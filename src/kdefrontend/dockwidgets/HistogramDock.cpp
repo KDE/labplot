@@ -575,6 +575,7 @@ void HistogramDock::binWidthChanged() {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
 	float width = ui.leBinWidth->text().toDouble();
 	for (auto* curve : m_curvesList)
 		curve->setBinWidth(width);
@@ -598,6 +599,7 @@ void HistogramDock::binRangesMinChanged(const QString& value) {
 		return;
 	DEBUG("	set value")
 
+	const Lock lock(m_initializing);
 	const double min = value.toDouble();
 	for (auto* hist : m_curvesList)
 		hist->setBinRangesMin(min);
@@ -607,6 +609,7 @@ void HistogramDock::binRangesMaxChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
 	const double max = value.toDouble();
 	for (auto* hist : m_curvesList)
 		hist->setBinRangesMax(max);
@@ -1364,9 +1367,9 @@ void HistogramDock::curveBinCountChanged(int count) {
 }
 
 void HistogramDock::curveBinWidthChanged(float width) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leBinWidth->setText(QString::number(width));
-	m_initializing = false;
 }
 
 void HistogramDock::curveAutoBinRangesChanged(bool value) {
@@ -1376,15 +1379,15 @@ void HistogramDock::curveAutoBinRangesChanged(bool value) {
 }
 
 void HistogramDock::curveBinRangesMinChanged(double value) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leBinRangesMin->setText(QString::number(value));
-	m_initializing = false;
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 	ui.leBinRangesMax->setText(QString::number(value));
-	m_initializing = false;
 }
 
 //Line-Tab
