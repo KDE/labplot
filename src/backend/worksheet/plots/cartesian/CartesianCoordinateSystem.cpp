@@ -336,6 +336,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
  */
 void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints,
 		std::vector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags) const {
+	DEBUG("CartesianCoordinateSystem::mapLogicalToScene()")
 	const QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
 	const bool limit = flags & MappingFlag::Limit;
@@ -383,6 +384,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 
 					scenePointsUsed[indexX][indexY] = true;
 					scenePoints.append(mappedPoint);
+					//DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
 					visiblePoints[i].flip();
 				}
 			}
@@ -670,16 +672,8 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 
 	if (limit) {
 		// set to max/min if passed over
-		// TODO: qBound?
-		if (logicalPoint.x() < pageRect.x())
-			logicalPoint.setX(pageRect.x());
-		if (logicalPoint.x() > pageRect.x() + pageRect.width())
-			logicalPoint.setX(pageRect.x() + pageRect.width());
-
-		if (logicalPoint.y() < pageRect.y())
-			logicalPoint.setY(pageRect.y());
-		if (logicalPoint.y() > pageRect.y() + pageRect.height())
-			logicalPoint.setY(pageRect.y() + pageRect.height());
+		logicalPoint.setX(qBound(pageRect.x(), logicalPoint.x(), pageRect.x() + pageRect.width()));
+		logicalPoint.setY(qBound(pageRect.y(), logicalPoint.y(), pageRect.y() + pageRect.height()));
 	}
 
 	if (noPageClippingY)

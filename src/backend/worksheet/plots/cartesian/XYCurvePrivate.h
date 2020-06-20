@@ -4,7 +4,7 @@
     Description          : Private members of XYCurve
     --------------------------------------------------------------------
     Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2013-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -156,6 +156,7 @@ private:
 	void drawFilling(QPainter*);
 	void draw(QPainter*);
 
+	//TODO: add m_
 	QPainterPath linePath;
 	QPainterPath dropLinePath;
 	QPainterPath valuesPath;
@@ -163,10 +164,11 @@ private:
 	QPainterPath symbolsPath;
 	QRectF boundingRectangle;
 	QPainterPath curveShape;
-	QVector<QLineF> lines;
-	QVector<QPointF> symbolPointsLogical;	//points in logical coordinates
-	QVector<QPointF> symbolPointsScene;	//points in scene coordinates
-	std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
+	QVector<QLineF> m_lines;
+	QVector<QPointF> m_logicalPoints;	//points in logical coordinates
+	QVector<QPointF> m_scenePoints;		//points in scene coordinates
+	//TODO: use Qt container
+	std::vector<bool> m_visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
 	std::vector<int> validPointsIndicesLogical;	//vector of the size of symbolPointsLogical containing the original indices in the source columns for valid and non-masked values
 	QVector<QPointF> valuesPoints;
 	std::vector<bool> connectedPointsLogical;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and

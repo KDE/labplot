@@ -1796,6 +1796,7 @@ double Column::maximum(int startIndex, int endIndex) const {
  * @return returns calculated value
  */
 // TODO: testing if it is faster than calculating log2.
+// TODO: put into NSL when useful
 int Column::calculateMaxSteps (unsigned int value) {
 	const std::array<signed char, 256> LogTable256 = {
 		-1,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,
@@ -1874,18 +1875,16 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 				higherIndex = index;
 
 		}
-
 	} else if (properties == AbstractColumn::Properties::Constant) {
 		return 0;
 	} else {
 		// AbstractColumn::Properties::No
-		// naiv way
+		// simple way
 		int index = 0;
 		prevValue = column[0];
 		for (int row = 0; row < rowCount; row++) {
-
 			double value = column[row];
-			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
 					prevValue = value;
 					index = row;
 			}

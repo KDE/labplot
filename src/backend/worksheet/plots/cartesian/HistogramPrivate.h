@@ -155,6 +155,8 @@ public:
 	QPainterPath valuesPath;
 	QRectF boundingRectangle;
 	QPainterPath curveShape;
+	//TODO: use Qt container
+	//TODO: add m_
 	QVector<QLineF> lines;
 	QVector<QPointF> pointsLogical;	//points in logical coordinates
 	QVector<QPointF> pointsScene;	//points in scene coordinates

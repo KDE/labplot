@@ -49,6 +49,13 @@
 #define DEBUG(x) {}
 #endif
 
+#if QT_VERSION < 0x050700
+template <class T>
+constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
+    return t;
+}
+#endif
+
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
 #define STDSTRING(qstr) qstr.toUtf8().constData()
 

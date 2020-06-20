@@ -91,7 +91,7 @@ public:
 		// QMatrix
 		// etc.
 	};
-	enum class Properties {
+	enum class Properties {	// TODO: why bit pattern? Aren't they exclusive?
 		No = 0x00,
 		Constant = 0x01,
 		MonotonicIncreasing = 0x02, // prev_value >= value for all values in column
