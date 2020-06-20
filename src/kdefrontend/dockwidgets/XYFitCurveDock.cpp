@@ -1207,6 +1207,9 @@ void XYFitCurveDock::showFitResult() {
 			m_messageWidget->setMessageType(KMessageWidget::Warning);
 		m_messageWidget->setText(status);
         m_messageWidget->animatedShow();
+	} else {
+		if (m_messageWidget)
+			m_messageWidget->close();
 	}
 
 	if (!fitResult.valid) {
