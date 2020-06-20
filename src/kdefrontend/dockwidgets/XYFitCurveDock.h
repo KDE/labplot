@@ -36,6 +36,7 @@
 
 class TreeViewComboBox;
 class FitParametersWidget;
+class KMessageWidget;
 
 class XYFitCurveDock: public XYCurveDock {
 	Q_OBJECT
@@ -64,6 +65,7 @@ private:
 	QList<double> parameters;
 	QList<double> parameterValues;
 	bool m_parametersValid{true};
+	KMessageWidget* m_messageWidget{nullptr};
 
 protected:
 	void setModel() override;
