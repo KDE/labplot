@@ -319,7 +319,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 				const QPointF mappedPoint(x, y);
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
 					scenePoints.append(mappedPoint);
-					visiblePoints[i].flip();
+					visiblePoints[i] = !visiblePoints.at(i);
 				}
 			}
 		}
@@ -335,7 +335,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 	@param scenePointsUsed List of bools which scene point was already used
  */
 void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints,
-		std::vector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags) const {
+		QVector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags) const {
 	DEBUG("CartesianCoordinateSystem::mapLogicalToScene()")
 	const QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
@@ -375,9 +375,9 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 				const QPointF mappedPoint(x, y);
 				//DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
-
-					const int indexX = qRound((mappedPoint.x() - d->plot->dataRect().x()) / minLogicalDiffX);
-					const int indexY = qRound((mappedPoint.y() - d->plot->dataRect().y()) / minLogicalDiffY);
+					//TODO: check
+					const int indexX = qRound((x - xPage) / minLogicalDiffX);
+					const int indexY = qRound((y - yPage) / minLogicalDiffY);
 					//DEBUG()
 					if (scenePointsUsed[indexX][indexY])
 						continue;
@@ -385,7 +385,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 					scenePointsUsed[indexX][indexY] = true;
 					scenePoints.append(mappedPoint);
 					//DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
-					visiblePoints[i].flip();
+					visiblePoints[i] = !visiblePoints.at(i);
 				}
 			}
 		}

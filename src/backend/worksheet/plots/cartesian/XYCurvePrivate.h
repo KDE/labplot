@@ -167,14 +167,13 @@ private:
 	QVector<QLineF> m_lines;
 	QVector<QPointF> m_logicalPoints;	//points in logical coordinates
 	QVector<QPointF> m_scenePoints;		//points in scene coordinates
-	//TODO: use Qt container
-	std::vector<bool> m_visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
-	std::vector<int> validPointsIndicesLogical;	//vector of the size of symbolPointsLogical containing the original indices in the source columns for valid and non-masked values
-	QVector<QPointF> valuesPoints;
-	std::vector<bool> connectedPointsLogical;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and
-												//false otherwise (don't connect because of a gap (NAN) in-between)
-	QVector<QString> valuesStrings;
-	QVector<QPolygonF> fillPolygons;
+	QVector<bool> m_visiblePoints;		//currently visible points in plot (size of m_logicalPoints)
+	QVector<QPointF> valuesPoints;		//TODO: COMMENT
+	QVector<QString> valuesStrings;		//TODO: COMMENT
+	QVector<QPolygonF> fillPolygons;	//TODO: COMMENT
+	//TODO: QVector
+	std::vector<int> validPointsIndicesLogical;	//original indices in the source columns for valid and non-masked values (size of m_logicalPoints)
+	std::vector<bool> connectedPointsLogical;  	//true for points connected with the consecutive point (size of m_logicalPoints)
 
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;

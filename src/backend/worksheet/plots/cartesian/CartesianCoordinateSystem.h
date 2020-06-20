@@ -75,7 +75,7 @@ public:
 
 	QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	void mapLogicalToScene(const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, MappingFlags flags = MappingFlag::DefaultMapping) const;
-	void mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF> &logicalPoints, QVector<QPointF>& scenePoints, std::vector<bool> &visiblePoints, QVector<QVector<bool> >& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags = MappingFlag::DefaultMapping) const;
+	void mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints, QVector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags = MappingFlag::DefaultMapping) const;
 	QPointF mapLogicalToScene(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 
