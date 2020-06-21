@@ -42,6 +42,7 @@ class CartesianScale {
 public:
 	virtual ~CartesianScale();
 
+	//TODO: remove "Scale"
 	enum class ScaleType {ScaleLinear, ScaleLog};
 
 	static CartesianScale* createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
@@ -63,6 +64,7 @@ protected:
 	CartesianScale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
 	ScaleType m_type;
 	Interval<double> m_interval;
+	//TODO: what are these?
 	double m_a;
 	double m_b;
 	double m_c;
@@ -73,6 +75,7 @@ public:
 	explicit CartesianCoordinateSystem(CartesianPlot*);
 	~CartesianCoordinateSystem() override;
 
+	//TODO: document the 5 versions
 	QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	void mapLogicalToScene(const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, MappingFlags flags = MappingFlag::DefaultMapping) const;
 	void mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints, QVector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags = MappingFlag::DefaultMapping) const;

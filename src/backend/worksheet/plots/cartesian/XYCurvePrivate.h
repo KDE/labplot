@@ -47,9 +47,9 @@ public:
 	void retransform();
 	void recalcLogicalPoints();
 	void updateLines();
-	void addLine(QPointF p0, QPointF p1, double &minY, double &maxY, bool &overlap, double minLogicalDiffX, int &pixelDiff); // for linear scale
-	void addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff, int pixelCount); // for nonlinear x Axis scale
-	void addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff);
+	void addLine(QPointF p0, QPointF p1, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX); // for any x scale
+	void addLinearLine(QPointF p0, QPointF p1, double& minY, double& maxY, QPointF& lastPoint, double minLogicalDiffX, int& pixelDiff);	// optimized for linear x scale
+	void addUniqueLine(QPointF p0, QPointF p1, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff);	// finally add line if unique (no overlay)
 	void updateDropLines();
 	void updateSymbols();
 	void updateValues();
@@ -171,7 +171,7 @@ private:
 	QVector<QPointF> valuesPoints;		//TODO: COMMENT
 	QVector<QString> valuesStrings;		//TODO: COMMENT
 	QVector<QPolygonF> fillPolygons;	//TODO: COMMENT
-	//TODO: QVector
+	//TODO: QVector, rename, usage
 	std::vector<int> validPointsIndicesLogical;	//original indices in the source columns for valid and non-masked values (size of m_logicalPoints)
 	std::vector<bool> connectedPointsLogical;  	//true for points connected with the consecutive point (size of m_logicalPoints)
 
