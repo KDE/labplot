@@ -352,6 +352,9 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	initGeneralTab();
 	initTabs();
 
+	if (m_messageWidget && m_messageWidget->isVisible())
+		m_messageWidget->close();
+
 	showFitResult();
 	enableRecalculate();
 
@@ -360,7 +363,6 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	//init parameter list when not available
 	if (m_fitData.paramStartValues.size() == 0)
 		updateModelEquation();
-
 }
 
 bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
@@ -1047,6 +1049,27 @@ void XYFitCurveDock::recalculateClicked() {
 	this->showFitResult();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 
+	//show the warning/error message, if available
+	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
+	const QString& status = fitResult.status;
+	if (status != i18n("Success")) {
+		emit info(i18n("Fit status: %1", fitResult.status));
+		if (!m_messageWidget) {
+			m_messageWidget = new KMessageWidget(this);
+			uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 25, 3, 1, 4);
+		}
+
+		if (!fitResult.valid)
+			m_messageWidget->setMessageType(KMessageWidget::Error);
+		else
+			m_messageWidget->setMessageType(KMessageWidget::Warning);
+		m_messageWidget->setText(status);
+        m_messageWidget->animatedShow();
+	} else {
+		if (m_messageWidget && m_messageWidget->isVisible())
+			m_messageWidget->close();
+	}
+
 	QApplication::restoreOverrideCursor();
 	DEBUG("XYFitCurveDock::recalculateClicked() DONE");
 }
@@ -1192,25 +1215,6 @@ void XYFitCurveDock::showFitResult() {
 
 	// Log
 	uiGeneralTab.twLog->item(0, 1)->setText(fitResult.status);
-
-	const QString& status = fitResult.status;
-	if (status != i18n("Success")) {
-		emit info(i18n("Fit status: %1", fitResult.status));
-		if (!m_messageWidget) {
-			m_messageWidget = new KMessageWidget(this);
-			uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 25, 3, 1, 4);
-		}
-
-		if (!fitResult.valid)
-			m_messageWidget->setMessageType(KMessageWidget::Error);
-		else
-			m_messageWidget->setMessageType(KMessageWidget::Warning);
-		m_messageWidget->setText(status);
-        m_messageWidget->animatedShow();
-	} else {
-		if (m_messageWidget)
-			m_messageWidget->close();
-	}
 
 	if (!fitResult.valid) {
 		DEBUG(" fit result not valid");
