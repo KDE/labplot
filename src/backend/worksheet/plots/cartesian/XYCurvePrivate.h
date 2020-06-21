@@ -168,8 +168,8 @@ private:
 	QVector<QPointF> m_logicalPoints;	//points in logical coordinates
 	QVector<QPointF> m_scenePoints;		//points in scene coordinates
 	QVector<bool> m_visiblePoints;		//currently visible points in plot (size of m_logicalPoints)
-	QVector<QPointF> valuesPoints;		//TODO: COMMENT
-	QVector<QString> valuesStrings;		//TODO: COMMENT
+	QVector<QPointF> m_valuesPoints;	//points for showing value
+	QVector<QString> m_valuesStrings;	//strings for showing value
 	QVector<QPolygonF> fillPolygons;	//TODO: COMMENT
 	//TODO: QVector, rename, usage
 	std::vector<int> validPointsIndicesLogical;	//original indices in the source columns for valid and non-masked values (size of m_logicalPoints)

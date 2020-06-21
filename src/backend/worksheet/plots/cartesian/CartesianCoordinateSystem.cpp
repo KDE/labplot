@@ -172,7 +172,7 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 	delete d;
 }
 
-CartesianScale *CartesianScale::createLinearScale(const Interval<double> &interval,
+CartesianScale* CartesianScale::createLinearScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
 
 	double lDiff = logicalEnd - logicalStart;
@@ -185,7 +185,7 @@ CartesianScale *CartesianScale::createLinearScale(const Interval<double> &interv
 	return new LinearScale(interval, a, b);
 }
 
-CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
+CartesianScale* CartesianScale::createLogScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, CartesianPlot::Scale type) {
 
 	double base;

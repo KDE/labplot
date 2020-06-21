@@ -1008,8 +1008,8 @@ void XYCurvePrivate::retransform() {
 		errorBarsPath = QPainterPath();
 		curveShape = QPainterPath();
 		m_lines.clear();
-		valuesPoints.clear();
-		valuesStrings.clear();
+		m_valuesPoints.clear();
+		m_valuesStrings.clear();
 		fillPolygons.clear();
 		recalcShapeAndBoundingRect();
 		return;
@@ -1229,7 +1229,6 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 
 		// using only the difference between the points is not sufficient, because p0 is updated always
 		// independent if new line added or not
-		// TODO: check
 		int p0Pixel = qRound((p0Scene.x() - plot->dataRect().x()) / (double)plot->dataRect().width() * numberOfPixelX);
 		int p1Pixel = qRound((p1Scene.x() - plot->dataRect().x()) / (double)plot->dataRect().width() * numberOfPixelX);
 		pixelDiff = p1Pixel - p0Pixel;
@@ -1282,6 +1281,7 @@ void XYCurvePrivate::addUniqueLine(QPointF p0, QPointF p1, double& minY, double&
 			if (p0.y() < minY)
 			 	minY = p0.y();
 
+			//TODO: only if inside scene
 			if (true) { //p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
 				//QDEBUG("	DRAW LINE from " << lastPoint << " to " << p0)
 				m_lines.append(QLineF(lastPoint, p0));
@@ -1390,7 +1390,6 @@ void XYCurvePrivate::updateLines() {
 		case XYCurve::LineType::NoLine:
 			break;
 		case XYCurve::LineType::Line: {
-			//TODO: check
 			for (int i = startIndex; i < endIndex; i++) {
 				if (!lineSkipGaps && !connectedPointsLogical.at(i))
 					continue;
@@ -1771,14 +1770,16 @@ void XYCurvePrivate::updateValues() {
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateValues()");
 #endif
 	valuesPath = QPainterPath();
-	valuesPoints.clear();
-	valuesStrings.clear();
+	m_valuesPoints.clear();
+	m_valuesStrings.clear();
 
 	const int numberOfPoints = m_logicalPoints.size();
 	if (valuesType == XYCurve::ValuesType::NoValues || numberOfPoints == 0) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
+	m_valuesPoints.reserve(numberOfPoints);
+	m_valuesStrings.reserve(numberOfPoints);
 
 	//determine the value string for all points that are currently visible in the plot
 	int i = 0;
@@ -1796,7 +1797,7 @@ void XYCurvePrivate::updateValues() {
 				value = QString::number(point.x(), valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(point.x()).toString(valuesDateTimeFormat);
-			valuesStrings << valuesPrefix + value + valuesSuffix;
+			m_valuesStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
 	}
@@ -1812,7 +1813,7 @@ void XYCurvePrivate::updateValues() {
 				value = QString::number(point.y(), valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);
-			valuesStrings << valuesPrefix + value + valuesSuffix;
+			m_valuesStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
 	}
@@ -1847,7 +1848,7 @@ void XYCurvePrivate::updateValues() {
 			if (valuesType == XYCurve::ValuesType::XYBracketed)
 				value += ')';
 
-			valuesStrings << valuesPrefix + value + valuesSuffix;
+			m_valuesStrings << valuesPrefix + value + valuesSuffix;
 		}
 		break;
 	}
@@ -1867,65 +1868,72 @@ void XYCurvePrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Numeric:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
+				m_valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				m_valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
-				valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
+				m_valuesStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-				valuesStrings << valuesPrefix + valuesColumn->dateTimeAt(i).toString(valuesDateTimeFormat) + valuesSuffix;
+				m_valuesStrings << valuesPrefix + valuesColumn->dateTimeAt(i).toString(valuesDateTimeFormat) + valuesSuffix;
 				break;
 			}
 		}
 	}
 	}
+	m_valuesStrings.squeeze();
 
 	//Calculate the coordinates where to paint the value strings.
 	//The coordinates depend on the actual size of the string.
 	QPointF tempPoint;
 	QFontMetrics fm(valuesFont);
-	qreal w;
-	qreal h = fm.ascent();
+	const double h = fm.ascent();
 
-	for (int i = 0; i < valuesStrings.size(); i++) {
-		w = fm.boundingRect(valuesStrings.at(i)).width();
+	i = 0;
+	for (const auto& string : qAsConst(m_valuesStrings)) {
+		const double w = fm.boundingRect(string).width();
+		const double x = m_scenePoints.at(i).x();
+		const double y = m_scenePoints.at(i).y();
+		i++;
+
 		switch (valuesPosition) {
 		case XYCurve::ValuesPosition::Above:
-			tempPoint.setX(m_scenePoints.at(i).x() - w/2.);
-			tempPoint.setY(m_scenePoints.at(i).y() - valuesDistance);
+			tempPoint.setX(x - w/2.);
+			tempPoint.setY(y - valuesDistance);
 			break;
 		case XYCurve::ValuesPosition::Under:
-			tempPoint.setX(m_scenePoints.at(i).x() - w/2.);
-			tempPoint.setY(m_scenePoints.at(i).y() + valuesDistance + h/2.);
+			tempPoint.setX(x - w/2.);
+			tempPoint.setY(y + valuesDistance + h/2.);
 			break;
 		case XYCurve::ValuesPosition::Left:
-			tempPoint.setX(m_scenePoints.at(i).x() - valuesDistance - w - 1.);
-			tempPoint.setY(m_scenePoints.at(i).y());
+			tempPoint.setX(x - valuesDistance - w - 1.);
+			tempPoint.setY(y);
 			break;
 		case XYCurve::ValuesPosition::Right:
-			tempPoint.setX(m_scenePoints.at(i).x() + valuesDistance - 1.);
-			tempPoint.setY(m_scenePoints.at(i).y());
+			tempPoint.setX(x + valuesDistance - 1.);
+			tempPoint.setY(y);
 			break;
 		}
-		valuesPoints.append(tempPoint);
+		m_valuesPoints.append(tempPoint);
 	}
+	m_valuesPoints.squeeze();
 
 	QTransform trafo;
 	QPainterPath path;
-	for (int i = 0; i < valuesPoints.size(); i++) {
+	i = 0;
+	for (const auto& point : qAsConst(m_valuesPoints)) {
 		path = QPainterPath();
-		path.addText( QPoint(0, 0), valuesFont, valuesStrings.at(i) );
+		path.addText(QPoint(0, 0), valuesFont, m_valuesStrings.at(i++));
 
 		trafo.reset();
-		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
+		trafo.translate(point.x(), point.y());
 		if (valuesRotationAngle != 0)
-			trafo.rotate( -valuesRotationAngle );
+			trafo.rotate(-valuesRotationAngle);
 
 		valuesPath.addPath(trafo.map(path));
 	}
@@ -2850,14 +2858,16 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 void XYCurvePrivate::drawValues(QPainter* painter) {
 	QTransform trafo;
 	QPainterPath path;
-	for (int i = 0; i < valuesPoints.size(); i++) {
+
+	int i = 0;
+	for (const auto& point : qAsConst(m_valuesPoints)) {
 		path = QPainterPath();
-		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
+		path.addText(QPoint(0, 0), valuesFont, m_valuesStrings.at(i++));
 
 		trafo.reset();
-		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
+		trafo.translate(point.x(), point.y());
 		if (valuesRotationAngle != 0)
-			trafo.rotate( -valuesRotationAngle );
+			trafo.rotate(-valuesRotationAngle);
 
 		painter->drawPath(trafo.map(path));
 	}
