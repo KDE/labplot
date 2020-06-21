@@ -1252,6 +1252,7 @@ void XYCurvePrivate::addUniqueLine(QPointF p0, QPointF p1, double& minY, double&
 	if (pixelDiff == 0) {
 		//DEBUG("	pixelDiff == 0!	p0.x = " << p0.x() << ", p1.x = " << p1.x())
 		//DEBUG("	minY/maxY = " << minY << '/' << maxY)
+		//TODO: UNUSED
 		if (!isnan(lastPoint.x())) { // second time and so the x axis pixel is the same
 			if (p1.y() > maxY)
 				maxY = p1.y();
@@ -1270,10 +1271,11 @@ void XYCurvePrivate::addUniqueLine(QPointF p0, QPointF p1, double& minY, double&
 		}
 		//DEBUG("	AFTER: minY/maxY =" << minY << '/' << maxY)
 	} else {	// pixelDiff != 0
-		//DEBUG("	pixelDiff != 0 lastX = " << lastPoint.x())
+		//DEBUG("	pixelDiff =" << pixelDiff << ", lastX = " << lastPoint.x())
 		if (!isnan(lastPoint.x())) { // when previously lastPoint, draw the previous line
 
 			// last point from previous pixel must be evaluated
+			// TODO: unused
 			if (p0.y() > maxY)
 				maxY = p0.y();
 
@@ -1281,28 +1283,12 @@ void XYCurvePrivate::addUniqueLine(QPointF p0, QPointF p1, double& minY, double&
 			 	minY = p0.y();
 
 			if (true) { //p1.x() >= plot->xMin() && p1.x() <= plot->xMax()) { // x inside scene
-				if (minY == maxY) {
-					//QDEBUG("	LINE " << p0 << ' ' << p1)
-					m_lines.append(QLineF(p0, p1)); // line from previous point to actual point
-				} else if (p0.y() == minY || p0.y() == maxY) { // draw vertical line
-					//QDEBUG("	OVERLAP LINE from " << lastPoint << " to " << p1)
-					m_lines.append(QLineF(lastPoint, p0));
-					if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
-						return;
+				//QDEBUG("	DRAW LINE from " << lastPoint << " to " << p0)
+				m_lines.append(QLineF(lastPoint, p0));
 
-					// draw line, only if there is a pixelDiff != 1 otherwise no line needed, because when drawing a new vertical line, this line is already included
-					//QDEBUG("		AND LINE " << p0 << ' ' << p1)
-					m_lines.append(QLineF(p0, p1));
-				} else { // last point nor min nor max
-					//QDEBUG("	LAST LINE @ " << p0.x() << " from " << minY << " -> " << maxY)
-					m_lines.append(QLineF(p0.x(), maxY, p0.x(), minY));
-					if (p1.y() >= minY && p1.y() <= maxY && pixelDiff == 1)
-						return;
-
-					//QDEBUG("		AND LINE " << p0 << ' ' << p1)
-					m_lines.append(QLineF(p0, p1));
-				}
-			} else { // in scene?
+				//QDEBUG("		AND LINE " << p0 << ' ' << p1)
+				m_lines.append(QLineF(p0, p1));
+			} else {
 				DEBUG("addLine: not in scene");
 			}
 
