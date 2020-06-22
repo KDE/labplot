@@ -33,6 +33,7 @@
 #include <QSplashScreen>
 #include <QStandardPaths>
 #include <QModelIndex>
+#include <QSysInfo>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -50,6 +51,25 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/macros.h"
 
+/*
+ * collect all system info to show in About dialog
+ */
+const QString getSystemInfo() {
+	// build type
+#ifdef NDEBUG
+	const QString buildType(i18n("Release version"));
+#else
+	const QString buildType(i18n("Debug version"));
+#endif
+
+	return buildType + '\n'
+		+ QSysInfo::prettyProductName() + '\n'
+		+ QSysInfo::buildAbi() + '\n'
+		+ i18n("Kernel: ") + QSysInfo::kernelType() + ' ' + QSysInfo::kernelVersion() + '\n'
+		+ i18n("C++ Compiler: ") + QString(CXX_COMPILER) + '\n'
+		+ i18n("C++ Compiler Flags: ") + QString(CXX_COMPILER_FLAGS);
+}
+
 int main (int argc, char *argv[]) {
 	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -57,14 +77,11 @@ int main (int argc, char *argv[]) {
 	KLocalizedString::setApplicationDomain("labplot2");
 	KCrash::initialize();
 
-#ifdef NDEBUG
-	const QString buildType(i18n("Release version"));
-#else
-	const QString buildType(i18n("Debug version"));
-#endif
+	QString systemInfo{getSystemInfo()};
+
 	KAboutData aboutData( QStringLiteral("labplot2"), QString("LabPlot"),
 		LVERSION, i18n("LabPlot2 is a KDE-application for interactive graphing and analysis of scientific data."),
-		KAboutLicense::GPL, i18n("(c) 2007-2020"), buildType, QStringLiteral("https://labplot.kde.org"));
+		KAboutLicense::GPL, i18n("(c) 2007-2020"), systemInfo, QStringLiteral("https://labplot.kde.org"));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), "stefan.gerlach@uni.kn", nullptr);
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), "alexander.semke@web.de", nullptr);
 	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), "f-kristof@hotmail.com", nullptr);
@@ -76,6 +93,8 @@ int main (int argc, char *argv[]) {
 	aboutData.setOrganizationDomain(QByteArray("kde.org"));
 	aboutData.setDesktopFileName(QStringLiteral("org.kde.labplot2"));
 	KAboutData::setApplicationData(aboutData);
+
+	//TODO: add library information (GSL version, etc.) in about dialog
 
 	QCommandLineParser parser;
 	parser.addHelpOption();
