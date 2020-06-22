@@ -831,7 +831,8 @@ QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
 	QString base = current_name;
 	int last_non_digit;
 	for (last_non_digit = base.size() - 1; last_non_digit >= 0 &&
-	        base[last_non_digit].category() == QChar::Number_DecimalDigit; --last_non_digit)
+		base[last_non_digit].category() == QChar::Number_DecimalDigit && base[last_non_digit-1].category() == QChar::Separator_Space;
+		--last_non_digit)
 		base.chop(1);
 
 	if (last_non_digit >=0 && base[last_non_digit].category() != QChar::Separator_Space)
