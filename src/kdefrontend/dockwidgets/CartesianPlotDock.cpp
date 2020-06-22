@@ -67,6 +67,11 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	rangeButtonsGroup->addButton(ui.rbRangeLast);
 	rangeButtonsGroup->addButton(ui.rbRangeFree);
 
+	ui.leXMin->setValidator(new QDoubleValidator(ui.leXMin));
+	ui.leXMax->setValidator(new QDoubleValidator(ui.leXMax));
+	ui.leYMin->setValidator(new QDoubleValidator(ui.leYMin));
+	ui.leYMax->setValidator(new QDoubleValidator(ui.leYMax));
+
 	//"Range breaks"-tab
 	ui.bAddXBreak->setIcon( QIcon::fromTheme("list-add") );
 	ui.bRemoveXBreak->setIcon( QIcon::fromTheme("list-remove") );
