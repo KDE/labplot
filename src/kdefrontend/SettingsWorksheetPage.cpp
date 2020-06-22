@@ -77,7 +77,20 @@ void SettingsWorksheetPage::applySettings() {
 }
 
 void SettingsWorksheetPage::restoreDefaults() {
-	loadSettings();
+	m_cbThemes->setCurrentIndex(0);
+	ui.chkPresenterModeInteractive->setChecked(false);
+	ui.chkDoubleBuffering->setChecked(true);
+
+	int index = ui.cbTexEngine->findData(QLatin1String("xelatex"));
+	if (index == -1) {
+		index = ui.cbTexEngine->findData(QLatin1String("lualatex"));
+		if (index == -1) {
+			index = ui.cbTexEngine->findData(QLatin1String("pdflatex"));
+			if (index == -1)
+				index = ui.cbTexEngine->findData(QLatin1String("latex"));
+		}
+	}
+	ui.cbTexEngine->setCurrentIndex(index);
 }
 
 void SettingsWorksheetPage::loadSettings() {

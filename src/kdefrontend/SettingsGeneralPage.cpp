@@ -71,7 +71,15 @@ void SettingsGeneralPage::applySettings() {
 }
 
 void SettingsGeneralPage::restoreDefaults() {
-	loadSettings();
+	ui.cbLoadOnStart->setCurrentIndex(0);
+	ui.cbInterface->setCurrentIndex(0);
+	ui.cbTabPosition->setCurrentIndex(0);
+	ui.cbMdiVisibility->setCurrentIndex(0);
+	ui.cbUnits->setCurrentIndex(0);
+	ui.chkAutoSave->setChecked(false);
+	ui.sbAutoSaveInterval->setValue(0);
+	ui.sbAutoSaveInterval->setValue(5);
+	ui.chkMemoryInfo->setChecked(true);
 }
 
 void SettingsGeneralPage::loadSettings() {
