@@ -121,6 +121,7 @@ public:
 	void addAspectToProject(AbstractAspect*);
 
 	enum class LoadOnStart {Nothing, NewProject, NewProjectWorksheet, LastProject, WelcomeScreen};
+	enum class TitleBarMode {ShowFilePath, ShowFileName, ShowProjectName};
 
 #ifdef HAVE_KUSERFEEDBACK
 	KUserFeedback::Provider& userFeedbackProvider() {return m_userFeedbackProvider;}
@@ -154,6 +155,7 @@ private:
 // 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget{nullptr};
 	QString m_lastOpenFileFilter;
+	TitleBarMode m_titleBarMode{TitleBarMode::ShowFilePath};
 
 #ifdef HAVE_KUSERFEEDBACK
     KUserFeedback::Provider m_userFeedbackProvider;
@@ -291,6 +293,7 @@ private slots:
 	bool saveProject();
 	bool saveProjectAs();
 	void autoSaveProject();
+	void updateTitleBar();
 
 	void print();
 	void printPreview();

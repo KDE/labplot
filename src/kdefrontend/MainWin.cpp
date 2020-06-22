@@ -308,9 +308,13 @@ void MainWin::initGUI(const QString& fileName) {
 	//load recently used projects
 	m_recentProjectsAction->loadEntries( KSharedConfig::openConfig()->group("Recent Files") );
 
+	//General Settings
+	const KConfigGroup& group = KSharedConfig::openConfig()->group("Settings_General");
+
+	//title bar
+	m_titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
 
 	//auto-save
-	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_General");
 	m_autoSaveActive = group.readEntry<bool>("AutoSave", false);
 	int interval = group.readEntry("AutoSaveInterval", 1);
 	interval = interval*60*1000;
@@ -862,10 +866,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	factory->container("edit", this)->setEnabled(!b);
 	factory->container("import", this)->setEnabled(!b);
 
-	if (b)
-		setCaption("LabPlot2");
-	else
-		setCaption(m_project->name());
+	updateTitleBar();
 
 #ifdef Q_OS_MAC
 	m_touchBar->clear();
@@ -1176,7 +1177,7 @@ bool MainWin::newProject() {
 	connect(m_project, &Project::closeRequested, this, &MainWin::closeProject);
 
 	m_undoViewEmptyLabel = i18n("%1: created", m_project->name());
-	setCaption(m_project->name());
+	updateTitleBar();
 
 	return true;
 }
@@ -1382,7 +1383,7 @@ void MainWin::openProject(const QString& filename) {
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl( QUrl(filename) );
-	setCaption(m_project->name());
+	updateTitleBar();
 	updateGUIOnProjectChanges();
 	updateGUI(); //there are most probably worksheets or spreadsheets in the open project -> update the GUI
 	m_saveAction->setEnabled(false);
@@ -1530,7 +1531,7 @@ bool MainWin::save(const QString& fileName) {
 		// do not rename temp file. Qt still holds a handle (which fails renaming on Windows) and deletes it
 		bool rc = QFile::copy(tempFileName, fileName);
 		if (rc) {
-			setCaption(m_project->name());
+			updateTitleBar();
 			statusBar()->showMessage(i18n("Project saved"));
 			m_saveAction->setEnabled(false);
 			m_recentProjectsAction->addUrl( QUrl(fileName) );
@@ -1572,6 +1573,36 @@ void MainWin::autoSaveProject() {
 		return;
 
 	this->saveProject();
+}
+
+void MainWin::updateTitleBar() {
+	QString title;
+	if (m_project) {
+		switch (m_titleBarMode) {
+		case TitleBarMode::ShowProjectName:
+			title = m_project->name();
+			break;
+		case TitleBarMode::ShowFileName:
+			if (m_project->fileName().isEmpty())
+				title = m_project->name();
+			else {
+				QFileInfo fi(m_project->fileName());
+				title = fi.baseName();
+			}
+			break;
+		case TitleBarMode::ShowFilePath:
+			if (m_project->fileName().isEmpty())
+				title = m_project->name();
+			else
+				title = m_project->fileName();
+		}
+
+		if (m_project->hasChanged())
+			title += QLatin1String("    [") + i18n("Changed") + QLatin1Char(']');
+	} else
+		title = QLatin1String("LabPlot");
+
+	setCaption(title);
 }
 
 /*!
@@ -1728,7 +1759,7 @@ void MainWin::newCantorWorksheet(QAction* action) {
 	Adds "changed" to the window caption and activates the save-Action.
 */
 void MainWin::projectChanged() {
-	setCaption(i18n("%1    [Changed]", m_project->name()));
+	updateTitleBar();
 	m_saveAction->setEnabled(true);
 	m_undoAction->setEnabled(true);
 	return;
@@ -1937,7 +1968,7 @@ void MainWin::undo() {
 	WAIT_CURSOR;
 	m_project->undoStack()->undo();
 	if (m_project->undoStack()->index() == 0) {
-		setCaption(m_project->name());
+		updateTitleBar();
 		m_saveAction->setEnabled(false);
 		m_undoAction->setEnabled(false);
 		m_project->setChanged(false);
@@ -2166,24 +2197,32 @@ void MainWin::dropEvent(QDropEvent* event) {
 void MainWin::handleSettingsChanges() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
 
+	//title bar
+	MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
+	if (titleBarMode != m_titleBarMode) {
+		m_titleBarMode = titleBarMode;
+		updateTitleBar();
+	}
+
+	//view mode
 // 	if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr) {
-// 		QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
-// 		if (m_mdiArea->viewMode() != viewMode) {
-// 			m_mdiArea->setViewMode(viewMode);
-// 			if (viewMode == QMdiArea::SubWindowView)
-// 				this->updateMdiWindowVisibility();
-// 		}
-//
-// 		if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
-// 			m_tileWindowsAction->setVisible(false);
-// 			m_cascadeWindowsAction->setVisible(false);
-// 			QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
-// 			if (m_mdiArea->tabPosition() != tabPosition)
-// 				m_mdiArea->setTabPosition(tabPosition);
-// 		} else {
-// 			m_tileWindowsAction->setVisible(true);
-// 			m_cascadeWindowsAction->setVisible(true);
-// 		}
+	QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
+	if (m_mdiArea->viewMode() != viewMode) {
+		m_mdiArea->setViewMode(viewMode);
+		if (viewMode == QMdiArea::SubWindowView)
+			this->updateMdiWindowVisibility();
+	}
+
+	if (m_mdiArea->viewMode() == QMdiArea::TabbedView) {
+		m_tileWindowsAction->setVisible(false);
+		m_cascadeWindowsAction->setVisible(false);
+		QTabWidget::TabPosition tabPosition = QTabWidget::TabPosition(group.readEntry("TabPosition", 0));
+		if (m_mdiArea->tabPosition() != tabPosition)
+			m_mdiArea->setTabPosition(tabPosition);
+	} else {
+		m_tileWindowsAction->setVisible(true);
+		m_cascadeWindowsAction->setVisible(true);
+	}
 // 	}
 
 	//autosave

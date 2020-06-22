@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : general settings page
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -40,16 +40,12 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	ui.sbAutoSaveInterval->setSuffix(i18n("min."));
 	retranslateUi();
 
-	connect(ui.cbLoadOnStart, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &SettingsGeneralPage::changed);
-	connect(ui.cbInterface, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &SettingsGeneralPage::interfaceChanged);
-	connect(ui.cbMdiVisibility, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &SettingsGeneralPage::changed);
-	connect(ui.cbTabPosition, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &SettingsGeneralPage::changed);
-	connect(ui.cbUnits, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &SettingsGeneralPage::changed);
+	connect(ui.cbLoadOnStart, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
+	connect(ui.cbTitleBar, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
+	connect(ui.cbInterface, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::interfaceChanged);
+	connect(ui.cbMdiVisibility, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
+	connect(ui.cbTabPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
+	connect(ui.cbUnits, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::stateChanged, this, &SettingsGeneralPage::autoSaveChanged);
 	connect(ui.chkMemoryInfo, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
 
@@ -61,6 +57,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 void SettingsGeneralPage::applySettings() {
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentIndex());
+	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
 	group.writeEntry(QLatin1String("ViewMode"), ui.cbInterface->currentIndex());
 	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
 	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
@@ -72,6 +69,7 @@ void SettingsGeneralPage::applySettings() {
 
 void SettingsGeneralPage::restoreDefaults() {
 	ui.cbLoadOnStart->setCurrentIndex(0);
+	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbInterface->setCurrentIndex(0);
 	ui.cbTabPosition->setCurrentIndex(0);
 	ui.cbMdiVisibility->setCurrentIndex(0);
@@ -85,6 +83,7 @@ void SettingsGeneralPage::restoreDefaults() {
 void SettingsGeneralPage::loadSettings() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), 0));
+	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
 	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
 	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
@@ -101,6 +100,11 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->addItem(i18n("Create new project with worksheet"));
 	ui.cbLoadOnStart->addItem(i18n("Load last used project"));
 // 	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
+
+	ui.cbTitleBar->clear();
+	ui.cbTitleBar->addItem(i18n("Show File Path"));
+	ui.cbTitleBar->addItem(i18n("Show File Name"));
+	ui.cbTitleBar->addItem(i18n("Show Project Name"));
 
 	ui.cbInterface->clear();
 	ui.cbInterface->addItem(i18n("Sub-window view"));
