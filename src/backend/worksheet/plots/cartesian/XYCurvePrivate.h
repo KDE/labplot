@@ -47,9 +47,9 @@ public:
 	void retransform();
 	void recalcLogicalPoints();
 	void updateLines();
-	void addLine(QPointF p0, QPointF p1, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX); // for any x scale
-	void addLinearLine(QPointF p0, QPointF p1, double& minY, double& maxY, QPointF& lastPoint, double minLogicalDiffX, int& pixelDiff);	// optimized for linear x scale
-	void addUniqueLine(QPointF p0, QPointF p1, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff);	// finally add line if unique (no overlay)
+	void addLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX); // for any x scale
+	void addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, double minLogicalDiffX, int& pixelDiff);	// optimized for linear x scale
+	void addUniqueLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pixelDiff);	// finally add line if unique (no overlay)
 	void updateDropLines();
 	void updateSymbols();
 	void updateValues();
@@ -167,10 +167,10 @@ private:
 	QVector<QLineF> m_lines;
 	QVector<QPointF> m_logicalPoints;	//points in logical coordinates
 	QVector<QPointF> m_scenePoints;		//points in scene coordinates
-	QVector<bool> m_visiblePoints;		//currently visible points in plot (size of m_logicalPoints)
-	QVector<QPointF> m_valuesPoints;	//points for showing value
-	QVector<QString> m_valuesStrings;	//strings for showing value
-	QVector<QPolygonF> fillPolygons;	//TODO: COMMENT
+	QVector<bool> m_pointVisible;		//if point is currently visible in plot (size of m_logicalPoints)
+	QVector<QPointF> m_valuePoints;		//points for showing value
+	QVector<QString> m_valueStrings;	//strings for showing value
+	QVector<QPolygonF> m_fillPolygons;	//polygons for filling
 	//TODO: QVector, rename, usage
 	std::vector<int> validPointsIndicesLogical;	//original indices in the source columns for valid and non-masked values (size of m_logicalPoints)
 	std::vector<bool> connectedPointsLogical;  	//true for points connected with the consecutive point (size of m_logicalPoints)
