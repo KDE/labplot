@@ -182,10 +182,10 @@ void Project::setChanged(const bool value) {
 	if (isLoading())
 		return;
 
+	d->changed = value;
+
 	if (value)
 		emit changed();
-
-	d->changed = value;
 }
 
 void Project::setSuppressAspectAddedSignal(bool value) {

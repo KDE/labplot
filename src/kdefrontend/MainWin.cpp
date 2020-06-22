@@ -1762,7 +1762,6 @@ void MainWin::projectChanged() {
 	updateTitleBar();
 	m_saveAction->setEnabled(true);
 	m_undoAction->setEnabled(true);
-	return;
 }
 
 void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
