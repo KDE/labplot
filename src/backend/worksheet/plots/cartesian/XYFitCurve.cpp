@@ -2343,6 +2343,11 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("previewEnabled", fitData.previewEnabled, bool);
 			READ_DOUBLE_VALUE("confidenceInterval", fitData.confidenceInterval);
 
+			//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
+			XYFitCurve::initFitData(d->fitData);
+			// remove default names and start values (will be read from project later)
+			d->fitData.paramStartValues.clear();
+
 		} else if (!preview && reader->name() == "name") {	// needed for custom model
 			d->fitData.paramNames << reader->readElementText();
 		} else if (!preview && reader->name() == "startValue") {
@@ -2413,7 +2418,9 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	// new fit model style (reset model type of old projects)
+	////////////////////////////// fix old projects /////////////////////////
+
+	// reset model type of old projects due to new model style
 	if (d->fitData.modelCategory == nsl_fit_model_basic && d->fitData.modelType >= NSL_FIT_MODEL_BASIC_COUNT) {
 		DEBUG("XYFitCurve::load() RESET old fit model");
 		d->fitData.modelType = 0;
@@ -2429,6 +2436,15 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->fitResult.tdist_pValues.resize(2);
 		d->fitResult.tdist_marginValues.resize(2);
 	}
+
+	// older projects also save the param names for non-custom models: remove them
+	while (d->fitData.paramNames.size() > d->fitData.paramStartValues.size())
+		d->fitData.paramNames.removeLast();
+
+	// not present in old projects
+	if (d->fitData.paramNamesUtf8.isEmpty())
+		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
+
 	// not present in old projects
 	int np = d->fitResult.paramValues.size();
 	if (d->fitResult.tdist_tValues.size() == 0)
@@ -2438,15 +2454,12 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	if (d->fitResult.tdist_marginValues.size() == 0)
 		d->fitResult.tdist_marginValues.resize(np);
 
-	if (d->fitData.paramNamesUtf8.isEmpty())
-		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
-
-	//set the model expression and the parameter names (can be derived from the saved values for category, type and degree)
-	XYFitCurve::initFitData(d->fitData);
-
+	// Loading done. Check some parameter
 	DEBUG("XYFitCurve::load() model type = " << d->fitData.modelType);
 	DEBUG("XYFitCurve::load() # params = " << d->fitData.paramNames.size());
 	DEBUG("XYFitCurve::load() # start values = " << d->fitData.paramStartValues.size());
+	for (const auto& value : d->fitData.paramStartValues)
+		DEBUG("XYFitCurve::load() # start value = " << value);
 
 	if (preview)
 		return true;
