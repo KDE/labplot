@@ -54,6 +54,7 @@
   <summary xml:lang="pt-BR">Criação de gráficos interativos e análise de dados científicos</summary>
   <summary xml:lang="ru">LabPlot — анализ экспериментальных данных с возможностью интерактивного построения графиков</summary>
   <summary xml:lang="sk">Interaktívne grafy a analýza vedeckých údajov</summary>
+  <summary xml:lang="sl">Interaktivni grafični prikaz in analiza znanstvenih podatkov</summary>
   <summary xml:lang="sv">Interaktiv diagramritning och analys av vetenskaplig data</summary>
   <summary xml:lang="uk">Інтерактивна побудова графіків та аналіз наукових даних</summary>
   <summary xml:lang="x-test">xxInteractive graphing and analysis of scientific dataxx</summary>
@@ -80,6 +81,7 @@
     <p xml:lang="pt-BR">O LabPlot é um aplicativo para criação de gráficos interativos e análise de dados científicos.</p>
     <p xml:lang="ru">LabPlot — программа от KDE для анализа экспериментальных данных с возможностью интерактивного построения графиков.</p>
     <p xml:lang="sk">LabPlot je KDE aplikácia pre interaktívne grafy a analýzu vedeckých údajov.</p>
+    <p xml:lang="sl">LabPlot je aplikacija za interaktivno grafiko in analizo znanstvenih podatkov.</p>
     <p xml:lang="sv">Labplot är ett program för interaktiv diagramritning och analys av vetenskaplig data.</p>
     <p xml:lang="uk">LabPlot — програма для інтерактивної побудови графіків та аналізу наукових даних.</p>
     <p xml:lang="x-test">xxLabPlot is an application for interactive graphing and analysis of scientific data.xx</p>
@@ -107,6 +109,7 @@
     <p xml:lang="pt-BR">O LabPlot oferece uma forma simples de criar, gerenciar e editar gráficos. Permite-lhe produzir gráficos com base nos dados de uma planilha ou nos dados importados de arquivos externos. Os gráficos podem ser exportados para diferentes formatos de imagens rasterizadas e vetoriais.</p>
     <p xml:lang="ru">LabPlot предоставляет простой способ создания, управления и редактирования графиков. Приложение позволяет создавать графики на основе данных из электронной таблицы или данных, импортированных из внешних файлов. Графики могут быть экспортированы в различные растровые и векторные графические форматы.</p>
     <p xml:lang="sk">LabPlot poskytuje jednoduché možnosti na vytváranie, správu a úpravu nákresov. Umožní vám vyrobiť nákresy založené na údajoch z tabuľky alebo z údajov importovaných z externých súborov. Nákresy sa dajú exportovať do niekoľkých rastrových a vektorových grafických formátov.</p>
+    <p xml:lang="sl">LabPlot omogoča preprost način za ustvarjanje, upravljanje in urejanje grafikonov. Omogoča vam izdelavo slik na podlagi podatkov iz preglednice ali podatkov, uvoženih iz zunanje datoteke. Grafikone lahko izvozite v slike več različnih rastrskih in vektorskih formatov.</p>
     <p xml:lang="sv">Labplot tillhandahåller ett enkelt sätt att skapa, hantera och redigera diagram. Det låter dig skapa diagram baserat på data från ett kalkylark eller data importerad från externa filer. Diagram kan exporteras till flera olika punktavbildnings- och vektorgrafik-format.</p>
     <p xml:lang="tr">LabPlot çizimleri oluşturmak, yönetmek ve düzenlemek için kolay bir yol sağlar. Bir tablodaki verilere veya harici dosyalardan alınan verilere dayalı çizimler üretmenizi sağlar. Çizimler çeşitli piksmap ve vektör grafik formatlarına aktarılabilir.</p>
     <p xml:lang="uk">За допомогою LabPlot просто створювати креслення, керувати ними та редагувати креслення. За допомогою програми можна створювати креслення на основі електронної таблиці або даних, імпортованих із зовнішнього файла. Креслення можна експортувати у форматі растрового або векторного зображення.</p>
@@ -135,6 +138,7 @@
       <caption xml:lang="pt">Exemplo de ajuste</caption>
       <caption xml:lang="pt-BR">Exemplo de ajuste</caption>
       <caption xml:lang="ru">Пример автоподбора масштаба</caption>
+      <caption xml:lang="sl">Primer prilagajanja</caption>
       <caption xml:lang="sv">Anpassningsexempel</caption>
       <caption xml:lang="uk">Приклад апроксимації</caption>
       <caption xml:lang="x-test">xxFit examplexx</caption>
@@ -161,6 +165,7 @@
       <caption xml:lang="pt-BR">Função matemática</caption>
       <caption xml:lang="ru">График функции</caption>
       <caption xml:lang="sk">Matematická funkcia</caption>
+      <caption xml:lang="sl">Matematična funkcija</caption>
       <caption xml:lang="sv">Matematisk funktion</caption>
       <caption xml:lang="uk">Математична функція</caption>
       <caption xml:lang="x-test">xxMathematical functionxx</caption>
@@ -185,6 +190,7 @@
       <caption xml:lang="pt">Folha de cálculo CAS</caption>
       <caption xml:lang="pt-BR">Folha de trabalho CAS</caption>
       <caption xml:lang="ru">Лист исходных данных</caption>
+      <caption xml:lang="sl">Delovni list CAS</caption>
       <caption xml:lang="sv">CAS-arbetsblad</caption>
       <caption xml:lang="uk">Робочий аркуш СКА</caption>
       <caption xml:lang="x-test">xxCAS worksheetxx</caption>
