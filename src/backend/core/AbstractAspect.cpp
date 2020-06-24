@@ -830,10 +830,23 @@ QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
 
 	QString base = current_name;
 	int last_non_digit;
-	for (last_non_digit = base.size() - 1; last_non_digit >= 0 &&
-		base[last_non_digit].category() == QChar::Number_DecimalDigit && base[last_non_digit-1].category() == QChar::Separator_Space;
-		--last_non_digit)
-		base.chop(1);
+	for (last_non_digit = base.size() - 1; last_non_digit >= 0; --last_non_digit) {
+		if (base[last_non_digit].category() == QChar::Number_DecimalDigit) {
+			base.chop(1);
+		} else {
+			if (base[last_non_digit].category() == QChar::Separator_Space)
+				break;
+			else {
+				//non-digit character is found and it's not the separator,
+				//the string either doesn't have any digits at all or is of
+				//the form "data_2020.06". In this case we don't use anything
+				//from the original name to increment the number
+				last_non_digit = 0;
+				base = current_name;
+				break;
+			}
+		}
+	}
 
 	if (last_non_digit >=0 && base[last_non_digit].category() != QChar::Separator_Space)
 		base.append(" ");
