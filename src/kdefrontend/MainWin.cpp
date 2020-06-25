@@ -349,10 +349,9 @@ void MainWin::initGUI(const QString& fileName) {
 				newProject();
 				newWorksheet();
 			} else if (load == LoadOnStart::LastProject) { //open last used project
-				if (!m_recentProjectsAction->urls().isEmpty()) {
-					QDEBUG("TO OPEN m_recentProjectsAction->urls() =" << m_recentProjectsAction->urls().constFirst());
-					openRecentProject( m_recentProjectsAction->urls().constFirst() );
-				}
+				const QString& path = KSharedConfig::openConfig()->group("MainWin").readEntry("LastOpenProject", "");
+				if (!path.isEmpty())
+					openProject(path);
 			}
 
 			updateGUIOnProjectChanges();
@@ -1183,9 +1182,6 @@ bool MainWin::newProject() {
 }
 
 void MainWin::openProject() {
-	KConfigGroup group(KSharedConfig::openConfig(), "MainWin");
-	const QString& dir = group.readEntry("LastOpenDir", "");
-
 	bool supportOthers = false;
 	QString allExtensions = Project::supportedExtensions();
 	QString extensions = i18n("LabPlot Projects (%1)", allExtensions);
@@ -1209,6 +1205,8 @@ void MainWin::openProject() {
 	if (supportOthers)
 		extensions = i18n("All supported files (%1)", allExtensions) + QLatin1String(";;") + extensions;
 
+	KConfigGroup group(KSharedConfig::openConfig(), "MainWin");
+	const QString& dir = group.readEntry("LastOpenDir", "");
 	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open Project"), dir, extensions, &m_lastOpenFileFilter);
 	if (path.isEmpty())// "Cancel" was clicked
 		return;
@@ -1389,6 +1387,9 @@ void MainWin::openProject(const QString& filename) {
 	m_saveAction->setEnabled(false);
 
 	statusBar()->showMessage( i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed()/1000) );
+
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
+	group.writeEntry("LastOpenProject", filename);
 
 	if (m_autoSaveActive)
 		m_autoSaveTimer.start();
