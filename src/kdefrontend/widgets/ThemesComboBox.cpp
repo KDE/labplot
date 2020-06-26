@@ -33,6 +33,8 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 
+#include <KLocalizedString>
+
 /*!
     \class ThemesComboBox
     \brief Preview of all themes in a QComboBox.
@@ -84,7 +86,10 @@ bool ThemesComboBox::eventFilter(QObject* object, QEvent* event) {
 
 void ThemesComboBox::handleThemeChanged(const QString& theme) {
 	if (theme != currentText()) {
-		setItemText(0, theme);
+		if (theme.isEmpty())
+			setItemText(0, i18n("Default")); //default theme
+		else
+			setItemText(0, theme);
 		emit currentThemeChanged(theme);
 	}
 

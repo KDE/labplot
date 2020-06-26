@@ -42,6 +42,9 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 
 	m_cbThemes = new ThemesComboBox();
 	ui.gridLayout->addWidget(m_cbThemes, 1, 4, 1, 1);
+	QString info = i18n("Default theme for newly created worksheets and worksheet objects");
+	ui.lTheme->setToolTip(info);
+	m_cbThemes->setToolTip(info);
 
 	const int size = ui.cbTexEngine->height();
 	ui.lLatexWarning->setPixmap( QIcon::fromTheme(QLatin1String("state-warning")).pixmap(size, size) );
@@ -70,14 +73,17 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 
 void SettingsWorksheetPage::applySettings() {
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
-	group.writeEntry(QLatin1String("Theme"), m_cbThemes->currentText());
+	if (m_cbThemes->currentText() == i18n("Default"))
+		group.writeEntry(QLatin1String("Theme"), QString());
+	else
+		group.writeEntry(QLatin1String("Theme"), m_cbThemes->currentText());
 	group.writeEntry(QLatin1String("PresenterModeInteractive"), ui.chkPresenterModeInteractive->isChecked());
 	group.writeEntry(QLatin1String("DoubleBuffering"), ui.chkDoubleBuffering->isChecked());
 	group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
 }
 
 void SettingsWorksheetPage::restoreDefaults() {
-	m_cbThemes->setCurrentIndex(0);
+	m_cbThemes->setItemText(0, i18n("Default")); //default theme
 	ui.chkPresenterModeInteractive->setChecked(false);
 	ui.chkDoubleBuffering->setChecked(true);
 
