@@ -36,6 +36,7 @@ class ThemesWidget : public QListView {
 
 public:
 	explicit ThemesWidget(QWidget*);
+	void setFixedMode();
 
 signals:
 	void themeSelected(const QString&);

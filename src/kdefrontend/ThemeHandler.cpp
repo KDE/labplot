@@ -186,6 +186,7 @@ void ThemeHandler::loadSelected(const QString& name) {
 void ThemeHandler::showPanel() {
 	QMenu menu;
 	ThemesWidget themeWidget(&menu);
+	themeWidget.setFixedMode();
 	connect(&themeWidget, &ThemesWidget::themeSelected, this, &ThemeHandler::loadSelected);
 	connect(&themeWidget, &ThemesWidget::themeSelected, &menu, &QMenu::close);
 	connect(&themeWidget, &ThemesWidget::canceled, &menu, &QMenu::close);

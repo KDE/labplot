@@ -41,6 +41,8 @@
 #include <KMessageBox>
 // #include <knewstuff3/downloaddialog.h>
 
+
+
 /*!
 	\class ThemesWidget
 	\brief Widget for showing theme previews and for selecting a theme.
@@ -51,12 +53,12 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	setSelectionMode(QAbstractItemView::SingleSelection);
 	setWordWrap(true);
 	setViewMode(QListWidget::IconMode);
-	setResizeMode(QListWidget::Fixed);
+	setResizeMode(QListWidget::Adjust);
 	setDragDropMode(QListView::NoDragDrop);
 
 	//make the icon 3x3cm big and show two of them in the height
-	int size = 3.0/2.54 * QApplication::desktop()->physicalDpiX();
-	setIconSize(QSize(size, size));
+	static const int themeIconSize = 3.0/2.54 * QApplication::desktop()->physicalDpiX();
+	setIconSize(QSize(themeIconSize, themeIconSize));
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 	//show preview pixmaps
@@ -98,14 +100,6 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 
 	QListView::setModel(mContentItemModel);
 
-	//resize the widget to show three items
-	QFont font;
-	QFontMetrics fm(font);
-	QSize widgetSize(size + qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent),
-					 3*(size + fm.height() + spacing())  + fm.height());
-	setMinimumSize(widgetSize);
-	setMaximumSize(widgetSize);
-
 	//SLOTS
 	connect(this, &ThemesWidget::clicked, this, &ThemesWidget::applyClicked);
 }
@@ -132,3 +126,14 @@ void ThemesWidget::applyClicked(const QModelIndex& index) {
 // 	    kDebug() << "Changed Entry: " << e.name();
 // 	}
 // }
+
+void ThemesWidget::setFixedMode() {
+	//resize the widget to show three items only
+	QFont font;
+	QFontMetrics fm(font);
+	static const int themeIconSize = 3.0/2.54 * QApplication::desktop()->physicalDpiX();
+	QSize widgetSize(themeIconSize + qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent),
+					 3*(themeIconSize + fm.height() + 2*spacing())  + fm.height() + spacing());
+	setMinimumSize(widgetSize);
+	setMaximumSize(widgetSize);
+}

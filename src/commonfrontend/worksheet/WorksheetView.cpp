@@ -567,6 +567,7 @@ void WorksheetView::initMenus() {
 	m_themeMenu = new QMenu(i18n("Apply Theme"), this);
 	m_themeMenu->setIcon(QIcon::fromTheme("color-management"));
 	auto* themeWidget = new ThemesWidget(nullptr);
+	themeWidget->setFixedMode();
 	connect(themeWidget, &ThemesWidget::themeSelected, m_worksheet, &Worksheet::setTheme);
 	connect(themeWidget, &ThemesWidget::themeSelected, m_themeMenu, &QMenu::close);
 
