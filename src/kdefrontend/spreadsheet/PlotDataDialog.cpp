@@ -471,6 +471,73 @@ void PlotDataDialog::plot() {
 			addCurvesToPlots(worksheet);
 		}
 
+		//when creating a new worksheet with many plots it can happen the place available for the data in the plot
+		//is small and the result created here doesn't look nice. To avoid this and as a quick a dirty workaround,
+		//we increase the size of the worksheet so the plots have a certain minimal size.
+		//TODO:
+		//A more sophisticated and better logic would require further adjustments for properties like plot area
+		//paddings, the font size of axis ticks and title labels, etc. Also, this logic should be applied maybe if
+		//we add plots to an already created worksheet.
+
+		//adjust the sizes
+		const auto layout = worksheet->layout();
+		const auto plots = worksheet->children<CartesianPlot>();
+		const int count = plots.size();
+		const double minSize = 4.0;
+		switch (layout) {
+		case Worksheet::Layout::NoLayout:
+		case Worksheet::Layout::VerticalLayout: {
+			if (layout == Worksheet::Layout::NoLayout)
+				worksheet->setLayout(Worksheet::Layout::VerticalLayout);
+
+			const auto plot = plots.constFirst();
+			double height = Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Unit::Centimeter);
+			if (height < 4.) {
+				double newHeight = worksheet->layoutTopMargin() + worksheet->layoutBottomMargin()
+							+ (count - 1) * worksheet->layoutHorizontalSpacing()
+							+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+				QRectF newRect = worksheet->pageRect();
+				newRect.setHeight(round(newHeight));
+				worksheet->setPageRect(newRect);
+			}
+			break;
+		}
+		case Worksheet::Layout::HorizontalLayout: {
+			const auto plot = plots.constFirst();
+			double width = Worksheet::convertFromSceneUnits(plot->rect().width(), Worksheet::Unit::Centimeter);
+			if (width < 4.) {
+				double newWidth = worksheet->layoutLeftMargin() + worksheet->layoutRightMargin()
+							+ (count - 1) * worksheet->layoutVerticalSpacing()
+							+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+				QRectF newRect = worksheet->pageRect();
+				newRect.setWidth(round(newWidth));
+				worksheet->setPageRect(newRect);
+			}
+			break;
+		}
+		case Worksheet::Layout::GridLayout: {
+			const auto plot = plots.constFirst();
+			double width = Worksheet::convertFromSceneUnits(plot->rect().width(), Worksheet::Unit::Centimeter);
+			double height = Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Unit::Centimeter);
+			if (width < 4. || height < 4.) {
+				QRectF newRect = worksheet->pageRect();
+				if (height < 4.) {
+					double newHeight = worksheet->layoutTopMargin() + worksheet->layoutBottomMargin()
+									+ (count - 1) * worksheet->layoutHorizontalSpacing()
+									+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+					newRect.setHeight(round(newHeight));
+				} else {
+					double newWidth = worksheet->layoutLeftMargin() + worksheet->layoutRightMargin()
+								+ (count - 1) * worksheet->layoutVerticalSpacing()
+								+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+					newRect.setWidth(round(newWidth));
+				}
+				worksheet->setPageRect(newRect);
+			}
+			break;
+		}
+		}
+
 		parent->endMacro();
 	}
 
