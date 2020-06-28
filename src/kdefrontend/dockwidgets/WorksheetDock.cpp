@@ -981,6 +981,7 @@ void WorksheetDock::loadConfig(KConfig& config) {
 	ui.sbBackgroundOpacity->setValue( qRound(group.readEntry("BackgroundOpacity", m_worksheet->backgroundOpacity())*100) );
 
 	// Layout
+	ui.cbLayout->setCurrentIndex( group.readEntry("Layout", (int)m_worksheet->layout()) );
 	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutTopMargin", m_worksheet->layoutTopMargin()), m_worksheetUnit) );
 	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutBottomMargin", m_worksheet->layoutBottomMargin()), m_worksheetUnit) );
 	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LayoutLeftMargin", m_worksheet->layoutLeftMargin()), m_worksheetUnit) );
@@ -1012,6 +1013,7 @@ void WorksheetDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BackgroundOpacity", ui.sbBackgroundOpacity->value()/100.0);
 
 	//Layout
+	group.writeEntry("Layout", ui.cbLayout->currentIndex());
 	group.writeEntry("LayoutTopMargin",Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), m_worksheetUnit));
 	group.writeEntry("LayoutBottomMargin",Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), m_worksheetUnit));
 	group.writeEntry("LayoutLeftMargin",Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), m_worksheetUnit));
