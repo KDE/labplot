@@ -1087,6 +1087,7 @@ void XYCurvePrivate::retransform() {
 			endIndex = numberOfPoints - 1;
 		}
 
+		m_pointVisible.clear();
 		m_pointVisible.resize(numberOfPoints);
 		cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints,
 				m_pointVisible, scenePointsUsed, minLogicalDiffX, minLogicalDiffY);
