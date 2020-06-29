@@ -172,6 +172,15 @@ void CartesianPlotLegend::retransform() {
 	d_ptr->retransform();
 }
 
+/*!
+ * overrides the implementation in WorksheetElement and sets the z-value to the maximal possible,
+ * legends are drawn on top of all other object in the plot.
+ */
+void CartesianPlotLegend::setZValue(qreal) {
+	Q_D(CartesianPlotLegend);
+	d->setZValue(std::numeric_limits<double>::max());
+}
+
 void CartesianPlotLegend::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);

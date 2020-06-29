@@ -87,6 +87,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
 	void retransform() override;
+	void setZValue(qreal) override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	typedef CartesianPlotLegendPrivate Private;

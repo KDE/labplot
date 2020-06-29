@@ -30,7 +30,6 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
 
 #include <QGraphicsItem>
 #include <QMenu>
@@ -144,8 +143,8 @@ QMenu* WorksheetElement::createContextMenu() {
 
 	//add the sub-menu for the drawing order
 
-	//don't add the drawing order menu for axes, they're always drawn on top of each other elements
-	if (dynamic_cast<Axis*>(this))
+	//don't add the drawing order menu for axes and legends, they're always drawn on top of each other elements
+	if (type() == AspectType::Axis || type() == AspectType::CartesianPlotLegend)
 		return menu;
 
 	//for plots in a worksheet with an active layout the Z-factor is not relevant but we still
@@ -173,7 +172,7 @@ QMenu* WorksheetElement::createContextMenu() {
 	//don't add the drawing order menu if the parent element has no other children
 	int children = 0;
 	for (auto* child : parentAspect()->children<WorksheetElement>()) {
-		if ( !dynamic_cast<Axis*>(child) )
+		if (child->type() != AspectType::Axis && child->type() != AspectType::CartesianPlotLegend)
 			children++;
 	}
 
@@ -193,8 +192,8 @@ void WorksheetElement::prepareMoveBehindMenu() {
 
 	for (int i = 0; i < index; ++i) {
 		const WorksheetElement* elem = children.at(i);
-		//axes are always drawn on top of other elements, don't add them to the menu
-		if (!dynamic_cast<const Axis*>(elem)) {
+		//axes and legends are always drawn on top of other elements, don't add them to the menu
+		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
 			QAction* action = m_moveBehindMenu->addAction(elem->icon(), elem->name());
 			action->setData(i);
 		}
@@ -213,8 +212,8 @@ void WorksheetElement::prepareMoveInFrontOfMenu() {
 
 	for (int i = index + 1; i < children.size(); ++i) {
 		const WorksheetElement* elem = children.at(i);
-		//axes are always drawn on top of other elements, don't add them to the menu
-		if (!dynamic_cast<const Axis*>(elem)) {
+		//axes and legends are always drawn on top of other elements, don't add them to the menu
+		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
 			QAction* action = m_moveInFrontOfMenu->addAction(elem->icon(), elem->name());
 			action->setData(i);
 		}
