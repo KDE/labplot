@@ -105,6 +105,11 @@ Features:
 </itemizedlist>
 </para>
 
+<para>
+&LabPlot; can be found on its homepage at kde.org:
+<ulink url="https://labplot.kde.org/">https://labplot.kde.org/</ulink>.
+</para>
+
 </chapter>
 
 
@@ -2256,50 +2261,6 @@ For more information about this constants see the documentation of GSL.
 <row><entry>erg</entry><entry><action>The energy of 1 erg</action></entry></row>
 
 </tbody></tgroup></informaltable>
-
-</sect1>
-
-</chapter>
-
-<chapter id="installation">
-<title>Installation</title>
-
-<sect1 id="getting-labplot">
-<title>How to Obtain &LabPlot;</title>
-
-<para>
-&LabPlot; can be found on its homepage at sourceforge.net:
-<ulink url="http://labplot.sf.net">http://labplot.sf.net</ulink>. 
-There is an overview about all available packages at
-<ulink url="http://labplot.wiki.sourceforge.net/Download">http://labplot.wiki.sourceforge.net/Download</ulink>.
-bug-fixed packages are released regular and can be found there too.
-</para>
-</sect1>
-
-<sect1 id="requirements">
-<title>Requirements</title>
-
-<para>
-In order to successfully use &LabPlot;, you need at least a standard &Qt; 5 and &kde; KF5 installation, the &GNU; scientific library (GSL), &cantor; libcantor library.
-</para>
-
-<!-- <para>
-Optional &LabPlot; uses the following programs/libraries when available:
-</para>
-
-<itemizedlist>
-<listitem><para>
-&GNU; scientific library (GSL) : used for special functions in the parser and most of the analysis functions.
-</para></listitem>
-</itemizedlist>
--->
-
-</sect1>
-
-<sect1 id="compilation">
-<title>Compilation and Installation</title>
-
-&install.compile.documentation;
 
 </sect1>
 
