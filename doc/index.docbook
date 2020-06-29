@@ -2266,60 +2266,6 @@ For more information about this constants see the documentation of GSL.
 
 </chapter>
 
-<chapter id="command-line-options">
-<title>Command Line Options</title>
-<sect1 id="specify-a-file">
-<title>Specify a File</title>
-
-<para>
-When starting &LabPlot; from the command prompt, you can supply the name of a project file (ending with .lml, .lml.gz, .lml.bz2 or .lml.xz):
-<cmdsynopsis>
-<command>labplot2</command>
-<arg rep="repeat"><replaceable>file.lml</replaceable></arg>
-</cmdsynopsis>
-</para>
-
-</sect1>
-
-<sect1 id="other-command-line-options">
-<title>Other Command Line Options</title>
-
-<para>The following command line help options are available</para>
-<variablelist>
-<varlistentry>
-<term><command>labplot2 <option>--help</option></command></term>
-<listitem><para>This lists the most basic options available at the
- command line.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--no-splash</option></command></term>
-<listitem><para>Do not show the splash screen</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--presenter</option></command></term>
-<listitem><para>Start in the presenter mode</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--author</option></command></term>
-<listitem><para>Lists &LabPlot;'s author in the terminal window</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--version</option></command></term>
-<listitem><para>Lists version information for &LabPlot;.
-Also available through <command>labplot2 <option>-v</option></command>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect1>
-
-</chapter>
-
-
 <chapter id="faq">
 <title>Questions and Answers</title>
 

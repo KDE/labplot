@@ -28,7 +28,7 @@
 <refsynopsisdiv id='synopsis'>
 <cmdsynopsis>
   <command>labplot2</command>
-    <arg choice="opt"><replaceable>generic-options</replaceable></arg>
+    <arg choice="opt"><replaceable>LabPlot options</replaceable></arg>
     <arg choice="opt"><replaceable>file</replaceable></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
@@ -47,10 +47,26 @@
 
 </refsect1>
 
-<refsect1 id="options"><title>Options</title>
+<refsect1 id="options"><title>LabPlot options</title>
 <para>
     For a full summary of generic options, run <userinput><command>labplot2</command> <parameter>--help</parameter></userinput>.
 </para>
+
+<variablelist>
+<varlistentry>
+<term><option>--no-splash</option></term>
+<listitem>
+<para>Do not show the splash screen.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><option>--presenter</option></term>
+<listitem>
+<para>Start in the presenter mode.</para>
+</listitem>
+</varlistentry>
+</variablelist>
 </refsect1>
 
 <refsect1 id="arguments"><title>Arguments</title>
@@ -58,7 +74,8 @@
   <varlistentry>
     <term><option>file</option></term>
   <listitem>
-    <para>An address of the project to be opened.</para>
+    <para>The location of the project to be opened, usually ending with <literal role="extension">.lml</literal>.</para>
+    <para>The project file can be also compressed, with its filename ending with <literal role="extension">.lml.gz</literal>, <literal role="extension">.lml.bz2</literal> or <literal role="extension">.lml.xz</literal>.</para>
   </listitem>
   </varlistentry>
 </variablelist>
