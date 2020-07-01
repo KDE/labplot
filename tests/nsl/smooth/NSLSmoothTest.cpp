@@ -151,7 +151,7 @@ const double percentile = 0.5;
 
 void NSLSmoothTest::testPercentile_padnone() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {2, 2, 2, 1.5, 1, 1, 1, 2.5, 9};
+	double result[] = {2, 2, 2, 2, 1, 1, 1, 4, 9};
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_none);
 	QCOMPARE(status, 0);
@@ -161,7 +161,7 @@ void NSLSmoothTest::testPercentile_padnone() {
 
 void NSLSmoothTest::testPercentile_padmirror() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {2, 2, 2, 1.5, 1, 1, 1, 2.5, 2.5};
+	double result[] = {2, 2, 2, 2, 1, 1, 1, 4, 4};
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_mirror);
 	QCOMPARE(status, 0);
@@ -171,7 +171,7 @@ void NSLSmoothTest::testPercentile_padmirror() {
 
 void NSLSmoothTest::testPercentile_padnearest() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {2, 2, 2, 1.5, 1, 1, 1, 2.5, 6.5};
+	double result[] = {2, 2, 2, 2, 1, 1, 1, 4, 9};
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_nearest);
 	QCOMPARE(status, 0);
@@ -181,7 +181,7 @@ void NSLSmoothTest::testPercentile_padnearest() {
 
 void NSLSmoothTest::testPercentile_padconstant() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {1, 2, 2, 1.5, 1, 1, 1, 0.5, 0.5};
+	double result[] = {2, 2, 2, 2, 1, 1, 1, 1, 1};
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_constant);
 	QCOMPARE(status, 0);
@@ -191,7 +191,7 @@ void NSLSmoothTest::testPercentile_padconstant() {
 
 void NSLSmoothTest::testPercentile_padperiodic() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {3, 2, 2, 1.5, 1, 1, 1, 1.5, 2};
+	double result[] = {4, 2, 2, 2, 1, 1, 1, 2, 2};
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_periodic);
 	QCOMPARE(status, 0);
