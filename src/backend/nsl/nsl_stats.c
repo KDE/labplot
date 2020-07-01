@@ -78,6 +78,7 @@ double nsl_stats_median_sorted(const double sorted_data[], size_t stride, size_t
 }
 
 double nsl_stats_median_from_sorted_data(const double sorted_data[], size_t stride, size_t n) {
+	// default method is number 7
 	return nsl_stats_median_sorted(sorted_data, stride, n, nsl_stats_quantile_type7);
 }
 
@@ -89,7 +90,7 @@ double nsl_stats_quantile(double data[], size_t stride, size_t n, double p, nsl_
 double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, double p, nsl_stats_quantile_type type) {
 
 	switch(type) {
-	case nsl_stats_quantile_type1:
+	case nsl_stats_quantile_type1:	// h = Np + 1/2, x[ceil(h – 1/2)]
 		if (p == 0.0)
 			return d[0];
 		else

@@ -2458,8 +2458,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	DEBUG("XYFitCurve::load() model type = " << d->fitData.modelType);
 	DEBUG("XYFitCurve::load() # params = " << d->fitData.paramNames.size());
 	DEBUG("XYFitCurve::load() # start values = " << d->fitData.paramStartValues.size());
-	for (const auto& value : d->fitData.paramStartValues)
-		DEBUG("XYFitCurve::load() # start value = " << value);
+	//for (const auto& value : d->fitData.paramStartValues)
+	//	DEBUG("XYFitCurve::load() # start value = " << value);
 
 	if (preview)
 		return true;

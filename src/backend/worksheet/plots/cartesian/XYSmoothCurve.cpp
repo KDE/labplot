@@ -106,6 +106,7 @@ XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYAnalysisCur
 XYSmoothCurvePrivate::~XYSmoothCurvePrivate() = default;
 
 void XYSmoothCurvePrivate::recalculate() {
+	DEBUG("XYSmoothCurvePrivate::recalculate()")
 	QElapsedTimer timer;
 	timer.start();
 
@@ -213,35 +214,35 @@ void XYSmoothCurvePrivate::recalculate() {
 	const nsl_smooth_weight_type weight = smoothData.weight;
 	const double percentile = smoothData.percentile;
 	const int order = smoothData.order;
-	const nsl_smooth_pad_mode mode = smoothData.mode;
+	const nsl_smooth_pad_mode padMode = smoothData.mode;
 	const double lvalue = smoothData.lvalue;
 	const double rvalue = smoothData.rvalue;
 
-	DEBUG("type:"<<nsl_smooth_type_name[type]);
-	DEBUG("points ="<<points);
-	DEBUG("weight:"<<nsl_smooth_weight_type_name[weight]);
-	DEBUG("percentile ="<<percentile);
-	DEBUG("order ="<<order);
-	DEBUG("mode ="<<nsl_smooth_pad_mode_name[mode]);
-	DEBUG("const. values ="<<lvalue<<rvalue);
+	DEBUG("	smooth type:" << nsl_smooth_type_name[type]);
+	DEBUG("	points = " << points);
+	DEBUG("	weight: " << nsl_smooth_weight_type_name[weight]);
+	DEBUG("	percentile = " << percentile);
+	DEBUG("	order = " << order);
+	DEBUG("	pad mode =	" << nsl_smooth_pad_mode_name[padMode]);
+	DEBUG("	const. values = " << lvalue << ' ' << rvalue);
 
 ///////////////////////////////////////////////////////////
 	int status = 0;
 
 	switch (type) {
 	case nsl_smooth_type_moving_average:
-		status = nsl_smooth_moving_average(ydata, n, points, weight, mode);
+		status = nsl_smooth_moving_average(ydata, n, points, weight, padMode);
 		break;
 	case nsl_smooth_type_moving_average_lagged:
-		status = nsl_smooth_moving_average_lagged(ydata, n, points, weight, mode);
+		status = nsl_smooth_moving_average_lagged(ydata, n, points, weight, padMode);
 		break;
 	case nsl_smooth_type_percentile:
-		status = nsl_smooth_percentile(ydata, n, points, percentile, mode);
+		status = nsl_smooth_percentile(ydata, n, points, percentile, padMode);
 		break;
 	case nsl_smooth_type_savitzky_golay:
-		if (mode == nsl_smooth_pad_constant)
+		if (padMode == nsl_smooth_pad_constant)
 			nsl_smooth_pad_constant_set(lvalue, rvalue);
-		status = nsl_smooth_savgol(ydata, n, points, order, mode);
+		status = nsl_smooth_savgol(ydata, n, points, order, padMode);
 		break;
 	}
 

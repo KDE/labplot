@@ -355,8 +355,8 @@ int nsl_smooth_percentile(double *data, size_t n, size_t points, double percenti
 		}
 		/*puts("");*/
 
-		/*using type 4 as default */
-		result[i] = nsl_stats_quantile(values, 1, np, percentile, nsl_stats_quantile_type4);
+		/*using type 7 as default */
+		result[i] = nsl_stats_quantile(values, 1, np, percentile, nsl_stats_quantile_type7);
 		free(values);
 	}
 
