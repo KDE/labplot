@@ -57,14 +57,15 @@
 const QString getSystemInfo() {
 	// build type
 #ifdef NDEBUG
-	const QString buildType(i18n("Release version"));
+	const QString buildType(i18n("Release build"));
 #else
-	const QString buildType(i18n("Debug version"));
+	const QString buildType(i18n("Debug build"));
 #endif
 
 	return buildType + '\n'
-		+ QSysInfo::prettyProductName() + '\n'
-		+ QSysInfo::buildAbi() + '\n'
+		+ QString("%1, %2").arg(__DATE__).arg(__TIME__) + '\n'
+		+ i18n("System: ") + QSysInfo::prettyProductName() + '\n'
+		+ i18n("Architecture: ") + QSysInfo::buildAbi() + '\n'
 		+ i18n("Kernel: ") + QSysInfo::kernelType() + ' ' + QSysInfo::kernelVersion() + '\n'
 		+ i18n("C++ Compiler: ") + QString(CXX_COMPILER) + '\n'
 		+ i18n("C++ Compiler Flags: ") + QString(CXX_COMPILER_FLAGS);
