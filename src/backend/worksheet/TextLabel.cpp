@@ -1077,8 +1077,8 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	Q_D(TextLabel);
 
 	KConfigGroup group = config.group("Label");
-	d->fontColor = group.readEntry("FontColor", QColor(Qt::white)); // used when it's latex text
-	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::black)); // used when it's latex text
+	d->fontColor = group.readEntry("FontColor", QColor(Qt::black)); // used when it's latex text
+	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::white)); // used when it's latex text
 
 	if (!d->textWrapper.teXUsed && !d->textWrapper.text.isEmpty()) {
 		// TODO: Replace QTextEdit by QTextDocument, because this does not contain the graphical stuff
