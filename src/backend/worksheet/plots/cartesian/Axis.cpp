@@ -936,6 +936,7 @@ QString AxisPrivate::name() const{
 bool AxisPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
 	setVisible(on);
+	gridItem->setVisible(on);
 	emit q->visibilityChanged(on);
 	return oldValue;
 }
