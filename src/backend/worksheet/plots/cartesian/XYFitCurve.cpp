@@ -2120,13 +2120,12 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	}
 
 	ExpressionParser* parser = ExpressionParser::getInstance();
-	double xmin, xmax;
-	if (fitData.autoEvalRange) { // evaluate fit on full data range
-		xmin = tmpXDataColumn->minimum();
-		xmax = tmpXDataColumn->maximum();
-	} else {	// use given range for evaluation
-		xmin = fitData.evalRange.first();
-		xmax = fitData.evalRange.last();
+	double xmin{tmpXDataColumn->minimum()}, xmax{tmpXDataColumn->maximum()};	// full data range
+	if (!fitData.autoEvalRange) { 	// use given range for evaluation
+		if (fitData.evalRange.last() != fitData.evalRange.first()) {	// avoid zero range
+			xmin = fitData.evalRange.first();
+			xmax = fitData.evalRange.last();
+		}
 	}
 	DEBUG("	eval range = " << xmin << " .. " << xmax);
 	xVector->resize((int)fitData.evaluatedPoints);

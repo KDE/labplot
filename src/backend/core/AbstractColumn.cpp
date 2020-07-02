@@ -575,7 +575,7 @@ void AbstractColumn::replaceBigInt(int first, const QVector<qint64>& new_values)
 }
 
 /**
- * Returns the properties hold by this column (no, monotonic increasing, monotonic decreasing,...)
+ * Returns the properties hold by this column (no, constant, monotonic increasing, monotonic decreasing,...)
  * Is used in XYCurve to improve the search velocity for the y value for a specific x value
  */
 AbstractColumn::Properties AbstractColumn::properties() const {

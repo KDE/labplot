@@ -69,6 +69,7 @@ public:
 
 		bool autoRange{true};		// use all data points? (default)
 		bool autoEvalRange{true};	// evaluate fit function on full data range (default)
+		//TODO: QPoint?
 		QVector<double> fitRange{0., 0.};	// x fit range
 		QVector<double> evalRange{0., 0.};	// x evaluation range
 	};

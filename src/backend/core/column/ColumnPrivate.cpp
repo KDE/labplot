@@ -1633,6 +1633,7 @@ void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) 
  * See where variable properties will be used.
  */
 void ColumnPrivate::updateProperties() {
+	DEBUG("ColumnPrivate::updateProperties()")
 
 	// TODO: for double Properties::Constant will never be used. Use an epsilon (difference smaller than epsilon is zero)
 	if (rowCount() == 0) {
@@ -1795,12 +1796,16 @@ void ColumnPrivate::updateProperties() {
 	}
 
 	properties = AbstractColumn::Properties::No;
-	if (monotonic_increasing > 0 && monotonic_decreasing > 0)
+	if (monotonic_increasing > 0 && monotonic_decreasing > 0) {
 		properties = AbstractColumn::Properties::Constant;
-	else if (monotonic_decreasing > 0)
+		DEBUG("	setting column CONSTANT")
+	} else if (monotonic_decreasing > 0) {
 		properties = AbstractColumn::Properties::MonotonicDecreasing;
-	else if (monotonic_increasing > 0)
+		DEBUG("	setting column MONTONIC DECREASING")
+	} else if (monotonic_increasing > 0) {
 		properties = AbstractColumn::Properties::MonotonicIncreasing;
+		DEBUG("	setting column MONTONIC INCREASING")
+	}
 
 	propertiesAvailable = true;
 }

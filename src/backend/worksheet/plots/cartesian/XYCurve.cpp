@@ -1244,9 +1244,9 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pi
  * @param pixelDiff x pixel distance between two points
  */
 void XYCurvePrivate::addUniqueLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pixelDiff) {
-	//QDEBUG("XYCurvePrivate::addUniqueLine() :" << p0 << " ->" << p1 << ' ' << "minY =" << minY << ' ' << "maxY =" << maxY << ", lastPoint =" << lastPoint << ", pixelDiff =" << pixelDiff)
+	//QDEBUG("XYCurvePrivate::addUniqueLine() :" << p0 << " ->" << p1 << ", lastPoint =" << lastPoint << ", pixelDiff =" << pixelDiff)
 	if (pixelDiff == 0) {
-		//QDEBUG("	pixelDiff == 0!)
+		//QDEBUG("	pixelDiff == 0!")
 		if (isnan(lastPoint.x()))	// save last point
 			lastPoint = p0;
 	} else {	// pixelDiff > 0
@@ -1346,6 +1346,7 @@ void XYCurvePrivate::updateLines() {
 
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 	if (columnProperties == AbstractColumn::Properties::Constant) {
+		DEBUG("	CONSTANT column")
 		tempPoint1 = QPointF(plot->xMin(), plot->yMin());
 		tempPoint2 = QPointF(plot->xMin(), plot->yMax());
 		m_lines.append(QLineF(tempPoint1, tempPoint2));
