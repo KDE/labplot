@@ -183,6 +183,7 @@ void XYFitCurveDock::setupGeneral() {
 
 	uiGeneralTab.twLog->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 	uiGeneralTab.twGoodness->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+	// append symbols
 	uiGeneralTab.twGoodness->item(0, 0)->setText(uiGeneralTab.twGoodness->item(0, 0)->text() + UTF8_QSTRING(" (χ²)"));
 	uiGeneralTab.twGoodness->item(1, 0)->setText(uiGeneralTab.twGoodness->item(1, 0)->text() + UTF8_QSTRING(" (χ²/dof)"));
 	uiGeneralTab.twGoodness->item(3, 0)->setText(uiGeneralTab.twGoodness->item(3, 0)->text() + UTF8_QSTRING(" (R²)"));
