@@ -1832,10 +1832,12 @@ void XYFitCurvePrivate::recalculate() {
 		writeSolverState(s);
 		if (status) {
 			DEBUG("		iter " << iter << ", status = " << gsl_strerror(status));
+			if (status == GSL_ETOLX) 	// change in the position vector falls below machine precision: no progress
+				status = GSL_SUCCESS;
 			break;
 		}
 		status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
-		DEBUG("		iter " << iter << ", test status = " << status);
+		DEBUG("		iter " << iter << ", test status = " << gsl_strerror(status));
 	} while (status == GSL_CONTINUE && iter < maxIters);
 
 	// second run for x-error fitting
@@ -1931,6 +1933,8 @@ void XYFitCurvePrivate::recalculate() {
 
 				if (status) {
 					DEBUG("		iter " << iter << ", status = " << gsl_strerror(status));
+					if (status == GSL_ETOLX) 	// change in the position vector falls below machine precision: no progress
+						status = GSL_SUCCESS;
 					break;
 				}
 				status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
