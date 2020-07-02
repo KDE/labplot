@@ -1805,7 +1805,7 @@ void XYFitCurvePrivate::recalculate() {
 	gsl_multifit_fdfsolver_set(s, &f, &x.vector);
 
 	DEBUG("	Iterate ...");
-	int status;
+	int status = GSL_SUCCESS;
 	unsigned int iter = 0;
 	fitResult.solverOutput.clear();
 	writeSolverState(s);
@@ -1822,6 +1822,10 @@ void XYFitCurvePrivate::recalculate() {
 				weight[i] = 1./gsl_pow_2(gsl_vector_get(s->f, i)/sqrt(weight[i]) + ydata[i]);	// 1/Y_i^2
 		}
 
+		if (nf == np) {	// all fixed parameter
+			DEBUG("	all parameter fixed. Stop iteration.")
+			break;
+		}
 		DEBUG("		run fdfsolver_iterate");
 		status = gsl_multifit_fdfsolver_iterate(s);
 		DEBUG("		fdfsolver_iterate DONE");
@@ -1922,6 +1926,9 @@ void XYFitCurvePrivate::recalculate() {
 				writeSolverState(s);
 				status = gsl_multifit_fdfsolver_iterate(s);
 				//printf ("status = %s\n", gsl_strerror (status));
+				if (nf == np) 	// stop if all parameters fix
+					break;
+
 				if (status) {
 					DEBUG("		iter " << iter << ", status = " << gsl_strerror(status));
 					break;
