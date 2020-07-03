@@ -80,6 +80,7 @@ public:
 	void setSelectedInView(const bool);
 	void deleteAspectFromGraphicsItem(const QGraphicsItem*);
 	void setIsClosing();
+	void suppressSelectionChangedEvent(bool);
 
 	CartesianPlotActionMode cartesianPlotActionMode();
 	void setCartesianPlotActionMode(CartesianPlotActionMode mode);

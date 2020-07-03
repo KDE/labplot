@@ -77,6 +77,7 @@ public:
 	void setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode);
 	void setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode);
 	void setPlotLock(bool lock);
+	void suppressSelectionChangedEvent(bool);
 
 	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
 	void registerShortcuts();

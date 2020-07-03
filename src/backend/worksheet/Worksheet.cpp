@@ -405,6 +405,11 @@ void Worksheet::setIsClosing() {
 		m_view->setIsClosing();
 }
 
+void Worksheet::suppressSelectionChangedEvent(bool value) {
+	if (m_view)
+		m_view->suppressSelectionChangedEvent(value);
+}
+
 /*!
  * \brief Worksheet::getPlotCount
  * \return number of CartesianPlot's in the Worksheet
