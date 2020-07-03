@@ -41,7 +41,7 @@
 #include <KMessageBox>
 // #include <knewstuff3/downloaddialog.h>
 
-
+#include <cmath>
 
 /*!
 	\class ThemesWidget
@@ -57,7 +57,7 @@ ThemesWidget::ThemesWidget(QWidget* parent) : QListView(parent) {
 	setDragDropMode(QListView::NoDragDrop);
 
 	//make the icon 3x3cm big and show two of them in the height
-	static const int themeIconSize = 3.0/2.54 * QApplication::desktop()->physicalDpiX();
+	static const int themeIconSize = std::ceil(3.0/2.54 * QApplication::desktop()->physicalDpiX());
 	setIconSize(QSize(themeIconSize, themeIconSize));
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -129,11 +129,12 @@ void ThemesWidget::applyClicked(const QModelIndex& index) {
 
 void ThemesWidget::setFixedMode() {
 	//resize the widget to show three items only
+	int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
 	QFont font;
 	QFontMetrics fm(font);
-	static const int themeIconSize = 3.0/2.54 * QApplication::desktop()->physicalDpiX();
-	QSize widgetSize(themeIconSize + qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent),
-					 3*(themeIconSize + fm.height() + 2*spacing())  + fm.height() + spacing());
+	static const int themeIconSize = std::ceil(3.0/2.54 * QApplication::desktop()->physicalDpiX());
+	QSize widgetSize(themeIconSize + style()->pixelMetric(QStyle::PM_ScrollBarExtent) + frameWidth*2,
+					 3*(themeIconSize + fm.height() + 2* frameWidth) + fm.height() + frameWidth);
 	setMinimumSize(widgetSize);
 	setMaximumSize(widgetSize);
 }
