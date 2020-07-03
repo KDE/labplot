@@ -264,6 +264,8 @@ void XYSmoothCurvePrivate::recalculate() {
 		roughVector->data()[i] = ydataOriginal[i] - ydata[i];
 	roughColumn->setChanged();
 
+	delete [] ydataOriginal;
+
 	//redraw the curve
 	recalcLogicalPoints();
 	emit q->dataChanged();

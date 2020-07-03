@@ -1020,7 +1020,7 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
 #if QT_VERSION >= 0x051000
 		xData << QRandomGenerator::global()->generateDouble();
 #else
-		xData << qrand()/RAND_MAX;
+		xData << (double)(qrand())/RAND_MAX;
 #endif
 
 	auto* col = sheet.column(0);
@@ -1046,7 +1046,7 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 #if QT_VERSION >= 0x051000
 		xData << QRandomGenerator::global()->generateDouble();
 #else
-		xData << qrand()/RAND_MAX;
+		xData << (double)(qrand())/RAND_MAX;
 #endif
 		yData << i + 1;
 	}

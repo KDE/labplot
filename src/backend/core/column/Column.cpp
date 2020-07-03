@@ -835,7 +835,10 @@ void Column::calculateStatistics() const {
 	const double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
 
 	statistics.variance = columnSumVariance / notNanCount;
-	statistics.standardDeviation = sqrt(statistics.variance * notNanCount / (notNanCount - 1));
+	if (notNanCount != 1)
+		statistics.standardDeviation = sqrt(statistics.variance * notNanCount / (notNanCount - 1));
+	else
+		statistics.standardDeviation = NAN;
 	statistics.skewness = centralMoment_r3 / gsl_pow_3(statistics.standardDeviation);
 	statistics.kurtosis = (centralMoment_r4 / gsl_pow_4(statistics.standardDeviation)) - 3.0;
 	statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
