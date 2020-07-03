@@ -179,7 +179,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(aerr, 0.2);
 
 	// nout can be up to 10 when third arg of nsl_geom_linesim_visvalingam_whyatt() is 10
-	for (i = 0; i < GSL_MAX(nout, 6); ++i)
+	for (i = 0; i < std::min(nout, 6uL); ++i)
 		QCOMPARE(index[i], result3[i]);
 
 	const size_t result5[] = {0, 2, 3, 5, 6, 7, 9};
