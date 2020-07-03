@@ -61,10 +61,19 @@ const QString getSystemInfo() {
 #else
 	const QString buildType(i18n("Debug build"));
 #endif
+	const QLocale locale{QLocale::system()};
+	// TODO: show zeroDigit(), groupSeparator(), etc.
+	const QString localeInfo{QLatin1String(" (")
+			+ i18n("Decimal point: ") + '\'' + QString(locale.decimalPoint())
+			+ QLatin1String("\', ")
+			+ i18n("Exponential: ") + '\'' + QString(locale.exponential())
+			+ QLatin1String("\')")};
 
 	return buildType + '\n'
 		+ QString("%1, %2").arg(__DATE__).arg(__TIME__) + '\n'
 		+ i18n("System: ") + QSysInfo::prettyProductName() + '\n'
+		+ i18n("Locale: ") + QLocale::languageToString(locale.language()) + ','
+			+ QLocale::countryToString(locale.country()) + localeInfo + '\n'
 		+ i18n("Architecture: ") + QSysInfo::buildAbi() + '\n'
 		+ i18n("Kernel: ") + QSysInfo::kernelType() + ' ' + QSysInfo::kernelVersion() + '\n'
 		+ i18n("C++ Compiler: ") + QString(CXX_COMPILER) + '\n'
