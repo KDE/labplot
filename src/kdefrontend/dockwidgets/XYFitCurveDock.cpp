@@ -1010,12 +1010,11 @@ void XYFitCurveDock::setPlotXRange() {
 
 	auto* plot = dynamic_cast<CartesianPlot*>(m_curve->parentAspect());
 	if (plot != nullptr) {
-		double rmin = m_fitData.evalRange.first();
-		double rmax = m_fitData.evalRange.last();
-		double extend = (rmax-rmin) * 0.05;	// +/- 5 percent of range. may be < 0
-		if (extend != 0.) {	// avoid zero range
-			plot->setXMin(rmin - extend);
-			plot->setXMax(rmax + extend);
+		const Range<double> range = m_fitData.evalRange;
+		const double extend = range.size() * 0.05;	// + 5 %
+		if (!range.isZero()) {
+			plot->setXMin(range.left() - extend);
+			plot->setXMax(range.right() + extend);
 		}
 	}
 }
@@ -1237,7 +1236,7 @@ void XYFitCurveDock::showFitResult() {
 
 	uiGeneralTab.twLog->item(4, 1)->setText(QString::number(fitResult.dof));
 	uiGeneralTab.twLog->item(5, 1)->setText(QString::number(fitResult.paramValues.size()));
-	uiGeneralTab.twLog->item(6, 1)->setText(QString::number(m_fitData.fitRange.first()) + " .. " + QString::number(m_fitData.fitRange.last()) );
+	uiGeneralTab.twLog->item(6, 1)->setText(m_fitData.fitRange.toString());
 
 	// show all iterations
 	QString str;

@@ -30,6 +30,7 @@
 #ifndef XYFITCURVE_H
 #define XYFITCURVE_H
 
+#include "backend/lib/Range.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
 
@@ -69,9 +70,8 @@ public:
 
 		bool autoRange{true};		// use all data points? (default)
 		bool autoEvalRange{true};	// evaluate fit function on full data range (default)
-		//TODO: QPoint?
-		QVector<double> fitRange{0., 0.};	// x fit range
-		QVector<double> evalRange{0., 0.};	// x evaluation range
+		Range<double> fitRange{0., 0.};	// x fit range
+		Range<double> evalRange{0., 0.};	// x evaluation range
 	};
 
 	struct FitResult {

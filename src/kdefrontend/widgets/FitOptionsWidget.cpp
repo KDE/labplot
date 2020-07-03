@@ -59,15 +59,15 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	const auto* plot = static_cast<const CartesianPlot*>(fitCurve->parentAspect());
 	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::RangeFormat::Numeric);
 	if (!m_dateTimeRange) {
-		ui.leMin->setText(QString::number(m_fitData->fitRange.first()));
-		ui.leMax->setText(QString::number(m_fitData->fitRange.last()));
-		ui.leEvalMin->setText(QString::number(m_fitData->evalRange.first()));
-		ui.leEvalMax->setText(QString::number(m_fitData->evalRange.last()));
+		ui.leMin->setText(QString::number(m_fitData->fitRange.left()));
+		ui.leMax->setText(QString::number(m_fitData->fitRange.right()));
+		ui.leEvalMin->setText(QString::number(m_fitData->evalRange.left()));
+		ui.leEvalMax->setText(QString::number(m_fitData->evalRange.right()));
 	} else {
-		ui.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.first()) );
-		ui.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.last()) );
-		ui.dateTimeEditEvalMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.first()) );
-		ui.dateTimeEditEvalMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.last()) );
+		ui.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.left()) );
+		ui.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.right()) );
+		ui.dateTimeEditEvalMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.left()) );
+		ui.dateTimeEditEvalMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->evalRange.right()) );
 	}
 
 	ui.leMin->setVisible(!m_dateTimeRange);
@@ -139,8 +139,7 @@ void FitOptionsWidget::autoRangeChanged() {
 		if (xDataColumn) {
 			const double xMin = xDataColumn->minimum();
 			const double xMax = xDataColumn->maximum();
-			m_fitData->fitRange.last() = xMax;
-			m_fitData->fitRange.first() = xMin;
+			m_fitData->fitRange.setRange(xMin, xMax);
 
 			if (!m_dateTimeRange) {
 				ui.leMin->setText(QString::number(xMin));
@@ -176,8 +175,7 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 		if (xDataColumn) {
 			const double xMin = xDataColumn->minimum();
 			const double xMax = xDataColumn->maximum();
-			m_fitData->evalRange.last() = xMax;
-			m_fitData->evalRange.first() = xMin;
+			m_fitData->evalRange.setRange(xMin, xMax);
 
 			if (!m_dateTimeRange) {
 				ui.leEvalMin->setText(QString::number(xMin));
@@ -193,46 +191,46 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 void FitOptionsWidget::fitRangeMinChanged() {
 	const double xMin = ui.leMin->text().toDouble();
 
-	m_fitData->fitRange.first() = xMin;
+	m_fitData->fitRange.setLeft(xMin);
 	changed();
 }
 void FitOptionsWidget::fitRangeMaxChanged() {
 	const double xMax = ui.leMax->text().toDouble();
 
-	m_fitData->fitRange.last() = xMax;
+	m_fitData->fitRange.setRight(xMax);
 	changed();
 }
 
 void FitOptionsWidget::fitRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->fitRange.first() = dateTime.toMSecsSinceEpoch();
+	m_fitData->fitRange.setLeft(dateTime.toMSecsSinceEpoch());
 	changed();
 }
 
 void FitOptionsWidget::fitRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->fitRange.last() = dateTime.toMSecsSinceEpoch();
+	m_fitData->fitRange.setRight(dateTime.toMSecsSinceEpoch());
 	changed();
 }
 
 void FitOptionsWidget::evalRangeMinChanged() {
 	const double xMin = ui.leEvalMin->text().toDouble();
 
-	m_fitData->evalRange.first() = xMin;
+	m_fitData->evalRange.setLeft(xMin);
 	changed();
 }
 void FitOptionsWidget::evalRangeMaxChanged() {
 	const double xMax = ui.leEvalMax->text().toDouble();
 
-	m_fitData->evalRange.last() = xMax;
+	m_fitData->evalRange.setRight(xMax);
 	changed();
 }
 
 void FitOptionsWidget::evalRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->evalRange.first() = dateTime.toMSecsSinceEpoch();
+	m_fitData->evalRange.setLeft(dateTime.toMSecsSinceEpoch());
 	changed();
 }
 
 void FitOptionsWidget::evalRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->evalRange.last() = dateTime.toMSecsSinceEpoch();
+	m_fitData->evalRange.setRight(dateTime.toMSecsSinceEpoch());
 	changed();
 }
 

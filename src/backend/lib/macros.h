@@ -446,6 +446,13 @@ if (str.isEmpty()) \
 else \
 	d->var = str.toDouble();
 
+#define READ_DOUBLE_VALUE_LOCAL(name, var) \
+str = attribs.value(name).toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs(name).toString()); \
+else \
+	var = str.toDouble();
+
 #define READ_STRING_VALUE(name, var) \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
