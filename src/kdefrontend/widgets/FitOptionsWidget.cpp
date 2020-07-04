@@ -142,8 +142,8 @@ void FitOptionsWidget::autoRangeChanged() {
 			m_fitData->fitRange.setRange(xMin, xMax);
 
 			if (!m_dateTimeRange) {
-				ui.leMin->setText(QString::number(xMin));
-				ui.leMax->setText(QString::number(xMax));
+				ui.leMin->setText(QLocale().toString(xMin));
+				ui.leMax->setText(QLocale().toString(xMax));
 			} else {
 				ui.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xMin));
 				ui.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xMax));
@@ -189,17 +189,11 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 }
 
 void FitOptionsWidget::fitRangeMinChanged() {
-	//TODO
-	const double xMin = ui.leMin->text().toDouble();
-
-	m_fitData->fitRange.setMin(xMin);
+	SET_DOUBLE_FROM_LE(m_fitData->fitRange.min(), ui.leMin);
 	changed();
 }
 void FitOptionsWidget::fitRangeMaxChanged() {
-	//TODO
-	const double xMax = ui.leMax->text().toDouble();
-
-	m_fitData->fitRange.setMax(xMax);
+	SET_DOUBLE_FROM_LE(m_fitData->fitRange.max(), ui.leMax);
 	changed();
 }
 

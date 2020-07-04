@@ -790,7 +790,7 @@ void CartesianPlotDock::addXBreak() {
 	for (auto* plot : m_plotList)
 		plot->setXRangeBreaks(breaks);
 
-	ui.cbXBreak->addItem(QString::number(ui.cbXBreak->count()+1));
+	ui.cbXBreak->addItem(QString::number(ui.cbXBreak->count() + 1));
 	ui.cbXBreak->setCurrentIndex(ui.cbXBreak->count()-1);
 }
 
@@ -824,9 +824,9 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 
 	m_initializing = true;
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.at(index);
-	QString str = std::isnan(rangeBreak.start) ? QString() : QString::number(rangeBreak.start);
+	QString str = std::isnan(rangeBreak.start) ? QString() : QLocale().toString(rangeBreak.start);
 	ui.leXBreakStart->setText(str);
-	str = std::isnan(rangeBreak.end) ? QString() : QString::number(rangeBreak.end);
+	str = std::isnan(rangeBreak.end) ? QString() : QLocale().toString(rangeBreak.end);
 	ui.leXBreakEnd->setText(str);
 	ui.sbXBreakPosition->setValue(rangeBreak.position*100);
 	ui.cbXBreakStyle->setCurrentIndex((int)rangeBreak.style);
@@ -911,12 +911,12 @@ void CartesianPlotDock::addYBreak() {
 	for (auto* plot : m_plotList)
 		plot->setYRangeBreaks(breaks);
 
-	ui.cbYBreak->addItem(QString::number(ui.cbYBreak->count()+1));
+	ui.cbYBreak->addItem(QString::number(ui.cbYBreak->count() + 1));
 	ui.cbYBreak->setCurrentIndex(ui.cbYBreak->count()-1);
 }
 
 void CartesianPlotDock::removeYBreak() {
-	ui.bRemoveYBreak->setVisible(m_plot->yRangeBreaks().list.size()>1);
+	ui.bRemoveYBreak->setVisible(m_plot->yRangeBreaks().list.size() > 1);
 	int index = ui.cbYBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
 	breaks.list.takeAt(index);
@@ -945,9 +945,9 @@ void CartesianPlotDock::currentYBreakChanged(int index) {
 
 	m_initializing = true;
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.at(index);
-	QString str = std::isnan(rangeBreak.start) ? QString() : QString::number(rangeBreak.start);
+	QString str = std::isnan(rangeBreak.start) ? QString() : QLocale().toString(rangeBreak.start);
 	ui.leYBreakStart->setText(str);
-	str = std::isnan(rangeBreak.end) ? QString() : QString::number(rangeBreak.end);
+	str = std::isnan(rangeBreak.end) ? QString() : QLocale().toString(rangeBreak.end);
 	ui.leYBreakEnd->setText(str);
 	ui.sbYBreakPosition->setValue(rangeBreak.position*100);
 	ui.cbYBreakStyle->setCurrentIndex((int)rangeBreak.style);
@@ -1399,13 +1399,13 @@ void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
 
 void CartesianPlotDock::plotRangeFirstValuesChanged(int value) {
 	m_initializing = true;
-	ui.leRangeFirst->setText(QString::number(value));
+	ui.leRangeFirst->setText(QLocale().toString(value));
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotRangeLastValuesChanged(int value) {
 	m_initializing = true;
-	ui.leRangeLast->setText(QString::number(value));
+	ui.leRangeLast->setText(QLocale().toString(value));
 	m_initializing = false;
 }
 
@@ -1658,8 +1658,8 @@ void CartesianPlotDock::load() {
 		break;
 	}
 	rangeTypeChanged();
-	ui.leRangeFirst->setText( QString::number(m_plot->rangeFirstValues()) );
-	ui.leRangeLast->setText( QString::number(m_plot->rangeLastValues()) );
+	ui.leRangeFirst->setText( QLocale().toString(m_plot->rangeFirstValues()) );
+	ui.leRangeLast->setText( QLocale().toString(m_plot->rangeLastValues()) );
 
 	ui.chkAutoScaleX->setChecked(m_plot->autoScaleX());
 	ui.leXMin->setText(QLocale().toString(m_plot->xMin()));
@@ -1687,7 +1687,7 @@ void CartesianPlotDock::load() {
 	//x-range breaks, show the first break
 	ui.chkXBreak->setChecked(m_plot->xRangeBreakingEnabled());
 	this->toggleXBreak(m_plot->xRangeBreakingEnabled());
-	ui.bRemoveXBreak->setVisible(m_plot->xRangeBreaks().list.size()>1);
+	ui.bRemoveXBreak->setVisible(m_plot->xRangeBreaks().list.size() > 1);
 	ui.cbXBreak->clear();
 	if (!m_plot->xRangeBreaks().list.isEmpty()) {
 		for (int i = 1; i <= m_plot->xRangeBreaks().list.size(); ++i)
@@ -1699,7 +1699,7 @@ void CartesianPlotDock::load() {
 	//y-range breaks, show the first break
 	ui.chkYBreak->setChecked(m_plot->yRangeBreakingEnabled());
 	this->toggleYBreak(m_plot->yRangeBreakingEnabled());
-	ui.bRemoveYBreak->setVisible(m_plot->yRangeBreaks().list.size()>1);
+	ui.bRemoveYBreak->setVisible(m_plot->yRangeBreaks().list.size() > 1);
 	ui.cbYBreak->clear();
 	if (!m_plot->yRangeBreaks().list.isEmpty()) {
 		for (int i = 1; i <= m_plot->yRangeBreaks().list.size(); ++i)

@@ -1206,7 +1206,7 @@ void XYFitCurveDock::showFitResult() {
 	for (int row = 0; row < uiGeneralTab.twLog->rowCount(); ++row)
 		uiGeneralTab.twLog->item(row, 1)->setText(QString());
 
-	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
+	const auto& fitResult = m_fitCurve->fitResult();
 
 	if (!fitResult.available) {
 		DEBUG(" fit result not available");
@@ -1223,19 +1223,19 @@ void XYFitCurveDock::showFitResult() {
 
 	// used confidence interval
 	double confidenceInterval = m_fitData.confidenceInterval;
-	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1\% lower confidence level", QString::number(confidenceInterval, 'g', 7)));
-	uiGeneralTab.twParameters->horizontalHeaderItem(7)->setToolTip(i18n("%1\% upper confidence level", QString::number(confidenceInterval, 'g', 7)));
+	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1\% lower confidence level", QLocale().toString(confidenceInterval, 'g', 7)));
+	uiGeneralTab.twParameters->horizontalHeaderItem(7)->setToolTip(i18n("%1\% upper confidence level", QLocale().toString(confidenceInterval, 'g', 7)));
 
 	// log
-	uiGeneralTab.twLog->item(1, 1)->setText(QString::number(fitResult.iterations));
-	uiGeneralTab.twLog->item(2, 1)->setText(QString::number(m_fitData.eps));
+	uiGeneralTab.twLog->item(1, 1)->setText(QLocale().toString(fitResult.iterations));
+	uiGeneralTab.twLog->item(2, 1)->setText(QLocale().toString(m_fitData.eps));
 	if (fitResult.elapsedTime > 1000)
-		uiGeneralTab.twLog->item(3, 1)->setText(QString::number(fitResult.elapsedTime/1000) + " s");
+		uiGeneralTab.twLog->item(3, 1)->setText(QLocale().toString(fitResult.elapsedTime/1000) + " s");
 	else
-		uiGeneralTab.twLog->item(3, 1)->setText(QString::number(fitResult.elapsedTime) + " ms");
+		uiGeneralTab.twLog->item(3, 1)->setText(QLocale().toString(fitResult.elapsedTime) + " ms");
 
-	uiGeneralTab.twLog->item(4, 1)->setText(QString::number(fitResult.dof));
-	uiGeneralTab.twLog->item(5, 1)->setText(QString::number(fitResult.paramValues.size()));
+	uiGeneralTab.twLog->item(4, 1)->setText(QLocale().toString(fitResult.dof));
+	uiGeneralTab.twLog->item(5, 1)->setText(QLocale().toString(fitResult.paramValues.size()));
 	uiGeneralTab.twLog->item(6, 1)->setText(m_fitData.fitRange.toString());
 
 	// show all iterations
@@ -1262,14 +1262,14 @@ void XYFitCurveDock::showFitResult() {
 		auto* item = new QTableWidgetItem(m_fitData.paramNamesUtf8.at(i));
 		item->setBackground(QApplication::palette().color(QPalette::Window));
 		uiGeneralTab.twParameters->setItem(i, 0, item);
-		item = new QTableWidgetItem(QString::number(paramValue));
+		item = new QTableWidgetItem(QLocale().toString(paramValue));
 		uiGeneralTab.twParameters->setItem(i, 1, item);
 
 		if (!m_fitData.paramFixed.at(i)) {
 			if (!std::isnan(errorValue)) {
-				item = new QTableWidgetItem(QString::number(errorValue, 'g', 6));
+				item = new QTableWidgetItem(QLocale().toString(errorValue));
 				uiGeneralTab.twParameters->setItem(i, 2, item);
-				item = new QTableWidgetItem(QString::number(100.*errorValue/std::abs(paramValue), 'g', 3));
+				item = new QTableWidgetItem(QLocale().toString(100.*errorValue/std::abs(paramValue), 'g', 3));
 				uiGeneralTab.twParameters->setItem(i, 3, item);
 			} else {
 				item = new QTableWidgetItem(UTF8_QSTRING("∞"));
@@ -1281,7 +1281,7 @@ void XYFitCurveDock::showFitResult() {
 			// t values
 			QString tdistValueString;
 			if (fitResult.tdist_tValues.at(i) < std::numeric_limits<double>::max())
-				tdistValueString = QString::number(fitResult.tdist_tValues.at(i), 'g', 3);
+				tdistValueString = QLocale().toString(fitResult.tdist_tValues.at(i), 'g', 3);
 			else
 				tdistValueString = UTF8_QSTRING("∞");
 			item = new QTableWidgetItem(tdistValueString);
@@ -1289,7 +1289,7 @@ void XYFitCurveDock::showFitResult() {
 
 			// p values
 			const double p = fitResult.tdist_pValues.at(i);
-			item = new QTableWidgetItem(QString::number(p, 'g', 3));
+			item = new QTableWidgetItem(QLocale().toString(p, 'g', 3));
 			// color p values depending on value
 			if (p > 0.05)
 				item->setForeground(QBrush(QApplication::palette().color(QPalette::LinkVisited)));
@@ -1309,33 +1309,33 @@ void XYFitCurveDock::showFitResult() {
 				//TODO: if (fitResult.tdist_tValues.at(i) > 1.e6)
 				//	item = new QTableWidgetItem(i18n("too small"));
 
-				item = new QTableWidgetItem(QString::number(paramValue - margin));
+				item = new QTableWidgetItem(QLocale().toString(paramValue - margin));
 				uiGeneralTab.twParameters->setItem(i, 6, item);
-				item = new QTableWidgetItem(QString::number(paramValue + margin));
+				item = new QTableWidgetItem(QLocale().toString(paramValue + margin));
 				uiGeneralTab.twParameters->setItem(i, 7, item);
 			}
 		}
 	}
 
 	// Goodness of fit
-	uiGeneralTab.twGoodness->item(0, 1)->setText(QString::number(fitResult.sse));
+	uiGeneralTab.twGoodness->item(0, 1)->setText(QLocale().toString(fitResult.sse));
 
 	if (fitResult.dof != 0) {
-		uiGeneralTab.twGoodness->item(1, 1)->setText(QString::number(fitResult.rms));
-		uiGeneralTab.twGoodness->item(2, 1)->setText(QString::number(fitResult.rsd));
+		uiGeneralTab.twGoodness->item(1, 1)->setText(QLocale().toString(fitResult.rms));
+		uiGeneralTab.twGoodness->item(2, 1)->setText(QLocale().toString(fitResult.rsd));
 
-		uiGeneralTab.twGoodness->item(3, 1)->setText(QString::number(fitResult.rsquare, 'g'));
-		uiGeneralTab.twGoodness->item(4, 1)->setText(QString::number(fitResult.rsquareAdj, 'g'));
+		uiGeneralTab.twGoodness->item(3, 1)->setText(QLocale().toString(fitResult.rsquare));
+		uiGeneralTab.twGoodness->item(4, 1)->setText(QLocale().toString(fitResult.rsquareAdj));
 
 		// chi^2 and F test p-values
-		uiGeneralTab.twGoodness->item(5, 1)->setText(QString::number(fitResult.chisq_p, 'g', 3));
-		uiGeneralTab.twGoodness->item(6, 1)->setText(QString::number(fitResult.fdist_F, 'g', 3));
-		uiGeneralTab.twGoodness->item(7, 1)->setText(QString::number(fitResult.fdist_p, 'g', 3));
-		uiGeneralTab.twGoodness->item(9, 1)->setText(QString::number(fitResult.aic, 'g', 3));
-		uiGeneralTab.twGoodness->item(10, 1)->setText(QString::number(fitResult.bic, 'g', 3));
+		uiGeneralTab.twGoodness->item(5, 1)->setText(QLocale().toString(fitResult.chisq_p, 'g', 3));
+		uiGeneralTab.twGoodness->item(6, 1)->setText(QLocale().toString(fitResult.fdist_F, 'g', 3));
+		uiGeneralTab.twGoodness->item(7, 1)->setText(QLocale().toString(fitResult.fdist_p, 'g', 3));
+		uiGeneralTab.twGoodness->item(9, 1)->setText(QLocale().toString(fitResult.aic, 'g', 3));
+		uiGeneralTab.twGoodness->item(10, 1)->setText(QLocale().toString(fitResult.bic, 'g', 3));
 	}
 
-	uiGeneralTab.twGoodness->item(8, 1)->setText(QString::number(fitResult.mae));
+	uiGeneralTab.twGoodness->item(8, 1)->setText(QLocale().toString(fitResult.mae));
 
 	//resize the table headers to fit the new content
 	uiGeneralTab.twLog->resizeColumnsToContents();

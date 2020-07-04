@@ -30,6 +30,7 @@
 #define RANGE_H
 
 #include <QString>
+#include <QLocale>
 
 //! Auxiliary class for a data range 
 /**
@@ -69,7 +70,7 @@ public:
 
 	//! Return a string in the format '[min, max]'
 	QString toString() const {
-		return "[" + QString::number(m_min) + ", " + QString::number(m_max) + "]";
+		return "[" + QLocale().toString(m_min) + ", " + QLocale().toString(m_max) + "]";
 	}
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
