@@ -47,22 +47,22 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.lRobust->setVisible(false);
 	ui.cbRobust->setVisible(false);
 
-	ui.leEps->setValidator( new QDoubleValidator(ui.leEps) );
 	ui.leMaxIterations->setValidator( new QIntValidator(ui.leMaxIterations) );
+	ui.leEps->setValidator( new QDoubleValidator(ui.leEps) );
 	ui.leEvaluatedPoints->setValidator( new QIntValidator(ui.leEvaluatedPoints) );
 
-	ui.leEps->setText(QString::number(m_fitData->eps));
-	ui.leMaxIterations->setText(QString::number(m_fitData->maxIterations));
-	ui.leEvaluatedPoints->setText(QString::number(m_fitData->evaluatedPoints));
+	ui.leMaxIterations->setText(QLocale().toString(m_fitData->maxIterations));
+	ui.leEps->setText(QLocale().toString(m_fitData->eps));
+	ui.leEvaluatedPoints->setText(QLocale().toString(static_cast<qulonglong>(m_fitData->evaluatedPoints)));
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(fitCurve->parentAspect());
 	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::RangeFormat::Numeric);
 	if (!m_dateTimeRange) {
-		ui.leMin->setText(QString::number(m_fitData->fitRange.min()));
-		ui.leMax->setText(QString::number(m_fitData->fitRange.max()));
-		ui.leEvalMin->setText(QString::number(m_fitData->evalRange.min()));
-		ui.leEvalMax->setText(QString::number(m_fitData->evalRange.max()));
+		ui.leMin->setText(QLocale().toString(m_fitData->fitRange.min()));
+		ui.leMax->setText(QLocale().toString(m_fitData->fitRange.max()));
+		ui.leEvalMin->setText(QLocale().toString(m_fitData->evalRange.min()));
+		ui.leEvalMax->setText(QLocale().toString(m_fitData->evalRange.max()));
 	} else {
 		ui.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.min()) );
 		ui.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.max()) );
@@ -178,8 +178,8 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 			m_fitData->evalRange.setRange(xMin, xMax);
 
 			if (!m_dateTimeRange) {
-				ui.leEvalMin->setText(QString::number(xMin));
-				ui.leEvalMax->setText(QString::number(xMax));
+				ui.leEvalMin->setText(QLocale().toString(xMin));
+				ui.leEvalMax->setText(QLocale().toString(xMax));
 			} else {
 				ui.dateTimeEditEvalMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xMin));
 				ui.dateTimeEditEvalMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xMax));
@@ -189,12 +189,14 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 }
 
 void FitOptionsWidget::fitRangeMinChanged() {
+	//TODO
 	const double xMin = ui.leMin->text().toDouble();
 
 	m_fitData->fitRange.setMin(xMin);
 	changed();
 }
 void FitOptionsWidget::fitRangeMaxChanged() {
+	//TODO
 	const double xMax = ui.leMax->text().toDouble();
 
 	m_fitData->fitRange.setMax(xMax);
@@ -212,15 +214,11 @@ void FitOptionsWidget::fitRangeMaxDateTimeChanged(const QDateTime& dateTime) {
 }
 
 void FitOptionsWidget::evalRangeMinChanged() {
-	const double xMin = ui.leEvalMin->text().toDouble();
-
-	m_fitData->evalRange.setMin(xMin);
+	SET_DOUBLE_FROM_LE(m_fitData->evalRange.min(), ui.leEvalMin);
 	changed();
 }
 void FitOptionsWidget::evalRangeMaxChanged() {
-	const double xMax = ui.leEvalMax->text().toDouble();
-
-	m_fitData->evalRange.setMax(xMax);
+	SET_DOUBLE_FROM_LE(m_fitData->evalRange.max(), ui.leEvalMax);
 	changed();
 }
 
@@ -235,9 +233,10 @@ void FitOptionsWidget::evalRangeMaxDateTimeChanged(const QDateTime& dateTime) {
 }
 
 void FitOptionsWidget::applyClicked() {
-	m_fitData->maxIterations = ui.leMaxIterations->text().toFloat();	//TODO: float?
-	m_fitData->eps = ui.leEps->text().toFloat();	// TODO: float?
-	m_fitData->evaluatedPoints = ui.leEvaluatedPoints->text().toInt();
+	SET_INT_FROM_LE(m_fitData->maxIterations, ui.leMaxIterations);
+	SET_DOUBLE_FROM_LE(m_fitData->eps, ui.leEps);
+	SET_INT_FROM_LE(m_fitData->evaluatedPoints, ui.leEvaluatedPoints);
+
 	m_fitData->useDataErrors = ui.cbUseDataErrors->isChecked();
 	m_fitData->useResults = ui.cbUseResults->isChecked();
 	m_fitData->previewEnabled = ui.cbPreview->isChecked();

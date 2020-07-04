@@ -47,6 +47,8 @@ public:
 	~Range() = default;
 	T min() const { return m_min; }
 	T max() const { return m_max; }
+	T& min() { return m_min; }
+	T& max() { return m_max; }
 	void setMin(T min) { m_min = min; }	// no check (use first)
 	void setMax(T max) { m_max = std::max(m_min, max); }
 	void setRange(T min, T max) {

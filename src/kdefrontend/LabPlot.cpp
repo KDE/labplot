@@ -61,7 +61,7 @@ const QString getSystemInfo() {
 #else
 	const QString buildType(i18n("Debug build"));
 #endif
-	const QLocale locale{QLocale::system()};
+	const QLocale locale;
 	// TODO: show zeroDigit(), groupSeparator(), etc.
 	const QString localeInfo{QLatin1String(" (")
 			+ i18n("Decimal point: ") + '\'' + QString(locale.decimalPoint())

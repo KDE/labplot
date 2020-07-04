@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -56,6 +56,9 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 }
 #endif
 
+#define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
+#define RESET_CURSOR QApplication::restoreOverrideCursor()
+
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
 #define STDSTRING(qstr) qstr.toUtf8().constData()
 
@@ -63,6 +66,23 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
     (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(value)))
 #define ENUM_COUNT(class, enum) \
 	(class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
+
+//////////////////////// LineEdit Access ///////////////////////////////
+#define SET_INT_FROM_LE(var, le) { \
+	bool ok; \
+	const int tmp = QLocale().toInt(le->text(), &ok); \
+	if (ok) \
+		var = tmp; \
+}
+
+#define SET_DOUBLE_FROM_LE(var, le) { \
+	bool ok; \
+	const double tmp = QLocale().toDouble(le->text(), &ok); \
+	if (ok) \
+		var = tmp; \
+}
+
+//////////////////////// Accessor ///////////////////////////////
 
 #define BASIC_ACCESSOR(type, var, method, Method) \
 	type method() const { return var; }; \
@@ -153,8 +173,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 		return d->var; \
 	}
 
-#define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
-#define RESET_CURSOR QApplication::restoreOverrideCursor()
+//////////////////////// Standard Setter /////////////////////
 
 #define STD_SETTER_CMD_IMPL(class_name, cmd_name, value_type, field_name) \
 class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
@@ -248,7 +267,8 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 };
 
 
-//xml-serialization/deserialization
+//////////////////////// XML - serialization/deserialization /////
+
 //QColor
 #define WRITE_QCOLOR(color) 												\
 do { 																		\
@@ -445,13 +465,6 @@ if (str.isEmpty()) \
 	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
 	d->var = str.toDouble();
-
-#define READ_DOUBLE_VALUE_LOCAL(name, var) \
-str = attribs.value(name).toString(); \
-if (str.isEmpty()) \
-	reader->raiseWarning(attributeWarning.subs(name).toString()); \
-else \
-	var = str.toDouble();
 
 #define READ_STRING_VALUE(name, var) \
 str = attribs.value(name).toString(); \

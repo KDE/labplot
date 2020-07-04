@@ -44,6 +44,7 @@ private:
 	XYFitCurve* m_fitCurve;
 	bool m_changed{false};
 	bool m_dateTimeRange{false};
+	const QLocale locale;
 
 signals:
 	void finished();

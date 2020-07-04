@@ -2323,12 +2323,10 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(yErrorColumn);
 
 			READ_INT_VALUE("autoRange", fitData.autoRange, bool);
-			double left{0}, right{0};
-			READ_DOUBLE_VALUE_LOCAL("xRangeMin", left);	// old name
-			READ_DOUBLE_VALUE_LOCAL("xRangeMax", right);	// old name
-			READ_DOUBLE_VALUE_LOCAL("fitRangeMin", left);
-			READ_DOUBLE_VALUE_LOCAL("fitRangeMax", right);
-			d->fitData.fitRange.setRange(left, right);
+			READ_DOUBLE_VALUE("xRangeMin", fitData.fitRange.min());	// old name
+			READ_DOUBLE_VALUE("xRangeMax", fitData.fitRange.max());	// old name
+			READ_DOUBLE_VALUE("fitRangeMin", fitData.fitRange.min());
+			READ_DOUBLE_VALUE("fitRangeMax", fitData.fitRange.min());
 			READ_INT_VALUE("modelCategory", fitData.modelCategory, nsl_fit_model_category);
 			READ_INT_VALUE("modelType", fitData.modelType, int);
 			READ_INT_VALUE("xWeightsType", fitData.xWeightsType, nsl_fit_weight_type);
