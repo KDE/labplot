@@ -66,7 +66,7 @@ void XYDataReductionCurveDock::setupGeneral() {
 	m_leComment = uiGeneralTab.leComment;
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
-	gridLayout->setContentsMargins(2,2,2,2);
+	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
 
@@ -649,15 +649,15 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 	}
 
 	if (dataReductionResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QString::number(dataReductionResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QLocale().toString(dataReductionResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(dataReductionResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QLocale().toString(dataReductionResult.elapsedTime)) + "<br>";
 
 	str += "<br>";
 
-	str += i18n("number of points: %1", QString::number(dataReductionResult.npoints)) + "<br>";
-	str += i18n("positional squared error: %1", QString::number(dataReductionResult.posError)) + "<br>";
-	str += i18n("area error: %1", QString::number(dataReductionResult.areaError)) + "<br>";
+	str += i18n("number of points: %1", QLocale().toString(static_cast<qulonglong>(dataReductionResult.npoints))) + "<br>";
+	str += i18n("positional squared error: %1", QLocale().toString(dataReductionResult.posError)) + "<br>";
+	str += i18n("area error: %1", QLocale().toString(dataReductionResult.areaError)) + "<br>";
 
 	uiGeneralTab.teResult->setText(str);
 }

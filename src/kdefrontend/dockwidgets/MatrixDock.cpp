@@ -94,7 +94,7 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 		ui.leName->setText(m_matrix->name());
 		ui.leComment->setText(m_matrix->comment());
 	} else {
-		//disable the fields "Name" and "Comment" if there are more the one matrix
+		//disable these fields if there is more than one matrix
 		ui.leName->setEnabled(false);
 		ui.leComment->setEnabled(false);
 
@@ -135,9 +135,12 @@ void MatrixDock::xStartChanged() {
 
 	QString str = ui.leXStart->text().trimmed();
 	if (str.isEmpty()) return;
-	double value = str.toDouble();
-	for (auto* matrix : m_matrixList)
-		matrix->setXStart(value);
+	bool ok;
+	const double value{ QLocale().toDouble(str, &ok) };
+	if (ok) {
+		for (auto* matrix : m_matrixList)
+			matrix->setXStart(value);
+	}
 }
 
 void MatrixDock::xEndChanged() {
@@ -146,9 +149,12 @@ void MatrixDock::xEndChanged() {
 
 	QString str = ui.leXEnd->text().trimmed();
 	if (str.isEmpty()) return;
-	double value = str.toDouble();
-	for (auto* matrix : m_matrixList)
-		matrix->setXEnd(value);
+	bool ok;
+	const double value{ QLocale().toDouble(str, &ok) };
+	if (ok) {
+		for (auto* matrix : m_matrixList)
+			matrix->setXEnd(value);
+	}
 }
 
 void MatrixDock::yStartChanged() {
@@ -157,9 +163,12 @@ void MatrixDock::yStartChanged() {
 
 	QString str = ui.leYStart->text().trimmed();
 	if (str.isEmpty()) return;
-	double value = str.toDouble();
-	for (auto* matrix : m_matrixList)
-		matrix->setYStart(value);
+	bool ok;
+	const double value{ QLocale().toDouble(str, &ok) };
+	if (ok) {
+		for (auto* matrix : m_matrixList)
+			matrix->setYStart(value);
+	}
 }
 
 void MatrixDock::yEndChanged() {
@@ -168,9 +177,12 @@ void MatrixDock::yEndChanged() {
 
 	QString str = ui.leYEnd->text().trimmed();
 	if (str.isEmpty()) return;
-	double value = str.toDouble();
-	for (auto* matrix : m_matrixList)
-		matrix->setYEnd(value);
+	bool ok;
+	const double value{ QLocale().toDouble(str, &ok) };
+	if (ok) {
+		for (auto* matrix : m_matrixList)
+			matrix->setYEnd(value);
+	}
 }
 
 //format
@@ -248,25 +260,25 @@ void MatrixDock::matrixColumnCountChanged(int count) {
 //mapping to the logical coordinates
 void MatrixDock::matrixXStartChanged(double value) {
 	m_initializing = true;
-	ui.leXStart->setText(QString::number(value));
+	ui.leXStart->setText(QLocale().toString(value));
 	m_initializing = false;
 }
 
 void MatrixDock::matrixXEndChanged(double value) {
 	m_initializing = true;
-	ui.leXEnd->setText(QString::number(value));
+	ui.leXEnd->setText(QLocale().toString(value));
 	m_initializing = false;
 }
 
 void MatrixDock::matrixYStartChanged(double value) {
 	m_initializing = true;
-	ui.leYStart->setText(QString::number(value));
+	ui.leYStart->setText(QLocale().toString(value));
 	m_initializing = false;
 }
 
 void MatrixDock::matrixYEndChanged(double value) {
 	m_initializing = true;
-	ui.leYEnd->setText(QString::number(value));
+	ui.leYEnd->setText(QLocale().toString(value));
 	m_initializing = false;
 }
 
@@ -299,10 +311,10 @@ void MatrixDock::load() {
 	ui.sbColumnCount->setValue(m_matrix->columnCount());
 
 	//mapping to the logical coordinates
-	ui.leXStart->setText(QString::number(m_matrix->xStart()));
-	ui.leXEnd->setText(QString::number(m_matrix->xEnd()));
-	ui.leYStart->setText(QString::number(m_matrix->yStart()));
-	ui.leYEnd->setText(QString::number(m_matrix->yEnd()));
+	ui.leXStart->setText(QLocale().toString(m_matrix->xStart()));
+	ui.leXEnd->setText(QLocale().toString(m_matrix->xEnd()));
+	ui.leYStart->setText(QLocale().toString(m_matrix->yStart()));
+	ui.leYEnd->setText(QLocale().toString(m_matrix->yEnd()));
 
 	//format
 	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData((int)m_matrix->numericFormat()));
@@ -341,10 +353,10 @@ void MatrixDock::loadConfig(KConfig& config) {
 	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
 
 	//mapping to the logical coordinates
-	ui.leXStart->setText( QString::number(group.readEntry("XStart", m_matrix->xStart())) );
-	ui.leXEnd->setText( QString::number(group.readEntry("XEnd", m_matrix->xEnd())) );
-	ui.leYStart->setText( QString::number(group.readEntry("YStart", m_matrix->yStart())) );
-	ui.leYEnd->setText( QString::number(group.readEntry("YEnd", m_matrix->yEnd())) );
+	ui.leXStart->setText( QLocale().toString(group.readEntry("XStart", m_matrix->xStart())) );
+	ui.leXEnd->setText( QLocale().toString(group.readEntry("XEnd", m_matrix->xEnd())) );
+	ui.leYStart->setText( QLocale().toString(group.readEntry("YStart", m_matrix->yStart())) );
+	ui.leYEnd->setText( QLocale().toString(group.readEntry("YEnd", m_matrix->yEnd())) );
 
 	//format
 	ui.cbFormat->setCurrentIndex( ui.cbFormat->findData(group.readEntry("NumericFormat", QString(m_matrix->numericFormat()))) );
@@ -363,10 +375,10 @@ void MatrixDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
 
 	//mapping to the logical coordinates
-	group.writeEntry("XStart", ui.leXStart->text().toInt());
-	group.writeEntry("XEnd", ui.leXEnd->text().toInt());
-	group.writeEntry("YStart", ui.leYStart->text().toInt());
-	group.writeEntry("YEnd", ui.leYEnd->text().toInt());
+	group.writeEntry("XStart", QLocale().toDouble(ui.leXStart->text()) );
+	group.writeEntry("XEnd", QLocale().toDouble(ui.leXEnd->text()) );
+	group.writeEntry("YStart", QLocale().toDouble(ui.leYStart->text()) );
+	group.writeEntry("YEnd", QLocale().toDouble(ui.leYEnd->text()) );
 
 	//format
 	group.writeEntry("NumericFormat", ui.cbFormat->itemData(ui.cbFormat->currentIndex()));

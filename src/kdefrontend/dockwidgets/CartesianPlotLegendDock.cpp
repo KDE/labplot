@@ -59,7 +59,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 	labelWidget->setGeometryAvailable(false);
 	labelWidget->setBorderAvailable(false);
 	hboxLayout->addWidget(labelWidget);
-	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setContentsMargins(2, 2, 2, 2);
 	hboxLayout->setSpacing(2);
 
 	//"Background"-tab

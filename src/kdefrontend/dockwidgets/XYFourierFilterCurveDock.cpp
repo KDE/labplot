@@ -88,6 +88,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
 	}
 
+	//TODO: use line edits
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
@@ -630,9 +631,9 @@ void XYFourierFilterCurveDock::showFilterResult() {
 	}
 
 	if (filterResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QString::number(filterResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QLocale().toString(filterResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(filterResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QLocale().toString(filterResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

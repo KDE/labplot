@@ -1771,7 +1771,7 @@ void XYCurvePrivate::updateValues() {
 			if (!m_pointVisible.at(i++)) continue;
 			QString value;
 			if (rangeFormat == CartesianPlot::RangeFormat::Numeric)
-				value = QString::number(point.x(), valuesNumericFormat, precision);
+				value = QLocale().toString(point.x(), valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(point.x()).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
@@ -1787,7 +1787,7 @@ void XYCurvePrivate::updateValues() {
 			if (!m_pointVisible.at(i++)) continue;
 			QString value;
 			if (rangeFormat == CartesianPlot::RangeFormat::Numeric)
-				value = QString::number(point.y(), valuesNumericFormat, precision);
+				value = QLocale().toString(point.y(), valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);
 			m_valueStrings << valuesPrefix + value + valuesSuffix;
@@ -1813,12 +1813,12 @@ void XYCurvePrivate::updateValues() {
 			if (valuesType == XYCurve::ValuesType::XYBracketed)
 				value = '(';
 			if (xRangeFormat == CartesianPlot::RangeFormat::Numeric)
-				value += QString::number(point.x(), valuesNumericFormat, xPrecision);
+				value += QLocale().toString(point.x(), valuesNumericFormat, xPrecision);
 			else
 				value += QDateTime::fromMSecsSinceEpoch(point.x()).toString(valuesDateTimeFormat);
 
 			if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
-				value += ',' + QString::number(point.y(), valuesNumericFormat, yPrecision);
+				value += ',' + QLocale().toString(point.y(), valuesNumericFormat, yPrecision);
 			else
 				value += ',' + QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);
 
@@ -1845,11 +1845,11 @@ void XYCurvePrivate::updateValues() {
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Numeric:
-				m_valueStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
+				m_valueStrings << valuesPrefix + QLocale().toString(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-				m_valueStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i)) + valuesSuffix;
+				m_valueStrings << valuesPrefix + QLocale().toString(valuesColumn->valueAt(i)) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Text:
 				m_valueStrings << valuesPrefix + valuesColumn->textAt(i) + valuesSuffix;
@@ -1880,20 +1880,16 @@ void XYCurvePrivate::updateValues() {
 
 		switch (valuesPosition) {
 		case XYCurve::ValuesPosition::Above:
-			tempPoint.setX(x - w/2.);
-			tempPoint.setY(y - valuesDistance);
+			tempPoint = QPointF(x - w/2., y - valuesDistance);
 			break;
 		case XYCurve::ValuesPosition::Under:
-			tempPoint.setX(x - w/2.);
-			tempPoint.setY(y + valuesDistance + h/2.);
+			tempPoint = QPointF(x - w/2., y + valuesDistance + h/2.);
 			break;
 		case XYCurve::ValuesPosition::Left:
-			tempPoint.setX(x - valuesDistance - w - 1.);
-			tempPoint.setY(y);
+			tempPoint = QPointF(x - valuesDistance - w - 1., y);
 			break;
 		case XYCurve::ValuesPosition::Right:
-			tempPoint.setX(x + valuesDistance - 1.);
-			tempPoint.setY(y);
+			tempPoint = QPointF(x + valuesDistance - 1., y);
 			break;
 		}
 		m_valuePoints.append(tempPoint);

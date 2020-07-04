@@ -100,6 +100,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	uiGeneralTab.cbPointsMode->addItem(i18n("Multiple of data points"));
 	uiGeneralTab.cbPointsMode->addItem(i18n("Custom"));
 
+	//TODO: use line edits
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
@@ -121,6 +122,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYInterpolationCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::typeChanged);
 	connect(uiGeneralTab.cbVariant, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::variantChanged);
+	//TODO: use line edits?
 	connect(uiGeneralTab.sbTension, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::tensionChanged);
 	connect(uiGeneralTab.sbContinuity, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::continuityChanged);
 	connect(uiGeneralTab.sbBias, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::biasChanged);
@@ -692,9 +694,9 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 	}
 
 	if (interpolationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QString::number(interpolationResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QLocale().toString(interpolationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(interpolationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QLocale().toString(interpolationResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

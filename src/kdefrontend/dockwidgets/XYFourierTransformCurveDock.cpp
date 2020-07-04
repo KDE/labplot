@@ -79,6 +79,7 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_DFT_XSCALE_COUNT; i++)
 		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
 
+	//TODO: use line edits
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
@@ -361,9 +362,9 @@ void XYFourierTransformCurveDock::showTransformResult() {
 	}
 
 	if (transformResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QString::number(transformResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QLocale().toString(transformResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(transformResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QLocale().toString(transformResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

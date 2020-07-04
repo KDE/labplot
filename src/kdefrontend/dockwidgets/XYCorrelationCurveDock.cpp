@@ -455,9 +455,9 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 	}
 
 	if (correlationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", QString::number(correlationResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QLocale().toString(correlationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(correlationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QLocale().toString(correlationResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

@@ -72,7 +72,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	m_aspect = list.first();
 	Q_ASSERT(m_line);
 
-	//if there are more then one point in the list, disable the comment and name widgets in the tab "general"
+	//if there is more then one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -129,9 +129,12 @@ void ReferenceLineDock::positionChanged() {
 	if (m_initializing)
 		return;
 
-	double pos = ui.lePosition->text().toDouble();
-	for (auto* line : m_linesList)
-		line->setPosition(pos);
+	bool ok;
+	const double pos{ QLocale().toDouble(ui.lePosition->text(), &ok) };
+	if (ok) {
+		for (auto* line : m_linesList)
+			line->setPosition(pos);
+	}
 }
 
 //Line
@@ -152,9 +155,8 @@ void ReferenceLineDock::colorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	QPen pen;
 	for (auto* line : m_linesList) {
-		pen = line->pen();
+		QPen pen = line->pen();
 		pen.setColor(color);
 		line->setPen(pen);
 	}
@@ -168,9 +170,8 @@ void ReferenceLineDock::widthChanged(double value) {
 	if (m_initializing)
 		return;
 
-	QPen pen;
 	for (auto* line : m_linesList) {
-		pen = line->pen();
+		QPen pen = line->pen();
 		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		line->setPen(pen);
 	}
@@ -180,7 +181,7 @@ void ReferenceLineDock::opacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (double)value/100.;
 	for (auto* line : m_linesList)
 		line->setOpacity(opacity);
 }
@@ -252,7 +253,7 @@ void ReferenceLineDock::load() {
 	m_initializing = true;
 
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(m_line->orientation()));
-	ui.lePosition->setText(QString::number(m_line->position()));
+	ui.lePosition->setText(QLocale().toString(m_line->position()));
 	ui.cbLineStyle->setCurrentIndex( (int) m_line->pen().style() );
 	ui.kcbLineColor->setColor( m_line->pen().color() );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_line->pen().widthF(), Worksheet::Unit::Point) );

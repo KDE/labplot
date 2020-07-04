@@ -84,6 +84,7 @@ void XYIntegrationCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_INT_NETHOD_COUNT; i++)
 		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
 
+	//TODO: use line edits
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
@@ -471,11 +472,11 @@ void XYIntegrationCurveDock::showIntegrationResult() {
 	}
 
 	if (integrationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QString::number(integrationResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QLocale().toString(integrationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(integrationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QLocale().toString(integrationResult.elapsedTime)) + "<br>";
 
-	str += i18n("value: %1", QString::number(integrationResult.value)) + "<br>";
+	str += i18n("value: %1", QLocale().toString(integrationResult.value)) + "<br>";
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);

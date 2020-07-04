@@ -119,7 +119,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	m_aspect = list.first();
 	Q_ASSERT(m_point);
 
-	//if there are more then one point in the list, disable the comment and name widgets in the tab "general"
+	//if there is more then one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -164,22 +164,28 @@ void CustomPointDock::positionXChanged() {
 	if (m_initializing)
 		return;
 
-	QPointF pos = m_point->position();
-	float x = ui.lePositionX->text().toFloat();
-	pos.setX(x);
-	for (auto* point : m_pointsList)
-		point->setPosition(pos);
+	bool ok;
+	double x = QLocale().toDouble(ui.lePositionX->text(), &ok);
+	if (ok) {
+		QPointF pos{m_point->position()};
+		pos.setX(x);
+		for (auto* point : m_pointsList)
+			point->setPosition(pos);
+	}
 }
 
 void CustomPointDock::positionYChanged() {
 	if (m_initializing)
 		return;
 
-	QPointF pos = m_point->position();
-	float y = ui.lePositionY->text().toFloat();
-	pos.setY(y);
-	for (auto* point : m_pointsList)
-		point->setPosition(pos);
+	bool ok;
+	double y = QLocale().toDouble(ui.lePositionY->text(), &ok);
+	if (ok) {
+		QPointF pos{m_point->position()};
+		pos.setY(y);
+		for (auto* point : m_pointsList)
+			point->setPosition(pos);
+	}
 }
 
 void CustomPointDock::visibilityChanged(bool state) {
@@ -241,7 +247,7 @@ void CustomPointDock::symbolOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (double)value/100.;
 	m_point->beginMacro(i18n("%1 CustomPoints: opacity changed", m_pointsList.count()));
 	for (auto* point : m_pointsList)
 		point->setSymbolOpacity(opacity);
@@ -279,14 +285,14 @@ void CustomPointDock::symbolFillingColorChanged(const QColor& color) {
 	m_point->endMacro();
 
 	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color );
+	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color);
 	m_initializing = false;
 }
 
 void CustomPointDock::symbolBorderStyleChanged(int index) {
 	auto penStyle = Qt::PenStyle(index);
 
-	if ( penStyle == Qt::NoPen ) {
+	if (penStyle == Qt::NoPen) {
 		ui.kcbSymbolBorderColor->setEnabled(false);
 		ui.sbSymbolBorderWidth->setEnabled(false);
 	} else {
@@ -358,8 +364,8 @@ void CustomPointDock::pointDescriptionChanged(const AbstractAspect* aspect) {
 
 void CustomPointDock::pointPositionChanged(QPointF position) {
 	m_initializing = true;
-	ui.lePositionX->setText(QString::number(position.x()));
-	ui.lePositionY->setText(QString::number(position.y()));
+	ui.lePositionX->setText(QLocale().toString(position.x()));
+	ui.lePositionY->setText(QLocale().toString(position.y()));
 	m_initializing = false;
 }
 
@@ -420,8 +426,8 @@ void CustomPointDock::load() {
 
 	m_initializing = true;
 
-	ui.lePositionX->setText(QString::number(m_point->position().x()));
-	ui.lePositionY->setText(QString::number(m_point->position().y()));
+	ui.lePositionX->setText(QLocale().toString(m_point->position().x()));
+	ui.lePositionY->setText(QLocale().toString(m_point->position().y()));
 
 	ui.cbSymbolStyle->setCurrentIndex( (int)m_point->symbolStyle() );
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_point->symbolSize(), Worksheet::Unit::Point) );

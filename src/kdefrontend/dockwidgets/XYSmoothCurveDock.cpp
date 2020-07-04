@@ -87,6 +87,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
 		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
 
+	//TODO: use line edits
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
@@ -107,6 +108,7 @@ void XYSmoothCurveDock::setupGeneral() {
 	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYSmoothCurveDock::xRangeMinDateTimeChanged);
 	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYSmoothCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::typeChanged);
+	//TODO: line edits?
 	connect(uiGeneralTab.sbPoints, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYSmoothCurveDock::pointsChanged);
 	connect(uiGeneralTab.cbWeight, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::weightChanged);
 	connect(uiGeneralTab.sbPercentile, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::percentileChanged);
@@ -571,9 +573,9 @@ void XYSmoothCurveDock::showSmoothResult() {
 	}
 
 	if (smoothResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QString::number(smoothResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QLocale().toString(smoothResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(smoothResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QLocale().toString(smoothResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

@@ -66,7 +66,7 @@ void XYDifferentiationCurveDock::setupGeneral() {
 	m_leComment = uiGeneralTab.leComment;
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
-	gridLayout->setContentsMargins(2,2,2,2);
+	gridLayout->setContentsMargins(2, 2, 2, 2);
 	gridLayout->setHorizontalSpacing(2);
 	gridLayout->setVerticalSpacing(2);
 
@@ -554,9 +554,9 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 	}
 
 	if (differentiationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QString::number(differentiationResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QLocale().toString(differentiationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(differentiationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QLocale().toString(differentiationResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

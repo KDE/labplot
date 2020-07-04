@@ -562,9 +562,9 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 	}
 
 	if (convolutionResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", QString::number(convolutionResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", QLocale().toString(convolutionResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(convolutionResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", QLocale().toString(convolutionResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 
