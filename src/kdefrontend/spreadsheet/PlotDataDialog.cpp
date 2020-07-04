@@ -381,18 +381,18 @@ void PlotDataDialog::plot() {
 		//add curves to an existing plot
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingPlots->currentModelIndex().internalPointer());
 		auto* plot = static_cast<CartesianPlot*>(aspect);
-		plot->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
+		plot->beginMacro( i18n("Plot - %1", m_spreadsheet->name()) );
 		addCurvesToPlot(plot);
 		plot->endMacro();
 	} else if (ui->rbPlotPlacement2->isChecked()) {
 		//add curves to a new plot in an existing worksheet
 		auto* aspect = static_cast<AbstractAspect*>(cbExistingWorksheets->currentModelIndex().internalPointer());
 		auto* worksheet = static_cast<Worksheet*>(aspect);
-		worksheet->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
+		worksheet->beginMacro( i18n("Worksheet - %1", m_spreadsheet->name()) );
 
 		if (ui->rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
-			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
+			CartesianPlot* plot = new CartesianPlot( i18n("Plot - %1", m_spreadsheet->name()) );
 			plot->setType(CartesianPlot::Type::FourAxes);
 
 			//set the axis titles before we add the plot to the worksheet
@@ -435,12 +435,12 @@ void PlotDataDialog::plot() {
 			parent = m_spreadsheet->project();
 #endif
 		parent->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
-		Worksheet* worksheet = new Worksheet(i18n("Plot data from %1", m_spreadsheet->name()));
+		Worksheet* worksheet = new Worksheet(i18n("Worksheet - %1", m_spreadsheet->name()));
 		parent->addChild(worksheet);
 
 		if (ui->rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
-			CartesianPlot* plot = new CartesianPlot( i18n("Plot data from %1", m_spreadsheet->name()) );
+			CartesianPlot* plot = new CartesianPlot( i18n("Plot - %1", m_spreadsheet->name()) );
 			plot->setType(CartesianPlot::Type::FourAxes);
 
 			//set the axis titles before we add the plot to the worksheet
