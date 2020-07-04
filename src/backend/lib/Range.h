@@ -40,40 +40,40 @@
 template<class T>
 class Range {
 public:
-	Range() : m_left(0), m_right(0) {}
-	Range(T left, T right) {
-		this->setRange(left, right);
+	Range() : m_min(0), m_max(0) {}
+	Range(T min, T max) {
+		this->setRange(min, max);
 	}
 	~Range() = default;
-	T left() const { return m_left; }
-	T right() const { return m_right; }
-	void setLeft(T left) { m_left = left; }	// no check (use first)
-	void setRight(T right) { m_right = std::max(m_left, right); }
-	void setRange(T left, T right) {
-		m_left = left;
-		m_right = std::max(left, right);
+	T min() const { return m_min; }
+	T max() const { return m_max; }
+	void setMin(T min) { m_min = min; }	// no check (use first)
+	void setMax(T max) { m_max = std::max(m_min, max); }
+	void setRange(T min, T max) {
+		m_min = min;
+		m_max = std::max(min, max);
 	}
-	T size() const { return m_right - m_left; }
-	bool isZero() const { return (m_right == m_left); }
-	bool inside(const Range<T>& other) const { return ( m_left <= other.left() && m_right >= other.right() ); }
-	bool inside(T value) const { return ( m_left <= value && m_right >= value ); }
-	void translate(T offset) { m_left += offset; m_right += offset; }
-	bool operator==(const Range<T>& other) const { return ( m_left == other.left() && m_right == other.right() ); }
+	T size() const { return m_max - m_min; }
+	bool isZero() const { return (m_max == m_min); }
+	bool inside(const Range<T>& other) const { return ( m_min <= other.min() && m_max >= other.max() ); }
+	bool inside(T value) const { return ( m_min <= value && m_max >= value ); }
+	void translate(T offset) { m_min += offset; m_max += offset; }
+	bool operator==(const Range<T>& other) const { return ( m_min == other.min() && m_max == other.max() ); }
 	Range<T>& operator=(const Range<T>& other) {
-		m_left = other.left();
-		m_right = other.right();
+		m_min = other.min();
+		m_max = other.max();
 		return *this;
 	}
 
-	//! Return a string in the format '[left, right]'
+	//! Return a string in the format '[min, max]'
 	QString toString() const {
-		return "[" + QString::number(m_left) + ", " + QString::number(m_right) + "]";
+		return "[" + QString::number(m_min) + ", " + QString::number(m_max) + "]";
 	}
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
 private:
-	T m_left;	// lower limit
-	T m_right;	// upper limit
+	T m_min;	// lower limit
+	T m_max;	// upper limit
 };
 
 #endif

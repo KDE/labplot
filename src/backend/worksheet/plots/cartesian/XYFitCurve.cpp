@@ -1613,15 +1613,12 @@ void XYFitCurvePrivate::recalculate() {
 	QVector<double> ydataVector;
 	QVector<double> xerrorVector;
 	QVector<double> yerrorVector;
-	double xmin, xmax;
-	if (fitData.autoRange) {
-		xmin = tmpXDataColumn->minimum();
-		xmax = tmpXDataColumn->maximum();
-	} else {
-		xmin = fitData.fitRange.left();
-		xmax = fitData.fitRange.right();
+	Range<double> xRange{tmpXDataColumn->minimum(), tmpXDataColumn->maximum()};
+	if (!fitData.autoRange) {
+		if (!fitData.fitRange.isZero()) 	// avoid zero range
+			xRange.setRange(fitData.fitRange.min(), fitData.fitRange.max());
 	}
-	DEBUG("	fit range = " << xmin << " .. " << xmax);
+	DEBUG("	fit range = " << xRange.min() << " .. " << xRange.max());
 
 	//logic from XYAnalysisCurve::copyData(), extended by the handling of error columns.
 	//TODO: decide how to deal with non-numerical error columns
@@ -1670,8 +1667,7 @@ void XYFitCurvePrivate::recalculate() {
 			y = tmpYDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 
-		// only when inside given range
-		if (x >= xmin && x <= xmax) {
+		if (x >= xRange.min() && x <= xRange.max()) {	// only when inside given range
 			if ((!xErrorColumn && !yErrorColumn) || !fitData.useDataErrors) {	// x-y
 				xdataVector.append(x);
 				ydataVector.append(y);
@@ -2058,7 +2054,7 @@ void XYFitCurvePrivate::recalculate() {
 	} else {	// only selected range
 		size_t j = 0;
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++) {
-			if (tmpXDataColumn->valueAt(i) >= xmin && tmpXDataColumn->valueAt(i) <= xmax)
+			if (tmpXDataColumn->valueAt(i) >= xRange.min() && tmpXDataColumn->valueAt(i) <= xRange.max())
 				residualsVector->data()[i] = - gsl_vector_get(s->f, j++);
 			else	// outside range
 				residualsVector->data()[i] = 0;
@@ -2134,7 +2130,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	if (preview)	// results not available yet
 		paramValues = fitData.paramStartValues;
 
-	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xRange.left()), QString::number(xRange.right()), (int)fitData.evaluatedPoints,
+	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xRange.min()), QString::number(xRange.max()), (int)fitData.evaluatedPoints,
 						xVector, yVector, fitData.paramNames, paramValues);
 	if (!rc) {
 		DEBUG("	ERROR: Parsing fit function failed")
@@ -2191,8 +2187,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->xErrorColumn, xErrorColumn);
 	WRITE_COLUMN(d->yErrorColumn, yErrorColumn);
 	writer->writeAttribute("autoRange", QString::number(d->fitData.autoRange));
-	writer->writeAttribute("fitRangeMin", QString::number(d->fitData.fitRange.left(), 'g', 15));
-	writer->writeAttribute("fitRangeMax", QString::number(d->fitData.fitRange.right(), 'g', 15));
+	writer->writeAttribute("fitRangeMin", QString::number(d->fitData.fitRange.min(), 'g', 15));
+	writer->writeAttribute("fitRangeMax", QString::number(d->fitData.fitRange.max(), 'g', 15));
 	writer->writeAttribute("modelCategory", QString::number(d->fitData.modelCategory));
 	writer->writeAttribute("modelType", QString::number(d->fitData.modelType));
 	writer->writeAttribute("xWeightsType", QString::number(d->fitData.xWeightsType));
