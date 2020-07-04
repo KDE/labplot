@@ -70,14 +70,14 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 //////////////////////// LineEdit Access ///////////////////////////////
 #define SET_INT_FROM_LE(var, le) { \
 	bool ok; \
-	const int tmp = QLocale().toInt(le->text(), &ok); \
+	const int tmp = QLocale().toInt((le)->text(), &ok); \
 	if (ok) \
 		var = tmp; \
 }
 
 #define SET_DOUBLE_FROM_LE(var, le) { \
 	bool ok; \
-	const double tmp = QLocale().toDouble(le->text(), &ok); \
+	const double tmp = QLocale().toDouble((le)->text(), &ok); \
 	if (ok) \
 		var = tmp; \
 }
