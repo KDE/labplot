@@ -403,10 +403,10 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
 	ui.sbBinCount->setValue(m_curve->binCount());
-	ui.leBinWidth->setText(QString::number(m_curve->binWidth()));
+	ui.leBinWidth->setText(QLocale().toString(m_curve->binWidth()));
 	ui.chkAutoBinRanges->setChecked(m_curve->autoBinRanges());
-	ui.leBinRangesMin->setText( QString::number(m_curve->binRangesMin()) );
-	ui.leBinRangesMax->setText( QString::number(m_curve->binRangesMax()) );
+	ui.leBinRangesMin->setText( QLocale().toString(m_curve->binRangesMin()) );
+	ui.leBinRangesMax->setText( QLocale().toString(m_curve->binRangesMax()) );
 	ui.chkVisible->setChecked( m_curve->isVisible() );
 
 	KConfig config(QString(), KConfig::SimpleConfig);
@@ -576,9 +576,12 @@ void HistogramDock::binWidthChanged() {
 		return;
 
 	const Lock lock(m_initializing);
-	float width = ui.leBinWidth->text().toDouble();
-	for (auto* curve : m_curvesList)
-		curve->setBinWidth(width);
+	bool ok;
+	const double width{QLocale().toDouble(ui.leBinWidth->text(), &ok)};
+	if (ok) {
+		for (auto* curve : m_curvesList)
+			curve->setBinWidth(width);
+	}
 }
 
 void HistogramDock::autoBinRangesChanged(int state) {
@@ -594,15 +597,16 @@ void HistogramDock::autoBinRangesChanged(int state) {
 }
 
 void HistogramDock::binRangesMinChanged(const QString& value) {
-	DEBUG("HistogramDock::binRangesMinChanged() value = " << value.toDouble());
 	if (m_initializing)
 		return;
-	DEBUG("	set value")
 
 	const Lock lock(m_initializing);
-	const double min = value.toDouble();
-	for (auto* hist : m_curvesList)
-		hist->setBinRangesMin(min);
+	bool ok;
+	const double min{QLocale().toDouble(value, &ok)};
+	if (ok) {
+		for (auto* hist : m_curvesList)
+			hist->setBinRangesMin(min);
+	}
 }
 
 void HistogramDock::binRangesMaxChanged(const QString& value) {
@@ -610,9 +614,12 @@ void HistogramDock::binRangesMaxChanged(const QString& value) {
 		return;
 
 	const Lock lock(m_initializing);
-	const double max = value.toDouble();
-	for (auto* hist : m_curvesList)
-		hist->setBinRangesMax(max);
+	bool ok;
+	const double max{QLocale().toDouble(value, &ok)};
+	if (ok) {
+		for (auto* hist : m_curvesList)
+			hist->setBinRangesMax(max);
+	}
 }
 
 //Line tab
@@ -1213,7 +1220,7 @@ void HistogramDock::errorBarsCapSizeChanged(double value) const {
 	if (m_initializing)
 		return;
 
-	float size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	double size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* curve : m_curvesList)
 		curve->setErrorBarsCapSize(size);
 }
@@ -1263,7 +1270,7 @@ void HistogramDock::errorBarsOpacityChanged(int value) const {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (double)value/100.;
 	for (auto* curve : m_curvesList)
 		curve->setErrorBarsOpacity(opacity);
 }
@@ -1313,7 +1320,7 @@ void HistogramDock::fillingOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (double)value/100.;
 	for (auto* curve : m_curvesList)
 		curve->setFillingOpacity(opacity);
 }
@@ -1366,10 +1373,10 @@ void HistogramDock::curveBinCountChanged(int count) {
 	m_initializing = false;
 }
 
-void HistogramDock::curveBinWidthChanged(float width) {
+void HistogramDock::curveBinWidthChanged(double width) {
 	if (m_initializing)return;
 	const Lock lock(m_initializing);
-	ui.leBinWidth->setText(QString::number(width));
+	ui.leBinWidth->setText(QLocale().toString(width));
 }
 
 void HistogramDock::curveAutoBinRangesChanged(bool value) {
@@ -1381,13 +1388,13 @@ void HistogramDock::curveAutoBinRangesChanged(bool value) {
 void HistogramDock::curveBinRangesMinChanged(double value) {
 	if (m_initializing)return;
 	const Lock lock(m_initializing);
-	ui.leBinRangesMin->setText(QString::number(value));
+	ui.leBinRangesMin->setText(QLocale().toString(value));
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
 	if (m_initializing)return;
 	const Lock lock(m_initializing);
-	ui.leBinRangesMax->setText(QString::number(value));
+	ui.leBinRangesMax->setText(QLocale().toString(value));
 }
 
 //Line-Tab
@@ -1562,12 +1569,11 @@ void HistogramDock::curveFillingFileNameChanged(QString& filename) {
 	ui.leFillingFileName->setText(filename);
 	m_initializing = false;
 }
-void HistogramDock::curveFillingOpacityChanged(float opacity) {
+void HistogramDock::curveFillingOpacityChanged(double opacity) {
 	m_initializing = true;
 	ui.sbFillingOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
 }
-
 
 //"Error bars"-Tab
 void HistogramDock::curveErrorTypeChanged(Histogram::ErrorType type) {

@@ -148,7 +148,7 @@ private slots:
 	void curveOrientationChanged(Histogram::HistogramOrientation);
 	void curveBinningMethodChanged(Histogram::BinningMethod);
 	void curveBinCountChanged(int);
-	void curveBinWidthChanged(float);
+	void curveBinWidthChanged(double);
 	void curveAutoBinRangesChanged(bool);
 	void curveBinRangesMinChanged(double);
 	void curveBinRangesMaxChanged(double);
@@ -191,7 +191,7 @@ private slots:
 	void curveFillingFirstColorChanged(QColor&);
 	void curveFillingSecondColorChanged(QColor&);
 	void curveFillingFileNameChanged(QString&);
-	void curveFillingOpacityChanged(float);
+	void curveFillingOpacityChanged(double);
 
 	//"Error bars"-Tab
 	void curveErrorTypeChanged(Histogram::ErrorType);

@@ -288,7 +288,7 @@ void AxisDock::init() {
 	ui.cbArrowType->setItemIcon(0, pm);
 
 	//simple, small
-	float cos_phi = cos(3.14159/6);
+	double cos_phi = cos(M_PI/6.);
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
 	pa.setRenderHint(QPainter::Antialiasing);
@@ -314,6 +314,7 @@ void AxisDock::init() {
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
 	pa.drawLine(3, 10, 17, 10);
+	//TODO: QPolygon?
 	QPointF points3[3] = {QPointF(17, 10), QPointF(10, 10-4*cos_phi), QPointF(10, 10+4*cos_phi) };
 	pa.drawPolygon(points3, 3);
 	pa.end();
@@ -622,16 +623,19 @@ void AxisDock::positionChanged() {
 	if (m_initializing)
 		return;
 
-	double offset = ui.lePosition->text().toDouble();
-	for (auto* axis : m_axesList)
-		axis->setOffset(offset);
+	bool ok;
+	const double offset{QLocale().toDouble(ui.lePosition->text(), &ok)};
+	if (ok) {
+		for (auto* axis : m_axesList)
+				axis->setOffset(offset);
+	}
 }
 
 void AxisDock::scaleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	auto scale = (Axis::Scale)index;
+	auto scale = static_cast<Axis::Scale>(index);
 	for (auto* axis : m_axesList)
 		axis->setScale(scale);
 }
@@ -654,7 +658,10 @@ void AxisDock::startChanged() {
 	if (m_initializing)
 		return;
 
-	double value = ui.leStart->text().toDouble();
+	bool ok;
+	double value{QLocale().toDouble(ui.leStart->text(), &ok)};
+	if (!ok)
+		return;
 
 	//check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set the default values.
 	auto scale = Axis::Scale(ui.cbScale->currentIndex());
@@ -663,16 +670,16 @@ void AxisDock::startChanged() {
 			KMessageBox::sorry(this,
 			                   i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
 			                   i18n("Wrong lower limit value") );
-			ui.leStart->setText( "0.01" );
 			value = 0.01;
+			ui.leStart->setText(QLocale().toString(value) );
 		}
 	} else if (scale == Axis::Scale::Sqrt) {
 		if (value < 0) {
 			KMessageBox::sorry(this,
 			                   i18n("The axes lower limit has a negative value. Default minimal value will be used."),
 			                   i18n("Wrong lower limit value") );
-			ui.leStart->setText( "0" );
 			value = 0;
+			ui.leStart->setText(QLocale().toString(value) );
 		}
 	}
 
@@ -685,7 +692,11 @@ void AxisDock::endChanged() {
 	if (m_initializing)
 		return;
 
-	double value = ui.leEnd->text().toDouble();
+	bool ok;
+	const double value{QLocale().toDouble(ui.leEnd->text(), &ok)};
+	if (!ok)
+		return;
+
 	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
 		axis->setEnd(value);
@@ -713,7 +724,11 @@ void AxisDock::zeroOffsetChanged() {
 	if (m_initializing)
 		return;
 
-	double offset = ui.leZeroOffset->text().toDouble();
+	bool ok;
+	const double offset{QLocale().toDouble(ui.leZeroOffset->text(), &ok)};
+	if (!ok)
+		return;
+
 	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
 		axis->setZeroOffset(offset);
@@ -723,7 +738,11 @@ void AxisDock::scalingFactorChanged() {
 	if (m_initializing)
 		return;
 
-	double scalingFactor = ui.leScalingFactor->text().toDouble();
+	bool ok;
+	const double scalingFactor{QLocale().toDouble(ui.leScalingFactor->text(), &ok)};
+	if (!ok)
+		return;
+
 	if (scalingFactor != 0.0) {
 		const Lock lock(m_initializing);
 		for (auto* axis : m_axesList)
@@ -770,7 +789,7 @@ void AxisDock::lineColorChanged(const QColor& color) {
 	m_initializing = false;
 }
 
-void AxisDock::lineWidthChanged(double  value) {
+void AxisDock::lineWidthChanged(double value) {
 	if (m_initializing)
 		return;
 
@@ -786,7 +805,7 @@ void AxisDock::lineOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (double)value/100.;
 	for (auto* axis : m_axesList)
 		axis->setLineOpacity(opacity);
 }
@@ -821,7 +840,7 @@ void AxisDock::arrowSizeChanged(int value) {
 	if (m_initializing)
 		return;
 
-	float v = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	double v = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* axis : m_axesList)
 		axis->setArrowSize(v);
 }
@@ -1052,7 +1071,7 @@ void AxisDock::majorTicksOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (double)value/100.;
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksOpacity(opacity);
 }
@@ -1282,7 +1301,7 @@ void AxisDock::minorTicksOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (double)value/100.;
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksOpacity(opacity);
 }
@@ -1467,7 +1486,7 @@ void AxisDock::majorGridOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (double)value/100.;
 	for (auto* axis : m_axesList)
 		axis->setMajorGridOpacity(opacity);
 }
@@ -1527,7 +1546,7 @@ void AxisDock::minorGridOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (double)value/100.;
 	for (auto* axis : m_axesList)
 		axis->setMinorGridOpacity(opacity);
 }
@@ -1567,9 +1586,9 @@ void AxisDock::axisPositionChanged(Axis::Position position) {
 	m_initializing = false;
 }
 
-void AxisDock::axisPositionChanged(float value) {
+void AxisDock::axisPositionChanged(double value) {
 	m_initializing = true;
-	ui.lePosition->setText( QString::number(value) );
+	ui.lePosition->setText(QLocale().toString(value));
 	m_initializing = false;
 }
 
@@ -1589,11 +1608,11 @@ void AxisDock::axisStartChanged(double value) {
 	if (m_initializing) return;
 	const Lock lock(m_initializing);
 
-	ui.leStart->setText( QString::number(value) );
+	ui.leStart->setText(QLocale().toString(value));
 	ui.dateTimeEditStart->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 
 	// determine stepsize and number of decimals
-	double range = fabs(m_axis->end() - m_axis->start());
+	double range = std::abs(m_axis->end() - m_axis->start());
 	int decimals = nsl_math_rounded_decimals(range) + 1;
 	DEBUG("range = " << range << ", decimals = " << decimals)
 	ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
@@ -1605,11 +1624,11 @@ void AxisDock::axisEndChanged(double value) {
 	if (m_initializing) return;
 	const Lock lock(m_initializing);
 
-	ui.leEnd->setText( QString::number(value) );
+	ui.leEnd->setText(QLocale().toString(value));
 	ui.dateTimeEditEnd->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 
 	// determine stepsize and number of decimals
-	double range = fabs(m_axis->end() - m_axis->start());
+	double range = std::abs(m_axis->end() - m_axis->start());
 	int decimals = nsl_math_rounded_decimals(range) + 1;
 	DEBUG("range = " << range << ", decimals = " << decimals)
 	ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
@@ -1620,13 +1639,13 @@ void AxisDock::axisEndChanged(double value) {
 void AxisDock::axisZeroOffsetChanged(qreal value) {
 	if (m_initializing) return;
 	const Lock lock(m_initializing);
-	ui.leZeroOffset->setText( QString::number(value) );
+	ui.leZeroOffset->setText(QLocale().toString(value));
 }
 
 void AxisDock::axisScalingFactorChanged(qreal value) {
 	if (m_initializing) return;
 	const Lock lock(m_initializing);
-	ui.leScalingFactor->setText( QString::number(value) );
+	ui.leScalingFactor->setText(QLocale().toString(value));
 }
 
 //line
@@ -1874,11 +1893,11 @@ void AxisDock::load() {
 	else
 		ui.cbPosition->setCurrentIndex(index);
 
-	ui.lePosition->setText( QString::number( m_axis->offset()) );
-	ui.cbScale->setCurrentIndex(  (int) m_axis->scale() );
+	ui.lePosition->setText( QLocale().toString(m_axis->offset()) );
+	ui.cbScale->setCurrentIndex( (int)m_axis->scale() );
 	ui.chkAutoScale->setChecked( m_axis->autoScale() );
-	ui.leStart->setText( QString::number(m_axis->start()) );
-	ui.leEnd->setText( QString::number(m_axis->end()) );
+	ui.leStart->setText( QLocale().toString(m_axis->start()) );
+	ui.leEnd->setText( QLocale().toString(m_axis->end()) );
 
 	ui.sbMajorTicksSpacingNumeric->setDecimals(0);
 	ui.sbMajorTicksSpacingNumeric->setSingleStep(m_axis->majorTicksSpacing());
@@ -1922,8 +1941,8 @@ void AxisDock::load() {
 		}
 	}
 
-	ui.leZeroOffset->setText( QString::number(m_axis->zeroOffset()) );
-	ui.leScalingFactor->setText( QString::number(m_axis->scalingFactor()) );
+	ui.leZeroOffset->setText( QLocale().toString(m_axis->zeroOffset()) );
+	ui.leScalingFactor->setText( QLocale().toString(m_axis->scalingFactor()) );
 
 	//Line
 	ui.cbLineStyle->setCurrentIndex( (int) m_axis->linePen().style() );
@@ -2033,13 +2052,13 @@ void AxisDock::loadConfig(KConfig& config) {
 	else
 		ui.cbPosition->setCurrentIndex(index);
 
-	ui.lePosition->setText( QString::number( group.readEntry("PositionOffset", m_axis->offset())) );
+	ui.lePosition->setText( QLocale().toString(group.readEntry("PositionOffset", m_axis->offset())) );
 	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) m_axis->scale()) );
-	ui.chkAutoScale->setChecked(group.readEntry("AutoScale", m_axis->autoScale()));
-	ui.leStart->setText( QString::number( group.readEntry("Start", m_axis->start())) );
-	ui.leEnd->setText( QString::number( group.readEntry("End", m_axis->end())) );
-	ui.leZeroOffset->setText( QString::number( group.readEntry("ZeroOffset", m_axis->zeroOffset())) );
-	ui.leScalingFactor->setText( QString::number( group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
+	ui.chkAutoScale->setChecked( group.readEntry("AutoScale", m_axis->autoScale()) );
+	ui.leStart->setText( QLocale().toString(group.readEntry("Start", m_axis->start())) );
+	ui.leEnd->setText( QLocale().toString(group.readEntry("End", m_axis->end())) );
+	ui.leZeroOffset->setText( QLocale().toString(group.readEntry("ZeroOffset", m_axis->zeroOffset())) );
+	ui.leScalingFactor->setText( QLocale().toString(group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
 
 	//Title
 	KConfigGroup axisLabelGroup = config.group("AxisLabel");
@@ -2149,12 +2168,12 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 			group.writeEntry("Position", ui.cbPosition->currentIndex() + 2);
 	}
 
-	group.writeEntry("PositionOffset", ui.lePosition->text());
+	group.writeEntry("PositionOffset", QLocale().toDouble(ui.lePosition->text()));
 	group.writeEntry("Scale", ui.cbScale->currentIndex());
-	group.writeEntry("Start", ui.leStart->text());
-	group.writeEntry("End", ui.leEnd->text());
-	group.writeEntry("ZeroOffset", ui.leZeroOffset->text());
-	group.writeEntry("ScalingFactor", ui.leScalingFactor->text());
+	group.writeEntry("Start", QLocale().toDouble(ui.leStart->text()));
+	group.writeEntry("End", QLocale().toDouble(ui.leEnd->text()));
+	group.writeEntry("ZeroOffset", QLocale().toDouble(ui.leZeroOffset->text()));
+	group.writeEntry("ScalingFactor", QLocale().toDouble(ui.leScalingFactor->text()));
 
 	//Title
 	KConfigGroup axisLabelGroup = config.group("AxisLabel");
