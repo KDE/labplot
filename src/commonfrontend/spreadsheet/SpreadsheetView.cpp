@@ -3264,7 +3264,7 @@ int SpreadsheetView::maxRowToExport() const {
 			//at the moment, we need to export the whole column.
 			//this logic needs to be adjusted once we're able to descriminate
 			//between empty and 0 values for integer columns
-			maxRow = m_spreadsheet->rowCount();
+			maxRow = m_spreadsheet->rowCount() - 1;
 			break;
 		} else if (mode == AbstractColumn::ColumnMode::DateTime) {
 			for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
