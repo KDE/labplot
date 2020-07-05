@@ -60,8 +60,72 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));
 	ui.twPreview->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-	ui.cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
+	ui.cbDecimalSeparator->addItem(i18n("Point '.'"));
+	ui.cbDecimalSeparator->addItem(i18n("Comma ','"));
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
+
+	const QString textNumberFormatShort = i18n("This option determines how the imported strings have to be converted to numbers.");
+	const QString textNumberFormat = textNumberFormatShort + "<br><br>" + i18n(
+	                                     "When point character is used for the decimal separator, the valid number representations are:"
+	                                     "<ul>"
+	                                     "<li>1234.56</li>"
+	                                     "<li>1,234.56</li>"
+	                                     "<li>etc.</li>"
+	                                     "</ul>"
+	                                     "For comma as the decimal separator, the valid number representations are:"
+	                                     "<ul>"
+	                                     "<li>1234,56</li>"
+	                                     "<li>1.234,56</li>"
+	                                     "<li>etc.</li>"
+	                                     "</ul>"
+	                                 );
+
+	ui.lDecimalSeparator->setToolTip(textNumberFormatShort);
+	ui.lDecimalSeparator->setWhatsThis(textNumberFormat);
+	ui.cbDecimalSeparator->setToolTip(textNumberFormatShort);
+	ui.cbDecimalSeparator->setWhatsThis(textNumberFormat);
+
+	const QString textDateTimeFormatShort = i18n("This option determines how the imported strings have to be converted to calendar date, i.e. year, month, and day numbers in the Gregorian calendar and to time.");
+	const QString textDateTimeFormat = textDateTimeFormatShort + "<br><br>" + i18n(
+	                                       "Expressions that may be used for the date part of format string:"
+	                                       "<table>"
+	                                       "<tr><td>d</td><td>the day as number without a leading zero (1 to 31).</td></tr>"
+	                                       "<tr><td>dd</td><td>the day as number with a leading zero (01 to 31).</td></tr>"
+	                                       "<tr><td>ddd</td><td>the abbreviated localized day name (e.g. 'Mon' to 'Sun'). Uses the system locale to localize the name.</td></tr>"
+	                                       "<tr><td>dddd</td><td>the long localized day name (e.g. 'Monday' to 'Sunday'). Uses the system locale to localize the name.</td></tr>"
+	                                       "<tr><td>M</td><td>the month as number without a leading zero (1 to 12).</td></tr>"
+	                                       "<tr><td>MM</td><td>the month as number with a leading zero (01 to 12).</td></tr>"
+	                                       "<tr><td>MMM</td><td>the abbreviated localized month name (e.g. 'Jan' to 'Dec'). Uses the system locale to localize the name.</td></tr>"
+	                                       "<tr><td>MMMM</td><td>the long localized month name (e.g. 'January' to 'December'). Uses the system locale to localize the name.</td></tr>"
+	                                       "<tr><td>yy</td><td>the year as two digit number (00 to 99).</td></tr>"
+	                                       "<tr><td>yyyy</td><td>the year as four digit number. If the year is negative, a minus sign is prepended in addition.</td></tr>"
+	                                       "</table><br><br>"
+	                                       "Expressions that may be used for the time part of the format string:"
+	                                       "<table>"
+	                                       "<tr><td>h</td><td>the hour without a leading zero (0 to 23 or 1 to 12 if AM/PM display)</td></tr>"
+	                                       "<tr><td>hh</td><td>the hour with a leading zero (00 to 23 or 01 to 12 if AM/PM display)</td></tr>"
+	                                       "<tr><td>H</td><td>the hour without a leading zero (0 to 23, even with AM/PM display)</td></tr>"
+	                                       "<tr><td>HH</td><td>the hour with a leading zero (00 to 23, even with AM/PM display)</td></tr>"
+	                                       "<tr><td>m</td><td>the minute without a leading zero (0 to 59)</td></tr>"
+	                                       "<tr><td>mm</td><td>the minute with a leading zero (00 to 59)</td></tr>"
+	                                       "<tr><td>s</td><td>the second without a leading zero (0 to 59)</td></tr>"
+	                                       "<tr><td>ss</td><td>the second with a leading zero (00 to 59)</td></tr>"
+	                                       "<tr><td>z</td><td>the milliseconds without leading zeroes (0 to 999)</td></tr>"
+	                                       "<tr><td>zzz</td><td>the milliseconds with leading zeroes (000 to 999)</td></tr>"
+	                                       "<tr><td>AP or A</td><td>interpret as an AM/PM time. AP must be either 'AM' or 'PM'.</td></tr>"
+	                                       "<tr><td>ap or a</td><td>Interpret as an AM/PM time. ap must be either 'am' or 'pm'.</td></tr>"
+	                                       "</table><br><br>"
+	                                       "Examples are:"
+	                                       "<table>"
+	                                       "<tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr>"
+	                                       "<tr><td>ddd MMMM d yy</td><td>Sun July 20 69</td></tr>"
+	                                       "<tr><td>'The day is' dddd</td><td>The day is Sunday</td></tr>"
+	                                       "</table>");
+
+	ui.lDateTimeFormat->setToolTip(textDateTimeFormatShort);
+	ui.lDateTimeFormat->setWhatsThis(textDateTimeFormat);
+	ui.cbDateTimeFormat->setToolTip(textDateTimeFormatShort);
+	ui.cbDateTimeFormat->setWhatsThis(textDateTimeFormat);
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teQuery->document());
@@ -94,7 +158,11 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	ui.cbConnection->setCurrentIndex(ui.cbConnection->findText(config.readEntry("Connection", "")));
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
-	ui.cbNumberFormat->setCurrentIndex(config.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
+
+	const QChar decimalSeparator = QLocale().decimalPoint();
+	int index = (decimalSeparator == '.') ? 0 : 1;
+	ui.cbDecimalSeparator->setCurrentIndex(config.readEntry("DecimalSeparator", index));
+
 	ui.cbDateTimeFormat->setCurrentItem(config.readEntry("DateTimeFormat", "yyyy-dd-MM hh:mm:ss:zzz"));
 	QList<int> defaultSizes;
 	defaultSizes << 100 << 100;
@@ -114,7 +182,7 @@ ImportSQLDatabaseWidget::~ImportSQLDatabaseWidget() {
 	KConfigGroup config(KSharedConfig::openConfig(), "ImportSQLDatabaseWidget");
 	config.writeEntry("Connection", ui.cbConnection->currentText());
 	config.writeEntry("ImportFrom", ui.cbImportFrom->currentIndex());
-	config.writeEntry("NumberFormat", ui.cbNumberFormat->currentIndex());
+	config.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());
 	config.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	config.writeEntry("SplitterMainSizes", ui.splitterMain->sizes());
 	config.writeEntry("SplitterPreviewSizes", ui.splitterPreview->sizes());
@@ -273,7 +341,11 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	m_columnNames.clear();
 	m_columnModes.clear();
 	bool numeric = true;
-	const auto numberFormat = (QLocale::Language)ui.cbNumberFormat->currentIndex();
+	QLocale::Language lang;
+	if (ui.cbDecimalSeparator->currentIndex() == 0)
+		lang = QLocale::Language::C;
+	else
+		lang = QLocale::Language::German;
 	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
 // 	ui.twPreview->setRowCount(1); //add the first row for the check boxes
 	for (int i = 0; i < m_cols; ++i) {
@@ -282,7 +354,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 		//value and type
 		const QString valueString = q.record().value(i).toString();
-		AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+		AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, lang);
 		m_columnModes << mode;
 		if (mode != AbstractColumn::ColumnMode::Numeric)
 			numeric = false;
@@ -369,7 +441,13 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 	//number and DateTime formatting
 	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
-	const QLocale numberFormat = QLocale((QLocale::Language)ui.cbNumberFormat->currentIndex());
+
+	QLocale::Language lang;
+	if (ui.cbDecimalSeparator->currentIndex() == 0)
+		lang = QLocale::Language::C;
+	else
+		lang = QLocale::Language::German;
+	const QLocale numberFormat = QLocale(lang);
 
 	//read the data
 	int row = 0;
