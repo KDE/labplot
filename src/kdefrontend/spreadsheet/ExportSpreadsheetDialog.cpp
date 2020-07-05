@@ -81,7 +81,9 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	QStringList separators = AsciiFilter::separatorCharacters();
 	separators.takeAt(0); //remove the first entry "auto"
 	ui->cbSeparator->addItems(separators);
-	ui->cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
+
+	ui->cbDecimalSeparator->addItem(i18n("Point '.'"));
+	ui->cbDecimalSeparator->addItem(i18n("Comma ','"));
 
 	ui->cbLaTeXExport->addItem(i18n("Export Spreadsheet"));
 	ui->cbLaTeXExport->addItem(i18n("Export Selection"));
@@ -91,8 +93,8 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->leFileName->setFocus();
 
 	const QString textNumberFormatShort = i18n("This option determines how the convert numbers to strings.");
-	ui->lNumberFormat->setToolTip(textNumberFormatShort);
-	ui->cbNumberFormat->setToolTip(textNumberFormatShort);
+	ui->lDecimalSeparator->setToolTip(textNumberFormatShort);
+	ui->lDecimalSeparator->setToolTip(textNumberFormatShort);
 
 	connect(ui->bOpen, &QPushButton::clicked, this, &ExportSpreadsheetDialog::selectFile);
 	connect(ui->leFileName, &QLineEdit::textChanged, this, &ExportSpreadsheetDialog::fileNameChanged );
@@ -109,7 +111,11 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->cbFormat->setCurrentIndex(conf.readEntry("Format", 0));
 	ui->chkExportHeader->setChecked(conf.readEntry("Header", true));
 	ui->cbSeparator->setCurrentItem(conf.readEntry("Separator", "TAB"));
-	ui->cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
+
+	const QChar decimalSeparator = QLocale().decimalPoint();
+	int index = (decimalSeparator == '.') ? 0 : 1;
+	ui->cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
+
 	ui->chkHeaders->setChecked(conf.readEntry("LaTeXHeaders", true));
 	ui->chkGridLines->setChecked(conf.readEntry("LaTeXGridLines", true));
 	ui->chkCaptions->setChecked(conf.readEntry("LaTeXCaptions", true));
@@ -138,7 +144,7 @@ ExportSpreadsheetDialog::~ExportSpreadsheetDialog() {
 	conf.writeEntry("Format", ui->cbFormat->currentIndex());
 	conf.writeEntry("Header", ui->chkExportHeader->isChecked());
 	conf.writeEntry("Separator", ui->cbSeparator->currentText());
-	conf.writeEntry("NumberFormat", ui->cbNumberFormat->currentIndex());
+	conf.writeEntry("DecimalSeparator", ui->cbDecimalSeparator->currentIndex());
 	conf.writeEntry("ShowOptions", m_showOptions);
 	conf.writeEntry("LaTeXHeaders", ui->chkHeaders->isChecked());
 	conf.writeEntry("LaTeXGridLines", ui->chkGridLines->isChecked());
@@ -257,7 +263,10 @@ QString ExportSpreadsheetDialog::separator() const {
 }
 
 QLocale::Language ExportSpreadsheetDialog::numberFormat() const {
-	return (QLocale::Language)ui->cbNumberFormat->currentIndex();
+	if (ui->cbDecimalSeparator->currentIndex() == 0)
+		return QLocale::Language::C;
+	else
+		return QLocale::Language::German;
 }
 
 void ExportSpreadsheetDialog::slotButtonClicked(QAbstractButton* button) {
@@ -374,8 +383,8 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	if (format == Format::LaTeX) {
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
-		ui->lNumberFormat->hide();
-		ui->cbNumberFormat->hide();
+		ui->lDecimalSeparator->hide();
+		ui->cbDecimalSeparator->hide();
 
 		ui->chkCaptions->show();
 		ui->chkGridLines->show();
@@ -422,8 +431,8 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->chkCaptions->hide();
 		ui->cbLaTeXExport->hide();
 		ui->cbSeparator->hide();
-		ui->lNumberFormat->hide();
-		ui->cbNumberFormat->hide();
+		ui->lDecimalSeparator->hide();
+		ui->cbDecimalSeparator->hide();
 
 		ui->cbExportToFITS->show();
 		ui->lExportToFITS->show();
@@ -436,8 +445,8 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	} else if (format == Format::SQLite) {
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
-		ui->lNumberFormat->hide();
-		ui->cbNumberFormat->hide();
+		ui->lDecimalSeparator->hide();
+		ui->cbDecimalSeparator->hide();
 
 		ui->chkCaptions->hide();
 		ui->chkEmptyRows->hide();
@@ -465,8 +474,8 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	} else {
 		ui->cbSeparator->show();
 		ui->lSeparator->show();
-		ui->lNumberFormat->show();
-		ui->cbNumberFormat->show();
+		ui->lDecimalSeparator->show();
+		ui->cbDecimalSeparator->show();
 
 		ui->chkCaptions->hide();
 		ui->chkEmptyRows->hide();
