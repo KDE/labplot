@@ -360,7 +360,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 			numeric = false;
 
 		//header item
-		QTableWidgetItem* item = new QTableWidgetItem(m_columnNames[i] + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, AbstractColumn::ColumnMode, mode) + QLatin1String("}"));
+		QTableWidgetItem* item = new QTableWidgetItem(m_columnNames[i] + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, mode) + QLatin1String("}"));
 		item->setTextAlignment(Qt::AlignLeft);
 		item->setIcon(AbstractColumn::iconForMode(mode));
 		ui.twPreview->setHorizontalHeaderItem(i, item);
