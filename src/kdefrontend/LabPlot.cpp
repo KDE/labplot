@@ -62,11 +62,19 @@ const QString getSystemInfo() {
 	const QString buildType(i18n("Debug build"));
 #endif
 	const QLocale locale;
-	// TODO: show zeroDigit(), groupSeparator(), etc.
 	const QString localeInfo{QLatin1String(" (")
 			+ i18n("Decimal point: ") + '\'' + QString(locale.decimalPoint())
 			+ QLatin1String("\', ")
+			+ i18n("Group separator: ") + '\'' + QString(locale.groupSeparator())
+			+ QLatin1String("\', ")
 			+ i18n("Exponential: ") + '\'' + QString(locale.exponential())
+			+ QLatin1String("\', ")
+			+ i18n("Zero digit: ") + '\'' + QString(locale.zeroDigit())
+			+ QLatin1String("\', ")
+			+ i18n("Percent: ") + '\'' + QString(locale.percent())
+			+ QLatin1String("\', ")
+			+ i18n("Positive/Negative sign: ") + '\'' + QString(locale.positiveSign()) + '\''
+			+ '/' + '\'' + QString(locale.negativeSign())
 			+ QLatin1String("\')")};
 
 	return buildType + '\n'
