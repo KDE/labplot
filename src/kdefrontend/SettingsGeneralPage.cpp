@@ -131,8 +131,8 @@ void SettingsGeneralPage::loadSettings() {
 	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
-	QLocale::Language decimalSeparatorLocale{ static_cast<QLocale::Language>(group.readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale().language()) )) };
-	ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(decimalSeparator(QLocale(decimalSeparatorLocale))) );
+	QLocale locale(static_cast<QLocale::Language>(group.readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale().language()) )) );
+	ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(decimalSeparator(locale)) );
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkMemoryInfo->setChecked(group.readEntry<bool>(QLatin1String("ShowMemoryInfo"), true));

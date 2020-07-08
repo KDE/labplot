@@ -67,6 +67,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 #define ENUM_COUNT(class, enum) \
 	(class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
 
+#define SET_NUMBER_LOCALE QLocale numberLocale(static_cast<QLocale::Language>(KSharedConfig::openConfig()->group("Settings_General").readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale().language()) )) );
 //////////////////////// LineEdit Access ///////////////////////////////
 #define SET_INT_FROM_LE(var, le) { \
 	bool ok; \

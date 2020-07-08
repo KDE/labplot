@@ -44,6 +44,7 @@
 #include <QPainter>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KSharedConfig>
 
 extern "C" {
 #include <gsl/gsl_math.h>
@@ -624,7 +625,8 @@ void AxisDock::positionChanged() {
 		return;
 
 	bool ok;
-	const double offset{QLocale().toDouble(ui.lePosition->text(), &ok)};
+	SET_NUMBER_LOCALE
+	const double offset{numberLocale.toDouble(ui.lePosition->text(), &ok)};
 	if (ok) {
 		for (auto* axis : m_axesList)
 				axis->setOffset(offset);
@@ -659,7 +661,8 @@ void AxisDock::startChanged() {
 		return;
 
 	bool ok;
-	double value{QLocale().toDouble(ui.leStart->text(), &ok)};
+	SET_NUMBER_LOCALE
+	double value{numberLocale.toDouble(ui.leStart->text(), &ok)};
 	if (!ok)
 		return;
 
@@ -671,7 +674,7 @@ void AxisDock::startChanged() {
 			                   i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
 			                   i18n("Wrong lower limit value") );
 			value = 0.01;
-			ui.leStart->setText(QLocale().toString(value) );
+			ui.leStart->setText(numberLocale.toString(value) );
 		}
 	} else if (scale == Axis::Scale::Sqrt) {
 		if (value < 0) {
@@ -679,7 +682,7 @@ void AxisDock::startChanged() {
 			                   i18n("The axes lower limit has a negative value. Default minimal value will be used."),
 			                   i18n("Wrong lower limit value") );
 			value = 0;
-			ui.leStart->setText(QLocale().toString(value) );
+			ui.leStart->setText(numberLocale.toString(value) );
 		}
 	}
 
@@ -693,7 +696,8 @@ void AxisDock::endChanged() {
 		return;
 
 	bool ok;
-	const double value{QLocale().toDouble(ui.leEnd->text(), &ok)};
+	SET_NUMBER_LOCALE
+	const double value{numberLocale.toDouble(ui.leEnd->text(), &ok)};
 	if (!ok)
 		return;
 
@@ -725,7 +729,8 @@ void AxisDock::zeroOffsetChanged() {
 		return;
 
 	bool ok;
-	const double offset{QLocale().toDouble(ui.leZeroOffset->text(), &ok)};
+	SET_NUMBER_LOCALE
+	const double offset{numberLocale.toDouble(ui.leZeroOffset->text(), &ok)};
 	if (!ok)
 		return;
 
@@ -739,7 +744,8 @@ void AxisDock::scalingFactorChanged() {
 		return;
 
 	bool ok;
-	const double scalingFactor{QLocale().toDouble(ui.leScalingFactor->text(), &ok)};
+	SET_NUMBER_LOCALE
+	const double scalingFactor{numberLocale.toDouble(ui.leScalingFactor->text(), &ok)};
 	if (!ok)
 		return;
 
@@ -1588,7 +1594,8 @@ void AxisDock::axisPositionChanged(Axis::Position position) {
 
 void AxisDock::axisPositionChanged(double value) {
 	m_initializing = true;
-	ui.lePosition->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.lePosition->setText(numberLocale.toString(value));
 	m_initializing = false;
 }
 
@@ -1608,7 +1615,8 @@ void AxisDock::axisStartChanged(double value) {
 	if (m_initializing) return;
 	const Lock lock(m_initializing);
 
-	ui.leStart->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leStart->setText(numberLocale.toString(value));
 	ui.dateTimeEditStart->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 
 	// determine stepsize and number of decimals
@@ -1624,7 +1632,8 @@ void AxisDock::axisEndChanged(double value) {
 	if (m_initializing) return;
 	const Lock lock(m_initializing);
 
-	ui.leEnd->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leEnd->setText(numberLocale.toString(value));
 	ui.dateTimeEditEnd->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 
 	// determine stepsize and number of decimals
@@ -1639,13 +1648,15 @@ void AxisDock::axisEndChanged(double value) {
 void AxisDock::axisZeroOffsetChanged(qreal value) {
 	if (m_initializing) return;
 	const Lock lock(m_initializing);
-	ui.leZeroOffset->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leZeroOffset->setText(numberLocale.toString(value));
 }
 
 void AxisDock::axisScalingFactorChanged(qreal value) {
 	if (m_initializing) return;
 	const Lock lock(m_initializing);
-	ui.leScalingFactor->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leScalingFactor->setText(numberLocale.toString(value));
 }
 
 //line
@@ -1893,11 +1904,12 @@ void AxisDock::load() {
 	else
 		ui.cbPosition->setCurrentIndex(index);
 
-	ui.lePosition->setText( QLocale().toString(m_axis->offset()) );
+	SET_NUMBER_LOCALE
+	ui.lePosition->setText( numberLocale.toString(m_axis->offset()) );
 	ui.cbScale->setCurrentIndex( (int)m_axis->scale() );
 	ui.chkAutoScale->setChecked( m_axis->autoScale() );
-	ui.leStart->setText( QLocale().toString(m_axis->start()) );
-	ui.leEnd->setText( QLocale().toString(m_axis->end()) );
+	ui.leStart->setText( numberLocale.toString(m_axis->start()) );
+	ui.leEnd->setText( numberLocale.toString(m_axis->end()) );
 
 	ui.sbMajorTicksSpacingNumeric->setDecimals(0);
 	ui.sbMajorTicksSpacingNumeric->setSingleStep(m_axis->majorTicksSpacing());
@@ -1941,8 +1953,8 @@ void AxisDock::load() {
 		}
 	}
 
-	ui.leZeroOffset->setText( QLocale().toString(m_axis->zeroOffset()) );
-	ui.leScalingFactor->setText( QLocale().toString(m_axis->scalingFactor()) );
+	ui.leZeroOffset->setText( numberLocale.toString(m_axis->zeroOffset()) );
+	ui.leScalingFactor->setText( numberLocale.toString(m_axis->scalingFactor()) );
 
 	//Line
 	ui.cbLineStyle->setCurrentIndex( (int) m_axis->linePen().style() );
@@ -2052,13 +2064,14 @@ void AxisDock::loadConfig(KConfig& config) {
 	else
 		ui.cbPosition->setCurrentIndex(index);
 
-	ui.lePosition->setText( QLocale().toString(group.readEntry("PositionOffset", m_axis->offset())) );
+	SET_NUMBER_LOCALE
+	ui.lePosition->setText( numberLocale.toString(group.readEntry("PositionOffset", m_axis->offset())) );
 	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) m_axis->scale()) );
 	ui.chkAutoScale->setChecked( group.readEntry("AutoScale", m_axis->autoScale()) );
-	ui.leStart->setText( QLocale().toString(group.readEntry("Start", m_axis->start())) );
-	ui.leEnd->setText( QLocale().toString(group.readEntry("End", m_axis->end())) );
-	ui.leZeroOffset->setText( QLocale().toString(group.readEntry("ZeroOffset", m_axis->zeroOffset())) );
-	ui.leScalingFactor->setText( QLocale().toString(group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
+	ui.leStart->setText( numberLocale.toString(group.readEntry("Start", m_axis->start())) );
+	ui.leEnd->setText( numberLocale.toString(group.readEntry("End", m_axis->end())) );
+	ui.leZeroOffset->setText( numberLocale.toString(group.readEntry("ZeroOffset", m_axis->zeroOffset())) );
+	ui.leScalingFactor->setText( numberLocale.toString(group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
 
 	//Title
 	KConfigGroup axisLabelGroup = config.group("AxisLabel");
@@ -2153,7 +2166,6 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 	}
 
-
 	//General
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 
@@ -2168,12 +2180,13 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 			group.writeEntry("Position", ui.cbPosition->currentIndex() + 2);
 	}
 
-	group.writeEntry("PositionOffset", QLocale().toDouble(ui.lePosition->text()));
+	SET_NUMBER_LOCALE
+	group.writeEntry("PositionOffset", numberLocale.toDouble(ui.lePosition->text()));
 	group.writeEntry("Scale", ui.cbScale->currentIndex());
-	group.writeEntry("Start", QLocale().toDouble(ui.leStart->text()));
-	group.writeEntry("End", QLocale().toDouble(ui.leEnd->text()));
-	group.writeEntry("ZeroOffset", QLocale().toDouble(ui.leZeroOffset->text()));
-	group.writeEntry("ScalingFactor", QLocale().toDouble(ui.leScalingFactor->text()));
+	group.writeEntry("Start", numberLocale.toDouble(ui.leStart->text()));
+	group.writeEntry("End", numberLocale.toDouble(ui.leEnd->text()));
+	group.writeEntry("ZeroOffset", numberLocale.toDouble(ui.leZeroOffset->text()));
+	group.writeEntry("ScalingFactor", numberLocale.toDouble(ui.leScalingFactor->text()));
 
 	//Title
 	KConfigGroup axisLabelGroup = config.group("AxisLabel");
