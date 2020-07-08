@@ -4,6 +4,7 @@
     Description          : general settings page
     --------------------------------------------------------------------
     Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -27,6 +28,7 @@
  ***************************************************************************/
 
 #include "SettingsGeneralPage.h"
+#include "backend/lib/macros.h"
 
 #include <KI18n/KLocalizedString>
 #include <KConfigGroup>
@@ -46,12 +48,49 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	connect(ui.cbMdiVisibility, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbTabPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbUnits, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
+	connect(ui.cbDecimalSeparator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::stateChanged, this, &SettingsGeneralPage::autoSaveChanged);
 	connect(ui.chkMemoryInfo, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
 	autoSaveChanged(ui.chkAutoSave->checkState());
+}
+
+SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLocale locale) {
+	QChar decimalPoint{locale.decimalPoint()};
+	if (decimalPoint == QChar('.'))
+		return DecimalSeparator::Dot;
+	else if (decimalPoint == QChar(','))
+		return DecimalSeparator::Comma;
+
+	return DecimalSeparator::Arabic;
+}
+
+QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
+	int currentIndex = ui.cbDecimalSeparator->currentIndex();
+	if (currentIndex == static_cast<int>(decimalSeparator()))
+		return QLocale().language();
+
+	QChar groupSeparator{QLocale().groupSeparator()};
+	QChar decimalPoint{QLocale().decimalPoint()};
+	if (currentIndex == static_cast<int>(DecimalSeparator::Dot)) {
+		if (groupSeparator == QLocale(QLocale::Language::Zarma).groupSeparator())	// \u00a0
+			return QLocale::Language::Zarma;	// . \u00a0
+		else if (groupSeparator == QLocale(QLocale::Language::SwissGerman).groupSeparator())	// \u2019
+			return QLocale::Language::SwissGerman;  // . \u2019
+		else
+			return QLocale::Language::C;	 	// . ,
+	} else if (currentIndex == static_cast<int>(DecimalSeparator::Comma)) {
+		if (groupSeparator == QLocale(QLocale::Language::French).groupSeparator())	// \u00a0
+			return QLocale::Language::French;       // , \u00a0
+		else if (groupSeparator == QLocale(QLocale::Language::Walser).groupSeparator())	// \u2019
+			return QLocale::Language::Walser;       // , \u2019
+		else
+			return QLocale::Language::German;       // , .
+	} else {
+		return QLocale::Language::Arabic;		// \u066b \u066c
+	}
 }
 
 void SettingsGeneralPage::applySettings() {
@@ -62,18 +101,21 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
 	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
+	group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(decimalSeparatorLocale()));
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), ui.chkMemoryInfo->isChecked());
 }
 
 void SettingsGeneralPage::restoreDefaults() {
+	DEBUG("SettingsGeneralPage::restoreDefaults()")
 	ui.cbLoadOnStart->setCurrentIndex(0);
 	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbInterface->setCurrentIndex(0);
 	ui.cbTabPosition->setCurrentIndex(0);
 	ui.cbMdiVisibility->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
+	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(decimalSeparator()));
 	ui.chkAutoSave->setChecked(false);
 	ui.sbAutoSaveInterval->setValue(0);
 	ui.sbAutoSaveInterval->setValue(5);
@@ -81,6 +123,7 @@ void SettingsGeneralPage::restoreDefaults() {
 }
 
 void SettingsGeneralPage::loadSettings() {
+	DEBUG("SettingsGeneralPage::loadSettings()")
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), 0));
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
@@ -88,6 +131,8 @@ void SettingsGeneralPage::loadSettings() {
 	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
+	QLocale::Language decimalSeparatorLocale{ static_cast<QLocale::Language>(group.readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale().language()) )) };
+	ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(decimalSeparator(QLocale(decimalSeparatorLocale))) );
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkMemoryInfo->setChecked(group.readEntry<bool>(QLatin1String("ShowMemoryInfo"), true));
@@ -123,6 +168,10 @@ void SettingsGeneralPage::retranslateUi() {
 
 	ui.cbUnits->addItem(i18n("Metric"));
 	ui.cbUnits->addItem(i18n("Imperial"));
+
+	ui.cbDecimalSeparator->addItem(i18n("Dot (.)"));
+	ui.cbDecimalSeparator->addItem(i18n("Comma (,)"));
+	ui.cbDecimalSeparator->addItem(i18n("Arabic"));
 }
 
 void SettingsGeneralPage::changed() {
