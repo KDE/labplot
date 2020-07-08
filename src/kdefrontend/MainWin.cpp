@@ -293,7 +293,8 @@ void MainWin::initGUI(const QString& fileName) {
 	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
 	tbImport->setMenu(m_importMenu);
 	tbImport->setDefaultAction(m_importFileAction);
-	mainToolBar->addWidget(tbImport);
+	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
+	mainToolBar->insertWidget(lastAction, tbImport);
 
 	qobject_cast<QMenu*>(factory()->container("import", this))->setIcon(QIcon::fromTheme("document-import"));
 	setWindowIcon(QIcon::fromTheme("LabPlot2", QGuiApplication::windowIcon()));
