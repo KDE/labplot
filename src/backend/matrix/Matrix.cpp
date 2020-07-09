@@ -39,14 +39,15 @@
 #include "commonfrontend/matrix/MatrixView.h"
 #include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
 
+#include <KLocalizedString>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QHeaderView>
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
-
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
 
 /*!
 	This class manages matrix based data (i.e., mathematically

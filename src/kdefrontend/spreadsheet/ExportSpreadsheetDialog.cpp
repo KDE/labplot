@@ -112,6 +112,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->chkExportHeader->setChecked(conf.readEntry("Header", true));
 	ui->cbSeparator->setCurrentItem(conf.readEntry("Separator", "TAB"));
 
+	//TODO: use general setting for decimal separator?
 	const QChar decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == '.') ? 0 : 1;
 	ui->cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));

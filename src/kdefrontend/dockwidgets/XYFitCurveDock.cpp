@@ -39,13 +39,15 @@
 #include "kdefrontend/widgets/FitOptionsWidget.h"
 #include "kdefrontend/widgets/FitParametersWidget.h"
 
+#include <KMessageWidget>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
 #include <QStandardPaths>
 #include <QClipboard>
-
-#include <KMessageWidget>
 
 extern "C" {
 #include "backend/nsl/nsl_sf_stats.h"

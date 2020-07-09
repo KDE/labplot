@@ -45,6 +45,28 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 
+#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
+#include "kdefrontend/spreadsheet/PlotDataDialog.h"
+#include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
+#include "kdefrontend/spreadsheet/DropValuesDialog.h"
+#include "kdefrontend/spreadsheet/GoToDialog.h"
+#include "kdefrontend/spreadsheet/RescaleDialog.h"
+#include "kdefrontend/spreadsheet/SortDialog.h"
+#include "kdefrontend/spreadsheet/RandomValuesDialog.h"
+#include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
+#include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
+#include "kdefrontend/spreadsheet/StatisticsDialog.h"
+
+#ifdef Q_OS_MAC
+#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
+#endif
+
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QKeyEvent>
 #include <QClipboard>
 #include <QInputDialog>
@@ -69,30 +91,11 @@
 #include <QRandomGenerator>
 #endif
 
-#include <KConfigGroup>
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KSharedConfig>
-
-#include "kdefrontend/spreadsheet/ExportSpreadsheetDialog.h"
-#include "kdefrontend/spreadsheet/PlotDataDialog.h"
-#include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
-#include "kdefrontend/spreadsheet/DropValuesDialog.h"
-#include "kdefrontend/spreadsheet/GoToDialog.h"
-#include "kdefrontend/spreadsheet/RescaleDialog.h"
-#include "kdefrontend/spreadsheet/SortDialog.h"
-#include "kdefrontend/spreadsheet/RandomValuesDialog.h"
-#include "kdefrontend/spreadsheet/EquidistantValuesDialog.h"
-#include "kdefrontend/spreadsheet/FunctionValuesDialog.h"
-#include "kdefrontend/spreadsheet/StatisticsDialog.h"
-
 #include <algorithm> //for std::reverse
 
+extern "C" {
 #include <gsl/gsl_math.h>
-
-#ifdef Q_OS_MAC
-#include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
-#endif
+}
 
 enum NormalizationMethod {DivideBySum, DivideByMin, DivideByMax, DivideByCount,
 						DivideByMean, DivideByMedian, DivideByMode, DivideByRange,
@@ -1423,7 +1426,7 @@ void SpreadsheetView::copySelection() {
 		formats << out_fltr->numericFormat();
 	}
 
-	QLocale locale;
+	SET_NUMBER_LOCALE
 	for (int r = 0; r < rows; r++) {
 		for (int c = 0; c < cols; c++) {
 			const Column* col_ptr = columns.at(c);
@@ -1432,9 +1435,9 @@ void SpreadsheetView::copySelection() {
 // 					output_str += col_ptr->formula(first_row + r);
 // 				else
 				if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Numeric)
-					output_str += locale.toString(col_ptr->valueAt(first_row + r), formats.at(c), 16); // copy with max. precision
+					output_str += numberLocale.toString(col_ptr->valueAt(first_row + r), formats.at(c), 16); // copy with max. precision
 				else if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Integer || col_ptr->columnMode() == AbstractColumn::ColumnMode::BigInt)
-					output_str += QString::number(col_ptr->valueAt(first_row + r));
+					output_str += numberLocale.toString(col_ptr->valueAt(first_row + r));
 				else
 					output_str += col_ptr->asStringColumn()->textAt(first_row + r);
 			}
@@ -1501,7 +1504,7 @@ void SpreadsheetView::pasteIntoSelection() {
 			input_col_count = cellTexts.at(i).count();
 	}
 
-	QLocale locale;
+	SET_NUMBER_LOCALE
 // 	bool localeDetermined = false;
 
 	if ( (first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col) ) {
@@ -1583,14 +1586,14 @@ void SpreadsheetView::pasteIntoSelection() {
 				QVector<double> new_data(rows);
 				for (int r = 0; r < rows; ++r) {
 					if (c < cellTexts.at(r).count())
-						new_data[r] = locale.toDouble(cellTexts.at(r).at(c));
+						new_data[r] = numberLocale.toDouble(cellTexts.at(r).at(c));
 				}
 				col->replaceValues(0, new_data);
 			} else {
 				for (int r = 0; r < rows && r < input_row_count; r++) {
 					if ( isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) ) {
 						if (!cellTexts.at(r).at(c).isEmpty())
-							col->setValueAt(first_row + r, locale.toDouble(cellTexts.at(r).at(c)));
+							col->setValueAt(first_row + r, numberLocale.toDouble(cellTexts.at(r).at(c)));
 						else
 							col->setValueAt(first_row + r, std::numeric_limits<double>::quiet_NaN());
 					}
@@ -1601,14 +1604,14 @@ void SpreadsheetView::pasteIntoSelection() {
 				QVector<int> new_data(rows);
 				for (int r = 0; r < rows; ++r) {
 					if (c < cellTexts.at(r).count())
-						new_data[r] = locale.toInt(cellTexts.at(r).at(c));
+						new_data[r] = numberLocale.toInt(cellTexts.at(r).at(c));
 				}
 				col->replaceInteger(0, new_data);
 			} else {
 				for (int r = 0; r < rows && r < input_row_count; r++) {
 					if ( isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) ) {
 						if (!cellTexts.at(r).at(c).isEmpty())
-							col->setIntegerAt(first_row + r, locale.toInt(cellTexts.at(r).at(c)));
+							col->setIntegerAt(first_row + r, numberLocale.toInt(cellTexts.at(r).at(c)));
 						else
 							col->setIntegerAt(first_row + r, 0);
 					}
@@ -1618,13 +1621,13 @@ void SpreadsheetView::pasteIntoSelection() {
 			if (rows == m_spreadsheet->rowCount() && rows <= cellTexts.size()) {
 				QVector<qint64> new_data(rows);
 				for (int r = 0; r < rows; ++r)
-					new_data[r] = locale.toLongLong(cellTexts.at(r).at(c));
+					new_data[r] = numberLocale.toLongLong(cellTexts.at(r).at(c));
 				col->replaceBigInt(0, new_data);
 			} else {
 				for (int r = 0; r < rows && r < input_row_count; r++) {
 					if ( isCellSelected(first_row + r, first_col + c) && (c < cellTexts.at(r).count()) ) {
 						if (!cellTexts.at(r).at(c).isEmpty())
-							col->setBigIntAt(first_row + r, locale.toLongLong(cellTexts.at(r).at(c)));
+							col->setBigIntAt(first_row + r, numberLocale.toLongLong(cellTexts.at(r).at(c)));
 						else
 							col->setBigIntAt(first_row + r, 0);
 					}

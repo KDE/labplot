@@ -159,7 +159,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
 
-	//TODO
+	//TODO: use general setting for decimal separator?
 	const QChar decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == '.') ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(config.readEntry("DecimalSeparator", index));
@@ -342,6 +342,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	m_columnNames.clear();
 	m_columnModes.clear();
 	bool numeric = true;
+	//TODO: use general setting for decimal separator?
 	QLocale::Language lang;
 	if (ui.cbDecimalSeparator->currentIndex() == 0)
 		lang = QLocale::Language::C;
@@ -443,6 +444,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	//number and DateTime formatting
 	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
 
+	//TODO: use general setting for decimal separator?
 	QLocale::Language lang;
 	if (ui.cbDecimalSeparator->currentIndex() == 0)
 		lang = QLocale::Language::C;

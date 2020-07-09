@@ -73,7 +73,6 @@ QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 		return QLocale().language();
 
 	QChar groupSeparator{QLocale().groupSeparator()};
-	QChar decimalPoint{QLocale().decimalPoint()};
 	if (currentIndex == static_cast<int>(DecimalSeparator::Dot)) {
 		if (groupSeparator == QLocale(QLocale::Language::Zarma).groupSeparator())	// \u00a0
 			return QLocale::Language::Zarma;	// . \u00a0

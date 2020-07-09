@@ -60,6 +60,7 @@ void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter, const QModelInde
 	Q_ASSERT(filter);
 
 	filter->setModelRows(getIndexRows(index));
+	//TODO: use general setting for decimal separator?
 	filter->setNumberFormat( QLocale::Language(ui.cbNumberFormat->currentIndex()));
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 	filter->setCreateIndexEnabled(ui.chbCreateIndex->isChecked());
@@ -82,6 +83,7 @@ void JsonOptionsWidget::clearModel() {
 void JsonOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
 
+	//TODO: use general setting for decimal separator?
 	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
 	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));

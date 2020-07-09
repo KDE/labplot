@@ -118,6 +118,7 @@ void DatasetMetadataManagerWidget::loadSettings() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "DatasetMetadataManagerWidget");
 	ui.cbCommentCharacter->setCurrentItem(conf.readEntry("commentChar", "#"));
 	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("separator", "auto"));
+	//TODO: use general setting for decimal separator?
 	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("numberFormat", static_cast<int>(QLocale::AnyLanguage)));
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("dateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
 	ui.chbCreateIndex->setChecked(conf.readEntry("createIndexColumn", false));

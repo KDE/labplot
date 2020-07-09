@@ -41,6 +41,10 @@
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QAction>
 #include <QStackedWidget>
 #include <QTableView>
@@ -57,8 +61,6 @@
 #include <QMutex>
 #include <QProcess>
 #include <QHeaderView>
-
-#include <KLocalizedString>
 #include <QIcon>
 
 #include <cfloat>
@@ -1123,6 +1125,7 @@ void MatrixView::exportToFile(const QString& path, const QString& separator, QLo
 	const int cols = m_matrix->columnCount();
 	const int rows = m_matrix->rowCount();
 	const QVector<QVector<double> >* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	//TODO: use general setting for number locale?
 	QLocale locale(language);
 	for (int row = 0; row < rows; ++row) {
 		for (int col = 0; col < cols; ++col) {

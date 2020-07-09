@@ -758,6 +758,7 @@ void LabelWidget::dateTimeMenu() {
 		//application language was changed:
 		//determine the currently used language and use QLocale::toString()
 		//to get the strings translated into the currently used language
+		//TODO: why not use QLocale() ?
 		QSettings settings (configFile, QSettings::IniFormat);
 		settings.beginGroup(QLatin1String("Language"));
 		QByteArray languageCode;

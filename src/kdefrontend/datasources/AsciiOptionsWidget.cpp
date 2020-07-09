@@ -148,6 +148,7 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	filter->setCommentCharacter( ui.cbCommentCharacter->currentText() );
 	filter->setSeparatingCharacter( ui.cbSeparatingCharacter->currentText() );
 
+	//TODO: use general setting for decimal separator?
 	QLocale::Language lang;
 	if (ui.cbDecimalSeparator->currentIndex() == 0)
 		lang = QLocale::Language::C;
@@ -175,6 +176,7 @@ void AsciiOptionsWidget::loadSettings() const {
 	ui.cbCommentCharacter->setCurrentText(conf.readEntry("CommentCharacter", "#"));
 	ui.cbSeparatingCharacter->setCurrentItem(conf.readEntry("SeparatingCharacter", "auto"));
 
+	//TODO: use general setting for decimal separator?
 	const QChar decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == '.') ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
