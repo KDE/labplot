@@ -32,9 +32,12 @@
 #include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <KMessageBox>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QMenu>
 #include <QWidgetAction>
-#include <KMessageBox>
 
 /*!
   \class XYFourierTransformCurveDock
@@ -361,10 +364,11 @@ void XYFourierTransformCurveDock::showTransformResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	if (transformResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QLocale().toString(transformResult.elapsedTime/1000)) + "<br>";
+	SET_NUMBER_LOCALE
+	if (transformResult.elapsedTime > 1000)
+		str += i18n("calculation time: %1 s", numberLocale.toString(transformResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QLocale().toString(transformResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(transformResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

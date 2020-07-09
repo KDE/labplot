@@ -29,6 +29,9 @@
 #include "FitOptionsWidget.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
+#include <KSharedConfig>
+#include <KConfigGroup>
+
 /*!
 	\class FitOptionsWidget
 	\brief Widget for editing advanced fit options.
@@ -51,18 +54,19 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.leEps->setValidator( new QDoubleValidator(ui.leEps) );
 	ui.leEvaluatedPoints->setValidator( new QIntValidator(ui.leEvaluatedPoints) );
 
-	ui.leMaxIterations->setText(QLocale().toString(m_fitData->maxIterations));
-	ui.leEps->setText(QLocale().toString(m_fitData->eps));
-	ui.leEvaluatedPoints->setText(QLocale().toString(static_cast<qulonglong>(m_fitData->evaluatedPoints)));
+	SET_NUMBER_LOCALE
+	ui.leMaxIterations->setText(numberLocale.toString(m_fitData->maxIterations));
+	ui.leEps->setText(numberLocale.toString(m_fitData->eps));
+	ui.leEvaluatedPoints->setText(numberLocale.toString(static_cast<qulonglong>(m_fitData->evaluatedPoints)));
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(fitCurve->parentAspect());
 	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::RangeFormat::Numeric);
 	if (!m_dateTimeRange) {
-		ui.leMin->setText(QLocale().toString(m_fitData->fitRange.min()));
-		ui.leMax->setText(QLocale().toString(m_fitData->fitRange.max()));
-		ui.leEvalMin->setText(QLocale().toString(m_fitData->evalRange.min()));
-		ui.leEvalMax->setText(QLocale().toString(m_fitData->evalRange.max()));
+		ui.leMin->setText(numberLocale.toString(m_fitData->fitRange.min()));
+		ui.leMax->setText(numberLocale.toString(m_fitData->fitRange.max()));
+		ui.leEvalMin->setText(numberLocale.toString(m_fitData->evalRange.min()));
+		ui.leEvalMax->setText(numberLocale.toString(m_fitData->evalRange.max()));
 	} else {
 		ui.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.min()) );
 		ui.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_fitData->fitRange.max()) );
@@ -141,9 +145,10 @@ void FitOptionsWidget::autoRangeChanged() {
 			const double xMax = xDataColumn->maximum();
 			m_fitData->fitRange.setRange(xMin, xMax);
 
+			SET_NUMBER_LOCALE
 			if (!m_dateTimeRange) {
-				ui.leMin->setText(QLocale().toString(xMin));
-				ui.leMax->setText(QLocale().toString(xMax));
+				ui.leMin->setText(numberLocale.toString(xMin));
+				ui.leMax->setText(numberLocale.toString(xMax));
 			} else {
 				ui.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xMin));
 				ui.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xMax));
@@ -177,9 +182,10 @@ void FitOptionsWidget::autoEvalRangeChanged() {
 			const double xMax = xDataColumn->maximum();
 			m_fitData->evalRange.setRange(xMin, xMax);
 
+			SET_NUMBER_LOCALE
 			if (!m_dateTimeRange) {
-				ui.leEvalMin->setText(QLocale().toString(xMin));
-				ui.leEvalMax->setText(QLocale().toString(xMax));
+				ui.leEvalMin->setText(numberLocale.toString(xMin));
+				ui.leEvalMax->setText(numberLocale.toString(xMax));
 			} else {
 				ui.dateTimeEditEvalMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xMin));
 				ui.dateTimeEditEvalMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xMax));

@@ -30,7 +30,6 @@
 #include "EquationHighlighter.h"
 #include "backend/gsl/ExpressionParser.h"
 
-#include <QLocale>
 #include <QPalette>
 #include <KTextEdit>
 

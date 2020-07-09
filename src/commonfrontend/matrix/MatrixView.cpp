@@ -662,11 +662,12 @@ void MatrixView::copySelection() {
 	WAIT_CURSOR;
 	QString output_str;
 
+	SET_NUMBER_LOCALE
 	for (int r = 0; r < rows; r++) 	{
 		for (int c = 0; c < cols; c++) {
 			//TODO: mode
 			if (isCellSelected(first_row + r, first_col + c))
-				output_str += QLocale().toString(m_matrix->cell<double>(first_row + r, first_col + c),
+				output_str += numberLocale.toString(m_matrix->cell<double>(first_row + r, first_col + c),
 				                                 m_matrix->numericFormat(), 16); // copy with max. precision
 			if (c < cols-1)
 				output_str += '\t';

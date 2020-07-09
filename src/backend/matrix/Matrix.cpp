@@ -426,11 +426,13 @@ template QString Matrix::cell<QString>(int row, int col) const;
 //! Return the text displayed in the given cell (needs explicit instantiation)
 template <typename T>
 QString Matrix::text(int row, int col) {
-	return QLocale().toString(cell<T>(row,col));
+	SET_NUMBER_LOCALE
+	return numberLocale.toString(cell<T>(row,col));
 }
 template <>
 QString Matrix::text<double>(int row, int col) {
-	return QLocale().toString(cell<double>(row,col), d->numericFormat, d->precision);
+	SET_NUMBER_LOCALE
+	return numberLocale.toString(cell<double>(row,col), d->numericFormat, d->precision);
 }
 template <>
 QString Matrix::text<QString>(int row, int col) {

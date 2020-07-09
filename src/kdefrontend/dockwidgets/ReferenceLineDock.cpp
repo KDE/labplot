@@ -35,6 +35,7 @@
 #include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
 
 ReferenceLineDock::ReferenceLineDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
@@ -130,7 +131,8 @@ void ReferenceLineDock::positionChanged() {
 		return;
 
 	bool ok;
-	const double pos{ QLocale().toDouble(ui.lePosition->text(), &ok) };
+	SET_NUMBER_LOCALE
+	const double pos{ numberLocale.toDouble(ui.lePosition->text(), &ok) };
 	if (ok) {
 		for (auto* line : m_linesList)
 			line->setPosition(pos);
@@ -252,8 +254,9 @@ void ReferenceLineDock::load() {
 
 	m_initializing = true;
 
+	SET_NUMBER_LOCALE
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(m_line->orientation()));
-	ui.lePosition->setText(QLocale().toString(m_line->position()));
+	ui.lePosition->setText(numberLocale.toString(m_line->position()));
 	ui.cbLineStyle->setCurrentIndex( (int) m_line->pen().style() );
 	ui.kcbLineColor->setColor( m_line->pen().color() );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_line->pen().widthF(), Worksheet::Unit::Point) );

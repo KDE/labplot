@@ -32,6 +32,9 @@
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
@@ -454,10 +457,11 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
+	SET_NUMBER_LOCALE
 	if (correlationResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", QLocale().toString(correlationResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(correlationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QLocale().toString(correlationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(correlationResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

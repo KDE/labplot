@@ -33,6 +33,9 @@
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <KSharedConfig>
+#include <KConfigGroup>
+
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
@@ -648,16 +651,17 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	if (dataReductionResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QLocale().toString(dataReductionResult.elapsedTime/1000)) + "<br>";
+	SET_NUMBER_LOCALE
+	if (dataReductionResult.elapsedTime > 1000)
+		str += i18n("calculation time: %1 s", numberLocale.toString(dataReductionResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QLocale().toString(dataReductionResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(dataReductionResult.elapsedTime)) + "<br>";
 
 	str += "<br>";
 
-	str += i18n("number of points: %1", QLocale().toString(static_cast<qulonglong>(dataReductionResult.npoints))) + "<br>";
-	str += i18n("positional squared error: %1", QLocale().toString(dataReductionResult.posError)) + "<br>";
-	str += i18n("area error: %1", QLocale().toString(dataReductionResult.areaError)) + "<br>";
+	str += i18n("number of points: %1", numberLocale.toString(static_cast<qulonglong>(dataReductionResult.npoints))) + "<br>";
+	str += i18n("positional squared error: %1", numberLocale.toString(dataReductionResult.posError)) + "<br>";
+	str += i18n("area error: %1", numberLocale.toString(dataReductionResult.areaError)) + "<br>";
 
 	uiGeneralTab.teResult->setText(str);
 }

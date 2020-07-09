@@ -33,6 +33,9 @@
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QStandardItemModel>
 
 /*!
@@ -572,10 +575,11 @@ void XYSmoothCurveDock::showSmoothResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
+	SET_NUMBER_LOCALE
 	if (smoothResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QLocale().toString(smoothResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(smoothResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QLocale().toString(smoothResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(smoothResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

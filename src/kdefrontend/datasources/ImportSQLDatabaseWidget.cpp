@@ -159,6 +159,7 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	ui.cbImportFrom->setCurrentIndex(config.readEntry("ImportFrom", 0));
 	importFromChanged(ui.cbImportFrom->currentIndex());
 
+	//TODO
 	const QChar decimalSeparator = QLocale().decimalPoint();
 	int index = (decimalSeparator == '.') ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(config.readEntry("DecimalSeparator", index));

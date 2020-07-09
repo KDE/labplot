@@ -399,14 +399,15 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.leName->setToolTip("");
 
 	//show the properties of the first curve
+	SET_NUMBER_LOCALE
 	ui.cbType->setCurrentIndex(m_curve->type());
 	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
 	ui.sbBinCount->setValue(m_curve->binCount());
-	ui.leBinWidth->setText(QLocale().toString(m_curve->binWidth()));
+	ui.leBinWidth->setText(numberLocale.toString(m_curve->binWidth()));
 	ui.chkAutoBinRanges->setChecked(m_curve->autoBinRanges());
-	ui.leBinRangesMin->setText( QLocale().toString(m_curve->binRangesMin()) );
-	ui.leBinRangesMax->setText( QLocale().toString(m_curve->binRangesMax()) );
+	ui.leBinRangesMin->setText( numberLocale.toString(m_curve->binRangesMin()) );
+	ui.leBinRangesMax->setText( numberLocale.toString(m_curve->binRangesMax()) );
 	ui.chkVisible->setChecked( m_curve->isVisible() );
 
 	KConfig config(QString(), KConfig::SimpleConfig);
@@ -577,7 +578,8 @@ void HistogramDock::binWidthChanged() {
 
 	const Lock lock(m_initializing);
 	bool ok;
-	const double width{QLocale().toDouble(ui.leBinWidth->text(), &ok)};
+	SET_NUMBER_LOCALE
+	const double width{numberLocale.toDouble(ui.leBinWidth->text(), &ok)};
 	if (ok) {
 		for (auto* curve : m_curvesList)
 			curve->setBinWidth(width);
@@ -602,7 +604,8 @@ void HistogramDock::binRangesMinChanged(const QString& value) {
 
 	const Lock lock(m_initializing);
 	bool ok;
-	const double min{QLocale().toDouble(value, &ok)};
+	SET_NUMBER_LOCALE
+	const double min{numberLocale.toDouble(value, &ok)};
 	if (ok) {
 		for (auto* hist : m_curvesList)
 			hist->setBinRangesMin(min);
@@ -615,7 +618,8 @@ void HistogramDock::binRangesMaxChanged(const QString& value) {
 
 	const Lock lock(m_initializing);
 	bool ok;
-	const double max{QLocale().toDouble(value, &ok)};
+	SET_NUMBER_LOCALE
+	const double max{numberLocale.toDouble(value, &ok)};
 	if (ok) {
 		for (auto* hist : m_curvesList)
 			hist->setBinRangesMax(max);
@@ -1376,7 +1380,8 @@ void HistogramDock::curveBinCountChanged(int count) {
 void HistogramDock::curveBinWidthChanged(double width) {
 	if (m_initializing)return;
 	const Lock lock(m_initializing);
-	ui.leBinWidth->setText(QLocale().toString(width));
+	SET_NUMBER_LOCALE
+	ui.leBinWidth->setText(numberLocale.toString(width));
 }
 
 void HistogramDock::curveAutoBinRangesChanged(bool value) {
@@ -1388,13 +1393,15 @@ void HistogramDock::curveAutoBinRangesChanged(bool value) {
 void HistogramDock::curveBinRangesMinChanged(double value) {
 	if (m_initializing)return;
 	const Lock lock(m_initializing);
-	ui.leBinRangesMin->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leBinRangesMin->setText(numberLocale.toString(value));
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
 	if (m_initializing)return;
 	const Lock lock(m_initializing);
-	ui.leBinRangesMax->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leBinRangesMax->setText(numberLocale.toString(value));
 }
 
 //Line-Tab

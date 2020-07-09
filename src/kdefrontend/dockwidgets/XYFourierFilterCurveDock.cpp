@@ -32,9 +32,12 @@
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <KMessageBox>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QMenu>
 #include <QWidgetAction>
-#include <KMessageBox>
 
 /*!
   \class XYFourierFilterCurveDock
@@ -630,10 +633,11 @@ void XYFourierFilterCurveDock::showFilterResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	if (filterResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QLocale().toString(filterResult.elapsedTime/1000)) + "<br>";
+	SET_NUMBER_LOCALE
+	if (filterResult.elapsedTime > 1000)
+		str += i18n("calculation time: %1 s", numberLocale.toString(filterResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QLocale().toString(filterResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(filterResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

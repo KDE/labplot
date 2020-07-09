@@ -32,6 +32,9 @@
 #include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
@@ -471,12 +474,13 @@ void XYIntegrationCurveDock::showIntegrationResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	if (integrationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QLocale().toString(integrationResult.elapsedTime/1000)) + "<br>";
+	SET_NUMBER_LOCALE
+	if (integrationResult.elapsedTime > 1000)
+		str += i18n("calculation time: %1 s", numberLocale.toString(integrationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QLocale().toString(integrationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(integrationResult.elapsedTime)) + "<br>";
 
-	str += i18n("value: %1", QLocale().toString(integrationResult.value)) + "<br>";
+	str += i18n("value: %1", numberLocale.toString(integrationResult.value)) + "<br>";
  	str += "<br><br>";
 
 	uiGeneralTab.teResult->setText(str);

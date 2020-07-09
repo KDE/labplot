@@ -33,6 +33,9 @@
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
@@ -693,10 +696,11 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	if (interpolationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QLocale().toString(interpolationResult.elapsedTime/1000)) + "<br>";
+	SET_NUMBER_LOCALE
+	if (interpolationResult.elapsedTime > 1000)
+		str += i18n("calculation time: %1 s", numberLocale.toString(interpolationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QLocale().toString(interpolationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(interpolationResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 

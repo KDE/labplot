@@ -600,7 +600,8 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 
 	const Lock lock(m_initializing);
 	bool ok;
-	const double xMin = QLocale().toDouble(value, &ok);
+	SET_NUMBER_LOCALE
+	const double xMin = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		for (auto* plot : m_plotList)
 			plot->setXMin(xMin);
@@ -613,7 +614,8 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 
 	const Lock lock(m_initializing);
 	bool ok;
-	const double xMax = QLocale().toDouble(value, &ok);
+	SET_NUMBER_LOCALE
+	const double xMax = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		for (auto* plot : m_plotList)
 			plot->setXMax(xMax);
@@ -692,7 +694,8 @@ void CartesianPlotDock::yMinChanged(const QString& value) {
 
 	const Lock lock(m_initializing);
 	bool ok;
-	const double yMin = QLocale().toDouble(value, &ok);
+	SET_NUMBER_LOCALE
+	const double yMin = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		for (auto* plot : m_plotList)
 			plot->setYMin(yMin);
@@ -705,7 +708,8 @@ void CartesianPlotDock::yMaxChanged(const QString& value) {
 
 	const Lock lock(m_initializing);
 	bool ok;
-	const double yMax = QLocale().toDouble(value, &ok);
+	SET_NUMBER_LOCALE
+	const double yMax = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		for (auto* plot : m_plotList)
 			plot->setYMax(yMax);
@@ -823,10 +827,11 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 		return;
 
 	m_initializing = true;
+	SET_NUMBER_LOCALE
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.at(index);
-	QString str = std::isnan(rangeBreak.start) ? QString() : QLocale().toString(rangeBreak.start);
+	QString str = std::isnan(rangeBreak.start) ? QString() : numberLocale.toString(rangeBreak.start);
 	ui.leXBreakStart->setText(str);
-	str = std::isnan(rangeBreak.end) ? QString() : QLocale().toString(rangeBreak.end);
+	str = std::isnan(rangeBreak.end) ? QString() : numberLocale.toString(rangeBreak.end);
 	ui.leXBreakEnd->setText(str);
 	ui.sbXBreakPosition->setValue(rangeBreak.position*100);
 	ui.cbXBreakStyle->setCurrentIndex((int)rangeBreak.style);
@@ -944,10 +949,11 @@ void CartesianPlotDock::currentYBreakChanged(int index) {
 		return;
 
 	m_initializing = true;
+	SET_NUMBER_LOCALE
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.at(index);
-	QString str = std::isnan(rangeBreak.start) ? QString() : QLocale().toString(rangeBreak.start);
+	QString str = std::isnan(rangeBreak.start) ? QString() : numberLocale.toString(rangeBreak.start);
 	ui.leYBreakStart->setText(str);
-	str = std::isnan(rangeBreak.end) ? QString() : QLocale().toString(rangeBreak.end);
+	str = std::isnan(rangeBreak.end) ? QString() : numberLocale.toString(rangeBreak.end);
 	ui.leYBreakEnd->setText(str);
 	ui.sbYBreakPosition->setValue(rangeBreak.position*100);
 	ui.cbYBreakStyle->setCurrentIndex((int)rangeBreak.style);
@@ -1399,13 +1405,15 @@ void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
 
 void CartesianPlotDock::plotRangeFirstValuesChanged(int value) {
 	m_initializing = true;
-	ui.leRangeFirst->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leRangeFirst->setText(numberLocale.toString(value));
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotRangeLastValuesChanged(int value) {
 	m_initializing = true;
-	ui.leRangeLast->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leRangeLast->setText(numberLocale.toString(value));
 	m_initializing = false;
 }
 
@@ -1419,7 +1427,8 @@ void CartesianPlotDock::plotXMinChanged(double value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
-	ui.leXMin->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leXMin->setText(numberLocale.toString(value));
 	ui.dateTimeEditXMin->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
 }
 
@@ -1427,7 +1436,8 @@ void CartesianPlotDock::plotXMaxChanged(double value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
-	ui.leXMax->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leXMax->setText(numberLocale.toString(value));
 	ui.dateTimeEditXMax->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 }
 
@@ -1453,7 +1463,8 @@ void CartesianPlotDock::plotYMinChanged(double value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
-	ui.leYMin->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leYMin->setText(numberLocale.toString(value));
 	ui.dateTimeEditYMin->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 }
 
@@ -1461,7 +1472,8 @@ void CartesianPlotDock::plotYMaxChanged(double value) {
 	if (m_initializing)
 		return;
 	const Lock lock(m_initializing);
-	ui.leYMax->setText(QLocale().toString(value));
+	SET_NUMBER_LOCALE
+	ui.leYMax->setText(numberLocale.toString(value));
 	ui.dateTimeEditYMax->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 }
 
@@ -1658,12 +1670,13 @@ void CartesianPlotDock::load() {
 		break;
 	}
 	rangeTypeChanged();
-	ui.leRangeFirst->setText( QLocale().toString(m_plot->rangeFirstValues()) );
-	ui.leRangeLast->setText( QLocale().toString(m_plot->rangeLastValues()) );
+	SET_NUMBER_LOCALE
+	ui.leRangeFirst->setText( numberLocale.toString(m_plot->rangeFirstValues()) );
+	ui.leRangeLast->setText( numberLocale.toString(m_plot->rangeLastValues()) );
 
 	ui.chkAutoScaleX->setChecked(m_plot->autoScaleX());
-	ui.leXMin->setText(QLocale().toString(m_plot->xMin()));
-	ui.leXMax->setText(QLocale().toString(m_plot->xMax()));
+	ui.leXMin->setText(numberLocale.toString(m_plot->xMin()));
+	ui.leXMax->setText(numberLocale.toString(m_plot->xMax()));
 	ui.dateTimeEditXMin->setDisplayFormat(m_plot->xRangeDateTimeFormat());
 	ui.dateTimeEditXMax->setDisplayFormat(m_plot->xRangeDateTimeFormat());
 	ui.dateTimeEditXMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xMin()));
@@ -1672,8 +1685,8 @@ void CartesianPlotDock::load() {
 	ui.cbXRangeFormat->setCurrentIndex( (int) m_plot->xRangeFormat() );
 
 	ui.chkAutoScaleY->setChecked(m_plot->autoScaleY());
-	ui.leYMin->setText(QLocale().toString(m_plot->yMin()));
-	ui.leYMax->setText(QLocale().toString(m_plot->yMax()));
+	ui.leYMin->setText(numberLocale.toString(m_plot->yMin()));
+	ui.leYMax->setText(numberLocale.toString(m_plot->yMax()));
 	ui.dateTimeEditYMin->setDisplayFormat(m_plot->yRangeDateTimeFormat());
 	ui.dateTimeEditYMax->setDisplayFormat(m_plot->yRangeDateTimeFormat());
 	ui.dateTimeEditYMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yMin()));

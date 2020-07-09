@@ -121,6 +121,7 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	QString result;
 	auto headerFormat = m_matrix->headerFormat();
+	SET_NUMBER_LOCALE
 	switch (orientation) {
 		case Qt::Horizontal:
 			switch (role) {
@@ -133,7 +134,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 						double step = 0.0;
 						if (m_matrix->columnCount() > 1)
 							step = diff/double(m_matrix->columnCount()-1);
-						result = QLocale().toString(m_matrix->xStart()+double(section)*step,
+						result = numberLocale.toString(m_matrix->xStart()+double(section)*step,
 								m_matrix->numericFormat(), m_matrix->precision());
 					} else {
 						result = QString::number(section+1) + QLatin1String(" (");
@@ -141,7 +142,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 						double step = 0.0;
 						if (m_matrix->columnCount() > 1)
 							step = diff/double(m_matrix->columnCount()-1);
-						result += QLocale().toString(m_matrix->xStart()+double(section)*step,
+						result += numberLocale.toString(m_matrix->xStart()+double(section)*step,
 								m_matrix->numericFormat(), m_matrix->precision());
 
 						result += ')';
@@ -162,9 +163,9 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 							step = diff/double(m_matrix->rowCount()-1);
 						// TODO: implement decent double == 0 check
 // 						if (diff < 1e-10)
-// 							result += QLocale().toString(m_matrix->yStart(),
+// 							result += numberLocale.toString(m_matrix->yStart(),
 // 									m_matrix->numericFormat(), m_matrix->displayedDigits());
-						result += QLocale().toString(m_matrix->yStart()+double(section)*step,
+						result += numberLocale.toString(m_matrix->yStart()+double(section)*step,
 								m_matrix->numericFormat(), m_matrix->precision());
 					} else {
 						result = QString::number(section+1) + QString(" (");
@@ -173,7 +174,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 						if (m_matrix->rowCount() > 1)
 							step = diff/double(m_matrix->rowCount()-1);
 
-						result += QLocale().toString(m_matrix->yStart()+double(section)*step,
+						result += numberLocale.toString(m_matrix->yStart()+double(section)*step,
 									m_matrix->numericFormat(), m_matrix->precision());
 						result += ')';
 					}

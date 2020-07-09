@@ -72,11 +72,9 @@ RescaleDialog::RescaleDialog(QWidget* parent) : QDialog(parent) {
 
 	double min = conf.readEntry(QLatin1String("Min"), 0.0);
 	double max = conf.readEntry(QLatin1String("Max"), 1.0);
-	QLocale locale;
-// 	ui.leMin->setText(locale.toString(min, 'f'));
-// 	ui.leMax->setText(locale.toString(max, 'f'));
-	ui.leMin->setText(QString::number(min));
-	ui.leMax->setText(QString::number(max));
+	SET_NUMBER_LOCALE
+	ui.leMin->setText(numberLocale.toString(min));
+	ui.leMax->setText(numberLocale.toString(max));
 
 	validateOkButton();
 }
@@ -87,8 +85,9 @@ RescaleDialog::~RescaleDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	// general settings
-	conf.writeEntry(QLatin1String("Min"), ui.leMin->text().toDouble());
-	conf.writeEntry(QLatin1String("Max"), ui.leMax->text().toDouble());
+	SET_NUMBER_LOCALE
+	conf.writeEntry(QLatin1String("Min"), numberLocale.toDouble(ui.leMin->text()));
+	conf.writeEntry(QLatin1String("Max"), numberLocale.toDouble(ui.leMax->text()));
 }
 
 void RescaleDialog::setColumns(const QVector<Column*>& columns) {
@@ -96,11 +95,13 @@ void RescaleDialog::setColumns(const QVector<Column*>& columns) {
 }
 
 double RescaleDialog::min() const {
-	return ui.leMin->text().toDouble();
+	SET_NUMBER_LOCALE
+	return numberLocale.toDouble(ui.leMin->text());
 }
 
 double RescaleDialog::max() const {
-	return ui.leMax->text().toDouble();
+	SET_NUMBER_LOCALE
+	return numberLocale.toDouble(ui.leMax->text());
 }
 
 void RescaleDialog::validateOkButton() {

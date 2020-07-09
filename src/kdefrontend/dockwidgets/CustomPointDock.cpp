@@ -31,11 +31,13 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
 
-#include <QPainter>
-#include <QDir>
 #include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
+
+#include <QPainter>
+#include <QDir>
 
 CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
 	ui.setupUi(this);
@@ -165,7 +167,8 @@ void CustomPointDock::positionXChanged() {
 		return;
 
 	bool ok;
-	double x = QLocale().toDouble(ui.lePositionX->text(), &ok);
+	SET_NUMBER_LOCALE
+	double x = numberLocale.toDouble(ui.lePositionX->text(), &ok);
 	if (ok) {
 		QPointF pos{m_point->position()};
 		pos.setX(x);
@@ -179,7 +182,8 @@ void CustomPointDock::positionYChanged() {
 		return;
 
 	bool ok;
-	double y = QLocale().toDouble(ui.lePositionY->text(), &ok);
+	SET_NUMBER_LOCALE
+	double y = numberLocale.toDouble(ui.lePositionY->text(), &ok);
 	if (ok) {
 		QPointF pos{m_point->position()};
 		pos.setY(y);
@@ -364,8 +368,9 @@ void CustomPointDock::pointDescriptionChanged(const AbstractAspect* aspect) {
 
 void CustomPointDock::pointPositionChanged(QPointF position) {
 	m_initializing = true;
-	ui.lePositionX->setText(QLocale().toString(position.x()));
-	ui.lePositionY->setText(QLocale().toString(position.y()));
+	SET_NUMBER_LOCALE
+	ui.lePositionX->setText(numberLocale.toString(position.x()));
+	ui.lePositionY->setText(numberLocale.toString(position.y()));
 	m_initializing = false;
 }
 
@@ -426,8 +431,9 @@ void CustomPointDock::load() {
 
 	m_initializing = true;
 
-	ui.lePositionX->setText(QLocale().toString(m_point->position().x()));
-	ui.lePositionY->setText(QLocale().toString(m_point->position().y()));
+	SET_NUMBER_LOCALE
+	ui.lePositionX->setText(numberLocale.toString(m_point->position().x()));
+	ui.lePositionY->setText(numberLocale.toString(m_point->position().y()));
 
 	ui.cbSymbolStyle->setCurrentIndex( (int)m_point->symbolStyle() );
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_point->symbolSize(), Worksheet::Unit::Point) );
