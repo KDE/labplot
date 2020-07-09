@@ -423,6 +423,18 @@ void AxisDock::setAxes(QList<Axis*> list) {
 
 	labelWidget->setAxes(list);
 
+	SET_NUMBER_LOCALE
+	ui.sbLineWidth->setLocale(numberLocale);
+	ui.sbMajorTicksSpacingNumeric->setLocale(numberLocale);
+	ui.sbMajorTicksWidth->setLocale(numberLocale);
+	ui.sbMajorTicksLength->setLocale(numberLocale);
+	ui.sbMinorTicksSpacingNumeric->setLocale(numberLocale);
+	ui.sbMinorTicksWidth->setLocale(numberLocale);
+	ui.sbMinorTicksLength->setLocale(numberLocale);
+	ui.sbLabelsOffset->setLocale(numberLocale);
+	ui.sbMajorGridWidth->setLocale(numberLocale);
+	ui.sbMinorGridWidth->setLocale(numberLocale);
+
 	//if there are more then one axis in the list, disable the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);

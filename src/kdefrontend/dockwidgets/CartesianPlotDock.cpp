@@ -290,6 +290,12 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	ui.sbTop->setLocale(numberLocale);
 	ui.sbWidth->setLocale(numberLocale);
 	ui.sbHeight->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
+	ui.sbBorderCornerRadius->setLocale(numberLocale);
+	ui.sbPaddingHorizontal->setLocale(numberLocale);
+	ui.sbPaddingVertical->setLocale(numberLocale);
+	ui.sbPaddingRight->setLocale(numberLocale);
+	ui.sbPaddingBottom->setLocale(numberLocale);
 
 	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
 	if (list.size() == 1) {
