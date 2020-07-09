@@ -40,14 +40,15 @@
 // #include "backend/lib/trace.h"
 #include "kdefrontend/GuiTools.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KSharedConfig>
+
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
 #include <QTextDocument>
-
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
 
 extern "C" {
 #include <gsl/gsl_math.h>
@@ -1468,45 +1469,46 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	tickLabelStrings.clear();
 	QString str;
+	SET_NUMBER_LOCALE
 	if ( (orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
 		|| (orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) ) {
 		if (labelsFormat == Axis::LabelsFormat::Decimal) {
-			QString nullStr = QString::number(0, 'f', labelsPrecision);
+			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
-				str = QString::number(value, 'f', labelsPrecision);
+				str = numberLocale.toString(value, 'f', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::ScientificE) {
-			QString nullStr = QString::number(0, 'e', labelsPrecision);
+			QString nullStr = numberLocale.toString(0., 'e', labelsPrecision);
 			for (const auto value : tickLabelValues) {
-				str = QString::number(value, 'e', labelsPrecision);
+				str = numberLocale.toString(value, 'e', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::Powers10) {
 			for (const auto value : tickLabelValues) {
-				str = "10<span style=\"vertical-align:super\">" + QString::number(log10(value), 'f', labelsPrecision) + "</span>";
+				str = "10<span style=\"vertical-align:super\">" + numberLocale.toString(log10(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::Powers2) {
 			for (const auto value : tickLabelValues) {
-				str = "2<span style=\"vertical-align:super\">" + QString::number(log2(value), 'f', labelsPrecision) + "</span>";
+				str = "2<span style=\"vertical-align:super\">" + numberLocale.toString(log2(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::PowersE) {
 			for (const auto value : tickLabelValues) {
-				str = "e<span style=\"vertical-align:super\">" + QString::number(log(value), 'f', labelsPrecision) + "</span>";
+				str = "e<span style=\"vertical-align:super\">" + numberLocale.toString(log(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::MultipliesPi) {
 			for (const auto value : tickLabelValues) {
-				str = "<span>" + QString::number(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
+				str = "<span>" + numberLocale.toString(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
