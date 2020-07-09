@@ -285,6 +285,12 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	labelWidget->setLabels(labels);
 
+	SET_NUMBER_LOCALE
+	ui.sbLeft->setLocale(numberLocale);
+	ui.sbTop->setLocale(numberLocale);
+	ui.sbWidth->setLocale(numberLocale);
+	ui.sbHeight->setLocale(numberLocale);
+
 	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
@@ -313,8 +319,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	this->load();
 
 	//update active widgets
-
-
 	m_themeHandler->setCurrentTheme(m_plot->theme());
 
 	//Deactivate the geometry related widgets, if the worksheet layout is active.
@@ -516,10 +520,10 @@ void CartesianPlotDock::geometryChanged() {
 	if (m_initializing)
 		return;
 
-	float x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), m_worksheetUnit);
-	float y = Worksheet::convertToSceneUnits(ui.sbTop->value(), m_worksheetUnit);
-	float w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
-	float h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
+	double x = Worksheet::convertToSceneUnits(ui.sbLeft->value(), m_worksheetUnit);
+	double y = Worksheet::convertToSceneUnits(ui.sbTop->value(), m_worksheetUnit);
+	double w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
+	double h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
 
 	QRectF rect(x, y, w, h);
 	m_plot->setRect(rect);
