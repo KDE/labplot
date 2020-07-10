@@ -228,6 +228,12 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_correlationData = m_correlationCurve->correlationData();
+
+	SET_NUMBER_LOCALE
+	uiGeneralTab.sbSamplingInterval->setLocale(numberLocale);
+	uiGeneralTab.sbMin->setLocale(numberLocale);
+	uiGeneralTab.sbMax->setLocale(numberLocale);
+
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;

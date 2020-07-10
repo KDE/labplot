@@ -245,6 +245,12 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
+
+	SET_NUMBER_LOCALE
+	uiGeneralTab.sbSamplingInterval->setLocale(numberLocale);
+	uiGeneralTab.sbMin->setLocale(numberLocale);
+	uiGeneralTab.sbMax->setLocale(numberLocale);
+
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;

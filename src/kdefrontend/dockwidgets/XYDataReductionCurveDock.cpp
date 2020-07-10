@@ -241,6 +241,13 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_dataReductionData = m_dataReductionCurve->dataReductionData();
+
+	SET_NUMBER_LOCALE
+	uiGeneralTab.sbMin->setLocale(numberLocale);
+	uiGeneralTab.sbMax->setLocale(numberLocale);
+	uiGeneralTab.sbTolerance->setLocale(numberLocale);
+	uiGeneralTab.sbTolerance2->setLocale(numberLocale);
+
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;

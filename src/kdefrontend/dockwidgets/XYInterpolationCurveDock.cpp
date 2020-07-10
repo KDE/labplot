@@ -130,6 +130,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.sbContinuity, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::continuityChanged);
 	connect(uiGeneralTab.sbBias, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::biasChanged);
 	connect(uiGeneralTab.cbEval, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::evaluateChanged);
+	// double?
 	connect(uiGeneralTab.sbPoints, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::numberOfPointsChanged);
 	connect(uiGeneralTab.cbPointsMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::pointsModeChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYInterpolationCurveDock::recalculateClicked);
@@ -265,6 +266,15 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_interpolationData = m_interpolationCurve->interpolationData();
+
+	SET_NUMBER_LOCALE
+	uiGeneralTab.sbMin->setLocale(numberLocale);
+	uiGeneralTab.sbMax->setLocale(numberLocale);
+	uiGeneralTab.sbTension->setLocale(numberLocale);
+	uiGeneralTab.sbContinuity->setLocale(numberLocale);
+	uiGeneralTab.sbBias->setLocale(numberLocale);
+	uiGeneralTab.sbPoints->setLocale(numberLocale);
+
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;

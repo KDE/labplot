@@ -121,6 +121,11 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	m_aspect = list.first();
 	Q_ASSERT(m_point);
 
+	SET_NUMBER_LOCALE
+	ui.sbSymbolSize->setLocale(numberLocale);
+	ui.sbSymbolBorderWidth->setLocale(numberLocale);
+
+
 	//if there is more then one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);

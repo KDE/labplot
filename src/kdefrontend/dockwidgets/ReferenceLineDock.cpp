@@ -73,6 +73,9 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	m_aspect = list.first();
 	Q_ASSERT(m_line);
 
+	SET_NUMBER_LOCALE
+	ui.sbLineWidth->setLocale(numberLocale);
+
 	//if there is more then one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);

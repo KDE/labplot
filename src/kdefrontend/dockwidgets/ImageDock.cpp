@@ -138,6 +138,13 @@ void ImageDock::setImages(QList<Image*> list) {
 	m_image = list.first();
 	m_aspect = list.first();
 
+	SET_NUMBER_LOCALE
+	ui.sbWidth->setLocale(numberLocale);
+	ui.sbHeight->setLocale(numberLocale);
+	ui.sbPositionX->setLocale(numberLocale);
+	ui.sbPositionY->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
+
 	//if there are more then one image in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);

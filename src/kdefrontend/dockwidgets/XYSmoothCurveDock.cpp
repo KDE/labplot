@@ -251,6 +251,14 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_smoothData = m_smoothCurve->smoothData();
+
+	SET_NUMBER_LOCALE
+	uiGeneralTab.sbMin->setLocale(numberLocale);
+	uiGeneralTab.sbMax->setLocale(numberLocale);
+	uiGeneralTab.sbPercentile->setLocale(numberLocale);
+	uiGeneralTab.sbLeftValue->setLocale(numberLocale);
+	uiGeneralTab.sbRightValue->setLocale(numberLocale);
+
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;

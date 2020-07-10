@@ -364,6 +364,14 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
 
+	SET_NUMBER_LOCALE
+	ui.sbLineWidth->setLocale(numberLocale);
+	ui.sbSymbolSize->setLocale(numberLocale);
+	ui.sbSymbolBorderWidth->setLocale(numberLocale);
+	ui.sbValuesDistance->setLocale(numberLocale);
+	ui.sbErrorBarsCapSize->setLocale(numberLocale);
+	ui.sbErrorBarsWidth->setLocale(numberLocale);
+
 	//if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		ui.lName->setEnabled(true);
@@ -399,7 +407,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.leName->setToolTip("");
 
 	//show the properties of the first curve
-	SET_NUMBER_LOCALE
 	ui.cbType->setCurrentIndex(m_curve->type());
 	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());

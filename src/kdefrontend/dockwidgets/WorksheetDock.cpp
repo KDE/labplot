@@ -158,6 +158,16 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	m_worksheet = list.first();
 	m_aspect = list.first();
 
+	SET_NUMBER_LOCALE
+	ui.sbWidth->setLocale(numberLocale);
+	ui.sbHeight->setLocale(numberLocale);
+	ui.sbLayoutTopMargin->setLocale(numberLocale);
+	ui.sbLayoutBottomMargin->setLocale(numberLocale);
+	ui.sbLayoutLeftMargin->setLocale(numberLocale);
+	ui.sbLayoutRightMargin->setLocale(numberLocale);
+	ui.sbLayoutHorizontalSpacing->setLocale(numberLocale);
+	ui.sbLayoutVerticalSpacing->setLocale(numberLocale);
+
 	//if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
