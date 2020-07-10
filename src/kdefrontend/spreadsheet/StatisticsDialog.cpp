@@ -34,6 +34,7 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QTextEdit>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QWindow>
 
@@ -43,7 +44,7 @@
 
 #include <cmath>
 
-StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDialog(parent),
+StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>& columns, QWidget* parent) : QDialog(parent),
 	m_twStatistics(new QTabWidget) {
 
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok);
@@ -215,6 +216,25 @@ StatisticsDialog::StatisticsDialog(const QString& title, QWidget* parent) : QDia
 	                     "</tr>"
 	                     "</table>");
 
+
+	m_columns = columns;
+
+	//create tab widgets for every column and show the initial text with the placeholders
+	if (!m_columns.isEmpty()) {
+		for (auto* col : m_columns) {
+			auto* textEdit = new QTextEdit(this);
+			textEdit->setReadOnly(true);
+			m_twStatistics->addTab(textEdit, col->name());
+		}
+
+		auto* const textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
+		textEdit->setHtml(m_htmlText.arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-"),
+									QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-")).
+									arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-"),
+										QLatin1String("-"), QLatin1String("-"), QLatin1String("-"), QLatin1String("-")).
+									arg(QLatin1String("-"), QLatin1String("-"), QLatin1String("-")));
+	}
+
 	connect(m_twStatistics, &QTabWidget::currentChanged, this, &StatisticsDialog::currentTabChanged);
 
 	//restore saved settings if available
@@ -232,18 +252,9 @@ StatisticsDialog::~StatisticsDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void StatisticsDialog::setColumns(const QVector<Column*>& columns) {
-	if (!columns.size())
-		return;
-
-	m_columns = columns;
-
-	for (auto* col : m_columns) {
-		auto* textEdit = new QTextEdit;
-		textEdit->setReadOnly(true);
-		m_twStatistics->addTab(textEdit, col->name());
-	}
-	currentTabChanged(0);
+void StatisticsDialog::showStatistics() {
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QTimer::singleShot(0, this, [=] () {currentTabChanged(0);});
 }
 
 const QString StatisticsDialog::isNanValue(const double value) {
@@ -275,11 +286,13 @@ QString modeValue(Column* column, double value) {
 }
 
 void StatisticsDialog::currentTabChanged(int index) {
+	auto* const textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
+	if (!textEdit)
+		return;
+
 	WAIT_CURSOR;
 	const Column::ColumnStatistics& statistics = m_columns[index]->statistics();
-	RESET_CURSOR;
 
-	auto* const textEdit = static_cast<QTextEdit*>(m_twStatistics->currentWidget());
 	textEdit->setHtml(m_htmlText.arg(QString::number(statistics.size),
 									isNanValue(statistics.minimum == INFINITY ? NAN : statistics.minimum),
 									isNanValue(statistics.maximum == -INFINITY ? NAN : statistics.maximum),
@@ -301,4 +314,5 @@ void StatisticsDialog::currentTabChanged(int index) {
 						arg(isNanValue(statistics.skewness),
 							isNanValue(statistics.kurtosis),
 							isNanValue(statistics.entropy)));
+	RESET_CURSOR;
 }

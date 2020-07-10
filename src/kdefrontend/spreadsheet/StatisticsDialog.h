@@ -38,9 +38,9 @@ class StatisticsDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit StatisticsDialog(const QString&, QWidget *parent = nullptr);
+	explicit StatisticsDialog(const QString&, const QVector<Column*>&, QWidget *parent = nullptr);
 	~StatisticsDialog() override;
-	void setColumns(const QVector<Column*>&);
+	void showStatistics();
 
 private:
 	const QString isNanValue(const double);

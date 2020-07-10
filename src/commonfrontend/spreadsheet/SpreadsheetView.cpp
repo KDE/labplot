@@ -83,6 +83,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QTableView>
+#include <QTimer>
 #include <QToolBar>
 #include <QTextStream>
 #include <QProcess>
@@ -2715,27 +2716,26 @@ void SpreadsheetView::showAllColumnsStatistics() {
 
 void SpreadsheetView::showColumnStatistics(bool forAll) {
 	QString dlgTitle(m_spreadsheet->name() + " column statistics");
-	auto* dlg = new StatisticsDialog(dlgTitle);
 	QVector<Column*> columns;
 
 	if (!forAll)
-		dlg->setColumns(selectedColumns());
+		columns = selectedColumns();
 	else if (forAll) {
 		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
 			if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::ColumnMode::Numeric)
 				columns << m_spreadsheet->column(col);
 		}
-		dlg->setColumns(columns);
 	}
-	if (dlg->exec() == QDialog::Accepted) {
-		if (forAll)
-			columns.clear();
-	}
+
+	auto* dlg = new StatisticsDialog(dlgTitle, columns);
+	dlg->setModal(true);
+	dlg->show();
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	QTimer::singleShot(0, this, [=] () {dlg->showStatistics();});
 }
 
 void SpreadsheetView::showRowStatistics() {
 	QString dlgTitle(m_spreadsheet->name() + " row statistics");
-	auto* dlg = new StatisticsDialog(dlgTitle);
 
 	QVector<Column*> columns;
 	for (int i = 0; i < m_spreadsheet->rowCount(); ++i) {
@@ -2743,10 +2743,11 @@ void SpreadsheetView::showRowStatistics() {
 			QVector<double> rowValues;
 			for (int j = 0; j < m_spreadsheet->columnCount(); ++j)
 				rowValues << m_spreadsheet->column(j)->valueAt(i);
-			columns << new Column(QString::number(i+1), rowValues);
+			columns << new Column(i18n("Row %1").arg(i+1), rowValues);
 		}
 	}
-	dlg->setColumns(columns);
+	auto* dlg = new StatisticsDialog(dlgTitle, columns);
+	dlg->showStatistics();
 
 	if (dlg->exec() == QDialog::Accepted) {
 		qDeleteAll(columns);

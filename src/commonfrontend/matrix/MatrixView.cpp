@@ -1481,7 +1481,6 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 void MatrixView::showColumnStatistics() {
 	if (selectedColumnCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " column statistics");
-		auto* dlg = new StatisticsDialog(dlgTitle);
 		QVector<Column*> columns;
 		for (int col = 0; col < m_matrix->columnCount(); ++col) {
 			if (isColumnSelected(col, false)) {
@@ -1489,7 +1488,8 @@ void MatrixView::showColumnStatistics() {
 				columns << new Column(headerString, static_cast<QVector<QVector<double>>*>(m_matrix->data())->at(col));
 			}
 		}
-		dlg->setColumns(columns);
+		auto* dlg = new StatisticsDialog(dlgTitle, columns);
+		dlg->showStatistics();
 		if (dlg->exec() == QDialog::Accepted) {
 			qDeleteAll(columns);
 			columns.clear();
@@ -1500,7 +1500,6 @@ void MatrixView::showColumnStatistics() {
 void MatrixView::showRowStatistics() {
 	if (selectedRowCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " row statistics");
-		auto* dlg = new StatisticsDialog(dlgTitle);
 		QVector<Column*> columns;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			if (isRowSelected(row, false)) {
@@ -1509,7 +1508,8 @@ void MatrixView::showRowStatistics() {
 				columns << new Column(headerString, m_matrix->rowCells<double>(row, 0, m_matrix->columnCount()-1));
 			}
 		}
-		dlg->setColumns(columns);
+		auto* dlg = new StatisticsDialog(dlgTitle, columns);
+		dlg->showStatistics();
 		if (dlg->exec() == QDialog::Accepted) {
 			qDeleteAll(columns);
 			columns.clear();
