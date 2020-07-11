@@ -16,6 +16,7 @@
 	* Allow to open Cantor and Jupyter projects
 	* [Windows] improved craft blueprint and installer package
 	* [macOS] added support for touchbar
+	* Support global user specified decimal separator
 	* Improved locale support in number input fields
 	* Extended "About"-Dialog
 
