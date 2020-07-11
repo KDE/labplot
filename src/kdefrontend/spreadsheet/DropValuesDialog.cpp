@@ -555,8 +555,20 @@ void DropValuesDialog::maskValues() const {
 	m_spreadsheet->beginMacro(i18n("%1: mask values", m_spreadsheet->name()));
 
 	const Operator op = static_cast<Operator>(ui.cbOperator->currentIndex());
-	const double value1 = ui.leValue1->text().toDouble();
-	const double value2 = ui.leValue2->text().toDouble();
+	SET_NUMBER_LOCALE
+	bool ok;
+	const double value1 = numberLocale.toDouble(ui.leValue1->text(), &ok);
+	if (!ok) {
+		DEBUG("Double value 1 invalid!")
+		m_spreadsheet->endMacro();
+		return;
+	}
+	const double value2 = numberLocale.toDouble(ui.leValue2->text(), &ok);
+	if (!ok) {
+		DEBUG("Double value 2 invalid!")
+		m_spreadsheet->endMacro();
+		return;
+	}
 
 	for (Column* col: m_columns) {
 		auto* task = new MaskValuesTask(col, op, value1, value2);
@@ -580,8 +592,20 @@ void DropValuesDialog::dropValues() const {
 	m_spreadsheet->beginMacro(i18n("%1: drop values", m_spreadsheet->name()));
 
 	const Operator op = static_cast<Operator>(ui.cbOperator->currentIndex());
-	const double value1 = ui.leValue1->text().toDouble();
-	const double value2 = ui.leValue2->text().toDouble();
+	SET_NUMBER_LOCALE
+	bool ok;
+	const double value1 = numberLocale.toDouble(ui.leValue1->text(), &ok);
+	if (!ok) {
+		DEBUG("Double value 1 invalid!")
+		m_spreadsheet->endMacro();
+		return;
+	}
+	const double value2 = numberLocale.toDouble(ui.leValue2->text(), &ok);
+	if (!ok) {
+		DEBUG("Double value 2 invalid!")
+		m_spreadsheet->endMacro();
+		return;
+	}
 
 	for (Column* col: m_columns) {
 		auto* task = new DropValuesTask(col, op, value1, value2);

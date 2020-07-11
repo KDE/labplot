@@ -258,18 +258,20 @@ void StatisticsDialog::showStatistics() {
 }
 
 const QString StatisticsDialog::isNanValue(const double value) {
-	return (std::isnan(value) ? QLatin1String("-") : QString::number(value,'f'));
+	SET_NUMBER_LOCALE
+	return (std::isnan(value) ? QLatin1String("-") : numberLocale.toString(value,'f'));
 }
 
 QString modeValue(Column* column, double value) {
 	if (std::isnan(value))
 		return QLatin1String("-");
 
+	SET_NUMBER_LOCALE
 	switch (column->columnMode()) {
 	case AbstractColumn::ColumnMode::Integer:
-		return QString::number((int)value);
+		return numberLocale.toString((int)value);
 	case AbstractColumn::ColumnMode::BigInt:
-		return QString::number((qint64)value);
+		return numberLocale.toString((qint64)value);
 	case AbstractColumn::ColumnMode::Text:
 		//TODO
 	case AbstractColumn::ColumnMode::DateTime:
@@ -279,7 +281,7 @@ QString modeValue(Column* column, double value) {
 	case AbstractColumn::ColumnMode::Month:
 		//TODO
 	case AbstractColumn::ColumnMode::Numeric:
-		return QString::number(value, 'f');
+		return numberLocale.toString(value, 'f');
 	}
 
 	return QString();

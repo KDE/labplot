@@ -27,12 +27,15 @@
  ***************************************************************************/
 
 #include "SettingsDatasetsPage.h"
+#include "backend/lib/macros.h"
+
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QDir>
 #include <QMessageBox>
 #include <QStandardPaths>
-
-#include <KLocalizedString>
 
 /**
  * \brief Page for the 'General' settings of the Labplot settings dialog.
@@ -74,13 +77,14 @@ void SettingsDatasetsPage::loadSettings() {
 				size += QFileInfo(dir, file).size();
 			}
 
+			SET_NUMBER_LOCALE
 			QString sizeStr;
 			if (size > 1024*1024)
-				sizeStr = QString::number(size/1024/1024) + QLatin1String("MB");
+				sizeStr = numberLocale.toString(size/1024/1024) + QLatin1String("MB");
 			if (size > 1024)
-				sizeStr = QString::number(size/1024) + QLatin1String("kB");
+				sizeStr = numberLocale.toString(size/1024) + QLatin1String("kB");
 			else
-				sizeStr = QString::number(size) + QLatin1String("B");
+				sizeStr = numberLocale.toString(size) + QLatin1String("B");
 
 			ui.lSize->setText(i18n("Total size - %1", sizeStr));
 		} else

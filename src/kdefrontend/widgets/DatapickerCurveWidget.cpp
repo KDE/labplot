@@ -31,9 +31,11 @@
 #include "backend/worksheet/Worksheet.h"
 #include "kdefrontend/GuiTools.h"
 
-#include <QPainter>
-
 #include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
+#include <QPainter>
 
 #include <cmath>
 
@@ -136,6 +138,11 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 	m_curveList = list;
 	m_curve = list.first();
 	m_aspect = list.first();
+
+	SET_NUMBER_LOCALE
+	ui.sbSize->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
+	ui.sbErrorBarSize->setLocale(numberLocale);
 
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);

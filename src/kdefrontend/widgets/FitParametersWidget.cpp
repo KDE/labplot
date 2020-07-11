@@ -75,7 +75,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.tableWidget->installEventFilter(this);
 
-	connect( ui.tableWidget, SIGNAL(cellChanged(int,int)), this, SLOT(changed()) );
+	connect(ui.tableWidget, SIGNAL(cellChanged(int, int)), this, SLOT(changed()) );
 	updateTableSize();
 }
 

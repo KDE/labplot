@@ -58,6 +58,7 @@ FitOptionsWidget::FitOptionsWidget(QWidget* parent, XYFitCurve::FitData* fitData
 	ui.leMaxIterations->setText(numberLocale.toString(m_fitData->maxIterations));
 	ui.leEps->setText(numberLocale.toString(m_fitData->eps));
 	ui.leEvaluatedPoints->setText(numberLocale.toString(static_cast<qulonglong>(m_fitData->evaluatedPoints)));
+	ui.sbConfidenceInterval->setLocale(numberLocale);
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(fitCurve->parentAspect());

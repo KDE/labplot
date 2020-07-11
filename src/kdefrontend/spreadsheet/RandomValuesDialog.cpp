@@ -105,6 +105,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 	if (conf.exists()) {
 		ui.cbDistribution->setCurrentIndex(conf.readEntry("Distribution", 0));
 		this->distributionChanged(ui.cbDistribution->currentIndex()); //if index=0 no signal is emitted above, call this slot directly here
+		// TODO: better read double value
 		ui.leParameter1->setText(conf.readEntry("Parameter1"));
 		ui.leParameter2->setText(conf.readEntry("Parameter2"));
 		ui.leParameter3->setText(conf.readEntry("Parameter3"));
@@ -123,6 +124,7 @@ RandomValuesDialog::~RandomValuesDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
 	conf.writeEntry("Distribution", ui.cbDistribution->currentIndex());
+	// TODO: better save double value
 	conf.writeEntry("Parameter1", ui.leParameter1->text());
 	conf.writeEntry("Parameter2", ui.leParameter2->text());
 	conf.writeEntry("Parameter3", ui.leParameter3->text());
@@ -146,6 +148,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 	ui.leParameter3->hide();
 	ui.lFunc->setText("p(x) =");
 
+	//TODO: number locale
 	switch (dist) {
 	case nsl_sf_stats_gaussian:
 		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
@@ -406,6 +409,7 @@ void RandomValuesDialog::generate() {
 	QVector<int> data_int(rows);
 	QVector<qint64> data_bigint(rows);
 
+	//TODO: number locale
 	switch (dist) {
 	case nsl_sf_stats_gaussian: {
 		double mu = ui.leParameter1->text().toDouble();

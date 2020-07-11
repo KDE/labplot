@@ -82,6 +82,7 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	separators.takeAt(0); //remove the first entry "auto"
 	ui->cbSeparator->addItems(separators);
 
+	//TODO: use general setting for decimal separator?
 	ui->cbDecimalSeparator->addItem(i18n("Point '.'"));
 	ui->cbDecimalSeparator->addItem(i18n("Comma ','"));
 
