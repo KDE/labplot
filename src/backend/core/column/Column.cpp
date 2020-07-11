@@ -33,6 +33,7 @@
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/column/columncommands.h"
 #include "backend/core/Project.h"
+#include "backend/lib/trace.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
@@ -49,6 +50,7 @@ extern "C" {
 }
 
 #include <array>
+#include <unordered_map>
 
 #include <QClipboard>
 #include <QFont>
@@ -657,6 +659,8 @@ void Column::calculateStatistics() const {
 			&& (columnMode() != ColumnMode::BigInt) )
 		return;
 
+	PERFTRACE("calculate column statistics");
+
 	d->statistics = ColumnStatistics();
 	ColumnStatistics& statistics = d->statistics;
 
@@ -669,9 +673,8 @@ void Column::calculateStatistics() const {
 	double columnSumSquare = 0.0;
 	statistics.minimum = INFINITY;
 	statistics.maximum = -INFINITY;
-	QMap<double, int> frequencyOfValues;
+	std::unordered_map<double, int> frequencyOfValues;
 	QVector<double> rowData;
-
 	if (columnMode() == ColumnMode::Numeric) {
 		auto* rowValues = reinterpret_cast<QVector<double>*>(data());
 		rowValuesSize = rowValues->size();
@@ -690,10 +693,10 @@ void Column::calculateStatistics() const {
 			columnSumNeg += (1.0 / val);
 			columnSumSquare += val*val;
 			columnProduct *= val;
-			if (frequencyOfValues.contains(val))
+			if (frequencyOfValues.find(val) != frequencyOfValues.end())
 				frequencyOfValues.operator [](val)++;
 			else
-				frequencyOfValues.insert(val, 1);
+				frequencyOfValues.insert(std::make_pair(val, 1));
 			++notNanCount;
 			rowData.push_back(val);
 		}
@@ -715,10 +718,10 @@ void Column::calculateStatistics() const {
 			columnSumNeg += (1.0 / val);
 			columnSumSquare += val*val;
 			columnProduct *= val;
-			if (frequencyOfValues.contains(val))
+			if (frequencyOfValues.find(val) != frequencyOfValues.end())
 				frequencyOfValues.operator [](val)++;
 			else
-				frequencyOfValues.insert(val, 1);
+				frequencyOfValues.insert(std::make_pair(val, 1));
 			++notNanCount;
 			rowData.push_back(val);
 		}
@@ -740,10 +743,10 @@ void Column::calculateStatistics() const {
 			columnSumNeg += (1.0 / val);
 			columnSumSquare += val*val;
 			columnProduct *= val;
-			if (frequencyOfValues.contains(val))
+			if (frequencyOfValues.find(val) != frequencyOfValues.end())
 				frequencyOfValues.operator [](val)++;
 			else
-				frequencyOfValues.insert(val, 1);
+				frequencyOfValues.insert(std::make_pair(val, 1));
 			++notNanCount;
 			rowData.push_back(val);
 		}
@@ -766,30 +769,24 @@ void Column::calculateStatistics() const {
 	//calculate the mode, the most frequent value in the data set
 	int maxFreq = 0;
 	double mode = NAN;
-	QMap<double, int>::const_iterator it = frequencyOfValues.constBegin();
-	while (it != frequencyOfValues.constEnd()) {
-		if (it.value() > maxFreq) {
-			maxFreq = it.value();
-			mode = it.key();
+	for (const auto& it : frequencyOfValues) {
+		if (it.second > maxFreq) {
+			maxFreq = it.second;
+			mode = it.first;
 		}
-		++it;
 	}
-
 	//check how many times the max frequency occurs in the data set.
 	//if more than once, we have a multi-modal distribution and don't show any mode
-	it = frequencyOfValues.constBegin();
 	int maxFreqOccurance = 0;
-	while (it != frequencyOfValues.constEnd()) {
-		if (it.value() == maxFreq)
+	for (const auto& it : frequencyOfValues) {
+		if (it.second == maxFreq)
 			++maxFreqOccurance;
 
 		if (maxFreqOccurance > 1) {
 			mode = NAN;
 			break;
 		}
-		++it;
 	}
-
 	statistics.mode = mode;
 
 	double columnSumVariance = 0;
@@ -845,7 +842,7 @@ void Column::calculateStatistics() const {
 
 	double entropy = 0.0;
 	for (const auto& v : frequencyOfValues) {
-		const double frequencyNorm = static_cast<double>(v) / notNanCount;
+		const double frequencyNorm = static_cast<double>(v.second) / notNanCount;
 		entropy += (frequencyNorm * log2(frequencyNorm));
 	}
 
