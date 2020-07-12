@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (C) 2019 Klaralvdalens Datakonsult AB, a KDAB Group company, info@kdab.com.
+** Copyright (C) 2019-2020 Klaralvdalens Datakonsult AB, a KDAB Group company, info@kdab.com.
 ** All rights reserved.
 **
 ** This file is part of the KD MacTouchBar library.
@@ -37,7 +37,18 @@
 
 QT_BEGIN_NAMESPACE
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 NSImage *qt_mac_create_nsimage(const QIcon &icon, int defaultSize = 0);
+#else
+//  defined in gui/painting/qcoregraphics.mm
+@interface NSImage (QtExtras)
++ (instancetype)imageFromQIcon:(const QIcon &)icon;
+@end
+static NSImage *qt_mac_create_nsimage(const QIcon &icon)
+{
+    return [NSImage imageFromQIcon:icon];
+}
+#endif
 
 static QString identifierForAction(QObject *action)
 {
