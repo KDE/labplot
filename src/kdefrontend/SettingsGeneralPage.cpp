@@ -69,26 +69,29 @@ SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLoc
 
 QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 	int currentIndex = ui.cbDecimalSeparator->currentIndex();
-	if (currentIndex == static_cast<int>(decimalSeparator()))
+	if (currentIndex == static_cast<int>(decimalSeparator())) 	// system decimal separator selected
 		return QLocale().language();
 
 	QChar groupSeparator{QLocale().groupSeparator()};
-	if (currentIndex == static_cast<int>(DecimalSeparator::Dot)) {
+	switch (currentIndex) {
+	case static_cast<int>(DecimalSeparator::Dot):
 		if (groupSeparator == QLocale(QLocale::Language::Zarma).groupSeparator())	// \u00a0
 			return QLocale::Language::Zarma;	// . \u00a0
 		else if (groupSeparator == QLocale(QLocale::Language::SwissGerman).groupSeparator())	// \u2019
 			return QLocale::Language::SwissGerman;  // . \u2019
 		else
 			return QLocale::Language::C;	 	// . ,
-	} else if (currentIndex == static_cast<int>(DecimalSeparator::Comma)) {
+	case static_cast<int>(DecimalSeparator::Comma):
 		if (groupSeparator == QLocale(QLocale::Language::French).groupSeparator())	// \u00a0
 			return QLocale::Language::French;       // , \u00a0
 		else if (groupSeparator == QLocale(QLocale::Language::Walser).groupSeparator())	// \u2019
 			return QLocale::Language::Walser;       // , \u2019
 		else
 			return QLocale::Language::German;       // , .
-	} else {
+	case static_cast<int>(DecimalSeparator::Arabic):
 		return QLocale::Language::Arabic;		// \u066b \u066c
+	default:	// automatic
+		return QLocale().language();
 	}
 }
 
@@ -100,7 +103,10 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
 	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
-	group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(decimalSeparatorLocale()));
+	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic))
+		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage));
+	else
+		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(decimalSeparatorLocale()));
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 	group.writeEntry(QLatin1String("ShowMemoryInfo"), ui.chkMemoryInfo->isChecked());
@@ -114,7 +120,7 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.cbTabPosition->setCurrentIndex(0);
 	ui.cbMdiVisibility->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
-	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(decimalSeparator()));
+	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
 	ui.chkAutoSave->setChecked(false);
 	ui.sbAutoSaveInterval->setValue(0);
 	ui.sbAutoSaveInterval->setValue(5);
@@ -131,7 +137,10 @@ void SettingsGeneralPage::loadSettings() {
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
 	QLocale locale(static_cast<QLocale::Language>(group.readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale().language()) )) );
-	ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(decimalSeparator(locale)) );
+	if (locale.language() == QLocale().language()) 	// no or default setting
+		ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(DecimalSeparator::Automatic) );
+	else
+		ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(decimalSeparator(locale)) );
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 	ui.chkMemoryInfo->setChecked(group.readEntry<bool>(QLatin1String("ShowMemoryInfo"), true));
@@ -171,6 +180,7 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbDecimalSeparator->addItem(i18n("Dot (.)"));
 	ui.cbDecimalSeparator->addItem(i18n("Comma (,)"));
 	ui.cbDecimalSeparator->addItem(i18n("Arabic"));
+	ui.cbDecimalSeparator->addItem(i18n("Automatic"));
 }
 
 void SettingsGeneralPage::changed() {

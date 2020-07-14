@@ -37,7 +37,7 @@ class SettingsGeneralPage : public SettingsPage {
 	Q_OBJECT
 
 public:
-	enum class DecimalSeparator{Dot, Comma, Arabic};
+	enum class DecimalSeparator{Dot, Comma, Arabic, Automatic};
 
 	explicit SettingsGeneralPage(QWidget*);
 
