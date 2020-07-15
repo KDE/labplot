@@ -58,7 +58,11 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 }
 
 SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLocale locale) {
+	DEBUG("SettingsGeneralPage::decimalSeparator()")
+	DEBUG("	LOCALE: " << STDSTRING(locale.name()))
+	DEBUG("	LOCALE LANG: " << locale.language())
 	QChar decimalPoint{locale.decimalPoint()};
+	DEBUG("	SEPARATING CHAR: " << STDSTRING(QString(decimalPoint)) )
 	if (decimalPoint == QChar('.'))
 		return DecimalSeparator::Dot;
 	else if (decimalPoint == QChar(','))
@@ -69,6 +73,10 @@ SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLoc
 
 QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 	int currentIndex = ui.cbDecimalSeparator->currentIndex();
+	DEBUG("	SYSTEM LOCALE: " << STDSTRING(QLocale().name()))
+	DEBUG("	SYSTEM LOCALE LANG: " << QLocale().language())
+	DEBUG("	CURRENT SEPARATING CHAR: " << STDSTRING(QString(QLocale().decimalPoint())) )
+	DEBUG("	GERMAN SEPARATING CHAR: " << STDSTRING(QString(QLocale(QLocale::Language::German).decimalPoint())) )
 	if (currentIndex == static_cast<int>(decimalSeparator())) 	// system decimal separator selected
 		return QLocale().language();
 
