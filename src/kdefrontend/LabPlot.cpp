@@ -61,6 +61,13 @@ const QString getSystemInfo() {
 #else
 	const QString buildType(i18n("Debug build"));
 #endif
+	QLocale locale;
+	const QString numberSystemInfo{ '('
+			+ i18n("Decimal point ") + '\'' + QString(locale.decimalPoint())
+			+ QLatin1String("\', ")
+			+ i18n("Group separator ") + '\'' + QString(locale.groupSeparator())
+			+ QLatin1String("\')")};
+
 	SET_NUMBER_LOCALE
 	const QString numberLocaleInfo{ ' '
 			+ i18n("Decimal point ") + '\'' + QString(numberLocale.decimalPoint())
@@ -69,20 +76,19 @@ const QString getSystemInfo() {
 			+ QLatin1String("\', ")
 			+ i18n("Exponential ") + '\'' + QString(numberLocale.exponential())
 			+ QLatin1String("\', ")
-			+ i18n("Zero digit: ") + '\'' + QString(numberLocale.zeroDigit())
+			+ i18n("Zero digit ") + '\'' + QString(numberLocale.zeroDigit())
 			+ QLatin1String("\', ")
-			+ i18n("Percent: ") + '\'' + QString(numberLocale.percent())
+			+ i18n("Percent ") + '\'' + QString(numberLocale.percent())
 			+ QLatin1String("\', ")
-			+ i18n("Positive/Negative sign: ") + '\'' + QString(numberLocale.positiveSign()) + '\''
-			+ '/' + '\'' + QString(numberLocale.negativeSign()) };
+			+ i18n("Positive/Negative sign ") + '\'' + QString(numberLocale.positiveSign()) + '\''
+			+ '/' + '\'' + QString(numberLocale.negativeSign()) + '\'' };
 
-	QLocale locale;
 	return buildType + '\n'
 		+ QString("%1, %2").arg(__DATE__).arg(__TIME__) + '\n'
 		+ i18n("System: ") + QSysInfo::prettyProductName() + '\n'
 		+ i18n("Locale: ") + QLocale::languageToString(locale.language()) + ','
-			+ QLocale::countryToString(locale.country()) + '\n'
-		+ i18n("Number settings:") + numberLocaleInfo + '\n'
+			+ QLocale::countryToString(locale.country()) + ' ' + numberSystemInfo + '\n'
+		+ i18n("Number settings:") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + ')' + '\n'
 		+ i18n("Architecture: ") + QSysInfo::buildAbi() + '\n'
 		+ i18n("Kernel: ") + QSysInfo::kernelType() + ' ' + QSysInfo::kernelVersion() + '\n'
 		+ i18n("C++ Compiler: ") + QString(CXX_COMPILER) + '\n'

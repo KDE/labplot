@@ -57,10 +57,10 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	autoSaveChanged(ui.chkAutoSave->checkState());
 }
 
+/* returns decimal separator (as SettingsGeneralPage::DecimalSeparator) of given locale (default: system setting) */
 SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLocale locale) {
 	DEBUG("SettingsGeneralPage::decimalSeparator()")
-	DEBUG("	LOCALE: " << STDSTRING(locale.name()))
-	DEBUG("	LOCALE LANG: " << locale.language())
+	DEBUG("	LOCALE: " << STDSTRING(locale.name()) << ',' << locale.language())
 	QChar decimalPoint{locale.decimalPoint()};
 	DEBUG("	SEPARATING CHAR: " << STDSTRING(QString(decimalPoint)) )
 	if (decimalPoint == QChar('.'))
@@ -72,13 +72,12 @@ SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLoc
 }
 
 QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
+	DEBUG("SettingsGeneralPage::decimalSeparatorLocale()")
 	int currentIndex = ui.cbDecimalSeparator->currentIndex();
-	DEBUG("	SYSTEM LOCALE: " << STDSTRING(QLocale().name()))
-	DEBUG("	SYSTEM LOCALE LANG: " << QLocale().language())
-	DEBUG("	CURRENT SEPARATING CHAR: " << STDSTRING(QString(QLocale().decimalPoint())) )
-	DEBUG("	GERMAN SEPARATING CHAR: " << STDSTRING(QString(QLocale(QLocale::Language::German).decimalPoint())) )
+	DEBUG("	SYSTEM LOCALE: " << STDSTRING(QLocale().name()) << ':' << QLocale().language())
+	DEBUG("	SYSTEM SEPARATING CHAR: " << STDSTRING(QString(QLocale().decimalPoint())) )
 	if (currentIndex == static_cast<int>(decimalSeparator())) 	// system decimal separator selected
-		return QLocale().language();
+		return QLocale::Language::AnyLanguage;
 
 	QChar groupSeparator{QLocale().groupSeparator()};
 	switch (currentIndex) {
@@ -99,7 +98,7 @@ QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 	case static_cast<int>(DecimalSeparator::Arabic):
 		return QLocale::Language::Arabic;		// \u066b \u066c
 	default:	// automatic
-		return QLocale().language();
+		return QLocale::Language::AnyLanguage;
 	}
 }
 
@@ -111,7 +110,7 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
 	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
-	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic))
+	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic))	// needed to overwrite previous setting
 		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage));
 	else
 		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(decimalSeparatorLocale()));
@@ -144,8 +143,8 @@ void SettingsGeneralPage::loadSettings() {
 	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
-	QLocale locale(static_cast<QLocale::Language>(group.readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale().language()) )) );
-	if (locale.language() == QLocale().language()) 	// no or default setting
+	QLocale locale(static_cast<QLocale::Language>(group.readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage) )) );
+	if (locale.language() == QLocale().language() && locale.decimalPoint() == QLocale().decimalPoint()) 	// no or default setting
 		ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(DecimalSeparator::Automatic) );
 	else
 		ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(decimalSeparator(locale)) );

@@ -69,8 +69,8 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 
 // define number locale from setting (using system locale when QLocale::AnyLanguage)
 #define SET_NUMBER_LOCALE \
-QLocale::Language numberLocaleLanguage = static_cast<QLocale::Language>(KSharedConfig::openConfig()->group("Settings_General").readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale().language()) )); \
-QLocale numberLocale(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale().language() : numberLocaleLanguage);
+QLocale::Language numberLocaleLanguage = static_cast<QLocale::Language>(KSharedConfig::openConfig()->group("Settings_General").readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage) )); \
+QLocale numberLocale(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage);
 
 //////////////////////// LineEdit Access ///////////////////////////////
 #define SET_INT_FROM_LE(var, le) { \
