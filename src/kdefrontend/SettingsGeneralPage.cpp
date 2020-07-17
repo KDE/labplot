@@ -186,7 +186,7 @@ void SettingsGeneralPage::retranslateUi() {
 
 	ui.cbDecimalSeparator->addItem(i18n("Dot (.)"));
 	ui.cbDecimalSeparator->addItem(i18n("Comma (,)"));
-	ui.cbDecimalSeparator->addItem(i18n("Arabic"));
+	ui.cbDecimalSeparator->addItem(i18n("Arabic (٫)"));
 	ui.cbDecimalSeparator->addItem(i18n("Automatic"));
 }
 
