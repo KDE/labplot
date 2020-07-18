@@ -76,8 +76,6 @@ QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 	int currentIndex = ui.cbDecimalSeparator->currentIndex();
 	DEBUG("	SYSTEM LOCALE: " << STDSTRING(QLocale().name()) << ':' << QLocale().language())
 	DEBUG("	SYSTEM SEPARATING CHAR: " << STDSTRING(QString(QLocale().decimalPoint())) )
-	if (currentIndex == static_cast<int>(decimalSeparator())) 	// system decimal separator selected
-		return QLocale::Language::AnyLanguage;
 
 	QChar groupSeparator{QLocale().groupSeparator()};
 	switch (currentIndex) {
