@@ -37,12 +37,15 @@
  */
 SettingsSpreadsheetPage::SettingsSpreadsheetPage(QWidget* parent) : SettingsPage(parent) {
 	ui.setupUi(this);
-	connect(ui.chkShowColumnType, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-	connect(ui.chkShowPlotDesignation, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
+	connect(ui.chkShowColumnType, &QCheckBox::stateChanged, this, &SettingsSpreadsheetPage::changed);
+	connect(ui.chkShowPlotDesignation, &QCheckBox::stateChanged, this, &SettingsSpreadsheetPage::changed);
 	loadSettings();
 }
 
 void SettingsSpreadsheetPage::applySettings() {
+	if (!m_changed)
+		return;
+
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Spreadsheet"));
 	group.writeEntry(QLatin1String("ShowColumnType"), ui.chkShowColumnType->isChecked());
 	group.writeEntry(QLatin1String("ShowPlotDesignation"), ui.chkShowPlotDesignation->isChecked());

@@ -62,16 +62,19 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 	if (TeXRenderer::executableExists(QLatin1String("latex")))
 		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
-	connect(m_cbThemes, SIGNAL(currentThemeChanged(QString)), this, SLOT(changed()) );
-	connect(ui.chkPresenterModeInteractive, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
-	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(checkTeX(int)) );
+	connect(m_cbThemes, &ThemesComboBox::currentThemeChanged, this, &SettingsWorksheetPage::changed);
+	connect(ui.chkPresenterModeInteractive, &QCheckBox::stateChanged, this, &SettingsWorksheetPage::changed);
+	connect(ui.chkDoubleBuffering, &QCheckBox::stateChanged, this, &SettingsWorksheetPage::changed);
+	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::changed);
+	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::checkTeX);
 
 	loadSettings();
 }
 
 void SettingsWorksheetPage::applySettings() {
+	if (!m_changed)
+		return;
+
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
 	if (m_cbThemes->currentText() == i18n("Default"))
 		group.writeEntry(QLatin1String("Theme"), QString());

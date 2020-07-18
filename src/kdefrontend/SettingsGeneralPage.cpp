@@ -101,6 +101,9 @@ QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 }
 
 void SettingsGeneralPage::applySettings() {
+	if (!m_changed)
+		return;
+
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentIndex());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
