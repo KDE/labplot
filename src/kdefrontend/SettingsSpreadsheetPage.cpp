@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : SettingsDialog.h
+    File                 : SettingsSpreadsheetPage.cpp
     Project              : LabPlot
+    Description          : settings page for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
-    Description          : application settings dialog
+    Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,53 +25,41 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef SETTINGSDIALOG_H
-#define SETTINGSDIALOG_H
 
-#include <KPageDialog>
+#include "SettingsSpreadsheetPage.h"
 
-class QAbstractButton;
-class SettingsGeneralPage;
-class SettingsSpreadsheetPage;
-class SettingsWorksheetPage;
-// class SettingsWelcomePage;
-class SettingsDatasetsPage;
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
-#ifdef HAVE_KUSERFEEDBACK
-namespace KUserFeedback {
-	class FeedbackConfigWidget;
+/**
+ * \brief Page for Spreadsheet settings of the Labplot settings dialog.
+ */
+SettingsSpreadsheetPage::SettingsSpreadsheetPage(QWidget* parent) : SettingsPage(parent) {
+	ui.setupUi(this);
+	connect(ui.chkShowColumnType, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
+	connect(ui.chkShowPlotDesignation, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
+	loadSettings();
 }
-#endif
 
-class SettingsDialog : public KPageDialog {
-	Q_OBJECT
+void SettingsSpreadsheetPage::applySettings() {
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Spreadsheet"));
+	group.writeEntry(QLatin1String("ShowColumnType"), ui.chkShowColumnType->isChecked());
+	group.writeEntry(QLatin1String("ShowPlotDesignation"), ui.chkShowPlotDesignation->isChecked());
+}
 
-public:
-	explicit SettingsDialog(QWidget*);
-	~SettingsDialog() override;
+void SettingsSpreadsheetPage::restoreDefaults() {
+	ui.chkShowColumnType->setChecked(true);
+	ui.chkShowPlotDesignation->setChecked(true);
+}
 
-private slots:
-	void changed();
-	void slotButtonClicked(QAbstractButton*);
+void SettingsSpreadsheetPage::loadSettings() {
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Spreadsheet"));
+	ui.chkShowColumnType->setChecked(group.readEntry(QLatin1String("ShowColumnType"), true));
+	ui.chkShowPlotDesignation->setChecked(group.readEntry(QLatin1String("ShowPlotDesignation"), true));
+}
 
-private:
-	bool m_changed{false};
-	SettingsGeneralPage* m_generalPage;
-	SettingsWorksheetPage* m_worksheetPage;
-	SettingsSpreadsheetPage* m_spreadsheetPage;
-// 	SettingsWelcomePage* m_welcomePage;
-	SettingsDatasetsPage* m_datasetsPage;
-
-#ifdef HAVE_KUSERFEEDBACK
-	KUserFeedback::FeedbackConfigWidget* m_userFeedbackWidget;
-#endif
-
-	void applySettings();
-	void restoreDefaults();
-
-signals:
-	void settingsChanged();
-	void resetWelcomeScreen();
-};
-
-#endif
+void SettingsSpreadsheetPage::changed() {
+	m_changed = true;
+	emit settingsChanged();
+}

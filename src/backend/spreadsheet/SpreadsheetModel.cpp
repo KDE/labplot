@@ -35,7 +35,9 @@
 #include <QBrush>
 #include <QIcon>
 
+#include <KConfigGroup>
 #include <KLocalizedString>
+#include <KSharedConfig>
 
 /*!
 	\class SpreadsheetModel
@@ -439,67 +441,74 @@ void SpreadsheetModel::updateHorizontalHeader() {
 	while (m_horizontal_header_data.size() > column_count)
 		m_horizontal_header_data.removeLast();
 
+	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Spreadsheet");
+	bool showColumnType = group.readEntry(QLatin1String("ShowColumnType"), true);
+	bool showPlotDesignation = group.readEntry(QLatin1String("ShowPlotDesignation"), true);
+
 	for (int i = 0; i < column_count; i++) {
 		Column* col = m_spreadsheet->child<Column>(i);
+		QString header = col->name();
 
-		QString type;
-		switch (col->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
-			type = QLatin1String(" {") + i18n("Numeric") + QLatin1Char('}');
-			break;
-		case AbstractColumn::ColumnMode::Integer:
-			type = QLatin1String(" {") + i18n("Integer") + QLatin1Char('}');
-			break;
-		case AbstractColumn::ColumnMode::BigInt:
-			type = QLatin1String(" {") + i18n("Big Integer") + QLatin1Char('}');
-			break;
-		case AbstractColumn::ColumnMode::Text:
-			type = QLatin1String(" {") + i18n("Text") + QLatin1Char('}');
-			break;
-		case AbstractColumn::ColumnMode::Month:
-			type = QLatin1String(" {") + i18n("Month Names") + QLatin1Char('}');
-			break;
-		case AbstractColumn::ColumnMode::Day:
-			type = QLatin1String(" {") + i18n("Day Names") + QLatin1Char('}');
-			break;
-		case AbstractColumn::ColumnMode::DateTime:
-			type = QLatin1String(" {") + i18n("Date and Time") + QLatin1Char('}');
-			break;
+		if (showColumnType) {
+			switch (col->columnMode()) {
+			case AbstractColumn::ColumnMode::Numeric:
+				header += QLatin1String(" {") + i18n("Numeric") + QLatin1Char('}');
+				break;
+			case AbstractColumn::ColumnMode::Integer:
+				header += QLatin1String(" {") + i18n("Integer") + QLatin1Char('}');
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				header += QLatin1String(" {") + i18n("Big Integer") + QLatin1Char('}');
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				header += QLatin1String(" {") + i18n("Text") + QLatin1Char('}');
+				break;
+			case AbstractColumn::ColumnMode::Month:
+				header += QLatin1String(" {") + i18n("Month Names") + QLatin1Char('}');
+				break;
+			case AbstractColumn::ColumnMode::Day:
+				header += QLatin1String(" {") + i18n("Day Names") + QLatin1Char('}');
+				break;
+			case AbstractColumn::ColumnMode::DateTime:
+				header += QLatin1String(" {") + i18n("Date and Time") + QLatin1Char('}');
+				break;
+			}
 		}
 
-		QString designation;
-		switch (col->plotDesignation()) {
-		case AbstractColumn::PlotDesignation::NoDesignation:
-			break;
-		case AbstractColumn::PlotDesignation::X:
-			designation = QLatin1String(" [X]");
-			break;
-		case AbstractColumn::PlotDesignation::Y:
-			designation = QLatin1String(" [Y]");
-			break;
-		case AbstractColumn::PlotDesignation::Z:
-			designation = QLatin1String(" [Z]");
-			break;
-		case AbstractColumn::PlotDesignation::XError:
-			designation = QLatin1String(" [") + i18n("X-error") + QLatin1Char(']');
-			break;
-		case AbstractColumn::PlotDesignation::XErrorPlus:
-			designation = QLatin1String(" [") + i18n("X-error +") + QLatin1Char(']');
-			break;
-		case AbstractColumn::PlotDesignation::XErrorMinus:
-			designation = QLatin1String(" [") + i18n("X-error -") + QLatin1Char(']');
-			break;
-		case AbstractColumn::PlotDesignation::YError:
-			designation = QLatin1String(" [") + i18n("Y-error") + QLatin1Char(']');
-			break;
-		case AbstractColumn::PlotDesignation::YErrorPlus:
-			designation = QLatin1String(" [") + i18n("Y-error +") + QLatin1Char(']');
-			break;
-		case AbstractColumn::PlotDesignation::YErrorMinus:
-			designation = QLatin1String(" [") + i18n("Y-error -") + QLatin1Char(']');
-			break;
+		if (showPlotDesignation) {
+			switch (col->plotDesignation()) {
+			case AbstractColumn::PlotDesignation::NoDesignation:
+				break;
+			case AbstractColumn::PlotDesignation::X:
+				header += QLatin1String(" [X]");
+				break;
+			case AbstractColumn::PlotDesignation::Y:
+				header += QLatin1String(" [Y]");
+				break;
+			case AbstractColumn::PlotDesignation::Z:
+				header += QLatin1String(" [Z]");
+				break;
+			case AbstractColumn::PlotDesignation::XError:
+				header += QLatin1String(" [") + i18n("X-error") + QLatin1Char(']');
+				break;
+			case AbstractColumn::PlotDesignation::XErrorPlus:
+				header += QLatin1String(" [") + i18n("X-error +") + QLatin1Char(']');
+				break;
+			case AbstractColumn::PlotDesignation::XErrorMinus:
+				header += QLatin1String(" [") + i18n("X-error -") + QLatin1Char(']');
+				break;
+			case AbstractColumn::PlotDesignation::YError:
+				header += QLatin1String(" [") + i18n("Y-error") + QLatin1Char(']');
+				break;
+			case AbstractColumn::PlotDesignation::YErrorPlus:
+				header += QLatin1String(" [") + i18n("Y-error +") + QLatin1Char(']');
+				break;
+			case AbstractColumn::PlotDesignation::YErrorMinus:
+				header += QLatin1String(" [") + i18n("Y-error -") + QLatin1Char(']');
+				break;
+			}
 		}
-		m_horizontal_header_data.replace(i, col->name() + type + designation);
+		m_horizontal_header_data.replace(i, header);
 	}
 }
 

@@ -1,9 +1,10 @@
 /***************************************************************************
-    File                 : SettingsDialog.h
+    File                 : SettingsSpreadsheetPage.h
     Project              : LabPlot
+    Description          : settings page for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
-    Description          : application settings dialog
+    --------------------------------------------------------------------
+    Copyright            : (C) 2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,53 +26,35 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef SETTINGSDIALOG_H
-#define SETTINGSDIALOG_H
 
-#include <KPageDialog>
+#ifndef SETTINGSSPREADSHEETPAGE_H
+#define SETTINGSSPREADSHEETPAGE_H
 
-class QAbstractButton;
-class SettingsGeneralPage;
-class SettingsSpreadsheetPage;
-class SettingsWorksheetPage;
-// class SettingsWelcomePage;
-class SettingsDatasetsPage;
+#include "SettingsPage.h"
+#include "ui_settingsspreadsheetpage.h"
 
-#ifdef HAVE_KUSERFEEDBACK
-namespace KUserFeedback {
-	class FeedbackConfigWidget;
-}
-#endif
+class ThemesComboBox;
 
-class SettingsDialog : public KPageDialog {
+class SettingsSpreadsheetPage : public SettingsPage {
 	Q_OBJECT
 
 public:
-	explicit SettingsDialog(QWidget*);
-	~SettingsDialog() override;
+	explicit SettingsSpreadsheetPage(QWidget*);
+
+	void applySettings() override;
+	void restoreDefaults() override;
+
+private:
+	Ui::SettingsSpreadsheetPage ui;
+	bool m_changed{false};
+
+	void loadSettings();
 
 private slots:
 	void changed();
-	void slotButtonClicked(QAbstractButton*);
-
-private:
-	bool m_changed{false};
-	SettingsGeneralPage* m_generalPage;
-	SettingsWorksheetPage* m_worksheetPage;
-	SettingsSpreadsheetPage* m_spreadsheetPage;
-// 	SettingsWelcomePage* m_welcomePage;
-	SettingsDatasetsPage* m_datasetsPage;
-
-#ifdef HAVE_KUSERFEEDBACK
-	KUserFeedback::FeedbackConfigWidget* m_userFeedbackWidget;
-#endif
-
-	void applySettings();
-	void restoreDefaults();
 
 signals:
 	void settingsChanged();
-	void resetWelcomeScreen();
 };
 
 #endif

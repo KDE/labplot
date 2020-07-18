@@ -31,6 +31,7 @@
 #include "SettingsGeneralPage.h"
 #include "SettingsDatasetsPage.h"
 // #include "SettingsWelcomePage.h"
+#include "SettingsSpreadsheetPage.h"
 #include "SettingsWorksheetPage.h"
 
 #include <QPushButton>
@@ -72,6 +73,11 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	KPageWidgetItem* worksheetFrame = addPage(m_worksheetPage, i18n("Worksheet"));
 	worksheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-worksheet")));
 	connect(m_worksheetPage, &SettingsWorksheetPage::settingsChanged, this, &SettingsDialog::changed);
+
+	m_spreadsheetPage = new SettingsSpreadsheetPage(this);
+	KPageWidgetItem* spreadsheetFrame = addPage(m_spreadsheetPage, i18n("Spreadsheet"));
+	spreadsheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")));
+	connect(m_spreadsheetPage, &SettingsSpreadsheetPage::settingsChanged, this, &SettingsDialog::changed);
 
 	m_datasetsPage = new SettingsDatasetsPage(this);
 	KPageWidgetItem* datasetsFrame = addPage(m_datasetsPage, i18n("Datasets"));
@@ -134,6 +140,7 @@ void SettingsDialog::applySettings() {
 	m_changed = false;
 	m_generalPage->applySettings();
 	m_worksheetPage->applySettings();
+	m_spreadsheetPage->applySettings();
 	KSharedConfig::openConfig()->sync();
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -149,4 +156,5 @@ void SettingsDialog::restoreDefaults() {
 	m_changed = false;
 	m_generalPage->restoreDefaults();
 	m_worksheetPage->restoreDefaults();
+	m_spreadsheetPage->restoreDefaults();
 }
