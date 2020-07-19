@@ -60,6 +60,7 @@ public:
 
 	enum class Units {Metric, Imperial};
 
+	virtual void updateLocale() {};
 	virtual void updateUnits() {};
 
 protected:

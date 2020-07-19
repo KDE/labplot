@@ -45,6 +45,7 @@ class WorksheetDock : public BaseDock {
 public:
 	explicit WorksheetDock(QWidget*);
 	void setWorksheets(QList<Worksheet*>);
+	void updateLocale() override;
 	void updateUnits() override;
 
 private:

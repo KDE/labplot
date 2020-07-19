@@ -49,6 +49,7 @@ public:
 	explicit CartesianPlotDock(QWidget*);
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
+	void updateLocale() override;
 	void updateUnits() override;
 
 private:

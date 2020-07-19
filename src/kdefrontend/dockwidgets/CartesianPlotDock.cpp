@@ -285,17 +285,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	labelWidget->setLabels(labels);
 
-	SET_NUMBER_LOCALE
-	ui.sbLeft->setLocale(numberLocale);
-	ui.sbTop->setLocale(numberLocale);
-	ui.sbWidth->setLocale(numberLocale);
-	ui.sbHeight->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
-	ui.sbBorderCornerRadius->setLocale(numberLocale);
-	ui.sbPaddingHorizontal->setLocale(numberLocale);
-	ui.sbPaddingVertical->setLocale(numberLocale);
-	ui.sbPaddingRight->setLocale(numberLocale);
-	ui.sbPaddingBottom->setLocale(numberLocale);
+	updateLocale();
 
 	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
 	if (list.size() == 1) {
@@ -388,6 +378,20 @@ void CartesianPlotDock::activateTitleTab() {
 	ui.tabWidget->setCurrentWidget(ui.tabTitle);
 }
 
+void CartesianPlotDock::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbLeft->setLocale(numberLocale);
+	ui.sbTop->setLocale(numberLocale);
+	ui.sbWidth->setLocale(numberLocale);
+	ui.sbHeight->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
+	ui.sbBorderCornerRadius->setLocale(numberLocale);
+	ui.sbPaddingHorizontal->setLocale(numberLocale);
+	ui.sbPaddingVertical->setLocale(numberLocale);
+	ui.sbPaddingRight->setLocale(numberLocale);
+	ui.sbPaddingBottom->setLocale(numberLocale);
+}
+
 void CartesianPlotDock::updateUnits() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
@@ -437,6 +441,7 @@ void CartesianPlotDock::updateUnits() {
 
 	labelWidget->updateUnits();
 }
+
 //************************************************************
 //**** SLOTs for changes triggered in CartesianPlotDock ******
 //************************************************************

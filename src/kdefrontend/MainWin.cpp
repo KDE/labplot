@@ -2257,7 +2257,22 @@ void MainWin::handleSettingsChanges() {
 		}
 	}
 
+	//update the locale
+	auto* widget = stackedWidget->currentWidget();
+	BaseDock* dock = dynamic_cast<BaseDock*>(widget);
+	qDebug() << "dock " << dock;
+	if (dock)
+		dock->updateLocale();
+	else {
+		auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
+		if (labelWidget)
+			labelWidget->updateUnits();
+	}
+
 	//update the units
+	//TODO: implement similar to the update of the locale above:
+	//update for the current dock widget only,
+	//for others the settings will be updated once the user selects them
 	if (stackedWidget) {
 		for (int i = 0; i < stackedWidget->count(); ++i) {
 			auto* widget = stackedWidget->widget(i);
