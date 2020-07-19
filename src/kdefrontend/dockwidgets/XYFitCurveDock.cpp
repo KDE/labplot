@@ -1152,6 +1152,8 @@ void XYFitCurveDock::resultCopy(bool copyAll) {
 	//copy the content of the table
 	for (int i = 0; i < tw->rowCount(); ++i) {
 		for (int j = 0; j < tw->columnCount(); ++j) {
+			if (!tw->item(i, j))
+				continue;
 			if (!copyAll && !tw->item(i, j)->isSelected())
 				continue;
 
