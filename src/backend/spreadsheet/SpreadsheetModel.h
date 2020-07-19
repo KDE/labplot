@@ -66,6 +66,7 @@ public:
 	void activateFormulaMode(bool on);
 	bool formulaModeActive() const;
 
+	void updateHorizontalHeader();
 	void suppressSignals(bool);
 
 private slots:
@@ -83,7 +84,6 @@ private slots:
 
 protected:
 	void updateVerticalHeader();
-	void updateHorizontalHeader();
 
 private:
 	Spreadsheet* m_spreadsheet;

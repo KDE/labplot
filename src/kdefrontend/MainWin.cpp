@@ -2272,6 +2272,11 @@ void MainWin::handleSettingsChanges() {
 		}
 	}
 
+	//update spreadsheet header
+	auto spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (auto* spreadsheet : spreadsheets)
+		spreadsheet->updateHorizontalHeader();
+
 	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
 	if(m_showWelcomeScreen != showWelcomeScreen)
 		m_showWelcomeScreen = showWelcomeScreen;

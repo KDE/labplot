@@ -123,6 +123,10 @@ bool Spreadsheet::printPreview() const {
 	return m_view->printPreview();
 }
 
+void Spreadsheet::updateHorizontalHeader() {
+	m_model->updateHorizontalHeader();
+}
+
 /*!
   Returns the maximum number of rows in the spreadsheet.
  */

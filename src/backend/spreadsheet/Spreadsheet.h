@@ -54,6 +54,8 @@ public:
 	void setModel(SpreadsheetModel*);
 	SpreadsheetModel* model();
 
+	void updateHorizontalHeader();
+
 	int columnCount() const;
 	int columnCount(AbstractColumn::PlotDesignation) const;
 	Column* column(int index) const;
