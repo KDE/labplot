@@ -2630,7 +2630,7 @@ void CartesianPlotPrivate::retransform() {
 
 	PERFTRACE("CartesianPlotPrivate::retransform()");
 	prepareGeometryChange();
-	setPos( rect.x()+rect.width()/2, rect.y()+rect.height()/2);
+	setPos(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
 
 	updateDataRect();
 	retransformScales();
@@ -3327,7 +3327,7 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	bool zoomX = false;
 	bool zoomY = false;
 	for (auto* axis : q->children<Axis>()) {
-		if (!axis->graphicsItem()->isSelected())
+		if (!axis->graphicsItem()->isSelected() && !axis->isHovered())
 			continue;
 
 		if (axis->orientation() == Axis::Orientation::Horizontal)

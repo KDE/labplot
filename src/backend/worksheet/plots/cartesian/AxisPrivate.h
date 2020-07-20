@@ -61,6 +61,7 @@ public:
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect();
 	void setPrinting(bool);
+	bool isHovered() const;
 
 	bool isDefault{false};
 

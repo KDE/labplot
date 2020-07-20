@@ -496,6 +496,11 @@ void Axis::setPrinting(bool on) {
 	d->setPrinting(on);
 }
 
+bool Axis::isHovered() const {
+	Q_D(const Axis);
+	return d->isHovered();
+}
+
 STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::Orientation, orientation, retransform);
 void Axis::setOrientation(Orientation orientation) {
 	Q_D(Axis);
@@ -2063,6 +2068,10 @@ void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 
 void AxisPrivate::setPrinting(bool on) {
 	m_printing = on;
+}
+
+bool AxisPrivate::isHovered() const {
+	return m_hovered;
 }
 
 //##############################################################################
