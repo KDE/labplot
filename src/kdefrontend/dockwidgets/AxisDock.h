@@ -50,6 +50,7 @@ public:
 
 	void setAxes(QList<Axis*>);
 	void activateTitleTab();
+	void updateLocale() override;
 
 private:
 	Ui::AxisDock ui;

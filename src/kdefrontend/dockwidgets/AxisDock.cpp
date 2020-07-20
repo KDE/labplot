@@ -423,17 +423,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 
 	labelWidget->setAxes(list);
 
-	SET_NUMBER_LOCALE
-	ui.sbLineWidth->setLocale(numberLocale);
-	ui.sbMajorTicksSpacingNumeric->setLocale(numberLocale);
-	ui.sbMajorTicksWidth->setLocale(numberLocale);
-	ui.sbMajorTicksLength->setLocale(numberLocale);
-	ui.sbMinorTicksSpacingNumeric->setLocale(numberLocale);
-	ui.sbMinorTicksWidth->setLocale(numberLocale);
-	ui.sbMinorTicksLength->setLocale(numberLocale);
-	ui.sbLabelsOffset->setLocale(numberLocale);
-	ui.sbMajorGridWidth->setLocale(numberLocale);
-	ui.sbMinorGridWidth->setLocale(numberLocale);
+	updateLocale();
 
 	//if there are more then one axis in the list, disable the tab "general"
 	if (list.size() == 1) {
@@ -517,6 +507,21 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::minorGridOpacityChanged, this, &AxisDock::axisMinorGridOpacityChanged);
 
 	connect(m_axis, &Axis::visibilityChanged, this, &AxisDock::axisVisibilityChanged);
+}
+
+void AxisDock::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbLineWidth->setLocale(numberLocale);
+	ui.sbMajorTicksSpacingNumeric->setLocale(numberLocale);
+	ui.sbMajorTicksWidth->setLocale(numberLocale);
+	ui.sbMajorTicksLength->setLocale(numberLocale);
+	ui.sbMinorTicksSpacingNumeric->setLocale(numberLocale);
+	ui.sbMinorTicksWidth->setLocale(numberLocale);
+	ui.sbMinorTicksLength->setLocale(numberLocale);
+	ui.sbLabelsOffset->setLocale(numberLocale);
+	ui.sbMajorGridWidth->setLocale(numberLocale);
+	ui.sbMinorGridWidth->setLocale(numberLocale);
+	labelWidget->updateLocale();
 }
 
 void AxisDock::activateTitleTab() {
@@ -641,7 +646,7 @@ void AxisDock::positionChanged() {
 	const double offset{numberLocale.toDouble(ui.lePosition->text(), &ok)};
 	if (ok) {
 		for (auto* axis : m_axesList)
-				axis->setOffset(offset);
+			axis->setOffset(offset);
 	}
 }
 

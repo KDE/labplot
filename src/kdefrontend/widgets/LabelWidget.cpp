@@ -225,6 +225,7 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	this->load();
 	initConnections();
 	updateBackground();
+	updateLocale();
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes) {
@@ -236,19 +237,13 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 		connect(axis->title(), &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged );
 	}
 
-	SET_NUMBER_LOCALE
-	ui.sbPositionX->setLocale(numberLocale);
-	ui.sbPositionY->setLocale(numberLocale);
-	ui.sbOffsetX->setLocale(numberLocale);
-	ui.sbOffsetY->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
-
 	m_axesList = axes;
 	m_label = m_labelsList.first();
 
 	this->load();
 	initConnections();
 	updateBackground();
+	updateLocale();
 }
 
 /*!
@@ -401,6 +396,15 @@ void LabelWidget::updateUnits() {
 
 	ui.sbPositionX->setSuffix(suffix);
 	ui.sbPositionY->setSuffix(suffix);
+}
+
+void LabelWidget::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbPositionX->setLocale(numberLocale);
+	ui.sbPositionY->setLocale(numberLocale);
+	ui.sbOffsetX->setLocale(numberLocale);
+	ui.sbOffsetY->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
 }
 
 //**********************************************************

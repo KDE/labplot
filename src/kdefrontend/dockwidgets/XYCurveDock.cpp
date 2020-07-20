@@ -577,16 +577,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	Q_ASSERT(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
-
-	SET_NUMBER_LOCALE
-	ui.sbLineWidth->setLocale(numberLocale);
-	ui.sbDropLineWidth->setLocale(numberLocale);
-	ui.sbSymbolSize->setLocale(numberLocale);
-	ui.sbSymbolBorderWidth->setLocale(numberLocale);
-	ui.sbValuesDistance->setLocale(numberLocale);
-	ui.sbErrorBarsCapSize->setLocale(numberLocale);
-	ui.sbErrorBarsWidth->setLocale(numberLocale);
-
+	updateLocale();
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;
@@ -755,6 +746,17 @@ void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAs
 		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
 	else
 		cb->setCurrentModelIndex(QModelIndex());
+}
+
+void XYCurveDock::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbLineWidth->setLocale(numberLocale);
+	ui.sbDropLineWidth->setLocale(numberLocale);
+	ui.sbSymbolSize->setLocale(numberLocale);
+	ui.sbSymbolBorderWidth->setLocale(numberLocale);
+	ui.sbValuesDistance->setLocale(numberLocale);
+	ui.sbErrorBarsCapSize->setLocale(numberLocale);
+	ui.sbErrorBarsWidth->setLocale(numberLocale);
 }
 
 //*************************************************************

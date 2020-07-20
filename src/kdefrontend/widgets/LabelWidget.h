@@ -54,6 +54,7 @@ public:
 	void setLabels(QList<TextLabel*>);
 	void setAxes(QList<Axis*>);
 	void updateUnits();
+	void updateLocale();
 
 	void load();
 	void loadConfig(KConfigGroup&);
