@@ -2,7 +2,7 @@
     File                 : String2IntegerFilter.h
     Project              : AbstractColumn
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Locale-aware conversion filter QString -> int.
 
  ***************************************************************************/
@@ -36,9 +36,9 @@ class String2IntegerFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	String2IntegerFilter() : m_use_default_locale(true) {}
-	void setNumericLocale(const QLocale& locale) { m_numeric_locale = locale; m_use_default_locale = false; }
-	void setNumericLocaleToDefault() { m_use_default_locale = true; }
+	explicit String2IntegerFilter() {}
+	void setNumberLocale(const QLocale& locale) { m_numberLocale = locale; m_useDefaultLocale = false; }
+	void setNumberLocaleToDefault() { m_useDefaultLocale = true; }
 
 	int integerAt(int row) const override {
 		//DEBUG("String2Integer::integerAt()");
@@ -48,10 +48,10 @@ public:
 		bool valid;
 		QString textValue = m_inputs.value(0)->textAt(row);
 		//DEBUG("	textValue = " << STDSTRING(textValue));
-		if (m_use_default_locale) // we need a new QLocale instance here in case the default changed since the last call
+		if (m_useDefaultLocale)
 			result = QLocale().toInt(textValue, &valid);
 		else
-			result = m_numeric_locale.toInt(textValue, &valid);
+			result = m_numberLocale.toInt(textValue, &valid);
 		//DEBUG("	result = " << result << " valid = " << valid);
 
 		if (valid)
@@ -69,8 +69,8 @@ protected:
 	}
 
 private:
-	QLocale m_numeric_locale;
-	bool m_use_default_locale;
+	QLocale m_numberLocale;
+	bool m_useDefaultLocale{true};
 };
 
 #endif // ifndef STRING2INTEGER_FILTER_H

@@ -2,8 +2,9 @@
     File                 : Double2StringFilter.h
     Project              : AbstractColumn
     --------------------------------------------------------------------
-    Copyright            : (C) 2007 by Knut Franke, Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
+    Copyright            : (C) 2007 by Knut Franke (knut.franke*gmx.de)
+    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
+    Copyright            : (C) 2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Locale-aware conversion filter double -> QString.
 
  ***************************************************************************/
@@ -38,8 +39,7 @@ class Double2StringFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	//! Standard constructor.
-	explicit Double2StringFilter(char format='e', int digits=6) : m_format(format), m_digits(digits) {}
+	explicit Double2StringFilter(char format='g', int digits = 6) : m_format(format), m_digits(digits) {}
 	//! Set format character as in QString::number
 	void setNumericFormat(char format);
 	//! Set number of displayed digits
@@ -48,6 +48,8 @@ public:
 	char numericFormat() const { return m_format; }
 	//! Get number of displayed digits
 	int numDigits() const { return m_digits; }
+	void setNumberLocale(const QLocale& locale) { m_numberLocale = locale; m_useDefaultLocale = false; }
+	void setNumberLocaleToDefault() { m_useDefaultLocale = true; }
 
 	//! Return the data type of the column
 	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Text; }
@@ -59,6 +61,8 @@ private:
 	char m_format;
 	//! Display digits or precision as in QString::number
 	int m_digits;
+	QLocale m_numberLocale;
+	bool m_useDefaultLocale{true};
 
 	//! \name XML related functions
 	//@{
@@ -73,7 +77,10 @@ public:
 		if (m_inputs.value(0)->rowCount() <= row) return QString();
 		double inputValue = m_inputs.value(0)->valueAt(row);
 		if (std::isnan(inputValue)) return QString();
-		return QLocale().toString(inputValue, m_format, m_digits);
+		if (m_useDefaultLocale)
+			return QLocale().toString(inputValue, m_format, m_digits);
+		else
+			return m_numberLocale.toString(inputValue, m_format, m_digits);
 	}
 
 protected:
@@ -83,5 +90,5 @@ protected:
 	}
 };
 
-#endif // ifndef DOUBLE2STRING_FILTER_H
+#endif // DOUBLE2STRING_FILTER_H
 

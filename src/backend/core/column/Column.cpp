@@ -43,14 +43,9 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
-extern "C" {
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_sort.h>
-#include <gsl/gsl_statistics.h>
-}
-
-#include <array>
-#include <unordered_map>
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QClipboard>
 #include <QFont>
@@ -59,7 +54,14 @@ extern "C" {
 #include <QMenu>
 #include <QThreadPool>
 
-#include <KLocalizedString>
+#include <array>
+#include <unordered_map>
+
+extern "C" {
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_sort.h>
+#include <gsl/gsl_statistics.h>
+}
 
 /**
  * \class Column
@@ -205,21 +207,22 @@ void Column::navigateTo(QAction* action) {
  * copies the values of the column to the clipboard
  */
 void Column::copyData() {
-	QLocale locale;
 	QString output;
 	int rows = rowCount();
 
+	//TODO: use locale of filter?
+	SET_NUMBER_LOCALE;
 	if (columnMode() == ColumnMode::Numeric) {
 		const Double2StringFilter* filter = static_cast<Double2StringFilter*>(outputFilter());
 		char format = filter->numericFormat();
 		for (int r = 0; r < rows; r++) {
-			output += locale.toString(valueAt(r), format, 16); // copy with max. precision
+			output += numberLocale.toString(valueAt(r), format, 16); // copy with max. precision
 			if (r < rows-1)
 				output += '\n';
 		}
 	} else if (columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt) {
 		for (int r = 0; r < rowCount(); r++) {
-			output += QString::number(valueAt(r));
+			output += numberLocale.toString(valueAt(r));
 			if (r < rows-1)
 				output += '\n';
 		}

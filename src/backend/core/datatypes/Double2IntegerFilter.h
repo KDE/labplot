@@ -2,7 +2,7 @@
     File                 : Double2IntegerFilter.h
     Project              : AbstractColumn
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : conversion filter double -> int.
 
  ***************************************************************************/
@@ -29,7 +29,6 @@
 #define DOUBLE2INTEGER_FILTER_H
 
 #include "../AbstractSimpleFilter.h"
-#include <QLocale>
 #include <cmath>
 
 //! conversion filter double -> int.
@@ -40,11 +39,12 @@ public:
 	Double2IntegerFilter() {}
 
 	int integerAt(int row) const override {
-		if (!m_inputs.value(0)) return 0;
+		if (!m_inputs.value(0))
+			return 0;
 
 		double value = m_inputs.value(0)->valueAt(row);
 
-		int result = 0;
+		int result{0};
 		if (!std::isnan(value))
 			result = (int)round(value);
 		//DEBUG("Double2Integer::integerAt() " << value << " -> " << result);

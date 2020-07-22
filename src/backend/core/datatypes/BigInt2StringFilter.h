@@ -35,8 +35,9 @@ class BigInt2StringFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	//! Standard constructor.
 	explicit BigInt2StringFilter() {}
+	void setNumberLocale(const QLocale& locale) { m_numberLocale = locale; m_useDefaultLocale = false; }
+	void setNumberLocaleToDefault() { m_useDefaultLocale = true; }
 
 	//! Return the data type of the column
 	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Text; }
@@ -48,7 +49,10 @@ public:
 
 		qint64 inputValue = m_inputs.value(0)->bigIntAt(row);
 
-		return QLocale().toString(inputValue);
+		if (m_useDefaultLocale)
+			return QLocale().toString(inputValue);
+		else
+			return m_numberLocale.toString(inputValue);
 	}
 
 protected:
@@ -56,7 +60,11 @@ protected:
 	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::BigInt;
 	}
+
+private:
+	QLocale m_numberLocale;
+	bool m_useDefaultLocale{true};
 };
 
-#endif // ifndef BIGINT2STRING_FILTER_H
+#endif // BIGINT2STRING_FILTER_H
 

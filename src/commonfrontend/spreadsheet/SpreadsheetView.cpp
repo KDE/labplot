@@ -1390,8 +1390,7 @@ void SpreadsheetView::goToPreviousColumn() {
 }
 
 void SpreadsheetView::cutSelection() {
-	int first = firstSelectedRow();
-	if ( first < 0 )
+	if (firstSelectedRow() < 0)
 		return;
 
 	WAIT_CURSOR;
@@ -1423,8 +1422,8 @@ void SpreadsheetView::copySelection() {
 	for (int c = 0; c < cols; c++) {
 		Column* col = m_spreadsheet->column(first_col + c);
 		columns << col;
-		const Double2StringFilter* out_fltr = static_cast<Double2StringFilter*>(col->outputFilter());
-		formats << out_fltr->numericFormat();
+		const auto* outFilter = static_cast<Double2StringFilter*>(col->outputFilter());
+		formats << outFilter->numericFormat();
 	}
 
 	SET_NUMBER_LOCALE

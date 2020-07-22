@@ -37,8 +37,8 @@ class String2BigIntFilter : public AbstractSimpleFilter {
 
 public:
 	String2BigIntFilter() : m_use_default_locale(true) {}
-	void setNumericLocale(const QLocale& locale) { m_numeric_locale = locale; m_use_default_locale = false; }
-	void setNumericLocaleToDefault() { m_use_default_locale = true; }
+	void setNumberLocale(const QLocale& locale) { m_numeric_locale = locale; m_use_default_locale = false; }
+	void setNumberLocaleToDefault() { m_use_default_locale = true; }
 
 	qint64 bigIntAt(int row) const override {
 		//DEBUG("String2BigInt::bigIntAt()");
