@@ -101,6 +101,7 @@ QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 }
 
 void SettingsGeneralPage::applySettings() {
+	DEBUG("SettingsGeneralPage::applySettings()")
 	if (!m_changed)
 		return;
 

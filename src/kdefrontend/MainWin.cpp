@@ -2258,6 +2258,8 @@ void MainWin::handleSettingsChanges() {
 	}
 
 	//update the locale
+	if (!stackedWidget)
+		return;
 	auto* widget = stackedWidget->currentWidget();
 	BaseDock* dock = dynamic_cast<BaseDock*>(widget);
 	qDebug() << "dock " << dock;

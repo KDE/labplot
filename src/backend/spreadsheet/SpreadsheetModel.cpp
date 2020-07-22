@@ -228,7 +228,7 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 		QLocale locale;
 		double new_value = locale.toDouble(value.toString(), &ok);
 		if (ok) {
-			if (column->valueAt(row) == new_value )
+			if (column->valueAt(row) == new_value)
 				return false;
 		} else {
 			//an empty (non-numeric value) was provided
