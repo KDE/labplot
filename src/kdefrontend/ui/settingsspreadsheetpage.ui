@@ -27,14 +27,14 @@
    <item>
     <widget class="QCheckBox" name="chkShowColumnType">
      <property name="text">
-      <string>show column type</string>
+      <string>Show column type</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QCheckBox" name="chkShowPlotDesignation">
      <property name="text">
-      <string>show plot designation</string>
+      <string>Show plot designation</string>
      </property>
     </widget>
    </item>

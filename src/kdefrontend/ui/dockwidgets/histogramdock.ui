@@ -1435,6 +1435,63 @@
    <header>kfontrequester.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>leComment</tabstop>
+  <tabstop>cbType</tabstop>
+  <tabstop>cbOrientation</tabstop>
+  <tabstop>cbBinningMethod</tabstop>
+  <tabstop>sbBinCount</tabstop>
+  <tabstop>leBinWidth</tabstop>
+  <tabstop>chkAutoBinRanges</tabstop>
+  <tabstop>leBinRangesMin</tabstop>
+  <tabstop>leBinRangesMax</tabstop>
+  <tabstop>chkVisible</tabstop>
+  <tabstop>cbLineType</tabstop>
+  <tabstop>cbLineStyle</tabstop>
+  <tabstop>kcbLineColor</tabstop>
+  <tabstop>sbLineWidth</tabstop>
+  <tabstop>sbLineOpacity</tabstop>
+  <tabstop>cbSymbolStyle</tabstop>
+  <tabstop>sbSymbolSize</tabstop>
+  <tabstop>sbSymbolRotation</tabstop>
+  <tabstop>sbSymbolOpacity</tabstop>
+  <tabstop>cbSymbolFillingStyle</tabstop>
+  <tabstop>kcbSymbolFillingColor</tabstop>
+  <tabstop>cbSymbolBorderStyle</tabstop>
+  <tabstop>kcbSymbolBorderColor</tabstop>
+  <tabstop>sbSymbolBorderWidth</tabstop>
+  <tabstop>cbValuesType</tabstop>
+  <tabstop>cbValuesPosition</tabstop>
+  <tabstop>sbValuesDistance</tabstop>
+  <tabstop>sbValuesRotation</tabstop>
+  <tabstop>sbValuesOpacity</tabstop>
+  <tabstop>cbValuesNumericFormat</tabstop>
+  <tabstop>sbValuesPrecision</tabstop>
+  <tabstop>cbValuesDateTimeFormat</tabstop>
+  <tabstop>leValuesPrefix</tabstop>
+  <tabstop>leValuesSuffix</tabstop>
+  <tabstop>kfrValuesFont</tabstop>
+  <tabstop>kcbValuesColor</tabstop>
+  <tabstop>cbFillingType</tabstop>
+  <tabstop>chkFillingEnabled</tabstop>
+  <tabstop>leFillingFileName</tabstop>
+  <tabstop>bFillingOpen</tabstop>
+  <tabstop>cbFillingColorStyle</tabstop>
+  <tabstop>cbFillingImageStyle</tabstop>
+  <tabstop>cbFillingBrushStyle</tabstop>
+  <tabstop>kcbFillingFirstColor</tabstop>
+  <tabstop>kcbFillingSecondColor</tabstop>
+  <tabstop>sbFillingOpacity</tabstop>
+  <tabstop>cbErrorType</tabstop>
+  <tabstop>cbErrorBarsType</tabstop>
+  <tabstop>cbErrorBarsStyle</tabstop>
+  <tabstop>sbErrorBarsCapSize</tabstop>
+  <tabstop>kcbErrorBarsColor</tabstop>
+  <tabstop>sbErrorBarsWidth</tabstop>
+  <tabstop>sbErrorBarsOpacity</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
