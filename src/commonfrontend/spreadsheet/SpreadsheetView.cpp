@@ -219,7 +219,6 @@ void SpreadsheetView::init() {
 	set the column sizes to the saved values or resize to content if no size was saved yet
 */
 void SpreadsheetView::resizeHeader() {
-	DEBUG("SpreadsheetView::resizeHeader()");
 	const auto columns = m_spreadsheet->children<Column>();
 	int i = 0;
 	for (auto col: columns) {
@@ -978,7 +977,6 @@ bool SpreadsheetView::areCommentsShown() const {
   toggles the column comment in the horizontal header
 */
 void SpreadsheetView::toggleComments() {
-	DEBUG("SpreadsheetView::toggleComments()")
 	showComments(!areCommentsShown());
 	//TODO
 	if (areCommentsShown())
@@ -989,7 +987,6 @@ void SpreadsheetView::toggleComments() {
 
 //! Shows (\c on=true) or hides (\c on=false) the column comments in the horizontal header
 void SpreadsheetView::showComments(bool on) {
-	DEBUG("SpreadsheetView::showComments()")
 	m_horizontalHeader->showComments(on);
 }
 
@@ -3768,7 +3765,7 @@ void SpreadsheetView::exportToSQLite(const QString& path) const {
 	if (!q.exec(query)) {
 		RESET_CURSOR;
 		KMessageBox::error(nullptr, i18n("Failed to insert values into the table."));
-		QDEBUG("bulk insert error " << q.lastError().databaseText());
+		QDEBUG(Q_FUNC_INFO << ", bulk insert error " << q.lastError().databaseText());
 	} else
 		q.exec(QLatin1String("COMMIT TRANSACTION;"));
 

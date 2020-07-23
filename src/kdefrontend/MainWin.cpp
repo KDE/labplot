@@ -252,8 +252,8 @@ void MainWin::initGUI(const QString& fileName) {
 	setupGUI(Default, KXMLGUIClient::xmlFile());	// should be "labplot2ui.rc"
 #endif
 
-	DEBUG("Component name: " << STDSTRING(KXMLGUIClient::componentName()));
-	DEBUG("XML file: " << STDSTRING(KXMLGUIClient::xmlFile()) << " (should be \"labplot2ui.rc\")");
+	DEBUG(Q_FUNC_INFO << ", Component name: " << STDSTRING(KXMLGUIClient::componentName()));
+	DEBUG(Q_FUNC_INFO << ", XML file: " << STDSTRING(KXMLGUIClient::xmlFile()) << " (should be \"labplot2ui.rc\")");
 
 	//all toolbars created via the KXMLGUI framework are locked on default:
 	// * on the very first program start, unlock all toolbars

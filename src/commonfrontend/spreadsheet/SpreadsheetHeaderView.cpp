@@ -87,7 +87,6 @@ SpreadsheetHeaderView::~SpreadsheetHeaderView() {
 }
 
 QSize SpreadsheetHeaderView::sizeHint() const {
-//	DEBUG("SpreadsheetHeaderView::sizeHint()")
 	QSize master_size = QHeaderView::sizeHint();
 	if (m_showComments)
 		master_size.setHeight(master_size.height() + m_slave->sizeHint().height());
@@ -105,7 +104,6 @@ void SpreadsheetHeaderView::setModel(QAbstractItemModel* model) {
 }
 
 void SpreadsheetHeaderView::paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const {
-//	DEBUG("SpreadsheetHeaderView::paintSection()")
 	QRect master_rect = rect;
 	if (m_showComments)
 		master_rect = rect.adjusted(0, 0, 0, -m_slave->sizeHint().height());
@@ -136,8 +134,6 @@ void SpreadsheetHeaderView::showComments(bool on) {
   adjust geometry and repaint header .
 */
 void SpreadsheetHeaderView::refresh() {
-	DEBUG("SpreadsheetHeaderView::refresh()")
-
 	//TODO
 	// adjust geometry and repaint header (still looking for a more elegant solution)
 	int width = sectionSize(count()-1);

@@ -59,10 +59,9 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 
 /* returns decimal separator (as SettingsGeneralPage::DecimalSeparator) of given locale (default: system setting) */
 SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLocale locale) {
-	DEBUG("SettingsGeneralPage::decimalSeparator()")
-	DEBUG("	LOCALE: " << STDSTRING(locale.name()) << ',' << locale.language())
+	DEBUG(Q_FUNC_INFO << ", LOCALE: " << STDSTRING(locale.name()) << ',' << locale.language())
 	QChar decimalPoint{locale.decimalPoint()};
-	DEBUG("	SEPARATING CHAR: " << STDSTRING(QString(decimalPoint)) )
+	DEBUG(Q_FUNC_INFO << ", SEPARATING CHAR: " << STDSTRING(QString(decimalPoint)) )
 	if (decimalPoint == QChar('.'))
 		return DecimalSeparator::Dot;
 	else if (decimalPoint == QChar(','))
@@ -72,10 +71,9 @@ SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLoc
 }
 
 QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
-	DEBUG("SettingsGeneralPage::decimalSeparatorLocale()")
 	int currentIndex = ui.cbDecimalSeparator->currentIndex();
-	DEBUG("	SYSTEM LOCALE: " << STDSTRING(QLocale().name()) << ':' << QLocale().language())
-	DEBUG("	SYSTEM SEPARATING CHAR: " << STDSTRING(QString(QLocale().decimalPoint())) )
+	DEBUG(Q_FUNC_INFO << ", SYSTEM LOCALE: " << STDSTRING(QLocale().name()) << ':' << QLocale().language())
+	DEBUG(Q_FUNC_INFO << ", SYSTEM SEPARATING CHAR: " << STDSTRING(QString(QLocale().decimalPoint())) )
 
 	QChar groupSeparator{QLocale().groupSeparator()};
 	switch (currentIndex) {
@@ -101,7 +99,7 @@ QLocale::Language SettingsGeneralPage::decimalSeparatorLocale() const {
 }
 
 void SettingsGeneralPage::applySettings() {
-	DEBUG("SettingsGeneralPage::applySettings()")
+	DEBUG(Q_FUNC_INFO)
 	if (!m_changed)
 		return;
 
@@ -122,7 +120,6 @@ void SettingsGeneralPage::applySettings() {
 }
 
 void SettingsGeneralPage::restoreDefaults() {
-	DEBUG("SettingsGeneralPage::restoreDefaults()")
 	ui.cbLoadOnStart->setCurrentIndex(0);
 	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbInterface->setCurrentIndex(0);
@@ -137,7 +134,6 @@ void SettingsGeneralPage::restoreDefaults() {
 }
 
 void SettingsGeneralPage::loadSettings() {
-	DEBUG("SettingsGeneralPage::loadSettings()")
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), 0));
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));

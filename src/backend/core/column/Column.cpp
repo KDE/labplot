@@ -286,7 +286,6 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
 	if (mode == columnMode())
 		return;
 
-	DEBUG("Column::setColumnMode()");
 	beginMacro(i18n("%1: change column type", name()));
 
 	auto* old_input_filter = d->inputFilter();
@@ -305,7 +304,6 @@ void Column::setColumnMode(AbstractColumn::ColumnMode mode) {
 	}
 
 	endMacro();
-	DEBUG("Column::setColumnMode() DONE");
 }
 
 void Column::setColumnModeFast(AbstractColumn::ColumnMode mode) {
@@ -519,7 +517,6 @@ void Column::clearFormulas() {
  * Use this only when columnMode() is Text
  */
 void Column::setTextAt(int row, const QString& new_value) {
-	DEBUG("Column::setTextAt()");
 	exec(new ColumnSetTextCmd(d, row, new_value));
 }
 
@@ -529,7 +526,6 @@ void Column::setTextAt(int row, const QString& new_value) {
  * Use this only when columnMode() is Text
  */
 void Column::replaceTexts(int first, const QVector<QString>& new_values) {
-	DEBUG("Column::replaceTexts()");
 	if (!new_values.isEmpty()) //TODO: do we really need this check?
 		exec(new ColumnReplaceTextsCmd(d, first, new_values));
 }
@@ -577,8 +573,6 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
  * Use this only when columnMode() is Numeric
  */
 void Column::setValueAt(int row, const double new_value) {
-	DEBUG("Column::setValueAt()")
-	DEBUG("setvalue")
 	exec(new ColumnSetValueCmd(d, row, new_value));
 }
 
@@ -588,7 +582,6 @@ void Column::setValueAt(int row, const double new_value) {
  * Use this only when columnMode() is Numeric
  */
 void Column::replaceValues(int first, const QVector<double>& new_values) {
-	DEBUG("Column::replaceValues()")
 	if (!new_values.isEmpty())
 		exec(new ColumnReplaceValuesCmd(d, first, new_values));
 }
@@ -599,7 +592,6 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
  * Use this only when columnMode() is Integer
  */
 void Column::setIntegerAt(int row, const int new_value) {
-	DEBUG("Column::setIntegerAt()")
 	exec(new ColumnSetIntegerCmd(d, row, new_value));
 }
 
@@ -609,7 +601,6 @@ void Column::setIntegerAt(int row, const int new_value) {
  * Use this only when columnMode() is Integer
  */
 void Column::replaceInteger(int first, const QVector<int>& new_values) {
-	DEBUG("Column::replaceInteger()")
 	if (!new_values.isEmpty())
 		exec(new ColumnReplaceIntegerCmd(d, first, new_values));
 }
@@ -620,7 +611,6 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
  * Use this only when columnMode() is BigInt
  */
 void Column::setBigIntAt(int row, const qint64 new_value) {
-	DEBUG("Column::setBigIntAt()")
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
 	d->propertiesAvailable = false;
@@ -633,7 +623,6 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
  * Use this only when columnMode() is BigInt
  */
 void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
-	DEBUG("Column::replaceInteger()")
 	if (!new_values.isEmpty())
 		exec(new ColumnReplaceBigIntCmd(d, first, new_values));
 }
@@ -1488,11 +1477,11 @@ QVector< Interval<int> > Column::formulaIntervals() const {
 }
 
 void Column::handleFormatChange() {
-	DEBUG("Column::handleFormatChange() mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
+	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
 	if (columnMode() == ColumnMode::DateTime) {
 		auto* input_filter = static_cast<String2DateTimeFilter*>(d->inputFilter());
 		auto* output_filter = static_cast<DateTime2StringFilter*>(d->outputFilter());
-		DEBUG("change format " << STDSTRING(input_filter->format()) << " to " << STDSTRING(output_filter->format()));
+		DEBUG(Q_FUNC_INFO << ", change format " << STDSTRING(input_filter->format()) << " to " << STDSTRING(output_filter->format()));
 		input_filter->setFormat(output_filter->format());
 	}
 
@@ -1503,7 +1492,6 @@ void Column::handleFormatChange() {
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;
 	d->propertiesAvailable = false;
-	DEBUG("Column::handleFormatChange() DONE");
 }
 
 /*!
