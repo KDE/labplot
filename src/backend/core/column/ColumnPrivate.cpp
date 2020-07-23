@@ -353,21 +353,21 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			break;
 		case AbstractColumn::ColumnMode::Numeric:
 			filter = new String2DoubleFilter();
-			//TODO: set number locale
+			static_cast<String2DoubleFilter*>(filter)->setNumberLocale(numberLocale);
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)), m_column_mode);
 			m_data = new QVector<double>();
 			break;
 		case AbstractColumn::ColumnMode::Integer:
 			filter = new String2IntegerFilter();
-			//TODO: set number locale
+			static_cast<String2IntegerFilter*>(filter)->setNumberLocale(numberLocale);
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)), m_column_mode);
 			m_data = new QVector<int>();
 			break;
 		case AbstractColumn::ColumnMode::BigInt:
 			filter = new String2BigIntFilter();
-			//TODO: set number locale
+			static_cast<String2BigIntFilter*>(filter)->setNumberLocale(numberLocale);
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)), m_column_mode);
 			m_data = new QVector<qint64>();

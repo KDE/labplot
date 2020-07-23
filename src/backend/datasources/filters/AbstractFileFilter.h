@@ -51,9 +51,8 @@ public:
 	~AbstractFileFilter() override = default;
 
 	static bool isNan(const QString&);
-	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat);
 	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language);
-	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, const QLocale&);
+	static AbstractColumn::ColumnMode columnMode(const QString& valueString, const QString& dateTimeFormat, const QLocale& = QLocale());
 	static QStringList numberFormats();
 	static AbstractFileFilter::FileType fileType(const QString&);
 	static QStringList fileTypes();

@@ -1540,7 +1540,7 @@ void SpreadsheetView::pasteIntoSelection() {
 // 			if (!localeDetermined)
 // 				localeDetermined = determineLocale(nonEmptyValue, locale);
 
-			const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
+			const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), numberLocale);
 			col->setColumnMode(mode);
 		}
 
@@ -1560,7 +1560,7 @@ void SpreadsheetView::pasteIntoSelection() {
 // 				if (!localeDetermined)
 // 					localeDetermined = determineLocale(nonEmptyValue, locale);
 
-				const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"));
+				const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), numberLocale);
 				Column* new_col = new Column(QString::number(curCol), mode);
 				new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				new_col->insertRows(0, m_spreadsheet->rowCount());
