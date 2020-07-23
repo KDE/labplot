@@ -29,6 +29,7 @@
 #include "backend/worksheet/WorksheetElementContainer.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
@@ -227,8 +228,16 @@ void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*
 
 bool WorksheetElementContainerPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
+
+	//When making a graphics item invisible, it gets deselected in the scene.
+	//In this case we don't want to deselect the item in the project explorer.
+	//We need to supress the deselection in the view.
+	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+	worksheet->suppressSelectionChangedEvent(true);
 	setVisible(on);
 	emit q->visibleChanged(on);
+	worksheet->suppressSelectionChangedEvent(false);
+
 	return oldValue;
 }
 
