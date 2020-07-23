@@ -193,7 +193,7 @@ AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
  * initial value) is not supported.
  */
 void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
-	DEBUG("ColumnPrivate::setColumnMode() " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_column_mode)
+	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_column_mode)
 		<< " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode))
 	if (mode == m_column_mode) return;
 
@@ -525,7 +525,6 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	if (filter_is_temporary) delete filter;
 
 	emit m_owner->modeChanged(m_owner);
-	DEBUG("ColumnPrivate::setColumnMode() DONE");
 }
 
 /**
@@ -535,7 +534,6 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
  */
 void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 				AbstractSimpleFilter* in_filter, AbstractSimpleFilter* out_filter) {
-	DEBUG("ColumnPrivate::replaceModeData()");
 	emit m_owner->modeAboutToChange(m_owner);
 	// disconnect formatChanged()
 	switch (m_column_mode) {
@@ -602,7 +600,6 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
  * \brief Replace data pointer
  */
 void ColumnPrivate::replaceData(void* data) {
-	DEBUG("ColumnPrivate::replaceData()")
 	emit m_owner->dataAboutToChange(m_owner);
 	m_data = data;
 	invalidate();
@@ -618,11 +615,10 @@ void ColumnPrivate::replaceData(void* data) {
  * Use a filter to convert a column to another type.
  */
 bool ColumnPrivate::copy(const AbstractColumn* other) {
-// 	DEBUG("ColumnPrivate::copy(other)");
 	if (other->columnMode() != columnMode()) return false;
-// 	DEBUG("	mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
+// 	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode()));
 	int num_rows = other->rowCount();
-// 	DEBUG("	rows " << num_rows);
+// 	DEBUG(Q_FUNC_INFO << ", rows " << num_rows);
 
 	emit m_owner->dataAboutToChange(m_owner);
 	resizeTo(num_rows);
@@ -680,7 +676,6 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
  * \param num_rows the number of rows to copy
  */
 bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int dest_start, int num_rows) {
-// 	DEBUG("ColumnPrivate::copy()");
 	if (source->columnMode() != m_column_mode) return false;
 	if (num_rows == 0) return true;
 

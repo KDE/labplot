@@ -57,8 +57,6 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	if (isNan(valueString))
 		return AbstractColumn::ColumnMode::Numeric;
 
-//	const std::string stdValueString = valueString.toStdString();
-
 	// check if integer first
 	bool ok;
 	int intValue = locale.toInt(valueString, &ok);

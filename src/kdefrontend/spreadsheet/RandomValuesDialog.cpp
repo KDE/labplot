@@ -116,7 +116,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 		//Gaussian distribution as default
 		this->distributionChanged(0);
 
-		resize( QSize(400,0).expandedTo(minimumSize()) );
+		resize( QSize(400, 0).expandedTo(minimumSize()) );
 	}
 }
 
@@ -404,7 +404,7 @@ void RandomValuesDialog::generate() {
 
 	const int index = ui.cbDistribution->currentIndex();
 	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
-	DEBUG("random number distribution: " << nsl_sf_stats_distribution_name[dist]);
+	DEBUG(Q_FUNC_INFO << ", random number distribution: " << nsl_sf_stats_distribution_name[dist]);
 
 	const int rows = m_spreadsheet->rowCount();
 	QVector<double> data(rows);
@@ -416,7 +416,7 @@ void RandomValuesDialog::generate() {
 		double mu{0.0}, sigma{1.0};
 		SET_DOUBLE_FROM_LE(mu, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(sigma, ui.leParameter2)
-		DEBUG(" mu = " << mu << ", sigma = " << sigma);
+		DEBUG(Q_FUNC_INFO << ", mu = " << mu << ", sigma = " << sigma);
 		for (auto* col : m_columns) {
 			auto mode = col->columnMode();
 			if (mode == AbstractColumn::ColumnMode::Numeric) {

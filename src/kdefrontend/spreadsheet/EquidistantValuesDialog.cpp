@@ -131,23 +131,19 @@ void EquidistantValuesDialog::typeChanged(int index) {
 }
 
 void EquidistantValuesDialog::checkValues() {
-	if (ui.leFrom->text().simplified().isEmpty()) {
+	if (ui.leFrom->text().simplified().isEmpty() || ui.leTo->text().simplified().isEmpty()) {
 		m_okButton->setEnabled(false);
 		return;
 	}
 
-	if (ui.leTo->text().simplified().isEmpty()) {
-		m_okButton->setEnabled(false);
-		return;
-	}
-
-	if (ui.cbType->currentIndex() == 0) {
-		if (ui.leNumber->text().simplified().isEmpty() || ui.leNumber->text().simplified().toInt() == 0) {
+	SET_NUMBER_LOCALE
+	if (ui.cbType->currentIndex() == 0) {	// INT
+		if (ui.leNumber->text().simplified().isEmpty() || numberLocale.toInt(ui.leNumber->text().simplified()) == 0) {
 			m_okButton->setEnabled(false);
 			return;
 		}
-	} else {
-		if (ui.leIncrement->text().simplified().isEmpty() || qFuzzyIsNull(ui.leIncrement->text().simplified().toDouble())) {
+	} else {	// DOUBLE
+		if (ui.leIncrement->text().simplified().isEmpty() || qFuzzyIsNull( numberLocale.toDouble(ui.leIncrement->text().simplified()) )) {
 			m_okButton->setEnabled(false);
 			return;
 		}
