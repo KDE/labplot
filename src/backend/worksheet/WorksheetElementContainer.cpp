@@ -84,14 +84,22 @@ void WorksheetElementContainer::setVisible(bool on) {
 	if (on) {
 		beginMacro( i18n("%1: set visible", name()) );
 		exec( new WorksheetElementContainerSetVisibleCmd(d, on, ki18n("%1: set visible")) );
-	} else {
+	} else
 		beginMacro( i18n("%1: set invisible", name()) );
-	}
 
 	//change the visibility of all children
 	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
-	for (auto* elem : childList)
-		elem->setVisible(on);
+	for (auto* elem : childList) {
+		auto* curve = dynamic_cast<XYCurve*>(elem);
+		if (curve) {
+			//making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
+			//this needs to avoided by supressing the retransformation in the curves.
+			curve->suppressRetransform(true);
+			elem->setVisible(on);
+			curve->suppressRetransform(false);
+		} else
+			elem->setVisible(on);
+	}
 
 	//if visible is set false, change the visibility of the container last
 	if (!on)
