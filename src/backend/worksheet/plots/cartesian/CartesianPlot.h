@@ -102,8 +102,9 @@ public:
 	QVector<AbstractAspect*> dependsOn() const override;
 	void setRect(const QRectF&) override;
 	QRectF dataRect() const;
-	void setMouseMode(const MouseMode);
-	void setLocked(const bool);
+	void setMouseMode(MouseMode);
+	void setLocked(bool);
+	bool isLocked() const;
 	MouseMode mouseMode() const;
 	void navigate(NavigationOperation);
 	void setSuppressDataChangedSignal(bool);

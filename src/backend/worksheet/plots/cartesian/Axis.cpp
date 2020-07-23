@@ -2066,6 +2066,51 @@ void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
+void AxisPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
+	if (!plot->isLocked()) {
+		m_panningStarted = true;
+		m_panningStart = event->pos();
+	} else
+		QGraphicsItem::mousePressEvent(event);
+}
+
+void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	if (m_panningStarted) {
+		if (orientation == WorksheetElement::Orientation::Horizontal) {
+			setCursor(Qt::SizeHorCursor);
+			const int deltaXScene = (m_panningStart.x() - event->pos().x());
+			if (abs(deltaXScene) < 5)
+				return;
+
+			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
+			if (deltaXScene > 0)
+				plot->shiftRightX();
+			else
+				plot->shiftLeftX();
+		} else {
+			setCursor(Qt::SizeVerCursor);
+			const int deltaYScene = (m_panningStart.y() - event->pos().y());
+			if (abs(deltaYScene) < 5)
+				return;
+
+			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
+			if (deltaYScene > 0)
+				plot->shiftUpY();
+			else
+				plot->shiftDownY();
+		}
+
+		m_panningStart = event->pos();
+	}
+}
+
+
+void AxisPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent*) {
+	setCursor(Qt::ArrowCursor);
+	m_panningStarted = false;
+}
+
 void AxisPrivate::setPrinting(bool on) {
 	m_printing = on;
 }

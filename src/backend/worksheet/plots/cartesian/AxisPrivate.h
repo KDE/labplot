@@ -147,6 +147,9 @@ private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void addArrow(QPointF point, int direction);
@@ -169,6 +172,8 @@ private:
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};
 	bool m_printing{false};
+	bool m_panningStarted{false};
+	QPointF m_panningStart;
 };
 
 #endif

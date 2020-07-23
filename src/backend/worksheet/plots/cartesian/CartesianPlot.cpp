@@ -1762,7 +1762,7 @@ void CartesianPlot::curveLinePenChanged(QPen pen) {
 	emit curveLinePenChanged(pen, curve->name());
 }
 
-void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
+void CartesianPlot::setMouseMode(MouseMode mouseMode) {
 	Q_D(CartesianPlot);
 
 	d->mouseMode = mouseMode;
@@ -1798,6 +1798,11 @@ void CartesianPlot::setMouseMode(const MouseMode mouseMode) {
 void CartesianPlot::setLocked(bool locked) {
 	Q_D(CartesianPlot);
 	d->locked = locked;
+}
+
+bool CartesianPlot::isLocked() const {
+	Q_D(const CartesianPlot);
+	return d->locked;
 }
 
 bool CartesianPlot::scaleAutoX() {
