@@ -423,7 +423,19 @@ void AxisDock::setAxes(QList<Axis*> list) {
 
 	labelWidget->setAxes(list);
 
-	updateLocale();
+	//set the current locale
+	SET_NUMBER_LOCALE
+	ui.sbLineWidth->setLocale(numberLocale);
+	ui.sbMajorTicksSpacingNumeric->setLocale(numberLocale);
+	ui.sbMajorTicksWidth->setLocale(numberLocale);
+	ui.sbMajorTicksLength->setLocale(numberLocale);
+	ui.sbMinorTicksSpacingNumeric->setLocale(numberLocale);
+	ui.sbMinorTicksWidth->setLocale(numberLocale);
+	ui.sbMinorTicksLength->setLocale(numberLocale);
+	ui.sbLabelsOffset->setLocale(numberLocale);
+	ui.sbMajorGridWidth->setLocale(numberLocale);
+	ui.sbMinorGridWidth->setLocale(numberLocale);
+	labelWidget->updateLocale();
 
 	//if there are more then one axis in the list, disable the tab "general"
 	if (list.size() == 1) {
@@ -509,6 +521,9 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::visibilityChanged, this, &AxisDock::axisVisibilityChanged);
 }
 
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
 void AxisDock::updateLocale() {
 	SET_NUMBER_LOCALE
 	ui.sbLineWidth->setLocale(numberLocale);
@@ -521,6 +536,14 @@ void AxisDock::updateLocale() {
 	ui.sbLabelsOffset->setLocale(numberLocale);
 	ui.sbMajorGridWidth->setLocale(numberLocale);
 	ui.sbMinorGridWidth->setLocale(numberLocale);
+
+	//update the QLineEdits, avoid the change events
+	Lock lock(m_initializing);
+	ui.lePosition->setText(numberLocale.toString(m_axis->offset()));
+	ui.leStart->setText(numberLocale.toString(m_axis->start()));
+	ui.leEnd->setText(numberLocale.toString(m_axis->end()));
+
+	//update the title label
 	labelWidget->updateLocale();
 }
 

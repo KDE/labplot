@@ -285,7 +285,19 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 
 	labelWidget->setLabels(labels);
 
-	updateLocale();
+	//set the current locale
+	SET_NUMBER_LOCALE
+	ui.sbLeft->setLocale(numberLocale);
+	ui.sbTop->setLocale(numberLocale);
+	ui.sbWidth->setLocale(numberLocale);
+	ui.sbHeight->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
+	ui.sbBorderCornerRadius->setLocale(numberLocale);
+	ui.sbPaddingHorizontal->setLocale(numberLocale);
+	ui.sbPaddingVertical->setLocale(numberLocale);
+	ui.sbPaddingRight->setLocale(numberLocale);
+	ui.sbPaddingBottom->setLocale(numberLocale);
+	labelWidget->updateLocale();
 
 	//if there is more then one plot in the list, disable the name and comment fields in the tab "general"
 	if (list.size() == 1) {
@@ -378,8 +390,13 @@ void CartesianPlotDock::activateTitleTab() {
 	ui.tabWidget->setCurrentWidget(ui.tabTitle);
 }
 
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
 void CartesianPlotDock::updateLocale() {
 	SET_NUMBER_LOCALE
+
+	//update the QSpinBoxes
 	ui.sbLeft->setLocale(numberLocale);
 	ui.sbTop->setLocale(numberLocale);
 	ui.sbWidth->setLocale(numberLocale);
@@ -390,6 +407,18 @@ void CartesianPlotDock::updateLocale() {
 	ui.sbPaddingVertical->setLocale(numberLocale);
 	ui.sbPaddingRight->setLocale(numberLocale);
 	ui.sbPaddingBottom->setLocale(numberLocale);
+
+	//update the QLineEdits, avoid the change events
+	Lock lock(m_initializing);
+	ui.leRangeFirst->setText(numberLocale.toString(m_plot->rangeFirstValues()));
+	ui.leRangeLast->setText(numberLocale.toString(m_plot->rangeLastValues()));
+	ui.leXMin->setText(numberLocale.toString(m_plot->xMin()));
+	ui.leXMax->setText(numberLocale.toString(m_plot->xMax()));
+	ui.leYMin->setText(numberLocale.toString(m_plot->yMin()));
+	ui.leYMax->setText(numberLocale.toString(m_plot->yMax()));
+
+	//update the title label
+	labelWidget->updateLocale();
 }
 
 void CartesianPlotDock::updateUnits() {
