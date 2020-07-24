@@ -211,6 +211,8 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	editTabLayout->addWidget(gvForeground, 10, 2);
 	gvForeground->setScalePixmap(valueFile);
 
+	updateLocale();
+
 	//SLOTS
 	//general
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerImageWidget::nameChanged);
@@ -387,6 +389,19 @@ void DatapickerImageWidget::handleWidgetActions() {
 		gvSaturation->bins = m_image->saturationBins;
 		gvValue->bins = m_image->valueBins;
 	}
+}
+
+void DatapickerImageWidget::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbRotation->setLocale(numberLocale);
+	ui.sbPositionX1->setLocale(numberLocale);
+	ui.sbPositionX2->setLocale(numberLocale);
+	ui.sbPositionX3->setLocale(numberLocale);
+	ui.sbPositionY1->setLocale(numberLocale);
+	ui.sbPositionY2->setLocale(numberLocale);
+	ui.sbPositionY3->setLocale(numberLocale);
+	ui.sbSymbolSize->setLocale(numberLocale);
+	ui.sbSymbolBorderWidth->setLocale(numberLocale);
 }
 
 //**********************************************************

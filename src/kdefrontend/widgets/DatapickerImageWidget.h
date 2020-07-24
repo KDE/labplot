@@ -65,6 +65,7 @@ public:
 
 	void setImages(QList<DatapickerImage*>);
 	void load();
+	void updateLocale() override;
 
 private:
 	Ui::DatapickerImageWidget ui;

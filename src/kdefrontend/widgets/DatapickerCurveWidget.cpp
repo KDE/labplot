@@ -59,6 +59,8 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : BaseDock(parent)
 	ui.lYErrorType->setToolTip(info);
 	ui.cbYErrorType->setToolTip(info);
 
+	updateLocale();
+
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerCurveWidget::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &DatapickerCurveWidget::commentChanged);
 	connect(ui.cbXErrorType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
@@ -139,11 +141,6 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 	m_curve = list.first();
 	m_aspect = list.first();
 
-	SET_NUMBER_LOCALE
-	ui.sbSize->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
-	ui.sbErrorBarSize->setLocale(numberLocale);
-
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -186,6 +183,13 @@ void DatapickerCurveWidget::hideErrorBarWidgets(bool on) {
 	ui.lErrorBarFillingStyle->setVisible(!on);
 	ui.sbErrorBarSize->setVisible(!on);
 	ui.lErrorBarSize->setVisible(!on);
+}
+
+void DatapickerCurveWidget::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbSize->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
+	ui.sbErrorBarSize->setLocale(numberLocale);
 }
 
 //*************************************************************

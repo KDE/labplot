@@ -44,6 +44,7 @@ public:
 
 	void setCurves(QList<DatapickerCurve*>);
 	void load();
+	void updateLocale() override;
 
 private:
 	Ui::DatapickerCurveWidget ui;
