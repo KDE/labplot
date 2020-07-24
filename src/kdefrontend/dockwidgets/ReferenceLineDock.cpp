@@ -47,6 +47,9 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent) : BaseDock(parent) {
 
 	ui.lePosition->setValidator( new QDoubleValidator(ui.lePosition) );
 
+	SET_NUMBER_LOCALE
+	ui.sbLineWidth->setLocale(numberLocale);
+
 	//SLOTS
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &ReferenceLineDock::nameChanged);
@@ -72,9 +75,6 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	m_line = list.first();
 	m_aspect = list.first();
 	Q_ASSERT(m_line);
-
-	SET_NUMBER_LOCALE
-	ui.sbLineWidth->setLocale(numberLocale);
 
 	//if there is more then one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
@@ -109,6 +109,17 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	//line
 	connect(m_line, &ReferenceLine::penChanged, this, &ReferenceLineDock::linePenChanged);
 	connect(m_line, &ReferenceLine::opacityChanged, this, &ReferenceLineDock::lineOpacityChanged);
+}
+
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void ReferenceLineDock::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbLineWidth->setLocale(numberLocale);
+
+	Lock lock(m_initializing);
+	ui.lePosition->setText(numberLocale.toString(m_line->position()));
 }
 
 //**********************************************************

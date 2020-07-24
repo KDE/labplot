@@ -42,6 +42,7 @@ class ReferenceLineDock : public BaseDock {
 public:
 	explicit ReferenceLineDock(QWidget *);
 	void setReferenceLines(QList<ReferenceLine*>);
+	void updateLocale() override;
 
 private:
 	Ui::ReferenceLineDock ui;

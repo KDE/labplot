@@ -93,6 +93,20 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 		layout->setVerticalSpacing(2);
 	}
 
+	//set the current locale
+	SET_NUMBER_LOCALE
+	ui.sbLineWidth->setLocale(numberLocale);
+	ui.sbMajorTicksSpacingNumeric->setLocale(numberLocale);
+	ui.sbMajorTicksWidth->setLocale(numberLocale);
+	ui.sbMajorTicksLength->setLocale(numberLocale);
+	ui.sbMinorTicksSpacingNumeric->setLocale(numberLocale);
+	ui.sbMinorTicksWidth->setLocale(numberLocale);
+	ui.sbMinorTicksLength->setLocale(numberLocale);
+	ui.sbLabelsOffset->setLocale(numberLocale);
+	ui.sbMajorGridWidth->setLocale(numberLocale);
+	ui.sbMinorGridWidth->setLocale(numberLocale);
+	labelWidget->updateLocale();
+
 	//**********************************  Slots **********************************************
 
 	//"General"-tab
@@ -422,20 +436,6 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	this->setModel();
 
 	labelWidget->setAxes(list);
-
-	//set the current locale
-	SET_NUMBER_LOCALE
-	ui.sbLineWidth->setLocale(numberLocale);
-	ui.sbMajorTicksSpacingNumeric->setLocale(numberLocale);
-	ui.sbMajorTicksWidth->setLocale(numberLocale);
-	ui.sbMajorTicksLength->setLocale(numberLocale);
-	ui.sbMinorTicksSpacingNumeric->setLocale(numberLocale);
-	ui.sbMinorTicksWidth->setLocale(numberLocale);
-	ui.sbMinorTicksLength->setLocale(numberLocale);
-	ui.sbLabelsOffset->setLocale(numberLocale);
-	ui.sbMajorGridWidth->setLocale(numberLocale);
-	ui.sbMinorGridWidth->setLocale(numberLocale);
-	labelWidget->updateLocale();
 
 	//if there are more then one axis in the list, disable the tab "general"
 	if (list.size() == 1) {

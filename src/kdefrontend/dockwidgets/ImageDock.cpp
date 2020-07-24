@@ -100,6 +100,8 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 	ui.cbBorderStyle->addItem(i18n("Dash dot line"));
 	ui.cbBorderStyle->addItem(i18n("Dash dot dot line"));
 
+	updateLocale();
+
 	//SLOTs
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &ImageDock::nameChanged);
@@ -189,6 +191,18 @@ void ImageDock::setImages(QList<Image*> list) {
 	//Border
 	connect(m_image, &Image::borderPenChanged, this, &ImageDock::imageBorderPenChanged);
 	connect(m_image, &Image::borderOpacityChanged, this, &ImageDock::imageBorderOpacityChanged);
+}
+
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void ImageDock::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbWidth->setLocale(numberLocale);
+	ui.sbHeight->setLocale(numberLocale);
+	ui.sbPositionX->setLocale(numberLocale);
+	ui.sbPositionY->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
 }
 
 void ImageDock::updateUnits() {

@@ -59,6 +59,8 @@ CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
 		layout->setVerticalSpacing(2);
 	}
 
+	updateLocale();
+
 	//SLOTS
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
@@ -121,11 +123,6 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	m_aspect = list.first();
 	Q_ASSERT(m_point);
 
-	SET_NUMBER_LOCALE
-	ui.sbSymbolSize->setLocale(numberLocale);
-	ui.sbSymbolBorderWidth->setLocale(numberLocale);
-
-
 	//if there is more then one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
@@ -161,6 +158,15 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	connect(m_point, SIGNAL(symbolOpacityChanged(qreal)), this, SLOT(pointSymbolOpacityChanged(qreal)));
 	connect(m_point, SIGNAL(symbolBrushChanged(QBrush)), this, SLOT(pointSymbolBrushChanged(QBrush)));
 	connect(m_point, SIGNAL(symbolPenChanged(QPen)), this, SLOT(pointSymbolPenChanged(QPen)));
+}
+
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void CustomPointDock::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbSymbolSize->setLocale(numberLocale);
+	ui.sbSymbolBorderWidth->setLocale(numberLocale);
 }
 
 //**********************************************************

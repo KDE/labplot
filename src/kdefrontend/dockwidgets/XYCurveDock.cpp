@@ -114,6 +114,8 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 		layout->setVerticalSpacing(2);
 	}
 
+	updateLocale();
+
 	//Slots
 
 	//Lines
@@ -577,7 +579,6 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	Q_ASSERT(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
-	updateLocale();
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;

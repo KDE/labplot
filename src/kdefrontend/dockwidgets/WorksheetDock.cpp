@@ -80,6 +80,8 @@ WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 		layout->setVerticalSpacing(2);
 	}
 
+	updateLocale();
+
 	//SLOTs
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &WorksheetDock::nameChanged);
@@ -157,8 +159,6 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	m_worksheetList = list;
 	m_worksheet = list.first();
 	m_aspect = list.first();
-
-	updateLocale();
 
 	//if there are more then one worksheet in the list, disable the name and comment field in the tab "general"
 	if (list.size() == 1) {

@@ -77,6 +77,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 		layout->setVerticalSpacing(2);
 	}
 
+	updateLocale();
+
 	//SIGNAL/SLOT
 
 	//General
@@ -249,6 +251,22 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 
 void CartesianPlotLegendDock::activateTitleTab() const{
 	ui.tabWidget->setCurrentWidget(ui.tabTitle);
+}
+
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void CartesianPlotLegendDock::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbLineSymbolWidth->setLocale(numberLocale);
+	ui.sbPositionX->setLocale(numberLocale);
+	ui.sbPositionY->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
+	ui.sbBorderCornerRadius->setLocale(numberLocale);
+	ui.sbLayoutTopMargin->setLocale(numberLocale);
+	ui.sbLayoutBottomMargin->setLocale(numberLocale);
+	ui.sbLayoutLeftMargin->setLocale(numberLocale);
+	ui.sbLayoutRightMargin->setLocale(numberLocale);
 }
 
 void CartesianPlotLegendDock::updateUnits() {

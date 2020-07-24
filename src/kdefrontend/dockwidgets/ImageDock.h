@@ -43,6 +43,7 @@ class ImageDock : public BaseDock {
 public:
 	explicit ImageDock(QWidget*);
 	void setImages(QList<Image*>);
+	void updateLocale() override;
 	void updateUnits() override;
 
 private:

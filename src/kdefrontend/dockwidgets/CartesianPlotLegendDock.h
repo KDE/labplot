@@ -47,6 +47,7 @@ public:
 
 	void setLegends(QList<CartesianPlotLegend*>);
 	void activateTitleTab() const;
+	void updateLocale() override;
 	void updateUnits() override;
 
 private:
