@@ -380,6 +380,12 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
 	if (event->matches(QKeySequence::Delete))
 		deleteSelected();
+	else if (event->key() == 32) {
+		auto* aspect = static_cast<AbstractAspect*>(m_treeView->currentIndex().internalPointer());
+		auto* we = dynamic_cast<WorksheetElement*>(aspect);
+		if (we)
+			we->setVisible(!we->isVisible());
+	}
 }
 
 //##############################################################################
