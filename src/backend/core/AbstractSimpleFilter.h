@@ -55,7 +55,9 @@ public:
 	virtual double valueAt(int row) const;
 	virtual int integerAt(int row) const;
 	virtual qint64 bigIntAt(int row) const;
-	virtual void setNumberLocale(const QLocale&) {};
+
+	void setNumberLocale(const QLocale& locale) { m_numberLocale = locale; m_useDefaultLocale = false; }
+	void setNumberLocaleToDefault() { m_useDefaultLocale = true; }
 
 	virtual int rowCount() const;
 	virtual int availableRowCount() const;
@@ -83,6 +85,8 @@ protected:
 	void inputRowsRemoved(const AbstractColumn * source, int first, int count) override;
 
 	SimpleFilterColumn* m_output_column;
+	QLocale m_numberLocale;
+	bool m_useDefaultLocale{true};
 };
 
 class SimpleFilterColumn : public AbstractColumn {

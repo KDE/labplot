@@ -36,8 +36,6 @@ class Integer2StringFilter : public AbstractSimpleFilter {
 
 public:
 	explicit Integer2StringFilter() {}
-	void setNumberLocale(const QLocale& locale) { m_numberLocale = locale; m_useDefaultLocale = false; }
-	void setNumberLocaleToDefault() { m_useDefaultLocale = true; }
 
 	//! Return the data type of the column
 	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Text; }
@@ -60,10 +58,6 @@ protected:
 	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::Integer;
 	}
-
-private:
-	QLocale m_numberLocale;
-	bool m_useDefaultLocale{true};
 };
 
 #endif // INTEGER2STRING_FILTER_H

@@ -39,8 +39,6 @@ class String2DoubleFilter : public AbstractSimpleFilter {
 
 public:
 	String2DoubleFilter() {}
-	void setNumberLocale(const QLocale& locale) { m_numberLocale = locale; m_useDefaultLocale = false; }
-	void setNumberLocaleToDefault() { m_useDefaultLocale = true; }
 
 	double valueAt(int row) const override {
 		//DEBUG("String2Double::valueAt()");
@@ -68,10 +66,6 @@ protected:
 	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::Text;
 	}
-
-private:
-	QLocale m_numberLocale;
-	bool m_useDefaultLocale{true};
 };
 
 #endif // ifndef STRING2DOUBLE_FILTER_H

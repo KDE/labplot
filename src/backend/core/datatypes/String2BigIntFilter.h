@@ -36,9 +36,7 @@ class String2BigIntFilter : public AbstractSimpleFilter {
 	Q_OBJECT
 
 public:
-	String2BigIntFilter() : m_use_default_locale(true) {}
-	void setNumberLocale(const QLocale& locale) { m_numeric_locale = locale; m_use_default_locale = false; }
-	void setNumberLocaleToDefault() { m_use_default_locale = true; }
+	String2BigIntFilter() {}
 
 	qint64 bigIntAt(int row) const override {
 		//DEBUG("String2BigInt::bigIntAt()");
@@ -48,10 +46,10 @@ public:
 		bool valid;
 		QString textValue = m_inputs.value(0)->textAt(row);
 		//DEBUG("	textValue = " << STDSTRING(textValue));
-		if (m_use_default_locale) // we need a new QLocale instance here in case the default changed since the last call
+		if (m_useDefaultLocale) // we need a new QLocale instance here in case the default changed since the last call
 			result = QLocale().toLongLong(textValue, &valid);
 		else
-			result = m_numeric_locale.toLongLong(textValue, &valid);
+			result = m_numberLocale.toLongLong(textValue, &valid);
 		//DEBUG("	result = " << result << " valid = " << valid);
 
 		if (valid)
@@ -67,10 +65,6 @@ protected:
 	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::Text;
 	}
-
-private:
-	QLocale m_numeric_locale;
-	bool m_use_default_locale;
 };
 
 #endif // ifndef STRING2BIGINT_FILTER_H

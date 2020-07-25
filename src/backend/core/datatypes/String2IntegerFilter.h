@@ -37,8 +37,6 @@ class String2IntegerFilter : public AbstractSimpleFilter {
 
 public:
 	explicit String2IntegerFilter() {}
-	void setNumberLocale(const QLocale& locale) { m_numberLocale = locale; m_useDefaultLocale = false; }
-	void setNumberLocaleToDefault() { m_useDefaultLocale = true; }
 
 	int integerAt(int row) const override {
 		//DEBUG("String2Integer::integerAt()");
@@ -67,10 +65,6 @@ protected:
 	bool inputAcceptable(int, const AbstractColumn *source) override {
 		return source->columnMode() == AbstractColumn::ColumnMode::Text;
 	}
-
-private:
-	QLocale m_numberLocale;
-	bool m_useDefaultLocale{true};
 };
 
 #endif // ifndef STRING2INTEGER_FILTER_H

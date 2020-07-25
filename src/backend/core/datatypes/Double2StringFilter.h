@@ -48,8 +48,6 @@ public:
 	char numericFormat() const { return m_format; }
 	//! Get number of displayed digits
 	int numDigits() const { return m_digits; }
-	void setNumberLocale(const QLocale& locale) { m_numberLocale = locale; m_useDefaultLocale = false; }
-	void setNumberLocaleToDefault() { m_useDefaultLocale = true; }
 
 	//! Return the data type of the column
 	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Text; }
@@ -61,8 +59,6 @@ private:
 	char m_format;
 	//! Display digits or precision as in QString::number
 	int m_digits;
-	QLocale m_numberLocale;
-	bool m_useDefaultLocale{true};
 
 	//! \name XML related functions
 	//@{
