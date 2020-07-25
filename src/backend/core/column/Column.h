@@ -56,6 +56,8 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 
+	void updateLocale();
+
 	AbstractColumn::ColumnMode columnMode() const override;
 	void setColumnMode(AbstractColumn::ColumnMode) override;
 	void setColumnModeFast(AbstractColumn::ColumnMode);

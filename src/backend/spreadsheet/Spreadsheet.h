@@ -55,6 +55,7 @@ public:
 	SpreadsheetModel* model();
 
 	void updateHorizontalHeader();
+	void updateLocale();
 
 	int columnCount() const;
 	int columnCount(AbstractColumn::PlotDesignation) const;

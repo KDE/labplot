@@ -127,6 +127,11 @@ void Spreadsheet::updateHorizontalHeader() {
 	m_model->updateHorizontalHeader();
 }
 
+void Spreadsheet::updateLocale() {
+	for (auto* col : children<Column>())
+		col->updateLocale();
+}
+
 /*!
   Returns the maximum number of rows in the spreadsheet.
  */

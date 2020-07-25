@@ -55,6 +55,7 @@ public:
 	virtual double valueAt(int row) const;
 	virtual int integerAt(int row) const;
 	virtual qint64 bigIntAt(int row) const;
+	virtual void setNumberLocale(const QLocale&) {};
 
 	virtual int rowCount() const;
 	virtual int availableRowCount() const;

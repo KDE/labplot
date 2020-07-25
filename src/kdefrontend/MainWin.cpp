@@ -2257,31 +2257,15 @@ void MainWin::handleSettingsChanges() {
 		}
 	}
 
-	//update the locale
-	if (!stackedWidget)
-		return;
-	auto* widget = stackedWidget->currentWidget();
-	BaseDock* dock = dynamic_cast<BaseDock*>(widget);
-	qDebug() << "dock " << dock;
-	if (dock)
-		dock->updateLocale();
-	else {
-		auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
-		if (labelWidget)
-			labelWidget->updateUnits();
-	}
-
-	//update the units
-	//TODO: implement similar to the update of the locale above:
-	//update for the current dock widget only,
-	//for others the settings will be updated once the user selects them
+	//update the locale and the units in the dock widgets
 	if (stackedWidget) {
 		for (int i = 0; i < stackedWidget->count(); ++i) {
 			auto* widget = stackedWidget->widget(i);
 			BaseDock* dock = dynamic_cast<BaseDock*>(widget);
-			if (dock)
+			if (dock) {
+				dock->updateLocale();
 				dock->updateUnits();
-			else {
+			} else {
 				auto* labelWidget = dynamic_cast<LabelWidget*>(widget);
 				if (labelWidget)
 					labelWidget->updateUnits();
@@ -2291,8 +2275,10 @@ void MainWin::handleSettingsChanges() {
 
 	//update spreadsheet header
 	auto spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
-	for (auto* spreadsheet : spreadsheets)
+	for (auto* spreadsheet : spreadsheets) {
 		spreadsheet->updateHorizontalHeader();
+		spreadsheet->updateLocale();
+	}
 
 	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
 	if(m_showWelcomeScreen != showWelcomeScreen)

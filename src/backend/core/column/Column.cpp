@@ -199,6 +199,12 @@ QMenu* Column::createContextMenu() {
 	return menu;
 }
 
+void Column::updateLocale() {
+	SET_NUMBER_LOCALE;
+	d->inputFilter()->setNumberLocale(numberLocale);
+	d->outputFilter()->setNumberLocale(numberLocale);
+}
+
 void Column::navigateTo(QAction* action) {
 	project()->navigateTo(action->data().toString());
 }
