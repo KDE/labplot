@@ -45,23 +45,23 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Numeric:
 		m_input_filter = new String2DoubleFilter();
-		static_cast<String2DoubleFilter*>(m_input_filter)->setNumberLocale(numberLocale);
+		m_input_filter->setNumberLocale(numberLocale);
 		m_output_filter = new Double2StringFilter('g');
-		static_cast<Double2StringFilter*>(m_output_filter)->setNumberLocale(numberLocale);
+		m_output_filter->setNumberLocale(numberLocale);
 		m_data = new QVector<double>();
 		break;
 	case AbstractColumn::ColumnMode::Integer:
 		m_input_filter = new String2IntegerFilter();
-		static_cast<String2IntegerFilter*>(m_input_filter)->setNumberLocale(numberLocale);
+		m_input_filter->setNumberLocale(numberLocale);
 		m_output_filter = new Integer2StringFilter();
-		static_cast<Integer2StringFilter*>(m_output_filter)->setNumberLocale(numberLocale);
+		m_output_filter->setNumberLocale(numberLocale);
 		m_data = new QVector<int>();
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
 		m_input_filter = new String2BigIntFilter();
-		static_cast<String2BigIntFilter*>(m_input_filter)->setNumberLocale(numberLocale);
+		m_input_filter->setNumberLocale(numberLocale);
 		m_output_filter = new BigInt2StringFilter();
-		static_cast<BigInt2StringFilter*>(m_output_filter)->setNumberLocale(numberLocale);
+		m_output_filter->setNumberLocale(numberLocale);
 		m_data = new QVector<qint64>();
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -104,25 +104,25 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, voi
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Numeric:
 		m_input_filter = new String2DoubleFilter();
-		static_cast<String2DoubleFilter*>(m_input_filter)->setNumberLocale(numberLocale);
+		m_input_filter->setNumberLocale(numberLocale);
 		m_output_filter = new Double2StringFilter();
-		static_cast<Double2StringFilter*>(m_output_filter)->setNumberLocale(numberLocale);
+		m_output_filter->setNumberLocale(numberLocale);
 		connect(static_cast<Double2StringFilter *>(m_output_filter), &Double2StringFilter::formatChanged,
 				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::Integer:
 		m_input_filter = new String2IntegerFilter();
-		static_cast<String2IntegerFilter*>(m_input_filter)->setNumberLocale(numberLocale);
+		m_input_filter->setNumberLocale(numberLocale);
 		m_output_filter = new Integer2StringFilter();
-		static_cast<Integer2StringFilter*>(m_output_filter)->setNumberLocale(numberLocale);
+		m_output_filter->setNumberLocale(numberLocale);
 		connect(static_cast<Integer2StringFilter *>(m_output_filter), &Integer2StringFilter::formatChanged,
 				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
 		m_input_filter = new String2BigIntFilter();
-		static_cast<String2BigIntFilter*>(m_input_filter)->setNumberLocale(numberLocale);
+		m_input_filter->setNumberLocale(numberLocale);
 		m_output_filter = new BigInt2StringFilter();
-		static_cast<BigInt2StringFilter*>(m_output_filter)->setNumberLocale(numberLocale);
+		m_output_filter->setNumberLocale(numberLocale);
 		connect(static_cast<BigInt2StringFilter *>(m_output_filter), &BigInt2StringFilter::formatChanged,
 				m_owner, &Column::handleFormatChange);
 		break;
@@ -353,21 +353,21 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 			break;
 		case AbstractColumn::ColumnMode::Numeric:
 			filter = new String2DoubleFilter();
-			static_cast<String2DoubleFilter*>(filter)->setNumberLocale(numberLocale);
+			filter->setNumberLocale(numberLocale);
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)), m_column_mode);
 			m_data = new QVector<double>();
 			break;
 		case AbstractColumn::ColumnMode::Integer:
 			filter = new String2IntegerFilter();
-			static_cast<String2IntegerFilter*>(filter)->setNumberLocale(numberLocale);
+			filter->setNumberLocale(numberLocale);
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)), m_column_mode);
 			m_data = new QVector<int>();
 			break;
 		case AbstractColumn::ColumnMode::BigInt:
 			filter = new String2BigIntFilter();
-			static_cast<String2BigIntFilter*>(filter)->setNumberLocale(numberLocale);
+			filter->setNumberLocale(numberLocale);
 			filter_is_temporary = true;
 			temp_col = new Column("temp_col", *(static_cast<QVector<QString>*>(old_data)), m_column_mode);
 			m_data = new QVector<qint64>();
@@ -453,25 +453,25 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	switch (mode) {	// new mode
 	case AbstractColumn::ColumnMode::Numeric:
 		new_in_filter = new String2DoubleFilter();
-		static_cast<String2DoubleFilter*>(new_in_filter)->setNumberLocale(numberLocale);
+		new_in_filter->setNumberLocale(numberLocale);
 		new_out_filter = new Double2StringFilter();
-		static_cast<Double2StringFilter*>(new_out_filter)->setNumberLocale(numberLocale);
+		new_out_filter->setNumberLocale(numberLocale);
 		connect(static_cast<Double2StringFilter*>(new_out_filter), &Double2StringFilter::formatChanged,
 				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::Integer:
 		new_in_filter = new String2IntegerFilter();
-		static_cast<String2IntegerFilter*>(new_in_filter)->setNumberLocale(numberLocale);
+		new_in_filter->setNumberLocale(numberLocale);
 		new_out_filter = new Integer2StringFilter();
-		static_cast<Integer2StringFilter*>(new_out_filter)->setNumberLocale(numberLocale);
+		new_out_filter->setNumberLocale(numberLocale);
 		connect(static_cast<Integer2StringFilter*>(new_out_filter), &Integer2StringFilter::formatChanged,
 				m_owner, &Column::handleFormatChange);
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
 		new_in_filter = new String2BigIntFilter();
-		static_cast<String2BigIntFilter*>(new_in_filter)->setNumberLocale(numberLocale);
+		new_in_filter->setNumberLocale(numberLocale);
 		new_out_filter = new BigInt2StringFilter();
-		static_cast<BigInt2StringFilter*>(new_out_filter)->setNumberLocale(numberLocale);
+		new_out_filter->setNumberLocale(numberLocale);
 		connect(static_cast<BigInt2StringFilter*>(new_out_filter), &BigInt2StringFilter::formatChanged,
 				m_owner, &Column::handleFormatChange);
 		break;
