@@ -33,13 +33,6 @@
 #include "backend/core/Project.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KParts/ReadWritePart>
-
-#include <QAction>
-#include <QModelIndex>
-
 #include "cantor/cantorlibs_version.h"
 #include "3rdparty/cantor/cantor_part.h"
 #include <cantor/worksheetaccess.h>
@@ -51,6 +44,13 @@
 #include "3rdparty/cantor/panelpluginhandler.h"
 #include "3rdparty/cantor/panelplugin.h"
 #endif
+
+#include <QAction>
+#include <QModelIndex>
+
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KParts/ReadWritePart>
 
 CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
 	: AbstractPart(name, AspectType::CantorWorksheet), m_backendName(name) {
