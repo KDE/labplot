@@ -32,7 +32,7 @@
 #include <KParts/ReadWritePart>
 #include <QAction>
 
-CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): BaseDock(parent) {
+CantorWorksheetDock::CantorWorksheetDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	ui.tabWidget->setMovable(true);
 	m_leName = ui.leName;
@@ -42,8 +42,8 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): BaseDock(parent) {
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CantorWorksheetDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &CantorWorksheetDock::commentChanged);
-	connect(ui.evaluate_worksheet, SIGNAL(pressed()), this, SLOT(evaluateWorksheet()));
-	connect(ui.restart_backend, SIGNAL(pressed()), this, SLOT(restartBackend()));
+	connect(ui.bEvaluate, &QPushButton::pressed, this, &CantorWorksheetDock::evaluateWorksheet);
+	connect(ui.bRestart, &QPushButton::pressed, this, &CantorWorksheetDock::restartBackend);
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
@@ -80,15 +80,15 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	ui.tabWidget->setCurrentIndex(prev_index);
 
 	if (m_worksheet->part()) {
-		ui.evaluate_worksheet->show();
-		ui.restart_backend->show();
+		ui.bEvaluate->show();
+		ui.bRestart->show();
 	} else {
-		ui.evaluate_worksheet->hide();
-		ui.restart_backend->hide();
+		ui.bEvaluate->hide();
+		ui.bRestart->hide();
 	}
 
 	//SIGNALs/SLOTs
-	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
+	connect(m_worksheet, &AbstractAspect::aspectDescriptionChanged, this, &CantorWorksheetDock::worksheetDescriptionChanged);
 	m_initializing = false;
 }
 

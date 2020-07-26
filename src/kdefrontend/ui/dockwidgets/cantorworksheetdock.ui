@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>351</width>
+    <width>380</width>
     <height>413</height>
    </rect>
   </property>
@@ -91,7 +91,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QPushButton" name="evaluate_worksheet">
+          <widget class="QPushButton" name="bEvaluate">
            <property name="text">
             <string>Evaluate Worksheet</string>
            </property>
@@ -102,7 +102,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="restart_backend">
+          <widget class="QPushButton" name="bRestart">
            <property name="text">
             <string>Restart Backend</string>
            </property>
