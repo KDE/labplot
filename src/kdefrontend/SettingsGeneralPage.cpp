@@ -142,7 +142,7 @@ void SettingsGeneralPage::loadSettings() {
 	ui.cbMdiVisibility->setCurrentIndex(group.readEntry(QLatin1String("MdiWindowVisibility"), 0));
 	ui.cbUnits->setCurrentIndex(group.readEntry(QLatin1String("Units"), 0));
 	QLocale locale(static_cast<QLocale::Language>(group.readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage) )) );
-	if (locale.language() == QLocale().language() && locale.decimalPoint() == QLocale().decimalPoint()) 	// no or default setting
+	if (locale.language() == QLocale::Language::AnyLanguage) 	// no or default setting
 		ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(DecimalSeparator::Automatic) );
 	else
 		ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(decimalSeparator(locale)) );
