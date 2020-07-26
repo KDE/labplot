@@ -40,9 +40,16 @@
 #include <QAction>
 #include <QModelIndex>
 
+#include "cantor/cantorlibs_version.h"
+#if CANTOR_VERSION > QT_VERSION_CHECK(20,8,0)
+#include "cantor/20.12/cantor_part.h"
+#include "cantor/20.12/panelpluginhandler.h"
+#include "cantor/20.12/panelplugin.h"
+#else
 #include "cantor/cantor_part.h"
-#include <cantor/panelpluginhandler.h>
-#include <cantor/panelplugin.h>
+#include "cantor/panelpluginhandler.h"
+#include "cantor/panelplugin.h"
+#endif
 #include <cantor/worksheetaccess.h>
 
 CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
@@ -96,12 +103,20 @@ bool CantorWorksheet::init(QByteArray* content) {
 		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
 
 		//available plugins
+#if CANTOR_VERSION > QT_VERSION_CHECK(20,8,0)
+		auto* handler = new Cantor::PanelPluginHandler(this);
+		handler->loadPlugins();
+		m_plugins = handler->activePluginsForSession(m_session, Cantor::PanelPluginHandler::PanelStates());
+		for (auto* plugin : m_plugins)
+			plugin->connectToShell(m_part);
+#else
 		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
 		if (!handler) {
 			KMessageBox::error(nullptr, i18n("No PanelPluginHandle found for the Cantor Part."));
 			return false;
 		}
 		m_plugins = handler->plugins();
+#endif
 	}
 
 	return true;

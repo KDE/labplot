@@ -58,7 +58,6 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	ui.leName->setToolTip("");
 	ui.leComment->setText(m_worksheet->comment());
 
-
 	//show all available plugins
 	int k = 0;
 	int prev_index = ui.tabWidget->currentIndex();
@@ -71,6 +70,8 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
 		index.clear();
 		for (auto* plugin : plugins) {
+			if (plugin->name() == QLatin1String("File Browser"))
+				continue;
 			plugin->setParentWidget(this);
 			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
 			index.append(i);
