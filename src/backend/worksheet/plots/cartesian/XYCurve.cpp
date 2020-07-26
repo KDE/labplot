@@ -996,7 +996,7 @@ void XYCurvePrivate::retransform() {
 	if (!isVisible())
 		return;
 
-	DEBUG("\nXYCurvePrivate::retransform() name = " << STDSTRING(name()) << ", m_suppressRetransform = " << m_suppressRetransform);
+	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", m_suppressRetransform = " << m_suppressRetransform);
 	if (m_suppressRetransform || !plot)
 		return;
 
@@ -1008,7 +1008,7 @@ void XYCurvePrivate::retransform() {
 	m_scenePoints.clear();
 
 	if (!xColumn || !yColumn) {
-		DEBUG("	xColumn or yColumn not available");
+		DEBUG(Q_FUNC_INFO << ", xColumn or yColumn not available");
 		linePath = QPainterPath();
 		dropLinePath = QPainterPath();
 		symbolsPath = QPainterPath();
@@ -1036,15 +1036,15 @@ void XYCurvePrivate::retransform() {
 #endif
 
 	const int numberOfPoints = m_logicalPoints.size();
-	DEBUG("	Number of logical points = " << numberOfPoints)
+	DEBUG(Q_FUNC_INFO << ", number of logical points = " << numberOfPoints)
 	if (numberOfPoints > 0) {
 		// this is the old method considering DPI
-		DEBUG("	plot->dataRect() width/height = " << plot->dataRect().width() << '/'  << plot->dataRect().height());
+		DEBUG(Q_FUNC_INFO << ", plot->dataRect() width/height = " << plot->dataRect().width() << '/'  << plot->dataRect().height());
 		//const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
 		//const double heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Unit::Inch);
-		//DEBUG("	widthDatarectInch/heightDatarectInch = " << widthDatarectInch << '/' << heightDatarectInch)
-		DEBUG("	Logical DPI X/Y = " << QApplication::desktop()->logicalDpiX() << '/' << QApplication::desktop()->logicalDpiY())
-		DEBUG("	Physical DPI X/Y = " << QApplication::desktop()->physicalDpiX() << '/' << QApplication::desktop()->physicalDpiY())
+		//DEBUG(Q_FUNC_INFO << ", widthDatarectInch/heightDatarectInch = " << widthDatarectInch << '/' << heightDatarectInch)
+		DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::desktop()->logicalDpiX() << '/' << QApplication::desktop()->logicalDpiY())
+		DEBUG(Q_FUNC_INFO << ", physical DPI X/Y = " << QApplication::desktop()->physicalDpiX() << '/' << QApplication::desktop()->physicalDpiY())
 		//const int numberOfPixelX = ceil(widthDatarectInch * QApplication::desktop()->physicalDpiX());
 		//const int numberOfPixelY = ceil(heightDatarectInch * QApplication::desktop()->physicalDpiY());
 
@@ -1053,16 +1053,16 @@ void XYCurvePrivate::retransform() {
 		const int numberOfPixelY = plot->dataRect().height();
 
 		if (numberOfPixelX <= 0 || numberOfPixelY <= 0) {
-			DEBUG("	Number of Pixel X <= 0 or number of Pixel Y <= 0!")
+			DEBUG(Q_FUNC_INFO << ", number of pixel X <= 0 or number of pixel Y <= 0!")
 			RESET_CURSOR;
 			return;
 		}
 
-		DEBUG("	numberOfPixelX/numberOfPixelY = " << numberOfPixelX << '/' << numberOfPixelY)
+		DEBUG(Q_FUNC_INFO << ", numberOfPixelX/numberOfPixelY = " << numberOfPixelX << '/' << numberOfPixelY)
 		//TODO: not needed with new method
 		const double minLogicalDiffX = plot->dataRect().width()/numberOfPixelX;
 		const double minLogicalDiffY = plot->dataRect().height()/numberOfPixelY;
-		DEBUG("	-> minLogicalDiffX/Y = " << minLogicalDiffX << '/' << minLogicalDiffY)
+		DEBUG(Q_FUNC_INFO << ", -> minLogicalDiffX/Y = " << minLogicalDiffX << '/' << minLogicalDiffY)
 
 		// eliminate multiple scene points (size (numberOfPixelX + 1) * (numberOfPixelY + 1))
 		QVector<QVector<bool>> scenePointsUsed(numberOfPixelX + 1);
@@ -1073,10 +1073,10 @@ void XYCurvePrivate::retransform() {
 		int startIndex, endIndex;
 		if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing ||
 			columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
-			DEBUG("	Column monotonic")
+			DEBUG(Q_FUNC_INFO << ", column monotonic")
 			double xMin = cSystem->mapSceneToLogical(plot->dataRect().topLeft()).x();
 			double xMax = cSystem->mapSceneToLogical(plot->dataRect().bottomRight()).x();
-			DEBUG("	xMin/xMax = " << xMin << '/' << xMax)
+			DEBUG(Q_FUNC_INFO << ", xMin/xMax = " << xMin << '/' << xMax)
 
 			startIndex = Column::indexForValue(xMin, m_logicalPoints, columnProperties);
 			endIndex = Column::indexForValue(xMax, m_logicalPoints, columnProperties);
@@ -1090,7 +1090,7 @@ void XYCurvePrivate::retransform() {
 				endIndex = numberOfPoints - 1;
 
 		} else {
-			DEBUG("	column not monotonic")
+			DEBUG(Q_FUNC_INFO << ", column not monotonic")
 			startIndex = 0;
 			endIndex = numberOfPoints - 1;
 		}
@@ -1120,7 +1120,6 @@ void XYCurvePrivate::retransform() {
  * copies the valid data points from the x- and y-columns into the internal container
  */
 void XYCurvePrivate::recalcLogicalPoints() {
-	DEBUG("XYCurvePrivate::recalcLogicalPoints()");
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::recalcLogicalPoints()");
 
 	m_pointVisible.clear();
@@ -1196,7 +1195,6 @@ void XYCurvePrivate::recalcLogicalPoints() {
  * @param pixelDiff x pixel distance between two points
  */
 void XYCurvePrivate::addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, double minLogicalDiffX, int& pixelDiff) {
-	//DEBUG("XYCurvePrivate::addLinearLine()")
 	pixelDiff = qRound(p1.x() / minLogicalDiffX) - qRound(p0.x() / minLogicalDiffX);
 	//QDEBUG("	" << p0 << " -> " << p1  << "p0.x*minLogicalDiffX =" << p0.x()*minLogicalDiffX << ", p1.x*minLogicalDiffX =" << p1.x()*minLogicalDiffX << ", pixelDiff =" << pixelDiff);
 
@@ -1214,7 +1212,6 @@ void XYCurvePrivate::addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, d
  * @param pixelCount pixel count
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX) {
-	//DEBUG("\nXYCurvePrivate::addLine()")
 
 	if (plot->xScale() == CartesianPlot::Scale::Linear) {
 		double minLogicalDiffX = (plot->xMax() - plot->xMin())/numberOfPixelX;
@@ -1230,7 +1227,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pi
 		// if the point is not valid, don't create a line
 		//if (std::isnan(p0Scene.x()) || std::isnan(p0Scene.y()))
 		if ((p0Scene.x() == 0 && p0Scene.y() == 0) || (p1Scene.x() == 0 && p1Scene.y() == 0)) { // not possible to create line
-			DEBUG("Not possible to create a line between " << p0Scene.x() << ',' << p0Scene.y() << " and "<< p1Scene.x() << ',' << p1Scene.y())
+			DEBUG(Q_FUNC_INFO << ", not possible to create a line between " << p0Scene.x() << ',' << p0Scene.y() << " and "<< p1Scene.x() << ',' << p1Scene.y())
 			return;
 		}
 
@@ -1283,14 +1280,13 @@ TODO: At the moment also the points which are outside of the scene are added. Th
   lines not visible in plot
 */
 void XYCurvePrivate::updateLines() {
-	DEBUG("XYCurvePrivate::updateLines()")
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines()");
 #endif
 	linePath = QPainterPath();
 	m_lines.clear();
 	if (lineType == XYCurve::LineType::NoLine) {
-		DEBUG("	nothing to do, since line type is XYCurve::LineType::NoLine");
+		DEBUG(Q_FUNC_INFO << ", nothing to do, since line type is XYCurve::LineType::NoLine");
 		updateFilling();
 		recalcShapeAndBoundingRect();
 		return;
@@ -1298,7 +1294,7 @@ void XYCurvePrivate::updateLines() {
 
 	int numberOfPoints{m_logicalPoints.size()};
 	if (numberOfPoints <= 1) {
-		DEBUG("	nothing to do, since not enough data points available");
+		DEBUG(Q_FUNC_INFO << ", nothing to do, since not enough data points available");
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1327,7 +1323,7 @@ void XYCurvePrivate::updateLines() {
 	auto columnProperties = q->xColumn()->properties();
 	if (columnProperties == AbstractColumn::Properties::MonotonicDecreasing ||
 		columnProperties == AbstractColumn::Properties::MonotonicIncreasing) {
-		DEBUG("	monotonic")
+		DEBUG(Q_FUNC_INFO << ", monotonic")
 		const double xMin = cSystem->mapSceneToLogical(pageRect.topLeft()).x();
 		const double xMax = cSystem->mapSceneToLogical(pageRect.bottomRight()).x();
 
@@ -1346,15 +1342,15 @@ void XYCurvePrivate::updateLines() {
 
 		numberOfPoints = endIndex - startIndex + 1;
 	} else {
-		DEBUG("	non monotonic")
+		DEBUG(Q_FUNC_INFO << ", non monotonic")
 		startIndex = 0;
 		endIndex = numberOfPoints - 1;
 	}
-	DEBUG("	start/endIndex = " << startIndex << '/' << endIndex)
+	DEBUG(Q_FUNC_INFO << ", start/endIndex = " << startIndex << '/' << endIndex)
 
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 	if (columnProperties == AbstractColumn::Properties::Constant) {
-		DEBUG("	CONSTANT column")
+		DEBUG(Q_FUNC_INFO << ", CONSTANT column")
 		tempPoint1 = QPointF(plot->xMin(), plot->yMin());
 		tempPoint2 = QPointF(plot->xMin(), plot->yMax());
 		m_lines.append(QLineF(tempPoint1, tempPoint2));
@@ -1711,7 +1707,6 @@ void XYCurvePrivate::updateDropLines() {
 }
 
 void XYCurvePrivate::updateSymbols() {
-	DEBUG("XYCurvePrivate::updateSymbols()")
 #ifdef PERFTRACE_CURVES
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateSymbols()");
 #endif
@@ -2632,7 +2627,7 @@ void XYCurvePrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
 */
 void XYCurvePrivate::recalcShapeAndBoundingRect() {
-	DEBUG("XYCurvePrivate::recalcShapeAndBoundingRect() m_suppressRecalc = " << m_suppressRecalc);
+	DEBUG(Q_FUNC_INFO << ", m_suppressRecalc = " << m_suppressRecalc);
 	if (m_suppressRecalc)
 		return;
 
@@ -2725,7 +2720,7 @@ void XYCurvePrivate::draw(QPainter* painter) {
 }
 
 void XYCurvePrivate::updatePixmap() {
-	DEBUG("XYCurvePrivate::updatePixmap() m_suppressRecalc = " << m_suppressRecalc);
+	DEBUG(Q_FUNC_INFO << ", m_suppressRecalc = " << m_suppressRecalc);
 	if (m_suppressRecalc)
 		return;
 
@@ -2734,7 +2729,7 @@ void XYCurvePrivate::updatePixmap() {
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
 	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
-		DEBUG("	boundingRectangle.width() or boundingRectangle.height() == 0");
+		DEBUG(Q_FUNC_INFO << ", boundingRectangle.width() or boundingRectangle.height() == 0");
 		m_pixmap = QPixmap();
 		RESET_CURSOR;
 		return;
