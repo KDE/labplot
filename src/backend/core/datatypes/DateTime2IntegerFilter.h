@@ -41,7 +41,11 @@ public:
 		if (!m_inputs.value(0)) return 0;
 		QDateTime inputDate = m_inputs.value(0)->dateTimeAt(row);
 		if (!inputDate.isValid()) return 0;
+#if QT_VERSION >= 0x051400
+		QDateTime start(QDate(1900, 1, 1).startOfDay());
+#else
 		QDateTime start(QDate(1900, 1, 1));
+#endif
 		return int(start.daysTo(inputDate));
 	}
 

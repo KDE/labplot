@@ -1328,7 +1328,6 @@ void CartesianPlot::addSmoothCurve() {
 }
 
 void CartesianPlot::addFitCurve() {
-	DEBUG("CartesianPlot::addFitCurve()");
 	XYFitCurve* curve = new XYFitCurve("fit");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
@@ -2000,7 +1999,6 @@ void CartesianPlot::scaleAutoTriggered() {
 }
 
 bool CartesianPlot::scaleAuto() {
-	DEBUG("CartesianPlot::scaleAuto()");
 	Q_D(CartesianPlot);
 
 	if (d->curvesXMinMaxIsDirty) {
@@ -2090,7 +2088,7 @@ bool CartesianPlot::scaleAuto() {
 		d->yMax = d->curvesYMax;
 		updateY = true;
 	}
-	DEBUG(" xmin/xmax = " << d->xMin << '/' << d->xMax << ", ymin/ymax = " << d->yMin << '/' << d->yMax);
+	DEBUG(Q_FUNC_INFO << ", xmin/xmax = " << d->xMin << '/' << d->xMax << ", ymin/ymax = " << d->yMin << '/' << d->yMax);
 
 	if (updateX || updateY) {
 		if (updateX) {
@@ -2655,8 +2653,7 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
-	DEBUG("CartesianPlotPrivate::retransformScales()");
-	DEBUG(" xmin/xmax = " << xMin << '/'<< xMax << ", ymin/ymax = " << yMin << '/' << yMax);
+	DEBUG(Q_FUNC_INFO << ", xmin/xmax = " << xMin << '/'<< xMax << ", ymin/ymax = " << yMin << '/' << yMax);
 	PERFTRACE("CartesianPlotPrivate::retransformScales()");
 
 	QVector<CartesianScale*> scales;
@@ -2939,7 +2936,7 @@ void CartesianPlotPrivate::checkYRange() {
 }
 
 CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
-	DEBUG("CartesianPlotPrivate::createScale() scene start/end = " << sceneStart << '/' << sceneEnd << ", logical start/end = " << logicalStart << '/' << logicalEnd);
+	DEBUG(Q_FUNC_INFO << ", scene start/end = " << sceneStart << '/' << sceneEnd << ", logical start/end = " << logicalStart << '/' << logicalEnd);
 // 	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
 	Interval<double> interval (std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
 // 	Interval<double> interval (logicalStart, logicalEnd);
@@ -4074,7 +4071,7 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 
 		// theme path is saved with UNIX dir separator
 		theme = theme.right(theme.length() - theme.lastIndexOf(QLatin1Char('/')) - 1);
-		DEBUG("	set theme to " << STDSTRING(theme));
+		DEBUG(Q_FUNC_INFO << ", set theme to " << STDSTRING(theme));
 	}
 
 	//loadThemeConfig() can be called from

@@ -72,7 +72,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 		if (!layout)
 			continue;
 
-		layout->setContentsMargins(2,2,2,2);
+		layout->setContentsMargins(2, 2, 2, 2);
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
@@ -726,7 +726,7 @@ void CartesianPlotLegendDock::borderOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	float opacity = (float)value/100.;
+	double opacity = (double)value/100.;
 	for (auto* legend : m_legendList)
 		legend->setBorderOpacity(opacity);
 }
