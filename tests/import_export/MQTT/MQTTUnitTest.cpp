@@ -66,7 +66,7 @@ void MQTTUnitTest::testContainFalse() {
 
 		while(!in.atEnd()) {
 			QString line = in.readLine();
-#if QT_VERSION >= 0x051400
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 #else
 			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
@@ -89,7 +89,7 @@ void MQTTUnitTest::testContainTrue() {
 
 		while(!in.atEnd()) {
 			QString line = in.readLine();
-#if QT_VERSION >= 0x051400
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 #else
 			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
@@ -115,7 +115,7 @@ void MQTTUnitTest::testCommonTrue(){
 
 		while(!in.atEnd()) {
 			QString line = in.readLine();
-#if QT_VERSION >= 0x051400
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 #else
 			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
@@ -138,7 +138,7 @@ void MQTTUnitTest::testCommonFalse(){
 
 		while(!in.atEnd()) {
 			QString line = in.readLine();
-#if QT_VERSION >= 0x051400
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 #else
 			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);

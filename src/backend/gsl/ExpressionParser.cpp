@@ -1310,7 +1310,7 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 	QStringList strings = expr.split(QRegularExpression(QStringLiteral("\\W+")), QString::SkipEmptyParts);
 	QDEBUG("found strings:" << strings);
 	// RE for any number
-#if QT_VERSION >= 0x051200
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 	const QRegularExpression re(QRegularExpression::anchoredPattern(QStringLiteral("[0-9]*")));
 #else
 	const QRegularExpression re("\\A(?:" +  QStringLiteral("[0-9]*") + ")\\z");

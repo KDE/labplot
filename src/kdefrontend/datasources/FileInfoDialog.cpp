@@ -163,7 +163,7 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
 		infoStrings << i18n("Executable: %1", fileInfo.isExecutable() ? i18n("yes") : i18n("no"));
 
-#if QT_VERSION >= 0x051000
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 		infoStrings << i18n("Birth time: %1", fileInfo.birthTime().toString());
 		infoStrings << i18n("Last metadata changed: %1", fileInfo.metadataChangeTime().toString());
 #else

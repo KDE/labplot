@@ -33,7 +33,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QUndoStack>
-#if QT_VERSION >= 0x051000
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 #include <QRandomGenerator>
 #endif
 
@@ -1017,7 +1017,7 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
 
 	QVector<double> xData;
 	for (int i = 0; i < sheet.rowCount(); i++)
-#if QT_VERSION >= 0x051000
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 		xData << QRandomGenerator::global()->generateDouble();
 #else
 		xData << (double)(qrand())/RAND_MAX;
@@ -1043,7 +1043,7 @@ void SpreadsheetTest::testSortPerformanceNumeric2() {
 	QVector<double> xData;
 	QVector<int> yData;
 	for (int i = 0; i < sheet.rowCount(); i++) {
-#if QT_VERSION >= 0x051000
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 		xData << QRandomGenerator::global()->generateDouble();
 #else
 		xData << (double)(qrand())/RAND_MAX;
