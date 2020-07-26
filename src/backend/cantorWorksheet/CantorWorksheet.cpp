@@ -41,16 +41,16 @@
 #include <QModelIndex>
 
 #include "cantor/cantorlibs_version.h"
-#if CANTOR_VERSION > QT_VERSION_CHECK(20,8,0)
-#include "cantor/20.12/cantor_part.h"
-#include "cantor/20.12/panelpluginhandler.h"
-#include "cantor/20.12/panelplugin.h"
-#else
-#include "cantor/cantor_part.h"
-#include "cantor/panelpluginhandler.h"
-#include "cantor/panelplugin.h"
-#endif
+#include "3rdparty/cantor/cantor_part.h"
 #include <cantor/worksheetaccess.h>
+
+#if CANTOR_VERSION > QT_VERSION_CHECK(20,8,0)
+#include <cantor/panelpluginhandler.h>
+#include <cantor/panelplugin.h>
+#else
+#include "3rdparty/cantor/panelpluginhandler.h"
+#include "3rdparty/cantor/panelplugin.h"
+#endif
 
 CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
 	: AbstractPart(name, AspectType::CantorWorksheet), m_backendName(name) {
