@@ -1916,7 +1916,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-						results << QDateTime( earliestDate.addDays((QRandomGenerator::global()->generateDouble())*((double)earliestDate.daysTo(latestDate)), midnight.addMSecs((QRandomGenerator::global()->generateDouble())*1000*60*60*24));
+						results << QDateTime( earliestDate.addDays((QRandomGenerator::global()->generateDouble())*((double)earliestDate.daysTo(latestDate))), midnight.addMSecs((QRandomGenerator::global()->generateDouble())*1000*60*60*24));
 #else
 						results << QDateTime( earliestDate.addDays(((double)qrand())*((double)earliestDate.daysTo(latestDate))/((double)RAND_MAX)), midnight.addMSecs(((qint64)qrand())*1000*60*60*24/RAND_MAX));
 #endif
