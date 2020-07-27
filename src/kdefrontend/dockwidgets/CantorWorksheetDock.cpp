@@ -72,6 +72,7 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		for (auto* plugin : plugins) {
 			if (plugin->name() == QLatin1String("File Browser"))
 				continue;
+			connect(plugin, &Cantor::PanelPlugin::visibilityRequested, this, &CantorWorksheetDock::visibilityRequested);
 			plugin->setParentWidget(this);
 			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
 			index.append(i);
@@ -102,6 +103,16 @@ void CantorWorksheetDock::evaluateWorksheet() {
 
 void CantorWorksheetDock::restartBackend() {
 	m_worksheet->part()->action("restart_backend")->trigger();
+}
+
+/*!
+ * this slot is called when the visibility for one of the panels in Cantor is requested.
+ * At the moment this can only happen for the integrated help in Maxima, R, etc.
+ * Here we hard-code the selection of the second tab being for the help.
+ * TODO: improve this logic without hard-coding for a fixed index.
+ */
+void CantorWorksheetDock::visibilityRequested() {
+	ui.tabWidget->setCurrentIndex(1);
 }
 
 //*************************************************************
