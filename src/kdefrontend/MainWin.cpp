@@ -1333,6 +1333,8 @@ void MainWin::openProject(const QString& filename) {
 							backendName = QLatin1String("sage");
 						else if (kernel == QLatin1String("ir"))
 							backendName = QLatin1String("r");
+						else if (kernel == QLatin1String("python3") || kernel == QLatin1String("python2"))
+							backendName = QLatin1String("python");
 						else
 							backendName = kernel;
 					} else
