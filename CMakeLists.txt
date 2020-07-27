@@ -51,19 +51,21 @@ OPTIONAL_COMPONENTS
 	Parts
 	SyntaxHighlighting
 )
-IF (Qt5SerialPort_FOUND)
-	MESSAGE (STATUS "Found Qt5 SerialPort")
-ELSE ()
-	MESSAGE (STATUS "Qt5 SerialPort not found")
-ENDIF ()
+# TODO: make NewStuff optional?
 IF (KF5NewStuff_FOUND)
-	MESSAGE (STATUS "Found KF5 new stuff")
 	add_definitions (-DHAVE_KF5_NEW_STUFF)
 ELSE ()
         MESSAGE (STATUS "KF5 new stuff not found")
 ENDIF ()
+# TODO: service not used?
+IF (NOT KF5Service_FOUND)
+	MESSAGE (STATUS "KF5 service not found")
+ENDIF ()
+# TODO: parts not used?
+IF (NOT KF5Parts_FOUND)
+	MESSAGE (STATUS "KF5 parts not found")
+ENDIF ()
 IF (KF5SyntaxHighlighting_FOUND)
-	MESSAGE (STATUS "Found KF5 syntax highlighting")
 	add_definitions (-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
 ELSE ()
 	MESSAGE (STATUS "KF5 syntax highlighting not found")
