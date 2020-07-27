@@ -219,7 +219,7 @@ SET_PACKAGE_PROPERTIES(Cantor PROPERTIES
 	URL "https://edu.kde.org/cantor/"
 )
 IF (Cantor_FOUND)
-	#MESSAGE (STATUS "Found Cantor Library")
+	MESSAGE (STATUS "Found Cantor Library")
 
 	# can be removed with code using it
 	IF (NOT ${Cantor_VERSION} VERSION_GREATER "0")

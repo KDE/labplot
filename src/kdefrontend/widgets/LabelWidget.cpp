@@ -35,6 +35,7 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "tools/TeXRenderer.h"
 
+#include <QFile>
 #include <QMenu>
 #include <QSettings>
 #include <QSplitter>
