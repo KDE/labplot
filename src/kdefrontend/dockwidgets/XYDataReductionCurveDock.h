@@ -95,6 +95,7 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
 	void dataChanged();
+	void curveVisibilityChanged(bool);
 };
 
 #endif

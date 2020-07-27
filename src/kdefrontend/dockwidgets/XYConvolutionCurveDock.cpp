@@ -204,6 +204,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	connect(m_convolutionCurve, SIGNAL(y2DataColumnChanged(const AbstractColumn*)), this, SLOT(curveY2DataColumnChanged(const AbstractColumn*)));
 	connect(m_convolutionCurve, SIGNAL(convolutionDataChanged(XYConvolutionCurve::ConvolutionData)), this, SLOT(curveConvolutionDataChanged(XYConvolutionCurve::ConvolutionData)));
 	connect(m_convolutionCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+	connect(m_convolutionCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYConvolutionCurveDock::curveVisibilityChanged);
 }
 
 void XYConvolutionCurveDock::setModel() {
@@ -670,4 +671,10 @@ void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurv
 
 void XYConvolutionCurveDock::dataChanged() {
 	this->enableRecalculate();
+}
+
+void XYConvolutionCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
 }

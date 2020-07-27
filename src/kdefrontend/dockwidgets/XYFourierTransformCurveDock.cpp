@@ -165,6 +165,7 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	connect(m_transformCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
 	connect(m_transformCurve, SIGNAL(transformDataChanged(XYFourierTransformCurve::TransformData)), this, SLOT(curveTransformDataChanged(XYFourierTransformCurve::TransformData)));
 	connect(m_transformCurve, SIGNAL(sourceDataChangedSinceLastTransform()), this, SLOT(enableRecalculate()));
+	connect(m_transformCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYFourierTransformCurveDock::curveVisibilityChanged);
 }
 
 void XYFourierTransformCurveDock::setModel() {
@@ -420,4 +421,10 @@ void XYFourierTransformCurveDock::curveTransformDataChanged(const XYFourierTrans
 
 void XYFourierTransformCurveDock::dataChanged() {
 	this->enableRecalculate();
+}
+
+void XYFourierTransformCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
 }

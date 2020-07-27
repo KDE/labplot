@@ -91,7 +91,7 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveSmoothDataChanged(const XYSmoothCurve::SmoothData&);
 	void dataChanged();
-
+	void curveVisibilityChanged(bool);
 };
 
 #endif

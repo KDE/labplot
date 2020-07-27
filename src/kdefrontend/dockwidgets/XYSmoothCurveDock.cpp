@@ -210,6 +210,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	connect(m_smoothCurve, &XYSmoothCurve::yDataColumnChanged, this, &XYSmoothCurveDock::curveYDataColumnChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::smoothDataChanged, this, &XYSmoothCurveDock::curveSmoothDataChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::sourceDataChanged, this, &XYSmoothCurveDock::enableRecalculate);
+	connect(m_smoothCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYSmoothCurveDock::curveVisibilityChanged);
 }
 
 void XYSmoothCurveDock::setModel() {
@@ -648,4 +649,10 @@ void XYSmoothCurveDock::curveSmoothDataChanged(const XYSmoothCurve::SmoothData& 
 
 void XYSmoothCurveDock::dataChanged() {
 	this->enableRecalculate();
+}
+
+void XYSmoothCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
 }

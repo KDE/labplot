@@ -294,6 +294,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, &XYFitCurve::yErrorColumnChanged, this, &XYFitCurveDock::curveYErrorColumnChanged);
 	connect(m_fitCurve, &XYFitCurve::fitDataChanged, this, &XYFitCurveDock::curveFitDataChanged);
 	connect(m_fitCurve, &XYFitCurve::sourceDataChanged, this, &XYFitCurveDock::enableRecalculate);
+	connect(m_fitCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYFitCurveDock::curveVisibilityChanged);
 
 	connect(fitParametersWidget, &FitParametersWidget::parametersChanged, this, &XYFitCurveDock::parametersChanged);
 	connect(fitParametersWidget, &FitParametersWidget::parametersValid, this, &XYFitCurveDock::parametersValid);
@@ -1423,4 +1424,10 @@ void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
 
 void XYFitCurveDock::dataChanged() {
 	this->enableRecalculate();
+}
+
+void XYFitCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
 }

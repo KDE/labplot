@@ -186,6 +186,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	connect(m_filterCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
 	connect(m_filterCurve, SIGNAL(filterDataChanged(XYFourierFilterCurve::FilterData)), this, SLOT(curveFilterDataChanged(XYFourierFilterCurve::FilterData)));
 	connect(m_filterCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+	connect(m_filterCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYFourierFilterCurveDock::curveVisibilityChanged);
 }
 
 void XYFourierFilterCurveDock::setModel() {
@@ -707,3 +708,10 @@ void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve
 void XYFourierFilterCurveDock::dataChanged() {
 	this->enableRecalculate();
 }
+
+void XYFourierFilterCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
+}
+

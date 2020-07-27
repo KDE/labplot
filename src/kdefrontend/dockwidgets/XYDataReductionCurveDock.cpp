@@ -202,6 +202,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	connect(m_dataReductionCurve, &XYDataReductionCurve::yDataColumnChanged, this, &XYDataReductionCurveDock::curveYDataColumnChanged);
 	connect(m_dataReductionCurve, &XYDataReductionCurve::dataReductionDataChanged, this, &XYDataReductionCurveDock::curveDataReductionDataChanged);
 	connect(m_dataReductionCurve, &XYDataReductionCurve::sourceDataChanged, this, &XYDataReductionCurveDock::enableRecalculate);
+	connect(m_dataReductionCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYDataReductionCurveDock::curveVisibilityChanged);
 }
 
 void XYDataReductionCurveDock::setModel() {
@@ -725,4 +726,10 @@ void XYDataReductionCurveDock::curveDataReductionDataChanged(const XYDataReducti
 
 void XYDataReductionCurveDock::dataChanged() {
 	this->enableRecalculate();
+}
+
+void XYDataReductionCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
 }

@@ -192,6 +192,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	connect(m_differentiationCurve, &XYDifferentiationCurve::yDataColumnChanged, this, &XYDifferentiationCurveDock::curveYDataColumnChanged);
 	connect(m_differentiationCurve, &XYDifferentiationCurve::differentiationDataChanged, this, &XYDifferentiationCurveDock::curveDifferentiationDataChanged);
 	connect(m_differentiationCurve, &XYDifferentiationCurve::sourceDataChanged, this, &XYDifferentiationCurveDock::enableRecalculate);
+	connect(m_differentiationCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYDifferentiationCurveDock::curveVisibilityChanged);
 }
 
 void XYDifferentiationCurveDock::setModel() {
@@ -629,4 +630,10 @@ void XYDifferentiationCurveDock::curveDifferentiationDataChanged(const XYDiffere
 
 void XYDifferentiationCurveDock::dataChanged() {
 	this->enableRecalculate();
+}
+
+void XYDifferentiationCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
 }

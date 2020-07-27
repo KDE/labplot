@@ -192,6 +192,7 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	connect(m_integrationCurve, &XYIntegrationCurve::yDataColumnChanged, this, &XYIntegrationCurveDock::curveYDataColumnChanged);
 	connect(m_integrationCurve, &XYIntegrationCurve::integrationDataChanged, this, &XYIntegrationCurveDock::curveIntegrationDataChanged);
 	connect(m_integrationCurve, &XYIntegrationCurve::sourceDataChanged, this, &XYIntegrationCurveDock::enableRecalculate);
+	connect(m_integrationCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYIntegrationCurveDock::curveVisibilityChanged);
 }
 
 void XYIntegrationCurveDock::setModel() {
@@ -548,4 +549,10 @@ void XYIntegrationCurveDock::curveIntegrationDataChanged(const XYIntegrationCurv
 
 void XYIntegrationCurveDock::dataChanged() {
 	this->enableRecalculate();
+}
+
+void XYIntegrationCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
 }

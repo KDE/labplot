@@ -87,6 +87,7 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveIntegrationDataChanged(const XYIntegrationCurve::IntegrationData&);
 	void dataChanged();
+	void curveVisibilityChanged(bool);
 };
 
 #endif

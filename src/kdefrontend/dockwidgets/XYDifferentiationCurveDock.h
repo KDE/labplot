@@ -88,6 +88,7 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
 	void dataChanged();
+	void curveVisibilityChanged(bool);
 };
 
 #endif

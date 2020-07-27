@@ -187,6 +187,7 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	connect(m_correlationCurve, SIGNAL(y2DataColumnChanged(const AbstractColumn*)), this, SLOT(curveY2DataColumnChanged(const AbstractColumn*)));
 	connect(m_correlationCurve, SIGNAL(correlationDataChanged(XYCorrelationCurve::CorrelationData)), this, SLOT(curveCorrelationDataChanged(XYCorrelationCurve::CorrelationData)));
 	connect(m_correlationCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+	connect(m_correlationCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYCorrelationCurveDock::curveVisibilityChanged);
 }
 
 void XYCorrelationCurveDock::setModel() {
@@ -551,4 +552,10 @@ void XYCorrelationCurveDock::curveCorrelationDataChanged(const XYCorrelationCurv
 
 void XYCorrelationCurveDock::dataChanged() {
 	this->enableRecalculate();
+}
+
+void XYCorrelationCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
 }
