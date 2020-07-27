@@ -1368,6 +1368,7 @@ void ImportFileWidget::refreshPreview() {
 			break;
 		}
 		case LiveDataSource::SourceType::SerialPort: {
+#ifdef HAVE_QTSERIALPORT
 			QSerialPort sPort{this};
 			DEBUG("	Port: " << STDSTRING(serialPort()) << ", Settings: " << baudRate() << ',' << sPort.dataBits()
 			      << ',' << sPort.parity() << ',' << sPort.stopBits());
@@ -1383,7 +1384,7 @@ void ImportFileWidget::refreshPreview() {
 				sPort.close();
 			} else
 				DEBUG("	ERROR: failed to open serial port. error: " << sPort.error());
-
+#endif
 			break;
 		}
 		case LiveDataSource::SourceType::MQTT: {

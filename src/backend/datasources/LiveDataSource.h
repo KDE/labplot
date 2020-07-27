@@ -34,10 +34,12 @@
 #include "backend/matrix/Matrix.h"
 
 #include <QLocalSocket>
-#include <QSerialPort>
 #include <QTimer>
 #include <QVector>
 #include <QMap>
+#ifdef HAVE_QTSERIALPORT
+#include <QSerialPort>
+#endif
 
 class QString;
 class AbstractFileFilter;
@@ -187,7 +189,9 @@ private:
 	QLocalSocket* m_localSocket{nullptr};
 	QTcpSocket* m_tcpSocket{nullptr};
 	QUdpSocket* m_udpSocket{nullptr};
+#ifdef HAVE_QTSERIALPORT
 	QSerialPort* m_serialPort{nullptr};
+#endif
 	QIODevice* m_device{nullptr};
 	QAction* m_plotDataAction{nullptr};
 
@@ -201,7 +205,9 @@ private slots:
 
 	void localSocketError(QLocalSocket::LocalSocketError);
 	void tcpSocketError(QAbstractSocket::SocketError);
+#ifdef HAVE_QTSERIALPORT
 	void serialPortError(QSerialPort::SerialPortError);
+#endif
 };
 
 #endif

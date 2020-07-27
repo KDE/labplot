@@ -476,6 +476,7 @@ void ImportFileDialog::checkOkButton() {
 		break;
 	}
 	case LiveDataSource::SourceType::SerialPort: {
+#ifdef HAVE_QTSERIALPORT
 		const QString sPort = m_importFileWidget->serialPort();
 		const int baudRate = m_importFileWidget->baudRate();
 
@@ -500,8 +501,9 @@ void ImportFileDialog::checkOkButton() {
 			okButton->setEnabled(false);
 			okButton->setToolTip(i18n("Serial port number is missing."));
 		}
+#endif
 		break;
-    }
+	}
 	case LiveDataSource::SourceType::MQTT: {
 #ifdef HAVE_MQTT
 		const bool enable = m_importFileWidget->isMqttValid();

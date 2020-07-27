@@ -47,9 +47,11 @@ Copyright	: (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QMessageBox>
 #include <QProcess>
 #include <QTimer>
-#include <QSerialPortInfo>
 #include <QTcpSocket>
 #include <QUdpSocket>
+#ifdef HAVE_QTSERIALPORT
+#include <QSerialPortInfo>
+#endif
 
 #include <KLocalizedString>
 
@@ -76,7 +78,9 @@ LiveDataSource::~LiveDataSource() {
 	delete m_fileSystemWatcher;
 	delete m_localSocket;
 	delete m_tcpSocket;
+#ifdef HAVE_QTSERIALPORT
 	delete m_serialPort;
+#endif
 }
 
 void LiveDataSource::initActions() {
@@ -101,6 +105,7 @@ QStringList LiveDataSource::availablePorts() {
 	QStringList ports;
 // 	qDebug() << "available ports count:" << QSerialPortInfo::availablePorts().size();
 
+#ifdef HAVE_QTSERIALPORT
 	for (const QSerialPortInfo& sp : QSerialPortInfo::availablePorts()) {
 		ports.append(sp.portName());
 
@@ -109,6 +114,7 @@ QStringList LiveDataSource::availablePorts() {
 	}
 	// For Testing:
 	// ports.append("/dev/pts/26");
+#endif
 
 	return ports;
 }
@@ -119,8 +125,10 @@ QStringList LiveDataSource::availablePorts() {
 QStringList LiveDataSource::supportedBaudRates() {
 	QStringList baudRates;
 
+#ifdef HAVE_QTSERIALPORT
 	for (const auto& baud : QSerialPortInfo::standardBaudRates())
 		baudRates.append(QString::number(baud));
+#endif
 	return baudRates;
 }
 
@@ -509,6 +517,7 @@ void LiveDataSource::read() {
 
 			break;
 		case SourceType::SerialPort:
+#ifdef HAVE_QTSERIALPORT
 			m_serialPort = new QSerialPort(this);
 			m_device = m_serialPort;
 			DEBUG("	Serial: " << STDSTRING(m_serialPortName) << ", " << m_baudRate);
@@ -520,6 +529,7 @@ void LiveDataSource::read() {
 			if (m_updateType == UpdateType::NewData)
 				connect(m_serialPort, &QSerialPort::readyRead, this, &LiveDataSource::readyRead);
 			connect(m_serialPort, static_cast<void (QSerialPort::*) (QSerialPort::SerialPortError)>(&QSerialPort::error), this, &LiveDataSource::serialPortError);
+#endif
 			break;
 		case SourceType::MQTT:
 			break;
@@ -585,10 +595,12 @@ void LiveDataSource::read() {
 		break;
 	case SourceType::SerialPort:
 		DEBUG("	Reading from serial port");
+#ifdef HAVE_QTSERIALPORT
 
 		// reading data here
 		if (m_fileType == AbstractFileFilter::FileType::Ascii)
 			static_cast<AsciiFilter*>(m_filter)->readFromLiveDeviceNotFile(*m_device, this);
+#endif
 		break;
 	case SourceType::MQTT:
 		break;
@@ -664,6 +676,7 @@ void LiveDataSource::tcpSocketError(QAbstractSocket::SocketError socketError) {
 	}*/
 }
 
+#ifdef HAVE_QTSERIALPORT
 void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortError) {
 	switch (serialPortError) {
 	case QSerialPort::DeviceNotFoundError:
@@ -704,6 +717,7 @@ void LiveDataSource::serialPortError(QSerialPort::SerialPortError serialPortErro
 		break;
 	}
 }
+#endif
 
 void LiveDataSource::plotData() {
 	auto* dlg = new PlotDataDialog(this);

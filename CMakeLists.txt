@@ -28,7 +28,6 @@ find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Svg
 	Widgets
 	Test
-	SerialPort
 )
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
@@ -187,6 +186,7 @@ option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
 option(ENABLE_ROOT "Build with ROOT (CERN) support" ON)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
+option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 
 ### OS macros ####################################
 IF (WIN32)
@@ -279,16 +279,16 @@ ENDIF ()
 
 ### NETCDF (optional) #############################
 IF (ENABLE_NETCDF)
-FIND_PACKAGE(netCDF)
-SET_PACKAGE_PROPERTIES(netCDF PROPERTIES
-    DESCRIPTION "Interfaces for array-oriented data access"
-    URL "https://www.unidata.ucar.edu/software/netcdf/"
-)
-IF (netCDF_FOUND)
-	add_definitions (-DHAVE_NETCDF)
-ELSE ()
-	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library NOT FOUND")
-ENDIF ()
+	FIND_PACKAGE(netCDF)
+	SET_PACKAGE_PROPERTIES(netCDF PROPERTIES
+	    DESCRIPTION "Interfaces for array-oriented data access"
+	    URL "https://www.unidata.ucar.edu/software/netcdf/"
+	)
+	IF (netCDF_FOUND)
+		add_definitions (-DHAVE_NETCDF)
+	ELSE ()
+		MESSAGE (STATUS "Network Common Data Format (NetCDF) Library NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library DISABLED")
 ENDIF ()
@@ -297,63 +297,82 @@ ENDIF ()
 IF (ENABLE_MQTT)
 # ATTENTION: unit test uses qWaitFor() which needs Qt >= 5.10
 # avoid warning for the moment using QUIET
-find_package(Qt5Mqtt ${QT_MIN_VERSION} QUIET NO_MODULE)
-IF (Qt5Mqtt_FOUND)
-	MESSAGE (STATUS "Found MQTT Library")
-	add_definitions (-DHAVE_MQTT)
-ELSE ()
-	MESSAGE (STATUS "MQTT Library NOT FOUND")
-ENDIF ()
+	find_package(Qt5Mqtt ${QT_MIN_VERSION} NO_MODULE)
+	IF (Qt5Mqtt_FOUND)
+		MESSAGE (STATUS "Found MQTT Library")
+		add_definitions (-DHAVE_MQTT)
+	ELSE ()
+		MESSAGE (STATUS "MQTT Library NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "MQTT Library DISABLED")
 ENDIF ()
 
+### QtSerialPort (optional) ###############################
+IF (ENABLE_QTSERIALPORT)
+	find_package(Qt5SerialPort ${QT_MIN_VERSION} NO_MODULE)
+	SET_PACKAGE_PROPERTIES (Qt5SerialPort PROPERTIES
+		DESCRIPTION "Qt Serial Port library"
+		URL "https://doc.qt.io/qt-5/qtserialport-index.html"
+		PURPOSE "Support basic functionality of serial ports.")
+	IF (Qt5SerialPort_FOUND)
+		MESSAGE (STATUS "Found Qt5SerialPort Library")
+		add_definitions (-DHAVE_QTSERIALPORT)
+	ELSE ()
+		MESSAGE (STATUS "Qt5SerialPort Library NOT FOUND")
+	ENDIF ()
+ELSE ()
+        MESSAGE (STATUS "Qt5SerialPort Library DISABLED")
+ENDIF ()
+
 ### FITS (optional) ###############################
 IF (ENABLE_FITS)
-FIND_PACKAGE (CFitsio)
-SET_PACKAGE_PROPERTIES (CFitsio PROPERTIES
-	DESCRIPTION "FITS IO Library"
-	URL "https://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
-	PURPOSE "Support for the FITS (Flexible Image Transport System) data format.")
-IF (CFITSIO_FOUND)
-	add_definitions (-DHAVE_FITS)
-	include_directories (${CFITSIO_INCLUDE_DIR})
-ELSE ()
-	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library NOT FOUND")
-ENDIF ()
+	FIND_PACKAGE (CFitsio)
+	SET_PACKAGE_PROPERTIES (CFitsio PROPERTIES
+		DESCRIPTION "FITS IO Library"
+		URL "https://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
+		PURPOSE "Support for the FITS (Flexible Image Transport System) data format.")
+	IF (CFITSIO_FOUND)
+		add_definitions (-DHAVE_FITS)
+		include_directories (${CFITSIO_INCLUDE_DIR})
+	ELSE ()
+		MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library DISABLED")
 ENDIF ()
 
 ### LIBCERF (optional) #############################
 IF (ENABLE_LIBCERF)
-FIND_PACKAGE (LIBCERF)
-IF (LIBCERF_FOUND)
-	add_definitions (-DHAVE_LIBCERF)
-ELSE ()
-	MESSAGE (STATUS "libcerf library NOT FOUND")
-ENDIF ()
+	FIND_PACKAGE (LIBCERF)
+	IF (LIBCERF_FOUND)
+		add_definitions (-DHAVE_LIBCERF)
+	ELSE ()
+		MESSAGE (STATUS "libcerf library NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "libcerf library DISABLED")
 ENDIF ()
 
+### ROOT (optional) #############################
 IF (ENABLE_ROOT)
-FIND_PACKAGE(ZLIB)
-SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
-	DESCRIPTION "General purpose compression library"
-	URL "https://www.zlib.net/"
-)
-FIND_PACKAGE(LZ4)
-IF (ZLIB_FOUND AND LZ4_FOUND)
-	MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
-	add_definitions (-DHAVE_ZIP)
-ELSE ()
-	MESSAGE (STATUS "ZIP libraries ZLIB and LZ4 (needed for ROOT importer) NOT FOUND")
-ENDIF ()
+	FIND_PACKAGE(ZLIB)
+	SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
+		DESCRIPTION "General purpose compression library"
+		URL "https://www.zlib.net/"
+	)
+	FIND_PACKAGE(LZ4)
+	IF (ZLIB_FOUND AND LZ4_FOUND)
+		MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
+		add_definitions (-DHAVE_ZIP)
+	ELSE ()
+		MESSAGE (STATUS "ZIP libraries ZLIB and LZ4 (needed for ROOT importer) NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "ROOT (CERN) importer DISABLED")
 ENDIF ()
 
+#################################################
 #################################################
 include(CheckFunctionExists)
 
