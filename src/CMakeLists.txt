@@ -388,7 +388,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
 
-IF (${Cantor_FOUND})
+IF (RECENT_CANTOR)
 	set(CANTOR_SOURCES
 		${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
 		${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
@@ -465,11 +465,9 @@ if (KUserFeedback_FOUND)
 endif()
 #TODO: KF5::NewStuff
 
-IF (Cantor_FOUND)
-	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts)
-	IF (${Cantor_VERSION} VERSION_GREATER "19.11")
-		target_link_libraries( labplot2lib Poppler::Qt5)
-	ENDIF()
+IF (RECENT_CANTOR)
+	# KF5::Service, KF5::Parts is optional but probably required by Cantor
+	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts Poppler::Qt5)
 ENDIF ()
 IF (HDF5_FOUND)
 	target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
