@@ -33,7 +33,11 @@
 #include "backend/core/Project.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
-#include "cantor/cantorlibs_version.h"
+#ifdef HAVE_CANTOR
+#include <cantor/cantorlibs_version.h>
+#else
+#define CANTOR_VERSION 0
+#endif
 #include "3rdparty/cantor/cantor_part.h"
 #include <cantor/worksheetaccess.h>
 

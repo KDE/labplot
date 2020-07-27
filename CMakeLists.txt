@@ -219,15 +219,18 @@ SET_PACKAGE_PROPERTIES(Cantor PROPERTIES
 	URL "https://edu.kde.org/cantor/"
 )
 IF (Cantor_FOUND)
-	MESSAGE (STATUS "Found Cantor Library")
-	add_definitions (-DHAVE_CANTOR_LIBS)
+	#MESSAGE (STATUS "Found Cantor Library")
 
+	# can be removed with code using it
 	IF (NOT ${Cantor_VERSION} VERSION_GREATER "0")
 		add_definitions (-DOLD_CANTORLIBS_VERSION)
-	ENDIF()
+	ENDIF ()
 	IF (${Cantor_VERSION} VERSION_GREATER "19.11")
 		FIND_PACKAGE(Poppler "0.62.0" REQUIRED COMPONENTS Qt5)
-	ENDIF()
+		add_definitions (-DHAVE_CANTOR_LIBS)
+	ELSE ()
+		MESSAGE (STATUS "Cantor Library ${Cantor_VERSION} TOO OLD. Minimum usable version is 19.12")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Cantor Library NOT FOUND")
 ENDIF ()

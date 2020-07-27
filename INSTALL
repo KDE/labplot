@@ -16,7 +16,7 @@ optional
 	* NetCDF version 3 or higher (including the devel-package, netcdf-devel or similar)
 	* CFITSIO version 3 or higher to support FITS data format (including the devel-package, cfitsio-devel or similar)
 	* libcerf version 1.0 or higher to support complex error and related functions (including the devel-package, libcerf-devel or similar)
-	* Cantor version 16.04 or higher (including the devel package, cantor-devel or similar)
+	* Cantor version 19.12 or higher (including the devel package, cantor-devel or similar)
 	* ZLIB and LZ4 to support ROOT (CERN) TH1 histograms (including the devel package, zlib-devel and liblz4-devel or similar)
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 
