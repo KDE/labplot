@@ -367,16 +367,23 @@ void ImagePrivate::scaleImage() {
 	if (keepRatio) {
 		if (width != image.width()) {
 			//width was changed -> rescale the height to keep the ratio
-			height = image.height()*width/image.width();
+			if (image.width() != 0)
+				height = image.height()*width/image.width();
+			else
+				height = 0;
 			q->heightChanged(height);
 		} else {
 			//height was changed -> rescale the width to keep the ratio
-			width = image.width()*height/image.height();
+			if (image.height() != 0)
+				width = image.width()*height/image.height();
+			else
+				width = 0;
 			q->widthChanged(width);
 		}
 	}
 
-	image = image.scaled(width, height);
+	if (width != 0 && height != 0)
+		image = image.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 	retransform();
 }
 
