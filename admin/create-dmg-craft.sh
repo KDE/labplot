@@ -40,6 +40,8 @@ cp -vr kde/share/$NAME/themes $INPREFIX/Resources/
 cp -vr kde/share/$NAME/pics $INPREFIX/Resources/
 # color schemes (needs patched kcolorschememanager.cpp)
 cp -vr kde/share/$NAME/color-schemes $INPREFIX/Resources/color-schemes
+#datasets
+cp -vr kde/share/$NAME/datasets $INPREFIX/Resources/datasets
 # appdata
 cp -v kde/share/metainfo/org.kde.labplot2.appdata.xml $INPREFIX/share/appdata/
 cp -v kde/share/applications/org.kde.$NAME.desktop $INPREFIX/share/applications/
