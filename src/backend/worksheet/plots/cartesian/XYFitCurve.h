@@ -105,6 +105,7 @@ public:
 		QVector<double> tdist_tValues;
 		QVector<double> tdist_pValues;
 		QVector<double> tdist_marginValues;
+		QVector<double> correlationMatrix;
 		QString solverOutput;
 	};
 

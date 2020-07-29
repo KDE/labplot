@@ -2001,14 +2001,14 @@ void XYFitCurvePrivate::recalculate() {
 	fitResult.bic = nsl_stats_bic(fitResult.sse, n, np, 1);
 
 	//parameter values
-	// GSL: const double c = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
-	// NIST: const double c = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
-	const double c = sqrt(fitResult.rms);
 	fitResult.paramValues.resize(np);
 	fitResult.errorValues.resize(np);
 	fitResult.tdist_tValues.resize(np);
 	fitResult.tdist_pValues.resize(np);
 	fitResult.tdist_marginValues.resize(np);
+	// GSL: cerr = GSL_MAX_DBL(1., sqrt(fitResult.rms)); // increase error for poor fit
+	// NIST: cerr = sqrt(fitResult.rms); // increase error for poor fit, decrease for good fit
+	const double cerr = sqrt(fitResult.rms);
 	// CI = 100* (1 - alpha)
 	const double alpha = 1.0 - fitData.confidenceInterval/100.;
 	for (unsigned int i = 0; i < np; i++) {
@@ -2019,10 +2019,12 @@ void XYFitCurvePrivate::recalculate() {
 			fitData.paramStartValues.data()[i] = fitResult.paramValues[i];
 			DEBUG("	saving parameter " << i << ": " << fitResult.paramValues[i] << ' ' << fitData.paramStartValues.data()[i]);
 		}
-		fitResult.errorValues[i] = c*sqrt(gsl_matrix_get(covar, i, i));
+		fitResult.errorValues[i] = cerr * sqrt(gsl_matrix_get(covar, i, i));
 		fitResult.tdist_tValues[i] = nsl_stats_tdist_t(fitResult.paramValues.at(i), fitResult.errorValues.at(i));
 		fitResult.tdist_pValues[i] = nsl_stats_tdist_p(fitResult.tdist_tValues.at(i), fitResult.dof);
 		fitResult.tdist_marginValues[i] = nsl_stats_tdist_margin(alpha, fitResult.dof, fitResult.errorValues.at(i));
+		for (unsigned int j = 0; j <= i; j++)
+			fitResult.correlationMatrix << gsl_matrix_get(covar, i, j)/sqrt(gsl_matrix_get(covar, i, i))/sqrt(gsl_matrix_get(covar, j, j));
 	}
 
 	// fill residuals vector. To get residuals on the correct x values, fill the rest with zeros.
@@ -2285,6 +2287,11 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 		writer->writeTextElement("tdist_margin", QString::number(value, 'g', 15));
 	writer->writeEndElement();
 
+	writer->writeStartElement("correlationMatrix");
+	foreach (const double &value, d->fitResult.correlationMatrix)
+		writer->writeTextElement("correlation", QString::number(value, 'g', 15));
+	writer->writeEndElement();
+
 	//save calculated columns if available
 	if (d->xColumn && d->yColumn && d->residualsColumn) {
 		d->xColumn->save(writer);
@@ -2382,6 +2389,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			d->fitResult.tdist_pValues << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == "tdist_margin") {
 			d->fitResult.tdist_marginValues << reader->readElementText().toDouble();
+		} else if (!preview && reader->name() == "correlation") {
+			d->fitResult.correlationMatrix << reader->readElementText().toDouble();
 		} else if (!preview && reader->name() == "fitResult") {
 			attribs = reader->attributes();
 
@@ -2457,6 +2466,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->fitResult.tdist_pValues.resize(np);
 	if (d->fitResult.tdist_marginValues.size() == 0)
 		d->fitResult.tdist_marginValues.resize(np);
+	if (d->fitResult.correlationMatrix.size() == 0)
+		d->fitResult.correlationMatrix.resize(np*(np+1)/2);
 
 	// Loading done. Check some parameter
 	DEBUG("XYFitCurve::load() model type = " << d->fitData.modelType);

@@ -255,7 +255,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -463,7 +463,7 @@
           <bool>true</bool>
          </property>
          <property name="rowCount">
-          <number>8</number>
+          <number>9</number>
          </property>
          <property name="columnCount">
           <number>2</number>
@@ -483,6 +483,7 @@
          <attribute name="verticalHeaderVisible">
           <bool>false</bool>
          </attribute>
+         <row/>
          <row/>
          <row/>
          <row/>
@@ -565,10 +566,20 @@
          </item>
          <item row="7" column="0">
           <property name="text">
-           <string>Iterations</string>
+           <string>Correlation</string>
           </property>
          </item>
          <item row="7" column="1">
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item row="8" column="0">
+          <property name="text">
+           <string>Iterations</string>
+          </property>
+         </item>
+         <item row="8" column="1">
           <property name="text">
            <string/>
           </property>

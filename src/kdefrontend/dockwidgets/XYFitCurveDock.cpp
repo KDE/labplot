@@ -228,7 +228,6 @@ void XYFitCurveDock::setupGeneral() {
  * load curve settings
  */
 void XYFitCurveDock::initGeneralTab() {
-	DEBUG("XYFitCurveDock::initGeneralTab()");
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
@@ -278,9 +277,9 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.sbDegree->setValue(m_fitData.degree);
 
 	if (m_fitData.paramStartValues.size() > 0)
-		DEBUG("	start value 1 = " << m_fitData.paramStartValues.at(0));
+		DEBUG(Q_FUNC_INFO << ", start value 1 = " << m_fitData.paramStartValues.at(0));
 
-	DEBUG("	model degree = " << m_fitData.degree);
+	DEBUG(Q_FUNC_INFO << ", model degree = " << m_fitData.degree);
 
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
@@ -298,11 +297,9 @@ void XYFitCurveDock::initGeneralTab() {
 
 	connect(fitParametersWidget, &FitParametersWidget::parametersChanged, this, &XYFitCurveDock::parametersChanged);
 	connect(fitParametersWidget, &FitParametersWidget::parametersValid, this, &XYFitCurveDock::parametersValid);
-	DEBUG("XYFitCurveDock::initGeneralTab() DONE");
 }
 
 void XYFitCurveDock::setModel() {
-	DEBUG("XYFitCurveDock::setModel()");
 	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
 							AspectType::CartesianPlot, AspectType::XYCurve, AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
@@ -326,14 +323,12 @@ void XYFitCurveDock::setModel() {
 	cbYErrorColumn->setModel(m_aspectTreeModel);
 
 	XYCurveDock::setModel();
-	DEBUG("XYFitCurveDock::setModel() DONE");
 }
 
 /*!
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
-	DEBUG("XYFitCurveDock::setCurves()");
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
@@ -343,11 +338,11 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
 
-	DEBUG("XYFitCurveDock::setCurves()	model type = " << m_fitData.modelType);
-	DEBUG("XYFitCurveDock::setCurves()	model = " << STDSTRING(m_fitData.model));
-	DEBUG("XYFitCurveDock::setCurves()	model degree = " << m_fitData.degree);
-	DEBUG("XYFitCurveDock::setCurves()	# params = " << m_fitData.paramNames.size());
-	DEBUG("XYFitCurveDock::setCurves()	# start values = " << m_fitData.paramStartValues.size());
+	DEBUG(Q_FUNC_INFO << ", model type = " << m_fitData.modelType);
+	DEBUG(Q_FUNC_INFO << ", model = " << STDSTRING(m_fitData.model));
+	DEBUG(Q_FUNC_INFO << ", model degree = " << m_fitData.degree);
+	DEBUG(Q_FUNC_INFO << ", # params = " << m_fitData.paramNames.size());
+	DEBUG(Q_FUNC_INFO << ", # start values = " << m_fitData.paramStartValues.size());
 	//for (auto startValue: m_fitData.paramStartValues)
 	//	DEBUG("XYFitCurveDock::setCurves()	start value = " << startValue);
 
@@ -582,7 +577,7 @@ void XYFitCurveDock::showResults(bool checked) {
 ///////////////////////////////////////////////////////////////////////////
 
 void XYFitCurveDock::xWeightChanged(int index) {
-	DEBUG("xWeightChanged() weight = " << nsl_fit_weight_type_name[index]);
+	DEBUG(Q_FUNC_INFO << ", weight = " << nsl_fit_weight_type_name[index]);
 
 	m_fitData.xWeightsType = (nsl_fit_weight_type)index;
 
@@ -607,7 +602,7 @@ void XYFitCurveDock::xWeightChanged(int index) {
 }
 
 void XYFitCurveDock::yWeightChanged(int index) {
-	DEBUG("yWeightChanged() weight = " << nsl_fit_weight_type_name[index]);
+	DEBUG(Q_FUNC_INFO << ", weight = " << nsl_fit_weight_type_name[index]);
 
 	m_fitData.yWeightsType = (nsl_fit_weight_type)index;
 
@@ -638,9 +633,9 @@ void XYFitCurveDock::yWeightChanged(int index) {
  */
 void XYFitCurveDock::categoryChanged(int index) {
 	if (index == nsl_fit_model_custom) {
-		DEBUG("categoryChanged() category = \"nsl_fit_model_custom\"");
+		DEBUG(Q_FUNC_INFO << ", category = \"nsl_fit_model_custom\"");
 	} else {
-		DEBUG("categoryChanged() category = \"" << nsl_fit_model_category_name[index] << "\"");
+		DEBUG(Q_FUNC_INFO << ", category = \"" << nsl_fit_model_category_name[index] << "\"");
 	}
 
 	bool hasChanged = true;
@@ -1244,21 +1239,35 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twLog->item(5, 1)->setText(numberLocale.toString(fitResult.paramValues.size()));
 	uiGeneralTab.twLog->item(6, 1)->setText(m_fitData.fitRange.toString());
 
-	// show all iterations
-	QString str;
+	const int np = m_fitData.paramNames.size();
+
+	// correlation matrix
+	QString sCorr;
 	for (const auto &s : m_fitData.paramNamesUtf8)
-		str += s + '\t';
-	str += UTF8_QSTRING("χ²");
+		sCorr += '\t' + s;
+	int index{0};
+	DEBUG(Q_FUNC_INFO << ", correlation values size = " << fitResult.correlationMatrix.size())
+	for (int i = 0; i < np; i++) {
+		sCorr += '\n' + m_fitData.paramNamesUtf8.at(i);
+		for (int j = 0; j <= i; j++)
+			sCorr += '\t' + numberLocale.toString(fitResult.correlationMatrix.at(index++), 'f');
+	}
+	uiGeneralTab.twLog->item(7, 1)->setText(sCorr);
+
+	// iterations
+	QString sIter;
+	for (const auto &s : m_fitData.paramNamesUtf8)
+		sIter += s + '\t';
+	sIter += UTF8_QSTRING("χ²");
 
 	const QStringList iterations = fitResult.solverOutput.split(';');
 	for (const auto &s : iterations)
 		if (!s.isEmpty())
-			str += '\n' + s;
-	uiGeneralTab.twLog->item(7, 1)->setText(str);
+			sIter += '\n' + s;
+	uiGeneralTab.twLog->item(8, 1)->setText(sIter);
 	uiGeneralTab.twLog->resizeRowsToContents();
 
 	// Parameters
-	const int np = m_fitData.paramNames.size();
 	uiGeneralTab.twParameters->setRowCount(np);
 
 	for (int i = 0; i < np; i++) {
