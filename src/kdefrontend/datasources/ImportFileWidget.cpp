@@ -1462,7 +1462,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		auto filter = static_cast<JsonFilter*>(currentFileFilter());
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
-		importedStrings = filter->preview(fileName);
+		importedStrings = filter->preview(fileName, lines);
 
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();

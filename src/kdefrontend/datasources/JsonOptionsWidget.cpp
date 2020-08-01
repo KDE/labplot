@@ -50,7 +50,8 @@ JsonOptionsWidget::JsonOptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 
 	ui.setupUi(parent);
 
-	ui.cbNumberFormat->addItems(AbstractFileFilter::numberFormats());
+	ui.cbDecimalSeparator->addItem(i18n("Point '.'"));
+	ui.cbDecimalSeparator->addItem(i18n("Comma ','"));
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
 	setTooltips();
@@ -60,8 +61,14 @@ void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter, const QModelInde
 	Q_ASSERT(filter);
 
 	filter->setModelRows(getIndexRows(index));
-	//TODO: use general setting for decimal separator?
-	filter->setNumberFormat( QLocale::Language(ui.cbNumberFormat->currentIndex()));
+
+	QLocale::Language lang;
+	if (ui.cbDecimalSeparator->currentIndex() == 0)
+		lang = QLocale::Language::C;
+	else
+		lang = QLocale::Language::German;
+	filter->setNumberFormat(lang);
+
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 	filter->setCreateIndexEnabled(ui.chbCreateIndex->isChecked());
 	filter->setNaNValueToZero(ui.chbConvertNaNToZero->isChecked());
@@ -83,8 +90,10 @@ void JsonOptionsWidget::clearModel() {
 void JsonOptionsWidget::loadSettings() const {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
 
-	//TODO: use general setting for decimal separator?
-	ui.cbNumberFormat->setCurrentIndex(conf.readEntry("NumberFormat", (int)QLocale::AnyLanguage));
+	const QChar decimalSeparator = QLocale().decimalPoint();
+	int index = (decimalSeparator == '.') ? 0 : 1;
+	ui.cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
+
 	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
 	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
 	ui.chbConvertNaNToZero->setChecked(conf.readEntry("ConvertNaNToZero", false));
@@ -94,7 +103,7 @@ void JsonOptionsWidget::loadSettings() const {
 void JsonOptionsWidget::saveSettings() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportJson");
 
-	conf.writeEntry("NumberFormat", ui.cbNumberFormat->currentIndex());
+	conf.writeEntry("DecimalSeparator", ui.cbDecimalSeparator->currentIndex());
 	conf.writeEntry("DateTimeFormat", ui.cbDateTimeFormat->currentText());
 	conf.writeEntry("CreateIndex", ui.chbCreateIndex->isChecked());
 	conf.writeEntry("ConvertNaNToZero", ui.chbConvertNaNToZero->isChecked());
@@ -137,10 +146,10 @@ void JsonOptionsWidget::setTooltips() {
 			"</ul>"
 	);
 
-	ui.lNumberFormat->setToolTip(textNumberFormatShort);
-	ui.lNumberFormat->setWhatsThis(textNumberFormat);
-	ui.cbNumberFormat->setToolTip(textNumberFormatShort);
-	ui.cbNumberFormat->setWhatsThis(textNumberFormat);
+	ui.lDecimalSeparator->setToolTip(textNumberFormatShort);
+	ui.lDecimalSeparator->setWhatsThis(textNumberFormat);
+	ui.cbDecimalSeparator->setToolTip(textNumberFormatShort);
+	ui.cbDecimalSeparator->setWhatsThis(textNumberFormat);
 
 	const QString textDateTimeFormatShort = i18n("This option determines how the imported strings have to be converted to calendar date, i.e. year, month, and day numbers in the Gregorian calendar and to time.");
 	const QString textDateTimeFormat = textDateTimeFormatShort + "<br><br>" + i18n(
