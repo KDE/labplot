@@ -40,6 +40,7 @@
 #include <QJsonArray>
 #include <QDataStream>
 #include <QDateTime>
+
 #include <KLocalizedString>
 #include <KFilterDev>
 
@@ -564,6 +565,14 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 	DEBUG("reading " << m_actualRows << " lines");
 	DEBUG("reading " << m_actualCols << " columns");
 
+	int progressIndex = 0;
+	const float progressInterval = 0.01*lines; //update on every 1% only
+
+	const auto& array = m_preparedDoc.array();
+	const auto& arrayIterator = array.begin();
+	const auto& object = m_preparedDoc.object();
+	const auto& objectIterator = object.begin();
+
 	for (int i = 0; i < m_actualRows; ++i) {
 		if (createIndexEnabled)
 			static_cast<QVector<int>*>(m_dataContainer[0])->operator[](i) = i + 1;
@@ -571,14 +580,14 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 		QJsonValue row;
 		switch (containerType) {
 		case JsonFilter::DataContainerType::Array:
-			row = *(m_preparedDoc.array().begin() + rowOffset + i);
+			row = *(arrayIterator + rowOffset + i);
 			break;
 		case JsonFilter::DataContainerType::Object:
 			if (importObjectNames) {
-				const QString& rowName = (m_preparedDoc.object().begin() + rowOffset + i).key();
+				const QString& rowName = (objectIterator + rowOffset + i).key();
 				setValueFromString((int)createIndexEnabled, i, rowName);
 			}
-			row = *(m_preparedDoc.object().begin() + rowOffset + i);
+			row = *(objectIterator + rowOffset + i);
 			break;
 		}
 
@@ -619,7 +628,15 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 				break;
 			}
 		}
-		emit q->completed(100 * i/m_actualRows);
+
+		//ask to update the progress bar only if we have more than 1000 lines
+		//only in 1% steps
+		progressIndex++;
+		if (m_actualRows > 1000 && progressIndex > progressInterval) {
+			emit q->completed(100 * i/m_actualRows);
+			progressIndex = 0;
+			QApplication::processEvents(QEventLoop::AllEvents, 0);
+		}
 	}
 
 	//set the plot designation to 'X' for index and name columns, if available
@@ -671,16 +688,22 @@ QVector<QStringList> JsonFilterPrivate::preview(int lines) {
 	QVector<QStringList> dataStrings;
 	const int rowOffset = startRow - 1;
 	DEBUG("	Generating preview for " << qMin(lines, m_actualRows)  << " lines");
+
+	const auto& array = m_preparedDoc.array();
+	const auto& arrayIterator = array.begin();
+	const auto& object = m_preparedDoc.object();
+	const auto& objectIterator = object.begin();
+
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString rowName;
 		QJsonValue row;
 		switch (containerType) {
 			case JsonFilter::DataContainerType::Object:
-				rowName = (m_preparedDoc.object().begin() + rowOffset + i).key();
-				row = *(m_preparedDoc.object().begin() + rowOffset + i);
+				rowName = (objectIterator + rowOffset + i).key();
+				row = *(objectIterator + rowOffset + i);
 				break;
 			case JsonFilter::DataContainerType::Array:
-				row = *(m_preparedDoc.array().begin() + rowOffset + i);
+				row = *(arrayIterator + rowOffset + i);
 				break;
 		}
 
