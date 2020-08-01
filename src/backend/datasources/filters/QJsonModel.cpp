@@ -2,6 +2,7 @@
  * The MIT License (MIT)
  *
  * Copyright (c) 2011 SCHUTZ Sacha
+ * Copyright (C) 2020 Alexander Semke (alexander.semke@web.de)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,25 +25,27 @@
 
 #include "QJsonModel.h"
 
-#include <QApplication>
-#include <QDebug>
 #include <QFile>
 #include <QMessageBox>
-#include <QPalette>
 #include <KLocalizedString>
+#include "backend/lib/trace.h"
 
 QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent) : mParent(parent) {}
 
 QJsonTreeItem::~QJsonTreeItem() {
-	qDeleteAll(mChilds);
+	qDeleteAll(mChildren);
 }
 
 void QJsonTreeItem::appendChild(QJsonTreeItem* item) {
-	mChilds.append(item);
+	mChildren.append(item);
+}
+
+void QJsonTreeItem::reserve(int size) {
+	mChildren.reserve(size);
 }
 
 QJsonTreeItem* QJsonTreeItem::child(int row) {
-	return mChilds.value(row);
+	return mChildren.value(row);
 }
 
 QJsonTreeItem* QJsonTreeItem::parent() {
@@ -50,12 +53,12 @@ QJsonTreeItem* QJsonTreeItem::parent() {
 }
 
 int QJsonTreeItem::childCount() const {
-	return mChilds.count();
+	return mChildren.count();
 }
 
 int QJsonTreeItem::row() const {
 	if (mParent)
-		return mParent->mChilds.indexOf(const_cast<QJsonTreeItem*>(this));
+		return mParent->mChildren.indexOf(const_cast<QJsonTreeItem*>(this));
 
 	return 0;
 }
@@ -94,36 +97,35 @@ int QJsonTreeItem::size() const {
 
 QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* parent) {
 	auto* rootItem = new QJsonTreeItem(parent);
-	rootItem->setKey("root");
+// 	rootItem->setKey("root");
 
 	if (value.isObject())
 		rootItem->setSize(QJsonDocument(value.toObject()).toJson(QJsonDocument::Compact).size());
 	else if (value.isArray())
 		rootItem->setSize(QJsonDocument(value.toArray()).toJson(QJsonDocument::Compact).size());
 
+	//read all children
 	if (value.isObject()) {
-		//Get all QJsonValue childs
-		for (QString key : value.toObject().keys()) {
-			QJsonValue v = value.toObject().value(key);
+		for (const QString& key : value.toObject().keys()) {
+			const QJsonValue& v = value.toObject().value(key);
 			QJsonTreeItem* child = load(v,rootItem);
 			child->setKey(key);
 			child->setType(v.type());
 			rootItem->appendChild(child);
 		}
 	} else if (value.isArray()) {
-		//QJsonDocument(v.toObject()).toJson(QJsonDocument::Compact).size();
-
-		//Get all QJsonValue childs
 		int index = 0;
-		for (QJsonValue v : value.toArray()) {
-			QJsonTreeItem* child = load(v,rootItem);
+		const auto& array = value.toArray();
+		rootItem->reserve(array.count());
+		for (const QJsonValue& v : value.toArray()) {
+			QJsonTreeItem* child = load(v, rootItem);
 			child->setKey(QString::number(index));
 			child->setType(v.type());
 			rootItem->appendChild(child);
 			++index;
 		}
 	} else {
-		QString str = value.toVariant().toString();
+		const QString& str = value.toVariant().toString();
 		rootItem->setValue(str);
 		rootItem->setType(value.type());
 		rootItem->setSize(str.length());
@@ -143,8 +145,21 @@ QJsonModel::QJsonModel(QObject* parent) : QAbstractItemModel(parent),
 	mHeaders.append(i18n("Value"));
 	mHeaders.append(i18n("Size in Bytes"));
 
+	//icons
 	mObjectIcon = QIcon::fromTheme(QLatin1String("labplot-json-object"));
 	mArrayIcon = QIcon::fromTheme(QLatin1String("labplot-json-array"));
+
+	//dark theme is used -> invert the icons which use black colors
+	if (qApp->palette().color(QPalette::Base).lightness() < 128) {
+		//TODO: use different(standard?) pixel size?
+		QImage image = mObjectIcon.pixmap(64, 64).toImage();
+		image.invertPixels();
+		mObjectIcon = QIcon(QPixmap::fromImage(image));
+
+		image = mArrayIcon.pixmap(64, 64).toImage();
+		image.invertPixels();
+		mArrayIcon = QIcon(QPixmap::fromImage(image));
+	}
 }
 
 QJsonModel::~QJsonModel() {
@@ -179,7 +194,8 @@ bool QJsonModel::load(QIODevice* device) {
 
 bool QJsonModel::loadJson(const QByteArray& json) {
 	QJsonParseError error;
-	QJsonDocument doc = QJsonDocument::fromJson(json, &error);
+
+	const QJsonDocument& doc = QJsonDocument::fromJson(json, &error);
 	if (error.error == QJsonParseError::NoError)
 		return loadJson(doc);
 	else {
@@ -191,6 +207,7 @@ bool QJsonModel::loadJson(const QByteArray& json) {
 }
 
 bool QJsonModel::loadJson(const QJsonDocument& jdoc) {
+	PERFTRACE("load json document into the model");
 	if (!jdoc.isNull()) {
 		beginResetModel();
 		delete mHeadItem;
@@ -198,7 +215,10 @@ bool QJsonModel::loadJson(const QJsonDocument& jdoc) {
 		mHeadItem = new QJsonTreeItem;
 
 		if (jdoc.isArray()) {
+			{
+			PERFTRACE("load json tree items");
 			mRootItem = QJsonTreeItem::load(QJsonValue(jdoc.array()), mHeadItem);
+			}
 			mRootItem->setType(QJsonValue::Array);
 
 		} else {
@@ -241,26 +261,11 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 			return item->value();
 	} else if (role == Qt::DecorationRole) {
 		if (index.column() == 0) {
-			if (qApp->palette().color(QPalette::Base).lightness() < 128) {
-				QIcon icon;
-				if (item->type() == QJsonValue::Array)
-					icon = mArrayIcon;
-				else if (item->type() == QJsonValue::Object)
-					icon = mObjectIcon;
-
-				//dark theme is used -> invert the icons which use black colors
-				QImage image = icon.pixmap(64, 64).toImage(); //TODO: use different(standard?) pixel size?
-				image.invertPixels();
-				icon = QIcon(QPixmap::fromImage(image));
-				return icon;
-			} else {
-				if (item->type() == QJsonValue::Array)
-					return mArrayIcon;
-				else if (item->type() == QJsonValue::Object)
-					return mObjectIcon;
-			}
+			if (item->type() == QJsonValue::Array)
+				return mArrayIcon;
+			else if (item->type() == QJsonValue::Object)
+				return mObjectIcon;
 		}
-		return QIcon();
 	}
 
 	return QVariant();

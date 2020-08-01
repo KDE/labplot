@@ -40,6 +40,7 @@ public:
 	explicit QJsonTreeItem(QJsonTreeItem* parent = nullptr);
 	~QJsonTreeItem();
 	void appendChild(QJsonTreeItem*);
+	void reserve(int);
 	QJsonTreeItem* child(int row);
 	QJsonTreeItem* parent();
 	int childCount() const;
@@ -60,7 +61,7 @@ private:
 	QString mValue;
 	QJsonValue::Type mType{QJsonValue::Undefined};
 	int mSize{0};
-	QList<QJsonTreeItem*> mChilds;
+	QList<QJsonTreeItem*> mChildren;
 	QJsonTreeItem* mParent;
 };
 
