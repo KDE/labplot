@@ -60,9 +60,9 @@ public:
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 
-	QVector<QStringList> preview(const QString& fileName);
-	QVector<QStringList> preview(QIODevice& device);
-	QVector<QStringList> preview(const QJsonDocument& doc);
+	QVector<QStringList> preview(const QString& fileName, int lines);
+	QVector<QStringList> preview(QIODevice& device, int lines);
+// 	QVector<QStringList> preview(const QJsonDocument& doc);
 
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;

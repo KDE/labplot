@@ -67,17 +67,17 @@ void JsonFilter::readDataFromFile(const QString& fileName, AbstractDataSource* d
 	d->readDataFromFile(fileName, dataSource, importMode);
 }
 
-QVector<QStringList> JsonFilter::preview(const QString& fileName) {
-	return d->preview(fileName);
+QVector<QStringList> JsonFilter::preview(const QString& fileName, int lines) {
+	return d->preview(fileName, lines);
 }
 
-QVector<QStringList> JsonFilter::preview(QIODevice& device) {
-	return d->preview(device);
+QVector<QStringList> JsonFilter::preview(QIODevice& device, int lines) {
+	return d->preview(device, lines);
 }
 
-QVector<QStringList> JsonFilter::preview(const QJsonDocument& doc) {
-	return d->preview(doc);
-}
+// QVector<QStringList> JsonFilter::preview(const QJsonDocument& doc) {
+// 	return d->preview(doc);
+// }
 
 /*!
 writes the content of the data source \c dataSource to the file \c fileName.
@@ -637,41 +637,41 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 /*!
 generates the preview for the file \c fileName.
 */
-QVector<QStringList> JsonFilterPrivate::preview(const QString& fileName) {
+QVector<QStringList> JsonFilterPrivate::preview(const QString& fileName, int lines) {
 	KFilterDev device(fileName);
-	return preview(device);
+	return preview(device, lines);
 }
 
 /*!
 generates the preview for device \c device.
 */
-QVector<QStringList> JsonFilterPrivate::preview(QIODevice& device) {
+QVector<QStringList> JsonFilterPrivate::preview(QIODevice& device, int lines) {
 	const int deviceError = prepareDeviceToRead(device);
 	if (deviceError != 0) {
 		DEBUG("Device error = " << deviceError);
 		return QVector<QStringList>();
 	}
 
-	return preview();
+	return preview(lines);
 }
 
 /*!
 generates the preview for document \c doc.
 */
-QVector<QStringList> JsonFilterPrivate::preview(const QJsonDocument& doc) {
-	if (prepareDocumentToRead(doc) != 0)
-		return QVector<QStringList>();
-	return preview();
-}
+// QVector<QStringList> JsonFilterPrivate::preview(const QJsonDocument& doc) {
+// 	if (prepareDocumentToRead(doc) != 0)
+// 		return QVector<QStringList>();
+// 	return preview();
+// }
 
 /*!
 generates the preview for document \c m_preparedDoc.
 */
-QVector<QStringList> JsonFilterPrivate::preview() {
+QVector<QStringList> JsonFilterPrivate::preview(int lines) {
 	QVector<QStringList> dataStrings;
 	const int rowOffset = startRow - 1;
-	DEBUG("reading " << m_actualRows << " lines");
-	for (int i = 0; i < m_actualRows; ++i) {
+	DEBUG("	Generating preview for " << qMin(lines, m_actualRows)  << " lines");
+	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		QString rowName;
 		QJsonValue row;
 		switch (containerType) {
@@ -729,7 +729,6 @@ QVector<QStringList> JsonFilterPrivate::preview() {
 			}
 		}
 		dataStrings << lineString;
-		emit q->completed(100 * i/m_actualRows);
 	}
 	return dataStrings;
 }

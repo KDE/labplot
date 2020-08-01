@@ -60,10 +60,10 @@ public:
 	                int lines = -1);
 
 	void write(const QString& fileName, AbstractDataSource*);
-	QVector<QStringList> preview(const QString& fileName);
-	QVector<QStringList> preview(QIODevice& device);
-	QVector<QStringList> preview(const QJsonDocument&);
-	QVector<QStringList> preview();
+	QVector<QStringList> preview(const QString& fileName, int lines);
+	QVector<QStringList> preview(QIODevice& device, int lines);
+// 	QVector<QStringList> preview(const QJsonDocument&);
+	QVector<QStringList> preview(int lines);
 
 	const JsonFilter* q;
 	QJsonModel* model;
