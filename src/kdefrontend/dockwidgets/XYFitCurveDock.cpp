@@ -1197,8 +1197,6 @@ void XYFitCurveDock::resultLogContextMenuRequest(QPoint pos) {
  * show the result and details of the fit
  */
 void XYFitCurveDock::showFitResult() {
-	DEBUG("XYFitCurveDock::showFitResult()");
-
 	//clear the previous result
 	uiGeneralTab.twParameters->setRowCount(0);
 	for (int row = 0; row < uiGeneralTab.twGoodness->rowCount(); ++row)
@@ -1209,7 +1207,7 @@ void XYFitCurveDock::showFitResult() {
 	const auto& fitResult = m_fitCurve->fitResult();
 
 	if (!fitResult.available) {
-		DEBUG(" fit result not available");
+		DEBUG(Q_FUNC_INFO << ", fit result not available");
 		return;
 	}
 
@@ -1217,7 +1215,7 @@ void XYFitCurveDock::showFitResult() {
 	uiGeneralTab.twLog->item(0, 1)->setText(fitResult.status);
 
 	if (!fitResult.valid) {
-		DEBUG(" fit result not valid");
+		DEBUG(Q_FUNC_INFO << ", fit result not valid");
 		return;
 	}
 
@@ -1361,7 +1359,6 @@ void XYFitCurveDock::showFitResult() {
 
 	//enable the "recalculate"-button if the source data was changed since the last fit
 	uiGeneralTab.pbRecalculate->setEnabled(m_fitCurve->isSourceDataChangedSinceLastRecalc());
-	DEBUG("XYFitCurveDock::showFitResult() DONE");
 }
 
 //*************************************************************
@@ -1420,7 +1417,6 @@ void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
  * called when fit data of fit curve changes
  */
 void XYFitCurveDock::curveFitDataChanged(const XYFitCurve::FitData& fitData) {
-	DEBUG("XYFitCurveDock::curveFitDataChanged()");
 	m_initializing = true;
 	m_fitData = fitData;
 

@@ -70,8 +70,8 @@ public:
 
 		bool autoRange{true};		// use all data points? (default)
 		bool autoEvalRange{true};	// evaluate fit function on full data range (default)
-		Range<double> fitRange{0., 0.};	// x fit range
-		Range<double> evalRange{0., 0.};	// x evaluation range
+		Range<double> fitRange{0., 0.};	// x range of data to fit
+		Range<double> evalRange{0., 0.};	// x range to evaluate fit function
 	};
 
 	struct FitResult {
