@@ -1537,7 +1537,15 @@ void AxisPrivate::retransformTickLabelStrings() {
 	where no duplicates for the tick label float occur.
  */
 int AxisPrivate::upperLabelsPrecision(int precision) {
-	//DEBUG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
+	DEBUG(Q_FUNC_INFO << ", precision =" << precision);
+
+	// avoid problems with zero range axis
+	if (qFuzzyCompare(tickLabelValues.constFirst(), tickLabelValues.constLast())) {
+		DEBUG(Q_FUNC_INFO << ", zero range axis detected. ticklabel values: ")
+		QDEBUG(Q_FUNC_INFO << tickLabelValues)
+		return 0;
+	}
+
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
@@ -1549,15 +1557,14 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 			if (i == j)
 				continue;
 
-			if (tempValues.at(i) == tempValues.at(j)) {
 			//duplicate for the current precision found, increase the precision and check again
-			return upperLabelsPrecision(precision + 1);
-			}
+			if (tempValues.at(i) == tempValues.at(j))
+				return upperLabelsPrecision(precision + 1);
 		}
 	}
 
 	//no duplicates for the current precision found: return the current value
-	//DEBUG("	upper precision = " << precision);
+	DEBUG(Q_FUNC_INFO << ", upper precision = " << precision);
 	return precision;
 }
 
