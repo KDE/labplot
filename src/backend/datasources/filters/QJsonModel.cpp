@@ -99,25 +99,27 @@ QJsonTreeItem* QJsonTreeItem::load(const QJsonValue& value, QJsonTreeItem* paren
 	auto* rootItem = new QJsonTreeItem(parent);
 // 	rootItem->setKey("root");
 
-	if (value.isObject())
-		rootItem->setSize(QJsonDocument(value.toObject()).toJson(QJsonDocument::Compact).size());
-	else if (value.isArray())
-		rootItem->setSize(QJsonDocument(value.toArray()).toJson(QJsonDocument::Compact).size());
-
-	//read all children
 	if (value.isObject()) {
-		for (const QString& key : value.toObject().keys()) {
-			const QJsonValue& v = value.toObject().value(key);
+		const auto& object = value.toObject();
+
+		//determine the size
+		rootItem->setSize(QJsonDocument(object).toJson(QJsonDocument::Compact).size());
+
+		//read all children
+		for (const QString& key : object.keys()) {
+			const QJsonValue& v = object.value(key);
 			QJsonTreeItem* child = load(v,rootItem);
 			child->setKey(key);
 			child->setType(v.type());
 			rootItem->appendChild(child);
 		}
 	} else if (value.isArray()) {
-		int index = 0;
 		const auto& array = value.toArray();
+		rootItem->setSize(QJsonDocument(array).toJson(QJsonDocument::Compact).size());
+
+		int index = 0;
 		rootItem->reserve(array.count());
-		for (const QJsonValue& v : value.toArray()) {
+		for (const QJsonValue& v : array) {
 			QJsonTreeItem* child = load(v, rootItem);
 			child->setKey(QString::number(index));
 			child->setType(v.type());
@@ -285,10 +287,7 @@ bool QJsonModel::setData(const QModelIndex& index, const QVariant& value, int ro
 }
 
 QVariant QJsonModel::headerData(int section, Qt::Orientation orientation, int role) const {
-	if (role != Qt::DisplayRole)
-		return QVariant();
-
-	if (orientation == Qt::Horizontal)
+	if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
 		return mHeaders.value(section);
 
 	return QVariant();
@@ -349,7 +348,7 @@ Qt::ItemFlags QJsonModel::flags(const QModelIndex& index) const {
 	else
 		return QAbstractItemModel::flags(index);
 }
-
+/*
 QJsonDocument QJsonModel::json() const {
 	auto v = genJson(mRootItem);
 	QJsonDocument doc;
@@ -361,8 +360,8 @@ QJsonDocument QJsonModel::json() const {
 
 	return doc;
 }
-
-QJsonValue  QJsonModel::genJson(QJsonTreeItem* item) const {
+*/
+QJsonValue QJsonModel::genJson(QJsonTreeItem* item) const {
 	auto type = item->type();
 	const int nchild = item->childCount();
 

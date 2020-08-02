@@ -85,7 +85,8 @@ public:
 	int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 	int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 	Qt::ItemFlags flags(const QModelIndex&) const override;
-	QJsonDocument json() const;
+
+// 	QJsonDocument json() const;
 	QJsonDocument genJsonByIndex(const QModelIndex&) const;
 
 private:
