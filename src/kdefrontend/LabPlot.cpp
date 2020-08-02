@@ -26,17 +26,9 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#include <QApplication>
-#include <QCommandLineParser>
-#include <QDir>
-#include <QFile>
-#include <QSplashScreen>
-#include <QStandardPaths>
-#include <QModelIndex>
-#include <QSysInfo>
-#ifdef _WIN32
-#include <windows.h>
-#endif
+#include "MainWin.h"
+#include "backend/core/AbstractColumn.h"
+#include "backend/lib/macros.h"
 
 #include <KAboutData>
 #include <KColorSchemeManager>
@@ -47,9 +39,19 @@
 #include <KMessageBox>
 #include <KSharedConfig>
 
-#include "MainWin.h"
-#include "backend/core/AbstractColumn.h"
-#include "backend/lib/macros.h"
+#include <QApplication>
+#include <QCommandLineParser>
+#include <QDir>
+#include <QFile>
+#include <QSplashScreen>
+#include <QStandardPaths>
+#include <QModelIndex>
+#include <QSysInfo>
+#include <QSettings>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 /*
  * collect all system info to show in About dialog
@@ -83,11 +85,19 @@ const QString getSystemInfo() {
 			+ i18n("Positive/Negative sign ") + '\'' + QString(numberLocale.positiveSign()) + '\''
 			+ '/' + '\'' + QString(numberLocale.negativeSign()) + '\'' };
 
+	// get language set in 'switch language'
+	const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+	QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
+	languageoverride.beginGroup(QStringLiteral("Language"));
+	QString usedLocale = languageoverride.value(qAppName(), "").toString();	// something like "en_US"
+	if (!usedLocale.isEmpty())
+		locale = QLocale(usedLocale);
+	QString usedLanguage = QLocale::languageToString(locale.language()) + ',' + QLocale::countryToString(locale.country());
+
 	return buildType + '\n'
 		+ QString("%1, %2").arg(__DATE__).arg(__TIME__) + '\n'
 		+ i18n("System: ") + QSysInfo::prettyProductName() + '\n'
-		+ i18n("Locale: ") + QLocale::languageToString(locale.language()) + ','
-			+ QLocale::countryToString(locale.country()) + ' ' + numberSystemInfo + '\n'
+		+ i18n("Locale: ") + usedLanguage + ' ' + numberSystemInfo + '\n'
 		+ i18n("Number settings:") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + ')' + '\n'
 		+ i18n("Architecture: ") + QSysInfo::buildAbi() + '\n'
 		+ i18n("Kernel: ") + QSysInfo::kernelType() + ' ' + QSysInfo::kernelVersion() + '\n'
