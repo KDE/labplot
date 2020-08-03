@@ -693,7 +693,7 @@ void XYCurve::setYErrorPlusColumn(const AbstractColumn* column) {
 	if (column != d->yErrorPlusColumn) {
 		exec(new XYCurveSetYErrorPlusColumnCmd(d, column, ki18n("%1: set y-error column")));
 		if (column) {
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateErrorBars()));
+			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateErrorBars);
 			//in the macro we connect to recalcLogicalPoints which is not needed for error columns
 			disconnect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalcLogicalPoints);
 		}
@@ -2558,8 +2558,10 @@ void XYCurvePrivate::updateErrorBars() {
 
 			//determine the end points of the errors bars in logical coordinates to draw later the cap
 			if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
-				pointsErrorBarAnchorX << QPointF(point.x() - errorMinus, point.y());
-				pointsErrorBarAnchorX << QPointF(point.x() + errorPlus, point.y());
+				if (errorMinus != 0)
+					pointsErrorBarAnchorX << QPointF(point.x() - errorMinus, point.y());
+				if (errorPlus != 0)
+					pointsErrorBarAnchorX << QPointF(point.x() + errorPlus, point.y());
 			}
 		}
 
@@ -2587,8 +2589,10 @@ void XYCurvePrivate::updateErrorBars() {
 
 			//determine the end points of the errors bars in logical coordinates to draw later the cap
 			if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
-				pointsErrorBarAnchorY << QPointF(point.x(), point.y() + errorMinus);
-				pointsErrorBarAnchorY << QPointF(point.x(), point.y() - errorPlus);
+				if (errorMinus != 0)
+					pointsErrorBarAnchorY << QPointF(point.x(), point.y() + errorMinus);
+				if (errorPlus != 0)
+					pointsErrorBarAnchorY << QPointF(point.x(), point.y() - errorPlus);
 			}
 		}
 	}
