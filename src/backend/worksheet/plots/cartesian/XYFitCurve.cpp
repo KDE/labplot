@@ -1824,14 +1824,20 @@ void XYFitCurvePrivate::recalculate() {
 		DEBUG(Q_FUNC_INFO << ", run fdfsolver_iterate");
 		status = gsl_multifit_fdfsolver_iterate(s);
 		DEBUG(Q_FUNC_INFO << ", fdfsolver_iterate DONE");
-		writeSolverState(s);
+		double chi2 = gsl_pow_2(gsl_blas_dnrm2(s->f));
+		writeSolverState(s, chi2);
 		if (status) {
 			DEBUG(Q_FUNC_INFO << ",	iter " << iter << ", status = " << gsl_strerror(status));
 			if (status == GSL_ETOLX) 	// change in the position vector falls below machine precision: no progress
 				status = GSL_SUCCESS;
 			break;
 		}
-		status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
+		if (qFuzzyIsNull(chi2)) {
+			DEBUG(Q_FUNC_INFO << ", chi^2 is zero! Finishing.")
+			status = GSL_SUCCESS;
+		} else {
+			status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
+		}
 		DEBUG(Q_FUNC_INFO << ",	iter " << iter << ", test status = " << gsl_strerror(status));
 	} while (status == GSL_CONTINUE && iter < maxIters);
 
@@ -1840,11 +1846,11 @@ void XYFitCurvePrivate::recalculate() {
 		DEBUG(Q_FUNC_INFO << ", Rerun fit with x errors");
 
 		unsigned int iter2 = 0;
-		double chisq = 0, chisqOld = 0;
+		double chi2 = 0, chi2Old = 0;
 		double *fun = new double[n];
 		do {
 			iter2++;
-			chisqOld = chisq;
+			chi2Old = chi2;
 			//printf("iter2 = %d\n", iter2);
 
 			// calculate function from residuals
@@ -1935,8 +1941,8 @@ void XYFitCurvePrivate::recalculate() {
 				status = gsl_multifit_test_delta(s->dx, s->x, delta, delta);
 			} while (status == GSL_CONTINUE && iter < maxIters);
 
-			chisq = gsl_blas_dnrm2(s->f);
-		} while (iter2 < maxIters && fabs(chisq-chisqOld) > fitData.eps);
+			chi2 = gsl_blas_dnrm2(s->f);
+		} while (iter2 < maxIters && fabs(chi2 - chi2Old) > fitData.eps);
 
 		delete[] fun;
 	}
@@ -2146,7 +2152,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 /*!
  * writes out the current state of the solver \c s
  */
-void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
+void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s, double chi2) {
 	QString state;
 
 	//current parameter values, semicolon separated
@@ -2158,10 +2164,12 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s) {
 		state += QString::number(nsl_fit_map_bound(x, min[i], max[i])) + '\t';
 	}
 
-	//current value of the chi2-function
-	state += QString::number(gsl_pow_2(gsl_blas_dnrm2(s->f)));
+	//current value of chi^2
+	if (isnan(chi2))
+		chi2 = gsl_pow_2(gsl_blas_dnrm2(s->f));
+	state += QString::number(chi2);
 	state += ';';
-	DEBUG(Q_FUNC_INFO << ", chi = " << gsl_pow_2(gsl_blas_dnrm2(s->f)));
+	DEBUG(Q_FUNC_INFO << ", chi^2 = " << chi2);
 
 	fitResult.solverOutput += state;
 }

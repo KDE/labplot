@@ -1426,7 +1426,6 @@ void AxisPrivate::retransformTickLabelStrings() {
 	if (suppressRetransform)
 		return;
 
-	//DEBUG("AxisPrivate::retransformTickLabelStrings()");
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
 		int newPrecision = upperLabelsPrecision(labelsPrecision);
