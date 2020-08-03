@@ -2112,9 +2112,10 @@ void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 
-void AxisPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent*) {
+void AxisPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	setCursor(Qt::ArrowCursor);
 	m_panningStarted = false;
+	QGraphicsItem::mouseReleaseEvent(event);
 }
 
 void AxisPrivate::setPrinting(bool on) {
