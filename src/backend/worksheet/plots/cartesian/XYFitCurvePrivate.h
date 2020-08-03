@@ -63,7 +63,7 @@ public:
 
 private:
 	void prepareResultColumns();
-	void writeSolverState(gsl_multifit_fdfsolver*, double chi2 = NAN);
+	void writeSolverState(gsl_multifit_fdfsolver*, double chi = NAN);
 };
 
 #endif

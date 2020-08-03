@@ -539,6 +539,9 @@ void FitTest::testLinearWampler2() {
 	const int np = fitData.paramNames.size();
 	QCOMPARE(np, 6);
 
+	for (int i = 0; i < np; i++) {
+		DEBUG(std::setprecision(15) << fitResult.paramValues.at(i));
+	}
 	QCOMPARE(fitResult.paramValues.at(0), 1.0);
 	QCOMPARE(fitResult.paramValues.at(1), 0.1);
 	QCOMPARE(fitResult.paramValues.at(2), 0.01);
