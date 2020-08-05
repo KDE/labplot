@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     --------------------------------------------------------------------
     Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
+    Copyright            : (C) 2018-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -47,26 +48,20 @@ public:
 	void setValueFromString(int column, int row, const QString& value);
 
 	int prepareDeviceToRead(QIODevice&);
-	int prepareDocumentToRead(const QJsonDocument&);
-
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
-	void readDataFromDocument(const QJsonDocument&, AbstractDataSource* = nullptr,
-	                          AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-
 	void importData(AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace,
 	                int lines = -1);
 
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device, int lines);
-// 	QVector<QStringList> preview(const QJsonDocument&);
 	QVector<QStringList> preview(int lines);
 
 	const JsonFilter* q;
-	QJsonModel* model;
+	QJsonModel* model{nullptr};
 
 	JsonFilter::DataContainerType containerType{JsonFilter::DataContainerType::Object};
 	QJsonValue::Type rowType{QJsonValue::Object};
@@ -91,7 +86,10 @@ private:
 	int m_prepared{false};
 	int m_columnOffset{0}; // indexes the "start column" in the datasource. Data will be imported starting from this column.
 	std::vector<void*> m_dataContainer; // pointers to the actual data containers (columns).
-	QJsonDocument m_preparedDoc; // parsed Json document
+	QJsonDocument m_doc; //original and full JSON document
+	QJsonDocument m_preparedDoc; // selected part of the full JSON document, the part that needs to be imported
+
+	bool prepareDocumentToRead();
 };
 
 #endif

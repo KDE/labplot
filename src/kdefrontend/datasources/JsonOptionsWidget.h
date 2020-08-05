@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     --------------------------------------------------------------------
     Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
+    Copyright            : (C) 2018-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -43,6 +44,7 @@ class JsonOptionsWidget : public QWidget {
 
 public:
 	explicit JsonOptionsWidget(QWidget*, ImportFileWidget*);
+
 	void applyFilterSettings(JsonFilter*, const QModelIndex&) const;
 	void clearModel();
 	void loadSettings() const;
@@ -57,7 +59,7 @@ private:
 	QString m_filename;
 	Ui::JsonOptionsWidget ui;
 	ImportFileWidget* m_fileWidget;
-	QJsonModel* m_model;
+	QPointer<QJsonModel> m_model;
 };
 
 #endif

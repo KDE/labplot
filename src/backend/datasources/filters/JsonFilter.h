@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     --------------------------------------------------------------------
     Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
+    Copyright            : (C) 2018-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -62,13 +63,14 @@ public:
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device, int lines);
-// 	QVector<QStringList> preview(const QJsonDocument& doc);
 
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
 	void setDataRowType(const QJsonValue::Type);
 	QJsonValue::Type dataRowType() const;
+
+	void setModel(QJsonModel*);
 	void setModelRows(const QVector<int>&);
 	QVector<int> modelRows() const;
 

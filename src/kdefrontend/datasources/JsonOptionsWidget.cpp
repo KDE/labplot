@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     --------------------------------------------------------------------
     Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
+    Copyright            : (C) 2018-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,6 +33,7 @@
 #include "backend/datasources/filters/QJsonModel.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/JsonFilter.h"
+#include "backend/lib/trace.h"
 
 #include <KLocalizedString>
 #include <KFilterDev>
@@ -60,6 +62,7 @@ JsonOptionsWidget::JsonOptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 void JsonOptionsWidget::applyFilterSettings(JsonFilter* filter, const QModelIndex& index) const {
 	Q_ASSERT(filter);
 
+	filter->setModel(m_model);
 	filter->setModelRows(getIndexRows(index));
 
 	QLocale::Language lang;
@@ -111,6 +114,7 @@ void JsonOptionsWidget::saveSettings() {
 }
 
 void JsonOptionsWidget::loadDocument(const QString& filename) {
+	PERFTRACE("JsonOptionsWidget::loadDocument");
 	if (m_filename == filename) return;
 	else
 		m_filename = filename;
