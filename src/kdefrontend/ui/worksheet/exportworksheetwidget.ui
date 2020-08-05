@@ -62,7 +62,7 @@
         <property name="toolTip">
          <string>Specify the name of the file to import.</string>
         </property>
-        <property name="clearButtonEnabled">
+        <property name="clearButtonEnabled" stdset="0">
          <bool>true</bool>
         </property>
        </widget>
@@ -70,7 +70,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="lExportTo">
         <property name="text">
-         <string>To:</string>
+         <string>Target:</string>
         </property>
        </widget>
       </item>

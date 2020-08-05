@@ -372,7 +372,6 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 }
 
 void PlotDataDialog::plot() {
-	DEBUG("PlotDataDialog::plot()");
 	WAIT_CURSOR;
 	m_spreadsheet->project()->setSuppressAspectAddedSignal(true);
 	m_lastAddedCurve = nullptr;
@@ -680,7 +679,6 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
  * helper function that does the actual creation of the curve and adding it as child to the \c plot.
  */
 void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot* plot) {
-	DEBUG("PlotDataDialog::addCurve()");
 	if (!m_analysisMode) {
 		auto* curve = new XYCurve(name);
 		curve->suppressRetransform(true);
