@@ -440,17 +440,27 @@ int JsonFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 */
 bool JsonFilterPrivate::prepareDocumentToRead() {
 	PERFTRACE("Prepare the JSON document to read");
+
 	if (modelRows.isEmpty())
 		m_preparedDoc = m_doc;
 	else {
-		if (!model)
-			model->loadJson(m_doc);
+		if (modelRows.size() == 1)
+			m_preparedDoc = m_doc; //root element selected, use the full document
+		else {
+			//when running tests there is no ImportFileWidget and JsonOptionsWidget available
+			//where the model is created and also passed to JsonFilter. So, we need to create
+			//a model here for in this case.
+			if (!model) {
+				model = new QJsonModel();
+				model->loadJson(m_doc);
+			}
 
-		QModelIndex index;
-		for (auto& it : modelRows)
-			index = model->index(it, 0, index);
+			QModelIndex index;
+			for (auto& it : modelRows)
+				index = model->index(it, 0, index);
 
-		m_preparedDoc = model->genJsonByIndex(index);
+			m_preparedDoc = model->genJsonByIndex(index);
+		}
 	}
 
 	if (!m_preparedDoc.isEmpty()) {
