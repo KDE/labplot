@@ -1559,6 +1559,9 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 	if (m_suppressRefresh)
 		return;
 
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
+	WAIT_CURSOR;
+
 	QDEBUG("ImportFileWidget::updateContent(): file name = " << fileName);
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
@@ -1588,6 +1591,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			break;
 		}
 	}
+	RESET_CURSOR;
 }
 
 void ImportFileWidget::updateTypeChanged(int idx) {

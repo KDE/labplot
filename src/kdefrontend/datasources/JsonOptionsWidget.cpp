@@ -120,6 +120,7 @@ void JsonOptionsWidget::loadDocument(const QString& filename) {
 		m_filename = filename;
 
 	KFilterDev device(m_filename);
+	m_model->clear();
 	if (!device.open(QIODevice::ReadOnly) ||
 	    (device.atEnd() && !device.isSequential()) || // empty file
 	    !m_model->loadJson(device.readAll())
