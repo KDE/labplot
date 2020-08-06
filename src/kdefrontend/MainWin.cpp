@@ -644,6 +644,14 @@ void MainWin::initActions() {
 
 	connect(windowVisibilityActions, &QActionGroup::triggered, this, &MainWin::setMdiWindowVisibility);
 
+	//show/hide the status bar
+	m_toggleStatusBarAction = new QAction(i18n("Show Status Bar"));
+	m_toggleStatusBarAction->setCheckable(true);
+	m_toggleStatusBarAction->setChecked(true);
+	connect(m_toggleStatusBarAction, &QAction::triggered, this, [=]() {
+		statusBar()->setVisible(!statusBar()->isVisible());
+	});
+
 	//Actions for hiding/showing the dock widgets
 	auto* docksActions = new QActionGroup(this);
 	docksActions->setExclusive(false);
@@ -676,8 +684,24 @@ void MainWin::initActions() {
 }
 
 void MainWin::initMenus() {
+	//add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
+	//this menu is created automatically when the defualt "full screen" action is created in initActions().
+	//because of a bug on macOS we don't have this action and menu on macOS, so we add available the explorer
+	//toggle actions to the menu "Windows".
+	auto* menu = dynamic_cast<QMenu*>(factory()->container("view", this));
+	if (!menu)
+		menu = dynamic_cast<QMenu*>(factory()->container("windows", this));
+
+	if (menu) {
+		menu->addSeparator();
+		menu->addAction(m_toggleStatusBarAction);
+		menu->addSeparator();
+		menu->addAction(m_toggleProjectExplorerDockAction);
+		menu->addAction(m_togglePropertiesDockAction);
+	}
+
 	//menu in the main toolbar for adding new aspects
-	auto* menu = dynamic_cast<QMenu*>(factory()->container("new", this));
+	menu = dynamic_cast<QMenu*>(factory()->container("new", this));
 	menu->setIcon(QIcon::fromTheme("window-new"));
 
 	//menu in the project explorer and in the toolbar for adding new aspects

@@ -202,9 +202,10 @@ private:
 	QAction* m_newDatapickerAction;
 	QAction* m_editFitsFileAction;
 
-	//toggling doch widgets
+	//toggling doch widgets and the status bar
 	QAction* m_toggleProjectExplorerDockAction;
 	QAction* m_togglePropertiesDockAction;
+	QAction* m_toggleStatusBarAction;
 
 	//window visibility
 	QAction* m_visibilityFolderAction;
