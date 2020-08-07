@@ -2584,15 +2584,15 @@ void XYCurvePrivate::updateErrorBars() {
 
 			//draw the error bars
 			if (errorMinus != 0 || errorPlus != 0)
-				elines.append(QLineF(QPointF(point.x(), point.y() + errorMinus),
-									QPointF(point.x(), point.y() - errorPlus)));
+				elines.append(QLineF(QPointF(point.x(), point.y() + errorPlus),
+									QPointF(point.x(), point.y() - errorMinus)));
 
 			//determine the end points of the errors bars in logical coordinates to draw later the cap
 			if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
 				if (errorMinus != 0)
-					pointsErrorBarAnchorY << QPointF(point.x(), point.y() + errorMinus);
+					pointsErrorBarAnchorY << QPointF(point.x(), point.y() + errorPlus);
 				if (errorPlus != 0)
-					pointsErrorBarAnchorY << QPointF(point.x(), point.y() - errorPlus);
+					pointsErrorBarAnchorY << QPointF(point.x(), point.y() - errorMinus);
 			}
 		}
 	}
