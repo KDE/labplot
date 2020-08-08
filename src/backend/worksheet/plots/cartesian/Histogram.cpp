@@ -1721,7 +1721,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 
 	//Filling
 	writer->writeStartElement("filling");
-	writer->writeAttribute( "enalbed", QString::number(d->fillingEnabled) );
+	writer->writeAttribute( "enabled", QString::number(d->fillingEnabled) );
 	writer->writeAttribute( "type", QString::number(static_cast<int>(d->fillingType)) );
 	writer->writeAttribute( "colorStyle", QString::number(static_cast<int>(d->fillingColorStyle)) );
 	writer->writeAttribute( "imageStyle", QString::number(static_cast<int>(d->fillingImageStyle)) );
