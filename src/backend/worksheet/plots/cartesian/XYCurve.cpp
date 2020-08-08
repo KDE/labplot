@@ -2259,40 +2259,6 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 			|| (errorMinusColumn && i >= errorMinusColumn->rowCount()) )
 			continue;
 
-		//determine the values for the errors
-		double errorPlus, errorMinus;
-		if (errorPlusColumn && errorPlusColumn->isValid(i) && !errorPlusColumn->isMasked(i))
-			if (errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Numeric ||
-					errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Integer ||
-					errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
-				errorPlus = errorPlusColumn->valueAt(i);
-			else if (errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::DateTime ||
-					 errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Month ||
-					 errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Day)
-				errorPlus = errorPlusColumn->dateTimeAt(i).toMSecsSinceEpoch();
-			else
-				return false;
-		else
-			errorPlus = 0;
-
-		if (errorType == ErrorType::Symmetric)
-			errorMinus = errorPlus;
-		else {
-			if (errorMinusColumn && errorMinusColumn->isValid(i) && !errorMinusColumn->isMasked(i))
-				if (errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Numeric ||
-					errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Integer ||
-					errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
-					errorMinus = errorMinusColumn->valueAt(i);
-				else if (errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::DateTime ||
-						 errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Month ||
-						 errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Day)
-					errorMinus = errorMinusColumn->dateTimeAt(i).toMSecsSinceEpoch();
-				else
-					return false;
-			else
-				errorMinus = 0;
-		}
-
 		double value;
 		if (column1->columnMode() == AbstractColumn::ColumnMode::Numeric || column1->columnMode() == AbstractColumn::ColumnMode::Integer ||
 				column1->columnMode() == AbstractColumn::ColumnMode::BigInt)
@@ -2304,11 +2270,53 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 		} else
 			return false;
 
-		if (value - errorMinus < min)
-			min = value - errorMinus;
+		if (errorType == ErrorType::NoError) {
+			if (value < min)
+				min = value;
 
-		if (value + errorPlus > max)
-			max = value + errorPlus;
+			if (value > max)
+				max = value;
+		} else {
+			//determine the values for the errors
+			double errorPlus, errorMinus;
+			if (errorPlusColumn && errorPlusColumn->isValid(i) && !errorPlusColumn->isMasked(i))
+				if (errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Numeric ||
+						errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Integer ||
+						errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
+					errorPlus = errorPlusColumn->valueAt(i);
+				else if (errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::DateTime ||
+						errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Month ||
+						errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Day)
+					errorPlus = errorPlusColumn->dateTimeAt(i).toMSecsSinceEpoch();
+				else
+					return false;
+			else
+				errorPlus = 0;
+
+			if (errorType == ErrorType::Symmetric)
+				errorMinus = errorPlus;
+			else {
+				if (errorMinusColumn && errorMinusColumn->isValid(i) && !errorMinusColumn->isMasked(i))
+					if (errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Numeric ||
+						errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Integer ||
+						errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
+						errorMinus = errorMinusColumn->valueAt(i);
+					else if (errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::DateTime ||
+							errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Month ||
+							errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Day)
+						errorMinus = errorMinusColumn->dateTimeAt(i).toMSecsSinceEpoch();
+					else
+						return false;
+				else
+					errorMinus = 0;
+			}
+
+			if (value - errorMinus < min)
+				min = value - errorMinus;
+
+			if (value + errorPlus > max)
+				max = value + errorPlus;
+		}
 	}
 	return true;
 }

@@ -1809,28 +1809,19 @@ bool CartesianPlot::scaleAutoX() {
 	if (d->curvesXMinMaxIsDirty) {
 		calculateCurvesXMinMax(false);
 
-		//loop over all histograms and determine the maximum and minimum x-values
-		for (const auto* curve : this->children<const Histogram>()) {
-			if (!curve->isVisible())
-				continue;
-			if (!curve->dataColumn())
-				continue;
-
-			const double min = curve->getXMinimum();
-			if (min < d->curvesXMin)
-				d->curvesXMin = min;
-
-			const double max = curve->getXMaximum();
-			if (max > d->curvesXMax)
-				d->curvesXMax = max;
-		}
-
-		// do it at the end, because it must be from the real min/max values
+		/*
+		//take the size of the error bar cap into account if error bars with caps are plotted
 		double errorBarsCapSize = -1;
 		for (auto* curve : this->children<const XYCurve>()) {
-			if (curve->yErrorType() != XYCurve::ErrorType::NoError) {
+			if (curve->yErrorType() == XYCurve::ErrorType::NoError)
+				continue;
+
+			if (curve->errorBarsType() != XYCurve::ErrorBarsType::WithEnds)
+				continue;
+
+			if ( (curve->yErrorType() == XYCurve::ErrorType::Symmetric && curve->yErrorPlusColumn())
+				|| (curve->yErrorType() == XYCurve::ErrorType::Asymmetric && (curve->yErrorPlusColumn() && curve->yErrorMinusColumn())) )
 				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
-			}
 		}
 
 		if (errorBarsCapSize > 0) {
@@ -1851,7 +1842,7 @@ bool CartesianPlot::scaleAutoX() {
 			d->retransformScales();
 			setIsLoading(false);
 			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMin, 0), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			point.setX(point.x() - errorBarsCapSize);
+			point.setX(point.x() - errorBarsCapSize/2.);
 			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			// Problem is, when the scaling is not linear (for example log(x)) and the minimum is 0. In this
 			// case mapLogicalToScene returns (0,0) which is smaller than the curves minimum
@@ -1859,11 +1850,12 @@ bool CartesianPlot::scaleAutoX() {
 				d->curvesXMin = point.x();
 
 			point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMax, 0), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			point.setX(point.x() + errorBarsCapSize);
+			point.setX(point.x() + errorBarsCapSize/2.);
 			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (point.x() > d->curvesXMax)
 				d->curvesXMax = point.x();
 		}
+		*/
 		d->curvesYMinMaxIsDirty = true;
 		d->curvesXMinMaxIsDirty = false;
 	}
@@ -1906,26 +1898,19 @@ bool CartesianPlot::scaleAutoY() {
 	if (d->curvesYMinMaxIsDirty) {
 		calculateCurvesYMinMax(false); // loop over all curves
 
-		//loop over all histograms and determine the maximum y-value
-		for (const auto* curve : this->children<const Histogram>()) {
-			if (!curve->isVisible())
-				continue;
-
-			const double min = curve->getYMinimum();
-			if (d->curvesYMin > min)
-				d->curvesYMin = min;
-
-			const double max = curve->getYMaximum();
-			if (max > d->curvesYMax)
-				d->curvesYMax = max;
-		}
-
-		// do it at the end, because it must be from the real min/max values
+		/*
+		//take the size of the error bar cap into account if error bars with caps are plotted
 		double errorBarsCapSize = -1;
 		for (auto* curve : this->children<const XYCurve>()) {
-			if (curve->xErrorType() != XYCurve::ErrorType::NoError) {
+			if (curve->xErrorType() == XYCurve::ErrorType::NoError)
+				continue;
+
+			if (curve->errorBarsType() != XYCurve::ErrorBarsType::WithEnds)
+				continue;
+
+			if ( (curve->xErrorType() == XYCurve::ErrorType::Symmetric && curve->xErrorPlusColumn())
+				|| (curve->xErrorType() == XYCurve::ErrorType::Asymmetric && (curve->xErrorPlusColumn() && curve->xErrorMinusColumn())) )
 				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
-			}
 		}
 
 		if (errorBarsCapSize > 0) {
@@ -1949,6 +1934,7 @@ bool CartesianPlot::scaleAutoY() {
 			if (point.y() > d->curvesYMax)
 				d->curvesYMax = point.y();
 		}
+		*/
 
 		d->curvesXMinMaxIsDirty = true;
 		d->curvesYMinMaxIsDirty = false;
@@ -2003,11 +1989,20 @@ bool CartesianPlot::scaleAuto() {
 
 	if (d->curvesXMinMaxIsDirty) {
 		calculateCurvesXMinMax();
+
+		/*
+		//take the size of the error bar cap into account if error bars with caps are plotted
 		double errorBarsCapSize = -1;
 		for (auto* curve : this->children<const XYCurve>()) {
-			if (curve->yErrorType() != XYCurve::ErrorType::NoError) {
+			if (curve->yErrorType() == XYCurve::ErrorType::NoError)
+				continue;
+
+			if (curve->errorBarsType() != XYCurve::ErrorBarsType::WithEnds)
+				continue;
+
+			if ( (curve->yErrorType() == XYCurve::ErrorType::Symmetric && curve->yErrorPlusColumn())
+				|| (curve->yErrorType() == XYCurve::ErrorType::Asymmetric && (curve->yErrorPlusColumn() && curve->yErrorMinusColumn())) )
 				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
-			}
 		}
 
 		if (errorBarsCapSize > 0) {
@@ -2031,16 +2026,26 @@ bool CartesianPlot::scaleAuto() {
 			if (point.x() > d->curvesXMax)
 				d->curvesXMax = point.x();
 		}
+		*/
 		d->curvesXMinMaxIsDirty = false;
 	}
 
 	if (d->curvesYMinMaxIsDirty) {
 		calculateCurvesYMinMax();
+
+		/*
+		//take the size of the error bar cap into account if error bars with caps are plotted
 		double errorBarsCapSize = -1;
 		for (auto* curve : this->children<const XYCurve>()) {
-			if (curve->xErrorType() != XYCurve::ErrorType::NoError) {
+			if (curve->xErrorType() == XYCurve::ErrorType::NoError)
+				continue;
+
+			if (curve->errorBarsType() != XYCurve::ErrorBarsType::WithEnds)
+				continue;
+
+			if ( (curve->xErrorType() == XYCurve::ErrorType::Symmetric && curve->xErrorPlusColumn())
+				|| (curve->xErrorType() == XYCurve::ErrorType::Asymmetric && (curve->xErrorPlusColumn() && curve->xErrorMinusColumn())) )
 				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
-			}
 		}
 
 		if (errorBarsCapSize > 0) {
@@ -2064,6 +2069,7 @@ bool CartesianPlot::scaleAuto() {
 			if (point.y() > d->curvesYMax)
 				d->curvesYMax = point.y();
 		}
+		*/
 		d->curvesYMinMaxIsDirty = false;
 	}
 
