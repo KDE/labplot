@@ -182,13 +182,13 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 }
 
 MainWin::~MainWin() {
-	//save the recent opened files
+	//save the current settings in MainWin
 	m_recentProjectsAction->saveEntries( KSharedConfig::openConfig()->group("Recent Files") );
 	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");
-	group.writeEntry("geometry", saveGeometry());
-	KSharedConfig::openConfig()->sync();
-
+	group.writeEntry(QLatin1String("geometry"), saveGeometry());
+	group.writeEntry(QLatin1String("windowState"), saveState());
 	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
+	KSharedConfig::openConfig()->sync();
 
 	//if welcome screen is shown, save its settings prior to deleting it
 // 	if(dynamic_cast<QQuickWidget*>(centralWidget()))
@@ -1135,7 +1135,7 @@ bool MainWin::newProject() {
 	m_currentAspect = m_project;
 	m_currentFolder = m_project;
 
-	KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
+	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	Project::MdiWindowVisibility vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
 	m_project->setMdiWindowVisibility( vis );
 	if (vis == Project::MdiWindowVisibility::folderOnly)
@@ -1151,10 +1151,11 @@ bool MainWin::newProject() {
 	//newProject is called for the first time, there is no project explorer yet
 	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
 	if (m_projectExplorer == nullptr) {
+		group = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
+
 		m_projectExplorerDock = new QDockWidget(this);
 		m_projectExplorerDock->setObjectName("projectexplorer");
 		m_projectExplorerDock->setWindowTitle(i18nc("@title:window", "Project Explorer"));
-		addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
 
 		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
 		m_projectExplorerDock->setWidget(m_projectExplorer);
@@ -1166,7 +1167,14 @@ bool MainWin::newProject() {
 		m_propertiesDock = new QDockWidget(this);
 		m_propertiesDock->setObjectName("aspect_properties_dock");
 		m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
-		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
+
+		//restore the position of the dock widgets
+		if (group.keyList().indexOf("windowState") != -1)
+			restoreState(group.readEntry("windowState", QByteArray()));
+		else {
+			addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
+			addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
+		}
 
 		auto* sa = new QScrollArea(m_propertiesDock);
 		stackedWidget = new QStackedWidget(sa);
