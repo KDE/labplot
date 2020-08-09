@@ -145,7 +145,6 @@ private:
 	bool m_projectClosing{false};
 	bool m_autoSaveActive{false};
 	QTimer m_autoSaveTimer;
-	bool m_showMemoryInfo{true};
 	bool m_showWelcomeScreen{false};
 	bool m_saveWelcomeScreen{true};
 	MemoryWidget* m_memoryInfoWidget{nullptr};
@@ -206,6 +205,7 @@ private:
 	QAction* m_toggleProjectExplorerDockAction;
 	QAction* m_togglePropertiesDockAction;
 	QAction* m_toggleStatusBarAction;
+	QAction* m_toggleMemoryInfoAction;
 
 	//window visibility
 	QAction* m_visibilityFolderAction;
@@ -342,6 +342,8 @@ private slots:
 	void setMdiWindowVisibility(QAction*);
 	void updateMdiWindowVisibility() const;
 	void toggleDockWidget(QAction*);
+	void toggleStatusBar();
+	void toggleMemoryInfo();
 	void toggleFullScreen();
 	void projectExplorerDockVisibilityChanged(bool);
 	void propertiesDockVisibilityChanged(bool);

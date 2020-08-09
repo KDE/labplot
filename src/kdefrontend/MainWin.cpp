@@ -173,21 +173,17 @@ MainWin::MainWin(QWidget *parent, const QString& filename)
 	m_userFeedbackProvider.addDataSource(new KUserFeedback::StartCountSource);
 	m_userFeedbackProvider.addDataSource(new KUserFeedback::UsageTimeSource);
 #endif
-
-	//restore the geometry
-	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");
-	restoreGeometry(group.readEntry("geometry", QByteArray()));
-
-	m_lastOpenFileFilter = group.readEntry(QLatin1String("lastOpenFileFilter"), QString());
 }
 
 MainWin::~MainWin() {
 	//save the current settings in MainWin
 	m_recentProjectsAction->saveEntries( KSharedConfig::openConfig()->group("Recent Files") );
+
 	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");
 	group.writeEntry(QLatin1String("geometry"), saveGeometry());
-	group.writeEntry(QLatin1String("windowState"), saveState());
+	group.writeEntry(QLatin1String("WindowState"), saveState());
 	group.writeEntry(QLatin1String("lastOpenFileFilter"), m_lastOpenFileFilter);
+	group.writeEntry(QLatin1String("ShowMemoryInfo"), (m_memoryInfoWidget != nullptr));
 	KSharedConfig::openConfig()->sync();
 
 	//if welcome screen is shown, save its settings prior to deleting it
@@ -363,12 +359,27 @@ void MainWin::initGUI(const QString& fileName) {
 		}
 	}
 
+	//read the settings of MainWin
+	const KConfigGroup& groupMainWin = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
+
+	//status bar
+	bool visible = groupMainWin.readEntry(QLatin1String("ShowStatusBar"), true);
+	statusBar()->setVisible(visible);
+	m_toggleStatusBarAction->setChecked(visible);
+	m_toggleMemoryInfoAction->setEnabled(visible);
+
 	//show memory info
-	const bool showMemoryInfo = group.readEntry(QLatin1String("ShowMemoryInfo"), true);
-	if (showMemoryInfo) {
+	visible = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
+	if (visible) {
 		m_memoryInfoWidget = new MemoryWidget(statusBar());
 		statusBar()->addPermanentWidget(m_memoryInfoWidget);
 	}
+	m_toggleMemoryInfoAction->setChecked(visible);
+
+	//restore the geometry
+	restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
+
+	m_lastOpenFileFilter = groupMainWin.readEntry(QLatin1String("lastOpenFileFilter"), QString());
 }
 
 /**
@@ -648,9 +659,13 @@ void MainWin::initActions() {
 	m_toggleStatusBarAction = new QAction(i18n("Show Status Bar"));
 	m_toggleStatusBarAction->setCheckable(true);
 	m_toggleStatusBarAction->setChecked(true);
-	connect(m_toggleStatusBarAction, &QAction::triggered, this, [=]() {
-		statusBar()->setVisible(!statusBar()->isVisible());
-	});
+	connect(m_toggleStatusBarAction, &QAction::triggered, this, &MainWin::toggleStatusBar);
+
+	//show/hide the status bar
+	m_toggleMemoryInfoAction = new QAction(i18n("Show Memory Usage"));
+	m_toggleMemoryInfoAction->setCheckable(true);
+	m_toggleMemoryInfoAction->setChecked(true);
+	connect(m_toggleMemoryInfoAction, &QAction::triggered, this, &MainWin::toggleMemoryInfo);
 
 	//Actions for hiding/showing the dock widgets
 	auto* docksActions = new QActionGroup(this);
@@ -695,6 +710,8 @@ void MainWin::initMenus() {
 	if (menu) {
 		menu->addSeparator();
 		menu->addAction(m_toggleStatusBarAction);
+		menu->addSeparator();
+		menu->addAction(m_toggleMemoryInfoAction);
 		menu->addSeparator();
 		menu->addAction(m_toggleProjectExplorerDockAction);
 		menu->addAction(m_togglePropertiesDockAction);
@@ -1169,8 +1186,8 @@ bool MainWin::newProject() {
 		m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
 
 		//restore the position of the dock widgets
-		if (group.keyList().indexOf("windowState") != -1)
-			restoreState(group.readEntry("windowState", QByteArray()));
+		if (group.keyList().indexOf("WindowState") != -1)
+			restoreState(group.readEntry("WindowState", QByteArray()));
 		else {
 			addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
 			addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
@@ -2073,6 +2090,26 @@ void MainWin::toggleDockWidget(QAction* action)  {
 	}
 }
 
+void MainWin::toggleStatusBar() {
+	statusBar()->setVisible(!statusBar()->isVisible());
+	m_toggleMemoryInfoAction->setEnabled(statusBar()->isVisible());
+
+	//show the current setting here because in the desctuctor the status bar is not visible anymore
+	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");
+	group.writeEntry(QLatin1String("ShowStatusBar"), statusBar()->isVisible());
+}
+
+void MainWin::toggleMemoryInfo() {
+	if (m_memoryInfoWidget) {
+		statusBar()->removeWidget(m_memoryInfoWidget);
+		delete m_memoryInfoWidget;
+		m_memoryInfoWidget = nullptr;
+	} else {
+		m_memoryInfoWidget = new MemoryWidget(statusBar());
+		statusBar()->addPermanentWidget(m_memoryInfoWidget);
+	}
+}
+
 void MainWin::propertiesExplorerRequested() {
 	if (!m_propertiesDock->isVisible())
 		m_propertiesDock->show();
@@ -2274,22 +2311,6 @@ void MainWin::handleSettingsChanges() {
 	interval *= 60*1000;
 	if (interval != m_autoSaveTimer.interval())
 		m_autoSaveTimer.setInterval(interval);
-
-	//show memory info
-	bool showMemoryInfo = group.readEntry(QLatin1String("ShowMemoryInfo"), true);
-	if (m_showMemoryInfo != showMemoryInfo) {
-		m_showMemoryInfo = showMemoryInfo;
-		if (showMemoryInfo) {
-			m_memoryInfoWidget = new MemoryWidget(statusBar());
-			statusBar()->addPermanentWidget(m_memoryInfoWidget);
-		} else {
-			if (m_memoryInfoWidget) {
-				statusBar()->removeWidget(m_memoryInfoWidget);
-				delete m_memoryInfoWidget;
-				m_memoryInfoWidget = nullptr;
-			}
-		}
-	}
 
 	//update the locale and the units in the dock widgets
 	if (stackedWidget) {

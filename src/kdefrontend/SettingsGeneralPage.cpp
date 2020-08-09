@@ -50,7 +50,6 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	connect(ui.cbUnits, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbDecimalSeparator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::stateChanged, this, &SettingsGeneralPage::autoSaveChanged);
-	connect(ui.chkMemoryInfo, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
@@ -116,7 +115,6 @@ void SettingsGeneralPage::applySettings() {
 		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(decimalSeparatorLocale()));
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
-	group.writeEntry(QLatin1String("ShowMemoryInfo"), ui.chkMemoryInfo->isChecked());
 }
 
 void SettingsGeneralPage::restoreDefaults() {
@@ -130,7 +128,6 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkAutoSave->setChecked(false);
 	ui.sbAutoSaveInterval->setValue(0);
 	ui.sbAutoSaveInterval->setValue(5);
-	ui.chkMemoryInfo->setChecked(true);
 }
 
 void SettingsGeneralPage::loadSettings() {
@@ -148,7 +145,6 @@ void SettingsGeneralPage::loadSettings() {
 		ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(decimalSeparator(locale)) );
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
-	ui.chkMemoryInfo->setChecked(group.readEntry<bool>(QLatin1String("ShowMemoryInfo"), true));
 }
 
 void SettingsGeneralPage::retranslateUi() {
