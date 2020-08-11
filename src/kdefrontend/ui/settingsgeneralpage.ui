@@ -7,10 +7,70 @@
     <x>0</x>
     <y>0</y>
     <width>613</width>
-    <height>387</height>
+    <height>399</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="9" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>156</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lDecimalSeparator">
+     <property name="text">
+      <string>Decimal separator:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="KComboBox" name="cbLoadOnStart"/>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QLabel" name="lMdiVisibility">
+     <property name="text">
+      <string>Sub-window visibility:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QComboBox" name="cbTitleBar"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lTabPosition">
+     <property name="text">
+      <string>Tab position:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3">
+    <widget class="QComboBox" name="cbUnits"/>
+   </item>
+   <item row="4" column="3">
+    <widget class="KComboBox" name="cbMdiVisibility"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lTitleBar">
+     <property name="text">
+      <string>Title Bar:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="lUnits">
+     <property name="text">
+      <string>Units:</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
@@ -34,58 +94,8 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="3">
-    <widget class="KComboBox" name="cbLoadOnStart"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lTitleBar">
-     <property name="text">
-      <string>Title Bar:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QComboBox" name="cbTitleBar"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lInterface">
-     <property name="text">
-      <string>Interface:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="3">
-    <widget class="KComboBox" name="cbInterface"/>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lTabPosition">
-     <property name="text">
-      <string>Tab position:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3">
-    <widget class="KComboBox" name="cbTabPosition"/>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="lMdiVisibility">
-     <property name="text">
-      <string>Sub-window visibility:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="3">
-    <widget class="KComboBox" name="cbMdiVisibility"/>
-   </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="lUnits">
-     <property name="text">
-      <string>Units:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="3">
-    <widget class="QComboBox" name="cbUnits"/>
+   <item row="6" column="3">
+    <widget class="QComboBox" name="cbDecimalSeparator"/>
    </item>
    <item row="7" column="1">
     <spacer name="verticalSpacer_2">
@@ -103,6 +113,19 @@
      </property>
     </spacer>
    </item>
+   <item row="2" column="3">
+    <widget class="KComboBox" name="cbInterface"/>
+   </item>
+   <item row="3" column="3">
+    <widget class="KComboBox" name="cbTabPosition"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lInterface">
+     <property name="text">
+      <string>Interface:</string>
+     </property>
+    </widget>
+   </item>
    <item row="8" column="0">
     <widget class="QLabel" name="lAutoSave">
      <property name="text">
@@ -119,7 +142,16 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -177,43 +209,6 @@
       </item>
      </layout>
     </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="lMemoryInfo">
-     <property name="text">
-      <string>Show memory info:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="3">
-    <widget class="QCheckBox" name="chkMemoryInfo">
-     <property name="text">
-      <string>Enabled</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>156</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lDecimalSeparator">
-     <property name="text">
-      <string>Decimal separator:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="3">
-    <widget class="QComboBox" name="cbDecimalSeparator"/>
    </item>
   </layout>
  </widget>
