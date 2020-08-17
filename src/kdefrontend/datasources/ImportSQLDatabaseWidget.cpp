@@ -300,6 +300,9 @@ void ImportSQLDatabaseWidget::connectionChanged() {
 	} else
 		setInvalid();
 
+	//show the last used query
+	ui.teQuery->setText(group.readEntry("Query"));
+
 	RESET_CURSOR;
 }
 
@@ -311,6 +314,15 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 	WAIT_CURSOR;
 	ui.twPreview->clear();
+
+	bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
+
+	//save the last used custom query
+	if (customQuery) {
+		KConfig config(m_configPath, KConfig::SimpleConfig);
+		KConfigGroup group = config.group(ui.cbConnection->currentText());
+		group.writeEntry("Query", ui.teQuery->toPlainText().simplified());
+	}
 
 	//execute the current query (select on a table or a custom query)
 	const QString& query = currentQuery(true);
@@ -374,7 +386,6 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	}
 
 	//preview the data
-	const bool customQuery = (ui.cbImportFrom->currentIndex() != 0);
 	int row = 0;
 	do {
 		for (int col = 0; col < m_cols; ++col) {
