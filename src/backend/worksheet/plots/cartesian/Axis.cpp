@@ -1539,7 +1539,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	DEBUG(Q_FUNC_INFO << ", precision =" << precision);
 
 	// avoid problems with zero range axis
-	if (qFuzzyCompare(tickLabelValues.constFirst(), tickLabelValues.constLast())) {
+	if (tickLabelValues.isEmpty() || qFuzzyCompare(tickLabelValues.constFirst(), tickLabelValues.constLast())) {
 		DEBUG(Q_FUNC_INFO << ", zero range axis detected. ticklabel values: ")
 		QDEBUG(Q_FUNC_INFO << tickLabelValues)
 		return 0;
