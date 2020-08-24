@@ -181,7 +181,7 @@ void AsciiOptionsWidget::loadSettings() const {
 	int index = (decimalSeparator == '.') ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(conf.readEntry("DecimalSeparator", index));
 
-	ui.cbDateTimeFormat->setCurrentItem(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
+	ui.cbDateTimeFormat->setCurrentText(conf.readEntry("DateTimeFormat", "yyyy-MM-dd hh:mm:ss.zzz"));
 	ui.chbCreateIndex->setChecked(conf.readEntry("CreateIndex", false));
 	ui.chbCreateTimestamp->setChecked(conf.readEntry("CreateTimestamp", true));
 	ui.chbSimplifyWhitespaces->setChecked(conf.readEntry("SimplifyWhitespaces", true));

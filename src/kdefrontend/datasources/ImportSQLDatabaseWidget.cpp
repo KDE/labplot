@@ -164,9 +164,8 @@ void ImportSQLDatabaseWidget::loadSettings() {
 	int index = (decimalSeparator == '.') ? 0 : 1;
 	ui.cbDecimalSeparator->setCurrentIndex(config.readEntry("DecimalSeparator", index));
 
-	ui.cbDateTimeFormat->setCurrentItem(config.readEntry("DateTimeFormat", "yyyy-dd-MM hh:mm:ss:zzz"));
-	QList<int> defaultSizes;
-	defaultSizes << 100 << 100;
+	ui.cbDateTimeFormat->setCurrentText(config.readEntry("DateTimeFormat", "yyyy-dd-MM hh:mm:ss:zzz"));
+	QList<int> defaultSizes{100, 100};
 	ui.splitterMain->setSizes(config.readEntry("SplitterMainSizes", defaultSizes));
 	ui.splitterPreview->setSizes(config.readEntry("SplitterPreviewSizes", defaultSizes));
 	//TODO
