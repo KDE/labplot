@@ -1218,11 +1218,9 @@ void CartesianPlotDock::fileNameChanged() {
 	if (m_initializing)
 		return;
 
-	QString fileName = ui.leBackgroundFileName->text();
-	if (!fileName.isEmpty() && !QFile::exists(fileName))
-		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leBackgroundFileName->setStyleSheet(QString());
+	const QString& fileName = ui.leBackgroundFileName->text();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leBackgroundFileName, invalid);
 
 	for (auto* plot : m_plotList)
 		plot->plotArea()->setBackgroundFileName(fileName);
@@ -1778,10 +1776,9 @@ void CartesianPlotDock::load() {
 	ui.sbBackgroundOpacity->setValue( round(m_plot->plotArea()->backgroundOpacity()*100.0) );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
-	if (!m_plot->plotArea()->backgroundFileName().isEmpty() && !QFile::exists(m_plot->plotArea()->backgroundFileName()))
-		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leBackgroundFileName->setStyleSheet(QString());
+	const QString& fileName = m_plot->plotArea()->backgroundFileName();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leBackgroundFileName, invalid);
 
 	//Padding
 	ui.sbPaddingHorizontal->setValue( Worksheet::convertFromSceneUnits(m_plot->horizontalPadding(), m_worksheetUnit) );

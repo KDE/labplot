@@ -28,6 +28,8 @@ Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
 *                                                                         *
 ***************************************************************************/
 #include "LiveDataDock.h"
+#include "kdefrontend/GuiTools.h"
+
 #include <QCompleter>
 #include <QFile>
 #include <QStandardItemModel>
@@ -270,13 +272,12 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	ui.cbReadingType->setCurrentIndex(static_cast<int>(readingType));
 
 	switch (sourceType) {
-	case LiveDataSource::SourceType::FileOrPipe:
+	case LiveDataSource::SourceType::FileOrPipe: {
 		ui.leSourceInfo->setText(source->fileName());
-		if (QFile::exists(source->fileName()))
-			ui.leSourceInfo->setStyleSheet(QString());
-		else
-			ui.leSourceInfo->setStyleSheet("QLineEdit{background:red;}");
+		bool invalid = !QFile::exists(source->fileName());
+		GuiTools::highlight(ui.leSourceInfo, invalid);
 		break;
+	}
 	case LiveDataSource::SourceType::NetworkTcpSocket:
 	case LiveDataSource::SourceType::NetworkUdpSocket:
 		ui.leSourceInfo->setText(QStringLiteral("%1:%2").arg(source->host()).arg(source->port()));

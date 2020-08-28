@@ -442,11 +442,9 @@ void DatapickerImageWidget::fileNameChanged() {
 
 	handleWidgetActions();
 
-	QString fileName = ui.leFileName->text();
-	if (!fileName.isEmpty() && !QFile::exists(fileName))
-		ui.leFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leFileName->setStyleSheet(QString());
+	const QString& fileName = ui.leFileName->text();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leFileName, invalid);
 
 	for (auto* image : m_imagesList)
 		image->setFileName(fileName);
@@ -874,10 +872,9 @@ void DatapickerImageWidget::load() {
 	ui.leFileName->setText( m_image->fileName() );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
-	if (!m_image->fileName().isEmpty() && !QFile::exists(m_image->fileName()))
-		ui.leFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leFileName->setStyleSheet(QString());
+	const QString& fileName = m_image->fileName();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leFileName, invalid);
 
 	ui.cbGraphType->setCurrentIndex((int) m_image->axisPoints().type);
 	ui.sbTernaryScale->setValue(m_image->axisPoints().ternaryScale);

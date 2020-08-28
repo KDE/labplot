@@ -33,6 +33,7 @@
 #ifdef HAVE_LIBORIGIN
 #include "backend/datasources/projects/OriginProjectParser.h"
 #endif
+#include "kdefrontend/GuiTools.h"
 #include "kdefrontend/MainWin.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
@@ -409,10 +410,7 @@ void ImportProjectDialog::fileNameChanged(const QString& name) {
 		fileName = QDir::homePath() + QLatin1String("/") + fileName;
 
 	bool fileExists = QFile::exists(fileName);
-	if (fileExists)
-		ui.leFileName->setStyleSheet(QString());
-	else
-		ui.leFileName->setStyleSheet("QLineEdit{background:red;}");
+	GuiTools::highlight(ui.leFileName, !fileExists);
 
 	if (!fileExists) {
 		//file doesn't exist -> delete the content preview that is still potentially

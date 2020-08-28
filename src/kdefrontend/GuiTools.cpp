@@ -33,6 +33,7 @@
 #include <array>
 #include <QApplication>
 #include <QComboBox>
+#include <QLineEdit>
 #include <QMenu>
 #include <QColor>
 #include <QPainter>
@@ -229,3 +230,10 @@ QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
 // 	QRect rect = img.rect().adjusted(1,1,-1,-1);
 // 	p.fillRect(rect, Qt::red);
 // 	comboBox->setItemData(0, QPixmap::fromImage(img), Qt::DecorationRole);
+
+void GuiTools::highlight(QLineEdit* le, bool invalid) {
+	if (invalid)
+		le->setStyleSheet(QStringLiteral("QLineEdit{color:red;}"));
+	else
+		le->setStyleSheet(QString());
+}

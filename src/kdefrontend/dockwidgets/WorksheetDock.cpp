@@ -773,11 +773,9 @@ void WorksheetDock::fileNameChanged() {
 	if (m_initializing)
 		return;
 
-	QString fileName = ui.leBackgroundFileName->text();
-	if (!fileName.isEmpty() && !QFile::exists(fileName))
-		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leBackgroundFileName->setStyleSheet(QString());
+	const QString& fileName = ui.leBackgroundFileName->text();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leBackgroundFileName, invalid);
 
 	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundFileName(fileName);
@@ -935,10 +933,9 @@ void WorksheetDock::load() {
 	ui.sbBackgroundOpacity->setValue( qRound(m_worksheet->backgroundOpacity()*100) );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
-	if (!m_worksheet->backgroundFileName().isEmpty() && !QFile::exists(m_worksheet->backgroundFileName()))
-		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leBackgroundFileName->setStyleSheet(QString());
+	const QString& fileName = m_worksheet->backgroundFileName();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leBackgroundFileName, invalid);
 
 	// Layout
 	ui.cbLayout->setCurrentIndex( (int) m_worksheet->layout() );

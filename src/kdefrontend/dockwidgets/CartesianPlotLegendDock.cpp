@@ -653,11 +653,9 @@ void CartesianPlotLegendDock::fileNameChanged() {
 	if (m_initializing)
 		return;
 
-	QString fileName = ui.leBackgroundFileName->text();
-	if (!fileName.isEmpty() && !QFile::exists(fileName))
-		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leBackgroundFileName->setStyleSheet("");
+	const QString& fileName = ui.leBackgroundFileName->text();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leBackgroundFileName, invalid);
 
 	for (auto* legend : m_legendList)
 		legend->setBackgroundFileName(fileName);
@@ -1020,10 +1018,9 @@ void CartesianPlotLegendDock::load() {
 	ui.sbBackgroundOpacity->setValue( qRound(m_legend->backgroundOpacity()*100.0) );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
-	if (!m_legend->backgroundFileName().isEmpty() && !QFile::exists(m_legend->backgroundFileName()))
-		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leBackgroundFileName->setStyleSheet("");
+	const QString& fileName = m_legend->backgroundFileName();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leBackgroundFileName, invalid);
 
 	//Border
 	ui.kcbBorderColor->setColor( m_legend->borderPen().color() );

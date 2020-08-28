@@ -275,11 +275,9 @@ void ImageDock::fileNameChanged() {
 	if (m_initializing)
 		return;
 
-	QString fileName = ui.leFileName->text();
-	if (!fileName.isEmpty() && !QFile::exists(fileName))
-		ui.leFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leFileName->setStyleSheet(QString());
+	const QString& fileName = ui.leFileName->text();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leFileName, invalid);
 
 	for (auto* image : m_imageList)
 		image->setFileName(fileName);

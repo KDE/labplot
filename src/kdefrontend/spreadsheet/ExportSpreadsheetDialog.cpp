@@ -30,6 +30,7 @@
 #include "ui_exportspreadsheetwidget.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <QCompleter>
 #include <QDirModel>
@@ -539,12 +540,12 @@ void ExportSpreadsheetDialog::fileNameChanged(const QString& name) {
 	int pos = path.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		QString dir = path.left(pos);
-		if (!QDir(dir).exists()) {
-			ui->leFileName->setStyleSheet("QLineEdit{background:red;}");
+		bool invalid = !QDir(dir).exists();
+		GuiTools::highlight(ui->leFileName, invalid);
+		if (invalid) {
 			m_okButton->setEnabled(false);
 			return;
-		} else
-			ui->leFileName->setStyleSheet(QString());
+		}
 	}
 
 	m_okButton->setEnabled(true);

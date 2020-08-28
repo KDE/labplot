@@ -28,6 +28,7 @@ Copyright            : (C) 2017-2018 Alexander Semke (alexander.semke@web.de)
 
 #include "DatabaseManagerWidget.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -152,7 +153,7 @@ void DatabaseManagerWidget::nameChanged(const QString& name) {
 	}
 
 	if (unique) {
-		ui.leName->setStyleSheet(QString());
+		GuiTools::highlight(ui.leName, false);
 		if (auto item = ui.lwConnections->currentItem()) {
 			item->setText(name);
 
@@ -162,7 +163,7 @@ void DatabaseManagerWidget::nameChanged(const QString& name) {
 			}
 		}
 	} else
-		ui.leName->setStyleSheet("QLineEdit{background: red;}");
+		GuiTools::highlight(ui.leName, true);
 }
 
 void DatabaseManagerWidget::driverChanged() {
@@ -279,10 +280,7 @@ void DatabaseManagerWidget::databaseNameChanged() {
 
 		if (!dbName.isEmpty()) {
 			bool fileExists = QFile::exists(dbName);
-			if (fileExists)
-				ui.leDatabase->setStyleSheet(QString());
-			else
-				ui.leDatabase->setStyleSheet(QStringLiteral("QLineEdit{background:red;}"));
+			GuiTools::highlight(ui.leName, !fileExists);
 		} else {
 			ui.leDatabase->setStyleSheet(QString());
 		}
