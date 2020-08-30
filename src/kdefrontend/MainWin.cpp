@@ -787,8 +787,7 @@ void MainWin::initMenus() {
 
 	//set the action for the current color scheme checked
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-#if KCONFIGWIDGETS_VERSION > QT_VERSION_CHECK(5,67,0)
-	// Since version 5.67 KColorSchemeManager has a system default option
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0)	// KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
 #else
 	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
