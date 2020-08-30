@@ -221,7 +221,7 @@ SET_PACKAGE_PROPERTIES(Cantor PROPERTIES
 	URL "https://edu.kde.org/cantor/"
 )
 IF (Cantor_FOUND)
-	MESSAGE (STATUS "Found Cantor Library")
+	MESSAGE (STATUS "Found Cantor Library ${Cantor_VERSION}")
 
 	IF (${Cantor_VERSION} VERSION_GREATER "19.11")
 		add_definitions (-DHAVE_CANTOR_LIBS)
