@@ -2207,6 +2207,8 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("eps", QString::number(d->fitData.eps, 'g', 15));
 	writer->writeAttribute("evaluatedPoints", QString::number(d->fitData.evaluatedPoints));
 	writer->writeAttribute("autoEvalRange", QString::number(d->fitData.autoEvalRange));
+	writer->writeAttribute("evalRangeMin", QString::number(d->fitData.evalRange.min(), 'g', 15));
+	writer->writeAttribute("evalRangeMax", QString::number(d->fitData.evalRange.max(), 'g', 15));
 	writer->writeAttribute("useDataErrors", QString::number(d->fitData.useDataErrors));
 	writer->writeAttribute("useResults", QString::number(d->fitData.useResults));
 	writer->writeAttribute("previewEnabled", QString::number(d->fitData.previewEnabled));
@@ -2353,6 +2355,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("evaluatedPoints", fitData.evaluatedPoints, size_t);
 			READ_INT_VALUE("evaluateFullRange", fitData.autoEvalRange, bool);	// old name
 			READ_INT_VALUE("autoEvalRange", fitData.autoEvalRange, bool);
+			READ_DOUBLE_VALUE("evalRangeMin", fitData.evalRange.min());
+			READ_DOUBLE_VALUE("evalRangeMax", fitData.evalRange.max());
 			READ_INT_VALUE("useDataErrors", fitData.useDataErrors, bool);
 			READ_INT_VALUE("useResults", fitData.useResults, bool);
 			READ_INT_VALUE("previewEnabled", fitData.previewEnabled, bool);
