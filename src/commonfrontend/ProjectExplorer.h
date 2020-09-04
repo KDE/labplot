@@ -51,6 +51,7 @@ class ProjectExplorer : public QWidget {
 
 public:
 	explicit ProjectExplorer(QWidget* parent = nullptr);
+	~ProjectExplorer() override;
 
 	void setCurrentAspect(const AbstractAspect*);
 	void setModel(AspectTreeModel*);

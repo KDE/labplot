@@ -47,6 +47,9 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -105,6 +108,20 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) :
 
 	connect(m_leFilter, &QLineEdit::textChanged, this, &ProjectExplorer::filterTextChanged);
 	connect(bFilterOptions, &QPushButton::toggled, this, &ProjectExplorer::toggleFilterOptionsMenu);
+}
+
+ProjectExplorer::~ProjectExplorer() {
+	// save the visible columns
+	QString status;
+	for (int i = 0; i < list_showColumnActions.size(); ++i) {
+		if (list_showColumnActions.at(i)->isChecked()) {
+			if (!status.isEmpty())
+				status += QLatin1Char(' ');
+			status += QString::number(i);
+		}
+	}
+	KConfigGroup group(KSharedConfig::openConfig(), QLatin1String("ProjectExplorer"));
+	group.writeEntry("VisibleColumns", status);
 }
 
 void ProjectExplorer::createActions() {
@@ -222,11 +239,39 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 
 	//create action for showing/hiding the columns in the tree.
 	//this is done here since the number of columns is  not available in createActions() yet.
-	if (list_showColumnActions.size() == 0) {
+	if (list_showColumnActions.isEmpty()) {
+		//read the status of the column actions if available
+		KConfigGroup group(KSharedConfig::openConfig(), QLatin1String("ProjectExplorer"));
+		const QString& status = group.readEntry(QLatin1String("VisibleColumns"), QString());
+		QVector<int> checkedActions;
+		if (!status.isEmpty()) {
+			QStringList strList = status.split(QLatin1Char(' '));
+			for (int i = 0; i < strList.size(); ++i)
+				checkedActions << strList.at(i).toInt();
+		}
+
+		if (checkedActions.size() != m_treeView->model()->columnCount()) {
+			showAllColumnsAction->setEnabled(true);
+			showAllColumnsAction->setChecked(false);
+		} else {
+			showAllColumnsAction->setEnabled(false);
+			showAllColumnsAction->setChecked(true);
+		}
+
+		//create an action for every available column in the model
 		for (int i = 0; i < m_treeView->model()->columnCount(); i++) {
 			QAction* showColumnAction =  new QAction(treeModel->headerData(i, Qt::Horizontal).toString(), this);
 			showColumnAction->setCheckable(true);
-			showColumnAction->setChecked(true);
+
+			//restore the status, if available
+			if (!checkedActions.isEmpty()) {
+				if (checkedActions.indexOf(i) != -1)
+					showColumnAction->setChecked(true);
+				else
+					m_treeView->hideColumn(i);
+			} else
+				showColumnAction->setChecked(true);
+
 			list_showColumnActions.append(showColumnAction);
 
 			connect(showColumnAction, &QAction::triggered,
