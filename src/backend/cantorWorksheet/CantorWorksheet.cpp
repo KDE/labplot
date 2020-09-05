@@ -46,6 +46,7 @@
 #endif
 
 #include <QAction>
+#include <QFileInfo>
 #include <QModelIndex>
 
 #include <KLocalizedString>
@@ -209,6 +210,14 @@ QWidget* CantorWorksheet::view() const {
 		m_view->setBaseSize(1500, 1500);
 		m_partView = m_view;
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
+
+		//set the current path in the session to the path of the project file
+		const Project* project = const_cast<CantorWorksheet*>(this)->project();
+		const QString& fileName = project->fileName();
+		if (!fileName.isEmpty()) {
+			QFileInfo fi(fileName);
+			m_session->setWorksheetPath(fi.filePath());
+		}
 	}
 	return m_partView;
 }
