@@ -32,10 +32,12 @@ Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
-
+#include <QDebug>
 void JsonFilterTest::initTestCase() {
 	const QString currentDir = __FILE__;
+	qDebug()<<"current directory " << currentDir;
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
+	qDebug()<<"data directory " << m_dataDir;
 
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
 	//TODO: redesign/remove this
@@ -88,6 +90,8 @@ void JsonFilterTest::testObjectImport01() {
 	JsonFilter filter;
 
 	const QString fileName = m_dataDir + "object.json";
+	qDebug()<<"file exists " << QFile::exists(fileName);
+	QCOMPARE(QFile::exists(fileName), true);
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCreateIndexEnabled(true);
 	filter.setDataRowType(QJsonValue::Object);
