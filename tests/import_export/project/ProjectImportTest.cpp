@@ -37,9 +37,6 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 void ProjectImportTest::initTestCase() {
-	const QString currentDir = __FILE__;
-	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
-
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
 	//TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
@@ -81,7 +78,7 @@ void ProjectImportTest::testOrigin01() {
 
 	//import the opj file into LabPlot's project object
 	OriginProjectParser parser;
-	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_tree_import.opj"));
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/origin8_test_tree_import.opj")));
 	Project project;
 	parser.importTo(&project, QStringList());
 
@@ -190,7 +187,7 @@ void ProjectImportTest::testOrigin01() {
 void ProjectImportTest::testOrigin02() {
 	//import one single object
 	OriginProjectParser parser;
-	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_tree_import.opj"));
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/origin8_test_tree_import.opj")));
 	Project project;
 	QStringList selectedPathes = {QLatin1String("test_tree_import/Folder1/Book1"), QLatin1String("test_tree_import/Folder1"), QLatin1String("test_tree_import")};
 	parser.importTo(&project, selectedPathes);
@@ -222,7 +219,7 @@ void ProjectImportTest::testOrigin02() {
 void ProjectImportTest::testOrigin03() {
 	//import one single object
 	OriginProjectParser parser;
-	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_tree_import.opj"));
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/origin8_test_tree_import.opj")));
 	Project project;
 
 	//import one single child in "Folder1"
@@ -283,7 +280,7 @@ void ProjectImportTest::testOrigin03() {
  */
 void ProjectImportTest::testOrigin04() {
 	OriginProjectParser parser;
-	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_tree_import.opj"));
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/origin8_test_tree_import.opj")));
 	Project project;
 
 	//import "Book1"
@@ -327,7 +324,7 @@ void ProjectImportTest::testOrigin04() {
 
 void ProjectImportTest::testOriginTextNumericColumns() {
 	OriginProjectParser parser;
-	parser.setProjectFileName(m_dataDir + QLatin1String("origin8_test_workbook.opj"));
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/origin8_test_workbook.opj")));
 	Project project;
 
 	//import "Book1"
@@ -414,8 +411,7 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	QCOMPARE(!std::isnan(column->valueAt(4)), false);
 }
 
-void ProjectImportTest::testParseOriginTags_data()
-{
+void ProjectImportTest::testParseOriginTags_data() {
 	QTest::addColumn<QString>("originTag");
 	QTest::addColumn<QString>("labPlotHTML");
 
@@ -460,8 +456,7 @@ void ProjectImportTest::testParseOriginTags_data()
 			   "then a change of <font face=\"dejavu sans\"> font</font>";
 }
 
-void ProjectImportTest::testParseOriginTags()
-{
+void ProjectImportTest::testParseOriginTags() {
 	QFETCH(QString, originTag);
 	QFETCH(QString, labPlotHTML);
 

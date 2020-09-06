@@ -32,7 +32,7 @@ Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
-#include <QDebug>
+
 void JsonFilterTest::initTestCase() {
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
 	//TODO: redesign/remove this

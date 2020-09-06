@@ -30,9 +30,6 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 
 void AsciiFilterTest::initTestCase() {
-	const QString currentDir = __FILE__;
-	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
-
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
 	//TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
@@ -48,7 +45,7 @@ void AsciiFilterTest::testEmptyFileAppend() {
 
 	const int rowCount = spreadsheet.rowCount();
 	const int colCount = spreadsheet.columnCount();
-	const QString fileName = m_dataDir + "empty_file.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_file.txt"));
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Append;
 
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
@@ -63,7 +60,7 @@ void AsciiFilterTest::testEmptyFilePrepend() {
 
 	const int rowCount = spreadsheet.rowCount();
 	const int colCount = spreadsheet.columnCount();
-	const QString fileName = m_dataDir + "empty_file.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_file.txt"));
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Prepend;
 
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
@@ -78,7 +75,7 @@ void AsciiFilterTest::testEmptyFileReplace() {
 
 	const int rowCount = spreadsheet.rowCount();
 	const int colCount = spreadsheet.columnCount();
-	const QString fileName = m_dataDir + "empty_file.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_file.txt"));
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
@@ -89,7 +86,7 @@ void AsciiFilterTest::testEmptyFileReplace() {
 void AsciiFilterTest::testEmptyLines01() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "empty_lines_01.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/empty_lines_01.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -121,7 +118,7 @@ void AsciiFilterTest::testEmptyLines01() {
 void AsciiFilterTest::testSparseFile01() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "sparse_file_01.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sparse_file_01.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(",");
@@ -156,7 +153,7 @@ void AsciiFilterTest::testSparseFile01() {
 void AsciiFilterTest::testSparseFile02() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "sparse_file_02.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sparse_file_02.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(",");
@@ -193,7 +190,7 @@ void AsciiFilterTest::testSparseFile02() {
 void AsciiFilterTest::testSparseFile03() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "sparse_file_03.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/sparse_file_03.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(",");
@@ -236,7 +233,7 @@ void AsciiFilterTest::testSparseFile03() {
 void AsciiFilterTest::testHeader01() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "separator_semicolon.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(";");
@@ -251,7 +248,7 @@ void AsciiFilterTest::testHeader01() {
 void AsciiFilterTest::testHeader02() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "separator_semicolon.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(";");
@@ -271,7 +268,7 @@ void AsciiFilterTest::testHeader02() {
 void AsciiFilterTest::testHeader03() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "separator_semicolon.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(";");
@@ -287,7 +284,7 @@ void AsciiFilterTest::testHeader03() {
 void AsciiFilterTest::testHeader04() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "separator_semicolon.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(";");
@@ -303,7 +300,7 @@ void AsciiFilterTest::testHeader04() {
 void AsciiFilterTest::testHeader05() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "separator_semicolon.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(";");
@@ -320,7 +317,7 @@ void AsciiFilterTest::testHeader05() {
 void AsciiFilterTest::testHeader06() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "separator_semicolon.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(";");
@@ -342,7 +339,7 @@ void AsciiFilterTest::testHeader06() {
 void AsciiFilterTest::testHeader07() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "comment_header_comment.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/comment_header_comment.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("TAB");
@@ -390,7 +387,7 @@ void AsciiFilterTest::testHeader07() {
 void AsciiFilterTest::testHeader08() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "separator_tab_with_header_with_spaces.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_tab_with_header_with_spaces.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -423,7 +420,7 @@ void AsciiFilterTest::testHeader08() {
 void AsciiFilterTest::testColumnRange00() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -447,7 +444,7 @@ void AsciiFilterTest::testColumnRange00() {
 void AsciiFilterTest::testColumnRange01() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -474,7 +471,7 @@ void AsciiFilterTest::testColumnRange01() {
 void AsciiFilterTest::testColumnRange02() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -498,7 +495,7 @@ void AsciiFilterTest::testColumnRange02() {
 void AsciiFilterTest::testColumnRange03() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -525,7 +522,7 @@ void AsciiFilterTest::testColumnRange03() {
 void AsciiFilterTest::testColumnRange04() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -547,7 +544,7 @@ void AsciiFilterTest::testColumnRange04() {
 void AsciiFilterTest::testColumnRange05() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -565,7 +562,7 @@ void AsciiFilterTest::testColumnRange05() {
 void AsciiFilterTest::testColumnRange06() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -586,7 +583,7 @@ void AsciiFilterTest::testColumnRange06() {
 void AsciiFilterTest::testRowRange00() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -616,7 +613,7 @@ void AsciiFilterTest::testRowRange00() {
 void AsciiFilterTest::testRowRange01() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -646,7 +643,7 @@ void AsciiFilterTest::testRowRange01() {
 void AsciiFilterTest::testRowRange02() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -666,7 +663,7 @@ void AsciiFilterTest::testRowRange02() {
 void AsciiFilterTest::testRowColumnRange00() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "numeric_data.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/numeric_data.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("auto");
@@ -703,7 +700,7 @@ void AsciiFilterTest::testRowColumnRange00() {
 void AsciiFilterTest::testQuotedStrings00() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "quoted_strings.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(",");
@@ -739,7 +736,7 @@ void AsciiFilterTest::testQuotedStrings00() {
 void AsciiFilterTest::testQuotedStrings01() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "quoted_strings_with_header.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings_with_header.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(",");
@@ -784,7 +781,7 @@ void AsciiFilterTest::testQuotedStrings01() {
 void AsciiFilterTest::testQuotedStrings02() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "quoted_strings_one_line.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings_one_line.txt"));
 
 	QCOMPARE(QFile::exists(fileName), true);
 
@@ -812,7 +809,7 @@ void AsciiFilterTest::testQuotedStrings02() {
 void AsciiFilterTest::testQuotedStrings03() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "quoted_strings_one_line_with_header.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/quoted_strings_one_line_with_header.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(",");
@@ -851,7 +848,7 @@ void AsciiFilterTest::testQuotedStrings03() {
 void AsciiFilterTest::testComments00() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "multi_line_comment.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/multi_line_comment.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(",");
@@ -874,7 +871,7 @@ void AsciiFilterTest::testComments00() {
 void AsciiFilterTest::testComments01() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "multi_line_comment_with_empty_lines.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/multi_line_comment_with_empty_lines.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(",");
@@ -900,7 +897,7 @@ void AsciiFilterTest::testComments01() {
 void AsciiFilterTest::testComments02() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "separator_semicolon_with_header.txt";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/separator_semicolon_with_header.txt"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCommentCharacter("");
@@ -943,7 +940,7 @@ void AsciiFilterTest::testComments02() {
 void AsciiFilterTest::testDateTime00() {
 	Spreadsheet spreadsheet("test", false);
 	AsciiFilter filter;
-	const QString fileName = m_dataDir + "datetime_01.csv";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/datetime_01.csv"));
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter(",");

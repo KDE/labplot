@@ -90,8 +90,5 @@ private slots:
 
 	//datetime data
 	void testDateTime00();
-
-private:
-	QString m_dataDir;
 };
 #endif

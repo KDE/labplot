@@ -47,8 +47,5 @@ private slots:
 	void testParseOriginTags_data();
 	void testParseOriginTags();
 #endif
-
-private:
-	QString m_dataDir;
 };
 #endif
