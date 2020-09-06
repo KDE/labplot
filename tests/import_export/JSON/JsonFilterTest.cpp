@@ -34,11 +34,6 @@ Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
 #include <KLocalizedString>
 #include <QDebug>
 void JsonFilterTest::initTestCase() {
-	const QString currentDir = __FILE__;
-	qDebug()<<"current directory " << currentDir;
-	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
-	qDebug()<<"data directory " << m_dataDir;
-
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
 	//TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
@@ -49,7 +44,7 @@ void JsonFilterTest::testArrayImport() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
-	const QString fileName = m_dataDir + "array.json";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/array.json"));
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCreateIndexEnabled(true);
 	filter.setDataRowType(QJsonValue::Array);
@@ -89,9 +84,7 @@ void JsonFilterTest::testObjectImport01() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
-	const QString fileName = m_dataDir + "object.json";
-	qDebug()<<"file exists " << QFile::exists(fileName);
-	QCOMPARE(QFile::exists(fileName), true);
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCreateIndexEnabled(true);
 	filter.setDataRowType(QJsonValue::Object);
@@ -145,7 +138,7 @@ void JsonFilterTest::testObjectImport02() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
-	const QString fileName = m_dataDir + "object.json";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setDataRowType(QJsonValue::Object);
 	filter.setImportObjectNames(true);
@@ -200,7 +193,7 @@ void JsonFilterTest::testObjectImport03() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
-	const QString fileName = m_dataDir + "object.json";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setDataRowType(QJsonValue::Object);
 	filter.setImportObjectNames(true);
@@ -242,7 +235,7 @@ void JsonFilterTest::testObjectImport04() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
-	const QString fileName = m_dataDir + "intraday.json";
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/intraday.json"));
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	QVector<int> rows{0, 1};
 	filter.setModelRows(rows);
