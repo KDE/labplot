@@ -241,8 +241,9 @@ void MainWin::initGUI(const QString& fileName) {
 	initActions();
 
 #ifdef Q_OS_MAC
-	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
+	// setup touchbar before GUI (otherwise actions in the toolbar are not selectable)
 	m_touchBar = new KDMacTouchBar(this);
+	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
 	//m_touchBar->setTouchButtonStyle(KDMacTouchBar::IconOnly);
 #else
 	setupGUI(Default, KXMLGUIClient::xmlFile());	// should be "labplot2ui.rc"
@@ -864,25 +865,25 @@ void MainWin::updateGUIOnProjectChanges() {
 	}
 
 	//disable all menus if there is no project
-	bool b = (m_project == nullptr);
-	m_saveAction->setEnabled(!b);
-	m_saveAsAction->setEnabled(!b);
-	m_printAction->setEnabled(!b);
-	m_printPreviewAction->setEnabled(!b);
-	m_importFileAction->setEnabled(!b);
-	m_importSqlAction->setEnabled(!b);
+	bool hasProject = (m_project != nullptr);
+	m_saveAction->setEnabled(hasProject);
+	m_saveAsAction->setEnabled(hasProject);
+	m_printAction->setEnabled(hasProject);
+	m_printPreviewAction->setEnabled(hasProject);
+	m_importFileAction->setEnabled(hasProject);
+	m_importSqlAction->setEnabled(hasProject);
 #ifdef HAVE_LIBORIGIN
-	m_importOpjAction->setEnabled(!b);
+	m_importOpjAction->setEnabled(hasProject);
 #endif
-	m_exportAction->setEnabled(!b);
-	m_newWorkbookAction->setEnabled(!b);
-	m_newSpreadsheetAction->setEnabled(!b);
-	m_newMatrixAction->setEnabled(!b);
-	m_newWorksheetAction->setEnabled(!b);
-	m_newDatapickerAction->setEnabled(!b);
-	m_closeAction->setEnabled(!b);
-	m_toggleProjectExplorerDockAction->setEnabled(!b);
-	m_togglePropertiesDockAction->setEnabled(!b);
+	m_exportAction->setEnabled(hasProject);
+	m_newWorkbookAction->setEnabled(hasProject);
+	m_newSpreadsheetAction->setEnabled(hasProject);
+	m_newMatrixAction->setEnabled(hasProject);
+	m_newWorksheetAction->setEnabled(hasProject);
+	m_newDatapickerAction->setEnabled(hasProject);
+	m_closeAction->setEnabled(hasProject);
+	m_toggleProjectExplorerDockAction->setEnabled(hasProject);
+	m_togglePropertiesDockAction->setEnabled(hasProject);
 
 	if (!m_mdiArea || !m_mdiArea->currentSubWindow()) {
 		factory->container("spreadsheet", this)->setEnabled(false);
@@ -902,16 +903,16 @@ void MainWin::updateGUIOnProjectChanges() {
 #endif
 	}
 
-	factory->container("new", this)->setEnabled(!b);
-	factory->container("edit", this)->setEnabled(!b);
-	factory->container("import", this)->setEnabled(!b);
+	factory->container("new", this)->setEnabled(hasProject);
+	factory->container("edit", this)->setEnabled(hasProject);
+	factory->container("import", this)->setEnabled(hasProject);
 
 	updateTitleBar();
 
 #ifdef Q_OS_MAC
 	m_touchBar->clear();
 
-	if (b){
+	if (!hasProject) {
 		m_touchBar->addAction(m_newProjectAction);
 		m_touchBar->addAction(m_openProjectAction);
 	} else {
