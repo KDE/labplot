@@ -42,6 +42,7 @@ class CustomPointDock : public BaseDock {
 public:
 	explicit CustomPointDock(QWidget *);
 	void setPoints(QList<CustomPoint*>);
+	void updateLocale() override;
 
 private:
 	Ui::CustomPointDock ui;

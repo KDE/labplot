@@ -41,6 +41,7 @@
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
+
 #include <QIcon>
 #include <QElapsedTimer>
 #include <QThreadPool>
@@ -72,7 +73,7 @@ void XYSmoothCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYSmoothCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-smooth-curve");
+	return QIcon::fromTheme("labplot-xy-smoothing-curve");
 }
 
 //##############################################################################
@@ -105,18 +106,21 @@ XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYAnalysisCur
 XYSmoothCurvePrivate::~XYSmoothCurvePrivate() = default;
 
 void XYSmoothCurvePrivate::recalculate() {
+	DEBUG("XYSmoothCurvePrivate::recalculate()")
 	QElapsedTimer timer;
 	timer.start();
 
 	//create smooth result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::Numeric);
-		yColumn = new Column("y", AbstractColumn::Numeric);
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
+
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 
 		xColumn->setHidden(true);
 		q->addChild(xColumn);
+
 		yColumn->setHidden(true);
 		q->addChild(yColumn);
 
@@ -127,6 +131,14 @@ void XYSmoothCurvePrivate::recalculate() {
 	} else {
 		xVector->clear();
 		yVector->clear();
+		if (roughVector)
+			roughVector->clear();
+	}
+
+	if (!roughColumn) {
+		roughColumn = new Column("rough", AbstractColumn::ColumnMode::Numeric);
+		roughVector = static_cast<QVector<double>* >(roughColumn->data());
+		q->addChild(roughColumn);
 	}
 
 	// clear the previous result
@@ -135,7 +147,7 @@ void XYSmoothCurvePrivate::recalculate() {
 	//determine the data source columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
@@ -176,18 +188,7 @@ void XYSmoothCurvePrivate::recalculate() {
 		xmax = smoothData.xRange.last();
 	}
 
-	for (int row = 0; row<tmpXDataColumn->rowCount(); ++row) {
-		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
-			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
-
-			// only when inside given range
-			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(tmpXDataColumn->valueAt(row));
-				ydataVector.append(tmpYDataColumn->valueAt(row));
-			}
-		}
-	}
+	XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax);
 
 	//number of data points to smooth
 	const size_t n = (size_t)xdataVector.size();
@@ -204,41 +205,44 @@ void XYSmoothCurvePrivate::recalculate() {
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
 
+	double* ydataOriginal = new double[n];
+	memcpy(ydataOriginal, ydata, n*sizeof(double));
+
 	// smooth settings
 	const nsl_smooth_type type = smoothData.type;
 	const size_t points = smoothData.points;
 	const nsl_smooth_weight_type weight = smoothData.weight;
 	const double percentile = smoothData.percentile;
 	const int order = smoothData.order;
-	const nsl_smooth_pad_mode mode = smoothData.mode;
+	const nsl_smooth_pad_mode padMode = smoothData.mode;
 	const double lvalue = smoothData.lvalue;
 	const double rvalue = smoothData.rvalue;
 
-	DEBUG("type:"<<nsl_smooth_type_name[type]);
-	DEBUG("points ="<<points);
-	DEBUG("weight:"<<nsl_smooth_weight_type_name[weight]);
-	DEBUG("percentile ="<<percentile);
-	DEBUG("order ="<<order);
-	DEBUG("mode ="<<nsl_smooth_pad_mode_name[mode]);
-	DEBUG("const. values ="<<lvalue<<rvalue);
+	DEBUG("	smooth type:" << nsl_smooth_type_name[type]);
+	DEBUG("	points = " << points);
+	DEBUG("	weight: " << nsl_smooth_weight_type_name[weight]);
+	DEBUG("	percentile = " << percentile);
+	DEBUG("	order = " << order);
+	DEBUG("	pad mode =	" << nsl_smooth_pad_mode_name[padMode]);
+	DEBUG("	const. values = " << lvalue << ' ' << rvalue);
 
 ///////////////////////////////////////////////////////////
 	int status = 0;
 
 	switch (type) {
 	case nsl_smooth_type_moving_average:
-		status = nsl_smooth_moving_average(ydata, n, points, weight, mode);
+		status = nsl_smooth_moving_average(ydata, n, points, weight, padMode);
 		break;
 	case nsl_smooth_type_moving_average_lagged:
-		status = nsl_smooth_moving_average_lagged(ydata, n, points, weight, mode);
+		status = nsl_smooth_moving_average_lagged(ydata, n, points, weight, padMode);
 		break;
 	case nsl_smooth_type_percentile:
-		status = nsl_smooth_percentile(ydata, n, points, percentile, mode);
+		status = nsl_smooth_percentile(ydata, n, points, percentile, padMode);
 		break;
 	case nsl_smooth_type_savitzky_golay:
-		if (mode == nsl_smooth_pad_constant)
+		if (padMode == nsl_smooth_pad_constant)
 			nsl_smooth_pad_constant_set(lvalue, rvalue);
-		status = nsl_smooth_savgol(ydata, n, points, order, mode);
+		status = nsl_smooth_savgol(ydata, n, points, order, padMode);
 		break;
 	}
 
@@ -253,6 +257,14 @@ void XYSmoothCurvePrivate::recalculate() {
 	smoothResult.valid = true;
 	smoothResult.status = QString::number(status);
 	smoothResult.elapsedTime = timer.elapsed();
+
+	//fill rough vector
+	roughVector->resize((int)n);
+	for (int i = 0; i < (int)n; ++i)
+		roughVector->data()[i] = ydataOriginal[i] - ydata[i];
+	roughColumn->setChanged();
+
+	delete [] ydataOriginal;
 
 	//redraw the curve
 	recalcLogicalPoints();
@@ -300,6 +312,10 @@ void XYSmoothCurve::save(QXmlStreamWriter* writer) const{
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 	}
+
+	if (d->roughColumn)
+		d->roughColumn->save(writer);
+
 	writer->writeEndElement(); //"smoothResult"
 
 	writer->writeEndElement(); //"xySmoothCurve"
@@ -344,7 +360,7 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", smoothResult.status);
 			READ_INT_VALUE("time", smoothResult.elapsedTime, int);
 		} else if (!preview && reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;
@@ -353,6 +369,8 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 				d->xColumn = column;
 			else if (column->name() == "y")
 				d->yColumn = column;
+			else
+				d->roughColumn = column;
 		}
 	}
 
@@ -376,6 +394,11 @@ bool XYSmoothCurve::load(XmlStreamReader* reader, bool preview) {
 		XYCurve::d_ptr->yColumn = d->yColumn;
 
 		recalcLogicalPoints();
+	}
+
+	if (d->roughColumn) {
+		addChild(d->roughColumn);
+		d->roughVector = static_cast<QVector<double>* >(d->roughColumn->data());
 	}
 
 	return true;

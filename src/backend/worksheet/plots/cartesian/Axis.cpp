@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013-2018 Stefan Gerlach  (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2013-2020 Stefan Gerlach  (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -40,16 +40,18 @@
 // #include "backend/lib/trace.h"
 #include "kdefrontend/GuiTools.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KSharedConfig>
+
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPainter>
 #include <QTextDocument>
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
-
 extern "C" {
+#include <gsl/gsl_math.h>
 #include "backend/nsl/nsl_math.h"
 }
 
@@ -65,7 +67,7 @@ extern "C" {
  */
 class AxisGrid : public QGraphicsItem {
 public:
-	AxisGrid(AxisPrivate* a) {
+	explicit AxisGrid(AxisPrivate* a) {
 		axis = a;
 		setFlag(QGraphicsItem::ItemIsSelectable, false);
 		setFlag(QGraphicsItem::ItemIsFocusable, false);
@@ -114,13 +116,13 @@ private:
  *
  *  \ingroup worksheet
  */
-Axis::Axis(const QString& name, AxisOrientation orientation)
+Axis::Axis(const QString& name, Orientation orientation)
 		: WorksheetElement(name, AspectType::Axis), d_ptr(new AxisPrivate(this)) {
 	d_ptr->orientation = orientation;
 	init();
 }
 
-Axis::Axis(const QString& name, AxisOrientation orientation, AxisPrivate* dd)
+Axis::Axis(const QString& name, Orientation orientation, AxisPrivate* dd)
 		: WorksheetElement(name, AspectType::Axis), d_ptr(dd) {
 	d_ptr->orientation = orientation;
 	init();
@@ -140,9 +142,9 @@ void Axis::init() {
 	KConfigGroup group = config.group("Axis");
 
 	d->autoScale = true;
-	d->position = Axis::AxisCustom;
+	d->position = Axis::Position::Custom;
 	d->offset = group.readEntry("PositionOffset", 0);
-	d->scale = (Axis::AxisScale) group.readEntry("Scale", (int) Axis::ScaleLinear);
+	d->scale = (Scale) group.readEntry("Scale", static_cast<int>(Scale::Linear));
 	d->autoScale = group.readEntry("AutoScale", true);
 	d->start = group.readEntry("Start", 0);
 	d->end = group.readEntry("End", 10);
@@ -150,70 +152,72 @@ void Axis::init() {
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
 
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int) Qt::SolidLine) );
-	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
+	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point) ) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
-	d->arrowType = (Axis::ArrowType) group.readEntry("ArrowType", (int)Axis::NoArrow);
-	d->arrowPosition = (Axis::ArrowPosition) group.readEntry("ArrowPosition", (int)Axis::ArrowRight);
-	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(10, Worksheet::Point));
+	d->arrowType = (Axis::ArrowType) group.readEntry("ArrowType", static_cast<int>(ArrowType::NoArrow));
+	d->arrowPosition = (Axis::ArrowPosition) group.readEntry("ArrowPosition", static_cast<int>(ArrowPosition::Right));
+	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 
 	// axis title
- 	d->title = new TextLabel(this->name(), TextLabel::AxisTitle);
+ 	d->title = new TextLabel(this->name(), TextLabel::Type::AxisTitle);
 	connect( d->title, &TextLabel::changed, this, &Axis::labelChanged);
 	addChild(d->title);
 	d->title->setHidden(true);
-	d->title->graphicsItem()->setParentItem(graphicsItem());
+	d->title->graphicsItem()->setParentItem(d);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	d->title->graphicsItem()->setAcceptHoverEvents(false);
 	d->title->setText(this->name());
-	if (d->orientation == AxisVertical) d->title->setRotationAngle(90);
-	d->titleOffsetX = Worksheet::convertToSceneUnits(2, Worksheet::Point); //distance to the axis tick labels
-	d->titleOffsetY = Worksheet::convertToSceneUnits(2, Worksheet::Point); //distance to the axis tick labels
+	if (d->orientation == Orientation::Vertical) d->title->setRotationAngle(90);
+	d->titleOffsetX = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); //distance to the axis tick labels
+	d->titleOffsetY = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); //distance to the axis tick labels
 
 	d->majorTicksDirection = (Axis::TicksDirection) group.readEntry("MajorTicksDirection", (int) Axis::ticksOut);
-	d->majorTicksType = (Axis::TicksType) group.readEntry("MajorTicksType", (int) Axis::TicksTotalNumber);
+	d->majorTicksType = (TicksType) group.readEntry("MajorTicksType", static_cast<int>(TicksType::TotalNumber));
 	d->majorTicksNumber = group.readEntry("MajorTicksNumber", 11);
-	d->majorTicksIncrement = group.readEntry("MajorTicksIncrement", -1.0); // set to negative value, so axisdocks determines the value to not to have to much labels the first time switched to TicksIncrement
+	d->majorTicksSpacing = group.readEntry("MajorTicksIncrement", 0.0); // set to 0, so axisdock determines the value to not have to many labels the first time switched to Spacing
+
 	d->majorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine) );
 	d->majorTicksPen.setColor( group.readEntry("MajorTicksColor", QColor(Qt::black) ) );
-	d->majorTicksPen.setWidthF( group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
-	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Point));
+	d->majorTicksPen.setWidthF( group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point) ) );
+	d->majorTicksLength = group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point));
 	d->majorTicksOpacity = group.readEntry("MajorTicksOpacity", 1.0);
 
-	d->minorTicksDirection = (Axis::TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
-	d->minorTicksType = (Axis::TicksType) group.readEntry("MinorTicksType", (int) Axis::TicksTotalNumber);
+	d->minorTicksDirection = (TicksDirection) group.readEntry("MinorTicksDirection", (int) Axis::ticksOut);
+	d->minorTicksType = (TicksType) group.readEntry("MinorTicksType", static_cast<int>(TicksType::TotalNumber));
 	d->minorTicksNumber = group.readEntry("MinorTicksNumber", 1);
-	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", -1.0);
+	d->minorTicksIncrement = group.readEntry("MinorTicksIncrement", 0.0);	// see MajorTicksIncrement
 	d->minorTicksPen.setStyle((Qt::PenStyle) group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine) );
 	d->minorTicksPen.setColor( group.readEntry("MinorTicksColor", QColor(Qt::black) ) );
-	d->minorTicksPen.setWidthF( group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point) ) );
-	d->minorTicksLength = group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Point));
+	d->minorTicksPen.setWidthF( group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point) ) );
+	d->minorTicksLength = group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point));
 	d->minorTicksOpacity = group.readEntry("MinorTicksOpacity", 1.0);
 
 	//Labels
-	d->labelsFormat = (Axis::LabelsFormat) group.readEntry("LabelsFormat", (int)Axis::FormatDecimal);
+	d->labelsFormat = (LabelsFormat) group.readEntry("LabelsFormat", static_cast<int>(LabelsFormat::Decimal));
 	d->labelsAutoPrecision = group.readEntry("LabelsAutoPrecision", true);
 	d->labelsPrecision = group.readEntry("LabelsPrecision", 1);
 	d->labelsDateTimeFormat = group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss");
-	d->labelsPosition = (Axis::LabelsPosition) group.readEntry("LabelsPosition", (int) Axis::LabelsOut);
-	d->labelsOffset = group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Point ));
+	d->labelsPosition = (LabelsPosition) group.readEntry("LabelsPosition", (int) LabelsPosition::Out);
+	d->labelsOffset = group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Unit::Point ));
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
 	d->labelsFont = group.readEntry("LabelsFont", QFont());
-	d->labelsFont.setPixelSize( Worksheet::convertToSceneUnits( 10.0, Worksheet::Point ) );
+	d->labelsFont.setPixelSize( Worksheet::convertToSceneUnits( 10.0, Worksheet::Unit::Point ) );
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
 	d->labelsPrefix =  group.readEntry("LabelsPrefix", "" );
 	d->labelsSuffix =  group.readEntry("LabelsSuffix", "" );
 	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
 
 	//major grid
-	d->majorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MajorGridStyle", (int) Qt::NoPen) );
+	d->majorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MajorGridStyle", (int) Qt::SolidLine) );
 	d->majorGridPen.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)) );
-	d->majorGridPen.setWidthF( group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
+	d->majorGridPen.setWidthF( group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point ) ) );
 	d->majorGridOpacity = group.readEntry("MajorGridOpacity", 1.0);
 
 	//minor grid
-	d->minorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MinorGridStyle", (int) Qt::NoPen) );
-	d->minorGridPen.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)) );
-	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Point ) ) );
+	d->minorGridPen.setStyle( (Qt::PenStyle) group.readEntry("MinorGridStyle", (int) Qt::DotLine) );
+	d->minorGridPen.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)) );
+	d->minorGridPen.setWidthF( group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point ) ) );
 	d->minorGridOpacity = group.readEntry("MinorGridOpacity", 1.0);
 }
 
@@ -271,12 +275,10 @@ void Axis::initMenus() {
 	lineColorMenu->setIcon(QIcon::fromTheme("fill-color"));
 	GuiTools::fillColorMenu( lineColorMenu, lineColorActionGroup );
 	lineMenu->addMenu( lineColorMenu );
-
-	m_menusInitialized = true;
 }
 
 QMenu* Axis::createContextMenu() {
-	if (!m_menusInitialized)
+	if (!orientationMenu)
 		initMenus();
 
 	Q_D(const Axis);
@@ -287,7 +289,7 @@ QMenu* Axis::createContextMenu() {
 	menu->insertAction(firstAction, visibilityAction);
 
 	//Orientation
-	if ( d->orientation == AxisHorizontal )
+	if (d->orientation == Orientation::Horizontal)
 		orientationHorizontalAction->setChecked(true);
 	else
 		orientationVerticalAction->setChecked(true);
@@ -312,7 +314,7 @@ QMenu* Axis::createContextMenu() {
 QIcon Axis::icon() const{
 	Q_D(const Axis);
 	QIcon ico;
-	if (d->orientation == Axis::AxisHorizontal)
+	if (d->orientation == Orientation::Horizontal)
 		ico = QIcon::fromTheme("labplot-axis-horizontal");
 	else
 		ico = QIcon::fromTheme("labplot-axis-vertical");
@@ -321,7 +323,7 @@ QIcon Axis::icon() const{
 }
 
 Axis::~Axis() {
-	if (m_menusInitialized) {
+	if (orientationMenu) {
 		delete orientationMenu;
 		delete lineMenu;
 	}
@@ -385,9 +387,9 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale)
-BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisOrientation, orientation, orientation)
-BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisPosition, position, position)
-BASIC_SHARED_D_READER_IMPL(Axis, Axis::AxisScale, scale, scale)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::Orientation, orientation, orientation)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::Position, position, position)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::Scale, scale, scale)
 BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, double, start, start)
 BASIC_SHARED_D_READER_IMPL(Axis, double, end, end)
@@ -407,7 +409,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, arrowSize, arrowSize)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, majorTicksDirection, majorTicksDirection)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType)
 BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksIncrement, majorTicksIncrement)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksSpacing, majorTicksSpacing)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, majorTicksColumn, majorTicksColumn)
 QString& Axis::majorTicksColumnPath() const { return d_ptr->majorTicksColumnPath; }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
@@ -417,7 +419,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksOpacity, majorTicksOpacity)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, minorTicksDirection, minorTicksDirection)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, minorTicksType, minorTicksType)
 BASIC_SHARED_D_READER_IMPL(Axis, int, minorTicksNumber, minorTicksNumber)
-BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksIncrement, minorTicksIncrement)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksSpacing, minorTicksIncrement)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, minorTicksColumn, minorTicksColumn)
 QString& Axis::minorTicksColumnPath() const { return d_ptr->minorTicksColumnPath; }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
@@ -454,7 +456,7 @@ void Axis::setAutoScale(bool autoScale) {
 			if (!plot)
 				return;
 
-			if (d->orientation == Axis::AxisHorizontal) {
+			if (d->orientation == Axis::Orientation::Horizontal) {
 				d->end = plot->xMax();
 				d->start = plot->xMin();
 			} else {
@@ -479,27 +481,42 @@ bool Axis::isVisible() const {
 	return d->isVisible();
 }
 
+void Axis::setDefault(bool value) {
+	Q_D(Axis);
+	d->isDefault = value;
+}
+
+bool Axis::isDefault() const {
+	Q_D(const Axis);
+	return d->isDefault;
+}
+
 void Axis::setPrinting(bool on) {
 	Q_D(Axis);
 	d->setPrinting(on);
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::AxisOrientation, orientation, retransform);
-void Axis::setOrientation( AxisOrientation orientation) {
+bool Axis::isHovered() const {
+	Q_D(const Axis);
+	return d->isHovered();
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::Orientation, orientation, retransform);
+void Axis::setOrientation(Orientation orientation) {
 	Q_D(Axis);
 	if (orientation != d->orientation)
 		exec(new AxisSetOrientationCmd(d, orientation, ki18n("%1: set axis orientation")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetPosition, Axis::AxisPosition, position, retransform);
-void Axis::setPosition(AxisPosition position) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetPosition, Axis::Position, position, retransform);
+void Axis::setPosition(Position position) {
 	Q_D(Axis);
 	if (position != d->position)
 		exec(new AxisSetPositionCmd(d, position, ki18n("%1: set axis position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, Axis::AxisScale, scale, retransformTicks);
-void Axis::setScale(AxisScale scale) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, Axis::Scale, scale, retransformTicks);
+void Axis::setScale(Scale scale) {
 	Q_D(Axis);
 	if (scale != d->scale)
 		exec(new AxisSetScalingCmd(d, scale, ki18n("%1: set axis scale")));
@@ -620,11 +637,11 @@ void Axis::setMajorTicksNumber(int majorTicksNumber) {
 		exec(new AxisSetMajorTicksNumberCmd(d, majorTicksNumber, ki18n("%1: set the total number of the major ticks")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksIncrement, qreal, majorTicksIncrement, retransformTicks);
-void Axis::setMajorTicksIncrement(qreal majorTicksIncrement) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksSpacing, qreal, majorTicksSpacing, retransformTicks);
+void Axis::setMajorTicksSpacing(qreal majorTicksSpacing) {
 	Q_D(Axis);
-	if (majorTicksIncrement != d->majorTicksIncrement)
-		exec(new AxisSetMajorTicksIncrementCmd(d, majorTicksIncrement, ki18n("%1: set the increment for the major ticks")));
+	if (majorTicksSpacing != d->majorTicksSpacing)
+		exec(new AxisSetMajorTicksSpacingCmd(d, majorTicksSpacing, ki18n("%1: set the spacing of the major ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksColumn, const AbstractColumn*, majorTicksColumn, retransformTicks)
@@ -685,11 +702,11 @@ void Axis::setMinorTicksNumber(int minorTicksNumber) {
 		exec(new AxisSetMinorTicksNumberCmd(d, minorTicksNumber, ki18n("%1: set the total number of the minor ticks")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksIncrement, qreal, minorTicksIncrement, retransformTicks);
-void Axis::setMinorTicksIncrement(qreal minorTicksIncrement) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksSpacing, qreal, minorTicksIncrement, retransformTicks);
+void Axis::setMinorTicksSpacing(qreal minorTicksSpacing) {
 	Q_D(Axis);
-	if (minorTicksIncrement != d->minorTicksIncrement)
-		exec(new AxisSetMinorTicksIncrementCmd(d, minorTicksIncrement, ki18n("%1: set the increment for the minor ticks")));
+	if (minorTicksSpacing != d->minorTicksIncrement)
+		exec(new AxisSetMinorTicksSpacingCmd(d, minorTicksSpacing, ki18n("%1: set the spacing of the minor ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksColumn, const AbstractColumn*, minorTicksColumn, retransformTicks)
@@ -733,13 +750,14 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat,
 void Axis::setLabelsFormat(LabelsFormat labelsFormat) {
 	Q_D(Axis);
 	if (labelsFormat != d->labelsFormat) {
-		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, ki18n("%1: set labels format")));
 
 		//TODO: this part is not undo/redo-aware
-		if (d->labelsFormatAutoChanged && labelsFormat == Axis::FormatDecimal)
+		if (labelsFormat == LabelsFormat::Decimal)
 			d->labelsFormatDecimalOverruled = true;
 		else
 			d->labelsFormatDecimalOverruled = false;
+
+		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, ki18n("%1: set labels format")));
 	}
 }
 
@@ -828,7 +846,7 @@ void Axis::setMajorGridPen(const QPen& pen) {
 		exec(new AxisSetMajorGridPenCmd(d, pen, ki18n("%1: set major grid style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridOpacity, qreal, majorGridOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorGridOpacity, qreal, majorGridOpacity, updateGrid);
 void Axis::setMajorGridOpacity(qreal opacity) {
 	Q_D(Axis);
 	if (opacity != d->majorGridOpacity)
@@ -843,7 +861,7 @@ void Axis::setMinorGridPen(const QPen& pen) {
 		exec(new AxisSetMinorGridPenCmd(d, pen, ki18n("%1: set minor grid style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridOpacity, qreal, minorGridOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorGridOpacity, qreal, minorGridOpacity, updateGrid);
 void Axis::setMinorGridOpacity(qreal opacity) {
 	Q_D(Axis);
 	if (opacity != d->minorGridOpacity)
@@ -884,9 +902,9 @@ void Axis::minorTicksColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 //##############################################################################
 void Axis::orientationChangedSlot(QAction* action) {
 	if (action == orientationHorizontalAction)
-		this->setOrientation(AxisHorizontal);
+		this->setOrientation(Axis::Orientation::Horizontal);
 	else
-		this->setOrientation(AxisVertical);
+		this->setOrientation(Axis::Orientation::Vertical);
 }
 
 void Axis::lineStyleChanged(QAction* action) {
@@ -923,7 +941,16 @@ QString AxisPrivate::name() const{
 
 bool AxisPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
+
+	//When making a graphics item invisible, it gets deselected in the scene.
+	//In this case we don't want to deselect the item in the project explorer.
+	//We need to supress the deselection in the view.
+	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+	worksheet->suppressSelectionChangedEvent(true);
 	setVisible(on);
+	gridItem->setVisible(on);
+	worksheet->suppressSelectionChangedEvent(false);
+
 	emit q->visibilityChanged(on);
 	return oldValue;
 }
@@ -963,12 +990,12 @@ void AxisPrivate::retransformLine() {
 	QPointF startPoint;
 	QPointF endPoint;
 
-	if (orientation == Axis::AxisHorizontal) {
-		if (position == Axis::AxisTop)
+	if (orientation == Axis::Orientation::Horizontal) {
+		if (position == Axis::Position::Top)
 			offset = plot->yMax();
-		else if (position == Axis::AxisBottom)
+		else if (position == Axis::Position::Bottom)
 			offset = plot->yMin();
-		else if (position == Axis::AxisCentered)
+		else if (position == Axis::Position::Centered)
 			offset = plot->yMin() + (plot->yMax()-plot->yMin())/2;
 
 		startPoint.setX(start);
@@ -976,11 +1003,11 @@ void AxisPrivate::retransformLine() {
 		endPoint.setX(end);
 		endPoint.setY(offset);
 	} else { // vertical
-		if (position == Axis::AxisLeft)
+		if (position == Axis::Position::Left)
 			offset = plot->xMin();
-		else if (position == Axis::AxisRight)
+		else if (position == Axis::Position::Right)
 			offset = plot->xMax();
-		else if (position == Axis::AxisCentered)
+		else if (position == Axis::Position::Centered)
 			offset = plot->xMin() + (plot->xMax()-plot->xMin())/2;
 
 		startPoint.setX(offset);
@@ -990,7 +1017,7 @@ void AxisPrivate::retransformLine() {
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MarkGaps);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 	for (const auto& line : lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
@@ -1010,17 +1037,17 @@ void AxisPrivate::retransformArrow() {
 		return;
 
 	arrowPath = QPainterPath();
-	if (arrowType == Axis::NoArrow || lines.isEmpty()) {
+	if (arrowType == Axis::ArrowType::NoArrow || lines.isEmpty()) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
-	if (arrowPosition == Axis::ArrowRight || arrowPosition == Axis::ArrowBoth) {
+	if (arrowPosition == Axis::ArrowPosition::Right || arrowPosition == Axis::ArrowPosition::Both) {
 		const QPointF& endPoint = lines.at(lines.size()-1).p2();
 		this->addArrow(endPoint, 1);
 	}
 
-	if (arrowPosition == Axis::ArrowLeft || arrowPosition == Axis::ArrowBoth) {
+	if (arrowPosition == Axis::ArrowPosition::Left || arrowPosition == Axis::ArrowPosition::Both) {
 		const QPointF& endPoint = lines.at(0).p1();
 		this->addArrow(endPoint, -1);
 	}
@@ -1031,43 +1058,43 @@ void AxisPrivate::retransformArrow() {
 void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 	static const double cos_phi = cos(M_PI/6.);
 
-	if (orientation == Axis::AxisHorizontal) {
+	if (orientation == Axis::Orientation::Horizontal) {
 		QPointF endPoint = QPointF(startPoint.x() + direction*arrowSize, startPoint.y());
 		arrowPath.moveTo(startPoint);
 		arrowPath.lineTo(endPoint);
 
 		switch (arrowType) {
-			case Axis::NoArrow:
+			case Axis::ArrowType::NoArrow:
 				break;
-			case Axis::SimpleArrowSmall:
+			case Axis::ArrowType::SimpleSmall:
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
 				break;
-			case Axis::SimpleArrowBig:
+			case Axis::ArrowType::SimpleBig:
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
 				break;
-			case Axis::FilledArrowSmall:
+			case Axis::ArrowType::FilledSmall:
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::FilledArrowBig:
+			case Axis::ArrowType::FilledBig:
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::SemiFilledArrowSmall:
+			case Axis::ArrowType::SemiFilledSmall:
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/8, endPoint.y()));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::SemiFilledArrowBig:
+			case Axis::ArrowType::SemiFilledBig:
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()));
 				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
@@ -1080,37 +1107,37 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 		arrowPath.lineTo(endPoint);
 
 		switch (arrowType) {
-			case Axis::NoArrow:
+			case Axis::ArrowType::NoArrow:
 				break;
-			case Axis::SimpleArrowSmall:
+			case Axis::ArrowType::SimpleSmall:
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				break;
-			case Axis::SimpleArrowBig:
+			case Axis::ArrowType::SimpleBig:
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
 				arrowPath.moveTo(endPoint);
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
 				break;
-			case Axis::FilledArrowSmall:
+			case Axis::ArrowType::FilledSmall:
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::FilledArrowBig:
+			case Axis::ArrowType::FilledBig:
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::SemiFilledArrowSmall:
+			case Axis::ArrowType::SemiFilledSmall:
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				arrowPath.lineTo(QPointF(endPoint.x(), endPoint.y()+direction*arrowSize/8));
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
 				arrowPath.lineTo(endPoint);
 				break;
-			case Axis::SemiFilledArrowBig:
+			case Axis::ArrowType::SemiFilledBig:
 				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
 				arrowPath.lineTo(QPointF(endPoint.x(), endPoint.y()+direction*arrowSize/4));
 				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
@@ -1154,55 +1181,54 @@ void AxisPrivate::retransformTicks() {
 		return;
 	}
 
-	//determine the spacing for the major ticks
-	double majorTicksSpacing = 0;
+	//determine the increment for the major ticks
+	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
-	if (majorTicksType == Axis::TicksTotalNumber) {
-		//the total number of the major ticks is given - > determine the spacing
+	if (majorTicksType == Axis::TicksType::TotalNumber) {
+		//the total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
 		switch (scale) {
-			case Axis::ScaleLinear:
-				majorTicksSpacing = (end-start)/(majorTicksNumber-1);
+			case Axis::Scale::Linear:
+				majorTicksIncrement = (end-start)/(majorTicksNumber-1);
 				break;
-			case Axis::ScaleLog10:
-				majorTicksSpacing = (log10(end)-log10(start))/(majorTicksNumber-1);
+			case Axis::Scale::Log10:
+				majorTicksIncrement = (log10(end)-log10(start))/(majorTicksNumber-1);
 				break;
-			case Axis::ScaleLog2:
-				majorTicksSpacing = (log(end)-log(start))/log(2)/(majorTicksNumber-1);
+			case Axis::Scale::Log2:
+				majorTicksIncrement = (log(end)-log(start))/log(2)/(majorTicksNumber-1);
 				break;
-			case Axis::ScaleLn:
-				majorTicksSpacing = (log(end)-log(start))/(majorTicksNumber-1);
+			case Axis::Scale::Ln:
+				majorTicksIncrement = (log(end)-log(start))/(majorTicksNumber-1);
 				break;
-			case Axis::ScaleSqrt:
-				majorTicksSpacing = (sqrt(end)-sqrt(start))/(majorTicksNumber-1);
+			case Axis::Scale::Sqrt:
+				majorTicksIncrement = (sqrt(end)-sqrt(start))/(majorTicksNumber-1);
 				break;
-			case Axis::ScaleX2:
-				majorTicksSpacing = (pow(end,2)-pow(start,2))/(majorTicksNumber-1);
+			case Axis::Scale::X2:
+				majorTicksIncrement = (end*end - start*start)/(majorTicksNumber-1);
 		}
-	} else if (majorTicksType == Axis::TicksIncrement) {
-		//the spacing (increment) of the major ticks is given - > determine the number
-		majorTicksSpacing = majorTicksIncrement;
+	} else if (majorTicksType == Axis::TicksType::Spacing) {
+		//the increment of the major ticks is given -> determine the number
+		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end-start);
 		switch (scale) {
-			case Axis::ScaleLinear:
-				tmpMajorTicksNumber = qRound((end-start)/majorTicksSpacing + 1);
+			case Axis::Scale::Linear:
+				tmpMajorTicksNumber = qRound((end-start)/majorTicksIncrement + 1);
 				break;
-			case Axis::ScaleLog10:
-				tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksSpacing + 1);
+			case Axis::Scale::Log10:
+				tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksIncrement + 1);
 				break;
-			case Axis::ScaleLog2:
-				tmpMajorTicksNumber = qRound((log(end)-log(start))/log(2)/majorTicksSpacing + 1);
+			case Axis::Scale::Log2:
+				tmpMajorTicksNumber = qRound((log(end)-log(start))/log(2)/majorTicksIncrement + 1);
 				break;
-			case Axis::ScaleLn:
-				tmpMajorTicksNumber = qRound((log(end)-log(start))/majorTicksSpacing + 1);
+			case Axis::Scale::Ln:
+				tmpMajorTicksNumber = qRound((log(end)-log(start))/majorTicksIncrement + 1);
 				break;
-			case Axis::ScaleSqrt:
-				tmpMajorTicksNumber = qRound((sqrt(end)-sqrt(start))/majorTicksSpacing + 1);
+			case Axis::Scale::Sqrt:
+				tmpMajorTicksNumber = qRound((sqrt(end)-sqrt(start))/majorTicksIncrement + 1);
 				break;
-			case Axis::ScaleX2:
-				tmpMajorTicksNumber = qRound((pow(end,2)-pow(start,2))/majorTicksSpacing + 1);
+			case Axis::Scale::X2:
+				tmpMajorTicksNumber = qRound((end*end - start*start)/majorTicksIncrement + 1);
 		}
-	} else {
-		//custom column was provided
+	} else { //custom column was provided
 		if (majorTicksColumn) {
 			tmpMajorTicksNumber = majorTicksColumn->rowCount();
 		} else {
@@ -1212,10 +1238,10 @@ void AxisPrivate::retransformTicks() {
 	}
 
 	int tmpMinorTicksNumber;
-	if (minorTicksType == Axis::TicksTotalNumber)
+	if (minorTicksType == Axis::TicksType::TotalNumber)
 		tmpMinorTicksNumber = minorTicksNumber;
-	else if (minorTicksType == Axis::TicksIncrement)
-		tmpMinorTicksNumber = (end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
+	else if (minorTicksType == Axis::TicksType::Spacing)
+		tmpMinorTicksNumber = fabs(end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
 	else
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
 
@@ -1231,44 +1257,52 @@ void AxisPrivate::retransformTicks() {
 	const double middleY = plot->yMin() + (plot->yMax() - plot->yMin())/2;
 	bool valid;
 
+	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
+		//DEBUG("major tick " << iMajor)
 		//calculate major tick's position
-		if (majorTicksType != Axis::TicksCustomColumn) {
+		if (majorTicksType != Axis::TicksType::CustomColumn) {
 			switch (scale) {
-				case Axis::ScaleLinear:
-					majorTickPos = start + majorTicksSpacing*iMajor;
-					nextMajorTickPos = start + majorTicksSpacing*(iMajor+1);
+				case Axis::Scale::Linear:
+					majorTickPos = start + majorTicksIncrement * iMajor;
+					nextMajorTickPos = majorTickPos + majorTicksIncrement;
 					break;
-				case Axis::ScaleLog10:
-					majorTickPos = pow(10, log10(start) + majorTicksSpacing*iMajor);
-					nextMajorTickPos = pow(10, log10(start) + majorTicksSpacing*(iMajor+1));
+				case Axis::Scale::Log10:
+					majorTickPos = start * pow(10, majorTicksIncrement*iMajor);
+					nextMajorTickPos = majorTickPos * pow(10, majorTicksIncrement);
 					break;
-				case Axis::ScaleLog2:
-					majorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing*iMajor);
-					nextMajorTickPos = pow(2, log(start)/log(2) + majorTicksSpacing*(iMajor+1));
+				case Axis::Scale::Log2:
+					majorTickPos = start * pow(2, majorTicksIncrement*iMajor);
+					nextMajorTickPos = majorTickPos * pow(2, majorTicksIncrement);
 					break;
-				case Axis::ScaleLn:
-					majorTickPos = exp(log(start) + majorTicksSpacing*iMajor);
-					nextMajorTickPos = exp(log(start) + majorTicksSpacing*(iMajor+1));
+				case Axis::Scale::Ln:
+					majorTickPos = start * exp(majorTicksIncrement*iMajor);
+					nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
 					break;
-				case Axis::ScaleSqrt:
-					majorTickPos = pow(sqrt(start) + majorTicksSpacing*iMajor, 2);
-					nextMajorTickPos = pow(sqrt(start) + majorTicksSpacing*(iMajor+1), 2);
+				case Axis::Scale::Sqrt:
+					majorTickPos = pow(sqrt(start) + majorTicksIncrement*iMajor, 2);
+					nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement*(iMajor+1), 2);
 					break;
-				case Axis::ScaleX2:
-					majorTickPos = sqrt(sqrt(start) + majorTicksSpacing*iMajor);
-					nextMajorTickPos = sqrt(sqrt(start) + majorTicksSpacing*(iMajor+1));
+				case Axis::Scale::X2:
+					majorTickPos = sqrt(start*start + majorTicksIncrement*iMajor);
+					nextMajorTickPos = sqrt(start*start + majorTicksIncrement*(iMajor+1));
 					break;
 			}
-		} else {
+		} else {	// custom column
+			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
+				continue;
 			majorTickPos = majorTicksColumn->valueAt(iMajor);
-			if (std::isnan(majorTickPos))
-				break; //stop iterating after the first non numerical value in the column
+			// set next major tick pos for minor ticks
+			if (iMajor < tmpMajorTicksNumber - 1) {
+				if (majorTicksColumn->isValid(iMajor+1) && !majorTicksColumn->isMasked(iMajor+1))
+					nextMajorTickPos = majorTicksColumn->valueAt(iMajor+1);
+			} else	// last major tick
+				tmpMinorTicksNumber = 0;
 		}
 
 		//calculate start and end points for major tick's line
-		if (majorTicksDirection != Axis::noTicks ) {
-			if (orientation == Axis::AxisHorizontal) {
+		if (majorTicksDirection != Axis::noTicks) {
+			if (orientation == Axis::Orientation::Horizontal) {
 				anchorPoint.setX(majorTickPos);
 				anchorPoint.setY(offset);
 				valid = transformAnchor(&anchorPoint);
@@ -1297,37 +1331,48 @@ void AxisPrivate::retransformTicks() {
 				}
 			}
 
+			double value = scalingFactor * majorTickPos + zeroOffset;
+
+			//if custom column is used, we can have duplicated values in it and we need only unique values
+			if (majorTicksType == Axis::TicksType::CustomColumn && tickLabelValues.indexOf(value) != -1)
+				valid = false;
+
 			//add major tick's line to the painter path
 			if (valid) {
 				majorTicksPath.moveTo(startPoint);
 				majorTicksPath.lineTo(endPoint);
 				majorTickPoints << anchorPoint;
-				tickLabelValues<< scalingFactor*majorTickPos+zeroOffset;
+				tickLabelValues << value;
 			}
 		}
 
 		//minor ticks
-		if ((Axis::noTicks != minorTicksDirection) && (tmpMajorTicksNumber > 1) && (tmpMinorTicksNumber > 0) && (iMajor<tmpMajorTicksNumber-1)) {
+		//DEBUG("	tmpMinorTicksNumber = " << tmpMinorTicksNumber)
+		if (Axis::noTicks != minorTicksDirection && tmpMajorTicksNumber > 1 && tmpMinorTicksNumber > 0 && iMajor < tmpMajorTicksNumber - 1 && nextMajorTickPos != majorTickPos) {
 			//minor ticks are placed at equidistant positions independent of the selected scaling for the major ticks positions
-			double minorTicksSpacing = (nextMajorTickPos-majorTickPos)/(tmpMinorTicksNumber+1);
+			double minorTicksIncrement = (nextMajorTickPos - majorTickPos)/(tmpMinorTicksNumber + 1);
+			//DEBUG("	nextMajorTickPos = " << nextMajorTickPos)
+			//DEBUG("	majorTickPos = " << majorTickPos)
+			//DEBUG("	minorTicksIncrement = " << minorTicksIncrement)
 
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				//calculate minor tick's position
-				if (minorTicksType != Axis::TicksCustomColumn) {
-					minorTickPos = majorTickPos + (iMinor+1)*minorTicksSpacing;
+				if (minorTicksType != Axis::TicksType::CustomColumn) {
+					minorTickPos = majorTickPos + (iMinor + 1) * minorTicksIncrement;
 				} else {
+					if (!minorTicksColumn->isValid(iMinor) || minorTicksColumn->isMasked(iMinor))
+						continue;
 					minorTickPos = minorTicksColumn->valueAt(iMinor);
-					if (std::isnan(minorTickPos))
-						break; //stop iterating after the first non numerical value in the column
 
 					//in the case a custom column is used for the minor ticks, we draw them _once_ for the whole range of the axis.
 					//execute the minor ticks loop only once.
 					if (iMajor > 0)
 						break;
 				}
+				//DEBUG("		minorTickPos = " << minorTickPos)
 
 				//calculate start and end points for minor tick's line
-				if (orientation == Axis::AxisHorizontal) {
+				if (orientation == Axis::Orientation::Horizontal) {
 					anchorPoint.setX(minorTickPos);
 					anchorPoint.setY(offset);
 					valid = transformAnchor(&anchorPoint);
@@ -1381,30 +1426,29 @@ void AxisPrivate::retransformTickLabelStrings() {
 	if (suppressRetransform)
 		return;
 
-// 	DEBUG("AxisPrivate::retransformTickLabelStrings()");
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
 		int newPrecision = upperLabelsPrecision(labelsPrecision);
-		if (newPrecision!= labelsPrecision) {
+		if (newPrecision != labelsPrecision) {
 			labelsPrecision = newPrecision;
 			emit q->labelsPrecisionChanged(labelsPrecision);
 		} else {
 			//check, whether we can reduce the current precision
 			newPrecision = lowerLabelsPrecision(labelsPrecision);
-			if (newPrecision!= labelsPrecision) {
+			if (newPrecision != labelsPrecision) {
 				labelsPrecision = newPrecision;
 				emit q->labelsPrecisionChanged(labelsPrecision);
 			}
 		}
 	}
-// 	DEBUG("labelsPrecision =" << labelsPrecision);
+	//DEBUG("labelsPrecision =" << labelsPrecision);
 
 	//automatically switch from 'decimal' to 'scientific' format for big numbers (>10^4)
 	//and back to decimal when the numbers get smaller after the auto-switch again
-	if (labelsFormat == Axis::FormatDecimal && !labelsFormatDecimalOverruled) {
+	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatDecimalOverruled) {
 		for (auto value : tickLabelValues) {
 			if (std::abs(value) > 1e4) {
-				labelsFormat = Axis::FormatScientificE;
+				labelsFormat = Axis::LabelsFormat::ScientificE;
 				emit q->labelsFormatChanged(labelsFormat);
 				labelsFormatAutoChanged = true;
 				break;
@@ -1422,52 +1466,53 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 		if (changeBack) {
 			labelsFormatAutoChanged = false;
-			labelsFormat = Axis::FormatDecimal;
+			labelsFormat = Axis::LabelsFormat::Decimal;
 			emit q->labelsFormatChanged(labelsFormat);
 		}
 	}
 
 	tickLabelStrings.clear();
 	QString str;
-	if ( (orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric)
-		|| (orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric) ) {
-		if (labelsFormat == Axis::FormatDecimal) {
-			QString nullStr = QString::number(0, 'f', labelsPrecision);
+	SET_NUMBER_LOCALE
+	if ( (orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+		|| (orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) ) {
+		if (labelsFormat == Axis::LabelsFormat::Decimal) {
+			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
-				str = QString::number(value, 'f', labelsPrecision);
+				str = numberLocale.toString(value, 'f', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::FormatScientificE) {
-			QString nullStr = QString::number(0, 'e', labelsPrecision);
+		} else if (labelsFormat == Axis::LabelsFormat::ScientificE) {
+			QString nullStr = numberLocale.toString(0., 'e', labelsPrecision);
 			for (const auto value : tickLabelValues) {
-				str = QString::number(value, 'e', labelsPrecision);
+				str = numberLocale.toString(value, 'e', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::FormatPowers10) {
+		} else if (labelsFormat == Axis::LabelsFormat::Powers10) {
 			for (const auto value : tickLabelValues) {
-				str = "10<span style=\"vertical-align:super\">" + QString::number(log10(value), 'f', labelsPrecision) + "</span>";
+				str = "10<span style=\"vertical-align:super\">" + numberLocale.toString(log10(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::FormatPowers2) {
+		} else if (labelsFormat == Axis::LabelsFormat::Powers2) {
 			for (const auto value : tickLabelValues) {
-				str = "2<span style=\"vertical-align:super\">" + QString::number(log2(value), 'f', labelsPrecision) + "</span>";
+				str = "2<span style=\"vertical-align:super\">" + numberLocale.toString(log2(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::FormatPowersE) {
+		} else if (labelsFormat == Axis::LabelsFormat::PowersE) {
 			for (const auto value : tickLabelValues) {
-				str = "e<span style=\"vertical-align:super\">" + QString::number(log(value), 'f', labelsPrecision) + "</span>";
+				str = "e<span style=\"vertical-align:super\">" + numberLocale.toString(log(value), 'f', labelsPrecision) + "</span>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::FormatMultipliesPi) {
+		} else if (labelsFormat == Axis::LabelsFormat::MultipliesPi) {
 			for (const auto value : tickLabelValues) {
-				str = "<span>" + QString::number(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
+				str = "<span>" + numberLocale.toString(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
@@ -1491,7 +1536,15 @@ void AxisPrivate::retransformTickLabelStrings() {
 	where no duplicates for the tick label float occur.
  */
 int AxisPrivate::upperLabelsPrecision(int precision) {
-// 	DEBUG("AxisPrivate::upperLabelsPrecision() precision =" << precision);
+	DEBUG(Q_FUNC_INFO << ", precision =" << precision);
+
+	// avoid problems with zero range axis
+	if (tickLabelValues.isEmpty() || qFuzzyCompare(tickLabelValues.constFirst(), tickLabelValues.constLast())) {
+		DEBUG(Q_FUNC_INFO << ", zero range axis detected. ticklabel values: ")
+		QDEBUG(Q_FUNC_INFO << tickLabelValues)
+		return 0;
+	}
+
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
@@ -1503,15 +1556,14 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 			if (i == j)
 				continue;
 
-			if (tempValues.at(i) == tempValues.at(j)) {
 			//duplicate for the current precision found, increase the precision and check again
-			return upperLabelsPrecision(precision + 1);
-			}
+			if (tempValues.at(i) == tempValues.at(j))
+				return upperLabelsPrecision(precision + 1);
 		}
 	}
 
 	//no duplicates for the current precision found: return the current value
-// 	DEBUG("	upper precision = " << precision);
+	DEBUG(Q_FUNC_INFO << ", upper precision = " << precision);
 	return precision;
 }
 
@@ -1524,7 +1576,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QVector<double> tempValues;
-	for (const auto value : tickLabelValues)
+	for (auto value : tickLabelValues)
 		tempValues.append( nsl_math_round_places(value, precision-1) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
@@ -1539,11 +1591,24 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 		}
 	}
 
-	//no duplicates found, reduce further, and check again
-	if (precision == 0)
-		return 0;
-	else
+	if (precision == 0) {
+		bool hasDoubles = false;
+		for (auto value : tickLabelValues) {
+			if (floor(value) != value) {
+				hasDoubles = true;
+				break;
+			}
+		}
+
+		//if we have double values we don't want to show them as integers, keep at least one float digit.
+		if (hasDoubles)
+			return 1;
+		else
+			return 0;
+	} else {
+		//no duplicates found, reduce further, and check again
 		return lowerLabelsPrecision(precision - 1);
+	}
 }
 
 /*!
@@ -1552,14 +1617,14 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
  */
 void AxisPrivate::retransformTickLabelPositions() {
 	tickLabelPoints.clear();
-	if (majorTicksDirection == Axis::noTicks || labelsPosition == Axis::NoLabels) {
+	if (majorTicksDirection == Axis::noTicks || labelsPosition == Axis::LabelsPosition::NoLabels) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
 
 	QFontMetrics fm(labelsFont);
-	float width = 0;
-	float height = fm.ascent();
+	double width = 0;
+	double height = fm.ascent();
 	QPointF pos;
 	const double middleX = plot->xMin() + (plot->xMax() - plot->xMin())/2;
 	const double middleY = plot->yMin() + (plot->yMax() - plot->yMin())/2;
@@ -1570,28 +1635,28 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
-	double cosinus = cos(labelsRotationAngle * M_PI / 180); // calculate only one time
-	double sinus = sin(labelsRotationAngle * M_PI / 180); // calculate only one time
+	double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
+	double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
-		if ((orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
-				(orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
-			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
-				width = fm.width(tickLabelStrings.at(i));
+		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) ||
+				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
+			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
+				width = fm.boundingRect(tickLabelStrings.at(i)).width();
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
 				width = td.size().width();
 				height = td.size().height();
 			}
 		} else { // Datetime
-			width = fm.width(tickLabelStrings.at(i));
+			width = fm.boundingRect(tickLabelStrings.at(i)).width();
 		}
 
-		double diffx = cosinus * width;
-		double diffy = sinus * width;
+		double diffx = cosine * width;
+		double diffy = sine * width;
 		anchorPoint = majorTickPoints.at(i);
 
 		//center align all labels with respect to the end point of the tick line
-		if (orientation == Axis::AxisHorizontal) {
+		if (orientation == Axis::Orientation::Horizontal) {
 			if (offset < middleY) {
 				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
@@ -1601,37 +1666,37 @@ void AxisPrivate::retransformTickLabelPositions() {
 			}
 
 			// for rotated labels (angle is not zero), align label's corner at the position of the tick
-			if (abs(labelsRotationAngle) > 179.999 && abs(labelsRotationAngle) < 180.009) { // +-180°
-				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() + width/2);
-					pos.setY( endPoint.y() + labelsOffset );
+			if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
+				if (labelsPosition == Axis::LabelsPosition::Out) {
+					pos.setX(endPoint.x() + width/2);
+					pos.setY(endPoint.y() + labelsOffset );
 				} else {
-					pos.setX( startPoint.x() + width/2);
-					pos.setY( startPoint.y() - height + labelsOffset );
+					pos.setX(startPoint.x() + width/2);
+					pos.setY(startPoint.y() - height - labelsOffset);
 				}
 			} else if (labelsRotationAngle <= -0.01) { // [-0.01°, -180°)
-				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() + sinus * height/2);
-					pos.setY( endPoint.y() + labelsOffset + cosinus * height/2);
+				if (labelsPosition == Axis::LabelsPosition::Out) {
+					pos.setX(endPoint.x() + sine * height/2);
+					pos.setY(endPoint.y() + labelsOffset + cosine * height/2);
 				} else {
-					pos.setX( startPoint.x() + sinus * height/2 - diffx);
-					pos.setY( startPoint.y() + labelsOffset + cosinus * height/2 + diffy);
+					pos.setX(startPoint.x() + sine * height/2 - diffx);
+					pos.setY(startPoint.y() - labelsOffset + cosine * height/2 + diffy);
 				}
 			} else if (labelsRotationAngle >= 0.01) { // [0.01°, 180°)
-				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - diffx + sinus * height/2);
-					pos.setY( endPoint.y() + labelsOffset + diffy + cosinus * height/2);
+				if (labelsPosition == Axis::LabelsPosition::Out) {
+					pos.setX(endPoint.x() - diffx + sine * height/2);
+					pos.setY(endPoint.y() + labelsOffset + diffy + cosine * height/2);
 				} else {
-					pos.setX( startPoint.x() + sinus * height/2);
-					pos.setY( startPoint.y() + labelsOffset + cosinus * height/2);
+					pos.setX(startPoint.x() + sine * height/2);
+					pos.setY(startPoint.y() - labelsOffset + cosine * height/2);
 				}
 			} else {	// 0°
-				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - width/2);
-					pos.setY( endPoint.y() + height + labelsOffset );
+				if (labelsPosition == Axis::LabelsPosition::Out) {
+					pos.setX(endPoint.x() - width/2);
+					pos.setY(endPoint.y() + height + labelsOffset);
 				} else {
-					pos.setX( startPoint.x() - width/2);
-					pos.setY( startPoint.y() + labelsOffset );
+					pos.setX(startPoint.x() - width/2);
+					pos.setY(startPoint.y() - labelsOffset);
 				}
 			}
 		// ---------------------- vertical -------------------------
@@ -1644,55 +1709,55 @@ void AxisPrivate::retransformTickLabelPositions() {
 				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? -xDirection *  majorTicksLength  : 0, 0);
 			}
 
-			if (labelsRotationAngle >= 89.999 && labelsRotationAngle <= 90.009) { // +90°
-				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - labelsOffset);
-					pos.setY( endPoint.y() + width/2 );
+			if (fabs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
+				if (labelsPosition == Axis::LabelsPosition::Out) {
+					pos.setX(endPoint.x() - labelsOffset);
+					pos.setY(endPoint.y() + width/2 );
 				} else {
-					pos.setX( startPoint.x() - labelsOffset);
-					pos.setY( startPoint.y() + width/2);
+					pos.setX(startPoint.x() + labelsOffset);
+					pos.setY(startPoint.y() + width/2);
 				}
-			} else if (labelsRotationAngle >= -90.999 && labelsRotationAngle <= -89.009) { // -90°
-				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - labelsOffset - height);
-					pos.setY( endPoint.y() - width/2 );
+			} else if (fabs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
+				if (labelsPosition == Axis::LabelsPosition::Out) {
+					pos.setX(endPoint.x() - labelsOffset - height);
+					pos.setY(endPoint.y() - width/2);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset);
-					pos.setY( startPoint.y() - width/2 );
+					pos.setX(startPoint.x() + labelsOffset);
+					pos.setY(startPoint.y() - width/2);
 				}
-			} else if (abs(labelsRotationAngle) > 179.999 && abs(labelsRotationAngle) < 180.009) { // +-180°
-				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - labelsOffset);
-					pos.setY( endPoint.y() - height/2);
+			} else if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
+				if (labelsPosition == Axis::LabelsPosition::Out) {
+					pos.setX(endPoint.x() - labelsOffset);
+					pos.setY(endPoint.y() - height/2);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset + width);
-					pos.setY( startPoint.y() - height/2 );
+					pos.setX(startPoint.x() + labelsOffset + width);
+					pos.setY(startPoint.y() - height/2);
 				}
-			} else if (abs(labelsRotationAngle) >= 0.01 && abs(labelsRotationAngle) < 90.01) { // [0.01°, 90°)
-				if (labelsPosition == Axis::LabelsOut) {
+			} else if (fabs(labelsRotationAngle) >= 0.01 && fabs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
-					pos.setX( endPoint.x() - labelsOffset - diffx + sinus * height/2);
-					pos.setY( endPoint.y() + cosinus * height/2 + diffy);
+					pos.setX(endPoint.x() - labelsOffset - diffx + sine * height/2);
+					pos.setY(endPoint.y() + cosine * height/2 + diffy);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset + sinus * height/2);
-					pos.setY( startPoint.y() + cosinus * height/2);
+					pos.setX(startPoint.x() + labelsOffset + sine * height/2);
+					pos.setY(startPoint.y() + cosine * height/2);
 				}
-			} else if (abs(labelsRotationAngle) >= 90.01 && abs(labelsRotationAngle) < 180) { // [90.01, 180)
-				if (labelsPosition == Axis::LabelsOut) {
+			} else if (fabs(labelsRotationAngle) >= 90.01 && fabs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
+				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
-					pos.setX( endPoint.x() - labelsOffset + sinus * height/2);
-					pos.setY( endPoint.y() + cosinus * height/2);
+					pos.setX(endPoint.x() - labelsOffset + sine * height/2);
+					pos.setY(endPoint.y() + cosine * height/2);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset - diffx + sinus * height/2);
-					pos.setY( startPoint.y() + diffy + cosinus * height/2);
+					pos.setX(startPoint.x() + labelsOffset - diffx + sine * height/2);
+					pos.setY(startPoint.y() + diffy + cosine * height/2);
 				}
 			} else { // 0°
-				if (labelsPosition == Axis::LabelsOut) {
-					pos.setX( endPoint.x() - width - labelsOffset);
-					pos.setY( endPoint.y() + height/2 );
+				if (labelsPosition == Axis::LabelsPosition::Out) {
+					pos.setX(endPoint.x() - width - labelsOffset);
+					pos.setY(endPoint.y() + height/2);
 				} else {
-					pos.setX( startPoint.x() - labelsOffset);
-					pos.setY( startPoint.y() + height/2 );
+					pos.setX(startPoint.x() + labelsOffset);
+					pos.setY(startPoint.y() + height/2);
 				}
 			}
 		}
@@ -1715,7 +1780,7 @@ void AxisPrivate::retransformMajorGrid() {
 	//major tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QVector<QPointF> logicalMajorTickPoints = cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QVector<QPointF> logicalMajorTickPoints = cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (logicalMajorTickPoints.isEmpty())
 		return;
@@ -1724,7 +1789,7 @@ void AxisPrivate::retransformMajorGrid() {
 	//when iterating over all grid lines, skip the first and the last points for auto scaled axes,
 	//since we don't want to paint any grid lines at the plot boundaries
 	bool skipLowestTick, skipUpperTick;
-	if (orientation == Axis::AxisHorizontal) { //horizontal axis
+	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
 		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xMin());
 		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xMax());
 	} else {
@@ -1753,7 +1818,7 @@ void AxisPrivate::retransformMajorGrid() {
 	}
 
 	QVector<QLineF> lines;
-	if (orientation == Axis::AxisHorizontal) { //horizontal axis
+	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
 		double yMin = plot->yMin();
 		double yMax = plot->yMax();
 
@@ -1772,7 +1837,7 @@ void AxisPrivate::retransformMajorGrid() {
 		}
 	}
 
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (const auto& line : lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -1794,10 +1859,10 @@ void AxisPrivate::retransformMinorGrid() {
 	//minor tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear somtimes without this flag
-	QVector<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::SuppressPageClipping);
+	QVector<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	QVector<QLineF> lines;
-	if (orientation == Axis::AxisHorizontal) { //horizontal axis
+	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
 		double yMin = plot->yMin();
 		double yMax = plot->yMax();
 
@@ -1811,13 +1876,23 @@ void AxisPrivate::retransformMinorGrid() {
 			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
 	}
 
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::SuppressPageClipping);
+	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (const auto& line : lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
 	}
 
 	recalcShapeAndBoundingRect();
+}
+
+/*!
+ * called when the opacity of the grid was changes, update the grid graphics item
+ */
+//TODO: this function is only needed for loaded projects where update() doesn't seem to be enough
+//and we have to call gridItem->update() explicitly.
+//This is not required for newly created plots/axes. Why is this difference?
+void AxisPrivate::updateGrid() {
+	gridItem->update();
 }
 
 void AxisPrivate::recalcShapeAndBoundingRect() {
@@ -1842,7 +1917,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	axisShape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
 
 	QPainterPath  tickLabelsPath = QPainterPath();
-	if (labelsPosition != Axis::NoLabels) {
+	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
 		QTransform trafo;
 		QPainterPath tempPath;
 		QFontMetrics fm(labelsFont);
@@ -1850,7 +1925,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		td.setDefaultFont(labelsFont);
 		for (int i = 0; i < tickLabelPoints.size(); i++) {
 			tempPath = QPainterPath();
-			if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 				tempPath.addRect(fm.boundingRect(tickLabelStrings.at(i)));
 			} else {
 				td.setHtml(tickLabelStrings.at(i));
@@ -1870,24 +1945,27 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 	//add title label, if available
 	if ( title->isVisible() && !title->text().text.isEmpty() ) {
-		//determine the new position of the title label:
-		//we calculate the new position here and not in retransform(),
-		//since it depends on the size and position of the tick labels, tickLabelsPath, available here.
-		QRectF rect = linePath.boundingRect();
-		qreal offsetX = titleOffsetX - labelsOffset; //the distance to the axis line
-		qreal offsetY = titleOffsetY - labelsOffset; //the distance to the axis line
-		if (orientation == Axis::AxisHorizontal) {
-			offsetY -= title->graphicsItem()->boundingRect().height()/2;
-			if (labelsPosition == Axis::LabelsOut)
-				offsetY -= tickLabelsPath.boundingRect().height();
-			title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + titleOffsetX, rect.bottomLeft().y() - offsetY ) );
-		} else {
-			offsetX -= title->graphicsItem()->boundingRect().width()/2;
-			if (labelsPosition == Axis::LabelsOut)
-				offsetX -= tickLabelsPath.boundingRect().width();
-			title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2 - titleOffsetY) );
+		const QRectF& titleRect = title->graphicsItem()->boundingRect();
+		if (titleRect.width() != 0.0 &&  titleRect.height() != 0.0) {
+			//determine the new position of the title label:
+			//we calculate the new position here and not in retransform(),
+			//since it depends on the size and position of the tick labels, tickLabelsPath, available here.
+			QRectF rect = linePath.boundingRect();
+			qreal offsetX = titleOffsetX; //the distance to the axis line
+			qreal offsetY = titleOffsetY; //the distance to the axis line
+			if (orientation == Axis::Orientation::Horizontal) {
+				offsetY -= titleRect.height()/2;
+				if (labelsPosition == Axis::LabelsPosition::Out)
+					offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
+				title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + titleOffsetX, rect.bottomLeft().y() - offsetY ) );
+			} else {
+				offsetX -= titleRect.width()/2;
+				if (labelsPosition == Axis::LabelsPosition::Out)
+					offsetX -= labelsOffset+ tickLabelsPath.boundingRect().width();
+				title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2 - titleOffsetY) );
+			}
+			axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 		}
-		axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 	}
 
 	boundingRectangle = axisShape.boundingRect();
@@ -1920,7 +1998,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		painter->drawPath(linePath);
 
 		//draw the arrow
-		if (arrowType != Axis::NoArrow)
+		if (arrowType != Axis::ArrowType::NoArrow)
 			painter->drawPath(arrowPath);
 	}
 
@@ -1941,20 +2019,20 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 	}
 
 	// draw tick labels
-	if (labelsPosition != Axis::NoLabels) {
+	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
 		painter->setOpacity(labelsOpacity);
 		painter->setPen(QPen(labelsColor));
 		painter->setFont(labelsFont);
 		QTextDocument td;
 		td.setDefaultFont(labelsFont);
-		if ((orientation == Axis::AxisHorizontal && plot->xRangeFormat() == CartesianPlot::Numeric) ||
-				(orientation == Axis::AxisVertical && plot->yRangeFormat() == CartesianPlot::Numeric)) {
+		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) ||
+				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
 			for (int i = 0; i < tickLabelPoints.size(); i++) {
 				painter->translate(tickLabelPoints.at(i));
 				painter->save();
 				painter->rotate(-labelsRotationAngle);
 
-				if (labelsFormat == Axis::FormatDecimal || labelsFormat == Axis::FormatScientificE) {
+				if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 					painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
 				} else {
 					td.setHtml(tickLabelStrings.at(i));
@@ -2007,27 +2085,77 @@ void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
+void AxisPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
+	auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
+	if (!plot->isLocked()) {
+		m_panningStarted = true;
+		m_panningStart = event->pos();
+	} else
+		QGraphicsItem::mousePressEvent(event);
+}
+
+void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	if (m_panningStarted) {
+		if (orientation == WorksheetElement::Orientation::Horizontal) {
+			setCursor(Qt::SizeHorCursor);
+			const int deltaXScene = (m_panningStart.x() - event->pos().x());
+			if (abs(deltaXScene) < 5)
+				return;
+
+			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
+			if (deltaXScene > 0)
+				plot->shiftRightX();
+			else
+				plot->shiftLeftX();
+		} else {
+			setCursor(Qt::SizeVerCursor);
+			const int deltaYScene = (m_panningStart.y() - event->pos().y());
+			if (abs(deltaYScene) < 5)
+				return;
+
+			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
+			if (deltaYScene > 0)
+				plot->shiftUpY();
+			else
+				plot->shiftDownY();
+		}
+
+		m_panningStart = event->pos();
+	}
+}
+
+
+void AxisPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	setCursor(Qt::ArrowCursor);
+	m_panningStarted = false;
+	QGraphicsItem::mouseReleaseEvent(event);
+}
+
 void AxisPrivate::setPrinting(bool on) {
 	m_printing = on;
+}
+
+bool AxisPrivate::isHovered() const {
+	return m_hovered;
 }
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
 //! Save as XML
-void Axis::save(QXmlStreamWriter* writer) const{
+void Axis::save(QXmlStreamWriter* writer) const {
 	Q_D(const Axis);
 
-	writer->writeStartElement( "axis" );
-	writeBasicAttributes( writer );
-	writeCommentElement( writer );
+	writer->writeStartElement("axis");
+	writeBasicAttributes(writer);
+	writeCommentElement(writer);
 
 	//general
 	writer->writeStartElement( "general" );
 	writer->writeAttribute( "autoScale", QString::number(d->autoScale) );
-	writer->writeAttribute( "orientation", QString::number(d->orientation) );
-	writer->writeAttribute( "position", QString::number(d->position) );
-	writer->writeAttribute( "scale", QString::number(d->scale) );
+	writer->writeAttribute( "orientation", QString::number(static_cast<int>(d->orientation)) );
+	writer->writeAttribute( "position", QString::number(static_cast<int>(d->position)) );
+	writer->writeAttribute( "scale", QString::number(static_cast<int>(d->scale)) );
 	writer->writeAttribute( "offset", QString::number(d->offset) );
 	writer->writeAttribute( "start", QString::number(d->start) );
 	writer->writeAttribute( "end", QString::number(d->end) );
@@ -2039,23 +2167,23 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 
 	//label
-	d->title->save( writer );
+	d->title->save(writer);
 
 	//line
 	writer->writeStartElement( "line" );
 	WRITE_QPEN(d->linePen);
 	writer->writeAttribute( "opacity", QString::number(d->lineOpacity) );
-	writer->writeAttribute( "arrowType", QString::number(d->arrowType) );
-	writer->writeAttribute( "arrowPosition", QString::number(d->arrowPosition) );
+	writer->writeAttribute( "arrowType", QString::number(static_cast<int>(d->arrowType)) );
+	writer->writeAttribute( "arrowPosition", QString::number(static_cast<int>(d->arrowPosition)) );
 	writer->writeAttribute( "arrowSize", QString::number(d->arrowSize) );
 	writer->writeEndElement();
 
 	//major ticks
 	writer->writeStartElement( "majorTicks" );
 	writer->writeAttribute( "direction", QString::number(d->majorTicksDirection) );
-	writer->writeAttribute( "type", QString::number(d->majorTicksType) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->majorTicksType)) );
 	writer->writeAttribute( "number", QString::number(d->majorTicksNumber) );
-	writer->writeAttribute( "increment", QString::number(d->majorTicksIncrement) );
+	writer->writeAttribute( "increment", QString::number(d->majorTicksSpacing) );
 	WRITE_COLUMN(d->majorTicksColumn, majorTicksColumn);
 	writer->writeAttribute( "length", QString::number(d->majorTicksLength) );
 	WRITE_QPEN(d->majorTicksPen);
@@ -2065,7 +2193,7 @@ void Axis::save(QXmlStreamWriter* writer) const{
 	//minor ticks
 	writer->writeStartElement( "minorTicks" );
 	writer->writeAttribute( "direction", QString::number(d->minorTicksDirection) );
-	writer->writeAttribute( "type", QString::number(d->minorTicksType) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->minorTicksType)) );
 	writer->writeAttribute( "number", QString::number(d->minorTicksNumber) );
 	writer->writeAttribute( "increment", QString::number(d->minorTicksIncrement) );
 	WRITE_COLUMN(d->minorTicksColumn, minorTicksColumn);
@@ -2078,10 +2206,10 @@ void Axis::save(QXmlStreamWriter* writer) const{
 
 	//labels
 	writer->writeStartElement( "labels" );
-	writer->writeAttribute( "position", QString::number(d->labelsPosition) );
+	writer->writeAttribute( "position", QString::number(static_cast<int>(d->labelsPosition)) );
 	writer->writeAttribute( "offset", QString::number(d->labelsOffset) );
 	writer->writeAttribute( "rotation", QString::number(d->labelsRotationAngle) );
-	writer->writeAttribute( "format", QString::number(d->labelsFormat) );
+	writer->writeAttribute( "format", QString::number(static_cast<int>(d->labelsFormat)) );
 	writer->writeAttribute( "precision", QString::number(d->labelsPrecision) );
 	writer->writeAttribute( "autoPrecision", QString::number(d->labelsAutoPrecision) );
 	writer->writeAttribute( "dateTimeFormat", d->labelsDateTimeFormat );
@@ -2131,9 +2259,9 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("autoScale", autoScale, bool);
-			READ_INT_VALUE("orientation", orientation, Axis::AxisOrientation);
-			READ_INT_VALUE("position", position, Axis::AxisPosition);
-			READ_INT_VALUE("scale", scale, Axis::AxisScale);
+			READ_INT_VALUE("orientation", orientation, Orientation);
+			READ_INT_VALUE("position", position, Axis::Position);
+			READ_INT_VALUE("scale", scale, Axis::Scale);
 			READ_DOUBLE_VALUE("offset", offset);
 			READ_DOUBLE_VALUE("start", start);
 			READ_DOUBLE_VALUE("end", end);
@@ -2163,7 +2291,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("direction", majorTicksDirection, Axis::TicksDirection);
 			READ_INT_VALUE("type", majorTicksType, Axis::TicksType);
 			READ_INT_VALUE("number", majorTicksNumber, int);
-			READ_DOUBLE_VALUE("increment", majorTicksIncrement);
+			READ_DOUBLE_VALUE("increment", majorTicksSpacing);
 			READ_COLUMN(majorTicksColumn);
 			READ_DOUBLE_VALUE("length", majorTicksLength);
 			READ_QPEN(d->majorTicksPen);
@@ -2238,48 +2366,53 @@ void Axis::loadThemeConfig(const KConfig& config) {
 
 	QPen p;
 	// Tick label
-	this->setLabelsColor(group.readEntry("LabelsFontColor",(QColor) this->labelsColor()));
-	this->setLabelsOpacity(group.readEntry("LabelsOpacity",this->labelsOpacity()));
+	this->setLabelsColor(group.readEntry("LabelsFontColor", QColor(Qt::black)));
+	this->setLabelsOpacity(group.readEntry("LabelsOpacity", 1.0));
 
 	//Line
-	this->setLineOpacity(group.readEntry("LineOpacity",this->lineOpacity()));
-	p.setColor(group.readEntry("LineColor", (QColor) this->linePen().color()));
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle",(int) this->linePen().style()));
-	p.setWidthF(group.readEntry("LineWidth", this->linePen().widthF()));
+	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
+	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setLinePen(p);
 
-	//Major ticks
-	this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", this->majorGridOpacity()));
-	p.setColor(group.readEntry("MajorGridColor",(QColor) this->majorGridPen().color()));
-	if (firstAxis)
-		p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle",(int) this->majorGridPen().style()));
-	else
+	//Major grid
+	if (firstAxis) {
+		p.setStyle((Qt::PenStyle)group.readEntry("MajorGridStyle", (int)Qt::SolidLine));
+		p.setColor(group.readEntry("MajorGridColor", QColor(Qt::gray)));
+		p.setWidthF(group.readEntry("MajorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	} else
 		p.setStyle(Qt::NoPen);
-	p.setWidthF(group.readEntry("MajorGridWidth", this->majorGridPen().widthF()));
 	this->setMajorGridPen(p);
-	p.setColor(group.readEntry("MajorTicksColor",(QColor)this->majorTicksPen().color()));
-	p.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle",(int) this->majorTicksPen().style()));
-	p.setWidthF(group.readEntry("MajorTicksWidth", this->majorTicksPen().widthF()));
+	this->setMajorGridOpacity(group.readEntry("MajorGridOpacity", 1.0));
+
+	//Major ticks
+	p.setStyle((Qt::PenStyle)group.readEntry("MajorTicksLineStyle", (int)Qt::SolidLine));
+	p.setColor(group.readEntry("MajorTicksColor", QColor(Qt::black)));
+	p.setWidthF(group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMajorTicksPen(p);
-	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity",this->majorTicksOpacity()));
+	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity", 1.0));
+
+	//Minor grid
+	if (firstAxis) {
+		p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle", (int)Qt::DotLine));
+		p.setColor(group.readEntry("MinorGridColor", QColor(Qt::gray)));
+		p.setWidthF(group.readEntry("MinorGridWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	} else
+		p.setStyle(Qt::NoPen);
+	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", 1.0));
+	this->setMinorGridPen(p);
 
 	//Minor ticks
-	this->setMinorGridOpacity(group.readEntry("MinorGridOpacity", this->minorGridOpacity()));
-	p.setColor(group.readEntry("MinorGridColor",(QColor) this->minorGridPen().color()));
-	if (firstAxis)
-		p.setStyle((Qt::PenStyle)group.readEntry("MinorGridStyle",(int) this->minorGridPen().style()));
-	else
-		p.setStyle(Qt::NoPen);
-	p.setWidthF(group.readEntry("MinorGridWidth", this->minorGridPen().widthF()));
-	this->setMinorGridPen(p);
-	p.setColor(group.readEntry("MinorTicksColor",(QColor) this->minorTicksPen().color()));
-	p.setWidthF(group.readEntry("MinorTicksWidth", this->minorTicksPen().widthF()));
+	p.setStyle((Qt::PenStyle)group.readEntry("MinorTicksLineStyle", (int)Qt::SolidLine));
+	p.setColor(group.readEntry("MinorTicksColor", QColor(Qt::black)));
+	p.setWidthF(group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMinorTicksPen(p);
-	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity",this->minorTicksOpacity()));
+	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity", 1.0));
 
-	const QVector<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
-	for (auto* child : childElements)
-		child->loadThemeConfig(config);
+	//load the theme for the title label
+	Q_D(Axis);
+	d->title->loadThemeConfig(config);
 }
 
 void Axis::saveThemeConfig(const KConfig& config) {
@@ -2317,6 +2450,7 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("MinorTicksOpacity", this->minorTicksOpacity());
 	group.writeEntry("MinorTicksType", (int)this->minorTicksType());
 
-	const QVector<TextLabel*>& childElements = children<TextLabel>(AbstractAspect::IncludeHidden);
-	childElements.at(0)->saveThemeConfig(config);
+	//same the theme config for the title label
+	Q_D(Axis);
+	d->title->saveThemeConfig(config);
 }

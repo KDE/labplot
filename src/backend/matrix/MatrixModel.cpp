@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2018-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -30,8 +30,11 @@
 
 #include "backend/matrix/MatrixModel.h"
 #include "backend/matrix/Matrix.h"
+
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QBrush>
-#include <QLocale>
 
 /*!
   \class MatrixModel
@@ -86,21 +89,23 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 		case Qt::ToolTipRole:
 		case Qt::EditRole:
 		case Qt::DisplayRole: {
-			AbstractColumn::ColumnMode mode = m_matrix->mode();
+			auto mode = m_matrix->mode();
 			//DEBUG("MatrixModel::data() DisplayRole, mode = " << mode);
 			switch (mode) {
-			case AbstractColumn::Numeric:
+			case AbstractColumn::ColumnMode::Numeric:
 				return QVariant(m_matrix->text<double>(row, col));
-			case AbstractColumn::Integer:
+			case AbstractColumn::ColumnMode::Integer:
 				return QVariant(m_matrix->text<int>(row, col));
-			case AbstractColumn::DateTime:
-			case AbstractColumn::Month:
-			case AbstractColumn::Day:
+			case AbstractColumn::ColumnMode::BigInt:
+				return QVariant(m_matrix->text<qint64>(row, col));
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
 				return QVariant(m_matrix->text<QDateTime>(row, col));
-			case AbstractColumn::Text:	// should not happen
+			case AbstractColumn::ColumnMode::Text:	// should not happen
 				return QVariant(m_matrix->text<QString>(row, col));
 			default:
-				DEBUG("	unknown column mode " << mode << " found");
+				DEBUG("	unknown column mode " << static_cast<int>(mode) << " found");
 				break;
 			}
 			break;
@@ -118,20 +123,21 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 
 QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	QString result;
-	Matrix::HeaderFormat headerFormat = m_matrix->headerFormat();
+	auto headerFormat = m_matrix->headerFormat();
+	SET_NUMBER_LOCALE
 	switch (orientation) {
 		case Qt::Horizontal:
 			switch (role) {
 				case Qt::DisplayRole:
 				case Qt::ToolTipRole:
-					if (headerFormat == Matrix::HeaderRowsColumns) {
+					if (headerFormat == Matrix::HeaderFormat::HeaderRowsColumns) {
 						result = QString::number(section+1);
-					} else if (headerFormat == Matrix::HeaderValues) {
+					} else if (headerFormat == Matrix::HeaderFormat::HeaderValues) {
 						double diff = m_matrix->xEnd() - m_matrix->xStart();
 						double step = 0.0;
 						if (m_matrix->columnCount() > 1)
 							step = diff/double(m_matrix->columnCount()-1);
-						result = QLocale().toString(m_matrix->xStart()+double(section)*step,
+						result = numberLocale.toString(m_matrix->xStart()+double(section)*step,
 								m_matrix->numericFormat(), m_matrix->precision());
 					} else {
 						result = QString::number(section+1) + QLatin1String(" (");
@@ -139,7 +145,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 						double step = 0.0;
 						if (m_matrix->columnCount() > 1)
 							step = diff/double(m_matrix->columnCount()-1);
-						result += QLocale().toString(m_matrix->xStart()+double(section)*step,
+						result += numberLocale.toString(m_matrix->xStart()+double(section)*step,
 								m_matrix->numericFormat(), m_matrix->precision());
 
 						result += ')';
@@ -151,18 +157,18 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 			switch (role) {
 				case Qt::DisplayRole:
 				case Qt::ToolTipRole:
-					if (headerFormat == Matrix::HeaderRowsColumns) {
+					if (headerFormat == Matrix::HeaderFormat::HeaderRowsColumns) {
 						result = QString::number(section+1);
-					} else if (headerFormat == Matrix::HeaderValues) {
+					} else if (headerFormat == Matrix::HeaderFormat::HeaderValues) {
 						double diff = m_matrix->yEnd() - m_matrix->yStart();
 						double step = 0.0;
 						if (m_matrix->rowCount() > 1)
 							step = diff/double(m_matrix->rowCount()-1);
 						// TODO: implement decent double == 0 check
 // 						if (diff < 1e-10)
-// 							result += QLocale().toString(m_matrix->yStart(),
+// 							result += numberLocale.toString(m_matrix->yStart(),
 // 									m_matrix->numericFormat(), m_matrix->displayedDigits());
-						result += QLocale().toString(m_matrix->yStart()+double(section)*step,
+						result += numberLocale.toString(m_matrix->yStart()+double(section)*step,
 								m_matrix->numericFormat(), m_matrix->precision());
 					} else {
 						result = QString::number(section+1) + QString(" (");
@@ -171,7 +177,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 						if (m_matrix->rowCount() > 1)
 							step = diff/double(m_matrix->rowCount()-1);
 
-						result += QLocale().toString(m_matrix->yStart()+double(section)*step,
+						result += numberLocale.toString(m_matrix->yStart()+double(section)*step,
 									m_matrix->numericFormat(), m_matrix->precision());
 						result += ')';
 					}
@@ -199,26 +205,29 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 	int column = index.column();
 
 	if (role == Qt::EditRole) {
-		const AbstractColumn::ColumnMode mode = m_matrix->mode();
+		const auto mode = m_matrix->mode();
 		switch (mode) {
-		case AbstractColumn::Numeric: 
+		case AbstractColumn::ColumnMode::Numeric: 
 			m_matrix->setCell(row, column, value.toDouble());
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::ColumnMode::Integer:
 			m_matrix->setCell(row, column, value.toInt());
 			break;
-		case AbstractColumn::DateTime:
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
+		case AbstractColumn::ColumnMode::BigInt:
+			m_matrix->setCell(row, column, value.toLongLong());
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
 			DEBUG("	WARNING: DateTime format not supported yet");	// should not happen
 			//TODO: m_matrix->setCell(row, column, value.toDateTime());
 			break;
-		case AbstractColumn::Text:
+		case AbstractColumn::ColumnMode::Text:
 			DEBUG("	WARNING: Text format not supported yet");	// should not happen
 			m_matrix->setCell(row, column, value.toString());
 			break;
 		default:
-			DEBUG("	Unsupported column mode " << mode);
+			DEBUG("	Unsupported column mode " << static_cast<int>(mode));
 			break;
 		}
 

@@ -37,6 +37,7 @@
 #include <limits>
 
 #include <QMenu>
+#include <QMessageBox>
 #include <QToolBar>
 #include <QDesktopWidget>
 #include <QWheelEvent>
@@ -44,7 +45,7 @@
 #include <QSvgGenerator>
 #include <QImage>
 #include <QToolButton>
-#include <QApplication>
+#include <QTimeLine>
 
 #include <KLocalizedString>
 
@@ -71,22 +72,21 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 	setMinimumSize(16, 16);
 	setFocusPolicy(Qt::StrongFocus);
 
-	viewport()->setAttribute( Qt::WA_OpaquePaintEvent );
-	viewport()->setAttribute( Qt::WA_NoSystemBackground );
+	viewport()->setAttribute(Qt::WA_OpaquePaintEvent);
+	viewport()->setAttribute(Qt::WA_NoSystemBackground);
 	setCacheMode(QGraphicsView::CacheBackground);
 
 	initActions();
 	initMenus();
-	selectAndEditModeAction->setChecked(true);
 	m_image->setSegmentsHoverEvent(true);
 	setInteractive(true);
 
 	changeZoom(zoomOriginAction);
 	currentZoomAction = zoomInViewAction;
 
-	if (m_image->plotPointsType() == DatapickerImage::AxisPoints)
+	if (m_image->plotPointsType() == DatapickerImage::PointsType::AxisPoints)
 		setAxisPointsAction->setChecked(true);
-	else if (m_image->plotPointsType() == DatapickerImage::CurvePoints)
+	else if (m_image->plotPointsType() == DatapickerImage::PointsType::CurvePoints)
 		setCurvePointsAction->setChecked(true);
 	else
 		selectSegmentAction->setChecked(true);
@@ -96,11 +96,27 @@ DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView
 
 	//signal/slot connections
 	//for general actions
-	connect( m_image, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)) );
-	connect( m_image, SIGNAL(requestUpdate()), this, SLOT(updateBackground()) );
-	connect( m_image, SIGNAL(requestUpdateActions()), this, SLOT(handleImageActions()) );
-	connect( m_datapicker, SIGNAL(requestUpdateActions()), this, SLOT(handleImageActions()) );
-	connect( m_image, SIGNAL(rotationAngleChanged(float)), this, SLOT(changeRotationAngle()) );
+	connect(m_image, &DatapickerImage::requestProjectContextMenu, this, &DatapickerImageView::createContextMenu);
+	connect(m_image, &DatapickerImage::requestUpdate, this, &DatapickerImageView::updateBackground);
+	connect(m_image, &DatapickerImage::requestUpdateActions, this, &DatapickerImageView::handleImageActions);
+	connect(m_datapicker, &Datapicker::requestUpdateActions, this, &DatapickerImageView::handleImageActions);
+	connect(m_image, &DatapickerImage::rotationAngleChanged, this, &DatapickerImageView::changeRotationAngle);
+
+	//resize the view to make the complete scene visible.
+	//no need to resize the view when the project is being opened,
+	//all views will be resized to the stored values at the end
+	if (!m_image->isLoading()) {
+		float w = Worksheet::convertFromSceneUnits(sceneRect().width(), Worksheet::Unit::Inch);
+		float h = Worksheet::convertFromSceneUnits(sceneRect().height(), Worksheet::Unit::Inch);
+		w *= QApplication::desktop()->physicalDpiX();
+		h *= QApplication::desktop()->physicalDpiY();
+		resize(w*1.1, h*1.1);
+	}
+
+	//rescale to the original size
+	static const float hscale = QApplication::desktop()->physicalDpiX()/(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	static const float vscale = QApplication::desktop()->physicalDpiY()/(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch));
+	setTransform(QTransform::fromScale(hscale, vscale));
 }
 
 DatapickerImageView::~DatapickerImageView() {
@@ -110,7 +126,6 @@ DatapickerImageView::~DatapickerImageView() {
 void DatapickerImageView::initActions() {
 	auto* zoomActionGroup = new QActionGroup(this);
 	auto* mouseModeActionGroup = new QActionGroup(this);
-	auto* plotPointsTypeActionGroup = new QActionGroup(this);
 	navigationActionGroup = new QActionGroup(this);
 	magnificationActionGroup = new QActionGroup(this);
 
@@ -128,26 +143,25 @@ void DatapickerImageView::initActions() {
 	zoomFitPageWidthAction = new QAction(QIcon::fromTheme("zoom-fit-width"), i18n("Fit to Width"), zoomActionGroup);
 
 	// Mouse mode actions
-	selectAndEditModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Edit"), mouseModeActionGroup);
-	selectAndEditModeAction->setCheckable(true);
-
 	navigationModeAction = new QAction(QIcon::fromTheme("input-mouse"), i18n("Navigate"), mouseModeActionGroup);
 	navigationModeAction->setCheckable(true);
+	navigationModeAction->setData(static_cast<int>(MouseMode::Navigation));
 
 	zoomSelectionModeAction = new QAction(QIcon::fromTheme("page-zoom"), i18n("Select and Zoom"), mouseModeActionGroup);
 	zoomSelectionModeAction->setCheckable(true);
+	zoomSelectionModeAction->setData(static_cast<int>(MouseMode::ZoomSelection));
 
-	selectAndMoveModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Move"), mouseModeActionGroup);
-	selectAndMoveModeAction->setCheckable(true);
-
-	setAxisPointsAction = new QAction(QIcon::fromTheme("labplot-plot-axis-points"), i18n("Set Axis Points"), plotPointsTypeActionGroup);
+	setAxisPointsAction = new QAction(QIcon::fromTheme("labplot-plot-axis-points"), i18n("Set Axis Points"), mouseModeActionGroup);
 	setAxisPointsAction->setCheckable(true);
+	setAxisPointsAction->setData(static_cast<int>(MouseMode::ReferencePointsEntry));
 
-	setCurvePointsAction = new QAction(QIcon::fromTheme("labplot-xy-curve-points"), i18n("Set Curve Points"), plotPointsTypeActionGroup);
+	setCurvePointsAction = new QAction(QIcon::fromTheme("labplot-xy-curve-points"), i18n("Set Curve Points"), mouseModeActionGroup);
 	setCurvePointsAction->setCheckable(true);
+	setCurvePointsAction->setData(static_cast<int>(MouseMode::CurvePointsEntry));
 
-	selectSegmentAction = new QAction(QIcon::fromTheme("labplot-xy-curve-segments"), i18n("Select Curve Segments"), plotPointsTypeActionGroup);
+	selectSegmentAction = new QAction(QIcon::fromTheme("labplot-xy-curve-segments"), i18n("Select Curve Segments"), mouseModeActionGroup);
 	selectSegmentAction->setCheckable(true);
+	selectSegmentAction->setData(static_cast<int>(MouseMode::CurveSegmentsEntry));
 
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("New Curve"), this);
 
@@ -179,26 +193,44 @@ void DatapickerImageView::initActions() {
 	fiveTimesMagnificationAction = new QAction(QIcon::fromTheme("labplot-5x-zoom"), i18n("5x Magnification"), magnificationActionGroup);
 	fiveTimesMagnificationAction->setCheckable(true);
 
-	connect( mouseModeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(mouseModeChanged(QAction*)) );
-	connect( zoomActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeZoom(QAction*)) );
-	connect( plotPointsTypeActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changePointsType(QAction*)) );
-	connect( addCurveAction, SIGNAL(triggered()), this, SLOT(addCurve()) );
-	connect( navigationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(changeSelectedItemsPosition(QAction*)) );
-	connect( magnificationActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(magnificationChanged(QAction*)) );
+	//set some default values
+	currentZoomAction = zoomInViewAction;
+	currentMagnificationAction = noMagnificationAction;
+
+	switch(m_image->plotPointsType()) {
+	case DatapickerImage::PointsType::AxisPoints:
+		currentPlotPointsTypeAction = setAxisPointsAction;
+		setAxisPointsAction->setChecked(true);
+		mouseModeChanged(setAxisPointsAction);
+		break;
+	case DatapickerImage::PointsType::CurvePoints:
+		currentPlotPointsTypeAction = setCurvePointsAction;
+		setCurvePointsAction->setChecked(true);
+		mouseModeChanged(setCurvePointsAction);
+		break;
+	case DatapickerImage::PointsType::SegmentPoints:
+		currentPlotPointsTypeAction = selectSegmentAction;
+		selectSegmentAction->setChecked(true);
+		mouseModeChanged(selectSegmentAction);
+	}
+
+	//signal-slot connections
+	connect(mouseModeActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::mouseModeChanged);
+	connect(zoomActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changeZoom);
+	connect(addCurveAction, &QAction::triggered, this, &DatapickerImageView::addCurve);
+	connect(navigationActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::changeSelectedItemsPosition);
+	connect(magnificationActionGroup, &QActionGroup::triggered, this, &DatapickerImageView::magnificationChanged);
 }
 
 void DatapickerImageView::initMenus() {
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
-	m_viewMouseModeMenu->addAction(selectAndEditModeAction);
+	m_viewMouseModeMenu->addAction(setAxisPointsAction);
+	m_viewMouseModeMenu->addAction(setCurvePointsAction);
+	m_viewMouseModeMenu->addAction(selectSegmentAction);
+	m_viewMouseModeMenu->addSeparator();
 	m_viewMouseModeMenu->addAction(navigationModeAction);
 	m_viewMouseModeMenu->addAction(zoomSelectionModeAction);
-	m_viewMouseModeMenu->addAction(selectAndMoveModeAction);
-
-	m_viewImageMenu = new QMenu(i18n("Data Entry Mode"), this);
-	m_viewImageMenu->addAction(setAxisPointsAction);
-	m_viewImageMenu->addAction(setCurvePointsAction);
-	m_viewImageMenu->addAction(selectSegmentAction);
 
 	m_zoomMenu = new QMenu(i18n("Zoom View"), this);
 	m_zoomMenu->setIcon(QIcon::fromTheme("zoom-draw"));
@@ -215,7 +247,7 @@ void DatapickerImageView::initMenus() {
 	m_navigationMenu->addAction(shiftDownAction);
 
 	m_magnificationMenu = new QMenu(i18n("Magnification"), this);
-	m_magnificationMenu->setIcon(QIcon::fromTheme("labplot-zoom"));
+	m_magnificationMenu->setIcon(QIcon::fromTheme("zoom-in"));
 	m_magnificationMenu->addAction(noMagnificationAction);
 	m_magnificationMenu->addAction(twoTimesMagnificationAction);
 	m_magnificationMenu->addAction(threeTimesMagnificationAction);
@@ -240,8 +272,6 @@ void DatapickerImageView::createContextMenu(QMenu* menu) const {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
-	menu->insertMenu(firstAction, m_viewImageMenu);
-	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, addCurveAction);
 	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_navigationMenu);
@@ -257,16 +287,11 @@ void DatapickerImageView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addAction(setAxisPointsAction);
 	toolBar->addAction(setCurvePointsAction);
 	toolBar->addAction(selectSegmentAction);
+	toolBar->addAction(navigationModeAction);
+	toolBar->addAction(zoomSelectionModeAction);
 
 	toolBar->addSeparator();
 	toolBar->addAction(addCurveAction);
-
-	toolBar->addSeparator();
-	toolBar->addAction(noMagnificationAction);
-	toolBar->addAction(twoTimesMagnificationAction);
-	toolBar->addAction(threeTimesMagnificationAction);
-	toolBar->addAction(fourTimesMagnificationAction);
-	toolBar->addAction(fiveTimesMagnificationAction);
 
 	toolBar->addSeparator();
 	toolBar->addAction(shiftRightAction);
@@ -274,17 +299,18 @@ void DatapickerImageView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addAction(shiftUpAction);
 	toolBar->addAction(shiftDownAction);
 
-	toolBar->addSeparator();
-	toolBar->addAction(selectAndEditModeAction);
-	toolBar->addAction(navigationModeAction);
-	toolBar->addAction(zoomSelectionModeAction);
-	toolBar->addAction(selectAndMoveModeAction);
-
 	tbZoom = new QToolButton(toolBar);
 	tbZoom->setPopupMode(QToolButton::MenuButtonPopup);
 	tbZoom->setMenu(m_zoomMenu);
 	tbZoom->setDefaultAction(currentZoomAction);
+	toolBar->addSeparator();
 	toolBar->addWidget(tbZoom);
+
+	tbMagnification = new QToolButton(toolBar);
+	tbMagnification->setPopupMode(QToolButton::MenuButtonPopup);
+	tbMagnification->setMenu(m_magnificationMenu);
+	tbMagnification->setDefaultAction(currentMagnificationAction);
+	toolBar->addWidget(tbMagnification);
 }
 
 void DatapickerImageView::setScene(QGraphicsScene* scene) {
@@ -293,7 +319,7 @@ void DatapickerImageView::setScene(QGraphicsScene* scene) {
 }
 
 void DatapickerImageView::drawForeground(QPainter* painter, const QRectF& rect) {
-	if (m_mouseMode == ZoomSelectionMode && m_selectionBandIsShown) {
+	if (m_mouseMode == MouseMode::ZoomSelection && m_selectionBandIsShown) {
 		painter->save();
 		const QRectF& selRect = mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect();
 		painter->setPen(QPen(Qt::black, 5/transform().m11()));
@@ -313,24 +339,13 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 	if (!scene_rect.contains(rect))
 		painter->fillRect(rect, Qt::lightGray);
 
-	//shadow
-	int shadowSize = scene_rect.width()*0.02;
-	QRectF rightShadowRect(scene_rect.right(), scene_rect.top() + shadowSize,
-				shadowSize, scene_rect.height());
-	QRectF bottomShadowRect(scene_rect.left() + shadowSize, scene_rect.bottom(),
-				scene_rect.width(), shadowSize);
-
-	painter->fillRect(rightShadowRect.intersected(rect), Qt::darkGray);
-	painter->fillRect(bottomShadowRect.intersected(rect), Qt::darkGray);
-
-
 	// canvas
 	if (m_image->isLoaded) {
-		if (m_image->plotImageType() == DatapickerImage::OriginalImage) {
-			QImage todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		if (m_image->plotImageType() == DatapickerImage::PlotImageType::OriginalImage) {
+			const QImage& todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 			painter->drawImage(scene_rect.topLeft(), todraw);
-		} else if (m_image->plotImageType() == DatapickerImage::ProcessedImage) {
-			QImage todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		} else if (m_image->plotImageType() == DatapickerImage::PlotImageType::ProcessedImage) {
+			const QImage& todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 			painter->drawImage(scene_rect.topLeft(), todraw);
 		} else {
 			painter->fillRect(scene_rect, Qt::white);
@@ -347,15 +362,40 @@ void DatapickerImageView::drawBackground(QPainter* painter, const QRectF& rect) 
 //##############################################################################
 //####################################  Events   ###############################
 //##############################################################################
-void DatapickerImageView::wheelEvent(QWheelEvent *event) {
-	if (m_mouseMode == ZoomSelectionMode) {
-		if (event->delta() > 0)
-			scale(1.2, 1.2);
-		else if (event->delta() < 0)
-			scale(1.0/1.2, 1.0/1.2);
-	} else {
+void DatapickerImageView::wheelEvent(QWheelEvent* event) {
+	//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
+	if (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
+		int numDegrees = event->delta() / 8;
+		int numSteps = numDegrees / 15; // see QWheelEvent documentation
+		zoom(numSteps);
+	} else
 		QGraphicsView::wheelEvent(event);
-	}
+}
+
+void DatapickerImageView::zoom(int numSteps) {
+	m_numScheduledScalings += numSteps;
+	if (m_numScheduledScalings * numSteps < 0) // if user moved the wheel in another direction, we reset previously scheduled scalings
+		m_numScheduledScalings = numSteps;
+
+	auto* anim = new QTimeLine(350, this);
+	anim->setUpdateInterval(20);
+
+	connect(anim, &QTimeLine::valueChanged, this, &DatapickerImageView::scalingTime);
+	connect(anim, &QTimeLine::finished, this, &DatapickerImageView::animFinished);
+	anim->start();
+}
+
+void DatapickerImageView::scalingTime() {
+	qreal factor = 1.0 + qreal(m_numScheduledScalings) / 300.0;
+	scale(factor, factor);
+}
+
+void DatapickerImageView::animFinished() {
+	if (m_numScheduledScalings > 0)
+		m_numScheduledScalings--;
+	else
+		m_numScheduledScalings++;
+	sender()->~QObject();
 }
 
 void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
@@ -366,26 +406,42 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 		return;
 	}
 
-	if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
+	if (event->button() == Qt::LeftButton && m_mouseMode == MouseMode::ZoomSelection) {
 		m_selectionStart = event->pos();
 		m_selectionBandIsShown = true;
 		return;
 	}
 
 	QPointF eventPos = mapToScene(event->pos());
-	if ( m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(eventPos) ) {
-		if ( m_image->plotPointsType() == DatapickerImage::AxisPoints ) {
-			int childCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	bool entryMode = (m_mouseMode == MouseMode::ReferencePointsEntry
+					  || m_mouseMode == MouseMode::CurvePointsEntry || m_mouseMode == MouseMode::CurveSegmentsEntry);
+
+	//check whether there is a point item under the cursor
+	bool pointsUnderCursor = false;
+	auto items = this->items(event->pos());
+	for (auto* item : items) {
+		if (item != m_image->m_magnificationWindow) {
+			pointsUnderCursor = true;
+			break;
+		}
+	}
+
+	if (entryMode && !pointsUnderCursor && m_image->isLoaded && sceneRect().contains(eventPos)) {
+		if ( m_image->plotPointsType() == DatapickerImage::PointsType::AxisPoints ) {
+			int childCount = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 			if (childCount < 3)
 				m_datapicker->addNewPoint(eventPos, m_image);
-		} else if ( m_image->plotPointsType() == DatapickerImage::CurvePoints && m_datapicker->activeCurve() ) {
+		} else if ( m_image->plotPointsType() == DatapickerImage::PointsType::CurvePoints && m_datapicker->activeCurve() ) {
 			m_datapicker->addNewPoint(eventPos, m_datapicker->activeCurve());
 		}
+
+		if (m_image->m_magnificationWindow && m_image->m_magnificationWindow->isVisible())
+			updateMagnificationWindow();
 	}
 
 	// make sure the datapicker (or its currently active curve) is selected in the project explorer if the view was clicked.
 	// We need this for the case when we change from the project-node in the project explorer to the datapicker node by clicking the view.
-	if (m_datapicker->activeCurve() && m_image->plotPointsType() != DatapickerImage::AxisPoints) {
+	if (m_datapicker->activeCurve() && m_image->plotPointsType() != DatapickerImage::PointsType::AxisPoints) {
 		m_datapicker->setSelectedInView(false);
 		m_datapicker->activeCurve()->setSelectedInView(true);
 	} else {
@@ -398,7 +454,7 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 }
 
 void DatapickerImageView::mouseReleaseEvent(QMouseEvent* event) {
-	if (event->button() == Qt::LeftButton && m_mouseMode == ZoomSelectionMode) {
+	if (event->button() == Qt::LeftButton && m_mouseMode == MouseMode::ZoomSelection) {
 		m_selectionBandIsShown = false;
 		viewport()->repaint(QRect(m_selectionStart, m_selectionEnd).normalized());
 
@@ -412,15 +468,6 @@ void DatapickerImageView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
-	if ( m_mouseMode == SelectAndEditMode || m_mouseMode == ZoomSelectionMode ) {
-		if (m_image->isLoaded)
-			setCursor(Qt::CrossCursor);
-		else
-			setCursor(Qt::ArrowCursor);
-	} else {
-		setCursor(Qt::ArrowCursor);
-	}
-
 	//show the selection band
 	if (m_selectionBandIsShown) {
 		QRect rect = QRect(m_selectionStart, m_selectionEnd).normalized();
@@ -438,17 +485,17 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 	QPointF pos = mapToScene(event->pos());
 
 	//show the current coordinates under the mouse cursor in the status bar
-	if (m_image->plotPointsType() == DatapickerImage::CurvePoints) {
+	if (m_image->plotPointsType() == DatapickerImage::PointsType::CurvePoints) {
 		QVector3D logicalPos = m_transform->mapSceneToLogical(pos, m_image->axisPoints());
-		if (m_image->axisPoints().type == DatapickerImage::Ternary) {
+		if (m_image->axisPoints().type == DatapickerImage::GraphType::Ternary) {
 			emit statusInfo( "a =" + QString::number(logicalPos.x()) + ", b =" + QString::number(logicalPos.y()) + ", c =" + QString::number(logicalPos.z()));
 		} else {
 			QString xLabel('x');
 			QString yLabel('y');
-			if (m_image->axisPoints().type == DatapickerImage::PolarInDegree) {
+			if (m_image->axisPoints().type == DatapickerImage::GraphType::PolarInDegree) {
 				xLabel = 'r';
 				yLabel = "y(deg)";
-			} else if (m_image->axisPoints().type == DatapickerImage::PolarInRadians) {
+			} else if (m_image->axisPoints().type == DatapickerImage::GraphType::PolarInRadians) {
 				xLabel = 'r';
 				yLabel = "y(rad)";
 			}
@@ -461,43 +508,46 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 	}
 
 	//show the magnification window
-	if ( magnificationFactor && m_mouseMode == SelectAndEditMode && m_image->isLoaded && sceneRect().contains(pos)
-		&& m_image->plotPointsType() != DatapickerImage::SegmentPoints ) {
+	if ( magnificationFactor && m_image->isLoaded && sceneRect().contains(pos) ) {
 
 		if (!m_image->m_magnificationWindow) {
-//            m_image->m_magnificationWindow = new QGraphicsPixmapItem(0, scene());
 			m_image->m_magnificationWindow = new QGraphicsPixmapItem;
 			scene()->addItem(m_image->m_magnificationWindow);
 			m_image->m_magnificationWindow->setZValue(std::numeric_limits<int>::max());
 		}
 
-		m_image->m_magnificationWindow->setVisible(false);
-
-		//copy the part of the view to be shown magnified
-		const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Centimeter)/transform().m11();
-		const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
-		QPixmap px = grab(mapFromScene(copyRect).boundingRect());
-		px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-		//draw the bounding rect
-		QPainter painter(&px);
-		const QPen pen = QPen(Qt::lightGray, 2/transform().m11());
-		painter.setPen(pen);
-		QRect rect = px.rect();
-		rect.setWidth(rect.width()-pen.widthF()/2);
-		rect.setHeight(rect.height()-pen.widthF()/2);
-		painter.drawRect(rect);
-
-		//set the pixmap
-		m_image->m_magnificationWindow->setPixmap(px);
-		m_image->m_magnificationWindow->setPos(pos.x()- px.width()/2, pos.y()- px.height()/2);
-
-		m_image->m_magnificationWindow->setVisible(true);
+		updateMagnificationWindow();
 	} else if (m_image->m_magnificationWindow) {
 		m_image->m_magnificationWindow->setVisible(false);
 	}
 
 	QGraphicsView::mouseMoveEvent(event);
+}
+
+void DatapickerImageView::updateMagnificationWindow() {
+	m_image->m_magnificationWindow->setVisible(false);
+	QPointF pos = mapToScene(mapFromGlobal(QCursor::pos()));
+
+	//copy the part of the view to be shown magnified
+	const int size = Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter)/transform().m11();
+	const QRectF copyRect(pos.x() - size/(2*magnificationFactor), pos.y() - size/(2*magnificationFactor), size/magnificationFactor, size/magnificationFactor);
+	QPixmap px = grab(mapFromScene(copyRect).boundingRect());
+	px = px.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+	//draw the bounding rect
+	QPainter painter(&px);
+	const QPen pen = QPen(Qt::lightGray, 2/transform().m11());
+	painter.setPen(pen);
+	QRect rect = px.rect();
+	rect.setWidth(rect.width()-pen.widthF()/2);
+	rect.setHeight(rect.height()-pen.widthF()/2);
+	painter.drawRect(rect);
+
+	//set the pixmap
+	m_image->m_magnificationWindow->setPixmap(px);
+	m_image->m_magnificationWindow->setPos(pos.x()- px.width()/2, pos.y()- px.height()/2);
+
+	m_image->m_magnificationWindow->setVisible(true);
 }
 
 void DatapickerImageView::contextMenuEvent(QContextMenuEvent* e) {
@@ -511,23 +561,55 @@ void DatapickerImageView::contextMenuEvent(QContextMenuEvent* e) {
 //##############################################################################
 //####################################  SLOTs   ###############################
 //##############################################################################
-void DatapickerImageView::changePointsType(QAction* action) {
-	if (action == setAxisPointsAction)
-		m_image->setPlotPointsType(DatapickerImage::AxisPoints);
-	else if (action == setCurvePointsAction)
-		m_image->setPlotPointsType(DatapickerImage::CurvePoints);
-	else if (action == selectSegmentAction)
-		m_image->setPlotPointsType(DatapickerImage::SegmentPoints);
+void DatapickerImageView::mouseModeChanged(QAction* action) {
+	m_mouseMode = (DatapickerImageView::MouseMode)action->data().toInt();
+
+	if (action == navigationModeAction) {
+		setInteractive(false);
+		setDragMode(QGraphicsView::ScrollHandDrag);
+		m_image->setSegmentsHoverEvent(false);
+	} else if (action == zoomSelectionModeAction){
+		setInteractive(false);
+		setDragMode(QGraphicsView::NoDrag);
+		m_image->setSegmentsHoverEvent(false);
+		setCursor(Qt::ArrowCursor);
+	} else {
+		setInteractive(true);
+		setDragMode(QGraphicsView::NoDrag);
+		m_image->setSegmentsHoverEvent(true);
+		setCursor(Qt::CrossCursor);
+
+		if (currentPlotPointsTypeAction != action) {
+			if (action == setAxisPointsAction) {
+				int count = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+				if (count) {
+					auto button = QMessageBox::question(this, i18n("Remove existing reference points?"),
+								i18n("All available reference points will be removed. Do you want to continue?"));
+					if (button != QMessageBox::Yes) {
+						currentPlotPointsTypeAction->setChecked(true);
+						return;
+					}
+				}
+
+				m_image->setPlotPointsType(DatapickerImage::PointsType::AxisPoints);
+			} else if (action == setCurvePointsAction)
+				m_image->setPlotPointsType(DatapickerImage::PointsType::CurvePoints);
+			else if (action == selectSegmentAction)
+				m_image->setPlotPointsType(DatapickerImage::PointsType::SegmentPoints);
+
+			currentPlotPointsTypeAction = action;
+		}
+	}
 }
 
 void DatapickerImageView::changeZoom(QAction* action) {
-	if (action == zoomInViewAction) {
-		scale(1.2, 1.2);
-	} else if (action == zoomOutViewAction) {
-		scale(1.0/1.2, 1.0/1.2);
-	} else if (action == zoomOriginAction) {
-		static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
-		static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1,Worksheet::Millimeter));
+	if (action == zoomInViewAction)
+		zoom(1);
+	else if (action == zoomOutViewAction)
+		zoom(-1);
+	else if (action == zoomOriginAction) {
+		static const float hscale = QApplication::desktop()->physicalDpiX()/(25.4*Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
+		static const float vscale = QApplication::desktop()->physicalDpiY()/(25.4*Worksheet::convertToSceneUnits(1, Worksheet::Unit::Millimeter));
 		setTransform(QTransform::fromScale(hscale, vscale));
 		m_rotationAngle = 0;
 	} else if (action == zoomFitPageWidthAction) {
@@ -563,7 +645,7 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 		shift.setY(1);
 
 	m_image->beginMacro(i18n("%1: change position of selected DatapickerPoints.", m_image->name()));
-	const QVector<DatapickerPoint*> axisPoints = m_image->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
+	const QVector<DatapickerPoint*> axisPoints = m_image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* point : axisPoints) {
 		if (!point->graphicsItem()->isSelected())
 			continue;
@@ -572,7 +654,7 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 		newPos = newPos + shift;
 		point->setPosition(newPos);
 
-		int pointIndex = m_image->indexOfChild<DatapickerPoint>(point, AbstractAspect::IncludeHidden);
+		int pointIndex = m_image->indexOfChild<DatapickerPoint>(point, AbstractAspect::ChildIndexFlag::IncludeHidden);
 		if (pointIndex == -1) continue;
 		DatapickerImage::ReferencePoints points = m_image->axisPoints();
 		points.scenePos[pointIndex].setX(point->position().x());
@@ -583,7 +665,7 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 	}
 
 	for (auto* curve : m_image->parentAspect()->children<DatapickerCurve>()) {
-		for (auto* point : curve->children<DatapickerPoint>(AbstractAspect::IncludeHidden)) {
+		for (auto* point : curve->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden)) {
 			if (!point->graphicsItem()->isSelected())
 				continue;
 
@@ -594,30 +676,8 @@ void DatapickerImageView::changeSelectedItemsPosition(QAction* action) {
 	}
 
 	m_image->endMacro();
-}
-
-void DatapickerImageView::mouseModeChanged(QAction* action) {
-	if (action == selectAndEditModeAction) {
-		m_mouseMode = SelectAndEditMode;
-		setInteractive(true);
-		setDragMode(QGraphicsView::NoDrag);
-		m_image->setSegmentsHoverEvent(true);
-	} else if (action == navigationModeAction) {
-		m_mouseMode = NavigationMode;
-		setInteractive(false);
-		setDragMode(QGraphicsView::ScrollHandDrag);
-		m_image->setSegmentsHoverEvent(false);
-	} else if (action == zoomSelectionModeAction) {
-		m_mouseMode = ZoomSelectionMode;
-		setInteractive(false);
-		setDragMode(QGraphicsView::NoDrag);
-		m_image->setSegmentsHoverEvent(false);
-	} else {
-		m_mouseMode = SelectAndMoveMode;
-		setInteractive(true);
-		setDragMode(QGraphicsView::NoDrag);
-		m_image->setSegmentsHoverEvent(false);
-	}
+	if (m_image->m_magnificationWindow && m_image->m_magnificationWindow->isVisible())
+		updateMagnificationWindow();
 }
 
 void DatapickerImageView::magnificationChanged(QAction* action) {
@@ -639,6 +699,9 @@ void DatapickerImageView::addCurve() {
 	curve->addDatasheet(m_image->axisPoints().type);
 	m_datapicker->addChild(curve);
 	m_datapicker->endMacro();
+
+	setCurvePointsAction->setChecked(true);
+	mouseModeChanged(setCurvePointsAction);
 }
 
 void DatapickerImageView::changeRotationAngle() {
@@ -653,7 +716,7 @@ void DatapickerImageView::handleImageActions() {
 		magnificationActionGroup->setEnabled(true);
 		setAxisPointsAction->setEnabled(true);
 
-		int pointsCount = m_image->childCount<DatapickerPoint>(AbstractAspect::IncludeHidden);
+		int pointsCount = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 		if (pointsCount > 0)
 			navigationActionGroup->setEnabled(true);
 		else
@@ -672,11 +735,6 @@ void DatapickerImageView::handleImageActions() {
 			addCurveAction->setEnabled(false);
 			setCurvePointsAction->setEnabled(false);
 			selectSegmentAction->setEnabled(false);
-			if (m_image->plotPointsType() != DatapickerImage::AxisPoints) {
-				m_image->setUndoAware(false);
-				m_image->setPlotPointsType(DatapickerImage::AxisPoints);
-				m_image->setUndoAware(true);
-			}
 		}
 	} else {
 		navigationActionGroup->setEnabled(false);
@@ -693,12 +751,12 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 	sourceRect = scene()->sceneRect();
 
 	//print
-	if (format == WorksheetView::Pdf) {
+	if (format == WorksheetView::ExportFormat::PDF) {
 		QPrinter printer(QPrinter::HighResolution);
 		printer.setOutputFormat(QPrinter::PdfFormat);
 		printer.setOutputFileName(path);
-		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 		printer.setPaperSize( QSizeF(w, h), QPrinter::Millimeter);
 		printer.setPageMargins(0,0,0,0, QPrinter::Millimeter);
 		printer.setPrintRange(QPrinter::PageRange);
@@ -710,11 +768,11 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		painter.begin(&printer);
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
-	} else if (format == WorksheetView::Svg) {
+	} else if (format == WorksheetView::ExportFormat::SVG) {
 		QSvgGenerator generator;
 		generator.setFileName(path);
-		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 		w = w*QApplication::desktop()->physicalDpiX()/25.4;
 		h = h*QApplication::desktop()->physicalDpiY()/25.4;
 
@@ -729,8 +787,8 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 	} else {
 		//PNG
 		//TODO add all formats supported by Qt in QImage
-		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Millimeter);
-		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Millimeter);
+		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
+		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 		w = w*resolution/25.4;
 		h = h*resolution/25.4;
 		QImage image(QSize(w, h), QImage::Format_ARGB32_Premultiplied);
@@ -759,8 +817,8 @@ void DatapickerImageView::exportPaint(QPainter* painter, const QRectF& targetRec
 
 void DatapickerImageView::print(QPrinter* printer) {
 	const QRectF scene_rect = sceneRect();
-	int w = Worksheet::convertFromSceneUnits(scene_rect.width(), Worksheet::Millimeter);
-	int h = Worksheet::convertFromSceneUnits(scene_rect.height(), Worksheet::Millimeter);
+	int w = Worksheet::convertFromSceneUnits(scene_rect.width(), Worksheet::Unit::Millimeter);
+	int h = Worksheet::convertFromSceneUnits(scene_rect.height(), Worksheet::Unit::Millimeter);
 	printer->setPaperSize( QSizeF(w, h), QPrinter::Millimeter);
 	printer->setPageMargins(0,0,0,0, QPrinter::Millimeter);
 	printer->setPrintRange(QPrinter::PageRange);
@@ -775,10 +833,10 @@ void DatapickerImageView::print(QPrinter* printer) {
 
 	// canvas
 	if (m_image->isLoaded) {
-		if (m_image->plotImageType() == DatapickerImage::OriginalImage) {
+		if (m_image->plotImageType() == DatapickerImage::PlotImageType::OriginalImage) {
 			QImage todraw = m_image->originalPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 			painter.drawImage(scene_rect.topLeft(), todraw);
-		} else if (m_image->plotImageType() == DatapickerImage::ProcessedImage) {
+		} else if (m_image->plotImageType() == DatapickerImage::PlotImageType::ProcessedImage) {
 			QImage todraw = m_image->processedPlotImage.scaled(scene_rect.width(), scene_rect.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 			painter.drawImage(scene_rect.topLeft(), todraw);
 		} else {

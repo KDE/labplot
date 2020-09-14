@@ -42,15 +42,6 @@ class CartesianPlotLegend : public WorksheetElement {
 	Q_ENUMS(VerticalPosition)
 
 public:
-	enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
-	enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
-
-	struct PositionWrapper {
-		QPointF point;
-		HorizontalPosition horizontalPosition;
-		VerticalPosition verticalPosition;
-	};
-
 	CartesianPlotLegend(CartesianPlot* parentPlot, const QString &name);
 	~CartesianPlotLegend() override;
 
@@ -96,6 +87,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 
 	void retransform() override;
+	void setZValue(qreal) override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 	typedef CartesianPlotLegendPrivate Private;
@@ -105,7 +97,7 @@ protected:
 	CartesianPlotLegendPrivate* const d_ptr;
 
 private:
-    	Q_DECLARE_PRIVATE(CartesianPlotLegend)
+	Q_DECLARE_PRIVATE(CartesianPlotLegend)
 	void init();
 	void initActions();
 

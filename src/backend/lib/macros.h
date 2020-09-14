@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -49,16 +49,49 @@
 #define DEBUG(x) {}
 #endif
 
-#ifdef Q_OS_WIN
- #define UTF8_QSTRING(str) QString::fromWCharArray(L##str)
-#else
- #define UTF8_QSTRING(str) QString::fromUtf8(str)
+#if QT_VERSION < 0x050700
+template <class T>
+constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
+    return t;
+}
 #endif
 
+#define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
+#define RESET_CURSOR QApplication::restoreOverrideCursor()
+
+#define UTF8_QSTRING(str) QString::fromUtf8(str)
+#define STDSTRING(qstr) qstr.toUtf8().constData()
+
 #define ENUM_TO_STRING(class, enum, value) \
-    (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(value))
+    (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(value)))
 #define ENUM_COUNT(class, enum) \
 	(class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
+
+// define number locale from setting (using system locale when QLocale::AnyLanguage)
+#define SET_NUMBER_LOCALE \
+QLocale::Language numberLocaleLanguage = static_cast<QLocale::Language>(KSharedConfig::openConfig()->group("Settings_General").readEntry( QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage) )); \
+QLocale numberLocale(numberLocaleLanguage == QLocale::AnyLanguage ? QLocale() : numberLocaleLanguage); \
+if (numberLocale.language() == QLocale::Language::C) \
+	numberLocale.setNumberOptions(QLocale::DefaultNumberOptions);
+
+//////////////////////// LineEdit Access ///////////////////////////////
+#define SET_INT_FROM_LE(var, le) { \
+	bool ok; \
+	SET_NUMBER_LOCALE \
+	const int tmp = numberLocale.toInt((le)->text(), &ok); \
+	if (ok) \
+		var = tmp; \
+}
+
+#define SET_DOUBLE_FROM_LE(var, le) { \
+	bool ok; \
+	SET_NUMBER_LOCALE \
+	const double tmp = numberLocale.toDouble((le)->text(), &ok); \
+	if (ok) \
+		var = tmp; \
+}
+
+//////////////////////// Accessor ///////////////////////////////
 
 #define BASIC_ACCESSOR(type, var, method, Method) \
 	type method() const { return var; }; \
@@ -149,8 +182,7 @@
 		return d->var; \
 	}
 
-#define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
-#define RESET_CURSOR QApplication::restoreOverrideCursor()
+//////////////////////// Standard Setter /////////////////////
 
 #define STD_SETTER_CMD_IMPL(class_name, cmd_name, value_type, field_name) \
 class class_name ## cmd_name ## Cmd: public StandardSetterCmd<class_name::Private, value_type> { \
@@ -244,7 +276,8 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 };
 
 
-//xml-serialization/deserialization
+//////////////////////// XML - serialization/deserialization /////
+
 //QColor
 #define WRITE_QCOLOR(color) 												\
 do { 																		\

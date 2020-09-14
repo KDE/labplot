@@ -86,6 +86,7 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveFilterDataChanged(const XYFourierFilterCurve::FilterData&);
 	void dataChanged();
+	void curveVisibilityChanged(bool);
 };
 
 #endif

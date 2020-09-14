@@ -112,7 +112,8 @@ EquidistantValuesDialog::~EquidistantValuesDialog() {
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
-	ui.leNumber->setText( QString::number(m_columns.first()->rowCount()) );
+	SET_NUMBER_LOCALE
+	ui.leNumber->setText( numberLocale.toString(m_columns.first()->rowCount()) );
 }
 
 void EquidistantValuesDialog::typeChanged(int index) {
@@ -130,23 +131,19 @@ void EquidistantValuesDialog::typeChanged(int index) {
 }
 
 void EquidistantValuesDialog::checkValues() {
-	if (ui.leFrom->text().simplified().isEmpty()) {
+	if (ui.leFrom->text().simplified().isEmpty() || ui.leTo->text().simplified().isEmpty()) {
 		m_okButton->setEnabled(false);
 		return;
 	}
 
-	if (ui.leTo->text().simplified().isEmpty()) {
-		m_okButton->setEnabled(false);
-		return;
-	}
-
-	if (ui.cbType->currentIndex() == 0) {
-		if (ui.leNumber->text().simplified().isEmpty() || ui.leNumber->text().simplified().toInt() == 0) {
+	SET_NUMBER_LOCALE
+	if (ui.cbType->currentIndex() == 0) {	// INT
+		if (ui.leNumber->text().simplified().isEmpty() || numberLocale.toInt(ui.leNumber->text().simplified()) == 0) {
 			m_okButton->setEnabled(false);
 			return;
 		}
-	} else {
-		if (ui.leIncrement->text().simplified().isEmpty() || qFuzzyIsNull(ui.leIncrement->text().simplified().toDouble())) {
+	} else {	// DOUBLE
+		if (ui.leIncrement->text().simplified().isEmpty() || qFuzzyIsNull( numberLocale.toDouble(ui.leIncrement->text().simplified()) )) {
 			m_okButton->setEnabled(false);
 			return;
 		}
@@ -164,22 +161,35 @@ void EquidistantValuesDialog::generate() {
 									m_spreadsheet->name(),
 									m_columns.size()));
 
-	double start  = ui.leFrom->text().toDouble();
-	double end  = ui.leTo->text().toDouble();
-	int number;
-	double dist;
+	SET_NUMBER_LOCALE
+	bool ok;
+	double start  = numberLocale.toDouble(ui.leFrom->text(), &ok);
+	if (!ok) {
+		DEBUG("Double value start invalid!")
+	        m_spreadsheet->endMacro();
+		RESET_CURSOR;
+		return;
+	}
+	double end  = numberLocale.toDouble(ui.leTo->text(), &ok);
+	if (!ok) {
+		DEBUG("Double value end invalid!")
+	        m_spreadsheet->endMacro();
+		RESET_CURSOR;
+		return;
+	}
+	int number{0};
+	double dist{0};
 	if (ui.cbType->currentIndex() == 0) { //fixed number
-		number = ui.leNumber->text().toInt();
-		if (number!=1)
+		number = numberLocale.toInt(ui.leNumber->text(), &ok);
+		if (ok && number != 1)
 			dist = (end - start)/ (number - 1);
-		else
-			dist = 0;
 	} else { //fixed increment
-		dist = ui.leIncrement->text().toDouble();
-		number = (end-start)/dist + 1;
+		dist = numberLocale.toDouble(ui.leIncrement->text(), &ok);
+		if (ok)
+			number = (end-start)/dist + 1;
 	}
 
-	if (m_spreadsheet->rowCount()<number)
+	if (m_spreadsheet->rowCount() < number)
 		m_spreadsheet->setRowCount(number);
 
 	for (auto* col : m_columns) {

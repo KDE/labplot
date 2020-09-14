@@ -30,7 +30,6 @@
 #include "DateTime2StringFilter.h"
 #include "backend/lib/XmlStreamReader.h"
 #include <QDateTime>
-#include <QRegExp>
 #include <QUndoCommand>
 
 #include <KLocalizedString>
@@ -48,7 +47,8 @@ private:
 };
 
 void DateTime2StringFilter::setFormat(const QString& format) {
-	exec(new DateTime2StringFilterSetFormatCmd(static_cast<DateTime2StringFilter*>(this), format));
+	if (m_format != format)
+		exec(new DateTime2StringFilterSetFormatCmd(this, format));
 }
 
 QString DateTime2StringFilter::textAt(int row) const {
@@ -62,9 +62,10 @@ QString DateTime2StringFilter::textAt(int row) const {
 }
 
 bool DateTime2StringFilter::inputAcceptable(int, const AbstractColumn *source) {
-	return (source->columnMode() == AbstractColumn::DateTime)
-		|| (source->columnMode() == AbstractColumn::Day)
-		|| (source->columnMode() == AbstractColumn::Month);
+	auto mode = source->columnMode();
+	return (mode == AbstractColumn::ColumnMode::DateTime)
+		|| (mode == AbstractColumn::ColumnMode::Day)
+		|| (mode == AbstractColumn::ColumnMode::Month);
 }
 
 DateTime2StringFilterSetFormatCmd::DateTime2StringFilterSetFormatCmd(DateTime2StringFilter* target, const QString &new_format)

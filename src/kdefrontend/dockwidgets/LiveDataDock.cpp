@@ -28,6 +28,8 @@ Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
 *                                                                         *
 ***************************************************************************/
 #include "LiveDataDock.h"
+#include "kdefrontend/GuiTools.h"
+
 #include <QCompleter>
 #include <QFile>
 #include <QStandardItemModel>
@@ -116,7 +118,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	ui.cbUpdateType->setCurrentIndex(static_cast<int>(client->updateType()));
 	ui.cbReadingType->setCurrentIndex(static_cast<int>(client->readingType()));
 
-	if (client->updateType() == MQTTClient::NewData) {
+	if (client->updateType() == MQTTClient::UpdateType::NewData) {
 		ui.lUpdateInterval->hide();
 		ui.sbUpdateInterval->hide();
 	}
@@ -132,7 +134,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	ui.sbKeepNValues->setValue(client->keepNValues());
 	ui.sbKeepNValues->setEnabled(true);
 
-	if (client->readingType() == MQTTClient::TillEnd) {
+	if (client->readingType() == MQTTClient::ReadingType::TillEnd) {
 		ui.lSampleSize->hide();
 		ui.sbSampleSize->hide();
 	} else
@@ -140,10 +142,10 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 	// disable "whole file" option
 	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(LiveDataSource::WholeFile);
+	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
-	if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::WholeFile)
-		ui.cbReadingType->setCurrentIndex(LiveDataSource::TillEnd);
+	if (ui.cbReadingType->currentIndex() == static_cast<int>(LiveDataSource::ReadingType::WholeFile))
+		ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 
 	m_mqttClient = client; // updates may be applied from now on
 
@@ -239,7 +241,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, client, &MQTTClient::addMQTTSubscription);
 	}
 
-	if (client->willUpdateType() == MQTTClient::OnClick && client->MQTTWillUse())
+	if (client->willUpdateType() == MQTTClient::WillUpdateType::OnClick && client->MQTTWillUse())
 		ui.bWillUpdateNow->show();
 
 	m_previousMQTTClient = oldclient;
@@ -248,14 +250,14 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 /*!
  * \brief Sets the live data source of this dock widget
- * \param sources
+ * \param source
  */
 void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 #ifdef HAVE_MQTT
 	m_mqttClient = nullptr;
 #endif
-	if (m_liveDataSource == source)
-		return;
+// 	if (m_liveDataSource == source)
+// 		return;
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
 
 	ui.leName->setText(source->name());
@@ -270,24 +272,23 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 	ui.cbReadingType->setCurrentIndex(static_cast<int>(readingType));
 
 	switch (sourceType) {
-	case LiveDataSource::FileOrPipe:
+	case LiveDataSource::SourceType::FileOrPipe: {
 		ui.leSourceInfo->setText(source->fileName());
-		if (QFile::exists(source->fileName()))
-			ui.leSourceInfo->setStyleSheet(QString());
-		else
-			ui.leSourceInfo->setStyleSheet("QLineEdit{background:red;}");
+		bool invalid = !QFile::exists(source->fileName());
+		GuiTools::highlight(ui.leSourceInfo, invalid);
 		break;
-	case LiveDataSource::NetworkTcpSocket:
-	case LiveDataSource::NetworkUdpSocket:
+	}
+	case LiveDataSource::SourceType::NetworkTcpSocket:
+	case LiveDataSource::SourceType::NetworkUdpSocket:
 		ui.leSourceInfo->setText(QStringLiteral("%1:%2").arg(source->host()).arg(source->port()));
 		break;
-	case LiveDataSource::LocalSocket:
+	case LiveDataSource::SourceType::LocalSocket:
 		ui.leSourceInfo->setText(source->localSocketName());
 		break;
-	case LiveDataSource::SerialPort:
+	case LiveDataSource::SourceType::SerialPort:
 		ui.leSourceInfo->setText(source->serialPortName());
 		break;
-	case LiveDataSource::MQTT:
+	case LiveDataSource::SourceType::MQTT:
 		break;
 	}
 
@@ -308,24 +309,24 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 
 	// disable "whole file" when having no file (i.e. socket or port)
 	auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
-	QStandardItem* item = model->item(LiveDataSource::WholeFile);
+	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe) {
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		//for file types other than ASCII and binary we support re-reading the whole file only
 		//select "read whole file" and deactivate the combobox
-		if (fileType != AbstractFileFilter::Ascii && fileType != AbstractFileFilter::Binary) {
-			ui.cbReadingType->setCurrentIndex(LiveDataSource::WholeFile);
+		if (fileType != AbstractFileFilter::FileType::Ascii && fileType != AbstractFileFilter::FileType::Binary) {
+			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 			ui.cbReadingType->setEnabled(false);
 		} else
 			ui.cbReadingType->setEnabled(true);
 	} else {
-		if (static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex()) == LiveDataSource::WholeFile)
-			ui.cbReadingType->setCurrentIndex(LiveDataSource::TillEnd);
+		if (ui.cbReadingType->currentIndex() == static_cast<int>(LiveDataSource::ReadingType::WholeFile))
+			ui.cbReadingType->setCurrentIndex(static_cast<int>(LiveDataSource::ReadingType::TillEnd));
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	}
 
-	if (((sourceType == LiveDataSource::FileOrPipe || sourceType == LiveDataSource::NetworkUdpSocket) &&
-	        (readingType == LiveDataSource::ContinuousFixed || readingType == LiveDataSource::FromEnd)))
+	if (((sourceType == LiveDataSource::SourceType::FileOrPipe || sourceType == LiveDataSource::SourceType::NetworkUdpSocket) &&
+	        (readingType == LiveDataSource::ReadingType::ContinuousFixed || readingType == LiveDataSource::ReadingType::FromEnd)))
 		ui.sbSampleSize->setValue(source->sampleSize());
 	else {
 		ui.lSampleSize->hide();
@@ -334,9 +335,9 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 
 	// disable "on new data"-option if not available
 	model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
-	item = model->item(LiveDataSource::NewData);
-	if (sourceType == LiveDataSource::NetworkTcpSocket || sourceType == LiveDataSource::NetworkUdpSocket ||
-	        sourceType == LiveDataSource::SerialPort)
+	item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
+	if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::NetworkUdpSocket ||
+	        sourceType == LiveDataSource::SourceType::SerialPort)
 		item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	else
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -406,46 +407,44 @@ void LiveDataDock::nameChanged(const QString& name) {
 void LiveDataDock::updateTypeChanged(int idx) {
 	if (m_liveDataSource)  {
 		DEBUG("LiveDataDock::updateTypeChanged()");
-		const LiveDataSource::UpdateType updateType = static_cast<LiveDataSource::UpdateType>(idx);
+		const auto updateType = static_cast<LiveDataSource::UpdateType>(idx);
 
 		switch (updateType) {
-		case LiveDataSource::TimeInterval: {
+		case LiveDataSource::UpdateType::TimeInterval: {
 				ui.lUpdateInterval->show();
 				ui.sbUpdateInterval->show();
-				const LiveDataSource::SourceType s = m_liveDataSource->sourceType();
-				const LiveDataSource::ReadingType r = m_liveDataSource->readingType();
-				const bool showSampleSize = ((s == LiveDataSource::FileOrPipe || s == LiveDataSource::NetworkUdpSocket) &&
-				                             (r == LiveDataSource::ContinuousFixed || r == LiveDataSource::FromEnd));
+				const auto s = m_liveDataSource->sourceType();
+				const auto r = m_liveDataSource->readingType();
+				const bool showSampleSize = ((s == LiveDataSource::SourceType::FileOrPipe || s == LiveDataSource::SourceType::NetworkUdpSocket) &&
+				                             (r == LiveDataSource::ReadingType::ContinuousFixed || r == LiveDataSource::ReadingType::FromEnd));
 				ui.lSampleSize->setVisible(showSampleSize);
 				ui.sbSampleSize->setVisible(showSampleSize);
 
 				m_liveDataSource->setUpdateType(updateType);
 				m_liveDataSource->setUpdateInterval(ui.sbUpdateInterval->value());
-				m_liveDataSource->setFileWatched(false);
 				break;
 			}
-		case LiveDataSource::NewData:
+		case LiveDataSource::UpdateType::NewData:
 			ui.lUpdateInterval->hide();
 			ui.sbUpdateInterval->hide();
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 
-			m_liveDataSource->setFileWatched(true);
 			m_liveDataSource->setUpdateType(updateType);
 		}
 	}
 #ifdef HAVE_MQTT
 	else if (m_mqttClient) {
 		DEBUG("LiveDataDock::updateTypeChanged()");
-		const MQTTClient::UpdateType type = static_cast<MQTTClient::UpdateType>(idx);
+		const auto type = static_cast<MQTTClient::UpdateType>(idx);
 
-		if (type == MQTTClient::TimeInterval) {
+		if (type == MQTTClient::UpdateType::TimeInterval) {
 			ui.lUpdateInterval->show();
 			ui.sbUpdateInterval->show();
 
 			m_mqttClient->setUpdateType(type);
 			m_mqttClient->setUpdateInterval(ui.sbUpdateInterval->value());
-		} else if (type == MQTTClient::NewData) {
+		} else if (type == MQTTClient::UpdateType::NewData) {
 			ui.lUpdateInterval->hide();
 			ui.sbUpdateInterval->hide();
 
@@ -462,12 +461,13 @@ void LiveDataDock::updateTypeChanged(int idx) {
 void LiveDataDock::readingTypeChanged(int idx) {
 	if (m_liveDataSource)  {
 		const auto type = static_cast<LiveDataSource::ReadingType>(idx);
-		const LiveDataSource::SourceType sourceType = m_liveDataSource->sourceType();
-		const LiveDataSource::UpdateType updateType = m_liveDataSource->updateType();
+		const auto sourceType = m_liveDataSource->sourceType();
+		const auto updateType = m_liveDataSource->updateType();
 
-		if (sourceType == LiveDataSource::NetworkTcpSocket || sourceType == LiveDataSource::LocalSocket || sourceType == LiveDataSource::SerialPort
-		        || type == LiveDataSource::TillEnd || type == LiveDataSource::WholeFile
-		        || updateType == LiveDataSource::NewData) {
+		if (sourceType == LiveDataSource::SourceType::NetworkTcpSocket || sourceType == LiveDataSource::SourceType::LocalSocket
+			|| sourceType == LiveDataSource::SourceType::SerialPort
+		        || type == LiveDataSource::ReadingType::TillEnd || type == LiveDataSource::ReadingType::WholeFile
+		        || updateType == LiveDataSource::UpdateType::NewData) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {
@@ -481,7 +481,7 @@ void LiveDataDock::readingTypeChanged(int idx) {
 	else if (m_mqttClient) {
 		MQTTClient::ReadingType type = static_cast<MQTTClient::ReadingType>(idx);
 
-		if (type == MQTTClient::TillEnd) {
+		if (type == MQTTClient::ReadingType::TillEnd) {
 			ui.lSampleSize->hide();
 			ui.sbSampleSize->hide();
 		} else {
@@ -574,7 +574,7 @@ void LiveDataDock::useWillMessage(bool use) {
 
 	if (use) {
 		m_mqttClient->setMQTTWillUse(true);
-		if (m_mqttClient->willUpdateType() == MQTTClient::OnClick)
+		if (m_mqttClient->willUpdateType() == MQTTClient::WillUpdateType::OnClick)
 			ui.bWillUpdateNow->show();
 
 	} else {
@@ -648,10 +648,10 @@ void LiveDataDock::willOwnMessageChanged(const QString& message) {
 void LiveDataDock::willUpdateTypeChanged(int updateType) {
 	m_mqttClient->setWillUpdateType(static_cast<MQTTClient::WillUpdateType>(updateType));
 
-	if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::TimePeriod) {
+	if (updateType == static_cast<int>(MQTTClient::WillUpdateType::TimePeriod)) {
 		ui.bWillUpdateNow->hide();
 		m_mqttClient->startWillTimer();
-	} else if (static_cast<MQTTClient::WillUpdateType>(updateType) == MQTTClient::OnClick) {
+	} else if (updateType == static_cast<int>(MQTTClient::WillUpdateType::OnClick)) {
 		ui.bWillUpdateNow->show();
 
 		//if update type is on click we stop the will timer
@@ -683,9 +683,9 @@ void LiveDataDock::willUpdateIntervalChanged(int interval) {
  * adds or removes the statistic represented by the index from m_mqttClient
  */
 void LiveDataDock::statisticsChanged(MQTTClient::WillStatisticsType willStatisticsType) {
-	if (willStatisticsType >= 0) {
+	if (willStatisticsType != MQTTClient::WillStatisticsType::NoStatistics) {
 		//if it's not already added and it's checked we add it
-		if (!m_mqttClient->willStatistics()[static_cast<int>(willStatisticsType)])
+		if (!m_mqttClient->willStatistics().at(static_cast<int>(willStatisticsType)))
 			m_mqttClient->addWillStatistics(willStatisticsType);
 		else //otherwise remove it
 			m_mqttClient->removeWillStatistics(willStatisticsType);
@@ -922,7 +922,7 @@ void LiveDataDock::showWillSettings() {
 	connect(&willSettingsWidget, &MQTTWillSettingsWidget::applyClicked, [this, &menu, &willSettingsWidget]() {
 		this->useWillMessage(willSettingsWidget.will().enabled);
 		this->willMessageTypeChanged(willSettingsWidget.will().willMessageType);
-		this->updateTypeChanged(willSettingsWidget.will().willUpdateType);
+		this->updateTypeChanged(static_cast<int>(willSettingsWidget.will().willUpdateType));
 		this->willRetainChanged(willSettingsWidget.will().willRetain);
 		this->willUpdateIntervalChanged(willSettingsWidget.will().willTimeInterval);
 		this->willOwnMessageChanged(willSettingsWidget.will().willOwnMessage);

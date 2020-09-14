@@ -87,6 +87,7 @@ private slots:
 	void curveY2DataColumnChanged(const AbstractColumn*);
 	void curveCorrelationDataChanged(const XYCorrelationCurve::CorrelationData&);
 	void dataChanged();
+	void curveVisibilityChanged(bool);
 };
 
 #endif

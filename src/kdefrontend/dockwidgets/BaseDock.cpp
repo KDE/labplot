@@ -4,6 +4,7 @@
 	Description          : Base Dock widget
 	--------------------------------------------------------------------
 	Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+	Copyright            : (C) 2019-2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,18 +30,22 @@
 #include "BaseDock.h"
 #include "backend/core/AbstractAspect.h"
 
-#include "klocalizedstring.h"
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	m_units = (Units)group.readEntry("Units", static_cast<int>(Units::Metric));
 
+	if (m_units == Units::Imperial)
+		m_worksheetUnit = Worksheet::Unit::Inch;
 }
 
-BaseDock::~BaseDock() {
-
-}
+BaseDock::~BaseDock() = default;
 
 void BaseDock::nameChanged() {
-	if (m_initializing)
+	if (m_initializing || !m_aspect)
 		return;
 
 	if (!m_aspect->setName(m_leName->text(), false)) {
@@ -54,7 +59,7 @@ void BaseDock::nameChanged() {
 }
 
 void BaseDock::commentChanged() {
-	if (m_initializing)
+	if (m_initializing || !m_aspect)
 		return;
 
 	m_aspect->setComment(m_leComment->text());

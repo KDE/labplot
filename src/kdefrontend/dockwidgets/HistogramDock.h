@@ -54,8 +54,7 @@ private:
 	TreeViewComboBox* cbDataColumn;
 	TreeViewComboBox* cbValuesColumn;
 
-	void updateValuesFormatWidgets(const AbstractColumn::ColumnMode);
-	void showValuesColumnFormat(const Column*);
+	void updateValuesWidgets();
 
 	void load();
 	void loadConfig(KConfig&);
@@ -112,6 +111,9 @@ private slots:
 	void valuesDistanceChanged(double);
 	void valuesRotationChanged(int);
 	void valuesOpacityChanged(int);
+	void valuesNumericFormatChanged(int);
+	void valuesPrecisionChanged(int);
+	void valuesDateTimeFormatChanged(const QString&);
 	void valuesPrefixChanged();
 	void valuesSuffixChanged();
 	void valuesFontChanged(const QFont&);
@@ -146,7 +148,7 @@ private slots:
 	void curveOrientationChanged(Histogram::HistogramOrientation);
 	void curveBinningMethodChanged(Histogram::BinningMethod);
 	void curveBinCountChanged(int);
-	void curveBinWidthChanged(float);
+	void curveBinWidthChanged(double);
 	void curveAutoBinRangesChanged(bool);
 	void curveBinRangesMinChanged(double);
 	void curveBinRangesMaxChanged(double);
@@ -172,6 +174,9 @@ private slots:
 	void curveValuesDistanceChanged(qreal);
 	void curveValuesOpacityChanged(qreal);
 	void curveValuesRotationAngleChanged(qreal);
+	void curveValuesNumericFormatChanged(char);
+	void curveValuesPrecisionChanged(int);
+	void curveValuesDateTimeFormatChanged(const QString&);
 	void curveValuesPrefixChanged(const QString&);
 	void curveValuesSuffixChanged(const QString&);
 	void curveValuesFontChanged(QFont);
@@ -186,7 +191,7 @@ private slots:
 	void curveFillingFirstColorChanged(QColor&);
 	void curveFillingSecondColorChanged(QColor&);
 	void curveFillingFileNameChanged(QString&);
-	void curveFillingOpacityChanged(float);
+	void curveFillingOpacityChanged(double);
 
 	//"Error bars"-Tab
 	void curveErrorTypeChanged(Histogram::ErrorType);

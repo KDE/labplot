@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : Widget for dynamic presenting of worksheets
 --------------------------------------------------------------------
 Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2018-2020 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -33,8 +34,6 @@ Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QScreen>
 #include <QTimeLine>
 
-#include <KLocalizedString>
-
 DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, QWidget* parent) : QWidget(parent),
 	m_view(new WorksheetView(worksheet)), m_timeLine(new QTimeLine(600)) {
 
@@ -58,10 +57,7 @@ DynamicPresenterWidget::DynamicPresenterWidget(Worksheet* worksheet, QWidget* pa
 	m_panel = new SlidingPanel(this, worksheet->name());
 	qApp->installEventFilter(this);
 	connect(m_timeLine, &QTimeLine::valueChanged, m_panel, &SlidingPanel::movePanel);
-	connect(m_panel->quitButton(), &QPushButton::clicked, this, &DynamicPresenterWidget::close);
-	grabMouse();
-
-	slideUp();
+	connect(m_panel->quitButton(), &QPushButton::clicked, this, [=]() {close();});
 }
 
 DynamicPresenterWidget::~DynamicPresenterWidget() {

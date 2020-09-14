@@ -75,6 +75,9 @@ public:
 	bool swapVisible(bool on);
 	void recalcShapeAndBoundingRect();
 
+	void setHover(bool on);
+	bool activateCurve(QPointF mouseScenePos, double maxDist);
+
 	void drawSymbols(QPainter*);
 	void drawValues(QPainter*);
 	void drawFilling(QPainter*);
@@ -86,8 +89,6 @@ public:
 	double getXMinimum();
 	double getXMaximum();
 	double getMaximumOccuranceofHistogram();
-
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	//General
 	const AbstractColumn* dataColumn{nullptr};
@@ -123,6 +124,9 @@ public:
 	qreal valuesDistance;
 	qreal valuesRotationAngle;
 	qreal valuesOpacity;
+	char valuesNumericFormat; //'g', 'e', 'E', etc. for numeric values
+	int valuesPrecision; //number of digits for numeric values
+	QString valuesDateTimeFormat;
 	QString valuesPrefix;
 	QString valuesSuffix;
 	QFont valuesFont;
@@ -151,6 +155,8 @@ public:
 	QPainterPath valuesPath;
 	QRectF boundingRectangle;
 	QPainterPath curveShape;
+	//TODO: use Qt container
+	//TODO: add m_
 	QVector<QLineF> lines;
 	QVector<QPointF> pointsLogical;	//points in logical coordinates
 	QVector<QPointF> pointsScene;	//points in scene coordinates
@@ -166,8 +172,11 @@ private:
 	size_t m_bins{0};
 
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 };
 
 #endif

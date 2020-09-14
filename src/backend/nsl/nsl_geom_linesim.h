@@ -159,7 +159,7 @@ size_t nsl_geom_linesim_reumann_witkam_auto(const double xdata[], const double y
 	xdata, ydata: data points
 	n: number of points
 	mintol: minimum tolerance (to define ray)
-	maxtol: maxmimum tolerance (to define next key)
+	maxtol: maximum tolerance (to define next key)
 	index: index of reduced points
 	-> returns final number of points
 */

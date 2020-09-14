@@ -54,6 +54,9 @@ public:
 	void setModel(SpreadsheetModel*);
 	SpreadsheetModel* model();
 
+	void updateHorizontalHeader();
+	void updateLocale();
+
 	int columnCount() const;
 	int columnCount(AbstractColumn::PlotDesignation) const;
 	Column* column(int index) const;
@@ -80,13 +83,10 @@ public:
 	void emitRowCountChanged() { emit rowCountChanged(rowCount()); }
 	void emitColumnCountChanged() { emit columnCountChanged(columnCount()); }
 
-	void registerShortcuts() override;
-	void unregisterShortcuts() override;
-
 	//data import
-	int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode,
+	int prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode,
 		int rows, int cols, QStringList colNameList, QVector<AbstractColumn::ColumnMode>) override;
-	void finalizeImport(int columnOffset, int startColumn , int endColumn, int numRows,
+	void finalizeImport(int columnOffset, int startColumn , int endColumn,
 		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 
@@ -104,7 +104,7 @@ public slots:
 	void clearMasks();
 
 	void moveColumn(int from, int to);
-	void sortColumns(Column* leading, QVector<Column*>, bool ascending);
+	void sortColumns(Column* leading, const QVector<Column*>&, bool ascending);
 
 private:
 	void init();

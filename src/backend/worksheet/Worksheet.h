@@ -31,6 +31,7 @@
 
 #include "backend/core/AbstractPart.h"
 #include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 class QGraphicsItem;
 class QGraphicsScene;
@@ -49,12 +50,12 @@ public:
 	explicit Worksheet(const QString& name, bool loading = false);
 	~Worksheet() override;
 
-	enum Unit {Millimeter, Centimeter, Inch, Point};
-	enum Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
-	enum CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
+	enum class Unit {Millimeter, Centimeter, Inch, Point};
+	enum class Layout {NoLayout, VerticalLayout, HorizontalLayout, GridLayout};
+	enum class CartesianPlotActionMode {ApplyActionToSelection, ApplyActionToAll};
 
-	static float convertToSceneUnits(const float value, const Worksheet::Unit unit);
-	static float convertFromSceneUnits(const float value, const Worksheet::Unit unit);
+	static double convertToSceneUnits(const double value, const Worksheet::Unit unit);
+	static double convertFromSceneUnits(const double value, const Worksheet::Unit unit);
 
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
@@ -79,6 +80,7 @@ public:
 	void setSelectedInView(const bool);
 	void deleteAspectFromGraphicsItem(const QGraphicsItem*);
 	void setIsClosing();
+	void suppressSelectionChangedEvent(bool);
 
 	CartesianPlotActionMode cartesianPlotActionMode();
 	void setCartesianPlotActionMode(CartesianPlotActionMode mode);
@@ -87,11 +89,11 @@ public:
 	void setPlotsLocked(bool);
 	bool plotsLocked();
 	int getPlotCount();
-	WorksheetElement* getPlot(int index);
+	CartesianPlot* getPlot(int index);
 	TreeModel* cursorModel();
 
-	void cursorModelPlotAdded(QString name);
-	void cursorModelPlotRemoved(QString name);
+	void cursorModelPlotAdded(const QString& name);
+	void cursorModelPlotRemoved(const QString& name);
 
 	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
@@ -126,16 +128,17 @@ public:
 
 public slots:
 	void setTheme(const QString&);
-	void cartesianPlotmousePressZoomSelectionMode(QPointF logicPos);
-	void cartesianPlotmousePressCursorMode(int cursorNumber, QPointF logicPos);
-	void cartesianPlotmouseMoveZoomSelectionMode(QPointF logicPos);
-	void cartesianPlotmouseMoveCursorMode(int cursorNumber, QPointF logicPos);
-	void cartesianPlotmouseReleaseZoomSelectionMode();
-	void cartesianPlotmouseHoverZoomSelectionMode(QPointF logicPos);
-	void cartesianPlotmouseModeChanged();
+	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);
+	void cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos);
+	void cartesianPlotMouseReleaseZoomSelectionMode();
+	void cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotMouseHoverOutsideDataRect();
+	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode);
 
 	// slots needed by the cursor
-	void updateCurveBackground(QPen pen, QString curveName);
+	void updateCurveBackground(const QPen&, const QString& curveName);
 	void updateCompleteCursorTreeModel();
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve* curve);
@@ -151,7 +154,7 @@ private:
 	mutable WorksheetView* m_view{nullptr};
 	friend class WorksheetPrivate;
 
-	private slots:
+private slots:
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
@@ -159,12 +162,15 @@ private:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
 
-	signals:
+signals:
 	void requestProjectContextMenu(QMenu*);
 	void itemSelected(QGraphicsItem*);
 	void itemDeselected(QGraphicsItem*);
 	void requestUpdate();
 	void useViewSizeRequested();
+	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
+	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
+	void propertiesExplorerRequested();
 
 	void backgroundTypeChanged(PlotArea::BackgroundType);
 	void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
@@ -186,7 +192,6 @@ private:
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
 	void themeChanged(const QString&);
-	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
 };
 
 #endif

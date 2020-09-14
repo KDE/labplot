@@ -267,17 +267,16 @@ QDateTime AbstractAspect::creationTime() const {
 }
 
 bool AbstractAspect::hidden() const {
-    return d->m_hidden;
+	return d->m_hidden;
 }
 
 /**
  * \brief Set "hidden" property, i.e. whether to exclude this aspect from being shown in the explorer.
  */
 void AbstractAspect::setHidden(bool value) {
-    if (value == d->m_hidden) return;
-    exec(new PropertyChangeCommand<bool>(i18n("%1: change hidden status", d->m_name),
-				 &d->m_hidden, value),
-			"aspectHiddenAboutToChange", "aspectHiddenChanged", Q_ARG(const AbstractAspect*,this));
+	if (value == d->m_hidden)
+		return;
+	d->m_hidden = value;
 }
 
 void AbstractAspect::setIsLoading(bool load) {
@@ -526,31 +525,28 @@ void AbstractAspect::removeAllChildren() {
 void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 	Q_ASSERT(parentAspect() != nullptr);
 	Q_ASSERT(newParent != nullptr);
-	int max_index = newParent->childCount<AbstractAspect>(IncludeHidden);
+	int max_index = newParent->childCount<AbstractAspect>(ChildIndexFlag::IncludeHidden);
 	if (newIndex == -1)
 		newIndex = max_index;
 	Q_ASSERT(newIndex >= 0 && newIndex <= max_index);
 
-	AbstractAspect* old_parent = parentAspect();
-	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
-	auto* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
-	auto* new_sibling = newParent->child<AbstractAspect>(newIndex, IncludeHidden);
+//	AbstractAspect* old_parent = parentAspect();
+// 	int old_index = old_parent->indexOfChild<AbstractAspect>(this, IncludeHidden);
+// 	auto* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
+// 	auto* new_sibling = newParent->child<AbstractAspect>(newIndex, IncludeHidden);
 
-	//TODO check/test this!
-	emit aspectAboutToBeRemoved(this);
-	emit newParent->aspectAboutToBeAdded(newParent, new_sibling, this);
+// 	emit newParent->aspectAboutToBeAdded(newParent, new_sibling, this);
 	exec(new AspectChildReparentCmd(parentAspect()->d, newParent->d, this, newIndex));
-	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
-	emit aspectAdded(this);
+// 	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
 }
 
-QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) {
+QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) const {
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
-		if (flags & IncludeHidden || !child->hidden()) {
-			if (child->inherits(type) || !(flags & Compress)) {
+		if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
+			if (child->inherits(type) || !(flags & ChildIndexFlag::Compress)) {
 				result << child;
-				if (flags & Recursive) {
+				if (flags & ChildIndexFlag::Recursive) {
 					result << child->children(type, flags);
 				}
 			}
@@ -559,7 +555,7 @@ QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFla
 	return result;
 }
 
-const QVector<AbstractAspect*> AbstractAspect::children() const {
+const QVector<AbstractAspect*>& AbstractAspect::children() const {
 	return d->m_children;
 }
 
@@ -605,7 +601,7 @@ QVector<AspectType> AbstractAspect::dropableOn() const {
  * \brief Load from XML
  *
  * XmlStreamReader supports errors as well as warnings. If only
- * warnings (non-critial errors) occur, this function must return
+ * warnings (non-critical errors) occur, this function must return
  * the reader at the end element corresponding to the current
  * element at the time the function was called.
  *
@@ -792,11 +788,15 @@ void AbstractAspect::setSelected(bool s) {
 void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//forward the signal to the highest possible level in the parent-child hierarchy
 	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
-	//need to react on the selection of children: e.g. Folder or XYFitCurve with
-	//the child column for calculated residuals
+	//need to react on the selection of children:
+	//* Folder
+	//* XYFitCurve with the child column for calculated residuals
+	//* XYSmouthCurve with the child column for calculated rough values
+	//* CantorWorksheet with the child columns for CAS variables
 	if (aspect->parentAspect()
 		&& !aspect->parentAspect()->inherits(AspectType::Folder)
 		&& !aspect->parentAspect()->inherits(AspectType::XYFitCurve)
+		&& !aspect->parentAspect()->inherits(AspectType::XYSmoothCurve)
 		&& !aspect->parentAspect()->inherits(AspectType::CantorWorksheet))
 		emit aspect->parentAspect()->selected(aspect);
 }
@@ -804,11 +804,15 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//forward the signal to the highest possible level in the parent-child hierarchy
 	//e.g. axis of a plot was selected. Don't include parent aspects here that do not
-	//need to react on the deselection of children: e.g. Folder or XYFitCurve with
-	//the child column for calculated residuals
+	//need to react on the deselection of children:
+	//* Folder
+	//* XYFitCurve with the child column for calculated residuals
+	//* XYSmouthCurve with the child column for calculated rough values
+	//* CantorWorksheet with the child columns for CAS variables
 	if (aspect->parentAspect()
 		&& !aspect->parentAspect()->inherits(AspectType::Folder)
 		&& !aspect->parentAspect()->inherits(AspectType::XYFitCurve)
+		&& !aspect->parentAspect()->inherits(AspectType::XYSmoothCurve)
 		&& !aspect->parentAspect()->inherits(AspectType::CantorWorksheet))
 		emit aspect->parentAspect()->deselected(aspect);
 }
@@ -826,9 +830,23 @@ QString AbstractAspect::uniqueNameFor(const QString& current_name) const {
 
 	QString base = current_name;
 	int last_non_digit;
-	for (last_non_digit = base.size() - 1; last_non_digit >= 0 &&
-	        base[last_non_digit].category() == QChar::Number_DecimalDigit; --last_non_digit)
-		base.chop(1);
+	for (last_non_digit = base.size() - 1; last_non_digit >= 0; --last_non_digit) {
+		if (base[last_non_digit].category() == QChar::Number_DecimalDigit) {
+			base.chop(1);
+		} else {
+			if (base[last_non_digit].category() == QChar::Separator_Space)
+				break;
+			else {
+				//non-digit character is found and it's not the separator,
+				//the string either doesn't have any digits at all or is of
+				//the form "data_2020.06". In this case we don't use anything
+				//from the original name to increment the number
+				last_non_digit = 0;
+				base = current_name;
+				break;
+			}
+		}
+	}
 
 	if (last_non_digit >=0 && base[last_non_digit].category() != QChar::Separator_Space)
 		base.append(" ");

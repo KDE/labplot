@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
-    <height>1179</height>
+    <width>384</width>
+    <height>1145</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -691,41 +691,8 @@
        <string>Values</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
-        <widget class="QLabel" name="lValuesGeneral">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>General</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lValuesPosition_2">
-         <property name="text">
-          <string>Type:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
+       <item row="9" column="2">
+        <widget class="KComboBox" name="cbValuesNumericFormat"/>
        </item>
        <item row="1" column="2">
         <widget class="KComboBox" name="cbValuesType">
@@ -737,47 +704,20 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lValuesColumn">
+       <item row="15" column="0">
+        <widget class="QLabel" name="lValuesSuffix">
          <property name="text">
-          <string>Dataset:</string>
+          <string>Suffix:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lValuesPosition">
-         <property name="text">
-          <string>Position:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="KComboBox" name="cbValuesPosition"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lValuesDistance">
-         <property name="text">
-          <string>Distance:</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QDoubleSpinBox" name="sbValuesDistance">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lValuesRotation">
-         <property name="text">
-          <string>Rotation:</string>
+       <item row="14" column="2">
+        <widget class="QLineEdit" name="leValuesPrefix">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
         </widget>
        </item>
@@ -803,12 +743,150 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lValuesOpacity">
+       <item row="16" column="0">
+        <widget class="QLabel" name="lValuesFont">
          <property name="text">
-          <string>Opacity:</string>
+          <string>Font:</string>
          </property>
         </widget>
+       </item>
+       <item row="15" column="2">
+        <widget class="QLineEdit" name="leValuesSuffix">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lValuesColumn">
+         <property name="text">
+          <string>Dataset:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="2">
+        <widget class="KFontRequester" name="kfrValuesFont"/>
+       </item>
+       <item row="18" column="0">
+        <spacer name="verticalSpacer_8">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>28</width>
+           <height>47</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lValuesDistance">
+         <property name="text">
+          <string>Distance:</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lValuesFormat">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Format</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QSpinBox" name="sbValuesPrecision">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimum">
+          <number>0</number>
+         </property>
+         <property name="maximum">
+          <number>16</number>
+         </property>
+         <property name="value">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lValuesPosition">
+         <property name="text">
+          <string>Position:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lValuesGeneral">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>General</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>86</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="2">
+        <widget class="QDoubleSpinBox" name="sbValuesDistance">
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lValuesPrecision">
+         <property name="text">
+          <string>Precision:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="0">
+        <widget class="QLabel" name="lValuesColor">
+         <property name="text">
+          <string>Color:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="2">
+        <widget class="KComboBox" name="cbValuesPosition"/>
        </item>
        <item row="6" column="2">
         <widget class="QSpinBox" name="sbValuesOpacity">
@@ -838,72 +916,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0" colspan="2">
-        <spacer name="verticalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>86</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lValuesFormatTop">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Format</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lValuesFormat">
-         <property name="text">
-          <string>Format:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="2">
-        <widget class="KComboBox" name="cbValuesFormat"/>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="lValuesPrecision">
-         <property name="text">
-          <string>Precision:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="2">
-        <widget class="QSpinBox" name="sbValuesPrecision">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimum">
-          <number>0</number>
-         </property>
-         <property name="maximum">
-          <number>16</number>
-         </property>
-         <property name="value">
-          <number>0</number>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0" colspan="2">
+       <item row="12" column="0" colspan="2">
         <spacer name="verticalSpacer_7">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -919,7 +932,30 @@
          </property>
         </spacer>
        </item>
-       <item row="12" column="0">
+       <item row="1" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="lValuesPrefix">
+         <property name="text">
+          <string>Prefix:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0">
         <widget class="QLabel" name="lValuesText">
          <property name="font">
           <font>
@@ -932,58 +968,28 @@
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
-        <widget class="QLabel" name="lValuesPrefix">
+       <item row="1" column="0">
+        <widget class="QLabel" name="lValuesPosition_2">
          <property name="text">
-          <string>Prefix:</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="2">
-        <widget class="QLineEdit" name="leValuesPrefix">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="lValuesSuffix">
+       <item row="6" column="0">
+        <widget class="QLabel" name="lValuesOpacity">
          <property name="text">
-          <string>Suffix:</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="2">
-        <widget class="QLineEdit" name="leValuesSuffix">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="lValuesFont">
+       <item row="5" column="0">
+        <widget class="QLabel" name="lValuesRotation">
          <property name="text">
-          <string>Font:</string>
+          <string>Rotation:</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="2">
-        <widget class="KFontRequester" name="kfrValuesFont"/>
-       </item>
-       <item row="16" column="0">
-        <widget class="QLabel" name="lValuesColor">
-         <property name="text">
-          <string>Color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="2">
+       <item row="17" column="2">
         <widget class="KColorButton" name="kcbValuesColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -993,18 +999,22 @@
          </property>
         </widget>
        </item>
-       <item row="17" column="0">
-        <spacer name="verticalSpacer_8">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="9" column="0">
+        <widget class="QLabel" name="lValuesNumericFormat">
+         <property name="text">
+          <string>Numeric:</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>28</width>
-           <height>47</height>
-          </size>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="lValuesDateTimeFormat">
+         <property name="text">
+          <string>DateTime:</string>
          </property>
-        </spacer>
+        </widget>
+       </item>
+       <item row="11" column="2">
+        <widget class="QComboBox" name="cbValuesDateTimeFormat"/>
        </item>
       </layout>
      </widget>
@@ -1072,7 +1082,7 @@
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
-         <property name="clearButtonEnabled" stdset="0">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -1410,6 +1420,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
@@ -1419,12 +1434,64 @@
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
   </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>leName</tabstop>
+  <tabstop>leComment</tabstop>
+  <tabstop>cbType</tabstop>
+  <tabstop>cbOrientation</tabstop>
+  <tabstop>cbBinningMethod</tabstop>
+  <tabstop>sbBinCount</tabstop>
+  <tabstop>leBinWidth</tabstop>
+  <tabstop>chkAutoBinRanges</tabstop>
+  <tabstop>leBinRangesMin</tabstop>
+  <tabstop>leBinRangesMax</tabstop>
+  <tabstop>chkVisible</tabstop>
+  <tabstop>cbLineType</tabstop>
+  <tabstop>cbLineStyle</tabstop>
+  <tabstop>kcbLineColor</tabstop>
+  <tabstop>sbLineWidth</tabstop>
+  <tabstop>sbLineOpacity</tabstop>
+  <tabstop>cbSymbolStyle</tabstop>
+  <tabstop>sbSymbolSize</tabstop>
+  <tabstop>sbSymbolRotation</tabstop>
+  <tabstop>sbSymbolOpacity</tabstop>
+  <tabstop>cbSymbolFillingStyle</tabstop>
+  <tabstop>kcbSymbolFillingColor</tabstop>
+  <tabstop>cbSymbolBorderStyle</tabstop>
+  <tabstop>kcbSymbolBorderColor</tabstop>
+  <tabstop>sbSymbolBorderWidth</tabstop>
+  <tabstop>cbValuesType</tabstop>
+  <tabstop>cbValuesPosition</tabstop>
+  <tabstop>sbValuesDistance</tabstop>
+  <tabstop>sbValuesRotation</tabstop>
+  <tabstop>sbValuesOpacity</tabstop>
+  <tabstop>cbValuesNumericFormat</tabstop>
+  <tabstop>sbValuesPrecision</tabstop>
+  <tabstop>cbValuesDateTimeFormat</tabstop>
+  <tabstop>leValuesPrefix</tabstop>
+  <tabstop>leValuesSuffix</tabstop>
+  <tabstop>kfrValuesFont</tabstop>
+  <tabstop>kcbValuesColor</tabstop>
+  <tabstop>cbFillingType</tabstop>
+  <tabstop>chkFillingEnabled</tabstop>
+  <tabstop>leFillingFileName</tabstop>
+  <tabstop>bFillingOpen</tabstop>
+  <tabstop>cbFillingColorStyle</tabstop>
+  <tabstop>cbFillingImageStyle</tabstop>
+  <tabstop>cbFillingBrushStyle</tabstop>
+  <tabstop>kcbFillingFirstColor</tabstop>
+  <tabstop>kcbFillingSecondColor</tabstop>
+  <tabstop>sbFillingOpacity</tabstop>
+  <tabstop>cbErrorType</tabstop>
+  <tabstop>cbErrorBarsType</tabstop>
+  <tabstop>cbErrorBarsStyle</tabstop>
+  <tabstop>sbErrorBarsCapSize</tabstop>
+  <tabstop>kcbErrorBarsColor</tabstop>
+  <tabstop>sbErrorBarsWidth</tabstop>
+  <tabstop>sbErrorBarsOpacity</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

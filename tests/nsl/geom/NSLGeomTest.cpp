@@ -96,20 +96,20 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.0378688524590164);
 	QCOMPARE(aerr, 0.25);
 
-	for (i = 0; i < nout; i++)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result[i]);
 
 	const size_t no = 6;
 	printf("* Simplification (Douglas Peucker variant) nout = %zu\n", no);
 	double tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, n, no, index);
 	perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, n, index);
-	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index); 
+	aerr = nsl_geom_linesim_area_error(xdata, ydata, n, index);
 	printf("tolout = %.15g, pos. error = %.15g, area error = %.15g)\n", tolout, perr, aerr);
 	QCOMPARE(tolout, 0.994505452921406);
 	QCOMPARE(perr, 0.0378688524590164);
 	QCOMPARE(aerr, 0.25);
 
-	for (i = 0; i < no; i++)
+	for (i = 0; i < no; ++i)
 		QCOMPARE(index[i], result[i]);
 
         const size_t np = 2;
@@ -123,7 +123,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.129756097560976);
 	QCOMPARE(aerr, 0.525);
 
-        for (i = 0; i < nout; i++)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result2[i]);
 
         const double tol2 = 1.5;
@@ -137,7 +137,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.1725);
 	QCOMPARE(aerr, 0.2);
 
-        for (i = 0; i < nout; i++)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result3[i]);
 
         const double tol3 = 0.5;
@@ -152,7 +152,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.0519512195121951);
 	QCOMPARE(aerr, 0.275);
 
-        for (i = 0; i < nout; i++)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result4[i]);
 
         const double tol4 = 0.7;
@@ -165,7 +165,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.0378688524590164);
 	QCOMPARE(aerr, 0.25);
 
-        for (i = 0; i < nout; i++)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result[i]);
 
         const double tol5 = 1.6;
@@ -178,7 +178,8 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.1725);
 	QCOMPARE(aerr, 0.2);
 
-        for (i = 0; i < nout; i++)
+	// nout can be up to 10 when third arg of nsl_geom_linesim_visvalingam_whyatt() is 10
+	for (i = 0; i < std::min(nout, (size_t)6uL); ++i)
 		QCOMPARE(index[i], result3[i]);
 
 	const size_t result5[] = {0, 2, 3, 5, 6, 7, 9};
@@ -191,7 +192,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.01);
 	QCOMPARE(aerr, 0.05);
 
-        for (i = 0; i < nout; i++)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result5[i]);
 
         const double mintol = 2.0;
@@ -205,7 +206,7 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.129756097560976);
 	QCOMPARE(aerr, 0.525);
 
-        for (i = 0; i < nout; i++)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result2[i]);
 
         const size_t region = 5;
@@ -218,19 +219,19 @@ void NSLGeomTest::testLineSim() {
 	QCOMPARE(perr, 0.0519512195121951);
 	QCOMPARE(aerr, 0.275);
 
-        for (i = 0; i < nout; i++)
+	for (i = 0; i < nout; ++i)
 		QCOMPARE(index[i], result4[i]);
 }
 
+#ifdef _MSC_VER	// crashes on Windows
+void NSLGeomTest::testLineSimMorse() {}
+#else
 void NSLGeomTest::testLineSimMorse() {
 	printf("NSLGeomTest::testLineSimMorse()\n");
-#ifdef _MSC_VER	// crashes on Windows
-	return;
-#endif
 
 	const QString fileName = m_dataDir + "morse_code.dat";
 	FILE *file;
-	if((file = fopen(fileName.toLocal8Bit().constData(), "r")) == NULL) {
+	if((file = fopen(fileName.toLocal8Bit().constData(), "r")) == nullptr) {
 		printf("ERROR reading %s. Giving up.\n", fileName.toLocal8Bit().constData());
 		return;
 	}
@@ -239,27 +240,28 @@ void NSLGeomTest::testLineSimMorse() {
 	const int NOUT = 15200;
 
 	printf("NSLGeomTest::testLineSimMorse(): allocating space for reading data\n");
-	double* xdata = (double *)malloc(N*sizeof(double));
-	if (xdata == NULL)
-		return;
-	double* ydata = (double *)malloc(N*sizeof(double));
-	if (ydata == NULL) {
-		free(xdata);
-		return;
-	}
+	QScopedArrayPointer<double> xdata(new double[N]);
+	QScopedArrayPointer<double> ydata(new double[N]);
 
 	printf("NSLGeomTest::testLineSimMorse(): reading data from file\n");
 	size_t i;
-	for (i = 0; i < N; i++)
-		fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
+	for (i = 0; i < N; i++) {
+		int num = fscanf(file,"%lf %lf", &xdata[i], &ydata[i]);
+		if (num != 2) {	// failed to read two values
+			printf("ERROR reading data\n");
+			fclose(file);
+			return;
+		}
+	}
+	fclose(file);
 
-	double atol = nsl_geom_linesim_clip_diag_perpoint(xdata, ydata, N);
+	double atol = nsl_geom_linesim_clip_diag_perpoint(xdata.data(), ydata.data(), N);
 	printf("automatic tol clip_diag_perpoint = %.15g\n", atol);
 	QCOMPARE(atol, 0.999993446759985);
-	atol = nsl_geom_linesim_clip_area_perpoint(xdata, ydata, N);
+	atol = nsl_geom_linesim_clip_area_perpoint(xdata.data(), ydata.data(), N);
 	printf("automatic tol clip_area_perpoint = %.15g\n", atol);
 	QCOMPARE(atol, 34.4653732526316);
-	atol = nsl_geom_linesim_avg_dist_perpoint(xdata, ydata, N);
+	atol = nsl_geom_linesim_avg_dist_perpoint(xdata.data(), ydata.data(), N);
 	printf("automatic tol avg_dist = %.15g\n", atol);
 	QCOMPARE(atol, 4.72091524721907);
 
@@ -268,19 +270,17 @@ void NSLGeomTest::testLineSimMorse() {
 	double tolout;
 	size_t index[N];
         QBENCHMARK {
-		tolout = nsl_geom_linesim_douglas_peucker_variant(xdata, ydata, N, NOUT, index);
+		tolout = nsl_geom_linesim_douglas_peucker_variant(xdata.data(), ydata.data(), N, NOUT, index);
 		QCOMPARE(tolout, 11.5280857733246);
         }
 
-	double perr = nsl_geom_linesim_positional_squared_error(xdata, ydata, N, index);
-	double aerr = nsl_geom_linesim_area_error(xdata, ydata, N, index);
+	double perr = nsl_geom_linesim_positional_squared_error(xdata.data(), ydata.data(), N, index);
+	double aerr = nsl_geom_linesim_area_error(xdata.data(), ydata.data(), N, index);
 	printf("maxtol = %.15g (pos. error = %.15g, area error = %.15g)\n", tolout, perr, aerr);
 	QCOMPARE(perr, 11.9586266895937);
 	QCOMPARE(aerr, 17.558046450762);
-
-	free(xdata);
-	free(ydata);
 }
+#endif
 
 //##############################################################################
 //#################  performance

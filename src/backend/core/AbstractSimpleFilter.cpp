@@ -4,6 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 by Knut Franke, Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
+    Copyright            : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Simplified filter interface for filters with
                            only one output port.
 
@@ -130,7 +131,7 @@
  */
 AbstractSimpleFilter::AbstractSimpleFilter()
 	: AbstractFilter("SimpleFilter"), m_output_column(new SimpleFilterColumn(this)) {
-	addChild(m_output_column);
+	addChildFast(m_output_column);
 }
 
 /**
@@ -151,7 +152,7 @@ int AbstractSimpleFilter::outputCount() const {
  * \brief Copy plot designation of input port 0.
  */
 AbstractColumn::PlotDesignation AbstractSimpleFilter::plotDesignation() const {
-	return m_inputs.value(0) ? m_inputs.at(0)->plotDesignation() : AbstractColumn::NoDesignation;
+	return m_inputs.value(0) ? m_inputs.at(0)->plotDesignation() : AbstractColumn::PlotDesignation::NoDesignation;
 }
 
 /**
@@ -172,7 +173,7 @@ AbstractColumn::ColumnMode AbstractSimpleFilter::columnMode() const {
 	// calling this function while m_input is empty is a sign of very bad code
 	// nevertheless it will return some rather meaningless value to
 	// avoid crashes
-	return m_inputs.value(0) ? m_inputs.at(0)->columnMode() : AbstractColumn::Text;
+	return m_inputs.value(0) ? m_inputs.at(0)->columnMode() : AbstractColumn::ColumnMode::Text;
 }
 
 /**
@@ -230,12 +231,30 @@ int AbstractSimpleFilter::integerAt(int row) const {
 }
 
 /**
+ * \brief Return the bigint value in row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+qint64 AbstractSimpleFilter::bigIntAt(int row) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->bigIntAt(row) : 0;
+}
+
+/**
  * \brief Number of output rows == number of input rows
  *
  * ... unless overridden in a subclass.
  */
 int AbstractSimpleFilter::rowCount() const {
 	return m_inputs.value(0) ? m_inputs.at(0)->rowCount() : 0;
+}
+
+/**
+ * \brief Number of output rows == number of input rows
+ *
+ * ... unless overridden in a subclass.
+ */
+int AbstractSimpleFilter::availableRowCount() const {
+	return m_inputs.value(0) ? m_inputs.at(0)->availableRowCount() : 0;
 }
 
 /**
@@ -411,4 +430,8 @@ double SimpleFilterColumn::valueAt(int row) const {
 
 int SimpleFilterColumn::integerAt(int row) const {
 	return m_owner->integerAt(row);
+}
+
+qint64 SimpleFilterColumn::bigIntAt(int row) const {
+	return m_owner->bigIntAt(row);
 }

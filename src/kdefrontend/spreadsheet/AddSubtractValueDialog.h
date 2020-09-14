@@ -45,14 +45,14 @@ public:
 	explicit AddSubtractValueDialog(Spreadsheet*, Operation, QWidget* parent = nullptr);
 	explicit AddSubtractValueDialog(Matrix*, Operation, QWidget* parent = nullptr);
 	~AddSubtractValueDialog() override;
-	void setColumns(QVector<Column*>);
+	void setColumns(const QVector<Column*>&);
 	void setMatrices();
 
 private:
 	void init();
 	void generateForColumns();
 	void generateForMatrices();
-	QString getMessage(QString);
+	QString getMessage(const QString&);
 
 	Ui::AddSubtractValueWidget ui;
 	QVector<Column*> m_columns;

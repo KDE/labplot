@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL math functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2018-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -28,6 +28,24 @@
 
 #include "nsl_math.h"
 #include <gsl/gsl_math.h>
+
+int nsl_math_decimal_places(double value) {
+	return -floor(log10(fabs(value)));
+}
+
+int nsl_math_rounded_decimals(double value) {
+	int places = nsl_math_decimal_places(value);
+
+// printf("places = %d, rv = %g\n", places, round(fabs(value) * pow(10, places)));
+	if (round(fabs(value) * gsl_pow_int(10., places)) >= 5.)
+		places--;
+
+	return places;
+}
+
+int nsl_math_rounded_decimals_max(double value, int max) {
+	return GSL_MIN_INT(max, nsl_math_rounded_decimals(value));
+}
 
 double nsl_math_round_places(double value, unsigned int n) {
 	// no need to round

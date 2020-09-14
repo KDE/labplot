@@ -33,18 +33,25 @@
 #include "backend/core/Project.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
+#include <cantor/cantorlibs_version.h>
+#include "3rdparty/cantor/cantor_part.h"
+#include <cantor/worksheetaccess.h>
+
+#ifdef HAVE_NEW_CANTOR_LIBS
+#include <cantor/panelpluginhandler.h>
+#include <cantor/panelplugin.h>
+#else
+#include "3rdparty/cantor/panelpluginhandler.h"
+#include "3rdparty/cantor/panelplugin.h"
+#endif
+
+#include <QAction>
+#include <QFileInfo>
+#include <QModelIndex>
+
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KParts/ReadWritePart>
-
-#include <QAction>
-#include <QModelIndex>
-#include <QDebug>
-
-#include "cantor/cantor_part.h"
-#include <cantor/panelpluginhandler.h>
-#include <cantor/panelplugin.h>
-#include <cantor/worksheetaccess.h>
 
 CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
 	: AbstractPart(name, AspectType::CantorWorksheet), m_backendName(name) {
@@ -57,11 +64,20 @@ CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
 	initializes Cantor's part and plugins
 */
 bool CantorWorksheet::init(QByteArray* content) {
-	KPluginFactory* factory = KPluginLoader(QLatin1String("libcantorpart")).factory();
-	if (factory) {
+	KPluginLoader loader(QLatin1String("cantorpart"));
+	KPluginFactory* factory = loader.factory();
+
+	if (!factory) {
+		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
+		//return false here, a proper error message will be created in load() and propagated further.
+		WARN("Failed to load Cantor plugin:")
+		WARN("Cantor Part file name: " << STDSTRING(loader.fileName()))
+		WARN("	" << STDSTRING(loader.errorString()))
+		return false;
+	} else {
 		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));
 		if (!m_part) {
-			qDebug() << "Could not create the Cantor Part.";
+			DEBUG("Could not create the Cantor Part.")
 			return false;
 		}
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
@@ -77,30 +93,29 @@ bool CantorWorksheet::init(QByteArray* content) {
 		connect(m_session, SIGNAL(statusChanged(Cantor::Session::Status)), this, SIGNAL(statusChanged(Cantor::Session::Status)));
 
 		//variable model
-#ifndef OLD_CANTORLIBS_VERSION
 		m_variableModel = m_session->variableDataModel();
-#else
-		m_variableModel = m_session->variableModel();
-#endif
-		connect(m_variableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(dataChanged(QModelIndex)));
-		connect(m_variableModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
-		connect(m_variableModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex,int,int)));
-		connect(m_variableModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
+		connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &CantorWorksheet::dataChanged);
+		connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
+		connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
+		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
 
 		//available plugins
+#ifdef HAVE_NEW_CANTOR_LIBS
+		auto* handler = new Cantor::PanelPluginHandler(this);
+		handler->loadPlugins();
+		m_plugins = handler->activePluginsForSession(m_session, Cantor::PanelPluginHandler::PanelStates());
+		for (auto* plugin : m_plugins)
+			plugin->connectToShell(m_part);
+#else
 		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
 		if (!handler) {
-			KMessageBox::error(view(), i18n("no PanelPluginHandle found for the Cantor Part."));
+			KMessageBox::error(nullptr, i18n("No PanelPluginHandle found for the Cantor Part."));
 			return false;
 		}
 		m_plugins = handler->plugins();
+#endif
 	}
-	else {
-		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
-		//return false here, a proper error message will be created in load() and propagated further.
-		DEBUG("Failed to load cantor plugin");
-		return false;
-	}
+
 	return true;
 }
 
@@ -114,9 +129,9 @@ void CantorWorksheet::dataChanged(const QModelIndex& index) {
 		if (dataValue.isNull())
 			dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1));
 		const QString& value = dataValue.toString();
-		auto* parser = new VariableParser(m_backendName, value);
-		if (parser->isParsed())
-			col->replaceValues(0, parser->values());
+		VariableParser parser(m_backendName, value);
+		if (parser.isParsed())
+			col->replaceValues(0, parser.values());
 	}
 
 }
@@ -129,13 +144,13 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 		if (dataValue.isNull())
 			dataValue = m_variableModel->data(m_variableModel->index(i, 1));
 		const QString& value = dataValue.toString();
-		auto* parser = new VariableParser(m_backendName, value);
-		if (parser->isParsed()) {
+		VariableParser parser(m_backendName, value);
+		if (parser.isParsed()) {
 			Column* col = child<Column>(name);
 			if (col) {
-				col->replaceValues(0, parser->values());
+				col->replaceValues(0, parser.values());
 			} else {
-				col = new Column(name, parser->values());
+				col = new Column(name, parser.values());
 				col->setUndoAware(false);
 				addChild(col);
 
@@ -150,8 +165,6 @@ void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int las
 			if (col)
 				removeChild(col);
 		}
-
-		delete(parser);
 	}
 
 	project()->setChanged(true);
@@ -168,20 +181,13 @@ void CantorWorksheet::modelReset() {
 
 void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {
 	Q_UNUSED(parent);
-#ifndef OLD_CANTORLIBS_VERSION
+
 	for (int i = first; i <= last; ++i) {
 		const QString& name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 		Column* column = child<Column>(name);
 		if (column)
 			column->remove();
 	}
-#else
-	Q_UNUSED(first);
-	Q_UNUSED(last);
-	//TODO: Old Cantor removes rows from the model even when the variable was changed only.
-	//We don't want this behaviour since this removes the columns from the datasource in the curve.
-	return;
-#endif
 }
 
 QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins() {
@@ -204,6 +210,14 @@ QWidget* CantorWorksheet::view() const {
 		m_view->setBaseSize(1500, 1500);
 		m_partView = m_view;
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
+
+		//set the current path in the session to the path of the project file
+		const Project* project = const_cast<CantorWorksheet*>(this)->project();
+		const QString& fileName = project->fileName();
+		if (!fileName.isEmpty()) {
+			QFileInfo fi(fileName);
+			m_session->setWorksheetPath(fi.filePath());
+		}
 	}
 	return m_partView;
 }
@@ -261,7 +275,7 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 	writer->writeEndElement();
 
 	//save columns(variables)
-	for (auto* col : children<Column>(IncludeHidden))
+	for (auto* col : children<Column>(ChildIndexFlag::IncludeHidden))
 		col->save(writer);
 
 	writer->writeEndElement(); // close "cantorWorksheet" section
@@ -274,7 +288,6 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
-	QString str;
 	bool rc = false;
 
 	while (!reader->atEnd()) {
@@ -292,12 +305,12 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			m_backendName = attribs.value("backend_name").toString().trimmed();
-			if (str.isEmpty())
+			if (m_backendName.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("backend_name").toString());
 		} else if (!preview && reader->name() == "worksheet") {
 			attribs = reader->attributes();
 
-			str = attribs.value("content").toString().trimmed();
+			QString str = attribs.value("content").toString().trimmed();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("content").toString());
 

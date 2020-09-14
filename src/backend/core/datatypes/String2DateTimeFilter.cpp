@@ -51,7 +51,7 @@ private:
 };
 
 AbstractColumn::ColumnMode String2DateTimeFilter::columnMode() const {
-	return AbstractColumn::DateTime;
+	return AbstractColumn::ColumnMode::DateTime;
 }
 
 QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
@@ -114,7 +114,7 @@ QTime String2DateTimeFilter::timeAt(int row) const {
 }
 
 bool String2DateTimeFilter::inputAcceptable(int, const AbstractColumn* source) {
-	return source->columnMode() == AbstractColumn::Text;
+	return source->columnMode() == AbstractColumn::ColumnMode::Text;
 }
 
 void String2DateTimeFilter::writeExtraAttributes(QXmlStreamWriter* writer) const {

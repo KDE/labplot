@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Sorting options dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,8 +26,10 @@
  *                                                                         *
  ***************************************************************************/
 #include "SortDialog.h"
+#include "backend/core/column/Column.h"
 
 #include <QPushButton>
+#include <QWindow>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -56,19 +58,23 @@ SortDialog::SortDialog(QWidget* parent) : QDialog(parent) {
 			this, &SortDialog::changeType);
 
 	//restore saved settings if available
+	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SortDialog"));
-	if (conf.exists())
+	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-	else
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
 
 	ui.cbOrdering->setCurrentIndex(conf.readEntry(QLatin1String("Ordering"), 0));
 	ui.cbSorting->setCurrentIndex(conf.readEntry(QLatin1String("Sorting"), 0));
+	changeType(ui.cbSorting->currentIndex());
 }
 
 SortDialog::~SortDialog() {
 	//save the current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("SortDialog"));
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
 	// general settings
 	conf.writeEntry(QLatin1String("Ordering"), ui.cbOrdering->currentIndex());
@@ -76,16 +82,14 @@ SortDialog::~SortDialog() {
 }
 
 void SortDialog::sortColumns() {
-	Column* leading;
+	Column* leading{nullptr};
 	if (ui.cbSorting->currentIndex() == Together)
 		leading = m_columns.at(ui.cbColumns->currentIndex());
-	else
-		leading = nullptr;
 
-	emit sort(leading, m_columns, ui.cbOrdering->currentIndex() == Ascending);
+	emit sort(leading, m_columns, ui.cbOrdering->currentIndex() == Qt::AscendingOrder);
 }
 
-void SortDialog::setColumns(QVector<Column*> columns) {
+void SortDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
 	for (auto* col : m_columns)

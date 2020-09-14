@@ -141,6 +141,8 @@ void TreeViewComboBox::showPopup() {
 	m_groupBox->move(mapToGlobal( this->rect().topLeft() ));
 
 	setEditText(m_lineEditText);
+	m_lineEdit->setText(""); //delete the previous search string
+	m_lineEdit->setFocus();
 }
 
 /*!
@@ -194,11 +196,11 @@ QString TreeViewComboBox::currentText() const {
 		return QString();
 }
 
-void TreeViewComboBox::setText(QString text) {
+void TreeViewComboBox::setText(const QString& text) {
 	m_lineEditText = text;
 }
 
-void TreeViewComboBox::setInvalid(bool invalid, QString tooltip) {
+void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 	if (invalid) {
 		setStyleSheet("background: red;");
 		setToolTip(tooltip);
@@ -231,7 +233,7 @@ bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event) {
 		this->setFocus();
 		return true;
 	}
-	return false;
+	return QComboBox::eventFilter(object, event);
 }
 
 //SLOTs
@@ -293,10 +295,13 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 	checks whether \c aspect is one of the allowed top level types
 */
 bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
-	foreach (AspectType type, m_topLevelClasses) {
-		if (aspect->inherits(type)) {
+	for (AspectType type : m_topLevelClasses) {
+		if (aspect->type() == type)
 			return true;
-		}
+
+		if (type == AspectType::XYAnalysisCurve)
+			if (aspect->inherits(AspectType::XYAnalysisCurve))
+				return true;
 	}
 	return false;
 }

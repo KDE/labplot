@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -32,6 +32,7 @@
 
 #include <QWidget>
 
+class QMenu;
 class QToolButton;
 class KConfig;
 
@@ -39,21 +40,25 @@ class TemplateHandler : public QWidget {
 	Q_OBJECT
 
 public:
-	enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint};
+	enum class ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint};
 
 	TemplateHandler(QWidget* parent, ClassName);
+	void setToolButtonStyle(Qt::ToolButtonStyle);
 
 private:
 	void retranslateUi();
+	bool eventFilter(QObject*, QEvent*) override;
 
+	QString m_dirName;
 	ClassName m_className;
-	QList<QString> m_dirNames;
+	QList<QString> m_subDirNames;
 
+	QMenu* m_textPositionMenu{nullptr};
 	QToolButton* m_tbLoad;
 	QToolButton* m_tbSave;
 	QToolButton* m_tbSaveDefault;
-	QToolButton* m_tbCopy;
-	QToolButton* m_tbPaste;
+// 	QToolButton* m_tbCopy;
+// 	QToolButton* m_tbPaste;
 
 private slots:
 	void loadMenu();
@@ -62,6 +67,7 @@ private slots:
 	void saveMenuSelected(QAction*);
 	void saveNewSelected(const QString&);
 	void saveDefaults();
+	void updateTextPosition(QAction*);
 
 signals:
 	void loadConfigRequested(KConfig&);

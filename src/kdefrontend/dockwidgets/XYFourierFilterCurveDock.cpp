@@ -32,9 +32,12 @@
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <KMessageBox>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QMenu>
 #include <QWidgetAction>
-#include <KMessageBox>
 
 /*!
   \class XYFourierFilterCurveDock
@@ -51,8 +54,6 @@
 */
 
 XYFourierFilterCurveDock::XYFourierFilterCurveDock(QWidget* parent) : XYCurveDock(parent) {
-	//remove the tab "Error bars"
-	ui.tabWidget->removeTab(5);
 }
 
 /*!
@@ -64,12 +65,10 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	m_leName = uiGeneralTab.leName;
 	m_leComment = uiGeneralTab.leComment;
 
-	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
-	if (gridLayout) {
-		gridLayout->setContentsMargins(2,2,2,2);
-		gridLayout->setHorizontalSpacing(2);
-		gridLayout->setVerticalSpacing(2);
-	}
+	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
+	gridLayout->setContentsMargins(2,2,2,2);
+	gridLayout->setHorizontalSpacing(2);
+	gridLayout->setVerticalSpacing(2);
 
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
 	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
@@ -92,6 +91,7 @@ void XYFourierFilterCurveDock::setupGeneral() {
 		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
 	}
 
+	//TODO: use line edits
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
@@ -119,9 +119,9 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed()) );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 
-	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
+	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierFilterCurveDock::dataSourceCurveChanged);
+	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierFilterCurveDock::xDataColumnChanged);
+	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierFilterCurveDock::yDataColumnChanged);
 }
 
 void XYFourierFilterCurveDock::initGeneralTab() {
@@ -151,7 +151,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	//show the properties of the first curve
 	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
 
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_filterCurve->dataSourceType());
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_filterCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_filterCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_filterCurve->xDataColumn());
@@ -186,11 +186,12 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	connect(m_filterCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
 	connect(m_filterCurve, SIGNAL(filterDataChanged(XYFourierFilterCurve::FilterData)), this, SLOT(curveFilterDataChanged(XYFourierFilterCurve::FilterData)));
 	connect(m_filterCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+	connect(m_filterCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYFourierFilterCurveDock::curveVisibilityChanged);
 }
 
 void XYFourierFilterCurveDock::setModel() {
 	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
-	                       AspectType::CartesianPlot, AspectType::XYCurve};
+							AspectType::CartesianPlot, AspectType::XYCurve, AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -219,10 +220,18 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
+	m_aspect = m_curve;
 	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_filterData = m_filterCurve->filterData();
+
+	SET_NUMBER_LOCALE
+	uiGeneralTab.sbMin->setLocale(numberLocale);
+	uiGeneralTab.sbMax->setLocale(numberLocale);
+	uiGeneralTab.sbCutoff->setLocale(numberLocale);
+	uiGeneralTab.sbCutoff2->setLocale(numberLocale);
+
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;
@@ -233,7 +242,7 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
 	auto type = (XYAnalysisCurve::DataSourceType)index;
-	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -323,7 +332,7 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+		if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_filterCurve->xDataColumn();
 		else {
 			if (m_filterCurve->dataSourceCurve())
@@ -425,7 +434,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 	int n = 100;
 	double f = 1.0; // sample frequency
 	const AbstractColumn* xDataColumn = nullptr;
-	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 		xDataColumn = m_filterCurve->xDataColumn();
 	else {
 		if (m_filterCurve->dataSourceCurve())
@@ -502,7 +511,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 	int n = 100;
 	double f = 1.0; // sample frequency
 	const AbstractColumn* xDataColumn = nullptr;
-	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 		xDataColumn = m_filterCurve->xDataColumn();
 	else {
 		if (m_filterCurve->dataSourceCurve())
@@ -596,7 +605,7 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
 
 	//no filtering possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
@@ -632,10 +641,11 @@ void XYFourierFilterCurveDock::showFilterResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	if (filterResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QString::number(filterResult.elapsedTime/1000)) + "<br>";
+	SET_NUMBER_LOCALE
+	if (filterResult.elapsedTime > 1000)
+		str += i18n("calculation time: %1 s", numberLocale.toString(filterResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(filterResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(filterResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 
@@ -663,7 +673,7 @@ void XYFourierFilterCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 
 void XYFourierFilterCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 
@@ -698,3 +708,10 @@ void XYFourierFilterCurveDock::curveFilterDataChanged(const XYFourierFilterCurve
 void XYFourierFilterCurveDock::dataChanged() {
 	this->enableRecalculate();
 }
+
+void XYFourierFilterCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
+}
+

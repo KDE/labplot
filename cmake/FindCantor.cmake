@@ -26,7 +26,7 @@
 #=============================================================================
 
 # Try to find via config. If that isn't available fall back to manual lookup.
-# Config is vastly preferrable because it will also make sure link dependencies
+# Config is vastly preferable because it will also make sure link dependencies
 # are found and actually in the target link interface.
 find_package(Cantor ${Cantor_FIND_VERSION} ${Cantor_FIND_REQUIRED} CONFIG QUIET)
 if(Cantor_FOUND)

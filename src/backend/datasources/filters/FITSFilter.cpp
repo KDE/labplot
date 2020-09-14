@@ -46,7 +46,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
  * \since 2.2.0
  * \ingroup datasources
  */
-FITSFilter::FITSFilter():AbstractFileFilter(FITS), d(new FITSFilterPrivate(this)) {}
+FITSFilter::FITSFilter():AbstractFileFilter(FileType::FITS), d(new FITSFilterPrivate(this)) {}
 
 FITSFilter::~FITSFilter() = default;
 
@@ -55,7 +55,7 @@ void FITSFilter::readDataFromFile(const QString &fileName, AbstractDataSource *d
 }
 
 QVector<QStringList> FITSFilter::readChdu(const QString &fileName, bool* okToMatrix, int lines) {
-	return d->readCHDU(fileName, nullptr, AbstractFileFilter::Replace, okToMatrix, lines);
+	return d->readCHDU(fileName, nullptr, AbstractFileFilter::ImportMode::Replace, okToMatrix, lines);
 }
 
 void FITSFilter::write(const QString &fileName, AbstractDataSource *dataSource) {
@@ -271,14 +271,14 @@ FITSFilterPrivate::FITSFilterPrivate(FITSFilter* owner) : q(owner) {}
  * \param importMode
  */
 QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, bool* okToMatrix, int lines) {
-	DEBUG("FITSFilterPrivate::readCHDU() file name = " << fileName.toStdString());
+	DEBUG("FITSFilterPrivate::readCHDU() file name = " << STDSTRING(fileName));
 	QVector<QStringList> dataStrings;
 
 #ifdef HAVE_FITS
 	int status = 0;
 
 	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status)) {
-		DEBUG("	ERROR opening file " << fileName.toStdString());
+		DEBUG("	ERROR opening file " << STDSTRING(fileName));
 		printError(status);
 		return dataStrings;
 	}
@@ -342,7 +342,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		columnModes.resize(actualCols - j);
 		QStringList vectorNames;
 
-		QVector<void*> dataContainer;
+		std::vector<void*> dataContainer;
 		if (!noDataSource) {
 			dataContainer.reserve(actualCols - j);
 			columnOffset = dataSource->prepareImport(dataContainer, importMode, lines - i, actualCols - j, vectorNames, columnModes);
@@ -380,7 +380,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		delete[] data;
 
 		if (dataSource)
-			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, QString(), importMode);
+			dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
 
 		fits_close_file(m_fitsFile, &status);
 
@@ -436,7 +436,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		if (endRow != -1)
 			lines = endRow;
 		QVector<QStringList*> stringDataPointers;
-		QVector<void*> numericDataPointers;
+		std::vector<void*> numericDataPointers;
 		QList<bool> columnNumericTypes;
 
 		int startCol = 0;
@@ -505,7 +505,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				spreadsheet->setUndoAware(false);
 				columnOffset = spreadsheet->resize(importMode, columnNames, actualCols - startCol);
 
-				if (importMode == AbstractFileFilter::Replace) {
+				if (importMode == AbstractFileFilter::ImportMode::Replace) {
 					spreadsheet->clear();
 					spreadsheet->setRowCount(lines - startRrow);
 				} else {
@@ -515,16 +515,16 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				DEBUG("Reading columns ...");
 				for (int n = 0; n < actualCols - startCol; ++n) {
 					if (columnNumericTypes.at(n)) {
-						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Numeric);
+						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Numeric);
 						auto* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());
 						numericDataPointers.push_back(datap);
-						if (importMode == AbstractFileFilter::Replace)
+						if (importMode == AbstractFileFilter::ImportMode::Replace)
 							datap->clear();
 					} else {
-						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::Text);
+						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Text);
 						auto* list = static_cast<QStringList*>(spreadsheet->column(columnOffset+n)->data());
 						stringDataPointers.push_back(list);
-						if (importMode == AbstractFileFilter::Replace)
+						if (importMode == AbstractFileFilter::ImportMode::Replace)
 							list->clear();
 					}
 				}
@@ -535,7 +535,6 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 				columnOffset = dataSource->prepareImport(numericDataPointers, importMode, lines - startRrow, matrixNumericColumnIndices.size());
 			}
-			numericDataPointers.squeeze();
 		}
 
 		int row = 1;
@@ -554,7 +553,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 			isMatrix = true;
 			coll = matrixNumericColumnIndices.first();
 			actualCols = matrixNumericColumnIndices.last();
-			if (importMode == AbstractFileFilter::Replace) {
+			if (importMode == AbstractFileFilter::ImportMode::Replace) {
 				for (auto* col : numericDataPointers)
 					static_cast<QVector<double>*>(col)->clear();
 			}
@@ -603,7 +602,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 		}
 
 		if (!noDataSource)
-			dataSource->finalizeImport(columnOffset, 1, actualCols, lines, QString(), importMode);
+			dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);
 
 		fits_close_file(m_fitsFile, &status);
 		return dataStrings;
@@ -830,7 +829,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 					tunit[i][0] = '\0';
 				}
 				switch (column->columnMode()) {
-				case AbstractColumn::Numeric: {
+				case AbstractColumn::ColumnMode::Numeric: {
 						int maxSize = -1;
 						for (int row = 0; row < nrows; ++row) {
 							if (QString::number(column->valueAt(row)).size() > maxSize)
@@ -864,7 +863,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 						strcpy(tform[i], tformn.toLatin1().data());
 						break;
 					}
-				case AbstractColumn::Text: {
+				case AbstractColumn::ColumnMode::Text: {
 						int maxSize = -1;
 						for (int row = 0; row < nrows; ++row) {
 							if (column->textAt(row).size() > maxSize)
@@ -875,10 +874,11 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 						strcpy(tform[i], tformn.toLatin1().data());
 						break;
 					}
-				case AbstractColumn::Integer:	//TODO
-				case AbstractColumn::DateTime:
-				case AbstractColumn::Day:
-				case AbstractColumn::Month:
+				case AbstractColumn::ColumnMode::Integer:	//TODO
+				case AbstractColumn::ColumnMode::BigInt:
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Day:
+				case AbstractColumn::ColumnMode::Month:
 					break;
 				}
 			}
@@ -909,9 +909,9 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 			double* columnNumeric = new double[nrows];
 			for (int col = 1; col <= tfields; ++col) {
 				const Column* c =  spreadsheet->column(col-1);
-				AbstractColumn::ColumnMode columnMode = c->columnMode();
+				auto columnMode = c->columnMode();
 
-				if (columnMode == AbstractColumn::Numeric) {
+				if (columnMode == AbstractColumn::ColumnMode::Numeric) {
 					for (int row = 0; row < nrows; ++row)
 						columnNumeric[row] = c->valueAt(row);
 
@@ -939,6 +939,8 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 						printError(status);
 						status = 0;
 						fits_close_file(m_fitsFile, &status);
+
+						delete[] columnNumeric;
 						return;
 					}
 				}
@@ -962,7 +964,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
  * \param fileName the name of the FITS file to be analyzed
  */
 QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fileName) {
-	DEBUG("FITSFilterPrivate::extensionNames() file name = " << fileName.toStdString());
+	DEBUG("FITSFilterPrivate::extensionNames() file name = " << STDSTRING(fileName));
 #ifdef HAVE_FITS
 	QMultiMap<QString, QString> extensions;
 	int status = 0;
@@ -1531,8 +1533,10 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 	for (const QString& ext : imageExtensions) {
 		QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << ext);
 		if (ext == i18n("Primary header")) {
-			if (checkPrimary && naxis == 0)
+			if (checkPrimary && naxis == 0) {
+				delete treeItem;
 				continue;
+			}
 		}
 		imageExtensionItem->addChild(treeItem);
 	}

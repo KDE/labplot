@@ -66,6 +66,8 @@ enum class AspectType : quint64 {
 		Histogram = 0x0210008,
 		PlotArea = 0x0210010,
 		TextLabel = 0x0210020,
+		Image = 0x0210030,
+		ReferenceLine = 0x0210040,
 		WorksheetElementContainer = 0x0220000,
 			AbstractPlot = 0x0221000,
 				CartesianPlot = 0x0221001,
@@ -115,7 +117,7 @@ class AbstractAspect : public QObject {
 	Q_OBJECT
 
 public:
-	enum ChildIndexFlag {
+	enum class ChildIndexFlag {
 		IncludeHidden = 0x01,
 		Recursive = 0x02,
 		Compress = 0x04
@@ -156,7 +158,7 @@ public:
 	void addChild(AbstractAspect*);
 	void addChildFast(AbstractAspect*);
 	virtual void finalizeAdd() {};
-	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags=nullptr);
+	QVector<AbstractAspect*> children(AspectType type, ChildIndexFlags flags = {}) const;
 	void insertChildBefore(AbstractAspect* child, AbstractAspect* before);
 	void insertChildBeforeFast(AbstractAspect* child, AbstractAspect* before);
 	void reparent(AbstractAspect* newParent, int newIndex = -1);
@@ -179,26 +181,26 @@ public:
 		return nullptr;
 	}
 
-	template <class T> QVector<T*> children(ChildIndexFlags flags = nullptr) const {
+	template <class T> QVector<T*> children(ChildIndexFlags flags = {}) const {
 		QVector<T*> result;
 		for (auto* child: children()) {
-			if (flags & IncludeHidden || !child->hidden()) {
+			if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
 				T* i = dynamic_cast<T*>(child);
 				if (i)
 					result << i;
 
-				if (flags & Recursive)
+				if (child && flags & ChildIndexFlag::Recursive)
 					result << child->template children<T>(flags);
 			}
 		}
 		return result;
 	}
 
-	template <class T> T* child(int index, ChildIndexFlags flags=nullptr) const {
+	template <class T> T* child(int index, ChildIndexFlags flags = {}) const {
 		int i = 0;
 		for (auto* child: children()) {
 			T* c = dynamic_cast<T*>(child);
-			if (c && (flags & IncludeHidden || !child->hidden()) && index == i++)
+			if (c && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) && index == i++)
 				return c;
 		}
 		return nullptr;
@@ -213,22 +215,22 @@ public:
 		return nullptr;
 	}
 
-	template <class T> int childCount(ChildIndexFlags flags = nullptr) const {
+	template <class T> int childCount(ChildIndexFlags flags = {}) const {
 		int result = 0;
 		for (auto* child: children()) {
 			T* i = dynamic_cast<T*>(child);
-			if (i && (flags & IncludeHidden || !child->hidden()))
+			if (i && (flags & ChildIndexFlag::IncludeHidden || !child->hidden()))
 				result++;
 		}
 		return result;
 	}
 
-	template <class T> int indexOfChild(const AbstractAspect* child, ChildIndexFlags flags = nullptr) const {
+	template <class T> int indexOfChild(const AbstractAspect* child, ChildIndexFlags flags = {}) const {
 		int index = 0;
 		for (auto* c:	 children()) {
 			if (child == c) return index;
 			T* i = dynamic_cast<T*>(c);
-			if (i && (flags & IncludeHidden || !c->hidden()))
+			if (i && (flags & ChildIndexFlag::IncludeHidden || !c->hidden()))
 				index++;
 		}
 		return -1;
@@ -263,7 +265,7 @@ private:
 	AbstractAspectPrivate* d;
 
 	QString uniqueNameFor(const QString&) const;
-	const QVector<AbstractAspect*> children() const;
+	const QVector<AbstractAspect*>& children() const;
 	void connectChild(AbstractAspect*);
 
 public slots:

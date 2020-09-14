@@ -30,7 +30,7 @@
 #include "VariableParser.h"
 #include <QStringList>
 #include "backend/lib/trace.h"
-#include <cmath>
+#include <cmath>	// NAN
 
 VariableParser::VariableParser(QString name, QString value)
 	: m_backendName(std::move(name)), m_string(std::move(value)) {
@@ -108,7 +108,7 @@ void VariableParser::parseOctaveValues() {
 			valueStringList << values.split(QLatin1Char(' '));
 	}
 
-	valueStringList.removeAll(QStringLiteral(""));
+	valueStringList.removeAll(QString());
 	parseValues(valueStringList);
 }
 

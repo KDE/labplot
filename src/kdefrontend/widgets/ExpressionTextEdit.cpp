@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for defining mathematical expressions
-	modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
+	modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
  ***************************************************************************/
 
 /***************************************************************************
@@ -80,7 +80,7 @@
   \brief  Provides a widget for defining mathematical expressions
 		  Supports syntax-highlighting and completion.
 
-		  Modified version of http://qt-project.org/doc/qt-4.8/tools-customcompleter.html
+		  Modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
 
   \ingroup kdefrontend
 */
@@ -97,7 +97,7 @@ ExpressionTextEdit::ExpressionTextEdit(QWidget* parent) : KTextEdit(parent),
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer->setCaseSensitivity(Qt::CaseInsensitive);
 
-	connect(m_completer, static_cast<void (QCompleter::*) (const QString&)>(&QCompleter::activated),this, &ExpressionTextEdit::insertCompletion);
+	connect(m_completer, QOverload<const QString&>::of(&QCompleter::activated), this, &ExpressionTextEdit::insertCompletion);
 	connect(this, &ExpressionTextEdit::textChanged, this, [=](){ validateExpression();});
 	connect(this, &ExpressionTextEdit::cursorPositionChanged, m_highlighter, &EquationHighlighter::rehighlight);
 }
@@ -113,13 +113,13 @@ bool ExpressionTextEdit::isValid() const {
 void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 	m_expressionType = type;
 	m_variables.clear();
-	if (type == XYEquationCurve::Cartesian)
+	if (type == XYEquationCurve::EquationType::Cartesian)
 		m_variables<<"x";
-	else if (type == XYEquationCurve::Polar)
+	else if (type == XYEquationCurve::EquationType::Polar)
 		m_variables<<"phi";
-	else if (type == XYEquationCurve::Parametric)
+	else if (type == XYEquationCurve::EquationType::Parametric)
 		m_variables<<"t";
-	else if (type == XYEquationCurve::Implicit)
+	else if (type == XYEquationCurve::EquationType::Implicit)
 		m_variables<<"x"<<"y";
 
 	m_highlighter->setVariables(m_variables);

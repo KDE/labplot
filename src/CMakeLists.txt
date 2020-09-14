@@ -12,23 +12,32 @@ set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 set_property(SOURCE gsl_parser.h PROPERTY SKIP_AUTOMOC ON)
 
 set(GUI_SOURCES
+    ${KDEFRONTEND_DIR}/DatasetModel.cpp
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/HistoryDialog.cpp
 	${KDEFRONTEND_DIR}/MainWin.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
+	${KDEFRONTEND_DIR}/SettingsSpreadsheetPage.cpp
 	${KDEFRONTEND_DIR}/SettingsWorksheetPage.cpp
+# 	${KDEFRONTEND_DIR}/SettingsWelcomePage.cpp
+	${KDEFRONTEND_DIR}/SettingsDatasetsPage.cpp
 	${KDEFRONTEND_DIR}/SettingsPage.h
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
+# 	${KDEFRONTEND_DIR}/welcomescreen/WelcomeScreenHelper.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
+	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FileInfoDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
+	${KDEFRONTEND_DIR}/datasources/ImportDatasetDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportFileDialog.cpp
@@ -38,14 +47,11 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/NetCDFOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ROOTOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/FITSOptionsWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/JsonOptionsWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp
-	${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/BaseDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CursorDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/ImageDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
@@ -58,6 +64,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/MatrixDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/PivotTableDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ProjectDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/ReferenceLineDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/SpreadsheetDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYEquationCurveDock.cpp
@@ -73,7 +80,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
         ${KDEFRONTEND_DIR}/generalTest/CorrelationCoefficientView.cpp
-	${KDEFRONTEND_DIR}/generalTest/GeneralTestView.cpp		
+	${KDEFRONTEND_DIR}/generalTest/GeneralTestView.cpp
         ${KDEFRONTEND_DIR}/generalTest/HypothesisTestView.cpp
 	${KDEFRONTEND_DIR}/matrix/MatrixFunctionDialog.cpp
 	${KDEFRONTEND_DIR}/pivot/HierarchicalHeaderView.cpp
@@ -83,8 +90,10 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/ExportSpreadsheetDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/AddSubtractValueDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/GoToDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FunctionValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
@@ -107,8 +116,21 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditAddUnitDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/FITSHeaderEditDialog.cpp
 	${KDEFRONTEND_DIR}/widgets/ResizableTextEdit.cpp
-	${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp
 )
+
+if (Qt5Mqtt_FOUND)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerWidget.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTConnectionManagerDialog.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTErrorWidget.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/datasources/MQTTSubscriptionWidget.cpp)
+	list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
+endif()
+
+if(APPLE)
+  list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/PresenterWidget_mac.mm)
+  list(APPEND GUI_SOURCES ${KDEFRONTEND_DIR}/worksheet/DynamicPresenterWidget_mac.mm)
+endif()
+
 
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
@@ -117,24 +139,25 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitparameterswidget.ui
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
+	${KDEFRONTEND_DIR}/ui/settingsspreadsheetpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui
+# 	${KDEFRONTEND_DIR}/ui/settingswelcomepage.ui
+	${KDEFRONTEND_DIR}/ui/settingsdatasetspage.ui
 	${KDEFRONTEND_DIR}/ui/settingsprintingpage.ui
-	${KDEFRONTEND_DIR}/ui/mqttwillsettingswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/asciioptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/binaryoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/databasemanagerwidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/datasetmetadatamanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/hdf5optionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/imageoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/importdatasetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importfilewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importprojectwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/importsqldatabasewidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/netcdfoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
-	${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
@@ -144,11 +167,13 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/custompointdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/correlationcoefficientdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/hypothesistestdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/imagedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/livedatadock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/notedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/matrixdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/pivottabledock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/projectdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/referencelinedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/spreadsheetdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycurvedockgeneraltab.ui
@@ -172,6 +197,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/dropvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/functionvalueswidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/randomvalueswidget.ui
+	${KDEFRONTEND_DIR}/ui/spreadsheet/rescalewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
@@ -180,6 +206,13 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitsheadereditnewkeywordwidget.ui
 	${KDEFRONTEND_DIR}/ui/fitsheadereditaddunitwidget.ui
 )
+
+if (Qt5Mqtt_FOUND)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttconnectionmanagerwidget.ui)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqtterrorwidget.ui)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/datasources/mqttsubscriptionwidget.ui)
+	list(APPEND UI_SOURCES ${KDEFRONTEND_DIR}/ui/mqttwillsettingswidget.ui)
+endif()
 
 set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/Folder.cpp
@@ -201,32 +234,42 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/Double2DateTimeFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2DayOfWeekFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2IntegerFilter.h
+	${BACKEND_DIR}/core/datatypes/Double2BigIntFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2MonthFilter.h
 	${BACKEND_DIR}/core/datatypes/Double2StringFilter.cpp
+	${BACKEND_DIR}/core/datatypes/Integer2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/Integer2BigIntFilter.h
 	${BACKEND_DIR}/core/datatypes/Integer2DateTimeFilter.h
 	${BACKEND_DIR}/core/datatypes/Integer2DayOfWeekFilter.h
-	${BACKEND_DIR}/core/datatypes/Integer2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/Integer2MonthFilter.h
 	${BACKEND_DIR}/core/datatypes/Integer2StringFilter.h
+	${BACKEND_DIR}/core/datatypes/BigInt2DoubleFilter.h
+	${BACKEND_DIR}/core/datatypes/BigInt2IntegerFilter.h
+	${BACKEND_DIR}/core/datatypes/BigInt2StringFilter.h
+	${BACKEND_DIR}/core/datatypes/BigInt2DateTimeFilter.h
+	${BACKEND_DIR}/core/datatypes/BigInt2MonthFilter.h
+	${BACKEND_DIR}/core/datatypes/BigInt2DayOfWeekFilter.h
 	${BACKEND_DIR}/core/datatypes/String2DayOfWeekFilter.h
 	${BACKEND_DIR}/core/datatypes/String2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/String2IntegerFilter.h
+	${BACKEND_DIR}/core/datatypes/String2BigIntFilter.h
 	${BACKEND_DIR}/core/datatypes/String2MonthFilter.h
 	${BACKEND_DIR}/core/datatypes/String2DateTimeFilter.cpp
 	${BACKEND_DIR}/core/datatypes/DateTime2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/DateTime2IntegerFilter.h
+	${BACKEND_DIR}/core/datatypes/DateTime2BigIntFilter.h
 	${BACKEND_DIR}/core/datatypes/DateTime2StringFilter.cpp
 	${BACKEND_DIR}/core/datatypes/Month2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/Month2IntegerFilter.h
+	${BACKEND_DIR}/core/datatypes/Month2BigIntFilter.h
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2DoubleFilter.h
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2IntegerFilter.h
+	${BACKEND_DIR}/core/datatypes/DayOfWeek2BigIntFilter.h
 	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
+	${BACKEND_DIR}/datasources/DatasetHandler.cpp
 	${BACKEND_DIR}/datasources/LiveDataSource.cpp
-	${BACKEND_DIR}/datasources/MQTTClient.cpp
-	${BACKEND_DIR}/datasources/MQTTSubscription.cpp
-	${BACKEND_DIR}/datasources/MQTTTopic.cpp
 	${BACKEND_DIR}/datasources/filters/AbstractFileFilter.cpp
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
@@ -255,6 +298,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/lib/XmlStreamReader.cpp
 	${BACKEND_DIR}/note/Note.cpp
+	${BACKEND_DIR}/worksheet/Image.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
@@ -268,8 +312,10 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/Curve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Histogram.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CustomPoint.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/ReferenceLine.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Symbol.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYAnalysisCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCurve.cpp
@@ -294,6 +340,17 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datapicker/Segments.cpp
 	${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
+
+if (Qt5Mqtt_FOUND)
+	list(APPEND BACKEND_SOURCES ${KDEFRONTEND_DIR}/widgets/MQTTWillSettingsWidget.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTClient.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTSubscription.cpp)
+	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/MQTTTopic.cpp)
+endif()
+
+# add the qml.qrc file
+# qt5_add_resources(qml_QRC ${KDEFRONTEND_DIR}/welcomescreen/qml.qrc)
+# better: enable AUTORCC
 
 IF (ENABLE_LIBORIGIN)
 	list(APPEND BACKEND_SOURCES ${BACKEND_DIR}/datasources/projects/OriginProjectParser.cpp)
@@ -348,7 +405,7 @@ set(COMMONFRONTEND_SOURCES
 	${COMMONFRONTEND_DIR}/datapicker/DatapickerImageView.cpp
 )
 
-IF (${Cantor_FOUND})
+IF (RECENT_CANTOR)
 	set(CANTOR_SOURCES
 		${KDEFRONTEND_DIR}/dockwidgets/CantorWorksheetDock.cpp
 		${BACKEND_DIR}/cantorWorksheet/VariableParser.cpp
@@ -375,8 +432,6 @@ set(GENERATED_SOURCES
 	${BISON_GslParser_OUTPUTS}
 )
 
-set_property(SOURCE gsl_parser.h PROPERTY SKIP_AUTOMOC ON)
-
 ##############################################################################
 INCLUDE_DIRECTORIES( . ${BACKEND_DIR}/gsl ${GSL_INCLUDE_DIR} )
 set( LABPLOT_SRCS ${GUI_SOURCES} )
@@ -400,11 +455,16 @@ target_link_libraries( labplot2lib
 	KF5::KIOWidgets
 	KF5::TextWidgets
 	KF5::XmlGui
+	KF5::NewStuff
+	KF5::NewStuffCore
 	Qt5::Svg
 	Qt5::Core
 	Qt5::Network
 	Qt5::PrintSupport
 	Qt5::Sql
+# 	Qt5::Qml
+# 	Qt5::Quick
+# 	Qt5::QuickWidgets
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES} )
 
@@ -417,10 +477,14 @@ ENDIF ()
 IF (KF5SyntaxHighlighting_FOUND)
 	target_link_libraries( labplot2lib KF5::SyntaxHighlighting )
 ENDIF ()
+if (KUserFeedback_FOUND)
+    target_link_libraries(labplot2lib KUserFeedbackWidgets)
+endif()
 #TODO: KF5::NewStuff
 
-IF (Cantor_FOUND)
-	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts)
+IF (RECENT_CANTOR)
+	# KF5::Service, KF5::Parts is optional but probably required by Cantor
+	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts Poppler::Qt5)
 ENDIF ()
 IF (HDF5_FOUND)
 	target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
@@ -429,7 +493,7 @@ IF (FFTW3_FOUND)
 	target_link_libraries( labplot2lib ${FFTW3_LIBRARIES} )
 ENDIF ()
 IF (netCDF_FOUND)
-	target_link_libraries( labplot2lib netcdf )
+	target_link_libraries( labplot2lib ${netCDF_LIBRARIES} )
 ENDIF ()
 IF (CFITSIO_FOUND)
 	target_link_libraries( labplot2lib ${CFITSIO_LIBRARIES} )
@@ -468,6 +532,8 @@ set(LML_ICONS
     ${CMAKE_CURRENT_SOURCE_DIR}/../icons/512-application-x-labplot2.png
 )
 
+add_subdirectory(3rdparty)
+
 # main executable
 set(LABPLOT_SOURCE ${KDEFRONTEND_DIR}/LabPlot.cpp)
 
@@ -485,14 +551,23 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable(labplot2 ${LABPLOT_SOURCE})
+add_executable(labplot2 ${LABPLOT_SOURCE} ${qml_QRC})
 target_link_libraries(labplot2 labplot2lib)
+IF (APPLE)
+	target_link_libraries(labplot2 KDMacTouchBar)
+ENDIF()
 
 ############## installation ################################
-install( TARGETS labplot2 DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install( TARGETS labplot2 DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES ${KDEFRONTEND_DIR}/labplot2ui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/${PROJECT_NAME} )
 install( FILES ${KDEFRONTEND_DIR}/splash.png ${KDEFRONTEND_DIR}/labplot2.ico ${CMAKE_CURRENT_SOURCE_DIR}/../icons/application-x-labplot2.ico DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME} )
 install( PROGRAMS org.kde.labplot2.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES labplot2.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
-install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+# if (${ECM_VERSION} STRGREATER "5.58.0")
+# 	install( FILES labplot2_themes.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR} )
+# 	install( FILES labplot2_datasets.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR} )
+# else ()
+# 	install( FILES labplot2_themes.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+# 	install( FILES labplot2_datasets.knsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+# endif ()
 update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )

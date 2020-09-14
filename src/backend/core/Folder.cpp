@@ -59,7 +59,7 @@
 Folder::Folder(const QString &name, AspectType type) : AbstractAspect(name, type) {
 	//when the child being removed is a LiveDataSource, stop reading from the source
 	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, [=](const AbstractAspect* aspect) {
-		const LiveDataSource* lds = dynamic_cast<const LiveDataSource*>(aspect);
+		const auto* lds = dynamic_cast<const LiveDataSource*>(aspect);
 		if (lds)
 			const_cast<LiveDataSource*>(lds)->pauseReading();
 	} );
@@ -116,7 +116,7 @@ void Folder::processDropEvent(QDropEvent* event) {
 			lastMovedAspect = part;
 		} else {
 			auto* folder = dynamic_cast<Folder*>(aspect);
-			if (folder) {
+			if (folder && folder != this) {
 				folder->reparent(this);
 				lastMovedAspect = folder;
 			}
@@ -136,7 +136,7 @@ void Folder::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	for (auto* child : children<AbstractAspect>(IncludeHidden)) {
+	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden)) {
 		writer->writeStartElement(QLatin1String("child_aspect"));
 		child->save(writer);
 		writer->writeEndElement(); // "child_aspect"
@@ -293,7 +293,8 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 		addChildFast(client);
 #endif
-	} else if (element_name == QLatin1String("LiveDataSource")) {
+	} else if (element_name == QLatin1String("liveDataSource")
+		|| element_name == QLatin1String("LiveDataSource")) { //TODO: remove "LiveDataSources" in couple of releases
 		LiveDataSource* liveDataSource = new LiveDataSource(QString(), true);
 		if (!liveDataSource->load(reader, preview)) {
 			delete liveDataSource;

@@ -60,6 +60,7 @@ private:
 
 	XYDataReductionCurve* m_dataReductionCurve{nullptr};
 	XYDataReductionCurve::DataReductionData m_dataReductionData;
+	bool m_dateTimeRange{false};
 
 protected:
 	void setModel() override;
@@ -72,13 +73,15 @@ private slots:
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
-	void xRangeMinChanged();
-	void xRangeMaxChanged();
-	void typeChanged();
+	void xRangeMinChanged(double);
+	void xRangeMaxChanged(double);
+	void xRangeMinDateTimeChanged(const QDateTime&);
+	void xRangeMaxDateTimeChanged(const QDateTime&);
+	void typeChanged(int);
 	void autoToleranceChanged();
-	void toleranceChanged();
+	void toleranceChanged(double);
 	void autoTolerance2Changed();
-	void tolerance2Changed();
+	void tolerance2Changed(double);
 
 	void recalculateClicked();
 	void enableRecalculate() const;
@@ -92,6 +95,7 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveDataReductionDataChanged(const XYDataReductionCurve::DataReductionData&);
 	void dataChanged();
+	void curveVisibilityChanged(bool);
 };
 
 #endif

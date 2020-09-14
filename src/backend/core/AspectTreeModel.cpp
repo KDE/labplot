@@ -194,7 +194,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 					name = i18n("%1   (no values)", name);
 
 				if (m_showPlotDesignation)
-					name += QLatin1Char('\t') + " " + column->plotDesignationString();
+					name += QLatin1Char('\t') + column->plotDesignationString();
 
 				return name;
 			} else
@@ -220,7 +220,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 	case Qt::DecorationRole:
 		return index.column() == 0 ? aspect->icon() : QIcon();
 	case Qt::ForegroundRole: {
-			const WorksheetElement* we = qobject_cast<WorksheetElement*>(aspect);
+			const WorksheetElement* we = dynamic_cast<WorksheetElement*>(aspect);
 			if (we) {
 				if (!we->isVisible())
 					return QVariant(  QApplication::palette().color(QPalette::Disabled,QPalette::Text ) );
@@ -234,7 +234,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 
 Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 	if (!index.isValid())
-		return nullptr;
+		return Qt::NoItemFlags;
 
 	Qt::ItemFlags result;
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -314,7 +314,7 @@ void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 	connect(aspect, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
 
 	//add signal-slot connects for all children, too
-	for (const auto* child : aspect->children<AbstractAspect>(AbstractAspect::Recursive)) {
+	for (const auto* child : aspect->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive)) {
 		connect(child, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 		connect(child, &AbstractAspect::childAspectSelectedInView, this, &AspectTreeModel::aspectSelectedInView);
 		connect(child, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
@@ -383,7 +383,7 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, in
 QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column) const {
 	//determine the aspect out of aspect path
 	AbstractAspect* aspect = nullptr;
-	auto children = m_root->children(AspectType::AbstractAspect, AbstractAspect::Recursive);
+	auto children = m_root->children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 	for (auto* child: children) {
 		if (child->path() == path) {
 			aspect = child;
@@ -440,7 +440,7 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const {
 //#################################  SLOTS  ####################################
 //##############################################################################
 void AspectTreeModel::renameRequestedSlot() {
-	auto* aspect = qobject_cast<AbstractAspect*>(QObject::sender());
+	auto* aspect = dynamic_cast<AbstractAspect*>(QObject::sender());
 	if (aspect)
 		emit renameRequested(modelIndexOfAspect(aspect));
 }

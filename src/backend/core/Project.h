@@ -39,7 +39,7 @@ class Project : public Folder {
 	Q_OBJECT
 
 public:
-	enum MdiWindowVisibility {
+	enum class MdiWindowVisibility {
 		folderOnly,
 		folderAndSubfolders,
 		allMdiWindows
@@ -72,6 +72,9 @@ public:
 	void setChanged(const bool value=true);
 	bool hasChanged() const;
 	void navigateTo(const QString& path);
+
+	void setSuppressAspectAddedSignal(bool);
+	bool aspectAddedSignalSuppressed() const;
 
 	void save(const QPixmap&, QXmlStreamWriter*) const;
 	bool load(XmlStreamReader*, bool preview) override;

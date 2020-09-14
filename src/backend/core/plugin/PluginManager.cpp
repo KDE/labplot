@@ -84,11 +84,7 @@ bool PluginManager::enablePlugin(const QString &absolutePath) {
 // 	QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
 // 	settings.beginGroup("PluginManager");
 // 	QStringList pluginPaths = settings.value("enabledPlugins", QStringList()).toStringList();
-// #if QT_VERSION >= 0x040500
 // 	pluginPaths.removeDuplicates();
-// #else
-// 	pluginPaths = QSet<QString>::fromList(pluginPaths).toList();
-// #endif
 // 	if (!pluginPaths.contains(absolutePath)) {
 // 		pluginPaths << absolutePath;
 // 		settings.setValue("enabledPlugins", pluginPaths);
@@ -146,11 +142,7 @@ void PluginManager::disablePlugin(const QString &absolutePath, bool rightNow) {
 // 	QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
 // 	settings.beginGroup("PluginManager");
 // 	QStringList pluginPaths = settings.value("enabledPlugins", QStringList()).toStringList();
-// #if QT_VERSION >= 0x040500
 // 	pluginPaths.removeDuplicates();
-// #else
-// 	pluginPaths = QSet<QString>::fromList(pluginPaths).toList();
-// #endif
 // 	int index = pluginPaths.indexOf(absolutePath);
 // 	if (index > -1) {
 // 		pluginPaths.removeAt(index);
@@ -206,11 +198,7 @@ void PluginManager::loadAll() {
 // 		QSettings settings(SETTINGS_FORMAT, QSettings::UserScope, SciDAVis::appName, SciDAVis::appName);
 // 		settings.beginGroup("PluginManager");
 // 		QStringList plugins = settings.value("enabledPlugins", QStringList()).toStringList();
-// #if QT_VERSION >= 0x040500
 // 		plugins.removeDuplicates();
-// #else
-// 		plugins = QSet<QString>::fromList(plugins).toList();
-// #endif
 // 		foreach (const QString& plugin, plugins) {
 // 			PluginLoader *pluginLoader = new PluginLoader(plugin);
 // 			if (!pluginLoader->load()) {

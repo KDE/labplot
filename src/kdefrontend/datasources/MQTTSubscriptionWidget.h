@@ -28,27 +28,21 @@ Copyright            : (C) 2019 by Kovacs Ferencz (kferike98@gmail.com)
 #ifndef MQTTSUBSCRIPTIONWIDGET_H
 #define MQTTSUBSCRIPTIONWIDGET_H
 
-#include <QWidget>
-#include <QVector>
-
-#ifdef HAVE_MQTT
 #include "ui_mqttsubscriptionwidget.h"
 class QMqttSubscription;
-#endif
 
 class MQTTSubscriptionWidget : public QWidget {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
 	explicit MQTTSubscriptionWidget(QWidget* parent = nullptr);
 	~MQTTSubscriptionWidget() override;
-	enum MQTTParentWidget {
-		ImportFileWidget = 0,
-		LiveDataDock = 1
+	enum class MQTTParentWidget {
+		ImportFileWidget,
+		LiveDataDock
 	};
 
-	void setTopicList (QStringList topicList);
+	void setTopicList(const QStringList& topicList);
 	QStringList getTopicList();
 
 	int subscriptionCount();
@@ -106,7 +100,6 @@ private slots:
 	void updateSubscriptionTree(const QVector<QString>&);
 	void clearWidgets();
 	void onDisconnect();
-#endif	// HAVE_MQTT
 };
 
 #endif // MQTTSUBSCRIPTIONWIDGET_H

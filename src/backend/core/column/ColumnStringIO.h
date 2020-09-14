@@ -41,6 +41,7 @@ public:
 	AbstractColumn::PlotDesignation plotDesignation() const override;
 	QString plotDesignationString() const override;
 	int rowCount() const override;
+	int availableRowCount() const override;
 	QString textAt(int) const override;
 	void setTextAt(int, const QString&) override;
 	virtual bool isValid(int) const;

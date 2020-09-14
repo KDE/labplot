@@ -50,6 +50,7 @@ public:
 
 	void setAxes(QList<Axis*>);
 	void activateTitleTab();
+	void updateLocale() override;
 
 private:
 	Ui::AxisDock ui;
@@ -70,9 +71,6 @@ private:
 	// own created widgets
 	DateTimeSpinBox* dtsbMajorTicksIncrement {nullptr};
 	DateTimeSpinBox* dtsbMinorTicksIncrement {nullptr};
-
-	int determineDecimals(double diff);
-	double determineStep(double diff, int decimal);
 
 private slots:
 	void init();
@@ -105,7 +103,7 @@ private slots:
 	void majorTicksDirectionChanged(int);
 	void majorTicksTypeChanged(int);
  	void majorTicksNumberChanged(int);
-	void majorTicksIncrementChanged();
+	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
 	void majorTicksLineStyleChanged(int);
 	void majorTicksColorChanged(const QColor&);
@@ -117,7 +115,7 @@ private slots:
 	void minorTicksDirectionChanged(int);
 	void minorTicksTypeChanged(int);
  	void minorTicksNumberChanged(int);
-	void minorTicksIncrementChanged();
+	void minorTicksSpacingChanged();
 	void minorTicksColumnChanged(const QModelIndex&);
 	void minorTicksLineStyleChanged(int);
 	void minorTicksColorChanged(const QColor&);
@@ -155,10 +153,10 @@ private slots:
 	//SLOTs for changes triggered in Axis
 	//General-Tab
 	void axisDescriptionChanged(const AbstractAspect*);
-	void axisOrientationChanged(Axis::AxisOrientation);
-	void axisPositionChanged(Axis::AxisPosition);
-	void axisPositionChanged(float);
-	void axisScaleChanged(Axis::AxisScale);
+	void axisOrientationChanged(Axis::Orientation);
+	void axisPositionChanged(Axis::Position);
+	void axisPositionChanged(double);
+	void axisScaleChanged(Axis::Scale);
 	void axisAutoScaleChanged(bool);
 	void axisStartChanged(double);
 	void axisEndChanged(double);
@@ -176,14 +174,14 @@ private slots:
 	void axisMajorTicksDirectionChanged(Axis::TicksDirection);
 	void axisMajorTicksTypeChanged(Axis::TicksType);
 	void axisMajorTicksNumberChanged(int);
-	void axisMajorTicksIncrementChanged(qreal);
+	void axisMajorTicksSpacingChanged(qreal);
 	void axisMajorTicksPenChanged(const QPen&);
 	void axisMajorTicksLengthChanged(qreal);
 	void axisMajorTicksOpacityChanged(qreal);
 	void axisMinorTicksDirectionChanged(Axis::TicksDirection);
 	void axisMinorTicksTypeChanged(Axis::TicksType);
 	void axisMinorTicksNumberChanged(int);
-	void axisMinorTicksIncrementChanged(qreal);
+	void axisMinorTicksSpacingChanged(qreal);
 	void axisMinorTicksPenChanged(const QPen&);
 	void axisMinorTicksLengthChanged(qreal);
 	void axisMinorTicksOpacityChanged(qreal);

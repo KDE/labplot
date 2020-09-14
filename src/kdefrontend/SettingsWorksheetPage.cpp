@@ -42,6 +42,9 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 
 	m_cbThemes = new ThemesComboBox();
 	ui.gridLayout->addWidget(m_cbThemes, 1, 4, 1, 1);
+	QString info = i18n("Default theme for newly created worksheets and worksheet objects");
+	ui.lTheme->setToolTip(info);
+	m_cbThemes->setToolTip(info);
 
 	const int size = ui.cbTexEngine->height();
 	ui.lLatexWarning->setPixmap( QIcon::fromTheme(QLatin1String("state-warning")).pixmap(size, size) );
@@ -59,25 +62,44 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 	if (TeXRenderer::executableExists(QLatin1String("latex")))
 		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
-	connect(m_cbThemes, SIGNAL(currentThemeChanged(QString)), this, SLOT(changed()) );
-	connect(ui.chkPresenterModeInteractive, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-	connect(ui.chkDoubleBuffering, SIGNAL(stateChanged(int)), this, SLOT(changed()) );
-	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()) );
-	connect(ui.cbTexEngine, SIGNAL(currentIndexChanged(int)), this, SLOT(checkTeX(int)) );
+	connect(m_cbThemes, &ThemesComboBox::currentThemeChanged, this, &SettingsWorksheetPage::changed);
+	connect(ui.chkPresenterModeInteractive, &QCheckBox::stateChanged, this, &SettingsWorksheetPage::changed);
+	connect(ui.chkDoubleBuffering, &QCheckBox::stateChanged, this, &SettingsWorksheetPage::changed);
+	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::changed);
+	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::checkTeX);
 
 	loadSettings();
 }
 
 void SettingsWorksheetPage::applySettings() {
+	if (!m_changed)
+		return;
+
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Worksheet"));
-	group.writeEntry(QLatin1String("Theme"), m_cbThemes->currentText());
+	if (m_cbThemes->currentText() == i18n("Default"))
+		group.writeEntry(QLatin1String("Theme"), QString());
+	else
+		group.writeEntry(QLatin1String("Theme"), m_cbThemes->currentText());
 	group.writeEntry(QLatin1String("PresenterModeInteractive"), ui.chkPresenterModeInteractive->isChecked());
 	group.writeEntry(QLatin1String("DoubleBuffering"), ui.chkDoubleBuffering->isChecked());
 	group.writeEntry(QLatin1String("LaTeXEngine"), ui.cbTexEngine->itemData(ui.cbTexEngine->currentIndex()));
 }
 
 void SettingsWorksheetPage::restoreDefaults() {
-	loadSettings();
+	m_cbThemes->setItemText(0, i18n("Default")); //default theme
+	ui.chkPresenterModeInteractive->setChecked(false);
+	ui.chkDoubleBuffering->setChecked(true);
+
+	int index = ui.cbTexEngine->findData(QLatin1String("xelatex"));
+	if (index == -1) {
+		index = ui.cbTexEngine->findData(QLatin1String("lualatex"));
+		if (index == -1) {
+			index = ui.cbTexEngine->findData(QLatin1String("pdflatex"));
+			if (index == -1)
+				index = ui.cbTexEngine->findData(QLatin1String("latex"));
+		}
+	}
+	ui.cbTexEngine->setCurrentIndex(index);
 }
 
 void SettingsWorksheetPage::loadSettings() {

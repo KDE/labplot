@@ -43,10 +43,10 @@ public:
 	~AbstractDataSource() override = default;
 
 	void clear();
-	virtual int prepareImport(QVector<void*>& dataContainer, AbstractFileFilter::ImportMode, int actualRows, int actualCols,
+	virtual int prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode, int actualRows, int actualCols,
 			QStringList colNameList = QStringList(), QVector<AbstractColumn::ColumnMode> = QVector<AbstractColumn::ColumnMode>()) = 0;
-	virtual void finalizeImport(int columnOffset = 0, int startColumn = 0, int endColumn = 0, int numRows = 0,
-			const QString& dateTimeFormat = QString(), AbstractFileFilter::ImportMode importMode = AbstractFileFilter::Replace) = 0;
+	virtual void finalizeImport(int columnOffset = 0, int startColumn = 0, int endColumn = 0,
+			const QString& dateTimeFormat = QString(), AbstractFileFilter::ImportMode importMode = AbstractFileFilter::ImportMode::Replace) = 0;
 };
 
 #endif // ABSTRACTDATASOURCE_H

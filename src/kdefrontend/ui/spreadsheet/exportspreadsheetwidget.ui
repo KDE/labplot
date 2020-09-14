@@ -42,7 +42,7 @@
         <property name="toolTip">
          <string>Specify the name of the file to import.</string>
         </property>
-        <property name="clearButtonEnabled" stdset="0">
+        <property name="clearButtonEnabled">
          <bool>true</bool>
         </property>
        </widget>
@@ -147,14 +147,14 @@
        </widget>
       </item>
       <item row="4" column="0">
-       <widget class="QLabel" name="lNumberFormat">
+       <widget class="QLabel" name="lDecimalSeparator">
         <property name="text">
-         <string>Number format:</string>
+         <string>Decimal Separator:</string>
         </property>
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QComboBox" name="cbNumberFormat"/>
+       <widget class="QComboBox" name="cbDecimalSeparator"/>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="lGridLines">

@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : Dialog for listing/editing FITS header keywords
 --------------------------------------------------------------------
 Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016-2019 by Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -26,19 +27,23 @@ Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.c
 ***************************************************************************/
 
 #include "FITSHeaderEditDialog.h"
-#include <KSharedConfig>
-#include <KWindowConfig>
+
+
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QWindow>
 #include <QVBoxLayout>
+
+#include <KSharedConfig>
+#include <KWindowConfig>
 
 /*! \class FITSHeaderEditDialog
  * \brief Dialog class for editing FITS header units.
  * \since 2.4.0
  * \ingroup widgets
  */
-FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent) {
-	m_headerEditWidget = new FITSHeaderEditWidget(this);
+FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent),
+	m_headerEditWidget(new FITSHeaderEditWidget(this)) {
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	auto* layout = new QVBoxLayout;
@@ -65,11 +70,13 @@ FITSHeaderEditDialog::FITSHeaderEditDialog(QWidget* parent) : QDialog(parent) {
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	//restore saved settings if available
+	create(); // ensure there's a window created
 	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditDialog");
-	if (conf.exists())
+	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
-	else
-		resize( QSize(400,0).expandedTo(minimumSize()) );
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
 }
 
 /*!

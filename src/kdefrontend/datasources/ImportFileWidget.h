@@ -113,10 +113,10 @@ private:
 
 private slots:
 	void fileNameChanged(const QString&);
-	void fileTypeChanged(int);
+	void fileTypeChanged(int = 0);
 
-	void updateTypeChanged(int);
 	void sourceTypeChanged(int);
+	void updateTypeChanged(int);
 	void readingTypeChanged(int);
 
 	void saveFilter();

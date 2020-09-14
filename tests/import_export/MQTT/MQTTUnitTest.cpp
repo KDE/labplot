@@ -66,7 +66,11 @@ void MQTTUnitTest::testContainFalse() {
 
 		while(!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(" ", QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+#else
+			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
+#endif
 			QCOMPARE(client->checkTopicContains(topics[0], topics[1]), false);
 		}
 
@@ -85,7 +89,11 @@ void MQTTUnitTest::testContainTrue() {
 
 		while(!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(" ", QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+#else
+			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
+#endif
 			QCOMPARE(client->checkTopicContains(topics[0], topics[1]), true);
 		}
 
@@ -107,7 +115,11 @@ void MQTTUnitTest::testCommonTrue(){
 
 		while(!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(" ", QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+#else
+			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
+#endif
 			QCOMPARE(client->checkCommonLevel(topics[0], topics[1]), topics[2]);
 		}
 
@@ -126,7 +138,11 @@ void MQTTUnitTest::testCommonFalse(){
 
 		while(!in.atEnd()) {
 			QString line = in.readLine();
-			QStringList topics = line.split(" ", QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+			QStringList topics = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+#else
+			QStringList topics = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
+#endif
 			QCOMPARE(client->checkCommonLevel(topics[0], topics[1]), "");
 		}
 
@@ -147,7 +163,7 @@ void MQTTUnitTest::testIntegerMessage() {
 	MQTTClient* mqttClient = new MQTTClient("test");
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
-	mqttClient->setReadingType(MQTTClient::TillEnd);
+	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
@@ -192,7 +208,7 @@ void MQTTUnitTest::testIntegerMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		if(timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::Recursive);
+			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 			for(int i = 0; i < topic.size(); ++i) {
 				if (topic[i]->topicName() == "labplot/mqttUnitTest") {
 					testTopic = topic[i];
@@ -200,31 +216,33 @@ void MQTTUnitTest::testIntegerMessage() {
 				}
 			}
 
-			Column* value = testTopic->column(testTopic->columnCount() - 1);
-			QCOMPARE(value->columnMode(), Column::ColumnMode::Integer);
-			QCOMPARE(value->rowCount(), 3);
-			QCOMPARE(value->valueAt(0), 1);
-			QCOMPARE(value->valueAt(1), 2);
-			QCOMPARE(value->valueAt(2), 3);
+			if (testTopic) {
+				Column* value = testTopic->column(testTopic->columnCount() - 1);
+				QCOMPARE(value->columnMode(), Column::ColumnMode::Integer);
+				QCOMPARE(value->rowCount(), 3);
+				QCOMPARE(value->valueAt(0), 1);
+				QCOMPARE(value->valueAt(1), 2);
+				QCOMPARE(value->valueAt(2), 3);
 
-			const QString fileName2 = m_dataDir + "integer_message_2.txt";
-			QFile file2(fileName2);
+				const QString fileName2 = m_dataDir + "integer_message_2.txt";
+				QFile file2(fileName2);
 
-			if(file2.open(QIODevice::ReadOnly)) {
-				QTextStream in2(&file2);
-				QString message = in2.readAll();
-				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+				if(file2.open(QIODevice::ReadOnly)) {
+					QTextStream in2(&file2);
+					QString message = in2.readAll();
+					client->publish(topicFilter.filter(), message.toUtf8(), 0);
+				}
+				file2.close();
+
+				QTest::qWait(1000);
+
+				QCOMPARE(value->rowCount(), 8);
+				QCOMPARE(value->valueAt(3), 6);
+				QCOMPARE(value->valueAt(4), 0);
+				QCOMPARE(value->valueAt(5), 0);
+				QCOMPARE(value->valueAt(6), 0);
+				QCOMPARE(value->valueAt(7), 3);
 			}
-			file2.close();
-
-			QTest::qWait(1000);
-
-			QCOMPARE(value->rowCount(), 8);
-			QCOMPARE(value->valueAt(3), 6);
-			QCOMPARE(value->valueAt(4), 0);
-			QCOMPARE(value->valueAt(5), 0);
-			QCOMPARE(value->valueAt(6), 0);
-			QCOMPARE(value->valueAt(7), 3);
 		}
 	}
 }
@@ -238,7 +256,7 @@ void MQTTUnitTest::testNumericMessage() {
 	MQTTClient* mqttClient = new MQTTClient("test");
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
-	mqttClient->setReadingType(MQTTClient::TillEnd);
+	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
@@ -283,7 +301,7 @@ void MQTTUnitTest::testNumericMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		if(timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::Recursive);
+			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 			for(int i = 0; i < topic.size(); ++i) {
 				if (topic[i]->topicName() == "labplot/mqttUnitTest") {
 					testTopic = topic[i];
@@ -291,31 +309,33 @@ void MQTTUnitTest::testNumericMessage() {
 				}
 			}
 
-			Column* value = testTopic->column(testTopic->columnCount() - 1);
-			QCOMPARE(value->columnMode(), Column::ColumnMode::Numeric);
-			QCOMPARE(value->rowCount(), 3);
-			QCOMPARE(value->valueAt(0), 1.5);
-			QCOMPARE(value->valueAt(1), 2.7);
-			QCOMPARE(value->valueAt(2), 3.9);
+			if (testTopic) {
+				Column* value = testTopic->column(testTopic->columnCount() - 1);
+				QCOMPARE(value->columnMode(), Column::ColumnMode::Numeric);
+				QCOMPARE(value->rowCount(), 3);
+				QCOMPARE(value->valueAt(0), 1.5);
+				QCOMPARE(value->valueAt(1), 2.7);
+				QCOMPARE(value->valueAt(2), 3.9);
 
-			const QString fileName2 = m_dataDir + "numeric_message_2.txt";
-			QFile file2(fileName2);
+				const QString fileName2 = m_dataDir + "numeric_message_2.txt";
+				QFile file2(fileName2);
 
-			if(file2.open(QIODevice::ReadOnly)) {
-				QTextStream in2(&file2);
-				QString message = in2.readAll();
-				client->publish(topicFilter.filter(), message.toUtf8(), 0);
+				if(file2.open(QIODevice::ReadOnly)) {
+					QTextStream in2(&file2);
+					QString message = in2.readAll();
+					client->publish(topicFilter.filter(), message.toUtf8(), 0);
+				}
+				file2.close();
+
+				QTest::qWait(1000);
+
+				QCOMPARE(value->rowCount(), 8);
+				QCOMPARE(value->valueAt(3), 6);
+				QCOMPARE((bool)std::isnan(value->valueAt(4)), true);
+				QCOMPARE((bool)std::isnan(value->valueAt(5)), true);
+				QCOMPARE((bool)std::isnan(value->valueAt(6)), true);
+				QCOMPARE(value->valueAt(7), 0.0098);
 			}
-			file2.close();
-
-			QTest::qWait(1000);
-
-			QCOMPARE(value->rowCount(), 8);
-			QCOMPARE(value->valueAt(3), 6);
-			QCOMPARE((bool)std::isnan(value->valueAt(4)), true);
-			QCOMPARE((bool)std::isnan(value->valueAt(5)), true);
-			QCOMPARE((bool)std::isnan(value->valueAt(6)), true);
-			QCOMPARE(value->valueAt(7), 0.0098);
 		}
 	}
 }
@@ -329,7 +349,7 @@ void MQTTUnitTest::testTextMessage() {
 	MQTTClient* mqttClient = new MQTTClient("test");
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
-	mqttClient->setReadingType(MQTTClient::TillEnd);
+	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
@@ -374,7 +394,7 @@ void MQTTUnitTest::testTextMessage() {
 		const MQTTTopic* testTopic = nullptr;
 
 		if(timer.isActive()) {
-			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::Recursive);
+			QVector<const MQTTTopic*> topic = mqttClient->children <const MQTTTopic>(AbstractAspect::ChildIndexFlag::Recursive);
 			for(int i = 0; i < topic.size(); ++i) {
 				if (topic[i]->topicName() == "labplot/mqttUnitTest") {
 					testTopic = topic[i];
@@ -382,14 +402,16 @@ void MQTTUnitTest::testTextMessage() {
 				}
 			}
 
-			Column* value = testTopic->column(testTopic->columnCount() - 1);
-			QCOMPARE(value->columnMode(), Column::ColumnMode::Text);
-			QCOMPARE(value->rowCount(), 5);
-			QCOMPARE(value->textAt(0), "ball");
-			QCOMPARE(value->textAt(1), "cat");
-			QCOMPARE(value->textAt(2), "dog");
-			QCOMPARE(value->textAt(3), "house");
-			QCOMPARE(value->textAt(4), "Barcelona");
+			if (testTopic) {
+				Column* value = testTopic->column(testTopic->columnCount() - 1);
+				QCOMPARE(value->columnMode(), Column::ColumnMode::Text);
+				QCOMPARE(value->rowCount(), 5);
+				QCOMPARE(value->textAt(0), "ball");
+				QCOMPARE(value->textAt(1), "cat");
+				QCOMPARE(value->textAt(2), "dog");
+				QCOMPARE(value->textAt(3), "house");
+				QCOMPARE(value->textAt(4), "Barcelona");
+			}
 		}
 	}
 }
@@ -406,7 +428,7 @@ void MQTTUnitTest::testSubscriptions() {
 	MQTTClient* mqttClient = new MQTTClient("test");
 	project->addChild(mqttClient);
 	mqttClient->setFilter(filter);
-	mqttClient->setReadingType(MQTTClient::TillEnd);
+	mqttClient->setReadingType(MQTTClient::ReadingType::TillEnd);
 	mqttClient->setKeepNValues(0);
 	mqttClient->setUpdateType(MQTTClient::UpdateType::NewData);
 	mqttClient->setMQTTClientHostPort("broker.hivemq.com", 1883);
@@ -540,7 +562,6 @@ void MQTTUnitTest::testSubscriptions() {
 			QTextStream in(file);
 			while(!in.atEnd()) {
 				QString topic = in.readLine();
-				QVector<QString> subscriptions = mqttClient->MQTTSubscriptions();
 				bool found = liveDock->testSubscribe(topic);
 				QCOMPARE(found, true);
 			}
@@ -553,7 +574,6 @@ void MQTTUnitTest::testSubscriptions() {
 		if(file->open(QIODevice::ReadOnly)) {
 			QTextStream in(file);
 			int count = in.readLine().simplified().toInt();
-			QVector<QString> sub = mqttClient->MQTTSubscriptions();
 			QCOMPARE(mqttClient->MQTTSubscriptions().size(), count);
 
 			while(!in.atEnd()) {

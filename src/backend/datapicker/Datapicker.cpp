@@ -4,7 +4,7 @@
     Description          : Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -199,7 +199,7 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 	--index; //-1 because of the first tab in the view being reserved for the plot image and curves
 
 	//select/deselect the data spreadhseets
-	QVector<const Spreadsheet*> spreadsheets = children<const Spreadsheet>(AbstractAspect::Recursive);
+	auto spreadsheets = children<const Spreadsheet>(ChildIndexFlag::Recursive);
 	const AbstractAspect* aspect = spreadsheets.at(index);
 	if (selected) {
 		emit childAspectSelectedInView(aspect);
@@ -227,39 +227,37 @@ void Datapicker::setSelectedInView(const bool b) {
 		emit childAspectDeselectedInView(this);
 }
 
-void Datapicker::addNewPoint(const QPointF& pos, AbstractAspect* parentAspect) {
-	QVector<DatapickerPoint*> childPoints = parentAspect->children<DatapickerPoint>(AbstractAspect::IncludeHidden);
-	if (childPoints.isEmpty())
-		beginMacro(i18n("%1: add new point", parentAspect->name()));
-	else
-		beginMacro(i18n("%1: add new point %2", parentAspect->name(), childPoints.count()));
+void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
+	auto points = parentAspect->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
 
-	auto* newPoint = new DatapickerPoint(i18n("%1 Point", parentAspect->name()));
+	auto* newPoint = new DatapickerPoint(i18n("Point %1", points.count() + 1));
 	newPoint->setPosition(pos);
 	newPoint->setHidden(true);
+
+	beginMacro(i18n("%1: add %2", parentAspect->name(), newPoint->name()));
 	parentAspect->addChild(newPoint);
 	newPoint->retransform();
 
-	auto* datapickerCurve = dynamic_cast<DatapickerCurve*>(parentAspect);
+	auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
 	if (m_image == parentAspect) {
-		DatapickerImage::ReferencePoints points = m_image->axisPoints();
-		points.scenePos[childPoints.count()].setX(pos.x());
-		points.scenePos[childPoints.count()].setY(pos.y());
-		m_image->setAxisPoints(points);
+		DatapickerImage::ReferencePoints axisPoints = m_image->axisPoints();
+		axisPoints.scenePos[points.count()].setX(pos.x());
+		axisPoints.scenePos[points.count()].setY(pos.y());
+		m_image->setAxisPoints(axisPoints);
 	} else if (datapickerCurve) {
 		newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
-		datapickerCurve->updateData(newPoint);
+		datapickerCurve->updatePoint(newPoint);
 	}
 
 	endMacro();
 	emit requestUpdateActions();
 }
 
-QVector3D Datapicker::mapSceneToLogical(const QPointF& point) const {
+QVector3D Datapicker::mapSceneToLogical(QPointF point) const {
 	return m_transform->mapSceneToLogical(point, m_image->axisPoints());
 }
 
-QVector3D Datapicker::mapSceneLengthToLogical(const QPointF& point) const {
+QVector3D Datapicker::mapSceneLengthToLogical(QPointF point) const {
 	return m_transform->mapSceneLengthToLogical(point, m_image->axisPoints());
 }
 
@@ -267,8 +265,8 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* curve = qobject_cast<const DatapickerCurve*>(aspect);
 	if (curve) {
 		//clear scene
-		QVector<DatapickerPoint*> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
-		for (auto* point : childPoints)
+		auto points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+		for (auto* point : points)
 			handleChildAspectAboutToBeRemoved(point);
 
 		if (curve == m_activeCurve) {
@@ -287,19 +285,20 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 	if (addedPoint)
 		handleChildAspectAdded(addedPoint);
 	else if (curve) {
-		QVector<DatapickerPoint*> childPoints = curve->children<DatapickerPoint>(IncludeHidden);
-		for (auto* point : childPoints)
+		connect(m_image, &DatapickerImage::axisPointsChanged, curve, &DatapickerCurve::updatePoints);
+		auto points = curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+		for (auto* point : points)
 			handleChildAspectAdded(point);
 	} else
 		return;
 
 	qreal zVal = 0;
-	QVector<DatapickerPoint*> childPoints = m_image->children<DatapickerPoint>(IncludeHidden);
-	for (auto* point : childPoints)
+	auto points = m_image->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+	for (auto* point : points)
 		point->graphicsItem()->setZValue(zVal++);
 
 	for (const auto* curve : children<DatapickerCurve>()) {
-		for (auto* point : curve->children<DatapickerPoint>(IncludeHidden))
+		for (auto* point : curve->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 			point->graphicsItem()->setZValue(zVal++);
 	}
 
@@ -337,7 +336,7 @@ void Datapicker::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//serialize all children
-	for (auto* child : children<AbstractAspect>(IncludeHidden))
+	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden))
 		child->save(writer);
 
 	writer->writeEndElement(); // close "datapicker" section
@@ -356,7 +355,10 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 		if (!reader->isStartElement())
 			continue;
 
-		if (reader->name() == "datapickerImage") {
+		if (reader->name() == "comment") {
+			if (!readCommentElement(reader))
+				return false;
+		} else if (reader->name() == "datapickerImage") {
 			DatapickerImage* plot = new DatapickerImage(i18n("Plot"), true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
@@ -379,8 +381,8 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	for (auto* aspect : children<AbstractAspect>(IncludeHidden)) {
-		for (auto* point : aspect->children<DatapickerPoint>(IncludeHidden))
+	for (auto* aspect : children<AbstractAspect>(ChildIndexFlag::IncludeHidden)) {
+		for (auto* point : aspect->children<DatapickerPoint>(ChildIndexFlag::IncludeHidden))
 			handleAspectAdded(point);
 	}
 

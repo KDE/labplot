@@ -43,9 +43,8 @@ class Axis: public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum AxisOrientation {AxisHorizontal, AxisVertical};
-	enum AxisPosition {AxisTop, AxisBottom, AxisLeft, AxisRight, AxisCentered, AxisCustom};
-	enum LabelsFormat {FormatDecimal, FormatScientificE, FormatPowers10, FormatPowers2, FormatPowersE, FormatMultipliesPi};
+	enum class Position {Top, Bottom, Left, Right, Centered, Custom};
+	enum class LabelsFormat {Decimal, ScientificE, Powers10, Powers2, PowersE, MultipliesPi};
 	enum TicksFlags {
 		noTicks = 0x00,
 		ticksIn = 0x01,
@@ -54,13 +53,13 @@ public:
 	};
 	Q_DECLARE_FLAGS(TicksDirection, TicksFlags)
 
-	enum TicksType {TicksTotalNumber, TicksIncrement, TicksCustomColumn, TicksCustomValues};
-	enum ArrowType {NoArrow, SimpleArrowSmall, SimpleArrowBig, FilledArrowSmall, FilledArrowBig, SemiFilledArrowSmall, SemiFilledArrowBig};
-	enum ArrowPosition {ArrowLeft, ArrowRight, ArrowBoth};
-	enum AxisScale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleSqrt, ScaleX2};
-	enum LabelsPosition {NoLabels, LabelsIn, LabelsOut};
+	enum class TicksType {TotalNumber, Spacing, CustomColumn, CustomValues};
+	enum class ArrowType {NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig};
+	enum class ArrowPosition {Left, Right, Both};
+	enum class Scale {Linear, Log10, Log2, Ln, Sqrt, X2};
+	enum class LabelsPosition {NoLabels, In, Out};
 
-	explicit Axis(const QString&, AxisOrientation orientation = AxisHorizontal);
+	explicit Axis(const QString&, Orientation orientation = Orientation::Horizontal);
 	~Axis() override;
 
 	void finalizeAdd() override;
@@ -76,9 +75,9 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 
 	BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
-	BASIC_D_ACCESSOR_DECL(AxisOrientation, orientation, Orientation)
-	BASIC_D_ACCESSOR_DECL(AxisPosition, position, Position)
-	BASIC_D_ACCESSOR_DECL(AxisScale, scale, Scale)
+	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
+	BASIC_D_ACCESSOR_DECL(Position, position, Position)
+	BASIC_D_ACCESSOR_DECL(Scale, scale, Scale)
 	BASIC_D_ACCESSOR_DECL(double, start, Start)
 	BASIC_D_ACCESSOR_DECL(double, end, End)
 	void setOffset(const double, const bool=true);
@@ -99,7 +98,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(TicksDirection, majorTicksDirection, MajorTicksDirection)
 	BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
 	BASIC_D_ACCESSOR_DECL(int, majorTicksNumber, MajorTicksNumber)
-	BASIC_D_ACCESSOR_DECL(qreal, majorTicksIncrement, MajorTicksIncrement)
+	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
 	QString& majorTicksColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
@@ -109,7 +108,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(TicksDirection, minorTicksDirection, MinorTicksDirection)
 	BASIC_D_ACCESSOR_DECL(TicksType, minorTicksType, MinorTicksType)
 	BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
-	BASIC_D_ACCESSOR_DECL(qreal, minorTicksIncrement, MinorTicksIncrement)
+	BASIC_D_ACCESSOR_DECL(qreal, minorTicksSpacing, MinorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
 	QString& minorTicksColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen)
@@ -134,9 +133,14 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, minorGridPen, MinorGridPen)
 	BASIC_D_ACCESSOR_DECL(qreal, minorGridOpacity, MinorGridOpacity)
 
+	void setDefault(bool);
+	bool isDefault() const;
+
 	void setVisible(bool) override;
 	bool isVisible() const override;
+
 	void setPrinting(bool) override;
+	bool isHovered() const;
 	void setSuppressRetransform(bool);
 	void retransform() override;
 	void retransformTickLabelStrings();
@@ -146,7 +150,7 @@ public:
 
 protected:
 	AxisPrivate* const d_ptr;
-	Axis(const QString&, AxisOrientation, AxisPrivate*);
+	Axis(const QString&, Orientation, AxisPrivate*);
 	TextLabel* m_title;
 
 private:
@@ -155,20 +159,18 @@ private:
 	void initActions();
 	void initMenus();
 
-	QAction* visibilityAction;
-	QAction* orientationHorizontalAction;
-	QAction* orientationVerticalAction;
+	QAction* visibilityAction{nullptr};
+	QAction* orientationHorizontalAction{nullptr};
+	QAction* orientationVerticalAction{nullptr};
 
-	QActionGroup* orientationActionGroup;
-	QActionGroup* lineStyleActionGroup;
-	QActionGroup* lineColorActionGroup;
+	QActionGroup* orientationActionGroup{nullptr};
+	QActionGroup* lineStyleActionGroup{nullptr};
+	QActionGroup* lineColorActionGroup{nullptr};
 
-	QMenu* orientationMenu;
-	QMenu* lineMenu;
-	QMenu* lineStyleMenu;
-	QMenu* lineColorMenu;
-
-	bool m_menusInitialized{false};
+	QMenu* orientationMenu{nullptr};
+	QMenu* lineMenu{nullptr};
+	QMenu* lineStyleMenu{nullptr};
+	QMenu* lineColorMenu{nullptr};
 
 private slots:
 	void labelChanged();
@@ -183,10 +185,10 @@ private slots:
 	void visibilityChangedSlot();
 
 signals:
-	void orientationChanged(Axis::AxisOrientation);
-	void positionChanged(Axis::AxisPosition);
+	void orientationChanged(Orientation);
+	void positionChanged(Position);
 	void positionChanged(double);
-	void scaleChanged(Axis::AxisScale);
+	void scaleChanged(Scale);
 	void startChanged(double);
 	void autoScaleChanged(bool);
 	void endChanged(double);
@@ -208,7 +210,7 @@ signals:
 	void majorTicksDirectionChanged(Axis::TicksDirection);
 	void majorTicksTypeChanged(Axis::TicksType);
 	void majorTicksNumberChanged(int);
-	void majorTicksIncrementChanged(qreal);
+	void majorTicksSpacingChanged(qreal);
 	void majorTicksColumnChanged(const AbstractColumn*);
 	void majorTicksPenChanged(QPen);
 	void majorTicksLengthChanged(qreal);

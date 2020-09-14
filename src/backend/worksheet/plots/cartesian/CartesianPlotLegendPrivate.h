@@ -36,6 +36,7 @@ class QBrush;
 class CartesianPlotLegend;
 class XYCurve;
 class QGraphicsSceneContextMenuEvent;
+class QKeyEvent;
 
 class CartesianPlotLegendPrivate : public QGraphicsItem {
 public:
@@ -53,7 +54,6 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
@@ -65,13 +65,13 @@ public:
 	QFont labelFont;
 	QColor labelColor;
 	bool labelColumnMajor;
-	CartesianPlotLegend::PositionWrapper position; //position in parent's coordinate system
+	WorksheetElement::PositionWrapper position; //position in parent's coordinate system
 	qreal rotationAngle;
 	float lineSymbolWidth; //the width of line+symbol
 	QList<float> maxColumnTextWidths; //the maximal width of the text within each column
 	int columnCount; //the actual number of columns, can be smaller then the specified layoutColumnCount
 	int rowCount; //the number of rows in the legend, depends on the number of curves and on columnCount
-	TextLabel* title;
+	TextLabel* title{nullptr};
 
 	//Background
 	PlotArea::BackgroundType backgroundType;
@@ -101,6 +101,8 @@ private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+	void keyPressEvent(QKeyEvent*) override;
 };
 
 #endif

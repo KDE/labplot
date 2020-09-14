@@ -47,8 +47,8 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget()
 	if (m_part) {
 		layout->addWidget(m_part->widget());
 		initActions();
-		connect(m_worksheet, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-		connect(m_worksheet, SIGNAL(statusChanged(Cantor::Session::Status)), this, SLOT(statusChanged(Cantor::Session::Status)));
+		connect(m_worksheet, &CantorWorksheet::requestProjectContextMenu, this, &CantorWorksheetView::createContextMenu);
+		connect(m_worksheet, &CantorWorksheet::statusChanged, this, &CantorWorksheetView::statusChanged);
 	} else {
 		QLabel* label = new QLabel(i18n("Failed to initialize %1", m_worksheet->backendName()));
 		label->setAlignment(Qt::AlignHCenter);
@@ -160,7 +160,7 @@ void CantorWorksheetView::initActions() {
 		m_solveEquationsAction->setData("solve_assistant");
 	}
 
-	connect(cantorActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(triggerCantorAction(QAction*)));
+	connect(cantorActionGroup, &QActionGroup::triggered, this, &CantorWorksheetView::triggerCantorAction);
 }
 
 void CantorWorksheetView::initMenus() {

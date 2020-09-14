@@ -45,7 +45,7 @@ class SpreadsheetModel : public QAbstractItemModel {
 public:
 	explicit SpreadsheetModel(Spreadsheet*);
 
-	enum CustomDataRole {
+	enum class CustomDataRole {
 		MaskingRole = Qt::UserRole, //!< bool determining whether the cell is masked
 		FormulaRole = Qt::UserRole+1, //!< the cells formula
 		CommentRole = Qt::UserRole+2, //!< the column comment (for headerData())
@@ -66,10 +66,10 @@ public:
 	void activateFormulaMode(bool on);
 	bool formulaModeActive() const;
 
+	void updateHorizontalHeader();
 	void suppressSignals(bool);
 
 private slots:
-	void handleAspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
@@ -84,7 +84,6 @@ private slots:
 
 protected:
 	void updateVerticalHeader();
-	void updateHorizontalHeader();
 
 private:
 	Spreadsheet* m_spreadsheet;
@@ -93,6 +92,8 @@ private:
 	QStringList m_horizontal_header_data;
 	int m_defaultHeaderHeight;
 	bool m_suppressSignals{false};
+	int m_rowCount{0};
+	int m_columnCount{0};
 };
 
 #endif

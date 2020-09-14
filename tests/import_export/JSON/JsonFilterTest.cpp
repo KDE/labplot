@@ -34,9 +34,6 @@ Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
 #include <KLocalizedString>
 
 void JsonFilterTest::initTestCase() {
-	const QString currentDir = __FILE__;
-	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
-
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
 	//TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
@@ -47,21 +44,21 @@ void JsonFilterTest::testArrayImport() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
-	const QString fileName = m_dataDir + "array.json";
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/array.json"));
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCreateIndexEnabled(true);
 	filter.setDataRowType(QJsonValue::Array);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
 	QCOMPARE(spreadsheet.columnCount(), 3);
 	QCOMPARE(spreadsheet.rowCount(), 3);
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Text);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), Column::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), Column::Y);
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 1")); //TODO is translatable in JsonFilter
@@ -87,25 +84,25 @@ void JsonFilterTest::testObjectImport01() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
-	const QString fileName = m_dataDir + "object.json";
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCreateIndexEnabled(true);
 	filter.setDataRowType(QJsonValue::Object);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
 	QCOMPARE(spreadsheet.columnCount(), 5);
 	QCOMPARE(spreadsheet.rowCount(), 3);
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::Text);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Text);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), Column::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(3)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(4)->plotDesignation(), Column::Y);
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(3)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(4)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("index"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("1"));
@@ -141,25 +138,25 @@ void JsonFilterTest::testObjectImport02() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
-	const QString fileName = m_dataDir + "object.json";
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setDataRowType(QJsonValue::Object);
 	filter.setImportObjectNames(true);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
 	QCOMPARE(spreadsheet.columnCount(), 5);
 	QCOMPARE(spreadsheet.rowCount(), 3);
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Text);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::Text);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Text);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), Column::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(3)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(4)->plotDesignation(), Column::Y);
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(3)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(4)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("name"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("1"));
@@ -196,8 +193,8 @@ void JsonFilterTest::testObjectImport03() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
-	const QString fileName = m_dataDir + "object.json";
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/object.json"));
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setDataRowType(QJsonValue::Object);
 	filter.setImportObjectNames(true);
 	filter.setStartColumn(2);
@@ -206,13 +203,13 @@ void JsonFilterTest::testObjectImport03() {
 
 	QCOMPARE(spreadsheet.columnCount(), 3);
 	QCOMPARE(spreadsheet.rowCount(), 3);
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::Text);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), Column::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), Column::Y);
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("name"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("2"));
@@ -238,8 +235,8 @@ void JsonFilterTest::testObjectImport04() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
-	const QString fileName = m_dataDir + "intraday.json";
-	AbstractFileFilter::ImportMode mode = AbstractFileFilter::Replace;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/intraday.json"));
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	QVector<int> rows{0, 1};
 	filter.setModelRows(rows);
 	filter.setDataRowType(QJsonValue::Object);
@@ -253,19 +250,19 @@ void JsonFilterTest::testObjectImport04() {
 
 	QCOMPARE(spreadsheet.columnCount(), 6);
 	QCOMPARE(spreadsheet.rowCount(), 2);
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::DateTime);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::Numeric);
-	QCOMPARE(spreadsheet.column(5)->columnMode(), AbstractColumn::Integer);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(5)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
-	QCOMPARE(spreadsheet.column(0)->plotDesignation(), Column::X);
-	QCOMPARE(spreadsheet.column(1)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(3)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(4)->plotDesignation(), Column::Y);
-	QCOMPARE(spreadsheet.column(5)->plotDesignation(), Column::Y);
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(3)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(4)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(5)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), i18n("timestamp"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("1. open"));

@@ -9,6 +9,7 @@
     <comment xml:lang="de">LabPlot2-Projektdatei</comment>
     <comment xml:lang="en_GB">LabPlot2 Project File</comment>
     <comment xml:lang="es">Archivo de proyecto de LabPlot2</comment>
+    <comment xml:lang="et">LabPlot2 projektifail</comment>
     <comment xml:lang="eu">LabPlot2 proiektu fitxategia</comment>
     <comment xml:lang="fi">LabPlot2-projektitiedosto</comment>
     <comment xml:lang="fr">Fichier projet LabPlot2</comment>
@@ -16,10 +17,13 @@
     <comment xml:lang="it">File di progetto LabPlot2</comment>
     <comment xml:lang="ko">LabPlot2 프로젝트 파일</comment>
     <comment xml:lang="nl">Projectbestand LabPlot</comment>
+    <comment xml:lang="nn">LabPlot2-prosjektfil</comment>
     <comment xml:lang="pl">Plik projektu LabPlot2</comment>
     <comment xml:lang="pt">Ficheiro de Projecto do LabPlot2</comment>
     <comment xml:lang="pt_BR">Arquivo de projeto do LabPlot2</comment>
+    <comment xml:lang="ru">Файл проекта LabPlot2</comment>
     <comment xml:lang="sk">Súbor projektu LabPlot2</comment>
+    <comment xml:lang="sl">Projektna datoteka LabPlot2</comment>
     <comment xml:lang="sv">Labplot2 projektfil</comment>
     <comment xml:lang="uk">файл проєкту LabPlot2</comment>
     <comment xml:lang="zh_TW">LabPlot2 專案檔</comment>

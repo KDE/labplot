@@ -78,6 +78,7 @@ double nsl_stats_median_sorted(const double sorted_data[], size_t stride, size_t
 }
 
 double nsl_stats_median_from_sorted_data(const double sorted_data[], size_t stride, size_t n) {
+	// default method is number 7
 	return nsl_stats_median_sorted(sorted_data, stride, n, nsl_stats_quantile_type7);
 }
 
@@ -89,7 +90,7 @@ double nsl_stats_quantile(double data[], size_t stride, size_t n, double p, nsl_
 double nsl_stats_quantile_sorted(const double d[], size_t stride, size_t n, double p, nsl_stats_quantile_type type) {
 
 	switch(type) {
-	case nsl_stats_quantile_type1:
+	case nsl_stats_quantile_type1:	// h = Np + 1/2, x[ceil(h – 1/2)]
 		if (p == 0.0)
 			return d[0];
 		else
@@ -213,17 +214,11 @@ double nsl_stats_chisq_p(double t, double dof) {
 }
 
 /* F distribution */
-double nsl_stats_fdist_F(double sst, double rms, unsigned int np, int version) {
-	switch (version) {
-	case 2:
-		if (np > 1)	// scale accourding R
-			sst /= np;
-		break;
-	default:
-		if (np > 2)     // scale according NIST reference
-			sst /= (np-1);
-	}
-	return sst/rms;
+double nsl_stats_fdist_F(double rsquare, size_t np, size_t dof) {
+	// (sst/sse - 1.) * dof/(p-1) = dof/(p-1)/(1./R^2 - 1)
+	if (np < 2)
+		np = 2;
+	return dof/(np - 1.)/(1./rsquare - 1.);
 }
 double nsl_stats_fdist_p(double F, size_t np, double dof) {
 	double p = gsl_cdf_fdist_Q(F, (double)np, dof);

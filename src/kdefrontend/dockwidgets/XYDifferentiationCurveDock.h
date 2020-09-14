@@ -56,6 +56,7 @@ private:
 
 	XYDifferentiationCurve* m_differentiationCurve{nullptr};
 	XYDifferentiationCurve::DifferentiationData m_differentiationData;
+	bool m_dateTimeRange{false};
 
 protected:
 	void setModel() override;
@@ -68,10 +69,12 @@ private slots:
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
-	void xRangeMinChanged();
-	void xRangeMaxChanged();
-	void derivOrderChanged();
-	void accOrderChanged();
+	void xRangeMinChanged(double);
+	void xRangeMaxChanged(double);
+	void xRangeMinDateTimeChanged(const QDateTime&);
+	void xRangeMaxDateTimeChanged(const QDateTime&);
+	void derivOrderChanged(int);
+	void accOrderChanged(int);
 
 	void recalculateClicked();
 	void enableRecalculate() const;
@@ -85,6 +88,7 @@ private slots:
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveDifferentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
 	void dataChanged();
+	void curveVisibilityChanged(bool);
 };
 
 #endif

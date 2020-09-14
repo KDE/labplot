@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -34,22 +34,29 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
 
+class AbstractAspect;
 class Column;
 class Spreadsheet;
-class SpreadsheetModel;
 class SpreadsheetItemDelegate;
 class SpreadsheetHeaderView;
-class AbstractAspect;
-class QTableView;
+class SpreadsheetModel;
 
-class QPrinter;
-class QMenu;
-class QToolBar;
-class QModelIndex;
+class QActionGroup;
 class QItemSelection;
+class QMenu;
+class QPrinter;
+class QModelIndex;
+class QTableView;
+class QToolBar;
+
+#ifdef Q_OS_MAC
+	class KDMacTouchBar;
+#endif
 
 class SpreadsheetView : public QWidget {
 	Q_OBJECT
+
+	friend class SpreadsheetTest;
 
 public:
 	explicit SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly = false);
@@ -81,9 +88,6 @@ public:
 	bool printView();
 	bool printPreview();
 
-	void registerShortcuts();
-	void unregisterShortcuts();
-
 private:
 	void init();
 	void initActions();
@@ -96,6 +100,7 @@ private:
 	                   const bool skipEmptyRows,const bool exportEntire) const;
 	void exportToFits(const QString& path, const int exportTo, const bool commentsAsUnits) const;
 	void exportToSQLite(const QString& path) const;
+	int maxRowToExport() const;
 
 	void insertColumnsLeft(int);
 	void insertColumnsRight(int);
@@ -104,6 +109,7 @@ private:
 	void insertRowsBelow(int);
 
 	QTableView* m_tableView;
+	bool m_editorEntered{false};
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetItemDelegate* m_delegate;
 	SpreadsheetModel* m_model;
@@ -123,7 +129,6 @@ private:
 // 		QAction* action_set_formula;
 // 		QAction* action_recalculate;
 	QAction* action_fill_row_numbers;
-	QAction* action_fill_sel_row_numbers;
 	QAction* action_fill_random;
 	QAction* action_fill_equidistant;
 	QAction* action_fill_random_nonuniform;
@@ -168,8 +173,8 @@ private:
 	QAction* action_drop_values;
 	QAction* action_mask_values;
 	QAction* action_join_columns;
-	QAction* action_normalize_columns;
-	QAction* action_normalize_selection;
+	QActionGroup* normalizeColumnActionGroup;
+	QActionGroup* ladderOfPowersActionGroup;
 	QAction* action_sort_columns;
 	QAction* action_sort_asc_column;
 	QAction* action_sort_desc_column;
@@ -197,20 +202,25 @@ private:
 	QAction* addFourierFilterAction;
 
 	//Menus
-	QMenu* m_selectionMenu;
-	QMenu* m_columnMenu;
+	QMenu* m_selectionMenu{nullptr};;
+	QMenu* m_columnMenu{nullptr};;
 	QMenu* m_columnSetAsMenu{nullptr};
 	QMenu* m_columnGenerateDataMenu{nullptr};
 	QMenu* m_columnManipulateDataMenu;
+	QMenu* m_columnNormalizeMenu{nullptr};
+	QMenu* m_columnLadderOfPowersMenu{nullptr};
 	QMenu* m_columnSortMenu{nullptr};
-	QMenu* m_rowMenu;
-	QMenu* m_spreadsheetMenu;
-	QMenu* m_plotDataMenu;
-	QMenu* m_analyzePlotMenu;
+	QMenu* m_rowMenu{nullptr};;
+	QMenu* m_spreadsheetMenu{nullptr};;
+	QMenu* m_plotDataMenu{nullptr};;
+	QMenu* m_analyzePlotMenu{nullptr};;
 
 public slots:
 	void createContextMenu(QMenu*);
 	void fillToolBar(QToolBar*);
+#ifdef Q_OS_MAC
+	void fillTouchBar(KDMacTouchBar*);
+#endif
 	void print(QPrinter*) const;
 
 private slots:
@@ -224,14 +234,14 @@ private slots:
     void doHypothesisTest();
     void findCorrelationCoefficient();
 	void sortSpreadsheet();
-	void sortDialog(QVector<Column*>);
+	void sortDialog(const QVector<Column*>&);
 
 	void cutSelection();
 	void copySelection();
-	void pasteIntoSelection();
 	void clearSelectedCells();
 	void maskSelection();
 	void unmaskSelection();
+	void pasteIntoSelection();
 // 		void recalculateSelectedCells();
 
 	void plotData();
@@ -262,9 +272,9 @@ private slots:
 	void reverseColumns();
 	void dropColumnValues();
 	void maskColumnValues();
-	void joinColumns();
-	void normalizeSelectedColumns();
-	void normalizeSelection();
+// 	void joinColumns();
+	void normalizeSelectedColumns(QAction*);
+	void powerTransformSelectedColumns(QAction*);
 
 	void sortSelectedColumns();
 	void sortColumnAscending();
@@ -291,6 +301,7 @@ private slots:
 	void deselectColumn(int);
 	void columnClicked(int);
 	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+	void advanceCell();
 };
 
 #endif

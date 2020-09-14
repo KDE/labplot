@@ -36,7 +36,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 ///////////// macros ///////////////////////////////////////////////
 
 #define NC_GET_ATT(type, ftype) \
-	type* value = (type*)malloc(len*sizeof(type)); \
+	auto* value = (type*)malloc(len*sizeof(type)); \
 	m_status = nc_get_att_ ##ftype(ncid, varid, name, value); \
 	handleError(m_status, "nc_get_att_" #ftype); \
 	for (unsigned int l = 0; l < len; l++) \
@@ -62,7 +62,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 	}
 
 #define NC_READ_AVAR(type, ftype, dtype) \
-	type* data = new type[(unsigned int)actualRows]; \
+	auto* data = new type[(unsigned int)actualRows]; \
 	\
 	size_t start = (size_t)(startRow - 1), count = (size_t)actualRows; \
 	m_status = nc_get_vara_ ##ftype(ncid, varid, &start, &count, data); \
@@ -97,7 +97,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 	}
 
 #define NC_READ_VAR2(type, ftype, dtype) \
-	type** data = (type**) malloc(rows * sizeof(type*)); \
+	auto** data = (type**) malloc(rows * sizeof(type*)); \
 	data[0] = (type*)malloc(cols * rows * sizeof(type)); \
 	for (unsigned int i = 1; i < rows; i++) \
 		data[i] = data[0] + i*cols; \
@@ -129,7 +129,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
 	\ingroup datasources
 */
-NetCDFFilter::NetCDFFilter():AbstractFileFilter(NETCDF), d(new NetCDFFilterPrivate(this)) {}
+NetCDFFilter::NetCDFFilter():AbstractFileFilter(FileType::NETCDF), d(new NetCDFFilterPrivate(this)) {}
 
 NetCDFFilter::~NetCDFFilter() = default;
 
@@ -294,7 +294,7 @@ QString NetCDFFilter::fileCDLString(const QString& fileName) {
 		CDLString += proc->readAll();
 		CDLString.replace('\n', "<br>\n");
 		CDLString.replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;");
-		//DEBUG("	CDL string: " << CDLString.toStdString());
+		//DEBUG("	CDL string: " << STDSTRING(CDLString));
 	}
 #else	//TODO: ncdump on Win, Mac
 	Q_UNUSED(fileName)
@@ -316,7 +316,7 @@ NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) : q(owner) {
 #ifdef HAVE_NETCDF
 void NetCDFFilterPrivate::handleError(int err, const QString& function) {
 	if (err != NC_NOERR) {
-		DEBUG("NETCDF ERROR:" << function.toStdString() << "() - " << nc_strerror(err));
+		DEBUG("NETCDF ERROR:" << STDSTRING(function) << "() - " << nc_strerror(err));
 		return;
 	}
 	Q_UNUSED(function);
@@ -653,7 +653,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 	if (currentVarName.isEmpty())
 		return dataStrings << (QStringList() << i18n("No variable selected"));
-	DEBUG(" current variable = " << currentVarName.toStdString());
+	DEBUG(" current variable = " << STDSTRING(currentVarName));
 
 #ifdef HAVE_NETCDF
 	int ncid;
@@ -683,7 +683,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 	int actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
-	QVector<void*> dataContainer;
+	std::vector<void*> dataContainer;
 	switch (ndims) {
 	case 0: {
 		DEBUG("	zero dimensions");
@@ -696,17 +696,19 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		case NC_SHORT:
 		case NC_USHORT:
 		case NC_INT:
-			columnModes[0] = AbstractColumn::Integer;
+			columnModes[0] = AbstractColumn::ColumnMode::Integer;
 			break;
 		case NC_UINT: 	// converted to double (int is too small)
-		case NC_INT64: 	// converted to double (int is too small)
+		case NC_INT64:
+			columnModes[0] = AbstractColumn::ColumnMode::BigInt;
+			break;
 		case NC_UINT64:	// converted to double (int is too small)
 		case NC_DOUBLE:
 		case NC_FLOAT:
-			columnModes[0] = AbstractColumn::Numeric;
+			columnModes[0] = AbstractColumn::ColumnMode::Numeric;
 			break;
 		case NC_CHAR:
-			columnModes[0] = AbstractColumn::Text;
+			columnModes[0] = AbstractColumn::ColumnMode::Text;
 			break;
 		//TODO: NC_STRING
 		}
@@ -717,7 +719,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		if (dataSource)
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
-		DEBUG("	Reading data of type " << translateDataType(type).toStdString());
+		DEBUG("	Reading data of type " << STDSTRING(translateDataType(type)));
 		switch (type) {
 		case NC_BYTE: { NC_READ_VAR(signed char, schar, int); break; }
 		case NC_UBYTE: { NC_READ_VAR(unsigned char, uchar, int); break; }
@@ -769,17 +771,19 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		case NC_SHORT:
 		case NC_USHORT:
 		case NC_INT:
-			columnModes[0] = AbstractColumn::Integer;
+			columnModes[0] = AbstractColumn::ColumnMode::Integer;
 			break;
 		case NC_UINT: 	// converted to double (int is too small)
-		case NC_INT64: 	// converted to double (int is too small)
+		case NC_INT64:
+			columnModes[0] = AbstractColumn::ColumnMode::BigInt;
+			break;
 		case NC_UINT64:	// converted to double (int is too small)
 		case NC_DOUBLE:
 		case NC_FLOAT:
-			columnModes[0] = AbstractColumn::Numeric;
+			columnModes[0] = AbstractColumn::ColumnMode::Numeric;
 			break;
 		case NC_CHAR:
-			columnModes[0] = AbstractColumn::Text;
+			columnModes[0] = AbstractColumn::ColumnMode::Text;
 			break;
 		//TODO: NC_STRING
 		}
@@ -790,7 +794,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		if (dataSource)
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
-		DEBUG("	Reading data of type " << translateDataType(type).toStdString());
+		DEBUG("	Reading data of type " << STDSTRING(translateDataType(type)));
 		switch (type) {
 		case NC_BYTE: { NC_READ_AVAR(signed char, schar, int); break; }
 		case NC_UBYTE: { NC_READ_AVAR(unsigned char, uchar, int); break; }
@@ -859,19 +863,22 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		case NC_USHORT:
 		case NC_INT:
 			for (int i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::Integer;
+				columnModes[i] = AbstractColumn::ColumnMode::Integer;
 			break;
 		case NC_UINT: 	// converted to double (int is too small)
-		case NC_INT64: 	// converted to double (int is too small)
+		case NC_INT64:
+			for (int i = 0; i < actualCols; i++)
+				columnModes[i] = AbstractColumn::ColumnMode::BigInt;
+			break;
 		case NC_UINT64:	// converted to double (int is too small)
 		case NC_DOUBLE:
 		case NC_FLOAT:
 			for (int i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::Numeric;
+				columnModes[i] = AbstractColumn::ColumnMode::Numeric;
 			break;
 		case NC_CHAR:
 			for (int i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::Text;
+				columnModes[i] = AbstractColumn::ColumnMode::Text;
 			break;
 		//TODO: NC_STRING
 		}
@@ -936,7 +943,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 	handleError(m_status, "nc_close");
 
 	if (dataSource)
-		dataSource->finalizeImport(columnOffset, 1, actualCols, -1, QString(), mode);
+		dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), mode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)

@@ -86,21 +86,21 @@
        </spacer>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="lNumberFormat">
+       <widget class="QLabel" name="lDecimalSeparator">
         <property name="text">
-         <string>Number format:</string>
+         <string>Decimal Separator:</string>
         </property>
        </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="lDateTimeFormat">
         <property name="text">
-         <string>DateTime format:</string>
+         <string>DateTime Format:</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QComboBox" name="cbNumberFormat"/>
+       <widget class="QComboBox" name="cbDecimalSeparator"/>
       </item>
       <item row="4" column="1">
        <widget class="KComboBox" name="cbDateTimeFormat">

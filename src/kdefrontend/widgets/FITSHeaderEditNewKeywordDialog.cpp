@@ -4,6 +4,7 @@ Project              : LabPlot
 Description          : Widget for adding new keyword in the FITS edit widget
 --------------------------------------------------------------------
 Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
+Copyright            : (C) 2016-2019 by Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -27,13 +28,14 @@ Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.c
 #include "FITSHeaderEditNewKeywordDialog.h"
 
 #include <QCompleter>
-
 #include <QDialog>
-#include <QMessageBox>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QWindow>
 
 #include <KMessageBox>
+#include <KSharedConfig>
+#include <KWindowConfig>
 
 #define FLEN_KEYWORD   75  /* max length of a keyword (HIERARCH convention) */
 #define FLEN_VALUE     71  /* max length of a keyword value string */
@@ -49,7 +51,7 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 
 	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-	ui.gridLayout->addWidget(btnBox);
+	ui.gridLayout->addWidget(btnBox, 3, 1, 1, 2);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 	m_cancelButton = btnBox->button(QDialogButtonBox::Cancel);
 
@@ -71,6 +73,21 @@ FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) 
 	ui.leKey->setMaxLength(FLEN_KEYWORD);
 	ui.leValue->setMaxLength(FLEN_VALUE);
 	ui.leComment->setMaxLength(FLEN_COMMENT);
+
+
+	//restore saved settings if available
+	create(); // ensure there's a window created
+	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditNewKeywordDialog");
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(300, 0).expandedTo(minimumSize()));
+}
+
+FITSHeaderEditNewKeywordDialog::~FITSHeaderEditNewKeywordDialog() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditNewKeywordDialog");
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
 /*!

@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2011 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
-    Description          :  constains several static functions which are used on frequently throughout the kde frontend.
+    Description          :  contains several static functions which are used on frequently throughout the kde frontend.
 
  ***************************************************************************/
 
@@ -34,6 +34,7 @@
 
 class QComboBox;
 class QColor;
+class QLineEdit;
 class QMenu;
 class QActionGroup;
 class QAction;
@@ -49,6 +50,8 @@ public:
 	static void fillColorMenu(QMenu*, QActionGroup*);
 	static void selectColorAction(QActionGroup*, const QColor&);
 	static QColor& colorFromAction(QActionGroup*, QAction*);
+
+	static void highlight(QLineEdit*, bool);
 };
 
 #endif // GUITOOLS_H

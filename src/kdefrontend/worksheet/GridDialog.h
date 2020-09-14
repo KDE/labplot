@@ -42,6 +42,7 @@ class GridDialog : public QDialog {
 
 public:
 	explicit GridDialog(QWidget*);
+	~GridDialog() override;
 	void save(WorksheetView::GridSettings&);
 
 private:

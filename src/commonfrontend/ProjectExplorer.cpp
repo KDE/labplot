@@ -43,10 +43,13 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QPushButton>
-#include <QSignalMapper>
+#include <QToolButton>
 #include <QTreeView>
 #include <QVBoxLayout>
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -74,15 +77,12 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) :
 	layoutFilter->setSpacing(0);
 	layoutFilter->setContentsMargins(0, 0, 0, 0);
 
-	QLabel* lFilter = new QLabel(i18n("Search/Filter:"));
-	layoutFilter->addWidget(lFilter);
-
 	m_leFilter = new QLineEdit(m_frameFilter);
 	m_leFilter->setClearButtonEnabled(true);
-	m_leFilter->setPlaceholderText(i18n("Search/Filter text"));
+	m_leFilter->setPlaceholderText(i18n("Search/Filter"));
 	layoutFilter->addWidget(m_leFilter);
 
-	bFilterOptions = new QPushButton(m_frameFilter);
+	bFilterOptions = new QToolButton(m_frameFilter);
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
 	bFilterOptions->setCheckable(true);
 	layoutFilter->addWidget(bFilterOptions);
@@ -108,6 +108,20 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) :
 
 	connect(m_leFilter, &QLineEdit::textChanged, this, &ProjectExplorer::filterTextChanged);
 	connect(bFilterOptions, &QPushButton::toggled, this, &ProjectExplorer::toggleFilterOptionsMenu);
+}
+
+ProjectExplorer::~ProjectExplorer() {
+	// save the visible columns
+	QString status;
+	for (int i = 0; i < list_showColumnActions.size(); ++i) {
+		if (list_showColumnActions.at(i)->isChecked()) {
+			if (!status.isEmpty())
+				status += QLatin1Char(' ');
+			status += QString::number(i);
+		}
+	}
+	KConfigGroup group(KSharedConfig::openConfig(), QLatin1String("ProjectExplorer"));
+	group.writeEntry("VisibleColumns", status);
 }
 
 void ProjectExplorer::createActions() {
@@ -225,21 +239,44 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 
 	//create action for showing/hiding the columns in the tree.
 	//this is done here since the number of columns is  not available in createActions() yet.
-	if (list_showColumnActions.size() == 0) {
-		showColumnsSignalMapper = new QSignalMapper(this);
+	if (list_showColumnActions.isEmpty()) {
+		//read the status of the column actions if available
+		KConfigGroup group(KSharedConfig::openConfig(), QLatin1String("ProjectExplorer"));
+		const QString& status = group.readEntry(QLatin1String("VisibleColumns"), QString());
+		QVector<int> checkedActions;
+		if (!status.isEmpty()) {
+			QStringList strList = status.split(QLatin1Char(' '));
+			for (int i = 0; i < strList.size(); ++i)
+				checkedActions << strList.at(i).toInt();
+		}
+
+		if (checkedActions.size() != m_treeView->model()->columnCount()) {
+			showAllColumnsAction->setEnabled(true);
+			showAllColumnsAction->setChecked(false);
+		} else {
+			showAllColumnsAction->setEnabled(false);
+			showAllColumnsAction->setChecked(true);
+		}
+
+		//create an action for every available column in the model
 		for (int i = 0; i < m_treeView->model()->columnCount(); i++) {
 			QAction* showColumnAction =  new QAction(treeModel->headerData(i, Qt::Horizontal).toString(), this);
 			showColumnAction->setCheckable(true);
-			showColumnAction->setChecked(true);
+
+			//restore the status, if available
+			if (!checkedActions.isEmpty()) {
+				if (checkedActions.indexOf(i) != -1)
+					showColumnAction->setChecked(true);
+				else
+					m_treeView->hideColumn(i);
+			} else
+				showColumnAction->setChecked(true);
+
 			list_showColumnActions.append(showColumnAction);
 
 			connect(showColumnAction, &QAction::triggered,
-					showColumnsSignalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-
-			showColumnsSignalMapper->setMapping(showColumnAction, i);
+					this, [=] { ProjectExplorer::toggleColumn(i); });
 		}
-		connect(showColumnsSignalMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped),
-				this, &ProjectExplorer::toggleColumn);
 	} else {
 		for (int i = 0; i < list_showColumnActions.size(); ++i) {
 			if (!list_showColumnActions.at(i)->isChecked())
@@ -253,7 +290,7 @@ void ProjectExplorer::setProject(Project* project) {
 	connect(project, &Project::requestSaveState, this, &ProjectExplorer::save);
 	connect(project, &Project::requestLoadState, this, &ProjectExplorer::load);
 	connect(project, &Project::requestNavigateTo, this, &ProjectExplorer::navigateTo);
-	connect(project, &Project::loaded, this, &ProjectExplorer::resizeHeader);
+	connect(project, &Project::loaded, this, &ProjectExplorer::projectLoaded);
 	m_project = project;
 
 	//for newly created projects, resize the header to fit the size of the header section names.
@@ -264,6 +301,10 @@ void ProjectExplorer::setProject(Project* project) {
 
 QModelIndex ProjectExplorer::currentIndex() const {
 	return m_treeView->currentIndex();
+}
+
+void ProjectExplorer::search() {
+	m_leFilter->setFocus();
 }
 
 /*!
@@ -351,7 +392,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			stream >> vec;
 			AbstractAspect* sourceAspect{nullptr};
 			if (!vec.isEmpty())
-				sourceAspect = (AbstractAspect*)vec.at(0);
+				sourceAspect = reinterpret_cast<AbstractAspect*>(vec.at(0));
 
 			if (!sourceAspect)
 				return false;
@@ -363,7 +404,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 
 			//accept only the events when the aspect being dragged is dropable onto the aspect under the cursor
 			//and the aspect under the cursor is not already the parent of the dragged aspect
-			AbstractAspect* destinationAspect = static_cast<AbstractAspect*>(index.internalPointer());
+			auto* destinationAspect = static_cast<AbstractAspect*>(index.internalPointer());
 			bool accept = sourceAspect->dropableOn().indexOf(destinationAspect->type()) != -1
 						&& sourceAspect->parentAspect() != destinationAspect;
 			event->setAccepted(accept);
@@ -381,16 +422,38 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 	return QObject::eventFilter(obj, event);
 }
 
+void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
+	if (event->matches(QKeySequence::Delete))
+		deleteSelected();
+	else if (event->key() == 32) {
+		auto* aspect = static_cast<AbstractAspect*>(m_treeView->currentIndex().internalPointer());
+		auto* we = dynamic_cast<WorksheetElement*>(aspect);
+		if (we)
+			we->setVisible(!we->isVisible());
+	}
+}
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
+/*!
+ * called after the project was loaded.
+ * resize the header of the view to adjust to the content
+ * and re-select the currently selected object to show
+ * its final properties in the dock widget after in Project::load() all
+ * pointers were restored, relative paths replaced by absolute, etc.
+ */
+void ProjectExplorer::projectLoaded() {
+	resizeHeader();
+	selectionChanged(m_treeView->selectionModel()->selection(), QItemSelection());
+}
 
 /*!
   expand the aspect \c aspect (the tree index corresponding to it) in the tree view
   and makes it visible and selected. Called when a new aspect is added to the project.
  */
 void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
-	if (m_project->isLoading())
+	if (m_project->isLoading() ||m_project->aspectAddedSignalSuppressed())
 		return;
 
 	//don't do anything if hidden aspects were added
@@ -423,11 +486,19 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 
 void ProjectExplorer::navigateTo(const QString& path) {
 	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	if (tree_model)
-		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(path));
+	if (tree_model) {
+		const QModelIndex& index = tree_model->modelIndexOfAspect(path);
+		m_treeView->scrollTo(index);
+		m_treeView->setCurrentIndex(index);
+		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		aspect->setSelected(true);
+	}
 }
 
 void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous) {
+	if (m_project->isLoading())
+		return;
+
 	Q_UNUSED(previous);
 	emit currentAspectChanged(static_cast<AbstractAspect*>(current.internalPointer()));
 }
@@ -575,6 +646,7 @@ void ProjectExplorer::selectIndex(const QModelIndex&  index) {
 		return;
 
 	if ( !m_treeView->selectionModel()->isSelected(index) ) {
+		m_changeSelectionFromView = true;
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 		m_treeView->setExpanded(index, true);
 		m_treeView->scrollTo(index);
@@ -585,8 +657,10 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index) {
 	if (m_project->isLoading())
 		return;
 
-	if ( m_treeView->selectionModel()->isSelected(index) )
+	if ( m_treeView->selectionModel()->isSelected(index) ) {
+		m_changeSelectionFromView = true;
 		m_treeView->selectionModel()->select(index, QItemSelectionModel::Deselect | QItemSelectionModel::Rows);
+	}
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
@@ -618,6 +692,16 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	}
 
 	emit selectedAspectsChanged(selectedAspects);
+
+	//emitting the signal above is done to show the properties widgets for the selected aspect(s).
+	//with this the project explorer looses the focus and don't react on the key events like DEL key press, etc.
+	//If we explicitely select an item in the project explorer (not via a selection in the view), we want to keep the focus here.
+	//TODO: after the focus is set again we react on DEL in the event filter, but navigation with the arrow keys in the table
+	//is still not possible. Looks like we need to set the selection again...
+	if (!m_changeSelectionFromView)
+		setFocus();
+	else
+		m_changeSelectionFromView = false;
 }
 
 /*!
@@ -626,9 +710,8 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 void ProjectExplorer::updateSelectedAspects() {
 	QModelIndexList items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	for (const QModelIndex& index : items) {
+	for (const QModelIndex& index : items)
 		selectedAspects << static_cast<AbstractAspect*>(index.internalPointer());
-	}
 
 	emit selectedAspectsChanged(selectedAspects);
 }
@@ -651,19 +734,51 @@ void ProjectExplorer::deleteSelected() {
 		return;
 
 
-	int rc = KMessageBox::warningYesNo( this,
-	                                    i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", items.size()/4),
-	                                    i18np("Delete selected object", "Delete selected objects", items.size()/4));
+	//determine all selected aspect
+	QVector<AbstractAspect*> aspects;
+	for (int i = 0; i < items.size()/4; ++i) {
+		const QModelIndex& index = items.at(i*4);
+		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		aspects << aspect;
+	}
+
+	QString msg;
+	if (aspects.size() > 1)
+		msg = i18n("Do you really want to delete the selected %1 objects?", aspects.size());
+	else
+		 msg = i18n("Do you really want to delete %1?", aspects.constFirst()->name());
+
+	int rc = KMessageBox::warningYesNo(this, msg, i18np("Delete selected object", "Delete selected objects", aspects.size()));
 
 	if (rc == KMessageBox::No)
 		return;
 
 	m_project->beginMacro(i18np("Project Explorer: delete %1 selected object", "Project Explorer: delete %1 selected objects", items.size()/4));
-	for (int i = 0; i < items.size()/4; ++i) {
-		const QModelIndex& index = items.at(i*4);
-		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		aspect->remove();
+
+	//determine aspects to be deleted:
+	//it's enough to delete parent items in the selection only,
+	//skip all selected aspects where one of the parents is also in the selection
+	//for example selected columns of a selected spreadsheet, etc.
+	QVector<AbstractAspect*> aspectsToDelete;
+	for (auto* aspect : aspects) {
+		auto* parent = aspect->parentAspect();
+		int parentSelected = false;
+		while (parent) {
+			if (aspects.indexOf(parent) != -1) {
+				parentSelected = true;
+				break;
+			}
+
+			parent = parent->parentAspect();
+		}
+
+		if (!parentSelected)
+			aspectsToDelete << aspect; //parent is not in the selection
 	}
+
+	for (auto* aspect : aspectsToDelete)
+		aspect->remove();
+
 	m_project->endMacro();
 }
 
@@ -694,7 +809,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 		expanded.push_back(-1);
 
 	int row = 0;
-	for (const auto* aspect : m_project->children(AspectType::AbstractAspect, AbstractAspect::Recursive)) {
+	for (const auto* aspect : m_project->children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive)) {
 		const QModelIndex& index = model->modelIndexOfAspect(aspect);
 
 		const auto* part = dynamic_cast<const AbstractPart*>(aspect);
@@ -754,7 +869,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
  */
 bool ProjectExplorer::load(XmlStreamReader* reader) {
 	const AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	const auto aspects = m_project->children(AspectType::AbstractAspect, AbstractAspect::Recursive);
+	const auto aspects = m_project->children(AspectType::AbstractAspect, AbstractAspect::ChildIndexFlag::Recursive);
 
 	bool expandedItem = false;
 	bool selectedItem = false;
@@ -798,13 +913,14 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			viewItem = false;
 			currentItem = true;
 		} else if (reader->name() == "row") {
+			//we need to read the attributes first and before readElementText() otherwise they are empty
 			attribs = reader->attributes();
 			row = reader->readElementText().toInt();
 
 			QModelIndex index;
 			if (row == -1)
 				index = model->modelIndexOfAspect(m_project); //-1 corresponds to the project-item (s.a. ProjectExplorer::save())
-			else if (row >= aspects.size())
+			else if (row >= aspects.size() || row < 0 /* checking for <0 to protect against wrong values in the XML */)
 				continue;
 			else
 				index = model->modelIndexOfAspect(aspects.at(row));
@@ -816,6 +932,9 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			else if (currentItem)
 				currentIndex = index;
 			else if (viewItem) {
+				if (row < 0) //should never happen, but we need to handle the corrupted file
+					continue;
+
 				auto* part = dynamic_cast<AbstractPart*>(aspects.at(row));
 				if (!part)
 					continue; //TODO: add error/warning message here?
@@ -873,6 +992,8 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 
 	m_treeView->setCurrentIndex(currentIndex);
 	m_treeView->scrollTo(currentIndex);
+	auto* aspect = static_cast<AbstractAspect*>(currentIndex.internalPointer());
+	emit currentAspectChanged(aspect);
 
 	//when setting the current index above it gets expanded, collapse all parent indices if they are were not expanded when saved
 	collapseParents(currentIndex, expanded);

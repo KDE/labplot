@@ -40,7 +40,7 @@ class BinaryFilter : public AbstractFileFilter {
 
 public:
 	//TODO; use ColumnMode when it supports all these types
-	enum DataType {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64};
+	enum class DataType {INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64, REAL32, REAL64};
 
 	BinaryFilter();
 	~BinaryFilter() override;
@@ -52,8 +52,8 @@ public:
 
 	// read data from any device
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
-	void readDataFromFile(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace) override;
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	void readDataFromFile(const QString& fileName, AbstractDataSource*, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
 	QVector<QStringList> preview(const QString& fileName, int lines);
 

@@ -2,7 +2,7 @@
     File                 : CartesianPlotLegendDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2020 by Alexander Semke (alexander.semke@web.de)
     Description          : widget for cartesian plot legend properties
 
  ***************************************************************************/
@@ -56,9 +56,10 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 	//"Title"-tab
 	auto hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget = new LabelWidget(ui.tabTitle);
-	labelWidget->setNoGeometryMode(true);
+	labelWidget->setGeometryAvailable(false);
+	labelWidget->setBorderAvailable(false);
 	hboxLayout->addWidget(labelWidget);
-	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setContentsMargins(2, 2, 2, 2);
 	hboxLayout->setSpacing(2);
 
 	//"Background"-tab
@@ -71,67 +72,92 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 		if (!layout)
 			continue;
 
-		layout->setContentsMargins(2,2,2,2);
+		layout->setContentsMargins(2, 2, 2, 2);
 		layout->setHorizontalSpacing(2);
 		layout->setVerticalSpacing(2);
 	}
+
+	updateLocale();
 
 	//SIGNAL/SLOT
 
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CartesianPlotLegendDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &CartesianPlotLegendDock::commentChanged);
-	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( ui.kfrLabelFont, SIGNAL(fontSelected(QFont)), this, SLOT(labelFontChanged(QFont)) );
-	connect( ui.kcbLabelColor, SIGNAL(changed(QColor)), this, SLOT(labelColorChanged(QColor)) );
-	connect( ui.cbOrder, SIGNAL(currentIndexChanged(int)), this, SLOT(labelOrderChanged(int)) );
-	connect( ui.sbLineSymbolWidth, SIGNAL(valueChanged(double)), this, SLOT(lineSymbolWidthChanged(double)) );
+	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotLegendDock::visibilityChanged);
+	connect(ui.kfrLabelFont, &KFontRequester::fontSelected, this, &CartesianPlotLegendDock::labelFontChanged);
+	connect(ui.kcbLabelColor, &KColorButton::changed, this, &CartesianPlotLegendDock::labelColorChanged);
+	connect(ui.cbOrder, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::labelOrderChanged);
+	connect(ui.sbLineSymbolWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::lineSymbolWidthChanged);
 
-	connect( ui.cbPositionX, SIGNAL(currentIndexChanged(int)), this, SLOT(positionXChanged(int)) );
-	connect( ui.cbPositionY, SIGNAL(currentIndexChanged(int)), this, SLOT(positionYChanged(int)) );
-	connect( ui.sbPositionX, SIGNAL(valueChanged(double)), this, SLOT(customPositionXChanged(double)) );
-	connect( ui.sbPositionY, SIGNAL(valueChanged(double)), this, SLOT(customPositionYChanged(double)) );
+	connect(ui.cbPositionX, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::positionXChanged);
+	connect(ui.cbPositionY, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::positionYChanged);
+	connect(ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::customPositionYChanged);
 
-	connect( ui.sbRotation, SIGNAL(valueChanged(int)), this, SLOT(rotationChanged(int)) );
+	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::rotationChanged);
 
 	//Background
-	connect( ui.cbBackgroundType, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundTypeChanged(int)) );
-	connect( ui.cbBackgroundColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundColorStyleChanged(int)) );
-	connect( ui.cbBackgroundImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundImageStyleChanged(int)) );
-	connect( ui.cbBackgroundBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(backgroundBrushStyleChanged(int)) );
-	connect( ui.bOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()) );
-	connect( ui.leBackgroundFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
-	connect( ui.leBackgroundFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged()) );
-	connect( ui.kcbBackgroundFirstColor, SIGNAL(changed(QColor)), this, SLOT(backgroundFirstColorChanged(QColor)) );
-	connect( ui.kcbBackgroundSecondColor, SIGNAL(changed(QColor)), this, SLOT(backgroundSecondColorChanged(QColor)) );
-	connect( ui.sbBackgroundOpacity, SIGNAL(valueChanged(int)), this, SLOT(backgroundOpacityChanged(int)) );
+	connect(ui.cbBackgroundType, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::backgroundTypeChanged);
+	connect(ui.cbBackgroundColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::backgroundColorStyleChanged);
+	connect(ui.cbBackgroundImageStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::backgroundImageStyleChanged);
+	connect(ui.cbBackgroundBrushStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::backgroundBrushStyleChanged);
+	connect(ui.bOpen, &QPushButton::clicked, this, &CartesianPlotLegendDock::selectFile);
+	connect(ui.leBackgroundFileName, &QLineEdit::returnPressed, this, &CartesianPlotLegendDock::fileNameChanged);
+	connect(ui.leBackgroundFileName, &QLineEdit::textChanged, this, &CartesianPlotLegendDock::fileNameChanged);
+	connect(ui.kcbBackgroundFirstColor, &KColorButton::changed, this, &CartesianPlotLegendDock::backgroundFirstColorChanged);
+	connect(ui.kcbBackgroundSecondColor, &KColorButton::changed, this, &CartesianPlotLegendDock::backgroundSecondColorChanged);
+	connect(ui.sbBackgroundOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::backgroundOpacityChanged);
 
 	//Border
-	connect( ui.cbBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(borderStyleChanged(int)) );
-	connect( ui.kcbBorderColor, SIGNAL(changed(QColor)), this, SLOT(borderColorChanged(QColor)) );
-	connect( ui.sbBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(borderWidthChanged(double)) );
-	connect( ui.sbBorderCornerRadius, SIGNAL(valueChanged(double)), this, SLOT(borderCornerRadiusChanged(double)) );
-	connect( ui.sbBorderOpacity, SIGNAL(valueChanged(int)), this, SLOT(borderOpacityChanged(int)) );
+	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &CartesianPlotLegendDock::borderStyleChanged);
+	connect(ui.kcbBorderColor, &KColorButton::changed, this, &CartesianPlotLegendDock::borderColorChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::borderWidthChanged);
+	connect(ui.sbBorderCornerRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::borderCornerRadiusChanged);
+	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::borderOpacityChanged);
 
 	//Layout
-	connect( ui.sbLayoutTopMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutTopMarginChanged(double)) );
-	connect( ui.sbLayoutBottomMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutBottomMarginChanged(double)) );
-	connect( ui.sbLayoutLeftMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutLeftMarginChanged(double)) );
-	connect( ui.sbLayoutRightMargin, SIGNAL(valueChanged(double)), this, SLOT(layoutRightMarginChanged(double)) );
-	connect( ui.sbLayoutHorizontalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutHorizontalSpacingChanged(double)) );
-	connect( ui.sbLayoutVerticalSpacing, SIGNAL(valueChanged(double)), this, SLOT(layoutVerticalSpacingChanged(double)) );
-	connect( ui.sbLayoutColumnCount, SIGNAL(valueChanged(int)), this, SLOT(layoutColumnCountChanged(int)) );
+	connect(ui.sbLayoutTopMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutTopMarginChanged);
+	connect(ui.sbLayoutBottomMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutBottomMarginChanged);
+	connect(ui.sbLayoutLeftMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutLeftMarginChanged);
+	connect(ui.sbLayoutRightMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutRightMarginChanged);
+	connect(ui.sbLayoutHorizontalSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutHorizontalSpacingChanged);
+	connect(ui.sbLayoutVerticalSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutVerticalSpacingChanged);
+	connect(ui.sbLayoutColumnCount, QOverload<int>::of(&QSpinBox::valueChanged),
+			this, &CartesianPlotLegendDock::layoutColumnCountChanged);
 
 	//template handler
 	auto* frame = new QFrame(this);
 	auto* layout = new QHBoxLayout(frame);
 	layout->setContentsMargins(0, 11, 0, 11);
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::CartesianPlotLegend);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CartesianPlotLegend);
 	layout->addWidget(templateHandler);
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CartesianPlotLegendDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CartesianPlotLegendDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &CartesianPlotLegendDock::info);
 
 	ui.verticalLayout->addWidget(frame);
 
@@ -143,7 +169,7 @@ void CartesianPlotLegendDock::init() {
 }
 
 void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	m_legendList = list;
 	m_legend = list.first();
 	m_aspect = list.first();
@@ -190,50 +216,117 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 
 	//SIGNALs/SLOTs
 	//General
-	connect( m_legend, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(legendDescriptionChanged(const AbstractAspect*)) );
-	connect( m_legend, SIGNAL(labelFontChanged(QFont&)), this, SLOT(legendLabelFontChanged(QFont&)) );
-	connect( m_legend, SIGNAL(labelColorChanged(QColor&)), this, SLOT(legendLabelColorChanged(QColor&)) );
-	connect( m_legend, SIGNAL(labelColumnMajorChanged(bool)), this, SLOT(legendLabelOrderChanged(bool)) );
-	connect( m_legend, SIGNAL(positionChanged(CartesianPlotLegend::PositionWrapper)),
-			 this, SLOT(legendPositionChanged(CartesianPlotLegend::PositionWrapper)) );
-	connect( m_legend, SIGNAL(rotationAngleChanged(qreal)), this, SLOT(legendRotationAngleChanged(qreal)) );
-	connect( m_legend, SIGNAL(lineSymbolWidthChanged(float)), this, SLOT(legendLineSymbolWidthChanged(float)) );
-	connect(m_legend, SIGNAL(visibilityChanged(bool)), this, SLOT(legendVisibilityChanged(bool)));
+	connect(m_legend, &AbstractAspect::aspectDescriptionChanged, this, &CartesianPlotLegendDock::legendDescriptionChanged);
+	connect(m_legend, &CartesianPlotLegend::labelFontChanged, this, &CartesianPlotLegendDock::legendLabelFontChanged);
+	connect(m_legend, &CartesianPlotLegend::labelColorChanged, this, &CartesianPlotLegendDock::legendLabelColorChanged);
+	connect(m_legend, &CartesianPlotLegend::labelColumnMajorChanged, this, &CartesianPlotLegendDock::legendLabelOrderChanged);
+	connect(m_legend, QOverload<const CartesianPlotLegend::PositionWrapper&>::of(&CartesianPlotLegend::positionChanged),
+			this, &CartesianPlotLegendDock::legendPositionChanged);
+	connect(m_legend, &CartesianPlotLegend::rotationAngleChanged, this, &CartesianPlotLegendDock::legendRotationAngleChanged);
+	connect(m_legend, &CartesianPlotLegend::lineSymbolWidthChanged, this, &CartesianPlotLegendDock::legendLineSymbolWidthChanged);
+	connect(m_legend, &CartesianPlotLegend::visibilityChanged, this, &CartesianPlotLegendDock::legendVisibilityChanged);
 
 	//background
-	connect( m_legend, SIGNAL(backgroundTypeChanged(PlotArea::BackgroundType)), this, SLOT(legendBackgroundTypeChanged(PlotArea::BackgroundType)) );
-	connect( m_legend, SIGNAL(backgroundColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle)) );
-	connect( m_legend, SIGNAL(backgroundImageStyleChanged(PlotArea::BackgroundImageStyle)), this, SLOT(legendBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle)) );
-	connect( m_legend, SIGNAL(backgroundBrushStyleChanged(Qt::BrushStyle)), this, SLOT(legendBackgroundBrushStyleChanged(Qt::BrushStyle)) );
-	connect( m_legend, SIGNAL(backgroundFirstColorChanged(QColor&)), this, SLOT(legendBackgroundFirstColorChanged(QColor&)) );
-	connect( m_legend, SIGNAL(backgroundSecondColorChanged(QColor&)), this, SLOT(legendBackgroundSecondColorChanged(QColor&)) );
-	connect( m_legend, SIGNAL(backgroundFileNameChanged(QString&)), this, SLOT(legendBackgroundFileNameChanged(QString&)) );
-	connect( m_legend, SIGNAL(backgroundOpacityChanged(float)), this, SLOT(legendBackgroundOpacityChanged(float)) );
-	connect( m_legend, SIGNAL(borderPenChanged(QPen&)), this, SLOT(legendBorderPenChanged(QPen&)) );
-	connect( m_legend, SIGNAL(borderCornerRadiusChanged(float)), this, SLOT(legendBorderCornerRadiusChanged(float)) );
-	connect( m_legend, SIGNAL(borderOpacityChanged(float)), this, SLOT(legendBorderOpacityChanged(float)) );
+	connect(m_legend, &CartesianPlotLegend::backgroundTypeChanged, this, &CartesianPlotLegendDock::legendBackgroundTypeChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundColorStyleChanged, this, &CartesianPlotLegendDock::legendBackgroundColorStyleChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundImageStyleChanged, this, &CartesianPlotLegendDock::legendBackgroundImageStyleChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundBrushStyleChanged, this, &CartesianPlotLegendDock::legendBackgroundBrushStyleChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundFirstColorChanged, this, &CartesianPlotLegendDock::legendBackgroundFirstColorChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundSecondColorChanged, this, &CartesianPlotLegendDock::legendBackgroundSecondColorChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundFileNameChanged, this, &CartesianPlotLegendDock::legendBackgroundFileNameChanged);
+	connect(m_legend, &CartesianPlotLegend::backgroundOpacityChanged, this, &CartesianPlotLegendDock::legendBackgroundOpacityChanged);
+	connect(m_legend, &CartesianPlotLegend::borderPenChanged, this, &CartesianPlotLegendDock::legendBorderPenChanged);
+	connect(m_legend, &CartesianPlotLegend::borderCornerRadiusChanged, this, &CartesianPlotLegendDock::legendBorderCornerRadiusChanged);
+	connect(m_legend, &CartesianPlotLegend::borderOpacityChanged, this, &CartesianPlotLegendDock::legendBorderOpacityChanged);
 
 	//layout
-	connect(m_legend,SIGNAL(layoutTopMarginChanged(float)),this,SLOT(legendLayoutTopMarginChanged(float)));
-	connect(m_legend,SIGNAL(layoutBottomMarginChanged(float)),this,SLOT(legendLayoutBottomMarginChanged(float)));
-	connect(m_legend,SIGNAL(layoutLeftMarginChanged(float)),this,SLOT(legendLayoutLeftMarginChanged(float)));
-	connect(m_legend,SIGNAL(layoutRightMarginChanged(float)),this,SLOT(legendLayoutRightMarginChanged(float)));
-	connect(m_legend,SIGNAL(layoutVerticalSpacingChanged(float)),this,SLOT(legendLayoutVerticalSpacingChanged(float)));
-	connect(m_legend,SIGNAL(layoutHorizontalSpacingChanged(float)),this,SLOT(legendLayoutHorizontalSpacingChanged(float)));
-	connect(m_legend,SIGNAL(layoutColumnCountChanged(int)),this,SLOT(legendLayoutColumnCountChanged(int)));
-
-	m_initializing = false;
+	connect(m_legend, &CartesianPlotLegend::layoutTopMarginChanged, this, &CartesianPlotLegendDock::legendLayoutTopMarginChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutBottomMarginChanged, this, &CartesianPlotLegendDock::legendLayoutBottomMarginChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutLeftMarginChanged, this, &CartesianPlotLegendDock::legendLayoutLeftMarginChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutRightMarginChanged, this, &CartesianPlotLegendDock::legendLayoutRightMarginChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutVerticalSpacingChanged, this, &CartesianPlotLegendDock::legendLayoutVerticalSpacingChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutHorizontalSpacingChanged, this, &CartesianPlotLegendDock::legendLayoutHorizontalSpacingChanged);
+	connect(m_legend, &CartesianPlotLegend::layoutColumnCountChanged, this, &CartesianPlotLegendDock::legendLayoutColumnCountChanged);
 }
 
 void CartesianPlotLegendDock::activateTitleTab() const{
 	ui.tabWidget->setCurrentWidget(ui.tabTitle);
 }
 
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void CartesianPlotLegendDock::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbLineSymbolWidth->setLocale(numberLocale);
+	ui.sbPositionX->setLocale(numberLocale);
+	ui.sbPositionY->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
+	ui.sbBorderCornerRadius->setLocale(numberLocale);
+	ui.sbLayoutTopMargin->setLocale(numberLocale);
+	ui.sbLayoutBottomMargin->setLocale(numberLocale);
+	ui.sbLayoutLeftMargin->setLocale(numberLocale);
+	ui.sbLayoutRightMargin->setLocale(numberLocale);
+}
+
+void CartesianPlotLegendDock::updateUnits() {
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", static_cast<int>(Units::Metric));
+	if (units == m_units)
+		return;
+
+	m_units = units;
+	Lock lock(m_initializing);
+	QString suffix;
+	if (m_units == Units::Metric) {
+		//convert from imperial to metric
+		m_worksheetUnit = Worksheet::Unit::Centimeter;
+		suffix = QLatin1String(" cm");
+		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value()*2.54);
+		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
+		ui.sbPositionY->setValue(ui.sbPositionY->value()*2.54);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value()*2.54);
+		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value()*2.54);
+		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value()*2.54);
+		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value()*2.54);
+		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value()*2.54);
+		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value()*2.54);
+		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value()*2.54);
+	} else {
+		//convert from metric to imperial
+		m_worksheetUnit = Worksheet::Unit::Inch;
+		suffix = QLatin1String(" in");
+		ui.sbLineSymbolWidth->setValue(ui.sbLineSymbolWidth->value()/2.54);
+		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);
+		ui.sbPositionY->setValue(ui.sbPositionY->value()/2.54);
+		ui.sbBorderCornerRadius->setValue(ui.sbBorderCornerRadius->value()/2.54);
+		ui.sbLayoutTopMargin->setValue(ui.sbLayoutTopMargin->value()/2.54);
+		ui.sbLayoutBottomMargin->setValue(ui.sbLayoutBottomMargin->value()/2.54);
+		ui.sbLayoutLeftMargin->setValue(ui.sbLayoutLeftMargin->value()/2.54);
+		ui.sbLayoutRightMargin->setValue(ui.sbLayoutRightMargin->value()/2.54);
+		ui.sbLayoutHorizontalSpacing->setValue(ui.sbLayoutHorizontalSpacing->value()/2.54);
+		ui.sbLayoutVerticalSpacing->setValue(ui.sbLayoutVerticalSpacing->value()/2.54);
+	}
+
+	ui.sbLineSymbolWidth->setSuffix(suffix);
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
+	ui.sbBorderCornerRadius->setSuffix(suffix);
+	ui.sbLayoutTopMargin->setSuffix(suffix);
+	ui.sbLayoutBottomMargin->setSuffix(suffix);
+	ui.sbLayoutLeftMargin->setSuffix(suffix);
+	ui.sbLayoutRightMargin->setSuffix(suffix);
+	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
+	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
+
+	labelWidget->updateUnits();
+}
+
 //************************************************************
 //** SLOTs for changes triggered in CartesianPlotLegendDock **
 //************************************************************
 void CartesianPlotLegendDock::retranslateUi() {
-	m_initializing = true;
+	Lock lock(m_initializing);
 
 	ui.cbBackgroundType->addItem(i18n("Color"));
 	ui.cbBackgroundType->addItem(i18n("Image"));
@@ -268,7 +361,22 @@ void CartesianPlotLegendDock::retranslateUi() {
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
 
-	m_initializing = false;
+	QString suffix;
+	if (m_units == Units::Metric)
+		suffix = QLatin1String(" cm");
+	else
+		suffix = QLatin1String(" in");
+
+	ui.sbLineSymbolWidth->setSuffix(suffix);
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
+	ui.sbBorderCornerRadius->setSuffix(suffix);
+	ui.sbLayoutTopMargin->setSuffix(suffix);
+	ui.sbLayoutBottomMargin->setSuffix(suffix);
+	ui.sbLayoutLeftMargin->setSuffix(suffix);
+	ui.sbLayoutRightMargin->setSuffix(suffix);
+	ui.sbLayoutHorizontalSpacing->setSuffix(suffix);
+	ui.sbLayoutVerticalSpacing->setSuffix(suffix);
 }
 
 // "General"-tab
@@ -286,7 +394,7 @@ void CartesianPlotLegendDock::labelFontChanged(const QFont& font) {
 		return;
 
 	QFont labelsFont = font;
-	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	labelsFont.setPixelSize( Worksheet::convertToSceneUnits(font.pointSizeF(), Worksheet::Unit::Point) );
 	for (auto* legend : m_legendList)
 		legend->setLabelFont(labelsFont);
 }
@@ -313,7 +421,7 @@ void CartesianPlotLegendDock::lineSymbolWidthChanged(double value) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLineSymbolWidth(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+		legend->setLineSymbolWidth(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 }
 
 /*!
@@ -361,7 +469,7 @@ void CartesianPlotLegendDock::customPositionXChanged(double value) {
 		return;
 
 	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	position.point.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 	for (auto* legend : m_legendList)
 		legend->setPosition(position);
 }
@@ -371,7 +479,7 @@ void CartesianPlotLegendDock::customPositionYChanged(double value) {
 		return;
 
 	CartesianPlotLegend::PositionWrapper position = m_legend->position();
-	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+	position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 	for (auto* legend : m_legendList)
 		legend->setPosition(position);
 }
@@ -388,7 +496,7 @@ void CartesianPlotLegendDock::rotationChanged(int value) {
 void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 	const auto type = (PlotArea::BackgroundType)index;
 
-	if (type == PlotArea::Color) {
+	if (type == PlotArea::BackgroundType::Color) {
 		ui.lBackgroundColorStyle->show();
 		ui.cbBackgroundColorStyle->show();
 		ui.lBackgroundImageStyle->hide();
@@ -404,7 +512,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.kcbBackgroundFirstColor->show();
 
 		auto style = (PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
-		if (style == PlotArea::SingleColor) {
+		if (style == PlotArea::BackgroundColorStyle::SingleColor) {
 			ui.lBackgroundFirstColor->setText(i18n("Color:"));
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
@@ -413,7 +521,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
-	} else if (type == PlotArea::Image) {
+	} else if (type == PlotArea::BackgroundType::Image) {
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
 		ui.lBackgroundImageStyle->show();
@@ -428,7 +536,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.kcbBackgroundFirstColor->hide();
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
-	} else if (type == PlotArea::Pattern) {
+	} else if (type == PlotArea::BackgroundType::Pattern) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
@@ -456,7 +564,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 void CartesianPlotLegendDock::backgroundColorStyleChanged(int index) {
 	auto style = (PlotArea::BackgroundColorStyle)index;
 
-	if (style == PlotArea::SingleColor) {
+	if (style == PlotArea::BackgroundColorStyle::SingleColor) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
@@ -519,6 +627,8 @@ void CartesianPlotLegendDock::selectFile() {
 	QString formats;
 	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
 		QString f = "*." + QString(format.constData());
+		if (f == QLatin1String("*.svg"))
+			continue;
 		formats.isEmpty() ? formats += f : formats += ' ' + f;
 	}
 
@@ -526,7 +636,7 @@ void CartesianPlotLegendDock::selectFile() {
 	if (path.isEmpty())
 		return; //cancel was clicked in the file-dialog
 
-	int pos = path.lastIndexOf(QDir::separator());
+	int pos = path.lastIndexOf(QLatin1String("/"));
 	if (pos != -1) {
 		QString newDir = path.left(pos);
 		if (newDir != dir)
@@ -543,11 +653,9 @@ void CartesianPlotLegendDock::fileNameChanged() {
 	if (m_initializing)
 		return;
 
-	QString fileName = ui.leBackgroundFileName->text();
-	if (!fileName.isEmpty() && !QFile::exists(fileName))
-		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leBackgroundFileName->setStyleSheet("");
+	const QString& fileName = ui.leBackgroundFileName->text();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leBackgroundFileName, invalid);
 
 	for (auto* legend : m_legendList)
 		legend->setBackgroundFileName(fileName);
@@ -599,7 +707,7 @@ void CartesianPlotLegendDock::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* legend : m_legendList) {
 		pen = legend->borderPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		legend->setBorderPen(pen);
 	}
 }
@@ -609,14 +717,14 @@ void CartesianPlotLegendDock::borderCornerRadiusChanged(double value) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
+		legend->setBorderCornerRadius(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::borderOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	float opacity = (float)value/100.;
+	double opacity = (double)value/100.;
 	for (auto* legend : m_legendList)
 		legend->setBorderOpacity(opacity);
 }
@@ -627,7 +735,7 @@ void CartesianPlotLegendDock::layoutTopMarginChanged(double margin) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		legend->setLayoutTopMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutBottomMarginChanged(double margin) {
@@ -635,7 +743,7 @@ void CartesianPlotLegendDock::layoutBottomMarginChanged(double margin) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		legend->setLayoutBottomMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutLeftMarginChanged(double margin) {
@@ -643,7 +751,7 @@ void CartesianPlotLegendDock::layoutLeftMarginChanged(double margin) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		legend->setLayoutLeftMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutRightMarginChanged(double margin) {
@@ -651,7 +759,7 @@ void CartesianPlotLegendDock::layoutRightMarginChanged(double margin) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, Worksheet::Centimeter));
+		legend->setLayoutRightMargin(Worksheet::convertToSceneUnits(margin, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutHorizontalSpacingChanged(double spacing) {
@@ -659,7 +767,7 @@ void CartesianPlotLegendDock::layoutHorizontalSpacingChanged(double spacing) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
+		legend->setLayoutHorizontalSpacing(Worksheet::convertToSceneUnits(spacing, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutVerticalSpacingChanged(double spacing) {
@@ -667,7 +775,7 @@ void CartesianPlotLegendDock::layoutVerticalSpacingChanged(double spacing) {
 		return;
 
 	for (auto* legend : m_legendList)
-		legend->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, Worksheet::Centimeter));
+		legend->setLayoutVerticalSpacing(Worksheet::convertToSceneUnits(spacing, m_worksheetUnit));
 }
 
 void CartesianPlotLegendDock::layoutColumnCountChanged(int count) {
@@ -702,7 +810,7 @@ void CartesianPlotLegendDock::legendLabelFontChanged(QFont& font) {
 	m_initializing = true;
 	//we need to set the font size in points for KFontRequester
 	QFont f(font);
-	f.setPointSizeF( Worksheet::convertFromSceneUnits(f.pixelSize(), Worksheet::Point) );
+	f.setPointSizeF( Worksheet::convertFromSceneUnits(f.pixelSize(), Worksheet::Unit::Point) );
 	ui.kfrLabelFont->setFont(f);
 	m_initializing = false;
 }
@@ -724,17 +832,17 @@ void CartesianPlotLegendDock::legendLabelOrderChanged(bool b) {
 
 void CartesianPlotLegendDock::legendLineSymbolWidthChanged(float value) {
 	m_initializing = true;
-	ui.sbLineSymbolWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLineSymbolWidth->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 
 void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::PositionWrapper& position) {
 	m_initializing = true;
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
-	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
-	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
+	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
+	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
 	m_initializing = false;
 }
 
@@ -753,19 +861,19 @@ void CartesianPlotLegendDock::legendVisibilityChanged(bool on) {
 //Background
 void CartesianPlotLegendDock::legendBackgroundTypeChanged(PlotArea::BackgroundType type) {
 	m_initializing = true;
-	ui.cbBackgroundType->setCurrentIndex(type);
+	ui.cbBackgroundType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle style) {
 	m_initializing = true;
-	ui.cbBackgroundColorStyle->setCurrentIndex(style);
+	ui.cbBackgroundColorStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle style) {
 	m_initializing = true;
-	ui.cbBackgroundImageStyle->setCurrentIndex(style);
+	ui.cbBackgroundImageStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
 
@@ -810,13 +918,13 @@ void CartesianPlotLegendDock::legendBorderPenChanged(QPen& pen) {
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
 	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendBorderCornerRadiusChanged(float value) {
 	m_initializing = true;
-	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
@@ -829,37 +937,37 @@ void CartesianPlotLegendDock::legendBorderOpacityChanged(float opacity) {
 //Layout
 void CartesianPlotLegendDock::legendLayoutTopMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutBottomMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutLeftMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutRightMarginChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutVerticalSpacingChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutHorizontalSpacingChanged(float value) {
 	m_initializing = true;
-	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Centimeter));
+	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
@@ -878,7 +986,7 @@ void CartesianPlotLegendDock::load() {
 	//Format
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelFont->setFont(font);
 
 	ui.kcbLabelColor->setColor( m_legend->labelColor() );
@@ -888,13 +996,13 @@ void CartesianPlotLegendDock::load() {
 	else
 		ui.cbOrder->setCurrentIndex(1); //row major
 
-	ui.sbLineSymbolWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter) );
+	ui.sbLineSymbolWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit) );
 
 	//Geometry
-	ui.cbPositionX->setCurrentIndex(m_legend->position().horizontalPosition);
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.x(), Worksheet::Centimeter) );
-	ui.cbPositionY->setCurrentIndex(m_legend->position().verticalPosition);
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.y(), Worksheet::Centimeter) );
+	ui.cbPositionX->setCurrentIndex(static_cast<int>(m_legend->position().horizontalPosition));
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.x(), m_worksheetUnit) );
+	ui.cbPositionY->setCurrentIndex(static_cast<int>(m_legend->position().verticalPosition));
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.y(), m_worksheetUnit) );
 	ui.sbRotation->setValue(m_legend->rotationAngle());
 
 	ui.chkVisible->setChecked( m_legend->isVisible() );
@@ -910,25 +1018,24 @@ void CartesianPlotLegendDock::load() {
 	ui.sbBackgroundOpacity->setValue( qRound(m_legend->backgroundOpacity()*100.0) );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
-	if (!m_legend->backgroundFileName().isEmpty() && !QFile::exists(m_legend->backgroundFileName()))
-		ui.leBackgroundFileName->setStyleSheet("QLineEdit{background:red;}");
-	else
-		ui.leBackgroundFileName->setStyleSheet("");
+	const QString& fileName = m_legend->backgroundFileName();
+	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
+	GuiTools::highlight(ui.leBackgroundFileName, invalid);
 
 	//Border
 	ui.kcbBorderColor->setColor( m_legend->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_legend->borderPen().style() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->borderPen().widthF(), Worksheet::Point) );
-	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_legend->borderCornerRadius(), Worksheet::Centimeter) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->borderPen().widthF(), Worksheet::Unit::Point) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_legend->borderCornerRadius(), m_worksheetUnit) );
 	ui.sbBorderOpacity->setValue( qRound(m_legend->borderOpacity()*100.0) );
 
 	// Layout
-	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), Worksheet::Centimeter) );
-	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), Worksheet::Centimeter) );
-	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), Worksheet::Centimeter) );
+	ui.sbLayoutTopMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit) );
+	ui.sbLayoutBottomMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), m_worksheetUnit) );
+	ui.sbLayoutLeftMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), m_worksheetUnit) );
+	ui.sbLayoutRightMargin->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), m_worksheetUnit) );
+	ui.sbLayoutHorizontalSpacing->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), m_worksheetUnit) );
+	ui.sbLayoutVerticalSpacing->setValue( Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit) );
 
 	ui.sbLayoutColumnCount->setValue( m_legend->layoutColumnCount() );
 
@@ -940,7 +1047,7 @@ void CartesianPlotLegendDock::load() {
 void CartesianPlotLegendDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
-	int index = config.name().lastIndexOf(QDir::separator());
+	int index = config.name().lastIndexOf(QLatin1String("/"));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
@@ -965,7 +1072,7 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	//Format
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Point)) );
+	font.setPointSizeF( qRound(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelFont->setFont( group.readEntry("LabelFont", font) );
 
 	ui.kcbLabelColor->setColor( group.readEntry("LabelColor", m_legend->labelColor()) );
@@ -976,14 +1083,13 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	else
 		ui.cbOrder->setCurrentIndex(1); //row major
 
-	ui.sbLineSymbolWidth->setValue(group.readEntry("LineSymbolWidth",
-													Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), Worksheet::Centimeter)) );
+	ui.sbLineSymbolWidth->setValue(group.readEntry("LineSymbolWidth", Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit)) );
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_legend->position().horizontalPosition ) );
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_legend->position().point.x()),Worksheet::Centimeter) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_legend->position().point.x()),m_worksheetUnit) );
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_legend->position().verticalPosition ) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_legend->position().point.y()),Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_legend->position().point.y()),m_worksheetUnit) );
 	ui.sbRotation->setValue( group.readEntry("Rotation", (int) m_legend->rotationAngle() ) );
 
 	ui.chkVisible->setChecked( group.readEntry("Visible", m_legend->isVisible()) );
@@ -1001,23 +1107,17 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	//Border
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_legend->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_legend->borderPen().style()) );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Point) );
-	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_legend->borderCornerRadius()), Worksheet::Centimeter) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_legend->borderPen().widthF()), Worksheet::Unit::Point) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_legend->borderCornerRadius()), m_worksheetUnit) );
 	ui.sbBorderOpacity->setValue( qRound(group.readEntry("BorderOpacity", m_legend->borderOpacity())*100.0) );
 
 	// Layout
-	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin",
-												   Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin",
-													   Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin",
-													 Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin",
-													  Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), Worksheet::Centimeter)) );
-	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing",
-														    Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), Worksheet::Centimeter)) );
-	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing",
-														  Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), Worksheet::Centimeter)) );
+	ui.sbLayoutTopMargin->setValue(group.readEntry("LayoutTopMargin", Worksheet::convertFromSceneUnits(m_legend->layoutTopMargin(), m_worksheetUnit)) );
+	ui.sbLayoutBottomMargin->setValue(group.readEntry("LayoutBottomMargin", Worksheet::convertFromSceneUnits(m_legend->layoutBottomMargin(), m_worksheetUnit)) );
+	ui.sbLayoutLeftMargin->setValue(group.readEntry("LayoutLeftMargin", Worksheet::convertFromSceneUnits(m_legend->layoutLeftMargin(), m_worksheetUnit)) );
+	ui.sbLayoutRightMargin->setValue(group.readEntry("LayoutRightMargin", Worksheet::convertFromSceneUnits(m_legend->layoutRightMargin(), m_worksheetUnit)) );
+	ui.sbLayoutHorizontalSpacing->setValue(group.readEntry("LayoutHorizontalSpacing", Worksheet::convertFromSceneUnits(m_legend->layoutHorizontalSpacing(), m_worksheetUnit)) );
+	ui.sbLayoutVerticalSpacing->setValue(group.readEntry("LayoutVerticalSpacing", Worksheet::convertFromSceneUnits(m_legend->layoutVerticalSpacing(), m_worksheetUnit)) );
 	ui.sbLayoutColumnCount->setValue(group.readEntry("LayoutColumnCount", m_legend->layoutColumnCount()));
 
 	//Title
@@ -1035,17 +1135,17 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	//General-tab
 	//Format
 	QFont font = m_legend->labelFont();
-	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Point) );
+	font.setPointSizeF( Worksheet::convertFromSceneUnits(font.pointSizeF(), Worksheet::Unit::Point) );
 	group.writeEntry("LabelFont", font);
 	group.writeEntry("LabelColor", ui.kcbLabelColor->color());
 	group.writeEntry("LabelColumMajorOrder", ui.cbOrder->currentIndex() == 0);// true for "column major", false for "row major"
-	group.writeEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), Worksheet::Centimeter));
+	group.writeEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(ui.sbLineSymbolWidth->value(), m_worksheetUnit));
 
 	//Geometry
 	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
-	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),m_worksheetUnit) );
 	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
-	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),m_worksheetUnit) );
 	group.writeEntry("Rotation", ui.sbRotation->value());
 
 	group.writeEntry("Visible", ui.chkVisible->isChecked());
@@ -1063,17 +1163,17 @@ void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {
 	//Border
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
-	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), Worksheet::Centimeter));
+	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
+	group.writeEntry("BorderCornerRadius", Worksheet::convertToSceneUnits(ui.sbBorderCornerRadius->value(), m_worksheetUnit));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 
 	//Layout
-	group.writeEntry("LayoutTopMargin",Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutBottomMargin",Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutLeftMargin",Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutRightMargin",Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutVerticalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), Worksheet::Centimeter));
-	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), Worksheet::Centimeter));
+	group.writeEntry("LayoutTopMargin",Worksheet::convertToSceneUnits(ui.sbLayoutTopMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutBottomMargin",Worksheet::convertToSceneUnits(ui.sbLayoutBottomMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutLeftMargin",Worksheet::convertToSceneUnits(ui.sbLayoutLeftMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutRightMargin",Worksheet::convertToSceneUnits(ui.sbLayoutRightMargin->value(), m_worksheetUnit));
+	group.writeEntry("LayoutVerticalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutVerticalSpacing->value(), m_worksheetUnit));
+	group.writeEntry("LayoutHorizontalSpacing",Worksheet::convertToSceneUnits(ui.sbLayoutHorizontalSpacing->value(), m_worksheetUnit));
 	group.writeEntry("LayoutColumnCount", ui.sbLayoutColumnCount->value());
 
 	//Title

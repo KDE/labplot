@@ -40,15 +40,16 @@ public:
 
 	void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const override;
 
-	void setMaskingColor(const QColor&);
-	QColor maskingColor() const;
-
 	void setEditorData(QWidget*, const QModelIndex&) const override;
 	void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const override;
 
 private:
-	QColor m_maskingColor;
+	QColor m_maskingColor{0xff,0,0};
 	bool eventFilter(QObject*, QEvent*) override;
+
+signals:
+	void returnPressed();
+	void editorEntered();
 };
 
 #endif

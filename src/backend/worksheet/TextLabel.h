@@ -35,6 +35,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 
 #include <QPen>
+#include <QTextEdit>
 
 class QBrush;
 class QFont;
@@ -44,33 +45,37 @@ class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
+	enum class Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
 
-	enum HorizontalPosition {hPositionLeft, hPositionCenter, hPositionRight, hPositionCustom};
-	enum VerticalPosition {vPositionTop, vPositionCenter, vPositionBottom, vPositionCustom};
-
-	enum HorizontalAlignment {hAlignLeft, hAlignCenter, hAlignRight};
-	enum VerticalAlignment {vAlignTop, vAlignCenter, vAlignBottom};
-
-	enum BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
+	enum class BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
 			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
 
+	// The text is always in html format
 	struct TextWrapper {
 		TextWrapper() {}
-		TextWrapper(const QString& t, bool b) : text(t), teXUsed(b) {}
-		TextWrapper(const QString& t) : text(t) {}
+		TextWrapper(const QString& t, bool b, bool html): teXUsed(b) {
+			if (b) {
+				text = t; // latex does not support html, so assume t is a plain string
+				return;
+			}
+			text = createHtml(t, html);
+		}
+		TextWrapper(const QString& t, bool html = false) {
+			text = createHtml(t, html);
+		}
+		QString createHtml(QString text, bool isHtml) {
+			if (isHtml)
+				return text;
+
+			QTextEdit te(text);
+			return te.toHtml();
+		}
 
 		QString text;
 		bool teXUsed{false};
 	};
 
-	struct PositionWrapper {
-		QPointF point;
-		HorizontalPosition horizontalPosition;
-		VerticalPosition verticalPosition;
-	};
-
-	explicit TextLabel(const QString& name, Type type = General);
+	explicit TextLabel(const QString& name, Type type = Type::General);
 	~TextLabel() override;
 
 	Type type() const;
@@ -88,11 +93,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(QColor, fontColor, FontColor)
 	BASIC_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
-	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
+	CLASS_D_ACCESSOR_DECL(WorksheetElement::PositionWrapper, position, Position)
 	void setPosition(QPointF);
 	void setPositionInvalid(bool);
-	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
-	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::VerticalAlignment, verticalAlignment, VerticalAlignment)
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
 	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape);
@@ -116,7 +121,7 @@ private slots:
 
 protected:
 	TextLabelPrivate* const d_ptr;
-	TextLabel(const QString& name, TextLabelPrivate* dd, Type type = General);
+	TextLabel(const QString& name, TextLabelPrivate* dd, Type type = Type::General);
 
 private:
 	Q_DECLARE_PRIVATE(TextLabel)
@@ -131,9 +136,9 @@ signals:
 	void teXFontChanged(const QFont);
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
-	void positionChanged(const TextLabel::PositionWrapper&);
-	void horizontalAlignmentChanged(TextLabel::HorizontalAlignment);
-	void verticalAlignmentChanged(TextLabel::VerticalAlignment);
+	void positionChanged(const WorksheetElement::PositionWrapper&);
+	void horizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
+	void verticalAlignmentChanged(WorksheetElement::VerticalAlignment);
 	void rotationAngleChanged(qreal);
 	void visibleChanged(bool);
 	void borderShapeChanged(TextLabel::BorderShape);

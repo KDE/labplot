@@ -42,10 +42,23 @@ class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
 
 public:
+	enum class Orientation {Horizontal, Vertical};
 	WorksheetElement(const QString&, AspectType);
 	~WorksheetElement() override;
 
-	enum WorksheetElementName {NameCartesianPlot = 1};
+	enum class WorksheetElementName {NameCartesianPlot = 1};
+
+	enum class HorizontalPosition {Left, Center, Right, Custom};
+	enum class VerticalPosition {Top, Center, Bottom, Custom};
+
+	enum class HorizontalAlignment {Left, Center, Right};
+	enum class VerticalAlignment {Top, Center, Bottom};
+
+	struct PositionWrapper {
+		QPointF point;
+		WorksheetElement::HorizontalPosition horizontalPosition;
+		WorksheetElement::VerticalPosition verticalPosition;
+	};
 
 	virtual QGraphicsItem* graphicsItem() const = 0;
 	virtual void setZValue(qreal);

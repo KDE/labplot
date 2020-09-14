@@ -151,7 +151,7 @@ const double percentile = 0.5;
 
 void NSLSmoothTest::testPercentile_padnone() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {2, 2, 2, 1.5, 1, 1, 1, 2.5, 9};
+	double result[] = {2, 2, 2, 2, 1, 1, 1, 4, 9};
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_none);
 	QCOMPARE(status, 0);
@@ -161,7 +161,7 @@ void NSLSmoothTest::testPercentile_padnone() {
 
 void NSLSmoothTest::testPercentile_padmirror() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {2, 2, 2, 1.5, 1, 1, 1, 2.5, 2.5};
+	double result[] = {2, 2, 2, 2, 1, 1, 1, 4, 4};
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_mirror);
 	QCOMPARE(status, 0);
@@ -171,7 +171,7 @@ void NSLSmoothTest::testPercentile_padmirror() {
 
 void NSLSmoothTest::testPercentile_padnearest() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {2, 2, 2, 1.5, 1, 1, 1, 2.5, 6.5};
+	double result[] = {2, 2, 2, 2, 1, 1, 1, 4, 9};
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_nearest);
 	QCOMPARE(status, 0);
@@ -181,7 +181,7 @@ void NSLSmoothTest::testPercentile_padnearest() {
 
 void NSLSmoothTest::testPercentile_padconstant() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {1, 2, 2, 1.5, 1, 1, 1, 0.5, 0.5};
+	double result[] = {2, 2, 2, 2, 1, 1, 1, 1, 1};
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_constant);
 	QCOMPARE(status, 0);
@@ -191,7 +191,7 @@ void NSLSmoothTest::testPercentile_padconstant() {
 
 void NSLSmoothTest::testPercentile_padperiodic() {
 	double data[] = {2, 2, 5, 2, 1, 0, 1, 4, 9};
-	double result[] = {3, 2, 2, 1.5, 1, 1, 1, 1.5, 2};
+	double result[] = {4, 2, 2, 2, 1, 1, 1, 2, 2};
 
 	int status = nsl_smooth_percentile(data, N, points, percentile, nsl_smooth_pad_periodic);
 	QCOMPARE(status, 0);
@@ -376,63 +376,58 @@ void NSLSmoothTest::testSG_mode_periodic() {
 const int nn = 1e6;
 
 void NSLSmoothTest::testPerformance_interp() {
-	double* data = new double[nn];
+	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
 		for (int i = 0;  i < nn; i++)
 			data[i] = i;
-		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_interp);
+		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_interp);
 		QCOMPARE(status, 0);
 	}
-	delete[] data;
 }
 
 void NSLSmoothTest::testPerformance_mirror() {
-	double* data = new double[nn];
+	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
 		for (int i = 0;  i < nn; i++)
 			data[i] = i;
-		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_mirror);
+		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_mirror);
 		QCOMPARE(status, 0);
 	}
-	delete[] data;
 }
 
 void NSLSmoothTest::testPerformance_nearest() {
-	double* data = new double[nn];
+	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
 		for (int i = 0;  i < nn; i++)
 			data[i] = i;
-		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_nearest);
+		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_nearest);
 		QCOMPARE(status, 0);
 	}
-	delete[] data;
 }
 
 void NSLSmoothTest::testPerformance_constant() {
-	double* data = new double[nn];
+	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
 		for (int i = 0;  i < nn; i++)
 			data[i] = i;
-		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_constant);
+		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_constant);
 		QCOMPARE(status, 0);
 	}
-	delete[] data;
 }
 
 void NSLSmoothTest::testPerformance_periodic() {
-	double* data = new double[nn];
+	QScopedArrayPointer<double> data(new double[nn]);
 
 	QBENCHMARK {
 		for (int i = 0;  i < nn; i++)
 			data[i] = i;
-		int status = nsl_smooth_savgol(data, nn, m, order, nsl_smooth_pad_periodic);
+		int status = nsl_smooth_savgol(data.data(), nn, m, order, nsl_smooth_pad_periodic);
 		QCOMPARE(status, 0);
 	}
-	delete[] data;
 }
 
 QTEST_MAIN(NSLSmoothTest)

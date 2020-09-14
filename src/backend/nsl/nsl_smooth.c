@@ -42,6 +42,9 @@ const char* nsl_smooth_weight_type_name[] = { i18n("uniform (rectangular)"), i18
 double nsl_smooth_pad_constant_lvalue = 0.0, nsl_smooth_pad_constant_rvalue = 0.0;
 
 int nsl_smooth_moving_average(double *data, size_t n, size_t points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode) {
+	if (n == 0 || points == 0)
+		return -1;
+
 	size_t i, j;
 	double *result = (double *)malloc(n*sizeof(double));
 	for (i = 0; i < n; i++)
@@ -168,6 +171,9 @@ int nsl_smooth_moving_average(double *data, size_t n, size_t points, nsl_smooth_
 }
 
 int nsl_smooth_moving_average_lagged(double *data, size_t n, size_t points, nsl_smooth_weight_type weight, nsl_smooth_pad_mode mode) {
+	if (n == 0 || points == 0)
+		return -1;
+
 	size_t i, j;
 	double* result = (double *)malloc(n*sizeof(double));
 	for (i = 0; i < n; i++)
@@ -295,6 +301,9 @@ int nsl_smooth_moving_average_lagged(double *data, size_t n, size_t points, nsl_
 }
 
 int nsl_smooth_percentile(double *data, size_t n, size_t points, double percentile, nsl_smooth_pad_mode mode) {
+	if (n == 0 || points == 0)
+		return -1;
+
 	size_t i, j;
 	double *result = (double *)malloc(n * sizeof(double));
 
@@ -346,8 +355,8 @@ int nsl_smooth_percentile(double *data, size_t n, size_t points, double percenti
 		}
 		/*puts("");*/
 
-		/*using type 4 as default */
-		result[i] = nsl_stats_quantile(values, 1, np, percentile, nsl_stats_quantile_type4);
+		/*using type 7 as default */
+		result[i] = nsl_stats_quantile(values, 1, np, percentile, nsl_stats_quantile_type7);
 		free(values);
 	}
 

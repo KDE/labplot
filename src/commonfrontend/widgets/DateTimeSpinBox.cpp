@@ -34,7 +34,7 @@
 
 DateTimeSpinBox::DateTimeSpinBox(QWidget* parent) : QAbstractSpinBox(parent) {
 	lineEdit()->setText("0000.00.00 00:00:00.001");
-	stepEnabled();
+	DateTimeSpinBox::stepEnabled();
 
 	m_regularExpressionValidator = new QRegularExpressionValidator();
 
@@ -85,12 +85,12 @@ void DateTimeSpinBox::stepBy(int steps) {
  * Write value to lineEdit of the spinbox
  */
 void DateTimeSpinBox::writeValue() {
-	lineEdit()->setText(QString::number(m_year) + "." +
-						QString("%1").arg(m_month, 2, 10, QLatin1Char('0')) + "." +
-						QString("%1").arg(m_day, 2, 10, QLatin1Char('0')) + " " +
-						QString("%1").arg(m_hour, 2, 10, QLatin1Char('0')) + ":" +
-						QString("%1").arg(m_minute, 2, 10, QLatin1Char('0')) + ":" +
-						QString("%1").arg(m_second, 2, 10, QLatin1Char('0')) + "." +
+	lineEdit()->setText(QString::number(m_year) + '.' +
+						QString("%1").arg(m_month, 2, 10, QLatin1Char('0')) + QLatin1Char('.') +
+						QString("%1").arg(m_day, 2, 10, QLatin1Char('0')) + QLatin1Char(' ') +
+						QString("%1").arg(m_hour, 2, 10, QLatin1Char('0')) + QLatin1Char(':') +
+						QString("%1").arg(m_minute, 2, 10, QLatin1Char('0')) + QLatin1Char(':') +
+						QString("%1").arg(m_second, 2, 10, QLatin1Char('0')) + QLatin1Char('.') +
 						QString("%1").arg(m_millisecond, 3, 10, QLatin1Char('0')));
 	emit valueChanged();
 }
@@ -142,25 +142,25 @@ void DateTimeSpinBox::getValue() {
 		if (text[i] == '.' || text[i] == ':' || text[i] == ' ' || i == text.length()-1)	{
 			switch(counter) {
 				case Type::year:
-					m_year = text.mid(startIndex, i - startIndex).toInt();
+					m_year = text.midRef(startIndex, i - startIndex).toInt();
 					break;
 				case Type::month:
-					m_month = text.mid(startIndex, i - startIndex).toInt();
+					m_month = text.midRef(startIndex, i - startIndex).toInt();
 					break;
 				case Type::day:
-					m_day = text.mid(startIndex, i - startIndex).toInt();
+					m_day = text.midRef(startIndex, i - startIndex).toInt();
 					break;
 				case Type::hour:
-					m_hour = text.mid(startIndex, i - startIndex).toInt();
+					m_hour = text.midRef(startIndex, i - startIndex).toInt();
 					break;
 				case Type::minute:
-					m_minute = text.mid(startIndex, i - startIndex).toInt();
+					m_minute = text.midRef(startIndex, i - startIndex).toInt();
 					break;
 				case Type::second:
-					m_second = text.mid(startIndex, i - startIndex).toInt();
+					m_second = text.midRef(startIndex, i - startIndex).toInt();
 					break;
 				case Type::millisecond:
-					m_millisecond = text.mid(startIndex, i - startIndex + 1).toInt(); // because of the condition (i == text.length()-1)
+					m_millisecond = text.midRef(startIndex, i - startIndex + 1).toInt(); // because of the condition (i == text.length()-1)
 					break;
 			}
 			startIndex = i+1;

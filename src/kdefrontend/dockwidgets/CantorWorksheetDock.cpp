@@ -32,7 +32,7 @@
 #include <KParts/ReadWritePart>
 #include <QAction>
 
-CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): BaseDock(parent) {
+CantorWorksheetDock::CantorWorksheetDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	ui.tabWidget->setMovable(true);
 	m_leName = ui.leName;
@@ -42,8 +42,8 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent): BaseDock(parent) {
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CantorWorksheetDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &CantorWorksheetDock::commentChanged);
-	connect(ui.evaluate_worksheet, SIGNAL(pressed()), this, SLOT(evaluateWorksheet()));
-	connect(ui.restart_backend, SIGNAL(pressed()), this, SLOT(restartBackend()));
+	connect(ui.bEvaluate, &QPushButton::pressed, this, &CantorWorksheetDock::evaluateWorksheet);
+	connect(ui.bRestart, &QPushButton::pressed, this, &CantorWorksheetDock::restartBackend);
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
@@ -58,7 +58,6 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	ui.leName->setToolTip("");
 	ui.leComment->setText(m_worksheet->comment());
 
-
 	//show all available plugins
 	int k = 0;
 	int prev_index = ui.tabWidget->currentIndex();
@@ -71,6 +70,9 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
 		index.clear();
 		for (auto* plugin : plugins) {
+			if (plugin->name() == QLatin1String("File Browser"))
+				continue;
+			connect(plugin, &Cantor::PanelPlugin::visibilityRequested, this, &CantorWorksheetDock::visibilityRequested);
 			plugin->setParentWidget(this);
 			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
 			index.append(i);
@@ -79,15 +81,15 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	ui.tabWidget->setCurrentIndex(prev_index);
 
 	if (m_worksheet->part()) {
-		ui.evaluate_worksheet->show();
-		ui.restart_backend->show();
+		ui.bEvaluate->show();
+		ui.bRestart->show();
 	} else {
-		ui.evaluate_worksheet->hide();
-		ui.restart_backend->hide();
+		ui.bEvaluate->hide();
+		ui.bRestart->hide();
 	}
 
 	//SIGNALs/SLOTs
-	connect(m_worksheet, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(worksheetDescriptionChanged(const AbstractAspect*)));
+	connect(m_worksheet, &AbstractAspect::aspectDescriptionChanged, this, &CantorWorksheetDock::worksheetDescriptionChanged);
 	m_initializing = false;
 }
 
@@ -101,6 +103,16 @@ void CantorWorksheetDock::evaluateWorksheet() {
 
 void CantorWorksheetDock::restartBackend() {
 	m_worksheet->part()->action("restart_backend")->trigger();
+}
+
+/*!
+ * this slot is called when the visibility for one of the panels in Cantor is requested.
+ * At the moment this can only happen for the integrated help in Maxima, R, etc.
+ * Here we hard-code the selection of the second tab being for the help.
+ * TODO: improve this logic without hard-coding for a fixed index.
+ */
+void CantorWorksheetDock::visibilityRequested() {
+	ui.tabWidget->setCurrentIndex(1);
 }
 
 //*************************************************************

@@ -50,7 +50,7 @@ public:
 
 private:
 	ColumnPrivate* m_col;
-	AbstractColumn::ColumnMode m_old_mode;
+	AbstractColumn::ColumnMode m_old_mode{AbstractColumn::ColumnMode::Numeric};
 	AbstractColumn::ColumnMode m_mode;
 	void* m_old_data{nullptr};
 	void* m_new_data{nullptr};
@@ -138,7 +138,7 @@ public:
 private:
 	ColumnPrivate* m_col;
 	AbstractColumn::PlotDesignation m_new_pd;
-	AbstractColumn::PlotDesignation m_old_pd;
+	AbstractColumn::PlotDesignation m_old_pd{AbstractColumn::PlotDesignation::X};
 };
 
 class ColumnClearCmd : public QUndoCommand {
@@ -253,6 +253,21 @@ private:
 	int m_row_count{0};
 };
 
+class ColumnSetBigIntCmd : public QUndoCommand {
+public:
+	explicit ColumnSetBigIntCmd(ColumnPrivate* col, int row, qint64 new_value, QUndoCommand* parent = nullptr);
+
+	void redo() override;
+	void undo() override;
+
+private:
+	ColumnPrivate* m_col;
+	int m_row;
+	qint64 m_new_value;
+	qint64 m_old_value{0};
+	qint64 m_row_count{0};
+};
+
 class ColumnSetDateTimeCmd : public QUndoCommand {
 public:
 	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, QDateTime new_value, QUndoCommand* parent = nullptr);
@@ -300,9 +315,9 @@ private:
 	int m_row_count{0};
 };
 
-class ColumnReplaceIntegersCmd : public QUndoCommand {
+class ColumnReplaceIntegerCmd : public QUndoCommand {
 public:
-	explicit ColumnReplaceIntegersCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent = nullptr);
+	explicit ColumnReplaceIntegerCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent = nullptr);
 
 	void redo() override;
 	void undo() override;
@@ -312,6 +327,22 @@ private:
 	int m_first;
 	QVector<int> m_new_values;
 	QVector<int> m_old_values;
+	bool m_copied{false};
+	int m_row_count{0};
+};
+
+class ColumnReplaceBigIntCmd : public QUndoCommand {
+public:
+	explicit ColumnReplaceBigIntCmd(ColumnPrivate* col, int first, const QVector<qint64>& new_values, QUndoCommand* parent = nullptr);
+
+	void redo() override;
+	void undo() override;
+
+private:
+	ColumnPrivate* m_col;
+	int m_first;
+	QVector<qint64> m_new_values;
+	QVector<qint64> m_old_values;
 	bool m_copied{false};
 	int m_row_count{0};
 };

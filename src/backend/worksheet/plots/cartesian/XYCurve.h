@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -31,9 +31,11 @@
 #define XYCURVE_H
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/Curve.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/macrosXYCurve.h"
 #include "backend/core/AbstractColumn.h"
 
 #include <QFont>
@@ -41,19 +43,26 @@
 
 class XYCurvePrivate;
 
-class XYCurve: public WorksheetElement {
+class XYCurve: public WorksheetElement, public Curve {
 	Q_OBJECT
 
 public:
-	enum LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
+	friend class XYCurveSetXColumnCmd;
+	friend class XYCurveSetYColumnCmd;
+	friend class XYCurveSetXErrorPlusColumnCmd;
+	friend class XYCurveSetXErrorMinusColumnCmd;
+	friend class XYCurveSetYErrorPlusColumnCmd;
+	friend class XYCurveSetYErrorMinusColumnCmd;
+	friend class XYCurveSetValuesColumnCmd;
+	enum class LineType {NoLine, Line, StartHorizontal, StartVertical, MidpointHorizontal, MidpointVertical, Segments2, Segments3,
 	               SplineCubicNatural, SplineCubicPeriodic, SplineAkimaNatural, SplineAkimaPeriodic
 	              };
-	enum DropLineType {NoDropLine, DropLineX, DropLineY, DropLineXY, DropLineXZeroBaseline, DropLineXMinBaseline, DropLineXMaxBaseline};
-	enum ValuesType {NoValues, ValuesX, ValuesY, ValuesXY, ValuesXYBracketed, ValuesCustomColumn};
-	enum ValuesPosition {ValuesAbove, ValuesUnder, ValuesLeft, ValuesRight};
-	enum ErrorType {NoError, SymmetricError, AsymmetricError};
-	enum FillingPosition {NoFilling, FillingAbove, FillingBelow, FillingZeroBaseline, FillingLeft, FillingRight};
-	enum ErrorBarsType {ErrorBarsSimple, ErrorBarsWithEnds};
+	enum class DropLineType {NoDropLine, X, Y, XY, XZeroBaseline, XMinBaseline, XMaxBaseline};
+	enum class ValuesType {NoValues, X, Y, XY, XYBracketed, CustomColumn};
+	enum class ValuesPosition {Above, Under, Left, Right};
+	enum class ErrorType {NoError, Symmetric, Asymmetric};
+	enum class FillingPosition {NoFilling, Above, Below, ZeroBaseline, Left, Right};
+	enum class ErrorBarsType {Simple, WithEnds};
 
 	explicit XYCurve(const QString &name, AspectType type = AspectType::XYCurve);
 	~XYCurve() override;
@@ -66,16 +75,14 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
-	static int calculateMaxSteps(unsigned int value);
 	double y(double x, bool &valueFound) const;
 	QDateTime yDateTime(double x, bool &valueFound) const;
-	int indexForX(double x) const;
-	int indexForX(double x, QVector<double>& column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
-	int indexForX(const double x, const QVector<QPointF> &column, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
-	int indexForX(double x, QVector<QLineF>& lines, AbstractColumn::Properties properties = AbstractColumn::Properties::No) const;
+	bool minMax(const AbstractColumn *column1, const AbstractColumn *column2, const ErrorType errorType, const AbstractColumn *errorPlusColumn, const AbstractColumn *errorMinusColumn, int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const;
+	bool minMaxX(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars = true) const;
+	bool minMaxY(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars = true) const;
 
-	bool activateCurve(QPointF mouseScenePos, double maxDist = -1);
-	void setHover(bool on);
+	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	void setHover(bool on) override;
 
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xColumn, XColumn)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yColumn, YColumn)
@@ -102,11 +109,14 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
-	const QString& valuesColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, valuesColumnPath, ValuesColumnPath)
 	BASIC_D_ACCESSOR_DECL(ValuesPosition, valuesPosition, ValuesPosition)
 	BASIC_D_ACCESSOR_DECL(qreal, valuesDistance, ValuesDistance)
 	BASIC_D_ACCESSOR_DECL(qreal, valuesRotationAngle, ValuesRotationAngle)
 	BASIC_D_ACCESSOR_DECL(qreal, valuesOpacity, ValuesOpacity)
+	BASIC_D_ACCESSOR_DECL(char, valuesNumericFormat, ValuesNumericFormat)
+	BASIC_D_ACCESSOR_DECL(int, valuesPrecision, ValuesPrecision)
+	CLASS_D_ACCESSOR_DECL(QString, valuesDateTimeFormat, ValuesDateTimeFormat)
 	CLASS_D_ACCESSOR_DECL(QString, valuesPrefix, ValuesPrefix)
 	CLASS_D_ACCESSOR_DECL(QString, valuesSuffix, ValuesSuffix)
 	CLASS_D_ACCESSOR_DECL(QColor, valuesColor, ValuesColor)
@@ -124,14 +134,15 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(ErrorType, xErrorType, XErrorType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorPlusColumn, XErrorPlusColumn)
-	const QString& xErrorPlusColumnPath() const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, xErrorMinusColumn, XErrorMinusColumn)
-	const QString& xErrorMinusColumnPath() const;
 	BASIC_D_ACCESSOR_DECL(ErrorType, yErrorType, YErrorType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorPlusColumn, YErrorPlusColumn)
-	const QString& yErrorPlusColumnPath() const;
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, yErrorMinusColumn, YErrorMinusColumn)
-	const QString& yErrorMinusColumnPath() const;
+	CLASS_D_ACCESSOR_DECL(QString, xErrorPlusColumnPath, XErrorPlusColumnPath)
+	CLASS_D_ACCESSOR_DECL(QString, xErrorMinusColumnPath, XErrorMinusColumnPath)
+	CLASS_D_ACCESSOR_DECL(QString, yErrorPlusColumnPath, YErrorPlusColumnPath)
+	CLASS_D_ACCESSOR_DECL(QString, yErrorMinusColumnPath, YErrorMinusColumnPath)
+
 	BASIC_D_ACCESSOR_DECL(ErrorBarsType, errorBarsType, ErrorBarsType)
 	BASIC_D_ACCESSOR_DECL(qreal, errorBarsCapSize, ErrorBarsCapSize)
 	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
@@ -161,6 +172,11 @@ private slots:
 	void yErrorMinusColumnAboutToBeRemoved(const AbstractAspect*);
 	void xColumnNameChanged();
 	void yColumnNameChanged();
+	void xErrorPlusColumnNameChanged();
+	void xErrorMinusColumnNameChanged();
+	void yErrorPlusColumnNameChanged();
+	void yErrorMinusColumnNameChanged();
+	void valuesColumnNameChanged();
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
 	void navigateTo();
@@ -173,6 +189,14 @@ private:
 	Q_DECLARE_PRIVATE(XYCurve)
 	void init();
 	void initActions();
+	bool columnRemoved(const AbstractColumn*, const AbstractAspect*) const;
+	XYCURVE_COLUMN_CONNECT(x)
+	XYCURVE_COLUMN_CONNECT(y)
+	XYCURVE_COLUMN_CONNECT(xErrorPlus)
+	XYCURVE_COLUMN_CONNECT(xErrorMinus)
+	XYCURVE_COLUMN_CONNECT(yErrorPlus)
+	XYCURVE_COLUMN_CONNECT(yErrorMinus)
+	XYCURVE_COLUMN_CONNECT(values)
 
 	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};
@@ -183,6 +207,11 @@ signals:
 	void dataChanged(); //emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void xDataChanged();
 	void yDataChanged();
+	void xErrorPlusDataChanged();
+	void xErrorMinusDataChanged();
+	void yErrorPlusDataChanged();
+	void yErrorMinusDataChanged();
+	void valuesDataChanged();
 	void visibilityChanged(bool);
 
 	void xColumnChanged(const AbstractColumn*);
@@ -214,6 +243,9 @@ signals:
 	void valuesDistanceChanged(qreal);
 	void valuesRotationAngleChanged(qreal);
 	void valuesOpacityChanged(qreal);
+	void valuesNumericFormatChanged(char);
+	void valuesPrecisionChanged(int);
+	void valuesDateTimeFormatChanged(QString);
 	void valuesPrefixChanged(QString);
 	void valuesSuffixChanged(QString);
 	void valuesFontChanged(QFont);

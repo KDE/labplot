@@ -38,15 +38,15 @@ class HDF5FilterPrivate {
 
 public:
 	explicit HDF5FilterPrivate(HDF5Filter*);
-	
+
 #ifdef HAVE_HDF5
 	static void handleError(int err, const QString& function, const QString& arg = QString());
 #endif
 
 	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
-	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	QVector<QStringList> readCurrentDataSet(const QString& fileName, AbstractDataSource*, bool &ok,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 
 	const HDF5Filter* q;
@@ -72,9 +72,9 @@ private:
 	QStringList readHDF5Compound(hid_t tid);
 	template <typename T> QStringList readHDF5Data1D(hid_t dataset, hid_t type, int rows, int lines,
 							void* dataPointer = nullptr);
-	QStringList readHDF5CompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, QVector<void*>& dataPointer);
+	QStringList readHDF5CompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, std::vector<void*>& dataPointer);
 	template <typename T> QVector<QStringList> readHDF5Data2D(hid_t dataset, hid_t ctype, int rows, int cols, int lines,
-								 QVector<void*>& dataPointer);
+								 std::vector<void*>& dataPointer);
 	QVector<QStringList> readHDF5CompoundData2D(hid_t dataset, hid_t tid, int rows, int cols, int lines);
 	QStringList readHDF5Attr(hid_t aid);
 	QStringList scanHDF5Attrs(hid_t oid);

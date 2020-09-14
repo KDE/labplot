@@ -32,6 +32,7 @@
 
 #include <QWidget>
 #include <QList>
+#include <QShortcut>
 #include "backend/datasources/filters/FITSFilter.h"
 #include "kdefrontend/widgets/FITSHeaderEditWidget.h"
 
@@ -74,9 +75,6 @@ public:
                            const bool latexHeaders, const bool gridLines,
                            const bool entire, const bool captions) const;
 	void exportToFits(const QString& fileName, const int exportTo) const;
-
-	void registerShortcuts();
-	void unregisterShortcuts();
 
 public slots:
 	void createContextMenu(QMenu*) const;
@@ -149,6 +147,8 @@ private:
 	QMenu* m_rowMenu;
 	QMenu* m_matrixMenu;
 	QMenu* m_headerFormatMenu;
+
+	QShortcut* sel_all;
 
 private slots:
 	void goToCell();

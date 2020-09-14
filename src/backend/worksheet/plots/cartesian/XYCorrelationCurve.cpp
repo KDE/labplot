@@ -108,8 +108,8 @@ void XYCorrelationCurvePrivate::recalculate() {
 
 	//create correlation result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::Numeric);
-		yColumn = new Column("y", AbstractColumn::Numeric);
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 
@@ -134,7 +134,7 @@ void XYCorrelationCurvePrivate::recalculate() {
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
 	const AbstractColumn* tmpY2DataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
@@ -167,11 +167,11 @@ void XYCorrelationCurvePrivate::recalculate() {
 		xmax = correlationData.xRange.last();
 	}
 
-	//only copy those data where values are valid
+	//only copy those data where values are valid and in range
 	if (tmpXDataColumn != nullptr) {	// x-axis present (with possible range)
 		for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
-			if (!std::isnan(tmpXDataColumn->valueAt(row)) && !tmpXDataColumn->isMasked(row)
-				&& !std::isnan(tmpYDataColumn->valueAt(row)) && !tmpYDataColumn->isMasked(row)) {
+			if (tmpXDataColumn->isValid(row) && !tmpXDataColumn->isMasked(row)
+				&& tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row)) {
 				if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
 					xdataVector.append(tmpXDataColumn->valueAt(row));
 					ydataVector.append(tmpYDataColumn->valueAt(row));
@@ -180,13 +180,13 @@ void XYCorrelationCurvePrivate::recalculate() {
 		}
 	} else {	// no x-axis: take all valid values
 		for (int row = 0; row < tmpYDataColumn->rowCount(); ++row)
-			if (!std::isnan(tmpYDataColumn->valueAt(row)) && !tmpYDataColumn->isMasked(row))
+			if (tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row))
 				ydataVector.append(tmpYDataColumn->valueAt(row));
 	}
 
 	if (tmpY2DataColumn != nullptr) {
 		for (int row = 0; row < tmpY2DataColumn->rowCount(); ++row)
-			if (!std::isnan(tmpY2DataColumn->valueAt(row)) && !tmpY2DataColumn->isMasked(row))
+			if (tmpY2DataColumn->isValid(row) && !tmpY2DataColumn->isMasked(row))
 				y2dataVector.append(tmpY2DataColumn->valueAt(row));
 	}
 
@@ -334,7 +334,7 @@ bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", correlationResult.status);
 			READ_INT_VALUE("time", correlationResult.elapsedTime, int);
 		} else if (!preview && reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

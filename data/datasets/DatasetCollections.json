@@ -1,0 +1,27 @@
+[
+	{
+		"name" : "DASL",
+		"description" : "<b>The Data And Story Library (DASL)</b> is brought to you by Data Description, creators of Data Desk: Data Analysis and Exploration software. DASL provides data from a wide variety of topics so that statistics teachers can find interesting, real-world examples for their students. We know a good example can make a lesson on a particular statistics method vivid and relevant. This library is designed to help teachers locate and identify datafiles for teaching as well as serve as an archive for datasets from statistics literature.",
+		"url" : "https://dasl.datadescription.com/"
+	},
+	{
+		"name" : "JSEDataArchive",
+		"description" : "<b>JSE Data Archive</b>  - data archive provided by the Journal of Statistics Education.",
+		"url" : "http://jse.amstat.org/jse_data_archive.htm"
+	},
+	{
+		"name" : "Rdatasets",
+		"description" : "<b>Rdatasets</b> is a collection of over 1300 datasets that were originally distributed alongside the statistical software environment R and some of its add-on packages. The goal is to make these data more broadly accessible for teaching and statistical software development.",
+		"url" : "https://vincentarelbundock.github.io/Rdatasets/"
+	},
+	{
+		"name" : "OzDASL",
+		"description" : "<b>OzDASL</b> is a library of data sets and associated stories. It is intended as a resource for teachers of statistics in Australia and New Zealand and elsewhere. Emphasis is given to data sets with an Australasian context, although interesting data sets from anywhere in the world are included.",
+		"url" : "http://www.statsci.org/data/"
+	},
+	{
+		"name" : "StatLib",
+		"description" : "<b>StatLib</b> is a datasets archive maintained by Pantelis Vlachos from Carnegie Melon University.",
+		"url" : "http://lib.stat.cmu.edu/datasets/"
+	}
+]

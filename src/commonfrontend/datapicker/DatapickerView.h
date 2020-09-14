@@ -4,7 +4,7 @@
     Description          : View class for Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -33,9 +33,9 @@
 
 class AbstractAspect;
 class Datapicker;
-class TabWidget;
 
 class QMenu;
+class QTabWidget;
 class QToolBar;
 
 class DatapickerView : public QWidget {
@@ -50,7 +50,7 @@ public:
 	int currentIndex() const;
 
 private:
-	TabWidget* m_tabWidget;
+	QTabWidget* m_tabWidget;
 	Datapicker* m_datapicker;
 	int lastSelectedIndex{0};
 	bool m_initializing;

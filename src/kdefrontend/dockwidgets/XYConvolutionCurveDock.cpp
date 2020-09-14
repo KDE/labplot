@@ -32,6 +32,9 @@
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
@@ -55,11 +58,6 @@ extern "C" {
 */
 
 XYConvolutionCurveDock::XYConvolutionCurveDock(QWidget* parent) : XYCurveDock(parent) {
-	//hide the line connection type
-	ui.cbLineType->setDisabled(true);
-
-	//remove the tab "Error bars"
-	ui.tabWidget->removeTab(5);
 }
 
 /*!
@@ -72,12 +70,10 @@ void XYConvolutionCurveDock::setupGeneral() {
 	m_leName = uiGeneralTab.leName;
 	m_leComment = uiGeneralTab.leComment;
 
-	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
-	if (gridLayout) {
-		gridLayout->setContentsMargins(2,2,2,2);
-		gridLayout->setHorizontalSpacing(2);
-		gridLayout->setVerticalSpacing(2);
-	}
+	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
+	gridLayout->setContentsMargins(2,2,2,2);
+	gridLayout->setHorizontalSpacing(2);
+	gridLayout->setVerticalSpacing(2);
 
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
 	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
@@ -171,7 +167,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.lXRange->setEnabled(false);
 	uiGeneralTab.cbAutoRange->setEnabled(false);
 
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_convolutionCurve->dataSourceType());
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_convolutionCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_convolutionCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_convolutionCurve->xDataColumn());
@@ -208,12 +204,13 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	connect(m_convolutionCurve, SIGNAL(y2DataColumnChanged(const AbstractColumn*)), this, SLOT(curveY2DataColumnChanged(const AbstractColumn*)));
 	connect(m_convolutionCurve, SIGNAL(convolutionDataChanged(XYConvolutionCurve::ConvolutionData)), this, SLOT(curveConvolutionDataChanged(XYConvolutionCurve::ConvolutionData)));
 	connect(m_convolutionCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+	connect(m_convolutionCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYConvolutionCurveDock::curveVisibilityChanged);
 }
 
 void XYConvolutionCurveDock::setModel() {
 	DEBUG("XYConvolutionCurveDock::setModel()");
 	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
-	                       AspectType::CartesianPlot, AspectType::XYCurve};
+	                       AspectType::CartesianPlot, AspectType::XYCurve, AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -249,6 +246,12 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
+
+	SET_NUMBER_LOCALE
+	uiGeneralTab.sbSamplingInterval->setLocale(numberLocale);
+	uiGeneralTab.sbMin->setLocale(numberLocale);
+	uiGeneralTab.sbMax->setLocale(numberLocale);
+
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;
@@ -263,7 +266,7 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 	auto type = (XYAnalysisCurve::DataSourceType)index;
-	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -444,7 +447,7 @@ void XYConvolutionCurveDock::autoRangeChanged() {
 		uiGeneralTab.sbMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+		if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_convolutionCurve->xDataColumn();
 		else {
 			if (m_convolutionCurve->dataSourceCurve())
@@ -537,7 +540,7 @@ void XYConvolutionCurveDock::enableRecalculate() const {
 
 	bool hasSourceData = false;
 	//no convolution possible without the y-data
-	if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectY != nullptr);
 		if (aspectY) {
@@ -568,10 +571,11 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
+	SET_NUMBER_LOCALE
 	if (convolutionResult.elapsedTime > 1000)
-		str += i18n("calculation time: %1 s", QString::number(convolutionResult.elapsedTime/1000)) + "<br>";
+		str += i18n("calculation time: %1 s", numberLocale.toString(convolutionResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(convolutionResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(convolutionResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 
@@ -599,7 +603,7 @@ void XYConvolutionCurveDock::curveDescriptionChanged(const AbstractAspect* aspec
 
 void XYConvolutionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 
@@ -667,4 +671,10 @@ void XYConvolutionCurveDock::curveConvolutionDataChanged(const XYConvolutionCurv
 
 void XYConvolutionCurveDock::dataChanged() {
 	this->enableRecalculate();
+}
+
+void XYConvolutionCurveDock::curveVisibilityChanged(bool on) {
+	m_initializing = true;
+	uiGeneralTab.chkVisible->setChecked(on);
+	m_initializing = false;
 }

@@ -37,7 +37,7 @@ Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include <QLocale>
 #include <KLocalizedString>
 
-bool AbstractFileFilter::isNan(QString s) {
+bool AbstractFileFilter::isNan(const QString& s) {
 	const static QStringList nanStrings{"NA", "NAN", "N/A", "-NA", "-NAN", "NULL"};
 	if (nanStrings.contains(s, Qt::CaseInsensitive))
 		return true;
@@ -46,34 +46,45 @@ bool AbstractFileFilter::isNan(QString s) {
 }
 
 AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language lang) {
-	QLocale locale(lang);
+	return columnMode(valueString, dateTimeFormat, QLocale(lang));
+}
 
+AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, const QLocale& locale) {
+	//TODO: use BigInt as default integer?
 	if (valueString.size() == 0)	// empty string treated as integer (meaning the non-empty strings will determine the data type)
-		return AbstractColumn::Integer;
+		return AbstractColumn::ColumnMode::Integer;
 
 	if (isNan(valueString))
-		return AbstractColumn::Numeric;
+		return AbstractColumn::ColumnMode::Numeric;
 
 	// check if integer first
 	bool ok;
-	locale.toInt(valueString, &ok);
-	DEBUG("string " << valueString.toStdString() << ": toInt " << locale.toInt(valueString, &ok) << "?:" << ok);
+	int intValue = locale.toInt(valueString, &ok);
+	DEBUG(Q_FUNC_INFO << ", " << STDSTRING(valueString) << " : toInt " << intValue << " ?: " << ok);
+	Q_UNUSED(intValue)
 	if (ok || isNan(valueString))
-		return AbstractColumn::Integer;
+		return AbstractColumn::ColumnMode::Integer;
 
+	//check big integer
+	qint64 bigIntValue = locale.toLongLong(valueString, &ok);
+	DEBUG(Q_FUNC_INFO << ", " << STDSTRING(valueString) << " : toBigInt " << bigIntValue << " ?: " << ok);
+	Q_UNUSED(bigIntValue)
+	if (ok || isNan(valueString))
+		return AbstractColumn::ColumnMode::BigInt;
 
 	//try to convert to a double
-	AbstractColumn::ColumnMode mode = AbstractColumn::Numeric;
-	locale.toDouble(valueString, &ok);
-	DEBUG("string " << valueString.toStdString() << ": toDouble " << locale.toDouble(valueString, &ok) << "?:" << ok);
+	auto mode = AbstractColumn::ColumnMode::Numeric;
+	double value = locale.toDouble(valueString, &ok);
+	DEBUG(Q_FUNC_INFO << ", " << STDSTRING(valueString) << " : toDouble " << value << " ?: " << ok);
+	Q_UNUSED(value)
 
 	//if not a number, check datetime. if that fails: string
 	if (!ok) {
 		QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 		if (valueDateTime.isValid())
-			mode = AbstractColumn::DateTime;
+			mode = AbstractColumn::ColumnMode::DateTime;
 		else
-			mode = AbstractColumn::Text;
+			mode = AbstractColumn::ColumnMode::Text;
 	}
 
 	return mode;
@@ -98,8 +109,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	proc.start("file", QStringList() << "-b" << "-z" << fileName);
 	if (!proc.waitForFinished(1000)) {
 		proc.kill();
-		DEBUG("ERROR: reading file type of file" << fileName.toStdString());
-		return Binary;
+		DEBUG("ERROR: reading file type of file" << STDSTRING(fileName));
+		return FileType::Binary;
 	}
 	fileInfo = proc.readLine();
 #endif
@@ -113,40 +124,40 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		|| fileName.endsWith(QLatin1String("json.lzma"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("json.xz"), Qt::CaseInsensitive) ) {
 		//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
-		fileType = JSON;
+		fileType = FileType::JSON;
 	} else if (fileInfo.contains(QLatin1String("ASCII"))
 		|| fileName.endsWith(QLatin1String("txt"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("csv"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("dat"), Qt::CaseInsensitive)
 		|| fileInfo.contains(QLatin1String("compressed data"))/* for gzipped ascii data */ ) {
 		if (NgspiceRawAsciiFilter::isNgspiceAsciiFile(fileName))
-			fileType = NgspiceRawAscii;
+			fileType = FileType::NgspiceRawAscii;
 		else //probably ascii data
-			fileType = Ascii;
+			fileType = FileType::Ascii;
 	} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format"))
 		|| fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) )
-		fileType = HDF5;
+		fileType = FileType::HDF5;
 	else if (fileInfo.contains(QLatin1String("NetCDF Data Format"))
 		|| fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive))
-		fileType = NETCDF;
+		fileType = FileType::NETCDF;
 	else if (fileInfo.contains(QLatin1String("FITS image data"))
 		|| fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive))
-		fileType = FITS;
+		fileType = FileType::FITS;
 	else if (fileInfo.contains(QLatin1String("ROOT")) //can be "ROOT Data Format" or "ROOT file Version ??? (Compression: 1)"
 		||  fileName.endsWith(QLatin1String("root"), Qt::CaseInsensitive)) // TODO find out file description
-		fileType = ROOT;
+		fileType = FileType::ROOT;
 	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
-		fileType = Image;
+		fileType = FileType::Image;
 	else if (NgspiceRawBinaryFilter::isNgspiceBinaryFile(fileName))
-		fileType = NgspiceRawBinary;
+		fileType = FileType::NgspiceRawBinary;
 	else
-		fileType = Binary;
+		fileType = FileType::Binary;
 
 	return fileType;
 }

@@ -2,7 +2,7 @@
     File                 : LabelWidget.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
@@ -31,6 +31,7 @@
 
 #include "ui_labelwidget.h"
 #include "backend/worksheet/TextLabel.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include <KConfigGroup>
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
@@ -52,13 +53,16 @@ public:
 
 	void setLabels(QList<TextLabel*>);
 	void setAxes(QList<Axis*>);
+	void updateUnits();
+	void updateLocale();
 
 	void load();
 	void loadConfig(KConfigGroup&);
 	void saveConfig(KConfigGroup&);
 
-	void setNoGeometryMode(const bool);
-	void setFixedLabelMode(const bool);
+	void setGeometryAvailable(bool);
+	void setFixedLabelMode(bool);
+	void setBorderAvailable(bool);
 
 private:
 	Ui::LabelWidget ui;
@@ -68,6 +72,8 @@ private:
 	bool m_initializing{false};
 	QMenu* m_dateTimeMenu;
 	bool m_teXEnabled{false};
+	BaseDock::Units m_units{BaseDock::Units::Metric};
+	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	KSyntaxHighlighting::SyntaxHighlighter* m_highlighter;
 	KSyntaxHighlighting::Repository m_repository;
@@ -84,6 +90,7 @@ private slots:
 	void charFormatChanged(const QTextCharFormat&);
 	void teXUsedChanged(bool);
 	void fontColorChanged(const QColor&);
+	void updateBackground() const;
 	void backgroundColorChanged(const QColor&);
 	void fontBoldChanged(bool);
 	void fontItalicChanged(bool);

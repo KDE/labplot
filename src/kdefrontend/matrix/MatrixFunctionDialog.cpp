@@ -72,9 +72,10 @@ MatrixFunctionDialog::MatrixFunctionDialog(Matrix* m, QWidget* parent) : QDialog
 	ui.teEquation->setFocus();
 	ui.teEquation->setMaximumHeight(QLineEdit().sizeHint().height()*2);
 
-	QString info = '[' + QString::number(m_matrix->xStart()) + ", " + QString::number(m_matrix->xEnd()) + "], " + i18np("%1 value", "%1 values", m_matrix->columnCount());
+	SET_NUMBER_LOCALE
+	QString info = '[' + numberLocale.toString(m_matrix->xStart()) + ", " + numberLocale.toString(m_matrix->xEnd()) + "], " + i18np("%1 value", "%1 values", m_matrix->columnCount());
 	ui.lXInfo->setText(info);
-	info = '[' + QString::number(m_matrix->yStart()) + ", " + QString::number(m_matrix->yEnd()) + "], " + i18np("%1 value", "%1 values", m_matrix->rowCount());
+	info = '[' + numberLocale.toString(m_matrix->yStart()) + ", " +numberLocale.toString(m_matrix->yEnd()) + "], " + i18np("%1 value", "%1 values", m_matrix->rowCount());
 	ui.lYInfo->setText(info);
 
 	ui.teEquation->setPlainText(m_matrix->formula());

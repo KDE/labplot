@@ -38,10 +38,12 @@ class XYAnalysisCurve : public XYCurve {
 	Q_OBJECT
 
 public:
-	enum DataSourceType {DataSourceSpreadsheet, DataSourceCurve};
+	enum class DataSourceType {Spreadsheet, Curve};
 
 	XYAnalysisCurve(const QString&, AspectType type);
 	~XYAnalysisCurve() override;
+
+	static void copyData(QVector<double>& xData, QVector<double>& yData, const AbstractColumn* xDataColumn, const AbstractColumn* yDataColumn, double xMin, double xMax);
 
 	virtual void recalculate() = 0;
 	void save(QXmlStreamWriter*) const override;

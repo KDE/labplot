@@ -35,7 +35,7 @@
 class PluginLoader: public QObject {
 	Q_OBJECT
 
-	enum PluginStatus {
+	enum class PluginStatus {
 		NotYetLoaded,
 		Active,
 		ErrorFromQt,
@@ -58,7 +58,7 @@ private:
 	QPluginLoader *m_loader{nullptr};
 	QString m_fileName;
 	QString m_statusString;
-	PluginStatus m_status{NotYetLoaded};
+	PluginStatus m_status{PluginStatus::NotYetLoaded};
 };
 
 #endif

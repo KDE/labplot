@@ -105,6 +105,11 @@ Features:
 </itemizedlist>
 </para>
 
+<para>
+&LabPlot; can be found on its homepage at kde.org:
+<ulink url="https://labplot.kde.org/">https://labplot.kde.org/</ulink>.
+</para>
+
 </chapter>
 
 
@@ -873,7 +878,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
 
 <para>This menu gives you the ability to change user settings.</para>
 
-<para>Apart from the common &kde; Settings menu entries described in the <ulink url="help:/fundamentals/ui.html#menus-settings">Settings Menu</ulink> chapter of the &kde; Fundamentals &LabPlot; has this application specific menu entry:
+<para>Apart from the common &kde; Settings menu entries described in the <ulink url="help:/fundamentals/menus.html#menus-settings">Settings Menu</ulink> chapter of the &kde; Fundamentals &LabPlot; has this application specific menu entry:
 </para>
 
 <variablelist>
@@ -892,7 +897,7 @@ The menu is only available when a datapicker object is selected on the <guilabel
 <title>The Help Menu</title>
 
 <para>
-  Additionally, &LabPlot; has the common &kde; Help menu items. For more information, read the section about the <ulink url="help:/fundamentals/ui.html#menus-help">Help Menu</ulink> of the &kde; Fundamentals.
+  Additionally, &LabPlot; has the common &kde; Help menu items. For more information, read the section about the <ulink url="help:/fundamentals/menus.html#menus-help">Help Menu</ulink> of the &kde; Fundamentals.
 </para>
 
 </sect1>
@@ -2260,104 +2265,6 @@ For more information about this constants see the documentation of GSL.
 </sect1>
 
 </chapter>
-
-<chapter id="installation">
-<title>Installation</title>
-
-<sect1 id="getting-labplot">
-<title>How to Obtain &LabPlot;</title>
-
-<para>
-&LabPlot; can be found on its homepage at sourceforge.net:
-<ulink url="http://labplot.sf.net">http://labplot.sf.net</ulink>. 
-There is an overview about all available packages at
-<ulink url="http://labplot.wiki.sourceforge.net/Download">http://labplot.wiki.sourceforge.net/Download</ulink>.
-bug-fixed packages are released regular and can be found there too.
-</para>
-</sect1>
-
-<sect1 id="requirements">
-<title>Requirements</title>
-
-<para>
-In order to successfully use &LabPlot;, you need at least a standard &Qt; 5 and &kde; KF5 installation, the &GNU; scientific library (GSL), &cantor; libcantor library.
-</para>
-
-<!-- <para>
-Optional &LabPlot; uses the following programs/libraries when available:
-</para>
-
-<itemizedlist>
-<listitem><para>
-&GNU; scientific library (GSL) : used for special functions in the parser and most of the analysis functions.
-</para></listitem>
-</itemizedlist>
--->
-
-</sect1>
-
-<sect1 id="compilation">
-<title>Compilation and Installation</title>
-
-&install.compile.documentation;
-
-</sect1>
-
-</chapter>
-
-<chapter id="command-line-options">
-<title>Command Line Options</title>
-<sect1 id="specify-a-file">
-<title>Specify a File</title>
-
-<para>
-When starting &LabPlot; from the command prompt, you can supply the name of a project file (ending with .lml, .lml.gz, .lml.bz2 or .lml.xz):
-<cmdsynopsis>
-<command>labplot2</command>
-<arg rep="repeat"><replaceable>file.lml</replaceable></arg>
-</cmdsynopsis>
-</para>
-
-</sect1>
-
-<sect1 id="other-command-line-options">
-<title>Other Command Line Options</title>
-
-<para>The following command line help options are available</para>
-<variablelist>
-<varlistentry>
-<term><command>labplot2 <option>--help</option></command></term>
-<listitem><para>This lists the most basic options available at the
- command line.</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--no-splash</option></command></term>
-<listitem><para>Do not show the splash screen</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--presenter</option></command></term>
-<listitem><para>Start in the presenter mode</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--author</option></command></term>
-<listitem><para>Lists &LabPlot;'s author in the terminal window</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><command>labplot2 <option>--version</option></command></term>
-<listitem><para>Lists version information for &LabPlot;.
-Also available through <command>labplot2 <option>-v</option></command>
-</para></listitem>
-</varlistentry>
-
-</variablelist>
-</sect1>
-
-</chapter>
-
 
 <chapter id="faq">
 <title>Questions and Answers</title>

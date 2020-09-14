@@ -13,19 +13,21 @@ set(KF5_MIN_VERSION "5.16.0")
 
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
-find_package(ECM 1.3.0 REQUIRED NO_MODULE)
+find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
 	Concurrent
 	Gui
+# 	Qml
+# 	Quick
+# 	QuickWidgets
 	PrintSupport
 	Sql
 	Svg
 	Widgets
 	Test
-	SerialPort
 )
 
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
@@ -42,28 +44,39 @@ find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS
 	TextWidgets
 	WidgetsAddons
 	XmlGui
-OPTIONAL_COMPONENTS
+	NewStuffCore
 	NewStuff
+OPTIONAL_COMPONENTS
 	Service
 	Parts
 	SyntaxHighlighting
 )
-IF (Qt5SerialPort_FOUND)
-        MESSAGE (STATUS "Found Qt5 SerialPort")
-ELSE ()
-        MESSAGE (STATUS "Qt5 SerialPort not found")
-ENDIF ()
+# TODO: make NewStuff optional?
 IF (KF5NewStuff_FOUND)
-        MESSAGE (STATUS "Found KF5 new stuff")
 	add_definitions (-DHAVE_KF5_NEW_STUFF)
 ELSE ()
         MESSAGE (STATUS "KF5 new stuff not found")
 ENDIF ()
+# TODO: service not used?
+IF (NOT KF5Service_FOUND)
+	MESSAGE (STATUS "KF5 service not found")
+ENDIF ()
+# TODO: parts not used?
+IF (NOT KF5Parts_FOUND)
+	MESSAGE (STATUS "KF5 parts not found")
+ENDIF ()
 IF (KF5SyntaxHighlighting_FOUND)
-        MESSAGE (STATUS "Found KF5 syntax highlighting")
 	add_definitions (-DHAVE_KF5_SYNTAX_HIGHLIGHTING)
 ELSE ()
-        MESSAGE (STATUS "KF5 syntax highlighting not found")
+	MESSAGE (STATUS "KF5 syntax highlighting not found")
+ENDIF ()
+
+find_package(KUserFeedback)
+IF (KUserFeedback_FOUND)
+	MESSAGE (STATUS "Found KUserFeedback")
+	add_definitions (-DHAVE_KUSERFEEDBACK)
+ELSE ()
+	MESSAGE (STATUS "KUserFeedback not found")
 ENDIF ()
 
 find_package(BISON REQUIRED)
@@ -134,8 +147,9 @@ endif ()
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-add_definitions (-DLVERSION=\"2.7.0\")
-# add_definitions (-DLDEBUG='1')
+add_definitions (-DLVERSION=\"2.8.0\")
+add_definitions (-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
+add_definitions (-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
 set(BUILD_SHARED_LIBS true)
 
 #cmake_policy(SET CMP0002 OLD)
@@ -149,7 +163,8 @@ if (CMAKE_VERSION VERSION_GREATER "3.5")
     find_program (CLANG_TIDY_EXE NAMES "clang-tidy" PATHS /usr/bin)
     if (CLANG_TIDY_EXE)
       message(STATUS "Clang-tidy supported, found and enabled: ${CLANG_TIDY_EXE}")
-      set(CLANG_TIDY_CHECKS "-*,modernize-*")
+      set(CLANG_TIDY_CHECKS "modernize-*,clang-analyzer-*,-clang-analyzer-cplusplus*")
+      #set(CLANG_TIDY_CHECKS "-*,modernize-*,clang-analyzer-*")
       # -extra-arg=--std=c++11
       set(CMAKE_CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-checks=${CLANG_TIDY_CHECKS};-header-filter='${CMAKE_SOURCE_DIR}/*'"
         CACHE STRING "" FORCE)
@@ -173,6 +188,7 @@ option(ENABLE_LIBORIGIN "Build with liborigin support" ON)
 option(ENABLE_ROOT "Build with ROOT (CERN) support" ON)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
+option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 
 ### OS macros ####################################
 IF (WIN32)
@@ -205,12 +221,18 @@ SET_PACKAGE_PROPERTIES(Cantor PROPERTIES
 	URL "https://edu.kde.org/cantor/"
 )
 IF (Cantor_FOUND)
-	MESSAGE (STATUS "Found Cantor Library")
-	add_definitions (-DHAVE_CANTOR_LIBS)
+	MESSAGE (STATUS "Found Cantor Library ${Cantor_VERSION}")
 
-	IF (NOT ${Cantor_VERSION} VERSION_GREATER "0")
-		add_definitions (-DOLD_CANTORLIBS_VERSION)
-	ENDIF()
+	IF (${Cantor_VERSION} VERSION_GREATER "19.11")
+		add_definitions (-DHAVE_CANTOR_LIBS)
+		set(RECENT_CANTOR TRUE)
+		FIND_PACKAGE(Poppler "0.62.0" REQUIRED COMPONENTS Qt5)
+	ELSE ()
+		MESSAGE (STATUS "Cantor Library ${Cantor_VERSION} TOO OLD. Minimum usable version is 19.12")
+	ENDIF ()
+	IF (${Cantor_VERSION} VERSION_GREATER "20.08")
+		add_definitions (-DHAVE_NEW_CANTOR_LIBS)
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Cantor Library NOT FOUND")
 ENDIF ()
@@ -239,6 +261,9 @@ SET_PACKAGE_PROPERTIES (HDF5 PROPERTIES
 )
 IF (HDF5_FOUND)
 	add_definitions (-DHAVE_HDF5)
+	IF (MSVC_FOUND)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DH5_BUILT_AS_DYNAMIC_LIB")
+	ENDIF ()
 	IF (HDF5_VERSION VERSION_GREATER "1.9")
 		add_definitions (-DHAVE_AT_LEAST_HDF5_1_10_0)
 	ENDIF ()
@@ -256,16 +281,16 @@ ENDIF ()
 
 ### NETCDF (optional) #############################
 IF (ENABLE_NETCDF)
-FIND_PACKAGE(netCDF)
-SET_PACKAGE_PROPERTIES(netCDF PROPERTIES
-    DESCRIPTION "Interfaces for array-oriented data access"
-    URL "https://www.unidata.ucar.edu/software/netcdf/"
-)
-IF (netCDF_FOUND)
-	add_definitions (-DHAVE_NETCDF)
-ELSE ()
-	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library NOT FOUND")
-ENDIF ()
+	FIND_PACKAGE(netCDF)
+	SET_PACKAGE_PROPERTIES(netCDF PROPERTIES
+	    DESCRIPTION "Interfaces for array-oriented data access"
+	    URL "https://www.unidata.ucar.edu/software/netcdf/"
+	)
+	IF (netCDF_FOUND)
+		add_definitions (-DHAVE_NETCDF)
+	ELSE ()
+		MESSAGE (STATUS "Network Common Data Format (NetCDF) Library NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Network Common Data Format (NetCDF) Library DISABLED")
 ENDIF ()
@@ -274,63 +299,82 @@ ENDIF ()
 IF (ENABLE_MQTT)
 # ATTENTION: unit test uses qWaitFor() which needs Qt >= 5.10
 # avoid warning for the moment using QUIET
-find_package(Qt5Mqtt ${QT_MIN_VERSION} QUIET NO_MODULE)
-IF (Qt5Mqtt_FOUND)
-	MESSAGE (STATUS "Found MQTT Library")
-	add_definitions (-DHAVE_MQTT)
-ELSE ()
-	MESSAGE (STATUS "MQTT Library NOT FOUND")
-ENDIF ()
+	find_package(Qt5Mqtt ${QT_MIN_VERSION} NO_MODULE)
+	IF (Qt5Mqtt_FOUND)
+		MESSAGE (STATUS "Found MQTT Library")
+		add_definitions (-DHAVE_MQTT)
+	ELSE ()
+		MESSAGE (STATUS "MQTT Library NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "MQTT Library DISABLED")
 ENDIF ()
 
+### QtSerialPort (optional) ###############################
+IF (ENABLE_QTSERIALPORT)
+	find_package(Qt5SerialPort ${QT_MIN_VERSION} NO_MODULE)
+	SET_PACKAGE_PROPERTIES (Qt5SerialPort PROPERTIES
+		DESCRIPTION "Qt Serial Port library"
+		URL "https://doc.qt.io/qt-5/qtserialport-index.html"
+		PURPOSE "Support basic functionality of serial ports.")
+	IF (Qt5SerialPort_FOUND)
+		MESSAGE (STATUS "Found Qt5SerialPort Library")
+		add_definitions (-DHAVE_QTSERIALPORT)
+	ELSE ()
+		MESSAGE (STATUS "Qt5SerialPort Library NOT FOUND")
+	ENDIF ()
+ELSE ()
+        MESSAGE (STATUS "Qt5SerialPort Library DISABLED")
+ENDIF ()
+
 ### FITS (optional) ###############################
 IF (ENABLE_FITS)
-FIND_PACKAGE (CFitsio)
-SET_PACKAGE_PROPERTIES (CFitsio PROPERTIES
-	DESCRIPTION "FITS IO Library"
-	URL "http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
-	PURPOSE "Support for the FITS (Flexible Image Transport System) data format.")
-IF (CFITSIO_FOUND)
-	add_definitions (-DHAVE_FITS)
-	include_directories (${CFITSIO_INCLUDE_DIR})
-ELSE ()
-	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library NOT FOUND")
-ENDIF ()
+	FIND_PACKAGE (CFitsio)
+	SET_PACKAGE_PROPERTIES (CFitsio PROPERTIES
+		DESCRIPTION "FITS IO Library"
+		URL "https://heasarc.gsfc.nasa.gov/fitsio/fitsio.html"
+		PURPOSE "Support for the FITS (Flexible Image Transport System) data format.")
+	IF (CFITSIO_FOUND)
+		add_definitions (-DHAVE_FITS)
+		include_directories (${CFITSIO_INCLUDE_DIR})
+	ELSE ()
+		MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Flexible Image Transport System Data Format (FITS) Library DISABLED")
 ENDIF ()
 
 ### LIBCERF (optional) #############################
 IF (ENABLE_LIBCERF)
-FIND_PACKAGE (LIBCERF)
-IF (LIBCERF_FOUND)
-	add_definitions (-DHAVE_LIBCERF)
-ELSE ()
-	MESSAGE (STATUS "libcerf library NOT FOUND")
-ENDIF ()
+	FIND_PACKAGE (LIBCERF)
+	IF (LIBCERF_FOUND)
+		add_definitions (-DHAVE_LIBCERF)
+	ELSE ()
+		MESSAGE (STATUS "libcerf library NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "libcerf library DISABLED")
 ENDIF ()
 
+### ROOT (optional) #############################
 IF (ENABLE_ROOT)
-FIND_PACKAGE(ZLIB)
-SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
-	DESCRIPTION "General purpose compression library"
-	URL "https://www.zlib.net/"
-)
-FIND_PACKAGE(LZ4)
-IF (ZLIB_FOUND AND LZ4_FOUND)
-	MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
-	add_definitions (-DHAVE_ZIP)
-ELSE ()
-	MESSAGE (STATUS "ZIP libraries ZLIB and LZ4 (needed for ROOT importer) NOT FOUND")
-ENDIF ()
+	FIND_PACKAGE(ZLIB)
+	SET_PACKAGE_PROPERTIES (ZLIB PROPERTIES
+		DESCRIPTION "General purpose compression library"
+		URL "https://www.zlib.net/"
+	)
+	FIND_PACKAGE(LZ4)
+	IF (ZLIB_FOUND AND LZ4_FOUND)
+		MESSAGE (STATUS "Found ZIP libraries ZLIB and LZ4 (needed for ROOT importer)")
+		add_definitions (-DHAVE_ZIP)
+	ELSE ()
+		MESSAGE (STATUS "ZIP libraries ZLIB and LZ4 (needed for ROOT importer) NOT FOUND")
+	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "ROOT (CERN) importer DISABLED")
 ENDIF ()
 
+#################################################
 #################################################
 include(CheckFunctionExists)
 

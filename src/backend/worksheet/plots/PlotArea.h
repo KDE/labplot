@@ -32,19 +32,20 @@
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/macros.h"
 
+class CartesianPlot;
 class PlotAreaPrivate;
 
 class PlotArea : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit PlotArea(const QString& name);
+	explicit PlotArea(const QString& name, CartesianPlot *parent);
 	~PlotArea() override;
 
-	enum BackgroundType {Color, Image, Pattern};
-	enum BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
+	enum class BackgroundType {Color, Image, Pattern};
+	enum class BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
 			TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient, RadialGradient};
-	enum BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
+	enum class BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 
 	QGraphicsItem* graphicsItem() const override;
 	void setVisible(bool on) override;
@@ -52,6 +53,9 @@ public:
 	void setPrinting(bool) override {};
 	void loadThemeConfig(const KConfig& config) override;
 	void saveThemeConfig(const KConfig& config) override;
+	bool isHovered() const;
+	bool isPrinted() const;
+	bool isSelected() const;
 
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
@@ -78,7 +82,7 @@ public:
 	typedef PlotAreaPrivate Private;
 
 protected:
-	PlotArea(const QString& name, PlotAreaPrivate* dd);
+	PlotArea(const QString& name, CartesianPlot *parent, PlotAreaPrivate* dd);
 	PlotAreaPrivate* const d_ptr;
 
 private:
@@ -97,6 +101,9 @@ signals:
 	void borderPenChanged(QPen&);
 	void borderCornerRadiusChanged(float);
 	void borderOpacityChanged(float);
+
+private:
+	CartesianPlot* m_parent;
 };
 
 #endif

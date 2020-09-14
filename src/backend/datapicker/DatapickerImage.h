@@ -53,29 +53,29 @@ public:
 	explicit DatapickerImage(const QString& name, bool loading = false);
 	~DatapickerImage() override;
 
-	enum GraphType { Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
-	enum ColorAttributes { None, Intensity, Foreground, Hue, Saturation, Value };
-	enum PlotImageType { NoImage, OriginalImage, ProcessedImage };
-	enum PointsType { AxisPoints, CurvePoints, SegmentPoints };
+	enum class GraphType {Cartesian, PolarInDegree, PolarInRadians, LogarithmicX, LogarithmicY, Ternary};
+	enum class ColorAttributes {None, Intensity, Foreground, Hue, Saturation, Value};
+	enum class PlotImageType {NoImage, OriginalImage, ProcessedImage};
+	enum class PointsType {AxisPoints, CurvePoints, SegmentPoints};
 
 	struct ReferencePoints {
-		GraphType type;
+		GraphType type{GraphType::Cartesian};
 		QPointF scenePos[3];
 		QVector3D logicalPos[3];
-		double ternaryScale;
+		double ternaryScale{1.0};
 	};
 
 	struct EditorSettings {
-		int intensityThresholdLow;
-		int intensityThresholdHigh;
-		int foregroundThresholdLow;
-		int foregroundThresholdHigh;
-		int hueThresholdLow;
-		int hueThresholdHigh;
-		int saturationThresholdLow;
-		int saturationThresholdHigh;
-		int valueThresholdLow;
-		int valueThresholdHigh;
+		int intensityThresholdLow{20};
+		int intensityThresholdHigh{100};
+		int foregroundThresholdLow{30};
+		int foregroundThresholdHigh{90};
+		int hueThresholdLow{0};
+		int hueThresholdHigh{360};
+		int saturationThresholdLow{30};
+		int saturationThresholdHigh{100};
+		int valueThresholdLow{30};
+		int valueThresholdHigh{90};
 	};
 
 	QIcon icon() const override;
@@ -132,7 +132,6 @@ public:
 
 private:
 	void init();
-	void initSceneParameters();
 
 	DatapickerImagePrivate* const d;
 	mutable DatapickerImageView* m_view{nullptr};

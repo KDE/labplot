@@ -33,6 +33,9 @@
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>
@@ -57,11 +60,6 @@ extern "C" {
 */
 
 XYInterpolationCurveDock::XYInterpolationCurveDock(QWidget* parent): XYCurveDock(parent) {
-	//hide the line connection type
-	ui.cbLineType->setDisabled(true);
-
-	//remove the tab "Error bars"
-	ui.tabWidget->removeTab(5);
 }
 
 /*!
@@ -73,12 +71,10 @@ void XYInterpolationCurveDock::setupGeneral() {
 	m_leName = uiGeneralTab.leName;
 	m_leComment = uiGeneralTab.leComment;
 
-	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
-	if (gridLayout) {
-		gridLayout->setContentsMargins(2,2,2,2);
-		gridLayout->setHorizontalSpacing(2);
-		gridLayout->setVerticalSpacing(2);
-	}
+	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
+	gridLayout->setContentsMargins(2,2,2,2);
+	gridLayout->setHorizontalSpacing(2);
+	gridLayout->setVerticalSpacing(2);
 
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
 	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
@@ -107,6 +103,7 @@ void XYInterpolationCurveDock::setupGeneral() {
 	uiGeneralTab.cbPointsMode->addItem(i18n("Multiple of data points"));
 	uiGeneralTab.cbPointsMode->addItem(i18n("Custom"));
 
+	//TODO: use line edits
 	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
 
@@ -119,24 +116,28 @@ void XYInterpolationCurveDock::setupGeneral() {
 	//Slots
 	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYInterpolationCurveDock::nameChanged );
 	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYInterpolationCurveDock::commentChanged );
-	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
-	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
-	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
-	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
-	connect( uiGeneralTab.cbVariant, SIGNAL(currentIndexChanged(int)), this, SLOT(variantChanged()) );
-	connect( uiGeneralTab.sbTension, SIGNAL(valueChanged(double)), this, SLOT(tensionChanged()) );
-	connect( uiGeneralTab.sbContinuity, SIGNAL(valueChanged(double)), this, SLOT(continuityChanged()) );
-	connect( uiGeneralTab.sbBias, SIGNAL(valueChanged(double)), this, SLOT(biasChanged()) );
-	connect( uiGeneralTab.cbEval, SIGNAL(currentIndexChanged(int)), this, SLOT(evaluateChanged()) );
-	connect( uiGeneralTab.sbPoints, SIGNAL(valueChanged(double)), this, SLOT(numberOfPointsChanged()) );
-	connect( uiGeneralTab.cbPointsMode, SIGNAL(currentIndexChanged(int)), this, SLOT(pointsModeChanged()) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYInterpolationCurveDock::visibilityChanged);
+	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::dataSourceTypeChanged);
+	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYInterpolationCurveDock::autoRangeChanged);
+	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYInterpolationCurveDock::xRangeMinDateTimeChanged);
+	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYInterpolationCurveDock::xRangeMaxDateTimeChanged);
+	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::typeChanged);
+	connect(uiGeneralTab.cbVariant, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::variantChanged);
+	//TODO: use line edits?
+	connect(uiGeneralTab.sbTension, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::tensionChanged);
+	connect(uiGeneralTab.sbContinuity, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::continuityChanged);
+	connect(uiGeneralTab.sbBias, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::biasChanged);
+	connect(uiGeneralTab.cbEval, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::evaluateChanged);
+	// double?
+	connect(uiGeneralTab.sbPoints, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYInterpolationCurveDock::numberOfPointsChanged);
+	connect(uiGeneralTab.cbPointsMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYInterpolationCurveDock::pointsModeChanged);
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYInterpolationCurveDock::recalculateClicked);
 
-	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
+	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYInterpolationCurveDock::dataSourceCurveChanged);
+	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYInterpolationCurveDock::xDataColumnChanged);
+	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYInterpolationCurveDock::yDataColumnChanged);
 }
 
 void XYInterpolationCurveDock::initGeneralTab() {
@@ -159,58 +160,77 @@ void XYInterpolationCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
-
 	//show the properties of the first curve
 	m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
-	Q_ASSERT(m_interpolationCurve);
+	checkColumnAvailability(cbXDataColumn, m_interpolationCurve->xDataColumn(), m_interpolationCurve->xDataColumnPath());
+	checkColumnAvailability(cbYDataColumn, m_interpolationCurve->yDataColumn(), m_interpolationCurve->yDataColumnPath());
 
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(m_interpolationCurve->dataSourceType());
+	//data source
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_interpolationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
 	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_interpolationCurve->dataSourceCurve());
 	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_interpolationCurve->xDataColumn());
 	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_interpolationCurve->yDataColumn());
+
+	//range widgets
+	const auto* plot = static_cast<const CartesianPlot*>(m_interpolationCurve->parentAspect());
+	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::RangeFormat::Numeric);
+	if (!m_dateTimeRange) {
+		uiGeneralTab.sbMin->setValue(m_interpolationData.xRange.first());
+		uiGeneralTab.sbMax->setValue(m_interpolationData.xRange.last());
+	} else {
+		uiGeneralTab.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_interpolationData.xRange.first()) );
+		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_interpolationData.xRange.last()) );
+	}
+
+	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.sbMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.lMinDateTime->setVisible(m_dateTimeRange);
+	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
+	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
+	uiGeneralTab.dateTimeEditMax->setVisible(m_dateTimeRange);
+
+	//auto range
 	uiGeneralTab.cbAutoRange->setChecked(m_interpolationData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_interpolationData.xRange.first());
-	uiGeneralTab.sbMax->setValue(m_interpolationData.xRange.last());
 	this->autoRangeChanged();
+
 	// update list of selectable types
 	xDataColumnChanged(cbXDataColumn->currentModelIndex());
 
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
-	this->typeChanged();
+	this->typeChanged(m_interpolationData.type);
 	uiGeneralTab.cbVariant->setCurrentIndex(m_interpolationData.variant);
-	this->variantChanged();
+	this->variantChanged(m_interpolationData.variant);
 	uiGeneralTab.sbTension->setValue(m_interpolationData.tension);
 	uiGeneralTab.sbContinuity->setValue(m_interpolationData.continuity);
 	uiGeneralTab.sbBias->setValue(m_interpolationData.bias);
 	uiGeneralTab.cbEval->setCurrentIndex(m_interpolationData.evaluate);
 
-	if (m_interpolationData.pointsMode == XYInterpolationCurve::Multiple)
+	if (m_interpolationData.pointsMode == XYInterpolationCurve::PointsMode::Multiple)
 		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints/5.);
 	else
 		uiGeneralTab.sbPoints->setValue(m_interpolationData.npoints);
-	uiGeneralTab.cbPointsMode->setCurrentIndex(m_interpolationData.pointsMode);
+	uiGeneralTab.cbPointsMode->setCurrentIndex(static_cast<int>(m_interpolationData.pointsMode));
 
 	this->showInterpolationResult();
 
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_interpolationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_interpolationCurve, SIGNAL(dataSourceTypeChanged(XYAnalysisCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType)));
-	connect(m_interpolationCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
-	connect(m_interpolationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
-	connect(m_interpolationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
-	connect(m_interpolationCurve, SIGNAL(interpolationDataChanged(XYInterpolationCurve::InterpolationData)), this, SLOT(curveInterpolationDataChanged(XYInterpolationCurve::InterpolationData)));
-	connect(m_interpolationCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+	connect(m_interpolationCurve, &XYInterpolationCurve::aspectDescriptionChanged, this, &XYInterpolationCurveDock::curveDescriptionChanged);
+	connect(m_interpolationCurve, &XYInterpolationCurve::dataSourceTypeChanged, this, &XYInterpolationCurveDock::curveDataSourceTypeChanged);
+	connect(m_interpolationCurve, &XYInterpolationCurve::dataSourceCurveChanged, this, &XYInterpolationCurveDock::curveDataSourceCurveChanged);
+	connect(m_interpolationCurve, &XYInterpolationCurve::xDataColumnChanged, this, &XYInterpolationCurveDock::curveXDataColumnChanged);
+	connect(m_interpolationCurve, &XYInterpolationCurve::yDataColumnChanged, this, &XYInterpolationCurveDock::curveYDataColumnChanged);
+	connect(m_interpolationCurve, &XYInterpolationCurve::interpolationDataChanged, this, &XYInterpolationCurveDock::curveInterpolationDataChanged);
+	connect(m_interpolationCurve, &XYInterpolationCurve::sourceDataChanged, this, &XYInterpolationCurveDock::enableRecalculate);
 }
 
 void XYInterpolationCurveDock::setModel() {
 	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
-	                       AspectType::CartesianPlot, AspectType::XYCurve};
+							AspectType::CartesianPlot, AspectType::XYCurve, AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;
@@ -226,6 +246,7 @@ void XYInterpolationCurveDock::setModel() {
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 
+	cbDataSourceCurve->setModel(m_aspectTreeModel);
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
 
@@ -239,11 +260,21 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
+	m_aspect = m_curve;
 	m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
 	Q_ASSERT(m_interpolationCurve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_interpolationData = m_interpolationCurve->interpolationData();
+
+	SET_NUMBER_LOCALE
+	uiGeneralTab.sbMin->setLocale(numberLocale);
+	uiGeneralTab.sbMax->setLocale(numberLocale);
+	uiGeneralTab.sbTension->setLocale(numberLocale);
+	uiGeneralTab.sbContinuity->setLocale(numberLocale);
+	uiGeneralTab.sbBias->setLocale(numberLocale);
+	uiGeneralTab.sbPoints->setLocale(numberLocale);
+
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;
@@ -258,7 +289,7 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 //*************************************************************
 void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
-	if (type == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -331,8 +362,8 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 		if (!std::isnan(column->valueAt(row)) && !column->isMasked(row))
 			n++;
 	dataPoints = n;
-	if (m_interpolationData.pointsMode == XYInterpolationCurve::Auto)
-		pointsModeChanged();
+	if (m_interpolationData.pointsMode == XYInterpolationCurve::PointsMode::Auto)
+		pointsModeChanged(uiGeneralTab.cbPointsMode->currentIndex());
 
 	const auto* model = qobject_cast<const QStandardItemModel*>(uiGeneralTab.cbType->model());
 	QStandardItem* item = model->item(nsl_interp_type_polynomial);
@@ -415,14 +446,18 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 	bool autoRange = uiGeneralTab.cbAutoRange->isChecked();
 	m_interpolationData.autoRange = autoRange;
 
-	if (autoRange) {
-		uiGeneralTab.lMin->setEnabled(false);
-		uiGeneralTab.sbMin->setEnabled(false);
-		uiGeneralTab.lMax->setEnabled(false);
-		uiGeneralTab.sbMax->setEnabled(false);
+	uiGeneralTab.lMin->setEnabled(!autoRange);
+	uiGeneralTab.sbMin->setEnabled(!autoRange);
+	uiGeneralTab.lMax->setEnabled(!autoRange);
+	uiGeneralTab.sbMax->setEnabled(!autoRange);
+	uiGeneralTab.lMinDateTime->setEnabled(!autoRange);
+	uiGeneralTab.dateTimeEditMin->setEnabled(!autoRange);
+	uiGeneralTab.lMaxDateTime->setEnabled(!autoRange);
+	uiGeneralTab.dateTimeEditMax->setEnabled(!autoRange);
 
+	if (autoRange) {
 		const AbstractColumn* xDataColumn = nullptr;
-		if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet)
+		if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
 			xDataColumn = m_interpolationCurve->xDataColumn();
 		else {
 			if (m_interpolationCurve->dataSourceCurve())
@@ -430,33 +465,45 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+			if (!m_dateTimeRange) {
+				uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
+				uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+			} else {
+				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
+				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
+			}
 		}
-	} else {
-		uiGeneralTab.lMin->setEnabled(true);
-		uiGeneralTab.sbMin->setEnabled(true);
-		uiGeneralTab.lMax->setEnabled(true);
-		uiGeneralTab.sbMax->setEnabled(true);
 	}
-
 }
-void XYInterpolationCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
 
-	m_interpolationData.xRange.first() = xMin;
+void XYInterpolationCurveDock::xRangeMinChanged(double value) {
+	m_interpolationData.xRange.first() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
-
-	m_interpolationData.xRange.last() = xMax;
+void XYInterpolationCurveDock::xRangeMaxChanged(double value) {
+	m_interpolationData.xRange.last() = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::typeChanged() {
-	const auto type = (nsl_interp_type)uiGeneralTab.cbType->currentIndex();
+void XYInterpolationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	m_interpolationData.xRange.first() = dateTime.toMSecsSinceEpoch();
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYInterpolationCurveDock::xRangeMaxDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	m_interpolationData.xRange.last() = dateTime.toMSecsSinceEpoch();
+	uiGeneralTab.pbRecalculate->setEnabled(true);
+}
+
+void XYInterpolationCurveDock::typeChanged(int index) {
+	const auto type = (nsl_interp_type)index;
 	m_interpolationData.type = type;
 
 	switch (type) {
@@ -489,102 +536,97 @@ void XYInterpolationCurveDock::typeChanged() {
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::variantChanged() {
-	const auto variant = (nsl_interp_pch_variant)uiGeneralTab.cbVariant->currentIndex();
+void XYInterpolationCurveDock::variantChanged(int index) {
+	const auto variant = (nsl_interp_pch_variant)index;
 	m_interpolationData.variant = variant;
 
 	switch (variant) {
 	case nsl_interp_pch_variant_finite_difference:
 		uiGeneralTab.lParameter->hide();
-                uiGeneralTab.lTension->hide();
-                uiGeneralTab.sbTension->hide();
-                uiGeneralTab.lContinuity->hide();
-                uiGeneralTab.sbContinuity->hide();
-                uiGeneralTab.lBias->hide();
-                uiGeneralTab.sbBias->hide();
+		uiGeneralTab.lTension->hide();
+		uiGeneralTab.sbTension->hide();
+		uiGeneralTab.lContinuity->hide();
+		uiGeneralTab.sbContinuity->hide();
+		uiGeneralTab.lBias->hide();
+		uiGeneralTab.sbBias->hide();
 		break;
 	case nsl_interp_pch_variant_catmull_rom:
 		uiGeneralTab.lParameter->show();
-                uiGeneralTab.lTension->show();
-                uiGeneralTab.sbTension->show();
-                uiGeneralTab.sbTension->setEnabled(false);
-                uiGeneralTab.sbTension->setValue(0.0);
-                uiGeneralTab.lContinuity->hide();
-                uiGeneralTab.sbContinuity->hide();
-                uiGeneralTab.lBias->hide();
-                uiGeneralTab.sbBias->hide();
+		uiGeneralTab.lTension->show();
+		uiGeneralTab.sbTension->show();
+		uiGeneralTab.sbTension->setEnabled(false);
+		uiGeneralTab.sbTension->setValue(0.0);
+		uiGeneralTab.lContinuity->hide();
+		uiGeneralTab.sbContinuity->hide();
+		uiGeneralTab.lBias->hide();
+		uiGeneralTab.sbBias->hide();
 		break;
 	case nsl_interp_pch_variant_cardinal:
 		uiGeneralTab.lParameter->show();
-                uiGeneralTab.lTension->show();
-                uiGeneralTab.sbTension->show();
-                uiGeneralTab.sbTension->setEnabled(true);
-                uiGeneralTab.lContinuity->hide();
-                uiGeneralTab.sbContinuity->hide();
-                uiGeneralTab.lBias->hide();
-                uiGeneralTab.sbBias->hide();
+		uiGeneralTab.lTension->show();
+		uiGeneralTab.sbTension->show();
+		uiGeneralTab.sbTension->setEnabled(true);
+		uiGeneralTab.lContinuity->hide();
+		uiGeneralTab.sbContinuity->hide();
+		uiGeneralTab.lBias->hide();
+		uiGeneralTab.sbBias->hide();
 		break;
 	case nsl_interp_pch_variant_kochanek_bartels:
 		uiGeneralTab.lParameter->show();
-                uiGeneralTab.lTension->show();
-                uiGeneralTab.sbTension->show();
-                uiGeneralTab.sbTension->setEnabled(true);
-                uiGeneralTab.lContinuity->show();
-                uiGeneralTab.sbContinuity->show();
-                uiGeneralTab.lBias->show();
-                uiGeneralTab.sbBias->show();
+		uiGeneralTab.lTension->show();
+		uiGeneralTab.sbTension->show();
+		uiGeneralTab.sbTension->setEnabled(true);
+		uiGeneralTab.lContinuity->show();
+		uiGeneralTab.sbContinuity->show();
+		uiGeneralTab.lBias->show();
+		uiGeneralTab.sbBias->show();
 		break;
 	}
 
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::tensionChanged() {
-	m_interpolationData.tension = uiGeneralTab.sbTension->value();
-
+void XYInterpolationCurveDock::tensionChanged(double value) {
+	m_interpolationData.tension = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::continuityChanged() {
-	m_interpolationData.continuity = uiGeneralTab.sbContinuity->value();
-
+void XYInterpolationCurveDock::continuityChanged(double value) {
+	m_interpolationData.continuity = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::biasChanged() {
-	m_interpolationData.bias = uiGeneralTab.sbBias->value();
-
+void XYInterpolationCurveDock::biasChanged(double value) {
+	m_interpolationData.bias = value;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::evaluateChanged() {
-	m_interpolationData.evaluate = (nsl_interp_evaluate)uiGeneralTab.cbEval->currentIndex();
-
-
+void XYInterpolationCurveDock::evaluateChanged(int index) {
+	m_interpolationData.evaluate = (nsl_interp_evaluate)index;
 	uiGeneralTab.pbRecalculate->setEnabled(true);
 }
 
-void XYInterpolationCurveDock::pointsModeChanged() {
-	const auto mode = (XYInterpolationCurve::PointsMode)uiGeneralTab.cbPointsMode->currentIndex();
+void XYInterpolationCurveDock::pointsModeChanged(int index) {
+	const auto mode = (XYInterpolationCurve::PointsMode)index;
 
 	switch (mode) {
-	case XYInterpolationCurve::Auto:
+	case XYInterpolationCurve::PointsMode::Auto:
 		uiGeneralTab.sbPoints->setEnabled(false);
 		uiGeneralTab.sbPoints->setDecimals(0);
 		uiGeneralTab.sbPoints->setSingleStep(1.0);
 		uiGeneralTab.sbPoints->setValue(5*dataPoints);
 		break;
-	case XYInterpolationCurve::Multiple:
+	case XYInterpolationCurve::PointsMode::Multiple:
 		uiGeneralTab.sbPoints->setEnabled(true);
-		if (m_interpolationData.pointsMode != XYInterpolationCurve::Multiple && dataPoints > 0) {
+		if (m_interpolationData.pointsMode != XYInterpolationCurve::PointsMode::Multiple && dataPoints > 0) {
 			uiGeneralTab.sbPoints->setDecimals(2);
 			uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()/(double)dataPoints);
 			uiGeneralTab.sbPoints->setSingleStep(0.01);
 		}
 		break;
-	case XYInterpolationCurve::Custom:
+	case XYInterpolationCurve::PointsMode::Custom:
 		uiGeneralTab.sbPoints->setEnabled(true);
-		if (m_interpolationData.pointsMode == XYInterpolationCurve::Multiple) {
+		if (m_interpolationData.pointsMode == XYInterpolationCurve::PointsMode::Multiple) {
 			uiGeneralTab.sbPoints->setDecimals(0);
 			uiGeneralTab.sbPoints->setSingleStep(1.0);
 			uiGeneralTab.sbPoints->setValue(uiGeneralTab.sbPoints->value()*dataPoints);
@@ -596,10 +638,9 @@ void XYInterpolationCurveDock::pointsModeChanged() {
 }
 
 void XYInterpolationCurveDock::numberOfPointsChanged() {
-	if (uiGeneralTab.cbPointsMode->currentIndex() == XYInterpolationCurve::Multiple)
-		m_interpolationData.npoints = uiGeneralTab.sbPoints->value()*dataPoints;
-	else
-		m_interpolationData.npoints = uiGeneralTab.sbPoints->value();
+	m_interpolationData.npoints = uiGeneralTab.sbPoints->value();
+	if (uiGeneralTab.cbPointsMode->currentIndex() == static_cast<int>(XYInterpolationCurve::PointsMode::Multiple))
+		m_interpolationData.npoints *= dataPoints;
 
 	// warn if points is smaller than data points
 	QPalette palette = uiGeneralTab.sbPoints->palette();
@@ -629,7 +670,7 @@ void XYInterpolationCurveDock::enableRecalculate() const {
 
 	//no interpolation possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (m_interpolationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
@@ -652,7 +693,7 @@ void XYInterpolationCurveDock::enableRecalculate() const {
  * show the result and details of the interpolation
  */
 void XYInterpolationCurveDock::showInterpolationResult() {
-	const XYInterpolationCurve::InterpolationResult& interpolationResult = m_interpolationCurve->interpolationResult();
+	const auto& interpolationResult = m_interpolationCurve->interpolationResult();
 	if (!interpolationResult.available) {
 		uiGeneralTab.teResult->clear();
 		return;
@@ -665,10 +706,11 @@ void XYInterpolationCurveDock::showInterpolationResult() {
 		return; //result is not valid, there was an error which is shown in the status-string, nothing to show more.
 	}
 
-	if (interpolationResult.elapsedTime>1000)
-		str += i18n("calculation time: %1 s", QString::number(interpolationResult.elapsedTime/1000)) + "<br>";
+	SET_NUMBER_LOCALE
+	if (interpolationResult.elapsedTime > 1000)
+		str += i18n("calculation time: %1 s", numberLocale.toString(interpolationResult.elapsedTime/1000)) + "<br>";
 	else
-		str += i18n("calculation time: %1 ms", QString::number(interpolationResult.elapsedTime)) + "<br>";
+		str += i18n("calculation time: %1 ms", numberLocale.toString(interpolationResult.elapsedTime)) + "<br>";
 
  	str += "<br><br>";
 
@@ -687,17 +729,16 @@ void XYInterpolationCurveDock::curveDescriptionChanged(const AbstractAspect* asp
 		return;
 
 	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text()) {
+	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
+	else if (aspect->comment() != uiGeneralTab.leComment->text())
 		uiGeneralTab.leComment->setText(aspect->comment());
-	}
 	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
-	uiGeneralTab.cbDataSourceType->setCurrentIndex(type);
+	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 
@@ -723,7 +764,7 @@ void XYInterpolationCurveDock::curveInterpolationDataChanged(const XYInterpolati
 	m_initializing = true;
 	m_interpolationData = data;
 	uiGeneralTab.cbType->setCurrentIndex(m_interpolationData.type);
-	this->typeChanged();
+	this->typeChanged(m_interpolationData.type);
 
 	this->showInterpolationResult();
 	m_initializing = false;

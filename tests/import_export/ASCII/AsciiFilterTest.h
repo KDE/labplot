@@ -53,6 +53,8 @@ private slots:
 	void testHeader04();
 	void testHeader05();
 	void testHeader06();
+	void testHeader07();
+	void testHeader08();
 
 	//read ranges
 	void testColumnRange00();
@@ -82,8 +84,11 @@ private slots:
 	//handling of NANs
 
 	//automatically skip comments
+	void testComments00();
+	void testComments01();
+	void testComments02();
 
-private:
-	QString m_dataDir;
+	//datetime data
+	void testDateTime00();
 };
 #endif

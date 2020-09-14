@@ -44,11 +44,11 @@ public:
 
 	void setCurves(QList<DatapickerCurve*>);
 	void load();
+	void updateLocale() override;
 
 private:
 	Ui::DatapickerCurveWidget ui;
 	void init();
-	void initConnections();
 	void hideErrorBarWidgets(bool);
 
 	DatapickerCurve* m_curve{nullptr};

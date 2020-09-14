@@ -46,6 +46,9 @@ public:
 	XYSmoothCurve::SmoothData smoothData;
 	XYSmoothCurve::SmoothResult smoothResult;
 
+	Column* roughColumn{nullptr};
+	QVector<double>* roughVector{nullptr};
+
 	XYSmoothCurve* const q;
 };
 

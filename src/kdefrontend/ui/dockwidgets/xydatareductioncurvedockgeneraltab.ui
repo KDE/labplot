@@ -6,11 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>497</width>
-    <height>1023</height>
+    <width>352</width>
+    <height>856</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="sizePolicy">
@@ -40,12 +40,18 @@
      </property>
     </spacer>
    </item>
+   <item row="0" column="2" colspan="2">
+    <widget class="QLineEdit" name="leName"/>
+   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
      <property name="text">
       <string>Comment:</string>
      </property>
     </widget>
+   </item>
+   <item row="1" column="2" colspan="2">
+    <widget class="QLineEdit" name="leComment"/>
    </item>
    <item row="2" column="2">
     <spacer name="verticalSpacer_3">
@@ -131,7 +137,132 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="2">
+   <item row="9" column="2" colspan="2">
+    <widget class="QFrame" name="frameRange">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lMax">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Maximum:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="sbMin">
+        <property name="decimals">
+         <number>6</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="sbMax">
+        <property name="decimals">
+         <number>6</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lMaxDateTime">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Maximum:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lMinDateTime">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Minimum:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lMin">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Minimum:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QDateTimeEdit" name="dateTimeEditMin">
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QDateTimeEdit" name="dateTimeEditMax">
+        <property name="calendarPopup">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="10" column="2">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -147,7 +278,7 @@
      </property>
     </spacer>
    </item>
-   <item row="12" column="0">
+   <item row="11" column="0">
     <widget class="QLabel" name="lSimplification">
      <property name="font">
       <font>
@@ -160,176 +291,14 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
+   <item row="12" column="0">
     <widget class="QLabel" name="lType">
      <property name="text">
       <string>Type:</string>
      </property>
     </widget>
    </item>
-   <item row="14" column="0">
-    <widget class="QLabel" name="lOption">
-     <property name="text">
-      <string>Option:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="15" column="0">
-    <widget class="QLabel" name="lOption2">
-     <property name="text">
-      <string>Option:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="16" column="2">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="17" column="0">
-    <widget class="QLabel" name="lResults">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Results:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-    </widget>
-   </item>
-   <item row="18" column="0" colspan="4">
-    <widget class="Line" name="line_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="19" column="2">
-    <spacer name="horizontalSpacer_2">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>266</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="19" column="3">
-    <widget class="QPushButton" name="pbRecalculate">
-     <property name="text">
-      <string>Recalculate</string>
-     </property>
-    </widget>
-   </item>
-   <item row="20" column="2">
-    <spacer name="verticalSpacerGeneral">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>24</width>
-       <height>10</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="21" column="0">
-    <widget class="QCheckBox" name="chkVisible">
-     <property name="text">
-      <string>Visible</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2" colspan="2">
-    <widget class="QLineEdit" name="leName"/>
-   </item>
-   <item row="1" column="2" colspan="2">
-    <widget class="QLineEdit" name="leComment"/>
-   </item>
-   <item row="9" column="2" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QLabel" name="lMin">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>50</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Minimum:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="sbMin">
-       <property name="decimals">
-        <number>6</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="10" column="2" colspan="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
-     <item>
-      <widget class="QLabel" name="lMax">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>50</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Maximum:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="sbMax">
-       <property name="decimals">
-        <number>6</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="13" column="2" colspan="2">
+   <item row="12" column="2" colspan="2">
     <widget class="KComboBox" name="cbType">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -339,7 +308,14 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="2" colspan="2">
+   <item row="13" column="0">
+    <widget class="QLabel" name="lOption">
+     <property name="text">
+      <string>Option:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="2" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QCheckBox" name="chkAuto">
@@ -384,7 +360,14 @@
      </item>
     </layout>
    </item>
-   <item row="15" column="2" colspan="2">
+   <item row="14" column="0">
+    <widget class="QLabel" name="lOption2">
+     <property name="text">
+      <string>Option:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="2" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QCheckBox" name="chkAuto2">
@@ -429,10 +412,92 @@
      </item>
     </layout>
    </item>
-   <item row="17" column="2" colspan="2">
+   <item row="15" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>18</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="16" column="0">
+    <widget class="QLabel" name="lResults">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Results:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+    </widget>
+   </item>
+   <item row="16" column="2" colspan="2">
     <widget class="QTextEdit" name="teResult">
      <property name="readOnly">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0" colspan="4">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="18" column="2">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>266</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="18" column="3">
+    <widget class="QPushButton" name="pbRecalculate">
+     <property name="text">
+      <string>Recalculate</string>
+     </property>
+    </widget>
+   </item>
+   <item row="19" column="0">
+    <spacer name="verticalSpacerGeneral">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>24</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="20" column="0">
+    <widget class="QCheckBox" name="chkVisible">
+     <property name="text">
+      <string>Visible</string>
      </property>
     </widget>
    </item>

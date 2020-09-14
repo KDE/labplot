@@ -28,12 +28,13 @@
 #ifndef CANTORWORKSHEETDOCK_H
 #define CANTORWORKSHEETDOCK_H
 
-#include <QWidget>
-#include <QPair>
-
-#include <cantor/panelplugin.h>
-#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_cantorworksheetdock.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
+
+#include <3rdparty/cantor/panelplugin.h>
+
+#include <QPair>
+#include <QWidget>
 
 class CantorWorksheet;
 class AbstractAspect;
@@ -56,9 +57,11 @@ private slots:
 	//"General"-tab
 	void evaluateWorksheet();
 	void restartBackend();
+	void visibilityRequested();
 
 	//SLOTs for changes triggered in Worksheet
 	void worksheetDescriptionChanged(const AbstractAspect*);
+
 signals:
 	void info(const QString&);
 

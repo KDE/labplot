@@ -41,11 +41,14 @@
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
+#include <KLocalizedString>
+#include <KConfigGroup>
+#include <KSharedConfig>
+
 #include <QAction>
 #include <QStackedWidget>
 #include <QTableView>
 #include <QKeyEvent>
-#include <QShortcut>
 #include <QMenu>
 #include <QPainter>
 #include <QPrinter>
@@ -58,8 +61,6 @@
 #include <QMutex>
 #include <QProcess>
 #include <QHeaderView>
-
-#include <KLocalizedString>
 #include <QIcon>
 
 #include <cfloat>
@@ -129,12 +130,12 @@ void MatrixView::init() {
 	area->setWidget(m_imageLabel);
 
 	//SLOTs
-	connect(m_matrix, SIGNAL(requestProjectContextMenu(QMenu*)), this, SLOT(createContextMenu(QMenu*)));
-	connect(m_model, SIGNAL(changed()), this, SLOT(matrixDataChanged()));
+	connect(m_matrix, &Matrix::requestProjectContextMenu, this, &MatrixView::createContextMenu);
+	connect(m_model, &MatrixModel::changed, this, &MatrixView::matrixDataChanged);
 
 	//keyboard shortcuts
-	QShortcut* sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
-	connect(sel_all, SIGNAL(activated()), m_tableView, SLOT(selectAll()));
+	sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
+	connect(sel_all, &QShortcut::activated, m_tableView, &QTableView::selectAll);
 
 	//TODO: add shortcuts for copy&paste,
 	//for a single shortcut we need to descriminate between copy&paste for columns, rows or selected cells.
@@ -156,7 +157,7 @@ void MatrixView::initActions() {
 	action_data_view->setChecked(true);
 	action_image_view = new QAction(QIcon::fromTheme("image-x-generic"), i18n("Image"), viewActionGroup);
 	action_image_view->setCheckable(true);
-	connect(viewActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(switchView(QAction*)));
+	connect(viewActionGroup, &QActionGroup::triggered, this, &MatrixView::switchView);
 
 	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
@@ -187,7 +188,7 @@ void MatrixView::initActions() {
 	action_header_format_2->setCheckable(true);
 	action_header_format_3= new QAction(i18n("Rows, Columns and xy-Values"), headerFormatActionGroup);
 	action_header_format_3->setCheckable(true);
-	connect(headerFormatActionGroup, SIGNAL(triggered(QAction*)), this, SLOT(headerFormatChanged(QAction*)));
+	connect(headerFormatActionGroup, &QActionGroup::triggered, this, &MatrixView::headerFormatChanged);
 
 	// column related actions
 	action_add_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("&Add Columns"), this);
@@ -212,43 +213,42 @@ void MatrixView::modifyValues() {
 	dlg->exec();
 }
 
-
 void MatrixView::connectActions() {
 	// selection related actions
-	connect(action_cut_selection, SIGNAL(triggered()), this, SLOT(cutSelection()));
-	connect(action_copy_selection, SIGNAL(triggered()), this, SLOT(copySelection()));
-	connect(action_paste_into_selection, SIGNAL(triggered()), this, SLOT(pasteIntoSelection()));
-	connect(action_clear_selection, SIGNAL(triggered()), this, SLOT(clearSelectedCells()));
-	connect(action_select_all, SIGNAL(triggered()), m_tableView, SLOT(selectAll()));
+	connect(action_cut_selection, &QAction::triggered, this, &MatrixView::cutSelection);
+	connect(action_copy_selection, &QAction::triggered, this, &MatrixView::copySelection);
+	connect(action_paste_into_selection, &QAction::triggered, this, &MatrixView::pasteIntoSelection);
+	connect(action_clear_selection, &QAction::triggered, this, &MatrixView::clearSelectedCells);
+	connect(action_select_all, &QAction::triggered, m_tableView, &QTableView::selectAll);
 
 	// matrix related actions
-	connect(action_fill_function, SIGNAL(triggered()), this, SLOT(fillWithFunctionValues()));
-	connect(action_fill_const, SIGNAL(triggered()), this, SLOT(fillWithConstValues()));
+	connect(action_fill_function, &QAction::triggered, this, &MatrixView::fillWithFunctionValues);
+	connect(action_fill_const, &QAction::triggered, this, &MatrixView::fillWithConstValues);
 
-	connect(action_go_to_cell, SIGNAL(triggered()), this, SLOT(goToCell()));
-	//connect(action_duplicate, SIGNAL(triggered()), this, SLOT(duplicate()));
-	connect(action_clear_matrix, SIGNAL(triggered()), m_matrix, SLOT(clear()));
-	connect(action_transpose, SIGNAL(triggered()), m_matrix, SLOT(transpose()));
-	connect(action_mirror_horizontally, SIGNAL(triggered()), m_matrix, SLOT(mirrorHorizontally()));
-	connect(action_mirror_vertically, SIGNAL(triggered()), m_matrix, SLOT(mirrorVertically()));
+	connect(action_go_to_cell, &QAction::triggered, this, QOverload<>::of(&MatrixView::goToCell));
+	//connect(action_duplicate, &QAction::triggered, this, &MatrixView::duplicate);
+	connect(action_clear_matrix, &QAction::triggered, m_matrix, &Matrix::clear);
+	connect(action_transpose, &QAction::triggered, m_matrix, &Matrix::transpose);
+	connect(action_mirror_horizontally, &QAction::triggered, m_matrix, &Matrix::mirrorHorizontally);
+	connect(action_mirror_vertically, &QAction::triggered, m_matrix, &Matrix::mirrorVertically);
 	connect(action_add_value, &QAction::triggered, this, &MatrixView::modifyValues);
 	connect(action_subtract_value, &QAction::triggered, this, &MatrixView::modifyValues);
 	connect(action_multiply_value, &QAction::triggered, this, &MatrixView::modifyValues);
 	connect(action_divide_value, &QAction::triggered, this, &MatrixView::modifyValues);
 
 	// column related actions
-	connect(action_add_columns, SIGNAL(triggered()), this, SLOT(addColumns()));
-	connect(action_insert_columns, SIGNAL(triggered()), this, SLOT(insertEmptyColumns()));
-	connect(action_remove_columns, SIGNAL(triggered()), this, SLOT(removeSelectedColumns()));
-	connect(action_clear_columns, SIGNAL(triggered()), this, SLOT(clearSelectedColumns()));
-	connect(action_statistics_columns, SIGNAL(triggered()), this, SLOT(showColumnStatistics()));
+	connect(action_add_columns, &QAction::triggered, this, &MatrixView::addColumns);
+	connect(action_insert_columns, &QAction::triggered, this, &MatrixView::insertEmptyColumns);
+	connect(action_remove_columns, &QAction::triggered, this, &MatrixView::removeSelectedColumns);
+	connect(action_clear_columns, &QAction::triggered, this, &MatrixView::clearSelectedColumns);
+	connect(action_statistics_columns, &QAction::triggered, this, &MatrixView::showColumnStatistics);
 
 	// row related actions
-	connect(action_add_rows, SIGNAL(triggered()), this, SLOT(addRows()));
-	connect(action_insert_rows, SIGNAL(triggered()), this, SLOT(insertEmptyRows()));
-	connect(action_remove_rows, SIGNAL(triggered()), this, SLOT(removeSelectedRows()));
-	connect(action_clear_rows, SIGNAL(triggered()), this, SLOT(clearSelectedRows()));
-	connect(action_statistics_rows, SIGNAL(triggered()), this, SLOT(showRowStatistics()));
+	connect(action_add_rows, &QAction::triggered, this, &MatrixView::addRows);
+	connect(action_insert_rows, &QAction::triggered, this, &MatrixView::insertEmptyRows);
+	connect(action_remove_rows, &QAction::triggered, this, &MatrixView::removeSelectedRows);
+	connect(action_clear_rows, &QAction::triggered, this, &MatrixView::clearSelectedRows);
+	connect(action_statistics_rows, &QAction::triggered, this, &MatrixView::showRowStatistics);
 }
 
 void MatrixView::initMenus() {
@@ -308,7 +308,6 @@ void MatrixView::initMenus() {
 	m_matrixMenu->addMenu(submenu);
 	m_matrixMenu->addSeparator();
 
-
 	m_matrixMenu->addAction(action_select_all);
 	m_matrixMenu->addAction(action_clear_matrix);
 	m_matrixMenu->addSeparator();
@@ -349,7 +348,6 @@ void MatrixView::createContextMenu(QMenu* menu) const {
 	submenu->addAction(action_fill_function);
 	menu->insertMenu(firstAction, submenu);
 	menu->insertSeparator(firstAction);
-
 
 	// Data manipulation sub-menu
 	submenu = new QMenu(i18n("Manipulate Data"), const_cast<MatrixView*>(this));
@@ -409,8 +407,8 @@ void MatrixView::adjustHeaders() {
 			m_tableView->setRowHeight(i, m_matrix->rowHeight(i));
 	}
 
-	connect(v_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleVerticalSectionResized(int,int,int)));
-	connect(h_header, SIGNAL(sectionResized(int,int,int)), this, SLOT(handleHorizontalSectionResized(int,int,int)));
+	connect(v_header, &QHeaderView::sectionResized, this, &MatrixView::handleVerticalSectionResized);
+	connect(h_header, &QHeaderView::sectionResized, this, &MatrixView::handleHorizontalSectionResized);
 }
 
 /*!
@@ -420,9 +418,9 @@ void MatrixView::resizeHeaders() {
 	m_tableView->resizeColumnsToContents();
 	m_tableView->resizeRowsToContents();
 
-	if (m_matrix->headerFormat() == Matrix::HeaderRowsColumns)
+	if (m_matrix->headerFormat() == Matrix::HeaderFormat::HeaderRowsColumns)
 		action_header_format_1->setChecked(true);
-	else if (m_matrix->headerFormat() == Matrix::HeaderValues)
+	else if (m_matrix->headerFormat() == Matrix::HeaderFormat::HeaderValues)
 		action_header_format_2->setChecked(true);
 	else
 		action_header_format_3->setChecked(true);
@@ -574,6 +572,8 @@ bool MatrixView::eventFilter(QObject * watched, QEvent * event) {
 void MatrixView::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)
 		advanceCell();
+	else if (event->key() == Qt::Key_Backspace || event->matches(QKeySequence::Delete))
+		clearSelectedCells();
 }
 
 //##############################################################################
@@ -624,7 +624,7 @@ void MatrixView::fillWithFunctionValues() {
 void MatrixView::fillWithConstValues() {
 	bool ok = false;
 	double value = QInputDialog::getDouble(this, i18n("Fill the matrix with constant value"),
-	                                       i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
+		i18n("Value"), 0, -2147483647, 2147483647, 6, &ok);
 	if (ok) {
 		WAIT_CURSOR;
 		auto* newData = static_cast<QVector<QVector<double>>*>(m_matrix->data());
@@ -664,11 +664,12 @@ void MatrixView::copySelection() {
 	WAIT_CURSOR;
 	QString output_str;
 
+	SET_NUMBER_LOCALE
 	for (int r = 0; r < rows; r++) 	{
 		for (int c = 0; c < cols; c++) {
 			//TODO: mode
 			if (isCellSelected(first_row + r, first_col + c))
-				output_str += QLocale().toString(m_matrix->cell<double>(first_row + r, first_col + c),
+				output_str += numberLocale.toString(m_matrix->cell<double>(first_row + r, first_col + c),
 				                                 m_matrix->numericFormat(), 16); // copy with max. precision
 			if (c < cols-1)
 				output_str += '\t';
@@ -767,7 +768,6 @@ void MatrixView::clearSelectedCells() {
 	RESET_CURSOR;
 }
 
-
 class UpdateImageTask : public QRunnable {
 public:
 	UpdateImageTask(int start, int end, QImage& image, const void* data, double scaleFactor, double min) : m_image(image), m_data(data) {
@@ -855,11 +855,11 @@ void MatrixView::matrixDataChanged() {
 
 void MatrixView::headerFormatChanged(QAction* action) {
 	if (action == action_header_format_1)
-		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumns);
+		m_matrix->setHeaderFormat(Matrix::HeaderFormat::HeaderRowsColumns);
 	else if (action == action_header_format_2)
-		m_matrix->setHeaderFormat(Matrix::HeaderValues);
+		m_matrix->setHeaderFormat(Matrix::HeaderFormat::HeaderValues);
 	else
-		m_matrix->setHeaderFormat(Matrix::HeaderRowsColumnsValues);
+		m_matrix->setHeaderFormat(Matrix::HeaderFormat::HeaderRowsColumnsValues);
 }
 
 //############################# column related slots ###########################
@@ -1032,7 +1032,6 @@ void MatrixView::print(QPrinter* printer) const {
 	if (remainingColumns > 0)
 		tablesCount++;
 	for (int table = 0; table < tablesCount; ++table) {
-		right = margin + vertHeaderWidth;
 		//Paint the horizontal header first
 		painter.setFont(hHeader->font());
 		QString headerString = m_tableView->model()->headerData(0, Qt::Horizontal).toString();
@@ -1126,6 +1125,7 @@ void MatrixView::exportToFile(const QString& path, const QString& separator, QLo
 	const int cols = m_matrix->columnCount();
 	const int rows = m_matrix->rowCount();
 	const QVector<QVector<double> >* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	//TODO: use general setting for number locale?
 	QLocale locale(language);
 	for (int row = 0; row < rows; ++row) {
 		for (int col = 0; col < cols; ++col) {
@@ -1481,7 +1481,6 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 void MatrixView::showColumnStatistics() {
 	if (selectedColumnCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " column statistics");
-		auto* dlg = new StatisticsDialog(dlgTitle);
 		QVector<Column*> columns;
 		for (int col = 0; col < m_matrix->columnCount(); ++col) {
 			if (isColumnSelected(col, false)) {
@@ -1489,7 +1488,8 @@ void MatrixView::showColumnStatistics() {
 				columns << new Column(headerString, static_cast<QVector<QVector<double>>*>(m_matrix->data())->at(col));
 			}
 		}
-		dlg->setColumns(columns);
+		auto* dlg = new StatisticsDialog(dlgTitle, columns);
+		dlg->showStatistics();
 		if (dlg->exec() == QDialog::Accepted) {
 			qDeleteAll(columns);
 			columns.clear();
@@ -1500,7 +1500,6 @@ void MatrixView::showColumnStatistics() {
 void MatrixView::showRowStatistics() {
 	if (selectedRowCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " row statistics");
-		auto* dlg = new StatisticsDialog(dlgTitle);
 		QVector<Column*> columns;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			if (isRowSelected(row, false)) {
@@ -1509,7 +1508,8 @@ void MatrixView::showRowStatistics() {
 				columns << new Column(headerString, m_matrix->rowCells<double>(row, 0, m_matrix->columnCount()-1));
 			}
 		}
-		dlg->setColumns(columns);
+		auto* dlg = new StatisticsDialog(dlgTitle, columns);
+		dlg->showStatistics();
 		if (dlg->exec() == QDialog::Accepted) {
 			qDeleteAll(columns);
 			columns.clear();
@@ -1523,12 +1523,4 @@ void MatrixView::exportToFits(const QString &fileName, const int exportTo) const
 	filter->write(fileName, m_matrix);
 
 	delete filter;
-}
-
-void MatrixView::registerShortcuts() {
-	action_clear_selection ->setShortcut(QKeySequence::Delete);
-}
-
-void MatrixView::unregisterShortcuts() {
-	action_clear_selection->setShortcut(QKeySequence());
 }

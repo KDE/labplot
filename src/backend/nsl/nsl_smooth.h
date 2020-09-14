@@ -42,7 +42,7 @@ extern const char* nsl_smooth_type_name[];
  *	interp: polynomial interpolation
  *	mirror:   3 2 | 1 2 3 4 5 | 4 3	(reflect)
  *	nearest:  1 1 | 1 2 3 4 5 | 5 5	(repeat)
- *	constant: V V | 1 2 3 4 5 | V V
+ *	constant: L L | 1 2 3 4 5 | R R
  *	periodic: 4 5 | 1 2 3 4 5 | 1 2 (wrap)
 */
 #define NSL_SMOOTH_PAD_MODE_COUNT 6

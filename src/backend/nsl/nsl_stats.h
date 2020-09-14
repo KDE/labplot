@@ -31,7 +31,8 @@
 
 #include <stdlib.h>
 
-/* estimation types of quantile (see https://en.wikipedia.org/wiki/Quantile) */
+/* estimation types of quantile (see https://en.wikipedia.org/wiki/Quantile,
+ * https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.mstats.mquantiles.html) */
 #define NSL_STATS_QUANTILE_TYPE_COUNT 9
 typedef enum {nsl_stats_quantile_type1=1, nsl_stats_quantile_type2, nsl_stats_quantile_type3, nsl_stats_quantile_type4, 
 		nsl_stats_quantile_type5, nsl_stats_quantile_type6, nsl_stats_quantile_type7, nsl_stats_quantile_type8,
@@ -80,7 +81,7 @@ double nsl_stats_tdist_margin(double alpha, double dof, double error);
 double nsl_stats_chisq_p(double t, double dof);
 
 /* F distribution */
-double nsl_stats_fdist_F(double sst, double rms, unsigned int np, int version);
+double nsl_stats_fdist_F(double rsquare, size_t np, size_t dof);
 /* p value */
 double nsl_stats_fdist_p(double F, size_t np, double dof);
 

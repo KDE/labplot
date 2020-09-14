@@ -68,14 +68,26 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	tempPath = QDir::tempPath();
 #endif
 
+	// make sure we have preview.sty available
+	if (!tempPath.contains(QLatin1String("preview.sty"))) {
+		QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("latex/preview.sty"));
+		if (file.isEmpty()) {
+			WARN("Couldn't find preview.sty.");
+			*success = false;
+			return QImage();
+		}
+		else
+			QFile::copy(file, tempPath + QLatin1String("/") + QLatin1String("preview.sty"));
+	}
+
 	//create a temporary file
-	QTemporaryFile file(tempPath + QDir::separator() + "labplot_XXXXXX.tex");
+	QTemporaryFile file(tempPath + QLatin1String("/") + "labplot_XXXXXX.tex");
 	// FOR DEBUG: file.setAutoRemove(false);
 	// DEBUG("temp file path = " << file.fileName().toUtf8().constData());
 	if (file.open()) {
 		QDir::setCurrent(tempPath);
 	} else {
-		WARN(QString("Couldn't open the file " + file.fileName()).toStdString());
+		WARN("Couldn't open the file " << STDSTRING(file.fileName()));
 		*success = false;
 		return QImage();
 	}
@@ -119,10 +131,11 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	//out << "\\usepackage{mathtools}";
 	out << "\\begin{document}";
 	out << "\\begin{preview}";
-	out << "\\pagecolor[rgb]{" << backgroundColor.redF() << ',' << backgroundColor.greenF() << ',' << backgroundColor.blueF() << "}";
+	out << "\\colorbox[rgb]{" << backgroundColor.redF() << ',' << backgroundColor.greenF() << ',' << backgroundColor.blueF() << "}{";
 	out << "\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
 	out << "\\color[rgb]{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
 	out << body;
+	out << "}";
 	out << "\\end{preview}";
 	out << "\\end{document}";
 	out.flush();

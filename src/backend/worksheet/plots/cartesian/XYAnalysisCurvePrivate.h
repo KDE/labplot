@@ -40,7 +40,7 @@ public:
 	explicit XYAnalysisCurvePrivate(XYAnalysisCurve*);
 	~XYAnalysisCurvePrivate() override;
 
-	XYAnalysisCurve::DataSourceType dataSourceType{XYAnalysisCurve::DataSourceSpreadsheet};
+	XYAnalysisCurve::DataSourceType dataSourceType{XYAnalysisCurve::DataSourceType::Spreadsheet};
 	const XYCurve* dataSourceCurve{nullptr};
 
 	const AbstractColumn* xDataColumn{nullptr}; //<! column storing the values for the input x-data for the analysis function

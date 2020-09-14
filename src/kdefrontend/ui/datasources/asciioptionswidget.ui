@@ -20,7 +20,7 @@
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>Comment character:</string>
+      <string>Comment Character:</string>
      </property>
     </widget>
    </item>
@@ -53,7 +53,7 @@
    <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="lSeparatingCharacter">
      <property name="text">
-      <string>Separating string:</string>
+      <string>Column Separator</string>
      </property>
     </widget>
    </item>
@@ -65,19 +65,19 @@
     </widget>
    </item>
    <item row="2" column="0" colspan="2">
-    <widget class="QLabel" name="lNumberFormat">
+    <widget class="QLabel" name="lDecimalSeparator">
      <property name="text">
-      <string>Number format:</string>
+      <string>Decimal Separator:</string>
      </property>
     </widget>
    </item>
    <item row="2" column="2" colspan="3">
-    <widget class="QComboBox" name="cbNumberFormat"/>
+    <widget class="QComboBox" name="cbDecimalSeparator"/>
    </item>
    <item row="3" column="0" colspan="2">
     <widget class="QLabel" name="lDateTimeFormat">
      <property name="text">
-      <string>DateTime format:</string>
+      <string>DateTime Format:</string>
      </property>
     </widget>
    </item>

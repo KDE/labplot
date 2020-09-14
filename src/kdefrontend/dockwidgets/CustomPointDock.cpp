@@ -31,11 +31,13 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
 
-#include <QPainter>
-#include <QDir>
 #include <KLocalizedString>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
+
+#include <QPainter>
+#include <QDir>
 
 CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
 	ui.setupUi(this);
@@ -57,6 +59,8 @@ CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
 		layout->setVerticalSpacing(2);
 	}
 
+	updateLocale();
+
 	//SLOTS
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
@@ -77,7 +81,7 @@ CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
 	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolBorderWidthChanged(double)) );
 
 	//Template handler
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::CustomPoint);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CustomPoint);
 	ui.verticalLayout->addWidget(templateHandler);
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
 	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
@@ -119,7 +123,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	m_aspect = list.first();
 	Q_ASSERT(m_point);
 
-	//if there are more then one point in the list, disable the comment and name widgets in the tab "general"
+	//if there is more then one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -156,6 +160,15 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	connect(m_point, SIGNAL(symbolPenChanged(QPen)), this, SLOT(pointSymbolPenChanged(QPen)));
 }
 
+/*
+ * updates the locale in the widgets. called when the application settins are changed.
+ */
+void CustomPointDock::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbSymbolSize->setLocale(numberLocale);
+	ui.sbSymbolBorderWidth->setLocale(numberLocale);
+}
+
 //**********************************************************
 //**** SLOTs for changes triggered in CustomPointDock ******
 //**********************************************************
@@ -164,22 +177,30 @@ void CustomPointDock::positionXChanged() {
 	if (m_initializing)
 		return;
 
-	QPointF pos = m_point->position();
-	float x = ui.lePositionX->text().toFloat();
-	pos.setX(x);
-	for (auto* point : m_pointsList)
-		point->setPosition(pos);
+	bool ok;
+	SET_NUMBER_LOCALE
+	double x = numberLocale.toDouble(ui.lePositionX->text(), &ok);
+	if (ok) {
+		QPointF pos{m_point->position()};
+		pos.setX(x);
+		for (auto* point : m_pointsList)
+			point->setPosition(pos);
+	}
 }
 
 void CustomPointDock::positionYChanged() {
 	if (m_initializing)
 		return;
 
-	QPointF pos = m_point->position();
-	float y = ui.lePositionY->text().toFloat();
-	pos.setY(y);
-	for (auto* point : m_pointsList)
-		point->setPosition(pos);
+	bool ok;
+	SET_NUMBER_LOCALE
+	double y = numberLocale.toDouble(ui.lePositionY->text(), &ok);
+	if (ok) {
+		QPointF pos{m_point->position()};
+		pos.setY(y);
+		for (auto* point : m_pointsList)
+			point->setPosition(pos);
+	}
 }
 
 void CustomPointDock::visibilityChanged(bool state) {
@@ -195,7 +216,7 @@ void CustomPointDock::visibilityChanged(bool state) {
 void CustomPointDock::symbolStyleChanged(int index) {
 	auto style = Symbol::Style(index);
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
-	if (style != Symbol::Line && style != Symbol::Cross) {
+	if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
 		ui.cbSymbolFillingStyle->setEnabled(true);
 		bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
 		ui.kcbSymbolFillingColor->setEnabled(!noBrush);
@@ -223,7 +244,7 @@ void CustomPointDock::symbolSizeChanged(double value) {
 
 	m_point->beginMacro(i18n("%1 CustomPoints: size changed", m_pointsList.count()));
 	for (auto* point : m_pointsList)
-		point->setSymbolSize( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		point->setSymbolSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 	m_point->endMacro();
 }
 
@@ -241,7 +262,7 @@ void CustomPointDock::symbolOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = (double)value/100.;
 	m_point->beginMacro(i18n("%1 CustomPoints: opacity changed", m_pointsList.count()));
 	for (auto* point : m_pointsList)
 		point->setSymbolOpacity(opacity);
@@ -279,14 +300,14 @@ void CustomPointDock::symbolFillingColorChanged(const QColor& color) {
 	m_point->endMacro();
 
 	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color );
+	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color);
 	m_initializing = false;
 }
 
 void CustomPointDock::symbolBorderStyleChanged(int index) {
 	auto penStyle = Qt::PenStyle(index);
 
-	if ( penStyle == Qt::NoPen ) {
+	if (penStyle == Qt::NoPen) {
 		ui.kcbSymbolBorderColor->setEnabled(false);
 		ui.sbSymbolBorderWidth->setEnabled(false);
 	} else {
@@ -333,7 +354,7 @@ void CustomPointDock::symbolBorderWidthChanged(double value) {
 	m_point->beginMacro(i18n("%1 CustomPoints: border width changed", m_pointsList.count()));
 	for (auto* point : m_pointsList) {
 		pen = point->symbolPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		point->setSymbolPen(pen);
 	}
 	m_point->endMacro();
@@ -358,8 +379,9 @@ void CustomPointDock::pointDescriptionChanged(const AbstractAspect* aspect) {
 
 void CustomPointDock::pointPositionChanged(QPointF position) {
 	m_initializing = true;
-	ui.lePositionX->setText(QString::number(position.x()));
-	ui.lePositionY->setText(QString::number(position.y()));
+	SET_NUMBER_LOCALE
+	ui.lePositionX->setText(numberLocale.toString(position.x()));
+	ui.lePositionY->setText(numberLocale.toString(position.y()));
 	m_initializing = false;
 }
 
@@ -372,7 +394,7 @@ void CustomPointDock::pointSymbolStyleChanged(Symbol::Style style) {
 
 void CustomPointDock::pointSymbolSizeChanged(qreal size) {
 	m_initializing = true;
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Point) );
+	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
 	m_initializing = false;
 }
 
@@ -401,7 +423,7 @@ void CustomPointDock::pointSymbolPenChanged(const QPen& pen) {
 	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
 	ui.kcbSymbolBorderColor->setColor( pen.color());
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, pen.color());
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Point));
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -420,11 +442,12 @@ void CustomPointDock::load() {
 
 	m_initializing = true;
 
-	ui.lePositionX->setText(QString::number(m_point->position().x()));
-	ui.lePositionY->setText(QString::number(m_point->position().y()));
+	SET_NUMBER_LOCALE
+	ui.lePositionX->setText(numberLocale.toString(m_point->position().x()));
+	ui.lePositionY->setText(numberLocale.toString(m_point->position().y()));
 
 	ui.cbSymbolStyle->setCurrentIndex( (int)m_point->symbolStyle() );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_point->symbolSize(), Worksheet::Point) );
+	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_point->symbolSize(), Worksheet::Unit::Point) );
 	ui.sbSymbolRotation->setValue( m_point->symbolRotationAngle() );
 	ui.sbSymbolOpacity->setValue( qRound(m_point->symbolOpacity()*100.0) );
 
@@ -433,7 +456,7 @@ void CustomPointDock::load() {
 
 	ui.cbSymbolBorderStyle->setCurrentIndex( (int) m_point->symbolPen().style() );
 	ui.kcbSymbolBorderColor->setColor( m_point->symbolPen().color() );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_point->symbolPen().widthF(), Worksheet::Point) );
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_point->symbolPen().widthF(), Worksheet::Unit::Point) );
 
 	ui.chkVisible->setChecked( m_point->isVisible() );
 
@@ -443,7 +466,7 @@ void CustomPointDock::load() {
 void CustomPointDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
-	int index = config.name().lastIndexOf(QDir::separator());
+	int index = config.name().lastIndexOf(QLatin1String("/"));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
@@ -464,14 +487,14 @@ void CustomPointDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "CustomPoint" );
 
 	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_point->symbolStyle()) );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_point->symbolSize()), Worksheet::Point) );
+	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_point->symbolSize()), Worksheet::Unit::Point) );
 	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_point->symbolRotationAngle()) );
 	ui.sbSymbolOpacity->setValue( qRound(group.readEntry("SymbolOpacity", m_point->symbolOpacity())*100.0) );
 	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_point->symbolBrush().style()) );
 	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_point->symbolBrush().color()) );
 	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_point->symbolPen().style()) );
 	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", m_point->symbolPen().color()) );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_point->symbolPen().widthF()), Worksheet::Point) );
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_point->symbolPen().widthF()), Worksheet::Unit::Point) );
 
 	m_initializing = true;
 	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, ui.kcbSymbolFillingColor->color());
@@ -482,13 +505,13 @@ void CustomPointDock::loadConfig(KConfig& config) {
 void CustomPointDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "CustomPoint" );
 	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->currentText());
-	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(),Worksheet::Point));
+	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(), Worksheet::Unit::Point));
 	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
-	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100 );
+	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100.0);
 	group.writeEntry("SymbolFillingStyle", ui.cbSymbolFillingStyle->currentIndex());
 	group.writeEntry("SymbolFillingColor", ui.kcbSymbolFillingColor->color());
 	group.writeEntry("SymbolBorderStyle", ui.cbSymbolBorderStyle->currentIndex());
 	group.writeEntry("SymbolBorderColor", ui.kcbSymbolBorderColor->color());
-	group.writeEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(ui.sbSymbolBorderWidth->value(),Worksheet::Point));
+	group.writeEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(ui.sbSymbolBorderWidth->value(), Worksheet::Unit::Point));
 	config.sync();
 }

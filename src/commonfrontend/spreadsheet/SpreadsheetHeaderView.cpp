@@ -29,6 +29,7 @@
 
 #include "SpreadsheetHeaderView.h"
 #include "SpreadsheetCommentsHeaderModel.h"
+#include "backend/lib/macros.h"
 
 /*!
  \class SpreadsheetCommentsHeaderView
@@ -87,9 +88,10 @@ SpreadsheetHeaderView::~SpreadsheetHeaderView() {
 
 QSize SpreadsheetHeaderView::sizeHint() const {
 	QSize master_size = QHeaderView::sizeHint();
-	master_size.setHeight(master_size.height());
 	if (m_showComments)
 		master_size.setHeight(master_size.height() + m_slave->sizeHint().height());
+	else
+		master_size.setHeight(master_size.height());
 
 	return master_size;
 }
@@ -135,13 +137,14 @@ void SpreadsheetHeaderView::refresh() {
 	//TODO
 	// adjust geometry and repaint header (still looking for a more elegant solution)
 	int width = sectionSize(count()-1);
-	m_slave->setStretchLastSection(true);  // ugly hack /*(flaw in Qt? Does anyone know a better way?)*/
+	m_slave->setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
 	m_slave->updateGeometry();
 	m_slave->setStretchLastSection(false); // ugly hack part 2
 	setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
 	updateGeometry();
 	setStretchLastSection(false); // ugly hack part 2
 	resizeSection(count()-1, width);
+
 	update();
 }
 

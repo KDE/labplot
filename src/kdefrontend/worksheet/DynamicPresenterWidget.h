@@ -53,6 +53,9 @@ protected:
 	void keyPressEvent(QKeyEvent*) override;
 	bool eventFilter(QObject*, QEvent*) override;
 	void focusOutEvent(QFocusEvent*) override;
+#ifdef Q_OS_MAC
+	void closeEvent(QCloseEvent*) override;
+#endif
 
 private slots:
 	void slideDown();

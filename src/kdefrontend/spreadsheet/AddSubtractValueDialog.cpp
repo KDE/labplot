@@ -4,6 +4,7 @@
     Description          : Dialog for adding/subtracting a value from column values
     --------------------------------------------------------------------
     Copyright            : (C) 2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -149,19 +150,27 @@ AddSubtractValueDialog::~AddSubtractValueDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void AddSubtractValueDialog::setColumns(QVector<Column*> columns) {
+void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
 	//depending on the current column mode, activate/deactivate the corresponding widgets
 	//and show the first valid value in the first selected column as the value to add/subtract
 	const Column* column = m_columns.first();
-	AbstractColumn::ColumnMode mode = column->columnMode();
-	if (mode == AbstractColumn::Integer) {
+	const auto mode = column->columnMode();
+	SET_NUMBER_LOCALE
+	//TODO: switch
+	if (mode == AbstractColumn::ColumnMode::Integer) {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(QString::number(column->integerAt(0)));
-	} else 	if (mode == AbstractColumn::Numeric) {
+		ui.leValue->setText(numberLocale.toString(column->integerAt(0)));
+	} else 	if (mode == AbstractColumn::ColumnMode::BigInt) {
+		ui.lTimeValue->setVisible(false);
+		ui.dateTimeEdit->setVisible(false);
+		//TODO: QLongLongValidator
+		ui.leValue->setValidator(new QIntValidator(ui.leValue));
+		ui.leValue->setText(numberLocale.toString(column->bigIntAt(0)));
+	} else 	if (mode == AbstractColumn::ColumnMode::Numeric) {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
@@ -169,7 +178,7 @@ void AddSubtractValueDialog::setColumns(QVector<Column*> columns) {
 		for (int row = 0; row < column->rowCount(); ++row) {
 			const double value = column->valueAt(row);
 			if (!std::isnan(value)) {
-				ui.leValue->setText(QString::number(column->valueAt(row), 'g', 16));
+				ui.leValue->setText(numberLocale.toString(column->valueAt(row), 'g', 16));
 				break;
 			}
 		}
@@ -190,17 +199,33 @@ void AddSubtractValueDialog::setColumns(QVector<Column*> columns) {
 }
 
 void AddSubtractValueDialog::setMatrices() {
-	if (m_matrix->mode() == AbstractColumn::Integer) {
+	const auto mode = m_matrix->mode();
+
+	SET_NUMBER_LOCALE
+	switch (mode) {
+	case AbstractColumn::ColumnMode::Integer:
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
-		ui.leValue->setText(QString::number(m_matrix->cell<int>(0,0)));
-	} else 	if (m_matrix->mode() == AbstractColumn::Numeric) {
+		ui.leValue->setText(numberLocale.toString(m_matrix->cell<int>(0,0)));
+		break;
+	case AbstractColumn::ColumnMode::BigInt:
+		ui.lTimeValue->setVisible(false);
+		ui.dateTimeEdit->setVisible(false);
+		// TODO: QLongLongValidator
+		ui.leValue->setValidator(new QIntValidator(ui.leValue));
+		ui.leValue->setText(numberLocale.toString(m_matrix->cell<qint64>(0,0)));
+		break;
+	case AbstractColumn::ColumnMode::Numeric:
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
-		ui.leValue->setText(QString::number(m_matrix->cell<double>(0,0)));
-	} else 	{ //datetime
+		ui.leValue->setText(numberLocale.toString(m_matrix->cell<double>(0,0)));
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Text:
 		ui.lValue->setVisible(false);
 		ui.leValue->setVisible(false);
 	}
@@ -211,9 +236,8 @@ void AddSubtractValueDialog::setMatrices() {
  * from every column element.
  */
 
-QString AddSubtractValueDialog::getMessage(QString name)
-{
-	QString msg = "";
+QString AddSubtractValueDialog::getMessage(const QString& name) {
+	QString msg;
 	QString value = ui.leValue->text();
 	switch (m_operation) {
 	case Add:
@@ -246,11 +270,18 @@ void AddSubtractValueDialog::generateForColumns() {
 	QString msg = getMessage(m_spreadsheet->name());
 	m_spreadsheet->beginMacro(msg);
 
-	AbstractColumn::ColumnMode mode = m_columns.first()->columnMode();
+	SET_NUMBER_LOCALE
+	bool ok;
+	auto mode = m_columns.first()->columnMode();
 	const int rows = m_spreadsheet->rowCount();
-	if (mode == AbstractColumn::Integer) {
+	if (mode == AbstractColumn::ColumnMode::Integer) {
 		QVector<int> new_data(rows);
-		int value = ui.leValue->text().toInt();
+		int value = numberLocale.toInt(ui.leValue->text(), &ok);
+		if (!ok) {
+			DEBUG("Integer value invalid!")
+			m_spreadsheet->endMacro();
+			return;
+		}
 
 		switch (m_operation) {
 		case Subtract:
@@ -284,9 +315,55 @@ void AddSubtractValueDialog::generateForColumns() {
 			}
 			break;
 		}
-	} else if (mode == AbstractColumn::Numeric) {
+	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
+		QVector<qint64> new_data(rows);
+		qint64 value = numberLocale.toLongLong(ui.leValue->text(), &ok);
+		if (!ok) {
+			DEBUG("BigInt value invalid!")
+			m_spreadsheet->endMacro();
+			return;
+		}
+
+		switch (m_operation) {
+		case Subtract:
+			value *= -1;
+			//fall through
+		case Add:
+			for (auto* col : m_columns) {
+				auto* data = static_cast<QVector<qint64>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) + value;
+
+				col->replaceBigInt(0, new_data);
+			}
+			break;
+		case Multiply:
+			for (auto* col : m_columns) {
+				auto* data = static_cast<QVector<qint64>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) * value;
+
+				col->replaceBigInt(0, new_data);
+			}
+			break;
+		case Divide:
+			for (auto* col : m_columns) {
+				auto* data = static_cast<QVector<qint64>* >(col->data());
+				for (int i = 0; i<rows; ++i)
+					new_data[i] = data->operator[](i) / value;
+
+				col->replaceBigInt(0, new_data);
+			}
+			break;
+		}
+	} else if (mode == AbstractColumn::ColumnMode::Numeric) {
 		QVector<double> new_data(rows);
-		double value = ui.leValue->text().toDouble();
+		double value = numberLocale.toDouble(ui.leValue->text(), &ok);
+		if (!ok) {
+			DEBUG("Double value invalid!")
+			m_spreadsheet->endMacro();
+			return;
+		}
 		switch (m_operation) {
 		case Subtract:
 			value *= -1.;
@@ -353,13 +430,20 @@ void AddSubtractValueDialog::generateForMatrices() {
 	QString msg = getMessage(m_matrix->name());
 	m_matrix->beginMacro(msg);
 
-	AbstractColumn::ColumnMode mode = m_matrix->mode();
+	auto mode = m_matrix->mode();
 
+	SET_NUMBER_LOCALE
+	bool ok;
 	const int rows = m_matrix->rowCount();
 	const int cols = m_matrix->columnCount();
-	if (mode == AbstractColumn::Integer) {
+	if (mode == AbstractColumn::ColumnMode::Integer) {
 		int new_data;
-		int value = ui.leValue->text().toInt();
+		int value = numberLocale.toInt(ui.leValue->text(), &ok);
+		if (!ok) {
+			DEBUG("Integer value invalid!")
+			m_matrix->endMacro();
+			return;
+		}
 
 		switch (m_operation) {
 		case Subtract:
@@ -371,7 +455,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 				{
 					new_data = m_matrix->cell<int>(i,j);
 					new_data += value;
-					m_matrix->setCell(i,j,new_data);
+					m_matrix->setCell(i, j, new_data);
 				}
 			break;
 		case Multiply:
@@ -380,7 +464,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 				{
 					new_data = m_matrix->cell<int>(i,j);
 					new_data *= value;
-					m_matrix->setCell(i,j,new_data);
+					m_matrix->setCell(i, j, new_data);
 				}
 			break;
 		case Divide:
@@ -389,13 +473,57 @@ void AddSubtractValueDialog::generateForMatrices() {
 				{
 					new_data = m_matrix->cell<int>(i,j);
 					new_data /= value;
+					m_matrix->setCell(i, j, new_data);
+				}
+			break;
+		}
+	} else if (mode == AbstractColumn::ColumnMode::BigInt) {
+		qint64 new_data;
+		qint64 value = numberLocale.toLongLong(ui.leValue->text(), &ok);
+		if (!ok) {
+			DEBUG("BigInt value invalid!")
+			m_matrix->endMacro();
+			return;
+		}
+
+		switch (m_operation) {
+		case Subtract:
+			value *= -1;
+			//fall through
+		case Add:
+			for (int i = 0; i<rows; ++i)
+				for(int j = 0; j<cols; ++j) {
+					new_data = m_matrix->cell<qint64>(i,j);
+					new_data += value;
+					m_matrix->setCell(i, j, new_data);
+				}
+			break;
+		case Multiply:
+			for (int i = 0; i<rows; ++i)
+				for(int j = 0; j<cols; ++j) {
+					new_data = m_matrix->cell<qint64>(i,j);
+					new_data *= value;
+					m_matrix->setCell(i, j, new_data);
+				}
+			break;
+		case Divide:
+		for (int i = 0; i<rows; ++i)
+				for(int j = 0; j<cols; ++j) {
+					new_data = m_matrix->cell<qint64>(i,j);
+					new_data /= value;
 					m_matrix->setCell(i,j,new_data);
 				}
 			break;
 		}
-	} else if (mode == AbstractColumn::Numeric) {
+	} else if (mode == AbstractColumn::ColumnMode::Numeric) {
 		double new_data;
-		double value = ui.leValue->text().toDouble();
+		double value = numberLocale.toDouble(ui.leValue->text(), &ok);
+		if (!ok) {
+			DEBUG("Double value invalid!")
+			m_matrix->endMacro();
+			return;
+		}
+
 		switch (m_operation) {
 		case Subtract:
 			value *= -1.;

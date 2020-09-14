@@ -57,6 +57,7 @@ private:
 	XYInterpolationCurve* m_interpolationCurve{nullptr};
 	XYInterpolationCurve::InterpolationData m_interpolationData;
 	unsigned int dataPoints{0};	// number of data points in selected column
+	bool m_dateTimeRange{false};
 
 protected:
 	void setModel() override;
@@ -69,16 +70,18 @@ private slots:
 	void xDataColumnChanged(const QModelIndex&);
 	void yDataColumnChanged(const QModelIndex&);
 	void autoRangeChanged();
-	void xRangeMinChanged();
-	void xRangeMaxChanged();
-	void typeChanged();
-	void variantChanged();
-	void tensionChanged();
-	void continuityChanged();
-	void biasChanged();
-	void evaluateChanged();
+	void xRangeMinChanged(double);
+	void xRangeMaxChanged(double);
+	void xRangeMinDateTimeChanged(const QDateTime&);
+	void xRangeMaxDateTimeChanged(const QDateTime&);
+	void typeChanged(int);
+	void variantChanged(int);
+	void tensionChanged(double);
+	void continuityChanged(double);
+	void biasChanged(double);
+	void evaluateChanged(int);
 	void numberOfPointsChanged();
-	void pointsModeChanged();
+	void pointsModeChanged(int);
 
 	void recalculateClicked();
 	void enableRecalculate() const;

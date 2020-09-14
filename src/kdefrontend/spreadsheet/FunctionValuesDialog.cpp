@@ -86,8 +86,9 @@ FunctionValuesDialog::FunctionValuesDialog(Spreadsheet* s, QWidget* parent) : QD
 	ui.bAddVariable->setIcon(QIcon::fromTheme("list-add"));
 	ui.bAddVariable->setToolTip(i18n("Add new variable"));
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	ui.chkAutoUpdate->setToolTip(i18n("Automatically update the calculated values on changes in the variable columns"));
 
+	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	ui.verticalLayout->addWidget(btnBox);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 
@@ -117,7 +118,7 @@ FunctionValuesDialog::~FunctionValuesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
+void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	m_columns = columns;
 
 	//formula expression
@@ -135,7 +136,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 		const QStringList columnPaths = m_columns.first()->formulaVariableColumnPaths();
 
 		//add all available variables and select the corresponding columns
-		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children(AspectType::Column, AbstractAspect::Recursive);
+		const QVector<AbstractAspect*> cols = m_spreadsheet->project()->children(AspectType::Column, AbstractAspect::ChildIndexFlag::Recursive);
 		for (int i = 0; i < variableNames.size(); ++i) {
 			addVariable();
 			m_variableNames[i]->setText(variableNames.at(i));
@@ -164,7 +165,7 @@ void FunctionValuesDialog::setColumns(QVector<Column*> columns) {
 				m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
 				m_variableDataColumns[i]->useCurrentIndexText(false);
 				m_variableDataColumns[i]->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPaths[i]));
-				m_variableDataColumns[i]->setText(columnPaths[i].split("/").last());
+				m_variableDataColumns[i]->setText(columnPaths[i].split('/').last());
 			}
 		}
 	}
@@ -272,7 +273,7 @@ void FunctionValuesDialog::insertConstant(const QString& str) {
 }
 
 void FunctionValuesDialog::addVariable() {
-	auto* layout = dynamic_cast<QGridLayout*>(ui.frameVariables->layout());
+	auto* layout = ui.gridLayoutVariables;
 	int row = m_variableNames.size();
 
 	//text field for the variable name
@@ -382,9 +383,9 @@ void FunctionValuesDialog::variableNameChanged() {
 void FunctionValuesDialog::variableColumnChanged(const QModelIndex& index) {
 	//combobox was potentially red-highlighted because of a missing column
 	//remove the highlighting if we have a valid selection now
-	AbstractAspect* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	if (aspect) {
-		TreeViewComboBox* cb = dynamic_cast<TreeViewComboBox*>(QObject::sender());
+		auto* cb = dynamic_cast<TreeViewComboBox*>(QObject::sender());
 		if (cb)
 			cb->setStyleSheet("");
 	}
@@ -417,8 +418,8 @@ void FunctionValuesDialog::generate() {
 	const QString& expression = ui.teEquation->toPlainText();
 	bool autoUpdate = (ui.chkAutoUpdate->checkState() == Qt::Checked);
 	for (auto* col : m_columns) {
-		if (col->columnMode() != AbstractColumn::Numeric)
-			col->setColumnMode(AbstractColumn::Numeric);
+		if (col->columnMode() != AbstractColumn::ColumnMode::Numeric)
+			col->setColumnMode(AbstractColumn::ColumnMode::Numeric);
 
 		col->setFormula(expression, variableNames, variableColumns, autoUpdate);
 		col->updateFormula();

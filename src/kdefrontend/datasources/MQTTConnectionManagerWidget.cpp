@@ -29,7 +29,6 @@ Copyright            : (C) 2018-2019 Alexander Semke (alexander.semke@web.de)
 
 #include "MQTTConnectionManagerWidget.h"
 
-#ifdef HAVE_MQTT
 #include "backend/lib/macros.h"
 
 #include <KConfig>
@@ -40,7 +39,6 @@ Copyright            : (C) 2018-2019 Alexander Semke (alexander.semke@web.de)
 
 #include <QTimer>
 #include <QtMqtt>
-#include <QDebug>
 #include <QListWidgetItem>
 
 /*!
@@ -707,5 +705,3 @@ void MQTTConnectionManagerWidget::onDisconnect() {
 		m_testTimer->stop();
 	}
 }
-
-#endif

@@ -29,6 +29,7 @@
 #include "backend/worksheet/WorksheetElementContainer.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
@@ -42,8 +43,8 @@
 
 /**
  * \class WorksheetElementContainer
- * \brief Worksheet element container - parent of multiple elements
  * \ingroup worksheet
+ * \brief Worksheet element container - parent of multiple elements
  * This class provides the functionality for a containers of multiple
  * worksheet elements. Such a container can be a plot or group of elements.
  */
@@ -83,14 +84,22 @@ void WorksheetElementContainer::setVisible(bool on) {
 	if (on) {
 		beginMacro( i18n("%1: set visible", name()) );
 		exec( new WorksheetElementContainerSetVisibleCmd(d, on, ki18n("%1: set visible")) );
-	} else {
+	} else
 		beginMacro( i18n("%1: set invisible", name()) );
-	}
 
 	//change the visibility of all children
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
-	for (auto* elem : childList)
-		elem->setVisible(on);
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
+	for (auto* elem : childList) {
+		auto* curve = dynamic_cast<XYCurve*>(elem);
+		if (curve) {
+			//making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
+			//this needs to avoided by supressing the retransformation in the curves.
+			curve->suppressRetransform(true);
+			elem->setVisible(on);
+			curve->suppressRetransform(false);
+		} else
+			elem->setVisible(on);
+	}
 
 	//if visible is set false, change the visibility of the container last
 	if (!on)
@@ -105,7 +114,7 @@ bool WorksheetElementContainer::isVisible() const {
 }
 
 bool WorksheetElementContainer::isFullyVisible() const {
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (const auto* elem : childList) {
 		if (!elem->isVisible())
 			return false;
@@ -125,7 +134,7 @@ void WorksheetElementContainer::retransform() {
 	PERFTRACE("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
 
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);
+	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (auto* child : childList)
 		child->retransform();
 
@@ -163,7 +172,7 @@ void WorksheetElementContainer::handleAspectAdded(const AbstractAspect* aspect) 
 		element->graphicsItem()->setParentItem(d);
 
 		qreal zVal = 0;
-		for (auto* child : children<WorksheetElement>(IncludeHidden))
+		for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
 			child->setZValue(zVal++);
 	}
 
@@ -227,8 +236,16 @@ void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*
 
 bool WorksheetElementContainerPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
+
+	//When making a graphics item invisible, it gets deselected in the scene.
+	//In this case we don't want to deselect the item in the project explorer.
+	//We need to supress the deselection in the view.
+	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+	worksheet->suppressSelectionChangedEvent(true);
 	setVisible(on);
 	emit q->visibleChanged(on);
+	worksheet->suppressSelectionChangedEvent(false);
+
 	return oldValue;
 }
 

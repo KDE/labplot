@@ -42,7 +42,7 @@ class XYInterpolationCurve : public XYAnalysisCurve {
 	Q_OBJECT
 
 public:
-	enum PointsMode {Auto, Multiple, Custom};
+	enum class PointsMode {Auto, Multiple, Custom};
 	struct InterpolationData {
 		InterpolationData() : xRange(2) {};
 
@@ -51,7 +51,7 @@ public:
 		double tension{0.0}, continuity{0.0}, bias{0.0};		// TCB values
 		nsl_interp_evaluate evaluate{nsl_interp_evaluate_function};	// what to evaluate
 		size_t npoints{100};						// nr. of points
-		XYInterpolationCurve::PointsMode pointsMode{XYInterpolationCurve::Auto};	// mode to interpret points
+		XYInterpolationCurve::PointsMode pointsMode{PointsMode::Auto};	// mode to interpret points
 		bool autoRange{true};						// use all data?
 		QVector<double> xRange;						// x range for interpolation
 	};

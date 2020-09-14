@@ -1,0 +1,757 @@
+{
+    "name": "JSEDataArchive",
+    "categories": [
+        {
+            "name": "Medicine",
+            "subcategories": [
+                {
+                    "name": "Common",
+                    "datasets": [
+                        {
+                            "description": "Time of Birth, Sex, and Birth Weight of 44 Babies",
+                            "description_url": "http://jse.amstat.org/datasets/babyboom.txt",
+                            "url": "http://jse.amstat.org/datasets/babyboom.dat.txt",
+                            "filename": "babyboom",
+                            "name": "Time of Birth, Sex, and Birth Weight of 44 Babies",
+                            "separator": "TAB",
+                            "columns": ["Time of birth recorded on the 24-hour clock", "Sex of the child (1 = girl, 2 = boy)", "Birth weight in grams", "Number of minutes after midnight of each birth"]
+                        },
+                        {
+                            "description": "This dataset contains 21 body dimension measurements as well as age, \nweight, height, and gender on 507 individuals. The 247 men and 260 \nwomen were primarily individuals in their twenties and thirties, with a \nscattering of older men and women, all exercising several hours a week.",
+                            "url": "http://jse.amstat.org/datasets/body.dat.txt",
+                            "filename": "Body",
+                            "name": "Exploring Relationships in Body Dimensions",
+                            "separator": "SPACE"
+                        },
+                        {
+                            "description": "Each record contains the results of a laboratory analysis of calcium, \ninorganic phosphorous, and alkaline phosphatase. The variable cammol \nis measured as millimoles per liter. Phosmol is inorganic phosphorous \nin millimoles per liter. Alkphos is meauring alkaline phosphatase in \ninternational units per liter. The purpose of the study was to \ndetermine if significant gender differences exist in the mean values \nof calcium, inorganic phosphorus, and alkaline phosphatase in \nsubjects over age 65. A second purpose was to determine if analytical \nvariation between laboratoreis would affect the mean values of the study variables. \nCalcium.dat contains incorrect records that have transcription errors. Calciumgood.dat \ncontains the corrected values. ",
+                            "description_url": "http://jse.amstat.org/datasets/calcium.txt",
+                            "url": "http://jse.amstat.org/datasets/calcium.dat.txt",
+                            "filename": "Calcium",
+                            "name": " Calcium, inorganic phosphorus and alkaline phosphatase levels in elderly patients ",
+                            "separator": "SPACE",
+                            "columns": ["OBSNO - Patient Observation Number", "AGE - Years", "SEX - 1=Male, 2=Female", "ALKPHOS - Alkaline Phosphatase International Units/Liter", "Lab - 1=Metpath; 2=Deyor; 3=St. Elizabeth's; 4=CB Rouche; 5=YOH; 6=Horizon",
+                            "CAMMOL - Calcium mmol/L", "PHOSMMOL - Inorganic Phosphorus mmol/L", "AGEGROUP - Age group 1=65-69; 2=70-74; 3=75-79; 4=80-84; 5=85-89 Years"]
+                        },
+                        {
+                            "description": "Each record contains the results of a laboratory analysis of calcium, \ninorganic phosphorous, and alkaline phosphatase. The variable cammol \nis measured as millimoles per liter. Phosmol is inorganic phosphorous \nin millimoles per liter. Alkphos is meauring alkaline phosphatase in \ninternational units per liter. The purpose of the study was to \ndetermine if significant gender differences exist in the mean values \nof calcium, inorganic phosphorus, and alkaline phosphatase in \nsubjects over age 65. A second purpose was to determine if analytical \nvariation between laboratoreis would affect the mean values of the study variables. \nCalcium.dat contains incorrect records that have transcription errors. Calciumgood.dat \ncontains the corrected values. ",
+                            "description_url": "http://jse.amstat.org/datasets/calcium.txt",
+                            "url": "http://jse.amstat.org/datasets/calciumgood.dat.txt",
+                            "filename": "Calciumgood",
+                            "name": " Calcium, inorganic phosphorus and alkaline phosphatase levels in elderly patients ",
+                            "separator": "SPACE",
+                            "columns": ["OBSNO - Patient Observation Number", "AGE - Years", "SEX - 1=Male, 2=Female", "ALKPHOS - Alkaline Phosphatase International Units/Liter", "Lab - 1=Metpath; 2=Deyor; 3=St. Elizabeth's; 4=CB Rouche; 5=YOH; 6=Horizon",
+                            "CAMMOL - Calcium mmol/L", "PHOSMMOL - Inorganic Phosphorus mmol/L", "AGEGROUP - Age group 1=65-69; 2=70-74; 3=75-79; 4=80-84; 5=85-89 Years"]
+                        },
+                        {
+                            "description": "Percentage of body fat, age, weight, height, and ten body circumference\nmeasurements (e.g., abdomen) are recorded for 252 men. Body fat, a\nmeasure of health, is estimated through an underwater weighing\ntechnique. Fitting body fat to the other measurements using multiple\nregression provides a convenient way of estimating body fat for men\nusing only a scale and a measuring tape.",
+                            "description_url": "http://jse.amstat.org/datasets/fat.txt",
+                            "url": "http://jse.amstat.org/datasets/fat.dat.txt",
+                            "filename": "fat",
+                            "name": "Fitting Percentage of Body Fat to Simple Body Measurements",
+                            "separator": "SPACE",
+                            "columns": ["Case Number", "Percent body fat using Brozek's equation, 457/Density - 414.2", "Percent body fat using Siri's equation, 495/Density - 450", "Density (gm/cm^3)",
+                            "Age (yrs)", "Weight (lbs)", "Height (inches)", "Adiposity index = Weight/Height^2 (kg/m^2)", "Fat Free Weight = (1 - fraction of body fat) * Weight, using Brozek's formula (lbs)",
+                            "Neck circumference (cm)", "Chest circumference (cm)", "Abdomen circumference (cm) \"at the umbilicus and level with the iliac crest\"", "Hip circumference (cm)", "Thigh circumference (cm)",
+                            "Knee circumference (cm)", "Ankle circumference (cm)", "Extended biceps circumference (cm)", "Forearm circumference (cm)", "Wrist circumference (cm) \"distal to the styloid processes\""]
+                        },
+                        {
+                            "description": "Sample of 654 youths, aged 3 to 19, in the area of East Boston\nduring middle to late 1970's. Interest concerns the relationship\nbetween smoking and FEV. Since the study is necessarily\nobservational, statistical adjustment via regression models\nclarifies the relationship.",
+                            "description_url": "http://jse.amstat.org/datasets/fev.txt",
+                            "url": "http://jse.amstat.org/datasets/fev.dat.txt",
+                            "filename": "fev",
+                            "name": "Forced Expiratory Volume (FEV) Data",
+                            "separator": "SPACE",
+                            "columns": ["age - discrete measure, positive integer (years)", "fev - continuous measure (liters)", "ht - continuous measure (inches)", "sex - discrete/nominal (Female coded 0, Male coded 1)", "smoke - discrete/nominal (Nonsmoker coded 0, Smoker coded 1)"]
+
+                        },
+                        {
+                            "description": "The tab-delimited data set gives characteristics of young female patients between\nthe ages of 11 to 26 who came to clinics of Johns Hopkins Medical Institutions between\n2006 and 2008 to begin the three-shot regimen of vaccinations with the anti-human\npapillomavirus (HPV) medication Gardasil.   ",
+                            "url": "http://jse.amstat.org/v19n1/gardasil.dat.txt",
+                            "filename": "gardasil",
+                            "name": "Retrospective Study (Potential Predictors for Completion or Non-Completion of the Three-Shot Anti-HPV Gardasil Vaccine Regimen)",
+                            "separator": "TAB",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "From a very young age, shoes for boys tend to be wider than shoes for \ngirls. Is this because boys have wider feet, or because it is assumed that \ngirls, even in elementary school, are willing to sacrifice comfort for fashion? \nTo assess the former, a statistician measures kids' feet.  Methods for analysis include \nt-tests, ANCOVA, and least-squares model building.  This data set is useful for \ndiscussion of covariates, confounding, and conclusions in the context of the problem.",
+                            "description_url": "http://jse.amstat.org/datasets/kidsfeet.txt",
+                            "url": "http://jse.amstat.org/datasets/kidsfeet.dat.txt",
+                            "filename": "kidsfeet",
+                            "name": "Foot measurements for fourth grade children",
+                            "separator": "SPACE",
+                            "columns": ["Birthdate: month and year  (data were collected in October 1997)", "Length of longer foot (cm)", "Width of longer foot (cm), measured at widest part of foot", "Sex: boy or girl", "Foot measured (right or left)", "Right- or left-handedness"]
+                        },
+                        {
+                            "description": "This article takes data from a paper in the _Journal of the American\nMedical Association_ that examined whether the true mean body\ntemperature is 98.6 degrees Fahrenheit. Because the dataset suggests\nthat the true mean is approximately 98.2, it helps students to grasp\nconcepts about true means, confidence intervals, and t-statistics.\nStudents can use a t-test to test for sex differences in body\ntemperature and regression to investigate the relationship between\ntemperature and heart rate.",
+                            "description_url": "http://jse.amstat.org/datasets/normtemp.txt",
+                            "url": "http://jse.amstat.org/datasets/normtemp.dat.txt",
+                            "filename": "normtemp",
+                            "name": "Normal Body Temperature, Gender, and Heart Rate ",
+                            "separator": "SPACE",
+                            "columns": ["Body temperature (degrees Fahrenheit)", "Gender (1 = male, 2 = female)", "Heart rate (beats per minute)"]
+                        }
+                    ]
+                },
+                {
+                    "name": "Other",
+                    "datasets": [
+                        {
+                            "description": "Drug interaction study of a new and a standard oral contraceptive \ntherapy.",
+                            "description_url": "http://jse.amstat.org/datasets/ocdrug.txt",
+                            "url": "http://jse.amstat.org/datasets/ocdrug.dat.txt",
+                            "filename": "ocdrug",
+                            "name": "Drug Interaction",
+                            "separator": "SPACE",
+                            "columns": ["Female Subject Number (1 to 22)", "Treatment Sequence (1 = Drug D, placebo; 2 = placebo, Drug D)", "Study Period (1, 2)", "Treatment (0 = placebo, 1 = Drug D)", "EE - AUC (pg*hr/ml)", "EE - Cmax (pg/ml)", "NET - AUC (pg*hr/ml)", "NET - Cmax (pg/ml)"]
+                        },
+                        {
+                            "description": "Bacteria are cultured in medical laboratories to identify them so patients can be treated \ncorrectly. The tryptone dataset contains measurements of bacteria counts following the \nculturing of five strains of Staphylococcus aureus. There are many strains of \nStaphylococcus aureus; five were used by the experimenter.  They are identified by numbers \nin the data because their names are too complicated to be useful as identifiers.  The \ndataset also contains the time of incubation, temperature of incubation and concentration \nof tryptone, a nutrient.  The protocols for culturing this bacteria, set the time at 24 \nhours, the temperature at 35 degrees and the tryptone concentration at 1.0%.  The question \nis whether the conditions recommended in the protocols for the culturing of these strains \nare optimal.  The task is to find the incubation time, temperature and tryptone concentration \nthat optimises the growth of this Bacterium.",
+                            "description_url": "http://jse.amstat.org/datasets/Tryptone.txt",
+                            "url": "http://jse.amstat.org/datasets/Tryptone.dat.txt",
+                            "filename": "Tryptone",
+                            "name": "The Tryptone Task",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Examining Potential Predictors for Completion of the Gardasil Vaccine Sequence Based on Data Gathered at Clinics of Johns Hopkins Medical Institutions",
+                            "description_url": "http://jse.amstat.org/v19n1/gardasil.txt",
+                            "url": "http://jse.amstat.org/v19n1/gardasil.dat.txt",
+                            "filename": "gardasil",
+                            "name": "Gardasil Vaccine Data",
+                            "separator": "TAB",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "The readabilities of 30 pamphlets about cancer are compared to the reading comprehension levels of 63 patients with cancer. Both variables are measured in grade levels. The data are presented as frequencies of occurrence over grade levels for both the pamphlet readabilities and the reading levels of the patients.",
+                            "description_url": "http://jse.amstat.org/datasets/readability.txt",
+                            "url": "http://jse.amstat.org/datasets/readability.dat.txt",
+                            "filename": "readability",
+                            "name": "Readability of Educational Materials for Patients with Cancer",
+                            "separator": "SPACE",
+                            "columns": ["Grade level", "Frequency of occurrence for brochure readabilities", "Frequency of occurrence for patient reading levels"]
+                        }
+                    ]
+                },
+                {
+                    "name": "Smoking",
+                    "datasets": [
+                        {
+                            "description": "Measurements of weight and tar, nicotine, and carbon monoxide content\nare given for 25 brands of domestic cigarettes.",
+                            "description_url": "http://jse.amstat.org/datasets/cigarettes.txt",
+                            "url": "http://jse.amstat.org/datasets/cigarettes.dat.txt",
+                            "filename": "Cigarettes",
+                            "name": "Cigarette data for an introduction to multiple regression",
+                            "separator": "SPACE",
+                            "columns": ["Brand name", "Tar content (mg)", "Nicotine content (mg)", "Weight (g)", "Carbon monoxide content (mg)"]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Nature",
+            "subcategories": [
+                {
+                    "name": "Animals",
+                    "datasets": [
+                        {
+                            "description": "The dataset consists of a few variables that may influence the demand for Beef in the United States. It provides an example of the influence of inflation in monetary time series data as well as providing some interesting statistical features in building demand models in regression.",
+                            "description_url": "http://jse.amstat.org/v22n1/kopcso/BeefDemandDoc.txt",
+                            "url": "http://jse.amstat.org/v22n1/kopcso/BeefDemand.txt",
+                            "filename": "BeefDemand",
+                            "name": "Beef Demand",
+                            "separator": "TAB",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "159 fishes of 7 species are caught and measured. Altogether there are\n8 variables. All the fishes are caught from the same lake\n(Laengelmavesi) near Tampere in Finland.",
+                            "description_url": "http://jse.amstat.org/datasets/fishcatch.txt",
+                            "url": "http://jse.amstat.org/datasets/fishcatch.dat.txt",
+                            "filename": "fishcatch",
+                            "name": "fishcatch",
+                            "separator": "SPACE",
+                            "columns": ["Obs - Observation number ranges from 1 to 159", "Species - (Numeric)", "Weight - Weight of the fish (in grams)", "Length1 - Length from the nose to the beginning of the tail (in cm)",
+                            "Length2 - Length from the nose to the notch of the tail (in cm)", "Length3 - Length from the nose to the end of the tail (in cm)", "Height% - Maximal height as % of Length3",
+                            "Width% - Maximal width as % of Length3", "Sex - 1 = male 0 = female"]
+                        },
+                        {
+                            "description": "A cost of increased reproduction in terms of reduced longevity has been\nshown for female fruitflies, but not for males. The flies used were an\noutbred stock. Sexual activity was manipulated by supplying individual\nmales with one or eight receptive virgin females per day.  The\nlongevity of these males was compared with that of two control types.\nThe first control consisted of two sets of individual males kept with\none or eight newly inseminated females.  Newly inseminated females will\nnot usually remate for at least two days, and thus served as a control\nfor any effect of competition with the male for food or space.  The\nsecond control was a set of individual males kept with no females.\nThere were 25 males in each of the five groups, which were treated\nidentically in number of anaesthetizations (using CO2) and provision of\nfresh food medium.",
+                            "description_url": "http://jse.amstat.org/datasets/fruitfly.txt",
+                            "url": "http://jse.amstat.org/datasets/fruitfly.dat.txt",
+                            "filename": "fruitfly",
+                            "name": "Sexual activity and the lifespan of male fruitflies",
+                            "separator": "SPACE",
+                            "columns": ["ID - Serial No. (1-25) within each group of 25 (the order in which data points were abstracted)", "PARTNERS - Number of companions (0, 1 or 8)", "TYPE - Type of companion, 0: newly pregnant female, 1: virgin female, 9: not applicable (when PARTNERS=0)",
+                            "LONGEVITY - Lifespan, in days", "THORAX - Length of thorax, in mm (x.xx)", "SLEEP - Percentage of each day spent sleeping"]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Statistics",
+            "subcategories": [
+                {
+                    "name": "Economics",
+                    "datasets": [
+                        {
+                            "description": "Data are from the American Association of University Professors (AAUP) annual faculty salary survey of American colleges and universities. They include average salary and overall compensation, broken down by full, associate, and assistant professor ranks. The dataset is used for the 1995 Data Analysis Exposition, sponsored by the Statistical Graphics Section of the American Statistical Association. See the file colleges.txt for more information on the Exposition.",
+                            "description_url": "http://jse.amstat.org/datasets/aaup.txt",
+                            "url": "http://jse.amstat.org/datasets/aaup.dat.txt",
+                            "filename": "AAUP",
+                            "name": "AAUP Faculty Salary data",
+                            "separator": ",",
+                            "columns": ["FICE (Federal ID number)", "College name", "State (postal code)", "Type  (I, IIA, or IIB)", "Average salary - full professors",
+                            "Average salary - associate professors", "Average salary - assistant professors", "Average salary - all ranks", "Average compensation - full professors",
+                            "Average compensation - associate professors", "Average compensation - assistant professors", "Average compensation - all ranks", "Number of full professors",
+                            "Number of associate professors", "Number of assistant professors", "Number of instructors", "Number of faculty - all ranks"]
+                        },
+                        {
+                            "description": "The dataset bestbuy.day contains monthly data on computer usage \n(MIPS) and total number of stores from August 1996 to July 2000. \nAdditionally, information on the planned number of stores through \nDecember 2001 is available. These data can be used to compare \ntime-series forecasting with trend and seasonality components and \ncausal forecasting based on simple linear regression. The simple \nlinear regression model exhibits unequal error variances, suggesting \na transformation of Y.",
+                            "description_url": "http://jse.amstat.org/datasets/bestbuy.txt",
+                            "url": "http://jse.amstat.org/datasets/bestbuy.dat.txt",
+                            "filename": "BestBuy",
+                            "name": " BestBuy",
+                            "separator": "SPACE",
+                            "columns": ["Date dd-mm-yyyy, August 1996 - July 2000", "MIPS usage (MIPS are a measure of computing resources)", "Number of stores", "Date dd-mm-yyyy, July 2000 - December 2001", "Planned Number of Stores through December 2001"]
+                        },
+                        {
+                            "description": "The dollar amount for a monthly (January 1991 through December 2000) \nhousehold electric bill is presented as a time series. In addition, \npotential explanatory variables are included. Twelve representative \nmonthly values are provided for the average temperature, for \nheating degree days, and for cooling degree days (not for each \nmonth for each year). Additional variables give the family size \neach month and indicate when a new electric meter and new heating \nand cooling equipment was installed. To convert the billing amount \nto estimated power consumption, a tiered rate function (supplied \nin the accompanying Instructor's Manual) and the costs of \nassociated riders (provided here) must be used. Consumption \nestimates resulting from this information are supplied.\t",
+                            "description_url": "http://jse.amstat.org/datasets/electricbill.txt",
+                            "url": "http://jse.amstat.org/datasets/electricbill.dat.txt",
+                            "filename": "electricbill",
+                            "name": " Electric Bill Data",
+                            "separator": "SPACE",
+                            "columns": ["Observation number", "Year", "Month", "Amount of bill (in dollars), includes 5% sales tax", "Average temperature (in degrees Fahrenheit)", "Heating Degree Days", "Cooling Degree Days", "Number of family members at home",
+                            "New meter? (indicator variable, 1 = yes)", "New heat pump 1? (indicator variable, 1= new)", "New heat pump 2? (indicator variable, 1= new)", "Total charge (per kwh) for all riders", "Calculated consumption (in kwh)"]
+                        },
+                        {
+                            "description": "The data file contains information on 76 single-family homes inEugene, Oregon during 2005.  This dataset is suitable for a completemultiple linear regression analysis of home price data that coversmany of the usual regression topics, including interaction andpredictor transformations.  Whereas realtors use experience and localknowledge to subjectively value a house based on its characteristics(size, amenities, location, etc.) and the prices of similar housesnearby, regression analysis can provide an alternative that moreobjectively models local house prices using these same data.SOURCES:The data were provided by Victoria Whitman, a realtor in Eugene, in2005.  The data were used in a case study in Pardoe (2006).",
+                            "description_url": "http://jse.amstat.org/datasets/homes76.txt",
+                            "url": "http://jse.amstat.org/datasets/homes76.dat.txt",
+                            "filename": "homes76",
+                            "name": " Modeling home prices using realtor data",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "For 97 countries in the world, data are given for birth rates, death\nrates, infant death rates, life expectancies for males and females, and\nGross National Product.",
+                            "description_url": "http://jse.amstat.org/datasets/poverty.txt",
+                            "url": "http://jse.amstat.org/datasets/poverty.dat.txt",
+                            "filename": "poverty",
+                            "name": "The Statistics of Poverty and Inequality ",
+                            "separator": "SPACE",
+                            "columns": ["Live birth rate per 1,000 of population", "Death rate per 1,000 of population", "Infant deaths per 1,000 of population under 1 year old", "Life expectancy at birth for males", "Life expectancy at birth for females",
+                            "Gross National Product per capita in U.S. dollars", "Country Group: 1 = Eastern Europe, 2 = South America and Mexico, 3 = Western Europe, North America, Japan, Australia, New Zealand, 4 = Middle East, 5 = Asia, 6 = Africa", "Country"]
+                        }
+                    ]
+                },
+                {
+                    "name": "Sport",
+                    "datasets": [
+                        {
+                            "description": "Each record contains the results of a test of a set of ball bearings. The quantities L10 and L50 are estimated percentiles of the fatigue failure distribution (obtained by fitting a Weibull distribution to the fatigue failure times, separately in each set). The objective is to analyse ln(L10) (and separately ln(L50)) by linear regression on the logarithms of P, Z and D, which are characteristics of the ball bearings. Differences between companies and between types of bearing can be tested.",
+                            "description_url": "http://jse.amstat.org/datasets/ballbearings.txt",
+                            "url": "http://jse.amstat.org/datasets/ballbearings.dat.txt",
+                            "filename": "ballbearings",
+                            "name": "Ball Bearing Reliability Data",
+                            "separator": "SPACE",
+                            "columns": ["Company", "Test number", "Year of test", "No. of bearings", "Load (P)", "No. of balls (Z)", "Diameter (D)", "L10", "L50", "Weibull slope", "Bearing type"]
+                        },
+                        {
+                            "description": "We consider as our population of interest the set of Major League Baseball players who played at least one game in both the 1991 and 1992 seasons, excluding pitchers. This dataset contains the 1992 salaries for that population, along with performance measures for each player from 1991. Four categorical variables indicate how free each player was to move to other teams.",
+                            "description_url": "http://jse.amstat.org/datasets/baseball.txt",
+                            "url": "http://jse.amstat.org/datasets/baseball.dat.txt",
+                            "filename": "baseball",
+                            "name": "baseball",
+                            "separator": "SPACE",
+                            "columns": ["Salary (in thousands of dollars)", "Batting average", "On-base percentage (OBP)", "Number of runs", "Number of hits",
+                            "Number of doubles", "Number of triples", "Number of home runs", "Number of runs batted in (RBI)", "Number of walks",
+                            "Number of strike-outs", "Number of stolen bases", "Number of errors",  "Indicator of \"free agency eligibility\"", "Indicator of \"free agent in 1991/2\"",
+                            "Indicator of \"arbitration eligibility\"", "Indicator of \"arbitration in 1991/2\"", "Player's name (in quotation marks)"]
+                        },
+                        {
+                            "description": "This data set contains every NCAA Basketball Tournament game ever played. The tournament has been held every year since 1939.",
+                            "description_url": "http://jse.amstat.org/datasets/basketball.txt",
+                            "url": "http://jse.amstat.org/datasets/basketball.dat.txt",
+                            "filename": "Basketball",
+                            "name": "NCAA Basketball Tournament Data",
+                            "separator": "SPACE",
+                            "columns": ["Year", "Winning School Columns", "Winning Score", "Losing School", "Losing Score"]
+                        },
+                        {
+                            "description": "Data are provided for Barry Bonds' plate appearances in the 2001\nbaseball season. Variables include characteristics of the innings\nbefore the first pitch to Bonds (e.g., the number of outs, the number\nof runners on each base, the score, the opposing pitcher's earned run\naverage) and after the first pitch to Bonds (e.g., the outcome of the\nappearance, how many runs scored in the inning after Bonds hits).",
+                            "description_url": "http://jse.amstat.org/datasets/bonds2001.txt",
+                            "url": "http://jse.amstat.org/datasets/bonds2001.dat.txt",
+                            "filename": "Bonds",
+                            "name": "Barry Bonds' 2001 Plate Appearances",
+                            "separator": "SPACE",
+                            "columns": ["Plate appearance number", "Number of the game in the season", "Number of the plate appearance within the game", "Equals one for games in San Francisco and equals zero otherwise",
+                            "1 - there is a runner on first base when Bonds appears, 0 - otherwise", "1- there is a runner on second base when Bonds appears, 0 - otherwise",
+                            "1 - there is a runner on third base when Bonds appears 0 - otherwise", "Number of outs in inning when Bonds appears", "Inning of plate appearance",
+                            "Number of runs scored by Giants in the inning after first pitch to Bonds", "1 -  Bonds walks, 0 - otherwise", "1 - Bonds walks intentionally, 0 - otherwise",
+                            "0 - Bonds does not reach base, 1 - Bonds reaches first base on a single or error, 2 - Bonds reaches second base on a double or error, 3 -  Bonds reaches third base on a triple or error, 4 - Bonds hits a home run, 5 - Bonds walks or is hit by a pitch",
+                            "Opposing pitchers' career earned run average as of the end of the 2000 season", "Giants score just before first pitch to Bonds", "Opposing team's score just before first pitch to Bonds"]
+                        },
+                        {
+                            "description": "Data are provided for Barry Bonds' plate appearances in the 2002\nbaseball season.  Variables include characteristics of the innings\nbefore the first pitch to Bonds (e.g., the number of outs, the number\nof runners on each base, the score, the opposing pitcher's earned run\naverage) and after the first pitch to Bonds (e.g., the outcome of the\nappearance, how many runs scored in the inning after Bonds hits).",
+                            "description_url": "http://jse.amstat.org/datasets/bonds2002.txt",
+                            "url": "http://jse.amstat.org/datasets/bonds2002.dat.txt",
+                            "filename": "Bonds",
+                            "name": "Barry Bonds' 2002 Plate Appearances",
+                            "separator": "SPACE",
+                            "columns": ["1 - there is a runner on first base when Bonds appears, 0 - otherwise", "1 - there is a runner on second base when Bonds appears and equals zero otherwise",
+                            "1 -  there is a runner on third base when Bonds appears, 0 - otherwise", "Number of outs in inning when Bonds appears",
+                            "0 - Bonds does not reach base, 1 - Bonds reaches first base on a single or error, 2 - Bonds reaches second base on a double or error, 3 - Bonds reaches third base on a triple or error, 4 - Bonds hits a home run, 5 - Bonds walks or is hit by a pitch",
+                            "Number of runs scored by Giants in the inning after first pitch to Bonds", "Opposing pitchers' career earned run average as of the end of the 2001 season",
+                            "Initials of player batting immediately after Bonds: JK = Jeff Kent, BS = Benito Santiago, RS = Reggie Sanders, RA = Rich Aurelia, YT = Yorvit Torrealba, DB = David Bell, SD = Shawn Dunston, RM = Ramon Martinez, NA = missing",
+                            "Player batting immediately after Bonds (previous column numerically coded): 0 = missing, 1 = Jeff Kent, 2 = Benito Santiago, 3 = Reggie Sanders, 4 = Rich Aurelia, 5 = Yorvit Torrealba, 6 = David Bell, 7 = Shawn Dunston, 8 = Ramon Martinez"]
+                        },
+                        {
+                            "description": "The dataset contains the scores, opponents, and sites of the 18 Big Ten\nmen's basketball games that involved the University of Iowa in 1997.",
+                            "description_url": "http://jse.amstat.org/datasets/hawks.txt",
+                            "url": "http://jse.amstat.org/datasets/hawks.dat.txt",
+                            "filename": "hawks",
+                            "name": " 1997 University of Iowa Big Ten Basketball Data",
+                            "separator": "SPACE"
+                        },
+                        {
+                            "description": "The dataset consists of game-by-game information for the 1998 season\nfor Mark McGwire and the St. Louis Cardinals, and Sammy Sosa and the\nChicago Cubs. The dataset includes information on the home run hitting\nof these two players, as well as game results for the teams.",
+                            "description_url": "http://jse.amstat.org/datasets/homerun.txt",
+                            "url": "http://jse.amstat.org/datasets/homerun.dat.txt",
+                            "filename": "homerun",
+                            "name": "The 1998 Home Run Race Between Mark McGwire and Sammy Sosa",
+                            "separator": "SPACE",
+                            "columns": ["Game number", "Month of game (St. Louis)", "Date of game (St. Louis)", "Calendar date of game [days since beginning of season] (St. Louis)", "Game location (St. Louis) (0 = Away, 1 = Home)",
+                            "Runs scored (St. Louis)", "Runs scored by opposition (St. Louis)", "Game result (St. Louis) (-1 = Tie, 0 = Loss, 1 = Win)", "Number of home runs hit by McGwire", "Runs driven in by McGwire's home runs",
+                            "McGwire game status (0 = Played, 1 = Did not play)", "Month of game (Chicago)", "Date of game (Chicago)", "Calendar date of game [days since beginning of season] (Chicago)",
+                            "Game location (Chicago) (0 = Away, 1 = Home)", "Runs scored (Chicago)", "Runs scored by opposition (Chicago)", "Game result (Chicago) (0 = Loss, 1 = Win)", "Number of home runs hit by Sosa",
+                            "Runs driven in by Sosa's home runs", "Sosa game status (0 = Played, 1 = Did not play)"]
+                        },
+                        {
+                            "description": "Data are from The Baseball Encyclopedia (1993) and Total Baseball (2001). \nThey include the location, league affiliation (National or American), \ndivision affiliation (East, Central, or West), season of play, home game \nattendance, runs scored, runs allowed, wins, losses, and number of games \nbehind the division leader for each major league franchise for the 1969 \nthrough 2000 seasons. Other data (including opening dates for new stadia, \nand dates of work stoppages) were collected from Ballparks by Munsey and \nSuppes (2001) and InfoPlease (2001).",
+                            "description_url": "http://jse.amstat.org/datasets/MLBattend.txt",
+                            "url": "http://jse.amstat.org/datasets/MLBattend.dat.txt",
+                            "filename": "MLBattend",
+                            "name": "1969-2000 Major League Baseball Attendance data",
+                            "separator": "SPACE",
+                            "columns": ["Major League Baseball franchise", "League affiliation (National or American)", "Division affiliation (East, Central, or West)", "Season",
+                            "Home game attendance", "Runs scored", "Runs allowed", "Wins", "Losses", "Number of games behind the division winner"]
+                        },
+                        {
+                            "description": "Driver results for all NASCAR races between 1975 1nd 2003, inclusive. The dataset constitutes all \nparticipants in each of 898 races, and includes their start/finish postions, prize winnings, car \nmake and laps completed.",
+                            "description_url": "http://jse.amstat.org/datasets/nascard.txt",
+                            "url": "http://jse.amstat.org/datasets/nascard.dat.txt",
+                            "filename": "nascard",
+                            "name": "NASCAR Driver Results",
+                            "separator": "SPACE",
+                            "columns": ["Series Race", "Year", "Race/Year", "Finishing Position", "Starting Position", "Laps Completed", "Winnings", "Number of cars in race", "Car Make", "Driver"]
+                        },
+                        {
+                            "description": "Race results for all NASCAR Winston Cup races between 1975 and 2003, inclusive. The dataset \nincludes the numbers of cars, total prize winnings, monthly consumer price index for the month \nof the race, track length, laps completed by the winner, spatial co-ordinates and name of track.",
+                            "description_url": "http://jse.amstat.org/datasets/nascarr.txt",
+                            "url": "http://jse.amstat.org/datasets/nascarr.dat.txt",
+                            "filename": "nascarr",
+                            "name": "NASCAR Race Results",
+                            "separator": "SPACE",
+                            "columns": ["Series Race", "Year", "Race/Year", "Number of cars in race", "Total race payout", "Monthly CPI-U", "Spearman’s", "Kendall’s", "Track Length", "Laps Completed by winner", "Road Indicator 1=Road Course, 0=Loop",
+                            "Caution Flags", "Lead Changes", "Winning Time", "Track Latitude", "Track Longitude", "Track Code", "Track Name"]
+                        },
+                        {
+                            "description": "This data set contains performance statistics for National \nFootball League (NFL) teams for their 2000 regular season.",
+                            "description_url": "http://jse.amstat.org/datasets/nfl2000.txt",
+                            "url": "http://jse.amstat.org/datasets/nfl2000.dat.txt",
+                            "filename": "nfl2000",
+                            "name": "NFL Y2K PCA",
+                            "separator": "SPACE",
+                            "columns": ["team initials", "name and location of the team", "wins", "losses", "drives begun in opponents' territory", "drives begun within 20 yards of the goal",
+                            "opponents drives begun in team's territory", "opponents drives begun within 20 yards of goal", "punts blocked by team", "punts team had blocked", "touchdowns scored by team",
+                            "touchdowns scored against team", "total yardage gained by offense", "total yardage allowed by defense", "time of possession by offense (in minutes)", "time of possession by opponents' offense",
+                            "field goals made", "field goals allowed to opponents", "field goals attempted", "field goals attempted by opponents", "punts made by opponents", "average length of punts made by opponents",
+                            "average change in field position", "during opponents' punts", "opponents' punts taken for touchbacks", "opponents' punts that resulted in the team's offense beginning within 20 yards of their own (defensive) goal line",
+                            "longest opponents' punt", "punts made by team", "average length of punts made by team", "average change in field position during team's punts", "team's punts taken for touchbacks",
+                            "team's punts that resulted in the opponents' offense beginning within 20 yards of their own (defensive) goal line", "homepuntlong  longest team punt", "first downs obtained by offense",
+                            "first downs allowed by defense", "sacks achieved by team's defense", "sacks allowed by team's offense", "kickoffs made by team", "kickoffs received by team", "yards gained during kickoff returns",
+                            "yards allowed to opposition during kickoff returns", "average yards gained during kickoff returns", "average yards allowed during kickoff returns", "longest kickoff return made by team",
+                            "longest kickoff return allowed by team", "kickoffs returned for a touchdown by team", "kickoffs returned for touchdown by opposition", "punts returned by team", "punts returned by opposition",
+                            "punts \"fair caught\" by team", "punts \"fair caught\" by opposition", "return yardage on punts by team", "return yardage on punts by opposition", "average length of punt returns by team",
+                            "average length of punt returns by opposition", "punts returned by team for a touchdown", "punts returned by opponents for a touchdown", "interceptions made by team's defense",
+                            "interceptions made against team's offense", "fumbles recovered by team's defense", "fumbles recovered by opposing defenses", "games played by team", "average number of yards gained per minute of possession by opponents",
+                            "average number of yards gained per minute of possession by team", "average number of punts per minute of possession by opponents", "average number of punts per minute of possession by team",
+                            "average number of touchdowns per minute of possession by opponents", "average number of touchdowns per minute of possession by team", "winning percentage", "turnovers obtained by team, per minute of possession by opponents",
+                            "turnovers allowed by team, per minute of possession", "first downs obtained by team, per minute of possession", "first downs allowed by team's defense, per minute of possession by opposition",
+                            "points scored by team", "points scored against team", "conference to which the team belongs (AFC or NFC)"]
+                        },
+                        {
+                            "description": "Four datasets (nfl93.dat, nfl94.dat, nfl95.dat, nfl96.dat) contain\nNational Football League game results for recent seasons. In addition\nto game scores, the datasets give oddsmakers' pointspreads and\nover/under values for each game.",
+                            "url": "http://jse.amstat.org/datasets/nfl93.dat.txt",
+                            "filename": "nfl93",
+                            "name": "NFL Scores and Pointspreads",
+                            "separator": "SPACE"
+                        },
+                        {
+                            "description": "Four datasets (nfl93.dat, nfl94.dat, nfl95.dat, nfl96.dat) contain\nNational Football League game results for recent seasons. In addition\nto game scores, the datasets give oddsmakers' pointspreads and\nover/under values for each game.",
+                            "description_url": "http://jse.amstat.org/datasets/nfl.txt",
+                            "url": "http://jse.amstat.org/datasets/nfl94.dat.txt",
+                            "filename": "nfl94",
+                            "name": "NFL Scores and Pointspreads",
+                            "separator": "SPACE",
+                            "columns": ["Date of game", "Visiting team name", "Visiting team score", "Home team name", "Home team score", "Indicator for overtime games (o or -)", "Pointspread", "Over/Under"]
+                        },
+                        {
+                            "description": "Four datasets (nfl93.dat, nfl94.dat, nfl95.dat, nfl96.dat) contain\nNational Football League game results for recent seasons. In addition\nto game scores, the datasets give oddsmakers' pointspreads and\nover/under values for each game.",
+                            "description_url": "http://jse.amstat.org/datasets/nfl.txt",
+                            "url": "http://jse.amstat.org/datasets/nfl95.dat.txt",
+                            "filename": "nfl95",
+                            "name": "NFL Scores and Pointspreads",
+                            "separator": "SPACE",
+                            "columns": ["Date of game", "Visiting team name", "Visiting team score", "Home team name", "Home team score", "Indicator for overtime games (o or -)", "Pointspread", "Over/Under"]
+                        },
+                        {
+                            "description": "Four datasets (nfl93.dat, nfl94.dat, nfl95.dat, nfl96.dat) contain\nNational Football League game results for recent seasons. In addition\nto game scores, the datasets give oddsmakers' pointspreads and\nover/under values for each game.",
+                            "description_url": "http://jse.amstat.org/datasets/nfl.txt",
+                            "url": "http://jse.amstat.org/datasets/nfl96.dat.txt",
+                            "filename": "nfl96",
+                            "name": " NFL Scores and Pointspreads",
+                            "separator": "SPACE",
+                            "columns": ["Date of game", "Visiting team name", "Visiting team score", "Home team name", "Home team score", "Indicator for overtime games (o or -)", "Pointspread", "Over/Under"]
+                        },
+                        {
+                            "description": "The dataset contains scores for all regular season National Football\nLeague games from the 1998, 1999 and 2000 seasons. In addition to \nthe points scored by the home and visiting teams in each game, the\ndataset contains a pointspread that handicaps each game.",
+                            "description_url": "http://jse.amstat.org/datasets/nfl98-00.txt",
+                            "url": "http://jse.amstat.org/datasets/nfl98-00.dat.txt",
+                            "filename": "nfl98-00",
+                            "name": " NFL Scores for 1998-2000",
+                            "separator": "SPACE",
+                            "columns": ["Year (1998, 1999, or 2000)", "Week of the season (1 to 17)", "Home team name", "Home team score", "Visiting team name", "Visiting team score", "Pointspread"]
+                        },
+                        {
+                            "description": "The data set provides the weights (in lbs)\nof the 26 men on the 1996 US Olympic Rowing Team in Atlanta. The\ndata includes the names of the participants and which event they\nrowed in. The US team participated in 7 of the 8 possible events.\nThis data set is useful for discussing outliers,\nexplanations for outliers, and comparing the robustness of the\nmean and the median.",
+                            "description_url": "http://jse.amstat.org/datasets/rowing.txt",
+                            "url": "http://jse.amstat.org/datasets/rowing.dat.txt",
+                            "filename": "rowing",
+                            "name": " Weights of 1996 US Olympic Rowing Team",
+                            "separator": "SPACE",
+                            "columns": ["Name: The rowers last name", "Event: The actual event the team member participated in", "Weight: Weight of individual team member in lbs"]
+                        },
+                        {
+                            "description": "Data consist of 500-yard freestyle swim times for male and female swimmers age 50-94 in a biennial national competition. Variables include year, gender, age, age group, swim time, seed time (qualifying time from state competition), and split times (in each 50-yard segment).",
+                            "url": "http://jse.amstat.org/v22n1/doane/SeniorSwimTimes-DataSet.txt",
+                            "filename": "SeniorSwimTimes",
+                            "name": "SeniorSwimTimes",
+                            "separator": "TAB",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Data are provided for the 56 Tour De France bicycle races since World\nWar II. The year and dates of the event, the total number of stages,\nthe total distance, the winning total time and average speed, the name\nand country of the winner, the birth date of the winner, and the\nwinner's age at the time of victory are the variables in the dataset.",
+                            "description_url": "http://jse.amstat.org/datasets/tdf.txt",
+                            "url": "http://jse.amstat.org/datasets/tdf.dat.txt",
+                            "filename": "tdf",
+                            "name": "Tour De France Winners (Can Lance Win Six?)",
+                            "separator": "SPACE",
+                            "columns": ["Year", "Start-Town", "Start-Date", "End-Date", "Stages", "Distance in kilometers", "Speed: The average speed of the winner in kph", "Time: The total riding time of the winner in hours",
+                            "Winner", "Country", "Birth-Date", "Age-Year", "Age-Tenth"]
+                        }
+                    ]
+                },
+                {
+                    "name": "Other",
+                    "datasets": [
+                        {
+                            "description": "Full population of data (all software projects completed by the AT&T data center from 1986 through 1991).",
+                            "description_url": "http://jse.amstat.org/datasets/aptness.txt",
+                            "url": "http://jse.amstat.org/datasets/aptness.dat.txt",
+                            "filename": "aptness",
+                            "name": "Evaluating Aptness of a Regression Model",
+                            "columns": ["Function Point Count", "Work Hours", "Operating System: (0) Unix, (1) MVS", "Database Management System: (1) IDMS, (2) IMS, (3) INFORMIX, (4) INGRESS, (5) Other", "Language: (1) COBOL, (2) PLI, (3) C, (4) Other"]
+                        },
+                        {
+                            "description": "The dataset contains information for the construction of a three-way table that illustrates Simpson's Paradox. Categorical variables observed for babies born in a metropolitan area of South Africa include race, whether or not the mother had medical aid (which is similar to health insurance), and whether or not the child was included in a follow-up study. The data are provided in two formats. The file birthtotena.dat contains the category labels and cell frequencies for the three-way table.  The file birthtotenb.dat lists each case on a separate line with three variables that indicate whether or not the mother had medical aid, whether or not the mother was traced for the five-year interview, and race.",
+                            "description_url": "http://jse.amstat.org/datasets/birthtoten.txt",
+                            "url": "http://jse.amstat.org/datasets/birthtotena.dat.txt",
+                            "filename": "birthtotena",
+                            "name": "Simpson's Paradox: An Example From a Longitudinal Study in South Africa",
+                            "columns": ["Aid/NoAid", "Traced/NotTraced", "White/Black"]
+                        },
+                        {
+                            "description": "The dataset contains information for the construction of a three-way table that illustrates Simpson's Paradox. Categorical variables observed for babies born in a metropolitan area of South Africa include race, whether or not the mother had medical aid (which is similar to health insurance), and whether or not the child was included in a follow-up study. The data are provided in two formats. The file birthtotena.dat contains the category labels and cell frequencies for the three-way table.  The file birthtotenb.dat lists each case on a separate line with three variables that indicate whether or not the mother had medical aid, whether or not the mother was traced for the five-year interview, and race.",
+                            "description_url": "http://jse.amstat.org/datasets/birthtoten.txt",
+                            "url": "http://jse.amstat.org/datasets/birthtotenb.dat.txt",
+                            "filename": "birthtotenb",
+                            "name": "Simpson's Paradox: An Example From a Longitudinal Study in South Africa",
+                            "columns": ["Medical Aid? (0 = No, 1 = Yes)", "Traced? (0 = No, 1 = Five-Year Group)", "Race (1 = White, 2 = Black)"]
+                        },
+                        {
+                            "description": "This dataset contains the prices of ladies' diamond rings and the carat size of their diamond stones. The rings are made with gold of 20 carats purity and are each mounted with a single diamond stone.",
+                            "description_url": "http://jse.amstat.org/datasets/diamond.txt",
+                            "url": "http://jse.amstat.org/datasets/diamond.dat.txt",
+                            "filename": "diamond",
+                            "name": "Diamond Ring Pricing Using Linear Regression",
+                            "columns": ["Size of diamond in carats (1 carat = .2 gram)", "Price of ring in Singapore dollars"]
+                        },
+                        {
+                            "description": "In many statistical models the normal distribution of the response is an essential assumption.\nThis paper uses a dataset of 2000 euro coins with information (up to the milligram) about\nthe weight of each coin. As the physical coin production process is subject to a multitude\nof (very small) variability sources, it seems reasonable to expect that the empirical\ndistribution of the weight of euro coins does agree with the normal distribution. Goodness\nof fit tests however show that this is not the case. Moreover, some outliers complicate\nthe analysis. Mixtures of normal distributions and skew normal distributions are fitted\nto the data, revealing that the normality assumption might not hold for those weights.",
+                            "description_url": "http://jse.amstat.org/datasets/euroweight.txt",
+                            "url": "http://jse.amstat.org/datasets/euroweight.dat.txt",
+                            "filename": "euroweight",
+                            "name": "The Weight of Euro Coins",
+                            "separator": "TAB",
+                            "columns": ["ID", "weight in grams", "batch"]
+                        },
+                        {
+                            "description": "Title, year of release, length in minutes, number of cast members listed, rating, and number of lines \nof description are recorded for a simple random sample of 100 movies.  One can use the sample to obtain base-line information \non the movie guide from which the data were collected.  The dataset also illustrates two paradoxes for associations between \nthree variables:  non-transitivity of positive correlation and Simpson's paradox.  SOURCE: The data were taken as a simple \nrandom sample of the approximately 19,000 movies (not including made-for-TV movies) in Leonard Maltin's Movie and Video \nGuide, 1996.  ",
+                            "description_url": "http://jse.amstat.org/datasets/films.txt",
+                            "url": "http://jse.amstat.org/datasets/films.dat.txt",
+                            "filename": "films",
+                            "name": "films dataset",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "This dataset contains descriptive data of contestants on the game shoe \"Friend or Foe?\". Information on the contestant's \nrace, sex, age, prize money, and playing strategy are included.",
+                            "description_url": "http://jse.amstat.org/datasets/friend_or_foe.txt",
+                            "url": "http://jse.amstat.org/datasets/friend_or_foe.dat.txt",
+                            "filename": "friend_or_foe",
+                            "name": "Data from the Television Game Show \"Friend or Foe?\"",
+                            "separator": "TAB",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "The dataset contains hat size as well as circumference, length of major axis \nand length of minor axis of the inner hat band for 26 hats. The manufacturer \nand the country of manufacture are also included.",
+                            "description_url": "http://jse.amstat.org/datasets/hats.txt",
+                            "url": "http://jse.amstat.org/datasets/hats.dat.txt",
+                            "filename": "hats",
+                            "name": " Hat measurements, including hat size",
+                            "separator": "SPACE",
+                            "columns": ["Hat size", "Circumference (inches)", "Length of major axis (inches)", "Length of minor axis (inches)", "Where made? Italy = 1, U.S.A. = 2", "Manufacturer: Beaver = 1, Borsalino = 2, Dobbs = 3, Stetson = 4"]
+                        },
+                        {
+                            "description": "The dataset consists of samples of size six taken without replacement\nfrom the integers {1, 2, 3, ..., 42}. There are actually three\ndatasets from three different sources, and in each case the six-tuples\nare (in theory) random selections or samples.  The observations in each\nsample are given in the order in which they were obtained or selected.",
+                            "description_url": "http://jse.amstat.org/datasets/lotto.txt",
+                            "url": "http://jse.amstat.org/datasets/lotto.dat.txt",
+                            "filename": "lotto",
+                            "name": "Lotto 6/42 Selections from Individuals, Irish National Lottery, and S-Plus Simulation",
+                            "separator": "TAB",
+                            "columns": ["Code for source of sample (1, 2, or 3)", "First selection in sample", "Second selection in sample", "Third selection in sample", "Fourth selection in sample", "Fifth selection in sample", "Sixth selection in sample"]
+                        },
+                        {
+                            "description": "This file contains daily per theater box office receipts for 49 \nmovies. This data is to accompany the article entitled Movie Data.",
+                            "description_url": "http://jse.amstat.org/datasets/moviedaily.txt",
+                            "url": "http://jse.amstat.org/datasets/moviedaily.dat.txt",
+                            "filename": "moviedaily",
+                            "name": "Data Documentation Template for Daily Movie Box Office Receipts",
+                            "separator": "TAB",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "This file contains total US gross box office receipts for 49 movies. This data is to accompany the article entitled Movie Data.",
+                            "description_url": "http://jse.amstat.org/datasets/movietotal.txt",
+                            "url": "http://jse.amstat.org/datasets/movietotal.dat.txt",
+                            "filename": "movietotal",
+                            "name": "Data Documentation Template for Total Movie Box Office Receipts",
+                            "separator": "TAB",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "This file contains weekend per theater box office receipts for 49 movies. This data is to accompany the article entitled Movie Data.",
+                            "description_url": "http://jse.amstat.org/datasets/movieweekend.txt",
+                            "url": "http://jse.amstat.org/datasets/movieweekend.dat.txt",
+                            "filename": "movieweekend",
+                            "name": "Data Documentation Template for Weekend Movie Box Office Receipts",
+                            "separator": "TAB",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "Every year actors and actresses are chosen to receive the Oscars awards for best actor and for best actress. This dataset \ncontains information about each of the winners for each of the 77 annual Oscar awards.\n\nAlthough there have been only 77 Oscars, there are 78 male winners and 78 female winners because ties happened on two \noccasions (1933 for the best actor and 1969 for the best actress).",
+                            "description_url": "http://jse.amstat.org/datasets/oscars.txt",
+                            "url": "http://jse.amstat.org/datasets/oscars.dat.txt",
+                            "filename": "oscars",
+                            "name": "Oscars: Best Actors and Actresses",
+                            "separator": "SPACE",
+                            "columns": ["Gender (m=male  f=female)", "Oscar Year Number (1-77)", "Year the Oscar Took Place", "Winner’s first and last name", "Name of the Movie in which the winner acted", "Age of winner (at the beginning of the winning year)",
+                            "Birth place (State if born in USA, else Country)", "Month in which the winner was born", "Day of month on which winner was born", "Year the winner was born"]
+                        },
+                        {
+                            "description": "This dataset contains information collected from rolling the pair of\npigs (found in the game \"Pass the Pigs\") 6000 times. A description of\nthe rules, scoring configurations, and data collection method are\nincluded in the accompanying paper.",
+                            "description_url": "http://jse.amstat.org/datasets/pig.txt",
+                            "url": "http://jse.amstat.org/datasets/pig.dat.txt",
+                            "filename": "pig",
+                            "name": "Data from the game \"Pass the Pigs\"",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": true
+                        },
+                        {
+                            "description": "In a residential home, energy consumption is closely related to the\noutdoor temperature and size of the house. In a home of a given size,\ntemperature fluctuations and energy consumption vary fairly predictably\nover time. When homeowners add a room, other things being equal,\nutility usage should increase. This dataset permits students to\nestimate the energy demand and make forecasts for future months, as\nwell as explore other relationships.\n\nThe dataset contains natural gas and electricity usage data for a\ngas-heated single-family residence in the Boston area from September\n1990 through May 1997, accompanied by monthly climatological data.  \nThe dataset is useful for illustrating the concepts and techniques of\ncentral tendency, dispersion, elementary time series analysis,\ncorrelation, simple and multiple regression, and variable\ntransformations.",
+                            "description_url": "http://jse.amstat.org/datasets/utility.txt",
+                            "url": "http://jse.amstat.org/datasets/utility.dat.txt",
+                            "filename": "utility",
+                            "name": "What Does It Take to Heat a New Room?",
+                            "separator": "SPACE",
+                            "columns": ["Observation month", "Number of days in the month", "Mean monthly temperature in Boston, in degrees Fahrenheit", "Mean natural gas usage per day for the month, in therms", "Total therms used for the month", "Days in the gas company billing cycle for the month",
+                            "Total kilowatt hours consumed in the month", "Mean kilowatt hours per day for the month", "Days in the electric company billing cycle for the month", "Dummy variable for method of determining kwh for the month (0 = actual month-end meter reading, 1 = estimated reading)",
+                            "Total heating degree days for the month", "Total cooling degree days for the month", "Dummy variable for the new room (0 = pre-addition, 1 = post-addition)"]
+                        },
+                        {
+                            "description": "For each person on board the fatal maiden voyage of the ocean liner Titanic, this dataset records sex, age [adult/child], economic status [first/second/third class, or crew] and whether or not that person survived.",
+                            "description_url": "http://jse.amstat.org/datasets/titanic.txt",
+                            "url": "http://jse.amstat.org/datasets/titanic.dat.txt",
+                            "filename": "titanic",
+                            "name": "Population at Risk and Death Rates for an Unusual Episode",
+                            "separator": "SPACE",
+                            "columns": ["Class (0 = crew, 1 = first, 2 = second, 3 = third)", "Age (1 = adult, 0 = child)", "Sex (1 = male, 0 = female)", "Survived (1 = yes, 0 = no)"]
+                        }
+                    ]
+                },
+                {
+                    "name": "Travel",
+                    "datasets": [
+                        {
+                            "description": "This dataset consists of all 135 large and medium sized air hubs in the United States as defined by the Federal Aviation Administration.",
+                            "description_url": "http://jse.amstat.org/datasets/airport.txt",
+                            "url": "http://jse.amstat.org/datasets/airport.dat.txt",
+                            "filename": "airport",
+                            "name": " US Airport Statistics",
+                            "separator": "SPACE",
+                            "columns": ["Airport", "City", "Scheduled departures", "Performed departures", "Enplaned passengers", "Enplaned revenue tons of freight", "Enplaned revenue tons of mail"]
+                        },
+                        {
+                            "description": "The data is a set of 50000 (1.3 MB ) observations containing roughly 2 minutes of traffic from the one hour, larger\ndec-pkt-1.tcp  file used in the paper. The larger file can be accessed from the author's web page or from its source. With \nonly 50000 observations, the data set ",
+                            "description_url": "http://jse.amstat.org/datasets/packetdata.txt",
+                            "url": "http://jse.amstat.org/datasets/packetdata.dat.txt",
+                            "filename": "packetdata",
+                            "name": "packetdata",
+                            "separator": "SPACE",
+                            "use_first_row_for_vectorname": true
+                        }
+                    ]
+                },
+                {
+                    "name": "Population",
+                    "datasets": [
+                        {
+                            "description": "For each of the forty largest countries in the world (according to 1990\npopulation figures), data are given for the country's life expectancy\nat birth, number of people per television set, and number of people per\nphysician.",
+                            "description_url": "http://jse.amstat.org/datasets/televisions.txt",
+                            "url": "http://jse.amstat.org/datasets/televisions.dat.txt",
+                            "filename": "televisions",
+                            "name": "Televisions, Physicians, and Life Expectancy",
+                            "separator": "SPACE",
+                            "columns": ["Country", "Life expectancy", "People per television", "People per physician", "Female life expectancy", "Male life expectancy"]
+                        },
+                        {
+                            "description": "This dataset contains 21 body dimension measurements as well as age, weight, height, and gender on 507 individuals. The 247 men and 260 women were primarily individuals in their twenties and thirties, with a scattering of older men and women, all exercising several hours a week.",
+                            "description_url": "http://jse.amstat.org/datasets/body.txt",
+                            "url": "http://jse.amstat.org/datasets/body.dat.txt",
+                            "filename": "body",
+                            "name": " Exploring Relationships in Body Dimensions",
+                            "separator": "SPACE",
+                            "columns": ["Biacromial diameter", "Biiliac diameter, or \"pelvic breadth\"", "Bitrochanteric diameter", "Chest depth between spine and sternum at nipple level, mid-expiration",
+                            "Chest diameter at nipple level, mid-expiration", "Elbow diameter, sum of two elbows", "Wrist diameter, sum of two wrists",
+                            "Knee diameter, sum of two knees", "Ankle diameter, sum of two ankles", "Shoulder girth over deltoid muscles", "Chest girth, nipple line in males and just above breast tissue in females, mid-expiration",
+                            "Waist girth, narrowest part of torso below the rib cage, average of contracted and relaxed position", "Navel (or \"Abdominal\") girth at umbilicus and iliac crest, iliac crest as a landmark",
+                            "Hip girth at level of bitrochanteric diameter", "Thigh girth below gluteal fold, average of right and left girths", "Bicep girth, flexed, average of right and left girths",
+                            "Forearm girth, extended, palm up, average of right and left girths", "Knee girth over patella, slightly flexed position, average of right and left girths",
+                            "Calf maximum girth, average of right and left girths", "Ankle minimum girth, average of right and left girths", "Wrist minimum girth, average of right and left girths",
+                            "Age (years)", "Weight (kg)", "Height (cm)", "Gender (1 - male, 0 - female)"]
+                        }
+                    ]
+                },
+                {
+                    "name": "Technology",
+                    "datasets": [
+                        {
+                            "description": "Specifications are given for 428 new vehicles for the 2004 year. The variables recorded include price, measurements relating to the size of the vehicle, and fuel efficiency.",
+                            "description_url": "http://jse.amstat.org/datasets/04cars.txt",
+                            "url": "http://jse.amstat.org/datasets/04cars.dat.txt",
+                            "filename": "04cars",
+                            "name": "2004 New Car and Truck Data",
+                            "separator": "SPACE",
+                            "columns": ["Vehicle Name", "Sports Car? (1=yes, 0=no)", "Sport Utility Vehicle? (1=yes, 0=no)", "Wagon? (1=yes, 0=no)", "Minivan?(1=yes, 0=no)", "Pickup? (1=yes, 0=no)", "All-Wheel Drive? (1=yes, 0=no)", "Rear-Wheel Drive? (1=yes, 0=no)", "Suggested Retail Price (U.S. Dollars)", "Dealer Cost (or 'invoice price') (U.S. Dollars)", "Engine Size (liters)", "Number of Cylinders (=-1 if rotary engine)", "Horsepower", "City Miles Per Gallon", "Highway Miles Per Gallon", "Weight (Pounds)", "Wheel Base (inches)", "Length (inches)", "Width (inches)"]
+                        },
+                        {
+                            "description": "The data set contains the results of a calibration experiment designed to estimate volume of oysters and to compare two computer vision systems (2-D vs. 3-D) for classification of oysters based on their image size in number of pixels. ",
+                            "description_url": "http://jse.amstat.org/datasets/30oysters.dat.txt",
+                            "url": "http://jse.amstat.org/datasets/30oysters.dat.txt",
+                            "filename": "30oysters",
+                            "name": "Oyster Volume Estimation Data",
+                            "separator": "SPACE",
+                            "columns": ["Oyster ID", "Oyster weight (g)", "Oyster volume (cc)", "Oyster size information from the 3-D imaging system (in volume pixels)", "Oyster size information from the 2-D imaging system (in pixels)"]
+                        },
+                        {
+                            "description": "The data set gives a random sample of the length of visits  of users entering the msnbc.com web site during September 28, 1999.\nThe length of the visit is an estimate of the total number of clicks or pages seen by each user and is based on web server \nlogs, thus it counts  only pages recorded by the server. Pages cached in the user's browser or in a cache proxy server are \nunknown. The data set used in the paper is much larger than the one made available here but that larger data set is also \navailable in a page cited in the references.",
+                            "description_url": "http://jse.amstat.org/datasets/msnbclength.txt",
+                            "url": "http://jse.amstat.org/datasets/msnbclength.dat.txt",
+                            "filename": "msnbclength",
+                            "name": "Internet Data Analysis for Undergrad Curriculum",
+                            "separator": ","
+                        },
+                        {
+                            "description": "The video lottery terminal dataset contains observations on the three\nwindows of an electronic slot machine for 345 plays together with the\nprize paid out for each play. The prize payout distribution is so\nbadly skewed that confidence intervals for expected payout based on the\ncentral limit theorem are not accurate.  The dataset can be used at the\ngraduate or upper undergraduate level to illustrate parametric\nbootstrapping.  The dataset can also be used in a graduate course to\nillustrate tests of independence for two and three-way contingency\ntables involving random zeroes, or these tables may be collapsed and\nused as examples in an introductory course.",
+                            "description_url": "http://jse.amstat.org/datasets/vlt.txt",
+                            "url": "http://jse.amstat.org/datasets/vlt.dat.txt",
+                            "filename": "vlt",
+                            "name": "Video Lottery Terminal Data",
+                            "separator": "SPACE"
+                        }
+                    ]
+                },
+                {
+                    "name": "Politics",
+                    "datasets": [
+                        {
+                            "description": "For each U.S. Senator, his or her votes on whether to remove President\nClinton on each of the two articles of impeachment (plus a summary\nvariable representing each Senator's number of \"guilty\" votes) are\nprovided, as well as each Senator's values on several variables that\ncould be predictive of vote (e.g., Senator's degree of conservatism,\nhow well Clinton did in the Senator's state in the 1996 Presidential\nelection).",
+                            "description_url": "http://jse.amstat.org/datasets/impeach.txt",
+                            "url": "http://jse.amstat.org/datasets/impeach.dat.txt",
+                            "filename": "impeach",
+                            "name": " U.S. Senate Votes on Clinton Removal",
+                            "separator": "SPACE",
+                            "columns": [" Name of senator", "State (postal code)", "Vote on Article I, Perjury:  0 = Not Guilty, 1 = Guilty", "Vote on Article II, Obstruction of Justice:  0 = NG, 1 = G",
+                            "Number of votes for guilt", "Party:  0 = Democrat, 1 = Republican", "Senator's degree of ideological conservativism (0-100)", "Percent of the vote Clinton received in the 1996 Presidential election in each state",
+                            "The year each Senator's seat is up and he/she must run for re-election (or retire)", "First-term senator? 0 = no, 1 = yes"]
+                        },
+                        {
+                            "description": "The data consist of the numbers of days served in office for the 43 \nPresidents of the United States as of 4 February 2004.",
+                            "description_url": "http://jse.amstat.org/datasets/outlier.txt",
+                            "url": "http://jse.amstat.org/datasets/outlier.dat.txt",
+                            "filename": "outlier",
+                            "name": "A Dataset That Is 44% Outliers",
+                            "separator": "SPACE",
+                            "columns": ["Last name of President (text, spelled with no embedded spaces)", "days in office (counts)"]
+                        }
+                    ]
+                },
+                {
+                    "name": "Education",
+                    "datasets": [
+                        {
+                            "description": "This dataset contains variables that address the relationship between \npublic school expenditures and academic performance, as measured by the SAT.",
+                            "description_url": "http://jse.amstat.org/datasets/sat.txt",
+                            "url": "http://jse.amstat.org/datasets/sat.dat.txt",
+                            "filename": "sat",
+                            "name": "Getting What You Pay For: The Debate Over Equity in Public School Expenditures ",
+                            "separator": "SPACE",
+                            "remove_quotes": true,
+                            "columns": ["Name of state (in quotation marks)", "Current expenditure per pupil in average daily attendance in public elementary and secondary schools, 1994-95 (in thousands of dollars)",
+                            "Average pupil/teacher ratio in public elementary and secondary schools, Fall 1994", "Estimated average annual salary of teachers in public elementary and secondary schools, 1994-95 (in thousands of dollars)",
+                            "Percentage of all eligible students taking the SAT, 1994-95", "Average verbal SAT score, 1994-95", "Average math SAT score, 1994-95", "Average total score on the SAT, 1994-95"]
+                        },
+                        {
+                            "description": "Data are from the 1995 U.S. News report on American colleges and\nuniversities.  They include demographic information on tuition,\nroom & board costs, SAT or ACT scores, application/acceptance\nrates, student/faculty ratio, graduation rate, and more.",
+                            "description_url": "http://jse.amstat.org/datasets/usnews.txt",
+                            "url": "http://jse.amstat.org/datasets/usnews.dat.txt",
+                            "filename": "usnews",
+                            "name": "U.S. News College data",
+                            "separator": ",",
+                            "columns": ["FICE (Federal ID number)", "College name", "State (postal code)", "Public/private indicator (public=1, private=2)", "Average Math SAT score", "Average Verbal SAT score", "Average Combined SAT score", "Average ACT score", "First quartile - Math SAT",
+                            "Third quartile - Math SAT", "First quartile - Verbal SAT", "Third quartile - Verbal SAT", "First quartile - ACT", "Third quartile - ACT", "Number of applications received", "Number of applicants accepted", "Number of new students enrolled",
+                            "Pct. new students from top 10% of H.S. class", "Pct. new students from top 25% of H.S. class", "Number of full-time undergraduates", "Number of part-time undergraduates", "In-state tuition", "Out-of-state tuition",
+                            "Room and board costs", "Room costs", "Board costs", "Additional fees", "Estimated book costs", "Estimated personal spending", "Pct. of faculty with Ph.D.'s", "Pct. of faculty with terminal degree", "Student/faculty ratio",
+                            "Pct. alumni who donate", "Instructional expenditure per student", "Graduation rate"]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

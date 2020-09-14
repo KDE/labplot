@@ -4,7 +4,7 @@
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni.kn)
-    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,6 +30,7 @@
 #include "TemplateHandler.h"
 
 #include <QFileInfo>
+#include <QDir>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -38,9 +39,17 @@
 #include <QToolButton>
 #include <QWidgetAction>
 
+
+#include <QApplication>
+#include <QMouseEvent>
+#include <QTimer>
+
 #include <KConfig>
+#include <KConfigGroup>
 #include <KIconLoader>
 #include <KLocalizedString>
+
+static QVector<TemplateHandler*> templateHandlers;
 
  /*!
   \class TemplateHandler
@@ -52,7 +61,7 @@
   \ingroup kdefrontend
 */
 
-TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(parent) {
+TemplateHandler::TemplateHandler(QWidget* parent, ClassName name) : QWidget(parent) {
 	auto* horizontalLayout = new QHBoxLayout(this);
 	horizontalLayout->setSpacing(0);
 	horizontalLayout->setMargin(0);
@@ -77,48 +86,148 @@ TemplateHandler::TemplateHandler(QWidget *parent, ClassName name): QWidget(paren
 // 	QSpacerItem* horizontalSpacer2 = new QSpacerItem(10, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 // 	horizontalLayout->addItem(horizontalSpacer2);
 
-	m_tbCopy = new QToolButton(this);
-	m_tbCopy->setIconSize(QSize(size, size));
-	m_tbCopy->setEnabled(false);
-	horizontalLayout->addWidget(m_tbCopy);
-
-	m_tbPaste = new QToolButton(this);
-	m_tbPaste->setIconSize(QSize(size, size));
-	m_tbPaste->setEnabled(false);
-	horizontalLayout->addWidget(m_tbPaste);
+// 	m_tbCopy = new QToolButton(this);
+// 	m_tbCopy->setIconSize(QSize(size, size));
+// 	m_tbCopy->setEnabled(false);
+// 	horizontalLayout->addWidget(m_tbCopy);
+//
+// 	m_tbPaste = new QToolButton(this);
+// 	m_tbPaste->setIconSize(QSize(size, size));
+// 	m_tbPaste->setEnabled(false);
+// 	horizontalLayout->addWidget(m_tbPaste);
 
 	m_tbLoad->setIcon(QIcon::fromTheme("document-open"));
 	m_tbSave->setIcon(QIcon::fromTheme("document-save"));
 	m_tbSaveDefault->setIcon(QIcon::fromTheme("document-save-as"));
-	m_tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
-	m_tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
+// 	m_tbCopy->setIcon(QIcon::fromTheme("edit-copy"));
+// 	m_tbPaste->setIcon(QIcon::fromTheme("edit-paste"));
 
 	connect(m_tbLoad, &QToolButton::clicked, this, &TemplateHandler::loadMenu);
 	connect(m_tbSave, &QToolButton::clicked, this, &TemplateHandler::saveMenu);
 	connect(m_tbSaveDefault, &QToolButton::clicked, this, &TemplateHandler::saveDefaults);
 
+
+	KConfig config;
+	KConfigGroup group = config.group(QLatin1String("TemplateHandler"));
+	auto style = (Qt::ToolButtonStyle)group.readEntry(QLatin1String("TextPosition"), (int)Qt::ToolButtonTextBesideIcon);
+	m_tbLoad->setToolButtonStyle(style);
+	m_tbSave->setToolButtonStyle(style);
+	m_tbSaveDefault->setToolButtonStyle(style);
+
+	m_tbLoad->installEventFilter(this);
+	m_tbSave->installEventFilter(this);
+	m_tbSaveDefault->installEventFilter(this);
+
 	m_className = name;
 
+	//folder where config files will be stored in object specific sub-folders:
+	//Linux    - ~/.local/share/labplot2/templates/
+	//Mac      - //TODO
+	//Windows  - C:/Users/<USER>/AppData/Roaming/labplot2/templates/
+	m_dirName = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + QLatin1String("/templates/");
+
 	//synchronize this with the ordering in TemplateHandler::ClassName
-	m_dirNames <<"spreadsheet"<<"matrix"<<"worksheet"<<"cartesianplot"<<"cartesianplotlegend"<<"xycurve"<<"axis"<<"custompoint"<<"histogram";
+	enum ClassName {Spreadsheet, Matrix, Worksheet, CartesianPlot, CartesianPlotLegend, Histogram, XYCurve, Axis, CustomPoint};
+	m_subDirNames <<"spreadsheet"<<"matrix"<<"worksheet"<<"cartesianplot"
+				<<"cartesianplotlegend"<<"histogram"<<"xycurve"<<"axis"<<"custompoint";
 
 	this->retranslateUi();
 
 	//disable the load-button if no templates are available yet
-	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + m_dirNames.at(m_className) + "/*");
+	QStringList list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
+	list.removeAll(QLatin1String("."));
+	list.removeAll(QLatin1String(".."));
 	m_tbLoad->setEnabled(list.size());
 
 	//TODO: implement copy&paste of properties and activate copy- and paste-buttons again
-	m_tbCopy->hide();
-	m_tbPaste->hide();
+// 	m_tbCopy->hide();
+// 	m_tbPaste->hide();
+
+	templateHandlers << this;
 }
 
 void TemplateHandler::retranslateUi() {
+	m_tbLoad->setText(i18n("Load"));
 	m_tbLoad->setToolTip(i18n("Load properties from a template"));
+	m_tbSave->setText(i18n("Save"));
 	m_tbSave->setToolTip(i18n("Save current properties as a template"));
+	m_tbSaveDefault->setText(i18n("Save Default"));
 	m_tbSaveDefault->setToolTip(i18n("Save current properties as default"));
-	m_tbCopy->setToolTip(i18n("Copy properties"));
-	m_tbPaste->setToolTip(i18n("Paste properties"));
+// 	m_tbCopy->setToolTip(i18n("Copy properties"));
+// 	m_tbPaste->setToolTip(i18n("Paste properties"));
+}
+
+bool TemplateHandler::eventFilter(QObject* obj, QEvent* event) {
+	if (event->type() == QEvent::MouseButtonPress) {
+		auto* mouseEvent = static_cast<QMouseEvent*>(event);
+		if (mouseEvent->button() == Qt::RightButton) {
+			if (!m_textPositionMenu) {
+				auto style = m_tbLoad->toolButtonStyle();
+
+				m_textPositionMenu = new QMenu(this);
+				m_textPositionMenu->addSection(i18n("Toolbar Settings"));
+
+				auto* actionGroup = new QActionGroup(this);
+				actionGroup->setExclusive(true);
+				connect(actionGroup, &QActionGroup::triggered, this, &TemplateHandler::updateTextPosition);
+
+				auto* subMenu = new QMenu(i18n("Text position"), m_textPositionMenu);
+
+				QAction* action = new QAction(i18n("Icons only"), actionGroup);
+				action->setCheckable(true);
+				action->setData((int)Qt::ToolButtonIconOnly);
+				if (style == Qt::ToolButtonIconOnly)
+					action->setChecked(true);
+				subMenu->addAction(action);
+
+				action = new QAction(i18n("Text only"), actionGroup);
+				action->setCheckable(true);
+				action->setData((int)Qt::ToolButtonTextOnly);
+				if (style == Qt::ToolButtonTextOnly)
+					action->setChecked(true);
+				subMenu->addAction(action);
+
+				action = new QAction(i18n("Text Alongside Icons"), actionGroup);
+				action->setCheckable(true);
+				action->setData((int)Qt::ToolButtonTextBesideIcon);
+				if (style == Qt::ToolButtonTextBesideIcon)
+					action->setChecked(true);
+				subMenu->addAction(action);
+
+				action = new QAction(i18n("Text Under Icons"), actionGroup);
+				action->setCheckable(true);
+				action->setData((int)Qt::ToolButtonTextUnderIcon);
+				if (style == Qt::ToolButtonTextUnderIcon)
+					action->setChecked(true);
+				subMenu->addAction(action);
+				m_textPositionMenu->addMenu(subMenu);
+
+			}
+
+			auto* widget = static_cast<QWidget*>(obj);
+			m_textPositionMenu->exec(widget->mapToGlobal(mouseEvent->pos()));
+		}
+	}
+	return QWidget::eventFilter(obj, event);
+}
+
+void TemplateHandler::updateTextPosition(QAction* action) {
+	auto style = static_cast<Qt::ToolButtonStyle>(action->data().toInt());
+
+	//save the current style
+	KConfig config;
+	KConfigGroup group = config.group(QLatin1String("TemplateHandler"));
+	group.writeEntry(QLatin1String("TextPosition"), (int)style);
+
+	//update all available template handlers
+	for (auto* handler : templateHandlers)
+		handler->setToolButtonStyle(style);
+}
+
+void TemplateHandler::setToolButtonStyle(Qt::ToolButtonStyle style) {
+	m_tbLoad->setToolButtonStyle(style);
+	m_tbSave->setToolButtonStyle(style);
+	m_tbSaveDefault->setToolButtonStyle(style);
 }
 
 //##############################################################################
@@ -126,13 +235,15 @@ void TemplateHandler::retranslateUi() {
 //##############################################################################
 void TemplateHandler::loadMenu() {
 	QMenu menu;
-	menu.addSection(i18n("Load From"));
+	menu.addSection(i18n("Load From Template"));
 
-	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/" + m_dirNames.at(m_className) + "/*");
+	QStringList list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
+	list.removeAll(QLatin1String("."));
+	list.removeAll(QLatin1String(".."));
 	for (int i = 0; i < list.size(); ++i) {
-			QFileInfo fileinfo(list.at(i));
-			QAction* action = menu.addAction(fileinfo.fileName());
-			action->setData(QVariant(list.at(i)));
+		QFileInfo fileinfo(list.at(i));
+		QAction* action = menu.addAction(QIcon::fromTheme(QLatin1String("document-edit")), fileinfo.fileName());
+		action->setData(fileinfo.fileName());
 	}
 	connect(&menu, &QMenu::triggered, this, &TemplateHandler::loadMenuSelected);
 
@@ -141,20 +252,22 @@ void TemplateHandler::loadMenu() {
 }
 
 void TemplateHandler::loadMenuSelected(QAction* action) {
-	KConfig config(action->data().toString(), KConfig::SimpleConfig);
+	QString configFile = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + '/' + action->data().toString();
+	KConfig config(configFile, KConfig::SimpleConfig);
 	emit loadConfigRequested(config);
-
 	emit info( i18n("Template \"%1\" was loaded.", action->text().remove('&')) );
 }
 
 void TemplateHandler::saveMenu() {
 	QMenu menu;
-	menu.addSection(i18n("Save As"));
+	menu.addSection(i18n("Save As Template"));
 
-	QStringList list = QStandardPaths::locateAll(QStandardPaths::ApplicationsLocation, "templates/"+ m_dirNames.at(m_className) + "/*");
+	QStringList list = QDir(m_dirName + m_subDirNames.at(static_cast<int>(m_className))).entryList();
+	list.removeAll(QLatin1String("."));
+	list.removeAll(QLatin1String(".."));
 	for (int i = 0; i < list.size(); ++i) {
 			QFileInfo fileinfo(list.at(i));
-			QAction* action = menu.addAction(fileinfo.fileName());
+			QAction* action = menu.addAction(QIcon::fromTheme(QLatin1String("document-edit")), fileinfo.fileName());
 			menu.addAction(action);
 			action->setShortcut(QKeySequence());
 	}
@@ -174,13 +287,16 @@ void TemplateHandler::saveMenu() {
 	connect(leFilename, &QLineEdit::returnPressed, &menu, &QMenu::close);
 
 	widgetAction->setDefaultWidget(frame);
+	if (menu.actions().size() > 1)
+		menu.addSeparator();
 	menu.addAction(widgetAction);
 
 	QPoint pos(-menu.sizeHint().width()+m_tbSave->width(),-menu.sizeHint().height());
+	menu.setFocus();
 	menu.exec(m_tbSave->mapToGlobal(pos));
 
 	//TODO: focus is not set. why?
-	leFilename->setFocus();
+// 	leFilename->setFocus();
 }
 
 /*!
@@ -188,13 +304,13 @@ void TemplateHandler::saveMenu() {
  * Emits \c saveConfigRequested, the receiver of the signal has to config.sync().
  */
 void TemplateHandler::saveNewSelected(const QString& filename) {
-	KConfig config(QStandardPaths::locate(QStandardPaths::ApplicationsLocation, "templates") + '/' + m_dirNames.at(m_className) + '/' + filename, KConfig::SimpleConfig);
+	QString path = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + '/' + filename;
+	KConfig config(path, KConfig::SimpleConfig);
 	emit saveConfigRequested(config);
+	emit info( i18n("New template \"%1\" was saved.", filename) );
 
 	//we have at least one saved template now -> enable the load button
 	m_tbLoad->setEnabled(true);
-
-	emit info( i18n("New template \"%1\" was saved.", filename) );
 }
 
 /*!
@@ -204,7 +320,6 @@ void TemplateHandler::saveNewSelected(const QString& filename) {
 void TemplateHandler::saveMenuSelected(QAction* action) {
 	KConfig config(action->data().toString()+'/'+action->text(), KConfig::SimpleConfig);
 	emit saveConfigRequested(config);
-
 	emit info( i18n("Template \"%1\" was saved.", action->text()) );
 }
 
@@ -215,6 +330,5 @@ void TemplateHandler::saveMenuSelected(QAction* action) {
 void TemplateHandler::saveDefaults() {
 	KConfig config;
 	emit saveConfigRequested(config);
-
 	emit info( i18n("New default template was saved.") );
 }

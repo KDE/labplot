@@ -75,19 +75,17 @@ void CustomPoint::init() {
 	d->position.setX( group.readEntry("PositionXValue", d->plot->xMin() + (d->plot->xMax()-d->plot->xMin())/2) );
 	d->position.setY( group.readEntry("PositionYValue", d->plot->yMin() + (d->plot->yMax()-d->plot->yMin())/2) );
 
-	d->symbolStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Circle);
-	d->symbolSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Point));
+	d->symbolStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::Circle);
+	d->symbolSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->symbolRotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->symbolOpacity = group.readEntry("SymbolOpacity", 1.0);
 	d->symbolBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
 	d->symbolBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::red)) );
 	d->symbolPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
 	d->symbolPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
-	d->symbolPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Point)) );
+	d->symbolPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
 
 	this->initActions();
-
-	retransform();
 }
 
 void CustomPoint::initActions() {
@@ -140,28 +138,28 @@ CLASS_SHARED_D_READER_IMPL(CustomPoint, QPen, symbolPen, symbolPen)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetPosition, QPointF, position, retransform)
-void CustomPoint::setPosition(const QPointF& position) {
+void CustomPoint::setPosition(QPointF position) {
 	Q_D(CustomPoint);
 	if (position != d->position)
 		exec(new CustomPointSetPositionCmd(d, position, ki18n("%1: set position")));
 }
 
 //Symbol
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolStyle, Symbol::Style, symbolStyle, retransform)
+STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolStyle, Symbol::Style, symbolStyle, recalcShapeAndBoundingRect)
 void CustomPoint::setSymbolStyle(Symbol::Style style) {
 	Q_D(CustomPoint);
 	if (style != d->symbolStyle)
 		exec(new CustomPointSetSymbolStyleCmd(d, style, ki18n("%1: set symbol style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolSize, qreal, symbolSize, retransform)
+STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolSize, qreal, symbolSize, recalcShapeAndBoundingRect)
 void CustomPoint::setSymbolSize(qreal size) {
 	Q_D(CustomPoint);
 	if (!qFuzzyCompare(1 + size, 1 + d->symbolSize))
 		exec(new CustomPointSetSymbolSizeCmd(d, size, ki18n("%1: set symbol size")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolRotationAngle, qreal, symbolRotationAngle, retransform)
+STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolRotationAngle, qreal, symbolRotationAngle, recalcShapeAndBoundingRect)
 void CustomPoint::setSymbolRotationAngle(qreal angle) {
 	Q_D(CustomPoint);
 	if (!qFuzzyCompare(1 + angle, 1 + d->symbolRotationAngle))
@@ -175,7 +173,7 @@ void CustomPoint::setSymbolBrush(const QBrush &brush) {
 		exec(new CustomPointSetSymbolBrushCmd(d, brush, ki18n("%1: set symbol filling")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolPen, QPen, symbolPen, update)
+STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolPen, QPen, symbolPen, recalcShapeAndBoundingRect)
 void CustomPoint::setSymbolPen(const QPen &pen) {
 	Q_D(CustomPoint);
 	if (pen != d->symbolPen)
@@ -189,7 +187,7 @@ void CustomPoint::setSymbolOpacity(qreal opacity) {
 		exec(new CustomPointSetSymbolOpacityCmd(d, opacity, ki18n("%1: set symbol opacity")));
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL_F(CustomPoint, SetVisible, bool, swapVisible, retransform);
+STD_SWAP_METHOD_SETTER_CMD_IMPL_F(CustomPoint, SetVisible, bool, swapVisible, update);
 void CustomPoint::setVisible(bool on) {
 	Q_D(CustomPoint);
 	exec(new CustomPointSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
@@ -236,25 +234,30 @@ void CustomPointPrivate::retransform() {
 
 	//calculate the point in the scene coordinates
 	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	QVector<QPointF> list, listScene;
-	list<<position;
-	listScene = cSystem->mapLogicalToScene(list, CartesianCoordinateSystem::DefaultMapping);
+	QVector<QPointF> listScene = cSystem->mapLogicalToScene(QVector<QPointF>{position});
 	if (!listScene.isEmpty()) {
 		m_visible = true;
 		positionScene = listScene.at(0);
 		suppressItemChangeEvent = true;
 		setPos(positionScene);
 		suppressItemChangeEvent = false;
-	} else {
+	} else
 		m_visible = false;
-	}
 
 	recalcShapeAndBoundingRect();
 }
 
 bool CustomPointPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
+
+	//When making a graphics item invisible, it gets deselected in the scene.
+	//In this case we don't want to deselect the item in the project explorer.
+	//We need to supress the deselection in the view.
+	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+	worksheet->suppressSelectionChangedEvent(true);
 	setVisible(on);
+	worksheet->suppressSelectionChangedEvent(false);
+
 	emit q->changed();
 	emit q->visibleChanged(on);
 	return oldValue;
@@ -281,7 +284,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	pointShape = QPainterPath();
-	if (m_visible && symbolStyle != Symbol::NoSymbols) {
+	if (m_visible && symbolStyle != Symbol::Style::NoSymbols) {
 		QPainterPath path = Symbol::pathFromStyle(symbolStyle);
 
 		QTransform trafo;
@@ -294,7 +297,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 			path = trafo.map(path);
 		}
 
-		pointShape = trafo.map(path);
+		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbolPen));
 		transformedBoundingRectangle = pointShape.boundingRect();
 	}
 }
@@ -306,7 +309,7 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 	if (!m_visible)
 		return;
 
-	if (symbolStyle != Symbol::NoSymbols) {
+	if (symbolStyle != Symbol::Style::NoSymbols) {
 		painter->setOpacity(symbolOpacity);
 		painter->setPen(symbolPen);
 		painter->setBrush(symbolBrush);
@@ -389,7 +392,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 
 	//Symbols
 	writer->writeStartElement("symbol");
-	writer->writeAttribute( "symbolStyle", QString::number(d->symbolStyle) );
+	writer->writeAttribute( "symbolStyle", QString::number(static_cast<int>(d->symbolStyle)) );
 	writer->writeAttribute( "opacity", QString::number(d->symbolOpacity) );
 	writer->writeAttribute( "rotation", QString::number(d->symbolRotationAngle) );
 	writer->writeAttribute( "size", QString::number(d->symbolSize) );

@@ -36,6 +36,7 @@
 
 class TreeViewComboBox;
 class FitParametersWidget;
+class KMessageWidget;
 
 class XYFitCurveDock: public XYCurveDock {
 	Q_OBJECT
@@ -49,6 +50,7 @@ private:
 	void initGeneralTab() override;
 	void showFitResult();
 	void updateSettings(const AbstractColumn*);
+	bool eventFilter(QObject*, QEvent*) override;
 
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve{nullptr};
@@ -63,6 +65,7 @@ private:
 	QList<double> parameters;
 	QList<double> parameterValues;
 	bool m_parametersValid{true};
+	KMessageWidget* m_messageWidget{nullptr};
 
 protected:
 	void setModel() override;
@@ -103,7 +106,7 @@ private slots:
 	void resultParametersContextMenuRequest(QPoint);
 	void resultGoodnessContextMenuRequest(QPoint);
 	void resultLogContextMenuRequest(QPoint);
-	void resultCopySelection();
+	void resultCopy(bool copyAll = false);
 	void resultCopyAll();
 
 	//SLOTs for changes triggered in XYCurve
@@ -117,6 +120,7 @@ private slots:
 	void curveYErrorColumnChanged(const AbstractColumn*);
 	void curveFitDataChanged(const XYFitCurve::FitData&);
 	void dataChanged();
+	void curveVisibilityChanged(bool);
 };
 
 #endif

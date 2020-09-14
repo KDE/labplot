@@ -66,8 +66,8 @@ public:
 	void setExportTo(const QStringList& to);
 	void setExportToImage(bool possible);
 
-	enum Format {
-		ASCII = 0,
+	enum class Format {
+		ASCII,
 		Binary,
 		LaTeX,
 		FITS,

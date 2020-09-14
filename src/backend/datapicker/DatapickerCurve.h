@@ -5,6 +5,7 @@
                            of datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -47,18 +48,18 @@ public:
 	explicit DatapickerCurve(const QString&);
 	~DatapickerCurve() override;
 
-	enum ErrorType {NoError, SymmetricError, AsymmetricError};
+	enum class ErrorType {NoError, SymmetricError, AsymmetricError};
 	struct Errors {
 		ErrorType x;
 		ErrorType y;
 	};
 
 	QIcon icon() const override;
-	QMenu* createContextMenu() override;
 	void setPrinting(bool);
 	void setSelectedInView(bool);
 	void addDatasheet(DatapickerImage::GraphType);
-	void updateData(const DatapickerPoint*);
+	void updatePoints();
+	void updatePoint(const DatapickerPoint*);
 
 	BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)
 	BASIC_D_ACCESSOR_DECL(Symbol::Style, pointStyle, PointStyle)
@@ -96,9 +97,6 @@ protected:
 	DatapickerCurve(const QString& name, DatapickerCurvePrivate* dd);
 	DatapickerCurvePrivate* const d_ptr;
 
-private slots:
-	void updateDatasheet();
-
 private:
 	Q_DECLARE_PRIVATE(DatapickerCurve)
 	void init();
@@ -106,7 +104,6 @@ private:
 	Column* appendColumn(const QString&);
 
 	Spreadsheet* m_datasheet{nullptr};
-	QAction* updateDatasheetAction{nullptr};
 
 signals:
 	void curveErrorTypesChanged(const DatapickerCurve::Errors&);

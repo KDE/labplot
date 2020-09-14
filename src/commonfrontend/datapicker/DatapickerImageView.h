@@ -30,37 +30,38 @@
 
 #include "commonfrontend/worksheet/WorksheetView.h"
 
-class QMenu;
-class QToolBar;
-class QToolButton;
-class QWheelEvent;
-
 class AbstractAspect;
 class DatapickerImage;
 class Datapicker;
 class Transform;
-class QActionGroup;
 
+class QActionGroup;
+class QMenu;
 class QPrinter;
+class QToolBar;
+class QToolButton;
+class QWheelEvent;
 
 class DatapickerImageView : public QGraphicsView {
 	Q_OBJECT
 
 public:
-	explicit DatapickerImageView(DatapickerImage* image);
+	explicit DatapickerImageView(DatapickerImage*);
 	~DatapickerImageView() override;
 
 	void setScene(QGraphicsScene*);
 	void exportToFile(const QString&, const WorksheetView::ExportFormat, const int);
 
 private:
-	enum MouseMode {SelectAndEditMode, NavigationMode, ZoomSelectionMode, SelectAndMoveMode};
+	enum class MouseMode {Navigation, ZoomSelection,
+		ReferencePointsEntry, CurvePointsEntry, CurveSegmentsEntry};
 
 	void initActions();
 	void initMenus();
 	void drawForeground(QPainter*, const QRectF&) override;
 	void drawBackground(QPainter*, const QRectF&) override;
-	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect);
+	void exportPaint(QPainter*, const QRectF& targetRect, const QRectF& sourceRect);
+	void updateMagnificationWindow();
 
 	//events
 	void contextMenuEvent(QContextMenuEvent*) override;
@@ -72,12 +73,13 @@ private:
 	DatapickerImage* m_image;
 	Datapicker* m_datapicker;
 	Transform* m_transform;
-	MouseMode m_mouseMode{SelectAndEditMode};
+	MouseMode m_mouseMode{MouseMode::ReferencePointsEntry};
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
 	int magnificationFactor{0};
 	float m_rotationAngle{0.0};
+	int m_numScheduledScalings{0};
 
 	//Menus
 	QMenu* m_zoomMenu;
@@ -87,7 +89,10 @@ private:
 	QMenu* m_magnificationMenu;
 
 	QToolButton* tbZoom{nullptr};
-	QAction* currentZoomAction;
+	QToolButton* tbMagnification{nullptr};
+	QAction* currentZoomAction{nullptr};
+	QAction* currentMagnificationAction{nullptr};
+	QAction* currentPlotPointsTypeAction{nullptr};
 
 	//Actions
 	QAction* zoomInViewAction;
@@ -104,8 +109,6 @@ private:
 
 	QAction* navigationModeAction;
 	QAction* zoomSelectionModeAction;
-	QAction* selectAndEditModeAction;
-	QAction* selectAndMoveModeAction;
 
 	QActionGroup* navigationActionGroup;
 	QAction* shiftLeftAction;
@@ -130,11 +133,14 @@ private slots:
 	void magnificationChanged(QAction*);
 	void changeZoom(QAction*);
 	void changeSelectedItemsPosition(QAction*);
-	void changePointsType(QAction*);
 	void handleImageActions();
 	void updateBackground();
 	void addCurve();
 	void changeRotationAngle();
+
+	void zoom(int);
+	void scalingTime();
+	void animFinished();
 
 signals:
 	void statusInfo(const QString&);

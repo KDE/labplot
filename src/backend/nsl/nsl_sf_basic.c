@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL special basic functions
     --------------------------------------------------------------------
-    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2018-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -52,12 +52,10 @@ double nsl_sf_sgn(double x) {
 #ifndef _WIN32
 	return copysign(1.0, x);
 #else
-	if (x > 0)
-		return 1;
-	else if (x < 0)
-		return -1;
-	else
+	if (x == 0)
 		return 0;
+	else
+		return GSL_SIGN(x);
 #endif
 }
 
@@ -70,7 +68,7 @@ double nsl_sf_theta(double x) {
 
 /*
  * source: https://stackoverflow.com/questions/11376288/fast-computing-of-log2-for-64-bit-integers
- * source: http://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
+ * source: https://graphics.stanford.edu/~seander/bithacks.html#IntegerLogLookup
  */
 int nsl_sf_log2_int(unsigned int x) {
 #ifdef _MSC_VER

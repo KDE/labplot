@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Private members of XYCurve
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2017 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -47,9 +47,9 @@ public:
 	void retransform();
 	void recalcLogicalPoints();
 	void updateLines();
-	void addLine(QPointF p0, QPointF p1, double &minY, double &maxY, bool &overlap, double minLogicalDiffX, int &pixelDiff); // for linear scale
-	void addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff, int pixelCount); // for nonlinear x Axis scale
-	void addLine(QPointF p0, QPointF p1, double& minY, double& maxY, bool& overlap, int& pixelDiff);
+	void addLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX); // for any x scale
+	void addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, double minLogicalDiffX, int& pixelDiff);	// optimized for linear x scale
+	void addUniqueLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pixelDiff);	// finally add line if unique (no overlay)
 	void updateDropLines();
 	void updateSymbols();
 	void updateValues();
@@ -67,8 +67,8 @@ public:
 	bool pointLiesNearCurve(const QPointF mouseScenePos, const QPointF curvePosPrevScene, const QPointF curvePosScene, const int index, const double maxDist) const;
 
 	//data source
-	const AbstractColumn* xColumn;
-	const AbstractColumn* yColumn;
+	const AbstractColumn* xColumn{nullptr};
+	const AbstractColumn* yColumn{nullptr};
 	QString dataSourceCurvePath;
 	QString xColumnPath;
 	QString yColumnPath;
@@ -97,12 +97,15 @@ public:
 
 	//values
 	XYCurve::ValuesType valuesType;
-	const AbstractColumn* valuesColumn;
+	const AbstractColumn* valuesColumn{nullptr};
 	QString valuesColumnPath;
 	XYCurve::ValuesPosition valuesPosition;
 	qreal valuesDistance;
 	qreal valuesRotationAngle;
 	qreal valuesOpacity;
+	char valuesNumericFormat; //'g', 'e', 'E', etc. for numeric values
+	int valuesPrecision; //number of digits for numeric values
+	QString valuesDateTimeFormat;
 	QString valuesPrefix;
 	QString valuesSuffix;
 	QFont valuesFont;
@@ -121,15 +124,15 @@ public:
 
 	//error bars
 	XYCurve::ErrorType xErrorType;
-	const AbstractColumn* xErrorPlusColumn;
+	const AbstractColumn* xErrorPlusColumn{nullptr};
 	QString xErrorPlusColumnPath;
-	const AbstractColumn* xErrorMinusColumn;
+	const AbstractColumn* xErrorMinusColumn{nullptr};
 	QString xErrorMinusColumnPath;
 
 	XYCurve::ErrorType yErrorType;
-	const AbstractColumn* yErrorPlusColumn;
+	const AbstractColumn* yErrorPlusColumn{nullptr};
 	QString yErrorPlusColumnPath;
-	const AbstractColumn* yErrorMinusColumn;
+	const AbstractColumn* yErrorMinusColumn{nullptr};
 	QString yErrorMinusColumnPath;
 
 	XYCurve::ErrorBarsType errorBarsType;
@@ -153,6 +156,7 @@ private:
 	void drawFilling(QPainter*);
 	void draw(QPainter*);
 
+	//TODO: add m_
 	QPainterPath linePath;
 	QPainterPath dropLinePath;
 	QPainterPath valuesPath;
@@ -160,16 +164,16 @@ private:
 	QPainterPath symbolsPath;
 	QRectF boundingRectangle;
 	QPainterPath curveShape;
-	QVector<QLineF> lines;
-	QVector<QPointF> symbolPointsLogical;	//points in logical coordinates
-	QVector<QPointF> symbolPointsScene;	//points in scene coordinates
-	std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
-	std::vector<int> validPointsIndicesLogical;	//vector of the size of symbolPointsLogical containing the original indices in the source columns for valid and non-masked values
-	QVector<QPointF> valuesPoints;
-	std::vector<bool> connectedPointsLogical;  //vector of the size of symbolPointsLogical with true for points connected with the consecutive point and
-												//false otherwise (don't connect because of a gap (NAN) in-between)
-	QVector<QString> valuesStrings;
-	QVector<QPolygonF> fillPolygons;
+	QVector<QLineF> m_lines;
+	QVector<QPointF> m_logicalPoints;	//points in logical coordinates
+	QVector<QPointF> m_scenePoints;		//points in scene coordinates
+	QVector<bool> m_pointVisible;		//if point is currently visible in plot (size of m_logicalPoints)
+	QVector<QPointF> m_valuePoints;		//points for showing value
+	QVector<QString> m_valueStrings;	//strings for showing value
+	QVector<QPolygonF> m_fillPolygons;	//polygons for filling
+	//TODO: QVector, rename, usage
+	std::vector<int> validPointsIndicesLogical;	//original indices in the source columns for valid and non-masked values (size of m_logicalPoints)
+	std::vector<bool> connectedPointsLogical;  	//true for points connected with the consecutive point (size of m_logicalPoints)
 
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;

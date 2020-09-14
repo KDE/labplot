@@ -4,6 +4,7 @@
     Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+	Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -27,35 +28,30 @@
 #ifndef DATAPICKERPOINT_H
 #define DATAPICKERPOINT_H
 
-#include "backend/core/AbstractAspect.h"
-#include "backend/lib/macros.h"
 #include "backend/datapicker/DatapickerCurve.h"
-#include <QGraphicsItem>
-#include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/lib/macros.h"
 
-class QObject;
-class QBrush;
-class QPen;
-class DatapickerPoint;
+#include <QGraphicsItem>
 
 //TODO: own file
 class ErrorBarItem : public QObject, public QGraphicsRectItem {
 	Q_OBJECT
 
 public:
-	enum ErrorBarType {PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
+	enum class ErrorBarType {PlusDeltaX, MinusDeltaX, PlusDeltaY, MinusDeltaY};
 
-	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, const ErrorBarType& type = PlusDeltaX);
-
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, ErrorBarType type = ErrorBarType::PlusDeltaX);
 	void setRectSize(const qreal);
 
 public slots:
-	void setPosition(const QPointF&);
+	void setPosition(QPointF);
 
 private:
 	void initRect();
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+	QVariant itemChange(GraphicsItemChange, const QVariant &value) override;
+
 	QGraphicsLineItem* barLineItem;
 	QRectF m_rect;
 	ErrorBarType m_type;
@@ -75,16 +71,16 @@ public:
 	QGraphicsItem* graphicsItem() const;
 	void setParentGraphicsItem(QGraphicsItem*);
 	void setPrinting(bool);
-	void initErrorBar(const DatapickerCurve::Errors&);
+	void initErrorBar(DatapickerCurve::Errors);
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
-	CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)
-	CLASS_D_ACCESSOR_DECL(QPointF, minusDeltaXPos, MinusDeltaXPos)
-	CLASS_D_ACCESSOR_DECL(QPointF, plusDeltaYPos, PlusDeltaYPos)
-	CLASS_D_ACCESSOR_DECL(QPointF, minusDeltaYPos, MinusDeltaYPos)
+	BASIC_D_ACCESSOR_DECL(QPointF, position, Position)
+	BASIC_D_ACCESSOR_DECL(QPointF, plusDeltaXPos, PlusDeltaXPos)
+	BASIC_D_ACCESSOR_DECL(QPointF, minusDeltaXPos, MinusDeltaXPos)
+	BASIC_D_ACCESSOR_DECL(QPointF, plusDeltaYPos, PlusDeltaYPos)
+	BASIC_D_ACCESSOR_DECL(QPointF, minusDeltaYPos, MinusDeltaYPos)
 
 	typedef DatapickerPointPrivate Private;
 

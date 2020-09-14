@@ -2,7 +2,7 @@
     File                 : MainWin.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Main window of the application
  ***************************************************************************/
@@ -27,6 +27,8 @@
  ***************************************************************************/
 #ifndef MAINWIN_H
 #define MAINWIN_H
+
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <KXmlGuiWindow>
 #include <QTimer>
@@ -55,6 +57,7 @@ class HistogramDock;
 class BarChartPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
+class ReferenceLineDock;
 class ColumnDock;
 class HypothesisTestDock;
 class CorrelationCoefficientDock;
@@ -76,6 +79,7 @@ class XYFourierTransformCurveDock;
 class XYConvolutionCurveDock;
 class XYCorrelationCurveDock;
 class WorksheetDock;
+class ImageDock;
 class LabelWidget;
 class DatapickerImageWidget;
 class DatapickerCurveWidget;
@@ -87,15 +91,29 @@ class CantorWorksheet;
 class CantorWorksheetDock;
 #endif
 
+class ImportDatasetWidget;
+class TreeModel;
+// class WelcomeScreenHelper;
+
 class QDockWidget;
-class QStackedWidget;
 class QDragEnterEvent;
 class QDropEvent;
 class QMdiArea;
 class QMdiSubWindow;
+class QStackedWidget;
 class QToolButton;
+class QQuickWidget;
+
+class KColorSchemeManager;
 class KRecentFilesAction;
-class TreeModel;
+
+#ifdef HAVE_KUSERFEEDBACK
+#include <KUserFeedback/Provider>
+#endif
+
+#ifdef Q_OS_MAC
+	class KDMacTouchBar;
+#endif
 
 class MainWin : public KXmlGuiWindow {
 	Q_OBJECT
@@ -109,8 +127,16 @@ public:
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
 
+	enum class LoadOnStart {Nothing, NewProject, NewProjectWorksheet, LastProject, WelcomeScreen};
+	enum class TitleBarMode {ShowFilePath, ShowFileName, ShowProjectName};
+
+#ifdef HAVE_KUSERFEEDBACK
+	KUserFeedback::Provider& userFeedbackProvider() {return m_userFeedbackProvider;}
+#endif
+
 private:
-	QMdiArea* m_mdiArea;
+	QMdiArea* m_mdiArea{nullptr};
+	KColorSchemeManager* m_schemeManager{nullptr};
 	QMdiSubWindow* m_currentSubWindow{nullptr};
 	Project* m_project{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
@@ -126,9 +152,26 @@ private:
 	bool m_projectClosing{false};
 	bool m_autoSaveActive{false};
 	QTimer m_autoSaveTimer;
-	bool m_showMemoryInfo{true};
+	bool m_showWelcomeScreen{false};
+	bool m_saveWelcomeScreen{true};
 	MemoryWidget* m_memoryInfoWidget{nullptr};
 	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
+	QMdiSubWindow* m_welcomeWindow{nullptr};
+	QQuickWidget* m_welcomeWidget{nullptr};
+// 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
+	ImportDatasetWidget* m_importDatasetWidget{nullptr};
+	QString m_lastOpenFileFilter;
+	TitleBarMode m_titleBarMode{TitleBarMode::ShowFilePath};
+
+#ifdef HAVE_KUSERFEEDBACK
+    KUserFeedback::Provider m_userFeedbackProvider;
+#endif
+
+#ifdef Q_OS_MAC
+	KDMacTouchBar* m_touchBar;
+	QAction* m_undoIconOnlyAction;
+	QAction* m_redoIconOnlyAction;
+#endif
 
 	KRecentFilesAction* m_recentProjectsAction;
 	QAction* m_saveAction;
@@ -137,6 +180,7 @@ private:
 	QAction* m_printPreviewAction;
 	QAction* m_importFileAction;
 	QAction* m_importSqlAction;
+	QAction* m_importDatasetAction;
 	QAction* m_importLabPlotAction;
 	QAction* m_importOpjAction;
 	QAction* m_exportAction;
@@ -154,40 +198,29 @@ private:
 	QAction* m_newSqlDataSourceAction;
 	QAction* m_newScriptAction;
 	QAction* m_newProjectAction;
+	QAction* m_openProjectAction;
 	QAction* m_historyAction;
 	QAction* m_undoAction;
 	QAction* m_redoAction;
-	QAction* m_tileWindows;
-	QAction* m_cascadeWindows;
+	QAction* m_closeWindowAction;
+	QAction* m_closeAllWindowsAction;
+	QAction* m_tileWindowsAction;
+	QAction* m_cascadeWindowsAction;
+	QAction* m_nextWindowAction;
+	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
 	QAction* m_editFitsFileAction;
 
-	//toggling doch widgets
-	QAction* m_toggleProjectExplorerDocQAction;
-	QAction* m_togglePropertiesDocQAction;
+	//toggling doch widgets and the status bar
+	QAction* m_toggleProjectExplorerDockAction;
+	QAction* m_togglePropertiesDockAction;
+	QAction* m_toggleStatusBarAction;
+	QAction* m_toggleMemoryInfoAction;
 
-	//worksheet actions
-	QAction* worksheetZoomInAction;
-	QAction* worksheetZoomOutAction;
-	QAction* worksheetZoomOriginAction;
-	QAction* worksheetZoomFitPageHeightAction;
-	QAction* worksheetZoomFitPageWidthAction;
-	QAction* worksheetZoomFitSelectionAction;
-
-	QAction* worksheetNavigationModeAction;
-	QAction* worksheetZoomModeAction;
-	QAction* worksheetSelectionModeAction;
-
-	QAction* worksheetVerticalLayoutAction;
-	QAction* worksheetHorizontalLayoutAction;
-	QAction* worksheetGridLayoutAction;
-	QAction* worksheetBreakLayoutAction;
-
+	//window visibility
 	QAction* m_visibilityFolderAction;
 	QAction* m_visibilitySubfolderAction;
 	QAction* m_visibilityAllAction;
-	QAction* m_toggleProjectExplorerDockAction;
-	QAction* m_togglePropertiesDockAction;
 
 	//Menus
 	QMenu* m_visibilityMenu{nullptr};
@@ -196,7 +229,7 @@ private:
 	QMenu* m_editMenu{nullptr};
 
 	//Docks
-	QStackedWidget* stackedWidget;
+	QStackedWidget* stackedWidget{nullptr};
 	AxisDock* axisDock{nullptr};
 	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};
@@ -226,7 +259,9 @@ private:
 	HistogramDock* histogramDock{nullptr};
 	WorksheetDock* worksheetDock{nullptr};
 	LabelWidget* textLabelDock{nullptr};
+	ImageDock* imageDock{nullptr};
 	CustomPointDock* customPointDock{nullptr};
+	ReferenceLineDock* referenceLineDock{nullptr};
 	DatapickerImageWidget* datapickerImageDock{nullptr};
 	DatapickerCurveWidget* datapickerCurveDock{nullptr};
 
@@ -238,17 +273,12 @@ private:
 // 	void toggleShowWidget(QWidget* widget, bool showToRight);
 // 	void toggleHideWidget(QWidget* widget, bool hideToLeft);
 
-	Workbook* activeWorkbook() const;
 	Spreadsheet* activeSpreadsheet() const;
-	Matrix* activeMatrix() const;
-	Worksheet* activeWorksheet() const;
-	Datapicker* activeDatapicker() const;
 
 	//Cantor
 #ifdef HAVE_CANTOR_LIBS
 	QMenu* m_newCantorWorksheetMenu;
 	CantorWorksheetDock* cantorWorksheetDock{nullptr};
-	CantorWorksheet* activeCantorWorksheet() const;
 #endif
 
 	friend class GuiObserver;
@@ -258,10 +288,12 @@ protected:
 	void closeEvent(QCloseEvent*) override;
 	void dragEnterEvent(QDragEnterEvent*) override;
 	void dropEvent(QDropEvent*) override;
-public slots:
-	void showCursorDock(TreeModel* model, QVector<CartesianPlot *> plots);
+
 private slots:
 	void initGUI(const QString&);
+// 	QQuickWidget* createWelcomeScreen();
+// 	void resetWelcomeScreen();
+	void createMdiArea();
 	void updateGUI();
 	void updateGUIOnProjectChanges();
 	void undo();
@@ -275,6 +307,7 @@ private slots:
 	bool saveProject();
 	bool saveProjectAs();
 	void autoSaveProject();
+	void updateTitleBar();
 
 	void print();
 	void printPreview();
@@ -283,11 +316,13 @@ private slots:
 	void importFileDialog(const QString& fileName = QString());
 	void importSqlDialog();
 	void importProjectDialog();
+	void importDatasetDialog();
 	void exportDialog();
 	void editFitsFileDialog();
 	void settingsDialog();
 	void projectChanged();
 	void colorSchemeChanged(QAction*);
+	void openDatasetExample();
 
 	//Cantor
 #ifdef HAVE_CANTOR_LIBS
@@ -323,9 +358,15 @@ private slots:
 	void setMdiWindowVisibility(QAction*);
 	void updateMdiWindowVisibility() const;
 	void toggleDockWidget(QAction*);
+	void toggleStatusBar();
+	void toggleMemoryInfo();
 	void toggleFullScreen();
 	void projectExplorerDockVisibilityChanged(bool);
 	void propertiesDockVisibilityChanged(bool);
+	void cursorDockVisibilityChanged(bool);
+	void propertiesExplorerRequested();
+
+	void cartesianPlotMouseModeChanged(CartesianPlot::MouseMode);
 };
 
 #endif

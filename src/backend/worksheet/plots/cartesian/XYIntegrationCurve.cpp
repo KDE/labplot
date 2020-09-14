@@ -71,7 +71,7 @@ void XYIntegrationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYIntegrationCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-integration-curve");
+	return QIcon::fromTheme("labplot-xy-curve");
 }
 
 //##############################################################################
@@ -109,8 +109,8 @@ void XYIntegrationCurvePrivate::recalculate() {
 
 	//create integration result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::Numeric);
-		yColumn = new Column("y", AbstractColumn::Numeric);
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 
@@ -134,7 +134,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 	//determine the data source columns
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
-	if (dataSourceType == XYAnalysisCurve::DataSourceSpreadsheet) {
+	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
@@ -145,17 +145,6 @@ void XYIntegrationCurvePrivate::recalculate() {
 	}
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
-		recalcLogicalPoints();
-		emit q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
-
-	//check column sizes
-	if (tmpXDataColumn->rowCount() != tmpYDataColumn->rowCount()) {
-		integrationResult.available = true;
-		integrationResult.valid = false;
-		integrationResult.status = i18n("Number of x and y data points must be equal.");
 		recalcLogicalPoints();
 		emit q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
@@ -176,18 +165,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 		xmax = integrationData.xRange.last();
 	}
 
-	for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
-		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(tmpXDataColumn->valueAt(row)) && !std::isnan(tmpYDataColumn->valueAt(row))
-			&& !tmpXDataColumn->isMasked(row) && !tmpYDataColumn->isMasked(row)) {
-
-			// only when inside given range
-			if (tmpXDataColumn->valueAt(row) >= xmin && tmpXDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(tmpXDataColumn->valueAt(row));
-				ydataVector.append(tmpYDataColumn->valueAt(row));
-			}
-		}
-	}
+	XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax);
 
 	const size_t n = (size_t)xdataVector.size();	// number of data points to integrate
 	if (n < 2) {
@@ -322,7 +300,7 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("time", integrationResult.elapsedTime, int);
 			READ_DOUBLE_VALUE("value", integrationResult.value);
 		} else if (!preview && reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

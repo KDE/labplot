@@ -29,6 +29,7 @@
 
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/lib/macros.h"
 
 /* ============================================================================ */
 /* =================================== scales ================================= */
@@ -76,7 +77,7 @@ bool CartesianScale::contains(double value) const {
 class LinearScale : public CartesianScale {
 public:
 	LinearScale(const Interval<double> &interval, double offset, double gradient)
-		: CartesianScale(ScaleLinear, interval, offset, gradient, 0) {
+		: CartesianScale(ScaleType::ScaleLinear, interval, offset, gradient, 0) {
 			Q_ASSERT(gradient != 0.0);
 
 		}
@@ -107,7 +108,7 @@ public:
 class LogScale : public CartesianScale {
 public:
 	LogScale(const Interval<double> &interval, double offset, double scaleFactor, double base, bool abs)
-		: CartesianScale(ScaleLog, interval, offset, scaleFactor, base), m_abs(abs) {
+		: CartesianScale(ScaleType::ScaleLog, interval, offset, scaleFactor, base), m_abs(abs) {
 			Q_ASSERT(scaleFactor != 0.0);
 			Q_ASSERT(base > 0.0);
 	}
@@ -148,7 +149,7 @@ private:
 //TODO: own header
 class CartesianCoordinateSystemPrivate {
 public:
-	CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
+	explicit CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
 	~CartesianCoordinateSystemPrivate();
 
 	CartesianCoordinateSystem* const q;
@@ -171,7 +172,7 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 	delete d;
 }
 
-CartesianScale *CartesianScale::createLinearScale(const Interval<double> &interval,
+CartesianScale* CartesianScale::createLinearScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
 
 	double lDiff = logicalEnd - logicalStart;
@@ -184,21 +185,19 @@ CartesianScale *CartesianScale::createLinearScale(const Interval<double> &interv
 	return new LinearScale(interval, a, b);
 }
 
-CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
+CartesianScale* CartesianScale::createLogScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, CartesianPlot::Scale type) {
 
 	double base;
-	if (type == CartesianPlot::ScaleLog10 || type == CartesianPlot::ScaleLog10Abs)
+	if (type == CartesianPlot::Scale::Log10 || type == CartesianPlot::Scale::Log10Abs)
 		base = 10.0;
-	else if (type == CartesianPlot::ScaleLog2 || type == CartesianPlot::ScaleLog2Abs)
+	else if (type == CartesianPlot::Scale::Log2 || type == CartesianPlot::Scale::Log2Abs)
 		base = 2.0;
 	else
 		base = M_E;
 
 
-	if (logicalStart < 0.0 || logicalStart == 0.0)
-		return nullptr;
-	if (logicalEnd < 0.0 || logicalEnd == 0.0)
+	if (logicalStart <= 0.0 || logicalEnd <= 0.0)
 		return nullptr;
 
 	double lDiff = (log(logicalEnd) - log(logicalStart)) / log(base);
@@ -208,24 +207,24 @@ CartesianScale *CartesianScale::createLogScale(const Interval<double> &interval,
 	double b = (sceneEnd - sceneStart) / lDiff;
 	double a = sceneStart - b * log(logicalStart)/log(base);
 
-	bool abs = (type == CartesianPlot::ScaleLog10Abs || type == CartesianPlot::ScaleLog2Abs || type == CartesianPlot::ScaleLnAbs);
+	bool abs = (type == CartesianPlot::Scale::Log10Abs || type == CartesianPlot::Scale::Log2Abs || type == CartesianPlot::Scale::LnAbs);
 	return new LogScale(interval, a, b, base, abs);
 }
 
 //##############################################################################
 //######################### logical to scene mappers ###########################
 //##############################################################################
-QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF> &points, MappingFlags flags) const {
+QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& points, MappingFlags flags) const {
+	//DEBUG(Q_FUNC_INFO << ", (points with flags)")
 	const QRectF pageRect = d->plot->dataRect();
-	QVector<QPointF> result;
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	const bool limit = flags & Limit;
-	const bool noPageClippingY = flags & SuppressPageClippingY;
-	const double xPage = pageRect.x();
-	const double yPage = pageRect.y();
-	const double w = pageRect.width();
-	const double h = pageRect.height();
+	bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const bool limit = flags & MappingFlag::Limit;
+	const double xPage = pageRect.x(), yPage = pageRect.y();
+	const double w = pageRect.width(), h = pageRect.height();
 
+	QVector<QPointF> result;
+	result.reserve(points.size());
 	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
 
@@ -233,36 +232,21 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 			if (!yScale) continue;
 
 			for (const auto& point : points) {
-				double x = point.x();
-				double y = point.y();
+				double x = point.x(), y = point.y();
 
-				if (!xScale->contains(x))
+				if (!xScale->contains(x) || !yScale->contains(y))
 					continue;
-
-				if (!yScale->contains(y))
-					continue;
-
-				if (!xScale->map(&x))
-					continue;
-
-				if (!yScale->map(&y))
+				if (!xScale->map(&x) || !yScale->map(&y))
 					continue;
 
 				if (limit) {
 					// set to max/min if passed over
-					if (x < xPage)
-						x = xPage;
-					if (x > xPage + w)
-						x = xPage + w;
-
-					if (y < yPage)
-						y = yPage;
-					if (y > yPage + h)
-						y = yPage + h;
+					x = qBound(xPage, x, xPage + w);
+					y = qBound(yPage, y, yPage + h);
 				}
 
 				if (noPageClippingY)
-					y = pageRect.y() + pageRect.height()/2;
+					y = yPage + h/2.;
 
 				const QPointF mappedPoint(x, y);
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint))
@@ -270,6 +254,7 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 			}
 		}
 	}
+	result.squeeze();
 
 	return result;
 }
@@ -283,14 +268,13 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
  */
 void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logicalPoints,
 		QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, MappingFlags flags) const {
+	DEBUG(Q_FUNC_INFO << ", (curve with all points)")
 	const QRectF pageRect = d->plot->dataRect();
-	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	const bool limit = flags & Limit;
-	const bool noPageClippingY = flags & SuppressPageClippingY;
-	const double xPage = pageRect.x();
-	const double yPage = pageRect.y();
-	const double w = pageRect.width();
-	const double h = pageRect.height();
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const bool limit = flags & MappingFlag::Limit;
+	const double xPage = pageRect.x(), yPage = pageRect.y();
+	const double w = pageRect.width(), h = pageRect.height();
 
 	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
@@ -298,44 +282,29 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 		for (const auto* yScale : d->yScales) {
 			if (!yScale) continue;
 
-			for (int i = 0; i < logicalPoints.size(); ++i) {
-				const QPointF& point = logicalPoints.at(i);
-
-				double x = point.x();
-				if (!xScale->contains(x))
+			int i = 0;
+			for (const auto& point : logicalPoints) {
+				double x = point.x(), y = point.y();
+				if (!xScale->contains(x) || !yScale->contains(y))
 					continue;
-
-				if (!xScale->map(&x))
-					continue;
-
-				double y = point.y();
-				if (!yScale->contains(y))
-					continue;
-
-				if (!yScale->map(&y))
+				if (!xScale->map(&x) || !yScale->map(&y))
 					continue;
 
 				if (limit) {
 					// set to max/min if passed over
-					if (x < xPage)
-						x = xPage;
-					if (x > xPage + w)
-						x = xPage + w;
-
-					if (y < yPage)
-						y = yPage;
-					if (y > yPage + h)
-						y = yPage + h;
+					x = qBound(xPage, x, xPage + w);
+					y = qBound(yPage, y, yPage + h);
 				}
 
 				if (noPageClippingY)
-					y = yPage + h/2;
+					y = yPage + h/2.;
 
 				const QPointF mappedPoint(x, y);
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
 					scenePoints.append(mappedPoint);
-					visiblePoints[i].flip();
+					visiblePoints[i] = !visiblePoints.at(i);
 				}
+				i++;
 			}
 		}
 	}
@@ -343,22 +312,21 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 
 /*!
 	Maps the points in logical coordinates from \c points and fills the \c visiblePoints with the points in logical coordinates restricted to the current intervals.
-	If there are points, which lies on another the point will not be added a second time.
+	If there are points, that lie on another one they will not be added a second time.
 	@param logicalPoints List of points in logical coordinates
 	@param scenePoints List for the points in scene coordinates
 	@param visiblePoints List for the logical coordinates restricted to the current region of the coordinate system
 	@param scenePointsUsed List of bools which scene point was already used
  */
-void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints,
-		QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags) const {
+void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints,
+		QVector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags) const {
+	DEBUG(Q_FUNC_INFO << ", (curve points)")
 	const QRectF pageRect = d->plot->dataRect();
-	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	const bool limit = flags & Limit;
-	const bool noPageClippingY = flags & SuppressPageClippingY;
-	const double xPage = pageRect.x();
-	const double yPage = pageRect.y();
-	const double w = pageRect.width();
-	const double h = pageRect.height();
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const bool limit = flags & MappingFlag::Limit;
+	const double xPage = pageRect.x(), yPage = pageRect.y();
+	const double w = pageRect.width(), h = pageRect.height();
 
 	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
@@ -369,65 +337,54 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 			for (int i = startIndex; i <= endIndex; ++i) {
 				const QPointF& point = logicalPoints.at(i);
 
-				double x = point.x();
-				if (!xScale->contains(x))
+				double x = point.x(), y = point.y();
+				if (!xScale->contains(x) || !yScale->contains(y))
 					continue;
-
-				if (!xScale->map(&x))
-					continue;
-
-				double y = point.y();
-				if (!yScale->contains(y))
-					continue;
-
-				if (!yScale->map(&y))
+				if (!xScale->map(&x) || !yScale->map(&y))
 					continue;
 
 				if (limit) {
 					// set to max/min if passed over
-					if (x < xPage)
-						x = xPage;
-					if (x > xPage + w)
-						x = xPage + w;
-
-					if (y < yPage)
-						y = yPage;
-					if (y > yPage + h)
-						y = yPage + h;
+					x = qBound(xPage, x, xPage + w);
+					y = qBound(yPage, y, yPage + h);
 				}
 
 				if (noPageClippingY)
-					y = yPage + h/2;
+					y = yPage + h/2.;
 
 				const QPointF mappedPoint(x, y);
+				//DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
-
-					int indexX = (int)((mappedPoint.x() - d->plot->dataRect().x())*minLogicalDiffX);
-					int indexY = (int)((mappedPoint.y() - d->plot->dataRect().y())*minLogicalDiffY);
-					if (scenePointsUsed[indexX][indexY])
+					//TODO: check
+					const int indexX = qRound((x - xPage) / minLogicalDiffX);
+					const int indexY = qRound((y - yPage) / minLogicalDiffY);
+					//DEBUG()
+					if (scenePointsUsed.at(indexX).at(indexY))
 						continue;
 
 					scenePointsUsed[indexX][indexY] = true;
 					scenePoints.append(mappedPoint);
-					visiblePoints[i].flip();
+					//DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
+					visiblePoints[i] = !visiblePoints.at(i);
 				}
 			}
 		}
 	}
 }
 
+/*
+ * Map a single point
+ * */
 QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, MappingFlags flags) const {
+	//DEBUG(Q_FUNC_INFO << ", (single point)")
 	const QRectF pageRect = d->plot->dataRect();
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	bool noPageClippingY = flags & SuppressPageClippingY;
-	bool limit = flags & Limit;
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
+	const bool limit = flags & MappingFlag::Limit;
 
-	double x = logicalPoint.x();
-	double y = logicalPoint.y();
-	const double xPage = pageRect.x();
-	const double yPage = pageRect.y();
-	const double w = pageRect.width();
-	const double h = pageRect.height();
+	double x = logicalPoint.x(), y = logicalPoint.y();
+	const double xPage = pageRect.x(), yPage = pageRect.y();
+	const double w = pageRect.width(), h = pageRect.height();
 
 	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
@@ -435,33 +392,19 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, Mappi
 		for (const auto* yScale : d->yScales) {
 			if (!yScale) continue;
 
-			if (!xScale->contains(x))
+			if (!xScale->contains(x) || !yScale->contains(y))
 				continue;
-
-			if (!xScale->map(&x))
-				continue;
-
-			if (!yScale->contains(y))
-				continue;
-
-			if (!yScale->map(&y))
+			if (!xScale->map(&x) || !yScale->map(&y))
 				continue;
 
 			if (limit) {
 				// set to max/min if passed over
-				if (x < xPage)
-					x = xPage;
-				if (x > xPage + w)
-					x = xPage + w;
-
-				if (y < yPage)
-					y = yPage;
-				if (y > yPage + h)
-					y = yPage + h;
+				x = qBound(xPage, x, xPage + w);
+				y = qBound(yPage, y, yPage + h);
 			}
 
 			if (noPageClippingY)
-				y = pageRect.y() + h/2;
+				y = pageRect.y() + h/2.;
 
 			QPointF mappedPoint(x, y);
 			if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint))
@@ -475,7 +418,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, Mappi
 QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLineF> &lines, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	QVector<QLineF> result;
-	const bool doPageClipping = !pageRect.isNull() && !(flags & SuppressPageClipping);
+	const bool doPageClipping = !pageRect.isNull() && !(flags & MappingFlag::SuppressPageClipping);
 
 	double xGapBefore = NAN;
 	double xGapAfter = NAN;
@@ -554,16 +497,16 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 				if (!yScale->map(&y2))
 					continue;
 
-				if (flags & MarkGaps) {
+				if (flags & MappingFlag::MarkGaps) {
 					//mark the end of the gap
 					if (!std::isnan(xGapBefore)) {
 						if (clipResult.xClippedLeft[0]) {
-							QLineF gapMarker(x1 + xGapBefore/4, y1 - xGapBefore/2, x1 - xGapBefore/4, y1 + xGapBefore/2);
+							QLineF gapMarker(x1 + xGapBefore/4., y1 - xGapBefore/2., x1 - xGapBefore/4., y1 + xGapBefore/2.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.xClippedLeft[1]) {
-							QLineF gapMarker(x2 + xGapBefore/4, y2 - xGapBefore/2, x2 - xGapBefore/4, y2 + xGapBefore/2);
+							QLineF gapMarker(x2 + xGapBefore/4., y2 - xGapBefore/2., x2 - xGapBefore/4., y2 + xGapBefore/2.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
@@ -572,12 +515,12 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 					//mark the beginning of the gap
 					if (!std::isnan(xGapAfter)) {
 						if (clipResult.xClippedRight[0]) {
-							QLineF gapMarker(x1 + xGapAfter/4, y1 - xGapAfter/2, x1 - xGapAfter/4, y1 + xGapAfter/2);
+							QLineF gapMarker(x1 + xGapAfter/4., y1 - xGapAfter/2., x1 - xGapAfter/4., y1 + xGapAfter/2.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.xClippedRight[1]) {
-							QLineF gapMarker(x2 + xGapAfter/4, y2 - xGapAfter/2, x2 - xGapAfter/4, y2 + xGapAfter/2);
+							QLineF gapMarker(x2 + xGapAfter/4., y2 - xGapAfter/2., x2 - xGapAfter/4., y2 + xGapAfter/2.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
@@ -585,12 +528,12 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 
 					if (!std::isnan(yGapBefore)) {
 						if (clipResult.yClippedTop[0]) {
-							QLineF gapMarker(x1 + yGapBefore/2, y1 - yGapBefore/4, x1 - yGapBefore/2, y1 + yGapBefore/4);
+							QLineF gapMarker(x1 + yGapBefore/2., y1 - yGapBefore/4., x1 - yGapBefore/2., y1 + yGapBefore/4.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.yClippedTop[1]) {
-							QLineF gapMarker(x2 + yGapBefore/2, y2 - yGapBefore/4, x2 - yGapBefore/2, y2 + yGapBefore/4);
+							QLineF gapMarker(x2 + yGapBefore/2., y2 - yGapBefore/4., x2 - yGapBefore/2., y2 + yGapBefore/4.);
 // 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
@@ -598,14 +541,14 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 
 					if (!std::isnan(yGapAfter)) {
 						if (clipResult.yClippedBottom[0]) {
-							QLineF gapMarker(QPointF(x1 + yGapAfter / 2, y1 - yGapAfter / 4),
-									QPointF(x1 - yGapAfter / 2, y1 + yGapAfter / 4));
+							QLineF gapMarker(QPointF(x1 + yGapAfter/2., y1 - yGapAfter/4.),
+									QPointF(x1 - yGapAfter/2., y1 + yGapAfter/4.));
 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
 						if (clipResult.yClippedBottom[1]) {
-							QLineF gapMarker(QPointF(x2 + yGapAfter / 2, y2 - yGapAfter / 4),
-									QPointF(x2 - yGapAfter / 2, y2 + yGapAfter / 4));
+							QLineF gapMarker(QPointF(x2 + yGapAfter/2., y2 - yGapAfter/4.),
+									QPointF(x2 - yGapAfter/2., y2 + yGapAfter/4.));
 							if (AbstractCoordinateSystem::clipLineToRect(&gapMarker, pageRect))
 								result.append(gapMarker);
 						}
@@ -632,9 +575,9 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPointF>& points, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	QVector<QPointF> result;
-	const bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	const bool limit = flags & Limit;
-	const bool noPageClippingY = flags & SuppressPageClippingY;
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool limit = flags & MappingFlag::Limit;
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 	const double xPage = pageRect.x();
 	const double yPage = pageRect.y();
 	const double w = pageRect.width();
@@ -646,19 +589,12 @@ QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPoi
 		double y = point.y();
 		if (limit) {
 			// set to max/min if passed over
-			if (x < xPage)
-				x = xPage;
-			if (x > xPage + w)
-				x = xPage + w;
-
-			if (y < yPage)
-				y = yPage;
-			if (y > yPage + h)
-				y = yPage + h;
+			x = qBound(xPage, x, xPage + w);
+			y = qBound(yPage, y, yPage + h);
 		}
 
 		if (noPageClippingY)
-			y = yPage + h/2;
+			y = yPage + h/2.;
 
 		if (noPageClipping || limit || pageRect.contains(point)) {
 			bool found = false;
@@ -704,25 +640,18 @@ QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPoi
 QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, MappingFlags flags) const {
 	QRectF pageRect = d->plot->dataRect();
 	QPointF result;
-	bool noPageClipping = pageRect.isNull() || (flags & SuppressPageClipping);
-	bool limit = flags & Limit;
-	const bool noPageClippingY = flags & SuppressPageClippingY;
+	bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	bool limit = flags & MappingFlag::Limit;
+	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 
 	if (limit) {
 		// set to max/min if passed over
-		if (logicalPoint.x() < pageRect.x())
-			logicalPoint.setX(pageRect.x());
-		if (logicalPoint.x() > pageRect.x() + pageRect.width())
-			logicalPoint.setX(pageRect.x() + pageRect.width());
-
-		if (logicalPoint.y() < pageRect.y())
-			logicalPoint.setY(pageRect.y());
-		if (logicalPoint.y() > pageRect.y() + pageRect.height())
-			logicalPoint.setY(pageRect.y() + pageRect.height());
+		logicalPoint.setX(qBound(pageRect.x(), logicalPoint.x(), pageRect.x() + pageRect.width()));
+		logicalPoint.setY(qBound(pageRect.y(), logicalPoint.y(), pageRect.y() + pageRect.height()));
 	}
 
 	if (noPageClippingY)
-		logicalPoint.setY(pageRect.y() + pageRect.height()/2);
+		logicalPoint.setY(pageRect.y() + pageRect.height()/2.);
 
 	if (noPageClipping || limit || pageRect.contains(logicalPoint)) {
 		double x = logicalPoint.x();
@@ -755,6 +684,8 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 
 	return result;
 }
+
+/**************************************************************************************/
 
 /**
  * \brief Determine the horizontal direction relative to the page.

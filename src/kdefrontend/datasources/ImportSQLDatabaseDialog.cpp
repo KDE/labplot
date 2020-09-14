@@ -38,6 +38,7 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <QDialogButtonBox>
+#include <QElapsedTimer>
 #include <QProgressBar>
 #include <QStatusBar>
 #include <QWindow>
@@ -110,7 +111,7 @@ void ImportSQLDatabaseDialog::importTo(QStatusBar* statusBar) const {
 	WAIT_CURSOR;
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	QTime timer;
+	QElapsedTimer timer;
 	timer.start();
 	if (aspect->inherits(AspectType::Matrix)) {
 		auto* matrix = qobject_cast<Matrix*>(aspect);

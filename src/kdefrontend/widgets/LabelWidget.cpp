@@ -2,7 +2,7 @@
     File                 : LabelWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
@@ -29,10 +29,15 @@
 #include "LabelWidget.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "tools/TeXRenderer.h"
 
+#include <QFile>
 #include <QMenu>
+#include <QSettings>
 #include <QSplitter>
 #include <QTextDocumentFragment>
 #include <QWidgetAction>
@@ -60,6 +65,11 @@
  */
 LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
+
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
+	if (m_units == BaseDock::Units::Imperial)
+		m_worksheetUnit = Worksheet::Unit::Inch;
 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
 
@@ -96,6 +106,15 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	ui.cbPositionY->addItem(i18n("Center"));
 	ui.cbPositionY->addItem(i18n("Bottom"));
 	ui.cbPositionY->addItem(i18n("Custom"));
+
+	QString suffix;
+	if (m_units == BaseDock::Units::Metric)
+		suffix = QLatin1String(" cm");
+	else
+		suffix = QLatin1String(" in");
+
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
 
 	ui.cbHorizontalAlignment->addItem(i18n("Left"));
 	ui.cbHorizontalAlignment->addItem(i18n("Center"));
@@ -167,27 +186,27 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	connect(m_dateTimeMenu, &QMenu::triggered, this, &LabelWidget::insertDateTime );
 	connect(ui.kfontRequester, &KFontRequester::fontSelected, this, &LabelWidget::fontChanged);
 	connect(ui.kfontRequesterTeX, &KFontRequester::fontSelected, this, &LabelWidget::teXFontChanged);
-	connect(ui.sbFontSize, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &LabelWidget::fontSizeChanged);
+	connect(ui.sbFontSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::fontSizeChanged);
 
 	// geometry
-	connect( ui.cbPositionX, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &LabelWidget::positionXChanged);
-	connect( ui.cbPositionY, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &LabelWidget::positionYChanged);
-	connect( ui.sbPositionX, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
-	connect( ui.sbPositionY, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
-	connect( ui.cbHorizontalAlignment, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
-	connect( ui.cbVerticalAlignment, static_cast<void (KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
-	connect( ui.sbRotation, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
-	connect( ui.sbOffsetX, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
-	connect( ui.sbOffsetY, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
+	connect( ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionXChanged);
+	connect( ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionYChanged);
+	connect( ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
+	connect( ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
+	connect( ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
+	connect( ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
+	connect( ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
+	connect( ui.sbOffsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
+	connect( ui.sbOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
 	connect( ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
 
 	//Border
-	connect(ui.cbBorderShape, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &LabelWidget::borderShapeChanged);
-	connect(ui.cbBorderStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &LabelWidget::borderStyleChanged);
+	connect(ui.cbBorderShape, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LabelWidget::borderShapeChanged);
+	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LabelWidget::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &LabelWidget::borderColorChanged);
-	connect(ui.sbBorderWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &LabelWidget::borderWidthChanged);
-	connect(ui.sbBorderOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &LabelWidget::borderOpacityChanged);
+	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::borderWidthChanged);
+	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::borderOpacityChanged);
 
 	//TODO: https://bugreports.qt.io/browse/QTBUG-25420
 	ui.tbFontUnderline->hide();
@@ -205,9 +224,9 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	ui.sbOffsetY->hide();
 
 	this->load();
-	borderShapeChanged(ui.cbBorderShape->currentIndex());
-
 	initConnections();
+	updateBackground();
+	updateLocale();
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes) {
@@ -224,23 +243,68 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 
 	this->load();
 	initConnections();
+	updateBackground();
+	updateLocale();
+}
+
+/*!
+ * this function keeps the background color of the TextEdit in LabelWidget in sync with
+ * the background color of the parent aspect. This is to avoid the situations where the
+ * text wouldn't be readable anymore if the foreground color is close or equal to the
+ * background color of TextEdit - e.g., a label with white foreground color on a dark worksheet
+ * and with white background color in TextEdit (desktop default color).
+ *
+ * Called if the background color of the parent aspect has changed.
+ */
+void LabelWidget::updateBackground() const {
+	if (ui.tbTexUsed->isChecked())
+		return;
+
+	QColor color;
+	AspectType type = m_label->parentAspect()->type();
+	if (type == AspectType::Worksheet)
+		color = static_cast<const Worksheet*>(m_label->parentAspect())->backgroundFirstColor();
+	else if (type == AspectType::CartesianPlot)
+		color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->backgroundFirstColor();
+	else if (type == AspectType::CartesianPlotLegend)
+		color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
+	if (type == AspectType::Axis)
+		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
+
+	QPalette p = ui.teLabel->palette();
+	p.setColor(QPalette::Base, color);
+	ui.teLabel->setPalette(p);
 }
 
 void LabelWidget::initConnections() const {
-	connect( m_label, &TextLabel::textWrapperChanged, this, &LabelWidget::labelTextWrapperChanged);
-	connect( m_label, &TextLabel::teXImageUpdated, this, &LabelWidget::labelTeXImageUpdated);
-	connect( m_label, &TextLabel::teXFontChanged, this, &LabelWidget::labelTeXFontChanged);
-	connect( m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
-	connect (m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
-	connect( m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
-	connect( m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
-	connect( m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
-	connect( m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
+	connect(m_label, &TextLabel::textWrapperChanged, this, &LabelWidget::labelTextWrapperChanged);
+	connect(m_label, &TextLabel::teXImageUpdated, this, &LabelWidget::labelTeXImageUpdated);
+	connect(m_label, &TextLabel::teXFontChanged, this, &LabelWidget::labelTeXFontChanged);
+	connect(m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
+	connect(m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
+	connect(m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
+	connect(m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
+	connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
+	connect(m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
 	connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
 	connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
 	connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
-	connect( m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
-	connect( m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
+	connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
+
+	AspectType type = m_label->parentAspect()->type();
+	if (type == AspectType::Worksheet) {
+		auto* worksheet = static_cast<const Worksheet*>(m_label->parentAspect());
+		connect(worksheet, &Worksheet::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+	}else if (type == AspectType::CartesianPlot) {
+		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea();
+		connect(plotArea, &PlotArea::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+	} else if (type == AspectType::CartesianPlotLegend) {
+		auto* legend = static_cast<const CartesianPlotLegend*>(m_label->parentAspect());
+		connect(legend, &CartesianPlotLegend::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+	} else if (type == AspectType::Axis) {
+		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea();
+		connect(plotArea, &PlotArea::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
+	}
 }
 
 /*!
@@ -270,24 +334,78 @@ void LabelWidget::setFixedLabelMode(const bool b) {
  * enables/disables all geometry relevant widgets.
  * Used when displaying legend's title label.
  */
-void LabelWidget::setNoGeometryMode(const bool b) {
-	ui.lGeometry->setVisible(!b);
-	ui.lPositionX->setVisible(!b);
-	ui.cbPositionX->setVisible(!b);
-	ui.sbPositionX->setVisible(!b);
-	ui.lPositionY->setVisible(!b);
-	ui.cbPositionY->setVisible(!b);
-	ui.sbPositionY->setVisible(!b);
-	ui.lHorizontalAlignment->setVisible(!b);
-	ui.cbHorizontalAlignment->setVisible(!b);
-	ui.lVerticalAlignment->setVisible(!b);
-	ui.cbVerticalAlignment->setVisible(!b);
-	ui.lOffsetX->setVisible(!b);
-	ui.lOffsetY->setVisible(!b);
-	ui.sbOffsetX->setVisible(!b);
-	ui.sbOffsetY->setVisible(!b);
-	ui.lRotation->setVisible(!b);
-	ui.sbRotation->setVisible(!b);
+void LabelWidget::setGeometryAvailable(const bool b) {
+	ui.lGeometry->setVisible(b);
+	ui.lPositionX->setVisible(b);
+	ui.cbPositionX->setVisible(b);
+	ui.sbPositionX->setVisible(b);
+	ui.lPositionY->setVisible(b);
+	ui.cbPositionY->setVisible(b);
+	ui.sbPositionY->setVisible(b);
+	ui.lHorizontalAlignment->setVisible(b);
+	ui.cbHorizontalAlignment->setVisible(b);
+	ui.lVerticalAlignment->setVisible(b);
+	ui.cbVerticalAlignment->setVisible(b);
+	ui.lOffsetX->setVisible(b);
+	ui.lOffsetY->setVisible(b);
+	ui.sbOffsetX->setVisible(b);
+	ui.sbOffsetY->setVisible(b);
+	ui.lRotation->setVisible(b);
+	ui.sbRotation->setVisible(b);
+}
+
+/*!
+ * enables/disables all border relevant widgets.
+ * Used when displaying legend's title label.
+ */
+void LabelWidget::setBorderAvailable(bool b) {
+	ui.lBorder->setVisible(b);
+	ui.lBorderShape->setVisible(b);
+	ui.cbBorderShape->setVisible(b);
+	ui.lBorderStyle->setVisible(b);
+	ui.cbBorderStyle->setVisible(b);
+	ui.lBorderColor->setVisible(b);
+	ui.kcbBorderColor->setVisible(b);
+	ui.lBorderWidth->setVisible(b);
+	ui.sbBorderWidth->setVisible(b);
+	ui.lBorderOpacity->setVisible(b);
+	ui.sbBorderOpacity->setVisible(b);
+}
+
+void LabelWidget::updateUnits() {
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	BaseDock::Units units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
+	if (units == m_units)
+		return;
+
+	m_units = units;
+	Lock lock(m_initializing);
+	QString suffix;
+	if (m_units == BaseDock::Units::Metric) {
+		//convert from imperial to metric
+		m_worksheetUnit = Worksheet::Unit::Centimeter;
+		suffix = QLatin1String(" cm");
+		ui.sbPositionX->setValue(ui.sbPositionX->value()*2.54);
+		ui.sbPositionY->setValue(ui.sbPositionX->value()*2.54);
+	} else {
+		//convert from metric to imperial
+		m_worksheetUnit = Worksheet::Unit::Inch;
+		suffix = QLatin1String(" in");
+		ui.sbPositionX->setValue(ui.sbPositionX->value()/2.54);
+		ui.sbPositionY->setValue(ui.sbPositionY->value()/2.54);
+	}
+
+	ui.sbPositionX->setSuffix(suffix);
+	ui.sbPositionY->setSuffix(suffix);
+}
+
+void LabelWidget::updateLocale() {
+	SET_NUMBER_LOCALE
+	ui.sbPositionX->setLocale(numberLocale);
+	ui.sbPositionY->setLocale(numberLocale);
+	ui.sbOffsetX->setLocale(numberLocale);
+	ui.sbOffsetY->setLocale(numberLocale);
+	ui.sbBorderWidth->setLocale(numberLocale);
 }
 
 //**********************************************************
@@ -300,6 +418,8 @@ void LabelWidget::textChanged() {
 	if (m_initializing)
 		return;
 
+	const Lock lock(m_initializing);
+
 	if (ui.tbTexUsed->isChecked()) {
 		QString text = ui.teLabel->toPlainText();
 		TextLabel::TextWrapper wrapper(text, true);
@@ -307,23 +427,26 @@ void LabelWidget::textChanged() {
 		for (auto* label : m_labelsList)
 			label->setText(wrapper);
 	} else {
-		//save an empty string instead of a html-string with empty body, if no text available in QTextEdit
+		//save an empty string instead of a html-string with empty body,
+		//if no text available in QTextEdit
 		QString text;
-		if (ui.teLabel->toPlainText().isEmpty())
-			text.clear();
-		else
-			text = ui.teLabel->toHtml();
+		if (!ui.teLabel->toPlainText().isEmpty()) {
+			//if the current label text is empty, set the color first
+			if (m_label->text().text.isEmpty()) {
+				ui.teLabel->selectAll();
+				ui.teLabel->setTextColor(m_label->fontColor());
+			}
 
-		TextLabel::TextWrapper wrapper(text, false);
-		for (auto* label : m_labelsList) {
-			label->setText(wrapper);
-			// Don't set FontColor, because the font color is already in the html code
-			// of the text. The font color is used to change the color for unformated
-			// text like from themes
-			// label->setFontColor(ui.kcbFontColor->color());
-			// label->setBackgroundColor(ui.kcbBackgroundColor->color());
+			text = ui.teLabel->toHtml();
 		}
+
+		TextLabel::TextWrapper wrapper(text, false, true);
+		for (auto* label : m_labelsList)
+			label->setText(wrapper);
 	}
+
+	//background color gets lost on every text change...
+	updateBackground();
 }
 
 /*!
@@ -338,7 +461,7 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 	if (ui.tbTexUsed->isChecked())
 		return;
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 
 	// update button state
 	ui.tbFontBold->setChecked(ui.teLabel->fontWeight() == QFont::Bold);
@@ -360,8 +483,6 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 
 	ui.kfontRequester->setFont(format.font());
-
-	m_initializing = false;
 }
 
 void LabelWidget::teXUsedChanged(bool checked) {
@@ -454,12 +575,9 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	//if no selection is done, apply the new color for the whole label,
-	//apply to the currently selected part of the text only otherwise
 	QTextCursor c = ui.teLabel->textCursor();
 	if (c.selectedText().isEmpty())
 		ui.teLabel->selectAll();
-
 	ui.teLabel->setTextColor(color);
 }
 
@@ -467,20 +585,23 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
+	if (!m_teXEnabled && m_label->text().teXUsed) {
+		QTextCursor c = ui.teLabel->textCursor();
+		if (c.selectedText().isEmpty())
+			ui.teLabel->selectAll();
 
-	ui.teLabel->setTextBackgroundColor(color);
+		ui.teLabel->setTextBackgroundColor(color);
+	} else {
+		// Latex text does not support html code. For this the backgroundColor variable is used
+		// Only single color background is supported
+		for (auto* label : m_labelsList)
+			label->setBackgroundColor(color);
+	}
 }
 
 void LabelWidget::fontSizeChanged(int value) {
 	if (m_initializing)
 		return;
-
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
 
 	QFont font = m_label->teXFont();
 	font.setPointSize(value);
@@ -581,7 +702,7 @@ void LabelWidget::fontChanged(const QFont& font) {
 
 	// use format instead of using ui.teLabel->setFontFamily(font.family());
 	// because this calls after every command textChanged() which is inefficient
-	QTextCharFormat format = ui.teLabel->currentCharFormat();
+	QTextCharFormat format;
 	format.setFontFamily(font.family());
 	format.setFontPointSize(font.pointSize());
 	format.setFontItalic(font.italic());
@@ -590,7 +711,7 @@ void LabelWidget::fontChanged(const QFont& font) {
 		format.setUnderlineStyle(QTextCharFormat::UnderlineStyle::SingleUnderline);
 	if (font.strikeOut()) // anytime true. don't know why
 		format.setFontStrikeOut(font.strikeOut());
-	ui.teLabel->setCurrentCharFormat(format);
+	ui.teLabel->mergeCurrentCharFormat(format);
 }
 
 void LabelWidget::teXFontChanged(const QFont& font) {
@@ -604,9 +725,13 @@ void LabelWidget::teXFontChanged(const QFont& font) {
 void LabelWidget::charMenu() {
 	QMenu menu;
 	KCharSelect selection(this, nullptr, KCharSelect::SearchLine | KCharSelect::CharacterTable | KCharSelect::BlockCombos | KCharSelect::HistoryButtons);
-	selection.setCurrentFont(ui.teLabel->currentFont());
-	connect(&selection, SIGNAL(charSelected(QChar)), this, SLOT(insertChar(QChar)));
-	connect(&selection, SIGNAL(charSelected(QChar)), &menu, SLOT(close()));
+	QFont font = ui.teLabel->currentFont();
+	// use the system default size, otherwise the symbols might be hard to read
+	// if the current label font size is too small
+	font.setPointSize(QFont().pointSize());
+	selection.setCurrentFont(font);
+	connect(&selection, &KCharSelect::charSelected, this, &LabelWidget::insertChar);
+	connect(&selection, &KCharSelect::charSelected, &menu, &LabelWidget::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&selection);
@@ -623,21 +748,54 @@ void LabelWidget::insertChar(QChar c) {
 void LabelWidget::dateTimeMenu() {
 	m_dateTimeMenu->clear();
 
-	QDate date = QDate::currentDate();
-	m_dateTimeMenu->addSeparator()->setText(i18n("Date"));
-	m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
-	m_dateTimeMenu->addAction( date.toString(Qt::ISODate) );
-	m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
-	m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleShortDate) );
-	m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleLongDate) );
+	const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+	const QString configFile = configPath + QLatin1String("/klanguageoverridesrc");
+	if (!QFile::exists(configFile)) {
+		QDate date = QDate::currentDate();
+		m_dateTimeMenu->addSeparator()->setText(i18n("Date"));
+		m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
+		m_dateTimeMenu->addAction( date.toString(Qt::ISODate) );
+		m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleShortDate) );
+		m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleLongDate) );
+		m_dateTimeMenu->addAction( date.toString(Qt::RFC2822Date) );
 
-	QDateTime time = QDateTime::currentDateTime();
-	m_dateTimeMenu->addSeparator()->setText(i18n("Date and Time"));
-	m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
-	m_dateTimeMenu->addAction( time.toString(Qt::ISODate) );
-	m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
-	m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleShortDate) );
-	m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleLongDate) );
+		QDateTime time = QDateTime::currentDateTime();
+		m_dateTimeMenu->addSeparator()->setText(i18n("Date and Time"));
+		m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
+		m_dateTimeMenu->addAction( time.toString(Qt::ISODate) );
+		m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleShortDate) );
+		m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleLongDate) );
+		m_dateTimeMenu->addAction( time.toString(Qt::RFC2822Date) );
+	} else {
+		//application language was changed:
+		//determine the currently used language and use QLocale::toString()
+		//to get the strings translated into the currently used language
+		//TODO: why not use QLocale() ?
+		QSettings settings (configFile, QSettings::IniFormat);
+		settings.beginGroup(QLatin1String("Language"));
+		QByteArray languageCode;
+		languageCode = settings.value(qAppName(), languageCode).toByteArray();
+		QLocale locale(QString::fromLatin1(languageCode.data()));
+
+		QDate date = QDate::currentDate();
+		m_dateTimeMenu->addSeparator()->setText(i18n("Date"));
+		m_dateTimeMenu->addAction( locale.toString(date, QLatin1String("ddd MMM d yyyy")) ); //Qt::TextDate
+		m_dateTimeMenu->addAction( locale.toString(date, QLatin1String("yyyy-MM-dd")) ); //Qt::ISODate
+		m_dateTimeMenu->addAction( locale.system().toString(date, QLocale::ShortFormat) ); //Qt::SystemLocaleShortDate
+		//no LongFormat here since it would contain strings in system's language which (potentially) is not the current application language
+		m_dateTimeMenu->addAction( locale.toString(date, QLatin1String("dd MMM yyyy")) ); //Qt::RFC2822Date
+
+		QDateTime time = QDateTime::currentDateTime();
+		m_dateTimeMenu->addSeparator()->setText(i18n("Date and Time"));
+		m_dateTimeMenu->addAction( locale.toString(time, QLatin1String("ddd MMM d hh:mm:ss yyyy")) ); //Qt::TextDate
+		m_dateTimeMenu->addAction( locale.toString(time, QLatin1String("yyyy-MM-ddTHH:mm:ss")) ); //Qt::ISODate
+		m_dateTimeMenu->addAction( locale.system().toString(time, QLocale::ShortFormat) ); //Qt::SystemLocaleShortDate
+		//no LongFormat here since it would contain strings in system's language which (potentially) is not the current application language
+
+		//TODO: RFC2822 requires time zone but Qt QLocale::toString() seems to ignore TZD (time zone designator) completely,
+		//which works correctly with QDateTime::toString()
+		m_dateTimeMenu->addAction( locale.toString(time, QLatin1String("dd MMM yyyy hh:mm:ss")) ); //Qt::RFC2822Date
+	}
 
 	m_dateTimeMenu->exec( mapToGlobal(ui.tbDateTime->rect().bottomLeft()));
 }
@@ -661,10 +819,12 @@ void LabelWidget::positionXChanged(int index) {
 	if (m_initializing)
 		return;
 
-	TextLabel::PositionWrapper position = m_label->position();
-	position.horizontalPosition = TextLabel::HorizontalPosition(index);
-	for (auto* label : m_labelsList)
+	auto horPos = TextLabel::HorizontalPosition(index);
+	for (auto* label : m_labelsList) {
+		auto position = label->position();
+		position.horizontalPosition = horPos;
 		label->setPosition(position);
+	}
 }
 
 /*!
@@ -680,30 +840,36 @@ void LabelWidget::positionYChanged(int index) {
 	if (m_initializing)
 		return;
 
-	TextLabel::PositionWrapper position = m_label->position();
-	position.verticalPosition = TextLabel::VerticalPosition(index);
-	for (auto* label : m_labelsList)
+	auto verPos = TextLabel::VerticalPosition(index);
+	for (auto* label : m_labelsList) {
+		auto position = label->position();
+		position.verticalPosition = verPos;
 		label->setPosition(position);
+	}
 }
 
 void LabelWidget::customPositionXChanged(double value) {
 	if (m_initializing)
 		return;
 
-	TextLabel::PositionWrapper position = m_label->position();
-	position.point.setX(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-	for (auto* label : m_labelsList)
+	double x = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* label : m_labelsList) {
+		auto position = label->position();
+		position.point.setX(x);
 		label->setPosition(position);
+	}
 }
 
 void LabelWidget::customPositionYChanged(double value) {
 	if (m_initializing)
 		return;
 
-	TextLabel::PositionWrapper position = m_label->position();
-	position.point.setY(Worksheet::convertToSceneUnits(value, Worksheet::Centimeter));
-	for (auto* label : m_labelsList)
+	double y = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* label : m_labelsList) {
+		auto position = label->position();
+		position.point.setY(y);
 		label->setPosition(position);
+	}
 }
 
 void LabelWidget::horizontalAlignmentChanged(int index) {
@@ -735,7 +901,7 @@ void LabelWidget::offsetXChanged(double value) {
 		return;
 
 	for (auto* axis : m_axesList)
-		axis->setTitleOffsetX( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		axis->setTitleOffsetX( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void LabelWidget::offsetYChanged(double value) {
@@ -743,7 +909,7 @@ void LabelWidget::offsetYChanged(double value) {
 		return;
 
 	for (auto* axis : m_axesList)
-		axis->setTitleOffsetY( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		axis->setTitleOffsetY( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 }
 
 void LabelWidget::visibilityChanged(bool state) {
@@ -757,7 +923,7 @@ void LabelWidget::visibilityChanged(bool state) {
 //border
 void LabelWidget::borderShapeChanged(int index) {
 	auto shape = (TextLabel::BorderShape)index;
-	bool b = (shape != TextLabel::NoBorder);
+	bool b = (shape != TextLabel::BorderShape::NoBorder);
 	ui.lBorderStyle->setVisible(b);
 	ui.cbBorderStyle->setVisible(b);
 	ui.lBorderWidth->setVisible(b);
@@ -810,7 +976,7 @@ void LabelWidget::borderWidthChanged(double value) {
 	QPen pen;
 	for (auto* label : m_labelsList) {
 		pen = label->borderPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Point) );
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
 		label->setBorderPen(pen);
 	}
 }
@@ -828,7 +994,8 @@ void LabelWidget::borderOpacityChanged(int value) {
 //****** SLOTs for changes triggered in TextLabel *********
 //*********************************************************
 void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
-	m_initializing = true;
+	if (m_initializing)return;
+	const Lock lock(m_initializing);
 
 	//save and restore the current cursor position after changing the text
 	QTextCursor cursor = ui.teLabel->textCursor();
@@ -843,7 +1010,6 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
 
 	ui.tbTexUsed->setChecked(text.teXUsed);
 	this->teXUsedChanged(text.teXUsed);
-	m_initializing = false;
 }
 
 /*!
@@ -851,9 +1017,10 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
  * or something else went wrong during rendering (\sa ExpressionTextEdit::validateExpression())
  */
 void LabelWidget::labelTeXImageUpdated(bool valid) {
-	if (!valid)
-		ui.teLabel->setStyleSheet(QLatin1String("QTextEdit{background: red;}"));
-	else
+	if (!valid) {
+		if (ui.teLabel->styleSheet().isEmpty())
+			ui.teLabel->setStyleSheet(QLatin1String("QTextEdit{background: red;}"));
+	} else
 		ui.teLabel->setStyleSheet(QString());
 }
 
@@ -865,17 +1032,22 @@ void LabelWidget::labelTeXFontChanged(const QFont& font) {
 }
 
 void LabelWidget::labelFontColorChanged(const QColor color) {
+	// this function is only called when the theme is changed. Otherwise the color
+	// is directly in the html text.
+	// when the theme changes, the hole text should change color regardless of the color it has
 	m_initializing = true;
 	ui.kcbFontColor->setColor(color);
+	ui.teLabel->selectAll();
+	ui.teLabel->setTextColor(color);
 	m_initializing = false;
 }
 
 void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& position) {
 	m_initializing = true;
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), Worksheet::Centimeter) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), Worksheet::Centimeter) );
-	ui.cbPositionX->setCurrentIndex( position.horizontalPosition );
-	ui.cbPositionY->setCurrentIndex( position.verticalPosition );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
+	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
+	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
 	m_initializing = false;
 }
 
@@ -887,25 +1059,25 @@ void LabelWidget::labelBackgroundColorChanged(const QColor color) {
 
 void LabelWidget::labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment index) {
 	m_initializing = true;
-	ui.cbHorizontalAlignment->setCurrentIndex(index);
+	ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
 	m_initializing = false;
 }
 
 void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment index) {
 	m_initializing = true;
-	ui.cbVerticalAlignment->setCurrentIndex(index);
+	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
 	m_initializing = false;
 }
 
 void LabelWidget::labelOffsetxChanged(qreal offset) {
 	m_initializing = true;
-	ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
+	ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
 void LabelWidget::labelOffsetyChanged(qreal offset) {
 	m_initializing = true;
-	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Point));
+	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -924,7 +1096,7 @@ void LabelWidget::labelVisibleChanged(bool on) {
 //border
 void LabelWidget::labelBorderShapeChanged(TextLabel::BorderShape shape) {
 	m_initializing = true;
-	ui.cbBorderShape->setCurrentIndex(shape);
+	ui.cbBorderShape->setCurrentIndex(static_cast<int>(shape));
 	m_initializing = false;
 }
 
@@ -935,7 +1107,7 @@ void LabelWidget::labelBorderPenChanged(const QPen& pen) {
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
 	if (ui.sbBorderWidth->value() != pen.widthF())
-		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(),Worksheet::Point));
+		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -967,11 +1139,20 @@ void LabelWidget::load() {
 		ui.kfontRequester->setFont(ui.teLabel->currentFont());
 	}
 
-	QTextCharFormat format = ui.teLabel->currentCharFormat(); // don't use colors from the textlabel, but
-	ui.kcbFontColor->setColor(format.foreground().color());
-	ui.kcbBackgroundColor->setColor(format.background().color());
+	// if the text is empty yet, user LabelWidget::fontColor(),
+	//extract the color from the html formatted text otherwise
+	 if (!m_label->text().text.isEmpty()) {
+		QTextCharFormat format = ui.teLabel->currentCharFormat();
+		ui.kcbFontColor->setColor(format.foreground().color());
+		//ui.kcbBackgroundColor->setColor(format.background().color());
+	 } else
+		ui.kcbFontColor->setColor(m_label->fontColor());
+
+	//used for latex text only
+	ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
+
 	this->teXUsedChanged(m_label->text().teXUsed);
-	ui.kfontRequesterTeX->setFont(format.font());
+	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
 
 	//move the cursor to the end and set the focus to the text editor
@@ -981,26 +1162,27 @@ void LabelWidget::load() {
 	ui.teLabel->setFocus();
 
 	// Geometry
-	ui.cbPositionX->setCurrentIndex( (int) m_label->position().horizontalPosition );
+	ui.cbPositionX->setCurrentIndex( (int)m_label->position().horizontalPosition );
 	positionXChanged(ui.cbPositionX->currentIndex());
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(),Worksheet::Centimeter) );
-	ui.cbPositionY->setCurrentIndex( (int) m_label->position().verticalPosition );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(), m_worksheetUnit) );
+	ui.cbPositionY->setCurrentIndex( (int)m_label->position().verticalPosition );
 	positionYChanged(ui.cbPositionY->currentIndex());
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(),Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(), m_worksheetUnit) );
 
 	if (!m_axesList.isEmpty()) {
-		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Point) );
-		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Point) );
+		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Unit::Point) );
+		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Unit::Point) );
 	}
 	ui.cbHorizontalAlignment->setCurrentIndex( (int) m_label->horizontalAlignment() );
 	ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
 	ui.sbRotation->setValue( m_label->rotationAngle() );
 
 	//Border
-	ui.cbBorderShape->setCurrentIndex( m_label->borderShape() );
+	ui.cbBorderShape->setCurrentIndex(static_cast<int>(m_label->borderShape()));
+	borderShapeChanged(ui.cbBorderShape->currentIndex());
 	ui.kcbBorderColor->setColor( m_label->borderPen().color() );
 	ui.cbBorderStyle->setCurrentIndex( (int) m_label->borderPen().style() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( round(m_label->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 
@@ -1021,13 +1203,13 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 
 	// Geometry
 	ui.cbPositionX->setCurrentIndex( group.readEntry("PositionX", (int) m_label->position().horizontalPosition ) );
-	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()),Worksheet::Centimeter) );
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionXValue", m_label->position().point.x()), m_worksheetUnit) );
 	ui.cbPositionY->setCurrentIndex( group.readEntry("PositionY", (int) m_label->position().verticalPosition ) );
-	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()),Worksheet::Centimeter) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("PositionYValue", m_label->position().point.y()), m_worksheetUnit) );
 
 	if (!m_axesList.isEmpty()) {
-		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Point) );
-		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Point) );
+		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Unit::Point) );
+		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Unit::Point) );
 	}
 	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("HorizontalAlignment", (int) m_label->horizontalAlignment()) );
 	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("VerticalAlignment", (int) m_label->verticalAlignment()) );
@@ -1037,7 +1219,7 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.cbBorderShape->setCurrentIndex(group.readEntry("BorderShape").toInt());
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_label->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int)m_label->borderPen().style()) );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_label->borderPen().widthF()), Worksheet::Point) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_label->borderPen().widthF()), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_label->borderOpacity())*100 );
 	m_initializing = false;
 }
@@ -1051,13 +1233,13 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 
 	// Geometry
 	group.writeEntry("PositionX", ui.cbPositionX->currentIndex());
-	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionXValue", Worksheet::convertToSceneUnits(ui.sbPositionX->value(),m_worksheetUnit) );
 	group.writeEntry("PositionY", ui.cbPositionY->currentIndex());
-	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),Worksheet::Centimeter) );
+	group.writeEntry("PositionYValue",  Worksheet::convertToSceneUnits(ui.sbPositionY->value(),m_worksheetUnit) );
 
 	if (!m_axesList.isEmpty()) {
-		group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Point) );
-		group.writeEntry("OffsetY",  Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Point) );
+		group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Unit::Point) );
+		group.writeEntry("OffsetY",  Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Unit::Point) );
 	}
 	group.writeEntry("HorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
 	group.writeEntry("VerticalAlignment", ui.cbVerticalAlignment->currentIndex());
@@ -1067,6 +1249,6 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 	group.writeEntry("BorderShape", ui.cbBorderShape->currentIndex());
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
-	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Point));
+	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 }

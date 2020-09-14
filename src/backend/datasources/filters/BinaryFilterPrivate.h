@@ -39,16 +39,16 @@ public:
 
 	int prepareStreamToRead(QDataStream&);
 	void readDataFromDevice(QIODevice& device, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
 	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	const BinaryFilter* q;
 
 	size_t vectors{2};
-	BinaryFilter::DataType dataType{BinaryFilter::INT8};
+	BinaryFilter::DataType dataType{BinaryFilter::DataType::INT8};
 	QDataStream::ByteOrder byteOrder{QDataStream::LittleEndian};
 	QVector<AbstractColumn::ColumnMode> columnModes;
 

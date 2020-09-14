@@ -28,16 +28,12 @@ Copyright            : (C) 2018 by Kovacs Ferencz (kferike98@gmail.com)
 #ifndef MQTTERRORWIDGET_H
 #define MQTTERRORWIDGET_H
 
-#include <QWidget>
-
-#ifdef HAVE_MQTT
 #include <QMqttClient>
 #include "ui_mqtterrorwidget.h"
+
 class MQTTClient;
-#endif
 
 class MQTTErrorWidget : public QWidget {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
@@ -50,8 +46,6 @@ private:
 
 private slots:
 	void tryToReconnect();
-
-#endif	// HAVE_MQTT
 };
 
 #endif // MQTTERRORWIDGET_H

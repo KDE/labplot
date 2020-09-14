@@ -5,3 +5,4 @@ build*
 TODO
 .kdev4
 labplot.kdev4
+compile_commands.json

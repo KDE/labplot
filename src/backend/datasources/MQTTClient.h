@@ -30,8 +30,6 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 #include "backend/core/Folder.h"
 
-#ifdef HAVE_MQTT
-#include <QTimer>
 #include <QVector>
 #include <QtMqtt/QMqttClient>
 #include <QtMqtt/QMqttMessage>
@@ -40,40 +38,39 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include <QtMqtt/QMqttTopicName>
 #include <QMap>
 
-class QString;
 class AsciiFilter;
 class MQTTSubscription;
 class QAction;
-#endif
+class QTimer;
+class QString;
 
 class MQTTClient : public Folder {
-#ifdef HAVE_MQTT
 	Q_OBJECT
 
 public:
-	enum UpdateType {
+	enum class UpdateType {
 		TimeInterval = 0,
 		NewData
 	};
 
-	enum ReadingType {
+	enum class ReadingType {
 		ContinuousFixed = 0,
 		FromEnd,
 		TillEnd
 	};
 
-	enum WillMessageType {
+	enum class WillMessageType {
 		OwnMessage = 0,
 		Statistics,
 		LastMessage
 	};
 
-	enum WillUpdateType {
+	enum class WillUpdateType {
 		TimePeriod = 0,
 		OnClick
 	};
 
-	enum WillStatisticsType {
+	enum class WillStatisticsType {
 		NoStatistics = -1,
 		Minimum,
 		Maximum,
@@ -131,11 +128,11 @@ public:
 	void setKeepLastValues(bool);
 	bool keepLastValues() const;
 
-	void setMQTTClientHostPort(const QString&, const quint16&);
+	void setMQTTClientHostPort(const QString&, quint16);
 	void setMQTTClientAuthentication(const QString&, const QString&);
 	void setMQTTClientId(const QString&);
 
-	void addInitialMQTTSubscriptions(const QMqttTopicFilter&, const quint8&);
+	void addInitialMQTTSubscriptions(const QMqttTopicFilter&, quint8);
 	QVector<QString> MQTTSubscriptions() const;
 
 	bool checkTopicContains(const QString& superior, const QString& inferior);
@@ -162,7 +159,7 @@ public:
 	QVector<QString> topicNames() const;
 	bool checkAllArrived();
 
-	void setWillSettings(MQTTWill);
+	void setWillSettings(const MQTTWill&);
 	MQTTWill willSettings() const;
 
 	void setMQTTWillUse(bool);
@@ -214,8 +211,8 @@ public:
 	void reparentTopic(const QString& topic, const QString& parent);
 
 private:
-	UpdateType m_updateType{TimeInterval};
-	ReadingType m_readingType{ContinuousFixed};
+	UpdateType m_updateType{UpdateType::TimeInterval};
+	ReadingType m_readingType{ReadingType::ContinuousFixed};
 	bool m_paused{false};
 	bool m_prepared{false};
 	int m_sampleSize{1};
@@ -254,7 +251,5 @@ signals:
 	void MQTTTopicsChanged();
 	void readFromTopics();
 	void clientAboutToBeDeleted(const QString&, quint16);
-
-#endif //HAVE_MQTT
 };
 #endif // MQTTCLIENT_H

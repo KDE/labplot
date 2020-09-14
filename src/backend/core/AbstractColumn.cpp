@@ -4,7 +4,7 @@
     Description          : Interface definition for data with column logic
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -36,8 +36,6 @@
 #include <QDateTime>
 #include <QIcon>
 #include <KLocalizedString>
-
-#include <cmath>
 
 /**
  * \class AbstractColumn
@@ -121,14 +119,15 @@ QStringList AbstractColumn::dateTimeFormats() {
  */
 QIcon AbstractColumn::iconForMode(ColumnMode mode) {
 	switch (mode) {
-	case AbstractColumn::Numeric:
-	case AbstractColumn::Integer:
+	case ColumnMode::Numeric:
+	case ColumnMode::Integer:
+	case ColumnMode::BigInt:
 		break;
-	case AbstractColumn::Text:
+	case ColumnMode::Text:
 		return QIcon::fromTheme("draw-text");
-	case AbstractColumn::DateTime:
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day:
 		return QIcon::fromTheme("chronometer");
 	}
 
@@ -193,6 +192,11 @@ bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int de
  */
 
 /**
+ * \fn int AbstractColumn::availableRowCount() const
+ * \brief Return the number of available data rows
+ */
+
+/**
  * \brief Insert some empty (or initialized with invalid values) rows
  */
 void AbstractColumn::insertRows(int before, int count) {
@@ -243,13 +247,13 @@ void AbstractColumn::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
 }
 
 bool AbstractColumn::isNumeric() const {
-	const AbstractColumn::ColumnMode mode = columnMode();
-	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer);
+	const auto mode = columnMode();
+	return (mode == ColumnMode::Numeric || mode == ColumnMode::Integer || mode == ColumnMode::BigInt);
 }
 
 bool AbstractColumn::isPlottable() const {
-	const AbstractColumn::ColumnMode mode = columnMode();
-	return (mode == AbstractColumn::Numeric || mode == AbstractColumn::Integer || mode == AbstractColumn::DateTime);
+	const auto mode = columnMode();
+	return (mode == ColumnMode::Numeric || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::DateTime);
 }
 
 /**
@@ -262,15 +266,16 @@ void AbstractColumn::clear() {}
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-	case AbstractColumn::Numeric:
-		return !std::isnan(valueAt(row));
-	case AbstractColumn::Integer:	// there is no invalid integer
+	case ColumnMode::Numeric:
+		return !(std::isnan(valueAt(row)) || std::isinf(valueAt(row)));
+	case ColumnMode::Integer:	// there is no invalid integer
+	case ColumnMode::BigInt:
 		return true;
-	case AbstractColumn::Text:
+	case ColumnMode::Text:
 		return !textAt(row).isNull();
-	case AbstractColumn::DateTime:
-	case AbstractColumn::Month:
-	case AbstractColumn::Day:
+	case ColumnMode::DateTime:
+	case ColumnMode::Month:
+	case ColumnMode::Day:
 		return dateTimeAt(row).isValid();
 	}
 
@@ -542,7 +547,35 @@ void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
 }
 
 /**
- * Returns the properties hold by this column (no, monotonic increasing, monotonic decreasing,...)
+ * \brief Return the bigint value in row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+qint64 AbstractColumn::bigIntAt(int row) const {
+	Q_UNUSED(row);
+	return 42;
+}
+
+/**
+ * \brief Set the content of row 'row'
+ *
+ * Use this only when columnMode() is BigInt
+ */
+void AbstractColumn::setBigIntAt(int row, const qint64 new_value) {
+	Q_UNUSED(row) Q_UNUSED(new_value)
+};
+
+/**
+ * \brief Replace a range of values
+ *
+ * Use this only when columnMode() is BigInt
+ */
+void AbstractColumn::replaceBigInt(int first, const QVector<qint64>& new_values) {
+	Q_UNUSED(first) Q_UNUSED(new_values)
+}
+
+/**
+ * Returns the properties hold by this column (no, constant, monotonic increasing, monotonic decreasing,...)
  * Is used in XYCurve to improve the search velocity for the y value for a specific x value
  */
 AbstractColumn::Properties AbstractColumn::properties() const {
@@ -555,9 +588,34 @@ double AbstractColumn::minimum(int count) const {
 	return -INFINITY;
 }
 
+double AbstractColumn::minimum(int startIndex, int endIndex) const {
+	Q_UNUSED(startIndex);
+	Q_UNUSED(endIndex);
+	return -INFINITY;
+}
+
 double AbstractColumn::maximum(int count) const {
 	Q_UNUSED(count);
 	return INFINITY;
+}
+
+double AbstractColumn::maximum(int startIndex, int endIndex) const {
+	Q_UNUSED(startIndex);
+	Q_UNUSED(endIndex);
+	return INFINITY;
+}
+
+bool AbstractColumn::indicesMinMax(double v1, double v2, int& start, int& end)  const {
+	Q_UNUSED(v1)
+	Q_UNUSED(v2)
+	Q_UNUSED(start)
+	Q_UNUSED(end)
+	return false;
+}
+
+int AbstractColumn::indexForValue(double x) const {
+	Q_UNUSED(x)
+	return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

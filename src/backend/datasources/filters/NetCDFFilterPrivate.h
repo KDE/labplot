@@ -40,10 +40,10 @@ public:
 
 	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	QString readAttribute(const QString& fileName, const QString& name, const QString& varName);
 	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 #ifdef HAVE_NETCDF
 	static void handleError(int status, const QString& function);

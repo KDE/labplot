@@ -65,6 +65,7 @@ public:
 
 	void setImages(QList<DatapickerImage*>);
 	void load();
+	void updateLocale() override;
 
 private:
 	Ui::DatapickerImageWidget ui;
@@ -73,7 +74,6 @@ private:
 
 	DatapickerImage* m_image;
 	QList<DatapickerImage*> m_imagesList;
-	bool m_initializing;
 
 	QxtSpanSlider* ssIntensity;
 	QxtSpanSlider* ssForeground;
@@ -108,7 +108,7 @@ private slots:
 	void ternaryScaleChanged(double);
 	void logicalPositionChanged();
 
-	//symbol propeties
+	//symbol properties
 	void pointsStyleChanged(int);
 	void pointsSizeChanged(double);
 	void pointsRotationChanged(int);

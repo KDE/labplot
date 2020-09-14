@@ -29,7 +29,10 @@
 
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 #include "backend/worksheet/plots/AbstractPlot.h"
-#include <cmath>
+
+extern "C" {
+#include <gsl/gsl_math.h>
+}
 
 /**
  * \class AbstractCoordinateSystem
@@ -88,8 +91,11 @@ AbstractCoordinateSystem::~AbstractCoordinateSystem() = default;
  * \return false if line is completely outside, otherwise true
  */
 
+// TODO: put into NSL
 double round(double value, int precision) {
-	return int(value*pow(10, precision) + (value<0 ? -0.5 : 0.5))/pow(10, precision);
+	//TODO: there must be faster ways to get this (lookup table?)
+	double order = gsl_pow_int(10., precision);
+	return int(value*order + (value < 0 ? -0.5 : 0.5))/order;
 }
 
 bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult) {
@@ -200,6 +206,7 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 
 //more intelligent comparison of floats,
 //taken from Knuth's "The art of computer programming"
+//TODO: put into NSL?
 bool AbstractCoordinateSystem::approximatelyEqual(double a, double b, double epsilon) {
 	return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
 }

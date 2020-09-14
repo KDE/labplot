@@ -39,61 +39,61 @@
 QPainterPath Symbol::pathFromStyle(Symbol::Style style) {
 	QPainterPath path;
 	QPolygonF polygon;
-	if (style == Symbol::Circle) {
+	if (style == Style::Circle) {
 		path.addEllipse(QPoint(0,0), 0.5, 0.5);
-	} else if (style == Symbol::Square) {
+	} else if (style == Style::Square) {
 		path.addRect(QRectF(- 0.5, -0.5, 1.0, 1.0));
-	} else if (style == Symbol::EquilateralTriangle) {
+	} else if (style == Style::EquilateralTriangle) {
 		polygon<<QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::RightTriangle) {
+	} else if (style == Style::RightTriangle) {
 		polygon<<QPointF(-0.5, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5)<<QPointF(-0.5, -0.5);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::Bar) {
+	} else if (style == Style::Bar) {
 		path.addRect(QRectF(- 0.5, -0.2, 1.0, 0.4));
-	} else if (style == Symbol::PeakedBar) {
+	} else if (style == Style::PeakedBar) {
 		polygon<<QPointF(-0.5, 0)<<QPointF(-0.3, -0.2)<<QPointF(0.3, -0.2)<<QPointF(0.5, 0)
 				<<QPointF(0.3, 0.2)<<QPointF(-0.3, 0.2)<<QPointF(-0.5, 0);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::SkewedBar) {
+	} else if (style == Style::SkewedBar) {
 		polygon<<QPointF(-0.5, 0.2)<<QPointF(-0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.2, 0.2)<<QPointF(-0.5, 0.2);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::Diamond) {
+	} else if (style == Style::Diamond) {
 		polygon<<QPointF(-0.5, 0)<<QPointF(0, -0.5)<<QPointF(0.5, 0)<<QPointF(0, 0.5)<<QPointF(-0.5, 0);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::Lozenge) {
+	} else if (style == Style::Lozenge) {
 		polygon<<QPointF(-0.25, 0)<<QPointF(0, -0.5)<<QPointF(0.25, 0)<<QPointF(0, 0.5)<<QPointF(-0.25, 0);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::Tie) {
+	} else if (style == Style::Tie) {
 		polygon<<QPointF(-0.5, -0.5)<<QPointF(0.5, -0.5)<<QPointF(-0.5, 0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, -0.5);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::TinyTie) {
+	} else if (style == Style::TinyTie) {
 		polygon<<QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(-0.2, 0.5)<<QPointF(0.2, 0.5)<<QPointF(-0.2, -0.5);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::Plus) {
+	} else if (style == Style::Plus) {
 		polygon<<QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.5, 0.2)
 				<<QPointF(0.2, 0.2)<<QPointF(0.2, 0.5)<<QPointF(-0.2, 0.5)<<QPointF(-0.2, 0.2)<<QPointF(-0.5, 0.2)
 				<<QPointF(-0.5, -0.2)<<QPointF(-0.2, -0.2)<<QPointF(-0.2, -0.5);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::Boomerang) {
+	} else if (style == Style::Boomerang) {
 		polygon<<QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(0, 0)<<QPointF(-0.5, 0.5);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::SmallBoomerang) {
+	} else if (style == Style::SmallBoomerang) {
 		polygon<<QPointF(-0.3, 0.5)<<QPointF(0, -0.5)<<QPointF(0.3, 0.5)<<QPointF(0, 0)<<QPointF(-0.3, 0.5);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::Star4) {
+	} else if (style == Style::Star4) {
 		polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
 				<<QPointF(0.1, 0.1)<<QPointF(0, 0.5)<<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::Star5) {
+	} else if (style == Style::Star5) {
 		polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
 				<<QPointF(0.1, 0.1)<<QPointF(0.5, 0.5)<<QPointF(0, 0.2)<<QPointF(-0.5, 0.5)
 				<<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
 		path.addPolygon(polygon);
-	} else if (style == Symbol::Line) {
+	} else if (style == Style::Line) {
 		path = QPainterPath(QPointF(0, -0.5));
 		path.lineTo(0, 0.5);
-	} else if (style == Symbol::Cross) {
+	} else if (style == Style::Cross) {
 		path = QPainterPath(QPointF(0, -0.5));
 		path.lineTo(0, 0.5);
 		path.moveTo(-0.5, 0);
@@ -106,41 +106,41 @@ QPainterPath Symbol::pathFromStyle(Symbol::Style style) {
 QString Symbol::nameFromStyle(Symbol::Style style) {
 	QString name;
 	//TODO: use 'switch'
-	if (style == Symbol::Circle)
+	if (style == Style::Circle)
 		name = i18n("circle");
-	else if (style == Symbol::Square)
+	else if (style == Style::Square)
 		name = i18n("square");
-	else if (style == Symbol::EquilateralTriangle)
+	else if (style == Style::EquilateralTriangle)
 		name = i18n("equilateral triangle");
-	else if (style == Symbol::RightTriangle)
+	else if (style == Style::RightTriangle)
 		name = i18n("right triangle");
-	else if (style == Symbol::Bar)
+	else if (style == Style::Bar)
 		name = i18n("bar");
-	else if (style == Symbol::PeakedBar)
+	else if (style == Style::PeakedBar)
 		name = i18n("peaked bar");
-	else if (style == Symbol::SkewedBar)
+	else if (style == Style::SkewedBar)
 		name = i18n("skewed bar");
-	else if (style == Symbol::Diamond)
+	else if (style == Style::Diamond)
 		name = i18n("diamond");
-	else if (style == Symbol::Lozenge)
+	else if (style == Style::Lozenge)
 		name = i18n("lozenge");
-	else if (style == Symbol::Tie)
+	else if (style == Style::Tie)
 		name = i18n("tie");
-	else if (style == Symbol::TinyTie)
+	else if (style == Style::TinyTie)
 		name = i18n("tiny tie");
-	else if (style == Symbol::Plus)
+	else if (style == Style::Plus)
 		name = i18n("plus");
-	else if (style == Symbol::Boomerang)
+	else if (style == Style::Boomerang)
 		name = i18n("boomerang");
-	else if (style == Symbol::SmallBoomerang)
+	else if (style == Style::SmallBoomerang)
 		name = i18n("small boomerang");
-	else if (style == Symbol::Star4)
+	else if (style == Style::Star4)
 		name = i18n("star4");
-	else if (style == Symbol::Star5)
+	else if (style == Style::Star5)
 		name = i18n("star5");
-	else if (style == Symbol::Line)
+	else if (style == Style::Line)
 		name = i18n("line");
-	else if (style == Symbol::Cross)
+	else if (style == Style::Cross)
 		name = i18n("cross");
 
 	return name;

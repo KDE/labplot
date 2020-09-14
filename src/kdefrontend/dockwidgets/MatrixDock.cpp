@@ -30,9 +30,11 @@
 #include "commonfrontend/matrix/MatrixView.h"
 #include "kdefrontend/TemplateHandler.h"
 
-#include <QDir>
 #include <KConfig>
 #include <KConfigGroup>
+#include <KSharedConfig>
+
+#include <QDir>
 
  /*!
   \class MatrixDock
@@ -73,7 +75,7 @@ MatrixDock::MatrixDock(QWidget* parent): BaseDock(parent) {
 	connect(ui.sbPrecision, SIGNAL(valueChanged(int)), this, SLOT(precisionChanged(int)));
 	connect(ui.cbHeader, SIGNAL(currentIndexChanged(int)), this, SLOT(headerFormatChanged(int)));
 
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::Matrix);
+	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Matrix);
 	ui.gridLayout->addWidget(templateHandler, 22, 0, 1, 4);
 	templateHandler->show();
 	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
@@ -94,7 +96,7 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 		ui.leName->setText(m_matrix->name());
 		ui.leComment->setText(m_matrix->comment());
 	} else {
-		//disable the fields "Name" and "Comment" if there are more the one matrix
+		//disable these fields if there is more than one matrix
 		ui.leName->setEnabled(false);
 		ui.leComment->setEnabled(false);
 
@@ -135,9 +137,13 @@ void MatrixDock::xStartChanged() {
 
 	QString str = ui.leXStart->text().trimmed();
 	if (str.isEmpty()) return;
-	double value = str.toDouble();
-	for (auto* matrix : m_matrixList)
-		matrix->setXStart(value);
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double value{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		for (auto* matrix : m_matrixList)
+			matrix->setXStart(value);
+	}
 }
 
 void MatrixDock::xEndChanged() {
@@ -146,9 +152,13 @@ void MatrixDock::xEndChanged() {
 
 	QString str = ui.leXEnd->text().trimmed();
 	if (str.isEmpty()) return;
-	double value = str.toDouble();
-	for (auto* matrix : m_matrixList)
-		matrix->setXEnd(value);
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double value{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		for (auto* matrix : m_matrixList)
+			matrix->setXEnd(value);
+	}
 }
 
 void MatrixDock::yStartChanged() {
@@ -157,9 +167,13 @@ void MatrixDock::yStartChanged() {
 
 	QString str = ui.leYStart->text().trimmed();
 	if (str.isEmpty()) return;
-	double value = str.toDouble();
-	for (auto* matrix : m_matrixList)
-		matrix->setYStart(value);
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double value{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		for (auto* matrix : m_matrixList)
+			matrix->setYStart(value);
+	}
 }
 
 void MatrixDock::yEndChanged() {
@@ -168,9 +182,13 @@ void MatrixDock::yEndChanged() {
 
 	QString str = ui.leYEnd->text().trimmed();
 	if (str.isEmpty()) return;
-	double value = str.toDouble();
-	for (auto* matrix : m_matrixList)
-		matrix->setYEnd(value);
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double value{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		for (auto* matrix : m_matrixList)
+			matrix->setYEnd(value);
+	}
 }
 
 //format
@@ -248,25 +266,29 @@ void MatrixDock::matrixColumnCountChanged(int count) {
 //mapping to the logical coordinates
 void MatrixDock::matrixXStartChanged(double value) {
 	m_initializing = true;
-	ui.leXStart->setText(QString::number(value));
+	SET_NUMBER_LOCALE
+	ui.leXStart->setText(numberLocale.toString(value));
 	m_initializing = false;
 }
 
 void MatrixDock::matrixXEndChanged(double value) {
 	m_initializing = true;
-	ui.leXEnd->setText(QString::number(value));
+	SET_NUMBER_LOCALE
+	ui.leXEnd->setText(numberLocale.toString(value));
 	m_initializing = false;
 }
 
 void MatrixDock::matrixYStartChanged(double value) {
 	m_initializing = true;
-	ui.leYStart->setText(QString::number(value));
+	SET_NUMBER_LOCALE
+	ui.leYStart->setText(numberLocale.toString(value));
 	m_initializing = false;
 }
 
 void MatrixDock::matrixYEndChanged(double value) {
 	m_initializing = true;
-	ui.leYEnd->setText(QString::number(value));
+	SET_NUMBER_LOCALE
+	ui.leYEnd->setText(numberLocale.toString(value));
 	m_initializing = false;
 }
 
@@ -299,21 +321,22 @@ void MatrixDock::load() {
 	ui.sbColumnCount->setValue(m_matrix->columnCount());
 
 	//mapping to the logical coordinates
-	ui.leXStart->setText(QString::number(m_matrix->xStart()));
-	ui.leXEnd->setText(QString::number(m_matrix->xEnd()));
-	ui.leYStart->setText(QString::number(m_matrix->yStart()));
-	ui.leYEnd->setText(QString::number(m_matrix->yEnd()));
+	SET_NUMBER_LOCALE
+	ui.leXStart->setText(numberLocale.toString(m_matrix->xStart()));
+	ui.leXEnd->setText(numberLocale.toString(m_matrix->xEnd()));
+	ui.leYStart->setText(numberLocale.toString(m_matrix->yStart()));
+	ui.leYEnd->setText(numberLocale.toString(m_matrix->yEnd()));
 
 	//format
 	ui.cbFormat->setCurrentIndex(ui.cbFormat->findData((int)m_matrix->numericFormat()));
 	ui.sbPrecision->setValue(m_matrix->precision());
-	ui.cbHeader->setCurrentIndex(m_matrix->headerFormat());
+	ui.cbHeader->setCurrentIndex(static_cast<int>(m_matrix->headerFormat()));
 }
 
 void MatrixDock::loadConfigFromTemplate(KConfig& config) {
 	//extract the name of the template from the file name
 	QString name;
-	const int index = config.name().lastIndexOf(QDir::separator());
+	const int index = config.name().lastIndexOf(QLatin1String("/"));
 	if (index != -1)
 		name = config.name().right(config.name().size() - index - 1);
 	else
@@ -341,10 +364,11 @@ void MatrixDock::loadConfig(KConfig& config) {
 	ui.sbColumnCount->setValue(group.readEntry("ColumnCount", m_matrix->columnCount()));
 
 	//mapping to the logical coordinates
-	ui.leXStart->setText( QString::number(group.readEntry("XStart", m_matrix->xStart())) );
-	ui.leXEnd->setText( QString::number(group.readEntry("XEnd", m_matrix->xEnd())) );
-	ui.leYStart->setText( QString::number(group.readEntry("YStart", m_matrix->yStart())) );
-	ui.leYEnd->setText( QString::number(group.readEntry("YEnd", m_matrix->yEnd())) );
+	SET_NUMBER_LOCALE
+	ui.leXStart->setText( numberLocale.toString(group.readEntry("XStart", m_matrix->xStart())) );
+	ui.leXEnd->setText( numberLocale.toString(group.readEntry("XEnd", m_matrix->xEnd())) );
+	ui.leYStart->setText( numberLocale.toString(group.readEntry("YStart", m_matrix->yStart())) );
+	ui.leYEnd->setText( numberLocale.toString(group.readEntry("YEnd", m_matrix->yEnd())) );
 
 	//format
 	ui.cbFormat->setCurrentIndex( ui.cbFormat->findData(group.readEntry("NumericFormat", QString(m_matrix->numericFormat()))) );
@@ -363,10 +387,11 @@ void MatrixDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("ColumnCount", ui.sbColumnCount->value());
 
 	//mapping to the logical coordinates
-	group.writeEntry("XStart", ui.leXStart->text().toInt());
-	group.writeEntry("XEnd", ui.leXEnd->text().toInt());
-	group.writeEntry("YStart", ui.leYStart->text().toInt());
-	group.writeEntry("YEnd", ui.leYEnd->text().toInt());
+	SET_NUMBER_LOCALE
+	group.writeEntry("XStart", numberLocale.toDouble(ui.leXStart->text()) );
+	group.writeEntry("XEnd", numberLocale.toDouble(ui.leXEnd->text()) );
+	group.writeEntry("YStart", numberLocale.toDouble(ui.leYStart->text()) );
+	group.writeEntry("YEnd", numberLocale.toDouble(ui.leYEnd->text()) );
 
 	//format
 	group.writeEntry("NumericFormat", ui.cbFormat->itemData(ui.cbFormat->currentIndex()));

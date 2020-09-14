@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007,2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2013 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -50,8 +50,8 @@ class AbstractColumn : public AbstractAspect {
 	Q_ENUMS(ColumnMode)
 
 public:
-	enum PlotDesignation {NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorMinus, YErrorPlus};
-	enum ColumnMode {
+	enum class PlotDesignation {NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorMinus, YErrorPlus};
+	enum class ColumnMode {
 		// BASIC FORMATS
 		Numeric = 0,	// double
 		Text = 1,	// QString
@@ -79,7 +79,7 @@ public:
 //		UInt16 = 23,	// quint16 (unsigned short)
 		Integer = 24,	// qint32 (int)
 //		UInt32 = 25,	// quint32 (unsigned int)
-//		Int64 = 26,	// qint64 (long)
+		BigInt = 26,	// qint64 (long)
 //		UInt64 = 27,	// quint64 (unsigned long)
 		// MISC
 		// QBrush = 30
@@ -91,7 +91,7 @@ public:
 		// QMatrix
 		// etc.
 	};
-	enum Properties {
+	enum class Properties {	// TODO: why bit pattern? Aren't they exclusive?
 		No = 0x00,
 		Constant = 0x01,
 		MonotonicIncreasing = 0x02, // prev_value >= value for all values in column
@@ -101,13 +101,19 @@ public:
 
 	struct ColumnStatistics {
 		ColumnStatistics() {
+			size = 0;
 			minimum = NAN;
 			maximum = NAN;
 			arithmeticMean = NAN;
 			geometricMean = NAN;
 			harmonicMean = NAN;
 			contraharmonicMean = NAN;
+			mode = NAN;
+			firstQuartile = NAN;
 			median = NAN;
+			thirdQuartile = NAN;
+			iqr = NAN;
+			trimean = NAN;
 			variance = NAN;
 			standardDeviation = NAN;
 			meanDeviation = NAN;
@@ -117,13 +123,19 @@ public:
 			kurtosis = NAN;
 			entropy = NAN;
 		}
+		int size;
 		double minimum;
 		double maximum;
 		double arithmeticMean;
 		double geometricMean;
 		double harmonicMean;
 		double contraharmonicMean;
+		double mode;
+		double firstQuartile;
 		double median;
+		double thirdQuartile;
+		double iqr;
+		double trimean;
 		double variance;
 		double standardDeviation;
 		double meanDeviation; // mean absolute deviation around mean
@@ -157,12 +169,17 @@ public:
 	virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
 
 	virtual int rowCount() const = 0;
+	virtual int availableRowCount() const = 0;
 	void insertRows(int before, int count);
 	void removeRows(int first, int count);
 	virtual void clear();
 
 	virtual double maximum(int count = 0) const;
+	virtual double maximum(int startIndex, int endIndex) const;
 	virtual double minimum(int count = 0) const;
+	virtual double minimum(int startIndex, int endIndex) const;
+	virtual bool indicesMinMax(double v1, double v2, int& start, int& end) const;
+	virtual int indexForValue(double x) const;
 
 	bool isValid(int row) const;
 
@@ -195,6 +212,9 @@ public:
 	virtual int integerAt(int row) const;
 	virtual void setIntegerAt(int row, int new_value);
 	virtual void replaceInteger(int first, const QVector<int>& new_values);
+	virtual qint64 bigIntAt(int row) const;
+	virtual void setBigIntAt(int row, qint64 new_value);
+	virtual void replaceBigInt(int first, const QVector<qint64>& new_values);
 	virtual Properties properties() const;
 
 signals:
@@ -204,6 +224,7 @@ signals:
 	void modeChanged(const AbstractColumn* source);
 	void dataAboutToChange(const AbstractColumn* source);
 	void dataChanged(const AbstractColumn* source);
+	void formatChanged(const AbstractColumn* source);
 	void rowsAboutToBeInserted(const AbstractColumn* source, int before, int count);
 	void rowsInserted(const AbstractColumn* source, int before, int count);
 	void rowsAboutToBeRemoved(const AbstractColumn* source, int first, int count);
@@ -211,6 +232,7 @@ signals:
 	void maskingAboutToChange(const AbstractColumn* source);
 	void maskingChanged(const AbstractColumn* source);
 	void aboutToBeDestroyed(const AbstractColumn* source);
+	void reset(const AbstractColumn* source); // this signal is emitted when the column is reused for another purpose. The curves must know that and disconnect all connections
 
 protected:
 	bool XmlReadMask(XmlStreamReader*);

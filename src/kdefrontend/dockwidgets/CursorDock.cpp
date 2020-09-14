@@ -34,12 +34,15 @@ Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/TreeModel.h"
 
-CursorDock::CursorDock(QWidget *parent) :
-	QWidget(parent),
-	ui(new Ui::CursorDock)
-{
+CursorDock::CursorDock(QWidget* parent) : QWidget(parent), ui(new Ui::CursorDock) {
 	ui->setupUi(this);
 	ui->tvCursorData->setModel(nullptr);
+
+	ui->bCollapseAll->setIcon(QIcon::fromTheme(QLatin1String("collapse-all")));
+	ui->bExpandAll->setIcon(QIcon::fromTheme(QLatin1String("expand-all")));
+
+	ui->bCollapseAll->setToolTip(i18n("Collapse all curves"));
+	ui->bExpandAll->setToolTip(i18n("Expand all curves"));
 
 	connect(ui->bCollapseAll, &QPushButton::clicked, this, &CursorDock::collapseAll);
 	connect(ui->bExpandAll, &QPushButton::clicked, this, &CursorDock::expandAll);
@@ -48,29 +51,38 @@ CursorDock::CursorDock(QWidget *parent) :
 	connect(ui->cbCursor1en, &QCheckBox::clicked, this, &CursorDock::cursor1EnableChanged);
 }
 
-void CursorDock::setPlots(QVector<CartesianPlot*> list) {
+void CursorDock::setWorksheet(Worksheet* worksheet) {
 	m_initializing = true;
-	m_plotList = list;
-	m_plot = list.first();
+
+	ui->tvCursorData->setModel(worksheet->cursorModel());
+	ui->tvCursorData->resizeColumnToContents(0);
+	m_plotList = worksheet->children<CartesianPlot>();
+	if (m_plotList.isEmpty())
+		return;
+
+	m_plot = m_plotList.first();
 
 	bool cursor0Enabled = m_plot->cursor0Enable();
 	bool cursor1Enabled = m_plot->cursor1Enable();
 	ui->cbCursor0en->setChecked(cursor0Enabled);
 	ui->cbCursor1en->setChecked(cursor1Enabled);
 
-	ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSOR0, !cursor0Enabled);
-	ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSOR1, !cursor1Enabled);
-	if (!cursor0Enabled)
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !cursor0Enabled);
-	else if(cursor1Enabled)
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !cursor0Enabled);
+	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), !cursor0Enabled);
+	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), !cursor1Enabled);
+	if (cursor0Enabled && cursor1Enabled)
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), false);
 	else
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, true);
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), true);
 
 	ui->tvCursorData->expandAll();
 
-	connect(m_plot, &CartesianPlot::cursor0EnableChanged, this, &CursorDock::plotCursor0EnableChanged);
-	connect(m_plot, &CartesianPlot::cursor1EnableChanged, this, &CursorDock::plotCursor1EnableChanged);
+	// connect all plots as a workaround to not be able to know which plot is selected
+	for (auto connection: selectedPlotsConnection)
+		disconnect(connection);
+	for (auto* plot : m_plotList) {
+		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor0EnableChanged, this, &CursorDock::plotCursor0EnableChanged);
+		selectedPlotsConnection << connect(plot, &CartesianPlot::cursor1EnableChanged, this, &CursorDock::plotCursor1EnableChanged);
+	}
 
 	m_initializing = false;
 }
@@ -85,10 +97,6 @@ void CursorDock::collapseAll() {
 
 void CursorDock::expandAll() {
 	ui->tvCursorData->expandAll();
-}
-
-void CursorDock::setCursorTreeViewModel(TreeModel* model) {
-	ui->tvCursorData->setModel(model);
 }
 
 void CursorDock::cursor0EnableChanged(bool enable) {
@@ -112,23 +120,26 @@ void CursorDock::cursor1EnableChanged(bool enable) {
 // #############################################################
 void CursorDock::plotCursor0EnableChanged(bool enable) {
 	m_initializing = true;
+
 	ui->cbCursor0en->setChecked(enable);
-	ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSOR0, !enable);
-	if (!enable)
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !enable);
-	else if (ui->cbCursor1en->isChecked())
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !enable);
+	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0), !enable);
+	if (enable && ui->cbCursor1en->isChecked())
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), false);
+	else
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), true);
+
 	m_initializing = false;
 }
 
 void CursorDock::plotCursor1EnableChanged(bool enable) {
 	m_initializing = true;
+
 	ui->cbCursor1en->setChecked(enable);
-	ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSOR1, !enable);
-	if (!enable)
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !enable);
-	else if (ui->cbCursor0en->isChecked())
-		ui->tvCursorData->setColumnHidden(WorksheetPrivate::TreeModelColumn::CURSORDIFF, !enable);
+	ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR1), !enable);
+	if (enable && ui->cbCursor0en->isChecked())
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), false);
+	else
+		ui->tvCursorData->setColumnHidden(static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF), true);
+
 	m_initializing = false;
 }
-

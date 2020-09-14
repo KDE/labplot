@@ -26,8 +26,6 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 *                                                                         *
 ***************************************************************************/
 #include "backend/datasources/MQTTSubscription.h"
-
-#ifdef HAVE_MQTT
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/MQTTClient.h"
 
@@ -147,7 +145,7 @@ void MQTTSubscription::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//MQTTTopics
-	for (auto* topic : children<MQTTTopic>(IncludeHidden))
+	for (auto* topic : children<MQTTTopic>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		topic->save(writer);
 
 	writer->writeEndElement(); // "MQTTSubscription"
@@ -160,9 +158,7 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 	if (!readBasicAttributes(reader))
 		return false;
 
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
-	QString str;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -194,4 +190,4 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 	emit loaded(this->subscriptionName());
 	return !reader->hasError();
 }
-#endif
+

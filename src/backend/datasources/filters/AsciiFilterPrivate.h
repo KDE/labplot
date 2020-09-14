@@ -45,12 +45,12 @@ public:
 	QStringList getLineString(QIODevice&);
 	int prepareDeviceToRead(QIODevice&);
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace, int lines = -1);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void readFromLiveDeviceNotFile(QIODevice& device, AbstractDataSource*,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	qint64 readFromLiveDevice(QIODevice&, AbstractDataSource*, qint64 from = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::Replace);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
@@ -103,7 +103,9 @@ private:
 	int m_actualCols{0};
 	int m_prepared{false};
 	int m_columnOffset{0}; // indexes the "start column" in the datasource. Data will be imported starting from this column.
-	QVector<void*> m_dataContainer; // pointers to the actual data containers
+	std::vector<void*> m_dataContainer; // pointers to the actual data containers
+
+	QDateTime parseDateTime(const QString& string, const QString& format);
 };
 
 #endif

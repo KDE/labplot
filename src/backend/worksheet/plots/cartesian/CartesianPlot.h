@@ -4,8 +4,8 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2019 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -62,18 +62,18 @@ public:
 	explicit CartesianPlot(const QString &name);
 	~CartesianPlot() override;
 
-	enum Scale {ScaleLinear, ScaleLog10, ScaleLog2, ScaleLn, ScaleLog10Abs, ScaleLog2Abs, ScaleLnAbs, ScaleSqrt, ScaleX2};
-	enum Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
-	enum RangeFormat {Numeric, DateTime};
-	enum RangeType {RangeFree, RangeLast, RangeFirst};
-	enum RangeBreakStyle {RangeBreakSimple, RangeBreakVertical, RangeBreakSloped};
-	enum MouseMode {SelectionMode, ZoomSelectionMode, ZoomXSelectionMode, ZoomYSelectionMode, Cursor};
-	enum NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
+	enum class Scale {Linear, Log10, Log2, Ln, Log10Abs, Log2Abs, LnAbs, Sqrt, X2};
+	enum class Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
+	enum class RangeFormat {Numeric, DateTime};
+	enum class RangeType {Free, Last, First};
+	enum class RangeBreakStyle {Simple, Vertical, Sloped};
+	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor};
+	enum class NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
 	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY
 	                         };
 
 	struct RangeBreak {
-		RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakSloped) {}
+		RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakStyle::Sloped) {}
 		bool isValid() const {
 			return (!std::isnan(start) && !std::isnan(end));
 		}
@@ -93,21 +93,27 @@ public:
 		int lastChanged;
 	};
 
-	void initDefault(Type = FourAxes);
+	void setType(Type type);
+	Type type() const;
+
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
 	void setRect(const QRectF&) override;
 	QRectF dataRect() const;
-	void setMouseMode(const MouseMode);
-	void setLocked(const bool);
+	void setMouseMode(MouseMode);
+	void setLocked(bool);
+	bool isLocked() const;
 	MouseMode mouseMode() const;
 	void navigate(NavigationOperation);
 	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
 	void processDropEvent(QDropEvent*) override;
 	bool isPanningActive() const;
+	bool isHovered() const;
+	bool isPrinted() const;
+	bool isSelected() const;
 	void addLegend(CartesianPlotLegend*);
 	int curveCount();
 	const XYCurve* getCurve(int index);
@@ -122,7 +128,8 @@ public:
 	void mouseMoveZoomSelectionMode(QPointF logicPos);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicPos);
 	void mouseReleaseZoomSelectionMode();
-        void mouseHoverZoomSelectionMode(QPointF logicPos);
+	void mouseHoverZoomSelectionMode(QPointF logicPos);
+	void mouseHoverOutsideDataRect();
 
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, xRangeFormat, XRangeFormat)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
@@ -160,6 +167,11 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
+	void shift(bool x, bool leftOrDown);
+	void zoom(bool x, bool in);
+
+	void calculateCurvesXMinMax(bool completeRange = true);
+	void calculateCurvesYMinMax(bool completeRange = true);
 
 	CartesianPlotLegend* m_legend{nullptr};
 	double m_zoomFactor{1.2};
@@ -187,7 +199,9 @@ private:
 	QAction* addVerticalAxisAction;
 	QAction* addLegendAction;
 	QAction* addTextLabelAction;
+	QAction* addImageAction;
 	QAction* addCustomPointAction;
+	QAction* addReferenceLineAction;
 
 	//scaling, zooming, navigation actions
 	QAction* scaleAutoXAction;
@@ -203,7 +217,6 @@ private:
 	QAction* shiftRightXAction;
 	QAction* shiftUpYAction;
 	QAction* shiftDownYAction;
-	QAction* cursorAction;
 
 	//analysis menu actions
 	QAction* addDataOperationAction;
@@ -212,12 +225,14 @@ private:
 	QAction* addIntegrationAction;
 	QAction* addInterpolationAction;
 	QAction* addSmoothAction;
-	QVector <QAction *> addFitAction;
+	QVector <QAction*> addFitAction;
 	QAction* addFourierFilterAction;
+	QAction* addFourierTransformAction;
 	QAction* addConvolutionAction;
 	QAction* addCorrelationAction;
 
 	QMenu* addNewMenu{nullptr};
+	QMenu* addNewAnalysisMenu{nullptr};
 	QMenu* zoomMenu{nullptr};
 	QMenu* dataAnalysisMenu{nullptr};
 	QMenu* themeMenu{nullptr};
@@ -243,23 +258,30 @@ public slots:
 
 	void addLegend();
 	void addTextLabel();
+	void addImage();
 	void addCustomPoint();
+	void addReferenceLine();
+
+	void scaleAutoTriggered();
 	bool scaleAuto();
 	bool scaleAutoX();
 	bool scaleAutoY();
+
 	void zoomIn();
 	void zoomOut();
 	void zoomInX();
 	void zoomOutX();
 	void zoomInY();
 	void zoomOutY();
+
 	void shiftLeftX();
 	void shiftRightX();
 	void shiftUpY();
 	void shiftDownY();
-	void cursor();
-	void dataChanged();
 
+	void cursor();
+
+	void dataChanged();
 	void curveLinePenChanged(QPen);
 
 private slots:
@@ -271,7 +293,6 @@ private slots:
 	void xDataChanged();
 	void yDataChanged();
 	void curveVisibilityChanged();
-
 
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
@@ -290,11 +311,11 @@ signals:
 	void xAutoScaleChanged(bool);
 	void xMinChanged(double);
 	void xMaxChanged(double);
-	void xScaleChanged(int);
+	void xScaleChanged(CartesianPlot::Scale);
 	void yAutoScaleChanged(bool);
 	void yMinChanged(double);
 	void yMaxChanged(double);
-	void yScaleChanged(int);
+	void yScaleChanged(CartesianPlot::Scale);
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void yRangeBreakingEnabledChanged(bool);
@@ -306,7 +327,9 @@ signals:
 	void mouseMoveCursorModeSignal(int cursorNumber, QPointF logicPos);
 	void mouseReleaseCursorModeSignal();
 	void mouseReleaseZoomSelectionModeSignal();
-        void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
+	void mouseHoverZoomSelectionModeSignal(QPointF logicalPoint);
+	void mouseHoverOutsideDataRectSignal();
+	void curveNameChanged(const AbstractAspect* curve);
 	void cursorPosChanged(int cursorNumber, double xPos);
 	void curveAdded(const XYCurve*);
 	void curveRemoved(const XYCurve*);
@@ -314,7 +337,7 @@ signals:
 	void cursorPenChanged(QPen);
 	void curveDataChanged(const XYCurve*);
 	void curveVisibilityChangedSignal();
-	void mouseModeChanged();
+	void mouseModeChanged(CartesianPlot::MouseMode);
 	void cursor0EnableChanged(bool enable);
 	void cursor1EnableChanged(bool enable);
 };

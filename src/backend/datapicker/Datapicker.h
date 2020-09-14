@@ -63,10 +63,10 @@ public:
 
 	void setChildSelectedInView(int index, bool selected);
 	void setSelectedInView(const bool);
-	void addNewPoint(const QPointF&, AbstractAspect*);
+	void addNewPoint(QPointF, AbstractAspect*);
 
-	QVector3D mapSceneToLogical(const QPointF&) const;
-	QVector3D mapSceneLengthToLogical(const QPointF&) const;
+	QVector3D mapSceneToLogical(QPointF) const;
+	QVector3D mapSceneLengthToLogical(QPointF) const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

@@ -42,18 +42,22 @@ public:
 		if (!m_inputs.value(0)) return NAN;
 		QDateTime inputDate = m_inputs.value(0)->dateTimeAt(row);
 		if (!inputDate.isValid()) return NAN;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		QDateTime start(QDate(1900, 1, 1).startOfDay());
+#else
 		QDateTime start(QDate(1900, 1, 1));
+#endif
 		return double(start.daysTo(inputDate)) +
 			double( -inputDate.time().msecsTo(QTime(0,0,0,0)) ) / 86400000.0;
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::Numeric; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Numeric; }
 
 protected:
 	//! Using typed ports: only DateTime inputs are accepted.
 	bool inputAcceptable(int, const AbstractColumn* source) override {
-		return source->columnMode() == AbstractColumn::DateTime;
+		return source->columnMode() == AbstractColumn::ColumnMode::DateTime;
 	}
 };
 

@@ -104,7 +104,7 @@ QStringList ThemeHandler::themeList() {
 	}
 
 	if (!themes.isEmpty())
-		DEBUG("	first theme path: " << themes.first().toStdString());
+		DEBUG("	first theme path: " << STDSTRING(themes.first()));
 
 	return themes;
 }
@@ -123,7 +123,7 @@ QStringList ThemeHandler::themes() {
 	}
 
 	if (!themes.isEmpty()) {
-		DEBUG("	first theme: " << themes.first().toStdString());
+		DEBUG("	first theme: " << STDSTRING(themes.first()));
 		QDEBUG("	themes = " << themes);
 	}
 
@@ -134,13 +134,15 @@ QStringList ThemeHandler::themes() {
  * get path for theme of name 'name'
  */
 const QString ThemeHandler::themeFilePath(const QString& name) {
-	DEBUG("ThemeHandler::themeFilePath() name = " << name.toStdString());
+	DEBUG("ThemeHandler::themeFilePath() name = " << STDSTRING(name));
 	QStringList themePaths = themeList();
 
 	for (int i = 0; i < themePaths.size(); ++i) {
-		if (themePaths.at(i).indexOf(name) != -1) {
-			DEBUG("	theme \"" << name.toStdString() << "\" path: " << themePaths.at(i).toStdString());
-			return themePaths.at(i);
+		const QString& path = themePaths.at(i);
+		const QString& fileName = QFileInfo(path).fileName();
+		if (fileName == name) {
+			DEBUG("	theme \"" << STDSTRING(name) << "\" path: " << STDSTRING(path));
+			return path;
 		}
 	}
 
@@ -174,7 +176,7 @@ void ThemeHandler::loadSelected(const QString& name) {
 	//TODO: activate this later
 // 	if (KStandardDirs::checkAccess(themeFilePath, W_OK)) {
 // 		pbPublishTheme->setEnabled(true);
-// 		m_currentLocalTheme = themeFilePath.right(themeFilePath.length() - themeFilePath.lastIndexOf(QDir::separator()) - 1);
+// 		m_currentLocalTheme = themeFilePath.right(themeFilePath.length() - themeFilePath.lastIndexOf(QLatin1String("/")) - 1);
 // 	} else {
 // 		pbPublishTheme->setEnabled(false);
 // 		m_currentLocalTheme.clear();
@@ -184,6 +186,7 @@ void ThemeHandler::loadSelected(const QString& name) {
 void ThemeHandler::showPanel() {
 	QMenu menu;
 	ThemesWidget themeWidget(&menu);
+	themeWidget.setFixedMode();
 	connect(&themeWidget, &ThemesWidget::themeSelected, this, &ThemeHandler::loadSelected);
 	connect(&themeWidget, &ThemesWidget::themeSelected, &menu, &QMenu::close);
 	connect(&themeWidget, &ThemesWidget::canceled, &menu, &QMenu::close);

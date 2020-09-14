@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>784</width>
+    <width>656</width>
     <height>1181</height>
    </rect>
   </property>
@@ -122,7 +122,7 @@
           </sizepolicy>
          </property>
          <property name="toolTip">
-          <string> Select the image file to import</string>
+          <string> Select the image file</string>
          </property>
          <property name="text">
           <string/>
@@ -137,7 +137,7 @@
         </widget>
        </item>
        <item row="5" column="5">
-        <widget class="KComboBox" name="cbGraphType">
+        <widget class="QComboBox" name="cbGraphType">
          <property name="toolTip">
           <string/>
          </property>
@@ -203,10 +203,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -218,14 +218,11 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="decimals">
-            <number>2</number>
-           </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -238,10 +235,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -284,10 +281,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -300,7 +297,7 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
             <double>9999.000000000000000</double>
@@ -326,10 +323,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -342,10 +339,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -404,10 +401,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -443,10 +440,10 @@
             </sizepolicy>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -525,7 +522,7 @@
           </sizepolicy>
          </property>
          <property name="suffix">
-          <string>px</string>
+          <string> px</string>
          </property>
         </widget>
        </item>
@@ -561,7 +558,7 @@
           </sizepolicy>
          </property>
          <property name="suffix">
-          <string>px</string>
+          <string> px</string>
          </property>
          <property name="prefix">
           <string/>
@@ -670,7 +667,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="KComboBox" name="cbSymbolStyle">
+        <widget class="QComboBox" name="cbSymbolStyle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -806,7 +803,7 @@
         </widget>
        </item>
        <item row="7" column="2">
-        <widget class="KComboBox" name="cbSymbolFillingStyle"/>
+        <widget class="QComboBox" name="cbSymbolFillingStyle"/>
        </item>
        <item row="8" column="0">
         <widget class="QLabel" name="lSymbolFillingColor">
@@ -862,7 +859,7 @@
         </widget>
        </item>
        <item row="11" column="2">
-        <widget class="KComboBox" name="cbSymbolBorderStyle"/>
+        <widget class="QComboBox" name="cbSymbolBorderStyle"/>
        </item>
        <item row="12" column="0">
         <widget class="QLabel" name="lSymbolBorderColor">
@@ -951,7 +948,7 @@
         <widget class="QWidget" name="whIntensity" native="true"/>
        </item>
        <item row="0" column="2">
-        <widget class="KComboBox" name="cbPlotImageType">
+        <widget class="QComboBox" name="cbPlotImageType">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -1067,28 +1064,38 @@
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
   </customwidget>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>leName</tabstop>
+  <tabstop>leComment</tabstop>
   <tabstop>leFileName</tabstop>
   <tabstop>bOpen</tabstop>
   <tabstop>cbGraphType</tabstop>
+  <tabstop>sbRotation</tabstop>
   <tabstop>sbPositionX1</tabstop>
   <tabstop>sbPositionY1</tabstop>
+  <tabstop>sbPositionZ1</tabstop>
   <tabstop>sbPositionX2</tabstop>
   <tabstop>sbPositionY2</tabstop>
+  <tabstop>sbPositionZ2</tabstop>
   <tabstop>sbPositionX3</tabstop>
   <tabstop>sbPositionY3</tabstop>
+  <tabstop>sbPositionZ3</tabstop>
+  <tabstop>sbTernaryScale</tabstop>
+  <tabstop>sbMinSegmentLength</tabstop>
+  <tabstop>sbPointSeparation</tabstop>
+  <tabstop>sbSymbolBorderWidth</tabstop>
+  <tabstop>sbSymbolRotation</tabstop>
+  <tabstop>cbSymbolStyle</tabstop>
+  <tabstop>sbSymbolOpacity</tabstop>
+  <tabstop>chbSymbolVisible</tabstop>
+  <tabstop>cbSymbolFillingStyle</tabstop>
   <tabstop>cbPlotImageType</tabstop>
-  <tabstop>lIntensity</tabstop>
-  <tabstop>lForeground</tabstop>
-  <tabstop>lHue</tabstop>
-  <tabstop>lSaturation</tabstop>
-  <tabstop>lValue</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>kcbSymbolFillingColor</tabstop>
+  <tabstop>sbSymbolSize</tabstop>
+  <tabstop>cbSymbolBorderStyle</tabstop>
+  <tabstop>kcbSymbolBorderColor</tabstop>
  </tabstops>
  <resources/>
  <connections/>

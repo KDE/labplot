@@ -51,6 +51,8 @@ class CantorWorksheet : public AbstractPart {
 public:
 	explicit CantorWorksheet(const QString& name, bool loading = false);
 
+	bool init(QByteArray* content = nullptr);
+
 	QWidget* view() const override;
 	QMenu* createContextMenu() override;
 	QIcon icon() const override;
@@ -74,8 +76,6 @@ private:
 	QList<Cantor::PanelPlugin*> m_plugins;
 	QAbstractItemModel* m_variableModel{nullptr};
 	Cantor::WorksheetAccessInterface* m_worksheetAccess{nullptr};
-
-	bool init(QByteArray* content = nullptr);
 
 private slots:
 	void dataChanged(const QModelIndex&);

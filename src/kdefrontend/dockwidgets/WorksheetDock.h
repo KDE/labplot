@@ -4,7 +4,7 @@
     Description          : widget for worksheet properties
     --------------------------------------------------------------------
     Copyright            : (C) 2008 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2010-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2020 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -45,6 +45,8 @@ class WorksheetDock : public BaseDock {
 public:
 	explicit WorksheetDock(QWidget*);
 	void setWorksheets(QList<Worksheet*>);
+	void updateLocale() override;
+	void updateUnits() override;
 
 private:
 	Ui::WorksheetDock ui;

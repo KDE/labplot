@@ -73,7 +73,7 @@ void XYFourierTransformCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYFourierTransformCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-fourier_transform-curve");
+	return QIcon::fromTheme("labplot-xy-fourier-transform-curve");
 }
 
 //##############################################################################
@@ -111,8 +111,8 @@ void XYFourierTransformCurvePrivate::recalculate() {
 
 	//create transform result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::Numeric);
-		yColumn = new Column("y", AbstractColumn::Numeric);
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 
@@ -140,30 +140,23 @@ void XYFourierTransformCurvePrivate::recalculate() {
 		return;
 	}
 
-	//check column sizes
-	if (xDataColumn->rowCount() != yDataColumn->rowCount()) {
-		transformResult.available = true;
-		transformResult.valid = false;
-		transformResult.status = i18n("Number of x and y data points must be equal.");
-		emit q->dataChanged();
-		sourceDataChangedSinceLastRecalc = false;
-		return;
-	}
-
 	//copy all valid data point for the transform to temporary vectors
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 	const double xmin = transformData.xRange.first();
 	const double xmax = transformData.xRange.last();
-	for (int row = 0; row < xDataColumn->rowCount(); ++row) {
-		//only copy those data where _all_ values (for x and y, if given) are valid
-		if (!std::isnan(xDataColumn->valueAt(row)) && !std::isnan(yDataColumn->valueAt(row))
-		        && !xDataColumn->isMasked(row) && !yDataColumn->isMasked(row)) {
-			// only when inside given range
-			if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
-				xdataVector.append(xDataColumn->valueAt(row));
-				ydataVector.append(yDataColumn->valueAt(row));
-			}
+
+	int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	for (int row = 0; row < rowCount; ++row) {
+		// only copy those data where _all_ values (for x and y, if given) are valid
+		if (std::isnan(xDataColumn->valueAt(row)) || std::isnan(yDataColumn->valueAt(row))
+				|| xDataColumn->isMasked(row) || yDataColumn->isMasked(row))
+			continue;
+
+		// only when inside given range
+		if (xDataColumn->valueAt(row) >= xmin && xDataColumn->valueAt(row) <= xmax) {
+			xdataVector.append(xDataColumn->valueAt(row));
+			ydataVector.append(yDataColumn->valueAt(row));
 		}
 	}
 
@@ -343,7 +336,7 @@ bool XYFourierTransformCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", transformResult.status);
 			READ_INT_VALUE("time", transformResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

@@ -52,7 +52,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	CLASS_D_ACCESSOR_DECL(QPointF, position, Position)
+	BASIC_D_ACCESSOR_DECL(QPointF, position, Position)
 	BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolStyle, SymbolStyle)
 	BASIC_D_ACCESSOR_DECL(qreal, symbolOpacity, SymbolOpacity)
 	BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle)

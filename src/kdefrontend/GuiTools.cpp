@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2013 Alexander Semke (alexander.semke*web.de)
                            (replace * with @ in the email addresses)
-    Description          :  constains several static functions which are used on frequently throughout the kde frontend.
+    Description          :  contains several static functions which are used on frequently throughout the kde frontend.
 
  ***************************************************************************/
 
@@ -30,14 +30,16 @@
 #include "GuiTools.h"
 #include <KI18n/KLocalizedString>
 
+#include <array>
 #include <QApplication>
 #include <QComboBox>
+#include <QLineEdit>
 #include <QMenu>
 #include <QColor>
 #include <QPainter>
 
 static const int colorsCount = 26;
-static QColor colors[colorsCount] = {QColor(255,255,255), QColor(0,0,0),
+static std::array<QColor, colorsCount> colors = {QColor(255,255,255), QColor(0,0,0),
 							QColor(192,0,0), QColor(255,0,0), QColor(255,192,192), //red
 							QColor(0,192,0), QColor(0,255,0), QColor(192,255,192), //green
 							QColor(0,0,192), QColor(0,0,255), QColor(192,192,255), //blue
@@ -63,7 +65,8 @@ void GuiTools::updatePenStyles(QComboBox* comboBox, const QColor& color) {
 	comboBox->setIconSize(QSize(w,h));
 
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
-	static QString list[6] = { i18n("No Line"), i18n("Solid Line"), i18n("Dash Line"),
+	//TODO: avoid copy-paste in all finctions!
+	static std::array<QString, 6> list = { i18n("No Line"), i18n("Solid Line"), i18n("Dash Line"),
 							   i18n("Dot Line"), i18n("Dash-dot Line"), i18n("Dash-dot-dot Line") };
 	for (int i = 0; i < 6; i++) {
 		pm.fill(Qt::transparent);
@@ -89,7 +92,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 	QPixmap pm(w, h);
 
 	//loop over six possible Qt-PenStyles, draw on the pixmap and insert it
-	static QString list[6] = { i18n("No Line"), i18n("Solid Line"), i18n("Dash Line"),
+	static std::array<QString, 6> list = { i18n("No Line"), i18n("Solid Line"), i18n("Dash Line"),
 							   i18n("Dot Line"), i18n("Dash-dot Line"), i18n("Dash-dot-dot Line") };
 
 	QAction* action;
@@ -148,7 +151,7 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 	QPen pen(Qt::SolidPattern, 1);
 	pa.setPen(pen);
 
-	static QString list[15] = { i18n("None"), i18n("Uniform"), i18n("Extremely Dense"),
+	static std::array<QString, 15> list = { i18n("None"), i18n("Uniform"), i18n("Extremely Dense"),
 								i18n("Very Dense"), i18n("Somewhat Dense"), i18n("Half Dense"),
 								i18n("Somewhat Sparse"), i18n("Very Sparse"), i18n("Extremely Sparse"),
 								i18n("Horiz. Lines"), i18n("Vert. Lines"), i18n("Crossing Lines"),
@@ -169,7 +172,7 @@ void GuiTools::updateBrushStyles(QComboBox* comboBox, const QColor& color) {
 }
 
 void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup) {
-	static const QString colorNames[colorsCount] = {i18n("White"), i18n("Black"),
+	static const std::array<QString, colorsCount> colorNames = {i18n("White"), i18n("Black"),
 							i18n("Dark Red"), i18n("Red"), i18n("Light Red"),
 							i18n("Dark Green"), i18n("Green"), i18n("Light Green"),
 							i18n("Dark Blue"), i18n("Blue"), i18n("Light Blue"),
@@ -227,3 +230,10 @@ QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
 // 	QRect rect = img.rect().adjusted(1,1,-1,-1);
 // 	p.fillRect(rect, Qt::red);
 // 	comboBox->setItemData(0, QPixmap::fromImage(img), Qt::DecorationRole);
+
+void GuiTools::highlight(QLineEdit* le, bool invalid) {
+	if (invalid)
+		le->setStyleSheet(QStringLiteral("QLineEdit{color:red;}"));
+	else
+		le->setStyleSheet(QString());
+}

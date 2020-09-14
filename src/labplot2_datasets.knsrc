@@ -1,0 +1,7 @@
+[KNewStuff3]
+ProvidersUrl=https://autoconfig.kde.org/ocs/providers.xml
+Categories=Labplot_Datasets
+UploadCategories=Labplot_Datasets
+TargetDir=labplot2/datasets
+Uncompress=never
+CustomName=true

@@ -27,7 +27,6 @@ Copyright            : (C) 2018 Fabian Kristof (fkristofszabolcs@gmail.com)
  ***************************************************************************/
 #include "MQTTWillSettingsWidget.h"
 
-#ifdef HAVE_MQTT
 /*!
 	\class MQTTWillSettingsWidget
 	\brief Widget for managing MQTT connection's will settings
@@ -38,8 +37,8 @@ MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient
 	ui.setupUi(this);
 	ui.leWillUpdateInterval->setValidator(new QIntValidator(2, 1000000));
 
-	connect(ui.cbWillMessageType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willMessageTypeChanged);
-	connect(ui.cbWillUpdate, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willUpdateTypeChanged);
+	connect(ui.cbWillMessageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willMessageTypeChanged);
+	connect(ui.cbWillUpdate, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willUpdateTypeChanged);
 
 	connect(ui.chbEnabled, &QCheckBox::stateChanged, this, &MQTTWillSettingsWidget::enableWillSettings);
 	connect(ui.chbWillRetain, &QCheckBox::stateChanged, [this](int state) {
@@ -54,10 +53,10 @@ MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient
 	connect(ui.lwWillStatistics, &QListWidget::itemChanged, [this](QListWidgetItem* item) {
 		m_statisticsType = static_cast<MQTTClient::WillStatisticsType>(ui.lwWillStatistics->row(item));
 	});
-	connect(ui.cbWillQoS, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this](int index) {
+	connect(ui.cbWillQoS, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index) {
 		m_will.willQoS = index;
 	});
-	connect(ui.cbWillTopic, static_cast<void (QComboBox::*) (const QString&)>(&QComboBox::currentTextChanged), [this](const QString& text) {
+	connect(ui.cbWillTopic, QOverload<const QString&>::of(&QComboBox::currentTextChanged), [this](const QString& text) {
 		m_will.willTopic = text;
 	});
 	connect(ui.bApply, &QPushButton::clicked, this, &MQTTWillSettingsWidget::applyClicked);
@@ -127,15 +126,17 @@ void MQTTWillSettingsWidget::loadSettings(const MQTTClient::MQTTWill& will, cons
 	if (!will.willTopic.isEmpty())
 		ui.cbWillTopic->setCurrentText(will.willTopic);
 
-	if (ui.cbWillMessageType->currentIndex() != static_cast<int> (will.willMessageType))
-		ui.cbWillMessageType->setCurrentIndex(will.willMessageType);
+	int messageType = static_cast<int>(will.willMessageType);
+	if (ui.cbWillMessageType->currentIndex() != messageType)
+		ui.cbWillMessageType->setCurrentIndex(messageType);
 	else
-		willMessageTypeChanged(will.willMessageType);
+		willMessageTypeChanged(messageType);
 
-	if (ui.cbWillUpdate->currentIndex() != static_cast<int> (will.willUpdateType))
-		ui.cbWillUpdate->setCurrentIndex(will.willUpdateType);
+	int updateType = static_cast<int>(will.willUpdateType);
+	if (ui.cbWillUpdate->currentIndex() != updateType)
+		ui.cbWillUpdate->setCurrentIndex(updateType);
 	else
-		willUpdateTypeChanged(will.willUpdateType);
+		willUpdateTypeChanged(updateType);
 
 	ui.leWillOwnMessage->setText(will.willOwnMessage);
 	ui.leWillUpdateInterval->setText(QString::number(will.willTimeInterval));
@@ -168,5 +169,3 @@ void MQTTWillSettingsWidget::enableWillSettings(int state) {
 	ui.lWillUpdateInterval->setEnabled(enabled);
 	ui.leWillUpdateInterval->setEnabled(enabled);
 }
-
-#endif

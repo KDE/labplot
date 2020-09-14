@@ -68,7 +68,7 @@
     in free/open-source software).
 
    Steven G. Johnson, Massachusetts Institute of Technology
-   http://math.mit.edu/~stevenj
+   https://math.mit.edu/~stevenj
    October 2012.
 
     -- Note that Algorithm 916 assumes that the erfc(x) function, 

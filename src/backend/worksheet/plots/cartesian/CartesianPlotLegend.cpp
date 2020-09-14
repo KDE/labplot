@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2020 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -41,10 +41,11 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
 
+#include <QGraphicsSceneContextMenuEvent>
+#include <QKeyEvent>
+#include <QMenu>
 #include <QPainterPath>
 #include <QPainter>
-#include <QGraphicsSceneContextMenuEvent>
-#include <QMenu>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -73,56 +74,53 @@ void CartesianPlotLegend::init() {
 	KConfigGroup group = config.group( "CartesianPlotLegend" );
 
 	d->labelFont = group.readEntry("LabelsFont", QFont());
-	d->labelFont.setPixelSize( Worksheet::convertToSceneUnits( 10, Worksheet::Point ) );
+	d->labelFont.setPixelSize( Worksheet::convertToSceneUnits( 10, Worksheet::Unit::Point ) );
 
-	d->labelColor = Qt::black;
+	d->labelColor =  group.readEntry("FontColor", QColor(Qt::black));
 	d->labelColumnMajor = true;
-	d->lineSymbolWidth = group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Centimeter));
+	d->lineSymbolWidth = group.readEntry("LineSymbolWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter));
 	d->rowCount = 0;
 	d->columnCount = 0;
 
-	d->position.horizontalPosition = CartesianPlotLegend::hPositionRight;
-	d->position.verticalPosition = CartesianPlotLegend::vPositionBottom;
+	d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
+	d->position.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
 
 	d->rotationAngle = group.readEntry("Rotation", 0.0);
 
 	//Title
- 	d->title = new TextLabel(this->name(), TextLabel::PlotLegendTitle);
+ 	d->title = new TextLabel(this->name(), TextLabel::Type::PlotLegendTitle);
+	d->title->setBorderShape(TextLabel::BorderShape::NoBorder);
 	addChild(d->title);
 	d->title->setHidden(true);
-	d->title->setParentGraphicsItem(graphicsItem());
+	d->title->setParentGraphicsItem(d);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	connect(d->title, &TextLabel::changed, this, &CartesianPlotLegend::retransform);
 
 	//Background
-	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", (int) PlotArea::Color);
-	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", (int) PlotArea::SingleColor);
-	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", (int) PlotArea::Scaled);
-	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", (int) Qt::SolidPattern);
+	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(PlotArea::BackgroundType::Color));
+	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor));
+	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled));
+	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern));
 	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
 	d->backgroundSecondColor = group.readEntry("BackgroundSecondColor", QColor(Qt::black));
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 
 	//Border
-	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
-										 group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Point)),
-										 (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
+	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)), group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
+				 (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderCornerRadius = group.readEntry("BorderCornerRadius", 0.0);
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 
 	//Layout
-	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Centimeter));
-	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Centimeter));
-	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Centimeter));
-	d->layoutRightMargin = group.readEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Centimeter));
-	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Centimeter));
-	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Centimeter));
+	d->layoutTopMargin =  group.readEntry("LayoutTopMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
+	d->layoutBottomMargin = group.readEntry("LayoutBottomMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
+	d->layoutLeftMargin = group.readEntry("LayoutLeftMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
+	d->layoutRightMargin = group.readEntry("LayoutRightMargin", Worksheet::convertToSceneUnits(0.2f, Worksheet::Unit::Centimeter));
+	d->layoutVerticalSpacing = group.readEntry("LayoutVerticalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Unit::Centimeter));
+	d->layoutHorizontalSpacing = group.readEntry("LayoutHorizontalSpacing", Worksheet::convertToSceneUnits(0.1f, Worksheet::Unit::Centimeter));
 	d->layoutColumnCount = group.readEntry("LayoutColumnCount", 1);
-
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsSelectable, true);
-	graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable);
-	graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 
 	this->initActions();
 }
@@ -174,6 +172,15 @@ void CartesianPlotLegend::retransform() {
 	d_ptr->retransform();
 }
 
+/*!
+ * overrides the implementation in WorksheetElement and sets the z-value to the maximal possible,
+ * legends are drawn on top of all other object in the plot.
+ */
+void CartesianPlotLegend::setZValue(qreal) {
+	Q_D(CartesianPlotLegend);
+	d->setZValue(std::numeric_limits<double>::max());
+}
+
 void CartesianPlotLegend::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	Q_UNUSED(horizontalRatio);
 	Q_UNUSED(verticalRatio);
@@ -188,7 +195,7 @@ void CartesianPlotLegend::handleResize(double horizontalRatio, double verticalRa
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
 CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
-CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, CartesianPlotLegend::PositionWrapper, position, position)
+CLASS_SHARED_D_READER_IMPL(CartesianPlotLegend, WorksheetElement::PositionWrapper, position, position)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, lineSymbolWidth, lineSymbolWidth)
 
@@ -252,7 +259,7 @@ void CartesianPlotLegend::setLineSymbolWidth(float width) {
 		exec(new CartesianPlotLegendSetLineSymbolWidthCmd(d, width, ki18n("%1: change line+symbol width")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetPosition, CartesianPlotLegend::PositionWrapper, position, updatePosition);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition);
 void CartesianPlotLegend::setPosition(const PositionWrapper& pos) {
 	Q_D(CartesianPlotLegend);
 	if (pos.point != d->position.point
@@ -416,6 +423,10 @@ void CartesianPlotLegend::visibilityChangedSlot() {
 //######################### Private implementation #############################
 //##############################################################################
 CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend *owner) : q(owner) {
+	setFlag(QGraphicsItem::ItemIsSelectable, true);
+	setFlag(QGraphicsItem::ItemIsMovable);
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
 }
 
@@ -457,7 +468,15 @@ QPainterPath CartesianPlotLegendPrivate::shape() const {
 
 bool CartesianPlotLegendPrivate::swapVisible(bool on) {
 	bool oldValue = isVisible();
+
+	//When making a graphics item invisible, it gets deselected in the scene.
+	//In this case we don't want to deselect the item in the project explorer.
+	//We need to supress the deselection in the view.
+	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+	worksheet->suppressSelectionChangedEvent(true);
 	setVisible(on);
+	worksheet->suppressSelectionChangedEvent(false);
+
 	emit q->visibilityChanged(on);
 	return oldValue;
 }
@@ -517,7 +536,7 @@ void CartesianPlotLegendPrivate::retransform() {
 				if (!curve->isVisible())
 					continue;
 
-				w = fm.width(curve->name());
+				w = fm.boundingRect(curve->name()).width();
 				if (w>maxTextWidth)
 					maxTextWidth = w;
 			}
@@ -575,24 +594,24 @@ void CartesianPlotLegendPrivate::updatePosition() {
 	//position the legend relative to the actual plot size minus small offset
 	//TODO: make the offset dependent on the size of axis ticks.
 	const QRectF parentRect = q->m_plot->dataRect();
-	float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Point);
-	float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Point);
+	float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
+	float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
 
-	if (position.horizontalPosition != CartesianPlotLegend::hPositionCustom) {
-		if (position.horizontalPosition == CartesianPlotLegend::hPositionLeft)
+	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
+		if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
 			position.point.setX(parentRect.x() + rect.width()/2 + hOffset);
-		else if (position.horizontalPosition == CartesianPlotLegend::hPositionCenter)
+		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Center)
 			position.point.setX(parentRect.x() + parentRect.width()/2);
-		else if (position.horizontalPosition == CartesianPlotLegend::hPositionRight)
+		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
 			position.point.setX(parentRect.x() + parentRect.width() - rect.width()/2 - hOffset);
 	}
 
-	if (position.verticalPosition != CartesianPlotLegend::vPositionCustom) {
-		if (position.verticalPosition == CartesianPlotLegend::vPositionTop)
+	if (position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
+		if (position.verticalPosition == WorksheetElement::VerticalPosition::Top)
 			position.point.setY(parentRect.y() + rect.height()/2 + vOffset);
-		else if (position.verticalPosition == CartesianPlotLegend::vPositionCenter)
+		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Center)
 			position.point.setY(parentRect.y() + parentRect.height()/2);
-		else if (position.verticalPosition == CartesianPlotLegend::vPositionBottom)
+		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
 			position.point.setY(parentRect.y() + parentRect.height() -  rect.height()/2 -vOffset);
 	}
 
@@ -623,41 +642,41 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	//draw the area
 	painter->setOpacity(backgroundOpacity);
 	painter->setPen(Qt::NoPen);
-	if (backgroundType == PlotArea::Color) {
+	if (backgroundType == PlotArea::BackgroundType::Color) {
 		switch (backgroundColorStyle) {
-			case PlotArea::SingleColor:{
+			case PlotArea::BackgroundColorStyle::SingleColor: {
 				painter->setBrush(QBrush(backgroundFirstColor));
 				break;
 			}
-			case PlotArea::HorizontalLinearGradient:{
+			case PlotArea::BackgroundColorStyle::HorizontalLinearGradient: {
 				QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
 				linearGrad.setColorAt(0, backgroundFirstColor);
 				linearGrad.setColorAt(1, backgroundSecondColor);
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case PlotArea::VerticalLinearGradient:{
+			case PlotArea::BackgroundColorStyle::VerticalLinearGradient: {
 				QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
 				linearGrad.setColorAt(0, backgroundFirstColor);
 				linearGrad.setColorAt(1, backgroundSecondColor);
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case PlotArea::TopLeftDiagonalLinearGradient:{
+			case PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
 				QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
 				linearGrad.setColorAt(0, backgroundFirstColor);
 				linearGrad.setColorAt(1, backgroundSecondColor);
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case PlotArea::BottomLeftDiagonalLinearGradient:{
+			case PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
 				QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
 				linearGrad.setColorAt(0, backgroundFirstColor);
 				linearGrad.setColorAt(1, backgroundSecondColor);
 				painter->setBrush(QBrush(linearGrad));
 				break;
 			}
-			case PlotArea::RadialGradient:{
+			case PlotArea::BackgroundColorStyle::RadialGradient: {
 				QRadialGradient radialGrad(rect.center(), rect.width()/2);
 				radialGrad.setColorAt(0, backgroundFirstColor);
 				radialGrad.setColorAt(1, backgroundSecondColor);
@@ -665,33 +684,33 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				break;
 			}
 		}
-	} else if (backgroundType == PlotArea::Image) {
+	} else if (backgroundType == PlotArea::BackgroundType::Image) {
 		if ( !backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (backgroundImageStyle) {
-				case PlotArea::ScaledCropped:
+				case PlotArea::BackgroundImageStyle::ScaledCropped:
 					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
 					painter->drawPixmap(rect.topLeft(),pix);
 					break;
-				case PlotArea::Scaled:
+				case PlotArea::BackgroundImageStyle::Scaled:
 					pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 					painter->drawPixmap(rect.topLeft(),pix);
 					break;
-				case PlotArea::ScaledAspectRatio:
+				case PlotArea::BackgroundImageStyle::ScaledAspectRatio:
 					pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
 					painter->drawPixmap(rect.topLeft(),pix);
 					break;
-				case PlotArea::Centered:
+				case PlotArea::BackgroundImageStyle::Centered:
 					painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
 					break;
-				case PlotArea::Tiled:
+				case PlotArea::BackgroundImageStyle::Tiled:
 					painter->drawTiledPixmap(rect,pix);
 					break;
-				case PlotArea::CenterTiled:
+				case PlotArea::BackgroundImageStyle::CenterTiled:
 					painter->drawTiledPixmap(rect,pix,QPoint(rect.size().width()/2,rect.size().height()/2));
 			}
 		}
-	} else if (backgroundType == PlotArea::Pattern) {
+	} else if (backgroundType == PlotArea::BackgroundType::Pattern) {
 		painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 	}
 
@@ -717,7 +736,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	float h = fm.ascent();
 	painter->setFont(labelFont);
 
-	//translate to left upper conner of the bounding rect plus the layout offset and the height of the title
+	//translate to left upper corner of the bounding rect plus the layout offset and the height of the title
 	painter->translate(-rect.width()/2+layoutLeftMargin, -rect.height()/2+layoutTopMargin);
 	if (title->isVisible() && !title->text().text.isEmpty())
 		painter->translate(0, title->graphicsItem()->boundingRect().height());
@@ -747,7 +766,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				//for the brush, use the histogram filling or symbols filling or no brush
 				if (hist->fillingEnabled())
 					painter->setBrush(QBrush(hist->fillingFirstColor(), hist->fillingBrushStyle()));
-				else if (hist->symbolsStyle() != Symbol::NoSymbols)
+				else if (hist->symbolsStyle() != Symbol::Style::NoSymbols)
 					painter->setBrush(hist->symbolsBrush());
 				else
 					painter->setBrush(Qt::NoBrush);
@@ -766,39 +785,39 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			//draw the legend item for histogram
-			const XYCurve* curve = dynamic_cast<XYCurve*>(curvesList.at(index));
+			const XYCurve* curve = static_cast<XYCurve*>(curvesList.at(index));
 
 			//curve's line (painted at the half of the ascent size)
-			if (curve->lineType() != XYCurve::NoLine) {
+			if (curve->lineType() != XYCurve::LineType::NoLine) {
 				painter->setPen(curve->linePen());
 				painter->setOpacity(curve->lineOpacity());
 				painter->drawLine(0, h/2, lineSymbolWidth, h/2);
 			}
 
 			//error bars
-			if ( (curve->xErrorType() != XYCurve::NoError && curve->xErrorPlusColumn()) || (curve->yErrorType() != XYCurve::NoError && curve->yErrorPlusColumn()) ) {
+			if ( (curve->xErrorType() != XYCurve::ErrorType::NoError && curve->xErrorPlusColumn()) || (curve->yErrorType() != XYCurve::ErrorType::NoError && curve->yErrorPlusColumn()) ) {
 				painter->setOpacity(curve->errorBarsOpacity());
 				painter->setPen(curve->errorBarsPen());
 
 				//curve's error bars for x
-				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Point);
-				if (curve->symbolsStyle()!=Symbol::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
+				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
+				if (curve->symbolsStyle()!=Symbol::Style::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
 					errorBarsSize = curve->symbolsSize()*1.4;
 
 				switch (curve->errorBarsType()) {
-				case XYCurve::ErrorBarsSimple:
+				case XYCurve::ErrorBarsType::Simple:
 					//horiz. line
-					if (curve->xErrorType() != XYCurve::NoError)
+					if (curve->xErrorType() != XYCurve::ErrorType::NoError)
 						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
 										lineSymbolWidth/2+errorBarsSize/2, h/2);
 					//vert. line
-					if (curve->yErrorType() != XYCurve::NoError)
+					if (curve->yErrorType() != XYCurve::ErrorType::NoError)
 						painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
 										lineSymbolWidth/2, h/2+errorBarsSize/2);
 					break;
-				case XYCurve::ErrorBarsWithEnds:
+				case XYCurve::ErrorBarsType::WithEnds:
 					//horiz. line
-					if (curve->xErrorType() != XYCurve::NoError) {
+					if (curve->xErrorType() != XYCurve::ErrorType::NoError) {
 						painter->drawLine(lineSymbolWidth/2-errorBarsSize/2, h/2,
 										lineSymbolWidth/2+errorBarsSize/2, h/2);
 
@@ -810,7 +829,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 					}
 
 					//vert. line
-					if (curve->yErrorType() != XYCurve::NoError) {
+					if (curve->yErrorType() != XYCurve::ErrorType::NoError) {
 						painter->drawLine(lineSymbolWidth/2, h/2-errorBarsSize/2,
 										lineSymbolWidth/2, h/2+errorBarsSize/2);
 
@@ -826,7 +845,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			//curve's symbol
-			if (curve->symbolsStyle()!=Symbol::NoSymbols) {
+			if (curve->symbolsStyle() != Symbol::Style::NoSymbols) {
 				painter->setOpacity(curve->symbolsOpacity());
 				painter->setBrush(curve->symbolsBrush());
 				painter->setPen(curve->symbolsPen());
@@ -883,10 +902,10 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
-		CartesianPlotLegend::PositionWrapper tempPosition;
+		WorksheetElement::PositionWrapper tempPosition;
 			tempPosition.point = value.toPointF();
-			tempPosition.horizontalPosition = CartesianPlotLegend::hPositionCustom;
-			tempPosition.verticalPosition = CartesianPlotLegend::vPositionCustom;
+			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -903,15 +922,47 @@ void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* eve
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
-		CartesianPlotLegend::PositionWrapper tempPosition;
+		WorksheetElement::PositionWrapper tempPosition;
 		tempPosition.point = point;
-		tempPosition.horizontalPosition = CartesianPlotLegend::hPositionCustom;
-		tempPosition.verticalPosition = CartesianPlotLegend::vPositionCustom;
+		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
 	}
 
 	QGraphicsItem::mouseReleaseEvent(event);
+}
+
+void CartesianPlotLegendPrivate::keyPressEvent(QKeyEvent* event) {
+	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
+		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
+		const int delta = 5;
+		QPointF point = pos();
+		WorksheetElement::PositionWrapper tempPosition;
+
+		if (event->key() == Qt::Key_Left) {
+			point.setX(point.x() - delta);
+			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+			tempPosition.verticalPosition = position.verticalPosition;
+		} else if (event->key() == Qt::Key_Right) {
+			point.setX(point.x() + delta);
+			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
+			tempPosition.verticalPosition = position.verticalPosition;
+		} else if (event->key() == Qt::Key_Up) {
+			point.setY(point.y() - delta);
+			tempPosition.horizontalPosition = position.horizontalPosition;
+			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
+		} else if (event->key() == Qt::Key_Down) {
+			point.setY(point.y() + delta);
+			tempPosition.horizontalPosition = position.horizontalPosition;
+			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
+		}
+
+		tempPosition.point = point;
+		q->setPosition(tempPosition);
+	}
+
+	QGraphicsItem::keyPressEvent(event);
 }
 
 void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
@@ -954,8 +1005,8 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "geometry" );
 	writer->writeAttribute( "x", QString::number(d->position.point.x()) );
 	writer->writeAttribute( "y", QString::number(d->position.point.y()) );
-	writer->writeAttribute( "horizontalPosition", QString::number(d->position.horizontalPosition) );
-	writer->writeAttribute( "verticalPosition", QString::number(d->position.verticalPosition) );
+	writer->writeAttribute( "horizontalPosition", QString::number(static_cast<int>(d->position.horizontalPosition)) );
+	writer->writeAttribute( "verticalPosition", QString::number(static_cast<int>(d->position.verticalPosition)) );
 	writer->writeAttribute( "rotation", QString::number(d->rotationAngle) );
 	writer->writeEndElement();
 
@@ -964,9 +1015,9 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 	//background
 	writer->writeStartElement( "background" );
-	writer->writeAttribute( "type", QString::number(d->backgroundType) );
-	writer->writeAttribute( "colorStyle", QString::number(d->backgroundColorStyle) );
-	writer->writeAttribute( "imageStyle", QString::number(d->backgroundImageStyle) );
+	writer->writeAttribute( "type", QString::number(static_cast<int>(d->backgroundType)) );
+	writer->writeAttribute( "colorStyle", QString::number(static_cast<int>(d->backgroundColorStyle)) );
+	writer->writeAttribute( "imageStyle", QString::number(static_cast<int>(d->backgroundImageStyle)) );
 	writer->writeAttribute( "brushStyle", QString::number(d->backgroundBrushStyle) );
 	writer->writeAttribute( "firstColor_r", QString::number(d->backgroundFirstColor.red()) );
 	writer->writeAttribute( "firstColor_g", QString::number(d->backgroundFirstColor.green()) );
@@ -982,6 +1033,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "border" );
 	WRITE_QPEN(d->borderPen);
 	writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
+	writer->writeAttribute( "borderCornerRadius", QString::number(d->borderCornerRadius) );
 	writer->writeEndElement();
 
 	//layout
@@ -1024,18 +1076,8 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QCOLOR(d->labelColor);
 			READ_QFONT(d->labelFont);
-
-			str = attribs.value("columnMajor").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("columnMajor").toString());
-			else
-				d->labelColumnMajor = str.toInt();
-
-			str = attribs.value("lineSymbolWidth").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("lineSymbolWidth").toString());
-			else
-				d->lineSymbolWidth = str.toDouble();
+			READ_INT_VALUE("columnMajor", labelColumnMajor, int);
+			READ_DOUBLE_VALUE("lineSymbolWidth", lineSymbolWidth);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
@@ -1061,13 +1103,13 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("horizontalPosition").toString());
 			else
-				d->position.horizontalPosition = (CartesianPlotLegend::HorizontalPosition)str.toInt();
+				d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)str.toInt();
 
 			str = attribs.value("verticalPosition").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("verticalPosition").toString());
 			else
-				d->position.verticalPosition = (CartesianPlotLegend::VerticalPosition)str.toInt();
+				d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
 
 			READ_DOUBLE_VALUE("rotation", rotationAngle);
 		} else if (reader->name() == "textLabel") {
@@ -1079,29 +1121,10 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "background") {
 			attribs = reader->attributes();
 
-			str = attribs.value("type").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("type").toString());
-			else
-				d->backgroundType = PlotArea::BackgroundType(str.toInt());
-
-			str = attribs.value("colorStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("colorStyle").toString());
-			else
-				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
-
-			str = attribs.value("imageStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("imageStyle").toString());
-			else
-				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
-
-			str = attribs.value("brushStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("brushStyle").toString());
-			else
-				d->backgroundBrushStyle = Qt::BrushStyle(str.toInt());
+			READ_INT_VALUE("type", backgroundType, PlotArea::BackgroundType);
+			READ_INT_VALUE("colorStyle", backgroundColorStyle, PlotArea::BackgroundColorStyle);
+			READ_INT_VALUE("imageStyle", backgroundImageStyle, PlotArea::BackgroundImageStyle);
+			READ_INT_VALUE("brushStyle", backgroundBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
 			if (str.isEmpty())
@@ -1142,65 +1165,21 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value("fileName").toString();
 			d->backgroundFileName = str;
 
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->backgroundOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("opacity", backgroundOpacity);
 		} else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
-
 			READ_QPEN(d->borderPen);
-
-			str = attribs.value("borderOpacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("borderOpacity").toString());
-			else
-				d->borderOpacity = str.toDouble();
+			READ_DOUBLE_VALUE("borderCornerRadius", borderCornerRadius);
+			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
 		} else if (!preview && reader->name() == "layout") {
 			attribs = reader->attributes();
-
-			str = attribs.value("topMargin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("topMargin").toString());
-			else
-				d->layoutTopMargin = str.toDouble();
-
-			str = attribs.value("bottomMargin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("bottomMargin").toString());
-			else
-				d->layoutBottomMargin = str.toDouble();
-
-			str = attribs.value("leftMargin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("leftMargin").toString());
-			else
-				d->layoutLeftMargin = str.toDouble();
-
-			str = attribs.value("rightMargin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("rightMargin").toString());
-			else
-				d->layoutRightMargin = str.toDouble();
-
-			str = attribs.value("verticalSpacing").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("verticalSpacing").toString());
-			else
-				d->layoutVerticalSpacing = str.toDouble();
-
-			str = attribs.value("horizontalSpacing").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("horizontalSpacing").toString());
-			else
-				d->layoutHorizontalSpacing = str.toDouble();
-
-			str = attribs.value("columnCount").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("columnCount").toString());
-			else
-				d->layoutColumnCount = str.toInt();
+			READ_DOUBLE_VALUE("topMargin", layoutTopMargin);
+			READ_DOUBLE_VALUE("bottomMargin", layoutBottomMargin);
+			READ_DOUBLE_VALUE("leftMargin", layoutLeftMargin);
+			READ_DOUBLE_VALUE("rightMargin", layoutRightMargin);
+			READ_DOUBLE_VALUE("verticalSpacing", layoutVerticalSpacing);
+			READ_DOUBLE_VALUE("horizontalSpacing", layoutHorizontalSpacing);
+			READ_INT_VALUE("columnCount", layoutColumnCount, int);
 		}
 	}
 
@@ -1208,25 +1187,37 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 }
 
 void CartesianPlotLegend::loadThemeConfig(const KConfig& config) {
-	KConfigGroup groupLabel = config.group("Label");
-	this->setLabelColor(groupLabel.readEntry("FontColor", QColor(Qt::white)));
+	KConfigGroup group;
 
-	const KConfigGroup group = config.group("CartesianPlot");
-	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle",(int) this->backgroundBrushStyle()));
-	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle",(int) this->backgroundColorStyle())));
-	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor",(QColor) this->backgroundFirstColor()));
-	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle",(int) this->backgroundImageStyle()));
-	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", this->backgroundOpacity()));
-	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor",(QColor) this->backgroundSecondColor()));
-	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType",(int) this->backgroundType())));
+	//for the font color use the value defined in the theme config for Label
+	if (config.hasGroup(QLatin1String("Theme")))
+		group = config.group(QLatin1String("Label"));
+	else
+		group = config.group(QLatin1String("CartesianPlotLegend"));
 
-	QPen pen = this->borderPen();
-	pen.setColor(group.readEntry("BorderColor", pen.color()));
-	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int) pen.style())));
-	pen.setWidthF(group.readEntry("BorderWidth", pen.widthF()));
+	this->setLabelColor(group.readEntry("FontColor", QColor(Qt::white)));
+
+	//for other theme dependent settings use the values defined in the theme config for CartesianPlot
+	if (config.hasGroup(QLatin1String("Theme")))
+		group = config.group("CartesianPlot");
+
+	//background
+	this->setBackgroundBrushStyle((Qt::BrushStyle)group.readEntry("BackgroundBrushStyle", (int)Qt::SolidPattern));
+	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle)(group.readEntry("BackgroundColorStyle", (int)PlotArea::BackgroundColorStyle::SingleColor)));
+	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
+	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle)group.readEntry("BackgroundImageStyle", (int)PlotArea::BackgroundImageStyle::Scaled));
+	this->setBackgroundOpacity(group.readEntry("BackgroundOpacity", 1.0));
+	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));
+	this->setBackgroundType((PlotArea::BackgroundType)(group.readEntry("BackgroundType", (int)PlotArea::BackgroundType::Color)));
+
+	//border
+	QPen pen;
+	pen.setColor(group.readEntry("BorderColor", QColor(Qt::black)));
+	pen.setStyle((Qt::PenStyle)(group.readEntry("BorderStyle", (int)Qt::SolidLine)));
+	pen.setWidthF(group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setBorderPen(pen);
-	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", this->borderCornerRadius()));
-	this->setBorderOpacity(group.readEntry("BorderOpacity", this->borderOpacity()));
+	this->setBorderCornerRadius(group.readEntry("BorderCornerRadius", 0.0));
+	this->setBorderOpacity(group.readEntry("BorderOpacity", 1.0));
 
 	title()->loadThemeConfig(config);
 }

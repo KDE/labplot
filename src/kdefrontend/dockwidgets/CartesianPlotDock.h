@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for cartesian plot properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -49,6 +49,8 @@ public:
 	explicit CartesianPlotDock(QWidget*);
 	void setPlots(QList<CartesianPlot*>);
 	void activateTitleTab();
+	void updateLocale() override;
+	void updateUnits() override;
 
 private:
 	Ui::CartesianPlotDock ui;
@@ -130,9 +132,9 @@ private slots:
 	void bottomPaddingChanged(double);
 
 	// "Cursor"-tab
-	void cursorLineWidthChanged(int width);
-	void cursorLineColorChanged(QColor color);
-	void cursorLineStyleChanged(int index);
+	void cursorLineWidthChanged(int);
+	void cursorLineColorChanged(const QColor&);
+	void cursorLineStyleChanged(int);
 
 	//SLOTs for changes triggered in CartesianPlot
 	//general
@@ -146,14 +148,14 @@ private slots:
 	void plotXMinChanged(double);
 	void plotXMaxChanged(double);
 	void plotXRangeFormatChanged(CartesianPlot::RangeFormat);
-	void plotXScaleChanged(int);
+	void plotXScaleChanged(CartesianPlot::Scale);
 
 
 	void plotYAutoScaleChanged(bool);
 	void plotYMinChanged(double);
 	void plotYMaxChanged(double);
 	void plotYRangeFormatChanged(CartesianPlot::RangeFormat);
-	void plotYScaleChanged(int);
+	void plotYScaleChanged(CartesianPlot::Scale);
 
 	void plotVisibleChanged(bool);
 
@@ -182,7 +184,7 @@ private slots:
 	void plotSymmetricPaddingChanged(bool);
 
 	// Cursor
-	void plotCursorPenChanged(QPen);
+	void plotCursorPenChanged(const QPen&);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);

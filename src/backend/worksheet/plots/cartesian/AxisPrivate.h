@@ -57,15 +57,19 @@ public:
 	void retransformTickLabelStrings();
 	void retransformMinorGrid();
 	void retransformMajorGrid();
+	void updateGrid();
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect();
 	void setPrinting(bool);
+	bool isHovered() const;
+
+	bool isDefault{false};
 
 	//general
 	bool autoScale;
-	Axis::AxisOrientation orientation; //!< horizontal or vertical
-	Axis::AxisPosition position; //!< left, right, bottom, top or custom (usually not changed after creation)
-	Axis::AxisScale scale;
+	Axis::Orientation orientation; //!< horizontal or vertical
+	Axis::Position position; //!< left, right, bottom, top or custom (usually not changed after creation)
+	Axis::Scale scale;
 	double offset; //!< offset from zero in the direction perpendicular to the axis
 	double start; //!< start coordinate of the axis line
 	double end; //!< end coordinate of the axis line
@@ -81,7 +85,7 @@ public:
 	qreal arrowSize;
 
 	// Title
-	TextLabel* title;
+	TextLabel* title{nullptr};
 	qreal titleOffsetX; //distance to the axis line
 	qreal titleOffsetY; //distance to the axis line
 
@@ -89,7 +93,7 @@ public:
 	Axis::TicksDirection majorTicksDirection; //!< major ticks direction: inwards, outwards, both, or none
 	Axis::TicksType majorTicksType; //!< the way how the number of major ticks is specified  - either as a total number or an increment
 	int majorTicksNumber; //!< number of major ticks
-	qreal majorTicksIncrement; //!< increment (step) for the major ticks
+	qreal majorTicksSpacing; //!< spacing (step) for the major ticks
 	const AbstractColumn* majorTicksColumn{nullptr}; //!< column containing values for major ticks' positions
 	QString majorTicksColumnPath;
 	qreal majorTicksLength; //!< major tick length (in page units!)
@@ -99,7 +103,7 @@ public:
 	Axis::TicksDirection minorTicksDirection; //!< minor ticks direction: inwards, outwards, both, or none
 	Axis::TicksType minorTicksType;  //!< the way how the number of minor ticks is specified  - either as a total number or an increment
 	int minorTicksNumber; //!< number of minor ticks (between each two major ticks)
-	qreal minorTicksIncrement; //!< increment (step) for the minor ticks
+	qreal minorTicksIncrement; //!< spacing (step) for the minor ticks
 	const AbstractColumn* minorTicksColumn{nullptr}; //!< column containing values for minor ticks' positions
 	QString minorTicksColumnPath;
 	qreal minorTicksLength; //!< minor tick length (in page units!)
@@ -121,13 +125,13 @@ public:
 	QString labelsSuffix;
 
 	//Grid
-	AxisGrid* gridItem;
+	AxisGrid* gridItem{nullptr};
 	QPen majorGridPen;
 	qreal majorGridOpacity;
 	QPen minorGridPen;
 	qreal minorGridOpacity;
 
-	Axis* const q;
+	Axis* const q{nullptr};
 
 	QPainterPath linePath;
 	QPainterPath majorGridPath;
@@ -143,6 +147,9 @@ private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void addArrow(QPointF point, int direction);
@@ -165,6 +172,8 @@ private:
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};
 	bool m_printing{false};
+	bool m_panningStarted{false};
+	QPointF m_panningStart;
 };
 
 #endif

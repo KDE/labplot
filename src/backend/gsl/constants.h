@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : constans.h
+    File                 : constants.h
     Project              : LabPlot
     Description          : definition of mathematical and physical constants
     --------------------------------------------------------------------
@@ -43,7 +43,7 @@ struct con _constants[] = {
 	{"pi", M_PI},
 	{"euler", M_EULER},
 
-	/* Physical constants: http://www.gnu.org/software/gsl/manual/html_node/Physical-Constants.html */
+	/* Physical constants: https://www.gnu.org/software/gsl/doc/html/const.html */
 	/* Physical constants in MKSA system */
 
 	/* Fundamental Constants */

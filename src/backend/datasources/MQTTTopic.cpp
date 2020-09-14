@@ -27,7 +27,6 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 ***************************************************************************/
 #include "backend/datasources/MQTTTopic.h"
 
-#ifdef HAVE_MQTT
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTClient.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
@@ -35,11 +34,9 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 #include "backend/datasources/filters/AsciiFilter.h"
 
 #include <QMenu>
-#include <QTimer>
 #include <QIcon>
 #include <QAction>
 #include <KLocalizedString>
-#include <QDebug>
 
 /*!
   \class MQTTTopic
@@ -218,7 +215,7 @@ void MQTTTopic::save(QXmlStreamWriter* writer) const {
 	m_filter->save(writer);
 
 	//Columns
-	for (auto* col : children<Column>(IncludeHidden))
+	for (auto* col : children<Column>(AbstractAspect::ChildIndexFlag::IncludeHidden))
 		col->save(writer);
 
 	writer->writeEndElement(); //MQTTTopic
@@ -284,7 +281,7 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 			for (int i = 0; i < pufferSize; ++i) {
 				str = attribs.value("message"+QString::number(i)).toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.arg("'message"+QString::number(i)+"'"));
+					reader->raiseWarning(attributeWarning.arg("'message"+QString::number(i)+'\''));
 				else
 					m_messagePuffer.push_back(str);
 			}
@@ -292,7 +289,7 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 			if (!m_filter->load(reader))
 				return false;
 		} else if (reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::Text);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Text);
 			if (!column->load(reader, preview)) {
 				delete column;
 				setColumnCount(0);
@@ -311,4 +308,3 @@ bool MQTTTopic::load(XmlStreamReader* reader, bool preview) {
 
 	return !reader->hasError();
 }
-#endif

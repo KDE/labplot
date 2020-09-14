@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating plots for the spreadsheet data
     --------------------------------------------------------------------
-    Copyright            : (C) 2017 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2017-2019 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -35,6 +35,7 @@ namespace Ui {
 #include <QDialog>
 
 class QComboBox;
+class AbstractAspect;
 class AspectTreeModel;
 class CartesianPlot;
 class Column;
@@ -46,13 +47,13 @@ class PlotDataDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	enum PlotType {PlotXYCurve, PlotHistogram};
-	enum AnalysisAction {DataReduction,
+	enum class PlotType {XYCurve, Histogram};
+	enum class AnalysisAction {DataReduction,
 		Differentiation, Integration, Interpolation, Smoothing,
 		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
 		FourierFilter};
 
-	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotXYCurve, QWidget* parent = nullptr);
+	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
 	void setAnalysisAction(AnalysisAction);
@@ -68,25 +69,24 @@ private:
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
 	PlotType m_plotType;
-	AnalysisAction m_analysisAction{Differentiation};
+	AnalysisAction m_analysisAction{AnalysisAction::Differentiation};
 	bool m_analysisMode{false};
+	AbstractAspect* m_lastAddedCurve{nullptr};
 
 	void processColumns();
 	void processColumnsForXYCurve(const QStringList& columnNames, const QString& xColumnName);
 	void processColumnsForHistogram(const QStringList&);
-	void addCurvesToPlot(CartesianPlot*) const;
-	void addCurvesToPlots(Worksheet*) const;
-	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*) const;
-	void addHistogram(const QString& name, Column* column, CartesianPlot*) const;
+	void addCurvesToPlot(CartesianPlot*);
+	void addCurvesToPlots(Worksheet*);
+	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*);
+	void addHistogram(const QString& name, Column* column, CartesianPlot*);
 	Column* columnFromName(const QString&) const;
-
-protected  slots:
-	virtual void checkOkButton();
 
 private slots:
 	void plot();
 	void curvePlacementChanged();
 	void plotPlacementChanged();
+	void checkOkButton();
 };
 
 #endif

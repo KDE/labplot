@@ -51,8 +51,8 @@ HDF5OptionsWidget::HDF5OptionsWidget(QWidget* parent, ImportFileWidget* fileWidg
 
 	ui.bRefreshPreview->setIcon( QIcon::fromTheme("view-refresh") );
 
-	connect( ui.twContent, SIGNAL(itemSelectionChanged()), SLOT(hdf5TreeWidgetSelectionChanged()) );
-	connect( ui.bRefreshPreview, SIGNAL(clicked()), fileWidget, SLOT(refreshPreview()) );
+	connect(ui.twContent, &QTreeWidget::itemSelectionChanged, this, &HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged);
+	connect(ui.bRefreshPreview, &QPushButton::clicked, fileWidget, &ImportFileWidget::refreshPreview);
 }
 
 void HDF5OptionsWidget::clear() {
