@@ -114,13 +114,13 @@ void ExpressionTextEdit::setExpressionType(XYEquationCurve::EquationType type) {
 	m_expressionType = type;
 	m_variables.clear();
 	if (type == XYEquationCurve::EquationType::Cartesian)
-		m_variables<<"x";
+		m_variables << "x";
 	else if (type == XYEquationCurve::EquationType::Polar)
-		m_variables<<"phi";
+		m_variables << "phi";
 	else if (type == XYEquationCurve::EquationType::Parametric)
-		m_variables<<"t";
+		m_variables << "t";
 	else if (type == XYEquationCurve::EquationType::Implicit)
-		m_variables<<"x"<<"y";
+		m_variables << "x" << "y";
 
 	m_highlighter->setVariables(m_variables);
 }

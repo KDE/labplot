@@ -71,7 +71,7 @@ void XYEquationCurveDock::setupGeneral() {
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
-		gridLayout->setContentsMargins(2,2,2,2);
+		gridLayout->setContentsMargins(2, 2, 2, 2);
 		gridLayout->setHorizontalSpacing(2);
 		gridLayout->setVerticalSpacing(2);
 	}
