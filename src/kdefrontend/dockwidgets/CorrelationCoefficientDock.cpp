@@ -604,7 +604,7 @@ void CorrelationCoefficientDock::countPartitions(Column *column, int &np, int &t
 	QMap<QString, bool> discovered_categorical_var;
 
 	AbstractColumn::ColumnMode original_col_mode = column->columnMode();
-	column->setColumnMode(AbstractColumn::Text);
+	column->setColumnMode(AbstractColumn::ColumnMode::Text);
 
 	for (int i = 0; i < total_rows; i++) {
 		cell_value = column->textAt(i);

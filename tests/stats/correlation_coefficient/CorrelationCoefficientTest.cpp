@@ -76,8 +76,8 @@ void CorrelationCoefficientTest::pearsonCoefficient() {
 	QFETCH(double, correlationValue_expected);
 	QFETCH(double, zValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::Numeric);
-	Column* col2 = new Column("col2", AbstractColumn::Numeric);
+	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
+	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
 
 	col1->replaceValues(0, col1Data);
 	col2->replaceValues(0, col2Data);
@@ -160,14 +160,14 @@ void CorrelationCoefficientTest::kendallCoefficient() {
 	Column* col2;
 
 	if (isDouble) {
-		col1 = new Column("col1", AbstractColumn::Numeric);
-		col2 = new Column("col2", AbstractColumn::Numeric);
+		col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
+		col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
 
 		col1->replaceValues(0, col1Values);
 		col2->replaceValues(0, col2Values);
 	} else {
-		col1 = new Column("col1", AbstractColumn::Text);
-		col2 = new Column("col2", AbstractColumn::Text);
+		col1 = new Column("col1", AbstractColumn::ColumnMode::Text);
+		col2 = new Column("col2", AbstractColumn::ColumnMode::Text);
 
 		col1->replaceTexts(0, col1Texts);
 		col2->replaceTexts(0, col2Texts);
@@ -229,8 +229,8 @@ void CorrelationCoefficientTest::spearmanCoefficient() {
 	QFETCH(QVector<double>, col2Data);
 	QFETCH(double, correlationValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::Numeric);
-	Column* col2 = new Column("col2", AbstractColumn::Numeric);
+	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
+	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
 
 	col1->replaceValues(0, col1Data);
 	col2->replaceValues(0, col2Data);

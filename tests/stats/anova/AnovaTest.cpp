@@ -63,8 +63,8 @@ void AnovaTest::oneWayAnova() {
 	QFETCH(double, fValue_expected);
 	QFETCH(double, pValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::Text);
-	Column* col2 = new Column("col2", AbstractColumn::Numeric);
+	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Text);
+	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
 
 	col1->replaceTexts(0, col1Data);
 	col2->replaceValues(0, col2Data);
@@ -135,9 +135,9 @@ void AnovaTest::twoWayAnova() {
 	QFETCH(double, pCol1Value_expected);
 	QFETCH(double, pCol2Value_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::Text);
-	Column* col2 = new Column("col2", AbstractColumn::Text);
-	Column* col3 = new Column("col3", AbstractColumn::Numeric);
+	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Text);
+	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Text);
+	Column* col3 = new Column("col3", AbstractColumn::ColumnMode::Numeric);
 
 	col1->replaceTexts(0, col1Data);
 	col2->replaceTexts(0, col2Data);

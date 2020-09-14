@@ -517,16 +517,16 @@ void PivotTablePrivate::createDb() {
 
 		query += QLatin1String("\"") + col->name() + QLatin1String("\" ");
 		switch (col->columnMode()) {
-		case AbstractColumn::Numeric:
+		case AbstractColumn::ColumnMode::Numeric:
 			query += QLatin1String("REAL");
 			break;
-		case AbstractColumn::Integer:
+		case AbstractColumn::ColumnMode::Integer:
 			query += QLatin1String("INTEGER");
 			break;
-		case AbstractColumn::Text:
-		case AbstractColumn::Month:
-		case AbstractColumn::Day:
-		case AbstractColumn::DateTime:
+		case AbstractColumn::ColumnMode::Text:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime:
 			query += QLatin1String("TEXT");
 			break;
 		}

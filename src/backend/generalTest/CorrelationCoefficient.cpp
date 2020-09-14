@@ -163,9 +163,9 @@ void CorrelationCoefficient::exportStatTableToSpreadsheet() {
 	col2->setName("Independent Var. 2");
 	col3->setName("Data Values");
 
-	col1->setColumnMode(AbstractColumn::Text);
-	col2->setColumnMode(AbstractColumn::Text);
-	col3->setColumnMode(AbstractColumn::Numeric);
+	col1->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col2->setColumnMode(AbstractColumn::ColumnMode::Text);
+	col3->setColumnMode(AbstractColumn::ColumnMode::Numeric);
 
 	int index = 0;
 	for (int i = 1; i < rowCount; i++)
@@ -311,8 +311,8 @@ void CorrelationCoefficient::performKendall() {
 		AbstractColumn::ColumnMode origCol1Mode = m_columns[0]->columnMode();
 		AbstractColumn::ColumnMode origCol2Mode = m_columns[1]->columnMode();
 
-		m_columns[0]->setColumnMode(AbstractColumn::Text);
-		m_columns[1]->setColumnMode(AbstractColumn::Text);
+		m_columns[0]->setColumnMode(AbstractColumn::ColumnMode::Text);
+		m_columns[1]->setColumnMode(AbstractColumn::ColumnMode::Text);
 
 		QMap<QString, int> ValueToRank;
 

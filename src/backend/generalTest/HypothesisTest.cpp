@@ -961,7 +961,7 @@ void HypothesisTest::m_performLeveneTest(bool categoricalVariable) {
 		QMap<QString, int> classnameToIndex;
 
 		AbstractColumn::ColumnMode originalColMode = m_columns[0]->columnMode();
-		m_columns[0]->setColumnMode(AbstractColumn::Text);
+		m_columns[0]->setColumnMode(AbstractColumn::ColumnMode::Text);
 
 		int partitionNumber = 1;
 		QString name;

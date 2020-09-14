@@ -138,8 +138,8 @@ QString GeneralTest::round(QVariant number, int precision) {
 int GeneralTest::findCount(const Column *column) {
 	int N = column->rowCount();
 	switch (column->columnMode()) {
-	case (AbstractColumn::Numeric):
-	case (AbstractColumn::Integer): {
+	case (AbstractColumn::ColumnMode::Numeric):
+	case (AbstractColumn::ColumnMode::Integer): {
 		for (int i = 0; i < N; i++)
 			if (std::isnan(column->valueAt(i))) {
 				N = i;
@@ -147,9 +147,9 @@ int GeneralTest::findCount(const Column *column) {
 			}
 		break;
 	}
-	case (AbstractColumn::Month):
-	case (AbstractColumn::Day):
-	case (AbstractColumn::Text): {
+	case (AbstractColumn::ColumnMode::Month):
+	case (AbstractColumn::ColumnMode::Day):
+	case (AbstractColumn::ColumnMode::Text): {
 		for (int i = 0; i < N; i++)
 			if (column->textAt(i).isEmpty()) {
 				N = i;
@@ -157,7 +157,7 @@ int GeneralTest::findCount(const Column *column) {
 			}
 		break;
 	}
-	case (AbstractColumn::DateTime):
+	case (AbstractColumn::ColumnMode::DateTime):
 		break;
 	}
 	return N;
@@ -296,7 +296,7 @@ void GeneralTest::countPartitions(Column* column, int& np, int& totalRows) {
 	QMap<QString, bool> discoveredCategoricalVar;
 
 	AbstractColumn::ColumnMode originalColMode = column->columnMode();
-	column->setColumnMode(AbstractColumn::Text);
+	column->setColumnMode(AbstractColumn::ColumnMode::Text);
 
 	for (int i = 0; i < totalRows; i++) {
 		HtmlCellValue = column->textAt(i);
@@ -326,7 +326,7 @@ GeneralTest::GeneralErrorType GeneralTest::findStatsCategorical(Column* column1,
 	}
 
 	AbstractColumn::ColumnMode originalColMode = columns[0]->columnMode();
-	columns[0]->setColumnMode(AbstractColumn::Text);
+	columns[0]->setColumnMode(AbstractColumn::ColumnMode::Text);
 
 	int partitionNumber = 1;
 	for (int i = 0; i < totalRows; i++) {

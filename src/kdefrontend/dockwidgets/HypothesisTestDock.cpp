@@ -539,7 +539,8 @@ void HypothesisTestDock::changeCbCol2Label() {
 	QString selected_text = ui.cbCol1->currentText();
 	Column* col1 = m_hypothesisTest->dataSourceSpreadsheet()->column(selected_text);
 
-	if (!ui.chbCategorical->isChecked() && (col1->columnMode() == AbstractColumn::Integer || col1->columnMode() == AbstractColumn::Numeric)) {
+	if (!ui.chbCategorical->isChecked()
+		&& (col1->columnMode() == AbstractColumn::ColumnMode::Integer || col1->columnMode() == AbstractColumn::ColumnMode::Numeric)) {
 		ui.lCol2->setText( i18n("Independent Var. 2"));
 		ui.chbCategorical->setChecked(false);
 		ui.chbCategorical->setEnabled(true);
@@ -748,7 +749,7 @@ void HypothesisTestDock::countPartitions(Column *column, int &np, int &total_row
 	QMap<QString, bool> discovered_categorical_var;
 
 	AbstractColumn::ColumnMode original_col_mode = column->columnMode();
-	column->setColumnMode(AbstractColumn::Text);
+	column->setColumnMode(AbstractColumn::ColumnMode::Text);
 
 	for (int i = 0; i < total_rows; i++) {
 		cell_value = column->textAt(i);
@@ -773,7 +774,7 @@ void HypothesisTestDock::setColumnsComboBoxModel(Spreadsheet* spreadsheet) {
 	m_multiCategoricalCols.clear();
 
 	for (auto* col : spreadsheet->children<Column>()) {
-		if (col->columnMode() == AbstractColumn::Integer || col->columnMode() == AbstractColumn::Numeric)
+		if (col->columnMode() == AbstractColumn::ColumnMode::Integer || col->columnMode() == AbstractColumn::ColumnMode::Numeric)
 			m_onlyValuesCols.append(col);
 		else {
 			int np = 0, n_rows = 0;

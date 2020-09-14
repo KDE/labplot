@@ -38,7 +38,6 @@ public:
     typedef QStandardItemModel inherited;
     explicit MyTableModel(QObject* parent = nullptr);
 
-public slots:
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 };
 #endif // MYTABLEMODEL_H

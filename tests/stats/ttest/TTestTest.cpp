@@ -63,8 +63,8 @@ void TTestTest::twoSampleIndependent() {
 	QFETCH(double, tValue_expected);
 	QFETCH(double, pValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::Numeric);
-	Column* col2 = new Column("col2", AbstractColumn::Numeric);
+	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
+	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
 
 	col1->replaceValues(0, col1Data);
 	col2->replaceValues(0, col2Data);
@@ -119,8 +119,8 @@ void TTestTest::twoSamplePaired() {
 	QFETCH(double, tValue_expected);
 	QFETCH(double, pValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::Numeric);
-	Column* col2 = new Column("col2", AbstractColumn::Numeric);
+	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
+	Column* col2 = new Column("col2", AbstractColumn::ColumnMode::Numeric);
 
 	col1->replaceValues(0, col1Data);
 	col2->replaceValues(0, col2Data);
@@ -171,7 +171,7 @@ void TTestTest::oneSample() {
 	QFETCH(double, tValue_expected);
 	QFETCH(double, pValue_expected);
 
-	Column* col1 = new Column("col1", AbstractColumn::Numeric);
+	Column* col1 = new Column("col1", AbstractColumn::ColumnMode::Numeric);
 	col1->replaceValues(0, col1Data);
 
 	QVector<Column*> cols;
