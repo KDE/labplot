@@ -20,10 +20,6 @@
 		"url" : "http://www.statsci.org/data/"
 	},
 	{
-		"name" : "Socrata",
-		"description" : ""
-	},
-	{
 		"name" : "StatLib",
 		"description" : "<b>StatLib</b> is a datasets archive maintained by Pantelis Vlachos from Carnegie Melon University.",
 		"url" : "http://lib.stat.cmu.edu/datasets/"
