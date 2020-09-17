@@ -4,6 +4,7 @@
     Description          : widget for hypothesis testing properties
     --------------------------------------------------------------------
     Copyright            : (C) 2019 Devanshu Agarwal(agarwaldevanshu8@gmail.com)
+    Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,22 +30,16 @@
 #ifndef CORRELATIONCOEFFICIENTDOCK_H
 #define CORRELATIONCOEFFICIENTDOCK_H
 
-#include "backend/generalTest/CorrelationCoefficient.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_correlationcoefficientdock.h"
-#include <QSqlDatabase>
 
-//class Column;
-//class Spreadsheet;
-//class AbstractAspect;
+class Column;
+class Spreadsheet;
 class AspectTreeModel;
-//class CorrelationCoefficient;
+class CorrelationCoefficient;
 class TreeViewComboBox;
-//class KConfig;
-//class QStandardItemModel;
-//class QStandardItem;
-//class QComboBox;
 
-class CorrelationCoefficientDock : public QWidget {
+class CorrelationCoefficientDock : public BaseDock {
 	Q_OBJECT
 
 public:
@@ -57,32 +52,23 @@ private:
 	TreeViewComboBox* cbSpreadsheet{nullptr};
 	CorrelationCoefficient* m_correlationCoefficient{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
-	QSqlDatabase m_db;
-	QString m_configPath;
-	//        void load();
-	//        void loadConfig(KConfig&);
 	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
-	//        void readConnections();
-	//        void updateFields();
-	//        bool fieldSelected(const QString&);
-	int m_test;
-	void countPartitions(Column *column, int &np, int &total_rows);
+	int m_test = 0;
+	void countPartitions(Column*, int &np, int &total_rows);
 
-	void setColumnsComboBoxModel(Spreadsheet* spreadsheet);
+	void setColumnsComboBoxModel(Spreadsheet*);
 	void setColumnsComboBoxView();
 	bool nonEmptySelectedColumns();
 
 	int testType(int test);
 	int testSubType(int test);
 
-	QList<Column* > m_onlyValuesCols;
-	QList<Column* > m_twoCategoricalCols;
-	QList<Column* > m_multiCategoricalCols;
+	QList<Column*> m_onlyValuesCols;
+	QList<Column*> m_twoCategoricalCols;
+	QList<Column*> m_multiCategoricalCols;
+
 private slots:
-	//SLOTs for changes triggered in PivotTableDock
-	//        void nameChanged();
-	//        void commentChanged();
-	void dataSourceTypeChanged(int);
+	//SLOTs for changes triggered in CorrelationCoefficientDock
 	void showTestType();
 	void showCorrelationCoefficient();
 	void findCorrelationCoefficient();
@@ -94,19 +80,7 @@ private slots:
 	void leNColumnsChanged();
 	void exportStatsTableToSpreadsheet();
 
-
-	//        void connectionChanged();
-	//        void tableChanged();
-	//        void showDatabaseManager();
-
-	//        //SLOTs for changes triggered in PivotTable
-	void CorrelationCoefficientDescriptionChanged(const AbstractAspect*);
-
-	//        //save/load template
-	//        void loadConfigFromTemplate(KConfig&);
-	//        void saveConfigAsTemplate(KConfig&);
-
-signals:
-	//        void info(const QString&);
+	//SLOTs for changes triggered in CorrelationCoefficient
+	void correlationCoefficientDescriptionChanged(const AbstractAspect*);
 };
 #endif // CORRELATIONCOEFFICIENTDOCK_H
