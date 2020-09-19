@@ -5,10 +5,10 @@ ENDIF ()
 IF (BUILD_READSTAT)
 	include(ExternalProject)
 
-	set(build_dir ${CMAKE_BINARY_DIR}/src/3rdparty)
-	set(install_dir ${build_dir}/install)
-	file(MAKE_DIRECTORY ${install_dir})
-	set(install_prefix -DCMAKE_INSTALL_PREFIX=${install_dir})
+	set(build_dir "${CMAKE_BINARY_DIR}/src/3rdparty")
+	set(install_dir "${build_dir}/install")
+	file(MAKE_DIRECTORY "${install_dir}")
+	set(install_prefix -DCMAKE_INSTALL_PREFIX="${install_dir}")
 
 	set(ext_src ${build_dir}/readstat/src/readstat)
 #if(WIN32)
@@ -39,5 +39,5 @@ IF (BUILD_READSTAT)
 ENDIF ()
 
 # preview.sty
-install(FILES preview.sty DESTINATION  ${DATA_INSTALL_DIR}/${PROJECT_NAME}/latex)
+install(FILES preview.sty DESTINATION ${DATA_INSTALL_DIR}/${PROJECT_NAME}/latex)
 
