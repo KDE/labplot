@@ -7,6 +7,9 @@ This folder contains versions of libraries and files LabPlot depends on.
 
 KDAB's Qt Widget for the Mac Touch Bar ([link](https://github.com/KDAB/KDMacTouchBar))
 
+## ReadStat
+
+ReadStat is a command-line tool and MIT-licensed C library for reading files from popular stats packages ([link](https://github.com/WizardMac/ReadStat))
 
 ## preview.sty
 
