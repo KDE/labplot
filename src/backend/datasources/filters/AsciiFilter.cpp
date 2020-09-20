@@ -141,14 +141,6 @@ QVector<QStringList> AsciiFilter::preview(QIODevice& device) {
 }
 
 /*!
-  reads the content of the file \c fileName to the data source \c dataSource.
-*/
-//void AsciiFilter::read(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-//	d->read(fileName, dataSource, importMode);
-//}
-
-
-/*!
 writes the content of the data source \c dataSource to the file \c fileName.
 */
 void AsciiFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
@@ -589,6 +581,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	else
 		m_actualCols = endColumn - startColumn + 1;
 
+	//add index column
 	if (createIndexEnabled) {
 		vectorNames.prepend(i18n("Index"));
 		m_actualCols++;
@@ -727,15 +720,24 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		case LiveDataSource::SourceType::LocalSocket:
 		case LiveDataSource::SourceType::SerialPort:
 			m_actualRows = 1;
+			m_actualCols = 1;
+			columnModes.clear();
 			if (createIndexEnabled) {
-				m_actualCols = 2;
-				columnModes << AbstractColumn::ColumnMode::Integer << AbstractColumn::ColumnMode::Numeric;
-				vectorNames << i18n("Index") << i18n("Value");
-			} else {
-				m_actualCols = 1;
-				columnModes << AbstractColumn::ColumnMode::Numeric;
-				vectorNames << i18n("Value");
+				columnModes << AbstractColumn::ColumnMode::Integer;
+				vectorNames << i18n("Index");
+				m_actualCols++;
 			}
+
+			if (createTimestampEnabled) {
+				columnModes << AbstractColumn::ColumnMode::DateTime;
+				vectorNames << i18n("Timestamp");
+				m_actualCols++;
+			}
+
+			//add column for the actual value
+			columnModes << AbstractColumn::ColumnMode::Numeric;
+			vectorNames << i18n("Value");
+
 			QDEBUG("	vector names = " << vectorNames);
 			break;
 		case LiveDataSource::SourceType::MQTT:
@@ -1191,18 +1193,24 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 					lineStringList[i] = lineStringList[i].simplified();
 			}
 
+			//add index if required
+			int offset = 0;
 			if (createIndexEnabled) {
-				if (spreadsheet->keepNValues() == 0)
-					lineStringList.prepend(QString::number(currentRow + 1));
-				else
-					lineStringList.prepend(QString::number(indexColumnIdx++));
+				int index = (spreadsheet->keepNValues() == 0) ? currentRow + 1 : indexColumnIdx++;
+				static_cast<QVector<int>*>(m_dataContainer[0])->operator[](currentRow) = index;
+				++offset;
 			}
 
-			//QDEBUG("	column modes = " << static_cast<QVector<int>>(columnModes));
-			for (int n = 0; n < m_actualCols; ++n) {
+			//add current timestamp if required
+			if (createTimestampEnabled) {
+				static_cast<QVector<QDateTime>*>(m_dataContainer[offset])->operator[](currentRow) = QDateTime::currentDateTime();
+				++offset;
+			}
+
+			for (int n = offset; n < m_actualCols; ++n) {
 				DEBUG("	actual col = " << n);
-				if (n < lineStringList.size()) {
-					QString valueString = lineStringList.at(n);
+				if (n - offset < lineStringList.size()) {
+					QString valueString = lineStringList.at(n - offset);
 					if (removeQuotesEnabled)
 						valueString.remove(QLatin1Char('"'));
 					DEBUG("	value string = " << STDSTRING(valueString));
@@ -1223,7 +1231,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						const int value = locale.toInt(valueString, &isNumber);
 						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
 // 						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
-
 						break;
 					}
 					case AbstractColumn::ColumnMode::BigInt: {
@@ -1232,7 +1239,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 						const qint64 value = locale.toLongLong(valueString, &isNumber);
 						static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
 // 						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
-
 						break;
 					}
 					case AbstractColumn::ColumnMode::DateTime: {
@@ -1506,10 +1512,6 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	if (device.isSequential() && device.bytesAvailable() < (int)sizeof(quint16))
 		return dataStrings;
 
-#ifdef PERFTRACE_LIVE_IMPORT
-	PERFTRACE("AsciiLiveDataImportTotal: ");
-#endif
-
 	int linesToRead = 0;
 	QVector<QString> newData;
 
@@ -1526,15 +1528,21 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	if (linesToRead == 0) return dataStrings;
 
 	int col = 0;
-	int colMax = newData.at(0).size();
-	if (createIndexEnabled)
-		colMax++;
+	int colMax = newData.at(0).size() + int(createIndexEnabled) + int(createTimestampEnabled);
 	columnModes.resize(colMax);
+
 	if (createIndexEnabled) {
 		columnModes[0] = AbstractColumn::ColumnMode::Integer;
 		col = 1;
-		vectorNames.prepend(i18n("Index"));
+		vectorNames << i18n("Index");
 	}
+
+	if (createTimestampEnabled) {
+		columnModes[col] = AbstractColumn::ColumnMode::DateTime;
+		col = 2;
+		vectorNames << i18n("Timestamp");
+	}
+
 	vectorNames.append(i18n("Value"));
 	QDEBUG("	vector names = " << vectorNames);
 
@@ -1544,10 +1552,19 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 	}
 
+	int offset = int(createIndexEnabled) + int(createTimestampEnabled);
 	QString line;
 	QLocale locale(numberFormat);
 	QStringList lineString;
 	for (int i = 0; i < linesToRead; ++i) {
+		// index column if required
+		if (createIndexEnabled)
+			lineString += QString::number(i + 1);
+
+		// timestamp column if required
+		if (createTimestampEnabled)
+			lineString += QDateTime::currentDateTime().toString();
+
 		line = newData.at(i);
 
 		// remove any newline
@@ -1561,8 +1578,6 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 			continue;
 
 		QStringList lineStringList = line.split(' ', QString::SkipEmptyParts);
-		if (createIndexEnabled)
-			lineStringList.prepend(QString::number(i + 1));
 
 		for (int n = 0; n < lineStringList.size(); ++n) {
 			if (n < lineStringList.size()) {
@@ -1570,7 +1585,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 				if (removeQuotesEnabled)
 					valueString.remove(QLatin1Char('"'));
 
-				switch (columnModes[n]) {
+				switch (columnModes[n+offset]) {
 				case AbstractColumn::ColumnMode::Numeric: {
 					bool isNumber;
 					const double value = locale.toDouble(valueString, &isNumber);
@@ -1768,6 +1783,19 @@ QDateTime AsciiFilterPrivate::parseDateTime(const QString& string, const QString
 
 	return dateTime;
 }
+
+int AsciiFilterPrivate::isPrepared() {
+	return m_prepared;
+}
+
+/*!
+ * \brief Returns the separator used by the filter
+ * \return
+ */
+QString AsciiFilterPrivate::separator() const {
+	return m_separator;
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
@@ -1824,10 +1852,9 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	return true;
 }
 
-int AsciiFilterPrivate::isPrepared() {
-	return m_prepared;
-}
-
+//##############################################################################
+//########################## MQTT releated code  ###############################
+//##############################################################################
 #ifdef HAVE_MQTT
 int AsciiFilterPrivate::prepareToRead(const QString& message) {
 	QStringList lines = message.split('\n');
@@ -2815,11 +2842,3 @@ void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic* topic, con
 	}
 }
 #endif
-
-/*!
- * \brief Returns the separator used by the filter
- * \return
- */
-QString AsciiFilterPrivate::separator() const {
-	return m_separator;
-}
