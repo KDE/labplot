@@ -27,6 +27,7 @@
 
 #include "SpreadsheetTest.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/Project.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
@@ -205,6 +206,76 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 	QCOMPARE(sheet.column(2)->integerAt(4), 940);
 	QCOMPARE(sheet.column(1)->valueAt(4), -4.97594);
 	QCOMPARE(sheet.column(4)->integerAt(4), 940);
+}
+
+/*!
+	automatically detect the proper format for the datetime columns
+ */
+void SpreadsheetTest::testCopyPasteColumnMode04() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
+
+	const QString str = "2020-09-20 11:21:40:849	7.7\n"
+						"2020-09-20 11:21:41:830	4.2";
+
+	QApplication::clipboard()->setText(str);
+
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
+
+	//spreadsheet size
+	QCOMPARE(sheet.columnCount(), 2);
+	QCOMPARE(sheet.rowCount(), 100);
+
+	//column modes
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+
+	//values
+	auto* filter = static_cast<DateTime2StringFilter*>(sheet.column(0)->outputFilter());
+	const QString& format = filter->format();
+
+	QCOMPARE(sheet.column(0)->dateTimeAt(0).toString(format), QLatin1String("2020-09-20 11:21:40:849"));
+	QCOMPARE(sheet.column(1)->valueAt(0), 7.7);
+
+	QCOMPARE(sheet.column(0)->dateTimeAt(1).toString(format), QLatin1String("2020-09-20 11:21:41:830"));
+	QCOMPARE(sheet.column(1)->valueAt(1), 4.2);
+}
+
+/*!
+	automatically detect the proper format for the datetime columns, time part only
+ */
+void SpreadsheetTest::testCopyPasteColumnMode05() {
+	Spreadsheet sheet("test", false);
+	sheet.setColumnCount(2);
+	sheet.setRowCount(100);
+
+	const QString str = "11:21:40	7.7\n"
+						"11:21:41	4.2";
+
+	QApplication::clipboard()->setText(str);
+
+	SpreadsheetView view(&sheet, false);
+	view.pasteIntoSelection();
+
+	//spreadsheet size
+	QCOMPARE(sheet.columnCount(), 2);
+	QCOMPARE(sheet.rowCount(), 100);
+
+	//column modes
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+
+	//values
+	auto* filter = static_cast<DateTime2StringFilter*>(sheet.column(0)->outputFilter());
+	const QString& format = filter->format();
+
+	QCOMPARE(sheet.column(0)->dateTimeAt(0).toString(format), QLatin1String("11:21:40"));
+	QCOMPARE(sheet.column(1)->valueAt(0), 7.7);
+
+	QCOMPARE(sheet.column(0)->dateTimeAt(1).toString(format), QLatin1String("11:21:41"));
+	QCOMPARE(sheet.column(1)->valueAt(1), 4.2);
 }
 
 //**********************************************************

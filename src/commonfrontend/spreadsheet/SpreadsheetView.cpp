@@ -1537,8 +1537,12 @@ void SpreadsheetView::pasteIntoSelection() {
 // 			if (!localeDetermined)
 // 				localeDetermined = determineLocale(nonEmptyValue, locale);
 
-			const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), numberLocale);
+			const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, QString(), numberLocale);
 			col->setColumnMode(mode);
+			if (mode == AbstractColumn::ColumnMode::DateTime) {
+				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+				filter->setFormat(AbstractFileFilter::dateTimeFormat(nonEmptyValue));
+			}
 		}
 
 		//add columns if necessary
@@ -1557,8 +1561,12 @@ void SpreadsheetView::pasteIntoSelection() {
 // 				if (!localeDetermined)
 // 					localeDetermined = determineLocale(nonEmptyValue, locale);
 
-				const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, QLatin1String("yyyy-dd-MM hh:mm:ss:zzz"), numberLocale);
+				const auto mode = AbstractFileFilter::columnMode(nonEmptyValue, QString(), numberLocale);
 				Column* new_col = new Column(QString::number(curCol), mode);
+				if (mode == AbstractColumn::ColumnMode::DateTime) {
+					auto* filter = static_cast<DateTime2StringFilter*>(new_col->outputFilter());
+					filter->setFormat(AbstractFileFilter::dateTimeFormat(nonEmptyValue));
+				}
 				new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 				new_col->insertRows(0, m_spreadsheet->rowCount());
 				m_spreadsheet->addChild(new_col);

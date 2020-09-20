@@ -49,6 +49,10 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	return columnMode(valueString, dateTimeFormat, QLocale(lang));
 }
 
+/*!
+ * return the column mode for the given value string and settings \c dateTimeFormat and \c locale.
+ * in case \c dateTimeFormat is empty, all possible datetime formats are tried out to determine the valid datetime object.
+ */
 AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, const QLocale& locale) {
 	//TODO: use BigInt as default integer?
 	if (valueString.size() == 0)	// empty string treated as integer (meaning the non-empty strings will determine the data type)
@@ -80,7 +84,16 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 
 	//if not a number, check datetime. if that fails: string
 	if (!ok) {
-		QDateTime valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+		QDateTime valueDateTime;
+		if (dateTimeFormat.isEmpty()) {
+			for (const auto& format : AbstractColumn::dateTimeFormats()) {
+				valueDateTime = QDateTime::fromString(valueString, format);
+				if (valueDateTime.isValid())
+					break;
+			}
+		} else
+			valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
+
 		if (valueDateTime.isValid())
 			mode = AbstractColumn::ColumnMode::DateTime;
 		else
@@ -88,6 +101,16 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 	}
 
 	return mode;
+}
+
+QString AbstractFileFilter::dateTimeFormat(const QString& valueString) {
+	QDateTime valueDateTime;
+	for (const auto& format : AbstractColumn::dateTimeFormats()) {
+		valueDateTime = QDateTime::fromString(valueString, format);
+		if (valueDateTime.isValid())
+			return format;
+	}
+	return QLatin1String("yyyy-MM-dd hh:mm:ss.zzz");
 }
 
 /*
