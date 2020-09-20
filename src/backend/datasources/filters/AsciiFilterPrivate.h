@@ -80,7 +80,7 @@ public:
 	double nanValue{NAN};
 	bool removeQuotesEnabled{false};
 	bool createIndexEnabled{false};
-	bool createTimestampEnabled{true};
+	bool createTimestampEnabled{false};
 	QStringList vectorNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	int startRow{1};

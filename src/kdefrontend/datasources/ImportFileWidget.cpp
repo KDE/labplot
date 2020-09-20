@@ -1138,6 +1138,10 @@ void ImportFileWidget::initOptionsWidget() {
 			QWidget* asciiw = new QWidget();
 			m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
 			m_asciiOptionsWidget->loadSettings();
+
+			//allow to add timestamp column for live data sources
+			if (m_liveDataSource)
+				m_asciiOptionsWidget->showTimestampOptions(true);
 			ui.swOptions->addWidget(asciiw);
 		}
 
@@ -1145,7 +1149,6 @@ void ImportFileWidget::initOptionsWidget() {
 		//can have different number of columns
 		bool isMQTT = (currentSourceType() == LiveDataSource::SourceType::MQTT);
 		m_asciiOptionsWidget->showAsciiHeaderOptions(!isMQTT);
-		m_asciiOptionsWidget->showTimestampOptions(isMQTT);
 
 		ui.swOptions->setCurrentWidget(m_asciiOptionsWidget->parentWidget());
 		break;

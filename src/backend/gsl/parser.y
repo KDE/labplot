@@ -265,7 +265,7 @@ int yylex(param *p) {
 	pdebug("PARSER: yylex()\n");
 	char c;
 
-	/* skip white space  */
+	/* skip white space */
 	while ((c = getcharstr(p)) == ' ' || c == '\t');
 
 	/* finish if reached EOF */
