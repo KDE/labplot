@@ -1901,13 +1901,13 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 
 	//add index column
 	if (createIndexEnabled) {
-		vectorNames << i18n("index");
+		vectorNames << i18n("Index");
 		columnModes << AbstractColumn::ColumnMode::Integer;
 	}
 
 	//add timestamp column
 	if (createTimestampEnabled) {
-		vectorNames << i18n("timestamp");
+		vectorNames << i18n("Timestamp");
 		columnModes << AbstractColumn::ColumnMode::DateTime;
 	}
 
@@ -1919,7 +1919,7 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 		if (removeQuotesEnabled)
 			valueString.remove(QLatin1Char('"'));
 
-		vectorNames << i18n("value %1", i);
+		vectorNames << i18n("Value %1", i);
 		columnModes << AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 		++i;
 	}
@@ -2647,7 +2647,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			//add index if required
 			int offset = 0;
 			if (createIndexEnabled) {
-				int index = (keepNValues != 0) ? indexColumnIdx++ : currentRow;
+				int index = (keepNValues == 0) ? currentRow + 1 : indexColumnIdx++;
 				static_cast<QVector<int>*>(m_dataContainer[0])->operator[](currentRow) = index;
 				++offset;
 			}
