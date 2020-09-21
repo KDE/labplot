@@ -43,10 +43,11 @@
 #include "backend/datasources/MQTTClient.h"
 #endif
 
+#include <KLocalizedString>
 #include <KMessageBox>
+#include <KMessageWidget>
 #include <KSharedConfig>
 #include <KWindowConfig>
-#include <KLocalizedString>
 
 #include <QDialogButtonBox>
 #include <QElapsedTimer>
@@ -420,14 +421,18 @@ void ImportFileDialog::checkOkButton() {
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
+				showErrorMessage(QString());
 			} else {
-				DEBUG("failed connect to local socket - " << STDSTRING(lsocket.errorString()));
 				okButton->setEnabled(false);
-				okButton->setToolTip(i18n("Could not connect to the provided local socket."));
+				QString msg = i18n("Could not connect to the provided local socket. Error: %1.", lsocket.errorString());
+				okButton->setToolTip(msg);
+				showErrorMessage(msg);
 			}
 		} else {
 			okButton->setEnabled(false);
-			okButton->setToolTip(i18n("Selected local socket does not exist."));
+			QString msg = i18n("Could not connect to the provided local socket. The socket does not exist.");
+			okButton->setToolTip(msg);
+			showErrorMessage(msg);
 		}
 
 		break;
@@ -440,15 +445,19 @@ void ImportFileDialog::checkOkButton() {
 			if (socket.waitForConnected()) {
 				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
+				showErrorMessage(QString());
 				socket.disconnectFromHost();
 			} else {
-				DEBUG("failed to connect to TCP socket - " << STDSTRING(socket.errorString()));
 				okButton->setEnabled(false);
-				okButton->setToolTip(i18n("Could not connect to the provided TCP socket."));
+				QString msg = i18n("Could not connect to the provided TCP socket. Error: %1.", socket.errorString());
+				okButton->setToolTip(msg);
+				showErrorMessage(msg);
 			}
 		} else {
 			okButton->setEnabled(false);
-			okButton->setToolTip(i18n("Either the host name or the port number is missing."));
+			QString msg = i18n("Either the host name or the port number is missing.");
+			okButton->setToolTip(msg);
+			showErrorMessage(msg);
 		}
 		break;
 	}
@@ -461,12 +470,14 @@ void ImportFileDialog::checkOkButton() {
 			if (socket.waitForConnected()) {
 				okButton->setEnabled(true);
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
+				showErrorMessage(QString());
 				socket.disconnectFromHost();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else {
-				DEBUG("failed to connect to UDP socket - " << STDSTRING(socket.errorString()));
 				okButton->setEnabled(false);
-				okButton->setToolTip(i18n("Could not connect to the provided UDP socket."));
+				QString msg = i18n("Could not to connect to the provided UDP socket. Error: %1.", socket.errorString());
+				okButton->setToolTip(msg);
+				showErrorMessage(msg);
 			}
 		} else {
 			okButton->setEnabled(false);
@@ -492,14 +503,18 @@ void ImportFileDialog::checkOkButton() {
 			okButton->setEnabled(serialPortOpened);
 			if (serialPortOpened) {
 				okButton->setToolTip(i18n("Close the dialog and import the data."));
+				showErrorMessage(QString());
 				serialPort.close();
 			} else {
-				DEBUG("Could not connect to the provided serial port");
-				okButton->setToolTip(i18n("Could not connect to the provided serial port."));
+				QString msg = i18n("Could not connect to the provided serial port.");
+				okButton->setToolTip(msg);
+				showErrorMessage(msg);
 			}
 		} else {
 			okButton->setEnabled(false);
-			okButton->setToolTip(i18n("Serial port number is missing."));
+			QString msg = i18n("Serial port number is missing.");
+			okButton->setToolTip(msg);
+			showErrorMessage(msg);
 		}
 #endif
 		break;
@@ -523,4 +538,19 @@ void ImportFileDialog::checkOkButton() {
 
 QString ImportFileDialog::selectedObject() const {
 	return m_importFileWidget->selectedObject();
+}
+
+void ImportFileDialog::showErrorMessage(const QString& message) {
+	if (message.isEmpty()) {
+		if (m_messageWidget && m_messageWidget->isVisible())
+			m_messageWidget->close();
+	} else {
+		if (!m_messageWidget) {
+			m_messageWidget = new KMessageWidget(this);
+			m_messageWidget->setMessageType(KMessageWidget::Error);
+			vLayout->insertWidget(vLayout->count() - 1, m_messageWidget);
+		}
+		m_messageWidget->setText(message);
+        m_messageWidget->animatedShow();
+	}
 }

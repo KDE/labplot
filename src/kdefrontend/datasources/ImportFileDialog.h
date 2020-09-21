@@ -42,6 +42,7 @@ class MQTTClient;
 
 class QStatusBar;
 class QMenu;
+class KMessageWidget;
 
 class ImportFileDialog : public ImportDialog {
 	Q_OBJECT
@@ -66,6 +67,9 @@ private:
 	ImportFileWidget* m_importFileWidget;
 	bool m_showOptions{false};
 	QPushButton* m_optionsButton;
+	KMessageWidget* m_messageWidget{nullptr};
+
+	void showErrorMessage(const QString&);
 
 protected  slots:
 	void checkOkButton() override;
