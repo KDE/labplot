@@ -475,7 +475,7 @@ void ImportFileDialog::checkOkButton() {
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else {
 				okButton->setEnabled(false);
-				QString msg = i18n("Could not to connect to the provided UDP socket. Error: %1.", socket.errorString());
+				QString msg = i18n("Could not connect to the provided UDP socket. Error: %1.", socket.errorString());
 				okButton->setToolTip(msg);
 				showErrorMessage(msg);
 			}
