@@ -117,9 +117,6 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 	connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::sourceTypeChanged), this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::hostChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::portChanged, this, &ImportFileDialog::checkOkButton);
-	//TODO: do we really need to check the ok button when the preview was refreshed?
-	//If not, remove this together with the previewRefreshed signal in ImportFileWidget
-	//connect(m_importFileWidget, &ImportFileWidget::previewRefreshed, this, &ImportFileDialog::checkOkButton);
 #ifdef HAVE_MQTT
 	connect(m_importFileWidget, &ImportFileWidget::subscriptionsChanged, this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::checkFileType, this, &ImportFileDialog::checkOkButton);
@@ -398,10 +395,14 @@ void ImportFileDialog::checkOkButton() {
 		DEBUG("	fileName = " << fileName.toUtf8().constData());
 		const bool enable = QFile::exists(fileName);
 		okButton->setEnabled(enable);
-		if (enable)
+		if (enable) {
 			okButton->setToolTip(i18n("Close the dialog and import the data."));
-		else
-			okButton->setToolTip(i18n("Provide an existing file."));
+			showErrorMessage(QString());
+		} else {
+			QString msg = i18n("The provided file doesn't exist.");
+			okButton->setToolTip(msg);
+			showErrorMessage(msg);
+		}
 
 		break;
 	}
@@ -522,6 +523,7 @@ void ImportFileDialog::checkOkButton() {
 	case LiveDataSource::SourceType::MQTT: {
 #ifdef HAVE_MQTT
 		const bool enable = m_importFileWidget->isMqttValid();
+		showErrorMessage(QString());
 		if (enable) {
 			okButton->setEnabled(true);
 			okButton->setToolTip(i18n("Close the dialog and import the data."));

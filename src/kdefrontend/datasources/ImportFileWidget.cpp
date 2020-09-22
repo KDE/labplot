@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2020 Alexander Semke (alexander.semke@web.de)
 Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
 Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 
@@ -45,19 +45,15 @@ Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 #include <QDir>
 #include <QDirModel>
 #include <QFileDialog>
-#include <QImageReader>
 #include <QInputDialog>
 #include <QIntValidator>
 #include <QLocalSocket>
-#include <QProcess>
 #include <QStandardItemModel>
 #include <QTableWidget>
 #include <QTcpSocket>
 #include <QTimer>
 #include <QUdpSocket>
-#include <QCheckBox>
 #include <QTreeWidgetItem>
-#include <QStringList>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -946,11 +942,6 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 	const QString fileName = absolutePath(name);
 
 	bool fileExists = QFile::exists(fileName);
-	if (fileExists)
-		m_cbFileName->setStyleSheet(QString());
-	else
-		m_cbFileName->setStyleSheet("QComboBox{background:red;}");
-
 	ui.gbOptions->setEnabled(fileExists);
 	ui.bManageFilters->setEnabled(fileExists);
 	ui.cbFilter->setEnabled(fileExists);
@@ -1552,8 +1543,6 @@ void ImportFileWidget::refreshPreview() {
 		m_fileEmpty = false;
 	} else
 		m_fileEmpty = true;
-
-	emit previewRefreshed();
 
 	RESET_CURSOR;
 }

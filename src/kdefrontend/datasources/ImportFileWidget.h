@@ -131,7 +131,6 @@ signals:
 	void sourceTypeChanged();
 	void hostChanged();
 	void portChanged();
-	void previewRefreshed();
 	void checkedFitsTableToMatrix(const bool enable);
 
 	friend class HDF5OptionsWidget;	// to access refreshPreview()
@@ -154,7 +153,7 @@ private:
 	bool m_initialisingMQTT{false};
 	bool m_connectionTimedOut{false};
 	MQTTClient::MQTTWill m_willSettings;
-    MQTTSubscriptionWidget* m_subscriptionWidget;
+    MQTTSubscriptionWidget* m_subscriptionWidget{nullptr};
 
 public:
 	void saveMQTTSettings(MQTTClient*) const;
