@@ -2113,7 +2113,7 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 void ImportFileWidget::mqttConnectTimeout() {
 	m_client->disconnectFromHost();
 	m_connectTimeoutTimer->stop();
-	emit error(i18n("Connecting to '%1' timed out.", m_client->hostname());
+	emit error(i18n("Connecting to '%1' timed out.", m_client->hostname()));
 	RESET_CURSOR;
 }
 
