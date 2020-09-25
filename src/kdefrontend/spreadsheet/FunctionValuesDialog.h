@@ -38,6 +38,7 @@ class Spreadsheet;
 class TreeViewComboBox;
 class AspectTreeModel;
 class QPushButton;
+class QLineEdit;
 
 enum class AspectType : quint64;
 
