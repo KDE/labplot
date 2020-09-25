@@ -65,11 +65,7 @@ public:
 	bool inside(T value) const { return ( m_min <= value && m_max >= value ); }
 	void translate(T offset) { m_min += offset; m_max += offset; }
 	bool operator==(const Range<T>& other) const { return ( m_min == other.min() && m_max == other.max() ); }
-	Range<T>& operator=(const Range<T>& other) {
-		m_min = other.min();
-		m_max = other.max();
-		return *this;
-	}
+	Range<T>& operator=(const Range<T>& other) = default;
 
 	//! Return a string in the format '[min, max]'
 	QString toString() const {
