@@ -96,8 +96,10 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 
 		if (valueDateTime.isValid())
 			mode = AbstractColumn::ColumnMode::DateTime;
-		else
+		else {
+			DEBUG(Q_FUNC_INFO << ", DATETIME invalid! String: " << STDSTRING(valueString) << " DateTime format: " << STDSTRING(dateTimeFormat))
 			mode = AbstractColumn::ColumnMode::Text;
+		}
 	}
 
 	return mode;

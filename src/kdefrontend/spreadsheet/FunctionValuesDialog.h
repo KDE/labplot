@@ -38,7 +38,6 @@ class Spreadsheet;
 class TreeViewComboBox;
 class AspectTreeModel;
 class QPushButton;
-class QLineEdit;
 
 enum class AspectType : quint64;
 
@@ -49,37 +48,39 @@ public:
 	explicit FunctionValuesDialog(Spreadsheet*, QWidget* parent = nullptr);
 	~FunctionValuesDialog() override;
 	void setColumns(const QVector<Column*>&);
-	bool validVariableName(QLineEdit*);
+	bool validVariableName(QLineEdit*);	// check if variable is already defined as constant or function
 
 private:
 	Ui::FunctionValuesWidget ui;
-	QVector<Column*> m_columns;
-	Spreadsheet* m_spreadsheet;
+	QVector<Column*> m_columns;	// columns to fill with values
+	Spreadsheet* m_spreadsheet;	// current spreadsheet
 #if __cplusplus < 201103L
 	std::auto_ptr<AspectTreeModel> m_aspectTreeModel;
 #else
 	std::unique_ptr<AspectTreeModel> m_aspectTreeModel;
 #endif
-	QList<AspectType>  m_topLevelClasses;
-	QList<AspectType>  m_selectableClasses;
+	QList<AspectType> m_topLevelClasses;
+	QList<AspectType> m_selectableClasses;
 
-	QList<QLineEdit*> m_variableNames;
-	QList<QLabel*> m_variableLabels;
+	// variable widgets
+	QList<QLineEdit*> m_variableLineEdits;
+	QList<QLabel*> m_variableLabels;	// '=' labels
 	QList<TreeViewComboBox*> m_variableDataColumns;
 	QList<QToolButton*> m_variableDeleteButtons;
 
 	QPushButton* m_okButton;
+
 private slots:
-	void generate();
-	void checkValues();
-	void showConstants();
-	void showFunctions();
+	void generate();	// calculate and set values from function
+	void checkValues();	// check user input and enable/diable Ok-button accordingly
+	void showConstants();	// select predefined constant
+	void showFunctions();	// select predefined function
 	void insertFunction(const QString&);
 	void insertConstant(const QString&);
 	void addVariable();
 	void deleteVariable();
 	void variableNameChanged();
-	void variableColumnChanged(const QModelIndex&);
+	void variableColumnChanged(const QModelIndex&);	// called when a new column is selected
 };
 
 #endif
