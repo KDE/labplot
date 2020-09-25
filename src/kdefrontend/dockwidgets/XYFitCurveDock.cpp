@@ -1008,8 +1008,8 @@ void XYFitCurveDock::setPlotXRange() {
 
 	auto* plot = dynamic_cast<CartesianPlot*>(m_curve->parentAspect());
 	if (plot != nullptr) {
-		const Range<double> range = m_fitData.evalRange;
-		const double extend = range.size() * 0.05;	// + 5 %
+		const Range<double> range{ m_fitData.evalRange };
+		const double extend{ range.size() * 0.05 };	// + 5 %
 		if (!range.isZero()) {
 			plot->setXMin(range.min() - extend);
 			plot->setXMax(range.max() + extend);

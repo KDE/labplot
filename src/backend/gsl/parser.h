@@ -76,7 +76,7 @@ typedef struct symrec {
 	struct symrec *next;	/* next field */
 } symrec;
 
-void init_table(void);	/* initialize symbol table */
+void init_table(void);		/* initialize symbol table */
 void delete_table(void);	/* delete symbol table */
 int parse_errors(void);
 symrec* assign_variable(const char* symb_name, double value);
