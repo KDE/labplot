@@ -57,6 +57,9 @@ public:
 		m_max = std::max(min, max);
 	}
 	T size() const { return m_max - m_min; }
+	// calculate step size from number of steps
+	// TODO: steps==1 ?
+	T stepSize(const int steps) const { return size()/(T)(steps - 1) ; }
 	bool isZero() const { return (m_max == m_min); }
 	bool inside(const Range<T>& other) const { return ( m_min <= other.min() && m_max >= other.max() ); }
 	bool inside(T value) const { return ( m_min <= value && m_max >= value ); }
