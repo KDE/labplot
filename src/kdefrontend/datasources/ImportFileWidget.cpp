@@ -95,7 +95,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	m_liveDataSource(liveDataSource)
 #ifdef HAVE_MQTT
 	,
-	m_connectTimeoutTimer(new QTimer(this)),
 	m_subscriptionWidget(new MQTTSubscriptionWidget(this))
 #endif
 {
@@ -145,10 +144,6 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 
 		ui.chbLinkFile->setToolTip(i18n("If this option is checked, only the link to the file is stored in the project file but not its content."));
 		ui.chbRelativePath->setToolTip(i18n("If this option is checked, the relative path of the file (relative to project's folder) will be saved."));
-
-#ifdef HAVE_MQTT
-		m_connectTimeoutTimer->setInterval(6000);
-#endif
 	}
 
 	QStringList filterItems {i18n("Automatic"), i18n("Custom")};
@@ -431,7 +426,6 @@ void ImportFileWidget::initSlots() {
 
 #ifdef HAVE_MQTT
 	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
-	connect(m_connectTimeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttConnectTimeout);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {
 		emit checkFileType();
 	});
@@ -1853,10 +1847,15 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
  * connects to the MQTT broker according to the connection settings.
  */
 void ImportFileWidget::mqttConnectionChanged() {
-	if (m_initialisingMQTT || ui.cbConnection->currentIndex() == -1)
+	if (m_initialisingMQTT || ui.cbConnection->currentIndex() == -1) {
+		ui.lLWT->hide();
+		ui.bLWT->hide();
+		ui.lTopics->hide();
 		return;
+	}
 
 	WAIT_CURSOR;
+	emit error(QString());
 
 	//disconnected from the broker that was selected before, if this is the case
 	if (m_client && m_client->state() == QMqttClient::ClientState::Connected) {
@@ -1892,6 +1891,11 @@ void ImportFileWidget::mqttConnectionChanged() {
 
 	//connect to the selected broker
 	QDEBUG("Connect to " << m_client->hostname() << ":" << m_client->port());
+	if (!m_connectTimeoutTimer) {
+		m_connectTimeoutTimer = new QTimer(this);
+		m_connectTimeoutTimer->setInterval(6000);
+		connect(m_connectTimeoutTimer, &QTimer::timeout, this, &ImportFileWidget::mqttConnectTimeout);
+	}
 	m_connectTimeoutTimer->start();
 	m_client->connectToHost();
 }
@@ -1901,15 +1905,23 @@ void ImportFileWidget::mqttConnectionChanged() {
  * subscribes to every topic (# wildcard) in order to later list every available topic
  */
 void ImportFileWidget::onMqttConnect() {
+	m_connectTimeoutTimer->stop();
 	if (m_client->error() == QMqttClient::NoError) {
-		m_connectTimeoutTimer->stop();
 		ui.frameSubscriptions->setVisible(true);
 		m_subscriptionWidget->setVisible(true);
 		m_subscriptionWidget->makeVisible(true);
 
 		if (!m_client->subscribe(QMqttTopicFilter(QLatin1String("#")), 1))
-			QMessageBox::critical(this, i18n("Couldn't subscribe"), i18n("Couldn't subscribe to all available topics. Something went wrong"));
-	}
+			emit error(i18n("Couldn't subscribe to all available topics."));
+		else {
+			emit error(QString());
+			ui.lLWT->show();
+			ui.bLWT->show();
+			ui.lTopics->show();
+		}
+	} else
+		emit error("on mqtt connect error " + QString::number(m_client->error()));
+
 	emit subscriptionsChanged();
 	RESET_CURSOR;
 }
@@ -1927,12 +1939,11 @@ void ImportFileWidget::onMqttDisconnect() {
 	ui.lLWT->hide();
 	ui.bLWT->hide();
 
-	ui.cbConnection->setItemText(ui.cbConnection->currentIndex(), ui.cbConnection->currentText() + ' ' + i18n("(Disconnected)"));
+	ui.cbConnection->setCurrentIndex(-1);
 
 	emit subscriptionsChanged();
+	emit error(i18n("Disconnected from '%1'.", m_client->hostname()));
 	RESET_CURSOR;
-	QMessageBox::critical(this, i18n("Disconnected"),
-		i18n("Disconnected from the broker '%1' before the connection was successful.", m_client->hostname()));
 }
 
 /*!
@@ -2031,7 +2042,7 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 
 	//if a subscribed topic contains the new topic, we have to update twSubscriptions
 	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
-		const QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', QString::SkipEmptyParts);
+		const QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(sep, QString::SkipEmptyParts);
 		if (!subscriptionName.isEmpty()) {
 			if (rootName == subscriptionName.first()) {
 				QVector<QString> subscriptions;
@@ -2091,6 +2102,7 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	default:
 		break;
 	}
+	m_connectTimeoutTimer->stop();
 }
 
 /*!
@@ -2099,11 +2111,10 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
  *		 disconnects the client, stops the timer, and warns the user
  */
 void ImportFileWidget::mqttConnectTimeout() {
-	m_connectionTimedOut = true;
 	m_client->disconnectFromHost();
 	m_connectTimeoutTimer->stop();
+	emit error(i18n("Connecting to '%1' timed out.", m_client->hostname());
 	RESET_CURSOR;
-	QMessageBox::warning(this, i18n("Warning"), i18n("Connecting to the given broker timed out! Try changing the settings"));
 }
 
 /*!

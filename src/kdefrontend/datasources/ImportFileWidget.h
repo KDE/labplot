@@ -132,6 +132,7 @@ signals:
 	void hostChanged();
 	void portChanged();
 	void checkedFitsTableToMatrix(const bool enable);
+	void error(const QString&);
 
 	friend class HDF5OptionsWidget;	// to access refreshPreview()
 	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
@@ -145,13 +146,12 @@ private:
 
 	QMqttClient* m_client{nullptr};
     QVector<QMqttSubscription*> m_mqttSubscriptions;
-	QTimer* m_connectTimeoutTimer;
+	QTimer* m_connectTimeoutTimer{nullptr};
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
 	QVector<QString> m_subscribedTopicNames;
 	QVector<QString> m_addedTopics;
 	QString m_configPath;
 	bool m_initialisingMQTT{false};
-	bool m_connectionTimedOut{false};
 	MQTTClient::MQTTWill m_willSettings;
     MQTTSubscriptionWidget* m_subscriptionWidget{nullptr};
 

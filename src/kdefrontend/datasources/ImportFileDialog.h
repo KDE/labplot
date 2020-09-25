@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import data dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2019 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2008-2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -41,7 +41,6 @@ class MQTTClient;
 #endif
 
 class QStatusBar;
-class QMenu;
 class KMessageWidget;
 
 class ImportFileDialog : public ImportDialog {
@@ -52,16 +51,12 @@ public:
 	~ImportFileDialog() override;
 
 	QString selectedObject() const override;
-
 	int sourceType() const;
-
 	void importToLiveDataSource(LiveDataSource*, QStatusBar*) const;
-
+	void importTo(QStatusBar*) const override;
 #ifdef HAVE_MQTT
 	void importToMQTT(MQTTClient*) const;
 #endif
-
-	void importTo(QStatusBar*) const override;
 
 private:
 	ImportFileWidget* m_importFileWidget;
@@ -69,14 +64,13 @@ private:
 	QPushButton* m_optionsButton;
 	KMessageWidget* m_messageWidget{nullptr};
 
-	void showErrorMessage(const QString&);
-
-protected  slots:
+protected slots:
 	void checkOkButton() override;
 
 private slots:
 	void toggleOptions();
 	void checkOnFitsTableToMatrix(const bool enable);
+	void showErrorMessage(const QString&);
 };
 
 #endif //IMPORTFILEDIALOG_H
