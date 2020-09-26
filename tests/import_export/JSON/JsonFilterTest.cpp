@@ -48,12 +48,13 @@ void JsonFilterTest::testArrayImport() {
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setCreateIndexEnabled(true);
 	filter.setDataRowType(QJsonValue::Array);
+	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd"));
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
 	QCOMPARE(spreadsheet.columnCount(), 3);
 	QCOMPARE(spreadsheet.rowCount(), 3);
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::DateTime);
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
@@ -68,9 +69,12 @@ void JsonFilterTest::testArrayImport() {
 	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
 	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
 
-	QCOMPARE(spreadsheet.column(1)->textAt(0), QString("2018-06-01"));
-	QCOMPARE(spreadsheet.column(1)->textAt(1), QString("2018-06-02"));
-	QCOMPARE(spreadsheet.column(1)->textAt(2), QString("2018-06-03"));
+	QDateTime value = QDateTime::fromString(QLatin1String("2018-06-01"), QLatin1String("yyyy-MM-dd"));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(0), value);
+	value = QDateTime::fromString(QLatin1String("2018-06-02"), QLatin1String("yyyy-MM-dd"));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(1), value);
+	value = QDateTime::fromString(QLatin1String("2018-06-03"), QLatin1String("yyyy-MM-dd"));
+	QCOMPARE(spreadsheet.column(1)->dateTimeAt(2), value);
 
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 0.01);
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0.02);

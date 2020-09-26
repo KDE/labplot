@@ -345,6 +345,7 @@ void AsciiFilterTest::testHeader07() {
 	filter.setSeparatingCharacter("TAB");
 	filter.setStartRow(2);
 	filter.setHeaderEnabled(true);
+	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
 	//spreadsheet size
