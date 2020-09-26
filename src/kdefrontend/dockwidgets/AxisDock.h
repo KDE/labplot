@@ -135,6 +135,8 @@ private slots:
 	void labelsRotationChanged(int);
 	void labelsFontChanged(const QFont&);
 	void labelsFontColorChanged(const QColor&);
+	void labelsBackgroundTypeChanged(int);
+	void labelsBackgroundColorChanged(const QColor&);
 	void labelsPrefixChanged();
 	void labelsSuffixChanged();
 	void labelsOpacityChanged(int);
@@ -196,6 +198,8 @@ private slots:
 	void axisLabelsRotationAngleChanged(qreal);
 	void axisLabelsFontChanged(const QFont&);
 	void axisLabelsFontColorChanged(const QColor&);
+	void axisLabelsBackgroundTypeChanged(Axis::LabelsBackgroundType);
+	void axisLabelsBackgroundColorChanged(const QColor&);
 	void axisLabelsPrefixChanged(const QString&);
 	void axisLabelsSuffixChanged(const QString&);
 	void axisLabelsOpacityChanged(qreal);

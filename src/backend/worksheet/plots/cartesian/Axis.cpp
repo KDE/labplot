@@ -204,6 +204,8 @@ void Axis::init() {
 	d->labelsFont = group.readEntry("LabelsFont", QFont());
 	d->labelsFont.setPixelSize( Worksheet::convertToSceneUnits( 10.0, Worksheet::Unit::Point ) );
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
+	d->labelsBackgroundType = (LabelsBackgroundType) group.readEntry("LabelsBackgroundType", static_cast<int>(LabelsBackgroundType::Transparent));
+	d->labelsBackgroundColor = group.readEntry("LabelsBackgroundColor", QColor(Qt::white));
 	d->labelsPrefix =  group.readEntry("LabelsPrefix", "" );
 	d->labelsSuffix =  group.readEntry("LabelsSuffix", "" );
 	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
@@ -435,6 +437,8 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOffset, labelsOffset);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsRotationAngle, labelsRotationAngle);
 CLASS_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor);
 CLASS_SHARED_D_READER_IMPL(Axis, QFont, labelsFont, labelsFont);
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsBackgroundType, labelsBackgroundType, labelsBackgroundType);
+CLASS_SHARED_D_READER_IMPL(Axis, QColor, labelsBackgroundColor, labelsBackgroundColor);
 CLASS_SHARED_D_READER_IMPL(Axis, QString, labelsPrefix, labelsPrefix);
 CLASS_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity);
@@ -815,6 +819,20 @@ void Axis::setLabelsFont(const QFont& font) {
 	Q_D(Axis);
 	if (font != d->labelsFont)
 		exec(new AxisSetLabelsFontCmd(d, font, ki18n("%1: set label font")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsBackgroundType, Axis::LabelsBackgroundType, labelsBackgroundType, update);
+void Axis::setLabelsBackgroundType(LabelsBackgroundType type) {
+	Q_D(Axis);
+	if (type != d->labelsBackgroundType)
+		exec(new AxisSetLabelsBackgroundTypeCmd(d, type, ki18n("%1: set labels background type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsBackgroundColor, QColor, labelsBackgroundColor, update);
+void Axis::setLabelsBackgroundColor(const QColor& color) {
+	Q_D(Axis);
+	if (color != d->labelsBackgroundColor)
+		exec(new AxisSetLabelsBackgroundColorCmd(d, color, ki18n("%1: set label background color")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsPrefix, QString, labelsPrefix, retransformTickLabelStrings);
@@ -1579,15 +1597,13 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 	for (auto value : tickLabelValues)
 		tempValues.append( nsl_math_round_places(value, precision-1) );
 
+	//check whether we have duplicates with reduced precision
+	//-> current precision cannot be reduced, return the current value
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
 			if (i == j) continue;
-			if (tempValues.at(i) == tempValues.at(j)) {
-				//duplicate found for the reduced precision
-				//-> current precision cannot be reduced, return the current value
-// 				DEBUG("	lower precision = " << precision);
+			if (tempValues.at(i) == tempValues.at(j))
 				return precision;
-			}
 		}
 	}
 
@@ -2025,6 +2041,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		painter->setFont(labelsFont);
 		QTextDocument td;
 		td.setDefaultFont(labelsFont);
+		QFontMetrics fm(labelsFont);
 		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
 			for (int i = 0; i < tickLabelPoints.size(); i++) {
@@ -2033,9 +2050,20 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 				painter->rotate(-labelsRotationAngle);
 
 				if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
+					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
+						const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
+						int width = rect.width();;
+						int height = rect.height();
+						painter->fillRect(0, -height/2, width, height, labelsBackgroundColor);
+					}
 					painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
 				} else {
 					td.setHtml(tickLabelStrings.at(i));
+					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
+						int width = td.size().width();
+						int height = td.size().height();
+						painter->fillRect(0, -height/2, width, height, labelsBackgroundColor);
+					}
 					painter->translate(0, -td.size().height());
 					td.drawContents(painter);
 				}
@@ -2047,6 +2075,12 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 				painter->translate(tickLabelPoints.at(i));
 				painter->save();
 				painter->rotate(-labelsRotationAngle);
+				if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
+						const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
+						int width = rect.width();;
+						int height = rect.height();
+						painter->fillRect(0, -height/2, width, height, labelsBackgroundColor);
+				}
 				painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
 				painter->restore();
 				painter->translate(-tickLabelPoints.at(i));
@@ -2218,6 +2252,10 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "prefix", d->labelsPrefix );
 	writer->writeAttribute( "suffix", d->labelsSuffix );
 	writer->writeAttribute( "opacity", QString::number(d->labelsOpacity) );
+	writer->writeAttribute( "backgroundType", QString::number(static_cast<int>(d->labelsBackgroundType)) );
+	writer->writeAttribute( "backgroundColor_r", QString::number(d->labelsBackgroundColor.red()) );
+	writer->writeAttribute( "backgroundColor_g", QString::number(d->labelsBackgroundColor.green()) );
+	writer->writeAttribute( "backgroundColor_b", QString::number(d->labelsBackgroundColor.blue()) );
 	writer->writeEndElement();
 
 	//grid
@@ -2325,6 +2363,19 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			d->labelsSuffix = attribs.value("suffix").toString();
 
 			READ_DOUBLE_VALUE("opacity", labelsOpacity);
+
+			READ_INT_VALUE("backgroundType", labelsBackgroundType, Axis::LabelsBackgroundType);
+			str = attribs.value("backgroundColor_r").toString();
+			if(!str.isEmpty())
+				d->labelsBackgroundColor.setRed(str.toInt());
+
+			str = attribs.value("backgroundColor_g").toString();
+			if(!str.isEmpty())
+				d->labelsBackgroundColor.setGreen(str.toInt());
+
+			str = attribs.value("backgroundColor_b").toString();
+			if(!str.isEmpty())
+				d->labelsBackgroundColor.setBlue(str.toInt());
 		} else if (!preview && reader->name() == "majorGrid") {
 			attribs = reader->attributes();
 
@@ -2348,7 +2399,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void Axis::loadThemeConfig(const KConfig& config) {
-	const KConfigGroup group = config.group("Axis");
+	const KConfigGroup& group = config.group("Axis");
 
 	//we don't want to show the major and minor grid lines for non-first horizontal/vertical axes
 	//determine the index of the axis among other axes having the same orientation
@@ -2365,9 +2416,14 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	}
 
 	QPen p;
+
 	// Tick label
 	this->setLabelsColor(group.readEntry("LabelsFontColor", QColor(Qt::black)));
 	this->setLabelsOpacity(group.readEntry("LabelsOpacity", 1.0));
+
+	//use plot area color for the background color of the labels
+	const KConfigGroup& groupPlot = config.group("CartesianPlot");
+	this->setLabelsBackgroundColor(groupPlot.readEntry("BackgroundFirstColor", QColor(Qt::white)));
 
 	//Line
 	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
@@ -2419,21 +2475,22 @@ void Axis::saveThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("Axis");
 
 	// Tick label
-	group.writeEntry("LabelsFontColor", (QColor) this->labelsColor());
+	group.writeEntry("LabelsFontColor", this->labelsColor());
 	group.writeEntry("LabelsOpacity", this->labelsOpacity());
+	group.writeEntry("LabelsBackgroundColor", this->labelsBackgroundColor());
 
 	//Line
 	group.writeEntry("LineOpacity", this->lineOpacity());
-	group.writeEntry("LineColor", (QColor) this->linePen().color());
+	group.writeEntry("LineColor", this->linePen().color());
 	group.writeEntry("LineStyle", (int) this->linePen().style());
 	group.writeEntry("LineWidth", this->linePen().widthF());
 
 	//Major ticks
 	group.writeEntry("MajorGridOpacity", this->majorGridOpacity());
-	group.writeEntry("MajorGridColor", (QColor) this->majorGridPen().color());
+	group.writeEntry("MajorGridColor", this->majorGridPen().color());
 	group.writeEntry("MajorGridStyle", (int) this->majorGridPen().style());
 	group.writeEntry("MajorGridWidth", this->majorGridPen().widthF());
-	group.writeEntry("MajorTicksColor", (QColor)this->majorTicksPen().color());
+	group.writeEntry("MajorTicksColor", this->majorTicksPen().color());
 	group.writeEntry("MajorTicksLineStyle", (int) this->majorTicksPen().style());
 	group.writeEntry("MajorTicksWidth", this->majorTicksPen().widthF());
 	group.writeEntry("MajorTicksOpacity", this->majorTicksOpacity());
@@ -2441,11 +2498,11 @@ void Axis::saveThemeConfig(const KConfig& config) {
 
 	//Minor ticks
 	group.writeEntry("MinorGridOpacity", this->minorGridOpacity());
-	group.writeEntry("MinorGridColor",(QColor) this->minorGridPen().color());
+	group.writeEntry("MinorGridColor", this->minorGridPen().color());
 	group.writeEntry("MinorGridStyle", (int) this->minorGridPen().style());
 	group.writeEntry("MinorGridWidth", this->minorGridPen().widthF());
-	group.writeEntry("MinorTicksColor", (QColor) this->minorTicksPen().color());
-	group.writeEntry("MinorTicksLineStyle",( int) this->minorTicksPen().style());
+	group.writeEntry("MinorTicksColor", this->minorTicksPen().color());
+	group.writeEntry("MinorTicksLineStyle", (int) this->minorTicksPen().style());
 	group.writeEntry("MinorTicksWidth", this->minorTicksPen().widthF());
 	group.writeEntry("MinorTicksOpacity", this->minorTicksOpacity());
 	group.writeEntry("MinorTicksType", (int)this->minorTicksType());

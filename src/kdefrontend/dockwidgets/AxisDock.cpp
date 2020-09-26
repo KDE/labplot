@@ -210,6 +210,9 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 			this, &AxisDock::labelsRotationChanged);
 	connect(ui.kfrLabelsFont, &KFontRequester::fontSelected, this, &AxisDock::labelsFontChanged);
 	connect(ui.kcbLabelsFontColor, &KColorButton::changed, this, &AxisDock::labelsFontColorChanged);
+	connect(ui.cbLabelsBackgroundType, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &AxisDock::labelsBackgroundTypeChanged);
+	connect(ui.kcbLabelsBackgroundColor, &KColorButton::changed, this, &AxisDock::labelsBackgroundColorChanged);
 	connect(ui.leLabelsPrefix, &QLineEdit::textChanged, this, &AxisDock::labelsPrefixChanged);
 	connect(ui.leLabelsSuffix, &QLineEdit::textChanged, this, &AxisDock::labelsSuffixChanged);
 	connect(ui.sbLabelsOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
@@ -409,6 +412,9 @@ void AxisDock::init() {
 	ui.cbLabelsFormat->addItem( i18n("Multiples of π") );
 
 	ui.cbLabelsDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
+
+	ui.cbLabelsBackgroundType->addItem(i18n("Transparent"));
+	ui.cbLabelsBackgroundType->addItem(i18n("Color"));
 }
 
 void AxisDock::setModel() {
@@ -508,6 +514,8 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::labelsRotationAngleChanged, this, &AxisDock::axisLabelsRotationAngleChanged);
 	connect(m_axis, &Axis::labelsFontChanged, this, &AxisDock::axisLabelsFontChanged);
 	connect(m_axis, &Axis::labelsColorChanged, this, &AxisDock::axisLabelsFontColorChanged);
+	connect(m_axis, &Axis::labelsBackgroundTypeChanged, this, &AxisDock::axisLabelsBackgroundTypeChanged);
+	connect(m_axis, &Axis::labelsBackgroundColorChanged, this, &AxisDock::axisLabelsBackgroundColorChanged);
 	connect(m_axis, &Axis::labelsPrefixChanged, this, &AxisDock::axisLabelsPrefixChanged);
 	connect(m_axis, &Axis::labelsSuffixChanged, this, &AxisDock::axisLabelsSuffixChanged);
 	connect(m_axis, &Axis::labelsOpacityChanged, this, &AxisDock::axisLabelsOpacityChanged);
@@ -1467,6 +1475,28 @@ void AxisDock::labelsFontColorChanged(const QColor& color) {
 		axis->setLabelsColor(color);
 }
 
+void AxisDock::labelsBackgroundTypeChanged(int index) {
+	auto type = Axis::LabelsBackgroundType(index);
+
+	bool transparent = (type == Axis::LabelsBackgroundType::Transparent);
+	ui.lLabelsBackgroundColor->setVisible(!transparent);
+	ui.kcbLabelsBackgroundColor->setVisible(!transparent);
+
+	if (m_initializing)
+		return;
+
+	for (auto* axis : m_axesList)
+		axis->setLabelsBackgroundType(type);
+}
+
+void AxisDock::labelsBackgroundColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	for (auto* axis : m_axesList)
+		axis->setLabelsBackgroundColor(color);
+}
+
 void AxisDock::labelsOpacityChanged(int value) {
 	if (m_initializing)
 		return;
@@ -1880,6 +1910,16 @@ void AxisDock::axisLabelsFontColorChanged(const QColor& color) {
 	ui.kcbLabelsFontColor->setColor(color);
 	m_initializing = false;
 }
+void AxisDock::axisLabelsBackgroundTypeChanged(Axis::LabelsBackgroundType type) {
+	m_initializing = true;
+	ui.cbLabelsBackgroundType->setCurrentIndex(static_cast<int>(type));
+	m_initializing = false;
+}
+void AxisDock::axisLabelsBackgroundColorChanged(const QColor& color) {
+	m_initializing = true;
+	ui.kcbLabelsBackgroundColor->setColor(color);
+	m_initializing = false;
+}
 void AxisDock::axisLabelsPrefixChanged(const QString& prefix) {
 	m_initializing = true;
 	ui.leLabelsPrefix->setText(prefix);
@@ -2041,6 +2081,8 @@ void AxisDock::load() {
 	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelsFont->setFont( font );
 	ui.kcbLabelsFontColor->setColor( m_axis->labelsColor() );
+	ui.cbLabelsBackgroundType->setCurrentIndex( (int) m_axis->labelsBackgroundType() );
+	ui.kcbLabelsBackgroundColor->setColor( m_axis->labelsBackgroundColor() );
 	ui.leLabelsPrefix->setText( m_axis->labelsPrefix() );
 	ui.leLabelsSuffix->setText( m_axis->labelsSuffix() );
 	ui.sbLabelsOpacity->setValue( round(m_axis->labelsOpacity()*100.0) );
@@ -2170,6 +2212,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelsFont->setFont( group.readEntry("LabelsFont", font) );
 	ui.kcbLabelsFontColor->setColor( group.readEntry("LabelsFontColor", m_axis->labelsColor()) );
+	ui.cbLabelsBackgroundType->setCurrentIndex( group.readEntry("LabelsBackgroundType", (int) m_axis->labelsBackgroundType()) );
+	ui.kcbLabelsBackgroundColor->setColor( group.readEntry("LabelsBackgroundColor", m_axis->labelsBackgroundColor()) );
 	ui.leLabelsPrefix->setText( group.readEntry("LabelsPrefix", m_axis->labelsPrefix()) );
 	ui.leLabelsSuffix->setText( group.readEntry("LabelsSuffix", m_axis->labelsSuffix()) );
 	ui.sbLabelsOpacity->setValue( round(group.readEntry("LabelsOpacity", m_axis->labelsOpacity())*100.0) );
@@ -2278,6 +2322,8 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LabelsRotation", ui.sbLabelsRotation->value());
 	group.writeEntry("LabelsFont", ui.kfrLabelsFont->font());
 	group.writeEntry("LabelsFontColor", ui.kcbLabelsFontColor->color());
+	group.writeEntry("LabelsBackgroundType", ui.cbLabelsBackgroundType->currentIndex());
+	group.writeEntry("LabelsBackgroundColor", ui.kcbLabelsBackgroundColor->color());
 	group.writeEntry("LabelsPrefix", ui.leLabelsPrefix->text());
 	group.writeEntry("LabelsSuffix", ui.leLabelsSuffix->text());
 	group.writeEntry("LabelsOpacity", ui.sbLabelsOpacity->value()/100.);

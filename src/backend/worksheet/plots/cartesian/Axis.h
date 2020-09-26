@@ -58,6 +58,7 @@ public:
 	enum class ArrowPosition {Left, Right, Both};
 	enum class Scale {Linear, Log10, Log2, Ln, Sqrt, X2};
 	enum class LabelsPosition {NoLabels, In, Out};
+	enum class LabelsBackgroundType {Transparent, Color};
 
 	explicit Axis(const QString&, Orientation orientation = Orientation::Horizontal);
 	~Axis() override;
@@ -124,6 +125,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle)
 	CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor)
 	CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont)
+	BASIC_D_ACCESSOR_DECL(LabelsBackgroundType, labelsBackgroundType, LabelsBackgroundType)
+	CLASS_D_ACCESSOR_DECL(QColor, labelsBackgroundColor, LabelsBackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QString, labelsPrefix, LabelsPrefix)
 	CLASS_D_ACCESSOR_DECL(QString, labelsSuffix, LabelsSuffix)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOpacity, LabelsOpacity)
@@ -236,6 +239,8 @@ signals:
 	void labelsRotationAngleChanged(qreal);
 	void labelsColorChanged(QColor);
 	void labelsFontChanged(QFont);
+	void labelsBackgroundTypeChanged(Axis::LabelsBackgroundType);
+	void labelsBackgroundColorChanged(QColor);
 	void labelsPrefixChanged(QString);
 	void labelsSuffixChanged(QString);
 	void labelsOpacityChanged(qreal);

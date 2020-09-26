@@ -119,6 +119,8 @@ public:
 	qreal labelsRotationAngle;
 	QColor labelsColor;
 	QFont labelsFont;
+	Axis::LabelsBackgroundType labelsBackgroundType;
+	QColor labelsBackgroundColor;
 	qreal labelsOffset; //!< offset, distance to the end of the tick line (in page units)
 	qreal labelsOpacity;
 	QString labelsPrefix;
