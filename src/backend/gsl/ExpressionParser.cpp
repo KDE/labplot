@@ -1291,16 +1291,16 @@ const QVector<int>& ExpressionParser::constantsGroupIndices() {
 }
 
 bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
-	for (const auto& var: vars) {
-		QByteArray varba = var.toLatin1();
-		assign_variable(varba.constData(), 0);
-	}
-
-	QByteArray funcba = expr.toLatin1();
-	const char* data = funcba.constData();
-
+	QDEBUG(Q_FUNC_INFO << ", expr:" << expr << ", vars:" << vars);
 	gsl_set_error_handler_off();
-	parse(data);
+
+	for (const auto& var: vars)
+		assign_variable(qPrintable(var), 0);
+
+	parse(qPrintable(expr));
+
+	//TODO: remove assigned vars?
+
 	return !(parse_errors() > 0);
 }
 
@@ -1481,7 +1481,7 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 	return true;
 }
 
-bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& expr2, const QString& min, const QString& max,
+bool ExpressionParser::evaluateParametric(const QString& xexpr, const QString& yexpr, const QString& min, const QString& max,
 		int count, QVector<double>* xVector, QVector<double>* yVector) {
 	gsl_set_error_handler_off();
 
@@ -1491,11 +1491,11 @@ bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& e
 	for (int i = 0; i < count; i++) {
 		assign_variable("t", range.min() + step * i);
 
-		const double x = parse(qPrintable(expr1));
+		const double x = parse(qPrintable(xexpr));
 		if (parse_errors() > 0)
 			return false;
 
-		const double y = parse(qPrintable(expr2));
+		const double y = parse(qPrintable(yexpr));
 		if (parse_errors() > 0)
 			return false;
 

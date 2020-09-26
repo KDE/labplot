@@ -201,10 +201,15 @@ symbol* assign_variable(const char* symb_name, double value) {
 	} else {
 		pdebug("PARSER: Variable already assigned\n");
 	}
-	ptr->value.var = value;
+
+	/* do not assign value if var already exits as function */
+	if (ptr->type == VAR)
+		ptr->value.var = value;
 
 	return ptr;
 };
+
+/*TODO: remove_variable() */
 
 static char getcharstr(param *p) {
 	pdebug(" getcharstr() pos = %d\n", (int)(p->pos));
@@ -222,7 +227,7 @@ static void ungetcstr(size_t *pos) {
 }
 
 double parse(const char *str) {
-	pdebug("\nPARSER: parse('%s') len=%d\n********************************\n", str, (int)strlen(str));
+	pdebug("\nPARSER: parse('%s') len = %d\n********************************\n", str, (int)strlen(str));
 
 	/* be sure that the symbol table has been initialized */
 	if (!sym_table)
@@ -239,14 +244,14 @@ double parse(const char *str) {
 	}
 
 	strcpy(p.string, str);
-	p.string[strlen(str)] = '\n';
-	p.string[strlen(str)+1] = '\0';
+	p.string[strlen(str)] = '\n';	// end for parsing
+	p.string[strlen(str)+1] = '\0';	// end of string
 	/* pdebug("PARSER: Call yyparse() for \"%s\" (len = %d)\n", p.string, (int)strlen(p.string)); */
 
 	/* parameter for yylex */
 	yyparse(&p);
 
-	pdebug("PARSER: parse() DONE (result = %g, parse errors = %d)\n*******************************\n", res, parse_errors());
+	pdebug("PARSER: parse() DONE (result = %g, errors = %d)\n*******************************\n", res, parse_errors());
 	free(p.string);
 	p.string = 0;
 
