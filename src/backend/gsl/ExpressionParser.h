@@ -3,6 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : c++ wrapper for the bison generated parser.
 
  ***************************************************************************/
@@ -29,6 +30,7 @@
 #ifndef EXPRESSIONPARSER_H
 #define EXPRESSIONPARSER_H
 
+#include "backend/lib/Range.h"
 #include <QVector>
 
 class QStringList;
@@ -73,7 +75,7 @@ private:
 	void initFunctions();
 	void initConstants();
 
-	static ExpressionParser* instance;
+	static ExpressionParser* m_instance;
 
 	QStringList m_functions;
 	QStringList m_functionsGroups;

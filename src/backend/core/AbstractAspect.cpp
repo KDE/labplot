@@ -523,8 +523,8 @@ void AbstractAspect::removeAllChildren() {
  * \brief Move a child to another parent aspect and transfer ownership.
  */
 void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
-	Q_ASSERT(parentAspect() != nullptr);
-	Q_ASSERT(newParent != nullptr);
+	Q_ASSERT(parentAspect());
+	Q_ASSERT(newParent);
 	int max_index = newParent->childCount<AbstractAspect>(ChildIndexFlag::IncludeHidden);
 	if (newIndex == -1)
 		newIndex = max_index;
@@ -556,6 +556,7 @@ QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFla
 }
 
 const QVector<AbstractAspect*>& AbstractAspect::children() const {
+	Q_ASSERT(d);
 	return d->m_children;
 }
 

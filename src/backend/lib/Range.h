@@ -29,6 +29,10 @@
 #ifndef RANGE_H
 #define RANGE_H
 
+extern "C" {
+#include "backend/gsl/parser.h"
+}
+
 #include <QString>
 #include <QLocale>
 
@@ -45,6 +49,10 @@ public:
 	Range(T min, T max) {
 		this->setRange(min, max);
 	}
+	Range(const QString& min, const QString& max) {
+		//TODO: check for NAN, INF?
+		this->setRange(parse(qPrintable(min.simplified())), parse(qPrintable(max.simplified())));
+	}
 	~Range() = default;
 	T min() const { return m_min; }
 	T max() const { return m_max; }
@@ -58,8 +66,7 @@ public:
 	}
 	T size() const { return m_max - m_min; }
 	// calculate step size from number of steps
-	// TODO: steps==1 ?
-	T stepSize(const int steps) const { return size()/(T)(steps - 1) ; }
+	T stepSize(const int steps) const { return (steps > 1) ? size()/(T)(steps - 1) : 0; }
 	bool isZero() const { return (m_max == m_min); }
 	bool inside(const Range<T>& other) const { return ( m_min <= other.min() && m_max >= other.max() ); }
 	bool inside(T value) const { return ( m_min <= value && m_max >= value ); }

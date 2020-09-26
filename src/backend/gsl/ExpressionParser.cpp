@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2014-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2014-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : C++ wrapper for the bison generated parser.
 
  ***************************************************************************/
@@ -43,7 +43,7 @@ extern "C" {
 #include "backend/gsl/parser.h"
 }
 
-ExpressionParser* ExpressionParser::instance = nullptr;
+ExpressionParser* ExpressionParser::m_instance{nullptr};
 
 ExpressionParser::ExpressionParser() {
 	init_table();
@@ -1236,15 +1236,17 @@ void ExpressionParser::initConstants() {
 		m_constantsGroupIndex << 15;
 }
 
+/**********************************************************************************/
+
 ExpressionParser::~ExpressionParser() {
 	delete_table();
 }
 
 ExpressionParser* ExpressionParser::getInstance() {
-	if (!instance)
-		instance = new ExpressionParser();
+	if (!m_instance)
+		m_instance = new ExpressionParser();
 
-	return instance;
+	return m_instance;
 }
 
 const QStringList& ExpressionParser::functions() {
@@ -1303,28 +1305,27 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 }
 
 QStringList ExpressionParser::getParameter(const QString& expr, const QStringList& vars) {
-	DEBUG("ExpressionParser::getParameter()");
-	QDEBUG("variables:" << vars);
+	QDEBUG(Q_FUNC_INFO << ", variables:" << vars);
 	QStringList parameters;
 
 	QStringList strings = expr.split(QRegularExpression(QStringLiteral("\\W+")), QString::SkipEmptyParts);
-	QDEBUG("found strings:" << strings);
+	QDEBUG(Q_FUNC_INFO << ", found strings:" << strings);
 	// RE for any number
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))
 	const QRegularExpression re(QRegularExpression::anchoredPattern(QStringLiteral("[0-9]*")));
 #else
 	const QRegularExpression re("\\A(?:" +  QStringLiteral("[0-9]*") + ")\\z");
 #endif
-	for (int i = 0; i < strings.size(); ++i) {
-		QDEBUG(strings[i] << ':' << constants().indexOf(strings[i]) << ' ' << functions().indexOf(strings[i]) << ' '
-			       << vars.indexOf(strings[i]) << ' ' << re.match(strings[i]).hasMatch());
+	for (const QString& string: strings) {
+		QDEBUG(string << ':' << constants().indexOf(string) << ' ' << functions().indexOf(string) << ' '
+			       << vars.indexOf(string) << ' ' << re.match(string).hasMatch());
 		// check if token is not a known constant/function/variable or number
-		if (constants().indexOf(strings[i]) == -1 && functions().indexOf(strings[i]) == -1
-		    && vars.indexOf(strings[i]) == -1 && re.match(strings[i]).hasMatch() == false)
-			parameters << strings[i];
+		if (constants().indexOf(string) == -1 && functions().indexOf(string) == -1
+		    && vars.indexOf(string) == -1 && re.match(string).hasMatch() == false)
+			parameters << string;
 	}
 	parameters.removeDuplicates();
-	QDEBUG("parameters found:" << parameters);
+	QDEBUG(Q_FUNC_INFO << ", parameters found:" << parameters);
 
 	return parameters;
 }
@@ -1335,31 +1336,20 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
 		int count, QVector<double>* xVector, QVector<double>* yVector,
 		const QStringList& paramNames, const QVector<double>& paramValues) {
-	DEBUG("ExpressionParser::evaluateCartesian() 1")
-
-	QByteArray xminba = min.toLatin1();
-	const double xMin = parse(xminba.constData());
-
-	QByteArray xmaxba = max.toLatin1();
-	const double xMax = parse(xmaxba.constData());
-
-	const double step = (xMax - xMin)/(double)(count - 1);
-
-	QByteArray funcba = expr.toLatin1();
-	const char* func = funcba.constData();
-
+	DEBUG(Q_FUNC_INFO << ", v1")
 	gsl_set_error_handler_off();
 
-	for (int i = 0; i < paramNames.size(); ++i) {
-		QByteArray paramba = paramNames.at(i).toLatin1();
-		assign_variable(paramba.constData(), paramValues.at(i));
-	}
+	const Range<double> range{min, max};
+	const double step = range.stepSize(count);
+
+	for (int i = 0; i < paramNames.size(); ++i)
+		assign_variable(qPrintable(paramNames.at(i)), paramValues.at(i));
 
 	for (int i = 0; i < count; i++) {
-		const double x = xMin + step * i;
+		const double x{ range.min() + step * i };
 		assign_variable("x", x);
-		const double y = parse(func);
 
+		const double y{ parse(qPrintable(expr)) };
 		if (parse_errors() > 0)
 			return false;
 
@@ -1372,26 +1362,17 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
 		int count, QVector<double>* xVector, QVector<double>* yVector) {
-	DEBUG("ExpressionParser::evaluateCartesian() 2")
-
-	QByteArray xminba = min.toLatin1();
-	const double xMin = parse(xminba.constData());
-
-	QByteArray xmaxba = max.toLatin1();
-	const double xMax = parse(xmaxba.constData());
-
-	const double step = (xMax - xMin)/(double)(count - 1);
-
-	QByteArray funcba = expr.toLatin1();
-	const char* func = funcba.constData();
-
+	DEBUG(Q_FUNC_INFO << ", v2")
 	gsl_set_error_handler_off();
 
-	for (int i = 0; i < count; i++) {
-		const double x = xMin + step*i;
-		assign_variable("x", x);
-		const double y = parse(func);
+	const Range<double> range{min, max};
+	const double step = range.stepSize(count);
 
+	for (int i = 0; i < count; i++) {
+		const double x{ range.min() + step * i };
+		assign_variable("x", x);
+
+		const double y{ parse(qPrintable(expr)) };
 		if (parse_errors() > 0)
 			return false;
 
@@ -1403,16 +1384,12 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 }
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector) {
-	DEBUG("ExpressionParser::evaluateCartesian() 3")
-	QByteArray funcba = expr.toLatin1();
-	const char* func = funcba.constData();
-
+	DEBUG(Q_FUNC_INFO << ", v3")
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < xVector->count(); i++) {
-		const double x = xVector->at(i);
-		assign_variable("x", x);
-		const double y = parse(func);
+		assign_variable("x", xVector->at(i));
+		const double y = parse(qPrintable(expr));
 
 		if (parse_errors() > 0)
 			return false;
@@ -1425,23 +1402,16 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 
 bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* xVector, QVector<double>* yVector,
 		const QStringList& paramNames, const QVector<double>& paramValues) {
-	DEBUG("ExpressionParser::evaluateCartesian() 4")
-
-	QByteArray funcba = expr.toLatin1();
-	const char* func = funcba.constData();
-
+	DEBUG(Q_FUNC_INFO << ", v4")
 	gsl_set_error_handler_off();
 
-	for (int i = 0; i < paramNames.size(); ++i) {
-		QByteArray paramba = paramNames.at(i).toLatin1();
-		assign_variable(paramba.constData(), paramValues.at(i));
-	}
+	for (int i = 0; i < paramNames.size(); ++i)
+		assign_variable(qPrintable(paramNames.at(i)), paramValues.at(i));
 
 	for (int i = 0; i < xVector->count(); i++) {
-		const double x = xVector->at(i);
-		assign_variable("x", x);
-		const double y = parse(func);
+		assign_variable("x", xVector->at(i));
 
+		const double y = parse(qPrintable(expr));
 		if (parse_errors() > 0)
 			return false;
 
@@ -1457,12 +1427,8 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	Data is stored in \c dataVectors.
  */
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList& vars, const QVector<QVector<double>*>& xVectors, QVector<double>* yVector) {
-	DEBUG("ExpressionParser::evaluateCartesian() 4")
+	DEBUG(Q_FUNC_INFO << ", v5")
 	Q_ASSERT(vars.size() == xVectors.size());
-
-	QByteArray funcba = expr.toLatin1();
-	const char* func = funcba.constData();
-
 	gsl_set_error_handler_off();
 
 	//determine the minimal size of involved vectors
@@ -1471,29 +1437,22 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		if (xVector->size() < minSize)
 			minSize = xVector->size();
 	}
-
 	if (yVector->size() < minSize)
 		minSize = yVector->size();
 
+	// calculate values
 	for (int i = 0; i < minSize; i++) {
-		for (int n = 0; n < vars.size(); ++n) {
-			const QString& varName = vars.at(n);
-			const double varValue = xVectors.at(n)->at(i);
-			QByteArray varba = varName.toLatin1();
-			assign_variable(varba.constData(), varValue);
-		}
+		for (int n = 0; n < vars.size(); ++n)
+			assign_variable(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 
-		//TODO DEBUG("BEFORE CRASH")
-		const double y = parse(func);
-		//DEBUG("AFTER CRASH")
-
+		const double y = parse(qPrintable(expr));
 		if (parse_errors() > 0)
 			return false;
 
 		(*yVector)[i] = y;
 	}
 
-	//in case the y-vector is longer than the x-vector(s), set all elements that were not calculated to NAN
+	//if the y-vector is longer than the x-vector(s), set all exceeding elements to NAN
 	for (int i = minSize; i < yVector->size(); ++i)
 		(*yVector)[i] = NAN;
 
@@ -1502,24 +1461,16 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 
 bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, const QString& max,
 		int count, QVector<double>* xVector, QVector<double>* yVector) {
-
-	QByteArray minba = min.toLatin1();
-	const double minValue = parse(minba.constData());
-
-	QByteArray maxba = max.toLatin1();
-	const double maxValue = parse(maxba.constData());
-
-	const double step = (maxValue - minValue)/(double)(count - 1);
-
-	QByteArray funcba = expr.toLatin1();
-	const char* func = funcba.constData();
-
 	gsl_set_error_handler_off();
 
+	const Range<double> range{min, max};
+	const double step = range.stepSize(count);
+
 	for (int i = 0; i < count; i++) {
-		const double phi = minValue + step * i;
+		const double phi = range.min() + step * i;
 		assign_variable("phi", phi);
-		const double r = parse(func);
+
+		const double r = parse(qPrintable(expr));
 		if (parse_errors() > 0)
 			return false;
 
@@ -1532,36 +1483,23 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 
 bool ExpressionParser::evaluateParametric(const QString& expr1, const QString& expr2, const QString& min, const QString& max,
 		int count, QVector<double>* xVector, QVector<double>* yVector) {
-
-	QByteArray minba = min.toLatin1();
-	const double minValue = parse(minba.constData());
-
-	QByteArray maxba = max.toLatin1();
-	const double maxValue = parse(maxba.constData());
-
-	const double step = (maxValue - minValue)/(double)(count - 1);
-
-	QByteArray xfuncba = expr1.toLatin1();
-	const char* xFunc = xfuncba.constData();
-
-	QByteArray yfuncba = expr2.toLatin1();
-	const char* yFunc = yfuncba.constData();
-
 	gsl_set_error_handler_off();
 
+	const Range<double> range{min, max};
+	const double step = range.stepSize(count);
+
 	for (int i = 0; i < count; i++) {
-		const double t = minValue + step*i;
-		assign_variable("t", t);
-		const double x = parse(xFunc);
+		assign_variable("t", range.min() + step * i);
+
+		const double x = parse(qPrintable(expr1));
+		if (parse_errors() > 0)
+			return false;
+
+		const double y = parse(qPrintable(expr2));
 		if (parse_errors() > 0)
 			return false;
 
 		(*xVector)[i] = x;
-
-		const double y = parse(yFunc);
-		if (parse_errors() > 0)
-			return false;
-
 		(*yVector)[i] = y;
 	}
 
