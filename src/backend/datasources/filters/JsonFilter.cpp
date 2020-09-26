@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     --------------------------------------------------------------------
     Copyright            : (C) 2018 Andrey Cygankov (craftplace.ms@gmail.com)
-    Copyright            : (C) 2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2018-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -736,13 +736,9 @@ QVector<QStringList> JsonFilterPrivate::preview(int lines) {
 
 			switch (value.type()) {
 			case QJsonValue::Double:
-				if (columnModes[n] == AbstractColumn::ColumnMode::Numeric)
-					lineString += QString::number(value.toDouble(), 'g', 16);
-				else
-					lineString += lineString += QString();
+				lineString += QString::number(value.toDouble(), 'g', 16);
 				break;
 			case QJsonValue::String:
-				//TODO: add parsing string before appending
 				lineString += value.toString();
 				break;
 			case QJsonValue::Array:
@@ -802,72 +798,24 @@ void JsonFilter::save(QXmlStreamWriter* writer) const {
 Loads from XML.
 */
 bool JsonFilter::load(XmlStreamReader* reader) {
-	QString attributeWarning = i18n("Attribute '%1' missing or empty, default value is used");
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs = reader->attributes();
+	QString str;
 
-	QString str = attribs.value("rowType").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'rowType'"));
-	else
-		d->rowType = static_cast<QJsonValue::Type>(str.toInt());
-
-	str = attribs.value("dateTimeFormat").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'dateTimeFormat'"));
-	else
-		d->dateTimeFormat = str;
-
-	str = attribs.value("numberFormat").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'numberFormat'"));
-	else
-		d->numberFormat = static_cast<QLocale::Language >(str.toInt());
-
-	str = attribs.value("createIndex").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'createIndex'"));
-	else
-		d->createIndexEnabled = str.toInt();
-
-	str = attribs.value("importObjectNames").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'importObjectNames'"));
-	else
-		d->importObjectNames = str.toInt();
-
-	str = attribs.value("nanValue").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'nanValue'"));
-	else
-		d->nanValue = str.toDouble();
-
-	str = attribs.value("startRow").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'startRow'"));
-	else
-		d->startRow = str.toInt();
-
-	str = attribs.value("endRow").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'endRow'"));
-	else
-		d->endRow = str.toInt();
-
-	str = attribs.value("startColumn").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'startColumn'"));
-	else
-		d->startColumn = str.toInt();
-
-	str = attribs.value("endColumn").toString();
-	if (str.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'endColumn'"));
-	else
-		d->endColumn = str.toInt();
+	READ_INT_VALUE("rowType", rowType, QJsonValue::Type);
+	READ_STRING_VALUE("dateTimeFormat", dateTimeFormat);
+	READ_INT_VALUE("numberFormat", numberFormat, QLocale::Language);
+	READ_INT_VALUE("createIndex", createIndexEnabled, bool);
+	READ_INT_VALUE("importObjectNames", importObjectNames, bool);
+	READ_DOUBLE_VALUE("nanValue", nanValue);
+	READ_INT_VALUE("startRow", startRow, int);
+	READ_INT_VALUE("endRow", endRow, int);
+	READ_INT_VALUE("startColumn", startColumn, int);
+	READ_INT_VALUE("endColumn", endColumn, int);
 
 	QStringList list = attribs.value("modelRows").toString().split(';');
 	if (list.isEmpty())
-		reader->raiseWarning(attributeWarning.arg("'modelRows'"));
+		reader->raiseWarning(attributeWarning.subs("'modelRows'").toString());
 	else {
 		d->modelRows = QVector<int>();
 		for (auto& it : list)
