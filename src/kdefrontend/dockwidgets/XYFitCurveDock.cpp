@@ -1222,8 +1222,8 @@ void XYFitCurveDock::showFitResult() {
 	SET_NUMBER_LOCALE
 	// used confidence interval
 	double confidenceInterval{m_fitData.confidenceInterval};
-	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1\% lower confidence level", numberLocale.toString(confidenceInterval, 'g', 7)));
-	uiGeneralTab.twParameters->horizontalHeaderItem(7)->setToolTip(i18n("%1\% upper confidence level", numberLocale.toString(confidenceInterval, 'g', 7)));
+	uiGeneralTab.twParameters->horizontalHeaderItem(6)->setToolTip(i18n("%1 % lower confidence level", numberLocale.toString(confidenceInterval, 'g', 7)));
+	uiGeneralTab.twParameters->horizontalHeaderItem(7)->setToolTip(i18n("%1 % upper confidence level", numberLocale.toString(confidenceInterval, 'g', 7)));
 
 	// log
 	uiGeneralTab.twLog->item(1, 1)->setText(numberLocale.toString(fitResult.iterations));
