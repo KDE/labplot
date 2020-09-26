@@ -2329,10 +2329,12 @@ void MainWin::handleSettingsChanges() {
 	}
 
 	//update spreadsheet header
-	auto spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
-	for (auto* spreadsheet : spreadsheets) {
-		spreadsheet->updateHorizontalHeader();
-		spreadsheet->updateLocale();
+	if (m_project) {
+		auto spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (auto* spreadsheet : spreadsheets) {
+			spreadsheet->updateHorizontalHeader();
+			spreadsheet->updateLocale();
+		}
 	}
 
 	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
