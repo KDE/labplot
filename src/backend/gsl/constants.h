@@ -37,7 +37,7 @@
 #include "parser.h"
 
 /* sync with ExpressionParser.cpp */
-struct con _constants[] = {
+struct cons _constants[] = {
 	/* Mathematical constants */
 	{"e", M_E},
 	{"pi", M_PI},

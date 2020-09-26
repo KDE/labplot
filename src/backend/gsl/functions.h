@@ -43,7 +43,7 @@
 #endif
 
 /* sync with ExpressionParser.cpp */
-struct func _functions[] = {
+struct funs _functions[] = {
 	/* standard functions */
 	{"rand", (func_t)nsl_sf_rand},
 	{"random", (func_t)nsl_sf_random},

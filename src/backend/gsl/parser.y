@@ -50,9 +50,9 @@
 
 /* params passed to yylex (and yyerror) */
 typedef struct param {
-	size_t pos;	/* current position in string */
+	size_t pos;		/* current position in string */
 	char *string;		/* the string to parse */
-/*	symrec *sym_table;	the symbol table (not used) */
+/*	symbol *sym_table;	the symbol table (not used) */
 } param;
 
 int yyerror(param *p, const char *err);
@@ -66,7 +66,7 @@ double res;
 
 %union {
 double dval;	/* For returning numbers */
-symrec *tptr;   /* For returning symbol-table pointers */
+symbol *tptr;   /* For returning symbol-table pointers */
 }
 
 %token <dval>  NUM 	/* Simple double precision number */
@@ -102,15 +102,15 @@ expr:      NUM       { $$ = $1;                         }
 | expr '*' expr      { $$ = $1 * $3;                    }
 | expr '/' expr      { $$ = $1 / $3;                    }
 | '-' expr  %prec NEG{ $$ = -$2;                        }
-| expr '^' expr      { $$ = pow ($1, $3);               }
-| expr '*' '*' expr  { $$ = pow ($1, $4);               }
+| expr '^' expr      { $$ = pow($1, $3);                }
+| expr '*' '*' expr  { $$ = pow($1, $4);                }
 | '(' expr ')'       { $$ = $2;                         }
 ;
 
 %%
 
 /* global symbol table */
-symrec *sym_table = 0;
+symbol *sym_table = 0;
 
 int parse_errors(void) {
 	return yynerrs;
@@ -119,84 +119,87 @@ int parse_errors(void) {
 int yyerror(param *p, const char *s) {
 	/* remove trailing newline */
 	p->string[strcspn(p->string, "\n")] = 0;
-	printf("PARSER ERROR: %s @ position %d of string \'%s\'\n", s, (int)(p->pos), p->string);
+	printf("PARSER ERROR: %s @ position %d of string '%s'\n", s, (int)(p->pos), p->string);
 
 	return 0;
 }
 
 /* save symbol in symbol table */
-symrec* putsym(const char *sym_name, int sym_type) {
-	pdebug("PARSER: putsym(): sym_name = %s\n", sym_name);
+symbol* putsym(const char *sym_name, int sym_type) {
+/*	pdebug("PARSER: putsym(): sym_name = '%s'\n", sym_name); */
 
-	symrec *ptr = (symrec *) malloc(sizeof (symrec));
+	symbol *ptr = (symbol *) malloc(sizeof (symbol));
 	ptr->name = (char *) malloc(strlen (sym_name) + 1);
 	strcpy(ptr->name, sym_name);
 	ptr->type = sym_type;
 	ptr->value.var = 0;	/* set value to 0 even if fctn */
-	ptr->next = (struct symrec *)sym_table;
+	ptr->next = (symbol *)sym_table;
 	sym_table = ptr;
 	
-	pdebug("PARSER: putsym() DONE\n");
+/*	pdebug("PARSER: putsym() DONE\n"); */
 	return ptr;
 }
 
 /* get symbol from symbol table */
-symrec* getsym(const char *sym_name) {
-	pdebug("PARSER: getsym(): sym_name = %s\n", sym_name);
+symbol* getsym(const char *sym_name) {
+	pdebug("PARSER: getsym(): sym_name = '%s'\n", sym_name);
 	
-	symrec *ptr;
-	for (ptr = sym_table; ptr != 0; ptr = (symrec *)ptr->next) {
+	symbol *ptr;
+	for (ptr = sym_table; ptr != 0; ptr = (symbol *)ptr->next) {
 		/* pdebug("%s ", ptr->name); */
 		if (strcmp(ptr->name, sym_name) == 0) {
-			pdebug("PARSER: symbol \'%s\' found\n", sym_name);
+			pdebug("PARSER:		SYMBOL FOUND\n");
 			return ptr;
 		}
 	}
 
-	pdebug("PARSER: symbol \'%s\' not found\n", sym_name);
+	pdebug("PARSER:		SYMBOL NOT FOUND\n");
 	return 0;
 }
 
 void init_table(void) {
 	pdebug("PARSER: init_table()\n");
 
-	symrec *ptr = 0;
+	symbol *ptr = 0;
 	int i;
 	/* add functions */
 	for (i = 0; _functions[i].name != 0; i++) {
-		ptr = putsym (_functions[i].name, FNCT);
+		ptr = putsym(_functions[i].name, FNCT);
 		ptr->value.fnctptr = _functions[i].fnct;
 	}
 	/* add constants */
 	for (i = 0; _constants[i].name != 0; i++) {
-		ptr = putsym (_constants[i].name, VAR);
+		ptr = putsym(_constants[i].name, VAR);
 		ptr->value.var = _constants[i].value;
 	}
 
-	pdebug("PARSER: init_table() DONE sym_table = %p\n", ptr);
+	pdebug("PARSER: init_table() DONE. sym_table = %p\n", ptr);
 }
 
 void delete_table(void) {
+	pdebug("PARSER: delete_table()\n");
 	while(sym_table) {
-		symrec *tmp = sym_table;
+		symbol *tmp = sym_table;
 		sym_table = sym_table->next;
 		free(tmp->name);
 		free(tmp);
 	}
 }
 
-symrec* assign_variable(const char* symb_name, double value) {
+symbol* assign_variable(const char* symb_name, double value) {
 	/* new style: pdebug("PARSER: assign_variable(): symb_name = %s value = %g sym_table = %p\n", var.name, var.value, sym_table);*/
-	pdebug("PARSER: assign_variable() : symb_name = %s value=%g\n", symb_name, value);
+	pdebug("PARSER: assign_variable() : symb_name = '%s', value = %g\n", symb_name, value);
 
 	/* be sure that the symbol table has been initialized */
 	if (!sym_table)
 		init_table();
 
-	symrec* ptr = getsym(symb_name);
+	symbol* ptr = getsym(symb_name);
 	if (!ptr) {
-		pdebug("PARSER: calling putsym(): symb_name = %s\n", symb_name);
+		pdebug("PARSER: calling putsym(): symb_name = '%s'\n", symb_name);
 		ptr = putsym(symb_name, VAR);
+	} else {
+		pdebug("PARSER: Variable already assigned\n");
 	}
 	ptr->value.var = value;
 
@@ -204,21 +207,22 @@ symrec* assign_variable(const char* symb_name, double value) {
 };
 
 static char getcharstr(param *p) {
-	pdebug("PARSER: getcharstr() pos = %d\n", (int)(p->pos));
+	pdebug(" getcharstr() pos = %d\n", (int)(p->pos));
 
 	if (p->string[p->pos] == '\0')
 		return EOF;
-	pdebug("next char is %c\n", p->string[p->pos]);
+	/* pdebug("PARSER: 	char is %c\n", p->string[p->pos]); */
 	return p->string[(p->pos)++];
 }
 
 static void ungetcstr(size_t *pos) {
-    if (*pos > 0)
-        (*pos)--;
+	/* pdebug("PARSER: ungetcstr()\n"); */
+	if (*pos > 0)
+		(*pos)--;
 }
 
 double parse(const char *str) {
-	pdebug("\nPARSER: parse(\"%s\") len=%d\n", str, (int)strlen(str));
+	pdebug("\nPARSER: parse('%s') len=%d\n********************************\n", str, (int)strlen(str));
 
 	/* be sure that the symbol table has been initialized */
 	if (!sym_table)
@@ -230,19 +234,19 @@ double parse(const char *str) {
 	size_t slen = strlen(str) + 2;
 	p.string = (char *) malloc(slen * sizeof(char));
 	if (p.string == NULL) {
-		printf("ERROR: out of memory for parsing string\n");
+		printf("PARSER ERROR: Out of memory for parsing string\n");
 		return 0.;
 	}
 
 	strcpy(p.string, str);
 	p.string[strlen(str)] = '\n';
 	p.string[strlen(str)+1] = '\0';
-	pdebug("\nPARSER: yyparse(\"%s\") len=%d\n", p.string, (int)strlen(p.string));
+	/* pdebug("PARSER: Call yyparse() for \"%s\" (len = %d)\n", p.string, (int)strlen(p.string)); */
 
 	/* parameter for yylex */
 	yyparse(&p);
 
-	pdebug("PARSER: parse() DONE (res = %g, parse errors = %d)\n", res, parse_errors());
+	pdebug("PARSER: parse() DONE (result = %g, parse errors = %d)\n*******************************\n", res, parse_errors());
 	free(p.string);
 	p.string = 0;
 
@@ -250,11 +254,11 @@ double parse(const char *str) {
 }
 
 double parse_with_vars(const char *str, const parser_var *vars, int nvars) {
-	pdebug("\nPARSER: parse_with_var(\"%s\") len=%d\n", str, (int)strlen(str));
+	pdebug("\nPARSER: parse_with_var(\"%s\") len = %d\n", str, (int)strlen(str));
 
 	int i;
 	for(i = 0; i < nvars; i++) {	/*assign vars */
-		pdebug("assign %s the value %g\n", vars[i].name, vars[i].value);
+		pdebug("PARSER: Assign '%s' the value %g\n", vars[i].name, vars[i].value);
 		assign_variable(vars[i].name, vars[i].value);
 	}
 
@@ -262,29 +266,33 @@ double parse_with_vars(const char *str, const parser_var *vars, int nvars) {
 }
 
 int yylex(param *p) {
-	pdebug("PARSER: yylex()\n");
-	char c;
+	pdebug("PARSER: YYLEX()");
 
-	/* skip white space */
+	/* get char and skip white space */
+	char c;
 	while ((c = getcharstr(p)) == ' ' || c == '\t');
 
 	/* finish if reached EOF */
 	if (c == EOF) {
-		pdebug("FINISHED\n");
+		pdebug("PARSER: FINISHED\n");
 		return 0;
 	}
 	/* check for non-ASCII chars */
 	if (!isascii(c)) {
-		pdebug("non-ASCII character found. Giving up\n");
+		pdebug(" non-ASCII character found. Giving up\n");
 		yynerrs++;
 		return 0;
 	}
+	if (c == '\n') {
+		pdebug("PARSER: Reached EOL\n");
+		return c;
+	}
 
-	pdebug("PARSER: reading character: %c\n", c);
+	pdebug("PARSER: PROCESSING character '%c'\n", c);
 
 	/* process numbers */
 	if (isdigit(c)) {
-		pdebug("PARSER: reading number (starts with digit)\n");
+		pdebug("PARSER: Found NUMBER (starts with digit)\n");
                 ungetcstr(&(p->pos));
                 char *s = &(p->string[p->pos]);
 
@@ -294,20 +302,20 @@ int yylex(param *p) {
 		double result = strtod(s, &remain);
 #else
 		/* use same locale for all languages: '.' as decimal point */
+		/* TODO: use system locale */
 		locale_t locale = newlocale(LC_NUMERIC_MASK, "C", NULL);
 
 		double result = strtod_l(s, &remain, locale);
 		freelocale(locale);
 #endif
-		pdebug("PARSER: reading: %s", s);
-		pdebug("PARSER: remain = %s", remain);
+		pdebug("PARSER:		Reading: '%s'\n", s);
+		pdebug("PARSER:		Remain: '%s'\n", remain);
 
 		/* check conversion */
 		if(strlen(s) == strlen(remain))
 			return 0;
 
-		pdebug("PARSER: result = %g\n", result);
-
+		pdebug("PARSER:		Result = %g\n", result);
 		yylval.dval = result;
 
                 p->pos += strlen(s) - strlen(remain);
@@ -315,18 +323,21 @@ int yylex(param *p) {
 		return NUM;
 	}
 
+	/* process symbol */
 	if (isalpha (c) || c == '.') {
-		pdebug("PARSER: reading identifier (starts with alpha: %c)\n", c);
+		pdebug("PARSER: Found SYMBOL (starts with alpha)\n");
 		static char *symbuf = 0;
 		static int length = 0;
 		int i = 0;
 
 		/* Initially make the buffer long enough for a 10-character symbol name */
-		if (length == 0)
-			length = 10, symbuf = (char *) malloc(length + 1);
+		if (length == 0) {
+			length = 10;
+			symbuf = (char *) malloc(length + 1);
+		}
 
 		do {
-			pdebug("reading symbol .. ");
+			pdebug("PARSER: Reading symbol .. ");
 			/* If buffer is full, make it bigger */
 			if (i == length) {
 				length *= 2;
@@ -334,30 +345,29 @@ int yylex(param *p) {
 			}
 			symbuf[i++] = c;
 			c = getcharstr(p);
-			pdebug("got %c\n", c);
+			pdebug("PARSER:		got '%c'\n", c);
 		}
 		while (c != EOF && (isalnum(c) || c == '_' || c == '.'));
-		pdebug("reading symbol done\n");
+		pdebug("PARSER: Reading SYMBOL DONE\n");
 
 		if (c != EOF)
 			ungetcstr(&(p->pos));
 		symbuf[i] = '\0';
 
-		symrec *s = getsym(symbuf);
+		symbol *s = getsym(symbuf);
 		if(s == 0) {	/* symbol unknown */
-			pdebug("PARSER: ERROR: symbol \"%s\" UNKNOWN\n", symbuf);
+			pdebug("PARSER ERROR: Symbol '%s' UNKNOWN\n", symbuf);
 			yynerrs++;
 			return 0;
+			/* old behavior: add symbol */
+			/* s = putsym (symbuf, VAR); */
 		}
-		/* old behavior */
-		/* if (s == 0)
-			 s = putsym (symbuf, VAR);
-		*/
+
 		yylval.tptr = s;
 		return s->type;
 	}
 
 	/* else: single operator */
-	pdebug("PARSER: single operator\n");
+	pdebug("PARSER: Found single operator '%c'\n", c);
 	return c;
 }

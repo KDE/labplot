@@ -31,20 +31,17 @@
 #define PARSER_H
 
 /* uncomment to enable parser specific debugging */
-/* #define PDEBUG 1 */
+#define PDEBUG 1
 
-struct con {
+struct cons {
 	const char* name;
 	double value;
 };
 
-struct func {
+struct funs {
 	const char* name;
-#ifdef _MSC_VER
+	/* MSVC needs void argument */
 	double (*fnct)(void);
-#else
-	double (*fnct)();
-#endif
 };
 
 /* variables to pass to parser */
@@ -54,38 +51,35 @@ typedef struct parser_var {
 	double value;
 } parser_var;
 
-/* Functions type */
-#ifdef _MSC_VER
+/* Function types */
+/* MSVC needs void argument */
 typedef double (*func_t) (void);
-#else
-typedef double (*func_t) ();
-#endif
 typedef double (*func_t1) (double);
 typedef double (*func_t2) (double, double);
 typedef double (*func_t3) (double, double, double);
 typedef double (*func_t4) (double, double, double, double);
 
 /* structure for list of symbols */
-typedef struct symrec {
+typedef struct symbol {
 	char *name;	/* name of symbol */
 	int type;	/* type of symbol: either VAR or FNCT */
 	union {
 		double var;	/* value of a VAR */
 		func_t fnctptr;	/* value of a FNCT */
 	} value;
-	struct symrec *next;	/* next field */
-} symrec;
+	struct symbol *next;	/* next field */
+} symbol;
 
 void init_table(void);		/* initialize symbol table */
 void delete_table(void);	/* delete symbol table */
 int parse_errors(void);
-symrec* assign_variable(const char* symb_name, double value);
+symbol* assign_variable(const char* symb_name, double value);
 /*new style: symrec* assign_variable(symrec *sym_table, parser_var var);*/
 double parse(const char *str);
 double parse_with_vars(const char[], const parser_var[], int nvars);
 
-extern struct con _constants[];
-extern struct func _functions[];
+extern struct cons _constants[];
+extern struct funs _functions[];
 
 
 #endif /*PARSER_H*/
