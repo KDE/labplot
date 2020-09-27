@@ -30,7 +30,7 @@
 #include <gsl/gsl_math.h>
 
 int nsl_math_decimal_places(double value) {
-	return -floor(log10(fabs(value)));
+	return -(int)floor(log10(fabs(value)));
 }
 
 int nsl_math_rounded_decimals(double value) {
