@@ -76,6 +76,7 @@ int parse_errors(void);
 symbol* assign_symbol(const char* symbol_name, double value);
 int remove_symbol(const char* symbol_name);
 double parse(const char *str);
+/* TODO: double parse(const char *string, const char *locale); */
 double parse_with_vars(const char[], const parser_var[], int nvars);
 
 extern struct cons _constants[];

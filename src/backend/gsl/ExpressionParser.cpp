@@ -1299,6 +1299,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 
 	parse(qPrintable(expr));
 
+	/*TODO: check if we accidentally remove used constants here */
 	for (const auto& var: vars)
 		remove_symbol(qPrintable(var));
 

@@ -38,6 +38,12 @@
 #include "parser.h"
 #include "constants.h"
 #include "functions.h"
+#if defined(_WIN32)
+#define locale_t _locale_t
+#define newlocale _create_locale
+#define freelocale free_locale
+#define strtod_l _strtod_l
+#endif
 
 #ifdef PDEBUG
 #include <stdio.h>
@@ -51,7 +57,8 @@
 /* params passed to yylex (and yyerror) */
 typedef struct param {
 	size_t pos;		/* current position in string */
-	char *string;		/* the string to parse */
+	char* string;		/* the string to parse */
+	char* locale;		/* name of locale to convert numbers */
 } param;
 
 int yyerror(param *p, const char *err);
@@ -177,7 +184,7 @@ int remove_symbol(const char *symbol_name) {
 }
 
 /* get symbol from symbol table
-   return 0 if symbol not found */
+   returns 0 if symbol not found */
 symbol* get_symbol(const char *symbol_name) {
 	pdebug("PARSER: get_symbol(): symbol_name = '%s'\n", symbol_name);
 	
@@ -194,6 +201,7 @@ symbol* get_symbol(const char *symbol_name) {
 	return 0;
 }
 
+/* initialize symbol table with all known functions and constants */
 void init_table(void) {
 	pdebug("PARSER: init_table()\n");
 
@@ -223,7 +231,7 @@ void delete_table(void) {
 	}
 }
 
-/* add new symbol or set value */
+/* add new symbol with value or just set value if symbol is a variable */
 symbol* assign_symbol(const char* symbol_name, double value) {
 	pdebug("PARSER: assign_symbol() : symbol_name = '%s', value = %g\n", symbol_name, value);
 
@@ -239,7 +247,7 @@ symbol* assign_symbol(const char* symbol_name, double value) {
 		pdebug("PARSER: Symbol already assigned\n");
 	}
 
-	/* do not assign value if var already exits as function */
+	/* do not assign value if symbol already exits as function */
 	if (ptr->type == VAR)
 		ptr->value.var = value;
 
@@ -261,8 +269,10 @@ static void ungetcstr(size_t *pos) {
 		(*pos)--;
 }
 
-double parse(const char *str) {
-	pdebug("\nPARSER: parse('%s') len = %d\n********************************\n", str, (int)strlen(str));
+/* TODO: pass locale name as char* (can be qPrintable(QLocale::name())) */
+/* double parse(const char *string, const char *locale) { */
+double parse(const char *string) {
+	pdebug("\nPARSER: parse('%s') len = %d\n********************************\n", string, (int)strlen(string));
 
 	/* be sure that the symbol table has been initialized */
 	if (!symbol_table)
@@ -270,17 +280,18 @@ double parse(const char *str) {
 
 	param p;
 	p.pos = 0;
+	/* TODO: p.locale = locale; or do we need a malloc and strcpy? */
 	/* leave space to terminate string by "\n\0" */
-	size_t slen = strlen(str) + 2;
+	const size_t slen = strlen(string) + 2;
 	p.string = (char *) malloc(slen * sizeof(char));
 	if (p.string == NULL) {
 		printf("PARSER ERROR: Out of memory for parsing string\n");
 		return 0.;
 	}
 
-	strcpy(p.string, str);
-	p.string[strlen(str)] = '\n';	// end for parsing
-	p.string[strlen(str)+1] = '\0';	// end of string
+	strcpy(p.string, string);
+	p.string[strlen(string)] = '\n';	// end for parsing
+	p.string[strlen(string)+1] = '\0';	// end of string
 	/* pdebug("PARSER: Call yyparse() for \"%s\" (len = %d)\n", p.string, (int)strlen(p.string)); */
 
 	/* parameter for yylex */
@@ -293,6 +304,7 @@ double parse(const char *str) {
 	return res;
 }
 
+/*TODO: is this used? */
 double parse_with_vars(const char *str, const parser_var *vars, int nvars) {
 	pdebug("\nPARSER: parse_with_var(\"%s\") len = %d\n", str, (int)strlen(str));
 
@@ -339,13 +351,15 @@ int yylex(param *p) {
 		/* convert to double */
 		char *remain;
 #if defined(_WIN32) || defined(__APPLE__)
-		double result = strtod(s, &remain);
+		const double result = strtod(s, &remain);
 #else
-		/* use same locale for all languages: '.' as decimal point */
-		/* TODO: use system locale */
+		/* TODO: check on WINDOWS with new defines */
+		/* TODO: check on MAC */
+		/* uses same locale for all languages: '.' as decimal point */
+		/* TODO: use passed locale (p->locale) istead of "C" */
 		locale_t locale = newlocale(LC_NUMERIC_MASK, "C", NULL);
 
-		double result = strtod_l(s, &remain, locale);
+		const double result = strtod_l(s, &remain, locale);
 		freelocale(locale);
 #endif
 		pdebug("PARSER:		Reading: '%s'\n", s);
