@@ -31,7 +31,7 @@
 #define PARSER_H
 
 /* uncomment to enable parser specific debugging */
-#define PDEBUG 1
+/* #define PDEBUG 1 */
 
 struct cons {
 	const char* name;
