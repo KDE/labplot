@@ -1,6 +1,10 @@
 -----2.9 -----
 Bug fixes:
     * Fix compiling with Cantor 20.08.X and X>0
+    * Parser improvements ("Generate Function Values"):
+        * Fix Crash using variable name of pre-defined functions as function ("sin()")
+        * Allow variable names containing function names ("sina")
+        * Correctly remove variables when changing name
 -----2.8 -----
 	* Improved DateTime data support
 	* Show the size of the members in the JSON file in the import file dialog
