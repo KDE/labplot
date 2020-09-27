@@ -769,7 +769,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 			<<"] free/bound:"<<QString::number(v, 'g', 15)<<' '<<QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
 	}
 
-	const char* func{qPrintable(*(((struct data*)params)->func))};
+	QString func{*(((struct data*)params)->func)};
 	for (size_t i = 0; i < n; i++) {
 		if (std::isnan(x[i]) || std::isnan(y[i]))
 			continue;
@@ -783,7 +783,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 
 		assign_symbol("x", x[i]);
 		//DEBUG("evaluate function \"" << func << "\" @ x = " << x[i] << ":");
-		double Yi = parse(func);
+		double Yi = parse(qPrintable(func));
 		//DEBUG("	f(x["<< i <<"]) = " << Yi);
 
 		if (parse_errors() > 0)
@@ -1464,7 +1464,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 	case nsl_fit_model_custom:
 		double value;
 		const unsigned int np = paramNames->size();
-		const char* func{qPrintable(*(((struct data*)params)->func))};
+		QString func{*(((struct data*)params)->func)};
 
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
@@ -1480,14 +1480,14 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
 				assign_symbol(qPrintable(paramNames->at(j)), value);
-				const double f_p = parse(func);
+				const double f_p = parse(qPrintable(func));
 
 				double eps = 1.e-9;
 				if (std::abs(f_p) > 0)
 					eps *= std::abs(f_p);	// scale step size with function value
 				value += eps;
 				assign_symbol(qPrintable(paramNames->at(j)), value);
-				const double f_pdp = parse(func);
+				const double f_pdp = parse(qPrintable(func));
 
 //				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
 //				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));
