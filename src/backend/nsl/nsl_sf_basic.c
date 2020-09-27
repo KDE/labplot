@@ -315,12 +315,12 @@ double nsl_sf_taylorcoeff(double n, double x) { return gsl_sf_taylorcoeff((int)r
 double nsl_sf_gegenpoly_n(double n, double l, double x) { return gsl_sf_gegenpoly_n((int)round(n), l, x); }
 
 #if (GSL_MAJOR_VERSION > 2) || (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION >= 4)
-double nsl_sf_hermite_prob(double n, double x) { return gsl_sf_hermite_prob(round(n), x); }
-double nsl_sf_hermite_phys(double n, double x) { return gsl_sf_hermite_phys(round(n), x); }
-double nsl_sf_hermite_func(double n, double x) { return gsl_sf_hermite_func(round(n), x); }
-double nsl_sf_hermite_prob_der(double m, double n, double x) { return gsl_sf_hermite_prob_der(round(m), round(n), x); }
-double nsl_sf_hermite_phys_der(double m, double n, double x) { return gsl_sf_hermite_phys_der(round(m), round(n), x); }
-double nsl_sf_hermite_func_der(double m, double n, double x) { return gsl_sf_hermite_func_der(round(m), round(n), x); }
+double nsl_sf_hermite_prob(double n, double x) { return gsl_sf_hermite_prob((int)round(n), x); }
+double nsl_sf_hermite_phys(double n, double x) { return gsl_sf_hermite_phys((int)round(n), x); }
+double nsl_sf_hermite_func(double n, double x) { return gsl_sf_hermite_func((int)round(n), x); }
+double nsl_sf_hermite_prob_der(double m, double n, double x) { return gsl_sf_hermite_prob_der((int)round(m), (int)round(n), x); }
+double nsl_sf_hermite_phys_der(double m, double n, double x) { return gsl_sf_hermite_phys_der((int)round(m), (int)round(n), x); }
+double nsl_sf_hermite_func_der(double m, double n, double x) { return gsl_sf_hermite_func_der((int)round(m), (int)round(n), x); }
 #endif
 
 double nsl_sf_hyperg_1F1i(double m, double n, double x) { return gsl_sf_hyperg_1F1_int((int)round(m), (int)round(n), x); }
