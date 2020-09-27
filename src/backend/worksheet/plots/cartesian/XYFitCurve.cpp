@@ -756,8 +756,6 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	double* weight = ((struct data*)params)->weight;
 	nsl_fit_model_category modelCategory = ((struct data*)params)->modelCategory;
 	unsigned int modelType = ((struct data*)params)->modelType;
-	QByteArray funcba = ((struct data*)params)->func->toLatin1();	// a local byte array is needed!
-	const char *func = funcba.constData();	// function to evaluate
 	QStringList* paramNames = ((struct data*)params)->paramNames;
 	double *min = ((struct data*)params)->paramMin;
 	double *max = ((struct data*)params)->paramMax;
@@ -766,12 +764,12 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 	for (int i = 0; i < paramNames->size(); i++) {
 		double v = gsl_vector_get(paramValues, (size_t)i);
 		// bound values if limits are set
-		QByteArray paramnameba = paramNames->at(i).toLatin1();
-		assign_variable(paramnameba.constData(), nsl_fit_map_bound(v, min[i], max[i]));
-		QDEBUG("Parameter"<<i<<" (\" "<<paramnameba.constData()<<"\")"<<'['<<min[i]<<','<<max[i]
+		assign_symbol(qPrintable(paramNames->at(i)), nsl_fit_map_bound(v, min[i], max[i]));
+		QDEBUG("Parameter"<<i<<" (' "<<paramNames->at(i)<<"')"<<'['<<min[i]<<','<<max[i]
 			<<"] free/bound:"<<QString::number(v, 'g', 15)<<' '<<QString::number(nsl_fit_map_bound(v, min[i], max[i]), 'g', 15));
 	}
 
+	const char* func{qPrintable(*(((struct data*)params)->func))};
 	for (size_t i = 0; i < n; i++) {
 		if (std::isnan(x[i]) || std::isnan(y[i]))
 			continue;
@@ -783,7 +781,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 				x[i] = 0;
 		}
 
-		assign_variable("x", x[i]);
+		assign_symbol("x", x[i]);
 		//DEBUG("evaluate function \"" << func << "\" @ x = " << x[i] << ":");
 		double Yi = parse(func);
 		//DEBUG("	f(x["<< i <<"]) = " << Yi);
@@ -1464,39 +1462,35 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 		}
 		break;
 	case nsl_fit_model_custom:
-		QByteArray funcba = ((struct data*)params)->func->toLatin1();
-		const char* func = funcba.data();
-		QByteArray nameba;
 		double value;
 		const unsigned int np = paramNames->size();
+		const char* func{qPrintable(*(((struct data*)params)->func))};
+
 		for (size_t i = 0; i < n; i++) {
 			x = xVector[i];
-			assign_variable("x", x);
+			assign_symbol("x", x);
 
 			for (unsigned int j = 0; j < np; j++) {
 				for (unsigned int k = 0; k < np; k++) {
 					if (k != j) {
-						nameba = paramNames->at(k).toLatin1();
 						value = nsl_fit_map_bound(gsl_vector_get(paramValues, k), min[k], max[k]);
-						assign_variable(nameba.data(), value);
+						assign_symbol(qPrintable(paramNames->at(k)), value);
 					}
 				}
 
-				nameba = paramNames->at(j).toLatin1();
-				const char *name = nameba.data();
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
-				assign_variable(name, value);
+				assign_symbol(qPrintable(paramNames->at(j)), value);
 				const double f_p = parse(func);
 
 				double eps = 1.e-9;
 				if (std::abs(f_p) > 0)
 					eps *= std::abs(f_p);	// scale step size with function value
 				value += eps;
-				assign_variable(name, value);
+				assign_symbol(qPrintable(paramNames->at(j)), value);
 				const double f_pdp = parse(func);
 
-//				DEBUG("evaluate deriv"<<QString(func)<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
-//				DEBUG("evaluate deriv"<<QString(func)<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));
+//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
+//				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));
 //				DEBUG("	deriv = " << STDSTRING(QString::number(sqrt(weight[i])*(f_pdp-f_p)/eps, 'g', 15));
 
 				if (fixed[j])

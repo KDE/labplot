@@ -73,8 +73,7 @@ typedef struct symbol {
 void init_table(void);		/* initialize symbol table */
 void delete_table(void);	/* delete symbol table */
 int parse_errors(void);
-symbol* assign_variable(const char* symb_name, double value);
-/*new style: symrec* assign_variable(symrec *sym_table, parser_var var);*/
+symbol* assign_symbol(const char* symbol_name, double value);
 double parse(const char *str);
 double parse_with_vars(const char[], const parser_var[], int nvars);
 

@@ -1295,7 +1295,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	gsl_set_error_handler_off();
 
 	for (const auto& var: vars)
-		assign_variable(qPrintable(var), 0);
+		assign_symbol(qPrintable(var), 0);
 
 	parse(qPrintable(expr));
 
@@ -1343,11 +1343,11 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 	const double step = range.stepSize(count);
 
 	for (int i = 0; i < paramNames.size(); ++i)
-		assign_variable(qPrintable(paramNames.at(i)), paramValues.at(i));
+		assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
 
 	for (int i = 0; i < count; i++) {
 		const double x{ range.min() + step * i };
-		assign_variable("x", x);
+		assign_symbol("x", x);
 
 		const double y{ parse(qPrintable(expr)) };
 		if (parse_errors() > 0)
@@ -1370,7 +1370,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 	for (int i = 0; i < count; i++) {
 		const double x{ range.min() + step * i };
-		assign_variable("x", x);
+		assign_symbol("x", x);
 
 		const double y{ parse(qPrintable(expr)) };
 		if (parse_errors() > 0)
@@ -1388,7 +1388,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < xVector->count(); i++) {
-		assign_variable("x", xVector->at(i));
+		assign_symbol("x", xVector->at(i));
 		const double y = parse(qPrintable(expr));
 
 		if (parse_errors() > 0)
@@ -1406,10 +1406,10 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	gsl_set_error_handler_off();
 
 	for (int i = 0; i < paramNames.size(); ++i)
-		assign_variable(qPrintable(paramNames.at(i)), paramValues.at(i));
+		assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));
 
 	for (int i = 0; i < xVector->count(); i++) {
-		assign_variable("x", xVector->at(i));
+		assign_symbol("x", xVector->at(i));
 
 		const double y = parse(qPrintable(expr));
 		if (parse_errors() > 0)
@@ -1443,7 +1443,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	// calculate values
 	for (int i = 0; i < minSize; i++) {
 		for (int n = 0; n < vars.size(); ++n)
-			assign_variable(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
+			assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 
 		const double y = parse(qPrintable(expr));
 		if (parse_errors() > 0)
@@ -1468,7 +1468,7 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 
 	for (int i = 0; i < count; i++) {
 		const double phi = range.min() + step * i;
-		assign_variable("phi", phi);
+		assign_symbol("phi", phi);
 
 		const double r = parse(qPrintable(expr));
 		if (parse_errors() > 0)
@@ -1489,7 +1489,7 @@ bool ExpressionParser::evaluateParametric(const QString& xexpr, const QString& y
 	const double step = range.stepSize(count);
 
 	for (int i = 0; i < count; i++) {
-		assign_variable("t", range.min() + step * i);
+		assign_symbol("t", range.min() + step * i);
 
 		const double x = parse(qPrintable(xexpr));
 		if (parse_errors() > 0)
