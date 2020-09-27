@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Parser for mathematical expressions
     --------------------------------------------------------------------
-    Copyright            : (C) 2014-2017 Stefan Gerlach  (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2014-2020 Stefan Gerlach  (stefan.gerlach@uni.kn)
     Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -31,7 +31,7 @@
 #define PARSER_H
 
 /* uncomment to enable parser specific debugging */
-/* #define PDEBUG 1 */
+#define PDEBUG 1
 
 struct cons {
 	const char* name;
@@ -67,13 +67,14 @@ typedef struct symbol {
 		double var;	/* value of a VAR */
 		func_t fnctptr;	/* value of a FNCT */
 	} value;
-	struct symbol *next;	/* next field */
+	struct symbol *next;	/* next symbol */
 } symbol;
 
 void init_table(void);		/* initialize symbol table */
 void delete_table(void);	/* delete symbol table */
 int parse_errors(void);
 symbol* assign_symbol(const char* symbol_name, double value);
+int remove_symbol(const char* symbol_name);
 double parse(const char *str);
 double parse_with_vars(const char[], const parser_var[], int nvars);
 

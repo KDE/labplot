@@ -4,7 +4,7 @@
     Description          : Parser for mathematical expressions
     --------------------------------------------------------------------
     Copyright            : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2014-2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2014-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -108,7 +108,7 @@ expr:      NUM       { $$ = $1;                         }
 
 %%
 
-/* global symbol table */
+/* global symbol table (as linked list) */
 symbol *symbol_table = 0;
 
 int parse_errors(void) {
@@ -123,12 +123,12 @@ int yyerror(param *p, const char *s) {
 	return 0;
 }
 
-/* save symbol in symbol table */
+/* save symbol in symbol table (at start of linked list) */
 symbol* put_symbol(const char *symbol_name, int symbol_type) {
 /*	pdebug("PARSER: put_symbol(): symbol_name = '%s'\n", symbol_name); */
 
-	symbol *ptr = (symbol *) malloc(sizeof (symbol));
-	ptr->name = (char *) malloc(strlen (symbol_name) + 1);
+	symbol *ptr = (symbol *)malloc(sizeof(symbol));
+	ptr->name = (char *)malloc(strlen(symbol_name) + 1);
 	strcpy(ptr->name, symbol_name);
 	ptr->type = symbol_type;
 	ptr->value.var = 0;	/* set value to 0 even if fctn */
@@ -139,7 +139,45 @@ symbol* put_symbol(const char *symbol_name, int symbol_type) {
 	return ptr;
 }
 
-/* get symbol from symbol table */
+/* remove symbol of name symbol_name from symbol table
+   removes only variables
+   returns 0 on success */
+int remove_symbol(const char *symbol_name) {
+	symbol* ptr = symbol_table;
+
+	/* check if head contains symbol */
+	if (ptr && (strcmp(ptr->name, symbol_name) == 0)) {
+		if (ptr->type == VAR) {
+			pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
+			symbol_table = ptr->next;
+			free(ptr->name);
+			free(ptr);
+		}
+		return 0;
+	}
+
+	/* search for symbol to be deleted */
+	symbol* prev;
+	while (ptr && (strcmp(ptr->name, symbol_name) != 0)) {
+		prev = ptr;
+		ptr = ptr->next;
+	}
+
+	/* symbol not found or is not a variable */
+	if (!ptr || ptr->type != VAR)
+		return 1;
+
+	/* remove symbol */
+	pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
+	prev->next = ptr->next;
+	free(ptr->name);
+	free(ptr);
+
+	return 0;
+}
+
+/* get symbol from symbol table
+   return 0 if symbol not found */
 symbol* get_symbol(const char *symbol_name) {
 	pdebug("PARSER: get_symbol(): symbol_name = '%s'\n", symbol_name);
 	
@@ -207,8 +245,6 @@ symbol* assign_symbol(const char* symbol_name, double value) {
 
 	return ptr;
 };
-
-/*TODO: remove_variable() */
 
 static char getcharstr(param *p) {
 	pdebug(" getcharstr() pos = %d\n", (int)(p->pos));
