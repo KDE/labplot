@@ -142,7 +142,7 @@ int nsl_corr_fft_FFTW(double s[], double r[], size_t n, double out[]) {
 
 	const size_t size = 2*(n/2+1);
 	double* in = (double*)malloc(size*sizeof(double));
-	fftw_plan rpf = fftw_plan_dft_r2c_1d(n, in, (fftw_complex*)in, FFTW_ESTIMATE);
+	fftw_plan rpf = fftw_plan_dft_r2c_1d((int)n, in, (fftw_complex*)in, FFTW_ESTIMATE);
 
 	fftw_execute_dft_r2c(rpf, s, (fftw_complex*)s);
 	fftw_execute_dft_r2c(rpf, r, (fftw_complex*)r);
@@ -161,7 +161,7 @@ int nsl_corr_fft_FFTW(double s[], double r[], size_t n, double out[]) {
 
 	// back transform
 	double* o = (double*)malloc(size*sizeof(double));
-	fftw_plan rpb = fftw_plan_dft_c2r_1d(n, (fftw_complex*)o, o, FFTW_ESTIMATE);
+	fftw_plan rpb = fftw_plan_dft_c2r_1d((int)n, (fftw_complex*)o, o, FFTW_ESTIMATE);
 	fftw_execute_dft_c2r(rpb, (fftw_complex*)s, s);
 	fftw_destroy_plan(rpb);
 

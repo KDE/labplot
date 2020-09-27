@@ -272,7 +272,7 @@ int nsl_filter_fourier(double data[], size_t n, nsl_filter_type type, nsl_filter
 	/* 1. transform */
 	double* fdata = (double*)malloc(2*n*sizeof(double));	/* contains re0,im0,re1,im1,re2,im2,... */
 #ifdef HAVE_FFTW3
-        fftw_plan plan = fftw_plan_dft_r2c_1d(n, data, (fftw_complex *) fdata, FFTW_ESTIMATE);
+        fftw_plan plan = fftw_plan_dft_r2c_1d((int)n, data, (fftw_complex *) fdata, FFTW_ESTIMATE);
         fftw_execute(plan);
 	fftw_destroy_plan(plan);
 #else
@@ -292,7 +292,7 @@ int nsl_filter_fourier(double data[], size_t n, nsl_filter_type type, nsl_filter
 	
 	/* 3. back transform */
 #ifdef HAVE_FFTW3
-        plan = fftw_plan_dft_c2r_1d(n, (fftw_complex *) fdata, data, FFTW_ESTIMATE);
+        plan = fftw_plan_dft_c2r_1d((int)n, (fftw_complex *) fdata, data, FFTW_ESTIMATE);
         fftw_execute(plan);
 	fftw_destroy_plan(plan);
 	/* normalize*/

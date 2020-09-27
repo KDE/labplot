@@ -1287,13 +1287,13 @@ std::string ROOTData::data(const ROOTData::KeyBuffer& buffer, std::ifstream& is)
 	} else if (buffer.compression == KeyBuffer::CompressionType::zlib) {
 		std::string cdata(buffer.compressed_count, 0);
 		is.read(&cdata[0], buffer.compressed_count);
-		uLongf luncomp = buffer.count;
-		if (uncompress((Bytef *)data.data(), &luncomp, (Bytef *)cdata.data(), cdata.size()) == Z_OK && data.size() == luncomp)
+		uLongf luncomp = (uLongf)buffer.count;
+		if (uncompress((Bytef *)data.data(), &luncomp, (Bytef *)cdata.data(), (uLong)cdata.size()) == Z_OK && data.size() == luncomp)
 			return data;
 	} else {
 		std::string cdata(buffer.compressed_count, 0);
 		is.read(&cdata[0], buffer.compressed_count);
-		if (LZ4_decompress_safe(cdata.data(), const_cast<char*>(data.data()), buffer.compressed_count, buffer.count) == static_cast<int>(buffer.count))
+		if (LZ4_decompress_safe(cdata.data(), const_cast<char*>(data.data()), (int)buffer.compressed_count, (int)buffer.count) == static_cast<int>(buffer.count))
 			return data;
 #endif
 	}

@@ -186,6 +186,7 @@ void delete_table(void) {
 	}
 }
 
+/* add new var or set value */
 symbol* assign_variable(const char* symb_name, double value) {
 	/* new style: pdebug("PARSER: assign_variable(): symb_name = %s value = %g sym_table = %p\n", var.name, var.value, sym_table);*/
 	pdebug("PARSER: assign_variable() : symb_name = '%s', value = %g\n", symb_name, value);
