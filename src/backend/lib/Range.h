@@ -33,8 +33,9 @@ extern "C" {
 #include "backend/gsl/parser.h"
 }
 
+#include "backend/lib/macros.h"	//SET_NUMBER_LOCALE
+
 #include <QString>
-#include <QLocale>
 
 //! Auxiliary class for a data range 
 /**
@@ -50,8 +51,9 @@ public:
 		this->setRange(min, max);
 	}
 	Range(const QString& min, const QString& max) {
+		SET_NUMBER_LOCALE
 		//TODO: check for NAN, INF?
-		this->setRange(parse(qPrintable(min.simplified())), parse(qPrintable(max.simplified())));
+		this->setRange(parse(qPrintable(min.simplified()), qPrintable(numberLocale.name())), parse(qPrintable(max.simplified()), qPrintable(numberLocale.name())));
 	}
 	~Range() = default;
 	T min() const { return m_min; }

@@ -75,9 +75,8 @@ void delete_table(void);	/* delete symbol table */
 int parse_errors(void);
 symbol* assign_symbol(const char* symbol_name, double value);
 int remove_symbol(const char* symbol_name);
-double parse(const char *str);
-/* TODO: double parse(const char *string, const char *locale); */
-double parse_with_vars(const char[], const parser_var[], int nvars);
+double parse(const char *string, const char *locale);
+double parse_with_vars(const char[], const parser_var[], int nvars, const char* locale);
 
 extern struct cons _constants[];
 extern struct funs _functions[];

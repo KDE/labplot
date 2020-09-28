@@ -58,7 +58,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 
 /* returns decimal separator (as SettingsGeneralPage::DecimalSeparator) of given locale (default: system setting) */
 SettingsGeneralPage::DecimalSeparator SettingsGeneralPage::decimalSeparator(QLocale locale) {
-	DEBUG(Q_FUNC_INFO << ", LOCALE: " << STDSTRING(locale.name()) << ',' << locale.language())
+	DEBUG(Q_FUNC_INFO << ", LOCALE: " << STDSTRING(locale.name()) << ", " << locale.language())
 	QChar decimalPoint{locale.decimalPoint()};
 	DEBUG(Q_FUNC_INFO << ", SEPARATING CHAR: " << STDSTRING(QString(decimalPoint)) )
 	if (decimalPoint == QChar('.'))

@@ -31,6 +31,10 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+// SET_NUMBER_LOCALE
+#include <KSharedConfig>
+#include <KConfigGroup>
+
 #include <QApplication>
 #include <QMetaEnum>
 

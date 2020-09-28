@@ -44,8 +44,6 @@
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
 #include <KLocalizedString>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QClipboard>
 #include <QFont>

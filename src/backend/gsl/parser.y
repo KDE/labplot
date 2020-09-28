@@ -58,7 +58,7 @@
 typedef struct param {
 	size_t pos;		/* current position in string */
 	char* string;		/* the string to parse */
-	char* locale;		/* name of locale to convert numbers */
+	const char* locale;	/* name of locale to convert numbers */
 } param;
 
 int yyerror(param *p, const char *err);
@@ -269,9 +269,7 @@ static void ungetcstr(size_t *pos) {
 		(*pos)--;
 }
 
-/* TODO: pass locale name as char* (can be qPrintable(QLocale::name())) */
-/* double parse(const char *string, const char *locale) { */
-double parse(const char *string) {
+double parse(const char* string, const char* locale) {
 	pdebug("\nPARSER: parse('%s') len = %d\n********************************\n", string, (int)strlen(string));
 
 	/* be sure that the symbol table has been initialized */
@@ -280,7 +278,8 @@ double parse(const char *string) {
 
 	param p;
 	p.pos = 0;
-	/* TODO: p.locale = locale; or do we need a malloc and strcpy? */
+	p.locale = locale;
+
 	/* leave space to terminate string by "\n\0" */
 	const size_t slen = strlen(string) + 2;
 	p.string = (char *) malloc(slen * sizeof(char));
@@ -304,8 +303,7 @@ double parse(const char *string) {
 	return res;
 }
 
-/*TODO: is this used? */
-double parse_with_vars(const char *str, const parser_var *vars, int nvars) {
+double parse_with_vars(const char *str, const parser_var *vars, int nvars, const char* locale) {
 	pdebug("\nPARSER: parse_with_var(\"%s\") len = %d\n", str, (int)strlen(str));
 
 	int i;
@@ -314,7 +312,7 @@ double parse_with_vars(const char *str, const parser_var *vars, int nvars) {
 		assign_symbol(vars[i].name, vars[i].value);
 	}
 
-	return parse(str);
+	return parse(str, locale);
 }
 
 int yylex(param *p) {
@@ -350,18 +348,16 @@ int yylex(param *p) {
 
 		/* convert to double */
 		char *remain;
-#if defined(_WIN32) || defined(__APPLE__)
+/*#if defined(_WIN32) || defined(__APPLE__)
 		const double result = strtod(s, &remain);
-#else
-		/* TODO: check on WINDOWS with new defines */
+#else*/
+		/* TODO: check on WINDOWS (with new defines above) */
 		/* TODO: check on MAC */
-		/* uses same locale for all languages: '.' as decimal point */
-		/* TODO: use passed locale (p->locale) istead of "C" */
-		locale_t locale = newlocale(LC_NUMERIC_MASK, "C", NULL);
+		locale_t locale = newlocale(LC_NUMERIC_MASK, p->locale, (locale_t)0);
 
 		const double result = strtod_l(s, &remain, locale);
 		freelocale(locale);
-#endif
+/*#endif*/
 		pdebug("PARSER:		Reading: '%s'\n", s);
 		pdebug("PARSER:		Remain: '%s'\n", remain);
 
