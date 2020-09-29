@@ -1,7 +1,7 @@
 -----2.9 -----
 Bug fixes:
     * Fix compiling with Cantor 20.08.X and X>0
-    * Parser improvements ("Generate Function Values"):
+    * Parser improvements (found in "Generate Function Values"):
         * Fix Crash using variable name of pre-defined functions as function ("sin()")
         * Allow variable names containing function names ("sina")
         * Correctly remove variables when changing name
