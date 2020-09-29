@@ -33,9 +33,6 @@
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
-#include <KConfigGroup>
-#include <KSharedConfig>
-
 #include <QStandardItemModel>
 
 /*!

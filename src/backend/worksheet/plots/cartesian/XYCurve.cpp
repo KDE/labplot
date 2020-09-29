@@ -55,9 +55,7 @@
 #include <QDesktopWidget>
 
 #include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 extern "C" {
 #include <gsl/gsl_math.h>

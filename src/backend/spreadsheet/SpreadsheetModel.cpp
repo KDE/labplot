@@ -35,9 +35,7 @@
 #include <QBrush>
 #include <QIcon>
 
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
 	\class SpreadsheetModel

@@ -32,8 +32,6 @@
 #include <QPushButton>
 #include <QWindow>
 
-#include <KConfigGroup>
-#include <KSharedConfig>
 #include <KWindowConfig>
 
 /*!

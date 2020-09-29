@@ -44,7 +44,6 @@
 #include <QPainter>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
 
 extern "C" {
 #include <gsl/gsl_math.h>

@@ -31,9 +31,6 @@
 #include "backend/matrix/MatrixModel.h"
 #include "backend/matrix/Matrix.h"
 
-#include <KConfigGroup>
-#include <KSharedConfig>
-
 #include <QBrush>
 
 /*!

@@ -41,8 +41,6 @@
 
 #include <KLocalizedString>
 #include <KConfig>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QHeaderView>
 #include <QPrinter>

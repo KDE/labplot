@@ -47,10 +47,8 @@
 #include <QImageReader>
 #include <QPainter>
 
-#include <KConfigGroup>
 #include <KConfig>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
   \class HistogramDock

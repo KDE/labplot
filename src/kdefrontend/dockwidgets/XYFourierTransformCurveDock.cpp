@@ -33,8 +33,6 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <KMessageBox>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QMenu>
 #include <QWidgetAction>

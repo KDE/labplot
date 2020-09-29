@@ -39,9 +39,7 @@
 #include <QPageSize>
 
 #include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
   \class WorksheetDock

@@ -42,8 +42,6 @@
 #include <QTextDocumentFragment>
 #include <QWidgetAction>
 
-#include <KConfigGroup>
-#include <KSharedConfig>
 #include <KCharSelect>
 #include <KLocalizedString>
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING

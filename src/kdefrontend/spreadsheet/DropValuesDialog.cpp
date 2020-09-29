@@ -36,8 +36,6 @@
 #include <QWindow>
 
 #include <KLocalizedString>
-#include <KConfigGroup>
-#include <KSharedConfig>
 #include <KWindowConfig>
 
 #include <cmath>

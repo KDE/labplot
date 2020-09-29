@@ -32,9 +32,6 @@
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
-#include <KConfigGroup>
-#include <KSharedConfig>
-
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>

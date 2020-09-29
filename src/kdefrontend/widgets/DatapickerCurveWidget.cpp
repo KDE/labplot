@@ -32,8 +32,6 @@
 #include "kdefrontend/GuiTools.h"
 
 #include <KLocalizedString>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QPainter>
 

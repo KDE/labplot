@@ -41,9 +41,7 @@
 #include "kdefrontend/GuiTools.h"
 
 #include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>

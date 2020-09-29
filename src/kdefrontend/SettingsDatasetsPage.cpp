@@ -30,8 +30,6 @@
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QDir>
 #include <QMessageBox>

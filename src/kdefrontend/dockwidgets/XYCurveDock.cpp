@@ -47,9 +47,7 @@
 #include <QPainter>
 
 #include <KConfig>
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 
 /*!
   \class XYCurveDock

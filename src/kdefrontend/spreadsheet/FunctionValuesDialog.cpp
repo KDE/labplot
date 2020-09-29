@@ -209,7 +209,7 @@ void FunctionValuesDialog::checkValues() {
 			return;
 		}
 
-		//TODO: why is the column check diabled?
+		//TODO: why is the column check disabled?
 /*		Column* column = dynamic_cast<Column*>(aspect);
 		DEBUG("row count = " << (static_cast<QVector<double>* >(column->data()))->size());
 		if (!column || column->rowCount() < 1) {
@@ -268,8 +268,8 @@ void FunctionValuesDialog::addVariable() {
 
 	//text field for the variable name
 	auto* le{ new QLineEdit() };
-	//TODO: why 30? Too small when variable has more than two chars
-	le->setMaximumWidth(30);
+	// hardcoding size is bad. 40 is enough for three letters
+	le->setMaximumWidth(40);
 	connect(le, &QLineEdit::textChanged, this, &FunctionValuesDialog::variableNameChanged);
 	layout->addWidget(le, row, 0, 1, 1);
 	m_variableLineEdits << le;

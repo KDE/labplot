@@ -34,9 +34,6 @@
 #include "backend/core/datatypes/filter.h"
 #include "backend/gsl/ExpressionParser.h"
 
-#include <KConfigGroup>
-#include <KSharedConfig>
-
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 	m_column_mode(mode), m_owner(owner) {
 	Q_ASSERT(owner != nullptr);

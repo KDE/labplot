@@ -37,9 +37,7 @@
 #include <QStandardPaths>
 #include <QWindow>
 
-#include <KConfigGroup>
 #include <KLocalizedString>
-#include <KSharedConfig>
 #include <KWindowConfig>
 
 extern "C" {

@@ -42,8 +42,6 @@
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
 
 #include <KLocalizedString>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QAction>
 #include <QStackedWidget>

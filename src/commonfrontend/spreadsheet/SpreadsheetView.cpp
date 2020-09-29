@@ -61,11 +61,8 @@
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
-#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QKeyEvent>
 #include <QClipboard>

@@ -32,19 +32,18 @@
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
 
+#include <KWindowConfig>
+#include <KLocalizedString>
+
 #include <QMenu>
 #include <QWidgetAction>
 #include <QDialogButtonBox>
 #include <QPushButton>
-#include <KLocalizedString>
 #include <QThreadPool>
 #include <QWindow>
 #ifndef NDEBUG
 #include <QElapsedTimer>
 #endif
-
-#include <KSharedConfig>
-#include <KWindowConfig>
 
 extern "C" {
 #include "backend/gsl/parser.h"

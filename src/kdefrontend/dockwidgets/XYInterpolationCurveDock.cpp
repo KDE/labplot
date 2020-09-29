@@ -33,9 +33,6 @@
 #include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
-#include <KConfigGroup>
-#include <KSharedConfig>
-
 #include <QMenu>
 #include <QWidgetAction>
 #include <QStandardItemModel>

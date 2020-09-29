@@ -40,8 +40,6 @@
 #include "kdefrontend/widgets/FitParametersWidget.h"
 
 #include <KMessageWidget>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QMenu>
 #include <QWidgetAction>

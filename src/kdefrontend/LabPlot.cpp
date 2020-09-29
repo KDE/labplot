@@ -32,12 +32,10 @@
 
 #include <KAboutData>
 #include <KColorSchemeManager>
-#include <KConfigGroup>
 #include <kconfigwidgets_version.h>
 #include <KCrash>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KSharedConfig>
 
 #include <QApplication>
 #include <QCommandLineParser>

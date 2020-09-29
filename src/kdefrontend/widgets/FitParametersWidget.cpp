@@ -29,8 +29,6 @@
 #include "FitParametersWidget.h"
 
 #include <KLocalizedString>
-#include <KSharedConfig>
-#include <KConfigGroup>
 
 #include <QLineEdit>
 #include <QCheckBox>

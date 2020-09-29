@@ -34,8 +34,6 @@
 
 #include <KLocalizedString>
 #include <KConfig>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 ReferenceLineDock::ReferenceLineDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);

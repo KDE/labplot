@@ -29,9 +29,6 @@
 #include "FitOptionsWidget.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
-#include <KSharedConfig>
-#include <KConfigGroup>
-
 /*!
 	\class FitOptionsWidget
 	\brief Widget for editing advanced fit options.

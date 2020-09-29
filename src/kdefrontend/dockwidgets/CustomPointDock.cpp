@@ -33,8 +33,6 @@
 
 #include <KLocalizedString>
 #include <KConfig>
-#include <KConfigGroup>
-#include <KSharedConfig>
 
 #include <QPainter>
 #include <QDir>

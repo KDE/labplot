@@ -33,9 +33,6 @@
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
-#include <KConfigGroup>
-#include <KSharedConfig>
-
 #include <QStandardItemModel>
 
 extern "C" {
