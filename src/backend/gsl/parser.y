@@ -40,9 +40,8 @@
 #include "functions.h"
 #if defined(_WIN32)
 #define locale_t _locale_t
-#define newlocale _create_locale
-#define freelocale free_locale
 #define strtod_l _strtod_l
+#define freelocale _free_locale
 #endif
 
 #ifdef PDEBUG
@@ -348,16 +347,16 @@ int yylex(param *p) {
 
 		/* convert to double */
 		char *remain;
-/*#if defined(_WIN32) || defined(__APPLE__)
-		const double result = strtod(s, &remain);
-#else*/
-		/* TODO: check on WINDOWS (with new defines above) */
+#if defined(_WIN32) /*|| defined(__APPLE__) */
+		locale_t locale = _create_locale(LC_NUMERIC, p->locale);
+#else
 		/* TODO: check on MAC */
 		locale_t locale = newlocale(LC_NUMERIC_MASK, p->locale, (locale_t)0);
+#endif
 
 		const double result = strtod_l(s, &remain, locale);
 		freelocale(locale);
-/*#endif*/
+
 		pdebug("PARSER:		Reading: '%s'\n", s);
 		pdebug("PARSER:		Remain: '%s'\n", remain);
 
