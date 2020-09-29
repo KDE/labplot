@@ -347,17 +347,15 @@ int yylex(param *p) {
 
 		/* convert to double */
 		char *remain;
-#if defined(_WIN32) /*|| defined(__APPLE__) */
+#if defined(_WIN32)
 		locale_t locale = _create_locale(LC_NUMERIC, p->locale);
 #else
-		/* TODO: check on MAC */
 		locale_t locale = newlocale(LC_NUMERIC_MASK, p->locale, (locale_t)0);
 #endif
-
 		const double result = strtod_l(s, &remain, locale);
 		freelocale(locale);
 
-		pdebug("PARSER:		Reading: '%s'\n", s);
+		pdebug("PARSER:		Reading: '%s' with locale %s\n", s, p->locale);
 		pdebug("PARSER:		Remain: '%s'\n", remain);
 
 		/* check conversion */
