@@ -31,7 +31,9 @@
 #define PARSER_H
 
 /* uncomment to enable parser specific debugging */
-/* #define PDEBUG 1 */
+#ifdef __FreeBSD__
+#define PDEBUG 1
+#endif
 
 struct cons {
 	const char* name;
