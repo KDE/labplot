@@ -34,12 +34,13 @@
 
 #include <klocalizedstring.h>
 
-extern "C" {
 #include <gsl/gsl_version.h>
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_const_mksa.h>
 #include <gsl/gsl_const_num.h>
+
+extern "C" {
 #include "backend/gsl/parser.h"
 }
 
@@ -1253,7 +1254,6 @@ const QStringList& ExpressionParser::functions() {
 	return m_functions;
 }
 
-
 const QStringList& ExpressionParser::functionsGroups() {
 	return m_functionsGroups;
 }
@@ -1265,6 +1265,8 @@ const QStringList& ExpressionParser::functionsNames() {
 const QVector<int>& ExpressionParser::functionsGroupIndices() {
 	return m_functionsGroupIndex;
 }
+
+//TODO: number of function arguments (needed for auto fill)
 
 const QStringList& ExpressionParser::constants() {
 	return m_constants;
