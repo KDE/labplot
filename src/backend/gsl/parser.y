@@ -80,9 +80,9 @@ symbol *tptr;   /* For returning symbol-table pointers */
 
 %right '='
 %left '-' '+'
-%left '*' '/'
+%left '*' '/' '%'
 %left NEG     /* Negation--unary minus */
-%right '^'    /* Exponential */
+%right '^' '!'
 
 %%
 input:   /* empty */
@@ -94,22 +94,26 @@ line:	'\n'
 	| error '\n' { yyerrok; }
 ;
 
-expr:      NUM       { $$ = $1;                         }
-| VAR                { $$ = $1->value.var;              }
-| VAR '=' expr       { $$ = $3; $1->value.var = $3;     }
-| FNCT '(' ')'       { $$ = (*($1->value.fnctptr))();   }
+expr:      NUM       { $$ = $1;                            }
+| VAR                { $$ = $1->value.var;                 }
+| VAR '=' expr       { $$ = $3; $1->value.var = $3;        }
+| FNCT '(' ')'       { $$ = (*($1->value.fnctptr))();      }
 | FNCT '(' expr ')'  { $$ = (*((func_t1)($1->value.fnctptr)))($3); }
 | FNCT '(' expr ',' expr ')'  { $$ = (*((func_t2)($1->value.fnctptr)))($3,$5); }
 | FNCT '(' expr ',' expr ','expr ')'  { $$ = (*((func_t3)($1->value.fnctptr)))($3,$5,$7); }
 | FNCT '(' expr ',' expr ',' expr ','expr ')'  { $$ = (*((func_t4)($1->value.fnctptr)))($3,$5,$7,$9); }
-| expr '+' expr      { $$ = $1 + $3;                    }
-| expr '-' expr      { $$ = $1 - $3;                    }
-| expr '*' expr      { $$ = $1 * $3;                    }
-| expr '/' expr      { $$ = $1 / $3;                    }
-| '-' expr  %prec NEG{ $$ = -$2;                        }
-| expr '^' expr      { $$ = pow($1, $3);                }
-| expr '*' '*' expr  { $$ = pow($1, $4);                }
-| '(' expr ')'       { $$ = $2;                         }
+| expr '+' expr      { $$ = $1 + $3;                       }
+| expr '-' expr      { $$ = $1 - $3;                       }
+| expr '*' expr      { $$ = $1 * $3;                       }
+| expr '/' expr      { $$ = $1 / $3;                       }
+| expr '%' expr      { $$ = (int)($1) % (int)($3);         }
+| '-' expr  %prec NEG{ $$ = -$2;                           }
+| expr '^' expr      { $$ = pow($1, $3);                   }
+| expr '*' '*' expr  { $$ = pow($1, $4);                   }
+| '(' expr ')'       { $$ = $2;                            }
+| '|' expr '|'       { $$ = fabs($2);                      }
+| expr '!'           { $$ = gsl_sf_fact((unsigned int)$1); }
+/* logical operators (!,&&,||) are not supported */
 ;
 
 %%
@@ -146,14 +150,14 @@ symbol* put_symbol(const char *symbol_name, int symbol_type) {
 }
 
 /* remove symbol of name symbol_name from symbol table
-   removes only variables
+   removes only variables of value 0
    returns 0 on success */
 int remove_symbol(const char *symbol_name) {
 	symbol* ptr = symbol_table;
 
 	/* check if head contains symbol */
 	if (ptr && (strcmp(ptr->name, symbol_name) == 0)) {
-		if (ptr->type == VAR) {
+		if (ptr->type == VAR && ptr->value.var == 0) {
 			pdebug("PARSER: REMOVING symbol '%s'\n", symbol_name);
 			symbol_table = ptr->next;
 			free(ptr->name);
@@ -169,8 +173,8 @@ int remove_symbol(const char *symbol_name) {
 		ptr = ptr->next;
 	}
 
-	/* symbol not found or is not a variable */
-	if (!ptr || ptr->type != VAR)
+	/* symbol not found or is not a variable or is not 0 */
+	if (!ptr || ptr->type != VAR || ptr->value.var != 0)
 		return 1;
 
 	/* remove symbol */
@@ -293,6 +297,7 @@ double parse(const char* string, const char* locale) {
 	/* pdebug("PARSER: Call yyparse() for \"%s\" (len = %d)\n", p.string, (int)strlen(p.string)); */
 
 	/* parameter for yylex */
+	res = NAN;	/* default value */
 	yyparse(&p);
 
 	pdebug("PARSER: parse() DONE (result = %g, errors = %d)\n*******************************\n", res, parse_errors());
