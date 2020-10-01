@@ -40,8 +40,11 @@ struct cons {
 
 struct funs {
 	const char* name;
-	/* MSVC needs void argument */
+#ifdef _MSC_VER	/* MSVC needs void argument */
 	double (*fnct)(void);
+#else
+	double (*fnct)();
+#endif
 };
 
 /* variables to pass to parser */
@@ -52,8 +55,11 @@ typedef struct parser_var {
 } parser_var;
 
 /* Function types */
-/* MSVC needs void argument */
+#ifdef _MSC_VER	/* MSVC needs void argument */
 typedef double (*func_t) (void);
+#else
+typedef double (*func_t) ();
+#endif
 typedef double (*func_t1) (double);
 typedef double (*func_t2) (double, double);
 typedef double (*func_t3) (double, double, double);
