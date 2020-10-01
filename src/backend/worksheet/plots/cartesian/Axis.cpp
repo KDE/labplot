@@ -2037,8 +2037,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		painter->setOpacity(labelsOpacity);
 		painter->setPen(QPen(labelsColor));
 		painter->setFont(labelsFont);
-		QTextDocument td;
-		td.setDefaultFont(labelsFont);
+		QTextEdit te;
+		te.setCurrentFont(labelsFont);
 		QFontMetrics fm(labelsFont);
 		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
@@ -2050,20 +2050,21 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 				if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
 						const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
-						int width = rect.width();;
-						int height = rect.height();
-						painter->fillRect(0, -height/2, width, height, labelsBackgroundColor);
+						painter->fillRect(rect, labelsBackgroundColor);
 					}
 					painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
 				} else {
-					td.setHtml(tickLabelStrings.at(i));
+					te.setHtml(tickLabelStrings.at(i));
+					te.selectAll();
+					te.setTextColor(labelsColor);
+					QSizeF size = te.document()->size();
+					int height = size.height();
 					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
-						int width = td.size().width();
-						int height = td.size().height();
+						int width = size.width();
 						painter->fillRect(0, -height/2, width, height, labelsBackgroundColor);
 					}
-					painter->translate(0, -td.size().height());
-					td.drawContents(painter);
+					painter->translate(0, -height);
+					te.document()->drawContents(painter);
 				}
 				painter->restore();
 				painter->translate(-tickLabelPoints.at(i));
@@ -2074,10 +2075,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 				painter->save();
 				painter->rotate(-labelsRotationAngle);
 				if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
-						const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
-						int width = rect.width();;
-						int height = rect.height();
-						painter->fillRect(0, -height/2, width, height, labelsBackgroundColor);
+					const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
+					painter->fillRect(rect, labelsBackgroundColor);
 				}
 				painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
 				painter->restore();
