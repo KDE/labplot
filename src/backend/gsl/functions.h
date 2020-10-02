@@ -42,40 +42,40 @@
 #pragma function(ceil, floor)
 #endif
 
-/* sync with ExpressionParser.cpp */
+/* list of functions (sync with ExpressionParser.cpp!) */
 struct funs _functions[] = {
 	/* standard functions */
-	{"rand", (func_t)nsl_sf_rand},
-	{"random", (func_t)nsl_sf_random},
-	{"drand", (func_t)nsl_sf_drand},
+	{"rand", (func_t)nsl_sf_rand, 0},
+	{"random", (func_t)nsl_sf_random, 0},
+	{"drand", (func_t)nsl_sf_drand, 0},
 	/* math.h */
-	{"ceil", (func_t)ceil},
-	{"fabs", (func_t)fabs},
-	{"log10", (func_t)log10},
-	{"pow", (func_t)pow},
-	{"sqrt", (func_t)sqrt},
-	{"sgn", (func_t)nsl_sf_sgn},
-	{"theta", (func_t)nsl_sf_theta},
-	{"harmonic", (func_t)nsl_sf_harmonic},
+	{"ceil", (func_t)ceil, 1},
+	{"fabs", (func_t)fabs, 1},
+	{"log10", (func_t)log10, 1},
+	{"pow", (func_t)pow, 2},
+	{"sqrt", (func_t)sqrt, 1},
+	{"sgn", (func_t)nsl_sf_sgn, 1},
+	{"theta", (func_t)nsl_sf_theta, 1},
+	{"harmonic", (func_t)nsl_sf_harmonic, 1},
 #ifndef _WIN32
-	{"cbrt", (func_t)cbrt},
-	{"logb", (func_t)logb},
-	{"rint", (func_t)rint},
-	{"round", (func_t)round},
-	{"trunc", (func_t)trunc},
+	{"cbrt", (func_t)cbrt, 1},
+	{"logb", (func_t)logb, 1},
+	{"rint", (func_t)rint, 1},
+	{"round", (func_t)round, 1},
+	{"trunc", (func_t)trunc, 1},
 #endif
 	/* GSL mathematical functions: see https://www.gnu.org/software/gsl/doc/html/math.html */
-	{"log1p", (func_t)gsl_log1p},
-	{"ldexp", (func_t)nsl_sf_ldexp},
-	{"powint", (func_t)nsl_sf_powint},
-	{"pow2", (func_t)gsl_pow_2},
-	{"pow3", (func_t)gsl_pow_3},
-	{"pow4", (func_t)gsl_pow_4},
-	{"pow5", (func_t)gsl_pow_5},
-	{"pow6", (func_t)gsl_pow_6},
-	{"pow7", (func_t)gsl_pow_7},
-	{"pow8", (func_t)gsl_pow_8},
-	{"pow9", (func_t)gsl_pow_9},
+	{"log1p", (func_t)gsl_log1p, 1},
+	{"ldexp", (func_t)nsl_sf_ldexp, 2},
+	{"powint", (func_t)nsl_sf_powint, 2},
+	{"pow2", (func_t)gsl_pow_2, 1},
+	{"pow3", (func_t)gsl_pow_3, 1},
+	{"pow4", (func_t)gsl_pow_4, 1},
+	{"pow5", (func_t)gsl_pow_5, 1},
+	{"pow6", (func_t)gsl_pow_6, 1},
+	{"pow7", (func_t)gsl_pow_7, 1},
+	{"pow8", (func_t)gsl_pow_8, 1},
+	{"pow9", (func_t)gsl_pow_9, 1},
 	/* GSL special functions: see https://www.gnu.org/software/gsl/doc/html/specfunc.html */
 	/* Airy Functions and Derivatives */
 	{"Ai", (func_t)nsl_sf_airy_Ai},
@@ -486,7 +486,7 @@ struct funs _functions[] = {
 	{"hypergeometricQ", (func_t)gsl_cdf_hypergeometric_Q},
 	/* Logarithmic Distribution */
 	{"logarithmic", (func_t)nsl_sf_logarithmic},
-	{0, (func_t)0}
+	{0, (func_t)0, 0}
 };
 
 #endif /*FUNCTIONS_H*/

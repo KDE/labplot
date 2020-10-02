@@ -45,6 +45,7 @@ struct funs {
 #else
 	double (*fnct)();
 #endif
+	int argc;
 };
 
 /* variables to pass to parser */
