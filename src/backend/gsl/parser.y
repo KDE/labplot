@@ -354,13 +354,27 @@ int yylex(param *p) {
 		char *remain;
 #if defined(_WIN32)
 		locale_t locale = _create_locale(LC_NUMERIC, p->locale);
+		if (locale == NULL) {
+			pdebug("PARSER ERROR in newlocale(%s): %s. Trying system locale.\n", p->locale, strerror(errno));
+			locale = _create_locale(LC_NUMERIC, "");
+		}
 #else
 		locale_t locale = newlocale(LC_NUMERIC_MASK, p->locale, (locale_t)0);
+		if (locale == (locale_t)0) {
+			pdebug("PARSER ERROR in newlocale(%s): %s. Trying system locale.\n", p->locale, strerror(errno));
+			locale = newlocale(LC_NUMERIC_MASK, "", (locale_t)0);
+			pdebug("PARSER:		Reading: '%s' with system locale\n", s);
+		} else {
+			pdebug("PARSER:		Reading: '%s' with locale %s\n", s, p->locale);
+		}
 #endif
-		const double result = strtod_l(s, &remain, locale);
-		freelocale(locale);
+		double result;
+		if (locale != NULL) {
+			result = strtod_l(s, &remain, locale);
+			freelocale(locale);
+		} else // use C locale
+			result = strtod(s, &remain);
 
-		pdebug("PARSER:		Reading: '%s' with locale %s\n", s, p->locale);
 		pdebug("PARSER:		Remain: '%s'\n", remain);
 
 		/* check conversion */
