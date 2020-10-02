@@ -76,8 +76,8 @@ private slots:
 	void checkValues();	// check user input and enable/diable Ok-button accordingly
 	void showConstants();	// select predefined constant
 	void showFunctions();	// select predefined function
-	void insertFunction(const QString&);
-	void insertConstant(const QString&);
+	void insertFunction(const QString&) const;
+	void insertConstant(const QString&) const;
 	void addVariable();
 	void deleteVariable();
 	void variableNameChanged();

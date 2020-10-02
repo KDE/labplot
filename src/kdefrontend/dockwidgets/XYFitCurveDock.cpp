@@ -988,13 +988,12 @@ void XYFitCurveDock::showOptions() {
 	menu.exec(uiGeneralTab.pbOptions->mapToGlobal(pos));
 }
 
-void XYFitCurveDock::insertFunction(const QString& str) const {
-	//TODO: not all function have only one argument!
-	uiGeneralTab.teEquation->insertPlainText(str + "(x)");
+void XYFitCurveDock::insertFunction(const QString& functionName) const {
+	uiGeneralTab.teEquation->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Cartesian));
 }
 
-void XYFitCurveDock::insertConstant(const QString& str) const {
-	uiGeneralTab.teEquation->insertPlainText(str);
+void XYFitCurveDock::insertConstant(const QString& constantsName) const {
+	uiGeneralTab.teEquation->insertPlainText(constantsName);
 }
 
 /*!

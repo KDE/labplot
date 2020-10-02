@@ -299,28 +299,22 @@ void XYEquationCurveDock::showFunctions() {
 	}
 }
 
-void XYEquationCurveDock::insertFunction1(const QString& str) {
-	//TODO: not all functions have only one argument
+void XYEquationCurveDock::insertFunction1(const QString& functionName) {
 	const auto type{XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex())};
-	if (type == XYEquationCurve::EquationType::Cartesian)
-		uiGeneralTab.teEquation1->insertPlainText(str + "(x)");
-	else if (type == XYEquationCurve::EquationType::Polar)
-		uiGeneralTab.teEquation1->insertPlainText(str + "(phi)");
-	else if (type == XYEquationCurve::EquationType::Parametric)
-		uiGeneralTab.teEquation1->insertPlainText(str + "(t)");
+
+	uiGeneralTab.teEquation1->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, type));
 }
 
-void XYEquationCurveDock::insertConstant1(const QString& str) {
-	uiGeneralTab.teEquation1->insertPlainText(str);
+void XYEquationCurveDock::insertConstant1(const QString& constantsName) {
+	uiGeneralTab.teEquation1->insertPlainText(constantsName);
 }
 
-void XYEquationCurveDock::insertFunction2(const QString& str) {
-	//TODO: not all functions have only one argument
-	uiGeneralTab.teEquation2->insertPlainText(str + "(t)");
+void XYEquationCurveDock::insertFunction2(const QString& functionName) {
+	uiGeneralTab.teEquation1->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Parametric));
 }
 
-void XYEquationCurveDock::insertConstant2(const QString& str) {
-	uiGeneralTab.teEquation2->insertPlainText(str);
+void XYEquationCurveDock::insertConstant2(const QString& constantsName) {
+	uiGeneralTab.teEquation2->insertPlainText(constantsName);
 }
 
 void XYEquationCurveDock::enableRecalculate() const {

@@ -51,8 +51,8 @@ private slots:
 	void checkValues();
 	void showConstants();
 	void showFunctions();
-	void insertFunction(const QString&);
-	void insertConstant(const QString&);
+	void insertFunction(const QString&) const;
+	void insertConstant(const QString&) const;
 };
 
 #endif

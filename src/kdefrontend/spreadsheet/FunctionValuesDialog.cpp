@@ -253,13 +253,12 @@ void FunctionValuesDialog::showFunctions() {
 	menu.exec(ui.tbFunctions->mapToGlobal(pos));
 }
 
-void FunctionValuesDialog::insertFunction(const QString& str) {
-	//TODO: not all functions have only one argument
-	ui.teEquation->insertPlainText(str + "(x)");
+void FunctionValuesDialog::insertFunction(const QString& functionName) const {
+	ui.teEquation->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Cartesian));
 }
 
-void FunctionValuesDialog::insertConstant(const QString& str) {
-	ui.teEquation->insertPlainText(str);
+void FunctionValuesDialog::insertConstant(const QString& constantsName) const {
+	ui.teEquation->insertPlainText(constantsName);
 }
 
 void FunctionValuesDialog::addVariable() {

@@ -28,6 +28,7 @@
  ***************************************************************************/
 #include "MatrixFunctionDialog.h"
 #include "backend/lib/macros.h"
+#include "backend/gsl/ExpressionParser.h"
 #include "backend/matrix/Matrix.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
@@ -149,13 +150,12 @@ void MatrixFunctionDialog::showFunctions() {
 	menu.exec(ui.tbFunctions->mapToGlobal(pos));
 }
 
-void MatrixFunctionDialog::insertFunction(const QString& str) {
-	//TODO: not all functions have only one argument
-	ui.teEquation->insertPlainText(str + "(x)");
+void MatrixFunctionDialog::insertFunction(const QString& functionName) const {
+	ui.teEquation->insertPlainText(functionName + ExpressionParser::functionArgumentString(functionName, XYEquationCurve::EquationType::Cartesian));
 }
 
-void MatrixFunctionDialog::insertConstant(const QString& str) {
-	ui.teEquation->insertPlainText(str);
+void MatrixFunctionDialog::insertConstant(const QString& constantsName) const {
+	ui.teEquation->insertPlainText(constantsName);
 }
 
 /* task class for parallel fill (not used) */
