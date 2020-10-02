@@ -31,6 +31,7 @@
 #define EXPRESSIONPARSER_H
 
 #include "backend/lib/Range.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include <QVector>
 
 class QStringList;
@@ -39,6 +40,8 @@ class ExpressionParser {
 
 public:
 	static ExpressionParser* getInstance();
+	static int functionArgumentCount(const QString& functionName);
+	static QString functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType);
 
 	bool isValid(const QString& expr, const QStringList& vars);
 	QStringList getParameter(const QString& expr, const QStringList& vars);

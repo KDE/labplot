@@ -51,8 +51,8 @@ ExpressionParser::ExpressionParser() {
 	initConstants();
 }
 
+// initialize function list	(sync with functions.h!)
 void ExpressionParser::initFunctions() {
-	//functions	(sync with functions.h!)
 	for (int i = 0; _functions[i].name != nullptr; i++)
 		m_functions << _functions[i].name;
 
@@ -1265,7 +1265,76 @@ const QVector<int>& ExpressionParser::functionsGroupIndices() {
 	return m_functionsGroupIndex;
 }
 
-//TODO: number of function arguments (needed for auto fill)
+/* another idea:
+ * https://stackoverflow.com/questions/36797770/get-function-parameters-count
+ * but this does not work since all function pointer have zero args in the struct
+ */
+int ExpressionParser::functionArgumentCount(const QString& functionName) {
+	int index = 0;
+	while (functionName != QString(_functions[index].name) && _functions[index].name != NULL)
+		index++;
+
+	DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);
+	DEBUG(Q_FUNC_INFO << ", function " << STDSTRING(functionName) << " has " << _functions[index].argc << " arguments");
+	return _functions[index].argc;
+}
+
+QString ExpressionParser::functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType type) {
+	switch (functionArgumentCount(functionName)) {
+	case 0:
+		return QString("()");
+	case 1:
+		switch(type) {
+		case XYEquationCurve::EquationType::Cartesian:
+			return QString("(x)");
+		case XYEquationCurve::EquationType::Polar:
+			return QString("(phi)");
+		case XYEquationCurve::EquationType::Parametric:
+			return QString("(t)");
+		case XYEquationCurve::EquationType::Implicit:
+		case XYEquationCurve::EquationType::Neutral:
+			return QString("(x)");
+		}
+	case 2:
+		switch(type) {
+		case XYEquationCurve::EquationType::Cartesian:
+			return QString("(x, y)");
+		case XYEquationCurve::EquationType::Polar:
+			return QString("(phi, theta)");
+		case XYEquationCurve::EquationType::Parametric:
+			return QString("(u, v)");
+		case XYEquationCurve::EquationType::Implicit:
+		case XYEquationCurve::EquationType::Neutral:
+			return QString("(x, y)");
+		}
+	case 3:
+		switch(type) {
+		case XYEquationCurve::EquationType::Cartesian:
+			return QString("(x, y, z)");
+		case XYEquationCurve::EquationType::Polar:
+			return QString("(alpha, beta, gamma)");
+		case XYEquationCurve::EquationType::Parametric:
+			return QString("(u, v, w)");
+		case XYEquationCurve::EquationType::Implicit:
+		case XYEquationCurve::EquationType::Neutral:
+			return QString("(x, y, z)");
+		}
+	case 4:
+		switch(type) {
+		case XYEquationCurve::EquationType::Cartesian:
+			return QString("(a, b, c, d)");
+		case XYEquationCurve::EquationType::Polar:
+			return QString("(alpha, beta, gamma, delta)");
+		case XYEquationCurve::EquationType::Parametric:
+			return QString("(a, b, c, d)");
+		case XYEquationCurve::EquationType::Implicit:
+		case XYEquationCurve::EquationType::Neutral:
+			return QString("(a, b, c, d)");
+		}
+	default:
+		return QString("(...)");
+	}
+}
 
 const QStringList& ExpressionParser::constants() {
 	return m_constants;
@@ -1301,7 +1370,7 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 	SET_NUMBER_LOCALE
 	parse(qPrintable(expr), qPrintable(numberLocale.name()));
 
-	/*TODO: check if we accidentally remove used constants here */
+	/* remove temporarily defined symbols */
 	for (const auto& var: vars)
 		remove_symbol(qPrintable(var));
 
