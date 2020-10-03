@@ -311,6 +311,7 @@ QString AsciiFilter::dateTimeFormat() const {
 
 void AsciiFilter::setNumberFormat(QLocale::Language lang) {
 	d->numberFormat = lang;
+	d->locale = QLocale(lang);
 }
 QLocale::Language AsciiFilter::numberFormat() const {
 	return d->numberFormat;
@@ -1160,7 +1161,6 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 		}
 
-		QLocale locale(numberFormat);
 		for (; row < linesToRead; ++row) {
 			DEBUG("\n	Reading row " << row + 1 << " of " << linesToRead);
 			QString line;
@@ -1209,79 +1209,16 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 			for (int n = offset; n < m_actualCols; ++n) {
 				DEBUG("	actual col = " << n);
+				QString valueString;
 				if (n - offset < lineStringList.size()) {
-					QString valueString = lineStringList.at(n - offset);
+					valueString = lineStringList.at(n - offset);
 					if (removeQuotesEnabled)
 						valueString.remove(QLatin1Char('"'));
-					DEBUG("	value string = " << STDSTRING(valueString));
+				} else
+					valueString = QString();
 
-					// set value depending on data type
-					switch (columnModes[n]) {
-					case AbstractColumn::ColumnMode::Numeric: {
-						DEBUG("	Numeric");
-						bool isNumber;
-						const double value = locale.toDouble(valueString, &isNumber);
-						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : nanValue);
-// 						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<double>*>(m_dataContainer[n])->size();
-						break;
-					}
-					case AbstractColumn::ColumnMode::Integer: {
-						DEBUG("	Integer");
-						bool isNumber;
-						const int value = locale.toInt(valueString, &isNumber);
-						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
-// 						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
-						break;
-					}
-					case AbstractColumn::ColumnMode::BigInt: {
-						DEBUG("	BigInt");
-						bool isNumber;
-						const qint64 value = locale.toLongLong(valueString, &isNumber);
-						static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
-// 						qDebug() << "dataContainer[" << n << "] size:" << static_cast<QVector<int>*>(m_dataContainer[n])->size();
-						break;
-					}
-					case AbstractColumn::ColumnMode::DateTime: {
-						QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
-						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
-						break;
-					}
-					case AbstractColumn::ColumnMode::Text:
-						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow) = valueString;
-						break;
-					case AbstractColumn::ColumnMode::Month:
-						//TODO
-						break;
-					case AbstractColumn::ColumnMode::Day:
-						//TODO
-						break;
-					}
-				} else {
-					DEBUG("	missing columns in this line");
-					switch (columnModes[n]) {
-					case AbstractColumn::ColumnMode::Numeric:
-						static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = nanValue;
-						break;
-					case AbstractColumn::ColumnMode::Integer:
-						static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = 0;
-						break;
-					case AbstractColumn::ColumnMode::BigInt:
-						static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](currentRow) = 0;
-						break;
-					case AbstractColumn::ColumnMode::DateTime:
-						static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
-						break;
-					case AbstractColumn::ColumnMode::Text:
-						static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow).clear();
-						break;
-					case AbstractColumn::ColumnMode::Month:
-						//TODO
-						break;
-					case AbstractColumn::ColumnMode::Day:
-						//TODO
-						break;
-					}
-				}
+				DEBUG("	value string = " << STDSTRING(valueString));
+				setValue(n, currentRow, valueString);
 			}
 			currentRow++;
 		}
@@ -1345,7 +1282,6 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	}
 
 	DEBUG("locale = " << STDSTRING(QLocale::languageToString(numberFormat)));
-	QLocale locale(numberFormat);
 
 	// Read the data
 	int currentRow = 0;	// indexes the position in the vector(column)
@@ -1412,67 +1348,13 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			//column counting starts with 1, subtract 1 as well as another 1 for the index column if required
 			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
 
-			if (col < lineStringList.size()) {
+			if (col < lineStringList.size())
 				valueString = lineStringList.at(col);
+			else
+				valueString = QString();
 
-				// set value depending on data type
-				switch (columnModes.at(n)) {
-				case AbstractColumn::ColumnMode::Numeric: {
-					bool isNumber;
-					const double value = locale.toDouble(valueString, &isNumber);
-					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : nanValue);
-					break;
-				}
-				case AbstractColumn::ColumnMode::Integer: {
-					bool isNumber;
-					const int value = locale.toInt(valueString, &isNumber);
-					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
-					break;
-				}
-				case AbstractColumn::ColumnMode::BigInt: {
-					bool isNumber;
-					const qint64 value = locale.toLongLong(valueString, &isNumber);
-					static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](currentRow) = (isNumber ? value : 0);
-					break;
-				}
-				case AbstractColumn::ColumnMode::DateTime: {
-					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
-					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
-					break;
-				}
-				case AbstractColumn::ColumnMode::Text: {
-					auto* colData = static_cast<QVector<QString>*>(m_dataContainer[n]);
-					colData->operator[](currentRow) = valueString;
-					break;
-				}
-				case AbstractColumn::ColumnMode::Month:	// never happens
-				case AbstractColumn::ColumnMode::Day:
-					break;
-				}
-			} else {	// missing columns in this line
-				switch (columnModes.at(n)) {
-				case AbstractColumn::ColumnMode::Numeric:
-					static_cast<QVector<double>*>(m_dataContainer[n])->operator[](currentRow) = nanValue;
-					break;
-				case AbstractColumn::ColumnMode::Integer:
-					static_cast<QVector<int>*>(m_dataContainer[n])->operator[](currentRow) = 0;
-					break;
-				case AbstractColumn::ColumnMode::BigInt:
-					static_cast<QVector<qint64>*>(m_dataContainer[n])->operator[](currentRow) = 0;
-					break;
-				case AbstractColumn::ColumnMode::DateTime:
-					static_cast<QVector<QDateTime>*>(m_dataContainer[n])->operator[](currentRow) = QDateTime();
-					break;
-				case AbstractColumn::ColumnMode::Text:
-					static_cast<QVector<QString>*>(m_dataContainer[n])->operator[](currentRow).clear();
-					break;
-				case AbstractColumn::ColumnMode::Month:	// never happens
-				case AbstractColumn::ColumnMode::Day:
-					break;
-				}
-			}
+			setValue(n, currentRow, valueString);
 		}
-
 		currentRow++;
 
 		//ask to update the progress bar only if we have more than 1000 lines
@@ -1483,8 +1365,8 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			progressIndex = 0;
 			QApplication::processEvents(QEventLoop::AllEvents, 0);
 		}
-
 	}
+
 	DEBUG("	Read " << currentRow << " lines");
 
 	//we might have skipped empty lines above. shrink the spreadsheet if the number of read lines (=currentRow)
@@ -1554,7 +1436,6 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 
 	int offset = int(createIndexEnabled) + int(createTimestampEnabled);
 	QString line;
-	QLocale locale(numberFormat);
 
 	//loop over all lines in the new data in the device and parse the available columns
 	for (int i = 0; i < linesToRead; ++i) {
@@ -1593,7 +1474,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;
 
-				lineString += parseValue(valueString, columnModes[n+offset], locale);
+				lineString += previewValue(valueString, columnModes[n+offset]);
 			} else 	// missing columns in this line
 				lineString += QString();
 		}
@@ -1625,7 +1506,6 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 
 	//number formatting
 	DEBUG("locale = " << STDSTRING(QLocale::languageToString(numberFormat)));
-	QLocale locale(numberFormat);
 
 	// Read the data
 	if (lines == -1)
@@ -1690,7 +1570,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;
 
-				lineString += parseValue(valueString, columnModes[n], locale);
+				lineString += previewValue(valueString, columnModes[n]);
 			} else 	// missing columns in this line
 				lineString += QString();
 		}
@@ -1705,7 +1585,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
  * converts \c valueString to the date type according to \c mode and \c locale
  * and returns its string representation.
  */
-QString AsciiFilterPrivate::parseValue(const QString& valueString, AbstractColumn::ColumnMode mode, const QLocale& locale) {
+QString AsciiFilterPrivate::previewValue(const QString& valueString, AbstractColumn::ColumnMode mode) {
 	QString result;
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Numeric: {
@@ -1739,6 +1619,66 @@ QString AsciiFilterPrivate::parseValue(const QString& valueString, AbstractColum
 		break;
 	}
 	return result;
+}
+
+//set value depending on data type
+void AsciiFilterPrivate::setValue(int col, int row, const QString& valueString) {
+	if (!valueString.isEmpty()) {
+		switch (columnModes.at(col)) {
+		case AbstractColumn::ColumnMode::Numeric: {
+			bool isNumber;
+			const double value = locale.toDouble(valueString, &isNumber);
+			static_cast<QVector<double>*>(m_dataContainer[col])->operator[](row) = (isNumber ? value : nanValue);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Integer: {
+			bool isNumber;
+			const int value = locale.toInt(valueString, &isNumber);
+			static_cast<QVector<int>*>(m_dataContainer[col])->operator[](row) = (isNumber ? value : 0);
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			bool isNumber;
+			const qint64 value = locale.toLongLong(valueString, &isNumber);
+			static_cast<QVector<qint64>*>(m_dataContainer[col])->operator[](row) = (isNumber ? value : 0);
+			break;
+		}
+		case AbstractColumn::ColumnMode::DateTime: {
+			QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
+			static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](row) = valueDateTime.isValid() ? valueDateTime : QDateTime();
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text: {
+			auto* colData = static_cast<QVector<QString>*>(m_dataContainer[col]);
+			colData->operator[](row) = valueString;
+			break;
+		}
+		case AbstractColumn::ColumnMode::Month:	// never happens
+		case AbstractColumn::ColumnMode::Day:
+			break;
+		}
+	} else {	// missing columns in this line
+		switch (columnModes.at(col)) {
+		case AbstractColumn::ColumnMode::Numeric:
+			static_cast<QVector<double>*>(m_dataContainer[col])->operator[](row) = nanValue;
+			break;
+		case AbstractColumn::ColumnMode::Integer:
+			static_cast<QVector<int>*>(m_dataContainer[col])->operator[](row) = 0;
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			static_cast<QVector<qint64>*>(m_dataContainer[col])->operator[](row) = 0;
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+			static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](row) = QDateTime();
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			static_cast<QVector<QString>*>(m_dataContainer[col])->operator[](row).clear();
+			break;
+		case AbstractColumn::ColumnMode::Month:	// never happens
+		case AbstractColumn::ColumnMode::Day:
+			break;
+		}
+	}
 }
 
 /*!
@@ -1932,7 +1872,6 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 
 	//number formatting
 	DEBUG("locale = " << STDSTRING(QLocale::languageToString(numberFormat)));
-	QLocale locale(numberFormat);
 
 	// Read the data
 	QStringList lines = message.split('\n');
@@ -1970,7 +1909,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;
 
-				lineString += parseValue(valueString, columnModes[n+offset], locale);
+				lineString += previewValue(valueString, columnModes[n+offset]);
 			} else 	// missing columns in this line
 				lineString += QString();
 		}
@@ -2592,7 +2531,6 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		PERFTRACE("AsciiLiveDataImportFillingContainers: ");
 #endif
 		int row = 0;
-		QLocale locale(numberFormat);
 		for (; row < linesToRead; ++row) {
 			QString line;
 			if (readingType == MQTTClient::ReadingType::FromEnd)
@@ -2628,72 +2566,12 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			for (int n = 0; n < m_actualCols - offset; ++n) {
 				int col = n + offset;
 				qDebug()<<"offset " << n << "  " << offset;
-				if (n < lineStringList.size()) {
-					QString valueString = lineStringList.at(n);
-
-					// set value depending on data type
-					switch (columnModes[col]) {
-					case AbstractColumn::ColumnMode::Numeric: {
-						bool isNumber;
-						const double value = locale.toDouble(valueString, &isNumber);
-						static_cast<QVector<double>*>(m_dataContainer[col])->operator[](currentRow) = (isNumber ? value : nanValue);
-						break;
-					}
-					case AbstractColumn::ColumnMode::Integer: {
-						bool isNumber;
-						const int value = locale.toInt(valueString, &isNumber);
-						static_cast<QVector<int>*>(m_dataContainer[col])->operator[](currentRow) = (isNumber ? value : 0);
-						break;
-					}
-					case AbstractColumn::ColumnMode::BigInt: {
-						bool isNumber;
-						const qint64 value = locale.toLongLong(valueString, &isNumber);
-						static_cast<QVector<qint64>*>(m_dataContainer[col])->operator[](currentRow) = (isNumber ? value : 0);
-						break;
-					}
-					case AbstractColumn::ColumnMode::DateTime: {
-						QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
-						static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](currentRow) = valueDateTime.isValid() ? valueDateTime : QDateTime();
-						break;
-					}
-					case AbstractColumn::ColumnMode::Text:
-						if (removeQuotesEnabled)
-							valueString.remove(QLatin1Char('"'));
-						static_cast<QVector<QString>*>(m_dataContainer[col])->operator[](currentRow) = valueString;
-						break;
-					case AbstractColumn::ColumnMode::Month:
-						//TODO
-						break;
-					case AbstractColumn::ColumnMode::Day:
-						//TODO
-						break;
-					}
-				} else {
-					DEBUG("	missing columns in this line");
-					switch (columnModes[n]) {
-					case AbstractColumn::ColumnMode::Numeric:
-						static_cast<QVector<double>*>(m_dataContainer[col])->operator[](currentRow) = nanValue;
-						break;
-					case AbstractColumn::ColumnMode::Integer:
-						static_cast<QVector<int>*>(m_dataContainer[col])->operator[](currentRow) = 0;
-						break;
-					case AbstractColumn::ColumnMode::BigInt:
-						static_cast<QVector<qint64>*>(m_dataContainer[col])->operator[](currentRow) = 0;
-						break;
-					case AbstractColumn::ColumnMode::DateTime:
-						static_cast<QVector<QDateTime>*>(m_dataContainer[col])->operator[](currentRow) = QDateTime();
-						break;
-					case AbstractColumn::ColumnMode::Text:
-						static_cast<QVector<QString>*>(m_dataContainer[col])->operator[](currentRow).clear();
-						break;
-					case AbstractColumn::ColumnMode::Month:
-						//TODO
-						break;
-					case AbstractColumn::ColumnMode::Day:
-						//TODO
-						break;
-					}
-				}
+				QString valueString;
+				if (n < lineStringList.size())
+					valueString = lineStringList.at(n);
+				else
+					valueString = QString();
+				setValue(col, currentRow, valueString);
 			}
 			currentRow++;
 		}

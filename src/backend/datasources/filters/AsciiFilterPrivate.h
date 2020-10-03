@@ -55,7 +55,8 @@ public:
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device);
-	QString parseValue(const QString&, AbstractColumn::ColumnMode, const QLocale&);
+	QString previewValue(const QString&, AbstractColumn::ColumnMode);
+	void setValue(int col, int row, const QString& value);
 
 	QString separator() const;
 
@@ -74,6 +75,7 @@ public:
 	QString separatingCharacter{QStringLiteral("auto")};
 	QString dateTimeFormat;
 	QLocale::Language numberFormat{QLocale::C};
+	QLocale locale{QLocale::C};
 	bool autoModeEnabled{true};
 	bool headerEnabled{true};
 	bool skipEmptyParts{false};
