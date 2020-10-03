@@ -55,6 +55,7 @@ public:
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> preview(QIODevice& device);
+	QString parseValue(const QString&, AbstractColumn::ColumnMode, const QLocale&);
 
 	QString separator() const;
 

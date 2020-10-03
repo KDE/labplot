@@ -1555,16 +1555,9 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	int offset = int(createIndexEnabled) + int(createTimestampEnabled);
 	QString line;
 	QLocale locale(numberFormat);
-	QStringList lineString;
+
+	//loop over all lines in the new data in the device and parse the available columns
 	for (int i = 0; i < linesToRead; ++i) {
-		// index column if required
-		if (createIndexEnabled)
-			lineString += QString::number(i + 1);
-
-		// timestamp column if required
-		if (createTimestampEnabled)
-			lineString += QDateTime::currentDateTime().toString();
-
 		line = newData.at(i);
 
 		// remove any newline
@@ -1577,45 +1570,30 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 			continue;
 
-		QStringList lineStringList = line.split(' ', QString::SkipEmptyParts);
+		QStringList lineString;
 
+		// index column if required
+		if (createIndexEnabled)
+			lineString += QString::number(i + 1);
+
+		// timestamp column if required
+		if (createTimestampEnabled)
+			lineString += QDateTime::currentDateTime().toString();
+
+		QStringList lineStringList = line.split(' ', QString::SkipEmptyParts);
+		QDEBUG(" line = " << lineStringList);
+
+		//parse columns
 		for (int n = 0; n < lineStringList.size(); ++n) {
 			if (n < lineStringList.size()) {
 				QString valueString = lineStringList.at(n);
 				if (removeQuotesEnabled)
 					valueString.remove(QLatin1Char('"'));
 
-				switch (columnModes[n+offset]) {
-				case AbstractColumn::ColumnMode::Numeric: {
-					bool isNumber;
-					const double value = locale.toDouble(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : nanValue, 'g', 16);
-					break;
-				}
-				case AbstractColumn::ColumnMode::Integer: {
-					bool isNumber;
-					const int value = locale.toInt(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : 0);
-					break;
-				}
-				case AbstractColumn::ColumnMode::BigInt: {
-					bool isNumber;
-					const qint64 value = locale.toLongLong(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : 0);
-					break;
-				}
-				case AbstractColumn::ColumnMode::DateTime: {
-					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
-					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
-					break;
-				}
-				case AbstractColumn::ColumnMode::Text:
-					lineString += valueString;
-					break;
-				case AbstractColumn::ColumnMode::Month:	// never happens
-				case AbstractColumn::ColumnMode::Day:
-					break;
-				}
+				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
+					continue;
+
+				lineString += parseValue(valueString, columnModes[n+offset], locale);
 			} else 	// missing columns in this line
 				lineString += QString();
 		}
@@ -1670,6 +1648,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 
 	DEBUG("	Generating preview for " << qMin(lines, m_actualRows)  << " lines");
 	QString line;
+
+	//loop over the preview lines in the file and parse the available columns
 	for (int i = 0; i < qMin(lines, m_actualRows); ++i) {
 		line = device.readLine();
 
@@ -1682,14 +1662,16 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 		QDEBUG(" line = " << lineStringList);
-
 		DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+
 		if (simplifyWhitespacesEnabled) {
 			for (int i = 0; i < lineStringList.size(); ++i)
 				lineStringList[i] = lineStringList[i].simplified();
 		}
 
 		QStringList lineString;
+
+		//parse columns
 		for (int n = 0; n < m_actualCols; ++n) {
 			// index column if required
 			if (n == 0 && createIndexEnabled) {
@@ -1705,42 +1687,10 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 				if (removeQuotesEnabled)
 					valueString.remove(QLatin1Char('"'));
 
-				//DEBUG(" valueString = " << STDSTRING(valueString));
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;
 
-				// set value depending on data type
-				switch (columnModes[n]) {
-				case AbstractColumn::ColumnMode::Numeric: {
-					bool isNumber;
-					const double value = locale.toDouble(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : nanValue, 'g', 15);
-					break;
-				}
-				case AbstractColumn::ColumnMode::Integer: {
-					bool isNumber;
-					const int value = locale.toInt(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : 0);
-					break;
-				}
-				case AbstractColumn::ColumnMode::BigInt: {
-					bool isNumber;
-					const qint64 value = locale.toLongLong(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : 0);
-					break;
-				}
-				case AbstractColumn::ColumnMode::DateTime: {
-					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
-					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
-					break;
-				}
-				case AbstractColumn::ColumnMode::Text:
-					lineString += valueString;
-					break;
-				case AbstractColumn::ColumnMode::Month:	// never happens
-				case AbstractColumn::ColumnMode::Day:
-					break;
-				}
+				lineString += parseValue(valueString, columnModes[n], locale);
 			} else 	// missing columns in this line
 				lineString += QString();
 		}
@@ -1749,6 +1699,46 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	}
 
 	return dataStrings;
+}
+
+/*!
+ * converts \c valueString to the date type according to \c mode and \c locale
+ * and returns its string representation.
+ */
+QString AsciiFilterPrivate::parseValue(const QString& valueString, AbstractColumn::ColumnMode mode, const QLocale& locale) {
+	QString result;
+	switch (mode) {
+	case AbstractColumn::ColumnMode::Numeric: {
+		bool isNumber;
+		const double value = locale.toDouble(valueString, &isNumber);
+		result = QString::number(isNumber ? value : nanValue, 'g', 15);
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: {
+		bool isNumber;
+		const int value = locale.toInt(valueString, &isNumber);
+		result = QString::number(isNumber ? value : 0);
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		bool isNumber;
+		const qint64 value = locale.toLongLong(valueString, &isNumber);
+		result = QString::number(isNumber ? value : 0);
+		break;
+	}
+	case AbstractColumn::ColumnMode::DateTime: {
+		QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
+		result = valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
+		break;
+	}
+	case AbstractColumn::ColumnMode::Text:
+		result = valueString;
+		break;
+	case AbstractColumn::ColumnMode::Month:	// never happens
+	case AbstractColumn::ColumnMode::Day:
+		break;
+	}
+	return result;
 }
 
 /*!
@@ -1946,6 +1936,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 
 	// Read the data
 	QStringList lines = message.split('\n');
+
+	//loop over all lines in the message and parse the available columns
 	int i = 0;
 	for (auto line : lines) {
 		if (simplifyWhitespacesEnabled)
@@ -1968,47 +1960,17 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 			lineString += QDateTime::currentDateTime().toString();
 
 		int offset = int(createIndexEnabled) + int(createTimestampEnabled);
+
+		//parse columns
 		for (int n = 0; n < m_actualCols - offset; ++n) {
 			if (n < lineStringList.size()) {
 				QString valueString = lineStringList.at(n);
-				//DEBUG(" valueString = " << STDSTRING(valueString));
+				if (removeQuotesEnabled)
+					valueString.remove(QLatin1Char('"'));
 				if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 					continue;
 
-				// set value depending on data type
-				switch (columnModes[n+offset]) {
-				case AbstractColumn::ColumnMode::Numeric: {
-					bool isNumber;
-					const double value = locale.toDouble(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : nanValue, 'g', 15);
-					break;
-				}
-				case AbstractColumn::ColumnMode::Integer: {
-					bool isNumber;
-					const int value = locale.toInt(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : 0);
-					break;
-				}
-				case AbstractColumn::ColumnMode::BigInt: {
-					bool isNumber;
-					const qint64 value = locale.toLongLong(valueString, &isNumber);
-					lineString += QString::number(isNumber ? value : 0);
-					break;
-				}
-				case AbstractColumn::ColumnMode::DateTime: {
-					QDateTime valueDateTime = parseDateTime(valueString, dateTimeFormat);
-					lineString += valueDateTime.isValid() ? valueDateTime.toString(dateTimeFormat) : QLatin1String(" ");
-					break;
-				}
-				case AbstractColumn::ColumnMode::Text:
-					if (removeQuotesEnabled)
-						valueString.remove(QLatin1Char('"'));
-					lineString += valueString;
-					break;
-				case AbstractColumn::ColumnMode::Month:	// never happens
-				case AbstractColumn::ColumnMode::Day:
-					break;
-				}
+				lineString += parseValue(valueString, columnModes[n+offset], locale);
 			} else 	// missing columns in this line
 				lineString += QString();
 		}
