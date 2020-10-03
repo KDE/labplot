@@ -1295,6 +1295,7 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 		case XYEquationCurve::EquationType::Neutral:
 			return QString("(x)");
 		}
+		break;
 	case 2:
 		switch(type) {
 		case XYEquationCurve::EquationType::Cartesian:
@@ -1307,6 +1308,7 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 		case XYEquationCurve::EquationType::Neutral:
 			return QString("(x, y)");
 		}
+		break;
 	case 3:
 		switch(type) {
 		case XYEquationCurve::EquationType::Cartesian:
@@ -1319,6 +1321,7 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 		case XYEquationCurve::EquationType::Neutral:
 			return QString("(x, y, z)");
 		}
+		break;
 	case 4:
 		switch(type) {
 		case XYEquationCurve::EquationType::Cartesian:
@@ -1331,9 +1334,10 @@ QString ExpressionParser::functionArgumentString(const QString& functionName, co
 		case XYEquationCurve::EquationType::Neutral:
 			return QString("(a, b, c, d)");
 		}
-	default:
-		return QString("(...)");
+		break;
 	}
+
+	return QString("(...)");
 }
 
 const QStringList& ExpressionParser::constants() {
