@@ -1,12 +1,18 @@
 -----2.9 -----
+	* [worksheet] allow to change the background color for axis labels (default: transparent)
+	* [spreadsheet] better auto-detection of datetime format for values pasted in the spreadsheet
+	* [live data] allow to add the timestamp column for all live sources, not only for MQTT sources
+	* [live data] better error handling and user notifications
+
 Bug fixes:
-    * Fix compiling with Cantor 20.08.X and X>0
-    * Parser improvements (found in "Generate Function Values"):
-        * Fix Crash using variable name of pre-defined functions as function ("sin()")
-        * Allow variable names containing function names ("sina")
-        * Correctly remove variables when changing name
-        * Use application number locale
-        * insert predefined functions with correct number of arguments
+	* Fix compiling with Cantor 20.08.X and X>0
+	* Parser improvements (found in "Generate Function Values"):
+		* Fix Crash using variable name of pre-defined functions as function ("sin()")
+		* Allow variable names containing function names ("sina")
+		* Correctly remove variables when changing name
+		* Use application number locale
+		* insert predefined functions with correct number of arguments
+
 -----2.8 -----
 	* Improved DateTime data support
 	* Show the size of the members in the JSON file in the import file dialog
@@ -30,14 +36,14 @@ Bug fixes:
 	* Extended "About"-Dialog
 
 Bug fixes:
-    BUG: 421193 - import float(4) data from hdf5
-    BUG: 418390 - Ignore infinite values (created in CAS worksheets for example) in curves
-    BUG: 412455 - Don't crash (sporadically) when opening the color scheme menu
-    BUG: 415214 - Better algorithm to draw the error bar caps
-    BUG: 413397 - Properly handle removal of columns in the spreadsheet model
-    BUG: 413401 - In plot data dialog, don't add new worksheets as children to workbooks, use the proper parent aspect
-    * Fix Cantor support and Unicode characters on Windows
-    * Fix evaluating fit residuals
+	* BUG 421193 - import float(4) data from hdf5
+	* BUG 418390 - Ignore infinite values (created in CAS worksheets for example) in curves
+	* BUG 412455 - Don't crash (sporadically) when opening the color scheme menu
+	* BUG 415214 - Better algorithm to draw the error bar caps
+	* BUG 413397 - Properly handle removal of columns in the spreadsheet model
+	* BUG 413401 - In plot data dialog, don't add new worksheets as children to workbooks, use the proper parent aspect
+	* Fix Cantor support and Unicode characters on Windows
+	* Fix evaluating fit residuals
 
 -----2.7 (24.10.2019)-----
 New features:
