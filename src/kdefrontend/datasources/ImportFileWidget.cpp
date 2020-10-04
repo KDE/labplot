@@ -1130,11 +1130,6 @@ void ImportFileWidget::initOptionsWidget() {
 			ui.swOptions->addWidget(asciiw);
 		}
 
-		//for MQTT topics we don't allow to set the vector names since the different topics
-		//can have different number of columns
-		bool isMQTT = (currentSourceType() == LiveDataSource::SourceType::MQTT);
-		m_asciiOptionsWidget->showAsciiHeaderOptions(!isMQTT);
-
 		ui.swOptions->setCurrentWidget(m_asciiOptionsWidget->parentWidget());
 		break;
 	}
@@ -1835,6 +1830,16 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 		QStandardItem* item = typeModel->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 		item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 	}
+
+	//disable the header options for non-file sources because:
+	//* for sockets we allow to import one single value only at the moment
+	//* for MQTT topics we don't allow to set the vector names since the different topics can have different number of columns
+	//For files this option still can be usefull if the user have to re-read the whole file
+	//and wants to use the header to set the column names or the user provides manually the column names.
+	//TODO: adjust this logic later once we allow to import multiple columns from sockets,
+	//it should be possible to provide the names of the columns
+	bool visible = (currentSourceType() == LiveDataSource::SourceType::FileOrPipe);
+	m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
 
 	emit sourceTypeChanged();
 	refreshPreview();
