@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private implementation class for AsciiFilter.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -42,23 +42,31 @@ class AsciiFilterPrivate {
 public:
 	explicit AsciiFilterPrivate(AsciiFilter*);
 
-	QStringList getLineString(QIODevice&);
-	int prepareDeviceToRead(QIODevice&);
+	int isPrepared();
+	QString separator() const;
+
+	//preview
+	QVector<QStringList> preview(const QString& fileName, int lines);
+	QVector<QStringList> preview(QIODevice&);
+
+	//read
 	void readDataFromDevice(QIODevice&, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-	void readFromLiveDeviceNotFile(QIODevice& device, AbstractDataSource*,
+	void readFromLiveDeviceNotFile(QIODevice&, AbstractDataSource*,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	qint64 readFromLiveDevice(QIODevice&, AbstractDataSource*, qint64 from = -1);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
+
+	//write
 	void write(const QString& fileName, AbstractDataSource*);
 
-	QVector<QStringList> preview(const QString& fileName, int lines);
-	QVector<QStringList> preview(QIODevice& device);
+	//helpers
+	int prepareDeviceToRead(QIODevice&);
+	void initDataContainers(Spreadsheet*);
 	QString previewValue(const QString&, AbstractColumn::ColumnMode);
 	void setValue(int col, int row, const QString& value);
-
-	QString separator() const;
+	QStringList getLineString(QIODevice&);
 
 #ifdef HAVE_MQTT
 	int prepareToRead(const QString&);
@@ -91,8 +99,6 @@ public:
 	int startColumn{1};
 	int endColumn{-1};
 	int mqttPreviewFirstEmptyColCount{0};
-
-	int isPrepared();
 
 	//TODO: redesign and remove this later
 	bool readingFile{false};

@@ -145,7 +145,6 @@ writes the content of the data source \c dataSource to the file \c fileName.
 */
 void AsciiFilter::write(const QString& fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
-// 	emit()
 }
 
 /*!
@@ -428,31 +427,22 @@ int AsciiFilter::endColumn() const {
 AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner) {
 }
 
-/*!
- * get a single line from device
- */
-QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
-	QString line;
-	do {	// skip comment lines in data lines
-		if (!device.canReadLine())
-			DEBUG("WARNING in AsciiFilterPrivate::getLineString(): device cannot 'readLine()' but using it anyway.");
-//			line = device.readAll();
-		line = device.readLine();
-	} while (!commentCharacter.isEmpty() && line.startsWith(commentCharacter));
-
-	line.remove(QRegularExpression(QStringLiteral("[\\n\\r]")));	// remove any newline
-	DEBUG("data line : \'" << STDSTRING(line) << '\'');
-	QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-	//TODO: remove quotes here?
-	if (simplifyWhitespacesEnabled) {
-		for (int i = 0; i < lineStringList.size(); ++i)
-			lineStringList[i] = lineStringList[i].simplified();
-	}
-	QDEBUG("data line, parsed: " << lineStringList);
-
-	return lineStringList;
+int AsciiFilterPrivate::isPrepared() {
+	return m_prepared;
 }
 
+/*!
+ * \brief Returns the separator used by the filter
+ * \return
+ */
+QString AsciiFilterPrivate::separator() const {
+	return m_separator;
+}
+
+
+//#####################################################################
+//############################# Read ##################################
+//#####################################################################
 /*!
  * returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end and 0 otherwise.
  */
@@ -764,53 +754,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			spreadsheet->setRowCount(keepNValues);
 			m_actualRows = keepNValues;
 		}
+
 		m_dataContainer.resize(m_actualCols);
+		initDataContainers(spreadsheet);
 
 		DEBUG("	data source resized to col: " << m_actualCols);
 		DEBUG("	data source rowCount: " << spreadsheet->rowCount());
-
-		DEBUG("	Setting data ..");
-		for (int n = 0; n < m_actualCols; ++n) {
-			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
-			spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
-			switch (columnModes[n]) {
-			case AbstractColumn::ColumnMode::Numeric: {
-				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Integer: {
-				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::BigInt: {
-				QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Text: {
-				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::DateTime: {
-				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			//TODO
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::Day:
-				break;
-			}
-		}
-
 		DEBUG("	Prepared!");
 	}
 
@@ -1002,45 +951,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		// if we have fixed size, we do this only once in preparation, here we can use
 		// m_prepared and we need something to decide whether it has a fixed size or increasing
-		for (int n = 0; n < m_actualCols; ++n) {
-			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
-			switch (columnModes[n]) {
-			case AbstractColumn::ColumnMode::Numeric: {
-				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Integer: {
-				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::BigInt: {
-				QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Text: {
-				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::DateTime: {
-				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			//TODO
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::Day:
-				break;
-			}
-		}
+		initDataContainers(spreadsheet);
 	} else {	// fixed size
 		//when we have a fixed size we have to pop sampleSize number of lines if specified
 		//here popping, setting currentRow
@@ -1176,6 +1087,9 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				}
 			}
 
+			if (removeQuotesEnabled)
+				line.remove(QLatin1Char('"'));
+
 			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter))) // skip empty or commented lines
 				continue;
 
@@ -1207,17 +1121,12 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				++offset;
 			}
 
+			//parse columns
 			for (int n = offset; n < m_actualCols; ++n) {
-				DEBUG("	actual col = " << n);
 				QString valueString;
-				if (n - offset < lineStringList.size()) {
+				if (n - offset < lineStringList.size())
 					valueString = lineStringList.at(n - offset);
-					if (removeQuotesEnabled)
-						valueString.remove(QLatin1Char('"'));
-				} else
-					valueString = QString();
 
-				DEBUG("	value string = " << STDSTRING(valueString));
 				setValue(n, currentRow, valueString);
 			}
 			currentRow++;
@@ -1322,6 +1231,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 // 		DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+
 		if (simplifyWhitespacesEnabled) {
 			for (int i = 0; i < lineStringList.size(); ++i)
 				lineStringList[i] = lineStringList[i].simplified();
@@ -1338,6 +1248,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			}
 		}
 
+		//parse columns
 		for (int n = 0; n < m_actualCols; ++n) {
 			// index column if required
 			if (n == 0 && createIndexEnabled) {
@@ -1347,11 +1258,9 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 			//column counting starts with 1, subtract 1 as well as another 1 for the index column if required
 			int col = createIndexEnabled ? n + startColumn - 2: n + startColumn - 1;
-
+			QString valueString;
 			if (col < lineStringList.size())
 				valueString = lineStringList.at(col);
-			else
-				valueString = QString();
 
 			setValue(n, currentRow, valueString);
 		}
@@ -1378,6 +1287,10 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 }
+
+//#####################################################################
+//############################ Preview ################################
+//#####################################################################
 
 /*!
  * preview for special devices (local/UDP/TCP socket or serial port)
@@ -1581,6 +1494,9 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	return dataStrings;
 }
 
+//#####################################################################
+//####################### Helper functions ############################
+//#####################################################################
 /*!
  * converts \c valueString to the date type according to \c mode and \c locale
  * and returns its string representation.
@@ -1681,6 +1597,76 @@ void AsciiFilterPrivate::setValue(int col, int row, const QString& valueString) 
 	}
 }
 
+void AsciiFilterPrivate::initDataContainers(Spreadsheet* spreadsheet) {
+	DEBUG("	Initializing the data containers ..");
+	for (int n = 0; n < m_actualCols; ++n) {
+		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
+		spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
+		switch (columnModes[n]) {
+		case AbstractColumn::ColumnMode::Numeric: {
+			QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
+			vector->reserve(m_actualRows);
+			vector->resize(m_actualRows);
+			m_dataContainer[n] = static_cast<void *>(vector);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Integer: {
+			QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
+			vector->resize(m_actualRows);
+			m_dataContainer[n] = static_cast<void *>(vector);
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
+			vector->resize(m_actualRows);
+			m_dataContainer[n] = static_cast<void *>(vector);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text: {
+			QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
+			vector->resize(m_actualRows);
+			m_dataContainer[n] = static_cast<void *>(vector);
+			break;
+		}
+		case AbstractColumn::ColumnMode::DateTime: {
+			QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
+			vector->resize(m_actualRows);
+			m_dataContainer[n] = static_cast<void *>(vector);
+			break;
+		}
+		//TODO
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+			break;
+		}
+	}
+}
+
+/*!
+ * get a single line from device
+ */
+QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
+	QString line;
+	do {	// skip comment lines in data lines
+		if (!device.canReadLine())
+			DEBUG("WARNING in AsciiFilterPrivate::getLineString(): device cannot 'readLine()' but using it anyway.");
+//			line = device.readAll();
+		line = device.readLine();
+	} while (!commentCharacter.isEmpty() && line.startsWith(commentCharacter));
+
+	line.remove(QRegularExpression(QStringLiteral("[\\n\\r]")));	// remove any newline
+	DEBUG("data line : \'" << STDSTRING(line) << '\'');
+	QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+	//TODO: remove quotes here?
+	if (simplifyWhitespacesEnabled) {
+		for (int i = 0; i < lineStringList.size(); ++i)
+			lineStringList[i] = lineStringList[i].simplified();
+	}
+	QDEBUG("data line, parsed: " << lineStringList);
+
+	return lineStringList;
+}
+
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
@@ -1714,17 +1700,6 @@ QDateTime AsciiFilterPrivate::parseDateTime(const QString& string, const QString
 	return dateTime;
 }
 
-int AsciiFilterPrivate::isPrepared() {
-	return m_prepared;
-}
-
-/*!
- * \brief Returns the separator used by the filter
- * \return
- */
-QString AsciiFilterPrivate::separator() const {
-	return m_separator;
-}
 
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
@@ -2042,52 +2017,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		}
 
 		m_dataContainer.resize(m_actualCols);
-
-		for (int n = 0; n < m_actualCols; ++n) {
-			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
-			spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
-			switch (columnModes[n]) {
-			case AbstractColumn::ColumnMode::Numeric: {
-				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Integer: {
-				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::BigInt: {
-				QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Text: {
-				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::DateTime: {
-				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			//TODO
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::Day:
-				break;
-			}
-		}
+		initDataContainers(spreadsheet);
 	}
 
 #ifdef PERFTRACE_LIVE_IMPORT
@@ -2391,50 +2321,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		// if we have fixed size, we do this only once in preparation, here we can use
 		// m_prepared and we need something to decide whether it has a fixed size or increasing
 
-		for (int n = 0; n < m_actualCols; ++n) {
-			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
-			switch (columnModes[n]) {
-			case AbstractColumn::ColumnMode::Numeric: {
-				QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Integer: {
-				QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::BigInt: {
-				QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Text: {
-				QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::DateTime: {
-				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			//TODO
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::Day:
-				break;
-			}
-		}
+		initDataContainers(spreadsheet);
 	} else {
 		//when we have a fixed size we have to pop sampleSize number of lines if specified
 		//here popping, setting currentRow
@@ -2538,11 +2425,18 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			else
 				line = newData.at(row);
 
-			if (simplifyWhitespacesEnabled)
-				line = line.simplified();
+			if (removeQuotesEnabled)
+				line.remove(QLatin1Char('"'));
 
 			if (line.isEmpty() || (!commentCharacter.isEmpty() && line.startsWith(commentCharacter)))
 				continue;
+
+			QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
+
+			if (simplifyWhitespacesEnabled) {
+				for (int i = 0; i < lineStringList.size(); ++i)
+					lineStringList[i] = lineStringList[i].simplified();
+			}
 
 			//add index if required
 			int offset = 0;
@@ -2559,18 +2453,12 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			}
 
 			//parse the columns
-			QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-			qDebug()<<"########################################################################";
-			qDebug()<<line;
-			qDebug()<<lineStringList;
 			for (int n = 0; n < m_actualCols - offset; ++n) {
 				int col = n + offset;
-				qDebug()<<"offset " << n << "  " << offset;
 				QString valueString;
 				if (n < lineStringList.size())
 					valueString = lineStringList.at(n);
-				else
-					valueString = QString();
+
 				setValue(col, currentRow, valueString);
 			}
 			currentRow++;
@@ -2629,56 +2517,12 @@ void AsciiFilterPrivate::setPreparedForMQTT(bool prepared, MQTTTopic* topic, con
 		m_actualRows = topic->rowCount();
 		//set the column modes
 		columnModes.resize(topic->columnCount());
-		for (int i = 0; i < topic->columnCount(); ++i) {
+		for (int i = 0; i < topic->columnCount(); ++i)
 			columnModes[i] = topic->column(i)->columnMode();
-		}
+
 		//set the data containers
 		m_dataContainer.resize(m_actualCols);
-		for (int n = 0; n < m_actualCols; ++n) {
-			// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
-			topic->child<Column>(n)->setColumnMode(columnModes[n]);
-			switch (columnModes[n]) {
-			case AbstractColumn::ColumnMode::Numeric: {
-				QVector<double>* vector = static_cast<QVector<double>* >(topic->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Integer: {
-				QVector<int>* vector = static_cast<QVector<int>* >(topic->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::BigInt: {
-				QVector<qint64>* vector = static_cast<QVector<qint64>* >(topic->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::Text: {
-				QVector<QString>* vector = static_cast<QVector<QString>*>(topic->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			case AbstractColumn::ColumnMode::DateTime: {
-				QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(topic->child<Column>(n)->data());
-				vector->reserve(m_actualRows);
-				vector->resize(m_actualRows);
-				m_dataContainer[n] = static_cast<void *>(vector);
-				break;
-			}
-			//TODO
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::Day:
-				break;
-			}
-		}
+		initDataContainers(topic);
 	}
 }
 #endif
