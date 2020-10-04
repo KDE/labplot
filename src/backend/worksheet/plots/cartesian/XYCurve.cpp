@@ -1192,9 +1192,9 @@ void XYCurvePrivate::recalcLogicalPoints() {
  * @param minLogicalDiffX logical difference between two pixels
  * @param pixelDiff x pixel distance between two points
  */
-void XYCurvePrivate::addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, double minLogicalDiffX, int& pixelDiff) {
-	pixelDiff = qRound(p1.x() / minLogicalDiffX) - qRound(p0.x() / minLogicalDiffX);
-	//QDEBUG("	" << p0 << " -> " << p1  << "p0.x*minLogicalDiffX =" << p0.x()*minLogicalDiffX << ", p1.x*minLogicalDiffX =" << p1.x()*minLogicalDiffX << ", pixelDiff =" << pixelDiff);
+void XYCurvePrivate::addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, double minLogicalDiffX, qint64& pixelDiff) {
+	pixelDiff = qRound64(p1.x() / minLogicalDiffX) - qRound64(p0.x() / minLogicalDiffX);
+	//QDEBUG(Q_FUNC_INFO << ", " << p0 << " -> " << p1  << "p0.x*minLogicalDiffX =" << p0.x()*minLogicalDiffX << ", p1.x*minLogicalDiffX =" << p1.x()*minLogicalDiffX << ", pixelDiff =" << pixelDiff);
 
 	addUniqueLine(p0, p1, lastPoint, pixelDiff);
 }
@@ -1209,7 +1209,8 @@ void XYCurvePrivate::addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, d
  * @param pixelDiff x pixel distance between two points
  * @param pixelCount pixel count
  */
-void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX) {
+void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff, int numberOfPixelX) {
+	DEBUG(Q_FUNC_INFO)
 
 	if (plot->xScale() == CartesianPlot::Scale::Linear) {
 		double minLogicalDiffX = (plot->xMax() - plot->xMin())/numberOfPixelX;
@@ -1231,8 +1232,9 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pi
 
 		// using only the difference between the points is not sufficient, because p0 is updated always
 		// if new line is added or not
-		int p0Pixel = qRound((p0Scene.x() - plot->dataRect().x()) / (double)plot->dataRect().width() * numberOfPixelX);
-		int p1Pixel = qRound((p1Scene.x() - plot->dataRect().x()) / (double)plot->dataRect().width() * numberOfPixelX);
+		qint64 p0Pixel = qRound64((p0Scene.x() - plot->dataRect().x()) / (double)plot->dataRect().width() * numberOfPixelX);
+		qint64 p1Pixel = qRound64((p1Scene.x() - plot->dataRect().x()) / (double)plot->dataRect().width() * numberOfPixelX);
+		//DEBUG(Q_FUNC_INFO << ", p0Pixel/p1Pixel = " << p0Pixel << ' ' << p1Pixel)
 		pixelDiff = p1Pixel - p0Pixel;
 		addUniqueLine(p0, p1, lastPoint, pixelDiff);
 	}
@@ -1246,8 +1248,8 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pi
  * @param lastPoint remember last point in case of overlap
  * @param pixelDiff x pixel distance between two points
  */
-void XYCurvePrivate::addUniqueLine(QPointF p0, QPointF p1, QPointF& lastPoint, int& pixelDiff) {
-	//QDEBUG("XYCurvePrivate::addUniqueLine() :" << p0 << " ->" << p1 << ", lastPoint =" << lastPoint << ", pixelDiff =" << pixelDiff)
+void XYCurvePrivate::addUniqueLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff) {
+	//QDEBUG(Q_FUNC_INFO << " :" << p0 << " ->" << p1 << ", lastPoint =" << lastPoint << ", pixelDiff =" << pixelDiff)
 	if (pixelDiff == 0) {
 		//QDEBUG("	pixelDiff == 0!")
 		if (isnan(lastPoint.x()))	// save last point
@@ -1354,7 +1356,7 @@ void XYCurvePrivate::updateLines() {
 		m_lines.append(QLineF(tempPoint1, tempPoint2));
 	} else {
 		QPointF lastPoint{NAN, NAN};	// last x value
-		int pixelDiff;
+		qint64 pixelDiff;
 		QPointF p0, p1;
 
 		switch (lineType) {
