@@ -1439,6 +1439,7 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of float digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
+	DEBUG(Q_FUNC_INFO)
 	if (suppressRetransform)
 		return;
 
@@ -1510,7 +1511,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::Powers10) {
 			for (const auto value : tickLabelValues) {
-				str = "10<span style=\"vertical-align:super\">" + numberLocale.toString(log10(value), 'f', labelsPrecision) + "</span>";
+				str = "10<sup>" + numberLocale.toString(log10(value), 'f', labelsPrecision) + "</sup>";
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
@@ -1649,8 +1650,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
-	double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
-	double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
+	const double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
+	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
 		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
@@ -1665,8 +1666,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 			width = fm.boundingRect(tickLabelStrings.at(i)).width();
 		}
 
-		double diffx = cosine * width;
-		double diffy = sine * width;
+		const double diffx = cosine * width;
+		const double diffy = sine * width;
 		anchorPoint = majorTickPoints.at(i);
 
 		//center align all labels with respect to the end point of the tick line
@@ -1930,7 +1931,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	axisShape.addPath(WorksheetElement::shapeFromPath(majorTicksPath, majorTicksPen));
 	axisShape.addPath(WorksheetElement::shapeFromPath(minorTicksPath, minorTicksPen));
 
-	QPainterPath  tickLabelsPath = QPainterPath();
+	QPainterPath tickLabelsPath = QPainterPath();
 	if (labelsPosition != Axis::LabelsPosition::NoLabels) {
 		QTransform trafo;
 		QPainterPath tempPath;
@@ -2037,11 +2038,12 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		painter->setOpacity(labelsOpacity);
 		painter->setPen(QPen(labelsColor));
 		painter->setFont(labelsFont);
-		QTextEdit te;
-		te.setCurrentFont(labelsFont);
+		QTextDocument doc;
+		doc.setDefaultFont(labelsFont);
 		QFontMetrics fm(labelsFont);
 		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
+			//QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
 			for (int i = 0; i < tickLabelPoints.size(); i++) {
 				painter->translate(tickLabelPoints.at(i));
 				painter->save();
@@ -2052,19 +2054,19 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 						const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
 						painter->fillRect(rect, labelsBackgroundColor);
 					}
-					painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
+					painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
 				} else {
-					te.setHtml(tickLabelStrings.at(i));
-					te.selectAll();
-					te.setTextColor(labelsColor);
-					QSizeF size = te.document()->size();
+					QString style("p {color: %1;}");
+					doc.setDefaultStyleSheet(style.arg(labelsColor.name()));
+					doc.setHtml("<p>" + tickLabelStrings.at(i) + "</p>");
+					QSizeF size = doc.size();
 					int height = size.height();
 					if (labelsBackgroundType != Axis::LabelsBackgroundType::Transparent) {
 						int width = size.width();
-						painter->fillRect(0, -height/2, width, height, labelsBackgroundColor);
+						painter->fillRect(0, -height, width, height, labelsBackgroundColor);
 					}
 					painter->translate(0, -height);
-					te.document()->drawContents(painter);
+					doc.drawContents(painter);
 				}
 				painter->restore();
 				painter->translate(-tickLabelPoints.at(i));
@@ -2078,7 +2080,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 					const QRect& rect = fm.boundingRect(tickLabelStrings.at(i));
 					painter->fillRect(rect, labelsBackgroundColor);
 				}
-				painter->drawText(QPoint(0,0), tickLabelStrings.at(i));
+				painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
 				painter->restore();
 				painter->translate(-tickLabelPoints.at(i));
 			}
