@@ -1320,31 +1320,36 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	}
 	QDEBUG("	data = " << newData);
 
-	if (linesToRead == 0) return dataStrings;
+	if (linesToRead == 0)
+		return dataStrings;
 
-	int col = 0;
-	int colMax = newData.at(0).size() + int(createIndexEnabled) + int(createTimestampEnabled);
-	columnModes.resize(colMax);
+	vectorNames.clear();
+	columnModes.clear();
 
 	if (createIndexEnabled) {
-		columnModes[0] = AbstractColumn::ColumnMode::Integer;
-		col = 1;
+		columnModes << AbstractColumn::ColumnMode::Integer;
 		vectorNames << i18n("Index");
 	}
 
 	if (createTimestampEnabled) {
-		columnModes[col] = AbstractColumn::ColumnMode::DateTime;
-		col = 2;
+		columnModes << AbstractColumn::ColumnMode::DateTime;
 		vectorNames << i18n("Timestamp");
 	}
 
-	vectorNames.append(i18n("Value"));
-	QDEBUG("	vector names = " << vectorNames);
+	//parse the first data line to determine data type for each column
+	QStringList firstLineStringList = newData.at(0).split(' ', QString::SkipEmptyParts);
+	int i = 1;
+	for (auto& valueString : firstLineStringList) {
+		if (simplifyWhitespacesEnabled)
+			valueString = valueString.simplified();
+		if (removeQuotesEnabled)
+			valueString.remove(QLatin1Char('"'));
+		if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
+			continue;
 
-	for (const auto& valueString : newData.at(0).split(' ', QString::SkipEmptyParts)) {
-		if (col == colMax)
-			break;
-		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+		vectorNames << i18n("Value %1", i);
+		columnModes << AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+		++i;
 	}
 
 	int offset = int(createIndexEnabled) + int(createTimestampEnabled);
@@ -1391,6 +1396,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 			} else 	// missing columns in this line
 				lineString += QString();
 		}
+
 		dataStrings << lineString;
 	}
 
