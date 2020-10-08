@@ -2084,27 +2084,29 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	switch (clientError) {
 	case QMqttClient::BadUsernameOrPassword:
-		QMessageBox::critical(this, i18n("Couldn't connect"), i18n("Wrong username or password"));
+		emit error(i18n("Wrong username or password"));
 		break;
 	case QMqttClient::IdRejected:
-		QMessageBox::critical(this, i18n("Couldn't connect"), i18n("The client ID wasn't accepted"));
+		emit error(i18n("The client ID wasn't accepted"));
 		break;
 	case QMqttClient::ServerUnavailable:
-		QMessageBox::critical(this, i18n("Server unavailable"), i18n("The broker couldn't be reached."));
+		emit error(i18n("The broker couldn't be reached."));
 		break;
 	case QMqttClient::NotAuthorized:
-		QMessageBox::critical(this, i18n("Not authorized"), i18n("The client is not authorized to connect."));
+		emit error(i18n("The client is not authorized to connect."));
 		break;
 	case QMqttClient::UnknownError:
-		QMessageBox::critical(this, i18n("Unknown MQTT error"), i18n("An unknown error occurred."));
+		emit error(i18n("An unknown error occurred."));
 		break;
 	case QMqttClient::NoError:
 	case QMqttClient::InvalidProtocolVersion:
 	case QMqttClient::TransportInvalid:
 	case QMqttClient::ProtocolViolation:
 	case QMqttClient::Mqtt5SpecificError:
+		emit error(i18n("An error occurred."));
 		break;
 	default:
+		emit error(i18n("An error occurred."));
 		break;
 	}
 	m_connectTimeoutTimer->stop();
