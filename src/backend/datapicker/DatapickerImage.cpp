@@ -183,7 +183,7 @@ bool DatapickerImage::printView() {
 }
 
 bool DatapickerImage::printPreview() const {
-	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &DatapickerImageView::print);
 	return dlg->exec();
 }
@@ -666,7 +666,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			READ_QBRUSH(d->pointBrush);
 			READ_QPEN(d->pointPen);
 		} else if (reader->name() == "datapickerPoint") {
-			DatapickerPoint* datapickerPoint = new DatapickerPoint(QString());
+			auto* datapickerPoint = new DatapickerPoint(QString());
 			datapickerPoint->setHidden(true);
 			if (!datapickerPoint->load(reader, preview)) {
 				delete datapickerPoint;

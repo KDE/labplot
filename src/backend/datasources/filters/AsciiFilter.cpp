@@ -1186,6 +1186,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 					c = mode;
 		}
 
+		Q_ASSERT(dataSource);
 		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 		m_prepared = true;
 	}
@@ -1285,6 +1286,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 	if (s && currentRow != m_actualRows && importMode == AbstractFileFilter::ImportMode::Replace)
 		s->setRowCount(currentRow);
 
+	Q_ASSERT(dataSource);
 	dataSource->finalizeImport(m_columnOffset, startColumn, startColumn + m_actualCols - 1, dateTimeFormat, importMode);
 }
 

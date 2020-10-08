@@ -150,6 +150,7 @@ DatapickerImage* Datapicker::image() const {
     in order to select the corresponding tab.
  */
 void Datapicker::childSelected(const AbstractAspect* aspect) {
+	Q_ASSERT(aspect);
 	m_activeCurve = dynamic_cast<DatapickerCurve*>(const_cast<AbstractAspect*>(aspect));
 
 	int index = -1;
@@ -158,7 +159,7 @@ void Datapicker::childSelected(const AbstractAspect* aspect) {
 		index = 0;
 		emit statusInfo(i18n("%1, active curve \"%2\"", this->name(), m_activeCurve->name()));
 		emit requestUpdateActions();
-	} else {
+	} else if (aspect) {
 		const auto* curve = aspect->ancestor<const DatapickerCurve>();
 		index = indexOfChild<AbstractAspect>(curve);
 		++index; //+1 because of the hidden plot image being the first child and shown in the first tab in the view
@@ -359,7 +360,7 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 			if (!readCommentElement(reader))
 				return false;
 		} else if (reader->name() == "datapickerImage") {
-			DatapickerImage* plot = new DatapickerImage(i18n("Plot"), true);
+			auto* plot = new DatapickerImage(i18n("Plot"), true);
 			if (!plot->load(reader, preview)) {
 				delete plot;
 				return false;
@@ -369,7 +370,7 @@ bool Datapicker::load(XmlStreamReader* reader, bool preview) {
 				m_image = plot;
 			}
 		} else if (reader->name() == "datapickerCurve") {
-			DatapickerCurve* curve = new DatapickerCurve(QString());
+			auto* curve = new DatapickerCurve(QString());
 			if (!curve->load(reader, preview)) {
 				delete curve;
 				return false;

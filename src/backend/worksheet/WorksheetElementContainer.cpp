@@ -97,7 +97,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 			curve->suppressRetransform(true);
 			elem->setVisible(on);
 			curve->suppressRetransform(false);
-		} else
+		} else if (elem)
 			elem->setVisible(on);
 	}
 

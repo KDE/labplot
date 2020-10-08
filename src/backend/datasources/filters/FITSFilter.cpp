@@ -1521,17 +1521,17 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 
 	QTreeWidgetItem* root = tw->invisibleRootItem();
 	//TODO: fileName may contain any data type: check if it's a FITS file
-	QTreeWidgetItem* treeNameItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << fileName);
+	auto* treeNameItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << fileName);
 	root->addChild(treeNameItem);
 	treeNameItem->setExpanded(true);
 
-	QTreeWidgetItem* imageExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << i18n("Images"));
+	auto* imageExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << i18n("Images"));
 	imageExtensionItem->setFlags(imageExtensionItem->flags() & ~Qt::ItemIsSelectable );
 	QString primaryHeaderNaxis = valueOf(fileName, "NAXIS");
 	const int naxis = primaryHeaderNaxis.toInt();
 	bool noImage = false;
 	for (const QString& ext : imageExtensions) {
-		QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << ext);
+		auto* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << ext);
 		if (ext == i18n("Primary header")) {
 			if (checkPrimary && naxis == 0) {
 				delete treeItem;
@@ -1551,11 +1551,11 @@ void FITSFilterPrivate::parseExtensions(const QString &fileName, QTreeWidget *tw
 		noImage = true;
 
 	if (tableExtensions.size() > 0) {
-		QTreeWidgetItem* tableExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << i18n("Tables"));
+		auto* tableExtensionItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << i18n("Tables"));
 		tableExtensionItem->setFlags(tableExtensionItem->flags() & ~Qt::ItemIsSelectable );
 
 		for (const QString& ext : tableExtensions) {
-			QTreeWidgetItem* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << ext);
+			auto* treeItem = new QTreeWidgetItem((QTreeWidgetItem*)nullptr, QStringList() << ext);
 			tableExtensionItem->addChild(treeItem);
 		}
 		if (tableExtensionItem->childCount() > 0) {

@@ -3115,7 +3115,7 @@ bool SpreadsheetView::printView() {
 }
 
 bool SpreadsheetView::printPreview() {
-	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(this);
+	auto* dlg = new QPrintPreviewDialog(this);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, this, &SpreadsheetView::print);
 	return dlg->exec();
 }

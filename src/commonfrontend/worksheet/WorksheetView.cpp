@@ -2061,6 +2061,6 @@ void WorksheetView::presenterMode() {
 	exportPaint(&painter, targetRect, sourceRect, true);
 	painter.end();
 
-	PresenterWidget* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
+	auto* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
 	presenterWidget->showFullScreen();
 }

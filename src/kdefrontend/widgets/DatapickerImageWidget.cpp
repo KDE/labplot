@@ -75,7 +75,7 @@ HistogramView::HistogramView(QWidget* parent, int range) : QGraphicsView(parent)
 void HistogramView::setScalePixmap(const QString& file) {
 	// scene rect is 1000*100 where upper 1000*80 is for histogram graph
 	// and lower 1000*20 is for histogram scale
-	QGraphicsPixmapItem* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 1000, 20, Qt::IgnoreAspectRatio), nullptr);
+	auto* pixmap = new QGraphicsPixmapItem(QPixmap(file).scaled( 1000, 20, Qt::IgnoreAspectRatio), nullptr);
 	pixmap->setZValue(-1);
 	pixmap->setPos(0, 90);
 	m_scene->addItem(pixmap);

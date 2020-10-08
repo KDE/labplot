@@ -67,7 +67,7 @@ bool Note::printView() {
 }
 
 bool Note::printPreview() const {
-	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &NoteView::print);
 	return dlg->exec();
 }

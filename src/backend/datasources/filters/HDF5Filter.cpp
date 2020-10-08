@@ -1238,7 +1238,7 @@ void HDF5FilterPrivate::scanHDF5DataType(hid_t tid, char *dataSetName, QTreeWidg
 	m_status = H5Iget_name(tid, link, MAXNAMELENGTH);
 	handleError(m_status, "H5Iget_name");
 
-	QTreeWidgetItem* dataTypeItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data type")<<typeProps.join(QString())<<attr);
+	auto* dataTypeItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data type")<<typeProps.join(QString())<<attr);
 	dataTypeItem->setIcon(0, QIcon::fromTheme("accessories-calculator"));
 	dataTypeItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(dataTypeItem);
@@ -1297,7 +1297,7 @@ void HDF5FilterPrivate::scanHDF5DataSet(hid_t did, char *dataSetName, QTreeWidge
 	handleError((int)pid, "H5Dget_create_plist");
 	dataSetProps << ", " << readHDF5PropertyList(pid).join(QString());
 
-	QTreeWidgetItem* dataSetItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join(QString())<<attr);
+	auto* dataSetItem = new QTreeWidgetItem(QStringList()<<QString(dataSetName)<<QString(link)<<i18n("data set")<<dataSetProps.join(QString())<<attr);
 	dataSetItem->setIcon(0, QIcon::fromTheme("x-office-spreadsheet"));
 	for (int i = 0; i < dataSetItem->columnCount(); ++i) {
 		if (rows > 0 && cols > 0 && regs > 0) {
@@ -1315,7 +1315,7 @@ void HDF5FilterPrivate::scanHDF5Link(hid_t gid, char *linkName, QTreeWidgetItem*
 	m_status = H5Gget_linkval(gid, linkName, MAXNAMELENGTH, target) ;
 	handleError(m_status, "H5Gget_linkval");
 
-	QTreeWidgetItem* linkItem = new QTreeWidgetItem(QStringList() << QString(linkName) << i18n("symbolic link") << i18n("link to %1", QFile::decodeName(target)));
+	auto* linkItem = new QTreeWidgetItem(QStringList() << QString(linkName) << i18n("symbolic link") << i18n("link to %1", QFile::decodeName(target)));
 	linkItem->setIcon(0, QIcon::fromTheme("emblem-symbolic-link"));
 	linkItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(linkItem);
@@ -1347,7 +1347,7 @@ void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char *groupName, QTreeWidgetIte
 
 	QString attr = scanHDF5Attrs(gid).join(" ");
 
-	QTreeWidgetItem* groupItem = new QTreeWidgetItem(QStringList() << QString(groupName) << QString(link) << QLatin1String("group ") << attr);
+	auto* groupItem = new QTreeWidgetItem(QStringList() << QString(groupName) << QString(link) << QLatin1String("group ") << attr);
 	groupItem->setIcon(0, QIcon::fromTheme("folder"));
 	groupItem->setFlags(Qt::ItemIsEnabled);
 	parentItem->addChild(groupItem);

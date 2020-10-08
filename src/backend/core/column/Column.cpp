@@ -147,7 +147,7 @@ QMenu* Column::createContextMenu() {
 			if (analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet
 					&& (analysisCurve->xDataColumn() == this || analysisCurve->yDataColumn() == this || analysisCurve->y2DataColumn() == this) )
 				used = true;
-		} else {
+		} else if (curve) {
 			if (curve->xColumn() == this || curve->yColumn() == this)
 				used = true;
 		}

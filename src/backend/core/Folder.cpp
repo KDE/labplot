@@ -295,7 +295,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 #endif
 	} else if (element_name == QLatin1String("liveDataSource")
 		|| element_name == QLatin1String("LiveDataSource")) { //TODO: remove "LiveDataSources" in couple of releases
-		LiveDataSource* liveDataSource = new LiveDataSource(QString(), true);
+		auto* liveDataSource = new LiveDataSource(QString(), true);
 		if (!liveDataSource->load(reader, preview)) {
 			delete liveDataSource;
 			return false;

@@ -49,7 +49,7 @@ Copyright            : (C) 2016-2019 by Alexander Semke (alexander.semke@web.de)
 FITSHeaderEditNewKeywordDialog::FITSHeaderEditNewKeywordDialog(QWidget *parent) : QDialog(parent) {
 	ui.setupUi(this);
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
 	ui.gridLayout->addWidget(btnBox, 3, 1, 1, 2);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);

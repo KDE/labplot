@@ -1233,7 +1233,7 @@ const XYCurve* CartesianPlot::currentCurve() const {
 }
 
 void CartesianPlot::addDataReductionCurve() {
-	XYDataReductionCurve* curve = new XYDataReductionCurve("Data reduction");
+	auto* curve = new XYDataReductionCurve("Data reduction");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro( i18n("%1: reduce '%2'", name(), curCurve->name()) );
@@ -1252,7 +1252,7 @@ void CartesianPlot::addDataReductionCurve() {
 }
 
 void CartesianPlot::addDifferentiationCurve() {
-	XYDifferentiationCurve* curve = new XYDifferentiationCurve("Differentiation");
+	auto* curve = new XYDifferentiationCurve("Differentiation");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro( i18n("%1: differentiate '%2'", name(), curCurve->name()) );
@@ -1271,7 +1271,7 @@ void CartesianPlot::addDifferentiationCurve() {
 }
 
 void CartesianPlot::addIntegrationCurve() {
-	XYIntegrationCurve* curve = new XYIntegrationCurve("Integration");
+	auto* curve = new XYIntegrationCurve("Integration");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro( i18n("%1: integrate '%2'", name(), curCurve->name()) );
@@ -1290,7 +1290,7 @@ void CartesianPlot::addIntegrationCurve() {
 }
 
 void CartesianPlot::addInterpolationCurve() {
-	XYInterpolationCurve* curve = new XYInterpolationCurve("Interpolation");
+	auto* curve = new XYInterpolationCurve("Interpolation");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro( i18n("%1: interpolate '%2'", name(), curCurve->name()) );
@@ -1309,7 +1309,7 @@ void CartesianPlot::addInterpolationCurve() {
 }
 
 void CartesianPlot::addSmoothCurve() {
-	XYSmoothCurve* curve = new XYSmoothCurve("Smooth");
+	auto* curve = new XYSmoothCurve("Smooth");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro( i18n("%1: smooth '%2'", name(), curCurve->name()) );
@@ -1328,7 +1328,7 @@ void CartesianPlot::addSmoothCurve() {
 }
 
 void CartesianPlot::addFitCurve() {
-	XYFitCurve* curve = new XYFitCurve("fit");
+	auto* curve = new XYFitCurve("fit");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro( i18n("%1: fit to '%2'", name(), curCurve->name()) );
@@ -1366,7 +1366,7 @@ void CartesianPlot::addFitCurve() {
 }
 
 void CartesianPlot::addFourierFilterCurve() {
-	XYFourierFilterCurve* curve = new XYFourierFilterCurve("Fourier filter");
+	auto* curve = new XYFourierFilterCurve("Fourier filter");
 	const XYCurve* curCurve = currentCurve();
 	if (curCurve) {
 		beginMacro( i18n("%1: Fourier filtering of '%2'", name(), curCurve->name()) );
@@ -1383,17 +1383,17 @@ void CartesianPlot::addFourierFilterCurve() {
 }
 
 void CartesianPlot::addFourierTransformCurve() {
-	XYFourierTransformCurve* curve = new XYFourierTransformCurve("Fourier transform");
+	auto* curve = new XYFourierTransformCurve("Fourier transform");
 	this->addChild(curve);
 }
 
 void CartesianPlot::addConvolutionCurve() {
-	XYConvolutionCurve* curve = new XYConvolutionCurve("Convolution");
+	auto* curve = new XYConvolutionCurve("Convolution");
 	this->addChild(curve);
 }
 
 void CartesianPlot::addCorrelationCurve() {
-	XYCorrelationCurve* curve = new XYCorrelationCurve("Auto-/Cross-Correlation");
+	auto* curve = new XYCorrelationCurve("Auto-/Cross-Correlation");
 	this->addChild(curve);
 }
 
@@ -1420,24 +1420,24 @@ void CartesianPlot::addLegend() {
 }
 
 void CartesianPlot::addTextLabel() {
-	TextLabel* label = new TextLabel("text label");
+	auto* label = new TextLabel("text label");
 	this->addChild(label);
 	label->setParentGraphicsItem(graphicsItem());
 }
 
 void CartesianPlot::addImage() {
-	Image* image = new Image("image");
+	auto* image = new Image("image");
 	this->addChild(image);
 }
 
 void CartesianPlot::addCustomPoint() {
-	CustomPoint* point = new CustomPoint(this, "custom point");
+	auto* point = new CustomPoint(this, "custom point");
 	this->addChild(point);
 	point->retransform();
 }
 
 void CartesianPlot::addReferenceLine() {
-	ReferenceLine* line = new ReferenceLine(this, "reference line");
+	auto* line = new ReferenceLine(this, "reference line");
 	this->addChild(line);
 	line->retransform();
 }
@@ -3887,7 +3887,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				}
 			}
 		} else if (reader->name() == "image") {
-			Image* image = new Image(QString());
+			auto* image = new Image(QString());
 			if (!image->load(reader, preview)) {
 				delete image;
 				return false;
@@ -3896,7 +3896,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
-			Axis* axis = new Axis(QString());
+			auto* axis = new Axis(QString());
 			if (axis->load(reader, preview))
 				addChildFast(axis);
 			else {
@@ -3904,7 +3904,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyCurve") {
-			XYCurve* curve = new XYCurve(QString());
+			auto* curve = new XYCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3912,7 +3912,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyEquationCurve") {
-			XYEquationCurve* curve = new XYEquationCurve(QString());
+			auto* curve = new XYEquationCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3920,7 +3920,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyDataReductionCurve") {
-			XYDataReductionCurve* curve = new XYDataReductionCurve(QString());
+			auto* curve = new XYDataReductionCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3928,7 +3928,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyDifferentiationCurve") {
-			XYDifferentiationCurve* curve = new XYDifferentiationCurve(QString());
+			auto* curve = new XYDifferentiationCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3936,7 +3936,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyIntegrationCurve") {
-			XYIntegrationCurve* curve = new XYIntegrationCurve(QString());
+			auto* curve = new XYIntegrationCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3944,7 +3944,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyInterpolationCurve") {
-			XYInterpolationCurve* curve = new XYInterpolationCurve(QString());
+			auto* curve = new XYInterpolationCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3952,7 +3952,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xySmoothCurve") {
-			XYSmoothCurve* curve = new XYSmoothCurve(QString());
+			auto* curve = new XYSmoothCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3960,7 +3960,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyFitCurve") {
-			XYFitCurve* curve = new XYFitCurve(QString());
+			auto* curve = new XYFitCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3968,7 +3968,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyFourierFilterCurve") {
-			XYFourierFilterCurve* curve = new XYFourierFilterCurve(QString());
+			auto* curve = new XYFourierFilterCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3976,7 +3976,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyFourierTransformCurve") {
-			XYFourierTransformCurve* curve = new XYFourierTransformCurve(QString());
+			auto* curve = new XYFourierTransformCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3984,7 +3984,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyConvolutionCurve") {
-			XYConvolutionCurve* curve = new XYConvolutionCurve(QString());
+			auto* curve = new XYConvolutionCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -3992,7 +3992,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyCorrelationCurve") {
-			XYCorrelationCurve* curve = new XYCorrelationCurve(QString());
+			auto* curve = new XYCorrelationCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -4008,7 +4008,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "customPoint") {
-			CustomPoint* point = new CustomPoint(this, QString());
+			auto* point = new CustomPoint(this, QString());
 			if (point->load(reader, preview))
 				addChildFast(point);
 			else {
@@ -4016,7 +4016,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "referenceLine") {
-			ReferenceLine* line = new ReferenceLine(this, QString());
+			auto* line = new ReferenceLine(this, QString());
 			if (line->load(reader, preview))
 				addChildFast(line);
 			else {
@@ -4024,7 +4024,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "Histogram") {
-			Histogram* curve = new Histogram("Histogram");
+			auto* curve = new Histogram("Histogram");
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {

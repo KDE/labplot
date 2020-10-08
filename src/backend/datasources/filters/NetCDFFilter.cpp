@@ -451,7 +451,7 @@ QString NetCDFFilterPrivate::scanAttrs(int ncid, int varid, int attid, QTreeWidg
 			}
 			QStringList props;
 			props << translateDataType(type) << " (" << QString::number(len) << ")";
-			QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(name) << typeName << props.join(QString()) << valueString.join(", "));
+			auto *attrItem = new QTreeWidgetItem(QStringList() << QString(name) << typeName << props.join(QString()) << valueString.join(", "));
 			attrItem->setIcon(0, QIcon::fromTheme("accessories-calculator"));
 			attrItem->setFlags(Qt::ItemIsEnabled);
 			parentItem->addChild(attrItem);
@@ -478,7 +478,7 @@ void NetCDFFilterPrivate::scanDims(int ncid, int ndims, QTreeWidgetItem* parentI
 		QString value;
 		if (i == ulid)
 			value = i18n("unlimited");
-		QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(name) << i18n("dimension") << props.join(QString()) << value);
+		auto* attrItem = new QTreeWidgetItem(QStringList() << QString(name) << i18n("dimension") << props.join(QString()) << value);
 		attrItem->setIcon(0, QIcon::fromTheme("accessories-calculator"));
 		attrItem->setFlags(Qt::ItemIsEnabled);
 		parentItem->addChild(attrItem);
@@ -578,19 +578,19 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 	handleError(m_status, "nc_inq");
 	DEBUG(" nattr/ndims/nvars = " << nattr << ' ' << ndims << ' '  << nvars);
 
-	QTreeWidgetItem *attrItem = new QTreeWidgetItem(QStringList() << QString(i18n("Attributes")));
+	auto* attrItem = new QTreeWidgetItem(QStringList() << QString(i18n("Attributes")));
 	attrItem->setIcon(0,QIcon::fromTheme("folder"));
 	attrItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(attrItem);
 	scanAttrs(ncid, NC_GLOBAL, -1, attrItem);
 
-	QTreeWidgetItem *dimItem = new QTreeWidgetItem(QStringList() << QString(i18n("Dimensions")));
+	auto* dimItem = new QTreeWidgetItem(QStringList() << QString(i18n("Dimensions")));
 	dimItem->setIcon(0, QIcon::fromTheme("folder"));
 	dimItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(dimItem);
 	scanDims(ncid, ndims, dimItem);
 
-	QTreeWidgetItem *varItem = new QTreeWidgetItem(QStringList() << QString(i18n("Variables")));
+	auto* varItem = new QTreeWidgetItem(QStringList() << QString(i18n("Variables")));
 	varItem->setIcon(0, QIcon::fromTheme("folder"));
 	varItem->setFlags(Qt::ItemIsEnabled);
 	rootItem->addChild(varItem);

@@ -237,13 +237,13 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex& parent) {
 
 QModelIndex TreeModel::parent(const QModelIndex &index) const {
 	if (!index.isValid())
-		return QModelIndex();
+		return {};
 
 	TreeItem *childItem = getItem(index);
 	TreeItem *parentItem = childItem->parent();
 
 	if (parentItem == rootItem)
-		return QModelIndex();
+		return {};
 
 	return createIndex(parentItem->childNumber(), 0, parentItem);
 }

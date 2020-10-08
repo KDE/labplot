@@ -28,8 +28,6 @@
 
 #include "Curve.h"
 
-Curve::Curve() {
-
-}
+Curve::Curve() = default;
 
 Curve::~Curve() = default;

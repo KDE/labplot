@@ -393,7 +393,7 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 			m_subscriptions.push_back(temp->topic().filter());
 			m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
-			MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
+			auto* newSubscription = new MQTTSubscription(temp->topic().filter());
 			newSubscription->setMQTTClient(this);
 
 			addChildFast(newSubscription);
@@ -467,9 +467,9 @@ void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
 				m_MQTTSubscriptions.remove(i);
 				//Remove every topic of the subscription as well
 				QVector<MQTTTopic*> topics = removeSubscription->topics();
-				for (int j = 0; j < topics.size(); ++j) {
-					m_topicNames.removeAll(topics[j]->topicName());
-				}
+				for (const auto& topic : topics)
+					m_topicNames.removeAll(topic->topicName());
+
 				//Remove the MQTTSubscription
 				removeChild(removeSubscription);
 				break;
@@ -507,7 +507,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
 			m_subscriptions.push_back(temp->topic().filter());
 			m_subscribedTopicNameQoS[temp->topic().filter()] = temp->qos();
 
-			MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
+			auto* newSubscription = new MQTTSubscription(temp->topic().filter());
 			newSubscription->setMQTTClient(this);
 
 			addChildFast(newSubscription);
@@ -998,7 +998,7 @@ void MQTTClient::onMQTTConnect() {
 					if (!m_loaded) {
 						m_subscriptions.push_back(temp->topic().filter());
 
-						MQTTSubscription* newSubscription = new MQTTSubscription(temp->topic().filter());
+						auto* newSubscription = new MQTTSubscription(temp->topic().filter());
 						newSubscription->setMQTTClient(this);
 
 						addChildFast(newSubscription);
@@ -1065,7 +1065,7 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
  */
 void MQTTClient::MQTTErrorChanged(QMqttClient::ClientError clientError) {
 	if (clientError != QMqttClient::ClientError::NoError) {
-		MQTTErrorWidget* errorWidget = new MQTTErrorWidget(clientError, this);
+		auto* errorWidget = new MQTTErrorWidget(clientError, this);
 		errorWidget->show();
 	}
 }
@@ -1335,7 +1335,7 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 			if (!m_filter->load(reader))
 				return false;
 		} else if (reader->name() == "MQTTSubscription") {
-			MQTTSubscription* subscription = new MQTTSubscription(QString());
+			auto* subscription = new MQTTSubscription(QString());
 			subscription->setMQTTClient(this);
 			m_MQTTSubscriptions.push_back(subscription);
 			connect(subscription, &MQTTSubscription::loaded, this, &MQTTClient::subscriptionLoaded);

@@ -46,7 +46,7 @@
 StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>& columns, QWidget* parent) : QDialog(parent),
 	m_twStatistics(new QTabWidget) {
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok);
 
 	QPushButton* btnOk = btnBox->button(QDialogButtonBox::Ok);
 	btnOk->setFocus();

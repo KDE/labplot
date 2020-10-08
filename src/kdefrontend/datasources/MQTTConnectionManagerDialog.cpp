@@ -52,7 +52,7 @@ MQTTConnectionManagerDialog::MQTTConnectionManagerDialog(QWidget* parent, const 
 
 	m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
+	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(mainWidget);
 	layout->addWidget(m_buttonBox);
 

@@ -70,7 +70,7 @@ GoToDialog::GoToDialog(QWidget* parent) : QDialog(parent) {
 	leColumn->setText("1");
 	layout->addWidget(leColumn, 1, 1);
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	connect(btnBox, &QDialogButtonBox::accepted, this, &GoToDialog::accept);
 	connect(btnBox, &QDialogButtonBox::rejected, this, &GoToDialog::reject);
 	layout->addWidget(btnBox, 2, 1);

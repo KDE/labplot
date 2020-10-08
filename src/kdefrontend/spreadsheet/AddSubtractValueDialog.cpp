@@ -108,7 +108,7 @@ void AddSubtractValueDialog::init() {
 	ui.setupUi(this);
 	setAttribute(Qt::WA_DeleteOnClose);
 
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
 	ui.gridLayout->addWidget(btnBox, 3, 0, 1, 2);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);

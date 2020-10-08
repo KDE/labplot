@@ -51,7 +51,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	ui.setupUi(mainWidget);
 	auto* layout = new QVBoxLayout(this);
 
-	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	ui.gridLayout->addWidget(buttonBox);
 	m_okButton = buttonBox->button(QDialogButtonBox::Ok);
 	m_okButton->setText(i18n("&Generate"));

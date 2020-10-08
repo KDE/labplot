@@ -197,7 +197,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 					name += QLatin1Char('\t') + column->plotDesignationString();
 
 				return name;
-			} else
+			} else if (aspect)
 				return aspect->name();
 		}
 		case 1:

@@ -180,7 +180,7 @@ bool Matrix::printView() {
 }
 
 bool Matrix::printPreview() const {
-	QPrintPreviewDialog* dlg = new QPrintPreviewDialog(m_view);
+	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &MatrixView::print);
 	return dlg->exec();
 }

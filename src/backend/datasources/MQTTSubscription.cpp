@@ -95,7 +95,7 @@ void MQTTSubscription::messageArrived(const QString& message, const QString& top
 
 	//if the topic can't be found, we add it as a new MQTTTopic, and read from it if needed
 	if (!found) {
-		MQTTTopic* newTopic = new MQTTTopic(topicName, this, false);
+		auto* newTopic = new MQTTTopic(topicName, this, false);
 		addChildFast(newTopic); //no need for undo/redo here
 		newTopic->newMessage(message);
 		if ((m_MQTTClient->updateType() == MQTTClient::UpdateType::NewData) && !m_MQTTClient->isPaused())
@@ -175,7 +175,7 @@ bool MQTTSubscription::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			m_subscriptionName = attribs.value("subscriptionName").toString();
 		} else if(reader->name() == QLatin1String("MQTTTopic")) {
-			MQTTTopic* topic = new MQTTTopic(QString(), this, false);
+			auto* topic = new MQTTTopic(QString(), this, false);
 			if (!topic->load(reader, preview)) {
 				delete topic;
 				return false;

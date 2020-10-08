@@ -175,7 +175,7 @@ MQTTClient *MQTTTopic::mqttClient() const {
  *\brief Plots the data stored in MQTTTopic
  */
 void MQTTTopic::plotData() {
-	PlotDataDialog* dlg = new PlotDataDialog(this);
+	auto* dlg = new PlotDataDialog(this);
 	dlg->exec();
 }
 

@@ -118,7 +118,7 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 		auto* folder = dynamic_cast<Folder*>(child);
 		if (folder)
 			moveFolder(targetFolder, folder);
-		else {
+		else if (child) {
 			project->removeChild(child);
 
 			//remove the object to be imported in the target folder if it's already existing
@@ -152,7 +152,7 @@ void ProjectParser::moveFolder(Folder* targetParentFolder, Folder* sourceChildFo
 			auto* folder = dynamic_cast<Folder*>(child);
 			if (folder) {
 				moveFolder(targetChildFolder, folder);
-			} else {
+			} else if (child) {
 				sourceChildFolderToMove->removeChild(child);
 
 				//remove the object to be imported in the target folder if it's already existing
