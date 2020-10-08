@@ -57,7 +57,7 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : BaseDock(parent)
 	ui.lYErrorType->setToolTip(info);
 	ui.cbYErrorType->setToolTip(info);
 
-	updateLocale();
+	DatapickerCurveWidget::updateLocale();
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerCurveWidget::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &DatapickerCurveWidget::commentChanged);

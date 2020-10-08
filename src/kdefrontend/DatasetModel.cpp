@@ -42,9 +42,7 @@ DatasetModel::DatasetModel(const QMap<QString, QMap<QString, QMap<QString, QVect
 	initDatasets(datasetsMap);
 }
 
-DatasetModel::~DatasetModel() {
-
-}
+DatasetModel::~DatasetModel() = default;
 
 /**
  * @brief Initializes the list of collections.

@@ -1271,7 +1271,7 @@ const QVector<int>& ExpressionParser::functionsGroupIndices() {
  */
 int ExpressionParser::functionArgumentCount(const QString& functionName) {
 	int index = 0;
-	while (functionName != QString(_functions[index].name) && _functions[index].name != NULL)
+	while (functionName != QString(_functions[index].name) && _functions[index].name != nullptr)
 		index++;
 
 	DEBUG(Q_FUNC_INFO << ", Found function " << STDSTRING(functionName) << " at index " << index);

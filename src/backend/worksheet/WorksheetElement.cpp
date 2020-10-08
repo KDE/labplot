@@ -121,7 +121,7 @@ QPainterPath WorksheetElement::shapeFromPath(const QPainterPath &path, const QPe
 
 	// TODO: We unfortunately need this hack as QPainterPathStroker will set a width of 1.0
 	// if we pass a value of 0.0 to QPainterPathStroker::setWidth()
-	const qreal penWidthZero = qreal(0.00000001);
+	const qreal penWidthZero = qreal(1.e-8);
 
 	QPainterPathStroker ps;
 	ps.setCapStyle(pen.capStyle());

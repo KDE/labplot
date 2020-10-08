@@ -112,7 +112,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 		layout->setVerticalSpacing(2);
 	}
 
-	updateLocale();
+	XYCurveDock::updateLocale();
 
 	//Slots
 

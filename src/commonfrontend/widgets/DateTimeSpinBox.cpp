@@ -38,7 +38,7 @@ DateTimeSpinBox::DateTimeSpinBox(QWidget* parent) : QAbstractSpinBox(parent) {
 
 	m_regularExpressionValidator = new QRegularExpressionValidator();
 
-	QRegularExpression regExp("([0-9]+)\\.(0[0-9]|1[0-2]|[0-9])\\.(0[0-9]|[0-2][0-9]|30|[0-9]) ([0-1][0-9]|2[0-3]|[0-9])\\:([0-5][0-9]|[0-9])\\:([0-5][0-9]|[0-9])\\.[0-9]{0,3}");
+	QRegularExpression regExp(R"(([0-9]+)\.(0[0-9]|1[0-2]|[0-9])\.(0[0-9]|[0-2][0-9]|30|[0-9]) ([0-1][0-9]|2[0-3]|[0-9])\:([0-5][0-9]|[0-9])\:([0-5][0-9]|[0-9])\.[0-9]{0,3})");
 	m_regularExpressionValidator->setRegularExpression(regExp);
 
 	lineEdit()->setValidator(m_regularExpressionValidator);

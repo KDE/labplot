@@ -237,7 +237,7 @@ bool AbstractAspect::setName(const QString &value, bool autoUnique) {
 
 
 		if (new_name != value)
-			info(i18n("Intended name \"%1\" was changed to \"%2\" in order to avoid name collision.", value, new_name));
+			info(i18n(R"(Intended name "%1" was changed to "%2" in order to avoid name collision.)", value, new_name));
 	} else
 		new_name = value;
 
@@ -420,7 +420,7 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 	QString new_name = uniqueNameFor(child->name());
 	beginMacro(i18n("%1: add %2", name(), new_name));
 	if (new_name != child->name()) {
-		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
+		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
 		child->setName(new_name);
 	}
 
@@ -448,7 +448,7 @@ void AbstractAspect::insertChildBefore(AbstractAspect* child, AbstractAspect* be
 	QString new_name = uniqueNameFor(child->name());
 	beginMacro(before ? i18n("%1: insert %2 before %3", name(), new_name, before->name()) : i18n("%1: insert %2 before end", name(), new_name));
 	if (new_name != child->name()) {
-		info(i18n("Renaming \"%1\" to \"%2\" in order to avoid name collision.", child->name(), new_name));
+		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
 		child->setName(new_name);
 	}
 	int index = d->indexOfChild(before);

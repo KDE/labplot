@@ -57,7 +57,7 @@ CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
 		layout->setVerticalSpacing(2);
 	}
 
-	updateLocale();
+	CustomPointDock::updateLocale();
 
 	//SLOTS
 	//General

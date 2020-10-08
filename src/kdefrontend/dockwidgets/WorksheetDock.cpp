@@ -78,7 +78,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 		layout->setVerticalSpacing(2);
 	}
 
-	updateLocale();
+	WorksheetDock::updateLocale();
 
 	//SLOTs
 	//General

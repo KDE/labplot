@@ -187,11 +187,11 @@ MainWin::~MainWin() {
 	KSharedConfig::openConfig()->sync();
 
 	//if welcome screen is shown, save its settings prior to deleting it
-// 	if(dynamic_cast<QQuickWidget*>(centralWidget()))
+// 	if (dynamic_cast<QQuickWidget*>(centralWidget()))
 // 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
 	if (m_project) {
-// 		if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
+// 		if (dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr)
 // 			m_mdiArea->closeAllSubWindows();
 
 		disconnect(m_project, nullptr, this, nullptr);
@@ -204,7 +204,7 @@ MainWin::~MainWin() {
 	if (m_guiObserver)
 		delete m_guiObserver;
 
-// 	if(m_welcomeScreenHelper)
+// 	if (m_welcomeScreenHelper)
 // 		delete m_welcomeScreenHelper;
 }
 
@@ -394,7 +394,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	showMaximized();
 
 	KToolBar* toolbar = toolBar();
-	if(toolbar)
+	if (toolbar)
 		toolbar->setVisible(false);
 
 	QList<QVariant> recentList;
@@ -408,7 +408,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	ctxt->setContextProperty("recentProjects", variant);
 
 	//Create helper object
-	if(m_welcomeScreenHelper)
+	if (m_welcomeScreenHelper)
 		delete m_welcomeScreenHelper;
 	m_welcomeScreenHelper = new WelcomeScreenHelper();
 	connect(m_welcomeScreenHelper, &WelcomeScreenHelper::openExampleProject,
@@ -436,7 +436,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
  */
 /*
 void MainWin::resetWelcomeScreen() {
-	if(dynamic_cast<QQuickWidget*>(centralWidget()))
+	if (dynamic_cast<QQuickWidget*>(centralWidget()))
 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "restoreOriginalLayout");
 }
 */
@@ -446,11 +446,11 @@ void MainWin::resetWelcomeScreen() {
  */
 void MainWin::createMdiArea() {
 	KToolBar* toolbar = toolBar();
-	if(toolbar)
+	if (toolbar)
 		toolbar->setVisible(true);
 
 	//Save welcome screen's dimensions.
-// 	if(m_showWelcomeScreen)
+// 	if (m_showWelcomeScreen)
 // 		QMetaObject::invokeMethod(m_welcomeWidget->rootObject(), "saveWidgetDimensions");
 
 	m_mdiArea = new QMdiArea;
@@ -1135,7 +1135,7 @@ bool MainWin::newProject() {
 	if (!closeProject())
 		return false;
 
-// 	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
+// 	if (dynamic_cast<QQuickWidget*>(centralWidget())) {
 // 		createMdiArea();
 // 		setCentralWidget(m_mdiArea);
 // 	}
@@ -1278,7 +1278,7 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
-// 	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
+// 	if (dynamic_cast<QQuickWidget*>(centralWidget())) {
 // 		createMdiArea();
 // 		setCentralWidget(m_mdiArea);
 // 	}
@@ -1450,7 +1450,7 @@ void MainWin::openProject(const QString& filename) {
 }
 
 void MainWin::openRecentProject(const QUrl& url) {
-// 	if(dynamic_cast<QQuickWidget*>(centralWidget())) {
+// 	if (dynamic_cast<QQuickWidget*>(centralWidget())) {
 // 		createMdiArea();
 // 		setCentralWidget(m_mdiArea);
 // 	}
@@ -1471,8 +1471,8 @@ bool MainWin::closeProject() {
 	if (warnModified())
 		return false;
 
-	if(!m_closing) {
-// 		if(dynamic_cast<QQuickWidget*>(centralWidget()) && m_showWelcomeScreen) {
+	if (!m_closing) {
+// 		if (dynamic_cast<QQuickWidget*>(centralWidget()) && m_showWelcomeScreen) {
 // 			m_welcomeWidget = createWelcomeScreen();
 // 			setCentralWidget(m_welcomeWidget);
 // 		}
@@ -1776,7 +1776,7 @@ void MainWin::newNotes() {
 	Otherwise returns \c 0.
 */
 Spreadsheet* MainWin::activeSpreadsheet() const {
-// 	if(dynamic_cast<QQuickWidget*>(centralWidget()))
+// 	if (dynamic_cast<QQuickWidget*>(centralWidget()))
 // 		return nullptr;
 
 	if (!m_currentAspect)
@@ -2277,7 +2277,7 @@ void MainWin::handleSettingsChanges() {
 	}
 
 	//view mode
-// 	if(dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr) {
+// 	if (dynamic_cast<QQuickWidget*>(centralWidget()) == nullptr) {
 	QMdiArea::ViewMode viewMode = QMdiArea::ViewMode(group.readEntry("ViewMode", 0));
 	if (m_mdiArea->viewMode() != viewMode) {
 		m_mdiArea->setViewMode(viewMode);
@@ -2338,7 +2338,7 @@ void MainWin::handleSettingsChanges() {
 	}
 
 	bool showWelcomeScreen = group.readEntry<bool>(QLatin1String("ShowWelcomeScreen"), true);
-	if(m_showWelcomeScreen != showWelcomeScreen)
+	if (m_showWelcomeScreen != showWelcomeScreen)
 		m_showWelcomeScreen = showWelcomeScreen;
 }
 
@@ -2448,10 +2448,10 @@ void MainWin::importProjectDialog() {
  * \brief opens a dialog to import datasets
  */
 void MainWin::importDatasetDialog() {
-	ImportDatasetDialog* dlg = new ImportDatasetDialog(this);
+	auto* dlg = new ImportDatasetDialog(this);
 	if (dlg->exec() == QDialog::Accepted) {
 			Spreadsheet* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
-			DatasetHandler* dataset = new DatasetHandler(spreadsheet);
+			auto* dataset = new DatasetHandler(spreadsheet);
 			dlg->importToDataset(dataset, statusBar());
 
 			QTimer timer;
@@ -2462,13 +2462,11 @@ void MainWin::importDatasetDialog() {
 			timer.start(1500);
 			loop.exec();
 
-			if(timer.isActive()){
+			if (timer.isActive()) {
 				timer.stop();
 				addAspectToProject(spreadsheet);
-				delete dataset;
 			}
-			else
-				delete dataset;
+			delete dataset;
 	}
 	delete dlg;
 }

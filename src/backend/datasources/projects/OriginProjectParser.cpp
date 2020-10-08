@@ -765,7 +765,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
-			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
 			break;
 		}
@@ -826,7 +826,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
 
-			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
 			break;
 		}
@@ -847,7 +847,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::Month);
 
-			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
 			break;
 		}
@@ -868,7 +868,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				col->setValueAt(i, column.data[i].as_double());
 			col->setColumnMode(AbstractColumn::ColumnMode::Day);
 
-			DateTime2StringFilter *filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
 			break;
 		}
@@ -901,7 +901,7 @@ void OriginProjectParser::loadColumnNumericFormat(const Origin::SpreadColumn& or
 			break;
 		}
 
-		Double2StringFilter* filter = static_cast<Double2StringFilter*>(column->outputFilter());
+		auto* filter = static_cast<Double2StringFilter*>(column->outputFilter());
 		filter->setNumericFormat(fi);
 		filter->setNumDigits(originColumn.decimalPlaces);
 	}
@@ -2081,7 +2081,7 @@ QString OriginProjectParser::parseOriginTags(const QString& str) const {
 	// The goal is to temporatily replace '(' and ')' that don't denote tags; this is so that we
 	// can handle parenthesis that are inside the tag, e.g. '\b(bold (cf))', we want the '(cf)' part
 	// to remain as is.
-	const QRegularExpression nonTagsRe("\\)([^)(]*)\\((?!\\s*([buigs\\+\\-]|\\d{1,3}\\s*[pc]|[\\w ]+\\s*:\\s*f)\\s*\\\\)");
+	const QRegularExpression nonTagsRe(R"(\)([^)(]*)\((?!\s*([buigs\+\-]|\d{1,3}\s*[pc]|[\w ]+\s*:\s*f)\s*\\))");
 	QString linerev = strreverse(line);
 	const QString lBracket = strreverse("&lbracket;");
 	const QString rBracket = strreverse("&rbracket;");

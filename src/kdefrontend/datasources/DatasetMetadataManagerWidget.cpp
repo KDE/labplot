@@ -196,7 +196,7 @@ bool DatasetMetadataManagerWidget::checkFileName() {
 bool DatasetMetadataManagerWidget::urlExists() {
 
 	//Check whether the given url is acceptable syntactically
-	const QRegularExpression re("^(?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$");
+	const QRegularExpression re(R"(^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$)");
 	const QRegularExpressionMatch match = re.match(ui.leDownloadURL->text());
 	bool hasMatch = match.hasMatch();
 	const bool urlExists = hasMatch && !ui.leDownloadURL->text().isEmpty();

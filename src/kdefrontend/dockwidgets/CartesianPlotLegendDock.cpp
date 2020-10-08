@@ -76,7 +76,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 		layout->setVerticalSpacing(2);
 	}
 
-	updateLocale();
+	CartesianPlotLegendDock::updateLocale();
 
 	//SIGNAL/SLOT
 

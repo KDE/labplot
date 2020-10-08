@@ -211,7 +211,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	editTabLayout->addWidget(gvForeground, 10, 2);
 	gvForeground->setScalePixmap(valueFile);
 
-	updateLocale();
+	DatapickerImageWidget::updateLocale();
 
 	//SLOTS
 	//general

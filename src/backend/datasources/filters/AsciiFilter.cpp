@@ -989,35 +989,35 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 				for (int col = 0; col < m_actualCols; ++col) {
 					switch (columnModes[col]) {
 					case AbstractColumn::ColumnMode::Numeric: {
-						QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(col)->data());
+						auto* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
 					case AbstractColumn::ColumnMode::Integer: {
-						QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(col)->data());
+						auto* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
 					case AbstractColumn::ColumnMode::BigInt: {
-						QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(col)->data());
+						auto* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
 					case AbstractColumn::ColumnMode::Text: {
-						QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(col)->data());
+						auto* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
 						break;
 					}
 					case AbstractColumn::ColumnMode::DateTime: {
-						QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(col)->data());
+						auto* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
 						m_dataContainer[col] = static_cast<void *>(vector);
@@ -1610,32 +1610,32 @@ void AsciiFilterPrivate::initDataContainers(Spreadsheet* spreadsheet) {
 		spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
 		switch (columnModes[n]) {
 		case AbstractColumn::ColumnMode::Numeric: {
-			QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
+			auto* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
 			vector->reserve(m_actualRows);
 			vector->resize(m_actualRows);
 			m_dataContainer[n] = static_cast<void *>(vector);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			QVector<int>* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
+			auto* vector = static_cast<QVector<int>* >(spreadsheet->child<Column>(n)->data());
 			vector->resize(m_actualRows);
 			m_dataContainer[n] = static_cast<void *>(vector);
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			QVector<qint64>* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
+			auto* vector = static_cast<QVector<qint64>* >(spreadsheet->child<Column>(n)->data());
 			vector->resize(m_actualRows);
 			m_dataContainer[n] = static_cast<void *>(vector);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
-			QVector<QString>* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
+			auto* vector = static_cast<QVector<QString>*>(spreadsheet->child<Column>(n)->data());
 			vector->resize(m_actualRows);
 			m_dataContainer[n] = static_cast<void *>(vector);
 			break;
 		}
 		case AbstractColumn::ColumnMode::DateTime: {
-			QVector<QDateTime>* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
+			auto* vector = static_cast<QVector<QDateTime>* >(spreadsheet->child<Column>(n)->data());
 			vector->resize(m_actualRows);
 			m_dataContainer[n] = static_cast<void *>(vector);
 			break;

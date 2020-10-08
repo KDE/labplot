@@ -55,7 +55,7 @@ DatasetMetadataManagerDialog::DatasetMetadataManagerDialog(QWidget* parent, cons
 	m_okButton = m_buttonBox->button(QDialogButtonBox::Ok);
 	m_okButton->setEnabled(false);
 
-	QVBoxLayout* layout = new QVBoxLayout(this);
+	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(m_mainWidget);
 	layout->addWidget(m_buttonBox);
 

@@ -98,7 +98,7 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 	ui.cbBorderStyle->addItem(i18n("Dash dot line"));
 	ui.cbBorderStyle->addItem(i18n("Dash dot dot line"));
 
-	updateLocale();
+	ImageDock::updateLocale();
 
 	//SLOTs
 	//General
