@@ -57,7 +57,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 	setWindowIcon( QIcon::fromTheme("view-history") );
 	setWindowTitle(i18nc("@title:window", "Undo/Redo History"));
 	setAttribute(Qt::WA_DeleteOnClose);
-	QDialogButtonBox* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	m_okButton = btnBox->button(QDialogButtonBox::Ok);
 
 	connect(btnBox->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this, &HistoryDialog::close);

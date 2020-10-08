@@ -83,7 +83,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	QWidget* mainWidget = new QWidget(this);
 	ui->setupUi(mainWidget);
 
-	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	m_okButton = buttonBox->button(QDialogButtonBox::Ok);
 	m_okButton->setDefault(true);
 	m_okButton->setToolTip(i18n("Plot the selected data"));

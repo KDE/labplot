@@ -578,8 +578,8 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 */
 void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	DEBUG("ImportFileWidget::saveMQTTSettings");
-	MQTTClient::UpdateType updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
-	MQTTClient::ReadingType readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
+	auto updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
+	auto readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
 
 	client->setComment(fileName());
 	currentFileFilter();
@@ -1999,7 +1999,7 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 
 			//if not we simply add every level of the topic to the tree
 			if (topItemIdx < 0) {
-				QTreeWidgetItem* currentItem = new QTreeWidgetItem(name);
+				auto* currentItem = new QTreeWidgetItem(name);
 				m_subscriptionWidget->addTopic(currentItem);
 				for (int i = 1; i < list.size(); ++i) {
 					name.clear();
@@ -2051,8 +2051,8 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 		if (!subscriptionName.isEmpty()) {
 			if (rootName == subscriptionName.first()) {
 				QVector<QString> subscriptions;
-				for(int i = 0; i < m_mqttSubscriptions.size(); ++i)
-					subscriptions.push_back(m_mqttSubscriptions[i]->topic().filter());
+				for (const auto& sub : m_mqttSubscriptions)
+					subscriptions.push_back(sub->topic().filter());
 				emit updateSubscriptionTree(subscriptions);
 				break;
 			}
@@ -2130,7 +2130,7 @@ void ImportFileWidget::mqttConnectTimeout() {
 */
 void ImportFileWidget::showMQTTConnectionManager() {
 	bool previousConnectionChanged = false;
-	MQTTConnectionManagerDialog* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText(), previousConnectionChanged);
+	auto* dlg = new MQTTConnectionManagerDialog(this, ui.cbConnection->currentText(), previousConnectionChanged);
 
 	if (dlg->exec() == QDialog::Accepted) {
 		//re-read the available connections to be in sync with the changes in MQTTConnectionManager
@@ -2184,8 +2184,8 @@ void ImportFileWidget::showWillSettings() {
 		MQTTSubscriptionWidget::findSubscriptionLeafChildren(children, m_subscriptionWidget->topLevelSubscription(i));
 
 	QVector<QString> topics;
-	for (int i = 0; i < children.size(); ++i)
-		topics.append(children[i]->text(0));
+	for (const auto& child : children)
+		topics.append(child->text(0));
 
 	MQTTWillSettingsWidget willSettingsWidget(&menu, m_willSettings, topics);
 
@@ -2193,7 +2193,7 @@ void ImportFileWidget::showWillSettings() {
 		m_willSettings = willSettingsWidget.will();
 		menu.close();
 	});
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&willSettingsWidget);
 	menu.addAction(widgetAction);
 
@@ -2202,8 +2202,8 @@ void ImportFileWidget::showWillSettings() {
 }
 
 void ImportFileWidget::enableWill(bool enable) {
-	if(enable) {
-		if(!ui.bLWT->isEnabled())
+	if (enable) {
+		if (!ui.bLWT->isEnabled())
 			ui.bLWT->setEnabled(enable);
 	} else
 		ui.bLWT->setEnabled(enable);

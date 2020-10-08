@@ -48,7 +48,7 @@ DatabaseManagerDialog::DatabaseManagerDialog(QWidget* parent, const QString& con
 	setWindowIcon(QIcon::fromTheme("network-server-database"));
 	setWindowTitle(i18nc("@title:window", "SQL Database Connections"));
 
-	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
 	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(mainWidget);

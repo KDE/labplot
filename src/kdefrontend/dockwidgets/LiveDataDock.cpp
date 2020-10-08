@@ -141,7 +141,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		ui.sbSampleSize->setValue(client->sampleSize());
 
 	// disable "whole file" option
-	const QStandardItemModel* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
+	const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbReadingType->model());
 	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 	item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
 	if (ui.cbReadingType->currentIndex() == static_cast<int>(LiveDataSource::ReadingType::WholeFile))
@@ -224,8 +224,8 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 		emit MQTTClearTopics();
 		//repopulating the tree widget with the already known topics of the client
-		for (int i = 0; i < m_currentHost->addedTopics.size(); ++i)
-			addTopicToTree(m_currentHost->addedTopics.at(i));
+		for (const auto& topic : m_currentHost->addedTopics)
+			addTopicToTree(topic);
 
 		//fill subscriptions tree widget
 		emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
@@ -479,7 +479,7 @@ void LiveDataDock::readingTypeChanged(int idx) {
 	}
 #ifdef HAVE_MQTT
 	else if (m_mqttClient) {
-		MQTTClient::ReadingType type = static_cast<MQTTClient::ReadingType>(idx);
+		auto type = static_cast<MQTTClient::ReadingType>(idx);
 
 		if (type == MQTTClient::ReadingType::TillEnd) {
 			ui.lSampleSize->hide();
@@ -932,7 +932,7 @@ void LiveDataDock::showWillSettings() {
 		menu.close();
 	});
 
-	QWidgetAction* widgetAction = new QWidgetAction(this);
+	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&willSettingsWidget);
 	menu.addAction(widgetAction);
 

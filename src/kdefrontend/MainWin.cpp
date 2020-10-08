@@ -1800,7 +1800,7 @@ Spreadsheet* MainWin::activeSpreadsheet() const {
 	adds a new Cantor Spreadsheet to the project.
 */
 void MainWin::newCantorWorksheet(QAction* action) {
-	CantorWorksheet* cantorworksheet = new CantorWorksheet(action->data().toString());
+	auto* cantorworksheet = new CantorWorksheet(action->data().toString());
 	this->addAspectToProject(cantorworksheet);
 }
 
@@ -1911,6 +1911,7 @@ void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
 }
 
 void MainWin::activateSubWindowForAspect(const AbstractAspect* aspect) const {
+	Q_ASSERT(aspect);
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 		PartMdiView* win{nullptr};
@@ -1980,7 +1981,8 @@ void MainWin::setMdiWindowVisibility(QAction* action) {
 	the window again via the context menu in the project explorer.
 */
 void MainWin::handleShowSubWindowRequested() {
-	activateSubWindowForAspect(m_currentAspect);
+	if (m_currentAspect)
+		activateSubWindowForAspect(m_currentAspect);
 }
 
 /*!
@@ -2496,7 +2498,7 @@ void MainWin::editFitsFileDialog() {
   adds a new file data source to the current project.
 */
 void MainWin::newLiveDataSourceActionTriggered() {
-	ImportFileDialog* dlg = new ImportFileDialog(this, true);
+	auto* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
 		if (static_cast<LiveDataSource::SourceType>(dlg->sourceType()) == LiveDataSource::SourceType::MQTT) {
 #ifdef HAVE_MQTT
@@ -2524,7 +2526,7 @@ void MainWin::newLiveDataSourceActionTriggered() {
 			}
 #endif
 		} else {
-			LiveDataSource* dataSource = new LiveDataSource(i18n("Live data source%1", 1), false);
+			auto* dataSource = new LiveDataSource(i18n("Live data source%1", 1), false);
 			dlg->importToLiveDataSource(dataSource, statusBar());
 			addAspectToProject(dataSource);
 		}
@@ -2559,8 +2561,8 @@ void MainWin::settingsDialog() {
 
 #ifdef HAVE_CANTOR_LIBS
 void MainWin::cantorSettingsDialog() {
-	static KCoreConfigSkeleton* emptyConfig = new KCoreConfigSkeleton();
-	KConfigDialog* cantorDialog = new KConfigDialog(this,  QLatin1String("Cantor Settings"), emptyConfig);
+	static auto* emptyConfig = new KCoreConfigSkeleton();
+	auto* cantorDialog = new KConfigDialog(this,  QLatin1String("Cantor Settings"), emptyConfig);
 	for (auto* backend : Cantor::Backend::availableBackends())
 		if (backend->config()) //It has something to configure, so add it to the dialog
 			cantorDialog->addPage(backend->settingsWidget(cantorDialog), backend->config(), backend->name(),  backend->icon());

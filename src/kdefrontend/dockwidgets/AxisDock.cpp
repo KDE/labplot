@@ -331,8 +331,8 @@ void AxisDock::init() {
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
 	pa.drawLine(3, 10, 17, 10);
-	//TODO: QPolygon?
-	QPointF points3[3] = {QPointF(17, 10), QPointF(10, 10-4*cos_phi), QPointF(10, 10+4*cos_phi) };
+	//TODO: use QPolygon?
+	QPointF points3[3] = { QPointF(17, 10), QPointF(10, 10-4*cos_phi), QPointF(10, 10+4*cos_phi) };
 	pa.drawPolygon(points3, 3);
 	pa.end();
 	ui.cbArrowType->setItemIcon(3, pm);
@@ -343,7 +343,7 @@ void AxisDock::init() {
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
 	pa.drawLine(3, 10, 17, 10);
-	QPointF points4[3] = {QPointF(17, 10), QPointF(10, 10-10*cos_phi), QPointF(10, 10+10*cos_phi) };
+	QPointF points4[3] = { QPointF(17, 10), QPointF(10, 10-10*cos_phi), QPointF(10, 10+10*cos_phi) };
 	pa.drawPolygon(points4, 3);
 	pa.end();
 	ui.cbArrowType->setItemIcon(4, pm);
@@ -354,7 +354,7 @@ void AxisDock::init() {
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
 	pa.drawLine(3, 10, 17, 10);
-	QPointF points5[4] = {QPointF(17, 10), QPointF(10, 10-4*cos_phi), QPointF(13, 10), QPointF(10, 10+4*cos_phi) };
+	QPointF points5[4] = { QPointF(17, 10), QPointF(10, 10-4*cos_phi), QPointF(13, 10), QPointF(10, 10+4*cos_phi) };
 	pa.drawPolygon(points5, 4);
 	pa.end();
 	ui.cbArrowType->setItemIcon(5, pm);
@@ -365,7 +365,7 @@ void AxisDock::init() {
 	pa.setRenderHint(QPainter::Antialiasing);
 	pa.setBrush(Qt::SolidPattern);
 	pa.drawLine(3, 10, 17, 10);
-	QPointF points6[4] = {QPointF(17, 10), QPointF(10, 10-10*cos_phi), QPointF(13, 10), QPointF(10, 10+10*cos_phi) };
+	QPointF points6[4] = { QPointF(17, 10), QPointF(10, 10-10*cos_phi), QPointF(13, 10), QPointF(10, 10+10*cos_phi) };
 	pa.drawPolygon(points6, 4);
 	pa.end();
 	ui.cbArrowType->setItemIcon(6, pm);

@@ -225,7 +225,7 @@ void ImportDatasetWidget::collectionChanged(int index) {
 		keywords << category;
 		for (const auto& subcategory : m_model->subcategories(m_collection, category)) {
 			keywords << subcategory;
-			for (const QString dataset : m_model->datasets(m_collection, category, subcategory))
+			for (const QString& dataset : m_model->datasets(m_collection, category, subcategory))
 				keywords << dataset;
 		}
 	}
@@ -240,7 +240,7 @@ void ImportDatasetWidget::updateCategories() {
 	m_initializing = true;
 	ui.twCategories->clear();
 
-	QTreeWidgetItem* rootItem = new QTreeWidgetItem(QStringList(i18n("All")));
+	auto* rootItem = new QTreeWidgetItem(QStringList(i18n("All")));
 	ui.twCategories->addTopLevelItem(rootItem);
 
 	const QString& filter = ui.leSearch->text();
@@ -250,7 +250,7 @@ void ImportDatasetWidget::updateCategories() {
 		const bool categoryMatch = (filter.isEmpty() || category.startsWith(filter, Qt::CaseInsensitive));
 
 		if (categoryMatch) {
-			QTreeWidgetItem* const item = new QTreeWidgetItem(QStringList(category));
+			auto* const item = new QTreeWidgetItem(QStringList(category));
 			rootItem->addChild(item);
 
 			//add all sub-categories
@@ -361,10 +361,10 @@ void ImportDatasetWidget::addDatasetItems(const QString& collection, const QStri
 	if (!filter.isEmpty() &&
 		(category.startsWith(filter, Qt::CaseInsensitive) || subcategory.startsWith(filter, Qt::CaseInsensitive))) {
 
-		for (const QString dataset : m_model->datasets(collection, category, subcategory))
+		for (const QString& dataset : m_model->datasets(collection, category, subcategory))
 			ui.lwDatasets->addItem(new QListWidgetItem(dataset));
 	} else {
-		for (const QString dataset : m_model->datasets(collection, category, subcategory)) {
+		for (const QString& dataset : m_model->datasets(collection, category, subcategory)) {
 			if (filter.isEmpty() || dataset.startsWith(filter, Qt::CaseInsensitive))
 				ui.lwDatasets->addItem(new QListWidgetItem(dataset));
 		}

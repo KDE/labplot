@@ -373,7 +373,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 			numeric = false;
 
 		//header item
-		QTableWidgetItem* item = new QTableWidgetItem(m_columnNames[i] + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, mode) + QLatin1String("}"));
+		auto* item = new QTableWidgetItem(m_columnNames[i] + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, mode) + QLatin1String("}"));
 		item->setTextAlignment(Qt::AlignLeft);
 		item->setIcon(AbstractColumn::iconForMode(mode));
 		ui.twPreview->setHorizontalHeaderItem(i, item);
@@ -549,7 +549,7 @@ QString ImportSQLDatabaseWidget::currentQuery(bool preview) {
 	The selected connection is selected in the connection combo box in this widget.
 **/
 void ImportSQLDatabaseWidget::showDatabaseManager() {
-	DatabaseManagerDialog* dlg = new DatabaseManagerDialog(this, ui.cbConnection->currentText());
+	auto* dlg = new DatabaseManagerDialog(this, ui.cbConnection->currentText());
 
 	if (dlg->exec() == QDialog::Accepted) {
 		//re-read the available connections to be in sync with the changes in DatabaseManager

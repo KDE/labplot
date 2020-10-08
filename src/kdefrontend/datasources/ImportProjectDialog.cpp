@@ -208,7 +208,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
 	const Project* targetProject = targetFolder->project();
 	QStringList targetAllPathes;
 	for (const auto* aspect : targetProject->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive)) {
-		if (!dynamic_cast<const Folder*>(aspect))
+		if (aspect && !dynamic_cast<const Folder*>(aspect))
 			targetAllPathes << aspect->path();
 	}
 
@@ -428,7 +428,7 @@ void ImportProjectDialog::newFolder() {
 	QString name = path.right( path.length() - path.lastIndexOf(QLatin1String("/"))-1 );
 
 	bool ok;
-	QInputDialog* dlg = new QInputDialog(this);
+	auto* dlg = new QInputDialog(this);
 	name = dlg->getText(this, i18n("Add new folder"), i18n("Folder name:"), QLineEdit::Normal, name, &ok);
 	if (ok) {
 		auto* folder = new Folder(name);
