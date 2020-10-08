@@ -22,4 +22,4 @@ export CXX=clang++
 
 export CLAZY_CHECKS="level2,no-qenums,no-qt-macros"
 
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-Xclang -load -Xclang ClangLazy.so -Xclang -add-plugin -Xclang clang-lazy  -D_GNU_SOURCE -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE -std=c++11 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" -DCMAKE_INSTALL_PREFIX=/usr && make -j 4
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-Xclang -load -Xclang ClazyPlugin.so -Xclang -add-plugin -Xclang clang-lazy  -D_GNU_SOURCE -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" -DCMAKE_CXX_FLAGS="-D_GNU_SOURCE -std=c++11 -O2 -Wall -Wextra -Wundef -Wpointer-arith -Wcast-align -Wunreachable-code -fno-omit-frame-pointer -fstack-protector -fno-exceptions" -DCMAKE_INSTALL_PREFIX=/usr && make -j 4
