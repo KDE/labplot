@@ -2090,7 +2090,8 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 		emit error(i18n("The client ID wasn't accepted"));
 		break;
 	case QMqttClient::ServerUnavailable:
-		emit error(i18n("The broker couldn't be reached."));
+	case QMqttClient::TransportInvalid:
+		emit error(i18n("The broker %1 couldn't be reached.", m_client->hostname()));
 		break;
 	case QMqttClient::NotAuthorized:
 		emit error(i18n("The client is not authorized to connect."));
@@ -2100,7 +2101,6 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 		break;
 	case QMqttClient::NoError:
 	case QMqttClient::InvalidProtocolVersion:
-	case QMqttClient::TransportInvalid:
 	case QMqttClient::ProtocolViolation:
 	case QMqttClient::Mqtt5SpecificError:
 		emit error(i18n("An error occurred."));
@@ -2120,7 +2120,7 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 void ImportFileWidget::mqttConnectTimeout() {
 	m_client->disconnectFromHost();
 	m_connectTimeoutTimer->stop();
-	emit error(i18n("Connecting to '%1' timed out.", m_client->hostname()));
+	emit error(i18n("Connecting to '%1:%2' timed out.", m_client->hostname(), m_client->port()));
 	RESET_CURSOR;
 }
 
