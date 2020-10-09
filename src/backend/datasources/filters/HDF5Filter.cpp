@@ -1330,7 +1330,7 @@ void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char *groupName, QTreeWidgetIte
 	handleError(m_status, "H5Gget_objinfo");
 	if (statbuf.nlink > 1) {
 		if (m_multiLinkList.contains(statbuf.objno[0])) {
-			QTreeWidgetItem* objectItem = new QTreeWidgetItem(QStringList()<<QString(groupName) << i18n("hard link"));
+			auto* objectItem = new QTreeWidgetItem(QStringList()<<QString(groupName) << i18n("hard link"));
 			objectItem->setIcon(0, QIcon::fromTheme("link"));
 			objectItem->setFlags(Qt::ItemIsEnabled);
 			parentItem->addChild(objectItem);
@@ -1393,7 +1393,7 @@ void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char *groupName, QTreeWidgetIte
 				break;
 			}
 		default:
-			QTreeWidgetItem* objectItem = new QTreeWidgetItem(QStringList() << QString(memberName) << i18n("unknown"));
+			auto* objectItem = new QTreeWidgetItem(QStringList() << QString(memberName) << i18n("unknown"));
 			objectItem->setFlags(Qt::ItemIsEnabled);
 			groupItem->addChild(objectItem);
 			break;

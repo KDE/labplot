@@ -199,6 +199,8 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 				return name;
 			} else if (aspect)
 				return aspect->name();
+			else
+				return QVariant();
 		}
 		case 1:
 			if (aspect->metaObject()->className() != QLatin1String("CantorWorksheet"))

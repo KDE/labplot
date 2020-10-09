@@ -1339,7 +1339,11 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	}
 
 	//parse the first data line to determine data type for each column
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	QStringList firstLineStringList = newData.at(0).split(' ', Qt::SkipEmptyParts);
+#else
 	QStringList firstLineStringList = newData.at(0).split(' ', QString::SkipEmptyParts);
+#endif
 	int i = 1;
 	for (auto& valueString : firstLineStringList) {
 		if (simplifyWhitespacesEnabled)
@@ -1381,7 +1385,11 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		if (createTimestampEnabled)
 			lineString += QDateTime::currentDateTime().toString();
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		QStringList lineStringList = line.split(' ', Qt::SkipEmptyParts);
+#else
 		QStringList lineStringList = line.split(' ', QString::SkipEmptyParts);
+#endif
 		QDEBUG(" line = " << lineStringList);
 
 		//parse columns

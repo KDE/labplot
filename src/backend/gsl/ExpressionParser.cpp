@@ -1385,7 +1385,11 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 	QDEBUG(Q_FUNC_INFO << ", variables:" << vars);
 	QStringList parameters;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	QStringList strings = expr.split(QRegularExpression(QStringLiteral("\\W+")), Qt::SkipEmptyParts);
+#else
 	QStringList strings = expr.split(QRegularExpression(QStringLiteral("\\W+")), QString::SkipEmptyParts);
+#endif
 	QDEBUG(Q_FUNC_INFO << ", found strings:" << strings);
 	// RE for any number
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 12, 0))

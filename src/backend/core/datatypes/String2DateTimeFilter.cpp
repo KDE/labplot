@@ -67,8 +67,13 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 	// fallback:
 	// try other format strings built from date_formats and time_formats
 	// comma and space are valid separators between date and time
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	QStringList strings = input_value.simplified().split(',', Qt::SkipEmptyParts);
+	if (strings.size() == 1) strings = strings.at(0).split(' ', Qt::SkipEmptyParts);
+#else
 	QStringList strings = input_value.simplified().split(',', QString::SkipEmptyParts);
 	if (strings.size() == 1) strings = strings.at(0).split(' ', QString::SkipEmptyParts);
+#endif
 
 	if (strings.size() < 1)
 		return result; // invalid date/time from first attempt
