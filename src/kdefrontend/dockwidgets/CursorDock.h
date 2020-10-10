@@ -4,6 +4,7 @@ Project              : LabPlot
 Description 	     : This dock represents the data from the cursors in the cartesian plots
 --------------------------------------------------------------------
 Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+Copyright            : (C) 2019-2020 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 
@@ -58,14 +59,18 @@ private:
 	void expandAll();
 	void cursor0EnableChanged(bool);
 	void cursor1EnableChanged(bool);
+	bool eventFilter(QObject*, QEvent*) override;
 
 	Ui::CursorDock* ui;
-
-private:
 	bool m_initializing{false};
 	QVector<CartesianPlot*> m_plotList;
 	CartesianPlot* m_plot{nullptr};
 	QList<QMetaObject::Connection> selectedPlotsConnection;
+
+private slots:
+	void contextMenuRequested(QPoint);
+	void resultCopy();
+	void resultCopyAll();
 };
 
 #endif // CURSORDOCK_H
