@@ -38,6 +38,7 @@
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/PropertyChangeCommand.h"
 #ifdef HAVE_MQTT
+#include "backend/datasources/MQTTClient.h"
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #endif
@@ -484,6 +485,16 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
  */
 void AbstractAspect::removeChild(AbstractAspect* child) {
 	Q_ASSERT(child->parentAspect() == this);
+
+	//when the child being removed is a LiveDataSource or a MQTT client,
+	//stop reading from the source before removing the child from the project
+	if (child->type() == AspectType::LiveDataSource)
+		static_cast<LiveDataSource*>(child)->pauseReading();
+#ifdef HAVE_MQTT
+	else if (child->type() == AspectType::MQTTClient)
+		static_cast<MQTTClient*>(child)->pauseReading();
+#endif
+
 	beginMacro(i18n("%1: remove %2", name(), child->name()));
 	exec(new AspectChildRemoveCmd(d, child));
 	endMacro();

@@ -42,7 +42,6 @@
 #endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
-#include "backend/datasources/MQTTSubscription.h"
 #endif
 #include "backend/worksheet/Worksheet.h"
 
@@ -57,12 +56,6 @@
  */
 
 Folder::Folder(const QString &name, AspectType type) : AbstractAspect(name, type) {
-	//when the child being removed is a LiveDataSource, stop reading from the source
-	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, [=](const AbstractAspect* aspect) {
-		const auto* lds = dynamic_cast<const LiveDataSource*>(aspect);
-		if (lds)
-			const_cast<LiveDataSource*>(lds)->pauseReading();
-	} );
 }
 
 QIcon Folder::icon() const {
@@ -77,7 +70,7 @@ QIcon Folder::icon() const {
 QMenu* Folder::createContextMenu() {
 	if (project()
 #ifdef HAVE_MQTT
-		&& !dynamic_cast<const MQTTSubscription*>(this)
+		&& type() != AspectType::MQTTSubscription
 #endif
 	)
 		return project()->createFolderContextMenu(this);
