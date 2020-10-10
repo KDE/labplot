@@ -290,13 +290,10 @@ void TemplateHandler::saveMenu() {
 	if (menu.actions().size() > 1)
 		menu.addSeparator();
 	menu.addAction(widgetAction);
+	leFilename->setFocus();
 
 	QPoint pos(-menu.sizeHint().width()+m_tbSave->width(),-menu.sizeHint().height());
-	menu.setFocus();
 	menu.exec(m_tbSave->mapToGlobal(pos));
-
-	//TODO: focus is not set. why?
-// 	leFilename->setFocus();
 }
 
 /*!
