@@ -528,7 +528,6 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	LiveDataSource::SourceType sourceType = currentSourceType();
 	auto readingType = static_cast<LiveDataSource::ReadingType>(ui.cbReadingType->currentIndex());
 
-	source->setComment( fileName() );
 	source->setFileType(fileType);
 	currentFileFilter();
 	source->setFilter(m_currentFilter.release()); // pass ownership of the filter to the LiveDataSource
@@ -539,12 +538,14 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 	case LiveDataSource::SourceType::FileOrPipe:
 		source->setFileName(fileName());
 		source->setFileLinked(ui.chbLinkFile->isChecked());
+		source->setComment(fileName());
 		if (m_liveDataSource)
 			source->setUseRelativePath(ui.chbRelativePath->isChecked());
 		break;
 	case LiveDataSource::SourceType::LocalSocket:
 		source->setFileName(fileName());
 		source->setLocalSocketName(fileName());
+		source->setComment(fileName());
 		break;
 	case LiveDataSource::SourceType::NetworkTcpSocket:
 	case LiveDataSource::SourceType::NetworkUdpSocket:
@@ -581,7 +582,6 @@ void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
 	auto updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
 	auto readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
 
-	client->setComment(fileName());
 	currentFileFilter();
 	client->setFilter(static_cast<AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
 
