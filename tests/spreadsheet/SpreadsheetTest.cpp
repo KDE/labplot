@@ -1084,7 +1084,7 @@ void SpreadsheetTest::testSortDateTime2() {
 void SpreadsheetTest::testSortPerformanceNumeric1() {
 	Spreadsheet sheet("test", false);
 	sheet.setColumnCount(1);
-	sheet.setRowCount(100000);
+	sheet.setRowCount(10000);
 
 	QVector<double> xData;
 	for (int i = 0; i < sheet.rowCount(); i++)
@@ -1109,7 +1109,7 @@ void SpreadsheetTest::testSortPerformanceNumeric1() {
 void SpreadsheetTest::testSortPerformanceNumeric2() {
 	Spreadsheet sheet("test", false);
 	sheet.setColumnCount(2);
-	sheet.setRowCount(100000);
+	sheet.setRowCount(10000);
 
 	QVector<double> xData;
 	QVector<int> yData;
