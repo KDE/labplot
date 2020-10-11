@@ -824,12 +824,12 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
 
 	host.client->disconnectFromHost();
 
-	if (m_previousMQTTClient != nullptr && m_previousMQTTClient->clientHostName() == hostname) {
+	if (m_previousMQTTClient && m_previousMQTTClient->clientHostName() == hostname) {
 		disconnect(m_previousHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceivedInBackground);
 		m_previousMQTTClient = nullptr;
 	}
 
-	if (m_mqttClient->clientHostName() == hostname) {
+	if (m_mqttClient && m_mqttClient->clientHostName() == hostname) {
 		emit MQTTClearTopics();
 		m_mqttClient = nullptr;
 	}

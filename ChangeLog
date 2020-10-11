@@ -2,7 +2,7 @@
 	* [worksheet] allow to change the background color for axis labels (default: transparent)
 	* [worksheet] allow to copy the plot cursor cordinates
 	* [spreadsheet] better auto-detection of datetime format for values pasted in the spreadsheet
-	* [live data] allow to add the timestamp column for all live sources, not only for MQTT sources
+	* [live data] allow to add the timestamp column for all network live sources (TCP/UDP), not only for MQTT
 	* [live data] better error handling and user notifications
 
 Bug fixes:

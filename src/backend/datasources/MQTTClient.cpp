@@ -823,13 +823,8 @@ void MQTTClient::updateWillMessage() {
 		//If client is disconnected we can update the settings
 		else if (m_MQTTWill.enabled && (m_client->state() == QMqttClient::ClientState::Disconnected) && m_disconnectForWill) {
 			m_client->setWillQoS(m_MQTTWill.willQoS);
-// 			qDebug()<<"Will QoS" << m_MQTTWill.willQoS;
-
 			m_client->setWillRetain(m_MQTTWill.willRetain);
-// 			qDebug()<<"Will retain" << m_MQTTWill.willRetain;
-
 			m_client->setWillTopic(m_MQTTWill.willTopic);
-// 			qDebug()<<"Will Topic" << m_MQTTWill.willTopic;
 
 			//Set the will message according to m_willMessageType
 			switch (m_MQTTWill.willMessageType) {
@@ -838,21 +833,16 @@ void MQTTClient::updateWillMessage() {
 // 				qDebug()<<"Will own message" << m_MQTTWill.willOwnMessage;
 				break;
 			case WillMessageType::Statistics: {
-				const auto asciiFilter = willTopic->filter();
-
-				//If the topic's asciiFilter was found, get the needed statistics
-				if (asciiFilter != nullptr) {
-					//Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
-					if ((asciiFilter->MQTTColumnMode() == AbstractColumn::ColumnMode::Integer) ||
-					        (asciiFilter->MQTTColumnMode() == AbstractColumn::ColumnMode::Numeric)) {
-						m_client->setWillMessage(asciiFilter->MQTTColumnStatistics(willTopic).toUtf8());
-					}
-					//Otherwise set empty message
-					else {
-						m_client->setWillMessage(QByteArray());
-					}
+				//Statistics is only possible if the data stored in the MQTTTopic is of type integer or numeric
+				//check the column mode of the last column in the topic for this.
+				//TODO: check this logic again - why last column only?
+				const auto* col = willTopic->child<Column>(willTopic->childCount<Column>() - 1);
+				auto mode = col->columnMode();
+				if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::Numeric)
+					m_client->setWillMessage(this->statistics(willTopic).toUtf8());
+				else
+					m_client->setWillMessage(QByteArray()); //empty message
 // 					qDebug() << "Will statistics message: "<< QString(m_client->willMessage());
-				}
 				break;
 			}
 			case WillMessageType::LastMessage:
@@ -868,6 +858,73 @@ void MQTTClient::updateWillMessage() {
 // 			qDebug()<< "Reconnect to host after updating will message";
 		}
 	}
+}
+
+/*!
+ * \brief Returns the statistical data that is needed by the topic for its MQTTClient's will message
+ * \param topic
+ */
+QString MQTTClient::statistics(const MQTTTopic* topic) const {
+	const auto* col = topic->child<Column>(topic->childCount<Column>() - 1);
+	QString statistics;
+
+	QVector<bool> willStatistics = topic->mqttClient()->willStatistics();
+	//Add every statistical data to the string, the flag of which is set true
+	for (int i = 0; i <= willStatistics.size(); i++) {
+		if (willStatistics[i]) {
+			switch (static_cast<MQTTClient::WillStatisticsType>(i) ) {
+			case MQTTClient::WillStatisticsType::ArithmeticMean:
+				statistics += QLatin1String("Arithmetic mean: ") + QString::number(col->statistics().arithmeticMean) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::ContraharmonicMean:
+				statistics += QLatin1String("Contraharmonic mean: ") + QString::number(col->statistics().contraharmonicMean) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::Entropy:
+				statistics += QLatin1String("Entropy: ") + QString::number(col->statistics().entropy) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::GeometricMean:
+				statistics += QLatin1String("Geometric mean: ") + QString::number(col->statistics().geometricMean) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::HarmonicMean:
+				statistics += QLatin1String("Harmonic mean: ") + QString::number(col->statistics().harmonicMean) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::Kurtosis:
+				statistics += QLatin1String("Kurtosis: ") + QString::number(col->statistics().kurtosis) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::Maximum:
+				statistics += QLatin1String("Maximum: ") + QString::number(col->statistics().maximum) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::MeanDeviation:
+				statistics += QLatin1String("Mean deviation: ") + QString::number(col->statistics().meanDeviation) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::MeanDeviationAroundMedian:
+				statistics += QLatin1String("Mean deviation around median: ") + QString::number(col->statistics().meanDeviationAroundMedian) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::Median:
+				statistics += QLatin1String("Median: ") + QString::number(col->statistics().median) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::MedianDeviation:
+				statistics += QLatin1String("Median deviation: ") + QString::number(col->statistics().medianDeviation) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::Minimum:
+				statistics += QLatin1String("Minimum: ") + QString::number(col->statistics().minimum) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::Skewness:
+				statistics += QLatin1String("Skewness: ") + QString::number(col->statistics().skewness) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::StandardDeviation:
+				statistics += QLatin1String("Standard deviation: ") + QString::number(col->statistics().standardDeviation) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::Variance:
+				statistics += QLatin1String("Variance: ") + QString::number(col->statistics().variance) + "\n";
+				break;
+			case MQTTClient::WillStatisticsType::NoStatistics:
+			default:
+				break;
+			}
+		}
+	}
+	return statistics;
 }
 
 /*!

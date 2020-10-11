@@ -40,6 +40,7 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 
 class AsciiFilter;
 class MQTTSubscription;
+class MQTTTopic;
 class QAction;
 class QTimer;
 class QString;
@@ -167,6 +168,7 @@ public:
 
 	void setWillTopic(const QString&);
 	QString willTopic() const;
+	QString statistics(const MQTTTopic*) const;
 
 	void setWillRetain(bool);
 	bool willRetain() const;

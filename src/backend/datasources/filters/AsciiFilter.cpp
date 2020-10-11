@@ -90,20 +90,6 @@ void AsciiFilter::readMQTTTopic(const QString& message, AbstractDataSource* data
 }
 
 /*!
-  Returns the statistical data, that the MQTTTopic needs for the will message.
-*/
-QString AsciiFilter::MQTTColumnStatistics(const MQTTTopic* topic) const {
-	return d->MQTTColumnStatistics(topic);
-}
-
-/*!
-  Returns the column mode of the last column (the value column of the MQTTTopic).
-*/
-AbstractColumn::ColumnMode AsciiFilter::MQTTColumnMode() const {
-	return d->MQTTColumnMode();
-}
-
-/*!
   After the MQTTTopic is loaded, prepares the filter for reading.
 */
 void AsciiFilter::setPreparedForMQTT(bool prepared, MQTTTopic* topic, const QString& separator) {
@@ -1921,77 +1907,6 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& message) {
 	}
 
 	return dataStrings;
-}
-
-/*!
- * \brief Returns the statistical data that is needed by the topic for its MQTTClient's will message
- * \param topic
- */
-QString AsciiFilterPrivate::MQTTColumnStatistics(const MQTTTopic* topic) const {
-	Column* const tempColumn = topic->child<Column>(m_actualCols - 1);
-	QString statistics;
-
-	QVector<bool> willStatistics = topic->mqttClient()->willStatistics();
-	//Add every statistical data to the string, the flag of which is set true
-	for (int i = 0; i <= willStatistics.size(); i++) {
-		if (willStatistics[i]) {
-			switch (static_cast<MQTTClient::WillStatisticsType>(i) ) {
-			case MQTTClient::WillStatisticsType::ArithmeticMean:
-				statistics += QLatin1String("Arithmetic mean: ") + QString::number(tempColumn->statistics().arithmeticMean) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::ContraharmonicMean:
-				statistics += QLatin1String("Contraharmonic mean: ") + QString::number(tempColumn->statistics().contraharmonicMean) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::Entropy:
-				statistics += QLatin1String("Entropy: ") + QString::number(tempColumn->statistics().entropy) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::GeometricMean:
-				statistics += QLatin1String("Geometric mean: ") + QString::number(tempColumn->statistics().geometricMean) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::HarmonicMean:
-				statistics += QLatin1String("Harmonic mean: ") + QString::number(tempColumn->statistics().harmonicMean) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::Kurtosis:
-				statistics += QLatin1String("Kurtosis: ") + QString::number(tempColumn->statistics().kurtosis) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::Maximum:
-				statistics += QLatin1String("Maximum: ") + QString::number(tempColumn->statistics().maximum) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::MeanDeviation:
-				statistics += QLatin1String("Mean deviation: ") + QString::number(tempColumn->statistics().meanDeviation) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::MeanDeviationAroundMedian:
-				statistics += QLatin1String("Mean deviation around median: ") + QString::number(tempColumn->statistics().meanDeviationAroundMedian) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::Median:
-				statistics += QLatin1String("Median: ") + QString::number(tempColumn->statistics().median) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::MedianDeviation:
-				statistics += QLatin1String("Median deviation: ") + QString::number(tempColumn->statistics().medianDeviation) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::Minimum:
-				statistics += QLatin1String("Minimum: ") + QString::number(tempColumn->statistics().minimum) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::Skewness:
-				statistics += QLatin1String("Skewness: ") + QString::number(tempColumn->statistics().skewness) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::StandardDeviation:
-				statistics += QLatin1String("Standard deviation: ") + QString::number(tempColumn->statistics().standardDeviation) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::Variance:
-				statistics += QLatin1String("Variance: ") + QString::number(tempColumn->statistics().variance) + "\n";
-				break;
-			case MQTTClient::WillStatisticsType::NoStatistics:
-			default:
-				break;
-			}
-		}
-	}
-	return statistics;
-}
-
-AbstractColumn::ColumnMode AsciiFilterPrivate::MQTTColumnMode() const {
-	return columnModes[m_actualCols - 1];
 }
 
 /*!
