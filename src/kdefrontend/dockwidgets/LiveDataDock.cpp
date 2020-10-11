@@ -6,7 +6,7 @@ Description          : Dock widget for live data properties
 Copyright            : (C) 2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
 Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2017-2020 Alexander Semke (alexander.semke@web.de)
 ***************************************************************************/
 
 /***************************************************************************
@@ -105,15 +105,12 @@ LiveDataDock::~LiveDataDock() = default;
  */
 void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
-	if (m_mqttClient == client)
-		return;
 	auto oldclient = m_mqttClient;
 	m_mqttClient = nullptr; // prevent updates due to changes to input widgets
+	const QPair<QString, quint16> id(client->clientHostName(), client->clientPort());
 
 	ui.leName->setText(client->name());
-	const QPair<QString, quint16> id(client->clientHostName(), client->clientPort());
 	ui.leSourceInfo->setText(QStringLiteral("%1:%2").arg(id.first).arg(id.second));
-
 	ui.sbUpdateInterval->setValue(client->updateInterval());
 	ui.cbUpdateType->setCurrentIndex(static_cast<int>(client->updateType()));
 	ui.cbReadingType->setCurrentIndex(static_cast<int>(client->readingType()));
@@ -123,7 +120,8 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		ui.sbUpdateInterval->hide();
 	}
 
-	if (client->isPaused()) {
+	m_paused = client->isPaused();
+	if (m_paused) {
 		ui.bPausePlayReading->setText(i18n("Continue reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
@@ -158,6 +156,7 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 	ui.bLWT->show();
 
 	m_previousHost = m_currentHost;
+
 	//if there isn't a client with this hostname we instantiate a new one
 	auto it = m_hosts.find(id);
 	if (it == m_hosts.end()) {
@@ -174,7 +173,6 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::addBeforeRemoveSubscription, client, &MQTTClient::addBeforeRemoveSubscription);
 		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::removeMQTTSubscription, client, &MQTTClient::removeMQTTSubscription);
 		connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, client, &MQTTClient::addMQTTSubscription);
-
 
 		m_currentHost->client->setHostname(id.first);
 		m_currentHost->client->setPort(id.second);
@@ -256,8 +254,6 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 #ifdef HAVE_MQTT
 	m_mqttClient = nullptr;
 #endif
-// 	if (m_liveDataSource == source)
-// 		return;
 	m_liveDataSource = nullptr; // prevent updates due to changes to input widgets
 
 	ui.leName->setText(source->name());
@@ -297,7 +293,8 @@ void LiveDataDock::setLiveDataSource(LiveDataSource* const source) {
 		ui.sbUpdateInterval->hide();
 	}
 
-	if (source->isPaused()) {
+	m_paused = source->isPaused();
+	if (m_paused) {
 		ui.bPausePlayReading->setText(i18n("Continue Reading"));
 		ui.bPausePlayReading->setIcon(QIcon::fromTheme(QLatin1String("media-record")));
 	} else {
@@ -570,13 +567,10 @@ void LiveDataDock::pauseContinueReading() {
  * \param state the state of the checbox
  */
 void LiveDataDock::useWillMessage(bool use) {
-	qDebug()<<"Use will message: " << use;
-
 	if (use) {
 		m_mqttClient->setMQTTWillUse(true);
 		if (m_mqttClient->willUpdateType() == MQTTClient::WillUpdateType::OnClick)
 			ui.bWillUpdateNow->show();
-
 	} else {
 		m_mqttClient->setMQTTWillUse(false);
 		ui.bWillUpdateNow->hide();
