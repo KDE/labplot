@@ -107,54 +107,57 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
   \ingroup kdefrontend
 */
 
-namespace GuiObserverHelper
-{
+namespace GuiObserverHelper {
 
 template<class T>
-bool raiseDock(T*& dock, QStackedWidget* parent)
-{
+bool raiseDock(T*& dock, QStackedWidget* parent) {
+	Q_ASSERT(parent);
+	DEBUG(Q_FUNC_INFO << ", number of stacked widgets = " << parent->count())
+
 	const bool generated = !dock;
 	if (generated) {
 		dock = new T(parent);
 		parent->addWidget(dock);
 	}
-	parent->setCurrentWidget(dock);
 
-	//in the scroll area scroll up to the top
+	// see https://wiki.qt.io/Technical_FAQ#How_can_I_get_a_QStackedWidget_to_automatically_switch_size_depending_on_the_content_of_the_page
+	if (parent->currentWidget())
+		parent->currentWidget()->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+	parent->setCurrentWidget(dock);
+	parent->currentWidget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+	// scroll the scroll area up to the top
 	if (parent->parent() && parent->parent()->parent()) {
-		auto* sa = dynamic_cast<QScrollArea*>(parent->parent()->parent());
-		if (sa)
-			sa->ensureVisible(0 ,0);
+		auto* scrollArea = dynamic_cast<QScrollArea*>(parent->parent()->parent());
+		if (scrollArea)
+			scrollArea->ensureVisible(0, 0);
 	}
 	return generated;
 }
 
 template<class T>
-void raiseDockConnect(T*& dock, QStatusBar* statusBar, QStackedWidget* parent)
-{
+void raiseDockConnect(T*& dock, QStatusBar* statusBar, QStackedWidget* parent) {
 	if (raiseDock(dock, parent))
 		QObject::connect(dock, &T::info, [=](const QString& text){ statusBar->showMessage(text); });
 }
 
 template<class T>
-void raiseDockSetupConnect(T*& dock, QStatusBar* statusBar, QStackedWidget* parent)
-{
+void raiseDockSetupConnect(T*& dock, QStatusBar* statusBar, QStackedWidget* parent) {
 	if (raiseDock(dock, parent)) {
 		dock->setupGeneral();
 		QObject::connect(dock, &T::info, [=](const QString& text){ statusBar->showMessage(text); });
 	}
 }
 
-template<class R>
-QList<R*> castList(QList<AbstractAspect*>& selectedAspects)
-{
-	QList<R*> list;
+template<class T>
+QList<T*> castList(QList<AbstractAspect*>& selectedAspects) {
+	QList<T*> list;
 	for (auto* aspect : selectedAspects)
-		list << static_cast<R*>(aspect);
+		list << static_cast<T*>(aspect);
 	return list;
 }
 
-}
+} // namespace GuiObserverHelper
 
 using namespace GuiObserverHelper;
 
@@ -170,7 +173,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) {
   and activates the corresponding dockwidgets, toolbars etc.
 */
 void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects) const {
-	auto clearDock = [&](){
+	auto clearDock = [&]() {
 		if (m_mainWindow->stackedWidget->currentWidget())
 			m_mainWindow->stackedWidget->currentWidget()->hide();
 
@@ -182,7 +185,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		return;
 	}
 
-	const AspectType type = selectedAspects.front()->type();
+	const AspectType type{ selectedAspects.front()->type() };
+	DEBUG(Q_FUNC_INFO << ", type: " << std::hex << static_cast<quint64>(type))
 
 	// update cursor dock
 	if (m_mainWindow->cursorWidget) {
@@ -200,7 +204,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 
 	// Check, whether objects of different types were selected.
 	// Don't show any dock widgets in this case.
-	for (auto* aspect : selectedAspects) {
+	for (const auto* aspect : selectedAspects) {
 		if (aspect->type() != type) {
 			clearDock();
 			return;

@@ -1169,7 +1169,7 @@ bool MainWin::newProject() {
 
 	//newProject is called for the first time, there is no project explorer yet
 	//-> initialize the project explorer,  the GUI-observer and the dock widgets.
-	if (m_projectExplorer == nullptr) {
+	if (!m_projectExplorer) {
 		group = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
 
 		m_projectExplorerDock = new QDockWidget(this);
@@ -1195,13 +1195,12 @@ bool MainWin::newProject() {
 			addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
 		}
 
-		auto* sa = new QScrollArea(m_propertiesDock);
-		stackedWidget = new QStackedWidget(sa);
-		stackedWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-		stackedWidget->setMinimumSize(0, 0);
-		sa->setWidget(stackedWidget);
-		sa->setWidgetResizable(true);
-		m_propertiesDock->setWidget(sa);
+		auto* scrollArea = new QScrollArea(m_propertiesDock);
+		scrollArea->setWidgetResizable(true);
+
+		stackedWidget = new QStackedWidget(scrollArea);
+		scrollArea->setWidget(stackedWidget);		// stacked widget inside scroll area
+		m_propertiesDock->setWidget(scrollArea);	// scroll area inside dock
 
 		connect(m_propertiesDock, &QDockWidget::visibilityChanged, this, &MainWin::propertiesDockVisibilityChanged);
 
