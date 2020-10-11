@@ -1962,10 +1962,6 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		initDataContainers(spreadsheet);
 	}
 
-#ifdef PERFTRACE_LIVE_IMPORT
-	PERFTRACE("AsciiLiveDataImportTotal: ");
-#endif
-
 	MQTTClient::ReadingType readingType;
 	if (!m_prepared) {
 		//if filter is not prepared we read till the end
@@ -1990,25 +1986,19 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		newData.resize(spreadsheet->mqttClient()->sampleSize());
 	}
 
-	int newDataIdx = 0;
 	//TODO: bool sampleSizeReached = false;
-	{
-#ifdef PERFTRACE_LIVE_IMPORT
-		PERFTRACE("AsciiLiveDataImportReadingFromFile: ");
-#endif
-		const QStringList newDataList = message.split(QRegularExpression(QStringLiteral("\n|\r\n|\r")),
-													  QString::SkipEmptyParts);
-		for (auto& line : newDataList) {
-			newData.push_back(line);
-			newLinesTillEnd++;
+	const QStringList newDataList = message.split(QRegularExpression(QStringLiteral("\n|\r\n|\r")),
+													QString::SkipEmptyParts);
+	for (auto& line : newDataList) {
+		newData.push_back(line);
+		newLinesTillEnd++;
 
-			if (readingType != MQTTClient::ReadingType::TillEnd) {
-				newLinesForSampleSizeNotTillEnd++;
-				//for Continuous reading and FromEnd we read sample rate number of lines if possible
-				if (newLinesForSampleSizeNotTillEnd == spreadsheet->mqttClient()->sampleSize()) {
-					//TODO: sampleSizeReached = true;
-					break;
-				}
+		if (readingType != MQTTClient::ReadingType::TillEnd) {
+			newLinesForSampleSizeNotTillEnd++;
+			//for Continuous reading and FromEnd we read sample rate number of lines if possible
+			if (newLinesForSampleSizeNotTillEnd == spreadsheet->mqttClient()->sampleSize()) {
+				//TODO: sampleSizeReached = true;
+				break;
 			}
 		}
 	}
@@ -2342,7 +2332,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	// from the last row we read the new data in the spreadsheet
 	qDebug() << "reading from line: "  << currentRow << " lines till end: " << newLinesTillEnd;
 	qDebug() << "Lines to read: " << linesToRead <<" actual rows: " << m_actualRows;
-	newDataIdx = 0;
+	int newDataIdx = 0;
 	//From end means that we read the last sample size amount of data
 	if (readingType == MQTTClient::ReadingType::FromEnd) {
 		if (m_prepared) {

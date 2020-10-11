@@ -26,31 +26,12 @@ Copyright	: (C) 2018 Kovacs Ferencz (kferike98@gmail.com)
 *                                                                         *
 ***************************************************************************/
 #include "backend/datasources/MQTTClient.h"
-
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
-
 #include "backend/datasources/filters/AsciiFilter.h"
-#include "backend/datasources/filters/FITSFilter.h"
-#include "backend/datasources/filters/BinaryFilter.h"
-#include "backend/core/Project.h"
-#include "kdefrontend/spreadsheet/PlotDataDialog.h"
-
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-
 #include "kdefrontend/datasources/MQTTErrorWidget.h"
 
-#include <QFileInfo>
-#include <QDateTime>
-#include <QProcess>
-#include <QDir>
-#include <QMenu>
 #include <QTimer>
-#include <QMessageBox>
-
-#include <QIcon>
-#include <QAction>
-#include <KLocalizedString>
 
 /*!
   \class MQTTClient
@@ -1409,4 +1390,3 @@ bool MQTTClient::load(XmlStreamReader* reader, bool preview) {
 
 	return !reader->hasError();
 }
-
