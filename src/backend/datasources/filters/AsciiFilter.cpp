@@ -573,6 +573,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		m_actualCols = endColumn - startColumn + 1;
 
 	//add index column
+	if (createTimestampEnabled) {
+		vectorNames.prepend(i18n("Timestamp"));
+		m_actualCols++;
+	}
+
+	//add index column
 	if (createIndexEnabled) {
 		vectorNames.prepend(i18n("Index"));
 		m_actualCols++;
@@ -598,7 +604,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	int col = 0;
 	if (createIndexEnabled) {
 		columnModes[0] = AbstractColumn::ColumnMode::Integer;
-		col = 1;
+		++col;
+	}
+
+	if (createTimestampEnabled) {
+		columnModes[col] = AbstractColumn::ColumnMode::DateTime;
+		++col;
 	}
 
 	for (auto& valueString : firstLineStringList) { // parse columns available in first data line
@@ -617,7 +628,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			break;
 		firstLineStringList = getLineString(device);
 
-		createIndexEnabled ? col = 1 : col = 0;
+		col = (int)createIndexEnabled + (int)createTimestampEnabled;
 
 		for (auto& valueString : firstLineStringList) {
 			if (simplifyWhitespacesEnabled)
