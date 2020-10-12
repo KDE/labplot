@@ -142,8 +142,6 @@ signals:
 
 #ifdef HAVE_MQTT
 private:
-    void unsubscribeFromTopic(const QString&, QVector<QTreeWidgetItem*> children);
-
 	QMqttClient* m_client{nullptr};
     QVector<QMqttSubscription*> m_mqttSubscriptions;
 	QTimer* m_connectTimeoutTimer{nullptr};
@@ -160,16 +158,17 @@ public:
 	bool isMqttValid();
 
 signals:
-    void newTopic(const QString&);
+	void newTopic(const QString&);
 	void subscriptionsChanged();
 	void checkFileType();
-    void updateSubscriptionTree(const QVector<QString>&);
-    void MQTTClearTopics();
+	void updateSubscriptionTree(const QVector<QString>&);
+	void MQTTClearTopics();
 
 private slots:
 	void mqttConnectionChanged();
     void onMqttConnect();
-    void mqttSubscribe(const QString&, uint);
+    void subscribeTopic(const QString&, uint);
+    void unsubscribeTopic(const QString&, QVector<QTreeWidgetItem*>);
     void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 	void onMqttDisconnect();

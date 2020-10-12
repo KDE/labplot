@@ -431,8 +431,8 @@ void ImportFileWidget::initSlots() {
 	});
 	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
 	connect(ui.bLWT, &QPushButton::clicked, this, &ImportFileWidget::showWillSettings);
-	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, this, &ImportFileWidget::mqttSubscribe);
-	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::MQTTUnsubscribeFromTopic, this, &ImportFileWidget::unsubscribeFromTopic);
+	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::makeSubscription, this, &ImportFileWidget::subscribeTopic);
+	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::MQTTUnsubscribeFromTopic, this, &ImportFileWidget::unsubscribeTopic);
 	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::enableWill, this, &ImportFileWidget::enableWill);
 	connect(m_subscriptionWidget, &MQTTSubscriptionWidget::subscriptionChanged, this, &ImportFileWidget::refreshPreview);
 #endif
@@ -861,69 +861,6 @@ void ImportFileWidget::setMQTTVisible(bool visible) {
 	ui.lLWT->setVisible(visible);
 	ui.bLWT->setVisible(visible);
 }
-
-#ifdef HAVE_MQTT
-/*!
- * returns \c true if there is a valid connection to an MQTT broker and the user has subscribed to at least 1 topic,
- * returns \c false otherwise.
- */
-bool ImportFileWidget::isMqttValid() {
-	if (!m_client)
-		return false;
-
-	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
-	bool subscribed = (m_subscriptionWidget->subscriptionCount() > 0);
-	bool fileTypeOk = false;
-	if (this->currentFileType() == AbstractFileFilter::FileType::Ascii)
-		fileTypeOk = true;
-
-	return connected && subscribed && fileTypeOk;
-}
-
-/*!
- *\brief Unsubscribes from the given topic, and removes any data connected to it
- *
- * \param topicName the name of a topic we want to unsubscribe from
- */
-void ImportFileWidget::unsubscribeFromTopic(const QString& topicName, QVector<QTreeWidgetItem*> children) {
-	if (topicName.isEmpty())
-		return;
-
-	QMqttTopicFilter filter{topicName};
-	m_client->unsubscribe(filter);
-
-	for (int i = 0; i< m_mqttSubscriptions.count(); ++i)
-		if (m_mqttSubscriptions[i]->topic().filter() == topicName) {
-			m_mqttSubscriptions.remove(i);
-			break;
-		}
-
-	QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
-	while (j.hasNext()) {
-		j.next();
-        if (MQTTSubscriptionWidget::checkTopicContains(topicName, j.key().name()))
-			m_lastMessage.remove(j.key());
-	}
-
-	for (int i = 0; i < m_subscribedTopicNames.size(); ++i) {
-        if (MQTTSubscriptionWidget::checkTopicContains(topicName, m_subscribedTopicNames[i])) {
-			m_subscribedTopicNames.remove(i);
-			i--;
-		}
-	}
-
-	if (m_willSettings.willTopic == topicName) {
-		if (m_subscriptionWidget->subscriptionCount() > 0)
-			m_willSettings.willTopic = children[0]->text(0);
-		else
-			m_willSettings.willTopic.clear();
-	}
-
-	//signals that there was a change among the subscribed topics
-	emit subscriptionsChanged();
-	refreshPreview();
-}
-#endif
 
 /************** SLOTS **************************************************************/
 /*!
@@ -1906,6 +1843,23 @@ void ImportFileWidget::mqttConnectionChanged() {
 }
 
 /*!
+ * returns \c true if there is a valid connection to an MQTT broker and the user has subscribed to at least 1 topic,
+ * returns \c false otherwise.
+ */
+bool ImportFileWidget::isMqttValid() {
+	if (!m_client)
+		return false;
+
+	bool connected = (m_client->state() == QMqttClient::ClientState::Connected);
+	bool subscribed = (m_subscriptionWidget->subscriptionCount() > 0);
+	bool fileTypeOk = false;
+	if (this->currentFileType() == AbstractFileFilter::FileType::Ascii)
+		fileTypeOk = true;
+
+	return connected && subscribed && fileTypeOk;
+}
+
+/*!
  *\brief called when the client connects to the broker successfully.
  * subscribes to every topic (# wildcard) in order to later list every available topic
  */
@@ -1955,7 +1909,7 @@ void ImportFileWidget::onMqttDisconnect() {
  *\brief called when the subscribe button is pressed
  * subscribes to the topic represented by the current item of twTopics
  */
-void ImportFileWidget::mqttSubscribe(const QString& name, uint QoS) {
+void ImportFileWidget::subscribeTopic(const QString& name, uint QoS) {
 	const QMqttTopicFilter filter {name};
 	QMqttSubscription* tempSubscription = m_client->subscribe(filter, static_cast<quint8>(QoS) );
 
@@ -1964,6 +1918,46 @@ void ImportFileWidget::mqttSubscribe(const QString& name, uint QoS) {
 		connect(tempSubscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
 		emit subscriptionsChanged();
 	}
+}
+
+/*!
+ *\brief Unsubscribes from the given topic, and removes any data connected to it
+ *
+ * \param topicName the name of a topic we want to unsubscribe from
+ */
+void ImportFileWidget::unsubscribeTopic(const QString& topicName, QVector<QTreeWidgetItem*> children) {
+	if (topicName.isEmpty())
+		return;
+
+	for (int i = 0; i< m_mqttSubscriptions.count(); ++i) {
+		if (m_mqttSubscriptions[i]->topic().filter() == topicName) {
+			//explicitely disconnect from the signal, callling QMqttClient::unsubscribe() below is not enough
+			disconnect(m_mqttSubscriptions.at(i), &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
+			m_mqttSubscriptions.remove(i);
+			break;
+		}
+	}
+
+	QMqttTopicFilter filter{topicName};
+	m_client->unsubscribe(filter);
+
+	QMapIterator<QMqttTopicName, QMqttMessage> j(m_lastMessage);
+	while (j.hasNext()) {
+		j.next();
+        if (MQTTSubscriptionWidget::checkTopicContains(topicName, j.key().name()))
+			m_lastMessage.remove(j.key());
+	}
+
+	if (m_willSettings.willTopic == topicName) {
+		if (m_subscriptionWidget->subscriptionCount() > 0)
+			m_willSettings.willTopic = children[0]->text(0);
+		else
+			m_willSettings.willTopic.clear();
+	}
+
+	//signals that there was a change among the subscribed topics
+	emit subscriptionsChanged();
+	refreshPreview();
 }
 
 /*!
@@ -2068,9 +2062,6 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
  */
 void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) {
 	QDEBUG("message received from: " << msg.topic().name());
-
-	if (!m_subscribedTopicNames.contains(msg.topic().name()))
-		m_subscribedTopicNames.push_back(msg.topic().name());
 
 	//update the last message for the topic
 	m_lastMessage[msg.topic()] = msg;
