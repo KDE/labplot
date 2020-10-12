@@ -109,26 +109,26 @@ void XYConvolutionCurveDock::setupGeneral() {
 	DEBUG("XYConvolutionCurveDock::setupGeneral() DONE");
 
 	//Slots
-	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::nameChanged );
-	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::commentChanged );
-	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
-	connect( uiGeneralTab.sbSamplingInterval, SIGNAL(valueChanged(double)), this, SLOT(samplingIntervalChanged()) );
-	connect( uiGeneralTab.cbKernel, SIGNAL(currentIndexChanged(int)), this, SLOT(kernelChanged()) );
-	connect( uiGeneralTab.sbKernelSize, SIGNAL(valueChanged(int)), this, SLOT(kernelSizeChanged()) );
-	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
-	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
-	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
-	connect( uiGeneralTab.cbDirection, SIGNAL(currentIndexChanged(int)), this, SLOT(directionChanged()) );
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
-	connect( uiGeneralTab.cbNorm, SIGNAL(currentIndexChanged(int)), this, SLOT(normChanged()) );
-	connect( uiGeneralTab.cbWrap, SIGNAL(currentIndexChanged(int)), this, SLOT(wrapChanged()) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::nameChanged );
+	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::commentChanged );
+	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYConvolutionCurveDock::visibilityChanged);
+	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::dataSourceTypeChanged);
+	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYConvolutionCurveDock::samplingIntervalChanged);
+	connect(uiGeneralTab.cbKernel, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::kernelChanged);
+	connect(uiGeneralTab.sbKernelSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYConvolutionCurveDock::kernelSizeChanged);
+	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYConvolutionCurveDock::autoRangeChanged);
+	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYConvolutionCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYConvolutionCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.cbDirection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::directionChanged);
+	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::typeChanged);
+	connect(uiGeneralTab.cbNorm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::normChanged);
+	connect(uiGeneralTab.cbWrap, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::wrapChanged);
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYConvolutionCurveDock::recalculateClicked);
 
-	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
-	connect( cbY2DataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(y2DataColumnChanged(QModelIndex)) );
+	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYConvolutionCurveDock::dataSourceCurveChanged);
+	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYConvolutionCurveDock::xDataColumnChanged);
+	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYConvolutionCurveDock::yDataColumnChanged);
+	connect(cbY2DataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYConvolutionCurveDock::y2DataColumnChanged);
 }
 
 void XYConvolutionCurveDock::initGeneralTab() {
@@ -193,14 +193,14 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_convolutionCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_convolutionCurve, SIGNAL(dataSourceTypeChanged(XYAnalysisCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType)));
-	connect(m_convolutionCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
-	connect(m_convolutionCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
-	connect(m_convolutionCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
-	connect(m_convolutionCurve, SIGNAL(y2DataColumnChanged(const AbstractColumn*)), this, SLOT(curveY2DataColumnChanged(const AbstractColumn*)));
-	connect(m_convolutionCurve, SIGNAL(convolutionDataChanged(XYConvolutionCurve::ConvolutionData)), this, SLOT(curveConvolutionDataChanged(XYConvolutionCurve::ConvolutionData)));
-	connect(m_convolutionCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+	connect(m_convolutionCurve, &XYConvolutionCurve::aspectDescriptionChanged, this, &XYConvolutionCurveDock::curveDescriptionChanged);
+	connect(m_convolutionCurve, &XYConvolutionCurve::dataSourceTypeChanged, this, &XYConvolutionCurveDock::curveDataSourceTypeChanged);
+	connect(m_convolutionCurve, &XYConvolutionCurve::dataSourceCurveChanged, this, &XYConvolutionCurveDock::curveDataSourceCurveChanged);
+	connect(m_convolutionCurve, &XYConvolutionCurve::xDataColumnChanged, this, &XYConvolutionCurveDock::curveXDataColumnChanged);
+	connect(m_convolutionCurve, &XYConvolutionCurve::yDataColumnChanged, this, &XYConvolutionCurveDock::curveYDataColumnChanged);
+	connect(m_convolutionCurve, &XYConvolutionCurve::y2DataColumnChanged, this, &XYConvolutionCurveDock::curveY2DataColumnChanged);
+	connect(m_convolutionCurve, &XYConvolutionCurve::convolutionDataChanged, this, &XYConvolutionCurveDock::curveConvolutionDataChanged);
+	connect(m_convolutionCurve, &XYConvolutionCurve::sourceDataChanged, this, &XYConvolutionCurveDock::enableRecalculate);
 	connect(m_convolutionCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYConvolutionCurveDock::curveVisibilityChanged);
 }
 

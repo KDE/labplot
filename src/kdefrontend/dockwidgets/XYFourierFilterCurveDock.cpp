@@ -100,22 +100,22 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	//Slots
-	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::nameChanged );
-	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::commentChanged );
-	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
-	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
-	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
-	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::nameChanged );
+	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::commentChanged );
+	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFourierFilterCurveDock::visibilityChanged);
+	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::dataSourceTypeChanged);
+	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYFourierFilterCurveDock::autoRangeChanged);
+	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierFilterCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierFilterCurveDock::xRangeMaxChanged);
 
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
-	connect( uiGeneralTab.cbForm, SIGNAL(currentIndexChanged(int)), this, SLOT(formChanged()) );
-	connect( uiGeneralTab.sbOrder, SIGNAL(valueChanged(int)), this, SLOT(orderChanged()) );
-	connect( uiGeneralTab.sbCutoff, SIGNAL(valueChanged(double)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.sbCutoff2, SIGNAL(valueChanged(double)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.cbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged()) );
-	connect( uiGeneralTab.cbUnit2, SIGNAL(currentIndexChanged(int)), this, SLOT(unit2Changed()) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::typeChanged);
+	connect(uiGeneralTab.cbForm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::formChanged);
+	connect(uiGeneralTab.sbOrder, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYFourierFilterCurveDock::orderChanged);
+	connect(uiGeneralTab.sbCutoff, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierFilterCurveDock::enableRecalculate);
+	connect(uiGeneralTab.sbCutoff2, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierFilterCurveDock::enableRecalculate);
+	connect(uiGeneralTab.cbUnit, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::unitChanged);
+	connect(uiGeneralTab.cbUnit2, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::unit2Changed);
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFourierFilterCurveDock::recalculateClicked);
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierFilterCurveDock::dataSourceCurveChanged);
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierFilterCurveDock::xDataColumnChanged);
@@ -177,13 +177,13 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_filterCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_filterCurve, SIGNAL(dataSourceTypeChanged(XYAnalysisCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType)));
-	connect(m_filterCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
-	connect(m_filterCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
-	connect(m_filterCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
-	connect(m_filterCurve, SIGNAL(filterDataChanged(XYFourierFilterCurve::FilterData)), this, SLOT(curveFilterDataChanged(XYFourierFilterCurve::FilterData)));
-	connect(m_filterCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+	connect(m_filterCurve, &XYFourierFilterCurve::aspectDescriptionChanged, this, &XYFourierFilterCurveDock::curveDescriptionChanged);
+	connect(m_filterCurve, &XYFourierFilterCurve::dataSourceTypeChanged, this, &XYFourierFilterCurveDock::curveDataSourceTypeChanged);
+	connect(m_filterCurve, &XYFourierFilterCurve::dataSourceCurveChanged, this, &XYFourierFilterCurveDock::curveDataSourceCurveChanged);
+	connect(m_filterCurve, &XYFourierFilterCurve::xDataColumnChanged, this, &XYFourierFilterCurveDock::curveXDataColumnChanged);
+	connect(m_filterCurve, &XYFourierFilterCurve::yDataColumnChanged, this, &XYFourierFilterCurveDock::curveYDataColumnChanged);
+	connect(m_filterCurve, &XYFourierFilterCurve::filterDataChanged, this, &XYFourierFilterCurveDock::curveFilterDataChanged);
+	connect(m_filterCurve, &XYFourierFilterCurve::sourceDataChanged, this, &XYFourierFilterCurveDock::enableRecalculate);
 	connect(m_filterCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYFourierFilterCurveDock::curveVisibilityChanged);
 }
 
@@ -712,4 +712,3 @@ void XYFourierFilterCurveDock::curveVisibilityChanged(bool on) {
 	uiGeneralTab.chkVisible->setChecked(on);
 	m_initializing = false;
 }
-

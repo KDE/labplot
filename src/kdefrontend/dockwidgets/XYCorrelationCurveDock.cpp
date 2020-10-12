@@ -105,22 +105,22 @@ void XYCorrelationCurveDock::setupGeneral() {
 	DEBUG("XYCorrelationCurveDock::setupGeneral() DONE");
 
 	//Slots
-	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::nameChanged );
-	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::commentChanged );
-	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( uiGeneralTab.cbDataSourceType, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSourceTypeChanged(int)) );
-	connect( uiGeneralTab.sbSamplingInterval, SIGNAL(valueChanged(double)), this, SLOT(samplingIntervalChanged()) );
-	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
-	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
-	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
-	connect( uiGeneralTab.cbNorm, SIGNAL(currentIndexChanged(int)), this, SLOT(normChanged()) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::nameChanged );
+	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::commentChanged );
+	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYCorrelationCurveDock::visibilityChanged);
+	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::dataSourceTypeChanged);
+	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCorrelationCurveDock::samplingIntervalChanged);
+	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYCorrelationCurveDock::autoRangeChanged);
+	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCorrelationCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCorrelationCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::typeChanged);
+	connect(uiGeneralTab.cbNorm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::normChanged);
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYCorrelationCurveDock::recalculateClicked);
 
-	connect( cbDataSourceCurve, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataSourceCurveChanged(QModelIndex)) );
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
-	connect( cbY2DataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(y2DataColumnChanged(QModelIndex)) );
+	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYCorrelationCurveDock::dataSourceCurveChanged);
+	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCorrelationCurveDock::xDataColumnChanged);
+	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCorrelationCurveDock::yDataColumnChanged);
+	connect(cbY2DataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYCorrelationCurveDock::y2DataColumnChanged);
 }
 
 void XYCorrelationCurveDock::initGeneralTab() {
@@ -179,14 +179,14 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_correlationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_correlationCurve, SIGNAL(dataSourceTypeChanged(XYAnalysisCurve::DataSourceType)), this, SLOT(curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType)));
-	connect(m_correlationCurve, SIGNAL(dataSourceCurveChanged(const XYCurve*)), this, SLOT(curveDataSourceCurveChanged(const XYCurve*)));
-	connect(m_correlationCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
-	connect(m_correlationCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
-	connect(m_correlationCurve, SIGNAL(y2DataColumnChanged(const AbstractColumn*)), this, SLOT(curveY2DataColumnChanged(const AbstractColumn*)));
-	connect(m_correlationCurve, SIGNAL(correlationDataChanged(XYCorrelationCurve::CorrelationData)), this, SLOT(curveCorrelationDataChanged(XYCorrelationCurve::CorrelationData)));
-	connect(m_correlationCurve, SIGNAL(sourceDataChanged()), this, SLOT(enableRecalculate()));
+	connect(m_correlationCurve, &XYCorrelationCurve::aspectDescriptionChanged, this, &XYCorrelationCurveDock::curveDescriptionChanged);
+	connect(m_correlationCurve, &XYCorrelationCurve::dataSourceTypeChanged, this, &XYCorrelationCurveDock::curveDataSourceTypeChanged);
+	connect(m_correlationCurve, &XYCorrelationCurve::dataSourceCurveChanged, this, &XYCorrelationCurveDock::curveDataSourceCurveChanged);
+	connect(m_correlationCurve, &XYCorrelationCurve::xDataColumnChanged, this, &XYCorrelationCurveDock::curveXDataColumnChanged);
+	connect(m_correlationCurve, &XYCorrelationCurve::yDataColumnChanged, this, &XYCorrelationCurveDock::curveYDataColumnChanged);
+	connect(m_correlationCurve, &XYCorrelationCurve::y2DataColumnChanged, this, &XYCorrelationCurveDock::curveY2DataColumnChanged);
+	connect(m_correlationCurve, &XYCorrelationCurve::correlationDataChanged, this, &XYCorrelationCurveDock::curveCorrelationDataChanged);
+	connect(m_correlationCurve, &XYCorrelationCurve::sourceDataChanged, this, &XYCorrelationCurveDock::enableRecalculate);
 	connect(m_correlationCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYCorrelationCurveDock::curveVisibilityChanged);
 }
 

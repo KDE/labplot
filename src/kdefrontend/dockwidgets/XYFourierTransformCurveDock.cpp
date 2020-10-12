@@ -91,19 +91,19 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	//Slots
 	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::nameChanged );
 	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::commentChanged );
-	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
-	connect( uiGeneralTab.cbAutoRange, SIGNAL(clicked(bool)), this, SLOT(autoRangeChanged()) );
-	connect( uiGeneralTab.sbMin, SIGNAL(valueChanged(double)), this, SLOT(xRangeMinChanged()) );
-	connect( uiGeneralTab.sbMax, SIGNAL(valueChanged(double)), this, SLOT(xRangeMaxChanged()) );
+	connect( uiGeneralTab.chkVisible,  &QCheckBox::clicked, this, &XYFourierTransformCurveDock::visibilityChanged);
+	connect( uiGeneralTab.cbAutoRange,  &QCheckBox::clicked, this, &XYFourierTransformCurveDock::autoRangeChanged);
+	connect( uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierTransformCurveDock::xRangeMinChanged);
+	connect( uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierTransformCurveDock::xRangeMaxChanged);
+	connect( uiGeneralTab.cbWindowType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::windowTypeChanged);
+	connect( uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::typeChanged);
+	connect( uiGeneralTab.cbTwoSided, &QCheckBox::stateChanged, this, &XYFourierTransformCurveDock::twoSidedChanged);
+	connect( uiGeneralTab.cbShifted, &QCheckBox::stateChanged, this, &XYFourierTransformCurveDock::shiftedChanged);
+	connect( uiGeneralTab.cbXScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::xScaleChanged);
+	connect( uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFourierTransformCurveDock::recalculateClicked);
 
-	connect( uiGeneralTab.cbWindowType, SIGNAL(currentIndexChanged(int)), this, SLOT(windowTypeChanged()) );
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged()) );
-	connect( uiGeneralTab.cbTwoSided, SIGNAL(stateChanged(int)), this, SLOT(twoSidedChanged()) );
-	connect( uiGeneralTab.cbShifted, SIGNAL(stateChanged(int)), this, SLOT(shiftedChanged()) );
-	connect( uiGeneralTab.cbXScale, SIGNAL(currentIndexChanged(int)), this, SLOT(xScaleChanged()) );
-
-//	connect( uiGeneralTab.pbOptions, SIGNAL(clicked()), this, SLOT(showOptions()) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierTransformCurveDock::xDataColumnChanged);
+	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierTransformCurveDock::yDataColumnChanged);
 }
 
 void XYFourierTransformCurveDock::initGeneralTab() {
@@ -158,11 +158,11 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_transformCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_transformCurve, SIGNAL(xDataColumnChanged(const AbstractColumn*)), this, SLOT(curveXDataColumnChanged(const AbstractColumn*)));
-	connect(m_transformCurve, SIGNAL(yDataColumnChanged(const AbstractColumn*)), this, SLOT(curveYDataColumnChanged(const AbstractColumn*)));
-	connect(m_transformCurve, SIGNAL(transformDataChanged(XYFourierTransformCurve::TransformData)), this, SLOT(curveTransformDataChanged(XYFourierTransformCurve::TransformData)));
-	connect(m_transformCurve, SIGNAL(sourceDataChangedSinceLastTransform()), this, SLOT(enableRecalculate()));
+	connect(m_transformCurve, &XYFourierTransformCurve::aspectDescriptionChanged, this, &XYFourierTransformCurveDock::curveDescriptionChanged);
+	connect(m_transformCurve, &XYFourierTransformCurve::xDataColumnChanged, this, &XYFourierTransformCurveDock::curveXDataColumnChanged);
+	connect(m_transformCurve, &XYFourierTransformCurve::yDataColumnChanged, this, &XYFourierTransformCurveDock::curveYDataColumnChanged);
+	connect(m_transformCurve, &XYFourierTransformCurve::transformDataChanged, this, &XYFourierTransformCurveDock::curveTransformDataChanged);
+	connect(m_transformCurve, &XYFourierTransformCurve::sourceDataChanged, this, &XYFourierTransformCurveDock::enableRecalculate);
 	connect(m_transformCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYFourierTransformCurveDock::curveVisibilityChanged);
 }
 
@@ -177,8 +177,6 @@ void XYFourierTransformCurveDock::setModel() {
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
 
-	connect( cbXDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xDataColumnChanged(QModelIndex)) );
-	connect( cbYDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yDataColumnChanged(QModelIndex)) );
 	XYCurveDock::setModel();
 }
 
