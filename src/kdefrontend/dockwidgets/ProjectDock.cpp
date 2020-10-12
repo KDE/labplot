@@ -85,11 +85,11 @@ void ProjectDock::setProject(Project *project) {
 void ProjectDock::retranslateUi() {
 }
 
-void ProjectDock::authorChanged(const QString& author) {
+void ProjectDock::authorChanged() {
 	if (m_initializing)
 		return;
 
-	m_project->setAuthor(author);
+	m_project->setAuthor(ui.leAuthor->text());
 }
 
 void ProjectDock::commentChanged() {

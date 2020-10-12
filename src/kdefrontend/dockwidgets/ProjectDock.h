@@ -50,7 +50,7 @@ private:
 private slots:
 	void retranslateUi();
 
-	void authorChanged(const QString&);
+	void authorChanged();
 
 	//SLOTs for changes triggered in Project
 	void projectDescriptionChanged(const AbstractAspect*);

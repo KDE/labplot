@@ -197,7 +197,7 @@ bool Project::aspectAddedSignalSuppressed() const {
 }
 
 bool Project::hasChanged() const {
-	return d->changed ;
+	return d->changed;
 }
 
 /*!
