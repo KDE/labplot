@@ -71,7 +71,6 @@ signals:
 private:
 	Ui::MQTTSubscriptionWidget ui;
 	MQTTParentWidget m_parent;
-	QWidget* m_parentWidget;
 	QCompleter* m_subscriptionCompleter{nullptr};
 	QCompleter* m_topicCompleter{nullptr};
 	QStringList m_topicList;

@@ -45,13 +45,8 @@ Copyright            : (C) 2019 by Kovacs Ferencz (kferike98@gmail.com)
 
    \ingroup kdefrontend
 */
-MQTTSubscriptionWidget::MQTTSubscriptionWidget( QWidget* parent): QWidget(parent),
-	m_parentWidget(parent),
+MQTTSubscriptionWidget::MQTTSubscriptionWidget(QWidget* parent) : QWidget(parent),
 	m_searchTimer(new QTimer(this)) {
-	if (dynamic_cast<class ImportFileWidget*>(parent) != nullptr)
-		m_parent = MQTTParentWidget::ImportFileWidget;
-	else
-		m_parent = MQTTParentWidget::LiveDataDock;
 
 	ui.setupUi(this);
 
@@ -85,14 +80,18 @@ MQTTSubscriptionWidget::MQTTSubscriptionWidget( QWidget* parent): QWidget(parent
 	            "</ul>");
 	ui.cbQos->setToolTip(info);
 
-	if (m_parent == MQTTParentWidget::ImportFileWidget) {
-		connect(dynamic_cast<class ImportFileWidget*>(m_parentWidget), &ImportFileWidget::newTopic, this, &MQTTSubscriptionWidget::setTopicCompleter);
-		connect(dynamic_cast<class ImportFileWidget*>(m_parentWidget), &ImportFileWidget::updateSubscriptionTree, this, &MQTTSubscriptionWidget::updateSubscriptionTree);
-		connect(dynamic_cast<class ImportFileWidget*>(m_parentWidget), &ImportFileWidget::MQTTClearTopics, this, &MQTTSubscriptionWidget::clearWidgets);
+	auto* importWidget = dynamic_cast<ImportFileWidget*>(parent);
+	if (importWidget) {
+		m_parent = MQTTParentWidget::ImportFileWidget;
+		connect(importWidget, &ImportFileWidget::newTopic, this, &MQTTSubscriptionWidget::setTopicCompleter);
+		connect(importWidget, &ImportFileWidget::updateSubscriptionTree, this, &MQTTSubscriptionWidget::updateSubscriptionTree);
+		connect(importWidget, &ImportFileWidget::MQTTClearTopics, this, &MQTTSubscriptionWidget::clearWidgets);
 	} else {
-		connect(dynamic_cast<class LiveDataDock*>(m_parentWidget), &LiveDataDock::MQTTClearTopics, this, &MQTTSubscriptionWidget::clearWidgets);
-		connect(dynamic_cast<class LiveDataDock*>(m_parentWidget), &LiveDataDock::newTopic, this, &MQTTSubscriptionWidget::setTopicCompleter);
-		connect(dynamic_cast<class LiveDataDock*>(m_parentWidget), &LiveDataDock::updateSubscriptionTree, this, &MQTTSubscriptionWidget::updateSubscriptionTree);
+		auto* liveDock = static_cast<LiveDataDock*>(parent);
+		m_parent = MQTTParentWidget::ImportFileWidget;
+		connect(liveDock, &LiveDataDock::MQTTClearTopics, this, &MQTTSubscriptionWidget::clearWidgets);
+		connect(liveDock, &LiveDataDock::newTopic, this, &MQTTSubscriptionWidget::setTopicCompleter);
+		connect(liveDock, &LiveDataDock::updateSubscriptionTree, this, &MQTTSubscriptionWidget::updateSubscriptionTree);
 	}
 
 	connect(ui.bSubscribe,  &QPushButton::clicked, this, &MQTTSubscriptionWidget::mqttSubscribe);
