@@ -153,6 +153,8 @@ private:
 	MQTTClient::MQTTWill m_willSettings;
     MQTTSubscriptionWidget* m_subscriptionWidget{nullptr};
 
+	void disconnectMqttConnection();
+
 public:
 	void saveMQTTSettings(MQTTClient*) const;
 	bool isMqttValid();

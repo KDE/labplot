@@ -573,56 +573,6 @@ void ImportFileWidget::saveSettings(LiveDataSource* source) const {
 		source->setSampleSize(ui.sbSampleSize->value());
 }
 
-#ifdef HAVE_MQTT
-/*!
-	saves the settings to the MQTTClient \c client.
-*/
-void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
-	DEBUG("ImportFileWidget::saveMQTTSettings");
-	auto updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
-	auto readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
-
-	currentFileFilter();
-	client->setFilter(static_cast<AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
-
-	client->setReadingType(readingType);
-
-	if (updateType == MQTTClient::UpdateType::TimeInterval)
-		client->setUpdateInterval(ui.sbUpdateInterval->value());
-
-	client->setKeepNValues(ui.sbKeepNValues->value());
-	client->setUpdateType(updateType);
-
-	if (readingType != MQTTClient::ReadingType::TillEnd)
-		client->setSampleSize(ui.sbSampleSize->value());
-
-	client->setMQTTClientHostPort(m_client->hostname(), m_client->port());
-
-	KConfig config(m_configPath, KConfig::SimpleConfig);
-	KConfigGroup group = config.group(ui.cbConnection->currentText());
-
-	bool useID = group.readEntry("UseID").toUInt();
-	bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
-
-	client->setMQTTUseAuthentication(useAuthentication);
-	if (useAuthentication)
-		client->setMQTTClientAuthentication(m_client->username(), m_client->password());
-
-	client->setMQTTUseID(useID);
-	if (useID)
-		client->setMQTTClientId(m_client->clientId());
-
-	for (int i = 0; i < m_mqttSubscriptions.count(); ++i)
-		client->addInitialMQTTSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
-
-	const bool retain = group.readEntry("Retain").toUInt();
-	client->setMQTTRetain(retain);
-
-	if (m_willSettings.enabled)
-		client->setWillSettings(m_willSettings);
-}
-#endif
-
 /*!
 	returns the currently used file type.
 */
@@ -1552,6 +1502,11 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 void ImportFileWidget::sourceTypeChanged(int idx) {
 	const auto sourceType = static_cast<LiveDataSource::SourceType>(idx);
 
+	//when switching from mqtt to another source type, make sure we disconnect from
+	//the current broker, if connected, in order not to get any notification anymore
+	if (sourceType != LiveDataSource::SourceType::MQTT)
+		disconnectMqttConnection();
+
 	// enable/disable "on new data"-option
 	const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
 	QStandardItem* item = model->item(static_cast<int>(LiveDataSource::UpdateType::NewData));
@@ -1799,14 +1754,8 @@ void ImportFileWidget::mqttConnectionChanged() {
 	WAIT_CURSOR;
 	emit error(QString());
 
-	//disconnected from the broker that was selected before, if this is the case
-	if (m_client && m_client->state() == QMqttClient::ClientState::Connected) {
-		emit MQTTClearTopics();
-		disconnect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
-		QDEBUG("Disconnecting from " << m_client->hostname());
-		m_client->disconnectFromHost();
-		delete m_client;
-	}
+	//disconnected from the broker that was selected before
+	disconnectMqttConnection();
 
 	//determine the connection settings for the new broker and initialize the mqtt client
 	KConfig config(m_configPath, KConfig::SimpleConfig);
@@ -1840,6 +1789,17 @@ void ImportFileWidget::mqttConnectionChanged() {
 	}
 	m_connectTimeoutTimer->start();
 	m_client->connectToHost();
+}
+
+void ImportFileWidget::disconnectMqttConnection() {
+	if (m_client && m_client->state() == QMqttClient::ClientState::Connected) {
+		emit MQTTClearTopics();
+		disconnect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
+		QDEBUG("Disconnecting from " << m_client->hostname());
+		m_client->disconnectFromHost();
+		delete m_client;
+		m_client = nullptr;
+	}
 }
 
 /*!
@@ -2200,4 +2160,52 @@ void ImportFileWidget::enableWill(bool enable) {
 		ui.bLWT->setEnabled(enable);
 }
 
+
+/*!
+	saves the settings to the MQTTClient \c client.
+*/
+void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
+	DEBUG("ImportFileWidget::saveMQTTSettings");
+	auto updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
+	auto readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
+
+	currentFileFilter();
+	client->setFilter(static_cast<AsciiFilter*>(m_currentFilter.release())); // pass ownership of the filter to MQTTClient
+
+	client->setReadingType(readingType);
+
+	if (updateType == MQTTClient::UpdateType::TimeInterval)
+		client->setUpdateInterval(ui.sbUpdateInterval->value());
+
+	client->setKeepNValues(ui.sbKeepNValues->value());
+	client->setUpdateType(updateType);
+
+	if (readingType != MQTTClient::ReadingType::TillEnd)
+		client->setSampleSize(ui.sbSampleSize->value());
+
+	client->setMQTTClientHostPort(m_client->hostname(), m_client->port());
+
+	KConfig config(m_configPath, KConfig::SimpleConfig);
+	KConfigGroup group = config.group(ui.cbConnection->currentText());
+
+	bool useID = group.readEntry("UseID").toUInt();
+	bool useAuthentication = group.readEntry("UseAuthentication").toUInt();
+
+	client->setMQTTUseAuthentication(useAuthentication);
+	if (useAuthentication)
+		client->setMQTTClientAuthentication(m_client->username(), m_client->password());
+
+	client->setMQTTUseID(useID);
+	if (useID)
+		client->setMQTTClientId(m_client->clientId());
+
+	for (int i = 0; i < m_mqttSubscriptions.count(); ++i)
+		client->addInitialMQTTSubscriptions(m_mqttSubscriptions[i]->topic(), m_mqttSubscriptions[i]->qos());
+
+	const bool retain = group.readEntry("Retain").toUInt();
+	client->setMQTTRetain(retain);
+
+	if (m_willSettings.enabled)
+		client->setWillSettings(m_willSettings);
+}
 #endif
