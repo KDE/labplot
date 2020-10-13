@@ -143,7 +143,7 @@ signals:
 #ifdef HAVE_MQTT
 private:
 	QMqttClient* m_client{nullptr};
-    QVector<QMqttSubscription*> m_mqttSubscriptions;
+	QVector<QMqttSubscription*> m_mqttSubscriptions;
 	QTimer* m_connectTimeoutTimer{nullptr};
 	QMap<QMqttTopicName, QMqttMessage> m_lastMessage;
 	QVector<QString> m_subscribedTopicNames;
@@ -151,7 +151,7 @@ private:
 	QString m_configPath;
 	bool m_initialisingMQTT{false};
 	MQTTClient::MQTTWill m_willSettings;
-    MQTTSubscriptionWidget* m_subscriptionWidget{nullptr};
+	MQTTSubscriptionWidget* m_subscriptionWidget{nullptr};
 
 	void disconnectMqttConnection();
 
@@ -168,18 +168,18 @@ signals:
 
 private slots:
 	void mqttConnectionChanged();
-    void onMqttConnect();
-    void subscribeTopic(const QString&, uint);
-    void unsubscribeTopic(const QString&, QVector<QTreeWidgetItem*>);
-    void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
+	void onMqttConnect();
+	void subscribeTopic(const QString&, uint);
+	void unsubscribeTopic(const QString&, QVector<QTreeWidgetItem*>);
+	void mqttMessageReceived(const QByteArray&, const QMqttTopicName&);
 	void mqttSubscriptionMessageReceived(const QMqttMessage& );
 	void onMqttDisconnect();
-    void mqttErrorChanged(QMqttClient::ClientError);
+	void mqttErrorChanged(QMqttClient::ClientError);
 	void mqttConnectTimeout();
 	void showMQTTConnectionManager();
 	void readMQTTConnections();
 	void showWillSettings();
-    void enableWill(bool);
+	void enableWill(bool);
 #endif
 };
 

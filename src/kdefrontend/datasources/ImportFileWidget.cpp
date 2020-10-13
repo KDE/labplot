@@ -1502,10 +1502,12 @@ void ImportFileWidget::readingTypeChanged(int idx) {
 void ImportFileWidget::sourceTypeChanged(int idx) {
 	const auto sourceType = static_cast<LiveDataSource::SourceType>(idx);
 
+#ifdef HAVE_MQTT
 	//when switching from mqtt to another source type, make sure we disconnect from
 	//the current broker, if connected, in order not to get any notification anymore
 	if (sourceType != LiveDataSource::SourceType::MQTT)
 		disconnectMqttConnection();
+#endif
 
 	// enable/disable "on new data"-option
 	const auto* model = qobject_cast<const QStandardItemModel*>(ui.cbUpdateType->model());
