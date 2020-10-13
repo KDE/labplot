@@ -4,7 +4,7 @@
     Description          : widget for project properties
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2013 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -40,7 +40,7 @@
   \ingroup kdefrontend
 */
 
-ProjectDock::ProjectDock(QWidget *parent): BaseDock(parent) {
+ProjectDock::ProjectDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	// leComment = ui.tbComment; // not a qlineedit
@@ -59,10 +59,11 @@ ProjectDock::ProjectDock(QWidget *parent): BaseDock(parent) {
 	this->retranslateUi();
 }
 
-void ProjectDock::setProject(Project *project) {
-	m_initializing = true;
+void ProjectDock::setProject(Project* project) {
 	m_project = project;
 	m_aspect = project;
+
+	m_initializing = true;
 	ui.leFileName->setText(project->fileName());
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -75,6 +76,7 @@ void ProjectDock::setProject(Project *project) {
 	loadConfig(config);
 
 	connect(m_project, &Project::aspectDescriptionChanged, this, &ProjectDock::projectDescriptionChanged);
+	connect(m_project, &Project::authorChanged, this, &ProjectDock::projectAuthorChanged);
 
 	m_initializing = false;
 }
@@ -108,13 +110,17 @@ void ProjectDock::projectDescriptionChanged(const AbstractAspect* aspect) {
 
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
-			ui.leName->setText(aspect->name());
+		ui.leName->setText(aspect->name());
 	else if (aspect->comment() != ui.tbComment->toPlainText())
-			ui.tbComment->setText(aspect->comment());
+		ui.tbComment->setText(aspect->comment());
 
 	m_initializing = false;
 }
 
+void ProjectDock::projectAuthorChanged(const QString& author) {
+	Lock lock(m_initializing);
+	ui.leAuthor->setText(author);
+}
 //*************************************************************
 //************************* Settings **************************
 //*************************************************************

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
 
@@ -83,11 +83,14 @@ public:
 	static bool isLabPlotProject(const QString& fileName);
 	static QString supportedExtensions();
 
+	class Private;
+
 public slots:
 	void descriptionChanged(const AbstractAspect*);
 	void aspectAddedSlot(const AbstractAspect*);
 
 signals:
+	void authorChanged(const QString&);
 	void requestSaveState(QXmlStreamWriter*) const;
 	void requestLoadState(XmlStreamReader*);
 	void requestProjectContextMenu(QMenu*);
@@ -99,7 +102,6 @@ signals:
 	void closeRequested();
 
 private:
-	class Private;
 	Private* d;
 	bool readProjectAttributes(XmlStreamReader*);
 	void save(QXmlStreamWriter*) const override;

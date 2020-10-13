@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2019 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
  ***************************************************************************/
@@ -82,10 +82,14 @@
 
 class Project::Private {
 public:
-	Private() :
+	Private(Project* owner) :
 		version(LVERSION),
 		author(QString(qgetenv("USER"))),
-		modificationTime(QDateTime::currentDateTime()) {
+		modificationTime(QDateTime::currentDateTime()),
+		q(owner) {
+	}
+	QString name() const  {
+		return q->name();
 	}
 
 	QUndoStack undo_stack;
@@ -96,9 +100,10 @@ public:
 	QDateTime modificationTime;
 	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
+	Project* const q;
 };
 
-Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private()) {
+Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private(this)) {
 	//load default values for name, comment and author from config
 	KConfig config;
 	KConfigGroup group = config.group("Project");
@@ -175,8 +180,14 @@ Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
 
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
 BASIC_D_ACCESSOR_IMPL(Project, QString, version, Version, version)
-CLASS_D_ACCESSOR_IMPL(Project, QString, author, Author, author)
+CLASS_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
+
+STD_SETTER_CMD_IMPL_S(Project, SetAuthor, QString, author)
+void Project::setAuthor(const QString& author) {
+	if (author != d->author)
+		exec(new ProjectSetAuthorCmd(d, author, ki18n("%1: set author")));
+}
 
 void Project::setChanged(const bool value) {
 	if (isLoading())
