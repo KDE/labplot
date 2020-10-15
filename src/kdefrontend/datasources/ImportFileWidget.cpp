@@ -458,7 +458,6 @@ void ImportFileWidget::showOptions(bool b) {
 }
 
 QString ImportFileWidget::fileName() const {
-	DEBUG("ImportFileWidget::fileName() : " << STDSTRING(m_cbFileName->currentText()))
 	return m_cbFileName->currentText();
 }
 
@@ -1319,7 +1318,6 @@ void ImportFileWidget::refreshPreview() {
 			DEBUG("	extension name = " << STDSTRING(extensionName));
 			fileName = extensionName;
 		}
-		DEBUG("	file name = " << STDSTRING(fileName));
 
 		bool readFitsTableToMatrix;
 		importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);

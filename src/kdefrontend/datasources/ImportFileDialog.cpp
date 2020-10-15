@@ -30,7 +30,6 @@
 #include "ImportFileDialog.h"
 #include "ImportFileWidget.h"
 #include "backend/core/AspectTreeModel.h"
-#include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/datasources/filters/filters.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -139,8 +138,8 @@ ImportFileDialog::~ImportFileDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-int ImportFileDialog::sourceType() const {
-	return static_cast<int>(m_importFileWidget->currentSourceType());
+LiveDataSource::SourceType ImportFileDialog::sourceType() const {
+	return m_importFileWidget->currentSourceType();
 }
 
 /*!

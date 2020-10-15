@@ -2501,27 +2501,25 @@ void MainWin::editFitsFileDialog() {
 void MainWin::newLiveDataSourceActionTriggered() {
 	auto* dlg = new ImportFileDialog(this, true);
 	if (dlg->exec() == QDialog::Accepted) {
-		if (static_cast<LiveDataSource::SourceType>(dlg->sourceType()) == LiveDataSource::SourceType::MQTT) {
+		if (dlg->sourceType() == LiveDataSource::SourceType::MQTT) {
 #ifdef HAVE_MQTT
-			MQTTClient* mqttClient = new MQTTClient(i18n("MQTT Client%1", 1));
+			auto* mqttClient = new MQTTClient(i18n("MQTT Client%1", 1));
 			dlg->importToMQTT(mqttClient);
 
-			mqttClient->setName(mqttClient->clientHostName());
-
-			QVector<const MQTTClient*> existingClients = m_project->children<const MQTTClient>(AbstractAspect::ChildIndexFlag::Recursive);
-
 			//doesn't make sense to have more MQTTClients connected to the same broker
+			auto clients = m_project->children<const MQTTClient>(AbstractAspect::ChildIndexFlag::Recursive);
 			bool found = false;
-			for (const auto* client : existingClients) {
+			for (const auto* client : clients) {
 				if (client->clientHostName() == mqttClient->clientHostName() && client->clientPort() == mqttClient->clientPort()) {
 					found = true;
 					break;
 				}
 			}
 
-			if (!found)
+			if (!found) {
+				mqttClient->setName(mqttClient->clientHostName());
 				addAspectToProject(mqttClient);
-			else {
+			} else {
 				delete mqttClient;
 				QMessageBox::warning(this, "Warning", "There already is a MQTTClient with this host!");
 			}

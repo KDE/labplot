@@ -31,10 +31,10 @@
 #define IMPORTFILEDIALOG_H
 
 #include "ImportDialog.h"
+#include "backend/datasources/LiveDataSource.h"
 
 class MainWin;
 class ImportFileWidget;
-class LiveDataSource;
 
 #ifdef HAVE_MQTT
 class MQTTClient;
@@ -51,7 +51,7 @@ public:
 	~ImportFileDialog() override;
 
 	QString selectedObject() const override;
-	int sourceType() const;
+	LiveDataSource::SourceType sourceType() const;
 	void importToLiveDataSource(LiveDataSource*, QStatusBar*) const;
 	void importTo(QStatusBar*) const override;
 #ifdef HAVE_MQTT

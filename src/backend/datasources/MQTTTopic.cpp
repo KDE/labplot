@@ -58,6 +58,7 @@ MQTTTopic::MQTTTopic(const QString& name, MQTTSubscription* subscription, bool l
 		m_filter->setSeparatingCharacter(mainFilter->separatingCharacter());
 		m_filter->setDateTimeFormat(mainFilter->dateTimeFormat());
 		m_filter->setCreateIndexEnabled(mainFilter->createIndexEnabled());
+		m_filter->setCreateTimestampEnabled(mainFilter->createTimestampEnabled());
 		m_filter->setSimplifyWhitespacesEnabled(mainFilter->simplifyWhitespacesEnabled());
 		m_filter->setNaNValueToZero(mainFilter->NaNValueToZeroEnabled());
 		m_filter->setRemoveQuotesEnabled(mainFilter->removeQuotesEnabled());
