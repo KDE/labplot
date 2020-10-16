@@ -160,7 +160,12 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	filter->setNumberFormat(lang);
 	filter->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
 	filter->setCreateIndexEnabled( ui.chbCreateIndex->isChecked() );
-	filter->setCreateTimestampEnabled( ui.chbCreateTimestamp->isChecked() );
+
+	//save the timestamp option only if it's visible, i.e. live source is used.
+	//use the default setting in the filter (false) otherwise for non-live source
+	if (ui.chbCreateTimestamp->isVisible())
+		filter->setCreateTimestampEnabled( ui.chbCreateTimestamp->isChecked() );
+
 	filter->setSimplifyWhitespacesEnabled( ui.chbSimplifyWhitespaces->isChecked() );
 	filter->setNaNValueToZero( ui.chbConvertNaNToZero->isChecked() );
 	filter->setRemoveQuotesEnabled( ui.chbRemoveQuotes->isChecked() );
