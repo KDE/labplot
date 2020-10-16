@@ -1731,7 +1731,8 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	//TODO: adjust this logic later once we allow to import multiple columns from sockets,
 	//it should be possible to provide the names of the columns
 	bool visible = (currentSourceType() == LiveDataSource::SourceType::FileOrPipe);
-	m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
+	if (m_asciiOptionsWidget)
+		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
 
 	emit sourceTypeChanged();
 	refreshPreview();
