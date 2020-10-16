@@ -208,9 +208,6 @@ void MatrixFunctionDialog::generate() {
 	//TODO: data types
 	auto* new_data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 
-	QByteArray funcba = ui.teEquation->toPlainText().toLocal8Bit();
-	char* func = funcba.data();
-
 	// check if rows or cols == 1
 	double diff = m_matrix->xEnd() - m_matrix->xStart();
 	double xStep = 0.0;
@@ -241,7 +238,8 @@ void MatrixFunctionDialog::generate() {
 		if (end > cols) end = cols;
 		qDebug() << "start/end: " << start << end;
 		const double xStart = m_matrix->xStart() + xStep*start;
-		GenerateValueTask* task = new GenerateValueTask(start, end, new_data, xStart, yStart, xStep, yStep, func);
+		GenerateValueTask* task = new GenerateValueTask(start, end, new_data, xStart, yStart, xStep, yStep,
+									qPrintable(ui.teEquation->toPlainText()));
 		task->setAutoDelete(false);
 		pool->start(task);
 	}
@@ -254,7 +252,8 @@ void MatrixFunctionDialog::generate() {
 		vars[0].value = x;
 		for (int row = 0; row < m_matrix->rowCount(); ++row) {
 			vars[1].value = y;
-			(new_data->operator[](col))[row] = parse_with_vars(func, vars, 2, qPrintable(numberLocale.name()));
+			(new_data->operator[](col))[row] = parse_with_vars(qPrintable(ui.teEquation->toPlainText()),
+										vars, 2, qPrintable(numberLocale.name()));
 			y += yStep;
 		}
 		y = m_matrix->yStart();

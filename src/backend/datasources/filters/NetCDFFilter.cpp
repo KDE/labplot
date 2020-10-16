@@ -230,13 +230,12 @@ int NetCDFFilter::endColumn() const {
 QString NetCDFFilter::fileInfoString(const QString& fileName) {
 	DEBUG("NetCDFFilter::fileInfoString()");
 
-	QByteArray bafileName = fileName.toLatin1();
-	DEBUG("fileName = " << bafileName.data());
+	DEBUG("fileName = " << qPrintable(fileName))
 
 	QString info;
 #ifdef HAVE_NETCDF
 	int ncid, status;
-	status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
+	status = nc_open(qPrintable(fileName), NC_NOWRITE, &ncid);
 	NetCDFFilterPrivate::handleError(status, "nc_open");
 	if (status != NC_NOERR) {
 		DEBUG("	File error. Giving up");
@@ -562,11 +561,10 @@ void NetCDFFilterPrivate::scanVars(int ncid, int nvars, QTreeWidgetItem* parentI
 void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
 	DEBUG("NetCDFFilterPrivate::parse()");
 #ifdef HAVE_NETCDF
-	QByteArray bafileName = fileName.toLatin1();
-	DEBUG("fileName = " << bafileName.data());
+	DEBUG("fileName = " << qPrintable(fileName));
 
 	int ncid;
-	m_status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
+	m_status = nc_open(qPrintable(fileName), NC_NOWRITE, &ncid);
 	handleError(m_status, "nc_open");
 	if (m_status != NC_NOERR) {
 		DEBUG("	Giving up");
@@ -604,11 +602,10 @@ void NetCDFFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootI
 #endif
 }
 
-QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QString & name, const QString & varName) {
+QString NetCDFFilterPrivate::readAttribute(const QString& fileName, const QString& name, const QString& varName) {
 #ifdef HAVE_NETCDF
 	int ncid;
-	QByteArray bafileName = fileName.toLatin1();
-	m_status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
+	m_status = nc_open(qPrintable(fileName), NC_NOWRITE, &ncid);
 	handleError(m_status, "nc_open");
 	if (m_status != NC_NOERR) {
 		DEBUG("	Giving up");
@@ -620,15 +617,13 @@ QString NetCDFFilterPrivate::readAttribute(const QString & fileName, const QStri
 	if (varName == "global")
 		varid = NC_GLOBAL;
 	else {
-		QByteArray bavarName = varName.toLatin1();
-		m_status = nc_inq_varid(ncid, bavarName.data(), &varid);
+		m_status = nc_inq_varid(ncid, qPrintable(varName), &varid);
 		handleError(m_status, "nc_inq_varid");
 	}
 
 	// attribute 'name'
 	int attid;
-	QByteArray baName = name.toLatin1();
-	m_status = nc_inq_attid(ncid, varid, baName.data(), &attid);
+	m_status = nc_inq_attid(ncid, varid, qPrintable(name), &attid);
 	handleError(m_status, "nc_inq_attid");
 
 	QString nameString = scanAttrs(ncid, varid, attid);
@@ -657,8 +652,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 
 #ifdef HAVE_NETCDF
 	int ncid;
-	QByteArray bafileName = fileName.toLatin1();
-	m_status = nc_open(bafileName.data(), NC_NOWRITE, &ncid);
+	m_status = nc_open(qPrintable(fileName), NC_NOWRITE, &ncid);
 	handleError(m_status, "nc_open");
 	if (m_status != NC_NOERR) {
 		DEBUG("	Giving up");
@@ -666,8 +660,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 	}
 
 	int varid;
-	QByteArray baVarName = currentVarName.toLatin1();
-	m_status = nc_inq_varid(ncid, baVarName.data(), &varid);
+	m_status = nc_inq_varid(ncid, qPrintable(currentVarName), &varid);
 	handleError(m_status, "nc_inq_varid");
 
 	int ndims;

@@ -140,25 +140,24 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	DEBUG("HDF5Filter::fileInfoString()");
 	QString info;
 #ifdef HAVE_HDF5
-	QByteArray bafileName = fileName.toLatin1();
-	DEBUG("fileName = " << bafileName.data());
+	DEBUG("fileName = " << qPrintable(fileName));
 
 	// check file type first
-	htri_t isHdf5 = H5Fis_hdf5(bafileName.data());
+	htri_t isHdf5 = H5Fis_hdf5(qPrintable(fileName));
 	if (isHdf5 == 0) {
-		DEBUG(bafileName.data() << " is not a HDF5 file! isHdf5 = " << isHdf5 << " Giving up.");
+		DEBUG(qPrintable(fileName) << " is not a HDF5 file! isHdf5 = " << isHdf5 << " Giving up.");
 		return i18n("Not a HDF5 file");
 	}
 	if (isHdf5 < 0) {
-		DEBUG("H5Fis_hdf5() failed on " << bafileName.data() << "! Giving up.");
+		DEBUG("H5Fis_hdf5() failed on " << qPrintable(fileName) << "! Giving up.");
 		return i18n("Failed checking file");
 	}
 
 	// open file
-	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
+	hid_t file = H5Fopen(qPrintable(fileName), H5F_ACC_RDONLY, H5P_DEFAULT);
 	HDF5FilterPrivate::handleError((int)file, "H5Fopen", fileName);
 	if (file < 0) {
-		DEBUG("Opening file " << bafileName.data() << " failed! Giving up.");
+		DEBUG("Opening file " << qPrintable(fileName) << " failed! Giving up.");
 		return i18n("Failed opening HDF5 file");
 	}
 
@@ -1408,25 +1407,24 @@ void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char *groupName, QTreeWidgetIte
 void HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem) {
 	DEBUG("HDF5FilterPrivate::parse()");
 #ifdef HAVE_HDF5
-	QByteArray bafileName = fileName.toLatin1();
-	DEBUG("fileName = " << bafileName.data());
+	DEBUG("fileName = " << qPrintable(fileName));
 
 	// check file type first
-	htri_t isHdf5 = H5Fis_hdf5(bafileName.data());
+	htri_t isHdf5 = H5Fis_hdf5(qPrintable(fileName));
 	if (isHdf5 == 0) {
-		DEBUG(bafileName.data() << " is not a HDF5 file! Giving up.");
+		DEBUG(qPrintable(fileName) << " is not a HDF5 file! Giving up.");
 		return;
 	}
 	if (isHdf5 < 0) {
-		DEBUG("H5Fis_hdf5() failed on " << bafileName.data() << "! Giving up.");
+		DEBUG("H5Fis_hdf5() failed on " << qPrintable(fileName) << "! Giving up.");
 		return;
 	}
 
 	// open file
-	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
+	hid_t file = H5Fopen(qPrintable(fileName), H5F_ACC_RDONLY, H5P_DEFAULT);
 	handleError((int)file, "H5Fopen", fileName);
 	if (file < 0) {
-		DEBUG("Opening file " << bafileName.data() << " failed! Giving up.");
+		DEBUG("Opening file " << qPrintable(fileName) << " failed! Giving up.");
 		return;
 	}
 	char rootName[] = "/";
@@ -1460,11 +1458,9 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 	DEBUG(" current data set = " << STDSTRING(currentDataSetName));
 
 #ifdef HAVE_HDF5
-	QByteArray bafileName = fileName.toLatin1();
-	hid_t file = H5Fopen(bafileName.data(), H5F_ACC_RDONLY, H5P_DEFAULT);
+	hid_t file = H5Fopen(qPrintable(fileName), H5F_ACC_RDONLY, H5P_DEFAULT);
 	handleError((int)file, "H5Fopen", fileName);
-	QByteArray badataSet = currentDataSetName.toLatin1();
-	hid_t dataset = H5Dopen2(file, badataSet.data(), H5P_DEFAULT);
+	hid_t dataset = H5Dopen2(file, qPrintable(currentDataSetName), H5P_DEFAULT);
 	handleError((int)file, "H5Dopen2", currentDataSetName);
 
 	// Get datatype and dataspace
