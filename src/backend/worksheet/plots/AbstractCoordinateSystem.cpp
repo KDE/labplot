@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2012-2014 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -33,6 +34,7 @@
 extern "C" {
 #include "backend/nsl/nsl_math.h"
 }
+#include <cmath>
 
 /**
  * \class AbstractCoordinateSystem
