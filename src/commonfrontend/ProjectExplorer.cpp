@@ -326,7 +326,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 		delete columnsMenu;
 
 		return true;
-	} else if (obj == m_treeView->viewport()) {
+	} else if (obj == m_treeView->viewport() && dynamic_cast<QMouseEvent*>(event)) {
 		auto* e = static_cast<QMouseEvent*>(event);
 		if (event->type() == QEvent::MouseButtonPress) {
 			if (e->button() == Qt::LeftButton) {
