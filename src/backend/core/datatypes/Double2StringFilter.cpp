@@ -74,10 +74,10 @@ bool Double2StringFilter::load(XmlStreamReader* reader, bool preview) {
 	if (AbstractSimpleFilter::load(reader, preview)) {
 		bool ok;
 		int digits = digits_str.toInt(&ok);
-		if (ok)
+		if (ok && m_digits != digits)
 			setNumDigits(digits);
 
-		if (format_str.size() >= 1)
+		if (format_str.size() >= 1 && m_format != format_str)
 			setNumericFormat(format_str.at(0).toLatin1());
 	} else
 		return false;
@@ -130,4 +130,3 @@ void Double2StringFilterSetDigitsCmd::redo() {
 void Double2StringFilterSetDigitsCmd::undo() {
 	redo();
 }
-
