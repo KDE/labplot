@@ -69,7 +69,8 @@ void XYConvolutionCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYConvolutionCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-convolution-curve");
+// 	return QIcon::fromTheme("labplot-xy-convolution-curve");//not available yet
+	return QIcon::fromTheme("labplot-xy-curve");
 }
 
 //##############################################################################

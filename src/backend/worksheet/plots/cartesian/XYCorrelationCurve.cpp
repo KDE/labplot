@@ -69,7 +69,8 @@ void XYCorrelationCurve::recalculate() {
 	Returns an icon to be used in the project explorer.
 */
 QIcon XYCorrelationCurve::icon() const {
-	return QIcon::fromTheme("labplot-xy-correlation-curve");
+// 	return QIcon::fromTheme("labplot-xy-correlation-curve"); //not available yet
+	return QIcon::fromTheme("labplot-xy-curve");
 }
 
 //##############################################################################
