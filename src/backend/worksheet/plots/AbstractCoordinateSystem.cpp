@@ -31,7 +31,7 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 
 extern "C" {
-#include <gsl/gsl_math.h>
+#include "backend/nsl/nsl_math.h"
 }
 
 /**
@@ -91,21 +91,14 @@ AbstractCoordinateSystem::~AbstractCoordinateSystem() = default;
  * \return false if line is completely outside, otherwise true
  */
 
-// TODO: put into NSL
-double round(double value, int precision) {
-	//TODO: there must be faster ways to get this (lookup table?)
-	double order = gsl_pow_int(10., precision);
-	return int(value*order + (value < 0 ? -0.5 : 0.5))/order;
-}
-
 bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult) {
 	//we usually clip on large rectangles, so we don't need high precision here -> round to one float digit
 	//this prevents some subtle float rounding artifacts that lead to disappearance
 	//of lines along the boundaries of the rect. (e.g. axis lines).
-	qreal x1 = round(line->x1(), 1);
-	qreal x2 = round(line->x2(), 1);
-	qreal y1 = round(line->y1(), 1);
-	qreal y2 = round(line->y2(), 1);
+	qreal x1 = nsl_math_round_places(line->x1(), 1);
+	qreal x2 = nsl_math_round_places(line->x2(), 1);
+	qreal y1 = nsl_math_round_places(line->y1(), 1);
+	qreal y2 = nsl_math_round_places(line->y2(), 1);
 
 	qreal left;
 	qreal right;
@@ -208,17 +201,17 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 //taken from Knuth's "The art of computer programming"
 //TODO: put into NSL?
 bool AbstractCoordinateSystem::approximatelyEqual(double a, double b, double epsilon) {
-	return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+	return std::abs(a - b) <= ( (std::abs(a) < std::abs(b) ? std::abs(b) : std::abs(a)) * epsilon);
 }
 
 bool AbstractCoordinateSystem::essentiallyEqual(double a, double b, double epsilon) {
-	return fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+	return std::abs(a - b) <= ( (std::abs(a) > std::abs(b) ? std::abs(b) : std::abs(a)) * epsilon);
 }
 
 bool AbstractCoordinateSystem::definitelyGreaterThan(double a, double b, double epsilon) {
-	return (a - b) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+	return (a - b) > ( (std::abs(a) < std::abs(b) ? std::abs(b) : std::abs(a)) * epsilon);
 }
 
 bool AbstractCoordinateSystem::definitelyLessThan(double a, double b, double epsilon) {
-	return (b - a) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+	return (b - a) > ( (std::abs(a) < std::abs(b) ? std::abs(b) : std::abs(a)) * epsilon);
 }
