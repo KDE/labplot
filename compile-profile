@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BUILDDIR=build_profile
+BUILDDIR=build-profile
 
 if [ ! -d $BUILDDIR ]; then
 	mkdir $BUILDDIR

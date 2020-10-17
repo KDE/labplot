@@ -11,4 +11,5 @@ cd $BUILDDIR
 export CC=pgcc
 export CXX=pgc++
 
-cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr && make -k -j 4
+# Debug
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr && make -k -j 4

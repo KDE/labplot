@@ -9,8 +9,11 @@ fi
 cd $BUILDDIR
 
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
+# no Cantor
 #cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_CANTOR=OFF -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
+# no tests
 #cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
+# Debug
 # cmake -DCMAKE_BUILD_TYPE=DebugFull -DCMAKE_INSTALL_PREFIX=/Users/user/kde ..
 
 make -j 4
