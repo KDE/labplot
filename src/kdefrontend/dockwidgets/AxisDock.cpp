@@ -805,6 +805,9 @@ void AxisDock::scalingFactorChanged() {
 
 // "Line"-tab
 void AxisDock::lineStyleChanged(int index) {
+	if (index == -1)
+		return;
+
 	auto penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
@@ -1046,6 +1049,9 @@ void AxisDock::majorTicksSpacingChanged() {
 }
 
 void AxisDock::majorTicksLineStyleChanged(int index) {
+	if (index == -1)
+		return;
+
 	auto penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
@@ -1291,6 +1297,9 @@ void AxisDock::minorTicksColumnChanged(const QModelIndex& index) {
 }
 
 void AxisDock::minorTicksLineStyleChanged(int index) {
+	if (index == -1)
+		return;
+
 	auto penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
@@ -1508,6 +1517,9 @@ void AxisDock::labelsOpacityChanged(int value) {
 // "Grid"-tab
 //major grid
 void AxisDock::majorGridStyleChanged(int index) {
+	if (index == -1)
+		return;
+
 	auto penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);
@@ -1568,6 +1580,9 @@ void AxisDock::majorGridOpacityChanged(int value) {
 
 //minor grid
 void AxisDock::minorGridStyleChanged(int index) {
+	if (index == -1)
+		return;
+
 	auto penStyle = Qt::PenStyle(index);
 
 	bool b = (penStyle != Qt::NoPen);

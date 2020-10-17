@@ -883,7 +883,7 @@ void XYCurveDock::lineInterpolationPointsCountChanged(int count) {
 }
 
 void XYCurveDock::lineStyleChanged(int index) {
-	if (m_initializing)
+	if (index == -1 || m_initializing)
 		return;
 
 	const auto penStyle = Qt::PenStyle(index);
@@ -955,7 +955,7 @@ void XYCurveDock::dropLineTypeChanged(int index) {
 }
 
 void XYCurveDock::dropLineStyleChanged(int index) {
-	if (m_initializing)
+	if (index == -1 || m_initializing)
 		return;
 
 	auto penStyle = Qt::PenStyle(index);
@@ -1073,6 +1073,9 @@ void XYCurveDock::symbolsOpacityChanged(int value) {
 }
 
 void XYCurveDock::symbolsFillingStyleChanged(int index) {
+	if (index == -1)
+		return;
+
 	const auto brushStyle = Qt::BrushStyle(index);
 	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
 
@@ -1104,8 +1107,10 @@ void XYCurveDock::symbolsFillingColorChanged(const QColor& color) {
 }
 
 void XYCurveDock::symbolsBorderStyleChanged(int index) {
-	const auto penStyle = Qt::PenStyle(index);
+	if (index == -1)
+		return;
 
+	const auto penStyle = Qt::PenStyle(index);
 	if ( penStyle == Qt::NoPen ) {
 		ui.kcbSymbolBorderColor->setEnabled(false);
 		ui.sbSymbolBorderWidth->setEnabled(false);
@@ -1502,7 +1507,7 @@ void XYCurveDock::fillingImageStyleChanged(int index) {
 }
 
 void XYCurveDock::fillingBrushStyleChanged(int index) {
-	if (m_initializing)
+	if (index == -1 || m_initializing)
 		return;
 
 	auto style = (Qt::BrushStyle)index;
@@ -1743,7 +1748,7 @@ void XYCurveDock::errorBarsCapSizeChanged(double value) const {
 }
 
 void XYCurveDock::errorBarsStyleChanged(int index) const {
-	if (m_initializing)
+	if (index == -1 || m_initializing)
 		return;
 
 	auto penStyle = Qt::PenStyle(index);
