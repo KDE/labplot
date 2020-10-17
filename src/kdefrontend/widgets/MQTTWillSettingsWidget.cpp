@@ -120,6 +120,7 @@ void MQTTWillSettingsWidget::willUpdateTypeChanged(int index) {
  */
 void MQTTWillSettingsWidget::loadSettings(const MQTTClient::MQTTWill& will, const QVector<QString>& topics) {
 	ui.chbEnabled->setChecked(will.enabled);
+	enableWillSettings(will.enabled);
 
 	ui.cbWillTopic->addItems(topics.toList());
 	//Set back the initial value
