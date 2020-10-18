@@ -493,6 +493,9 @@ void WorksheetDock::orientationChanged(int index) {
 
 // "Background"-tab
 void WorksheetDock::backgroundTypeChanged(int index) {
+	if (index == -1)
+		return;
+
 	auto type = (PlotArea::BackgroundType)index;
 
 	if (type == PlotArea::BackgroundType::Color) {

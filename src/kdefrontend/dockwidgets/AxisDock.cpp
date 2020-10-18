@@ -920,8 +920,11 @@ void AxisDock::majorTicksDirectionChanged(int index) {
 	ui.cbMajorTicksLineStyle->setEnabled(b);
 	dtsbMinorTicksIncrement->setEnabled(b);
 	if (b) {
-		auto penStyle = Qt::PenStyle(ui.cbMajorTicksLineStyle->currentIndex());
-		b = (penStyle != Qt::NoPen);
+		if (ui.cbMajorTicksLineStyle->currentIndex() != -1) {
+			auto penStyle = Qt::PenStyle(ui.cbMajorTicksLineStyle->currentIndex());
+			b = (penStyle != Qt::NoPen);
+		} else
+			b = false;
 	}
 	ui.lMajorTicksColor->setEnabled(b);
 	ui.kcbMajorTicksColor->setEnabled(b);
@@ -1152,8 +1155,11 @@ void AxisDock::minorTicksDirectionChanged(int index) {
 	ui.lMinorTicksLineStyle->setEnabled(b);
 	ui.cbMinorTicksLineStyle->setEnabled(b);
 	if (b) {
-		auto penStyle = Qt::PenStyle(ui.cbMinorTicksLineStyle->currentIndex());
-		b = (penStyle != Qt::NoPen);
+		if (ui.cbMinorTicksLineStyle->currentIndex() != -1) {
+			auto penStyle = Qt::PenStyle(ui.cbMinorTicksLineStyle->currentIndex());
+			b = (penStyle != Qt::NoPen);
+		} else
+			b = false;
 	}
 	ui.lMinorTicksColor->setEnabled(b);
 	ui.kcbMinorTicksColor->setEnabled(b);
