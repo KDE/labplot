@@ -1288,11 +1288,11 @@ void MainWin::openProject(const QString& filename) {
 		return;
 
 	WAIT_CURSOR;
+	m_project->setFileName(filename);
 	QElapsedTimer timer;
 	timer.start();
 	bool rc = false;
 	if (Project::isLabPlotProject(filename)) {
-		m_project->setFileName(filename);
 		rc = m_project->load(filename);
 	}
 #ifdef HAVE_LIBORIGIN
