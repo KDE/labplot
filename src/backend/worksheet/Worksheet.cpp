@@ -1258,7 +1258,11 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	if (suppressLayoutUpdate)
 		return;
 
-	QVector<WorksheetElementContainer*> list = q->children<WorksheetElementContainer>();
+	auto list = q->children<WorksheetElementContainer>();
+	int count = list.count();
+	if (count == 0)
+		return;
+
 	if (layout == Worksheet::Layout::NoLayout) {
 		for (auto* elem : list)
 			elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -1269,7 +1273,6 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	float x = layoutLeftMargin;
 	float y = layoutTopMargin;
 	float w, h;
-	int count = list.count();
 	if (layout == Worksheet::Layout::VerticalLayout) {
 		w = m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
 		h = (m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (count-1)*layoutVerticalSpacing)/count;

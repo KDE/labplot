@@ -564,6 +564,9 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 }
 
 void WorksheetDock::backgroundColorStyleChanged(int index) {
+	if (index == -1)
+		return;
+
 	auto style = (PlotArea::BackgroundColorStyle)index;
 
 	if (style == PlotArea::BackgroundColorStyle::SingleColor) {
