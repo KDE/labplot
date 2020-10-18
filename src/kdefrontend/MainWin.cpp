@@ -1479,6 +1479,12 @@ bool MainWin::closeProject() {
 // 		}
 	}
 
+	//hide the sub-windows prior to deleting them in order to get rid of the shadows
+	//drawn across the sub-windows by the style. The shadow is removed by closing/hiding
+	//the sub-window exlicitely but not if we just delete it.
+	for (auto* window : m_mdiArea->subWindowList())
+		window->hide();
+
 	m_projectClosing = true;
 	statusBar()->clearMessage();
 	delete m_aspectTreeModel;
@@ -1505,6 +1511,7 @@ bool MainWin::closeProject() {
 	delete cursorDock;
 	cursorDock = nullptr;
 	cursorWidget = nullptr; // is deleted, because it's the cild of cursorDock
+
 	return true;
 }
 

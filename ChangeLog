@@ -10,6 +10,7 @@ Bug fixes:
 	* Fix drawing lines between points of datetime data
 	* Fix drawing axis tick label in color when in HTML mode
 	* Fix size of dock widgets when changing between them
+	* BUG 389920 - remove sub-window shadow remnants when closing the project
 	* Parser improvements (found in "Generate Function Values"):
 		* Fix Crash using variable name of pre-defined functions as function ("sin()")
 		* Allow variable names containing function names ("sina")
