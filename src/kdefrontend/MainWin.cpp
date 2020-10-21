@@ -1155,7 +1155,7 @@ bool MainWin::newProject() {
 	m_currentFolder = m_project;
 
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	Project::MdiWindowVisibility vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
+	auto vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
 	m_project->setMdiWindowVisibility( vis );
 	if (vis == Project::MdiWindowVisibility::folderOnly)
 		m_visibilityFolderAction->setChecked(true);
@@ -1482,6 +1482,8 @@ bool MainWin::closeProject() {
 	//hide the sub-windows prior to deleting them in order to get rid of the shadows
 	//drawn across the sub-windows by the style. The shadow is removed by closing/hiding
 	//the sub-window exlicitely but not if we just delete it.
+	//TODO: the actual fix is in https://invent.kde.org/plasma/breeze/-/merge_requests/43,
+	//we can remove this hack later.
 	for (auto* window : m_mdiArea->subWindowList())
 		window->hide();
 
@@ -1899,7 +1901,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 	called when the current aspect in the tree of the project explorer was changed.
 	Selects the new aspect.
 */
-void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
+void MainWin::handleCurrentAspectChanged(AbstractAspect* aspect) {
 	if (!aspect)
 		aspect = m_project; // should never happen, just in case
 
@@ -2052,8 +2054,7 @@ void MainWin::redo() {
 	Shows/hides mdi sub-windows depending on the current visibility policy.
 */
 void MainWin::updateMdiWindowVisibility() const {
-	QList<QMdiSubWindow *> windows = m_mdiArea->subWindowList();
-	PartMdiView* part_view;
+	auto windows = m_mdiArea->subWindowList();
 	switch (m_project->mdiWindowVisibility()) {
 	case Project::MdiWindowVisibility::allMdiWindows:
 		for (auto* window : windows)
@@ -2062,21 +2063,16 @@ void MainWin::updateMdiWindowVisibility() const {
 		break;
 	case Project::MdiWindowVisibility::folderOnly:
 		for (auto* window : windows) {
-			part_view = qobject_cast<PartMdiView *>(window);
-			Q_ASSERT(part_view);
-			if (part_view->part()->folder() == m_currentFolder)
-				part_view->show();
-			else
-				part_view->hide();
+			auto* view = static_cast<PartMdiView*>(window);
+			bool visible = view->part()->folder() == m_currentFolder;
+			window->setVisible(visible);
 		}
 		break;
 	case Project::MdiWindowVisibility::folderAndSubfolders:
 		for (auto* window : windows) {
-			part_view = qobject_cast<PartMdiView *>(window);
-			if (part_view->part()->isDescendantOf(m_currentFolder))
-				part_view->show();
-			else
-				part_view->hide();
+			auto* view = static_cast<PartMdiView*>(window);
+			bool visible = view->part()->isDescendantOf(m_currentFolder);
+			window->setVisible(visible);
 		}
 		break;
 	}
@@ -2306,6 +2302,18 @@ void MainWin::handleSettingsChanges() {
 		m_cascadeWindowsAction->setVisible(true);
 	}
 // 	}
+
+	//window visibility
+	auto vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
+	if (m_project && (vis != m_project->mdiWindowVisibility())) {
+		if (vis == Project::MdiWindowVisibility::folderOnly)
+			m_visibilityFolderAction->setChecked(true);
+		else if (vis == Project::MdiWindowVisibility::folderAndSubfolders)
+			m_visibilitySubfolderAction->setChecked(true);
+		else
+			m_visibilityAllAction->setChecked(true);
+		m_project->setMdiWindowVisibility(vis);
+	}
 
 	//autosave
 	bool autoSave = group.readEntry("AutoSave", 0);
