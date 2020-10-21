@@ -1901,7 +1901,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 	called when the current aspect in the tree of the project explorer was changed.
 	Selects the new aspect.
 */
-void MainWin::handleCurrentAspectChanged(AbstractAspect *aspect) {
+void MainWin::handleCurrentAspectChanged(AbstractAspect* aspect) {
 	if (!aspect)
 		aspect = m_project; // should never happen, just in case
 
@@ -2055,7 +2055,6 @@ void MainWin::redo() {
 */
 void MainWin::updateMdiWindowVisibility() const {
 	auto windows = m_mdiArea->subWindowList();
-	PartMdiView* part_view;
 	switch (m_project->mdiWindowVisibility()) {
 	case Project::MdiWindowVisibility::allMdiWindows:
 		for (auto* window : windows)
@@ -2064,21 +2063,16 @@ void MainWin::updateMdiWindowVisibility() const {
 		break;
 	case Project::MdiWindowVisibility::folderOnly:
 		for (auto* window : windows) {
-			part_view = qobject_cast<PartMdiView *>(window);
-			Q_ASSERT(part_view);
-			if (part_view->part()->folder() == m_currentFolder)
-				part_view->show();
-			else
-				part_view->hide();
+			auto* view = static_cast<PartMdiView*>(window);
+			bool visible = view->part()->folder() == m_currentFolder;
+			window->setVisible(visible);
 		}
 		break;
 	case Project::MdiWindowVisibility::folderAndSubfolders:
 		for (auto* window : windows) {
-			part_view = qobject_cast<PartMdiView *>(window);
-			if (part_view->part()->isDescendantOf(m_currentFolder))
-				part_view->show();
-			else
-				part_view->hide();
+			auto* view = static_cast<PartMdiView*>(window);
+			bool visible = view->part()->isDescendantOf(m_currentFolder);
+			window->setVisible(visible);
 		}
 		break;
 	}
@@ -2310,7 +2304,7 @@ void MainWin::handleSettingsChanges() {
 // 	}
 
 	//window visibility
-	Project::MdiWindowVisibility vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
+	auto vis = Project::MdiWindowVisibility(group.readEntry("MdiWindowVisibility", 0));
 	if (m_project && (vis != m_project->mdiWindowVisibility())) {
 		if (vis == Project::MdiWindowVisibility::folderOnly)
 			m_visibilityFolderAction->setChecked(true);

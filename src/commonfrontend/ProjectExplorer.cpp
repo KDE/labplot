@@ -939,8 +939,6 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				if (!part)
 					continue; //TODO: add error/warning message here?
 
-				emit currentAspectChanged(part);
-
 				str = attribs.value("state").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("state").toString());
