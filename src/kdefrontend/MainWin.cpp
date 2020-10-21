@@ -701,7 +701,7 @@ void MainWin::initActions() {
 
 void MainWin::initMenus() {
 	//add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
-	//this menu is created automatically when the defualt "full screen" action is created in initActions().
+	//this menu is created automatically when the default "full screen" action is created in initActions().
 	//because of a bug on macOS we don't have this action and menu on macOS, so we add available the explorer
 	//toggle actions to the menu "Windows".
 	auto* menu = dynamic_cast<QMenu*>(factory()->container("view", this));
