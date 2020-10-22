@@ -939,6 +939,8 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				if (!part)
 					continue; //TODO: add error/warning message here?
 
+				emit activateView(part); //request to show the view in MainWin
+
 				str = attribs.value("state").toString();
 				if (str.isEmpty())
 					reader->raiseWarning(attributeWarning.subs("state").toString());

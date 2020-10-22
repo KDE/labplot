@@ -1180,6 +1180,7 @@ bool MainWin::newProject() {
 		m_projectExplorerDock->setWidget(m_projectExplorer);
 
 		connect(m_projectExplorer, &ProjectExplorer::currentAspectChanged, this, &MainWin::handleCurrentAspectChanged);
+		connect(m_projectExplorer, &ProjectExplorer::activateView, this, &MainWin::activateSubWindowForAspect);
 		connect(m_projectExplorerDock, &QDockWidget::visibilityChanged, this, &MainWin::projectExplorerDockVisibilityChanged);
 
 		//Properties dock
@@ -1437,6 +1438,7 @@ void MainWin::openProject(const QString& filename) {
 	updateTitleBar();
 	updateGUIOnProjectChanges();
 	updateGUI(); //there are most probably worksheets or spreadsheets in the open project -> update the GUI
+	updateMdiWindowVisibility();
 	m_saveAction->setEnabled(false);
 
 	statusBar()->showMessage( i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed()/1000) );

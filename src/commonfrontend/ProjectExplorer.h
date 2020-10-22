@@ -116,6 +116,7 @@ private slots:
 
 signals:
 	void currentAspectChanged(AbstractAspect*);
+	void activateView(AbstractAspect*);
 	void selectedAspectsChanged(QList<AbstractAspect*>&);
 	void hiddenAspectSelected(const AbstractAspect*);
 };
