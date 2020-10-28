@@ -742,10 +742,7 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
-	if (positionInvalid)
-		return;
-
-	if (textWrapper.text.isEmpty())
+	if (positionInvalid || textWrapper.text.isEmpty())
 		return;
 
 	painter->save();
