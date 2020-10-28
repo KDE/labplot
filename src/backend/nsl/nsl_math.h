@@ -29,8 +29,23 @@
 #ifndef NSL_MATH_H
 #define NSL_MATH_H
 
+#include <stdbool.h>
+
 #define M_PI_180 (M_PI/180.)
 #define M_180_PI (180./M_PI)
+
+/*
+ * more intelligent comparison of doubles,
+ * taken from Knuth's "The art of computer programming"
+ */
+bool nsl_math_approximately_equal(double a, double b);
+bool nsl_math_essentially_equal(double a, double b);
+bool nsl_math_definitely_greater_than(double a, double b);
+bool nsl_math_definitely_less_than(double a, double b);
+bool nsl_math_approximately_equal_eps(double a, double b, double epsilon);
+bool nsl_math_essentially_equal_eps(double a, double b, double epsilon);
+bool nsl_math_definitely_greater_than_eps(double a, double b, double epsilon);
+bool nsl_math_definitely_less_than_eps(double a, double b, double epsilon);
 
 /* returns decimal places of signed value
 * 0.1 -> 1, 0.06 -> 2, 23 -> -1, 100 -> -2

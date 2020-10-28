@@ -29,6 +29,40 @@
 #include "nsl_math.h"
 #include <gsl/gsl_math.h>
 
+bool nsl_math_approximately_equal(double a, double b) {
+	return nsl_math_approximately_equal_eps(a, b, 1.e-7);
+}
+
+bool nsl_math_approximately_equal_eps(double a, double b, double epsilon) {
+        return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
+bool nsl_math_essentially_equal(double a, double b) {
+	return nsl_math_essentially_equal_eps(a, b, 1.e-7);
+}
+
+bool nsl_math_essentially_equal_eps(double a, double b, double epsilon) {
+        return fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
+bool nsl_math_definitely_greater_than(double a, double b) {
+	return nsl_math_definitely_greater_than_eps(a, b, 1.e-7);
+}
+
+bool nsl_math_definitely_greater_than_eps(double a, double b, double epsilon) {
+        return (a - b) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
+bool nsl_math_definitely_less_than(double a, double b) {
+	return nsl_math_definitely_less_than_eps(a, b, 1.e-7);
+}
+
+bool nsl_math_definitely_less_than_eps(double a, double b, double epsilon) {
+        return (b - a) > ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon);
+}
+
+
+
 int nsl_math_decimal_places(double value) {
 	return -(int)floor(log10(fabs(value)));
 }

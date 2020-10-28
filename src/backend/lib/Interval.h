@@ -33,6 +33,10 @@
 
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
 
+extern "C" {
+#include "backend/nsl/nsl_math.h"
+}
+
 template<class T> class Interval;
 
 template<class T> class IntervalBase {
@@ -50,8 +54,8 @@ template<class T> class IntervalBase {
 		bool contains(const Interval<T>& other) const { return ( m_start <= other.start() && m_end >= other.end() ); }
 		bool contains(T value) const { return ( m_start <= value && m_end >= value ); }
 		bool fuzzyContains(T value) const {
-			bool rc1 = AbstractCoordinateSystem::definitelyLessThan(m_start, value);
-			bool rc2 = AbstractCoordinateSystem::definitelyGreaterThan(m_end, value);
+			bool rc1 = nsl_math_definitely_less_than(m_start, value);
+			bool rc2 = nsl_math_definitely_greater_than(m_end, value);
 			return (rc1 && rc2);
 		}
 		bool intersects(const Interval<T>& other) const { return ( contains(other.start()) || contains(other.end()) ); }

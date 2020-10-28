@@ -78,10 +78,6 @@ public:
 
 	//static members
 	static bool clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult = nullptr);
-	static bool approximatelyEqual(double a, double b, double epsilon = 1.e-7);
-	static bool essentiallyEqual(double a, double b, double epsilon = 1.e-7);
-	static bool definitelyGreaterThan(double a, double b, double epsilon = 1.e-7);
-	static bool definitelyLessThan(double a, double b, double epsilon = 1.e-7);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractCoordinateSystem::MappingFlags)

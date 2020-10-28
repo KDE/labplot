@@ -31,6 +31,10 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/lib/macros.h"
 
+extern "C" {
+#include "backend/nsl/nsl_math.h"
+}
+
 /* ============================================================================ */
 /* =================================== scales ================================= */
 /* ============================================================================ */
@@ -752,11 +756,11 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF po
 		l += w;
 	else
 		r += w;
-	if ( AbstractCoordinateSystem::essentiallyEqual(l, r)) // null rect
+	if (nsl_math_essentially_equal(l, r)) // null rect
 		return false;
 
-	if ( AbstractCoordinateSystem::definitelyLessThan(point.x(), l)
-		|| AbstractCoordinateSystem::definitelyGreaterThan(point.x(), r) )
+	if ( nsl_math_definitely_less_than(point.x(), l)
+		|| nsl_math_definitely_greater_than(point.x(), r) )
  	return false;
 
 	qreal t = rect.y();
@@ -765,11 +769,11 @@ bool CartesianCoordinateSystem::rectContainsPoint(const QRectF& rect, QPointF po
 		t += h;
 	else
 		b += h;
- 	if ( AbstractCoordinateSystem::essentiallyEqual(t, b) ) // null rect
+	if (nsl_math_essentially_equal(t, b) ) // null rect
 		return false;
 
-	if ( AbstractCoordinateSystem::definitelyLessThan(point.y(), t)
-		|| AbstractCoordinateSystem::definitelyGreaterThan(point.y(), b) )
+	if ( nsl_math_definitely_less_than(point.y(), t)
+		|| nsl_math_definitely_greater_than(point.y(), b) )
 		return false;
 
 	return true;

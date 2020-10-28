@@ -198,22 +198,3 @@ bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, 
 	}
 	return true;
 }
-
-//more intelligent comparison of floats,
-//taken from Knuth's "The art of computer programming"
-//TODO: put into NSL?
-bool AbstractCoordinateSystem::approximatelyEqual(double a, double b, double epsilon) {
-	return std::abs(a - b) <= ( (std::abs(a) < std::abs(b) ? std::abs(b) : std::abs(a)) * epsilon);
-}
-
-bool AbstractCoordinateSystem::essentiallyEqual(double a, double b, double epsilon) {
-	return std::abs(a - b) <= ( (std::abs(a) > std::abs(b) ? std::abs(b) : std::abs(a)) * epsilon);
-}
-
-bool AbstractCoordinateSystem::definitelyGreaterThan(double a, double b, double epsilon) {
-	return (a - b) > ( (std::abs(a) < std::abs(b) ? std::abs(b) : std::abs(a)) * epsilon);
-}
-
-bool AbstractCoordinateSystem::definitelyLessThan(double a, double b, double epsilon) {
-	return (b - a) > ( (std::abs(a) < std::abs(b) ? std::abs(b) : std::abs(a)) * epsilon);
-}

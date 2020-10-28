@@ -1964,7 +1964,7 @@ void XYCurvePrivate::updateFilling() {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
 
 		//start point
-		if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
+		if (nsl_math_essentially_equal(start.y(), edge.y())) {
 			if (first.x() < plot->xMin())
 				start = edge;
 			else if (first.x() > plot->xMax())
@@ -1974,7 +1974,7 @@ void XYCurvePrivate::updateFilling() {
 		}
 
 		//end point
-		if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
+		if (nsl_math_essentially_equal(end.y(), edge.y())) {
 			if (last.x() < plot->xMin())
 				end = edge;
 			else if (last.x() > plot->xMax())
@@ -1989,7 +1989,7 @@ void XYCurvePrivate::updateFilling() {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
 
 		//start point
-		if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
+		if (nsl_math_essentially_equal(start.y(), edge.y())) {
 			if (first.x() < plot->xMin())
 				start = edge;
 			else if (first.x() > plot->xMax())
@@ -1999,7 +1999,7 @@ void XYCurvePrivate::updateFilling() {
 		}
 
 		//end point
-		if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
+		if (nsl_math_essentially_equal(end.y(), edge.y())) {
 			if (last.x() < plot->xMin())
 				end = edge;
 			else if (last.x() > plot->xMax())
@@ -2014,7 +2014,7 @@ void XYCurvePrivate::updateFilling() {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
 
 		//start point
-		if (AbstractCoordinateSystem::essentiallyEqual(start.y(), edge.y())) {
+		if (nsl_math_essentially_equal(start.y(), edge.y())) {
 			if (plot->yMax() > 0) {
 				if (first.x() < plot->xMin())
 					start = edge;
@@ -2033,7 +2033,7 @@ void XYCurvePrivate::updateFilling() {
 		}
 
 		//end point
-		if (AbstractCoordinateSystem::essentiallyEqual(end.y(), edge.y())) {
+		if (nsl_math_essentially_equal(end.y(), edge.y())) {
 			if (plot->yMax() > 0) {
 				if (last.x() < plot->xMin())
 					end = edge;
@@ -2056,7 +2056,7 @@ void XYCurvePrivate::updateFilling() {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
 
 		//start point
-		if (AbstractCoordinateSystem::essentiallyEqual(start.x(), edge.x())) {
+		if (nsl_math_essentially_equal(start.x(), edge.x())) {
 			if (first.y() < plot->yMin())
 				start = edge;
 			else if (first.y() > plot->yMax())
@@ -2066,7 +2066,7 @@ void XYCurvePrivate::updateFilling() {
 		}
 
 		//end point
-		if (AbstractCoordinateSystem::essentiallyEqual(end.x(), edge.x())) {
+		if (nsl_math_essentially_equal(end.x(), edge.x())) {
 			if (last.y() < plot->yMin())
 				end = edge;
 			else if (last.y() > plot->yMax())
@@ -2081,7 +2081,7 @@ void XYCurvePrivate::updateFilling() {
 		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
 
 		//start point
-		if (AbstractCoordinateSystem::essentiallyEqual(start.x(), edge.x())) {
+		if (nsl_math_essentially_equal(start.x(), edge.x())) {
 			if (first.y() < plot->yMin())
 				start = edge;
 			else if (first.y() > plot->yMax())
@@ -2091,7 +2091,7 @@ void XYCurvePrivate::updateFilling() {
 		}
 
 		//end point
-		if (AbstractCoordinateSystem::essentiallyEqual(end.x(), edge.x())) {
+		if (nsl_math_essentially_equal(end.x(), edge.x())) {
 			if (last.y() < plot->yMin())
 				end = edge;
 			else if (last.y() > plot->yMax())
