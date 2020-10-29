@@ -481,20 +481,26 @@ void MainWin::createMdiArea() {
 void MainWin::initActions() {
 	// ******************** File-menu *******************************
 	//add some standard actions
-	m_newProjectAction = KStandardAction::openNew(this, SLOT(newProject()),actionCollection());
-	m_openProjectAction = KStandardAction::open(this, SLOT(openProject()),actionCollection());
+	m_newProjectAction = KStandardAction::openNew(this, &MainWin::newProject, actionCollection());
+	m_openProjectAction = KStandardAction::open(this, SLOT(openProject()), actionCollection());
 	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(QUrl)),actionCollection());
-	m_closeAction = KStandardAction::close(this, SLOT(closeProject()),actionCollection());
+	m_closeAction = KStandardAction::close(this, &MainWin::closeProject, actionCollection());
 	actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); //remove the shortcut, QKeySequence::Close will be used for closing sub-windows
-	m_saveAction = KStandardAction::save(this, SLOT(saveProject()),actionCollection());
-	m_saveAsAction = KStandardAction::saveAs(this, SLOT(saveProjectAs()),actionCollection());
-	m_printAction = KStandardAction::print(this, SLOT(print()),actionCollection());
-	m_printPreviewAction = KStandardAction::printPreview(this, SLOT(printPreview()),actionCollection());
+	m_saveAction = KStandardAction::save(this, &MainWin::saveProject, actionCollection());
+	m_saveAsAction = KStandardAction::saveAs(this, &MainWin::saveProjectAs, actionCollection());
+	m_printAction = KStandardAction::print(this, &MainWin::print, actionCollection());
+	m_printPreviewAction = KStandardAction::printPreview(this, &MainWin::printPreview, actionCollection());
 
 	//TODO: on Mac OS when going full-screen we get a crash because of an stack-overflow
 #ifndef Q_OS_MAC
-	KStandardAction::fullScreen(this, SLOT(toggleFullScreen()), this, actionCollection());
+	KStandardAction::fullScreen(this, &MainWin::toggleFullScreen, this, actionCollection());
 #endif
+
+	//QDEBUG(Q_FUNC_INFO << ", preferences action name:" << KStandardAction::name(KStandardAction::Preferences))
+	KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
+	// QAction* action = actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
+	KStandardAction::quit(this, SLOT(close()), actionCollection());
+
 
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme("labplot-workbook-new"),i18n("Workbook"),this);
@@ -633,10 +639,6 @@ void MainWin::initActions() {
 	actionCollection()->setDefaultShortcut(m_prevWindowAction, QKeySequence::PreviousChild);
 	m_prevWindowAction->setStatusTip(i18n("Move the focus to the previous window"));
 	actionCollection()->addAction("previous window", m_prevWindowAction);
-
-	//"Standard actions"
-	KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
-	KStandardAction::quit(this, SLOT(close()), actionCollection());
 
 	//Actions for window visibility
 	auto* windowVisibilityActions = new QActionGroup(this);
@@ -807,6 +809,7 @@ void MainWin::initMenus() {
 #ifdef HAVE_CANTOR_LIBS
 	QAction* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS"), this);
 	connect(action, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
+	action->setMenuRole(QAction::NoRole);	// prevent macOS Qt heuristics to select this action for preferences
 	if (settingsMenu)
 		settingsMenu->addAction(action);
 #endif
