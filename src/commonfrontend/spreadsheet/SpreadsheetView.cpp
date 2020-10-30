@@ -873,6 +873,7 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 
 	const bool hasValues = column->hasValues();
 	const bool numeric = column->isNumeric();
+	const bool datetime = (column->columnMode() == AbstractColumn::ColumnMode::DateTime);
 
 	if (numeric)
 		menu->insertMenu(firstAction, m_columnSetAsMenu);
@@ -882,6 +883,8 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 			menu->insertSeparator(firstAction);
 			menu->insertMenu(firstAction, m_columnGenerateDataMenu);
 			menu->insertSeparator(firstAction);
+		}
+		if (numeric || datetime) {
 			menu->insertMenu(firstAction, m_columnManipulateDataMenu);
 			menu->insertSeparator(firstAction);
 		}
@@ -891,13 +894,7 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 		action_sort_desc_column->setVisible(true);
 		action_sort_columns->setVisible(false);
 
-		//in case no cells are available, deactivate the actions that only make sense in the presence of cells
-		const bool hasCells = m_spreadsheet->rowCount() > 0;
-		m_columnGenerateDataMenu->setEnabled(numeric && hasCells);
-
-		//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
-		m_columnManipulateDataMenu->setEnabled(numeric && hasValues);
-		m_columnSortMenu->setEnabled(hasValues);
+		checkColumnMenus(numeric, datetime, hasValues);
 	}
 
 	menu->insertSeparator(firstAction);
@@ -1214,8 +1211,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool datetime = false;
 			bool hasValues = false;
 			for (const Column* col : selectedColumns()) {
-				if ( !(col->columnMode() == AbstractColumn::ColumnMode::Numeric || col->columnMode() == AbstractColumn::ColumnMode::Integer ||
-							col->columnMode() == AbstractColumn::ColumnMode::BigInt) ) {
+				if (!col->isNumeric()) {
 					datetime = (col->columnMode() == AbstractColumn::ColumnMode::DateTime);
 					if (!datetime)
 						plottable = false;
@@ -1237,19 +1233,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			m_columnSetAsMenu->setEnabled(numeric);
 			action_statistics_columns->setEnabled(numeric && hasValues);
 
-			if (!m_readOnly) {
-				m_columnGenerateDataMenu->setEnabled(numeric);
-				m_columnManipulateDataMenu->setEnabled(numeric || datetime);
-				m_columnSortMenu->setEnabled(numeric);
-
-				//in case no cells are available, deactivate the actions that only make sense in the presence of cells
-				const bool hasCells = m_spreadsheet->rowCount() > 0;
-				m_columnGenerateDataMenu->setEnabled(numeric && hasCells);
-
-				//in case no valid numerical values are available, deactivate the actions that only make sense in the presence of values
-				m_columnManipulateDataMenu->setEnabled(numeric && hasValues);
-				m_columnSortMenu->setEnabled(hasValues);
-			}
+			if (!m_readOnly)
+				checkColumnMenus(numeric, datetime, hasValues);
 
 			m_columnMenu->exec(global_pos);
 		} else if (watched == this) {
@@ -1350,6 +1335,26 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 
 	action_mask_selection->setEnabled(hasUnmasked);
 	action_unmask_selection->setEnabled(hasMasked);
+}
+
+void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool hasValues) {
+	//generate data is only possible for numeric columns and if there are cells available
+	const bool hasCells = m_spreadsheet->rowCount() > 0;
+	m_columnGenerateDataMenu->setEnabled(numeric && hasCells);
+
+	//manipulate data is only possible for numeric and datetime and if there values.
+	//datetime has only "add/subtract value", everything else is deactivated
+	m_columnManipulateDataMenu->setEnabled((numeric || datetime) && hasValues);
+	action_multiply_value->setEnabled(numeric);
+	action_divide_value->setEnabled(numeric);
+	action_reverse_columns->setEnabled(numeric);
+	action_drop_values->setEnabled(numeric);
+	action_mask_values->setEnabled(numeric);
+	m_columnNormalizeMenu->setEnabled(numeric);
+	m_columnLadderOfPowersMenu->setEnabled(numeric);
+
+	//sort is possible for all data types if values are available
+	m_columnSortMenu->setEnabled(hasValues);
 }
 
 bool SpreadsheetView::formulaModeActive() const {
