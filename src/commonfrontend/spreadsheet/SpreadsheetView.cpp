@@ -1511,7 +1511,7 @@ void SpreadsheetView::pasteIntoSelection() {
 	//2. only one cell selected
 	//3. the whole column is selected (the use clicked on the header)
 	//Also, set the proper column mode if the target column doesn't have any values yet
-	and set the proper column mode if the column is empty
+	//and set the proper column mode if the column is empty
 	if ( (first_col == -1 || first_row == -1)
 		|| (last_row == first_row && last_col == first_col)
 		|| (first_row == 0 && last_row == m_spreadsheet->rowCount() - 1) ) {

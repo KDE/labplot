@@ -46,16 +46,15 @@ class TextLabel : public WorksheetElement {
 
 public:
 	enum class Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
-
 	enum class BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
 			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
 
-	// The text is always in html format
+	// The text is always in HMTL format
 	struct TextWrapper {
 		TextWrapper() {}
 		TextWrapper(const QString& t, bool b, bool html): teXUsed(b) {
 			if (b) {
-				text = t; // latex does not support html, so assume t is a plain string
+				text = t; // LaTeX does not support HTML, so assume t is a plain text string
 				return;
 			}
 			text = createHtml(t, html);

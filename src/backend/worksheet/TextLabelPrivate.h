@@ -48,6 +48,7 @@ public:
 	// -> take this into account
 	double scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
 	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
+	//TODO: use constant for 2.54
 	double teXImageScaleFactor{Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;

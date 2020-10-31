@@ -755,12 +755,13 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 			painter->drawImage(boundingRect(), teXImage);
 	} else {
 		// don't set fontColor to pen, because the color
-		// is already in the html code
+		// is already in the HTML code
 		//painter->setPen(fontColor);
 		painter->scale(scaleFactor, scaleFactor);
-		float w = staticText.size().width();
-		float h = staticText.size().height();
-		painter->drawStaticText(QPoint(-w/2,-h/2), staticText);
+		qreal w = staticText.size().width();
+		qreal h = staticText.size().height();
+		QDEBUG(Q_FUNC_INFO << ", Drawing text:" << staticText.text())
+		painter->drawStaticText(QPointF(-w/2, -h/2), staticText);
 	}
 	painter->restore();
 
