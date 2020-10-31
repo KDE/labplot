@@ -1506,9 +1506,15 @@ void SpreadsheetView::pasteIntoSelection() {
 	SET_NUMBER_LOCALE
 // 	bool localeDetermined = false;
 
-	if ( (first_col == -1 || first_row == -1) || (last_row == first_row && last_col == first_col) ) {
-		// if there is no selection or only one cell selected, the
-		// selection will be expanded to the needed size from the current cell
+	//expand the current selection to the needed size if
+	//1. there is no selection
+	//2. only one cell selected
+	//3. the whole column is selected (the use clicked on the header)
+	//Also, set the proper column mode if the target column doesn't have any values yet
+	and set the proper column mode if the column is empty
+	if ( (first_col == -1 || first_row == -1)
+		|| (last_row == first_row && last_col == first_col)
+		|| (first_row == 0 && last_row == m_spreadsheet->rowCount() - 1) ) {
 		int current_row, current_col;
 		getCurrentCell(&current_row, &current_col);
 		if (current_row == -1) current_row = 0;
