@@ -482,8 +482,8 @@ void MainWin::initActions() {
 	// ******************** File-menu *******************************
 	//add some standard actions
 	m_newProjectAction = KStandardAction::openNew(this, &MainWin::newProject, actionCollection());
-	m_openProjectAction = KStandardAction::open(this, SLOT(openProject()), actionCollection());
-	m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openRecentProject(QUrl)),actionCollection());
+	m_openProjectAction = KStandardAction::open(this, static_cast<void (MainWin::*)()>(&MainWin::openProject), actionCollection());
+	m_recentProjectsAction = KStandardAction::openRecent(this, &MainWin::openRecentProject, actionCollection());
 	m_closeAction = KStandardAction::close(this, &MainWin::closeProject, actionCollection());
 	actionCollection()->setDefaultShortcut(m_closeAction, QKeySequence()); //remove the shortcut, QKeySequence::Close will be used for closing sub-windows
 	m_saveAction = KStandardAction::save(this, &MainWin::saveProject, actionCollection());
@@ -497,9 +497,9 @@ void MainWin::initActions() {
 #endif
 
 	//QDEBUG(Q_FUNC_INFO << ", preferences action name:" << KStandardAction::name(KStandardAction::Preferences))
-	KStandardAction::preferences(this, SLOT(settingsDialog()), actionCollection());
+	KStandardAction::preferences(this, &MainWin::settingsDialog, actionCollection());
 	// QAction* action = actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
-	KStandardAction::quit(this, SLOT(close()), actionCollection());
+	KStandardAction::quit(this, &MainWin::close, actionCollection());
 
 
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
