@@ -397,7 +397,7 @@ void AddSubtractValueDialog::generateForColumns() {
 	}
 	} else { //datetime
 		QVector<QDateTime> new_data(rows);
-		quint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
+		qint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
 		switch (m_operation) {
 		case Subtract:
 			value *= -1.;
@@ -450,8 +450,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			//fall through
 		case Add:
 			for (int i = 0; i<rows; ++i)
-				for(int j = 0; j<cols; ++j)
-				{
+				for(int j = 0; j<cols; ++j) {
 					new_data = m_matrix->cell<int>(i,j);
 					new_data += value;
 					m_matrix->setCell(i, j, new_data);
@@ -459,17 +458,15 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Multiply:
 			for (int i = 0; i<rows; ++i)
-				for(int j = 0; j<cols; ++j)
-				{
+				for(int j = 0; j<cols; ++j) {
 					new_data = m_matrix->cell<int>(i,j);
 					new_data *= value;
 					m_matrix->setCell(i, j, new_data);
 				}
 			break;
 		case Divide:
-		for (int i = 0; i<rows; ++i)
-				for(int j = 0; j<cols; ++j)
-				{
+			for (int i = 0; i<rows; ++i)
+				for(int j = 0; j<cols; ++j) {
 					new_data = m_matrix->cell<int>(i,j);
 					new_data /= value;
 					m_matrix->setCell(i, j, new_data);
@@ -506,7 +503,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 				}
 			break;
 		case Divide:
-		for (int i = 0; i<rows; ++i)
+			for (int i = 0; i<rows; ++i)
 				for(int j = 0; j<cols; ++j) {
 					new_data = m_matrix->cell<qint64>(i,j);
 					new_data /= value;
@@ -529,8 +526,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			//fall through
 		case Add:
 			for (int i = 0; i<rows; ++i)
-				for(int j = 0; j<cols; ++j)
-				{
+				for(int j = 0; j<cols; ++j) {
 					new_data = m_matrix->cell<double>(i,j);
 					new_data += value;
 					m_matrix->setCell(i,j,new_data);
@@ -538,8 +534,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Multiply:
 			for (int i = 0; i<rows; ++i)
-				for(int j = 0; j<cols; ++j)
-				{
+				for(int j = 0; j<cols; ++j) {
 					new_data = m_matrix->cell<double>(i,j);
 					new_data *= value;
 					m_matrix->setCell(i,j,new_data);
@@ -547,8 +542,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			break;
 		case Divide:
 			for (int i = 0; i<rows; ++i)
-				for(int j = 0; j<cols; ++j)
-				{
+				for(int j = 0; j<cols; ++j) {
 					new_data = m_matrix->cell<double>(i,j);
 					new_data /= value;
 					m_matrix->setCell(i,j,new_data);
@@ -557,20 +551,19 @@ void AddSubtractValueDialog::generateForMatrices() {
 	}
 	} else { //datetime
 		QDateTime new_data;
-		quint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
+		qint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
 		switch (m_operation) {
 		case Subtract:
 			value *= -1.;
 			//fall through
 		case Add:
 			for (int i = 0; i<rows; ++i)
-			for(int j = 0; j<cols; ++j)
-			{
-				quint64 data = (m_matrix->cell<QDateTime>(i,j)).toMSecsSinceEpoch();
-				new_data = QDateTime::fromMSecsSinceEpoch(data + value);
-				m_matrix->setCell(i,j,new_data);
-			}
-		break;
+				for(int j = 0; j<cols; ++j)	{
+					qint64 data = (m_matrix->cell<QDateTime>(i,j)).toMSecsSinceEpoch();
+					new_data = QDateTime::fromMSecsSinceEpoch(data + value);
+					m_matrix->setCell(i,j,new_data);
+				}
+			break;
 		case Multiply:
 		case Divide:
 			break;
