@@ -398,6 +398,8 @@ void AddSubtractValueDialog::generateForColumns() {
 	} else { //datetime
 		QVector<QDateTime> new_data(rows);
 		qint64 value = ui.dateTimeEdit->dateTime().toMSecsSinceEpoch();
+		//QDEBUG(Q_FUNC_INFO << ", DT CHANGE:" << ui.dateTimeEdit->dateTime())
+		//QDEBUG(Q_FUNC_INFO << ", VALUE:" << value)
 		switch (m_operation) {
 		case Subtract:
 			value *= -1;
@@ -405,8 +407,12 @@ void AddSubtractValueDialog::generateForColumns() {
 		case Add:
 			for (auto* col : m_columns) {
 				auto* data = static_cast<QVector<QDateTime>* >(col->data());
+				//QDEBUG(Q_FUNC_INFO << ", DT OLD:" << data->operator[](0))
+				//QDEBUG(Q_FUNC_INFO << ", OLD VALUE:" << data->operator[](0).toMSecsSinceEpoch())
+				//QDEBUG(Q_FUNC_INFO << ", NEW VALUE:" << data->operator[](0).toMSecsSinceEpoch() + value)
+				//QDEBUG(Q_FUNC_INFO << ", DT NEW:" << QDateTime::fromMSecsSinceEpoch(data->operator[](0).toMSecsSinceEpoch() + value, timeSpec))
 				for (int i = 0; i < rows; ++i)
-					new_data[i] = QDateTime::fromMSecsSinceEpoch(data->operator[](i).toMSecsSinceEpoch() + value, Qt::UTC);
+					new_data[i] = QDateTime::fromMSecsSinceEpoch(data->operator[](i).toMSecsSinceEpoch() + value, data->operator[](i).timeSpec());
 
 				col->replaceDateTimes(0, new_data);
 			}
@@ -560,7 +566,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 			for (int i = 0; i < rows; ++i)
 				for(int j = 0; j < cols; ++j) {
 					qint64 data = (m_matrix->cell<QDateTime>(i,j)).toMSecsSinceEpoch();
-					new_data = QDateTime::fromMSecsSinceEpoch(data + value);
+					new_data = QDateTime::fromMSecsSinceEpoch(data + value, (m_matrix->cell<QDateTime>(i,j)).timeSpec());
 					m_matrix->setCell(i,j,new_data);
 				}
 			break;
