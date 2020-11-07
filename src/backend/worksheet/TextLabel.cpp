@@ -760,7 +760,7 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		painter->scale(scaleFactor, scaleFactor);
 		qreal w = staticText.size().width();
 		qreal h = staticText.size().height();
-		QDEBUG(Q_FUNC_INFO << ", Drawing text:" << staticText.text())
+		//QDEBUG(Q_FUNC_INFO << ", Drawing text:" << staticText.text())
 		painter->drawStaticText(QPointF(-w/2, -h/2), staticText);
 	}
 	painter->restore();

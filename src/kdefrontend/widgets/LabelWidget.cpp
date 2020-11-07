@@ -694,22 +694,28 @@ void LabelWidget::fontChanged(const QFont& font) {
 	if (m_initializing)
 		return;
 
-	QTextCursor c = ui.teLabel->textCursor();
+	const auto c = ui.teLabel->textCursor();
 	if (c.selectedText().isEmpty())
 		ui.teLabel->selectAll();
 
-	// use format instead of using ui.teLabel->setFontFamily(font.family());
-	// because this calls after every command textChanged() which is inefficient
+	// use mergeCurrentCharFormat(QTextCharFormat) instead of setFontFamily(font.family()), etc.
+	// because this avoids textChanged() after every command
 	QTextCharFormat format;
 	format.setFontFamily(font.family());
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
+	format.setFontFamilies({font.family()});	// see QTBUG-80475
+#endif
 	format.setFontPointSize(font.pointSize());
 	format.setFontItalic(font.italic());
 	format.setFontWeight(font.weight());
 	if (font.underline())
 		format.setUnderlineStyle(QTextCharFormat::UnderlineStyle::SingleUnderline);
-	if (font.strikeOut()) // anytime true. don't know why
+	if (font.strikeOut())
 		format.setFontStrikeOut(font.strikeOut());
+
+	//QDEBUG(Q_FUNC_INFO << ", BEFORE:" << ui.teLabel->toHtml())
 	ui.teLabel->mergeCurrentCharFormat(format);
+	//QDEBUG(Q_FUNC_INFO << ", AFTER :" << ui.teLabel->toHtml())
 }
 
 void LabelWidget::teXFontChanged(const QFont& font) {
