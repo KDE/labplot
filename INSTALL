@@ -51,6 +51,9 @@ To compile LabPlot without optional dependencies even if they are present on the
 
 Note, by switching off these libraries the feature set of LabPlot will be reduced.
 
+To enable reproducable builds, use
+-DENABLE_REPRODUCIBLE=ON
+
 ================================================================================
 To run the tests execute
 

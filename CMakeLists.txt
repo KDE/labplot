@@ -190,6 +190,7 @@ option(ENABLE_READSTAT "Build with ReadStat support" OFF)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
+option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 
 ### OS macros ####################################
 IF (WIN32)
@@ -387,6 +388,13 @@ IF (ENABLE_READSTAT AND NOT WIN32)
 	add_definitions (-DHAVE_READSTAT)
 ELSE ()
 	MESSAGE (STATUS "ReadStat support DISABLED")
+ENDIF ()
+#################################################
+IF (ENABLE_REPRODUCIBLE)
+	add_definitions (-DREPRODUCIBLE_BUILD)
+	message(STATUS "Reproducable build ENABLED")
+ELSE ()
+	message(STATUS "Reproducable build DISABLED")
 ENDIF ()
 #################################################
 #################################################

@@ -93,7 +93,9 @@ const QString getSystemInfo() {
 	QString usedLanguage = QLocale::languageToString(locale.language()) + ',' + QLocale::countryToString(locale.country());
 
 	return buildType + '\n'
+#ifndef REPRODUCIBLE_BUILD
 		+ QString("%1, %2").arg(__DATE__).arg(__TIME__) + '\n'
+#endif
 		+ i18n("System: ") + QSysInfo::prettyProductName() + '\n'
 		+ i18n("Locale: ") + usedLanguage + ' ' + numberSystemInfo + '\n'
 		+ i18n("Number settings:") + numberLocaleInfo + QLatin1String(" (") + i18n("Updated on restart") + ')' + '\n'
