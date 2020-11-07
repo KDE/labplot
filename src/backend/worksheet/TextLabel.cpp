@@ -745,35 +745,32 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	if (positionInvalid || textWrapper.text.isEmpty())
 		return;
 
-	painter->save();
-
-	//draw the text
 	painter->rotate(-rotationAngle);
 
+	//draw the text
 	if (textWrapper.teXUsed) {
 		if (boundingRect().width() != 0.0 &&  boundingRect().height() != 0.0)
 			painter->drawImage(boundingRect(), teXImage);
 	} else {
-		// don't set fontColor to pen, because the color
-		// is already in the HTML code
+		// don't set pen color, the color is already in the HTML code
 		//painter->setPen(fontColor);
 		painter->scale(scaleFactor, scaleFactor);
 		qreal w = staticText.size().width();
 		qreal h = staticText.size().height();
+		//staticText.setPerformanceHint(QStaticText::AggressiveCaching);
 		//QDEBUG(Q_FUNC_INFO << ", Drawing text:" << staticText.text())
-		painter->drawStaticText(QPointF(-w/2, -h/2), staticText);
+		painter->drawStaticText(QPointF(-w/2., -h/2.), staticText);
 	}
-	painter->restore();
 
 	//draw the border
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
-		painter->save();
-		painter->rotate(-rotationAngle);
 		painter->setPen(borderPen);
 		painter->setOpacity(borderOpacity);
 		painter->drawPath(borderShapePath);
-		painter->restore();
 	}
+
+	// restore
+	painter->rotate(rotationAngle);
 
 	if (m_hovered && !isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
