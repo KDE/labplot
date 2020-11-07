@@ -48,7 +48,7 @@ public:
 
 	bool isDraggable() const override;
 	QVector<AspectType> dropableOn() const override;
-	void processDropEvent(QDropEvent*) override;
+	void processDropEvent(const QVector<quintptr>&) override;
 
 private:
 	QStringList m_pathesToLoad;

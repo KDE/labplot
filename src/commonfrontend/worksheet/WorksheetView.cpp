@@ -28,6 +28,7 @@
  ***************************************************************************/
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "backend/core/AbstractColumn.h"
+#include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
@@ -1180,8 +1181,11 @@ void WorksheetView::dragMoveEvent(QDragMoveEvent* event) {
 
 void WorksheetView::dropEvent(QDropEvent* event) {
 	CartesianPlot* plot = plotAt(event->pos());
-	if (plot != nullptr)
-		plot->processDropEvent(event);
+	if (!plot)
+		return;
+
+	const QMimeData* mimeData = event->mimeData();
+	plot->processDropEvent(plot->project()->droppedAspects(mimeData));
 }
 
 //##############################################################################

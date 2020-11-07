@@ -33,6 +33,7 @@
 #include "backend/core/Folder.h"
 #include "backend/lib/macros.h"
 
+class QMimeData;
 class QString;
 
 class Project : public Folder {
@@ -82,6 +83,7 @@ public:
 
 	static bool isLabPlotProject(const QString& fileName);
 	static QString supportedExtensions();
+	QVector<quintptr> droppedAspects(const QMimeData*);
 
 	class Private;
 

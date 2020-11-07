@@ -88,21 +88,11 @@ QVector<AspectType> Folder::dropableOn() const {
 	return QVector<AspectType>{AspectType::Folder, AspectType::Project};
 }
 
-void Folder::processDropEvent(QDropEvent* event) {
-	const QMimeData* mimeData = event->mimeData();
-	if (!mimeData)
-		return;
-
-	//deserialize the mime data to the vector of aspect pointers
-	QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
-	QVector<quintptr> vec;
-	QDataStream stream(&data, QIODevice::ReadOnly);
-	stream >> vec;
-
+void Folder::processDropEvent(const QVector<quintptr>& vec) {
 	//reparent AbstractPart and Folder objects only
 	AbstractAspect* lastMovedAspect{nullptr};
 	for (auto a : vec) {
-		auto* aspect = (AbstractAspect*)a;
+		auto* aspect = reinterpret_cast<AbstractAspect*>(a);
 		auto* part = dynamic_cast<AbstractPart*>(aspect);
 		if (part) {
 			part->reparent(this);

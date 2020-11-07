@@ -36,7 +36,6 @@
 
 #include <cmath>
 
-class QDropEvent;
 class QToolBar;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
@@ -109,7 +108,7 @@ public:
 	void navigate(NavigationOperation);
 	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
-	void processDropEvent(QDropEvent*) override;
+	void processDropEvent(const QVector<quintptr>&) override;
 	bool isPanningActive() const;
 	bool isHovered() const;
 	bool isPrinted() const;

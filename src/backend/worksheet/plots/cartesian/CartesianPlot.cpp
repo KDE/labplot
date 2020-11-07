@@ -761,17 +761,9 @@ void CartesianPlot::setSuppressDataChangedSignal(bool value) {
 	d->suppressRetransform = value;
 }
 
-void CartesianPlot::processDropEvent(QDropEvent* event) {
+void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 	PERFTRACE("CartesianPlot::processDropEvent");
-	const QMimeData* mimeData = event->mimeData();
-	if (!mimeData)
-		return;
 
-	//deserialize the mime data to the vector of aspect pointers
-	QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
-	QVector<quintptr> vec;
-	QDataStream stream(&data, QIODevice::ReadOnly);
-	stream >> vec;
 	QVector<AbstractColumn*> columns;
 	for (auto a : vec) {
 		auto* aspect = (AbstractAspect*)a;

@@ -39,7 +39,6 @@ class Project;
 class XmlStreamReader;
 
 class QDateTime;
-class QDropEvent;
 class QIcon;
 class QMenu;
 class QUndoCommand;
@@ -165,7 +164,7 @@ public:
 
 	virtual bool isDraggable() const;
 	virtual QVector<AspectType> dropableOn() const;
-	virtual void processDropEvent(QDropEvent*) {};
+	virtual void processDropEvent(const QVector<quintptr>&) {};
 
 	template <class T> T* ancestor() const {
 		AbstractAspect* parent = parentAspect();

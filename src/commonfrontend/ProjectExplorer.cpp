@@ -326,9 +326,9 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 		delete columnsMenu;
 
 		return true;
-	} else if (obj == m_treeView->viewport() && dynamic_cast<QMouseEvent*>(event)) {
-		auto* e = static_cast<QMouseEvent*>(event);
+	} else if (obj == m_treeView->viewport()) {
 		if (event->type() == QEvent::MouseButtonPress) {
+			auto* e = static_cast<QMouseEvent*>(event);
 			if (e->button() == Qt::LeftButton) {
 				QModelIndex index = m_treeView->indexAt(e->pos());
 				if (!index.isValid())
@@ -341,6 +341,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 				}
 			}
 		} else if (event->type() == QEvent::MouseMove) {
+			auto* e = static_cast<QMouseEvent*>(event);
 			if ( !m_dragStarted && m_treeView->selectionModel()->selectedIndexes().size() > 0
 				&& (e->globalPos() - m_dragStartPos).manhattanLength() >= QApplication::startDragDistance()) {
 
@@ -360,6 +361,7 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 
 				QByteArray data;
 				QDataStream stream(&data, QIODevice::WriteOnly);
+				stream << (quintptr)m_project; //serialize the project pointer first, will be used as the unique identifier
 				stream << vec;
 
 				mimeData->setData("labplot-dnd", data);
@@ -378,18 +380,26 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			if (mimeData->formats().at(0) != QLatin1String("labplot-dnd")) {
 				event->ignore();
 				return false;
+			} else {
+				//drad&drop between the different project windows is not supported yet.
+				//check whether we're dragging inside of the same project.
+				QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
+				QDataStream stream(&data, QIODevice::ReadOnly);
+				quintptr ptr = 0;
+				stream >> ptr;
+				auto* project = reinterpret_cast<Project*>(ptr);
+				if (project != m_project) {
+					event->ignore();
+					return false;
+				}
 			}
 
 			event->setAccepted(true);
 		} else if (event->type() == QEvent::DragMove) {
 			auto* dragMoveEvent = static_cast<QDragEnterEvent*>(event);
 			const QMimeData* mimeData = dragMoveEvent->mimeData();
+			QVector<quintptr> vec = m_project->droppedAspects(mimeData);
 
-			//determine the first aspect being dragged
-			QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
-			QVector<quintptr> vec;
-			QDataStream stream(&data, QIODevice::ReadOnly);
-			stream >> vec;
 			AbstractAspect* sourceAspect{nullptr};
 			if (!vec.isEmpty())
 				sourceAspect = reinterpret_cast<AbstractAspect*>(vec.at(0));
@@ -410,12 +420,21 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			event->setAccepted(accept);
 		} else if (event->type() == QEvent::Drop) {
 			auto* dropEvent = static_cast<QDropEvent*>(event);
+			const QMimeData* mimeData = dropEvent->mimeData();
+			if (!mimeData)
+				return false;
+
+			QVector<quintptr> vec = m_project->droppedAspects(mimeData);
+			if (vec.isEmpty())
+				return false;
+
 			QModelIndex index = m_treeView->indexAt(dropEvent->pos());
 			if (!index.isValid())
 				return false;
 
+			//process the droped objects
 			auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-			aspect->processDropEvent(dropEvent);
+			aspect->processDropEvent(vec);
 		}
 	}
 

@@ -44,6 +44,7 @@
 #include <QDateTime>
 #include <QFile>
 #include <QMenu>
+#include <QMimeData>
 #include <QThreadPool>
 #include <QUndoStack>
 #include <QBuffer>
@@ -370,6 +371,21 @@ bool Project::isLabPlotProject(const QString& fileName) {
 QString Project::supportedExtensions() {
 	static const QString extensions = "*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ";
 	return extensions;
+}
+
+QVector<quintptr> Project::droppedAspects(const QMimeData* mimeData) {
+	QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
+	QDataStream stream(&data, QIODevice::ReadOnly);
+
+	//read the project pointer first
+	quintptr project = 0;
+	stream >> project;
+
+	//read the pointers of the dragged aspects
+	QVector<quintptr> vec;
+	stream >> vec;
+
+	return vec;
 }
 
 //##############################################################################
