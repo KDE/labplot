@@ -126,6 +126,7 @@
 #include <KActionMenu>
 #include <KColorScheme>
 #include <KColorSchemeManager>
+#include <KToggleFullScreenAction>
 #include <kconfigwidgets_version.h>
 
 #ifdef HAVE_CANTOR_LIBS
@@ -493,14 +494,13 @@ void MainWin::initActions() {
 
 	//TODO: on Mac OS when going full-screen we get a crash because of an stack-overflow
 #ifndef Q_OS_MAC
-	KStandardAction::fullScreen(this, &MainWin::toggleFullScreen, this, actionCollection());
+	m_toggleFullScreenAction = KStandardAction::fullScreen(this, &MainWin::toggleFullScreen, this, actionCollection());
 #endif
 
 	//QDEBUG(Q_FUNC_INFO << ", preferences action name:" << KStandardAction::name(KStandardAction::Preferences))
 	KStandardAction::preferences(this, &MainWin::settingsDialog, actionCollection());
 	// QAction* action = actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
 	KStandardAction::quit(this, &MainWin::close, actionCollection());
-
 
 	//New Folder/Workbook/Spreadsheet/Matrix/Worksheet/Datasources
 	m_newWorkbookAction = new QAction(QIcon::fromTheme("labplot-workbook-new"),i18n("Workbook"),this);
@@ -2225,13 +2225,8 @@ void MainWin::cartesianPlotMouseModeChanged(CartesianPlot::MouseMode mode) {
 	}
 }
 
-void MainWin::toggleFullScreen() {
-	if (this->windowState() == Qt::WindowFullScreen)
-		this->setWindowState(m_lastWindowState);
-	else {
-		m_lastWindowState = this->windowState();
-		this->showFullScreen();
-	}
+void MainWin::toggleFullScreen(bool t) {
+	m_toggleFullScreenAction->setFullScreen(this, t);
 }
 
 void MainWin::closeEvent(QCloseEvent* event) {

@@ -99,6 +99,7 @@ class QQuickWidget;
 
 class KColorSchemeManager;
 class KRecentFilesAction;
+class KToggleFullScreenAction;
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/Provider>
@@ -206,6 +207,7 @@ private:
 	QAction* m_togglePropertiesDockAction;
 	QAction* m_toggleStatusBarAction;
 	QAction* m_toggleMemoryInfoAction;
+	KToggleFullScreenAction* m_toggleFullScreenAction;
 
 	//window visibility
 	QAction* m_visibilityFolderAction;
@@ -344,7 +346,7 @@ private slots:
 	void toggleDockWidget(QAction*);
 	void toggleStatusBar();
 	void toggleMemoryInfo();
-	void toggleFullScreen();
+	void toggleFullScreen(bool);
 	void projectExplorerDockVisibilityChanged(bool);
 	void propertiesDockVisibilityChanged(bool);
 	void cursorDockVisibilityChanged(bool);
