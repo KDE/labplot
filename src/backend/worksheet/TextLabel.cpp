@@ -745,6 +745,7 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	if (positionInvalid || textWrapper.text.isEmpty())
 		return;
 
+	painter->save();
 	painter->rotate(-rotationAngle);
 
 	//draw the text
@@ -761,16 +762,18 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		//QDEBUG(Q_FUNC_INFO << ", Drawing text:" << staticText.text())
 		painter->drawStaticText(QPointF(-w/2., -h/2.), staticText);
 	}
+	painter->restore();
 
 	//draw the border
 	if (borderShape != TextLabel::BorderShape::NoBorder) {
+		painter->save();
 		painter->setPen(borderPen);
 		painter->setOpacity(borderOpacity);
-		painter->drawPath(borderShapePath);
-	}
 
-	// restore
-	painter->rotate(rotationAngle);
+		painter->rotate(-rotationAngle);
+		painter->drawPath(borderShapePath);
+		painter->restore();
+	}
 
 	if (m_hovered && !isSelected() && !m_printing) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
