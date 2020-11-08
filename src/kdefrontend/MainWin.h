@@ -149,7 +149,6 @@ private:
 	bool m_showWelcomeScreen{false};
 	bool m_saveWelcomeScreen{true};
 	MemoryWidget* m_memoryInfoWidget{nullptr};
-	Qt::WindowStates m_lastWindowState; //< last window state before switching to full screen mode
 	QMdiSubWindow* m_welcomeWindow{nullptr};
 	QQuickWidget* m_welcomeWidget{nullptr};
 // 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};

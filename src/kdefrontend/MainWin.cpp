@@ -492,10 +492,7 @@ void MainWin::initActions() {
 	m_printAction = KStandardAction::print(this, &MainWin::print, actionCollection());
 	m_printPreviewAction = KStandardAction::printPreview(this, &MainWin::printPreview, actionCollection());
 
-	//TODO: on Mac OS when going full-screen we get a crash because of an stack-overflow
-#ifndef Q_OS_MAC
 	m_toggleFullScreenAction = KStandardAction::fullScreen(this, &MainWin::toggleFullScreen, this, actionCollection());
-#endif
 
 	//QDEBUG(Q_FUNC_INFO << ", preferences action name:" << KStandardAction::name(KStandardAction::Preferences))
 	KStandardAction::preferences(this, &MainWin::settingsDialog, actionCollection());
@@ -704,11 +701,7 @@ void MainWin::initActions() {
 void MainWin::initMenus() {
 	//add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
 	//this menu is created automatically when the default "full screen" action is created in initActions().
-	//because of a bug on macOS we don't have this action and menu on macOS, so we add available the explorer
-	//toggle actions to the menu "Windows".
 	auto* menu = dynamic_cast<QMenu*>(factory()->container("view", this));
-	if (!menu)
-		menu = dynamic_cast<QMenu*>(factory()->container("windows", this));
 
 	if (menu) {
 		menu->addSeparator();
