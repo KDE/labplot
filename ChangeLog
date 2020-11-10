@@ -13,6 +13,7 @@ Bug fixes:
 	* BUG 389920 - remove sub-window shadow remnants when closing the project
 	* BUG 428029 - changing font of text label for newer Qt versions
 	* BUG 428813 - full screen not restored (also fixed full screen on macOS)
+	* BUG 428698 - Don't crash when doing drag&drop between different main windows
 	* Fix missing settings dialog on macOS
 	* Parser improvements (found in "Generate Function Values"):
 		* Fix Crash using variable name of pre-defined functions as function ("sin()")
