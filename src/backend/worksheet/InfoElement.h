@@ -137,7 +137,7 @@ signals:
     void visibleChanged(const bool);
     void gluePointIndexChanged(const int);
 	void connectionLineCurveNameChanged(const QString&);
-	void labelBorderShapeChangedSignal(int gluePointsCount);
+	void labelBorderShapeChangedSignal();
 	void curveRemoved(const QString&);
 };
 
