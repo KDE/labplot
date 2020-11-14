@@ -52,7 +52,7 @@ public:
 	~InfoElement();
 
 	struct MarkerPoints_T {
-		MarkerPoints_T();
+		MarkerPoints_T() = default;
 		MarkerPoints_T(CustomPoint* custompoint, QString customPointPath, const XYCurve* curve, QString curvePath):
 			customPoint(custompoint), customPointPath(customPointPath), curve(curve), curvePath(curvePath) {}
 		CustomPoint* customPoint{nullptr};
@@ -70,9 +70,9 @@ public:
 	void init();
 	void initActions();
 	void initMenus();
-    void addCurve(const XYCurve*, CustomPoint* = nullptr);
-    void addCurvePath(QString& curvePath, CustomPoint* = nullptr);
-    bool assignCurve(const QVector<XYCurve*>&);
+	void addCurve(const XYCurve*, CustomPoint* = nullptr);
+	void addCurvePath(QString& curvePath, CustomPoint* = nullptr);
+	bool assignCurve(const QVector<XYCurve*>&);
 	void removeCurve(const XYCurve*);
 	void setZValue(qreal) override;
 	int markerPointsCount();
@@ -81,7 +81,7 @@ public:
 	TextLabel::GluePoint gluePoint(int index);
 	TextLabel::TextWrapper createTextLabelText();
 	QMenu* createContextMenu() override;
-    CartesianPlot* plot();
+	CartesianPlot* plot();
 	bool isVisible() const override;
 	bool isTextLabel() const;
 
@@ -128,14 +128,14 @@ private:
 	// Actions
 	QAction* visibilityAction;
 signals:
-    void xposLineVisibleChanged(const bool);
-    void connectionLineVisibleChanged(const bool);
-    void xposLineWidthChanged(const double);
+	void xposLineVisibleChanged(const bool);
+	void connectionLineVisibleChanged(const bool);
+	void xposLineWidthChanged(const double);
 	void xposLineColorChanged(const QColor&);
-    void connectionLineWidthChanged(const double);
+	void connectionLineWidthChanged(const double);
 	void connectionLineColorChanged(const QColor&);
-    void visibleChanged(const bool);
-    void gluePointIndexChanged(const int);
+	void visibleChanged(const bool);
+	void gluePointIndexChanged(const int);
 	void connectionLineCurveNameChanged(const QString&);
 	void labelBorderShapeChangedSignal();
 	void curveRemoved(const QString&);
