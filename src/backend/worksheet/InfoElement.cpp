@@ -519,7 +519,7 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 	// textlabel was deleted
 	const TextLabel* textlabel = dynamic_cast<const TextLabel*>(child);
 	if (textlabel) {
-		assert(label == textlabel);
+		Q_ASSERT(label == textlabel);
 		label = nullptr;
 		for (int i = 0; i < markerpoints.length(); i++) { // why it's not working without?
 			m_suppressChildRemoved = true;

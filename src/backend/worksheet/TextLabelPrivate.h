@@ -73,7 +73,7 @@ public:
 	bool positionInvalid{false};
 
 	const CartesianPlot* plot{nullptr};
-    const CartesianCoordinateSystem* cSystem{nullptr};
+	const CartesianCoordinateSystem* cSystem{nullptr};
 	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
 	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
 
@@ -93,7 +93,7 @@ public:
 	void updateTeXImage();
 	void updateBorder();
 	QPointF logicalPos(AbstractCoordinateSystem::MappingFlags flag = AbstractCoordinateSystem::MappingFlag::DefaultMapping);
-    QRectF size();
+	QRectF size();
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	TextLabel::GluePoint gluePointAt(int index);
 
@@ -116,11 +116,10 @@ public:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
-    TextLabel* const q{nullptr};
+	TextLabel* const q{nullptr};
 
 	// used in the InfoElement (Marker) to attach the line to the label
 	QVector<TextLabel::GluePoint> m_gluePoints;
-
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;

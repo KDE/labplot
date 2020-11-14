@@ -128,11 +128,14 @@ public:
 	bool isAttachedToCoord() const;
 	bool isAttachedToCoordEnabled() const;
 	void setPrinting(bool) override;
-    QRectF size();
-    QPointF logicalPos(AbstractCoordinateSystem::MappingFlags flag = AbstractCoordinateSystem::MappingFlag::DefaultMapping);
+	QRectF size();
+	QPointF logicalPos(AbstractCoordinateSystem::MappingFlags flag = AbstractCoordinateSystem::MappingFlag::DefaultMapping);
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	int gluePointCount();
 	struct GluePoint {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0))	// we need a default contructor for QVector
+		GluePoint() = default;
+#endif
 		GluePoint(QPointF point, QString name) : point(point), name(name) {}
 		QPointF point;
 		QString name;

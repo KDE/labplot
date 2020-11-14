@@ -535,14 +535,14 @@ QPointF TextLabelPrivate::findNearestGluePoint(QPointF scenePoint) {
 		return boundingRectangle.center();
 
 	if (m_gluePoints.length() == 1)
-		return mapParentToPlotArea(mapToParent(m_gluePoints[0].point));
+		return mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
 
-	QPointF point = mapParentToPlotArea(mapToParent(m_gluePoints[0].point));
+	QPointF point = mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
 	QPointF nearestPoint = point;
 	double distance2 = pow(point.x()-scenePoint.x(), 2) + pow(point.y()-scenePoint.y(), 2);
 	// assumption, more than one point available
-	for (int i=1; i< m_gluePoints.length(); i++) {
-		point = mapParentToPlotArea(mapToParent(m_gluePoints[i].point));
+	for (int i = 1; i < m_gluePoints.length(); i++) {
+		point = mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
 		double distance2_temp = pow(point.x()-scenePoint.x(), 2) + pow(point.y()-scenePoint.y(), 2);
 		if (distance2_temp < distance2) {
 			nearestPoint = point;
@@ -567,11 +567,11 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 		pos = boundingRectangle.center();
 		name = "center";
 	} else if (index < 0) {
-		pos = m_gluePoints[0].point;
-		name = m_gluePoints[0].name;
+		pos = m_gluePoints.at(0).point;
+		name = m_gluePoints.at(0).name;
 	} else {
-		pos = m_gluePoints[index].point;
-		name = m_gluePoints[index].name;
+		pos = m_gluePoints.at(index).point;
+		name = m_gluePoints.at(index).name;
 	}
 
 	return TextLabel::GluePoint(mapParentToPlotArea(mapToParent(pos)), name);
@@ -735,12 +735,12 @@ void TextLabelPrivate::updateBorder() {
 
 	borderShapePath = QPainterPath();
 	switch (borderShape) {
-    case (TextLabel::BorderShape::NoBorder): {
+	case (TextLabel::BorderShape::NoBorder): {
 			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width()/2,boundingRectangle.y()), "top"));
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width(),boundingRectangle.y()+boundingRectangle.height()/2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width()/2,boundingRectangle.y()+boundingRectangle.height()), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(),boundingRectangle.y()+boundingRectangle.height()/2), "left"));
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width()/2, boundingRectangle.y()), "top"));
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width(), boundingRectangle.y()+boundingRectangle.height()/2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width()/2, boundingRectangle.y()+boundingRectangle.height()), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y()+boundingRectangle.height()/2), "left"));
 			break;
 		}
 	case (TextLabel::BorderShape::Rect): {
