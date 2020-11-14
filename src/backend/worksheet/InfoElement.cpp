@@ -395,7 +395,6 @@ bool InfoElement::isVisible() const {
 }
 
 bool InfoElement::isTextLabel() const {
-	Q_D(const InfoElement);
 	return label != nullptr;
 }
 
@@ -496,7 +495,8 @@ void InfoElement::labelBorderShapeChanged() {
  * Delete child and remove from markerpoint list if it is a markerpoint. If it is a textlabel delete complete InfoElement
  */
 void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
-	Q_D(InfoElement);
+    Q_UNUSED(before)
+    Q_D(InfoElement);
 
 	// when childs are reordered, don't remove them
 	// problem: when the order was changed the elements are deleted for a short time and recreated. This function will called then
@@ -534,7 +534,6 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 }
 
 void InfoElement::childAdded(const AbstractAspect* child) {
-	Q_D(InfoElement);
 	const CustomPoint* point = dynamic_cast<const CustomPoint*>(child);
 	if (point) {
 		connect(point, &CustomPoint::positionChanged, this, &InfoElement::pointPositionChanged);
@@ -591,7 +590,7 @@ void InfoElement::pointPositionChanged(QPointF pos) {
 			DEBUG("InfoElement::pointPositionChanged, Set Position: ("<< x_new << "," << y << ")");
 			markerpoints[i].customPoint->setPosition(QPointF(x_new,y));
 			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-			QPointF position = d->cSystem->mapSceneToLogical(markerpoints[i].customPoint->graphicsItem()->pos());
+            //QPointF position = d->cSystem->mapSceneToLogical(markerpoints[i].customPoint->graphicsItem()->pos());
 			m_suppressChildPositionChanged = false;
 		}
 	}
@@ -619,7 +618,9 @@ void InfoElement::retransform() {
 	d->retransform();
 }
 void InfoElement::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-
+    Q_UNUSED(horizontalRatio)
+    Q_UNUSED(verticalRatio)
+    Q_UNUSED(pageResize)
 }
 
 //##############################################################################
@@ -718,14 +719,15 @@ void InfoElement::setConnectionLineCurveName(const QString name) {
 //##############################################################################
 
 InfoElementPrivate::InfoElementPrivate(InfoElement* owner,CartesianPlot *plot):
-	q(owner),
-	plot(plot) {
+    plot(plot),
+    q(owner) {
 	init();
 }
 
 InfoElementPrivate::InfoElementPrivate(InfoElement* owner, CartesianPlot *plot, const XYCurve* curve):
-	q(owner),
-	plot(plot) {
+    plot(plot),
+    q(owner) {
+    Q_UNUSED(curve)
 	init();
 }
 
@@ -857,6 +859,7 @@ QRectF InfoElementPrivate::boundingRect() const {
 }
 
 void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget* widget) {
+    Q_UNUSED(widget)
 	if (!visible)
 		return;
 
@@ -887,8 +890,8 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 		if (xposLineVisible) {
 			if (abs(xposLine.x1()-event->pos().x())< ((xposLineWidth < 3)? 3: xposLineWidth)) {
-				if (!isSelected());
-				setSelected(true);
+                if (!isSelected())
+                    setSelected(true);
 				m_suppressKeyPressEvents = false;
 				oldMousePos = mapToParent(event->pos());
 				event->accept();
@@ -1002,8 +1005,8 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	}
 	if (newMarkerPointPos) { // move oldMousePos only when the markerpoints are moved to the next value
 		q->label->setText(q->createTextLabelText());
-		double x_label = q->label->position().point.x() + delta.x();
-		double y_label = q->label->position().point.y();
+        //double x_label = q->label->position().point.x() + delta.x();
+        //double y_label = q->label->position().point.y();
 		//q->label->setPosition(QPointF(x_label,y_label)); // don't move label
 		oldMousePos = eventPos;
 	}
@@ -1029,7 +1032,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 		else
 			index = -1;
 
-		double x, y, xNew;
+        double x, xNew;
 		bool valueFound;
 		QPointF pointPosition;
 		int rowCount;
@@ -1049,7 +1052,6 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 		for (int i=1; i< q->markerPointsCount(); i++) {
 			if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
 				position = q->markerpoints[i].customPoint->position();
-				auto* column = q->markerpoints[i].curve->xColumn();
 				if (m_index > rowCount - 1)
 					m_index = rowCount - 1;
 				if (m_index < 0)

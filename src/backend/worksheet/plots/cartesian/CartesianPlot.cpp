@@ -1466,6 +1466,7 @@ void CartesianPlot::addInfoElement(const XYCurve* curve, double pos) {
 void CartesianPlot::addTextLabel() {
 	auto* label = new TextLabel("text label");
 	this->addChild(label);
+    label->enableCoordBinding(true);
 	label->setParentGraphicsItem(graphicsItem());
 }
 

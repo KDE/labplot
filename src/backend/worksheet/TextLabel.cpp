@@ -391,7 +391,7 @@ void TextLabel::setCoordBinding(bool on) {
 bool TextLabel::enableCoordBinding(bool enable, const CartesianPlot* plot) {
 	Q_D(TextLabel);
 
-	if (!d->plot) // if infoelement is parent, it has no cartesianplot
+    if (!d->plot) // if infoelement is parent, it has no cartesianplot so d->plot stays nullptr because of the dynamic cast
 		d->plot = dynamic_cast<const CartesianPlot*>(parentAspect());
 
 	if (d->plot == nullptr) {
