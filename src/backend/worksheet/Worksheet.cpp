@@ -411,19 +411,19 @@ void Worksheet::suppressSelectionChangedEvent(bool value) {
 }
 
 /*!
- * \brief Worksheet::getPlotCount
+ * \brief Worksheet::plotCount
  * \return number of CartesianPlot's in the Worksheet
  */
-int Worksheet::getPlotCount() {
+int Worksheet::plotCount() {
 	return children<CartesianPlot>().length();
 }
 
 /*!
- * \brief Worksheet::getPlot
+ * \brief Worksheet::plot
  * \param index Number of plot which should be returned
  * \return Pointer to the CartesianPlot which was searched with index
  */
-CartesianPlot* Worksheet::getPlot(int index) {
+CartesianPlot* Worksheet::plot(int index) {
 	auto plots = children<CartesianPlot>();
 	if (plots.length() - 1 >= index)
 		return plots.at(index);
@@ -848,21 +848,21 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 		treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
 
 		// y values
-		for (int i = 0; i < getPlotCount(); i++) { // i=0 is the x Axis
+        for (int i = 0; i < plotCount(); i++) { // i=0 is the x Axis
 
-			auto* plot = getPlot(i);
-			if (!plot || !plot->isVisible())
+            auto* p = plot(i);
+            if (!p || !p->isVisible())
 				continue;
 
 			QModelIndex plotIndex = treeModel->index(rowPlot, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
 
 			// curves
 			int rowCurve = 0;
-			for (int j = 0; j < plot->curveCount(); j++) {
+            for (int j = 0; j < p->curveCount(); j++) {
 				// assumption: index of signals in model is the same than the index of the signal in the plot
 				bool valueFound;
 
-				const XYCurve* curve = plot->getCurve(j);
+                const XYCurve* curve = p->getCurve(j);
 				if (!curve->isVisible())
 					continue;
 
@@ -1111,8 +1111,8 @@ void Worksheet::updateCompleteCursorTreeModel() {
 	if (treeModel->rowCount() > 0)
 		treeModel->removeRows(0, treeModel->rowCount()); // remove all data
 
-	int plotCount = getPlotCount();
-	if (plotCount < 1)
+    int pc = plotCount();
+    if (pc < 1)
 		return;
 
 	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
@@ -1122,7 +1122,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 		// set X data
 		QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME));
 		treeModel->setData(xName, QVariant("X"));
-		auto* plot0 = getPlot(0);
+        auto* plot0 = plot(0);
 		if (plot0) {
 			double valueCursor[2];
 			for (int i = 0; i < 2; i++) {
@@ -1139,12 +1139,12 @@ void Worksheet::updateCompleteCursorTreeModel() {
 	}
 
 	// set plot name, y value, background
-	for (int i = 0; i < plotCount; i++) {
-		auto* plot = getPlot(i);
+    for (int i = 0; i < pc; i++) {
+        auto* p = plot(i);
 		QModelIndex plotName;
 		int addOne = 0;
 
-		if (!plot || !plot->isVisible())
+        if (!p || !p->isVisible())
 			continue;
 
 		// add new entry for the plot
@@ -1153,18 +1153,18 @@ void Worksheet::updateCompleteCursorTreeModel() {
 		// add plot name and X row if needed
 		if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 			plotName = treeModel->index(i + 1, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME)); // plus one because first row are the x values
-			treeModel->setData(plotName, QVariant(plot->name()));
+            treeModel->setData(plotName, QVariant(p->name()));
 		} else {
 			addOne = 1;
 			plotName = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
-			treeModel->setData(plotName, QVariant(plot->name()));
+            treeModel->setData(plotName, QVariant(p->name()));
 			treeModel->insertRows(0, 1, plotName); // one, because the first row are the x values
 
 			QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotName);
 			treeModel->setData(xName, QVariant("X"));
 			double valueCursor[2];
 			for (int i = 0; i < 2; i++) {
-				valueCursor[i] = plot->cursorPos(i);
+                valueCursor[i] = p->cursorPos(i);
 				QModelIndex cursor = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i, plotName);
 
 				treeModel->setData(cursor, QVariant(valueCursor[i]));
@@ -1175,15 +1175,15 @@ void Worksheet::updateCompleteCursorTreeModel() {
 
 
 		int rowCurve = addOne;
-		for (int j = 0; j < plot->curveCount(); j++) {
+        for (int j = 0; j < p->curveCount(); j++) {
 			double cursorValue[2] = {NAN, NAN};
-			const XYCurve* curve = plot->getCurve(j);
+            const XYCurve* curve = p->getCurve(j);
 
 			if (!curve->isVisible())
 				continue;
 
 			for (int k = 0; k < 2; k++) {
-				double xPos = plot->cursorPos(k);
+                double xPos = p->cursorPos(k);
 				bool valueFound;
 				cursorValue[k] = curve->y(xPos,valueFound);
 			}

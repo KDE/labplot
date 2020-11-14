@@ -56,6 +56,7 @@
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/InfoElement.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
@@ -63,6 +64,7 @@
 #include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
+#include "kdefrontend/worksheet/InfoElementDialog.h"
 
 #include <QDir>
 #include <QDropEvent>
@@ -106,7 +108,7 @@ CartesianPlot::~CartesianPlot() {
 
 	delete m_coordinateSystem;
 
-	//don't need to delete objects added with addChild()
+	//no need to delete objects added with addChild()
 
 	//no need to delete the d-pointer here - it inherits from QGraphicsItem
 	//and is deleted during the cleanup in QGraphicsScene
@@ -436,6 +438,7 @@ void CartesianPlot::initActions() {
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), this);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), this);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), this);
+    addInfoElementAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Info Element"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 	addReferenceLineAction = new QAction(QIcon::fromTheme("draw-line"), i18n("Reference Line"), this);
 
@@ -458,6 +461,7 @@ void CartesianPlot::initActions() {
 	connect(addVerticalAxisAction, &QAction::triggered, this, &CartesianPlot::addVerticalAxis);
 	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
 	connect(addImageAction, &QAction::triggered, this, &CartesianPlot::addImage);
+	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::openInfoElementCreationDialog);
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
 
@@ -601,6 +605,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addTextLabelAction);
 	addNewMenu->addAction(addImageAction);
+	addNewMenu->addAction(addInfoElementAction);
 	addNewMenu->addSeparator();
 	addNewMenu->addAction(addCustomPointAction);
 	addNewMenu->addAction(addReferenceLineAction);
@@ -689,6 +694,8 @@ QMenu* CartesianPlot::createContextMenu() {
 		initMenus();
 
 	QMenu* menu = WorksheetElement::createContextMenu();
+	// seems to be a bug, because the tooltips are not shown
+	menu->setToolTipsVisible(true);
 	QAction* firstAction = menu->actions().at(1);
 
 
@@ -701,6 +708,14 @@ QMenu* CartesianPlot::createContextMenu() {
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+
+	if (children<XYCurve>().isEmpty()) {
+		addInfoElementAction->setEnabled(false);
+		addInfoElementAction->setToolTip("No curve inside plot.");
+	} else {
+		addInfoElementAction->setEnabled(true);
+		addInfoElementAction->setToolTip("");
+	}
 
 	return menu;
 }
@@ -1211,6 +1226,19 @@ void CartesianPlot::addEquationCurve() {
 void CartesianPlot::addHistogram() {
 	addChild(new Histogram("Histogram"));
 }
+/*!
+ * \brief CartesianPlot::curveSelected
+ * Slot which will be called from the XYCurve, when a curve will be selected
+ */
+void CartesianPlot::curveSelected(double pos) {
+	// if dialog does not exist, cartesianPlotInfoElementCreationDialog() was never called
+	// which means, no infoelement should be created --> ignore it
+	if (!m_infoElementDialog)
+		return;
+
+	// if the dialog was already created previously. The dialog ignores the signal by itself
+	m_infoElementDialog->setActiveCurve(qobject_cast<const XYCurve*>(QObject::sender()), pos);
+}
 
 /*!
  * returns the first selected XYCurve in the plot
@@ -1411,6 +1439,30 @@ void CartesianPlot::addLegend() {
 		addLegendAction->setEnabled(false);
 }
 
+void CartesianPlot::openInfoElementCreationDialog() {
+	if (!m_infoElementDialog) {
+		Worksheet* worksheet = static_cast<Worksheet*>(parent(AspectType::Worksheet));
+		if (worksheet)
+			m_infoElementDialog = new InfoElementDialog(worksheet->view());
+		else
+			m_infoElementDialog = new InfoElementDialog(nullptr);
+	}
+	m_infoElementDialog->setPlot(this);
+	m_infoElementDialog->show();
+}
+
+/*!
+ * \brief CartesianPlot::addInfoElement
+ * Marks cartesianPlot to add a new infoElement.
+ * When a curve will be selected, a InfoElement will be added
+ */
+void CartesianPlot::addInfoElement(const XYCurve* curve, double pos) {
+    InfoElement* ie = new InfoElement("Info Element", this, curve, pos);
+    this->addChild(ie);
+    ie->setParentGraphicsItem(graphicsItem());
+    ie->retransform(); // must be done, because the custompoint must be retransformed (see https://invent.kde.org/marmsoler/labplot/issues/9)
+}
+
 void CartesianPlot::addTextLabel() {
 	auto* label = new TextLabel("text label");
 	this->addChild(label);
@@ -1479,6 +1531,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::symbolsOpacityChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::symbolsBrushChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::symbolsPenChanged, this, &CartesianPlot::updateLegend);
+		connect(curve, SIGNAL(linePenChanged(QPen)), this, SIGNAL(curveLinePenChanged(QPen))); // feed forward linePenChanged, because Worksheet needs because CursorDock must be updated too
+		connect(curve, &XYCurve::selected, this, &CartesianPlot::curveSelected);
 
 		updateLegend();
 		d->curvesXMinMaxIsDirty = true;
@@ -3579,6 +3633,22 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		painter->drawRect(QRectF(selectionStart, selectionEnd));
 		painter->restore();
 	}
+
+	float penWidth = 6.;
+	QRectF rect = q->m_plotArea->graphicsItem()->boundingRect();
+	// the sign must be oposite for penWidth??
+	rect = QRectF(-rect.width()/2 - penWidth / 2, -rect.height()/2 - penWidth / 2,
+				  rect.width() + penWidth, rect.height() + penWidth);
+
+	if (m_hovered && !isSelected() && !m_printing) {
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth, Qt::SolidLine));
+		painter->drawRect(rect);
+	}
+
+	if (isSelected() && !m_printing) {
+		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth, Qt::SolidLine));
+		painter->drawRect(rect);
+	}
 }
 
 //##############################################################################
@@ -3885,7 +3955,17 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			} else
 				addChildFast(image);
-		} else if (reader->name() == "plotArea")
+		} else if (reader->name() == "infoElement") {
+			InfoElement* marker = new InfoElement("Marker", this);
+			if (marker->load(reader, preview)) {
+				addChildFast(marker);
+				marker->setParentGraphicsItem(graphicsItem());
+				marker->retransform();
+			} else {
+				delete marker;
+				return false;
+			}
+        } else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
 			auto* axis = new Axis(QString());
@@ -3896,7 +3976,8 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyCurve") {
-			auto* curve = new XYCurve(QString());
+            auto* curve = new XYCurve(QString());
+			connect(curve, &XYCurve::selected, this, &CartesianPlot::curveSelected);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {

@@ -79,7 +79,7 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
 #include "DatasetModel.h"
-// #include "welcomescreen/WelcomeScreenHelper.h"
+#include "kdefrontend/worksheet/InfoElementDialog.h"
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/ApplicationVersionSource>

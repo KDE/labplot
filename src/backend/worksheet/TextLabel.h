@@ -33,6 +33,7 @@
 #include "backend/lib/macros.h"
 #include "tools/TeXRenderer.h"
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
 #include <QPen>
 #include <QTextEdit>
@@ -40,12 +41,18 @@
 class QBrush;
 class QFont;
 class TextLabelPrivate;
+class CartesianPlot;
 
 class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
 public:
+<<<<<<< HEAD
+	enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel};
+
+=======
 	enum class Type {General, PlotTitle, AxisTitle, PlotLegendTitle};
+>>>>>>> d0573f64a0edc64b2167a9ce86f2064b8f781299
 	enum class BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
 			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
 
@@ -62,6 +69,16 @@ public:
 		TextWrapper(const QString& t, bool html = false) {
 			text = createHtml(t, html);
 		}
+		TextWrapper(const QString& t, bool html, QString& placeholder): teXUsed(false), placeholder(true), textPlaceholder(placeholder) {
+			text = createHtml(t, html);
+		}
+		TextWrapper(const QString& t, bool b, bool html, bool placeholder): teXUsed(b), placeholder(placeholder) {
+			if (b) {
+				text = t; // latex does not support html, so assume t is a plain string
+				return;
+			}
+			text = createHtml(t, html);
+		}
 		QString createHtml(QString text, bool isHtml) {
 			if (isHtml)
 				return text;
@@ -72,9 +89,12 @@ public:
 
 		QString text;
 		bool teXUsed{false};
+		bool placeholder{false};
+		QString textPlaceholder{""}; // text with placeholders
 	};
 
 	explicit TextLabel(const QString& name, Type type = Type::General);
+    TextLabel(const QString& name, CartesianPlot*, Type type = Type::General);
 	~TextLabel() override;
 
 	Type type() const;
@@ -91,6 +111,9 @@ public:
 	CLASS_D_ACCESSOR_DECL(TextWrapper, text, Text)
 	BASIC_D_ACCESSOR_DECL(QColor, fontColor, FontColor)
 	BASIC_D_ACCESSOR_DECL(QColor, backgroundColor, BackgroundColor)
+	CLASS_D_ACCESSOR_DECL(TextWrapper, textPlaceholder, PlaceholderText)
+	BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor)
+	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
 	CLASS_D_ACCESSOR_DECL(WorksheetElement::PositionWrapper, position, Position)
 	void setPosition(QPointF);
@@ -104,8 +127,23 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
 	void setVisible(bool on) override;
+	void setCoordBinding(bool on);
+	bool enableCoordBinding(bool enable, const CartesianPlot* plot = nullptr);
 	bool isVisible() const override;
+	bool isAttachedToCoord() const;
+	bool isAttachedToCoordEnabled() const;
 	void setPrinting(bool) override;
+    QRectF size();
+    QPointF logicalPos(AbstractCoordinateSystem::MappingFlags flag = AbstractCoordinateSystem::MappingFlag::DefaultMapping);
+	QPointF findNearestGluePoint(QPointF scenePoint);
+	int gluePointCount();
+	struct GluePoint {
+		GluePoint(QPointF point, QString name) : point(point), name(name) {}
+		QPointF point;
+		QString name;
+	};
+
+	GluePoint gluePointAt(int index);
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;

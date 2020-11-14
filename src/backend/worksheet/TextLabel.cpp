@@ -32,6 +32,8 @@
 #include "TextLabelPrivate.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #include <QApplication>
 #include <QBuffer>
@@ -73,8 +75,10 @@ TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type)
 	init();
 }
 
-TextLabel::Type TextLabel::type() const {
-	return m_type;
+TextLabel::TextLabel(const QString &name, CartesianPlot* plot, Type type):
+	WorksheetElement(name, AspectType::TextLabel),
+	d_ptr(new TextLabelPrivate(this,plot)), m_type(type), visibilityAction(nullptr) {
+	init();
 }
 
 void TextLabel::init() {
@@ -94,6 +98,8 @@ void TextLabel::init() {
 	case Type::PlotLegendTitle:
 		groupName = "PlotLegendTitle";
 		break;
+	case InfoElementLabel:
+		groupName = "InfoElementLabel";
 	}
 
 	const KConfig config;
@@ -146,6 +152,10 @@ void TextLabel::init() {
 
 	DEBUG("CHECK: default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
 
+	// disable attach to cartesian plot by default
+	d->m_coordBindingEnable = false;
+	d->m_coordBinding = false;
+
 	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QImage>::finished, this, &TextLabel::updateTeXImage);
 }
 
@@ -157,6 +167,11 @@ QGraphicsItem* TextLabel::graphicsItem() const {
 	return d_ptr;
 }
 
+/*!
+ * \brief TextLabel::setParentGraphicsItem
+ * Sets the parent graphicsitem, needed for binding to coord
+ * \param item parent graphicsitem
+ */
 void TextLabel::setParentGraphicsItem(QGraphicsItem* item) {
 	Q_D(TextLabel);
 	d->setParentItem(item);
@@ -197,8 +212,8 @@ void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool 
 /*!
 	Returns an icon to be used in the project explorer.
 */
-QIcon TextLabel::icon() const{
-	return QIcon::fromTheme("draw-text");
+QIcon TextLabel::icon() const {
+	return  QIcon::fromTheme("draw-text");
 }
 
 QMenu* TextLabel::createContextMenu() {
@@ -236,8 +251,17 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText);
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
-	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed) )
+	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed)
+			|| ((d->textWrapper.placeholder || textWrapper.placeholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
+			textWrapper.placeholder != d->textWrapper.placeholder)
 		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPlaceholderText, TextLabel::TextWrapper, textWrapper, updateText);
+void TextLabel::setPlaceholderText(const TextWrapper &textWrapper) {
+	Q_D(TextLabel);
+	if ( (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder) || (textWrapper.teXUsed != d->textWrapper.teXUsed) )
+		exec(new TextLabelSetPlaceholderTextCmd(d, textWrapper, ki18n("%1: set label placeholdertext")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFont, QFont, teXFont, updateText);
@@ -270,12 +294,16 @@ void TextLabel::setPosition(const PositionWrapper& pos) {
 }
 
 /*!
-	sets the position without undo/redo-stuff
-*/
+ * \brief TextLabel::setPosition
+ * sets the position without undo/redo-stuff
+ * \param point point in scene coordinates
+ */
 void TextLabel::setPosition(QPointF point) {
 	Q_D(TextLabel);
 	if (point != d->position.point) {
 		d->position.point = point;
+		if(d->m_coordBindingEnable)
+            d->m_logicalPos = d->cSystem->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		retransform();
 	}
 }
@@ -340,9 +368,92 @@ void TextLabel::setVisible(bool on) {
 	exec(new TextLabelSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
+/*!
+ * \brief TextLabel::setCoordBinding
+ * Binds TextLabel to the coord of the parent CartesianPlot, but only if coord binding is enabled
+ * \param on set(true) or reset(false) coord binding
+ */
+void TextLabel::setCoordBinding(bool on) {
+	Q_D(TextLabel);
+	if (!d->m_coordBindingEnable)
+		return;
+	d->m_coordBinding = on;
+    d->m_logicalPos = d->cSystem->mapSceneToLogical(d->pos(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+}
+
+/*!
+ * \brief TextLabel::enableCoordBinding
+ * \param enable enable or disable coord binding
+ * \param plot parent plot to which should be bind, if no parentAspect added. If parentAspect exist, this plot will be used.
+ * If argument CartesianPlot and parentAspect is not available, not able to enable bind too coord.
+ * \return true if successfully bind, otherwise false
+ */
+bool TextLabel::enableCoordBinding(bool enable, const CartesianPlot* plot) {
+	Q_D(TextLabel);
+
+	if (!d->plot) // if infoelement is parent, it has no cartesianplot
+		d->plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+
+	if (d->plot == nullptr) {
+		if (plot == nullptr) {
+			d->m_coordBindingEnable = false;
+			return false;
+		} else {
+			d->m_coordBindingEnable = enable;
+			d->plot = plot;
+			d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
+			return true;
+		}
+	}
+	d->m_coordBindingEnable = enable;
+	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
+	return true;
+}
+
+QRectF TextLabel::size() {
+	Q_D(TextLabel);
+    return d->size();
+}
+
+QPointF TextLabel::logicalPos(AbstractCoordinateSystem::MappingFlags flag) {
+	Q_D(TextLabel);
+    return d->logicalPos(flag);
+}
+
+QPointF TextLabel::findNearestGluePoint(QPointF scenePoint) {
+	Q_D(TextLabel);
+	return d->findNearestGluePoint(scenePoint);
+}
+
+TextLabel::GluePoint TextLabel::gluePointAt(int index) {
+	Q_D(TextLabel);
+	return d->gluePointAt(index);
+}
+
+int TextLabel::gluePointCount() {
+	Q_D(const TextLabel);
+	return d->m_gluePoints.length();
+}
+
 bool TextLabel::isVisible() const {
 	Q_D(const TextLabel);
 	return d->isVisible();
+}
+/*!
+ * \brief TextLabel::isAttachedToCoordEnabled
+ * \return true if bind to coord is enabled
+ */
+bool TextLabel::isAttachedToCoordEnabled() const {
+	Q_D(const TextLabel);
+	return d->m_coordBindingEnable;
+}
+/*!
+ * \brief TextLabel::isAttachedToCoord
+ * \return true if TextLabel is attached to the coord.
+ */
+bool TextLabel::isAttachedToCoord() const {
+	Q_D(const TextLabel);
+	return d->m_coordBinding;
 }
 
 void TextLabel::setPrinting(bool on) {
@@ -374,8 +485,115 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : q(owner) {
 	setAcceptHoverEvents(true);
 }
 
+TextLabelPrivate::TextLabelPrivate(TextLabel* owner, CartesianPlot* plot)
+	: teXRenderSuccessful(false),
+	  positionInvalid(false),
+	  suppressItemChangeEvent(false),
+	  suppressRetransform(false),
+	  m_printing(false),
+	  m_hovered(false),
+	  q(owner),
+	  plot(plot) {
+
+	if(plot)
+		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+	else
+		cSystem = nullptr;
+
+	setFlag(QGraphicsItem::ItemIsSelectable);
+	setFlag(QGraphicsItem::ItemIsMovable);
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+	setAcceptHoverEvents(true);
+}
+
 QString TextLabelPrivate::name() const {
 	return q->name();
+}
+
+/*!
+ * \brief TextLabelPrivate::size
+ * \return Size and position of the TextLabel in scene coords
+ */
+QRectF TextLabelPrivate::size() {
+	float w, h;
+	if (textWrapper.teXUsed) {
+		//image size is in pixel, convert to scene units
+		w = teXImage.width()*teXImageScaleFactor;
+		h = teXImage.height()*teXImageScaleFactor;
+	} else {
+		//size is in points, convert to scene units
+		w = staticText.size().width()*scaleFactor;
+		h = staticText.size().height()*scaleFactor;
+	}
+	float x = position.point.x();
+	float y = position.point.y();
+	return QRectF(x,y,w,h);
+}
+
+/*!
+ * \brief TextLabelPrivate::findNearestGluePoint
+ * Finds the glue point, which is nearest to @param point in scene coords.
+ * \param point reference position
+ * \return Nearest point to @param point
+ */
+QPointF TextLabelPrivate::findNearestGluePoint(QPointF scenePoint) {
+	if (m_gluePoints.isEmpty())
+		return boundingRectangle.center();
+
+	if (m_gluePoints.length() == 1)
+		return mapParentToPlotArea(mapToParent(m_gluePoints[0].point));
+
+	QPointF point = mapParentToPlotArea(mapToParent(m_gluePoints[0].point));
+	QPointF nearestPoint = point;
+	double distance2 = pow(point.x()-scenePoint.x(), 2) + pow(point.y()-scenePoint.y(), 2);
+	// assumption, more than one point available
+	for (int i=1; i< m_gluePoints.length(); i++) {
+		point = mapParentToPlotArea(mapToParent(m_gluePoints[i].point));
+		double distance2_temp = pow(point.x()-scenePoint.x(), 2) + pow(point.y()-scenePoint.y(), 2);
+		if (distance2_temp < distance2) {
+			nearestPoint = point;
+			distance2 = distance2_temp;
+		}
+	}
+
+	return nearestPoint;
+}
+
+/*!
+ * \brief TextLabelPrivate::gluePointAt
+ * Returns the gluePoint at a specific index.
+ * \param index
+ * \return Returns gluepoint at index \param index
+ */
+TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
+	QPointF pos;
+	QString name;
+
+	if (m_gluePoints.isEmpty() || index > m_gluePoints.length()) {
+		pos = boundingRectangle.center();
+		name = "center";
+	} else if (index < 0) {
+		pos = m_gluePoints[0].point;
+		name = m_gluePoints[0].name;
+	} else {
+		pos = m_gluePoints[index].point;
+		name = m_gluePoints[index].name;
+	}
+
+	return TextLabel::GluePoint(mapParentToPlotArea(mapToParent(pos)), name);
+}
+
+/*!
+ * \brief TextLabelPrivate::logicalPos
+ * \return logical position in the plot
+ */
+QPointF TextLabelPrivate::logicalPos(AbstractCoordinateSystem::MappingFlags flag) {
+	if(m_coordBinding)
+        return m_logicalPos;
+	if(cSystem)
+		return cSystem->mapSceneToLogical(position.point, flag);
+
+	return QPointF();
 }
 
 /*!
@@ -398,39 +616,40 @@ void TextLabelPrivate::retransform() {
 		//image size is in pixel, convert to scene units
 		w = teXImage.width()*teXImageScaleFactor;
 		h = teXImage.height()*teXImageScaleFactor;
-	}
-	else {
+	} else {
 		//size is in points, convert to scene units
 		w = staticText.size().width()*scaleFactor;
 		h = staticText.size().height()*scaleFactor;
 	}
-
-	//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
 	QPointF itemPos;
-	switch (horizontalAlignment) {
-	case WorksheetElement::HorizontalAlignment::Left:
-		itemPos.setX(x - w/2);
-		break;
-	case WorksheetElement::HorizontalAlignment::Center:
-		itemPos.setX(x);
-		break;
-	case WorksheetElement::HorizontalAlignment::Right:
-		itemPos.setX(x + w/2);
-		break;
-	}
+	if(!m_coordBinding) {
+		//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
+		switch (horizontalAlignment) {
+        case WorksheetElement::HorizontalAlignment::Left:
+			itemPos.setX(x - w/2);
+			break;
+        case WorksheetElement::HorizontalAlignment::Center:
+			itemPos.setX(x);
+			break;
+        case WorksheetElement::HorizontalAlignment::Right:
+			itemPos.setX(x + w/2);
+			break;
+		}
 
-	switch (verticalAlignment) {
-	case WorksheetElement::VerticalAlignment::Top:
-		itemPos.setY(y - h/2);
-		break;
-	case WorksheetElement::VerticalAlignment::Center:
-		itemPos.setY(y);
-		break;
-	case WorksheetElement::VerticalAlignment::Bottom:
-		itemPos.setY(y + h/2);
-		break;
-	}
-
+		switch (verticalAlignment) {
+        case WorksheetElement::VerticalAlignment::Top:
+			itemPos.setY(y - h/2);
+			break;
+        case WorksheetElement::VerticalAlignment::Center:
+			itemPos.setY(y);
+			break;
+        case WorksheetElement::VerticalAlignment::Bottom:
+			itemPos.setY(y + h/2);
+			break;
+		}
+	} else
+        itemPos = cSystem->mapLogicalToScene(m_logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	itemPos = mapPlotAreaToParent(itemPos);
 	suppressItemChangeEvent = true;
 	setPos(itemPos);
 	suppressItemChangeEvent = false;
@@ -452,9 +671,9 @@ void TextLabelPrivate::updatePosition() {
 	//determine the parent item
 	QRectF parentRect;
 	QGraphicsItem* parent = parentItem();
-	if (parent) {
+	if (parent)
 		parentRect = parent->boundingRect();
-	} else {
+	else {
 		if (!scene())
 			return;
 
@@ -518,171 +737,247 @@ void TextLabelPrivate::updateTeXImage() {
 }
 
 void TextLabelPrivate::updateBorder() {
+	typedef TextLabel::GluePoint GluePoint;
+
 	borderShapePath = QPainterPath();
 	switch (borderShape) {
-	case TextLabel::BorderShape::NoBorder:
-		break;
-	case TextLabel::BorderShape::Rect:
-		borderShapePath.addRect(boundingRectangle);
-		break;
-	case TextLabel::BorderShape::Ellipse: {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
-		borderShapePath.addEllipse(xs  - 0.1 * w, ys - 0.1 * h, 1.2 * w,  1.2 * h);
-		break;
-	}
-	case TextLabel::BorderShape::RoundSideRect: {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
-		borderShapePath.moveTo(xs, ys);
-		borderShapePath.lineTo(xs + w, ys);
-		borderShapePath.quadTo(xs + w + h/2, ys + h/2, xs + w, ys + h);
-		borderShapePath.lineTo(xs, ys + h);
-		borderShapePath.quadTo(xs - h/2, ys + h/2, xs, ys);
-		break;
-	}
-	case TextLabel::BorderShape::RoundCornerRect: {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
-		borderShapePath.moveTo(xs + h * 0.2, ys);
-		borderShapePath.lineTo(xs + w - h * 0.2, ys);
-		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
-		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
-		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
-		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
-		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
-		borderShapePath.lineTo(xs, ys + 0.2 * h);
-		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
-		break;
-	}
-	case TextLabel::BorderShape::InwardsRoundCornerRect: {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
-		borderShapePath.moveTo(xs, ys - 0.3 * h);
-		borderShapePath.lineTo(xs + w, ys - 0.3 * h);
-		borderShapePath.quadTo(xs + w, ys, xs + w + 0.3 * h, ys);
-		borderShapePath.lineTo(xs + w + 0.3 * h, ys + h);
-		borderShapePath.quadTo(xs + w, ys + h, xs + w, ys + h + 0.3 * h);
-		borderShapePath.lineTo(xs, ys + h + 0.3 * h);
-		borderShapePath.quadTo(xs, ys + h, xs - 0.3 * h, ys + h);
-		borderShapePath.lineTo(xs - 0.3 * h, ys);
-		borderShapePath.quadTo(xs, ys, xs, ys - 0.3 * h);
-		break;
-	}
-	case TextLabel::BorderShape::DentedBorderRect: {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
-		borderShapePath.moveTo(xs - 0.2 * h, ys - 0.2 * h);
-		borderShapePath.quadTo(xs + w / 2, ys, xs + w + 0.2 * h, ys - 0.2 * h);
-		borderShapePath.quadTo(xs + w, ys + h / 2, xs + w + 0.2 * h, ys + h + 0.2 * h);
-		borderShapePath.quadTo(xs + w / 2, ys + h, xs - 0.2 * h, ys + h + 0.2 * h);
-		borderShapePath.quadTo(xs, ys + h / 2, xs - 0.2 * h, ys - 0.2 * h);
-		break;
-	}
-	case TextLabel::BorderShape::Cuboid: {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
-		borderShapePath.moveTo(xs, ys);
-		borderShapePath.lineTo(xs + w, ys);
-		borderShapePath.lineTo(xs + w, ys + h);
-		borderShapePath.lineTo(xs, ys + h);
-		borderShapePath.lineTo(xs, ys);
-		borderShapePath.lineTo(xs + 0.3 * h, ys - 0.2 * h);
-		borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
-		borderShapePath.lineTo(xs + w, ys);
-		borderShapePath.moveTo(xs + w, ys + h);
-		borderShapePath.lineTo(xs + w + 0.3 * h, ys + h - 0.2 * h);
-		borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
-		break;
-	}
-	case TextLabel::BorderShape::UpPointingRectangle: {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
-		borderShapePath.moveTo(xs + h * 0.2, ys);
-		borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys);
-		borderShapePath.lineTo(xs + w / 2, ys - 0.2 * h);
-		borderShapePath.lineTo(xs + w / 2 + 0.2 * h, ys);
-		borderShapePath.lineTo(xs + w - h * 0.2, ys);
-		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
-		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
-		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
-		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
-		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
-		borderShapePath.lineTo(xs, ys + 0.2 * h);
-		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
-		break;
-	}
+    case (TextLabel::BorderShape::NoBorder): {
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width()/2,boundingRectangle.y()), "top"));
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width(),boundingRectangle.y()+boundingRectangle.height()/2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width()/2,boundingRectangle.y()+boundingRectangle.height()), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(),boundingRectangle.y()+boundingRectangle.height()/2), "left"));
+			break;
+		}
+	case (TextLabel::BorderShape::Rect): {
+			borderShapePath.addRect(boundingRectangle);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width()/2, boundingRectangle.y()), "top"));
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height()/2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width()/2, boundingRectangle.y() + boundingRectangle.height()), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height()/2), "left"));
+			break;
+		}
+	case (TextLabel::BorderShape::Ellipse): {
+			const double xs = boundingRectangle.x();
+			const double ys = boundingRectangle.y();
+			const double w = boundingRectangle.width();
+			const double h = boundingRectangle.height();
+			const QRectF ellipseRect(xs  - 0.1 * w, ys - 0.1 * h, 1.2 * w,  1.2 * h);
+			borderShapePath.addEllipse(ellipseRect);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width()/2, ellipseRect.y()), "top"));
+			m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width(), ellipseRect.y() + ellipseRect.height()/2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width()/2, ellipseRect.y() + ellipseRect.height()), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(ellipseRect.x(), ellipseRect.y() + ellipseRect.height()/2), "left"));
+			break;
+		}
+	case (TextLabel::BorderShape::RoundSideRect): {
+			const double xs = boundingRectangle.x();
+			const double ys = boundingRectangle.y();
+			const double w = boundingRectangle.width();
+			const double h = boundingRectangle.height();
+			borderShapePath.moveTo(xs, ys);
+			borderShapePath.lineTo(xs + w, ys);
+			borderShapePath.quadTo(xs + w + h/2, ys + h/2, xs + w, ys + h);
+			borderShapePath.lineTo(xs, ys + h);
+			borderShapePath.quadTo(xs - h/2, ys + h/2, xs, ys);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w + h/2, ys + h/2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(xs - h/2, ys + h/2), "left"));
+			break;
+		}
+	case (TextLabel::BorderShape::RoundCornerRect): {
+			const double xs = boundingRectangle.x();
+			const double ys = boundingRectangle.y();
+			const double w = boundingRectangle.width();
+			const double h = boundingRectangle.height();
+			borderShapePath.moveTo(xs + h * 0.2, ys);
+			borderShapePath.lineTo(xs + w - h * 0.2, ys);
+			borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+			borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+			borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+			borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+			borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+			borderShapePath.lineTo(xs, ys + 0.2 * h);
+			borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(xs+w/2,ys), "top"));
+			m_gluePoints.append(GluePoint(QPointF(xs+w,ys+h/2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(xs+w/2,ys+h), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(xs,ys+h/2), "left"));
+			break;
+		}
+	case (TextLabel::BorderShape::InwardsRoundCornerRect): {
+			const double xs = boundingRectangle.x();
+			const double ys = boundingRectangle.y();
+			const double w = boundingRectangle.width();
+			const double h = boundingRectangle.height();
+			borderShapePath.moveTo(xs, ys - 0.3 * h);
+			borderShapePath.lineTo(xs + w, ys - 0.3 * h);
+			borderShapePath.quadTo(xs + w, ys, xs + w + 0.3 * h, ys);
+			borderShapePath.lineTo(xs + w + 0.3 * h, ys + h);
+			borderShapePath.quadTo(xs + w, ys + h, xs + w, ys + h + 0.3 * h);
+			borderShapePath.lineTo(xs, ys + h + 0.3 * h);
+			borderShapePath.quadTo(xs, ys + h, xs - 0.3 * h, ys + h);
+			borderShapePath.lineTo(xs - 0.3 * h, ys);
+			borderShapePath.quadTo(xs, ys, xs, ys - 0.3 * h);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.3 * h), "top"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w + 0.3 * h, ys + h / 2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.3 * h), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(xs - 0.3 * h, ys + h / 2), "left"));
+			break;
+		}
+	case (TextLabel::BorderShape::DentedBorderRect): {
+			const double xs = boundingRectangle.x();
+			const double ys = boundingRectangle.y();
+			const double w = boundingRectangle.width();
+			const double h = boundingRectangle.height();
+			borderShapePath.moveTo(xs - 0.2 * h, ys - 0.2 * h);
+			borderShapePath.quadTo(xs + w / 2, ys, xs + w + 0.2 * h, ys - 0.2 * h);
+			borderShapePath.quadTo(xs + w, ys + h / 2, xs + w + 0.2 * h, ys + h + 0.2 * h);
+			borderShapePath.quadTo(xs + w / 2, ys + h, xs - 0.2 * h, ys + h + 0.2 * h);
+			borderShapePath.quadTo(xs, ys + h / 2, xs - 0.2 * h, ys - 0.2 * h);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.2 * h), "top"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w + 0.2 * h, ys + h / 2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.2 * h), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(xs - 0.2 * h, ys + h / 2), "left"));
+			break;
+		}
+	case (TextLabel::BorderShape::Cuboid): {
+			const double xs = boundingRectangle.x();
+			const double ys = boundingRectangle.y();
+			const double w = boundingRectangle.width();
+			const double h = boundingRectangle.height();
+			borderShapePath.moveTo(xs, ys);
+			borderShapePath.lineTo(xs + w, ys);
+			borderShapePath.lineTo(xs + w, ys + h);
+			borderShapePath.lineTo(xs, ys + h);
+			borderShapePath.lineTo(xs, ys);
+			borderShapePath.lineTo(xs + 0.3 * h, ys - 0.2 * h);
+			borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
+			borderShapePath.lineTo(xs + w, ys);
+			borderShapePath.moveTo(xs + w, ys + h);
+			borderShapePath.lineTo(xs + w + 0.3 * h, ys + h - 0.2 * h);
+			borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.1 * h), "top"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w + 0.15 * h, ys + h / 2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), "left"));
+			break;
+		}
+	case (TextLabel::BorderShape::UpPointingRectangle): {
+			const double xs = boundingRectangle.x();
+			const double ys = boundingRectangle.y();
+			const double w = boundingRectangle.width();
+			const double h = boundingRectangle.height();
+			borderShapePath.moveTo(xs + h * 0.2, ys);
+			borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys);
+			borderShapePath.lineTo(xs + w / 2, ys - 0.2 * h);
+			borderShapePath.lineTo(xs + w / 2 + 0.2 * h, ys);
+			borderShapePath.lineTo(xs + w - h * 0.2, ys);
+			borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+			borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+			borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+			borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+			borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+			borderShapePath.lineTo(xs, ys + 0.2 * h);
+			borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys - h * 0.2), "top"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h/2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(xs, ys + h/2), "left"));
+			break;
+		}
 	case (TextLabel::BorderShape::DownPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
-		borderShapePath.moveTo(xs +h * 0.2, ys);
-		borderShapePath.lineTo(xs + w - h * 0.2, ys);
-		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
-		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
-		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
-		borderShapePath.lineTo(xs + w / 2 + 0.2 * h, ys + h);
-		borderShapePath.lineTo(xs + w / 2, ys + h + 0.2 * h);
-		borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys + h);
-		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
-		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
-		borderShapePath.lineTo(xs, ys + 0.2 * h);
-		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
-		break;
-	}
+			const double xs = boundingRectangle.x();
+			const double ys = boundingRectangle.y();
+			const double w = boundingRectangle.width();
+			const double h = boundingRectangle.height();
+			borderShapePath.moveTo(xs +h * 0.2, ys);
+			borderShapePath.lineTo(xs + w - h * 0.2, ys);
+			borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+			borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+			borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+			borderShapePath.lineTo(xs + w / 2 + 0.2 * h, ys + h);
+			borderShapePath.lineTo(xs + w / 2, ys + h + 0.2 * h);
+			borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys + h);
+			borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+			borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+			borderShapePath.lineTo(xs, ys + 0.2 * h);
+			borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h/2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h  + 0.2 * h), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(xs, ys + h/2), "left"));
+			break;
+		}
 	case (TextLabel::BorderShape::LeftPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
-		borderShapePath.moveTo(xs + h*0.2, ys);
-		borderShapePath.lineTo(xs + w - h * 0.2, ys);
-		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
-		borderShapePath.lineTo(xs + w,  ys + h - 0.2 * h);
-		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
-		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
-		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
-		borderShapePath.lineTo(xs, ys + h / 2 + 0.2 * h);
-		borderShapePath.lineTo(xs - 0.2 * h, ys + h / 2);
-		borderShapePath.lineTo(xs, ys + h / 2 - 0.2 * h);
-		borderShapePath.lineTo(xs, ys + 0.2 * h);
-		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
-		break;
-	}
+			const double xs = boundingRectangle.x();
+			const double ys = boundingRectangle.y();
+			const double w = boundingRectangle.width();
+			const double h = boundingRectangle.height();
+			borderShapePath.moveTo(xs + h*0.2, ys);
+			borderShapePath.lineTo(xs + w - h * 0.2, ys);
+			borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+			borderShapePath.lineTo(xs + w,  ys + h - 0.2 * h);
+			borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+			borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+			borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+			borderShapePath.lineTo(xs, ys + h / 2 + 0.2 * h);
+			borderShapePath.lineTo(xs - 0.2 * h, ys + h / 2);
+			borderShapePath.lineTo(xs, ys + h / 2 - 0.2 * h);
+			borderShapePath.lineTo(xs, ys + 0.2 * h);
+			borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h/2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(xs - 0.2 * h, ys + h/2), "left"));
+			break;
+		}
 	case (TextLabel::BorderShape::RightPointingRectangle): {
-		const double xs = boundingRectangle.x();
-		const double ys = boundingRectangle.y();
-		const double w = boundingRectangle.width();
-		const double h = boundingRectangle.height();
-		borderShapePath.moveTo(xs + h * 0.2, ys);
-		borderShapePath.lineTo(xs + w - h * 0.2, ys);
-		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
-		borderShapePath.lineTo(xs + w, ys + h / 2 - 0.2 * h);
-		borderShapePath.lineTo(xs + w + 0.2 * h, ys + h / 2);
-		borderShapePath.lineTo(xs + w, ys + h / 2 + 0.2 * h);
-		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
-		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
-		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
-		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
-		borderShapePath.lineTo(xs, ys + 0.2 * h);
-		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
-		break;
-	}
+			const double xs = boundingRectangle.x();
+			const double ys = boundingRectangle.y();
+			const double w = boundingRectangle.width();
+			const double h = boundingRectangle.height();
+			borderShapePath.moveTo(xs + h * 0.2, ys);
+			borderShapePath.lineTo(xs + w - h * 0.2, ys);
+			borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+			borderShapePath.lineTo(xs + w, ys + h / 2 - 0.2 * h);
+			borderShapePath.lineTo(xs + w + 0.2 * h, ys + h / 2);
+			borderShapePath.lineTo(xs + w, ys + h / 2 + 0.2 * h);
+			borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+			borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+			borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+			borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+			borderShapePath.lineTo(xs, ys + 0.2 * h);
+			borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+
+			m_gluePoints.clear();
+			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w + 0.2 * h, ys + h/2), "right"));
+			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
+			m_gluePoints.append(GluePoint(QPointF(xs, ys + h/2), "left"));
+			break;
+		}
 	}
 
 	recalcShapeAndBoundingRect();
@@ -694,10 +989,13 @@ bool TextLabelPrivate::swapVisible(bool on) {
 	//When making a graphics item invisible, it gets deselected in the scene.
 	//In this case we don't want to deselect the item in the project explorer.
 	//We need to supress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	worksheet->suppressSelectionChangedEvent(true);
-	setVisible(on);
-	worksheet->suppressSelectionChangedEvent(false);
+    auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+    if (worksheet) {
+        worksheet->suppressSelectionChangedEvent(true);
+        setVisible(on);
+        worksheet->suppressSelectionChangedEvent(false);
+    } else
+        setVisible(on);
 
 	emit q->changed();
 	emit q->visibleChanged(on);
@@ -736,6 +1034,12 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	}
 
 	labelShape = matrix.map(labelShape);
+
+	// rotate gluePoints
+	for (int i=0; i < m_gluePoints.length(); i++)
+		m_gluePoints[i].point = matrix.map(m_gluePoints[i].point);
+
+	emit q->changed();
 }
 
 void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
@@ -784,6 +1088,17 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(labelShape);
 	}
+
+#define DEBUG_TEXTLABEL_GLUEPOINTS 0
+#if DEBUG_TEXTLABEL_GLUEPOINTS
+	// just for debugging
+	painter->setPen(QColor(Qt::GlobalColor::red));
+	QRectF gluePointRect(0,0,10,10);
+	for (int i=0; i < m_gluePoints.length(); i++) {
+		gluePointRect.moveTo(m_gluePoints[i].point.x() - gluePointRect.width()/2, m_gluePoints[i].point.y() - gluePointRect.height()/2);
+		painter->fillRect(gluePointRect, QColor(Qt::GlobalColor::red));
+	}
+#endif
 }
 
 QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant &value) {
@@ -793,22 +1108,29 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
 		TextLabel::PositionWrapper tempPosition;
-		tempPosition.point = positionFromItemPosition(value.toPointF());
+		tempPosition.point = positionFromItemPosition(mapParentToPlotArea(value.toPointF()));
 		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
 		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 
 		//emit the signals in order to notify the UI.
-		//we don't set the position related member variables during the mouse movements.
-		//this is done on mouse release events only.
+		if(m_coordBinding)
+            m_logicalPos = cSystem->mapSceneToLogical(tempPosition.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		// don't use setPosition here, because then all small changes are on the undo stack
 		emit q->positionChanged(tempPosition);
 	}
 
 	return QGraphicsItem::itemChange(change, value);
 }
 
+void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
+	if(m_coordBinding)
+        m_logicalPos = cSystem->mapSceneToLogical(mapParentToPlotArea(pos()), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	return QGraphicsItem::mouseMoveEvent(event);
+}
+
 void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
-	QPointF point = positionFromItemPosition(pos());
+	QPointF point = positionFromItemPosition(mapParentToPlotArea(pos()));
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
@@ -825,7 +1147,7 @@ void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
 void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
-		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
+			|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
 		const int delta = 5;
 		QPointF point = positionFromItemPosition(pos());
 		WorksheetElement::PositionWrapper tempPosition;
@@ -856,7 +1178,7 @@ void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 }
 
 /*!
- *	converts label's position to GraphicsItem's position.
+ *	converts label's position in plotArea coordinates to labels position.
  */
 QPointF TextLabelPrivate::positionFromItemPosition(QPointF itemPos) {
 	double x = itemPos.x();
@@ -897,6 +1219,48 @@ QPointF TextLabelPrivate::positionFromItemPosition(QPointF itemPos) {
 	}
 
 	return tmpPosition;
+}
+
+/*!
+ * \brief TextLabelPrivate::mapPlotAreaToParent
+ * Mapping a point from the PlotArea (CartesianPlot::plotArea) coordinates to the parent
+ * coordinates of this item
+ * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
+ * IMPORTANT: function is also used in Custompoint, so when changing anything, change it also there
+ * \param point point in plotArea coordinates
+ * \return point in parent coordinates
+ */
+QPointF TextLabelPrivate::mapPlotAreaToParent(QPointF point) {
+	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
+
+	if (parent) {
+		CartesianPlot* plot = static_cast<CartesianPlot*>(parent);
+		// first mapping to item coordinates and from there back to parent
+		// WorksheetinfoElement: parentItem()->parentItem() == plot->graphicsItem()
+		// plot->graphicsItem().pos() == plot->plotArea()->graphicsItem().pos()
+		return mapToParent(mapFromItem(plot->plotArea()->graphicsItem(), point));
+	}
+
+	return point; // don't map if no parent set. Then it's during load
+}
+
+/*!
+ * \brief TextLabelPrivate::mapParentToPlotArea
+ * Mapping a point from parent coordinates to plotArea coordinates
+ * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
+ * IMPORTANT: function is also used in Custompoint, so when changing anything, change it also there
+ * \param point point in parent coordinates
+ * \return point in PlotArea coordinates
+ */
+QPointF TextLabelPrivate::mapParentToPlotArea(QPointF point) {
+	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
+	if (parent) {
+		CartesianPlot* plot = static_cast<CartesianPlot*>(parent);
+		// mapping from parent to item coordinates and them to plot area
+		return mapToItem(plot->plotArea()->graphicsItem(), mapFromParent(point));
+	}
+
+	return point; // don't map if no parent set. Then it's during load
 }
 
 void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -940,13 +1304,22 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "verticalAlignment", QString::number(static_cast<int>(d->verticalAlignment)) );
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
+	writer->writeAttribute( "enableCoordBinding", QString::number(d->m_coordBindingEnable));
+	writer->writeAttribute( "coordBinding", QString::number(d->m_coordBinding));
+    writer->writeAttribute( "logicalPosX", QString::number(d->m_logicalPos.x()));
+    writer->writeAttribute( "logicalPosY", QString::number(d->m_logicalPos.y()));
 	writer->writeEndElement();
 
 	writer->writeStartElement( "text" );
 	writer->writeCharacters( d->textWrapper.text );
 	writer->writeEndElement();
 
+	writer->writeStartElement( "textPlaceholder");
+	writer->writeCharacters( d->textWrapper.textPlaceholder);
+	writer->writeEndElement();
+
 	writer->writeStartElement( "format" );
+	writer->writeAttribute( "placeholder", QString::number(d->textWrapper.placeholder) );
 	writer->writeAttribute( "teXUsed", QString::number(d->textWrapper.teXUsed) );
 	WRITE_QFONT(d->teXFont);
 	writer->writeAttribute( "fontColor_r", QString::number(d->fontColor.red()) );
@@ -1021,13 +1394,52 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
-		} else if (!preview && reader->name() == "text") {
+
+			str = attribs.value("enableCoordBinding").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("enableCoordBinding").toString());
+			else
+				enableCoordBinding(str.toInt());
+
+			str = attribs.value("coordBinding").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("coordBinding").toString());
+			else
+				setCoordBinding(str.toInt());
+
+			str = attribs.value("logicalPosX").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("logicalPosX").toString());
+			else
+                d->m_logicalPos.setX(str.toDouble());
+
+			str = attribs.value("logicalPosY").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("logicalPosY").toString());
+			else
+                d->m_logicalPos.setY(str.toDouble());
+
+		} else if (!preview && reader->name() == "text")
 			d->textWrapper.text = reader->readElementText();
-		} else if (!preview && reader->name() == "format") {
+		else if (!preview && reader->name() == "textPlaceholder")
+			d->textWrapper.textPlaceholder = reader->readElementText();
+		else if (!preview && reader->name() == "format") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("teXUsed", textWrapper.teXUsed, bool);
 			READ_QFONT(d->teXFont);
+
+			str = attribs.value("placeholder").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("teXUsed").toString());
+			else
+				d->textWrapper.placeholder = str.toInt();
+
+			str = attribs.value("teXUsed").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("teXUsed").toString());
+			else
+				d->textWrapper.teXUsed = str.toInt();
 
 			str = attribs.value("fontColor_r").toString();
 			if (str.isEmpty())

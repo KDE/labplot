@@ -67,6 +67,7 @@ enum class AspectType : quint64 {
 		TextLabel = 0x0210020,
 		Image = 0x0210030,
 		ReferenceLine = 0x0210040,
+		InfoElement = 0x0210080,
 		WorksheetElementContainer = 0x0220000,
 			AbstractPlot = 0x0221000,
 				CartesianPlot = 0x0221001,

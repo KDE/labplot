@@ -159,6 +159,8 @@ public:
 	void retransform() override;
 	void recalcLogicalPoints();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
+	double y(double x, double &x_new, bool &valueFound) const;
+	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
 
 private slots:
 	void updateValues();
@@ -213,6 +215,7 @@ signals:
 	void yErrorMinusDataChanged();
 	void valuesDataChanged();
 	void visibilityChanged(bool);
+	void selected(double pos);
 
 	void xColumnChanged(const AbstractColumn*);
 	void yColumnChanged(const AbstractColumn*);

@@ -47,10 +47,10 @@ class Matrix;
 class GuiObserver;
 class AxisDock;
 class CursorDock;
+class InfoElementDock;
 class NoteDock;
 class CartesianPlotDock;
 class HistogramDock;
-class BarChartPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ReferenceLineDock;
@@ -78,6 +78,7 @@ class DatapickerImageWidget;
 class DatapickerCurveWidget;
 class MemoryWidget;
 class CartesianPlot;
+class InfoElementDialog;
 
 #ifdef HAVE_CANTOR_LIBS
 class CantorWorksheet;
@@ -225,6 +226,7 @@ private:
 	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};
 	NoteDock* notesDock{nullptr};
+	InfoElementDock* infoElementDock{nullptr};
 	CartesianPlotDock* cartesianPlotDock{nullptr};
 	CartesianPlotLegendDock* cartesianPlotLegendDock{nullptr};
 	ColumnDock* columnDock{nullptr};

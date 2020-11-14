@@ -1,10 +1,11 @@
 /***************************************************************************
-    File                 : CustomPoint.cpp
-    Project              : LabPlot
-    Description          : Custom user-defined point on the plot
-    --------------------------------------------------------------------
-    Copyright            : (C) 2015 Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+	File                 : CustomPoint.cpp
+	Project              : LabPlot
+	Description          : Custom user-defined point on the plot
+	--------------------------------------------------------------------
+	Copyright            : (C) 2015 Ankit Wagadre (wagadre.ankit@gmail.com)
+	Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 Martin Marmsoler (martin.marmsoler@gmail.com)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -198,6 +199,12 @@ bool CustomPoint::isVisible() const {
 	return d->isVisible();
 }
 
+void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
+	Q_D(CustomPoint);
+	d->setParentItem(item);
+	//d->updatePosition();
+}
+
 void CustomPoint::setPrinting(bool on) {
 	Q_D(CustomPoint);
 	d->m_printing = on;
@@ -232,14 +239,18 @@ void CustomPointPrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
+	if (!parentItem())
+		return;
+
 	//calculate the point in the scene coordinates
 	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	QVector<QPointF> listScene = cSystem->mapLogicalToScene(QVector<QPointF>{position});
 	if (!listScene.isEmpty()) {
 		m_visible = true;
 		positionScene = listScene.at(0);
+		QPointF inParentCoords = mapPlotAreaToParent(positionScene);
 		suppressItemChangeEvent = true;
-		setPos(positionScene);
+		setPos(inParentCoords);
 		suppressItemChangeEvent = false;
 	} else
 		m_visible = false;
@@ -254,9 +265,12 @@ bool CustomPointPrivate::swapVisible(bool on) {
 	//In this case we don't want to deselect the item in the project explorer.
 	//We need to supress the deselection in the view.
 	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	worksheet->suppressSelectionChangedEvent(true);
-	setVisible(on);
-	worksheet->suppressSelectionChangedEvent(false);
+    if (worksheet) {
+        worksheet->suppressSelectionChangedEvent(true);
+        setVisible(on);
+        worksheet->suppressSelectionChangedEvent(false);
+    } else
+        setVisible(on);
 
 	emit q->changed();
 	emit q->visibleChanged(on);
@@ -333,16 +347,23 @@ QVariant CustomPointPrivate::itemChange(GraphicsItemChange change, const QVarian
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//emit the signals in order to notify the UI.
-		//we don't set the position related member variables during the mouse movements.
-		//this is done on mouse release events only.
 		const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-		emit q->positionChanged(cSystem->mapSceneToLogical(value.toPointF()));
+		QPointF scenePos = mapParentToPlotArea(value.toPointF());
+		QPointF logicalPos = cSystem->mapSceneToLogical(scenePos); // map parent to scene
+		//q->setPosition(logicalPos);
+
+		// not needed, because positionChanged trigger the widget, which sets the position
+		//position = logicalPos; // don't use setPosition, because this will call retransform and then again this function
+		emit q->positionChanged(logicalPos);
 	}
 
 	return QGraphicsItem::itemChange(change, value);
 }
 
 void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	if (q->parentAspect()->type() == AspectType::InfoElement)
+		return; // don't move when the parent is a InfoElement, because there nou custompoint position change by mouse is not allowed
+
 	//position was changed -> set the position member variables
 	suppressRetransform = true;
 	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
@@ -370,6 +391,46 @@ void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 		emit q->unhovered();
 		update();
 	}
+}
+
+/*!
+ * \brief CustomPointPrivate::mapPlotAreaToParent
+ * Mapping a point from the PlotArea (CartesianPlot::plotArea) coordinates to the parent
+ * coordinates of this item
+ * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
+ * IMPORTANT: function is also used in Textlabel, so when changing anything, change it also there
+ * \param point point in plotArea coordinates
+ * \return point in parent coordinates
+ */
+QPointF CustomPointPrivate::mapPlotAreaToParent(QPointF point) {
+	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
+
+	if (parent) {
+		CartesianPlot* plot = static_cast<CartesianPlot*>(parent);
+		// first mapping to item coordinates and from there back to parent
+		// WorksheetinfoElement: parentItem()->parentItem() == plot->graphicsItem()
+		// plot->graphicsItem().pos() == plot->plotArea()->graphicsItem().pos()
+		return mapToParent(mapFromItem(plot->plotArea()->graphicsItem(), point));
+	}
+	return QPointF(0, 0);
+}
+
+/*!
+ * \brief CustomPointPrivate::mapParentToPlotArea
+ * Mapping a point from parent coordinates to plotArea coordinates
+ * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
+ * IMPORTANT: function is also used in Textlabel, so when changing anything, change it also there
+ * \param point point in parent coordinates
+ * \return point in PlotArea coordinates
+ */
+QPointF CustomPointPrivate::mapParentToPlotArea(QPointF point) {
+	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
+	if (parent) {
+		CartesianPlot* plot = static_cast<CartesianPlot*>(parent);
+		// mapping from parent to item coordinates and them to plot area
+		return mapToItem(plot->plotArea()->graphicsItem(), mapFromParent(point));
+	}
+	return QPointF(0, 0);
 }
 
 //##############################################################################

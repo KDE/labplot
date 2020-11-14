@@ -31,6 +31,9 @@
 
 #include <QGraphicsItem>
 
+class CustomPoint;
+class CartesianPlot;
+
 class CustomPointPrivate: public QGraphicsItem {
 public:
 	explicit CustomPointPrivate(CustomPoint*, const CartesianPlot*);
@@ -78,6 +81,8 @@ private:
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	QPointF mapPlotAreaToParent(QPointF point);
+	QPointF mapParentToPlotArea(QPointF point);
 };
 
 #endif

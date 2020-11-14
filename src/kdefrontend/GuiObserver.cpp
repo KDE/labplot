@@ -43,6 +43,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/Image.h"
+#include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/TextLabel.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
@@ -59,6 +60,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
+#include "kdefrontend/dockwidgets/InfoElementDock.h"
 #include "kdefrontend/dockwidgets/NoteDock.h"
 #include "kdefrontend/dockwidgets/CursorDock.h"
 #include "kdefrontend/dockwidgets/CartesianPlotDock.h"
@@ -387,6 +389,28 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		raiseDock(m_mainWindow->notesDock, m_mainWindow->stackedWidget);
 		m_mainWindow->notesDock->setNotesList(castList<Note>(selectedAspects));
 		break;
+	case AspectType::InfoElement: {
+			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Marker"));
+			raiseDock(m_mainWindow->infoElementDock, m_mainWindow->stackedWidget);
+
+			QList<InfoElement*> list;
+
+			// check if all InfoElements have the same CartesianPlot as Parent
+			// if they don't have, disable changing the curves
+			bool sameParent = true;
+            CartesianPlot* parent = static_cast<CartesianPlot*>(selectedAspects[0]->parent(AspectType::CartesianPlot));
+			for (auto* aspect: selectedAspects) {
+                // It cannot be that an InfoElement does not have a parent. So it must not be checked
+                if (static_cast<CartesianPlot*>(aspect->parent(AspectType::CartesianPlot)) != parent)
+					sameParent = false;
+
+				list << qobject_cast<InfoElement*>(aspect);
+			}
+
+			m_mainWindow->infoElementDock->setInfoElements(list, sameParent);
+			m_mainWindow->infoElementDock->show();
+			break;
+		}
 	case AspectType::MQTTClient:
 #ifdef HAVE_MQTT
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "MQTT Data Source"));

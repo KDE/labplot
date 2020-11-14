@@ -30,16 +30,22 @@
 #ifndef TEXTLABELPRIVATE_H
 #define TEXTLABELPRIVATE_H
 
+#include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+
 #include <QStaticText>
 #include <QFutureWatcher>
 #include <QGraphicsItem>
 #include <QDesktopWidget>
 
 class QGraphicsSceneHoverEvent;
+class CartesianPlot;
+class CartesianCoordinateSystem;
+class TextLabel;
 
 class TextLabelPrivate: public QGraphicsItem {
 public:
 	explicit TextLabelPrivate(TextLabel*);
+	explicit TextLabelPrivate(TextLabel*, CartesianPlot* plot);
 
 	qreal rotationAngle{0.0};
 	//scaling:
@@ -66,12 +72,16 @@ public:
 		TextLabel::HorizontalPosition::Center, TextLabel::VerticalPosition::Center};
 	bool positionInvalid{false};
 
+	const CartesianPlot* plot{nullptr};
+    const CartesianCoordinateSystem* cSystem{nullptr};
 	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
 	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
 
 	TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
+	bool m_coordBindingEnable{false}; // if allowed to attach to coord
+	bool m_coordBinding{false}; // actual state
 
 	QString name() const;
 	void retransform();
@@ -82,7 +92,13 @@ public:
 	void updateText();
 	void updateTeXImage();
 	void updateBorder();
+	QPointF logicalPos(AbstractCoordinateSystem::MappingFlags flag = AbstractCoordinateSystem::MappingFlag::DefaultMapping);
+    QRectF size();
+	QPointF findNearestGluePoint(QPointF scenePoint);
+	TextLabel::GluePoint gluePointAt(int index);
+
 	QStaticText staticText;
+        QPointF m_logicalPos;
 
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
@@ -100,14 +116,21 @@ public:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
-	TextLabel* const q;
+    TextLabel* const q{nullptr};
+
+	// used in the InfoElement (Marker) to attach the line to the label
+	QVector<TextLabel::GluePoint> m_gluePoints;
+
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void keyPressEvent(QKeyEvent*) override;
+	void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+	QPointF mapPlotAreaToParent(QPointF point);
+	QPointF mapParentToPlotArea(QPointF point);
 };
 
 #endif

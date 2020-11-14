@@ -36,6 +36,7 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/InfoElement.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
@@ -598,6 +599,15 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
 
 			curve->suppressRetransform(false);
+		}
+
+		// assign to all markers the curves they need
+        auto elements = children<InfoElement>(ChildIndexFlag::Recursive);
+        for (auto element : elements) {
+			if (!element->assignCurve(curves)) {
+				reader->raiseWarning(i18n("Not all markerpoints have a curve assigned."));
+				return false;
+			}
 		}
 
 		//axes

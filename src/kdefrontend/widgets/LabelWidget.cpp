@@ -198,6 +198,8 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	connect( ui.sbOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
 	connect( ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
+	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &LabelWidget::bindingChanged);
+	connect(ui.chbShowPlaceholderText, &QCheckBox::toggled, this, &LabelWidget::showPlaceholderTextChanged);
 
 	//Border
 	connect(ui.cbBorderShape, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LabelWidget::borderShapeChanged);
@@ -258,7 +260,7 @@ void LabelWidget::updateBackground() const {
 	if (ui.tbTexUsed->isChecked())
 		return;
 
-	QColor color;
+    QColor color(Qt::white);
 	AspectType type = m_label->parentAspect()->type();
 	if (type == AspectType::Worksheet)
 		color = static_cast<const Worksheet*>(m_label->parentAspect())->backgroundFirstColor();
@@ -266,8 +268,12 @@ void LabelWidget::updateBackground() const {
 		color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->backgroundFirstColor();
 	else if (type == AspectType::CartesianPlotLegend)
 		color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
-	if (type == AspectType::Axis)
+    else if (type == AspectType::InfoElement)
+        color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
+    else if (type == AspectType::Axis)
 		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
+    else
+        DEBUG("Not handled type:" << static_cast<int>(type));
 
 	QPalette p = ui.teLabel->palette();
 	p.setColor(QPalette::Base, color);
@@ -420,10 +426,24 @@ void LabelWidget::textChanged() {
 
 	if (ui.tbTexUsed->isChecked()) {
 		QString text = ui.teLabel->toPlainText();
-		TextLabel::TextWrapper wrapper(text, true);
+		TextLabel::TextWrapper wrapper;
+		wrapper.teXUsed = true;
 
-		for (auto* label : m_labelsList)
-			label->setText(wrapper);
+		if (!ui.chbShowPlaceholderText->isChecked()) {
+			wrapper.text = text;
+			for (auto* label : m_labelsList) {
+				wrapper.textPlaceholder = label->text().textPlaceholder;
+				wrapper.placeholder = label->text().placeholder;
+				label->setText(wrapper);
+			}
+		} else {
+			wrapper.textPlaceholder = text;
+			for (auto* label: m_labelsList) {
+				wrapper.placeholder = label->text().placeholder;
+				wrapper.text = label->text().text;
+				label->setPlaceholderText(wrapper);
+			}
+		}
 	} else {
 		//save an empty string instead of a html-string with empty body,
 		//if no text available in QTextEdit
@@ -439,8 +459,25 @@ void LabelWidget::textChanged() {
 		}
 
 		TextLabel::TextWrapper wrapper(text, false, true);
-		for (auto* label : m_labelsList)
-			label->setText(wrapper);
+		// Don't set FontColor, because the font color is already in the html code
+		// of the text. The font color is used to change the color for Latex text
+		// label->setFontColor(ui.kcbFontColor->color());
+		// label->setBackgroundColor(ui.kcbBackgroundColor->color());
+		if(!ui.chbShowPlaceholderText->isChecked()) {
+			wrapper.text = text;
+			for (auto* label : m_labelsList) {
+				wrapper.placeholder = label->text().placeholder;
+				wrapper.textPlaceholder = label->text().textPlaceholder;
+				label->setText(wrapper);
+			}
+		} else {
+			wrapper.textPlaceholder = text;
+			for (auto* label : m_labelsList) {
+				wrapper.placeholder = label->text().placeholder;
+				wrapper.text = label->text().text;
+				label->setPlaceholderText(wrapper);
+			}
+		}
 	}
 
 	//background color gets lost on every text change...
@@ -994,6 +1031,35 @@ void LabelWidget::borderOpacityChanged(int value) {
 		label->setBorderOpacity(opacity);
 }
 
+/*!
+ * \brief LabelWidget::bindingChanged
+ * Bind TextLabel to the cartesian plot coords or not
+ * \param checked
+ */
+void LabelWidget::bindingChanged(bool checked) {
+	if(m_initializing)
+		return;
+
+	for (auto* label : m_labelsList)
+		label->setCoordBinding(checked);
+}
+
+void LabelWidget::showPlaceholderTextChanged(bool checked) {
+	if(m_initializing)
+		return;
+	if (!checked) {
+		if (m_label->text().teXUsed)
+			ui.teLabel->setText(m_label->text().text);
+		else
+			ui.teLabel->setHtml(m_label->text().text);
+	} else {
+		if (m_label->text().teXUsed)
+			ui.teLabel->setText(m_label->text().textPlaceholder);
+		else
+			ui.teLabel->setHtml(m_label->text().textPlaceholder);
+	}
+}
+
 //*********************************************************
 //****** SLOTs for changes triggered in TextLabel *********
 //*********************************************************
@@ -1004,10 +1070,17 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
 	//save and restore the current cursor position after changing the text
 	QTextCursor cursor = ui.teLabel->textCursor();
 	int position = cursor.position();
-	if (text.teXUsed)
-		ui.teLabel->setText(text.text);
-	else
-		ui.teLabel->setHtml(text.text);
+	if(!ui.chbShowPlaceholderText->isChecked()) {
+		if (text.teXUsed)
+			ui.teLabel->setText(text.text);
+		else
+			ui.teLabel->setHtml(text.text);
+	} else {
+		if(text.teXUsed)
+			ui.teLabel->setText(text.textPlaceholder);
+		else
+			ui.teLabel->setHtml(text.textPlaceholder);
+	}
 	cursor.movePosition(QTextCursor::Start);
 	cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, position);
 	ui.teLabel->setTextCursor(cursor);
@@ -1122,6 +1195,14 @@ void LabelWidget::labelBorderOpacityChanged(float value) {
 	m_initializing = false;
 }
 
+void LabelWidget::labelCartesianPlotParent(bool on) {
+	m_initializing = true;
+	ui.chbBindLogicalPos->setVisible(on);
+	if (!on)
+		ui.chbBindLogicalPos->setChecked(false);
+	m_initializing = false;
+}
+
 //**********************************************************
 //******************** SETTINGS ****************************
 //**********************************************************
@@ -1133,14 +1214,36 @@ void LabelWidget::load() {
 
 	ui.chbVisible->setChecked(m_label->isVisible());
 
+	// don't show checkbox if Placeholder feature not used
+	bool placeholder = m_label->text().placeholder;
+	if (!placeholder) {
+		ui.chbShowPlaceholderText->setVisible(false);
+		ui.chbShowPlaceholderText->setEnabled(false);
+		ui.chbShowPlaceholderText->setChecked(false);
+	} else {
+		ui.chbShowPlaceholderText->setEnabled(true);
+		ui.chbShowPlaceholderText->setVisible(true);
+		ui.chbShowPlaceholderText->setChecked(true);
+	}
+
 	//Text/TeX
 	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
-	if (m_label->text().teXUsed)
-		ui.teLabel->setText(m_label->text().text);
-	else {
-		ui.teLabel->setHtml(m_label->text().text);
-		ui.teLabel->selectAll(); // must be done to retrieve font
-		ui.kfontRequester->setFont(ui.teLabel->currentFont());
+	if(!placeholder) {
+		if (m_label->text().teXUsed)
+			ui.teLabel->setText(m_label->text().text);
+		else {
+			ui.teLabel->setHtml(m_label->text().text);
+			ui.teLabel->selectAll(); // must be done to retrieve font
+			ui.kfontRequester->setFont(ui.teLabel->currentFont());
+		}
+	} else {
+		if (m_label->text().teXUsed)
+			ui.teLabel->setText(m_label->text().textPlaceholder);
+		else {
+			ui.teLabel->setHtml(m_label->text().textPlaceholder);
+			ui.teLabel->selectAll(); // must be done to retrieve font
+			ui.kfontRequester->setFont(ui.teLabel->currentFont());
+		}
 	}
 
 	// if the text is empty yet, user LabelWidget::fontColor(),
@@ -1158,6 +1261,7 @@ void LabelWidget::load() {
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
+	ui.chbShowPlaceholderText->setChecked(m_label->text().placeholder);
 
 	//move the cursor to the end and set the focus to the text editor
 	QTextCursor cursor = ui.teLabel->textCursor();
@@ -1181,6 +1285,7 @@ void LabelWidget::load() {
 	ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
 	ui.sbRotation->setValue( m_label->rotationAngle() );
 
+	// don't show if binding not enabled. example: axis titles
 	//Border
 	ui.cbBorderShape->setCurrentIndex(static_cast<int>(m_label->borderShape()));
 	borderShapeChanged(ui.cbBorderShape->currentIndex());
@@ -1189,6 +1294,9 @@ void LabelWidget::load() {
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( round(m_label->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+
+	ui.chbBindLogicalPos->setVisible(m_label->isAttachedToCoordEnabled());
+	ui.chbBindLogicalPos->setChecked(m_label->isAttachedToCoord());
 
 	m_initializing = false;
 }

@@ -805,12 +805,13 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 	//* XYFitCurve with the child column for calculated residuals
 	//* XYSmouthCurve with the child column for calculated rough values
 	//* CantorWorksheet with the child columns for CAS variables
-	if (aspect->parentAspect()
-		&& !aspect->parentAspect()->inherits(AspectType::Folder)
-		&& !aspect->parentAspect()->inherits(AspectType::XYFitCurve)
-		&& !aspect->parentAspect()->inherits(AspectType::XYSmoothCurve)
-		&& !aspect->parentAspect()->inherits(AspectType::CantorWorksheet))
-		emit aspect->parentAspect()->selected(aspect);
+    AbstractAspect* parent = this->parentAspect();
+	if (parent
+		&& !parent->inherits(AspectType::Folder)
+		&& !parent->inherits(AspectType::XYFitCurve)
+		&& !parent->inherits(AspectType::XYSmoothCurve)
+		&& !parent->inherits(AspectType::CantorWorksheet))
+		emit this->selected(aspect);
 }
 
 void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
@@ -821,12 +822,13 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 	//* XYFitCurve with the child column for calculated residuals
 	//* XYSmouthCurve with the child column for calculated rough values
 	//* CantorWorksheet with the child columns for CAS variables
-	if (aspect->parentAspect()
-		&& !aspect->parentAspect()->inherits(AspectType::Folder)
-		&& !aspect->parentAspect()->inherits(AspectType::XYFitCurve)
-		&& !aspect->parentAspect()->inherits(AspectType::XYSmoothCurve)
-		&& !aspect->parentAspect()->inherits(AspectType::CantorWorksheet))
-		emit aspect->parentAspect()->deselected(aspect);
+    AbstractAspect* parent = this->parentAspect();
+	if (parent
+		&& !parent->inherits(AspectType::Folder)
+		&& !parent->inherits(AspectType::XYFitCurve)
+		&& !parent->inherits(AspectType::XYSmoothCurve)
+		&& !parent->inherits(AspectType::CantorWorksheet))
+		emit this->deselected(aspect);
 }
 
 /**

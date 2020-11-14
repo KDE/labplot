@@ -225,6 +225,7 @@ void WorksheetElement::prepareMoveInFrontOfMenu() {
 }
 
 void WorksheetElement::execMoveInFrontOf(QAction* action) {
+	emit moveBegin();
 	AbstractAspect* parent = parentAspect();
 	int index = action->data().toInt();
 	AbstractAspect* sibling1 = parent->child<WorksheetElement>(index);
@@ -233,9 +234,11 @@ void WorksheetElement::execMoveInFrontOf(QAction* action) {
 	remove();
 	parent->insertChildBefore(this, sibling2);
 	endMacro();
+	emit moveEnd();
 }
 
 void WorksheetElement::execMoveBehind(QAction* action) {
+	emit moveBegin();
 	AbstractAspect* parent = parentAspect();
 	int index = action->data().toInt();
 	AbstractAspect* sibling = parent->child<WorksheetElement>(index);
@@ -243,6 +246,7 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	remove();
 	parent->insertChildBefore(this, sibling);
 	endMacro();
+	emit moveEnd();
 }
 
 void WorksheetElement::loadThemeConfig(const KConfig &) {

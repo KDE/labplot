@@ -88,8 +88,8 @@ public:
 	void setCartesianPlotCursorMode(CartesianPlotActionMode mode);
 	void setPlotsLocked(bool);
 	bool plotsLocked();
-	int getPlotCount();
-	CartesianPlot* getPlot(int index);
+	int plotCount();
+    CartesianPlot* plot(int index);
 	TreeModel* cursorModel();
 
 	void cursorModelPlotAdded(const QString& name);

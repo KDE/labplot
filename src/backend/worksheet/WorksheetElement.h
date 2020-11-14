@@ -103,6 +103,10 @@ signals:
 
 	void hovered();
 	void unhovered();
+	// needed in the worksheet info element, because execMoveInFrontOf and execMoveBehind
+	// call also child removed but this is only temporary
+	void moveBegin(); // called, at the begin of execMoveInFrontOf or execMoveBehind is called
+	void moveEnd(); // called, at the end of execMoveInFrontOf or execMoveBehind is called
 };
 
 #endif

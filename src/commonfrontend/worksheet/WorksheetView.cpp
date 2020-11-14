@@ -421,6 +421,7 @@ void WorksheetView::initMenus() {
 	m_addNewMenu->addSeparator();
 	m_addNewMenu->addAction(addTextLabelAction);
 	m_addNewMenu->addAction(addImageAction);
+	m_addNewMenu->addAction(addGlobalInfoElementAction);
 
 	m_viewMouseModeMenu = new QMenu(i18n("Mouse Mode"), this);
 	m_viewMouseModeMenu->setIcon(QIcon::fromTheme("input-mouse"));
@@ -1064,7 +1065,9 @@ void WorksheetView::mouseDoubleClickEvent(QMouseEvent*) {
 }
 
 void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
-	if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection) {
+	if (m_suppressSelectionChangedEvent)
+		return QGraphicsView::mouseMoveEvent(event);
+    if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection ) {
 		//check whether there is a cartesian plot under the cursor
 		//and set the cursor appearance according to the current mouse mode for the cartesian plots
 		if ( isPlotAtPos(event->pos()) ) {

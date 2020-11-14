@@ -828,6 +828,64 @@ bool XYCurve::columnRemoved(const AbstractColumn* column, const AbstractAspect* 
 	return removed;
 }
 
+// Finds index where x is located and returns the value "index" after the found value
+/*!
+ * Find nearest x value from a value xpos and his y value
+ * @param xpos position for which the next index xpos should be found
+ * @param offset Offset from the index where xpos is. Positive is after the found index, negative is before the found index
+ * @param x x value at the found index
+ * @param y y value at the found index
+ * @param valueFound True when value found, otherwise false
+ */
+int XYCurve::getNextValue(double xpos, int offset, double& x, double& y, bool& valueFound) const {
+
+	valueFound = false;
+	AbstractColumn::Properties properties = xColumn()->properties();
+	if (properties == AbstractColumn::Properties::MonotonicDecreasing)
+		offset *=-1;
+
+	int index = xColumn()->indexForValue(xpos);
+	if (index < 0)
+		return -1;
+	if (offset > 0 && index+offset < xColumn()->rowCount())
+		index += offset;
+	else if (offset > 0)
+		index = xColumn()->rowCount() -1;
+	else if ((offset < 0 && index+offset > 0))
+		index += offset;
+	else
+		index = 0;
+
+
+	AbstractColumn::ColumnMode xMode = xColumn()->columnMode();
+
+	if (xMode == AbstractColumn::ColumnMode::Numeric ||
+			xMode == AbstractColumn::ColumnMode::Integer)
+		x = xColumn()->valueAt(index);
+	else if (xMode == AbstractColumn::ColumnMode::DateTime ||
+			 xMode == AbstractColumn::ColumnMode::Day ||
+			 xMode == AbstractColumn::ColumnMode::Month)
+		x = xColumn()->dateTimeAt(index).toMSecsSinceEpoch();
+	else
+		return index;
+
+
+	AbstractColumn::ColumnMode yMode = yColumn()->columnMode();
+
+	if (yMode == AbstractColumn::ColumnMode::Numeric ||
+			yMode == AbstractColumn::ColumnMode::Integer)
+		y = yColumn()->valueAt(index);
+	else if (yMode == AbstractColumn::ColumnMode::DateTime ||
+			 yMode == AbstractColumn::ColumnMode::Day ||
+			 yMode == AbstractColumn::ColumnMode::Month)
+		y = yColumn()->dateTimeAt(index).toMSecsSinceEpoch();
+	else
+		return index;
+
+	valueFound = true;
+	return index;
+}
+
 void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
 	if (columnRemoved(d->xColumn, aspect)) {
@@ -943,6 +1001,7 @@ void XYCurve::navigateTo() {
 //##############################################################################
 XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	setAcceptHoverEvents(false);
 }
 
@@ -1000,7 +1059,7 @@ void XYCurvePrivate::retransform() {
 
 	{
 #ifdef PERFTRACE_CURVES
-	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform()");
+		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform()");
 #endif
 
 	m_scenePoints.clear();
@@ -1021,8 +1080,8 @@ void XYCurvePrivate::retransform() {
 		return;
 	}
 
-	if (!plot->isPanningActive())
-		WAIT_CURSOR;
+		if (!plot->isPanningActive())
+			WAIT_CURSOR;
 
 	//calculate the scene coordinates
 	// This condition cannot be used, because m_logicalPoints is also used in updateErrorBars(), updateDropLines() and in updateFilling()
@@ -1092,6 +1151,7 @@ void XYCurvePrivate::retransform() {
 			startIndex = 0;
 			endIndex = numberOfPoints - 1;
 		}
+		//} // (symbolsStyle != Symbol::NoSymbols || valuesType != XYCurve::NoValues )
 
 		m_pointVisible.clear();
 		m_pointVisible.resize(numberOfPoints);
@@ -1101,16 +1161,16 @@ void XYCurvePrivate::retransform() {
 	}
 	//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )
 
-	m_suppressRecalc = true;
-	updateLines();
-	updateDropLines();
-	updateSymbols();
-	updateValues();
-	m_suppressRecalc = false;
-	updateErrorBars();
-
-	RESET_CURSOR;
+		RESET_CURSOR;
 	}
+
+    m_suppressRecalc = true;
+    updateLines();
+    updateDropLines();
+    updateSymbols();
+    updateValues();
+    m_suppressRecalc = false;
+    updateErrorBars();
 }
 
 /*!
@@ -1315,7 +1375,7 @@ void XYCurvePrivate::updateLines() {
 	//calculate the lines connecting the data points
 	{
 #ifdef PERFTRACE_CURVES
-	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate the lines connecting the data points");
+		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate the lines connecting the data points");
 #endif
 
 	// find index for xMin and xMax to not loop through all values
@@ -1498,6 +1558,10 @@ void XYCurvePrivate::updateLines() {
 						lastPoint.setX(NAN);
 						m_lines.append(QLineF(lastPoint, p1));
 					}
+                    if (!isnan(lastPoint.x()))	// last line
+                        m_lines.append(QLineF(m_logicalPoints[endIndex-1], m_logicalPoints[endIndex]));
+
+					break;
 				}
 			}
 			if (!isnan(lastPoint.x()))	// last line
@@ -1610,7 +1674,7 @@ void XYCurvePrivate::updateLines() {
 			}
 		}
 	}
-	}
+    }
 
 	//map the lines to scene coordinates
 	{
@@ -1622,14 +1686,14 @@ void XYCurvePrivate::updateLines() {
 
 	{
 #ifdef PERFTRACE_CURVES
-	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate new line path");
+		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate new line path");
 #endif
-	//new line path
-	for (const auto& line : qAsConst(m_lines)) {
-		linePath.moveTo(line.p1());
-		linePath.lineTo(line.p2());
-	}
-	}
+        //new line path
+        for (const auto& line : qAsConst(m_lines)) {
+            linePath.moveTo(line.p1());
+            linePath.lineTo(line.p2());
+        }
+    }
 
 	updateFilling();
 	recalcShapeAndBoundingRect();
@@ -2153,13 +2217,13 @@ void XYCurvePrivate::updateFilling() {
 	recalcShapeAndBoundingRect();
 }
 
- /*!
- * Find y value which corresponds to a @p x . @p valueFound indicates, if value was found.
- * When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
- * @param x
- * @param valueFound
- * @return
- */
+/*!
+* Find y value which corresponds to a @p x . @p valueFound indicates, if value was found.
+* When monotonic increasing or decreasing a different algorithm will be used, which needs less steps (mean) (log_2(rowCount)) to find the value.
+* @param x
+* @param valueFound
+* @return
+*/
 double XYCurve::y(double x, bool &valueFound) const {
 	if (!yColumn() || !xColumn()) {
 		valueFound = false;
@@ -2175,9 +2239,48 @@ double XYCurve::y(double x, bool &valueFound) const {
 
 	valueFound = true;
 	if (yColumnMode == AbstractColumn::ColumnMode::Numeric || yColumnMode == AbstractColumn::ColumnMode::Integer ||
-			yColumnMode == AbstractColumn::ColumnMode::BigInt) {
+            yColumnMode == AbstractColumn::ColumnMode::BigInt)
 		return yColumn()->valueAt(index);
-	} else {
+	else {
+		valueFound = false;
+		return NAN;
+	}
+}
+
+/*!
+ * @param x :value for which y should be found
+ * @param valueFound: returns true if y value found, otherwise false
+ * @param x_new: exact x value where y value is
+ * @return y value from x value
+ */
+double XYCurve::y(double x, double &x_new, bool &valueFound) const {
+	AbstractColumn::ColumnMode yColumnMode = yColumn()->columnMode();
+	int index = xColumn()->indexForValue(x);
+	if (index < 0) {
+		valueFound = false;
+		return NAN;
+	}
+
+	AbstractColumn::ColumnMode xColumnMode = xColumn()->columnMode();
+	if (xColumnMode == AbstractColumn::ColumnMode::Numeric ||
+			xColumnMode == AbstractColumn::ColumnMode::Integer)
+		x_new = xColumn()->valueAt(index);
+	else if(xColumnMode == AbstractColumn::ColumnMode::DateTime ||
+			xColumnMode == AbstractColumn::ColumnMode::Day ||
+			xColumnMode == AbstractColumn::ColumnMode::Month)
+		x_new = xColumn()->dateTimeAt(index).toMSecsSinceEpoch();
+	else {
+		// any other type implemented
+		valueFound = false;
+		return NAN;
+	}
+
+
+	valueFound = true;
+	if (yColumnMode == AbstractColumn::ColumnMode::Numeric ||
+			yColumnMode == AbstractColumn::ColumnMode::Integer)
+		return yColumn()->valueAt(index);
+	else {
 		valueFound = false;
 		return NAN;
 	}
@@ -2256,7 +2359,7 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 			continue;
 
 		if ( (errorPlusColumn && i >= errorPlusColumn->rowCount())
-			|| (errorMinusColumn && i >= errorMinusColumn->rowCount()) )
+				|| (errorMinusColumn && i >= errorMinusColumn->rowCount()) )
 			continue;
 
 		double value;
@@ -2265,9 +2368,9 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 			value = column1->valueAt(i);
 		else if (column1->columnMode() == AbstractColumn::ColumnMode::DateTime ||
 				 column1->columnMode() == AbstractColumn::ColumnMode::Month ||
-				 column1->columnMode() == AbstractColumn::ColumnMode::Day) {
+				 column1->columnMode() == AbstractColumn::ColumnMode::Day)
 			value = column1->dateTimeAt(i).toMSecsSinceEpoch();
-		} else
+		else
 			return false;
 
 		if (errorType == ErrorType::NoError) {
@@ -2361,7 +2464,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 		}
 
 	} else if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
-			properties == AbstractColumn::Properties::MonotonicDecreasing) {
+			   properties == AbstractColumn::Properties::MonotonicDecreasing) {
 
 		bool increase{true};
 		if (properties == AbstractColumn::Properties::MonotonicDecreasing)
@@ -2441,7 +2544,7 @@ bool XYCurvePrivate::pointLiesNearLine(const QPointF p1, const QPointF p2, const
 	if (vecLength == 0) {
 		if (gsl_hypot(dx1m, dy1m) <= maxDist)
 			return true;
-		 return false;
+		return false;
 	}
 	QPointF unitvec(dx12/vecLength, dy12/vecLength);
 
@@ -2760,6 +2863,15 @@ void XYCurvePrivate::updatePixmap() {
 	RESET_CURSOR;
 }
 
+QVariant XYCurvePrivate::itemChange(GraphicsItemChange change, const QVariant & value) {
+
+	// signalize, that the curve was selected. Will be used to create a new InfoElement (Marker)
+	if (change == QGraphicsItem::ItemSelectedChange)
+		if (value.toBool() && cSystem)
+			emit q->selected(cSystem->mapSceneToLogical(mousePos).x());
+	return QGraphicsItem::itemChange(change,value);
+}
+
 /*!
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
   \sa QGraphicsItem::paint().
@@ -2959,8 +3071,9 @@ void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		event->ignore();
 		return QGraphicsItem::mousePressEvent(event);
 	}
+	mousePos = event->pos();
 
-	if(q->activateCurve(event->pos())){
+	if(q->activateCurve(event->pos())) {
 		setSelected(true);
 		return;
 	}
