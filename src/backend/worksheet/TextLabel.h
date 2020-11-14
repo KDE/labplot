@@ -47,7 +47,7 @@ class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum Type {General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel};
+    enum class Type {General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel};
 	enum class BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
 			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
 

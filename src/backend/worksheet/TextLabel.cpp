@@ -98,7 +98,7 @@ void TextLabel::init() {
 	case Type::PlotLegendTitle:
 		groupName = "PlotLegendTitle";
 		break;
-	case InfoElementLabel:
+    case Type::InfoElementLabel:
 		groupName = "InfoElementLabel";
 	}
 
@@ -486,14 +486,8 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : q(owner) {
 }
 
 TextLabelPrivate::TextLabelPrivate(TextLabel* owner, CartesianPlot* plot)
-	: teXRenderSuccessful(false),
-	  positionInvalid(false),
-	  suppressItemChangeEvent(false),
-	  suppressRetransform(false),
-	  m_printing(false),
-	  m_hovered(false),
-	  q(owner),
-	  plot(plot) {
+    : plot(plot),
+      q(owner) {
 
 	if(plot)
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());

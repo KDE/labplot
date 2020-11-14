@@ -172,7 +172,7 @@ void InfoElementDock::gluePointChanged(int index) {
 		infoElement->setGluePointIndex(index - 1); // index 0 means automatic, which is defined as -1
 }
 
-void InfoElementDock::curveChanged(int index) {
+void InfoElementDock::curveChanged() {
 	if (m_initializing)
 		return;
 

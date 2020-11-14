@@ -31,7 +31,7 @@ private slots:
     void xposLineVisibilityChanged(bool);
     void connectionLineVisibilityChanged(bool);
 	void gluePointChanged(int index);
-	void curveChanged(int index);
+    void curveChanged();
 
 	// slots triggered in the InfoElement
     void elementConnectionLineWidthChanged(const double);
