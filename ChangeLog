@@ -1,3 +1,4 @@
+-----2.9.0 -----
 -----2.8.1 -----
 	* [worksheet] allow to change the background color for axis labels (default: transparent)
 	* [worksheet] allow to copy the plot cursor cordinates
