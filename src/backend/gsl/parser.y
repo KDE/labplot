@@ -298,6 +298,7 @@ double parse(const char* string, const char* locale) {
 
 	/* parameter for yylex */
 	res = NAN;	/* default value */
+	yynerrs = 0;	/* reset error count */
 	yyparse(&p);
 
 	pdebug("PARSER: parse() DONE (result = %g, errors = %d)\n*******************************\n", res, parse_errors());
