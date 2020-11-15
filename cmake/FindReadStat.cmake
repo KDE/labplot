@@ -30,7 +30,7 @@ find_library(READSTAT_LIBRARY readstat)
 find_path(READSTAT_INCLUDE_DIR readstat.h)
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(READSTAT
+find_package_handle_standard_args(ReadStat
     FOUND_VAR
         READSTAT_FOUND
     REQUIRED_VARS
