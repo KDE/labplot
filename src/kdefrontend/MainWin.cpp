@@ -96,6 +96,7 @@
 
 #include <QMdiArea>
 #include <QMenu>
+#include <QMenuBar>
 #include <QDockWidget>
 #include <QStackedWidget>
 #include <QUndoStack>
@@ -364,14 +365,9 @@ void MainWin::initGUI(const QString& fileName) {
 	//read the settings of MainWin
 	const KConfigGroup& groupMainWin = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
 
-	//status bar
-	bool visible = groupMainWin.readEntry(QLatin1String("ShowStatusBar"), true);
-	statusBar()->setVisible(visible);
-	m_toggleStatusBarAction->setChecked(visible);
-	m_toggleMemoryInfoAction->setEnabled(visible);
-
 	//show memory info
-	visible = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
+	m_toggleMemoryInfoAction->setEnabled(m_toggleStatusBarAction->isChecked());
+	bool visible = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
 	if (visible) {
 		m_memoryInfoWidget = new MemoryWidget(statusBar());
 		statusBar()->addPermanentWidget(m_memoryInfoWidget);
@@ -655,13 +651,11 @@ void MainWin::initActions() {
 
 	connect(windowVisibilityActions, &QActionGroup::triggered, this, &MainWin::setMdiWindowVisibility);
 
-	//show/hide the status bar
-	m_toggleStatusBarAction = new QAction(i18n("Show Status Bar"));
-	m_toggleStatusBarAction->setCheckable(true);
-	m_toggleStatusBarAction->setChecked(true);
-	connect(m_toggleStatusBarAction, &QAction::triggered, this, &MainWin::toggleStatusBar);
+	//show/hide the status and menu bars
+	m_toggleStatusBarAction = KStandardAction::showStatusbar(this, &MainWin::toggleStatusBar, actionCollection());
+	KStandardAction::showMenubar(this, &MainWin::toggleMenuBar, actionCollection());
 
-	//show/hide the status bar
+	//show/hide the memory usage widget
 	m_toggleMemoryInfoAction = new QAction(i18n("Show Memory Usage"));
 	m_toggleMemoryInfoAction->setCheckable(true);
 	m_toggleMemoryInfoAction->setChecked(true);
@@ -704,10 +698,6 @@ void MainWin::initMenus() {
 	auto* menu = dynamic_cast<QMenu*>(factory()->container("view", this));
 
 	if (menu) {
-		menu->addSeparator();
-		menu->addAction(m_toggleStatusBarAction);
-		menu->addSeparator();
-		menu->addAction(m_toggleMemoryInfoAction);
 		menu->addSeparator();
 		menu->addAction(m_toggleProjectExplorerDockAction);
 		menu->addAction(m_togglePropertiesDockAction);
@@ -792,12 +782,15 @@ void MainWin::initMenus() {
 #endif
 	KActionMenu* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
+	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
 
 	QMenu* settingsMenu = dynamic_cast<QMenu*>(factory()->container("settings", this));
-	if (settingsMenu)
-		settingsMenu->insertMenu(settingsMenu->actions().constFirst(), schemesMenu->menu());
+	if (settingsMenu) {
+		auto* action = settingsMenu->insertSeparator(settingsMenu->actions().constFirst());
+		settingsMenu->insertMenu(action, schemesMenu->menu());
+	}
 
-	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
+	//TODO: add m_toggleMemoryInfoAction after the "Show status bar" action
 
 #ifdef HAVE_CANTOR_LIBS
 	QAction* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS"), this);
@@ -2094,13 +2087,9 @@ void MainWin::toggleDockWidget(QAction* action)  {
 	}
 }
 
-void MainWin::toggleStatusBar() {
-	statusBar()->setVisible(!statusBar()->isVisible());
-	m_toggleMemoryInfoAction->setEnabled(statusBar()->isVisible());
-
-	//show the current setting here because in the desctuctor the status bar is not visible anymore
-	KConfigGroup group = KSharedConfig::openConfig()->group("MainWin");
-	group.writeEntry(QLatin1String("ShowStatusBar"), statusBar()->isVisible());
+void MainWin::toggleStatusBar(bool checked) {
+	statusBar()->setVisible(checked);
+	m_toggleMemoryInfoAction->setEnabled(checked);
 }
 
 void MainWin::toggleMemoryInfo() {
@@ -2112,6 +2101,10 @@ void MainWin::toggleMemoryInfo() {
 		m_memoryInfoWidget = new MemoryWidget(statusBar());
 		statusBar()->addPermanentWidget(m_memoryInfoWidget);
 	}
+}
+
+void MainWin::toggleMenuBar(bool checked) {
+	menuBar()->setVisible(checked);
 }
 
 void MainWin::propertiesExplorerRequested() {

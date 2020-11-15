@@ -100,6 +100,7 @@ class QQuickWidget;
 
 class KColorSchemeManager;
 class KRecentFilesAction;
+class KToggleAction;
 class KToggleFullScreenAction;
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -205,7 +206,7 @@ private:
 	//toggling doch widgets and the status bar
 	QAction* m_toggleProjectExplorerDockAction;
 	QAction* m_togglePropertiesDockAction;
-	QAction* m_toggleStatusBarAction;
+	KToggleAction* m_toggleStatusBarAction;
 	QAction* m_toggleMemoryInfoAction;
 	KToggleFullScreenAction* m_toggleFullScreenAction;
 
@@ -345,7 +346,8 @@ private slots:
 	void setMdiWindowVisibility(QAction*);
 	void updateMdiWindowVisibility() const;
 	void toggleDockWidget(QAction*);
-	void toggleStatusBar();
+	void toggleStatusBar(bool);
+	void toggleMenuBar(bool);
 	void toggleMemoryInfo();
 	void toggleFullScreen(bool);
 	void projectExplorerDockVisibilityChanged(bool);
