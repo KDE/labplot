@@ -38,9 +38,9 @@ VariableParser::VariableParser(QString name, QString value)
 	PERFTRACE("parsing variable");
 	if (m_backendName.compare(QStringLiteral("Maxima"), Qt::CaseInsensitive) == 0)
 		parseMaximaValues();
-	else if (m_backendName.compare(QStringLiteral("Python 3"), Qt::CaseInsensitive) == 0)
-		parsePythonValues();
-	else if (m_backendName.compare(QStringLiteral("Python 2"), Qt::CaseInsensitive) == 0)
+	else if ( (m_backendName.compare(QStringLiteral("Python"), Qt::CaseInsensitive) == 0)
+			|| (m_backendName.compare(QStringLiteral("Python 3"), Qt::CaseInsensitive) == 0)
+			|| (m_backendName.compare(QStringLiteral("Python 2"), Qt::CaseInsensitive) == 0) )
 		parsePythonValues();
 	else if (m_backendName.compare(QStringLiteral("Sage"), Qt::CaseInsensitive) == 0)
 		parsePythonValues();
