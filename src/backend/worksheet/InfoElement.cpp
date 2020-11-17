@@ -634,7 +634,6 @@ BASIC_SHARED_D_READER_IMPL(InfoElement, double, xposLineWidth, xposLineWidth);
 BASIC_SHARED_D_READER_IMPL(InfoElement, QColor, xposLineColor, xposLineColor);
 BASIC_SHARED_D_READER_IMPL(InfoElement, double, connectionLineWidth, connectionLineWidth);
 BASIC_SHARED_D_READER_IMPL(InfoElement, QColor, connectionLineColor, connectionLineColor);
-BASIC_SHARED_D_READER_IMPL(InfoElement, bool, visible, visible);
 BASIC_SHARED_D_READER_IMPL(InfoElement, int, gluePointIndex, gluePointIndex);
 BASIC_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
 /* ============================ setter methods ================= */

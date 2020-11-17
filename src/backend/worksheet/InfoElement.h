@@ -82,7 +82,6 @@ public:
 	TextLabel::TextWrapper createTextLabelText();
 	QMenu* createContextMenu() override;
 	CartesianPlot* plot();
-	bool isVisible() const override;
 	bool isTextLabel() const;
 
 	QGraphicsItem* graphicsItem() const override;
@@ -97,9 +96,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(QColor, xposLineColor, XPosLineColor);
 	BASIC_D_ACCESSOR_DECL(double, connectionLineWidth, ConnectionLineWidth);
 	BASIC_D_ACCESSOR_DECL(QColor, connectionLineColor, ConnectionLineColor);
-	BASIC_D_ACCESSOR_DECL(bool, visible, Visible);
 	BASIC_D_ACCESSOR_DECL(int, gluePointIndex, GluePointIndex);
 	BASIC_D_ACCESSOR_DECL(QString, connectionLineCurveName, ConnectionLineCurveName);
+
+	void setVisible(bool on) override;
+	bool isVisible() const override;
 
 	typedef  InfoElementPrivate Private;
 
