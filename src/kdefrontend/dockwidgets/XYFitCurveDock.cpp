@@ -923,7 +923,7 @@ void XYFitCurveDock::updateParameterList() {
 
 	ExpressionParser* parser = ExpressionParser::getInstance();
 	QStringList vars; // variables that are known
-	vars << "x";	//TODO: others?
+	vars << "x";	//TODO: generalize when we support other XYEquationCurve::EquationType
 	m_fitData.paramNames = m_fitData.paramNamesUtf8 = parser->getParameter(m_fitData.model, vars);
 
 	// if number of parameter changed
@@ -955,8 +955,10 @@ void XYFitCurveDock::updateParameterList() {
 void XYFitCurveDock::parametersChanged(bool updateParameterWidget) {
 	DEBUG("XYFitCurveDock::parametersChanged() m_initializing = " << m_initializing);
 
-	//parameter names were (probably) changed -> set the new names in EquationTextEdit
-	uiGeneralTab.teEquation->setVariables(m_fitData.paramNames);
+	//parameter names were (probably) changed -> set the new vars in ExpressionTextEdit teEquation
+	QStringList vars{m_fitData.paramNames};
+	vars << "x";	//TODO: generalize when we support other XYEquationCurve::EquationType
+	uiGeneralTab.teEquation->setVariables(vars);
 
 	if (m_initializing)
 		return;
