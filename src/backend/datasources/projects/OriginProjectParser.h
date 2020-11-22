@@ -31,7 +31,7 @@
 
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/datasources/projects/ProjectParser.h"
-#include <liborigin/OriginFile.h>
+#include "3rdparty/liborigin/OriginFile.h"
 
 class Axis;
 class Column;

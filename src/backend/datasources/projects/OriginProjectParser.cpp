@@ -43,8 +43,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/TextLabel.h"
-
-#include <liborigin/OriginFile.h>
+#include "3rdparty/liborigin/OriginFile.h"
 
 #include <KLocalizedString>
 

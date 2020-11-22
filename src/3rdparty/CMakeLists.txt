@@ -2,6 +2,10 @@ IF (APPLE)
 	add_subdirectory(kdmactouchbar)
 ENDIF ()
 
+IF (ENABLE_LIBORIGIN)
+	add_subdirectory(liborigin)
+ENDIF ()
+
 IF (BUILD_READSTAT)
 	include(ExternalProject)
 

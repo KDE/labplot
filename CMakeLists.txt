@@ -416,10 +416,6 @@ add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)
 
-IF (ENABLE_LIBORIGIN)
-	add_subdirectory(liborigin)
-ENDIF ()
-
 if (ENABLE_TESTS)
     enable_testing(true)
     add_subdirectory(tests)
