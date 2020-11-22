@@ -203,7 +203,7 @@ private:
 	QAction* m_newDatapickerAction;
 	QAction* m_editFitsFileAction;
 
-	//toggling doch widgets and the status bar
+	//toggling dock widgets, status bar and full screen
 	QAction* m_toggleProjectExplorerDockAction;
 	QAction* m_togglePropertiesDockAction;
 	KToggleAction* m_toggleStatusBarAction;
@@ -279,6 +279,7 @@ protected:
 	void closeEvent(QCloseEvent*) override;
 	void dragEnterEvent(QDragEnterEvent*) override;
 	void dropEvent(QDropEvent*) override;
+
 
 private slots:
 	void initGUI(const QString&);

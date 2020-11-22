@@ -127,6 +127,7 @@
 #include <KActionMenu>
 #include <KColorScheme>
 #include <KColorSchemeManager>
+#include <KToggleAction>
 #include <KToggleFullScreenAction>
 #include <kconfigwidgets_version.h>
 
@@ -238,7 +239,8 @@ Project* MainWin::project() const {
 }
 
 void MainWin::initGUI(const QString& fileName) {
-	statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
+	if (statusBar()->isEnabled())
+		statusBar()->showMessage(i18nc("%1 is the LabPlot version", "Welcome to LabPlot %1", QLatin1String(LVERSION)));
 
 	initActions();
 
@@ -366,13 +368,12 @@ void MainWin::initGUI(const QString& fileName) {
 	const KConfigGroup& groupMainWin = KSharedConfig::openConfig()->group(QLatin1String("MainWin"));
 
 	//show memory info
-	m_toggleMemoryInfoAction->setEnabled(m_toggleStatusBarAction->isChecked());
-	bool visible = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
-	if (visible) {
-		m_memoryInfoWidget = new MemoryWidget(statusBar());
-		statusBar()->addPermanentWidget(m_memoryInfoWidget);
-	}
-	m_toggleMemoryInfoAction->setChecked(visible);
+	m_toggleMemoryInfoAction->setEnabled(statusBar()->isEnabled());	// disable/enable menu with statusbar
+	bool memoryInfoShown = groupMainWin.readEntry(QLatin1String("ShowMemoryInfo"), true);
+	DEBUG(Q_FUNC_INFO << ", memory info enabled in config: " << memoryInfoShown)
+	m_toggleMemoryInfoAction->setChecked(memoryInfoShown);
+	if (memoryInfoShown)
+		toggleMemoryInfo();
 
 	//restore the geometry
 	restoreGeometry(groupMainWin.readEntry("geometry", QByteArray()));
@@ -652,13 +653,23 @@ void MainWin::initActions() {
 	connect(windowVisibilityActions, &QActionGroup::triggered, this, &MainWin::setMdiWindowVisibility);
 
 	//show/hide the status and menu bars
+	// KMainWindow should provide a menu that allows showing/hiding of the statusbar via showStatusbar()
+	// see https://api.kde.org/frameworks/kxmlgui/html/classKXmlGuiWindow.html#a3d7371171cafabe30cb3bb7355fdfed1
+	//KXMLGUI framework automatically stores "Disabled" for the key "StatusBar"
+	KConfigGroup groupMain = KSharedConfig::openConfig()->group("MainWindow");
+	const QString& str = groupMain.readEntry(QLatin1String("StatusBar"), "");
+	bool statusBarDisabled = (str == QLatin1String("Disabled"));
+	DEBUG(Q_FUNC_INFO << ", statusBar enabled in config: " << !statusBarDisabled)
+	createStandardStatusBarAction();
 	m_toggleStatusBarAction = KStandardAction::showStatusbar(this, &MainWin::toggleStatusBar, actionCollection());
+	m_toggleStatusBarAction->setChecked(!statusBarDisabled);
+	statusBar()->setEnabled(!statusBarDisabled);	// setVisible() does not work
+
 	KStandardAction::showMenubar(this, &MainWin::toggleMenuBar, actionCollection());
 
 	//show/hide the memory usage widget
 	m_toggleMemoryInfoAction = new QAction(i18n("Show Memory Usage"));
 	m_toggleMemoryInfoAction->setCheckable(true);
-	m_toggleMemoryInfoAction->setChecked(true);
 	connect(m_toggleMemoryInfoAction, &QAction::triggered, this, &MainWin::toggleMemoryInfo);
 
 	//Actions for hiding/showing the dock widgets
@@ -788,9 +799,12 @@ void MainWin::initMenus() {
 	if (settingsMenu) {
 		auto* action = settingsMenu->insertSeparator(settingsMenu->actions().constFirst());
 		settingsMenu->insertMenu(action, schemesMenu->menu());
-	}
 
-	//TODO: add m_toggleMemoryInfoAction after the "Show status bar" action
+		// add m_toggleMemoryInfoAction after the "Show status bar" action
+		auto actions = settingsMenu->actions();
+		const int index = actions.indexOf(m_toggleStatusBarAction);
+		settingsMenu->insertAction(actions.at(index + 1), m_toggleMemoryInfoAction);
+	}
 
 #ifdef HAVE_CANTOR_LIBS
 	QAction* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS"), this);
@@ -2088,11 +2102,14 @@ void MainWin::toggleDockWidget(QAction* action)  {
 }
 
 void MainWin::toggleStatusBar(bool checked) {
-	statusBar()->setVisible(checked);
+	statusBar()->setVisible(checked);	// show/hide statusbar
+	statusBar()->setEnabled(checked);
+	// enabled/disable memory info menu with statusbar
 	m_toggleMemoryInfoAction->setEnabled(checked);
 }
 
 void MainWin::toggleMemoryInfo() {
+	DEBUG(Q_FUNC_INFO)
 	if (m_memoryInfoWidget) {
 		statusBar()->removeWidget(m_memoryInfoWidget);
 		delete m_memoryInfoWidget;
