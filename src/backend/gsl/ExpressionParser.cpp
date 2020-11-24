@@ -87,7 +87,9 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << i18n("Lambert W Functions");
 	m_functionsGroups << i18n("Legendre Functions and Spherical Harmonics");
 	m_functionsGroups << i18n("Logarithm and Related Functions");
-//	m_functionsGroups << i18n("Mathieu Functions");
+#if (GSL_MAJOR_VERSION >= 2)
+	m_functionsGroups << i18n("Mathieu Functions");
+#endif
 	m_functionsGroups << i18n("Power Function");
 	m_functionsGroups << i18n("Psi (Digamma) Function");
 	m_functionsGroups << i18n("Synchrotron Functions");
@@ -482,6 +484,20 @@ void ExpressionParser::initFunctions() {
 	index++;
 	for (int i = 0; i < 4; i++)
 		m_functionsGroupIndex << index;
+
+	//Mathieu Functions
+#if (GSL_MAJOR_VERSION >= 2)
+	m_functionsNames << i18n("Characteristic values a_n(q) of the Mathieu functions ce_n(q,x)");
+	m_functionsNames << i18n("Characteristic values b_n(q) of the Mathieu functions se_n(q,x)");
+	m_functionsNames << i18n("Angular Mathieu functions ce_n(q,x)");
+	m_functionsNames << i18n("Angular Mathieu functions se_n(q,x)");
+	m_functionsNames << i18n("Radial j-th kind Mathieu functions Mc_n^{(j)}(q,x)");
+	m_functionsNames << i18n("Radial j-th kind Mathieu functions Ms_n^{(j)}(q,x)");
+
+	index++;
+	for (int i = 0; i < 6; i++)
+		m_functionsGroupIndex << index;
+#endif
 
 	// Power Function
 	m_functionsNames << i18n("x^n for integer n with an error estimate");

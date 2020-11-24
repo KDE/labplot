@@ -287,6 +287,15 @@ struct funs _functions[] = {
 	{"logabs", (func_t)gsl_sf_log_abs, 1},
 	{"logp", (func_t)gsl_sf_log_1plusx, 1},
 	{"logpm", (func_t)gsl_sf_log_1plusx_mx, 1},
+	/* Mathieu Functions */
+#if (GSL_MAJOR_VERSION >= 2)
+	{"an", (func_t)nsl_sf_mathieu_a, 2},
+	{"bn", (func_t)nsl_sf_mathieu_b, 2},
+	{"cen", (func_t)nsl_sf_mathieu_ce, 3},
+	{"sen", (func_t)nsl_sf_mathieu_se, 3},
+	{"Mc", (func_t)nsl_sf_mathieu_Mc, 4},
+	{"Ms", (func_t)nsl_sf_mathieu_Ms, 4},
+#endif
 	/* Power Function */
 	{"gsl_powint", (func_t)nsl_sf_powint, 2},
 	/* Psi (Digamma) Function */

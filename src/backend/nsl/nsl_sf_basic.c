@@ -343,6 +343,15 @@ double nsl_sf_conicalP_sphreg(double l, double L, double x) { return gsl_sf_coni
 double nsl_sf_conicalP_cylreg(double m, double l, double x) { return gsl_sf_conicalP_sph_reg((int)round(m), l, x); }
 double nsl_sf_legendre_H3d(double l,  double L, double e) { return gsl_sf_legendre_H3d((int)round(l), L, e); }
 
+#if (GSL_MAJOR_VERSION >= 2)
+double nsl_sf_mathieu_a(double n, double q) { return gsl_sf_mathieu_a((int)round(n), q); }
+double nsl_sf_mathieu_b(double n, double q) { return gsl_sf_mathieu_b((int)round(n), q); }
+double nsl_sf_mathieu_ce(double n, double q, double x) { return gsl_sf_mathieu_ce((int)round(n), q, x); }
+double nsl_sf_mathieu_se(double n, double q, double x) { return gsl_sf_mathieu_se((int)round(n), q, x); }
+double nsl_sf_mathieu_Mc(double j, double n, double q, double x) { return gsl_sf_mathieu_Mc((int)round(j), (int)round(n), q, x); }
+double nsl_sf_mathieu_Ms(double j, double n, double q, double x) { return gsl_sf_mathieu_Ms((int)round(j), (int)round(n), q, x); }
+#endif
+
 double nsl_sf_psiint(double n) { return gsl_sf_psi_int((int)round(n)); }
 double nsl_sf_psi1int(double n) { return gsl_sf_psi_1_int((int)round(n)); }
 double nsl_sf_psin(double n,  double x) { return gsl_sf_psi_n((int)round(n), x); }

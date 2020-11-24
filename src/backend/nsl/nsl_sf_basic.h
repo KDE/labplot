@@ -164,6 +164,15 @@ double nsl_sf_conicalP_sphreg(double l, double L, double x);
 double nsl_sf_conicalP_cylreg(double m, double l, double x);
 double nsl_sf_legendre_H3d(double l,  double L, double e);
 
+#if (GSL_MAJOR_VERSION >= 2)
+double nsl_sf_mathieu_a(double n, double q);
+double nsl_sf_mathieu_b(double n, double q);
+double nsl_sf_mathieu_ce(double n, double q, double x);
+double nsl_sf_mathieu_se(double n, double q, double x);
+double nsl_sf_mathieu_Mc(double j, double n, double q, double x);
+double nsl_sf_mathieu_Ms(double j, double n, double q, double x);
+#endif
+
 double nsl_sf_psiint(double n);
 double nsl_sf_psi1int(double n);
 double nsl_sf_psin(double n,  double x);
