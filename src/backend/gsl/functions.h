@@ -259,6 +259,7 @@ struct funs _functions[] = {
 	{"L1", (func_t)gsl_sf_laguerre_1, 2},
 	{"L2", (func_t)gsl_sf_laguerre_2, 2},
 	{"L3", (func_t)gsl_sf_laguerre_3, 2},
+	{"Ln", (func_t)nsl_sf_laguerre_n, 3},
 	/* Lambert W Functions */
 	{"W0", (func_t)gsl_sf_lambert_W0, 1},
 	{"Wm1", (func_t)gsl_sf_lambert_Wm1, 1},

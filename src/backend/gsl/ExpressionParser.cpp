@@ -434,9 +434,10 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("generalized Laguerre polynomials L_1");
 	m_functionsNames << i18n("generalized Laguerre polynomials L_2");
 	m_functionsNames << i18n("generalized Laguerre polynomials L_3");
+	m_functionsNames << i18n("generalized Laguerre polynomials L_n");
 
 	index++;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 		m_functionsGroupIndex << index;
 
 	// Lambert W Functions
