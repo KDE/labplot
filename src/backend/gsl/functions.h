@@ -234,11 +234,14 @@ struct funs _functions[] = {
 	{"Cn", (func_t)nsl_sf_gegenpoly_n, 3},
 #if (GSL_MAJOR_VERSION > 2) || (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION >= 4)
 	/* Hermite polynomials and functions */
+	{"Hn", (func_t)nsl_sf_hermite, 2},
 	{"Hen", (func_t)nsl_sf_hermite_prob, 2},
-	{"Hn", (func_t)nsl_sf_hermite_phys, 2},
 	{"Hfn", (func_t)nsl_sf_hermite_func, 2},
-	{"Hend", (func_t)nsl_sf_hermite_prob_der, 3},
-	{"Hnd", (func_t)nsl_sf_hermite_phys_der, 3},
+#if (GSL_MAJOR_VERSION > 2) || (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION >= 6)
+	{"Hfnf", (func_t)nsl_sf_hermite_func_fast, 2},
+#endif
+	{"Hnd", (func_t)nsl_sf_hermite_deriv, 3},
+	{"Hend", (func_t)nsl_sf_hermite_prob_deriv, 3},
 	{"Hfnd", (func_t)nsl_sf_hermite_func_der, 3},
 #endif
 	/* Hypergeometric Functions */

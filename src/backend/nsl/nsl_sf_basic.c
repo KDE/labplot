@@ -314,13 +314,21 @@ double nsl_sf_taylorcoeff(double n, double x) { return gsl_sf_taylorcoeff((int)r
 
 double nsl_sf_gegenpoly_n(double n, double l, double x) { return gsl_sf_gegenpoly_n((int)round(n), l, x); }
 
+/* Hermite polynomials and functions since GSL 2.4 */
 #if (GSL_MAJOR_VERSION > 2) || (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION >= 4)
 double nsl_sf_hermite_prob(double n, double x) { return gsl_sf_hermite_prob((int)round(n), x); }
-double nsl_sf_hermite_phys(double n, double x) { return gsl_sf_hermite_phys((int)round(n), x); }
 double nsl_sf_hermite_func(double n, double x) { return gsl_sf_hermite_func((int)round(n), x); }
-double nsl_sf_hermite_prob_der(double m, double n, double x) { return gsl_sf_hermite_prob_der((int)round(m), (int)round(n), x); }
-double nsl_sf_hermite_phys_der(double m, double n, double x) { return gsl_sf_hermite_phys_der((int)round(m), (int)round(n), x); }
 double nsl_sf_hermite_func_der(double m, double n, double x) { return gsl_sf_hermite_func_der((int)round(m), (int)round(n), x); }
+#if (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION < 6)
+double nsl_sf_hermite(double n, double x) { return gsl_sf_hermite_phys((int)round(n), x); }
+double nsl_sf_hermite_deriv(double m, double n, double x) { return gsl_sf_hermite_phys_der((int)round(m), (int)round(n), x); }
+double nsl_sf_hermite_prob_deriv(double m, double n, double x) { return gsl_sf_hermite_prob_der((int)round(m), (int)round(n), x); }
+#else	/* renamed and added func_fast in GSL 2.6 */
+double nsl_sf_hermite(double n, double x) { return gsl_sf_hermite((int)round(n), x); }
+double nsl_sf_hermite_deriv(double m, double n, double x) { return gsl_sf_hermite_deriv((int)round(m), (int)round(n), x); }
+double nsl_sf_hermite_prob_deriv(double m, double n, double x) { return gsl_sf_hermite_prob_deriv((int)round(m), (int)round(n), x); }
+double nsl_sf_hermite_func_fast(double n, double x) { return gsl_sf_hermite_func_fast((int)round(n), x); }
+#endif
 #endif
 
 double nsl_sf_hyperg_1F1i(double m, double n, double x) { return gsl_sf_hyperg_1F1_int((int)round(m), (int)round(n), x); }

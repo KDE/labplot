@@ -398,12 +398,19 @@ void ExpressionParser::initFunctions() {
 	m_functionsNames << i18n("Hermite polynomials physicists version");
 	m_functionsNames << i18n("Hermite polynomials probabilists version");
 	m_functionsNames << i18n("Hermite functions");
+#if (GSL_MAJOR_VERSION > 2) || (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION >= 6)
+	m_functionsNames << i18n("Hermite functions (fast version)");
+#endif
 	m_functionsNames << i18n("Derivatives of Hermite polynomials physicists version");
 	m_functionsNames << i18n("Derivatives of Hermite polynomials probabilists version");
 	m_functionsNames << i18n("Derivatives of Hermite functions");
 
 	index++;
+#if (GSL_MAJOR_VERSION == 2) && (GSL_MINOR_VERSION < 6)
 	for (int i = 0; i < 6; i++)
+#else
+	for (int i = 0; i < 7; i++)
+#endif
 		m_functionsGroupIndex << index;
 #endif
 
