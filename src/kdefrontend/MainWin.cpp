@@ -287,17 +287,18 @@ void MainWin::initGUI(const QString& fileName) {
 		//TODO: the application is not really usable if the rc file was not found. We should quit the application. The following line crashes
 		//the application because of the splash screen. We need to find another solution.
 // 		QMetaObject::invokeMethod(this, "close", Qt::QueuedConnection); //call close as soon as we enter the eventloop
-		return;
+// 		return;
+	} else {
+		auto* tbImport = new QToolButton(mainToolBar);
+		tbImport->setPopupMode(QToolButton::MenuButtonPopup);
+		tbImport->setMenu(m_importMenu);
+		tbImport->setDefaultAction(m_importFileAction);
+		auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
+		mainToolBar->insertWidget(lastAction, tbImport);
+
+		qobject_cast<QMenu*>(factory()->container("import", this))->setIcon(QIcon::fromTheme("document-import"));
 	}
 
-	auto* tbImport = new QToolButton(mainToolBar);
-	tbImport->setPopupMode(QToolButton::MenuButtonPopup);
-	tbImport->setMenu(m_importMenu);
-	tbImport->setDefaultAction(m_importFileAction);
-	auto* lastAction = mainToolBar->actions().at(mainToolBar->actions().count() - 1);
-	mainToolBar->insertWidget(lastAction, tbImport);
-
-	qobject_cast<QMenu*>(factory()->container("import", this))->setIcon(QIcon::fromTheme("document-import"));
 	setWindowIcon(QIcon::fromTheme("LabPlot2", QGuiApplication::windowIcon()));
 	setAttribute( Qt::WA_DeleteOnClose );
 
@@ -716,7 +717,8 @@ void MainWin::initMenus() {
 
 	//menu in the main toolbar for adding new aspects
 	menu = dynamic_cast<QMenu*>(factory()->container("new", this));
-	menu->setIcon(QIcon::fromTheme("window-new"));
+	if (menu)
+		menu->setIcon(QIcon::fromTheme("window-new"));
 
 	//menu in the project explorer and in the toolbar for adding new aspects
 	m_newMenu = new QMenu(i18n("Add New"), this);
