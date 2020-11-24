@@ -31,7 +31,6 @@
 #define INFOELEMENT_H
 
 #include "WorksheetElement.h"
-
 #include "backend/worksheet/TextLabel.h"
 
 class TextLabel;
@@ -45,6 +44,7 @@ class QMenu;
 
 class InfoElement : public WorksheetElement {
 	Q_OBJECT
+
 public:
 	InfoElement(const QString& name, CartesianPlot*);
 	InfoElement(const QString& name, CartesianPlot*, const XYCurve*, double pos);
@@ -67,6 +67,8 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfig&) override;
+
 	void init();
 	void initActions();
 	void initMenus();
@@ -105,18 +107,20 @@ public:
 	typedef  InfoElementPrivate Private;
 
 public slots:
-	void labelPositionChanged(TextLabel::PositionWrapper position);
-	void labelVisibleChanged(bool visible);
-	void pointPositionChanged(QPointF pos);
+	void labelPositionChanged(TextLabel::PositionWrapper);
+	void labelVisibleChanged(bool);
+	void pointPositionChanged(QPointF);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
-	void childAdded(const AbstractAspect* child);
+	void childAdded(const AbstractAspect*);
 	void labelBorderShapeChanged();
-	void labelTextWrapperChanged(TextLabel::TextWrapper wrapper);
+	void labelTextWrapperChanged(TextLabel::TextWrapper);
 	void moveElementBegin();
 	void moveElementEnd();
 	void curveVisibilityChanged();
+
 protected:
 	InfoElementPrivate* const d_ptr;
+
 private:
 	Q_DECLARE_PRIVATE(InfoElement)
 	TextLabel* label{nullptr};
@@ -128,6 +132,7 @@ private:
 
 	// Actions
 	QAction* visibilityAction;
+
 signals:
 	void xposLineVisibleChanged(const bool);
 	void connectionLineVisibleChanged(const bool);

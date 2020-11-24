@@ -91,8 +91,7 @@ InfoElement::InfoElement(const QString &name, CartesianPlot *plot, const XYCurve
 		}
 
 		// C++14 enabled:
-		//connect(curve, qOverload<bool>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
-		connect(curve, static_cast<void(XYCurve::*)(bool)>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+		connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
 		custompoint->setVisible(curve->isVisible());
 
 		setVisible(true);
@@ -135,7 +134,6 @@ InfoElement::~InfoElement() {
 }
 
 void InfoElement::init() {
-
 	Q_D(InfoElement);
 
 	initActions();
@@ -151,6 +149,12 @@ void InfoElement::init() {
 	TextLabel::TextWrapper text;
 	text.placeholder = true;
 	label->setText(text); // set placeholder to true
+
+	//use the color for the axis line from the theme also for info element's lines
+	KConfig config;
+	const KConfigGroup& group = config.group("Axis");
+	d->connectionLineColor = group.readEntry("LineColor", QColor(Qt::black));
+	d->xposLineColor = d->connectionLineColor;
 }
 
 void InfoElement::initActions() {
@@ -175,6 +179,7 @@ QMenu* InfoElement::createContextMenu() {
 
 	return menu;
 }
+
 /*!
  * @brief InfoElement::addCurve
  * Adds a new markerpoint to the plot which is placed on the curve curve
@@ -188,6 +193,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		if (curve == markerpoint.curve)
 			return;
 	}
+
 	if (!custompoint) {
 		custompoint = new CustomPoint(d->plot, "Markerpoint");
 		addChild(custompoint);
@@ -232,6 +238,7 @@ void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
 		if(curvePath == markerpoint.curvePath)
 			return;
 	}
+
 	if (!custompoint) {
 		custompoint = new CustomPoint(d->plot, "Markerpoint");
 		custompoint->setVisible(false);
@@ -272,6 +279,7 @@ bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
 			success = false;
 		}
 	}
+
 	retransform();
 	return success;
 }
@@ -366,7 +374,6 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	}
 
 	for (int i=0; i< markerpoints.length(); i++) {
-
 		QString replace;
 		if(!wrapper.teXUsed)
 			replace = QString("&amp;(");
@@ -376,6 +383,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		replace+=  markerpoints[i].curve->name() + QString(")");
 		placeholderText.replace(replace, QString::number(markerpoints[i].y));
 	}
+
 	wrapper.text = placeholderText;
 	return wrapper;
 }
@@ -481,13 +489,11 @@ void InfoElement::curveVisibilityChanged() {
 		setXPosLineVisible(true);
 		label->setVisible(true);
 	}
-
-
 }
 
 void InfoElement::labelBorderShapeChanged() {
 	Q_D(InfoElement);
-    emit labelBorderShapeChangedSignal();
+	emit labelBorderShapeChangedSignal();
 	d->retransform();
 }
 
@@ -495,8 +501,8 @@ void InfoElement::labelBorderShapeChanged() {
  * Delete child and remove from markerpoint list if it is a markerpoint. If it is a textlabel delete complete InfoElement
  */
 void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
-    Q_UNUSED(before)
-    Q_D(InfoElement);
+	Q_UNUSED(before)
+	Q_D(InfoElement);
 
 	// when childs are reordered, don't remove them
 	// problem: when the order was changed the elements are deleted for a short time and recreated. This function will called then
@@ -562,6 +568,7 @@ void InfoElement::childAdded(const AbstractAspect* child) {
 		l->setParentGraphicsItem(graphicsItem());
 	}
 }
+
 /*!
  * Will be called, when the customPoint changes his position
  * @param pos
@@ -594,6 +601,7 @@ void InfoElement::pointPositionChanged(QPointF pos) {
 			m_suppressChildPositionChanged = false;
 		}
 	}
+
 	label->setText(createTextLabelText());
 	d->retransform();
 }
@@ -617,6 +625,7 @@ void InfoElement::retransform() {
 	Q_D(InfoElement);
 	d->retransform();
 }
+
 void InfoElement::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
     Q_UNUSED(horizontalRatio)
     Q_UNUSED(verticalRatio)
@@ -717,21 +726,20 @@ void InfoElement::setConnectionLineCurveName(const QString name) {
 //####################### Private implementation ###############################
 //##############################################################################
 
-InfoElementPrivate::InfoElementPrivate(InfoElement* owner,CartesianPlot *plot):
-    plot(plot),
-    q(owner) {
+InfoElementPrivate::InfoElementPrivate(InfoElement* owner,CartesianPlot* plot):
+	plot(plot),
+	q(owner) {
 	init();
 }
 
-InfoElementPrivate::InfoElementPrivate(InfoElement* owner, CartesianPlot *plot, const XYCurve* curve):
-    plot(plot),
-    q(owner) {
-    Q_UNUSED(curve)
+InfoElementPrivate::InfoElementPrivate(InfoElement* owner, CartesianPlot* plot, const XYCurve* curve):
+	plot(plot),
+	q(owner) {
+	Q_UNUSED(curve)
 	init();
 }
 
 void InfoElementPrivate::init() {
-
 	setFlag(QGraphicsItem::ItemIsMovable, false);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -740,8 +748,6 @@ void InfoElementPrivate::init() {
 
 	if(plot)
 		cSystem =  dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
-	else
-		cSystem = nullptr;
 }
 
 QString InfoElementPrivate::name() const {
@@ -753,14 +759,12 @@ QString InfoElementPrivate::name() const {
 	Or when the label or the point where moved
  */
 void InfoElementPrivate::retransform() {
-
 	if (!q->label || q->markerpoints.isEmpty())
 		return;
 
 	q->m_suppressChildPositionChanged = true;
 
 	q->label->retransform();
-
 
 	for (auto markerpoint: q->markerpoints)
 		markerpoint.customPoint->retransform();
@@ -843,7 +847,6 @@ void InfoElementPrivate::updateConnectionLine() {
 }
 
 void InfoElementPrivate::visibilityChanged() {
-
 	for(auto markerpoint: q->markerpoints)
 		markerpoint.customPoint->setVisible(visible);
 	if(q->label)
@@ -851,14 +854,13 @@ void InfoElementPrivate::visibilityChanged() {
 	update(boundingRect());
 }
 
-
 //reimplemented from QGraphicsItem
 QRectF InfoElementPrivate::boundingRect() const {
 	return boundingRectangle;
 }
 
 void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget* widget) {
-    Q_UNUSED(widget)
+	Q_UNUSED(widget)
 	if (!visible)
 		return;
 
@@ -1002,6 +1004,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		} else
 			DEBUG("No value found for Logicalpoint" << i);
 	}
+
 	if (newMarkerPointPos) { // move oldMousePos only when the markerpoints are moved to the next value
 		q->label->setText(q->createTextLabelText());
         //double x_label = q->label->position().point.x() + delta.x();
@@ -1083,10 +1086,10 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 
 	}
 }
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################
-
 void InfoElement::save(QXmlStreamWriter* writer) const {
 	Q_D(const InfoElement);
 
@@ -1270,4 +1273,16 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 		return false;
 	}
 	return true;
+}
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void InfoElement::loadThemeConfig(const KConfig& config) {
+	Q_D(InfoElement);
+
+	//use the color for the axis line from the theme also for info element's lines
+	const KConfigGroup& group = config.group("Axis");
+	d->connectionLineColor = group.readEntry("LineColor", QColor(Qt::black));
+	d->xposLineColor = d->connectionLineColor;
 }
