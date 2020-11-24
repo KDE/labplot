@@ -40,7 +40,7 @@ IF (BUILD_READSTAT)
 		BUILD_COMMAND ${ext_make}
 		# libtool install does not work with spaces
 		#INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
-		INSTALL_COMMAND cp -av .libs/${readstat_library} ../../../install/lib/ && cp -av src/readstat.h  ../../../install/include/)
+		INSTALL_COMMAND cp -av .libs/${readstat_library} ${install_dir}/lib/ && cp -av src/readstat.h  ${install_dir}/include/)
 ENDIF ()
 
 # preview.sty

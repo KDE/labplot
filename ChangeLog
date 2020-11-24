@@ -1,4 +1,5 @@
 -----2.9.0 -----
+	* Support Mathieu functions via GSL
 -----2.8.2 -----
 Bug fixes:
 	* [CAS] fixed the regression introduced after the python2 backend was deprecated in Cantor

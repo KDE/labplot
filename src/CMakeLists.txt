@@ -494,6 +494,10 @@ IF (ZLIB_FOUND AND LZ4_FOUND)
 ENDIF ()
 # TODO: disabled on Windows until tested
 IF (ENABLE_READSTAT AND NOT WIN32)
+	# build before using
+	IF (BUILD_READSTAT)
+		add_dependencies( labplot2lib 3rdparty_readstat )
+	ENDIF ()
 	target_link_libraries( labplot2lib ${READSTAT_LIBRARY} )
 ENDIF ()
 IF (ENABLE_LIBORIGIN)
