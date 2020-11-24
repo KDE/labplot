@@ -28,7 +28,7 @@ IF (BUILD_READSTAT)
 	# --prefix=${install_dir} does not work with spaces
         set(ext_configure ${ext_src}/configure --enable-static --disable-shared)
 	set(ext_insource ON)
-	set(ext_make ${CMAKE_MAKE_PROGRAM} CXXFLAGS=-fPIC CFLAGS=-fPIC)
+	#set(ext_make ${CMAKE_MAKE_PROGRAM} CXXFLAGS=-fPIC CFLAGS=-fPIC)
         set(readstat_library libreadstat.a)
 #endif()
 	ExternalProject_Add(3rdparty_readstat
@@ -37,7 +37,7 @@ IF (BUILD_READSTAT)
 		SOURCE_DIR ${ext_src}
 		CONFIGURE_COMMAND ${ext_configure}
 		BUILD_IN_SOURCE ${ext_insource}
-		BUILD_COMMAND ${ext_make}
+		#BUILD_COMMAND ${ext_make}
 		# libtool install does not work with spaces
 		#INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
 		INSTALL_COMMAND cp -av .libs/${readstat_library} ${install_dir}/lib/ && cp -av src/readstat.h  ${install_dir}/include/)
