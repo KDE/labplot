@@ -1,33 +1,60 @@
-#include "InfoElementDock.h"
+/***************************************************************************
+	File                 : InfoElement.cpp
+	Project              : LabPlot
+	Description          : Dock widget for InfoElemnt
+	--------------------------------------------------------------------
+	Copyright            : (C) 2020 Martin Marmsoler (martin.marmsoler@gmail.com)
+	Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
+ ***************************************************************************/
 
+/***************************************************************************
+ *                                                                         *
+ *  This program is free software; you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation; either version 2 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the Free Software           *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+ *   Boston, MA  02110-1301  USA                                           *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "InfoElementDock.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "ui_infoelementdock.h"
 
-InfoElementDock::InfoElementDock(QWidget *parent) :
-	BaseDock(parent),
-	ui(new Ui::InfoElementDock) {
+InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui::InfoElementDock) {
 	ui->setupUi(this);
+	m_leName = ui->leName;
+	m_leComment = ui->leComment;
 
+	//**********************************  Slots **********************************************
+	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
+	connect(ui->leComment, &QLineEdit::textChanged, this, &InfoElementDock::commentChanged);
 	connect(ui->chbVisible, &QCheckBox::toggled, this, &InfoElementDock::visibilityChanged);
+
 	connect(ui->btnAddCurve, &QPushButton::clicked, this, &InfoElementDock::addCurve);
 	connect(ui->btnRemoveCurve, &QPushButton::clicked, this, &InfoElementDock::removeCurve);
-	connect(ui->sbXPosLineWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::xposLineWidthChanged);
-	connect(ui->sbConnectionLineWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::connectionLineWidthChanged);
-	// From Qt 5.7 qOverload can be used:
-	//connect(ui->sbXPosLineWidth, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::xposLineWidthChanged);
-	//connect(ui->sbConnectionLineWidth, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::connectionLineWidthChanged);
+	connect(ui->sbXPosLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::xposLineWidthChanged);
+	connect(ui->sbConnectionLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::connectionLineWidthChanged);
 	connect(ui->kcbXPosLineColor, &KColorButton::changed, this, &InfoElementDock::xposLineColorChanged);
 	connect(ui->kcbConnectionLineColor, &KColorButton::changed, this, &InfoElementDock::connectionLineColorChanged);
 	connect(ui->chbXPosLineVisible, &QCheckBox::toggled, this, &InfoElementDock::xposLineVisibilityChanged);
 	connect(ui->cbConnnectionLineVisible, &QCheckBox::toggled, this, &InfoElementDock::connectionLineVisibilityChanged);
-
 	connect(ui->cb_gluePoint, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
 	connect(ui->cb_curve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
 }
 
-void InfoElementDock::setInfoElements(QList<InfoElement *> &list, bool sameParent) {
+void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent) {
 	const Lock lock(m_initializing);
 
 	m_elements = list;
@@ -38,6 +65,23 @@ void InfoElementDock::setInfoElements(QList<InfoElement *> &list, bool sameParen
 	ui->lstSelectedCurves->clear();
 	ui->cb_curve->clear();
 
+	//if there are more then one info element in the list, disable the name and comment fields
+	if (list.size() == 1) {
+		ui->lName->setEnabled(true);
+		ui->leName->setEnabled(true);
+		ui->lComment->setEnabled(true);
+		ui->leComment->setEnabled(true);
+		ui->leName->setText(m_element->name());
+		ui->leComment->setText(m_element->comment());
+	} else {
+		ui->lName->setEnabled(false);
+		ui->leName->setEnabled(false);
+		ui->lComment->setEnabled(false);
+		ui->leComment->setEnabled(false);
+		ui->leName->setText(QString());
+		ui->leComment->setText(QString());
+	}
+
 	ui->chbVisible->setChecked(m_element->isVisible());
 
 	// disable if not all worksheetelements do not have the same parent (different CartesianPlots),
@@ -47,17 +91,18 @@ void InfoElementDock::setInfoElements(QList<InfoElement *> &list, bool sameParen
 		for (int i=0; i< curves.length(); i++)
 			ui->lstAvailableCurves->addItem(curves[i]->name());
 
-		for (int i=0; i<m_element->markerPointsCount(); i++)
+		for (int i=0; i<m_element->markerPointsCount(); i++) {
 			if (m_element->markerPointAt(i).curve != nullptr) {
 				ui->lstSelectedCurves->addItem(m_element->markerPointAt(i).curve->name());
 				ui->cb_curve->addItem(m_element->markerPointAt(i).curve->name());
 			}
-
+		}
 	} else {
 		ui->lstAvailableCurves->setEnabled(false);
 		ui->lstSelectedCurves->setEnabled(false);
 	}
-	QString curveName = m_element->connectionLineCurveName();
+
+	const QString& curveName = m_element->connectionLineCurveName();
 	for (int i=0; i< ui->cb_curve->count(); i++) {
 		if (ui->cb_curve->itemData(i, Qt::DisplayRole).toString().compare(curveName) == 0) {
 			ui->cb_curve->setCurrentIndex(i);
@@ -104,6 +149,9 @@ void InfoElementDock::initConnections() {
 
 }
 
+//*************************************************************
+//******* SLOTs for changes triggered in InfoElementDock ******
+//*************************************************************
 InfoElementDock::~InfoElementDock() {
 	delete ui;
 }
@@ -182,7 +230,6 @@ void InfoElementDock::curveChanged() {
 }
 
 void InfoElementDock::addCurve() {
-
 	if (!m_sameParent)
 		return;
 
@@ -204,7 +251,7 @@ void InfoElementDock::addCurve() {
 		if (curveAlreadyExist)
 			continue;
 
-		XYCurve* curve;
+		XYCurve* curve = nullptr;
 		for (int i=0; i < m_elements[0]->plot()->children<XYCurve>().count(); i++) {
 			if (m_elements[0]->plot()->children<XYCurve>()[i]->name() == curveName)
 				curve = m_elements[0]->plot()->children<XYCurve>()[i];
@@ -244,8 +291,18 @@ void InfoElementDock::removeCurve() {
 }
 
 //***********************************************************
-//****** SLOTs for changes triggered in InfoElement
+//******* SLOTs for changes triggered in InfoElement ********
 //***********************************************************
+void InfoElementDock::elementDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_element != aspect)
+		return;
+
+	const Lock lock(m_initializing);
+	if (aspect->name() != ui->leName->text())
+		ui->leName->setText(aspect->name());
+	else if (aspect->comment() != ui->leComment->text())
+		ui->leComment->setText(aspect->comment());
+}
 
 void InfoElementDock::elementConnectionLineWidthChanged(const double width) {
 	const Lock lock(m_initializing);
