@@ -291,8 +291,8 @@ struct funs _functions[] = {
 #if (GSL_MAJOR_VERSION >= 2)
 	{"an", (func_t)nsl_sf_mathieu_a, 2},
 	{"bn", (func_t)nsl_sf_mathieu_b, 2},
-	{"cen", (func_t)nsl_sf_mathieu_ce, 3},
-	{"sen", (func_t)nsl_sf_mathieu_se, 3},
+	{"ce", (func_t)nsl_sf_mathieu_ce, 3},
+	{"se", (func_t)nsl_sf_mathieu_se, 3},
 	{"Mc", (func_t)nsl_sf_mathieu_Mc, 4},
 	{"Ms", (func_t)nsl_sf_mathieu_Ms, 4},
 #endif
