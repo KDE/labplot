@@ -1541,7 +1541,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 	gsl_set_error_handler_off();
 
 	//determine the minimal size of involved vectors
-	double minSize = INFINITY;
+	int minSize{std::numeric_limits<int>::max()};
 	for (auto* xVector : xVectors) {
 		if (xVector->size() < minSize)
 			minSize = xVector->size();
@@ -1562,9 +1562,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		(*yVector)[i] = y;
 	}
 
-	//if the y-vector is longer than the x-vector(s), set all exceeding elements to NAN
+	//if the y-vector is longer than the x-vector(s), set all exceeding elements to NaN
 	for (int i = minSize; i < yVector->size(); ++i)
-		(*yVector)[i] = NAN;
+		(*yVector)[i] = std::numeric_limits<double>::quiet_NaN();
 
 	return true;
 }

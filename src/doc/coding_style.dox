@@ -130,6 +130,7 @@ Very short classes can be bundled in one file which then is named using all lowe
     }
 @endcode
 \section links Links
+* Numeric limits should be using C++ <limits>: std::numeric_limits<T>::infinity() & std::numeric_limits<T>::quiet_NaN() for floating point types and std::numeric_limits<T>::min() & std::numeric_limits<T>::max() for all types
 
 Apart from that, the following links are recommended as guidelines for the coding style:
 
