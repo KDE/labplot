@@ -89,13 +89,13 @@ public:
 	void setPlotsLocked(bool);
 	bool plotsLocked();
 	int plotCount();
-    CartesianPlot* plot(int index);
+	CartesianPlot* plot(int index);
 	TreeModel* cursorModel();
 
 	void cursorModelPlotAdded(const QString& name);
 	void cursorModelPlotRemoved(const QString& name);
 
-	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
+	BASIC_D_ACCESSOR_DECL(double, backgroundOpacity, BackgroundOpacity)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
@@ -107,12 +107,12 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, scaleContent, ScaleContent)
 	BASIC_D_ACCESSOR_DECL(bool, useViewSize, UseViewSize)
 	BASIC_D_ACCESSOR_DECL(Worksheet::Layout, layout, Layout)
-	BASIC_D_ACCESSOR_DECL(float, layoutTopMargin, LayoutTopMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutBottomMargin, LayoutBottomMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutLeftMargin, LayoutLeftMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutRightMargin, LayoutRightMargin)
-	BASIC_D_ACCESSOR_DECL(float, layoutHorizontalSpacing, LayoutHorizontalSpacing)
-	BASIC_D_ACCESSOR_DECL(float, layoutVerticalSpacing, LayoutVerticalSpacing)
+	BASIC_D_ACCESSOR_DECL(double, layoutTopMargin, LayoutTopMargin)
+	BASIC_D_ACCESSOR_DECL(double, layoutBottomMargin, LayoutBottomMargin)
+	BASIC_D_ACCESSOR_DECL(double, layoutLeftMargin, LayoutLeftMargin)
+	BASIC_D_ACCESSOR_DECL(double, layoutRightMargin, LayoutRightMargin)
+	BASIC_D_ACCESSOR_DECL(double, layoutHorizontalSpacing, LayoutHorizontalSpacing)
+	BASIC_D_ACCESSOR_DECL(double, layoutVerticalSpacing, LayoutVerticalSpacing)
 	BASIC_D_ACCESSOR_DECL(int, layoutRowCount, LayoutRowCount)
 	BASIC_D_ACCESSOR_DECL(int, layoutColumnCount, LayoutColumnCount)
 

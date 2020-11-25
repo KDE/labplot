@@ -520,16 +520,16 @@ BASIC_D_READER_IMPL(Worksheet, Qt::BrushStyle, backgroundBrushStyle, backgroundB
 CLASS_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColor)
 CLASS_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor)
 CLASS_D_READER_IMPL(Worksheet, QString, backgroundFileName, backgroundFileName)
-BASIC_D_READER_IMPL(Worksheet, float, backgroundOpacity, backgroundOpacity)
+BASIC_D_READER_IMPL(Worksheet, double, backgroundOpacity, backgroundOpacity)
 
 /* =============================== getter methods for layout options ====================================== */
 BASIC_D_READER_IMPL(Worksheet, Worksheet::Layout, layout, layout)
-BASIC_D_READER_IMPL(Worksheet, float, layoutTopMargin, layoutTopMargin)
-BASIC_D_READER_IMPL(Worksheet, float, layoutBottomMargin, layoutBottomMargin)
-BASIC_D_READER_IMPL(Worksheet, float, layoutLeftMargin, layoutLeftMargin)
-BASIC_D_READER_IMPL(Worksheet, float, layoutRightMargin, layoutRightMargin)
-BASIC_D_READER_IMPL(Worksheet, float, layoutHorizontalSpacing, layoutHorizontalSpacing)
-BASIC_D_READER_IMPL(Worksheet, float, layoutVerticalSpacing, layoutVerticalSpacing)
+BASIC_D_READER_IMPL(Worksheet, double, layoutTopMargin, layoutTopMargin)
+BASIC_D_READER_IMPL(Worksheet, double, layoutBottomMargin, layoutBottomMargin)
+BASIC_D_READER_IMPL(Worksheet, double, layoutLeftMargin, layoutLeftMargin)
+BASIC_D_READER_IMPL(Worksheet, double, layoutRightMargin, layoutRightMargin)
+BASIC_D_READER_IMPL(Worksheet, double, layoutHorizontalSpacing, layoutHorizontalSpacing)
+BASIC_D_READER_IMPL(Worksheet, double, layoutVerticalSpacing, layoutVerticalSpacing)
 BASIC_D_READER_IMPL(Worksheet, int, layoutRowCount, layoutRowCount)
 BASIC_D_READER_IMPL(Worksheet, int, layoutColumnCount, layoutColumnCount)
 
@@ -592,8 +592,8 @@ void Worksheet::setBackgroundFileName(const QString& fileName) {
 		exec(new WorksheetSetBackgroundFileNameCmd(d, fileName, ki18n("%1: set background image")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundOpacity, float, backgroundOpacity, update)
-void Worksheet::setBackgroundOpacity(float opacity) {
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundOpacity, double, backgroundOpacity, update)
+void Worksheet::setBackgroundOpacity(double opacity) {
 	if (opacity != d->backgroundOpacity)
 		exec(new WorksheetSetBackgroundOpacityCmd(d, opacity, ki18n("%1: set opacity")));
 }
@@ -608,8 +608,8 @@ void Worksheet::setLayout(Worksheet::Layout layout) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutTopMargin, float, layoutTopMargin, updateLayout)
-void Worksheet::setLayoutTopMargin(float margin) {
+STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutTopMargin, double, layoutTopMargin, updateLayout)
+void Worksheet::setLayoutTopMargin(double margin) {
 	if (margin != d->layoutTopMargin) {
 		beginMacro(i18n("%1: set layout top margin", name()));
 		exec(new WorksheetSetLayoutTopMarginCmd(d, margin, ki18n("%1: set layout top margin")));
@@ -617,8 +617,8 @@ void Worksheet::setLayoutTopMargin(float margin) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutBottomMargin, float, layoutBottomMargin, updateLayout)
-void Worksheet::setLayoutBottomMargin(float margin) {
+STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutBottomMargin, double, layoutBottomMargin, updateLayout)
+void Worksheet::setLayoutBottomMargin(double margin) {
 	if (margin != d->layoutBottomMargin) {
 		beginMacro(i18n("%1: set layout bottom margin", name()));
 		exec(new WorksheetSetLayoutBottomMarginCmd(d, margin, ki18n("%1: set layout bottom margin")));
@@ -626,8 +626,8 @@ void Worksheet::setLayoutBottomMargin(float margin) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutLeftMargin, float, layoutLeftMargin, updateLayout)
-void Worksheet::setLayoutLeftMargin(float margin) {
+STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutLeftMargin, double, layoutLeftMargin, updateLayout)
+void Worksheet::setLayoutLeftMargin(double margin) {
 	if (margin != d->layoutLeftMargin) {
 		beginMacro(i18n("%1: set layout left margin", name()));
 		exec(new WorksheetSetLayoutLeftMarginCmd(d, margin, ki18n("%1: set layout left margin")));
@@ -635,8 +635,8 @@ void Worksheet::setLayoutLeftMargin(float margin) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRightMargin, float, layoutRightMargin, updateLayout)
-void Worksheet::setLayoutRightMargin(float margin) {
+STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutRightMargin, double, layoutRightMargin, updateLayout)
+void Worksheet::setLayoutRightMargin(double margin) {
 	if (margin != d->layoutRightMargin) {
 		beginMacro(i18n("%1: set layout right margin", name()));
 		exec(new WorksheetSetLayoutRightMarginCmd(d, margin, ki18n("%1: set layout right margin")));
@@ -644,8 +644,8 @@ void Worksheet::setLayoutRightMargin(float margin) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutVerticalSpacing, float, layoutVerticalSpacing, updateLayout)
-void Worksheet::setLayoutVerticalSpacing(float spacing) {
+STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutVerticalSpacing, double, layoutVerticalSpacing, updateLayout)
+void Worksheet::setLayoutVerticalSpacing(double spacing) {
 	if (spacing != d->layoutVerticalSpacing) {
 		beginMacro(i18n("%1: set layout vertical spacing", name()));
 		exec(new WorksheetSetLayoutVerticalSpacingCmd(d, spacing, ki18n("%1: set layout vertical spacing")));
@@ -653,8 +653,8 @@ void Worksheet::setLayoutVerticalSpacing(float spacing) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutHorizontalSpacing, float, layoutHorizontalSpacing, updateLayout)
-void Worksheet::setLayoutHorizontalSpacing(float spacing) {
+STD_SETTER_CMD_IMPL_M_F_S(Worksheet, SetLayoutHorizontalSpacing, double, layoutHorizontalSpacing, updateLayout)
+void Worksheet::setLayoutHorizontalSpacing(double spacing) {
 	if (spacing != d->layoutHorizontalSpacing) {
 		beginMacro(i18n("%1: set layout horizontal spacing", name()));
 		exec(new WorksheetSetLayoutHorizontalSpacingCmd(d, spacing, ki18n("%1: set layout horizontal spacing")));
@@ -1270,9 +1270,9 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		return;
 	}
 
-	float x = layoutLeftMargin;
-	float y = layoutTopMargin;
-	float w, h;
+	double x = layoutLeftMargin;
+	double y = layoutTopMargin;
+	double w, h;
 	if (layout == Worksheet::Layout::VerticalLayout) {
 		w = m_scene->sceneRect().width() - layoutLeftMargin - layoutRightMargin;
 		h = (m_scene->sceneRect().height()-layoutTopMargin-layoutBottomMargin- (count-1)*layoutVerticalSpacing)/count;
@@ -1290,7 +1290,7 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	} else { //GridLayout
 		//add new rows, if not sufficient
 		if (count > layoutRowCount*layoutColumnCount) {
-			layoutRowCount = floor( (float)count/layoutColumnCount + 0.5);
+			layoutRowCount = floor( (double)count/layoutColumnCount + 0.5);
 			emit q->layoutRowCountChanged(layoutRowCount);
 		}
 
@@ -1310,21 +1310,21 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	}
 }
 
-void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, float x, float y, float h, float w, bool undoable) {
+void WorksheetPrivate::setContainerRect(WorksheetElementContainer* elem, double x, double y, double h, double w, bool undoable) {
 	if (useViewSize) {
 		//when using the view size, no need to put rect changes onto the undo-stack
 		elem->setUndoAware(false);
-		elem->setRect(QRectF(x,y,w,h));
+		elem->setRect(QRectF(x, y, w, h));
 		elem->setUndoAware(true);
 	} else {
 		//don't put rect changed onto the undo-stack if undoable-flag is set to true,
 		//e.g. when new child is added or removed (the layout and the childrend rects will be updated anyway)
 		if (!undoable) {
 			elem->setUndoAware(false);
-			elem->setRect(QRectF(x,y,w,h));
+			elem->setRect(QRectF(x, y, w, h));
 			elem->setUndoAware(true);
 		} else
-			elem->setRect(QRectF(x,y,w,h));
+			elem->setRect(QRectF(x, y, w, h));
 	}
 	elem->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 }
@@ -1361,7 +1361,7 @@ void Worksheet::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "layout", QString::number(static_cast<int>(d->layout)) );
 	writer->writeAttribute( "topMargin", QString::number(d->layoutTopMargin) );
 	writer->writeAttribute( "bottomMargin", QString::number(d->layoutBottomMargin) );
-	writer->writeAttribute( "leftMargin", QString::number(d->layoutLeftMargin) );
+	writer->writeAttribute( "leftMargin",  QString::number(d->layoutLeftMargin) );
 	writer->writeAttribute( "rightMargin", QString::number(d->layoutRightMargin) );
 	writer->writeAttribute( "verticalSpacing", QString::number(d->layoutVerticalSpacing) );
 	writer->writeAttribute( "horizontalSpacing", QString::number(d->layoutHorizontalSpacing) );

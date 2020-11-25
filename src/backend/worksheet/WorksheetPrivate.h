@@ -53,7 +53,7 @@ public:
 	QString name() const;
 	void update();
 	void updateLayout(bool undoable = true);
-	void setContainerRect(WorksheetElementContainer*, float x, float y, float h, float w, bool undoable);
+	void setContainerRect(WorksheetElementContainer*, double x, double y, double h, double w, bool undoable);
 	void updatePageRect();
 
 	PlotArea::BackgroundType backgroundType;
@@ -63,17 +63,17 @@ public:
 	QColor backgroundFirstColor;
 	QColor backgroundSecondColor;
 	QString backgroundFileName;
-	float backgroundOpacity{1.0};
+	double backgroundOpacity{1.0};
 
 	Worksheet::Layout layout{Worksheet::Layout::VerticalLayout};
 	bool suppressLayoutUpdate{false};
 	bool suppressCursorPosChanged{false};
-	float layoutTopMargin{0.0};
-	float layoutBottomMargin{0.0};
-	float layoutLeftMargin{0.0};
-	float layoutRightMargin{0.0};
-	float layoutVerticalSpacing{0.0};
-	float layoutHorizontalSpacing{0.0};
+	double layoutTopMargin{0.0};
+	double layoutBottomMargin{0.0};
+	double layoutLeftMargin{0.0};
+	double layoutRightMargin{0.0};
+	double layoutVerticalSpacing{0.0};
+	double layoutHorizontalSpacing{0.0};
 	int layoutColumnCount{2};
 	int layoutRowCount{2};
 	QString theme;
