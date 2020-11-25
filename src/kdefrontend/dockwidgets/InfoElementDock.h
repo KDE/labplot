@@ -51,8 +51,6 @@ public slots:
 
 private slots:
 	void visibilityChanged(bool state);
-	void addCurve();
-	void removeCurve();
 	void connectionLineWidthChanged(double);
 	void connectionLineColorChanged(const QColor &);
 	void xposLineWidthChanged(double);
@@ -61,6 +59,7 @@ private slots:
 	void connectionLineVisibilityChanged(bool);
 	void gluePointChanged(int index);
 	void curveChanged();
+	void curveSelectionChanged(int state);
 
 	// slots triggered in the InfoElement
 	void elementDescriptionChanged(const AbstractAspect*);

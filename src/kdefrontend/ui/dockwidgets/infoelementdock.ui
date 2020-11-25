@@ -6,29 +6,31 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>438</width>
-    <height>914</height>
+    <width>361</width>
+    <height>847</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="lName">
-     <property name="text">
-      <string>Name:</string>
+   <item row="0" column="3">
+    <spacer name="horizontalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-    </widget>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>17</width>
+       <height>24</height>
+      </size>
+     </property>
+    </spacer>
    </item>
-   <item row="0" column="1" colspan="2">
+   <item row="0" column="4">
     <widget class="QLineEdit" name="leName"/>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lComment">
-     <property name="text">
-      <string>Comment:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" colspan="2">
+   <item row="1" column="4">
     <widget class="QLineEdit" name="leComment">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -38,7 +40,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="2" column="1" colspan="2">
     <spacer name="verticalSpacer_6">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -54,58 +56,24 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lVerticalLine">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Vertical Line</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lVerticalLineEnabled">
-     <property name="text">
-      <string>Enabled:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
+   <item row="4" column="4">
     <widget class="QCheckBox" name="chbXPosLineVisible">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Width:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="2">
+   <item row="5" column="4">
     <widget class="QDoubleSpinBox" name="sbXPosLineWidth">
      <property name="minimum">
       <double>1.000000000000000</double>
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lVerticalLineColor">
-     <property name="text">
-      <string>Color:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2">
+   <item row="6" column="4">
     <widget class="KColorButton" name="kcbXPosLineColor"/>
    </item>
-   <item row="7" column="0">
+   <item row="7" column="1" colspan="2">
     <spacer name="verticalSpacer_3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -121,58 +89,24 @@
      </property>
     </spacer>
    </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Connection Line</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Enabled:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="2">
+   <item row="9" column="4">
     <widget class="QCheckBox" name="cbConnnectionLineVisible">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Width:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="2">
+   <item row="10" column="4">
     <widget class="QDoubleSpinBox" name="sbConnectionLineWidth">
      <property name="minimum">
       <double>1.000000000000000</double>
      </property>
     </widget>
    </item>
-   <item row="11" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Color:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="11" column="2">
+   <item row="11" column="4">
     <widget class="KColorButton" name="kcbConnectionLineColor"/>
    </item>
-   <item row="12" column="0">
+   <item row="12" column="1" colspan="2">
     <spacer name="verticalSpacer_4">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -188,40 +122,13 @@
      </property>
     </spacer>
    </item>
-   <item row="13" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Connect To</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="0" colspan="2">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Label Anchor:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="2">
+   <item row="14" column="4">
     <widget class="QComboBox" name="cb_gluePoint"/>
    </item>
-   <item row="15" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>Curve:</string>
-     </property>
-    </widget>
+   <item row="15" column="4">
+    <widget class="QComboBox" name="cbCurve"/>
    </item>
-   <item row="15" column="2">
-    <widget class="QComboBox" name="cb_curve"/>
-   </item>
-   <item row="16" column="0">
+   <item row="16" column="1" colspan="2">
     <spacer name="verticalSpacer_5">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -237,94 +144,14 @@
      </property>
     </spacer>
    </item>
-   <item row="17" column="0">
-    <widget class="QLabel" name="label_9">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Points</string>
+   <item row="18" column="4">
+    <widget class="QListWidget" name="lwCurves">
+     <property name="selectionMode">
+      <enum>QAbstractItemView::MultiSelection</enum>
      </property>
     </widget>
    </item>
-   <item row="18" column="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QListWidget" name="lstAvailableCurves">
-         <property name="selectionMode">
-          <enum>QAbstractItemView::MultiSelection</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnAddCurve">
-           <property name="text">
-            <string>Add</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QListWidget" name="lstSelectedCurves">
-         <property name="selectionMode">
-          <enum>QAbstractItemView::MultiSelection</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnRemoveCurve">
-           <property name="text">
-            <string>Remove</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </item>
-   <item row="19" column="0">
+   <item row="19" column="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -337,7 +164,129 @@
      </property>
     </spacer>
    </item>
-   <item row="20" column="0">
+   <item row="0" column="0" colspan="3">
+    <widget class="QLabel" name="lName">
+     <property name="text">
+      <string>Name:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="QLabel" name="lComment">
+     <property name="text">
+      <string>Comment:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0" colspan="4">
+    <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Connection Line</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="3">
+    <widget class="QLabel" name="lVerticalLineEnabled">
+     <property name="text">
+      <string>Enabled:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="4">
+    <widget class="QLabel" name="lVerticalLine">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Vertical Line</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="3">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Width:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="3">
+    <widget class="QLabel" name="lVerticalLineColor">
+     <property name="text">
+      <string>Color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="3">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Enabled:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0" colspan="3">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Width:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0" colspan="3">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="0" colspan="4">
+    <widget class="QLabel" name="label_4">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Connect To</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0" colspan="3">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Label Anchor:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="15" column="0" colspan="3">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>Curve:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="17" column="0" colspan="4">
+    <widget class="QLabel" name="label_9">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Points</string>
+     </property>
+    </widget>
+   </item>
+   <item row="20" column="0" colspan="4">
     <widget class="QCheckBox" name="chbVisible">
      <property name="text">
       <string>Visible</string>

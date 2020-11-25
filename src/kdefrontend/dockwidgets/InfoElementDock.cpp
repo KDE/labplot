@@ -42,8 +42,6 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	connect(ui->leComment, &QLineEdit::textChanged, this, &InfoElementDock::commentChanged);
 	connect(ui->chbVisible, &QCheckBox::toggled, this, &InfoElementDock::visibilityChanged);
 
-	connect(ui->btnAddCurve, &QPushButton::clicked, this, &InfoElementDock::addCurve);
-	connect(ui->btnRemoveCurve, &QPushButton::clicked, this, &InfoElementDock::removeCurve);
 	connect(ui->sbXPosLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::xposLineWidthChanged);
 	connect(ui->sbConnectionLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::connectionLineWidthChanged);
 	connect(ui->kcbXPosLineColor, &KColorButton::changed, this, &InfoElementDock::xposLineColorChanged);
@@ -51,7 +49,7 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	connect(ui->chbXPosLineVisible, &QCheckBox::toggled, this, &InfoElementDock::xposLineVisibilityChanged);
 	connect(ui->cbConnnectionLineVisible, &QCheckBox::toggled, this, &InfoElementDock::connectionLineVisibilityChanged);
 	connect(ui->cb_gluePoint, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
-	connect(ui->cb_curve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
+	connect(ui->cbCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
 }
 
 void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent) {
@@ -61,9 +59,8 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 	m_element = list.first();
 	m_sameParent = sameParent;
 
-	ui->lstAvailableCurves->clear();
-	ui->lstSelectedCurves->clear();
-	ui->cb_curve->clear();
+	ui->lwCurves->clear();
+	ui->cbCurve->clear();
 
 	//if there are more then one info element in the list, disable the name and comment fields
 	if (list.size() == 1) {
@@ -88,24 +85,33 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 	// because then the available curves are different
 	if (sameParent) {
 		QVector<XYCurve*> curves = m_element->plot()->children<XYCurve>();
-		for (int i=0; i< curves.length(); i++)
-			ui->lstAvailableCurves->addItem(curves[i]->name());
+		for (int i = 0; i < curves.length(); ++i) {
+			auto* curve = curves.at(i);
+			auto* item = new QListWidgetItem();
+			auto* checkBox = new QCheckBox(curve->name());
+			connect(checkBox, &QCheckBox::stateChanged, this, &InfoElementDock::curveSelectionChanged);
+			ui->lwCurves->addItem(item);
+			ui->lwCurves->setItemWidget(item, checkBox);
 
-		for (int i=0; i<m_element->markerPointsCount(); i++) {
-			if (m_element->markerPointAt(i).curve != nullptr) {
-				ui->lstSelectedCurves->addItem(m_element->markerPointAt(i).curve->name());
-				ui->cb_curve->addItem(m_element->markerPointAt(i).curve->name());
+			for (int i=0; i<m_element->markerPointsCount(); i++) {
+				auto* markerCurve = m_element->markerPointAt(i).curve;
+				if (markerCurve && markerCurve->name() == curve->name())
+					checkBox->setChecked(true);
 			}
 		}
-	} else {
-		ui->lstAvailableCurves->setEnabled(false);
-		ui->lstSelectedCurves->setEnabled(false);
-	}
+
+		for (int i=0; i<m_element->markerPointsCount(); i++) {
+			auto* markerCurve = m_element->markerPointAt(i).curve;
+			if (markerCurve)
+				ui->cbCurve->addItem(markerCurve->name());
+		}
+	} else
+		ui->lwCurves->setEnabled(false);
 
 	const QString& curveName = m_element->connectionLineCurveName();
-	for (int i=0; i< ui->cb_curve->count(); i++) {
-		if (ui->cb_curve->itemData(i, Qt::DisplayRole).toString().compare(curveName) == 0) {
-			ui->cb_curve->setCurrentIndex(i);
+	for (int i=0; i< ui->cbCurve->count(); i++) {
+		if (ui->cbCurve->itemData(i, Qt::DisplayRole).toString().compare(curveName) == 0) {
+			ui->cbCurve->setCurrentIndex(i);
 			break;
 		}
 	}
@@ -224,70 +230,33 @@ void InfoElementDock::curveChanged() {
 	if (m_initializing)
 		return;
 
-	QString name = ui->cb_curve->currentText();
+	QString name = ui->cbCurve->currentText();
 	for (auto* infoElement: m_elements)
 		infoElement->setConnectionLineCurveName(name);
 }
 
-void InfoElementDock::addCurve() {
-	if (!m_sameParent)
+void InfoElementDock::curveSelectionChanged(int state) {
+	if (m_initializing || !m_sameParent)
 		return;
 
-	QList<QListWidgetItem*> list = ui->lstAvailableCurves->selectedItems();
-
-	bool curveAlreadyExist;
-	for (QListWidgetItem* selectedItem: list) {
-		QString curveName = selectedItem->data(Qt::DisplayRole).toString();
-
-		curveAlreadyExist = false;
-		for (int i=0; i<ui->lstSelectedCurves->count(); i++) {
-			QListWidgetItem* item = ui->lstSelectedCurves->item(i);
-
-			if (item->data(Qt::DisplayRole) == selectedItem->data(Qt::DisplayRole)) {
-				curveAlreadyExist = true;
-				break;
-			}
-		}
-		if (curveAlreadyExist)
-			continue;
-
-		XYCurve* curve = nullptr;
-		for (int i=0; i < m_elements[0]->plot()->children<XYCurve>().count(); i++) {
-			if (m_elements[0]->plot()->children<XYCurve>()[i]->name() == curveName)
-				curve = m_elements[0]->plot()->children<XYCurve>()[i];
+	//determine the curve for which the selection was changed
+	auto* checkBox = static_cast<QCheckBox*>(QObject::sender());
+	QString curveName = checkBox->text().remove(QLatin1Char('&'));
+	XYCurve* curve = nullptr;
+	for (auto* c : m_elements[0]->plot()->children<XYCurve>())
+		if (c->name() == curveName) {
+			curve = c;
+			break;
 		}
 
-		ui->lstSelectedCurves->addItem(selectedItem->data(Qt::DisplayRole).toString());
-		for (int i=0; i< list.count(); i++) {
-			for (int j=0; j < m_elements.count(); j++) {
-				for (int k=0; k < m_elements[j]->markerPointsCount(); k++)
-					m_elements[j]->addCurve(curve);
-			}
-		}
+	//add/remove the changed curve
+	if (state == Qt::Checked && curve) {
+		for (auto* element : m_elements)
+			element->addCurve(curve);
+	} else {
+		for (auto* element : m_elements)
+			element->removeCurve(curve);
 	}
-
-}
-
-void InfoElementDock::removeCurve() {
-	if (!m_sameParent)
-		return;
-
-	QList<QListWidgetItem*> list = ui->lstSelectedCurves->selectedItems();
-
-	for (auto item: list)
-		ui->lstSelectedCurves->takeItem(ui->lstSelectedCurves->row(item));
-
-	for (int i=0; i<list.count(); i++) {
-		for (int j=0; j< m_elements.count(); j++) {
-			for (int k=0; k < m_elements[j]->markerPointsCount(); k++) {
-				if (m_elements[j]->markerPointAt(k).curve->name() == list.at(i)->data(Qt::DisplayRole)) {
-					m_elements[j]->removeCurve(m_elements[j]->markerPointAt(k).curve);
-					continue;
-				}
-			}
-		}
-	}
-
 }
 
 //***********************************************************
@@ -349,9 +318,9 @@ void InfoElementDock::elementGluePointIndexChanged(const int index) {
 
 void InfoElementDock::elementConnectionLineCurveChanged(const QString name) {
 	const Lock lock(m_initializing);
-	for (int i=0; i< ui->cb_curve->count(); i++) {
-		if (ui->cb_curve->itemData(i).toString().compare(name) == 0) {
-			ui->cb_curve->setCurrentIndex(i);
+	for (int i=0; i< ui->cbCurve->count(); i++) {
+		if (ui->cbCurve->itemData(i).toString().compare(name) == 0) {
+			ui->cbCurve->setCurrentIndex(i);
 			break;
 		}
 	}
@@ -367,10 +336,11 @@ void InfoElementDock::elementLabelBorderShapeChanged() {
 
 void InfoElementDock::elementCurveRemoved(QString name) {
 	const Lock lock(m_initializing);
-	for (int i=0; i < ui->lstSelectedCurves->count(); i++) {
-		QListWidgetItem *item = ui->lstSelectedCurves->item(i);
-		if (item->data(Qt::DisplayRole).toString().compare(name) == 0) {
-			ui->lstSelectedCurves->takeItem(i);
+	for (int i = 0; i < ui->lwCurves->count(); ++i) {
+		auto* item = ui->lwCurves->item(i);
+		auto* checkBox = static_cast<QCheckBox*>(ui->lwCurves->itemWidget(item));
+		if (checkBox->text() == name) {
+			ui->lwCurves->takeItem(i);
 			break;
 		}
 	}
