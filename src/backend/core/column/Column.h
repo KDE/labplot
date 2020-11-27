@@ -37,6 +37,7 @@
 
 class CartesianPlot;
 class ColumnStringIO;
+class QAction;
 class QActionGroup;
 
 class Column : public AbstractColumn {

@@ -29,6 +29,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/NetCDFFilterPrivate.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 #include <QProcess>

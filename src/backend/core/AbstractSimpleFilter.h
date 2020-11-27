@@ -34,6 +34,8 @@
 #include "AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
 
+#include <QLocale>
+
 class SimpleFilterColumn;
 
 class AbstractSimpleFilter : public AbstractFilter {

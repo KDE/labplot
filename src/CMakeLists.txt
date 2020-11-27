@@ -297,6 +297,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/AbstractCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/PlotArea.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/Axis.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianScale.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianCoordinateSystem.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlot.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/CartesianPlotLegend.cpp

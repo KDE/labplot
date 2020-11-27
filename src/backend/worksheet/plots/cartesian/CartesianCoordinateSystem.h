@@ -29,46 +29,12 @@
 #ifndef CARTESIANCOORDINATESYSTEM_H
 #define CARTESIANCOORDINATESYSTEM_H
 
+#include "CartesianScale.h"
+#include "CartesianPlot.h"
 #include "backend/worksheet/plots/AbstractCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/lib/Interval.h"
-
-#include <vector>
 
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
-
-class CartesianScale {
-public:
-	virtual ~CartesianScale();
-
-	//TODO: remove "Scale"
-	enum class ScaleType {ScaleLinear, ScaleLog};
-
-	static CartesianScale* createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
-		double logicalStart, double logicalEnd);
-	static CartesianScale* createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
-		double logicalStart, double logicalEnd, CartesianPlot::Scale);
-
-	virtual void getProperties(ScaleType *type = nullptr, Interval<double> *interval = nullptr,
-			double *a = nullptr, double *b = nullptr, double *c = nullptr) const;
-
-	inline double start() const;
-	inline double end() const;
-	inline bool contains(double) const;
-	virtual bool map(double*) const = 0;
-	virtual bool inverseMap(double*) const = 0;
-	virtual int direction() const = 0;
-
-protected:
-	CartesianScale(ScaleType type, const Interval<double> &interval, double a, double b, double c);
-	ScaleType m_type;
-	Interval<double> m_interval;
-	//TODO: what are these?
-	double m_a;
-	double m_b;
-	double m_c;
-};
 
 class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 public:

@@ -29,6 +29,7 @@
 
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/datasources/DatasetHandler.h"
+#include "backend/lib/macros.h"
 
 #include <QDir>
 #include <QFile>

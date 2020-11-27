@@ -31,6 +31,7 @@ Copyright            : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/lib/trace.h"
 
 #include <QFile>
+#include <QDataStream>
 
 /*!
 \class NgspiceRawBinaryFilter

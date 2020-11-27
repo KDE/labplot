@@ -29,6 +29,7 @@
 
 #include "StatisticsDialog.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/macros.h"
 
 #include <QDialogButtonBox>
 #include <QPushButton>
@@ -40,6 +41,7 @@
 
 #include <KLocalizedString>
 #include <KWindowConfig>
+#include <KSharedConfig>
 
 #include <cmath>
 

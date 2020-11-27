@@ -1,10 +1,10 @@
+
 /***************************************************************************
-    File                 : AbstractPlot.h
+    File                 : CartesianCoordinateSystemPrivate.h
     Project              : LabPlot
-    Description          : Base class for plots of different types
+    Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,46 +27,18 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ABSTRACTPLOT_H
-#define ABSTRACTPLOT_H
+#ifndef CARTESIANCOORDINATESYSTEMPRIVATE_H
+#define CARTESIANCOORDINATESYSTEMPRIVATE_H
 
-#include "backend/worksheet/WorksheetElementContainer.h"
-#include "backend/lib/macros.h"
-
-class AbstractCoordinateSystem;
-class PlotArea;
-class TextLabel;
-class AbstractPlotPrivate;
-
-class AbstractPlot : public WorksheetElementContainer {
-	Q_OBJECT
-
+class CartesianCoordinateSystemPrivate {
 public:
-	AbstractPlot(const QString &name, AspectType type);
-	~AbstractPlot() override = default;
+	explicit CartesianCoordinateSystemPrivate(CartesianCoordinateSystem *owner);
+	~CartesianCoordinateSystemPrivate();
 
-	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
-	AbstractCoordinateSystem* coordinateSystem() const;
-	PlotArea* plotArea();
-	TextLabel* title();
-
-	BASIC_D_ACCESSOR_DECL(double, horizontalPadding, HorizontalPadding)
-	BASIC_D_ACCESSOR_DECL(double, verticalPadding, VerticalPadding)
-	BASIC_D_ACCESSOR_DECL(double, rightPadding, RightPadding)
-	BASIC_D_ACCESSOR_DECL(double, bottomPadding, BottomPadding)
-	BASIC_D_ACCESSOR_DECL(bool, symmetricPadding, SymmetricPadding)
-
-	typedef AbstractPlotPrivate Private;
-
-protected:
-	AbstractPlot(const QString&, AbstractPlotPrivate*, AspectType);
-	AbstractCoordinateSystem* m_coordinateSystem{nullptr};
-	PlotArea* m_plotArea{nullptr};
-	TextLabel* m_title{nullptr};
-
-private:
-	void init();
-	Q_DECLARE_PRIVATE(AbstractPlot)
+	CartesianCoordinateSystem* const q;
+	CartesianPlot* plot{nullptr};
+	QVector<CartesianScale*> xScales;
+	QVector<CartesianScale*> yScales;
 };
 
 #endif

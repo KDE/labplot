@@ -29,17 +29,18 @@
 #include "ImportDatasetDialog.h"
 #include "ImportDatasetWidget.h"
 #include "backend/datasources/DatasetHandler.h"
+#include "backend/lib/macros.h"
 
-#include "QDialogButtonBox"
+#include <QDialogButtonBox>
 #include <QElapsedTimer>
-#include "QProgressBar"
-#include "QPushButton"
-#include "QStatusBar"
-#include "QWindow"
+#include <QProgressBar>
+#include <QPushButton>
+#include <QStatusBar>
+#include <QWindow>
 
-#include "KConfigGroup"
-#include "KSharedConfig"
-#include "KWindowConfig"
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KWindowConfig>
 
 /*!
 	\class ImportDatasetDialog

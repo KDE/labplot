@@ -31,7 +31,7 @@
 #ifndef INTERVAL_H
 #define INTERVAL_H
 
-#include "backend/worksheet/plots/AbstractCoordinateSystem.h"
+#include <QVector>
 
 extern "C" {
 #include "backend/nsl/nsl_math.h"

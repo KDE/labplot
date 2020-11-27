@@ -31,6 +31,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/lib/macros.h"
 
 #include <QBrush>
 #include <QIcon>

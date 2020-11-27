@@ -28,6 +28,7 @@ Copyright            : (C) 2015 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/ImageFilterPrivate.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/macros.h"
 
 #include <QImage>
 #include <KLocalizedString>

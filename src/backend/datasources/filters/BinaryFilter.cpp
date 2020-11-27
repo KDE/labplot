@@ -29,6 +29,7 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include "backend/datasources/filters/BinaryFilterPrivate.h"
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/macros.h"
 
 #include <QDataStream>
 #include <KLocalizedString>

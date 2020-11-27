@@ -1,10 +1,10 @@
+
 /***************************************************************************
-    File                 : AbstractPlot.h
+    File                 : CartesianScale.h
     Project              : LabPlot
-    Description          : Base class for plots of different types
+    Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,46 +27,48 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef ABSTRACTPLOT_H
-#define ABSTRACTPLOT_H
+#ifndef CARTESIANSCALE_H
+#define CARTESIANSCALE_H
 
-#include "backend/worksheet/WorksheetElementContainer.h"
-#include "backend/lib/macros.h"
+#include "CartesianPlot.h"
+#include "backend/lib/Interval.h"
 
-class AbstractCoordinateSystem;
-class PlotArea;
-class TextLabel;
-class AbstractPlotPrivate;
-
-class AbstractPlot : public WorksheetElementContainer {
-	Q_OBJECT
-
+class CartesianScale {
 public:
-	AbstractPlot(const QString &name, AspectType type);
-	~AbstractPlot() override = default;
+	virtual ~CartesianScale();
 
-	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
-	AbstractCoordinateSystem* coordinateSystem() const;
-	PlotArea* plotArea();
-	TextLabel* title();
+	enum class Type {Linear, Log};
 
-	BASIC_D_ACCESSOR_DECL(double, horizontalPadding, HorizontalPadding)
-	BASIC_D_ACCESSOR_DECL(double, verticalPadding, VerticalPadding)
-	BASIC_D_ACCESSOR_DECL(double, rightPadding, RightPadding)
-	BASIC_D_ACCESSOR_DECL(double, bottomPadding, BottomPadding)
-	BASIC_D_ACCESSOR_DECL(bool, symmetricPadding, SymmetricPadding)
+	static CartesianScale* createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
+		double logicalStart, double logicalEnd);
+	static CartesianScale* createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
+		double logicalStart, double logicalEnd, CartesianPlot::Scale);
 
-	typedef AbstractPlotPrivate Private;
+	virtual void getProperties(Type *type = nullptr, Interval<double> *interval = nullptr,
+			double *a = nullptr, double *b = nullptr, double *c = nullptr) const;
+
+	inline double start() const {
+		return m_interval.start();
+	}
+	inline double end() const {
+		return m_interval.end();
+	}
+	inline bool contains(double value) const {
+		return m_interval.contains(value);
+	}
+
+	virtual bool map(double*) const = 0;
+	virtual bool inverseMap(double*) const = 0;
+	virtual int direction() const = 0;
 
 protected:
-	AbstractPlot(const QString&, AbstractPlotPrivate*, AspectType);
-	AbstractCoordinateSystem* m_coordinateSystem{nullptr};
-	PlotArea* m_plotArea{nullptr};
-	TextLabel* m_title{nullptr};
-
-private:
-	void init();
-	Q_DECLARE_PRIVATE(AbstractPlot)
+	CartesianScale(Type type, const Interval<double> &interval, double a, double b, double c);
+	Type m_type;
+	Interval<double> m_interval;
+	//TODO: what are these?
+	double m_a;
+	double m_b;
+	double m_c;
 };
 
 #endif

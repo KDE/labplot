@@ -33,6 +33,7 @@
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
+#include <QLocale>
 
 class AbstractAspect;
 class Column;

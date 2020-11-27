@@ -30,6 +30,7 @@
 #include "backend/datasources/DatasetHandler.h"
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
 #include "kdefrontend/DatasetModel.h"
+#include "backend/lib/macros.h"
 
 #include <QCompleter>
 #include <QDir>

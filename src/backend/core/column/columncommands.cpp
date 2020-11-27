@@ -30,6 +30,7 @@
 
 #include "columncommands.h"
 #include "ColumnPrivate.h"
+#include "backend/lib/macros.h"
 #include <KLocalizedString>
 
 /** ***************************************************************************

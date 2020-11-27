@@ -30,6 +30,7 @@ Copyright            : (C) 2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/datasources/filters/ROOTFilterPrivate.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/macros.h"
 
 #include <KLocalizedString>
 

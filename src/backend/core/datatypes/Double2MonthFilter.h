@@ -31,6 +31,7 @@
 #define DOUBLE2MONTH_FILTER_H
 
 #include "../AbstractSimpleFilter.h"
+#include "backend/lib/macros.h"
 #include <QDateTime>
 #include <cmath>
 

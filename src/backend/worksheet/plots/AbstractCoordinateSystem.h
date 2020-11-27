@@ -33,10 +33,6 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include <QVector>
 
-class QString;
-class QLine;
-class QRectF;
-
 class AbstractCoordinateSystem {
 public:
 	enum class MappingFlag {

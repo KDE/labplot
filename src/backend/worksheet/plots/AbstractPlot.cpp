@@ -94,22 +94,22 @@ void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bo
 	WorksheetElementContainer::handleResize(horizontalRatio, verticalRatio, pageResize);
 }
 
-BASIC_SHARED_D_READER_IMPL(AbstractPlot, float, horizontalPadding, horizontalPadding)
-BASIC_SHARED_D_READER_IMPL(AbstractPlot, float, verticalPadding, verticalPadding)
+BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, horizontalPadding, horizontalPadding)
+BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, verticalPadding, verticalPadding)
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, rightPadding, rightPadding)
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, double, bottomPadding, bottomPadding)
 BASIC_SHARED_D_READER_IMPL(AbstractPlot, bool, symmetricPadding, symmetricPadding)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetHorizontalPadding, float, horizontalPadding, retransform)
-void AbstractPlot::setHorizontalPadding(float padding) {
+STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetHorizontalPadding, double, horizontalPadding, retransform)
+void AbstractPlot::setHorizontalPadding(double padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->horizontalPadding)
 		exec(new AbstractPlotSetHorizontalPaddingCmd(d, padding, ki18n("%1: set horizontal padding")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetVerticalPadding, float, verticalPadding, retransform)
-void AbstractPlot::setVerticalPadding(float padding) {
+STD_SETTER_CMD_IMPL_F_S(AbstractPlot, SetVerticalPadding, double, verticalPadding, retransform)
+void AbstractPlot::setVerticalPadding(double padding) {
 	Q_D(AbstractPlot);
 	if (padding != d->verticalPadding)
 		exec(new AbstractPlotSetVerticalPaddingCmd(d, padding, ki18n("%1: set vertical padding")));

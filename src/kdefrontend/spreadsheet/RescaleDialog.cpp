@@ -27,12 +27,14 @@
  ***************************************************************************/
 #include "RescaleDialog.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/macros.h"
 
 #include <QDoubleValidator>
 #include <QPushButton>
 #include <QWindow>
 
 #include <KWindowConfig>
+#include <KSharedConfig>
 
 /*!
 	\class RescaleDialog
