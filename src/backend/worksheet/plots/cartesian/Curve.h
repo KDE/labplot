@@ -29,7 +29,7 @@
 #ifndef CURVE_H
 #define CURVE_H
 
-#include <QPointF>
+class QPointF;
 
 class Curve {
 public:

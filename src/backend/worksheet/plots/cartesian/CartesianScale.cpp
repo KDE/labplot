@@ -157,7 +157,7 @@ CartesianScale* CartesianScale::createLogScale(const Interval<double> &interval,
 	if (logicalStart <= 0.0 || logicalEnd <= 0.0)
 		return nullptr;
 
-	double lDiff = (log(logicalEnd) - log(logicalStart)) / log(base);
+	const double lDiff = (log(logicalEnd) - log(logicalStart)) / log(base);
 	if (lDiff == 0.0)
 		return nullptr;
 

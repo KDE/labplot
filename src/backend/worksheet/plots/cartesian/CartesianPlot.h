@@ -34,9 +34,6 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 
-#include <cmath>
-
-class QToolBar;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
 class AbstractColumn;

@@ -59,7 +59,7 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& points, MappingFlags flags) const {
 	//DEBUG(Q_FUNC_INFO << ", (points with flags)")
 	const QRectF pageRect = d->plot->dataRect();
-	bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
+	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
 	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
 	const bool limit = flags & MappingFlag::Limit;
 	const double xPage = pageRect.x(), yPage = pageRect.y();

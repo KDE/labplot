@@ -39,9 +39,6 @@ extern "C" {
 #include <gsl/gsl_histogram.h>
 }
 
-class QPen;
-class QFont;
-
 class HistogramPrivate : public QGraphicsItem {
 public:
 	explicit HistogramPrivate(Histogram* owner);

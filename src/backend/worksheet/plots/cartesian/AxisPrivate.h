@@ -29,10 +29,11 @@
 #ifndef AXISPRIVATE_H
 #define AXISPRIVATE_H
 
+#include "Axis.h"
+
 #include <QGraphicsItem>
 #include <QPen>
 #include <QFont>
-#include "Axis.h"
 
 class QGraphicsSceneHoverEvent;
 

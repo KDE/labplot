@@ -1731,7 +1731,7 @@ void CartesianPlotDock::load() {
 	ui.dateTimeEditYMax->setDisplayFormat(m_plot->yRangeDateTimeFormat());
 	ui.dateTimeEditYMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yMin()));
 	ui.dateTimeEditYMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yMax()));
-	ui.cbYScaling->setCurrentIndex( (int)m_plot->yScale() );
+	ui.cbYScaling->setCurrentIndex( (int) m_plot->yScale() );
 	ui.cbYRangeFormat->setCurrentIndex( (int) m_plot->yRangeFormat() );
 
 	//Title

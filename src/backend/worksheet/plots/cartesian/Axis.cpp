@@ -166,7 +166,8 @@ void Axis::init() {
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	d->title->graphicsItem()->setAcceptHoverEvents(false);
 	d->title->setText(this->name());
-	if (d->orientation == Orientation::Vertical) d->title->setRotationAngle(90);
+	if (d->orientation == Orientation::Vertical)
+		d->title->setRotationAngle(90);
 	d->titleOffsetX = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); //distance to the axis tick labels
 	d->titleOffsetY = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); //distance to the axis tick labels
 
@@ -313,13 +314,13 @@ QMenu* Axis::createContextMenu() {
 */
 QIcon Axis::icon() const{
 	Q_D(const Axis);
-	QIcon ico;
+	QIcon icon;
 	if (d->orientation == Orientation::Horizontal)
-		ico = QIcon::fromTheme("labplot-axis-horizontal");
+		icon = QIcon::fromTheme("labplot-axis-horizontal");
 	else
-		ico = QIcon::fromTheme("labplot-axis-vertical");
+		icon = QIcon::fromTheme("labplot-axis-vertical");
 
-	return ico;
+	return icon;
 }
 
 Axis::~Axis() {
