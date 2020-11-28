@@ -50,6 +50,7 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	connect(ui->cbConnnectionLineVisible, &QCheckBox::toggled, this, &InfoElementDock::connectionLineVisibilityChanged);
 	connect(ui->cb_gluePoint, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
 	connect(ui->cbCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
+    connect(ui->sbPosition, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::positionChanged);
 }
 
 void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent) {
@@ -127,6 +128,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 	ui->kcbConnectionLineColor->setColor(m_element->connectionLineColor());
 	ui->sbXPosLineWidth->setValue(m_element->xposLineWidth());
 	ui->sbConnectionLineWidth->setValue(m_element->connectionLineWidth());
+    ui->sbPosition->setValue(m_element->position());
 
 	initConnections();
 }
@@ -152,6 +154,8 @@ void InfoElementDock::initConnections() {
 			 this, &InfoElementDock::elementLabelBorderShapeChanged );
 	connect (m_element, &InfoElement::curveRemoved,
 			 this, &InfoElementDock::elementCurveRemoved);
+    connect (m_element, &InfoElement::positionChanged,
+             this, &InfoElementDock::elementPositionChanged);
 
 }
 
@@ -233,6 +237,14 @@ void InfoElementDock::curveChanged() {
 	QString name = ui->cbCurve->currentText();
 	for (auto* infoElement: m_elements)
 		infoElement->setConnectionLineCurveName(name);
+}
+
+void InfoElementDock::positionChanged(double pos) {
+    if (m_initializing)
+        return;
+
+    for (auto* infoElement: m_elements)
+        infoElement->setPosition(pos);
 }
 
 void InfoElementDock::curveSelectionChanged(int state) {
@@ -332,6 +344,11 @@ void InfoElementDock::elementLabelBorderShapeChanged() {
 	ui->cb_gluePoint->addItem("Automatic");
 	for (int i=0; i < m_element->gluePointsCount(); i++)
 		ui->cb_gluePoint->addItem(m_element->gluePoint(i).name);
+}
+
+void InfoElementDock::elementPositionChanged(double pos) {
+    const Lock lock(m_initializing);
+    ui->sbPosition->setValue(pos);
 }
 
 void InfoElementDock::elementCurveRemoved(QString name) {

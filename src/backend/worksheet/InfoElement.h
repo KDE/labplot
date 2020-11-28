@@ -59,7 +59,7 @@ public:
 		QString customPointPath{""};
 		const XYCurve* curve{nullptr};
 		QString curvePath{""};
-		// x and y values are needed, because the columns of the curves of different Markerpoints do not have the same
+        // x and y values are needed, because the columns of the curves of different Markerpoints might do not have the same
 		// length
 		double x{0}; // x Value
 		double y{0}; // y Value
@@ -85,6 +85,8 @@ public:
 	QMenu* createContextMenu() override;
 	CartesianPlot* plot();
 	bool isTextLabel() const;
+    double setMarkerpointPosition(double x);
+    int currentIndex(double new_x, double* found_x=nullptr);
 
 	QGraphicsItem* graphicsItem() const override;
 	void setPrinting(bool on) override;
@@ -92,6 +94,7 @@ public:
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
+    BASIC_D_ACCESSOR_DECL(double, position, Position);
 	BASIC_D_ACCESSOR_DECL(bool, xposLineVisible, XPosLineVisible);
 	BASIC_D_ACCESSOR_DECL(bool, connectionLineVisible, ConnectionLineVisible);
 	BASIC_D_ACCESSOR_DECL(double, xposLineWidth, XPosLineWidth);
@@ -149,6 +152,7 @@ signals:
 	void visibleChanged(const bool);
 	void gluePointIndexChanged(const int);
 	void connectionLineCurveNameChanged(const QString&);
+    void positionChanged(const double);
 	void labelBorderShapeChangedSignal();
 	void curveRemoved(const QString&);
 };

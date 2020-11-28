@@ -59,6 +59,7 @@ private slots:
 	void connectionLineVisibilityChanged(bool);
 	void gluePointChanged(int index);
 	void curveChanged();
+    void positionChanged(double pos);
 	void curveSelectionChanged(int state);
 
 	// slots triggered in the InfoElement
@@ -73,6 +74,7 @@ private slots:
 	void elementGluePointIndexChanged(const int);
 	void elementConnectionLineCurveChanged(const QString name);
 	void elementLabelBorderShapeChanged();
+    void elementPositionChanged(double pos);
 
 private:
     Ui::InfoElementDock* ui;
