@@ -144,8 +144,7 @@ void Axis::init() {
 	d->offset = group.readEntry("PositionOffset", 0);
 	d->scale = (Scale) group.readEntry("Scale", static_cast<int>(Scale::Linear));
 	d->autoScale = group.readEntry("AutoScale", true);
-	d->start = group.readEntry("Start", 0);
-	d->end = group.readEntry("End", 10);
+	d->range = Range<double>(group.readEntry("Start", 0), group.readEntry("End", 10));
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
 
@@ -392,8 +391,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Scale, scale, scale)
 BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
-BASIC_SHARED_D_READER_IMPL(Axis, double, start, start)
-BASIC_SHARED_D_READER_IMPL(Axis, double, end, end)
+BASIC_SHARED_D_READER_IMPL(Axis, Range<double>, range, range)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
 
@@ -459,16 +457,13 @@ void Axis::setAutoScale(bool autoScale) {
 			if (!plot)
 				return;
 
-			if (d->orientation == Axis::Orientation::Horizontal) {
-				d->end = plot->xMax();
-				d->start = plot->xMin();
-			} else {
-				d->end = plot->yMax();
-				d->start = plot->yMin();
-			}
+			if (d->orientation == Axis::Orientation::Horizontal)
+				d->range = Range<double>(plot->xMin(), plot->xMax());
+			else
+				d->range = Range<double>(plot->yMin(), plot->yMax());
+
 			retransform();
-			emit endChanged(d->end);
-			emit startChanged(d->start);
+			emit rangeChanged(d->range);
 		}
 	}
 }
@@ -540,18 +535,25 @@ void Axis::setOffset(double offset, bool undo) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetStart, double, start, retransform);
-void Axis::setStart(double start) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetRange, Range<double>, range, retransform);
+void Axis::setRange(Range<double> range) {
 	Q_D(Axis);
-	if (start != d->start)
-		exec(new AxisSetStartCmd(d, start, ki18n("%1: set axis start")));
+	if (range != d->range)
+		exec(new AxisSetRangeCmd(d, range, ki18n("%1: set axis range")));
 }
-
-STD_SETTER_CMD_IMPL_F_S(Axis, SetEnd, double, end, retransform);
-void Axis::setEnd(double end) {
+void Axis::setStart(double min) {
 	Q_D(Axis);
-	if (end != d->end)
-		exec(new AxisSetEndCmd(d, end, ki18n("%1: set axis end")));
+	Range<double> range{min, d->range.max()};
+	setRange(range);
+}
+void Axis::setEnd(double max) {
+	Q_D(Axis);
+	Range<double> range{d->range.min(), max};
+	setRange(range);
+}
+void Axis::setRange(double min, double max) {
+	Range<double> range{min, max};
+	setRange(range);
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetZeroOffset, qreal, zeroOffset, retransform);
@@ -1013,11 +1015,11 @@ void AxisPrivate::retransformLine() {
 		else if (position == Axis::Position::Bottom)
 			offset = plot->yMin();
 		else if (position == Axis::Position::Centered)
-			offset = plot->yMin() + (plot->yMax()-plot->yMin())/2;
+			offset = plot->yMin() + (plot->yMax() - plot->yMin())/2;
 
-		startPoint.setX(start);
+		startPoint.setX(range.min());
 		startPoint.setY(offset);
-		endPoint.setX(end);
+		endPoint.setX(range.max());
 		endPoint.setY(offset);
 	} else { // vertical
 		if (position == Axis::Position::Left)
@@ -1025,11 +1027,11 @@ void AxisPrivate::retransformLine() {
 		else if (position == Axis::Position::Right)
 			offset = plot->xMax();
 		else if (position == Axis::Position::Centered)
-			offset = plot->xMin() + (plot->xMax()-plot->xMin())/2;
+			offset = plot->xMin() + (plot->xMax() - plot->xMin())/2;
 
 		startPoint.setX(offset);
-		startPoint.setY(start);
-		endPoint.setY(end);
+		startPoint.setY(range.min());
+		endPoint.setY(range.max());
 		endPoint.setX(offset);
 	}
 
@@ -1201,24 +1203,25 @@ void AxisPrivate::retransformTicks() {
 	//determine the increment for the major ticks
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
+	double start{range.min()}, end{range.max()};
 	if (majorTicksType == Axis::TicksType::TotalNumber) {
 		//the total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
 		switch (scale) {
 			case Axis::Scale::Linear:
-				majorTicksIncrement = (end-start)/(majorTicksNumber-1);
+				majorTicksIncrement = range.size()/(majorTicksNumber-1);
 				break;
 			case Axis::Scale::Log10:
-				majorTicksIncrement = (log10(end)-log10(start))/(majorTicksNumber-1);
+				majorTicksIncrement = (log10(end) - log10(start))/(majorTicksNumber-1);
 				break;
 			case Axis::Scale::Log2:
-				majorTicksIncrement = (log(end)-log(start))/log(2)/(majorTicksNumber-1);
+				majorTicksIncrement = (log(end) - log(start))/log(2)/(majorTicksNumber-1);
 				break;
 			case Axis::Scale::Ln:
-				majorTicksIncrement = (log(end)-log(start))/(majorTicksNumber-1);
+				majorTicksIncrement = (log(end) - log(start))/(majorTicksNumber-1);
 				break;
 			case Axis::Scale::Sqrt:
-				majorTicksIncrement = (sqrt(end)-sqrt(start))/(majorTicksNumber-1);
+				majorTicksIncrement = (sqrt(end) - sqrt(start))/(majorTicksNumber-1);
 				break;
 			case Axis::Scale::X2:
 				majorTicksIncrement = (end*end - start*start)/(majorTicksNumber-1);
@@ -1228,7 +1231,7 @@ void AxisPrivate::retransformTicks() {
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end-start);
 		switch (scale) {
 			case Axis::Scale::Linear:
-				tmpMajorTicksNumber = qRound((end-start)/majorTicksIncrement + 1);
+				tmpMajorTicksNumber = qRound(range.size()/majorTicksIncrement + 1);
 				break;
 			case Axis::Scale::Log10:
 				tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksIncrement + 1);
@@ -1813,7 +1816,7 @@ void AxisPrivate::retransformMajorGrid() {
 		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), plot->yMax());
 	}
 
-	int start, end;
+	int start, end;	// TODO: hides Axis::start, Axis::end!
 	if (skipLowestTick) {
 		if (logicalMajorTickPoints.size() > 1)
 			start = 1;
@@ -2191,8 +2194,8 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "position", QString::number(static_cast<int>(d->position)) );
 	writer->writeAttribute( "scale", QString::number(static_cast<int>(d->scale)) );
 	writer->writeAttribute( "offset", QString::number(d->offset) );
-	writer->writeAttribute( "start", QString::number(d->start) );
-	writer->writeAttribute( "end", QString::number(d->end) );
+	writer->writeAttribute( "start", QString::number(d->range.min()) );
+	writer->writeAttribute( "end", QString::number(d->range.max()) );
 	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
 	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
 	writer->writeAttribute( "titleOffsetX", QString::number(d->titleOffsetX) );
@@ -2301,8 +2304,8 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("position", position, Axis::Position);
 			READ_INT_VALUE("scale", scale, Axis::Scale);
 			READ_DOUBLE_VALUE("offset", offset);
-			READ_DOUBLE_VALUE("start", start);
-			READ_DOUBLE_VALUE("end", end);
+			READ_DOUBLE_VALUE("start", range.min());
+			READ_DOUBLE_VALUE("end", range.max());
 			READ_DOUBLE_VALUE("scalingFactor", scalingFactor);
 			READ_DOUBLE_VALUE("zeroOffset", zeroOffset);
 			READ_DOUBLE_VALUE("titleOffsetX", titleOffsetX);

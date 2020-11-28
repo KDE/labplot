@@ -67,6 +67,7 @@ public:
 		m_max = std::max(min, max);
 	}
 	T size() const { return m_max - m_min; }
+	T length() const { return std::abs(m_max - m_min); }
 	// calculate step size from number of steps
 	T stepSize(const int steps) const { return (steps > 1) ? size()/(T)(steps - 1) : 0; }
 	bool isZero() const { return (m_max == m_min); }
@@ -74,6 +75,7 @@ public:
 	bool inside(T value) const { return ( m_min <= value && m_max >= value ); }
 	void translate(T offset) { m_min += offset; m_max += offset; }
 	bool operator==(const Range<T>& other) const { return ( m_min == other.min() && m_max == other.max() ); }
+	bool operator!=(const Range<T>& other) const { return ( m_min != other.min() || m_max != other.max() ); }
 	Range<T>& operator=(const Range<T>& other) = default;
 
 	//! Return a string in the format '[min, max]'

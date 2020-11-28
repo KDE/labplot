@@ -1197,8 +1197,7 @@ void CartesianPlot::addHorizontalAxis() {
 	Axis* axis = new Axis("x-axis", Axis::Orientation::Horizontal);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
-		axis->setStart(xMin());
-		axis->setEnd(xMax());
+		axis->setRange(xMin(), xMax());
 		axis->setUndoAware(true);
 	}
 	addChild(axis);
@@ -1208,8 +1207,7 @@ void CartesianPlot::addVerticalAxis() {
 	Axis* axis = new Axis("y-axis", Axis::Orientation::Vertical);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
-		axis->setStart(yMin());
-		axis->setEnd(yMax());
+		axis->setRange(yMin(), yMax());
 		axis->setUndoAware(true);
 	}
 	addChild(axis);

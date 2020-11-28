@@ -31,6 +31,7 @@
 #define AXISNEW_H
 
 #include "backend/worksheet/WorksheetElement.h"
+#include "backend/lib/Range.h"
 #include "backend/lib/macros.h"
 
 class CartesianPlot;
@@ -79,8 +80,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
 	BASIC_D_ACCESSOR_DECL(Scale, scale, Scale)
-	BASIC_D_ACCESSOR_DECL(double, start, Start)
-	BASIC_D_ACCESSOR_DECL(double, end, End)
+	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range)
+	void setStart(const double);
+	void setEnd(const double);
+	void setRange(const double, const double);
 	void setOffset(const double, const bool=true);
 	double offset() const;
 	BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor)
@@ -195,6 +198,7 @@ signals:
 	void startChanged(double);
 	void autoScaleChanged(bool);
 	void endChanged(double);
+	void rangeChanged(Range<double>);
 	void zeroOffsetChanged(qreal);
 	void scalingFactorChanged(qreal);
 

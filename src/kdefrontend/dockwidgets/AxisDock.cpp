@@ -547,8 +547,8 @@ void AxisDock::updateLocale() {
 	//update the QLineEdits, avoid the change events
 	Lock lock(m_initializing);
 	ui.lePosition->setText(numberLocale.toString(m_axis->offset()));
-	ui.leStart->setText(numberLocale.toString(m_axis->start()));
-	ui.leEnd->setText(numberLocale.toString(m_axis->end()));
+	ui.leStart->setText(numberLocale.toString(m_axis->range().min()));
+	ui.leEnd->setText(numberLocale.toString(m_axis->range().max()));
 
 	//update the title label
 	labelWidget->updateLocale();
@@ -1021,7 +1021,7 @@ void AxisDock::majorTicksSpacingChanged() {
 		|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 
 	double spacing = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
-	double range = fabs(m_axis->end() - m_axis->start());
+	double range = m_axis->range().length();
 	DEBUG("major spacing = " << spacing << ", range = " << range)
 
 	// fix spacing if incorrect (not set or > 100 ticks)
@@ -1251,7 +1251,7 @@ void AxisDock::minorTicksSpacingChanged() {
 		|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 
 	double spacing = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
-	double range = fabs(m_axis->end() - m_axis->start());
+	double range = m_axis->range().length();
 	//DEBUG("minor spacing = " << spacing << ", range = " << range)
 	int numberTicks = 0;
 
@@ -1710,8 +1710,8 @@ void AxisDock::axisStartChanged(double value) {
 	ui.dateTimeEditStart->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 
 	// determine stepsize and number of decimals
-	double range = std::abs(m_axis->end() - m_axis->start());
-	int decimals = nsl_math_rounded_decimals(range) + 1;
+	const double range{ m_axis->range().length() };
+	const int decimals{ nsl_math_rounded_decimals(range) + 1 };
 	DEBUG("range = " << range << ", decimals = " << decimals)
 	ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
 	ui.sbMajorTicksSpacingNumeric->setSingleStep(gsl_pow_int(10., -decimals));
@@ -1727,8 +1727,8 @@ void AxisDock::axisEndChanged(double value) {
 	ui.dateTimeEditEnd->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 
 	// determine stepsize and number of decimals
-	double range = std::abs(m_axis->end() - m_axis->start());
-	int decimals = nsl_math_rounded_decimals(range) + 1;
+	const double range{ m_axis->range().length() };
+	const int decimals{ nsl_math_rounded_decimals(range) + 1 };
 	DEBUG("range = " << range << ", decimals = " << decimals)
 	ui.sbMajorTicksSpacingNumeric->setDecimals(decimals);
 	ui.sbMajorTicksSpacingNumeric->setSingleStep(gsl_pow_int(10., -decimals));
@@ -2008,8 +2008,8 @@ void AxisDock::load() {
 	ui.lePosition->setText( numberLocale.toString(m_axis->offset()) );
 	ui.cbScale->setCurrentIndex( (int)m_axis->scale() );
 	ui.chkAutoScale->setChecked( m_axis->autoScale() );
-	ui.leStart->setText( numberLocale.toString(m_axis->start()) );
-	ui.leEnd->setText( numberLocale.toString(m_axis->end()) );
+	ui.leStart->setText( numberLocale.toString(m_axis->range().min()) );
+	ui.leEnd->setText( numberLocale.toString(m_axis->range().max()) );
 
 	ui.sbMajorTicksSpacingNumeric->setDecimals(0);
 	ui.sbMajorTicksSpacingNumeric->setSingleStep(m_axis->majorTicksSpacing());
@@ -2047,8 +2047,8 @@ void AxisDock::load() {
 				ui.dateTimeEditStart->setDisplayFormat(plot->yRangeDateTimeFormat());
 				ui.dateTimeEditEnd->setDisplayFormat(plot->yRangeDateTimeFormat());
 			}
-			ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->start()));
-			ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->end()));
+			ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().min()));
+			ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().max()));
 
 		}
 	}
@@ -2170,8 +2170,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.lePosition->setText( numberLocale.toString(group.readEntry("PositionOffset", m_axis->offset())) );
 	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) m_axis->scale()) );
 	ui.chkAutoScale->setChecked( group.readEntry("AutoScale", m_axis->autoScale()) );
-	ui.leStart->setText( numberLocale.toString(group.readEntry("Start", m_axis->start())) );
-	ui.leEnd->setText( numberLocale.toString(group.readEntry("End", m_axis->end())) );
+	ui.leStart->setText( numberLocale.toString(group.readEntry("Start", m_axis->range().min())) );
+	ui.leEnd->setText( numberLocale.toString(group.readEntry("End", m_axis->range().max())) );
 	ui.leZeroOffset->setText( numberLocale.toString(group.readEntry("ZeroOffset", m_axis->zeroOffset())) );
 	ui.leScalingFactor->setText( numberLocale.toString(group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
 

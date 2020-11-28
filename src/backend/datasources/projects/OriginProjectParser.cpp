@@ -1385,8 +1385,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 // 		bool oppositeLine;
 
 	//ranges
-	axis->setStart(originAxis.min);
-	axis->setEnd(originAxis.max);
+	axis->setRange(originAxis.min, originAxis.max);
 
 	//ticks
 	axis->setMajorTicksType(Axis::TicksType::Spacing);

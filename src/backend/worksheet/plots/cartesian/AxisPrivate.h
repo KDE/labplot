@@ -72,8 +72,7 @@ public:
 	Axis::Position position; //!< left, right, bottom, top or custom (usually not changed after creation)
 	Axis::Scale scale;
 	double offset; //!< offset from zero in the direction perpendicular to the axis
-	double start; //!< start coordinate of the axis line
-	double end; //!< end coordinate of the axis line
+	Range<double> range;	// coordinate range of the axis line
 	qreal scalingFactor;
 	qreal zeroOffset;
 
