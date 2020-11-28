@@ -36,6 +36,7 @@ extern "C" {
 #include "backend/lib/macros.h"	//SET_NUMBER_LOCALE
 
 #include <QString>
+#include <cmath>
 
 //! Auxiliary class for a data range 
 /**
@@ -67,7 +68,7 @@ public:
 		m_max = std::max(min, max);
 	}
 	T size() const { return m_max - m_min; }
-	T length() const { return std::abs(m_max - m_min); }
+	T length() const { return fabs(m_max - m_min); }
 	// calculate step size from number of steps
 	T stepSize(const int steps) const { return (steps > 1) ? size()/(T)(steps - 1) : 0; }
 	bool isZero() const { return (m_max == m_min); }
