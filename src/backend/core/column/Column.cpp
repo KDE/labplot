@@ -2123,10 +2123,8 @@ int Column::indexForValue(double x) const {
 
 				double value = valueAt(row);
 				if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
-					if (row < rowCount() - 1) {
-						prevValue = value;
-						index = row;
-					}
+                    prevValue = value;
+                    index = row;
 				}
 			}
 			return index;
