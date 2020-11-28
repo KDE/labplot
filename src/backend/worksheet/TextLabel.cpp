@@ -542,7 +542,7 @@ QPointF TextLabelPrivate::findNearestGluePoint(QPointF scenePoint) {
 	double distance2 = pow(point.x()-scenePoint.x(), 2) + pow(point.y()-scenePoint.y(), 2);
 	// assumption, more than one point available
 	for (int i = 1; i < m_gluePoints.length(); i++) {
-		point = mapParentToPlotArea(mapToParent(m_gluePoints.at(0).point));
+        point = mapParentToPlotArea(mapToParent(m_gluePoints.at(i).point));
 		double distance2_temp = pow(point.x()-scenePoint.x(), 2) + pow(point.y()-scenePoint.y(), 2);
 		if (distance2_temp < distance2) {
 			nearestPoint = point;

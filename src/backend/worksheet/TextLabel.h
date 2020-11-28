@@ -84,7 +84,11 @@ public:
 
 		QString text;
 		bool teXUsed{false};
-		bool placeholder{false};
+        /*! Determines if the Textlabe can have a placeholder or not.
+         * Depending on this variable in the LabelWidget between
+         * the text and the placeholder text can be switched
+         */
+        bool placeholder{false};
 		QString textPlaceholder{""}; // text with placeholders
 	};
 

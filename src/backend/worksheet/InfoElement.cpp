@@ -210,6 +210,8 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	// C++14 enabled:
 	//connect(curve, qOverload<bool>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
 	connect(curve, static_cast<void(XYCurve::*)(bool)>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+    connect(curve, &XYCurve::moveBegin, this, [this](){m_curveGetsMoved = true;});
+    connect(curve, &XYCurve::moveEnd, this, [this](){m_curveGetsMoved = false;});
 	custompoint->setVisible(curve->isVisible());
 
 	if (d->m_index < 0)
@@ -219,6 +221,14 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
 	markerpoints.append(markerpoint);
+
+    if (markerpoints.length() == 1)
+    {
+        // Do a retransform, because when the first markerpoint
+        // was added, after a curve was removed and added, the
+        // position of the connection line must be recalculated
+        retransform();
+    }
 }
 
 /*!
@@ -289,6 +299,9 @@ bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
  * @param curve
  */
 void InfoElement::removeCurve(const XYCurve* curve) {
+    if (m_curveGetsMoved)
+        return;
+
 	for (int i=0; i< markerpoints.length(); i++) {
 		if (markerpoints[i].curve == curve) {
 			disconnect(curve, static_cast<void(XYCurve::*)(bool)>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
@@ -335,14 +348,22 @@ InfoElement::MarkerPoints_T InfoElement::markerPointAt(int index) {
 
 /*!
  * create Text which will be shown in the TextLabel
+ * Called when:
+ *  - The position of the infoelement was changed
+ *  - a curve was removed
+ *  - a curve was added
  * @return Text
  */
 TextLabel::TextWrapper InfoElement::createTextLabelText() {
 
-	if (!label || markerPointsCount() == 0)
-		return TextLabel::TextWrapper();
 	// TODO: save positions of the variables in extra variables to replace faster, because replace takes long time
-	TextLabel::TextWrapper wrapper = label->text();
+    TextLabel::TextWrapper wrapper = label->text();
+    if (markerPointsCount() < 1) {
+        DEBUG(wrapper.text.toStdString());
+        DEBUG(wrapper.textPlaceholder.toStdString());
+        wrapper.text = wrapper.textPlaceholder;
+        return wrapper;
+    }
 
 	AbstractColumn::ColumnMode columnMode = markerpoints[0].curve->xColumn()->columnMode();
 	QString placeholderText = wrapper.textPlaceholder;
@@ -520,6 +541,9 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 				markerpoints.removeAt(i);
 			// no point->remove() needed, because it was already deleted
 		}
+        // recreate text, because when marker was deleted,
+        // the placeholder should not be replaced anymore by a value
+        label->setText(createTextLabelText());
 	}
 
 	// textlabel was deleted
@@ -764,7 +788,7 @@ void InfoElementPrivate::retransform() {
 
 	q->m_suppressChildPositionChanged = true;
 
-	q->label->retransform();
+    q->label->retransform();
 
 	for (auto markerpoint: q->markerpoints)
 		markerpoint.customPoint->retransform();
