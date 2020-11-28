@@ -27,12 +27,11 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "backend/worksheet/plots/cartesian/Axis.h"
-#include "backend/worksheet/plots/cartesian/AxisPrivate.h"
+#include "AxisPrivate.h"
+#include "CartesianCoordinateSystem.h"
+#include "CartesianPlot.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -157,7 +156,7 @@ void Axis::init() {
 
 	// axis title
  	d->title = new TextLabel(this->name(), TextLabel::Type::AxisTitle);
-	connect( d->title, &TextLabel::changed, this, &Axis::labelChanged);
+	connect(d->title, &TextLabel::changed, this, &Axis::labelChanged);
 	addChild(d->title);
 	d->title->setHidden(true);
 	d->title->graphicsItem()->setParentItem(d);
@@ -204,8 +203,8 @@ void Axis::init() {
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
 	d->labelsBackgroundType = (LabelsBackgroundType) group.readEntry("LabelsBackgroundType", static_cast<int>(LabelsBackgroundType::Transparent));
 	d->labelsBackgroundColor = group.readEntry("LabelsBackgroundColor", QColor(Qt::white));
-	d->labelsPrefix =  group.readEntry("LabelsPrefix", "" );
-	d->labelsSuffix =  group.readEntry("LabelsSuffix", "" );
+	d->labelsPrefix =  group.readEntry("LabelsPrefix", "");
+	d->labelsSuffix =  group.readEntry("LabelsSuffix", "");
 	d->labelsOpacity = group.readEntry("LabelsOpacity", 1.0);
 
 	//major grid
@@ -1015,24 +1014,20 @@ void AxisPrivate::retransformLine() {
 		else if (position == Axis::Position::Bottom)
 			offset = plot->yMin();
 		else if (position == Axis::Position::Centered)
-			offset = plot->yMin() + (plot->yMax() - plot->yMin())/2;
+			offset = (plot->yMin() + plot->yMax())/2.;
 
-		startPoint.setX(range.min());
-		startPoint.setY(offset);
-		endPoint.setX(range.max());
-		endPoint.setY(offset);
+		startPoint = QPointF(range.min(), offset);
+		endPoint = QPointF(range.max(), offset);
 	} else { // vertical
 		if (position == Axis::Position::Left)
 			offset = plot->xMin();
 		else if (position == Axis::Position::Right)
 			offset = plot->xMax();
 		else if (position == Axis::Position::Centered)
-			offset = plot->xMin() + (plot->xMax() - plot->xMin())/2;
+			offset = (plot->xMin() + plot->xMax())/2.;
 
-		startPoint.setX(offset);
-		startPoint.setY(range.min());
-		endPoint.setY(range.max());
-		endPoint.setX(offset);
+		startPoint = QPointF(offset, range.min());
+		endPoint = QPointF(offset, range.max());
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
@@ -1187,8 +1182,6 @@ void AxisPrivate::retransformTicks() {
 	if (suppressRetransform)
 		return;
 
-	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
-
 	majorTicksPath = QPainterPath();
 	minorTicksPath = QPainterPath();
 	majorTickPoints.clear();
@@ -1204,6 +1197,7 @@ void AxisPrivate::retransformTicks() {
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
 	double start{range.min()}, end{range.max()};
+	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
 	if (majorTicksType == Axis::TicksType::TotalNumber) {
 		//the total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
@@ -1273,8 +1267,8 @@ void AxisPrivate::retransformTicks() {
 	qreal nextMajorTickPos = 0.0;
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
-	const double middleX = plot->xMin() + (plot->xMax() - plot->xMin())/2;
-	const double middleY = plot->yMin() + (plot->yMax() - plot->yMin())/2;
+	const double middleX = (plot->xMin() + plot->xMax())/2.;
+	const double middleY = (plot->yMin() + plot->yMax())/2.;
 	bool valid;
 
 	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
@@ -1645,8 +1639,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	double width = 0;
 	double height = fm.ascent();
 	QPointF pos;
-	const double middleX = plot->xMin() + (plot->xMax() - plot->xMin())/2;
-	const double middleY = plot->yMin() + (plot->yMax() - plot->yMin())/2;
+	const double middleX = (plot->xMin() + plot->xMax())/2.;
+	const double middleY = (plot->yMin() + plot->yMax())/2.;
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
 

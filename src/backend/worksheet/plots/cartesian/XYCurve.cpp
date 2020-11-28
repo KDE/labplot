@@ -82,6 +82,7 @@ XYCurve::~XYCurve() = default;
 void XYCurve::finalizeAdd() {
 	Q_D(XYCurve);
 	d->plot = static_cast<const CartesianPlot*>(parentAspect());
+	Q_ASSERT(d->plot);
 	d->cSystem = static_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
 }
 
@@ -1270,7 +1271,7 @@ void XYCurvePrivate::addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, d
  * @param pixelCount pixel count
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff, int numberOfPixelX) {
-	DEBUG(Q_FUNC_INFO)
+	//DEBUG(Q_FUNC_INFO)
 
 	if (plot->xScale() == CartesianPlot::Scale::Linear) {
 		double minLogicalDiffX = (plot->xMax() - plot->xMin())/numberOfPixelX;

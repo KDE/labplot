@@ -4,6 +4,7 @@
     Description          : Private members of Axis.
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 

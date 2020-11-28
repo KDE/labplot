@@ -549,7 +549,7 @@ void XYCurveDock::setModel() {
 
 
 	//this function is called after the dock widget is initializes and the curves are set.
-	//so, we use this function to finalize the initialization eventhough it's not related
+	//so, we use this function to finalize the initialization even though it's not related
 	//to the actual set of the model (could also be solved by a new class XYAnalysisiCurveDock).
 
 	//hide property widgets that are not relevant for analysis curves

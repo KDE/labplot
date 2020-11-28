@@ -65,6 +65,8 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 	const double xPage = pageRect.x(), yPage = pageRect.y();
 	const double w = pageRect.width(), h = pageRect.height();
 
+	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+
 	QVector<QPointF> result;
 	result.reserve(points.size());
 	for (const auto* xScale : d->xScales) {
@@ -118,6 +120,8 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 	const double xPage = pageRect.x(), yPage = pageRect.y();
 	const double w = pageRect.width(), h = pageRect.height();
 
+	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+
 	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
 
@@ -169,6 +173,8 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 	const bool limit = flags & MappingFlag::Limit;
 	const double xPage = pageRect.x(), yPage = pageRect.y();
 	const double w = pageRect.width(), h = pageRect.height();
+
+	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
@@ -228,6 +234,8 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, Mappi
 	const double xPage = pageRect.x(), yPage = pageRect.y();
 	const double w = pageRect.width(), h = pageRect.height();
 
+	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+
 	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
 
@@ -266,6 +274,8 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 	double xGapAfter = NAN;
 	double yGapBefore = NAN;
 	double yGapAfter = NAN;
+
+	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
  	QVectorIterator<CartesianScale *> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
@@ -425,6 +435,7 @@ QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPoi
 	const double w = pageRect.width();
 	const double h = pageRect.height();
 
+	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	for (const auto& point : points) {
 		double x = point.x();
@@ -494,6 +505,8 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 
 	if (noPageClippingY)
 		logicalPoint.setY(pageRect.y() + pageRect.height()/2.);
+
+	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	if (noPageClipping || limit || pageRect.contains(logicalPoint)) {
 		double x = logicalPoint.x();
