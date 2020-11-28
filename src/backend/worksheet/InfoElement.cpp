@@ -299,8 +299,8 @@ bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
  * @param curve
  */
 void InfoElement::removeCurve(const XYCurve* curve) {
-    if (m_curveGetsMoved)
-        return;
+	if (m_curveGetsMoved)
+		return;
 
 	for (int i=0; i< markerpoints.length(); i++) {
 		if (markerpoints[i].curve == curve) {
@@ -788,7 +788,7 @@ void InfoElementPrivate::retransform() {
 
 	q->m_suppressChildPositionChanged = true;
 
-    q->label->retransform();
+	q->label->retransform();
 
 	for (auto markerpoint: q->markerpoints)
 		markerpoint.customPoint->retransform();
@@ -796,7 +796,8 @@ void InfoElementPrivate::retransform() {
 	// line goes to the first pointPos
 	QPointF pointPos = cSystem->mapLogicalToScene(q->markerpoints[0].customPoint->position(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (int i=1; i< q->markerPointsCount(); i++) {
-		if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
+		const auto* curve = q->markerpoints[i].curve;
+		if (curve->name().compare(connectionLineCurveName) == 0) {
 			pointPos = cSystem->mapLogicalToScene(q->markerpoints[i].customPoint->position(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
@@ -1309,4 +1310,8 @@ void InfoElement::loadThemeConfig(const KConfig& config) {
 	const KConfigGroup& group = config.group("Axis");
 	d->connectionLineColor = group.readEntry("LineColor", QColor(Qt::black));
 	d->xposLineColor = d->connectionLineColor;
+
+	//load the theme for all the children
+	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
+		child->loadThemeConfig(config);
 }

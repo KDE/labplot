@@ -3964,7 +3964,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (marker->load(reader, preview)) {
 				addChildFast(marker);
 				marker->setParentGraphicsItem(graphicsItem());
-				marker->retransform();
 			} else {
 				delete marker;
 				return false;
