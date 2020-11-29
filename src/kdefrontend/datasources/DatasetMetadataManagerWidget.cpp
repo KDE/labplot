@@ -210,7 +210,7 @@ bool DatasetMetadataManagerWidget::urlExists() {
 	} else {
 		QPalette palette;
 		palette.setColor(QPalette::Base, m_baseColor);
-		palette.setColor(QPalette::Text, m_textColor);;
+		palette.setColor(QPalette::Text, m_textColor);
 		ui.leDownloadURL->setPalette(palette);
 		ui.leDownloadURL->setToolTip("");
 	}

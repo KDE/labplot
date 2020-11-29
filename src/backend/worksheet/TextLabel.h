@@ -137,7 +137,7 @@ public:
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	int gluePointCount();
 	struct GluePoint {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0))	// we need a default contructor for QVector
+#if (QT_VERSION < QT_VERSION_CHECK(5, 13, 0))	// we need a default constructor for QVector
 		GluePoint() = default;
 #endif
 		GluePoint(QPointF point, QString name) : point(point), name(name) {}

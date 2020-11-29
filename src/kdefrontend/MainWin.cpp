@@ -1488,7 +1488,7 @@ bool MainWin::closeProject() {
 
 	//hide the sub-windows prior to deleting them in order to get rid of the shadows
 	//drawn across the sub-windows by the style. The shadow is removed by closing/hiding
-	//the sub-window exlicitely but not if we just delete it.
+	//the sub-window explicitly but not if we just delete it.
 	//TODO: the actual fix is in https://invent.kde.org/plasma/breeze/-/merge_requests/43,
 	//we can remove this hack later.
 	for (auto* window : m_mdiArea->subWindowList())

@@ -1726,7 +1726,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	//disable the header options for non-file sources because:
 	//* for sockets we allow to import one single value only at the moment
 	//* for MQTT topics we don't allow to set the vector names since the different topics can have different number of columns
-	//For files this option still can be usefull if the user have to re-read the whole file
+	//For files this option still can be useful if the user have to re-read the whole file
 	//and wants to use the header to set the column names or the user provides manually the column names.
 	//TODO: adjust this logic later once we allow to import multiple columns from sockets,
 	//it should be possible to provide the names of the columns
@@ -1892,7 +1892,7 @@ void ImportFileWidget::unsubscribeTopic(const QString& topicName, QVector<QTreeW
 
 	for (int i = 0; i< m_mqttSubscriptions.count(); ++i) {
 		if (m_mqttSubscriptions[i]->topic().filter() == topicName) {
-			//explicitely disconnect from the signal, callling QMqttClient::unsubscribe() below is not enough
+			//explicitly disconnect from the signal, callling QMqttClient::unsubscribe() below is not enough
 			disconnect(m_mqttSubscriptions.at(i), &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
 			m_mqttSubscriptions.remove(i);
 			break;

@@ -386,7 +386,7 @@ QVariant WelcomeScreenHelper::getHeightScale(const QString& sectionID) {
 	if(m_heightScale.contains(sectionID))
 		return QVariant(m_heightScale[sectionID]);
 
-	return QVariant(-1);;
+	return QVariant(-1);
 }
 
 /**
