@@ -811,11 +811,11 @@ void InfoElementPrivate::retransform() {
 		labelPos = q->label->gluePointAt(gluePointIndex).point;
 
 	double x,y;
-	QPointF min_scene = cSystem->mapLogicalToScene(QPointF(plot->xMin(),plot->yMin()));
-	QPointF max_scene = cSystem->mapLogicalToScene(QPointF(plot->xMax(),plot->yMax()));
+	QPointF min_scene = cSystem->mapLogicalToScene(QPointF(plot->xRange().min(), plot->yRange().min()));
+	QPointF max_scene = cSystem->mapLogicalToScene(QPointF(plot->xRange().max(), plot->yRange().max()));
 
-	y = abs(max_scene.y() - min_scene.y()) / 2;
-	x = abs(max_scene.x() - min_scene.x()) / 2;
+	y = qAbs(max_scene.y() - min_scene.y()) / 2;
+	x = qAbs(max_scene.x() - min_scene.x()) / 2;
 
 	QPointF labelPosItemCoords = mapFromParent(labelPos); // calculate item coords from scene coords
 	QPointF pointPosItemCoords = mapFromParent(pointPos); // calculate item coords from scene coords

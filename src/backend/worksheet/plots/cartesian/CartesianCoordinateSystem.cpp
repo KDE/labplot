@@ -65,7 +65,7 @@ QVector<QPointF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPoi
 	const double xPage = pageRect.x(), yPage = pageRect.y();
 	const double w = pageRect.width(), h = pageRect.height();
 
-	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	QVector<QPointF> result;
 	result.reserve(points.size());
@@ -120,7 +120,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(const QVector<QPointF>& logica
 	const double xPage = pageRect.x(), yPage = pageRect.y();
 	const double w = pageRect.width(), h = pageRect.height();
 
-	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
@@ -174,7 +174,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 	const double xPage = pageRect.x(), yPage = pageRect.y();
 	const double w = pageRect.width(), h = pageRect.height();
 
-	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
@@ -224,7 +224,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
  * Map a single point
  * */
 QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, MappingFlags flags) const {
-	//DEBUG(Q_FUNC_INFO << ", (single point)")
+	DEBUG(Q_FUNC_INFO << ", (single point)")
 	const QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
 	const bool noPageClippingY = flags & MappingFlag::SuppressPageClippingY;
@@ -234,7 +234,7 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, Mappi
 	const double xPage = pageRect.x(), yPage = pageRect.y();
 	const double w = pageRect.width(), h = pageRect.height();
 
-	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	for (const auto* xScale : d->xScales) {
 		if (!xScale) continue;
@@ -275,7 +275,7 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 	double yGapBefore = NAN;
 	double yGapAfter = NAN;
 
-	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
  	QVectorIterator<CartesianScale *> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
@@ -435,7 +435,7 @@ QVector<QPointF> CartesianCoordinateSystem::mapSceneToLogical(const QVector<QPoi
 	const double w = pageRect.width();
 	const double h = pageRect.height();
 
-	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	for (const auto& point : points) {
 		double x = point.x();
@@ -506,7 +506,7 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 	if (noPageClippingY)
 		logicalPoint.setY(pageRect.y() + pageRect.height()/2.);
 
-	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	if (noPageClipping || limit || pageRect.contains(logicalPoint)) {
 		double x = logicalPoint.x();
@@ -570,6 +570,7 @@ int CartesianCoordinateSystem::yDirection() const {
 
 // TODO: design elegant, flexible and undo-aware API for changing scales
 bool CartesianCoordinateSystem::setXScales(const QVector<CartesianScale *> &scales) {
+	DEBUG(Q_FUNC_INFO)
 	while (!d->xScales.isEmpty())
 		delete d->xScales.takeFirst();
 
@@ -578,10 +579,12 @@ bool CartesianCoordinateSystem::setXScales(const QVector<CartesianScale *> &scal
 }
 
 QVector<CartesianScale*> CartesianCoordinateSystem::xScales() const {
+	DEBUG(Q_FUNC_INFO)
 	return d->xScales; // TODO: should rather return a copy of the scales here
 }
 
 bool CartesianCoordinateSystem::setYScales(const QVector<CartesianScale*> &scales) {
+	DEBUG(Q_FUNC_INFO)
 	while (!d->yScales.isEmpty())
 		delete d->yScales.takeFirst();
 
@@ -590,6 +593,7 @@ bool CartesianCoordinateSystem::setYScales(const QVector<CartesianScale*> &scale
 }
 
 QVector<CartesianScale*> CartesianCoordinateSystem::yScales() const {
+	DEBUG(Q_FUNC_INFO)
 	return d->yScales; // TODO: should rather return a copy of the scales here
 }
 

@@ -4,6 +4,7 @@
     Description          : Private members of CartesianPlot.
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -38,7 +39,6 @@
 #include <QStaticText>
 
 class CartesianPlotPrivate : public AbstractPlotPrivate {
-
 public:
 	explicit CartesianPlotPrivate(CartesianPlot*);
 
@@ -63,28 +63,27 @@ public:
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	CartesianPlot::RangeFormat xRangeFormat{CartesianPlot::RangeFormat::Numeric};
 	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::RangeFormat::Numeric};
-	QString xRangeDateTimeFormat;
-	QString yRangeDateTimeFormat;
-	int rangeFirstValues{1000};
-	int rangeLastValues{1000};
-	double xMin{0.0}, xMax{1.0}, yMin{0.0}, yMax{1.0};
-	float xMinPrev{0.0}, xMaxPrev{1.0}, yMinPrev{0.0}, yMaxPrev{1.0};
+	QString xRangeDateTimeFormat, yRangeDateTimeFormat;
+	int rangeFirstValues{1000}, rangeLastValues{1000};
+	Range<double> xRange{0.0, 1.0}, yRange{0.0, 1.0};
+	//TODO: ranges
+	double xMinPrev{0.0}, xMaxPrev{1.0}, yMinPrev{0.0}, yMaxPrev{1.0};
 	bool autoScaleX{true}, autoScaleY{true};
-	float autoScaleOffsetFactor{0.0f};
+	double autoScaleOffsetFactor{0.0f};
 	CartesianPlot::Scale xScale{CartesianPlot::Scale::Linear}, yScale{CartesianPlot::Scale::Linear};
-	bool xRangeBreakingEnabled{false};
-	bool yRangeBreakingEnabled{false};
-	CartesianPlot::RangeBreaks xRangeBreaks;
-	CartesianPlot::RangeBreaks yRangeBreaks;
+	bool xRangeBreakingEnabled{false}, yRangeBreakingEnabled{false};
+	CartesianPlot::RangeBreaks xRangeBreaks, yRangeBreaks;
 	QString theme;
 
 	//cached values of minimum and maximum for all visible curves
 	bool curvesXMinMaxIsDirty{false}, curvesYMinMaxIsDirty{false};
+	//TODO: numeric limits
+	//TODO: ranges
 	double curvesXMin{INFINITY}, curvesXMax{-INFINITY}, curvesYMin{INFINITY}, curvesYMax{-INFINITY};
 
 	CartesianPlot* const q;
+	CartesianCoordinateSystem* coordinateSystem{nullptr};
 	CartesianPlot::MouseMode mouseMode{CartesianPlot::MouseMode::Selection};
-	CartesianCoordinateSystem* cSystem{nullptr};
 	bool suppressRetransform{false};
 	bool panningStarted{false};
 	bool locked{false};
@@ -92,6 +91,7 @@ public:
 	// Cursor
 	bool cursor0Enable{false};
 	int selectedCursor{0};
+	// numeric limits
 	QPointF cursor0Pos{QPointF(NAN, NAN)};
 	bool cursor1Enable{false};
 	QPointF cursor1Pos{QPointF(NAN, NAN)};

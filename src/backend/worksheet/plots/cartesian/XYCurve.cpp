@@ -1274,7 +1274,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64&
 	//DEBUG(Q_FUNC_INFO)
 
 	if (plot->xScale() == CartesianPlot::Scale::Linear) {
-		double minLogicalDiffX = (plot->xMax() - plot->xMin())/numberOfPixelX;
+		double minLogicalDiffX = plot->xRange().size()/numberOfPixelX;
 		//DEBUG("	plot->xMax() - plot->xMin() = " << plot->xMax() - plot->xMin())
 		//DEBUG("	plot->dataRect().width() = " << plot->dataRect().width())
 		//DEBUG("	-> minLogicalDiffX = " << minLogicalDiffX)
@@ -1412,8 +1412,8 @@ void XYCurvePrivate::updateLines() {
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 	if (columnProperties == AbstractColumn::Properties::Constant) {
 		DEBUG(Q_FUNC_INFO << ", CONSTANT column")
-		tempPoint1 = QPointF(plot->xMin(), plot->yMin());
-		tempPoint2 = QPointF(plot->xMin(), plot->yMax());
+		tempPoint1 = QPointF(plot->xRange().min(), plot->yRange().min());
+		tempPoint2 = QPointF(plot->xRange().min(), plot->yRange().max());
 		m_lines.append(QLineF(tempPoint1, tempPoint2));
 	} else {
 		QPointF lastPoint{NAN, NAN};	// last x value
@@ -1713,8 +1713,8 @@ void XYCurvePrivate::updateDropLines() {
 
 	//calculate drop lines
 	QVector<QLineF> dlines;
-	const double xMin = plot->xMin();
-	const double yMin = plot->yMin();
+	const double xMin = plot->xRange().min();
+	const double yMin = plot->yRange().min();
 
 	int i{0};
 	switch (dropLineType) {
@@ -2025,148 +2025,150 @@ void XYCurvePrivate::updateFilling() {
 	const QPointF& last = m_logicalPoints.at(m_logicalPoints.size()-1);//last point of the curve, may not be visible currently
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
+	const double xMin{ plot->xRange().min() }, xMax{ plot->xRange().max() };
+	const double yMin{ plot->yRange().min() }, yMax{ plot->yRange().max() };
 	if (fillingPosition == XYCurve::FillingPosition::Above) {
-		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xRange().min(), yMin));
 
 		//start point
 		if (nsl_math_essentially_equal(start.y(), edge.y())) {
-			if (first.x() < plot->xMin())
+			if (first.x() < xMin)
 				start = edge;
-			else if (first.x() > plot->xMax())
-				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+			else if (first.x() > xMax)
+				start = cSystem->mapLogicalToScene(QPointF(xMax, yMin));
 			else
-				start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMin()));
+				start = cSystem->mapLogicalToScene(QPointF(first.x(), yMin));
 		}
 
 		//end point
 		if (nsl_math_essentially_equal(end.y(), edge.y())) {
-			if (last.x() < plot->xMin())
+			if (last.x() < xMin)
 				end = edge;
-			else if (last.x() > plot->xMax())
-				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+			else if (last.x() > xMax)
+				end = cSystem->mapLogicalToScene(QPointF(xMax, yMin));
 			else
-				end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMin()));
+				end = cSystem->mapLogicalToScene(QPointF(last.x(), yMin));
 		}
 
 		//coordinate at which to close all polygons
-		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax())).y();
+		yEnd = cSystem->mapLogicalToScene(QPointF(xMin, yMax)).y();
 	} else if (fillingPosition == XYCurve::FillingPosition::Below) {
-		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+		edge = cSystem->mapLogicalToScene(QPointF(xMin, yMax));
 
 		//start point
 		if (nsl_math_essentially_equal(start.y(), edge.y())) {
-			if (first.x() < plot->xMin())
+			if (first.x() < xMin)
 				start = edge;
-			else if (first.x() > plot->xMax())
-				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else if (first.x() > xMax)
+				start = cSystem->mapLogicalToScene(QPointF(xMax, yMax));
 			else
-				start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMax()));
+				start = cSystem->mapLogicalToScene(QPointF(first.x(), yMax));
 		}
 
 		//end point
 		if (nsl_math_essentially_equal(end.y(), edge.y())) {
-			if (last.x() < plot->xMin())
+			if (last.x() < xMin)
 				end = edge;
-			else if (last.x() > plot->xMax())
-				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else if (last.x() > xMax)
+				end = cSystem->mapLogicalToScene(QPointF(xMax, yMax));
 			else
-				end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMax()));
+				end = cSystem->mapLogicalToScene(QPointF(last.x(), yMax));
 		}
 
 		//coordinate at which to close all polygons
-		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).y();
+		yEnd = cSystem->mapLogicalToScene(QPointF(xMin, yMin)).y();
 	} else if (fillingPosition == XYCurve::FillingPosition::ZeroBaseline) {
-		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+		edge = cSystem->mapLogicalToScene(QPointF(xMin, yMax));
 
 		//start point
 		if (nsl_math_essentially_equal(start.y(), edge.y())) {
-			if (plot->yMax() > 0) {
-				if (first.x() < plot->xMin())
+			if (yMax > 0) {
+				if (first.x() < xMin)
 					start = edge;
-				else if (first.x() > plot->xMax())
-					start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+				else if (first.x() > plot->xRange().max())
+					start = cSystem->mapLogicalToScene(QPointF(xMax, yMax));
 				else
-					start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMax()));
+					start = cSystem->mapLogicalToScene(QPointF(first.x(), yMax));
 			} else {
-				if (first.x() < plot->xMin())
+				if (first.x() < xMin)
 					start = edge;
-				else if (first.x() > plot->xMax())
-					start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+				else if (first.x() > xMax)
+					start = cSystem->mapLogicalToScene(QPointF(xMax, yMin));
 				else
-					start = cSystem->mapLogicalToScene(QPointF(first.x(), plot->yMin()));
+					start = cSystem->mapLogicalToScene(QPointF(first.x(), yMin));
 			}
 		}
 
 		//end point
 		if (nsl_math_essentially_equal(end.y(), edge.y())) {
-			if (plot->yMax() > 0) {
-				if (last.x() < plot->xMin())
+			if (yMax > 0) {
+				if (last.x() < xMin)
 					end = edge;
-				else if (last.x() > plot->xMax())
-					end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+				else if (last.x() > xMax)
+					end = cSystem->mapLogicalToScene(QPointF(xMax, yMax));
 				else
-					end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMax()));
+					end = cSystem->mapLogicalToScene(QPointF(last.x(), yMax));
 			} else {
-				if (last.x() < plot->xMin())
+				if (last.x() < xMin)
 					end = edge;
-				else if (last.x() > plot->xMax())
-					end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+				else if (last.x() > xMax)
+					end = cSystem->mapLogicalToScene(QPointF(xMax, yMin));
 				else
-					end = cSystem->mapLogicalToScene(QPointF(last.x(), plot->yMin()));
+					end = cSystem->mapLogicalToScene(QPointF(last.x(), yMin));
 			}
 		}
 
-		yEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin() > 0 ? plot->yMin() : 0)).y();
+		yEnd = cSystem->mapLogicalToScene(QPointF(xMin, yMin > 0 ? yMin : 0)).y();
 	} else if (fillingPosition == XYCurve::FillingPosition::Left) {
-		edge = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin()));
+		edge = cSystem->mapLogicalToScene(QPointF(xMax, yMin));
 
 		//start point
 		if (nsl_math_essentially_equal(start.x(), edge.x())) {
-			if (first.y() < plot->yMin())
+			if (first.y() < yMin)
 				start = edge;
-			else if (first.y() > plot->yMax())
-				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else if (first.y() > yMax)
+				start = cSystem->mapLogicalToScene(QPointF(xMax, yMax));
 			else
-				start = cSystem->mapLogicalToScene(QPointF(plot->xMax(), first.y()));
+				start = cSystem->mapLogicalToScene(QPointF(xMax, first.y()));
 		}
 
 		//end point
 		if (nsl_math_essentially_equal(end.x(), edge.x())) {
-			if (last.y() < plot->yMin())
+			if (last.y() < yMin)
 				end = edge;
-			else if (last.y() > plot->yMax())
-				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMax()));
+			else if (last.y() > yMax)
+				end = cSystem->mapLogicalToScene(QPointF(xMax, yMax));
 			else
-				end = cSystem->mapLogicalToScene(QPointF(plot->xMax(), last.y()));
+				end = cSystem->mapLogicalToScene(QPointF(xMax, last.y()));
 		}
 
 		//coordinate at which to close all polygons
-		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin())).x();
+		xEnd = cSystem->mapLogicalToScene(QPointF(xMin, yMin)).x();
 	} else { //FillingRight
-		edge = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMin()));
+		edge = cSystem->mapLogicalToScene(QPointF(xMin, yMin));
 
 		//start point
 		if (nsl_math_essentially_equal(start.x(), edge.x())) {
-			if (first.y() < plot->yMin())
+			if (first.y() < yMin)
 				start = edge;
-			else if (first.y() > plot->yMax())
-				start = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+			else if (first.y() > yMax)
+				start = cSystem->mapLogicalToScene(QPointF(xMin, yMax));
 			else
-				start = cSystem->mapLogicalToScene(QPointF(plot->xMin(), first.y()));
+				start = cSystem->mapLogicalToScene(QPointF(xMin, first.y()));
 		}
 
 		//end point
 		if (nsl_math_essentially_equal(end.x(), edge.x())) {
-			if (last.y() < plot->yMin())
+			if (last.y() < yMin)
 				end = edge;
-			else if (last.y() > plot->yMax())
-				end = cSystem->mapLogicalToScene(QPointF(plot->xMin(), plot->yMax()));
+			else if (last.y() > yMax)
+				end = cSystem->mapLogicalToScene(QPointF(xMin, yMax));
 			else
-				end = cSystem->mapLogicalToScene(QPointF(plot->xMin(), last.y()));
+				end = cSystem->mapLogicalToScene(QPointF(xMin, last.y()));
 		}
 
 		//coordinate at which to close all polygons
-		xEnd = cSystem->mapLogicalToScene(QPointF(plot->xMax(), plot->yMin())).x();
+		xEnd = cSystem->mapLogicalToScene(QPointF(xMax, yMin)).x();
 	}
 
 	if (start != fillLines.at(0).p1())

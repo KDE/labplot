@@ -410,10 +410,10 @@ void CartesianPlotDock::updateLocale() {
 	Lock lock(m_initializing);
 	ui.leRangeFirst->setText(numberLocale.toString(m_plot->rangeFirstValues()));
 	ui.leRangeLast->setText(numberLocale.toString(m_plot->rangeLastValues()));
-	ui.leXMin->setText(numberLocale.toString(m_plot->xMin()));
-	ui.leXMax->setText(numberLocale.toString(m_plot->xMax()));
-	ui.leYMin->setText(numberLocale.toString(m_plot->yMin()));
-	ui.leYMax->setText(numberLocale.toString(m_plot->yMax()));
+	ui.leXMin->setText(numberLocale.toString(m_plot->xRange().min()));
+	ui.leXMax->setText(numberLocale.toString(m_plot->xRange().max()));
+	ui.leYMin->setText(numberLocale.toString(m_plot->yRange().min()));
+	ui.leYMax->setText(numberLocale.toString(m_plot->yRange().max()));
 
 	//update the title label
 	labelWidget->updateLocale();
@@ -1715,22 +1715,22 @@ void CartesianPlotDock::load() {
 	ui.leRangeLast->setText( numberLocale.toString(m_plot->rangeLastValues()) );
 
 	ui.chkAutoScaleX->setChecked(m_plot->autoScaleX());
-	ui.leXMin->setText(numberLocale.toString(m_plot->xMin()));
-	ui.leXMax->setText(numberLocale.toString(m_plot->xMax()));
+	ui.leXMin->setText(numberLocale.toString(m_plot->xRange().min()));
+	ui.leXMax->setText(numberLocale.toString(m_plot->xRange().max()));
 	ui.dateTimeEditXMin->setDisplayFormat(m_plot->xRangeDateTimeFormat());
 	ui.dateTimeEditXMax->setDisplayFormat(m_plot->xRangeDateTimeFormat());
-	ui.dateTimeEditXMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xMin()));
-	ui.dateTimeEditXMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xMax()));
+	ui.dateTimeEditXMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange().min()));
+	ui.dateTimeEditXMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange().max()));
 	ui.cbXScaling->setCurrentIndex( (int) m_plot->xScale() );
 	ui.cbXRangeFormat->setCurrentIndex( (int) m_plot->xRangeFormat() );
 
 	ui.chkAutoScaleY->setChecked(m_plot->autoScaleY());
-	ui.leYMin->setText(numberLocale.toString(m_plot->yMin()));
-	ui.leYMax->setText(numberLocale.toString(m_plot->yMax()));
+	ui.leYMin->setText(numberLocale.toString(m_plot->yRange().min()));
+	ui.leYMax->setText(numberLocale.toString(m_plot->yRange().max()));
 	ui.dateTimeEditYMin->setDisplayFormat(m_plot->yRangeDateTimeFormat());
 	ui.dateTimeEditYMax->setDisplayFormat(m_plot->yRangeDateTimeFormat());
-	ui.dateTimeEditYMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yMin()));
-	ui.dateTimeEditYMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yMax()));
+	ui.dateTimeEditYMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yRange().min()));
+	ui.dateTimeEditYMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yRange().max()));
 	ui.cbYScaling->setCurrentIndex( (int) m_plot->yScale() );
 	ui.cbYRangeFormat->setCurrentIndex( (int) m_plot->yRangeFormat() );
 

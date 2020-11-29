@@ -457,9 +457,9 @@ void Axis::setAutoScale(bool autoScale) {
 				return;
 
 			if (d->orientation == Axis::Orientation::Horizontal)
-				d->range = Range<double>(plot->xMin(), plot->xMax());
+				d->range = plot->xRange();
 			else
-				d->range = Range<double>(plot->yMin(), plot->yMax());
+				d->range =  plot->yRange();
 
 			retransform();
 			emit rangeChanged(d->range);
@@ -1010,21 +1010,21 @@ void AxisPrivate::retransformLine() {
 
 	if (orientation == Axis::Orientation::Horizontal) {
 		if (position == Axis::Position::Top)
-			offset = plot->yMax();
+			offset = plot->yRange().max();
 		else if (position == Axis::Position::Bottom)
-			offset = plot->yMin();
+			offset = plot->yRange().min();
 		else if (position == Axis::Position::Centered)
-			offset = (plot->yMin() + plot->yMax())/2.;
+			offset = plot->yRange().center();
 
 		startPoint = QPointF(range.min(), offset);
 		endPoint = QPointF(range.max(), offset);
 	} else { // vertical
 		if (position == Axis::Position::Left)
-			offset = plot->xMin();
+			offset = plot->xRange().min();
 		else if (position == Axis::Position::Right)
-			offset = plot->xMax();
+			offset = plot->xRange().max();
 		else if (position == Axis::Position::Centered)
-			offset = (plot->xMin() + plot->xMax())/2.;
+			offset = plot->xRange().center();
 
 		startPoint = QPointF(offset, range.min());
 		endPoint = QPointF(offset, range.max());
@@ -1267,8 +1267,8 @@ void AxisPrivate::retransformTicks() {
 	qreal nextMajorTickPos = 0.0;
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
-	const double middleX = (plot->xMin() + plot->xMax())/2.;
-	const double middleY = (plot->yMin() + plot->yMax())/2.;
+	const double middleX = plot->xRange().center();
+	const double middleY = plot->yRange().center();
 	bool valid;
 
 	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
@@ -1639,8 +1639,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	double width = 0;
 	double height = fm.ascent();
 	QPointF pos;
-	const double middleX = (plot->xMin() + plot->xMax())/2.;
-	const double middleY = (plot->yMin() + plot->yMax())/2.;
+	const double middleX = plot->xRange().center();
+	const double middleY = plot->yRange().center();
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
 
@@ -1648,6 +1648,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
+	// TODO: M_PI/180. factor
 	const double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
@@ -1803,11 +1804,11 @@ void AxisPrivate::retransformMajorGrid() {
 	//since we don't want to paint any grid lines at the plot boundaries
 	bool skipLowestTick, skipUpperTick;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xMin());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xMax());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xRange().min());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xRange().max());
 	} else {
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), plot->yMin());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), plot->yMax());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), plot->yRange().min());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), plot->yRange().max());
 	}
 
 	int start, end;	// TODO: hides Axis::start, Axis::end!
@@ -1832,21 +1833,19 @@ void AxisPrivate::retransformMajorGrid() {
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		double yMin = plot->yMin();
-		double yMax = plot->yMax();
+		const Range<double> yRange{plot->yRange()};
 
 		for (int i = start; i < end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
-			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
+			lines.append( QLineF(point.x(), yRange.min(), point.x(), yRange.max()) );
 		}
 	} else { //vertical axis
-		double xMin = plot->xMin();
-		double xMax = plot->xMax();
+		const Range<double> xRange{plot->xRange()};
 
 		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
 		for (int i = start; i < end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
-			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
+			lines.append( QLineF(xRange.min(), point.y(), xRange.max(), point.y()) );
 		}
 	}
 
@@ -1876,17 +1875,15 @@ void AxisPrivate::retransformMinorGrid() {
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		double yMin = plot->yMin();
-		double yMax = plot->yMax();
+		const Range<double> yRange{plot->yRange()};
 
 		for (const auto point : logicalMinorTickPoints)
-			lines.append( QLineF(point.x(), yMin, point.x(), yMax) );
+			lines.append( QLineF(point.x(), yRange.min(), point.x(), yRange.max()) );
 	} else { //vertical axis
-		double xMin = plot->xMin();
-		double xMax = plot->xMax();
+		const Range<double> xRange{plot->xRange()};
 
 		for (const auto point: logicalMinorTickPoints)
-			lines.append( QLineF(xMin, point.y(), xMax, point.y()) );
+			lines.append( QLineF(xRange.min(), point.y(), xRange.max(), point.y()) );
 	}
 
 	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);

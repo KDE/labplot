@@ -33,6 +33,7 @@
 
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/lib/Range.h"
 
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
@@ -74,6 +75,7 @@ public:
 		bool isValid() const {
 			return (!std::isnan(start) && !std::isnan(end));
 		}
+		//TODO: Range
 		double start;
 		double end;
 		double position;
@@ -137,10 +139,13 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
-	BASIC_D_ACCESSOR_DECL(double, xMin, XMin)
-	BASIC_D_ACCESSOR_DECL(double, xMax, XMax)
-	BASIC_D_ACCESSOR_DECL(double, yMin, YMin)
-	BASIC_D_ACCESSOR_DECL(double, yMax, YMax)
+	BASIC_D_ACCESSOR_DECL(Range<double>, xRange, XRange)
+	BASIC_D_ACCESSOR_DECL(Range<double>, yRange, YRange)
+	// convenience methods
+	void setXMin(const double value);
+	void setXMax(const double value);
+	void setYMin(const double value);
+	void setYMax(const double value);
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
@@ -315,12 +320,14 @@ signals:
 	void rangeFirstValuesChanged(int);
 	void rectChanged(QRectF&);
 	void xAutoScaleChanged(bool);
+	void yAutoScaleChanged(bool);
+	void xRangeChanged(Range<double>);
+	void yRangeChanged(Range<double>);
 	void xMinChanged(double);
 	void xMaxChanged(double);
-	void xScaleChanged(CartesianPlot::Scale);
-	void yAutoScaleChanged(bool);
 	void yMinChanged(double);
 	void yMaxChanged(double);
+	void xScaleChanged(CartesianPlot::Scale);
 	void yScaleChanged(CartesianPlot::Scale);
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);

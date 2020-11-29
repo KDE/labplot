@@ -73,8 +73,8 @@ void CustomPoint::init() {
 	KConfig config;
 	KConfigGroup group;
 	group = config.group("CustomPoint");
-	d->position.setX( group.readEntry("PositionXValue", d->plot->xMin() + (d->plot->xMax()-d->plot->xMin())/2) );
-	d->position.setY( group.readEntry("PositionYValue", d->plot->yMin() + (d->plot->yMax()-d->plot->yMin())/2) );
+	d->position.setX( group.readEntry("PositionXValue", d->plot->xRange().center()) );
+	d->position.setY( group.readEntry("PositionYValue", d->plot->yRange().center()) );
 
 	d->symbolStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::Circle);
 	d->symbolSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));

@@ -75,13 +75,15 @@ void InfoElementDialog::updateSettings() {
 	// TODO: set position in the mid of the screen as default
 	CartesianCoordinateSystem* cSystem = dynamic_cast<CartesianCoordinateSystem*>(m_plot->coordinateSystem());
 	if (cSystem) {
-		double xMinScene = cSystem->mapLogicalToScene(QPointF(m_plot->xMin(), m_plot->yMin())).x();
-		double xMaxScene = cSystem->mapLogicalToScene(QPointF(m_plot->xMax(), m_plot->yMin())).x();
+		//TODO: Range?
+		double xMinScene = cSystem->mapLogicalToScene(QPointF(m_plot->xRange().min(), m_plot->yRange().min())).x();
+		//TODO: check yMin -> yMax?
+		double xMaxScene = cSystem->mapLogicalToScene(QPointF(m_plot->xRange().max(), m_plot->yRange().min())).x();
 
-		double midLogical = cSystem->mapSceneToLogical(QPointF(xMinScene + (xMaxScene - xMinScene)/2, 0)).x();
+		double midLogical = cSystem->mapSceneToLogical(QPointF((xMinScene + xMaxScene)/2, 0)).x();
 
-		ui->sb_Pos->setMinimum(m_plot->xMin());
-		ui->sb_Pos->setMaximum(m_plot->xMax());
+		ui->sb_Pos->setMinimum(m_plot->xRange().min());
+		ui->sb_Pos->setMaximum(m_plot->xRange().max());
 		ui->sb_Pos->setValue(midLogical);
 	} else
 		ui->sb_Pos->setValue(0);
