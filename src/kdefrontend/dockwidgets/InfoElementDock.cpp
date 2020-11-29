@@ -58,6 +58,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 
 	m_elements = list;
 	m_element = list.first();
+	m_aspect = m_element;
 	m_sameParent = sameParent;
 
 	ui->lwCurves->clear();
@@ -118,7 +119,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 	}
 
 	if (m_element->isTextLabel()) {
-        elementLabelBorderShapeChanged();
+		elementLabelBorderShapeChanged();
 		ui->cb_gluePoint->setCurrentIndex(m_element->gluePointIndex()+1);
 	}
 
@@ -154,9 +155,8 @@ void InfoElementDock::initConnections() {
 			 this, &InfoElementDock::elementLabelBorderShapeChanged );
 	connect (m_element, &InfoElement::curveRemoved,
 			 this, &InfoElementDock::elementCurveRemoved);
-    connect (m_element, &InfoElement::positionChanged,
-             this, &InfoElementDock::elementPositionChanged);
-
+	connect (m_element, &InfoElement::positionChanged,
+				this, &InfoElementDock::elementPositionChanged);
 }
 
 //*************************************************************
@@ -240,11 +240,11 @@ void InfoElementDock::curveChanged() {
 }
 
 void InfoElementDock::positionChanged(double pos) {
-    if (m_initializing)
-        return;
+	if (m_initializing)
+		return;
 
-    for (auto* infoElement: m_elements)
-        infoElement->setPosition(pos);
+	for (auto* infoElement: m_elements)
+		infoElement->setPosition(pos);
 }
 
 void InfoElementDock::curveSelectionChanged(int state) {
@@ -341,14 +341,14 @@ void InfoElementDock::elementConnectionLineCurveChanged(const QString name) {
 void InfoElementDock::elementLabelBorderShapeChanged() {
 	const Lock lock(m_initializing);
 	ui->cb_gluePoint->clear();
-	ui->cb_gluePoint->addItem("Automatic");
+	ui->cb_gluePoint->addItem(i18n("Auto"));
 	for (int i=0; i < m_element->gluePointsCount(); i++)
 		ui->cb_gluePoint->addItem(m_element->gluePoint(i).name);
 }
 
 void InfoElementDock::elementPositionChanged(double pos) {
-    const Lock lock(m_initializing);
-    ui->sbPosition->setValue(pos);
+	const Lock lock(m_initializing);
+	ui->sbPosition->setValue(pos);
 }
 
 void InfoElementDock::elementCurveRemoved(QString name) {

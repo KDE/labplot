@@ -77,10 +77,10 @@ private slots:
     void elementPositionChanged(double pos);
 
 private:
-    Ui::InfoElementDock* ui;
+	Ui::InfoElementDock* ui;
 	InfoElement* m_element{nullptr};
 	QList<InfoElement*> m_elements;
-	bool m_sameParent;
+	bool m_sameParent{false};
 };
 
 #endif // INFOELEMENTDOCK_H

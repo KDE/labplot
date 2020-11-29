@@ -85,8 +85,8 @@ public:
 	QMenu* createContextMenu() override;
 	CartesianPlot* plot();
 	bool isTextLabel() const;
-    double setMarkerpointPosition(double x);
-    int currentIndex(double new_x, double* found_x=nullptr);
+	double setMarkerpointPosition(double x);
+	int currentIndex(double new_x, double* found_x=nullptr);
 
 	QGraphicsItem* graphicsItem() const override;
 	void setPrinting(bool on) override;
@@ -132,12 +132,12 @@ private:
 	bool m_suppressChildRemoved {false};
 	bool m_suppressChildPositionChanged {false};
 	bool m_setTextLabelText{false};
-    /*!
-     * This variable is set when a curve is moved in the order, because there
-     * the curve is removed and readded and we would like to ignore this remove and
-     * add. Because of single thread it makes no problems.
-     */
-    bool m_curveGetsMoved{false};
+	/*!
+		* This variable is set when a curve is moved in the order, because there
+		* the curve is removed and readded and we would like to ignore this remove and
+		* add. Because of single thread it makes no problems.
+		*/
+	bool m_curveGetsMoved{false};
 
 	// Actions
 	QAction* visibilityAction;
@@ -152,7 +152,7 @@ signals:
 	void visibleChanged(const bool);
 	void gluePointIndexChanged(const int);
 	void connectionLineCurveNameChanged(const QString&);
-    void positionChanged(const double);
+	void positionChanged(const double);
 	void labelBorderShapeChangedSignal();
 	void curveRemoved(const QString&);
 };

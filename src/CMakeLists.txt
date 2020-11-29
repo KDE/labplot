@@ -52,7 +52,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/AxisDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CursorDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/ImageDock.cpp
-        ${KDEFRONTEND_DIR}/dockwidgets/InfoElementDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/InfoElementDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/NoteDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/CartesianPlotLegendDock.cpp
@@ -90,7 +90,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
-        ${KDEFRONTEND_DIR}/worksheet/InfoElementDialog.cpp
+	${KDEFRONTEND_DIR}/worksheet/InfoElementDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/DynamicPresenterWidget.cpp
 	${KDEFRONTEND_DIR}/worksheet/PresenterWidget.cpp
@@ -154,7 +154,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
-        ${KDEFRONTEND_DIR}/ui/dockwidgets/infoelementdock.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/infoelementdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cartesianplotlegenddock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/histogramdock.ui
@@ -192,7 +192,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/spreadsheet/rescalewidget.ui
 	${KDEFRONTEND_DIR}/ui/spreadsheet/sortdialogwidget.ui
 	${KDEFRONTEND_DIR}/ui/worksheet/exportworksheetwidget.ui
-        ${KDEFRONTEND_DIR}/ui/worksheet/infoelementdialog.ui
+	${KDEFRONTEND_DIR}/ui/worksheet/infoelementdialog.ui
 	${KDEFRONTEND_DIR}/ui/datapickerimagewidget.ui
 	${KDEFRONTEND_DIR}/ui/datapickercurvewidget.ui
 	${KDEFRONTEND_DIR}/ui/fitsheadereditwidget.ui
@@ -288,7 +288,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/Image.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
-        ${BACKEND_DIR}/worksheet/InfoElement.cpp
+	${BACKEND_DIR}/worksheet/InfoElement.cpp
 	${BACKEND_DIR}/worksheet/Worksheet.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementContainer.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElementGroup.cpp
