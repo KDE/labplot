@@ -39,7 +39,7 @@ extern "C" {
 
 //! Auxiliary class for a data range 
 /**
- *	This class represents a data range [left, right] with right >= left.
+ *	This class represents a data range [left, right] where left can be > right
  *
  *	Only types supporting comparison are supported
  */
@@ -60,11 +60,11 @@ public:
 	T max() const { return m_max; }
 	T& min() { return m_min; }
 	T& max() { return m_max; }
-	void setMin(T min) { m_min = min; }	// no check (use first)
-	void setMax(T max) { m_max = std::max(m_min, max); }
+	void setMin(T min) { m_min = min; }
+	void setMax(T max) { m_max = max; }
 	void setRange(T min, T max) {
 		m_min = min;
-		m_max = std::max(min, max);
+		m_max = max;
 	}
 	T size() const { return m_max - m_min; }
 	T length() const { return qAbs(m_max - m_min); }
