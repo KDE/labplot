@@ -349,11 +349,13 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::xAutoScaleChanged, this, &CartesianPlotDock::plotXAutoScaleChanged);
 	connect(m_plot, &CartesianPlot::xMinChanged, this, &CartesianPlotDock::plotXMinChanged);
 	connect(m_plot, &CartesianPlot::xMaxChanged, this, &CartesianPlotDock::plotXMaxChanged);
+	connect(m_plot, &CartesianPlot::xRangeChanged, this, &CartesianPlotDock::plotXRangeChanged);
 	connect(m_plot, &CartesianPlot::xScaleChanged, this, &CartesianPlotDock::plotXScaleChanged);
 	connect(m_plot, &CartesianPlot::xRangeFormatChanged, this, &CartesianPlotDock::plotXRangeFormatChanged);
 	connect(m_plot, &CartesianPlot::yAutoScaleChanged, this, &CartesianPlotDock::plotYAutoScaleChanged);
 	connect(m_plot, &CartesianPlot::yMinChanged, this, &CartesianPlotDock::plotYMinChanged);
 	connect(m_plot, &CartesianPlot::yMaxChanged, this, &CartesianPlotDock::plotYMaxChanged);
+	connect(m_plot, &CartesianPlot::yRangeChanged, this, &CartesianPlotDock::plotYRangeChanged);
 	connect(m_plot, &CartesianPlot::yScaleChanged, this, &CartesianPlotDock::plotYScaleChanged);
 	connect(m_plot, &CartesianPlot::yRangeFormatChanged, this, &CartesianPlotDock::plotYRangeFormatChanged);
 	connect(m_plot, &CartesianPlot::visibleChanged, this, &CartesianPlotDock::plotVisibleChanged);
@@ -637,6 +639,7 @@ void CartesianPlotDock::autoScaleXChanged(int state) {
 }
 
 void CartesianPlotDock::xMinChanged(const QString& value) {
+	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
 
@@ -651,6 +654,7 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 }
 
 void CartesianPlotDock::xMaxChanged(const QString& value) {
+	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
 
@@ -662,6 +666,15 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 		for (auto* plot : m_plotList)
 			plot->setXMax(xMax);
 	}
+}
+
+void CartesianPlotDock::xRangeChanged(const Range<double>& range) {
+	DEBUG(Q_FUNC_INFO)
+	if (m_initializing)
+		return;
+
+	for (auto* plot : m_plotList)
+			plot->setXRange(range);
 }
 
 void CartesianPlotDock::xMinDateTimeChanged(const QDateTime& dateTime) {
@@ -756,6 +769,15 @@ void CartesianPlotDock::yMaxChanged(const QString& value) {
 		for (auto* plot : m_plotList)
 			plot->setYMax(yMax);
 	}
+}
+
+void CartesianPlotDock::yRangeChanged(const Range<double>& range) {
+	DEBUG(Q_FUNC_INFO)
+	if (m_initializing)
+		return;
+
+	for (auto* plot : m_plotList)
+			plot->setYRange(range);
 }
 
 void CartesianPlotDock::yMinDateTimeChanged(const QDateTime& dateTime) {
@@ -1481,6 +1503,17 @@ void CartesianPlotDock::plotXMaxChanged(double value) {
 	ui.dateTimeEditXMax->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 }
 
+void CartesianPlotDock::plotXRangeChanged(Range<double> range) {
+	DEBUG(Q_FUNC_INFO)
+        if (m_initializing)
+                return;
+
+	const Lock lock(m_initializing);
+	SET_NUMBER_LOCALE
+	ui.leXMin->setText(numberLocale.toString(range.min()));
+	ui.leXMax->setText(numberLocale.toString(range.max()));
+}
+
 void CartesianPlotDock::plotXScaleChanged(CartesianPlot::Scale scale) {
 	m_initializing = true;
 	ui.cbXScaling->setCurrentIndex(static_cast<int>(scale));
@@ -1515,6 +1548,17 @@ void CartesianPlotDock::plotYMaxChanged(double value) {
 	SET_NUMBER_LOCALE
 	ui.leYMax->setText(numberLocale.toString(value));
 	ui.dateTimeEditYMax->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
+}
+
+void CartesianPlotDock::plotYRangeChanged(Range<double> range) {
+	DEBUG(Q_FUNC_INFO)
+        if (m_initializing)
+                return;
+
+	const Lock lock(m_initializing);
+	SET_NUMBER_LOCALE
+	ui.leYMin->setText(numberLocale.toString(range.min()));
+	ui.leYMax->setText(numberLocale.toString(range.max()));
 }
 
 void CartesianPlotDock::plotYScaleChanged(CartesianPlot::Scale scale) {

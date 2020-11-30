@@ -1010,20 +1010,23 @@ void CartesianPlot::setAutoScaleX(bool autoScaleX) {
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRange, Range<double>, xRange, retransformScales)
 void CartesianPlot::setXRange(Range<double> range) {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
 	if (range.finite() && range != d->xRange) {
 		d->curvesYMinMaxIsDirty = true;
-		exec(new CartesianPlotSetXRangeCmd(d, xRange(), ki18n("%1: set x range")));
+		exec(new CartesianPlotSetXRangeCmd(d, range, ki18n("%1: set x range")));
 		if (d->autoScaleY)
 			scaleAutoY();
 	}
 }
 void CartesianPlot::setXMin(double value) {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
 	Range<double> range{value, d->xRange.max()};
 	setXRange(range);
 }
 void CartesianPlot::setXMax(double value) {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
 	Range<double> range{d->xRange.min(), value};
 	setXRange(range);
@@ -1097,7 +1100,7 @@ void CartesianPlot::setYRange(Range<double> range) {
 	Q_D(CartesianPlot);
 	if (range.finite() && range != d->yRange) {
 		d->curvesXMinMaxIsDirty = true;
-		exec(new CartesianPlotSetYRangeCmd(d, yRange(), ki18n("%1: set y range")));
+		exec(new CartesianPlotSetYRangeCmd(d, range, ki18n("%1: set y range")));
 		if (d->autoScaleX)
 			scaleAutoX();
 	}
@@ -2947,7 +2950,7 @@ void CartesianPlotPrivate::checkXRange() {
 	if (xRange.min() <= 0.0) {
 		(min < xRange.max() * min) ? xRange.min() = min : xRange.min() = xRange.max() * min;
 		emit q->xMinChanged(xRange.min());
-	} else if (xRange.max() <= 0.0) {	// should not happen (max >= min)
+	} else if (xRange.max() <= 0.0) {
 		(-min > xRange.min() * min) ? xRange.max() = -min : xRange.max() = xRange.min() * min;
 		emit q->xMaxChanged(xRange.max());
 	}

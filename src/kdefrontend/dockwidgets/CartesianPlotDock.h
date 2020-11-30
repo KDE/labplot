@@ -78,16 +78,20 @@ private slots:
 	void autoScaleXChanged(int);
 	void xMinChanged(const QString&);
 	void xMaxChanged(const QString&);
+	void xRangeChanged(const Range<double>&);
 	void xMinDateTimeChanged(const QDateTime&);
 	void xMaxDateTimeChanged(const QDateTime&);
+	//void xRangeDateTimeChanged(const Range<quint64>&);
 	void xRangeFormatChanged(int);
 	void xScaleChanged(int);
 
 	void autoScaleYChanged(int);
 	void yMinChanged(const QString&);
 	void yMaxChanged(const QString&);
+	void yRangeChanged(const Range<double>&);
 	void yMinDateTimeChanged(const QDateTime&);
 	void yMaxDateTimeChanged(const QDateTime&);
+	//void yRangeDateTimeChanged(const Range<quint64>&);
 	void yRangeFormatChanged(int);
 	void yScaleChanged(int);
 
@@ -147,12 +151,14 @@ private slots:
 	void plotXAutoScaleChanged(bool);
 	void plotXMinChanged(double);
 	void plotXMaxChanged(double);
+	void plotXRangeChanged(Range<double>);
 	void plotXRangeFormatChanged(CartesianPlot::RangeFormat);
 	void plotXScaleChanged(CartesianPlot::Scale);
 
 	void plotYAutoScaleChanged(bool);
 	void plotYMinChanged(double);
 	void plotYMaxChanged(double);
+	void plotYRangeChanged(Range<double>);
 	void plotYRangeFormatChanged(CartesianPlot::RangeFormat);
 	void plotYScaleChanged(CartesianPlot::Scale);
 
