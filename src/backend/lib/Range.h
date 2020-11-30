@@ -39,7 +39,7 @@ extern "C" {
 
 //! Auxiliary class for a data range 
 /**
- *	This class represents a data range [left, right] where left can be > right
+ *	This class represents a data range [left, right] where left can be >= right
  *
  *	Only types supporting comparison are supported
  */
@@ -74,7 +74,7 @@ public:
 	bool isZero() const { return ( m_max == m_min ); }
 	bool finite() const { return ( qIsFinite(m_min) && qIsFinite(m_max) ); }
 	bool inside(const Range<T>& other) const { return ( m_min <= other.min() && m_max >= other.max() ); }
-	bool inside(T value) const { return ( m_min <= value && m_max >= value ); }
+	bool inside(T value) const { return ( qMin(m_min, m_max) <= value && qMax(m_max, m_max) >= value ); }
 	void translate(T offset) { m_min += offset; m_max += offset; }
 	void extend(T value) { m_min -= value; m_max += value; }
 	Range<T>& operator=(const Range<T>& other) = default;
