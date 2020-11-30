@@ -40,7 +40,7 @@ extern "C" {
 
 //! Auxiliary class for a data range 
 /**
- *	This class represents a data range [left, right] with right >= left.
+ *	This class represents a data range [left, right] where left can be >= right
  *
  *	Only types supporting comparison are supported
  */
@@ -62,10 +62,10 @@ public:
 	T& min() { return m_min; }
 	T& max() { return m_max; }
 	void setMin(T min) { m_min = min; }	// no check (use first)
-	void setMax(T max) { m_max = std::max(m_min, max); }
+	void setMax(T max) { m_max = max; }
 	void setRange(T min, T max) {
 		m_min = min;
-		m_max = std::max(min, max);
+		m_max = max;
 	}
 	T size() const { return m_max - m_min; }
 	T length() const { return fabs(m_max - m_min); }
@@ -73,7 +73,7 @@ public:
 	T stepSize(const int steps) const { return (steps > 1) ? size()/(T)(steps - 1) : 0; }
 	bool isZero() const { return (m_max == m_min); }
 	bool inside(const Range<T>& other) const { return ( m_min <= other.min() && m_max >= other.max() ); }
-	bool inside(T value) const { return ( m_min <= value && m_max >= value ); }
+	bool inside(T value) const { return ( qMin(m_min, m_max) <= value && qMax(m_min, m_max) >= value ); }
 	void translate(T offset) { m_min += offset; m_max += offset; }
 	bool operator==(const Range<T>& other) const { return ( m_min == other.min() && m_max == other.max() ); }
 	bool operator!=(const Range<T>& other) const { return ( m_min != other.min() || m_max != other.max() ); }
