@@ -55,7 +55,7 @@
  */
 
 /*!
-  Constructur of the class.
+  Constructor of the class.
   Creates a view for the DatapickerImage \c image and initializes the internal model.
 */
 DatapickerImageView::DatapickerImageView(DatapickerImage* image) : QGraphicsView(),

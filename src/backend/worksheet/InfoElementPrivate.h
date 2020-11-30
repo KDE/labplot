@@ -70,6 +70,7 @@ public:
 	int m_index{-1}; // index of the actual position
 	// connect to this curve
 	QString connectionLineCurveName;
+    double position;
 
 	QColor connectionLineColor{QColor(Qt::black)};
 	double connectionLineWidth{5}; // drawing linewidth

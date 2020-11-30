@@ -75,7 +75,7 @@
  */
 
 /*!
-  Constructur of the class.
+  Constructor of the class.
   Creates a view for the Worksheet \c worksheet and initializes the internal model.
 */
 WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(), m_worksheet(worksheet) {
@@ -214,7 +214,7 @@ void WorksheetView::initActions() {
 	//TODO: the icons labplot-editvlayout and labplot-edithlayout are confusing for the user.
 	//the orientation is visualized as a horizontal or vertical line on the icon, but the user
 	//percieves the two objects (resembles plots on the worksheet) separated by this line much stronger than the line itself.
-	//with this, the two objects separated by a vertical line are percieved to be layed out in a _horizontal_ order and the
+	//with this, the two objects separated by a vertical line are perceived to be layed out in a _horizontal_ order and the
 	//same for the vertical line. Because of this we change the icons here. We can rename the icons later in the breeze icon set.
 	verticalLayoutAction = new QAction(QIcon::fromTheme("labplot-edithlayout"), i18n("Vertical Layout"), layoutActionGroup);
 	verticalLayoutAction->setCheckable(true);
@@ -2052,7 +2052,7 @@ void WorksheetView::presenterMode() {
 	h *= QApplication::desktop()->physicalDpiY()/25.4;
 
 	QRectF targetRect(0, 0, w, h);
-	const QRectF& screenSize = QGuiApplication::primaryScreen()->availableGeometry();;
+	const QRectF& screenSize = QGuiApplication::primaryScreen()->availableGeometry();
 
 	if (targetRect.width() > screenSize.width() || ((targetRect.height() > screenSize.height()))) {
 		const double ratio = qMin(screenSize.width() / targetRect.width(), screenSize.height() / targetRect.height());

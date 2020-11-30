@@ -4,7 +4,7 @@
 	Description          : Marker which can highlight points of curves and
 						   show their values
 	--------------------------------------------------------------------
-	Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+	Copyright            : (C) 2020 Martin Marmsoler (martin.marmsoler@gmail.com)
  ***************************************************************************/
 
 /***************************************************************************
@@ -47,19 +47,19 @@
 #include <QDateTime>
 
 
-InfoElement::InfoElement(const QString &name, CartesianPlot *plot):
+InfoElement::InfoElement(const QString& name, CartesianPlot* plot):
 	WorksheetElement(name, AspectType::InfoElement),
-	d_ptr(new InfoElementPrivate(this,plot)) {
+	d_ptr(new InfoElementPrivate(this, plot)) {
 	Q_D(InfoElement);
 	init();
 	setVisible(false);
 	d->retransform();
 }
 
-InfoElement::InfoElement(const QString &name, CartesianPlot *plot, const XYCurve *curve, double pos):
+InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve* curve, double pos):
 	WorksheetElement(name, AspectType::InfoElement),
 	// must be at least, because otherwise label ist not a nullptr
-	d_ptr(new InfoElementPrivate(this,plot,curve)) {
+	d_ptr(new InfoElementPrivate(this, plot, curve)) {
 	Q_D(InfoElement);
 
 	init();
@@ -67,6 +67,7 @@ InfoElement::InfoElement(const QString &name, CartesianPlot *plot, const XYCurve
 	m_suppressChildPositionChanged = true;
 
 	if (curve) {
+        d->connectionLineCurveName = curve->name();
 		CustomPoint* custompoint = new CustomPoint(plot, "Markerpoint");
 		addChild(custompoint);
 		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
@@ -77,6 +78,7 @@ InfoElement::InfoElement(const QString &name, CartesianPlot *plot, const XYCurve
 		double y = curve->y(pos,xpos,valueFound);
 		if (valueFound) {
 			d->xPos = xpos;
+            d->position = xpos;
 			d->m_index = curve->xColumn()->indexForValue(xpos);
 			markerpoints.last().x = xpos;
 			markerpoints.last().y = y;
@@ -84,13 +86,13 @@ InfoElement::InfoElement(const QString &name, CartesianPlot *plot, const XYCurve
 			DEBUG("Value found");
 		} else {
 			d->xPos = 0;
+            d->position = 0;
 			markerpoints.last().x = 0;
 			markerpoints.last().y = 0;
 			custompoint->setPosition(d->cSystem->mapSceneToLogical(QPointF(0,0)));
 			DEBUG("Value not found");
 		}
 
-		// C++14 enabled:
 		connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
 		custompoint->setVisible(curve->isVisible());
 
@@ -107,11 +109,13 @@ InfoElement::InfoElement(const QString &name, CartesianPlot *plot, const XYCurve
 		textString.append(QString(QString(markerpoints[0].curve->name()+":")));
 		textString.append(QString::number(markerpoints[0].y));
 		text.text = textString;
+
 		// TODO: Find better solution than using textedit
 		QTextEdit textedit(QString("&(x), ")+ QString(markerpoints[0].curve->name()+":"+"&("+markerpoints[0].curve->name()+")"));
 		text.textPlaceholder = textedit.toHtml();
 	} else
-		text.textPlaceholder = "Please Add Text here";
+		text.textPlaceholder = i18n("Please Add Text here");
+
 	label->setText(text);
 
 	m_suppressChildPositionChanged = false;
@@ -207,7 +211,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	} else
 		addChild(custompoint);
 
-	// C++14 enabled:
+    // C++14 enabled:
 	//connect(curve, qOverload<bool>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
 	connect(curve, static_cast<void(XYCurve::*)(bool)>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
     connect(curve, &XYCurve::moveBegin, this, [this](){m_curveGetsMoved = true;});
@@ -222,13 +226,13 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
 	markerpoints.append(markerpoint);
 
-    if (markerpoints.length() == 1)
-    {
-        // Do a retransform, because when the first markerpoint
-        // was added, after a curve was removed and added, the
-        // position of the connection line must be recalculated
-        retransform();
-    }
+	if (markerpoints.length() == 1)
+	{
+		// Do a retransform, because when the first markerpoint
+		// was added, after a curve was removed and added, the
+		// position of the connection line must be recalculated
+		retransform();
+	}
 }
 
 /*!
@@ -254,6 +258,7 @@ void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
 		custompoint->setVisible(false);
 		addChild(custompoint);
 	}
+
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), nullptr, curvePath};
 	markerpoints.append(markerpoint);
 }
@@ -265,7 +270,6 @@ void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
  * \return true if all markerpoints are assigned with a curve, false if one or more markerpoints don't have a curve assigned
  */
 bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
-
 	bool success = true;
 	for (int i =0; i< markerpoints.length(); i++) {
 		for (auto curve: curves) {
@@ -357,13 +361,13 @@ InfoElement::MarkerPoints_T InfoElement::markerPointAt(int index) {
 TextLabel::TextWrapper InfoElement::createTextLabelText() {
 
 	// TODO: save positions of the variables in extra variables to replace faster, because replace takes long time
-    TextLabel::TextWrapper wrapper = label->text();
-    if (markerPointsCount() < 1) {
-        DEBUG(wrapper.text.toStdString());
-        DEBUG(wrapper.textPlaceholder.toStdString());
-        wrapper.text = wrapper.textPlaceholder;
-        return wrapper;
-    }
+	TextLabel::TextWrapper wrapper = label->text();
+	if (markerPointsCount() < 1) {
+		DEBUG(wrapper.text.toStdString());
+		DEBUG(wrapper.textPlaceholder.toStdString());
+		wrapper.text = wrapper.textPlaceholder;
+		return wrapper;
+	}
 
 	AbstractColumn::ColumnMode columnMode = markerpoints[0].curve->xColumn()->columnMode();
 	QString placeholderText = wrapper.textPlaceholder;
@@ -482,9 +486,8 @@ void InfoElement::curveVisibilityChanged() {
 
 	bool oneMarkerpointVisible = false;
 	for (auto custompoint: markerpoints) {
-		if (custompoint.curve == curve) {
+		if (custompoint.curve == curve)
 			custompoint.customPoint->setVisible(visible);
-		}
 
 		if (custompoint.customPoint->isVisible())
 			oneMarkerpointVisible = true;
@@ -541,9 +544,9 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 				markerpoints.removeAt(i);
 			// no point->remove() needed, because it was already deleted
 		}
-        // recreate text, because when marker was deleted,
-        // the placeholder should not be replaced anymore by a value
-        label->setText(createTextLabelText());
+		// recreate text, because when marker was deleted,
+		// the placeholder should not be replaced anymore by a value
+		label->setText(createTextLabelText());
 	}
 
 	// textlabel was deleted
@@ -594,6 +597,54 @@ void InfoElement::childAdded(const AbstractAspect* child) {
 }
 
 /*!
+ * \brief InfoElement::currentValue
+ * Calculates the new x position from
+ * \param new_x
+ * \return
+ */
+int InfoElement::currentIndex(double x, double* found_x) {
+	Q_D(InfoElement);
+
+	for (struct MarkerPoints_T markerpoint: markerpoints) {
+		if (markerpoint.curve->name() == connectionLineCurveName()) {
+			int index = markerpoint.curve->xColumn()->indexForValue(x);
+
+			if (found_x && index >= 0)
+				*found_x = markerpoint.curve->xColumn()->valueAt(index);
+			return index;
+		}
+	}
+
+	return -1;
+}
+
+double InfoElement::setMarkerpointPosition(double x) {
+	// TODO: can be optimized when it will be checked if all markerpoints have the same xColumn, then the index m_index is the same
+	Q_D(InfoElement);
+	double x_new;
+	double x_new_first = 0;
+	for (int i=0; i<markerpoints.length(); i++) {
+		bool valueFound;
+		double y = markerpoints[i].curve->y(x,x_new, valueFound);
+		d->xPos = x_new;
+		if (i == 0)
+			x_new_first = x_new;
+		if (valueFound) {
+			m_suppressChildPositionChanged = true;
+			markerpoints[i].x = x_new;
+			markerpoints[i].y = y;
+			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
+			DEBUG("InfoElement::pointPositionChanged, Set Position: ("<< x_new << "," << y << ")");
+			markerpoints[i].customPoint->setPosition(QPointF(x_new,y));
+			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+			//QPointF position = d->cSystem->mapSceneToLogical(markerpoints[i].customPoint->graphicsItem()->pos());
+			m_suppressChildPositionChanged = false;
+		}
+	}
+	return x_new_first;
+}
+
+/*!
  * Will be called, when the customPoint changes his position
  * @param pos
  */
@@ -608,26 +659,7 @@ void InfoElement::pointPositionChanged(QPointF pos) {
 	if (point == nullptr)
 		return;
 
-	// caĺculate new y value
-	double x = point->position().x();
-	double x_new;
-	for (int i=0; i<markerpoints.length(); i++) {
-		bool valueFound;
-		double y = markerpoints[i].curve->y(x,x_new, valueFound);
-		d->xPos = x_new;
-		if (valueFound) {
-			m_suppressChildPositionChanged = true;
-			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-			DEBUG("InfoElement::pointPositionChanged, Set Position: ("<< x_new << "," << y << ")");
-			markerpoints[i].customPoint->setPosition(QPointF(x_new,y));
-			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-            //QPointF position = d->cSystem->mapSceneToLogical(markerpoints[i].customPoint->graphicsItem()->pos());
-			m_suppressChildPositionChanged = false;
-		}
-	}
-
-	label->setText(createTextLabelText());
-	d->retransform();
+	setPosition(point->position().x());
 }
 
 void InfoElement::setParentGraphicsItem(QGraphicsItem* item) {
@@ -651,9 +683,9 @@ void InfoElement::retransform() {
 }
 
 void InfoElement::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-    Q_UNUSED(horizontalRatio)
-    Q_UNUSED(verticalRatio)
-    Q_UNUSED(pageResize)
+	Q_UNUSED(horizontalRatio)
+	Q_UNUSED(verticalRatio)
+	Q_UNUSED(pageResize)
 }
 
 //##############################################################################
@@ -669,6 +701,7 @@ BASIC_SHARED_D_READER_IMPL(InfoElement, double, connectionLineWidth, connectionL
 BASIC_SHARED_D_READER_IMPL(InfoElement, QColor, connectionLineColor, connectionLineColor);
 BASIC_SHARED_D_READER_IMPL(InfoElement, int, gluePointIndex, gluePointIndex);
 BASIC_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
+BASIC_SHARED_D_READER_IMPL(InfoElement, double, position, position);
 /* ============================ setter methods ================= */
 
 // Problem: No member named 'Private' in 'InfoElement':
@@ -732,14 +765,30 @@ STD_SETTER_CMD_IMPL_F_S(InfoElement, SetGluePointIndex, int, gluePointIndex, ret
 void InfoElement::setGluePointIndex(const int value) {
 	Q_D(InfoElement);
 	if (value != d->gluePointIndex)
-		exec(new InfoElementSetGluePointIndexCmd(d, value, ki18n("%1: set visible")));
+        exec(new InfoElementSetGluePointIndexCmd(d, value, ki18n("%1: set gluepoint index")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineCurveName, QString, connectionLineCurveName, retransform);
 void InfoElement::setConnectionLineCurveName(const QString name) {
 	Q_D(InfoElement);
 	if (name.compare(d->connectionLineCurveName) != 0)
-		exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set visible")));
+        exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetPosition, double, position, retransform);
+void InfoElement::setPosition(const double pos) {
+	Q_D(InfoElement);
+	double value;
+	int index = currentIndex(pos, &value);
+	if (index < 0)
+		return;
+
+	if (value != d->position) {
+		d->m_index = index;
+		setMarkerpointPosition(value);
+		label->setText(createTextLabelText());
+		exec(new InfoElementSetPositionCmd(d, pos, ki18n("%1: set position")));
+	}
 }
 
 //##############################################################################
@@ -797,7 +846,7 @@ void InfoElementPrivate::retransform() {
 	QPointF pointPos = cSystem->mapLogicalToScene(q->markerpoints[0].customPoint->position(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (int i=1; i< q->markerPointsCount(); i++) {
 		const auto* curve = q->markerpoints[i].curve;
-		if (curve->name().compare(connectionLineCurveName) == 0) {
+		if (curve && curve->name().compare(connectionLineCurveName) == 0) {
 			pointPos = cSystem->mapLogicalToScene(q->markerpoints[i].customPoint->position(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
@@ -916,8 +965,8 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 		if (xposLineVisible) {
 			if (abs(xposLine.x1()-event->pos().x())< ((xposLineWidth < 3)? 3: xposLineWidth)) {
-                if (!isSelected())
-                    setSelected(true);
+				if (!isSelected())
+					setSelected(true);
 				m_suppressKeyPressEvents = false;
 				oldMousePos = mapToParent(event->pos());
 				event->accept();
@@ -981,13 +1030,6 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if (q->markerpoints.isEmpty())
 		return;
 
-	for (auto markerpoint: q->markerpoints)
-		markerpoint.customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-
-	bool newMarkerPointPos = false;
-
-	q->label->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-
 	// TODO: find better method to do this. It's inefficient.
 	// Finding which curve should be used to find the new values
 	double x = q->markerpoints[0].x;
@@ -1001,48 +1043,12 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		}
 	}
 	x += delta_logic.x();
-	DEBUG("markerpoints[0].x: " << q->markerpoints[0].x << ", markerpoints[0].y: " << q->markerpoints[0].y << ", Scene xpos: " << x);
-	for (int i =0; i < q->markerpoints.length(); i++) {
-		bool valueFound = false;
-		double x_new = NAN;
-		int index = -1;
-
-		// find index and y value for a corresponding x value
-		double y;
-		if (q->markerpoints[i].curve) {
-			index = q->markerpoints[i].curve->xColumn()->indexForValue(x);
-			x_new = q->markerpoints[i].curve->xColumn()->valueAt(index);
-			y = q->markerpoints[i].curve->yColumn()->valueAt(index);
-			valueFound = true;
-		} else
-			y = 0;
-
-		if (valueFound) {
-			if (abs(x_new - q->markerpoints[i].x) > 0 && i == activeIndex)
-				newMarkerPointPos = true;
-			q->markerpoints[i].y = y;
-			q->markerpoints[i].x = x_new;
-			q->m_suppressChildPositionChanged = true;
-			q->markerpoints[i].customPoint->setPosition(QPointF(x_new,y));
-			q->m_suppressChildPositionChanged = false;
-			m_index = index;
-		} else
-			DEBUG("No value found for Logicalpoint" << i);
-	}
-
-	if (newMarkerPointPos) { // move oldMousePos only when the markerpoints are moved to the next value
-		q->label->setText(q->createTextLabelText());
-        //double x_label = q->label->position().point.x() + delta.x();
-        //double y_label = q->label->position().point.y();
-		//q->label->setPosition(QPointF(x_label,y_label)); // don't move label
-		oldMousePos = eventPos;
-	}
-
-	q->label->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-	for (auto markerpoint: q->markerpoints)
-		markerpoint.customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-
-	retransform();
+    int xindex = q->markerpoints[activeIndex].curve->xColumn()->indexForValue(x);
+    double x_new = q->markerpoints[activeIndex].curve->xColumn()->valueAt(xindex);
+    if (abs(x_new - q->markerpoints[activeIndex].x) > 0) {
+        oldMousePos = eventPos;
+        q->setPosition(x);
+    }
 }
 
 void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
@@ -1059,8 +1065,9 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 		else
 			index = -1;
 
-        double x, xNew;
-		bool valueFound;
+		double x;
+// 		double xNew;
+// 		bool valueFound;
 		QPointF pointPosition;
 		int rowCount;
 
@@ -1075,6 +1082,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 		if (m_index < 0)
 			m_index = 0;
 
+        // find markerpoint to which the values matches (curvename is stored in connectionLineCurveName)
 		x = column->valueAt(m_index);
 		for (int i=1; i< q->markerPointsCount(); i++) {
 			if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
@@ -1088,26 +1096,27 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 			}
 		}
 
-		xNew = x;
-		for (int i =0; i< q->markerpoints.length(); i++) {
-			q->markerpoints[i].x = x;
-			auto* curve = q->markerpoints[i].curve;
-			if (curve->xColumn()->rowCount() == rowCount) { // if the other columns have the same length it can simply used the index
-				q->markerpoints[i].y = curve->yColumn()->valueAt(m_index);
-				valueFound = true;
-			} else // if the length of the columns of the other curves are different, the y value must be searched
-				q->markerpoints[i].y = curve->y(x, xNew, valueFound);
-			if (valueFound) { // new set by curve->y()
-				pointPosition.setX(xNew);
-				pointPosition.setY(q->markerpoints[i].y);
-				DEBUG("X_old: " << q->markerpoints[i].customPoint->position().x() << "X_new: " << x);
-				q->m_suppressChildPositionChanged = true;
-				q->markerpoints[i].customPoint->setPosition(pointPosition);
-				q->m_suppressChildPositionChanged = false;
-			}
-		}
-		q->label->setText(q->createTextLabelText());
-		retransform();
+		q->setPosition(x);
+//		xNew = x;
+//		for (int i =0; i< q->markerpoints.length(); i++) {
+//			q->markerpoints[i].x = x;
+//			auto* curve = q->markerpoints[i].curve;
+//			if (curve->xColumn()->rowCount() == rowCount) { // if the other columns have the same length it can simply used the index
+//				q->markerpoints[i].y = curve->yColumn()->valueAt(m_index);
+//				valueFound = true;
+//			} else // if the length of the columns of the other curves are different, the y value must be searched
+//				q->markerpoints[i].y = curve->y(x, xNew, valueFound);
+//			if (valueFound) { // new set by curve->y()
+//				pointPosition.setX(xNew);
+//				pointPosition.setY(q->markerpoints[i].y);
+//				DEBUG("X_old: " << q->markerpoints[i].customPoint->position().x() << "X_new: " << x);
+//				q->m_suppressChildPositionChanged = true;
+//				q->markerpoints[i].customPoint->setPosition(pointPosition);
+//				q->m_suppressChildPositionChanged = false;
+//			}
+//		}
+//		q->label->setText(q->createTextLabelText());
+//		retransform();
 
 	}
 }

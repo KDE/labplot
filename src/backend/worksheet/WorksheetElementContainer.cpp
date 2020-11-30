@@ -144,7 +144,7 @@ void WorksheetElementContainer::retransform() {
 /*!
  * called if the size of the worksheet page was changed and the content has to be adjusted/resized (\c pageResize = true)
  * or if a new rectangular for the element container was set (\c pageResize = false).
- * In the second case, \c WorksheetElement::handleResize() is called for every worksheet child to adjuste the content to the new size.
+ * In the second case, \c WorksheetElement::handleResize() is called for every worksheet child to adjust the content to the new size.
  * In the first case, a new rectangular for the container is calculated and set first, which on the other hand, triggers the content adjustments
  * in the container children.
  */
@@ -258,7 +258,7 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 // 	if (q->isLoading())
 // 		return;
 
-	//old logic calculating the bounding box as as the box covering all children.
+	//old logic calculating the bounding box as the box covering all children.
 	//we might need this logic later once we implement something like selection of multiple plots, etc.
 // 	boundingRectangle = QRectF();
 // 	QVector<WorksheetElement*> childList = q->children<WorksheetElement>(AbstractAspect::IncludeHidden | AbstractAspect::Compress);

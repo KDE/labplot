@@ -72,7 +72,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbDecimalSeparator->setToolTip(textNumberFormatShort);
 	ui.cbDecimalSeparator->setWhatsThis(textNumberFormat);
 
-	//only available for live data, will be activated explicitely
+	//only available for live data, will be activated explicitly
 	ui.chbCreateTimestamp->setVisible(false);
 
 	const QString textDateTimeFormatShort = i18n("This option determines how the imported strings have to be converted to calendar date, i.e. year, month, and day numbers in the Gregorian calendar and to time.");

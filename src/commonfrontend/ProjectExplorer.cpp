@@ -714,7 +714,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	//emitting the signal above is done to show the properties widgets for the selected aspect(s).
 	//with this the project explorer looses the focus and don't react on the key events like DEL key press, etc.
-	//If we explicitely select an item in the project explorer (not via a selection in the view), we want to keep the focus here.
+	//If we explicitly select an item in the project explorer (not via a selection in the view), we want to keep the focus here.
 	//TODO: after the focus is set again we react on DEL in the event filter, but navigation with the arrow keys in the table
 	//is still not possible. Looks like we need to set the selection again...
 	if (!m_changeSelectionFromView)

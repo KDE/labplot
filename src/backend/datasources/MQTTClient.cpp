@@ -536,7 +536,7 @@ void MQTTClient::addBeforeRemoveSubscription(const QString& topicName, quint8 Qo
  * \param parent, the name of the MQTTSubscription
  */
 void MQTTClient::reparentTopic(const QString& topicName, const QString& parentTopicName) {
-	//We can only reparent if the parent containd the topic
+	//We can only reparent if the parent contained the topic
 	if (m_subscriptions.contains(parentTopicName) && m_topicNames.contains(topicName)) {
 // 		qDebug() << "Reparent " << topicName << " to " << parentTopicName;
 		//search for the parent MQTTSubscription

@@ -3196,7 +3196,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		QPointF logicalPos = coordinateSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
 
 		// updating treeview data and cursor position
-		// updatign cursor position is done in Worksheet, because
+		// updating cursor position is done in Worksheet, because
 		// multiple plots must be updated
 		emit q->mouseMoveCursorModeSignal(selectedCursor, logicalPos);
 	}
