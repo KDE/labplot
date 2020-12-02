@@ -5,6 +5,7 @@
 						   show their values
 	--------------------------------------------------------------------
 	Copyright            : (C) 2020 Martin Marmsoler (martin.marmsoler@gmail.com)
+	Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -28,16 +29,16 @@
 
 #include "InfoElement.h"
 
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-#include "backend/worksheet/InfoElementPrivate.h"
-#include "backend/worksheet/plots/cartesian/CustomPoint.h"
-#include "backend/worksheet/TextLabel.h"
+#include "backend/core/Project.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/InfoElementPrivate.h"
+#include "backend/worksheet/TextLabel.h"
 
-#include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QKeyEvent>
@@ -45,7 +46,6 @@
 #include <QMenu>
 #include <QTextEdit>
 #include <QDateTime>
-
 
 InfoElement::InfoElement(const QString& name, CartesianPlot* plot):
 	WorksheetElement(name, AspectType::InfoElement),
@@ -146,7 +146,7 @@ void InfoElement::init() {
 	connect(this, &InfoElement::aspectRemoved, this, &InfoElement::childRemoved);
 	connect(this, &InfoElement::aspectAdded, this, &InfoElement::childAdded);
 
-	label = new TextLabel("InfoElementLabel", d->plot);
+	label = new TextLabel(i18n("Label"), d->plot);
 	addChild(label);
 	label->enableCoordBinding(true);
 	label->setCoordBinding(true);
@@ -198,8 +198,10 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 			return;
 	}
 
+	project()->setSuppressAspectAddedSignal(true);
+
 	if (!custompoint) {
-		custompoint = new CustomPoint(d->plot, "Markerpoint");
+		custompoint = new CustomPoint(d->plot, i18n("Symbol"));
 		addChild(custompoint);
 		bool valueFound;
 		double x_new, y;
@@ -211,11 +213,11 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	} else
 		addChild(custompoint);
 
-    // C++14 enabled:
-	//connect(curve, qOverload<bool>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
-	connect(curve, static_cast<void(XYCurve::*)(bool)>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
-    connect(curve, &XYCurve::moveBegin, this, [this](){m_curveGetsMoved = true;});
-    connect(curve, &XYCurve::moveEnd, this, [this](){m_curveGetsMoved = false;});
+	project()->setSuppressAspectAddedSignal(true);
+
+	connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+	connect(curve, &XYCurve::moveBegin, this, [this]() {m_curveGetsMoved = true;});
+	connect(curve, &XYCurve::moveEnd, this, [this]() {m_curveGetsMoved = false;});
 	custompoint->setVisible(curve->isVisible());
 
 	if (d->m_index < 0)
@@ -233,6 +235,8 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		// position of the connection line must be recalculated
 		retransform();
 	}
+
+	label->setHidden(false);
 }
 
 /*!
@@ -254,7 +258,7 @@ void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
 	}
 
 	if (!custompoint) {
-		custompoint = new CustomPoint(d->plot, "Markerpoint");
+		custompoint = new CustomPoint(d->plot, i18n("Symbol"));
 		custompoint->setVisible(false);
 		addChild(custompoint);
 	}
@@ -276,9 +280,7 @@ bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
 			QString curvePath = curve->path();
 			if(markerpoints[i].curvePath == curve->path()) {
 				markerpoints[i].curve = curve;
-				// C++14 enabled:
-				//connect(curve, qOverload<bool>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
-				connect(curve, static_cast<void(XYCurve::*)(bool)>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+				connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
 				markerpoints[i].customPoint->setVisible(curve->isVisible()); // initial visibility
 				break;
 			}
@@ -306,12 +308,16 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 	if (m_curveGetsMoved)
 		return;
 
-	for (int i=0; i< markerpoints.length(); i++) {
+	for (int i = 0; i< markerpoints.length(); i++) {
 		if (markerpoints[i].curve == curve) {
-			disconnect(curve, static_cast<void(XYCurve::*)(bool)>(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+			disconnect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
 			removeChild(markerpoints[i].customPoint);
 		}
 	}
+
+	//hide the label in the project explorer if now curves are selected
+	if (markerpoints.isEmpty())
+		label->setHidden(true);
 }
 
 /*!
