@@ -1195,7 +1195,7 @@ void CartesianPlotLegend::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group(QLatin1String("CartesianPlotLegend"));
 
-	this->setLabelColor(group.readEntry("FontColor", QColor(Qt::white)));
+	this->setLabelColor(group.readEntry("FontColor", QColor(Qt::black)));
 
 	//for other theme dependent settings use the values defined in the theme config for CartesianPlot
 	if (config.hasGroup(QLatin1String("Theme")))
