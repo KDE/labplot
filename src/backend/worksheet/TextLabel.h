@@ -54,25 +54,25 @@ public:
 	// The text is always in HMTL format
 	struct TextWrapper {
 		TextWrapper() {}
-		TextWrapper(const QString& t, bool b, bool html): teXUsed(b) {
-			if (b) {
-				text = t; // LaTeX does not support HTML, so assume t is a plain text string
+        TextWrapper(const QString& text, bool teXUsed, bool html): teXUsed(teXUsed) {
+            if (teXUsed) {
+                this->text = text; // LaTeX does not support HTML, so assume t is a plain text string
 				return;
 			}
-			text = createHtml(t, html);
+            this->text = createHtml(text, html);
 		}
-		TextWrapper(const QString& t, bool html = false) {
-			text = createHtml(t, html);
+        TextWrapper(const QString& text, bool html = false) {
+            this->text = createHtml(text, html);
 		}
-		TextWrapper(const QString& t, bool html, QString& placeholder): teXUsed(false), allowPlaceholder(true), textPlaceholder(placeholder) {
-			text = createHtml(t, html);
+        TextWrapper(const QString& text, bool html, QString& placeholder): teXUsed(false), allowPlaceholder(true), textPlaceholder(placeholder) {
+            this->text = createHtml(text, html);
 		}
-		TextWrapper(const QString& t, bool b, bool html, bool allowPlaceholder): teXUsed(b), allowPlaceholder(allowPlaceholder) {
-			if (b) {
-				text = t; // latex does not support html, so assume t is a plain string
+        TextWrapper(const QString& text, bool teXUsed, bool html, bool allowPlaceholder): teXUsed(teXUsed), allowPlaceholder(allowPlaceholder) {
+            if (teXUsed) {
+                this->text = text; // latex does not support html, so assume t is a plain string
 				return;
 			}
-			text = createHtml(t, html);
+            this->text = createHtml(text, html);
 		}
 		QString createHtml(QString text, bool isHtml) {
 			if (isHtml)
