@@ -1501,8 +1501,15 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 		te.setTextColor(d->fontColor);
 		//te.setTextBackgroundColor(backgroundColor); // for plain text no background color supported, due to bug https://bugreports.qt.io/browse/QTBUG-25420
 
+        TextWrapper wrapper(te.toHtml(), false, true);
+        te.setHtml(d->textWrapper.textPlaceholder);
+        te.selectAll();
+        te.setTextColor(d->fontColor);
+        wrapper.textPlaceholder = te.toHtml();
+        wrapper.allowPlaceholder = d->textWrapper.allowPlaceholder;
+
 		// update the text. also in the Widget to which is connected
-		TextWrapper wrapper(te.toHtml(), false, true);
+
 		setText(wrapper);
 	}
 
