@@ -252,8 +252,8 @@ STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper,
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed)
-			|| ((d->textWrapper.placeholder || textWrapper.placeholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
-			textWrapper.placeholder != d->textWrapper.placeholder)
+            || ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
+            textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder)
 		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 }
 
@@ -1313,7 +1313,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	writer->writeStartElement( "format" );
-	writer->writeAttribute( "placeholder", QString::number(d->textWrapper.placeholder) );
+    writer->writeAttribute( "placeholder", QString::number(d->textWrapper.allowPlaceholder) );
 	writer->writeAttribute( "teXUsed", QString::number(d->textWrapper.teXUsed) );
 	WRITE_QFONT(d->teXFont);
 	writer->writeAttribute( "fontColor_r", QString::number(d->fontColor.red()) );
@@ -1427,7 +1427,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("teXUsed").toString());
 			else
-				d->textWrapper.placeholder = str.toInt();
+                d->textWrapper.allowPlaceholder = str.toInt();
 
 			str = attribs.value("teXUsed").toString();
 			if(str.isEmpty())

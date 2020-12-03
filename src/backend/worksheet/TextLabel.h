@@ -64,10 +64,10 @@ public:
 		TextWrapper(const QString& t, bool html = false) {
 			text = createHtml(t, html);
 		}
-		TextWrapper(const QString& t, bool html, QString& placeholder): teXUsed(false), placeholder(true), textPlaceholder(placeholder) {
+		TextWrapper(const QString& t, bool html, QString& placeholder): teXUsed(false), allowPlaceholder(true), textPlaceholder(placeholder) {
 			text = createHtml(t, html);
 		}
-		TextWrapper(const QString& t, bool b, bool html, bool placeholder): teXUsed(b), placeholder(placeholder) {
+		TextWrapper(const QString& t, bool b, bool html, bool allowPlaceholder): teXUsed(b), allowPlaceholder(allowPlaceholder) {
 			if (b) {
 				text = t; // latex does not support html, so assume t is a plain string
 				return;
@@ -88,7 +88,7 @@ public:
          * Depending on this variable in the LabelWidget between
          * the text and the placeholder text can be switched
          */
-        bool placeholder{false};
+        bool allowPlaceholder{false};
 		QString textPlaceholder{""}; // text with placeholders
 	};
 

@@ -438,13 +438,13 @@ void LabelWidget::textChanged() {
 			wrapper.text = text;
 			for (auto* label : m_labelsList) {
 				wrapper.textPlaceholder = label->text().textPlaceholder;
-				wrapper.placeholder = label->text().placeholder;
+                wrapper.allowPlaceholder = label->text().allowPlaceholder;
 				label->setText(wrapper);
 			}
 		} else {
 			wrapper.textPlaceholder = text;
 			for (auto* label: m_labelsList) {
-				wrapper.placeholder = label->text().placeholder;
+                wrapper.allowPlaceholder = label->text().allowPlaceholder;
 				wrapper.text = label->text().text;
 				label->setPlaceholderText(wrapper);
 			}
@@ -471,14 +471,14 @@ void LabelWidget::textChanged() {
 		if(!ui.chbShowPlaceholderText->isChecked()) {
 			wrapper.text = text;
 			for (auto* label : m_labelsList) {
-				wrapper.placeholder = label->text().placeholder;
+                wrapper.allowPlaceholder = label->text().allowPlaceholder;
 				wrapper.textPlaceholder = label->text().textPlaceholder;
 				label->setText(wrapper);
 			}
 		} else {
 			wrapper.textPlaceholder = text;
 			for (auto* label : m_labelsList) {
-				wrapper.placeholder = label->text().placeholder;
+                wrapper.allowPlaceholder = label->text().allowPlaceholder;
 				wrapper.text = label->text().text;
 				label->setPlaceholderText(wrapper);
 			}
@@ -1220,8 +1220,8 @@ void LabelWidget::load() {
 	ui.chbVisible->setChecked(m_label->isVisible());
 
 	// don't show checkbox if Placeholder feature not used
-	bool placeholder = m_label->text().placeholder;
-	if (!placeholder) {
+    bool allowPlaceholder = m_label->text().allowPlaceholder;
+    if (!allowPlaceholder) {
 		ui.chbShowPlaceholderText->setVisible(false);
 		ui.chbShowPlaceholderText->setEnabled(false);
 		ui.chbShowPlaceholderText->setChecked(false);
@@ -1233,7 +1233,7 @@ void LabelWidget::load() {
 
 	//Text/TeX
 	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
-	if(!placeholder) {
+    if(!allowPlaceholder) {
 		if (m_label->text().teXUsed)
 			ui.teLabel->setText(m_label->text().text);
 		else {
@@ -1266,7 +1266,7 @@ void LabelWidget::load() {
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
-	ui.chbShowPlaceholderText->setChecked(m_label->text().placeholder);
+    ui.chbShowPlaceholderText->setChecked(m_label->text().allowPlaceholder);
 
 	//move the cursor to the end and set the focus to the text editor
 	QTextCursor cursor = ui.teLabel->textCursor();

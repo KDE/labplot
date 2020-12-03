@@ -101,7 +101,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 		setVisible(false);
 
 	TextLabel::TextWrapper text;
-	text.placeholder = true;
+    text.allowPlaceholder = true;
 
 	if (!markerpoints.empty()) {
 		QString textString;
@@ -151,7 +151,7 @@ void InfoElement::init() {
 	label->enableCoordBinding(true);
 	label->setCoordBinding(true);
 	TextLabel::TextWrapper text;
-	text.placeholder = true;
+    text.allowPlaceholder = true;
 	label->setText(text); // set placeholder to true
 
 	//use the color for the axis line from the theme also for info element's lines
