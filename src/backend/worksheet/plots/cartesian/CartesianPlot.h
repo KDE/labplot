@@ -31,8 +31,8 @@
 #ifndef CARTESIANPLOT_H
 #define CARTESIANPLOT_H
 
-#include "backend/worksheet/plots/AbstractPlot.h"
-#include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "Histogram.h"
+#include "../AbstractPlot.h"
 #include "backend/lib/Range.h"
 
 class CartesianPlotPrivate;

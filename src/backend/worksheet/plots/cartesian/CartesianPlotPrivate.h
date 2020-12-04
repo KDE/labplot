@@ -33,7 +33,7 @@
 #include "CartesianPlot.h"
 #include "CartesianCoordinateSystem.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/AbstractPlotPrivate.h"
+#include "../AbstractPlotPrivate.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QStaticText>

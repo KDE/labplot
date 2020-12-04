@@ -30,9 +30,12 @@
 
 #include "CartesianPlot.h"
 #include "CartesianPlotPrivate.h"
+#include "CartesianPlotLegend.h"
 #include "Axis.h"
 #include "XYCurve.h"
 #include "Histogram.h"
+#include "CustomPoint.h"
+#include "ReferenceLine.h"
 #include "XYEquationCurve.h"
 #include "XYDataReductionCurve.h"
 #include "XYDifferentiationCurve.h"
@@ -44,14 +47,11 @@
 #include "XYFourierTransformCurve.h"
 #include "XYConvolutionCurve.h"
 #include "XYCorrelationCurve.h"
+#include "../PlotArea.h"
+#include "../AbstractPlotPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
-#include "backend/worksheet/plots/cartesian/CustomPoint.h"
-#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-#include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/Image.h"
@@ -66,6 +66,10 @@
 #include "kdefrontend/widgets/ThemesWidget.h"
 #include "kdefrontend/worksheet/InfoElementDialog.h"
 
+#include <KConfig>
+#include <KConfigGroup>
+#include <KLocalizedString>
+
 #include <QDir>
 #include <QDropEvent>
 #include <QIcon>
@@ -76,10 +80,6 @@
 
 #include <array>
 #include <cmath>
-
-#include <KConfig>
-#include <KConfigGroup>
-#include <KLocalizedString>
 
 /**
  * \class CartesianPlot
