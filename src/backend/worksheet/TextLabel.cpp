@@ -98,7 +98,7 @@ void TextLabel::init() {
 	case Type::PlotLegendTitle:
 		groupName = "PlotLegendTitle";
 		break;
-    case Type::InfoElementLabel:
+	case Type::InfoElementLabel:
 		groupName = "InfoElementLabel";
 	}
 
@@ -252,8 +252,8 @@ STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper,
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed)
-            || ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
-            textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder)
+	        || ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
+	        textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder)
 		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 }
 
@@ -303,7 +303,7 @@ void TextLabel::setPosition(QPointF point) {
 	if (point != d->position.point) {
 		d->position.point = point;
 		if(d->m_coordBindingEnable)
-            d->m_logicalPos = d->cSystem->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			d->m_logicalPos = d->cSystem->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		retransform();
 	}
 }
@@ -378,7 +378,7 @@ void TextLabel::setCoordBinding(bool on) {
 	if (!d->m_coordBindingEnable)
 		return;
 	d->m_coordBinding = on;
-    d->m_logicalPos = d->cSystem->mapSceneToLogical(d->pos(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	d->m_logicalPos = d->cSystem->mapSceneToLogical(d->pos(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 }
 
 /*!
@@ -391,7 +391,7 @@ void TextLabel::setCoordBinding(bool on) {
 bool TextLabel::enableCoordBinding(bool enable, const CartesianPlot* plot) {
 	Q_D(TextLabel);
 
-    if (!d->plot) // if infoelement is parent, it has no cartesianplot so d->plot stays nullptr because of the dynamic cast
+	if (!d->plot) // if infoelement is parent, it has no cartesianplot so d->plot stays nullptr because of the dynamic cast
 		d->plot = dynamic_cast<const CartesianPlot*>(parentAspect());
 
 	if (d->plot == nullptr) {
@@ -412,12 +412,12 @@ bool TextLabel::enableCoordBinding(bool enable, const CartesianPlot* plot) {
 
 QRectF TextLabel::size() {
 	Q_D(TextLabel);
-    return d->size();
+	return d->size();
 }
 
 QPointF TextLabel::logicalPos(AbstractCoordinateSystem::MappingFlags flag) {
 	Q_D(TextLabel);
-    return d->logicalPos(flag);
+	return d->logicalPos(flag);
 }
 
 QPointF TextLabel::findNearestGluePoint(QPointF scenePoint) {
@@ -486,8 +486,8 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : q(owner) {
 }
 
 TextLabelPrivate::TextLabelPrivate(TextLabel* owner, CartesianPlot* plot)
-    : plot(plot),
-      q(owner) {
+	: plot(plot),
+	  q(owner) {
 
 	if(plot)
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
@@ -542,7 +542,7 @@ QPointF TextLabelPrivate::findNearestGluePoint(QPointF scenePoint) {
 	double distance2 = pow(point.x()-scenePoint.x(), 2) + pow(point.y()-scenePoint.y(), 2);
 	// assumption, more than one point available
 	for (int i = 1; i < m_gluePoints.length(); i++) {
-        point = mapParentToPlotArea(mapToParent(m_gluePoints.at(i).point));
+		point = mapParentToPlotArea(mapToParent(m_gluePoints.at(i).point));
 		double distance2_temp = pow(point.x()-scenePoint.x(), 2) + pow(point.y()-scenePoint.y(), 2);
 		if (distance2_temp < distance2) {
 			nearestPoint = point;
@@ -583,7 +583,7 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
  */
 QPointF TextLabelPrivate::logicalPos(AbstractCoordinateSystem::MappingFlags flag) {
 	if(m_coordBinding)
-        return m_logicalPos;
+		return m_logicalPos;
 	if(cSystem)
 		return cSystem->mapSceneToLogical(position.point, flag);
 
@@ -619,30 +619,30 @@ void TextLabelPrivate::retransform() {
 	if(!m_coordBinding) {
 		//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
 		switch (horizontalAlignment) {
-        case WorksheetElement::HorizontalAlignment::Left:
+		case WorksheetElement::HorizontalAlignment::Left:
 			itemPos.setX(x - w/2);
 			break;
-        case WorksheetElement::HorizontalAlignment::Center:
+		case WorksheetElement::HorizontalAlignment::Center:
 			itemPos.setX(x);
 			break;
-        case WorksheetElement::HorizontalAlignment::Right:
+		case WorksheetElement::HorizontalAlignment::Right:
 			itemPos.setX(x + w/2);
 			break;
 		}
 
 		switch (verticalAlignment) {
-        case WorksheetElement::VerticalAlignment::Top:
+		case WorksheetElement::VerticalAlignment::Top:
 			itemPos.setY(y - h/2);
 			break;
-        case WorksheetElement::VerticalAlignment::Center:
+		case WorksheetElement::VerticalAlignment::Center:
 			itemPos.setY(y);
 			break;
-        case WorksheetElement::VerticalAlignment::Bottom:
+		case WorksheetElement::VerticalAlignment::Bottom:
 			itemPos.setY(y + h/2);
 			break;
 		}
 	} else
-        itemPos = cSystem->mapLogicalToScene(m_logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		itemPos = cSystem->mapLogicalToScene(m_logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	itemPos = mapPlotAreaToParent(itemPos);
 	suppressItemChangeEvent = true;
 	setPos(itemPos);
@@ -983,13 +983,13 @@ bool TextLabelPrivate::swapVisible(bool on) {
 	//When making a graphics item invisible, it gets deselected in the scene.
 	//In this case we don't want to deselect the item in the project explorer.
 	//We need to supress the deselection in the view.
-    auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-    if (worksheet) {
-        worksheet->suppressSelectionChangedEvent(true);
-        setVisible(on);
-        worksheet->suppressSelectionChangedEvent(false);
-    } else
-        setVisible(on);
+	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+	if (worksheet) {
+		worksheet->suppressSelectionChangedEvent(true);
+		setVisible(on);
+		worksheet->suppressSelectionChangedEvent(false);
+	} else
+		setVisible(on);
 
 	emit q->changed();
 	emit q->visibleChanged(on);
@@ -1108,7 +1108,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 
 		//emit the signals in order to notify the UI.
 		if(m_coordBinding)
-            m_logicalPos = cSystem->mapSceneToLogical(tempPosition.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			m_logicalPos = cSystem->mapSceneToLogical(tempPosition.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		// don't use setPosition here, because then all small changes are on the undo stack
 		emit q->positionChanged(tempPosition);
 	}
@@ -1118,7 +1118,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 
 void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if(m_coordBinding)
-        m_logicalPos = cSystem->mapSceneToLogical(mapParentToPlotArea(pos()), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		m_logicalPos = cSystem->mapSceneToLogical(mapParentToPlotArea(pos()), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	return QGraphicsItem::mouseMoveEvent(event);
 }
 
@@ -1141,7 +1141,7 @@ void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
 void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
-			|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
+	        || event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
 		const int delta = 5;
 		QPointF point = positionFromItemPosition(pos());
 		WorksheetElement::PositionWrapper tempPosition;
@@ -1300,8 +1300,8 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeAttribute( "enableCoordBinding", QString::number(d->m_coordBindingEnable));
 	writer->writeAttribute( "coordBinding", QString::number(d->m_coordBinding));
-    writer->writeAttribute( "logicalPosX", QString::number(d->m_logicalPos.x()));
-    writer->writeAttribute( "logicalPosY", QString::number(d->m_logicalPos.y()));
+	writer->writeAttribute( "logicalPosX", QString::number(d->m_logicalPos.x()));
+	writer->writeAttribute( "logicalPosY", QString::number(d->m_logicalPos.y()));
 	writer->writeEndElement();
 
 	writer->writeStartElement( "text" );
@@ -1313,7 +1313,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	writer->writeStartElement( "format" );
-    writer->writeAttribute( "placeholder", QString::number(d->textWrapper.allowPlaceholder) );
+	writer->writeAttribute( "placeholder", QString::number(d->textWrapper.allowPlaceholder) );
 	writer->writeAttribute( "teXUsed", QString::number(d->textWrapper.teXUsed) );
 	WRITE_QFONT(d->teXFont);
 	writer->writeAttribute( "fontColor_r", QString::number(d->fontColor.red()) );
@@ -1405,13 +1405,13 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("logicalPosX").toString());
 			else
-                d->m_logicalPos.setX(str.toDouble());
+				d->m_logicalPos.setX(str.toDouble());
 
 			str = attribs.value("logicalPosY").toString();
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("logicalPosY").toString());
 			else
-                d->m_logicalPos.setY(str.toDouble());
+				d->m_logicalPos.setY(str.toDouble());
 
 		} else if (!preview && reader->name() == "text")
 			d->textWrapper.text = reader->readElementText();
@@ -1427,7 +1427,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			if(str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("teXUsed").toString());
 			else
-                d->textWrapper.allowPlaceholder = str.toInt();
+				d->textWrapper.allowPlaceholder = str.toInt();
 
 			str = attribs.value("teXUsed").toString();
 			if(str.isEmpty())
@@ -1501,12 +1501,12 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 		te.setTextColor(d->fontColor);
 		//te.setTextBackgroundColor(backgroundColor); // for plain text no background color supported, due to bug https://bugreports.qt.io/browse/QTBUG-25420
 
-        TextWrapper wrapper(te.toHtml(), false, true);
-        te.setHtml(d->textWrapper.textPlaceholder);
-        te.selectAll();
-        te.setTextColor(d->fontColor);
-        wrapper.textPlaceholder = te.toHtml();
-        wrapper.allowPlaceholder = d->textWrapper.allowPlaceholder;
+		TextWrapper wrapper(te.toHtml(), false, true);
+		te.setHtml(d->textWrapper.textPlaceholder);
+		te.selectAll();
+		te.setTextColor(d->fontColor);
+		wrapper.textPlaceholder = te.toHtml();
+		wrapper.allowPlaceholder = d->textWrapper.allowPlaceholder;
 
 		// update the text. also in the Widget to which is connected
 

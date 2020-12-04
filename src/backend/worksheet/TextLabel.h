@@ -47,32 +47,33 @@ class TextLabel : public WorksheetElement {
 	Q_OBJECT
 
 public:
-    enum class Type {General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel};
+	enum class Type {General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel};
 	enum class BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
-			Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle};
+	                        Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle
+	                       };
 
 	// The text is always in HMTL format
 	struct TextWrapper {
 		TextWrapper() {}
-        TextWrapper(const QString& text, bool teXUsed, bool html): teXUsed(teXUsed) {
-            if (teXUsed) {
-                this->text = text; // LaTeX does not support HTML, so assume t is a plain text string
+		TextWrapper(const QString& text, bool teXUsed, bool html): teXUsed(teXUsed) {
+			if (teXUsed) {
+				this->text = text; // LaTeX does not support HTML, so assume t is a plain text string
 				return;
 			}
-            this->text = createHtml(text, html);
+			this->text = createHtml(text, html);
 		}
-        TextWrapper(const QString& text, bool html = false) {
-            this->text = createHtml(text, html);
+		TextWrapper(const QString& text, bool html = false) {
+			this->text = createHtml(text, html);
 		}
-        TextWrapper(const QString& text, bool html, QString& placeholder): teXUsed(false), allowPlaceholder(true), textPlaceholder(placeholder) {
-            this->text = createHtml(text, html);
+		TextWrapper(const QString& text, bool html, QString& placeholder): teXUsed(false), allowPlaceholder(true), textPlaceholder(placeholder) {
+			this->text = createHtml(text, html);
 		}
-        TextWrapper(const QString& text, bool teXUsed, bool html, bool allowPlaceholder): teXUsed(teXUsed), allowPlaceholder(allowPlaceholder) {
-            if (teXUsed) {
-                this->text = text; // latex does not support html, so assume t is a plain string
+		TextWrapper(const QString& text, bool teXUsed, bool html, bool allowPlaceholder): teXUsed(teXUsed), allowPlaceholder(allowPlaceholder) {
+			if (teXUsed) {
+				this->text = text; // latex does not support html, so assume t is a plain string
 				return;
 			}
-            this->text = createHtml(text, html);
+			this->text = createHtml(text, html);
 		}
 		QString createHtml(QString text, bool isHtml) {
 			if (isHtml)
@@ -84,16 +85,16 @@ public:
 
 		QString text;
 		bool teXUsed{false};
-        /*! Determines if the Textlabe can have a placeholder or not.
-         * Depending on this variable in the LabelWidget between
-         * the text and the placeholder text can be switched
-         */
-        bool allowPlaceholder{false};
+		/*! Determines if the Textlabe can have a placeholder or not.
+		 * Depending on this variable in the LabelWidget between
+		 * the text and the placeholder text can be switched
+		 */
+		bool allowPlaceholder{false};
 		QString textPlaceholder{""}; // text with placeholders
 	};
 
 	explicit TextLabel(const QString& name, Type type = Type::General);
-    TextLabel(const QString& name, CartesianPlot*, Type type = Type::General);
+	TextLabel(const QString& name, CartesianPlot*, Type type = Type::General);
 	~TextLabel() override;
 
 	Type type() const;

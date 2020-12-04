@@ -67,7 +67,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 	m_suppressChildPositionChanged = true;
 
 	if (curve) {
-        d->connectionLineCurveName = curve->name();
+		d->connectionLineCurveName = curve->name();
 		CustomPoint* custompoint = new CustomPoint(plot, "Markerpoint");
 		addChild(custompoint);
 		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
@@ -78,7 +78,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 		double y = curve->y(pos,xpos,valueFound);
 		if (valueFound) {
 			d->xPos = xpos;
-            d->position = xpos;
+			d->position = xpos;
 			d->m_index = curve->xColumn()->indexForValue(xpos);
 			markerpoints.last().x = xpos;
 			markerpoints.last().y = y;
@@ -86,7 +86,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 			DEBUG("Value found");
 		} else {
 			d->xPos = 0;
-            d->position = 0;
+			d->position = 0;
 			markerpoints.last().x = 0;
 			markerpoints.last().y = 0;
 			custompoint->setPosition(d->cSystem->mapSceneToLogical(QPointF(0,0)));
@@ -101,7 +101,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 		setVisible(false);
 
 	TextLabel::TextWrapper text;
-    text.allowPlaceholder = true;
+	text.allowPlaceholder = true;
 
 	if (!markerpoints.empty()) {
 		QString textString;
@@ -151,7 +151,7 @@ void InfoElement::init() {
 	label->enableCoordBinding(true);
 	label->setCoordBinding(true);
 	TextLabel::TextWrapper text;
-    text.allowPlaceholder = true;
+	text.allowPlaceholder = true;
 	label->setText(text); // set placeholder to true
 
 	//use the color for the axis line from the theme also for info element's lines
@@ -216,8 +216,12 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	project()->setSuppressAspectAddedSignal(true);
 
 	connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
-	connect(curve, &XYCurve::moveBegin, this, [this]() {m_curveGetsMoved = true;});
-	connect(curve, &XYCurve::moveEnd, this, [this]() {m_curveGetsMoved = false;});
+	connect(curve, &XYCurve::moveBegin, this, [this]() {
+		m_curveGetsMoved = true;
+	});
+	connect(curve, &XYCurve::moveEnd, this, [this]() {
+		m_curveGetsMoved = false;
+	});
 	custompoint->setVisible(curve->isVisible());
 
 	if (d->m_index < 0)
@@ -228,8 +232,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
 	markerpoints.append(markerpoint);
 
-	if (markerpoints.length() == 1)
-	{
+	if (markerpoints.length() == 1) {
 		// Do a retransform, because when the first markerpoint
 		// was added, after a curve was removed and added, the
 		// position of the connection line must be recalculated
@@ -385,11 +388,11 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	if (!wrapper.teXUsed) {
 		double value = markerpoints[0].x;
 		if (columnMode== AbstractColumn::ColumnMode::Numeric ||
-				columnMode == AbstractColumn::ColumnMode::Integer)
+		        columnMode == AbstractColumn::ColumnMode::Integer)
 			placeholderText.replace("&amp;(x)",QString::number(value));
 		else if (columnMode== AbstractColumn::ColumnMode::Day ||
-				 columnMode == AbstractColumn::ColumnMode::Month ||
-				 columnMode == AbstractColumn::ColumnMode::DateTime) {
+		         columnMode == AbstractColumn::ColumnMode::Month ||
+		         columnMode == AbstractColumn::ColumnMode::DateTime) {
 			QDateTime dateTime;
 			dateTime.setTime_t(value);
 			QString dateTimeString = dateTime.toString();
@@ -397,11 +400,11 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		}
 	} else {
 		if (columnMode== AbstractColumn::ColumnMode::Numeric ||
-				columnMode == AbstractColumn::ColumnMode::Integer)
+		        columnMode == AbstractColumn::ColumnMode::Integer)
 			placeholderText.replace("&(x)",QString::number(markerpoints[0].x));
 		else if (columnMode== AbstractColumn::ColumnMode::Day ||
-				 columnMode == AbstractColumn::ColumnMode::Month ||
-				 columnMode == AbstractColumn::ColumnMode::DateTime) {
+		         columnMode == AbstractColumn::ColumnMode::Month ||
+		         columnMode == AbstractColumn::ColumnMode::DateTime) {
 			QDateTime dateTime;
 			dateTime.setTime_t(markerpoints[0].x);
 			QString dateTimeString = dateTime.toString();
@@ -776,14 +779,14 @@ STD_SETTER_CMD_IMPL_F_S(InfoElement, SetGluePointIndex, int, gluePointIndex, ret
 void InfoElement::setGluePointIndex(const int value) {
 	Q_D(InfoElement);
 	if (value != d->gluePointIndex)
-        exec(new InfoElementSetGluePointIndexCmd(d, value, ki18n("%1: set gluepoint index")));
+		exec(new InfoElementSetGluePointIndexCmd(d, value, ki18n("%1: set gluepoint index")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineCurveName, QString, connectionLineCurveName, retransform);
 void InfoElement::setConnectionLineCurveName(const QString name) {
 	Q_D(InfoElement);
 	if (name.compare(d->connectionLineCurveName) != 0)
-        exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
+		exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetPosition, double, position, retransform);
@@ -1054,12 +1057,12 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		}
 	}
 	x += delta_logic.x();
-    int xindex = q->markerpoints[activeIndex].curve->xColumn()->indexForValue(x);
-    double x_new = q->markerpoints[activeIndex].curve->xColumn()->valueAt(xindex);
-    if (abs(x_new - q->markerpoints[activeIndex].x) > 0) {
-        oldMousePos = eventPos;
-        q->setPosition(x);
-    }
+	int xindex = q->markerpoints[activeIndex].curve->xColumn()->indexForValue(x);
+	double x_new = q->markerpoints[activeIndex].curve->xColumn()->valueAt(xindex);
+	if (abs(x_new - q->markerpoints[activeIndex].x) > 0) {
+		oldMousePos = eventPos;
+		q->setPosition(x);
+	}
 }
 
 void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
@@ -1093,7 +1096,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 		if (m_index < 0)
 			m_index = 0;
 
-        // find markerpoint to which the values matches (curvename is stored in connectionLineCurveName)
+		// find markerpoint to which the values matches (curvename is stored in connectionLineCurveName)
 		x = column->valueAt(m_index);
 		for (int i=1; i< q->markerPointsCount(); i++) {
 			if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
