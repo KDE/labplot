@@ -39,59 +39,61 @@ extern "C" {
 
 //! Auxiliary class for a data range 
 /**
- *	This class represents a data range [left, right] where left can be >= right
+ *	This class represents a data range [start, end] where start can be > end.
+ *	It replaces the Interval classes
  *
  *	Only types supporting comparison are supported
  */
 template<class T>
 class Range {
 public:
-	Range() : m_min(0), m_max(0) {}
-	Range(T min, T max) {
-		this->setRange(min, max);
+	Range() : m_start(0), m_end(0) {}
+	Range(T start, T end) {
+		this->setRange(start, end);
 	}
-	Range(const QString& min, const QString& max) {
+	Range(const QString& start, const QString& end) {
 		SET_NUMBER_LOCALE
 		//TODO: check for NAN, INF?
-		this->setRange(parse(qPrintable(min.simplified()), qPrintable(numberLocale.name())), parse(qPrintable(max.simplified()), qPrintable(numberLocale.name())));
+		this->setRange(parse(qPrintable(start.simplified()), qPrintable(numberLocale.name())), parse(qPrintable(end.simplified()), qPrintable(numberLocale.name())));
 	}
 	~Range() = default;
-	T min() const { return m_min; }
-	T max() const { return m_max; }
-	T& min() { return m_min; }
-	T& max() { return m_max; }
-	void setMin(T min) { m_min = min; }
-	void setMax(T max) { m_max = max; }
-	void setRange(T min, T max) {
-		m_min = min;
-		m_max = max;
+	T start() const { return m_start; }
+	T end() const { return m_end; }
+	T& start() { return m_start; }
+	T& end() { return m_end; }
+	void setMin(T start) { m_start = start; }	// use first
+	void setMax(T end) { m_end = end; }
+	void setRange(T start, T end) {
+		m_start = start;
+		m_end = end;
 	}
-	T size() const { return m_max - m_min; }
-	T length() const { return qAbs(m_max - m_min); }
-	T center() const { return (m_min + m_max)/2; }
+	T size() const { return m_end - m_start; }
+	T length() const { return qAbs(m_end - m_start); }
+	T center() const { return (m_start + m_end)/2; }
 	// calculate step size from number of steps
 	T stepSize(const int steps) const { return (steps > 1) ? size()/(T)(steps - 1) : 0; }
-	bool isZero() const { return ( m_max == m_min ); }
-	bool finite() const { return ( qIsFinite(m_min) && qIsFinite(m_max) ); }
-	bool inside(const Range<T>& other) const { return ( m_min <= other.min() && m_max >= other.max() ); }
-	bool inside(T value) const { return ( qMin(m_min, m_max) <= value && qMax(m_min, m_max) >= value ); }
-	void translate(T offset) { m_min += offset; m_max += offset; }
-	void extend(T value) { m_min -= value; m_max += value; }
+	bool isZero() const { return ( m_end == m_start ); }
+	bool finite() const { return ( qIsFinite(m_start) && qIsFinite(m_end) ); }
+	bool inverse() const { return (m_start > m_end); }
+	bool inside(const Range<T>& other) const { return ( qMin(m_start, m_end) <= qMin(other.start(), other.end()) && qMax(m_start, m_end) >= qMax(other.start(), other.end()) ); }
+	bool inside(T value) const { return ( qMin(m_start, m_end) <= value && qMax(m_start, m_end) >= value ); }
+	void translate(T offset) { m_start += offset; m_end += offset; }
+	void extend(T value) { m_start -= value; m_end += value; }
 	Range<T>& operator=(const Range<T>& other) = default;
-	bool operator==(const Range<T>& other) const { return ( m_min == other.min() && m_max == other.max() ); }
-	bool operator!=(const Range<T>& other) const { return ( m_min != other.min() || m_max != other.max() ); }
-	Range<T>& operator+=(const T value) { m_min += value; m_max += value; return *this; }
-	Range<T>& operator*=(const T value) { m_min *= value; m_max *= value; return *this; }
+	bool operator==(const Range<T>& other) const { return ( m_start == other.start() && m_end == other.end() ); }
+	bool operator!=(const Range<T>& other) const { return ( m_start != other.start() || m_end != other.end() ); }
+	Range<T>& operator+=(const T value) { m_start += value; m_end += value; return *this; }
+	Range<T>& operator*=(const T value) { m_start *= value; m_end *= value; return *this; }
 
-	//! Return a string in the format '[min, max]'
+	//! Return a string in the format '[start, end]'
 	QString toString() const {
-		return "[" + QLocale().toString(m_min) + ", " + QLocale().toString(m_max) + "]";
+		return "[" + QLocale().toString(m_start) + ", " + QLocale().toString(m_end) + "]";
 	}
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
 private:
-	T m_min;	// lower limit
-	T m_max;	// upper limit
+	T m_start;	// start value
+	T m_end;	// upper limit
 };
 
 #endif

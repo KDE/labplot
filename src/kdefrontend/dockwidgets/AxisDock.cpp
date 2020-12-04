@@ -547,8 +547,8 @@ void AxisDock::updateLocale() {
 	//update the QLineEdits, avoid the change events
 	Lock lock(m_initializing);
 	ui.lePosition->setText(numberLocale.toString(m_axis->offset()));
-	ui.leStart->setText(numberLocale.toString(m_axis->range().min()));
-	ui.leEnd->setText(numberLocale.toString(m_axis->range().max()));
+	ui.leStart->setText(numberLocale.toString(m_axis->range().start()));
+	ui.leEnd->setText(numberLocale.toString(m_axis->range().end()));
 
 	//update the title label
 	labelWidget->updateLocale();
@@ -2008,8 +2008,8 @@ void AxisDock::load() {
 	ui.lePosition->setText( numberLocale.toString(m_axis->offset()) );
 	ui.cbScale->setCurrentIndex( (int)m_axis->scale() );
 	ui.chkAutoScale->setChecked( m_axis->autoScale() );
-	ui.leStart->setText( numberLocale.toString(m_axis->range().min()) );
-	ui.leEnd->setText( numberLocale.toString(m_axis->range().max()) );
+	ui.leStart->setText( numberLocale.toString(m_axis->range().start()) );
+	ui.leEnd->setText( numberLocale.toString(m_axis->range().end()) );
 
 	ui.sbMajorTicksSpacingNumeric->setDecimals(0);
 	ui.sbMajorTicksSpacingNumeric->setSingleStep(m_axis->majorTicksSpacing());
@@ -2047,8 +2047,8 @@ void AxisDock::load() {
 				ui.dateTimeEditStart->setDisplayFormat(plot->yRangeDateTimeFormat());
 				ui.dateTimeEditEnd->setDisplayFormat(plot->yRangeDateTimeFormat());
 			}
-			ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().min()));
-			ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().max()));
+			ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().start()));
+			ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().end()));
 
 		}
 	}
@@ -2170,8 +2170,8 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.lePosition->setText( numberLocale.toString(group.readEntry("PositionOffset", m_axis->offset())) );
 	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) m_axis->scale()) );
 	ui.chkAutoScale->setChecked( group.readEntry("AutoScale", m_axis->autoScale()) );
-	ui.leStart->setText( numberLocale.toString(group.readEntry("Start", m_axis->range().min())) );
-	ui.leEnd->setText( numberLocale.toString(group.readEntry("End", m_axis->range().max())) );
+	ui.leStart->setText( numberLocale.toString(group.readEntry("Start", m_axis->range().start())) );
+	ui.leEnd->setText( numberLocale.toString(group.readEntry("End", m_axis->range().end())) );
 	ui.leZeroOffset->setText( numberLocale.toString(group.readEntry("ZeroOffset", m_axis->zeroOffset())) );
 	ui.leScalingFactor->setText( numberLocale.toString(group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
 

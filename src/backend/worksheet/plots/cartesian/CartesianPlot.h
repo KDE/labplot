@@ -70,7 +70,7 @@ public:
 	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY
 	                         };
 
-	struct RangeBreak {
+	struct RangeBreak {	//TODO: Range
 		RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakStyle::Sloped) {}
 		bool isValid() const {
 			return (!std::isnan(start) && !std::isnan(end));

@@ -41,7 +41,7 @@ template<class T> class Interval;
 
 template<class T> class IntervalBase {
 	public:
-		IntervalBase() : m_start(-1), m_end(-1){}
+		IntervalBase() : m_start(-1), m_end(-1) {}
 		IntervalBase(T start, T end) {
 			m_start = start;
 			m_end = end;
@@ -125,10 +125,8 @@ template<class T> class IntervalBase {
 		 * intersect or touch anymore.
 		 */
 		static void mergeIntervalIntoList(QVector< Interval<T> > * list, Interval<T> i) {
-			for(int c=0; c<list->size(); c++)
-			{
-				if( list->at(c).touches(i) || list->at(c).intersects(i) )
-				{
+			for (int c = 0; c < list->size(); c++) {
+				if ( list->at(c).touches(i) || list->at(c).intersects(i) ) {
 					Interval<T> result = merge(list->takeAt(c), i);
 					mergeIntervalIntoList(list, result);
 					return;
@@ -202,9 +200,8 @@ template<class T> class IntervalBase {
 
 //! Auxiliary class for interval based data
 /**
- *	This class represents an interval of
- *	the type [start,end]. It should be pretty
- *	self explanatory.
+ *	This class represents a data range of
+ *	the type [start,end] where start > end is possible.
  *
  *	For the template argument (T), only numerical types ((unsigned) short, (unsigned) int,
  *	(unsigned) long, float, double, long double) are supported.
@@ -214,16 +211,16 @@ template<class T> class Interval : public IntervalBase<T> {
 		Interval() = default;
 		Interval(T start, T end) : IntervalBase<T>(start, end) {}
 		Interval(const Interval<T>&) = default;
-		T size() const {
+		T size() const {	// why "+1"?
 			return IntervalBase<T>::m_end - IntervalBase<T>::m_start + 1;
 		}
-		bool isValid() const {
+		bool isValid() const {	// why >=0 ?
 			return ( IntervalBase<T>::m_start >= 0 && IntervalBase<T>::m_end >= 0 &&
 					IntervalBase<T>::m_start <= IntervalBase<T>::m_end );
 		}
-		bool touches(const Interval<T>& other) const override {
-			return ( (other.end() == IntervalBase<T>::m_start-1) ||
-					(other.start() == IntervalBase<T>::m_end+1) );
+		bool touches(const Interval<T>& other) const override {	// why "+/- 1" ?
+			return ( (other.end() == IntervalBase<T>::m_start - 1) ||
+					(other.start() == IntervalBase<T>::m_end + 1) );
 		}
 };
 

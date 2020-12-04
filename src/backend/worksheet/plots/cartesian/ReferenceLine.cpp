@@ -304,9 +304,9 @@ void ReferenceLinePrivate::retransform() {
 		//determine the length of the line to be drawn
 		QVector<QPointF> pointsLogical;
 		if (orientation == ReferenceLine::Orientation::Vertical)
-			pointsLogical << QPointF(position, plot->yRange().min()) << QPointF(position, plot->yRange().max());
+			pointsLogical << QPointF(position, plot->yRange().start()) << QPointF(position, plot->yRange().end());
 		else
-			pointsLogical << QPointF(plot->xRange().min(), position) << QPointF(plot->xRange().max(), position);
+			pointsLogical << QPointF(plot->xRange().start(), position) << QPointF(plot->xRange().end(), position);
 
 		QVector<QPointF> pointsScene = cSystem->mapLogicalToScene(pointsLogical);
 

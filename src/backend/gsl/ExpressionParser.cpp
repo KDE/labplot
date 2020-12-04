@@ -1452,7 +1452,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 	SET_NUMBER_LOCALE
 	for (int i = 0; i < count; i++) {
-		const double x{ range.min() + step * i };
+		const double x{ range.start() + step * i };
 		assign_symbol("x", x);
 
 		const double y{ parse(qPrintable(expr), qPrintable(numberLocale.name())) };
@@ -1476,7 +1476,7 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 
 	SET_NUMBER_LOCALE
 	for (int i = 0; i < count; i++) {
-		const double x{ range.min() + step * i };
+		const double x{ range.start() + step * i };
 		assign_symbol("x", x);
 
 		const double y{ parse(qPrintable(expr), qPrintable(numberLocale.name())) };
@@ -1578,7 +1578,7 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 
 	SET_NUMBER_LOCALE
 	for (int i = 0; i < count; i++) {
-		const double phi = range.min() + step * i;
+		const double phi = range.start() + step * i;
 		assign_symbol("phi", phi);
 
 		const double r = parse(qPrintable(expr), qPrintable(numberLocale.name()));
@@ -1601,7 +1601,7 @@ bool ExpressionParser::evaluateParametric(const QString& xexpr, const QString& y
 
 	SET_NUMBER_LOCALE
 	for (int i = 0; i < count; i++) {
-		assign_symbol("t", range.min() + step * i);
+		assign_symbol("t", range.start() + step * i);
 
 		const double x = parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
 		if (parse_errors() > 0)

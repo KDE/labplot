@@ -542,12 +542,12 @@ void Axis::setRange(Range<double> range) {
 }
 void Axis::setStart(double min) {
 	Q_D(Axis);
-	Range<double> range{min, d->range.max()};
+	Range<double> range{min, d->range.end()};
 	setRange(range);
 }
 void Axis::setEnd(double max) {
 	Q_D(Axis);
-	Range<double> range{d->range.min(), max};
+	Range<double> range{d->range.start(), max};
 	setRange(range);
 }
 void Axis::setRange(double min, double max) {
@@ -1010,24 +1010,24 @@ void AxisPrivate::retransformLine() {
 
 	if (orientation == Axis::Orientation::Horizontal) {
 		if (position == Axis::Position::Top)
-			offset = plot->yRange().max();
+			offset = plot->yRange().end();
 		else if (position == Axis::Position::Bottom)
-			offset = plot->yRange().min();
+			offset = plot->yRange().start();
 		else if (position == Axis::Position::Centered)
 			offset = plot->yRange().center();
 
-		startPoint = QPointF(range.min(), offset);
-		endPoint = QPointF(range.max(), offset);
+		startPoint = QPointF(range.start(), offset);
+		endPoint = QPointF(range.end(), offset);
 	} else { // vertical
 		if (position == Axis::Position::Left)
-			offset = plot->xRange().min();
+			offset = plot->xRange().start();
 		else if (position == Axis::Position::Right)
-			offset = plot->xRange().max();
+			offset = plot->xRange().end();
 		else if (position == Axis::Position::Centered)
 			offset = plot->xRange().center();
 
-		startPoint = QPointF(offset, range.min());
-		endPoint = QPointF(offset, range.max());
+		startPoint = QPointF(offset, range.start());
+		endPoint = QPointF(offset, range.end());
 	}
 
 	lines.append(QLineF(startPoint, endPoint));
@@ -1196,7 +1196,7 @@ void AxisPrivate::retransformTicks() {
 	//determine the increment for the major ticks
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
-	double start{range.min()}, end{range.max()};
+	double start{range.start()}, end{range.end()};
 	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
 	if (majorTicksType == Axis::TicksType::TotalNumber) {
 		//the total number of major ticks is given - > determine the increment
@@ -1804,11 +1804,11 @@ void AxisPrivate::retransformMajorGrid() {
 	//since we don't want to paint any grid lines at the plot boundaries
 	bool skipLowestTick, skipUpperTick;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xRange().min());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xRange().max());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xRange().start());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xRange().end());
 	} else {
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), plot->yRange().min());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), plot->yRange().max());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), plot->yRange().start());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), plot->yRange().end());
 	}
 
 	int start, end;	// TODO: hides Axis::start, Axis::end!
@@ -1837,7 +1837,7 @@ void AxisPrivate::retransformMajorGrid() {
 
 		for (int i = start; i < end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
-			lines.append( QLineF(point.x(), yRange.min(), point.x(), yRange.max()) );
+			lines.append( QLineF(point.x(), yRange.start(), point.x(), yRange.end()) );
 		}
 	} else { //vertical axis
 		const Range<double> xRange{plot->xRange()};
@@ -1845,7 +1845,7 @@ void AxisPrivate::retransformMajorGrid() {
 		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
 		for (int i = start; i < end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
-			lines.append( QLineF(xRange.min(), point.y(), xRange.max(), point.y()) );
+			lines.append( QLineF(xRange.start(), point.y(), xRange.end(), point.y()) );
 		}
 	}
 
@@ -1878,12 +1878,12 @@ void AxisPrivate::retransformMinorGrid() {
 		const Range<double> yRange{plot->yRange()};
 
 		for (const auto point : logicalMinorTickPoints)
-			lines.append( QLineF(point.x(), yRange.min(), point.x(), yRange.max()) );
+			lines.append( QLineF(point.x(), yRange.start(), point.x(), yRange.end()) );
 	} else { //vertical axis
 		const Range<double> xRange{plot->xRange()};
 
 		for (const auto point: logicalMinorTickPoints)
-			lines.append( QLineF(xRange.min(), point.y(), xRange.max(), point.y()) );
+			lines.append( QLineF(xRange.start(), point.y(), xRange.end(), point.y()) );
 	}
 
 	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
@@ -2185,8 +2185,8 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "position", QString::number(static_cast<int>(d->position)) );
 	writer->writeAttribute( "scale", QString::number(static_cast<int>(d->scale)) );
 	writer->writeAttribute( "offset", QString::number(d->offset) );
-	writer->writeAttribute( "start", QString::number(d->range.min()) );
-	writer->writeAttribute( "end", QString::number(d->range.max()) );
+	writer->writeAttribute( "start", QString::number(d->range.start()) );
+	writer->writeAttribute( "end", QString::number(d->range.end()) );
 	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
 	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
 	writer->writeAttribute( "titleOffsetX", QString::number(d->titleOffsetX) );
@@ -2295,8 +2295,8 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("position", position, Axis::Position);
 			READ_INT_VALUE("scale", scale, Axis::Scale);
 			READ_DOUBLE_VALUE("offset", offset);
-			READ_DOUBLE_VALUE("start", range.min());
-			READ_DOUBLE_VALUE("end", range.max());
+			READ_DOUBLE_VALUE("start", range.start());
+			READ_DOUBLE_VALUE("end", range.end());
 			READ_DOUBLE_VALUE("scalingFactor", scalingFactor);
 			READ_DOUBLE_VALUE("zeroOffset", zeroOffset);
 			READ_DOUBLE_VALUE("titleOffsetX", titleOffsetX);

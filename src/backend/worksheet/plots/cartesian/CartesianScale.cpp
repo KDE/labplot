@@ -129,10 +129,11 @@ private:
 
 /***************************************************************/
 
+//TODO: Invertal -> Range, use Range for scene and logical
 CartesianScale* CartesianScale::createLinearScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
 
-	double lDiff = logicalEnd - logicalStart;
+	const double lDiff = logicalEnd - logicalStart;
 	if (lDiff == 0.0)
 		return nullptr;
 
@@ -142,6 +143,7 @@ CartesianScale* CartesianScale::createLinearScale(const Interval<double> &interv
 	return new LinearScale(interval, a, b);
 }
 
+//TODO: Invertal -> Range, use Range for scene and logical
 CartesianScale* CartesianScale::createLogScale(const Interval<double> &interval,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, CartesianPlot::Scale type) {
 

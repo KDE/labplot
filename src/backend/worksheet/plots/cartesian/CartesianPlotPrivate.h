@@ -66,7 +66,7 @@ public:
 	QString xRangeDateTimeFormat, yRangeDateTimeFormat;
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 	Range<double> xRange{0.0, 1.0}, yRange{0.0, 1.0};
-	//TODO: ranges
+	//TODO: range
 	double xMinPrev{0.0}, xMaxPrev{1.0}, yMinPrev{0.0}, yMaxPrev{1.0};
 	bool autoScaleX{true}, autoScaleY{true};
 	double autoScaleOffsetFactor{0.0f};
@@ -78,7 +78,7 @@ public:
 	//cached values of minimum and maximum for all visible curves
 	bool curvesXMinMaxIsDirty{false}, curvesYMinMaxIsDirty{false};
 	//TODO: numeric limits
-	//TODO: ranges
+	//TODO: ranges/intervals
 	double curvesXMin{INFINITY}, curvesXMax{-INFINITY}, curvesYMin{INFINITY}, curvesYMax{-INFINITY};
 
 	CartesianPlot* const q;

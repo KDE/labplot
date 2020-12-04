@@ -1412,8 +1412,8 @@ void XYCurvePrivate::updateLines() {
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 	if (columnProperties == AbstractColumn::Properties::Constant) {
 		DEBUG(Q_FUNC_INFO << ", CONSTANT column")
-		tempPoint1 = QPointF(plot->xRange().min(), plot->yRange().min());
-		tempPoint2 = QPointF(plot->xRange().min(), plot->yRange().max());
+		tempPoint1 = QPointF(plot->xRange().start(), plot->yRange().start());
+		tempPoint2 = QPointF(plot->xRange().start(), plot->yRange().end());
 		m_lines.append(QLineF(tempPoint1, tempPoint2));
 	} else {
 		QPointF lastPoint{NAN, NAN};	// last x value
@@ -1713,8 +1713,8 @@ void XYCurvePrivate::updateDropLines() {
 
 	//calculate drop lines
 	QVector<QLineF> dlines;
-	const double xMin = plot->xRange().min();
-	const double yMin = plot->yRange().min();
+	const double xMin = plot->xRange().start();
+	const double yMin = plot->yRange().start();
 
 	int i{0};
 	switch (dropLineType) {
@@ -2025,10 +2025,10 @@ void XYCurvePrivate::updateFilling() {
 	const QPointF& last = m_logicalPoints.at(m_logicalPoints.size()-1);//last point of the curve, may not be visible currently
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
-	const double xMin{ plot->xRange().min() }, xMax{ plot->xRange().max() };
-	const double yMin{ plot->yRange().min() }, yMax{ plot->yRange().max() };
+	const double xMin{ plot->xRange().start() }, xMax{ plot->xRange().end() };
+	const double yMin{ plot->yRange().start() }, yMax{ plot->yRange().end() };
 	if (fillingPosition == XYCurve::FillingPosition::Above) {
-		edge = cSystem->mapLogicalToScene(QPointF(plot->xRange().min(), yMin));
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xRange().start(), yMin));
 
 		//start point
 		if (nsl_math_essentially_equal(start.y(), edge.y())) {
@@ -2085,7 +2085,7 @@ void XYCurvePrivate::updateFilling() {
 			if (yMax > 0) {
 				if (first.x() < xMin)
 					start = edge;
-				else if (first.x() > plot->xRange().max())
+				else if (first.x() > plot->xRange().end())
 					start = cSystem->mapLogicalToScene(QPointF(xMax, yMax));
 				else
 					start = cSystem->mapLogicalToScene(QPointF(first.x(), yMax));
