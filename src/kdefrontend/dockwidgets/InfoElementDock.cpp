@@ -42,14 +42,14 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	connect(ui->leComment, &QLineEdit::textChanged, this, &InfoElementDock::commentChanged);
 	connect(ui->chbVisible, &QCheckBox::toggled, this, &InfoElementDock::visibilityChanged);
 
-	connect(ui->sbXPosLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::xposLineWidthChanged);
+	connect(ui->sbVerticalLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::xposLineWidthChanged);
 	connect(ui->sbConnectionLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::connectionLineWidthChanged);
-	connect(ui->kcbXPosLineColor, &KColorButton::changed, this, &InfoElementDock::xposLineColorChanged);
+	connect(ui->kcbVerticalLineColor, &KColorButton::changed, this, &InfoElementDock::xposLineColorChanged);
 	connect(ui->kcbConnectionLineColor, &KColorButton::changed, this, &InfoElementDock::connectionLineColorChanged);
-	connect(ui->chbXPosLineVisible, &QCheckBox::toggled, this, &InfoElementDock::xposLineVisibilityChanged);
-	connect(ui->cbConnnectionLineVisible, &QCheckBox::toggled, this, &InfoElementDock::connectionLineVisibilityChanged);
-	connect(ui->cb_gluePoint, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
-	connect(ui->cbCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
+	connect(ui->chbVerticalLineEnabled, &QCheckBox::toggled, this, &InfoElementDock::xposLineVisibilityChanged);
+	connect(ui->cbConnnectionLineEnabled, &QCheckBox::toggled, this, &InfoElementDock::connectionLineVisibilityChanged);
+	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
+	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
     connect(ui->sbPosition, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::positionChanged);
 }
 
@@ -62,7 +62,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 	m_sameParent = sameParent;
 
 	ui->lwCurves->clear();
-	ui->cbCurve->clear();
+	ui->cbConnectToCurve->clear();
 
 	//if there are more then one info element in the list, disable the name and comment fields
 	if (list.size() == 1) {
@@ -105,29 +105,29 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 		for (int i=0; i<m_element->markerPointsCount(); i++) {
 			auto* markerCurve = m_element->markerPointAt(i).curve;
 			if (markerCurve)
-				ui->cbCurve->addItem(markerCurve->name());
+				ui->cbConnectToCurve->addItem(markerCurve->name());
 		}
 	} else
 		ui->lwCurves->setEnabled(false);
 
 	const QString& curveName = m_element->connectionLineCurveName();
-	for (int i=0; i< ui->cbCurve->count(); i++) {
-		if (ui->cbCurve->itemData(i, Qt::DisplayRole).toString().compare(curveName) == 0) {
-			ui->cbCurve->setCurrentIndex(i);
+	for (int i=0; i< ui->cbConnectToCurve->count(); i++) {
+		if (ui->cbConnectToCurve->itemData(i, Qt::DisplayRole).toString().compare(curveName) == 0) {
+			ui->cbConnectToCurve->setCurrentIndex(i);
 			break;
 		}
 	}
 
 	if (m_element->isTextLabel()) {
 		elementLabelBorderShapeChanged();
-		ui->cb_gluePoint->setCurrentIndex(m_element->gluePointIndex()+1);
+		ui->cbConnectToAnchor->setCurrentIndex(m_element->gluePointIndex()+1);
 	}
 
-	ui->chbXPosLineVisible->setChecked(m_element->xposLineVisible());
-	ui->cbConnnectionLineVisible->setChecked(m_element->connectionLineVisible());
-	ui->kcbXPosLineColor->setColor(m_element->xposLineColor());
+	ui->chbVerticalLineEnabled->setChecked(m_element->xposLineVisible());
+	ui->cbConnnectionLineEnabled->setChecked(m_element->connectionLineVisible());
+	ui->kcbVerticalLineColor->setColor(m_element->xposLineColor());
 	ui->kcbConnectionLineColor->setColor(m_element->connectionLineColor());
-	ui->sbXPosLineWidth->setValue(m_element->xposLineWidth());
+	ui->sbVerticalLineWidth->setValue(m_element->xposLineWidth());
 	ui->sbConnectionLineWidth->setValue(m_element->connectionLineWidth());
     ui->sbPosition->setValue(m_element->position());
 
@@ -207,6 +207,11 @@ void InfoElementDock::xposLineColorChanged(const QColor& color) {
 }
 
 void InfoElementDock::xposLineVisibilityChanged(bool visible) {
+	ui->lVerticalLineWidth->setVisible(visible);
+	ui->sbVerticalLineWidth->setVisible(visible);
+	ui->lVerticalLineColor->setVisible(visible);
+	ui->kcbVerticalLineColor->setVisible(visible);
+
 	if (m_initializing)
 		return;
 
@@ -215,6 +220,16 @@ void InfoElementDock::xposLineVisibilityChanged(bool visible) {
 }
 
 void InfoElementDock::connectionLineVisibilityChanged(bool visible) {
+	ui->lConnectionLineWidth->setVisible(visible);
+	ui->sbConnectionLineWidth->setVisible(visible);
+	ui->lConnectionLineColor->setVisible(visible);
+	ui->kcbConnectionLineColor->setVisible(visible);
+	ui->lConnectTo->setVisible(visible);
+	ui->lConnectToAnchor->setVisible(visible);
+	ui->cbConnectToAnchor->setVisible(visible);
+	ui->lConnectToCurve->setVisible(visible);
+	ui->cbConnectToCurve->setVisible(visible);
+
 	if (m_initializing)
 		return;
 
@@ -234,7 +249,7 @@ void InfoElementDock::curveChanged() {
 	if (m_initializing)
 		return;
 
-	QString name = ui->cbCurve->currentText();
+	QString name = ui->cbConnectToCurve->currentText();
 	for (auto* infoElement: m_elements)
 		infoElement->setConnectionLineCurveName(name);
 }
@@ -297,22 +312,22 @@ void InfoElementDock::elementConnectionLineColorChanged(const QColor& color) {
 
 void InfoElementDock::elementXPosLineWidthChanged(const double width) {
 	const Lock lock(m_initializing);
-	ui->sbXPosLineWidth->setValue(width);
+	ui->sbVerticalLineWidth->setValue(width);
 }
 
 void InfoElementDock::elementXposLineColorChanged(const QColor& color) {
 	const Lock lock(m_initializing);
-	ui->kcbXPosLineColor->setColor(color);
+	ui->kcbVerticalLineColor->setColor(color);
 }
 
 void InfoElementDock::elementXPosLineVisibleChanged(const bool visible) {
 	const Lock lock(m_initializing);
-	ui->chbXPosLineVisible->setChecked(visible);
+	ui->chbVerticalLineEnabled->setChecked(visible);
 }
 
 void InfoElementDock::elementConnectionLineVisibleChanged(const bool visible) {
 	const Lock lock(m_initializing);
-	ui->cbConnnectionLineVisible->setChecked(visible);
+	ui->cbConnnectionLineEnabled->setChecked(visible);
 }
 
 void InfoElementDock::elementVisibilityChanged(const bool visible) {
@@ -323,16 +338,16 @@ void InfoElementDock::elementVisibilityChanged(const bool visible) {
 void InfoElementDock::elementGluePointIndexChanged(const int index) {
 	const Lock lock(m_initializing);
 	if (index < 0)
-		ui->cb_gluePoint->setCurrentIndex(0);
+		ui->cbConnectToAnchor->setCurrentIndex(0);
 	else
-		ui->cb_gluePoint->setCurrentIndex(index + 1); // automatic label is in same combo box
+		ui->cbConnectToAnchor->setCurrentIndex(index + 1); // automatic label is in same combo box
 }
 
 void InfoElementDock::elementConnectionLineCurveChanged(const QString name) {
 	const Lock lock(m_initializing);
-	for (int i=0; i< ui->cbCurve->count(); i++) {
-		if (ui->cbCurve->itemData(i).toString().compare(name) == 0) {
-			ui->cbCurve->setCurrentIndex(i);
+	for (int i=0; i< ui->cbConnectToCurve->count(); i++) {
+		if (ui->cbConnectToCurve->itemData(i).toString().compare(name) == 0) {
+			ui->cbConnectToCurve->setCurrentIndex(i);
 			break;
 		}
 	}
@@ -340,10 +355,10 @@ void InfoElementDock::elementConnectionLineCurveChanged(const QString name) {
 
 void InfoElementDock::elementLabelBorderShapeChanged() {
 	const Lock lock(m_initializing);
-	ui->cb_gluePoint->clear();
-	ui->cb_gluePoint->addItem(i18n("Auto"));
+	ui->cbConnectToAnchor->clear();
+	ui->cbConnectToAnchor->addItem(i18n("Auto"));
 	for (int i=0; i < m_element->gluePointsCount(); i++)
-		ui->cb_gluePoint->addItem(m_element->gluePoint(i).name);
+		ui->cbConnectToAnchor->addItem(m_element->gluePoint(i).name);
 }
 
 void InfoElementDock::elementPositionChanged(double pos) {
