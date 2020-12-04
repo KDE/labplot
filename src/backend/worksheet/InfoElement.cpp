@@ -236,7 +236,8 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		retransform();
 	}
 
-	label->setHidden(false);
+	label->setHidden(false); //show in the project explorer
+	label->setVisible(true); //show in the worksheet view
 }
 
 /*!
@@ -315,9 +316,13 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 		}
 	}
 
-	//hide the label in the project explorer if now curves are selected
-	if (markerpoints.isEmpty())
-		label->setHidden(true);
+	//hide the label if now curves are selected
+	if (markerpoints.isEmpty()) {
+		label->setHidden(true); //hide in the project explorer
+		label->setVisible(false); //hide in the worksheet view
+		Q_D(InfoElement);
+		d->update(); //redraw to remove all children graphic items belonging to InfoElement
+	}
 }
 
 /*!

@@ -227,6 +227,11 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	initConnections();
 	updateBackground();
 	updateLocale();
+
+	//hide the option "Visible" if the label is child of a InfoElement,
+	//the label is what the user identifies with the info element itself
+	bool visible = (m_label->parentAspect()->type() != AspectType::InfoElement);
+	ui.chbVisible->setVisible(visible);
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes) {
