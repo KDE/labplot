@@ -2976,13 +2976,12 @@ void CartesianPlotPrivate::checkYRange() {
 CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
 	DEBUG(Q_FUNC_INFO << ", scene start/end = " << sceneStart << '/' << sceneEnd << ", logical start/end = " << logicalStart << '/' << logicalEnd);
 // 	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
-//TODO: Use Range<double> instead?
-	Interval<double> interval(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
+	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
 // 	Interval<double> interval (logicalStart, logicalEnd);
 	if (type == CartesianPlot::Scale::Linear)
-		return CartesianScale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		return CartesianScale::createLinearScale(range, sceneStart, sceneEnd, logicalStart, logicalEnd);
 	else
-		return CartesianScale::createLogScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd, type);
+		return CartesianScale::createLogScale(range, sceneStart, sceneEnd, logicalStart, logicalEnd, type);
 }
 
 /*!

@@ -286,8 +286,8 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 		if (xIterator.hasNext()) {
 			const CartesianScale* nextXScale = xIterator.peekNext();
 			if (!nextXScale) continue;
-			Interval<double> nextXInterval;
-			nextXScale->getProperties(nullptr, &nextXInterval);
+			Range<double> nextXRange;
+			nextXScale->getProperties(nullptr, &nextXRange);
 
 			double x1 = xScale->end();
 			double x2 = nextXScale->start();

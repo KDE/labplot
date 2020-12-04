@@ -75,8 +75,8 @@ public:
 	bool isZero() const { return ( m_end == m_start ); }
 	bool finite() const { return ( qIsFinite(m_start) && qIsFinite(m_end) ); }
 	bool inverse() const { return (m_start > m_end); }
-	bool inside(const Range<T>& other) const { return ( qMin(m_start, m_end) <= qMin(other.start(), other.end()) && qMax(m_start, m_end) >= qMax(other.start(), other.end()) ); }
-	bool inside(T value) const { return ( qMin(m_start, m_end) <= value && qMax(m_start, m_end) >= value ); }
+	bool contains(const Range<T>& other) const { return ( qMin(m_start, m_end) <= qMin(other.start(), other.end()) && qMax(m_start, m_end) >= qMax(other.start(), other.end()) ); }
+	bool contains(T value) const { return ( qMin(m_start, m_end) <= value && qMax(m_start, m_end) >= value ); }
 	void translate(T offset) { m_start += offset; m_end += offset; }
 	void extend(T value) { m_start -= value; m_end += value; }
 	Range<T>& operator=(const Range<T>& other) = default;

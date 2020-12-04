@@ -5,6 +5,7 @@
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -33,18 +34,18 @@
  * \class CartesianScale
  * \brief Base class for cartesian coordinate system scales.
  */
-CartesianScale::CartesianScale(Type type, const Interval<double> &interval, double a, double b, double c)
-	: m_type(type), m_interval(interval), m_a(a), m_b(b), m_c(c) {
+CartesianScale::CartesianScale(Type type, const Range<double> &range, double a, double b, double c)
+	: m_type(type), m_range(range), m_a(a), m_b(b), m_c(c) {
 }
 
 CartesianScale::~CartesianScale() = default;
 
-void CartesianScale::getProperties(Type *type, Interval<double> *interval,
+void CartesianScale::getProperties(Type *type, Range<double> *range,
 		double *a, double *b, double *c) const {
 	if (type)
 		*type = m_type;
-	if (interval)
-		*interval = m_interval;
+	if (range)
+		*range = m_range;
 	if (a)
 		*a = m_a;
 	if (b)
@@ -59,8 +60,8 @@ void CartesianScale::getProperties(Type *type, Interval<double> *interval,
  */
 class LinearScale : public CartesianScale {
 public:
-	LinearScale(const Interval<double> &interval, double offset, double gradient)
-		: CartesianScale(Type::Linear, interval, offset, gradient, 0) {
+	LinearScale(const Range<double> &range, double offset, double gradient)
+		: CartesianScale(Type::Linear, range, offset, gradient, 0) {
 			Q_ASSERT(gradient != 0.0);
 
 		}
@@ -90,8 +91,8 @@ public:
  */
 class LogScale : public CartesianScale {
 public:
-	LogScale(const Interval<double> &interval, double offset, double scaleFactor, double base, bool abs)
-		: CartesianScale(Type::Log, interval, offset, scaleFactor, base), m_abs(abs) {
+	LogScale(const Range<double> &range, double offset, double scaleFactor, double base, bool abs)
+		: CartesianScale(Type::Log, range, offset, scaleFactor, base), m_abs(abs) {
 			Q_ASSERT(scaleFactor != 0.0);
 			Q_ASSERT(base > 0.0);
 	}
@@ -129,8 +130,8 @@ private:
 
 /***************************************************************/
 
-//TODO: Invertal -> Range, use Range for scene and logical
-CartesianScale* CartesianScale::createLinearScale(const Interval<double> &interval,
+//TODO: use Range for scene and logical
+CartesianScale* CartesianScale::createLinearScale(const Range<double> &range,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
 
 	const double lDiff = logicalEnd - logicalStart;
@@ -140,11 +141,11 @@ CartesianScale* CartesianScale::createLinearScale(const Interval<double> &interv
 	double b = (sceneEnd - sceneStart) / lDiff;
 	double a = sceneStart - b * logicalStart;
 
-	return new LinearScale(interval, a, b);
+	return new LinearScale(range, a, b);
 }
 
-//TODO: Invertal -> Range, use Range for scene and logical
-CartesianScale* CartesianScale::createLogScale(const Interval<double> &interval,
+//TODO: use Range for scene and logical
+CartesianScale* CartesianScale::createLogScale(const Range<double> &range,
 		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, CartesianPlot::Scale type) {
 
 	double base;
@@ -167,6 +168,6 @@ CartesianScale* CartesianScale::createLogScale(const Interval<double> &interval,
 	double a = sceneStart - b * log(logicalStart)/log(base);
 
 	bool abs = (type == CartesianPlot::Scale::Log10Abs || type == CartesianPlot::Scale::Log2Abs || type == CartesianPlot::Scale::LnAbs);
-	return new LogScale(interval, a, b, base, abs);
+	return new LogScale(range, a, b, base, abs);
 }
 

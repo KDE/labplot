@@ -5,6 +5,7 @@
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -31,7 +32,7 @@
 #define CARTESIANSCALE_H
 
 #include "CartesianPlot.h"
-#include "backend/lib/Interval.h"
+#include "backend/lib/Range.h"
 
 class CartesianScale {
 public:
@@ -39,22 +40,25 @@ public:
 
 	enum class Type {Linear, Log};
 
-	static CartesianScale* createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
+	static CartesianScale* createLinearScale(const Range<double> &range, double sceneStart, double sceneEnd,
 		double logicalStart, double logicalEnd);
-	static CartesianScale* createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
+	static CartesianScale* createLogScale(const Range<double> &range, double sceneStart, double sceneEnd,
 		double logicalStart, double logicalEnd, CartesianPlot::Scale);
 
-	virtual void getProperties(Type *type = nullptr, Interval<double> *interval = nullptr,
+	virtual void getProperties(Type *type = nullptr, Range<double> *range = nullptr,
 			double *a = nullptr, double *b = nullptr, double *c = nullptr) const;
 
 	inline double start() const {
-		return m_interval.start();
+		return m_range.start();
 	}
 	inline double end() const {
-		return m_interval.end();
+		return m_range.end();
+	}
+	inline Range<double> range() const {
+		return m_range;
 	}
 	inline bool contains(double value) const {
-		return m_interval.contains(value);
+		return m_range.contains(value);
 	}
 
 	virtual bool map(double*) const = 0;
@@ -62,9 +66,9 @@ public:
 	virtual int direction() const = 0;
 
 protected:
-	CartesianScale(Type type, const Interval<double> &interval, double a, double b, double c);
+	CartesianScale(Type type, const Range<double> &range, double a, double b, double c);
 	Type m_type;
-	Interval<double> m_interval;
+	Range<double> m_range;
 	//TODO: what are these?
 	double m_a;
 	double m_b;
