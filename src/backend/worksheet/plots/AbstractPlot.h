@@ -60,7 +60,7 @@ public:
 
 protected:
 	AbstractPlot(const QString&, AbstractPlotPrivate*, AspectType);
-	AbstractCoordinateSystem* m_coordinateSystem{nullptr};
+	QVector<AbstractCoordinateSystem*> m_coordinateSystems;
 	PlotArea* m_plotArea{nullptr};
 	TextLabel* m_title{nullptr};
 

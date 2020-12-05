@@ -79,7 +79,7 @@ public:
 	Range<double> curvesXRange{qInf(), -qInf()}, curvesYRange{qInf(), -qInf()};
 
 	CartesianPlot* const q;
-	CartesianCoordinateSystem* coordinateSystem{nullptr};
+	QVector<CartesianCoordinateSystem*> coordinateSystems;
 	CartesianPlot::MouseMode mouseMode{CartesianPlot::MouseMode::Selection};
 	bool suppressRetransform{false};
 	bool panningStarted{false};

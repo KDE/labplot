@@ -69,7 +69,8 @@ PlotArea* AbstractPlot::plotArea() {
 }
 
 AbstractCoordinateSystem* AbstractPlot::coordinateSystem() const {
-	return m_coordinateSystem;
+	//TODO
+	return m_coordinateSystems.at(0);
 }
 
 TextLabel* AbstractPlot::title() {
