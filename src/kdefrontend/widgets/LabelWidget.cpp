@@ -162,8 +162,8 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
 	m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("LaTeX")));
 	m_highlighter->setTheme(  (palette().color(QPalette::Base).lightness() < 128)
-								? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-								: m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme) );
+	                          ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+	                          : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme) );
 #endif
 
 	//SLOTS
@@ -265,7 +265,7 @@ void LabelWidget::updateBackground() const {
 	if (ui.tbTexUsed->isChecked())
 		return;
 
-    QColor color(Qt::white);
+	QColor color(Qt::white);
 	AspectType type = m_label->parentAspect()->type();
 	if (type == AspectType::Worksheet)
 		color = static_cast<const Worksheet*>(m_label->parentAspect())->backgroundFirstColor();
@@ -273,12 +273,12 @@ void LabelWidget::updateBackground() const {
 		color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->backgroundFirstColor();
 	else if (type == AspectType::CartesianPlotLegend)
 		color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
-    else if (type == AspectType::InfoElement)
-        color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
-    else if (type == AspectType::Axis)
+	else if (type == AspectType::InfoElement)
 		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
-    else
-        DEBUG("Not handled type:" << static_cast<int>(type));
+	else if (type == AspectType::Axis)
+		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
+	else
+		DEBUG("Not handled type:" << static_cast<int>(type));
 
 	QPalette p = ui.teLabel->palette();
 	p.setColor(QPalette::Base, color);
@@ -304,7 +304,7 @@ void LabelWidget::initConnections() const {
 	if (type == AspectType::Worksheet) {
 		auto* worksheet = static_cast<const Worksheet*>(m_label->parentAspect());
 		connect(worksheet, &Worksheet::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
-	}else if (type == AspectType::CartesianPlot) {
+	} else if (type == AspectType::CartesianPlot) {
 		auto* plotArea = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea();
 		connect(plotArea, &PlotArea::backgroundFirstColorChanged, this, &LabelWidget::updateBackground);
 	} else if (type == AspectType::CartesianPlotLegend) {
@@ -438,13 +438,13 @@ void LabelWidget::textChanged() {
 			wrapper.text = text;
 			for (auto* label : m_labelsList) {
 				wrapper.textPlaceholder = label->text().textPlaceholder;
-				wrapper.placeholder = label->text().placeholder;
+				wrapper.allowPlaceholder = label->text().allowPlaceholder;
 				label->setText(wrapper);
 			}
 		} else {
 			wrapper.textPlaceholder = text;
 			for (auto* label: m_labelsList) {
-				wrapper.placeholder = label->text().placeholder;
+				wrapper.allowPlaceholder = label->text().allowPlaceholder;
 				wrapper.text = label->text().text;
 				label->setPlaceholderText(wrapper);
 			}
@@ -471,14 +471,14 @@ void LabelWidget::textChanged() {
 		if(!ui.chbShowPlaceholderText->isChecked()) {
 			wrapper.text = text;
 			for (auto* label : m_labelsList) {
-				wrapper.placeholder = label->text().placeholder;
+				wrapper.allowPlaceholder = label->text().allowPlaceholder;
 				wrapper.textPlaceholder = label->text().textPlaceholder;
 				label->setText(wrapper);
 			}
 		} else {
 			wrapper.textPlaceholder = text;
 			for (auto* label : m_labelsList) {
-				wrapper.placeholder = label->text().placeholder;
+				wrapper.allowPlaceholder = label->text().allowPlaceholder;
 				wrapper.text = label->text().text;
 				label->setPlaceholderText(wrapper);
 			}
@@ -1220,8 +1220,8 @@ void LabelWidget::load() {
 	ui.chbVisible->setChecked(m_label->isVisible());
 
 	// don't show checkbox if Placeholder feature not used
-	bool placeholder = m_label->text().placeholder;
-	if (!placeholder) {
+	bool allowPlaceholder = m_label->text().allowPlaceholder;
+	if (!allowPlaceholder) {
 		ui.chbShowPlaceholderText->setVisible(false);
 		ui.chbShowPlaceholderText->setEnabled(false);
 		ui.chbShowPlaceholderText->setChecked(false);
@@ -1233,7 +1233,7 @@ void LabelWidget::load() {
 
 	//Text/TeX
 	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
-	if(!placeholder) {
+	if(!allowPlaceholder) {
 		if (m_label->text().teXUsed)
 			ui.teLabel->setText(m_label->text().text);
 		else {
@@ -1253,11 +1253,11 @@ void LabelWidget::load() {
 
 	// if the text is empty yet, user LabelWidget::fontColor(),
 	//extract the color from the html formatted text otherwise
-	 if (!m_label->text().text.isEmpty()) {
+	if (!m_label->text().text.isEmpty()) {
 		QTextCharFormat format = ui.teLabel->currentCharFormat();
 		ui.kcbFontColor->setColor(format.foreground().color());
 		//ui.kcbBackgroundColor->setColor(format.background().color());
-	 } else
+	} else
 		ui.kcbFontColor->setColor(m_label->fontColor());
 
 	//used for latex text only
@@ -1266,7 +1266,7 @@ void LabelWidget::load() {
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
-	ui.chbShowPlaceholderText->setChecked(m_label->text().placeholder);
+	ui.chbShowPlaceholderText->setChecked(m_label->text().allowPlaceholder);
 
 	//move the cursor to the end and set the focus to the text editor
 	QTextCursor cursor = ui.teLabel->textCursor();
