@@ -40,26 +40,15 @@ public:
 
 	enum class Type {Linear, Log};
 
-	static CartesianScale* createLinearScale(const Range<double> &range, double sceneStart, double sceneEnd,
-		double logicalStart, double logicalEnd);
-	static CartesianScale* createLogScale(const Range<double> &range, double sceneStart, double sceneEnd,
-		double logicalStart, double logicalEnd, CartesianPlot::Scale);
+	static CartesianScale* createLinearScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange);
+	static CartesianScale* createLogScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange, CartesianPlot::Scale);
 
-	virtual void getProperties(Type *type = nullptr, Range<double> *range = nullptr,
-			double *a = nullptr, double *b = nullptr, double *c = nullptr) const;
+	virtual void getProperties(Type *type = nullptr, Range<double> *range = nullptr, double *a = nullptr, double *b = nullptr, double *c = nullptr) const;
 
-	inline double start() const {
-		return m_range.start();
-	}
-	inline double end() const {
-		return m_range.end();
-	}
-	inline Range<double> range() const {
-		return m_range;
-	}
-	inline bool contains(double value) const {
-		return m_range.contains(value);
-	}
+	inline double start() const { return m_range.start(); }
+	inline double end() const { return m_range.end(); }
+	inline Range<double> range() const { return m_range; }
+	inline bool contains(double value) const { return m_range.contains(value); }
 
 	virtual bool map(double*) const = 0;
 	virtual bool inverseMap(double*) const = 0;

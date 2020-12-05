@@ -130,23 +130,20 @@ private:
 
 /***************************************************************/
 
-//TODO: use Range for scene and logical
 CartesianScale* CartesianScale::createLinearScale(const Range<double> &range,
-		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
+		const Range<double> &sceneRange, const Range<double> &logicalRange) {
 
-	const double lDiff = logicalEnd - logicalStart;
-	if (lDiff == 0.0)
+	if (logicalRange.size() == 0.0)
 		return nullptr;
 
-	double b = (sceneEnd - sceneStart) / lDiff;
-	double a = sceneStart - b * logicalStart;
+	double b = sceneRange.size() / logicalRange.size();
+	double a = sceneRange.start() - b * logicalRange.start();
 
 	return new LinearScale(range, a, b);
 }
 
-//TODO: use Range for scene and logical
 CartesianScale* CartesianScale::createLogScale(const Range<double> &range,
-		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd, CartesianPlot::Scale type) {
+		const Range<double> &sceneRange, const Range<double> &logicalRange, CartesianPlot::Scale type) {
 
 	double base;
 	if (type == CartesianPlot::Scale::Log10 || type == CartesianPlot::Scale::Log10Abs)
@@ -157,15 +154,15 @@ CartesianScale* CartesianScale::createLogScale(const Range<double> &range,
 		base = M_E;
 
 
-	if (logicalStart <= 0.0 || logicalEnd <= 0.0)
+	if (logicalRange.start() <= 0.0 || logicalRange.end() <= 0.0)
 		return nullptr;
 
-	const double lDiff = (log(logicalEnd) - log(logicalStart)) / log(base);
+	const double lDiff = (log(logicalRange.end()) - log(logicalRange.start())) / log(base);
 	if (lDiff == 0.0)
 		return nullptr;
 
-	double b = (sceneEnd - sceneStart) / lDiff;
-	double a = sceneStart - b * log(logicalStart)/log(base);
+	double b = sceneRange.size() / lDiff;
+	double a = sceneRange.start() - b * log(logicalRange.start())/log(base);
 
 	bool abs = (type == CartesianPlot::Scale::Log10Abs || type == CartesianPlot::Scale::Log2Abs || type == CartesianPlot::Scale::LnAbs);
 	return new LogScale(range, a, b, base, abs);

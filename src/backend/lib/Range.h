@@ -35,7 +35,7 @@ extern "C" {
 
 #include "backend/lib/macros.h"	//SET_NUMBER_LOCALE
 
-#include <QString>
+class QString;
 
 //! Auxiliary class for a data range 
 /**
@@ -61,7 +61,7 @@ public:
 	T end() const { return m_end; }
 	T& start() { return m_start; }
 	T& end() { return m_end; }
-	void setMin(T start) { m_start = start; }	// use first
+	void setMin(T start) { m_start = start; }
 	void setMax(T end) { m_end = end; }
 	void setRange(T start, T end) {
 		m_start = start;
@@ -73,6 +73,7 @@ public:
 	// calculate step size from number of steps
 	T stepSize(const int steps) const { return (steps > 1) ? size()/(T)(steps - 1) : 0; }
 	bool isZero() const { return ( m_end == m_start ); }
+	bool valid() const { return ( !qIsNaN(m_start) && !qIsNaN(m_end) ); }
 	bool finite() const { return ( qIsFinite(m_start) && qIsFinite(m_end) ); }
 	bool inverse() const { return (m_start > m_end); }
 	bool contains(const Range<T>& other) const { return ( qMin(m_start, m_end) <= qMin(other.start(), other.end()) && qMax(m_start, m_end) >= qMax(other.start(), other.end()) ); }
@@ -89,6 +90,7 @@ public:
 	QString toString() const {
 		return "[" + QLocale().toString(m_start) + ", " + QLocale().toString(m_end) + "]";
 	}
+	const char* toStdString() const { return STDSTRING(toString()); }
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
 private:

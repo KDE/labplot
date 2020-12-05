@@ -383,14 +383,12 @@ void CartesianPlot::setType(Type type) {
 		}
 	}
 
-	//TODO: range
-	d->xMinPrev = d->xRange.start();
-	d->xMaxPrev = d->xRange.end();
-	d->yMinPrev = d->yRange.start();
-	d->yMaxPrev = d->yRange.end();
+	d->xPrevRange = d->xRange;
+	d->yPrevRange = d->yRange;
 
 	//Geometry, specify the plot rect in scene coordinates.
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
+	//TODO: double
 	float x = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
 	float y = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
 	float w = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Centimeter);
@@ -969,16 +967,14 @@ void CartesianPlot::setRangeFirstValues(int values) {
 class CartesianPlotSetAutoScaleXCmd : public QUndoCommand {
 public:
 	CartesianPlotSetAutoScaleXCmd(CartesianPlotPrivate* private_obj, bool autoScale) :
-		m_private(private_obj), m_autoScale(autoScale), m_autoScaleOld(false), m_minOld(0.0), m_maxOld(0.0) {
+		m_private(private_obj), m_autoScale(autoScale), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
 		setText(i18n("%1: change x-range auto scaling", m_private->name()));
 	};
 
 	void redo() override {
 		m_autoScaleOld = m_private->autoScaleX;
 		if (m_autoScale) {
-			//TODO: range
-			m_minOld = m_private->xRange.start();
-			m_maxOld = m_private->xRange.end();
+			m_oldRange = m_private->xRange;
 			m_private->q->scaleAutoX();
 		}
 		m_private->autoScaleX = m_autoScale;
@@ -987,7 +983,7 @@ public:
 
 	void undo() override {
 		if (!m_autoScaleOld) {
-			m_private->xRange.setRange(m_minOld, m_maxOld);
+			m_private->xRange = m_oldRange;
 			m_private->retransformScales();
 		}
 		m_private->autoScaleX = m_autoScaleOld;
@@ -998,8 +994,7 @@ private:
 	CartesianPlotPrivate* m_private;
 	bool m_autoScale;
 	bool m_autoScaleOld;
-	double m_minOld;
-	double m_maxOld;
+	Range<double> m_oldRange;
 };
 
 void CartesianPlot::setAutoScaleX(bool autoScaleX) {
@@ -1869,10 +1864,10 @@ bool CartesianPlot::scaleAutoX() {
 
 		if (errorBarsCapSize > 0) {
 			// must be done, because retransformScales uses xMin/xMax
-			if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY)
+			if (d->curvesXMin != d->xMin && d->curvesXMin != qInf())
 				d->xMin = d->curvesXMin;
 
-			if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY)
+			if (d->curvesXMax != d->xMax && d->curvesXMax != -qInf())
 				d->xMax = d->curvesXMax;
 			// When the previous scale is completely different. The mapTo functions scale with wrong values. To prevent
 			// this a rescale must be done.
@@ -1904,13 +1899,13 @@ bool CartesianPlot::scaleAutoX() {
 	}
 
 	bool update = false;
-	if (d->curvesXMin != d->xRange.start() && d->curvesXMin != INFINITY) {
-		d->xRange.start() = d->curvesXMin;
+	if (d->curvesXRange.start() != d->xRange.start() && d->curvesXRange.start() != std::numeric_limits<double>::infinity()) {
+		d->xRange.start() = d->curvesXRange.start();
 		update = true;
 	}
 
-	if (d->curvesXMax != d->xRange.end() && d->curvesXMax != -INFINITY) {
-		d->xRange.end() = d->curvesXMax;
+	if (d->curvesXRange.end() != d->xRange.end() && d->curvesXRange.end() != -std::numeric_limits<double>::infinity()) {
+		d->xRange.end() = d->curvesXRange.end();
 		update = true;
 	}
 
@@ -1923,7 +1918,7 @@ bool CartesianPlot::scaleAutoX() {
 			else
 				d->xRange.setRange(-0.1, 0.1);
 		} else {
-			const double offset = d->xRange.size()*d->autoScaleOffsetFactor;
+			const double offset{ d->xRange.size() * d->autoScaleOffsetFactor };
 			d->xRange.extend(offset);
 		}
 		d->retransformScales();
@@ -1954,10 +1949,10 @@ bool CartesianPlot::scaleAutoY() {
 		}
 
 		if (errorBarsCapSize > 0) {
-			if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY)
+			if (d->curvesYMin != d->yMin && d->curvesYMin != qInf())
 				d->yMin = d->curvesYMin;
 
-			if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY)
+			if (d->curvesYMax != d->yMax && d->curvesYMax != -qInf())
 				d->yMax = d->curvesYMax;
 			setIsLoading(true);
 			d->retransformScales();
@@ -1981,13 +1976,13 @@ bool CartesianPlot::scaleAutoY() {
 	}
 
 	bool update = false;
-	if (d->curvesYMin != d->yRange.start() && d->curvesYMin != INFINITY) {
-		d->yRange.start() = d->curvesYMin;
+	if (d->curvesYRange.start() != d->yRange.start() && d->curvesYRange.start() != std::numeric_limits<double>::infinity()) {
+		d->yRange.start() = d->curvesYRange.start();
 		update = true;
 	}
 
-	if (d->curvesYMax != d->yRange.end() && d->curvesYMax != -INFINITY) {
-		d->yRange.end() = d->curvesYMax;
+	if (d->curvesYRange.end() != d->yRange.end() && d->curvesYRange.end() != -std::numeric_limits<double>::infinity()) {
+		d->yRange.end() = d->curvesYRange.end();
 		update = true;
 	}
 	if (update) {
@@ -1999,7 +1994,7 @@ bool CartesianPlot::scaleAutoY() {
 			else
 				d->yRange.setRange(-0.1, 0.1);
 		} else {
-			d->yRange.extend( d->yRange.size()*d->autoScaleOffsetFactor );
+			d->yRange.extend( d->yRange.size() * d->autoScaleOffsetFactor );
 		}
 		d->retransformScales();
 	}
@@ -2042,10 +2037,10 @@ bool CartesianPlot::scaleAuto() {
 		}
 
 		if (errorBarsCapSize > 0) {
-			if (d->curvesXMin != d->xMin && d->curvesXMin != INFINITY)
+			if (d->curvesXMin != d->xMin && d->curvesXMin != qInf())
 				d->xMin = d->curvesXMin;
 
-			if (d->curvesXMax != d->xMax && d->curvesXMax != -INFINITY)
+			if (d->curvesXMax != d->xMax && d->curvesXMax != -qInf())
 				d->xMax = d->curvesXMax;
 			setIsLoading(true);
 			d->retransformScales();
@@ -2085,10 +2080,10 @@ bool CartesianPlot::scaleAuto() {
 		}
 
 		if (errorBarsCapSize > 0) {
-			if (d->curvesYMin != d->yMin && d->curvesYMin != INFINITY)
+			if (d->curvesYMin != d->yMin && d->curvesYMin != qInf())
 				d->yMin = d->curvesYMin;
 
-			if (d->curvesYMax != d->yMax && d->curvesYMax != -INFINITY)
+			if (d->curvesYMax != d->yMax && d->curvesYMax != -qInf())
 				d->yMax = d->curvesYMax;
 			setIsLoading(true);
 			d->retransformScales();
@@ -2111,27 +2106,26 @@ bool CartesianPlot::scaleAuto() {
 
 	bool updateX = false;
 	bool updateY = false;
-	//TODO: nuemric limits
-	if (d->curvesXMin != d->xRange.start() && d->curvesXMin != INFINITY) {
-		d->xRange.start() = d->curvesXMin;
+	if (d->curvesXRange.start() != d->xRange.start() && d->curvesXRange.start() != std::numeric_limits<double>::infinity()) {
+		d->xRange.start() = d->curvesXRange.start();
 		updateX = true;
 	}
 
-	if (d->curvesXMax != d->xRange.end() && d->curvesXMax != -INFINITY) {
-		d->xRange.end() = d->curvesXMax;
+	if (d->curvesXRange.end() != d->xRange.end() && d->curvesXRange.end() != -std::numeric_limits<double>::infinity()) {
+		d->xRange.end() = d->curvesXRange.end();
 		updateX = true;
 	}
 
-	if (d->curvesYMin != d->yRange.start() && d->curvesYMin != INFINITY) {
-		d->yRange.start() = d->curvesYMin;
+	if (d->curvesYRange.start() != d->yRange.start() && d->curvesYRange.start() != std::numeric_limits<double>::infinity()) {
+		d->yRange.start() = d->curvesYRange.start();
 		updateY = true;
 	}
 
-	if (d->curvesYMax != d->yRange.end() && d->curvesYMax != -INFINITY) {
-		d->yRange.end() = d->curvesYMax;
+	if (d->curvesYRange.end() != d->yRange.end() && d->curvesYRange.end() != -std::numeric_limits<double>::infinity()) {
+		d->yRange.end() = d->curvesYRange.end();
 		updateY = true;
 	}
-	DEBUG(Q_FUNC_INFO << ", xmin/xmax = " << STDSTRING(d->xRange.toString()) << ", ymin/ymax = " << STDSTRING(d->yRange.toString()));
+	DEBUG( Q_FUNC_INFO << ", xmin/xmax = " << d->xRange.toStdString() << ", ymin/ymax = " << d->yRange.toStdString() );
 
 	if (updateX || updateY) {
 		if (updateX) {
@@ -2173,9 +2167,7 @@ bool CartesianPlot::scaleAuto() {
 void CartesianPlot::calculateCurvesXMinMax(bool completeRange) {
 	Q_D(CartesianPlot);
 
-	//TODO: Range
-	d->curvesXMin = INFINITY;
-	d->curvesXMax = -INFINITY;
+	d->curvesXRange.setRange(qInf(), -qInf());
 
 	//loop over all xy-curves and determine the maximum and minimum x-values
 	for (const auto* curve : this->children<const XYCurve>()) {
@@ -2186,40 +2178,36 @@ void CartesianPlot::calculateCurvesXMinMax(bool completeRange) {
 		if (!xColumn)
 			continue;
 
-		//TODO: Range
-		double min = d->curvesXMin;
-		double max = d->curvesXMax;
+		Range<double> range{d->curvesXRange};
 
-		int start =0;
-		int end = 0;
+		//TODO: Range<int>?
+		Range<int> indexRange{0, 0};
 		if (d->rangeType == RangeType::Free && curve->yColumn()
 				&& !completeRange) {
-			curve->yColumn()->indicesMinMax(yRange().start(), yRange().end(), start, end);
-			if (end < curve->yColumn()->rowCount())
-				end ++;
+			//TODO: Range
+			curve->yColumn()->indicesMinMax(yRange().start(), yRange().end(), indexRange.start(), indexRange.end());
+			if (indexRange.end() < curve->yColumn()->rowCount())
+				indexRange.end()++;
 		} else {
 			switch (d->rangeType) {
 			case RangeType::Free:
-				start = 0;
-				end = xColumn->rowCount();
+				indexRange.setRange(0, xColumn->rowCount());
 				break;
 			case RangeType::Last:
-				start = xColumn->rowCount() - d->rangeLastValues;
-				end = xColumn->rowCount();
+				indexRange.setRange(xColumn->rowCount() - d->rangeLastValues, xColumn->rowCount());
 				break;
 			case RangeType::First:
-				start = 0;
-				end = d->rangeFirstValues;
+				indexRange.setRange(0, d->rangeFirstValues);
 				break;
 			}
 		}
 
-		curve->minMaxX(start, end, min, max, true);
-		if (min < d->curvesXMin)
-			d->curvesXMin = min;
+		curve->minMaxX(indexRange, range, true);
+		if (range.start() < d->curvesXRange.start())
+			d->curvesXRange.start() = range.start();
 
-		if (max > d->curvesXMax)
-			d->curvesXMax = max;
+		if (range.end() > d->curvesXRange.end())
+			d->curvesXRange.end() = range.end();
 	}
 
 	//loop over all histograms and determine the maximum and minimum x-values
@@ -2229,13 +2217,13 @@ void CartesianPlot::calculateCurvesXMinMax(bool completeRange) {
 		if (!curve->dataColumn())
 			continue;
 
-		const double min = curve->getXMinimum();
-		if (d->curvesXMin > min)
-			d->curvesXMin = min;
+		//TODO: Range
+		const Range<double> range{ curve->getXMinimum(), curve->getXMaximum() };
 
-		const double max = curve->getXMaximum();
-		if (max > d->curvesXMax)
-			d->curvesXMax = max;
+		if (d->curvesXRange.start() > range.start())
+			d->curvesXRange.start() = range.start();
+		if (range.end() > d->curvesXRange.end())
+			d->curvesXRange.end() = range.end();
 	}
 }
 
@@ -2246,13 +2234,8 @@ void CartesianPlot::calculateCurvesXMinMax(bool completeRange) {
 void CartesianPlot::calculateCurvesYMinMax(bool completeRange) {
 	Q_D(CartesianPlot);
 
-	//TODO: Range
-	d->curvesYMin = INFINITY;
-	d->curvesYMax = -INFINITY;
-
-	//TODO: Range
-	double min = d->curvesYMin;
-	double max = d->curvesYMax;
+	d->curvesYRange.setRange(qInf(), -qInf());
+	Range<double> range{d->curvesYRange};
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
 	for (const auto* curve : this->children<const XYCurve>()) {
@@ -2263,37 +2246,33 @@ void CartesianPlot::calculateCurvesYMinMax(bool completeRange) {
 		if (!yColumn)
 			continue;
 
-		int start =0;
-		int end = 0;
-		if (d->rangeType == RangeType::Free && curve->xColumn() &&
-				!completeRange) {
-			curve->xColumn()->indicesMinMax(xRange().start(), xRange().end(), start, end);
-			if (end < curve->xColumn()->rowCount())
-				end ++; // because minMaxY excludes indexMax
+		Range<int> indexRange{0, 0};
+		if (d->rangeType == RangeType::Free && curve->xColumn() && !completeRange) {
+			//TODO: Range
+			curve->xColumn()->indicesMinMax(xRange().start(), xRange().end(), indexRange.start(), indexRange.end());
+			if (indexRange.end() < curve->xColumn()->rowCount())
+				indexRange.end()++; // because minMaxY excludes indexMax
 		} else {
 			switch (d->rangeType) {
 				case RangeType::Free:
-					start = 0;
-					end = yColumn->rowCount();
+					indexRange.setRange(0, yColumn->rowCount());
 					break;
 				case RangeType::Last:
-					start = yColumn->rowCount() - d->rangeLastValues;
-					end = yColumn->rowCount();
+					indexRange.setRange(yColumn->rowCount() - d->rangeLastValues, yColumn->rowCount());
 					break;
 				case RangeType::First:
-					start = 0;
-					end = d->rangeFirstValues;
+					indexRange.setRange(0, d->rangeFirstValues);
 					break;
 			}
 		}
 
-		curve->minMaxY(start, end, min, max, true);
+		curve->minMaxY(indexRange, range, true);
 
-		if (min < d->curvesYMin)
-			d->curvesYMin = min;
+		if (range.start() < d->curvesYRange.start())
+			d->curvesYRange.start() = range.start();
 
-		if (max > d->curvesYMax)
-			d->curvesYMax = max;
+		if (range.end() > d->curvesYRange.end())
+			d->curvesYRange.end() = range.end();
 	}
 
 	//loop over all histograms and determine the maximum y-value
@@ -2302,12 +2281,12 @@ void CartesianPlot::calculateCurvesYMinMax(bool completeRange) {
 			continue;
 
 		const double min = curve->getYMinimum();
-		if (d->curvesYMin > min)
-			d->curvesYMin = min;
+		if (d->curvesYRange.start() > min)
+			d->curvesYRange.start() = min;
 
 		const double max = curve->getYMaximum();
-		if (max > d->curvesYMax)
-			d->curvesYMax = max;
+		if (max > d->curvesYRange.end())
+			d->curvesYRange.end() = max;
 	}
 }
 
@@ -2407,7 +2386,7 @@ void CartesianPlot::zoomOutY() {
 void CartesianPlot::zoom(bool x, bool in) {
 	Q_D(CartesianPlot);
 
-	//TODO: range
+	//TODO: Range
 	double min;
 	double max;
 	CartesianPlot::Scale scale;
@@ -2688,7 +2667,7 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
-	DEBUG(Q_FUNC_INFO << ", xmin/xmax = " << STDSTRING(xRange.toString()) << ", ymin/ymax = " << STDSTRING(yRange.toString()) );
+	DEBUG( Q_FUNC_INFO << ", xmin/xmax = " << xRange.toStdString() << ", ymin/ymax = " << yRange.toStdString() );
 	PERFTRACE(Q_FUNC_INFO);
 
 	QVector<CartesianScale*> scales;
@@ -2701,51 +2680,44 @@ void CartesianPlotPrivate::retransformScales() {
 	bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
 
 	static const int breakGap = 20;
-	double sceneStart, sceneEnd, logicalStart, logicalEnd;
+	Range<double> sceneRange, logicalRange;
 
 	// Create X-scales
-	int plotSceneStart = dataRect.x();
-	int plotSceneEnd = dataRect.x() + dataRect.width();
-	if (!hasValidBreak) {
-		//no breaks available -> range goes from the plot beginning to the end of the plot
-		sceneStart = plotSceneStart;
-		sceneEnd = plotSceneEnd;
-		logicalStart = xRange.start();
-		logicalEnd = xRange.end();
+	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
+	if (!hasValidBreak) {	//no breaks available -> range goes from the plot beginning to the end of the plot
+		sceneRange = plotSceneRange;
+		logicalRange = xRange;
 
-		//TODO: how should we handle the case sceneStart == sceneEnd?
+		//TODO: how should we handle the case sceneRange.length() == 0?
 		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
-		if (sceneStart != sceneEnd)
-			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		if (sceneRange.length() > 0)
+			scales << this->createScale(xScale, sceneRange, logicalRange);
 	} else {
-		int sceneEndLast = plotSceneStart;
-		int logicalEndLast = xRange.start();
+		double sceneEndLast = plotSceneRange.start();
+		double logicalEndLast = xRange.start();
 		for (const auto& rb : xRangeBreaks.list) {
 			if (!rb.isValid())
 				break;
 
 			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
-			sceneStart = sceneEndLast;
-			if (&rb == &xRangeBreaks.list.first()) sceneStart += breakGap;
-			sceneEnd = plotSceneStart + (plotSceneEnd-plotSceneStart) * rb.position;
-			logicalStart = logicalEndLast;
-			logicalEnd = rb.start;
+			sceneRange.start() = sceneEndLast;
+			if (&rb == &xRangeBreaks.list.first()) sceneRange.start() += breakGap;
+			sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
+			logicalRange = Range<double>(logicalEndLast, rb.range.start());
 
-			if (sceneStart != sceneEnd)
-				scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			if (sceneRange.length() > 0)
+				scales << this->createScale(xScale, sceneRange, logicalRange);
 
-			sceneEndLast = sceneEnd;
-			logicalEndLast = rb.end;
+			sceneEndLast = sceneRange.end();
+			logicalEndLast = rb.range.end();
 		}
 
 		//add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
-		sceneStart = sceneEndLast+breakGap;
-		sceneEnd = plotSceneEnd;
-		logicalStart = logicalEndLast;
-		logicalEnd = xRange.end();
+		sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
+		logicalRange.setRange(logicalEndLast, xRange.end());
 
-		if (sceneStart != sceneEnd)
-			scales << this->createScale(xScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		if (sceneRange.length() > 0)
+			scales << this->createScale(xScale, sceneRange, logicalRange);
 	}
 
 	coordinateSystem->setXScales(scales);
@@ -2759,80 +2731,61 @@ void CartesianPlotPrivate::retransformScales() {
 
 	// Create Y-scales
 	scales.clear();
-	plotSceneStart = dataRect.y() + dataRect.height();
-	plotSceneEnd = dataRect.y();
+	plotSceneRange.setRange(dataRect.y() + dataRect.height(), dataRect.y());
 	if (!hasValidBreak) {
 		//no breaks available -> range goes from the plot beginning to the end of the plot
-		sceneStart = plotSceneStart;
-		sceneEnd = plotSceneEnd;
-		logicalStart = yRange.start();
-		logicalEnd = yRange.end();
+		sceneRange = plotSceneRange;
+		logicalRange = yRange;
 
-		if (sceneStart != sceneEnd)
-			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		if (sceneRange.length() > 0)
+			scales << this->createScale(yScale, sceneRange, logicalRange);
 	} else {
-		int sceneEndLast = plotSceneStart;
-		int logicalEndLast = yRange.start();
+		double sceneEndLast = plotSceneRange.start();
+		double logicalEndLast = yRange.start();
 		for (const auto& rb : yRangeBreaks.list) {
 			if (!rb.isValid())
 				break;
 
 			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
-			sceneStart = sceneEndLast;
-			if (&rb == &yRangeBreaks.list.first()) sceneStart -= breakGap;
-			sceneEnd = plotSceneStart + (plotSceneEnd-plotSceneStart) * rb.position;
-			logicalStart = logicalEndLast;
-			logicalEnd = rb.start;
+			sceneRange.start() = sceneEndLast;
+			if (&rb == &yRangeBreaks.list.first()) sceneRange.start() -= breakGap;
+			sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
+			logicalRange = Range<double>(logicalEndLast, rb.range.start());
 
-			if (sceneStart != sceneEnd)
-				scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+			if (sceneRange.length() > 0)
+				scales << this->createScale(yScale, sceneRange, logicalRange);
 
-			sceneEndLast = sceneEnd;
-			logicalEndLast = rb.end;
+			sceneEndLast = sceneRange.end();
+			logicalEndLast = rb.range.end();
 		}
 
 		//add the remaining range going from the last available range break to the end of the plot (=end of the y-data range)
-		sceneStart = sceneEndLast-breakGap;
-		sceneEnd = plotSceneEnd;
-		logicalStart = logicalEndLast;
-		logicalEnd = yRange.end();
+		sceneRange.setRange(sceneEndLast - breakGap, plotSceneRange.end());
+		logicalRange.setRange(logicalEndLast, yRange.end());
 
-		if (sceneStart != sceneEnd)
-			scales << this->createScale(yScale, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		if (sceneRange.length() > 0)
+			scales << this->createScale(yScale, sceneRange, logicalRange);
 	}
 
 	coordinateSystem->setYScales(scales);
 
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
-	double deltaXMin = 0;
-	double deltaXMax = 0;
-	double deltaYMin = 0;
-	double deltaYMax = 0;
+	double deltaXMin = xRange.start() - xPrevRange.start();
+	double deltaXMax = xRange.end() - xPrevRange.end();
+	double deltaYMin = yRange.start() - yPrevRange.start();
+	double deltaYMax = yRange.end() - yPrevRange.end();
 
-	if (xRange.start() != xMinPrev) {
-		deltaXMin = xRange.start() - xMinPrev;
+	if (deltaXMin != 0)
 		emit q->xMinChanged(xRange.start());
-	}
-
-	if (xRange.end() != xMaxPrev) {
-		deltaXMax = xRange.end() - xMaxPrev;
+	if (deltaXMax != 0)
 		emit q->xMaxChanged(xRange.end());
-	}
-
-	if (yRange.start() != yMinPrev) {
-		deltaYMin = yRange.start() - yMinPrev;
+	if (deltaYMin != 0)
 		emit q->yMinChanged(yRange.start());
-	}
-
-	if (yRange.end() != yMaxPrev) {
-		deltaYMax = yRange.end() - yMaxPrev;
+	if (deltaYMax != 0)
 		emit q->yMaxChanged(yRange.end());
-	}
 
-	xMinPrev = xRange.start();
-	xMaxPrev = xRange.end();
-	yMinPrev = yRange.start();
-	yMaxPrev = yRange.end();
+	xPrevRange = xRange;
+	yPrevRange = yRange;
 	//adjust auto-scale axes
 	for (auto* axis : q->children<Axis>()) {
 		if (!axis->autoScale())
@@ -2972,16 +2925,15 @@ void CartesianPlotPrivate::checkYRange() {
 	}
 }
 
-//TODO: use Range for scene and logical
-CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
-	DEBUG(Q_FUNC_INFO << ", scene start/end = " << sceneStart << '/' << sceneEnd << ", logical start/end = " << logicalStart << '/' << logicalEnd);
+CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, const Range<double> &sceneRange, const Range<double> &logicalRange) {
+	DEBUG( Q_FUNC_INFO << ", scene start/end = " << sceneRange.toStdString() << ", logical start/end = " << logicalRange.toStdString() );
 // 	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
 	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
 // 	Interval<double> interval (logicalStart, logicalEnd);
 	if (type == CartesianPlot::Scale::Linear)
-		return CartesianScale::createLinearScale(range, sceneStart, sceneEnd, logicalStart, logicalEnd);
+		return CartesianScale::createLinearScale(range, sceneRange, logicalRange);
 	else
-		return CartesianScale::createLogScale(range, sceneStart, sceneEnd, logicalStart, logicalEnd, type);
+		return CartesianScale::createLogScale(range, sceneRange, logicalRange, type);
 }
 
 /*!
@@ -3671,8 +3623,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute( "enabled", QString::number(d->xRangeBreakingEnabled) );
 		for (const auto& rb : d->xRangeBreaks.list) {
 			writer->writeStartElement("xRangeBreak");
-			writer->writeAttribute("start", QString::number(rb.start));
-			writer->writeAttribute("end", QString::number(rb.end));
+			writer->writeAttribute("start", QString::number(rb.range.start()));
+			writer->writeAttribute("end", QString::number(rb.range.end()));
 			writer->writeAttribute("position", QString::number(rb.position));
 			writer->writeAttribute("style", QString::number(static_cast<int>(rb.style)));
 			writer->writeEndElement();
@@ -3686,8 +3638,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute( "enabled", QString::number(d->yRangeBreakingEnabled) );
 		for (const auto& rb : d->yRangeBreaks.list) {
 			writer->writeStartElement("yRangeBreak");
-			writer->writeAttribute("start", QString::number(rb.start));
-			writer->writeAttribute("end", QString::number(rb.end));
+			writer->writeAttribute("start", QString::number(rb.range.start()));
+			writer->writeAttribute("end", QString::number(rb.range.end()));
 			writer->writeAttribute("position", QString::number(rb.position));
 			writer->writeAttribute("style", QString::number(static_cast<int>(rb.style)));
 			writer->writeEndElement();
@@ -3783,7 +3735,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("xMin").toString());
 			else {
 				d->xRange.start() = str.toDouble();
-				d->xMinPrev = d->xRange.start();
+				d->xPrevRange.start() = d->xRange.start();
 			}
 
 			str = attribs.value("xMax").toString();
@@ -3791,7 +3743,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("xMax").toString());
 			else {
 				d->xRange.end() = str.toDouble();
-				d->xMaxPrev = d->xRange.end();
+				d->xPrevRange.end() = d->xRange.end();
 			}
 
 			str = attribs.value("yMin").toString();
@@ -3799,7 +3751,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("yMin").toString());
 			else {
 				d->yRange.start() = str.toDouble();
-				d->yMinPrev = d->yRange.start();
+				d->yPrevRange.start() = d->yRange.start();
 			}
 
 			str = attribs.value("yMax").toString();
@@ -3807,7 +3759,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("yMax").toString());
 			else {
 				d->yRange.end() = str.toDouble();
-				d->yMaxPrev = d->yRange.end();
+				d->yPrevRange.end() = d->yRange.end();
 			}
 
 			READ_INT_VALUE("xScale", xScale, CartesianPlot::Scale);
@@ -3835,13 +3787,13 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("start").toString());
 			else
-				b.start = str.toDouble();
+				b.range.start() = str.toDouble();
 
 			str = attribs.value("end").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("end").toString());
 			else
-				b.end = str.toDouble();
+				b.range.end() = str.toDouble();
 
 			str = attribs.value("position").toString();
 			if (str.isEmpty())
@@ -3870,13 +3822,13 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("start").toString());
 			else
-				b.start = str.toDouble();
+				b.range.start() = str.toDouble();
 
 			str = attribs.value("end").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("end").toString());
 			else
-				b.end = str.toDouble();
+				b.range.end() = str.toDouble();
 
 			str = attribs.value("position").toString();
 			if (str.isEmpty())

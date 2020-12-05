@@ -70,14 +70,12 @@ public:
 	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY
 	                         };
 
-	struct RangeBreak {	//TODO: Range
-		RangeBreak() : start(NAN), end(NAN), position(0.5), style(RangeBreakStyle::Sloped) {}
+	struct RangeBreak {
+		RangeBreak() : range(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()), position(0.5), style(RangeBreakStyle::Sloped) {}
 		bool isValid() const {
-			return (!std::isnan(start) && !std::isnan(end));
+			return range.valid();
 		}
-		//TODO: Range
-		double start;
-		double end;
+		Range<double> range;
 		double position;
 		RangeBreakStyle style;
 	};
@@ -229,7 +227,7 @@ private:
 	QAction* addIntegrationAction;
 	QAction* addInterpolationAction;
 	QAction* addSmoothAction;
-	QVector <QAction*> addFitAction;
+	QVector<QAction*> addFitAction;
 	QAction* addFourierFilterAction;
 	QAction* addFourierTransformAction;
 	QAction* addConvolutionAction;

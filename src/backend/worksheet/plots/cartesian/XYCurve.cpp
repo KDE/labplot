@@ -1325,7 +1325,7 @@ void XYCurvePrivate::addUniqueLine(QPointF p0, QPointF p1, QPointF& lastPoint, q
 			// same for y
 			m_lines.append(QLineF(lastPoint, p0));
 
-			lastPoint.setX(NAN);
+			lastPoint.setX(qQNaN());
 		}
 
 		//QDEBUG("	LINE " << p0 << ' ' << p1)
@@ -1416,7 +1416,7 @@ void XYCurvePrivate::updateLines() {
 		tempPoint2 = QPointF(plot->xRange().start(), plot->yRange().end());
 		m_lines.append(QLineF(tempPoint1, tempPoint2));
 	} else {
-		QPointF lastPoint{NAN, NAN};	// last x value
+		QPointF lastPoint{qQNaN(), qQNaN()};	// last x value
 		qint64 pixelDiff;
 		QPointF p0, p1;
 
@@ -1530,7 +1530,7 @@ void XYCurvePrivate::updateLines() {
 				} else {
 					skip = 0;
 					if (!isnan(lastPoint.x())) {
-						lastPoint.setX(NAN);
+						lastPoint.setX(qQNaN());
 						m_lines.append(QLineF(lastPoint, p1));
 					}
 				}
@@ -1556,7 +1556,7 @@ void XYCurvePrivate::updateLines() {
 				} else {
 					skip = 0;
 					if (!isnan(lastPoint.x())) {
-						lastPoint.setX(NAN);
+						lastPoint.setX(qQNaN());
 						m_lines.append(QLineF(lastPoint, p1));
 					}
                     if (!isnan(lastPoint.x()))	// last line
@@ -2230,14 +2230,14 @@ void XYCurvePrivate::updateFilling() {
 double XYCurve::y(double x, bool &valueFound) const {
 	if (!yColumn() || !xColumn()) {
 		valueFound = false;
-		return NAN;
+		return qQNaN();
 	}
 
 	auto yColumnMode = yColumn()->columnMode();
 	const int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return NAN;
+		return qQNaN();
 	}
 
 	valueFound = true;
@@ -2246,7 +2246,7 @@ double XYCurve::y(double x, bool &valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return NAN;
+		return qQNaN();
 	}
 }
 
@@ -2261,7 +2261,7 @@ double XYCurve::y(double x, double &x_new, bool &valueFound) const {
 	int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return NAN;
+		return qQNaN();
 	}
 
 	AbstractColumn::ColumnMode xColumnMode = xColumn()->columnMode();
@@ -2275,7 +2275,7 @@ double XYCurve::y(double x, double &x_new, bool &valueFound) const {
 	else {
 		// any other type implemented
 		valueFound = false;
-		return NAN;
+		return qQNaN();
 	}
 
 
@@ -2285,7 +2285,7 @@ double XYCurve::y(double x, double &x_new, bool &valueFound) const {
 		return yColumn()->valueAt(index);
 	else {
 		valueFound = false;
-		return NAN;
+		return qQNaN();
 	}
 }
 
@@ -2319,12 +2319,12 @@ QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
 	return QDateTime();
 }
 
-bool XYCurve::minMaxY(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const {
-	return minMax(yColumn(), xColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexMin, indexMax, yMin, yMax, includeErrorBars);
+bool XYCurve::minMaxX(const Range<int>& indexRange, Range<double>& xRange, bool includeErrorBars) const {
+	return minMax(xColumn(), yColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexRange, xRange, includeErrorBars);
 }
 
-bool XYCurve::minMaxX(int indexMin, int indexMax, double& xMin, double& xMax, bool includeErrorBars) const {
-	return minMax(xColumn(), yColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexMin, indexMax, xMin, xMax, includeErrorBars);
+bool XYCurve::minMaxY(const Range<int>& indexRange, Range<double>& yRange, bool includeErrorBars) const {
+	return minMax(yColumn(), xColumn(), yErrorType(), yErrorPlusColumn(), yErrorMinusColumn(), indexRange, yRange, includeErrorBars);
 }
 
 /*!
@@ -2341,23 +2341,22 @@ bool XYCurve::minMaxX(int indexMin, int indexMax, double& xMin, double& xMax, bo
  * \p max
  * \ includeErrorBars If true respect the error bars in the min/max calculation
  */
-bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column2, const ErrorType errorType, const AbstractColumn* errorPlusColumn, const AbstractColumn* errorMinusColumn, int indexMin, int indexMax, double& min, double& max, bool includeErrorBars) const {
+bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column2, const ErrorType errorType, const AbstractColumn* errorPlusColumn, const AbstractColumn* errorMinusColumn, const Range<int>& indexRange, Range<double>& range, bool includeErrorBars) const {
 	// when property is increasing or decreasing there is a benefit in finding minimum and maximum
 	// for property == AbstractColumn::Properties::No it must be iterated over all values so it does not matter if this function or the below one is used
 	// if the property of the second column is not AbstractColumn::Properties::No means, that all values are valid and not masked
 	if ((!includeErrorBars || errorType == ErrorType::NoError) && column1->properties() != AbstractColumn::Properties::No && column2 && column2->properties() != AbstractColumn::Properties::No) {
-		min = column1->minimum(indexMin, indexMax);
-		max = column1->maximum(indexMin, indexMax);
+		//TODO: Range
+		range.setRange( column1->minimum(indexRange.start(), indexRange.end()), column1->maximum(indexRange.start(), indexRange.end()) );
 		return true;
 	}
 
 	if (column1->rowCount() == 0)
 		return false;
 
-	min = INFINITY;
-	max = -INFINITY;
+	range.setRange(qInf(), -qInf());
 
-	for (int i = indexMin; i < indexMax; ++i) {
+	for (int i = indexRange.start(); i < indexRange.end(); ++i) {
 		if (!column1->isValid(i) || column1->isMasked(i) || (column2 && (!column2->isValid(i) || column2->isMasked(i))))
 			continue;
 
@@ -2377,11 +2376,11 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 			return false;
 
 		if (errorType == ErrorType::NoError) {
-			if (value < min)
-				min = value;
+			if (value < range.start())
+				range.start() = value;
 
-			if (value > max)
-				max = value;
+			if (value > range.end())
+				range.end() = value;
 		} else {
 			//determine the values for the errors
 			double errorPlus, errorMinus;
@@ -2417,11 +2416,11 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 					errorMinus = 0;
 			}
 
-			if (value - errorMinus < min)
-				min = value - errorMinus;
+			if (value - errorMinus < range.start())
+				range.start() = value - errorMinus;
 
-			if (value + errorPlus > max)
-				max = value + errorPlus;
+			if (value + errorPlus > range.end())
+				range.end() = value + errorPlus;
 		}
 	}
 	return true;

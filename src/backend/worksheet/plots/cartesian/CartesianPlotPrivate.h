@@ -66,8 +66,7 @@ public:
 	QString xRangeDateTimeFormat, yRangeDateTimeFormat;
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 	Range<double> xRange{0.0, 1.0}, yRange{0.0, 1.0};
-	//TODO: range
-	double xMinPrev{0.0}, xMaxPrev{1.0}, yMinPrev{0.0}, yMaxPrev{1.0};
+	Range<double> xPrevRange{0.0, 1.0}, yPrevRange{0.0, 1.0};
 	bool autoScaleX{true}, autoScaleY{true};
 	double autoScaleOffsetFactor{0.0f};
 	CartesianPlot::Scale xScale{CartesianPlot::Scale::Linear}, yScale{CartesianPlot::Scale::Linear};
@@ -77,9 +76,7 @@ public:
 
 	//cached values of minimum and maximum for all visible curves
 	bool curvesXMinMaxIsDirty{false}, curvesYMinMaxIsDirty{false};
-	//TODO: numeric limits
-	//TODO: ranges/intervals
-	double curvesXMin{INFINITY}, curvesXMax{-INFINITY}, curvesYMin{INFINITY}, curvesYMax{-INFINITY};
+	Range<double> curvesXRange{qInf(), -qInf()}, curvesYRange{qInf(), -qInf()};
 
 	CartesianPlot* const q;
 	CartesianCoordinateSystem* coordinateSystem{nullptr};
@@ -91,10 +88,9 @@ public:
 	// Cursor
 	bool cursor0Enable{false};
 	int selectedCursor{0};
-	// numeric limits
-	QPointF cursor0Pos{QPointF(NAN, NAN)};
+	QPointF cursor0Pos{QPointF(qQNaN(), qQNaN())};
 	bool cursor1Enable{false};
-	QPointF cursor1Pos{QPointF(NAN, NAN)};
+	QPointF cursor1Pos{QPointF(qQNaN(), qQNaN())};
 	QPen cursorPen{Qt::red, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 
 signals:
@@ -116,8 +112,7 @@ private:
 	void checkXRange();
 	void checkYRange();
 	CartesianScale* createScale(CartesianPlot::Scale type,
-		double sceneStart, double sceneEnd,
-		double logicalStart, double logicalEnd);
+		const Range<double> &sceneRange, const Range<double> &logicalRange);
 
 	bool m_insideDataRect{false};
 	bool m_selectionBandIsShown{false};

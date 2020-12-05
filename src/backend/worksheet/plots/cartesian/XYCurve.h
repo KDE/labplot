@@ -30,13 +30,14 @@
 #ifndef XYCURVE_H
 #define XYCURVE_H
 
+#include "Curve.h"
+#include "Symbol.h"
 #include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/cartesian/Curve.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/PlotArea.h"
+#include "backend/core/AbstractColumn.h"
+#include "backend/lib/Range.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/macrosXYCurve.h"
-#include "backend/core/AbstractColumn.h"
 
 #include <QFont>
 #include <QPen>
@@ -77,9 +78,11 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 	double y(double x, bool &valueFound) const;
 	QDateTime yDateTime(double x, bool &valueFound) const;
-	bool minMax(const AbstractColumn *column1, const AbstractColumn *column2, const ErrorType errorType, const AbstractColumn *errorPlusColumn, const AbstractColumn *errorMinusColumn, int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars) const;
-	bool minMaxX(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars = true) const;
-	bool minMaxY(int indexMin, int indexMax, double& yMin, double& yMax, bool includeErrorBars = true) const;
+	bool minMax(const AbstractColumn *column1, const AbstractColumn *column2, const ErrorType errorType,
+			const AbstractColumn *errorPlusColumn, const AbstractColumn *errorMinusColumn,
+			const Range<int>& indexRange, Range<double>& yRange, bool includeErrorBars) const;
+	bool minMaxX(const Range<int>& indexRange, Range<double>& xRange, bool includeErrorBars = true) const;
+	bool minMaxY(const Range<int>& indexRange, Range<double>& yRange, bool includeErrorBars = true) const;
 
 	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
 	void setHover(bool on) override;

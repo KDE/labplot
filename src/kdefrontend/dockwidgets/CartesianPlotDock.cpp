@@ -893,9 +893,9 @@ void CartesianPlotDock::currentXBreakChanged(int index) {
 	m_initializing = true;
 	SET_NUMBER_LOCALE
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->xRangeBreaks().list.at(index);
-	QString str = std::isnan(rangeBreak.start) ? QString() : numberLocale.toString(rangeBreak.start);
+	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leXBreakStart->setText(str);
-	str = std::isnan(rangeBreak.end) ? QString() : numberLocale.toString(rangeBreak.end);
+	str = std::isnan(rangeBreak.range.end()) ? QString() : numberLocale.toString(rangeBreak.range.end());
 	ui.leXBreakEnd->setText(str);
 	ui.sbXBreakPosition->setValue(rangeBreak.position*100);
 	ui.cbXBreakStyle->setCurrentIndex((int)rangeBreak.style);
@@ -908,7 +908,7 @@ void CartesianPlotDock::xBreakStartChanged() {
 
 	int index = ui.cbXBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
-	breaks.list[index].start = ui.leXBreakStart->text().toDouble();
+	breaks.list[index].range.start() = ui.leXBreakStart->text().toDouble();
 	breaks.lastChanged = index;
 
 	for (auto* plot : m_plotList)
@@ -921,7 +921,7 @@ void CartesianPlotDock::xBreakEndChanged() {
 
 	int index = ui.cbXBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->xRangeBreaks();
-	breaks.list[index].end = ui.leXBreakEnd->text().toDouble();
+	breaks.list[index].range.end() = ui.leXBreakEnd->text().toDouble();
 	breaks.lastChanged = index;
 
 	for (auto* plot : m_plotList)
@@ -1015,11 +1015,11 @@ void CartesianPlotDock::currentYBreakChanged(int index) {
 	m_initializing = true;
 	SET_NUMBER_LOCALE
 	const CartesianPlot::RangeBreak rangeBreak = m_plot->yRangeBreaks().list.at(index);
-	QString str = std::isnan(rangeBreak.start) ? QString() : numberLocale.toString(rangeBreak.start);
+	QString str = qIsNaN(rangeBreak.range.start()) ? QString() : numberLocale.toString(rangeBreak.range.start());
 	ui.leYBreakStart->setText(str);
-	str = std::isnan(rangeBreak.end) ? QString() : numberLocale.toString(rangeBreak.end);
+	str = std::isnan(rangeBreak.range.end()) ? QString() : numberLocale.toString(rangeBreak.range.end());
 	ui.leYBreakEnd->setText(str);
-	ui.sbYBreakPosition->setValue(rangeBreak.position*100);
+	ui.sbYBreakPosition->setValue(rangeBreak.position * 100);
 	ui.cbYBreakStyle->setCurrentIndex((int)rangeBreak.style);
 	m_initializing = false;
 }
@@ -1030,7 +1030,7 @@ void CartesianPlotDock::yBreakStartChanged() {
 
 	int index = ui.cbYBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
-	breaks.list[index].start = ui.leYBreakStart->text().toDouble();
+	breaks.list[index].range.start() = ui.leYBreakStart->text().toDouble();
 	breaks.lastChanged = index;
 
 	for (auto* plot : m_plotList)
@@ -1043,7 +1043,7 @@ void CartesianPlotDock::yBreakEndChanged() {
 
 	int index = ui.cbYBreak->currentIndex();
 	CartesianPlot::RangeBreaks breaks = m_plot->yRangeBreaks();
-	breaks.list[index].end = ui.leYBreakEnd->text().toDouble();
+	breaks.list[index].range.end() = ui.leYBreakEnd->text().toDouble();
 	breaks.lastChanged = index;
 
 	for (auto* plot : m_plotList)

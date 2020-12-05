@@ -734,7 +734,7 @@ QRectF HistogramPrivate::boundingRect() const {
 
 double HistogramPrivate::getMaximumOccuranceofHistogram() {
 	if (m_histogram) {
-		double yMaxRange = -INFINITY;
+		double yMaxRange = -qInf();
 		switch (type) {
 		case Histogram::Ordinary: {
 			size_t maxYAddes = gsl_histogram_max_bin(m_histogram);
@@ -761,7 +761,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 		return yMaxRange;
 	}
 
-	return -INFINITY;
+	return -qInf();
 }
 
 double HistogramPrivate::getXMinimum() {
@@ -771,7 +771,7 @@ double HistogramPrivate::getXMinimum() {
 	case Histogram::Horizontal:
 		return 0;
 	}
-	return INFINITY;
+	return qInf();
 }
 
 double HistogramPrivate::getXMaximum() {
@@ -781,7 +781,7 @@ double HistogramPrivate::getXMaximum() {
 	case Histogram::Horizontal:
 		return getMaximumOccuranceofHistogram();
 	}
-	return -INFINITY;
+	return -qInf();
 }
 
 double HistogramPrivate::getYMinimum() {
@@ -791,7 +791,7 @@ double HistogramPrivate::getYMinimum() {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
 	}
-	return INFINITY;
+	return qInf();
 }
 
 double HistogramPrivate::getYMaximum() {
@@ -801,7 +801,7 @@ double HistogramPrivate::getYMaximum() {
 	case Histogram::Horizontal:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
 	}
-	return INFINITY;
+	return qInf();
 }
 
 /*!

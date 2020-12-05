@@ -1624,7 +1624,7 @@ void XYFitCurvePrivate::recalculate() {
 				!tmpYDataColumn->isValid(row) || tmpYDataColumn->isMasked(row))
 			continue;
 
-		double x = NAN;
+		double x = qQNaN();
 		switch (tmpXDataColumn->columnMode()) {
 		case AbstractColumn::ColumnMode::Numeric:
 			x = tmpXDataColumn->valueAt(row);
@@ -1643,7 +1643,7 @@ void XYFitCurvePrivate::recalculate() {
 			x = tmpXDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 
-		double y = NAN;
+		double y = qQNaN();
 		switch (tmpYDataColumn->columnMode()) {
 		case AbstractColumn::ColumnMode::Numeric:
 			y = tmpYDataColumn->valueAt(row);

@@ -270,10 +270,10 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 	QVector<QLineF> result;
 	const bool doPageClipping = !pageRect.isNull() && !(flags & MappingFlag::SuppressPageClipping);
 
-	double xGapBefore = NAN;
-	double xGapAfter = NAN;
-	double yGapBefore = NAN;
-	double yGapAfter = NAN;
+	double xGapBefore = qQNaN();
+	double xGapAfter = qQNaN();
+	double yGapBefore = qQNaN();
+	double yGapAfter = qQNaN();
 
 	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
@@ -298,9 +298,9 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 			if (valid)
 				xGapAfter = x2 - x1;
 			else
-				xGapAfter = NAN;
+				xGapAfter = qQNaN();
 		} else
-			xGapAfter = NAN;
+			xGapAfter = qQNaN();
 
 		QVectorIterator<CartesianScale*> yIterator(d->yScales);
 		while (yIterator.hasNext()) {
@@ -321,9 +321,9 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 				if (valid)
 					yGapAfter = y2 - y1;
 				else
-					yGapAfter = NAN;
+					yGapAfter = qQNaN();
 			} else
-				yGapAfter = NAN;
+				yGapAfter = qQNaN();
 
 			const QRectF scaleRect = QRectF(xScale->start(), yScale->start(),
 								xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();

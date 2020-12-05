@@ -66,16 +66,15 @@ void XYAnalysisCurve::init() {
 }
 
 void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
-							   const AbstractColumn* xDataColumn, const AbstractColumn* yDataColumn,
-							   double xMin, double xMax) {
+		const AbstractColumn* xDataColumn, const AbstractColumn* yDataColumn, double xMin, double xMax) {
 
-	int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	const int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
 	for (int row = 0; row < rowCount; ++row) {
 		if (!xDataColumn->isValid(row) || xDataColumn->isMasked(row) ||
 				!yDataColumn->isValid(row) || yDataColumn->isMasked(row))
 			continue;
 
-		double x = NAN;
+		double x = qQNaN();
 		switch (xDataColumn->columnMode()) {
 		case AbstractColumn::ColumnMode::Numeric:
 			x = xDataColumn->valueAt(row);
@@ -94,7 +93,7 @@ void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
 			x = xDataColumn->dateTimeAt(row).toMSecsSinceEpoch();
 		}
 
-		double y = NAN;
+		double y = qQNaN();
 		switch (yDataColumn->columnMode()) {
 		case AbstractColumn::ColumnMode::Numeric:
 			y = yDataColumn->valueAt(row);
