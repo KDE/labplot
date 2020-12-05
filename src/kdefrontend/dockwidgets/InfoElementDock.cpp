@@ -37,6 +37,8 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	m_leName = ui->leName;
 	m_leComment = ui->leComment;
 
+	ui->lePosition->setValidator( new QDoubleValidator(ui->lePosition) );
+
 	//**********************************  Slots **********************************************
 	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
 	connect(ui->leComment, &QLineEdit::textChanged, this, &InfoElementDock::commentChanged);
@@ -50,7 +52,7 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	connect(ui->cbConnnectionLineEnabled, &QCheckBox::toggled, this, &InfoElementDock::connectionLineVisibilityChanged);
 	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
-    connect(ui->sbPosition, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::positionChanged);
+	connect(ui->lePosition, &QLineEdit::textChanged, this, &InfoElementDock::positionChanged);
 }
 
 void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent) {
@@ -129,7 +131,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 	ui->kcbConnectionLineColor->setColor(m_element->connectionLineColor());
 	ui->sbVerticalLineWidth->setValue(m_element->xposLineWidth());
 	ui->sbConnectionLineWidth->setValue(m_element->connectionLineWidth());
-    ui->sbPosition->setValue(m_element->position());
+    ui->lePosition->setText(QString::number(m_element->position()));
 
 	initConnections();
 }
@@ -254,12 +256,18 @@ void InfoElementDock::curveChanged() {
 		infoElement->setConnectionLineCurveName(name);
 }
 
-void InfoElementDock::positionChanged(double pos) {
+void InfoElementDock::positionChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
-	for (auto* infoElement: m_elements)
-		infoElement->setPosition(pos);
+	const Lock lock(m_initializing);
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double pos = numberLocale.toDouble(value, &ok);
+	if (ok) {
+		for (auto* element : m_elements)
+			element->setPosition(pos);
+	}
 }
 
 void InfoElementDock::curveSelectionChanged(int state) {
@@ -363,7 +371,7 @@ void InfoElementDock::elementLabelBorderShapeChanged() {
 
 void InfoElementDock::elementPositionChanged(double pos) {
 	const Lock lock(m_initializing);
-	ui->sbPosition->setValue(pos);
+	ui->lePosition->setText(QString::number(pos));
 }
 
 void InfoElementDock::elementCurveRemoved(QString name) {
