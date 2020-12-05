@@ -63,12 +63,17 @@ public:
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	CartesianPlot::RangeFormat xRangeFormat{CartesianPlot::RangeFormat::Numeric};
 	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::RangeFormat::Numeric};
-	QString xRangeDateTimeFormat, yRangeDateTimeFormat;
+	QString xRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"}, yRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 	Range<double> xRange{0.0, 1.0}, yRange{0.0, 1.0};
 	Range<double> xPrevRange{0.0, 1.0}, yPrevRange{0.0, 1.0};
 	bool autoScaleX{true}, autoScaleY{true};
-	double autoScaleOffsetFactor{0.0f};
+	//the following factor determines the size of the offset between the min/max points of the curves
+	//and the coordinate system ranges, when doing auto scaling
+	//Factor 0 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
+	//TODO: make this factor optional.
+	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
+	double autoScaleOffsetFactor{0.0};
 	CartesianPlot::Scale xScale{CartesianPlot::Scale::Linear}, yScale{CartesianPlot::Scale::Linear};
 	bool xRangeBreakingEnabled{false}, yRangeBreakingEnabled{false};
 	CartesianPlot::RangeBreaks xRangeBreaks, yRangeBreaks;

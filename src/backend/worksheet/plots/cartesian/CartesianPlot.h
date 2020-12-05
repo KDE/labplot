@@ -5,7 +5,7 @@
     Description          : Cartesian plot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2019 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2012-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -67,11 +67,10 @@ public:
 	enum class RangeBreakStyle {Simple, Vertical, Sloped};
 	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor};
 	enum class NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
-	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY
-	                         };
+	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 
 	struct RangeBreak {
-		RangeBreak() : range(std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()), position(0.5), style(RangeBreakStyle::Sloped) {}
+		RangeBreak() : range(qQNaN(), qQNaN()), position(0.5), style(RangeBreakStyle::Sloped) {}
 		bool isValid() const {
 			return range.valid();
 		}

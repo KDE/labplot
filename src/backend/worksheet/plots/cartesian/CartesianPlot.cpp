@@ -4,7 +4,7 @@
     Description          : Cartesian plot
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
 
  ***************************************************************************/
@@ -124,27 +124,6 @@ void CartesianPlot::init() {
 	d->coordinateSystems.append( new CartesianCoordinateSystem(this) );
 	m_coordinateSystems.append( d->coordinateSystems.at(0) );
 
-	d->rangeType = RangeType::Free;
-	d->xRangeFormat = RangeFormat::Numeric;
-	d->yRangeFormat = RangeFormat::Numeric;
-	d->xRangeDateTimeFormat = "yyyy-MM-dd hh:mm:ss";
-	d->yRangeDateTimeFormat = "yyyy-MM-dd hh:mm:ss";
-	d->rangeFirstValues = 1000;
-	d->rangeLastValues = 1000;
-	d->autoScaleX = true;
-	d->autoScaleY = true;
-	d->xScale = Scale::Linear;
-	d->yScale = Scale::Linear;
-	d->xRangeBreakingEnabled = false;
-	d->yRangeBreakingEnabled = false;
-
-	//the following factor determines the size of the offset between the min/max points of the curves
-	//and the coordinate system ranges, when doing auto scaling
-	//Factor 0 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
-	//TODO: make this factor optional.
-	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
-	d->autoScaleOffsetFactor = 0.0f;
-
 	m_plotArea = new PlotArea(name() + " plot area", this);
 	addChildFast(m_plotArea);
 
@@ -185,8 +164,8 @@ void CartesianPlot::setType(Type type) {
 
 	switch (type) {
 	case Type::FourAxes: {
-			d->xRange.setRange(0.0, 1.0);
-			d->yRange.setRange(0.0, 1.0);
+			d->xRange.setRange(0., 1.);
+			d->yRange.setRange(0., 1.);
 
 			//Axes
 			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
@@ -194,8 +173,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::Position::Bottom);
-			axis->setStart(0);
-			axis->setEnd(1);
+			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksIn);
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
@@ -207,8 +185,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::Position::Top);
-			axis->setStart(0);
-			axis->setEnd(1);
+			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksIn);
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
@@ -228,8 +205,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::Position::Left);
-			axis->setStart(0);
-			axis->setEnd(1);
+			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksIn);
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
@@ -241,8 +217,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::Position::Right);
-			axis->setStart(0);
-			axis->setEnd(1);
+			axis->setRange(0., 1.);
 			axis->setOffset(1);
 			axis->setMajorTicksDirection(Axis::ticksIn);
 			axis->setMajorTicksNumber(6);
@@ -269,8 +244,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::Position::Bottom);
-			axis->setStart(0);
-			axis->setEnd(1);
+			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
@@ -283,8 +257,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::Position::Left);
-			axis->setStart(0);
-			axis->setEnd(1);
+			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
@@ -310,8 +283,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::Position::Centered);
-			axis->setStart(-0.5);
-			axis->setEnd(0.5);
+			axis->setRange(-0.5, 0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
@@ -325,8 +297,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(true);
 			addChild(axis);
 			axis->setPosition(Axis::Position::Centered);
-			axis->setStart(-0.5);
-			axis->setEnd(0.5);
+			axis->setRange(-0.5, 0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
@@ -354,8 +325,7 @@ void CartesianPlot::setType(Type type) {
 			addChild(axis);
 			axis->setPosition(Axis::Position::Custom);
 			axis->setOffset(0);
-			axis->setStart(-0.5);
-			axis->setEnd(0.5);
+			axis->setRange(-0.5, 0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
@@ -370,8 +340,7 @@ void CartesianPlot::setType(Type type) {
 			addChild(axis);
 			axis->setPosition(Axis::Position::Custom);
 			axis->setOffset(0);
-			axis->setStart(-0.5);
-			axis->setEnd(0.5);
+			axis->setRange(-0.5, 0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
 			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
@@ -396,7 +365,7 @@ void CartesianPlot::setType(Type type) {
 	float h = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Centimeter);
 
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
-	d->rect = QRectF(x,y,w,h);
+	d->rect = QRectF(x, y, w, h);
 	d->retransform();
 }
 
@@ -430,7 +399,7 @@ void CartesianPlot::initActions() {
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), this);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), this);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), this);
-    addInfoElementAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Info Element"), this);
+	addInfoElementAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Info Element"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
 	addReferenceLineAction = new QAction(QIcon::fromTheme("draw-line"), i18n("Reference Line"), this);
 

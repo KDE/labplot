@@ -4,7 +4,8 @@
     Description          : Base class for plots of different types
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2017 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -69,7 +70,7 @@ PlotArea* AbstractPlot::plotArea() {
 }
 
 AbstractCoordinateSystem* AbstractPlot::coordinateSystem() const {
-	//TODO
+	// TODO: return default or specified cSystem
 	return m_coordinateSystems.at(0);
 }
 
