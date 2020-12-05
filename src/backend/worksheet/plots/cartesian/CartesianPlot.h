@@ -227,7 +227,7 @@ private:
 	QAction* addIntegrationAction;
 	QAction* addInterpolationAction;
 	QAction* addSmoothAction;
-	QVector<QAction*> addFitAction;
+	QVector<QAction*> addFitActions;
 	QAction* addFourierFilterAction;
 	QAction* addFourierTransformAction;
 	QAction* addConvolutionAction;

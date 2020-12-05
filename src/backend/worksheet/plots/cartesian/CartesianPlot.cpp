@@ -468,47 +468,47 @@ void CartesianPlot::initActions() {
 
 	QAction* fitAction = new QAction(i18n("Linear"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitLinear));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Power"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitPower));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Exponential (degree 1)"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitExp1));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Exponential (degree 2)"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitExp2));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Inverse exponential"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitInvExp));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Gauss"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitGauss));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Cauchy-Lorentz"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitCauchyLorentz));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Arc Tangent"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitTan));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Hyperbolic Tangent"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitTanh));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Error Function"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitErrFunc));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Custom"), this);
 	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitCustom));
-	addFitAction.append(fitAction);
+	addFitActions.append(fitAction);
 
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
 	addFourierTransformAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("Fourier Transform"), this);
@@ -520,7 +520,7 @@ void CartesianPlot::initActions() {
 	connect(addSmoothAction, &QAction::triggered, this, &CartesianPlot::addSmoothCurve);
 	connect(addConvolutionAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
 	connect(addCorrelationAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
-	for (const auto& action : addFitAction)
+	for (const auto& action : addFitActions)
 		connect(action, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
 	connect(addFourierTransformAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
@@ -631,20 +631,20 @@ void CartesianPlot::initMenus() {
 	// Data fit menu
 	QMenu* dataFitMenu = new QMenu(i18n("Fit"));
 	dataFitMenu->setIcon(QIcon::fromTheme("labplot-xy-fit-curve"));
-	dataFitMenu->addAction(addFitAction.at(0));
-	dataFitMenu->addAction(addFitAction.at(1));
-	dataFitMenu->addAction(addFitAction.at(2));
-	dataFitMenu->addAction(addFitAction.at(3));
-	dataFitMenu->addAction(addFitAction.at(4));
+	dataFitMenu->addAction(addFitActions.at(0));
+	dataFitMenu->addAction(addFitActions.at(1));
+	dataFitMenu->addAction(addFitActions.at(2));
+	dataFitMenu->addAction(addFitActions.at(3));
+	dataFitMenu->addAction(addFitActions.at(4));
 	dataFitMenu->addSeparator();
-	dataFitMenu->addAction(addFitAction.at(5));
-	dataFitMenu->addAction(addFitAction.at(6));
+	dataFitMenu->addAction(addFitActions.at(5));
+	dataFitMenu->addAction(addFitActions.at(6));
 	dataFitMenu->addSeparator();
-	dataFitMenu->addAction(addFitAction.at(7));
-	dataFitMenu->addAction(addFitAction.at(8));
-	dataFitMenu->addAction(addFitAction.at(9));
+	dataFitMenu->addAction(addFitActions.at(7));
+	dataFitMenu->addAction(addFitActions.at(8));
+	dataFitMenu->addAction(addFitActions.at(9));
 	dataFitMenu->addSeparator();
-	dataFitMenu->addAction(addFitAction.at(10));
+	dataFitMenu->addAction(addFitActions.at(10));
 
 	//analysis menu
 	dataAnalysisMenu = new QMenu(i18n("Analysis"));
