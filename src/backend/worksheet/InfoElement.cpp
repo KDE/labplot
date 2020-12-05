@@ -216,18 +216,12 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	project()->setSuppressAspectAddedSignal(true);
 
 	connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
-	connect(curve, &XYCurve::moveBegin, this, [this]() {
-		m_curveGetsMoved = true;
-	});
-	connect(curve, &XYCurve::moveEnd, this, [this]() {
-		m_curveGetsMoved = false;
-	});
+	connect(curve, &XYCurve::moveBegin, this, [this]() { m_curveGetsMoved = true; });
+	connect(curve, &XYCurve::moveEnd, this, [this]() { m_curveGetsMoved = false; });
 	custompoint->setVisible(curve->isVisible());
 
 	if (d->m_index < 0)
 		d->m_index = curve->xColumn()->indexForValue(custompoint->position().x());
-	if (d->m_index < 0)
-		d->m_index = 0;
 
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
 	markerpoints.append(markerpoint);
@@ -388,11 +382,11 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	if (!wrapper.teXUsed) {
 		double value = markerpoints[0].x;
 		if (columnMode== AbstractColumn::ColumnMode::Numeric ||
-		        columnMode == AbstractColumn::ColumnMode::Integer)
+			columnMode == AbstractColumn::ColumnMode::Integer)
 			placeholderText.replace("&amp;(x)",QString::number(value));
 		else if (columnMode== AbstractColumn::ColumnMode::Day ||
-		         columnMode == AbstractColumn::ColumnMode::Month ||
-		         columnMode == AbstractColumn::ColumnMode::DateTime) {
+				columnMode == AbstractColumn::ColumnMode::Month ||
+				columnMode == AbstractColumn::ColumnMode::DateTime) {
 			QDateTime dateTime;
 			dateTime.setTime_t(value);
 			QString dateTimeString = dateTime.toString();
@@ -400,11 +394,11 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		}
 	} else {
 		if (columnMode== AbstractColumn::ColumnMode::Numeric ||
-		        columnMode == AbstractColumn::ColumnMode::Integer)
+			columnMode == AbstractColumn::ColumnMode::Integer)
 			placeholderText.replace("&(x)",QString::number(markerpoints[0].x));
 		else if (columnMode== AbstractColumn::ColumnMode::Day ||
-		         columnMode == AbstractColumn::ColumnMode::Month ||
-		         columnMode == AbstractColumn::ColumnMode::DateTime) {
+				columnMode == AbstractColumn::ColumnMode::Month ||
+				columnMode == AbstractColumn::ColumnMode::DateTime) {
 			QDateTime dateTime;
 			dateTime.setTime_t(markerpoints[0].x);
 			QString dateTimeString = dateTime.toString();
@@ -472,6 +466,9 @@ void InfoElement::labelTextWrapperChanged(TextLabel::TextWrapper wrapper) {
 	m_setTextLabelText = true;
 	label->setText(createTextLabelText());
 	m_setTextLabelText = false;
+
+	Q_D(InfoElement);
+	d->retransform();
 }
 
 /*!
@@ -1080,9 +1077,6 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 			index = -1;
 
 		double x;
-// 		double xNew;
-// 		bool valueFound;
-		QPointF pointPosition;
 		int rowCount;
 
 		// problem: when curves have different number of samples, the points are anymore aligned

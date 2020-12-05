@@ -131,7 +131,9 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 	ui->kcbConnectionLineColor->setColor(m_element->connectionLineColor());
 	ui->sbVerticalLineWidth->setValue(m_element->xposLineWidth());
 	ui->sbConnectionLineWidth->setValue(m_element->connectionLineWidth());
-    ui->lePosition->setText(QString::number(m_element->position()));
+
+	SET_NUMBER_LOCALE
+	ui->lePosition->setText( numberLocale.toString(m_element->position()) );
 
 	initConnections();
 }
@@ -370,8 +372,11 @@ void InfoElementDock::elementLabelBorderShapeChanged() {
 }
 
 void InfoElementDock::elementPositionChanged(double pos) {
+	if (m_initializing)
+		return;
 	const Lock lock(m_initializing);
-	ui->lePosition->setText(QString::number(pos));
+	SET_NUMBER_LOCALE
+	ui->lePosition->setText(numberLocale.toString(pos));
 }
 
 void InfoElementDock::elementCurveRemoved(QString name) {
