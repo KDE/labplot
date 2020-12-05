@@ -1578,10 +1578,10 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			updateLegend();
 		}
 
-        const auto* infoElement= qobject_cast<const InfoElement*>(child);
-        if (infoElement) {
-            connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
-        }
+		const auto* infoElement= qobject_cast<const InfoElement*>(child);
+		if (infoElement)
+			connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
+
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
 		const auto* element = static_cast<const WorksheetElement*>(child);
