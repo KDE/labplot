@@ -56,7 +56,6 @@ public:
 		//TODO: check for NAN, INF?
 		this->setRange(parse(qPrintable(min.simplified()), qPrintable(numberLocale.name())), parse(qPrintable(max.simplified()), qPrintable(numberLocale.name())));
 	}
-	~Range() = default;
 	T min() const { return m_min; }
 	T max() const { return m_max; }
 	T& min() { return m_min; }
@@ -77,7 +76,6 @@ public:
 	void translate(T offset) { m_min += offset; m_max += offset; }
 	bool operator==(const Range<T>& other) const { return ( m_min == other.min() && m_max == other.max() ); }
 	bool operator!=(const Range<T>& other) const { return ( m_min != other.min() || m_max != other.max() ); }
-	Range<T>& operator=(const Range<T>& other) = default;
 
 	//! Return a string in the format '[min, max]'
 	QString toString() const {

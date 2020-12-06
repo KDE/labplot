@@ -46,7 +46,9 @@ template<class T> class IntervalBase {
 			m_start = start;
 			m_end = end;
 		}
+		IntervalBase(IntervalBase const&) = default;
 		virtual ~IntervalBase() = default;
+		IntervalBase& operator=(const IntervalBase&) = default;
 		T start() const { return m_start; }
 		T end() const { return m_end; }
 		void setStart(T start) { m_start = start; }
@@ -213,7 +215,6 @@ template<class T> class Interval : public IntervalBase<T> {
 	public:
 		Interval() = default;
 		Interval(T start, T end) : IntervalBase<T>(start, end) {}
-		Interval(const Interval<T>&) = default;
 		T size() const {
 			return IntervalBase<T>::m_end - IntervalBase<T>::m_start + 1;
 		}
@@ -224,45 +225,6 @@ template<class T> class Interval : public IntervalBase<T> {
 		bool touches(const Interval<T>& other) const override {
 			return ( (other.end() == IntervalBase<T>::m_start-1) ||
 					(other.start() == IntervalBase<T>::m_end+1) );
-		}
-};
-
-template<> class Interval<float> : public IntervalBase<float> {
-	public:
-		Interval() {}
-		Interval(float start, float end) : IntervalBase<float>(start, end) {}
-		Interval(const Interval<float>& other) = default;
-		float size() const { return IntervalBase<float>::m_end - IntervalBase<float>::m_start; }
-		bool isValid() const { return ( IntervalBase<float>::m_start <= IntervalBase<float>::m_end ); }
-		bool touches(const Interval<float>& other) const override {
-			return ( (other.end() == IntervalBase<float>::m_start) ||
-					(other.start() == IntervalBase<float>::m_end) );
-		}
-};
-
-template<> class Interval<double> : public IntervalBase<double> {
-	public:
-		Interval() {}
-		Interval(double start, double end) : IntervalBase<double>(start, end) {}
-		Interval(const Interval<double>&) = default;
-		double size() const { return IntervalBase<double>::m_end - IntervalBase<double>::m_start; }
-		bool isValid() const { return ( IntervalBase<double>::m_start <= IntervalBase<double>::m_end ); }
-		bool touches(const Interval<double>& other) const override {
-			return ( (other.end() == IntervalBase<double>::m_start) ||
-					(other.start() == IntervalBase<double>::m_end) );
-		}
-};
-
-template<> class Interval<long double> : public IntervalBase<long double> {
-	public:
-		Interval() {}
-		Interval(long double start, long double end) : IntervalBase<long double>(start, end) {}
-		Interval(const Interval<long double>& other) = default;
-		long double size() const { return IntervalBase<long double>::m_end - IntervalBase<long double>::m_start; }
-		bool isValid() const { return ( IntervalBase<long double>::m_start <= IntervalBase<long double>::m_end ); }
-		bool touches(const Interval<long double>& other) const override {
-			return ( (other.end() == IntervalBase<long double>::m_start) ||
-					(other.start() == IntervalBase<long double>::m_end) );
 		}
 };
 
