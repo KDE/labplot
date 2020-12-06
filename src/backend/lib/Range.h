@@ -56,7 +56,6 @@ public:
 		//TODO: check for NAN, INF?
 		this->setRange(parse(qPrintable(start.simplified()), qPrintable(numberLocale.name())), parse(qPrintable(end.simplified()), qPrintable(numberLocale.name())));
 	}
-	~Range() = default;
 	T start() const { return m_start; }
 	T end() const { return m_end; }
 	T& start() { return m_start; }
@@ -80,7 +79,6 @@ public:
 	bool contains(T value) const { return ( qMin(m_start, m_end) <= value && qMax(m_start, m_end) >= value ); }
 	void translate(T offset) { m_start += offset; m_end += offset; }
 	void extend(T value) { m_start -= value; m_end += value; }
-	Range<T>& operator=(const Range<T>& other) = default;
 	bool operator==(const Range<T>& other) const { return ( m_start == other.start() && m_end == other.end() ); }
 	bool operator!=(const Range<T>& other) const { return ( m_start != other.start() || m_end != other.end() ); }
 	Range<T>& operator+=(const T value) { m_start += value; m_end += value; return *this; }

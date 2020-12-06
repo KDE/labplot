@@ -120,10 +120,12 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 		}
 	}
 
-	if (m_element->isTextLabel()) {
-		elementLabelBorderShapeChanged();
-		ui->cbConnectToAnchor->setCurrentIndex(m_element->gluePointIndex()+1);
-	}
+	//possible anchor points
+	ui->cbConnectToAnchor->clear();
+	ui->cbConnectToAnchor->addItem(i18n("Auto"));
+	for (int i=0; i < m_element->gluePointsCount(); i++)
+		ui->cbConnectToAnchor->addItem(m_element->gluePoint(i).name);
+	ui->cbConnectToAnchor->setCurrentIndex(m_element->gluePointIndex()+1);
 
 	ui->chbVerticalLineEnabled->setChecked(m_element->xposLineVisible());
 	ui->cbConnnectionLineEnabled->setChecked(m_element->connectionLineVisible());
