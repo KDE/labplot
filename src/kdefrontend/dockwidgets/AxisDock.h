@@ -129,7 +129,7 @@ private slots:
 	void labelsFormatChanged(int);
 	void labelsPrecisionChanged(int);
 	void labelsAutoPrecisionChanged(int);
-	void labelsDateTimeFormatChanged(int);
+	void labelsDateTimeFormatChanged();
 	void labelsPositionChanged(int);
 	void labelsOffsetChanged(double);
 	void labelsRotationChanged(int);
