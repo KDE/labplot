@@ -21,6 +21,7 @@ optional
 	* ReadStat for importing serveral statistical data formats (will be build if not available)
 	* Qt SerialPort to support serial port functionality
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
+	* KUserFeedback to support collecting feedback from users
 
 
 ===============================================================================
