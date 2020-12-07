@@ -123,6 +123,9 @@ void CartesianPlot::init() {
 
 	d->coordinateSystems.append( new CartesianCoordinateSystem(this) );
 	m_coordinateSystems.append( d->coordinateSystems.at(0) );
+	// second cSystem for testing
+	d->coordinateSystems.append( new CartesianCoordinateSystem(this) );
+	m_coordinateSystems.append( d->coordinateSystems.at(1) );
 
 	m_plotArea = new PlotArea(name() + " plot area", this);
 	addChildFast(m_plotArea);
@@ -2097,7 +2100,7 @@ bool CartesianPlot::scaleAuto() {
 		d->yRange.end() = d->curvesYRange.end();
 		updateY = true;
 	}
-	DEBUG( Q_FUNC_INFO << ", xmin/xmax = " << d->xRange.toStdString() << ", ymin/ymax = " << d->yRange.toStdString() );
+	DEBUG( Q_FUNC_INFO << ", xrange = " << d->xRange.toStdString() << ", yrange = " << d->yRange.toStdString() );
 
 	if (updateX || updateY) {
 		if (updateX) {
@@ -2639,26 +2642,29 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
-	DEBUG( Q_FUNC_INFO << ", xmin/xmax = " << xRange.toStdString() << ", ymin/ymax = " << yRange.toStdString() );
+	DEBUG( Q_FUNC_INFO << ", xrange = " << xRange.toStdString() << ", yrange = " << yRange.toStdString() );
 	PERFTRACE(Q_FUNC_INFO);
 
 	QVector<CartesianScale*> scales;
 
-	//check ranges for log-scales
+	//////////// Create X-scales ////////////////
+	//check ranges for nonlinear scales
 	if (xScale != CartesianPlot::Scale::Linear)
 		checkXRange();
-
-	//check whether we have x-range breaks - the first break, if available, should be valid
-	bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
 
 	static const int breakGap = 20;
 	Range<double> sceneRange, logicalRange;
 
-	// Create X-scales
+	DEBUG(Q_FUNC_INFO << ", number of csystems: " << coordinateSystems.size())
+	//TODO: loop over all cSystems and set the correct x/yRanges
+
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
-	if (!hasValidBreak) {	//no breaks available -> range goes from the plot beginning to the end of the plot
+
+	//check whether we have x-range breaks - the first break, if available, should be valid
+	bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
+	if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
 		sceneRange = plotSceneRange;
-		logicalRange = xRange;
+		logicalRange = xRange;		// TODO: use xRange of current data range
 
 		//TODO: how should we handle the case sceneRange.length() == 0?
 		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
@@ -2692,23 +2698,24 @@ void CartesianPlotPrivate::retransformScales() {
 			scales << this->createScale(xScale, sceneRange, logicalRange);
 	}
 
-	//TODO
+	//TODO: which cSystem?
 	coordinateSystems.at(0)->setXScales(scales);
+	scales.clear();
 
-	//check ranges for log-scales
+	//// cSystem loop end
+
+	//////// Create Y-scales /////////////
+	//check ranges for nonlinear scales
 	if (yScale != CartesianPlot::Scale::Linear)
 		checkYRange();
 
+	plotSceneRange.setRange(dataRect.y() + dataRect.height(), dataRect.y());
+
 	//check whether we have y-range breaks - the first break, if available, should be valid
 	hasValidBreak = (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty() && yRangeBreaks.list.first().isValid());
-
-	// Create Y-scales
-	scales.clear();
-	plotSceneRange.setRange(dataRect.y() + dataRect.height(), dataRect.y());
-	if (!hasValidBreak) {
-		//no breaks available -> range goes from the plot beginning to the end of the plot
+	if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
 		sceneRange = plotSceneRange;
-		logicalRange = yRange;
+		logicalRange = yRange;		//TODO: use yRange
 
 		if (sceneRange.length() > 0)
 			scales << this->createScale(yScale, sceneRange, logicalRange);
@@ -2740,7 +2747,7 @@ void CartesianPlotPrivate::retransformScales() {
 			scales << this->createScale(yScale, sceneRange, logicalRange);
 	}
 
-	//TODO
+	//TODO: which cSystem?
 	coordinateSystems.at(0)->setYScales(scales);
 
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
