@@ -201,6 +201,8 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.chkLabelsAutoPrecision, &QCheckBox::stateChanged, this, &AxisDock::labelsAutoPrecisionChanged);
 	connect(ui.cbLabelsDateTimeFormat, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			this, &AxisDock::labelsDateTimeFormatChanged);
+	connect(ui.cbLabelsDateTimeFormat, &QComboBox::currentTextChanged,
+			this, &AxisDock::labelsDateTimeFormatChanged);
 	connect(ui.cbLabelsPosition, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			this, &AxisDock::labelsPositionChanged);
 	connect(ui.sbLabelsOffset, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
@@ -1403,7 +1405,7 @@ void AxisDock::labelsAutoPrecisionChanged(int state) {
 		axis->setLabelsAutoPrecision(checked);
 }
 
-void AxisDock::labelsDateTimeFormatChanged(int) {
+void AxisDock::labelsDateTimeFormatChanged() {
 	if (m_initializing)
 		return;
 
