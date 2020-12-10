@@ -30,6 +30,7 @@
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "kdefrontend/GuiTools.h"
 #include "ui_infoelementdock.h"
 
 InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui::InfoElementDock) {
@@ -42,17 +43,29 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	//**********************************  Slots **********************************************
 	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
 	connect(ui->leComment, &QLineEdit::textChanged, this, &InfoElementDock::commentChanged);
+	connect(ui->lePosition, &QLineEdit::textChanged, this, &InfoElementDock::positionChanged);
+	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
+	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
 	connect(ui->chbVisible, &QCheckBox::toggled, this, &InfoElementDock::visibilityChanged);
 
-	connect(ui->sbVerticalLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::xposLineWidthChanged);
-	connect(ui->sbConnectionLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &InfoElementDock::connectionLineWidthChanged);
-	connect(ui->kcbVerticalLineColor, &KColorButton::changed, this, &InfoElementDock::xposLineColorChanged);
+	//vertical line
+	connect(ui->cbVerticalLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &InfoElementDock::verticalLineStyleChanged);
+	connect(ui->kcbVerticalLineColor, &KColorButton::changed,
+			this, &InfoElementDock::verticalLineColorChanged);
+	connect(ui->sbVerticalLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &InfoElementDock::verticalLineWidthChanged);
+	connect(ui->sbVerticalLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
+			this, &InfoElementDock::verticalLineOpacityChanged);
+
+	//connection line
+	connect(ui->cbConnectionLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &InfoElementDock::connectionLineStyleChanged);
+	connect(ui->sbConnectionLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+			this, &InfoElementDock::connectionLineWidthChanged);
 	connect(ui->kcbConnectionLineColor, &KColorButton::changed, this, &InfoElementDock::connectionLineColorChanged);
-	connect(ui->chbVerticalLineEnabled, &QCheckBox::toggled, this, &InfoElementDock::xposLineVisibilityChanged);
-	connect(ui->cbConnnectionLineEnabled, &QCheckBox::toggled, this, &InfoElementDock::connectionLineVisibilityChanged);
-	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
-	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
-	connect(ui->lePosition, &QLineEdit::textChanged, this, &InfoElementDock::positionChanged);
+	connect(ui->sbConnectionLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
+			this, &InfoElementDock::connectionLineOpacityChanged);
 }
 
 void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent) {
@@ -127,42 +140,48 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 		ui->cbConnectToAnchor->addItem(m_element->gluePoint(i).name);
 	ui->cbConnectToAnchor->setCurrentIndex(m_element->gluePointIndex()+1);
 
-	ui->chbVerticalLineEnabled->setChecked(m_element->xposLineVisible());
-	ui->cbConnnectionLineEnabled->setChecked(m_element->connectionLineVisible());
-	ui->kcbVerticalLineColor->setColor(m_element->xposLineColor());
-	ui->kcbConnectionLineColor->setColor(m_element->connectionLineColor());
-	ui->sbVerticalLineWidth->setValue(m_element->xposLineWidth());
-	ui->sbConnectionLineWidth->setValue(m_element->connectionLineWidth());
+	ui->cbVerticalLineStyle->setCurrentIndex( (int) m_element->verticalLinePen().style() );
+	ui->kcbVerticalLineColor->setColor(m_element->verticalLinePen().color());
+	ui->sbVerticalLineWidth->setValue( Worksheet::convertFromSceneUnits(m_element->verticalLinePen().widthF(), Worksheet::Unit::Point) );
+	ui->sbVerticalLineOpacity->setValue( round(m_element->verticalLineOpacity()*100.0) );
+	GuiTools::updatePenStyles(ui->cbVerticalLineStyle, ui->kcbVerticalLineColor->color());
+
+	ui->cbConnectionLineStyle->setCurrentIndex( (int) m_element->connectionLinePen().style() );
+	ui->kcbConnectionLineColor->setColor(m_element->connectionLinePen().color());
+	ui->sbConnectionLineWidth->setValue( Worksheet::convertFromSceneUnits(m_element->connectionLinePen().widthF(), Worksheet::Unit::Point) );
+	ui->sbConnectionLineOpacity->setValue( round(m_element->connectionLineOpacity()*100.0) );
+	GuiTools::updatePenStyles(ui->cbConnectionLineStyle, ui->kcbConnectionLineColor->color());
 
 	SET_NUMBER_LOCALE
 	ui->lePosition->setText( numberLocale.toString(m_element->position()) );
 
-	initConnections();
-}
+	//connections
 
-void InfoElementDock::initConnections() {
-	connect( m_element, &InfoElement::visibleChanged,
-			 this, &InfoElementDock::elementVisibilityChanged );
-	connect( m_element, &InfoElement::connectionLineWidthChanged,
-			 this, &InfoElementDock::elementConnectionLineWidthChanged );
-	connect( m_element, &InfoElement::connectionLineColorChanged,
-			 this, &InfoElementDock::elementConnectionLineColorChanged );
-	connect( m_element, &InfoElement::xposLineWidthChanged,
-			 this, &InfoElementDock::elementXPosLineWidthChanged );
-	connect( m_element, &InfoElement::xposLineColorChanged,
-			 this, &InfoElementDock::elementXposLineColorChanged );
-	connect( m_element, &InfoElement::xposLineVisibleChanged,
-			 this, &InfoElementDock::elementXPosLineVisibleChanged );
-	connect (m_element, &InfoElement::gluePointIndexChanged,
-			 this, &InfoElementDock::elementGluePointIndexChanged );
-	connect (m_element, &InfoElement::connectionLineCurveNameChanged,
-			 this, &InfoElementDock::elementConnectionLineCurveChanged );
-	connect (m_element, &InfoElement::labelBorderShapeChangedSignal,
-			 this, &InfoElementDock::elementLabelBorderShapeChanged );
-	connect (m_element, &InfoElement::curveRemoved,
-			 this, &InfoElementDock::elementCurveRemoved);
-	connect (m_element, &InfoElement::positionChanged,
+	//general
+	connect(m_element, &InfoElement::positionChanged,
 				this, &InfoElementDock::elementPositionChanged);
+	connect(m_element, &InfoElement::gluePointIndexChanged,
+			 this, &InfoElementDock::elementGluePointIndexChanged);
+	connect(m_element, &InfoElement::connectionLineCurveNameChanged,
+			 this, &InfoElementDock::elementConnectionLineCurveChanged);
+	connect(m_element, &InfoElement::labelBorderShapeChangedSignal,
+			 this, &InfoElementDock::elementLabelBorderShapeChanged);
+	connect(m_element, &InfoElement::curveRemoved,
+			 this, &InfoElementDock::elementCurveRemoved);
+	connect(m_element, &InfoElement::visibleChanged,
+			 this, &InfoElementDock::elementVisibilityChanged);
+
+	//vertical line
+	connect(m_element, &InfoElement::verticalLinePenChanged,
+			this, &InfoElementDock::elementVerticalLinePenChanged);
+	connect(m_element, &InfoElement::verticalLineOpacityChanged,
+			this, &InfoElementDock::elementVerticalLineOpacityChanged);
+
+	//connection line
+	connect(m_element, &InfoElement::connectionLinePenChanged,
+			this, &InfoElementDock::elementConnectionLinePenChanged);
+	connect(m_element, &InfoElement::connectionLineOpacityChanged,
+			this, &InfoElementDock::elementConnectionLineOpacityChanged);
 }
 
 //*************************************************************
@@ -172,94 +191,7 @@ InfoElementDock::~InfoElementDock() {
 	delete ui;
 }
 
-void InfoElementDock::visibilityChanged(bool state) {
-	if (m_initializing)
-		return;
-
-	for (auto* infoElement : m_elements)
-		infoElement->setVisible(state);
-}
-
-void InfoElementDock::connectionLineWidthChanged(double width) {
-	if (m_initializing)
-		return;
-
-	for (auto* infoElement: m_elements)
-		infoElement->setConnectionLineWidth(width);
-}
-
-void InfoElementDock::connectionLineColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	for (auto* infoElement: m_elements)
-		infoElement->setConnectionLineColor(color);
-}
-
-void InfoElementDock::xposLineWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	for (auto* infoElement: m_elements)
-		infoElement->setXPosLineWidth(value);
-}
-
-void InfoElementDock::xposLineColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	for (auto* infoElement: m_elements)
-		infoElement->setXPosLineColor(color);
-}
-
-void InfoElementDock::xposLineVisibilityChanged(bool visible) {
-	ui->lVerticalLineWidth->setVisible(visible);
-	ui->sbVerticalLineWidth->setVisible(visible);
-	ui->lVerticalLineColor->setVisible(visible);
-	ui->kcbVerticalLineColor->setVisible(visible);
-
-	if (m_initializing)
-		return;
-
-	for (auto* infoElement: m_elements)
-		infoElement->setXPosLineVisible(visible);
-}
-
-void InfoElementDock::connectionLineVisibilityChanged(bool visible) {
-	ui->lConnectionLineWidth->setVisible(visible);
-	ui->sbConnectionLineWidth->setVisible(visible);
-	ui->lConnectionLineColor->setVisible(visible);
-	ui->kcbConnectionLineColor->setVisible(visible);
-	ui->lConnectTo->setVisible(visible);
-	ui->lConnectToAnchor->setVisible(visible);
-	ui->cbConnectToAnchor->setVisible(visible);
-	ui->lConnectToCurve->setVisible(visible);
-	ui->cbConnectToCurve->setVisible(visible);
-
-	if (m_initializing)
-		return;
-
-	for (auto* infoElement: m_elements)
-		infoElement->setConnectionLineVisible(visible);
-}
-
-void InfoElementDock::gluePointChanged(int index) {
-	if (m_initializing)
-		return;
-
-	for (auto* infoElement: m_elements)
-		infoElement->setGluePointIndex(index - 1); // index 0 means automatic, which is defined as -1
-}
-
-void InfoElementDock::curveChanged() {
-	if (m_initializing)
-		return;
-
-	QString name = ui->cbConnectToCurve->currentText();
-	for (auto* infoElement: m_elements)
-		infoElement->setConnectionLineCurveName(name);
-}
-
+//general tab
 void InfoElementDock::positionChanged(const QString& value) {
 	if (m_initializing)
 		return;
@@ -298,6 +230,133 @@ void InfoElementDock::curveSelectionChanged(int state) {
 	}
 }
 
+void InfoElementDock::curveChanged() {
+	if (m_initializing)
+		return;
+
+	QString name = ui->cbConnectToCurve->currentText();
+	for (auto* infoElement: m_elements)
+		infoElement->setConnectionLineCurveName(name);
+}
+
+void InfoElementDock::gluePointChanged(int index) {
+	if (m_initializing)
+		return;
+
+	for (auto* infoElement: m_elements)
+		infoElement->setGluePointIndex(index - 1); // index 0 means automatic, which is defined as -1
+}
+
+void InfoElementDock::visibilityChanged(bool state) {
+	if (m_initializing)
+		return;
+
+	for (auto* infoElement : m_elements)
+		infoElement->setVisible(state);
+}
+
+//vertical line tab
+void InfoElementDock::verticalLineStyleChanged(int index) {
+	if (index == -1 || m_initializing)
+		return;
+
+	const auto penStyle = Qt::PenStyle(index);
+	QPen pen;
+	for (auto* element : m_elements) {
+		pen = element->verticalLinePen();
+		pen.setStyle(penStyle);
+		element->setVerticalLinePen(pen);
+	}
+}
+
+void InfoElementDock::verticalLineColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* element : m_elements) {
+		pen = element->verticalLinePen();
+		pen.setColor(color);
+		element->setVerticalLinePen(pen);
+	}
+
+	m_initializing = true;
+	GuiTools::updatePenStyles(ui->cbVerticalLineStyle, color);
+	m_initializing = false;
+}
+
+void InfoElementDock::verticalLineWidthChanged(double value) {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* element : m_elements) {
+		pen = element->verticalLinePen();
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
+		element->setVerticalLinePen(pen);
+	}
+}
+
+void InfoElementDock::verticalLineOpacityChanged(int value) {
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	for (auto* element : m_elements)
+		element->setVerticalLineOpacity(opacity);
+}
+
+//connection line tab
+void InfoElementDock::connectionLineStyleChanged(int index) {
+	if (index == -1 || m_initializing)
+		return;
+
+	const auto penStyle = Qt::PenStyle(index);
+	QPen pen;
+	for (auto* element : m_elements) {
+		pen = element->connectionLinePen();
+		pen.setStyle(penStyle);
+		element->setConnectionLinePen(pen);
+	}
+}
+
+void InfoElementDock::connectionLineColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* element : m_elements) {
+		pen = element->connectionLinePen();
+		pen.setColor(color);
+		element->setConnectionLinePen(pen);
+	}
+
+	m_initializing = true;
+	GuiTools::updatePenStyles(ui->cbConnectionLineStyle, color);
+	m_initializing = false;
+}
+
+void InfoElementDock::connectionLineWidthChanged(double value) {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* element : m_elements) {
+		pen = element->connectionLinePen();
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
+		element->setConnectionLinePen(pen);
+	}
+}
+
+void InfoElementDock::connectionLineOpacityChanged(int value) {
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	for (auto* element : m_elements)
+		element->setConnectionLineOpacity(opacity);
+}
+
 //***********************************************************
 //******* SLOTs for changes triggered in InfoElement ********
 //***********************************************************
@@ -310,36 +369,6 @@ void InfoElementDock::elementDescriptionChanged(const AbstractAspect* aspect) {
 		ui->leName->setText(aspect->name());
 	else if (aspect->comment() != ui->leComment->text())
 		ui->leComment->setText(aspect->comment());
-}
-
-void InfoElementDock::elementConnectionLineWidthChanged(const double width) {
-	const Lock lock(m_initializing);
-	ui->sbConnectionLineWidth->setValue(width);
-}
-
-void InfoElementDock::elementConnectionLineColorChanged(const QColor& color) {
-	const Lock lock(m_initializing);
-	ui->kcbConnectionLineColor->setColor(color);
-}
-
-void InfoElementDock::elementXPosLineWidthChanged(const double width) {
-	const Lock lock(m_initializing);
-	ui->sbVerticalLineWidth->setValue(width);
-}
-
-void InfoElementDock::elementXposLineColorChanged(const QColor& color) {
-	const Lock lock(m_initializing);
-	ui->kcbVerticalLineColor->setColor(color);
-}
-
-void InfoElementDock::elementXPosLineVisibleChanged(const bool visible) {
-	const Lock lock(m_initializing);
-	ui->chbVerticalLineEnabled->setChecked(visible);
-}
-
-void InfoElementDock::elementConnectionLineVisibleChanged(const bool visible) {
-	const Lock lock(m_initializing);
-	ui->cbConnnectionLineEnabled->setChecked(visible);
 }
 
 void InfoElementDock::elementVisibilityChanged(const bool visible) {
@@ -391,4 +420,32 @@ void InfoElementDock::elementCurveRemoved(QString name) {
 			break;
 		}
 	}
+}
+
+//vertical line
+void InfoElementDock::elementVerticalLinePenChanged(const QPen& pen) {
+	const Lock lock(m_initializing);
+	ui->cbVerticalLineStyle->setCurrentIndex((int)pen.style());
+	ui->kcbVerticalLineColor->setColor( pen.color());
+	GuiTools::updatePenStyles(ui->cbVerticalLineStyle, pen.color());
+	ui->sbVerticalLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Unit::Point) );
+}
+
+void InfoElementDock::elementVerticalLineOpacityChanged(qreal opacity) {
+	const Lock lock(m_initializing);
+	ui->sbVerticalLineOpacity->setValue( round(opacity*100.0) );
+}
+
+//connection line
+void InfoElementDock::elementConnectionLinePenChanged(const QPen& pen) {
+	const Lock lock(m_initializing);
+	ui->cbConnectionLineStyle->setCurrentIndex((int)pen.style());
+	ui->kcbConnectionLineColor->setColor( pen.color());
+	GuiTools::updatePenStyles(ui->cbVerticalLineStyle, pen.color());
+	ui->sbVerticalLineWidth->setValue( Worksheet::convertFromSceneUnits( pen.widthF(), Worksheet::Unit::Point) );
+}
+
+void InfoElementDock::elementConnectionLineOpacityChanged(qreal opacity) {
+	const Lock lock(m_initializing);
+	ui->sbConnectionLineOpacity->setValue( round(opacity*100.0) );
 }
