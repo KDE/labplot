@@ -44,37 +44,36 @@ public:
 	explicit InfoElementDock(QWidget* parent = nullptr);
 	~InfoElementDock();
 	void setInfoElements(QList<InfoElement*> &list, bool sameParent);
-	void initConnections();
 
 public slots:
 	void elementCurveRemoved(QString name);
 
 private slots:
-	void visibilityChanged(bool state);
-	void connectionLineWidthChanged(double);
-	void connectionLineColorChanged(const QColor &);
-	void xposLineWidthChanged(double);
-	void xposLineColorChanged(const QColor &);
-	void xposLineVisibilityChanged(bool);
-	void connectionLineVisibilityChanged(bool);
 	void gluePointChanged(int index);
 	void curveChanged();
 	void positionChanged(const QString&);
-	void curveSelectionChanged(int state);
+	void curveSelectionChanged(int);
+	void visibilityChanged(bool);
+	void verticalLineStyleChanged(int);
+	void verticalLineWidthChanged(double);
+	void verticalLineColorChanged(const QColor&);
+	void verticalLineOpacityChanged(int);
+	void connectionLineStyleChanged(int);
+	void connectionLineWidthChanged(double);
+	void connectionLineColorChanged(const QColor&);
+	void connectionLineOpacityChanged(int);
 
 	// slots triggered in the InfoElement
 	void elementDescriptionChanged(const AbstractAspect*);
-	void elementConnectionLineWidthChanged(const double);
-	void elementConnectionLineColorChanged(const QColor& );
-	void elementXPosLineWidthChanged(const double);
-	void elementXposLineColorChanged(const QColor&);
-	void elementXPosLineVisibleChanged(const bool);
-	void elementConnectionLineVisibleChanged(const bool);
-	void elementVisibilityChanged(const bool);
+	void elementPositionChanged(double pos);
 	void elementGluePointIndexChanged(const int);
 	void elementConnectionLineCurveChanged(const QString name);
 	void elementLabelBorderShapeChanged();
-	void elementPositionChanged(double pos);
+	void elementVisibilityChanged(const bool);
+	void elementVerticalLinePenChanged(const QPen&);
+	void elementVerticalLineOpacityChanged(qreal);
+	void elementConnectionLinePenChanged(const QPen&);
+	void elementConnectionLineOpacityChanged(qreal);
 
 private:
 	Ui::InfoElementDock* ui;

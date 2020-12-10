@@ -57,7 +57,7 @@ public:
 	void init();
 	void updatePosition();
 	void retransform();
-	void updateXPosLine();
+	void updateVerticalLine();
 	void updateConnectionLine();
 	void visibilityChanged();
 
@@ -72,12 +72,10 @@ public:
 	QString connectionLineCurveName;
     double position;
 
-	QColor connectionLineColor{QColor(Qt::black)};
-	double connectionLineWidth{5}; // drawing linewidth
-	bool xposLineVisible{true};
-	bool connectionLineVisible{true};
-	QColor xposLineColor{QColor(Qt::black)};
-	double xposLineWidth{5}; // drawing linewidth
+	QPen verticalLinePen;
+	qreal verticalLineOpacity;
+	QPen connectionLinePen;
+	qreal connectionLineOpacity;
 
     CartesianPlot* plot{nullptr};
     const CartesianCoordinateSystem* cSystem{nullptr};

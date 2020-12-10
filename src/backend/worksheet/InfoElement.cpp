@@ -38,6 +38,7 @@
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/InfoElementPrivate.h"
 #include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/Worksheet.h"
 
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
@@ -156,9 +157,7 @@ void InfoElement::init() {
 
 	//use the color for the axis line from the theme also for info element's lines
 	KConfig config;
-	const KConfigGroup& group = config.group("Axis");
-	d->connectionLineColor = group.readEntry("LineColor", QColor(Qt::black));
-	d->xposLineColor = d->connectionLineColor;
+	loadThemeConfig(config);
 }
 
 void InfoElement::initActions() {
@@ -287,7 +286,7 @@ bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
 
 	// check if all markerpoints have a valid curve
 	// otherwise delete customPoint with no valid curve
-	for (int i=markerpoints.count()-1; i >= 0; i--) {
+	for (int i = markerpoints.count()-1; i >= 0; i--) {
 		if (markerpoints[i].curve == nullptr) {
 			removeChild(markerpoints[i].customPoint);
 			success = false;
@@ -516,12 +515,13 @@ void InfoElement::curveVisibilityChanged() {
 
 	// if no markerpoints are visible, hide all infoElement elements
 	if ((!visible && markerpoints.count() == 0) || !oneMarkerpointVisible) {
-		setConnectionLineVisible(false);
-		setXPosLineVisible(false);
+		//TODO
+// 		setConnectionLineVisible(false);
+// 		setXPosLineVisible(false);
 		label->setVisible(false);
 	} else {
-		setConnectionLineVisible(true);
-		setXPosLineVisible(true);
+// 		setConnectionLineVisible(true);
+// 		setXPosLineVisible(true);
 		label->setVisible(true);
 	}
 }
@@ -704,15 +704,14 @@ void InfoElement::handleResize(double horizontalRatio, double verticalRatio, boo
 //##############################################################################
 
 /* ============================ getter methods ================= */
-BASIC_SHARED_D_READER_IMPL(InfoElement, bool, xposLineVisible, xposLineVisible);
-BASIC_SHARED_D_READER_IMPL(InfoElement, bool, connectionLineVisible, connectionLineVisible);
-BASIC_SHARED_D_READER_IMPL(InfoElement, double, xposLineWidth, xposLineWidth);
-BASIC_SHARED_D_READER_IMPL(InfoElement, QColor, xposLineColor, xposLineColor);
-BASIC_SHARED_D_READER_IMPL(InfoElement, double, connectionLineWidth, connectionLineWidth);
-BASIC_SHARED_D_READER_IMPL(InfoElement, QColor, connectionLineColor, connectionLineColor);
+BASIC_SHARED_D_READER_IMPL(InfoElement, double, position, position);
 BASIC_SHARED_D_READER_IMPL(InfoElement, int, gluePointIndex, gluePointIndex);
 BASIC_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
-BASIC_SHARED_D_READER_IMPL(InfoElement, double, position, position);
+CLASS_SHARED_D_READER_IMPL(InfoElement, QPen, verticalLinePen, verticalLinePen)
+BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, verticalLineOpacity, verticalLineOpacity)
+CLASS_SHARED_D_READER_IMPL(InfoElement, QPen, connectionLinePen, connectionLinePen)
+BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, connectionLineOpacity, connectionLineOpacity)
+
 /* ============================ setter methods ================= */
 
 // Problem: No member named 'Private' in 'InfoElement':
@@ -723,53 +722,20 @@ BASIC_SHARED_D_READER_IMPL(InfoElement, double, position, position);
 // Problem: InfoElementPrivate has no member named 'name'
 // Solution: implement function name()
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetXPosLineVisible, bool, xposLineVisible, updateXPosLine);
-void InfoElement::setXPosLineVisible(const bool xposLineVisible) {
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetPosition, double, position, retransform);
+void InfoElement::setPosition(const double pos) {
 	Q_D(InfoElement);
-	if (xposLineVisible != d->xposLineVisible)
-		exec(new InfoElementSetXPosLineVisibleCmd(d, xposLineVisible, ki18n("%1: set vertical line visible")));
-}
+	double value;
+	int index = currentIndex(pos, &value);
+	if (index < 0)
+		return;
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineVisible, bool, connectionLineVisible, updateConnectionLine);
-void InfoElement::setConnectionLineVisible(const bool connectionLineVisible) {
-	Q_D(InfoElement);
-	if (connectionLineVisible != d->connectionLineVisible)
-		exec(new InfoElementSetConnectionLineVisibleCmd(d, connectionLineVisible, ki18n("%1: set connection line visible")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetXPosLineWidth, double, xposLineWidth, updateXPosLine);
-void InfoElement::setXPosLineWidth(const double xposLineWidth) {
-	Q_D(InfoElement);
-	if (xposLineWidth != d->xposLineWidth)
-		exec(new InfoElementSetXPosLineWidthCmd(d, xposLineWidth, ki18n("%1: set vertical line width")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetXPosLineColor, QColor, xposLineColor, updateXPosLine);
-void InfoElement::setXPosLineColor(const QColor xposLineColor) {
-	Q_D(InfoElement);
-	if (xposLineColor != d->xposLineColor)
-		exec(new InfoElementSetXPosLineColorCmd(d, xposLineColor, ki18n("%1: set vertical line color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineWidth, double, connectionLineWidth, updateConnectionLine);
-void InfoElement::setConnectionLineWidth(const double connectionLineWidth) {
-	Q_D(InfoElement);
-	if (connectionLineWidth != d->connectionLineWidth)
-		exec(new InfoElementSetConnectionLineWidthCmd(d, connectionLineWidth, ki18n("%1: set connection line width")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineColor, QColor, connectionLineColor, updateConnectionLine);
-void InfoElement::setConnectionLineColor(const QColor connectionLineColor) {
-	Q_D(InfoElement);
-	if (connectionLineColor != d->connectionLineColor)
-		exec(new InfoElementSetConnectionLineColorCmd(d, connectionLineColor, ki18n("%1: set connection line color")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVisible, bool, visible, visibilityChanged);
-void InfoElement::setVisible(const bool visible) {
-	Q_D(InfoElement);
-	if (visible != d->visible)
-		exec(new InfoElementSetVisibleCmd(d, visible, ki18n("%1: set visible")));
+	if (value != d->position) {
+		d->m_index = index;
+		setMarkerpointPosition(value);
+		label->setText(createTextLabelText());
+		exec(new InfoElementSetPositionCmd(d, pos, ki18n("%1: set position")));
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetGluePointIndex, int, gluePointIndex, retransform);
@@ -786,20 +752,41 @@ void InfoElement::setConnectionLineCurveName(const QString name) {
 		exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetPosition, double, position, retransform);
-void InfoElement::setPosition(const double pos) {
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVisible, bool, visible, visibilityChanged);
+void InfoElement::setVisible(const bool visible) {
 	Q_D(InfoElement);
-	double value;
-	int index = currentIndex(pos, &value);
-	if (index < 0)
-		return;
+	if (visible != d->visible)
+		exec(new InfoElementSetVisibleCmd(d, visible, ki18n("%1: set visible")));
+}
 
-	if (value != d->position) {
-		d->m_index = index;
-		setMarkerpointPosition(value);
-		label->setText(createTextLabelText());
-		exec(new InfoElementSetPositionCmd(d, pos, ki18n("%1: set position")));
-	}
+//vertical line
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVerticalLinePen, QPen, verticalLinePen, updateVerticalLine)
+void InfoElement::setVerticalLinePen(const QPen& pen) {
+	Q_D(InfoElement);
+	if (pen != d->verticalLinePen)
+		exec(new InfoElementSetVerticalLinePenCmd(d, pen, ki18n("%1: set vertical line style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVerticalLineOpacity, qreal, verticalLineOpacity, update);
+void InfoElement::setVerticalLineOpacity(qreal opacity) {
+	Q_D(InfoElement);
+	if (opacity != d->verticalLineOpacity)
+		exec(new InfoElementSetVerticalLineOpacityCmd(d, opacity, ki18n("%1: set vertical line opacity")));
+}
+
+//connection line
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLinePen, QPen, connectionLinePen, updateConnectionLine)
+void InfoElement::setConnectionLinePen(const QPen& pen) {
+	Q_D(InfoElement);
+	if (pen != d->connectionLinePen)
+		exec(new InfoElementSetConnectionLinePenCmd(d, pen, ki18n("%1: set connection line style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineOpacity, qreal, connectionLineOpacity, update);
+void InfoElement::setConnectionLineOpacity(qreal opacity) {
+	Q_D(InfoElement);
+	if (opacity != d->connectionLineOpacity)
+		exec(new InfoElementSetConnectionLineOpacityCmd(d, opacity, ki18n("%1: set connection line opacity")));
 }
 
 //##############################################################################
@@ -920,7 +907,7 @@ void InfoElementPrivate::updatePosition() {
 /*!
  * Repainting to update xposLine
  */
-void InfoElementPrivate::updateXPosLine() {
+void InfoElementPrivate::updateVerticalLine() {
 	update(boundingRectangle);
 }
 
@@ -953,16 +940,14 @@ void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		return;
 
 	// do not draw connection line when the label is not visible
-	if (connectionLineVisible && q->label->isVisible()) {
-		QPen pen(connectionLineColor, connectionLineWidth);
-		painter->setPen(pen);
+	if (connectionLinePen.style() != Qt::NoPen && q->label->isVisible()) {
+		painter->setPen(connectionLinePen);
 		painter->drawLine(connectionLine);
 	}
 
 	// draw vertical line, which connects all points together
-	if (xposLineVisible) {
-		QPen pen(xposLineColor, xposLineWidth);
-		painter->setPen(pen);
+	if (verticalLinePen.style() != Qt::NoPen) {
+		painter->setPen(verticalLinePen);
 		painter->drawLine(xposLine);
 	}
 }
@@ -974,8 +959,9 @@ QVariant InfoElementPrivate::itemChange(GraphicsItemChange change, const QVarian
 void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (event->button() == Qt::MouseButton::LeftButton) {
 
-		if (xposLineVisible) {
-			if (abs(xposLine.x1()-event->pos().x())< ((xposLineWidth < 3)? 3: xposLineWidth)) {
+		if (verticalLinePen.style() != Qt::NoPen) {
+			const double width = verticalLinePen.widthF();
+			if (abs(xposLine.x1()-event->pos().x())< ((width < 3)? 3 : width)) {
 				if (!isSelected())
 					setSelected(true);
 				m_suppressKeyPressEvents = false;
@@ -992,10 +978,10 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		}*/
 
 		// https://stackoverflow.com/questions/11604680/point-laying-near-line
-		double dx12 = connectionLine.x2()-connectionLine.x1();
-		double dy12 = connectionLine.y2()-connectionLine.y1();
-		double vecLenght = sqrt(pow(dx12,2)+pow(dy12,2));
-		QPointF unitvec(dx12/vecLenght,dy12/vecLenght);
+		double dx12 = connectionLine.x2() - connectionLine.x1();
+		double dy12 = connectionLine.y2() - connectionLine.y1();
+		double vecLenght = sqrt(pow(dx12,2) + pow(dy12,2));
+		QPointF unitvec(dx12/vecLenght, dy12/vecLenght);
 
 		double dx1m = event->pos().x() - connectionLine.x1();
 		double dy1m = event->pos().y() - connectionLine.y1();
@@ -1005,7 +991,8 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		DEBUG("DIST_SEGMENT   " << dist_segm << "SCALAR_PRODUCT: " << scalar_product << "VEC_LENGTH: " << vecLenght);
 
 		if (scalar_product > 0) {
-			if (scalar_product < vecLenght && dist_segm < ((connectionLineWidth < 3) ? 3: connectionLineWidth)) {
+			const double width = connectionLinePen.widthF();
+			if (scalar_product < vecLenght && dist_segm < ((width < 3) ? 3 : width)) {
 				event->accept();
 				if (!isSelected())
 					setSelected(true);
@@ -1135,31 +1122,34 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 void InfoElement::save(QXmlStreamWriter* writer) const {
 	Q_D(const InfoElement);
 
-	writer->writeStartElement( "infoElement" );
+	writer->writeStartElement("infoElement");
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//geometry
-	writer->writeStartElement( "geometry" );
-	writer->writeAttribute( "visible", QString::number(d->visible) );
-	writer->writeAttribute("connectionLineWidth", QString::number(connectionLineWidth()));
-	writer->writeAttribute("connectionLineColor_r", QString::number(connectionLineColor().red()));
-	writer->writeAttribute("connectionLineColor_g", QString::number(connectionLineColor().green()));
-	writer->writeAttribute("connectionLineColor_b", QString::number(connectionLineColor().blue()));
-	writer->writeAttribute("xposLineWidth", QString::number(xposLineWidth()));
-	writer->writeAttribute("xposLineColor_r", QString::number(xposLineColor().red()));
-	writer->writeAttribute("xposLineColor_g", QString::number(xposLineColor().green()));
-	writer->writeAttribute("xposLineColor_b", QString::number(xposLineColor().blue()));
-	writer->writeAttribute("xposLineVisible", QString::number(xposLineVisible()));
-	writer->writeAttribute("connectionLineCurveName", connectionLineCurveName());
-	writer->writeAttribute("gluePointIndex", QString::number(gluePointIndex()));
-	writer->writeEndElement();
-
-	writer->writeStartElement("settings");
+	//general
+	writer->writeStartElement("general");
+	writer->writeAttribute("position", QString::number(d->position));
+	writer->writeAttribute("curve", d->connectionLineCurveName);
+	writer->writeAttribute("gluePointIndex", QString::number(d->gluePointIndex));
 	writer->writeAttribute("markerIndex", QString::number(d->m_index));
+	writer->writeAttribute("visible", QString::number(d->visible));
 	writer->writeEndElement();
 
+	//lines
+	writer->writeStartElement("verticalLine");
+	WRITE_QPEN(d->verticalLinePen);
+	writer->writeAttribute("opacity", QString::number(d->verticalLineOpacity));
+	writer->writeEndElement();
+
+	writer->writeStartElement("connectionLine");
+	WRITE_QPEN(d->connectionLinePen);
+	writer->writeAttribute("opacity", QString::number(d->connectionLineOpacity));
+	writer->writeEndElement();
+
+	//text label
 	label->save(writer);
+
+	//custom points
 	QString path;
 	for (auto custompoint: markerpoints) {
 		custompoint.customPoint->save(writer);
@@ -1195,7 +1185,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 
 		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
-		} else if (reader->name() == "geometry") {
+		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
 
 			str = attribs.value("visible").toString();
@@ -1204,72 +1194,16 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			else
 				setVisible(str.toInt());
 
-			str = attribs.value("connectionLineWidth").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				setConnectionLineWidth(str.toDouble());
-
-			str = attribs.value("connectionLineColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->connectionLineColor.setRed(str.toInt());
-
-			str = attribs.value("connectionLineColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->connectionLineColor.setGreen(str.toInt());
-
-			str = attribs.value("connectionLineColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->connectionLineColor.setBlue(str.toInt());
-
-			str = attribs.value("xposLineWidth").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				setXPosLineWidth(str.toDouble());
-
-			str = attribs.value("xposLineColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->xposLineColor.setRed(str.toInt());
-
-			str = attribs.value("xposLineColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->xposLineColor.setGreen(str.toInt());
-
-			str = attribs.value("xposLineColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->xposLineColor.setBlue(str.toInt());
-
-			str = attribs.value("xposLineVisible").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				setXPosLineVisible(str.toInt());
-
-			str = attribs.value("connectionLineCurveName").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				setConnectionLineCurveName(str);
-
-			str = attribs.value("gluePointIndex").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				setGluePointIndex(str.toInt());
-
+			READ_DOUBLE_VALUE("position", position);
+			READ_INT_VALUE("gluePointIndex", gluePointIndex, int);
+			READ_INT_VALUE("markerIndex", m_index, int);
+			READ_STRING_VALUE("curve", connectionLineCurveName);
+		} else if (reader->name() == "verticalLine") {
+			READ_QPEN(d->verticalLinePen);
+			READ_DOUBLE_VALUE("opacity", verticalLineOpacity);
+		} else if (reader->name() == "connectionLine") {
+			READ_QPEN(d->connectionLinePen);
+			READ_DOUBLE_VALUE("opacity", connectionLineOpacity);
 		} else if (reader->name() == "textLabel") {
 			if (!label) {
 				label = new TextLabel("InfoElementLabel", d->plot);
@@ -1325,8 +1259,17 @@ void InfoElement::loadThemeConfig(const KConfig& config) {
 
 	//use the color for the axis line from the theme also for info element's lines
 	const KConfigGroup& group = config.group("Axis");
-	d->connectionLineColor = group.readEntry("LineColor", QColor(Qt::black));
-	d->xposLineColor = d->connectionLineColor;
+
+	QPen p;
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
+
+	this->setVerticalLinePen(p);
+	this->setVerticalLineOpacity(group.readEntry("LineOpacity", 1.0));
+
+	this->setConnectionLinePen(p);
+	this->setConnectionLineOpacity(group.readEntry("LineOpacity", 1.0));
 
 	//load the theme for all the children
 	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))

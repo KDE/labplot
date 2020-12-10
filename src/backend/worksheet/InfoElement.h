@@ -95,14 +95,12 @@ public:
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
     BASIC_D_ACCESSOR_DECL(double, position, Position);
-	BASIC_D_ACCESSOR_DECL(bool, xposLineVisible, XPosLineVisible);
-	BASIC_D_ACCESSOR_DECL(bool, connectionLineVisible, ConnectionLineVisible);
-	BASIC_D_ACCESSOR_DECL(double, xposLineWidth, XPosLineWidth);
-	BASIC_D_ACCESSOR_DECL(QColor, xposLineColor, XPosLineColor);
-	BASIC_D_ACCESSOR_DECL(double, connectionLineWidth, ConnectionLineWidth);
-	BASIC_D_ACCESSOR_DECL(QColor, connectionLineColor, ConnectionLineColor);
 	BASIC_D_ACCESSOR_DECL(int, gluePointIndex, GluePointIndex);
 	BASIC_D_ACCESSOR_DECL(QString, connectionLineCurveName, ConnectionLineCurveName);
+	CLASS_D_ACCESSOR_DECL(QPen, verticalLinePen, VerticalLinePen)
+	BASIC_D_ACCESSOR_DECL(qreal, verticalLineOpacity, VerticalLineOpacity)
+	CLASS_D_ACCESSOR_DECL(QPen, connectionLinePen, ConnectionLinePen)
+	BASIC_D_ACCESSOR_DECL(qreal, connectionLineOpacity, ConnectionLineOpacity)
 
 	void setVisible(bool on) override;
 	bool isVisible() const override;
@@ -143,18 +141,16 @@ private:
 	QAction* visibilityAction;
 
 signals:
-	void xposLineVisibleChanged(const bool);
-	void connectionLineVisibleChanged(const bool);
-	void xposLineWidthChanged(const double);
-	void xposLineColorChanged(const QColor&);
-	void connectionLineWidthChanged(const double);
-	void connectionLineColorChanged(const QColor&);
 	void visibleChanged(const bool);
 	void gluePointIndexChanged(const int);
 	void connectionLineCurveNameChanged(const QString&);
 	void positionChanged(const double);
 	void labelBorderShapeChangedSignal();
 	void curveRemoved(const QString&);
+	void verticalLinePenChanged(const QPen&);
+	void verticalLineOpacityChanged(qreal);
+	void connectionLinePenChanged(const QPen&);
+	void connectionLineOpacityChanged(qreal);
 };
 
 #endif // INFOELEMENT_H
