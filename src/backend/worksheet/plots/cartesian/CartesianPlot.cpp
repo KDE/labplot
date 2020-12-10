@@ -1822,7 +1822,7 @@ bool CartesianPlot::scaleAutoX() {
 	if (d->curvesXMinMaxIsDirty) {
 		calculateCurvesXMinMax(false);
 
-		/*
+		/* TODO:
 		//take the size of the error bar cap into account if error bars with caps are plotted
 		double errorBarsCapSize = -1;
 		for (auto* curve : this->children<const XYCurve>()) {
@@ -1902,13 +1902,14 @@ bool CartesianPlot::scaleAutoX() {
 	return update;
 }
 
+// TODO: copy paste code?
 bool CartesianPlot::scaleAutoY() {
 	Q_D(CartesianPlot);
 
 	if (d->curvesYMinMaxIsDirty) {
 		calculateCurvesYMinMax(false); // loop over all curves
 
-		/*
+		/* TODO:
 		//take the size of the error bar cap into account if error bars with caps are plotted
 		double errorBarsCapSize = -1;
 		for (auto* curve : this->children<const XYCurve>()) {
@@ -1990,13 +1991,14 @@ void CartesianPlot::scaleAutoTriggered() {
 		setAutoScaleY(true);
 }
 
+// TODO: copy paste code?
 bool CartesianPlot::scaleAuto() {
 	Q_D(CartesianPlot);
 
 	if (d->curvesXMinMaxIsDirty) {
 		calculateCurvesXMinMax();
 
-		/*
+		/* TODO
 		//take the size of the error bar cap into account if error bars with caps are plotted
 		double errorBarsCapSize = -1;
 		for (auto* curve : this->children<const XYCurve>()) {
