@@ -32,6 +32,7 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
 class InfoElement;
+class LabelWidget;
 
 namespace Ui {
 class InfoElementDock;
@@ -80,6 +81,7 @@ private:
 	InfoElement* m_element{nullptr};
 	QList<InfoElement*> m_elements;
 	bool m_sameParent{false};
+	LabelWidget* m_labelWidget{nullptr};
 };
 
 #endif // INFOELEMENTDOCK_H

@@ -68,7 +68,6 @@ public:
 	// TextLabel Gluepoint
 	int gluePointIndex{-1}; // negative value means automatic mode
 	int m_index{-1}; // index of the actual position
-	// connect to this curve
 	QString connectionLineCurveName;
     double position;
 
@@ -81,9 +80,8 @@ public:
     const CartesianCoordinateSystem* cSystem{nullptr};
 
 	InfoElement* const q;
+
 private:
-
-
 	QPointF sceneDeltaPoint; // delta position from worksheetinfoElementPrivate to the first marker point in scene coords
 	QPointF sceneDeltaTextLabel;
 

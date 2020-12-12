@@ -31,6 +31,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/widgets/LabelWidget.h"
 #include "ui_infoelementdock.h"
 
 InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui::InfoElementDock) {
@@ -39,6 +40,14 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	m_leComment = ui->leComment;
 
 	ui->lePosition->setValidator( new QDoubleValidator(ui->lePosition) );
+
+
+	//"Title"-tab
+	auto* hboxLayout = new QHBoxLayout(ui->tabTitle);
+	m_labelWidget = new LabelWidget(ui->tabTitle);
+	hboxLayout->addWidget(m_labelWidget);
+	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setSpacing(2);
 
 	//**********************************  Slots **********************************************
 	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
@@ -75,6 +84,13 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 	m_element = list.first();
 	m_aspect = m_element;
 	m_sameParent = sameParent;
+
+	QList<TextLabel*> labels;
+	for (auto* element : list)
+		labels.append(element->title());
+
+	m_labelWidget->setLabels(labels);
+
 
 	ui->lwCurves->clear();
 	ui->cbConnectToCurve->clear();
