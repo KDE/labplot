@@ -282,10 +282,13 @@ void ExportWorksheetDialog::exportToChanged(int index) {
 	ui->leFileName->setVisible(toFile);
 	ui->bOpen->setVisible(toFile);
 
-	if (toFile)
+	if (toFile) {
 		m_okButton->setToolTip(i18n("Export to file and close the dialog."));
-	else
+		fileNameChanged(ui->leFileName->text()); //call this to check whether a valid file name was provided
+	} else {
 		m_okButton->setToolTip(i18n("Export to clipboard and close the dialog."));
+		m_okButton->setEnabled(true);
+	}
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
