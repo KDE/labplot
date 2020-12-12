@@ -49,6 +49,9 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	connect(ui.cbTabPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbUnits, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbDecimalSeparator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
+	connect(ui.chkOmitGroupSeparator, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
+	connect(ui.chkOmitLeadingZeroInExponent, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
+	connect(ui.chkIncludeTrailingZeroesAfterDot, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::stateChanged, this, &SettingsGeneralPage::autoSaveChanged);
 
 	loadSettings();
@@ -109,10 +112,18 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
 	group.writeEntry(QLatin1String("MdiWindowVisibility"), ui.cbMdiVisibility->currentIndex());
 	group.writeEntry(QLatin1String("Units"), ui.cbUnits->currentIndex());
-	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic))	// needed to overwrite previous setting
+	if (ui.cbDecimalSeparator->currentIndex() == static_cast<int>(DecimalSeparator::Automatic))	// need to overwrite previous setting
 		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(QLocale::Language::AnyLanguage));
 	else
 		group.writeEntry(QLatin1String("DecimalSeparatorLocale"), static_cast<int>(decimalSeparatorLocale()));
+	QLocale::NumberOptions numberOptions{ QLocale::DefaultNumberOptions };
+	if (ui.chkOmitGroupSeparator->isChecked())
+		numberOptions |= QLocale::OmitGroupSeparator;
+	if (ui.chkOmitLeadingZeroInExponent->isChecked())
+		numberOptions |= QLocale::OmitLeadingZeroInExponent;
+	if (ui.chkIncludeTrailingZeroesAfterDot->isChecked())
+		numberOptions |= QLocale::IncludeTrailingZeroesAfterDot;
+	group.writeEntry(QLatin1String("NumberOptions"), static_cast<int>(numberOptions));
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
 }
@@ -125,6 +136,9 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.cbMdiVisibility->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
 	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
+	ui.chkOmitGroupSeparator->setChecked(false);
+	ui.chkOmitLeadingZeroInExponent->setChecked(false);
+	ui.chkIncludeTrailingZeroesAfterDot->setChecked(false);
 	ui.chkAutoSave->setChecked(false);
 	ui.sbAutoSaveInterval->setValue(0);
 	ui.sbAutoSaveInterval->setValue(5);
@@ -143,6 +157,13 @@ void SettingsGeneralPage::loadSettings() {
 		ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(DecimalSeparator::Automatic) );
 	else
 		ui.cbDecimalSeparator->setCurrentIndex( static_cast<int>(decimalSeparator(locale)) );
+	QLocale::NumberOptions numberOptions{ static_cast<QLocale::NumberOptions>(group.readEntry(QLatin1String("NumberOptions"), static_cast<int>(QLocale::DefaultNumberOptions))) };
+	if (numberOptions & QLocale::OmitGroupSeparator)
+		ui.chkOmitGroupSeparator->setChecked(true);
+	if (numberOptions & QLocale::OmitLeadingZeroInExponent)
+		ui.chkOmitLeadingZeroInExponent->setChecked(true);
+	if (numberOptions & QLocale::IncludeTrailingZeroesAfterDot)
+		ui.chkIncludeTrailingZeroesAfterDot->setChecked(true);
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
 }
