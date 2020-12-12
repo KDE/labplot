@@ -69,9 +69,7 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 
-	void init();
-	void initActions();
-	void initMenus();
+	TextLabel* title();
 	void addCurve(const XYCurve*, CustomPoint* = nullptr);
 	void addCurvePath(QString& curvePath, CustomPoint* = nullptr);
 	bool assignCurve(const QVector<XYCurve*>&);
@@ -124,7 +122,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(InfoElement)
-	TextLabel* label{nullptr};
+	TextLabel* m_title{nullptr};
 	QVector<struct MarkerPoints_T> markerpoints;
 	bool m_menusInitialized {false};
 	bool m_suppressChildRemoved {false};
@@ -139,6 +137,10 @@ private:
 
 	// Actions
 	QAction* visibilityAction;
+
+	void init();
+	void initActions();
+	void initMenus();
 
 signals:
 	void visibleChanged(const bool);

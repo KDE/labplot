@@ -117,7 +117,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 	} else
 		text.textPlaceholder = i18n("Please Add Text here");
 
-	label->setText(text);
+	m_title->setText(text);
 
 	m_suppressChildPositionChanged = false;
 
@@ -133,7 +133,7 @@ InfoElement::~InfoElement() {
 	//		removeChild(markerpoint.customPoint);
 	//	}
 
-	//	removeChild(label);
+	//	removeChild(m_title);
 
 	//	m_suppressChildRemoved = false;
 }
@@ -147,13 +147,14 @@ void InfoElement::init() {
 	connect(this, &InfoElement::aspectRemoved, this, &InfoElement::childRemoved);
 	connect(this, &InfoElement::aspectAdded, this, &InfoElement::childAdded);
 
-	label = new TextLabel(i18n("Label"), d->plot);
-	addChild(label);
-	label->enableCoordBinding(true);
-	label->setCoordBinding(true);
+	m_title = new TextLabel(i18n("Label"), d->plot);
+	addChild(m_title);
+	m_title->setHidden(true);
+	m_title->enableCoordBinding(true);
+	m_title->setCoordBinding(true);
 	TextLabel::TextWrapper text;
 	text.allowPlaceholder = true;
-	label->setText(text); // set placeholder to true
+	m_title->setText(text); // set placeholder to true
 
 	//use the color for the axis line from the theme also for info element's lines
 	KConfig config;
@@ -232,8 +233,8 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		retransform();
 	}
 
-	label->setHidden(false); //show in the project explorer
-	label->setVisible(true); //show in the worksheet view
+	m_title->setHidden(false); //show in the project explorer
+	m_title->setVisible(true); //show in the worksheet view
 }
 
 /*!
@@ -314,21 +315,21 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 
 	//hide the label if now curves are selected
 	if (markerpoints.isEmpty()) {
-		label->setHidden(true); //hide in the project explorer
-		label->setVisible(false); //hide in the worksheet view
+		m_title->setHidden(true); //hide in the project explorer
+		m_title->setVisible(false); //hide in the worksheet view
 		Q_D(InfoElement);
 		d->update(); //redraw to remove all children graphic items belonging to InfoElement
 	}
 }
 
 /*!
- * Set the z value of the label and the custompoints higher than the infoelement
+ * Set the z value of the m_title and the custompoints higher than the infoelement
  * @param value
  */
 void InfoElement::setZValue(qreal value) {
 	graphicsItem()->setZValue(value);
 
-	label->setZValue(value+1);
+	m_title->setZValue(value+1);
 
 	for (auto markerpoint: markerpoints)
 		markerpoint.customPoint->setZValue(value+1);
@@ -342,11 +343,11 @@ int InfoElement::markerPointsCount() {
 }
 
 TextLabel::GluePoint InfoElement::gluePoint(int index) {
-	return label->gluePointAt(index);
+	return m_title->gluePointAt(index);
 }
 
 int InfoElement::gluePointsCount() {
-	return label->gluePointCount();
+	return m_title->gluePointCount();
 }
 
 /*!
@@ -368,7 +369,7 @@ InfoElement::MarkerPoints_T InfoElement::markerPointAt(int index) {
 TextLabel::TextWrapper InfoElement::createTextLabelText() {
 
 	// TODO: save positions of the variables in extra variables to replace faster, because replace takes long time
-	TextLabel::TextWrapper wrapper = label->text();
+	TextLabel::TextWrapper wrapper = m_title->text();
 	if (markerPointsCount() < 1) {
 		DEBUG(wrapper.text.toStdString());
 		DEBUG(wrapper.textPlaceholder.toStdString());
@@ -434,8 +435,12 @@ bool InfoElement::isVisible() const {
 	return d->visible;
 }
 
+TextLabel* InfoElement::title() {
+	return m_title;
+}
+
 bool InfoElement::isTextLabel() const {
-	return label != nullptr;
+	return m_title != nullptr;
 }
 
 /*!
@@ -463,7 +468,7 @@ void InfoElement::labelTextWrapperChanged(TextLabel::TextWrapper wrapper) {
 		return;
 
 	m_setTextLabelText = true;
-	label->setText(createTextLabelText());
+	m_title->setText(createTextLabelText());
 	m_setTextLabelText = false;
 
 	Q_D(InfoElement);
@@ -518,11 +523,11 @@ void InfoElement::curveVisibilityChanged() {
 		//TODO
 // 		setConnectionLineVisible(false);
 // 		setXPosLineVisible(false);
-		label->setVisible(false);
+		m_title->setVisible(false);
 	} else {
 // 		setConnectionLineVisible(true);
 // 		setXPosLineVisible(true);
-		label->setVisible(true);
+		m_title->setVisible(true);
 	}
 }
 
@@ -557,14 +562,14 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 		}
 		// recreate text, because when marker was deleted,
 		// the placeholder should not be replaced anymore by a value
-		label->setText(createTextLabelText());
+		m_title->setText(createTextLabelText());
 	}
 
 	// textlabel was deleted
 	const TextLabel* textlabel = dynamic_cast<const TextLabel*>(child);
 	if (textlabel) {
-		Q_ASSERT(label == textlabel);
-		label = nullptr;
+		Q_ASSERT(m_title == textlabel);
+		m_title = nullptr;
 		for (int i = 0; i < markerpoints.length(); i++) { // why it's not working without?
 			m_suppressChildRemoved = true;
 			markerpoints[i].customPoint->remove();
@@ -592,17 +597,17 @@ void InfoElement::childAdded(const AbstractAspect* child) {
 		return;
 	}
 
-	const TextLabel* labelChild = dynamic_cast<const TextLabel*>(child);
-	if (labelChild) {
-		connect(label, &TextLabel::positionChanged, this, &InfoElement::labelPositionChanged);
-		connect(label, &TextLabel::visibleChanged, this, &InfoElement::labelVisibleChanged);
-		connect(label, &TextLabel::textWrapperChanged, this, &InfoElement::labelTextWrapperChanged);
-		connect(label, &TextLabel::borderShapeChanged, this, &InfoElement::labelBorderShapeChanged);
-		connect(label, &TextLabel::moveBegin, this, &InfoElement::moveElementBegin);
-		connect(label, &TextLabel::moveEnd, this, &InfoElement::moveElementEnd);
-		connect(label, &TextLabel::rotationAngleChanged, this, &InfoElement::retransform);
+	const TextLabel* m_titleChild = dynamic_cast<const TextLabel*>(child);
+	if (m_titleChild) {
+		connect(m_title, &TextLabel::positionChanged, this, &InfoElement::labelPositionChanged);
+		connect(m_title, &TextLabel::visibleChanged, this, &InfoElement::labelVisibleChanged);
+		connect(m_title, &TextLabel::textWrapperChanged, this, &InfoElement::labelTextWrapperChanged);
+		connect(m_title, &TextLabel::borderShapeChanged, this, &InfoElement::labelBorderShapeChanged);
+		connect(m_title, &TextLabel::moveBegin, this, &InfoElement::moveElementBegin);
+		connect(m_title, &TextLabel::moveEnd, this, &InfoElement::moveElementEnd);
+		connect(m_title, &TextLabel::rotationAngleChanged, this, &InfoElement::retransform);
 
-		TextLabel* l = const_cast<TextLabel*>(labelChild);
+		TextLabel* l = const_cast<TextLabel*>(m_titleChild);
 		l->setParentGraphicsItem(graphicsItem());
 	}
 }
@@ -733,7 +738,7 @@ void InfoElement::setPosition(const double pos) {
 	if (value != d->position) {
 		d->m_index = index;
 		setMarkerpointPosition(value);
-		label->setText(createTextLabelText());
+		m_title->setText(createTextLabelText());
 		exec(new InfoElementSetPositionCmd(d, pos, ki18n("%1: set position")));
 	}
 }
@@ -830,12 +835,12 @@ QString InfoElementPrivate::name() const {
 	Or when the label or the point where moved
  */
 void InfoElementPrivate::retransform() {
-	if (!q->label || q->markerpoints.isEmpty())
+	if (!q->m_title || q->markerpoints.isEmpty())
 		return;
 
 	q->m_suppressChildPositionChanged = true;
 
-	q->label->retransform();
+	q->m_title->retransform();
 
 	for (auto markerpoint: q->markerpoints)
 		markerpoint.customPoint->retransform();
@@ -851,11 +856,11 @@ void InfoElementPrivate::retransform() {
 	}
 
 	// use limit function like in the cursor! So the line will be drawn only till the border of the cartesian Plot
-	QPointF labelPos;
+	QPointF m_titlePos;
 	if (gluePointIndex < 0)
-		labelPos = q->label->findNearestGluePoint(pointPos);
+		m_titlePos = q->m_title->findNearestGluePoint(pointPos);
 	else
-		labelPos = q->label->gluePointAt(gluePointIndex).point;
+		m_titlePos = q->m_title->gluePointAt(gluePointIndex).point;
 
 	double x,y;
 	QPointF min_scene = cSystem->mapLogicalToScene(QPointF(plot->xMin(),plot->yMin()));
@@ -864,7 +869,7 @@ void InfoElementPrivate::retransform() {
 	y = abs(max_scene.y() - min_scene.y()) / 2;
 	x = abs(max_scene.x() - min_scene.x()) / 2;
 
-	QPointF labelPosItemCoords = mapFromParent(labelPos); // calculate item coords from scene coords
+	QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
 	QPointF pointPosItemCoords = mapFromParent(pointPos); // calculate item coords from scene coords
 
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
@@ -872,8 +877,8 @@ void InfoElementPrivate::retransform() {
 	boundingRectangle.setTopLeft(mapFromParent(plot->plotArea()->graphicsItem()->boundingRect().topLeft()));
 	boundingRectangle.setBottomRight(mapFromParent(plot->plotArea()->graphicsItem()->boundingRect().bottomRight()));
 
-	if (boundingRectangle.contains(labelPosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
-		connectionLine = QLineF(labelPosItemCoords.x(), labelPosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
+	if (boundingRectangle.contains(m_titlePosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
+		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
 	else
 		connectionLine = QLineF();
 
@@ -921,8 +926,8 @@ void InfoElementPrivate::updateConnectionLine() {
 void InfoElementPrivate::visibilityChanged() {
 	for(auto markerpoint: q->markerpoints)
 		markerpoint.customPoint->setVisible(visible);
-	if(q->label)
-		q->label->setVisible(visible);
+	if(q->m_title)
+		q->m_title->setVisible(visible);
 	update(boundingRect());
 }
 
@@ -940,7 +945,7 @@ void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		return;
 
 	// do not draw connection line when the label is not visible
-	if (connectionLinePen.style() != Qt::NoPen && q->label->isVisible()) {
+	if (connectionLinePen.style() != Qt::NoPen && q->m_title->isVisible()) {
 		painter->setPen(connectionLinePen);
 		painter->drawLine(connectionLine);
 	}
@@ -1023,7 +1028,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	QPointF eventLogicPos = cSystem->mapSceneToLogical(eventPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	QPointF delta_logic =  eventLogicPos - cSystem->mapSceneToLogical(oldMousePos);
 
-	if (!q->label)
+	if (!q->m_title)
 		return;
 	if (q->markerpoints.isEmpty())
 		return;
@@ -1110,7 +1115,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 //				q->m_suppressChildPositionChanged = false;
 //			}
 //		}
-//		q->label->setText(q->createTextLabelText());
+//		q->m_title->setText(q->createTextLabelText());
 //		retransform();
 
 	}
@@ -1147,7 +1152,7 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//text label
-	label->save(writer);
+	m_title->save(writer);
 
 	//custom points
 	QString path;
@@ -1205,11 +1210,11 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			READ_QPEN(d->connectionLinePen);
 			READ_DOUBLE_VALUE("opacity", connectionLineOpacity);
 		} else if (reader->name() == "textLabel") {
-			if (!label) {
-				label = new TextLabel("InfoElementLabel", d->plot);
-				this->addChild(label);
+			if (!m_title) {
+				m_title = new TextLabel(i18n("Label"), d->plot);
+				this->addChild(m_title);
 			}
-			if (!label->load(reader, preview))
+			if (!m_title->load(reader, preview))
 				return false;
 		} else if (reader->name() == "customPoint") {
 			// Marker must have at least one curve
