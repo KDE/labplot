@@ -71,10 +71,20 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	// x ranges
 	QLineEdit *le = new QLineEdit(ui.twXRanges);
 	le->setValidator(new QDoubleValidator(le));
+	le->setProperty("row", 0);
 	ui.twXRanges->setCellWidget(0, 1, le);
 	le = new QLineEdit(ui.twXRanges);
 	le->setValidator(new QDoubleValidator(le));
+	le->setProperty("row", 0);
 	ui.twXRanges->setCellWidget(0, 2, le);
+	le = new QLineEdit(ui.twXRanges);
+	le->setValidator(new QDoubleValidator(le));
+	le->setProperty("row", 1);
+	ui.twXRanges->setCellWidget(1, 1, le);
+	le = new QLineEdit(ui.twXRanges);
+	le->setValidator(new QDoubleValidator(le));
+	le->setProperty("row", 1);
+	ui.twXRanges->setCellWidget(1, 2, le);
 
 	// plot ranges
 	QComboBox *cb = new QComboBox(ui.twPlotRanges);
@@ -169,6 +179,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leXMax, &QLineEdit::textChanged, this, &CartesianPlotDock::xMaxChanged);
 	connect(qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(0, 1)), &QLineEdit::textChanged, this, &CartesianPlotDock::xMinChanged);
 	connect(qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(0, 2)), &QLineEdit::textChanged, this, &CartesianPlotDock::xMaxChanged);
+	connect(qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(1, 1)), &QLineEdit::textChanged, this, &CartesianPlotDock::xMinChanged);
+	connect(qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(1, 2)), &QLineEdit::textChanged, this, &CartesianPlotDock::xMaxChanged);
 	connect(ui.dateTimeEditXMin, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMinDateTimeChanged);
 	connect(ui.dateTimeEditXMax, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMaxDateTimeChanged);
 	connect(ui.cbXScaling, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::xScaleChanged);
@@ -697,8 +709,16 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 	SET_NUMBER_LOCALE
 	const double xMin = numberLocale.toDouble(value, &ok);
 	if (ok) {
-		for (auto* plot : m_plotList)
+		//TODO NEW: set xmin of plot range that has selected x range
+		// get selected x-range:
+		const int xRangeIndex{ sender()->property("row").toInt() };
+		DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
+		for (auto* plot : m_plotList) {
+			// ask plot which plot ranges have this x-range?
+			//for (auto plotrange: plot->plotranges)	loop over plot ranges and check selected checkbox item
+			//TODO
 			plot->setXMin(xMin);
+		}
 	}
 }
 
