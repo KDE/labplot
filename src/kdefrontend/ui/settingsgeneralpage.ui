@@ -7,11 +7,31 @@
     <x>0</x>
     <y>0</y>
     <width>613</width>
-    <height>399</height>
+    <height>474</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="9" column="1">
+   <item row="8" column="3">
+    <widget class="QCheckBox" name="chkOmitLeadingZeroInExponent">
+     <property name="text">
+      <string>Omit leading zero in exponent</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="3">
+    <widget class="QCheckBox" name="chkOmitGroupSeparator">
+     <property name="text">
+      <string>Omit group separator</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3">
+    <widget class="QComboBox" name="cbUnits"/>
+   </item>
+   <item row="4" column="3">
+    <widget class="KComboBox" name="cbMdiVisibility"/>
+   </item>
+   <item row="12" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -50,12 +70,6 @@
       <string>Tab position:</string>
      </property>
     </widget>
-   </item>
-   <item row="5" column="3">
-    <widget class="QComboBox" name="cbUnits"/>
-   </item>
-   <item row="4" column="3">
-    <widget class="KComboBox" name="cbMdiVisibility"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lTitleBar">
@@ -97,7 +111,7 @@
    <item row="6" column="3">
     <widget class="QComboBox" name="cbDecimalSeparator"/>
    </item>
-   <item row="7" column="1">
+   <item row="10" column="1">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -126,14 +140,14 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="11" column="0">
     <widget class="QLabel" name="lAutoSave">
      <property name="text">
       <string>Auto-Save:</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="3">
+   <item row="11" column="3">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
@@ -142,16 +156,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item>
@@ -208,6 +213,20 @@
        </spacer>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Number options:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="3">
+    <widget class="QCheckBox" name="chkIncludeTrailingZeroesAfterDot">
+     <property name="text">
+      <string>Include trailing zeroes after dot</string>
+     </property>
     </widget>
    </item>
   </layout>
