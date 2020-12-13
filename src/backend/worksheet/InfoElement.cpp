@@ -73,18 +73,21 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 		addChild(custompoint);
 		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
 		markerpoints.append(markerpoint);
+
 		// setpos after label was created
-		bool valueFound;
-		double xpos;
-		double y = curve->y(pos,xpos,valueFound);
-		if (valueFound) {
-			d->xPos = xpos;
-			d->position = xpos;
-			d->m_index = curve->xColumn()->indexForValue(xpos);
-			markerpoints.last().x = xpos;
-			markerpoints.last().y = y;
-			custompoint->setPosition(QPointF(xpos,y));
-			DEBUG("Value found");
+		if (curve->xColumn() && curve->yColumn()) {
+			bool valueFound;
+			double xpos;
+			double y = curve->y(pos,xpos,valueFound);
+			if (valueFound) {
+				d->xPos = xpos;
+				d->position = xpos;
+				d->m_index = curve->xColumn()->indexForValue(xpos);
+				markerpoints.last().x = xpos;
+				markerpoints.last().y = y;
+				custompoint->setPosition(QPointF(xpos,y));
+				DEBUG("Value found");
+			}
 		} else {
 			d->xPos = 0;
 			d->position = 0;
@@ -376,6 +379,9 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		wrapper.text = wrapper.textPlaceholder;
 		return wrapper;
 	}
+
+	if (!markerpoints[0].curve->xColumn())
+		return wrapper; //no data is set in the curve yet, nothing to do
 
 	AbstractColumn::ColumnMode columnMode = markerpoints[0].curve->xColumn()->columnMode();
 	QString placeholderText = wrapper.textPlaceholder;
@@ -1204,9 +1210,11 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("markerIndex", m_index, int);
 			READ_STRING_VALUE("curve", connectionLineCurveName);
 		} else if (reader->name() == "verticalLine") {
+			attribs = reader->attributes();
 			READ_QPEN(d->verticalLinePen);
 			READ_DOUBLE_VALUE("opacity", verticalLineOpacity);
 		} else if (reader->name() == "connectionLine") {
+			attribs = reader->attributes();
 			READ_QPEN(d->connectionLinePen);
 			READ_DOUBLE_VALUE("opacity", connectionLineOpacity);
 		} else if (reader->name() == "textLabel") {
