@@ -41,7 +41,6 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 
 	ui->lePosition->setValidator( new QDoubleValidator(ui->lePosition) );
 
-
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui->tabTitle);
 	m_labelWidget = new LabelWidget(ui->tabTitle);
@@ -91,7 +90,6 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 
 	m_labelWidget->setLabels(labels);
 
-
 	ui->lwCurves->clear();
 	ui->cbConnectToCurve->clear();
 
@@ -128,15 +126,11 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 
 			for (int i=0; i<m_element->markerPointsCount(); i++) {
 				auto* markerCurve = m_element->markerPointAt(i).curve;
-				if (markerCurve && markerCurve->name() == curve->name())
+				if (markerCurve && markerCurve->name() == curve->name()) {
 					checkBox->setChecked(true);
+					ui->cbConnectToCurve->addItem(markerCurve->name());
+				}
 			}
-		}
-
-		for (int i=0; i<m_element->markerPointsCount(); i++) {
-			auto* markerCurve = m_element->markerPointAt(i).curve;
-			if (markerCurve)
-				ui->cbConnectToCurve->addItem(markerCurve->name());
 		}
 	} else
 		ui->lwCurves->setEnabled(false);
@@ -230,19 +224,31 @@ void InfoElementDock::curveSelectionChanged(int state) {
 	auto* checkBox = static_cast<QCheckBox*>(QObject::sender());
 	QString curveName = checkBox->text().remove(QLatin1Char('&'));
 	XYCurve* curve = nullptr;
-	for (auto* c : m_elements[0]->plot()->children<XYCurve>())
+	for (auto* c : m_elements[0]->plot()->children<XYCurve>()) {
 		if (c->name() == curveName) {
 			curve = c;
 			break;
 		}
+	}
 
 	//add/remove the changed curve
 	if (state == Qt::Checked && curve) {
 		for (auto* element : m_elements)
 			element->addCurve(curve);
+
+		//TODO: add the new curve at the proper index via insertItem();
+		ui->cbConnectToCurve->addItem(curveName);
 	} else {
 		for (auto* element : m_elements)
 			element->removeCurve(curve);
+
+		//update the "connect to" combobox
+		for (int i = 0; ui->cbConnectToCurve->count(); ++i) {
+			if (ui->cbConnectToCurve->itemText(i) == curveName) {
+				ui->cbConnectToCurve->removeItem(i);
+				break;
+			}
+		}
 	}
 }
 
@@ -250,7 +256,7 @@ void InfoElementDock::curveChanged() {
 	if (m_initializing)
 		return;
 
-	QString name = ui->cbConnectToCurve->currentText();
+	const QString& name = ui->cbConnectToCurve->currentText();
 	for (auto* infoElement: m_elements)
 		infoElement->setConnectionLineCurveName(name);
 }

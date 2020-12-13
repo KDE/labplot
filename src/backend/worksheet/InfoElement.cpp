@@ -206,13 +206,16 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	if (!custompoint) {
 		custompoint = new CustomPoint(d->plot, i18n("Symbol"));
 		addChild(custompoint);
-		bool valueFound;
-		double x_new, y;
-		if (markerpoints.isEmpty())
-			y = curve->y(d->xPos, x_new, valueFound);
-		else
-			y = curve->y(markerpoints[0].customPoint->position().x(), x_new, valueFound);
-		custompoint->setPosition(QPointF(x_new,y));
+
+		if (curve->xColumn() && curve->yColumn()) {
+			bool valueFound;
+			double x_new, y;
+			if (markerpoints.isEmpty())
+				y = curve->y(d->xPos, x_new, valueFound);
+			else
+				y = curve->y(markerpoints[0].customPoint->position().x(), x_new, valueFound);
+			custompoint->setPosition(QPointF(x_new, y));
+		}
 	} else
 		addChild(custompoint);
 
@@ -223,7 +226,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	connect(curve, &XYCurve::moveEnd, this, [this]() { m_curveGetsMoved = false; });
 	custompoint->setVisible(curve->isVisible());
 
-	if (d->m_index < 0)
+	if (d->m_index < 0 && curve->xColumn())
 		d->m_index = curve->xColumn()->indexForValue(custompoint->position().x());
 
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
