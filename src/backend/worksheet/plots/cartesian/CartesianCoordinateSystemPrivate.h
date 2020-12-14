@@ -39,6 +39,7 @@ public:
 	CartesianPlot* plot{nullptr};
 	QVector<CartesianScale*> xScales;
 	QVector<CartesianScale*> yScales;
+	int xIndex{0}, yIndex{0};	// indices used by Plot
 };
 
 #endif

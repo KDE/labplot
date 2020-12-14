@@ -74,6 +74,10 @@ AbstractCoordinateSystem* AbstractPlot::coordinateSystem() const {
 	return m_coordinateSystems.at(0);
 }
 
+QVector<AbstractCoordinateSystem*> AbstractPlot::coordinateSystems() const {
+	return m_coordinateSystems;
+}
+
 TextLabel* AbstractPlot::title() {
 	return m_title;
 }

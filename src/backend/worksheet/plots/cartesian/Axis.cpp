@@ -457,7 +457,7 @@ void Axis::setAutoScale(bool autoScale) {
 				return;
 
 			if (d->orientation == Axis::Orientation::Horizontal)
-				d->range = plot->xRange();
+				d->range = plot->xRange(0);
 			else
 				d->range =  plot->yRange();
 
@@ -1020,11 +1020,11 @@ void AxisPrivate::retransformLine() {
 		endPoint = QPointF(range.end(), offset);
 	} else { // vertical
 		if (position == Axis::Position::Left)
-			offset = plot->xRange().start();
+			offset = plot->xRange(0).start();
 		else if (position == Axis::Position::Right)
-			offset = plot->xRange().end();
+			offset = plot->xRange(0).end();
 		else if (position == Axis::Position::Centered)
-			offset = plot->xRange().center();
+			offset = plot->xRange(0).center();
 
 		startPoint = QPointF(offset, range.start());
 		endPoint = QPointF(offset, range.end());
@@ -1267,7 +1267,7 @@ void AxisPrivate::retransformTicks() {
 	qreal nextMajorTickPos = 0.0;
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
-	const double middleX = plot->xRange().center();
+	const double middleX = plot->xRange(0).center();
 	const double middleY = plot->yRange().center();
 	bool valid;
 
@@ -1639,7 +1639,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 	double width = 0;
 	double height = fm.ascent();
 	QPointF pos;
-	const double middleX = plot->xRange().center();
+	const double middleX = plot->xRange(0).center();
 	const double middleY = plot->yRange().center();
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
@@ -1804,8 +1804,8 @@ void AxisPrivate::retransformMajorGrid() {
 	//since we don't want to paint any grid lines at the plot boundaries
 	bool skipLowestTick, skipUpperTick;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xRange().start());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xRange().end());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xRange(0).start());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xRange(0).end());
 	} else {
 		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), plot->yRange().start());
 		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), plot->yRange().end());
@@ -1840,7 +1840,7 @@ void AxisPrivate::retransformMajorGrid() {
 			lines.append( QLineF(point.x(), yRange.start(), point.x(), yRange.end()) );
 		}
 	} else { //vertical axis
-		const Range<double> xRange{plot->xRange()};
+		const Range<double> xRange{plot->xRange(0)};
 
 		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
 		for (int i = start; i < end; ++i) {
@@ -1880,7 +1880,7 @@ void AxisPrivate::retransformMinorGrid() {
 		for (const auto point : logicalMinorTickPoints)
 			lines.append( QLineF(point.x(), yRange.start(), point.x(), yRange.end()) );
 	} else { //vertical axis
-		const Range<double> xRange{plot->xRange()};
+		const Range<double> xRange{plot->xRange(0)};
 
 		for (const auto point: logicalMinorTickPoints)
 			lines.append( QLineF(xRange.start(), point.y(), xRange.end(), point.y()) );

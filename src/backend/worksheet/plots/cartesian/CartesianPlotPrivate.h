@@ -65,8 +65,9 @@ public:
 	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::RangeFormat::Numeric};
 	QString xRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"}, yRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
-	Range<double> xRange{0.0, 1.0}, yRange{0.0, 1.0};
-	Range<double> xPrevRange{0.0, 1.0}, yPrevRange{0.0, 1.0};
+	QVector<Range<double>> xRanges{{}};	// x ranges
+	Range<double> xRange{}, yRange{};
+	Range<double> xPrevRange{}, yPrevRange{};
 	bool autoScaleX{true}, autoScaleY{true};
 	//the following factor determines the size of the offset between the min/max points of the curves
 	//and the coordinate system ranges, when doing auto scaling

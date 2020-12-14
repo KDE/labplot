@@ -138,12 +138,16 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
 	BASIC_D_ACCESSOR_DECL(Range<double>, xRange, XRange)
 	BASIC_D_ACCESSOR_DECL(Range<double>, yRange, YRange)
+	Range<double> xRange(int index);
+	void setXRange(int index, Range<double>);	// set x range of d->xRanges[index]
 	// convenience methods
-	void setXMin(const double value);
-	void setXMax(const double value);
-	void setYMin(const double value);
-	void setYMax(const double value);
-	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)
+//	void setXMin(const double value);
+	void setXMin(int index, double value);	// set x min of d->xRanges[index]
+//	void setXMax(const double value);
+	void setXMax(int index, double value);	// set x max of d->xRanges[index]
+	void setYMin(double value);
+	void setYMax(double value);
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)	//TODO: need a vector to have a scale for all xRanges
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)

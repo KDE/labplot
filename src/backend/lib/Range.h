@@ -47,7 +47,7 @@ class QString;
 template<class T>
 class Range {
 public:
-	Range() : m_start(0), m_end(0) {}
+	Range() : m_start(0), m_end(1) {}
 	Range(T start, T end) {
 		this->setRange(start, end);
 	}

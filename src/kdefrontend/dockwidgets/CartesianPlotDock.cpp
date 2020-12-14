@@ -447,15 +447,15 @@ void CartesianPlotDock::updateLocale() {
 	Lock lock(m_initializing);
 	ui.leRangeFirst->setText(numberLocale.toString(m_plot->rangeFirstValues()));
 	ui.leRangeLast->setText(numberLocale.toString(m_plot->rangeLastValues()));
-	ui.leXMin->setText(numberLocale.toString(m_plot->xRange().start()));
-	ui.leXMax->setText(numberLocale.toString(m_plot->xRange().end()));
+	ui.leXMin->setText(numberLocale.toString(m_plot->xRange(0).start()));
+	ui.leXMax->setText(numberLocale.toString(m_plot->xRange(0).end()));
 	ui.leYMin->setText(numberLocale.toString(m_plot->yRange().start()));
 	ui.leYMax->setText(numberLocale.toString(m_plot->yRange().end()));
 	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(0, 1));
 	if (le) {
-		le->setText( numberLocale.toString(m_plot->xRange().start()) );
+		le->setText( numberLocale.toString(m_plot->xRange(0).start()) );
 		le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(0, 2));
-		le->setText( numberLocale.toString(m_plot->xRange().end()) );
+		le->setText( numberLocale.toString(m_plot->xRange(0).end()) );
 	}
 
 	//update the title label
@@ -714,10 +714,17 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 		const int xRangeIndex{ sender()->property("row").toInt() };
 		DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
 		for (auto* plot : m_plotList) {
-			// ask plot which plot ranges have this x-range?
-			//for (auto plotrange: plot->plotranges)	loop over plot ranges and check selected checkbox item
-			//TODO
-			plot->setXMin(xMin);
+			// ask plot which plot ranges have this x-range
+			//const int cSystems{ plot->coordinateSystems().size() };
+			//DEBUG(Q_FUNC_INFO << ", plot has " << cSystems << " coordinate systems")
+			//for (auto cSystem : plot->coordinateSystems()) {
+			//	DEBUG(Q_FUNC_INFO << ", coordinate system x index: " << dynamic_cast<CartesianCoordinateSystem*>(cSystem)->xIndex())
+				//if (cSystem->xIndex() == xRangeIndex)
+				//	cSystem->setXmin(xMin)	<- no access to cSystem->scale()
+			//}
+			// or just set xRange[xRangeIndex] of plot	-> see CartesianPlot::retransformScales()
+			plot->setXMin(xRangeIndex, xMin);
+			//plot->setXMin(xMin);
 		}
 	}
 }
@@ -733,7 +740,7 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 	const double xMax = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		for (auto* plot : m_plotList)
-			plot->setXMax(xMax);
+			plot->setXMax(0, xMax);
 	}
 }
 
@@ -752,7 +759,7 @@ void CartesianPlotDock::xMinDateTimeChanged(const QDateTime& dateTime) {
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* plot : m_plotList)
-		plot->setXMin(value);
+		plot->setXMin(0, value);
 }
 
 void CartesianPlotDock::xMaxDateTimeChanged(const QDateTime& dateTime) {
@@ -761,7 +768,7 @@ void CartesianPlotDock::xMaxDateTimeChanged(const QDateTime& dateTime) {
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* plot : m_plotList)
-		plot->setXMax(value);
+		plot->setXMax(0, value);
 }
 
 /*!
@@ -804,12 +811,12 @@ void CartesianPlotDock::xRangeFormatChanged(int index) {
 	} else {
 		QDateTimeEdit *dte = new QDateTimeEdit(ui.twXRanges);
 		dte->setDisplayFormat( m_plot->xRangeDateTimeFormat() );
-		dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange().start()));
+		dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange(0).start()));
 		ui.twXRanges->setCellWidget(0, 1, dte);
 		connect(dte, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMinDateTimeChanged);
 		dte = new QDateTimeEdit(ui.twXRanges);
 		dte->setDisplayFormat( m_plot->xRangeDateTimeFormat() );
-		dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange().end()));
+		dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange(0).end()));
 		ui.twXRanges->setCellWidget(0, 2, dte);
 		connect(dte, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMaxDateTimeChanged);
 	}
@@ -880,7 +887,7 @@ void CartesianPlotDock::yMinDateTimeChanged(const QDateTime& dateTime) {
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* plot : m_plotList)
-		plot->setXMin(value);
+		plot->setXMin(0, value);
 }
 
 void CartesianPlotDock::yMaxDateTimeChanged(const QDateTime& dateTime) {
@@ -889,7 +896,7 @@ void CartesianPlotDock::yMaxDateTimeChanged(const QDateTime& dateTime) {
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* plot : m_plotList)
-		plot->setXMax(value);
+		plot->setXMax(0, value);
 }
 
 /*!
@@ -1873,25 +1880,25 @@ void CartesianPlotDock::load() {
 	ui.leRangeLast->setText( numberLocale.toString(m_plot->rangeLastValues()) );
 
 	ui.chkAutoScaleX->setChecked(m_plot->autoScaleX());
-	ui.leXMin->setText(numberLocale.toString(m_plot->xRange().start()));
-	ui.leXMax->setText(numberLocale.toString(m_plot->xRange().end()));
+	ui.leXMin->setText(numberLocale.toString(m_plot->xRange(0).start()));
+	ui.leXMax->setText(numberLocale.toString(m_plot->xRange(0).end()));
 	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(0, 1));
 	if (le) {
-		le->setText( numberLocale.toString(m_plot->xRange().start()) );
+		le->setText( numberLocale.toString(m_plot->xRange(0).start()) );
 		auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(0, 2));
-		le->setText( numberLocale.toString(m_plot->xRange().end()) );
+		le->setText( numberLocale.toString(m_plot->xRange(0).end()) );
 	}
 	ui.dateTimeEditXMin->setDisplayFormat(m_plot->xRangeDateTimeFormat());
 	ui.dateTimeEditXMax->setDisplayFormat(m_plot->xRangeDateTimeFormat());
-	ui.dateTimeEditXMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange().start()));
-	ui.dateTimeEditXMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange().end()));
+	ui.dateTimeEditXMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange(0).start()));
+	ui.dateTimeEditXMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange(0).end()));
 	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(0, 1));
 	if (dte) {
 		dte->setDisplayFormat( m_plot->xRangeDateTimeFormat() );
-		dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange().start()));
+		dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange(0).start()));
 		dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(0, 2));
 		dte->setDisplayFormat( m_plot->xRangeDateTimeFormat() );
-		dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange().end()));
+		dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange(0).end()));
 	}
 
 	ui.cbXScaling->setCurrentIndex( (int) m_plot->xScale() );

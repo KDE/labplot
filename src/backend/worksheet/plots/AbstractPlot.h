@@ -47,6 +47,7 @@ public:
 
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	AbstractCoordinateSystem* coordinateSystem() const;
+	QVector<AbstractCoordinateSystem*> coordinateSystems() const;
 	PlotArea* plotArea();
 	TextLabel* title();
 

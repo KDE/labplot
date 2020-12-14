@@ -597,6 +597,14 @@ QVector<CartesianScale*> CartesianCoordinateSystem::yScales() const {
 	return d->yScales; // TODO: should rather return a copy of the scales here
 }
 
+int CartesianCoordinateSystem::xIndex() const {
+	return d->xIndex;
+}
+
+int CartesianCoordinateSystem::yIndex() const {
+	return d->yIndex;
+}
+
 /*!
  * Adjusted the function QRectF::contains(QPointF) from Qt 4.8.4 to handle the
  * comparison of float numbers correctly.
