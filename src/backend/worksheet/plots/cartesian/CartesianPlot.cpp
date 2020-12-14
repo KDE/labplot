@@ -64,7 +64,6 @@
 #include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
-#include "kdefrontend/worksheet/InfoElementDialog.h"
 
 #include <QDir>
 #include <QDropEvent>
@@ -461,7 +460,7 @@ void CartesianPlot::initActions() {
 	connect(addVerticalAxisAction, &QAction::triggered, this, &CartesianPlot::addVerticalAxis);
 	connect(addTextLabelAction, &QAction::triggered, this, &CartesianPlot::addTextLabel);
 	connect(addImageAction, &QAction::triggered, this, &CartesianPlot::addImage);
-	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::openInfoElementCreationDialog);
+	connect(addInfoElementAction, &QAction::triggered, this, &CartesianPlot::addInfoElement);
 	connect(addCustomPointAction, &QAction::triggered, this, &CartesianPlot::addCustomPoint);
 	connect(addReferenceLineAction, &QAction::triggered, this, &CartesianPlot::addReferenceLine);
 
@@ -1224,19 +1223,6 @@ void CartesianPlot::addEquationCurve() {
 void CartesianPlot::addHistogram() {
 	addChild(new Histogram("Histogram"));
 }
-/*!
- * \brief CartesianPlot::curveSelected
- * Slot which will be called from the XYCurve, when a curve will be selected
- */
-void CartesianPlot::curveSelected(double pos) {
-	// if dialog does not exist, cartesianPlotInfoElementCreationDialog() was never called
-	// which means, no infoelement should be created --> ignore it
-	if (!m_infoElementDialog)
-		return;
-
-	// if the dialog was already created previously. The dialog ignores the signal by itself
-	m_infoElementDialog->setActiveCurve(qobject_cast<const XYCurve*>(QObject::sender()), pos);
-}
 
 /*!
  * returns the first selected XYCurve in the plot
@@ -1437,28 +1423,20 @@ void CartesianPlot::addLegend() {
 		addLegendAction->setEnabled(false);
 }
 
-void CartesianPlot::openInfoElementCreationDialog() {
-	if (!m_infoElementDialog) {
-		Worksheet* worksheet = static_cast<Worksheet*>(parent(AspectType::Worksheet));
-		if (worksheet)
-			m_infoElementDialog = new InfoElementDialog(worksheet->view());
-		else
-			m_infoElementDialog = new InfoElementDialog(nullptr);
-	}
-	m_infoElementDialog->setPlot(this);
-	m_infoElementDialog->show();
-}
+void CartesianPlot::addInfoElement() {
+	Q_D(const CartesianPlot);
 
-/*!
- * \brief CartesianPlot::addInfoElement
- * Marks cartesianPlot to add a new infoElement.
- * When a curve will be selected, a InfoElement will be added
- */
-void CartesianPlot::addInfoElement(const XYCurve* curve, double pos) {
-    InfoElement* ie = new InfoElement("Info Element", this, curve, pos);
-    this->addChild(ie);
-    ie->setParentGraphicsItem(graphicsItem());
-    ie->retransform(); // must be done, because the custompoint must be retransformed (see https://invent.kde.org/marmsoler/labplot/issues/9)
+	XYCurve* curve = nullptr;
+	auto curves = children<XYCurve>();
+	if (curves.count())
+		curve = curves.first();
+
+	double pos = d->xMin + (d->xMax - d->xMin)/2;
+
+	InfoElement* element = new InfoElement("Info Element", this, curve, pos);
+	this->addChild(element);
+	element->setParentGraphicsItem(graphicsItem());
+	element->retransform(); // must be done, because the custompoint must be retransformed (see https://invent.kde.org/marmsoler/labplot/issues/9)
 }
 
 void CartesianPlot::addTextLabel() {
@@ -1531,7 +1509,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::symbolsBrushChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::symbolsPenChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, SIGNAL(linePenChanged(QPen)), this, SIGNAL(curveLinePenChanged(QPen))); // feed forward linePenChanged, because Worksheet needs because CursorDock must be updated too
-		connect(curve, &XYCurve::selected, this, &CartesianPlot::curveSelected);
 
 		updateLegend();
 		d->curvesXMinMaxIsDirty = true;
@@ -3980,7 +3957,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyCurve") {
             auto* curve = new XYCurve(QString());
-			connect(curve, &XYCurve::selected, this, &CartesianPlot::curveSelected);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {

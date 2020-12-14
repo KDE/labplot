@@ -157,7 +157,6 @@ public:
 
 public slots:
 	void setTheme(const QString&);
-	void curveSelected(double pos);
 
 private:
 	void init();
@@ -263,9 +262,9 @@ public slots:
 	void addLegend();
 	void addTextLabel();
 	void addImage();
-	void addInfoElement(const XYCurve* curve, double pos);
 	void addCustomPoint();
 	void addReferenceLine();
+	void addInfoElement();
 
 	void scaleAutoTriggered();
 	bool scaleAuto();
@@ -302,7 +301,6 @@ private slots:
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
 	void loadTheme(const QString&);
-	void openInfoElementCreationDialog();
 
 protected:
 	CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
