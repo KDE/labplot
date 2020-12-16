@@ -206,4 +206,7 @@
     <release version="2.8.1" date="2020-11-13"/>
     <release version="2.8.0" date="2020-09-16"/>
   </releases>
+  <custom>
+    <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9ngxfc68925l</value>
+  </custom>
 </component>
