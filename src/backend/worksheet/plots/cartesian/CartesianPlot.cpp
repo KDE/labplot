@@ -2663,8 +2663,8 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformScales() {
-	DEBUG( Q_FUNC_INFO << ", xrange = " << xRange.toStdString() << ", yrange = " << yRange.toStdString() );
-	for (auto range : xRanges)
+	//DEBUG( Q_FUNC_INFO << ", xrange = " << xRange.toStdString() << ", yrange = " << yRange.toStdString() );
+	for (auto& range : xRanges)
 		DEBUG( Q_FUNC_INFO << ", xranges = " << range.toStdString() );
 	PERFTRACE(Q_FUNC_INFO);
 
@@ -2687,7 +2687,7 @@ void CartesianPlotPrivate::retransformScales() {
 	bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
 	if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
 		sceneRange = plotSceneRange;
-		logicalRange = xRanges[0];		//TODO: use xRange[cSystem->xIndex()]
+		logicalRange = xRanges.at(0);		//TODO: use xRange[cSystem->xIndex()]
 
 		//TODO: how should we handle the case sceneRange.length() == 0?
 		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
@@ -2695,7 +2695,7 @@ void CartesianPlotPrivate::retransformScales() {
 			scales << this->createScale(xScale, sceneRange, logicalRange);
 	} else {
 		double sceneEndLast = plotSceneRange.start();
-		double logicalEndLast = xRanges[0].start();	//TODO
+		double logicalEndLast = xRanges.at(0).start();	//TODO
 		for (const auto& rb : xRangeBreaks.list) {
 			if (!rb.isValid())
 				break;
