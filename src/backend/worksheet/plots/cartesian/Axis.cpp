@@ -1460,10 +1460,11 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	//automatically switch from 'decimal' to 'scientific' format for big numbers (>10^4)
 	//and back to decimal when the numbers get smaller after the auto-switch again
+	//TODO: also for abs(value) < 1e-4?
 	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatDecimalOverruled) {
 		for (auto value : tickLabelValues) {
 			if (std::abs(value) > 1e4) {
-				labelsFormat = Axis::LabelsFormat::ScientificE;
+				labelsFormat = Axis::LabelsFormat::Scientific;
 				emit q->labelsFormatChanged(labelsFormat);
 				labelsFormatAutoChanged = true;
 				break;
@@ -1528,6 +1529,14 @@ void AxisPrivate::retransformTickLabelStrings() {
 		} else if (labelsFormat == Axis::LabelsFormat::MultipliesPi) {
 			for (const auto value : tickLabelValues) {
 				str = "<span>" + numberLocale.toString(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
+				str = labelsPrefix + str + labelsSuffix;
+				tickLabelStrings << str;
+			}
+		} else if (labelsFormat == Axis::LabelsFormat::Scientific) {
+			for (const auto value : tickLabelValues) {
+				str = numberLocale.toString(value, 'e', labelsPrecision);
+				str.remove("+");	// remove '+' in exponent
+				str.replace( QRegExp("e(.*)"), "×10<sup>\\1</sup>" );	// e(-)NN -> ×10<sup>(-)NN</sup>
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
