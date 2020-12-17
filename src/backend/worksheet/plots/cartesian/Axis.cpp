@@ -1441,6 +1441,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	if (suppressRetransform)
 		return;
 
+	//TODO: in scientific notaion upperLabelsPrecision() fails. Need a better function
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
 		int newPrecision = upperLabelsPrecision(labelsPrecision);
@@ -1458,12 +1459,11 @@ void AxisPrivate::retransformTickLabelStrings() {
 	}
 	//DEBUG("labelsPrecision =" << labelsPrecision);
 
-	//automatically switch from 'decimal' to 'scientific' format for big numbers (>10^4)
+	//automatically switch from 'decimal' to 'scientific' format for big and small numbers
 	//and back to decimal when the numbers get smaller after the auto-switch again
-	//TODO: also for abs(value) < 1e-4?
 	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatDecimalOverruled) {
 		for (auto value : tickLabelValues) {
-			if (std::abs(value) > 1e4) {
+			if ( qAbs(value) > 1.e4 || (qAbs(value) > 0 && qAbs(value) < 1e-4) ) {
 				labelsFormat = Axis::LabelsFormat::Scientific;
 				emit q->labelsFormatChanged(labelsFormat);
 				labelsFormatAutoChanged = true;
@@ -1471,10 +1471,10 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 		}
 	} else if (labelsFormatAutoChanged ) {
-		//check whether we still have big numbers
+		//check whether we still have big or small numbers
 		bool changeBack = true;
 		for (auto value : tickLabelValues) {
-			if (std::abs(value) > 1e4) {
+			if ( qAbs(value) > 1.e4 || (qAbs(value) > 0 && qAbs(value) < 1.e-4) ) {
 				changeBack = false;
 				break;
 			}
@@ -1557,10 +1557,10 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 /*!
 	returns the smallest upper limit for the precision
-	where no duplicates for the tick label float occur.
+	where no duplicates for the tick label values occur.
  */
 int AxisPrivate::upperLabelsPrecision(int precision) {
-	DEBUG(Q_FUNC_INFO << ", precision =" << precision);
+	DEBUG(Q_FUNC_INFO << ", precision = " << precision);
 
 	// avoid problems with zero range axis
 	if (tickLabelValues.isEmpty() || qFuzzyCompare(tickLabelValues.constFirst(), tickLabelValues.constLast())) {
@@ -1569,7 +1569,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 		return 0;
 	}
 
-	//round float to the current precision and look for duplicates.
+	//round values to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
 	for (const auto value : tickLabelValues)
@@ -1580,7 +1580,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 			if (i == j)
 				continue;
 
-			//duplicate for the current precision found, increase the precision and check again
+			// if duplicate for the current precision found, increase the precision and check again
 			if (tempValues.at(i) == tempValues.at(j))
 				return upperLabelsPrecision(precision + 1);
 		}
