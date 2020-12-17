@@ -91,13 +91,23 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	QComboBox *cb = new QComboBox(ui.twPlotRanges);
 	cb->addItem("1");
 	ui.twPlotRanges->setCellWidget(0, 0, cb);
-	ui.twPlotRanges->resizeColumnToContents(0);
 	//connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::xRangeFormatChanged);
 	cb = new QComboBox(ui.twPlotRanges);
 	cb->addItem("1");
 	ui.twPlotRanges->setCellWidget(0, 1, cb);
 	ui.twPlotRanges->resizeColumnToContents(1);
 	//connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::xRangeFormatChanged);
+	ui.twPlotRanges->resizeColumnToContents(0);
+	//TEST:
+	cb = new QComboBox(ui.twPlotRanges);
+	cb->addItem("2");
+	ui.twPlotRanges->setCellWidget(1, 0, cb);
+	//connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::xRangeFormatChanged);
+	cb = new QComboBox(ui.twPlotRanges);
+	cb->addItem("1");
+	ui.twPlotRanges->setCellWidget(1, 1, cb);
+	//connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::xRangeFormatChanged);
+	ui.twPlotRanges->resizeColumnToContents(1);
 
 	ui.leYMin->setValidator(new QDoubleValidator(ui.leYMin));
 	ui.leYMax->setValidator(new QDoubleValidator(ui.leYMax));
@@ -767,9 +777,11 @@ void CartesianPlotDock::xRangeChanged(const Range<double>& range) {
 	if (m_initializing)
 		return;
 
-	//TODO: which x range
+	// selected x range
+	const int xRangeIndex{ sender()->property("row").toInt() };
+	DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
 	for (auto* plot : m_plotList)
-			plot->setXRange(range);
+			plot->setXRange(xRangeIndex, range);
 }
 
 void CartesianPlotDock::xMinDateTimeChanged(const QDateTime& dateTime) {
@@ -849,11 +861,13 @@ void CartesianPlotDock::xRangeFormatChanged(int index) {
 		dte->setDisplayFormat( m_plot->xRangeDateTimeFormat() );
 		dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange(0).start()));
 		ui.twXRanges->setCellWidget(0, 1, dte);
+		ui.twPlotRanges->resizeColumnToContents(1);
 		connect(dte, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMinDateTimeChanged);
 		dte = new QDateTimeEdit(ui.twXRanges);
 		dte->setDisplayFormat( m_plot->xRangeDateTimeFormat() );
 		dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange(0).end()));
 		ui.twXRanges->setCellWidget(0, 2, dte);
+		ui.twPlotRanges->resizeColumnToContents(2);
 		connect(dte, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMaxDateTimeChanged);
 		//TODO: TEST
 	}

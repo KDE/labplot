@@ -2680,52 +2680,55 @@ void CartesianPlotPrivate::retransformScales() {
 
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
 
+	// loop over all cSystems and use the correct x/yRanges to set scales
 	DEBUG(Q_FUNC_INFO << ", number of csystems: " << coordinateSystems.size())
-	//TODO: loop over all cSystems and set the correct x/yRanges
+	int i{0};	// for debugging
+	for (auto cSystem : coordinateSystems) {
+		const int xRangeIndex{ cSystem->xIndex() };	// use x range of current cSystem
+		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range index: " << xRangeIndex)
 
-	//check whether we have x-range breaks - the first break, if available, should be valid
-	bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
-	if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
-		sceneRange = plotSceneRange;
-		logicalRange = xRanges.at(0);		//TODO: use xRange[cSystem->xIndex()]
+		//check whether we have x-range breaks - the first break, if available, should be valid
+		bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
+		if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
+			sceneRange = plotSceneRange;
+			logicalRange = xRanges.at(xRangeIndex);
 
-		//TODO: how should we handle the case sceneRange.length() == 0?
-		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
-		if (sceneRange.length() > 0)
-			scales << this->createScale(xScale, sceneRange, logicalRange);
-	} else {
-		double sceneEndLast = plotSceneRange.start();
-		double logicalEndLast = xRanges.at(0).start();	//TODO
-		for (const auto& rb : xRangeBreaks.list) {
-			if (!rb.isValid())
-				break;
+			//TODO: how should we handle the case sceneRange.length() == 0?
+			//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
+			if (sceneRange.length() > 0)
+				scales << this->createScale(xScale, sceneRange, logicalRange);
+		} else {
+			double sceneEndLast = plotSceneRange.start();
+			double logicalEndLast = xRanges.at(xRangeIndex).start();
+			for (const auto& rb : xRangeBreaks.list) {
+				if (!rb.isValid())
+					break;
 
-			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
-			sceneRange.start() = sceneEndLast;
-			if (&rb == &xRangeBreaks.list.first()) sceneRange.start() += breakGap;
-			sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
-			logicalRange = Range<double>(logicalEndLast, rb.range.start());
+				//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
+				sceneRange.start() = sceneEndLast;
+				if (&rb == &xRangeBreaks.list.first()) sceneRange.start() += breakGap;
+				sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
+				logicalRange = Range<double>(logicalEndLast, rb.range.start());
+
+				if (sceneRange.length() > 0)
+					scales << this->createScale(xScale, sceneRange, logicalRange);
+
+				sceneEndLast = sceneRange.end();
+				logicalEndLast = rb.range.end();
+			}
+
+			//add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
+			sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
+			logicalRange.setRange(logicalEndLast, xRanges.at(xRangeIndex).end());
 
 			if (sceneRange.length() > 0)
 				scales << this->createScale(xScale, sceneRange, logicalRange);
-
-			sceneEndLast = sceneRange.end();
-			logicalEndLast = rb.range.end();
 		}
 
-		//add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
-		sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
-		logicalRange.setRange(logicalEndLast, xRanges[0].end());	// TODO
-
-		if (sceneRange.length() > 0)
-			scales << this->createScale(xScale, sceneRange, logicalRange);
+		//set scales of cSystem
+		cSystem->setXScales(scales);
+		scales.clear();
 	}
-
-	//set scales of cSystem
-	coordinateSystems.at(0)->setXScales(scales);
-	scales.clear();
-
-	//// cSystem loop end
 
 	//////// Create Y-scales /////////////
 	//check ranges for nonlinear scales
@@ -2734,8 +2737,10 @@ void CartesianPlotPrivate::retransformScales() {
 
 	plotSceneRange.setRange(dataRect.y() + dataRect.height(), dataRect.y());
 
+	//TODO: loop over all cSystems
+
 	//check whether we have y-range breaks - the first break, if available, should be valid
-	hasValidBreak = (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty() && yRangeBreaks.list.first().isValid());
+	bool hasValidBreak = (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty() && yRangeBreaks.list.first().isValid());
 	if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
 		sceneRange = plotSceneRange;
 		logicalRange = yRange;		//TODO: use yRange

@@ -180,7 +180,7 @@
           </font>
          </property>
          <property name="text">
-          <string>x-Range:</string>
+          <string>x-Ranges:</string>
          </property>
         </widget>
        </item>
@@ -482,7 +482,36 @@
          </property>
         </widget>
        </item>
-       <item row="23" column="2" colspan="4">
+       <item row="24" column="5">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>28</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="32" column="0">
+        <widget class="QLabel" name="lPlotRanges">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Plot Ranges:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="0" colspan="7">
         <widget class="QTableWidget" name="twXRanges">
          <property name="columnCount">
           <number>4</number>
@@ -574,36 +603,7 @@
          </item>
         </widget>
        </item>
-       <item row="23" column="0">
-        <widget class="QLabel" name="lXRanges">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>X Ranges:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="24" column="5">
-        <spacer name="verticalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>28</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="32" column="2" colspan="4">
+       <item row="32" column="2" colspan="5">
         <widget class="QTableWidget" name="twPlotRanges">
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>true</bool>
@@ -614,6 +614,11 @@
          <row>
           <property name="text">
            <string>Row 1</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Row 2</string>
           </property>
          </row>
          <column>
@@ -646,19 +651,21 @@
            <string/>
           </property>
          </item>
-        </widget>
-       </item>
-       <item row="32" column="0">
-        <widget class="QLabel" name="lPlotRanges">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Plot Ranges:</string>
-         </property>
+         <item row="1" column="0">
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item row="1" column="1">
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item row="1" column="2">
+          <property name="text">
+           <string/>
+          </property>
+         </item>
         </widget>
        </item>
       </layout>
