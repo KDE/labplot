@@ -1504,32 +1504,56 @@ void AxisPrivate::retransformTickLabelStrings() {
 		} else if (labelsFormat == Axis::LabelsFormat::ScientificE) {
 			QString nullStr = numberLocale.toString(0., 'e', labelsPrecision);
 			for (const auto value : tickLabelValues) {
-				str = numberLocale.toString(value, 'e', labelsPrecision);
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else
+					str = numberLocale.toString(value, 'e', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::Powers10) {
 			for (const auto value : tickLabelValues) {
-				str = "10<sup>" + numberLocale.toString(log10(value), 'f', labelsPrecision) + "</sup>";
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else {
+					str = "10<sup>" + numberLocale.toString(log10(qAbs(value)), 'f', labelsPrecision) + "</sup>";
+					if (value < 0)
+						str.prepend("-");
+				}
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::Powers2) {
 			for (const auto value : tickLabelValues) {
-				str = "2<span style=\"vertical-align:super\">" + numberLocale.toString(log2(value), 'f', labelsPrecision) + "</span>";
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else  {
+					str = "2<span style=\"vertical-align:super\">" + numberLocale.toString(log2(qAbs(value)), 'f', labelsPrecision) + "</span>";
+					if (value < 0)
+						str.prepend("-");
+				}
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::PowersE) {
 			for (const auto value : tickLabelValues) {
-				str = "e<span style=\"vertical-align:super\">" + numberLocale.toString(log(value), 'f', labelsPrecision) + "</span>";
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else {
+					str = "e<span style=\"vertical-align:super\">" + numberLocale.toString(log(qAbs(value)), 'f', labelsPrecision) + "</span>";
+					if (value < 0)
+						str.prepend("-");
+				}
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::MultipliesPi) {
 			for (const auto value : tickLabelValues) {
-				str = "<span>" + numberLocale.toString(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else
+					str = "<span>" + numberLocale.toString(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
@@ -1566,7 +1590,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
 	for (const auto value : tickLabelValues)
-		tempValues.append( nsl_math_round_places(value, precision) );
+		tempValues.append( nsl_math_round_precision(value, precision) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1594,7 +1618,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 	//if there are duplicates, decrease the precision.
 	QVector<double> tempValues;
 	for (auto value : tickLabelValues)
-		tempValues.append( nsl_math_round_places(value, precision-1) );
+		tempValues.append( nsl_math_round_precision(value, precision-1) );
 
 	//check whether we have duplicates with reduced precision
 	//-> current precision cannot be reduced, return the current value
