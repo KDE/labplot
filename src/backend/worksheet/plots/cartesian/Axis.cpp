@@ -1437,11 +1437,10 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of float digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO <<", labels precision = " << labelsPrecision)
 	if (suppressRetransform)
 		return;
 
-	//TODO: in scientific notaion upperLabelsPrecision() fails. Need a better function
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
 		int newPrecision = upperLabelsPrecision(labelsPrecision);
@@ -1456,8 +1455,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 				emit q->labelsPrecisionChanged(labelsPrecision);
 			}
 		}
+		DEBUG(Q_FUNC_INFO << ", auto labels precision = " << labelsPrecision)
 	}
-	//DEBUG("labelsPrecision =" << labelsPrecision);
 
 	//automatically switch from 'decimal' to 'scientific' format for big and small numbers
 	//and back to decimal when the numbers get smaller after the auto-switch again
@@ -1573,7 +1572,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
 	for (const auto value : tickLabelValues)
-		tempValues.append( nsl_math_round_places(value, precision) );
+		tempValues.append( nsl_math_round_precision(value, precision) );
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1593,15 +1592,15 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 
 /*!
 	returns highest lower limit for the precision
-	where no duplicates for the tick label float occur.
+	where no duplicates for the tick label values occur.
 */
 int AxisPrivate::lowerLabelsPrecision(int precision) {
-// 	DEBUG("AxisPrivate::lowerLabelsPrecision() precision =" << precision);
-	//round float to the current precision and look for duplicates.
+	DEBUG(Q_FUNC_INFO << ", precision = " << precision);
+	//round value to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QVector<double> tempValues;
 	for (auto value : tickLabelValues)
-		tempValues.append( nsl_math_round_places(value, precision-1) );
+		tempValues.append( nsl_math_round_precision(value, precision-1) );
 
 	//check whether we have duplicates with reduced precision
 	//-> current precision cannot be reduced, return the current value
@@ -1622,7 +1621,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 			}
 		}
 
-		//if we have double values we don't want to show them as integers, keep at least one float digit.
+		//if we have double values we don't want to show them as integers, keep at least one digit.
 		if (hasDoubles)
 			return 1;
 		else
