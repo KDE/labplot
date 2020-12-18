@@ -406,11 +406,12 @@ void AxisDock::init() {
 	ui.cbLabelsPosition->addItem(i18n("Bottom"));
 
 	ui.cbLabelsFormat->addItem( i18n("Decimal notation") );
-	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
+	ui.cbLabelsFormat->addItem( i18n("Scientific E notation") );
 	ui.cbLabelsFormat->addItem( i18n("Powers of 10") );
 	ui.cbLabelsFormat->addItem( i18n("Powers of 2") );
 	ui.cbLabelsFormat->addItem( i18n("Powers of e") );
 	ui.cbLabelsFormat->addItem( i18n("Multiples of π") );
+	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
 
 	ui.cbLabelsDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 

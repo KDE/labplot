@@ -1,6 +1,7 @@
 -----2.9.0 -----
 	* Support Mathieu functions via GSL
 	* Added global settings for numbers
+	* Support real scientific notation of axes label
 -----2.8.2 -----
 Bug fixes:
 	* [CAS] fixed the regression introduced after the python2 backend was deprecated in Cantor
