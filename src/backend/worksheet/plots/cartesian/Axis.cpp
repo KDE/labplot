@@ -1502,40 +1502,70 @@ void AxisPrivate::retransformTickLabelStrings() {
 		} else if (labelsFormat == Axis::LabelsFormat::ScientificE) {
 			QString nullStr = numberLocale.toString(0., 'e', labelsPrecision);
 			for (const auto value : tickLabelValues) {
-				str = numberLocale.toString(value, 'e', labelsPrecision);
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else
+					str = numberLocale.toString(value, 'e', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::Powers10) {
 			for (const auto value : tickLabelValues) {
-				str = "10<sup>" + numberLocale.toString(log10(value), 'f', labelsPrecision) + "</sup>";
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else  {
+					str = "10<sup>" + numberLocale.toString(log10(qAbs(value)), 'f', labelsPrecision) + "</sup>";
+					if (value < 0)
+						str.prepend("-");
+				}
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::Powers2) {
 			for (const auto value : tickLabelValues) {
-				str = "2<span style=\"vertical-align:super\">" + numberLocale.toString(log2(value), 'f', labelsPrecision) + "</span>";
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else  {
+					str = "2<span style=\"vertical-align:super\">" + numberLocale.toString(log2(qAbs(value)), 'f', labelsPrecision) + "</span>";
+					if (value < 0)
+						str.prepend("-");
+				}
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::PowersE) {
 			for (const auto value : tickLabelValues) {
-				str = "e<span style=\"vertical-align:super\">" + numberLocale.toString(log(value), 'f', labelsPrecision) + "</span>";
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else {
+					str = "e<span style=\"vertical-align:super\">" + numberLocale.toString(log(qAbs(value)), 'f', labelsPrecision) + "</span>";
+					if (value < 0)
+						str.prepend("-");
+				}
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::MultipliesPi) {
 			for (const auto value : tickLabelValues) {
-				str = "<span>" + numberLocale.toString(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else
+					str = "<span>" + numberLocale.toString(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
 		} else if (labelsFormat == Axis::LabelsFormat::Scientific) {
 			for (const auto value : tickLabelValues) {
-				str = numberLocale.toString(value, 'e', labelsPrecision);
-				str.remove("+");	// remove '+' in exponent
-				str.replace( QRegExp("e(.*)"), "×10<sup>\\1</sup>" );	// e(-)NN -> ×10<sup>(-)NN</sup>
+				if (value == 0)	// just show "0"
+					str = numberLocale.toString(value, 'f', 0);
+				else if (qAbs(value) < 10. && qAbs(value) > .1)	// use normal notation for values near 1
+					str = numberLocale.toString(value, 'f', labelsPrecision);
+				else {
+					str = numberLocale.toString(value, 'e', labelsPrecision);
+					str.remove("+");	// remove '+' in exponent
+					str.replace( QRegExp("e(.*)"), "×10<sup>\\1</sup>" );	// e(-)NN -> ×10<sup>(-)NN</sup>
+				}
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
