@@ -61,10 +61,14 @@ int nsl_math_rounded_decimals(double value);
  */
 int nsl_math_rounded_decimals_max(double value, int max);
 
-/* round double value to n decimal places */
+/* round double value to n decimal places
+ * 1234.556 & n = 3 -> 1234.556, 0.001234 & n = 4 -> 0.0012
+ */
 double nsl_math_round_places(double value, unsigned int n); 
 
-/* round double value to precision p */
+/* round double value to precision p
+ * 1234.5 & p = 2 -> 1230 (1.23e3), 0.012345 & p = 2 -> 0.0123 (1.23e-2)
+ */
 double nsl_math_round_precision(double value, unsigned int p);
 
 #endif /* NSL_MATH_H */

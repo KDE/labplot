@@ -1,10 +1,12 @@
 -----2.9.0 -----
 	* Support Mathieu functions via GSL
 	* Added global settings for numbers
-	* Support real scientific notation of axes label
+	* Support real scientific notation and improve other notations of axes label
 -----2.8.2 -----
 Bug fixes:
-	* [CAS] fixed the regression introduced after the python2 backend was deprecated in Cantor
+	* [CAS] Fixed the regression introduced after the python2 backend was deprecated in Cantor
+	* [Axis label] Fix "power of" notations for negative values, show "0" for zero
+		and improve auto precision for small values
 	* BUG 427190 - Fixed resetting parser error count on some platforms (Debian, Manjaro)
 	* BUG 429110 - Support semicolon as function argument separator for locale with comma as decimal separator
 	* BUG 429368 - Fix validation of custom model equation in fit dock
