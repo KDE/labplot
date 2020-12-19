@@ -147,7 +147,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		|| fileName.endsWith(QLatin1String("json.gz"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("json.bz2"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("json.lzma"), Qt::CaseInsensitive)
-		|| fileName.endsWith(QLatin1String("json.xz"), Qt::CaseInsensitive) ) {
+		|| fileName.endsWith(QLatin1String("json.xz"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String("har"), Qt::CaseInsensitive) ) {
 		//*.json files can be recognized as ASCII. so, do the check for the json-extension as first.
 		fileType = FileType::JSON;
 	} else if (fileInfo.contains(QLatin1String("ASCII"))
