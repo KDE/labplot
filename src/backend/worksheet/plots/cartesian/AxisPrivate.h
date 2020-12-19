@@ -155,8 +155,8 @@ private:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void addArrow(QPointF point, int direction);
-	int upperLabelsPrecision(int);
-	int lowerLabelsPrecision(int);
+	int upperLabelsPrecision(int precision, Axis::LabelsFormat);
+	int lowerLabelsPrecision(int precision, Axis::LabelsFormat);
 	bool transformAnchor(QPointF*);
 
 	QPainterPath arrowPath;

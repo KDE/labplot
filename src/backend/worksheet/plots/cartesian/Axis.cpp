@@ -1445,13 +1445,13 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	if (labelsAutoPrecision) {
 		//check, whether we need to increase the current precision
-		int newPrecision = upperLabelsPrecision(labelsPrecision);
+		int newPrecision = upperLabelsPrecision(labelsPrecision, labelsFormat);
 		if (newPrecision != labelsPrecision) {
 			labelsPrecision = newPrecision;
 			emit q->labelsPrecisionChanged(labelsPrecision);
 		} else {
 			//check, whether we can reduce the current precision
-			newPrecision = lowerLabelsPrecision(labelsPrecision);
+			newPrecision = lowerLabelsPrecision(labelsPrecision, labelsFormat);
 			if (newPrecision != labelsPrecision) {
 				labelsPrecision = newPrecision;
 				emit q->labelsPrecisionChanged(labelsPrecision);
@@ -1576,8 +1576,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	returns the smallest upper limit for the precision
 	where no duplicates for the tick label float occur.
  */
-int AxisPrivate::upperLabelsPrecision(int precision) {
-	DEBUG(Q_FUNC_INFO << ", precision =" << precision);
+int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFormat format) {
+	DEBUG(Q_FUNC_INFO << ", precision = " << precision);
 
 	// avoid problems with zero range axis
 	if (tickLabelValues.isEmpty() || qFuzzyCompare(tickLabelValues.constFirst(), tickLabelValues.constLast())) {
@@ -1589,8 +1589,29 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	//round float to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
-	for (const auto value : tickLabelValues)
-		tempValues.append( nsl_math_round_precision(value, precision) );
+	switch (format) {
+	case Axis::LabelsFormat::Decimal:
+	case Axis::LabelsFormat::MultipliesPi:
+		for (const auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_places(value, precision) );
+		break;
+	case Axis::LabelsFormat::ScientificE:
+	case Axis::LabelsFormat::Scientific:
+		for (const auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_precision(value, precision) );
+		break;
+	case Axis::LabelsFormat::Powers10:
+		for (const auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision) );
+		break;
+	case Axis::LabelsFormat::Powers2:
+		for (const auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_places(log2(qAbs(value)), precision) );
+		break;
+	case Axis::LabelsFormat::PowersE:
+		for (const auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
+	}
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1599,7 +1620,7 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 
 			//duplicate for the current precision found, increase the precision and check again
 			if (tempValues.at(i) == tempValues.at(j))
-				return upperLabelsPrecision(precision + 1);
+				return upperLabelsPrecision(precision + 1, format);
 		}
 	}
 
@@ -1613,12 +1634,35 @@ int AxisPrivate::upperLabelsPrecision(int precision) {
 	where no duplicates for the tick label float occur.
 */
 int AxisPrivate::lowerLabelsPrecision(int precision) {
-// 	DEBUG("AxisPrivate::lowerLabelsPrecision() precision =" << precision);
-	//round float to the current precision and look for duplicates.
+int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFormat format) {
+	DEBUG(Q_FUNC_INFO << ", precision = " << precision);
+	//round value to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QVector<double> tempValues;
-	for (auto value : tickLabelValues)
-		tempValues.append( nsl_math_round_precision(value, precision-1) );
+	switch (format) {
+	case Axis::LabelsFormat::Decimal:
+	case Axis::LabelsFormat::MultipliesPi:
+		for (auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_places(value, precision-1) );
+		break;
+	case Axis::LabelsFormat::ScientificE:
+	case Axis::LabelsFormat::Scientific:
+		for (auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_precision(value, precision-1) );
+		break;
+	case Axis::LabelsFormat::Powers10:
+		for (auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision-1) );
+		break;
+	case Axis::LabelsFormat::Powers2:
+		for (auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_places(log2(qAbs(value)), precision-1) );
+		break;
+	case Axis::LabelsFormat::PowersE:
+		for (auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision-1) );
+	}
+
 
 	//check whether we have duplicates with reduced precision
 	//-> current precision cannot be reduced, return the current value
@@ -1646,7 +1690,7 @@ int AxisPrivate::lowerLabelsPrecision(int precision) {
 			return 0;
 	} else {
 		//no duplicates found, reduce further, and check again
-		return lowerLabelsPrecision(precision - 1);
+		return lowerLabelsPrecision(precision - 1, format);
 	}
 }
 
