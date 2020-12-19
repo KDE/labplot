@@ -24,11 +24,13 @@
  */
 
 #include "QJsonModel.h"
+#include "backend/lib/trace.h"
 
 #include <QFile>
 #include <QMessageBox>
+#include <QPainter>
+
 #include <KLocalizedString>
-#include "backend/lib/trace.h"
 
 QJsonTreeItem::QJsonTreeItem(QJsonTreeItem* parent) : mParent(parent) {}
 
@@ -148,20 +150,30 @@ QJsonModel::QJsonModel(QObject* parent) : QAbstractItemModel(parent),
 	mHeaders.append(i18n("Size in Bytes"));
 
 	//icons
-	mObjectIcon = QIcon::fromTheme(QLatin1String("labplot-json-object"));
-	mArrayIcon = QIcon::fromTheme(QLatin1String("labplot-json-array"));
+	QPainter painter;
+	QPixmap pix(64, 64);
 
-	//dark theme is used -> invert the icons which use black colors
-	if (qApp->palette().color(QPalette::Base).lightness() < 128) {
-		//TODO: use different(standard?) pixel size?
-		QImage image = mObjectIcon.pixmap(64, 64).toImage();
-		image.invertPixels();
-		mObjectIcon = QIcon(QPixmap::fromImage(image));
+	QFont font;
+	font.setPixelSize(60);
 
-		image = mArrayIcon.pixmap(64, 64).toImage();
-		image.invertPixels();
-		mArrayIcon = QIcon(QPixmap::fromImage(image));
-	}
+	const QColor& color = qApp->palette().color(QPalette::Text);
+	painter.setPen(QPen(color));
+
+	//draw the icon for JSON array
+	pix.fill(QColor(Qt::transparent));
+	painter.begin(&pix);
+	painter.setFont(font);
+	painter.drawText(pix.rect(), Qt::AlignCenter, QLatin1String("[ ]"));
+	painter.end();
+	mArrayIcon = QIcon(pix);
+
+	//draw the icon for JSON object
+	pix.fill(QColor(Qt::transparent));
+	painter.begin(&pix);
+	painter.setFont(font);
+	painter.drawText(pix.rect(), Qt::AlignCenter, QLatin1String("{ }"));
+	painter.end();
+	mObjectIcon = QIcon(pix);
 }
 
 QJsonModel::~QJsonModel() {
