@@ -1596,7 +1596,6 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			tempValues.append( nsl_math_round_places(value, precision) );
 		break;
 	case Axis::LabelsFormat::ScientificE:
-	case Axis::LabelsFormat::Scientific:
 		for (const auto value : tickLabelValues)
 			tempValues.append( nsl_math_round_precision(value, precision) );
 		break;
@@ -1633,7 +1632,6 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 	returns highest lower limit for the precision
 	where no duplicates for the tick label float occur.
 */
-int AxisPrivate::lowerLabelsPrecision(int precision) {
 int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFormat format) {
 	DEBUG(Q_FUNC_INFO << ", precision = " << precision);
 	//round value to the current precision and look for duplicates.
@@ -1646,7 +1644,6 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 			tempValues.append( nsl_math_round_places(value, precision-1) );
 		break;
 	case Axis::LabelsFormat::ScientificE:
-	case Axis::LabelsFormat::Scientific:
 		for (auto value : tickLabelValues)
 			tempValues.append( nsl_math_round_precision(value, precision-1) );
 		break;
