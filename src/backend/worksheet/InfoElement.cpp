@@ -69,7 +69,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 
 	if (curve) {
 		d->connectionLineCurveName = curve->name();
-		CustomPoint* custompoint = new CustomPoint(plot, "Markerpoint");
+		CustomPoint* custompoint = new CustomPoint(plot, curve->name());
 		addChild(custompoint);
 		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
 		markerpoints.append(markerpoint);
@@ -204,7 +204,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	project()->setSuppressAspectAddedSignal(true);
 
 	if (!custompoint) {
-		custompoint = new CustomPoint(d->plot, i18n("Symbol"));
+		custompoint = new CustomPoint(d->plot, curve->name());
 		addChild(custompoint);
 
 		if (curve->xColumn() && curve->yColumn()) {
@@ -239,7 +239,6 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		retransform();
 	}
 
-	m_title->setHidden(false); //show in the project explorer
 	m_title->setVisible(true); //show in the worksheet view
 }
 
@@ -321,7 +320,6 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 
 	//hide the label if now curves are selected
 	if (markerpoints.isEmpty()) {
-		m_title->setHidden(true); //hide in the project explorer
 		m_title->setVisible(false); //hide in the worksheet view
 		Q_D(InfoElement);
 		d->update(); //redraw to remove all children graphic items belonging to InfoElement

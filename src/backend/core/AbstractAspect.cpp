@@ -31,16 +31,12 @@
 #include "backend/core/AspectPrivate.h"
 #include "backend/core/aspectcommands.h"
 #include "backend/core/Project.h"
-#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/datasources/LiveDataSource.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/SignallingUndoCommand.h"
 #include "backend/lib/PropertyChangeCommand.h"
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
-#include "backend/datasources/MQTTSubscription.h"
-#include "backend/datasources/MQTTTopic.h"
 #endif
 
 #include <QMenu>
@@ -317,17 +313,18 @@ QMenu* AbstractAspect::createContextMenu() {
 	// - Mqtt subscriptions
 	// - Mqtt topics
 	// - Columns in Mqtt topics
-	bool enabled = !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect()))
-		&& !(dynamic_cast<const Column*>(this) && this->parentAspect()->parentAspect() && dynamic_cast<const DatapickerCurve*>(this->parentAspect()->parentAspect()))
-		&& !(dynamic_cast<const Column*>(this) && dynamic_cast<const LiveDataSource*>(this->parentAspect()))
+	bool disabled = (type() == AspectType::Spreadsheet && parentAspect()->type() == AspectType::DatapickerCurve)
+		|| (type() == AspectType::Column && parentAspect()->parentAspect() && parentAspect()->parentAspect()->type() == AspectType::DatapickerCurve)
+		|| (type() == AspectType::Column && parentAspect()->type() == AspectType::LiveDataSource)
 #ifdef HAVE_MQTT
-		&& !dynamic_cast<const MQTTSubscription*>(this)
-		&& !dynamic_cast<const MQTTTopic*>(this)
-		&& !(dynamic_cast<const Column*>(this) && dynamic_cast<const MQTTTopic*>(this->parentAspect()))
+		|| (type() == AspectType::MQTTSubscription)
+		|| (type() == AspectType::MQTTTopic)
+		| (type() == AspectType::Column && parentAspect()->type() == AspectType::MQTTTopic)
 #endif
+		|| (type() == AspectType::CustomPoint && parentAspect()->type() == AspectType::InfoElement)
 		;
 
-	if(enabled) {
+	if(!disabled) {
 		menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
 		if (type() != AspectType::Project)
 			menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, SLOT(remove()));
@@ -339,7 +336,6 @@ QMenu* AbstractAspect::createContextMenu() {
 AspectType AbstractAspect::type() const {
 	return m_type;
 }
-
 
 bool AbstractAspect::inherits(AspectType type) const {
 	return (static_cast<quint64>(m_type) & static_cast<quint64>(type)) == static_cast<quint64>(type);
