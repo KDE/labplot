@@ -103,6 +103,11 @@ QIcon CustomPoint::icon() const {
 }
 
 QMenu* CustomPoint::createContextMenu() {
+	//no context menu if the custom point is a child of an InfoElement,
+	//everything is controlled by the parent
+	if (parentAspect()->type() == AspectType::InfoElement)
+		return nullptr;
+
 	QMenu* menu = WorksheetElement::createContextMenu();
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
