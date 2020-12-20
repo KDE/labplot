@@ -83,7 +83,8 @@ void XYCurve::finalizeAdd() {
 	Q_D(XYCurve);
 	d->plot = static_cast<const CartesianPlot*>(parentAspect());
 	Q_ASSERT(d->plot);
-	d->cSystem = static_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
+	//TODO
+	d->cSystem = static_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(0));
 }
 
 void XYCurve::init() {

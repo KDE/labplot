@@ -125,6 +125,8 @@ void CartesianPlot::init() {
 	// TEST: second cSystem for testing
 	d->coordinateSystems.append( new CartesianCoordinateSystem(this) );
 	m_coordinateSystems.append( d->coordinateSystems.at(1) );
+	// set x range to second x range
+	d->coordinateSystems[1]->setXIndex(1);
 
 	// TEST: second xrange
 	d->xRanges.append(Range<double>());
@@ -1201,6 +1203,7 @@ void CartesianPlot::addHorizontalAxis() {
 	Axis* axis = new Axis("x-axis", Axis::Orientation::Horizontal);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
+		//TODO
 		axis->setRange(xRange(0));
 		axis->setUndoAware(true);
 	}
@@ -2662,10 +2665,14 @@ void CartesianPlotPrivate::retransform() {
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }
 
+/*
+ * calculate x and y scales from scence range and logical range (x/y range) for all coordinate systems
+ */
 void CartesianPlotPrivate::retransformScales() {
 	//DEBUG( Q_FUNC_INFO << ", xrange = " << xRange.toStdString() << ", yrange = " << yRange.toStdString() );
+	int i{0}; // debugging
 	for (auto& range : xRanges)
-		DEBUG( Q_FUNC_INFO << ", xranges = " << range.toStdString() );
+		DEBUG( Q_FUNC_INFO << ", x range " << i++ << " = " << range.toStdString() );
 	PERFTRACE(Q_FUNC_INFO);
 
 	QVector<CartesianScale*> scales;
@@ -2682,7 +2689,7 @@ void CartesianPlotPrivate::retransformScales() {
 
 	// loop over all cSystems and use the correct x/yRanges to set scales
 	DEBUG(Q_FUNC_INFO << ", number of csystems: " << coordinateSystems.size())
-	int i{0};	// for debugging
+	i = 0; // debugging
 	for (auto cSystem : coordinateSystems) {
 		const int xRangeIndex{ cSystem->xIndex() };	// use x range of current cSystem
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range index: " << xRangeIndex)
@@ -2775,15 +2782,20 @@ void CartesianPlotPrivate::retransformScales() {
 			scales << this->createScale(yScale, sceneRange, logicalRange);
 	}
 
-	//TODO: which cSystem?
+	//TODO
 	coordinateSystems.at(0)->setYScales(scales);
+	scales.clear();
+
+	//////// END Create Y-scales /////////////
 
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
+	//TODO
 	double deltaXMin = xRanges[0].start() - xPrevRange.start();
 	double deltaXMax = xRanges[0].end() - xPrevRange.end();
 	double deltaYMin = yRange.start() - yPrevRange.start();
 	double deltaYMax = yRange.end() - yPrevRange.end();
 
+	//TODO
 	if (deltaXMin != 0)
 		emit q->xMinChanged(xRanges[0].start());
 	if (deltaXMax != 0)
@@ -2793,6 +2805,7 @@ void CartesianPlotPrivate::retransformScales() {
 	if (deltaYMax != 0)
 		emit q->yMaxChanged(yRange.end());
 
+	//TODO
 	xPrevRange = xRanges[0];
 	yPrevRange = yRange;
 	//adjust auto-scale axes
@@ -2804,14 +2817,16 @@ void CartesianPlotPrivate::retransformScales() {
 			if (deltaXMax != 0) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setEnd(xRanges[0].end());
+				//TODO
+				axis->setEnd(xRanges.at(0).end());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
 			if (deltaXMin != 0) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setStart(xRanges[0].start());
+				//TODO
+				axis->setStart(xRanges.at(0).start());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}

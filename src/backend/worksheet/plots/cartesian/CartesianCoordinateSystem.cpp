@@ -600,9 +600,15 @@ QVector<CartesianScale*> CartesianCoordinateSystem::yScales() const {
 int CartesianCoordinateSystem::xIndex() const {
 	return d->xIndex;
 }
+void CartesianCoordinateSystem::setXIndex(int index) {
+	d->xIndex = index;
+}
 
 int CartesianCoordinateSystem::yIndex() const {
 	return d->yIndex;
+}
+void CartesianCoordinateSystem::setYIndex(int index) {
+	d->yIndex = index;
 }
 
 /*!

@@ -401,12 +401,14 @@ bool TextLabel::enableCoordBinding(bool enable, const CartesianPlot* plot) {
 		} else {
 			d->m_coordBindingEnable = enable;
 			d->plot = plot;
-			d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
+			//TODO
+			d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(0));
 			return true;
 		}
 	}
 	d->m_coordBindingEnable = enable;
-	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
+	//TODO
+	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(0));
 	return true;
 }
 
@@ -489,8 +491,9 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner, CartesianPlot* plot)
 	: plot(plot),
 	  q(owner) {
 
+		  //TODO
 	if(plot)
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
 	else
 		cSystem = nullptr;
 

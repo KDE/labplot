@@ -991,7 +991,8 @@ void HistogramPrivate::updateLines() {
 
 	//map the lines and the symbol positions to the scene coordinates
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+	//TODO
+	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
 	lines = cSystem->mapLogicalToScene(lines);
 	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
 	cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
@@ -1274,7 +1275,8 @@ void HistogramPrivate::updateFilling() {
 
 	QVector<QLineF> fillLines;
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem();
+	//TODO
+	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem(0);
 
 	//if there're no interpolation lines available (Histogram::NoLine selected), create line-interpolation,
 	//use already available lines otherwise.

@@ -58,7 +58,9 @@ public:
 	bool setYScales(const QVector<CartesianScale*>&);
 	QVector<CartesianScale*> yScales() const;
 	int xIndex() const;
+	void setXIndex(int);
 	int yIndex() const;
+	void setYIndex(int);
 
 private:
 	void init();

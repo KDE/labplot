@@ -57,7 +57,7 @@ public:
 	enum class TicksType {TotalNumber, Spacing, CustomColumn, CustomValues};
 	enum class ArrowType {NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig};
 	enum class ArrowPosition {Left, Right, Both};
-	//TODO: use CartesanPlot::Scale?
+	//TODO: use CartesianPlot::Scale?
 	enum class Scale {Linear, Log10, Log2, Ln, Sqrt, X2};
 	enum class LabelsPosition {NoLabels, In, Out};
 	enum class LabelsBackgroundType {Transparent, Color};

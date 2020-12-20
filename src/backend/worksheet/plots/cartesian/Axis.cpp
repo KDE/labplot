@@ -129,7 +129,8 @@ void Axis::finalizeAdd() {
 	Q_D(Axis);
 	d->plot = dynamic_cast<CartesianPlot*>(parentAspect());
 	Q_ASSERT(d->plot);
-	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem());
+	//TODO
+	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(0));
 }
 
 void Axis::init() {
@@ -457,7 +458,7 @@ void Axis::setAutoScale(bool autoScale) {
 				return;
 
 			if (d->orientation == Axis::Orientation::Horizontal)
-				d->range = plot->xRange(0);
+				d->range = plot->xRange(d->cSystem->xIndex());
 			else
 				d->range =  plot->yRange();
 
@@ -988,6 +989,7 @@ QPainterPath AxisPrivate::shape() const{
 	recalculates the position of the axis on the worksheet
  */
 void AxisPrivate::retransform() {
+	DEBUG(Q_FUNC_INFO)
 	if (suppressRetransform || !plot)
 		return;
 
@@ -999,6 +1001,7 @@ void AxisPrivate::retransform() {
 }
 
 void AxisPrivate::retransformLine() {
+	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
 	if (suppressRetransform)
 		return;
 
@@ -1020,11 +1023,11 @@ void AxisPrivate::retransformLine() {
 		endPoint = QPointF(range.end(), offset);
 	} else { // vertical
 		if (position == Axis::Position::Left)
-			offset = plot->xRange(0).start();
+			offset = plot->xRange(cSystem->xIndex()).start();
 		else if (position == Axis::Position::Right)
-			offset = plot->xRange(0).end();
+			offset = plot->xRange(cSystem->xIndex()).end();
 		else if (position == Axis::Position::Centered)
-			offset = plot->xRange(0).center();
+			offset = plot->xRange(cSystem->xIndex()).center();
 
 		startPoint = QPointF(offset, range.start());
 		endPoint = QPointF(offset, range.end());
@@ -1267,7 +1270,7 @@ void AxisPrivate::retransformTicks() {
 	qreal nextMajorTickPos = 0.0;
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
-	const double middleX = plot->xRange(0).center();
+	const double middleX = plot->xRange(cSystem->xIndex()).center();
 	const double middleY = plot->yRange().center();
 	bool valid;
 
@@ -1720,7 +1723,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 	double width = 0;
 	double height = fm.ascent();
 	QPointF pos;
-	const double middleX = plot->xRange(0).center();
+	const double middleX = plot->xRange(cSystem->xIndex()).center();
 	const double middleY = plot->yRange().center();
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
@@ -1885,8 +1888,8 @@ void AxisPrivate::retransformMajorGrid() {
 	//since we don't want to paint any grid lines at the plot boundaries
 	bool skipLowestTick, skipUpperTick;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xRange(0).start());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xRange(0).end());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xRange(cSystem->xIndex()).start());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xRange(cSystem->xIndex()).end());
 	} else {
 		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), plot->yRange().start());
 		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), plot->yRange().end());
@@ -1921,7 +1924,7 @@ void AxisPrivate::retransformMajorGrid() {
 			lines.append( QLineF(point.x(), yRange.start(), point.x(), yRange.end()) );
 		}
 	} else { //vertical axis
-		const Range<double> xRange{plot->xRange(0)};
+		const Range<double> xRange{plot->xRange(cSystem->xIndex())};
 
 		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
 		for (int i = start; i < end; ++i) {
@@ -1961,7 +1964,7 @@ void AxisPrivate::retransformMinorGrid() {
 		for (const auto point : logicalMinorTickPoints)
 			lines.append( QLineF(point.x(), yRange.start(), point.x(), yRange.end()) );
 	} else { //vertical axis
-		const Range<double> xRange{plot->xRange(0)};
+		const Range<double> xRange{plot->xRange(cSystem->xIndex())};
 
 		for (const auto point: logicalMinorTickPoints)
 			lines.append( QLineF(xRange.start(), point.y(), xRange.end(), point.y()) );

@@ -831,8 +831,9 @@ void InfoElementPrivate::init() {
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
 
+	//TODO
 	if(plot)
-		cSystem =  dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
+		cSystem =  dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
 }
 
 QString InfoElementPrivate::name() const {
