@@ -299,6 +299,9 @@ void WorksheetView::initActions() {
 	cartesianPlotSelectionModeAction->setCheckable(true);
 	cartesianPlotSelectionModeAction->setChecked(true);
 
+	cartesianPlotCrosshairModeAction = new QAction(QIcon::fromTheme("crosshairs"), i18n("Crosshair"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotCrosshairModeAction->setCheckable(true);
+
 	cartesianPlotZoomSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select"), i18n("Select Region and Zoom In"), cartesianPlotMouseModeActionGroup);
 	cartesianPlotZoomSelectionModeAction->setCheckable(true);
 
@@ -688,6 +691,7 @@ void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar){
 
 void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(cartesianPlotSelectionModeAction);
+	toolBar->addAction(cartesianPlotCrosshairModeAction);
 	toolBar->addAction(cartesianPlotZoomSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomXSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
@@ -1862,6 +1866,8 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 
 	if (action == cartesianPlotSelectionModeAction)
 		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::Selection;
+	else if (action == cartesianPlotCrosshairModeAction)
+		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::Crosshair;
 	else if (action == cartesianPlotZoomSelectionModeAction)
 		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::ZoomSelection;
 	else if (action == cartesianPlotZoomXSelectionModeAction)

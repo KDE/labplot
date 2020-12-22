@@ -207,6 +207,7 @@ private:
 	QAction* cartesianPlotApplyToAllCursor{nullptr};
 	QAction* cartesianPlotApplyToSelectionCursor{nullptr};
 	QAction* cartesianPlotSelectionModeAction{nullptr};
+	QAction* cartesianPlotCrosshairModeAction{nullptr};
 	QAction* cartesianPlotZoomSelectionModeAction{nullptr};
 	QAction* cartesianPlotZoomXSelectionModeAction{nullptr};
 	QAction* cartesianPlotZoomYSelectionModeAction{nullptr};

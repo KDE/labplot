@@ -3419,8 +3419,8 @@ void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 
 			q->setRect(rect);
 		}
-
 	}
+
 	QGraphicsItem::keyPressEvent(event);
 }
 
@@ -3430,8 +3430,9 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	if (dataRect.contains(point)) {
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 
-		if ((mouseMode == CartesianPlot::MouseMode::ZoomSelection) ||
-			mouseMode == CartesianPlot::MouseMode::Selection) {
+		if ((mouseMode == CartesianPlot::MouseMode::ZoomSelection)
+			|| mouseMode == CartesianPlot::MouseMode::Selection
+			|| mouseMode == CartesianPlot::MouseMode::Crosshair) {
 			info = "x=";
 			if (xRangeFormat == CartesianPlot::RangeFormat::Numeric)
 				 info += QString::number(logicalPoint.x());
@@ -3479,6 +3480,10 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 				}
 				curves[i]->setHover(false);
 			}
+		} else if (mouseMode == CartesianPlot::MouseMode::Crosshair) {
+			setCursor(Qt::CrossCursor);
+			m_crosshairPos = event->pos();
+			update();
 		} else if (mouseMode == CartesianPlot::MouseMode::Cursor) {
 			info = "x=";
 			if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
@@ -3581,10 +3586,28 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		painter->restore();
 	}
 
-	painter->setPen(QPen(Qt::black, 3));
 	if ((mouseMode == CartesianPlot::MouseMode::ZoomXSelection || mouseMode == CartesianPlot::MouseMode::ZoomYSelection)
-			&& (!m_selectionBandIsShown) && m_insideDataRect)
+			&& (!m_selectionBandIsShown) && m_insideDataRect) {
+		painter->setPen(QPen(Qt::black, 3));
 		painter->drawLine(m_selectionStartLine);
+	} else if (mouseMode == CartesianPlot::MouseMode::Crosshair) {
+		painter->setPen(QPen(Qt::black, 2, Qt::DotLine));
+
+		//horizontal line
+		double x1 = dataRect.left();
+		double y1 = m_crosshairPos.y();
+		double x2 = dataRect.right();
+		double y2 = y1;
+		painter->drawLine(x1, y1, x2, y2);
+
+		//vertical line
+		x1 = m_crosshairPos.x();
+		y1 = dataRect.bottom();
+		x2 = x1;
+		y2 = dataRect.top();
+		painter->drawLine(x1, y1, x2, y2);
+	}
+
 
 	if (m_selectionBandIsShown) {
 		QPointF selectionStart = m_selectionStart;

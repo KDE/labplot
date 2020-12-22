@@ -64,7 +64,7 @@ public:
 	enum class RangeFormat {Numeric, DateTime};
 	enum class RangeType {Free, Last, First};
 	enum class RangeBreakStyle {Simple, Vertical, Sloped};
-	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor};
+	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor, Crosshair};
 	enum class NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
 	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY
 	                         };
