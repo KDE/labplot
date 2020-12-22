@@ -4,7 +4,8 @@
     Project              : LabPlot
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
-    Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -39,7 +40,7 @@ public:
 	CartesianPlot* plot{nullptr};
 	QVector<CartesianScale*> xScales;
 	QVector<CartesianScale*> yScales;
-	int xIndex{0}, yIndex{0};	// indices used by Plot
+	int xIndex{0}, yIndex{0};	// indices of x/y plot ranges used here
 };
 
 #endif

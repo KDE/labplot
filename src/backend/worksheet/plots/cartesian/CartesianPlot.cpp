@@ -189,8 +189,11 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis("x axis 2", Axis::Orientation::Horizontal);
+			//TEST: use second cSystem of plot
+			axis->setCoordinateSystemIndex(1);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
+
 			addChild(axis);
 			axis->setPosition(Axis::Position::Top);
 			axis->setRange(0., 1.);
@@ -367,11 +370,10 @@ void CartesianPlot::setType(Type type) {
 
 	//Geometry, specify the plot rect in scene coordinates.
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
-	//TODO: double
-	float x = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
-	float y = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
-	float w = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Centimeter);
-	float h = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Centimeter);
+	double x = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
+	double y = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
+	double w = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Centimeter);
+	double h = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Centimeter);
 
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->rect = QRectF(x, y, w, h);
@@ -2688,11 +2690,11 @@ void CartesianPlotPrivate::retransformScales() {
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
 
 	// loop over all cSystems and use the correct x/yRanges to set scales
-	DEBUG(Q_FUNC_INFO << ", number of csystems: " << coordinateSystems.size())
+	DEBUG(Q_FUNC_INFO << ", number of coordinate systems = " << coordinateSystems.size())
 	i = 0; // debugging
 	for (auto cSystem : coordinateSystems) {
 		const int xRangeIndex{ cSystem->xIndex() };	// use x range of current cSystem
-		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range index: " << xRangeIndex)
+		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range index = " << xRangeIndex)
 
 		//check whether we have x-range breaks - the first break, if available, should be valid
 		bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
@@ -2732,7 +2734,7 @@ void CartesianPlotPrivate::retransformScales() {
 				scales << this->createScale(xScale, sceneRange, logicalRange);
 		}
 
-		//set scales of cSystem
+		//set x scales of cSystem
 		cSystem->setXScales(scales);
 		scales.clear();
 	}
@@ -2744,49 +2746,51 @@ void CartesianPlotPrivate::retransformScales() {
 
 	plotSceneRange.setRange(dataRect.y() + dataRect.height(), dataRect.y());
 
-	//TODO: loop over all cSystems
+	// loop over all cSystems
+	for (auto cSystem : coordinateSystems) {
+		const int yRangeIndex{ cSystem->yIndex() };	// use y range of current cSystem
+		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range index = " << yRangeIndex)
 
-	//check whether we have y-range breaks - the first break, if available, should be valid
-	bool hasValidBreak = (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty() && yRangeBreaks.list.first().isValid());
-	if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
-		sceneRange = plotSceneRange;
-		logicalRange = yRange;		//TODO: use yRange
-
-		if (sceneRange.length() > 0)
-			scales << this->createScale(yScale, sceneRange, logicalRange);
-	} else {
-		double sceneEndLast = plotSceneRange.start();
-		double logicalEndLast = yRange.start();
-		for (const auto& rb : yRangeBreaks.list) {
-			if (!rb.isValid())
-				break;
-
-			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
-			sceneRange.start() = sceneEndLast;
-			if (&rb == &yRangeBreaks.list.first()) sceneRange.start() -= breakGap;
-			sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
-			logicalRange = Range<double>(logicalEndLast, rb.range.start());
+		//check whether we have y-range breaks - the first break, if available, should be valid
+		bool hasValidBreak = (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty() && yRangeBreaks.list.first().isValid());
+		if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
+			sceneRange = plotSceneRange;
+			logicalRange = yRange;		//TODO: use yRange
 
 			if (sceneRange.length() > 0)
 				scales << this->createScale(yScale, sceneRange, logicalRange);
+		} else {
+			double sceneEndLast = plotSceneRange.start();
+			double logicalEndLast = yRange.start();
+			for (const auto& rb : yRangeBreaks.list) {
+				if (!rb.isValid())
+					break;
 
-			sceneEndLast = sceneRange.end();
-			logicalEndLast = rb.range.end();
+				//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
+				sceneRange.start() = sceneEndLast;
+				if (&rb == &yRangeBreaks.list.first()) sceneRange.start() -= breakGap;
+				sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
+				logicalRange = Range<double>(logicalEndLast, rb.range.start());
+
+				if (sceneRange.length() > 0)
+					scales << this->createScale(yScale, sceneRange, logicalRange);
+
+				sceneEndLast = sceneRange.end();
+				logicalEndLast = rb.range.end();
+			}
+
+			//add the remaining range going from the last available range break to the end of the plot (=end of the y-data range)
+			sceneRange.setRange(sceneEndLast - breakGap, plotSceneRange.end());
+			logicalRange.setRange(logicalEndLast, yRange.end());
+
+			if (sceneRange.length() > 0)
+				scales << this->createScale(yScale, sceneRange, logicalRange);
 		}
 
-		//add the remaining range going from the last available range break to the end of the plot (=end of the y-data range)
-		sceneRange.setRange(sceneEndLast - breakGap, plotSceneRange.end());
-		logicalRange.setRange(logicalEndLast, yRange.end());
-
-		if (sceneRange.length() > 0)
-			scales << this->createScale(yScale, sceneRange, logicalRange);
+		//set y scales of cSystem
+		cSystem->setYScales(scales);
+		scales.clear();
 	}
-
-	//TODO
-	coordinateSystems.at(0)->setYScales(scales);
-	scales.clear();
-
-	//////// END Create Y-scales /////////////
 
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
 	//TODO

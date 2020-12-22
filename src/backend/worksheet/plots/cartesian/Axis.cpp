@@ -126,11 +126,11 @@ Axis::Axis(const QString& name, Orientation orientation, AxisPrivate* dd)
 }
 
 void Axis::finalizeAdd() {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(Axis);
 	d->plot = dynamic_cast<CartesianPlot*>(parentAspect());
 	Q_ASSERT(d->plot);
-	//TODO
-	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(0));
+	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(d->cSystemIndex));
 }
 
 void Axis::init() {
@@ -887,6 +887,12 @@ void Axis::setMinorGridOpacity(qreal opacity) {
 		exec(new AxisSetMinorGridOpacityCmd(d, opacity, ki18n("%1: set minor grid opacity")));
 }
 
+BASIC_SHARED_D_READER_IMPL(Axis, int, coordinateSystemIndex, cSystemIndex)
+void Axis::setCoordinateSystemIndex(const int index) {
+	Q_D(Axis);
+	d->cSystemIndex = index;
+}
+
 //##############################################################################
 //####################################  SLOTs   ################################
 //##############################################################################
@@ -1001,7 +1007,11 @@ void AxisPrivate::retransform() {
 }
 
 void AxisPrivate::retransformLine() {
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() <<  ", coordinate system index = " << cSystemIndex)
 	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
+	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
+	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString())
+
 	if (suppressRetransform)
 		return;
 
@@ -1033,6 +1043,7 @@ void AxisPrivate::retransformLine() {
 		endPoint = QPointF(offset, range.end());
 	}
 
+	QDEBUG(Q_FUNC_INFO << ", start/end point: " << startPoint << "/" << endPoint)
 	lines.append(QLineF(startPoint, endPoint));
 	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 	for (const auto& line : lines) {
@@ -1041,6 +1052,7 @@ void AxisPrivate::retransformLine() {
 	}
 
 	if (linePath.isEmpty()) {
+		DEBUG(Q_FUNC_INFO << ", line path is empty")
 		recalcShapeAndBoundingRect();
 		return;
 	} else {
@@ -1182,6 +1194,7 @@ bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	recalculates the position of the axis ticks.
  */
 void AxisPrivate::retransformTicks() {
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString())
 	if (suppressRetransform)
 		return;
 
@@ -1268,6 +1281,11 @@ void AxisPrivate::retransformTicks() {
 	qreal majorTickPos = 0.0;
 	qreal minorTickPos;
 	qreal nextMajorTickPos = 0.0;
+
+	DEBUG(Q_FUNC_INFO << ", coordinate system index = " << cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
+	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
+
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
 	const double middleX = plot->xRange(cSystem->xIndex()).center();
@@ -1440,7 +1458,7 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of float digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
-	DEBUG(Q_FUNC_INFO <<", labels precision = " << labelsPrecision)
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", labels precision = " << labelsPrecision)
 	if (suppressRetransform)
 		return;
 
@@ -1606,9 +1624,12 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 	QVector<double> tempValues;
 	switch (format) {
 	case Axis::LabelsFormat::Decimal:
-	case Axis::LabelsFormat::MultipliesPi:
 		for (const auto value : tickLabelValues)
 			tempValues.append( nsl_math_round_places(value, precision) );
+		break;
+	case Axis::LabelsFormat::MultipliesPi:
+		for (const auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_places(value / M_PI, precision) );
 		break;
 	case Axis::LabelsFormat::ScientificE:
 	case Axis::LabelsFormat::Scientific:
@@ -1655,9 +1676,12 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 	QVector<double> tempValues;
 	switch (format) {
 	case Axis::LabelsFormat::Decimal:
-	case Axis::LabelsFormat::MultipliesPi:
 		for (auto value : tickLabelValues)
 			tempValues.append( nsl_math_round_places(value, precision-1) );
+		break;
+	case Axis::LabelsFormat::MultipliesPi:
+		for (auto value : tickLabelValues)
+			tempValues.append( nsl_math_round_places(value / M_PI, precision-1) );
 		break;
 	case Axis::LabelsFormat::ScientificE:
 	case Axis::LabelsFormat::Scientific:
@@ -1723,6 +1747,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	double width = 0;
 	double height = fm.ascent();
 	QPointF pos;
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
 	const double middleX = plot->xRange(cSystem->xIndex()).center();
 	const double middleY = plot->yRange().center();
 	const int xDirection = cSystem->xDirection();
@@ -1915,6 +1941,9 @@ void AxisPrivate::retransformMajorGrid() {
 		end = logicalMajorTickPoints.size();
 	}
 
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
+
 	QVector<QLineF> lines;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
 		const Range<double> yRange{plot->yRange()};
@@ -1956,6 +1985,9 @@ void AxisPrivate::retransformMinorGrid() {
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear sometimes without this flag
 	QVector<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis

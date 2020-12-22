@@ -62,6 +62,8 @@ public:
 	enum class LabelsPosition {NoLabels, In, Out};
 	enum class LabelsBackgroundType {Transparent, Color};
 
+	typedef AxisPrivate Private;	// for Axis::Private used in macros instead of AxisPrivate
+
 	explicit Axis(const QString&, Orientation orientation = Orientation::Horizontal);
 	~Axis() override;
 
@@ -153,7 +155,8 @@ public:
 	void retransformTickLabelStrings();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	typedef AxisPrivate Private;
+	int coordinateSystemIndex() const;
+	void setCoordinateSystemIndex(int);
 
 protected:
 	AxisPrivate* const d_ptr;

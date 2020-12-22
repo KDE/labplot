@@ -275,7 +275,7 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 	double yGapBefore = qQNaN();
 	double yGapAfter = qQNaN();
 
-	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
  	QVectorIterator<CartesianScale *> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
