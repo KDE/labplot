@@ -64,11 +64,12 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include <QKeyEvent>
-#include <QClipboard>
-#include <QInputDialog>
-#include <QDate>
+#include <QAbstractSlider>
 #include <QApplication>
+#include <QClipboard>
+#include <QDate>
+#include <QInputDialog>
+#include <QKeyEvent>
 #include <QMenu>
 #include <QMessageBox>
 #include <QMimeData>
@@ -76,6 +77,8 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#include <QRegularExpression>
+#include <QScrollBar>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -84,7 +87,6 @@
 #include <QToolBar>
 #include <QTextStream>
 #include <QProcess>
-#include <QRegularExpression>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 #include <QRandomGenerator>
 #endif
@@ -173,6 +175,7 @@ void SpreadsheetView::init() {
 	m_tableView->setHorizontalHeader(m_horizontalHeader);
 	m_horizontalHeader->setSectionsMovable(true);
 	m_horizontalHeader->installEventFilter(this);
+	m_tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
 	resizeHeader();
 
@@ -186,6 +189,7 @@ void SpreadsheetView::init() {
 	v_header->setSectionResizeMode(QHeaderView::Fixed);
 	v_header->setSectionsMovable(false);
 	v_header->installEventFilter(this);
+	m_tableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
 
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
@@ -227,6 +231,19 @@ void SpreadsheetView::resizeHeader() {
 	}
 }
 
+void SpreadsheetView::resizeEvent(QResizeEvent* event) {
+	QWidget::resizeEvent(event);
+	if (m_frozenTableView)
+		updateFrozenTableGeometry();
+}
+
+void SpreadsheetView::updateFrozenTableGeometry() {
+	m_frozenTableView->setGeometry(m_tableView->verticalHeader()->width() + m_tableView->frameWidth(),
+								m_tableView->frameWidth(),
+								m_tableView->columnWidth(0),
+								m_tableView->viewport()->height() + m_tableView->horizontalHeader()->height());
+}
+
 void SpreadsheetView::initActions() {
 	// selection related actions
 	action_cut_selection = new QAction(QIcon::fromTheme("edit-cut"), i18n("Cu&t"), this);
@@ -262,6 +279,7 @@ void SpreadsheetView::initActions() {
 	action_insert_columns_right = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("Insert Multiple Columns Right"), this);
 	action_remove_columns = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remove Selected Columns"), this);
 	action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Selected Columns"), this);
+	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
 	action_set_as_none = new QAction(i18n("None"), this);
 	action_set_as_none->setData(static_cast<int>(AbstractColumn::PlotDesignation::NoDesignation));
@@ -654,6 +672,10 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addAction(action_clear_columns);
 	}
 	m_columnMenu->addSeparator();
+	m_columnMenu->addAction(action_freeze_columns);
+	m_columnMenu->addSeparator();
+
+	m_columnMenu->addSeparator();
 	m_columnMenu->addAction(action_toggle_comments);
 	m_columnMenu->addSeparator();
 
@@ -733,6 +755,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_insert_columns_right, &QAction::triggered, this, static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::insertColumnsRight));
 	connect(action_remove_columns, &QAction::triggered, this, &SpreadsheetView::removeSelectedColumns);
 	connect(action_clear_columns, &QAction::triggered, this, &SpreadsheetView::clearSelectedColumns);
+	connect(action_freeze_columns, &QAction::triggered, this, &SpreadsheetView::toggleFreezeColumn);
 	connect(action_set_as_none, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_x, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
 	connect(action_set_as_y, &QAction::triggered, this, &SpreadsheetView::setSelectionAs);
@@ -933,6 +956,11 @@ void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSi
 	//save the new size in the column
 	Column* col = m_spreadsheet->child<Column>(logicalIndex);
 	col->setWidth(newSize);
+
+	if (m_frozenTableView && logicalIndex == 0){
+		m_frozenTableView->setColumnWidth(0, newSize);
+		updateFrozenTableGeometry();
+	}
 }
 
 void SpreadsheetView::goToCell(int row, int col) {
@@ -1185,7 +1213,8 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			}
 			action_statistics_rows->setVisible(onlyNumeric);
 			m_rowMenu->exec(global_pos);
-		} else if (watched == m_horizontalHeader) {
+		} else if ( (watched == m_horizontalHeader)
+			|| (m_frozenTableView && watched == m_frozenTableView->horizontalHeader()) ) {
 			const int col = m_horizontalHeader->logicalIndexAt(cm_event->pos());
 			if (!isColumnSelected(col, true)) {
 				QItemSelectionModel* sel_model = m_tableView->selectionModel();
@@ -1355,6 +1384,17 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool hasValu
 
 	//sort is possible for all data types if values are available
 	m_columnSortMenu->setEnabled(hasValues);
+
+	if (isColumnSelected(0, true)) {
+		action_freeze_columns->setEnabled(true);
+		if (m_frozenTableView) {
+			if (!m_frozenTableView->isVisible())
+				action_freeze_columns->setText(i18n("Freeze Column"));
+			else
+				action_freeze_columns->setText(i18n("Unfreeze Column"));
+		}
+	} else
+		action_freeze_columns->setEnabled(false);;
 }
 
 bool SpreadsheetView::formulaModeActive() const {
@@ -2275,6 +2315,54 @@ void SpreadsheetView::clearSelectedColumns() {
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
+}
+
+void SpreadsheetView::toggleFreezeColumn() {
+	if (!m_frozenTableView) {
+		m_frozenTableView = new QTableView(this);
+		m_frozenTableView->setModel(m_model);
+
+		auto* delegate = new SpreadsheetItemDelegate(this);
+		connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
+		connect(delegate, &SpreadsheetItemDelegate::editorEntered, this, [=]() {
+			m_editorEntered = true;
+		});
+		connect(delegate, &SpreadsheetItemDelegate::closeEditor, this, [=]() {
+			m_editorEntered = false;
+		});
+
+		m_frozenTableView->setItemDelegate(delegate);
+		m_frozenTableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+		m_frozenTableView->setFocusPolicy(Qt::NoFocus);
+		m_frozenTableView->verticalHeader()->hide();
+		m_frozenTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+		m_frozenTableView->horizontalHeader()->installEventFilter(this);
+		m_tableView->viewport()->stackUnder(m_frozenTableView);
+
+	// 	m_frozenTableView->setStyleSheet("QTableView { border: none;"
+	// 								"background-color: #8EDE21;"
+	// 								"selection-background-color: #999}");
+		m_frozenTableView->setSelectionModel(m_tableView->selectionModel());
+		for (int col = 1; col < m_model->columnCount(); ++col)
+			m_frozenTableView->setColumnHidden(col, true);
+
+		m_frozenTableView->setColumnWidth(0, m_tableView->columnWidth(0));
+
+		m_frozenTableView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		m_frozenTableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+		m_frozenTableView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+		updateFrozenTableGeometry();
+
+		//synchronize the sroll bars across the main and the frozen views
+		connect(m_frozenTableView->verticalScrollBar(), &QAbstractSlider::valueChanged,
+				m_tableView->verticalScrollBar(), &QAbstractSlider::setValue);
+		connect(m_tableView->verticalScrollBar(), &QAbstractSlider::valueChanged,
+				m_frozenTableView->verticalScrollBar(), &QAbstractSlider::setValue);
+	}
+
+	m_frozenTableView->setVisible(!m_frozenTableView->isVisible());
 }
 
 void SpreadsheetView::setSelectionAs() {

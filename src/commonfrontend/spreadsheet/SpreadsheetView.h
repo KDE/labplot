@@ -47,6 +47,7 @@ class QItemSelection;
 class QMenu;
 class QPrinter;
 class QModelIndex;
+class QResizeEvent;
 class QTableView;
 class QToolBar;
 
@@ -89,6 +90,9 @@ public:
 	bool printView();
 	bool printPreview();
 
+protected:
+	void resizeEvent(QResizeEvent*) override;
+
 private:
 	void init();
 	void initActions();
@@ -109,7 +113,10 @@ private:
 	void insertRowsAbove(int);
 	void insertRowsBelow(int);
 
-	QTableView* m_tableView;
+	void updateFrozenTableGeometry();
+
+	QTableView* m_tableView{nullptr};
+	QTableView* m_frozenTableView{nullptr};
 	bool m_editorEntered{false};
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetItemDelegate* m_delegate;
@@ -178,6 +185,7 @@ private:
 	QAction* action_sort_asc_column;
 	QAction* action_sort_desc_column;
 	QAction* action_statistics_columns;
+	QAction* action_freeze_columns;
 
 	//row related actions
 	QAction* action_insert_row_above;
@@ -263,6 +271,7 @@ private slots:
 	void insertColumnsRight();
 	void removeSelectedColumns();
 	void clearSelectedColumns();
+	void toggleFreezeColumn();
 
 	void modifyValues();
 	void reverseColumns();
