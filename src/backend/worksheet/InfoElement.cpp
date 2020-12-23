@@ -849,15 +849,16 @@ void InfoElementPrivate::retransform() {
 
 	q->m_title->retransform();
 
-	for (auto markerpoint: q->markerpoints)
+	for (auto markerpoint : q->markerpoints)
 		markerpoint.customPoint->retransform();
 
-	// line goes to the first pointPos
-	QPointF pointPos = cSystem->mapLogicalToScene(q->markerpoints[0].customPoint->position(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	for (int i=1; i< q->markerPointsCount(); i++) {
+	//determine the position to connect the line to
+	QPointF pointPos;
+	for (int i = 0; i < q->markerPointsCount(); ++i) {
 		const auto* curve = q->markerpoints[i].curve;
-		if (curve && curve->name().compare(connectionLineCurveName) == 0) {
-			pointPos = cSystem->mapLogicalToScene(q->markerpoints[i].customPoint->position(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		if (curve && curve->name() == connectionLineCurveName) {
+			pointPos = cSystem->mapLogicalToScene(q->markerpoints[i].customPoint->position(),
+												  AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
 	}
@@ -869,44 +870,28 @@ void InfoElementPrivate::retransform() {
 	else
 		m_titlePos = q->m_title->gluePointAt(gluePointIndex).point;
 
-	double x,y;
-	QPointF min_scene = cSystem->mapLogicalToScene(QPointF(plot->xMin(),plot->yMin()));
-	QPointF max_scene = cSystem->mapLogicalToScene(QPointF(plot->xMax(),plot->yMax()));
+	//new bounding rectangle
+	const QRectF& rect = plot->dataRect();
+	boundingRectangle = mapFromParent(rect).boundingRect();
 
-	y = abs(max_scene.y() - min_scene.y()) / 2;
-	x = abs(max_scene.x() - min_scene.x()) / 2;
-
-	QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
-	QPointF pointPosItemCoords = mapFromParent(pointPos); // calculate item coords from scene coords
-
-	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-
-	boundingRectangle.setTopLeft(mapFromParent(plot->plotArea()->graphicsItem()->boundingRect().topLeft()));
-	boundingRectangle.setBottomRight(mapFromParent(plot->plotArea()->graphicsItem()->boundingRect().bottomRight()));
-
+	//connection line
+	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
+	const QPointF pointPosItemCoords = mapFromParent(pointPos); // calculate item coords from scene coords
 	if (boundingRectangle.contains(m_titlePosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
 		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
 	else
 		connectionLine = QLineF();
 
-	xposLine = QLineF(pointPosItemCoords.x(), 0, pointPosItemCoords.x(), 2 * y);
+	//vertical line
+	xposLine = QLineF(pointPosItemCoords.x(), boundingRectangle.bottom(),
+					  pointPosItemCoords.x(), boundingRectangle.top());
 
-	QPointF itemPos;
-	//DEBUG("ConnectionLine: P1.x: " << (connectionLine.p1()).x() << "P2.x: " << (connectionLine.p2()).x());
-	itemPos.setX(x); // x is always between the labelpos and the point pos
-	if (max_scene.y() < min_scene.y())
-		itemPos.setY(max_scene.y());
-	else
-		itemPos.setY(min_scene.y());
-
-	if (max_scene.x() < min_scene.x())
-		itemPos.setX(max_scene.x());
-	else
-		itemPos.setX(min_scene.x());
-
+	//new item position
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
+	QPointF itemPos(qMin(rect.top(), rect.bottom()),
+					qMin(rect.left(), rect.right()));
 	setPos(itemPos);
-
-	update(boundingRect());
+	update(boundingRectangle);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 
 	q->m_suppressChildPositionChanged = false;

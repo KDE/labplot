@@ -3,8 +3,8 @@
 	Project              : LabPlot
 	Description          : Private members of InfoElement
 	--------------------------------------------------------------------
-    Copyright            : (C) 2020 by Martin Marmsoler (martin.marmsoler@gmail.com)
-
+	Copyright            : (C) 2020 by Martin Marmsoler (martin.marmsoler@gmail.com)
+	Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -39,11 +39,11 @@ class CartesianCoordinateSystem;
 class XYCurve;
 class QGraphicsSceneMouseEvent;
 
-class InfoElementPrivate: public QGraphicsItem
-{
+class InfoElementPrivate : public QGraphicsItem {
+
 public:
-    InfoElementPrivate(InfoElement *owner, CartesianPlot *);
-    InfoElementPrivate(InfoElement *owner, CartesianPlot *, const XYCurve *);
+	InfoElementPrivate(InfoElement* owner, CartesianPlot*);
+	InfoElementPrivate(InfoElement* owner, CartesianPlot*, const XYCurve *);
 	QString name() const;
 
 	//reimplemented from QGraphicsItem
@@ -69,15 +69,15 @@ public:
 	int gluePointIndex{-1}; // negative value means automatic mode
 	int m_index{-1}; // index of the actual position
 	QString connectionLineCurveName;
-    double position;
+	double position;
 
 	QPen verticalLinePen;
 	qreal verticalLineOpacity;
 	QPen connectionLinePen;
 	qreal connectionLineOpacity;
 
-    CartesianPlot* plot{nullptr};
-    const CartesianCoordinateSystem* cSystem{nullptr};
+	CartesianPlot* plot{nullptr};
+	const CartesianCoordinateSystem* cSystem{nullptr};
 
 	InfoElement* const q;
 
