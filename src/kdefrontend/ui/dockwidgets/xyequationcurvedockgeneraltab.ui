@@ -37,7 +37,7 @@
    <item row="0" column="4" colspan="2">
     <widget class="QLineEdit" name="leName"/>
    </item>
-   <item row="11" column="5">
+   <item row="12" column="5">
     <widget class="QPushButton" name="pbRecalculate">
      <property name="text">
       <string>Recalculate</string>
@@ -51,7 +51,7 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="0" colspan="2">
+   <item row="14" column="0" colspan="2">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>Visible</string>
@@ -66,7 +66,7 @@
     </widget>
    </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lEquation">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -99,16 +99,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <property name="spacing">
@@ -153,7 +144,7 @@
      </layout>
     </widget>
    </item>
-   <item row="11" column="4">
+   <item row="12" column="4">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -188,7 +179,7 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="0" colspan="6">
+   <item row="11" column="0" colspan="6">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -267,7 +258,7 @@
      </property>
     </widget>
    </item>
-   <item row="12" column="1">
+   <item row="13" column="1">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -311,16 +302,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <property name="spacing">
@@ -387,6 +369,16 @@
       <string>x=f(t)</string>
      </property>
     </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="lPlotRange">
+     <property name="text">
+      <string>Plot range:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="4" colspan="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
    </item>
   </layout>
  </widget>

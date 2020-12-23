@@ -62,6 +62,8 @@ public:
 	int yIndex() const;
 	void setYIndex(int);
 
+	QString info() const override;
+
 private:
 	void init();
 	bool rectContainsPoint(const QRectF&, QPointF) const;

@@ -4,7 +4,7 @@
     Description          : A xy-curve
     --------------------------------------------------------------------
     Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2013-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -164,6 +164,11 @@ public:
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 	double y(double x, double &x_new, bool &valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
+
+	int coordinateSystemIndex() const;
+	void setCoordinateSystemIndex(int);
+	int coordinateSystemCount() const;
+	QString coordinateSystemInfo(int index) const;
 
 private slots:
 	void updateValues();

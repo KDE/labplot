@@ -81,10 +81,9 @@ XYCurve::~XYCurve() = default;
 
 void XYCurve::finalizeAdd() {
 	Q_D(XYCurve);
-	d->plot = static_cast<const CartesianPlot*>(parentAspect());
+	d->plot = dynamic_cast<CartesianPlot*>(parentAspect());
 	Q_ASSERT(d->plot);
-	//TODO
-	d->cSystem = static_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(0));
+	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(d->cSystemIndex));
 }
 
 void XYCurve::init() {
@@ -1166,13 +1165,13 @@ void XYCurvePrivate::retransform() {
 		RESET_CURSOR;
 	}
 
-    m_suppressRecalc = true;
-    updateLines();
-    updateDropLines();
-    updateSymbols();
-    updateValues();
-    m_suppressRecalc = false;
-    updateErrorBars();
+	m_suppressRecalc = true;
+	updateLines();
+	updateDropLines();
+	updateSymbols();
+	updateValues();
+	m_suppressRecalc = false;
+	updateErrorBars();
 }
 
 /*!
@@ -1272,10 +1271,10 @@ void XYCurvePrivate::addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, d
  * @param pixelCount pixel count
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff, int numberOfPixelX) {
-	//DEBUG(Q_FUNC_INFO)
+	//DEBUG(Q_FUNC_INFO << ", coordinate system index: " << cSystem->xIndex())
 
 	if (plot->xScale() == CartesianPlot::Scale::Linear) {
-		double minLogicalDiffX = plot->xRange().size()/numberOfPixelX;
+		double minLogicalDiffX = plot->xRange(cSystem->xIndex()).size()/numberOfPixelX;
 		//DEBUG("	plot->xMax() - plot->xMin() = " << plot->xMax() - plot->xMin())
 		//DEBUG("	plot->dataRect().width() = " << plot->dataRect().width())
 		//DEBUG("	-> minLogicalDiffX = " << minLogicalDiffX)
@@ -1413,8 +1412,8 @@ void XYCurvePrivate::updateLines() {
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 	if (columnProperties == AbstractColumn::Properties::Constant) {
 		DEBUG(Q_FUNC_INFO << ", CONSTANT column")
-		tempPoint1 = QPointF(plot->xRange().start(), plot->yRange().start());
-		tempPoint2 = QPointF(plot->xRange().start(), plot->yRange().end());
+		tempPoint1 = QPointF(plot->xRange(cSystem->xIndex()).start(), plot->yRange().start());
+		tempPoint2 = QPointF(plot->xRange(cSystem->xIndex()).start(), plot->yRange().end());
 		m_lines.append(QLineF(tempPoint1, tempPoint2));
 	} else {
 		QPointF lastPoint{qQNaN(), qQNaN()};	// last x value
@@ -1714,7 +1713,7 @@ void XYCurvePrivate::updateDropLines() {
 
 	//calculate drop lines
 	QVector<QLineF> dlines;
-	const double xMin = plot->xRange().start();
+	const double xMin = plot->xRange(cSystem->xIndex()).start();
 	const double yMin = plot->yRange().start();
 
 	int i{0};
@@ -2026,10 +2025,10 @@ void XYCurvePrivate::updateFilling() {
 	const QPointF& last = m_logicalPoints.at(m_logicalPoints.size()-1);//last point of the curve, may not be visible currently
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
-	const double xMin{ plot->xRange().start() }, xMax{ plot->xRange().end() };
+	const double xMin{ plot->xRange(cSystem->xIndex()).start() }, xMax{ plot->xRange(cSystem->xIndex()).end() };
 	const double yMin{ plot->yRange().start() }, yMax{ plot->yRange().end() };
 	if (fillingPosition == XYCurve::FillingPosition::Above) {
-		edge = cSystem->mapLogicalToScene(QPointF(plot->xRange().start(), yMin));
+		edge = cSystem->mapLogicalToScene(QPointF(plot->xRange(cSystem->xIndex()).start(), yMin));
 
 		//start point
 		if (nsl_math_essentially_equal(start.y(), edge.y())) {
@@ -2086,7 +2085,7 @@ void XYCurvePrivate::updateFilling() {
 			if (yMax > 0) {
 				if (first.x() < xMin)
 					start = edge;
-				else if (first.x() > plot->xRange().end())
+				else if (first.x() > plot->xRange(cSystem->xIndex()).end())
 					start = cSystem->mapLogicalToScene(QPointF(xMax, yMax));
 				else
 					start = cSystem->mapLogicalToScene(QPointF(first.x(), yMax));
@@ -3097,6 +3096,28 @@ void XYCurvePrivate::setHover(bool on) {
 	m_hovered = on;
 	on ? emit q->hovered() : emit q->unhovered();
 	update();
+}
+
+BASIC_SHARED_D_READER_IMPL(XYCurve, int, coordinateSystemIndex, cSystemIndex)
+void XYCurve::setCoordinateSystemIndex(const int index) {
+	Q_D(XYCurve);
+	d->cSystemIndex = index;
+}
+
+int XYCurve::coordinateSystemCount() const {
+	Q_D(const XYCurve);
+	if (d->plot)
+		return d->plot->coordinateSystems().size();
+
+	return 0;
+}
+
+QString XYCurve::coordinateSystemInfo(const int index) const {
+	Q_D(const XYCurve);
+	if (d->plot)
+		return d->plot->coordinateSystem(index)->info();
+
+	return QString();
 }
 
 //##############################################################################

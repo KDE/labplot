@@ -53,6 +53,8 @@ public:
 	virtual QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
 	virtual QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
 
+	virtual QString info() const { return QString(); };
+
 	class LineClipResult {
 	public:
 		LineClipResult() {

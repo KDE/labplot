@@ -53,6 +53,14 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 	delete d;
 }
 
+QString CartesianCoordinateSystem::info() const {
+	//TODO: yRange(d->yIndex)
+	if (d->plot)
+		return QString(QLatin1String("x = ") + d->plot->xRange(d->xIndex).toString() + QLatin1String(", y = ") + d->plot->yRange().toString());
+
+	return i18n("no info available");
+};
+
 //##############################################################################
 //######################### logical to scene mappers ###########################
 //##############################################################################

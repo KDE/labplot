@@ -3,6 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of equation curves
 
  ***************************************************************************/
@@ -33,9 +34,6 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "ui_xyequationcurvedockgeneraltab.h"
 
-class EquationHighlighter;
-class QCompleter;
-
 class XYEquationCurveDock: public XYCurveDock {
 	Q_OBJECT
 
@@ -46,6 +44,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void updatePlotRanges() const;
 
 	Ui::XYEquationCurveDockGeneralTab uiGeneralTab;
 	XYEquationCurve* m_equationCurve{nullptr};

@@ -134,6 +134,23 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	initTabs();
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	m_initializing = false;
+
+	updatePlotRanges();
+}
+
+//TODO: signal-slot for changing cSystemIndex
+void XYEquationCurveDock::updatePlotRanges() const {
+	const int cSystemCount{ m_curve->coordinateSystemCount() };
+	const int cSystemIndex{ m_curve->coordinateSystemIndex() };
+	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
+	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex)
+	if (cSystemCount > 0 && uiGeneralTab.cbPlotRanges->count() != cSystemCount) {
+		// fill ui.cbPlotRanges
+		uiGeneralTab.cbPlotRanges->clear();
+		for (int i{0}; i < cSystemCount; i++)
+			uiGeneralTab.cbPlotRanges->addItem( m_curve->coordinateSystemInfo(i) );
+		uiGeneralTab.cbPlotRanges->setCurrentIndex(cSystemIndex);
+	}
 }
 
 void XYEquationCurveDock::initGeneralTab() {
@@ -331,6 +348,8 @@ void XYEquationCurveDock::enableRecalculate() const {
 
 	valid = (valid && uiGeneralTab.teMin->isValid() && uiGeneralTab.teMax->isValid());
 	uiGeneralTab.pbRecalculate->setEnabled(valid);
+
+	updatePlotRanges();
 }
 
 //*************************************************************

@@ -986,7 +986,7 @@ void CartesianPlot::setAutoScaleX(bool autoScaleX) {
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRange, Range<double>, xRange, retransformScales)
 Range<double> CartesianPlot::xRange(const int index) {
-	DEBUG(Q_FUNC_INFO)
+	//DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
 	return d->xRanges.at(index);
 }
@@ -1205,7 +1205,7 @@ void CartesianPlot::addHorizontalAxis() {
 	Axis* axis = new Axis("x-axis", Axis::Orientation::Horizontal);
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
-		//TODO
+		//TODO: use xrange of default plot range
 		axis->setRange(xRange(0));
 		axis->setUndoAware(true);
 	}
@@ -1223,14 +1223,23 @@ void CartesianPlot::addVerticalAxis() {
 }
 
 void CartesianPlot::addCurve() {
+	DEBUG(Q_FUNC_INFO)
+	//TODO: how to select plot range
 	addChild(new XYCurve("xy-curve"));
 }
 
 void CartesianPlot::addEquationCurve() {
-	addChild(new XYEquationCurve("f(x)"));
+	DEBUG(Q_FUNC_INFO)
+	auto* curve = new XYEquationCurve("f(x)");
+	//TODO: select default plot range
+	//TEST
+	curve->setCoordinateSystemIndex(1);
+	addChild(curve);
 }
 
 void CartesianPlot::addHistogram() {
+	DEBUG(Q_FUNC_INFO)
+	//TODO: how to select plot range
 	addChild(new Histogram("Histogram"));
 }
 
