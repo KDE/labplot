@@ -3102,6 +3102,8 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, int, coordinateSystemIndex, cSystemIndex)
 void XYCurve::setCoordinateSystemIndex(const int index) {
 	Q_D(XYCurve);
 	d->cSystemIndex = index;
+	if (d->plot)
+		d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(index));
 }
 
 int XYCurve::coordinateSystemCount() const {

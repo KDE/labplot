@@ -100,6 +100,7 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.teMin->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 	uiGeneralTab.teMax->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 
+
 	//Slots
 	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYEquationCurveDock::nameChanged );
 	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYEquationCurveDock::commentChanged );
@@ -115,6 +116,8 @@ void XYEquationCurveDock::setupGeneral() {
 	connect( uiGeneralTab.teMin, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.teMax, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
 	connect( uiGeneralTab.sbCount, SIGNAL(valueChanged(int)), this, SLOT(enableRecalculate()) );
+
+	connect( uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::plotRangeChanged );
 	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
 }
 
@@ -138,7 +141,6 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	updatePlotRanges();
 }
 
-//TODO: signal-slot for changing cSystemIndex
 void XYEquationCurveDock::updatePlotRanges() const {
 	const int cSystemCount{ m_curve->coordinateSystemCount() };
 	const int cSystemIndex{ m_curve->coordinateSystemIndex() };
@@ -350,6 +352,15 @@ void XYEquationCurveDock::enableRecalculate() const {
 	uiGeneralTab.pbRecalculate->setEnabled(valid);
 
 	updatePlotRanges();
+}
+
+void XYEquationCurveDock::plotRangeChanged(int index) {
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
+
+	if (index != m_curve->coordinateSystemIndex()) {
+		m_curve->setCoordinateSystemIndex(index);
+		m_curve->retransform();	// redraw
+	}
 }
 
 //*************************************************************

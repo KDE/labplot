@@ -130,6 +130,8 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leZeroOffset, &QLineEdit::textChanged, this, &AxisDock::zeroOffsetChanged);
 	connect(ui.leScalingFactor, &QLineEdit::textChanged, this, &AxisDock::scalingFactorChanged);
 
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged );
+
 	//"Line"-tab
 	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			this, &AxisDock::lineStyleChanged);
@@ -471,6 +473,8 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	//show the properties of the first axis
 	this->load();
 
+	updatePlotRanges();
+
 	// general
 	connect(m_axis, &Axis::aspectDescriptionChanged, this, &AxisDock::axisDescriptionChanged);
 	connect(m_axis, &Axis::orientationChanged, this, QOverload<Axis::Orientation>::of(&AxisDock::axisOrientationChanged));
@@ -566,6 +570,20 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
 	else
 		cb->setCurrentModelIndex(QModelIndex());
+}
+
+void AxisDock::updatePlotRanges() const {
+	const int cSystemCount{ m_axis->coordinateSystemCount() };
+	const int cSystemIndex{ m_axis->coordinateSystemIndex() };
+	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
+	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex)
+	if (cSystemCount > 0 && ui.cbPlotRanges->count() != cSystemCount) {
+		// fill ui.cbPlotRanges
+		ui.cbPlotRanges->clear();
+		for (int i{0}; i < cSystemCount; i++)
+			ui.cbPlotRanges->addItem( m_axis->coordinateSystemInfo(i) );
+		ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
+	}
 }
 
 //*************************************************************
@@ -1991,6 +2009,15 @@ void AxisDock::axisVisibilityChanged(bool on) {
 	m_initializing = true;
 	ui.chkVisible->setChecked(on);
 	m_initializing = false;
+}
+
+void AxisDock::plotRangeChanged(int index) {
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
+
+	if (index != m_axis->coordinateSystemIndex()) {
+		m_axis->setCoordinateSystemIndex(index);
+		m_axis->retransform();	// redraw
+	}
 }
 
 //*************************************************************

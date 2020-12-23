@@ -891,6 +891,24 @@ BASIC_SHARED_D_READER_IMPL(Axis, int, coordinateSystemIndex, cSystemIndex)
 void Axis::setCoordinateSystemIndex(const int index) {
 	Q_D(Axis);
 	d->cSystemIndex = index;
+	if (d->plot)
+		d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(index));
+}
+
+int Axis::coordinateSystemCount() const {
+	Q_D(const Axis);
+	if (d->plot)
+		return d->plot->coordinateSystems().size();
+
+	return 0;
+}
+
+QString Axis::coordinateSystemInfo(const int index) const {
+	Q_D(const Axis);
+	if (d->plot)
+		return d->plot->coordinateSystem(index)->info();
+
+	return QString();
 }
 
 //##############################################################################

@@ -157,6 +157,8 @@ public:
 
 	int coordinateSystemIndex() const;
 	void setCoordinateSystemIndex(int);
+	int coordinateSystemCount() const;
+	QString coordinateSystemInfo(int index) const;
 
 protected:
 	AxisPrivate* const d_ptr;

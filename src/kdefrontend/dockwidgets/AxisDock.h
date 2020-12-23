@@ -64,6 +64,7 @@ private:
 
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
+	void updatePlotRanges() const;
 
 	void load();
 	void loadConfig(KConfig&);
@@ -89,6 +90,7 @@ private slots:
 	void endDateTimeChanged(const QDateTime&);
 	void zeroOffsetChanged();
 	void scalingFactorChanged();
+	void plotRangeChanged(int);
 
 	//Line-Tab
   	void lineStyleChanged(int);
