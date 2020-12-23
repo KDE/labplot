@@ -648,6 +648,8 @@ int InfoElement::currentIndex(double x, double* found_x) {
 					*found_x = markerpoint.curve->xColumn()->dateTimeAt(index).toMSecsSinceEpoch();
 					break;
 				}
+
+				return index;
 			}
 		}
 	}
