@@ -628,13 +628,27 @@ void InfoElement::childAdded(const AbstractAspect* child) {
 int InfoElement::currentIndex(double x, double* found_x) {
 	Q_D(InfoElement);
 
-	for (struct MarkerPoints_T markerpoint: markerpoints) {
+	for (auto markerpoint : markerpoints) {
 		if (markerpoint.curve->name() == connectionLineCurveName()) {
 			int index = markerpoint.curve->xColumn()->indexForValue(x);
 
-			if (found_x && index >= 0)
-				*found_x = markerpoint.curve->xColumn()->valueAt(index);
-			return index;
+			if (found_x && index >= 0) {
+				auto mode = markerpoint.curve->xColumn()->columnMode();
+				switch (mode) {
+				case AbstractColumn::ColumnMode::Numeric:
+				case AbstractColumn::ColumnMode::Integer:
+				case AbstractColumn::ColumnMode::BigInt:
+					*found_x = markerpoint.curve->xColumn()->valueAt(index);
+					break;
+				case AbstractColumn::ColumnMode::Text:
+					break;
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Day:
+					*found_x = markerpoint.curve->xColumn()->dateTimeAt(index).toMSecsSinceEpoch();
+					break;
+				}
+			}
 		}
 	}
 
@@ -657,7 +671,6 @@ double InfoElement::setMarkerpointPosition(double x) {
 			markerpoints[i].x = x_new;
 			markerpoints[i].y = y;
 			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-			DEBUG("InfoElement::pointPositionChanged, Set Position: ("<< x_new << "," << y << ")");
 			markerpoints[i].customPoint->setPosition(QPointF(x_new,y));
 			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 			//QPointF position = d->cSystem->mapSceneToLogical(markerpoints[i].customPoint->graphicsItem()->pos());
