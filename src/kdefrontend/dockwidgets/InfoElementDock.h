@@ -53,6 +53,7 @@ private slots:
 	void gluePointChanged(int index);
 	void curveChanged();
 	void positionChanged(const QString&);
+	void positionDateTimeChanged(const QDateTime&);
 	void curveSelectionChanged(int);
 	void visibilityChanged(bool);
 	void verticalLineStyleChanged(int);

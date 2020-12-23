@@ -628,13 +628,29 @@ void InfoElement::childAdded(const AbstractAspect* child) {
 int InfoElement::currentIndex(double x, double* found_x) {
 	Q_D(InfoElement);
 
-	for (struct MarkerPoints_T markerpoint: markerpoints) {
+	for (auto markerpoint : markerpoints) {
 		if (markerpoint.curve->name() == connectionLineCurveName()) {
 			int index = markerpoint.curve->xColumn()->indexForValue(x);
 
-			if (found_x && index >= 0)
-				*found_x = markerpoint.curve->xColumn()->valueAt(index);
-			return index;
+			if (found_x && index >= 0) {
+				auto mode = markerpoint.curve->xColumn()->columnMode();
+				switch (mode) {
+				case AbstractColumn::ColumnMode::Numeric:
+				case AbstractColumn::ColumnMode::Integer:
+				case AbstractColumn::ColumnMode::BigInt:
+					*found_x = markerpoint.curve->xColumn()->valueAt(index);
+					break;
+				case AbstractColumn::ColumnMode::Text:
+					break;
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Day:
+					*found_x = markerpoint.curve->xColumn()->dateTimeAt(index).toMSecsSinceEpoch();
+					break;
+				}
+
+				return index;
+			}
 		}
 	}
 
@@ -657,7 +673,6 @@ double InfoElement::setMarkerpointPosition(double x) {
 			markerpoints[i].x = x_new;
 			markerpoints[i].y = y;
 			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-			DEBUG("InfoElement::pointPositionChanged, Set Position: ("<< x_new << "," << y << ")");
 			markerpoints[i].customPoint->setPosition(QPointF(x_new,y));
 			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 			//QPointF position = d->cSystem->mapSceneToLogical(markerpoints[i].customPoint->graphicsItem()->pos());
@@ -718,24 +733,15 @@ void InfoElement::handleResize(double horizontalRatio, double verticalRatio, boo
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(InfoElement, double, position, position);
 BASIC_SHARED_D_READER_IMPL(InfoElement, int, gluePointIndex, gluePointIndex);
-BASIC_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
+CLASS_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
 CLASS_SHARED_D_READER_IMPL(InfoElement, QPen, verticalLinePen, verticalLinePen)
 BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, verticalLineOpacity, verticalLineOpacity)
 CLASS_SHARED_D_READER_IMPL(InfoElement, QPen, connectionLinePen, connectionLinePen)
 BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, connectionLineOpacity, connectionLineOpacity)
 
 /* ============================ setter methods ================= */
-
-// Problem: No member named 'Private' in 'InfoElement':
-// Solution:
-// Define "typedef  InfoElementPrivate Private;" in public section
-// of InfoElement
-
-// Problem: InfoElementPrivate has no member named 'name'
-// Solution: implement function name()
-
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetPosition, double, position, retransform);
-void InfoElement::setPosition(const double pos) {
+void InfoElement::setPosition(double pos) {
 	Q_D(InfoElement);
 	double value;
 	int index = currentIndex(pos, &value);
@@ -751,21 +757,21 @@ void InfoElement::setPosition(const double pos) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetGluePointIndex, int, gluePointIndex, retransform);
-void InfoElement::setGluePointIndex(const int value) {
+void InfoElement::setGluePointIndex(int value) {
 	Q_D(InfoElement);
 	if (value != d->gluePointIndex)
 		exec(new InfoElementSetGluePointIndexCmd(d, value, ki18n("%1: set gluepoint index")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineCurveName, QString, connectionLineCurveName, retransform);
-void InfoElement::setConnectionLineCurveName(const QString name) {
+void InfoElement::setConnectionLineCurveName(const QString& name) {
 	Q_D(InfoElement);
 	if (name.compare(d->connectionLineCurveName) != 0)
 		exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVisible, bool, visible, visibilityChanged);
-void InfoElement::setVisible(const bool visible) {
+void InfoElement::setVisible(bool visible) {
 	Q_D(InfoElement);
 	if (visible != d->visible)
 		exec(new InfoElementSetVisibleCmd(d, visible, ki18n("%1: set visible")));
@@ -850,15 +856,16 @@ void InfoElementPrivate::retransform() {
 
 	q->m_title->retransform();
 
-	for (auto markerpoint: q->markerpoints)
+	for (auto markerpoint : q->markerpoints)
 		markerpoint.customPoint->retransform();
 
-	// line goes to the first pointPos
-	QPointF pointPos = cSystem->mapLogicalToScene(q->markerpoints[0].customPoint->position(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	for (int i=1; i< q->markerPointsCount(); i++) {
+	//determine the position to connect the line to
+	QPointF pointPos;
+	for (int i = 0; i < q->markerPointsCount(); ++i) {
 		const auto* curve = q->markerpoints[i].curve;
-		if (curve && curve->name().compare(connectionLineCurveName) == 0) {
-			pointPos = cSystem->mapLogicalToScene(q->markerpoints[i].customPoint->position(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		if (curve && curve->name() == connectionLineCurveName) {
+			pointPos = cSystem->mapLogicalToScene(q->markerpoints[i].customPoint->position(),
+												  AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
 	}
@@ -870,44 +877,28 @@ void InfoElementPrivate::retransform() {
 	else
 		m_titlePos = q->m_title->gluePointAt(gluePointIndex).point;
 
-	double x,y;
-	QPointF min_scene = cSystem->mapLogicalToScene(QPointF(plot->xRange().start(), plot->yRange().start()));
-	QPointF max_scene = cSystem->mapLogicalToScene(QPointF(plot->xRange().end(), plot->yRange().end()));
+	//new bounding rectangle
+	const QRectF& rect = plot->dataRect();
+	boundingRectangle = mapFromParent(rect).boundingRect();
 
-	y = qAbs(max_scene.y() - min_scene.y()) / 2;
-	x = qAbs(max_scene.x() - min_scene.x()) / 2;
-
-	QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
-	QPointF pointPosItemCoords = mapFromParent(pointPos); // calculate item coords from scene coords
-
-	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-
-	boundingRectangle.setTopLeft(mapFromParent(plot->plotArea()->graphicsItem()->boundingRect().topLeft()));
-	boundingRectangle.setBottomRight(mapFromParent(plot->plotArea()->graphicsItem()->boundingRect().bottomRight()));
-
+	//connection line
+	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
+	const QPointF pointPosItemCoords = mapFromParent(pointPos); // calculate item coords from scene coords
 	if (boundingRectangle.contains(m_titlePosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
 		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
 	else
 		connectionLine = QLineF();
 
-	xposLine = QLineF(pointPosItemCoords.x(), 0, pointPosItemCoords.x(), 2 * y);
+	//vertical line
+	xposLine = QLineF(pointPosItemCoords.x(), boundingRectangle.bottom(),
+					  pointPosItemCoords.x(), boundingRectangle.top());
 
-	QPointF itemPos;
-	//DEBUG("ConnectionLine: P1.x: " << (connectionLine.p1()).x() << "P2.x: " << (connectionLine.p2()).x());
-	itemPos.setX(x); // x is always between the labelpos and the point pos
-	if (max_scene.y() < min_scene.y())
-		itemPos.setY(max_scene.y());
-	else
-		itemPos.setY(min_scene.y());
-
-	if (max_scene.x() < min_scene.x())
-		itemPos.setX(max_scene.x());
-	else
-		itemPos.setX(min_scene.x());
-
+	//new item position
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
+	QPointF itemPos(qMin(rect.top(), rect.bottom()),
+					qMin(rect.left(), rect.right()));
 	setPos(itemPos);
-
-	update(boundingRect());
+	update(boundingRectangle);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 
 	q->m_suppressChildPositionChanged = false;

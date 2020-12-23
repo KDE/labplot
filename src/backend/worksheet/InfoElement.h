@@ -94,7 +94,7 @@ public:
 
     BASIC_D_ACCESSOR_DECL(double, position, Position);
 	BASIC_D_ACCESSOR_DECL(int, gluePointIndex, GluePointIndex);
-	BASIC_D_ACCESSOR_DECL(QString, connectionLineCurveName, ConnectionLineCurveName);
+	CLASS_D_ACCESSOR_DECL(QString, connectionLineCurveName, ConnectionLineCurveName);
 	CLASS_D_ACCESSOR_DECL(QPen, verticalLinePen, VerticalLinePen)
 	BASIC_D_ACCESSOR_DECL(qreal, verticalLineOpacity, VerticalLineOpacity)
 	CLASS_D_ACCESSOR_DECL(QPen, connectionLinePen, ConnectionLinePen)
@@ -103,7 +103,7 @@ public:
 	void setVisible(bool on) override;
 	bool isVisible() const override;
 
-	typedef  InfoElementPrivate Private;
+	typedef InfoElementPrivate Private;
 
 public slots:
 	void labelPositionChanged(TextLabel::PositionWrapper);

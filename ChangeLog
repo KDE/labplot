@@ -4,6 +4,8 @@
 	* Support real scientific notation and improve other notations of axes label
 	* [spreadsheet]:
 		* Allow to freeze the first column
+	* [worksheet]:
+		* Crosshair cursor mode in the plot
 
 -----2.8.2 -----
 Bug fixes:

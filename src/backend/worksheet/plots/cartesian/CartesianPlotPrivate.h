@@ -128,6 +128,7 @@ private:
 	QPointF m_selectionEnd;
 	QLineF m_selectionStartLine;
 	QPointF m_panningStart;
+	QPointF m_crosshairPos; //current position of the mouse cursor in scene coordinates
 
 	QStaticText m_cursor0Text{"1"};
 	QStaticText m_cursor1Text{"2"};

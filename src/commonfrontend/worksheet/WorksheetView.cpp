@@ -148,9 +148,7 @@ void WorksheetView::initBasicActions() {
 
 	//Zoom actions
 	zoomInViewAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), this);
-
 	zoomOutViewAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom Out"), this);
-
 	zoomOriginAction = new QAction(QIcon::fromTheme("zoom-original"), i18n("Original Size"), this);
 }
 
@@ -284,35 +282,44 @@ void WorksheetView::initActions() {
 	connect(cartesianPlotActionModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotActionModeChanged);
 
 	// cursor apply to all/selected
-	auto* cartesianPlotActionCursorGroup = new QActionGroup(this);
-	cartesianPlotActionCursorGroup->setExclusive(true);
-	cartesianPlotApplyToSelectionCursor = new QAction(i18n("Selected Plots"), cartesianPlotActionCursorGroup);
+	auto* plotActionCursorGroup = new QActionGroup(this);
+	plotActionCursorGroup->setExclusive(true);
+	cartesianPlotApplyToSelectionCursor = new QAction(i18n("Selected Plots"), plotActionCursorGroup);
 	cartesianPlotApplyToSelectionCursor->setCheckable(true);
-	cartesianPlotApplyToAllCursor = new QAction(i18n("All Plots"), cartesianPlotActionCursorGroup);
+	cartesianPlotApplyToAllCursor = new QAction(i18n("All Plots"), plotActionCursorGroup);
 	cartesianPlotApplyToAllCursor->setCheckable(true);
 	setCartesianPlotCursorMode(m_worksheet->cartesianPlotCursorMode());
-	connect(cartesianPlotActionCursorGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotCursorModeChanged);
+	connect(plotActionCursorGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotCursorModeChanged);
 
-	auto* cartesianPlotMouseModeActionGroup = new QActionGroup(this);
-	cartesianPlotMouseModeActionGroup->setExclusive(true);
-	cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Edit"), cartesianPlotMouseModeActionGroup);
+	auto* plotMouseModeActionGroup = new QActionGroup(this);
+	plotMouseModeActionGroup->setExclusive(true);
+	cartesianPlotSelectionModeAction = new QAction(QIcon::fromTheme("labplot-cursor-arrow"), i18n("Select and Edit"), plotMouseModeActionGroup);
+	cartesianPlotSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::Selection));
 	cartesianPlotSelectionModeAction->setCheckable(true);
 	cartesianPlotSelectionModeAction->setChecked(true);
 
-	cartesianPlotZoomSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select"), i18n("Select Region and Zoom In"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotCrosshairModeAction = new QAction(QIcon::fromTheme("crosshairs"), i18n("Crosshair"), plotMouseModeActionGroup);
+	cartesianPlotCrosshairModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::Crosshair));
+	cartesianPlotCrosshairModeAction->setCheckable(true);
+
+	cartesianPlotZoomSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select"), i18n("Select Region and Zoom In"), plotMouseModeActionGroup);
+	cartesianPlotZoomSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomSelection));
 	cartesianPlotZoomSelectionModeAction->setCheckable(true);
 
-	cartesianPlotZoomXSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select-x"), i18n("Select x-Region and Zoom In"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotZoomXSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select-x"), i18n("Select x-Region and Zoom In"), plotMouseModeActionGroup);
+	cartesianPlotZoomXSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomXSelection));
 	cartesianPlotZoomXSelectionModeAction->setCheckable(true);
 
-	cartesianPlotZoomYSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select-y"), i18n("Select y-Region and Zoom In"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotZoomYSelectionModeAction = new QAction(QIcon::fromTheme("labplot-zoom-select-y"), i18n("Select y-Region and Zoom In"), plotMouseModeActionGroup);
+	cartesianPlotZoomYSelectionModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::ZoomYSelection));
 	cartesianPlotZoomYSelectionModeAction->setCheckable(true);
 
 	// TODO: change ICON
-	cartesianPlotCursorModeAction = new QAction(QIcon::fromTheme("debug-execute-from-cursor"), i18n("Cursor"), cartesianPlotMouseModeActionGroup);
+	cartesianPlotCursorModeAction = new QAction(QIcon::fromTheme("debug-execute-from-cursor"), i18n("Cursor"), plotMouseModeActionGroup);
+	cartesianPlotCursorModeAction->setData(static_cast<int>(CartesianPlot::MouseMode::Cursor));
 	cartesianPlotCursorModeAction->setCheckable(true);
 
-	connect(cartesianPlotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotMouseModeChanged);
+	connect(plotMouseModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotMouseModeChanged);
 
 	auto* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-Curve"), cartesianPlotAddNewActionGroup);
@@ -688,6 +695,7 @@ void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar){
 
 void WorksheetView::fillCartesianPlotToolBar(QToolBar* toolBar) {
 	toolBar->addAction(cartesianPlotSelectionModeAction);
+	toolBar->addAction(cartesianPlotCrosshairModeAction);
 	toolBar->addAction(cartesianPlotZoomSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomXSelectionModeAction);
 	toolBar->addAction(cartesianPlotZoomYSelectionModeAction);
@@ -1860,16 +1868,7 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 	if (m_suppressMouseModeChange)
 		return;
 
-	if (action == cartesianPlotSelectionModeAction)
-		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::Selection;
-	else if (action == cartesianPlotZoomSelectionModeAction)
-		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::ZoomSelection;
-	else if (action == cartesianPlotZoomXSelectionModeAction)
-		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::ZoomXSelection;
-	else if (action == cartesianPlotZoomYSelectionModeAction)
-		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::ZoomYSelection;
-	else if (action == cartesianPlotCursorModeAction)
-		m_cartesianPlotMouseMode = CartesianPlot::MouseMode::Cursor;
+	m_cartesianPlotMouseMode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
 
 	for (auto* plot : m_worksheet->children<CartesianPlot>() )
 		plot->setMouseMode(m_cartesianPlotMouseMode);
