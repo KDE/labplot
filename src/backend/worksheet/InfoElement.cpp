@@ -718,24 +718,15 @@ void InfoElement::handleResize(double horizontalRatio, double verticalRatio, boo
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(InfoElement, double, position, position);
 BASIC_SHARED_D_READER_IMPL(InfoElement, int, gluePointIndex, gluePointIndex);
-BASIC_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
+CLASS_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
 CLASS_SHARED_D_READER_IMPL(InfoElement, QPen, verticalLinePen, verticalLinePen)
 BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, verticalLineOpacity, verticalLineOpacity)
 CLASS_SHARED_D_READER_IMPL(InfoElement, QPen, connectionLinePen, connectionLinePen)
 BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, connectionLineOpacity, connectionLineOpacity)
 
 /* ============================ setter methods ================= */
-
-// Problem: No member named 'Private' in 'InfoElement':
-// Solution:
-// Define "typedef  InfoElementPrivate Private;" in public section
-// of InfoElement
-
-// Problem: InfoElementPrivate has no member named 'name'
-// Solution: implement function name()
-
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetPosition, double, position, retransform);
-void InfoElement::setPosition(const double pos) {
+void InfoElement::setPosition(double pos) {
 	Q_D(InfoElement);
 	double value;
 	int index = currentIndex(pos, &value);
@@ -751,21 +742,21 @@ void InfoElement::setPosition(const double pos) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetGluePointIndex, int, gluePointIndex, retransform);
-void InfoElement::setGluePointIndex(const int value) {
+void InfoElement::setGluePointIndex(int value) {
 	Q_D(InfoElement);
 	if (value != d->gluePointIndex)
 		exec(new InfoElementSetGluePointIndexCmd(d, value, ki18n("%1: set gluepoint index")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineCurveName, QString, connectionLineCurveName, retransform);
-void InfoElement::setConnectionLineCurveName(const QString name) {
+void InfoElement::setConnectionLineCurveName(const QString& name) {
 	Q_D(InfoElement);
 	if (name.compare(d->connectionLineCurveName) != 0)
 		exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVisible, bool, visible, visibilityChanged);
-void InfoElement::setVisible(const bool visible) {
+void InfoElement::setVisible(bool visible) {
 	Q_D(InfoElement);
 	if (visible != d->visible)
 		exec(new InfoElementSetVisibleCmd(d, visible, ki18n("%1: set visible")));

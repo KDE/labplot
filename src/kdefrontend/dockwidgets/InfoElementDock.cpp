@@ -48,10 +48,17 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	hboxLayout->setContentsMargins(2,2,2,2);
 	hboxLayout->setSpacing(2);
 
+	//set the current locale
+	SET_NUMBER_LOCALE
+	ui->lePosition->setLocale(numberLocale);
+	m_labelWidget->updateLocale();
+
 	//**********************************  Slots **********************************************
+	//general
 	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
 	connect(ui->leComment, &QLineEdit::textChanged, this, &InfoElementDock::commentChanged);
 	connect(ui->lePosition, &QLineEdit::textChanged, this, &InfoElementDock::positionChanged);
+	connect(ui->dateTimeEditPosition, &QDateTimeEdit::dateTimeChanged, this, &InfoElementDock::positionDateTimeChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
 	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
 	connect(ui->chbVisible, &QCheckBox::toggled, this, &InfoElementDock::visibilityChanged);
@@ -163,7 +170,20 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 	GuiTools::updatePenStyles(ui->cbConnectionLineStyle, ui->kcbConnectionLineColor->color());
 
 	SET_NUMBER_LOCALE
-	ui->lePosition->setText( numberLocale.toString(m_element->position()) );
+	if (m_element->plot()->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) {
+		ui->lePosition->setText( numberLocale.toString(m_element->position()) );
+		ui->lPosition->show();
+		ui->lePosition->show();
+		ui->lPositionDateTime->hide();
+		ui->dateTimeEditPosition->hide();
+	} else {
+		ui->dateTimeEditPosition->setDisplayFormat(m_element->plot()->xRangeDateTimeFormat());
+		ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_element->position()));
+		ui->lPosition->hide();
+		ui->lePosition->hide();
+		ui->lPositionDateTime->show();
+		ui->dateTimeEditPosition->show();
+	}
 
 	//connections
 
@@ -214,6 +234,15 @@ void InfoElementDock::positionChanged(const QString& value) {
 		for (auto* element : m_elements)
 			element->setPosition(pos);
 	}
+}
+
+void InfoElementDock::positionDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	quint64 value = dateTime.toMSecsSinceEpoch();
+	for (auto* element : m_elements)
+		element->setPosition(value);
 }
 
 void InfoElementDock::curveSelectionChanged(int state) {
@@ -430,6 +459,7 @@ void InfoElementDock::elementPositionChanged(double pos) {
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui->lePosition->setText(numberLocale.toString(pos));
+	ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(pos));
 }
 
 void InfoElementDock::elementCurveRemoved(QString name) {

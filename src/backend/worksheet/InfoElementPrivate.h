@@ -26,10 +26,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef WORKSHEETINFOELEMENTPRIVATE_H
-#define WORKSHEETINFOELEMENTPRIVATE_H
+#ifndef INFOELEMENTPRIVATE_H
+#define INFOELEMENTPRIVATE_H
 
-#include "QGraphicsItem"
+#include <QGraphicsItem>
 
 class InfoElement;
 class TextLabel;
