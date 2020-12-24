@@ -394,7 +394,7 @@ void XYCurveDock::init() {
 	trafo.scale(15, 15);
 
 	ui.cbSymbolStyle->addItem(i18n("None"));
-	for (int i = 1; i < 19; ++i) {	//TODO: use enum count
+	for (int i = 1; i < Symbol::stylesCount(); ++i) {
 		const auto style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
