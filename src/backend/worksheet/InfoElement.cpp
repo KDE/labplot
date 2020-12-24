@@ -54,12 +54,11 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot):
 	Q_D(InfoElement);
 	init();
 	setVisible(false);
-	d->retransform();
+// 	d->retransform();
 }
 
 InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve* curve, double pos):
 	WorksheetElement(name, AspectType::InfoElement),
-	// must be at least, because otherwise label ist not a nullptr
 	d_ptr(new InfoElementPrivate(this, plot, curve)) {
 	Q_D(InfoElement);
 
@@ -97,30 +96,30 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 			DEBUG("Value not found");
 		}
 
-		connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
-		custompoint->setVisible(curve->isVisible());
+		TextLabel::TextWrapper text;
+		text.allowPlaceholder = true;
 
-		setVisible(true);
-	} else
-		setVisible(false);
-
-	TextLabel::TextWrapper text;
-	text.allowPlaceholder = true;
-
-	if (!markerpoints.empty()) {
 		QString textString;
 		textString = QString::number(markerpoints[0].x)+ ", ";
 		textString.append(QString(QString(markerpoints[0].curve->name()+":")));
 		textString.append(QString::number(markerpoints[0].y));
 		text.text = textString;
 
-		// TODO: Find better solution than using textedit
-		QTextEdit textedit(QString("&(x), ")+ QString(markerpoints[0].curve->name()+":"+"&("+markerpoints[0].curve->name()+")"));
-		text.textPlaceholder = textedit.toHtml();
-	} else
-		text.textPlaceholder = i18n("Please Add Text here");
 
-	m_title->setText(text);
+		// TODO: Find better solution than using textedit
+		QString str = QLatin1String("&(x), ") + markerpoints[0].curve->name()
+								+ QLatin1Char(':') + QLatin1String("&(") + markerpoints[0].curve->name() + QLatin1Char(')');
+		QTextEdit textedit(str);
+		text.textPlaceholder = textedit.toHtml();
+
+		m_title->setText(text);
+
+		connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+		custompoint->setVisible(curve->isVisible());
+
+		setVisible(true);
+	} else
+		setVisible(false);
 
 	m_suppressChildPositionChanged = false;
 
@@ -232,6 +231,8 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
 	markerpoints.append(markerpoint);
 
+	m_title->setText(createTextLabelText());
+
 	if (markerpoints.length() == 1) {
 		// Do a retransform, because when the first markerpoint
 		// was added, after a curve was removed and added, the
@@ -318,6 +319,8 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 		}
 	}
 
+	m_title->setText(createTextLabelText());
+
 	//hide the label if now curves are selected
 	if (markerpoints.isEmpty()) {
 		m_title->setVisible(false); //hide in the worksheet view
@@ -384,47 +387,42 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	if (!markerpoints[0].curve->xColumn())
 		return wrapper; //no data is set in the curve yet, nothing to do
 
-	AbstractColumn::ColumnMode columnMode = markerpoints[0].curve->xColumn()->columnMode();
-	QString placeholderText = wrapper.textPlaceholder;
-	if (!wrapper.teXUsed) {
-		double value = markerpoints[0].x;
-		if (columnMode== AbstractColumn::ColumnMode::Numeric ||
-			columnMode == AbstractColumn::ColumnMode::Integer)
-			placeholderText.replace("&amp;(x)",QString::number(value));
-		else if (columnMode== AbstractColumn::ColumnMode::Day ||
-				columnMode == AbstractColumn::ColumnMode::Month ||
-				columnMode == AbstractColumn::ColumnMode::DateTime) {
-			QDateTime dateTime;
-			dateTime.setTime_t(value);
-			QString dateTimeString = dateTime.toString();
-			placeholderText.replace("&amp;(x)",dateTimeString);
-		}
-	} else {
-		if (columnMode== AbstractColumn::ColumnMode::Numeric ||
-			columnMode == AbstractColumn::ColumnMode::Integer)
-			placeholderText.replace("&(x)",QString::number(markerpoints[0].x));
-		else if (columnMode== AbstractColumn::ColumnMode::Day ||
-				columnMode == AbstractColumn::ColumnMode::Month ||
-				columnMode == AbstractColumn::ColumnMode::DateTime) {
-			QDateTime dateTime;
-			dateTime.setTime_t(markerpoints[0].x);
-			QString dateTimeString = dateTime.toString();
-			placeholderText.replace("&(x)",dateTimeString);
-		}
+	Q_D(const InfoElement);
+
+	QString text = wrapper.textPlaceholder;
+
+	//replace the placeholder for the x-value
+	QString xValueStr;
+	auto columnMode = markerpoints[0].curve->xColumn()->columnMode();
+	if (columnMode== AbstractColumn::ColumnMode::Numeric
+		|| columnMode == AbstractColumn::ColumnMode::Integer
+		|| columnMode == AbstractColumn::ColumnMode::BigInt)
+		xValueStr = QString::number(d->position);
+	else if (columnMode== AbstractColumn::ColumnMode::Day ||
+			columnMode == AbstractColumn::ColumnMode::Month ||
+			columnMode == AbstractColumn::ColumnMode::DateTime) {
+		QDateTime dateTime = QDateTime::fromMSecsSinceEpoch(d->position);
+		xValueStr = dateTime.toString(plot()->xRangeDateTimeFormat());
 	}
 
-	for (int i=0; i< markerpoints.length(); i++) {
+	if (!wrapper.teXUsed)
+		text.replace("&amp;(x)", xValueStr);
+	else
+		text.replace("&(x)", xValueStr);
+
+	//replace the placeholders for curve's y-values
+	for (const auto& markerpoint : markerpoints) {
 		QString replace;
 		if(!wrapper.teXUsed)
-			replace = QString("&amp;(");
+			replace = QLatin1String("&amp;(");
 		else
-			replace = QString("&(");
+			replace = QLatin1String("&(");
 
-		replace+=  markerpoints[i].curve->name() + QString(")");
-		placeholderText.replace(replace, QString::number(markerpoints[i].y));
+		replace += markerpoint.curve->name() + QLatin1Char(')');
+		text.replace(replace, QString::number(markerpoint.customPoint->position().y()));
 	}
 
-	wrapper.text = placeholderText;
+	wrapper.text = text;
 	return wrapper;
 }
 
@@ -560,8 +558,8 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 		return;
 
 	// point removed
-	const CustomPoint* point = dynamic_cast<const CustomPoint*> (child);
-	if (point != nullptr) {
+	const CustomPoint* point = dynamic_cast<const CustomPoint*>(child);
+	if (point) {
 		for (int i =0; i< markerpoints.length(); i++) {
 			if (point == markerpoints[i].customPoint)
 				markerpoints.removeAt(i);
@@ -1018,7 +1016,7 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 	QPointF eventPos = mapToParent(event->pos());
-	DEBUG("EventPos: " << eventPos.x() << " Y: " << eventPos.y());
+// 	DEBUG("EventPos: " << eventPos.x() << " Y: " << eventPos.y());
 	QPointF delta = eventPos - oldMousePos;
 	if (delta == QPointF(0,0))
 		return;
