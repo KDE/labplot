@@ -1,9 +1,9 @@
 /***************************************************************************
     File                 : CustomPointDock.cpp
     Project              : LabPlot
-    Description          : widget for Datapicker-Point properties
+    Description          : widget for CustomPoint properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -37,7 +37,7 @@
 #include <QPainter>
 #include <QDir>
 
-CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
+CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_leComment = ui.leComment;
@@ -63,27 +63,27 @@ CustomPointDock::CustomPointDock(QWidget *parent): BaseDock(parent) {
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &CustomPointDock::commentChanged);
-	connect( ui.lePositionX, SIGNAL(returnPressed()), this, SLOT(positionXChanged()) );
-	connect( ui.lePositionY, SIGNAL(returnPressed()), this, SLOT(positionYChanged()) );
-	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect(ui.lePositionX, &QLineEdit::textChanged, this, &CustomPointDock::positionXChanged);
+	connect(ui.lePositionY, &QLineEdit::textChanged, this, &CustomPointDock::positionYChanged);
+	connect( ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
 
 	//Symbols
-	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolStyleChanged(int)) );
-	connect( ui.sbSymbolSize, SIGNAL(valueChanged(double)), this, SLOT(symbolSizeChanged(double)) );
-	connect( ui.sbSymbolRotation, SIGNAL(valueChanged(int)), this, SLOT(symbolRotationChanged(int)) );
-	connect( ui.sbSymbolOpacity, SIGNAL(valueChanged(int)), this, SLOT(symbolOpacityChanged(int)) );
-	connect( ui.cbSymbolFillingStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolFillingStyleChanged(int)) );
-	connect( ui.kcbSymbolFillingColor, SIGNAL(changed(QColor)), this, SLOT(symbolFillingColorChanged(QColor)) );
-	connect( ui.cbSymbolBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolBorderStyleChanged(int)) );
-	connect( ui.kcbSymbolBorderColor, SIGNAL(changed(QColor)), this, SLOT(symbolBorderColorChanged(QColor)) );
-	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolBorderWidthChanged(double)) );
+	connect( ui.cbSymbolStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::symbolStyleChanged);
+	connect( ui.sbSymbolSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CustomPointDock::symbolSizeChanged);
+	connect( ui.sbSymbolRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &CustomPointDock::symbolRotationChanged);
+	connect( ui.sbSymbolOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &CustomPointDock::symbolOpacityChanged);
+	connect( ui.cbSymbolFillingStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::symbolFillingStyleChanged);
+	connect( ui.kcbSymbolFillingColor, &KColorButton::changed, this, &CustomPointDock::symbolFillingColorChanged);
+	connect( ui.cbSymbolBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::symbolBorderStyleChanged);
+	connect( ui.kcbSymbolBorderColor, &KColorButton::changed, this, &CustomPointDock::symbolBorderColorChanged);
+	connect( ui.sbSymbolBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CustomPointDock::symbolBorderWidthChanged);
 
 	//Template handler
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::CustomPoint);
 	ui.verticalLayout->addWidget(templateHandler);
-	connect(templateHandler, SIGNAL(loadConfigRequested(KConfig&)), this, SLOT(loadConfigFromTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(saveConfigRequested(KConfig&)), this, SLOT(saveConfigAsTemplate(KConfig&)));
-	connect(templateHandler, SIGNAL(info(QString)), this, SIGNAL(info(QString)));
+	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &CustomPointDock::loadConfigFromTemplate);
+	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &CustomPointDock::saveConfigAsTemplate);
+	connect(templateHandler, &TemplateHandler::info, this, &CustomPointDock::info);
 
 	init();
 }
@@ -95,8 +95,13 @@ void CustomPointDock::init() {
 	QPainter pa;
 	int iconSize = 20;
 	QPixmap pm(iconSize, iconSize);
-	QPen pen(Qt::SolidPattern, 0);
 	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
+
+	QPen pen(Qt::SolidPattern, 0);
+	const QColor& color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	pen.setColor(color);
+	pa.setPen(pen);
+
 	QTransform trafo;
 	trafo.scale(15, 15);
 	for (int i = 1; i < Symbol::stylesCount(); ++i) { //skip the first style "None"
@@ -115,13 +120,13 @@ void CustomPointDock::init() {
 }
 
 void CustomPointDock::setPoints(QList<CustomPoint*> list) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_pointsList = list;
 	m_point = list.first();
 	m_aspect = list.first();
 	Q_ASSERT(m_point);
 
-	//if there is more then one point in the list, disable the comment and name widgets in "general"
+	//if there is more than one point in the list, disable the comment and name widgets in "general"
 	if (list.size() == 1) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
@@ -145,17 +150,17 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 
 	//SIGNALs/SLOTs
 	// general
-	connect(m_point, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),this, SLOT(pointDescriptionChanged(const AbstractAspect*)));
-	connect(m_point, SIGNAL(positionChanged(QPointF)), this, SLOT(pointPositionChanged(QPointF)));
-	connect(m_point, SIGNAL(visibleChanged(bool)), this, SLOT(pointVisibilityChanged(bool)));
+	connect(m_point, &CustomPoint::aspectDescriptionChanged, this, &CustomPointDock::pointDescriptionChanged);
+	connect(m_point, &CustomPoint::positionChanged, this, &CustomPointDock::pointPositionChanged);
+	connect(m_point, &CustomPoint::visibleChanged, this, &CustomPointDock::pointVisibilityChanged);
 
 	//symbol
-	connect(m_point, SIGNAL(symbolStyleChanged(Symbol::Style)), this, SLOT(pointSymbolStyleChanged(Symbol::Style)));
-	connect(m_point, SIGNAL(symbolSizeChanged(qreal)), this, SLOT(pointSymbolSizeChanged(qreal)));
-	connect(m_point, SIGNAL(symbolRotationAngleChanged(qreal)), this, SLOT(pointSymbolRotationAngleChanged(qreal)));
-	connect(m_point, SIGNAL(symbolOpacityChanged(qreal)), this, SLOT(pointSymbolOpacityChanged(qreal)));
-	connect(m_point, SIGNAL(symbolBrushChanged(QBrush)), this, SLOT(pointSymbolBrushChanged(QBrush)));
-	connect(m_point, SIGNAL(symbolPenChanged(QPen)), this, SLOT(pointSymbolPenChanged(QPen)));
+	connect(m_point, &CustomPoint::symbolStyleChanged, this, &CustomPointDock::pointSymbolStyleChanged);
+	connect(m_point, &CustomPoint::symbolSizeChanged, this, &CustomPointDock::pointSymbolSizeChanged);
+	connect(m_point, &CustomPoint::symbolRotationAngleChanged, this, &CustomPointDock::pointSymbolRotationAngleChanged);
+	connect(m_point, &CustomPoint::symbolOpacityChanged, this, &CustomPointDock::pointSymbolOpacityChanged);
+	connect(m_point, &CustomPoint::symbolBrushChanged, this, &CustomPointDock::pointSymbolBrushChanged);
+	connect(m_point, &CustomPoint::symbolPenChanged, this, &CustomPointDock::pointSymbolPenChanged);
 }
 
 /*
@@ -165,6 +170,8 @@ void CustomPointDock::updateLocale() {
 	SET_NUMBER_LOCALE
 	ui.sbSymbolSize->setLocale(numberLocale);
 	ui.sbSymbolBorderWidth->setLocale(numberLocale);
+	ui.lePositionX->setLocale(numberLocale);
+	ui.lePositionY->setLocale(numberLocale);
 }
 
 //**********************************************************
@@ -439,8 +446,6 @@ void CustomPointDock::load() {
 	if (!m_point)
 		return;
 
-	m_initializing = true;
-
 	SET_NUMBER_LOCALE
 	ui.lePositionX->setText(numberLocale.toString(m_point->position().x()));
 	ui.lePositionY->setText(numberLocale.toString(m_point->position().y()));
@@ -459,8 +464,6 @@ void CustomPointDock::load() {
 	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_point->symbolPen().widthF(), Worksheet::Unit::Point) );
 
 	ui.chkVisible->setChecked( m_point->isVisible() );
-
-	m_initializing = false;
 }
 
 void CustomPointDock::loadConfigFromTemplate(KConfig& config) {
