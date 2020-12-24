@@ -82,16 +82,12 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 				d->xPos = xpos;
 				d->position = xpos;
 				d->m_index = curve->xColumn()->indexForValue(xpos);
-				markerpoints.last().x = xpos;
-				markerpoints.last().y = y;
 				custompoint->setPosition(QPointF(xpos,y));
 				DEBUG("Value found");
 			}
 		} else {
 			d->xPos = 0;
 			d->position = 0;
-			markerpoints.last().x = 0;
-			markerpoints.last().y = 0;
 			custompoint->setPosition(d->cSystem->mapSceneToLogical(QPointF(0,0)));
 			DEBUG("Value not found");
 		}
@@ -100,9 +96,9 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 		text.allowPlaceholder = true;
 
 		QString textString;
-		textString = QString::number(markerpoints[0].x)+ ", ";
+		textString = QString::number(markerpoints[0].customPoint->position().x()) + ", ";
 		textString.append(QString(QString(markerpoints[0].curve->name()+":")));
-		textString.append(QString::number(markerpoints[0].y));
+		textString.append(QString::number(markerpoints[0].customPoint->position().y()));
 		text.text = textString;
 
 
@@ -668,8 +664,6 @@ double InfoElement::setMarkerpointPosition(double x) {
 			x_new_first = x_new;
 		if (valueFound) {
 			m_suppressChildPositionChanged = true;
-			markerpoints[i].x = x_new;
-			markerpoints[i].y = y;
 			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
 			markerpoints[i].customPoint->setPosition(QPointF(x_new,y));
 			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
@@ -1031,12 +1025,12 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 	// TODO: find better method to do this. It's inefficient.
 	// Finding which curve should be used to find the new values
-	double x = q->markerpoints[0].x;
+	double x = xPos;
 	int activeIndex = 0;
 	for (int i=1; i< q->markerPointsCount(); i++) {
 		if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
 			// not possible to use index, because when the number of elements in the columns of the curves are not the same there is a problem
-			x = q->markerpoints[i].x; //q->markerpoints[i].curve->xColumn()->valueAt(m_index)
+			x = q->markerpoints[i].customPoint->position().x(); //q->markerpoints[i].curve->xColumn()->valueAt(m_index)
 			activeIndex = i;
 			break;
 		}
@@ -1044,7 +1038,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	x += delta_logic.x();
 	int xindex = q->markerpoints[activeIndex].curve->xColumn()->indexForValue(x);
 	double x_new = q->markerpoints[activeIndex].curve->xColumn()->valueAt(xindex);
-	if (abs(x_new - q->markerpoints[activeIndex].x) > 0) {
+	if (abs(x_new - q->markerpoints[activeIndex].customPoint->position().x()) > 0) {
 		oldMousePos = eventPos;
 		q->setPosition(x);
 	}
@@ -1156,8 +1150,6 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 		custompoint.customPoint->save(writer);
 		writer->writeStartElement("markerPoint");
 		writer->writeAttribute(QLatin1String("curvepath"), path = custompoint.curve->path());
-		writer->writeAttribute(QLatin1String("x"), QString::number(custompoint.x));
-		writer->writeAttribute(QLatin1String("y"), QString::number(custompoint.y));
 		writer->writeEndElement(); // close "markerPoint
 	}
 	writer->writeEndElement(); // close "infoElement"
@@ -1234,8 +1226,6 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			path = attribs.value("curvepath").toString();
 			addCurvePath(path, markerpoint);
-			markerpoints.last().x = attribs.value("x").toDouble();
-			markerpoints.last().y = attribs.value("y").toDouble();
 		} else if (reader->name() == "settings") {
 			attribs = reader->attributes();
 			str = attribs.value("markerIndex").toString();
