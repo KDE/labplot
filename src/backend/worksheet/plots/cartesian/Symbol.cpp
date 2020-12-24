@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Symbol
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -28,13 +28,17 @@
 
 /*!
   \class Symbol
-  \brief 
+  \brief
 
   \ingroup worksheet
 */
 
 #include "Symbol.h"
 #include <KLocalizedString>
+
+int Symbol::stylesCount() {
+	return 19;
+}
 
 QPainterPath Symbol::pathFromStyle(Symbol::Style style) {
 	QPainterPath path;

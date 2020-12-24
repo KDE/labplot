@@ -56,13 +56,9 @@ public:
 		MarkerPoints_T(CustomPoint* custompoint, QString customPointPath, const XYCurve* curve, QString curvePath):
 			customPoint(custompoint), customPointPath(customPointPath), curve(curve), curvePath(curvePath) {}
 		CustomPoint* customPoint{nullptr};
-		QString customPointPath{""};
+		QString customPointPath;
 		const XYCurve* curve{nullptr};
-		QString curvePath{""};
-        // x and y values are needed, because the columns of the curves of different Markerpoints might do not have the same
-		// length
-		double x{0}; // x Value
-		double y{0}; // y Value
+		QString curvePath;
 	};
 
 	void save(QXmlStreamWriter*) const override;
