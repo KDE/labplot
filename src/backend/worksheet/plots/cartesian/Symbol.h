@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Symbol
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -39,6 +39,7 @@ public:
 			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
 			Star4, Star5, Line, Cross};
 
+	static int stylesCount();
 	static QPainterPath pathFromStyle(Symbol::Style);
 	static QString nameFromStyle(Symbol::Style);
 };

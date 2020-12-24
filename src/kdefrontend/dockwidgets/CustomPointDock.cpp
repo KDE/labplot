@@ -99,7 +99,7 @@ void CustomPointDock::init() {
 	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
 	QTransform trafo;
 	trafo.scale(15, 15);
-	for (int i = 0; i < 18; ++i) {
+	for (int i = 1; i < Symbol::stylesCount(); ++i) { //skip the first style "None"
 		auto style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
@@ -108,7 +108,7 @@ void CustomPointDock::init() {
 		pa.translate(iconSize/2,iconSize/2);
 		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
 		pa.end();
-		ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
+		ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style), (int)style);
 	}
 	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
 	m_initializing = false;
@@ -211,8 +211,8 @@ void CustomPointDock::visibilityChanged(bool state) {
 	m_point->endMacro();
 }
 
-void CustomPointDock::symbolStyleChanged(int index) {
-	auto style = Symbol::Style(index);
+void CustomPointDock::symbolStyleChanged(int) {
+	auto style = static_cast<Symbol::Style>(ui.cbSymbolStyle->itemData(ui.cbSymbolStyle->currentIndex()).toInt());
 	//enable/disable the  filling options in the GUI depending on the currently selected points.
 	if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
 		ui.cbSymbolFillingStyle->setEnabled(true);
@@ -386,7 +386,8 @@ void CustomPointDock::pointPositionChanged(QPointF position) {
 //"Symbol"-tab
 void CustomPointDock::pointSymbolStyleChanged(Symbol::Style style) {
 	m_initializing = true;
-	ui.cbSymbolStyle->setCurrentIndex((int)style);
+	int index = ui.cbSymbolStyle->findData((int)style);
+	ui.cbSymbolStyle->setCurrentIndex(index);
 	m_initializing = false;
 }
 
@@ -444,7 +445,8 @@ void CustomPointDock::load() {
 	ui.lePositionX->setText(numberLocale.toString(m_point->position().x()));
 	ui.lePositionY->setText(numberLocale.toString(m_point->position().y()));
 
-	ui.cbSymbolStyle->setCurrentIndex( (int)m_point->symbolStyle() );
+	int index = ui.cbSymbolStyle->findData((int)m_point->symbolStyle());
+	ui.cbSymbolStyle->setCurrentIndex(index);
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_point->symbolSize(), Worksheet::Unit::Point) );
 	ui.sbSymbolRotation->setValue( m_point->symbolRotationAngle() );
 	ui.sbSymbolOpacity->setValue( qRound(m_point->symbolOpacity()*100.0) );
@@ -484,7 +486,8 @@ void CustomPointDock::loadConfigFromTemplate(KConfig& config) {
 void CustomPointDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "CustomPoint" );
 
-	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_point->symbolStyle()) );
+	int index = ui.cbSymbolStyle->findData((int)m_point->symbolStyle());
+	ui.cbSymbolStyle->setCurrentIndex(group.readEntry("SymbolStyle", index));
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_point->symbolSize()), Worksheet::Unit::Point) );
 	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_point->symbolRotationAngle()) );
 	ui.sbSymbolOpacity->setValue( qRound(group.readEntry("SymbolOpacity", m_point->symbolOpacity())*100.0) );
@@ -502,7 +505,7 @@ void CustomPointDock::loadConfig(KConfig& config) {
 
 void CustomPointDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group( "CustomPoint" );
-	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->currentText());
+	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->itemData(ui.cbSymbolStyle->currentIndex()));
 	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(), Worksheet::Unit::Point));
 	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
 	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100.0);
