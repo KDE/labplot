@@ -64,7 +64,7 @@ private:
 
 	void setModel();
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
-	void updatePlotRanges() const;
+	void updatePlotRanges() const override;
 
 	void load();
 	void loadConfig(KConfig&);

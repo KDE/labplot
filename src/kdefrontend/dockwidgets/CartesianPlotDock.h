@@ -51,6 +51,8 @@ public:
 	void activateTitleTab();
 	void updateLocale() override;
 	void updateUnits() override;
+	void updateXRangeList();
+	void updatePlotRangeList();
 
 private:
 	Ui::CartesianPlotDock ui;
@@ -58,6 +60,7 @@ private:
 	CartesianPlot* m_plot{nullptr};
 	LabelWidget* labelWidget{nullptr};
 	ThemeHandler* m_themeHandler;
+	QButtonGroup* m_bgDefaultPlotRange{nullptr};
 
 	void loadConfig(KConfig&);
 
@@ -161,6 +164,8 @@ private slots:
 	void plotYRangeChanged(Range<double>);
 	void plotYRangeFormatChanged(CartesianPlot::RangeFormat);
 	void plotYScaleChanged(CartesianPlot::Scale);
+
+	void defaultPlotRangeChanged();
 
 	void plotVisibleChanged(bool);
 

@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright         : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
     Copyright         : (C) 2019-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright         : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -62,6 +63,7 @@ public:
 
 	virtual void updateLocale() {};
 	virtual void updateUnits() {};
+	virtual void updatePlotRanges() const {};	// needed in all curve and axis docks
 
 protected:
 	bool m_initializing{false};

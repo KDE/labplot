@@ -37,6 +37,7 @@
 
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
+class CartesianCoordinateSystem;
 class AbstractColumn;
 class XYCurve;
 class XYEquationCurve;
@@ -50,8 +51,8 @@ class XYFourierFilterCurve;
 class XYFourierTransformCurve;
 class XYConvolutionCurve;
 class XYCorrelationCurve;
-class KConfig;
 class InfoElementDialog;
+class KConfig;
 
 class CartesianPlot : public AbstractPlot {
 	Q_OBJECT
@@ -138,6 +139,8 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
 	BASIC_D_ACCESSOR_DECL(Range<double>, xRange, XRange)
 	BASIC_D_ACCESSOR_DECL(Range<double>, yRange, YRange)
+	int xRangeCount() const;
+//	int yRangeCount() const;
 	Range<double> xRange(int index);
 	void setXRange(int index, Range<double>);	// set x range of d->xRanges[index]
 	// convenience methods
@@ -147,6 +150,11 @@ public:
 	void setXMax(int index, double value);	// set x max of d->xRanges[index]
 	void setYMin(double value);
 	void setYMax(double value);
+	int coordinateSystemCount() const;
+	const CartesianCoordinateSystem* coordinateSystem(int) const;
+	//TODO: set coordinateSystems: how to handle QVector?
+	//addCSystem(), removeCSystem()
+	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystem, DefaultCoordinateSystem);
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)	//TODO: need a vector to have a scale for all xRanges
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
@@ -328,6 +336,7 @@ signals:
 	void yMaxChanged(double);
 	void xScaleChanged(CartesianPlot::Scale);
 	void yScaleChanged(CartesianPlot::Scale);
+	void defaultCoordinateSystemChanged(int);
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void yRangeBreakingEnabledChanged(bool);

@@ -985,6 +985,12 @@ void CartesianPlot::setAutoScaleX(bool autoScaleX) {
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRange, Range<double>, xRange, retransformScales)
+int CartesianPlot::xRangeCount() const {
+	Q_D(const CartesianPlot);
+	if (d)
+		return d->xRanges.size();
+	return 0;
+}
 Range<double> CartesianPlot::xRange(const int index) {
 	//DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
@@ -1127,6 +1133,31 @@ void CartesianPlot::setYMax(const double value) {
 	Q_D(CartesianPlot);
 	Range<double> range{d->yRange.start(), value};
 	setYRange(range);
+}
+
+
+int CartesianPlot::coordinateSystemCount() const {
+	Q_D(const CartesianPlot);
+	return d->coordinateSystems.size();
+}
+
+const CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
+	Q_D(const CartesianPlot);
+	if (index > d->coordinateSystems.size())
+		return nullptr;
+
+	return d->coordinateSystems.at(index);
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetDefaultCoordinateSystem, int, defaultCoordinateSystem, retransformScales)
+int CartesianPlot::defaultCoordinateSystem() const {
+	Q_D(const CartesianPlot);
+	return d->defaultCoordinateSystem;
+}
+void CartesianPlot::setDefaultCoordinateSystem(int index) {
+        Q_D(CartesianPlot);
+        if (index != d->defaultCoordinateSystem)
+                exec(new CartesianPlotSetDefaultCoordinateSystemCmd(d, index, ki18n("%1: set default plot range")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYScale, CartesianPlot::Scale, yScale, retransformScales)
@@ -2697,7 +2728,7 @@ void CartesianPlotPrivate::retransformScales() {
 
 	//////////// Create X-scales ////////////////
 	//check ranges for nonlinear scales
-	if (xScale != CartesianPlot::Scale::Linear)	// do we need multiple xScales ?
+	if (xScale != CartesianPlot::Scale::Linear)	//TODO: do we need multiple xScales ?
 		checkXRange();
 
 	static const int breakGap = 20;
@@ -2763,6 +2794,7 @@ void CartesianPlotPrivate::retransformScales() {
 	plotSceneRange.setRange(dataRect.y() + dataRect.height(), dataRect.y());
 
 	// loop over all cSystems
+	i = 0; // debugging
 	for (auto cSystem : coordinateSystems) {
 		const int yRangeIndex{ cSystem->yIndex() };	// use y range of current cSystem
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range index = " << yRangeIndex)
