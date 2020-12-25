@@ -268,16 +268,33 @@ void InfoElementDock::curveSelectionChanged(int state) {
 		//TODO: add the new curve at the proper index via insertItem();
 		ui->cbConnectToCurve->addItem(curveName);
 	} else {
-		for (auto* element : m_elements)
-			element->removeCurve(curve);
+		bool macroStarted = false;
 
 		//update the "connect to" combobox
 		for (int i = 0; ui->cbConnectToCurve->count(); ++i) {
 			if (ui->cbConnectToCurve->itemText(i) == curveName) {
+
+				//removing an entry from combo box automatically triggers
+				//the selection of a new time which leads to a selection of
+				//a new "connect to"-curve in the InfoElement. To make only
+				//one single entry on the undo-stak we need to start a macro here:
+				macroStarted = true;
+				int size = m_elements.size();
+				if (size > 1)
+					m_element->beginMacro(i18n("%1 info elements: curve \"%2\" removed", size, curveName));
+				else
+					m_element->beginMacro(i18n("%1: curve \"%2\" removed", m_element->name(), curveName));
+
 				ui->cbConnectToCurve->removeItem(i);
 				break;
 			}
 		}
+
+		for (auto* element : m_elements)
+			element->removeCurve(curve);
+
+		if (macroStarted)
+			m_element->endMacro();
 	}
 }
 

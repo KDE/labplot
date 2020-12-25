@@ -209,7 +209,10 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 				y = curve->y(d->xPos, x_new, valueFound);
 			else
 				y = curve->y(markerpoints[0].customPoint->position().x(), x_new, valueFound);
+
+			custompoint->setUndoAware(false);
 			custompoint->setPosition(QPointF(x_new, y));
+			custompoint->setUndoAware(true);
 		}
 	} else
 		addChild(custompoint);
@@ -219,7 +222,10 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
 	connect(curve, &XYCurve::moveBegin, this, [this]() { m_curveGetsMoved = true; });
 	connect(curve, &XYCurve::moveEnd, this, [this]() { m_curveGetsMoved = false; });
+
+	custompoint->setUndoAware(false);
 	custompoint->setVisible(curve->isVisible());
+	custompoint->setUndoAware(true);
 
 	if (d->m_index < 0 && curve->xColumn())
 		d->m_index = curve->xColumn()->indexForValue(custompoint->position().x());
@@ -227,6 +233,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
 	markerpoints.append(markerpoint);
 
+	m_title->setUndoAware(false);
 	m_title->setText(createTextLabelText());
 
 	if (markerpoints.length() == 1) {
@@ -236,7 +243,6 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		retransform();
 	}
 
-	m_title->setUndoAware(false);
 	m_title->setVisible(true); //show in the worksheet view
 	m_title->setUndoAware(true);
 }
@@ -317,6 +323,7 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 		}
 	}
 
+	m_title->setUndoAware(false);
 	m_title->setText(createTextLabelText());
 
 	//hide the label if now curves are selected
@@ -327,6 +334,8 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 		Q_D(InfoElement);
 		d->update(); //redraw to remove all children graphic items belonging to InfoElement
 	}
+
+	m_title->setUndoAware(true);
 }
 
 /*!
@@ -473,7 +482,9 @@ void InfoElement::labelTextWrapperChanged(TextLabel::TextWrapper wrapper) {
 		return;
 
 	m_setTextLabelText = true;
+	m_title->setUndoAware(false);
 	m_title->setText(createTextLabelText());
+	m_title->setUndoAware(true);
 	m_setTextLabelText = false;
 
 	Q_D(InfoElement);
@@ -563,7 +574,9 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 		}
 		// recreate text, because when marker was deleted,
 		// the placeholder should not be replaced anymore by a value
+		m_title->setUndoAware(false);
 		m_title->setText(createTextLabelText());
+		m_title->setUndoAware(true);
 	}
 
 	// textlabel was deleted
@@ -662,12 +675,15 @@ double InfoElement::setMarkerpointPosition(double x) {
 		d->xPos = x_new;
 		if (i == 0)
 			x_new_first = x_new;
+
 		if (valueFound) {
 			m_suppressChildPositionChanged = true;
-			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-			markerpoints[i].customPoint->setPosition(QPointF(x_new,y));
-			markerpoints[i].customPoint->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-			//QPointF position = d->cSystem->mapSceneToLogical(markerpoints[i].customPoint->graphicsItem()->pos());
+			auto* point = markerpoints[i].customPoint;
+			point->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
+			point->setUndoAware(false);
+			point->setPosition(QPointF(x_new,y));
+			point->setUndoAware(false);
+			point->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 			m_suppressChildPositionChanged = false;
 		}
 	}
@@ -743,7 +759,9 @@ void InfoElement::setPosition(double pos) {
 	if (value != d->position) {
 		d->m_index = index;
 		setMarkerpointPosition(value);
+		m_title->setUndoAware(false);
 		m_title->setText(createTextLabelText());
+		m_title->setUndoAware(true);
 		exec(new InfoElementSetPositionCmd(d, pos, ki18n("%1: set position")));
 	}
 }
