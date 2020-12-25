@@ -236,7 +236,9 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		retransform();
 	}
 
+	m_title->setUndoAware(false);
 	m_title->setVisible(true); //show in the worksheet view
+	m_title->setUndoAware(true);
 }
 
 /*!
@@ -319,7 +321,9 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 
 	//hide the label if now curves are selected
 	if (markerpoints.isEmpty()) {
+		m_title->setUndoAware(false);
 		m_title->setVisible(false); //hide in the worksheet view
+		m_title->setUndoAware(true);
 		Q_D(InfoElement);
 		d->update(); //redraw to remove all children graphic items belonging to InfoElement
 	}
@@ -519,17 +523,13 @@ void InfoElement::curveVisibilityChanged() {
 		}
 	}
 
-	// if no markerpoints are visible, hide all infoElement elements
-	if ((!visible && markerpoints.count() == 0) || !oneMarkerpointVisible) {
-		//TODO
-// 		setConnectionLineVisible(false);
-// 		setXPosLineVisible(false);
+	// if no markerpoints are visible, hide the title label
+	m_title->setUndoAware(false);
+	if ((!visible && markerpoints.count() == 0) || !oneMarkerpointVisible)
 		m_title->setVisible(false);
-	} else {
-// 		setConnectionLineVisible(true);
-// 		setXPosLineVisible(true);
+	else
 		m_title->setVisible(true);
-	}
+	m_title->setUndoAware(true);
 }
 
 void InfoElement::labelBorderShapeChanged() {
@@ -916,8 +916,11 @@ void InfoElementPrivate::updateConnectionLine() {
 void InfoElementPrivate::visibilityChanged() {
 	for(auto markerpoint: q->markerpoints)
 		markerpoint.customPoint->setVisible(visible);
-	if(q->m_title)
+	if(q->m_title) {
+		q->m_title->setUndoAware(false);
 		q->m_title->setVisible(visible);
+		q->m_title->setUndoAware(true);
+	}
 	update(boundingRect());
 }
 
@@ -1145,11 +1148,10 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 	m_title->save(writer);
 
 	//custom points
-	QString path;
 	for (auto custompoint: markerpoints) {
 		custompoint.customPoint->save(writer);
 		writer->writeStartElement("markerPoint");
-		writer->writeAttribute(QLatin1String("curvepath"), path = custompoint.curve->path());
+		writer->writeAttribute(QLatin1String("curvepath"), custompoint.curve->path());
 		writer->writeEndElement(); // close "markerPoint
 	}
 	writer->writeEndElement(); // close "infoElement"
@@ -1219,20 +1221,12 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			}
 			this->addChild(markerpoint);
 			markerpointFound = true;
-
 		} else if (reader->name() == "markerPoint") {
 			markerpointFound = false;
 			QString path;
 			attribs = reader->attributes();
 			path = attribs.value("curvepath").toString();
 			addCurvePath(path, markerpoint);
-		} else if (reader->name() == "settings") {
-			attribs = reader->attributes();
-			str = attribs.value("markerIndex").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->m_index = str.toInt();
 		}
 	}
 
