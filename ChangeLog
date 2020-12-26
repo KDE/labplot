@@ -6,6 +6,7 @@
 		* Allow to freeze the first column
 	* [worksheet]:
 		* Crosshair cursor mode in the plot
+		* New themes "Monokai", "ggplot grey", "ggplot dark"
 
 -----2.8.2 -----
 Bug fixes:

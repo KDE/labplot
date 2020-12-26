@@ -2526,6 +2526,8 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	p.setWidthF(group.readEntry("MajorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMajorTicksPen(p);
 	this->setMajorTicksOpacity(group.readEntry("MajorTicksOpacity", 1.0));
+	this->setMajorTicksDirection((Axis::TicksDirection)group.readEntry("MajorTicksDirection", (int)Axis::ticksIn));
+	this->setMajorTicksLength(group.readEntry("MajorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point)));
 
 	//Minor grid
 	if (firstAxis) {
@@ -2543,6 +2545,8 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	p.setWidthF(group.readEntry("MinorTicksWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setMinorTicksPen(p);
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity", 1.0));
+	this->setMinorTicksDirection((Axis::TicksDirection)group.readEntry("MinorTicksDirection", (int)Axis::ticksIn));
+	this->setMinorTicksLength(group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point)));
 
 	//load the theme for the title label
 	Q_D(Axis);
