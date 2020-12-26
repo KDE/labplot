@@ -37,6 +37,8 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
 
+#include <KMessageBox>
+
 #include <QCompleter>
 #include <QPainter>
 #include <QTimer>
@@ -151,6 +153,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.dateTimeEditXMax, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMaxDateTimeChanged);
 	//connect(ui.cbXScaling, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::xScaleChanged);
 	connect(ui.cbXRangeFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::xRangeFormatChanged);
+	connect(ui.tbAddXRange, &QToolButton::clicked, this, &CartesianPlotDock::addXRange);
+	connect(ui.tbRemoveXRange, &QToolButton::clicked, this, &CartesianPlotDock::removeXRange);
 
 	connect(ui.chkAutoScaleY, &QCheckBox::stateChanged, this, &CartesianPlotDock::autoScaleYChanged);
 	connect(ui.leYMin, &QLineEdit::textChanged, this, &CartesianPlotDock::yMinChanged);
@@ -528,7 +532,10 @@ void CartesianPlotDock::updateXRangeList() {
 //	ui.twXRanges->resizeColumnToContents(2);
 	ui.twXRanges->resizeColumnToContents(3);
 
+	ui.tbRemoveXRange->setEnabled(xRangeCount > 1 ? true : false);
+
 	updateLocale();	// fill values
+	updatePlotRangeList();	// update xranges used in plot ranges
 	if (m_plot->autoScaleX())	// disable widgets for auto scale
 		autoScaleXChanged(Qt::Checked);
 }
@@ -1022,6 +1029,65 @@ void CartesianPlotDock::yRangeFormatChanged(int index) {
 	auto format = (CartesianPlot::RangeFormat)index;
 	for (auto* plot : m_plotList)
 		plot->setYRangeFormat(format);
+}
+
+void CartesianPlotDock::addXRange() {
+	if (!m_plot)
+		return;
+
+	DEBUG(Q_FUNC_INFO << ", current x range count = " << m_plot->xRangeCount())
+
+	m_plot->addXRange();
+	updateXRangeList();
+}
+
+void CartesianPlotDock::removeXRange() {
+	if (!m_plot)
+		return;
+
+	int currentRow{ ui.twXRanges->currentRow() };
+	QDEBUG(Q_FUNC_INFO << ", current row = " << currentRow)
+	if (currentRow < 0 || currentRow > m_plot->xRangeCount()) {
+		DEBUG(Q_FUNC_INFO << ", no current row")
+		currentRow = m_plot->xRangeCount() - 1;
+	}
+	QDEBUG(Q_FUNC_INFO << ", removing row " << currentRow)
+
+	// check plot ranges using range to remove
+	const int cSystemCount{ m_plot->coordinateSystemCount() };
+	DEBUG(Q_FUNC_INFO << ", nr of cSystems = " << cSystemCount)
+	QString msg;
+	for (int i{0}; i < cSystemCount; i++) {
+		const auto* cSystem{ m_plot->coordinateSystem(i) };
+
+		if (cSystem->xIndex() == currentRow) {
+			if (msg.size() > 0)
+				msg += ", ";
+			msg += QString::number(i+1);
+		}
+	}
+
+	if (msg.size() > 0) {
+		DEBUG(Q_FUNC_INFO << ", x range used in plot range " << msg.toStdString())
+		auto ret = KMessageBox::warningYesNo(this, i18n("X range %1 is used in plot range %2. ", currentRow+1, msg)
+							+ i18n("Really remove it?"));
+		if (ret == KMessageBox::No)
+			return;
+		else {
+			// reset x ranges of cSystems using the range to be removed
+			for (int i{0}; i < cSystemCount; i++) {
+				auto* cSystem{ m_plot->coordinateSystem(i) };
+
+				if (cSystem->xIndex() == currentRow)
+					cSystem->setXIndex(0);	// first range
+				else if (cSystem->xIndex() > currentRow)
+					cSystem->setXIndex(cSystem->xIndex() - 1);
+			}
+		}
+	}
+
+	m_plot->removeXRange(currentRow);
+	updateXRangeList();
 }
 
 // "Range Breaks"-tab

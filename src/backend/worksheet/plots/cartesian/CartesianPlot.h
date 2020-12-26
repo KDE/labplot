@@ -143,6 +143,8 @@ public:
 //	int yRangeCount() const;
 	Range<double> xRange(int index);
 	void setXRange(int index, Range<double>);	// set x range of d->xRanges[index]
+	void addXRange();				// add new x range
+	void removeXRange(int index);			// remove selected x range
 	// convenience methods
 //	void setXMin(const double value);
 	void setXMin(int index, double value);	// set x min of d->xRanges[index]
@@ -151,7 +153,7 @@ public:
 	void setYMin(double value);
 	void setYMax(double value);
 	int coordinateSystemCount() const;
-	const CartesianCoordinateSystem* coordinateSystem(int) const;
+	CartesianCoordinateSystem* coordinateSystem(int) const;
 	//TODO: set coordinateSystems: how to handle QVector?
 	//addCSystem(), removeCSystem()
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystem, DefaultCoordinateSystem);

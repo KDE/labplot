@@ -87,6 +87,8 @@ private slots:
 	//void xRangeDateTimeChanged(const Range<quint64>&);
 	void xRangeFormatChanged(int);
 	void xScaleChanged(int);
+	void addXRange();
+	void removeXRange();
 
 	void autoScaleYChanged(int);
 	void yMinChanged(const QString&);

@@ -1006,6 +1006,19 @@ void CartesianPlot::setXRange(Range<double> range) {
 			scaleAutoY();
 	}
 }
+void CartesianPlot::addXRange() {
+	Q_D(CartesianPlot);
+	d->xRanges.append(Range<double>());
+}
+
+void CartesianPlot::removeXRange(int index) {
+	Q_D(CartesianPlot);
+	if (index < 0 || index > d->xRanges.size()) {
+		DEBUG(Q_FUNC_INFO << ", index out of range")
+		return;
+	}
+	d->xRanges.remove(index);
+}
 
 // set x range command with index
 class CartesianPlotSetXRangeIndexCmd: public StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>> {
@@ -1141,7 +1154,7 @@ int CartesianPlot::coordinateSystemCount() const {
 	return d->coordinateSystems.size();
 }
 
-const CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
+CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
 	Q_D(const CartesianPlot);
 	if (index > d->coordinateSystems.size())
 		return nullptr;
