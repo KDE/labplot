@@ -185,7 +185,7 @@ void ExportWorksheetDialog::slotButtonClicked(QAbstractButton* button) {
 
 //SLOTS
 void ExportWorksheetDialog::okClicked() {
-	if ( QFile::exists(ui->leFileName->text()) ) {
+	if ( m_askOverwrite && QFile::exists(ui->leFileName->text()) ) {
 		int r = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
 		if (r == KMessageBox::No)
 			return;
@@ -237,7 +237,14 @@ void ExportWorksheetDialog::selectFile() {
 
 	const QString path = QFileDialog::getSaveFileName(this, i18n("Export to file"), dir, format);
 	if (!path.isEmpty()) {
+		//if the file is already existing, the user was already asked
+		//in QFileDialog whether to overwrite or not.
+		//Don't ask again when the user click on Ok-button.
+		m_askOverwrite = false;
+
+		m_initializing = true;
 		ui->leFileName->setText(path);
+		m_initializing = false;
 
 		int pos = path.lastIndexOf(QLatin1String("/"));
 		if (pos != -1) {
@@ -292,6 +299,9 @@ void ExportWorksheetDialog::exportToChanged(int index) {
 }
 
 void ExportWorksheetDialog::fileNameChanged(const QString& name) {
+	if (m_initializing)
+		return;
+
 	if (name.simplified().isEmpty()) {
 		m_okButton->setEnabled(false);
 		return;
@@ -308,5 +318,6 @@ void ExportWorksheetDialog::fileNameChanged(const QString& name) {
 		}
 	}
 
+	m_askOverwrite = true;
 	m_okButton->setEnabled(true);
 }
