@@ -663,7 +663,7 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksPen, QPen, majorTicksPen, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksPen, QPen, majorTicksPen, retransformTicks /* need to retransform because of "no line" handling */);
 void Axis::setMajorTicksPen(const QPen& pen) {
 	Q_D(Axis);
 	if (pen != d->majorTicksPen)
@@ -728,7 +728,7 @@ void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksPen, QPen, minorTicksPen, recalcShapeAndBoundingRect);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMinorTicksPen, QPen, minorTicksPen, retransformTicks /* need to retransform because of "no line" handling */);
 void Axis::setMinorTicksPen(const QPen& pen) {
 	Q_D(Axis);
 	if (pen != d->minorTicksPen)
@@ -1353,8 +1353,10 @@ void AxisPrivate::retransformTicks() {
 
 			//add major tick's line to the painter path
 			if (valid) {
-				majorTicksPath.moveTo(startPoint);
-				majorTicksPath.lineTo(endPoint);
+				if (majorTicksPen.style() != Qt::NoPen) {
+					majorTicksPath.moveTo(startPoint);
+					majorTicksPath.lineTo(endPoint);
+				}
 				majorTickPoints << anchorPoint;
 				tickLabelValues << value;
 			}
@@ -1418,8 +1420,10 @@ void AxisPrivate::retransformTicks() {
 
 				//add minor tick's line to the painter path
 				if (valid) {
-					minorTicksPath.moveTo(startPoint);
-					minorTicksPath.lineTo(endPoint);
+					if (minorTicksPen.style() != Qt::NoPen) {
+						minorTicksPath.moveTo(startPoint);
+						minorTicksPath.lineTo(endPoint);
+					}
 					minorTickPoints << anchorPoint;
 				}
 			}
@@ -2546,7 +2550,7 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setMinorTicksPen(p);
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity", 1.0));
 	this->setMinorTicksDirection((Axis::TicksDirection)group.readEntry("MinorTicksDirection", (int)Axis::ticksIn));
-	this->setMinorTicksLength(group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(6.0, Worksheet::Unit::Point)));
+	this->setMinorTicksLength(group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point)));
 
 	//load the theme for the title label
 	Q_D(Axis);
