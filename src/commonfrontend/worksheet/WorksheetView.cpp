@@ -1650,9 +1650,12 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	if (area == ExportArea::BoundingBox)
 		sourceRect = scene()->itemsBoundingRect();
 	else if (area == ExportArea::Selection) {
-		//TODO doesn't work: rect = scene()->selectionArea().boundingRect();
-		for (const auto* item : m_selectedItems)
-			sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
+		if (!m_selectedItems.isEmpty()) {
+			//TODO doesn't work: rect = scene()->selectionArea().boundingRect();
+			for (const auto* item : m_selectedItems)
+				sourceRect = sourceRect.united( item->mapToScene(item->boundingRect()).boundingRect() );
+		} else
+			sourceRect = scene()->sceneRect(); //export everything if nothing is selected
 	} else
 		sourceRect = scene()->sceneRect();
 

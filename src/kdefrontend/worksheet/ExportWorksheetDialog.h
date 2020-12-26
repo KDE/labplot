@@ -56,6 +56,8 @@ public:
 private:
 	Ui::ExportWorksheetWidget* ui;
 	bool m_showOptions{true};
+	bool m_askOverwrite{true};
+	bool m_initializing{false};
 	QPushButton* m_showOptionsButton;
 	QPushButton* m_okButton;
 	QPushButton* m_cancelButton;
