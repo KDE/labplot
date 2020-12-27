@@ -73,6 +73,10 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 
 	ui.kcbFontColor->setColor(Qt::black); // default color
 
+	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
+	ui.lBindLogicalPos->setToolTip(msg);
+	ui.chbBindLogicalPos->setToolTip(msg);
+
 	//Icons
 	ui.tbFontBold->setIcon( QIcon::fromTheme(QLatin1String("format-text-bold")) );
 	ui.tbFontItalic->setIcon( QIcon::fromTheme(QLatin1String("format-text-italic")) );
@@ -1042,6 +1046,17 @@ void LabelWidget::borderOpacityChanged(int value) {
  * \param checked
  */
 void LabelWidget::bindingChanged(bool checked) {
+	ui.lPositionX->setVisible(!checked);
+	ui.cbPositionX->setVisible(!checked);
+	ui.sbPositionX->setVisible(!checked);
+	ui.lPositionY->setVisible(!checked);
+	ui.cbPositionY->setVisible(!checked);
+	ui.sbPositionY->setVisible(!checked);
+	ui.lHorizontalAlignment->setVisible(!checked);
+	ui.cbHorizontalAlignment->setVisible(!checked);
+	ui.lVerticalAlignment->setVisible(!checked);
+	ui.cbVerticalAlignment->setVisible(!checked);
+
 	if(m_initializing)
 		return;
 
@@ -1221,15 +1236,9 @@ void LabelWidget::load() {
 
 	// don't show checkbox if Placeholder feature not used
 	bool allowPlaceholder = m_label->text().allowPlaceholder;
-	if (!allowPlaceholder) {
-		ui.chbShowPlaceholderText->setVisible(false);
-		ui.chbShowPlaceholderText->setEnabled(false);
-		ui.chbShowPlaceholderText->setChecked(false);
-	} else {
-		ui.chbShowPlaceholderText->setEnabled(true);
-		ui.chbShowPlaceholderText->setVisible(true);
-		ui.chbShowPlaceholderText->setChecked(true);
-	}
+	ui.chbShowPlaceholderText->setVisible(allowPlaceholder);
+	ui.chbShowPlaceholderText->setEnabled(allowPlaceholder);
+	ui.chbShowPlaceholderText->setChecked(allowPlaceholder);
 
 	//Text/TeX
 	ui.tbTexUsed->setChecked( (bool) m_label->text().teXUsed );
@@ -1266,7 +1275,6 @@ void LabelWidget::load() {
 	this->teXUsedChanged(m_label->text().teXUsed);
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
-	ui.chbShowPlaceholderText->setChecked(m_label->text().allowPlaceholder);
 
 	//move the cursor to the end and set the focus to the text editor
 	QTextCursor cursor = ui.teLabel->textCursor();
@@ -1275,6 +1283,10 @@ void LabelWidget::load() {
 	ui.teLabel->setFocus();
 
 	// Geometry
+	ui.chbBindLogicalPos->setVisible(m_label->isAttachedToCoordEnabled());
+	ui.chbBindLogicalPos->setChecked(m_label->isAttachedToCoord());
+	bindingChanged(m_label->isAttachedToCoord());
+
 	ui.cbPositionX->setCurrentIndex( (int)m_label->position().horizontalPosition );
 	positionXChanged(ui.cbPositionX->currentIndex());
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(), m_worksheetUnit) );
@@ -1299,9 +1311,6 @@ void LabelWidget::load() {
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( round(m_label->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-
-	ui.chbBindLogicalPos->setVisible(m_label->isAttachedToCoordEnabled());
-	ui.chbBindLogicalPos->setChecked(m_label->isAttachedToCoord());
 
 	m_initializing = false;
 }
