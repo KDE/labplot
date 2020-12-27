@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>620</width>
-    <height>1105</height>
+    <width>345</width>
+    <height>552</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -120,7 +120,21 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="5" column="0" colspan="3">
+        <widget class="QLabel" name="lPositionXDateTime">
+         <property name="text">
+          <string>x:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="4">
+        <widget class="QDateTimeEdit" name="dateTimeEditPositionX">
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
         <widget class="QLabel" name="lPositionY">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -136,14 +150,14 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="4">
+       <item row="6" column="4">
         <widget class="QLineEdit" name="lePositionY">
          <property name="showClearButton" stdset="0">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="6" column="2">
+       <item row="7" column="2">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -156,7 +170,7 @@
          </property>
         </spacer>
        </item>
-       <item row="7" column="0" colspan="3">
+       <item row="8" column="0" colspan="3">
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
           <string>Visible</string>
@@ -483,14 +497,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
