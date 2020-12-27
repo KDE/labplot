@@ -1105,7 +1105,7 @@ void CartesianPlotDock::removePlotRange() {
 	}
 	QDEBUG(Q_FUNC_INFO << ", removing plot range " << currentRow)
 
-	//TODO: check all children for cSystem usage
+	//TODO: check all children for cSystem usage in one loop (with only one messagebox)
 	for (auto* axis : m_plot->children<Axis>()) {
 		const int cSystemIndex{ axis->coordinateSystemIndex() };
 		DEBUG(Q_FUNC_INFO << ", axis x index = " << cSystemIndex)

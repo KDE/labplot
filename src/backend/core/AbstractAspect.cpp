@@ -662,7 +662,7 @@ void AbstractAspect::paste() {
 		if (reader.name() == QLatin1String("type")) {
 			auto attribs = reader.attributes();
 			auto type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
-			if (type == AspectType::AbstractAspect)
+			if (type != AspectType::AbstractAspect)
 				aspect = AspectFactory::createAspect(type);
 		} else {
 			if (aspect) {
