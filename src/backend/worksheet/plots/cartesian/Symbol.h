@@ -37,7 +37,7 @@ class Symbol {
 public:
 	enum class Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
 			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
-			Star4, Star5, Line, Cross};
+			Star4, Star5, Line, Cross, Heart, Lightning};
 
 	static int stylesCount();
 	static QPainterPath pathFromStyle(Symbol::Style);

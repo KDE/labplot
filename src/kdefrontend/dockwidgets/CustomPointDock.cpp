@@ -64,6 +64,7 @@ CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &CustomPointDock::commentChanged);
 	connect(ui.lePositionX, &QLineEdit::textChanged, this, &CustomPointDock::positionXChanged);
+	connect(ui.dateTimeEditPositionX, &QDateTimeEdit::dateTimeChanged, this, &CustomPointDock::positionXDateTimeChanged);
 	connect(ui.lePositionY, &QLineEdit::textChanged, this, &CustomPointDock::positionYChanged);
 	connect( ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
 
@@ -152,6 +153,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	//via the parent settings -> disable the positioning here.
 	bool enabled = (m_point->parentAspect()->type() != AspectType::InfoElement);
 	ui.lePositionX->setEnabled(enabled);
+	ui.dateTimeEditPositionX->setEnabled(enabled);
 	ui.lePositionY->setEnabled(enabled);
 
 	//SIGNALs/SLOTs
@@ -197,6 +199,17 @@ void CustomPointDock::positionXChanged() {
 		for (auto* point : m_pointsList)
 			point->setPosition(pos);
 	}
+}
+
+void CustomPointDock::positionXDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	quint64 x = dateTime.toMSecsSinceEpoch();
+	QPointF pos{m_point->position()};
+	pos.setX(x);
+	for (auto* point : m_pointsList)
+		point->setPosition(pos);
 }
 
 void CustomPointDock::positionYChanged() {
@@ -392,6 +405,7 @@ void CustomPointDock::pointPositionChanged(QPointF position) {
 	m_initializing = true;
 	SET_NUMBER_LOCALE
 	ui.lePositionX->setText(numberLocale.toString(position.x()));
+	ui.dateTimeEditPositionX->setDateTime(QDateTime::fromMSecsSinceEpoch(position.x()));
 	ui.lePositionY->setText(numberLocale.toString(position.y()));
 	m_initializing = false;
 }
@@ -453,7 +467,24 @@ void CustomPointDock::load() {
 		return;
 
 	SET_NUMBER_LOCALE
-	ui.lePositionX->setText(numberLocale.toString(m_point->position().x()));
+	CartesianPlot* plot = static_cast<CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
+	if (plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) {
+		ui.lPositionX->show();
+		ui.lePositionX->show();
+		ui.lPositionXDateTime->hide();
+		ui.dateTimeEditPositionX->hide();
+
+		ui.lePositionX->setText(numberLocale.toString(m_point->position().x()));
+	} else {
+		ui.lPositionX->hide();
+		ui.lePositionX->hide();
+		ui.lPositionXDateTime->show();
+		ui.dateTimeEditPositionX->show();
+
+		ui.dateTimeEditPositionX->setDisplayFormat(plot->xRangeDateTimeFormat());
+		ui.dateTimeEditPositionX->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->position().x()));
+	}
+
 	ui.lePositionY->setText(numberLocale.toString(m_point->position().y()));
 
 	int index = ui.cbSymbolStyle->findData((int)m_point->symbolStyle());

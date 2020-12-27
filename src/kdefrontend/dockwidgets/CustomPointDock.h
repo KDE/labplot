@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dock widget for the custom point on the plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -58,6 +58,7 @@ private slots:
 	//SLOTs for changes triggered in CustomPointDock
 	//General-Tab
 	void positionXChanged();
+	void positionXDateTimeChanged(const QDateTime&);
 	void positionYChanged();
 	void visibilityChanged(bool);
 

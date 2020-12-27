@@ -4,7 +4,7 @@
 	Description          : Custom user-defined point on the plot
 	--------------------------------------------------------------------
 	Copyright            : (C) 2015 Ankit Wagadre (wagadre.ankit@gmail.com)
-	Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2020 Martin Marmsoler (martin.marmsoler@gmail.com)
  ***************************************************************************/
 /***************************************************************************
@@ -516,30 +516,10 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "symbol") {
 			attribs = reader->attributes();
 
-			str = attribs.value("symbolStyle").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("symbolStyle").toString());
-			else
-				d->symbolStyle = (Symbol::Style)str.toInt();
-
-			str = attribs.value("opacity").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("opacity").toString());
-			else
-				d->symbolOpacity = str.toDouble();
-
-			str = attribs.value("rotation").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("rotation").toString());
-			else
-				d->symbolRotationAngle = str.toDouble();
-
-			str = attribs.value("size").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("size").toString());
-			else
-				d->symbolSize = str.toDouble();
-
+			READ_INT_VALUE("symbolStyle", symbolStyle, Symbol::Style);
+			READ_DOUBLE_VALUE("opacity", symbolOpacity);
+			READ_DOUBLE_VALUE("rotation", symbolRotationAngle);
+			READ_DOUBLE_VALUE("size", symbolSize);
 			READ_QBRUSH(d->symbolBrush);
 			READ_QPEN(d->symbolPen);
 		} else { // unknown element

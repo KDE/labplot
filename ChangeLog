@@ -5,8 +5,12 @@
 	* [spreadsheet]:
 		* Allow to freeze the first column
 	* [worksheet]:
+		* Info Element - a new worksheet element to annotate curve values on the plot
 		* Crosshair cursor mode in the plot
 		* New themes "Monokai", "ggplot grey", "ggplot dark"
+		* New curve symbols "heart" and "lightning"
+		* DateTime support for Custom Points
+		* Allow to specify text label's position in logical plot coordinates
 
 -----2.8.2 -----
 Bug fixes:
