@@ -125,9 +125,8 @@ void CartesianPlot::init() {
 	// TEST: second cSystem for testing
 	d->coordinateSystems.append( new CartesianCoordinateSystem(this) );
 	m_coordinateSystems.append( d->coordinateSystems.at(1) );
-	// set x range to second x range
+	// TEST: set x range to second x range
 	d->coordinateSystems[1]->setXIndex(1);
-
 	// TEST: second xrange
 	d->xRanges.append(Range<double>());
 
@@ -1014,7 +1013,7 @@ void CartesianPlot::addXRange() {
 void CartesianPlot::removeXRange(int index) {
 	Q_D(CartesianPlot);
 	if (index < 0 || index > d->xRanges.size()) {
-		DEBUG(Q_FUNC_INFO << ", index out of range")
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
 	d->xRanges.remove(index);
@@ -1148,7 +1147,6 @@ void CartesianPlot::setYMax(const double value) {
 	setYRange(range);
 }
 
-
 int CartesianPlot::coordinateSystemCount() const {
 	Q_D(const CartesianPlot);
 	return d->coordinateSystems.size();
@@ -1160,6 +1158,25 @@ CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
 		return nullptr;
 
 	return d->coordinateSystems.at(index);
+}
+
+void CartesianPlot::addCoordinateSystem() {
+	DEBUG(Q_FUNC_INFO)
+	Q_D(CartesianPlot);
+	auto* cSystem{ new CartesianCoordinateSystem(this) };
+	d->coordinateSystems.append( cSystem );
+	m_coordinateSystems.append( cSystem );
+}
+void CartesianPlot::removeCoordinateSystem(int index) {
+	DEBUG(Q_FUNC_INFO)
+	Q_D(CartesianPlot);
+	if (index < 0 || index > d->coordinateSystems.size()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return;
+	}
+
+	d->coordinateSystems.remove(index);
+	m_coordinateSystems.remove(index);
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetDefaultCoordinateSystem, int, defaultCoordinateSystem, retransformScales)

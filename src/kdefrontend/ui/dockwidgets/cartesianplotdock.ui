@@ -21,7 +21,7 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="9" column="5">
+       <item row="9" column="4">
         <widget class="QRadioButton" name="rbRangeFree">
          <property name="text">
           <string>Free</string>
@@ -31,21 +31,21 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="5">
+       <item row="0" column="4">
         <widget class="QLineEdit" name="leName">
          <property name="clearButtonEnabled" stdset="0">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="1" column="5">
+       <item row="1" column="4">
         <widget class="QLineEdit" name="leComment">
          <property name="clearButtonEnabled" stdset="0">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="4" column="5">
+       <item row="4" column="4">
         <widget class="QDoubleSpinBox" name="sbLeft">
          <property name="prefix">
           <string/>
@@ -61,7 +61,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="5">
+       <item row="5" column="4">
         <widget class="QDoubleSpinBox" name="sbTop">
          <property name="suffix">
           <string> cm</string>
@@ -74,7 +74,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="5">
+       <item row="6" column="4">
         <widget class="QDoubleSpinBox" name="sbWidth">
          <property name="suffix">
           <string> cm</string>
@@ -87,7 +87,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="5">
+       <item row="7" column="4">
         <widget class="QDoubleSpinBox" name="sbHeight">
          <property name="suffix">
           <string> cm</string>
@@ -100,71 +100,65 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="5">
+       <item row="10" column="4">
         <widget class="QLineEdit" name="leRangeLast"/>
        </item>
-       <item row="10" column="6">
+       <item row="10" column="5">
         <widget class="QLabel" name="lShowLastNPoints">
          <property name="text">
           <string>points</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="5">
+       <item row="11" column="4">
         <widget class="QLineEdit" name="leRangeFirst"/>
        </item>
-       <item row="11" column="6">
+       <item row="11" column="5">
         <widget class="QLabel" name="lShowFirstNPoints">
          <property name="text">
           <string>points</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="5">
+       <item row="15" column="4">
         <widget class="QComboBox" name="cbXRangeFormat"/>
        </item>
-       <item row="16" column="5">
-        <widget class="QLineEdit" name="leXMin">
-         <property name="placeholderText">
-          <string>Auto</string>
-         </property>
-         <property name="clearButtonEnabled" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="17" column="5">
-        <widget class="QLineEdit" name="leXMax">
-         <property name="placeholderText">
-          <string>Auto</string>
-         </property>
-         <property name="clearButtonEnabled" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="18" column="5">
+       <item row="17" column="4">
         <widget class="QDateTimeEdit" name="dateTimeEditXMin">
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="10" column="0" colspan="3">
+       <item row="10" column="0" colspan="2">
         <widget class="QRadioButton" name="rbRangeLast">
          <property name="text">
           <string>Show &amp;last</string>
          </property>
         </widget>
        </item>
-       <item row="19" column="5" rowspan="2">
+       <item row="34" column="0" colspan="2">
+        <widget class="QCheckBox" name="chkVisible">
+         <property name="text">
+          <string>Visible</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0" colspan="2">
+        <widget class="QRadioButton" name="rbRangeFirst">
+         <property name="text">
+          <string>Show f&amp;irst</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="4" rowspan="2">
         <widget class="QDateTimeEdit" name="dateTimeEditXMax">
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="14" column="0" colspan="3">
+       <item row="14" column="0" colspan="2">
         <widget class="QLabel" name="lXscale">
          <property name="font">
           <font>
@@ -177,20 +171,20 @@
          </property>
         </widget>
        </item>
-       <item row="21" column="5">
+       <item row="20" column="4">
         <widget class="QComboBox" name="cbXScaling"/>
        </item>
-       <item row="25" column="5">
+       <item row="24" column="4">
         <widget class="QCheckBox" name="chkAutoScaleY">
          <property name="text">
           <string>Auto</string>
          </property>
         </widget>
        </item>
-       <item row="26" column="5">
+       <item row="25" column="4">
         <widget class="QComboBox" name="cbYRangeFormat"/>
        </item>
-       <item row="27" column="5">
+       <item row="26" column="4">
         <widget class="QLineEdit" name="leYMin">
          <property name="placeholderText">
           <string>Auto</string>
@@ -200,7 +194,7 @@
          </property>
         </widget>
        </item>
-       <item row="28" column="5">
+       <item row="27" column="4">
         <widget class="QLineEdit" name="leYMax">
          <property name="placeholderText">
           <string>Auto</string>
@@ -210,16 +204,16 @@
          </property>
         </widget>
        </item>
-       <item row="29" column="5">
+       <item row="28" column="4">
         <widget class="QDateTimeEdit" name="dateTimeEditYMin"/>
        </item>
-       <item row="30" column="5">
+       <item row="29" column="4">
         <widget class="QDateTimeEdit" name="dateTimeEditYMax"/>
        </item>
-       <item row="31" column="5">
+       <item row="30" column="4">
         <widget class="QComboBox" name="cbYScaling"/>
        </item>
-       <item row="8" column="0" colspan="4">
+       <item row="8" column="0" colspan="3">
         <spacer name="verticalSpacer_10">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -235,7 +229,7 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="0" colspan="4">
+       <item row="2" column="0" colspan="3">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -264,21 +258,21 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="0" colspan="3">
+       <item row="0" column="0" colspan="2">
         <widget class="QLabel" name="lName">
          <property name="text">
           <string>Name:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="3">
+       <item row="1" column="0" colspan="2">
         <widget class="QLabel" name="lComment">
          <property name="text">
           <string>Comment:</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="3">
+       <item row="3" column="0" colspan="2">
         <widget class="QLabel" name="lGeometry">
          <property name="font">
           <font>
@@ -291,49 +285,49 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0" colspan="3">
+       <item row="4" column="0" colspan="2">
         <widget class="QLabel" name="lTopMargin">
          <property name="text">
           <string>Left:</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="3">
+       <item row="5" column="0" colspan="2">
         <widget class="QLabel" name="lLeftMargin">
          <property name="text">
           <string>Top:</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="3">
+       <item row="6" column="0" colspan="2">
         <widget class="QLabel" name="lBottomMargin">
          <property name="text">
           <string>Width:</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0" colspan="3">
+       <item row="7" column="0" colspan="2">
         <widget class="QLabel" name="lRightMargin">
          <property name="text">
           <string>Height:</string>
          </property>
         </widget>
        </item>
-       <item row="31" column="0" colspan="3">
+       <item row="30" column="0" colspan="2">
         <widget class="QLabel" name="lXScaling_2">
          <property name="text">
           <string>Scaling:</string>
          </property>
         </widget>
        </item>
-       <item row="30" column="0" colspan="3">
+       <item row="29" column="0" colspan="2">
         <widget class="QLabel" name="lYMaxDateTime">
          <property name="text">
           <string>Maximum:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="3">
+       <item row="0" column="2">
         <spacer name="horizontalSpacer_4">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -349,28 +343,7 @@
          </property>
         </spacer>
        </item>
-       <item row="34" column="0" colspan="3">
-        <widget class="QCheckBox" name="chkVisible">
-         <property name="text">
-          <string>Visible</string>
-         </property>
-        </widget>
-       </item>
-       <item row="11" column="0" colspan="3">
-        <widget class="QRadioButton" name="rbRangeFirst">
-         <property name="text">
-          <string>Show f&amp;irst</string>
-         </property>
-        </widget>
-       </item>
-       <item row="15" column="0" colspan="3">
-        <widget class="QLabel" name="lXRangeFormat">
-         <property name="text">
-          <string>Format:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0" colspan="3">
+       <item row="9" column="0" colspan="2">
         <widget class="QLabel" name="lDataRange">
          <property name="font">
           <font>
@@ -383,7 +356,7 @@
          </property>
         </widget>
        </item>
-       <item row="13" column="0" colspan="3">
+       <item row="13" column="0" colspan="2">
         <spacer name="verticalSpacer_11">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -399,42 +372,21 @@
          </property>
         </spacer>
        </item>
-       <item row="16" column="0" colspan="3">
-        <widget class="QLabel" name="lXMin">
-         <property name="text">
-          <string>Minimum:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="17" column="0" colspan="3">
-        <widget class="QLabel" name="lXMax">
-         <property name="text">
-          <string>Maximum:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="18" column="0" colspan="3">
+       <item row="17" column="0" colspan="2">
         <widget class="QLabel" name="lXMinDateTime">
          <property name="text">
           <string>Minimum:</string>
          </property>
         </widget>
        </item>
-       <item row="19" column="0" rowspan="2" colspan="3">
+       <item row="18" column="0" rowspan="2" colspan="2">
         <widget class="QLabel" name="lXMaxDateTime">
          <property name="text">
           <string>Maximum:</string>
          </property>
         </widget>
        </item>
-       <item row="21" column="0" colspan="3">
-        <widget class="QLabel" name="lXScaling">
-         <property name="text">
-          <string>Scaling:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="25" column="0" colspan="3">
+       <item row="24" column="0" colspan="2">
         <widget class="QLabel" name="lYscale">
          <property name="font">
           <font>
@@ -447,35 +399,35 @@
          </property>
         </widget>
        </item>
-       <item row="26" column="0" colspan="3">
+       <item row="25" column="0" colspan="2">
         <widget class="QLabel" name="lYRangeFormat">
          <property name="text">
           <string>Format:</string>
          </property>
         </widget>
        </item>
-       <item row="27" column="0" colspan="3">
+       <item row="26" column="0" colspan="2">
         <widget class="QLabel" name="lYMin">
          <property name="text">
           <string>Minimum:</string>
          </property>
         </widget>
        </item>
-       <item row="28" column="0" colspan="3">
+       <item row="27" column="0" colspan="2">
         <widget class="QLabel" name="lYMax">
          <property name="text">
           <string>Maximum:</string>
          </property>
         </widget>
        </item>
-       <item row="29" column="0" colspan="3">
+       <item row="28" column="0" colspan="2">
         <widget class="QLabel" name="lYMinDateTime">
          <property name="text">
           <string>Minimum:</string>
          </property>
         </widget>
        </item>
-       <item row="24" column="5">
+       <item row="23" column="4">
         <spacer name="verticalSpacer_6">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -491,32 +443,16 @@
          </property>
         </spacer>
        </item>
-       <item row="32" column="0">
-        <widget class="QLabel" name="lPlotRanges">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Plot Ranges:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="23" column="0" colspan="7">
+       <item row="22" column="0" colspan="6">
         <widget class="QTableWidget" name="twXRanges">
+         <property name="toolTip">
+          <string>List of x ranges</string>
+         </property>
          <property name="columnCount">
           <number>4</number>
          </property>
-         <attribute name="horizontalHeaderCascadingSectionResizes">
-          <bool>false</bool>
-         </attribute>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>51</number>
-         </attribute>
-         <attribute name="horizontalHeaderMinimumSectionSize">
-          <number>50</number>
+          <number>80</number>
          </attribute>
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>true</bool>
@@ -546,8 +482,11 @@
          </column>
         </widget>
        </item>
-       <item row="32" column="2" colspan="5">
+       <item row="32" column="1" colspan="5">
         <widget class="QTableWidget" name="twPlotRanges">
+         <property name="toolTip">
+          <string>List of plot ranges</string>
+         </property>
          <attribute name="horizontalHeaderDefaultSectionSize">
           <number>100</number>
          </attribute>
@@ -574,7 +513,7 @@
          </column>
         </widget>
        </item>
-       <item row="14" column="5">
+       <item row="14" column="4">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QCheckBox" name="chkAutoScaleX">
@@ -585,6 +524,9 @@
          </item>
          <item>
           <widget class="QToolButton" name="tbAddXRange">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add a new x range&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
@@ -597,6 +539,9 @@
          </item>
          <item>
           <widget class="QToolButton" name="tbRemoveXRange">
+           <property name="toolTip">
+            <string>Remove the current x range</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
@@ -606,6 +551,57 @@
             </iconset>
            </property>
           </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="32" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="lPlotRanges">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Plot Ranges:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QToolButton" name="tbAddPlotRange">
+             <property name="toolTip">
+              <string>Add new plot range</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset theme="list-add">
+               <normaloff/>
+              </iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="tbRemovePlotRange">
+             <property name="toolTip">
+              <string>Remove current plot range</string>
+             </property>
+             <property name="text">
+              <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset theme="list-remove">
+               <normaloff/>
+              </iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -1519,8 +1515,6 @@
   <tabstop>rbRangeFirst</tabstop>
   <tabstop>leRangeFirst</tabstop>
   <tabstop>cbXRangeFormat</tabstop>
-  <tabstop>leXMin</tabstop>
-  <tabstop>leXMax</tabstop>
   <tabstop>dateTimeEditXMin</tabstop>
   <tabstop>dateTimeEditXMax</tabstop>
   <tabstop>cbXScaling</tabstop>
@@ -1568,5 +1562,38 @@
   <tabstop>sbPaddingBottom</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>tbAddPlotRange</sender>
+   <signal>clicked()</signal>
+   <receiver>CartesianPlotDock</receiver>
+   <slot>addPlotRange()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>42</x>
+     <y>1280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>229</x>
+     <y>683</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tbRemovePlotRange</sender>
+   <signal>clicked()</signal>
+   <receiver>CartesianPlotDock</receiver>
+   <slot>removePlotRange()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>89</x>
+     <y>1280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>229</x>
+     <y>683</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

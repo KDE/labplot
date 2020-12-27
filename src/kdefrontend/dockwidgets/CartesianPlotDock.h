@@ -89,6 +89,8 @@ private slots:
 	void xScaleChanged(int);
 	void addXRange();
 	void removeXRange();
+	void addPlotRange();
+	void removePlotRange();
 
 	void autoScaleYChanged(int);
 	void yMinChanged(const QString&);

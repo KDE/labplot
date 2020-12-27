@@ -154,8 +154,8 @@ public:
 	void setYMax(double value);
 	int coordinateSystemCount() const;
 	CartesianCoordinateSystem* coordinateSystem(int) const;
-	//TODO: set coordinateSystems: how to handle QVector?
-	//addCSystem(), removeCSystem()
+	void addCoordinateSystem();			// add a new cooridnate system
+	void removeCoordinateSystem(int index);		// remove coordinate system of index
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystem, DefaultCoordinateSystem);
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)	//TODO: need a vector to have a scale for all xRanges
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)

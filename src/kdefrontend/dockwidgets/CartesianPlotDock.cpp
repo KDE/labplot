@@ -29,6 +29,7 @@
 
 #include "CartesianPlotDock.h"
 #include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/core/column/Column.h"
 
@@ -594,15 +595,17 @@ void CartesianPlotDock::updatePlotRangeList() {
 		m_bgDefaultPlotRange = new QButtonGroup(this);
 		connect(m_bgDefaultPlotRange, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), this, &CartesianPlotDock::defaultPlotRangeChanged);
 	}
-	for (int i{0}; i < ui.twPlotRanges->rowCount(); i++) {
+	for (int i{0}; i < cSystemCount; i++) {
 		QRadioButton *rb = new QRadioButton();
 		if (i == m_plot->defaultCoordinateSystem())
 			rb->setChecked(true);
 		m_bgDefaultPlotRange->addButton(rb);
-		rb->setStyleSheet("margin-left:50%; margin-right:50%;");
+		rb->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
 		ui.twPlotRanges->setCellWidget(i, 2, rb);
 		m_bgDefaultPlotRange->setId(rb, i);
 	}
+
+	ui.tbRemovePlotRange->setEnabled(cSystemCount > 1 ? true : false);
 }
 
 //************************************************************
@@ -625,7 +628,6 @@ void CartesianPlotDock::retranslateUi() {
 	//ui.cbXScaling->addItem( i18n("log2(abs(x))") );
 	//ui.cbXScaling->addItem( i18n("ln(abs(x))") );
 	ui.cbXScaling->hide();
-	ui.lXScaling->hide();
 
 	//TODO: avoid copy-paste (see XScaling)
 	ui.cbYScaling->addItem( i18n("linear") );
@@ -764,8 +766,6 @@ void CartesianPlotDock::autoScaleXChanged(int state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
 	bool checked = (state == Qt::Checked);
 	ui.cbXRangeFormat->setEnabled(!checked);
-	ui.leXMin->setEnabled(false);
-	ui.leXMax->setEnabled(false);
 	ui.dateTimeEditXMin->setEnabled(!checked);
 	ui.dateTimeEditXMax->setEnabled(!checked);
 	for (int row{0}; row < ui.twXRanges->rowCount(); row++ ) {
@@ -872,12 +872,6 @@ void CartesianPlotDock::xRangeFormatChanged(int index) {
 
 	const int xRangeIndex{ sender()->property("row").toInt() };
 	DEBUG(Q_FUNC_INFO << ", x range index = " << xRangeIndex)
-
-	// obsolete
-	ui.lXMin->setVisible(false);
-	ui.leXMin->setVisible(false);
-	ui.lXMax->setVisible(false);
-	ui.leXMax->setVisible(false);
 
 	ui.lXMinDateTime->setVisible(!numeric);
 	ui.dateTimeEditXMin->setVisible(!numeric);
@@ -1046,12 +1040,12 @@ void CartesianPlotDock::removeXRange() {
 		return;
 
 	int currentRow{ ui.twXRanges->currentRow() };
-	QDEBUG(Q_FUNC_INFO << ", current row = " << currentRow)
+	QDEBUG(Q_FUNC_INFO << ", current x range = " << currentRow)
 	if (currentRow < 0 || currentRow > m_plot->xRangeCount()) {
-		DEBUG(Q_FUNC_INFO << ", no current row")
+		DEBUG(Q_FUNC_INFO << ", no current x range")
 		currentRow = m_plot->xRangeCount() - 1;
 	}
-	QDEBUG(Q_FUNC_INFO << ", removing row " << currentRow)
+	QDEBUG(Q_FUNC_INFO << ", removing x range " << currentRow)
 
 	// check plot ranges using range to remove
 	const int cSystemCount{ m_plot->coordinateSystemCount() };
@@ -1088,6 +1082,59 @@ void CartesianPlotDock::removeXRange() {
 
 	m_plot->removeXRange(currentRow);
 	updateXRangeList();
+}
+
+void CartesianPlotDock::addPlotRange() {
+	if (!m_plot)
+		return;
+
+	DEBUG(Q_FUNC_INFO)
+
+	m_plot->addCoordinateSystem();
+	updatePlotRangeList();
+}
+
+void CartesianPlotDock::removePlotRange() {
+	DEBUG(Q_FUNC_INFO)
+
+	int currentRow{ ui.twPlotRanges->currentRow() };
+	QDEBUG(Q_FUNC_INFO << ", current plot range = " << currentRow)
+	if (currentRow < 0 || currentRow > m_plot->coordinateSystemCount()) {
+		DEBUG(Q_FUNC_INFO << ", no current plot range")
+		currentRow = m_plot->coordinateSystemCount() - 1;
+	}
+	QDEBUG(Q_FUNC_INFO << ", removing plot range " << currentRow)
+
+	//TODO: check all children for cSystem usage
+	for (auto* axis : m_plot->children<Axis>()) {
+		const int cSystemIndex{ axis->coordinateSystemIndex() };
+		DEBUG(Q_FUNC_INFO << ", axis x index = " << cSystemIndex)
+		if (cSystemIndex == currentRow) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: plot range used in axis")
+			auto ret = KMessageBox::warningYesNo(this, i18n("Plot range %1 is used by axis \"%2\". ", currentRow+1, axis->name())
+								+ i18n("Really remove it?"));
+			if (ret == KMessageBox::No)
+				return;
+			else	// reset
+				axis->setCoordinateSystemIndex(0);
+		}
+	}
+	for (auto* curve : m_plot->children<XYCurve>()) {
+		const int cSystemIndex{ curve->coordinateSystemIndex() };
+		DEBUG(Q_FUNC_INFO << ", curve x index = " << cSystemIndex)
+		if (cSystemIndex == currentRow) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: plot range used in curve")
+			auto ret = KMessageBox::warningYesNo(this, i18n("Plot range %1 is used in curve \"%2\". ", currentRow+1, curve->name())
+								+ i18n("Really remove it?"));
+			if (ret == KMessageBox::No)
+				return;
+			else	// reset
+				curve->setCoordinateSystemIndex(0);
+		}
+	}
+
+	m_plot->removeCoordinateSystem(currentRow);
+	updatePlotRangeList();
 }
 
 // "Range Breaks"-tab
