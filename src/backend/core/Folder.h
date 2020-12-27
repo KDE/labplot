@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Folder in a project
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
 
@@ -46,6 +46,7 @@ public:
 	void setPathesToLoad(const QStringList&);
 	const QStringList& pathesToLoad() const;
 
+	QVector<AspectType> pasteTypes() const override;
 	bool isDraggable() const override;
 	QVector<AspectType> dropableOn() const override;
 	void processDropEvent(const QVector<quintptr>&) override;

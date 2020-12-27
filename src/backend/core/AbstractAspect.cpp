@@ -29,6 +29,7 @@
 
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectPrivate.h"
+#include "backend/core/AspectFactory.h"
 #include "backend/core/aspectcommands.h"
 #include "backend/core/Project.h"
 #include "backend/datasources/LiveDataSource.h"
@@ -39,7 +40,10 @@
 #include "backend/datasources/MQTTClient.h"
 #endif
 
+#include <QClipboard>
 #include <QMenu>
+#include <QMimeData>
+#include <KStandardAction>
 
 /**
  * \class AbstractAspect
@@ -302,9 +306,22 @@ QMenu* AbstractAspect::createContextMenu() {
 
 	//TODO: activate this again when the functionality is implemented
 // 	menu->addAction( KStandardAction::cut(this) );
-// 	menu->addAction(KStandardAction::copy(this));
-// 	menu->addAction(KStandardAction::paste(this));
-// 	menu->addSeparator();
+
+	auto* action = KStandardAction::copy(this);
+	connect(action, &QAction::triggered, this, &AbstractAspect::copy);
+	menu->addAction(action);
+
+	//determine the aspect type of the content available in the clipboard
+	//and enable the paste entry if the content is labplot specific
+	//and if it can be pasted into the current aspect
+	auto t = clipboardAspectType();
+	if (t != AspectType::AbstractAspect && pasteTypes().indexOf(t) != -1) {
+		auto* action = KStandardAction::paste(this);
+// 		QAction* action = new QAction("paste");
+		menu->addAction(action);
+		connect(action, &QAction::triggered, this, &AbstractAspect::paste);
+	}
+	menu->addSeparator();
 
 	//don't allow to rename and delete
 	// - data spreadsheets of datapicker curves
@@ -584,6 +601,113 @@ QVector<AbstractAspect*> AbstractAspect::dependsOn() const {
 		aspects << parentAspect() << parentAspect()->dependsOn();
 
 	return aspects;
+}
+
+/*!
+ * return the list of all aspect types that can be copy&pasted into the current aspect.
+ * returns an empty list on default, needs to be re-implemented in all derived classes
+ * that want to allow other aspects to be pasted into.
+ */
+QVector<AspectType> AbstractAspect::pasteTypes() const {
+	return QVector<AspectType>();
+}
+
+/*!
+ * copies the aspect to the clipboard. The standard XML-serialization
+ * via AbstractAspect::load() is used.
+ */
+void AbstractAspect::copy() const {
+	QString output;
+	QXmlStreamWriter writer(&output);
+	writer.writeStartDocument();
+
+	//add LabPlot's copy&paste "identifier"
+	writer.writeDTD(QLatin1String("<!DOCTYPE LabPlotCopyPasteXML>"));
+
+	//write the type of the copied aspect
+	writer.writeStartElement(QLatin1String("type"));
+	writer.writeAttribute(QLatin1String("value"), QString::number(static_cast<int>(m_type)));
+	writer.writeEndElement();
+
+	//write the aspect itself
+	save(&writer);
+
+	writer.writeEndDocument();
+	QApplication::clipboard()->setText(output);
+}
+
+/*!
+ * in case the clipboard containts a LabPlot's specific copy&paste content,
+ * this function deserializes the XML string and adds the created aspect as
+ * a child to the current aspect ("paste").
+ */
+void AbstractAspect::paste() {
+	const QClipboard* clipboard = QApplication::clipboard();
+	const QMimeData* mimeData = clipboard->mimeData();
+	if (!mimeData->hasText())
+		return;
+
+	const QString& xml = clipboard->text();
+	if (!xml.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
+		return;
+
+	AbstractAspect* aspect = nullptr;
+	XmlStreamReader reader(xml);
+	while (!reader.atEnd()) {
+		reader.readNext();
+
+		if (!reader.isStartElement())
+			continue;
+
+		if (reader.name() == QLatin1String("type")) {
+			auto attribs = reader.attributes();
+			auto type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
+			if (type == AspectType::AbstractAspect)
+				aspect = AspectFactory::createAspect(type);
+		} else {
+			if (aspect) {
+				aspect->load(&reader, false);
+				break;
+			}
+		}
+// 		reader.skipToEndElement();
+// 		reader.skipToNextTag();
+	}
+
+// 	qDebug()<<"errors " << reader.errorString();
+	if (aspect) {
+// 		aspect->setName(i18n("Copy of %1", aspect->name()));
+		addChild(aspect);
+	}
+}
+
+/*!
+ * helper function determening whether the current content of the clipboard
+ * contants the labplot specific copy&paste XML content. In case a valid content
+ * is available, the aspect type of the object to be pasted is returned.
+ * AspectType::AbstractAspect is returned otherwise.
+ */
+AspectType AbstractAspect::clipboardAspectType() const {
+	const QClipboard* clipboard = QApplication::clipboard();
+	const QMimeData* mimeData = clipboard->mimeData();
+	if (!mimeData->hasText())
+		return AspectType::AbstractAspect;
+
+	const QString& xml = clipboard->text();
+	if (!xml.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
+		return AspectType::AbstractAspect;
+
+	XmlStreamReader reader(xml);
+	while (!reader.atEnd()) {
+		reader.readNext();
+		if (reader.isStartElement() && reader.name() == QLatin1String("type")) {
+			auto attribs = reader.attributes();
+			AspectType type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
+			return type;
+		}
+	}
+
+	return AspectType::AbstractAspect;
 }
 
 bool AbstractAspect::isDraggable() const {

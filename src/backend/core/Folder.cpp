@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Folder in a project
     --------------------------------------------------------------------
-    Copyright            : (C) 2009-2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2009-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
 
@@ -82,6 +82,10 @@ bool Folder::isDraggable() const {
 		return false;
 	else
 		return true;
+}
+
+QVector<AspectType> Folder::pasteTypes() const {
+	return QVector<AspectType>{AspectType::Worksheet, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Matrix};
 }
 
 QVector<AspectType> Folder::dropableOn() const {
