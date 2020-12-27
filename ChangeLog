@@ -7,6 +7,7 @@
 	* [worksheet]:
 		* Crosshair cursor mode in the plot
 		* New themes "Monokai", "ggplot grey", "ggplot dark"
+		* New curve symbols "heart" and "lightning"
 
 -----2.8.2 -----
 Bug fixes:
