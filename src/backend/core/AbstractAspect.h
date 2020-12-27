@@ -163,6 +163,7 @@ public:
 	void removeAllChildren();
 	virtual QVector<AbstractAspect*> dependsOn() const;
 
+	virtual QVector<AspectType> pasteTypes() const;
 	virtual bool isDraggable() const;
 	virtual QVector<AspectType> dropableOn() const;
 	virtual void processDropEvent(const QVector<quintptr>&) {};
@@ -264,11 +265,16 @@ private:
 	QString uniqueNameFor(const QString&) const;
 	const QVector<AbstractAspect*>& children() const;
 	void connectChild(AbstractAspect*);
+	AspectType clipboardAspectType() const;
 
 public slots:
 	bool setName(const QString&, bool autoUnique = true);
 	void setComment(const QString&);
 	void remove();
+
+private slots:
+	void copy() const;
+	void paste();
 
 protected slots:
 	virtual void childSelected(const AbstractAspect*);

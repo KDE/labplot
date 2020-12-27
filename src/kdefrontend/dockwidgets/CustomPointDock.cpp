@@ -148,6 +148,12 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	//show the properties of the first custom point
 	this->load();
 
+	//for custom points being children of an InfoElement, the position is changed
+	//via the parent settings -> disable the positioning here.
+	bool enabled = (m_point->parentAspect()->type() != AspectType::InfoElement);
+	ui.lePositionX->setEnabled(enabled);
+	ui.lePositionY->setEnabled(enabled);
+
 	//SIGNALs/SLOTs
 	// general
 	connect(m_point, &CustomPoint::aspectDescriptionChanged, this, &CustomPointDock::pointDescriptionChanged);

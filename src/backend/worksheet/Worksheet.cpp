@@ -188,6 +188,10 @@ QVector<AbstractAspect*> Worksheet::dependsOn() const {
 	return aspects;
 }
 
+QVector<AspectType> Worksheet::pasteTypes() const {
+	return QVector<AspectType>{AspectType::CartesianPlot, AspectType::TextLabel, AspectType::Image};
+}
+
 bool Worksheet::exportView() const {
 	auto* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());

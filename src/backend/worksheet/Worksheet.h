@@ -61,6 +61,7 @@ public:
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
 	QVector<AbstractAspect*> dependsOn() const override;
+	QVector<AspectType> pasteTypes() const override;
 
 	bool exportView() const override;
 	bool printView() override;
