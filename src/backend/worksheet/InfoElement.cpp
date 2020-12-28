@@ -1240,7 +1240,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 			this->addChild(point);
-			addCurvePath(curvePath, markerpoint);
+			addCurvePath(curvePath, point);
 			curvePath.clear();
 		} else if (reader->name() == "point") {
 			attribs = reader->attributes();
