@@ -1166,12 +1166,17 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 	m_title->save(writer);
 
 	//custom points
-	for (auto custompoint: markerpoints) {
-		custompoint.customPoint->save(writer);
-		writer->writeStartElement("markerPoint");
-		writer->writeAttribute(QLatin1String("curvepath"), custompoint.curve->path());
-		writer->writeEndElement(); // close "markerPoint
+	if (!markerpoints.isEmpty()) {
+		writer->writeStartElement("points");
+		for (auto custompoint : markerpoints) {
+			writer->writeStartElement("point");
+			writer->writeAttribute(QLatin1String("curvepath"), custompoint.curve->path());
+			custompoint.customPoint->save(writer);
+			writer->writeEndElement(); //close "point"
+		}
+		writer->writeEndElement(); //clost "points"
 	}
+
 	writer->writeEndElement(); // close "infoElement"
 }
 
@@ -1181,11 +1186,10 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 
 	Q_D(InfoElement);
 
-	CustomPoint* markerpoint = nullptr;
-	bool markerpointFound = false;
 	QXmlStreamAttributes attribs;
-	QString str;
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
+	QString str;
+	QString curvePath;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1227,32 +1231,23 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			if (!m_title->load(reader, preview))
 				return false;
 		} else if (reader->name() == "customPoint") {
-			// Marker must have at least one curve
-			if (markerpointFound) { // must be cleared by markerPoint
-				delete markerpoint;
+			if (curvePath.isEmpty()) //safety check in case the xml is broken
+				continue;
+
+			auto* point = new CustomPoint(d->plot, QString());
+			if (!point->load(reader,preview)) {
+				delete  point;
 				return false;
 			}
-			markerpoint = new CustomPoint(d->plot, "Marker");
-			if (!markerpoint->load(reader,preview)) {
-				delete  markerpoint;
-				return false;
-			}
-			this->addChild(markerpoint);
-			markerpointFound = true;
-		} else if (reader->name() == "markerPoint") {
-			markerpointFound = false;
-			QString path;
+			this->addChild(point);
+			addCurvePath(curvePath, markerpoint);
+			curvePath.clear();
+		} else if (reader->name() == "point") {
 			attribs = reader->attributes();
-			path = attribs.value("curvepath").toString();
-			addCurvePath(path, markerpoint);
+			curvePath = attribs.value("curvepath").toString();
 		}
 	}
 
-	if (markerpointFound) {
-		// problem, if a markerpoint has no markerPointCurve
-		delete markerpoint;
-		return false;
-	}
 	return true;
 }
 
