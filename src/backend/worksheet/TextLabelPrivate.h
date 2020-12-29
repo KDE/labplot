@@ -71,6 +71,7 @@ public:
 		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)),
 		TextLabel::HorizontalPosition::Center, TextLabel::VerticalPosition::Center};
 	bool positionInvalid{false};
+	QPointF positionLogical;
 
 	const CartesianPlot* plot{nullptr};
 	const CartesianCoordinateSystem* cSystem{nullptr};
@@ -92,13 +93,11 @@ public:
 	void updateText();
 	void updateTeXImage();
 	void updateBorder();
-	QPointF logicalPos(AbstractCoordinateSystem::MappingFlags flag = AbstractCoordinateSystem::MappingFlag::DefaultMapping);
 	QRectF size();
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	TextLabel::GluePoint gluePointAt(int index);
 
 	QStaticText staticText;
-        QPointF m_logicalPos;
 
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
@@ -125,7 +124,6 @@ private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void keyPressEvent(QKeyEvent*) override;
-	void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	QPointF mapPlotAreaToParent(QPointF point);

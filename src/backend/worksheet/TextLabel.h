@@ -116,6 +116,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
 	CLASS_D_ACCESSOR_DECL(WorksheetElement::PositionWrapper, position, Position)
+	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
 	void setPosition(QPointF);
 	void setPositionInvalid(bool);
 	BASIC_D_ACCESSOR_DECL(WorksheetElement::HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
@@ -134,7 +135,6 @@ public:
 	bool isAttachedToCoordEnabled() const;
 	void setPrinting(bool) override;
 	QRectF size();
-	QPointF logicalPos(AbstractCoordinateSystem::MappingFlags flag = AbstractCoordinateSystem::MappingFlag::DefaultMapping);
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	int gluePointCount();
 	struct GluePoint {
@@ -177,6 +177,7 @@ signals:
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
 	void positionChanged(const WorksheetElement::PositionWrapper&);
+	void positionLogicalChanged(QPointF);
 	void horizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
 	void verticalAlignmentChanged(WorksheetElement::VerticalAlignment);
 	void rotationAngleChanged(qreal);
