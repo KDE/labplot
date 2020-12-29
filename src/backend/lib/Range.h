@@ -40,32 +40,49 @@ class QString;
 //! Auxiliary class for a data range 
 /**
  *	This class represents a data range [start, end] where start can be > end.
- *	It replaces the Interval classes
+ *	It replaces the Interval class and has following attributes:
+ *	* start
+ *	* end
+ *	* format (Numeric or Datetime)
  *
  *	Only types supporting comparison are supported
  */
-template<class T>
-class Range {
+class RangeT {	// access enum without template
 public:
-	Range() : m_start(0), m_end(1) {}
-	Range(T start, T end) {
-		this->setRange(start, end);
+	enum class Format {Numeric, DateTime};
+};
+
+template<class T>
+class Range : RangeT {
+public:
+
+	Range() : m_start(0), m_end(1), m_format(Format::Numeric) {}
+	Range(T start, T end, Format format = Format::Numeric) {
+		this->setRange(start, end, format);
 	}
-	Range(const QString& start, const QString& end) {
+	Range(const QString& start, const QString& end, const Format format = Format::Numeric) {
 		SET_NUMBER_LOCALE
 		//TODO: check for NAN, INF?
-		this->setRange(parse(qPrintable(start.simplified()), qPrintable(numberLocale.name())), parse(qPrintable(end.simplified()), qPrintable(numberLocale.name())));
+		this->setRange(parse(qPrintable(start.simplified()), qPrintable(numberLocale.name())),
+				parse(qPrintable(end.simplified()), qPrintable(numberLocale.name())),
+				format);
 	}
+
 	T start() const { return m_start; }
 	T end() const { return m_end; }
+	Format format() const { return m_format; }
 	T& start() { return m_start; }
 	T& end() { return m_end; }
+	Format& format() { return m_format; }
 	void setMin(T start) { m_start = start; }
 	void setMax(T end) { m_end = end; }
-	void setRange(T start, T end) {
+	void setRange(T start, T end, Range::Format format = Format::Numeric) {
 		m_start = start;
 		m_end = end;
+		m_format = format;
 	}
+	void setFormat(Format format) { m_format = format; }
+
 	T size() const { return m_end - m_start; }
 	T length() const { return qAbs(m_end - m_start); }
 	T center() const { return (m_start + m_end)/2; }
@@ -85,6 +102,7 @@ public:
 	Range<T>& operator*=(const T value) { m_start *= value; m_end *= value; return *this; }
 
 	//! Return a string in the format '[start, end]'
+	//TODO: DateTime format
 	QString toString() const {
 		return "[" + QLocale().toString(m_start) + ", " + QLocale().toString(m_end) + "]";
 	}
@@ -94,6 +112,7 @@ public:
 private:
 	T m_start;	// start value
 	T m_end;	// upper limit
+	Range::Format m_format;	// format (Numeric or DateTime)
 };
 
 #endif

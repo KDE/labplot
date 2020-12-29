@@ -148,7 +148,8 @@ void XYDataReductionCurveDock::initGeneralTab() {
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_dataReductionCurve->parentAspect());
-	m_dateTimeRange = (plot->xRangeFormat() != CartesianPlot::RangeFormat::Numeric);
+	//TODO: AxisDock
+	m_dateTimeRange = (plot->xRangeFormat(0) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
 		uiGeneralTab.sbMin->setValue(m_dataReductionData.xRange.first());
 		uiGeneralTab.sbMax->setValue(m_dataReductionData.xRange.last());

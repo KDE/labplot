@@ -63,6 +63,7 @@ public:
 
 	enum class Scale {Linear, Log10, Log2, Ln, Log10Abs, Log2Abs, LnAbs, Sqrt, X2};
 	enum class Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
+	// TODO: replaced by Range::Format
 	enum class RangeFormat {Numeric, DateTime};
 	enum class RangeType {Free, Last, First};
 	enum class RangeBreakStyle {Simple, Vertical, Sloped};
@@ -128,8 +129,6 @@ public:
 	void mouseHoverZoomSelectionMode(QPointF logicPos);
 	void mouseHoverOutsideDataRect();
 
-	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, xRangeFormat, XRangeFormat)
-	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
 	const QString& xRangeDateTimeFormat() const;
 	const QString& yRangeDateTimeFormat() const;
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
@@ -143,6 +142,10 @@ public:
 //	int yRangeCount() const;
 	Range<double> xRange(int index);
 	void setXRange(int index, Range<double>);	// set x range of d->xRanges[index]
+	//BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat)
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
+	RangeT::Format xRangeFormat(int index) const;		// get range format of d->xRanges[index]
+	void setXRangeFormat(int index, RangeT::Format);	// set format of d->xRanges[index]
 	void addXRange();				// add new x range
 	void removeXRange(int index);			// remove selected x range
 	// convenience methods
@@ -323,7 +326,7 @@ protected:
 
 signals:
 	void rangeTypeChanged(CartesianPlot::RangeType);
-	void xRangeFormatChanged(CartesianPlot::RangeFormat);
+	void xRangeFormatChanged(RangeT::Format);
 	void yRangeFormatChanged(CartesianPlot::RangeFormat);
 	void rangeLastValuesChanged(int);
 	void rangeFirstValuesChanged(int);

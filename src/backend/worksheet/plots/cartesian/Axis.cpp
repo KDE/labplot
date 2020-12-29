@@ -889,6 +889,7 @@ void Axis::setMinorGridOpacity(qreal opacity) {
 
 BASIC_SHARED_D_READER_IMPL(Axis, int, coordinateSystemIndex, cSystemIndex)
 void Axis::setCoordinateSystemIndex(const int index) {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(Axis);
 	d->cSystemIndex = index;
 	if (d->plot)
@@ -1301,8 +1302,10 @@ void AxisPrivate::retransformTicks() {
 	qreal nextMajorTickPos = 0.0;
 
 	DEBUG(Q_FUNC_INFO << ", coordinate system index = " << cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
-	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
+	if (cSystem)
+		DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
+	if (plot)
+		DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
 
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
@@ -1532,7 +1535,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	tickLabelStrings.clear();
 	QString str;
 	SET_NUMBER_LOCALE
-	if ( (orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+	//TODO
+	if ( (orientation == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric)
 		|| (orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) ) {
 		if (labelsFormat == Axis::LabelsFormat::Decimal) {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
@@ -1784,7 +1788,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
-		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) ||
+		//TODO
+		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 				width = fm.boundingRect(tickLabelStrings.at(i)).width();
@@ -2174,7 +2179,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		QTextDocument doc;
 		doc.setDefaultFont(labelsFont);
 		QFontMetrics fm(labelsFont);
-		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) ||
+		//TODO
+		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
 			//QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
 			for (int i = 0; i < tickLabelPoints.size(); i++) {

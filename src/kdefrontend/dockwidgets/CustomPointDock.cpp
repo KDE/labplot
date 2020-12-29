@@ -468,7 +468,8 @@ void CustomPointDock::load() {
 
 	SET_NUMBER_LOCALE
 	CartesianPlot* plot = static_cast<CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
-	if (plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric) {
+	//TODO: AxisDock
+	if (plot->xRangeFormat(0) == RangeT::Format::Numeric) {
 		ui.lPositionX->show();
 		ui.lePositionX->show();
 		ui.lPositionXDateTime->hide();

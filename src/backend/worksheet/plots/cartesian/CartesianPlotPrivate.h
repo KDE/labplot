@@ -61,7 +61,7 @@ public:
 
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
-	CartesianPlot::RangeFormat xRangeFormat{CartesianPlot::RangeFormat::Numeric};
+	//CartesianPlot::RangeFormat xRangeFormat{CartesianPlot::RangeFormat::Numeric};
 	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::RangeFormat::Numeric};
 	QString xRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"}, yRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
 	int rangeFirstValues{1000}, rangeLastValues{1000};

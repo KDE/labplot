@@ -577,13 +577,12 @@ void AxisDock::updatePlotRanges() const {
 	const int cSystemIndex{ m_axis->coordinateSystemIndex() };
 	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
 	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex)
-	if (cSystemCount > 0 && ui.cbPlotRanges->count() != cSystemCount) {
-		// fill ui.cbPlotRanges
-		ui.cbPlotRanges->clear();
-		for (int i{0}; i < cSystemCount; i++)
-			ui.cbPlotRanges->addItem( m_axis->coordinateSystemInfo(i) );
-		ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
-	}
+
+	// fill ui.cbPlotRanges
+	ui.cbPlotRanges->clear();
+	for (int i{0}; i < cSystemCount; i++)
+		ui.cbPlotRanges->addItem( QString::number(i+1) + QLatin1String(" : ") + m_axis->coordinateSystemInfo(i) );
+	ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
 }
 
 //*************************************************************
@@ -987,7 +986,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.lMajorTicksSpacingNumeric->show();
 
 		const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
-		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+		//TODO use interface in Axis?
+		const int xIndex = plot->coordinateSystem(m_axis->coordinateSystemIndex())->xIndex();
+		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
 					|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 		if (numeric) {
 			ui.lMajorTicksIncrementDateTime->hide();
@@ -1037,8 +1038,8 @@ void AxisDock::majorTicksSpacingChanged() {
 		return;
 
 	const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
-
-	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+	//TODO: :990
+	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric)
 		|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 
 	double spacing = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
@@ -1217,7 +1218,8 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		ui.sbMinorTicksNumber->hide();
 
 		const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
-		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+		//TODO: :990
+		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric)
 					|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 		if (numeric) {
 			ui.lMinorTicksSpacingNumeric->show();
@@ -1268,7 +1270,8 @@ void AxisDock::minorTicksSpacingChanged() {
 
 	const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
 
-	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+	//TODO: :990
+	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric)
 		|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 
 	double spacing = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
@@ -1823,8 +1826,9 @@ void AxisDock::axisMajorTicksNumberChanged(int number) {
 void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
 	m_initializing = true;
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	//TODO: :990
 	if (plot) {
-		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 
 		if (numeric)
@@ -1872,8 +1876,9 @@ void AxisDock::axisMinorTicksNumberChanged(int number) {
 void AxisDock::axisMinorTicksSpacingChanged(qreal increment) {
 	m_initializing = true;
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	//TODO :990
 	if (plot) {
-		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 
 		if (numeric)
@@ -2012,9 +2017,9 @@ void AxisDock::axisVisibilityChanged(bool on) {
 }
 
 void AxisDock::plotRangeChanged(int index) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
+	QDEBUG(Q_FUNC_INFO << ", index = " << index)
 
-	if (index != m_axis->coordinateSystemIndex()) {
+	if (index >= 0 && index != m_axis->coordinateSystemIndex()) {
 		m_axis->setCoordinateSystemIndex(index);
 		m_axis->retransform();	// redraw
 	}
@@ -2046,8 +2051,9 @@ void AxisDock::load() {
 
 	//depending on range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	//TODO: :990
 	if (plot) {
-		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 		//ranges
 		ui.lStart->setVisible(numeric);
@@ -2182,8 +2188,9 @@ void AxisDock::loadConfig(KConfig& config) {
 
 	bool numeric = false;
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	//TODO: see :990
 	if (plot) {
-		numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+		numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 	}
 
@@ -2222,10 +2229,11 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbMajorTicksDirection->setCurrentIndex( group.readEntry("MajorTicksDirection", (int) m_axis->majorTicksDirection()) );
 	ui.cbMajorTicksType->setCurrentIndex( group.readEntry("MajorTicksType", (int) m_axis->majorTicksType()) );
 	ui.sbMajorTicksNumber->setValue( group.readEntry("MajorTicksNumber", m_axis->majorTicksNumber()) );
+	auto value{ group.readEntry("MajorTicksIncrement", m_axis->majorTicksSpacing()) };
 	if (numeric)
-		ui.sbMajorTicksSpacingNumeric->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksSpacing()));
+		ui.sbMajorTicksSpacingNumeric->setValue(value);
 	else
-		dtsbMajorTicksIncrement->setValue(group.readEntry("MajorTicksIncrement", m_axis->majorTicksSpacing()));
+		dtsbMajorTicksIncrement->setValue(value);
 	ui.cbMajorTicksLineStyle->setCurrentIndex( group.readEntry("MajorTicksLineStyle", (int) m_axis->majorTicksPen().style()) );
 	ui.kcbMajorTicksColor->setColor( group.readEntry("MajorTicksColor", m_axis->majorTicksPen().color()) );
 	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MajorTicksWidth", m_axis->majorTicksPen().widthF()), Worksheet::Unit::Point) );
@@ -2236,10 +2244,11 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbMinorTicksDirection->setCurrentIndex( group.readEntry("MinorTicksDirection", (int) m_axis->minorTicksDirection()) );
 	ui.cbMinorTicksType->setCurrentIndex( group.readEntry("MinorTicksType", (int) m_axis->minorTicksType()) );
 	ui.sbMinorTicksNumber->setValue( group.readEntry("MinorTicksNumber", m_axis->minorTicksNumber()) );
+	value = group.readEntry("MinorTicksIncrement", m_axis->minorTicksSpacing());
 	if (numeric)
-		ui.sbMinorTicksSpacingNumeric->setValue(group.readEntry("MinorTicksIncrement", m_axis->minorTicksSpacing()));
+		ui.sbMinorTicksSpacingNumeric->setValue(value);
 	else
-		dtsbMinorTicksIncrement->setValue(group.readEntry("MinorTicksIncrement", m_axis->minorTicksSpacing()));
+		dtsbMinorTicksIncrement->setValue(value);
 	ui.cbMinorTicksLineStyle->setCurrentIndex( group.readEntry("MinorTicksLineStyle", (int) m_axis->minorTicksPen().style()) );
 	ui.kcbMinorTicksColor->setColor( group.readEntry("MinorTicksColor", m_axis->minorTicksPen().color()) );
 	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MinorTicksWidth", m_axis->minorTicksPen().widthF()), Worksheet::Unit::Point) );
@@ -2295,8 +2304,9 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 
 	bool numeric = false;
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	//TODO: see :990
 	if (plot) {
-		numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric)
+		numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) );
 	}
 

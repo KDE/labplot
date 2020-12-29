@@ -146,13 +146,12 @@ void XYEquationCurveDock::updatePlotRanges() const {
 	const int cSystemIndex{ m_curve->coordinateSystemIndex() };
 	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
 	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex)
-	if (cSystemCount > 0 && uiGeneralTab.cbPlotRanges->count() != cSystemCount) {
-		// fill ui.cbPlotRanges
-		uiGeneralTab.cbPlotRanges->clear();
-		for (int i{0}; i < cSystemCount; i++)
-			uiGeneralTab.cbPlotRanges->addItem( m_curve->coordinateSystemInfo(i) );
-		uiGeneralTab.cbPlotRanges->setCurrentIndex(cSystemIndex);
-	}
+
+	// fill ui.cbPlotRanges
+	uiGeneralTab.cbPlotRanges->clear();
+	for (int i{0}; i < cSystemCount; i++)
+		uiGeneralTab.cbPlotRanges->addItem( QString::number(i+1) + QLatin1String(" : ") + m_curve->coordinateSystemInfo(i) );
+	uiGeneralTab.cbPlotRanges->setCurrentIndex(cSystemIndex);
 }
 
 void XYEquationCurveDock::initGeneralTab() {
@@ -357,7 +356,7 @@ void XYEquationCurveDock::enableRecalculate() const {
 void XYEquationCurveDock::plotRangeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 
-	if (index != m_curve->coordinateSystemIndex()) {
+	if (index >= 0 && index != m_curve->coordinateSystemIndex()) {
 		m_curve->setCoordinateSystemIndex(index);
 		m_curve->retransform();	// redraw
 	}

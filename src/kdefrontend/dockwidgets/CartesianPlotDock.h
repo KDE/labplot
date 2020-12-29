@@ -91,6 +91,7 @@ private slots:
 	void removeXRange();
 	void addPlotRange();
 	void removePlotRange();
+	void PlotRangeXChanged(const int index);
 
 	void autoScaleYChanged(int);
 	void yMinChanged(const QString&);
@@ -159,7 +160,7 @@ private slots:
 	void plotXMinChanged(double);
 	void plotXMaxChanged(double);
 	void plotXRangeChanged(Range<double>);
-	void plotXRangeFormatChanged(CartesianPlot::RangeFormat);
+	void plotXRangeFormatChanged(RangeT::Format);
 	void plotXScaleChanged(CartesianPlot::Scale);
 
 	void plotYAutoScaleChanged(bool);
