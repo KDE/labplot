@@ -51,10 +51,8 @@
 InfoElement::InfoElement(const QString& name, CartesianPlot* plot):
 	WorksheetElement(name, AspectType::InfoElement),
 	d_ptr(new InfoElementPrivate(this, plot)) {
-	Q_D(InfoElement);
 	init();
 	setVisible(false);
-// 	d->retransform();
 }
 
 InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve* curve, double pos):
@@ -258,12 +256,12 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
  * @param custompoint adding already created custom point
  */
 void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
-	Q_D(InfoElement);
-
 	for(auto markerpoint: markerpoints) {
 		if(curvePath == markerpoint.curvePath)
 			return;
 	}
+
+	Q_D(InfoElement);
 
 	if (!custompoint) {
 		custompoint = new CustomPoint(d->plot, i18n("Symbol"));
@@ -383,7 +381,6 @@ InfoElement::MarkerPoints_T InfoElement::markerPointAt(int index) {
  * @return Text
  */
 TextLabel::TextWrapper InfoElement::createTextLabelText() {
-
 	// TODO: save positions of the variables in extra variables to replace faster, because replace takes long time
 	TextLabel::TextWrapper wrapper = m_title->text();
 	if (markerPointsCount() < 1) {
@@ -633,8 +630,6 @@ void InfoElement::childAdded(const AbstractAspect* child) {
  * \return
  */
 int InfoElement::currentIndex(double x, double* found_x) {
-	Q_D(InfoElement);
-
 	for (auto markerpoint : markerpoints) {
 		if (markerpoint.curve->name() == connectionLineCurveName()) {
 			int index = markerpoint.curve->xColumn()->indexForValue(x);
@@ -696,8 +691,6 @@ double InfoElement::setMarkerpointPosition(double x) {
  */
 void InfoElement::pointPositionChanged(QPointF pos) {
 	Q_UNUSED(pos)
-	Q_D(InfoElement);
-
 	if (m_suppressChildPositionChanged)
 		return;
 
@@ -758,11 +751,11 @@ void InfoElement::setPosition(double pos) {
 
 	if (value != d->position) {
 		d->m_index = index;
+		exec(new InfoElementSetPositionCmd(d, pos, ki18n("%1: set position")));
 		setMarkerpointPosition(value);
 		m_title->setUndoAware(false);
 		m_title->setText(createTextLabelText());
 		m_title->setUndoAware(true);
-		exec(new InfoElementSetPositionCmd(d, pos, ki18n("%1: set position")));
 	}
 }
 
@@ -975,7 +968,6 @@ QVariant InfoElementPrivate::itemChange(GraphicsItemChange change, const QVarian
 
 void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (event->button() == Qt::MouseButton::LeftButton) {
-
 		if (verticalLinePen.style() != Qt::NoPen) {
 			const double width = verticalLinePen.widthF();
 			if (abs(xposLine.x1()-event->pos().x())< ((width < 3)? 3 : width)) {
@@ -1167,12 +1159,17 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 	m_title->save(writer);
 
 	//custom points
-	for (auto custompoint: markerpoints) {
-		custompoint.customPoint->save(writer);
-		writer->writeStartElement("markerPoint");
-		writer->writeAttribute(QLatin1String("curvepath"), custompoint.curve->path());
-		writer->writeEndElement(); // close "markerPoint
+	if (!markerpoints.isEmpty()) {
+		writer->writeStartElement("points");
+		for (auto custompoint : markerpoints) {
+			writer->writeStartElement("point");
+			writer->writeAttribute(QLatin1String("curvepath"), custompoint.curve->path());
+			custompoint.customPoint->save(writer);
+			writer->writeEndElement(); //close "point"
+		}
+		writer->writeEndElement(); //clost "points"
 	}
+
 	writer->writeEndElement(); // close "infoElement"
 }
 
@@ -1182,11 +1179,10 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 
 	Q_D(InfoElement);
 
-	CustomPoint* markerpoint = nullptr;
-	bool markerpointFound = false;
 	QXmlStreamAttributes attribs;
-	QString str;
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
+	QString str;
+	QString curvePath;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1228,32 +1224,23 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			if (!m_title->load(reader, preview))
 				return false;
 		} else if (reader->name() == "customPoint") {
-			// Marker must have at least one curve
-			if (markerpointFound) { // must be cleared by markerPoint
-				delete markerpoint;
+			if (curvePath.isEmpty()) //safety check in case the xml is broken
+				continue;
+
+			auto* point = new CustomPoint(d->plot, QString());
+			if (!point->load(reader,preview)) {
+				delete  point;
 				return false;
 			}
-			markerpoint = new CustomPoint(d->plot, "Marker");
-			if (!markerpoint->load(reader,preview)) {
-				delete  markerpoint;
-				return false;
-			}
-			this->addChild(markerpoint);
-			markerpointFound = true;
-		} else if (reader->name() == "markerPoint") {
-			markerpointFound = false;
-			QString path;
+			this->addChild(point);
+			addCurvePath(curvePath, point);
+			curvePath.clear();
+		} else if (reader->name() == "point") {
 			attribs = reader->attributes();
-			path = attribs.value("curvepath").toString();
-			addCurvePath(path, markerpoint);
+			curvePath = attribs.value("curvepath").toString();
 		}
 	}
 
-	if (markerpointFound) {
-		// problem, if a markerpoint has no markerPointCurve
-		delete markerpoint;
-		return false;
-	}
 	return true;
 }
 
@@ -1261,8 +1248,6 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void InfoElement::loadThemeConfig(const KConfig& config) {
-	Q_D(InfoElement);
-
 	//use the color for the axis line from the theme also for info element's lines
 	const KConfigGroup& group = config.group("Axis");
 

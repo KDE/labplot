@@ -195,6 +195,11 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	connect( ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionYChanged);
 	connect( ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
 	connect( ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
+
+	connect(ui.lePositionXLogical, &QLineEdit::textChanged, this, &LabelWidget::positionXLogicalChanged);
+	connect(ui.dtePositionXLogical, &QDateTimeEdit::dateTimeChanged, this, &LabelWidget::positionXLogicalDateTimeChanged);
+	connect(ui.lePositionYLogical, &QLineEdit::textChanged, this, &LabelWidget::positionYLogicalChanged);
+
 	connect( ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
 	connect( ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
 	connect( ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
@@ -296,6 +301,7 @@ void LabelWidget::initConnections() const {
 	connect(m_label, &TextLabel::fontColorChanged, this, &LabelWidget::labelFontColorChanged);
 	connect(m_label, &TextLabel::backgroundColorChanged, this, &LabelWidget::labelBackgroundColorChanged);
 	connect(m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
+	connect(m_label, &TextLabel::positionLogicalChanged, this, &LabelWidget::labelPositionLogicalChanged);
 	connect(m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
 	connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
 	connect(m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
@@ -416,6 +422,8 @@ void LabelWidget::updateLocale() {
 	SET_NUMBER_LOCALE
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);
+	ui.lePositionXLogical->setLocale(numberLocale);
+	ui.lePositionYLogical->setLocale(numberLocale);
 	ui.sbOffsetX->setLocale(numberLocale);
 	ui.sbOffsetY->setLocale(numberLocale);
 	ui.sbBorderWidth->setLocale(numberLocale);
@@ -856,6 +864,8 @@ void LabelWidget::insertDateTime(QAction* action) {
 
 // geometry slots
 
+//absolute positioning
+
 /*!
     called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
@@ -921,6 +931,52 @@ void LabelWidget::customPositionYChanged(double value) {
 		label->setPosition(position);
 	}
 }
+
+//positioning using logical plot coordinates
+void LabelWidget::positionXLogicalChanged(const QString& value) {
+	if (m_initializing)
+		return;
+
+	const Lock lock(m_initializing);
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double x = numberLocale.toDouble(value, &ok);
+	if (ok) {
+		QPointF pos = m_label->positionLogical();
+		pos.setX(x);
+		for (auto* label : m_labelsList)
+			label->setPositionLogical(pos);
+	}
+}
+
+void LabelWidget::positionXLogicalDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	quint64 x = dateTime.toMSecsSinceEpoch();
+	QPointF pos = m_label->positionLogical();
+	pos.setX(x);
+	for (auto* label : m_labelsList)
+		label->setPositionLogical(pos);
+}
+
+void LabelWidget::positionYLogicalChanged(const QString& value) {
+	if (m_initializing)
+		return;
+
+	const Lock lock(m_initializing);
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double y = numberLocale.toDouble(value, &ok);
+	if (ok) {
+		QPointF pos = m_label->positionLogical();
+		pos.setY(y);
+		for (auto* label : m_labelsList)
+			label->setPositionLogical(pos);
+	}
+}
+
+//alignment
 
 void LabelWidget::horizontalAlignmentChanged(int index) {
 	if (m_initializing)
@@ -1046,16 +1102,27 @@ void LabelWidget::borderOpacityChanged(int value) {
  * \param checked
  */
 void LabelWidget::bindingChanged(bool checked) {
+	//widgets for positioning using absolute plot distances
 	ui.lPositionX->setVisible(!checked);
 	ui.cbPositionX->setVisible(!checked);
 	ui.sbPositionX->setVisible(!checked);
+
 	ui.lPositionY->setVisible(!checked);
 	ui.cbPositionY->setVisible(!checked);
 	ui.sbPositionY->setVisible(!checked);
-	ui.lHorizontalAlignment->setVisible(!checked);
-	ui.cbHorizontalAlignment->setVisible(!checked);
-	ui.lVerticalAlignment->setVisible(!checked);
-	ui.cbVerticalAlignment->setVisible(!checked);
+
+	//widgets for positioning using logical plot coordinates
+	const auto* plot = static_cast<const CartesianPlot*>(m_label->parent(AspectType::CartesianPlot));
+	//TODO
+	if (plot && plot->xRangeFormat(0) == RangeT::Format::DateTime) {
+		ui.dtePositionXLogical->setVisible(checked);
+	} else {
+		ui.lPositionXLogical->setVisible(checked);
+		ui.lePositionXLogical->setVisible(checked);
+
+		ui.lPositionYLogical->setVisible(checked);
+		ui.lePositionYLogical->setVisible(checked);
+	}
 
 	if(m_initializing)
 		return;
@@ -1146,6 +1213,14 @@ void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& positio
 	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
 	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
 	m_initializing = false;
+}
+
+void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
+	const Lock lock(m_initializing);
+	SET_NUMBER_LOCALE
+	ui.lePositionXLogical->setText(numberLocale.toString(pos.x()));
+	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
+	ui.lePositionYLogical->setText(numberLocale.toString(pos.y()));
 }
 
 void LabelWidget::labelBackgroundColorChanged(const QColor color) {
@@ -1283,10 +1358,12 @@ void LabelWidget::load() {
 	ui.teLabel->setFocus();
 
 	// Geometry
+	ui.lBindLogicalPos->setVisible(m_label->isAttachedToCoordEnabled());
 	ui.chbBindLogicalPos->setVisible(m_label->isAttachedToCoordEnabled());
 	ui.chbBindLogicalPos->setChecked(m_label->isAttachedToCoord());
 	bindingChanged(m_label->isAttachedToCoord());
 
+	//widgets for positioning using absolute plot distances
 	ui.cbPositionX->setCurrentIndex( (int)m_label->position().horizontalPosition );
 	positionXChanged(ui.cbPositionX->currentIndex());
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.x(), m_worksheetUnit) );
@@ -1294,6 +1371,30 @@ void LabelWidget::load() {
 	positionYChanged(ui.cbPositionY->currentIndex());
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(), m_worksheetUnit) );
 
+	//widgets for positioning using logical plot coordinates
+	SET_NUMBER_LOCALE
+	const auto* plot = static_cast<const CartesianPlot*>(m_label->parent(AspectType::CartesianPlot));
+	//TODO
+	if (plot && plot->xRangeFormat(0) == RangeT::Format::DateTime) {
+		ui.lPositionXLogical->hide();
+		ui.lePositionXLogical->hide();
+		ui.lPositionXLogicalDateTime->show();
+		ui.dtePositionXLogical->show();
+
+		ui.dtePositionXLogical->setDisplayFormat(plot->xRangeDateTimeFormat());
+		ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_label->positionLogical().x()));
+	} else {
+		ui.lPositionXLogical->show();
+		ui.lePositionXLogical->show();
+		ui.lPositionXLogicalDateTime->hide();
+		ui.dtePositionXLogical->hide();
+
+		ui.lePositionXLogical->setText(numberLocale.toString(m_label->positionLogical().x()));
+	}
+
+	ui.lePositionYLogical->setText(numberLocale.toString(m_label->positionLogical().y()));
+
+	//offsets, alignment and rotation
 	if (!m_axesList.isEmpty()) {
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Unit::Point) );
 		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Unit::Point) );
