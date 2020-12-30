@@ -930,6 +930,7 @@ void CartesianPlot::setXRangeFormat(const int index, const RangeT::Format format
 	Q_D(CartesianPlot);
 	if (format != xRangeFormat(index) && index >= 0 && index < xRangeCount())
 		d->xRanges[index].setFormat(format);
+	emit d->xRangeFormatChanged();
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeFormat, CartesianPlot::RangeFormat, yRangeFormat, yRangeFormatChanged);
@@ -1825,11 +1826,11 @@ void CartesianPlot::xDataChanged() {
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		if (curve) {
 			const AbstractColumn* col = curve->xColumn();
-			//TODO
-			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && xRangeFormat(0) != RangeT::Format::DateTime) {
+			const auto* cSystem{ coordinateSystem(defaultCoordinateSystem()) };
+			const auto xRangeFormat{ xRange(cSystem->xIndex()).format() };
+			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && xRangeFormat != RangeT::Format::DateTime) {
 				setUndoAware(false);
-				//TODO
-				setXRangeFormat(0, RangeT::Format::DateTime);
+				setXRangeFormat(cSystem->xIndex(), RangeT::Format::DateTime);
 				setUndoAware(true);
 			}
 		}
@@ -2027,7 +2028,7 @@ bool CartesianPlot::scaleAutoX() {
 		//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
 		if (d->xRanges.at(xIndex).isZero()) {
 			const double value{ d->xRanges.at(xIndex).start() };
-			if (value != 0)
+			if (!qFuzzyIsNull(value))
 				d->xRanges[xIndex].setRange(value * 0.9, value * 1.1);
 			else
 				d->xRanges[xIndex].setRange(-0.1, 0.1);
@@ -2104,7 +2105,7 @@ bool CartesianPlot::scaleAutoY() {
 		//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
 		if (d->yRange.isZero()) {
 			const double value{ d->yRange.start() };
-			if (value != 0)
+			if (!qFuzzyIsNull(value))
 				d->yRange.setRange(value * 0.9, value * 1.1);
 			else
 				d->yRange.setRange(-0.1, 0.1);
@@ -2222,13 +2223,17 @@ bool CartesianPlot::scaleAuto() {
 
 	bool updateX = false;
 	bool updateY = false;
-	if (d->curvesXRange.start() != d->xRanges.at(0).start() && d->curvesXRange.start() != std::numeric_limits<double>::infinity()) {
-		d->xRanges[0].start() = d->curvesXRange.start();
+
+	const auto* cSystem{ coordinateSystem(defaultCoordinateSystem()) };
+	const auto xIndex{ cSystem->xIndex() };
+
+	if (d->curvesXRange.start() != d->xRanges.at(xIndex).start() && d->curvesXRange.start() != std::numeric_limits<double>::infinity()) {
+		d->xRanges[xIndex].start() = d->curvesXRange.start();
 		updateX = true;
 	}
 
-	if (d->curvesXRange.end() != d->xRanges.at(0).end() && d->curvesXRange.end() != -std::numeric_limits<double>::infinity()) {
-		d->xRanges[0].end() = d->curvesXRange.end();
+	if (d->curvesXRange.end() != d->xRanges.at(xIndex).end() && d->curvesXRange.end() != -std::numeric_limits<double>::infinity()) {
+		d->xRanges[xIndex].end() = d->curvesXRange.end();
 		updateX = true;
 	}
 
@@ -2241,19 +2246,19 @@ bool CartesianPlot::scaleAuto() {
 		d->yRange.end() = d->curvesYRange.end();
 		updateY = true;
 	}
-	DEBUG( Q_FUNC_INFO << ", xrange = " << d->xRanges.at(0).toStdString() << ", yrange = " << d->yRange.toStdString() );
+	DEBUG( Q_FUNC_INFO << ", xrange = " << d->xRanges.at(xIndex).toStdString() << ", yrange = " << d->yRange.toStdString() );
 
 	if (updateX || updateY) {
 		if (updateX) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (d->xRanges.at(0).isZero()) {
-				const double value{ d->xRanges.at(0).start() };
-				if (value != 0)
-					d->xRanges[0].setRange(value * 0.9, value * 1.1);
+			if (d->xRanges.at(xIndex).isZero()) {
+				const double value{ d->xRanges.at(xIndex).start() };
+				if (!qFuzzyIsNull(value))
+					d->xRanges[xIndex].setRange(value * 0.9, value * 1.1);
 				else
-					d->xRanges[0].setRange(-0.1, 0.1);
+					d->xRanges[xIndex].setRange(-0.1, 0.1);
 			} else {
-				d->xRanges[0].extend( d->xRanges.at(0).size()*d->autoScaleOffsetFactor );
+				d->xRanges[xIndex].extend( d->xRanges.at(xIndex).size()*d->autoScaleOffsetFactor );
 			}
 			setAutoScaleX(true);
 		}
@@ -2261,7 +2266,7 @@ bool CartesianPlot::scaleAuto() {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
 			if (d->yRange.isZero()) {
 				const double value{ d->yRange.start() };
-				if (value != 0)
+				if (!qFuzzyIsNull(value))
 					d->yRange.setRange(value * 0.9, value * 1.1);
 				else
 					d->yRange.setRange(-0.1, 0.1);
@@ -2501,14 +2506,16 @@ void CartesianPlot::zoomOutY() {
  */
 void CartesianPlot::zoom(bool x, bool in) {
 	Q_D(CartesianPlot);
+	const auto* cSystem{ coordinateSystem(defaultCoordinateSystem()) };
+	const int xIndex{ cSystem->xIndex() };
 
 	//TODO: Range
 	double min;
 	double max;
 	CartesianPlot::Scale scale;
 	if (x) {
-		min = d->xRanges.at(0).start();
-		max = d->xRanges.at(0).end();
+		min = d->xRanges.at(xIndex).start();
+		max = d->xRanges.at(xIndex).end();
 		scale = d->xScale;
 	} else {
 		min = d->yRange.start();
@@ -2559,7 +2566,7 @@ void CartesianPlot::zoom(bool x, bool in) {
 
 	if (!std::isnan(min) && !std::isnan(max) && std::isfinite(min) && std::isfinite(max)) {
 		if (x)
-			d->xRanges[0].setRange(min, max);
+			d->xRanges[xIndex].setRange(min, max);
 		else
 			d->yRange.setRange(min, max);
 	}
@@ -2574,6 +2581,8 @@ void CartesianPlot::zoom(bool x, bool in) {
  */
 void CartesianPlot::shift(bool x, bool leftOrDown) {
 	Q_D(CartesianPlot);
+	const auto* cSystem{ coordinateSystem(defaultCoordinateSystem()) };
+	const int xIndex{ cSystem->xIndex() };
 
 	//TODO: Range
 	double min;
@@ -2582,8 +2591,8 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 	double offset = 0.0;
 	double factor = 0.1;
 	if (x) {
-		min = d->xRanges.at(0).start();
-		max = d->xRanges.at(0).end();
+		min = d->xRanges.at(xIndex).start();
+		max = d->xRanges.at(xIndex).end();
 		scale = d->xScale;
 	} else {
 		min = d->yRange.start();
@@ -2629,7 +2638,7 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 
 	if (!std::isnan(min) && !std::isnan(max) && std::isfinite(min) && std::isfinite(max)) {
 		if (x)
-			d->xRanges[0].setRange(min, max);
+			d->xRanges[xIndex].setRange(min, max);
 		else
 			d->yRange.setRange(min, max);
 	}
@@ -3021,14 +3030,18 @@ void CartesianPlotPrivate::rangeChanged() {
 }
 
 void CartesianPlotPrivate::xRangeFormatChanged() {
+	DEBUG(Q_FUNC_INFO)
 	for (auto* axis : q->children<Axis>()) {
+		//TODO: only if x range of axis's plot range is changed
 		if (axis->orientation() == Axis::Orientation::Horizontal)
 			axis->retransformTickLabelStrings();
 	}
 }
 
 void CartesianPlotPrivate::yRangeFormatChanged() {
+	DEBUG(Q_FUNC_INFO)
 	for (auto* axis : q->children<Axis>()) {
+		//TODO: see xRangeFormatChanged()
 		if (axis->orientation() == Axis::Orientation::Vertical)
 			axis->retransformTickLabelStrings();
 	}
@@ -3320,13 +3333,13 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 	QString info;
 	const auto* cSystem{ coordinateSystems.at(defaultCoordinateSystem) };
+	const auto xRangeFormat{ xRanges.at(cSystem->xIndex()).format() };
 	const QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 		m_selectionEnd = cSystem->mapLogicalToScene(logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		QPointF logicalEnd = logicalPos;
-		//TODO
-		if (xRanges.at(0).format() == RangeT::Format::Numeric)
+	if (xRangeFormat == RangeT::Format::Numeric)
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 		else
 			info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
@@ -3343,8 +3356,7 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 		m_selectionEnd.setX(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).x());//event->pos().x());
 		m_selectionEnd.setY(dataRect.bottom());
 		QPointF logicalEnd = logicalPos;
-		//TODO
-		if (xRanges.at(0).format() == RangeT::Format::Numeric)
+	if (xRangeFormat == RangeT::Format::Numeric)
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 		else
 			info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
@@ -3365,13 +3377,14 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 }
 
 void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logicalPos) {
+	const auto* cSystem{ coordinateSystems.at(defaultCoordinateSystem) };
+	const auto xRangeFormat{ xRanges.at(cSystem->xIndex()).format() };
 
 	QPointF p1(logicalPos.x(), 0);
 	cursorNumber == 0 ? cursor0Pos = p1 : cursor1Pos = p1;
 
 	QString info;
-	//TODO
-	if (xRanges.at(0).format() == RangeT::Format::Numeric)
+	if (xRangeFormat == RangeT::Format::Numeric)
 		info = QString::fromUtf8("x=") + QString::number(logicalPos.x());
 	else
 		info = i18n("x=%1", QDateTime::fromMSecsSinceEpoch(logicalPos.x()).toString(xRangeDateTimeFormat));
@@ -3526,6 +3539,8 @@ void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
 	QString info;
+	const auto* cSystem{ coordinateSystems.at(defaultCoordinateSystem) };
+	const auto xRangeFormat{ xRanges.at(cSystem->xIndex()).format() };
 	if (dataRect.contains(point)) {
 		QPointF logicalPoint = coordinateSystems.at(defaultCoordinateSystem)->mapSceneToLogical(point);
 
@@ -3533,8 +3548,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			|| mouseMode == CartesianPlot::MouseMode::Selection
 			|| mouseMode == CartesianPlot::MouseMode::Crosshair) {
 			info = "x=";
-			//TODO
-			if (xRanges.at(0).format() == RangeT::Format::Numeric)
+			if (xRangeFormat == RangeT::Format::Numeric)
 				 info += QString::number(logicalPoint.x());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
@@ -3550,8 +3564,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection && !m_selectionBandIsShown) {
 			info = "x=";
-			//TODO
-			if (xRanges.at(0).format() == RangeT::Format::Numeric)
+			if (xRangeFormat == RangeT::Format::Numeric)
 				 info += QString::number(logicalPoint.x());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);

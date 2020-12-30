@@ -905,6 +905,7 @@ int Axis::coordinateSystemCount() const {
 }
 
 QString Axis::coordinateSystemInfo(const int index) const {
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	Q_D(const Axis);
 	if (d->plot)
 		return d->plot->coordinateSystem(index)->info();
@@ -1535,8 +1536,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	tickLabelStrings.clear();
 	QString str;
 	SET_NUMBER_LOCALE
-	//TODO
-	if ( (orientation == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric)
+	auto xRangeFormat{ plot->xRange(cSystem->xIndex()).format() };
+	if ( (orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 		|| (orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) ) {
 		if (labelsFormat == Axis::LabelsFormat::Decimal) {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
@@ -1788,8 +1789,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
-		//TODO
-		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric) ||
+		auto xRangeFormat{ plot->xRange(cSystem->xIndex()).format() };
+		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 				width = fm.boundingRect(tickLabelStrings.at(i)).width();
@@ -2179,8 +2180,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		QTextDocument doc;
 		doc.setDefaultFont(labelsFont);
 		QFontMetrics fm(labelsFont);
-		//TODO
-		if ((orientation == Axis::Orientation::Horizontal && plot->xRangeFormat(0) == RangeT::Format::Numeric) ||
+		auto xRangeFormat{ plot->xRange(cSystem->xIndex()).format() };
+		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
 			//QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
 			for (int i = 0; i < tickLabelPoints.size(); i++) {

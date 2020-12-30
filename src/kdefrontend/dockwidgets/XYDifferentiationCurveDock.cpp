@@ -31,6 +31,7 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <QStandardItemModel>
@@ -146,8 +147,8 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_differentiationCurve->parentAspect());
-	//TODO: AxisDock
-	m_dateTimeRange = (plot->xRangeFormat(0) != RangeT::Format::Numeric);
+	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->xIndex();
+	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
 		uiGeneralTab.sbMin->setValue(m_differentiationData.xRange.first());
 		uiGeneralTab.sbMax->setValue(m_differentiationData.xRange.last());

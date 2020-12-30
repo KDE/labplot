@@ -104,7 +104,13 @@ public:
 	//! Return a string in the format '[start, end]'
 	//TODO: DateTime format
 	QString toString() const {
-		return "[" + QLocale().toString(m_start) + ", " + QLocale().toString(m_end) + "]";
+		//TODO: use m_datetimeformat
+		QString xRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
+		if (m_format == Format::Numeric)
+			return "[" + QLocale().toString(m_start) + ", " + QLocale().toString(m_end) + "]";
+		else
+			return QDateTime::fromMSecsSinceEpoch(m_start).toString(xRangeDateTimeFormat) + " - "
+				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(xRangeDateTimeFormat);
 	}
 	const char* toStdString() const { return STDSTRING(toString()); }
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)

@@ -91,7 +91,8 @@ Very short classes can be bundled in one file which then is named using all lowe
 \section constructs Usage of specific constructs
 
 * Qt version features can be checked with "#if QT_VERSION >= 0x050403" (meaning Qt 5.4.3)
-* For integer data types int is preferred for small numbers and size_t for big, unsigned values. Use double as floating point type.
+* For integer data types int is preferred for indices and normal numbers, size_t for big, unsigned values and quint64 for datetime values. Use double (qreal) as floating point type.
+	Compare floating point numbers with qFuzzyCompare() or qFuzzyIsNull().
 * Use C++ casting (static_cast, const_cast, dynamic_cast) and qobject_cast in Qt classes since they include checks
 	see https://en.wikibooks.org/wiki/C%2B%2B_Programming/Programming_Languages/C%2B%2B/Code/Statements/Variables/Type_Casting
 * Use Qt container instead of STL container
