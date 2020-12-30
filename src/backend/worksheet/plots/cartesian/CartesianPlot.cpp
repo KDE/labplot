@@ -2224,54 +2224,56 @@ bool CartesianPlot::scaleAuto() {
 	bool updateX = false;
 	bool updateY = false;
 
-	const auto* cSystem{ coordinateSystem(defaultCoordinateSystem()) };
-	const auto xIndex{ cSystem->xIndex() };
+	const auto xIndex{ coordinateSystem(defaultCoordinateSystem())->xIndex() };
+	auto& xRange{ d->xRanges[xIndex] };
+	//TODO: y
+	auto& yRange{ d->yRange };
 
-	if (d->curvesXRange.start() != d->xRanges.at(xIndex).start() && d->curvesXRange.start() != std::numeric_limits<double>::infinity()) {
-		d->xRanges[xIndex].start() = d->curvesXRange.start();
+	if (!qFuzzyCompare(d->curvesXRange.start(), xRange.start()) && !qIsInf(d->curvesXRange.start()) ) {
+		xRange.start() = d->curvesXRange.start();
 		updateX = true;
 	}
 
-	if (d->curvesXRange.end() != d->xRanges.at(xIndex).end() && d->curvesXRange.end() != -std::numeric_limits<double>::infinity()) {
-		d->xRanges[xIndex].end() = d->curvesXRange.end();
+	if (!qFuzzyCompare(d->curvesXRange.end(), xRange.end()) && !qIsInf(d->curvesXRange.end()) ) {
+		xRange.end() = d->curvesXRange.end();
 		updateX = true;
 	}
 
-	if (d->curvesYRange.start() != d->yRange.start() && d->curvesYRange.start() != std::numeric_limits<double>::infinity()) {
-		d->yRange.start() = d->curvesYRange.start();
+	if (!qFuzzyCompare(d->curvesYRange.start(), yRange.start()) && !qIsInf(d->curvesYRange.start()) ) {
+		yRange.start() = d->curvesYRange.start();
 		updateY = true;
 	}
 
-	if (d->curvesYRange.end() != d->yRange.end() && d->curvesYRange.end() != -std::numeric_limits<double>::infinity()) {
-		d->yRange.end() = d->curvesYRange.end();
+	if (!qFuzzyCompare(d->curvesYRange.end(), yRange.end()) && !qIsInf(d->curvesYRange.end()) ) {
+		yRange.end() = d->curvesYRange.end();
 		updateY = true;
 	}
-	DEBUG( Q_FUNC_INFO << ", xrange = " << d->xRanges.at(xIndex).toStdString() << ", yrange = " << d->yRange.toStdString() );
+	DEBUG( Q_FUNC_INFO << ", xrange = " << xRange.toStdString() << ", yrange = " << yRange.toStdString() );
 
 	if (updateX || updateY) {
 		if (updateX) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (d->xRanges.at(xIndex).isZero()) {
-				const double value{ d->xRanges.at(xIndex).start() };
+			if (xRange.isZero()) {
+				const double value{ xRange.start() };
 				if (!qFuzzyIsNull(value))
-					d->xRanges[xIndex].setRange(value * 0.9, value * 1.1);
+					xRange.setRange(value * 0.9, value * 1.1);
 				else
-					d->xRanges[xIndex].setRange(-0.1, 0.1);
+					xRange.setRange(-0.1, 0.1);
 			} else {
-				d->xRanges[xIndex].extend( d->xRanges.at(xIndex).size()*d->autoScaleOffsetFactor );
+				xRange.extend( xRange.size() * d->autoScaleOffsetFactor );
 			}
 			setAutoScaleX(true);
 		}
 		if (updateY) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (d->yRange.isZero()) {
-				const double value{ d->yRange.start() };
+			if (yRange.isZero()) {
+				const double value{ yRange.start() };
 				if (!qFuzzyIsNull(value))
-					d->yRange.setRange(value * 0.9, value * 1.1);
+					yRange.setRange(value * 0.9, value * 1.1);
 				else
-					d->yRange.setRange(-0.1, 0.1);
+					yRange.setRange(-0.1, 0.1);
 			} else {
-				d->yRange.extend( d->yRange.size()*d->autoScaleOffsetFactor );
+				yRange.extend( yRange.size()*d->autoScaleOffsetFactor );
 			}
 			setAutoScaleY(true);
 		}
@@ -2925,13 +2927,13 @@ void CartesianPlotPrivate::retransformScales() {
 	double deltaYMin = yRange.start() - yPrevRange.start();
 	double deltaYMax = yRange.end() - yPrevRange.end();
 
-	if (deltaXMin != 0)
+	if (!qFuzzyIsNull(deltaXMin))
 		emit q->xMinChanged(xRange.start());
-	if (deltaXMax != 0)
+	if (!qFuzzyIsNull(deltaXMax))
 		emit q->xMaxChanged(xRange.end());
-	if (deltaYMin != 0)
+	if (!qFuzzyIsNull(deltaYMin))
 		emit q->yMinChanged(yRange.start());
-	if (deltaYMax != 0)
+	if (!qFuzzyIsNull(deltaYMax))
 		emit q->yMaxChanged(yRange.end());
 
 	xPrevRange = xRange;
@@ -2942,14 +2944,14 @@ void CartesianPlotPrivate::retransformScales() {
 			continue;
 
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
-			if (deltaXMax != 0) {
+			if (!qFuzzyIsNull(deltaXMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
 				axis->setEnd(xRange.end());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
-			if (deltaXMin != 0) {
+			if (!qFuzzyIsNull(deltaXMin)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
 				axis->setStart(xRange.start());
@@ -2961,14 +2963,14 @@ void CartesianPlotPrivate::retransformScales() {
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
 		} else {
-			if (deltaYMax != 0) {
+			if (qFuzzyIsNull(deltaYMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
 				axis->setEnd(yRange.end());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
-			if (deltaYMin != 0) {
+			if (qFuzzyIsNull(deltaYMin)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
 				axis->setStart(yRange.start());

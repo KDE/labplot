@@ -44,12 +44,15 @@ class QString;
  *	* start
  *	* end
  *	* format (Numeric or Datetime)
+ *	* datetime format ("YY-MM-DD ...")
+ *	* scale (Linear, Log, ...)
  *
  *	Only types supporting comparison are supported
  */
 class RangeT {	// access enum without template
 public:
 	enum class Format {Numeric, DateTime};
+	enum class Scale {Linear, Log10, Log2, Ln, Log10Abs, Log2Abs, LnAbs, Sqrt, X2};
 };
 
 template<class T>
@@ -87,7 +90,7 @@ public:
 	T length() const { return qAbs(m_end - m_start); }
 	T center() const { return (m_start + m_end)/2; }
 	// calculate step size from number of steps
-	T stepSize(const int steps) const { return (steps > 1) ? size()/(T)(steps - 1) : 0; }
+	T stepSize(const int steps) const { return (steps > 1) ? size()/static_cast<T>(steps - 1) : 0; }
 	bool isZero() const { return ( m_end == m_start ); }
 	bool valid() const { return ( !qIsNaN(m_start) && !qIsNaN(m_end) ); }
 	bool finite() const { return ( qIsFinite(m_start) && qIsFinite(m_end) ); }
@@ -118,7 +121,9 @@ public:
 private:
 	T m_start;	// start value
 	T m_end;	// upper limit
-	Range::Format m_format;	// format (Numeric or DateTime)
+	Format m_format;	// format (Numeric or DateTime)
+	QString m_dateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
+	Scale m_scale;	// scale (Linear, Log , ...)
 };
 
 #endif

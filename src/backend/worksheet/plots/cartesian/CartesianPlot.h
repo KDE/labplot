@@ -82,6 +82,7 @@ public:
 	};
 
 	//simple wrapper for QList<RangeBreaking> in order to get our macros working
+	//TODO: same for xRanges, etc.?
 	struct RangeBreaks {
 		RangeBreaks() : lastChanged(-1) {
 			RangeBreak b;
@@ -255,7 +256,7 @@ private:
 	QMenu* themeMenu{nullptr};
 
 	// storing the pointer, because then it can be implemented also interactive clicking on a curve
-	// otherwise I have to do QDialog::excec and everything is blocked
+	// otherwise I have to do QDialog::exec and everything is blocked
 	// When saving, it is possible to use show
 	InfoElementDialog* m_infoElementDialog{nullptr};
 
