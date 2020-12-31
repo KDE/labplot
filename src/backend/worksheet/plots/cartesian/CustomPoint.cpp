@@ -73,7 +73,8 @@ void CustomPoint::init() {
 	KConfig config;
 	KConfigGroup group;
 	group = config.group("CustomPoint");
-	d->position.setX( group.readEntry("PositionXValue", d->plot->xRange().center()) );
+	//TODO
+	d->position.setX( group.readEntry("PositionXValue", d->plot->xRange(0).center()) );
 	d->position.setY( group.readEntry("PositionYValue", d->plot->yRange().center()) );
 
 	d->symbolStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::Circle);

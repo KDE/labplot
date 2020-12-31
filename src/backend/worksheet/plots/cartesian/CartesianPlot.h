@@ -61,9 +61,10 @@ public:
 	explicit CartesianPlot(const QString &name);
 	~CartesianPlot() override;
 
+	//TODO: replaced by RangeT::Scale
 	enum class Scale {Linear, Log10, Log2, Ln, Log10Abs, Log2Abs, LnAbs, Sqrt, X2};
 	enum class Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
-	// TODO: replaced by Range::Format
+	// TODO: replaced by RangeT::Format
 	enum class RangeFormat {Numeric, DateTime};
 	enum class RangeType {Free, Last, First};
 	enum class RangeBreakStyle {Simple, Vertical, Sloped};
@@ -137,11 +138,12 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
-	BASIC_D_ACCESSOR_DECL(Range<double>, xRange, XRange)
+//	BASIC_D_ACCESSOR_DECL(Range<double>, xRange, XRange)
 	BASIC_D_ACCESSOR_DECL(Range<double>, yRange, YRange)
 	int xRangeCount() const;
 //	int yRangeCount() const;
-	Range<double> xRange(int index);
+	Range<double> xRange(int index) const;
+	void setXRange(Range<double>);		// set x range of default plot range
 	void setXRange(int index, Range<double>);	// set x range of d->xRanges[index]
 	//BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
@@ -160,8 +162,9 @@ public:
 	CartesianCoordinateSystem* coordinateSystem(int) const;
 	void addCoordinateSystem();			// add a new cooridnate system
 	void removeCoordinateSystem(int index);		// remove coordinate system of index
-	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystem, DefaultCoordinateSystem);
-	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)	//TODO: need a vector to have a scale for all xRanges
+	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystem, DefaultCoordinateSystem)
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)	//TODO: obsolete
+	RangeT::Scale xRangeScale(int index) const;		// get range scale of d->xRanges[index]
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)

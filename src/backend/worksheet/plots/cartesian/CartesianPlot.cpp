@@ -364,7 +364,8 @@ void CartesianPlot::setType(Type type) {
 		}
 	}
 
-	d->xPrevRange = d->xRange;
+	const int xIndex{ d->coordinateSystems.at(d->defaultCoordinateSystem)->xIndex() };
+	d->xPrevRange = d->xRanges.at(xIndex);
 	d->yPrevRange = d->yRange;
 
 	//Geometry, specify the plot rect in scene coordinates.
@@ -830,7 +831,7 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeFormat, yRangeForm
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeLastValues, rangeLastValues)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeFirstValues, rangeFirstValues)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, Range<double>, xRange, xRange)
+//BASIC_SHARED_D_READER_IMPL(CartesianPlot, Range<double>, xRange, xRange)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::Scale, xScale, xScale)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, xRangeBreakingEnabled, xRangeBreakingEnabled)
 CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, xRangeBreaks, xRangeBreaks)
@@ -960,21 +961,25 @@ public:
 	CartesianPlotSetAutoScaleXCmd(CartesianPlotPrivate* private_obj, bool autoScale) :
 		m_private(private_obj), m_autoScale(autoScale), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
 		setText(i18n("%1: change x-range auto scaling", m_private->name()));
-	};
+	}
 
 	void redo() override {
+		const int xIndex{ m_private->coordinateSystems.at(m_private->defaultCoordinateSystem)->xIndex() };
+
 		m_autoScaleOld = m_private->autoScaleX;
 		if (m_autoScale) {
-			m_oldRange = m_private->xRange;
+			m_oldRange = m_private->xRanges.at(xIndex);
 			m_private->q->scaleAutoX();
 		}
 		m_private->autoScaleX = m_autoScale;
 		emit m_private->q->xAutoScaleChanged(m_autoScale);
-	};
+	}
 
 	void undo() override {
+		const int xIndex{ m_private->coordinateSystems.at(m_private->defaultCoordinateSystem)->xIndex() };
+
 		if (!m_autoScaleOld) {
-			m_private->xRange = m_oldRange;
+			m_private->xRanges[xIndex] = m_oldRange;
 			m_private->retransformScales();
 		}
 		m_private->autoScaleX = m_autoScaleOld;
@@ -994,25 +999,36 @@ void CartesianPlot::setAutoScaleX(bool autoScaleX) {
 		exec(new CartesianPlotSetAutoScaleXCmd(d, autoScaleX));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRange, Range<double>, xRange, retransformScales)
+// set x range command with index
+class CartesianPlotSetXRangeIndexCmd: public StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>> {
+	public:
+		CartesianPlotSetXRangeIndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description)
+			: StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>>(target, &CartesianPlot::Private::xRanges, index, newValue, description) {}
+		//TODO: check emit
+		virtual void finalize() override { m_target->retransformScales(); emit m_target->q->xRangeChanged((m_target->*m_field).at(m_index)); }
+};
+
+//STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRange, Range<double>, xRange, retransformScales)
 int CartesianPlot::xRangeCount() const {
 	Q_D(const CartesianPlot);
 	if (d)
 		return d->xRanges.size();
 	return 0;
 }
-Range<double> CartesianPlot::xRange(const int index) {
+Range<double> CartesianPlot::xRange(const int index) const {
 	//DEBUG(Q_FUNC_INFO)
-	Q_D(CartesianPlot);
+	Q_D(const CartesianPlot);
 	return d->xRanges.at(index);
 }
-//TODO: still needed? Sets which x range?
+// Sets x range of default plot range
 void CartesianPlot::setXRange(Range<double> range) {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
-	if (range.finite() && range != d->xRange) {
+	const int xIndex{ coordinateSystem(defaultCoordinateSystem())->xIndex() };
+	if (range.finite() && range != d->xRanges[xIndex]) {
 		d->curvesYMinMaxIsDirty = true;
-		exec(new CartesianPlotSetXRangeCmd(d, range, ki18n("%1: set x range")));
+		exec(new CartesianPlotSetXRangeIndexCmd(d, range, xIndex, ki18n("%1: set x range")));
+		//d->xRanges[xIndex] = range;
 		if (d->autoScaleY)
 			scaleAutoY();
 	}
@@ -1030,16 +1046,6 @@ void CartesianPlot::removeXRange(int index) {
 	}
 	d->xRanges.remove(index);
 }
-
-// set x range command with index
-class CartesianPlotSetXRangeIndexCmd: public StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>> {
-	public:
-		CartesianPlotSetXRangeIndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description)
-			: StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>>(target, &CartesianPlot::Private::xRanges, index, newValue, description) {}
-		//TODO: check emit
-		virtual void finalize() override { m_target->retransformScales(); emit m_target->q->xRangeChanged((m_target->*m_field).at(m_index)); }
-};
-
 void CartesianPlot::setXRange(const int index, const Range<double> range) {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
@@ -1050,24 +1056,12 @@ void CartesianPlot::setXRange(const int index, const Range<double> range) {
 			scaleAutoY();
 	}
 }
-/*void CartesianPlot::setXMin(double value) {
-	DEBUG(Q_FUNC_INFO)
-	Q_D(CartesianPlot);
-	Range<double> range{value, d->xRanges.at(0).end()};
-	setXRange(range);
-}*/
 void CartesianPlot::setXMin(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
 	Range<double> range{value, d->xRanges.at(index).end()};
 	setXRange(index, range);
 }
-/*void CartesianPlot::setXMax(double value) {
-	DEBUG(Q_FUNC_INFO)
-	Q_D(CartesianPlot);
-	Range<double> range{d->xRanges.at(0).start(), value};
-	setXRange(range);
-}*/
 void CartesianPlot::setXMax(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
@@ -1541,7 +1535,8 @@ void CartesianPlot::addInfoElement() {
 	if (curves.count())
 		curve = curves.first();
 
-	const double pos = d->xRange.center();
+	const int xIndex{ coordinateSystem(defaultCoordinateSystem())->xIndex() };
+	const double pos = d->xRanges[xIndex].center();
 
 	InfoElement* element = new InfoElement("Info Element", this, curve, pos);
 	this->addChild(element);
@@ -3169,6 +3164,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 void CartesianPlotPrivate::mousePressZoomSelectionMode(QPointF logicalPos) {
 	const auto* cSystem{ coordinateSystems.at(defaultCoordinateSystem) };
+	auto& xRange{ xRanges[cSystem->xIndex()] };
 	const QPointF scenePos = cSystem->mapLogicalToScene(logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 		if (logicalPos.x() < xRange.start())
@@ -3225,7 +3221,7 @@ void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{ coordinateSystems.at(defaultCoordinateSystem) };
-	const int xIndex{ cSystem->xIndex() };
+	auto& xRange{ xRanges[cSystem->xIndex()] };
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
 		if (panningStarted && dataRect.contains(event->pos()) ) {
 			//don't retransform on small mouse movement deltas
@@ -3241,25 +3237,25 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			switch (xScale) {
 			case CartesianPlot::Scale::Linear: {
 				const double deltaX = (logicalStart.x() - logicalEnd.x());
-				xRanges[xIndex].translate(deltaX);
+				xRange.translate(deltaX);
 				break;
 			}
 			case CartesianPlot::Scale::Log10:
 			case CartesianPlot::Scale::Log10Abs: {
 				const double deltaX = log10(logicalStart.x()) - log10(logicalEnd.x());
-				xRanges[xIndex] *= pow(10, deltaX);
+				xRange *= pow(10, deltaX);
 				break;
 			}
 			case CartesianPlot::Scale::Log2:
 			case CartesianPlot::Scale::Log2Abs: {
 				const double deltaX = log2(logicalStart.x()) - log2(logicalEnd.x());
-				xRanges[xIndex] *= pow(2, deltaX);
+				xRange *= pow(2, deltaX);
 				break;
 			}
 			case CartesianPlot::Scale::Ln:
 			case CartesianPlot::Scale::LnAbs: {
 				const double deltaX = log(logicalStart.x()) - log(logicalEnd.x());
-				xRanges[xIndex] *= exp(deltaX);
+				xRange *= exp(deltaX);
 				break;
 			}
 			case CartesianPlot::Scale::Sqrt:

@@ -885,10 +885,10 @@ void CartesianPlotDock::xScaleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	auto scale = static_cast<CartesianPlot::Scale>(index);
+//	const auto scale{ static_cast<CartesianPlot::Scale>(index) };
 	//TODO: multiple scales
-	for (auto* plot : m_plotList)
-		plot->setXScale(scale);
+//	for (auto* plot : m_plotList)
+//		plot->setXScale(scale);
 }
 
 void CartesianPlotDock::xRangeFormatChanged(int index) {
@@ -2127,9 +2127,9 @@ void CartesianPlotDock::load() {
 	}
 
 	//ui.cbXScaling->setCurrentIndex( (int) m_plot->xScale() );
-	//TODO: need multiple x scales
-	if (ui.twXRanges->cellWidget(0, 3))
-		qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(0, 3))->setCurrentIndex( static_cast<int>(m_plot->xScale()) );
+	//TODO: multiple x scales
+//	if (ui.twXRanges->cellWidget(0, 3))
+//		qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(0, 3))->setCurrentIndex( static_cast<int>(m_plot->xScale()) );
 
 	ui.chkAutoScaleY->setChecked(m_plot->autoScaleY());
 	ui.leYMin->setText(numberLocale.toString(m_plot->yRange().start()));

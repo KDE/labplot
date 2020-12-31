@@ -61,12 +61,11 @@ public:
 
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
-	//CartesianPlot::RangeFormat xRangeFormat{CartesianPlot::RangeFormat::Numeric};
 	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::RangeFormat::Numeric};
 	QString xRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"}, yRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 	QVector<Range<double>> xRanges{{}};	// x ranges
-	Range<double> xRange{}, yRange{};
+	Range<double> yRange{};		//TODO: obsolete
 	Range<double> xPrevRange{}, yPrevRange{};
 	bool autoScaleX{true}, autoScaleY{true};
 	//the following factor determines the size of the offset between the min/max points of the curves

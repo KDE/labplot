@@ -59,32 +59,38 @@ template<class T>
 class Range : RangeT {
 public:
 
-	Range() : m_start(0), m_end(1), m_format(Format::Numeric) {}
-	Range(T start, T end, Format format = Format::Numeric) {
-		this->setRange(start, end, format);
+	Range() : m_start(0), m_end(1), m_format(Format::Numeric), m_scale(Scale::Linear) {}
+	Range(T start, T end, Format format = Format::Numeric, Scale scale = Scale::Linear) {
+		this->setRange(start, end, format, scale);
 	}
-	Range(const QString& start, const QString& end, const Format format = Format::Numeric) {
+	Range(const QString& start, const QString& end, const Format format = Format::Numeric,
+	      const Scale scale = Scale::Linear) {
 		SET_NUMBER_LOCALE
 		//TODO: check for NAN, INF?
 		this->setRange(parse(qPrintable(start.simplified()), qPrintable(numberLocale.name())),
 				parse(qPrintable(end.simplified()), qPrintable(numberLocale.name())),
-				format);
+				format, scale);
 	}
 
 	T start() const { return m_start; }
 	T end() const { return m_end; }
 	Format format() const { return m_format; }
+	Scale scale() const { return m_scale; }
 	T& start() { return m_start; }
 	T& end() { return m_end; }
 	Format& format() { return m_format; }
+	Scale& scale() { return m_scale; }
 	void setMin(T start) { m_start = start; }
 	void setMax(T end) { m_end = end; }
-	void setRange(T start, T end, Range::Format format = Format::Numeric) {
+	void setRange(T start, T end, Format format = Format::Numeric,
+		      Scale scale = Scale::Linear) {
 		m_start = start;
 		m_end = end;
 		m_format = format;
+		m_scale = scale;
 	}
 	void setFormat(Format format) { m_format = format; }
+	void setScale(Scale scale) { m_scale = scale; }
 
 	T size() const { return m_end - m_start; }
 	T length() const { return qAbs(m_end - m_start); }
@@ -105,15 +111,12 @@ public:
 	Range<T>& operator*=(const T value) { m_start *= value; m_end *= value; return *this; }
 
 	//! Return a string in the format '[start, end]'
-	//TODO: DateTime format
 	QString toString() const {
-		//TODO: use m_datetimeformat
-		QString xRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
 		if (m_format == Format::Numeric)
 			return "[" + QLocale().toString(m_start) + ", " + QLocale().toString(m_end) + "]";
 		else
-			return QDateTime::fromMSecsSinceEpoch(m_start).toString(xRangeDateTimeFormat) + " - "
-				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(xRangeDateTimeFormat);
+			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " - "
+				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
 	}
 	const char* toStdString() const { return STDSTRING(toString()); }
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
@@ -122,7 +125,7 @@ private:
 	T m_start;	// start value
 	T m_end;	// upper limit
 	Format m_format;	// format (Numeric or DateTime)
-	QString m_dateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
+	QString m_dateTimeFormat{"yyyy-MM-dd hh:mm:ss"};	// only used for DateTime
 	Scale m_scale;	// scale (Linear, Log , ...)
 };
 

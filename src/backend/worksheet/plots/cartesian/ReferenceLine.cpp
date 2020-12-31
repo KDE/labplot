@@ -75,7 +75,8 @@ void ReferenceLine::init() {
 	group = config.group("ReferenceLine");
 
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
-	d->position = group.readEntry("Position", d->plot->xRange().center());
+	//TODO
+	d->position = group.readEntry("Position", d->plot->xRange(0).center());
 
 	d->pen.setStyle( (Qt::PenStyle) group.readEntry("Style", (int)Qt::SolidLine) );
 	d->pen.setColor( group.readEntry("Color", QColor(Qt::black)) );
@@ -285,11 +286,12 @@ void ReferenceLinePrivate::retransform() {
 		return;
 
 	//calculate the position in the scene coordinates
+	//TODO
 	QVector<QPointF> listLogical;
 	if (orientation == ReferenceLine::Orientation::Vertical)
 		listLogical << QPointF(position, plot->yRange().center());
 	else
-		listLogical << QPointF(plot->xRange().center(), position);
+		listLogical << QPointF(plot->xRange(0).center(), position);
 
 	//TODO
 	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
@@ -304,10 +306,11 @@ void ReferenceLinePrivate::retransform() {
 
 		//determine the length of the line to be drawn
 		QVector<QPointF> pointsLogical;
+		//TODO
 		if (orientation == ReferenceLine::Orientation::Vertical)
 			pointsLogical << QPointF(position, plot->yRange().start()) << QPointF(position, plot->yRange().end());
 		else
-			pointsLogical << QPointF(plot->xRange().start(), position) << QPointF(plot->xRange().end(), position);
+			pointsLogical << QPointF(plot->xRange(0).start(), position) << QPointF(plot->xRange(0).end(), position);
 
 		QVector<QPointF> pointsScene = cSystem->mapLogicalToScene(pointsLogical);
 
