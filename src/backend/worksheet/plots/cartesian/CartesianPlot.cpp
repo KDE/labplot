@@ -1440,9 +1440,8 @@ void CartesianPlot::addInfoElement() {
 }
 
 void CartesianPlot::addTextLabel() {
-	auto* label = new TextLabel("text label");
+	auto* label = new TextLabel("text label", this);
 	this->addChild(label);
-	label->enableCoordBinding(true);
 	label->setParentGraphicsItem(graphicsItem());
 }
 
@@ -3955,7 +3954,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				//can be removed in couple of releases
 				m_title->setName(name() + QLatin1String(" - ") + i18n("Title"));
 			} else {
-				TextLabel* label = new TextLabel("text label");
+				TextLabel* label = new TextLabel("text label", this);
 				if (label->load(reader, preview)) {
 					addChildFast(label);
 					label->setParentGraphicsItem(graphicsItem());
