@@ -71,6 +71,7 @@ public:
 		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)),
 		TextLabel::HorizontalPosition::Center, TextLabel::VerticalPosition::Center};
 	bool positionInvalid{false};
+	bool coordinateBindingEnabled{false};
 	QPointF positionLogical;
 
 	const CartesianPlot* plot{nullptr};
@@ -81,8 +82,6 @@ public:
 	TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
-	bool m_coordBindingEnable{false}; // if allowed to attach to coord
-	bool m_coordBinding{false}; // actual state
 
 	QString name() const;
 	void retransform();
@@ -103,6 +102,8 @@ public:
 	bool suppressRetransform{false};
 	bool m_printing{false};
 	bool m_hovered{false};
+	bool m_coordBinding{false};
+	bool m_coordBindingEnable{false};
 
 	QRectF boundingRectangle; //bounding rectangle of the text
 	QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text

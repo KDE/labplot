@@ -116,6 +116,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
 	CLASS_D_ACCESSOR_DECL(WorksheetElement::PositionWrapper, position, Position)
+// 	BASIC_D_ACCESSOR_DELC(bool, coordinateBindingEnabled, CoordinateBindingEnabled)
+	void setCoordinateBindingEnabled(bool);
+	bool coordinateBindingEnabled() const;
 	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
 	void setPosition(QPointF);
 	void setPositionInvalid(bool);
@@ -128,12 +131,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
 	void setVisible(bool on) override;
-	void setCoordBinding(bool on);
-	bool enableCoordBinding(bool enable, const CartesianPlot* plot = nullptr);
 	bool isVisible() const override;
-	bool isAttachedToCoord() const;
-	bool isAttachedToCoordEnabled() const;
 	void setPrinting(bool) override;
+	void setCoordBinding(bool);
+	bool enableCoordBinding(bool, const CartesianPlot*);
 	QRectF size();
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	int gluePointCount();
@@ -177,6 +178,7 @@ signals:
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
 	void positionChanged(const WorksheetElement::PositionWrapper&);
+	void coordinateBindingEnabledChanged(bool);
 	void positionLogicalChanged(QPointF);
 	void horizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
 	void verticalAlignmentChanged(WorksheetElement::VerticalAlignment);

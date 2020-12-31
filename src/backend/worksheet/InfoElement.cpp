@@ -146,8 +146,6 @@ void InfoElement::init() {
 	m_title = new TextLabel(i18n("Label"), d->plot);
 	addChild(m_title);
 	m_title->setHidden(true);
-	m_title->enableCoordBinding(true);
-	m_title->setCoordBinding(true);
 	TextLabel::TextWrapper text;
 	text.allowPlaceholder = true;
 	m_title->setText(text); // set placeholder to true

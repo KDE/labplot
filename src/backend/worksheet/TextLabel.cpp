@@ -4,7 +4,7 @@
     Description          : Text label supporting reach text and latex formatting
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2020 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2019 by Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -148,6 +148,8 @@ void TextLabel::init() {
 		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
 		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", static_cast<int>(d->horizontalAlignment));
 		d->verticalAlignment = (WorksheetElement::VerticalAlignment) group.readEntry("VerticalAlignment", static_cast<int>(d->verticalAlignment));
+		if (d->cSystem)
+			d->positionLogical = d->cSystem->mapSceneToLogical(d->position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	}
 
 	DEBUG("CHECK: default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
@@ -239,10 +241,10 @@ CLASS_SHARED_D_READER_IMPL(TextLabel, QPointF, positionLogical, positionLogical)
 BASIC_SHARED_D_READER_IMPL(TextLabel, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, rotationAngle, rotationAngle);
-
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::BorderShape, borderShape, borderShape)
 CLASS_SHARED_D_READER_IMPL(TextLabel, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
+BASIC_SHARED_D_READER_IMPL(TextLabel, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText);
@@ -287,6 +289,13 @@ void TextLabel::setPosition(const PositionWrapper& pos) {
 	Q_D(TextLabel);
 	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition)
 		exec(new TextLabelSetPositionCmd(d, pos, ki18n("%1: set position")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled, retransform);
+void TextLabel::setCoordinateBindingEnabled(bool on) {
+	Q_D(TextLabel);
+	if (on != d->coordinateBindingEnabled)
+		exec(new TextLabelSetCoordinateBindingEnabledCmd(d, on, on ? ki18n("%1: use logical coordinates") : ki18n("%1: set invisible")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPositionLogical, QPointF, positionLogical, retransform);
@@ -439,24 +448,6 @@ bool TextLabel::isVisible() const {
 	return d->isVisible();
 }
 
-/*!
- * \brief TextLabel::isAttachedToCoordEnabled
- * \return true if bind to coord is enabled
- */
-bool TextLabel::isAttachedToCoordEnabled() const {
-	Q_D(const TextLabel);
-	return d->m_coordBindingEnable;
-}
-
-/*!
- * \brief TextLabel::isAttachedToCoord
- * \return true if TextLabel is attached to the coord.
- */
-bool TextLabel::isAttachedToCoord() const {
-	Q_D(const TextLabel);
-	return d->m_coordBinding;
-}
-
 void TextLabel::setPrinting(bool on) {
 	Q_D(TextLabel);
 	d->m_printing = on;
@@ -585,26 +576,22 @@ void TextLabelPrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
-/*
-	double x, y;
-	if(m_coordBindingEnable && m_coordBinding) {
+	if(coordinateBindingEnabled && cSystem) {
 		//the position in logical coordinates was changed, calculate the position in scene coordinates
 		position.point = cSystem->mapLogicalToScene(positionLogical, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-
-		x = positionLogical.x();
-		y = positionLogical.y();
+		emit q->positionChanged(position);
 	} else {
-		//the position in scene coordinates was changed, calculate the position in logical coordinates
-		positionLogical = cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom
+	        || position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
+			updatePosition();
 
-		x = position.point.x();
-		y = position.point.y();
+			//the position in scene coordinates was changed, calculate the position in logical coordinates
+			if (cSystem) {
+				positionLogical = cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+				emit q->positionLogicalChanged(positionLogical);
+			}
+		}
 	}
-*/
-
-	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom
-	        || position.verticalPosition != WorksheetElement::VerticalPosition::Custom)
-		updatePosition();
 
 	double x = position.point.x();
 	double y = position.point.y();
@@ -696,10 +683,7 @@ void TextLabelPrivate::updatePosition() {
 			position.point.setY( parentRect.y() + parentRect.height() );
 	}
 
-	if(m_coordBindingEnable && m_coordBinding)
-		emit q->positionLogicalChanged(positionLogical);
-	else
-		emit q->positionChanged(position);
+	emit q->positionChanged(position);
 }
 
 /*!
@@ -1115,7 +1099,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 
 		//emit the signals in order to notify the UI.
 		// don't use setPosition here, because then all small changes are on the undo stack
-		if(m_coordBindingEnable && m_coordBinding) {
+		if(coordinateBindingEnabled) {
 			QPointF tempPoint = cSystem->mapSceneToLogical(tempPosition.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			emit q->positionLogicalChanged(tempPoint);
 		} else
@@ -1126,7 +1110,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 }
 /*
 void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
-	if(m_coordBinding)
+	if(coordinateBinding)
 		positionLogical = cSystem->mapSceneToLogical(mapParentToPlotArea(pos()), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	return QGraphicsItem::mouseMoveEvent(event);
 }*/
@@ -1307,8 +1291,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "verticalAlignment", QString::number(static_cast<int>(d->verticalAlignment)) );
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
-	writer->writeAttribute( "enableCoordBinding", QString::number(d->m_coordBindingEnable));
-	writer->writeAttribute( "coordBinding", QString::number(d->m_coordBinding));
+	writer->writeAttribute( "coordinateBinding", QString::number(d->coordinateBindingEnabled));
 	writer->writeAttribute( "logicalPosX", QString::number(d->positionLogical.x()));
 	writer->writeAttribute( "logicalPosY", QString::number(d->positionLogical.y()));
 	writer->writeEndElement();
@@ -1398,17 +1381,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->setVisible(str.toInt());
 
-			str = attribs.value("enableCoordBinding").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("enableCoordBinding").toString());
-			else
-				enableCoordBinding(str.toInt());
-
-			str = attribs.value("coordBinding").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("coordBinding").toString());
-			else
-				setCoordBinding(str.toInt());
+			READ_INT_VALUE("coordinateBinding", coordinateBindingEnabled, bool);
 
 			str = attribs.value("logicalPosX").toString();
 			if(str.isEmpty())

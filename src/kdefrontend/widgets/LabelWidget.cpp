@@ -1128,7 +1128,7 @@ void LabelWidget::bindingChanged(bool checked) {
 		return;
 
 	for (auto* label : m_labelsList)
-		label->setCoordBinding(checked);
+		label->setCoordinateBindingEnabled(checked);
 }
 
 void LabelWidget::showPlaceholderTextChanged(bool checked) {
@@ -1358,11 +1358,6 @@ void LabelWidget::load() {
 	ui.teLabel->setFocus();
 
 	// Geometry
-	ui.lBindLogicalPos->setVisible(m_label->isAttachedToCoordEnabled());
-	ui.chbBindLogicalPos->setVisible(m_label->isAttachedToCoordEnabled());
-	ui.chbBindLogicalPos->setChecked(m_label->isAttachedToCoord());
-	bindingChanged(m_label->isAttachedToCoord());
-
 	//widgets for positioning using absolute plot distances
 	ui.cbPositionX->setCurrentIndex( (int)m_label->position().horizontalPosition );
 	positionXChanged(ui.cbPositionX->currentIndex());
@@ -1374,6 +1369,12 @@ void LabelWidget::load() {
 	//widgets for positioning using logical plot coordinates
 	SET_NUMBER_LOCALE
 	const auto* plot = static_cast<const CartesianPlot*>(m_label->parent(AspectType::CartesianPlot));
+	bool visible = (plot != nullptr);
+	ui.lBindLogicalPos->setVisible(visible);
+	ui.chbBindLogicalPos->setVisible(visible);
+	ui.chbBindLogicalPos->setChecked(m_label->coordinateBindingEnabled());
+	bindingChanged(m_label->coordinateBindingEnabled());
+
 	//TODO
 	if (plot && plot->xRangeFormat(0) == RangeT::Format::DateTime) {
 		ui.lPositionXLogical->hide();
