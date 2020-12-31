@@ -161,7 +161,7 @@ private slots:
 	void plotXMaxChanged(double);
 	void plotXRangeChanged(Range<double>);
 	void plotXRangeFormatChanged(RangeT::Format);
-	void plotXScaleChanged(CartesianPlot::Scale);
+	void plotXScaleChanged(CartesianPlot::Scale);	//TODO: RangeT::Scale
 
 	void plotYAutoScaleChanged(bool);
 	void plotYMinChanged(double);

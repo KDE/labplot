@@ -916,22 +916,31 @@ void CartesianPlot::setRangeType(RangeType type) {
 		exec(new CartesianPlotSetRangeTypeCmd(d, type, ki18n("%1: set range type")));
 }
 
-//STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeFormat, RangeT::Format, xRangeFormat, xRangeFormatChanged);
-/*void CartesianPlot::setXRangeFormat(RangeT::Format format) {
-	Q_D(CartesianPlot);
-	if (format != d->xRangeFormat)
-		exec(new CartesianPlotSetXRangeFormatCmd(d, format, ki18n("%1: set x-range format")));
-}*/
-//TODO: CartesianPlotSetXRangeFormatIndexCmd
+RangeT::Format CartesianPlot::xRangeFormat() const {
+	return xRangeFormat(coordinateSystem(defaultCoordinateSystem())->xIndex());
+}
 RangeT::Format CartesianPlot::xRangeFormat(const int index) const {
 	Q_D(const CartesianPlot);
+	if (index < 0 || index > d->xRanges.size()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return RangeT::Format::Numeric;
+	}
 	return d->xRanges.at(index).format();
 }
+void CartesianPlot::setXRangeFormat(const RangeT::Format format) {
+	setXRangeFormat(coordinateSystem(defaultCoordinateSystem())->xIndex(), format);
+}
+//TODO: CartesianPlotSetXRangeFormatIndexCmd
 void CartesianPlot::setXRangeFormat(const int index, const RangeT::Format format) {
 	Q_D(CartesianPlot);
-	if (format != xRangeFormat(index) && index >= 0 && index < xRangeCount())
+	if (index < 0 || index > d->xRanges.size()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return;
+	}
+	if (format != xRangeFormat(index)) {
 		d->xRanges[index].setFormat(format);
-	emit d->xRangeFormatChanged();
+		emit d->xRangeFormatChanged();
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeFormat, CartesianPlot::RangeFormat, yRangeFormat, yRangeFormatChanged);
@@ -1025,7 +1034,7 @@ void CartesianPlot::setXRange(Range<double> range) {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
 	const int xIndex{ coordinateSystem(defaultCoordinateSystem())->xIndex() };
-	if (range.finite() && range != d->xRanges[xIndex]) {
+	if (range.finite() && range != d->xRanges.at(xIndex)) {
 		d->curvesYMinMaxIsDirty = true;
 		exec(new CartesianPlotSetXRangeIndexCmd(d, range, xIndex, ki18n("%1: set x range")));
 		//d->xRanges[xIndex] = range;
@@ -1069,12 +1078,37 @@ void CartesianPlot::setXMax(const int index, const double value) {
 	setXRange(index, range);
 }
 
+// obsolete
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales)
-void CartesianPlot::setXScale(Scale scale) {
+void CartesianPlot::setXScale(CartesianPlot::Scale scale) {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
 	if (scale != d->xScale)
 		exec(new CartesianPlotSetXScaleCmd(d, scale, ki18n("%1: set x scale")));
+}
+//TODO: undo aware?
+void CartesianPlot::setXRangeScale(const RangeT::Scale scale) {
+	setXRangeScale(coordinateSystem(defaultCoordinateSystem())->xIndex(), scale);
+}
+void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {
+	Q_D(CartesianPlot);
+	if (index < 0 || index > d->xRanges.size()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return;
+	}
+	d->xRanges[index].setScale(scale);
+	//TODO	emit d->xRangeScaleChanged();
+}
+RangeT::Scale CartesianPlot::xRangeScale() const {
+	return xRangeScale(coordinateSystem(defaultCoordinateSystem())->xIndex());
+}
+RangeT::Scale CartesianPlot::xRangeScale(const int index) const {
+	Q_D(const CartesianPlot);
+	if (index < 0 || index > d->xRanges.size()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return RangeT::Scale::Linear;
+	}
+	return d->xRanges.at(index).scale();
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBreakingEnabled, retransformScales)

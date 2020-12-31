@@ -133,8 +133,6 @@ public:
 	void setVisible(bool on) override;
 	bool isVisible() const override;
 	void setPrinting(bool) override;
-	void setCoordBinding(bool);
-	bool enableCoordBinding(bool, const CartesianPlot*);
 	QRectF size();
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	int gluePointCount();

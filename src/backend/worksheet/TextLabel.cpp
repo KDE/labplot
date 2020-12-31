@@ -378,51 +378,6 @@ void TextLabel::setVisible(bool on) {
 	exec(new TextLabelSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
 }
 
-/*!
- * \brief TextLabel::setCoordBinding
- * Binds TextLabel to the coord of the parent CartesianPlot, but only if coord binding is enabled
- * \param on set(true) or reset(false) coord binding
- */
-void TextLabel::setCoordBinding(bool on) {
-	Q_D(TextLabel);
-	if (!d->m_coordBindingEnable)
-		return;
-	d->m_coordBinding = on;
-	d->positionLogical = d->cSystem->mapSceneToLogical(d->pos(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	emit positionLogicalChanged(d->positionLogical);
-}
-
-/*!
- * \brief TextLabel::enableCoordBinding
- * \param enable enable or disable coord binding
- * \param plot parent plot to which should be bind, if no parentAspect added. If parentAspect exist, this plot will be used.
- * If argument CartesianPlot and parentAspect is not available, not able to enable bind too coord.
- * \return true if successfully bind, otherwise false
- */
-bool TextLabel::enableCoordBinding(bool enable, const CartesianPlot* plot) {
-	Q_D(TextLabel);
-
-	if (!d->plot) // if infoelement is parent, it has no cartesianplot so d->plot stays nullptr because of the dynamic cast
-		d->plot = dynamic_cast<const CartesianPlot*>(parentAspect());
-
-	if (d->plot == nullptr) {
-		if (plot == nullptr) {
-			d->m_coordBindingEnable = false;
-			return false;
-		} else {
-			d->m_coordBindingEnable = enable;
-			d->plot = plot;
-			//TODO
-			d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(0));
-			return true;
-		}
-	}
-	d->m_coordBindingEnable = enable;
-	//TODO
-	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(0));
-	return true;
-}
-
 QRectF TextLabel::size() {
 	Q_D(TextLabel);
 	return d->size();
@@ -480,11 +435,9 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : q(owner) {
 TextLabelPrivate::TextLabelPrivate(TextLabel* owner, CartesianPlot* plot)
 	: plot(plot), q(owner) {
 
-	  //TODO
+	//TODO
 	if(plot)
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
-	else
-		cSystem = nullptr;
 
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemIsMovable);

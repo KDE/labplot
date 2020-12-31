@@ -1113,8 +1113,7 @@ void LabelWidget::bindingChanged(bool checked) {
 
 	//widgets for positioning using logical plot coordinates
 	const auto* plot = static_cast<const CartesianPlot*>(m_label->parent(AspectType::CartesianPlot));
-	//TODO
-	if (plot && plot->xRangeFormat(0) == RangeT::Format::DateTime) {
+	if (plot && plot->xRangeFormat() == RangeT::Format::DateTime) {
 		ui.dtePositionXLogical->setVisible(checked);
 	} else {
 		ui.lPositionXLogical->setVisible(checked);
@@ -1375,8 +1374,7 @@ void LabelWidget::load() {
 	ui.chbBindLogicalPos->setChecked(m_label->coordinateBindingEnabled());
 	bindingChanged(m_label->coordinateBindingEnabled());
 
-	//TODO
-	if (plot && plot->xRangeFormat(0) == RangeT::Format::DateTime) {
+	if (plot && plot->xRangeFormat() == RangeT::Format::DateTime) {
 		ui.lPositionXLogical->hide();
 		ui.lePositionXLogical->hide();
 		ui.lPositionXLogicalDateTime->show();

@@ -468,8 +468,7 @@ void CustomPointDock::load() {
 
 	SET_NUMBER_LOCALE
 	CartesianPlot* plot = static_cast<CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
-	//TODO: const int xIndex = plot->coordinateSystem(m_point->coordinateSystemIndex())->xIndex();
-	if (plot->xRangeFormat(0) == RangeT::Format::Numeric) {
+	if (plot->xRangeFormat() == RangeT::Format::Numeric) {
 		ui.lPositionX->show();
 		ui.lePositionX->show();
 		ui.lPositionXDateTime->hide();

@@ -144,18 +144,18 @@ public:
 //	int yRangeCount() const;
 	Range<double> xRange(int index) const;
 	void setXRange(Range<double>);		// set x range of default plot range
-	void setXRange(int index, Range<double>);	// set x range of d->xRanges[index]
+	void setXRange(int index, Range<double>);	// set x range index
 	//BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
-	RangeT::Format xRangeFormat(int index) const;		// get range format of d->xRanges[index]
-	void setXRangeFormat(int index, RangeT::Format);	// set format of d->xRanges[index]
+	RangeT::Format xRangeFormat() const;		// get x range format of default plot range
+	RangeT::Format xRangeFormat(int index) const;		// get format of x range index
+	void setXRangeFormat(RangeT::Format);				// set x range format of default plot range
+	void setXRangeFormat(int index, RangeT::Format);	// set format of x range index
 	void addXRange();				// add new x range
 	void removeXRange(int index);			// remove selected x range
 	// convenience methods
-//	void setXMin(const double value);
-	void setXMin(int index, double value);	// set x min of d->xRanges[index]
-//	void setXMax(const double value);
-	void setXMax(int index, double value);	// set x max of d->xRanges[index]
+	void setXMin(int index, double value);	// set x min of x range index
+	void setXMax(int index, double value);	// set x max of x range index
 	void setYMin(double value);
 	void setYMax(double value);
 	int coordinateSystemCount() const;
@@ -164,7 +164,10 @@ public:
 	void removeCoordinateSystem(int index);		// remove coordinate system of index
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystem, DefaultCoordinateSystem)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)	//TODO: obsolete
-	RangeT::Scale xRangeScale(int index) const;		// get range scale of d->xRanges[index]
+	RangeT::Scale xRangeScale() const;		// get x range scale of default plot range
+	RangeT::Scale xRangeScale(int index) const;		// get range scale of x range index
+	void setXRangeScale(RangeT::Scale);	// set x range scale of default plot range
+	void setXRangeScale(int index, RangeT::Scale);	// set scale of x range index
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
