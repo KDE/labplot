@@ -621,7 +621,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 	}
 	for (int i{0}; i < cSystemCount; i++) {
 		QRadioButton *rb = new QRadioButton();
-		if (i == m_plot->defaultCoordinateSystem())
+		if (i == m_plot->defaultCoordinateSystemIndex())
 			rb->setChecked(true);
 		m_bgDefaultPlotRange->addButton(rb);
 		rb->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
@@ -1804,7 +1804,7 @@ void CartesianPlotDock::plotXMinChanged(double value) {
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	const int xIndex{ m_plot ? m_plot->coordinateSystem(m_plot->defaultCoordinateSystem())->xIndex() : 0 };
+	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
 	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(xIndex, 1));
 	if (le)	// Numeric
 		le->setText( numberLocale.toString(value) );
@@ -1819,7 +1819,7 @@ void CartesianPlotDock::plotXMaxChanged(double value) {
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	const int xIndex{ m_plot ? m_plot->coordinateSystem(m_plot->defaultCoordinateSystem())->xIndex() : 0 };
+	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
 	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(xIndex, 2));
 	if (le)	// Numeric
 		le->setText(numberLocale.toString(value));
@@ -1835,7 +1835,7 @@ void CartesianPlotDock::plotXRangeChanged(Range<double> range) {
 
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	const int xIndex{ m_plot ? m_plot->coordinateSystem(m_plot->defaultCoordinateSystem())->xIndex() : 0 };
+	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
 	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(xIndex, 1));
 	if (le) {	// Numeric
 		le->setText( numberLocale.toString(range.start()) );
@@ -1852,7 +1852,7 @@ void CartesianPlotDock::plotXRangeChanged(Range<double> range) {
 
 void CartesianPlotDock::plotXScaleChanged(CartesianPlot::Scale scale) {
 	m_initializing = true;
-	const int xIndex{ m_plot ? m_plot->coordinateSystem(m_plot->defaultCoordinateSystem())->xIndex() : 0 };
+	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
 	qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(xIndex, 3))->setCurrentIndex(static_cast<int>(scale));
 	m_initializing = false;
 }
@@ -1860,7 +1860,7 @@ void CartesianPlotDock::plotXScaleChanged(CartesianPlot::Scale scale) {
 void CartesianPlotDock::plotXRangeFormatChanged(RangeT::Format format) {
 	DEBUG(Q_FUNC_INFO << ", format = " << static_cast<int>(format))
 	m_initializing = true;
-	const int xIndex{ m_plot ? m_plot->coordinateSystem(m_plot->defaultCoordinateSystem())->xIndex() : 0 };
+	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
 	qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(xIndex, 0))->setCurrentIndex(static_cast<int>(format));
 	m_initializing = false;
 }
@@ -1915,7 +1915,7 @@ void CartesianPlotDock::plotYRangeFormatChanged(CartesianPlot::RangeFormat forma
 void CartesianPlotDock::defaultPlotRangeChanged() {
 	const int index{ m_bgDefaultPlotRange->checkedId() };
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	m_plot->setDefaultCoordinateSystem(index);
+	m_plot->setDefaultCoordinateSystemIndex(index);
 }
 
 void CartesianPlotDock::plotVisibleChanged(bool on) {

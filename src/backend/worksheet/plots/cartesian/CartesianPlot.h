@@ -61,16 +61,16 @@ public:
 	explicit CartesianPlot(const QString &name);
 	~CartesianPlot() override;
 
+	enum class Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
+	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor, Crosshair};
+	enum class NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
+				  ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 	//TODO: replaced by RangeT::Scale
 	enum class Scale {Linear, Log10, Log2, Ln, Log10Abs, Log2Abs, LnAbs, Sqrt, X2};
-	enum class Type {FourAxes, TwoAxes, TwoAxesCentered, TwoAxesCenteredZero};
 	// TODO: replaced by RangeT::Format
 	enum class RangeFormat {Numeric, DateTime};
 	enum class RangeType {Free, Last, First};
 	enum class RangeBreakStyle {Simple, Vertical, Sloped};
-	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor, Crosshair};
-	enum class NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
-	                          ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 
 	struct RangeBreak {
 		RangeBreak() : range(qQNaN(), qQNaN()), position(0.5), style(RangeBreakStyle::Sloped) {}
@@ -88,7 +88,7 @@ public:
 		RangeBreaks() : lastChanged(-1) {
 			RangeBreak b;
 			list << b;
-		};
+		}
 		QList<RangeBreak> list;
 		int lastChanged;
 	};
@@ -131,6 +131,7 @@ public:
 	void mouseHoverZoomSelectionMode(QPointF logicPos);
 	void mouseHoverOutsideDataRect();
 
+	//TODO: use Range::xRangeDateTimeFormat()
 	const QString& xRangeDateTimeFormat() const;
 	const QString& yRangeDateTimeFormat() const;
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
@@ -142,15 +143,11 @@ public:
 	BASIC_D_ACCESSOR_DECL(Range<double>, yRange, YRange)
 	int xRangeCount() const;
 //	int yRangeCount() const;
+	//TODO: return reference and replace d->xRanges[index]  in .cpp
+	Range<double> xRange() const;		// get x range of default plot range
 	Range<double> xRange(int index) const;
 	void setXRange(Range<double>);		// set x range of default plot range
 	void setXRange(int index, Range<double>);	// set x range index
-	//BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat)
-	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
-	RangeT::Format xRangeFormat() const;		// get x range format of default plot range
-	RangeT::Format xRangeFormat(int index) const;		// get format of x range index
-	void setXRangeFormat(RangeT::Format);				// set x range format of default plot range
-	void setXRangeFormat(int index, RangeT::Format);	// set format of x range index
 	void addXRange();				// add new x range
 	void removeXRange(int index);			// remove selected x range
 	// convenience methods
@@ -158,11 +155,12 @@ public:
 	void setXMax(int index, double value);	// set x max of x range index
 	void setYMin(double value);
 	void setYMax(double value);
-	int coordinateSystemCount() const;
-	CartesianCoordinateSystem* coordinateSystem(int) const;
-	void addCoordinateSystem();			// add a new cooridnate system
-	void removeCoordinateSystem(int index);		// remove coordinate system of index
-	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystem, DefaultCoordinateSystem)
+	//BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat)
+	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
+	RangeT::Format xRangeFormat() const;		// get x range format of default plot range
+	RangeT::Format xRangeFormat(int index) const;		// get format of x range index
+	void setXRangeFormat(RangeT::Format);				// set x range format of default plot range
+	void setXRangeFormat(int index, RangeT::Format);	// set format of x range index
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)	//TODO: obsolete
 	RangeT::Scale xRangeScale() const;		// get x range scale of default plot range
 	RangeT::Scale xRangeScale(int index) const;		// get range scale of x range index
@@ -176,6 +174,13 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, cursorPen, CursorPen);
 	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable);
 	CLASS_D_ACCESSOR_DECL(bool, cursor1Enable, Cursor1Enable);
+
+	int coordinateSystemCount() const;
+	CartesianCoordinateSystem* coordinateSystem(int) const;
+	CartesianCoordinateSystem* defaultCoordinateSystem() const;
+	void addCoordinateSystem();			// add a new cooridnate system
+	void removeCoordinateSystem(int index);		// remove coordinate system of index
+	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystemIndex, DefaultCoordinateSystemIndex)
 
 	QString theme() const;
 
@@ -348,7 +353,7 @@ signals:
 	void yMaxChanged(double);
 	void xScaleChanged(CartesianPlot::Scale);
 	void yScaleChanged(CartesianPlot::Scale);
-	void defaultCoordinateSystemChanged(int);
+	void defaultCoordinateSystemIndexChanged(int);
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 	void yRangeBreakingEnabledChanged(bool);

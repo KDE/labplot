@@ -86,7 +86,10 @@ public:
 
 	CartesianPlot* const q;
 	QVector<CartesianCoordinateSystem*> coordinateSystems;
-	int defaultCoordinateSystem{0};
+	int defaultCoordinateSystemIndex{0};
+	CartesianCoordinateSystem* defaultCoordinateSystem() const {
+		return coordinateSystems.at(defaultCoordinateSystemIndex);
+	}
 
 	CartesianPlot::MouseMode mouseMode{CartesianPlot::MouseMode::Selection};
 	bool suppressRetransform{false};
