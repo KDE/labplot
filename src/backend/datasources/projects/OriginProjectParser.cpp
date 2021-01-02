@@ -1061,16 +1061,16 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			//scales
 			switch (originXAxis.scale) {
 			case Origin::GraphAxis::Linear:
-				plot->setXScale(CartesianPlot::Scale::Linear);
+				plot->setXRangeScale(RangeT::Scale::Linear);
 				break;
 			case Origin::GraphAxis::Log10:
-				plot->setXScale(CartesianPlot::Scale::Log10);
+				plot->setXRangeScale(RangeT::Scale::Log10);
 				break;
 			case Origin::GraphAxis::Ln:
-				plot->setXScale(CartesianPlot::Scale::Ln);
+				plot->setXRangeScale(RangeT::Scale::Ln);
 				break;
 			case Origin::GraphAxis::Log2:
-				plot->setXScale(CartesianPlot::Scale::Log2);
+				plot->setXRangeScale(RangeT::Scale::Log2);
 				break;
 			case Origin::GraphAxis::Probability:
 			case Origin::GraphAxis::Probit:
@@ -1078,7 +1078,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			case Origin::GraphAxis::OffsetReciprocal:
 			case Origin::GraphAxis::Logit:
 				//TODO:
-				plot->setXScale(CartesianPlot::Scale::Linear);
+				plot->setXRangeScale(RangeT::Scale::Linear);
 				break;
 			}
 

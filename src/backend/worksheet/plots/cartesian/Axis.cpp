@@ -1030,7 +1030,7 @@ void AxisPrivate::retransformLine() {
 	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() <<  ", coordinate system index = " << cSystemIndex)
 	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
 	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
-	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString())
+	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << ", scale = " << (int)range.scale())
 
 	if (suppressRetransform)
 		return;
@@ -1291,7 +1291,7 @@ void AxisPrivate::retransformTicks() {
 	if (minorTicksType == Axis::TicksType::TotalNumber)
 		tmpMinorTicksNumber = minorTicksNumber;
 	else if (minorTicksType == Axis::TicksType::Spacing)
-		tmpMinorTicksNumber = fabs(end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
+		tmpMinorTicksNumber = qAbs(end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
 	else
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
 

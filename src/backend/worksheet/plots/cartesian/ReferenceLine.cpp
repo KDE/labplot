@@ -286,15 +286,13 @@ void ReferenceLinePrivate::retransform() {
 		return;
 
 	//calculate the position in the scene coordinates
-	//TODO
 	QVector<QPointF> listLogical;
 	if (orientation == ReferenceLine::Orientation::Vertical)
 		listLogical << QPointF(position, plot->yRange().center());
 	else
-		listLogical << QPointF(plot->xRange(0).center(), position);
+		listLogical << QPointF(plot->xRange().center(), position);
 
-	//TODO
-	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
+	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->defaultCoordinateSystem());
 	QVector<QPointF> listScene = cSystem->mapLogicalToScene(listLogical);
 
 	if (!listScene.isEmpty()) {
@@ -306,11 +304,10 @@ void ReferenceLinePrivate::retransform() {
 
 		//determine the length of the line to be drawn
 		QVector<QPointF> pointsLogical;
-		//TODO
 		if (orientation == ReferenceLine::Orientation::Vertical)
 			pointsLogical << QPointF(position, plot->yRange().start()) << QPointF(position, plot->yRange().end());
 		else
-			pointsLogical << QPointF(plot->xRange(0).start(), position) << QPointF(plot->xRange(0).end(), position);
+			pointsLogical << QPointF(plot->xRange().start(), position) << QPointF(plot->xRange().end(), position);
 
 		QVector<QPointF> pointsScene = cSystem->mapLogicalToScene(pointsLogical);
 

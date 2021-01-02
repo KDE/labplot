@@ -504,7 +504,9 @@ void CartesianPlotDock::updateXRangeList() {
 	ui.twXRanges->setRowCount(xRangeCount);
 	for (int i{0}; i < xRangeCount; i++) {
 		const auto format{ m_plot->xRangeFormat(i) };
-		DEBUG(Q_FUNC_INFO << ", format : " << static_cast<int>(format))
+		const auto scale { m_plot->xRange(i).scale() };
+		DEBUG(Q_FUNC_INFO << ", x range " << i << " format : " << static_cast<int>(format)
+			<< " scale : " << static_cast<int>(scale))
 		if (format == RangeT::Format::Numeric) {
 			QLineEdit *le = new QLineEdit(ui.twXRanges);
 			le->setValidator(new QDoubleValidator(le));
@@ -518,14 +520,14 @@ void CartesianPlotDock::updateXRangeList() {
 			connect(le, &QLineEdit::textChanged, this, &CartesianPlotDock::xMaxChanged);
 		} else {
 			QDateTimeEdit *dte = new QDateTimeEdit(ui.twXRanges);
-			dte->setDisplayFormat( m_plot->xRangeDateTimeFormat() );
+			dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(i) );
 			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange(i).start()));
 			ui.twXRanges->setCellWidget(i, 1, dte);
 			ui.twPlotRanges->resizeColumnToContents(1);
 			dte->setProperty("row", i);
 			connect(dte, &QDateTimeEdit::dateTimeChanged, this, &CartesianPlotDock::xMinDateTimeChanged);
 			dte = new QDateTimeEdit(ui.twXRanges);
-			dte->setDisplayFormat( m_plot->xRangeDateTimeFormat() );
+			dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(i) );
 			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->xRange(i).end()));
 			ui.twXRanges->setCellWidget(i, 2, dte);
 			ui.twPlotRanges->resizeColumnToContents(2);
@@ -550,7 +552,8 @@ void CartesianPlotDock::updateXRangeList() {
 		cb->addItem( i18n("log(|x|)") );
 		cb->addItem( i18n("log2(|x|)") );
 		cb->addItem( i18n("ln(|x|)") );
-		//TODO: setCurrentIndex(static_cast<int>(scale));
+		cb->setCurrentIndex(static_cast<int>(scale));
+		cb->setProperty("row", i);
 		ui.twXRanges->setCellWidget(i, 3, cb);
 		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::xScaleChanged);
 	}
@@ -641,16 +644,6 @@ void CartesianPlotDock::retranslateUi() {
 	//general
 	ui.cbYRangeFormat->addItem(i18n("Numeric"));
 	ui.cbYRangeFormat->addItem(i18n("Date and Time"));
-
-	//TODO
-	//ui.cbXScaling->addItem( i18n("linear") );
-	//ui.cbXScaling->addItem( i18n("log(x)") );
-	//ui.cbXScaling->addItem( i18n("log2(x)") );
-	//ui.cbXScaling->addItem( i18n("ln(x)") );
-	//ui.cbXScaling->addItem( i18n("log(abs(x))") );
-	//ui.cbXScaling->addItem( i18n("log2(abs(x))") );
-	//ui.cbXScaling->addItem( i18n("ln(abs(x))") );
-	ui.cbXScaling->hide();
 
 	//TODO: avoid copy-paste (see XScaling)
 	ui.cbYScaling->addItem( i18n("linear") );
@@ -881,14 +874,15 @@ void CartesianPlotDock::xMaxDateTimeChanged(const QDateTime& dateTime) {
     called on scale changes (linear, log) for the x-axis
  */
 void CartesianPlotDock::xScaleChanged(int index) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	if (m_initializing)
 		return;
 
-//	const auto scale{ static_cast<CartesianPlot::Scale>(index) };
-	//TODO: multiple scales
-//	for (auto* plot : m_plotList)
-//		plot->setXScale(scale);
+	const int xRangeIndex{ sender()->property("row").toInt() };
+	DEBUG(Q_FUNC_INFO << ", x range " << xRangeIndex << " scale changed to " << index)
+	const auto scale{ static_cast<RangeT::Scale>(index) };
+	for (auto* plot : m_plotList)
+		plot->setXRangeScale(xRangeIndex, scale);
 }
 
 void CartesianPlotDock::xRangeFormatChanged(int index) {
@@ -1851,6 +1845,7 @@ void CartesianPlotDock::plotXRangeChanged(Range<double> range) {
 }
 
 void CartesianPlotDock::plotXScaleChanged(CartesianPlot::Scale scale) {
+	DEBUG(Q_FUNC_INFO << ", scale = " << (int)scale)
 	m_initializing = true;
 	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
 	qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(xIndex, 3))->setCurrentIndex(static_cast<int>(scale));
@@ -2116,11 +2111,10 @@ void CartesianPlotDock::load() {
 		} else {
 			auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, 1));
 			if (dte) {	// may be nullptr
-				//TODO: need multiple xRangeDateTimeFormat
-				dte->setDisplayFormat( m_plot->xRangeDateTimeFormat() );
+				dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(row) );
 				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(xRange.start())) );
 				dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, 2));
-				dte->setDisplayFormat( m_plot->xRangeDateTimeFormat() );
+				dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(row) );
 				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(xRange.end())) );
 			}
 		}

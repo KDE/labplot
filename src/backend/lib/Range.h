@@ -74,12 +74,14 @@ public:
 
 	T start() const { return m_start; }
 	T end() const { return m_end; }
-	Format format() const { return m_format; }
-	Scale scale() const { return m_scale; }
 	T& start() { return m_start; }
 	T& end() { return m_end; }
+	Format format() const { return m_format; }
 	Format& format() { return m_format; }
+	Scale scale() const { return m_scale; }
 	Scale& scale() { return m_scale; }
+	QString dateTimeFormat() const { return m_dateTimeFormat; }
+	const QString& dateTimeFormat() { return m_dateTimeFormat; }
 	void setMin(T start) { m_start = start; }
 	void setMax(T end) { m_end = end; }
 	void setRange(T start, T end, Format format = Format::Numeric,
@@ -91,6 +93,7 @@ public:
 	}
 	void setFormat(Format format) { m_format = format; }
 	void setScale(Scale scale) { m_scale = scale; }
+	void setDateTimeFormat(QString format) { m_dateTimeFormat = format; }
 
 	T size() const { return m_end - m_start; }
 	T length() const { return qAbs(m_end - m_start); }

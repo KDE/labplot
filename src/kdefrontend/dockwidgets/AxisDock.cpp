@@ -2075,9 +2075,10 @@ void AxisDock::load() {
 
 		if (!numeric) {
 			if (m_axis->orientation() == Axis::Orientation::Horizontal) {
-				ui.dateTimeEditStart->setDisplayFormat(plot->xRangeDateTimeFormat());
-				ui.dateTimeEditEnd->setDisplayFormat(plot->xRangeDateTimeFormat());
+				ui.dateTimeEditStart->setDisplayFormat(plot->xRangeDateTimeFormat(xIndex));
+				ui.dateTimeEditEnd->setDisplayFormat(plot->xRangeDateTimeFormat(xIndex));
 			} else {
+				//TODO
 				ui.dateTimeEditStart->setDisplayFormat(plot->yRangeDateTimeFormat());
 				ui.dateTimeEditEnd->setDisplayFormat(plot->yRangeDateTimeFormat());
 			}

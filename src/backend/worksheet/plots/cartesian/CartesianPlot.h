@@ -132,7 +132,8 @@ public:
 	void mouseHoverOutsideDataRect();
 
 	//TODO: use Range::xRangeDateTimeFormat()
-	const QString& xRangeDateTimeFormat() const;
+	const QString xRangeDateTimeFormat() const;
+	const QString xRangeDateTimeFormat(int index) const;
 	const QString& yRangeDateTimeFormat() const;
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
@@ -161,7 +162,6 @@ public:
 	RangeT::Format xRangeFormat(int index) const;		// get format of x range index
 	void setXRangeFormat(RangeT::Format);				// set x range format of default plot range
 	void setXRangeFormat(int index, RangeT::Format);	// set format of x range index
-	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, xScale, XScale)	//TODO: obsolete
 	RangeT::Scale xRangeScale() const;		// get x range scale of default plot range
 	RangeT::Scale xRangeScale(int index) const;		// get range scale of x range index
 	void setXRangeScale(RangeT::Scale);	// set x range scale of default plot range

@@ -58,13 +58,22 @@ public:
 	void setZoomSelectionBandShow(bool show);
 
 	CartesianPlot::Type type{CartesianPlot::Type::FourAxes};
+	QString theme;
 
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::RangeFormat::Numeric};
-	QString xRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"}, yRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
+	//TODO: obsolete
+//WORK	QString xRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"}, yRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
+	QString yRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 	QVector<Range<double>> xRanges{{}};	// x ranges
+	const Range<double> xRange() const {
+		return xRanges.at(defaultCoordinateSystem()->xIndex());
+	}
+	Range<double>& xRange() {
+		return xRanges[defaultCoordinateSystem()->xIndex()];
+	}
 	Range<double> yRange{};		//TODO: obsolete
 	Range<double> xPrevRange{}, yPrevRange{};
 	bool autoScaleX{true}, autoScaleY{true};
@@ -75,10 +84,11 @@ public:
 	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
 	double autoScaleOffsetFactor{0.0};
 	//TODO: obsolete
-	CartesianPlot::Scale xScale{CartesianPlot::Scale::Linear}, yScale{CartesianPlot::Scale::Linear};
+	CartesianPlot::Scale yScale{CartesianPlot::Scale::Linear};
+	//TODO: move to Range?
 	bool xRangeBreakingEnabled{false}, yRangeBreakingEnabled{false};
 	CartesianPlot::RangeBreaks xRangeBreaks, yRangeBreaks;
-	QString theme;
+
 
 	//cached values of minimum and maximum for all visible curves
 	bool curvesXMinMaxIsDirty{false}, curvesYMinMaxIsDirty{false};
@@ -122,7 +132,10 @@ private:
 	void updateDataRect();
 	void checkXRange();
 	void checkYRange();
+	//obsolete version
 	CartesianScale* createScale(CartesianPlot::Scale type,
+		const Range<double> &sceneRange, const Range<double> &logicalRange);
+	CartesianScale* createScale(RangeT::Scale,
 		const Range<double> &sceneRange, const Range<double> &logicalRange);
 
 	bool m_insideDataRect{false};

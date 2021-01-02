@@ -1273,7 +1273,8 @@ void XYCurvePrivate::addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, d
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff, int numberOfPixelX) {
 	//DEBUG(Q_FUNC_INFO << ", coordinate system index: " << cSystem->xIndex())
 
-	if (plot->xScale() == CartesianPlot::Scale::Linear) {
+	const auto xIndex{ cSystem->xIndex() };
+	if (plot->xRangeScale(xIndex) == RangeT::Scale::Linear) {
 		double minLogicalDiffX = plot->xRange(cSystem->xIndex()).size()/numberOfPixelX;
 		//DEBUG("	plot->xMax() - plot->xMin() = " << plot->xMax() - plot->xMin())
 		//DEBUG("	plot->dataRect().width() = " << plot->dataRect().width())
