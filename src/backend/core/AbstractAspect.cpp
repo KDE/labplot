@@ -623,6 +623,7 @@ void AbstractAspect::copy() const {
 
 	//add LabPlot's copy&paste "identifier"
 	writer.writeDTD(QLatin1String("<!DOCTYPE LabPlotCopyPasteXML>"));
+	writer.writeStartElement("copy_content"); //root element
 
 	//write the type of the copied aspect
 	writer.writeStartElement(QLatin1String("type"));
@@ -632,6 +633,7 @@ void AbstractAspect::copy() const {
 	//write the aspect itself
 	save(&writer);
 
+	writer.writeEndElement(); //end the root-element
 	writer.writeEndDocument();
 	QApplication::clipboard()->setText(output);
 }
@@ -662,7 +664,7 @@ void AbstractAspect::paste() {
 		if (reader.name() == QLatin1String("type")) {
 			auto attribs = reader.attributes();
 			auto type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
-			if (type == AspectType::AbstractAspect)
+			if (type != AspectType::AbstractAspect)
 				aspect = AspectFactory::createAspect(type);
 		} else {
 			if (aspect) {
@@ -670,14 +672,12 @@ void AbstractAspect::paste() {
 				break;
 			}
 		}
-// 		reader.skipToEndElement();
-// 		reader.skipToNextTag();
 	}
 
 // 	qDebug()<<"errors " << reader.errorString();
 	if (aspect) {
-// 		aspect->setName(i18n("Copy of %1", aspect->name()));
 		addChild(aspect);
+		project()->restorePointers(aspect);
 	}
 }
 

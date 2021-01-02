@@ -70,7 +70,7 @@ public:
 
 		/* spreadsheet and its children */
 		else if (type == AspectType::Spreadsheet)
-			return new Spreadsheet(QString());
+			return new Spreadsheet(QString(), true /*loading*/);
 		else if (type == AspectType::Column)
 			return new Column(QString());
 

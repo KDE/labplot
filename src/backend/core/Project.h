@@ -80,6 +80,7 @@ public:
 	void save(const QPixmap&, QXmlStreamWriter*) const;
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
+	static void restorePointers(AbstractAspect*);
 
 	static bool isLabPlotProject(const QString& fileName);
 	static QString supportedExtensions();
