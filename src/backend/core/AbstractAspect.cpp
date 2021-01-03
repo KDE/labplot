@@ -716,7 +716,7 @@ void AbstractAspect::paste(bool duplicate) {
  * is available, the aspect type of the object to be pasted is returned.
  * AspectType::AbstractAspect is returned otherwise.
  */
-AspectType AbstractAspect::clipboardAspectType(QString& name) const {
+AspectType AbstractAspect::clipboardAspectType(QString& name) {
 	AspectType type = AspectType::AbstractAspect;
 	const QClipboard* clipboard = QApplication::clipboard();
 	const QMimeData* mimeData = clipboard->mimeData();

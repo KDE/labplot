@@ -442,10 +442,29 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
+	//current selected aspect
+	auto* aspect = static_cast<AbstractAspect*>(m_treeView->currentIndex().internalPointer());
+
 	if (event->matches(QKeySequence::Delete))
 		deleteSelected();
-	else if (event->key() == 32) {
-		auto* aspect = static_cast<AbstractAspect*>(m_treeView->currentIndex().internalPointer());
+	else if (event->matches(QKeySequence::Copy)) {
+		//copy
+		if (aspect != m_project)
+			aspect->copy();
+	} else if (event->matches(QKeySequence::Paste)) {
+		//paste
+		QString name;
+		auto t = AbstractAspect::clipboardAspectType(name);
+		if (t != AspectType::AbstractAspect && aspect->pasteTypes().indexOf(t) != -1)
+			aspect->paste();
+	} else if ( (event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) {
+		//duplicate
+		if (aspect != m_project) {
+			aspect->copy();
+			aspect->parentAspect()->paste(true);
+		}
+	} else if (event->key() == 32) {
+		//space key - hide/show the current object
 		auto* we = dynamic_cast<WorksheetElement*>(aspect);
 		if (we)
 			we->setVisible(!we->isVisible());

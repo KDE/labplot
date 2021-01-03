@@ -248,6 +248,8 @@ public:
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*, bool preview) = 0;
 
+	static AspectType clipboardAspectType(QString&);
+
 protected:
 	void info(const QString& text) { emit statusInfo(text); }
 
@@ -265,14 +267,11 @@ private:
 	QString uniqueNameFor(const QString&) const;
 	const QVector<AbstractAspect*>& children() const;
 	void connectChild(AbstractAspect*);
-	AspectType clipboardAspectType(QString&) const;
 
 public slots:
 	bool setName(const QString&, bool autoUnique = true);
 	void setComment(const QString&);
 	void remove();
-
-private slots:
 	void copy() const;
 	void duplicate();
 	void paste(bool duplicate = false);
