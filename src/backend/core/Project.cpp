@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2021 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
  ***************************************************************************/
@@ -547,7 +547,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		reader->raiseError(i18n("no valid XML document found"));
 
 	if (!preview) {
-		//everything is read now, restore the pointers to the columns in xy-curves etc.
+		//everything is read now, restore the pointers
 		restorePointers(this);
 	}
 
@@ -555,6 +555,12 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	return !reader->hasError();
 }
 
+/*!
+ * this function is used to restore the pointers to to the columns in xy-curves etc.
+ * from the stored column paths. This function is called after the project was loaded
+ * and when an aspect is being pasted. In both cases we deserialized from XML and need
+ * to restore the pointers.
+ */
 void Project::restorePointers(AbstractAspect* aspect) {
 	//wait until all columns are decoded from base64-encoded data
 	QThreadPool::globalInstance()->waitForDone();
@@ -578,6 +584,9 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	if (hasChildren)
 		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
 	else {
+		//the object doesn't have any children -> one single aspect is being pasted.
+		//check whether the object being pasted is a XYCurve and add it to the
+		//list of curves to be retransformed
 		if (aspect->inherits(AspectType::XYCurve))
 			curves << static_cast<XYCurve*>(aspect);
 	}
@@ -659,7 +668,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	//data picker curves
 	QVector<DatapickerCurve*> dataPickerCurves;
 	if (hasChildren)
-		aspect->children<DatapickerCurve>(ChildIndexFlag::Recursive);
+		dataPickerCurves = aspect->children<DatapickerCurve>(ChildIndexFlag::Recursive);
 	else {
 		if (aspect->type() == AspectType::DatapickerCurve)
 			dataPickerCurves << static_cast<DatapickerCurve*>(aspect);
@@ -697,7 +706,17 @@ void Project::restorePointers(AbstractAspect* aspect) {
 
 	//all data was read in spreadsheets:
 	//call CartesianPlot::retransform() to retransform the plots
-	for (auto* plot : aspect->children<CartesianPlot>(ChildIndexFlag::Recursive)) {
+	QVector<CartesianPlot*> plots;
+	if (hasChildren && aspect->type() != AspectType::CartesianPlot)
+		plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::CartesianPlot)
+			plots << static_cast<CartesianPlot*>(aspect);
+		else if (aspect->inherits(AspectType::XYCurve) || aspect->type() == AspectType::Histogram)
+			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
+	}
+
+	for (auto* plot : plots) {
 		plot->setIsLoading(false);
 		plot->retransform();
 	}
@@ -706,7 +725,7 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	//call CartesianPlot::dataChanged() to notify affected plots about the new data.
 	//this needs to be done here since in LiveDataSource::finalizeImport() called above
 	//where the data is read the column pointers are not restored yes in curves.
-	QVector<CartesianPlot*> plots;
+	plots.clear();
 	for (auto* source : sources) {
 		for (int n = 0; n < source->columnCount(); ++n) {
 			Column* column = source->column(n);

@@ -674,6 +674,7 @@ void AbstractAspect::paste() {
 	}
 
 	if (aspect) {
+		beginMacro(i18n("%1: pasted %2", name(), aspect->name()));
 		if (aspect->type() != AspectType::CartesianPlotLegend)
 			addChild(aspect);
 		else {
@@ -685,6 +686,7 @@ void AbstractAspect::paste() {
 		}
 
 		project()->restorePointers(aspect);
+		endMacro();
 	}
 }
 
