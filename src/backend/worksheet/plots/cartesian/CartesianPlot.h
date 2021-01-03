@@ -4,7 +4,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2021 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2019 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -97,6 +97,8 @@ public:
 	QMenu* createContextMenu() override;
 	QMenu* analysisMenu();
 	QVector<AbstractAspect*> dependsOn() const override;
+	QVector<AspectType> pasteTypes() const override;
+
 	void setRect(const QRectF&) override;
 	QRectF dataRect() const;
 	void setMouseMode(MouseMode);

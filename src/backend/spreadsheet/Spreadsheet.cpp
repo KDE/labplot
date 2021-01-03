@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2006-2009 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2012-2019 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2021 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -810,6 +810,11 @@ void Spreadsheet::setColumnSelectedInView(int index, bool selected) {
 		}
 	} else
 		emit childAspectDeselectedInView(child<Column>(index));
+}
+
+
+QVector<AspectType> Spreadsheet::pasteTypes() const {
+	return QVector<AspectType>{AspectType::Column};
 }
 
 //##############################################################################

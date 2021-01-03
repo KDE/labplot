@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Aspect providing a spreadsheet table with column logic
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2017 Alexander Semke(alexander.semke@web.de)
+    Copyright            : (C) 2010-2021 Alexander Semke(alexander.semke@web.de)
     Copyright            : (C) 2006-2008 Tilman Benkert (thzs@gmx.net)
 
  ***************************************************************************/
@@ -53,6 +53,8 @@ public:
 
 	void setModel(SpreadsheetModel*);
 	SpreadsheetModel* model();
+
+	QVector<AspectType> pasteTypes() const override;
 
 	void updateHorizontalHeader();
 	void updateLocale();

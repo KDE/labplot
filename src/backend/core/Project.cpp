@@ -546,8 +546,10 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	} else  // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
-	if (!preview)
+	if (!preview) {
+		//everything is read now, restore the pointers to the columns in xy-curves etc.
 		restorePointers(this);
+	}
 
 	emit loaded();
 	return !reader->hasError();
@@ -556,6 +558,9 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 void Project::restorePointers(AbstractAspect* aspect) {
 	//wait until all columns are decoded from base64-encoded data
 	QThreadPool::globalInstance()->waitForDone();
+
+	bool hasChildren = aspect->childCount<AbstractAspect>();
+	auto columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
 
 	//LiveDataSource:
 	//call finalizeLoad() to replace relative with absolute paths if required
@@ -566,14 +571,17 @@ void Project::restorePointers(AbstractAspect* aspect) {
 		source->finalizeLoad();
 	}
 
-	//everything is read now.
-	//restore the pointer to the data sets (columns) in xy-curves etc.
-	auto columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
-
 	//xy-curves
 	// cannot be removed by the column observer, because it does not react
 	// on curve changes
-	auto curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
+	QVector<XYCurve*> curves;
+	if (hasChildren)
+		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->inherits(AspectType::XYCurve))
+			curves << static_cast<XYCurve*>(aspect);
+	}
+
 	for (auto* curve : curves) {
 		if (!curve) continue;
 		curve->suppressRetransform(true);
@@ -608,12 +616,26 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	}
 
 	// assign to all markers the curves they need
-	auto elements = aspect->children<InfoElement>(ChildIndexFlag::Recursive);
+	QVector<InfoElement*> elements;
+	if (hasChildren)
+		elements = aspect->children<InfoElement>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::InfoElement)
+			elements << static_cast<InfoElement*>(aspect);
+	}
+
 	for (auto element : elements)
 		element->assignCurve(curves);
 
 	//axes
-	auto axes = aspect->children<Axis>(ChildIndexFlag::Recursive);
+	QVector<Axis*> axes;
+	if (hasChildren)
+		axes = aspect->children<Axis>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::Axis)
+			axes << static_cast<Axis*>(aspect);
+	}
+
 	for (auto* axis : axes) {
 		if (!axis) continue;
 		RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
@@ -621,14 +643,28 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	}
 
 	//histograms
-	auto hists = aspect->children<Histogram>(ChildIndexFlag::Recursive);
+	QVector<Histogram*> hists;
+	if (hasChildren)
+		hists = aspect->children<Histogram>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::Histogram)
+			hists << static_cast<Histogram*>(aspect);
+	}
+
 	for (auto* hist : hists) {
 		if (!hist) continue;
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
 	}
 
 	//data picker curves
-	auto dataPickerCurves = aspect->children<DatapickerCurve>(ChildIndexFlag::Recursive);
+	QVector<DatapickerCurve*> dataPickerCurves;
+	if (hasChildren)
+		aspect->children<DatapickerCurve>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::DatapickerCurve)
+			dataPickerCurves << static_cast<DatapickerCurve*>(aspect);
+	}
+
 	for (auto* dataPickerCurve : dataPickerCurves) {
 		if (!dataPickerCurve) continue;
 		RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);

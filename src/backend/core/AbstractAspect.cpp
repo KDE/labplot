@@ -317,7 +317,6 @@ QMenu* AbstractAspect::createContextMenu() {
 	auto t = clipboardAspectType();
 	if (t != AspectType::AbstractAspect && pasteTypes().indexOf(t) != -1) {
 		auto* action = KStandardAction::paste(this);
-// 		QAction* action = new QAction("paste");
 		menu->addAction(action);
 		connect(action, &QAction::triggered, this, &AbstractAspect::paste);
 	}
@@ -674,7 +673,6 @@ void AbstractAspect::paste() {
 		}
 	}
 
-// 	qDebug()<<"errors " << reader.errorString();
 	if (aspect) {
 		addChild(aspect);
 		project()->restorePointers(aspect);

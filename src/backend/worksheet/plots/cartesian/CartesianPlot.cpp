@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2021 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016-2018 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
 
@@ -746,6 +746,17 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 	}
 
 	return aspects;
+}
+
+QVector<AspectType> CartesianPlot::pasteTypes() const {
+	return QVector<AspectType>{
+		AspectType::XYCurve, AspectType::Histogram,
+		AspectType::Axis, AspectType::XYEquationCurve,
+		//analysis curves
+		AspectType::TextLabel, AspectType::Image,
+		AspectType::InfoElement, AspectType::CustomPoint,
+		AspectType::ReferenceLine, AspectType::CartesianPlotLegend
+	};
 }
 
 void CartesianPlot::navigate(NavigationOperation op) {

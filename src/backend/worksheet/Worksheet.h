@@ -60,6 +60,7 @@ public:
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QWidget* view() const override;
+
 	QVector<AbstractAspect*> dependsOn() const override;
 	QVector<AspectType> pasteTypes() const override;
 
