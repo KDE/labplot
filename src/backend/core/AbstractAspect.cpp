@@ -307,9 +307,16 @@ QMenu* AbstractAspect::createContextMenu() {
 	//TODO: activate this again when the functionality is implemented
 // 	menu->addAction( KStandardAction::cut(this) );
 
-	auto* action = KStandardAction::copy(this);
-	connect(action, &QAction::triggered, this, &AbstractAspect::copy);
-	menu->addAction(action);
+	if (this != project()) {
+		auto* action = KStandardAction::copy(this);
+		connect(action, &QAction::triggered, this, &AbstractAspect::copy);
+		menu->addAction(action);
+
+		auto* actionDuplicate = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Duplicate Here"), this);
+		actionDuplicate->setShortcut(Qt::CTRL + Qt::Key_D);
+		connect(actionDuplicate, &QAction::triggered, this, &AbstractAspect::duplicate);
+		menu->addAction(actionDuplicate);
+	}
 
 	//determine the aspect type of the content available in the clipboard
 	//and enable the paste entry if the content is labplot specific
@@ -637,12 +644,17 @@ void AbstractAspect::copy() const {
 	QApplication::clipboard()->setText(output);
 }
 
+void AbstractAspect::duplicate() {
+	copy();
+	parentAspect()->paste(true);
+}
+
 /*!
  * in case the clipboard containts a LabPlot's specific copy&paste content,
  * this function deserializes the XML string and adds the created aspect as
  * a child to the current aspect ("paste").
  */
-void AbstractAspect::paste() {
+void AbstractAspect::paste(bool duplicate) {
 	const QClipboard* clipboard = QApplication::clipboard();
 	const QMimeData* mimeData = clipboard->mimeData();
 	if (!mimeData->hasText())
@@ -674,7 +686,13 @@ void AbstractAspect::paste() {
 	}
 
 	if (aspect) {
-		beginMacro(i18n("%1: pasted %2", name(), aspect->name()));
+		if (!duplicate)
+			beginMacro(i18n("%1: pasted %2", name(), aspect->name()));
+		else {
+			beginMacro(i18n("%1: duplicated %2", name(), aspect->name()));
+			aspect->setName(i18n("Copy of %1", aspect->name()));
+		}
+
 		if (aspect->type() != AspectType::CartesianPlotLegend)
 			addChild(aspect);
 		else {

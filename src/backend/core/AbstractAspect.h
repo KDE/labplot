@@ -274,7 +274,8 @@ public slots:
 
 private slots:
 	void copy() const;
-	void paste();
+	void duplicate();
+	void paste(bool duplicate = false);
 
 protected slots:
 	virtual void childSelected(const AbstractAspect*);

@@ -48,7 +48,7 @@ class AspectFactory {
 public:
 	static AbstractAspect* createAspect(AspectType type) {
 		if (type == AspectType::Folder)
-			return new CartesianPlot(QString());
+			return new Folder(QString());
 
 		/* worksheet and all its children */
 		else if (type == AspectType::Worksheet)
