@@ -321,9 +321,11 @@ QMenu* AbstractAspect::createContextMenu() {
 	//determine the aspect type of the content available in the clipboard
 	//and enable the paste entry if the content is labplot specific
 	//and if it can be pasted into the current aspect
-	auto t = clipboardAspectType();
+	QString name;
+	auto t = clipboardAspectType(name);
 	if (t != AspectType::AbstractAspect && pasteTypes().indexOf(t) != -1) {
 		auto* action = KStandardAction::paste(this);
+		action->setText(i18n("Paste '%1'", name));
 		menu->addAction(action);
 		connect(action, &QAction::triggered, this, &AbstractAspect::paste);
 	}
@@ -714,27 +716,35 @@ void AbstractAspect::paste(bool duplicate) {
  * is available, the aspect type of the object to be pasted is returned.
  * AspectType::AbstractAspect is returned otherwise.
  */
-AspectType AbstractAspect::clipboardAspectType() const {
+AspectType AbstractAspect::clipboardAspectType(QString& name) const {
+	AspectType type = AspectType::AbstractAspect;
 	const QClipboard* clipboard = QApplication::clipboard();
 	const QMimeData* mimeData = clipboard->mimeData();
 	if (!mimeData->hasText())
-		return AspectType::AbstractAspect;
+		return type;
 
 	const QString& xml = clipboard->text();
 	if (!xml.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
-		return AspectType::AbstractAspect;
+		return type;
 
 	XmlStreamReader reader(xml);
+	bool typeFound = false;
 	while (!reader.atEnd()) {
 		reader.readNext();
-		if (reader.isStartElement() && reader.name() == QLatin1String("type")) {
+		if (reader.isStartElement()) {
 			auto attribs = reader.attributes();
-			AspectType type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
-			return type;
+			if (reader.name() == QLatin1String("type")) {
+				type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
+				typeFound = true;
+			} else {
+				name = attribs.value(QLatin1String("name")).toString();
+				if (typeFound)
+					break;
+			}
 		}
 	}
 
-	return AspectType::AbstractAspect;
+	return type;
 }
 
 bool AbstractAspect::isDraggable() const {

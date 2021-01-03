@@ -265,7 +265,7 @@ private:
 	QString uniqueNameFor(const QString&) const;
 	const QVector<AbstractAspect*>& children() const;
 	void connectChild(AbstractAspect*);
-	AspectType clipboardAspectType() const;
+	AspectType clipboardAspectType(QString&) const;
 
 public slots:
 	bool setName(const QString&, bool autoUnique = true);
