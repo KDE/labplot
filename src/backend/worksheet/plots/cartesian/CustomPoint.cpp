@@ -112,6 +112,7 @@ QMenu* CustomPoint::createContextMenu() {
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }

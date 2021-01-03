@@ -65,8 +65,8 @@ public:
 			return new Axis(QString());
 		else if (type == AspectType::XYCurve)
 			return new XYCurve(QString());
-// 		else if (type == AspectType::CartesianPlotLegend)
-// 			return new CartesianPlotLegend(QString());
+		else if (type == AspectType::CartesianPlotLegend)
+			return new CartesianPlotLegend(QString());
 
 		/* spreadsheet and its children */
 		else if (type == AspectType::Spreadsheet)

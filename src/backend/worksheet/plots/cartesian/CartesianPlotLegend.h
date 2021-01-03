@@ -32,7 +32,6 @@
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/lib/macros.h"
 
-class CartesianPlot;
 class CartesianPlotLegendPrivate;
 class TextLabel;
 
@@ -42,9 +41,10 @@ class CartesianPlotLegend : public WorksheetElement {
 	Q_ENUMS(VerticalPosition)
 
 public:
-	CartesianPlotLegend(CartesianPlot* parentPlot, const QString &name);
+	CartesianPlotLegend(const QString &name);
 	~CartesianPlotLegend() override;
 
+	void finalizeAdd() override;
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;
@@ -93,15 +93,13 @@ public:
 	typedef CartesianPlotLegendPrivate Private;
 
 protected:
-	CartesianPlotLegend(CartesianPlot*, const QString& name, CartesianPlotLegendPrivate* dd);
+	CartesianPlotLegend(const QString& name, CartesianPlotLegendPrivate* dd);
 	CartesianPlotLegendPrivate* const d_ptr;
 
 private:
 	Q_DECLARE_PRIVATE(CartesianPlotLegend)
 	void init();
 	void initActions();
-
-	CartesianPlot* m_plot{nullptr};
 	QAction* visibilityAction{nullptr};
 
 private slots:

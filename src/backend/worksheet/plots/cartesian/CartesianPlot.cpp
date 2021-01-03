@@ -707,6 +707,7 @@ QMenu* CartesianPlot::createContextMenu() {
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+	menu->insertSeparator(firstAction);
 
 	if (children<XYCurve>().isEmpty()) {
 		addInfoElementAction->setEnabled(false);
@@ -749,14 +750,20 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 }
 
 QVector<AspectType> CartesianPlot::pasteTypes() const {
-	return QVector<AspectType>{
+	QVector<AspectType> types{
 		AspectType::XYCurve, AspectType::Histogram,
 		AspectType::Axis, AspectType::XYEquationCurve,
 		//analysis curves
 		AspectType::TextLabel, AspectType::Image,
 		AspectType::InfoElement, AspectType::CustomPoint,
-		AspectType::ReferenceLine, AspectType::CartesianPlotLegend
+		AspectType::ReferenceLine
 	};
+
+	//only allow to paste a legend if there is no legen available yet in the plot
+	if (!m_legend)
+		types << AspectType::CartesianPlotLegend;
+
+	return types;
 }
 
 void CartesianPlot::navigate(NavigationOperation op) {
@@ -1425,7 +1432,7 @@ void CartesianPlot::addLegend() {
 	if (m_legend)
 		return;
 
-	m_legend = new CartesianPlotLegend(this, "legend");
+	m_legend = new CartesianPlotLegend("legend");
 	this->addChild(m_legend);
 	m_legend->retransform();
 
@@ -4097,7 +4104,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "cartesianPlotLegend") {
-			m_legend = new CartesianPlotLegend(this, QString());
+			m_legend = new CartesianPlotLegend(QString());
 			if (m_legend->load(reader, preview))
 				addChildFast(m_legend);
 			else {

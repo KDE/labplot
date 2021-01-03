@@ -51,17 +51,23 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name)
-		: WorksheetElement(name, AspectType::CartesianPlotLegend), d_ptr(new CartesianPlotLegendPrivate(this)), m_plot(plot) {
+CartesianPlotLegend::CartesianPlotLegend(const QString &name)
+		: WorksheetElement(name, AspectType::CartesianPlotLegend), d_ptr(new CartesianPlotLegendPrivate(this)) {
 
 	init();
 }
 
-CartesianPlotLegend::CartesianPlotLegend(CartesianPlot* plot, const QString &name, CartesianPlotLegendPrivate *dd)
-		: WorksheetElement(name, AspectType::CartesianPlotLegend), d_ptr(dd), m_plot(plot) {
+CartesianPlotLegend::CartesianPlotLegend(const QString &name, CartesianPlotLegendPrivate *dd)
+		: WorksheetElement(name, AspectType::CartesianPlotLegend), d_ptr(dd) {
 
 	init();
 }
+
+void CartesianPlotLegend::finalizeAdd() {
+	Q_D(CartesianPlotLegend);
+	d->plot = static_cast<const CartesianPlot*>(parentAspect());
+}
+
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
 //and is deleted during the cleanup in QGraphicsScene
@@ -137,6 +143,7 @@ QMenu* CartesianPlotLegend::createContextMenu() {
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+	menu->insertSeparator(firstAction);
 
 	return menu;
 }
@@ -485,7 +492,7 @@ bool CartesianPlotLegendPrivate::swapVisible(bool on) {
   recalculates the rectangular of the legend.
 */
 void CartesianPlotLegendPrivate::retransform() {
-	if (suppressRetransform)
+	if (suppressRetransform || !plot)
 		return;
 
 	prepareGeometryChange();
@@ -493,13 +500,13 @@ void CartesianPlotLegendPrivate::retransform() {
 	curvesList.clear();
 
 	//add xy-curves
-	for (auto* curve : q->m_plot->children<XYCurve>()) {
+	for (auto* curve : plot->children<XYCurve>()) {
 		if (curve && curve->isVisible())
 			curvesList.push_back(curve);
 	}
 
 	//add histograms
-	for (auto* hist : q->m_plot->children<Histogram>()) {
+	for (auto* hist : plot->children<Histogram>()) {
 		if (hist && hist->isVisible())
 			curvesList.push_back(hist);
 	}
@@ -593,7 +600,7 @@ void CartesianPlotLegendPrivate::retransform() {
 void CartesianPlotLegendPrivate::updatePosition() {
 	//position the legend relative to the actual plot size minus small offset
 	//TODO: make the offset dependent on the size of axis ticks.
-	const QRectF parentRect = q->m_plot->dataRect();
+	const QRectF parentRect = plot->dataRect();
 	float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
 	float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
 
