@@ -329,7 +329,7 @@ str = attribs.value("style").toString(); 									\
 if(str.isEmpty())															\
 	reader->raiseWarning(attributeWarning.subs("style").toString());					\
 else																		\
-	pen.setStyle( (Qt::PenStyle)str.toInt() );								\
+	pen.setStyle( static_cast<Qt::PenStyle>(str.toInt()) );								\
 																			\
 QColor color;																\
 str = attribs.value("color_r").toString();									\
@@ -423,7 +423,7 @@ str = attribs.value("brush_style").toString();								\
 if(str.isEmpty())															\
 	reader->raiseWarning(attributeWarning.subs("brush_style").toString());			\
 else																		\
-	brush.setStyle( (Qt::BrushStyle)str.toInt() );							\
+	brush.setStyle( static_cast<Qt::BrushStyle>(str.toInt()) );							\
 																			\
 QColor color;																\
 str = attribs.value("brush_color_r").toString();							\
@@ -468,25 +468,31 @@ do {																				\
 } while(0)
 
 #define READ_INT_VALUE(name, var, type) \
+do { \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
 	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
-	d->var = (type)str.toInt();
+	d->var = static_cast<type>(str.toInt()); \
+} while(0)
 
 #define READ_DOUBLE_VALUE(name, var) \
+do { \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
 	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
-	d->var = str.toDouble();
+	d->var = str.toDouble(); \
+} while(0)
 
 #define READ_STRING_VALUE(name, var) \
+do { \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
 	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
-	d->var = str;
+	d->var = str; \
+} while(0)
 
 //used in Project::load()
 #define RESTORE_COLUMN_POINTER(obj, col, Col) 										\

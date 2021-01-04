@@ -187,7 +187,7 @@ QMenu* InfoElement::createContextMenu() {
 void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	Q_D(InfoElement);
 
-	for (auto markerpoint: markerpoints) {
+	for (auto& markerpoint : markerpoints) {
 		if (curve == markerpoint.curve)
 			return;
 	}
@@ -254,7 +254,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
  * @param custompoint adding already created custom point
  */
 void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
-	for(auto markerpoint: markerpoints) {
+	for(auto& markerpoint : markerpoints) {
 		if(curvePath == markerpoint.curvePath)
 			return;
 	}
@@ -280,8 +280,7 @@ void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
 bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
 	bool success = true;
 	for (int i =0; i< markerpoints.length(); i++) {
-		for (auto curve: curves) {
-			QString curvePath = curve->path();
+		for (auto curve : curves) {
 			if(markerpoints[i].curvePath == curve->path()) {
 				markerpoints[i].curve = curve;
 				connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
@@ -343,7 +342,7 @@ void InfoElement::setZValue(qreal value) {
 
 	m_title->setZValue(value+1);
 
-	for (auto markerpoint: markerpoints)
+	for (auto& markerpoint : markerpoints)
 		markerpoint.customPoint->setZValue(value+1);
 }
 
@@ -388,7 +387,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		return wrapper;
 	}
 
-	if (!markerpoints[0].curve->xColumn())
+	if (!(markerpoints[0].curve && markerpoints[0].curve->xColumn()))
 		return wrapper; //no data is set in the curve yet, nothing to do
 
 	Q_D(const InfoElement);
@@ -472,7 +471,7 @@ void InfoElement::labelVisibleChanged(bool visible) {
 }
 
 void InfoElement::labelTextWrapperChanged(TextLabel::TextWrapper wrapper) {
-	Q_UNUSED(wrapper);
+	Q_UNUSED(wrapper)
 	if (m_setTextLabelText)
 		return;
 
@@ -511,7 +510,7 @@ void InfoElement::curveVisibilityChanged() {
 	bool visible = curve->isVisible();
 
 	bool oneMarkerpointVisible = false;
-	for (auto custompoint: markerpoints) {
+	for (auto& custompoint: markerpoints) {
 		if (custompoint.curve == curve)
 			custompoint.customPoint->setVisible(visible);
 
@@ -521,7 +520,7 @@ void InfoElement::curveVisibilityChanged() {
 
 	// if curve was set to hidden, set InfoElement to first visible curve
 	if (!visible) {
-		for (auto custompoint: markerpoints) {
+		for (auto& custompoint : markerpoints) {
 			if (custompoint.curve->isVisible()) {
 				setConnectionLineCurveName(custompoint.curve->name());
 				break;
@@ -628,7 +627,7 @@ void InfoElement::childAdded(const AbstractAspect* child) {
  * \return
  */
 int InfoElement::currentIndex(double x, double* found_x) {
-	for (auto markerpoint : markerpoints) {
+	for (auto& markerpoint : markerpoints) {
 		if (markerpoint.curve->name() == connectionLineCurveName()) {
 			int index = markerpoint.curve->xColumn()->indexForValue(x);
 
@@ -856,7 +855,7 @@ void InfoElementPrivate::retransform() {
 
 	q->m_title->retransform();
 
-	for (auto markerpoint : q->markerpoints)
+	for (auto& markerpoint : q->markerpoints)
 		markerpoint.customPoint->retransform();
 
 	//determine the position to connect the line to
@@ -923,7 +922,7 @@ void InfoElementPrivate::updateConnectionLine() {
 }
 
 void InfoElementPrivate::visibilityChanged() {
-	for(auto markerpoint: q->markerpoints)
+	for(auto& markerpoint : q->markerpoints)
 		markerpoint.customPoint->setVisible(visible);
 	if(q->m_title) {
 		q->m_title->setUndoAware(false);
@@ -994,7 +993,7 @@ void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 		double dist_segm = abs(dx1m*unitvec.y() - dy1m*unitvec.x());
 		double scalar_product = dx1m*unitvec.x()+dy1m*unitvec.y();
-		DEBUG("DIST_SEGMENT   " << dist_segm << "SCALAR_PRODUCT: " << scalar_product << "VEC_LENGTH: " << vecLenght);
+		//DEBUG("DIST_SEGMENT   " << dist_segm << "SCALAR_PRODUCT: " << scalar_product << "VEC_LENGTH: " << vecLenght);
 
 		if (scalar_product > 0) {
 			const double width = connectionLinePen.widthF();
@@ -1158,7 +1157,7 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 	//custom points
 	if (!markerpoints.isEmpty()) {
 		writer->writeStartElement("points");
-		for (auto custompoint : markerpoints) {
+		for (const auto& custompoint : markerpoints) {
 			writer->writeStartElement("point");
 			writer->writeAttribute(QLatin1String("curvepath"), custompoint.curve->path());
 			custompoint.customPoint->save(writer);
@@ -1183,7 +1182,6 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 
 	while (!reader->atEnd()) {
 		reader->readNext();
-		QStringRef text =  reader->text();
 		if (reader->isEndElement() && reader->name() == "infoElement")
 			break;
 
