@@ -216,9 +216,9 @@ void XYConvolutionCurveDock::setModel() {
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
 	list = {AspectType::Folder, AspectType::Workbook, AspectType::Datapicker, AspectType::DatapickerCurve,
-	        AspectType::Spreadsheet, AspectType::LiveDataSource, AspectType::Column,
-	        AspectType::Worksheet, AspectType::CartesianPlot, AspectType::XYConvolution
-	       };
+			AspectType::Spreadsheet, AspectType::LiveDataSource, AspectType::Column,
+			AspectType::Worksheet, AspectType::CartesianPlot, AspectType::XYConvolutionCurve
+	};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbY2DataColumn->setTopLevelClasses(list);

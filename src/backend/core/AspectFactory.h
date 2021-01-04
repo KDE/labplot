@@ -39,7 +39,16 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
+#include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
+#include "backend/worksheet/plots/cartesian/XYDifferentiationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
+#include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
+#include "backend/worksheet/plots/cartesian/XYIntegrationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYInterpolationCurve.h"
+#include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/datapicker/DatapickerCurve.h"
@@ -65,6 +74,28 @@ public:
 			return new Axis(QString());
 		else if (type == AspectType::XYCurve)
 			return new XYCurve(QString());
+		else if (type == AspectType::XYEquationCurve)
+			return new XYEquationCurve(QString());
+		else if (type == AspectType::XYConvolutionCurve)
+			return new XYConvolutionCurve(QString());
+		else if (type == AspectType::XYCorrelationCurve)
+			return new XYCorrelationCurve(QString());
+		else if (type == AspectType::XYDataReductionCurve)
+			return new XYDataReductionCurve(QString());
+		else if (type == AspectType::XYDifferentiationCurve)
+			return new XYDifferentiationCurve(QString());
+		else if (type == AspectType::XYFitCurve)
+			return new XYFitCurve(QString());
+		else if (type == AspectType::XYFourierFilterCurve)
+			return new XYFourierFilterCurve(QString());
+		else if (type == AspectType::XYFourierTransformCurve)
+			return new XYFourierTransformCurve(QString());
+		else if (type == AspectType::XYIntegrationCurve)
+			return new XYIntegrationCurve(QString());
+		else if (type == AspectType::XYInterpolationCurve)
+			return new XYInterpolationCurve(QString());
+		else if (type == AspectType::XYSmoothCurve)
+			return new XYSmoothCurve(QString());
 		else if (type == AspectType::CartesianPlotLegend)
 			return new CartesianPlotLegend(QString());
 

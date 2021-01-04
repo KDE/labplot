@@ -49,11 +49,11 @@ extern "C" {
 }
 
 XYConvolutionCurve::XYConvolutionCurve(const QString& name)
-	: XYAnalysisCurve(name, new XYConvolutionCurvePrivate(this), AspectType::XYConvolution) {
+	: XYAnalysisCurve(name, new XYConvolutionCurvePrivate(this), AspectType::XYConvolutionCurve) {
 }
 
 XYConvolutionCurve::XYConvolutionCurve(const QString& name, XYConvolutionCurvePrivate* dd)
-	: XYAnalysisCurve(name, dd, AspectType::XYConvolution) {
+	: XYAnalysisCurve(name, dd, AspectType::XYConvolutionCurve) {
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem

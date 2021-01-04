@@ -75,7 +75,7 @@ enum class AspectType : quint64 {
 		XYCurve = 0x0240000,
 			XYEquationCurve = 0x0240001,
 		XYAnalysisCurve = 0x0280000,
-			XYConvolution = 0x0280001,
+			XYConvolutionCurve = 0x0280001,
 			XYCorrelationCurve = 0x0280002,
 			XYDataReductionCurve = 0x0280004,
 			XYDifferentiationCurve = 0x0280008,

@@ -753,13 +753,17 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 	QVector<AspectType> types{
 		AspectType::XYCurve, AspectType::Histogram,
 		AspectType::Axis, AspectType::XYEquationCurve,
-		//analysis curves
+		AspectType::XYConvolutionCurve, AspectType::XYCorrelationCurve,
+		AspectType::XYDataReductionCurve, AspectType::XYDifferentiationCurve,
+		AspectType::XYFitCurve, AspectType::XYFourierFilterCurve,
+		AspectType::XYFourierTransformCurve, AspectType::XYIntegrationCurve,
+		AspectType::XYInterpolationCurve, AspectType::XYSmoothCurve,
 		AspectType::TextLabel, AspectType::Image,
 		AspectType::InfoElement, AspectType::CustomPoint,
 		AspectType::ReferenceLine
 	};
 
-	//only allow to paste a legend if there is no legen available yet in the plot
+	//only allow to paste a legend if there is no legend available yet in the plot
 	if (!m_legend)
 		types << AspectType::CartesianPlotLegend;
 
