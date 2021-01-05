@@ -33,12 +33,14 @@
 
 class CustomPoint;
 class CartesianPlot;
+class CartesianCoordinateSystem;
 
 class CustomPointPrivate: public QGraphicsItem {
 public:
 	explicit CustomPointPrivate(CustomPoint*, const CartesianPlot*);
 
-	const CartesianPlot* plot;
+	const CartesianPlot* plot{nullptr};
+	const CartesianCoordinateSystem* cSystem{nullptr};
 
 	QString name() const;
 	void retransform();

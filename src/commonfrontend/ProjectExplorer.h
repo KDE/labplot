@@ -46,6 +46,8 @@ class QXmlStreamWriter;
 class QItemSelection;
 class QMenu;
 
+class KMessageWidget;
+
 class ProjectExplorer : public QWidget {
 	Q_OBJECT
 
@@ -67,9 +69,12 @@ private:
 	void keyPressEvent(QKeyEvent*) override;
 	void collapseParents(const QModelIndex&, const QList<QModelIndex>& expanded);
 	bool filter(const QModelIndex&, const QString&);
+	void showErrorMessage(const QString&);
+
 	int m_columnToHide{0};
 	QTreeView* m_treeView;
 	Project* m_project{nullptr};
+	KMessageWidget* m_messageWidget{nullptr};
 	QPoint m_dragStartPos;
 	bool m_dragStarted{false};
 	bool m_changeSelectionFromView{false};

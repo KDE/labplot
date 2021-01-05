@@ -85,7 +85,12 @@ bool Folder::isDraggable() const {
 }
 
 QVector<AspectType> Folder::pasteTypes() const {
-	return QVector<AspectType>{AspectType::Worksheet, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Matrix};
+	return QVector<AspectType>{
+		AspectType::Worksheet, AspectType::Workbook,
+		AspectType::Spreadsheet, AspectType::Matrix,
+		AspectType::Datapicker, AspectType::LiveDataSource,
+		AspectType::Note, AspectType::CantorWorksheet
+	};
 }
 
 QVector<AspectType> Folder::dropableOn() const {

@@ -31,11 +31,14 @@
 
 #include <QGraphicsItem>
 
+class CartesianCoordinateSystem;
+
 class ReferenceLinePrivate: public QGraphicsItem {
 public:
 	explicit ReferenceLinePrivate(ReferenceLine*, const CartesianPlot*);
 
-	const CartesianPlot* plot;
+	const CartesianPlot* plot{nullptr};
+	const CartesianCoordinateSystem* cSystem{nullptr};
 
 	QString name() const;
 	void retransform();

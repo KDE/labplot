@@ -1075,7 +1075,7 @@ void WorksheetView::mouseDoubleClickEvent(QMouseEvent*) {
 void WorksheetView::mouseMoveEvent(QMouseEvent* event) {
 	if (m_suppressSelectionChangedEvent)
 		return QGraphicsView::mouseMoveEvent(event);
-    if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection ) {
+	if (m_mouseMode == MouseMode::Selection && m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection ) {
 		//check whether there is a cartesian plot under the cursor
 		//and set the cursor appearance according to the current mouse mode for the cartesian plots
 		if ( isPlotAtPos(event->pos()) ) {
@@ -1152,9 +1152,49 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 }
 
 void WorksheetView::keyPressEvent(QKeyEvent* event) {
+	//handle delete
+	if (event->matches(QKeySequence::Delete)) {
+		deleteElement();
+		QGraphicsView::keyPressEvent(event);
+		return;
+	}
+
+	//handle copy/paste/duplicate
+
+	//determine the currently selected aspect
+	AbstractAspect* aspect = nullptr;
+	if (m_selectedItems.count() == 1) {
+		//at the moment we allow to copy/paste/duplicate one single selcted object only
+		const auto children = m_worksheet->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive);
+		const auto* item = m_selectedItems.constFirst();
+		for (auto* child : children) {
+			if (child->graphicsItem() == item) {
+				aspect = child;
+				break;
+			}
+		}
+	} else
+		aspect = m_worksheet;
+
 	if (event->matches(QKeySequence::Copy)) {
-		//add here copying of objects
-		exportToClipboard();
+		exportToClipboard(); //export the image to the clipboard
+		if (aspect != m_worksheet)
+			aspect->copy(); //copy the selected object itself
+	} else if (event->matches(QKeySequence::Paste)) {
+		//paste
+		QString name;
+		auto t = AbstractAspect::clipboardAspectType(name);
+		if (t != AspectType::AbstractAspect && aspect->pasteTypes().indexOf(t) != -1)
+			aspect->paste();
+	} else if ( (event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D) && aspect != m_worksheet) {
+		//duplicate
+		aspect->copy();
+		aspect->parentAspect()->paste(true);
+	} else if (event->key() == 32) {
+		//space key - hide/show the current object
+		auto* we = dynamic_cast<WorksheetElement*>(aspect);
+		if (we)
+			we->setVisible(!we->isVisible());
 	}
 
 	QGraphicsView::keyPressEvent(event);

@@ -1165,7 +1165,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			const QString& legendText = QString::fromLatin1(originLegend.text.c_str());
 			DEBUG(" legend text = " << STDSTRING(legendText));
 			if (!originLegend.text.empty()) {
-				auto* legend = new CartesianPlotLegend(plot, i18n("legend"));
+				auto* legend = new CartesianPlotLegend(i18n("legend"));
 
 				//Origin's legend uses "\l(...)" or "\L(...)" string to format the legend symbol
 				// and "%(...) to format the legend text for each curve

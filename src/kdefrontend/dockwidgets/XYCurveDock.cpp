@@ -512,7 +512,7 @@ void XYCurveDock::setModel() {
 		list = {AspectType::Column, AspectType::XYCurve,
 			AspectType::XYFitCurve, AspectType::XYIntegrationCurve, AspectType::XYInterpolationCurve,
 			AspectType::XYSmoothCurve, AspectType::XYFourierFilterCurve, AspectType::XYFourierTransformCurve,
-			AspectType::XYConvolution, AspectType::XYCorrelationCurve, AspectType::XYDataReductionCurve};
+			AspectType::XYConvolutionCurve, AspectType::XYCorrelationCurve, AspectType::XYDataReductionCurve};
 	else
 		list = {AspectType::Column, AspectType::XYCurve};
 

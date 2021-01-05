@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2021 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2007-2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2007 Knut Franke (knut.franke@gmx.de)
  ***************************************************************************/
@@ -547,156 +547,209 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		reader->raiseError(i18n("no valid XML document found"));
 
 	if (!preview) {
-		//wait until all columns are decoded from base64-encoded data
-		QThreadPool::globalInstance()->waitForDone();
-
-		//LiveDataSource:
-		//call finalizeLoad() to replace relative with absolute paths if required
-		//and to create columns during the initial read
-		auto sources = children<LiveDataSource>(ChildIndexFlag::Recursive);
-		for (auto* source : sources) {
-			if (!source) continue;
-			source->finalizeLoad();
-		}
-
-		//everything is read now.
-		//restore the pointer to the data sets (columns) in xy-curves etc.
-		auto columns = children<Column>(ChildIndexFlag::Recursive);
-
-		//xy-curves
-		// cannot be removed by the column observer, because it does not react
-		// on curve changes
-		auto curves = children<XYCurve>(ChildIndexFlag::Recursive);
-		for (auto* curve : curves) {
-			if (!curve) continue;
-			curve->suppressRetransform(true);
-
-			auto* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
-			auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
-			if (equationCurve) {
-				//curves defined by a mathematical equations recalculate their own columns on load again.
-				if (!preview)
-					equationCurve->recalculate();
-			} else if (analysisCurve) {
-				RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
-				RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
-				RESTORE_COLUMN_POINTER(analysisCurve, y2DataColumn, Y2DataColumn);
-				auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
-				if (fitCurve) {
-					RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
-					RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
-				}
-			} else {
-				RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
-				RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
-				RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
-				RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
-				RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
-				RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
-				RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
-			}
-			if (dynamic_cast<XYAnalysisCurve*>(curve))
-				RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
-
-			curve->suppressRetransform(false);
-		}
-
-		// assign to all markers the curves they need
-        auto elements = children<InfoElement>(ChildIndexFlag::Recursive);
-        for (auto element : elements) {
-			if (!element->assignCurve(curves)) {
-				reader->raiseWarning(i18n("Not all markerpoints have a curve assigned."));
-				return false;
-			}
-		}
-
-		//axes
-		auto axes = children<Axis>(ChildIndexFlag::Recursive);
-		for (auto* axis : axes) {
-			if (!axis) continue;
-			RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
-			RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
-		}
-
-		//histograms
-		auto hists = children<Histogram>(ChildIndexFlag::Recursive);
-		for (auto* hist : hists) {
-			if (!hist) continue;
-			RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
-		}
-
-		//data picker curves
-		auto dataPickerCurves = children<DatapickerCurve>(ChildIndexFlag::Recursive);
-		for (auto* dataPickerCurve : dataPickerCurves) {
-			if (!dataPickerCurve) continue;
-			RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
-			RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
-			RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
-			RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
-			RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
-			RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
-		}
-
-		//if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
-		for (auto* col : columns) {
-			if (!col->formulaVariableColumnPaths().isEmpty()) {
-				auto& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
-				formulaVariableColumns.resize(col->formulaVariableColumnPaths().length());
-
-				for (int i = 0; i < col->formulaVariableColumnPaths().length(); i++) {
-					auto path = col->formulaVariableColumnPaths()[i];
-					for (Column* c : columns) {
-						if (!c) continue;
-						if (c->path() == path) {
-							formulaVariableColumns[i] = c;
-							col->finalizeLoad();
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		//all data was read in spreadsheets:
-		//call CartesianPlot::retransform() to retransform the plots
-		for (auto* plot : children<CartesianPlot>(ChildIndexFlag::Recursive)) {
-			plot->setIsLoading(false);
-			plot->retransform();
-		}
-
-		//all data was read in live-data sources:
-		//call CartesianPlot::dataChanged() to notify affected plots about the new data.
-		//this needs to be done here since in LiveDataSource::finalizeImport() called above
-		//where the data is read the column pointers are not restored yes in curves.
-		QVector<CartesianPlot*> plots;
-		for (auto* source : sources) {
-			for (int n = 0; n < source->columnCount(); ++n) {
-				Column* column = source->column(n);
-
-				//determine the plots where the column is consumed
-				for (const auto* curve : curves) {
-					if (curve->xColumn() == column || curve->yColumn() == column) {
-						auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
-						if (plots.indexOf(plot) == -1) {
-							plots << plot;
-							plot->setSuppressDataChangedSignal(true);
-						}
-					}
-				}
-
-				column->setChanged();
-			}
-		}
-
-		//loop over all affected plots and retransform them
-		for (auto* plot : plots) {
-			plot->setSuppressDataChangedSignal(false);
-			plot->dataChanged();
-		}
+		//everything is read now, restore the pointers
+		restorePointers(this);
 	}
 
 	emit loaded();
 	return !reader->hasError();
+}
+
+/*!
+ * this function is used to restore the pointers to to the columns in xy-curves etc.
+ * from the stored column paths. This function is called after the project was loaded
+ * and when an aspect is being pasted. In both cases we deserialized from XML and need
+ * to restore the pointers.
+ */
+void Project::restorePointers(AbstractAspect* aspect) {
+	//wait until all columns are decoded from base64-encoded data
+	QThreadPool::globalInstance()->waitForDone();
+
+	bool hasChildren = aspect->childCount<AbstractAspect>();
+	auto columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
+
+	//LiveDataSource:
+	//call finalizeLoad() to replace relative with absolute paths if required
+	//and to create columns during the initial read
+	auto sources = aspect->children<LiveDataSource>(ChildIndexFlag::Recursive);
+	for (auto* source : sources) {
+		if (!source) continue;
+		source->finalizeLoad();
+	}
+
+	//xy-curves
+	// cannot be removed by the column observer, because it does not react
+	// on curve changes
+	QVector<XYCurve*> curves;
+	if (hasChildren)
+		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
+	else {
+		//the object doesn't have any children -> one single aspect is being pasted.
+		//check whether the object being pasted is a XYCurve and add it to the
+		//list of curves to be retransformed
+		if (aspect->inherits(AspectType::XYCurve))
+			curves << static_cast<XYCurve*>(aspect);
+	}
+
+	for (auto* curve : curves) {
+		if (!curve) continue;
+		curve->suppressRetransform(true);
+
+		auto* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
+		auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
+		if (equationCurve) {
+			//curves defined by a mathematical equations recalculate their own columns on load again.
+			equationCurve->recalculate();
+		} else if (analysisCurve) {
+			RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
+			RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
+			RESTORE_COLUMN_POINTER(analysisCurve, y2DataColumn, Y2DataColumn);
+			auto* fitCurve = dynamic_cast<XYFitCurve*>(curve);
+			if (fitCurve) {
+				RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
+				RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
+			}
+		} else {
+			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);
+			RESTORE_COLUMN_POINTER(curve, yColumn, YColumn);
+			RESTORE_COLUMN_POINTER(curve, valuesColumn, ValuesColumn);
+			RESTORE_COLUMN_POINTER(curve, xErrorPlusColumn, XErrorPlusColumn);
+			RESTORE_COLUMN_POINTER(curve, xErrorMinusColumn, XErrorMinusColumn);
+			RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
+			RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
+		}
+		if (dynamic_cast<XYAnalysisCurve*>(curve))
+			RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
+
+		curve->suppressRetransform(false);
+	}
+
+	// assign to all markers the curves they need
+	QVector<InfoElement*> elements;
+	if (hasChildren)
+		elements = aspect->children<InfoElement>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::InfoElement)
+			elements << static_cast<InfoElement*>(aspect);
+	}
+
+	for (auto element : elements)
+		element->assignCurve(curves);
+
+	//axes
+	QVector<Axis*> axes;
+	if (hasChildren)
+		axes = aspect->children<Axis>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::Axis)
+			axes << static_cast<Axis*>(aspect);
+	}
+
+	for (auto* axis : axes) {
+		if (!axis) continue;
+		RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
+		RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
+	}
+
+	//histograms
+	QVector<Histogram*> hists;
+	if (hasChildren)
+		hists = aspect->children<Histogram>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::Histogram)
+			hists << static_cast<Histogram*>(aspect);
+	}
+
+	for (auto* hist : hists) {
+		if (!hist) continue;
+		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
+	}
+
+	//data picker curves
+	QVector<DatapickerCurve*> dataPickerCurves;
+	if (hasChildren)
+		dataPickerCurves = aspect->children<DatapickerCurve>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::DatapickerCurve)
+			dataPickerCurves << static_cast<DatapickerCurve*>(aspect);
+	}
+
+	for (auto* dataPickerCurve : dataPickerCurves) {
+		if (!dataPickerCurve) continue;
+		RESTORE_COLUMN_POINTER(dataPickerCurve, posXColumn, PosXColumn);
+		RESTORE_COLUMN_POINTER(dataPickerCurve, posYColumn, PosYColumn);
+		RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaXColumn, PlusDeltaXColumn);
+		RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaXColumn, MinusDeltaXColumn);
+		RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
+		RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
+	}
+
+	//if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
+	for (auto* col : columns) {
+		if (!col->formulaVariableColumnPaths().isEmpty()) {
+			auto& formulaVariableColumns = const_cast<QVector<Column*>&>(col->formulaVariableColumns());
+			formulaVariableColumns.resize(col->formulaVariableColumnPaths().length());
+
+			for (int i = 0; i < col->formulaVariableColumnPaths().length(); i++) {
+				auto path = col->formulaVariableColumnPaths()[i];
+				for (Column* c : columns) {
+					if (!c) continue;
+					if (c->path() == path) {
+						formulaVariableColumns[i] = c;
+						col->finalizeLoad();
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	//all data was read in spreadsheets:
+	//call CartesianPlot::retransform() to retransform the plots
+	QVector<CartesianPlot*> plots;
+	if (hasChildren && aspect->type() != AspectType::CartesianPlot)
+		plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::CartesianPlot)
+			plots << static_cast<CartesianPlot*>(aspect);
+		else if (aspect->inherits(AspectType::XYCurve) || aspect->type() == AspectType::Histogram)
+			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
+	}
+
+	for (auto* plot : plots) {
+		plot->setIsLoading(false);
+		plot->retransform();
+	}
+
+	//all data was read in live-data sources:
+	//call CartesianPlot::dataChanged() to notify affected plots about the new data.
+	//this needs to be done here since in LiveDataSource::finalizeImport() called above
+	//where the data is read the column pointers are not restored yes in curves.
+	plots.clear();
+	for (auto* source : sources) {
+		for (int n = 0; n < source->columnCount(); ++n) {
+			Column* column = source->column(n);
+
+			//determine the plots where the column is consumed
+			for (const auto* curve : curves) {
+				if (curve->xColumn() == column || curve->yColumn() == column) {
+					auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
+					if (plots.indexOf(plot) == -1) {
+						plots << plot;
+						plot->setSuppressDataChangedSignal(true);
+					}
+				}
+			}
+
+			column->setChanged();
+		}
+	}
+
+	//loop over all affected plots and retransform them
+	for (auto* plot : plots) {
+		plot->setSuppressDataChangedSignal(false);
+		plot->dataChanged();
+	}
 }
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {

@@ -307,17 +307,27 @@ QMenu* AbstractAspect::createContextMenu() {
 	//TODO: activate this again when the functionality is implemented
 // 	menu->addAction( KStandardAction::cut(this) );
 
-	auto* action = KStandardAction::copy(this);
-	connect(action, &QAction::triggered, this, &AbstractAspect::copy);
-	menu->addAction(action);
+	if (this != project()) {
+		auto* action = KStandardAction::copy(this);
+		connect(action, &QAction::triggered, this, &AbstractAspect::copy);
+		menu->addAction(action);
+
+		if (m_type != AspectType::CartesianPlotLegend) {
+			auto* actionDuplicate = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Duplicate Here"), this);
+			actionDuplicate->setShortcut(Qt::CTRL + Qt::Key_D);
+			connect(actionDuplicate, &QAction::triggered, this, &AbstractAspect::duplicate);
+			menu->addAction(actionDuplicate);
+		}
+	}
 
 	//determine the aspect type of the content available in the clipboard
 	//and enable the paste entry if the content is labplot specific
 	//and if it can be pasted into the current aspect
-	auto t = clipboardAspectType();
+	QString name;
+	auto t = clipboardAspectType(name);
 	if (t != AspectType::AbstractAspect && pasteTypes().indexOf(t) != -1) {
 		auto* action = KStandardAction::paste(this);
-// 		QAction* action = new QAction("paste");
+		action->setText(i18n("Paste '%1'", name));
 		menu->addAction(action);
 		connect(action, &QAction::triggered, this, &AbstractAspect::paste);
 	}
@@ -623,6 +633,7 @@ void AbstractAspect::copy() const {
 
 	//add LabPlot's copy&paste "identifier"
 	writer.writeDTD(QLatin1String("<!DOCTYPE LabPlotCopyPasteXML>"));
+	writer.writeStartElement("copy_content"); //root element
 
 	//write the type of the copied aspect
 	writer.writeStartElement(QLatin1String("type"));
@@ -632,8 +643,14 @@ void AbstractAspect::copy() const {
 	//write the aspect itself
 	save(&writer);
 
+	writer.writeEndElement(); //end the root-element
 	writer.writeEndDocument();
 	QApplication::clipboard()->setText(output);
+}
+
+void AbstractAspect::duplicate() {
+	copy();
+	parentAspect()->paste(true);
 }
 
 /*!
@@ -641,7 +658,7 @@ void AbstractAspect::copy() const {
  * this function deserializes the XML string and adds the created aspect as
  * a child to the current aspect ("paste").
  */
-void AbstractAspect::paste() {
+void AbstractAspect::paste(bool duplicate) {
 	const QClipboard* clipboard = QApplication::clipboard();
 	const QMimeData* mimeData = clipboard->mimeData();
 	if (!mimeData->hasText())
@@ -663,21 +680,35 @@ void AbstractAspect::paste() {
 			auto attribs = reader.attributes();
 			auto type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
 			if (type != AspectType::AbstractAspect)
-				aspect = AspectFactory::createAspect(type);
+				aspect = AspectFactory::createAspect(type, this);
 		} else {
 			if (aspect) {
 				aspect->load(&reader, false);
 				break;
 			}
 		}
-// 		reader.skipToEndElement();
-// 		reader.skipToNextTag();
 	}
 
-// 	qDebug()<<"errors " << reader.errorString();
 	if (aspect) {
-// 		aspect->setName(i18n("Copy of %1", aspect->name()));
-		addChild(aspect);
+		if (!duplicate)
+			beginMacro(i18n("%1: pasted '%2'", name(), aspect->name()));
+		else {
+			beginMacro(i18n("%1: duplicated '%2'", name(), aspect->name()));
+			aspect->setName(i18n("Copy of '%1'", aspect->name()));
+		}
+
+		if (aspect->type() != AspectType::CartesianPlotLegend)
+			addChild(aspect);
+		else {
+			//spectial handling for the legend since only one single
+			//legend object is allowed per plot
+			auto* plot = static_cast<CartesianPlot*>(this);
+			auto* legend = static_cast<CartesianPlotLegend*>(aspect);
+			plot->addLegend(legend);
+		}
+
+		project()->restorePointers(aspect);
+		endMacro();
 	}
 }
 
@@ -687,27 +718,35 @@ void AbstractAspect::paste() {
  * is available, the aspect type of the object to be pasted is returned.
  * AspectType::AbstractAspect is returned otherwise.
  */
-AspectType AbstractAspect::clipboardAspectType() const {
+AspectType AbstractAspect::clipboardAspectType(QString& name) {
+	AspectType type = AspectType::AbstractAspect;
 	const QClipboard* clipboard = QApplication::clipboard();
 	const QMimeData* mimeData = clipboard->mimeData();
 	if (!mimeData->hasText())
-		return AspectType::AbstractAspect;
+		return type;
 
 	const QString& xml = clipboard->text();
 	if (!xml.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
-		return AspectType::AbstractAspect;
+		return type;
 
 	XmlStreamReader reader(xml);
+	bool typeFound = false;
 	while (!reader.atEnd()) {
 		reader.readNext();
-		if (reader.isStartElement() && reader.name() == QLatin1String("type")) {
+		if (reader.isStartElement()) {
 			auto attribs = reader.attributes();
-			AspectType type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
-			return type;
+			if (reader.name() == QLatin1String("type")) {
+				type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
+				typeFound = true;
+			} else {
+				name = attribs.value(QLatin1String("name")).toString();
+				if (typeFound)
+					break;
+			}
 		}
 	}
 
-	return AspectType::AbstractAspect;
+	return type;
 }
 
 bool AbstractAspect::isDraggable() const {

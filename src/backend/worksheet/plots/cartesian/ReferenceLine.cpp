@@ -71,8 +71,7 @@ void ReferenceLine::init() {
 	Q_D(ReferenceLine);
 
 	KConfig config;
-	KConfigGroup group;
-	group = config.group("ReferenceLine");
+	KConfigGroup group = config.group("ReferenceLine");
 
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
 	//TODO
@@ -179,9 +178,9 @@ void ReferenceLine::retransform() {
 }
 
 void ReferenceLine::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(horizontalRatio);
-	Q_UNUSED(verticalRatio);
-	Q_UNUSED(pageResize);
+	Q_UNUSED(horizontalRatio)
+	Q_UNUSED(verticalRatio)
+	Q_UNUSED(pageResize)
 }
 
 /* ============================ getter methods ================= */
@@ -272,6 +271,7 @@ ReferenceLinePrivate::ReferenceLinePrivate(ReferenceLine* owner, const Cartesian
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(true);
+	cSystem = static_cast<const CartesianCoordinateSystem*>(plot->defaultCoordinateSystem());
 }
 
 QString ReferenceLinePrivate::name() const {
@@ -292,6 +292,7 @@ void ReferenceLinePrivate::retransform() {
 	else
 		listLogical << QPointF(plot->xRange().center(), position);
 
+	// overwrites global cSystem?
 	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->defaultCoordinateSystem());
 	QVector<QPointF> listScene = cSystem->mapLogicalToScene(listLogical);
 
@@ -422,7 +423,7 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 		//emit the signals in order to notify the UI (dock widget and status bar) about the new logical position.
 		//we don't set the position related member variables during the mouse movements.
 		//this is done on mouse release events only.
-		//TODO
+		//TODO: overwrites global cSystem?
 		const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
 		QPointF positionLogical = cSystem->mapSceneToLogical(positionSceneNew);
 		if (orientation == ReferenceLine::Orientation::Horizontal) {
@@ -453,7 +454,7 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 void ReferenceLinePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//position was changed -> set the position member variables
 	suppressRetransform = true;
-	//TODO
+	//TODO: overwrites global cSystem?
 	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
 	QPointF positionLogical = cSystem->mapSceneToLogical(pos());
 	if (orientation == ReferenceLine::Orientation::Horizontal)
@@ -555,4 +556,18 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 		retransform();
 
 	return true;
+}
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void ReferenceLine::loadThemeConfig(const KConfig& config) {
+	//for the properties of the line read the properties of the axis line
+	const KConfigGroup& group = config.group("Axis");
+	QPen p;
+	this->setOpacity(group.readEntry("LineOpacity", 1.0));
+	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
+	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	this->setPen(p);
 }

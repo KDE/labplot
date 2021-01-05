@@ -314,7 +314,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		raiseDockSetupConnect(m_mainWindow->xyFourierFilterCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->xyFourierFilterCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
-	case AspectType::XYConvolution:
+	case AspectType::XYConvolutionCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Convolution/Deconvolution"));
 		raiseDockSetupConnect(m_mainWindow->xyConvolutionCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->xyConvolutionCurveDock->setCurves(castList<XYCurve>(selectedAspects));

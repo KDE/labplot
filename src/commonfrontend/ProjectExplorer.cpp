@@ -51,6 +51,7 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <KLocalizedString>
+#include <KMessageWidget>
 #include <KMessageBox>
 
 /*!
@@ -442,13 +443,56 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void ProjectExplorer::keyPressEvent(QKeyEvent* event) {
+	//current selected aspect
+	auto* aspect = static_cast<AbstractAspect*>(m_treeView->currentIndex().internalPointer());
+
 	if (event->matches(QKeySequence::Delete))
 		deleteSelected();
-	else if (event->key() == 32) {
-		auto* aspect = static_cast<AbstractAspect*>(m_treeView->currentIndex().internalPointer());
+	else if (event->matches(QKeySequence::Copy)) {
+		//copy
+		if (aspect != m_project) {
+			aspect->copy();
+			showErrorMessage(QString());
+		}
+	} else if (event->matches(QKeySequence::Paste)) {
+		//paste
+		QString name;
+		auto t = AbstractAspect::clipboardAspectType(name);
+		if (t != AspectType::AbstractAspect && aspect->pasteTypes().indexOf(t) != -1) {
+			aspect->paste();
+			showErrorMessage(QString());
+		} else {
+			QString msg = i18n("'%1' cannot be pasted in %2.", name, aspect->name());
+			showErrorMessage(msg);
+
+		}
+	} else if ( (event->modifiers() & Qt::ControlModifier) && (event->key() == Qt::Key_D)) {
+		//duplicate
+		if (aspect != m_project) {
+			aspect->copy();
+			aspect->parentAspect()->paste(true);
+			showErrorMessage(QString());
+		}
+	} else if (event->key() == 32) {
+		//space key - hide/show the current object
 		auto* we = dynamic_cast<WorksheetElement*>(aspect);
 		if (we)
 			we->setVisible(!we->isVisible());
+	}
+}
+
+void ProjectExplorer::showErrorMessage(const QString& message) {
+	if (message.isEmpty()) {
+		if (m_messageWidget && m_messageWidget->isVisible())
+			m_messageWidget->close();
+	} else {
+		if (!m_messageWidget) {
+			m_messageWidget = new KMessageWidget(this);
+			m_messageWidget->setMessageType(KMessageWidget::Error);
+			layout()->addWidget(m_messageWidget);
+		}
+		m_messageWidget->setText(message);
+		m_messageWidget->animatedShow();
 	}
 }
 

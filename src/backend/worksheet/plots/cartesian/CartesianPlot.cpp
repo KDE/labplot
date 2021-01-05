@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2021 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2016-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2017-2018 by Garvit Khatri (garvitdelhi@gmail.com)
 
@@ -679,6 +679,7 @@ QMenu* CartesianPlot::createContextMenu() {
 
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+	menu->insertSeparator(firstAction);
 
 	if (children<XYCurve>().isEmpty()) {
 		addInfoElementAction->setEnabled(false);
@@ -718,6 +719,27 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 	}
 
 	return aspects;
+}
+
+QVector<AspectType> CartesianPlot::pasteTypes() const {
+	QVector<AspectType> types{
+		AspectType::XYCurve, AspectType::Histogram,
+		AspectType::Axis, AspectType::XYEquationCurve,
+		AspectType::XYConvolutionCurve, AspectType::XYCorrelationCurve,
+		AspectType::XYDataReductionCurve, AspectType::XYDifferentiationCurve,
+		AspectType::XYFitCurve, AspectType::XYFourierFilterCurve,
+		AspectType::XYFourierTransformCurve, AspectType::XYIntegrationCurve,
+		AspectType::XYInterpolationCurve, AspectType::XYSmoothCurve,
+		AspectType::TextLabel, AspectType::Image,
+		AspectType::InfoElement, AspectType::CustomPoint,
+		AspectType::ReferenceLine
+	};
+
+	//only allow to paste a legend if there is no legend available yet in the plot
+	if (!m_legend)
+		types << AspectType::CartesianPlotLegend;
+
+	return types;
 }
 
 void CartesianPlot::navigate(NavigationOperation op) {
@@ -1551,7 +1573,7 @@ void CartesianPlot::addLegend() {
 	if (m_legend)
 		return;
 
-	m_legend = new CartesianPlotLegend(this, "legend");
+	m_legend = new CartesianPlotLegend("legend");
 	this->addChild(m_legend);
 	m_legend->retransform();
 
@@ -1898,7 +1920,7 @@ void CartesianPlot::yDataChanged() {
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		if (curve) {
 			const AbstractColumn* col = curve->yColumn();
-			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->yRangeFormat != RangeFormat::DateTime) {
+			if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->yRangeFormat != RangeFormat::DateTime) {
 				setUndoAware(false);
 				setYRangeFormat(RangeFormat::DateTime);
 				setUndoAware(true);
@@ -4115,7 +4137,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete marker;
 				return false;
 			}
-        } else if (reader->name() == "plotArea")
+		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
 			auto* axis = new Axis(QString());
@@ -4126,7 +4148,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyCurve") {
-            auto* curve = new XYCurve(QString());
+			auto* curve = new XYCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -4222,7 +4244,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "cartesianPlotLegend") {
-			m_legend = new CartesianPlotLegend(this, QString());
+			m_legend = new CartesianPlotLegend(QString());
 			if (m_legend->load(reader, preview))
 				addChildFast(m_legend);
 			else {

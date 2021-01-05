@@ -49,6 +49,7 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfig&) override;
 
 	BASIC_D_ACCESSOR_DECL(double, position, Position)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
