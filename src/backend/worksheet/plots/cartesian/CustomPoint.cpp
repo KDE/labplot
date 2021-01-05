@@ -70,11 +70,11 @@ CustomPoint::~CustomPoint() = default;
 void CustomPoint::init() {
 	Q_D(CustomPoint);
 
+	d->position.setX(d->plot->xMin() + (d->plot->xMax()-d->plot->xMin())/2);
+	d->position.setY(d->plot->yMin() + (d->plot->yMax()-d->plot->yMin())/2);
+
 	KConfig config;
-	KConfigGroup group;
-	group = config.group("CustomPoint");
-	d->position.setX( group.readEntry("PositionXValue", d->plot->xMin() + (d->plot->xMax()-d->plot->xMin())/2) );
-	d->position.setY( group.readEntry("PositionYValue", d->plot->yMin() + (d->plot->yMax()-d->plot->yMin())/2) );
+	KConfigGroup group = config.group("CustomPoint");
 
 	d->symbolStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::Circle);
 	d->symbolSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
@@ -127,9 +127,9 @@ void CustomPoint::retransform() {
 }
 
 void CustomPoint::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(horizontalRatio);
-	Q_UNUSED(verticalRatio);
-	Q_UNUSED(pageResize);
+	Q_UNUSED(horizontalRatio)
+	Q_UNUSED(verticalRatio)
+	Q_UNUSED(pageResize)
 }
 
 /* ============================ getter methods ================= */
@@ -232,6 +232,7 @@ CustomPointPrivate::CustomPointPrivate(CustomPoint* owner, const CartesianPlot* 
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(true);
+	cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 }
 
 QString CustomPointPrivate::name() const {
@@ -242,14 +243,10 @@ QString CustomPointPrivate::name() const {
     calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void CustomPointPrivate::retransform() {
-	if (suppressRetransform)
-		return;
-
-	if (!parentItem())
+	if (suppressRetransform || !parentItem())
 		return;
 
 	//calculate the point in the scene coordinates
-	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	QVector<QPointF> listScene = cSystem->mapLogicalToScene(QVector<QPointF>{position});
 	if (!listScene.isEmpty()) {
 		m_visible = true;
@@ -271,12 +268,12 @@ bool CustomPointPrivate::swapVisible(bool on) {
 	//In this case we don't want to deselect the item in the project explorer.
 	//We need to supress the deselection in the view.
 	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-    if (worksheet) {
-        worksheet->suppressSelectionChangedEvent(true);
-        setVisible(on);
-        worksheet->suppressSelectionChangedEvent(false);
-    } else
-        setVisible(on);
+	if (worksheet) {
+		worksheet->suppressSelectionChangedEvent(true);
+		setVisible(on);
+		worksheet->suppressSelectionChangedEvent(false);
+	} else
+		setVisible(on);
 
 	emit q->changed();
 	emit q->visibleChanged(on);
@@ -312,7 +309,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 		path = trafo.map(path);
 		trafo.reset();
 
-		if (symbolRotationAngle != 0) {
+		if (symbolRotationAngle != 0.) {
 			trafo.rotate(symbolRotationAngle);
 			path = trafo.map(path);
 		}
@@ -353,7 +350,6 @@ QVariant CustomPointPrivate::itemChange(GraphicsItemChange change, const QVarian
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//emit the signals in order to notify the UI.
-		const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 		QPointF scenePos = mapParentToPlotArea(value.toPointF());
 		QPointF logicalPos = cSystem->mapSceneToLogical(scenePos); // map parent to scene
 		//q->setPosition(logicalPos);
@@ -367,12 +363,13 @@ QVariant CustomPointPrivate::itemChange(GraphicsItemChange change, const QVarian
 }
 
 void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	//don't move when the parent is a InfoElement, because there
+	//the custompoint position changes by the mouse are not allowed
 	if (q->parentAspect()->type() == AspectType::InfoElement)
-		return; // don't move when the parent is a InfoElement, because there nou custompoint position change by mouse is not allowed
+		return;
 
 	//position was changed -> set the position member variables
 	suppressRetransform = true;
-	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem());
 	q->setPosition(cSystem->mapSceneToLogical(pos()));
 	suppressRetransform = false;
 
@@ -409,14 +406,12 @@ void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
  * \return point in parent coordinates
  */
 QPointF CustomPointPrivate::mapPlotAreaToParent(QPointF point) {
-	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
-
-	if (parent) {
-		CartesianPlot* plot = static_cast<CartesianPlot*>(parent);
+	if (plot) {
 		// first mapping to item coordinates and from there back to parent
 		// WorksheetinfoElement: parentItem()->parentItem() == plot->graphicsItem()
 		// plot->graphicsItem().pos() == plot->plotArea()->graphicsItem().pos()
-		return mapToParent(mapFromItem(plot->plotArea()->graphicsItem(), point));
+		auto* plotArea = const_cast<CartesianPlot*>(plot)->plotArea();
+		return mapToParent(mapFromItem(plotArea->graphicsItem(), point));
 	}
 	return QPointF(0, 0);
 }
@@ -430,11 +425,10 @@ QPointF CustomPointPrivate::mapPlotAreaToParent(QPointF point) {
  * \return point in PlotArea coordinates
  */
 QPointF CustomPointPrivate::mapParentToPlotArea(QPointF point) {
-	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
-	if (parent) {
-		CartesianPlot* plot = static_cast<CartesianPlot*>(parent);
+	if (plot) {
 		// mapping from parent to item coordinates and them to plot area
-		return mapToItem(plot->plotArea()->graphicsItem(), mapFromParent(point));
+		auto* plotArea = const_cast<CartesianPlot*>(plot)->plotArea();
+		return mapToItem(plotArea->graphicsItem(), mapFromParent(point));
 	}
 	return QPointF(0, 0);
 }

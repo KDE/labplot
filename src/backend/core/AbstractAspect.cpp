@@ -312,10 +312,12 @@ QMenu* AbstractAspect::createContextMenu() {
 		connect(action, &QAction::triggered, this, &AbstractAspect::copy);
 		menu->addAction(action);
 
-		auto* actionDuplicate = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Duplicate Here"), this);
-		actionDuplicate->setShortcut(Qt::CTRL + Qt::Key_D);
-		connect(actionDuplicate, &QAction::triggered, this, &AbstractAspect::duplicate);
-		menu->addAction(actionDuplicate);
+		if (m_type != AspectType::CartesianPlotLegend) {
+			auto* actionDuplicate = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Duplicate Here"), this);
+			actionDuplicate->setShortcut(Qt::CTRL + Qt::Key_D);
+			connect(actionDuplicate, &QAction::triggered, this, &AbstractAspect::duplicate);
+			menu->addAction(actionDuplicate);
+		}
 	}
 
 	//determine the aspect type of the content available in the clipboard
@@ -678,7 +680,7 @@ void AbstractAspect::paste(bool duplicate) {
 			auto attribs = reader.attributes();
 			auto type = static_cast<AspectType>(attribs.value(QLatin1String("value")).toInt());
 			if (type != AspectType::AbstractAspect)
-				aspect = AspectFactory::createAspect(type);
+				aspect = AspectFactory::createAspect(type, this);
 		} else {
 			if (aspect) {
 				aspect->load(&reader, false);
@@ -689,10 +691,10 @@ void AbstractAspect::paste(bool duplicate) {
 
 	if (aspect) {
 		if (!duplicate)
-			beginMacro(i18n("%1: pasted %2", name(), aspect->name()));
+			beginMacro(i18n("%1: pasted '%2'", name(), aspect->name()));
 		else {
-			beginMacro(i18n("%1: duplicated %2", name(), aspect->name()));
-			aspect->setName(i18n("Copy of %1", aspect->name()));
+			beginMacro(i18n("%1: duplicated '%2'", name(), aspect->name()));
+			aspect->setName(i18n("Copy of '%1'", aspect->name()));
 		}
 
 		if (aspect->type() != AspectType::CartesianPlotLegend)

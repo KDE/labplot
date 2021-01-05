@@ -37,7 +37,10 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/Image.h"
+#include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYConvolutionCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCorrelationCurve.h"
@@ -55,7 +58,7 @@
 
 class AspectFactory {
 public:
-	static AbstractAspect* createAspect(AspectType type) {
+	static AbstractAspect* createAspect(AspectType type, AbstractAspect* parent) {
 		if (type == AspectType::Folder)
 			return new Folder(QString());
 
@@ -68,6 +71,16 @@ public:
 			return new TextLabel(QString());
 		else if (type == AspectType::Image)
 			return new Image(QString());
+		else if (type == AspectType::CustomPoint) {
+			auto* plot = static_cast<CartesianPlot*>(parent);
+			return new CustomPoint(plot, QString());
+		} else if (type == AspectType::ReferenceLine) {
+			auto* plot = static_cast<CartesianPlot*>(parent);
+			return new ReferenceLine(plot, QString());
+		} else if (type == AspectType::InfoElement) {
+			auto* plot = static_cast<CartesianPlot*>(parent);
+			return new InfoElement(QString(), plot);
+		}
 
 		/* CartesianPlot's children */
 		else if (type == AspectType::Axis)

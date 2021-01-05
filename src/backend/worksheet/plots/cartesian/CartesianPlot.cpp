@@ -1733,7 +1733,7 @@ void CartesianPlot::xDataChanged() {
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		if (curve) {
 			const AbstractColumn* col = curve->xColumn();
-			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->xRangeFormat != RangeFormat::DateTime) {
+			if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->xRangeFormat != RangeFormat::DateTime) {
 				setUndoAware(false);
 				setXRangeFormat(RangeFormat::DateTime);
 				setUndoAware(true);
@@ -1779,7 +1779,7 @@ void CartesianPlot::yDataChanged() {
 		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
 		if (curve) {
 			const AbstractColumn* col = curve->yColumn();
-			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->yRangeFormat != RangeFormat::DateTime) {
+			if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && d->yRangeFormat != RangeFormat::DateTime) {
 				setUndoAware(false);
 				setYRangeFormat(RangeFormat::DateTime);
 				setUndoAware(true);
@@ -4001,7 +4001,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete marker;
 				return false;
 			}
-        } else if (reader->name() == "plotArea")
+		} else if (reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
 		else if (reader->name() == "axis") {
 			auto* axis = new Axis(QString());
@@ -4012,7 +4012,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else if (reader->name() == "xyCurve") {
-            auto* curve = new XYCurve(QString());
+			auto* curve = new XYCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
