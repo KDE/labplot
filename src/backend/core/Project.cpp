@@ -583,13 +583,11 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<XYCurve*> curves;
 	if (hasChildren)
 		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
-	else {
+	else if (aspect->inherits(AspectType::XYCurve))
 		//the object doesn't have any children -> one single aspect is being pasted.
 		//check whether the object being pasted is a XYCurve and add it to the
 		//list of curves to be retransformed
-		if (aspect->inherits(AspectType::XYCurve))
-			curves << static_cast<XYCurve*>(aspect);
-	}
+		curves << static_cast<XYCurve*>(aspect);
 
 	for (auto* curve : curves) {
 		if (!curve) continue;
@@ -626,24 +624,20 @@ void Project::restorePointers(AbstractAspect* aspect) {
 
 	// assign to all markers the curves they need
 	QVector<InfoElement*> elements;
-	if (hasChildren)
+	if (aspect->type() == AspectType::InfoElement) //check for the type first. InfoElement has children, but they are not relevant here
+		elements << static_cast<InfoElement*>(aspect);
+	else if (hasChildren)
 		elements = aspect->children<InfoElement>(ChildIndexFlag::Recursive);
-	else {
-		if (aspect->type() == AspectType::InfoElement)
-			elements << static_cast<InfoElement*>(aspect);
-	}
 
-	for (auto element : elements)
+	for (auto* element : elements)
 		element->assignCurve(curves);
 
 	//axes
 	QVector<Axis*> axes;
 	if (hasChildren)
 		axes = aspect->children<Axis>(ChildIndexFlag::Recursive);
-	else {
-		if (aspect->type() == AspectType::Axis)
-			axes << static_cast<Axis*>(aspect);
-	}
+	else if (aspect->type() == AspectType::Axis)
+		axes << static_cast<Axis*>(aspect);
 
 	for (auto* axis : axes) {
 		if (!axis) continue;
@@ -655,10 +649,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<Histogram*> hists;
 	if (hasChildren)
 		hists = aspect->children<Histogram>(ChildIndexFlag::Recursive);
-	else {
-		if (aspect->type() == AspectType::Histogram)
-			hists << static_cast<Histogram*>(aspect);
-	}
+	else if (aspect->type() == AspectType::Histogram)
+		hists << static_cast<Histogram*>(aspect);
 
 	for (auto* hist : hists) {
 		if (!hist) continue;
@@ -669,10 +661,8 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	QVector<DatapickerCurve*> dataPickerCurves;
 	if (hasChildren)
 		dataPickerCurves = aspect->children<DatapickerCurve>(ChildIndexFlag::Recursive);
-	else {
-		if (aspect->type() == AspectType::DatapickerCurve)
-			dataPickerCurves << static_cast<DatapickerCurve*>(aspect);
-	}
+	else if (aspect->type() == AspectType::DatapickerCurve)
+		dataPickerCurves << static_cast<DatapickerCurve*>(aspect);
 
 	for (auto* dataPickerCurve : dataPickerCurves) {
 		if (!dataPickerCurve) continue;
