@@ -780,15 +780,15 @@ void CartesianPlotDock::rangeLastChanged(const QString& text) {
 
 void CartesianPlotDock::autoScaleXChanged(int state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
-	bool checked = (state == Qt::Checked);
-	for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
-		qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(row, 0))->setEnabled(!checked);
-		qobject_cast<QWidget*>(ui.twXRanges->cellWidget(row, 1))->setEnabled(!checked);
-		qobject_cast<QWidget*>(ui.twXRanges->cellWidget(row, 2))->setEnabled(!checked);
-	}
-
 	if (m_initializing)
 		return;
+
+	bool checked = (state == Qt::Checked);
+	// only first x range is auto scaled
+	//	for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
+		qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(0, 0))->setEnabled(!checked);
+		qobject_cast<QWidget*>(ui.twXRanges->cellWidget(0, 1))->setEnabled(!checked);
+		qobject_cast<QWidget*>(ui.twXRanges->cellWidget(0, 2))->setEnabled(!checked);
 
 	for (auto* plot : m_plotList)
 		plot->setAutoScaleX(checked);

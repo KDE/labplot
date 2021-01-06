@@ -133,31 +133,39 @@ public:
 	void mouseHoverZoomSelectionMode(QPointF logicPos);
 	void mouseHoverOutsideDataRect();
 
-	//TODO: use Range::xRangeDateTimeFormat()
 	const QString xRangeDateTimeFormat() const;
 	const QString xRangeDateTimeFormat(int index) const;
 	const QString& yRangeDateTimeFormat() const;
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
+	//TODO: obsolete
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
-//	BASIC_D_ACCESSOR_DECL(Range<double>, xRange, XRange)
-	BASIC_D_ACCESSOR_DECL(Range<double>, yRange, YRange)
 	int xRangeCount() const;
-//	int yRangeCount() const;
-	//TODO: return reference and replace d->xRanges[index]  in .cpp
-	Range<double> xRange() const;		// get x range of default plot range
-	Range<double> xRange(int index) const;
+	int yRangeCount() const;
+	const Range<double>& xRange() const;		// get x range of default plot range
+	Range<double> xRange(int index) const;		// get x range of plot range index
+	BASIC_D_ACCESSOR_DECL(Range<double>, yRange, YRange)
+//	const Range<double>& yRange() const;		// get y range of default plot range
+	Range<double> yRange(int index) const;		// get y range of plot range index
 	void setXRange(Range<double>);		// set x range of default plot range
 	void setXRange(int index, Range<double>);	// set x range index
+//	void setYRange(Range<double>);		// set y range of default plot range
+	void setYRange(int index, Range<double>);	// set y range index
 	void addXRange();				// add new x range
+	void addXRange(Range<double>);			// add x range
 	void removeXRange(int index);			// remove selected x range
+	void addYRange();				// add new y range
+	void removeYRange(int index);			// remove selected y range
 	// convenience methods
 	void setXMin(int index, double value);	// set x min of x range index
 	void setXMax(int index, double value);	// set x max of x range index
+	// obsolete
 	void setYMin(double value);
 	void setYMax(double value);
+	void setYMin(int index, double value);	// set y min of x range index
+	void setYMax(int index, double value);	// set y max of x range index
 	//BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat)
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeFormat, yRangeFormat, YRangeFormat)
 	RangeT::Format xRangeFormat() const;		// get x range format of default plot range
@@ -181,6 +189,7 @@ public:
 	CartesianCoordinateSystem* coordinateSystem(int) const;
 	CartesianCoordinateSystem* defaultCoordinateSystem() const;
 	void addCoordinateSystem();			// add a new cooridnate system
+	void addCoordinateSystem(CartesianCoordinateSystem* cSystem);	// add a cooridnate system
 	void removeCoordinateSystem(int index);		// remove coordinate system of index
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystemIndex, DefaultCoordinateSystemIndex)
 

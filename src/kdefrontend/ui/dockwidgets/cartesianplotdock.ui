@@ -25,6 +25,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QCheckBox" name="chkAutoScaleX">
+           <property name="toolTip">
+            <string>Sets the first x range to the curves range automatically </string>
+           </property>
            <property name="text">
             <string>Auto</string>
            </property>

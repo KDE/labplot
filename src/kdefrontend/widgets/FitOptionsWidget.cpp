@@ -204,12 +204,12 @@ void FitOptionsWidget::fitRangeMaxChanged() {
 }
 
 void FitOptionsWidget::fitRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->fitRange.setMin(dateTime.toMSecsSinceEpoch());
+	m_fitData->fitRange.setStart(dateTime.toMSecsSinceEpoch());
 	changed();
 }
 
 void FitOptionsWidget::fitRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->fitRange.setMax(dateTime.toMSecsSinceEpoch());
+	m_fitData->fitRange.setEnd(dateTime.toMSecsSinceEpoch());
 	changed();
 }
 
@@ -223,12 +223,12 @@ void FitOptionsWidget::evalRangeMaxChanged() {
 }
 
 void FitOptionsWidget::evalRangeMinDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->evalRange.setMin(dateTime.toMSecsSinceEpoch());
+	m_fitData->evalRange.setStart(dateTime.toMSecsSinceEpoch());
 	changed();
 }
 
 void FitOptionsWidget::evalRangeMaxDateTimeChanged(const QDateTime& dateTime) {
-	m_fitData->evalRange.setMax(dateTime.toMSecsSinceEpoch());
+	m_fitData->evalRange.setEnd(dateTime.toMSecsSinceEpoch());
 	changed();
 }
 

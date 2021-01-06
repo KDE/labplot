@@ -82,8 +82,10 @@ public:
 	Scale& scale() { return m_scale; }
 	QString dateTimeFormat() const { return m_dateTimeFormat; }
 	const QString& dateTimeFormat() { return m_dateTimeFormat; }
-	void setMin(T start) { m_start = start; }
-	void setMax(T end) { m_end = end; }
+	bool autoScale() const { return m_autoScale; }
+
+	void setStart(T start) { m_start = start; }
+	void setEnd(T end) { m_end = end; }
 	void setRange(T start, T end, Format format = Format::Numeric,
 		      Scale scale = Scale::Linear) {
 		m_start = start;
@@ -94,6 +96,7 @@ public:
 	void setFormat(Format format) { m_format = format; }
 	void setScale(Scale scale) { m_scale = scale; }
 	void setDateTimeFormat(QString format) { m_dateTimeFormat = format; }
+	void setAutoScale(bool b) { m_autoScale = b; }
 
 	T size() const { return m_end - m_start; }
 	T length() const { return qAbs(m_end - m_start); }
@@ -126,10 +129,11 @@ public:
 
 private:
 	T m_start;	// start value
-	T m_end;	// upper limit
-	Format m_format;	// format (Numeric or DateTime)
+	T m_end;	// end value
+	Format m_format{Format::Numeric};	// format (Numeric or DateTime)
 	QString m_dateTimeFormat{"yyyy-MM-dd hh:mm:ss"};	// only used for DateTime
-	Scale m_scale;	// scale (Linear, Log , ...)
+	Scale m_scale{Scale::Linear};	// scale (Linear, Log , ...)
+	bool m_autoScale{true};	// auto adapt start and end to all curves using this range (in plot)
 };
 
 #endif

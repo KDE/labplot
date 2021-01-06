@@ -1030,7 +1030,7 @@ void AxisPrivate::retransformLine() {
 	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() <<  ", coordinate system index = " << cSystemIndex)
 	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
 	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
-	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << ", scale = " << (int)range.scale())
+	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << ", scale = " << static_cast<int>(range.scale()))
 
 	if (suppressRetransform)
 		return;
@@ -1038,8 +1038,7 @@ void AxisPrivate::retransformLine() {
 	linePath = QPainterPath();
 	lines.clear();
 
-	QPointF startPoint;
-	QPointF endPoint;
+	QPointF startPoint, endPoint;
 
 	if (orientation == Axis::Orientation::Horizontal) {
 		if (position == Axis::Position::Top)
