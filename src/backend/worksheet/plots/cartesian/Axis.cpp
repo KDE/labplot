@@ -1536,8 +1536,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 	QString str;
 	SET_NUMBER_LOCALE
 	auto xRangeFormat{ plot->xRange(cSystem->xIndex()).format() };
+	auto yRangeFormat{ plot->yRange(cSystem->yIndex()).format() };
 	if ( (orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
-		|| (orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric) ) {
+		|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric) ) {
 		if (labelsFormat == Axis::LabelsFormat::Decimal) {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
@@ -1789,8 +1790,9 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
 		auto xRangeFormat{ plot->xRange(cSystem->xIndex()).format() };
+		auto yRangeFormat{ plot->yRange(cSystem->yIndex()).format() };
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
-				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
+				(orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 				width = fm.boundingRect(tickLabelStrings.at(i)).width();
 			} else {
@@ -2180,8 +2182,9 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		doc.setDefaultFont(labelsFont);
 		QFontMetrics fm(labelsFont);
 		auto xRangeFormat{ plot->xRange(cSystem->xIndex()).format() };
+		auto yRangeFormat{ plot->yRange(cSystem->yIndex()).format() };
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
-				(orientation == Axis::Orientation::Vertical && plot->yRangeFormat() == CartesianPlot::RangeFormat::Numeric)) {
+				(orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			//QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
 			for (int i = 0; i < tickLabelPoints.size(); i++) {
 				painter->translate(tickLabelPoints.at(i));

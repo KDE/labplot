@@ -4,7 +4,7 @@
     Description          : widget for cartesian plot properties
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2012-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -52,6 +52,7 @@ public:
 	void updateLocale() override;
 	void updateUnits() override;
 	void updateXRangeList();
+	void updateYRangeList();
 	void updatePlotRangeList();
 
 private:
@@ -88,10 +89,13 @@ private slots:
 	void xRangeFormatChanged(int);
 	void xScaleChanged(int);
 	void addXRange();
+	void addYRange();
 	void removeXRange();
+	void removeYRange();
 	void addPlotRange();
 	void removePlotRange();
 	void PlotRangeXChanged(const int index);
+	void PlotRangeYChanged(const int index);
 
 	void autoScaleYChanged(int);
 	void yMinChanged(const QString&);
@@ -157,18 +161,17 @@ private slots:
 	void plotRangeLastValuesChanged(int);
 
 	void plotXAutoScaleChanged(bool);
-	void plotXMinChanged(double);
-	void plotXMaxChanged(double);
-	void plotXRangeChanged(Range<double>);
-	void plotXRangeFormatChanged(RangeT::Format);
-	void plotXScaleChanged(CartesianPlot::Scale);	//TODO: RangeT::Scale
-
 	void plotYAutoScaleChanged(bool);
+	void plotXMinChanged(double);
 	void plotYMinChanged(double);
+	void plotXMaxChanged(double);
 	void plotYMaxChanged(double);
+	void plotXRangeChanged(Range<double>);
 	void plotYRangeChanged(Range<double>);
-	void plotYRangeFormatChanged(CartesianPlot::RangeFormat);
-	void plotYScaleChanged(CartesianPlot::Scale);
+	void plotXRangeFormatChanged(RangeT::Format);
+	void plotYRangeFormatChanged(RangeT::Format);
+	void plotXScaleChanged(RangeT::Scale);
+	void plotYScaleChanged(RangeT::Scale);
 
 	void defaultPlotRangeChanged();
 

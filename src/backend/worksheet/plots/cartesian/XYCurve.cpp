@@ -1842,14 +1842,14 @@ void XYCurvePrivate::updateValues() {
 		break;
 	}
 	case XYCurve::ValuesType::Y: {
-		CartesianPlot::RangeFormat rangeFormat = plot->yRangeFormat();
+		auto rangeFormat{ plot->yRange(cSystem->yIndex()).format() };
 		int precision = valuesPrecision;
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
 		for (const auto& point : qAsConst(m_logicalPoints)) {
 			if (!m_pointVisible.at(i++)) continue;
 			QString value;
-			if (rangeFormat == CartesianPlot::RangeFormat::Numeric)
+			if (rangeFormat == RangeT::Format::Numeric)
 				value = numberLocale.toString(point.y(), valuesNumericFormat, precision);
 			else
 				value = QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);
@@ -1860,7 +1860,7 @@ void XYCurvePrivate::updateValues() {
 	case XYCurve::ValuesType::XY:
 	case XYCurve::ValuesType::XYBracketed: {
 		auto xRangeFormat{ plot->xRange(cSystem->xIndex()).format() };
-		CartesianPlot::RangeFormat yRangeFormat = plot->yRangeFormat();
+		auto yRangeFormat{ plot->yRange(cSystem->yIndex()).format() };
 
 		int xPrecision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
@@ -1880,7 +1880,7 @@ void XYCurvePrivate::updateValues() {
 			else
 				value += QDateTime::fromMSecsSinceEpoch(point.x()).toString(valuesDateTimeFormat);
 
-			if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
+			if (yRangeFormat == RangeT::Format::Numeric)
 				value += ',' + numberLocale.toString(point.y(), valuesNumericFormat, yPrecision);
 			else
 				value += ',' + QDateTime::fromMSecsSinceEpoch(point.y()).toString(valuesDateTimeFormat);

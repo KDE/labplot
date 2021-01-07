@@ -1053,10 +1053,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setAutoScaleY(false);
 			const Origin::GraphAxis& originXAxis = layer.xAxis;
 			const Origin::GraphAxis& originYAxis = layer.yAxis;
-			Range<double> range{originXAxis.min, originXAxis.max};
-			plot->setXRange(range);
-			plot->setYMin(originYAxis.min);
-			plot->setYMax(originYAxis.max);
+			Range<double> xRange{originXAxis.min, originXAxis.max};
+			Range<double> yRange{originYAxis.min, originYAxis.max};
+			plot->setXRange(xRange);
+			plot->setYRange(yRange);
 
 			//scales
 			switch (originXAxis.scale) {
@@ -1084,16 +1084,16 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 			switch (originYAxis.scale) {
 			case Origin::GraphAxis::Linear:
-				plot->setYScale(CartesianPlot::Scale::Linear);
+				plot->setYRangeScale(RangeT::Scale::Linear);
 				break;
 			case Origin::GraphAxis::Log10:
-				plot->setYScale(CartesianPlot::Scale::Log10);
+				plot->setYRangeScale(RangeT::Scale::Log10);
 				break;
 			case Origin::GraphAxis::Ln:
-				plot->setYScale(CartesianPlot::Scale::Ln);
+				plot->setYRangeScale(RangeT::Scale::Ln);
 				break;
 			case Origin::GraphAxis::Log2:
-				plot->setYScale(CartesianPlot::Scale::Log2);
+				plot->setYRangeScale(RangeT::Scale::Log2);
 				break;
 			case Origin::GraphAxis::Probability:
 			case Origin::GraphAxis::Probit:
@@ -1101,7 +1101,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			case Origin::GraphAxis::OffsetReciprocal:
 			case Origin::GraphAxis::Logit:
 				//TODO:
-				plot->setYScale(CartesianPlot::Scale::Linear);
+				plot->setYRangeScale(RangeT::Scale::Linear);
 				break;
 			}
 

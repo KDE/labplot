@@ -59,27 +59,26 @@ public:
 
 	CartesianPlot::Type type{CartesianPlot::Type::FourAxes};
 	QString theme;
-
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::RangeFormat::Numeric};
+	int rangeFirstValues{1000}, rangeLastValues{1000};
+
 	//TODO: obsolete
 	QString yRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
-	int rangeFirstValues{1000}, rangeLastValues{1000};
 	QVector<Range<double>> xRanges{{}}, yRanges{{}};	// x, y ranges
-	Range<double> yRange{};		//TODO: obsolete
 	const Range<double> xRange() const {
 		return xRanges.at(defaultCoordinateSystem()->xIndex());
 	}
 	Range<double>& xRange() {
 		return xRanges[defaultCoordinateSystem()->xIndex()];
 	}
-	//	const Range<double> yRange() const {
-	//		return yRanges.at(defaultCoordinateSystem()->yIndex());
-	//	}
-	//	Range<double>& yRange() {
-	//		return yRanges[defaultCoordinateSystem()->yIndex()];
-	//	}
+	const Range<double> yRange() const {
+		return yRanges.at(defaultCoordinateSystem()->yIndex());
+	}
+	Range<double>& yRange() {
+		return yRanges[defaultCoordinateSystem()->yIndex()];
+	}
 	Range<double> xPrevRange{}, yPrevRange{};
 	bool autoScaleX{true}, autoScaleY{true};
 	//the following factor determines the size of the offset between the min/max points of the curves
