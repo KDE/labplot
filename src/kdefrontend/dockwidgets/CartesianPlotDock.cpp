@@ -431,7 +431,7 @@ void CartesianPlotDock::updateLocale() {
 	//	ui.twXRanges->resizeColumnToContents(1);
 	//	ui.twXRanges->resizeColumnToContents(2);
 	// y ranges
-	for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
+	for (int row{0}; row < ui.twYRanges->rowCount(); row++) {
 		if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
 			auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, 1));
 			if (le) {	// may be nullptr
