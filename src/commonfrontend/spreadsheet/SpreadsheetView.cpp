@@ -3171,8 +3171,6 @@ bool SpreadsheetView::exportView() {
 			exportToFile(path, exportHeader, separator, format);
 			break;
 		}
-		case ExportSpreadsheetDialog::Format::Binary:
-			break;
 		case ExportSpreadsheetDialog::Format::LaTeX: {
 			const bool exportLatexHeader = dlg->exportLatexHeader();
 			const bool gridLines = dlg->gridLines();
