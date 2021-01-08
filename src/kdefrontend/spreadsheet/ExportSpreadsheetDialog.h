@@ -68,7 +68,6 @@ public:
 
 	enum class Format {
 		ASCII,
-		Binary,
 		LaTeX,
 		FITS,
 		SQLite

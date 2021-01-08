@@ -71,7 +71,6 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 	ui->leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	ui->cbFormat->addItem("ASCII", static_cast<int>(Format::ASCII));
-	ui->cbFormat->addItem("Binary", static_cast<int>(Format::Binary));
 	ui->cbFormat->addItem("LaTeX", static_cast<int>(Format::LaTeX));
 	ui->cbFormat->addItem("FITS", static_cast<int>(Format::FITS));
 
@@ -321,10 +320,11 @@ void ExportSpreadsheetDialog::toggleOptions() {
 	m_showOptions = !m_showOptions;
 	ui->gbOptions->setVisible(m_showOptions);
 	m_showOptions ? m_showOptionsButton->setText(i18n("Hide Options")) :
-			m_showOptionsButton->setText(i18n("Show Options"));	//resize the dialog
-	resize(layout()->minimumSize());
+			m_showOptionsButton->setText(i18n("Show Options"));
+
+	//resize the dialog
 	layout()->activate();
-	resize( QSize(this->width(),0).expandedTo(minimumSize()) );
+	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
 }
 
 /*!
@@ -340,9 +340,11 @@ void ExportSpreadsheetDialog::selectFile() {
 	case Format::ASCII:
 		extensions = i18n("Text files (*.txt *.dat *.csv)");
 		break;
+	/*
 	case Format::Binary:
 		extensions = i18n("Binary files (*.*)");
 		break;
+	*/
 	case Format::LaTeX:
 		extensions = i18n("LaTeX files (*.tex)");
 		break;
@@ -372,7 +374,7 @@ void ExportSpreadsheetDialog::selectFile() {
  */
 void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
-	extensions << ".txt" << ".bin" << ".tex" << ".fits" << ".db";
+	extensions << ".txt" << ".tex" << ".fits" << ".db";
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(".");
 	if (index != 1) {
@@ -383,7 +385,8 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	}
 
 	const Format format = Format(ui->cbFormat->itemData(ui->cbFormat->currentIndex()).toInt());
-	if (format == Format::LaTeX) {
+	switch (format) {
+	case Format::LaTeX: {
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();
@@ -415,7 +418,10 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
-	} else if (format == Format::FITS) {
+
+		break;
+	}
+	case Format::FITS: {
 		ui->lCaptions->hide();
 		ui->lEmptyRows->hide();
 		ui->lExportArea->hide();
@@ -445,7 +451,10 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 				ui->chkColumnsAsUnits->show();
 			}
 		}
-	} else if (format == Format::SQLite) {
+
+		break;
+	}
+	case Format::SQLite: {
 		ui->cbSeparator->hide();
 		ui->lSeparator->hide();
 		ui->lDecimalSeparator->hide();
@@ -474,7 +483,10 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
-	} else {
+
+		break;
+	}
+	case Format::ASCII: {
 		ui->cbSeparator->show();
 		ui->lSeparator->show();
 		ui->lDecimalSeparator->show();
@@ -500,6 +512,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 		ui->lExportToFITS->hide();
 		ui->lColumnAsUnits->hide();
 		ui->chkColumnsAsUnits->hide();
+	}
 	}
 
 	if (!m_matrixMode && !(format == Format::FITS || format == Format::SQLite)) {
