@@ -114,6 +114,10 @@ public:
 	QPointF cursor1Pos{QPointF(qQNaN(), qQNaN())};
 	QPen cursorPen{Qt::red, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 
+	//other mouse cursor modes
+	QPen zoomSelectPen{Qt::black, 3, Qt::SolidLine};
+	QPen crossHairPen{Qt::black, 2, Qt::DotLine};
+
 signals:
 	void mousePressZoomSelectionModeSignal(QPointF logicalPos);
 	void mousePressCursorModeSignal(QPointF logicalPos);

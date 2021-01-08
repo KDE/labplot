@@ -3785,7 +3785,7 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	if ((mouseMode == CartesianPlot::MouseMode::ZoomXSelection
 		|| mouseMode == CartesianPlot::MouseMode::ZoomYSelection)
 		&& (!m_selectionBandIsShown) && m_insideDataRect) {
-		painter->setPen(QPen(Qt::black, 3));
+		painter->setPen(zoomSelectPen);
 		painter->drawLine(m_selectionStartLine);
 	} else if (m_selectionBandIsShown) {
 		QPointF selectionStart = m_selectionStart;
@@ -3808,14 +3808,14 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		if (m_selectionEnd.y() < dataRect.top())
 			selectionEnd.setY(dataRect.top());
 		painter->save();
-		painter->setPen(QPen(Qt::black, 5));
+		painter->setPen(zoomSelectPen);
 		painter->drawRect(QRectF(selectionStart, selectionEnd));
 		painter->setBrush(Qt::blue);
 		painter->setOpacity(0.2);
 		painter->drawRect(QRectF(selectionStart, selectionEnd));
 		painter->restore();
 	} else if (mouseMode == CartesianPlot::MouseMode::Crosshair) {
-		painter->setPen(QPen(Qt::black, 2, Qt::DotLine));
+		painter->setPen(crossHairPen);
 
 		//horizontal line
 		double x1 = dataRect.left();
@@ -4619,6 +4619,13 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 			}
 		}
 	}
+
+	//use the color of the axis lines as the color for the different mouse cursor lines
+	Q_D(CartesianPlot);
+	const KConfigGroup& group = config.group("Axis");
+	const QColor& color = group.readEntry("LineColor", QColor(Qt::black));
+	d->zoomSelectPen.setColor(color);
+	d->crossHairPen.setColor(color);
 }
 
 const QList<QColor>& CartesianPlot::themeColorPalette() const {
