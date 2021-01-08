@@ -2994,7 +2994,7 @@ void CartesianPlotPrivate::retransformScales() {
 			logicalRange = yRange;
 
 			if (sceneRange.length() > 0)
-				scales << this->createScale(yScale, sceneRange, logicalRange);
+				scales << this->createScale(yRange.scale(), sceneRange, logicalRange);
 		} else {
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = yRange.start();
@@ -3009,7 +3009,7 @@ void CartesianPlotPrivate::retransformScales() {
 				logicalRange = Range<double>(logicalEndLast, rb.range.start());
 
 				if (sceneRange.length() > 0)
-					scales << this->createScale(yScale, sceneRange, logicalRange);
+					scales << this->createScale(yRange.scale(), sceneRange, logicalRange);
 
 				sceneEndLast = sceneRange.end();
 				logicalEndLast = rb.range.end();
@@ -3020,7 +3020,7 @@ void CartesianPlotPrivate::retransformScales() {
 			logicalRange.setRange(logicalEndLast, yRange.end());
 
 			if (sceneRange.length() > 0)
-				scales << this->createScale(yScale, sceneRange, logicalRange);
+				scales << this->createScale(yRange.scale(), sceneRange, logicalRange);
 		}
 
 		//set y scales of cSystem
@@ -3188,18 +3188,6 @@ void CartesianPlotPrivate::checkYRange() {
 	}
 }
 
-// obsolete version
-CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, const Range<double> &sceneRange, const Range<double> &logicalRange) {
-	DEBUG( Q_FUNC_INFO << ", scene start/end = " << sceneRange.toStdString() << ", logical start/end = " << logicalRange.toStdString() );
-// 	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
-	//TODO
-	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
-// 	Interval<double> interval (logicalStart, logicalEnd);
-	if (type == CartesianPlot::Scale::Linear)
-		return CartesianScale::createLinearScale(range, sceneRange, logicalRange);
-	else
-		return CartesianScale::createLogScale(range, sceneRange, logicalRange, type);
-}
 CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double> &sceneRange, const Range<double> &logicalRange) {
 	DEBUG( Q_FUNC_INFO << ", scene start/end = " << sceneRange.toStdString() << ", logical start/end = " << logicalRange.toStdString() );
 // 	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
@@ -3386,32 +3374,32 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			}
 
 			//handle the change in y
-			switch (yScale) {
-			case CartesianPlot::Scale::Linear: {
+			switch (yRange().scale()) {
+			case RangeT::Scale::Linear: {
 				const double deltaY = (logicalStart.y() - logicalEnd.y());
 				yRange().translate(deltaY);
 				break;
 			}
-			case CartesianPlot::Scale::Log10:
-			case CartesianPlot::Scale::Log10Abs: {
+			case RangeT::Scale::Log10:
+			case RangeT::Scale::Log10Abs: {
 				const double deltaY = log10(logicalStart.y()) - log10(logicalEnd.y());
 				yRange() *= pow(10, deltaY);
 				break;
 			}
-			case CartesianPlot::Scale::Log2:
-			case CartesianPlot::Scale::Log2Abs: {
+			case RangeT::Scale::Log2:
+			case RangeT::Scale::Log2Abs: {
 				const double deltaY = log2(logicalStart.y()) - log2(logicalEnd.y());
 				yRange() *= pow(2, deltaY);
 				break;
 			}
-			case CartesianPlot::Scale::Ln:
-			case CartesianPlot::Scale::LnAbs: {
+			case RangeT::Scale::Ln:
+			case RangeT::Scale::LnAbs: {
 				const double deltaY = log(logicalStart.y()) - log(logicalEnd.y());
 				yRange() *= exp(deltaY);
 				break;
 			}
-			case CartesianPlot::Scale::Sqrt:
-			case CartesianPlot::Scale::X2:
+			case RangeT::Scale::Sqrt:
+			case RangeT::Scale::X2:
 				break;
 			}
 
@@ -3454,8 +3442,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 	QString info;
 	const auto* cSystem{ defaultCoordinateSystem() };
 	const auto xRangeFormat{ xRange().format() };
+	const auto yRangeFormat{ yRange().format() };
 	const auto xRangeDateTimeFormat{ xRange().dateTimeFormat() };
-	//TODO
 	const auto yRangeDateTimeFormat{ yRange().dateTimeFormat() };
 	const QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
@@ -3469,7 +3457,7 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 						QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
 
 		info += QLatin1String(", ");
-		if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
+		if (yRangeFormat == RangeT::Format::Numeric)
 			info += QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
 		else
 			info += i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
@@ -3489,7 +3477,7 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 		logicalPos.setX(xRange().start()); // must be done, because the other plots can have other ranges, value must be in the scenes
 		m_selectionEnd.setY(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).y());//event->pos().y());
 		QPointF logicalEnd = logicalPos;
-		if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
+		if (yRangeFormat == RangeT::Format::Numeric)
 			info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
 		else
 			info = i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
@@ -3664,6 +3652,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QString info;
 	const auto* cSystem{ defaultCoordinateSystem() };
 	const auto xRangeFormat{ xRange().format() };
+	const auto yRangeFormat{ yRange().format() };
 	const auto xRangeDateTimeFormat{ xRange().dateTimeFormat() };
 	const auto yRangeDateTimeFormat{ yRange().dateTimeFormat() };
 	if (dataRect.contains(point)) {
@@ -3679,7 +3668,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
 
 			info += ", y=";
-			if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
+			if (yRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
@@ -3696,7 +3685,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection && !m_selectionBandIsShown) {
 			info = "y=";
-			if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
+			if (yRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
@@ -3724,7 +3713,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			update();
 		} else if (mouseMode == CartesianPlot::MouseMode::Cursor) {
 			info = "x=";
-			if (yRangeFormat == CartesianPlot::RangeFormat::Numeric)
+			if (yRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.x());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
@@ -3953,6 +3942,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	}
 	writer->writeEndElement();
 	writer->writeStartElement("coordinateSystems");
+	writer->writeAttribute( "defaultCoordinateSystem", QString::number(defaultCoordinateSystemIndex()) );
 	for (const auto& cSystem : d->coordinateSystems) {
 		writer->writeStartElement( "coordinateSystem" );
 		writer->writeAttribute( "xIndex", QString::number(cSystem->xIndex()) );
@@ -4018,7 +4008,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	for (auto* elem : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
 		elem->save(writer);
 
-	writer->writeEndElement(); // close "cartesianPlot" section
+	writer->writeEndElement(); // cartesianPlot
 }
 
 //! Load from XML
@@ -4160,6 +4150,8 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			addYRange(range);
 		} else if (!preview && reader->name() == "coordinateSystems") {
 			attribs = reader->attributes();
+			READ_INT_VALUE("defaultCoordinateSystem", defaultCoordinateSystemIndex, int);
+
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
 			READ_DOUBLE_VALUE("rightPadding", rightPadding);

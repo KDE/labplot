@@ -74,8 +74,7 @@ void ReferenceLine::init() {
 	KConfigGroup group = config.group("ReferenceLine");
 
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
-	//TODO
-	d->position = group.readEntry("Position", d->plot->xRange(0).center());
+	d->position = group.readEntry("Position", d->plot->xRange().center());
 
 	d->pen.setStyle( (Qt::PenStyle) group.readEntry("Style", (int)Qt::SolidLine) );
 	d->pen.setColor( group.readEntry("Color", QColor(Qt::black)) );
@@ -271,7 +270,6 @@ ReferenceLinePrivate::ReferenceLinePrivate(ReferenceLine* owner, const Cartesian
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(true);
-	cSystem = static_cast<const CartesianCoordinateSystem*>(plot->defaultCoordinateSystem());
 }
 
 QString ReferenceLinePrivate::name() const {
@@ -292,8 +290,7 @@ void ReferenceLinePrivate::retransform() {
 	else
 		listLogical << QPointF(plot->xRange().center(), position);
 
-	// overwrites global cSystem?
-	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->defaultCoordinateSystem());
+	const auto* cSystem{ plot->defaultCoordinateSystem() };
 	QVector<QPointF> listScene = cSystem->mapLogicalToScene(listLogical);
 
 	if (!listScene.isEmpty()) {
@@ -423,8 +420,7 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 		//emit the signals in order to notify the UI (dock widget and status bar) about the new logical position.
 		//we don't set the position related member variables during the mouse movements.
 		//this is done on mouse release events only.
-		//TODO: overwrites global cSystem?
-		const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
+		const auto* cSystem{ plot->defaultCoordinateSystem() };
 		QPointF positionLogical = cSystem->mapSceneToLogical(positionSceneNew);
 		if (orientation == ReferenceLine::Orientation::Horizontal) {
 			emit q->positionChanged(positionLogical.y());
@@ -454,8 +450,7 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 void ReferenceLinePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//position was changed -> set the position member variables
 	suppressRetransform = true;
-	//TODO: overwrites global cSystem?
-	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
+	const auto* cSystem{ plot->defaultCoordinateSystem() };
 	QPointF positionLogical = cSystem->mapSceneToLogical(pos());
 	if (orientation == ReferenceLine::Orientation::Horizontal)
 		q->setPosition(positionLogical.y());

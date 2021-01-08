@@ -38,7 +38,6 @@ public:
 	explicit ReferenceLinePrivate(ReferenceLine*, const CartesianPlot*);
 
 	const CartesianPlot* plot{nullptr};
-	const CartesianCoordinateSystem* cSystem{nullptr};
 
 	QString name() const;
 	void retransform();

@@ -86,7 +86,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot, const XYCurve
 		} else {
 			d->xPos = 0;
 			d->position = 0;
-			custompoint->setPosition(d->cSystem->mapSceneToLogical(QPointF(0,0)));
+			custompoint->setPosition(d->cSystem->mapSceneToLogical(QPointF(0, 0)));
 			DEBUG("Value not found");
 		}
 
@@ -835,9 +835,8 @@ void InfoElementPrivate::init() {
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
 
-	//TODO
 	if(plot)
-		cSystem =  dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
+		cSystem = plot->defaultCoordinateSystem();
 }
 
 QString InfoElementPrivate::name() const {

@@ -61,11 +61,8 @@ public:
 	QString theme;
 	QRectF dataRect;
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
-	CartesianPlot::RangeFormat yRangeFormat{CartesianPlot::RangeFormat::Numeric};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 
-	//TODO: obsolete
-	QString yRangeDateTimeFormat{"yyyy-MM-dd hh:mm:ss"};
 	QVector<Range<double>> xRanges{{}}, yRanges{{}};	// x, y ranges
 	const Range<double> xRange() const {
 		return xRanges.at(defaultCoordinateSystem()->xIndex());
@@ -88,11 +85,10 @@ public:
 	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
 	double autoScaleOffsetFactor{0.0};
 	//TODO: obsolete
-	CartesianPlot::Scale yScale{CartesianPlot::Scale::Linear};
+//	CartesianPlot::Scale yScale{CartesianPlot::Scale::Linear};
 	//TODO: move to Range?
 	bool xRangeBreakingEnabled{false}, yRangeBreakingEnabled{false};
 	CartesianPlot::RangeBreaks xRangeBreaks, yRangeBreaks;
-
 
 	//cached values of minimum and maximum for all visible curves
 	bool curvesXMinMaxIsDirty{false}, curvesYMinMaxIsDirty{false};
@@ -137,8 +133,8 @@ private:
 	void checkXRange();
 	void checkYRange();
 	//obsolete version
-	CartesianScale* createScale(CartesianPlot::Scale type,
-		const Range<double> &sceneRange, const Range<double> &logicalRange);
+//	CartesianScale* createScale(CartesianPlot::Scale type,
+//		const Range<double> &sceneRange, const Range<double> &logicalRange);
 	CartesianScale* createScale(RangeT::Scale,
 		const Range<double> &sceneRange, const Range<double> &logicalRange);
 

@@ -232,7 +232,8 @@ CustomPointPrivate::CustomPointPrivate(CustomPoint* owner, const CartesianPlot* 
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(true);
-	cSystem = static_cast<const CartesianCoordinateSystem*>(plot->defaultCoordinateSystem());
+
+	cSystem = plot->defaultCoordinateSystem();
 }
 
 QString CustomPointPrivate::name() const {
@@ -247,8 +248,6 @@ void CustomPointPrivate::retransform() {
 		return;
 
 	//calculate the point in the scene coordinates
-	//TODO: overwrites global cSystem
-	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
 	QVector<QPointF> listScene = cSystem->mapLogicalToScene(QVector<QPointF>{position});
 	if (!listScene.isEmpty()) {
 		m_visible = true;
@@ -352,8 +351,6 @@ QVariant CustomPointPrivate::itemChange(GraphicsItemChange change, const QVarian
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//emit the signals in order to notify the UI.
-		//TODO: overwrites global cSystem?
-		const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
 		QPointF scenePos = mapParentToPlotArea(value.toPointF());
 		QPointF logicalPos = cSystem->mapSceneToLogical(scenePos); // map parent to scene
 		//q->setPosition(logicalPos);
@@ -374,8 +371,6 @@ void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
 	//position was changed -> set the position member variables
 	suppressRetransform = true;
-	//TODO: overwrites global cSystem?
-	const auto* cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
 	q->setPosition(cSystem->mapSceneToLogical(pos()));
 	suppressRetransform = false;
 

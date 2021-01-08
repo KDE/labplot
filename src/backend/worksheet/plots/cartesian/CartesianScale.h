@@ -41,8 +41,6 @@ public:
 	enum class Type {Linear, Log};
 
 	static CartesianScale* createLinearScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange);
-	// obsolete
-	static CartesianScale* createLogScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange, CartesianPlot::Scale);
 	static CartesianScale* createLogScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange, RangeT::Scale);
 
 	virtual void getProperties(Type *type = nullptr, Range<double> *range = nullptr, double *a = nullptr, double *b = nullptr, double *c = nullptr) const;

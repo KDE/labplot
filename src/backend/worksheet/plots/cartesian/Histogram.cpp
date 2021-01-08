@@ -991,8 +991,7 @@ void HistogramPrivate::updateLines() {
 
 	//map the lines and the symbol positions to the scene coordinates
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	//TODO
-	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
+	const auto* cSystem{ plot->defaultCoordinateSystem() };
 	lines = cSystem->mapLogicalToScene(lines);
 	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
 	cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
@@ -1275,8 +1274,7 @@ void HistogramPrivate::updateFilling() {
 
 	QVector<QLineF> fillLines;
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	//TODO
-	const AbstractCoordinateSystem* cSystem = plot->coordinateSystem(0);
+	const AbstractCoordinateSystem* cSystem{ plot->defaultCoordinateSystem() };
 
 	//if there're no interpolation lines available (Histogram::NoLine selected), create line-interpolation,
 	//use already available lines otherwise.
@@ -1297,16 +1295,14 @@ void HistogramPrivate::updateFilling() {
 	//in case the histogram is zoomed, handle the clipping on the l.h.s.
 	const QPointF& firstPoint = fillLines.constFirst().p1();
 	QPointF start;
-	//TODO
-	if (plot->xRange(0).start() > binRangesMin) {
-		//TODO
-		start = cSystem->mapLogicalToScene(QPointF(plot->xRange(0).start(), plot->yRange().start() > 0 ? plot->yRange().start() : 0));
+	if (plot->xRange().start() > binRangesMin) {
+		start = cSystem->mapLogicalToScene(QPointF(plot->xRange().start(), plot->yRange().start() > 0 ? plot->yRange().start() : 0));
 
 		if ( !qFuzzyCompare(start.x(), firstPoint.x()) )
 			fillPolygon << QPointF(start.x(), firstPoint.y());
 	}
 
-	//add the first point of the fist visible line
+	//add the first point of the first visible line
 	fillPolygon << firstPoint;
 
 	//iterate over all visible lines and add unique points.
@@ -1325,10 +1321,8 @@ void HistogramPrivate::updateFilling() {
 	//in case the histogram is zoomed, handle the clipping on the r.h.s.
 	const QPointF& lastPoint = fillLines.at(fillLines.size()-2).p2();
 	QPointF end;
-	//TODO
-	if (plot->xRange(0).end() < binRangesMax) {
-		//TODO
-		end = cSystem->mapLogicalToScene(QPointF(plot->xRange(0).end(), plot->yRange().start() > 0 ? plot->yRange().start() : 0));
+	if (plot->xRange().end() < binRangesMax) {
+		end = cSystem->mapLogicalToScene(QPointF(plot->xRange().end(), plot->yRange().start() > 0 ? plot->yRange().start() : 0));
 
 		if (end.y() != lastPoint.y())
 			fillPolygon << QPointF(end.x(), lastPoint.y());
@@ -1338,8 +1332,7 @@ void HistogramPrivate::updateFilling() {
 
 	//close the polygon
 	fillPolygon << end;
-	//TODO
-	if (plot->xRange(0).start() > binRangesMin)
+	if (plot->xRange().start() > binRangesMin)
 		fillPolygon << start;
 
 	recalcShapeAndBoundingRect();

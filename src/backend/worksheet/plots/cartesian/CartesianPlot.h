@@ -65,10 +65,6 @@ public:
 	enum class MouseMode {Selection, ZoomSelection, ZoomXSelection, ZoomYSelection, Cursor, Crosshair};
 	enum class NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
 				  ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
-	//TODO: replaced by RangeT::Scale
-	enum class Scale {Linear, Log10, Log2, Ln, Log10Abs, Log2Abs, LnAbs, Sqrt, X2};
-	// TODO: replaced by RangeT::Format
-	enum class RangeFormat {Numeric, DateTime};
 	enum class RangeType {Free, Last, First};
 	enum class RangeBreakStyle {Simple, Vertical, Sloped};
 
@@ -144,6 +140,7 @@ public:
 	//TODO: obsolete
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
 	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
+
 	int xRangeCount() const;
 	int yRangeCount() const;
 	const Range<double>& xRange() const;		// get x range of default plot range
@@ -181,7 +178,6 @@ public:
 	void setXRangeScale(int index, RangeT::Scale);	// set scale of x range index
 	void setYRangeScale(RangeT::Scale);	// set y range scale of default plot range
 	void setYRangeScale(int index, RangeT::Scale);	// set scale of y range index
-//	BASIC_D_ACCESSOR_DECL(CartesianPlot::Scale, yScale, YScale)
 
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
