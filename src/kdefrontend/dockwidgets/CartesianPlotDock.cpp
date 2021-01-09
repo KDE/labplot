@@ -1322,12 +1322,20 @@ void CartesianPlotDock::horizontalPaddingChanged(double value) {
 	if (m_initializing)
 		return;
 	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
-	for (auto* plot : m_plotList)
+	for (auto* plot : m_plotList) {
+		//if symmetric padding is active we also adjust the right padding.
+		//start a macro in this case to only have one single entry on the undo stack.
+		//TODO: ideally this is done in CartesianPlot and is completely transparent to CartesianPlotDock.
+		const bool sym = m_plot->symmetricPadding();
+		if (sym)
+			plot->beginMacro(i18n("%1: set horizontal padding", plot->name()));
+
 		plot->setHorizontalPadding(padding);
 
-	if (m_plot->symmetricPadding()) {
-		for (auto* plot: m_plotList)
+		if (sym) {
 			plot->setRightPadding(padding);
+			plot->endMacro();
+		}
 	}
 }
 
@@ -1343,14 +1351,18 @@ void CartesianPlotDock::verticalPaddingChanged(double value) {
 	if (m_initializing)
 		return;
 
-	// TODO: find better solution (set spinbox range). When plot->rect().width() does change?
-	double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
-	for (auto* plot : m_plotList)
+	const double padding = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* plot : m_plotList) {
+		const bool sym = m_plot->symmetricPadding();
+		if (sym)
+			plot->beginMacro(i18n("%1: set vertical padding", plot->name()));
+
 		plot->setVerticalPadding(padding);
 
-	if (m_plot->symmetricPadding()) {
-		for (auto* plot: m_plotList)
+		if (sym) {
 			plot->setBottomPadding(padding);
+			plot->endMacro();
+		}
 	}
 }
 
@@ -1630,6 +1642,7 @@ void CartesianPlotDock::plotBorderOpacityChanged(float value) {
 }
 
 void CartesianPlotDock::plotHorizontalPaddingChanged(float value) {
+	qDebug()<<"here";
 	m_initializing = true;
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
