@@ -3868,19 +3868,21 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		painter->restore();
 	}
 
-	static double penWidth = 6.;
-	QRectF rect = q->m_plotArea->graphicsItem()->boundingRect();
-	// the sign must be oposite for penWidth??
-	rect = QRectF(-rect.width()/2 - penWidth / 2, -rect.height()/2 - penWidth / 2,
-				  rect.width() + penWidth, rect.height() + penWidth);
+	const bool hovered = (m_hovered && !isSelected());
+	const bool selected = isSelected();
+	if ((hovered || selected)  && !m_printing) {
+		static double penWidth = 20.;
+		const QRectF& br = q->m_plotArea->graphicsItem()->boundingRect();
+		const qreal width = br.width();
+		const qreal height = br.height();
+		const QRectF rect = QRectF(-width/2 + penWidth/2, -height/2 + penWidth/2,
+					  width - penWidth, height - penWidth);
 
-	if (m_hovered && !isSelected() && !m_printing) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth, Qt::SolidLine));
-		painter->drawRect(rect);
-	}
+		if (m_hovered)
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth));
+		else
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth));
 
-	if (isSelected() && !m_printing) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth, Qt::SolidLine));
 		painter->drawRect(rect);
 	}
 }

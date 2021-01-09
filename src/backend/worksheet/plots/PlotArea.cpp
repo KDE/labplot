@@ -281,11 +281,15 @@ void PlotAreaPrivate::setRect(const QRectF& r) {
 }
 
 QRectF PlotAreaPrivate::boundingRect () const {
-	float width = rect.width();
-	float height = rect.height();
-	float penWidth = borderPen.width();
-	return QRectF{-width/2 - penWidth/2, -height/2 - penWidth/2,
-	              width + penWidth, height + penWidth};
+	if (borderPen.style() != Qt::NoPen){
+		const qreal width = rect.width();
+		const qreal height = rect.height();
+		const double penWidth = borderPen.width();
+		return QRectF{-width/2 - penWidth/2, -height/2 - penWidth/2,
+					width + penWidth, height + penWidth};
+	} else
+		return rect;
+
 }
 
 QPainterPath PlotAreaPrivate::shape() const {
