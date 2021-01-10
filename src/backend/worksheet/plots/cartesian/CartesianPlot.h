@@ -187,12 +187,12 @@ public:
 	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable);
 	CLASS_D_ACCESSOR_DECL(bool, cursor1Enable, Cursor1Enable);
 
-	int coordinateSystemCount() const;
-	CartesianCoordinateSystem* coordinateSystem(int) const;
-	CartesianCoordinateSystem* defaultCoordinateSystem() const;
-	void addCoordinateSystem();			// add a new cooridnate system
-	void addCoordinateSystem(CartesianCoordinateSystem* cSystem);	// add a cooridnate system
-	void removeCoordinateSystem(int index);		// remove coordinate system of index
+	int coordinateSystemCount() const;	// get number of coordinate systems
+	CartesianCoordinateSystem* coordinateSystem(int) const;	// get coordinate system index
+	CartesianCoordinateSystem* defaultCoordinateSystem() const;	// return default coordinate system
+	void addCoordinateSystem();			// add a new coordinate system
+	void addCoordinateSystem(CartesianCoordinateSystem* cSystem);	// add a coordinate system
+	void removeCoordinateSystem(int index);		// remove coordinate system index
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystemIndex, DefaultCoordinateSystemIndex)
 
 	QString theme() const;

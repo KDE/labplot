@@ -74,7 +74,7 @@
           <enum>QAbstractScrollArea::AdjustToContents</enum>
          </property>
          <property name="columnCount">
-          <number>4</number>
+          <number>5</number>
          </property>
          <attribute name="horizontalHeaderDefaultSectionSize">
           <number>80</number>
@@ -88,6 +88,11 @@
          <attribute name="verticalHeaderMinimumSectionSize">
           <number>10</number>
          </attribute>
+         <column>
+          <property name="text">
+           <string>Auto</string>
+          </property>
+         </column>
          <column>
           <property name="text">
            <string>Format</string>
@@ -431,6 +436,11 @@
          </attribute>
          <column>
           <property name="text">
+           <string>Auto</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
            <string>Format</string>
           </property>
          </column>
@@ -454,11 +464,17 @@
        <item row="20" column="2" colspan="3">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QCheckBox" name="chkAutoScaleY">
-           <property name="text">
-            <string>Auto</string>
+          <spacer name="horizontalSpacer_9">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
-          </widget>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
          <item>
           <widget class="QToolButton" name="tbAddYRange">
@@ -475,45 +491,6 @@
           <widget class="QToolButton" name="tbRemoveYRange">
            <property name="toolTip">
             <string>remove the current selected y range</string>
-           </property>
-           <property name="icon">
-            <iconset theme="list-remove">
-             <normaloff>.</normaloff>.</iconset>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="14" column="3" colspan="2">
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QCheckBox" name="chkAutoScaleX">
-           <property name="toolTip">
-            <string>Sets the first x range to the curves range automatically </string>
-           </property>
-           <property name="text">
-            <string>Auto</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="tbAddXRange">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add a new x range&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="icon">
-            <iconset theme="list-add">
-             <normaloff>.</normaloff>.</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="tbRemoveXRange">
-           <property name="toolTip">
-            <string>Remove the current selected x range</string>
-           </property>
-           <property name="text">
-            <string>...</string>
            </property>
            <property name="icon">
             <iconset theme="list-remove">
@@ -627,6 +604,48 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="14" column="2" colspan="3">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <spacer name="horizontalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbAddXRange">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add a new x range&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="icon">
+            <iconset theme="list-add">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbRemoveXRange">
+           <property name="toolTip">
+            <string>Remove the current selected x range</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset theme="list-remove">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

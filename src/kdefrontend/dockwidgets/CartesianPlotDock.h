@@ -63,6 +63,8 @@ private:
 	ThemeHandler* m_themeHandler;
 	QButtonGroup* m_bgDefaultPlotRange{nullptr};
 
+	void autoScaleXRange(int rangeIndex, bool);
+	void autoScaleYRange(int rangeIndex, bool);
 	void loadConfig(KConfig&);
 
 private slots:

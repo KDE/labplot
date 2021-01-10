@@ -1080,12 +1080,13 @@ private:
 	Range<double> m_oldRange;
 };
 
-
+// auto scales default plot range
 void CartesianPlot::setAutoScaleX(bool autoScaleX) {
 	Q_D(CartesianPlot);
 	if (autoScaleX != d->autoScaleX)
 		exec(new CartesianPlotSetAutoScaleXCmd(d, autoScaleX));
 }
+// auto scales default plot range
 void CartesianPlot::setAutoScaleY(bool autoScaleY) {
 	Q_D(CartesianPlot);
 	if (autoScaleY != d->autoScaleY)
@@ -2114,6 +2115,21 @@ bool CartesianPlot::isLocked() const {
 	return d->locked;
 }
 
+// auto scale
+
+void CartesianPlot::scaleAutoTriggered() {
+	QAction* action = dynamic_cast<QAction*>(QObject::sender());
+	if (!action)
+		return;
+
+	if (action == scaleAutoAction)
+		scaleAuto();
+	else if (action == scaleAutoXAction)
+		setAutoScaleX(true);
+	else if (action == scaleAutoYAction)
+		setAutoScaleY(true);
+}
+
 bool CartesianPlot::scaleAutoX() {
 	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
@@ -2276,18 +2292,6 @@ bool CartesianPlot::scaleAutoY() {
 	return update;
 }
 
-void CartesianPlot::scaleAutoTriggered() {
-	QAction* action = dynamic_cast<QAction*>(QObject::sender());
-	if (!action)
-		return;
-
-	if (action == scaleAutoAction)
-		scaleAuto();
-	else if (action == scaleAutoXAction)
-		setAutoScaleX(true);
-	else if (action == scaleAutoYAction)
-		setAutoScaleY(true);
-}
 
 // TODO: copy paste code?
 bool CartesianPlot::scaleAuto() {
@@ -2563,6 +2567,8 @@ void CartesianPlot::calculateCurvesYMinMax(bool completeRange) {
 			d->curvesYRange.end() = max;
 	}
 }
+
+// zoom
 
 void CartesianPlot::zoomIn() {
 	Q_D(CartesianPlot);
