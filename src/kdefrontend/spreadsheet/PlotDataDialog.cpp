@@ -393,28 +393,7 @@ void PlotDataDialog::plot() {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot - %1", m_spreadsheet->name()) );
 			plot->setType(CartesianPlot::Type::FourAxes);
-
-			//set the axis titles before we add the plot to the worksheet
-			//set the x-axis names
-			const QString& xColumnName = ui->cbXColumn->currentText();
-			for (auto* axis : plot->children<Axis>()) {
-				if (axis->orientation() == Axis::Orientation::Horizontal) {
-					axis->title()->setText(xColumnName);
-					break;
-				}
-			}
-
-			//if we only have one single y-column to plot, we can set the title of the y-axes
-			if (m_columnComboBoxes.size() == 2) {
-				const QString& yColumnName = m_columnComboBoxes[1]->currentText();
-				for (auto* axis : plot->children<Axis>()) {
-					if (axis->orientation() == Axis::Orientation::Vertical) {
-						axis->title()->setText(yColumnName);
-						break;
-					}
-				}
-			}
-
+			setAxesTitles(plot);
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
 		} else {
@@ -441,28 +420,7 @@ void PlotDataDialog::plot() {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot - %1", m_spreadsheet->name()) );
 			plot->setType(CartesianPlot::Type::FourAxes);
-
-			//set the axis titles before we add the plot to the worksheet
-			//set the x-axis names
-			const QString& xColumnName = ui->cbXColumn->currentText();
-			for (auto* axis : plot->children<Axis>()) {
-				if (axis->orientation() == Axis::Orientation::Horizontal) {
-					axis->title()->setText(xColumnName);
-					break;
-				}
-			}
-
-			//if we only have one single y-column to plot, we can set the title of the y-axes
-			if (m_columnComboBoxes.size() == 2) {
-				const QString& yColumnName = m_columnComboBoxes[1]->currentText();
-				for (auto* axis : plot->children<Axis>()) {
-					if (axis->orientation() == Axis::Orientation::Vertical) {
-						axis->title()->setText(yColumnName);
-						break;
-					}
-				}
-			}
-
+			setAxesTitles(plot);
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
 		} else {
@@ -477,65 +435,7 @@ void PlotDataDialog::plot() {
 		//A more sophisticated and better logic would require further adjustments for properties like plot area
 		//paddings, the font size of axis ticks and title labels, etc. Also, this logic should be applied maybe if
 		//we add plots to an already created worksheet.
-
-		//adjust the sizes
-		const auto layout = worksheet->layout();
-		const auto plots = worksheet->children<CartesianPlot>();
-		const int count = plots.size();
-		const double minSize = 4.0;
-		switch (layout) {
-		case Worksheet::Layout::NoLayout:
-		case Worksheet::Layout::VerticalLayout: {
-			if (layout == Worksheet::Layout::NoLayout)
-				worksheet->setLayout(Worksheet::Layout::VerticalLayout);
-
-			const auto plot = plots.constFirst();
-			double height = Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Unit::Centimeter);
-			if (height < 4.) {
-				double newHeight = worksheet->layoutTopMargin() + worksheet->layoutBottomMargin()
-							+ (count - 1) * worksheet->layoutHorizontalSpacing()
-							+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
-				QRectF newRect = worksheet->pageRect();
-				newRect.setHeight(round(newHeight));
-				worksheet->setPageRect(newRect);
-			}
-			break;
-		}
-		case Worksheet::Layout::HorizontalLayout: {
-			const auto plot = plots.constFirst();
-			double width = Worksheet::convertFromSceneUnits(plot->rect().width(), Worksheet::Unit::Centimeter);
-			if (width < 4.) {
-				double newWidth = worksheet->layoutLeftMargin() + worksheet->layoutRightMargin()
-							+ (count - 1) * worksheet->layoutVerticalSpacing()
-							+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
-				QRectF newRect = worksheet->pageRect();
-				newRect.setWidth(round(newWidth));
-				worksheet->setPageRect(newRect);
-			}
-			break;
-		}
-		case Worksheet::Layout::GridLayout: {
-			const auto plot = plots.constFirst();
-			double width = Worksheet::convertFromSceneUnits(plot->rect().width(), Worksheet::Unit::Centimeter);
-			double height = Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Unit::Centimeter);
-			if (width < 4. || height < 4.) {
-				QRectF newRect = worksheet->pageRect();
-				if (height < 4.) {
-					double newHeight = worksheet->layoutTopMargin() + worksheet->layoutBottomMargin()
-									+ (count - 1) * worksheet->layoutHorizontalSpacing()
-									+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
-					newRect.setHeight(round(newHeight));
-				} else {
-					double newWidth = worksheet->layoutLeftMargin() + worksheet->layoutRightMargin()
-								+ (count - 1) * worksheet->layoutVerticalSpacing()
-								+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
-					newRect.setWidth(round(newWidth));
-				}
-				worksheet->setPageRect(newRect);
-			}
-			break;
-		}
-		}
+		adjustWorksheetSize(worksheet);
 
 		parent->endMacro();
 	}
@@ -627,20 +527,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
-
-			//set the axis names in the new plot
-			bool xSet = false;
-			bool ySet = false;
-			for (auto* axis : plot->children<Axis>()) {
-				if (axis->orientation() == Axis::Orientation::Horizontal && !xSet) {
-					axis->title()->setText(xColumnName);
-					xSet = true;
-				} else if (axis->orientation() == Axis::Orientation::Vertical && !ySet) {
-					axis->title()->setText(name);
-					ySet = true;
-				}
-			}
-
+			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
 			addCurve(name, xColumn, yColumn, plot);
 			plot->scaleAuto();
@@ -654,16 +541,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
-
-			//set the axis names in the new plot
-			bool xSet = false;
-			for (auto* axis : plot->children<Axis>()) {
-				if (axis->orientation() == Axis::Orientation::Horizontal && !xSet) {
-					axis->title()->setText(name);
-					xSet = true;
-				}
-			}
-
+			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
 			addHistogram(name, column, plot);
 			plot->scaleAuto();
@@ -757,6 +635,128 @@ void PlotDataDialog::addHistogram(const QString& name, Column* column, Cartesian
 	hist->setDataColumn(column);
 // 	hist->suppressRetransform(false);
 	m_lastAddedCurve = hist;
+}
+
+void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
+	//adjust the sizes
+	const auto layout = worksheet->layout();
+	const auto plots = worksheet->children<CartesianPlot>();
+	const int count = plots.size();
+	const double minSize = 4.0;
+	switch (layout) {
+	case Worksheet::Layout::NoLayout:
+	case Worksheet::Layout::VerticalLayout: {
+		if (layout == Worksheet::Layout::NoLayout)
+			worksheet->setLayout(Worksheet::Layout::VerticalLayout);
+
+		const auto plot = plots.constFirst();
+		double height = Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Unit::Centimeter);
+		if (height < 4.) {
+			double newHeight = worksheet->layoutTopMargin() + worksheet->layoutBottomMargin()
+						+ (count - 1) * worksheet->layoutHorizontalSpacing()
+						+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+			QRectF newRect = worksheet->pageRect();
+			newRect.setHeight(round(newHeight));
+			worksheet->setPageRect(newRect);
+		}
+		break;
+	}
+	case Worksheet::Layout::HorizontalLayout: {
+		const auto plot = plots.constFirst();
+		double width = Worksheet::convertFromSceneUnits(plot->rect().width(), Worksheet::Unit::Centimeter);
+		if (width < 4.) {
+			double newWidth = worksheet->layoutLeftMargin() + worksheet->layoutRightMargin()
+						+ (count - 1) * worksheet->layoutVerticalSpacing()
+						+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+			QRectF newRect = worksheet->pageRect();
+			newRect.setWidth(round(newWidth));
+			worksheet->setPageRect(newRect);
+		}
+		break;
+	}
+	case Worksheet::Layout::GridLayout: {
+		const auto plot = plots.constFirst();
+		double width = Worksheet::convertFromSceneUnits(plot->rect().width(), Worksheet::Unit::Centimeter);
+		double height = Worksheet::convertFromSceneUnits(plot->rect().height(), Worksheet::Unit::Centimeter);
+		if (width < 4. || height < 4.) {
+			QRectF newRect = worksheet->pageRect();
+			if (height < 4.) {
+				double newHeight = worksheet->layoutTopMargin() + worksheet->layoutBottomMargin()
+								+ (count - 1) * worksheet->layoutHorizontalSpacing()
+								+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+				newRect.setHeight(round(newHeight));
+			} else {
+				double newWidth = worksheet->layoutLeftMargin() + worksheet->layoutRightMargin()
+							+ (count - 1) * worksheet->layoutVerticalSpacing()
+							+ count * Worksheet::convertToSceneUnits(minSize, Worksheet::Unit::Centimeter);
+				newRect.setWidth(round(newWidth));
+			}
+			worksheet->setPageRect(newRect);
+		}
+		break;
+	}
+	}
+}
+
+void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) const {
+	switch (m_plotType) {
+	case PlotType::XYCurve: {
+		//x-axis title
+		const QString& xColumnName = ui->cbXColumn->currentText();
+		for (auto* axis : plot->children<Axis>()) {
+			if (axis->orientation() == Axis::Orientation::Horizontal) {
+				axis->title()->setText(xColumnName);
+				break;
+			}
+		}
+
+		//y-axis title
+		for (auto* axis : plot->children<Axis>()) {
+			if (axis->orientation() == Axis::Orientation::Vertical) {
+				if (!name.isEmpty()) {
+					//multiple columns are plotted with "one curve per plot",
+					//the function is called with the column name.
+					//use it for the x-axis title
+					axis->title()->setText(name);
+				} else if (m_columnComboBoxes.size() == 2) {
+					//if we only have one single y-column to plot, we can set the title of the y-axes
+					const QString& yColumnName = m_columnComboBoxes[1]->currentText();
+					axis->title()->setText(yColumnName);
+				}
+
+				break;
+			}
+		}
+
+		break;
+	}
+	case PlotType::Histogram: {
+		//x-axis title
+		for (auto* axis : plot->children<Axis>()) {
+			if (axis->orientation() == Axis::Orientation::Horizontal) {
+				if (!name.isEmpty()) {
+					//multiple columns are plotted with "one curve per plot",
+					//the function is called with the column name.
+					//use it for the x-axis title
+					axis->title()->setText(name);
+				} else if (m_columnComboBoxes.size() == 1) {
+					const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
+					axis->title()->setText(yColumnName);
+				}
+
+				break;
+			}
+		}
+
+		//y-axis title
+		for (auto* axis : plot->children<Axis>()) {
+			if (axis->orientation() == Axis::Orientation::Vertical) {
+				axis->title()->setText(i18n("Frequency"));
+				break;
+			}
+		}
+	}
+	}
 }
 
 //################################################################
