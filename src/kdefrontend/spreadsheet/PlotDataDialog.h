@@ -81,6 +81,8 @@ private:
 	void addCurve(const QString& name, Column* xColumn, Column* yColumn, CartesianPlot*);
 	void addHistogram(const QString& name, Column* column, CartesianPlot*);
 	Column* columnFromName(const QString&) const;
+	void adjustWorksheetSize(Worksheet*) const;
+	void setAxesTitles(CartesianPlot*, const QString& yColumnName = QString()) const;
 
 private slots:
 	void plot();
