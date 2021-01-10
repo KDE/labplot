@@ -843,8 +843,8 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeLastValues, rangeLastValues)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeFirstValues, rangeFirstValues)
 
 //TODO
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleY, autoScaleY)
+//BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
+//BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleY, autoScaleY)
 
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, xRangeBreakingEnabled, xRangeBreakingEnabled)
 CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, xRangeBreaks, xRangeBreaks)
@@ -1015,12 +1015,12 @@ public:
 	}
 
 	void redo() override {
-		m_autoScaleOld = m_private->autoScaleX;
+		m_autoScaleOld = m_private->autoScaleX();
 		if (m_autoScale) {
 			m_oldRange = m_private->xRange();
 			m_private->q->scaleAutoX();
 		}
-		m_private->autoScaleX = m_autoScale;
+		m_private->setAutoScaleX(m_autoScale);
 		emit m_private->q->xAutoScaleChanged(m_autoScale);
 	}
 
@@ -1029,7 +1029,7 @@ public:
 			m_private->xRange() = m_oldRange;
 			m_private->retransformScales();
 		}
-		m_private->autoScaleX = m_autoScaleOld;
+		m_private->setAutoScaleX(m_autoScaleOld);
 		emit m_private->q->xAutoScaleChanged(m_autoScaleOld);
 	}
 
@@ -1047,12 +1047,12 @@ public:
 	}
 
 	void redo() override {
-		m_autoScaleOld = m_private->autoScaleY;
+		m_autoScaleOld = m_private->autoScaleY();
 		if (m_autoScale) {
 			m_oldRange = m_private->yRange();
 			m_private->q->scaleAutoY();
 		}
-		m_private->autoScaleY = m_autoScale;
+		m_private->setAutoScaleY(m_autoScale);
 		emit m_private->q->yAutoScaleChanged(m_autoScale);
 	}
 
@@ -1061,7 +1061,7 @@ public:
 			m_private->yRange() = m_oldRange;
 			m_private->retransformScales();
 		}
-		m_private->autoScaleY = m_autoScaleOld;
+		m_private->setAutoScaleY(m_autoScaleOld);
 		emit m_private->q->yAutoScaleChanged(m_autoScaleOld);
 	}
 
@@ -1072,16 +1072,16 @@ private:
 	Range<double> m_oldRange;
 };
 
-// auto scales default plot range
+// auto scales x range of default plot range
 void CartesianPlot::setAutoScaleX(bool autoScaleX) {
 	Q_D(CartesianPlot);
-	if (autoScaleX != d->autoScaleX)
+	if (autoScaleX != d->autoScaleX())
 		exec(new CartesianPlotSetAutoScaleXCmd(d, autoScaleX));
 }
-// auto scales default plot range
+// auto scale y range of default plot range
 void CartesianPlot::setAutoScaleY(bool autoScaleY) {
 	Q_D(CartesianPlot);
-	if (autoScaleY != d->autoScaleY)
+	if (autoScaleY != d->autoScaleY())
 		exec(new CartesianPlotSetAutoScaleYCmd(d, autoScaleY));
 }
 
@@ -1100,6 +1100,15 @@ class CartesianPlotSetYRangeIndexCmd: public StandardQVectorSetterCmd<CartesianP
 		//TODO: check emit
 		virtual void finalize() override { m_target->retransformScales(); emit m_target->q->yRangeChanged((m_target->*m_field).at(m_index)); }
 };
+
+bool CartesianPlot::autoScaleX() {
+	Q_D(const CartesianPlot);
+	return d->xRanges.at(defaultCoordinateSystem()->xIndex()).autoScale();
+}
+bool CartesianPlot::autoScaleY() {
+	Q_D(const CartesianPlot);
+	return d->yRanges.at(defaultCoordinateSystem()->yIndex()).autoScale();
+}
 
 int CartesianPlot::xRangeCount() const {
 	Q_D(const CartesianPlot);
@@ -1142,7 +1151,7 @@ void CartesianPlot::setXRange(Range<double> range) {
 		d->curvesYMinMaxIsDirty = true;
 		exec(new CartesianPlotSetXRangeIndexCmd(d, range, xIndex, ki18n("%1: set x range")));
 		//d->xRanges[xIndex] = range;
-		if (d->autoScaleY)
+		if (autoScaleY())
 			scaleAutoY();
 	}
 }
@@ -1155,7 +1164,7 @@ void CartesianPlot::setYRange(Range<double> range) {
 		d->curvesXMinMaxIsDirty = true;
 		exec(new CartesianPlotSetYRangeIndexCmd(d, range, yIndex, ki18n("%1: set y range")));
 		//d->yRanges[yIndex] = range;
-		if (d->autoScaleX)
+		if (autoScaleX())
 			scaleAutoX();
 	}
 }
@@ -1198,7 +1207,7 @@ void CartesianPlot::setXRange(const int index, const Range<double> range) {
 	if (range.finite() && range != xRange(index)) {
 		d->curvesYMinMaxIsDirty = true;
 		exec(new CartesianPlotSetXRangeIndexCmd(d, range, index, ki18n("%1: set x range")));
-		if (d->autoScaleY)
+		if (autoScaleY())
 			scaleAutoY();
 	}
 }
@@ -1208,7 +1217,7 @@ void CartesianPlot::setYRange(const int index, const Range<double> range) {
 	if (range.finite() && range != yRange(index)) {
 		d->curvesXMinMaxIsDirty = true;
 		exec(new CartesianPlotSetYRangeIndexCmd(d, range, index, ki18n("%1: set y range")));
-		if (d->autoScaleX)
+		if (autoScaleX())
 			scaleAutoX();
 	}
 }
@@ -1902,11 +1911,11 @@ void CartesianPlot::dataChanged() {
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
 	bool updated = false;
-	if (d->autoScaleX && d->autoScaleY)
+	if (autoScaleX() && autoScaleY())
 		updated = scaleAuto();
-	else if (d->autoScaleX)
+	else if (autoScaleX())
 		updated = scaleAutoX();
-	else if (d->autoScaleY)
+	else if (autoScaleY())
 		updated = scaleAutoY();
 
 	if (!updated || !QObject::sender()) {
@@ -1947,7 +1956,7 @@ void CartesianPlot::xDataChanged() {
 
 	d->curvesXMinMaxIsDirty = true;
 	bool updated = false;
-	if (d->autoScaleX)
+	if (autoScaleX())
 		updated = this->scaleAutoX();
 
 	if (!updated) {
@@ -1994,7 +2003,7 @@ void CartesianPlot::yDataChanged() {
 
 	d->curvesYMinMaxIsDirty = true;
 	bool updated = false;
-	if (d->autoScaleY)
+	if (autoScaleY())
 		updated = this->scaleAutoY();
 
 	if (!updated) {
@@ -2032,11 +2041,11 @@ void CartesianPlot::curveVisibilityChanged() {
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
 	updateLegend();
-	if (d->autoScaleX && d->autoScaleY)
+	if (autoScaleX() && autoScaleY())
 		this->scaleAuto();
-	else if (d->autoScaleX)
+	else if (autoScaleX())
 		this->scaleAutoX();
-	else if (d->autoScaleY)
+	else if (autoScaleY())
 		this->scaleAutoY();
 
 	emit curveVisibilityChangedSignal();
@@ -2587,7 +2596,7 @@ void CartesianPlot::zoomInX() {
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
 	zoom(true, true); //zoom in x
-	if (d->autoScaleY && autoScaleY())
+	if (autoScaleY())
 		return;
 
 	d->retransformScales();
@@ -2602,7 +2611,7 @@ void CartesianPlot::zoomOutX() {
 	d->curvesYMinMaxIsDirty = true;
 	zoom(true, false); //zoom out x
 
-	if (d->autoScaleY && autoScaleY())
+	if (autoScaleY())
 		return;
 
 	d->retransformScales();
@@ -2617,7 +2626,7 @@ void CartesianPlot::zoomInY() {
 	d->curvesYMinMaxIsDirty = true;
 	zoom(false, true); //zoom in y
 
-	if (d->autoScaleX && autoScaleX())
+	if (autoScaleX())
 		return;
 
 	d->retransformScales();
@@ -2632,7 +2641,7 @@ void CartesianPlot::zoomOutY() {
 	d->curvesYMinMaxIsDirty = true;
 	zoom(false, false); //zoom out y
 
-	if (d->autoScaleX && autoScaleX())
+	if (autoScaleX())
 		return;
 
 	d->retransformScales();
@@ -2751,7 +2760,7 @@ void CartesianPlot::shiftLeftX() {
 	d->curvesYMinMaxIsDirty = true;
 	shift(true, true);
 
-	if (d->autoScaleY && scaleAutoY())
+	if (autoScaleY() && scaleAutoY())
 		return;
 
 	d->retransformScales();
@@ -2766,7 +2775,7 @@ void CartesianPlot::shiftRightX() {
 	d->curvesYMinMaxIsDirty = true;
 	shift(true, false);
 
-	if (d->autoScaleY && scaleAutoY())
+	if (autoScaleY() && scaleAutoY())
 		return;
 
 	d->retransformScales();
@@ -2781,7 +2790,7 @@ void CartesianPlot::shiftUpY() {
 	d->curvesXMinMaxIsDirty = true;
 	shift(false, false);
 
-	if (d->autoScaleX && scaleAutoX())
+	if (autoScaleX() && scaleAutoX())
 		return;
 
 	d->retransformScales();
@@ -2796,7 +2805,7 @@ void CartesianPlot::shiftDownY() {
 	d->curvesXMinMaxIsDirty = true;
 	shift(false, true);
 
-	if (d->autoScaleX && scaleAutoX())
+	if (autoScaleX() && scaleAutoX())
 		return;
 
 	d->retransformScales();
@@ -3117,11 +3126,11 @@ void CartesianPlotPrivate::updateDataRect() {
 void CartesianPlotPrivate::rangeChanged() {
 	curvesXMinMaxIsDirty = true;
 	curvesYMinMaxIsDirty = true;
-	if (autoScaleX && autoScaleY)
+	if (autoScaleX() && autoScaleY())
 		q->scaleAuto();
-	else if (autoScaleX)
+	else if (autoScaleX())
 		q->scaleAutoX();
-	else if (autoScaleY)
+	else if (autoScaleY())
 		q->scaleAutoY();
 }
 

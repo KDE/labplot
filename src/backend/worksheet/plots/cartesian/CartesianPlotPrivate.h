@@ -77,15 +77,16 @@ public:
 		return yRanges[defaultCoordinateSystem()->yIndex()];
 	}
 	Range<double> xPrevRange{}, yPrevRange{};
-	bool autoScaleX{true}, autoScaleY{true};
+	bool autoScaleX() { return xRanges.at(defaultCoordinateSystem()->xIndex()).autoScale(); }
+	bool autoScaleY() { return yRanges.at(defaultCoordinateSystem()->yIndex()).autoScale(); }
+	void setAutoScaleX(bool b) { xRanges[defaultCoordinateSystem()->xIndex()].setAutoScale(b); }
+	void setAutoScaleY(bool b) { yRanges[defaultCoordinateSystem()->yIndex()].setAutoScale(b); }
 	//the following factor determines the size of the offset between the min/max points of the curves
 	//and the coordinate system ranges, when doing auto scaling
 	//Factor 0 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.
 	//TODO: make this factor optional.
 	//Provide in the UI the possibility to choose between "exact" or 0% offset, 2%, 5% and 10% for the auto fit option
 	double autoScaleOffsetFactor{0.0};
-	//TODO: obsolete
-//	CartesianPlot::Scale yScale{CartesianPlot::Scale::Linear};
 	//TODO: move to Range?
 	bool xRangeBreakingEnabled{false}, yRangeBreakingEnabled{false};
 	CartesianPlot::RangeBreaks xRangeBreaks, yRangeBreaks;
@@ -136,9 +137,6 @@ private:
 	void updateDataRect();
 	void checkXRange();
 	void checkYRange();
-	//obsolete version
-//	CartesianScale* createScale(CartesianPlot::Scale type,
-//		const Range<double> &sceneRange, const Range<double> &logicalRange);
 	CartesianScale* createScale(RangeT::Scale,
 		const Range<double> &sceneRange, const Range<double> &logicalRange);
 

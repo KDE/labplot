@@ -137,9 +137,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
-	//TODO: obsolete
-	BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)
-	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)
+	bool autoScaleX();	// x axis of default coordinate system auto scaled?
+	void setAutoScaleX(bool);	// auto scale x axis of default coordinate system
+	bool autoScaleY();	// y axis of default coordinate system auto scaled?
+	void setAutoScaleY(bool);	// auto scale y axis of default coordinate system
 
 	int xRangeCount() const;
 	int yRangeCount() const;
