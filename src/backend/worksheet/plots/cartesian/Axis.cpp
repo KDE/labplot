@@ -488,11 +488,6 @@ bool Axis::isDefault() const {
 	return d->isDefault;
 }
 
-void Axis::setPrinting(bool on) {
-	Q_D(Axis);
-	d->setPrinting(on);
-}
-
 bool Axis::isHovered() const {
 	Q_D(const Axis);
 	return d->isHovered();
@@ -2170,12 +2165,12 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		}
 	}
 
-	if (m_hovered && !isSelected() && !m_printing) {
+	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(axisShape);
 	}
 
-	if (isSelected() && !m_printing) {
+	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(axisShape);
 	}
@@ -2245,10 +2240,6 @@ void AxisPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	setCursor(Qt::ArrowCursor);
 	m_panningStarted = false;
 	QGraphicsItem::mouseReleaseEvent(event);
-}
-
-void AxisPrivate::setPrinting(bool on) {
-	m_printing = on;
 }
 
 bool AxisPrivate::isHovered() const {

@@ -62,7 +62,6 @@ public:
 	void updateGrid();
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect();
-	void setPrinting(bool);
 	bool isHovered() const;
 
 	bool isDefault{false};
@@ -174,7 +173,6 @@ private:
 
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};
-	bool m_printing{false};
 	bool m_panningStarted{false};
 	QPointF m_panningStart;
 };

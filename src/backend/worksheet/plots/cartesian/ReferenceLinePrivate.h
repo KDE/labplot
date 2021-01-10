@@ -50,7 +50,6 @@ public:
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
 
-	bool m_printing{false};
 	bool m_hovered{false};
 	bool m_visible{true}; //point inside the plot (visible) or not
 

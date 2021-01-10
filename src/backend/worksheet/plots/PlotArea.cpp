@@ -112,10 +112,6 @@ bool PlotArea::isHovered() const {
 	return m_parent->isHovered();
 }
 
-bool PlotArea::isPrinted() const {
-	return m_parent->isPrinted();
-}
-
 bool PlotArea::isSelected() const {
 	return m_parent->isSelected();
 }
@@ -415,12 +411,12 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 	rect = QRectF(-rect.width()/2 + penWidth / 2, -rect.height()/2 + penWidth / 2,
 				  rect.width() - penWidth, rect.height() - penWidth);
 
-	if (q->isHovered() && !q->isSelected() && !q->isPrinted()) {
+	if (q->isHovered() && !q->isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth, Qt::SolidLine));
 		painter->drawRect(rect);
 	}
 
-	if (q->isSelected() && !q->isPrinted()) {
+	if (q->isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth, Qt::SolidLine));
 		painter->drawRect(rect);
 	}

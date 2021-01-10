@@ -58,7 +58,6 @@ public:
 	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect();
 	void updatePixmap();
-	void setPrinting(bool);
 	void suppressRetransform(bool);
 
 	void setHover(bool on);
@@ -184,7 +183,6 @@ private:
 	bool m_hovered{false};
 	bool m_suppressRecalc{false};
 	bool m_suppressRetransform{false};
-	bool m_printing{false};
 	QPointF mousePos;
 };
 

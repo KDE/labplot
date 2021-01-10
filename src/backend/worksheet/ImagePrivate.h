@@ -74,7 +74,6 @@ public:
 
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
-	bool m_printing{false};
 	bool m_hovered{false};
 
 	QRectF boundingRectangle; //bounding rectangle of the text

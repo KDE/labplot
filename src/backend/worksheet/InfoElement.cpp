@@ -708,11 +708,6 @@ QGraphicsItem* InfoElement::graphicsItem() const {
 	return d_ptr;
 }
 
-void InfoElement::setPrinting(bool on) {
-	Q_D(InfoElement);
-	d->m_printing = on;
-}
-
 void InfoElement::retransform() {
 	Q_D(InfoElement);
 	d->retransform();

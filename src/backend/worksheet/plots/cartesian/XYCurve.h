@@ -150,7 +150,6 @@ public:
 
 	void setVisible(bool on) override;
 	bool isVisible() const override;
-	void setPrinting(bool on) override;
 	void suppressRetransform(bool);
 	bool isSourceDataChangedSinceLastRecalc() const;
 

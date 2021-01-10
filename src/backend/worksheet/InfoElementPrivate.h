@@ -62,7 +62,6 @@ public:
 	void visibilityChanged();
 
 	bool visible{true};
-	bool m_printing{false};
 	double xPos;
 
 	// TextLabel Gluepoint

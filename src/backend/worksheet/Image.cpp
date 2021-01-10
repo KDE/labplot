@@ -264,11 +264,6 @@ bool Image::isVisible() const {
 	return d->isVisible();
 }
 
-void Image::setPrinting(bool on) {
-	Q_D(Image);
-	d->m_printing = on;
-}
-
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
@@ -496,12 +491,12 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
 		painter->restore();
 	}
 
-	if (m_hovered && !isSelected() && !m_printing) {
+	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(imageShape);
 	}
 
-	if (isSelected() && !m_printing) {
+	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(imageShape);
 	}

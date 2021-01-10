@@ -83,7 +83,6 @@ public:
 	int currentIndex(double new_x, double* found_x=nullptr);
 
 	QGraphicsItem* graphicsItem() const override;
-	void setPrinting(bool on) override;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;

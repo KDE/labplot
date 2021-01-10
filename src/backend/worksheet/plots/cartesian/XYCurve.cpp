@@ -220,11 +220,6 @@ bool XYCurve::isVisible() const {
 	return d->isVisible();
 }
 
-void XYCurve::setPrinting(bool on) {
-	Q_D(XYCurve);
-	d->setPrinting(on);
-}
-
 /*!
  * \brief XYCurve::activateCurve
  * Checks if the mousepos distance to the curve is less than @p maxDist
@@ -2888,13 +2883,13 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setBrush(Qt::NoBrush);
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-	if ( !m_printing && KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) )
+	if ( !q->isPrinting() && KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) )
 		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
 	else
 		draw(painter); //draw directly again (slow)
 
 
-	if (m_hovered && !isSelected() && !m_printing) {
+	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			QPainter p(&pix);
@@ -2910,7 +2905,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 		return;
 	}
 
-	if (isSelected() && !m_printing) {
+	if (isSelected() && !q->isPrinting()) {
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			QPainter p(&pix);
@@ -3052,10 +3047,6 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 
 		painter->drawPolygon(pol);
 	}
-}
-
-void XYCurvePrivate::setPrinting(bool on) {
-	m_printing = on;
 }
 
 void XYCurvePrivate::suppressRetransform(bool on) {
