@@ -228,11 +228,6 @@ bool ReferenceLine::isVisible() const {
 	return d->isVisible();
 }
 
-void ReferenceLine::setPrinting(bool on) {
-	Q_D(ReferenceLine);
-	d->m_printing = on;
-}
-
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
@@ -386,12 +381,12 @@ void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	else
 		painter->drawLine(0, length/2, 0, -length/2);
 
-	if (m_hovered && !isSelected() && !m_printing) {
+	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(lineShape);
 	}
 
-	if (isSelected() && !m_printing) {
+	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(lineShape);
 	}

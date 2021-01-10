@@ -50,11 +50,9 @@ public:
 	QGraphicsItem* graphicsItem() const override;
 	void setVisible(bool on) override;
 	bool isVisible() const override;
-	void setPrinting(bool) override {};
 	void loadThemeConfig(const KConfig& config) override;
 	void saveThemeConfig(const KConfig& config) override;
 	bool isHovered() const;
-	bool isPrinted() const;
 	bool isSelected() const;
 
 	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)

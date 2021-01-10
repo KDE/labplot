@@ -211,11 +211,6 @@ void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
 	//d->updatePosition();
 }
 
-void CustomPoint::setPrinting(bool on) {
-	Q_D(CustomPoint);
-	d->m_printing = on;
-}
-
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
@@ -334,12 +329,12 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		painter->drawPath(pointShape);
 	}
 
-	if (m_hovered && !isSelected() && !m_printing) {
+	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(pointShape);
 	}
 
-	if (isSelected() && !m_printing) {
+	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(pointShape);
 	}

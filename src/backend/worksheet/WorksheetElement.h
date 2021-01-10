@@ -65,7 +65,9 @@ public:
 	virtual void setVisible(bool on) = 0;
 	virtual bool isVisible() const = 0;
 	virtual bool isFullyVisible() const;
-	virtual void setPrinting(bool) = 0;
+
+	virtual void setPrinting(bool);
+	bool isPrinting() const;
 
 	QMenu* createContextMenu() override;
 
@@ -82,6 +84,7 @@ private:
 	QMenu* m_drawingOrderMenu;
 	QMenu* m_moveBehindMenu;
 	QMenu* m_moveInFrontOfMenu;
+	bool m_printing{false};
 
 private slots:
 	void prepareMoveBehindMenu();

@@ -62,7 +62,6 @@ public:
 
 	void setVisible(bool on) override;
 	bool isVisible() const override;
-	void setPrinting(bool) override;
 	void setParentGraphicsItem(QGraphicsItem* item);
 
 	void retransform() override;

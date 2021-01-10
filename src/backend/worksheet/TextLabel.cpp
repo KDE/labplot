@@ -403,11 +403,6 @@ bool TextLabel::isVisible() const {
 	return d->isVisible();
 }
 
-void TextLabel::setPrinting(bool on) {
-	Q_D(TextLabel);
-	d->m_printing = on;
-}
-
 void TextLabel::updateTeXImage() {
 	Q_D(TextLabel);
 	d->updateTeXImage();
@@ -1017,12 +1012,12 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		painter->restore();
 	}
 
-	if (m_hovered && !isSelected() && !m_printing) {
+	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(labelShape);
 	}
 
-	if (isSelected() && !m_printing) {
+	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(labelShape);
 	}

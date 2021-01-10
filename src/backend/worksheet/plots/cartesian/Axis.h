@@ -148,7 +148,6 @@ public:
 	void setVisible(bool) override;
 	bool isVisible() const override;
 
-	void setPrinting(bool) override;
 	bool isHovered() const;
 	void setSuppressRetransform(bool);
 	void retransform() override;

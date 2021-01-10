@@ -100,7 +100,6 @@ public:
 
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
-	bool m_printing{false};
 	bool m_hovered{false};
 	bool m_coordBinding{false};
 	bool m_coordBindingEnable{false};

@@ -71,7 +71,6 @@ public:
 
 	void setVisible(bool on) override;
 	bool isVisible() const override;
-	void setPrinting(bool) override;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;

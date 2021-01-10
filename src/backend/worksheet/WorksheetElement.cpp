@@ -97,6 +97,13 @@ bool WorksheetElement::isFullyVisible() const {
  * \brief Switches the printing mode on/off
  *
  */
+void WorksheetElement::setPrinting(bool printing) {
+	m_printing = printing;
+}
+
+bool WorksheetElement::isPrinting() const {
+	return m_printing;
+}
 
 /**
  * \fn void WorksheetElement::retransform()

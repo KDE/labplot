@@ -63,8 +63,8 @@ WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 	ui.chScaleContent->setToolTip(i18n("If checked, rescale the content of the worksheet on size changes. Otherwise resize the canvas only."));
 
 	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editbreaklayout"), i18n("No Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editvlayout"), i18n("Vertical Layout"));
-	ui.cbLayout->addItem(QIcon::fromTheme("labplot-edithlayout"), i18n("Horizontal Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme("labplot-edithlayout"), i18n("Vertical Layout"));
+	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editvlayout"), i18n("Horizontal Layout"));
 	ui.cbLayout->addItem(QIcon::fromTheme("labplot-editgrid"), i18n("Grid Layout"));
 
 	//adjust layouts in the tabs
