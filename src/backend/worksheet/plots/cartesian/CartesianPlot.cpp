@@ -171,10 +171,6 @@ void CartesianPlot::setType(Type type) {
 
 	switch (type) {
 	case Type::FourAxes: {
-			//TODO: needed?
-			d->xRanges[0].setRange(0., 1.);
-			d->yRanges[0].setRange(0., 1.);
-
 			//Axes
 			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
 			axis->setDefault(true);
@@ -247,10 +243,6 @@ void CartesianPlot::setType(Type type) {
 			break;
 		}
 	case Type::TwoAxes: {
-			//TODO: needed?
-			d->xRanges[0].setRange(0.0, 1.0);
-			d->yRanges[0].setRange(0.0, 1.0);
-
 			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
@@ -1255,7 +1247,6 @@ RangeT::Scale CartesianPlot::yRangeScale() const {
 	return yRangeScale(defaultCoordinateSystem()->yIndex());
 }
 RangeT::Scale CartesianPlot::xRangeScale(const int index) const {
-	Q_D(const CartesianPlot);
 	if (index < 0 || index > xRangeCount()) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return RangeT::Scale::Linear;
@@ -1263,7 +1254,6 @@ RangeT::Scale CartesianPlot::xRangeScale(const int index) const {
 	return xRange(index).scale();
 }
 RangeT::Scale CartesianPlot::yRangeScale(const int index) const {
-	Q_D(const CartesianPlot);
 	if (index < 0 || index > yRangeCount()) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return RangeT::Scale::Linear;
@@ -1471,19 +1461,15 @@ void CartesianPlot::addCurve() {
 }
 
 void CartesianPlot::addEquationCurve() {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", to default coordinate system " << defaultCoordinateSystemIndex())
 	auto* curve{ new XYEquationCurve("f(x)") };
-	//TEST
-	//	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	curve->setCoordinateSystemIndex(1);
-	DEBUG(Q_FUNC_INFO << ", TODO")
+	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	addChild(curve);
 }
 
 void CartesianPlot::addHistogram() {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", TODO: to default coordinate system " << defaultCoordinateSystemIndex())
 	auto* hist{ new Histogram("Histogram") };
-	//TODO: set default plot range?
 	//hist->setCoordinateSystemIndex(defaultCoordinateSystem());
 	DEBUG(Q_FUNC_INFO << ", TODO")
 	addChild(hist);
@@ -1788,23 +1774,21 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			if (col) {
 				if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
 					setUndoAware(false);
-					//TODO
-					DEBUG(Q_FUNC_INFO << ", TODO")
-					setXRangeFormat(0, RangeT::Format::DateTime);
+					// see format of curves x range
+					setXRangeFormat(coordinateSystem(curve->coordinateSystemIndex())->xIndex(), RangeT::Format::DateTime);
 					setUndoAware(true);
 
 					//set column's datetime format for all horizontal axis
-					for (auto* axis : children<Axis>()) {
+					//TODO: do we really want this?
+					/*for (auto* axis : children<Axis>()) {
 						if (axis->orientation() == Axis::Orientation::Horizontal) {
 							auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-							//TODO
-							xRange(0).setDateTimeFormat(filter->format());
+							xRange(X).setDateTimeFormat(filter->format());
 							axis->setUndoAware(false);
-							//TODO
-							axis->setLabelsDateTimeFormat(xRange(0).dateTimeFormat());
+							axis->setLabelsDateTimeFormat(xRange(X).dateTimeFormat());
 							axis->setUndoAware(true);
 						}
-					}
+					}*/
 				}
 			}
 
@@ -1812,23 +1796,20 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			if (col) {
 				if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
 					setUndoAware(false);
-					//TODO
-					DEBUG(Q_FUNC_INFO << ", TODO")
-					setYRangeFormat(0, RangeT::Format::DateTime);
+					setYRangeFormat(coordinateSystem(curve->coordinateSystemIndex())->yIndex(), RangeT::Format::DateTime);
 					setUndoAware(true);
 
 					//set column's datetime format for all vertical axis
-					for (auto* axis : children<Axis>()) {
+					// TODO: do we really want this?
+					/*for (auto* axis : children<Axis>()) {
 						if (axis->orientation() == Axis::Orientation::Vertical) {
 							auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-							//TODO
-							yRange(0).setDateTimeFormat(filter->format());
+							yRange(X).setDateTimeFormat(filter->format());
 							axis->setUndoAware(false);
-							//TODO
-							axis->setLabelsDateTimeFormat(yRange(0).dateTimeFormat());
+							axis->setLabelsDateTimeFormat(yRange(X).dateTimeFormat());
 							axis->setUndoAware(true);
 						}
-					}
+					}*/
 				}
 			}
 		}
@@ -3156,7 +3137,7 @@ void CartesianPlotPrivate::xRangeFormatChanged() {
 void CartesianPlotPrivate::yRangeFormatChanged() {
 	DEBUG(Q_FUNC_INFO)
 	for (auto* axis : q->children<Axis>()) {
-		//TODO: see xRangeFormatChanged()
+		//TODO: only if x range of axis's plot range is changed
 		if (axis->orientation() == Axis::Orientation::Vertical)
 			axis->retransformTickLabelStrings();
 	}
