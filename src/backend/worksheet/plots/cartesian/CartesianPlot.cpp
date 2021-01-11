@@ -123,13 +123,13 @@ void CartesianPlot::init() {
 	d->coordinateSystems.append( new CartesianCoordinateSystem(this) );
 	m_coordinateSystems.append( d->coordinateSystems.at(0) );
 	// TEST: second cSystem for testing
-	d->coordinateSystems.append( new CartesianCoordinateSystem(this) );
-	m_coordinateSystems.append( d->coordinateSystems.at(1) );
+	//d->coordinateSystems.append( new CartesianCoordinateSystem(this) );
+	//m_coordinateSystems.append( d->coordinateSystems.at(1) );
 	// TEST: set x range to second x range
 	//d->coordinateSystems[1]->setXIndex(1);
 	// TEST: second x/y range
-	d->xRanges.append(Range<double>(0, 2));
-	d->yRanges.append(Range<double>(0, 2));
+	//d->xRanges.append(Range<double>(0, 2));
+	//d->yRanges.append(Range<double>(0, 2));
 
 	m_plotArea = new PlotArea(name() + " plot area", this);
 	addChildFast(m_plotArea);
@@ -186,7 +186,7 @@ void CartesianPlot::setType(Type type) {
 
 			axis = new Axis("x axis 2", Axis::Orientation::Horizontal);
 			//TEST: use second cSystem of plot
-			axis->setCoordinateSystemIndex(1);
+			//axis->setCoordinateSystemIndex(1);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 
@@ -2208,6 +2208,7 @@ bool CartesianPlot::scaleAutoX() {
 
 // TODO: copy paste code?
 bool CartesianPlot::scaleAutoY() {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
 
 	if (d->curvesYMinMaxIsDirty) {
@@ -2906,6 +2907,8 @@ void CartesianPlotPrivate::retransformScales() {
 	int i{0}; // debugging
 	for (auto& range : xRanges)
 		DEBUG( Q_FUNC_INFO << ", x range " << i++ << " = " << range.toStdString() << ", scale = " << (int)range.scale() );
+	for (auto& range : yRanges)
+		DEBUG( Q_FUNC_INFO << ", y range " << i++ << " = " << range.toStdString() << ", scale = " << (int)range.scale() );
 	PERFTRACE(Q_FUNC_INFO);
 
 	QVector<CartesianScale*> scales;
@@ -3041,12 +3044,13 @@ void CartesianPlotPrivate::retransformScales() {
 
 	xPrevRange = xRange();
 	yPrevRange = yRange();
-	//adjust auto-scale axes
+
+	//adjust all auto-scale axes
 	for (auto* axis : q->children<Axis>()) {
 		if (!axis->autoScale())
 			continue;
 
-		if (axis->orientation() == Axis::Orientation::Horizontal) {
+		if (axis->orientation() == Axis::Orientation::Horizontal) {	// x
 			if (!qFuzzyIsNull(deltaXMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
@@ -3065,15 +3069,15 @@ void CartesianPlotPrivate::retransformScales() {
 // 			if (axis->position() == Axis::Position::Custom && deltaYMin != 0) {
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
-		} else {
-			if (qFuzzyIsNull(deltaYMax)) {
+		} else {	// y
+			if (!qFuzzyIsNull(deltaYMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
 				axis->setEnd(yRange().end());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
-			if (qFuzzyIsNull(deltaYMin)) {
+			if (!qFuzzyIsNull(deltaYMin)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
 				axis->setStart(yRange().start());

@@ -676,11 +676,11 @@ void CartesianPlotDock::updateYRangeList() {
 		autoScaleYRange(i, m_plot->yRange(i).autoScale());
 }
 
+// update plot ranges in list
 void CartesianPlotDock::updatePlotRangeList() {
 	if (!m_plot)
 		return;
 
-	// update plot range tablewidget
 	const int cSystemCount{ m_plot->coordinateSystemCount() };
 	DEBUG(Q_FUNC_INFO << ", nr of cSystems = " << cSystemCount)
 	ui.twPlotRanges->setRowCount(cSystemCount);
@@ -689,7 +689,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		const int xIndex{ cSystem->xIndex() }, yIndex{ cSystem->yIndex() };
 		const auto xRange{ m_plot->xRange(xIndex) }, yRange{ m_plot->yRange(yIndex) };
 
-		DEBUG(Q_FUNC_INFO << ", coordinate system " << i << " : xIndex = " << xIndex)
+		DEBUG(Q_FUNC_INFO << ", coordinate system " << i << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString())
 		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString())
 
@@ -699,12 +699,12 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
 		if (m_plot->xRangeCount() > 1) {
 			for (int index{0}; index < m_plot->xRangeCount(); index++)
-				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + xRange.toString() );
+				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + m_plot->xRange(index).toString() );
 			cb->setCurrentIndex(xIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeXChanged);
 		} else {
-			cb->addItem( m_plot->xRange(0).toString() );
+			cb->addItem( xRange.toString() );
 			cb->setStyleSheet("QComboBox::drop-down {border-width: 0px;}");	// hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, 0, cb);
@@ -715,12 +715,12 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
 		if (m_plot->yRangeCount() > 1) {
 			for (int index{0}; index < m_plot->yRangeCount(); index++)
-				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + yRange.toString() );
+				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + m_plot->yRange(index).toString() );
 			cb->setCurrentIndex(yIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeYChanged);
 		} else {
-			cb->addItem( m_plot->yRange(0).toString() );
+			cb->addItem( yRange.toString() );
 			cb->setStyleSheet("QComboBox::drop-down {border-width: 0px;}");	// hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, 1, cb);
@@ -898,8 +898,11 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 	qobject_cast<QWidget*>(ui.twXRanges->cellWidget(index, 2))->setEnabled(!checked);
 	qobject_cast<QWidget*>(ui.twXRanges->cellWidget(index, 3))->setEnabled(!checked);
 
-	for (auto* plot : m_plotList)
+	for (auto* plot : m_plotList) {
 		plot->xRange(index).setAutoScale(checked);
+		//auto scale to curves
+		plot->scaleAuto();
+	}
 }
 
 void CartesianPlotDock::autoScaleYChanged(int state) {
@@ -920,8 +923,11 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 	qobject_cast<QWidget*>(ui.twYRanges->cellWidget(index, 2))->setEnabled(!checked);
 	qobject_cast<QWidget*>(ui.twYRanges->cellWidget(index, 3))->setEnabled(!checked);
 
-	for (auto* plot : m_plotList)
+	for (auto* plot : m_plotList) {
 		plot->yRange(index).setAutoScale(checked);
+		//auto scale to curves
+		plot->scaleAuto();
+	}
 }
 
 void CartesianPlotDock::xMinChanged(const QString& value) {

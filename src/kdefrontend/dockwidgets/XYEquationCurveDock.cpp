@@ -266,6 +266,7 @@ void XYEquationCurveDock::recalculateClicked() {
 		dynamic_cast<XYEquationCurve*>(curve)->setEquationData(data);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
+	updatePlotRanges();	// axes range may change when range on auto scale
 }
 
 void XYEquationCurveDock::showConstants() {
