@@ -68,9 +68,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	rangeButtonsGroup->addButton(ui.rbRangeLast);
 	rangeButtonsGroup->addButton(ui.rbRangeFree);
 
-	//ui.leYMin->setValidator(new QDoubleValidator(ui.leYMin));
-	//ui.leYMax->setValidator(new QDoubleValidator(ui.leYMax));
-
 	//"Range breaks"-tab
 	ui.bAddXBreak->setIcon( QIcon::fromTheme("list-add") );
 	ui.bRemoveXBreak->setIcon( QIcon::fromTheme("list-remove") );
@@ -514,7 +511,7 @@ void CartesianPlotDock::updateXRangeList() {
 		const auto format{ xRange.format() };
 		const auto scale { xRange.scale() };
 		DEBUG(Q_FUNC_INFO << ", x range " << i << " format : " << static_cast<int>(format)
-			<< " scale : " << static_cast<int>(scale))
+			<< " scale : " << static_cast<int>(scale) << " auto scale = " << xRange.autoScale())
 
 		// auto scale
 		QCheckBox *chk = new QCheckBox(ui.twXRanges);
@@ -585,9 +582,14 @@ void CartesianPlotDock::updateXRangeList() {
 
 	updateLocale();	// fill values
 	updatePlotRangeList();	// update x ranges used in plot ranges
+
 	// enable/disable widgets
-	for (int i{0}; i < xRangeCount; i++)
-		autoScaleXRange(i, m_plot->xRange(i).autoScale());
+	for (int i{0}; i < xRangeCount; i++) {
+		const bool checked{ m_plot->xRange(i).autoScale() };
+		qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(i, 1))->setEnabled(!checked);
+		qobject_cast<QWidget*>(ui.twXRanges->cellWidget(i, 2))->setEnabled(!checked);
+		qobject_cast<QWidget*>(ui.twXRanges->cellWidget(i, 3))->setEnabled(!checked);
+	}
 }
 void CartesianPlotDock::updateYRangeList() {
 	if (!m_plot)
@@ -602,7 +604,7 @@ void CartesianPlotDock::updateYRangeList() {
 		const auto format{ yRange.format() };
 		const auto scale { yRange.scale() };
 		DEBUG(Q_FUNC_INFO << ", y range " << i << " format : " << static_cast<int>(format)
-			<< " scale : " << static_cast<int>(scale))
+			<< " scale : " << static_cast<int>(scale) << " auto scale = " << yRange.autoScale())
 
 		// auto scale
 		QCheckBox *chk = new QCheckBox(ui.twYRanges);
@@ -671,9 +673,14 @@ void CartesianPlotDock::updateYRangeList() {
 
 	updateLocale();	// fill values
 	updatePlotRangeList();	// update y ranges used in plot ranges
+
 	// enable/disable widgets
-	for (int i{0}; i < yRangeCount; i++)
-		autoScaleYRange(i, m_plot->yRange(i).autoScale());
+	for (int i{0}; i < yRangeCount; i++) {
+		const bool checked{ m_plot->yRange(i).autoScale() };
+		qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(i, 1))->setEnabled(!checked);
+		qobject_cast<QWidget*>(ui.twYRanges->cellWidget(i, 2))->setEnabled(!checked);
+		qobject_cast<QWidget*>(ui.twYRanges->cellWidget(i, 3))->setEnabled(!checked);
+	}
 }
 
 // update plot ranges in list
@@ -689,7 +696,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		const int xIndex{ cSystem->xIndex() }, yIndex{ cSystem->yIndex() };
 		const auto xRange{ m_plot->xRange(xIndex) }, yRange{ m_plot->yRange(yIndex) };
 
-		DEBUG(Q_FUNC_INFO << ", coordinate system " << i << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
+		DEBUG(Q_FUNC_INFO << ", coordinate system " << i+1 << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString())
 		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString())
 
@@ -892,17 +899,24 @@ void CartesianPlotDock::autoScaleXChanged(int state) {
 	autoScaleXRange(xRangeIndex, checked);
 }
 void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
-	DEBUG(Q_FUNC_INFO << ", check = " << checked)
+	DEBUG(Q_FUNC_INFO << ", index = " << index << " checked = " << checked)
 
-	qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(index, 1))->setEnabled(!checked);
-	qobject_cast<QWidget*>(ui.twXRanges->cellWidget(index, 2))->setEnabled(!checked);
-	qobject_cast<QWidget*>(ui.twXRanges->cellWidget(index, 3))->setEnabled(!checked);
+	if (ui.twXRanges->cellWidget(index, 1)) {
+		qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(index, 1))->setEnabled(!checked);
+		qobject_cast<QWidget*>(ui.twXRanges->cellWidget(index, 2))->setEnabled(!checked);
+		qobject_cast<QWidget*>(ui.twXRanges->cellWidget(index, 3))->setEnabled(!checked);
+	}
 
 	for (auto* plot : m_plotList) {
-		plot->xRange(index).setAutoScale(checked);
-		//auto scale to curves
-		plot->scaleAuto();
+		plot->setAutoScaleX(index, checked);
+		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRange(index).autoScale())
+		if (checked) {
+			plot->scaleAutoX(true);	// scale to full range
+			if (plot->autoScaleY())
+				plot->scaleAutoY();
+		}
 	}
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::autoScaleYChanged(int state) {
@@ -917,20 +931,28 @@ void CartesianPlotDock::autoScaleYChanged(int state) {
 	autoScaleYRange(yRangeIndex, checked);
 }
 void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
-	DEBUG(Q_FUNC_INFO << ", check = " << checked)
+	DEBUG(Q_FUNC_INFO << ", index = " << index << ", check = " << checked)
 
-	qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(index, 1))->setEnabled(!checked);
-	qobject_cast<QWidget*>(ui.twYRanges->cellWidget(index, 2))->setEnabled(!checked);
-	qobject_cast<QWidget*>(ui.twYRanges->cellWidget(index, 3))->setEnabled(!checked);
+	if (ui.twYRanges->cellWidget(index, 1)) {
+		qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(index, 1))->setEnabled(!checked);
+		qobject_cast<QWidget*>(ui.twYRanges->cellWidget(index, 2))->setEnabled(!checked);
+		qobject_cast<QWidget*>(ui.twYRanges->cellWidget(index, 3))->setEnabled(!checked);
+	}
 
 	for (auto* plot : m_plotList) {
-		plot->yRange(index).setAutoScale(checked);
-		//auto scale to curves
-		plot->scaleAuto();
+		plot->setAutoScaleY(index, checked);
+		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRange(index).autoScale())
+		if (checked) {
+			plot->scaleAutoY(true);	// full range
+			if (plot->autoScaleX())
+				plot->scaleAutoX();
+		}
 	}
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::xMinChanged(const QString& value) {
+	DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
 	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
@@ -945,10 +967,13 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 		DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
 		for (auto* plot : m_plotList)
 			plot->setXMin(xRangeIndex, xMin);
+
+		updateYRangeList();	// plot is auto scaled
 		updatePlotRangeList();
 	}
 }
 void CartesianPlotDock::yMinChanged(const QString& value) {
+	DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
 	if (m_initializing)
 		return;
 
@@ -962,12 +987,14 @@ void CartesianPlotDock::yMinChanged(const QString& value) {
 		DEBUG( Q_FUNC_INFO << ", y range index: " << yRangeIndex )
 		for (auto* plot : m_plotList)
 			plot->setYMin(yRangeIndex, yMin);
+
+		updateXRangeList();	// plot is auto scaled
 		updatePlotRangeList();
 	}
 }
 
 void CartesianPlotDock::xMaxChanged(const QString& value) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
 	if (m_initializing)
 		return;
 
@@ -981,10 +1008,13 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 		DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
 		for (auto* plot : m_plotList)
 			plot->setXMax(xRangeIndex, xMax);
+
+		updateYRangeList();	// plot is auto scaled
 		updatePlotRangeList();
 	}
 }
 void CartesianPlotDock::yMaxChanged(const QString& value) {
+	DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
 	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
@@ -999,6 +1029,9 @@ void CartesianPlotDock::yMaxChanged(const QString& value) {
 		DEBUG( Q_FUNC_INFO << ", y range index: " << yRangeIndex )
 		for (auto* plot : m_plotList)
 			plot->setYMax(yRangeIndex, yMax);
+
+		updateXRangeList();	// plot is auto scaled
+		updatePlotRangeList();
 	}
 }
 
@@ -1252,8 +1285,6 @@ void CartesianPlotDock::removeYRange() {
 void CartesianPlotDock::addPlotRange() {
 	if (!m_plot)
 		return;
-
-	DEBUG(Q_FUNC_INFO)
 
 	m_plot->addCoordinateSystem();
 	updatePlotRangeList();
@@ -2069,7 +2100,7 @@ void CartesianPlotDock::plotYMaxChanged(double value) {
 }
 
 void CartesianPlotDock::plotXRangeChanged(Range<double> range) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", x range = " << range.toStdString())
         if (m_initializing)
                 return;
 

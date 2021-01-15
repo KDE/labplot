@@ -145,7 +145,7 @@ void XYEquationCurveDock::updatePlotRanges() const {
 	const int cSystemCount{ m_curve->coordinateSystemCount() };
 	const int cSystemIndex{ m_curve->coordinateSystemIndex() };
 	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
-	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
 
 	// fill ui.cbPlotRanges
 	uiGeneralTab.cbPlotRanges->clear();

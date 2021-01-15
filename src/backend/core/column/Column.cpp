@@ -2164,7 +2164,7 @@ int Column::indexForValue(double x) const {
  * \return
  */
 bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
-
+	DEBUG(Q_FUNC_INFO << ", values = " << v1 << "/" << v2)
 	start = -1;
 	end = -1;
 	if (rowCount() == 0)

@@ -884,7 +884,7 @@ void Axis::setMinorGridOpacity(qreal opacity) {
 
 BASIC_SHARED_D_READER_IMPL(Axis, int, coordinateSystemIndex, cSystemIndex)
 void Axis::setCoordinateSystemIndex(const int index) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	Q_D(Axis);
 	d->cSystemIndex = index;
 	if (d->plot)
@@ -902,7 +902,9 @@ int Axis::coordinateSystemCount() const {
 QString Axis::coordinateSystemInfo(const int index) const {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	Q_D(const Axis);
-	if (d->plot)
+	if (index < 0 || index > coordinateSystemCount()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of bounds")
+	} else if (d->plot)
 		return d->plot->coordinateSystem(index)->info();
 
 	return QString();

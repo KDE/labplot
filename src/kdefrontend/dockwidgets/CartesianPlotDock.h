@@ -62,6 +62,7 @@ private:
 	LabelWidget* labelWidget{nullptr};
 	ThemeHandler* m_themeHandler;
 	QButtonGroup* m_bgDefaultPlotRange{nullptr};
+	bool m_autoScale{false};
 
 	void autoScaleXRange(int rangeIndex, bool);
 	void autoScaleYRange(int rangeIndex, bool);

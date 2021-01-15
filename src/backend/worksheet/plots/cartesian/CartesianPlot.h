@@ -139,8 +139,10 @@ public:
 
 	bool autoScaleX();	// x axis of default coordinate system auto scaled?
 	void setAutoScaleX(bool);	// auto scale x axis of default coordinate system
+	void setAutoScaleX(int index, bool);	// auto scale x axis index
 	bool autoScaleY();	// y axis of default coordinate system auto scaled?
 	void setAutoScaleY(bool);	// auto scale y axis of default coordinate system
+	void setAutoScaleY(int index, bool);	// auto scale y axis index
 
 	int xRangeCount() const;
 	int yRangeCount() const;
@@ -312,9 +314,9 @@ public slots:
 	void addInfoElement();
 
 	void scaleAutoTriggered();
-	bool scaleAuto();
-	bool scaleAutoX();
-	bool scaleAutoY();
+	bool scaleAuto(bool fullRange = true);
+	bool scaleAutoX(bool fullRange = false);
+	bool scaleAutoY(bool fullRange = false);
 
 	void zoomIn();
 	void zoomOut();
@@ -330,6 +332,7 @@ public slots:
 
 	void cursor();
 
+	bool autoScale();
 	void dataChanged();
 	void curveLinePenChanged(QPen);
 

@@ -2025,6 +2025,7 @@ void AxisDock::plotRangeChanged(int index) {
 
 	if (index >= 0 && index != m_axis->coordinateSystemIndex()) {
 		m_axis->setCoordinateSystemIndex(index);
+//		if (m_axis->autoScale())
 		m_axis->retransform();	// redraw
 	}
 }

@@ -96,10 +96,9 @@ public:
 	Range<double> curvesXRange{qInf(), -qInf()}, curvesYRange{qInf(), -qInf()};
 
 	CartesianPlot* const q;
-	QVector<CartesianCoordinateSystem*> coordinateSystems;
 	int defaultCoordinateSystemIndex{0};
 	CartesianCoordinateSystem* defaultCoordinateSystem() const {
-		return coordinateSystems.at(defaultCoordinateSystemIndex);
+		return dynamic_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(defaultCoordinateSystemIndex));
 	}
 
 	CartesianPlot::MouseMode mouseMode{CartesianPlot::MouseMode::Selection};
