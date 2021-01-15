@@ -54,7 +54,6 @@ public:
 
 	void setVisible(bool) override;
 	bool isVisible() const override;
-	void setPrinting(bool) override;
 
 	TextLabel* title();
 

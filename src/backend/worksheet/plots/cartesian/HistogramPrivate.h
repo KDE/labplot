@@ -69,17 +69,12 @@ public:
 	void updateValues();
 	void updateFilling();
 	void updateErrorBars();
+	void updatePixmap();
 	bool swapVisible(bool on);
 	void recalcShapeAndBoundingRect();
 
 	void setHover(bool on);
 	bool activateCurve(QPointF mouseScenePos, double maxDist);
-
-	void drawSymbols(QPainter*);
-	void drawValues(QPainter*);
-	void drawFilling(QPainter*);
-	void draw(QPainter*);
-	void updatePixmap();
 
 	double getYMaximum();
 	double getYMinimum();
@@ -172,8 +167,12 @@ private:
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
+
+	void drawSymbols(QPainter*);
+	void drawValues(QPainter*);
+	void drawFilling(QPainter*);
+	void draw(QPainter*);
 };
 
 #endif

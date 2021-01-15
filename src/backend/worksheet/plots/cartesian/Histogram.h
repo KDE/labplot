@@ -34,9 +34,9 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/lib/macros.h"
 
+class AbstractColumn;
 class HistogramPrivate;
 
 class Histogram : public WorksheetElement, public Curve {
@@ -125,7 +125,6 @@ public:
 
 	void setVisible(bool on) override;
 	bool isVisible() const override;
-	void setPrinting(bool on) override;
 	void suppressRetransform(bool);
 
 	double getYMaximum() const;
