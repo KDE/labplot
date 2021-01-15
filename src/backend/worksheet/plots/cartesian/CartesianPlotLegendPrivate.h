@@ -57,7 +57,6 @@ public:
 
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
-	bool m_printing{false};
 	bool m_hovered{false};
 
 	QList<WorksheetElement*> curvesList; //list containing all visible curves

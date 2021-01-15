@@ -36,6 +36,7 @@
   */
 #include "Histogram.h"
 #include "HistogramPrivate.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -175,11 +176,6 @@ void Histogram::setVisible(bool on) {
 bool Histogram::isVisible() const {
 	Q_D(const Histogram);
 	return d->isVisible();
-}
-
-void Histogram::setPrinting(bool on) {
-	Q_D(Histogram);
-	d->m_printing = on;
 }
 
 bool Histogram::activateCurve(QPointF mouseScenePos, double maxDist) {
@@ -1447,7 +1443,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	else
 		draw(painter); //draw directly again (slow)
 
-	if (m_hovered && !isSelected() && !m_printing) {
+	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		if (m_hoverEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			QPainter p(&pix);
@@ -1463,7 +1459,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		return;
 	}
 
-	if (isSelected() && !m_printing) {
+	if (isSelected() && !q->isPrinting()) {
 		if (m_selectionEffectImageIsDirty) {
 			QPixmap pix = m_pixmap;
 			QPainter p(&pix);

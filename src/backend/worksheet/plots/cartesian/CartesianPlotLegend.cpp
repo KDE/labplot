@@ -166,11 +166,6 @@ bool CartesianPlotLegend::isVisible() const{
 	return d->isVisible();
 }
 
-void CartesianPlotLegend::setPrinting(bool on) {
-	Q_D(CartesianPlotLegend);
-	d->m_printing = on;
-}
-
 QGraphicsItem *CartesianPlotLegend::graphicsItem() const{
 	return d_ptr;
 }
@@ -892,12 +887,12 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	painter->restore();
 	painter->restore();
 
-	if (m_hovered && !isSelected() && !m_printing) {
+	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(shape());
 	}
 
-	if (isSelected() && !m_printing) {
+	if (isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(shape());
 	}
