@@ -84,23 +84,23 @@ WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &WorksheetDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &WorksheetDock::commentChanged);
-	connect(ui.cbSize, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbSize, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, static_cast<void (WorksheetDock::*)(int)>(&WorksheetDock::sizeChanged));
 	connect(ui.sbWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
 			this, static_cast<void (WorksheetDock::*)()>(&WorksheetDock::sizeChanged));
 	connect(ui.sbHeight, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
 			 this, static_cast<void (WorksheetDock::*)()>(&WorksheetDock::sizeChanged));
-	connect(ui.cbOrientation, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &WorksheetDock::orientationChanged);
 
 	//Background
-	connect(ui.cbBackgroundType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbBackgroundType, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &WorksheetDock::backgroundTypeChanged);
-	connect(ui.cbBackgroundColorStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbBackgroundColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &WorksheetDock::backgroundColorStyleChanged);
-	connect(ui.cbBackgroundImageStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbBackgroundImageStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &WorksheetDock::backgroundImageStyleChanged);
-	connect(ui.cbBackgroundBrushStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbBackgroundBrushStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &WorksheetDock::backgroundBrushStyleChanged);
 	connect(ui.bOpen, &QPushButton::clicked, this, &WorksheetDock::selectFile);
 	connect(ui.leBackgroundFileName, &QLineEdit::returnPressed, this, &WorksheetDock::fileNameChanged);
@@ -111,7 +111,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 			this, &WorksheetDock::backgroundOpacityChanged);
 
 	//Layout
-	connect(ui.cbLayout, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+	connect(ui.cbLayout, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &WorksheetDock::layoutChanged);
 	connect( ui.chScaleContent, &QCheckBox::clicked, this, &WorksheetDock::scaleContentChanged);
 	connect( ui.sbLayoutTopMargin, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),

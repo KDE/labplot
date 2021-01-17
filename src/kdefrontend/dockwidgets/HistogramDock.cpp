@@ -4,7 +4,7 @@
     Description          : widget for Histogram properties
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
-    Copyright            : (C) 2018 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018-2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -382,7 +382,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 		this->setModelIndexFromColumn(cbDataColumn, m_curve->dataColumn());
 		this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
-
 		ui.leName->setText(m_curve->name());
 		ui.leComment->setText(m_curve->comment());
 	} else {
@@ -393,7 +392,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 		ui.lXColumn->setEnabled(false);
 		cbDataColumn->setEnabled(false);
-
 		cbDataColumn->setCurrentModelIndex(QModelIndex());
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
 
@@ -460,6 +458,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::valuesColorChanged, this, &HistogramDock::curveValuesColorChanged);
 
 	//Filling-Tab
+	connect( m_curve, &Histogram::fillingEnabledChanged, this, &HistogramDock::curveFillingEnabledChanged);
 	connect( m_curve, &Histogram::fillingTypeChanged, this, &HistogramDock::curveFillingTypeChanged);
 	connect( m_curve, &Histogram::fillingColorStyleChanged, this, &HistogramDock::curveFillingColorStyleChanged);
 	connect( m_curve, &Histogram::fillingImageStyleChanged, this, &HistogramDock::curveFillingImageStyleChanged);

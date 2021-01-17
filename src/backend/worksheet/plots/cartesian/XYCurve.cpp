@@ -1556,8 +1556,8 @@ void XYCurvePrivate::updateLines() {
 						lastPoint.setX(qQNaN());
 						m_lines.append(QLineF(lastPoint, p1));
 					}
-                    if (!isnan(lastPoint.x()))	// last line
-                        m_lines.append(QLineF(m_logicalPoints[endIndex-1], m_logicalPoints[endIndex]));
+					if (!isnan(lastPoint.x()))	// last line
+						m_lines.append(QLineF(m_logicalPoints[endIndex-1], m_logicalPoints[endIndex]));
 
 					break;
 				}
@@ -1672,7 +1672,7 @@ void XYCurvePrivate::updateLines() {
 			}
 		}
 	}
-    }
+	}
 
 	//map the lines to scene coordinates
 	{
@@ -1686,12 +1686,12 @@ void XYCurvePrivate::updateLines() {
 #ifdef PERFTRACE_CURVES
 		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate new line path");
 #endif
-        //new line path
-        for (const auto& line : qAsConst(m_lines)) {
-            linePath.moveTo(line.p1());
-            linePath.lineTo(line.p2());
-        }
-    }
+		//new line path
+		for (const auto& line : qAsConst(m_lines)) {
+			linePath.moveTo(line.p1());
+			linePath.lineTo(line.p2());
+		}
+	}
 
 	updateFilling();
 	recalcShapeAndBoundingRect();

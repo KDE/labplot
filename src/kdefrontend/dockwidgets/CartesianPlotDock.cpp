@@ -114,18 +114,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.leYBreakEnd->setValidator( new QDoubleValidator(ui.leYBreakEnd) );
 
 	//set the current locale
-	SET_NUMBER_LOCALE
-	ui.sbLeft->setLocale(numberLocale);
-	ui.sbTop->setLocale(numberLocale);
-	ui.sbWidth->setLocale(numberLocale);
-	ui.sbHeight->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
-	ui.sbBorderCornerRadius->setLocale(numberLocale);
-	ui.sbPaddingHorizontal->setLocale(numberLocale);
-	ui.sbPaddingVertical->setLocale(numberLocale);
-	ui.sbPaddingRight->setLocale(numberLocale);
-	ui.sbPaddingBottom->setLocale(numberLocale);
-	labelWidget->updateLocale();
+	updateLocale();
 
 	//SIGNAL/SLOT
 	//General
@@ -399,50 +388,52 @@ void CartesianPlotDock::updateLocale() {
 	ui.sbPaddingBottom->setLocale(numberLocale);
 
 	//update the QLineEdits, avoid the change events
-	Lock lock(m_initializing);
-	ui.leRangeFirst->setText( numberLocale.toString(m_plot->rangeFirstValues()) );
-	ui.leRangeLast->setText( numberLocale.toString(m_plot->rangeLastValues()) );
+	if (m_plot) {
+		Lock lock(m_initializing);
+		ui.leRangeFirst->setText( numberLocale.toString(m_plot->rangeFirstValues()) );
+		ui.leRangeLast->setText( numberLocale.toString(m_plot->rangeLastValues()) );
 
-	// x ranges
-	for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
-		if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
-			auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, 2));
-			if (le) {	// may be nullptr
-				le->setText( numberLocale.toString(m_plot->xRange(row).start()) );
-				le = qobject_cast<QLineEdit*>( ui.twXRanges->cellWidget(row, 3) );
-				le->setText( numberLocale.toString(m_plot->xRange(row).end()) );
-			}
-		} else {
-			auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, 2));
-			if (dte) {
-				dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->xRange(row).start()) );
-				dte = qobject_cast<QDateTimeEdit*>( ui.twXRanges->cellWidget(row, 3) );
-				dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->xRange(row).end()) );
-			}
-		}
-	}
-//	ui.twXRanges->resizeColumnToContents(1);
-//	ui.twXRanges->resizeColumnToContents(2);
-	// y ranges
-	for (int row{0}; row < ui.twYRanges->rowCount(); row++) {
-		if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
-			auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, 2));
-			if (le) {	// may be nullptr
-				le->setText( numberLocale.toString(m_plot->yRange(row).start()) );
-				le = qobject_cast<QLineEdit*>( ui.twYRanges->cellWidget(row, 3) );
-				le->setText( numberLocale.toString(m_plot->yRange(row).end()) );
-			}
-		} else {
-			auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, 2));
-			if (dte) {
-				dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->yRange(row).start()) );
-				dte = qobject_cast<QDateTimeEdit*>( ui.twYRanges->cellWidget(row, 3) );
-				dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->yRange(row).end()) );
+		// x ranges
+		for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
+			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
+				auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, 2));
+				if (le) {	// may be nullptr
+					le->setText( numberLocale.toString(m_plot->xRange(row).start()) );
+					le = qobject_cast<QLineEdit*>( ui.twXRanges->cellWidget(row, 3) );
+					le->setText( numberLocale.toString(m_plot->xRange(row).end()) );
+				}
+			} else {
+				auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, 2));
+				if (dte) {
+					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->xRange(row).start()) );
+					dte = qobject_cast<QDateTimeEdit*>( ui.twXRanges->cellWidget(row, 3) );
+					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->xRange(row).end()) );
+				}
 			}
 		}
+//		ui.twXRanges->resizeColumnToContents(1);
+//		ui.twXRanges->resizeColumnToContents(2);
+		// y ranges
+		for (int row{0}; row < ui.twYRanges->rowCount(); row++) {
+			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
+				auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, 2));
+				if (le) {	// may be nullptr
+					le->setText( numberLocale.toString(m_plot->yRange(row).start()) );
+					le = qobject_cast<QLineEdit*>( ui.twYRanges->cellWidget(row, 3) );
+					le->setText( numberLocale.toString(m_plot->yRange(row).end()) );
+				}
+			} else {
+				auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, 2));
+				if (dte) {
+					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->yRange(row).start()) );
+					dte = qobject_cast<QDateTimeEdit*>( ui.twYRanges->cellWidget(row, 3) );
+					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->yRange(row).end()) );
+				}
+			}
+		}
+//		ui.twYRanges->resizeColumnToContents(1);
+//		ui.twYRanges->resizeColumnToContents(2);
 	}
-//	ui.twYRanges->resizeColumnToContents(1);
-//	ui.twYRanges->resizeColumnToContents(2);
 
 	//update the title label
 	labelWidget->updateLocale();
