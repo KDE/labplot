@@ -1244,22 +1244,30 @@ void CartesianPlot::setYRange(const int index, const Range<double> range) {
 }
 void CartesianPlot::setXMin(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO)
-	Range<double> range{value, xRange(index).end()};
+	Range<double> range{ xRange(index) };
+	range.setStart(value);
+
 	setXRange(index, range);
 }
 void CartesianPlot::setXMax(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO)
-	Range<double> range{ xRange(index).start(), value};
+	Range<double> range{ xRange(index) };
+	range.setEnd(value);
+
 	setXRange(index, range);
 }
 void CartesianPlot::setYMin(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO)
-	Range<double> range{value, yRange(index).end()};
+	Range<double> range{ yRange(index) };
+	range.setStart(value);
+
 	setYRange(index, range);
 }
 void CartesianPlot::setYMax(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO)
-	Range<double> range{ yRange(index).start(), value};
+	Range<double> range{ yRange(index) };
+	range.setEnd(value);
+
 	setYRange(index, range);
 }
 

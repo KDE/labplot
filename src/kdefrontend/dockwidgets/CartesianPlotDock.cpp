@@ -395,19 +395,21 @@ void CartesianPlotDock::updateLocale() {
 
 		// x ranges
 		for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
+			const auto xRange{ m_plot->xRange(row) };
+			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
 				auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, 2));
 				if (le) {	// may be nullptr
-					le->setText( numberLocale.toString(m_plot->xRange(row).start()) );
+					le->setText( numberLocale.toString(xRange.start()) );
 					le = qobject_cast<QLineEdit*>( ui.twXRanges->cellWidget(row, 3) );
-					le->setText( numberLocale.toString(m_plot->xRange(row).end()) );
+					le->setText( numberLocale.toString(xRange.end()) );
 				}
 			} else {
 				auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, 2));
 				if (dte) {
-					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->xRange(row).start()) );
+					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(xRange.start()) );
 					dte = qobject_cast<QDateTimeEdit*>( ui.twXRanges->cellWidget(row, 3) );
-					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->xRange(row).end()) );
+					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(xRange.end()) );
 				}
 			}
 		}
@@ -415,19 +417,21 @@ void CartesianPlotDock::updateLocale() {
 //		ui.twXRanges->resizeColumnToContents(2);
 		// y ranges
 		for (int row{0}; row < ui.twYRanges->rowCount(); row++) {
+			const auto yRange{ m_plot->yRange(row) };
+			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
 				auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, 2));
 				if (le) {	// may be nullptr
-					le->setText( numberLocale.toString(m_plot->yRange(row).start()) );
+					le->setText( numberLocale.toString(yRange.start()) );
 					le = qobject_cast<QLineEdit*>( ui.twYRanges->cellWidget(row, 3) );
-					le->setText( numberLocale.toString(m_plot->yRange(row).end()) );
+					le->setText( numberLocale.toString(yRange.end()) );
 				}
 			} else {
 				auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, 2));
 				if (dte) {
-					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->yRange(row).start()) );
+					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(yRange.start()) );
 					dte = qobject_cast<QDateTimeEdit*>( ui.twYRanges->cellWidget(row, 3) );
-					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(m_plot->yRange(row).end()) );
+					dte->setDateTime( QDateTime::fromMSecsSinceEpoch(yRange.end()) );
 				}
 			}
 		}
@@ -688,8 +692,8 @@ void CartesianPlotDock::updatePlotRangeList() {
 		const auto xRange{ m_plot->xRange(xIndex) }, yRange{ m_plot->yRange(yIndex) };
 
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i+1 << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
-		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString())
-		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString())
+		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << " auto scale = " << xRange.autoScale())
+		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << " auto scale = " << yRange.autoScale())
 
 		QComboBox *cb = new QComboBox(ui.twPlotRanges);
 		cb->setEditable(true);	// to have a line edit
@@ -2358,6 +2362,7 @@ void CartesianPlotDock::load() {
 	// x ranges
 	for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
 		const auto xRange{ m_plot->xRange(row) };
+		DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 
 		auto* chk = qobject_cast<QCheckBox*>(ui.twXRanges->cellWidget(row, 0));
 		chk->setChecked(xRange.autoScale());
@@ -2390,6 +2395,7 @@ void CartesianPlotDock::load() {
 	// y ranges
 	for (int row{0}; row < ui.twYRanges->rowCount(); row++) {
 		const auto yRange{ m_plot->yRange(row) };
+		DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 
 		auto* chk = qobject_cast<QCheckBox*>(ui.twYRanges->cellWidget(row, 0));
 		chk->setChecked(yRange.autoScale());
