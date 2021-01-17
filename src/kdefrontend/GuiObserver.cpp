@@ -3,7 +3,7 @@ File                 : GuiObserver.cpp
 Project              : LabPlot
 Description 	     : GUI observer
 --------------------------------------------------------------------
-Copyright            : (C) 2010-2015 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2010-2021 Alexander Semke (alexander.semke@web.de)
 Copyright            : (C) 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 
@@ -42,6 +42,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
 #include "backend/worksheet/TextLabel.h"
@@ -73,6 +74,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "kdefrontend/dockwidgets/SpreadsheetDock.h"
 #include "kdefrontend/dockwidgets/XYCurveDock.h"
 #include "kdefrontend/dockwidgets/HistogramDock.h"
+#include "kdefrontend/dockwidgets/BoxPlotDock.h"
 #include "kdefrontend/dockwidgets/XYEquationCurveDock.h"
 #include "kdefrontend/dockwidgets/XYDataReductionCurveDock.h"
 #include "kdefrontend/dockwidgets/XYDifferentiationCurveDock.h"
@@ -328,6 +330,11 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Histogram Properties"));
 		raiseDockConnect(m_mainWindow->histogramDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->histogramDock->setCurves(castList<Histogram>(selectedAspects));
+		break;
+	case AspectType::BoxPlot:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Box Plot"));
+		raiseDock(m_mainWindow->boxPlotDock, m_mainWindow->stackedWidget);
+		m_mainWindow->boxPlotDock->setBoxPlots(castList<BoxPlot>(selectedAspects));
 		break;
 	case AspectType::TextLabel:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Text Label"));

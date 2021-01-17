@@ -1,4 +1,4 @@
-/***************************************************************************
+	/***************************************************************************
     File                 : MainWin.h
     Project              : LabPlot
     --------------------------------------------------------------------
@@ -51,6 +51,7 @@ class InfoElementDock;
 class NoteDock;
 class CartesianPlotDock;
 class HistogramDock;
+class BoxPlotDock;
 class CartesianPlotLegendDock;
 class CustomPointDock;
 class ReferenceLineDock;
@@ -248,6 +249,7 @@ private:
 	XYConvolutionCurveDock* xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* xyCorrelationCurveDock{nullptr};
 	HistogramDock* histogramDock{nullptr};
+	BoxPlotDock* boxPlotDock{nullptr};
 	WorksheetDock* worksheetDock{nullptr};
 	LabelWidget* textLabelDock{nullptr};
 	ImageDock* imageDock{nullptr};

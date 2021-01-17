@@ -255,20 +255,20 @@ BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsCapSize, errorBarsCapSize)
 CLASS_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsOpacity, errorBarsOpacity)
 
-double Histogram::getYMaximum() const {
-	return d_ptr->getYMaximum();
+double Histogram::xMinimum() const {
+	return d_ptr->xMinimum();
 }
 
-double Histogram::getYMinimum() const {
-	return d_ptr->getYMinimum();
+double Histogram::xMaximum() const {
+	return d_ptr->xMaximum();
 }
 
-double Histogram::getXMaximum() const {
-	return d_ptr->getXMaximum();
+double Histogram::yMinimum() const {
+	return d_ptr->yMinimum();
 }
 
-double Histogram::getXMinimum() const {
-	return d_ptr->getXMinimum();
+double Histogram::yMaximum() const {
+	return d_ptr->yMaximum();
 }
 
 //##############################################################################
@@ -760,7 +760,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 	return -INFINITY;
 }
 
-double HistogramPrivate::getXMinimum() {
+double HistogramPrivate::xMinimum() {
 	switch (orientation) {
 	case Histogram::Vertical:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
@@ -770,7 +770,7 @@ double HistogramPrivate::getXMinimum() {
 	return INFINITY;
 }
 
-double HistogramPrivate::getXMaximum() {
+double HistogramPrivate::xMaximum() {
 	switch (orientation) {
 	case Histogram::Vertical:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
@@ -780,7 +780,7 @@ double HistogramPrivate::getXMaximum() {
 	return -INFINITY;
 }
 
-double HistogramPrivate::getYMinimum() {
+double HistogramPrivate::yMinimum() {
 	switch (orientation) {
 	case Histogram::Vertical:
 		return 0;
@@ -790,7 +790,7 @@ double HistogramPrivate::getYMinimum() {
 	return INFINITY;
 }
 
-double HistogramPrivate::getYMaximum() {
+double HistogramPrivate::yMaximum() {
 	switch (orientation) {
 	case Histogram::Vertical:
 		return getMaximumOccuranceofHistogram();
