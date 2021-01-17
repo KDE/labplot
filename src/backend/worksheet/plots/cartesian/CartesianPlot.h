@@ -228,6 +228,7 @@ private:
 	QAction* addCurveAction;
 	QAction* addEquationCurveAction;
 	QAction* addHistogramAction;
+	QAction* addBoxPlotAction;
 	QAction* addDataReductionCurveAction;
 	QAction* addDifferentiationCurveAction;
 	QAction* addIntegrationCurveAction;
@@ -294,6 +295,7 @@ public slots:
 	void addVerticalAxis();
 	void addCurve();
 	void addHistogram();
+	void addBoxPlot();
 	void addEquationCurve();
 	void addDataReductionCurve();
 	void addDifferentiationCurve();

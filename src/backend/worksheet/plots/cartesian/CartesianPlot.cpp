@@ -52,6 +52,12 @@
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
+#include "backend/worksheet/plots/cartesian/CustomPoint.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/Image.h"
@@ -380,6 +386,7 @@ void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
 	addHistogramAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
+	addBoxPlotAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Box Plot"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a mathematical Equation"), this);
 // no icons yet
 	addDataReductionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data Reduction"), this);
@@ -407,6 +414,7 @@ void CartesianPlot::initActions() {
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
 	connect(addHistogramAction,&QAction::triggered, this, &CartesianPlot::addHistogram);
+	connect(addBoxPlotAction,&QAction::triggered, this, &CartesianPlot::addBoxPlot);
 	connect(addEquationCurveAction, &QAction::triggered, this, &CartesianPlot::addEquationCurve);
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -539,6 +547,7 @@ void CartesianPlot::initMenus() {
 	addNewMenu->setIcon(QIcon::fromTheme("list-add"));
 	addNewMenu->addAction(addCurveAction);
 	addNewMenu->addAction(addHistogramAction);
+	addNewMenu->addAction(addBoxPlotAction);
 	addNewMenu->addAction(addEquationCurveAction);
 	addNewMenu->addSeparator();
 
@@ -1488,6 +1497,10 @@ void CartesianPlot::addHistogram() {
 	addChild(hist);
 }
 
+void CartesianPlot::addBoxPlot() {
+	addChild(new BoxPlot("Box Plot"));
+}
+
 /*!
  * returns the first selected XYCurve in the plot
  */
@@ -1833,6 +1846,14 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		if (hist) {
 			connect(hist, &Histogram::dataChanged, this, &CartesianPlot::dataChanged);
 			connect(hist, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
+
+			updateLegend();
+		}
+
+		const auto* boxPlot = qobject_cast<const BoxPlot*>(child);
+		if (boxPlot) {
+			connect(boxPlot, &BoxPlot::dataChanged, this, &CartesianPlot::dataChanged);
+// 			connect(boxPlot, &BoxPlot::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
 
 			updateLegend();
 		}
@@ -2514,12 +2535,29 @@ void CartesianPlot::calculateCurvesXMinMax(bool completeRange) {
 		if (!curve->dataColumn())
 			continue;
 
-		const Range<double> range{ curve->getXMinimum(), curve->getXMaximum() };
+		const double min = curve->xMinimum();
+		if (d->curvesXRange.start() > min)
+			d->curvesXRange.start() = min;
 
-		if (d->curvesXRange.start() > range.start())
-			d->curvesXRange.start() = range.start();
-		if (range.end() > d->curvesXRange.end())
-			d->curvesXRange.end() = range.end();
+		const double max = curve->xMaximum();
+		if (max > d->curvesXRange.end())
+			d->curvesXRange.end() = max;
+	}
+
+	//loop over all box plots and determine the maximum and minimum x-values
+	for (const auto* curve : this->children<const BoxPlot>()) {
+		if (!curve->isVisible())
+			continue;
+		if (!curve->dataColumn())
+			continue;
+
+		const double min = curve->xMinimum();
+		if (d->curvesXRange.start() > min)
+			d->curvesXRange.start() = min;
+
+		const double max = curve->xMaximum();
+		if (max > d->curvesXRange.end())
+			d->curvesXRange.end() = max;
 	}
 }
 
@@ -2575,11 +2613,25 @@ void CartesianPlot::calculateCurvesYMinMax(bool completeRange) {
 		if (!curve->isVisible())
 			continue;
 
-		const double min = curve->getYMinimum();
+		const double min = curve->yMinimum();
 		if (d->curvesYRange.start() > min)
 			d->curvesYRange.start() = min;
 
-		const double max = curve->getYMaximum();
+		const double max = curve->yMaximum();
+		if (max > d->curvesYRange.end())
+			d->curvesYRange.end() = max;
+	}
+
+	//loop over all box plots and determine the maximum y-value
+	for (const auto* curve : this->children<const BoxPlot>()) {
+		if (!curve->isVisible())
+			continue;
+
+		const double min = curve->yMinimum();
+		if (d->curvesYRange.start() > min)
+			d->curvesYRange.start() = min;
+
+		const double max = curve->yMaximum();
 		if (max > d->curvesYRange.end())
 			d->curvesYRange.end() = max;
 	}
@@ -4512,12 +4564,20 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete line;
 				return false;
 			}
-		} else if (reader->name() == "Histogram") {
-			auto* curve = new Histogram("Histogram");
-			if (curve->load(reader, preview))
-				addChildFast(curve);
+		} else if (reader->name() == "boxPlot") {
+			auto* boxPlot = new BoxPlot("BoxPlot");
+			if (boxPlot->load(reader, preview))
+				addChildFast(boxPlot);
 			else {
-				removeChild(curve);
+				removeChild(boxPlot);
+				return false;
+			}
+		} else if (reader->name() == "Histogram") {
+			auto* hist = new Histogram("Histogram");
+			if (hist->load(reader, preview))
+				addChildFast(hist);
+			else {
+				removeChild(hist);
 				return false;
 			}
 		} else { // unknown element

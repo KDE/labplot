@@ -48,16 +48,6 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	bool m_printing{false};
-	bool m_hovered{false};
-	bool m_suppressRetransform{false};
-	bool m_suppressRecalc{false};
-	QPixmap m_pixmap;
-	QImage m_hoverEffectImage;
-	QImage m_selectionEffectImage;
-	bool m_hoverEffectImageIsDirty{false};
-	bool m_selectionEffectImageIsDirty{false};
-
 	void retransform();
 	void recalcHistogram();
 	void updateType();
@@ -76,11 +66,13 @@ public:
 	void setHover(bool on);
 	bool activateCurve(QPointF mouseScenePos, double maxDist);
 
-	double getYMaximum();
-	double getYMinimum();
-	double getXMinimum();
-	double getXMaximum();
+	double xMinimum();
+	double xMaximum();
+	double yMinimum();
+	double yMaximum();
 	double getMaximumOccuranceofHistogram();
+
+	bool m_suppressRecalc{false};
 
 	//General
 	const AbstractColumn* dataColumn{nullptr};
@@ -162,6 +154,15 @@ public:
 private:
 	gsl_histogram* m_histogram{nullptr};
 	size_t m_bins{0};
+
+	bool m_printing{false};
+	bool m_hovered{false};
+	bool m_suppressRetransform{false};
+	QPixmap m_pixmap;
+	QImage m_hoverEffectImage;
+	QImage m_selectionEffectImage;
+	bool m_hoverEffectImageIsDirty{false};
+	bool m_selectionEffectImageIsDirty{false};
 
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;

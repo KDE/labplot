@@ -32,6 +32,7 @@
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
@@ -655,6 +656,18 @@ void Project::restorePointers(AbstractAspect* aspect) {
 	for (auto* hist : hists) {
 		if (!hist) continue;
 		RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
+	}
+
+	//box plots
+	QVector<BoxPlot*> boxPlots;
+	if (hasChildren)
+		boxPlots = aspect->children<BoxPlot>(ChildIndexFlag::Recursive);
+	else if (aspect->type() == AspectType::BoxPlot)
+		boxPlots << static_cast<BoxPlot*>(aspect);
+
+	for (auto* boxPlot : boxPlots) {
+		if (!boxPlot) continue;
+		RESTORE_COLUMN_POINTER(boxPlot, dataColumn, DataColumn);
 	}
 
 	//data picker curves

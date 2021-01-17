@@ -85,6 +85,7 @@ enum class AspectType : quint64 {
 			XYInterpolationCurve = 0x0280080,
 			XYIntegrationCurve = 0x0280100,
 			XYSmoothCurve = 0x0280200,
+		BoxPlot = 0x0250000,
 
 	AbstractPart = 0x0400000,
 		AbstractDataSource = 0x0410000,

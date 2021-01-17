@@ -127,10 +127,10 @@ public:
 	bool isVisible() const override;
 	void suppressRetransform(bool);
 
-	double getYMaximum() const;
-	double getYMinimum() const;
-	double getXMaximum() const;
-	double getXMinimum() const;
+	double xMinimum() const;
+	double xMaximum() const;
+	double yMinimum() const;
+	double yMaximum() const;
 
 	typedef WorksheetElement BaseClass;
 	typedef HistogramPrivate Private;
