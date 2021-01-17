@@ -55,8 +55,6 @@ private:
 	TreeViewComboBox* cbValuesColumn;
 
 	void updateValuesWidgets();
-
-	void load();
 	void loadConfig(KConfig&);
 
 protected:

@@ -116,18 +116,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.leYBreakEnd->setValidator( new QDoubleValidator(ui.leYBreakEnd) );
 
 	//set the current locale
-	SET_NUMBER_LOCALE
-	ui.sbLeft->setLocale(numberLocale);
-	ui.sbTop->setLocale(numberLocale);
-	ui.sbWidth->setLocale(numberLocale);
-	ui.sbHeight->setLocale(numberLocale);
-	ui.sbBorderWidth->setLocale(numberLocale);
-	ui.sbBorderCornerRadius->setLocale(numberLocale);
-	ui.sbPaddingHorizontal->setLocale(numberLocale);
-	ui.sbPaddingVertical->setLocale(numberLocale);
-	ui.sbPaddingRight->setLocale(numberLocale);
-	ui.sbPaddingBottom->setLocale(numberLocale);
-	labelWidget->updateLocale();
+	updateLocale();
 
 	//SIGNAL/SLOT
 	//General
@@ -407,13 +396,15 @@ void CartesianPlotDock::updateLocale() {
 	ui.sbPaddingBottom->setLocale(numberLocale);
 
 	//update the QLineEdits, avoid the change events
-	Lock lock(m_initializing);
-	ui.leRangeFirst->setText(numberLocale.toString(m_plot->rangeFirstValues()));
-	ui.leRangeLast->setText(numberLocale.toString(m_plot->rangeLastValues()));
-	ui.leXMin->setText(numberLocale.toString(m_plot->xMin()));
-	ui.leXMax->setText(numberLocale.toString(m_plot->xMax()));
-	ui.leYMin->setText(numberLocale.toString(m_plot->yMin()));
-	ui.leYMax->setText(numberLocale.toString(m_plot->yMax()));
+	if (m_plot) {
+		Lock lock(m_initializing);
+		ui.leRangeFirst->setText(numberLocale.toString(m_plot->rangeFirstValues()));
+		ui.leRangeLast->setText(numberLocale.toString(m_plot->rangeLastValues()));
+		ui.leXMin->setText(numberLocale.toString(m_plot->xMin()));
+		ui.leXMax->setText(numberLocale.toString(m_plot->xMax()));
+		ui.leYMin->setText(numberLocale.toString(m_plot->yMin()));
+		ui.leYMax->setText(numberLocale.toString(m_plot->yMax()));
+	}
 
 	//update the title label
 	labelWidget->updateLocale();
