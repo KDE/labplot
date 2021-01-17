@@ -1654,13 +1654,11 @@ void AxisDock::axisDescriptionChanged(const AbstractAspect* aspect) {
 	if (m_axis != aspect)
 		return;
 
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
+	const Lock lock(m_initializing);
+	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
+	else if (aspect->comment() != ui.leComment->text())
 		ui.leComment->setText(aspect->comment());
-	}
-	m_initializing = false;
 }
 
 void AxisDock::axisOrientationChanged(Axis::Orientation orientation) {
