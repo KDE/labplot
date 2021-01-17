@@ -7,6 +7,7 @@ Bug fixes:
 	* BUG 427190 - Fixed resetting parser error count on some platforms (Debian, Manjaro)
 	* BUG 429110 - Support semicolon as function argument separator for locale with comma as decimal separator
 	* BUG 429368 - Fix validation of custom model equation in fit dock
+	* BUG 431535 - Save/Load value format
 -----2.8.1 -----
 	* [worksheet] allow to change the background color for axis labels (default: transparent)
 	* [worksheet] allow to copy the plot cursor cordinates
