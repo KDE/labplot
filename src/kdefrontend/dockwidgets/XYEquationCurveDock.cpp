@@ -2,7 +2,7 @@
     File             : XYEquationCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
+    Copyright        : (C) 2014-2021 Alexander Semke (alexander.semke@web.de)
     Description      : widget for editing properties of equation curves
 
  ***************************************************************************/
@@ -101,21 +101,21 @@ void XYEquationCurveDock::setupGeneral() {
 	uiGeneralTab.teMax->setMaximumHeight(uiGeneralTab.leName->sizeHint().height());
 
 	//Slots
-	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYEquationCurveDock::nameChanged );
-	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYEquationCurveDock::commentChanged );
-	connect( uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYEquationCurveDock::nameChanged);
+	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYEquationCurveDock::commentChanged);
+	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYEquationCurveDock::visibilityChanged);
 
-	connect( uiGeneralTab.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
-	connect( uiGeneralTab.teEquation1, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.teEquation2, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.tbConstants1, SIGNAL(clicked()), this, SLOT(showConstants()) );
-	connect( uiGeneralTab.tbFunctions1, SIGNAL(clicked()), this, SLOT(showFunctions()) );
-	connect( uiGeneralTab.tbConstants2, SIGNAL(clicked()), this, SLOT(showConstants()) );
-	connect( uiGeneralTab.tbFunctions2, SIGNAL(clicked()), this, SLOT(showFunctions()) );
-	connect( uiGeneralTab.teMin, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.teMax, SIGNAL(expressionChanged()), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.sbCount, SIGNAL(valueChanged(int)), this, SLOT(enableRecalculate()) );
-	connect( uiGeneralTab.pbRecalculate, SIGNAL(clicked()), this, SLOT(recalculateClicked()) );
+	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::typeChanged);
+	connect(uiGeneralTab.teEquation1, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
+	connect(uiGeneralTab.teEquation2, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
+	connect(uiGeneralTab.tbConstants1, &QToolButton::clicked, this, &XYEquationCurveDock::showConstants);
+	connect(uiGeneralTab.tbFunctions1, &QToolButton::clicked, this, &XYEquationCurveDock::showFunctions);
+	connect(uiGeneralTab.tbConstants2, &QToolButton::clicked, this, &XYEquationCurveDock::showConstants);
+	connect(uiGeneralTab.tbFunctions2, &QToolButton::clicked, this, &XYEquationCurveDock::showFunctions);
+	connect(uiGeneralTab.teMin, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
+	connect(uiGeneralTab.teMax, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
+	connect(uiGeneralTab.sbCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYEquationCurveDock::enableRecalculate);
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYEquationCurveDock::recalculateClicked);
 }
 
 /*!
@@ -171,10 +171,10 @@ void XYEquationCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_equationCurve, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)),
-			this, SLOT(curveDescriptionChanged(const AbstractAspect*)));
-	connect(m_equationCurve, SIGNAL(equationDataChanged(XYEquationCurve::EquationData)),
-			this, SLOT(curveEquationDataChanged(XYEquationCurve::EquationData)));
+	connect(m_equationCurve, &XYEquationCurve::aspectDescriptionChanged,
+			this, &XYEquationCurveDock::curveDescriptionChanged);
+	connect(m_equationCurve, &XYEquationCurve::equationDataChanged,
+			this, &XYEquationCurveDock::curveEquationDataChanged);
 }
 
 //*************************************************************
@@ -245,7 +245,7 @@ void XYEquationCurveDock::recalculateClicked() {
 	data.count = uiGeneralTab.sbCount->value();
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYEquationCurve*>(curve)->setEquationData(data);
+		static_cast<XYEquationCurve*>(curve)->setEquationData(data);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 }
@@ -255,12 +255,12 @@ void XYEquationCurveDock::showConstants() {
 	ConstantsWidget constants(&menu);
 
 	if (QObject::sender() == uiGeneralTab.tbConstants1)
-		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant1(QString)));
+		connect(&constants, &ConstantsWidget::constantSelected, this, &XYEquationCurveDock::insertConstant1);
 	else
-		connect(&constants, SIGNAL(constantSelected(QString)), this, SLOT(insertConstant2(QString)));
+		connect(&constants, &ConstantsWidget::constantSelected, this, &XYEquationCurveDock::insertConstant2);
 
-	connect(&constants, SIGNAL(constantSelected(QString)), &menu, SLOT(close()));
-	connect(&constants, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&constants, &ConstantsWidget::constantSelected, &menu, &QMenu::close);
+	connect(&constants, &ConstantsWidget::canceled, &menu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&constants);
@@ -279,12 +279,12 @@ void XYEquationCurveDock::showFunctions() {
 	QMenu menu;
 	FunctionsWidget functions(&menu);
 	if (QObject::sender() == uiGeneralTab.tbFunctions1)
-		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction1(QString)));
+		connect(&functions, &FunctionsWidget::functionSelected, this, &XYEquationCurveDock::insertFunction1);
 	else
-		connect(&functions, SIGNAL(functionSelected(QString)), this, SLOT(insertFunction2(QString)));
+		connect(&functions, &FunctionsWidget::functionSelected, this, &XYEquationCurveDock::insertFunction2);
 
-	connect(&functions, SIGNAL(functionSelected(QString)), &menu, SLOT(close()));
-	connect(&functions, SIGNAL(canceled()), &menu, SLOT(close()));
+	connect(&functions, &FunctionsWidget::functionSelected, &menu, &QMenu::close);
+	connect(&functions, &FunctionsWidget::canceled, &menu, &QMenu::close);
 
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(&functions);
@@ -341,22 +341,19 @@ void XYEquationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) 
 	if (m_curve != aspect)
 		return;
 
-	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text()) {
+	const Lock lock(m_initializing);
+	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	} else if (aspect->comment() != uiGeneralTab.leComment->text()) {
+	else if (aspect->comment() != uiGeneralTab.leComment->text())
 		uiGeneralTab.leComment->setText(aspect->comment());
-	}
-	m_initializing = false;
 }
 
 void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& data) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	uiGeneralTab.cbType->setCurrentIndex(static_cast<int>(data.type));
 	uiGeneralTab.teEquation1->setText(data.expression1);
 	uiGeneralTab.teEquation2->setText(data.expression2);
 	uiGeneralTab.teMin->setText(data.min);
 	uiGeneralTab.teMax->setText(data.max);
 	uiGeneralTab.sbCount->setValue(data.count);
-	m_initializing = false;
 }
