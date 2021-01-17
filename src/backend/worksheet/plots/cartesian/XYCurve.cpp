@@ -2824,9 +2824,8 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	//draw values
 	if (valuesType != XYCurve::ValuesType::NoValues) {
 		painter->setOpacity(valuesOpacity);
-		//don't use any painter pen, since this will force QPainter to render the text outline which is expensive
-		painter->setPen(Qt::NoPen);
-		painter->setBrush(valuesColor);
+		painter->setPen(QPen(valuesColor));
+		painter->setFont(valuesFont);
 		drawValues(painter);
 	}
 }
@@ -2943,20 +2942,17 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 }
 
 void XYCurvePrivate::drawValues(QPainter* painter) {
-	QTransform trafo;
-	QPainterPath path;
-
 	int i = 0;
 	for (const auto& point : qAsConst(m_valuePoints)) {
-		path = QPainterPath();
-		path.addText(QPoint(0, 0), valuesFont, m_valueStrings.at(i++));
-
-		trafo.reset();
-		trafo.translate(point.x(), point.y());
+		painter->translate(point);
 		if (valuesRotationAngle != 0)
-			trafo.rotate(-valuesRotationAngle);
+			painter->rotate(-valuesRotationAngle);
 
-		painter->drawPath(trafo.map(path));
+		painter->drawText(QPoint(0, 0), m_valueStrings.at(i++));
+
+		if (valuesRotationAngle != 0)
+			painter->rotate(valuesRotationAngle);
+		painter->translate(-point);
 	}
 }
 
