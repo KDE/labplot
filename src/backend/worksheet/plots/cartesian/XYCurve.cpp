@@ -3036,7 +3036,9 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "distance", QString::number(d->valuesDistance) );
 	writer->writeAttribute( "rotation", QString::number(d->valuesRotationAngle) );
 	writer->writeAttribute( "opacity", QString::number(d->valuesOpacity) );
-	//TODO values format and precision
+	writer->writeAttribute("numericFormat", QString(d->valuesNumericFormat));
+	writer->writeAttribute("dateTimeFormat", d->valuesDateTimeFormat);
+	writer->writeAttribute( "precision", QString::number(d->valuesPrecision) );
 	writer->writeAttribute( "prefix", d->valuesPrefix );
 	writer->writeAttribute( "suffix", d->valuesSuffix );
 	WRITE_QCOLOR(d->valuesColor);
@@ -3144,6 +3146,15 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("distance", valuesDistance);
 			READ_DOUBLE_VALUE("rotation", valuesRotationAngle);
 			READ_DOUBLE_VALUE("opacity", valuesOpacity);
+
+			str = attribs.value("numericFormat").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("numericFormat").toString());
+			else
+				d->valuesNumericFormat = *(str.toLatin1().data());
+
+			READ_STRING_VALUE("dateTimeFormat", valuesDateTimeFormat);
+			READ_INT_VALUE("precision", valuesPrecision, int);
 
 			//don't produce any warning if no prefix or suffix is set (empty string is allowed here in xml)
 			d->valuesPrefix = attribs.value("prefix").toString();

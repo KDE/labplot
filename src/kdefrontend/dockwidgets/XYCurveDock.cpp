@@ -155,8 +155,8 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.cbValuesNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::valuesNumericFormatChanged);
 	connect(ui.sbValuesPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYCurveDock::valuesPrecisionChanged);
 	connect(ui.cbValuesDateTimeFormat, &QComboBox::currentTextChanged, this, &XYCurveDock::valuesDateTimeFormatChanged);
-	connect( ui.leValuesPrefix, SIGNAL(returnPressed()), this, SLOT(valuesPrefixChanged()) );
-	connect( ui.leValuesSuffix, SIGNAL(returnPressed()), this, SLOT(valuesSuffixChanged()) );
+	connect(ui.leValuesPrefix, &QLineEdit::textChanged, this, &XYCurveDock::valuesPrefixChanged);
+	connect(ui.leValuesSuffix, &QLineEdit::textChanged, this, &XYCurveDock::valuesSuffixChanged);
 	connect( ui.kfrValuesFont, SIGNAL(fontSelected(QFont)), this, SLOT(valuesFontChanged(QFont)) );
 	connect( ui.kcbValuesColor, SIGNAL(changed(QColor)), this, SLOT(valuesColorChanged(QColor)) );
 
@@ -167,7 +167,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	connect( ui.cbFillingImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingImageStyleChanged(int)) );
 	connect( ui.cbFillingBrushStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingBrushStyleChanged(int)) );
 	connect(ui.bFillingOpen, SIGNAL(clicked(bool)), this, SLOT(selectFile()));
-	connect( ui.leFillingFileName, SIGNAL(returnPressed()), this, SLOT(fileNameChanged()) );
+	connect(ui.leFillingFileName, &QLineEdit::textChanged, this, &XYCurveDock::fileNameChanged);
 	connect( ui.leFillingFileName, SIGNAL(textChanged(QString)), this, SLOT(fileNameChanged()) );
 	connect( ui.kcbFillingFirstColor, SIGNAL(changed(QColor)), this, SLOT(fillingFirstColorChanged(QColor)) );
 	connect( ui.kcbFillingSecondColor, SIGNAL(changed(QColor)), this, SLOT(fillingSecondColorChanged(QColor)) );
