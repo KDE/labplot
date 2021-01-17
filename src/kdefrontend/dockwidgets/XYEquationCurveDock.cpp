@@ -152,6 +152,8 @@ void XYEquationCurveDock::updatePlotRanges() const {
 	for (int i{0}; i < cSystemCount; i++)
 		uiGeneralTab.cbPlotRanges->addItem( QString::number(i+1) + QLatin1String(" : ") + m_curve->coordinateSystemInfo(i) );
 	uiGeneralTab.cbPlotRanges->setCurrentIndex(cSystemIndex);
+	// disable when there is only on plot range
+	uiGeneralTab.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
 }
 
 void XYEquationCurveDock::initGeneralTab() {

@@ -583,6 +583,8 @@ void AxisDock::updatePlotRanges() const {
 	for (int i{0}; i < cSystemCount; i++)
 		ui.cbPlotRanges->addItem( QString::number(i+1) + QLatin1String(" : ") + m_axis->coordinateSystemInfo(i) );
 	ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
+	// disable when there is only on plot range
+	ui.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
 }
 
 //*************************************************************
@@ -710,6 +712,7 @@ void AxisDock::scaleChanged(int index) {
 }
 
 void AxisDock::autoScaleChanged(int index) {
+	DEBUG(Q_FUNC_INFO)
 	bool autoScale = index == Qt::Checked;
 	ui.leStart->setEnabled(!autoScale);
 	ui.leEnd->setEnabled(!autoScale);
@@ -721,6 +724,8 @@ void AxisDock::autoScaleChanged(int index) {
 
 	for (auto* axis : m_axesList)
 		axis->setAutoScale(autoScale);
+
+	updateLocale();	// update values
 }
 
 void AxisDock::startChanged() {

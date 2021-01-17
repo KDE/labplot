@@ -1350,6 +1350,7 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 				axis->setRange(m_plot->xRange(index));
 		}
 	}
+	//TODO m_plot->retransform();	// update plot
 	// don't update curve range when x range of curve's plot range changes
 }
 void CartesianPlotDock::PlotRangeYChanged(const int index) {
@@ -1366,6 +1367,7 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 				axis->setRange(m_plot->yRange(index));
 		}
 	}
+	//TODO: m_plot->retransform();	// update plot
 	// don't update curve range when x range of curve's plot range changes
 }
 
