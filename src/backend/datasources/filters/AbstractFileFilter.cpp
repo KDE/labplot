@@ -159,24 +159,32 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 			fileType = FileType::NgspiceRawAscii;
 		else //probably ascii data
 			fileType = FileType::Ascii;
+#ifdef HAVE_HDF5
 	} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format"))
 		|| fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) )
 		fileType = FileType::HDF5;
+#endif
+#ifdef HAVE_NETCDF
 	else if (fileInfo.contains(QLatin1String("NetCDF Data Format"))
 		|| fileName.endsWith(QLatin1String("nc"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("netcdf"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("cdf"), Qt::CaseInsensitive))
 		fileType = FileType::NETCDF;
+#endif
+#ifdef HAVE_FITS
 	else if (fileInfo.contains(QLatin1String("FITS image data"))
 		|| fileName.endsWith(QLatin1String("fits"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("fit"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("fts"), Qt::CaseInsensitive))
 		fileType = FileType::FITS;
+#endif
+#ifdef HAVE_ZIP
 	else if (fileInfo.contains(QLatin1String("ROOT")) //can be "ROOT Data Format" or "ROOT file Version ??? (Compression: 1)"
 		||  fileName.endsWith(QLatin1String("root"), Qt::CaseInsensitive)) // TODO find out file description
 		fileType = FileType::ROOT;
+#endif
 	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 		fileType = FileType::Image;
 	else if (NgspiceRawBinaryFilter::isNgspiceBinaryFile(fileName))
