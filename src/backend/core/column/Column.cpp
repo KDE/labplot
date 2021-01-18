@@ -667,8 +667,8 @@ void Column::calculateStatistics() const {
 	double columnProduct = 1.0;
 	double columnSumNeg = 0.0;
 	double columnSumSquare = 0.0;
-	statistics.minimum = INFINITY;
-	statistics.maximum = -INFINITY;
+	statistics.minimum = qInf();
+	statistics.maximum = -qInf();
 	std::unordered_map<double, int> frequencyOfValues;
 	QVector<double> rowData;
 	if (columnMode() == ColumnMode::Numeric) {
