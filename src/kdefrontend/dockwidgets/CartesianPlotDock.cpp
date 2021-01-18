@@ -905,7 +905,7 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 	for (auto* plot : m_plotList) {
 		plot->setAutoScaleX(index, checked);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRange(index).autoScale())
-		if (checked) {
+		if ( checked && index == plot->defaultCoordinateSystem()->xIndex() ) {
 			plot->scaleAutoX(true);	// scale to full range
 			if (plot->autoScaleY())
 				plot->scaleAutoY();
@@ -937,7 +937,7 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 	for (auto* plot : m_plotList) {
 		plot->setAutoScaleY(index, checked);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRange(index).autoScale())
-		if (checked) {
+		if ( checked && index == plot->defaultCoordinateSystem()->yIndex() ) {
 			plot->scaleAutoY(true);	// full range
 			if (plot->autoScaleX())
 				plot->scaleAutoX();
@@ -1345,7 +1345,8 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 				axis->setRange(m_plot->xRange(index));
 		}
 	}
-	//TODO m_plot->retransform();	// update plot
+	//TODO
+	m_plot->retransform();	// update plot
 	// don't update curve range when x range of curve's plot range changes
 }
 void CartesianPlotDock::PlotRangeYChanged(const int index) {
