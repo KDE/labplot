@@ -906,9 +906,9 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 		plot->setAutoScaleX(index, checked);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRange(index).autoScale())
 		if ( checked && index == plot->defaultCoordinateSystem()->xIndex() ) {
-			plot->scaleAutoX(true);	// scale to full range
+			plot->scaleAutoX(true);	// full range
 			if (plot->autoScaleY())
-				plot->scaleAutoY();
+				plot->scaleAutoY(true);	// full range
 		}
 	}
 	updatePlotRangeList();
@@ -940,7 +940,7 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 		if ( checked && index == plot->defaultCoordinateSystem()->yIndex() ) {
 			plot->scaleAutoY(true);	// full range
 			if (plot->autoScaleX())
-				plot->scaleAutoX();
+				plot->scaleAutoX(true);	// full range
 		}
 	}
 	updatePlotRangeList();
@@ -1333,21 +1333,29 @@ void CartesianPlotDock::removePlotRange() {
  */
 void CartesianPlotDock::PlotRangeXChanged(const int index) {
 	const int plotRangeIndex{ sender()->property("row").toInt() };
-	DEBUG(Q_FUNC_INFO << ", set x range of plot range " << plotRangeIndex+1  << " to " << index+1)
+	DEBUG(Q_FUNC_INFO << ", Set x range of plot range " << plotRangeIndex+1  << " to " << index+1)
 	auto* cSystem{ m_plot->coordinateSystem(plotRangeIndex) };
 	cSystem->setXIndex(index);
 
+	// auto scale x range when on auto scale (now that it is used)
+	if (m_plot->xRange(index).autoScale()) {
+		autoScaleXRange(index, true);
+		updateXRangeList();
+	}
+
 	for (auto* axis : m_plot->children<Axis>()) {
 		const int cSystemIndex{ axis->coordinateSystemIndex() };
+		DEBUG(Q_FUNC_INFO << ", Axis \"" << axis->name().toStdString() << "\" cSystem index = " << cSystemIndex)
 		if (cSystemIndex == plotRangeIndex) {
-			DEBUG(Q_FUNC_INFO << ", plot range used in axis \"" << axis->name().toStdString() << "\" has changed")
-			if ( axis->autoScale() )
+			DEBUG(Q_FUNC_INFO << ", Plot range used in axis \"" << axis->name().toStdString() << "\" has changed")
+			if ( axis->autoScale() ) {
+				DEBUG(Q_FUNC_INFO << ", Set x range of axis to " << m_plot->xRange(index).toStdString())
 				axis->setRange(m_plot->xRange(index));
+			}
 		}
 	}
-	//TODO
-	m_plot->retransform();	// update plot
-	// don't update curve range when x range of curve's plot range changes
+
+	m_plot->dataChanged();	// update plot
 }
 void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	const int plotRangeIndex{ sender()->property("row").toInt() };
@@ -1355,6 +1363,11 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	auto* cSystem{ m_plot->coordinateSystem(plotRangeIndex) };
 	cSystem->setYIndex(index);
 
+	// auto scale y range when on auto scale (now that it is used)
+	if (m_plot->yRange(index).autoScale()) {
+		autoScaleYRange(index, true);
+		updateYRangeList();
+	}
 	for (auto* axis : m_plot->children<Axis>()) {
 		const int cSystemIndex{ axis->coordinateSystemIndex() };
 		if (cSystemIndex == plotRangeIndex) {
@@ -1363,8 +1376,8 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 				axis->setRange(m_plot->yRange(index));
 		}
 	}
-	//TODO: m_plot->retransform();	// update plot
-	// don't update curve range when x range of curve's plot range changes
+
+	m_plot->dataChanged();	// update plot
 }
 
 // "Range Breaks"-tab

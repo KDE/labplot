@@ -1505,7 +1505,7 @@ void Column::handleFormatChange() {
  * for \c count < 0, the minimum of the last \p count elements is returned.
  */
 double Column::minimum(int count) const {
-	double min = INFINITY;
+	double min = qInf();
 	if (count == 0 && d->statisticsAvailable)
 		min = const_cast<Column*>(this)->statistics().minimum;
 	else {
@@ -1535,7 +1535,7 @@ double Column::minimum(int count) const {
  * \p endIndex
  */
 double Column::minimum(int startIndex, int endIndex) const {
-	double min = INFINITY;
+	double min = qInf();
 
 	if (rowCount() == 0)
 		return min;
@@ -1615,7 +1615,6 @@ double Column::minimum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::Day:
 		case ColumnMode::Month:
-		default:
 			break;
 		}
 		return min;
@@ -1637,7 +1636,6 @@ double Column::minimum(int startIndex, int endIndex) const {
 		case ColumnMode::Day:
 			return dateTimeAt(foundIndex).toMSecsSinceEpoch();
 		case ColumnMode::Text:
-		default:
 			break;
 	}
 
@@ -1651,7 +1649,8 @@ double Column::minimum(int startIndex, int endIndex) const {
  * for \c count < 0, the maximum of the last \p count elements is returned.
  */
 double Column::maximum(int count) const {
-	double max = -INFINITY;
+	DEBUG(Q_FUNC_INFO << ", count = " << count)
+	double max = -qInf();
 
 	if (count == 0 && d->statisticsAvailable)
 		max = const_cast<Column*>(this)->statistics().maximum;
@@ -1682,7 +1681,7 @@ double Column::maximum(int count) const {
  * \p endIndex
  */
 double Column::maximum(int startIndex, int endIndex) const {
-	double max = -INFINITY;
+	double max{ -qInf() };
 	if (rowCount() == 0)
 		return max;
 
@@ -1754,7 +1753,6 @@ double Column::maximum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::Day:
 		case ColumnMode::Month:
-		default:
 			break;
 		}
 		return max;
@@ -1776,7 +1774,6 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case ColumnMode::Day:
 			return dateTimeAt(foundIndex).toMSecsSinceEpoch();
 		case ColumnMode::Text:
-		default:
 			break;
 	}
 	return max;

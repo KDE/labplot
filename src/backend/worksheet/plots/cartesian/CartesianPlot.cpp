@@ -2989,7 +2989,6 @@ void CartesianPlotPrivate::retransform() {
  * calculate x and y scales from scence range and logical range (x/y range) for all coordinate systems
  */
 void CartesianPlotPrivate::retransformScales() {
-	//DEBUG( Q_FUNC_INFO << ", xrange = " << xRange.toStdString() << ", yrange = " << yRange.toStdString() );
 	int i{1}; // debugging
 	for (auto& range : xRanges)
 		DEBUG( Q_FUNC_INFO << ", x range " << i++ << " = " << range.toStdString() << ", scale = " << (int)range.scale() );
