@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import project dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -40,6 +40,7 @@ class TreeViewComboBox;
 class MainWin;
 class QDialogButtonBox;
 class QStatusBar;
+class KUrlComboBox;
 
 class ImportProjectDialog : public QDialog {
 	Q_OBJECT
@@ -56,6 +57,7 @@ public:
 private:
 	Ui::ImportProjectWidget ui;
 	MainWin* m_mainWin;
+	KUrlComboBox* m_cbFileName;
 	ProjectParser* m_projectParser{nullptr};
 	ProjectType m_projectType;
 	AspectTreeModel* m_aspectTreeModel;

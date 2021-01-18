@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : import project dialog
     --------------------------------------------------------------------
-    Copyright            : (C) 2017-2019 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2017-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -49,6 +49,7 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KSharedConfig>
+#include <KUrlComboBox>
 #include <KWindowConfig>
 
 /*!
@@ -68,6 +69,13 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	QWidget* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	ui.chbUnusedObjects->hide();
+
+	m_cbFileName = new KUrlComboBox(KUrlComboBox::Mode::Files, this);
+	m_cbFileName->setMaxItems(7);
+	auto* l = dynamic_cast<QHBoxLayout*>(ui.gbProject->layout());
+	if (l)
+		l->insertWidget(1, m_cbFileName);
+
 	vLayout->addWidget(mainWidget);
 
 	ui.tvPreview->setAnimated(true);
@@ -100,7 +108,8 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
 	//Signals/Slots
-	connect(ui.leFileName, &QLineEdit::textChanged, this, &ImportProjectDialog::fileNameChanged);
+	connect(m_cbFileName, &KUrlComboBox::urlActivated,
+			this, [=](const QUrl &url){fileNameChanged(url.path());});
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportProjectDialog::selectFile);
 	connect(m_bNewFolder, &QPushButton::clicked, this, &ImportProjectDialog::newFolder);
 	connect(ui.chbUnusedObjects, &QCheckBox::stateChanged, this, &ImportProjectDialog::refreshPreview);
@@ -127,7 +136,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 
 	//"What's this?" texts
 	QString info = i18n("Specify the file where the project content has to be imported from.");
-	ui.leFileName->setWhatsThis(info);
+	m_cbFileName->setWhatsThis(info);
 
 	info = i18n("Select one or several objects to be imported into the current project.\n"
 	            "Note, all children of the selected objects as well as all the dependent objects will be automatically selected.\n"
@@ -147,18 +156,25 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	} else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
 
-	QString lastImportedFile;
+	QString file;
+	QString files;
 	switch (m_projectType) {
 	case ProjectType::LabPlot:
-		lastImportedFile = QLatin1String("LastImportedLabPlotProject");
+		file = QLatin1String("LastImportedLabPlotProject");
+		files = QLatin1String("LastImportedLabPlotProjects");
 		break;
 	case ProjectType::Origin:
-		lastImportedFile = QLatin1String("LastImportedOriginProject");
+		file = QLatin1String("LastImportedOriginProject");
+		files = QLatin1String("LastImportedOriginProjects");
 		break;
 	}
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-	ui.leFileName->setText(conf.readEntry(lastImportedFile, ""));
+	m_cbFileName->setUrl(conf.readEntry(file, ""));
+	QStringList urls = m_cbFileName->urls();
+	urls.append(conf.readXdgListEntry(files));
+	m_cbFileName->setUrls(urls);
+	fileNameChanged(m_cbFileName->currentText());
 }
 
 ImportProjectDialog::~ImportProjectDialog() {
@@ -166,17 +182,21 @@ ImportProjectDialog::~ImportProjectDialog() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ImportProjectDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 
-	QString lastImportedFile;
+	QString file;
+	QString files;
 	switch (m_projectType) {
 	case ProjectType::LabPlot:
-		lastImportedFile = QLatin1String("LastImportedLabPlotProject");
+		file = QLatin1String("LastImportedLabPlotProject");
+		files = QLatin1String("LastImportedLabPlotProjects");
 		break;
 	case ProjectType::Origin:
-		lastImportedFile = QLatin1String("LastImportedOriginProject");
+		file = QLatin1String("LastImportedOriginProject");
+		files = QLatin1String("LastImportedOriginProjects");
 		break;
 	}
 
-	conf.writeEntry(lastImportedFile, ui.leFileName->text());
+	conf.writeEntry(file, m_cbFileName->currentText());
+	conf.writeXdgListEntry(files, m_cbFileName->urls());
 }
 
 void ImportProjectDialog::setCurrentFolder(const Folder* folder) {
@@ -269,7 +289,7 @@ void ImportProjectDialog::importTo(QStatusBar* statusBar) const {
  * show the content of the project in the tree view
  */
 void ImportProjectDialog::refreshPreview() {
-	QString project = ui.leFileName->text();
+	const QString& project = m_cbFileName->currentText();
 	m_projectParser->setProjectFileName(project);
 
 #ifdef HAVE_LIBORIGIN
@@ -341,12 +361,12 @@ void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const
 	//TODO: we need a better "selection", maybe with tri-state check boxes in the tree view
 	const auto* aspect = static_cast<const AbstractAspect*>(indexes.at(0).internalPointer());
 	const QVector<AbstractAspect*> aspects = aspect->dependsOn();
+
 	const auto* model = reinterpret_cast<AspectTreeModel*>(ui.tvPreview->model());
 	for (const auto* aspect : aspects) {
 		QModelIndex index = model->modelIndexOfAspect(aspect, 0);
 		ui.tvPreview->selectionModel()->select(index, QItemSelectionModel::Select | QItemSelectionModel::Rows);
 	}
-
 
 	//Ok-button is only enabled if some project objects were selected
 	bool enable = (selected.indexes().size() != 0);
@@ -394,7 +414,12 @@ void ImportProjectDialog::selectFile() {
 			conf.writeEntry(lastDirConfEntryName, newDir);
 	}
 
-	ui.leFileName->setText(path);
+	QStringList urls = m_cbFileName->urls();
+	urls.insert(0, QUrl::fromLocalFile(path).url());
+	m_cbFileName->setUrls(urls);
+	m_cbFileName->setCurrentText(urls.first());
+	fileNameChanged(path); // why do I have to call this function separately
+
 	refreshPreview();
 }
 
@@ -410,8 +435,6 @@ void ImportProjectDialog::fileNameChanged(const QString& name) {
 		fileName = QDir::homePath() + QLatin1String("/") + fileName;
 
 	bool fileExists = QFile::exists(fileName);
-	GuiTools::highlight(ui.leFileName, !fileExists);
-
 	if (!fileExists) {
 		//file doesn't exist -> delete the content preview that is still potentially
 		//available from the previously selected file
@@ -424,7 +447,7 @@ void ImportProjectDialog::fileNameChanged(const QString& name) {
 }
 
 void ImportProjectDialog::newFolder() {
-	QString path = ui.leFileName->text();
+	const QString& path = m_cbFileName->currentText();
 	QString name = path.right( path.length() - path.lastIndexOf(QLatin1String("/"))-1 );
 
 	bool ok;
