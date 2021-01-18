@@ -95,7 +95,7 @@ void ReferenceLine::initActions() {
 	connect(visibilityAction, &QAction::triggered, this, &ReferenceLine::visibilityChangedSlot);
 
 	//Orientation
-	orientationActionGroup = new QActionGroup(this);
+	auto* orientationActionGroup = new QActionGroup(this);
 	orientationActionGroup->setExclusive(true);
 	connect(orientationActionGroup, &QActionGroup::triggered, this, &ReferenceLine::orientationChangedSlot);
 

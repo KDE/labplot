@@ -78,7 +78,6 @@ private:
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 
-	QActionGroup* orientationActionGroup{nullptr};
 	QActionGroup* lineStyleActionGroup{nullptr};
 	QActionGroup* lineColorActionGroup{nullptr};
 
