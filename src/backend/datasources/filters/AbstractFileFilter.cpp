@@ -159,8 +159,9 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 			fileType = FileType::NgspiceRawAscii;
 		else //probably ascii data
 			fileType = FileType::Ascii;
+	}
 #ifdef HAVE_HDF5
-	} else if (fileInfo.contains(QLatin1String("Hierarchical Data Format"))
+	else if (fileInfo.contains(QLatin1String("Hierarchical Data Format"))
 		|| fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("hdf"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String("hdf5"), Qt::CaseInsensitive) )
