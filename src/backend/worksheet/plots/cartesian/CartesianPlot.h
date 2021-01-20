@@ -336,7 +336,6 @@ public slots:
 
 	bool autoScale(bool fullRange = true);
 	void dataChanged();
-	void curveLinePenChanged(QPen);
 
 private slots:
 	void updateLegend();
@@ -346,6 +345,7 @@ private slots:
 
 	void xDataChanged();
 	void yDataChanged();
+	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
 
 	//SLOTs for changes triggered via QActions in the context menu

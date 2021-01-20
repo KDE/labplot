@@ -532,12 +532,13 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 					} else if (reader->name() == "child_aspect") {
 						if (!readChildAspectElement(reader, preview))
 							return false;
-					} else if (reader->name() == "state") {
+					} else if (!preview && reader->name() == "state") {
 						//load the state of the views (visible, maximized/minimized/geometry)
 						//and the state of the project explorer (expanded items, currently selected item)
 						emit requestLoadState(reader);
 					} else {
-						reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+						if (!preview)
+							reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 						if (!reader->skipToEndElement()) return false;
 					}
 				}
@@ -547,10 +548,8 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	} else  // no start document
 		reader->raiseError(i18n("no valid XML document found"));
 
-	if (!preview) {
-		//everything is read now, restore the pointers
-		restorePointers(this);
-	}
+	//everything is read now, restore the pointers
+	restorePointers(this, preview);
 
 	emit loaded();
 	return !reader->hasError();
@@ -562,7 +561,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
  * and when an aspect is being pasted. In both cases we deserialized from XML and need
  * to restore the pointers.
  */
-void Project::restorePointers(AbstractAspect* aspect) {
+void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	//wait until all columns are decoded from base64-encoded data
 	QThreadPool::globalInstance()->waitForDone();
 
@@ -706,6 +705,9 @@ void Project::restorePointers(AbstractAspect* aspect) {
 			}
 		}
 	}
+
+	if (preview)
+		return;
 
 	//all data was read in spreadsheets:
 	//call CartesianPlot::retransform() to retransform the plots

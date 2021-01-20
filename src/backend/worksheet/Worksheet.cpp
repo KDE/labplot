@@ -1532,14 +1532,14 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			} else
 				addChildFast(plot);
-		} else if (reader->name() == "textLabel") {
+		} else if (!preview && reader->name() == "textLabel") {
 			TextLabel* label = new TextLabel(QString());
 			if (!label->load(reader, preview)) {
 				delete label;
 				return false;
 			} else
 				addChildFast(label);
-		} else if (reader->name() == "image") {
+		} else if (!preview && reader->name() == "image") {
 			Image* image = new Image(QString());
 			if (!image->load(reader, preview)) {
 				delete image;
@@ -1547,7 +1547,8 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			} else
 				addChildFast(image);
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
+			if (!preview)
+				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
 		}
 	}

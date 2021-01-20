@@ -1780,7 +1780,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::yErrorTypeChanged, this, &CartesianPlot::dataChanged);
 		connect(curve, &XYCurve::yErrorPlusColumnChanged, this, &CartesianPlot::dataChanged);
 		connect(curve, &XYCurve::yErrorMinusColumnChanged, this, &CartesianPlot::dataChanged);
-		connect(curve, static_cast<void (XYCurve::*)(bool)>(&XYCurve::visibilityChanged),
+		connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged),
 				this, &CartesianPlot::curveVisibilityChanged);
 
 		//update the legend on changes of the name, line and symbol styles
@@ -1796,7 +1796,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::symbolsOpacityChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::symbolsBrushChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::symbolsPenChanged, this, &CartesianPlot::updateLegend);
-		connect(curve, SIGNAL(linePenChanged(QPen)), this, SIGNAL(curveLinePenChanged(QPen))); // feed forward linePenChanged, because Worksheet needs because CursorDock must be updated too
+		connect(curve, &XYCurve::linePenChanged, this, QOverload<QPen>::of(&CartesianPlot::curveLinePenChanged)); // forward to Worksheet to update CursorDock
 
 		updateLegend();
 		d->curvesXMinMaxIsDirty = true;
@@ -4407,7 +4407,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				b.style = CartesianPlot::RangeBreakStyle(str.toInt());
 
 			d->yRangeBreaks.list << b;
-		} else if (reader->name() == "textLabel") {
+		} else if (!preview && reader->name() == "textLabel") {
 			if (!titleLabelRead) {
 				//the first text label is always the title label
 				m_title->load(reader, preview);
@@ -4427,14 +4427,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					return false;
 				}
 			}
-		} else if (reader->name() == "image") {
+		} else if (!preview && reader->name() == "image") {
 			auto* image = new Image(QString());
 			if (!image->load(reader, preview)) {
 				delete image;
 				return false;
 			} else
 				addChildFast(image);
-		} else if (reader->name() == "infoElement") {
+		} else if (!preview && reader->name() == "infoElement") {
 			InfoElement* marker = new InfoElement("Marker", this);
 			if (marker->load(reader, preview)) {
 				addChildFast(marker);
@@ -4443,9 +4443,9 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete marker;
 				return false;
 			}
-		} else if (reader->name() == "plotArea")
+		} else if (!preview && reader->name() == "plotArea")
 			m_plotArea->load(reader, preview);
-		else if (reader->name() == "axis") {
+		else if (!preview && reader->name() == "axis") {
 			auto* axis = new Axis(QString());
 			if (axis->load(reader, preview))
 				addChildFast(axis);
@@ -4549,7 +4549,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				removeChild(curve);
 				return false;
 			}
-		} else if (reader->name() == "cartesianPlotLegend") {
+		} else if (!preview && reader->name() == "cartesianPlotLegend") {
 			m_legend = new CartesianPlotLegend(QString());
 			if (m_legend->load(reader, preview))
 				addChildFast(m_legend);
@@ -4557,7 +4557,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete m_legend;
 				return false;
 			}
-		} else if (reader->name() == "customPoint") {
+		} else if (!preview && reader->name() == "customPoint") {
 			auto* point = new CustomPoint(this, QString());
 			if (point->load(reader, preview))
 				addChildFast(point);
@@ -4565,7 +4565,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete point;
 				return false;
 			}
-		} else if (reader->name() == "referenceLine") {
+		} else if (!preview && reader->name() == "referenceLine") {
 			auto* line = new ReferenceLine(this, QString());
 			if (line->load(reader, preview))
 				addChildFast(line);
@@ -4590,7 +4590,8 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			}
 		} else { // unknown element
-			reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
+			if (!preview)
+				reader->raiseWarning(i18n("unknown cartesianPlot element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
 		}
 	}
