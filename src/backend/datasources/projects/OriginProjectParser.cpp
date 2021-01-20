@@ -1032,6 +1032,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		if (!layer.is3D()) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot%1", QString::number(index)));
 			worksheet->addChildFast(plot);
+
+			if (preview)
+				continue;
+
 			plot->setIsLoading(true);
 			//TODO: width, height
 
