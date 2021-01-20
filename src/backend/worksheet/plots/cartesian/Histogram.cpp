@@ -208,7 +208,7 @@ QString& Histogram::dataColumnPath() const {
 
 //line
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::LineType, lineType, lineType)
-CLASS_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
+BASIC_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, lineOpacity, lineOpacity)
 
 //symbols
@@ -216,8 +216,8 @@ BASIC_SHARED_D_READER_IMPL(Histogram, Symbol::Style, symbolsStyle, symbolsStyle)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, symbolsOpacity, symbolsOpacity)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, symbolsRotationAngle, symbolsRotationAngle)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, symbolsSize, symbolsSize)
-CLASS_SHARED_D_READER_IMPL(Histogram, QBrush, symbolsBrush, symbolsBrush)
-CLASS_SHARED_D_READER_IMPL(Histogram, QPen, symbolsPen, symbolsPen)
+BASIC_SHARED_D_READER_IMPL(Histogram, QBrush, symbolsBrush, symbolsBrush)
+BASIC_SHARED_D_READER_IMPL(Histogram, QPen, symbolsPen, symbolsPen)
 
 //values
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
@@ -229,30 +229,30 @@ BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesPosition, valuesPosition,
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesDistance, valuesDistance)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesRotationAngle, valuesRotationAngle)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesOpacity, valuesOpacity)
-CLASS_SHARED_D_READER_IMPL(Histogram, char, valuesNumericFormat, valuesNumericFormat)
+BASIC_SHARED_D_READER_IMPL(Histogram, char, valuesNumericFormat, valuesNumericFormat)
 BASIC_SHARED_D_READER_IMPL(Histogram, int, valuesPrecision, valuesPrecision)
-CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesDateTimeFormat, valuesDateTimeFormat)
-CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesPrefix, valuesPrefix)
-CLASS_SHARED_D_READER_IMPL(Histogram, QString, valuesSuffix, valuesSuffix)
-CLASS_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
-CLASS_SHARED_D_READER_IMPL(Histogram, QFont, valuesFont, valuesFont)
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, valuesDateTimeFormat, valuesDateTimeFormat)
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, valuesPrefix, valuesPrefix)
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, valuesSuffix, valuesSuffix)
+BASIC_SHARED_D_READER_IMPL(Histogram, QColor, valuesColor, valuesColor)
+BASIC_SHARED_D_READER_IMPL(Histogram, QFont, valuesFont, valuesFont)
 
 //filling
 BASIC_SHARED_D_READER_IMPL(Histogram, bool, fillingEnabled, fillingEnabled)
 BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundType, fillingType, fillingType)
 BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
 BASIC_SHARED_D_READER_IMPL(Histogram, PlotArea::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
-CLASS_SHARED_D_READER_IMPL(Histogram, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
-CLASS_SHARED_D_READER_IMPL(Histogram, QColor, fillingFirstColor, fillingFirstColor)
-CLASS_SHARED_D_READER_IMPL(Histogram, QColor, fillingSecondColor, fillingSecondColor)
-CLASS_SHARED_D_READER_IMPL(Histogram, QString, fillingFileName, fillingFileName)
+BASIC_SHARED_D_READER_IMPL(Histogram, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
+BASIC_SHARED_D_READER_IMPL(Histogram, QColor, fillingFirstColor, fillingFirstColor)
+BASIC_SHARED_D_READER_IMPL(Histogram, QColor, fillingSecondColor, fillingSecondColor)
+BASIC_SHARED_D_READER_IMPL(Histogram, QString, fillingFileName, fillingFileName)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, fillingOpacity, fillingOpacity)
 
 //error bars
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ErrorType, errorType, errorType)
 BASIC_SHARED_D_READER_IMPL(Histogram, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsCapSize, errorBarsCapSize)
-CLASS_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
+BASIC_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsOpacity, errorBarsOpacity)
 
 double Histogram::xMinimum() const {

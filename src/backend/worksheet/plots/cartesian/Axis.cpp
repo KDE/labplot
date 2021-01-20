@@ -399,7 +399,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, titleOffsetX, titleOffsetX)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, titleOffsetY, titleOffsetY)
 
-CLASS_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen)
+BASIC_SHARED_D_READER_IMPL(Axis, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, lineOpacity, lineOpacity)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::ArrowType, arrowType, arrowType)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::ArrowPosition, arrowPosition, arrowPosition)
@@ -412,7 +412,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksSpacing, majorTicksSpacing)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, majorTicksColumn, majorTicksColumn)
 QString& Axis::majorTicksColumnPath() const { return d_ptr->majorTicksColumnPath; }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
-CLASS_SHARED_D_READER_IMPL(Axis, QPen, majorTicksPen, majorTicksPen)
+BASIC_SHARED_D_READER_IMPL(Axis, QPen, majorTicksPen, majorTicksPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksOpacity, majorTicksOpacity)
 
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksDirection, minorTicksDirection, minorTicksDirection)
@@ -422,7 +422,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksSpacing, minorTicksIncrement)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, minorTicksColumn, minorTicksColumn)
 QString& Axis::minorTicksColumnPath() const { return d_ptr->minorTicksColumnPath; }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
-CLASS_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen)
+BASIC_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksOpacity, minorTicksOpacity)
 
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsFormat, labelsFormat, labelsFormat);
@@ -432,17 +432,17 @@ BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsDateTimeFormat, labelsDateTimeFo
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsPosition, labelsPosition, labelsPosition);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOffset, labelsOffset);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsRotationAngle, labelsRotationAngle);
-CLASS_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor);
-CLASS_SHARED_D_READER_IMPL(Axis, QFont, labelsFont, labelsFont);
+BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor);
+BASIC_SHARED_D_READER_IMPL(Axis, QFont, labelsFont, labelsFont);
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsBackgroundType, labelsBackgroundType, labelsBackgroundType);
-CLASS_SHARED_D_READER_IMPL(Axis, QColor, labelsBackgroundColor, labelsBackgroundColor);
-CLASS_SHARED_D_READER_IMPL(Axis, QString, labelsPrefix, labelsPrefix);
-CLASS_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix);
+BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsBackgroundColor, labelsBackgroundColor);
+BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsPrefix, labelsPrefix);
+BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsSuffix, labelsSuffix);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOpacity, labelsOpacity);
 
-CLASS_SHARED_D_READER_IMPL(Axis, QPen, majorGridPen, majorGridPen)
+BASIC_SHARED_D_READER_IMPL(Axis, QPen, majorGridPen, majorGridPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorGridOpacity, majorGridOpacity)
-CLASS_SHARED_D_READER_IMPL(Axis, QPen, minorGridPen, minorGridPen)
+BASIC_SHARED_D_READER_IMPL(Axis, QPen, minorGridPen, minorGridPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorGridOpacity, minorGridOpacity)
 
 /* ============================ setter methods and undo commands ================= */

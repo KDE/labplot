@@ -202,7 +202,7 @@ BASIC_D_READER_IMPL(Matrix, double, yEnd, yEnd)
 BASIC_D_READER_IMPL(Matrix, char, numericFormat, numericFormat)
 BASIC_D_READER_IMPL(Matrix, int, precision, precision)
 BASIC_D_READER_IMPL(Matrix, Matrix::HeaderFormat, headerFormat, headerFormat)
-CLASS_D_READER_IMPL(Matrix, QString, formula, formula)
+BASIC_D_READER_IMPL(Matrix, QString, formula, formula)
 
 void Matrix::setSuppressDataChangedSignal(bool b) {
 	if (m_model)

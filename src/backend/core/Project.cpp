@@ -183,7 +183,7 @@ Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
 
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
 BASIC_D_ACCESSOR_IMPL(Project, QString, version, Version, version)
-CLASS_D_READER_IMPL(Project, QString, author, author)
+BASIC_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
 
 STD_SETTER_CMD_IMPL_S(Project, SetAuthor, QString, author)

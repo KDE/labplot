@@ -232,17 +232,17 @@ QMenu* TextLabel::createContextMenu() {
 }
 
 /* ============================ getter methods ================= */
-CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
-CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor);
-CLASS_SHARED_D_READER_IMPL(TextLabel, QColor, backgroundColor, backgroundColor);
-CLASS_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont);
-CLASS_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
-CLASS_SHARED_D_READER_IMPL(TextLabel, QPointF, positionLogical, positionLogical);
+BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
+BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor);
+BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, backgroundColor, backgroundColor);
+BASIC_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont);
+BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
+BASIC_SHARED_D_READER_IMPL(TextLabel, QPointF, positionLogical, positionLogical);
 BASIC_SHARED_D_READER_IMPL(TextLabel, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, rotationAngle, rotationAngle);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::BorderShape, borderShape, borderShape)
-CLASS_SHARED_D_READER_IMPL(TextLabel, QPen, borderPen, borderPen)
+BASIC_SHARED_D_READER_IMPL(TextLabel, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 BASIC_SHARED_D_READER_IMPL(TextLabel, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 

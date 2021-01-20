@@ -855,14 +855,14 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeFirstValues, rangeFirstValue
 //BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleY, autoScaleY)
 
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, xRangeBreakingEnabled, xRangeBreakingEnabled)
-CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, xRangeBreaks, xRangeBreaks)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, xRangeBreaks, xRangeBreaks)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, yRangeBreakingEnabled, yRangeBreakingEnabled)
-CLASS_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, yRangeBreaks, yRangeBreaks)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, yRangeBreaks, yRangeBreaks)
 
-CLASS_SHARED_D_READER_IMPL(CartesianPlot, QPen, cursorPen, cursorPen);
-CLASS_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor0Enable, cursor0Enable);
-CLASS_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor1Enable, cursor1Enable);
-CLASS_SHARED_D_READER_IMPL(CartesianPlot, QString, theme, theme)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, QPen, cursorPen, cursorPen);
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor0Enable, cursor0Enable);
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor1Enable, cursor1Enable);
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, QString, theme, theme)
 
 /*!
 	returns the actual bounding rectangular of the plot area showing data (plot's rectangular minus padding)
@@ -1122,11 +1122,11 @@ class CartesianPlotSetYRangeIndexCmd: public StandardQVectorSetterCmd<CartesianP
 		virtual void finalize() override { m_target->retransformScales(); emit m_target->q->yRangeChanged((m_target->*m_field).at(m_index)); }
 };
 
-bool CartesianPlot::autoScaleX() {
+bool CartesianPlot::autoScaleX() const {
 	Q_D(const CartesianPlot);
 	return d->xRanges.at(defaultCoordinateSystem()->xIndex()).autoScale();
 }
-bool CartesianPlot::autoScaleY() {
+bool CartesianPlot::autoScaleY() const {
 	Q_D(const CartesianPlot);
 	return d->yRanges.at(defaultCoordinateSystem()->yIndex()).autoScale();
 }
@@ -2137,14 +2137,7 @@ void CartesianPlot::setMouseMode(MouseMode mouseMode) {
 	emit mouseModeChanged(mouseMode);
 }
 
-void CartesianPlot::setLocked(bool locked) {
-	Q_D(CartesianPlot);
-	d->locked = locked;
-}
-bool CartesianPlot::isLocked() const {
-	Q_D(const CartesianPlot);
-	return d->locked;
-}
+BASIC_SHARED_D_ACCESSOR_IMPL(CartesianPlot, bool, isLocked, Locked, locked)
 
 // auto scale
 

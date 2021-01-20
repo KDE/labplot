@@ -99,6 +99,9 @@ numberLocale.setNumberOptions(numberOptions);
 
 //////////////////////// Accessor ///////////////////////////////
 
+// type: BASIC (by value), CLASS (by reference)
+// D: private var, SHARED: Q_D
+// DECL and IMPL
 #define BASIC_ACCESSOR(type, var, method, Method) \
 	type method() const { return var; }; \
 	void set ## Method(const type value) { var = value; }
@@ -109,23 +112,21 @@ numberLocale.setNumberOptions(numberOptions);
 #define BASIC_D_ACCESSOR_DECL(type, method, Method) \
 	type method() const; \
 	void set ## Method(const type value);
+#define CLASS_D_ACCESSOR_DECL(type, method, Method) \
+	type method() const; \
+	void set ## Method(const type & value);
 
-#define BASIC_D_ACCESSOR_IMPL(classname, type, method, Method, var) \
-	void classname::set ## Method(const type value) \
-	{ \
-		d->var = value; \
-	} \
-	type classname::method() const \
-	{ \
-		return d->var; \
-	}
+#define BASIC_D_INDEX_ACCESSOR_DECL(type, method, Method) \
+	type method(int index) const; \
+	void set ## Method(int index, const type value);
 
+// replaces CLASS_D_READER_IMPL
 #define BASIC_D_READER_IMPL(classname, type, method, var) \
 	type classname::method() const \
 	{ \
 		return d->var; \
 	}
-
+// replaces CLASS_SHARED_D_READER_IMPL
 #define BASIC_SHARED_D_READER_IMPL(classname, type, method, var) \
 	type classname::method() const \
 	{ \
@@ -133,32 +134,36 @@ numberLocale.setNumberOptions(numberOptions);
 		return d->var; \
 	}
 
-#define CLASS_D_ACCESSOR_DECL(type, method, Method) \
-	type method() const; \
-	void set ## Method(const type & value);
+#define BASIC_D_ACCESSOR_IMPL(classname, type, method, Method, var) \
+	void classname::set ## Method(const type value) \
+	{ \
+		d->var = value; \
+	} \
+	BASIC_D_READER_IMPL(classname, type, method, var)
 
 #define CLASS_D_ACCESSOR_IMPL(classname, type, method, Method, var) \
 	void classname::set ## Method(const type & value) \
 	{ \
 		d->var = value; \
 	} \
-	type classname::method() const \
-	{ \
-		return d->var; \
-	}
+	BASIC_D_READER_IMPL(classname, type, method, var)
 
-#define CLASS_D_READER_IMPL(classname, type, method, var) \
-	type classname::method() const \
+#define BASIC_SHARED_D_ACCESSOR_IMPL(classname, type, method, Method, var) \
+	void classname::set ## Method(const type value) \
 	{ \
-		return d->var; \
-	}
+		Q_D(classname); \
+		d->var = value; \
+	} \
+	BASIC_SHARED_D_READER_IMPL(classname, type, method, var)
 
-#define CLASS_SHARED_D_READER_IMPL(classname, type, method, var) \
-	type classname::method() const \
+#define CLASS_SHARED_D_ACCESSOR_IMPL(classname, type, method, Method, var) \
+	void classname::set ## Method(const type & value) \
 	{ \
-		Q_D(const classname); \
-		return d->var; \
-	}
+		Q_D(classname); \
+		d->var = value; \
+	} \
+	BASIC_SHARED_D_READER_IMPL(classname, type, method, var)
+
 
 #define POINTER_D_ACCESSOR_DECL(type, method, Method) \
 	type *method() const; \
@@ -281,8 +286,8 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 		virtual void finalize() { m_target->finalize_method(); } \
 };
 
-
 //////////////////////// XML - serialization/deserialization /////
+//TODO: do we really need all these tabs?
 
 //QColor
 #define WRITE_QCOLOR(color) 												\

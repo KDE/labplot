@@ -188,18 +188,18 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, fillingEnabled, fillingEnabled)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, PlotArea::BackgroundType, fillingType, fillingType)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, PlotArea::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
-CLASS_SHARED_D_READER_IMPL(BoxPlot, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
-CLASS_SHARED_D_READER_IMPL(BoxPlot, QColor, fillingFirstColor, fillingFirstColor)
-CLASS_SHARED_D_READER_IMPL(BoxPlot, QColor, fillingSecondColor, fillingSecondColor)
-CLASS_SHARED_D_READER_IMPL(BoxPlot, QString, fillingFileName, fillingFileName)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QColor, fillingFirstColor, fillingFirstColor)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QColor, fillingSecondColor, fillingSecondColor)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QString, fillingFileName, fillingFileName)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, fillingOpacity, fillingOpacity)
 
 //border
-CLASS_SHARED_D_READER_IMPL(BoxPlot, QPen, borderPen, borderPen)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, borderOpacity, borderOpacity)
 
 //whiskers
-CLASS_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersOpacity, whiskersOpacity)
 
 QString& BoxPlot::dataColumnPath() const {

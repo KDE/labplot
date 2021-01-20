@@ -521,9 +521,9 @@ BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundType, backgroundType, backgro
 BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
 BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
 BASIC_D_READER_IMPL(Worksheet, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle)
-CLASS_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColor)
-CLASS_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor)
-CLASS_D_READER_IMPL(Worksheet, QString, backgroundFileName, backgroundFileName)
+BASIC_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColor)
+BASIC_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor)
+BASIC_D_READER_IMPL(Worksheet, QString, backgroundFileName, backgroundFileName)
 BASIC_D_READER_IMPL(Worksheet, double, backgroundOpacity, backgroundOpacity)
 
 /* =============================== getter methods for layout options ====================================== */
@@ -537,7 +537,7 @@ BASIC_D_READER_IMPL(Worksheet, double, layoutVerticalSpacing, layoutVerticalSpac
 BASIC_D_READER_IMPL(Worksheet, int, layoutRowCount, layoutRowCount)
 BASIC_D_READER_IMPL(Worksheet, int, layoutColumnCount, layoutColumnCount)
 
-CLASS_D_READER_IMPL(Worksheet, QString, theme, theme)
+BASIC_D_READER_IMPL(Worksheet, QString, theme, theme)
 
 /* ============================ setter methods and undo commands for general options  ===================== */
 void Worksheet::setUseViewSize(bool useViewSize) {

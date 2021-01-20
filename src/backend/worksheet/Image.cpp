@@ -149,17 +149,17 @@ QMenu* Image::createContextMenu() {
 }
 
 /* ============================ getter methods ================= */
-CLASS_SHARED_D_READER_IMPL(Image, QString, fileName, fileName)
+BASIC_SHARED_D_READER_IMPL(Image, QString, fileName, fileName)
 BASIC_SHARED_D_READER_IMPL(Image, qreal, opacity, opacity)
 BASIC_SHARED_D_READER_IMPL(Image, int, width, width)
 BASIC_SHARED_D_READER_IMPL(Image, int, height, height)
 BASIC_SHARED_D_READER_IMPL(Image, bool, keepRatio, keepRatio)
-CLASS_SHARED_D_READER_IMPL(Image, WorksheetElement::PositionWrapper, position, position)
+BASIC_SHARED_D_READER_IMPL(Image, WorksheetElement::PositionWrapper, position, position)
 BASIC_SHARED_D_READER_IMPL(Image, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment)
 BASIC_SHARED_D_READER_IMPL(Image, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment)
 BASIC_SHARED_D_READER_IMPL(Image, qreal, rotationAngle, rotationAngle)
 
-CLASS_SHARED_D_READER_IMPL(Image, QPen, borderPen, borderPen)
+BASIC_SHARED_D_READER_IMPL(Image, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(Image, qreal, borderOpacity, borderOpacity)
 
 /* ============================ setter methods and undo commands ================= */

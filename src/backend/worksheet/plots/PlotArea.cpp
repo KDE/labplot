@@ -132,18 +132,18 @@ void PlotArea::retransform() {
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(PlotArea, bool, clippingEnabled, clippingEnabled())
-CLASS_SHARED_D_READER_IMPL(PlotArea, QRectF, rect, rect)
+BASIC_SHARED_D_READER_IMPL(PlotArea, QRectF, rect, rect)
 
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundType, backgroundType, backgroundType)
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
 BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
-CLASS_SHARED_D_READER_IMPL(PlotArea, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle)
-CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundFirstColor, backgroundFirstColor)
-CLASS_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundSecondColor, backgroundSecondColor)
-CLASS_SHARED_D_READER_IMPL(PlotArea, QString, backgroundFileName, backgroundFileName)
+BASIC_SHARED_D_READER_IMPL(PlotArea, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle)
+BASIC_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundFirstColor, backgroundFirstColor)
+BASIC_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundSecondColor, backgroundSecondColor)
+BASIC_SHARED_D_READER_IMPL(PlotArea, QString, backgroundFileName, backgroundFileName)
 BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, backgroundOpacity, backgroundOpacity)
 
-CLASS_SHARED_D_READER_IMPL(PlotArea, QPen, borderPen, borderPen)
+BASIC_SHARED_D_READER_IMPL(PlotArea, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderCornerRadius, borderCornerRadius)
 BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderOpacity, borderOpacity)
 

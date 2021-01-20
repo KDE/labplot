@@ -226,9 +226,9 @@ DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
 }
 
 /* =============================== getter methods for background options ================================= */
-CLASS_D_READER_IMPL(DatapickerImage, QString, fileName, fileName)
-CLASS_D_READER_IMPL(DatapickerImage, DatapickerImage::ReferencePoints, axisPoints, axisPoints)
-CLASS_D_READER_IMPL(DatapickerImage, DatapickerImage::EditorSettings, settings, settings)
+BASIC_D_READER_IMPL(DatapickerImage, QString, fileName, fileName)
+BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::ReferencePoints, axisPoints, axisPoints)
+BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::EditorSettings, settings, settings)
 BASIC_D_READER_IMPL(DatapickerImage, float, rotationAngle, rotationAngle)
 BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::PointsType, plotPointsType, plotPointsType)
 BASIC_D_READER_IMPL(DatapickerImage, int, pointSeparation, pointSeparation)
@@ -237,8 +237,8 @@ BASIC_D_READER_IMPL(DatapickerImage, Symbol::Style, pointStyle, pointStyle)
 BASIC_D_READER_IMPL(DatapickerImage, qreal, pointOpacity, pointOpacity)
 BASIC_D_READER_IMPL(DatapickerImage, qreal, pointRotationAngle, pointRotationAngle)
 BASIC_D_READER_IMPL(DatapickerImage, qreal, pointSize, pointSize)
-CLASS_D_READER_IMPL(DatapickerImage, QBrush, pointBrush, pointBrush)
-CLASS_D_READER_IMPL(DatapickerImage, QPen, pointPen, pointPen)
+BASIC_D_READER_IMPL(DatapickerImage, QBrush, pointBrush, pointBrush)
+BASIC_D_READER_IMPL(DatapickerImage, QPen, pointPen, pointPen)
 BASIC_D_READER_IMPL(DatapickerImage, bool, pointVisibility, pointVisibility)
 /* ============================ setter methods and undo commands  for background options  ================= */
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetFileName, QString, fileName, updateFileName)

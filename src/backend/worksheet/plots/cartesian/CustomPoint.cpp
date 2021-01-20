@@ -133,15 +133,15 @@ void CustomPoint::handleResize(double horizontalRatio, double verticalRatio, boo
 }
 
 /* ============================ getter methods ================= */
-CLASS_SHARED_D_READER_IMPL(CustomPoint, QPointF, position, position)
+BASIC_SHARED_D_READER_IMPL(CustomPoint, QPointF, position, position)
 
 //symbols
 BASIC_SHARED_D_READER_IMPL(CustomPoint, Symbol::Style, symbolStyle, symbolStyle)
 BASIC_SHARED_D_READER_IMPL(CustomPoint, qreal, symbolOpacity, symbolOpacity)
 BASIC_SHARED_D_READER_IMPL(CustomPoint, qreal, symbolRotationAngle, symbolRotationAngle)
 BASIC_SHARED_D_READER_IMPL(CustomPoint, qreal, symbolSize, symbolSize)
-CLASS_SHARED_D_READER_IMPL(CustomPoint, QBrush, symbolBrush, symbolBrush)
-CLASS_SHARED_D_READER_IMPL(CustomPoint, QPen, symbolPen, symbolPen)
+BASIC_SHARED_D_READER_IMPL(CustomPoint, QBrush, symbolBrush, symbolBrush)
+BASIC_SHARED_D_READER_IMPL(CustomPoint, QPen, symbolPen, symbolPen)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetPosition, QPointF, position, retransform)

@@ -183,9 +183,9 @@ void ReferenceLine::handleResize(double horizontalRatio, double verticalRatio, b
 }
 
 /* ============================ getter methods ================= */
-CLASS_SHARED_D_READER_IMPL(ReferenceLine, ReferenceLine::Orientation, orientation, orientation)
+BASIC_SHARED_D_READER_IMPL(ReferenceLine, ReferenceLine::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(ReferenceLine, double, position, position)
-CLASS_SHARED_D_READER_IMPL(ReferenceLine, QPen, pen, pen)
+BASIC_SHARED_D_READER_IMPL(ReferenceLine, QPen, pen, pen)
 BASIC_SHARED_D_READER_IMPL(ReferenceLine, qreal, opacity, opacity)
 
 /* ============================ setter methods and undo commands ================= */

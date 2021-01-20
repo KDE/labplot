@@ -726,10 +726,10 @@ void InfoElement::handleResize(double horizontalRatio, double verticalRatio, boo
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(InfoElement, double, position, position);
 BASIC_SHARED_D_READER_IMPL(InfoElement, int, gluePointIndex, gluePointIndex);
-CLASS_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
-CLASS_SHARED_D_READER_IMPL(InfoElement, QPen, verticalLinePen, verticalLinePen)
+BASIC_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
+BASIC_SHARED_D_READER_IMPL(InfoElement, QPen, verticalLinePen, verticalLinePen)
 BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, verticalLineOpacity, verticalLineOpacity)
-CLASS_SHARED_D_READER_IMPL(InfoElement, QPen, connectionLinePen, connectionLinePen)
+BASIC_SHARED_D_READER_IMPL(InfoElement, QPen, connectionLinePen, connectionLinePen)
 BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, connectionLineOpacity, connectionLineOpacity)
 
 /* ============================ setter methods ================= */

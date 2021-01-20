@@ -101,9 +101,8 @@ public:
 	void setRect(const QRectF&) override;
 	QRectF dataRect() const;
 	void setMouseMode(MouseMode);
-	void setLocked(bool);
-	bool isLocked() const;
 	MouseMode mouseMode() const;
+	BASIC_D_ACCESSOR_DECL(bool, isLocked, Locked)
 	void navigate(NavigationOperation);
 	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
@@ -137,23 +136,19 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
-	bool autoScaleX();	// x axis of default coordinate system auto scaled?
-	void setAutoScaleX(bool);	// auto scale x axis of default coordinate system
+	BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)	// auto scale x range of default csystem
 	void setAutoScaleX(int index, bool);	// auto scale x axis index
-	bool autoScaleY();	// y axis of default coordinate system auto scaled?
-	void setAutoScaleY(bool);	// auto scale y axis of default coordinate system
+	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)	// auto scale y range of default csystem
 	void setAutoScaleY(int index, bool);	// auto scale y axis index
 
 	int xRangeCount() const;
 	int yRangeCount() const;
 	const Range<double>& xRange() const;		// get x range of default plot range
 	const Range<double>& yRange() const;		// get y range of default plot range
-	Range<double> xRange(int index) const;		// get x range of plot range index
-	Range<double> yRange(int index) const;		// get y range of plot range index
 	void setXRange(Range<double>);		// set x range of default plot range
 	void setYRange(Range<double>);		// set y range of default plot range
-	void setXRange(int index, Range<double>);	// set x range index
-	void setYRange(int index, Range<double>);	// set y range index
+	BASIC_D_INDEX_ACCESSOR_DECL(Range<double>, xRange, XRange) // x range index
+	BASIC_D_INDEX_ACCESSOR_DECL(Range<double>, yRange, YRange) // y range index
 	void addXRange();				// add new x range
 	void addYRange();				// add new y range
 	void addXRange(Range<double>);			// add x range
@@ -165,22 +160,14 @@ public:
 	void setXMax(int index, double value);	// set x max of x range index
 	void setYMin(int index, double value);	// set y min of y range index
 	void setYMax(int index, double value);	// set y max of y range index
-	RangeT::Format xRangeFormat() const;		// get x range format of default plot range
-	RangeT::Format yRangeFormat() const;		// get y range format of default plot range
-	RangeT::Format xRangeFormat(int index) const;		// get format of x range index
-	RangeT::Format yRangeFormat(int index) const;		// get format of y range index
-	void setXRangeFormat(RangeT::Format);				// set x range format of default plot range
-	void setYRangeFormat(RangeT::Format);				// set y range format of default plot range
-	void setXRangeFormat(int index, RangeT::Format);	// set format of x range index
-	void setYRangeFormat(int index, RangeT::Format);	// set format of y range index
-	RangeT::Scale xRangeScale() const;		// get x range scale of default plot range
-	RangeT::Scale yRangeScale() const;		// get y range scale of default plot range
-	RangeT::Scale xRangeScale(int index) const;		// get range scale of x range index
-	RangeT::Scale yRangeScale(int index) const;		// get range scale of y range index
-	void setXRangeScale(RangeT::Scale);	// set x range scale of default plot range
-	void setXRangeScale(int index, RangeT::Scale);	// set scale of x range index
-	void setYRangeScale(RangeT::Scale);	// set y range scale of default plot range
-	void setYRangeScale(int index, RangeT::Scale);	// set scale of y range index
+	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat)	// x range format of default cSystem
+	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // range format of x range index
+	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat)	// y range format of default cSystem
+	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat) // range format of x range index
+	BASIC_D_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale)	// x range scale of default cSystem
+	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Scale, xRangeScale, XRangeScale) // range scale of x range index
+	BASIC_D_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale)	// y range scale of default cSystem
+	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Scale, yRangeScale, YRangeScale) // range scale of x range index
 
 	BASIC_D_ACCESSOR_DECL(bool, xRangeBreakingEnabled, XRangeBreakingEnabled)
 	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)

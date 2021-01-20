@@ -250,20 +250,20 @@ void XYCurve::setHover(bool on) {
 //data source
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yColumn, yColumn)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, xColumnPath, xColumnPath)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, yColumnPath, yColumnPath)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, xColumnPath, xColumnPath)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, yColumnPath, yColumnPath)
 
 //line
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::LineType, lineType, lineType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, lineSkipGaps, lineSkipGaps)
 BASIC_SHARED_D_READER_IMPL(XYCurve, bool, lineIncreasingXOnly, lineIncreasingXOnly)
 BASIC_SHARED_D_READER_IMPL(XYCurve, int, lineInterpolationPointsCount, lineInterpolationPointsCount)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, linePen, linePen)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, lineOpacity, lineOpacity)
 
 //droplines
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::DropLineType, dropLineType, dropLineType)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, dropLinePen, dropLinePen)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, dropLinePen, dropLinePen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, dropLineOpacity, dropLineOpacity)
 
 //symbols
@@ -271,35 +271,35 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, Symbol::Style, symbolsStyle, symbolsStyle)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsOpacity, symbolsOpacity)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsRotationAngle, symbolsRotationAngle)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsSize, symbolsSize)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QBrush, symbolsBrush, symbolsBrush)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QBrush, symbolsBrush, symbolsBrush)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
 
 //values
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesType, valuesType, valuesType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn *, valuesColumn, valuesColumn)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesColumnPath, valuesColumnPath)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, valuesColumnPath, valuesColumnPath)
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesPosition, valuesPosition, valuesPosition)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesDistance, valuesDistance)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesRotationAngle, valuesRotationAngle)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, valuesOpacity, valuesOpacity)
-CLASS_SHARED_D_READER_IMPL(XYCurve, char, valuesNumericFormat, valuesNumericFormat)
+BASIC_SHARED_D_READER_IMPL(XYCurve, char, valuesNumericFormat, valuesNumericFormat)
 BASIC_SHARED_D_READER_IMPL(XYCurve, int, valuesPrecision, valuesPrecision)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesDateTimeFormat, valuesDateTimeFormat)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesPrefix, valuesPrefix)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, valuesSuffix, valuesSuffix)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, valuesColor, valuesColor)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, valuesDateTimeFormat, valuesDateTimeFormat)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, valuesPrefix, valuesPrefix)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, valuesSuffix, valuesSuffix)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QColor, valuesColor, valuesColor)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 
 //filling
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::FillingPosition, fillingPosition, fillingPosition)
 BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundType, fillingType, fillingType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
 BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
-CLASS_SHARED_D_READER_IMPL(XYCurve, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, fillingFirstColor, fillingFirstColor)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QColor, fillingSecondColor, fillingSecondColor)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, fillingFileName, fillingFileName)
+BASIC_SHARED_D_READER_IMPL(XYCurve, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QColor, fillingFirstColor, fillingFirstColor)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QColor, fillingSecondColor, fillingSecondColor)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, fillingFileName, fillingFileName)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, fillingOpacity, fillingOpacity)
 
 //error bars
@@ -310,14 +310,14 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorType, yErrorType, yErrorType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorPlusColumn, yErrorPlusColumn)
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, yErrorMinusColumn, yErrorMinusColumn)
 
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, xErrorPlusColumnPath, xErrorPlusColumnPath)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, xErrorMinusColumnPath, xErrorMinusColumnPath)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, yErrorPlusColumnPath, yErrorPlusColumnPath)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QString, yErrorMinusColumnPath, yErrorMinusColumnPath)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, xErrorPlusColumnPath, xErrorPlusColumnPath)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, xErrorMinusColumnPath, xErrorMinusColumnPath)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, yErrorPlusColumnPath, yErrorPlusColumnPath)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QString, yErrorMinusColumnPath, yErrorMinusColumnPath)
 
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, errorBarsType)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsCapSize, errorBarsCapSize)
-CLASS_SHARED_D_READER_IMPL(XYCurve, QPen, errorBarsPen, errorBarsPen)
+BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
 
 /*!
