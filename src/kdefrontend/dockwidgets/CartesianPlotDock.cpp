@@ -1010,7 +1010,6 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 }
 void CartesianPlotDock::yMaxChanged(const QString& value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
-	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
 
@@ -1035,10 +1034,10 @@ void CartesianPlotDock::xRangeChanged(const Range<double>& range) {
 		return;
 
 	// selected x range
-	const int xRangeIndex{ sender()->property("row").toInt() };
-	DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
+	const int index{ sender()->property("row").toInt() };
+	DEBUG( Q_FUNC_INFO << ", x range index: " << index )
 	for (auto* plot : m_plotList)
-			plot->setXRange(xRangeIndex, range);
+			plot->setXRange(index, range);
 	updatePlotRangeList();
 }
 void CartesianPlotDock::yRangeChanged(const Range<double>& range) {
@@ -1046,10 +1045,10 @@ void CartesianPlotDock::yRangeChanged(const Range<double>& range) {
 		return;
 
 	// selected y range
-	const int yRangeIndex{ sender()->property("row").toInt() };
-	DEBUG( Q_FUNC_INFO << ", y range index: " << yRangeIndex )
+	const int index{ sender()->property("row").toInt() };
+	DEBUG( Q_FUNC_INFO << ", y range index: " << index )
 	for (auto* plot : m_plotList)
-			plot->setYRange(yRangeIndex, range);
+			plot->setYRange(index, range);
 	updatePlotRangeList();
 }
 
@@ -1059,10 +1058,10 @@ void CartesianPlotDock::xMinDateTimeChanged(const QDateTime& dateTime) {
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	// selected x range
-	const int xRangeIndex{ sender()->property("row").toInt() };
-	DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
+	const int index{ sender()->property("row").toInt() };
+	DEBUG( Q_FUNC_INFO << ", x range index: " << index )
 	for (auto* plot : m_plotList)
-		plot->setXMin(xRangeIndex, value);
+		plot->setXMin(index, value);
 	updatePlotRangeList();
 }
 void CartesianPlotDock::yMinDateTimeChanged(const QDateTime& dateTime) {
@@ -1071,10 +1070,10 @@ void CartesianPlotDock::yMinDateTimeChanged(const QDateTime& dateTime) {
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	// selected y range
-	const int yRangeIndex{ sender()->property("row").toInt() };
-	DEBUG( Q_FUNC_INFO << ", y range index: " << yRangeIndex )
+	const int index{ sender()->property("row").toInt() };
+	DEBUG( Q_FUNC_INFO << ", y range index: " << index )
 	for (auto* plot : m_plotList)
-		plot->setYMin(yRangeIndex, value);
+		plot->setYMin(index, value);
 	updatePlotRangeList();
 }
 
@@ -1084,10 +1083,10 @@ void CartesianPlotDock::xMaxDateTimeChanged(const QDateTime& dateTime) {
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	// selected x range
-	const int xRangeIndex{ sender()->property("row").toInt() };
-	DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
+	const int index{ sender()->property("row").toInt() };
+	DEBUG( Q_FUNC_INFO << ", x range index: " << index )
 	for (auto* plot : m_plotList)
-		plot->setXMax(xRangeIndex, value);
+		plot->setXMax(index, value);
 	updatePlotRangeList();
 }
 void CartesianPlotDock::yMaxDateTimeChanged(const QDateTime& dateTime) {
@@ -1096,10 +1095,10 @@ void CartesianPlotDock::yMaxDateTimeChanged(const QDateTime& dateTime) {
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	// selected y range
-	const int yRangeIndex{ sender()->property("row").toInt() };
-	DEBUG( Q_FUNC_INFO << ", y range index: " << yRangeIndex )
+	const int index{ sender()->property("row").toInt() };
+	DEBUG( Q_FUNC_INFO << ", y range index: " << index )
 	for (auto* plot : m_plotList)
-		plot->setYMax(yRangeIndex, value);
+		plot->setYMax(index, value);
 	updatePlotRangeList();
 }
 
@@ -2043,14 +2042,20 @@ void CartesianPlotDock::plotRangeLastValuesChanged(int value) {
 }
 
 // x & y ranges
-void CartesianPlotDock::plotXAutoScaleChanged(bool value) {
+void CartesianPlotDock::plotXAutoScaleChanged(bool checked) {
+	DEBUG(Q_FUNC_INFO << ", checked = " << checked)
 	m_initializing = true;
-	//TODO: ui.chkAutoScaleX->setChecked(value);
+	//OLD: ui.chkAutoScaleX->setChecked(value);
+	const int index{ m_plot->defaultCoordinateSystem()->xIndex() };
+	qobject_cast<QCheckBox*>(ui.twXRanges->cellWidget(index, 0))->setChecked(checked);
 	m_initializing = false;
 }
-void CartesianPlotDock::plotYAutoScaleChanged(bool value) {
+void CartesianPlotDock::plotYAutoScaleChanged(bool checked) {
+	DEBUG(Q_FUNC_INFO << ", checked = " << checked)
 	m_initializing = true;
-	//TODO: ui.chkAutoScaleY->setChecked(value);
+	//OLD: ui.chkAutoScaleY->setChecked(value);
+	const int index{ m_plot->defaultCoordinateSystem()->yIndex() };
+	qobject_cast<QCheckBox*>(ui.twYRanges->cellWidget(index, 0))->setChecked(checked);
 	m_initializing = false;
 }
 
@@ -2060,11 +2065,11 @@ void CartesianPlotDock::plotXMinChanged(double value) {
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
-	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(xIndex, 2));
+	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
+	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(index, 2));
 	if (le)	// Numeric
 		le->setText( numberLocale.toString(value) );
-	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(xIndex, 2));
+	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(index, 2));
 	if (dte) // DateTime
 		dte->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 }
@@ -2074,11 +2079,11 @@ void CartesianPlotDock::plotYMinChanged(double value) {
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	const int yIndex{ m_plot ? m_plot->defaultCoordinateSystem()->yIndex() : 0 };
-	auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(yIndex, 2));
+	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->yIndex() : 0 };
+	auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(index, 2));
 	if (le)	// Numeric
 		le->setText( numberLocale.toString(value) );
-	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(yIndex, 2));
+	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(index, 2));
 	if (dte) // DateTime
 		dte->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 }
@@ -2089,11 +2094,11 @@ void CartesianPlotDock::plotXMaxChanged(double value) {
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
-	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(xIndex, 3));
+	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
+	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(index, 3));
 	if (le)	// Numeric
 		le->setText(numberLocale.toString(value));
-	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(xIndex, 3));
+	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(index, 3));
 	if (dte)	// DateTime
 		dte->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 }
@@ -2103,11 +2108,11 @@ void CartesianPlotDock::plotYMaxChanged(double value) {
 		return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	const int yIndex{ m_plot ? m_plot->defaultCoordinateSystem()->yIndex() : 0 };
-	auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(yIndex, 3));
+	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->yIndex() : 0 };
+	auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(index, 3));
 	if (le)	// Numeric
 		le->setText(numberLocale.toString(value));
-	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(yIndex, 3));
+	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(index, 3));
 	if (dte)	// DateTime
 		dte->setDateTime( QDateTime::fromMSecsSinceEpoch(value) );
 }
@@ -2119,17 +2124,17 @@ void CartesianPlotDock::plotXRangeChanged(Range<double> range) {
 
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
-	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(xIndex, 2));
+	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
+	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(index, 2));
 	if (le) {	// Numeric
 		le->setText( numberLocale.toString(range.start()) );
-		le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(xIndex, 3));
+		le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(index, 3));
 		le->setText( numberLocale.toString(range.end()) );
 	}
-	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(xIndex, 2));
+	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(index, 2));
 	if (dte) {	// DateTime
 		dte->setDateTime( QDateTime::fromMSecsSinceEpoch(range.start()) );
-		dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(xIndex, 3));
+		dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(index, 3));
 		dte->setDateTime( QDateTime::fromMSecsSinceEpoch(range.end()) );
 	}
 }
@@ -2140,17 +2145,17 @@ void CartesianPlotDock::plotYRangeChanged(Range<double> range) {
 
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
-	const int yIndex{ m_plot ? m_plot->defaultCoordinateSystem()->yIndex() : 0 };
-	auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(yIndex, 2));
+	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->yIndex() : 0 };
+	auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(index, 2));
 	if (le) {	// Numeric
 		le->setText( numberLocale.toString(range.start()) );
-		le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(yIndex, 3));
+		le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(index, 3));
 		le->setText( numberLocale.toString(range.end()) );
 	}
-	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(yIndex, 2));
+	auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(index, 2));
 	if (dte) {	// DateTime
 		dte->setDateTime( QDateTime::fromMSecsSinceEpoch(range.start()) );
-		dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(yIndex, 3));
+		dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(index, 3));
 		dte->setDateTime( QDateTime::fromMSecsSinceEpoch(range.end()) );
 	}
 }
@@ -2158,28 +2163,28 @@ void CartesianPlotDock::plotYRangeChanged(Range<double> range) {
 void CartesianPlotDock::plotXScaleChanged(RangeT::Scale scale) {
 	DEBUG(Q_FUNC_INFO << ", scale = " << (int)scale)
 	m_initializing = true;
-	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
-	qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(xIndex, 4))->setCurrentIndex(static_cast<int>(scale));
+	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
+	qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(index, 4))->setCurrentIndex(static_cast<int>(scale));
 	m_initializing = false;
 }
 void CartesianPlotDock::plotYScaleChanged(RangeT::Scale scale) {
 	m_initializing = true;
-	const int yIndex{ m_plot ? m_plot->defaultCoordinateSystem()->yIndex() : 0 };
-	qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(yIndex, 4))->setCurrentIndex(static_cast<int>(scale));
+	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->yIndex() : 0 };
+	qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(index, 4))->setCurrentIndex(static_cast<int>(scale));
 	m_initializing = false;
 }
 
 void CartesianPlotDock::plotXRangeFormatChanged(RangeT::Format format) {
 	DEBUG(Q_FUNC_INFO << ", format = " << static_cast<int>(format))
 	m_initializing = true;
-	const int xIndex{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
-	qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(xIndex, 1))->setCurrentIndex(static_cast<int>(format));
+	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
+	qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(index, 1))->setCurrentIndex(static_cast<int>(format));
 	m_initializing = false;
 }
 void CartesianPlotDock::plotYRangeFormatChanged(RangeT::Format format) {
 	m_initializing = true;
-	const int yIndex{ m_plot ? m_plot->defaultCoordinateSystem()->yIndex() : 0 };
-	qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(yIndex, 1))->setCurrentIndex(static_cast<int>(format));
+	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->yIndex() : 0 };
+	qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(index, 1))->setCurrentIndex(static_cast<int>(format));
 	m_initializing = false;
 }
 
@@ -2188,6 +2193,7 @@ void CartesianPlotDock::defaultPlotRangeChanged() {
 	const int index{ m_bgDefaultPlotRange->checkedId() };
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	m_plot->setDefaultCoordinateSystemIndex(index);
+	//TODO m_plot->dataChanged();	// update plot
 }
 
 //range breaks

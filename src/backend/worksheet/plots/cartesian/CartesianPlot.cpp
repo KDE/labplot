@@ -1932,15 +1932,15 @@ void CartesianPlot::updateLegend() {
 		m_legend->retransform();
 }
 
-bool CartesianPlot::autoScale() {
+bool CartesianPlot::autoScale(bool fullRange) {
 	bool updated{ false };
 
 	if (autoScaleX() && autoScaleY())
 		updated = scaleAuto();
 	else if (autoScaleX())
-		updated = scaleAutoX();
+		updated = scaleAutoX(fullRange);
 	else if (autoScaleY())
-		updated = scaleAutoY();
+		updated = scaleAutoY(fullRange);
 
 	return updated;
 }
@@ -1956,7 +1956,7 @@ void CartesianPlot::dataChanged() {
 	Q_D(CartesianPlot);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
-	const bool updated{ autoScale() };
+	const bool updated{ autoScale(true) };
 
 	if (!updated || !QObject::sender()) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
@@ -1987,6 +1987,7 @@ void CartesianPlot::dataChanged() {
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::xDataChanged() {
+	DEBUG(Q_FUNC_INFO)
 	if (project() && project()->isLoading())
 		return;
 
@@ -3214,6 +3215,7 @@ void CartesianPlotPrivate::updateDataRect() {
 }
 
 void CartesianPlotPrivate::rangeChanged() {
+	DEBUG(Q_FUNC_INFO)
 	curvesXMinMaxIsDirty = true;
 	curvesYMinMaxIsDirty = true;
 	if (autoScaleX() && autoScaleY())

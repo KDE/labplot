@@ -334,7 +334,7 @@ public slots:
 
 	void cursor();
 
-	bool autoScale();
+	bool autoScale(bool fullRange = true);
 	void dataChanged();
 	void curveLinePenChanged(QPen);
 
