@@ -33,6 +33,8 @@
 #include "backend/core/Folder.h"
 #include "backend/lib/macros.h"
 
+class AbstractColumn;
+class XYCurve;
 class QMimeData;
 class QString;
 
@@ -105,6 +107,7 @@ signals:
 
 private:
 	Private* d;
+	void updateCurveColumnDependencies(const QVector<XYCurve*>&, const AbstractColumn*) const;
 	bool readProjectAttributes(XmlStreamReader*);
 	void save(QXmlStreamWriter*) const override;
 };
