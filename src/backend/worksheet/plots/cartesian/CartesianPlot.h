@@ -304,8 +304,8 @@ public slots:
 
 	void scaleAutoTriggered();
 	bool scaleAuto(bool fullRange = true);
-	bool scaleAutoX(bool fullRange = false);
-	bool scaleAutoY(bool fullRange = false);
+	bool scaleAutoX(bool fullRange = true);
+	bool scaleAutoY(bool fullRange = true);
 
 	void zoomIn();
 	void zoomOut();

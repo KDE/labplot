@@ -2193,7 +2193,8 @@ void CartesianPlotDock::defaultPlotRangeChanged() {
 	const int index{ m_bgDefaultPlotRange->checkedId() };
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	m_plot->setDefaultCoordinateSystemIndex(index);
-	//TODO m_plot->dataChanged();	// update plot
+	updatePlotRangeList();	// changing default cSystem may change x/y-ranges when on auto scale
+	m_plot->retransform();	// update plot
 }
 
 //range breaks

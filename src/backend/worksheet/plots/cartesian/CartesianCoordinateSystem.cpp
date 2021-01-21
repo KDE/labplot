@@ -55,9 +55,9 @@ CartesianCoordinateSystem::~CartesianCoordinateSystem() {
 
 QString CartesianCoordinateSystem::info() const {
 	DEBUG(Q_FUNC_INFO)
-	//TODO: yRange(d->yIndex)
 	if (d->plot)
-		return QString(QLatin1String("x = ") + d->plot->xRange(d->xIndex).toString() + QLatin1String(", y = ") + d->plot->yRange().toString());
+		return QString(QLatin1String("x = ") + d->plot->xRange(d->xIndex).toString()
+			       + QLatin1String(", y = ") + d->plot->yRange(d->yIndex).toString());
 
 	return i18n("no info available");
 };

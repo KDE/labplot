@@ -447,24 +447,25 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorGridOpacity, minorGridOpacity)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(Axis, SetAutoScale, bool, autoScale, retransform);
-void Axis::setAutoScale(bool autoScale) {
+void Axis::setAutoScale(const bool autoScale) {
+	DEBUG(Q_FUNC_INFO << ", auto scale = " << autoScale)
 	Q_D(Axis);
-	if (autoScale != d->autoScale) {
+	if (autoScale != d->autoScale)
 		exec(new AxisSetAutoScaleCmd(d, autoScale, ki18n("%1: set axis auto scaling")));
 
-		if (autoScale) {
-			auto* plot = qobject_cast<CartesianPlot*>(parentAspect());
-			if (!plot)
-				return;
+	if (autoScale) {	// also if not changing (like on plot range changes)
+		const auto* plot = qobject_cast<CartesianPlot*>(parentAspect());
+		if (!plot)
+			return;
 
-			if (d->orientation == Axis::Orientation::Horizontal)
-				d->range = plot->xRange(d->cSystem->xIndex());
-			else
-				d->range =  plot->yRange();
+		if (d->orientation == Axis::Orientation::Horizontal)
+			d->range = plot->xRange(d->cSystem->xIndex());
+		else
+			d->range = plot->yRange(d->cSystem->yIndex());
 
-			retransform();
-			emit rangeChanged(d->range);
-		}
+		DEBUG(Q_FUNC_INFO << ", new range = " << d->range.toStdString())
+		retransform();
+		emit rangeChanged(d->range);
 	}
 }
 
@@ -1024,8 +1025,9 @@ void AxisPrivate::retransform() {
 }
 
 void AxisPrivate::retransformLine() {
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() <<  ", coordinate system index = " << cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
+	DEBUG(Q_FUNC_INFO << " " << title->name().toStdString() <<  ", coordinate system " << cSystemIndex+1)
+	DEBUG(Q_FUNC_INFO << ", x range is x range " << cSystem->xIndex()+1)
+	DEBUG(Q_FUNC_INFO << ", y range is y range " << cSystem->yIndex()+1)
 	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
 	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << ", scale = " << static_cast<int>(range.scale()))
 

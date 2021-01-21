@@ -2024,11 +2024,17 @@ void AxisDock::axisVisibilityChanged(bool on) {
 }
 
 void AxisDock::plotRangeChanged(int index) {
-	QDEBUG(Q_FUNC_INFO << ", index = " << index)
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	if (index < 0 || index > plot->coordinateSystemCount()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of bounds")
+		return;
+	}
 
-	if (index >= 0 && index != m_axis->coordinateSystemIndex()) {
+	if (index != m_axis->coordinateSystemIndex()) {
 		m_axis->setCoordinateSystemIndex(index);
-//		if (m_axis->autoScale())
+		m_axis->setAutoScale(ui.chkAutoScale->isChecked());	// update values
+		updateLocale();		// update line edits
 		m_axis->retransform();	// redraw
 	}
 }

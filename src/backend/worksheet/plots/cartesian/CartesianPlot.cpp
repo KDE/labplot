@@ -1233,7 +1233,7 @@ void CartesianPlot::setXRange(const int index, const Range<double> range) {
 	}
 }
 void CartesianPlot::setYRange(const int index, const Range<double> range) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", index = " << index << " range = " << range.toStdString())
 	Q_D(CartesianPlot);
 	if (range.finite() && range != yRange(index)) {
 		d->curvesXMinMaxIsDirty = true;
@@ -1264,7 +1264,7 @@ void CartesianPlot::setYMin(const int index, const double value) {
 	setYRange(index, range);
 }
 void CartesianPlot::setYMax(const int index, const double value) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", index = " << index << " value = " << value)
 	Range<double> range{ yRange(index) };
 	range.setEnd(value);
 
@@ -1346,7 +1346,7 @@ void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* cSystem) {
 	m_coordinateSystems.append( cSystem );
 }
 void CartesianPlot::removeCoordinateSystem(int index) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	if (index < 0 || index > m_coordinateSystems.size()) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
@@ -1362,8 +1362,10 @@ int CartesianPlot::defaultCoordinateSystemIndex() const {
 }
 void CartesianPlot::setDefaultCoordinateSystemIndex(int index) {
         Q_D(CartesianPlot);
-	if (index != d->defaultCoordinateSystemIndex)
+	if (index != d->defaultCoordinateSystemIndex) {
 		exec(new CartesianPlotSetDefaultCoordinateSystemIndexCmd(d, index, ki18n("%1: set default plot range")));
+		d->retransform(); //TODO: check
+	}
 }
 CartesianCoordinateSystem* CartesianPlot::defaultCoordinateSystem() const {
 	Q_D(const CartesianPlot);
@@ -2999,11 +3001,12 @@ void CartesianPlotPrivate::retransformScales() {
 	//////////// Create X-scales ////////////////
 	// loop over all cSystems and use the correct x/yRanges to set scales
 	DEBUG(Q_FUNC_INFO << ", number of coordinate systems = " << q->m_coordinateSystems.size())
-	i = 0; // debugging
+	i = 1; // debugging
 	for (const auto& cSystem : q->m_coordinateSystems) {
 		const int xRangeIndex{ dynamic_cast<CartesianCoordinateSystem*>(cSystem)->xIndex() };	// use x range of current cSystem
 		const auto xRange{ xRanges.at(xRangeIndex) };
-		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range index = " << xRangeIndex)
+		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range is x range " << xRangeIndex+1)
+		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString())
 		//check ranges for nonlinear scales
 		if (xRange.scale() != RangeT::Scale::Linear)
 			checkXRange();
@@ -3056,11 +3059,11 @@ void CartesianPlotPrivate::retransformScales() {
 	plotSceneRange.setRange(dataRect.y() + dataRect.height(), dataRect.y());
 
 	// loop over all cSystems
-	i = 0; // debugging
+	i = 1; // debugging
 	for (auto cSystem : q->m_coordinateSystems) {
 		const int yRangeIndex{ dynamic_cast<CartesianCoordinateSystem*>(cSystem)->yIndex() };	// use y range of current cSystem
 		const auto yRange{ yRanges.at(yRangeIndex) };
-		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range index = " << yRangeIndex)
+		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range is y range " << yRangeIndex+1)
 		DEBUG(Q_FUNC_INFO << ", yrange = " << yRange.toStdString())
 		//check ranges for nonlinear scales
 		if (yRange.scale() != RangeT::Scale::Linear)
