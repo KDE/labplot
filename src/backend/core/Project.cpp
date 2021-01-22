@@ -594,6 +594,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		for (auto* hist : hists) {
 			if (!hist) continue;
 			RESTORE_COLUMN_POINTER(hist, dataColumn, DataColumn);
+			RESTORE_COLUMN_POINTER(hist, valuesColumn, ValuesColumn);
 		}
 
 		//data picker curves
