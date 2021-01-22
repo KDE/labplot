@@ -1039,23 +1039,24 @@ void AxisPrivate::retransformLine() {
 
 	QPointF startPoint, endPoint;
 
+	const int xIndex{ cSystem->xIndex() }, yIndex{ cSystem->yIndex() };
 	if (orientation == Axis::Orientation::Horizontal) {
 		if (position == Axis::Position::Top)
-			offset = plot->yRange().end();
+			offset = plot->yRange(yIndex).end();
 		else if (position == Axis::Position::Bottom)
-			offset = plot->yRange().start();
+			offset = plot->yRange(yIndex).start();
 		else if (position == Axis::Position::Centered)
-			offset = plot->yRange().center();
+			offset = plot->yRange(yIndex).center();
 
 		startPoint = QPointF(range.start(), offset);
 		endPoint = QPointF(range.end(), offset);
 	} else { // vertical
 		if (position == Axis::Position::Left)
-			offset = plot->xRange(cSystem->xIndex()).start();
+			offset = plot->xRange(xIndex).start();
 		else if (position == Axis::Position::Right)
-			offset = plot->xRange(cSystem->xIndex()).end();
+			offset = plot->xRange(xIndex).end();
 		else if (position == Axis::Position::Centered)
-			offset = plot->xRange(cSystem->xIndex()).center();
+			offset = plot->xRange(xIndex).center();
 
 		startPoint = QPointF(offset, range.start());
 		endPoint = QPointF(offset, range.end());
@@ -1300,16 +1301,16 @@ void AxisPrivate::retransformTicks() {
 	qreal minorTickPos;
 	qreal nextMajorTickPos = 0.0;
 
+	const int xIndex{ cSystem->xIndex() }, yIndex{ cSystem-> yIndex() };
 	DEBUG(Q_FUNC_INFO << ", coordinate system index = " << cSystemIndex)
-	if (cSystem)
-		DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
-	if (plot)
-		DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
+	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
+	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
+	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
 
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
-	const double middleX = plot->xRange(cSystem->xIndex()).center();
-	const double middleY = plot->yRange().center();
+	const double middleX = plot->xRange(xIndex).center();
+	const double middleY = plot->yRange(yIndex).center();
 	bool valid;
 
 	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
@@ -1770,13 +1771,15 @@ void AxisPrivate::retransformTickLabelPositions() {
 	}
 
 	QFontMetrics fm(labelsFont);
-	double width = 0;
-	double height = fm.ascent();
+	double width = 0, height = fm.ascent();
 	QPointF pos;
+
+	const int xIndex{ cSystem->xIndex() }, yIndex{ cSystem->yIndex() };
 	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
-	const double middleX = plot->xRange(cSystem->xIndex()).center();
-	const double middleY = plot->yRange().center();
+	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
+	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
+	const double middleX = plot->xRange(xIndex).center();
+	const double middleY = plot->yRange(yIndex).center();
 	const int xDirection = cSystem->xDirection();
 	const int yDirection = cSystem->yDirection();
 
@@ -1788,8 +1791,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
-		auto xRangeFormat{ plot->xRange(cSystem->xIndex()).format() };
-		auto yRangeFormat{ plot->yRange(cSystem->yIndex()).format() };
+		auto xRangeFormat{ plot->xRange(xIndex).format() };
+		auto yRangeFormat{ plot->yRange(yIndex).format() };
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
@@ -1937,16 +1940,22 @@ void AxisPrivate::retransformMajorGrid() {
 	if (logicalMajorTickPoints.isEmpty())
 		return;
 
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ", x range " << cSystem->xIndex()+1)
+	DEBUG(Q_FUNC_INFO << ", y range " << cSystem->yIndex()+1)
+	const auto xRange{ plot->xRange(cSystem->xIndex()) };
+	const auto yRange{ plot->yRange(cSystem->yIndex()) };
+
 	//TODO:
 	//when iterating over all grid lines, skip the first and the last points for auto scaled axes,
 	//since we don't want to paint any grid lines at the plot boundaries
 	bool skipLowestTick, skipUpperTick;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), plot->xRange(cSystem->xIndex()).start());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), plot->xRange(cSystem->xIndex()).end());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).x(), xRange.start());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).x(), xRange.end());
 	} else {
-		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), plot->yRange().start());
-		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), plot->yRange().end());
+		skipLowestTick = qFuzzyCompare(logicalMajorTickPoints.at(0).y(), yRange.start());
+		skipUpperTick = qFuzzyCompare(logicalMajorTickPoints.at(logicalMajorTickPoints.size()-1).y(), yRange.end());
 	}
 
 	int start, end;	// TODO: hides Axis::start, Axis::end!
@@ -1969,20 +1978,13 @@ void AxisPrivate::retransformMajorGrid() {
 		end = logicalMajorTickPoints.size();
 	}
 
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
-
 	QVector<QLineF> lines;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		const Range<double> yRange{plot->yRange()};
-
 		for (int i = start; i < end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
 			lines.append( QLineF(point.x(), yRange.start(), point.x(), yRange.end()) );
 		}
 	} else { //vertical axis
-		const Range<double> xRange{plot->xRange(cSystem->xIndex())};
-
 		//skip the first and the last points, since we don't want to paint any grid lines at the plot boundaries
 		for (int i = start; i < end; ++i) {
 			const QPointF& point = logicalMajorTickPoints.at(i);
@@ -2015,18 +2017,19 @@ void AxisPrivate::retransformMinorGrid() {
 	QVector<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range index = " << cSystem->xIndex())
+	DEBUG(Q_FUNC_INFO << ", x range " << cSystem->xIndex())
+	DEBUG(Q_FUNC_INFO << ", y range " << cSystem->yIndex())
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		const Range<double> yRange{plot->yRange()};
+		const Range<double> yRange{plot->yRange(cSystem->yIndex())};
 
-		for (const auto point : logicalMinorTickPoints)
+		for (const auto& point : logicalMinorTickPoints)
 			lines.append( QLineF(point.x(), yRange.start(), point.x(), yRange.end()) );
 	} else { //vertical axis
 		const Range<double> xRange{plot->xRange(cSystem->xIndex())};
 
-		for (const auto point: logicalMinorTickPoints)
+		for (const auto& point: logicalMinorTickPoints)
 			lines.append( QLineF(xRange.start(), point.y(), xRange.end(), point.y()) );
 	}
 
