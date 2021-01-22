@@ -57,6 +57,11 @@ public:
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
 		emit m_target->q->aspectAboutToBeRemoved(m_child);
+
+		//emit the "about to be removed" signal also for all children of the aspect being currently removed
+		for (auto* child : m_child->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden))
+			m_child->aspectAboutToBeRemoved(child);
+
 		m_index = m_target->removeChild(m_child);
 		emit m_target->q->aspectRemoved(m_target->q, nextSibling, m_child);
 //		m_removed = true;
