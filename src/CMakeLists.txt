@@ -1,3 +1,4 @@
+
 find_package(SharedMimeInfo REQUIRED)
 set(KDE_FRONTEND true)
 set(KDEFRONTEND_DIR kdefrontend)
@@ -89,6 +90,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/RandomValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/RescaleDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/SortDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/StatisticsColumnWidget.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/StatisticsDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/ExportWorksheetDialog.cpp
 	${KDEFRONTEND_DIR}/worksheet/GridDialog.cpp

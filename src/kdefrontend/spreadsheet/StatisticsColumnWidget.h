@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : StatisticsDialog.h
+	File                 : StatisticsColumnWidget.h
     Project              : LabPlot
-    Description          : Dialog showing statistics for column values
+	Description          : Widget showing statistics for column values
     --------------------------------------------------------------------
-    Copyright            : (C) 2016-2017 by Fabian Kristof (fkristofszabolcs@gmail.com)
-	Copyright            : (C) 2016-2021 by Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,25 +25,50 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef STATISTICSDIALOG_H
-#define STATISTICSDIALOG_H
+#ifndef STATISTICSCOLUMNWIDGET_H
+#define STATISTICSCOLUMNWIDGET_H
 
-#include <QDialog>
+#include <QWidget>
 
 class Column;
-class QTabWidget;
+class Project;
 
-class StatisticsDialog : public QDialog {
+class QTabWidget;
+class QTextEdit;
+
+class StatisticsColumnWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit StatisticsDialog(const QString&, const QVector<Column*>&, QWidget *parent = nullptr);
-	~StatisticsDialog() override;
+	explicit StatisticsColumnWidget(const Column*, QWidget *parent = nullptr);
+	~StatisticsColumnWidget() override;
 	void showStatistics();
 
 private:
-	QTabWidget* m_twStatistics;
-	QVector<Column*> m_columns;
+	void showOverview();
+	void showHistogram();
+	void showKDEPlot();
+	void showQQPlot();
+	void showBoxPlot();
+
+	const QString isNanValue(const double);
+
+	const Column* m_column;
+	Project* m_project;
+	QTabWidget* m_tabWidget;
+	QTextEdit* m_teOverview;
+	QWidget m_histogramWidget;
+	QWidget m_kdePlotWidget;
+	QWidget m_qqPlotWidget;
+	QWidget m_boxPlotWidget;
+
+	QString m_htmlText;
+
+	bool m_overviewInitialized{false};
+	bool m_histogramInitialized{false};
+	bool m_kdePlotInitialized{false};
+	bool m_qqPlotInitialized{false};
+	bool m_boxPlotInitialized{false};
 
 private slots:
 	void currentTabChanged(int);
