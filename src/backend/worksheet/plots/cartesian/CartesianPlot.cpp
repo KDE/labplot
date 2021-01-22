@@ -2298,7 +2298,7 @@ bool CartesianPlot::scaleAutoY(bool fullRange) {
 	}
 
 	bool update = false;
-	//TODO: sets default y range
+	//TODO: this function changes the default y range
 	DEBUG(Q_FUNC_INFO << ", y range = " << yRange().toStdString() << "., curves y range = " << d->curvesYRange.toStdString())
 	if (!qFuzzyCompare(d->curvesYRange.start(), yRange().start()) && !qIsInf(d->curvesYRange.start()) ) {
 		d->yRange().start() = d->curvesYRange.start();
@@ -3110,6 +3110,9 @@ void CartesianPlotPrivate::retransformScales() {
 		scales.clear();
 	}
 
+	//TODO: what to do with these?
+	// also check delta* usage later
+
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
 	double deltaXMin = xRange().start() - xPrevRange.start();
 	double deltaXMax = xRange().end() - xPrevRange.end();
@@ -3130,6 +3133,10 @@ void CartesianPlotPrivate::retransformScales() {
 
 	//adjust all auto-scale axes
 	for (auto* axis : q->children<Axis>()) {
+		// use ranges of axis
+		const auto* cSystem{ q->coordinateSystem(axis->coordinateSystemIndex()) };
+		const auto xRange{ xRanges.at(cSystem->xIndex()) };
+		const auto yRange{ yRanges.at(cSystem->yIndex()) };
 		if (!axis->autoScale())
 			continue;
 
@@ -3137,14 +3144,14 @@ void CartesianPlotPrivate::retransformScales() {
 			if (!qFuzzyIsNull(deltaXMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setEnd(xRange().end());
+				axis->setEnd(xRange.end());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
 			if (!qFuzzyIsNull(deltaXMin)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setStart(xRange().start());
+				axis->setStart(xRange.start());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
@@ -3156,14 +3163,14 @@ void CartesianPlotPrivate::retransformScales() {
 			if (!qFuzzyIsNull(deltaYMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setEnd(yRange().end());
+				axis->setEnd(yRange.end());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
 			if (!qFuzzyIsNull(deltaYMin)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setStart(yRange().start());
+				axis->setStart(yRange.start());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}

@@ -712,7 +712,7 @@ void AxisDock::scaleChanged(int index) {
 }
 
 void AxisDock::autoScaleChanged(int index) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	bool autoScale = index == Qt::Checked;
 	ui.leStart->setEnabled(!autoScale);
 	ui.leEnd->setEnabled(!autoScale);

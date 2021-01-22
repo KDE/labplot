@@ -533,6 +533,7 @@ void Axis::setOffset(double offset, bool undo) {
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetRange, Range<double>, range, retransform);
 void Axis::setRange(Range<double> range) {
+	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString())
 	Q_D(Axis);
 	if (range != d->range)
 		exec(new AxisSetRangeCmd(d, range, ki18n("%1: set axis range")));

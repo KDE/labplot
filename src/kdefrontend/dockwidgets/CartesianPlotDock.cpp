@@ -921,7 +921,7 @@ void CartesianPlotDock::autoScaleYChanged(int state) {
 
 	bool checked = (state == Qt::Checked);
 	const int yRangeIndex{ sender()->property("row").toInt() };
-	DEBUG( Q_FUNC_INFO << ", y range index: " << yRangeIndex )
+	DEBUG( Q_FUNC_INFO << ", y range " << yRangeIndex+1 )
 
 	autoScaleYRange(yRangeIndex, checked);
 }
@@ -937,6 +937,8 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 	for (auto* plot : m_plotList) {
 		plot->setAutoScaleY(index, checked);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRange(index).autoScale())
+				//TODO: check second condition!
+				// (how to auto scale non default y range?)
 		if ( checked && index == plot->defaultCoordinateSystem()->yIndex() ) {
 			plot->scaleAutoY(true);	// full range
 			if (plot->autoScaleX())
