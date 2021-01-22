@@ -262,7 +262,9 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	for (auto column : columns)
 		updateCurveColumnDependencies(curves, column);
 
-	//TODO: add a similar logic for histograms, etc.
+	const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
+	for (auto column : columns)
+		updateHistogramColumnDependencies(histograms, column);
 }
 
 void Project::updateCurveColumnDependencies(const QVector<XYCurve*>& curves, const AbstractColumn* column) const {
@@ -322,6 +324,22 @@ void Project::updateCurveColumnDependencies(const QVector<XYCurve*>& curves, con
 	}
 }
 
+void Project::updateHistogramColumnDependencies(const QVector<Histogram*>& histograms, const AbstractColumn* column) const {
+	const QString& columnPath = column->path();
+	for (auto* histogram : histograms) {
+		if (histogram->dataColumnPath() == columnPath) {
+			histogram->setUndoAware(false);
+			histogram->setDataColumn(column);
+			histogram->setUndoAware(true);
+		}
+
+		if (histogram->valuesColumnPath() == columnPath) {
+			histogram->setUndoAware(false);
+			histogram->setValuesColumn(column);
+			histogram->setUndoAware(true);
+		}
+	}
+}
 void Project::navigateTo(const QString& path) {
 	emit requestNavigateTo(path);
 }
