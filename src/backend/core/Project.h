@@ -34,6 +34,7 @@
 #include "backend/lib/macros.h"
 
 class AbstractColumn;
+class Histogram;
 class XYCurve;
 class QMimeData;
 class QString;
@@ -108,6 +109,7 @@ signals:
 private:
 	Private* d;
 	void updateCurveColumnDependencies(const QVector<XYCurve*>&, const AbstractColumn*) const;
+	void updateHistogramColumnDependencies(const QVector<Histogram*>&, const AbstractColumn*) const;
 	bool readProjectAttributes(XmlStreamReader*);
 	void save(QXmlStreamWriter*) const override;
 };
