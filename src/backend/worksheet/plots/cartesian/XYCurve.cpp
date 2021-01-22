@@ -795,36 +795,6 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pa
 	setValuesFont(font);
 }
 
-/*!
- * returns \c true if the aspect being removed \c removedAspect is equal to \c column
- * or to one of its parents. returns \c false otherwise.
- */
-bool XYCurve::columnRemoved(const AbstractColumn* column, const AbstractAspect* removedAspect) const {
-	// TODO: BAD HACK.
-	// In macrosXYCurve.h every parent of the column is connected to the function aspectAboutToBeRemoved().
-	// When a column is removed, the function aspectAboutToBeRemoved is called and the column pointer is set to nullptr.
-	// However, when a child of the parent is removed, the parent calls the aspectAboutToBeRemoved() again, but
-	// the column was already disconnected.
-	// Better solution would be to emit aspectAboutToBeRemoved() for every column when their parents are removed.
-	// At the moment this signal is only emitted when the column is deleted directly and not when its parent is deleted.
-	// Once this is done, the connection of all parents to the aspectAboutToBeRemoved() signal can be removed.
-	if (!column)
-		return false;
-
-	bool removed = (removedAspect == column);
-	if (!removed) {
-		auto* parent = column->parentAspect();
-		while (parent) {
-			if (parent == removedAspect) {
-				removed = true;
-				break;
-			}
-			parent = parent->parentAspect();
-		}
-	}
-	return removed;
-}
-
 // Finds index where x is located and returns the value "index" after the found value
 /*!
  * Find nearest x value from a value xpos and his y value
@@ -885,7 +855,7 @@ int XYCurve::getNextValue(double xpos, int offset, double& x, double& y, bool& v
 
 void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (columnRemoved(d->xColumn, aspect)) {
+	if (aspect == d->xColumn) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->xColumn = nullptr;
 		d->retransform();
@@ -894,7 +864,7 @@ void XYCurve::xColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (columnRemoved(d->yColumn, aspect)) {
+	if (aspect == d->yColumn) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->yColumn = nullptr;
 		d->retransform();
@@ -903,7 +873,7 @@ void XYCurve::yColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (columnRemoved(d->valuesColumn, aspect)) {
+	if (aspect == d->valuesColumn) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->valuesColumn = nullptr;
 		d->updateValues();
@@ -912,7 +882,7 @@ void XYCurve::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (columnRemoved(d->xErrorPlusColumn, aspect)) {
+	if (aspect == d->xErrorPlusColumn) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->xErrorPlusColumn = nullptr;
 		d->updateErrorBars();
@@ -921,7 +891,7 @@ void XYCurve::xErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (columnRemoved(d->xErrorMinusColumn, aspect)) {
+	if (aspect == d->xErrorMinusColumn) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->xErrorMinusColumn = nullptr;
 		d->updateErrorBars();
@@ -930,7 +900,7 @@ void XYCurve::xErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (columnRemoved(d->yErrorPlusColumn, aspect)) {
+	if (aspect == d->yErrorPlusColumn) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->yErrorPlusColumn = nullptr;
 		d->updateErrorBars();
@@ -939,7 +909,7 @@ void XYCurve::yErrorPlusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 
 void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(XYCurve);
-	if (columnRemoved(d->yErrorMinusColumn, aspect)) {
+	if (aspect == d->yErrorMinusColumn) {
 		disconnect(aspect, nullptr, this, nullptr);
 		d->yErrorMinusColumn = nullptr;
 		d->updateErrorBars();

@@ -198,7 +198,6 @@ private:
 	Q_DECLARE_PRIVATE(XYCurve)
 	void init();
 	void initActions();
-	bool columnRemoved(const AbstractColumn*, const AbstractAspect*) const;
 	XYCURVE_COLUMN_CONNECT(x)
 	XYCURVE_COLUMN_CONNECT(y)
 	XYCURVE_COLUMN_CONNECT(xErrorPlus)
