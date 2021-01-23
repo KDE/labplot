@@ -2337,6 +2337,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
 	writer->writeAttribute( "titleOffsetX", QString::number(d->titleOffsetX) );
 	writer->writeAttribute( "titleOffsetY", QString::number(d->titleOffsetY) );
+	writer->writeAttribute( "plotRangeIndex", QString::number(d->cSystemIndex) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
@@ -2447,6 +2448,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("zeroOffset", zeroOffset);
 			READ_DOUBLE_VALUE("titleOffsetX", titleOffsetX);
 			READ_DOUBLE_VALUE("titleOffsetY", titleOffsetY);
+			READ_INT_VALUE("plotRangeIndex", cSystemIndex, bool);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
