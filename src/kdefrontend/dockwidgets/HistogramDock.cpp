@@ -382,8 +382,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 		ui.lXColumn->setEnabled(true);
 		cbDataColumn->setEnabled(true);
 
-		this->setModelIndexFromColumn(cbDataColumn, m_curve->dataColumn());
-		this->setModelIndexFromColumn(cbValuesColumn, m_curve->valuesColumn());
+		cbDataColumn->setColumn(m_curve->dataColumn(), m_curve->dataColumnPath());
+		cbValuesColumn->setColumn(m_curve->valuesColumn(), m_curve->valuesColumnPath());
 		ui.leName->setText(m_curve->name());
 		ui.leComment->setText(m_curve->comment());
 	} else {
@@ -500,13 +500,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::errorBarsOpacityChanged, this, &HistogramDock::curveErrorBarsOpacityChanged);
 
 	m_initializing = false;
-}
-
-void HistogramDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
-	if (column)
-		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
-	else
-		cb->setCurrentModelIndex(QModelIndex());
 }
 
 void HistogramDock::retranslateUi() {
@@ -1397,7 +1390,7 @@ void HistogramDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 
 void HistogramDock::curveDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbDataColumn, column);
+	cbDataColumn->setColumn(column, m_curve->dataColumnPath());
 	m_initializing = false;
 }
 
@@ -1519,7 +1512,7 @@ void HistogramDock::curveValuesTypeChanged(Histogram::ValuesType type) {
 }
 void HistogramDock::curveValuesColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromColumn(cbValuesColumn, column);
+	cbValuesColumn->setColumn(column, m_curve->valuesColumnPath());
 	m_initializing = false;
 }
 void HistogramDock::curveValuesPositionChanged(Histogram::ValuesPosition position) {

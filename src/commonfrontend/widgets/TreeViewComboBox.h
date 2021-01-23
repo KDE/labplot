@@ -32,6 +32,8 @@
 #include <QComboBox>
 
 class AbstractAspect;
+class AbstractColumn;
+class AspectTreeModel;
 class QGroupBox;
 class QLineEdit;
 class QTreeView;
@@ -44,8 +46,10 @@ class TreeViewComboBox : public QComboBox {
 public:
 	explicit TreeViewComboBox(QWidget* parent = nullptr);
 
-	void setModel(QAbstractItemModel*);
+	void setModel(AspectTreeModel*);
 	void setCurrentModelIndex(const QModelIndex&);
+	void setAspect(const AbstractAspect*);
+	void setColumn(const AbstractColumn*, const QString&);
 	QModelIndex currentModelIndex() const;
 
 	void setTopLevelClasses(const QList<AspectType>&);
@@ -61,6 +65,7 @@ public:
 	void setText(const QString& text);
 
 private:
+	AspectTreeModel* m_model{nullptr};
 	QTreeView* m_treeView;
 	QGroupBox* m_groupBox;
 	QLineEdit* m_lineEdit;
@@ -77,7 +82,7 @@ private:
 	bool isTopLevel(const AbstractAspect*) const;
 	bool isHidden(const AbstractAspect*) const;
 
-	void paintEvent(QPaintEvent *) override;
+	void paintEvent(QPaintEvent*) override;
 
 private slots:
 	void treeViewIndexActivated(const QModelIndex&);

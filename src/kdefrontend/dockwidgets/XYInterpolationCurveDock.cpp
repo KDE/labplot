@@ -158,16 +158,12 @@ void XYInterpolationCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, m_interpolationCurve->xDataColumn(), m_interpolationCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, m_interpolationCurve->yDataColumn(), m_interpolationCurve->yDataColumnPath());
-
 	//data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_interpolationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_interpolationCurve->dataSourceCurve());
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_interpolationCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_interpolationCurve->yDataColumn());
+	cbDataSourceCurve->setAspect(m_interpolationCurve->dataSourceCurve());
+	cbXDataColumn->setColumn(m_interpolationCurve->xDataColumn(), m_interpolationCurve->xDataColumnPath());
+	cbYDataColumn->setColumn(m_interpolationCurve->yDataColumn(), m_interpolationCurve->yDataColumnPath());
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_interpolationCurve->parentAspect());
@@ -258,8 +254,7 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	m_aspect = m_curve;
-	m_interpolationCurve = dynamic_cast<XYInterpolationCurve*>(m_curve);
-	Q_ASSERT(m_interpolationCurve);
+	m_interpolationCurve = static_cast<XYInterpolationCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_interpolationData = m_interpolationCurve->interpolationData();
@@ -741,19 +736,19 @@ void XYInterpolationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataS
 
 void XYInterpolationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
+	cbDataSourceCurve->setAspect(curve);
 	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
+	cbXDataColumn->setColumn(column, m_interpolationCurve->xDataColumnPath());
 	m_initializing = false;
 }
 
 void XYInterpolationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	cbYDataColumn->setColumn(column, m_interpolationCurve->yDataColumnPath());
 	m_initializing = false;
 }
 

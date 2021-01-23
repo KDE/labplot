@@ -30,6 +30,7 @@
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/AspectTreeModel.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/lib/macros.h"
 
 #include <QEvent>
@@ -96,7 +97,8 @@ void TreeViewComboBox::setHiddenAspects(const QList<const AbstractAspect*>& list
 /*!
 	Sets the \a model for the view to present.
 */
-void TreeViewComboBox::setModel(QAbstractItemModel* model) {
+void TreeViewComboBox::setModel(AspectTreeModel* model) {
+	m_model = model;
 	m_treeView->setModel(model);
 
 	//show only the first column in the combo box
@@ -308,4 +310,33 @@ bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
 
 bool TreeViewComboBox::isHidden(const AbstractAspect* aspect) const {
 	return (m_hiddenAspects.indexOf(aspect) != -1);
+}
+
+void TreeViewComboBox::setAspect(const AbstractAspect* aspect) {
+	if (aspect)
+		setCurrentModelIndex(m_model->modelIndexOfAspect(aspect));
+	else
+		setCurrentModelIndex(QModelIndex());
+}
+
+void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& path) {
+	setAspect(column);
+
+	// don't make the comboboxe red for initially created curves
+	if (!column && path.isEmpty()) {
+		setText("");
+		setInvalid(false);
+		return;
+	}
+
+	if (column) {
+	qDebug()<<"check " << column->name()	 << "  " << path;
+		// current index text should be used
+		useCurrentIndexText(true);
+		setInvalid(false);
+	} else {
+		useCurrentIndexText(false);
+		setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", path));
+	}
+	setText(path.split('/').last());
 }

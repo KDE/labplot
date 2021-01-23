@@ -245,19 +245,13 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	auto* fitCurve = static_cast<XYFitCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, fitCurve->xDataColumn(), fitCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, fitCurve->yDataColumn(), fitCurve->yDataColumnPath());
-	checkColumnAvailability(cbXErrorColumn, fitCurve->xErrorColumn(), fitCurve->xErrorColumnPath());
-	checkColumnAvailability(cbYErrorColumn, fitCurve->yErrorColumn(), fitCurve->yErrorColumnPath());
-
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_fitCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_fitCurve->dataSourceCurve());
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_fitCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_fitCurve->yDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbXErrorColumn, m_fitCurve->xErrorColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYErrorColumn, m_fitCurve->yErrorColumn());
+	cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());
+	cbXDataColumn->setColumn(m_fitCurve->xDataColumn(), m_fitCurve->xDataColumnPath());
+	cbYDataColumn->setColumn(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
+	cbXErrorColumn->setColumn(m_fitCurve->xErrorColumn(), m_fitCurve->xErrorColumnPath());
+	cbYErrorColumn->setColumn(m_fitCurve->yErrorColumn(), m_fitCurve->yErrorColumnPath());
 
 	int tmpModelType = m_fitData.modelType;	// save type because it's reset when category changes
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
@@ -331,7 +325,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	m_aspect = m_curve;
-	m_fitCurve = dynamic_cast<XYFitCurve*>(m_curve);
+	m_fitCurve = static_cast<XYFitCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
@@ -1384,31 +1378,31 @@ void XYFitCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType 
 
 void XYFitCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
+	cbDataSourceCurve->setAspect(curve);
 	m_initializing = false;
 }
 
 void XYFitCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
+	cbXDataColumn->setColumn(column, m_fitCurve->xDataColumnPath());
 	m_initializing = false;
 }
 
 void XYFitCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	cbYDataColumn->setColumn(column, m_fitCurve->yDataColumnPath());
 	m_initializing = false;
 }
 
 void XYFitCurveDock::curveXErrorColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXErrorColumn, column);
+	cbXErrorColumn->setColumn(column, m_fitCurve->xErrorColumnPath());
 	m_initializing = false;
 }
 
 void XYFitCurveDock::curveYErrorColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYErrorColumn, column);
+	cbYErrorColumn->setColumn(column, m_fitCurve->yErrorColumnPath());
 	m_initializing = false;
 }
 

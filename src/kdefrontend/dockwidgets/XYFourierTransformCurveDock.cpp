@@ -126,15 +126,9 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
-
 	//show the properties of the first curve
-	m_transformCurve = dynamic_cast<XYFourierTransformCurve*>(m_curve);
-
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_transformCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_transformCurve->yDataColumn());
+	cbXDataColumn->setColumn(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
+	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_transformData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_transformData.xRange.last());
@@ -188,7 +182,7 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	m_aspect = m_curve;
-	m_transformCurve = dynamic_cast<XYFourierTransformCurve*>(m_curve);
+	m_transformCurve = static_cast<XYFourierTransformCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_transformData = m_transformCurve->transformData();
@@ -395,13 +389,13 @@ void XYFourierTransformCurveDock::curveDescriptionChanged(const AbstractAspect* 
 
 void XYFourierTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
+	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());
 	m_initializing = false;
 }
 
 void XYFourierTransformCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	cbYDataColumn->setColumn(column, m_transformCurve->yDataColumnPath());
 	m_initializing = false;
 }
 

@@ -52,7 +52,6 @@ public:
 
 	void setCurves(QList<XYCurve*>);
 	virtual void setupGeneral();
-	void checkColumnAvailability(TreeViewComboBox*, const AbstractColumn*, const QString& columnPath);
 	void updateLocale() override;
 
 private:
@@ -75,7 +74,6 @@ private:
 protected:
 	void initTabs();
 	virtual void setModel();
-	void setModelIndexFromAspect(TreeViewComboBox*, const AbstractAspect*);
 
 	Ui::XYCurveDock ui;
 	QList<XYCurve*> m_curvesList;
