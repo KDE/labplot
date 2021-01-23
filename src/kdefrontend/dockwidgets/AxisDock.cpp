@@ -2041,7 +2041,7 @@ void AxisDock::plotRangeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	if (index < 0 || index > plot->coordinateSystemCount()) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of bounds")
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
 

@@ -356,9 +356,15 @@ void XYEquationCurveDock::enableRecalculate() const {
 
 void XYEquationCurveDock::plotRangeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_curve->parentAspect());
+	if (index < 0 || index > plot->coordinateSystemCount()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return;
+	}
 
-	if (index >= 0 && index != m_curve->coordinateSystemIndex()) {
+	if (index != m_curve->coordinateSystemIndex()) {
 		m_curve->setCoordinateSystemIndex(index);
+		updateLocale();		// update line edits
 		m_curve->retransform();	// redraw
 	}
 }

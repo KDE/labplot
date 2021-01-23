@@ -4,7 +4,7 @@
     Description          : widget for XYCurve properties
     --------------------------------------------------------------------
     Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2012-2021 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 
@@ -218,7 +218,7 @@ void XYCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	// Tab "General"
+	// Tab "General" (see xycurvedockgeneraltab.ui)
 	auto* gridLayout = qobject_cast<QGridLayout*>(generalTab->layout());
 
 	cbXColumn = new TreeViewComboBox(generalTab);
@@ -235,6 +235,7 @@ void XYCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)));
 	connect(cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)));
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::plotRangeChanged);
 }
 
 void XYCurveDock::init() {
@@ -565,7 +566,7 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 
 void XYCurveDock::initGeneralTab() {
 	DEBUG("XYCurveDock::initGeneralTab()");
-	//if there are more than one curve in the list, disable the content in the tab "general"
+	//if there is more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
@@ -602,6 +603,8 @@ void XYCurveDock::initGeneralTab() {
 
 	//show the properties of the first curve
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
+
+	updatePlotRanges();
 
 	//Slots
 	connect(m_curve, &XYCurve::aspectDescriptionChanged, this, &XYCurveDock::curveDescriptionChanged);
@@ -1232,6 +1235,21 @@ void XYCurveDock::updateValuesWidgets() {
 		ui.lValuesDateTimeFormat->show();
 		ui.cbValuesDateTimeFormat->show();
 	}
+}
+
+void XYCurveDock::updatePlotRanges() const {
+	const int cSystemCount{ m_curve->coordinateSystemCount() };
+	const int cSystemIndex{ m_curve->coordinateSystemIndex() };
+	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
+	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex+1)
+
+	// fill ui.cbPlotRanges
+	uiGeneralTab.cbPlotRanges->clear();
+	for (int i{0}; i < cSystemCount; i++)
+		uiGeneralTab.cbPlotRanges->addItem( QString::number(i+1) + QLatin1String(" : ") + m_curve->coordinateSystemInfo(i) );
+	uiGeneralTab.cbPlotRanges->setCurrentIndex(cSystemIndex);
+	// disable when there is only on plot range
+	uiGeneralTab.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
 }
 
 void XYCurveDock::valuesPositionChanged(int index) {
@@ -2036,6 +2054,20 @@ void XYCurveDock::curveErrorBarsOpacityChanged(qreal opacity) {
 	m_initializing = true;
 	ui.sbErrorBarsOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
+}
+void XYCurveDock::plotRangeChanged(int index) {
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_curve->parentAspect());
+	if (index < 0 || index > plot->coordinateSystemCount()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return;
+	}
+
+	if (index != m_curve->coordinateSystemIndex()) {
+		m_curve->setCoordinateSystemIndex(index);
+		updateLocale();		// update line edits
+		m_curve->retransform();	// redraw
+	}
 }
 
 //*************************************************************

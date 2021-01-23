@@ -57,6 +57,7 @@ public:
 private:
 	virtual void initGeneralTab();
 	void updateValuesWidgets();
+	void updatePlotRanges() const override;
 
 	void load();
 	void loadConfig(KConfig&);
@@ -90,6 +91,7 @@ private slots:
 	//SLOTs for changes triggered in XYCurveDock
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
+	void plotRangeChanged(int);
 
 	//Line-Tab
 	void lineTypeChanged(int);

@@ -3103,6 +3103,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "general" );
 	WRITE_COLUMN(d->xColumn, xColumn);
 	WRITE_COLUMN(d->yColumn, yColumn);
+	writer->writeAttribute( "plotRangeIndex", QString::number(d->cSystemIndex) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
@@ -3215,6 +3216,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
+			READ_INT_VALUE("plotRangeIndex", cSystemIndex, bool);
 		} else if (!preview && reader->name() == "lines") {
 			attribs = reader->attributes();
 
