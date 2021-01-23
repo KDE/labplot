@@ -1771,6 +1771,8 @@ double CartesianPlot::cursorPos(int cursorNumber) {
 
 void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
+
+	const bool firstCurve = (children<XYCurve>().size() + children<Histogram>().size() == 1);
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	if (curve) {
 		connect(curve, &XYCurve::dataChanged, this, &CartesianPlot::dataChanged);
@@ -1805,50 +1807,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		d->curvesYMinMaxIsDirty = true;
 
 		//in case the first curve is added, check whether we start plotting datetime data
-		if (children<XYCurve>().size() == 1) {
-			const auto* col = dynamic_cast<const Column*>(curve->xColumn());
-			if (col) {
-				if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
-					setUndoAware(false);
-					// see format of curves x range
-					setXRangeFormat(coordinateSystem(curve->coordinateSystemIndex())->xIndex(), RangeT::Format::DateTime);
-					setUndoAware(true);
-
-					//set column's datetime format for all horizontal axis
-					//TODO: do we really want this?
-					/*for (auto* axis : children<Axis>()) {
-						if (axis->orientation() == Axis::Orientation::Horizontal) {
-							auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-							xRange(X).setDateTimeFormat(filter->format());
-							axis->setUndoAware(false);
-							axis->setLabelsDateTimeFormat(xRange(X).dateTimeFormat());
-							axis->setUndoAware(true);
-						}
-					}*/
-				}
-			}
-
-			col = dynamic_cast<const Column*>(curve->yColumn());
-			if (col) {
-				if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
-					setUndoAware(false);
-					setYRangeFormat(coordinateSystem(curve->coordinateSystemIndex())->yIndex(), RangeT::Format::DateTime);
-					setUndoAware(true);
-
-					//set column's datetime format for all vertical axis
-					// TODO: do we really want this?
-					/*for (auto* axis : children<Axis>()) {
-						if (axis->orientation() == Axis::Orientation::Vertical) {
-							auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-							yRange(X).setDateTimeFormat(filter->format());
-							axis->setUndoAware(false);
-							axis->setLabelsDateTimeFormat(yRange(X).dateTimeFormat());
-							axis->setUndoAware(true);
-						}
-					}*/
-				}
-			}
+		if (firstCurve) {
+			checkAxisFormat(curve->xColumn(), Axis::Orientation::Horizontal);
+			checkAxisFormat(curve->yColumn(), Axis::Orientation::Vertical);
 		}
+
 		emit curveAdded(curve);
 
 	} else {
@@ -1858,6 +1821,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(hist, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
 
 			updateLegend();
+			d->curvesXMinMaxIsDirty = true;
+			d->curvesYMinMaxIsDirty = true;
+
+			if (firstCurve)
+				checkAxisFormat(hist->dataColumn(), Axis::Orientation::Horizontal);
 		}
 
 		const auto* boxPlot = qobject_cast<const BoxPlot*>(child);
@@ -1889,6 +1857,30 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			} else {
 				KConfig config;
 				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
+			}
+		}
+	}
+}
+
+void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientation orientation) {
+	const auto* col = dynamic_cast<const Column*>(column);
+	if (!col)
+		return;
+
+	if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
+		setUndoAware(false);
+		setXRangeFormat(RangeT::Format::DateTime);
+		setUndoAware(true);
+
+		//set column's datetime format for all horizontal axis
+		for (auto* axis : children<Axis>()) {
+			const auto* cSystem{ coordinateSystem(axis->coordinateSystemIndex()) };
+			if (axis->orientation() == orientation) {
+				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+				xRange(cSystem->xIndex()).setDateTimeFormat(filter->format());
+				axis->setUndoAware(false);
+				axis->setLabelsDateTimeFormat(xRangeDateTimeFormat());
+				axis->setUndoAware(true);
 			}
 		}
 	}
@@ -4334,6 +4326,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("yRangeFormat").toString());
 			else
 				yRange(0).format() = static_cast<RangeT::Format>(str.toInt());
+
+			str = attribs.value("xRangeDateTimeFormat").toString();
+			if (!str.isEmpty())
+				xRange(0).setDateTimeFormat(str);
+
+			str = attribs.value("yRangeDateTimeFormat").toString();
+			if (!str.isEmpty())
+				yRange(0).setDateTimeFormat(str);
 
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);

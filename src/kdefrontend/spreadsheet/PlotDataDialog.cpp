@@ -630,10 +630,10 @@ void PlotDataDialog::addCurve(const QString& name, Column* xColumn, Column* yCol
 
 void PlotDataDialog::addHistogram(const QString& name, Column* column, CartesianPlot* plot) {
 	auto* hist = new Histogram(name);
-	plot->addChild(hist);
 // 	hist->suppressRetransform(true);
 	hist->setDataColumn(column);
 // 	hist->suppressRetransform(false);
+	plot->addChild(hist);
 	m_lastAddedCurve = hist;
 }
 

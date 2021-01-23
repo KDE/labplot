@@ -31,6 +31,7 @@
 #ifndef CARTESIANPLOT_H
 #define CARTESIANPLOT_H
 
+#include "Axis.h"
 #include "Histogram.h"
 #include "../AbstractPlot.h"
 #include "backend/lib/Range.h"
@@ -200,7 +201,7 @@ private:
 	const XYCurve* currentCurve() const;
 	void shift(bool x, bool leftOrDown);
 	void zoom(bool x, bool in);
-
+	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
 	void calculateCurvesXMinMax(bool completeRange = true);
 	void calculateCurvesYMinMax(bool completeRange = true);
 

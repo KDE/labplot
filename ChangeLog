@@ -10,7 +10,7 @@
 		* Crosshair cursor mode in the plot
 		* New themes "Monokai", "ggplot grey", "ggplot dark"
 		* New curve symbols "heart" and "lightning"
-		* DateTime support for Custom Points
+		* DateTime support for Custom Points and for Histograms
 		* Allow to specify text label's position in logical plot coordinates
 
 -----2.8.2 -----
