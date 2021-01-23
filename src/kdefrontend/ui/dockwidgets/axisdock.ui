@@ -227,20 +227,14 @@
          </property>
         </widget>
        </item>
-       <item row="13" column="2">
-        <widget class="QLineEdit" name="leZeroOffset"/>
-       </item>
-       <item row="14" column="0">
+       <item row="15" column="0">
         <widget class="QLabel" name="lScalingFactor">
          <property name="text">
           <string>Scaling factor:</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="2">
-        <widget class="QLineEdit" name="leScalingFactor"/>
-       </item>
-       <item row="16" column="0">
+       <item row="18" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -253,22 +247,28 @@
          </property>
         </spacer>
        </item>
-       <item row="17" column="0">
+       <item row="19" column="0">
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
           <string>Visible</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="0">
+       <item row="17" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Plot range:</string>
          </property>
         </widget>
        </item>
-       <item row="15" column="2">
+       <item row="17" column="2">
         <widget class="QComboBox" name="cbPlotRanges"/>
+       </item>
+       <item row="13" column="2">
+        <widget class="KLineEdit" name="leZeroOffset"/>
+       </item>
+       <item row="15" column="2">
+        <widget class="KLineEdit" name="leScalingFactor"/>
        </item>
       </layout>
      </widget>
@@ -1584,6 +1584,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

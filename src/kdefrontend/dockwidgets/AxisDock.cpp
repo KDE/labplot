@@ -39,11 +39,13 @@
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "commonfrontend/widgets/DateTimeSpinBox.h"
 
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KLineEdit>
+
 #include <QTimer>
 #include <QDir>
 #include <QPainter>
-#include <KLocalizedString>
-#include <KMessageBox>
 
 extern "C" {
 #include <gsl/gsl_math.h>
@@ -127,10 +129,9 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leEnd, &QLineEdit::textChanged, this, &AxisDock::endChanged);
 	connect(ui.dateTimeEditStart, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::startDateTimeChanged);
 	connect(ui.dateTimeEditEnd, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::endDateTimeChanged);
-	connect(ui.leZeroOffset, &QLineEdit::textChanged, this, &AxisDock::zeroOffsetChanged);
-	connect(ui.leScalingFactor, &QLineEdit::textChanged, this, &AxisDock::scalingFactorChanged);
-
-	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged );
+	connect(ui.leZeroOffset, &KLineEdit::textChanged, this, &AxisDock::zeroOffsetChanged);
+	connect(ui.leScalingFactor, &KLineEdit::textChanged, this, &AxisDock::scalingFactorChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
 
 	//"Line"-tab
 	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -533,6 +534,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::minorGridOpacityChanged, this, &AxisDock::axisMinorGridOpacityChanged);
 
 	connect(m_axis, &Axis::visibilityChanged, this, &AxisDock::axisVisibilityChanged);
+
 }
 
 /*
@@ -797,14 +799,20 @@ void AxisDock::endDateTimeChanged(const QDateTime& dateTime) {
 }
 
 void AxisDock::zeroOffsetChanged() {
+	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
+
+	if (ui.leZeroOffset->text().isEmpty())	// default value
+			ui.leZeroOffset->setText("0");
 
 	bool ok;
 	SET_NUMBER_LOCALE
 	const double offset{numberLocale.toDouble(ui.leZeroOffset->text(), &ok)};
 	if (!ok)
 		return;
+
+	ui.leZeroOffset->setClearButtonEnabled(offset != 0);
 
 	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
@@ -815,11 +823,16 @@ void AxisDock::scalingFactorChanged() {
 	if (m_initializing)
 		return;
 
+	if (ui.leScalingFactor->text().isEmpty())	// default value
+			ui.leScalingFactor->setText("1");
+
 	bool ok;
 	SET_NUMBER_LOCALE
 	const double scalingFactor{numberLocale.toDouble(ui.leScalingFactor->text(), &ok)};
 	if (!ok)
 		return;
+
+	ui.leScalingFactor->setClearButtonEnabled(scalingFactor != 1);
 
 	if (scalingFactor != 0.0) {
 		const Lock lock(m_initializing);
@@ -1765,6 +1778,7 @@ void AxisDock::axisEndChanged(double value) {
 }
 
 void AxisDock::axisZeroOffsetChanged(qreal value) {
+	DEBUG(Q_FUNC_INFO)
 	if (m_initializing) return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
