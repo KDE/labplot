@@ -129,6 +129,8 @@ HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(n
 	connect( ui.chkAutoBinRanges, &QCheckBox::stateChanged, this, &HistogramDock::autoBinRangesChanged );
 	connect( ui.leBinRangesMin, &QLineEdit::textChanged, this, &HistogramDock::binRangesMinChanged );
 	connect( ui.leBinRangesMax, &QLineEdit::textChanged, this, &HistogramDock::binRangesMaxChanged );
+	connect(ui.dteBinRangesMin, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
+	connect(ui.dteBinRangesMax, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
 
 	//Line
 	connect(ui.cbLineType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HistogramDock::lineTypeChanged);
@@ -413,6 +415,28 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	ui.leBinRangesMax->setText( numberLocale.toString(m_curve->binRangesMax()) );
 	ui.chkVisible->setChecked( m_curve->isVisible() );
 
+	//handle numeric vs. datetime widgets
+	//TODO: we need to react on range format changes in the plot in general,
+	//add signal-slot connection for this
+	const auto* plot = static_cast<const CartesianPlot*>(m_curve->parent(AspectType::CartesianPlot));
+	ui.dteBinRangesMin->setDisplayFormat(plot->xRangeDateTimeFormat());
+	ui.dteBinRangesMax->setDisplayFormat(plot->xRangeDateTimeFormat());
+	ui.dteBinRangesMin->setDateTime(QDateTime::fromMSecsSinceEpoch(m_curve->binRangesMin()));
+	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(m_curve->binRangesMax()));
+
+	bool numeric = (plot->xRangeFormat() == CartesianPlot::RangeFormat::Numeric);
+
+	ui.lBinRangesMin->setVisible(numeric);
+	ui.lBinRangesMax->setVisible(numeric);
+	ui.leBinRangesMin->setVisible(numeric);
+	ui.leBinRangesMax->setVisible(numeric);
+
+	ui.lBinRangesMinDateTime->setVisible(!numeric);
+	ui.dteBinRangesMin->setVisible(!numeric);
+	ui.lBinRangesMaxDateTime->setVisible(!numeric);
+	ui.dteBinRangesMax->setVisible(!numeric);
+
+	//load the remaining properties
 	KConfig config(QString(), KConfig::SimpleConfig);
 	loadConfig(config);
 
@@ -594,6 +618,8 @@ void HistogramDock::autoBinRangesChanged(int state) {
 	bool checked = (state == Qt::Checked);
 	ui.leBinRangesMin->setEnabled(!checked);
 	ui.leBinRangesMax->setEnabled(!checked);
+	ui.dteBinRangesMin->setEnabled(!checked);
+	ui.dteBinRangesMax->setEnabled(!checked);
 
 	if (m_initializing)
 		return;
@@ -628,6 +654,24 @@ void HistogramDock::binRangesMaxChanged(const QString& value) {
 		for (auto* hist : m_curvesList)
 			hist->setBinRangesMax(max);
 	}
+}
+
+void HistogramDock::binRangesMinDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	quint64 min = dateTime.toMSecsSinceEpoch();
+	for (auto* hist : m_curvesList)
+		hist->setBinRangesMin(min);
+}
+
+void HistogramDock::binRangesMaxDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	quint64 max = dateTime.toMSecsSinceEpoch();
+	for (auto* hist : m_curvesList)
+		hist->setBinRangesMax(max);
 }
 
 //Line tab
@@ -1399,6 +1443,7 @@ void HistogramDock::curveBinRangesMinChanged(double value) {
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leBinRangesMin->setText(numberLocale.toString(value));
+	ui.dteBinRangesMin->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
 }
 
 void HistogramDock::curveBinRangesMaxChanged(double value) {
@@ -1406,6 +1451,7 @@ void HistogramDock::curveBinRangesMaxChanged(double value) {
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leBinRangesMax->setText(numberLocale.toString(value));
+	ui.dteBinRangesMax->setDateTime(QDateTime::fromMSecsSinceEpoch(value));
 }
 
 //Line-Tab

@@ -83,6 +83,8 @@ private slots:
 	void autoBinRangesChanged(int);
 	void binRangesMinChanged(const QString&);
 	void binRangesMaxChanged(const QString&);
+	void binRangesMinDateTimeChanged(const QDateTime&);
+	void binRangesMaxDateTimeChanged(const QDateTime&);
 
 	//Lines-Tab
 	void lineTypeChanged(int);

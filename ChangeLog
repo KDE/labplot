@@ -1,7 +1,22 @@
 -----2.9.0 -----
+	* Allow to copy&paste and to duplicate single objects in the project explorer
+	* Support Mathieu functions via GSL
+	* Added global settings for numbers
+	* Support real scientific notation and improve other notations of axes label
+	* [spreadsheet]:
+		* Allow to freeze the first column
+	* [worksheet]:
+		* Info Element - a new worksheet element to annotate curve values on the plot
+		* Crosshair cursor mode in the plot
+		* New themes "Monokai", "ggplot grey", "ggplot dark"
+		* New curve symbols "heart" and "lightning"
+		* DateTime support for Custom Points and for Histograms
+		* Allow to specify text label's position in logical plot coordinates
+
 -----2.8.2 -----
 Bug fixes:
 	* [CAS] Fixed the regression introduced after the python2 backend was deprecated in Cantor
+	* [worksheet] DateTime support in Histograms.
 	* [Axis label] Fix "power of" notations for negative values, show "0" for zero
 		and improve auto precision for small values
 	* BUG 427190 - Fixed resetting parser error count on some platforms (Debian, Manjaro)
