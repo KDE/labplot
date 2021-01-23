@@ -960,13 +960,19 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 	const double xMin = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		// selected x range
-		const int xRangeIndex{ sender()->property("row").toInt() };
-		DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
+		const int index{ sender()->property("row").toInt() };
+		DEBUG( Q_FUNC_INFO << ", x range index: " << index )
+		bool changed{false};
 		for (auto* plot : m_plotList)
-			plot->setXMin(xRangeIndex, xMin);
+			if (!qFuzzyCompare(xMin, plot->xRange(index).start())) {
+				plot->setXMin(index, xMin);
+				changed = true;
+			}
 
-		updateYRangeList();	// plot is auto scaled
-		updatePlotRangeList();
+		if (changed) {
+			updateYRangeList();	// plot is auto scaled
+			updatePlotRangeList();
+		}
 	}
 }
 void CartesianPlotDock::yMinChanged(const QString& value) {
@@ -980,13 +986,19 @@ void CartesianPlotDock::yMinChanged(const QString& value) {
 	const double yMin = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		// selected y range
-		const int yRangeIndex{ sender()->property("row").toInt() };
-		DEBUG( Q_FUNC_INFO << ", y range index: " << yRangeIndex )
+		const int index{ sender()->property("row").toInt() };
+		DEBUG( Q_FUNC_INFO << ", y range index: " << index )
+		bool changed{false};
 		for (auto* plot : m_plotList)
-			plot->setYMin(yRangeIndex, yMin);
+			if (!qFuzzyCompare(yMin, plot->yRange(index).start())) {
+				plot->setYMin(index, yMin);
+				changed = true;
+			}
 
-		updateXRangeList();	// plot is auto scaled
-		updatePlotRangeList();
+		if (changed) {
+			updateXRangeList();	// plot is auto scaled
+			updatePlotRangeList();
+		}
 	}
 }
 
@@ -1001,13 +1013,19 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 	const double xMax = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		// selected x range
-		const int xRangeIndex{ sender()->property("row").toInt() };
-		DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
+		const int index{ sender()->property("row").toInt() };
+		DEBUG( Q_FUNC_INFO << ", x range index: " << index )
+		bool changed{false};
 		for (auto* plot : m_plotList)
-			plot->setXMax(xRangeIndex, xMax);
+			if (!qFuzzyCompare(xMax, plot->xRange(index).end())) {
+				plot->setXMax(index, xMax);
+				changed = true;
+			}
 
-		updateYRangeList();	// plot is auto scaled
-		updatePlotRangeList();
+		if (changed) {
+			updateYRangeList();	// plot is auto scaled
+			updatePlotRangeList();
+		}
 	}
 }
 void CartesianPlotDock::yMaxChanged(const QString& value) {
@@ -1021,13 +1039,19 @@ void CartesianPlotDock::yMaxChanged(const QString& value) {
 	const double yMax = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		// selected y range
-		const int yRangeIndex{ sender()->property("row").toInt() };
-		DEBUG( Q_FUNC_INFO << ", y range index: " << yRangeIndex )
+		const int index{ sender()->property("row").toInt() };
+		DEBUG( Q_FUNC_INFO << ", y range index: " << index )
+		bool changed{false};
 		for (auto* plot : m_plotList)
-			plot->setYMax(yRangeIndex, yMax);
+			if (!qFuzzyCompare(yMax, plot->yRange(index).end())) {
+				plot->setYMax(index, yMax);
+				changed = true;
+			}
 
-		updateXRangeList();	// plot is auto scaled
-		updatePlotRangeList();
+		if (changed) {
+			updateXRangeList();	// plot is auto scaled
+			updatePlotRangeList();
+		}
 	}
 }
 
