@@ -135,16 +135,12 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_integrationCurve = static_cast<XYIntegrationCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, m_integrationCurve->xDataColumn(), m_integrationCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, m_integrationCurve->yDataColumn(), m_integrationCurve->yDataColumnPath());
-
 	//data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_integrationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_integrationCurve->dataSourceCurve());
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_integrationCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_integrationCurve->yDataColumn());
+	cbDataSourceCurve->setAspect(m_integrationCurve->dataSourceCurve());
+	cbXDataColumn->setColumn(m_integrationCurve->xDataColumn(), m_integrationCurve->xDataColumnPath());
+	cbYDataColumn->setColumn(m_integrationCurve->yDataColumn(), m_integrationCurve->yDataColumnPath());
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_integrationCurve->parentAspect());
@@ -226,7 +222,7 @@ void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	m_aspect = m_curve;
-	m_integrationCurve = dynamic_cast<XYIntegrationCurve*>(m_curve);
+	m_integrationCurve = static_cast<XYIntegrationCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_integrationData = m_integrationCurve->integrationData();
@@ -518,19 +514,19 @@ void XYIntegrationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSou
 
 void XYIntegrationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
+	cbDataSourceCurve->setAspect(curve);
 	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
+	cbXDataColumn->setColumn(column, m_integrationCurve->xDataColumnPath());
 	m_initializing = false;
 }
 
 void XYIntegrationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	cbYDataColumn->setColumn(column, m_integrationCurve->yDataColumnPath());
 	m_initializing = false;
 }
 

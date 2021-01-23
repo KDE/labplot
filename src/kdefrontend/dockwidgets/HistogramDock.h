@@ -64,7 +64,6 @@ protected:
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 
 	virtual void setModel();
-	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
 
 private slots:
 	void init();

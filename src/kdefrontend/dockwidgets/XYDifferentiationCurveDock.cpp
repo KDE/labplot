@@ -134,16 +134,12 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_differentiationCurve = static_cast<XYDifferentiationCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, m_differentiationCurve->xDataColumn(), m_differentiationCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, m_differentiationCurve->yDataColumn(), m_differentiationCurve->yDataColumnPath());
-
 	//data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_differentiationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_differentiationCurve->dataSourceCurve());
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_differentiationCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_differentiationCurve->yDataColumn());
+	cbDataSourceCurve->setAspect(m_differentiationCurve->dataSourceCurve());
+	cbXDataColumn->setColumn(m_differentiationCurve->xDataColumn(), m_differentiationCurve->xDataColumnPath());
+	cbYDataColumn->setColumn(m_differentiationCurve->yDataColumn(), m_differentiationCurve->yDataColumnPath());
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_differentiationCurve->parentAspect());
@@ -226,7 +222,7 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	m_aspect = m_curve;
-	m_differentiationCurve = dynamic_cast<XYDifferentiationCurve*>(m_curve);
+	m_differentiationCurve = static_cast<XYDifferentiationCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_differentiationData = m_differentiationCurve->differentiationData();
@@ -599,19 +595,19 @@ void XYDifferentiationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::Dat
 
 void XYDifferentiationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
+	cbDataSourceCurve->setAspect(curve);
 	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
+	cbXDataColumn->setColumn(column, m_differentiationCurve->xDataColumnPath());
 	m_initializing = false;
 }
 
 void XYDifferentiationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	cbYDataColumn->setColumn(column, m_differentiationCurve->yDataColumnPath());
 	m_initializing = false;
 }
 

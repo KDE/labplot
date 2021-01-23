@@ -144,24 +144,17 @@ void XYCorrelationCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
-	checkColumnAvailability(cbY2DataColumn, analysisCurve->y2DataColumn(), analysisCurve->y2DataColumnPath());
-
 	//show the properties of the first curve
-	m_correlationCurve = dynamic_cast<XYCorrelationCurve*>(m_curve);
-
 	// hide x-Range per default
 	uiGeneralTab.lXRange->setEnabled(false);
 	uiGeneralTab.cbAutoRange->setEnabled(false);
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_correlationCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_correlationCurve->dataSourceCurve());
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_correlationCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_correlationCurve->yDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, m_correlationCurve->y2DataColumn());
+	cbDataSourceCurve->setAspect(m_correlationCurve->dataSourceCurve());
+	cbXDataColumn->setColumn(m_correlationCurve->xDataColumn(), m_correlationCurve->xDataColumnPath());
+	cbYDataColumn->setColumn(m_correlationCurve->yDataColumn(), m_correlationCurve->yDataColumnPath());
+	cbY2DataColumn->setColumn(m_correlationCurve->y2DataColumn(), m_correlationCurve->y2DataColumnPath());
 	uiGeneralTab.sbSamplingInterval->setValue(m_correlationData.samplingInterval);
 	uiGeneralTab.cbAutoRange->setChecked(m_correlationData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_correlationData.xRange.first());
@@ -225,7 +218,7 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
-	m_correlationCurve = dynamic_cast<XYCorrelationCurve*>(m_curve);
+	m_correlationCurve = static_cast<XYCorrelationCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_correlationData = m_correlationCurve->correlationData();
@@ -502,15 +495,15 @@ void XYCorrelationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSou
 
 void XYCorrelationCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
+	cbDataSourceCurve->setAspect(curve);
 	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveXDataColumnChanged()");
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
-	if (column != nullptr) {
+	cbXDataColumn->setColumn(column, m_correlationCurve->xDataColumnPath());
+	if (column) {
 		DEBUG("X Column available");
 		uiGeneralTab.lXRange->setEnabled(true);
 		uiGeneralTab.cbAutoRange->setEnabled(true);
@@ -531,14 +524,14 @@ void XYCorrelationCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 void XYCorrelationCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveYDataColumnChanged()");
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	cbYDataColumn->setColumn(column, m_correlationCurve->yDataColumnPath());
 	m_initializing = false;
 }
 
 void XYCorrelationCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYCorrelationCurveDock::curveY2DataColumnChanged()");
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, column);
+	cbY2DataColumn->setColumn(column, m_correlationCurve->y2DataColumnPath());
 	m_initializing = false;
 }
 

@@ -142,18 +142,12 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
-
 	//show the properties of the first curve
-	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
-
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_filterCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_filterCurve->dataSourceCurve());
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_filterCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_filterCurve->yDataColumn());
+	cbDataSourceCurve->setAspect(m_filterCurve->dataSourceCurve());
+	cbXDataColumn->setColumn(m_filterCurve->xDataColumn(), m_filterCurve->xDataColumnPath());
+	cbYDataColumn->setColumn(m_filterCurve->yDataColumn(), m_filterCurve->xDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_filterData.autoRange);
 	uiGeneralTab.sbMin->setValue(m_filterData.xRange.first());
 	uiGeneralTab.sbMax->setValue(m_filterData.xRange.last());
@@ -219,7 +213,7 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	m_aspect = m_curve;
-	m_filterCurve = dynamic_cast<XYFourierFilterCurve*>(m_curve);
+	m_filterCurve = static_cast<XYFourierFilterCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_filterData = m_filterCurve->filterData();
@@ -677,19 +671,19 @@ void XYFourierFilterCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataS
 
 void XYFourierFilterCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
+	cbDataSourceCurve->setAspect(curve);
 	m_initializing = false;
 }
 
 void XYFourierFilterCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
+	cbXDataColumn->setColumn(column, m_filterCurve->xDataColumnPath());
 	m_initializing = false;
 }
 
 void XYFourierFilterCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	cbYDataColumn->setColumn(column, m_filterCurve->yDataColumnPath());
 	m_initializing = false;
 }
 

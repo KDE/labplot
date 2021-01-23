@@ -147,16 +147,12 @@ void XYSmoothCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	m_smoothCurve = static_cast<XYSmoothCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, m_smoothCurve->xDataColumn(), m_smoothCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, m_smoothCurve->yDataColumn(), m_smoothCurve->yDataColumnPath());
-
 	//data source
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_smoothCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_smoothCurve->dataSourceCurve());
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_smoothCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_smoothCurve->yDataColumn());
+	cbDataSourceCurve->setAspect(m_smoothCurve->dataSourceCurve());
+	cbXDataColumn->setColumn(m_smoothCurve->xDataColumn(), m_smoothCurve->xDataColumnPath());
+	cbYDataColumn->setColumn(m_smoothCurve->yDataColumn(), m_smoothCurve->yDataColumnPath());
 
 	//range widgets
 	const auto* plot = static_cast<const CartesianPlot*>(m_smoothCurve->parentAspect());
@@ -247,7 +243,7 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	m_aspect = m_curve;
-	m_smoothCurve = dynamic_cast<XYSmoothCurve*>(m_curve);
+	m_smoothCurve = static_cast<XYSmoothCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_smoothData = m_smoothCurve->smoothData();
@@ -621,19 +617,19 @@ void XYSmoothCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceTy
 
 void XYSmoothCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
+	cbDataSourceCurve->setAspect(curve);
 	m_initializing = false;
 }
 
 void XYSmoothCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
+	cbXDataColumn->setColumn(column, m_smoothCurve->xDataColumnPath());
 	m_initializing = false;
 }
 
 void XYSmoothCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	cbYDataColumn->setColumn(column, m_smoothCurve->yDataColumnPath());
 	m_initializing = false;
 }
 

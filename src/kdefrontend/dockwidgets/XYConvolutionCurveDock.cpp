@@ -152,24 +152,17 @@ void XYConvolutionCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(m_curve);
-	checkColumnAvailability(cbXDataColumn, analysisCurve->xDataColumn(), analysisCurve->xDataColumnPath());
-	checkColumnAvailability(cbYDataColumn, analysisCurve->yDataColumn(), analysisCurve->yDataColumnPath());
-	checkColumnAvailability(cbY2DataColumn, analysisCurve->y2DataColumn(), analysisCurve->y2DataColumnPath());
-
 	//show the properties of the first curve
-	m_convolutionCurve = dynamic_cast<XYConvolutionCurve*>(m_curve);
-
 	// hide x-Range per default
 	uiGeneralTab.lXRange->setEnabled(false);
 	uiGeneralTab.cbAutoRange->setEnabled(false);
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_convolutionCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, m_convolutionCurve->dataSourceCurve());
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, m_convolutionCurve->xDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, m_convolutionCurve->yDataColumn());
-	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, m_convolutionCurve->y2DataColumn());
+	cbDataSourceCurve->setAspect(m_convolutionCurve->dataSourceCurve());
+	cbXDataColumn->setColumn(m_convolutionCurve->xDataColumn(), m_convolutionCurve->xDataColumnPath());
+	cbYDataColumn->setColumn(m_convolutionCurve->yDataColumn(), m_convolutionCurve->yDataColumnPath());
+	cbY2DataColumn->setColumn(m_convolutionCurve->y2DataColumn(), m_convolutionCurve->y2DataColumnPath());
 	uiGeneralTab.sbSamplingInterval->setValue(m_convolutionData.samplingInterval);
 	uiGeneralTab.cbKernel->setCurrentIndex(m_convolutionData.kernel);
 	uiGeneralTab.sbKernelSize->setValue((int)m_convolutionData.kernelSize);
@@ -239,7 +232,7 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
-	m_convolutionCurve = dynamic_cast<XYConvolutionCurve*>(m_curve);
+	m_convolutionCurve = static_cast<XYConvolutionCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
 	m_convolutionData = m_convolutionCurve->convolutionData();
@@ -606,15 +599,15 @@ void XYConvolutionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSou
 
 void XYConvolutionCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbDataSourceCurve, curve);
+	cbDataSourceCurve->setAspect(curve);
 	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveXDataColumnChanged()");
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbXDataColumn, column);
-	if (column != nullptr) {
+	cbXDataColumn->setColumn(column, m_convolutionCurve->xDataColumnPath());
+	if (column) {
 		DEBUG("X Column available");
 		uiGeneralTab.lXRange->setEnabled(true);
 		uiGeneralTab.cbAutoRange->setEnabled(true);
@@ -635,15 +628,15 @@ void XYConvolutionCurveDock::curveXDataColumnChanged(const AbstractColumn* colum
 void XYConvolutionCurveDock::curveYDataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveYDataColumnChanged()");
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbYDataColumn, column);
+	cbYDataColumn->setColumn(column, m_convolutionCurve->yDataColumnPath());
 	m_initializing = false;
 }
 
 void XYConvolutionCurveDock::curveY2DataColumnChanged(const AbstractColumn* column) {
 	DEBUG("XYConvolutionCurveDock::curveY2DataColumnChanged()");
 	m_initializing = true;
-	XYCurveDock::setModelIndexFromAspect(cbY2DataColumn, column);
-	if (column != nullptr) {
+	cbY2DataColumn->setColumn(column, m_convolutionCurve->y2DataColumnPath());
+	if (column) {
 		DEBUG("Y2 Column available");
 		uiGeneralTab.lKernel->setEnabled(false);
 		uiGeneralTab.cbKernel->setEnabled(false);

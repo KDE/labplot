@@ -528,25 +528,6 @@ void XYCurveDock::setModel() {
 	cbYErrorMinusColumn->setModel(m_aspectTreeModel);
 	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
 
-	if (cbXColumn) {
-		QString msg = i18n("The column \"%1\" is not available. If a new column at this path is created, it will automatically be used again by this curve.");
-		QString path = m_curve->xColumnPath().split('/').last();
-		if (m_curve->xColumn()) {
-			path += QString("\t ") + m_curve->xColumn()->plotDesignationString();
-			cbXColumn->setInvalid(false);
-		} else
-			cbXColumn->setInvalid(true, msg.arg(m_curve->xColumnPath()));
-		cbXColumn->setText(path);
-
-		path = m_curve->yColumnPath().split('/').last();
-		if (m_curve->yColumn()) {
-			path += QString("\t ") + m_curve->yColumn()->plotDesignationString();
-			cbYColumn->setInvalid(false);
-		} else
-			cbYColumn->setInvalid(true, msg.arg(m_curve->yColumnPath()));
-		cbYColumn->setText(path);
-	}
-
 
 	//this function is called after the dock widget is initializes and the curves are set.
 	//so, we use this function to finalize the initialization even though it's not related
@@ -596,9 +577,8 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.lYColumn->setEnabled(true);
 		cbYColumn->setEnabled(true);
 
-		DEBUG("setModelIndexFromAspect()");
-		this->setModelIndexFromAspect(cbXColumn, m_curve->xColumn());
-		this->setModelIndexFromAspect(cbYColumn, m_curve->yColumn());
+		cbXColumn->setColumn(m_curve->xColumn(), m_curve->xColumnPath());
+		cbYColumn->setColumn(m_curve->yColumn(), m_curve->yColumnPath());
 
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
@@ -620,14 +600,6 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.leComment->setText(QString());
 	}
 
-	checkColumnAvailability(cbXColumn, m_curve->xColumn(), m_curve->xColumnPath());
-	checkColumnAvailability(cbYColumn, m_curve->yColumn(), m_curve->yColumnPath());
-	checkColumnAvailability(cbValuesColumn, m_curve->valuesColumn(), m_curve->valuesColumnPath());
-	checkColumnAvailability(cbXErrorPlusColumn, m_curve->xErrorPlusColumn(), m_curve->xErrorPlusColumnPath());
-	checkColumnAvailability(cbXErrorMinusColumn, m_curve->xErrorMinusColumn(), m_curve->xErrorMinusColumnPath());
-	checkColumnAvailability(cbYErrorPlusColumn, m_curve->yErrorPlusColumn(), m_curve->yErrorPlusColumnPath());
-	checkColumnAvailability(cbYErrorMinusColumn, m_curve->yErrorMinusColumn(), m_curve->yErrorMinusColumnPath());
-
 	//show the properties of the first curve
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
@@ -642,11 +614,11 @@ void XYCurveDock::initGeneralTab() {
 void XYCurveDock::initTabs() {
 	//if there are more than one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
-		this->setModelIndexFromAspect(cbValuesColumn, m_curve->valuesColumn());
-		this->setModelIndexFromAspect(cbXErrorPlusColumn, m_curve->xErrorPlusColumn());
-		this->setModelIndexFromAspect(cbXErrorMinusColumn, m_curve->xErrorMinusColumn());
-		this->setModelIndexFromAspect(cbYErrorPlusColumn, m_curve->yErrorPlusColumn());
-		this->setModelIndexFromAspect(cbYErrorMinusColumn, m_curve->yErrorMinusColumn());
+		cbValuesColumn->setColumn(m_curve->valuesColumn(), m_curve->valuesColumnPath());
+		cbXErrorPlusColumn->setColumn(m_curve->xErrorPlusColumn(), m_curve->xErrorPlusColumnPath());
+		cbXErrorMinusColumn->setColumn(m_curve->xErrorMinusColumn(), m_curve->xErrorMinusColumnPath());
+		cbYErrorPlusColumn->setColumn(m_curve->yErrorPlusColumn(), m_curve->yErrorPlusColumnPath());
+		cbYErrorMinusColumn->setColumn(m_curve->yErrorMinusColumn(), m_curve->yErrorMinusColumnPath());
 	} else {
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
 		cbXErrorPlusColumn->setCurrentModelIndex(QModelIndex());
@@ -716,35 +688,6 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, SIGNAL(errorBarsTypeChanged(XYCurve::ErrorBarsType)), this, SLOT(curveErrorBarsTypeChanged(XYCurve::ErrorBarsType)));
 	connect(m_curve, SIGNAL(errorBarsPenChanged(QPen)), this, SLOT(curveErrorBarsPenChanged(QPen)));
 	connect(m_curve, SIGNAL(errorBarsOpacityChanged(qreal)), this, SLOT(curveErrorBarsOpacityChanged(qreal)));
-}
-
-void XYCurveDock::checkColumnAvailability(TreeViewComboBox* cb, const AbstractColumn* column, const QString& columnPath) {
-	if (!cb)
-		return;// normally it shouldn't be called
-
-	// don't make the comboboxes red for initially created curves
-	if (!column && columnPath.isEmpty()) {
-		cb->setText("");
-		cb->setInvalid(false);
-		return;
-	}
-
-	if (column) {
-		// current index text should be used
-		cb->useCurrentIndexText(true);
-		cb->setInvalid(false);
-	} else {
-		cb->useCurrentIndexText(false);
-		cb->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPath));
-	}
-	cb->setText(columnPath.split('/').last());
-}
-
-void XYCurveDock::setModelIndexFromAspect(TreeViewComboBox* cb, const AbstractAspect* aspect) {
-	if (aspect)
-		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(aspect));
-	else
-		cb->setCurrentModelIndex(QModelIndex());
 }
 
 void XYCurveDock::updateLocale() {
@@ -1815,18 +1758,14 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromAspect(cbXColumn, column);
-	cbXColumn->useCurrentIndexText(true);
-	cbXColumn->setInvalid(false);
+	cbXColumn->setColumn(column, m_curve->xColumnPath());
 	updateValuesWidgets();
 	m_initializing = false;
 }
 
 void XYCurveDock::curveYColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromAspect(cbYColumn, column);
-	cbYColumn->useCurrentIndexText(true);
-	cbYColumn->setInvalid(false);
+	cbYColumn->setColumn(column, m_curve->yColumnPath());
 	updateValuesWidgets();
 	m_initializing = false;
 }
@@ -1935,7 +1874,7 @@ void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
 }
 void XYCurveDock::curveValuesColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromAspect(cbValuesColumn, column);
+	cbValuesColumn->setColumn(column, m_curve->valuesColumnPath());
 	m_initializing = false;
 }
 void XYCurveDock::curveValuesPositionChanged(XYCurve::ValuesPosition position) {
@@ -2051,12 +1990,12 @@ void XYCurveDock::curveXErrorTypeChanged(XYCurve::ErrorType type) {
 }
 void XYCurveDock::curveXErrorPlusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromAspect(cbXErrorPlusColumn, column);
+	cbXErrorPlusColumn->setColumn(column, m_curve->xErrorPlusColumnPath());
 	m_initializing = false;
 }
 void XYCurveDock::curveXErrorMinusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromAspect(cbXErrorMinusColumn, column);
+	cbXErrorMinusColumn->setColumn(column, m_curve->xErrorMinusColumnPath());
 	m_initializing = false;
 }
 void XYCurveDock::curveYErrorTypeChanged(XYCurve::ErrorType type) {
@@ -2066,13 +2005,13 @@ void XYCurveDock::curveYErrorTypeChanged(XYCurve::ErrorType type) {
 }
 void XYCurveDock::curveYErrorPlusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromAspect(cbYErrorPlusColumn, column);
+	cbYErrorPlusColumn->setColumn(column, m_curve->yErrorPlusColumnPath());
 	m_initializing = false;
 }
 
 void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
-	this->setModelIndexFromAspect(cbYErrorMinusColumn, column);
+	cbYErrorMinusColumn->setColumn(column, m_curve->yErrorMinusColumnPath());
 	m_initializing = false;
 }
 void XYCurveDock::curveErrorBarsCapSizeChanged(qreal size) {
