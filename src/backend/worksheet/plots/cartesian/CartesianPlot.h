@@ -32,6 +32,7 @@
 #define CARTESIANPLOT_H
 
 #include "backend/worksheet/plots/AbstractPlot.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 
 #include <cmath>
@@ -168,7 +169,7 @@ private:
 	const XYCurve* currentCurve() const;
 	void shift(bool x, bool leftOrDown);
 	void zoom(bool x, bool in);
-
+	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
 	void calculateCurvesXMinMax(bool completeRange = true);
 	void calculateCurvesYMinMax(bool completeRange = true);
 

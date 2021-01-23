@@ -30,7 +30,6 @@
 
 #include "CartesianPlot.h"
 #include "CartesianPlotPrivate.h"
-#include "Axis.h"
 #include "XYCurve.h"
 #include "Histogram.h"
 #include "XYEquationCurve.h"
@@ -1452,6 +1451,8 @@ double CartesianPlot::cursorPos(int cursorNumber) {
 
 void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
+
+	const bool firstCurve = (children<XYCurve>().size() + children<Histogram>().size() == 1);
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	if (curve) {
 		connect(curve, &XYCurve::dataChanged, this, &CartesianPlot::dataChanged);
@@ -1486,47 +1487,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		d->curvesYMinMaxIsDirty = true;
 
 		//in case the first curve is added, check whether we start plotting datetime data
-		if (children<XYCurve>().size() == 1) {
-			const auto* col = dynamic_cast<const Column*>(curve->xColumn());
-			if (col) {
-				if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
-					setUndoAware(false);
-					setXRangeFormat(RangeFormat::DateTime);
-					setUndoAware(true);
-
-					//set column's datetime format for all horizontal axis
-					for (auto* axis : children<Axis>()) {
-						if (axis->orientation() == Axis::Orientation::Horizontal) {
-							auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-							d->xRangeDateTimeFormat = filter->format();
-							axis->setUndoAware(false);
-							axis->setLabelsDateTimeFormat(d->xRangeDateTimeFormat);
-							axis->setUndoAware(true);
-						}
-					}
-				}
-			}
-
-			col = dynamic_cast<const Column*>(curve->yColumn());
-			if (col) {
-				if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
-					setUndoAware(false);
-					setYRangeFormat(RangeFormat::DateTime);
-					setUndoAware(true);
-
-					//set column's datetime format for all vertical axis
-					for (auto* axis : children<Axis>()) {
-						if (axis->orientation() == Axis::Orientation::Vertical) {
-							auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-							d->yRangeDateTimeFormat = filter->format();
-							axis->setUndoAware(false);
-							axis->setLabelsDateTimeFormat(d->yRangeDateTimeFormat);
-							axis->setUndoAware(true);
-						}
-					}
-				}
-			}
+		if (firstCurve) {
+			checkAxisFormat(curve->xColumn(), Axis::Orientation::Horizontal);
+			checkAxisFormat(curve->yColumn(), Axis::Orientation::Vertical);
 		}
+
 		emit curveAdded(curve);
 
 	} else {
@@ -1536,6 +1501,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(hist, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
 
 			updateLegend();
+			d->curvesXMinMaxIsDirty = true;
+			d->curvesYMinMaxIsDirty = true;
+
+			if (firstCurve)
+				checkAxisFormat(hist->dataColumn(), Axis::Orientation::Horizontal);
 		}
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
@@ -1554,6 +1524,30 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			} else {
 				KConfig config;
 				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);
+			}
+		}
+	}
+}
+
+void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientation orientation) {
+	const auto* col = dynamic_cast<const Column*>(column);
+	if (!col)
+		return;
+
+	if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
+		setUndoAware(false);
+		setXRangeFormat(RangeFormat::DateTime);
+		setUndoAware(true);
+
+		//set column's datetime format for all horizontal axis
+		Q_D(CartesianPlot);
+		for (auto* axis : children<Axis>()) {
+			if (axis->orientation() == orientation) {
+				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+				d->xRangeDateTimeFormat = filter->format();
+				axis->setUndoAware(false);
+				axis->setLabelsDateTimeFormat(d->xRangeDateTimeFormat);
+				axis->setUndoAware(true);
 			}
 		}
 	}
