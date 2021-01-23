@@ -3774,6 +3774,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "yScale", QString::number(static_cast<int>(d->yScale)) );
 	writer->writeAttribute( "xRangeFormat", QString::number(static_cast<int>(d->xRangeFormat)) );
 	writer->writeAttribute( "yRangeFormat", QString::number(static_cast<int>(d->yRangeFormat)) );
+	writer->writeAttribute( "xRangeDateTimeFormat", d->xRangeDateTimeFormat );
+	writer->writeAttribute( "yRangeDateTimeFormat", d->yRangeDateTimeFormat );
 	writer->writeAttribute( "horizontalPadding", QString::number(d->horizontalPadding) );
 	writer->writeAttribute( "verticalPadding", QString::number(d->verticalPadding) );
 	writer->writeAttribute( "rightPadding", QString::number(d->rightPadding) );
@@ -3930,6 +3932,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("xRangeFormat", xRangeFormat, CartesianPlot::RangeFormat);
 			READ_INT_VALUE("yRangeFormat", yRangeFormat, CartesianPlot::RangeFormat);
+
+			str = attribs.value("xRangeDateTimeFormat").toString();
+			if (!str.isEmpty())
+				d->xRangeDateTimeFormat = str;
+
+			str = attribs.value("yRangeDateTimeFormat").toString();
+			if (!str.isEmpty())
+				d->yRangeDateTimeFormat = str;
 
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);

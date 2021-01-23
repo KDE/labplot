@@ -943,9 +943,25 @@ void HistogramPrivate::recalcHistogram() {
 			m_histogram = gsl_histogram_alloc (m_bins);
 			gsl_histogram_set_ranges_uniform (m_histogram, binRangesMin, binRangesMax);
 
-			for (int row = 0; row < dataColumn->rowCount(); ++row) {
-				if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
-					gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
+			switch (dataColumn->columnMode()) {
+			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
+				for (int row = 0; row < dataColumn->rowCount(); ++row) {
+					if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
+						gsl_histogram_increment(m_histogram, dataColumn->valueAt(row));
+				}
+				break;
+			case AbstractColumn::ColumnMode::DateTime:
+				for (int row = 0; row < dataColumn->rowCount(); ++row) {
+					if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) )
+						gsl_histogram_increment(m_histogram, dataColumn->dateTimeAt(row).toMSecsSinceEpoch());
+			}
+				break;
+			case AbstractColumn::ColumnMode::Text:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+				break;
 			}
 		} else
 			DEBUG("Number of bins must be positiv integer")
