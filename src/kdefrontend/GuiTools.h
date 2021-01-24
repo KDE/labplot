@@ -46,6 +46,7 @@ public:
 	static void updatePenStyles(QMenu*, QActionGroup*, const QColor&);
 	static void selectPenStyleAction(QActionGroup*, Qt::PenStyle);
 	static Qt::PenStyle penStyleFromAction(QActionGroup*, QAction*);
+	static void addSymbolStyles(QComboBox*);
 
 	static void fillColorMenu(QMenu*, QActionGroup*);
 	static void selectColorAction(QActionGroup*, const QColor&);

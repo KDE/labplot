@@ -83,6 +83,12 @@ private slots:
 	void borderWidthChanged(double) const;
 	void borderOpacityChanged(int) const;
 
+	//median line
+	void medianLineStyleChanged(int) const;
+	void medianLineColorChanged(const QColor&);
+	void medianLineWidthChanged(double) const;
+	void medianLineOpacityChanged(int) const;
+
 	//whiskers
 	void whiskersStyleChanged(int) const;
 	void whiskersCapSizeChanged(double) const;
@@ -110,6 +116,10 @@ private slots:
 	//box border
 	void plotBorderPenChanged(QPen&);
 	void plotBorderOpacityChanged(float);
+
+	//box border
+	void plotMedianLinePenChanged(QPen&);
+	void plotMedianLineOpacityChanged(float);
 
 	//whiskers
 	void plotWhiskersPenChanged(QPen&);

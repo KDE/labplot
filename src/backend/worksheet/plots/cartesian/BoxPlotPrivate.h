@@ -82,6 +82,11 @@ public:
 	QPen borderPen;
 	qreal borderOpacity;
 
+	//median line
+	QLineF medianLine;
+	QPen medianLinePen;
+	qreal medianLineOpacity;
+
 	//whiskers
 	QPainterPath whiskersPath;
 	QPen whiskersPen;

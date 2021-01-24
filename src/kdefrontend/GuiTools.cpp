@@ -28,6 +28,8 @@
  ***************************************************************************/
 
 #include "GuiTools.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
+
 #include <KI18n/KLocalizedString>
 
 #include <array>
@@ -236,4 +238,30 @@ void GuiTools::highlight(QLineEdit* le, bool invalid) {
 		le->setStyleSheet(QStringLiteral("QLineEdit{color:red;}"));
 	else
 		le->setStyleSheet(QString());
+}
+
+void GuiTools::addSymbolStyles(QComboBox* cb) {
+	QPainter pa;
+	QPen pen(Qt::SolidPattern, 0);
+	const QColor& color = (QApplication::palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	pen.setColor(color);
+	pa.setPen(pen);
+
+	int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
+	cb->setIconSize(QSize(iconSize, iconSize));
+	QTransform trafo;
+	trafo.scale(15, 15);
+
+	for (int i = 1; i < Symbol::stylesCount(); ++i) {
+		const auto style = (Symbol::Style)i;
+		pm.fill(Qt::transparent);
+		pa.begin(&pm);
+		pa.setPen(pen);
+		pa.setRenderHint(QPainter::Antialiasing);
+		pa.translate(iconSize/2,iconSize/2);
+		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
+		pa.end();
+		cb->addItem(QIcon(pm), Symbol::nameFromStyle(style), (int)style);
+	}
 }
