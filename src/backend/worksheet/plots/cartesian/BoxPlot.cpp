@@ -100,6 +100,7 @@ void BoxPlot::init() {
 	                    group.readEntry("WhiskersWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 	                    (Qt::PenStyle) group.readEntry("WhiskersStyle", (int)Qt::SolidLine));
 	d->whiskersOpacity = group.readEntry("WhiskersOpacity", 1.0);
+	d->whiskersCapSize = group.readEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
 }
 
 /*!
@@ -201,6 +202,7 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, borderOpacity, borderOpacity)
 //whiskers
 CLASS_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersOpacity, whiskersOpacity)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersCapSize, whiskersCapSize)
 
 QString& BoxPlot::dataColumnPath() const {
 	return d_ptr->dataColumnPath;
@@ -340,7 +342,7 @@ void BoxPlot::setBorderOpacity(qreal opacity) {
 		exec(new BoxPlotSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
 }
 
-//box border
+//whiskers
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersPen, QPen, whiskersPen, updatePixmap)
 void BoxPlot::setWhiskersPen(const QPen &pen) {
 	Q_D(BoxPlot);
@@ -353,6 +355,13 @@ void BoxPlot::setWhiskersOpacity(qreal opacity) {
 	Q_D(BoxPlot);
 	if (opacity != d->whiskersOpacity)
 		exec(new BoxPlotSetWhiskersOpacityCmd(d, opacity, ki18n("%1: set whiskers opacity")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapSize, double, whiskersCapSize, recalc)
+void BoxPlot::setWhiskersCapSize(double size) {
+	Q_D(BoxPlot);
+	if (size != d->whiskersCapSize)
+		exec(new BoxPlotSetWhiskersCapSizeCmd(d, size, ki18n("%1: set whiskers cap size")));
 }
 
 //##############################################################################
@@ -395,13 +404,10 @@ QString BoxPlotPrivate::name() const {
     calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void BoxPlotPrivate::retransform() {
-	if (suppressRetransform)
+	if (m_suppressRetransform || !isVisible())
 		return;
 
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::retransform()");
-	if (!isVisible())
-		return;
-
 
 	if (!dataColumn) {
 		boxRect = QRectF();
@@ -485,6 +491,15 @@ void BoxPlotPrivate::verticalBoxPlot() {
 		whiskersPath.lineTo(line.p2());
 	}
 
+	//add caps
+	QPointF maxPoint = cSystem->mapLogicalToScene(QPointF(x, whiskerMax));
+	QPointF minPoint = cSystem->mapLogicalToScene(QPointF(x, whiskerMin));
+	whiskersPath.moveTo(QPointF(maxPoint.x() - whiskersCapSize/2., maxPoint.y()));
+	whiskersPath.lineTo(QPointF(maxPoint.x() + whiskersCapSize/2., maxPoint.y()));
+
+	whiskersPath.moveTo(QPointF(minPoint.x() - whiskersCapSize/2., minPoint.y()));
+	whiskersPath.lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
+
 	//calculate the new min and max values of the box plot
 	//for the current sizes of the box and of the whiskers
 	m_xMin = xMin - 0.25;
@@ -517,14 +532,14 @@ bool BoxPlotPrivate::swapVisible(bool on) {
     Returns the outer bounds of the item as a rectangle.
  */
 QRectF BoxPlotPrivate::boundingRect() const {
-	return boundingRectangle;
+	return m_boundingRectangle;
 }
 
 /*!
     Returns the shape of this item as a QPainterPath in local coordinates.
 */
 QPainterPath BoxPlotPrivate::shape() const {
-	return lineShape;
+	return m_boxPlotShape;
 }
 
 /*!
@@ -532,7 +547,15 @@ QPainterPath BoxPlotPrivate::shape() const {
 */
 void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
-	boundingRectangle = boxRect;
+	m_boxPlotShape = QPainterPath();
+
+// 	m_boundingRectangle = boxRect.united(whiskersPath.boundingRect());
+	QPainterPath boxPath;
+	boxPath.addRect(boxRect);
+	m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, whiskersPen));
+	m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(whiskersPath, whiskersPen));
+
+	m_boundingRectangle = m_boxPlotShape.boundingRect();
 	updatePixmap();
 }
 
@@ -554,8 +577,8 @@ double BoxPlotPrivate::yMaximum() {
 
 void BoxPlotPrivate::updatePixmap() {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::updatePixmap()");
-	QPixmap pixmap(boundingRectangle.width(), boundingRectangle.height());
-	if (boundingRectangle.width() == 0 || boundingRectangle.height() == 0) {
+	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
+	if (m_boundingRectangle.width() == 0 || m_boundingRectangle.height() == 0) {
 		m_pixmap = pixmap;
 		m_hoverEffectImageIsDirty = true;
 		m_selectionEffectImageIsDirty = true;
@@ -564,7 +587,7 @@ void BoxPlotPrivate::updatePixmap() {
 	pixmap.fill(Qt::transparent);
 	QPainter painter(&pixmap);
 	painter.setRenderHint(QPainter::Antialiasing, true);
-	painter.translate(-boundingRectangle.topLeft());
+	painter.translate(-m_boundingRectangle.topLeft());
 
 	draw(&painter);
 	painter.end();
@@ -691,10 +714,6 @@ void BoxPlotPrivate::drawBox(QPainter* painter) {
 	}
 }
 
-void BoxPlotPrivate::drawWhiskers(QPainter*) {
-
-}
-
 void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
@@ -707,7 +726,7 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
 	if ( KSharedConfig::openConfig()->group("Settings_Worksheet").readEntry<bool>("DoubleBuffering", true) )
-		painter->drawPixmap(boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
+		painter->drawPixmap(m_boundingRectangle.topLeft(), m_pixmap); //draw the cached pixmap (fast)
 	else
 		draw(painter); //draw directly again (slow)
 
@@ -723,7 +742,7 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 			m_hoverEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
+		painter->drawImage(m_boundingRectangle.topLeft(), m_hoverEffectImage, m_pixmap.rect());
 		return;
 	}
 
@@ -739,7 +758,7 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 			m_selectionEffectImageIsDirty = false;
 		}
 
-		painter->drawImage(boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
+		painter->drawImage(m_boundingRectangle.topLeft(), m_selectionEffectImage, m_pixmap.rect());
 		return;
 	}
 }
@@ -893,5 +912,46 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void BoxPlot::loadThemeConfig(const KConfig& config) {
-	Q_UNUSED(config)
+	KConfigGroup group;
+	if (config.hasGroup(QLatin1String("Theme")))
+		group = config.group("XYCurve"); //when loading from the theme config, use the same properties as for XYCurve
+	else
+		group = config.group("BoxPlot");
+
+
+	int index = parentAspect()->indexOfChild<Histogram>(this);
+	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	QColor themeColor;
+	if (index<plot->themeColorPalette().size())
+		themeColor = plot->themeColorPalette().at(index);
+	else {
+		if (plot->themeColorPalette().size())
+			themeColor = plot->themeColorPalette().last();
+	}
+
+	QPen p;
+
+	Q_D(BoxPlot);
+
+	//box border
+	p.setStyle((Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine));
+	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	p.setWidthF(group.readEntry("LineWidth", borderPen().widthF()));
+	p.setColor(themeColor);
+	setBorderPen(p);
+	setBorderOpacity(group.readEntry("LineOpacity", 1.0));
+
+	//box filling
+	setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
+	setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor)));
+	setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
+	setFillingFirstColor(themeColor);
+	setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
+	setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color)));
+
+	//whiskers
+	setWhiskersPen(p);
+	setWhiskersOpacity(group.readEntry("LineOpacity", 1.0));
+
+	d->recalcShapeAndBoundingRect();
 }

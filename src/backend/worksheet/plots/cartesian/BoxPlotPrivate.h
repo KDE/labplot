@@ -53,10 +53,6 @@ public:
 	bool m_hovered{false};
 	bool m_visible{true}; //point inside the plot (visible) or not
 
-	QRectF boundingRectangle;
-	QPainterPath lineShape;
-
-
 	//reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
@@ -69,7 +65,6 @@ public:
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::MinMax};
 	BoxPlot::Orientation orientation{BoxPlot::Orientation::Vertical};
 	qreal opacity{1.0};
-
 
 	//box filling
 	QRectF boxRect;
@@ -90,6 +85,7 @@ public:
 	//whiskers
 	QPainterPath whiskersPath;
 	QPen whiskersPen;
+	double whiskersCapSize;
 	qreal whiskersOpacity;
 
 private:
@@ -103,14 +99,17 @@ private:
 
 	void draw(QPainter*);
 	void drawBox(QPainter*);
-	void drawWhiskers(QPainter*);
 
-	bool suppressItemChangeEvent{false};
-	bool suppressRetransform{false};
+	bool n_suppressItemChangeEvent{false};
+	bool m_suppressRetransform{false};
 	bool m_suppressRecalc{false};
+
+	QRectF m_boundingRectangle;
+	QPainterPath m_boxPlotShape;
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
 	QImage m_selectionEffectImage;
+
 	bool m_hoverEffectImageIsDirty{false};
 	bool m_selectionEffectImageIsDirty{false};
 

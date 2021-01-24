@@ -61,27 +61,34 @@ private slots:
 	//SLOTs for changes triggered in BoxPlotDock
 
 	//"General"-tab
-	void dataColumnChanged(const QModelIndex&);
-	void visibilityChanged(bool);
+	void dataColumnChanged(const QModelIndex&) const;
+	void visibilityChanged(bool) const;
 
 	//"Box"-tab
 	//box filling
-	void fillingEnabledChanged(int);
-	void boxFillingTypeChanged(int);
-	void boxFillingColorStyleChanged(int);
-	void boxFillingImageStyleChanged(int);
-	void boxFillingBrushStyleChanged(int);
-	void boxFillingFirstColorChanged(const QColor&);
-	void boxFillingSecondColorChanged(const QColor&);
+	void fillingEnabledChanged(int) const;
+	void boxFillingTypeChanged(int) const;
+	void boxFillingColorStyleChanged(int) const;
+	void boxFillingImageStyleChanged(int) const;
+	void boxFillingBrushStyleChanged(int) const;
+	void boxFillingFirstColorChanged(const QColor&) const;
+	void boxFillingSecondColorChanged(const QColor&) const;
 	void selectFile();
-	void fileNameChanged();
-	void boxFillingOpacityChanged(int);
+	void fileNameChanged() const;
+	void boxFillingOpacityChanged(int) const;
 
 	//box border
-	void borderStyleChanged(int);
+	void borderStyleChanged(int) const;
 	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
-	void borderOpacityChanged(int);
+	void borderWidthChanged(double) const;
+	void borderOpacityChanged(int) const;
+
+	//whiskers
+	void whiskersStyleChanged(int) const;
+	void whiskersCapSizeChanged(double) const;
+	void whiskersColorChanged(const QColor&);
+	void whiskersWidthChanged(double) const;
+	void whiskersOpacityChanged(int) const;
 
 	//SLOTs for changes triggered in BoxPlot
 	//general
@@ -105,7 +112,9 @@ private slots:
 	void plotBorderOpacityChanged(float);
 
 	//whiskers
-
+	void plotWhiskersPenChanged(QPen&);
+	void plotWhiskersCapSizeChanged(double);
+	void plotWhiskersOpacityChanged(float);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);
