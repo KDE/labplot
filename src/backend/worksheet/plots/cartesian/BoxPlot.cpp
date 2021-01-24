@@ -205,7 +205,7 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, borderOpacity, borderOpacity)
 
 //median line
-CLASS_SHARED_D_READER_IMPL(BoxPlot, QPen, medianLinePen, medianLinePen)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, medianLinePen, medianLinePen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, medianLineOpacity, medianLineOpacity)
 
 //whiskers
