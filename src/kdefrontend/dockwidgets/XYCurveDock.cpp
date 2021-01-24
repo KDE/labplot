@@ -388,23 +388,8 @@ void XYCurveDock::init() {
 
 	//Symbols
 	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
-
-	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
-	QTransform trafo;
-	trafo.scale(15, 15);
-
-	ui.cbSymbolStyle->addItem(i18n("None"));
-	for (int i = 1; i < Symbol::stylesCount(); ++i) {
-		const auto style = (Symbol::Style)i;
-		pm.fill(Qt::transparent);
-		pa.begin(&pm);
-		pa.setPen(pen);
-		pa.setRenderHint(QPainter::Antialiasing);
-		pa.translate(iconSize/2,iconSize/2);
-		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
-		pa.end();
-		ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
-	}
+	GuiTools::addSymbolStyles(ui.cbSymbolStyle);
+	ui.cbSymbolStyle->insertItem(0, i18n("None"));
 
 	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
 	m_initializing = false;
