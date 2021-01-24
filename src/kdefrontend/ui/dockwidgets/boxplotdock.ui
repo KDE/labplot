@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>356</width>
-    <height>918</height>
+    <height>876</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -159,15 +159,31 @@
        <string>Box</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="7" column="0" colspan="2">
-        <widget class="QLabel" name="lFillingFirstColor">
+       <item row="11" column="0" colspan="2">
+        <widget class="QLabel" name="lBorder">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
-          <string>First color:</string>
+          <string>Border</string>
          </property>
         </widget>
        </item>
-       <item row="21" column="4">
-        <widget class="QDoubleSpinBox" name="sbReferenceLineWidth">
+       <item row="19" column="4">
+        <widget class="KColorButton" name="kcbMedianLineColor">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="4">
+        <widget class="QDoubleSpinBox" name="sbBorderWidth">
          <property name="suffix">
           <string> pt</string>
          </property>
@@ -183,10 +199,10 @@
          </property>
         </widget>
        </item>
-       <item row="19" column="0">
-        <widget class="QLabel" name="lReferenceLineStyle">
+       <item row="21" column="0" colspan="2">
+        <widget class="QLabel" name="lMedianLineOpacity">
          <property name="text">
-          <string>Style:</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -194,6 +210,87 @@
         <widget class="QLabel" name="lFillingEnabled">
          <property name="text">
           <string>Enabled:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="4">
+        <widget class="KComboBox" name="cbMedianLineStyle"/>
+       </item>
+       <item row="2" column="4">
+        <widget class="KComboBox" name="cbFillingType">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0" colspan="2">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>72</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="20" column="0" colspan="2">
+        <widget class="QLabel" name="lMedianLineWidth">
+         <property name="text">
+          <string>Width:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="0">
+        <widget class="QLabel" name="lMedianLineStyle">
+         <property name="text">
+          <string>Style:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QLabel" name="lFillingBrushStyle">
+         <property name="text">
+          <string>Style:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QCheckBox" name="chkFillingEnabled">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QLabel" name="lFillingColorStyle">
+         <property name="text">
+          <string>Style:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="lFillingType">
+         <property name="text">
+          <string>Type:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="4">
+        <widget class="KColorButton" name="kcbFillingFirstColor"/>
+       </item>
+       <item row="9" column="0" colspan="2">
+        <widget class="QLabel" name="lFillingOpacity">
+         <property name="text">
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
@@ -207,28 +304,21 @@
          </property>
         </widget>
        </item>
-       <item row="21" column="0" colspan="2">
-        <widget class="QLabel" name="lReferenceLineWidth">
+       <item row="6" column="0">
+        <widget class="QLabel" name="lFillingImageStyle">
          <property name="text">
-          <string>Width:</string>
+          <string>Style:</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="0" colspan="2">
-        <widget class="QLabel" name="lBorder">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Border</string>
-         </property>
-        </widget>
+       <item row="6" column="4">
+        <widget class="KComboBox" name="cbFillingImageStyle"/>
        </item>
-       <item row="20" column="4">
-        <widget class="KColorButton" name="kcbReferenceLineColor">
+       <item row="4" column="4">
+        <widget class="KComboBox" name="cbFillingColorStyle"/>
+       </item>
+       <item row="13" column="4">
+        <widget class="KColorButton" name="kcbBorderColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -237,18 +327,24 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="lFilling">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
+       <item row="5" column="4">
+        <widget class="KComboBox" name="cbFillingBrushStyle"/>
+       </item>
+       <item row="2" column="2">
+        <spacer name="horizontalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="text">
-          <string>Filling</string>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
          </property>
-        </widget>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>13</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="9" column="4">
         <widget class="QSpinBox" name="sbFillingOpacity">
@@ -278,24 +374,11 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="2">
-        <spacer name="horizontalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>13</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
+       <item row="12" column="4">
+        <widget class="KComboBox" name="cbBorderStyle"/>
        </item>
-       <item row="14" column="4">
-        <widget class="QDoubleSpinBox" name="sbBorderWidth">
+       <item row="20" column="4">
+        <widget class="QDoubleSpinBox" name="sbMedianLineWidth">
          <property name="suffix">
           <string> pt</string>
          </property>
@@ -304,61 +387,63 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="4">
-        <widget class="KColorButton" name="kcbFillingSecondColor"/>
+       <item row="7" column="0" colspan="2">
+        <widget class="QLabel" name="lFillingFirstColor">
+         <property name="text">
+          <string>First color:</string>
+         </property>
+        </widget>
        </item>
-       <item row="20" column="0">
-        <widget class="QLabel" name="lReferenceLineColor">
+       <item row="13" column="0" colspan="2">
+        <widget class="QLabel" name="lBorderColor">
          <property name="text">
           <string>Color:</string>
          </property>
         </widget>
        </item>
-       <item row="18" column="0" colspan="2">
-        <widget class="QLabel" name="lReferenceLinePosition">
+       <item row="19" column="0">
+        <widget class="QLabel" name="lMedianLineColor">
          <property name="text">
-          <string>Position:</string>
+          <string>Color:</string>
          </property>
         </widget>
        </item>
-       <item row="19" column="4">
-        <widget class="KComboBox" name="cbReferenceLineStyle"/>
-       </item>
-       <item row="4" column="4">
-        <widget class="KComboBox" name="cbFillingColorStyle"/>
-       </item>
-       <item row="22" column="0" colspan="2">
-        <widget class="QLabel" name="lReferenceLineOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="4">
-        <widget class="KComboBox" name="cbBorderStyle"/>
-       </item>
-       <item row="4" column="0" colspan="2">
-        <widget class="QLabel" name="lFillingColorStyle">
+       <item row="12" column="0" colspan="2">
+        <widget class="QLabel" name="lBorderStyle">
          <property name="text">
           <string>Style:</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="4">
-        <widget class="KColorButton" name="kcbFillingFirstColor"/>
-       </item>
-       <item row="2" column="4">
-        <widget class="KComboBox" name="cbFillingType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+       <item row="8" column="0" colspan="2">
+        <widget class="QLabel" name="lFillingSecondColor">
+         <property name="text">
+          <string>Second color:</string>
          </property>
         </widget>
        </item>
-       <item row="18" column="4">
-        <widget class="KComboBox" name="cbReferenceLinePosition"/>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lFillingFileName">
+         <property name="text">
+          <string>File name:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="4">
+        <widget class="KColorButton" name="kcbFillingSecondColor"/>
+       </item>
+       <item row="22" column="1">
+        <spacer name="verticalSpacer_13">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>24</width>
+           <height>136</height>
+          </size>
+         </property>
+        </spacer>
        </item>
        <item row="16" column="0" colspan="2">
         <spacer name="verticalSpacer_6">
@@ -376,22 +461,15 @@
          </property>
         </spacer>
        </item>
-       <item row="8" column="0" colspan="2">
-        <widget class="QLabel" name="lFillingSecondColor">
+       <item row="15" column="0">
+        <widget class="QLabel" name="lBorderOpacity">
          <property name="text">
-          <string>Second color:</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lFillingImageStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="22" column="4">
-        <widget class="QSpinBox" name="sbReferenceLineOpacity">
+       <item row="21" column="4">
+        <widget class="QSpinBox" name="sbMedianLineOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -418,26 +496,6 @@
          </property>
         </widget>
        </item>
-       <item row="23" column="1">
-        <spacer name="verticalSpacer_13">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>24</width>
-           <height>136</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="12" column="0" colspan="2">
-        <widget class="QLabel" name="lBorderStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
        <item row="17" column="0" colspan="2">
         <widget class="QLabel" name="lReferenceLine">
          <property name="font">
@@ -447,49 +505,22 @@
           </font>
          </property>
          <property name="text">
-          <string>Reference</string>
+          <string>Median Line</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="4">
-        <widget class="QCheckBox" name="chkFillingEnabled">
+       <item row="0" column="0" colspan="2">
+        <widget class="QLabel" name="lFilling">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
-          <string/>
+          <string>Filling</string>
          </property>
         </widget>
-       </item>
-       <item row="5" column="0" colspan="2">
-        <widget class="QLabel" name="lFillingBrushStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="4">
-        <widget class="KColorButton" name="kcbBorderColor">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0" colspan="2">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>72</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="3" column="5">
         <widget class="QPushButton" name="bFillingOpen">
@@ -504,47 +535,6 @@
          </property>
          <property name="text">
           <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QLabel" name="lFillingType">
-         <property name="text">
-          <string>Type:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="0" colspan="2">
-        <widget class="QLabel" name="lBorderColor">
-         <property name="text">
-          <string>Color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0" colspan="2">
-        <widget class="QLabel" name="lFillingOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lFillingFileName">
-         <property name="text">
-          <string>File name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="4">
-        <widget class="KComboBox" name="cbFillingBrushStyle"/>
-       </item>
-       <item row="6" column="4">
-        <widget class="KComboBox" name="cbFillingImageStyle"/>
-       </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="lBorderOpacity">
-         <property name="text">
-          <string>Opacity:</string>
          </property>
         </widget>
        </item>

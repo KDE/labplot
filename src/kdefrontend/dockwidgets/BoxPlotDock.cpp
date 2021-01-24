@@ -86,6 +86,9 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent), cbDataColumn(new T
 	//box border
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 
+	//median line
+	GuiTools::updatePenStyles(ui.cbMedianLineStyle, Qt::black);
+
 	//Tab "Markers"
 
 	//Tab "Whiskers"
@@ -137,6 +140,12 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent), cbDataColumn(new T
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &BoxPlotDock::borderColorChanged);
 	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::borderWidthChanged);
 	connect(ui.sbBorderOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::borderOpacityChanged);
+
+	//median line
+	connect(ui.cbMedianLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::medianLineStyleChanged);
+	connect(ui.kcbMedianLineColor, &KColorButton::changed, this, &BoxPlotDock::medianLineColorChanged);
+	connect(ui.sbMedianLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::medianLineWidthChanged);
+	connect(ui.sbMedianLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::medianLineOpacityChanged);
 
 	//Tab "Markers"
 
@@ -221,6 +230,10 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	//box border
 	connect(m_boxPlot, &BoxPlot::borderPenChanged, this, &BoxPlotDock::plotBorderPenChanged);
 	connect(m_boxPlot, &BoxPlot::borderOpacityChanged, this, &BoxPlotDock::plotBorderOpacityChanged);
+
+	//median line
+	connect(m_boxPlot, &BoxPlot::medianLinePenChanged, this, &BoxPlotDock::plotMedianLinePenChanged);
+	connect(m_boxPlot, &BoxPlot::medianLineOpacityChanged, this, &BoxPlotDock::plotMedianLineOpacityChanged);
 
 	//whiskers
 	connect(m_boxPlot, &BoxPlot::whiskersPenChanged, this, &BoxPlotDock::plotWhiskersPenChanged);
@@ -538,6 +551,57 @@ void BoxPlotDock::borderOpacityChanged(int value) const {
 		boxPlot->setBorderOpacity(opacity);
 }
 
+//median line
+void BoxPlotDock::medianLineStyleChanged(int index) const {
+	if (m_initializing)
+		return;
+
+	auto penStyle = Qt::PenStyle(index);
+	QPen pen;
+	for (auto* boxPlot : m_boxPlots) {
+		pen = boxPlot->medianLinePen();
+		pen.setStyle(penStyle);
+		boxPlot->setMedianLinePen(pen);
+	}
+}
+
+void BoxPlotDock::medianLineColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* boxPlot : m_boxPlots) {
+		pen = boxPlot->medianLinePen();
+		pen.setColor(color);
+		boxPlot->setMedianLinePen(pen);
+	}
+
+	m_initializing = true;
+	GuiTools::updatePenStyles(ui.cbMedianLineStyle, color);
+	m_initializing = false;
+}
+
+void BoxPlotDock::medianLineWidthChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* boxPlot : m_boxPlots) {
+		pen = boxPlot->medianLinePen();
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
+		boxPlot->setMedianLinePen(pen);
+	}
+}
+
+void BoxPlotDock::medianLineOpacityChanged(int value) const {
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	for (auto* boxPlot : m_boxPlots)
+		boxPlot->setMedianLineOpacity(opacity);
+}
+
 //whiskers
 void BoxPlotDock::whiskersStyleChanged(int index) const {
 	if (m_initializing)
@@ -677,6 +741,22 @@ void BoxPlotDock::plotBorderOpacityChanged(float value) {
 	Lock lock(m_initializing);
 	float v = (float)value*100.;
 	ui.sbBorderOpacity->setValue(v);
+}
+
+//median line
+void BoxPlotDock::plotMedianLinePenChanged(QPen& pen) {
+	Lock lock(m_initializing);
+	if (ui.cbMedianLineStyle->currentIndex() != pen.style())
+		ui.cbMedianLineStyle->setCurrentIndex(pen.style());
+	if (ui.kcbMedianLineColor->color() != pen.color())
+		ui.kcbMedianLineColor->setColor(pen.color());
+	if (ui.sbMedianLineWidth->value() != pen.widthF())
+		ui.sbMedianLineWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+}
+void BoxPlotDock::plotMedianLineOpacityChanged(float value) {
+	Lock lock(m_initializing);
+	float v = (float)value*100.;
+	ui.sbMedianLineOpacity->setValue(v);
 }
 
 //whiskers

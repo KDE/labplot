@@ -71,6 +71,10 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
+	//median line
+	CLASS_D_ACCESSOR_DECL(QPen, medianLinePen, MedianLinePen)
+	BASIC_D_ACCESSOR_DECL(qreal, medianLineOpacity, MedianLineOpacity)
+
 	//whiskers
 	CLASS_D_ACCESSOR_DECL(QPen, whiskersPen, WhiskersPen)
 	BASIC_D_ACCESSOR_DECL(qreal, whiskersOpacity, WhiskersOpacity)
@@ -121,7 +125,7 @@ signals:
 	void whiskersTypeChanged(BoxPlot::WhiskersType);
 	void visibilityChanged(bool);
 
-	//Box filling
+	//box filling
 	void fillingEnabledChanged(bool);
 	void fillingTypeChanged(PlotArea::BackgroundType);
 	void fillingColorStyleChanged(PlotArea::BackgroundColorStyle);
@@ -135,6 +139,10 @@ signals:
 	//box border
 	void borderPenChanged(QPen&);
 	void borderOpacityChanged(float);
+
+	//median line
+	void medianLinePenChanged(QPen&);
+	void medianLineOpacityChanged(float);
 
 	//whiskers
 	void whiskersPenChanged(QPen&);
