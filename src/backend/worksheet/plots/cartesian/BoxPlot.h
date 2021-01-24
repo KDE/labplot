@@ -74,6 +74,7 @@ public:
 	//whiskers
 	CLASS_D_ACCESSOR_DECL(QPen, whiskersPen, WhiskersPen)
 	BASIC_D_ACCESSOR_DECL(qreal, whiskersOpacity, WhiskersOpacity)
+	BASIC_D_ACCESSOR_DECL(double, whiskersCapSize, WhiskersCapSize)
 
 	void setVisible(bool on) override;
 	bool isVisible() const override;
@@ -101,7 +102,6 @@ private:
 	QAction* orientationHorizontalAction{nullptr};
 	QAction* orientationVerticalAction{nullptr};
 	QAction* visibilityAction{nullptr};
-
 	QMenu* orientationMenu{nullptr};
 
 public slots:
@@ -139,6 +139,7 @@ signals:
 	//whiskers
 	void whiskersPenChanged(QPen&);
 	void whiskersOpacityChanged(float);
+	void whiskersCapSizeChanged(double);
 };
 
 #endif
