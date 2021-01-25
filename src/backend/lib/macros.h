@@ -291,260 +291,248 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 //TODO: why "do {...} while(0)"?
 
 //QColor
-#define WRITE_QCOLOR(color) 												\
-do { 																		\
-writer->writeAttribute( "color_r", QString::number(color.red()) );			\
-writer->writeAttribute( "color_g", QString::number(color.green()) ); 		\
-writer->writeAttribute( "color_b", QString::number(color.blue()) ); 		\
-} while (0)
+#define WRITE_QCOLOR(color) \
+{ \
+writer->writeAttribute( "color_r", QString::number(color.red()) ); \
+writer->writeAttribute( "color_g", QString::number(color.green()) ); \
+writer->writeAttribute( "color_b", QString::number(color.blue()) ); \
+}
 
-#define READ_QCOLOR(color) 													\
-do {																		\
-str = attribs.value("color_r").toString();									\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("color_r").toString());				\
-else																		\
-	color.setRed( str.toInt() );											\
-																			\
-str = attribs.value("color_g").toString();									\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("color_g").toString());				\
-else																		\
-	color.setGreen( str.toInt() );											\
-																			\
-str = attribs.value("color_b").toString();									\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("color_b").toString());				\
-else																		\
-	color.setBlue( str.toInt() );											\
-} while(0)
+#define READ_QCOLOR(color) \
+{ \
+str = attribs.value("color_r").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("color_r").toString()); \
+else \
+	color.setRed( str.toInt() ); \
+\
+str = attribs.value("color_g").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("color_g").toString()); \
+else \
+	color.setGreen( str.toInt() ); \
+\
+str = attribs.value("color_b").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("color_b").toString()); \
+else \
+	color.setBlue( str.toInt() ); \
+}
 
 //QPen
-#define WRITE_QPEN(pen) 													\
-do { 																		\
-writer->writeAttribute( "style", QString::number(pen.style()) ); 			\
-writer->writeAttribute( "color_r", QString::number(pen.color().red()) ); 	\
-writer->writeAttribute( "color_g", QString::number(pen.color().green()) ); 	\
-writer->writeAttribute( "color_b", QString::number(pen.color().blue()) ); 	\
-writer->writeAttribute( "width", QString::number(pen.widthF()) ); 			\
-} while (0)
+#define WRITE_QPEN(pen) \
+{ \
+writer->writeAttribute( "style", QString::number(pen.style()) ); \
+writer->writeAttribute( "color_r", QString::number(pen.color().red()) ); \
+writer->writeAttribute( "color_g", QString::number(pen.color().green()) ); \
+writer->writeAttribute( "color_b", QString::number(pen.color().blue()) ); \
+writer->writeAttribute( "width", QString::number(pen.widthF()) ); \
+}
 
-#define READ_QPEN(pen) 														\
-do {																		\
-str = attribs.value("style").toString(); 									\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("style").toString());					\
-else																		\
-	pen.setStyle( static_cast<Qt::PenStyle>(str.toInt()) );								\
-																			\
-QColor color;																\
-str = attribs.value("color_r").toString();									\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("color_r").toString());				\
-else																		\
-	color.setRed( str.toInt() );											\
-																			\
-str = attribs.value("color_g").toString();									\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("color_g").toString());				\
-else																		\
-	color.setGreen( str.toInt() );											\
-																			\
-str = attribs.value("color_b").toString();									\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("color_b").toString());				\
-else																		\
-	color.setBlue( str.toInt() );											\
-																			\
-pen.setColor(color);														\
-																			\
-str = attribs.value("width").toString();									\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("width").toString());					\
-else																		\
-	pen.setWidthF( str.toDouble() );										\
-} while(0)
+#define READ_QPEN(pen) \
+{ \
+str = attribs.value("style").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("style").toString()); \
+else \
+	pen.setStyle( static_cast<Qt::PenStyle>(str.toInt()) );	\
+\
+QColor color; \
+str = attribs.value("color_r").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("color_r").toString()); \
+else \
+	color.setRed( str.toInt() ); \
+\
+str = attribs.value("color_g").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("color_g").toString()); \
+else \
+	color.setGreen( str.toInt() ); \
+\
+str = attribs.value("color_b").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("color_b").toString()); \
+else \
+	color.setBlue( str.toInt() ); \
+\
+pen.setColor(color); \
+\
+str = attribs.value("width").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("width").toString()); \
+else \
+	pen.setWidthF( str.toDouble() ); \
+}
 
 //QFont
-#define WRITE_QFONT(font) 													\
-do {																		\
-writer->writeAttribute( "fontFamily", font.family() );						\
-writer->writeAttribute( "fontSize", QString::number(font.pixelSize()) );	\
-writer->writeAttribute( "fontPointSize", QString::number(font.pointSize()));\
-writer->writeAttribute( "fontWeight", QString::number(font.weight()) );		\
-writer->writeAttribute( "fontItalic", QString::number(font.italic()) );		\
-} while(0)
+#define WRITE_QFONT(font) \
+{ \
+writer->writeAttribute( "fontFamily", font.family() ); \
+writer->writeAttribute( "fontSize", QString::number(font.pixelSize()) ); \
+writer->writeAttribute( "fontPointSize", QString::number(font.pointSize())); \
+writer->writeAttribute( "fontWeight", QString::number(font.weight()) );	\
+writer->writeAttribute( "fontItalic", QString::number(font.italic()) );	\
+}
 
-#define READ_QFONT(font) 													\
-do {																		\
-str = attribs.value("fontFamily").toString();								\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("fontFamily").toString());				\
-else																		\
-	font.setFamily( str );													\
-																			\
-str = attribs.value("fontSize").toString();									\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("fontSize").toString());				\
-else {																		\
-	int size = str.toInt();													\
-	if (size != -1)															\
-		font.setPixelSize(size);											\
-}																			\
-																			\
-str = attribs.value("fontPointSize").toString();							\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("fontPointSize").toString());			\
-else {																		\
-	int size = str.toInt();													\
-	if (size != -1)															\
-		font.setPointSize(size);											\
-}																			\
-																			\
-str = attribs.value("fontWeight").toString();								\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("fontWeight").toString());				\
-else																		\
-	font.setWeight( str.toInt() );											\
-																			\
-str = attribs.value("fontItalic").toString();								\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("fontItalic").toString());				\
-else																		\
-	font.setItalic( str.toInt() );											\
-} while(0)
+#define READ_QFONT(font) \
+{ \
+str = attribs.value("fontFamily").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("fontFamily").toString()); \
+else \
+	font.setFamily( str ); \
+\
+str = attribs.value("fontSize").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("fontSize").toString()); \
+else { \
+	int size = str.toInt();	\
+	if (size != -1) \
+		font.setPixelSize(size); \
+} \
+\
+str = attribs.value("fontPointSize").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("fontPointSize").toString()); \
+else { \
+	int size = str.toInt();	\
+	if (size != -1) \
+		font.setPointSize(size); \
+} \
+\
+str = attribs.value("fontWeight").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("fontWeight").toString()); \
+else \
+	font.setWeight( str.toInt() ); \
+\
+str = attribs.value("fontItalic").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("fontItalic").toString()); \
+else \
+	font.setItalic( str.toInt() ); \
+}
 
 //QBrush
-#define WRITE_QBRUSH(brush) 													\
-do {																			\
-writer->writeAttribute("brush_style", QString::number(brush.style()) );			\
-writer->writeAttribute("brush_color_r", QString::number(brush.color().red()));	\
-writer->writeAttribute("brush_color_g", QString::number(brush.color().green()));\
-writer->writeAttribute("brush_color_b", QString::number(brush.color().blue()));	\
-} while(0)
+#define WRITE_QBRUSH(brush) \
+{ \
+writer->writeAttribute("brush_style", QString::number(brush.style()) ); \
+writer->writeAttribute("brush_color_r", QString::number(brush.color().red())); \
+writer->writeAttribute("brush_color_g", QString::number(brush.color().green())); \
+writer->writeAttribute("brush_color_b", QString::number(brush.color().blue())); \
+}
 
-#define READ_QBRUSH(brush) 													\
-do {																		\
-str = attribs.value("brush_style").toString();								\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("brush_style").toString());			\
-else																		\
-	brush.setStyle( static_cast<Qt::BrushStyle>(str.toInt()) );							\
-																			\
-QColor color;																\
-str = attribs.value("brush_color_r").toString();							\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("brush_color_r").toString());			\
-else																		\
-	color.setRed( str.toInt() );											\
-																			\
-str = attribs.value("brush_color_g").toString();							\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("brush_color_g").toString());			\
-else																		\
-	color.setGreen( str.toInt() );											\
-																			\
-str = attribs.value("brush_color_b").toString();							\
-if(str.isEmpty())															\
-	reader->raiseWarning(attributeWarning.subs("brush_color_b").toString());			\
-else																		\
-	color.setBlue( str.toInt() );											\
-																			\
-brush.setColor(color);														\
-} while(0)
-
-
+#define READ_QBRUSH(brush) \
+{ \
+str = attribs.value("brush_style").toString(); \
+if(str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("brush_style").toString()); \
+else \
+	brush.setStyle( static_cast<Qt::BrushStyle>(str.toInt()) ); \
+\
+QColor color; \
+str = attribs.value("brush_color_r").toString(); \
+if(str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("brush_color_r").toString()); \
+else \
+	color.setRed( str.toInt() ); \
+\
+str = attribs.value("brush_color_g").toString(); \
+if(str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("brush_color_g").toString()); \
+else \
+	color.setGreen( str.toInt() ); \
+\
+str = attribs.value("brush_color_b").toString(); \
+if(str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs("brush_color_b").toString()); \
+else \
+	color.setBlue( str.toInt() ); \
+\
+brush.setColor(color); \
+}
 
 //Column
-#define WRITE_COLUMN(column, columnName) 											\
-do {																				\
-if (column){																		\
-	writer->writeAttribute( #columnName, column->path() );							\
-} else {																			\
-	writer->writeAttribute( #columnName, QString() );										\
-}																					\
-} while(0)
+#define WRITE_COLUMN(column, columnName) \
+if (column) { \
+	writer->writeAttribute( #columnName, column->path() ); \
+} else { \
+	writer->writeAttribute( #columnName, QString() ); \
+}
 
 //column names can be empty in case no columns were used before save
 //the actual pointers to the x- and y-columns are restored in Project::load()
-#define READ_COLUMN(columnName)														\
-do {																				\
-	str = attribs.value(#columnName).toString();									\
-	d->columnName ##Path = str;														\
-} while(0)
+#define READ_COLUMN(columnName)	\
+{ \
+	str = attribs.value(#columnName).toString(); \
+	d->columnName ##Path = str; \
+}
 
 #define READ_INT_VALUE_DIRECT(name, var, type) \
-do { \
+{ \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
 	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
 	var = static_cast<type>(str.toInt()); \
-} while(0)
+}
 
 #define READ_INT_VALUE(name, var, type) READ_INT_VALUE_DIRECT(name, d->var, type)
 
 #define READ_DOUBLE_VALUE(name, var) \
-do { \
+{ \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
 	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
 	d->var = str.toDouble(); \
-} while(0)
+}
 
 #define READ_STRING_VALUE(name, var) \
-do { \
+{ \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
 	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
 	d->var = str; \
-} while(0)
+}
 
 //used in Project::load()
-#define RESTORE_COLUMN_POINTER(obj, col, Col) 										\
-do {																				\
-if (!obj->col ##Path().isEmpty()) {													\
-	for (Column* column : columns) {												\
-		if (!column) continue;														\
-		if (column->path() == obj->col ##Path()) {									\
- 			obj->set## Col(column);													\
-			break;				 													\
-		}																			\
-	}																				\
-}																					\
-} while(0)
+#define RESTORE_COLUMN_POINTER(obj, col, Col) \
+if (!obj->col ##Path().isEmpty()) { \
+	for (Column* column : columns) { \
+		if (!column) continue; \
+		if (column->path() == obj->col ##Path()) { \
+			obj->set## Col(column);	\
+			break; \
+		} \
+	} \
+}
 
+#define WRITE_PATH(obj, name) \
+if (obj) { \
+	writer->writeAttribute( #name, obj->path() ); \
+} else { \
+	writer->writeAttribute( #name, QString() ); \
+}
 
+#define READ_PATH(name)	\
+{ \
+	str = attribs.value(#name).toString(); \
+	d->name ##Path = str; \
+}
 
-#define WRITE_PATH(obj, name) 														\
-do {																				\
-if (obj){																			\
-	writer->writeAttribute( #name, obj->path() );									\
-} else {																			\
-	writer->writeAttribute( #name, QString() );											\
-}																					\
-} while(0)
-
-#define READ_PATH(name)																\
-do {																				\
-	str = attribs.value(#name).toString();											\
-	d->name ##Path = str;															\
-} while(0)
-
-#define RESTORE_POINTER(obj, name, Name, Type, list) 								\
-do {																				\
-if (!obj->name ##Path().isEmpty()) {												\
-	for (AbstractAspect* aspect : list) {											\
-		if (aspect->path() == obj->name ##Path()) {									\
-			auto a = dynamic_cast<Type*>(aspect);									\
-			if (!a) continue;														\
- 			obj->set## Name(a);														\
-			break;				 													\
-		}																			\
-	}																				\
-}																					\
-} while(0)
+#define RESTORE_POINTER(obj, name, Name, Type, list) \
+if (!obj->name ##Path().isEmpty()) { \
+	for (AbstractAspect* aspect : list) { \
+		if (aspect->path() == obj->name ##Path()) { \
+			auto a = dynamic_cast<Type*>(aspect); \
+			if (!a) continue; \
+			obj->set## Name(a); \
+			break; \
+		} \
+	} \
+}
 
 #endif // MACROS_H
