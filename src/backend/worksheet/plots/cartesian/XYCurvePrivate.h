@@ -142,9 +142,8 @@ public:
 	XYCurve* const q;
 	friend class XYCurve;
 
-	CartesianPlot* plot{nullptr};
-	int cSystemIndex{0};	// index of coordinate system used from plot
-	const CartesianCoordinateSystem* cSystem{nullptr};	//current cSystem
+//	CartesianPlot* plot{nullptr};
+//	const CartesianCoordinateSystem* cSystem{nullptr};	//current cSystem
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;

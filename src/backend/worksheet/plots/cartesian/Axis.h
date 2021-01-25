@@ -154,11 +154,6 @@ public:
 	void retransformTickLabelStrings();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	int coordinateSystemIndex() const;
-	void setCoordinateSystemIndex(int);
-	int coordinateSystemCount() const;
-	QString coordinateSystemInfo(int index) const;
-
 protected:
 	AxisPrivate* const d_ptr;
 	Axis(const QString&, Orientation, AxisPrivate*);

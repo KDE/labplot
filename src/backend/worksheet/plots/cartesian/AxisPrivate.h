@@ -142,10 +142,6 @@ public:
 	bool labelsFormatDecimalOverruled{false};
 	bool labelsFormatAutoChanged{false};
 
-	CartesianPlot* plot{nullptr};
-	const CartesianCoordinateSystem* cSystem{nullptr};
-	int cSystemIndex{0};	// index of coordinate system used from plot
-
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;

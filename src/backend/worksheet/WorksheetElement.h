@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -33,10 +34,12 @@
 #include "backend/core/AbstractAspect.h"
 #include <QPainterPath>
 
+class CartesianPlot;
+class CartesianCoordinateSystem;
+class KConfig;
 class QAction;
 class QGraphicsItem;
 class QPen;
-class KConfig;
 
 class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
@@ -76,6 +79,16 @@ public:
 
 	static QPainterPath shapeFromPath(const QPainterPath&, const QPen&);
 	virtual void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) = 0;
+
+	int coordinateSystemIndex() const { return m_cSystemIndex; };
+	void setCoordinateSystemIndex(int);
+	int coordinateSystemCount() const;
+	QString coordinateSystemInfo(int index) const;
+
+protected:
+	int m_cSystemIndex{0};	// index of coordinate system used from plot
+	CartesianPlot* plot{nullptr};	// parent plot if available
+	const CartesianCoordinateSystem* cSystem{nullptr};	//current cSystem
 
 public slots:
 	virtual void retransform() = 0;

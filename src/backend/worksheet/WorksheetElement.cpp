@@ -29,7 +29,8 @@
 
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/AbstractPlot.h"
+#include "plots/AbstractPlot.h"
+#include "plots/cartesian/CartesianCoordinateSystem.h"
 
 #include <QGraphicsItem>
 #include <QMenu>
@@ -260,4 +261,26 @@ void WorksheetElement::loadThemeConfig(const KConfig &) {
 }
 
 void WorksheetElement::saveThemeConfig(const KConfig &) {
+}
+
+// coordinate system
+
+void  WorksheetElement::setCoordinateSystemIndex(int index) {
+	m_cSystemIndex = index;
+	if (plot)
+		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(index));
+}
+
+int WorksheetElement::coordinateSystemCount() const {
+	if (plot)
+		return plot->coordinateSystems().size();
+
+	return 0;
+}
+
+QString WorksheetElement::coordinateSystemInfo(const int index) const {
+	if (plot)
+		return plot->coordinateSystem(index)->info();
+
+	return QString();
 }

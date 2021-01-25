@@ -164,11 +164,6 @@ public:
 	double y(double x, double &x_new, bool &valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
 
-	int coordinateSystemIndex() const;
-	void setCoordinateSystemIndex(int);
-	int coordinateSystemCount() const;
-	QString coordinateSystemInfo(int index) const;
-
 private slots:
 	void updateValues();
 	void updateErrorBars();

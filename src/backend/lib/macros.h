@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2013-2015 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -288,6 +288,7 @@ class class_name ## cmd_name ## Cmd: public StandardSwapMethodSetterCmd<class_na
 
 //////////////////////// XML - serialization/deserialization /////
 //TODO: do we really need all these tabs?
+//TODO: why "do {...} while(0)"?
 
 //QColor
 #define WRITE_QCOLOR(color) 												\
@@ -472,14 +473,16 @@ do {																				\
 	d->columnName ##Path = str;														\
 } while(0)
 
-#define READ_INT_VALUE(name, var, type) \
+#define READ_INT_VALUE_DIRECT(name, var, type) \
 do { \
 str = attribs.value(name).toString(); \
 if (str.isEmpty()) \
 	reader->raiseWarning(attributeWarning.subs(name).toString()); \
 else \
-	d->var = static_cast<type>(str.toInt()); \
+	var = static_cast<type>(str.toInt()); \
 } while(0)
+
+#define READ_INT_VALUE(name, var, type) READ_INT_VALUE_DIRECT(name, d->var, type)
 
 #define READ_DOUBLE_VALUE(name, var) \
 do { \

@@ -1321,33 +1321,21 @@ void CartesianPlotDock::removePlotRange() {
 	}
 	QDEBUG(Q_FUNC_INFO << ", removing plot range " << currentRow)
 
-	//TODO: check all children for cSystem usage in one loop (with only one messagebox)
-	for (auto* axis : m_plot->children<Axis>()) {
-		const int cSystemIndex{ axis->coordinateSystemIndex() };
-		DEBUG(Q_FUNC_INFO << ", axis x index = " << cSystemIndex)
+	// check all children for cSystem usage
+	for (auto* element : m_plot->children<WorksheetElement>()) {
+		const int cSystemIndex{ element->coordinateSystemIndex() };
+		DEBUG(Q_FUNC_INFO << ", element x index = " << cSystemIndex)
 		if (cSystemIndex == currentRow) {
-			DEBUG(Q_FUNC_INFO << ", WARNING: plot range used in axis")
-			auto ret = KMessageBox::warningYesNo(this, i18n("Plot range %1 is used by axis \"%2\". ", currentRow+1, axis->name())
+			DEBUG(Q_FUNC_INFO << ", WARNING: plot range used in element")
+			auto ret = KMessageBox::warningYesNo(this, i18n("Plot range %1 is used by element \"%2\". ", currentRow+1, element->name())
 								+ i18n("Really remove it?"));
 			if (ret == KMessageBox::No)
 				return;
 			else	// reset
-				axis->setCoordinateSystemIndex(0);
+				element->setCoordinateSystemIndex(0);
 		}
 	}
-	for (auto* curve : m_plot->children<XYCurve>()) {
-		const int cSystemIndex{ curve->coordinateSystemIndex() };
-		DEBUG(Q_FUNC_INFO << ", curve x index = " << cSystemIndex)
-		if (cSystemIndex == currentRow) {
-			DEBUG(Q_FUNC_INFO << ", WARNING: plot range used in curve")
-			auto ret = KMessageBox::warningYesNo(this, i18n("Plot range %1 is used in curve \"%2\". ", currentRow+1, curve->name())
-								+ i18n("Really remove it?"));
-			if (ret == KMessageBox::No)
-				return;
-			else	// reset
-				curve->setCoordinateSystemIndex(0);
-		}
-	}
+	//TODO: update elements?
 
 	m_plot->removeCoordinateSystem(currentRow);
 	updatePlotRangeList();

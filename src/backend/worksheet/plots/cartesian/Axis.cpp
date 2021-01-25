@@ -127,10 +127,9 @@ Axis::Axis(const QString& name, Orientation orientation, AxisPrivate* dd)
 
 void Axis::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
-	Q_D(Axis);
-	d->plot = dynamic_cast<CartesianPlot*>(parentAspect());
-	Q_ASSERT(d->plot);
-	d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(d->cSystemIndex));
+	plot = dynamic_cast<CartesianPlot*>(parentAspect());
+	Q_ASSERT(plot);
+	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(m_cSystemIndex));
 }
 
 void Axis::init() {
@@ -459,9 +458,9 @@ void Axis::setAutoScale(const bool autoScale) {
 			return;
 
 		if (d->orientation == Axis::Orientation::Horizontal)
-			d->range = plot->xRange(d->cSystem->xIndex());
+			d->range = plot->xRange(cSystem->xIndex());
 		else
-			d->range = plot->yRange(d->cSystem->yIndex());
+			d->range = plot->yRange(cSystem->yIndex());
 
 		DEBUG(Q_FUNC_INFO << ", new range = " << d->range.toStdString())
 		retransform();
@@ -884,34 +883,6 @@ void Axis::setMinorGridOpacity(qreal opacity) {
 		exec(new AxisSetMinorGridOpacityCmd(d, opacity, ki18n("%1: set minor grid opacity")));
 }
 
-BASIC_SHARED_D_READER_IMPL(Axis, int, coordinateSystemIndex, cSystemIndex)
-void Axis::setCoordinateSystemIndex(const int index) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	Q_D(Axis);
-	d->cSystemIndex = index;
-	if (d->plot)
-		d->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(d->plot->coordinateSystem(index));
-}
-
-int Axis::coordinateSystemCount() const {
-	Q_D(const Axis);
-	if (d->plot)
-		return d->plot->coordinateSystems().size();
-
-	return 0;
-}
-
-QString Axis::coordinateSystemInfo(const int index) const {
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	Q_D(const Axis);
-	if (index < 0 || index > coordinateSystemCount()) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of bounds")
-	} else if (d->plot)
-		return d->plot->coordinateSystem(index)->info();
-
-	return QString();
-}
-
 //##############################################################################
 //####################################  SLOTs   ################################
 //##############################################################################
@@ -1015,7 +986,7 @@ QPainterPath AxisPrivate::shape() const{
  */
 void AxisPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (suppressRetransform || !plot)
+	if (suppressRetransform || !q->plot)
 		return;
 
 // 	PERFTRACE(name().toLatin1() + ", AxisPrivate::retransform()");
@@ -1026,10 +997,10 @@ void AxisPrivate::retransform() {
 }
 
 void AxisPrivate::retransformLine() {
-	DEBUG(Q_FUNC_INFO << " " << title->name().toStdString() <<  ", coordinate system " << cSystemIndex+1)
-	DEBUG(Q_FUNC_INFO << ", x range is x range " << cSystem->xIndex()+1)
-	DEBUG(Q_FUNC_INFO << ", y range is y range " << cSystem->yIndex()+1)
-	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
+	DEBUG(Q_FUNC_INFO << " " << title->name().toStdString() <<  ", coordinate system " << q->m_cSystemIndex+1)
+	DEBUG(Q_FUNC_INFO << ", x range is x range " << q->cSystem->xIndex()+1)
+	DEBUG(Q_FUNC_INFO << ", y range is y range " << q->cSystem->yIndex()+1)
+	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(q->plot->coordinateSystem(q->m_cSystemIndex))->xIndex() )
 	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << ", scale = " << static_cast<int>(range.scale()))
 
 	if (suppressRetransform)
@@ -1040,24 +1011,24 @@ void AxisPrivate::retransformLine() {
 
 	QPointF startPoint, endPoint;
 
-	const int xIndex{ cSystem->xIndex() }, yIndex{ cSystem->yIndex() };
+	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem->yIndex() };
 	if (orientation == Axis::Orientation::Horizontal) {
 		if (position == Axis::Position::Top)
-			offset = plot->yRange(yIndex).end();
+			offset = q->plot->yRange(yIndex).end();
 		else if (position == Axis::Position::Bottom)
-			offset = plot->yRange(yIndex).start();
+			offset = q->plot->yRange(yIndex).start();
 		else if (position == Axis::Position::Centered)
-			offset = plot->yRange(yIndex).center();
+			offset = q->plot->yRange(yIndex).center();
 
 		startPoint = QPointF(range.start(), offset);
 		endPoint = QPointF(range.end(), offset);
 	} else { // vertical
 		if (position == Axis::Position::Left)
-			offset = plot->xRange(xIndex).start();
+			offset = q->plot->xRange(xIndex).start();
 		else if (position == Axis::Position::Right)
-			offset = plot->xRange(xIndex).end();
+			offset = q->plot->xRange(xIndex).end();
 		else if (position == Axis::Position::Centered)
-			offset = plot->xRange(xIndex).center();
+			offset = q->plot->xRange(xIndex).center();
 
 		startPoint = QPointF(offset, range.start());
 		endPoint = QPointF(offset, range.end());
@@ -1065,7 +1036,7 @@ void AxisPrivate::retransformLine() {
 
 	QDEBUG(Q_FUNC_INFO << ", start/end point: " << startPoint << "/" << endPoint)
 	lines.append(QLineF(startPoint, endPoint));
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
+	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 	for (const auto& line : lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
@@ -1200,7 +1171,7 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	QVector<QPointF> points;
 	points.append(*anchorPoint);
-	points = cSystem->mapLogicalToScene(points);
+	points = q->cSystem->mapLogicalToScene(points);
 
 	if (points.count() != 1) { // point is not mappable or in a coordinate gap
 		return false;
@@ -1302,16 +1273,16 @@ void AxisPrivate::retransformTicks() {
 	qreal minorTickPos;
 	qreal nextMajorTickPos = 0.0;
 
-	const int xIndex{ cSystem->xIndex() }, yIndex{ cSystem-> yIndex() };
-	DEBUG(Q_FUNC_INFO << ", coordinate system index = " << cSystemIndex)
+	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem-> yIndex() };
+	DEBUG(Q_FUNC_INFO << ", coordinate system index = " << q->m_cSystemIndex)
 	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
 	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
-	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(cSystemIndex))->xIndex() )
+	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(q->plot->coordinateSystem(q->m_cSystemIndex))->xIndex() )
 
-	const int xDirection = cSystem->xDirection();
-	const int yDirection = cSystem->yDirection();
-	const double middleX = plot->xRange(xIndex).center();
-	const double middleY = plot->yRange(yIndex).center();
+	const int xDirection = q->cSystem->xDirection();
+	const int yDirection = q->cSystem->yDirection();
+	const double middleX = q->plot->xRange(xIndex).center();
+	const double middleY = q->plot->yRange(yIndex).center();
 	bool valid;
 
 	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
@@ -1536,8 +1507,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	tickLabelStrings.clear();
 	QString str;
 	SET_NUMBER_LOCALE
-	auto xRangeFormat{ plot->xRange(cSystem->xIndex()).format() };
-	auto yRangeFormat{ plot->yRange(cSystem->yIndex()).format() };
+	auto xRangeFormat{ q->plot->xRange(q->cSystem->xIndex()).format() };
+	auto yRangeFormat{ q->plot->yRange(q->cSystem->yIndex()).format() };
 	if ( (orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 		|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric) ) {
 		if (labelsFormat == Axis::LabelsFormat::Decimal) {
@@ -1775,14 +1746,14 @@ void AxisPrivate::retransformTickLabelPositions() {
 	double width = 0, height = fm.ascent();
 	QPointF pos;
 
-	const int xIndex{ cSystem->xIndex() }, yIndex{ cSystem->yIndex() };
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << cSystemIndex)
+	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem->yIndex() };
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << q->m_cSystemIndex)
 	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
 	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
-	const double middleX = plot->xRange(xIndex).center();
-	const double middleY = plot->yRange(yIndex).center();
-	const int xDirection = cSystem->xDirection();
-	const int yDirection = cSystem->yDirection();
+	const double middleX = q->plot->xRange(xIndex).center();
+	const double middleY = q->plot->yRange(yIndex).center();
+	const int xDirection = q->cSystem->xDirection();
+	const int yDirection = q->cSystem->yDirection();
 
 	QPointF startPoint, endPoint, anchorPoint;
 
@@ -1792,8 +1763,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
-		auto xRangeFormat{ plot->xRange(xIndex).format() };
-		auto yRangeFormat{ plot->yRange(yIndex).format() };
+		auto xRangeFormat{ q->plot->xRange(xIndex).format() };
+		auto yRangeFormat{ q->plot->yRange(yIndex).format() };
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
@@ -1936,16 +1907,16 @@ void AxisPrivate::retransformMajorGrid() {
 	//major tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear sometimes without this flag
-	QVector<QPointF> logicalMajorTickPoints = cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	QVector<QPointF> logicalMajorTickPoints = q->cSystem->mapSceneToLogical(majorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (logicalMajorTickPoints.isEmpty())
 		return;
 
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range " << cSystem->xIndex()+1)
-	DEBUG(Q_FUNC_INFO << ", y range " << cSystem->yIndex()+1)
-	const auto xRange{ plot->xRange(cSystem->xIndex()) };
-	const auto yRange{ plot->yRange(cSystem->yIndex()) };
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << q->m_cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex()+1)
+	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->yIndex()+1)
+	const auto xRange{ q->plot->xRange(q->cSystem->xIndex()) };
+	const auto yRange{ q->plot->yRange(q->cSystem->yIndex()) };
 
 	//TODO:
 	//when iterating over all grid lines, skip the first and the last points for auto scaled axes,
@@ -1993,7 +1964,7 @@ void AxisPrivate::retransformMajorGrid() {
 		}
 	}
 
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (const auto& line : lines) {
 		majorGridPath.moveTo(line.p1());
 		majorGridPath.lineTo(line.p2());
@@ -2015,26 +1986,26 @@ void AxisPrivate::retransformMinorGrid() {
 	//minor tick points are already in scene coordinates, convert them back to logical...
 	//TODO: mapping should work without SuppressPageClipping-flag, check float comparisons in the map-function.
 	//Currently, grid lines disappear sometimes without this flag
-	QVector<QPointF> logicalMinorTickPoints = cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	QVector<QPointF> logicalMinorTickPoints = q->cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range " << cSystem->xIndex())
-	DEBUG(Q_FUNC_INFO << ", y range " << cSystem->yIndex())
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << q->m_cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex())
+	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->yIndex())
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		const Range<double> yRange{plot->yRange(cSystem->yIndex())};
+		const Range<double> yRange{q->plot->yRange(q->cSystem->yIndex())};
 
 		for (const auto& point : logicalMinorTickPoints)
 			lines.append( QLineF(point.x(), yRange.start(), point.x(), yRange.end()) );
 	} else { //vertical axis
-		const Range<double> xRange{plot->xRange(cSystem->xIndex())};
+		const Range<double> xRange{q->plot->xRange(q->cSystem->xIndex())};
 
 		for (const auto& point: logicalMinorTickPoints)
 			lines.append( QLineF(xRange.start(), point.y(), xRange.end(), point.y()) );
 	}
 
-	lines = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	for (const auto& line : lines) {
 		minorGridPath.moveTo(line.p1());
 		minorGridPath.lineTo(line.p2());
@@ -2063,7 +2034,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 		axisShape = QPainterPath();
 		boundingRectangle = QRectF();
 		title->setPositionInvalid(true);
-		if (plot) plot->prepareGeometryChange();
+		if (q->plot)
+			q->plot->prepareGeometryChange();
 		return;
 	} else {
 		title->setPositionInvalid(false);
@@ -2130,8 +2102,8 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 
 	//if the axis goes beyond the current bounding box of the plot (too high offset is used, too long labels etc.)
 	//request a prepareGeometryChange() for the plot in order to properly keep track of geometry changes
-	if (plot)
-		plot->prepareGeometryChange();
+	if (q->plot)
+		q->plot->prepareGeometryChange();
 }
 
 /*!
@@ -2184,8 +2156,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		QTextDocument doc;
 		doc.setDefaultFont(labelsFont);
 		QFontMetrics fm(labelsFont);
-		auto xRangeFormat{ plot->xRange(cSystem->xIndex()).format() };
-		auto yRangeFormat{ plot->yRange(cSystem->yIndex()).format() };
+		auto xRangeFormat{ q->plot->xRange(q->cSystem->xIndex()).format() };
+		auto yRangeFormat{ q->plot->yRange(q->cSystem->yIndex()).format() };
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			//QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
@@ -2337,7 +2309,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
 	writer->writeAttribute( "titleOffsetX", QString::number(d->titleOffsetX) );
 	writer->writeAttribute( "titleOffsetY", QString::number(d->titleOffsetY) );
-	writer->writeAttribute( "plotRangeIndex", QString::number(d->cSystemIndex) );
+	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
@@ -2448,7 +2420,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("zeroOffset", zeroOffset);
 			READ_DOUBLE_VALUE("titleOffsetX", titleOffsetX);
 			READ_DOUBLE_VALUE("titleOffsetY", titleOffsetY);
-			READ_INT_VALUE("plotRangeIndex", cSystemIndex, bool);
+			READ_INT_VALUE("plotRangeIndex", q->m_cSystemIndex, bool);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
