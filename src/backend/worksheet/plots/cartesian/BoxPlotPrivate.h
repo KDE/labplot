@@ -87,6 +87,15 @@ public:
 	QPen medianLinePen;
 	qreal medianLineOpacity;
 
+	//markers
+	Symbol::Style symbolOutliersStyle;
+	Symbol::Style symbolMeanStyle;
+	QBrush symbolsBrush;
+	QPen symbolsPen;
+	qreal symbolsOpacity;
+	qreal symbolsRotationAngle;
+	qreal symbolsSize;
+
 	//whiskers
 	QPainterPath whiskersPath;
 	QPen whiskersPen;
@@ -104,6 +113,7 @@ private:
 
 	void draw(QPainter*);
 	void drawBox(QPainter*);
+	void drawSymbols(QPainter*);
 
 	bool n_suppressItemChangeEvent{false};
 	bool m_suppressRetransform{false};
@@ -111,6 +121,8 @@ private:
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_boxPlotShape;
+	QVector<QPointF> m_outliersSymbolPoints;	//positins of the outlier symbols in scene coordinates
+	QPointF m_meanSymbolPoint; //position of the mean symbol in scene coordinates
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
 	QImage m_selectionEffectImage;
