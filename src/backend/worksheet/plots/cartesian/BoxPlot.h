@@ -30,6 +30,7 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/PlotArea.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 
 class BoxPlotPrivate;
 class AbstractColumn;
@@ -54,7 +55,6 @@ public:
 	//general
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, dataColumn, DataColumn)
 	QString& dataColumnPath() const;
-	BASIC_D_ACCESSOR_DECL(BoxPlot::WhiskersType, whiskersType, WhiskersType)
 
 	//box filling
 	BASIC_D_ACCESSOR_DECL(bool, fillingEnabled, FillingEnabled)
@@ -75,7 +75,17 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, medianLinePen, MedianLinePen)
 	BASIC_D_ACCESSOR_DECL(qreal, medianLineOpacity, MedianLineOpacity)
 
+	//markers
+	BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolOutliersStyle, SymbolOutliersStyle)
+	BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolMeanStyle, SymbolMeanStyle)
+	BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity)
+	BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolsRotationAngle)
+	BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolsSize)
+	CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush)
+	CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen)
+
 	//whiskers
+	BASIC_D_ACCESSOR_DECL(BoxPlot::WhiskersType, whiskersType, WhiskersType)
 	CLASS_D_ACCESSOR_DECL(QPen, whiskersPen, WhiskersPen)
 	BASIC_D_ACCESSOR_DECL(qreal, whiskersOpacity, WhiskersOpacity)
 	BASIC_D_ACCESSOR_DECL(double, whiskersCapSize, WhiskersCapSize)
@@ -122,7 +132,6 @@ signals:
 	//General-Tab
 	void dataChanged();
 	void dataColumnChanged(const AbstractColumn*);
-	void whiskersTypeChanged(BoxPlot::WhiskersType);
 	void visibilityChanged(bool);
 
 	//box filling
@@ -144,7 +153,17 @@ signals:
 	void medianLinePenChanged(QPen&);
 	void medianLineOpacityChanged(float);
 
+	//symbols for outliers and for the mean
+	void symbolOutliersStyleChanged(Symbol::Style);
+	void symbolMeanStyleChanged(Symbol::Style);
+	void symbolsSizeChanged(qreal);
+	void symbolsRotationAngleChanged(qreal);
+	void symbolsOpacityChanged(qreal);
+	void symbolsBrushChanged(QBrush);
+	void symbolsPenChanged(const QPen&);
+
 	//whiskers
+	void whiskersTypeChanged(BoxPlot::WhiskersType);
 	void whiskersPenChanged(QPen&);
 	void whiskersOpacityChanged(float);
 	void whiskersCapSizeChanged(double);

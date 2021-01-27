@@ -56,6 +56,7 @@ private:
 	void setModel();
 	void loadConfig(KConfig&);
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
+	void updateSymbolWidgets();
 
 private slots:
 	//SLOTs for changes triggered in BoxPlotDock
@@ -89,7 +90,20 @@ private slots:
 	void medianLineWidthChanged(double) const;
 	void medianLineOpacityChanged(int) const;
 
+	//makers
+	void symbolOutliersStyleChanged(int);
+	void symbolMeanStyleChanged(int);
+	void symbolsSizeChanged(double) const;
+	void symbolsRotationChanged(int) const;
+	void symbolsOpacityChanged(int) const;
+	void symbolsFillingStyleChanged(int) const;
+	void symbolsFillingColorChanged(const QColor&);
+	void symbolsBorderStyleChanged(int) const;
+	void symbolsBorderColorChanged(const QColor&);
+	void symbolsBorderWidthChanged(double) const;
+
 	//whiskers
+	void whiskersTypeChanged(int) const;
 	void whiskersStyleChanged(int) const;
 	void whiskersCapSizeChanged(double) const;
 	void whiskersColorChanged(const QColor&);
@@ -117,11 +131,21 @@ private slots:
 	void plotBorderPenChanged(QPen&);
 	void plotBorderOpacityChanged(float);
 
-	//box border
+	//median line
 	void plotMedianLinePenChanged(QPen&);
 	void plotMedianLineOpacityChanged(float);
 
+	//markers
+	void plotSymbolOutliersStyleChanged(Symbol::Style);
+	void plotSymbolMeanStyleChanged(Symbol::Style);
+	void plotSymbolsSizeChanged(qreal);
+	void plotSymbolsRotationAngleChanged(qreal);
+	void plotSymbolsOpacityChanged(qreal);
+	void plotSymbolsBrushChanged(const QBrush&);
+	void plotSymbolsPenChanged(const QPen&);
+
 	//whiskers
+	void plotWhiskersTypeChanged(BoxPlot::WhiskersType);
 	void plotWhiskersPenChanged(QPen&);
 	void plotWhiskersCapSizeChanged(double);
 	void plotWhiskersOpacityChanged(float);

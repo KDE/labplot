@@ -587,7 +587,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLabel" name="lOutliersSymbolStyle">
+        <widget class="QLabel" name="lSymbolOutliersStyle">
          <property name="text">
           <string>Outliers:</string>
          </property>
@@ -610,7 +610,7 @@
         </spacer>
        </item>
        <item row="1" column="2">
-        <widget class="KComboBox" name="cbOutliersSymbolStyle">
+        <widget class="KComboBox" name="cbSymbolOutliersStyle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -620,14 +620,14 @@
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="lMeanSymbolStyle">
+        <widget class="QLabel" name="lSymbolMeanStyle">
          <property name="text">
           <string>Mean:</string>
          </property>
         </widget>
        </item>
        <item row="2" column="2">
-        <widget class="KComboBox" name="cbMeanSymbolStyle">
+        <widget class="KComboBox" name="cbSymbolMeanStyle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
