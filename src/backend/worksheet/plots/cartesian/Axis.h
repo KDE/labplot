@@ -67,7 +67,6 @@ public:
 	explicit Axis(const QString&, Orientation orientation = Orientation::Horizontal);
 	~Axis() override;
 
-	void finalizeAdd() override;
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 

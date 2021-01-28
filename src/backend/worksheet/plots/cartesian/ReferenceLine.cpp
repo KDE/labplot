@@ -4,6 +4,7 @@
     Description          : Custom user-defined point on the plot
     --------------------------------------------------------------------
     Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -51,15 +52,10 @@
  * x- and y- coordinates in parent's coordinate system
  */
 
-ReferenceLine::ReferenceLine(const CartesianPlot* plot, const QString& name)
-	: WorksheetElement(name, AspectType::ReferenceLine), d_ptr(new ReferenceLinePrivate(this, plot)) {
+ReferenceLine::ReferenceLine(CartesianPlot* p, const QString& name)
+	: WorksheetElement(name, AspectType::ReferenceLine), d_ptr(new ReferenceLinePrivate(this)) {
 
-	init();
-}
-
-ReferenceLine::ReferenceLine(const QString& name, ReferenceLinePrivate* dd)
-	: WorksheetElement(name, AspectType::ReferenceLine), d_ptr(dd) {
-
+	m_plot = p;
 	init();
 }
 
@@ -74,7 +70,7 @@ void ReferenceLine::init() {
 	KConfigGroup group = config.group("ReferenceLine");
 
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
-	d->position = group.readEntry("Position", d->plot->xRange().center());
+	d->position = group.readEntry("Position", m_plot->xRange().center());
 
 	d->pen.setStyle( (Qt::PenStyle) group.readEntry("Style", (int)Qt::SolidLine) );
 	d->pen.setColor( group.readEntry("Color", QColor(Qt::black)) );
@@ -260,7 +256,7 @@ void ReferenceLine::visibilityChangedSlot() {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-ReferenceLinePrivate::ReferenceLinePrivate(ReferenceLine* owner, const CartesianPlot* p) : plot(p), q(owner) {
+ReferenceLinePrivate::ReferenceLinePrivate(ReferenceLine* owner) :	q(owner) {
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
@@ -275,18 +271,20 @@ QString ReferenceLinePrivate::name() const {
     calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void ReferenceLinePrivate::retransform() {
-	if (suppressRetransform)
+	if (suppressRetransform || ! q->cSystem)
 		return;
+
+	const auto xRange{ q->m_plot->xRange(q->cSystem->xIndex()) };
+	const auto yRange{ q->m_plot->yRange(q->cSystem->yIndex()) };
 
 	//calculate the position in the scene coordinates
 	QVector<QPointF> listLogical;
 	if (orientation == ReferenceLine::Orientation::Vertical)
-		listLogical << QPointF(position, plot->yRange().center());
+		listLogical << QPointF(position, yRange.center());
 	else
-		listLogical << QPointF(plot->xRange().center(), position);
+		listLogical << QPointF(xRange.center(), position);
 
-	const auto* cSystem{ plot->defaultCoordinateSystem() };
-	QVector<QPointF> listScene = cSystem->mapLogicalToScene(listLogical);
+	QVector<QPointF> listScene = q->cSystem->mapLogicalToScene(listLogical);
 
 	if (!listScene.isEmpty()) {
 		positionScene = listScene.at(0);
@@ -298,11 +296,11 @@ void ReferenceLinePrivate::retransform() {
 		//determine the length of the line to be drawn
 		QVector<QPointF> pointsLogical;
 		if (orientation == ReferenceLine::Orientation::Vertical)
-			pointsLogical << QPointF(position, plot->yRange().start()) << QPointF(position, plot->yRange().end());
+			pointsLogical << QPointF(position, yRange.start()) << QPointF(position, yRange.end());
 		else
-			pointsLogical << QPointF(plot->xRange().start(), position) << QPointF(plot->xRange().end(), position);
+			pointsLogical << QPointF(xRange.start(), position) << QPointF(xRange.end(), position);
 
-		QVector<QPointF> pointsScene = cSystem->mapLogicalToScene(pointsLogical);
+		QVector<QPointF> pointsScene = q->cSystem->mapLogicalToScene(pointsLogical);
 
 		if (pointsScene.size() > 1) {
 			if (orientation == ReferenceLine::Orientation::Vertical)
@@ -411,11 +409,12 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 			positionSceneNew.setY(positionScene.y());
 	}
 
-	if (plot->dataRect().contains(positionSceneNew)) {
+	if (q->m_plot->dataRect().contains(positionSceneNew)) {
 		//emit the signals in order to notify the UI (dock widget and status bar) about the new logical position.
 		//we don't set the position related member variables during the mouse movements.
 		//this is done on mouse release events only.
-		const auto* cSystem{ plot->defaultCoordinateSystem() };
+		//TODO
+		const auto* cSystem{ q->m_plot->defaultCoordinateSystem() };
 		QPointF positionLogical = cSystem->mapSceneToLogical(positionSceneNew);
 		if (orientation == ReferenceLine::Orientation::Horizontal) {
 			emit q->positionChanged(positionLogical.y());
@@ -427,15 +426,15 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 	} else {
 		//line is moved outside of the plot, keep it at the plot boundary
 		if (orientation == ReferenceLine::Orientation::Horizontal) {
-			if (positionSceneNew.y() < plot->dataRect().y())
-				positionSceneNew.setY(plot->dataRect().y());
+			if (positionSceneNew.y() < q->m_plot->dataRect().y())
+				positionSceneNew.setY(q->m_plot->dataRect().y());
 			else
-				positionSceneNew.setY(plot->dataRect().y() + plot->dataRect().height());
+				positionSceneNew.setY(q->m_plot->dataRect().y() + q->m_plot->dataRect().height());
 		} else {
-			if (positionSceneNew.x() < plot->dataRect().x())
-				positionSceneNew.setX(plot->dataRect().x());
+			if (positionSceneNew.x() < q->m_plot->dataRect().x())
+				positionSceneNew.setX(q->m_plot->dataRect().x());
 			else
-				positionSceneNew.setX(plot->dataRect().x() + plot->dataRect().width());
+				positionSceneNew.setX(q->m_plot->dataRect().x() + q->m_plot->dataRect().width());
 		}
 	}
 
@@ -445,8 +444,7 @@ QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVari
 void ReferenceLinePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//position was changed -> set the position member variables
 	suppressRetransform = true;
-	const auto* cSystem{ plot->defaultCoordinateSystem() };
-	QPointF positionLogical = cSystem->mapSceneToLogical(pos());
+	QPointF positionLogical = q->cSystem->mapSceneToLogical(pos());
 	if (orientation == ReferenceLine::Orientation::Horizontal)
 		q->setPosition(positionLogical.y());
 	else
@@ -490,6 +488,7 @@ void ReferenceLine::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("general");
 	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
 	writer->writeAttribute("position", QString::number(d->position));
+	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeAttribute("visible", QString::number(d->isVisible()));
 	writer->writeEndElement();
 
@@ -526,6 +525,8 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			READ_DOUBLE_VALUE("position", position);
 			READ_INT_VALUE("orientation", orientation, Orientation);
+
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, bool);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

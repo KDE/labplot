@@ -4,6 +4,7 @@
     Description          : widget for CustomPoint properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -66,6 +67,7 @@ CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.lePositionX, &QLineEdit::textChanged, this, &CustomPointDock::positionXChanged);
 	connect(ui.dateTimeEditPositionX, &QDateTimeEdit::dateTimeChanged, this, &CustomPointDock::positionXDateTimeChanged);
 	connect(ui.lePositionY, &QLineEdit::textChanged, this, &CustomPointDock::positionYChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::plotRangeChanged);
 	connect( ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
 
 	//Symbols
@@ -126,6 +128,8 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	//show the properties of the first custom point
 	this->load();
 
+	updatePlotRanges();	// needed when loading project
+
 	//for custom points being children of an InfoElement, the position is changed
 	//via the parent settings -> disable the positioning here.
 	bool enabled = (m_point->parentAspect()->type() != AspectType::InfoElement);
@@ -137,6 +141,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	// general
 	connect(m_point, &CustomPoint::aspectDescriptionChanged, this, &CustomPointDock::pointDescriptionChanged);
 	connect(m_point, &CustomPoint::positionChanged, this, &CustomPointDock::pointPositionChanged);
+	connect(m_point, &WorksheetElement::plotRangeListChanged, this, &CustomPointDock::updatePlotRanges);
 	connect(m_point, &CustomPoint::visibleChanged, this, &CustomPointDock::pointVisibilityChanged);
 
 	//symbol
@@ -146,17 +151,23 @@ void CustomPointDock::setPoints(QList<CustomPoint*> list) {
 	connect(m_point, &CustomPoint::symbolOpacityChanged, this, &CustomPointDock::pointSymbolOpacityChanged);
 	connect(m_point, &CustomPoint::symbolBrushChanged, this, &CustomPointDock::pointSymbolBrushChanged);
 	connect(m_point, &CustomPoint::symbolPenChanged, this, &CustomPointDock::pointSymbolPenChanged);
+	DEBUG(Q_FUNC_INFO << " DONE")
 }
 
 /*
  * updates the locale in the widgets. called when the application settins are changed.
  */
 void CustomPointDock::updateLocale() {
+	DEBUG(Q_FUNC_INFO)
 	SET_NUMBER_LOCALE
 	ui.sbSymbolSize->setLocale(numberLocale);
 	ui.sbSymbolBorderWidth->setLocale(numberLocale);
 	ui.lePositionX->setLocale(numberLocale);
 	ui.lePositionY->setLocale(numberLocale);
+}
+
+void CustomPointDock::updatePlotRanges() const {
+	updatePlotRangeList(ui.cbPlotRanges);
 }
 
 //**********************************************************

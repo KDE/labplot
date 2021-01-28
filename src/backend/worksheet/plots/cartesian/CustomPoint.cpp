@@ -5,7 +5,8 @@
 	--------------------------------------------------------------------
 	Copyright            : (C) 2015 Ankit Wagadre (wagadre.ankit@gmail.com)
 	Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2020 Martin Marmsoler (martin.marmsoler@gmail.com)
+	Copyright            : (C) 2020 Martin Marmsoler (martin.marmsoler@gmail.com)
+	Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -51,14 +52,13 @@
  * x- and y- coordinates in parent's coordinate system
  */
 
-CustomPoint::CustomPoint(const CartesianPlot* plot, const QString& name)
-	: WorksheetElement(name, AspectType::CustomPoint), d_ptr(new CustomPointPrivate(this, plot)) {
+CustomPoint::CustomPoint(CartesianPlot* p, const QString& name)
+	: WorksheetElement(name, AspectType::CustomPoint), d_ptr(new CustomPointPrivate(this)) {
 
-	init();
-}
-
-CustomPoint::CustomPoint(const QString& name, CustomPointPrivate* dd)
-	: WorksheetElement(name, AspectType::CustomPoint), d_ptr(dd) {
+	m_plot = p;
+	DEBUG(Q_FUNC_INFO << ", cSystem index = " << m_cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ", plot cSystem count = " << m_plot->coordinateSystemCount())
+	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
 
 	init();
 }
@@ -70,8 +70,9 @@ CustomPoint::~CustomPoint() = default;
 void CustomPoint::init() {
 	Q_D(CustomPoint);
 
-	d->position.setX(d->plot->xRange().center());
-	d->position.setY(d->plot->yRange().center());
+	// default position
+	d->position.setX(m_plot->xRange(cSystem->xIndex()).center());
+	d->position.setY(m_plot->yRange(cSystem->yIndex()).center());
 
 	KConfig config;
 	KConfigGroup group = config.group("CustomPoint");
@@ -122,6 +123,7 @@ QGraphicsItem* CustomPoint::graphicsItem() const {
 }
 
 void CustomPoint::retransform() {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(CustomPoint);
 	d->retransform();
 }
@@ -222,28 +224,31 @@ void CustomPoint::visibilityChanged() {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-CustomPointPrivate::CustomPointPrivate(CustomPoint* owner, const CartesianPlot* p) : plot(p), q(owner) {
+CustomPointPrivate::CustomPointPrivate(CustomPoint* owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(true);
-
-	cSystem = plot->defaultCoordinateSystem();
 }
 
 QString CustomPointPrivate::name() const {
 	return q->name();
 }
 
+const CartesianPlot* CustomPointPrivate::plot() {
+	return q->m_plot;
+}
+
 /*!
     calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void CustomPointPrivate::retransform() {
+	DEBUG(Q_FUNC_INFO)
 	if (suppressRetransform || !parentItem())
 		return;
 
 	//calculate the point in the scene coordinates
-	QVector<QPointF> listScene = cSystem->mapLogicalToScene(QVector<QPointF>{position});
+	QVector<QPointF> listScene = q->cSystem->mapLogicalToScene(QVector<QPointF>{position});
 	if (!listScene.isEmpty()) {
 		m_visible = true;
 		positionScene = listScene.at(0);
@@ -347,7 +352,7 @@ QVariant CustomPointPrivate::itemChange(GraphicsItemChange change, const QVarian
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//emit the signals in order to notify the UI.
 		QPointF scenePos = mapParentToPlotArea(value.toPointF());
-		QPointF logicalPos = cSystem->mapSceneToLogical(scenePos); // map parent to scene
+		QPointF logicalPos = q->cSystem->mapSceneToLogical(scenePos); // map parent to scene
 		//q->setPosition(logicalPos);
 
 		// not needed, because positionChanged trigger the widget, which sets the position
@@ -366,7 +371,7 @@ void CustomPointPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
 	//position was changed -> set the position member variables
 	suppressRetransform = true;
-	q->setPosition(cSystem->mapSceneToLogical(pos()));
+	q->setPosition(q->cSystem->mapSceneToLogical(pos()));
 	suppressRetransform = false;
 
 	QGraphicsItem::mouseReleaseEvent(event);
@@ -402,11 +407,11 @@ void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
  * \return point in parent coordinates
  */
 QPointF CustomPointPrivate::mapPlotAreaToParent(QPointF point) {
-	if (plot) {
+	if (plot()) {
 		// first mapping to item coordinates and from there back to parent
 		// WorksheetinfoElement: parentItem()->parentItem() == plot->graphicsItem()
 		// plot->graphicsItem().pos() == plot->plotArea()->graphicsItem().pos()
-		auto* plotArea = const_cast<CartesianPlot*>(plot)->plotArea();
+		auto* plotArea = const_cast<CartesianPlot*>(plot())->plotArea();
 		return mapToParent(mapFromItem(plotArea->graphicsItem(), point));
 	}
 	return QPointF(0, 0);
@@ -421,9 +426,9 @@ QPointF CustomPointPrivate::mapPlotAreaToParent(QPointF point) {
  * \return point in PlotArea coordinates
  */
 QPointF CustomPointPrivate::mapParentToPlotArea(QPointF point) {
-	if (plot) {
+	if (plot()) {
 		// mapping from parent to item coordinates and them to plot area
-		auto* plotArea = const_cast<CartesianPlot*>(plot)->plotArea();
+		auto* plotArea = const_cast<CartesianPlot*>(plot())->plotArea();
 		return mapToItem(plotArea->graphicsItem(), mapFromParent(point));
 	}
 	return QPointF(0, 0);
@@ -444,6 +449,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("geometry");
 	writer->writeAttribute( "x", QString::number(d->position.x()) );
 	writer->writeAttribute( "y", QString::number(d->position.y()) );
+	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
@@ -495,6 +501,8 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("y").toString());
 			else
 				d->position.setY(str.toDouble());
+
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, bool);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

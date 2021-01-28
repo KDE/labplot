@@ -37,10 +37,7 @@ class CartesianCoordinateSystem;
 
 class CustomPointPrivate: public QGraphicsItem {
 public:
-	explicit CustomPointPrivate(CustomPoint*, const CartesianPlot*);
-
-	const CartesianPlot* plot{nullptr};
-	const CartesianCoordinateSystem* cSystem{nullptr};
+	explicit CustomPointPrivate(CustomPoint*);
 
 	QString name() const;
 	void retransform();
@@ -78,6 +75,7 @@ public:
 	CustomPoint* const q;
 
 private:
+	const CartesianPlot* plot();
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;

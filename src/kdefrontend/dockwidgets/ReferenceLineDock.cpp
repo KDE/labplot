@@ -4,6 +4,7 @@
     Description          : Dock widget for the reference line on the plot
     --------------------------------------------------------------------
     Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -55,6 +56,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent) : BaseDock(parent) {
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
 	connect(ui.lePosition, &QLineEdit::textChanged, this, &ReferenceLineDock::positionChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
 
 	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::styleChanged);
@@ -96,8 +98,11 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	//show the properties of the first reference line
 	this->load();
 
+	updatePlotRanges();
+
 	//SIGNALs/SLOTs
 	connect(m_line, &AbstractAspect::aspectDescriptionChanged,this, &ReferenceLineDock::lineDescriptionChanged);
+	connect(m_line, &WorksheetElement::plotRangeListChanged, this, &ReferenceLineDock::updatePlotRanges);
 	connect(m_line, &ReferenceLine::visibleChanged, this, &ReferenceLineDock::lineVisibilityChanged);
 
 	//position
@@ -118,6 +123,10 @@ void ReferenceLineDock::updateLocale() {
 
 	Lock lock(m_initializing);
 	ui.lePosition->setText(numberLocale.toString(m_line->position()));
+}
+
+void ReferenceLineDock::updatePlotRanges() const {
+	updatePlotRangeList(ui.cbPlotRanges);
 }
 
 //**********************************************************

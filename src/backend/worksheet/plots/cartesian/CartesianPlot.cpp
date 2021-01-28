@@ -1330,6 +1330,8 @@ int CartesianPlot::coordinateSystemCount() const {
 }
 
 CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
+	DEBUG(Q_FUNC_INFO << ", nr of cSystems = " << m_coordinateSystems.size())
 	if (index > m_coordinateSystems.size())
 		return nullptr;
 
@@ -1730,7 +1732,7 @@ void CartesianPlot::addInfoElement() {
 	InfoElement* element = new InfoElement("Info Element", this, curve, pos);
 	this->addChild(element);
 	element->setParentGraphicsItem(graphicsItem());
-	element->retransform(); // must be done, because the custompoint must be retransformed (see https://invent.kde.org/marmsoler/labplot/issues/9)
+	element->retransform(); // must be done, because the element must be retransformed (see https://invent.kde.org/marmsoler/labplot/issues/9)
 }
 
 void CartesianPlot::addTextLabel() {
@@ -1746,21 +1748,23 @@ void CartesianPlot::addImage() {
 
 void CartesianPlot::addCustomPoint() {
 	auto* point = new CustomPoint(this, "custom point");
+	point->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	this->addChild(point);
 	point->retransform();
 }
 
 void CartesianPlot::addReferenceLine() {
 	auto* line = new ReferenceLine(this, "reference line");
+	line->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	this->addChild(line);
 	line->retransform();
 }
 
-int CartesianPlot::curveCount(){
-	return children<XYCurve>().length();
+int CartesianPlot::curveCount() {
+	return children<XYCurve>().size();
 }
 
-const XYCurve* CartesianPlot::getCurve(int index){
+const XYCurve* CartesianPlot::getCurve(int index) {
 	return children<XYCurve>().at(index);
 }
 

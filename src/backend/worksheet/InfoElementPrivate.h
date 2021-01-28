@@ -38,12 +38,13 @@ class CartesianPlot;
 class CartesianCoordinateSystem;
 class XYCurve;
 class QGraphicsSceneMouseEvent;
+class QPen;
 
 class InfoElementPrivate : public QGraphicsItem {
 
 public:
-	InfoElementPrivate(InfoElement* owner, CartesianPlot*);
-	InfoElementPrivate(InfoElement* owner, CartesianPlot*, const XYCurve *);
+	InfoElementPrivate(InfoElement* owner);
+	InfoElementPrivate(InfoElement* owner, const XYCurve *);
 	QString name() const;
 
 	//reimplemented from QGraphicsItem
@@ -75,8 +76,8 @@ public:
 	QPen connectionLinePen;
 	qreal connectionLineOpacity;
 
-	CartesianPlot* plot{nullptr};
-	const CartesianCoordinateSystem* cSystem{nullptr};
+	//TODO
+//	CartesianPlot* plot{nullptr};
 
 	InfoElement* const q;
 

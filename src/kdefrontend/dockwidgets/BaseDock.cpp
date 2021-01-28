@@ -5,7 +5,7 @@
 	--------------------------------------------------------------------
 	Copyright            : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
 	Copyright            : (C) 2019-2020 Alexander Semke (alexander.semke@web.de)
-
+	Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -34,6 +34,8 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
+#include <QComboBox>
+
 BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	m_units = (Units)group.readEntry("Units", static_cast<int>(Units::Metric));
@@ -43,6 +45,44 @@ BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
 }
 
 BaseDock::~BaseDock() = default;
+
+void BaseDock::updatePlotRangeList(QComboBox* cb) const {
+	DEBUG(Q_FUNC_INFO)
+	auto* element{ static_cast<WorksheetElement*>(m_aspect) };
+	const int cSystemCount{ element->coordinateSystemCount() };
+	const int cSystemIndex{ element->coordinateSystemIndex() };
+
+	if (cSystemCount == 0) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: no plot range yet")
+		return;
+	}
+	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
+	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex+1)
+
+	// fill ui.cbPlotRanges
+	cb->clear();
+	for (int i{0}; i < cSystemCount; i++)
+		cb->addItem( QString::number(i+1) + QLatin1String(" : ") + element->coordinateSystemInfo(i) );
+	cb->setCurrentIndex(cSystemIndex);
+	// disable when there is only on plot range
+	cb->setEnabled(cSystemCount == 1 ? false : true);
+}
+
+void BaseDock::plotRangeChanged(int index) {
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_aspect->parentAspect());
+	if (index < 0 || index > plot->coordinateSystemCount()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return;
+	}
+
+	auto* element{ static_cast<WorksheetElement*>(m_aspect) };
+	if (index != element->coordinateSystemIndex()) {
+		element->setCoordinateSystemIndex(index);
+		updateLocale();		// update line edits
+		element->retransform();	// redraw
+	}
+}
 
 void BaseDock::nameChanged() {
 	if (m_initializing || !m_aspect)

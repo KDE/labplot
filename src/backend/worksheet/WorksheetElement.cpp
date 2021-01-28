@@ -66,6 +66,14 @@ WorksheetElement::~WorksheetElement() {
 	delete m_drawingOrderMenu;
 }
 
+void WorksheetElement::finalizeAdd() {
+	DEBUG(Q_FUNC_INFO)
+	m_plot = dynamic_cast<CartesianPlot*>(parentAspect());
+	if (m_plot)
+		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
+	emit plotRangeListChanged();
+}
+
 /**
  * \fn QGraphicsItem *WorksheetElement::graphicsItem() const
  * \brief Return the graphics item representing this element.
@@ -267,20 +275,21 @@ void WorksheetElement::saveThemeConfig(const KConfig &) {
 
 void  WorksheetElement::setCoordinateSystemIndex(int index) {
 	m_cSystemIndex = index;
-	if (plot)
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(index));
+	if (m_plot)
+		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(index));
 }
 
 int WorksheetElement::coordinateSystemCount() const {
-	if (plot)
-		return plot->coordinateSystems().size();
+	if (m_plot)
+		return m_plot->coordinateSystems().size();
+	DEBUG(Q_FUNC_INFO << ", WARNING: no plot set!")
 
 	return 0;
 }
 
 QString WorksheetElement::coordinateSystemInfo(const int index) const {
-	if (plot)
-		return plot->coordinateSystem(index)->info();
+	if (m_plot)
+		return m_plot->coordinateSystem(index)->info();
 
 	return QString();
 }

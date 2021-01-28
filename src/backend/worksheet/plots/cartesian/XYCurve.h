@@ -68,7 +68,6 @@ public:
 	explicit XYCurve(const QString &name, AspectType type = AspectType::XYCurve);
 	~XYCurve() override;
 
-	void finalizeAdd() override;
 	QIcon icon() const override;
 	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;

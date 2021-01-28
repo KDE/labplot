@@ -4,6 +4,7 @@
     Description          : Dock widget for the reference line on the plot
     --------------------------------------------------------------------
     Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -68,6 +69,7 @@ private slots:
 
 	//SLOTs for changes triggered in ReferenceLine
 	void lineDescriptionChanged(const AbstractAspect*);
+	void updatePlotRanges() const override;
 	void lineVisibilityChanged(bool);
 
 	//Position

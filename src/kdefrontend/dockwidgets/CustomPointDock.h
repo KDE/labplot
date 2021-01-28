@@ -4,6 +4,7 @@
     Description          : Dock widget for the custom point on the plot
     --------------------------------------------------------------------
     Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -77,6 +78,7 @@ private slots:
 	//General-Tab
 	void pointDescriptionChanged(const AbstractAspect*);
 	void pointPositionChanged(QPointF);
+	void updatePlotRanges() const override;
 	void pointVisibilityChanged(bool);
 
 	//Symbol-Tab

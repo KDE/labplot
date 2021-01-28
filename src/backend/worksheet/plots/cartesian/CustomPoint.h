@@ -42,7 +42,7 @@ class CustomPoint : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit CustomPoint(const CartesianPlot*, const QString&);
+	explicit CustomPoint(CartesianPlot*, const QString&);
 	~CustomPoint() override;
 
 	QIcon icon() const override;

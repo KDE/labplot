@@ -4,7 +4,8 @@
     Description          : widget for Histogram properties
     --------------------------------------------------------------------
     Copyright            : (C) 2016 Anu Mittal (anu22mittal@gmail.com)
-    Copyright            : (C) 2018-2021 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2018-2021 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -131,6 +132,7 @@ HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(n
 	connect( ui.leBinRangesMax, &QLineEdit::textChanged, this, &HistogramDock::binRangesMaxChanged );
 	connect(ui.dteBinRangesMin, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
 	connect(ui.dteBinRangesMax, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMaxDateTimeChanged);
+	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::plotRangeChanged);
 
 	//Line
 	connect(ui.cbLineType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &HistogramDock::lineTypeChanged);
@@ -440,6 +442,8 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	KConfig config(QString(), KConfig::SimpleConfig);
 	loadConfig(config);
 
+	updatePlotRanges();
+
 	//Slots
 	//General-tab
 	connect(m_curve, &Histogram::aspectDescriptionChanged, this, &HistogramDock::curveDescriptionChanged);
@@ -511,6 +515,20 @@ void HistogramDock::retranslateUi() {
 // 	ui.lYColumn->setText(i18n("y-data"));
 
 	//TODO updatePenStyles, updateBrushStyles for all comboboxes
+}
+void HistogramDock::updatePlotRanges() const {
+	const int cSystemCount{ m_curve->coordinateSystemCount() };
+	const int cSystemIndex{ m_curve->coordinateSystemIndex() };
+	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
+	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex+1)
+
+	// fill ui.cbPlotRanges
+	ui.cbPlotRanges->clear();
+	for (int i{0}; i < cSystemCount; i++)
+		ui.cbPlotRanges->addItem( QString::number(i+1) + QLatin1String(" : ") + m_curve->coordinateSystemInfo(i) );
+	ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
+	// disable when there is only on plot range
+	ui.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
 }
 
 //*************************************************************
@@ -665,6 +683,21 @@ void HistogramDock::binRangesMaxDateTimeChanged(const QDateTime& dateTime) {
 	quint64 max = dateTime.toMSecsSinceEpoch();
 	for (auto* hist : m_curvesList)
 		hist->setBinRangesMax(max);
+}
+
+void HistogramDock::plotRangeChanged(int index) {
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
+	const auto* plot = dynamic_cast<const CartesianPlot*>(m_curve->parentAspect());
+	if (index < 0 || index > plot->coordinateSystemCount()) {
+		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
+		return;
+	}
+
+	if (index != m_curve->coordinateSystemIndex()) {
+		m_curve->setCoordinateSystemIndex(index);
+		updateLocale();		// update line edits
+		m_curve->retransform();	// redraw
+	}
 }
 
 //Line tab

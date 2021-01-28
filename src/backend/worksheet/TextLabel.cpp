@@ -77,7 +77,8 @@ TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type)
 
 TextLabel::TextLabel(const QString &name, CartesianPlot* plot, Type type):
 	WorksheetElement(name, AspectType::TextLabel),
-	d_ptr(new TextLabelPrivate(this,plot)), m_type(type), visibilityAction(nullptr) {
+	d_ptr(new TextLabelPrivate(this, plot)), m_type(type), visibilityAction(nullptr) {
+
 	init();
 }
 
@@ -148,8 +149,8 @@ void TextLabel::init() {
 		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
 		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", static_cast<int>(d->horizontalAlignment));
 		d->verticalAlignment = (WorksheetElement::VerticalAlignment) group.readEntry("VerticalAlignment", static_cast<int>(d->verticalAlignment));
-		if (d->cSystem)
-			d->positionLogical = d->cSystem->mapSceneToLogical(d->position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		if (cSystem)
+			d->positionLogical = cSystem->mapSceneToLogical(d->position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	}
 
 	DEBUG("CHECK: default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
@@ -432,7 +433,7 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner, CartesianPlot* plot)
 
 	//TODO
 	if(plot)
-		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
+		q->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
 
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemIsMovable);
@@ -524,9 +525,9 @@ void TextLabelPrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
-	if(coordinateBindingEnabled && cSystem) {
+	if(coordinateBindingEnabled && q->cSystem) {
 		//the position in logical coordinates was changed, calculate the position in scene coordinates
-		position.point = cSystem->mapLogicalToScene(positionLogical, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		position.point = q->cSystem->mapLogicalToScene(positionLogical, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		emit q->positionChanged(position);
 	} else {
 		if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom
@@ -534,8 +535,8 @@ void TextLabelPrivate::retransform() {
 			updatePosition();
 
 			//the position in scene coordinates was changed, calculate the position in logical coordinates
-			if (cSystem) {
-				positionLogical = cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			if (q->cSystem) {
+				positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 				emit q->positionLogicalChanged(positionLogical);
 			}
 		}
@@ -1048,7 +1049,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		//emit the signals in order to notify the UI.
 		// don't use setPosition here, because then all small changes are on the undo stack
 		if(coordinateBindingEnabled) {
-			QPointF tempPoint = cSystem->mapSceneToLogical(tempPosition.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			QPointF tempPoint = q->cSystem->mapSceneToLogical(tempPosition.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			emit q->positionLogicalChanged(tempPoint);
 		} else
 			emit q->positionChanged(tempPosition);
@@ -1059,7 +1060,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 /*
 void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if(coordinateBinding)
-		positionLogical = cSystem->mapSceneToLogical(mapParentToPlotArea(pos()), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos()), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	return QGraphicsItem::mouseMoveEvent(event);
 }*/
 

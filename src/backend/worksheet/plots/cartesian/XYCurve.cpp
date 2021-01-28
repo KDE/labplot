@@ -79,12 +79,6 @@ XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type)
 //and is deleted during the cleanup in QGraphicsScene
 XYCurve::~XYCurve() = default;
 
-void XYCurve::finalizeAdd() {
-	plot = dynamic_cast<CartesianPlot*>(parentAspect());
-	Q_ASSERT(plot);
-	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(m_cSystemIndex));
-}
-
 void XYCurve::init() {
 	Q_D(XYCurve);
 
@@ -172,7 +166,7 @@ QMenu* XYCurve::createContextMenu() {
 
 	//"data analysis" menu
 //	auto* plot = static_cast<CartesianPlot*>(parentAspect());
-	menu->insertMenu(visibilityAction, plot->analysisMenu());
+	menu->insertMenu(visibilityAction, m_plot->analysisMenu());
 	menu->insertSeparator(visibilityAction);
 	menu->insertSeparator(firstAction);
 
@@ -1020,7 +1014,7 @@ void XYCurvePrivate::retransform() {
 		return;
 
 	DEBUG("\n" << Q_FUNC_INFO << ", name = " << STDSTRING(name()) << ", m_suppressRetransform = " << m_suppressRetransform);
-	if (m_suppressRetransform || !q->plot)
+	if (m_suppressRetransform || !plot())
 		return;
 
 	{
@@ -1046,7 +1040,7 @@ void XYCurvePrivate::retransform() {
 		return;
 	}
 
-		if (!q->plot->isPanningActive())
+		if (!plot()->isPanningActive())
 			WAIT_CURSOR;
 
 	//calculate the scene coordinates
@@ -1061,7 +1055,7 @@ void XYCurvePrivate::retransform() {
 	const int numberOfPoints = m_logicalPoints.size();
 	DEBUG(Q_FUNC_INFO << ", number of logical points = " << numberOfPoints)
 	if (numberOfPoints > 0) {
-		const auto dataRect{ q->plot->dataRect() };
+		const auto dataRect{ plot()->dataRect() };
 		// this is the old method considering DPI
 		DEBUG(Q_FUNC_INFO << ", plot->dataRect() width/height = " << dataRect.width() << '/'  << dataRect.height());
 		//const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
@@ -1240,8 +1234,8 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64&
 	//DEBUG(Q_FUNC_INFO << ", coordinate system index: " << cSystem->xIndex())
 
 	const auto xIndex{ q->cSystem->xIndex() };
-	if (q->plot->xRangeScale(xIndex) == RangeT::Scale::Linear) {
-		double minLogicalDiffX = q->plot->xRange(xIndex).size()/numberOfPixelX;
+	if (plot()->xRangeScale(xIndex) == RangeT::Scale::Linear) {
+		double minLogicalDiffX = plot()->xRange(xIndex).size()/numberOfPixelX;
 		//DEBUG("	plot->xMax() - plot->xMin() = " << plot->xMax() - plot->xMin())
 		//DEBUG("	plot->dataRect().width() = " << plot->dataRect().width())
 		//DEBUG("	-> minLogicalDiffX = " << minLogicalDiffX)
@@ -1260,7 +1254,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64&
 
 		// using only the difference between the points is not sufficient, because p0 is updated always
 		// if new line is added or not
-		const auto dataRect{ q->plot->dataRect() };
+		const auto dataRect{ plot()->dataRect() };
 		qint64 p0Pixel = qRound64((p0Scene.x() - dataRect.x()) / (double)dataRect.width() * numberOfPixelX);
 		qint64 p1Pixel = qRound64((p1Scene.x() - dataRect.x()) / (double)dataRect.width() * numberOfPixelX);
 		//DEBUG(Q_FUNC_INFO << ", p0Pixel/p1Pixel = " << p0Pixel << ' ' << p1Pixel)
@@ -1328,7 +1322,7 @@ void XYCurvePrivate::updateLines() {
 		return;
 	}
 
-	const QRectF pageRect = q->plot->dataRect();
+	const QRectF pageRect = plot()->dataRect();
 	// old method using DPI
 	//const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
 	//float heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Unit::Inch);	// unsed
@@ -1380,8 +1374,8 @@ void XYCurvePrivate::updateLines() {
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 	if (columnProperties == AbstractColumn::Properties::Constant) {
 		DEBUG(Q_FUNC_INFO << ", CONSTANT column")
-		const auto xRange{ q->plot->xRange(q->cSystem->xIndex()) };
-		const auto yRange{ q->plot->yRange(q->cSystem->yIndex()) };
+		const auto xRange{ plot()->xRange(q->cSystem->xIndex()) };
+		const auto yRange{ plot()->yRange(q->cSystem->yIndex()) };
 		tempPoint1 = QPointF(xRange.start(), yRange.start());
 		tempPoint2 = QPointF(xRange.start(), yRange.end());
 		m_lines.append(QLineF(tempPoint1, tempPoint2));
@@ -1683,8 +1677,8 @@ void XYCurvePrivate::updateDropLines() {
 
 	//calculate drop lines
 	QVector<QLineF> dlines;
-	const double xMin = q->plot->xRange(q->cSystem->xIndex()).start();
-	const double yMin = q->plot->yRange(q->cSystem->xIndex()).start();
+	const double xMin = plot()->xRange(q->cSystem->xIndex()).start();
+	const double yMin = plot()->yRange(q->cSystem->xIndex()).start();
 
 	int i{0};
 	switch (dropLineType) {
@@ -1794,7 +1788,7 @@ void XYCurvePrivate::updateValues() {
 	switch (valuesType) {
 	case XYCurve::ValuesType::NoValues:
 	case XYCurve::ValuesType::X: {
-		auto xRangeFormat{ q->plot->xRange(q->cSystem->xIndex()).format() };
+		auto xRangeFormat{ plot()->xRange(q->cSystem->xIndex()).format() };
 		int precision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1810,7 +1804,7 @@ void XYCurvePrivate::updateValues() {
 		break;
 	}
 	case XYCurve::ValuesType::Y: {
-		auto rangeFormat{ q->plot->yRange(q->cSystem->yIndex()).format() };
+		auto rangeFormat{ plot()->yRange(q->cSystem->yIndex()).format() };
 		int precision = valuesPrecision;
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1827,8 +1821,8 @@ void XYCurvePrivate::updateValues() {
 	}
 	case XYCurve::ValuesType::XY:
 	case XYCurve::ValuesType::XYBracketed: {
-		auto xRangeFormat{ q->plot->xRange(q->cSystem->xIndex()).format() };
-		auto yRangeFormat{ q->plot->yRange(q->cSystem->yIndex()).format() };
+		auto xRangeFormat{ plot()->xRange(q->cSystem->xIndex()).format() };
+		auto yRangeFormat{ plot()->yRange(q->cSystem->yIndex()).format() };
 
 		int xPrecision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
@@ -1995,8 +1989,8 @@ void XYCurvePrivate::updateFilling() {
 	const QPointF& last = m_logicalPoints.at(m_logicalPoints.size()-1);//last point of the curve, may not be visible currently
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
-	const auto xRange{ q->plot->xRange(q->cSystem->xIndex()) };
-	const auto yRange{ q->plot->yRange(q->cSystem->yIndex()) };
+	const auto xRange{ plot()->xRange(q->cSystem->xIndex()) };
+	const auto yRange{ plot()->yRange(q->cSystem->yIndex()) };
 	const double xMin{ xRange.start() }, xMax{ xRange.end() };
 	const double yMin{ yRange.start() }, yMax{ yRange.end() };
 	if (fillingPosition == XYCurve::FillingPosition::Above) {
@@ -3040,7 +3034,7 @@ void XYCurvePrivate::suppressRetransform(bool on) {
  * \p event
  */
 void XYCurvePrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
-	if (q->plot->mouseMode() != CartesianPlot::MouseMode::Selection) {
+	if (plot()->mouseMode() != CartesianPlot::MouseMode::Selection) {
 		event->ignore();
 		return QGraphicsItem::mousePressEvent(event);
 	}

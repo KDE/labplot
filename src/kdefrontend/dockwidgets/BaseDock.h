@@ -5,8 +5,7 @@
     --------------------------------------------------------------------
     Copyright         : (C) 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
     Copyright         : (C) 2019-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright         : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    Copyright         : (C) 2020-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -37,6 +36,7 @@
 #include <QLineEdit>
 
 class AbstractAspect;
+class QComboBox;
 
 struct Lock {
 	inline explicit Lock(bool& variable)
@@ -63,7 +63,7 @@ public:
 
 	virtual void updateLocale() {};
 	virtual void updateUnits() {};
-	virtual void updatePlotRanges() const {};	// needed in all curve and axis docks
+	virtual void updatePlotRanges() const {};	// used in worksheet element docks
 
 protected:
 	bool m_initializing{false};
@@ -73,10 +73,12 @@ protected:
 	QList<AbstractAspect*> m_aspects;
 	Units m_units{Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
+	void updatePlotRangeList(QComboBox*) const;	// used in worksheet element docks
 
 protected slots:
 	void nameChanged();
 	void commentChanged();
+	void plotRangeChanged(int index);	// used in worksheet element docks
 };
 
 #endif

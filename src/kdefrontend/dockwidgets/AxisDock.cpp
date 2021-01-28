@@ -4,7 +4,7 @@
     Description          : axes widget class
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2020 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    Copyright            : (C) 2012-2021 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
 
@@ -1067,7 +1067,7 @@ void AxisDock::majorTicksSpacingChanged() {
 
 	// fix spacing if incorrect (not set or > 100 ticks)
 	if (spacing == 0. || range / spacing > 100.) {
-		if (spacing == 0)
+		if (spacing == 0.)
 			spacing = range / (ui.sbMajorTicksNumber->value() - 1);
 
 		if (range / spacing > 100.)
@@ -1174,7 +1174,7 @@ void AxisDock::majorTicksOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (double)value/100.;
+	qreal opacity{ value/100. };
 	for (auto* axis : m_axesList)
 		axis->setMajorTicksOpacity(opacity);
 }
@@ -1413,7 +1413,7 @@ void AxisDock::minorTicksOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (double)value/100.;
+	qreal opacity{ value/100. };
 	for (auto* axis : m_axesList)
 		axis->setMinorTicksOpacity(opacity);
 }
@@ -1559,7 +1559,7 @@ void AxisDock::labelsOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity{ value/100. };
 	for (auto* axis : m_axesList)
 		axis->setLabelsOpacity(opacity);
 }
@@ -1623,7 +1623,7 @@ void AxisDock::majorGridOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (double)value/100.;
+	qreal opacity{ value/100. };
 	for (auto* axis : m_axesList)
 		axis->setMajorGridOpacity(opacity);
 }
@@ -1686,7 +1686,7 @@ void AxisDock::minorGridOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (double)value/100.;
+	qreal opacity{ value/100. };
 	for (auto* axis : m_axesList)
 		axis->setMinorGridOpacity(opacity);
 }
@@ -1804,7 +1804,7 @@ void AxisDock::axisLinePenChanged(const QPen& pen) {
 
 void AxisDock::axisArrowTypeChanged(Axis::ArrowType type) {
 	m_initializing = true;
-	ui.cbArrowType->setCurrentIndex((int)type);
+	ui.cbArrowType->setCurrentIndex( static_cast<int>(type) );
 	m_initializing = false;
 }
 
@@ -1816,7 +1816,7 @@ void AxisDock::axisLineOpacityChanged(qreal opacity) {
 
 void AxisDock::axisArrowPositionChanged(Axis::ArrowPosition position) {
 	m_initializing = true;
-	ui.cbArrowPosition->setCurrentIndex( (int)position );
+	ui.cbArrowPosition->setCurrentIndex( static_cast<int>(position) );
 	m_initializing = false;
 }
 
@@ -1873,7 +1873,7 @@ void AxisDock::axisMajorTicksLengthChanged(qreal length) {
 }
 void AxisDock::axisMajorTicksOpacityChanged(qreal opacity) {
 	m_initializing = true;
-	ui.sbMajorTicksOpacity->setValue( round(opacity*100.0));
+	ui.sbMajorTicksOpacity->setValue( round(opacity * 100.0) );
 	m_initializing = false;
 }
 
@@ -1936,7 +1936,7 @@ void AxisDock::axisLabelsFormatChanged(Axis::LabelsFormat format) {
 }
 void AxisDock::axisLabelsAutoPrecisionChanged(bool on) {
 	m_initializing = true;
-	ui.chkLabelsAutoPrecision->setChecked((int) on);
+	ui.chkLabelsAutoPrecision->setChecked(on);
 	m_initializing = false;
 }
 void AxisDock::axisLabelsPrecisionChanged(int precision) {
@@ -1999,7 +1999,7 @@ void AxisDock::axisLabelsSuffixChanged(const QString& suffix) {
 }
 void AxisDock::axisLabelsOpacityChanged(qreal opacity) {
 	m_initializing = true;
-	ui.sbLabelsOpacity->setValue( round(opacity*100.0) );
+	ui.sbLabelsOpacity->setValue( round(opacity * 100.0) );
 	m_initializing = false;
 }
 
@@ -2014,12 +2014,12 @@ void AxisDock::axisMajorGridPenChanged(const QPen& pen) {
 }
 void AxisDock::axisMajorGridOpacityChanged(qreal opacity) {
 	m_initializing = true;
-	ui.sbMajorGridOpacity->setValue( round(opacity*100.0) );
+	ui.sbMajorGridOpacity->setValue( round(opacity * 100.0) );
 	m_initializing = false;
 }
 void AxisDock::axisMinorGridPenChanged(const QPen& pen) {
 	m_initializing = true;
-	ui.cbMinorGridStyle->setCurrentIndex((int) pen.style());
+	ui.cbMinorGridStyle->setCurrentIndex( static_cast<int>(pen.style()) );
 	ui.kcbMinorGridColor->setColor(pen.color());
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, pen.color());
 	ui.sbMinorGridWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
@@ -2027,7 +2027,7 @@ void AxisDock::axisMinorGridPenChanged(const QPen& pen) {
 }
 void AxisDock::axisMinorGridOpacityChanged(qreal opacity) {
 	m_initializing = true;
-	ui.sbMinorGridOpacity->setValue( round(opacity*100.0) );
+	ui.sbMinorGridOpacity->setValue( round(opacity * 100.0) );
 	m_initializing = false;
 }
 
@@ -2059,9 +2059,9 @@ void AxisDock::plotRangeChanged(int index) {
 void AxisDock::load() {
 	//General
 	ui.chkVisible->setChecked( m_axis->isVisible() );
-	ui.cbOrientation->setCurrentIndex( (int) m_axis->orientation() );
+	ui.cbOrientation->setCurrentIndex( static_cast<int>(m_axis->orientation()) );
 
-	int index = (int)m_axis->position();
+	int index{ static_cast<int>(m_axis->position()) };
 	if (index > 1)
 		ui.cbPosition->setCurrentIndex(index-2);
 	else

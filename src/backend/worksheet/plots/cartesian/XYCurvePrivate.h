@@ -146,6 +146,7 @@ public:
 //	const CartesianCoordinateSystem* cSystem{nullptr};	//current cSystem
 
 private:
+	CartesianPlot* plot() const { return q->m_plot; }	// convenience method
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	QVariant itemChange(GraphicsItemChange change, const QVariant & value) override;

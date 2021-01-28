@@ -75,7 +75,7 @@ public:
 	QPointF positionLogical;
 
 	const CartesianPlot* plot{nullptr};
-	const CartesianCoordinateSystem* cSystem{nullptr};
+
 	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
 	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
 

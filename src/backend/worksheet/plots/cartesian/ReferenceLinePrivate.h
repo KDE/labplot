@@ -35,9 +35,7 @@ class CartesianCoordinateSystem;
 
 class ReferenceLinePrivate: public QGraphicsItem {
 public:
-	explicit ReferenceLinePrivate(ReferenceLine*, const CartesianPlot*);
-
-	const CartesianPlot* plot{nullptr};
+	explicit ReferenceLinePrivate(ReferenceLine*);
 
 	QString name() const;
 	void retransform();

@@ -40,7 +40,7 @@ class ReferenceLine : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	explicit ReferenceLine(const CartesianPlot*, const QString&);
+	explicit ReferenceLine(CartesianPlot*, const QString&);
 	~ReferenceLine() override;
 
 	QIcon icon() const override;

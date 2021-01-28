@@ -1696,6 +1696,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "autoBinRanges", QString::number(d->autoBinRanges) );
 	writer->writeAttribute( "binRangesMin", QString::number(d->binRangesMin) );
 	writer->writeAttribute( "binRangesMax", QString::number(d->binRangesMax) );
+	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
@@ -1786,6 +1787,8 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("autoBinRanges", autoBinRanges, bool);
 			READ_DOUBLE_VALUE("binRangesMin", binRangesMin);
 			READ_DOUBLE_VALUE("binRangesMax", binRangesMax);
+
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, bool);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

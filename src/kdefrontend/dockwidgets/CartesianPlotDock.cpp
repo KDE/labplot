@@ -1331,14 +1331,14 @@ void CartesianPlotDock::removePlotRange() {
 								+ i18n("Really remove it?"));
 			if (ret == KMessageBox::No)
 				return;
-			else	// reset
-				element->setCoordinateSystemIndex(0);
+			else
+				element->setCoordinateSystemIndex(0);	// reset
 		}
 	}
-	//TODO: update elements?
 
 	m_plot->removeCoordinateSystem(currentRow);
 	updatePlotRangeList();
+	m_plot->retransform();	// update plot and elements
 }
 
 /*

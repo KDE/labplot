@@ -55,6 +55,7 @@ private:
 	TreeViewComboBox* cbValuesColumn;
 
 	void updateValuesWidgets();
+	void updatePlotRanges() const override;
 	void loadConfig(KConfig&);
 
 protected:
@@ -84,6 +85,7 @@ private slots:
 	void binRangesMaxChanged(const QString&);
 	void binRangesMinDateTimeChanged(const QDateTime&);
 	void binRangesMaxDateTimeChanged(const QDateTime&);
+	void plotRangeChanged(int);
 
 	//Lines-Tab
 	void lineTypeChanged(int);

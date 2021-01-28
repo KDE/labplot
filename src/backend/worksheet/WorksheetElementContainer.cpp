@@ -250,7 +250,7 @@ bool WorksheetElementContainerPrivate::swapVisible(bool on) {
 }
 
 void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
-	prepareGeometryChange();
+	prepareGeometryChange();	// this is not const!
 	recalcShapeAndBoundingRect();
 }
 

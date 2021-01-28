@@ -77,7 +77,7 @@ public:
 	TextLabel::GluePoint gluePoint(int index);
 	TextLabel::TextWrapper createTextLabelText();
 	QMenu* createContextMenu() override;
-	CartesianPlot* plot();
+
 	bool isTextLabel() const;
 	double setMarkerpointPosition(double x);
 	int currentIndex(double new_x, double* found_x=nullptr);
@@ -87,7 +87,7 @@ public:
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-    BASIC_D_ACCESSOR_DECL(double, position, Position);
+	BASIC_D_ACCESSOR_DECL(double, position, Position);
 	BASIC_D_ACCESSOR_DECL(int, gluePointIndex, GluePointIndex);
 	CLASS_D_ACCESSOR_DECL(QString, connectionLineCurveName, ConnectionLineCurveName);
 	CLASS_D_ACCESSOR_DECL(QPen, verticalLinePen, VerticalLinePen)

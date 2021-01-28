@@ -143,6 +143,7 @@ public:
 	bool labelsFormatAutoChanged{false};
 
 private:
+	CartesianPlot* plot() const { return q->m_plot; }	// convenience method
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
