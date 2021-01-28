@@ -225,8 +225,8 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, Symbol::Style, symbolMeanStyle, symbolMeanSt
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, symbolsOpacity, symbolsOpacity)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, symbolsRotationAngle, symbolsRotationAngle)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, symbolsSize, symbolsSize)
-CLASS_SHARED_D_READER_IMPL(BoxPlot, QBrush, symbolsBrush, symbolsBrush)
-CLASS_SHARED_D_READER_IMPL(BoxPlot, QPen, symbolsPen, symbolsPen)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QBrush, symbolsBrush, symbolsBrush)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, symbolsPen, symbolsPen)
 
 //whiskers
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
