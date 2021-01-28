@@ -649,7 +649,7 @@ void BoxPlotDock::symbolMeanStyleChanged(int index) {
 
 	const auto style = Symbol::Style(index);
 	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setSymbolOutliersStyle(style);
+		boxPlot->setSymbolMeanStyle(style);
 }
 
 void BoxPlotDock::updateSymbolWidgets() {
@@ -1046,12 +1046,21 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	boxFillingTypeChanged(ui.cbFillingType->currentIndex());
 
 	//box border
-	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_boxPlot->borderPen().color()) );
-	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_boxPlot->borderPen().style()) );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_boxPlot->borderPen().widthF()), Worksheet::Unit::Point) );
+	const QPen& penBorder = m_boxPlot->borderPen();
+	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int)penBorder.style()) );
+	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", penBorder.color()) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", penBorder.widthF()), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_boxPlot->borderOpacity())*100 );
 
+	//median line
+	const QPen& penMedian = m_boxPlot->medianLinePen();
+	ui.cbMedianLineStyle->setCurrentIndex( group.readEntry("MedianLineStyle", (int)penMedian.style()) );
+	ui.kcbMedianLineColor->setColor( group.readEntry("MedianLineColor", penMedian.color()) );
+	ui.sbMedianLineWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("MedianLineWidth", penMedian.widthF()), Worksheet::Unit::Point) );
+	ui.sbMedianLineOpacity->setValue( group.readEntry("MedianLineOpacity", m_boxPlot->borderOpacity())*100 );
+
 	//symbols
+	const QPen& penSymbol = m_boxPlot->symbolsPen();
 	ui.cbSymbolOutliersStyle->setCurrentIndex( group.readEntry("SymbolOutliersStyle", (int)m_boxPlot->symbolOutliersStyle()) );
 	ui.cbSymbolMeanStyle->setCurrentIndex( group.readEntry("SymbolMeanStyle", (int)m_boxPlot->symbolMeanStyle()) );
 	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_boxPlot->symbolsSize()), Worksheet::Unit::Point) );
@@ -1059,15 +1068,16 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", m_boxPlot->symbolsOpacity())*100.0) );
 	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_boxPlot->symbolsBrush().style()) );
 	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_boxPlot->symbolsBrush().color()) );
-	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_boxPlot->symbolsPen().style()) );
-	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", m_boxPlot->symbolsPen().color()) );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_boxPlot->symbolsPen().widthF()), Worksheet::Unit::Point) );
+	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int)penSymbol.style()) );
+	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", penSymbol.color()) );
+	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth", penSymbol.widthF()), Worksheet::Unit::Point) );
 
 	//whiskers
-	ui.cbWhiskersType->setCurrentIndex( group.readEntry("WhiskersType", (int) m_boxPlot->whiskersType()) );
-	ui.kcbWhiskersColor->setColor( group.readEntry("WhiskersColor", m_boxPlot->whiskersPen().color()) );
-	ui.cbWhiskersStyle->setCurrentIndex( group.readEntry("WhiskersStyle", (int) m_boxPlot->whiskersPen().style()) );
-	ui.sbWhiskersWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("WhiskersWidth", m_boxPlot->whiskersPen().widthF()), Worksheet::Unit::Point) );
+	const QPen& penWhiskers = m_boxPlot->whiskersPen();
+	ui.cbWhiskersType->setCurrentIndex( group.readEntry("WhiskersType", (int)m_boxPlot->whiskersType()) );
+	ui.cbWhiskersStyle->setCurrentIndex( group.readEntry("WhiskersStyle", (int)penWhiskers.style()) );
+	ui.kcbWhiskersColor->setColor( group.readEntry("WhiskersColor", penWhiskers.color()) );
+	ui.sbWhiskersWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("WhiskersWidth", penWhiskers.widthF()), Worksheet::Unit::Point) );
 	ui.sbWhiskersOpacity->setValue( group.readEntry("WhiskersOpacity", m_boxPlot->whiskersOpacity())*100 );
 	ui.sbWhiskersCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapSize", m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point) );
 }
@@ -1112,16 +1122,23 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("BorderOpacity", ui.sbBorderOpacity->value()/100.0);
 
-	//markers
-// 	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->currentIndex());
-// 	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(),Worksheet::Unit::Point));
-// 	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
-// 	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100.0);
-// 	group.writeEntry("SymbolFillingStyle", ui.cbSymbolFillingStyle->currentIndex());
-// 	group.writeEntry("SymbolFillingColor", ui.kcbSymbolFillingColor->color());
-// 	group.writeEntry("SymbolBorderStyle", ui.cbSymbolBorderStyle->currentIndex());
-// 	group.writeEntry("SymbolBorderColor", ui.kcbSymbolBorderColor->color());
-// 	group.writeEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(ui.sbSymbolBorderWidth->value(), Worksheet::Unit::Point));
+	//median line
+	group.writeEntry("MedianLineStyle", ui.cbMedianLineStyle->currentIndex());
+	group.writeEntry("MedianLineColor", ui.kcbMedianLineColor->color());
+	group.writeEntry("MedianLineWidth", Worksheet::convertToSceneUnits(ui.sbMedianLineWidth->value(), Worksheet::Unit::Point));
+	group.writeEntry("MedianLineOpacity", ui.sbMedianLineOpacity->value()/100.0);
+
+	//symbols for the outliers and for the mean
+	group.writeEntry("SymbolOutliersStyle", ui.cbSymbolOutliersStyle->currentIndex());
+	group.writeEntry("SymbolMeanStyle", ui.cbSymbolMeanStyle->currentIndex());
+	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(),Worksheet::Unit::Point));
+	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
+	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100.0);
+	group.writeEntry("SymbolFillingStyle", ui.cbSymbolFillingStyle->currentIndex());
+	group.writeEntry("SymbolFillingColor", ui.kcbSymbolFillingColor->color());
+	group.writeEntry("SymbolBorderStyle", ui.cbSymbolBorderStyle->currentIndex());
+	group.writeEntry("SymbolBorderColor", ui.kcbSymbolBorderColor->color());
+	group.writeEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(ui.sbSymbolBorderWidth->value(), Worksheet::Unit::Point));
 
 	//whiskers
 	group.writeEntry("WhiskersType", ui.cbWhiskersType->currentIndex());

@@ -639,7 +639,6 @@ void BoxPlotPrivate::verticalBoxPlot() {
 	//mean symbol
 	m_meanSymbolPoint = cSystem->mapLogicalToScene(QPointF(x, statistics.median));
 
-
 	//calculate the new min and max values of the box plot
 	//for the current sizes of the box and of the whiskers
 	m_xMin = xMin - 0.25;
@@ -783,9 +782,8 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 		painter->drawPath(whiskersPath);
 	}
 
-	//draw the symbox for the outliers and for the mean
-	//draw symbols
-	if (symbolOutliersStyle != Symbol::Style::NoSymbols && symbolMeanStyle != Symbol::Style::NoSymbols) {
+	//draw the symbols for the outliers and for the mean
+	if (symbolOutliersStyle != Symbol::Style::NoSymbols || symbolMeanStyle != Symbol::Style::NoSymbols) {
 		painter->setOpacity(symbolsOpacity);
 		painter->setPen(symbolsPen);
 		painter->setBrush(symbolsBrush);
@@ -1026,7 +1024,18 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	//median line
 	writer->writeStartElement("medianLine");
 	WRITE_QPEN(d->medianLinePen);
-	writer->writeAttribute( "opacity", QString::number(d->medianLineOpacity) );
+	writer->writeAttribute("opacity", QString::number(d->medianLineOpacity));
+	writer->writeEndElement();
+
+	//symbols for the outliers and for the mean
+	writer->writeStartElement("symbols");
+	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->symbolOutliersStyle)));
+	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->symbolMeanStyle)) );
+	writer->writeAttribute("opacity", QString::number(d->symbolsOpacity));
+	writer->writeAttribute("rotation", QString::number(d->symbolsRotationAngle));
+	writer->writeAttribute("size", QString::number(d->symbolsSize));
+	WRITE_QBRUSH(d->symbolsBrush);
+	WRITE_QPEN(d->symbolsPen);
 	writer->writeEndElement();
 
 	//whiskers
@@ -1122,6 +1131,17 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QPEN(d->medianLinePen);
 			READ_DOUBLE_VALUE("opacity", medianLineOpacity);
+		} else if (!preview && reader->name() == "symbols") {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("symbolOutlierssStyle", symbolOutliersStyle, Symbol::Style);
+			READ_INT_VALUE("symbolMeanStyle", symbolMeanStyle, Symbol::Style);
+			READ_DOUBLE_VALUE("opacity", symbolsOpacity);
+			READ_DOUBLE_VALUE("rotation", symbolsRotationAngle);
+			READ_DOUBLE_VALUE("size", symbolsSize);
+
+			READ_QBRUSH(d->symbolsBrush);
+			READ_QPEN(d->symbolsPen);
 		} else if (!preview && reader->name() == "whiskers") {
 			attribs = reader->attributes();
 
