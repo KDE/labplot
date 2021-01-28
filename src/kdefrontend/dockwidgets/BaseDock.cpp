@@ -28,7 +28,9 @@
  ***************************************************************************/
 
 #include "BaseDock.h"
+#include "AxisDock.h"
 #include "backend/core/AbstractAspect.h"
+
 
 #include <KLocalizedString>
 #include <KConfigGroup>
@@ -79,6 +81,8 @@ void BaseDock::plotRangeChanged(int index) {
 	auto* element{ static_cast<WorksheetElement*>(m_aspect) };
 	if (index != element->coordinateSystemIndex()) {
 		element->setCoordinateSystemIndex(index);
+		if (dynamic_cast<Axis*>(element))
+			dynamic_cast<AxisDock*>(this)->updateAutoScale();
 		updateLocale();		// update line edits
 		element->retransform();	// redraw
 	}

@@ -61,6 +61,7 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	connect(ui->dateTimeEditPosition, &QDateTimeEdit::dateTimeChanged, this, &InfoElementDock::positionDateTimeChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
 	connect(ui->cbConnectToAnchor, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::gluePointChanged);
+	connect(ui->cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::plotRangeChanged);
 	connect(ui->chbVisible, &QCheckBox::toggled, this, &InfoElementDock::visibilityChanged);
 
 	//vertical line
@@ -187,6 +188,8 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 
 	//connections
 
+	updatePlotRanges();	// needed when loading project
+
 	//general
 	connect(m_element, &InfoElement::positionChanged,
 				this, &InfoElementDock::elementPositionChanged);
@@ -198,6 +201,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 			 this, &InfoElementDock::elementLabelBorderShapeChanged);
 	connect(m_element, &InfoElement::curveRemoved,
 			 this, &InfoElementDock::elementCurveRemoved);
+	connect(m_element, &WorksheetElement::plotRangeListChanged, this, &InfoElementDock::updatePlotRanges);
 	connect(m_element, &InfoElement::visibleChanged,
 			 this, &InfoElementDock::elementVisibilityChanged);
 
@@ -212,6 +216,10 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 			this, &InfoElementDock::elementConnectionLinePenChanged);
 	connect(m_element, &InfoElement::connectionLineOpacityChanged,
 			this, &InfoElementDock::elementConnectionLineOpacityChanged);
+}
+
+void InfoElementDock::updatePlotRanges() const {
+	updatePlotRangeList(ui->cbPlotRanges);
 }
 
 //*************************************************************

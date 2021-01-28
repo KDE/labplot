@@ -51,6 +51,7 @@ public:
 	void setAxes(QList<Axis*>);
 	void activateTitleTab();
 	void updateLocale() override;
+	void updateAutoScale();
 
 private:
 	Ui::AxisDock ui;
@@ -90,7 +91,6 @@ private slots:
 	void endDateTimeChanged(const QDateTime&);
 	void zeroOffsetChanged();
 	void scalingFactorChanged();
-	void plotRangeChanged(int);
 
 	//Line-Tab
   	void lineStyleChanged(int);

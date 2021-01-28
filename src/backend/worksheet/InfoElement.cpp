@@ -48,10 +48,10 @@
 #include <QTextEdit>
 #include <QDateTime>
 
-InfoElement::InfoElement(const QString& name, CartesianPlot* p):
+InfoElement::InfoElement(const QString& name, CartesianPlot* plot):
 	WorksheetElement(name, AspectType::InfoElement),
 	d_ptr(new InfoElementPrivate(this)) {
-	m_plot = p;
+	m_plot = plot;
 
 	init();
 	setVisible(false);

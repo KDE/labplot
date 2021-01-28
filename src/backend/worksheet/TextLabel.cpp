@@ -77,8 +77,10 @@ TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type)
 
 TextLabel::TextLabel(const QString &name, CartesianPlot* plot, Type type):
 	WorksheetElement(name, AspectType::TextLabel),
-	d_ptr(new TextLabelPrivate(this, plot)), m_type(type), visibilityAction(nullptr) {
+	d_ptr(new TextLabelPrivate(this)), m_type(type), visibilityAction(nullptr) {
 
+	m_plot = plot;
+	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
 	init();
 }
 
@@ -425,19 +427,6 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsFocusable);
-	setAcceptHoverEvents(true);
-}
-
-TextLabelPrivate::TextLabelPrivate(TextLabel* owner, CartesianPlot* plot)
-	: plot(plot), q(owner) {
-
-	//TODO
-	if(plot)
-		q->cSystem = dynamic_cast<const CartesianCoordinateSystem*>(plot->coordinateSystem(0));
-
-	setFlag(QGraphicsItem::ItemIsSelectable);
-	setFlag(QGraphicsItem::ItemIsMovable);
-	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setAcceptHoverEvents(true);
 }
 
@@ -1239,6 +1228,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "horizontalAlignment", QString::number(static_cast<int>(d->horizontalAlignment)) );
 	writer->writeAttribute( "verticalAlignment", QString::number(static_cast<int>(d->verticalAlignment)) );
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
+	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeAttribute( "coordinateBinding", QString::number(d->coordinateBindingEnabled));
 	writer->writeAttribute( "logicalPosX", QString::number(d->positionLogical.x()));
@@ -1323,6 +1313,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
 			READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
 			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, bool);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

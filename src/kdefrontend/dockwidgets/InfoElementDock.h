@@ -76,6 +76,7 @@ private slots:
 	void elementVerticalLineOpacityChanged(qreal);
 	void elementConnectionLinePenChanged(const QPen&);
 	void elementConnectionLineOpacityChanged(qreal);
+	void updatePlotRanges() const override;
 
 private:
 	Ui::InfoElementDock* ui;

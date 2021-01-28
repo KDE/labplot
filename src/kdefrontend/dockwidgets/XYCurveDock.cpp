@@ -595,6 +595,7 @@ void XYCurveDock::initGeneralTab() {
 	connect(m_curve, &XYCurve::aspectDescriptionChanged, this, &XYCurveDock::curveDescriptionChanged);
 	connect(m_curve, &XYCurve::xColumnChanged, this, &XYCurveDock::curveXColumnChanged);
 	connect(m_curve, &XYCurve::yColumnChanged, this, &XYCurveDock::curveYColumnChanged);
+	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRanges);
 	connect(m_curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYCurveDock::curveVisibilityChanged);
 	DEBUG("XYCurveDock::initGeneralTab() DONE");
 }
@@ -687,6 +688,10 @@ void XYCurveDock::updateLocale() {
 	ui.sbValuesDistance->setLocale(numberLocale);
 	ui.sbErrorBarsCapSize->setLocale(numberLocale);
 	ui.sbErrorBarsWidth->setLocale(numberLocale);
+}
+
+void XYCurveDock::updatePlotRanges() const {
+	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 
 //*************************************************************
@@ -1220,21 +1225,6 @@ void XYCurveDock::updateValuesWidgets() {
 		ui.lValuesDateTimeFormat->show();
 		ui.cbValuesDateTimeFormat->show();
 	}
-}
-
-void XYCurveDock::updatePlotRanges() const {
-	const int cSystemCount{ m_curve->coordinateSystemCount() };
-	const int cSystemIndex{ m_curve->coordinateSystemIndex() };
-	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
-	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex+1)
-
-	// fill ui.cbPlotRanges
-	uiGeneralTab.cbPlotRanges->clear();
-	for (int i{0}; i < cSystemCount; i++)
-		uiGeneralTab.cbPlotRanges->addItem( QString::number(i+1) + QLatin1String(" : ") + m_curve->coordinateSystemInfo(i) );
-	uiGeneralTab.cbPlotRanges->setCurrentIndex(cSystemIndex);
-	// disable when there is only on plot range
-	uiGeneralTab.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
 }
 
 void XYCurveDock::valuesPositionChanged(int index) {
@@ -2039,20 +2029,6 @@ void XYCurveDock::curveErrorBarsOpacityChanged(qreal opacity) {
 	m_initializing = true;
 	ui.sbErrorBarsOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
-}
-void XYCurveDock::plotRangeChanged(int index) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	const auto* plot = dynamic_cast<const CartesianPlot*>(m_curve->parentAspect());
-	if (index < 0 || index > plot->coordinateSystemCount()) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return;
-	}
-
-	if (index != m_curve->coordinateSystemIndex()) {
-		m_curve->setCoordinateSystemIndex(index);
-		updateLocale();		// update line edits
-		m_curve->retransform();	// redraw
-	}
 }
 
 //*************************************************************

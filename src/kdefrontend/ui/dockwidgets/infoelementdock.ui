@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>343</width>
+    <width>371</width>
     <height>619</height>
    </rect>
   </property>
@@ -25,7 +25,7 @@
         <widget class="QLineEdit" name="lePosition"/>
        </item>
        <item row="5" column="0">
-        <widget class="QLabel" name="label_9">
+        <widget class="QLabel" name="lCurves">
          <property name="font">
           <font>
            <weight>50</weight>
@@ -74,7 +74,7 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
+       <item row="11" column="0">
         <widget class="QCheckBox" name="chbVisible">
          <property name="text">
           <string>Visible</string>
@@ -94,7 +94,7 @@
        <item row="0" column="3">
         <widget class="QLineEdit" name="leName"/>
        </item>
-       <item row="9" column="0">
+       <item row="10" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -188,6 +188,16 @@
           <bool>true</bool>
          </property>
         </widget>
+       </item>
+       <item row="9" column="0" colspan="2">
+        <widget class="QLabel" name="lPlotRange">
+         <property name="text">
+          <string>Plot range:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="3">
+        <widget class="QComboBox" name="cbPlotRanges"/>
        </item>
       </layout>
      </widget>

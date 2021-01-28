@@ -487,6 +487,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::endChanged, this, &AxisDock::axisEndChanged);
 	connect(m_axis, &Axis::zeroOffsetChanged, this, &AxisDock::axisZeroOffsetChanged);
 	connect(m_axis, &Axis::scalingFactorChanged, this, &AxisDock::axisScalingFactorChanged);
+	connect(m_axis, &WorksheetElement::plotRangeListChanged, this, &AxisDock::updatePlotRanges);
 
 	// line
 	connect(m_axis, &Axis::linePenChanged, this, &AxisDock::axisLinePenChanged);
@@ -575,18 +576,11 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 }
 
 void AxisDock::updatePlotRanges() const {
-	const int cSystemCount{ m_axis->coordinateSystemCount() };
-	const int cSystemIndex{ m_axis->coordinateSystemIndex() };
-	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
-	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex+1)
+	updatePlotRangeList(ui.cbPlotRanges);
+}
 
-	// fill ui.cbPlotRanges
-	ui.cbPlotRanges->clear();
-	for (int i{0}; i < cSystemCount; i++)
-		ui.cbPlotRanges->addItem( QString::number(i+1) + QLatin1String(" : ") + m_axis->coordinateSystemInfo(i) );
-	ui.cbPlotRanges->setCurrentIndex(cSystemIndex);
-	// disable when there is only on plot range
-	ui.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
+void AxisDock::updateAutoScale() {
+	m_axis->setAutoScale(ui.chkAutoScale->isChecked());
 }
 
 //*************************************************************
@@ -2035,22 +2029,6 @@ void AxisDock::axisVisibilityChanged(bool on) {
 	m_initializing = true;
 	ui.chkVisible->setChecked(on);
 	m_initializing = false;
-}
-
-void AxisDock::plotRangeChanged(int index) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
-	if (index < 0 || index > plot->coordinateSystemCount()) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return;
-	}
-
-	if (index != m_axis->coordinateSystemIndex()) {
-		m_axis->setCoordinateSystemIndex(index);
-		m_axis->setAutoScale(ui.chkAutoScale->isChecked());	// update values
-		updateLocale();		// update line edits
-		m_axis->retransform();	// redraw
-	}
 }
 
 //*************************************************************

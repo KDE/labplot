@@ -52,10 +52,10 @@
  * x- and y- coordinates in parent's coordinate system
  */
 
-CustomPoint::CustomPoint(CartesianPlot* p, const QString& name)
+CustomPoint::CustomPoint(CartesianPlot* plot, const QString& name)
 	: WorksheetElement(name, AspectType::CustomPoint), d_ptr(new CustomPointPrivate(this)) {
 
-	m_plot = p;
+	m_plot = plot;
 	DEBUG(Q_FUNC_INFO << ", cSystem index = " << m_cSystemIndex)
 	DEBUG(Q_FUNC_INFO << ", plot cSystem count = " << m_plot->coordinateSystemCount())
 	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));

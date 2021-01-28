@@ -52,10 +52,10 @@
  * x- and y- coordinates in parent's coordinate system
  */
 
-ReferenceLine::ReferenceLine(CartesianPlot* p, const QString& name)
+ReferenceLine::ReferenceLine(CartesianPlot* plot, const QString& name)
 	: WorksheetElement(name, AspectType::ReferenceLine), d_ptr(new ReferenceLinePrivate(this)) {
 
-	m_plot = p;
+	m_plot = plot;
 	init();
 }
 
