@@ -30,6 +30,7 @@
 
 #include <QWidget>
 
+class CartesianPlot;
 class Column;
 class Project;
 
@@ -50,6 +51,7 @@ private:
 	void showKDEPlot();
 	void showQQPlot();
 	void showBoxPlot();
+	CartesianPlot* addPlot(QWidget*);
 
 	const QString isNanValue(const double);
 
