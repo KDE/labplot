@@ -99,8 +99,19 @@ void BoxPlot::init() {
 	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 
+	//markers
+	d->symbolOutliersStyle = (Symbol::Style)group.readEntry("SymbolOutliersStyle", static_cast<int>(Symbol::Style::Circle));
+	d->symbolMeanStyle = (Symbol::Style)group.readEntry("SymbolMeanStyle", static_cast<int>(Symbol::Style::Cross));
+	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
+	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
+	d->symbolsBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
+	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
+	d->symbolsPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
+	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
+	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
 
-	//box border
+	//whiskers
 	d->whiskersPen = QPen(group.readEntry("WhiskersColor", QColor(Qt::black)),
 	                    group.readEntry("WhiskersWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 	                    (Qt::PenStyle) group.readEntry("WhiskersStyle", (int)Qt::SolidLine));
@@ -208,6 +219,15 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, borderOpacity, borderOpacity)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, medianLinePen, medianLinePen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, medianLineOpacity, medianLineOpacity)
 
+//markers
+BASIC_SHARED_D_READER_IMPL(BoxPlot, Symbol::Style, symbolOutliersStyle, symbolOutliersStyle)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, Symbol::Style, symbolMeanStyle, symbolMeanStyle)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, symbolsOpacity, symbolsOpacity)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, symbolsRotationAngle, symbolsRotationAngle)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, symbolsSize, symbolsSize)
+CLASS_SHARED_D_READER_IMPL(BoxPlot, QBrush, symbolsBrush, symbolsBrush)
+CLASS_SHARED_D_READER_IMPL(BoxPlot, QPen, symbolsPen, symbolsPen)
+
 //whiskers
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersOpacity, whiskersOpacity)
@@ -252,13 +272,6 @@ void BoxPlot::setDataColumn(const AbstractColumn* column) {
 			//TODO: add disconnect in the undo-function
 		}
 	}
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersType, BoxPlot::WhiskersType, whiskersType, recalc)
-void BoxPlot::setWhiskersType(BoxPlot::WhiskersType type) {
-	Q_D(BoxPlot);
-	if (type != d->whiskersType)
-		exec(new BoxPlotSetWhiskersTypeCmd(d, type, ki18n("%1: set whiskers type")));
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(BoxPlot, SetVisible, bool, swapVisible, update);
@@ -366,7 +379,64 @@ void BoxPlot::setMedianLineOpacity(qreal opacity) {
 		exec(new BoxPlotSetMedianLineOpacityCmd(d, opacity, ki18n("%1: set median line opacity")));
 }
 
+//markers
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolOutliersStyle, Symbol::Style, symbolOutliersStyle, retransform)
+void BoxPlot::setSymbolOutliersStyle(Symbol::Style style) {
+	Q_D(BoxPlot);
+	if (style != d->symbolOutliersStyle)
+		exec(new BoxPlotSetSymbolOutliersStyleCmd(d, style, ki18n("%1: set outliers symbol style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolMeanStyle, Symbol::Style, symbolMeanStyle, retransform)
+void BoxPlot::setSymbolMeanStyle(Symbol::Style style) {
+	Q_D(BoxPlot);
+	if (style != d->symbolMeanStyle)
+		exec(new BoxPlotSetSymbolMeanStyleCmd(d, style, ki18n("%1: set mean symbol style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolsSize, qreal, symbolsSize, updatePixmap)
+void BoxPlot::setSymbolsSize(qreal size) {
+	Q_D(BoxPlot);
+	if (!qFuzzyCompare(1 + size, 1 + d->symbolsSize))
+		exec(new BoxPlotSetSymbolsSizeCmd(d, size, ki18n("%1: set symbol size")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolsRotationAngle, qreal, symbolsRotationAngle, updatePixmap)
+void BoxPlot::setSymbolsRotationAngle(qreal angle) {
+	Q_D(BoxPlot);
+	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
+		exec(new BoxPlotSetSymbolsRotationAngleCmd(d, angle, ki18n("%1: rotate symbols")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolsBrush, QBrush, symbolsBrush, updatePixmap)
+void BoxPlot::setSymbolsBrush(const QBrush &brush) {
+	Q_D(BoxPlot);
+	if (brush != d->symbolsBrush)
+		exec(new BoxPlotSetSymbolsBrushCmd(d, brush, ki18n("%1: set symbol filling")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolsPen, QPen, symbolsPen, updatePixmap)
+void BoxPlot::setSymbolsPen(const QPen &pen) {
+	Q_D(BoxPlot);
+	if (pen != d->symbolsPen)
+		exec(new BoxPlotSetSymbolsPenCmd(d, pen, ki18n("%1: set symbol outline style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolsOpacity, qreal, symbolsOpacity, updatePixmap)
+void BoxPlot::setSymbolsOpacity(qreal opacity) {
+	Q_D(BoxPlot);
+	if (opacity != d->symbolsOpacity)
+		exec(new BoxPlotSetSymbolsOpacityCmd(d, opacity, ki18n("%1: set symbols opacity")));
+}
+
 //whiskers
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersType, BoxPlot::WhiskersType, whiskersType, recalc)
+void BoxPlot::setWhiskersType(BoxPlot::WhiskersType type) {
+	Q_D(BoxPlot);
+	if (type != d->whiskersType)
+		exec(new BoxPlotSetWhiskersTypeCmd(d, type, ki18n("%1: set whiskers type")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersPen, QPen, whiskersPen, updatePixmap)
 void BoxPlot::setWhiskersPen(const QPen &pen) {
 	Q_D(BoxPlot);
@@ -425,8 +495,10 @@ QString BoxPlotPrivate::name() const {
 }
 
 /*!
-    calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
- */
+  called when the size of the plot or its data ranges (manual changes, zooming, etc.) were changed.
+  recalculates the position of the scene points to be drawn.
+  triggers the update of lines, drop lines, symbols etc.
+*/
 void BoxPlotPrivate::retransform() {
 	if (m_suppressRetransform || !isVisible())
 		return;
@@ -486,8 +558,11 @@ void BoxPlotPrivate::verticalBoxPlot() {
 	boxRect = QRectF(topLeft, bottomRight);
 
 	//median line
+	medianLine = QLineF();
 	lines << QLineF(xMin, statistics.median, xMax, statistics.median);
-	medianLine = cSystem->mapLogicalToScene(lines).first();
+	lines = cSystem->mapLogicalToScene(lines);
+	if (!lines.isEmpty())
+		medianLine = lines.first();
 
 	//calculate the size and the position for the whiskers
 	double whiskerMin = 0.;
@@ -528,6 +603,41 @@ void BoxPlotPrivate::verticalBoxPlot() {
 
 	whiskersPath.moveTo(QPointF(minPoint.x() - whiskersCapSize/2., minPoint.y()));
 	whiskersPath.lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
+
+	//outliers symbols
+	m_outliersSymbolPoints.clear();
+	switch (dataColumn->columnMode()) {
+	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Integer:
+	case AbstractColumn::ColumnMode::BigInt:
+		for (int row = 0; row < dataColumn->rowCount(); ++row) {
+			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) ) {
+				const double value = dataColumn->valueAt(row);
+				if (value > whiskerMax || value < whiskerMin)
+					m_outliersSymbolPoints << QPointF(x, value);
+			}
+		}
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+		for (int row = 0; row < dataColumn->rowCount(); ++row) {
+			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) ){
+				const double value = dataColumn->dateTimeAt(row).toMSecsSinceEpoch();
+				if (value > whiskerMax || value < whiskerMin)
+					m_outliersSymbolPoints << QPointF(x, value);
+			}
+	}
+		break;
+	case AbstractColumn::ColumnMode::Text:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		break;
+	}
+
+	if (!m_outliersSymbolPoints.isEmpty())
+		m_outliersSymbolPoints = cSystem->mapLogicalToScene(m_outliersSymbolPoints);
+
+	//mean symbol
+	m_meanSymbolPoint = cSystem->mapLogicalToScene(QPointF(x, statistics.median));
 
 	//calculate the new min and max values of the box plot
 	//for the current sizes of the box and of the whiskers
@@ -583,6 +693,29 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	boxPath.addRect(boxRect);
 	m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, whiskersPen));
 	m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(whiskersPath, whiskersPen));
+
+	if (symbolOutliersStyle != Symbol::Style::NoSymbols) {
+		QPainterPath symbolsPath = QPainterPath();
+		QPainterPath path = Symbol::pathFromStyle(symbolOutliersStyle);
+
+		QTransform trafo;
+		trafo.scale(symbolsSize, symbolsSize);
+		path = trafo.map(path);
+		trafo.reset();
+
+		if (symbolsRotationAngle != 0) {
+			trafo.rotate(symbolsRotationAngle);
+			path = trafo.map(path);
+		}
+
+		for (const auto& point : qAsConst(m_outliersSymbolPoints)) {
+			trafo.reset();
+			trafo.translate(point.x(), point.y());
+			symbolsPath.addPath(trafo.map(path));
+		}
+
+		m_boxPlotShape.addPath(symbolsPath);
+	}
 
 	m_boundingRectangle = m_boxPlotShape.boundingRect();
 	updatePixmap();
@@ -649,9 +782,38 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 		painter->drawPath(whiskersPath);
 	}
 
-	//draw the symbol for the mean
+	//draw the symbols for the outliers and for the mean
+	if (symbolOutliersStyle != Symbol::Style::NoSymbols || symbolMeanStyle != Symbol::Style::NoSymbols) {
+		painter->setOpacity(symbolsOpacity);
+		painter->setPen(symbolsPen);
+		painter->setBrush(symbolsBrush);
+		drawSymbols(painter);
+	}
+}
 
-	//draw the symbols for the outliers
+void BoxPlotPrivate::drawSymbols(QPainter* painter) {
+	//outliers
+	QPainterPath path = Symbol::pathFromStyle(symbolOutliersStyle);
+
+	QTransform trafo;
+	trafo.scale(symbolsSize, symbolsSize);
+	path = trafo.map(path);
+	trafo.reset();
+	if (symbolsRotationAngle != 0) {
+		trafo.rotate(-symbolsRotationAngle);
+		path = trafo.map(path);
+	}
+	for (const auto& point : qAsConst(m_outliersSymbolPoints)) {
+		trafo.reset();
+		trafo.translate(point.x(), point.y());
+		painter->drawPath(trafo.map(path));
+	}
+
+	//mean
+	path = Symbol::pathFromStyle(symbolMeanStyle);
+	trafo.reset();
+	trafo.translate(m_meanSymbolPoint.x(), m_meanSymbolPoint.y());
+	painter->drawPath(trafo.map(path));
 }
 
 void BoxPlotPrivate::drawBox(QPainter* painter) {
@@ -862,7 +1024,18 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	//median line
 	writer->writeStartElement("medianLine");
 	WRITE_QPEN(d->medianLinePen);
-	writer->writeAttribute( "opacity", QString::number(d->medianLineOpacity) );
+	writer->writeAttribute("opacity", QString::number(d->medianLineOpacity));
+	writer->writeEndElement();
+
+	//symbols for the outliers and for the mean
+	writer->writeStartElement("symbols");
+	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->symbolOutliersStyle)));
+	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->symbolMeanStyle)) );
+	writer->writeAttribute("opacity", QString::number(d->symbolsOpacity));
+	writer->writeAttribute("rotation", QString::number(d->symbolsRotationAngle));
+	writer->writeAttribute("size", QString::number(d->symbolsSize));
+	WRITE_QBRUSH(d->symbolsBrush);
+	WRITE_QPEN(d->symbolsPen);
 	writer->writeEndElement();
 
 	//whiskers
@@ -958,6 +1131,17 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QPEN(d->medianLinePen);
 			READ_DOUBLE_VALUE("opacity", medianLineOpacity);
+		} else if (!preview && reader->name() == "symbols") {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("symbolOutlierssStyle", symbolOutliersStyle, Symbol::Style);
+			READ_INT_VALUE("symbolMeanStyle", symbolMeanStyle, Symbol::Style);
+			READ_DOUBLE_VALUE("opacity", symbolsOpacity);
+			READ_DOUBLE_VALUE("rotation", symbolsRotationAngle);
+			READ_DOUBLE_VALUE("size", symbolsSize);
+
+			READ_QBRUSH(d->symbolsBrush);
+			READ_QPEN(d->symbolsPen);
 		} else if (!preview && reader->name() == "whiskers") {
 			attribs = reader->attributes();
 
@@ -983,7 +1167,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 void BoxPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("XYCurve"); //when loading from the theme config, use the same properties as for XYCurve
+		group = config.group("BoxPlot"); //when loading from the theme config, use the same properties as for BoxPlot
 	else
 		group = config.group("BoxPlot");
 
