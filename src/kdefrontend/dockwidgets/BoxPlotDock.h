@@ -53,6 +53,12 @@ private:
 	BoxPlot* m_boxPlot{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
 
+	QGridLayout* m_gridLayout;
+	QPushButton* m_buttonNew;
+	QVector<TreeViewComboBox*> m_dataComboBoxes;
+	QVector<QPushButton*> m_removeButtons;
+	int m_dataLayoutIndex;
+
 	void setModel();
 	void loadConfig(KConfig&);
 	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
@@ -62,6 +68,8 @@ private slots:
 	//SLOTs for changes triggered in BoxPlotDock
 
 	//"General"-tab
+	void addDataColumn();
+	void removeDataColumn();
 	void dataColumnChanged(const QModelIndex&) const;
 	void visibilityChanged(bool) const;
 

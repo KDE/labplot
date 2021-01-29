@@ -37,6 +37,7 @@
 
 #include <QFileDialog>
 #include <QImageReader>
+#include <QPushButton>
 
 #include <KLocalizedString>
 #include <KConfig>
@@ -47,8 +48,25 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent), cbDataColumn(new T
 	m_leComment = ui.leComment;
 
 	// Tab "General"
-	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
-	gridLayout->addWidget(cbDataColumn, 4, 2, 1, 1);
+	QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
+	sizePolicy1.setHorizontalStretch(0);
+	sizePolicy1.setVerticalStretch(0);
+	sizePolicy1.setHeightForWidth(cbDataColumn->sizePolicy().hasHeightForWidth());
+	cbDataColumn->setSizePolicy(sizePolicy1);
+
+	m_buttonNew = new QPushButton();
+	m_buttonNew->setIcon(QIcon::fromTheme("list-add"));
+	connect(m_buttonNew, &QPushButton::clicked, this, &BoxPlotDock::addDataColumn);
+
+	m_gridLayout = new QGridLayout(ui.frameDataColumns);
+	m_gridLayout->setContentsMargins(0, 0, 0, 0);
+	m_gridLayout->setHorizontalSpacing(2);
+	m_gridLayout->setVerticalSpacing(2);
+
+	ui.frameDataColumns->setLayout(m_gridLayout);
+	m_gridLayout->addWidget(cbDataColumn, 0, 0, 1, 1);
+	m_gridLayout->addWidget(m_buttonNew, 1, 1, 1, 1);
+	m_dataLayoutIndex = 1;
 
 	ui.cbWhiskersType->addItem(i18n("min/max"));
 	ui.cbWhiskersType->addItem(i18n("1.5 IQR"));
@@ -306,6 +324,46 @@ void BoxPlotDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractCo
 //**********************************************************
 //*** SLOTs for changes triggered in BoxPlotDock *****
 //**********************************************************
+void BoxPlotDock::addDataColumn() {
+	TreeViewComboBox* cb = new TreeViewComboBox;
+
+	static const QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
+	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
+	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
+	                       AspectType::XYFitCurve, AspectType::XYSmoothCurve, AspectType::CantorWorksheet};
+	cb->setTopLevelClasses(list);
+	cb->setModel(m_aspectTreeModel);
+	m_dataComboBoxes << cb;
+
+	++m_dataLayoutIndex;
+	m_gridLayout->addWidget(cb, m_dataLayoutIndex, 0, 1, 1);
+
+	auto* button = new QPushButton();
+	button->setIcon(QIcon::fromTheme("list-remove"));
+	connect(button, &QPushButton::clicked, this, &BoxPlotDock::removeDataColumn);
+	m_gridLayout->addWidget(button, m_dataLayoutIndex, 1, 1, 1);
+	m_removeButtons << button;
+
+	m_gridLayout->addWidget(m_buttonNew, m_dataLayoutIndex + 1, 1, 1, 1);
+
+	ui.lDataColumn->setText(i18n("Columns:"));
+}
+
+void BoxPlotDock::removeDataColumn() {
+	auto* sender = static_cast<QPushButton*>(QObject::sender());
+	for (int i = 0; i < m_removeButtons.size(); ++i) {
+		if (sender == m_removeButtons.at(i)) {
+			delete m_dataComboBoxes.takeAt(i);
+			delete m_removeButtons.takeAt(i);
+		}
+	}
+
+	if (!m_removeButtons.isEmpty())
+		ui.lDataColumn->setText(i18n("Columns:"));
+	else
+		ui.lDataColumn->setText(i18n("Column:"));
+}
+
 void BoxPlotDock::dataColumnChanged(const QModelIndex& index) const {
 	if (m_initializing)
 		return;
