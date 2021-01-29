@@ -330,7 +330,6 @@ void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& pa
 	}
 
 	if (column) {
-	qDebug()<<"check " << column->name()	 << "  " << path;
 		// current index text should be used
 		useCurrentIndexText(true);
 		setInvalid(false);
