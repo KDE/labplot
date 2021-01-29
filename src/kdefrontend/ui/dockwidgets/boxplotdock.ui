@@ -94,6 +94,9 @@
          <property name="text">
           <string>Column:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
         </widget>
        </item>
        <item row="5" column="0">
@@ -149,6 +152,16 @@
         <widget class="QCheckBox" name="chkVisible">
          <property name="text">
           <string>Visible</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2">
+        <widget class="QFrame" name="frameDataColumns">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
          </property>
         </widget>
        </item>
