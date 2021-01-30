@@ -10,14 +10,24 @@
 		* Crosshair cursor mode in the plot
 		* New themes "Monokai", "ggplot grey", "ggplot dark"
 		* New curve symbols "heart" and "lightning"
-		* DateTime support for Custom Points and for Histograms
 		* Allow to specify text label's position in logical plot coordinates
 
 -----2.8.2 -----
 Bug fixes:
 	* [CAS] Fixed the regression introduced after the python2 backend was deprecated in Cantor
-	* [Axis label] Fix "power of" notations for negative values, show "0" for zero
-		and improve auto precision for small values
+	* [worksheet]:
+		* DateTime support for Custom Points and for Histograms
+		* Fix "power of" notations for negative values, show "0" for zero and improve auto precision for small values for axis labels
+		* Show all available symbols styles for CustomPoint, the last one was missing
+		* Convert the plot range format to datetime also when the first histogram for datetime data was added to the plot
+		* Properly restore the saved values column and also save the values formatting properties in the histogram
+		* If the deleted columns are being restored, restore the column pointers also in the histograms
+		* Properly react in the histogram on column deletions
+		* save/load the values format in xy-curve
+		* react on text change for values prefix and suffix and not on return pressed event in the curve properties explorer
+	* [import]
+		* Don't try to parse a netCDF file when the application was compiled without any support for netCDF, and similar for other formats
+		* show the last recently imported projects in a combobox also in ImportProjectDialog similar to how it's already done in ImportFileDialog
 	* BUG 427190 - Fixed resetting parser error count on some platforms (Debian, Manjaro)
 	* BUG 429110 - Support semicolon as function argument separator for locale with comma as decimal separator
 	* BUG 429368 - Fix validation of custom model equation in fit dock
