@@ -67,7 +67,7 @@ public:
 	qreal opacity{1.0};
 
 	//box filling
-	QRectF boxRect;
+
 	bool fillingEnabled{true};
 	PlotArea::BackgroundType fillingType;
 	PlotArea::BackgroundColorStyle fillingColorStyle;
@@ -83,7 +83,6 @@ public:
 	qreal borderOpacity;
 
 	//median line
-	QLineF medianLine;
 	QPen medianLinePen;
 	qreal medianLineOpacity;
 
@@ -97,7 +96,6 @@ public:
 	qreal symbolsSize;
 
 	//whiskers
-	QPainterPath whiskersPath;
 	QPen whiskersPen;
 	double whiskersCapSize;
 	qreal whiskersOpacity;
@@ -108,11 +106,13 @@ private:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
+	void recalcVertical();
 	void verticalBoxPlot();
+	void recalcHorizontal();
 	void horizontalBoxPlot();
 
 	void draw(QPainter*);
-	void drawBox(QPainter*);
+	void drawFilling(QPainter*);
 	void drawSymbols(QPainter*);
 
 	bool n_suppressItemChangeEvent{false};
@@ -121,20 +121,33 @@ private:
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_boxPlotShape;
+
+	QRectF m_boxRect;
+	double m_xMinBox;
+	double m_xMaxBox;
+	double m_yMinBox;
+	double m_yMaxBox;
+	double m_median;
+	QLineF m_medianLine;
+	QPainterPath m_whiskersPath;
+	double m_whiskerMin;
+	double m_whiskerMax;
+	QVector<QPointF> m_outliersSymbolPointsLogical;	//positions of the outlier symbols in logical coordinates
 	QVector<QPointF> m_outliersSymbolPoints;	//positions of the outlier symbols in scene coordinates
 	int m_outliersCount; //total number of outliers. this number is different to the size of the vector m_outliersSymbolPoints containing unique points only
 	QPointF m_meanSymbolPoint; //position of the mean symbol in scene coordinates
+
+	double m_xMin;
+	double m_xMax;
+	double m_yMin;
+	double m_yMax;
+
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
 	QImage m_selectionEffectImage;
 
 	bool m_hoverEffectImageIsDirty{false};
 	bool m_selectionEffectImageIsDirty{false};
-
-	double m_xMin;
-	double m_xMax;
-	double m_yMin;
-	double m_yMax;
 };
 
 #endif

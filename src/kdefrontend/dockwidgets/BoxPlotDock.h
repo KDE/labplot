@@ -76,15 +76,15 @@ private slots:
 	//"Box"-tab
 	//box filling
 	void fillingEnabledChanged(int) const;
-	void boxFillingTypeChanged(int) const;
-	void boxFillingColorStyleChanged(int) const;
-	void boxFillingImageStyleChanged(int) const;
-	void boxFillingBrushStyleChanged(int) const;
-	void boxFillingFirstColorChanged(const QColor&) const;
-	void boxFillingSecondColorChanged(const QColor&) const;
+	void fillingTypeChanged(int) const;
+	void fillingColorStyleChanged(int) const;
+	void fillingImageStyleChanged(int) const;
+	void fillingBrushStyleChanged(int) const;
+	void fillingFirstColorChanged(const QColor&) const;
+	void fillingSecondColorChanged(const QColor&) const;
 	void selectFile();
 	void fileNameChanged() const;
-	void boxFillingOpacityChanged(int) const;
+	void fillingOpacityChanged(int) const;
 
 	//box border
 	void borderStyleChanged(int) const;
