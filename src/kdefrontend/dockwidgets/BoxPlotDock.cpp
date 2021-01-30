@@ -144,20 +144,20 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent), cbDataColumn(new T
 	//box filling
 	connect(ui.chkFillingEnabled, &QCheckBox::stateChanged, this, &BoxPlotDock::fillingEnabledChanged);
 	connect(ui.cbFillingType, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			 this, &BoxPlotDock::boxFillingTypeChanged);
+			 this, &BoxPlotDock::fillingTypeChanged);
 	connect(ui.cbFillingColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			 this, &BoxPlotDock::boxFillingColorStyleChanged);
+			 this, &BoxPlotDock::fillingColorStyleChanged);
 	connect(ui.cbFillingImageStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			 this, &BoxPlotDock::boxFillingImageStyleChanged);
+			 this, &BoxPlotDock::fillingImageStyleChanged);
 	connect(ui.cbFillingBrushStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			 this, &BoxPlotDock::boxFillingBrushStyleChanged);
+			 this, &BoxPlotDock::fillingBrushStyleChanged);
 	connect(ui.bFillingOpen, &QPushButton::clicked, this, &BoxPlotDock::selectFile);
 	connect(ui.leFillingFileName, &QLineEdit::returnPressed, this, &BoxPlotDock::fileNameChanged);
 	connect(ui.leFillingFileName, &QLineEdit::textChanged, this, &BoxPlotDock::fileNameChanged);
-	connect(ui.kcbFillingFirstColor, &KColorButton::changed, this, &BoxPlotDock::boxFillingFirstColorChanged);
-	connect(ui.kcbFillingSecondColor, &KColorButton::changed, this, &BoxPlotDock::boxFillingSecondColorChanged);
+	connect(ui.kcbFillingFirstColor, &KColorButton::changed, this, &BoxPlotDock::fillingFirstColorChanged);
+	connect(ui.kcbFillingSecondColor, &KColorButton::changed, this, &BoxPlotDock::fillingSecondColorChanged);
 	connect(ui.sbFillingOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-			this, &BoxPlotDock::boxFillingOpacityChanged);
+			this, &BoxPlotDock::fillingOpacityChanged);
 
 	//box border
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::borderStyleChanged);
@@ -407,7 +407,7 @@ void BoxPlotDock::fillingEnabledChanged(int state) const {
 		boxPlot->setFillingEnabled(state);
 }
 
-void BoxPlotDock::boxFillingTypeChanged(int index) const {
+void BoxPlotDock::fillingTypeChanged(int index) const {
 	if (index == -1)
 		return;
 
@@ -478,7 +478,7 @@ void BoxPlotDock::boxFillingTypeChanged(int index) const {
 		boxPlot->setFillingType(type);
 }
 
-void BoxPlotDock::boxFillingColorStyleChanged(int index) const {
+void BoxPlotDock::fillingColorStyleChanged(int index) const {
 	if (index == -1)
 		return;
 
@@ -501,7 +501,7 @@ void BoxPlotDock::boxFillingColorStyleChanged(int index) const {
 		boxPlot->setFillingColorStyle(style);
 }
 
-void BoxPlotDock::boxFillingImageStyleChanged(int index) const {
+void BoxPlotDock::fillingImageStyleChanged(int index) const {
 	if (m_initializing)
 		return;
 
@@ -510,7 +510,7 @@ void BoxPlotDock::boxFillingImageStyleChanged(int index) const {
 		boxPlot->setFillingImageStyle(style);
 }
 
-void BoxPlotDock::boxFillingBrushStyleChanged(int index) const {
+void BoxPlotDock::fillingBrushStyleChanged(int index) const {
 	if (m_initializing)
 		return;
 
@@ -519,7 +519,7 @@ void BoxPlotDock::boxFillingBrushStyleChanged(int index) const {
 		boxPlot->setFillingBrushStyle(style);
 }
 
-void BoxPlotDock::boxFillingFirstColorChanged(const QColor& c) const {
+void BoxPlotDock::fillingFirstColorChanged(const QColor& c) const {
 	if (m_initializing)
 		return;
 
@@ -527,7 +527,7 @@ void BoxPlotDock::boxFillingFirstColorChanged(const QColor& c) const {
 		boxPlot->setFillingFirstColor(c);
 }
 
-void BoxPlotDock::boxFillingSecondColorChanged(const QColor& c) const {
+void BoxPlotDock::fillingSecondColorChanged(const QColor& c) const {
 	if (m_initializing)
 		return;
 
@@ -576,7 +576,7 @@ void BoxPlotDock::fileNameChanged() const {
 		boxPlot->setFillingFileName(fileName);
 }
 
-void BoxPlotDock::boxFillingOpacityChanged(int value) const {
+void BoxPlotDock::fillingOpacityChanged(int value) const {
 	if (m_initializing)
 		return;
 
@@ -1101,7 +1101,10 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.kcbFillingFirstColor->setColor( group.readEntry("FillingFirstColor", m_boxPlot->fillingFirstColor()) );
 	ui.kcbFillingSecondColor->setColor( group.readEntry("FillingSecondColor", m_boxPlot->fillingSecondColor()) );
 	ui.sbFillingOpacity->setValue( round(group.readEntry("FillingOpacity", m_boxPlot->fillingOpacity())*100.0) );
-	boxFillingTypeChanged(ui.cbFillingType->currentIndex());
+
+	//update the box filling widgets
+	fillingEnabledChanged(ui.chkFillingEnabled->isChecked());
+	fillingTypeChanged(ui.cbFillingType->currentIndex());
 
 	//box border
 	const QPen& penBorder = m_boxPlot->borderPen();
