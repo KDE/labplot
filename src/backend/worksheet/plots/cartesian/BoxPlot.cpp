@@ -605,6 +605,9 @@ void BoxPlotPrivate::verticalBoxPlot() {
 	whiskersPath.lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
 
 	//outliers symbols
+	m_outliersCount = 0;
+	double outlierMax = whiskerMax;
+	double outlierMin = whiskerMin;
 	m_outliersSymbolPoints.clear();
 	switch (dataColumn->columnMode()) {
 	case AbstractColumn::ColumnMode::Numeric:
@@ -613,8 +616,17 @@ void BoxPlotPrivate::verticalBoxPlot() {
 		for (int row = 0; row < dataColumn->rowCount(); ++row) {
 			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) ) {
 				const double value = dataColumn->valueAt(row);
-				if (value > whiskerMax || value < whiskerMin)
-					m_outliersSymbolPoints << QPointF(x, value);
+				if (value > whiskerMax || value < whiskerMin) {
+					const QPoint point(x, value);
+					++m_outliersCount;
+					if (m_outliersSymbolPoints.indexOf(point) == -1) {
+						m_outliersSymbolPoints << point;
+						if (value > outlierMax)
+							outlierMax = value;
+						else if (value < outlierMin)
+							outlierMin = value;
+					}
+				}
 			}
 		}
 		break;
@@ -622,8 +634,17 @@ void BoxPlotPrivate::verticalBoxPlot() {
 		for (int row = 0; row < dataColumn->rowCount(); ++row) {
 			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) ){
 				const double value = dataColumn->dateTimeAt(row).toMSecsSinceEpoch();
-				if (value > whiskerMax || value < whiskerMin)
-					m_outliersSymbolPoints << QPointF(x, value);
+				if (value > whiskerMax || value < whiskerMin) {
+					const QPoint point(x, value);
+					++m_outliersCount;
+					if (m_outliersSymbolPoints.indexOf(point) == -1) {
+						m_outliersSymbolPoints << point;
+						if (value > outlierMax)
+							outlierMax = value;
+						else if (value < outlierMin)
+							outlierMin = value;
+					}
+				}
 			}
 	}
 		break;
@@ -643,8 +664,8 @@ void BoxPlotPrivate::verticalBoxPlot() {
 	//for the current sizes of the box and of the whiskers
 	m_xMin = xMin - 0.25;
 	m_xMax = xMax + 0.25;
-	m_yMin = whiskerMin;
-	m_yMax = whiskerMax;
+	m_yMin = outlierMin;
+	m_yMax = outlierMax;
 }
 
 void BoxPlotPrivate::horizontalBoxPlot() {
@@ -1029,8 +1050,8 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 	//symbols for the outliers and for the mean
 	writer->writeStartElement("symbols");
-	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->symbolOutliersStyle)));
-	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->symbolMeanStyle)) );
+	writer->writeAttribute("symbolOutliersStyle", QString::number(static_cast<int>(d->symbolOutliersStyle)));
+	writer->writeAttribute("symbolMeanStyle", QString::number(static_cast<int>(d->symbolMeanStyle)) );
 	writer->writeAttribute("opacity", QString::number(d->symbolsOpacity));
 	writer->writeAttribute("rotation", QString::number(d->symbolsRotationAngle));
 	writer->writeAttribute("size", QString::number(d->symbolsSize));
@@ -1134,7 +1155,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "symbols") {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("symbolOutlierssStyle", symbolOutliersStyle, Symbol::Style);
+			READ_INT_VALUE("symbolOutliersStyle", symbolOutliersStyle, Symbol::Style);
 			READ_INT_VALUE("symbolMeanStyle", symbolMeanStyle, Symbol::Style);
 			READ_DOUBLE_VALUE("opacity", symbolsOpacity);
 			READ_DOUBLE_VALUE("rotation", symbolsRotationAngle);

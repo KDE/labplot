@@ -121,7 +121,8 @@ private:
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_boxPlotShape;
-	QVector<QPointF> m_outliersSymbolPoints;	//positins of the outlier symbols in scene coordinates
+	QVector<QPointF> m_outliersSymbolPoints;	//positions of the outlier symbols in scene coordinates
+	int m_outliersCount; //total number of outliers. this number is different to the size of the vector m_outliersSymbolPoints containing unique points only
 	QPointF m_meanSymbolPoint; //position of the mean symbol in scene coordinates
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;
