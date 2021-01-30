@@ -33,6 +33,7 @@
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/lib/macros.h"
 
 #include <QTabWidget>
@@ -306,6 +307,57 @@ void StatisticsColumnWidget::showOverview() {
 }
 
 void StatisticsColumnWidget::showHistogram() {
+	CartesianPlot* plot = addPlot(&m_histogramWidget);
+
+	auto axes = plot->children<Axis>();
+	for (auto* axis : qAsConst(axes)) {
+		if (axis->orientation() == Axis::Orientation::Horizontal)
+			axis->title()->setText(m_column->name());
+		else
+			axis->title()->setText(i18n("Frequency"));
+
+		axis->setMinorTicksDirection(Axis::noTicks);
+		//QPen pen = axis->line
+	}
+
+	Histogram* histogram = new Histogram(QString());
+	plot->addChild(histogram);
+	histogram->setDataColumn(m_column);
+
+	m_histogramInitialized = true;
+}
+
+void StatisticsColumnWidget::showKDEPlot() {
+	m_kdePlotInitialized = true;
+}
+
+void StatisticsColumnWidget::showQQPlot() {
+	m_qqPlotInitialized = true;
+}
+
+void StatisticsColumnWidget::showBoxPlot() {
+	CartesianPlot* plot = addPlot(&m_boxPlotWidget);
+
+	auto axes = plot->children<Axis>();
+	for (auto* axis : qAsConst(axes)) {
+		if (axis->orientation() == Axis::Orientation::Horizontal) {
+			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
+			axis->setMajorGridPen(QPen(Qt::NoPen));
+			axis->title()->setText(QString());
+		} else
+			axis->title()->setText(m_column->name());
+
+		axis->setMinorTicksDirection(Axis::noTicks);
+	}
+
+	BoxPlot* boxPlot = new BoxPlot(QString());
+	plot->addChild(boxPlot);
+	boxPlot->setDataColumn(m_column);
+
+	m_boxPlotInitialized = true;
+}
+
+CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	Worksheet* worksheet = new Worksheet(QString());
 	worksheet->setUseViewSize(true);
 	worksheet->setLayoutTopMargin(0.);
@@ -322,40 +374,14 @@ void StatisticsColumnWidget::showHistogram() {
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
 
-	auto axes = plot->children<Axis>();
-	for (auto* axis : axes) {
-		if (axis->orientation() == Axis::Orientation::Horizontal)
-			axis->title()->setText(m_column->name());
-		else
-			axis->title()->setText(i18n("Frequency"));
-
-		axis->setMinorTicksDirection(Axis::noTicks);
-		//QPen pen = axis->line
-	}
 	worksheet->addChild(plot);
 
 	worksheet->setPlotsLocked(true);
 
-	Histogram* histogram = new Histogram(QString());
-	plot->addChild(histogram);
-	histogram->setDataColumn(m_column);
-
-	auto* layout = new QVBoxLayout;
+	auto* layout = new QVBoxLayout(widget);
 	layout->setSpacing(0);
 	layout->addWidget(worksheet->view());
-	m_histogramWidget.setLayout(layout);
+	widget->setLayout(layout);
 
-	m_histogramInitialized = true;
-}
-
-void StatisticsColumnWidget::showKDEPlot() {
-	m_kdePlotInitialized = true;
-}
-
-void StatisticsColumnWidget::showQQPlot() {
-	m_qqPlotInitialized = true;
-}
-
-void StatisticsColumnWidget::showBoxPlot() {
-	m_boxPlotInitialized = true;
+	return plot;
 }
