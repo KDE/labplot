@@ -850,10 +850,6 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeType, rangeType, r
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeLastValues, rangeLastValues)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeFirstValues, rangeFirstValues)
 
-//TODO
-//BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleX, autoScaleX)
-//BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, autoScaleY, autoScaleY)
-
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, xRangeBreakingEnabled, xRangeBreakingEnabled)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, xRangeBreaks, xRangeBreaks)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, yRangeBreakingEnabled, yRangeBreakingEnabled)
@@ -1000,6 +996,8 @@ void CartesianPlot::setXRangeFormat(const int index, const RangeT::Format format
 	if (format != xRangeFormat(index)) {
 		d->xRanges[index].setFormat(format);
 		emit d->xRangeFormatChanged();
+		if (project())
+			project()->setChanged(true);
 	}
 }
 //TODO: CartesianPlotSetYRangeFormatIndexCmd
@@ -1012,6 +1010,8 @@ void CartesianPlot::setYRangeFormat(const int index, const RangeT::Format format
 	if (format != yRangeFormat(index)) {
 		d->yRanges[index].setFormat(format);
 		emit d->yRangeFormatChanged();
+		if (project())
+			project()->setChanged(true);
 	}
 }
 
@@ -1153,7 +1153,7 @@ const Range<double>& CartesianPlot::yRange() const {
 	Q_D(const CartesianPlot);
 	return d->yRanges.at( defaultCoordinateSystem()->yIndex() );
 }
-Range<double> CartesianPlot::xRange(const int index) const {
+const Range<double> CartesianPlot::xRange(const int index) const {
 	Q_D(const CartesianPlot);
 	if (index < 0 || index > xRangeCount()) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
@@ -1161,7 +1161,7 @@ Range<double> CartesianPlot::xRange(const int index) const {
 	}
 	return d->xRanges.at(index);
 }
-Range<double> CartesianPlot::yRange(const int index) const {
+const Range<double> CartesianPlot::yRange(const int index) const {
 	Q_D(const CartesianPlot);
 	if (index < 0 || index > yRangeCount()) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
@@ -1895,6 +1895,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 }
 
 void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientation orientation) {
+	Q_D(CartesianPlot);
 	const auto* col = dynamic_cast<const Column*>(column);
 	if (!col)
 		return;
@@ -1909,7 +1910,7 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 			const auto* cSystem{ coordinateSystem(axis->coordinateSystemIndex()) };
 			if (axis->orientation() == orientation) {
 				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-				xRange(cSystem->xIndex()).setDateTimeFormat(filter->format());
+				d->xRanges[cSystem->xIndex()].setDateTimeFormat(filter->format());
 				axis->setUndoAware(false);
 				axis->setLabelsDateTimeFormat(xRangeDateTimeFormat());
 				axis->setUndoAware(true);
@@ -2180,11 +2181,14 @@ void CartesianPlot::scaleAutoTriggered() {
 		setAutoScaleY(true);
 }
 
-bool CartesianPlot::scaleAutoX(bool fullRange) {
-	DEBUG(Q_FUNC_INFO << ", full range = " << fullRange)
+bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
+	if (index == -1)
+		index = defaultCoordinateSystem()->xIndex();
+
+	DEBUG(Q_FUNC_INFO << ", index = " << index << " full range = " << fullRange)
 	Q_D(CartesianPlot);
 	if (d->curvesXMinMaxIsDirty) {
-		calculateCurvesXMinMax(fullRange);
+		calculateCurvesXMinMax(index, fullRange);
 
 		/* TODO:
 		//take the size of the error bar cap into account if error bars with caps are plotted
@@ -2238,32 +2242,31 @@ bool CartesianPlot::scaleAutoX(bool fullRange) {
 	}
 
 	// if no curve: do not reset to [0, 1] but don't change
+	auto& xRange{ d->xRanges[index] };
 
-	//TODO: sets default x range
-	DEBUG(Q_FUNC_INFO << ", x range = " << xRange().toStdString() << "., curves x range = " << d->curvesXRange.toStdString())
+	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << "., curves x range = " << d->curvesXRange.toStdString())
 	bool update = false;
-	if (!qFuzzyCompare(d->curvesXRange.start(), xRange().start()) && !qIsInf(d->curvesXRange.start())) {
-		d->xRange().start() = d->curvesXRange.start();
+	if (!qFuzzyCompare(d->curvesXRange.start(), xRange.start()) && !qIsInf(d->curvesXRange.start())) {
+		xRange.start() = d->curvesXRange.start();
 		update = true;
 	}
 
-	if (!qFuzzyCompare(d->curvesXRange.end(), xRange().end()) && !qIsInf(d->curvesXRange.end()) ) {
-		d->xRange().end() = d->curvesXRange.end();
+	if (!qFuzzyCompare(d->curvesXRange.end(), xRange.end()) && !qIsInf(d->curvesXRange.end()) ) {
+		xRange.end() = d->curvesXRange.end();
 		update = true;
 	}
 
 	if (update) {
-		DEBUG(Q_FUNC_INFO << ", set new x range = " << xRange().toStdString())
+		DEBUG(Q_FUNC_INFO << ", set new x range = " << xRange.toStdString())
 		//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-		if (xRange().isZero()) {
-			const double value{ xRange().start() };
+		if (xRange.isZero()) {
+			const double value{ xRange.start() };
 			if (!qFuzzyIsNull(value))
-				d->xRange().setRange(value * 0.9, value * 1.1);
+				xRange.setRange(value * 0.9, value * 1.1);
 			else
-				d->xRange().setRange(-0.1, 0.1);
+				xRange.setRange(-0.1, 0.1);
 		} else {
-			const double offset{ xRange().size() * d->autoScaleOffsetFactor };
-			d->xRange().extend(offset);
+			xRange.extend( xRange.size() * d->autoScaleOffsetFactor );
 		}
 		d->retransformScales();
 	}
@@ -2272,12 +2275,15 @@ bool CartesianPlot::scaleAutoX(bool fullRange) {
 }
 
 // TODO: copy paste code?
-bool CartesianPlot::scaleAutoY(bool fullRange) {
-	DEBUG(Q_FUNC_INFO << ", full range = " << fullRange)
+bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
+	if (index == -1)
+		index = defaultCoordinateSystem()->yIndex();
+
+	DEBUG(Q_FUNC_INFO << ", index = " << index << " full range = " << fullRange)
 	Q_D(CartesianPlot);
 
 	if (d->curvesYMinMaxIsDirty) {
-		calculateCurvesYMinMax(fullRange);
+		calculateCurvesYMinMax(index, fullRange);
 
 		/* TODO:
 		//take the size of the error bar cap into account if error bars with caps are plotted
@@ -2321,29 +2327,30 @@ bool CartesianPlot::scaleAutoY(bool fullRange) {
 		d->curvesYMinMaxIsDirty = false;
 	}
 
+	auto& yRange{ d->yRanges[index] };
+
 	bool update = false;
-	//TODO: this function changes the default y range
-	DEBUG(Q_FUNC_INFO << ", y range = " << yRange().toStdString() << "., curves y range = " << d->curvesYRange.toStdString())
-	if (!qFuzzyCompare(d->curvesYRange.start(), yRange().start()) && !qIsInf(d->curvesYRange.start()) ) {
-		d->yRange().start() = d->curvesYRange.start();
+	DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", curves y range = " << d->curvesYRange.toStdString())
+	if (!qFuzzyCompare(d->curvesYRange.start(), yRange.start()) && !qIsInf(d->curvesYRange.start()) ) {
+		yRange.start() = d->curvesYRange.start();
 		update = true;
 	}
 
-	if (!qFuzzyCompare(d->curvesYRange.end(), yRange().end()) && !qIsInf(d->curvesYRange.end()) ) {
-		d->yRange().end() = d->curvesYRange.end();
+	if (!qFuzzyCompare(d->curvesYRange.end(), yRange.end()) && !qIsInf(d->curvesYRange.end()) ) {
+		yRange.end() = d->curvesYRange.end();
 		update = true;
 	}
 	if (update) {
-		DEBUG(Q_FUNC_INFO << ", set new y range = " << yRange().toStdString())
+		DEBUG(Q_FUNC_INFO << ", set new y range = " << yRange.toStdString())
 		//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-		if (yRange().isZero()) {
-			const double value{ yRange().start() };
+		if (yRange.isZero()) {
+			const double value{ yRange.start() };
 			if (!qFuzzyIsNull(value))
-				d->yRange().setRange(value * 0.9, value * 1.1);
+				yRange.setRange(value * 0.9, value * 1.1);
 			else
-				d->yRange().setRange(-0.1, 0.1);
+				yRange.setRange(-0.1, 0.1);
 		} else {
-			d->yRange().extend( yRange().size() * d->autoScaleOffsetFactor );
+			yRange.extend( yRange.size() * d->autoScaleOffsetFactor );
 		}
 		d->retransformScales();
 	}
@@ -2351,14 +2358,19 @@ bool CartesianPlot::scaleAutoY(bool fullRange) {
 	return update;
 }
 
-
 // TODO: copy paste code?
-bool CartesianPlot::scaleAuto(const bool fullRange) {
-	DEBUG(Q_FUNC_INFO)
+bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
+	if (xIndex == -1)
+		xIndex = defaultCoordinateSystem()->xIndex();
+	if (yIndex == -1)
+		yIndex = defaultCoordinateSystem()->yIndex();
+
+	DEBUG(Q_FUNC_INFO << ", x/y index = " << xIndex << ' ' << yIndex)
 	Q_D(CartesianPlot);
 
 	if (d->curvesXMinMaxIsDirty) {
-		calculateCurvesXMinMax(fullRange);
+		//TODO: use index
+		calculateCurvesXMinMax(xIndex, fullRange);
 
 		/* TODO
 		//take the size of the error bar cap into account if error bars with caps are plotted
@@ -2401,7 +2413,7 @@ bool CartesianPlot::scaleAuto(const bool fullRange) {
 	}
 
 	if (d->curvesYMinMaxIsDirty) {
-		calculateCurvesYMinMax();
+		calculateCurvesYMinMax(yIndex, fullRange);
 
 		/*
 		//take the size of the error bar cap into account if error bars with caps are plotted
@@ -2446,8 +2458,8 @@ bool CartesianPlot::scaleAuto(const bool fullRange) {
 	bool updateX = false;
 	bool updateY = false;
 
-	auto& xRange{ d->xRange() };
-	auto& yRange{ d->yRange() };
+	auto& xRange{ d->xRanges[xIndex] };
+	auto& yRange{ d->yRanges[yIndex] };
 
 	if (!qFuzzyCompare(d->curvesXRange.start(), xRange.start()) && !qIsInf(d->curvesXRange.start()) ) {
 		xRange.start() = d->curvesXRange.start();
@@ -2505,7 +2517,7 @@ bool CartesianPlot::scaleAuto(const bool fullRange) {
  * Calculates and sets curves y min and max. This function does not respect the range
  * of the y axis
  */
-void CartesianPlot::calculateCurvesXMinMax(bool completeRange) {
+void CartesianPlot::calculateCurvesXMinMax(const int index, bool completeRange) {
 	DEBUG(Q_FUNC_INFO << ", complete range = " << completeRange)
 	Q_D(CartesianPlot);
 
@@ -2513,6 +2525,9 @@ void CartesianPlot::calculateCurvesXMinMax(bool completeRange) {
 
 	//loop over all xy-curves and determine the maximum and minimum x-values
 	for (const auto* curve : this->children<const XYCurve>()) {
+		//only curves with correct xIndex
+		if (coordinateSystem(curve->coordinateSystemIndex())->xIndex() != index)
+			continue;
 		if (!curve->isVisible())
 			continue;
 
@@ -2593,7 +2608,7 @@ void CartesianPlot::calculateCurvesXMinMax(bool completeRange) {
  * Calculates and sets curves y min and max. This function does not respect the range
  * of the x axis
  */
-void CartesianPlot::calculateCurvesYMinMax(bool completeRange) {
+void CartesianPlot::calculateCurvesYMinMax(const int index, bool completeRange) {
 	Q_D(CartesianPlot);
 
 	d->curvesYRange.setRange(qInf(), -qInf());
@@ -2601,6 +2616,9 @@ void CartesianPlot::calculateCurvesYMinMax(bool completeRange) {
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
 	for (const auto* curve : this->children<const XYCurve>()) {
+		//only curves with correct yIndex
+		if (coordinateSystem(curve->coordinateSystemIndex())->yIndex() != index)
+			continue;
 		if (!curve->isVisible())
 			continue;
 
@@ -4298,18 +4316,18 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("autoScaleX").toString());
 			else
-				xRange(0).setAutoScale(str.toInt());
+				d->xRanges[0].setAutoScale(str.toInt());
 			str = attribs.value("autoScaleY").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("autoScaleY").toString());
 			else
-				yRange(0).setAutoScale(str.toInt());
+				d->yRanges[0].setAutoScale(str.toInt());
 
 			str = attribs.value("xMin").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("xMin").toString());
 			else {
-				xRange(0).start() = str.toDouble();
+				d->xRanges[0].start() = str.toDouble();
 				d->xPrevRange.start() = xRange(0).start();
 			}
 
@@ -4317,7 +4335,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("xMax").toString());
 			else {
-				xRange(0).end() = str.toDouble();
+				d->xRanges[0].end() = str.toDouble();
 				d->xPrevRange.end() = xRange(0).end();
 			}
 
@@ -4325,7 +4343,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("yMin").toString());
 			else {
-				yRange(0).start() = str.toDouble();
+				d->yRanges[0].start() = str.toDouble();
 				d->yPrevRange.start() = yRange(0).start();
 			}
 
@@ -4333,7 +4351,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("yMax").toString());
 			else {
-				yRange(0).end() = str.toDouble();
+				d->yRanges[0].end() = str.toDouble();
 				d->yPrevRange.end() = yRange(0).end();
 			}
 
@@ -4341,31 +4359,31 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("xScale").toString());
 			else
-				xRange(0).scale() = static_cast<RangeT::Scale>(str.toInt());
+				d->xRanges[0].scale() = static_cast<RangeT::Scale>(str.toInt());
 			str = attribs.value("yScale").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("yScale").toString());
 			else
-				yRange(0).scale() = static_cast<RangeT::Scale>(str.toInt());
+				d->yRanges[0].scale() = static_cast<RangeT::Scale>(str.toInt());
 
 			str = attribs.value("xRangeFormat").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("xRangeFormat").toString());
 			else
-				xRange(0).format() = static_cast<RangeT::Format>(str.toInt());
+				d->xRanges[0].format() = static_cast<RangeT::Format>(str.toInt());
 			str = attribs.value("yRangeFormat").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("yRangeFormat").toString());
 			else
-				yRange(0).format() = static_cast<RangeT::Format>(str.toInt());
+				d->yRanges[0].format() = static_cast<RangeT::Format>(str.toInt());
 
 			str = attribs.value("xRangeDateTimeFormat").toString();
 			if (!str.isEmpty())
-				xRange(0).setDateTimeFormat(str);
+				d->xRanges[0].setDateTimeFormat(str);
 
 			str = attribs.value("yRangeDateTimeFormat").toString();
 			if (!str.isEmpty())
-				yRange(0).setDateTimeFormat(str);
+				d->yRanges[0].setDateTimeFormat(str);
 
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);

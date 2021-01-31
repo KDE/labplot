@@ -118,7 +118,7 @@ numberLocale.setNumberOptions(numberOptions);
 
 #define BASIC_D_INDEX_ACCESSOR_DECL(type, method, Method) \
 	type method(int index) const; \
-	void set ## Method(int index, const type value);
+	void set ## Method(int index, type value);
 
 // replaces CLASS_D_READER_IMPL
 #define BASIC_D_READER_IMPL(classname, type, method, var) \

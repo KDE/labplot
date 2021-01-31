@@ -115,7 +115,7 @@ void XYEquationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.teMin, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.teMax, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.sbCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYEquationCurveDock::enableRecalculate);
-	connect( uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::plotRangeChanged );
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::plotRangeChanged );
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYEquationCurveDock::recalculateClicked);
 }
 
@@ -137,21 +137,6 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = false;
 
 	updatePlotRanges();
-}
-
-void XYEquationCurveDock::updatePlotRanges() const {
-	const int cSystemCount{ m_curve->coordinateSystemCount() };
-	const int cSystemIndex{ m_curve->coordinateSystemIndex() };
-	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
-	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex + 1)
-
-	// fill ui.cbPlotRanges
-	uiGeneralTab.cbPlotRanges->clear();
-	for (int i{0}; i < cSystemCount; i++)
-		uiGeneralTab.cbPlotRanges->addItem( QString::number(i+1) + QLatin1String(" : ") + m_curve->coordinateSystemInfo(i) );
-	uiGeneralTab.cbPlotRanges->setCurrentIndex(cSystemIndex);
-	// disable when there is only on plot range
-	uiGeneralTab.cbPlotRanges->setEnabled(cSystemCount == 1 ? false : true);
 }
 
 void XYEquationCurveDock::initGeneralTab() {
@@ -193,6 +178,11 @@ void XYEquationCurveDock::initGeneralTab() {
 			this, &XYEquationCurveDock::curveDescriptionChanged);
 	connect(m_equationCurve, &XYEquationCurve::equationDataChanged,
 			this, &XYEquationCurveDock::curveEquationDataChanged);
+	connect(m_equationCurve, &WorksheetElement::plotRangeListChanged, this, &XYEquationCurveDock::updatePlotRanges);
+}
+
+void XYEquationCurveDock::updatePlotRanges() const {
+	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 
 //*************************************************************
@@ -352,21 +342,6 @@ void XYEquationCurveDock::enableRecalculate() const {
 	uiGeneralTab.pbRecalculate->setEnabled(valid);
 
 	updatePlotRanges();
-}
-
-void XYEquationCurveDock::plotRangeChanged(int index) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	const auto* plot = dynamic_cast<const CartesianPlot*>(m_curve->parentAspect());
-	if (index < 0 || index > plot->coordinateSystemCount()) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return;
-	}
-
-	if (index != m_curve->coordinateSystemIndex()) {
-		m_curve->setCoordinateSystemIndex(index);
-		updateLocale();		// update line edits
-		m_curve->retransform();	// redraw
-	}
 }
 
 //*************************************************************

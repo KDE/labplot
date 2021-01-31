@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>411</width>
-    <height>1012</height>
+    <height>1021</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -70,14 +70,14 @@
          <property name="toolTip">
           <string>List of x ranges</string>
          </property>
-         <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustToContents</enum>
-         </property>
          <property name="columnCount">
           <number>5</number>
          </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>true</bool>
+         </attribute>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>80</number>
+          <number>60</number>
          </attribute>
          <attribute name="horizontalHeaderStretchLastSection">
           <bool>true</bool>
@@ -117,7 +117,7 @@
        </item>
        <item row="1" column="4">
         <widget class="QLineEdit" name="leComment">
-         <property name="clearButtonEnabled">
+         <property name="clearButtonEnabled" stdset="0">
           <bool>true</bool>
          </property>
         </widget>
@@ -249,7 +249,7 @@
        </item>
        <item row="0" column="4">
         <widget class="QLineEdit" name="leName">
-         <property name="clearButtonEnabled">
+         <property name="clearButtonEnabled" stdset="0">
           <bool>true</bool>
          </property>
         </widget>
@@ -310,9 +310,6 @@
          <property name="toolTip">
           <string>List of plot ranges</string>
          </property>
-         <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustToContents</enum>
-         </property>
          <attribute name="horizontalHeaderDefaultSectionSize">
           <number>100</number>
          </attribute>
@@ -368,7 +365,8 @@
            </property>
            <property name="icon">
             <iconset theme="list-add">
-             <normaloff>.</normaloff>.</iconset>
+             <normaloff/>
+            </iconset>
            </property>
           </widget>
          </item>
@@ -382,7 +380,8 @@
            </property>
            <property name="icon">
             <iconset theme="list-remove">
-             <normaloff>.</normaloff>.</iconset>
+             <normaloff/>
+            </iconset>
            </property>
           </widget>
          </item>
@@ -422,13 +421,16 @@
          <property name="toolTip">
           <string>list of y ranges</string>
          </property>
-         <property name="sizeAdjustPolicy">
-          <enum>QAbstractScrollArea::AdjustToContents</enum>
-         </property>
+         <attribute name="horizontalHeaderCascadingSectionResizes">
+          <bool>true</bool>
+         </attribute>
          <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>80</number>
+          <number>60</number>
          </attribute>
          <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="verticalHeaderCascadingSectionResizes">
           <bool>true</bool>
          </attribute>
          <attribute name="verticalHeaderMinimumSectionSize">
@@ -483,7 +485,8 @@
            </property>
            <property name="icon">
             <iconset theme="list-add">
-             <normaloff>.</normaloff>.</iconset>
+             <normaloff/>
+            </iconset>
            </property>
           </widget>
          </item>
@@ -494,7 +497,8 @@
            </property>
            <property name="icon">
             <iconset theme="list-remove">
-             <normaloff>.</normaloff>.</iconset>
+             <normaloff/>
+            </iconset>
            </property>
           </widget>
          </item>
@@ -627,7 +631,8 @@
            </property>
            <property name="icon">
             <iconset theme="list-add">
-             <normaloff>.</normaloff>.</iconset>
+             <normaloff/>
+            </iconset>
            </property>
           </widget>
          </item>
@@ -641,7 +646,8 @@
            </property>
            <property name="icon">
             <iconset theme="list-remove">
-             <normaloff>.</normaloff>.</iconset>
+             <normaloff/>
+            </iconset>
            </property>
           </widget>
          </item>
@@ -851,16 +857,7 @@
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
@@ -1284,7 +1281,7 @@
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
-         <property name="clearButtonEnabled">
+         <property name="clearButtonEnabled" stdset="0">
           <bool>true</bool>
          </property>
         </widget>

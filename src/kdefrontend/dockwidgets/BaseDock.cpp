@@ -62,6 +62,10 @@ void BaseDock::updatePlotRangeList(QComboBox* cb) const {
 	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)
 	DEBUG(Q_FUNC_INFO << ", current plot range: " << cSystemIndex+1)
 
+	if (!cb) {
+		DEBUG(Q_FUNC_INFO << ", ERRO: no plot range combo box")
+		return;
+	}
 	// fill ui.cbPlotRanges
 	cb->clear();
 	for (int i{0}; i < cSystemCount; i++)

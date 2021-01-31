@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2020-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of equation curves
 
  ***************************************************************************/
@@ -65,8 +65,6 @@ private slots:
 	//General-Tab
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveEquationDataChanged(const XYEquationCurve::EquationData&);
-
-	void plotRangeChanged(int);
 };
 
 #endif

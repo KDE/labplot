@@ -54,6 +54,7 @@ public:
 	virtual void setupGeneral();
 	void updateLocale() override;
 
+
 private:
 	virtual void initGeneralTab();
 	void updateValuesWidgets();

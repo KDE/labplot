@@ -148,8 +148,8 @@ public:
 	const Range<double>& yRange() const;		// get y range of default plot range
 	void setXRange(Range<double>);		// set x range of default plot range
 	void setYRange(Range<double>);		// set y range of default plot range
-	BASIC_D_INDEX_ACCESSOR_DECL(Range<double>, xRange, XRange) // x range index
-	BASIC_D_INDEX_ACCESSOR_DECL(Range<double>, yRange, YRange) // y range index
+	BASIC_D_INDEX_ACCESSOR_DECL(const Range<double>, xRange, XRange) // x range index
+	BASIC_D_INDEX_ACCESSOR_DECL(const Range<double>, yRange, YRange) // y range index
 	void addXRange();				// add new x range
 	void addYRange();				// add new y range
 	void addXRange(Range<double>);			// add x range
@@ -202,8 +202,8 @@ private:
 	void shift(bool x, bool leftOrDown);
 	void zoom(bool x, bool in);
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
-	void calculateCurvesXMinMax(bool completeRange = true);
-	void calculateCurvesYMinMax(bool completeRange = true);
+	void calculateCurvesXMinMax(int index, bool completeRange = true);
+	void calculateCurvesYMinMax(int index, bool completeRange = true);
 
 	CartesianPlotLegend* m_legend{nullptr};
 	double m_zoomFactor{1.2};
@@ -304,9 +304,9 @@ public slots:
 	void addInfoElement();
 
 	void scaleAutoTriggered();
-	bool scaleAuto(bool fullRange = true);
-	bool scaleAutoX(bool fullRange = true);
-	bool scaleAutoY(bool fullRange = true);
+	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true);
+	bool scaleAutoX(int index = -1, bool fullRange = true);
+	bool scaleAutoY(int index = -1, bool fullRange = true);
 
 	void zoomIn();
 	void zoomOut();
