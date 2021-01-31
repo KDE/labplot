@@ -30,6 +30,7 @@
 #include "BaseDock.h"
 #include "AxisDock.h"
 #include "backend/core/AbstractAspect.h"
+#include "backend/core/Project.h"
 
 
 #include <KLocalizedString>
@@ -85,6 +86,7 @@ void BaseDock::plotRangeChanged(int index) {
 			dynamic_cast<AxisDock*>(this)->updateAutoScale();
 		updateLocale();		// update line edits
 		element->retransform();	// redraw
+		element->project()->setChanged(true);
 	}
 }
 

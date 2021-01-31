@@ -1096,14 +1096,20 @@ void CartesianPlot::setAutoScaleY(bool autoScaleY) {
 //TODO: undo aware CartesianPlotSetAutoScaleXIndexCmd
 void CartesianPlot::setAutoScaleX(const int index, bool autoScaleX) {
 	Q_D(CartesianPlot);
-	if (autoScaleX != xRange(index).autoScale())
+	if (autoScaleX != xRange(index).autoScale()) {
 		d->xRanges[index].setAutoScale(autoScaleX);
+		if (project())
+			project()->setChanged(true);
+	}
 }
 //TODO: undo aware CartesianPlotSetAutoScaleYIndexCmd
 void CartesianPlot::setAutoScaleY(const int index, bool autoScaleY) {
 	Q_D(CartesianPlot);
-	if (autoScaleY != yRange(index).autoScale())
+	if (autoScaleY != yRange(index).autoScale()) {
 		d->yRanges[index].setAutoScale(autoScaleY);
+		if (project())
+			project()->setChanged(true);
+	}
 }
 
 // set x/y range command with index
@@ -1192,18 +1198,26 @@ void CartesianPlot::setYRange(Range<double> range) {
 void CartesianPlot::addXRange() {
 	Q_D(CartesianPlot);
 	d->xRanges.append(Range<double>());
+	if (project())
+		project()->setChanged(true);
 }
 void CartesianPlot::addYRange() {
 	Q_D(CartesianPlot);
 	d->yRanges.append(Range<double>());
+	if (project())
+		project()->setChanged(true);
 }
 void CartesianPlot::addXRange(const Range<double> range) {
 	Q_D(CartesianPlot);
 	d->xRanges.append(range);
+	if (project())
+		project()->setChanged(true);
 }
 void CartesianPlot::addYRange(const Range<double> range) {
 	Q_D(CartesianPlot);
 	d->yRanges.append(range);
+	if (project())
+		project()->setChanged(true);
 }
 
 void CartesianPlot::removeXRange(int index) {
@@ -1213,6 +1227,8 @@ void CartesianPlot::removeXRange(int index) {
 		return;
 	}
 	d->xRanges.remove(index);
+	if (project())
+		project()->setChanged(true);
 }
 void CartesianPlot::removeYRange(int index) {
 	Q_D(CartesianPlot);
@@ -1221,6 +1237,8 @@ void CartesianPlot::removeYRange(int index) {
 		return;
 	}
 	d->yRanges.remove(index);
+	if (project())
+		project()->setChanged(true);
 }
 void CartesianPlot::setXRange(const int index, const Range<double> range) {
 	DEBUG(Q_FUNC_INFO)
@@ -1312,6 +1330,8 @@ void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {
 	}
 	d->xRanges[index].setScale(scale);
 	d->retransformScales();
+	if (project())
+		project()->setChanged(true);
 }
 void CartesianPlot::setYRangeScale(const int index, const RangeT::Scale scale) {
 	Q_D(CartesianPlot);
@@ -1321,6 +1341,8 @@ void CartesianPlot::setYRangeScale(const int index, const RangeT::Scale scale) {
 	}
 	d->yRanges[index].setScale(scale);
 	d->retransformScales();
+	if (project())
+		project()->setChanged(true);
 }
 
 // coordinate systems
@@ -1342,10 +1364,14 @@ void CartesianPlot::addCoordinateSystem() {
 	DEBUG(Q_FUNC_INFO)
 	auto* cSystem{ new CartesianCoordinateSystem(this) };
 	m_coordinateSystems.append( cSystem );
+	if (project())
+		project()->setChanged(true);
 }
 void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* cSystem) {
 	DEBUG(Q_FUNC_INFO)
 	m_coordinateSystems.append( cSystem );
+	if (project())
+		project()->setChanged(true);
 }
 void CartesianPlot::removeCoordinateSystem(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
@@ -1355,6 +1381,8 @@ void CartesianPlot::removeCoordinateSystem(int index) {
 	}
 
 	m_coordinateSystems.remove(index);
+	if (project())
+		project()->setChanged(true);
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetDefaultCoordinateSystemIndex, int, defaultCoordinateSystemIndex, retransformScales)

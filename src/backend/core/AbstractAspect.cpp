@@ -231,7 +231,7 @@ bool AbstractAspect::setName(const QString &value, bool autoUnique) {
 
 	QString new_name;
 	if (d->m_parent) {
-			new_name = d->m_parent->uniqueNameFor(value);
+		new_name = d->m_parent->uniqueNameFor(value);
 
 		if (!autoUnique && new_name.compare(value) != 0) // value is not unique, so don't change name
 			return false; // this value is used in the dock to check if the name is valid
