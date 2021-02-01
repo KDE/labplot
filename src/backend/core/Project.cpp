@@ -646,10 +646,10 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	else if (aspect->type() == AspectType::BoxPlot)
 		boxPlots << static_cast<BoxPlot*>(aspect);
 
-	for (auto* boxPlot : boxPlots) {
-		if (!boxPlot) continue;
-		RESTORE_COLUMN_POINTER(boxPlot, dataColumn, DataColumn);
-	}
+// 	for (auto* boxPlot : boxPlots) {
+// 		if (!boxPlot) continue;
+// 		RESTORE_COLUMN_POINTER(boxPlot, dataColumn, DataColumn);
+// 	}
 
 	//data picker curves
 	QVector<DatapickerCurve*> dataPickerCurves;

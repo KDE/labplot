@@ -60,14 +60,13 @@ public:
 	BoxPlot* const q;
 
 	//General
-	const AbstractColumn* dataColumn{nullptr};
-	QString dataColumnPath;
+	QVector<AbstractColumn*> dataColumns;
+	QVector<QString> dataColumnPaths;
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::MinMax};
 	BoxPlot::Orientation orientation{BoxPlot::Orientation::Vertical};
 	qreal opacity{1.0};
 
 	//box filling
-
 	bool fillingEnabled{true};
 	PlotArea::BackgroundType fillingType;
 	PlotArea::BackgroundColorStyle fillingColorStyle;
@@ -106,14 +105,14 @@ private:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
-	void recalcVertical();
-	void verticalBoxPlot();
-	void recalcHorizontal();
-	void horizontalBoxPlot();
+	void recalcVertical(int);
+	void verticalBoxPlot(int);
+	void recalcHorizontal(int);
+	void horizontalBoxPlot(int);
 
 	void draw(QPainter*);
-	void drawFilling(QPainter*);
-	void drawSymbols(QPainter*);
+	void drawFilling(QPainter*, int);
+	void drawSymbols(QPainter*, int);
 
 	bool n_suppressItemChangeEvent{false};
 	bool m_suppressRetransform{false};
@@ -122,20 +121,22 @@ private:
 	QRectF m_boundingRectangle;
 	QPainterPath m_boxPlotShape;
 
-	QRectF m_boxRect;
-	double m_xMinBox;
-	double m_xMaxBox;
-	double m_yMinBox;
-	double m_yMaxBox;
-	double m_median;
-	QLineF m_medianLine;
-	QPainterPath m_whiskersPath;
-	double m_whiskerMin;
-	double m_whiskerMax;
-	QVector<QPointF> m_outliersSymbolPointsLogical;	//positions of the outlier symbols in logical coordinates
-	QVector<QPointF> m_outliersSymbolPoints;	//positions of the outlier symbols in scene coordinates
-	int m_outliersCount; //total number of outliers. this number is different to the size of the vector m_outliersSymbolPoints containing unique points only
-	QPointF m_meanSymbolPoint; //position of the mean symbol in scene coordinates
+	QVector<QRectF> m_boxRect;
+	QVector<double> m_xMinBox;
+	QVector<double> m_xMaxBox;
+	QVector<double> m_yMinBox;
+	QVector<double> m_yMaxBox;
+	QVector<double> m_median;
+	QVector<QLineF> m_medianLine;
+	QVector<QPainterPath> m_whiskersPath;
+	QVector<double> m_whiskerMin;
+	QVector<double> m_whiskerMax;
+	QVector<double> m_outlierMax;
+	QVector<double> m_outlierMin;
+	QVector<QVector<QPointF>> m_outliersSymbolPointsLogical;	//positions of the outlier symbols in logical coordinates
+	QVector<QVector<QPointF>> m_outliersSymbolPoints;	//positions of the outlier symbols in scene coordinates
+	QVector<int> m_outliersCount; //total number of outliers. this number is different to the size of the vector m_outliersSymbolPoints containing unique points only
+	QVector<QPointF> m_meanSymbolPoint; //position of the mean symbol in scene coordinates
 
 	double m_xMin;
 	double m_xMax;

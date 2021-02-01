@@ -42,18 +42,12 @@
 #include <KLocalizedString>
 #include <KConfig>
 
-BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent), cbDataColumn(new TreeViewComboBox) {
+BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_leComment = ui.leComment;
 
 	// Tab "General"
-	QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
-	sizePolicy1.setHorizontalStretch(0);
-	sizePolicy1.setVerticalStretch(0);
-	sizePolicy1.setHeightForWidth(cbDataColumn->sizePolicy().hasHeightForWidth());
-	cbDataColumn->setSizePolicy(sizePolicy1);
-
 	m_buttonNew = new QPushButton();
 	m_buttonNew->setIcon(QIcon::fromTheme("list-add"));
 	connect(m_buttonNew, &QPushButton::clicked, this, &BoxPlotDock::addDataColumn);
@@ -62,11 +56,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent), cbDataColumn(new T
 	m_gridLayout->setContentsMargins(0, 0, 0, 0);
 	m_gridLayout->setHorizontalSpacing(2);
 	m_gridLayout->setVerticalSpacing(2);
-
 	ui.frameDataColumns->setLayout(m_gridLayout);
-	m_gridLayout->addWidget(cbDataColumn, 0, 0, 1, 1);
-	m_gridLayout->addWidget(m_buttonNew, 1, 1, 1, 1);
-	m_dataLayoutIndex = 1;
 
 	ui.cbWhiskersType->addItem(i18n("min/max"));
 	ui.cbWhiskersType->addItem(i18n("1.5 IQR"));
@@ -138,7 +128,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent), cbDataColumn(new T
 	//Tab "General"
 	connect(ui.leName, &QLineEdit::textChanged, this, &BoxPlotDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &BoxPlotDock::commentChanged);
-	connect(cbDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &BoxPlotDock::dataColumnChanged);
 
 	//Tab "Box"
 	//box filling
@@ -224,8 +213,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 		ui.leComment->setText(m_boxPlot->comment());
 
 		ui.lDataColumn->setEnabled(true);
-		cbDataColumn->setEnabled(true);
-		this->setModelIndexFromColumn(cbDataColumn, m_boxPlot->dataColumn());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
@@ -235,8 +222,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 		ui.leComment->setText(QString());
 
 		ui.lDataColumn->setEnabled(false);
-		cbDataColumn->setEnabled(false);
-		cbDataColumn->setCurrentModelIndex(QModelIndex());
 	}
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -244,6 +229,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	//show the properties of the first box plot
 	KConfig config(QString(), KConfig::SimpleConfig);
 	loadConfig(config);
+	loadDataColumns();
 
 	//SIGNALs/SLOTs
 	//general
@@ -290,17 +276,8 @@ void BoxPlotDock::setModel() {
 	m_aspectTreeModel->enablePlottableColumnsOnly(true);
 	m_aspectTreeModel->enableShowPlotDesignation(true);
 
-	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
-	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,
-	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
-	                       AspectType::XYFitCurve, AspectType::XYSmoothCurve, AspectType::CantorWorksheet};
-
-	cbDataColumn->setTopLevelClasses(list);
-
-	list = {AspectType::Column};
+	QList<AspectType> list{AspectType::Column};
 	m_aspectTreeModel->setSelectableAspects(list);
-
-	cbDataColumn->setModel(m_aspectTreeModel);
 }
 
 /*
@@ -314,11 +291,52 @@ void BoxPlotDock::updateLocale() {
 // 	ui.lePosition->setText(numberLocale.toString(m_boxPlot->position()));
 }
 
-void BoxPlotDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColumn* column) {
-	if (column)
-		cb->setCurrentModelIndex(m_aspectTreeModel->modelIndexOfAspect(column));
-	else
-		cb->setCurrentModelIndex(QModelIndex());
+void BoxPlotDock::loadDataColumns() {
+	//add the combobox for the first column, is always present
+	if (m_dataComboBoxes.count() == 0)
+		addDataColumn();
+
+	int count = m_boxPlot->dataColumns().count();
+	if (count != 0) {
+		//box plot has already data columns, make sure we have the proper number of comboboxes
+		int diff = count - m_dataComboBoxes.count();
+		if (diff > 0) {
+			for (int i = 0; i < diff; ++i)
+				addDataColumn();
+		} else if (diff < 0) {
+			for (int i = diff; i != 0; ++i)
+				removeDataColumn();
+		}
+
+		//show the columns in the comboboxes
+		for (int i = 0; i < count; ++i)
+			m_dataComboBoxes.at(i)->setAspect(m_boxPlot->dataColumns().at(i));
+	} else {
+		//no data columns set in the box plot yet, we show the first combo box only
+		m_dataComboBoxes.first()->setAspect(nullptr);
+		for (int i = 1; i < m_dataComboBoxes.count(); ++i)
+			removeDataColumn();
+	}
+
+	//disable data column widgets if we're modifying more than one box plot at the same time
+	bool enabled = (m_boxPlots.count() == 1);
+	m_buttonNew->setVisible(enabled);
+	for (auto* cb : m_dataComboBoxes)
+		cb->setEnabled(enabled);
+	for (auto* b : m_removeButtons)
+		b->setVisible(enabled);
+}
+
+void BoxPlotDock::setDataColumns() const {
+	QVector<AbstractColumn*> columns;
+
+	for (auto* cb : m_dataComboBoxes) {
+		auto* aspect = cb->currentAspect();
+		if (aspect && aspect->type() == AspectType::Column)
+			columns << static_cast<AbstractColumn*>(aspect);
+	}
+
+	m_boxPlot->setDataColumns(columns);
 }
 
 //**********************************************************
@@ -333,28 +351,49 @@ void BoxPlotDock::addDataColumn() {
 	                       AspectType::XYFitCurve, AspectType::XYSmoothCurve, AspectType::CantorWorksheet};
 	cb->setTopLevelClasses(list);
 	cb->setModel(m_aspectTreeModel);
+	connect(cb, &TreeViewComboBox::currentModelIndexChanged, this, &BoxPlotDock::dataColumnChanged);
+
+	int index = m_dataComboBoxes.size();
+
+	if (index == 0) {
+		QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
+		sizePolicy1.setHorizontalStretch(0);
+		sizePolicy1.setVerticalStretch(0);
+		sizePolicy1.setHeightForWidth(cb->sizePolicy().hasHeightForWidth());
+		cb->setSizePolicy(sizePolicy1);
+	} else {
+		auto* button = new QPushButton();
+		button->setIcon(QIcon::fromTheme("list-remove"));
+		connect(button, &QPushButton::clicked, this, &BoxPlotDock::removeDataColumn);
+		m_gridLayout->addWidget(button, index, 1, 1, 1);
+		m_removeButtons << button;
+	}
+
+	m_gridLayout->addWidget(cb, index, 0, 1, 1);
+	m_gridLayout->addWidget(m_buttonNew, index + 1, 1, 1, 1);
+
 	m_dataComboBoxes << cb;
-
-	++m_dataLayoutIndex;
-	m_gridLayout->addWidget(cb, m_dataLayoutIndex, 0, 1, 1);
-
-	auto* button = new QPushButton();
-	button->setIcon(QIcon::fromTheme("list-remove"));
-	connect(button, &QPushButton::clicked, this, &BoxPlotDock::removeDataColumn);
-	m_gridLayout->addWidget(button, m_dataLayoutIndex, 1, 1, 1);
-	m_removeButtons << button;
-
-	m_gridLayout->addWidget(m_buttonNew, m_dataLayoutIndex + 1, 1, 1, 1);
-
 	ui.lDataColumn->setText(i18n("Columns:"));
 }
 
 void BoxPlotDock::removeDataColumn() {
 	auto* sender = static_cast<QPushButton*>(QObject::sender());
-	for (int i = 0; i < m_removeButtons.size(); ++i) {
-		if (sender == m_removeButtons.at(i)) {
-			delete m_dataComboBoxes.takeAt(i);
-			delete m_removeButtons.takeAt(i);
+	if (sender) {
+		//remove button was clicked, determin which one and
+		//delete it together with the corresponding combobox
+		for (int i = 0; i < m_removeButtons.count(); ++i) {
+			if (sender == m_removeButtons.at(i)) {
+				delete m_dataComboBoxes.takeAt(i+1);
+				delete m_removeButtons.takeAt(i);
+			}
+		}
+	} else {
+		//no sender is available, the function is being called directly in loadDataColumns().
+		//delete the last remove button together with the corresponding combobox
+		int index = m_removeButtons.count() - 1;
+		if (index >= 0) {
+			delete m_dataComboBoxes.takeAt(index+1);
+			delete m_removeButtons.takeAt(index);
 		}
 	}
 
@@ -362,21 +401,16 @@ void BoxPlotDock::removeDataColumn() {
 		ui.lDataColumn->setText(i18n("Columns:"));
 	else
 		ui.lDataColumn->setText(i18n("Column:"));
+
+	if (!m_initializing)
+		setDataColumns();
 }
 
-void BoxPlotDock::dataColumnChanged(const QModelIndex& index) const {
+void BoxPlotDock::dataColumnChanged(const QModelIndex&) const {
 	if (m_initializing)
 		return;
 
-	auto aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column(nullptr);
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
-
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setDataColumn(column);
+	setDataColumns();
 }
 
 void BoxPlotDock::visibilityChanged(bool state) const {
@@ -947,7 +981,7 @@ void BoxPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 
 void BoxPlotDock::plotDataColumnChanged(const AbstractColumn* column) {
 	Lock lock(m_initializing);
-	this->setModelIndexFromColumn(cbDataColumn, column);
+// 	cbDataColumn->setColumn(column, m_boxPlot->dataColumnPath());
 }
 void BoxPlotDock::plotVisibilityChanged(bool on) {
 	Lock lock(m_initializing);

@@ -48,7 +48,6 @@ public:
 
 private:
 	Ui::BoxPlotDock ui;
-	TreeViewComboBox* cbDataColumn{nullptr};
 	QList<BoxPlot*> m_boxPlots;
 	BoxPlot* m_boxPlot{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
@@ -57,11 +56,11 @@ private:
 	QPushButton* m_buttonNew;
 	QVector<TreeViewComboBox*> m_dataComboBoxes;
 	QVector<QPushButton*> m_removeButtons;
-	int m_dataLayoutIndex;
 
 	void setModel();
 	void loadConfig(KConfig&);
-	void setModelIndexFromColumn(TreeViewComboBox*, const AbstractColumn*);
+	void setDataColumns() const;
+	void loadDataColumns();
 	void updateSymbolWidgets();
 
 private slots:

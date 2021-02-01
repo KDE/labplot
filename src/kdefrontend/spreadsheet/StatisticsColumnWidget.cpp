@@ -352,7 +352,10 @@ void StatisticsColumnWidget::showBoxPlot() {
 
 	BoxPlot* boxPlot = new BoxPlot(QString());
 	plot->addChild(boxPlot);
-	boxPlot->setDataColumn(m_column);
+
+	QVector<AbstractColumn*> columns;
+	columns << const_cast<Column*>(m_column);
+	boxPlot->setDataColumns(columns);
 
 	m_boxPlotInitialized = true;
 }
