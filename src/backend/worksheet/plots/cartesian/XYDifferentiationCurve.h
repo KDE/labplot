@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by an differentiation
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -43,12 +43,13 @@ class XYDifferentiationCurve : public XYAnalysisCurve {
 
 public:
 	struct DifferentiationData {
-		DifferentiationData() : xRange(2) {};
+		DifferentiationData() {};
 
 		nsl_diff_deriv_order_type derivOrder{nsl_diff_deriv_order_first};	// order of differentiation
 		int accOrder{2};							// order of accuracy
 		bool autoRange{true};							// use all data?
-		QVector<double> xRange;							// x range for integration
+		//TODO: use Range
+		QVector<double> xRange{0., 0.};						// x range for integration
 	};
 	struct DifferentiationResult {
 		DifferentiationResult() {};

@@ -6,11 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
-    <height>945</height>
+    <width>393</width>
+    <height>852</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <item row="4" column="2" colspan="4">
+    <widget class="QComboBox" name="cbDataSourceType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="sizePolicy">
@@ -89,16 +99,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="2" colspan="4">
-    <widget class="QComboBox" name="cbDataSourceType">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="0">
     <widget class="QLabel" name="lDataSourceCurve">
      <property name="text">
@@ -121,7 +121,7 @@
     </widget>
    </item>
    <item row="8" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lXRange">
      <property name="text">
       <string>x-Range:</string>
      </property>
@@ -308,30 +308,14 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="4">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="15" column="0">
+   <item row="14" column="0">
     <widget class="QLabel" name="lEval">
      <property name="text">
       <string/>
      </property>
     </widget>
    </item>
-   <item row="16" column="0">
+   <item row="15" column="0">
     <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
@@ -347,21 +331,21 @@
      </property>
     </widget>
    </item>
-   <item row="16" column="1" colspan="5">
+   <item row="15" column="1" colspan="5">
     <widget class="QTextEdit" name="teResult">
      <property name="readOnly">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="17" column="0" rowspan="2" colspan="6">
+   <item row="16" column="0" rowspan="2" colspan="6">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="19" column="3">
+   <item row="18" column="3">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -374,35 +358,29 @@
      </property>
     </spacer>
    </item>
-   <item row="20" column="1" colspan="2">
-    <spacer name="verticalSpacerGeneral">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>24</width>
-       <height>10</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="21" column="0">
+   <item row="20" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>Visible</string>
      </property>
     </widget>
    </item>
-   <item row="19" column="4">
+   <item row="18" column="4">
     <widget class="QPushButton" name="pbRecalculate">
      <property name="text">
       <string>Recalculate</string>
      </property>
     </widget>
+   </item>
+   <item row="19" column="0">
+    <widget class="QLabel" name="lPlotRange">
+     <property name="text">
+      <string>Plot ranges:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="19" column="2" colspan="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
    </item>
   </layout>
  </widget>

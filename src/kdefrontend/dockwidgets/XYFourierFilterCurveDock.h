@@ -2,7 +2,7 @@
     File             : XYFourierFilterCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of Fourier filter curves
 
  ***************************************************************************/
@@ -45,6 +45,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void updatePlotRanges() const override;
 	void showFilterResult();
 
 	Ui::XYFourierFilterCurveDockGeneralTab uiGeneralTab;

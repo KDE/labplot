@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a Fourier transform
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -43,7 +43,7 @@ class XYFourierTransformCurve : public XYAnalysisCurve {
 
 public:
 	struct TransformData {
-		TransformData() : xRange(2) {};
+		TransformData() {};
 
 		nsl_dft_result_type type{nsl_dft_result_magnitude};
 		bool twoSided{false};
@@ -51,7 +51,8 @@ public:
 		nsl_dft_xscale xScale{nsl_dft_xscale_frequency};
 		nsl_sf_window_type windowType{nsl_sf_window_uniform};
 		bool autoRange{true};		// use all data?
-		QVector<double> xRange;		// x range for transform
+		//TODO: use Range
+		QVector<double> xRange{0, 0};	// x range for transform
 	};
 	struct TransformResult {
 		TransformResult() {};

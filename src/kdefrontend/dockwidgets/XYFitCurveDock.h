@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2017-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2017-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of equation curves
 
  ***************************************************************************/
@@ -48,8 +48,9 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void showFitResult();
+	void updatePlotRanges() const override;
 	void updateSettings(const AbstractColumn*);
+	void showFitResult();
 	bool eventFilter(QObject*, QEvent*) override;
 
 	Ui::XYFitCurveDockGeneralTab uiGeneralTab;

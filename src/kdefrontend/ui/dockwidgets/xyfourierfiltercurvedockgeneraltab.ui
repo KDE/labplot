@@ -6,11 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>625</width>
-    <height>1080</height>
+    <width>390</width>
+    <height>839</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="4" column="2" colspan="2">
+    <widget class="QComboBox" name="cbDataSourceType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="text">
@@ -83,16 +93,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="2" colspan="2">
-    <widget class="QComboBox" name="cbDataSourceType">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="0">
     <widget class="QLabel" name="lDataSourceCurve">
      <property name="text">
@@ -115,7 +115,7 @@
     </widget>
    </item>
    <item row="8" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="lXRange">
      <property name="text">
       <string>x-Range:</string>
      </property>
@@ -336,7 +336,7 @@
     </spacer>
    </item>
    <item row="18" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
        <weight>75</weight>
@@ -385,7 +385,7 @@
      </property>
     </widget>
    </item>
-   <item row="21" column="0">
+   <item row="22" column="0">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -401,12 +401,22 @@
      </property>
     </spacer>
    </item>
-   <item row="22" column="0">
+   <item row="23" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>Visible</string>
      </property>
     </widget>
+   </item>
+   <item row="21" column="0">
+    <widget class="QLabel" name="lPlotRange">
+     <property name="text">
+      <string>Plot ranges:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="21" column="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
    </item>
   </layout>
  </widget>

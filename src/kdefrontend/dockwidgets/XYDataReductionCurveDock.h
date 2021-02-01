@@ -2,7 +2,7 @@
     File             : XYDataReductionCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright        : (C) 2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for editing properties of data reduction curves
 
@@ -48,9 +48,10 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void showDataReductionResult();
+	void updatePlotRanges() const override;
 	void updateTolerance();
 	void updateTolerance2();
+	void showDataReductionResult();
 
 	Ui::XYDataReductionCurveDockGeneralTab uiGeneralTab;
 	QStatusBar* statusBar;	// main status bar to display progress

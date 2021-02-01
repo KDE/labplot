@@ -43,7 +43,7 @@ class XYDataReductionCurve : public XYAnalysisCurve {
 
 public:
 	struct DataReductionData {
-		DataReductionData() : xRange(2) {};
+		DataReductionData() {};
 
 		nsl_geom_linesim_type type{nsl_geom_linesim_type_douglas_peucker_variant};	// type of simplification
 		bool autoTolerance{true};	// automatic tolerance
@@ -51,7 +51,8 @@ public:
 		bool autoTolerance2{true};	// automatic tolerance2
 		double tolerance2{0.0};		// tolerance2
 		bool autoRange{true};		// use all data?
-		QVector<double> xRange;		// x range for integration
+		//TODO: use Range
+		QVector<double> xRange{0., 0.};		// x range for integration
 	};
 	struct DataReductionResult {
 		DataReductionResult() {};

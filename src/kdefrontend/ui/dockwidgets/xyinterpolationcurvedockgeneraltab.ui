@@ -6,11 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>548</width>
-    <height>1088</height>
+    <width>643</width>
+    <height>960</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <item row="4" column="2" colspan="2">
+    <widget class="QComboBox" name="cbDataSourceType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="sizePolicy">
@@ -89,16 +99,6 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="2" colspan="2">
-    <widget class="QComboBox" name="cbDataSourceType">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
    <item row="5" column="0">
     <widget class="QLabel" name="lDataSourceCurve">
      <property name="text">
@@ -121,7 +121,7 @@
     </widget>
    </item>
    <item row="8" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lXRange">
      <property name="text">
       <string>x-Range:</string>
      </property>
@@ -262,23 +262,7 @@
      </layout>
     </widget>
    </item>
-   <item row="10" column="2">
-    <spacer name="verticalSpacer_4">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>18</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="11" column="0">
+   <item row="10" column="0">
     <widget class="QLabel" name="lInterpolation">
      <property name="font">
       <font>
@@ -291,14 +275,14 @@
      </property>
     </widget>
    </item>
-   <item row="12" column="0">
+   <item row="11" column="0">
     <widget class="QLabel" name="lType">
      <property name="text">
       <string>Type:</string>
      </property>
     </widget>
    </item>
-   <item row="12" column="2" colspan="2">
+   <item row="11" column="2" colspan="2">
     <widget class="KComboBox" name="cbType">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -308,24 +292,24 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
+   <item row="12" column="0">
     <widget class="QLabel" name="lVariant">
      <property name="text">
       <string>Variant:</string>
      </property>
     </widget>
    </item>
-   <item row="13" column="2" colspan="2">
+   <item row="12" column="2" colspan="2">
     <widget class="QComboBox" name="cbVariant"/>
    </item>
-   <item row="14" column="0">
+   <item row="13" column="0">
     <widget class="QLabel" name="lParameter">
      <property name="text">
       <string>Parameter:</string>
      </property>
     </widget>
    </item>
-   <item row="14" column="2" colspan="2">
+   <item row="13" column="2" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="lTension">
@@ -401,7 +385,7 @@
      </item>
     </layout>
    </item>
-   <item row="15" column="2">
+   <item row="14" column="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -417,24 +401,24 @@
      </property>
     </spacer>
    </item>
-   <item row="16" column="0">
+   <item row="15" column="0">
     <widget class="QLabel" name="lEval">
      <property name="text">
       <string>Evaluate:</string>
      </property>
     </widget>
    </item>
-   <item row="16" column="2" colspan="2">
+   <item row="15" column="2" colspan="2">
     <widget class="QComboBox" name="cbEval"/>
    </item>
-   <item row="17" column="0">
+   <item row="16" column="0">
     <widget class="QLabel" name="lPoints">
      <property name="text">
       <string>Points:</string>
      </property>
     </widget>
    </item>
-   <item row="17" column="2" colspan="2">
+   <item row="16" column="2" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QDoubleSpinBox" name="sbPoints">
@@ -470,7 +454,7 @@
      </item>
     </layout>
    </item>
-   <item row="18" column="2">
+   <item row="17" column="2">
     <spacer name="verticalSpacer_5">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -486,7 +470,7 @@
      </property>
     </spacer>
    </item>
-   <item row="19" column="0">
+   <item row="18" column="0">
     <widget class="QLabel" name="lResults">
      <property name="font">
       <font>
@@ -502,21 +486,21 @@
      </property>
     </widget>
    </item>
-   <item row="19" column="2" colspan="2">
+   <item row="18" column="2" colspan="2">
     <widget class="QTextEdit" name="teResult">
      <property name="readOnly">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="20" column="0" colspan="4">
+   <item row="19" column="0" colspan="4">
     <widget class="Line" name="line_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="21" column="2">
+   <item row="20" column="2">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -529,7 +513,7 @@
      </property>
     </spacer>
    </item>
-   <item row="21" column="3">
+   <item row="20" column="3">
     <widget class="QPushButton" name="pbRecalculate">
      <property name="text">
       <string>Recalculate</string>
@@ -556,6 +540,16 @@
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>Visible</string>
+     </property>
+    </widget>
+   </item>
+   <item row="21" column="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
+   </item>
+   <item row="21" column="0">
+    <widget class="QLabel" name="lPlotRange">
+     <property name="text">
+      <string>Plot ranges:</string>
      </property>
     </widget>
    </item>

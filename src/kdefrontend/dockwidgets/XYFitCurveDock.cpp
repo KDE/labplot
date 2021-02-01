@@ -3,7 +3,7 @@
     Project          : LabPlot
     --------------------------------------------------------------------
     Copyright        : (C) 2014-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright        : (C) 2016-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of fit curves
 
  ***************************************************************************/
@@ -214,6 +214,7 @@ void XYFitCurveDock::setupGeneral() {
 	connect(uiGeneralTab.lFit, &QPushButton::clicked, this, &XYFitCurveDock::showFitOptions);
 	connect(uiGeneralTab.lParameters, &QPushButton::clicked, this, &XYFitCurveDock::showParameters);
 	connect(uiGeneralTab.lResults, &QPushButton::clicked, this, &XYFitCurveDock::showResults);
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::plotRangeChanged );
 
 	connect(cbDataSourceCurve, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::dataSourceCurveChanged);
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFitCurveDock::xDataColumnChanged);
@@ -285,6 +286,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, &XYFitCurve::yErrorColumnChanged, this, &XYFitCurveDock::curveYErrorColumnChanged);
 	connect(m_fitCurve, &XYFitCurve::fitDataChanged, this, &XYFitCurveDock::curveFitDataChanged);
 	connect(m_fitCurve, &XYFitCurve::sourceDataChanged, this, &XYFitCurveDock::enableRecalculate);
+	connect(m_fitCurve, &WorksheetElement::plotRangeListChanged, this, &XYFitCurveDock::updatePlotRanges);
 	connect(m_fitCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYFitCurveDock::curveVisibilityChanged);
 
 	connect(fitParametersWidget, &FitParametersWidget::parametersChanged, this, &XYFitCurveDock::parametersChanged);
@@ -349,11 +351,17 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	showFitResult();
 	enableRecalculate();
 
+	updatePlotRanges();
+
 	m_initializing = false;
 
 	//init parameter list when not available
 	if (m_fitData.paramStartValues.size() == 0)
 		updateModelEquation();
+}
+
+void XYFitCurveDock	::updatePlotRanges() const {
+	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 
 bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {

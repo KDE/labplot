@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a smooth
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -43,7 +43,7 @@ class XYSmoothCurve : public XYAnalysisCurve {
 
 public:
 	struct SmoothData {
-		SmoothData() : xRange(2) {};
+		SmoothData() {};
 
 		nsl_smooth_type type{nsl_smooth_type_moving_average};		// type of smoothing
 		size_t points{5};			// number of points
@@ -53,7 +53,8 @@ public:
 		nsl_smooth_pad_mode mode{nsl_smooth_pad_none};		// mode of padding for edges
 		double lvalue{0.0}, rvalue{0.0};	// values for constant padding
 		bool autoRange{true};			// use all data?
-		QVector<double> xRange;			// x range for integration
+		//TODO: use Range
+		QVector<double> xRange{0., 0.};			// x range for integration
 	};
 	struct SmoothResult {
 		SmoothResult() {};

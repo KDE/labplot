@@ -2,7 +2,7 @@
     File             : XYConvolutionCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2018-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of convolution curves
 
  ***************************************************************************/
@@ -45,6 +45,7 @@ public:
 
 private:
 	void initGeneralTab() override;
+	void updatePlotRanges() const override;
 	void showConvolutionResult();
 
 	Ui::XYConvolutionCurveDockGeneralTab uiGeneralTab;

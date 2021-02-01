@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>446</width>
-    <height>1260</height>
+    <height>1207</height>
    </rect>
   </property>
   <property name="autoFillBackground">
@@ -1115,6 +1115,16 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="29" column="0" colspan="2">
+    <widget class="QLabel" name="lPlotRange">
+     <property name="text">
+      <string>Plot ranges:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="29" column="4" colspan="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
    </item>
   </layout>
  </widget>

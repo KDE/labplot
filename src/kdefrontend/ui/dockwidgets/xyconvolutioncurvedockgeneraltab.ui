@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>396</width>
-    <height>1041</height>
+    <width>423</width>
+    <height>940</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -172,6 +172,16 @@
      </property>
     </widget>
    </item>
+   <item row="10" column="4">
+    <widget class="QSpinBox" name="sbKernelSize">
+     <property name="minimum">
+      <number>2</number>
+     </property>
+     <property name="maximum">
+      <number>999</number>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="lComment">
      <property name="text">
@@ -247,7 +257,7 @@
      </item>
     </layout>
    </item>
-   <item row="27" column="0">
+   <item row="28" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>Visible</string>
@@ -375,7 +385,7 @@
     </widget>
    </item>
    <item row="18" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lNormResponse">
      <property name="text">
       <string>Norm. Response:</string>
      </property>
@@ -388,7 +398,7 @@
      </property>
     </widget>
    </item>
-   <item row="26" column="2">
+   <item row="27" column="2">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -423,13 +433,13 @@
    <item row="16" column="2" colspan="3">
     <widget class="QComboBox" name="cbDirection"/>
    </item>
-   <item row="10" column="4">
-    <widget class="QSpinBox" name="sbKernelSize">
-     <property name="minimum">
-      <number>2</number>
-     </property>
-     <property name="maximum">
-      <number>999</number>
+   <item row="26" column="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
+   </item>
+   <item row="26" column="0">
+    <widget class="QLabel" name="lPlotRange">
+     <property name="text">
+      <string>Plot ranges:</string>
      </property>
     </widget>
    </item>

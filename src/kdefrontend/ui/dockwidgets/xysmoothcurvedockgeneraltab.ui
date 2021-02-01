@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>419</width>
-    <height>1062</height>
+    <height>1085</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -105,7 +105,7 @@
     </widget>
    </item>
    <item row="8" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lXRange">
      <property name="text">
       <string>x-Range:</string>
      </property>
@@ -191,16 +191,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item row="1" column="1">
@@ -324,7 +315,7 @@
      </property>
     </widget>
    </item>
-   <item row="23" column="0">
+   <item row="24" column="0">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -340,7 +331,7 @@
      </property>
     </spacer>
    </item>
-   <item row="24" column="0">
+   <item row="25" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>Visible</string>
@@ -584,6 +575,16 @@
       <bool>true</bool>
      </property>
     </widget>
+   </item>
+   <item row="23" column="0">
+    <widget class="QLabel" name="lPlotRange">
+     <property name="text">
+      <string>Plot ranges:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="23" column="2" colspan="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
    </item>
   </layout>
  </widget>

@@ -2,7 +2,7 @@
     File             : XYDifferentiationCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright        : (C) 2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for editing properties of differentiation curves
 
@@ -46,8 +46,9 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void showDifferentiationResult();
+	void updatePlotRanges() const override;
 	void updateSettings(const AbstractColumn*);
+	void showDifferentiationResult();
 
 	Ui::XYDifferentiationCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve{nullptr};

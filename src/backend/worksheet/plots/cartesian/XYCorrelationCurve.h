@@ -48,6 +48,7 @@ public:
 		nsl_corr_type_type type{nsl_corr_type_linear};	// linear or circular
 		nsl_corr_norm_type normalize{nsl_corr_norm_none};	// normalization
 		bool autoRange{true};				// use all data?
+		//TODO: use Range
 		QVector<double> xRange{0., 0.};			// x range for correlation
 	};
 	struct CorrelationResult {

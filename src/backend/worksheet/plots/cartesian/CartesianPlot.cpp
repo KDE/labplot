@@ -1532,7 +1532,7 @@ void CartesianPlot::addEquationCurve() {
 void CartesianPlot::addHistogram() {
 	DEBUG(Q_FUNC_INFO << ", TODO: to default coordinate system " << defaultCoordinateSystemIndex())
 	auto* hist{ new Histogram("Histogram") };
-	//hist->setCoordinateSystemIndex(defaultCoordinateSystem());
+	hist->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	DEBUG(Q_FUNC_INFO << ", TODO")
 	addChild(hist);
 }
@@ -1663,16 +1663,19 @@ void CartesianPlot::addFitCurve() {
 		curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Curve);
 		curve->setDataSourceCurve(curCurve);
 
-
 		//set the fit model category and type
 		const auto* action = qobject_cast<const QAction*>(QObject::sender());
-		PlotDataDialog::AnalysisAction type = (PlotDataDialog::AnalysisAction)action->data().toInt();
-		curve->initFitData(type);
+		if (action) {
+			auto type = (PlotDataDialog::AnalysisAction)action->data().toInt();
+			curve->initFitData(type);
+		} else {
+			DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
+		}
 		curve->initStartValues(curCurve);
 
 		//fit with weights for y if the curve has error bars for y
 		if (curCurve->yErrorType() == XYCurve::ErrorType::Symmetric && curCurve->yErrorPlusColumn()) {
-			XYFitCurve::FitData fitData = curve->fitData();
+			auto fitData = curve->fitData();
 			fitData.yWeightsType = nsl_fit_weight_instrumental;
 			curve->setFitData(fitData);
 			curve->setYErrorColumn(curCurve->yErrorPlusColumn());
@@ -2182,8 +2185,11 @@ void CartesianPlot::scaleAutoTriggered() {
 }
 
 bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
-	if (index == -1)
+	if (index == -1) {
+		if (!defaultCoordinateSystem())
+			return false;
 		index = defaultCoordinateSystem()->xIndex();
+	}
 
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " full range = " << fullRange)
 	Q_D(CartesianPlot);
@@ -2241,8 +2247,14 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 		d->curvesXMinMaxIsDirty = false;
 	}
 
-	// if no curve: do not reset to [0, 1] but don't change
+	if (index >= d->xRanges.size()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: index >= x ranges size:  " << index << " >= " <<  d->xRanges.size())
+		return false;
+	}
+
 	auto& xRange{ d->xRanges[index] };
+
+	// if no curve: do not reset to [0, 1] but don't change
 
 	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << "., curves x range = " << d->curvesXRange.toStdString())
 	bool update = false;
@@ -2276,8 +2288,11 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 
 // TODO: copy paste code?
 bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
-	if (index == -1)
+	if (index == -1) {
+		if (!defaultCoordinateSystem())
+			return false;
 		index = defaultCoordinateSystem()->yIndex();
+	}
 
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " full range = " << fullRange)
 	Q_D(CartesianPlot);
@@ -2327,6 +2342,11 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 		d->curvesYMinMaxIsDirty = false;
 	}
 
+	if (index >= d->yRanges.size()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: index >= y ranges size:  " << index << " >= " <<  d->yRanges.size())
+		return false;
+	}
+
 	auto& yRange{ d->yRanges[index] };
 
 	bool update = false;
@@ -2360,10 +2380,16 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 
 // TODO: copy paste code?
 bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
-	if (xIndex == -1)
+	if (xIndex == -1) {
+		if (!defaultCoordinateSystem())
+			return false;
 		xIndex = defaultCoordinateSystem()->xIndex();
-	if (yIndex == -1)
+	}
+	if (yIndex == -1) {
+		if (!defaultCoordinateSystem())
+			return false;
 		yIndex = defaultCoordinateSystem()->yIndex();
+	}
 
 	DEBUG(Q_FUNC_INFO << ", x/y index = " << xIndex << ' ' << yIndex)
 	Q_D(CartesianPlot);
@@ -2457,6 +2483,15 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
 
 	bool updateX = false;
 	bool updateY = false;
+
+	if (xIndex >= d->xRanges.size()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: x index >= x ranges size:  " << xIndex << " >= " <<  d->xRanges.size())
+		return false;
+	}
+	if (yIndex >= d->yRanges.size()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: y index >= y ranges size:  " << yIndex << " >= " <<  d->yRanges.size())
+		return false;
+	}
 
 	auto& xRange{ d->xRanges[xIndex] };
 	auto& yRange{ d->yRanges[yIndex] };

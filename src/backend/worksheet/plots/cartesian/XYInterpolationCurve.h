@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by an interpolation
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -44,7 +44,7 @@ class XYInterpolationCurve : public XYAnalysisCurve {
 public:
 	enum class PointsMode {Auto, Multiple, Custom};
 	struct InterpolationData {
-		InterpolationData() : xRange(2) {};
+		InterpolationData() {};
 
 		nsl_interp_type type{nsl_interp_type_linear};			// type of interpolation
 		nsl_interp_pch_variant variant{nsl_interp_pch_variant_finite_difference};		// variant of cubic Hermite interpolation
@@ -53,7 +53,8 @@ public:
 		size_t npoints{100};						// nr. of points
 		XYInterpolationCurve::PointsMode pointsMode{PointsMode::Auto};	// mode to interpret points
 		bool autoRange{true};						// use all data?
-		QVector<double> xRange;						// x range for interpolation
+		//TODO: use Range
+		QVector<double> xRange{0, 0};					// x range for interpolation
 	};
 	struct InterpolationResult {
 		InterpolationResult() {};

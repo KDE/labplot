@@ -54,7 +54,7 @@
     </widget>
    </item>
    <item row="7" column="0">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="lXRange">
      <property name="text">
       <string>x-Range:</string>
      </property>
@@ -187,7 +187,7 @@
      </property>
     </widget>
    </item>
-   <item row="24" column="0">
+   <item row="27" column="0">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -203,7 +203,7 @@
      </property>
     </spacer>
    </item>
-   <item row="25" column="0">
+   <item row="28" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>Visible</string>
@@ -255,7 +255,7 @@
     </layout>
    </item>
    <item row="14" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="lWindow">
      <property name="text">
       <string>Window:</string>
      </property>
@@ -339,6 +339,16 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="24" column="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
+   </item>
+   <item row="24" column="0" colspan="2">
+    <widget class="QLabel" name="lPlotRange">
+     <property name="text">
+      <string>Plot range:</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

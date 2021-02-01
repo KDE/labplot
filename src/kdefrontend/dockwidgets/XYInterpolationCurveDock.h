@@ -2,7 +2,7 @@
     File             : XYInterpolationCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of interpolation curves
 
  ***************************************************************************/
@@ -46,8 +46,9 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void showInterpolationResult();
 	void updateSettings(const AbstractColumn*);
+	void updatePlotRanges() const override;
+	void showInterpolationResult();
 
 	Ui::XYInterpolationCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve{nullptr};

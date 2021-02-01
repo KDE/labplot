@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by an integration
     --------------------------------------------------------------------
-    Copyright            : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
@@ -42,12 +42,13 @@ class XYIntegrationCurve : public XYAnalysisCurve {
 
 public:
 	struct IntegrationData {
-		IntegrationData() : xRange(2) {};
+		IntegrationData() {};
 
 		nsl_int_method_type method{nsl_int_method_trapezoid};	// method for integration
 		bool absolute{false};		// absolute area?
 		bool autoRange{true};		// use all data?
-		QVector<double> xRange;		// x range for integration
+		//TODO: use Range
+		QVector<double> xRange{0, 0};	// x range for integration
 	};
 	struct IntegrationResult {
 		IntegrationResult() {};

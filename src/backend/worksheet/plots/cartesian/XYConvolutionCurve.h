@@ -53,6 +53,7 @@ public:
 		nsl_conv_norm_type normalize{nsl_conv_norm_none};	// normalization of response
 		nsl_conv_wrap_type wrap{nsl_conv_wrap_none};		// wrap response
 		bool autoRange{true};					// use all data?
+		//TODO: use Range
 		QVector<double> xRange{0., 0.};				// x range for convolution
 	};
 	struct ConvolutionResult {

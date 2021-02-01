@@ -6,11 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>625</width>
-    <height>923</height>
+    <width>435</width>
+    <height>839</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="4" column="2" colspan="3">
+    <widget class="QComboBox" name="cbDataSourceType">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
    <item row="14" column="0" colspan="3">
     <widget class="QLabel" name="lConvolution">
      <property name="font">
@@ -71,19 +81,9 @@
     </widget>
    </item>
    <item row="16" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lNormalize">
      <property name="text">
       <string>Normalize:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2" colspan="3">
-    <widget class="QComboBox" name="cbDataSourceType">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
      </property>
     </widget>
    </item>
@@ -272,7 +272,7 @@
      </property>
     </widget>
    </item>
-   <item row="24" column="2">
+   <item row="25" column="2">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -295,7 +295,7 @@
      </property>
     </widget>
    </item>
-   <item row="25" column="0">
+   <item row="26" column="0">
     <widget class="QCheckBox" name="chkVisible">
      <property name="text">
       <string>Visible</string>
@@ -393,6 +393,16 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="24" column="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
+   </item>
+   <item row="24" column="0">
+    <widget class="QLabel" name="lPlotRange">
+     <property name="text">
+      <string>Plot ranges:</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

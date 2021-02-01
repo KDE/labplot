@@ -2,7 +2,7 @@
     File             : XYIntegrationCurveDock.h
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright        : (C) 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : widget for editing properties of integration curves
 
  ***************************************************************************/
@@ -45,8 +45,9 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void showIntegrationResult();
 	void updateSettings(const AbstractColumn*);
+	void updatePlotRanges() const override;
+	void showIntegrationResult();
 
 	Ui::XYIntegrationCurveDockGeneralTab uiGeneralTab;
 	TreeViewComboBox* cbDataSourceCurve{nullptr};

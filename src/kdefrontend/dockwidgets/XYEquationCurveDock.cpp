@@ -115,28 +115,8 @@ void XYEquationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.teMin, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.teMax, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
 	connect(uiGeneralTab.sbCount, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYEquationCurveDock::enableRecalculate);
-	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::plotRangeChanged );
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYEquationCurveDock::recalculateClicked);
-}
-
-/*!
-  sets the curves. The properties of the curves in the list \c list can be edited in this widget.
-*/
-void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing = true;
-	m_curvesList = list;
-	m_curve = list.first();
-	m_aspect = list.first();
-	m_equationCurve = dynamic_cast<XYEquationCurve*>(m_curve);
-	Q_ASSERT(m_equationCurve);
-	m_aspectTreeModel =  new AspectTreeModel(m_curve->project());
-	XYCurveDock::setModel();
-	initGeneralTab();
-	initTabs();
-	uiGeneralTab.pbRecalculate->setEnabled(false);
-	m_initializing = false;
-
-	updatePlotRanges();
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::plotRangeChanged );
 }
 
 void XYEquationCurveDock::initGeneralTab() {
@@ -179,6 +159,27 @@ void XYEquationCurveDock::initGeneralTab() {
 	connect(m_equationCurve, &XYEquationCurve::equationDataChanged,
 			this, &XYEquationCurveDock::curveEquationDataChanged);
 	connect(m_equationCurve, &WorksheetElement::plotRangeListChanged, this, &XYEquationCurveDock::updatePlotRanges);
+}
+
+/*!
+  sets the curves. The properties of the curves in the list \c list can be edited in this widget.
+*/
+void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
+	m_initializing = true;
+	m_curvesList = list;
+	m_curve = list.first();
+	m_aspect = list.first();
+	m_equationCurve = dynamic_cast<XYEquationCurve*>(m_curve);
+	Q_ASSERT(m_equationCurve);
+	m_aspectTreeModel =  new AspectTreeModel(m_curve->project());
+	XYCurveDock::setModel();
+	initGeneralTab();
+	initTabs();
+	uiGeneralTab.pbRecalculate->setEnabled(false);
+
+	updatePlotRanges();
+
+	m_initializing = false;
 }
 
 void XYEquationCurveDock::updatePlotRanges() const {
