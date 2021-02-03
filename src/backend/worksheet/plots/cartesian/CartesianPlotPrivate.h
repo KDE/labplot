@@ -77,10 +77,28 @@ public:
 		return yRanges[defaultCoordinateSystem()->yIndex()];
 	}
 	Range<double> xPrevRange{}, yPrevRange{};
-	bool autoScaleX() { return xRanges.at(defaultCoordinateSystem()->xIndex()).autoScale(); }
-	bool autoScaleY() { return yRanges.at(defaultCoordinateSystem()->yIndex()).autoScale(); }
-	void setAutoScaleX(bool b) { xRanges[defaultCoordinateSystem()->xIndex()].setAutoScale(b); }
-	void setAutoScaleY(bool b) { yRanges[defaultCoordinateSystem()->yIndex()].setAutoScale(b); }
+
+	bool autoScaleX(int index = -1) {
+		if (index == -1)
+			index = defaultCoordinateSystem()->xIndex();
+		return xRanges.at(index).autoScale();
+	}
+	bool autoScaleY(int index = -1) {
+		if (index == -1)
+			index = defaultCoordinateSystem()->yIndex();
+		return yRanges.at(index).autoScale();
+	}
+	void setAutoScaleX(int index = -1, bool b = true) {
+		if (index == -1)
+			index = defaultCoordinateSystem()->xIndex();
+		xRanges[index].setAutoScale(b);
+	}
+	void setAutoScaleY(int index = -1, bool b = true) {
+		if (index == -1)
+			index = defaultCoordinateSystem()->yIndex();
+		yRanges[index].setAutoScale(b);
+	}
+
 	//the following factor determines the size of the offset between the min/max points of the curves
 	//and the coordinate system ranges, when doing auto scaling
 	//Factor 0 corresponds to the exact match - min/max values of the curves correspond to the start/end values of the ranges.

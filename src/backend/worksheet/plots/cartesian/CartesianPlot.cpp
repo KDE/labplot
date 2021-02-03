@@ -750,8 +750,8 @@ void CartesianPlot::navigate(NavigationOperation op) {
 			d->curvesYMinMaxIsDirty = true;
 		}
 		scaleAuto();
-	} else if (op == NavigationOperation::ScaleAutoX) setAutoScaleX(true);
-	else if (op == NavigationOperation::ScaleAutoY) setAutoScaleY(true);
+	} else if (op == NavigationOperation::ScaleAutoX) setAutoScaleX();
+	else if (op == NavigationOperation::ScaleAutoY) setAutoScaleY();
 	else if (op == NavigationOperation::ZoomIn) zoomIn();
 	else if (op == NavigationOperation::ZoomOut) zoomOut();
 	else if (op == NavigationOperation::ZoomInX) zoomInX();
@@ -1015,98 +1015,107 @@ void CartesianPlot::setYRangeFormat(const int index, const RangeT::Format format
 	}
 }
 
-class CartesianPlotSetAutoScaleXCmd : public QUndoCommand {
+// auto scale
+
+bool CartesianPlot::autoScaleX(int index) const {
+	Q_D(const CartesianPlot);
+	if (index == -1)
+		index = defaultCoordinateSystem()->xIndex();
+	return d->xRanges.at(index).autoScale();
+}
+bool CartesianPlot::autoScaleY(int index) const {
+	Q_D(const CartesianPlot);
+	if (index == -1)
+		index = defaultCoordinateSystem()->yIndex();
+	return d->yRanges.at(index).autoScale();
+}
+
+class CartesianPlotSetAutoScaleXIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotSetAutoScaleXCmd(CartesianPlotPrivate* private_obj, bool autoScale) :
-		m_private(private_obj), m_autoScale(autoScale), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
-		setText(i18n("%1: change x-range auto scaling", m_private->name()));
+	CartesianPlotSetAutoScaleXIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index) :
+		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
+		setText(i18n("%1: change x-range %2 auto scaling", m_private->name(), index + 1));
 	}
 
 	void redo() override {
-		m_autoScaleOld = m_private->autoScaleX();
+		m_autoScaleOld = m_private->autoScaleX(m_index);
 		if (m_autoScale) {
-			m_oldRange = m_private->xRange();
-			m_private->q->scaleAutoX();
+			m_oldRange = m_private->yRanges.at(m_index);
+			m_private->q->scaleAutoX(m_index);
 		}
-		m_private->setAutoScaleX(m_autoScale);
+		m_private->setAutoScaleX(m_index, m_autoScale);
 		emit m_private->q->xAutoScaleChanged(m_autoScale);
 	}
 
 	void undo() override {
 		if (!m_autoScaleOld) {
-			m_private->xRange() = m_oldRange;
+			m_private->xRanges[m_index] = m_oldRange;
 			m_private->retransformScales();
 		}
-		m_private->setAutoScaleX(m_autoScaleOld);
+		m_private->setAutoScaleX(m_index, m_autoScaleOld);
 		emit m_private->q->xAutoScaleChanged(m_autoScaleOld);
 	}
 
 private:
 	CartesianPlotPrivate* m_private;
 	bool m_autoScale;
+	int m_index;
 	bool m_autoScaleOld;
 	Range<double> m_oldRange;
 };
-class CartesianPlotSetAutoScaleYCmd : public QUndoCommand {
+class CartesianPlotSetAutoScaleYIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotSetAutoScaleYCmd(CartesianPlotPrivate* private_obj, bool autoScale) :
-		m_private(private_obj), m_autoScale(autoScale), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
-		setText(i18n("%1: change y-range auto scaling", m_private->name()));
+	CartesianPlotSetAutoScaleYIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index) :
+		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
+		setText(i18n("%1: change y-range %2 auto scaling", m_private->name(), index + 1));
 	}
 
 	void redo() override {
-		m_autoScaleOld = m_private->autoScaleY();
+		m_autoScaleOld = m_private->autoScaleY(m_index);
 		if (m_autoScale) {
-			m_oldRange = m_private->yRange();
-			m_private->q->scaleAutoY();
+			m_oldRange = m_private->yRanges.at(m_index);
+			m_private->q->scaleAutoY(m_index);
 		}
-		m_private->setAutoScaleY(m_autoScale);
+		m_private->setAutoScaleY(m_index, m_autoScale);
 		emit m_private->q->yAutoScaleChanged(m_autoScale);
 	}
 
 	void undo() override {
 		if (!m_autoScaleOld) {
-			m_private->yRange() = m_oldRange;
+			m_private->yRanges[m_index] = m_oldRange;
 			m_private->retransformScales();
 		}
-		m_private->setAutoScaleY(m_autoScaleOld);
+		m_private->setAutoScaleY(m_index, m_autoScaleOld);
 		emit m_private->q->yAutoScaleChanged(m_autoScaleOld);
 	}
 
 private:
 	CartesianPlotPrivate* m_private;
 	bool m_autoScale;
+	int m_index;
 	bool m_autoScaleOld;
 	Range<double> m_oldRange;
 };
 
-// auto scales x range of default plot range
-void CartesianPlot::setAutoScaleX(bool autoScaleX) {
-	Q_D(CartesianPlot);
-	if (autoScaleX != d->autoScaleX())
-		exec(new CartesianPlotSetAutoScaleXCmd(d, autoScaleX));
-}
-// auto scale y range of default plot range
-void CartesianPlot::setAutoScaleY(bool autoScaleY) {
-	Q_D(CartesianPlot);
-	if (autoScaleY != d->autoScaleY())
-		exec(new CartesianPlotSetAutoScaleYCmd(d, autoScaleY));
-}
 // auto scales x range index
-//TODO: undo aware CartesianPlotSetAutoScaleXIndexCmd
-void CartesianPlot::setAutoScaleX(const int index, bool autoScaleX) {
+void CartesianPlot::setAutoScaleX(int index, const bool autoScaleX) {
+	if (index == -1)
+		index = defaultCoordinateSystem()->xIndex();
 	Q_D(CartesianPlot);
 	if (autoScaleX != xRange(index).autoScale()) {
 		d->xRanges[index].setAutoScale(autoScaleX);
+		exec(new CartesianPlotSetAutoScaleYIndexCmd(d, autoScaleX, index));
 		if (project())
 			project()->setChanged(true);
 	}
 }
-//TODO: undo aware CartesianPlotSetAutoScaleYIndexCmd
-void CartesianPlot::setAutoScaleY(const int index, bool autoScaleY) {
+void CartesianPlot::setAutoScaleY(int index, const bool autoScaleY) {
+	if (index == -1)
+		index = defaultCoordinateSystem()->yIndex();
 	Q_D(CartesianPlot);
 	if (autoScaleY != yRange(index).autoScale()) {
 		d->yRanges[index].setAutoScale(autoScaleY);
+		exec(new CartesianPlotSetAutoScaleYIndexCmd(d, autoScaleY, index));
 		if (project())
 			project()->setChanged(true);
 	}
@@ -1128,14 +1137,6 @@ class CartesianPlotSetYRangeIndexCmd: public StandardQVectorSetterCmd<CartesianP
 		virtual void finalize() override { m_target->retransformScales(); emit m_target->q->yRangeChanged((m_target->*m_field).at(m_index)); }
 };
 
-bool CartesianPlot::autoScaleX() const {
-	Q_D(const CartesianPlot);
-	return d->xRanges.at(defaultCoordinateSystem()->xIndex()).autoScale();
-}
-bool CartesianPlot::autoScaleY() const {
-	Q_D(const CartesianPlot);
-	return d->yRanges.at(defaultCoordinateSystem()->yIndex()).autoScale();
-}
 
 int CartesianPlot::xRangeCount() const {
 	Q_D(const CartesianPlot);
@@ -1923,6 +1924,7 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 }
 
 void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
+	DEBUG(Q_FUNC_INFO)
 	Q_UNUSED(parent);
 	Q_UNUSED(before);
 	if (m_legend == child) {
@@ -1930,10 +1932,13 @@ void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAsp
 			addLegendAction->setEnabled(true);
 		m_legend = nullptr;
 	} else {
+		DEBUG(Q_FUNC_INFO << ", not a legend")
 		const auto* curve = qobject_cast<const XYCurve*>(child);
 		if (curve) {
+			DEBUG(Q_FUNC_INFO << ", a curve")
 			updateLegend();
 			emit curveRemoved(curve);
+			autoScale(true, curve->coordinateSystemIndex());	// update all plot ranges
 		}
 	}
 }
@@ -1962,15 +1967,19 @@ void CartesianPlot::updateLegend() {
 		m_legend->retransform();
 }
 
-bool CartesianPlot::autoScale(bool fullRange) {
+bool CartesianPlot::autoScale(int cSystemIndex, bool fullRange) {
+	DEBUG(Q_FUNC_INFO << ", full range = " << fullRange)
 	bool updated{ false };
 
-	if (autoScaleX() && autoScaleY())
-		updated = scaleAuto();
-	else if (autoScaleX())
-		updated = scaleAutoX(fullRange);
-	else if (autoScaleY())
-		updated = scaleAutoY(fullRange);
+	int xIndex{ coordinateSystem(cSystemIndex)->xIndex() };
+	int yIndex{ coordinateSystem(cSystemIndex)->yIndex() };
+	DEBUG(Q_FUNC_INFO << ", auto scale x/y = " << autoScaleX(xIndex) << "/" << autoScaleY(yIndex))
+	if (autoScaleX(xIndex) && autoScaleY(yIndex))
+		updated = scaleAuto(xIndex, yIndex, fullRange);
+	else if (autoScaleX(xIndex))
+		updated = scaleAutoX(xIndex, fullRange);
+	else if (autoScaleY(yIndex))
+		updated = scaleAutoY(yIndex, fullRange);
 
 	return updated;
 }
@@ -2179,9 +2188,9 @@ void CartesianPlot::scaleAutoTriggered() {
 	if (action == scaleAutoAction)
 		scaleAuto();
 	else if (action == scaleAutoXAction)
-		setAutoScaleX(true);
+		setAutoScaleX();
 	else if (action == scaleAutoYAction)
-		setAutoScaleY(true);
+		setAutoScaleY();
 }
 
 bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
@@ -2189,6 +2198,7 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 		if (!defaultCoordinateSystem())
 			return false;
 		index = defaultCoordinateSystem()->xIndex();
+		DEBUG(Q_FUNC_INFO << ", set index")
 	}
 
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " full range = " << fullRange)

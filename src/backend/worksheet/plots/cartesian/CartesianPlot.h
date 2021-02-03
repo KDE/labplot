@@ -137,10 +137,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
-	BASIC_D_ACCESSOR_DECL(bool, autoScaleX, AutoScaleX)	// auto scale x range of default csystem
-	void setAutoScaleX(int index, bool);	// auto scale x axis index
-	BASIC_D_ACCESSOR_DECL(bool, autoScaleY, AutoScaleY)	// auto scale y range of default csystem
-	void setAutoScaleY(int index, bool);	// auto scale y axis index
+	bool autoScaleX(int index = -1) const;	// is x range index auto scaled?
+	void setAutoScaleX(int index = -1, bool = true);	// auto scale x range index
+	bool autoScaleY(int index = -1) const;	// is y range index auto scaled?
+	void setAutoScaleY(int index = -1, bool = true);	// auto scale y range index
 
 	int xRangeCount() const;
 	int yRangeCount() const;
@@ -322,7 +322,7 @@ public slots:
 
 	void cursor();
 
-	bool autoScale(bool fullRange = true);
+	bool autoScale(int cSystemIndex = -1, bool fullRange = true);
 	void dataChanged();
 
 private slots:
