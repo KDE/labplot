@@ -77,7 +77,7 @@ void BoxPlot::init() {
 	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::MinMax);
 
 	//box filling
-	d->fillingEnabled = group.readEntry("FillingEnabled", true);
+	d->fillingEnabled = group.readEntry("FillingEnabled", false);
 	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color));
 	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor));
 	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled));
@@ -196,7 +196,7 @@ void BoxPlot::handleResize(double horizontalRatio, double verticalRatio, bool pa
 
 /* ============================ getter methods ================= */
 //general
-BASIC_SHARED_D_READER_IMPL(BoxPlot, const AbstractColumn*, dataColumn, dataColumn)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<AbstractColumn*>, dataColumns, dataColumns)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
 
 //box
@@ -233,8 +233,8 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersOpacity, whiskersOpacity)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersCapSize, whiskersCapSize)
 
-QString& BoxPlot::dataColumnPath() const {
-	return d_ptr->dataColumnPath;
+QVector<QString>& BoxPlot::dataColumnPaths() const {
+	return d_ptr->dataColumnPaths;
 }
 
 double BoxPlot::xMinimum() const {
@@ -256,13 +256,16 @@ double BoxPlot::yMaximum() const {
 /* ============================ setter methods and undo commands ================= */
 
 //General
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetDataColumn, const AbstractColumn*, dataColumn, recalc)
-void BoxPlot::setDataColumn(const AbstractColumn* column) {
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetDataColumns, QVector<AbstractColumn*>, dataColumns, recalc)
+void BoxPlot::setDataColumns(const QVector<AbstractColumn*>& columns) {
 	Q_D(BoxPlot);
-	if (column != d->dataColumn) {
-		exec(new BoxPlotSetDataColumnCmd(d, column, ki18n("%1: set data column")));
+	if (columns != d->dataColumns) {
+		exec(new BoxPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
 
-		if (column) {
+		for (auto * column : columns) {
+			if (!column)
+				continue;
+
 			connect(column, &AbstractColumn::dataChanged, this, &BoxPlot::dataChanged);
 
 			//update the curve itself on changes
@@ -464,9 +467,12 @@ void BoxPlot::setWhiskersCapSize(double size) {
 
 void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(BoxPlot);
-	if (aspect == d->dataColumn) {
-		d->dataColumn = nullptr;
-		d->retransform();
+	for (int i = 0; i < d->dataColumns.size(); ++i) {
+		if (aspect == d->dataColumns.at(i)) {
+			d->dataColumns.remove(i);
+			d->recalc();
+			break;
+		}
 	}
 }
 
@@ -505,27 +511,74 @@ void BoxPlotPrivate::retransform() {
 
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::retransform()");
 
-	m_boxRect = QRectF();
-	m_medianLine = QLineF();
-	m_whiskersPath = QPainterPath();
-	m_outliersCount = 0;
-	m_outliersSymbolPoints.clear();
+	const int count = dataColumns.size();
+	for (int i = 0; i < count; ++i) {
+		m_boxRect[i] = QRectF();
+		m_medianLine[i] = QLineF();
+		m_whiskersPath[i] = QPainterPath();
+		m_outliersCount[i] = 0;
+		m_outliersSymbolPoints[i].clear();
+	}
 
-	if (dataColumn) {
-		if (orientation == BoxPlot::Orientation::Vertical)
-			verticalBoxPlot();
-		else
-			horizontalBoxPlot();
+	if (count) {
+		if (orientation == BoxPlot::Orientation::Vertical) {
+			for (int i = 0; i < count; ++i)
+				verticalBoxPlot(i);
+		} else {
+			for (int i = 0; i < count; ++i)
+				horizontalBoxPlot(i);
+		}
 	}
 
 	recalcShapeAndBoundingRect();
 }
 
 void BoxPlotPrivate::recalc() {
-	if (orientation == BoxPlot::Orientation::Vertical)
-		recalcVertical();
-	else
-		recalcHorizontal();
+	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalcVertical()");
+
+	//resize the internal containers
+	const int count = dataColumns.size();
+	m_boxRect.resize(count);
+	m_xMinBox.resize(count);
+	m_xMaxBox.resize(count);
+	m_yMinBox.resize(count);
+	m_yMaxBox.resize(count);
+	m_median.resize(count);
+	m_medianLine.resize(count);
+	m_whiskersPath.resize(count);
+	m_whiskerMin.resize(count);
+	m_whiskerMax.resize(count);
+	m_outlierMax.resize(count);
+	m_outlierMin.resize(count);;
+	m_outliersSymbolPointsLogical.resize(count);
+	m_outliersSymbolPoints.resize(count);
+	m_outliersCount.resize(count);
+	m_meanSymbolPoint.resize(count);
+
+	if (orientation == BoxPlot::Orientation::Vertical) {
+		for (int i = 0; i < count; ++i)
+			recalcVertical(i);
+	} else {
+		for (int i = 0; i < count; ++i)
+			recalcHorizontal(i);
+	}
+
+	//calculate the new min and max values of the box plot
+	//for the current sizes of the box and of the whiskers
+	m_yMin = INFINITY;
+	m_yMax = -INFINITY;
+	if (orientation == BoxPlot::Orientation::Vertical) {
+		m_xMin = 0.0;
+		m_xMax = count;
+
+		for (int i = 0; i < count; ++i) {
+			if (m_outlierMax.at(i) > m_yMax)
+				m_yMax = m_outlierMax.at(i);
+
+			if (m_outlierMin.at(i) < m_yMin)
+				m_yMin = m_outlierMin.at(i);
+		}
+	}
 
 	//the size of the boxplot changed because of the actual
 	//data changes or because of new boxplot settings.
@@ -538,46 +591,49 @@ void BoxPlotPrivate::recalc() {
 //	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 //	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->defaultCoordinateSystem());
 //	QVector<QLineF> lines;
-void BoxPlotPrivate::recalcVertical() {
-	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalcVertical()");
+//void BoxPlotPrivate::recalcVertical() {
+//	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalcVertical()");
 
-	const auto& statistics = static_cast<const Column*>(dataColumn)->statistics();
-	const double x = 1.0;
+//	const auto& statistics = static_cast<const Column*>(dataColumn)->statistics();
+//	const double x = 1.0;
+void BoxPlotPrivate::recalcVertical(int index) {
+	const auto& statistics = static_cast<const Column*>(dataColumns.at(index))->statistics();
+	const double x = index + 0.5;
 	const double width = 0.5;
 
 	//box
-	m_xMinBox = x - width/2;
-	m_xMaxBox = x + width/2;
-	m_yMinBox = statistics.firstQuartile;
-	m_yMaxBox = statistics.thirdQuartile;
-	m_median = statistics.median;
+	m_xMinBox[index] = x - width/2;
+	m_xMaxBox[index] = x + width/2;
+	m_yMinBox[index] = statistics.firstQuartile;
+	m_yMaxBox[index] = statistics.thirdQuartile;
+	m_median[index] = statistics.median;
 
 	//whiskers
-	m_whiskerMin = 0.;
-	m_whiskerMax = 0.;
 	switch (whiskersType) {
 	case BoxPlot::WhiskersType::MinMax: {
-		m_whiskerMax = statistics.maximum;
-		m_whiskerMin = statistics.minimum;
+		m_whiskerMax[index] = statistics.maximum;
+		m_whiskerMin[index] = statistics.minimum;
 		break;
 	}
 	case BoxPlot::WhiskersType::IQR: {
-		m_whiskerMax = m_yMaxBox + 1.5*statistics.iqr;
-		m_whiskerMin = m_yMinBox - 1.5*statistics.iqr;
+		m_whiskerMax[index] = m_yMaxBox.at(index) + 1.5*statistics.iqr;
+		m_whiskerMin[index] = m_yMinBox.at(index) - 1.5*statistics.iqr;
 		break;
 	}
 	case BoxPlot::WhiskersType::STDDEV: {
-		m_whiskerMax = m_yMaxBox + statistics.standardDeviation;
-		m_whiskerMin = m_yMinBox - statistics.standardDeviation;
+		m_whiskerMax[index] = m_yMaxBox.at(index) + statistics.standardDeviation;
+		m_whiskerMin[index] = m_yMinBox.at(index) - statistics.standardDeviation;
 		break;
 	}
 	}
 
 	//outliers symbols
-	m_outliersCount = 0;
-	double outlierMax = m_whiskerMax;
-	double outlierMin = m_whiskerMin;
-	m_outliersSymbolPointsLogical.clear();
+	m_outliersCount[index] = 0;
+	m_outlierMax[index] = m_whiskerMax.at(index);
+	m_outlierMin[index] = m_whiskerMin.at(index);
+	m_outliersSymbolPointsLogical[index].clear();
+
+	auto* dataColumn = dataColumns.at(index);
 	switch (dataColumn->columnMode()) {
 	case AbstractColumn::ColumnMode::Numeric:
 	case AbstractColumn::ColumnMode::Integer:
@@ -585,15 +641,15 @@ void BoxPlotPrivate::recalcVertical() {
 		for (int row = 0; row < dataColumn->rowCount(); ++row) {
 			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) ) {
 				const double value = dataColumn->valueAt(row);
-				if (value > m_whiskerMax || value < m_whiskerMin) {
-					const QPoint point(x, value);
-					++m_outliersCount;
-					if (m_outliersSymbolPointsLogical.indexOf(point) == -1) {
-						m_outliersSymbolPointsLogical << point;
-						if (value > outlierMax)
-							outlierMax = value;
-						else if (value < outlierMin)
-							outlierMin = value;
+				if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
+					const QPointF point(x, value);
+					++m_outliersCount[index];
+					if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1) {
+						m_outliersSymbolPointsLogical[index] << point;
+						if (value > m_outlierMax.at(index))
+							m_outlierMax[index] = value;
+						else if (value < m_outlierMin.at(index))
+							m_outlierMin[index] = value;
 					}
 				}
 			}
@@ -603,91 +659,85 @@ void BoxPlotPrivate::recalcVertical() {
 		for (int row = 0; row < dataColumn->rowCount(); ++row) {
 			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) ){
 				const double value = dataColumn->dateTimeAt(row).toMSecsSinceEpoch();
-				if (value > m_whiskerMax || value < m_whiskerMin) {
-					const QPoint point(x, value);
-					++m_outliersCount;
-					if (m_outliersSymbolPointsLogical.indexOf(point) == -1) {
-						m_outliersSymbolPointsLogical << point;
-						if (value > outlierMax)
-							outlierMax = value;
-						else if (value < outlierMin)
-							outlierMin = value;
+				if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
+					const QPointF point(x, value);
+					++m_outliersCount[index];
+					if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1) {
+						m_outliersSymbolPointsLogical[index] << point;
+						if (value > m_outlierMax.at(index))
+							m_outlierMax[index] = value;
+						else if (value < m_outlierMin.at(index))
+							m_outlierMin[index] = value;
 					}
 				}
 			}
-	}
+		}
 		break;
 	case AbstractColumn::ColumnMode::Text:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
 		break;
 	}
-
-	//calculate the new min and max values of the box plot
-	//for the current sizes of the box and of the whiskers
-	m_xMin = m_xMinBox - 0.25;
-	m_xMax = m_xMaxBox + 0.25;
-	m_yMin = outlierMin;
-	m_yMax = outlierMax;
 }
 
-void BoxPlotPrivate::verticalBoxPlot() {
+void BoxPlotPrivate::verticalBoxPlot(int index) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::verticalBoxPlot()");
 
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->defaultCoordinateSystem());
 	QVector<QLineF> lines;
 
-	const double x = 1.0;
+	const double x = index + 0.5;
 
 	//calculate the size and the position of the box
 	//map the box to scene coordinates
-	QPointF topLeft = QPointF(m_xMinBox, m_yMaxBox);
-	QPointF bottomRight = QPointF(m_xMaxBox, m_yMinBox);
+	QPointF topLeft = QPointF(m_xMinBox.at(index), m_yMaxBox.at(index));
+	QPointF bottomRight = QPointF(m_xMaxBox.at(index), m_yMinBox.at(index));
 	topLeft = cSystem->mapLogicalToScene(topLeft);
 	bottomRight = cSystem->mapLogicalToScene(bottomRight);
-	m_boxRect = QRectF(topLeft, bottomRight);
+	m_boxRect[index] = QRectF(topLeft, bottomRight);
 
 	//median line
-	m_medianLine = QLineF();
-	lines << QLineF(m_xMinBox, m_median, m_xMaxBox, m_median);
+	m_medianLine[index] = QLineF();
+	lines << QLineF(m_xMinBox.at(index), m_median.at(index), m_xMaxBox.at(index), m_median.at(index));
 	lines = cSystem->mapLogicalToScene(lines);
 	if (!lines.isEmpty())
-		m_medianLine = lines.first();
+		m_medianLine[index] = lines.first();
 
 	//calculate the size and the position for the whiskers
 	lines.clear();
-	lines << QLineF(x, m_yMaxBox, x, m_whiskerMax); //upper whisker
-	lines << QLineF(x, m_yMinBox, x, m_whiskerMin); //lower whisker
+	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); //upper whisker
+	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); //lower whisker
 	lines = cSystem->mapLogicalToScene(lines);
-	m_whiskersPath = QPainterPath();
+	m_whiskersPath[index] = QPainterPath();
 	for (const auto& line : qAsConst(lines)) {
-		m_whiskersPath.moveTo(line.p1());
-		m_whiskersPath.lineTo(line.p2());
+		m_whiskersPath[index].moveTo(line.p1());
+		m_whiskersPath[index].lineTo(line.p2());
 	}
 
 	//add caps
-	QPointF maxPoint = cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax));
-	QPointF minPoint = cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin));
-	m_whiskersPath.moveTo(QPointF(maxPoint.x() - whiskersCapSize/2., maxPoint.y()));
-	m_whiskersPath.lineTo(QPointF(maxPoint.x() + whiskersCapSize/2., maxPoint.y()));
+	QPointF maxPoint = cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax.at(index)));
+	QPointF minPoint = cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)));
+	m_whiskersPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize/2., maxPoint.y()));
+	m_whiskersPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize/2., maxPoint.y()));
 
-	m_whiskersPath.moveTo(QPointF(minPoint.x() - whiskersCapSize/2., minPoint.y()));
-	m_whiskersPath.lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
+	m_whiskersPath[index].moveTo(QPointF(minPoint.x() - whiskersCapSize/2., minPoint.y()));
+	m_whiskersPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
 
 	//outliers symbols
-	if (!m_outliersSymbolPointsLogical.isEmpty())
-		m_outliersSymbolPoints = cSystem->mapLogicalToScene(m_outliersSymbolPointsLogical);
+	if (!m_outliersSymbolPointsLogical[index].isEmpty())
+		m_outliersSymbolPoints[index] = cSystem->mapLogicalToScene(m_outliersSymbolPointsLogical.at(index));
 
 	//mean symbol
-	m_meanSymbolPoint = cSystem->mapLogicalToScene(QPointF(x, m_median));
+	m_meanSymbolPoint[index] = cSystem->mapLogicalToScene(QPointF(x, m_median.at(index)));
 }
 
-void BoxPlotPrivate::recalcHorizontal() {
-
+void BoxPlotPrivate::recalcHorizontal(int index) {
+	Q_UNUSED(index)
 }
-void BoxPlotPrivate::horizontalBoxPlot() {
 
+void BoxPlotPrivate::horizontalBoxPlot(int index) {
+	Q_UNUSED(index)
 }
 
 bool BoxPlotPrivate::swapVisible(bool on) {
@@ -727,32 +777,34 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	m_boxPlotShape = QPainterPath();
 
-	QPainterPath boxPath;
-	boxPath.addRect(m_boxRect);
-	m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, whiskersPen));
-	m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath, whiskersPen));
+	for (int i = 0; i < dataColumns.size(); ++i) {
+		QPainterPath boxPath;
+		boxPath.addRect(m_boxRect.at(i));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, whiskersPen));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersPen));
 
-	if (symbolOutliersStyle != Symbol::Style::NoSymbols) {
-		QPainterPath symbolsPath = QPainterPath();
-		QPainterPath path = Symbol::pathFromStyle(symbolOutliersStyle);
+		if (symbolOutliersStyle != Symbol::Style::NoSymbols) {
+			QPainterPath symbolsPath = QPainterPath();
+			QPainterPath path = Symbol::pathFromStyle(symbolOutliersStyle);
 
-		QTransform trafo;
-		trafo.scale(symbolsSize, symbolsSize);
-		path = trafo.map(path);
-		trafo.reset();
-
-		if (symbolsRotationAngle != 0) {
-			trafo.rotate(symbolsRotationAngle);
+			QTransform trafo;
+			trafo.scale(symbolsSize, symbolsSize);
 			path = trafo.map(path);
-		}
-
-		for (const auto& point : qAsConst(m_outliersSymbolPoints)) {
 			trafo.reset();
-			trafo.translate(point.x(), point.y());
-			symbolsPath.addPath(trafo.map(path));
-		}
 
-		m_boxPlotShape.addPath(symbolsPath);
+			if (symbolsRotationAngle != 0) {
+				trafo.rotate(symbolsRotationAngle);
+				path = trafo.map(path);
+			}
+
+			for (const auto& point : qAsConst(m_outliersSymbolPoints.at(i))) {
+				trafo.reset();
+				trafo.translate(point.x(), point.y());
+				symbolsPath.addPath(trafo.map(path));
+			}
+
+			m_boxPlotShape.addPath(symbolsPath);
+		}
 	}
 
 	m_boundingRectangle = m_boxPlotShape.boundingRect();
@@ -800,47 +852,49 @@ void BoxPlotPrivate::updatePixmap() {
 void BoxPlotPrivate::draw(QPainter* painter) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::draw()");
 
-	//draw the box filling
-	if (fillingEnabled) {
-		painter->setOpacity(fillingOpacity);
-		painter->setPen(Qt::SolidLine);
-		drawFilling(painter);
-	}
+	for (int i = 0; i < dataColumns.size(); ++i) {
+		//draw the box filling
+		if (fillingEnabled) {
+			painter->setOpacity(fillingOpacity);
+			painter->setPen(Qt::SolidLine);
+			drawFilling(painter, i);
+		}
 
-	//draw the border
-	if (borderPen.style() != Qt::NoPen) {
-		painter->setPen(borderPen);
-		painter->setBrush(Qt::NoBrush);
-		painter->setOpacity(borderOpacity);
-		painter->drawRect(m_boxRect);
-	}
+		//draw the border
+		if (borderPen.style() != Qt::NoPen) {
+			painter->setPen(borderPen);
+			painter->setBrush(Qt::NoBrush);
+			painter->setOpacity(borderOpacity);
+			painter->drawRect(m_boxRect.at(i));
+		}
 
-	//draw the median line
-	if (medianLinePen.style() != Qt::NoPen) {
-		painter->setPen(medianLinePen);
-		painter->setBrush(Qt::NoBrush);
-		painter->setOpacity(medianLineOpacity);
-		painter->drawLine(m_medianLine);
-	}
+		//draw the median line
+		if (medianLinePen.style() != Qt::NoPen) {
+			painter->setPen(medianLinePen);
+			painter->setBrush(Qt::NoBrush);
+			painter->setOpacity(medianLineOpacity);
+			painter->drawLine(m_medianLine.at(i));
+		}
 
-	//draw the whiskers
-	if (whiskersPen.style() != Qt::NoPen) {
-		painter->setPen(whiskersPen);
-		painter->setBrush(Qt::NoBrush);
-		painter->setOpacity(whiskersOpacity);
-		painter->drawPath(m_whiskersPath);
-	}
+		//draw the whiskers
+		if (whiskersPen.style() != Qt::NoPen) {
+			painter->setPen(whiskersPen);
+			painter->setBrush(Qt::NoBrush);
+			painter->setOpacity(whiskersOpacity);
+			painter->drawPath(m_whiskersPath.at(i));
+		}
 
-	//draw the symbols for the outliers and for the mean
-	if (symbolOutliersStyle != Symbol::Style::NoSymbols || symbolMeanStyle != Symbol::Style::NoSymbols) {
-		painter->setOpacity(symbolsOpacity);
-		painter->setPen(symbolsPen);
-		painter->setBrush(symbolsBrush);
-		drawSymbols(painter);
+		//draw the symbols for the outliers and for the mean
+		if (symbolOutliersStyle != Symbol::Style::NoSymbols || symbolMeanStyle != Symbol::Style::NoSymbols) {
+			painter->setOpacity(symbolsOpacity);
+			painter->setPen(symbolsPen);
+			painter->setBrush(symbolsBrush);
+			drawSymbols(painter, i);
+		}
 	}
 }
 
-void BoxPlotPrivate::drawSymbols(QPainter* painter) {
+void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 	//outliers
 	QPainterPath path = Symbol::pathFromStyle(symbolOutliersStyle);
 
@@ -852,7 +906,8 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter) {
 		trafo.rotate(-symbolsRotationAngle);
 		path = trafo.map(path);
 	}
-	for (const auto& point : qAsConst(m_outliersSymbolPoints)) {
+
+	for (const auto& point : qAsConst(m_outliersSymbolPoints[index])) {
 		trafo.reset();
 		trafo.translate(point.x(), point.y());
 		painter->drawPath(trafo.map(path));
@@ -861,13 +916,13 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter) {
 	//mean
 	path = Symbol::pathFromStyle(symbolMeanStyle);
 	trafo.reset();
-	trafo.translate(m_meanSymbolPoint.x(), m_meanSymbolPoint.y());
+	trafo.translate(m_meanSymbolPoint[index].x(), m_meanSymbolPoint[index].y());
 	painter->drawPath(trafo.map(path));
 }
 
-void BoxPlotPrivate::drawFilling(QPainter* painter) {
+void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::drawFilling()");
-	const QRectF& rect = m_boxRect;
+	const QRectF& rect = m_boxRect[index];
 	if (fillingType == PlotArea::BackgroundType::Color) {
 		switch (fillingColorStyle) {
 		case PlotArea::BackgroundColorStyle::SingleColor: {
@@ -1035,7 +1090,11 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement("general");
-	WRITE_COLUMN(d->dataColumn, dataColumn);
+	for (auto* column : d->dataColumns) {
+		writer->writeStartElement("column");
+		writer->writeAttribute("path", column->path());
+		writer->writeEndElement();
+	}
 	writer->writeEndElement();
 
 	//box filling
@@ -1113,7 +1172,13 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
-			READ_COLUMN(dataColumn);
+		} else if (reader->name() == "column") {
+			attribs = reader->attributes();
+
+			str = attribs.value("path").toString();
+			if (!str.isEmpty())
+				d->dataColumnPaths << str;
+// 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == "filling") {
 			attribs = reader->attributes();
 
@@ -1211,7 +1276,6 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group("BoxPlot");
 
-
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	QColor themeColor;
@@ -1247,6 +1311,8 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	setMedianLineOpacity(group.readEntry("LineOpacity", 1.0));
 
 	//symbols for the mean and for the outliers
+	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", themeColor) );
+	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", themeColor) );
 
 	//whiskers
 	setWhiskersPen(p);

@@ -648,7 +648,26 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 	for (auto* boxPlot : boxPlots) {
 		if (!boxPlot) continue;
-		RESTORE_COLUMN_POINTER(boxPlot, dataColumn, DataColumn);
+
+		//initialize the array for the column pointers
+		int count = boxPlot->dataColumnPaths().count();
+		QVector<AbstractColumn*> dataColumns;
+		dataColumns.resize(count);
+
+		//restore the pointers
+		for (int i = 0; i < count; ++i) {
+			dataColumns[i] = nullptr;
+			const auto& path = boxPlot->dataColumnPaths().at(i);
+			for (Column* column : columns) {
+				if (!column) continue;
+				if (column->path() == path) {
+					dataColumns[i] = column;
+					break;
+				}
+			}
+		}
+
+		boxPlot->setDataColumns(dataColumns);
 	}
 
 	//data picker curves

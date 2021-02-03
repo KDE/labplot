@@ -319,6 +319,10 @@ void TreeViewComboBox::setAspect(const AbstractAspect* aspect) {
 		setCurrentModelIndex(QModelIndex());
 }
 
+AbstractAspect* TreeViewComboBox::currentAspect() const {
+	return static_cast<AbstractAspect*>(currentModelIndex().internalPointer());
+}
+
 void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& path) {
 	setAspect(column);
 

@@ -49,6 +49,7 @@ public:
 	void setModel(AspectTreeModel*);
 	void setCurrentModelIndex(const QModelIndex&);
 	void setAspect(const AbstractAspect*);
+	AbstractAspect* currentAspect() const;
 	void setColumn(const AbstractColumn*, const QString&);
 	QModelIndex currentModelIndex() const;
 

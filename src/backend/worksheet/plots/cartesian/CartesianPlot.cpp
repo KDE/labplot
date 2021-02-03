@@ -2001,21 +2001,16 @@ void CartesianPlot::dataChanged() {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
-		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
-		if (curve)
-			curve->retransform();
+		auto* element = dynamic_cast<WorksheetElement*>(QObject::sender());
+		if (element)
+			element->retransform();
 		else {
-			auto* hist = dynamic_cast<Histogram*>(QObject::sender());
-			if (hist)
-				hist->retransform();
-			else {
-				//no sender available, the function was called directly in the file filter (live data source got new data)
-				//or in Project::load() -> retransform all available curves since we don't know which curves are affected.
-				//TODO: this logic can be very expensive
-				for (auto* c : children<XYCurve>()) {
-					c->recalcLogicalPoints();
-					c->retransform();
-				}
+			//no sender available, the function was called directly in the file filter (live data source got new data)
+			//or in Project::load() -> retransform all available curves since we don't know which curves are affected.
+			//TODO: this logic can be very expensive
+			for (auto* c : children<XYCurve>()) {
+				c->recalcLogicalPoints();
+				c->retransform();
 			}
 		}
 	}
@@ -2636,7 +2631,7 @@ void CartesianPlot::calculateCurvesXMinMax(const int index, bool completeRange) 
 	for (const auto* curve : this->children<const BoxPlot>()) {
 		if (!curve->isVisible())
 			continue;
-		if (!curve->dataColumn())
+		if (curve->dataColumns().isEmpty())
 			continue;
 
 		const double min = curve->xMinimum();
