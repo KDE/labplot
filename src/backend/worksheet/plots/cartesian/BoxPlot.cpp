@@ -77,7 +77,7 @@ void BoxPlot::init() {
 	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::MinMax);
 
 	//box filling
-	d->fillingEnabled = group.readEntry("FillingEnabled", true);
+	d->fillingEnabled = group.readEntry("FillingEnabled", false);
 	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color));
 	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor));
 	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled));
@@ -1162,12 +1162,13 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			if (!readCommentElement(reader)) return false;
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
-			str = attribs.value("path").toString();
-			if (!str.isEmpty())
-				d->dataColumnPaths << str;
+
 		} else if (reader->name() == "column") {
 			attribs = reader->attributes();
 
+			str = attribs.value("path").toString();
+			if (!str.isEmpty())
+				d->dataColumnPaths << str;
 // 			READ_COLUMN(dataColumn);
 		} else if (!preview && reader->name() == "filling") {
 			attribs = reader->attributes();
@@ -1266,7 +1267,6 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group("BoxPlot");
 
-
 	int index = parentAspect()->indexOfChild<Histogram>(this);
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
 	QColor themeColor;
@@ -1302,6 +1302,8 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	setMedianLineOpacity(group.readEntry("LineOpacity", 1.0));
 
 	//symbols for the mean and for the outliers
+	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", themeColor) );
+	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", themeColor) );
 
 	//whiskers
 	setWhiskersPen(p);
