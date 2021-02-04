@@ -3191,7 +3191,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("visible").toString());
 			else
 				d->setVisible(str.toInt());
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, bool);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 		} else if (!preview && reader->name() == "lines") {
 			attribs = reader->attributes();
 

@@ -526,7 +526,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("position", position);
 			READ_INT_VALUE("orientation", orientation, Orientation);
 
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, bool);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

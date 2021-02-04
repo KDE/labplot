@@ -1182,7 +1182,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == "general") {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, bool);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

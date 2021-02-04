@@ -2414,7 +2414,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("titleOffsetX", titleOffsetX);
 			READ_DOUBLE_VALUE("titleOffsetY", titleOffsetY);
 
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, bool);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

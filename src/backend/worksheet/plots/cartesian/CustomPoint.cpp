@@ -502,7 +502,7 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->position.setY(str.toDouble());
 
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, bool);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

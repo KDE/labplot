@@ -1313,7 +1313,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
 			READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
 			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, bool);
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
