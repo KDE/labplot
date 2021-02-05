@@ -952,6 +952,55 @@ void CartesianPlot::setRangeFirstValues(int values) {
 
 // x/y ranges
 
+class CartesianPlotSetXRangeFormatIndexCmd : public QUndoCommand {
+public:
+	CartesianPlotSetXRangeFormatIndexCmd(CartesianPlotPrivate* private_obj, RangeT::Format format, int index) :
+		m_private(private_obj), m_format(format), m_index(index) {
+		setText(i18n("%1: change x-range %2 format", m_private->name(), index + 1));
+	}
+
+	void redo() override {
+		m_formatOld = m_private->xRanges.at(m_index).format();
+		m_private->xRanges[m_index].setFormat(m_format);
+		emit m_private->q->xRangeFormatChanged(m_format);
+	}
+
+	void undo() override {
+		m_private->xRanges[m_index].setFormat(m_formatOld);
+		emit m_private->q->xRangeFormatChanged(m_formatOld);
+	}
+
+private:
+	CartesianPlotPrivate* m_private;
+	RangeT::Format m_format;
+	int m_index;
+	RangeT::Format m_formatOld;
+};
+class CartesianPlotSetYRangeFormatIndexCmd : public QUndoCommand {
+public:
+	CartesianPlotSetYRangeFormatIndexCmd(CartesianPlotPrivate* private_obj, RangeT::Format format, int index) :
+		m_private(private_obj), m_format(format), m_index(index) {
+		setText(i18n("%1: change y-range %2 format", m_private->name(), index + 1));
+	}
+
+	void redo() override {
+		m_formatOld = m_private->yRanges.at(m_index).format();
+		m_private->yRanges[m_index].setFormat(m_format);
+		emit m_private->q->yRangeFormatChanged(m_format);
+	}
+
+	void undo() override {
+		m_private->yRanges[m_index].setFormat(m_formatOld);
+		emit m_private->q->yRangeFormatChanged(m_formatOld);
+	}
+
+private:
+	CartesianPlotPrivate* m_private;
+	RangeT::Format m_format;
+	int m_index;
+	RangeT::Format m_formatOld;
+};
+
 RangeT::Format CartesianPlot::xRangeFormat() const {
 	return xRangeFormat(defaultCoordinateSystem()->xIndex());
 }
@@ -980,13 +1029,6 @@ void CartesianPlot::setXRangeFormat(const RangeT::Format format) {
 void CartesianPlot::setYRangeFormat(const RangeT::Format format) {
 	setYRangeFormat(defaultCoordinateSystem()->yIndex(), format);
 }
-//TODO: CartesianPlotSetXRangeFormatIndexCmd
-/*STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetYRangeFormat, CartesianPlot::RangeFormat, yRangeFormat, yRangeFormatChanged);
-void CartesianPlot::setYRangeFormat(RangeFormat format) {
-	Q_D(CartesianPlot);
-	if (format != d->yRangeFormat)
-		exec(new CartesianPlotSetYRangeFormatCmd(d, format, ki18n("%1: set y-range format")));
-}*/
 void CartesianPlot::setXRangeFormat(const int index, const RangeT::Format format) {
 	Q_D(CartesianPlot);
 	if (index < 0 || index > xRangeCount()) {
@@ -994,13 +1036,13 @@ void CartesianPlot::setXRangeFormat(const int index, const RangeT::Format format
 		return;
 	}
 	if (format != xRangeFormat(index)) {
-		d->xRanges[index].setFormat(format);
+//		d->xRanges[index].setFormat(format);
+		exec(new CartesianPlotSetXRangeFormatIndexCmd(d, format, index));
 		emit d->xRangeFormatChanged();
 		if (project())
 			project()->setChanged(true);
 	}
 }
-//TODO: CartesianPlotSetYRangeFormatIndexCmd
 void CartesianPlot::setYRangeFormat(const int index, const RangeT::Format format) {
 	Q_D(CartesianPlot);
 	if (index < 0 || index > yRangeCount()) {
@@ -1008,7 +1050,8 @@ void CartesianPlot::setYRangeFormat(const int index, const RangeT::Format format
 		return;
 	}
 	if (format != yRangeFormat(index)) {
-		d->yRanges[index].setFormat(format);
+//		d->yRanges[index].setFormat(format);
+		exec(new CartesianPlotSetYRangeFormatIndexCmd(d, format, index));
 		emit d->yRangeFormatChanged();
 		if (project())
 			project()->setChanged(true);
@@ -1103,7 +1146,7 @@ void CartesianPlot::setAutoScaleX(int index, const bool autoScaleX) {
 		index = defaultCoordinateSystem()->xIndex();
 	Q_D(CartesianPlot);
 	if (autoScaleX != xRange(index).autoScale()) {
-		d->xRanges[index].setAutoScale(autoScaleX);
+		//d->xRanges[index].setAutoScale(autoScaleX);
 		exec(new CartesianPlotSetAutoScaleYIndexCmd(d, autoScaleX, index));
 		if (project())
 			project()->setChanged(true);
@@ -1114,7 +1157,7 @@ void CartesianPlot::setAutoScaleY(int index, const bool autoScaleY) {
 		index = defaultCoordinateSystem()->yIndex();
 	Q_D(CartesianPlot);
 	if (autoScaleY != yRange(index).autoScale()) {
-		d->yRanges[index].setAutoScale(autoScaleY);
+		//d->yRanges[index].setAutoScale(autoScaleY);
 		exec(new CartesianPlotSetAutoScaleYIndexCmd(d, autoScaleY, index));
 		if (project())
 			project()->setChanged(true);
@@ -1177,8 +1220,8 @@ void CartesianPlot::setXRange(Range<double> range) {
 	const int xIndex{ defaultCoordinateSystem()->xIndex() };
 	if (range.finite() && range != xRange()) {
 		d->curvesYMinMaxIsDirty = true;
-		exec(new CartesianPlotSetXRangeIndexCmd(d, range, xIndex, ki18n("%1: set x range")));
 		//d->xRanges[xIndex] = range;
+		exec(new CartesianPlotSetXRangeIndexCmd(d, range, xIndex, ki18n("%1: set x range")));
 		if (autoScaleY())
 			scaleAutoY();
 	}
@@ -1190,8 +1233,8 @@ void CartesianPlot::setYRange(Range<double> range) {
 	const int yIndex{ defaultCoordinateSystem()->yIndex() };
 	if (range.finite() && range != yRange()) {
 		d->curvesXMinMaxIsDirty = true;
-		exec(new CartesianPlotSetYRangeIndexCmd(d, range, yIndex, ki18n("%1: set y range")));
 		//d->yRanges[yIndex] = range;
+		exec(new CartesianPlotSetYRangeIndexCmd(d, range, yIndex, ki18n("%1: set y range")));
 		if (autoScaleX())
 			scaleAutoX();
 	}
@@ -1290,13 +1333,57 @@ void CartesianPlot::setYMax(const int index, const double value) {
 	setYRange(index, range);
 }
 
-//TODO: undo aware?
-//STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetXScale, CartesianPlot::Scale, xScale, retransformScales)
-/*void CartesianPlot::setXScale(Scale scale) {
-	Q_D(CartesianPlot);
-	if (scale != d->xScale)
-		exec(new CartesianPlotSetXScaleCmd(d, scale, ki18n("%1: set x scale")));
-}*/
+// x/y scale
+
+class CartesianPlotSetXScaleIndexCmd : public QUndoCommand {
+public:
+	CartesianPlotSetXScaleIndexCmd(CartesianPlotPrivate* private_obj, RangeT::Scale scale, int index) :
+		m_private(private_obj), m_scale(scale), m_index(index) {
+		setText(i18n("%1: change x-range %2 scale", m_private->name(), index + 1));
+	}
+
+	void redo() override {
+		m_scaleOld = m_private->xRanges.at(m_index).scale();
+		m_private->xRanges[m_index].setScale(m_scale);
+		emit m_private->q->xScaleChanged(m_scale);
+	}
+
+	void undo() override {
+		m_private->xRanges[m_index].setScale(m_scaleOld);
+		emit m_private->q->xScaleChanged(m_scaleOld);
+	}
+
+private:
+	CartesianPlotPrivate* m_private;
+	RangeT::Scale m_scale;
+	int m_index;
+	RangeT::Scale m_scaleOld;
+};
+class CartesianPlotSetYScaleIndexCmd : public QUndoCommand {
+public:
+	CartesianPlotSetYScaleIndexCmd(CartesianPlotPrivate* private_obj, RangeT::Scale scale, int index) :
+		m_private(private_obj), m_scale(scale), m_index(index) {
+		setText(i18n("%1: change x-range %2 scale", m_private->name(), index + 1));
+	}
+
+	void redo() override {
+		m_scaleOld = m_private->yRanges.at(m_index).scale();
+		m_private->yRanges[m_index].setScale(m_scale);
+		emit m_private->q->yScaleChanged(m_scale);
+	}
+
+	void undo() override {
+		m_private->yRanges[m_index].setScale(m_scaleOld);
+		emit m_private->q->yScaleChanged(m_scaleOld);
+	}
+
+private:
+	CartesianPlotPrivate* m_private;
+	RangeT::Scale m_scale;
+	int m_index;
+	RangeT::Scale m_scaleOld;
+};
+
 RangeT::Scale CartesianPlot::xRangeScale() const {
 	return xRangeScale(defaultCoordinateSystem()->xIndex());
 }
@@ -1323,13 +1410,15 @@ void CartesianPlot::setXRangeScale(const RangeT::Scale scale) {
 void CartesianPlot::setYRangeScale(const RangeT::Scale scale) {
 	setYRangeScale(defaultCoordinateSystem()->yIndex(), scale);
 }
+
 void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {
 	Q_D(CartesianPlot);
 	if (index < 0 || index > xRangeCount()) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-	d->xRanges[index].setScale(scale);
+//	d->xRanges[index].setScale(scale);
+	exec(new CartesianPlotSetXScaleIndexCmd(d, scale, index));
 	d->retransformScales();
 	if (project())
 		project()->setChanged(true);
@@ -1340,7 +1429,8 @@ void CartesianPlot::setYRangeScale(const int index, const RangeT::Scale scale) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-	d->yRanges[index].setScale(scale);
+//	d->yRanges[index].setScale(scale);
+	exec(new CartesianPlotSetYScaleIndexCmd(d, scale, index));
 	d->retransformScales();
 	if (project())
 		project()->setChanged(true);
@@ -1531,10 +1621,9 @@ void CartesianPlot::addEquationCurve() {
 }
 
 void CartesianPlot::addHistogram() {
-	DEBUG(Q_FUNC_INFO << ", TODO: to default coordinate system " << defaultCoordinateSystemIndex())
+	DEBUG(Q_FUNC_INFO << ", to default coordinate system " << defaultCoordinateSystemIndex())
 	auto* hist{ new Histogram("Histogram") };
 	hist->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	DEBUG(Q_FUNC_INFO << ", TODO")
 	addChild(hist);
 }
 
@@ -2400,7 +2489,6 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
 	Q_D(CartesianPlot);
 
 	if (d->curvesXMinMaxIsDirty) {
-		//TODO: use index
 		calculateCurvesXMinMax(xIndex, fullRange);
 
 		/* TODO
