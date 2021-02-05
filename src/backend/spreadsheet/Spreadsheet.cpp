@@ -978,14 +978,14 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		for (int n = 0; n < cols; n++ ) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Numeric);
 			newColumn->setUndoAware(false);
-			addChildFast(newColumn);
+			addChild(newColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
 		Column* firstColumn = child<Column>(0);
 		for (int n = 0; n < cols; n++ ) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Numeric);
 			newColumn->setUndoAware(false);
-			insertChildBeforeFast(newColumn, firstColumn);
+			insertChildBefore(newColumn, firstColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Replace) {
 		//replace completely the previous content of the data source with the content to be imported.
@@ -1001,7 +1001,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			for (int i = columns; i < cols; i++) {
 				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Numeric);
 				newColumn->setUndoAware(false);
-				addChildFast(newColumn);
+				addChildFast(newColumn); //in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
 		}
 
