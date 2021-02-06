@@ -30,6 +30,7 @@ Bug fixes:
 		* Show the last recently imported projects in a combobox also in ImportProjectDialog similar to how it's already done in ImportFileDialog
 		* Don't show any error messages when the source file or local socket is empty when the import dialog is opened for the first time
 	* Don't change the current selection in the Project Explorer when objects are being added or removed during undo or redo
+	* Improved LaTeX support in export dialog and export of big spreadsheets
 	* BUG 427190 - Fixed resetting parser error count on some platforms (Debian, Manjaro)
 	* BUG 429110 - Support semicolon as function argument separator for locale with comma as decimal separator
 	* BUG 429368 - Fix validation of custom model equation in fit dock
