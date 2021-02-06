@@ -62,6 +62,46 @@ public:
 	enum class LabelsPosition {NoLabels, In, Out};
 	enum class LabelsBackgroundType {Transparent, Color};
 
+	// LabelsFormat <-> index, see AxisDock::init()
+	static int labelsFormatToIndex(LabelsFormat format) {
+		switch (format) {
+		case LabelsFormat::Decimal:
+			return 0;
+		case LabelsFormat::Scientific:
+			return 1;
+		case LabelsFormat::ScientificE:
+			return 2;
+		case LabelsFormat::Powers10:
+			return 3;
+		case LabelsFormat::Powers2:
+			return 4;
+		case LabelsFormat::PowersE:
+			return 5;
+		case LabelsFormat::MultipliesPi:
+			return 6;
+		}
+		return 0;
+	}
+	static LabelsFormat indexToLabelsFormat(int index) {
+		switch (index) {
+		case 0:
+			return LabelsFormat::Decimal;
+		case 1:
+			return LabelsFormat::Scientific;
+		case 2:
+			return LabelsFormat::ScientificE;
+		case 3:
+			return LabelsFormat::Powers10;
+		case 4:
+			return LabelsFormat::Powers2;
+		case 5:
+			return LabelsFormat::PowersE;
+		case 6:
+			return LabelsFormat::MultipliesPi;
+		}
+		return LabelsFormat::Decimal;
+	}
+
 	typedef AxisPrivate Private;	// for Axis::Private used in macros instead of AxisPrivate
 
 	explicit Axis(const QString&, Orientation orientation = Orientation::Horizontal);

@@ -408,13 +408,14 @@ void AxisDock::init() {
 	ui.cbLabelsPosition->addItem(i18n("Top"));
 	ui.cbLabelsPosition->addItem(i18n("Bottom"));
 
+	// see Axis::labelsFormatToIndex() and Axis::indexToLabelsFormat()
 	ui.cbLabelsFormat->addItem( i18n("Decimal notation") );
+	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
 	ui.cbLabelsFormat->addItem( i18n("Scientific E notation") );
 	ui.cbLabelsFormat->addItem( i18n("Powers of 10") );
 	ui.cbLabelsFormat->addItem( i18n("Powers of 2") );
 	ui.cbLabelsFormat->addItem( i18n("Powers of e") );
 	ui.cbLabelsFormat->addItem( i18n("Multiples of π") );
-	ui.cbLabelsFormat->addItem( i18n("Scientific notation") );
 
 	ui.cbLabelsDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
@@ -1418,7 +1419,7 @@ void AxisDock::labelsFormatChanged(int index) {
 		return;
 
 	for (auto* axis : m_axesList)
-		axis->setLabelsFormat(Axis::LabelsFormat(index));
+		axis->setLabelsFormat(Axis::indexToLabelsFormat(index));
 }
 
 void AxisDock::labelsPrecisionChanged(int value) {
@@ -1925,7 +1926,7 @@ void AxisDock::axisMinorTicksOpacityChanged(qreal opacity) {
 //labels
 void AxisDock::axisLabelsFormatChanged(Axis::LabelsFormat format) {
 	m_initializing = true;
-	ui.cbLabelsFormat->setCurrentIndex(static_cast<int>(format));
+	ui.cbLabelsFormat->setCurrentIndex( Axis::labelsFormatToIndex(format) );
 	m_initializing = false;
 }
 void AxisDock::axisLabelsAutoPrecisionChanged(bool on) {
@@ -2136,7 +2137,7 @@ void AxisDock::load() {
 	ui.cbLabelsPosition->setCurrentIndex( (int) m_axis->labelsPosition() );
 	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(m_axis->labelsOffset(), Worksheet::Unit::Point) );
 	ui.sbLabelsRotation->setValue( m_axis->labelsRotationAngle() );
-	ui.cbLabelsFormat->setCurrentIndex( (int) m_axis->labelsFormat() );
+	ui.cbLabelsFormat->setCurrentIndex( Axis::labelsFormatToIndex(m_axis->labelsFormat()) );
 	ui.chkLabelsAutoPrecision->setChecked( (int) m_axis->labelsAutoPrecision() );
 	ui.sbLabelsPrecision->setValue( (int)m_axis->labelsPrecision() );
 	ui.cbLabelsDateTimeFormat->setCurrentText(m_axis->labelsDateTimeFormat());
@@ -2268,7 +2269,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	//TODO
 
 	// Tick label
-	ui.cbLabelsFormat->setCurrentIndex( group.readEntry("LabelsFormat", (int) m_axis->labelsFormat()) );
+	ui.cbLabelsFormat->setCurrentIndex( Axis::labelsFormatToIndex((Axis::LabelsFormat) ( group.readEntry("LabelsFormat", Axis::labelsFormatToIndex(m_axis->labelsFormat())) )) );
 	ui.chkLabelsAutoPrecision->setChecked( group.readEntry("LabelsAutoPrecision", (int) m_axis->labelsAutoPrecision()) );
 	ui.sbLabelsPrecision->setValue( group.readEntry("LabelsPrecision", (int)m_axis->labelsPrecision()) );
 	ui.cbLabelsDateTimeFormat->setCurrentText( group.readEntry("LabelsDateTimeFormat", "yyyy-MM-dd hh:mm:ss") );
@@ -2384,7 +2385,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	// TODO
 
 	// Tick label
-	group.writeEntry("LabelsFormat", ui.cbLabelsFormat->currentIndex());
+	group.writeEntry("LabelsFormat", static_cast<int>( Axis::indexToLabelsFormat(ui.cbLabelsFormat->currentIndex()) ));
 	group.writeEntry("LabelsAutoPrecision", ui.chkLabelsAutoPrecision->isChecked());
 	group.writeEntry("LabelsPrecision", ui.sbLabelsPrecision->value());
 	group.writeEntry("LabelsPosition", ui.cbLabelsPosition->currentIndex());
