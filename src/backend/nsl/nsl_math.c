@@ -82,6 +82,19 @@ int nsl_math_rounded_decimals_max(double value, int max) {
 }
 
 double nsl_math_round_places(double value, unsigned int n) {
+	nsl_math_places(value, n, 0);
+}
+double nsl_math_floor_places(double value, unsigned int n) {
+	nsl_math_places(value, n, 1);
+}
+double nsl_math_ceil_places(double value, unsigned int n) {
+	nsl_math_places(value, n, 2);
+}
+double nsl_math_trunc_places(double value, unsigned int n) {
+	nsl_math_places(value, n, 3);
+}
+
+double nsl_math_places(double value, unsigned int n, int method) {
 	// no need to round
 	if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value))
 		return value;
@@ -93,7 +106,20 @@ double nsl_math_round_places(double value, unsigned int n) {
 	if (fabs(scaled_value) < .5)
 		return 0.;
 
-	return round(scaled_value)/scale;
+	switch (method) {
+	case 0:
+		return round(scaled_value)/scale;
+		break;
+	case 1:
+		return floor(scaled_value)/scale;
+		break;
+	case 2:
+		return ceil(scaled_value)/scale;
+		break;
+	case 3:
+		return trunc(scaled_value)/scale;
+	}
+
 }
 
 double nsl_math_round_precision(double value, unsigned int p) {

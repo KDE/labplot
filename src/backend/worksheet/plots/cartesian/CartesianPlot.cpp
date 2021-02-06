@@ -4414,6 +4414,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "coordinateSystems") {
 			attribs = reader->attributes();
 			READ_INT_VALUE("defaultCoordinateSystem", defaultCoordinateSystemIndex, int);
+			DEBUG(Q_FUNC_INFO << ", got default cSystem index = " << d->defaultCoordinateSystemIndex)
 
 			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
 			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
@@ -4421,7 +4422,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("bottomPadding", bottomPadding);
 			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 
-//			d->coordinateSystems.clear();
 			m_coordinateSystems.clear();
 		} else if (!preview && reader->name() == "coordinateSystem") {
 			attribs = reader->attributes();
@@ -4435,9 +4435,10 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value("yIndex").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("yIndex").toString());
-			else
+			else {
 				cSystem->setYIndex( str.toInt() );
-			addCoordinateSystem(cSystem);
+				addCoordinateSystem(cSystem);
+			}
 
 			// old style (pre 2.9.0, to read old projects)
 			str = attribs.value("autoScaleX").toString();

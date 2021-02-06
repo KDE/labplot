@@ -284,7 +284,7 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 	double yGapBefore = qQNaN();
 	double yGapAfter = qQNaN();
 
-	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	DEBUG(Q_FUNC_INFO << ", xScales/yScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
  	QVectorIterator<CartesianScale *> xIterator(d->xScales);
 	while (xIterator.hasNext()) {
@@ -335,9 +335,10 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 				yGapAfter = qQNaN();
 
 			const QRectF scaleRect = QRectF(xScale->start(), yScale->start(),
-								xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();
+							xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();
 
 			for (auto line : lines) {
+//				QDEBUG(Q_FUNC_INFO << ", LINE " << line)
 				LineClipResult clipResult;
 				if (!AbstractCoordinateSystem::clipLineToRect(&line, scaleRect, &clipResult))
 					continue;
@@ -418,10 +419,13 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 
 				QLineF mappedLine(QPointF(x1, y1), QPointF(x2, y2));
 				if (doPageClipping) {
-					if (!AbstractCoordinateSystem::clipLineToRect(&mappedLine, pageRect))
+					if (!AbstractCoordinateSystem::clipLineToRect(&mappedLine, pageRect)) {
+						DEBUG(Q_FUNC_INFO << ", OMIT line!")
 						continue;
+					}
 				}
 
+//				QDEBUG(Q_FUNC_INFO << ", append line " << mappedLine)
 				result.append(mappedLine);
 			}
 		}

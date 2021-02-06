@@ -587,16 +587,8 @@ void BoxPlotPrivate::recalc() {
 	emit q->dataChanged();
 }
 
-//void BoxPlotPrivate::verticalBoxPlot() {
-//	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-//	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->defaultCoordinateSystem());
-//	QVector<QLineF> lines;
-//void BoxPlotPrivate::recalcVertical() {
-//	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalcVertical()");
-
-//	const auto& statistics = static_cast<const Column*>(dataColumn)->statistics();
-//	const double x = 1.0;
 void BoxPlotPrivate::recalcVertical(int index) {
+//	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalcVertical()");
 	const auto& statistics = static_cast<const Column*>(dataColumns.at(index))->statistics();
 	const double x = index + 0.5;
 	const double width = 0.5;
@@ -684,9 +676,9 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::verticalBoxPlot()");
 
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	const auto* cSystem = static_cast<const CartesianCoordinateSystem*>(plot->defaultCoordinateSystem());
-	QVector<QLineF> lines;
+	const auto* cSystem{ plot->defaultCoordinateSystem() };
 
+	QVector<QLineF> lines;
 	const double x = index + 0.5;
 
 	//calculate the size and the position of the box

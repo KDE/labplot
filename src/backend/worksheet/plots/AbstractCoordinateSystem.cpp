@@ -94,13 +94,15 @@ AbstractCoordinateSystem::~AbstractCoordinateSystem() = default;
  */
 
 bool AbstractCoordinateSystem::clipLineToRect(QLineF *line, const QRectF &rect, LineClipResult *clipResult) {
+//	QDEBUG(Q_FUNC_INFO << ", line = " << *line << ", rect = " << rect)
 	//we usually clip on large rectangles, so we don't need high precision here -> round to one float digit
 	//this prevents some subtle float rounding artifacts that lead to disappearance
 	//of lines along the boundaries of the rect. (e.g. axis lines).
-	qreal x1 = nsl_math_round_places(line->x1(), 1);
-	qreal x2 = nsl_math_round_places(line->x2(), 1);
-	qreal y1 = nsl_math_round_places(line->y1(), 1);
-	qreal y2 = nsl_math_round_places(line->y2(), 1);
+	qreal x1 = nsl_math_trunc_places(line->x1(), 1);
+	qreal x2 = nsl_math_trunc_places(line->x2(), 1);
+	qreal y1 = nsl_math_trunc_places(line->y1(), 1);
+	qreal y2 = nsl_math_trunc_places(line->y2(), 1);
+//	DEBUG(Q_FUNC_INFO << "x1/x2 y1/y2 = " << x1 << "/" << x2 << " " << y1 << "/" << y2)
 
 	qreal left;
 	qreal right;

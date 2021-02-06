@@ -990,11 +990,11 @@ void AxisPrivate::retransform() {
 }
 
 void AxisPrivate::retransformLine() {
-	DEBUG(Q_FUNC_INFO << " " << title->name().toStdString() <<  ", coordinate system " << q->m_cSystemIndex+1)
-	DEBUG(Q_FUNC_INFO << ", x range is x range " << q->cSystem->xIndex()+1)
-	DEBUG(Q_FUNC_INFO << ", y range is y range " << q->cSystem->yIndex()+1)
-	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->xIndex() )
-	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << ", scale = " << static_cast<int>(range.scale()))
+	DEBUG(Q_FUNC_INFO << ", \"" << title->name().toStdString() <<  "\", coordinate system " << q->m_cSystemIndex + 1)
+	DEBUG(Q_FUNC_INFO << ", x range is x range " << q->cSystem->xIndex() + 1)
+	DEBUG(Q_FUNC_INFO << ", y range is y range " << q->cSystem->yIndex() + 1)
+//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->xIndex() )
+	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << " scale = " << static_cast<int>(range.scale()))
 
 	if (suppressRetransform)
 		return;
@@ -1029,14 +1029,16 @@ void AxisPrivate::retransformLine() {
 
 	QDEBUG(Q_FUNC_INFO << ", start/end point: " << startPoint << "/" << endPoint)
 	lines.append(QLineF(startPoint, endPoint));
+//	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
 	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
+//	QDEBUG(Q_FUNC_INFO << ", LINES after map = " << lines)
 	for (const auto& line : lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
 
 	if (linePath.isEmpty()) {
-		DEBUG(Q_FUNC_INFO << ", line path is empty")
+		DEBUG(Q_FUNC_INFO << ", WARNING: line path is empty")
 		recalcShapeAndBoundingRect();
 		return;
 	} else {
@@ -1267,10 +1269,10 @@ void AxisPrivate::retransformTicks() {
 	qreal nextMajorTickPos = 0.0;
 
 	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem-> yIndex() };
-	DEBUG(Q_FUNC_INFO << ", coordinate system index = " << q->m_cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
-	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
-	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->xIndex() )
+	DEBUG(Q_FUNC_INFO << ", coordinate system " << q->m_cSystemIndex + 1)
+	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)
+	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
+//	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->xIndex() )
 
 	const int xDirection = q->cSystem->xDirection();
 	const int yDirection = q->cSystem->yDirection();
@@ -1905,9 +1907,9 @@ void AxisPrivate::retransformMajorGrid() {
 	if (logicalMajorTickPoints.isEmpty())
 		return;
 
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << q->m_cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex()+1)
-	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->yIndex()+1)
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system " << q->m_cSystemIndex + 1)
+	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex() + 1)
+	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->yIndex() + 1)
 	const auto xRange{ plot()->xRange(q->cSystem->xIndex()) };
 	const auto yRange{ plot()->yRange(q->cSystem->yIndex()) };
 
@@ -1981,9 +1983,9 @@ void AxisPrivate::retransformMinorGrid() {
 	//Currently, grid lines disappear sometimes without this flag
 	QVector<QPointF> logicalMinorTickPoints = q->cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << q->m_cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex())
-	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->yIndex())
+	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system " << q->m_cSystemIndex + 1)
+	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex() + 1)
+	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->yIndex() + 1)
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
