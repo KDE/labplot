@@ -2057,7 +2057,10 @@ void CartesianPlot::updateLegend() {
 }
 
 bool CartesianPlot::autoScale(int cSystemIndex, bool fullRange) {
-	DEBUG(Q_FUNC_INFO << ", full range = " << fullRange)
+	if (cSystemIndex == -1)
+		 cSystemIndex= defaultCoordinateSystemIndex();
+
+	DEBUG(Q_FUNC_INFO << ", cSystem index = " << cSystemIndex << ", full range = " << fullRange)
 	bool updated{ false };
 
 	int xIndex{ coordinateSystem(cSystemIndex)->xIndex() };
@@ -2084,7 +2087,7 @@ void CartesianPlot::dataChanged() {
 	Q_D(CartesianPlot);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
-	const bool updated{ autoScale(true) };
+	const bool updated{ autoScale() };
 
 	if (!updated || !QObject::sender()) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data

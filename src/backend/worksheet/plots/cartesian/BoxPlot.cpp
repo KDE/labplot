@@ -480,7 +480,8 @@ void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
 void BoxPlot::orientationChangedSlot(QAction* action) {
-
+	Q_UNUSED(action)
+	//TODO
 }
 
 void BoxPlot::visibilityChangedSlot() {
@@ -675,9 +676,6 @@ void BoxPlotPrivate::recalcVertical(int index) {
 void BoxPlotPrivate::verticalBoxPlot(int index) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::verticalBoxPlot()");
 
-	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	const auto* cSystem{ plot->defaultCoordinateSystem() };
-
 	QVector<QLineF> lines;
 	const double x = index + 0.5;
 
@@ -685,14 +683,14 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	//map the box to scene coordinates
 	QPointF topLeft = QPointF(m_xMinBox.at(index), m_yMaxBox.at(index));
 	QPointF bottomRight = QPointF(m_xMaxBox.at(index), m_yMinBox.at(index));
-	topLeft = cSystem->mapLogicalToScene(topLeft);
-	bottomRight = cSystem->mapLogicalToScene(bottomRight);
+	topLeft = q->cSystem->mapLogicalToScene(topLeft);
+	bottomRight = q->cSystem->mapLogicalToScene(bottomRight);
 	m_boxRect[index] = QRectF(topLeft, bottomRight);
 
 	//median line
 	m_medianLine[index] = QLineF();
 	lines << QLineF(m_xMinBox.at(index), m_median.at(index), m_xMaxBox.at(index), m_median.at(index));
-	lines = cSystem->mapLogicalToScene(lines);
+	lines = q->cSystem->mapLogicalToScene(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
@@ -700,7 +698,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	lines.clear();
 	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); //upper whisker
 	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); //lower whisker
-	lines = cSystem->mapLogicalToScene(lines);
+	lines = q->cSystem->mapLogicalToScene(lines);
 	m_whiskersPath[index] = QPainterPath();
 	for (const auto& line : qAsConst(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
@@ -708,8 +706,8 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	}
 
 	//add caps
-	QPointF maxPoint = cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax.at(index)));
-	QPointF minPoint = cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)));
+	QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax.at(index)));
+	QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)));
 	m_whiskersPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize/2., maxPoint.y()));
 	m_whiskersPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize/2., maxPoint.y()));
 
@@ -718,10 +716,10 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 
 	//outliers symbols
 	if (!m_outliersSymbolPointsLogical[index].isEmpty())
-		m_outliersSymbolPoints[index] = cSystem->mapLogicalToScene(m_outliersSymbolPointsLogical.at(index));
+		m_outliersSymbolPoints[index] = q->cSystem->mapLogicalToScene(m_outliersSymbolPointsLogical.at(index));
 
 	//mean symbol
-	m_meanSymbolPoint[index] = cSystem->mapLogicalToScene(QPointF(x, m_median.at(index)));
+	m_meanSymbolPoint[index] = q->cSystem->mapLogicalToScene(QPointF(x, m_median.at(index)));
 }
 
 void BoxPlotPrivate::recalcHorizontal(int index) {
@@ -1087,6 +1085,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("path", column->path());
 		writer->writeEndElement();
 	}
+	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeEndElement();
 
 	//box filling
@@ -1164,6 +1163,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 		} else if (reader->name() == "column") {
 			attribs = reader->attributes();
 
