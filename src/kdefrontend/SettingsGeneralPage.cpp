@@ -136,8 +136,8 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.cbMdiVisibility->setCurrentIndex(0);
 	ui.cbUnits->setCurrentIndex(0);
 	ui.cbDecimalSeparator->setCurrentIndex(static_cast<int>(DecimalSeparator::Automatic));
-	ui.chkOmitGroupSeparator->setChecked(false);
-	ui.chkOmitLeadingZeroInExponent->setChecked(false);
+	ui.chkOmitGroupSeparator->setChecked(true);
+	ui.chkOmitLeadingZeroInExponent->setChecked(true);
 	ui.chkIncludeTrailingZeroesAfterDot->setChecked(false);
 	ui.chkAutoSave->setChecked(false);
 	ui.sbAutoSaveInterval->setValue(0);
