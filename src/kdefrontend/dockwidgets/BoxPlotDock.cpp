@@ -328,7 +328,7 @@ void BoxPlotDock::loadDataColumns() {
 }
 
 void BoxPlotDock::setDataColumns() const {
-	QVector<AbstractColumn*> columns;
+	QVector<const AbstractColumn*> columns;
 
 	for (auto* cb : m_dataComboBoxes) {
 		auto* aspect = cb->currentAspect();

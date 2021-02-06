@@ -53,7 +53,7 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 
 	//general
-	CLASS_D_ACCESSOR_DECL(QVector<AbstractColumn*>, dataColumns, DataColumns)
+	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
 	QVector<QString>& dataColumnPaths() const;
 
 	//box filling
@@ -131,7 +131,7 @@ private slots:
 signals:
 	//General-Tab
 	void dataChanged();
-	void dataColumnsChanged(const QVector<AbstractColumn*>&);
+	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void dataColumnChanged(const AbstractColumn*);
 	void visibilityChanged(bool);
 
