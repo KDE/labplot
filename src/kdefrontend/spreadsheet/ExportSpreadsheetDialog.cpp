@@ -375,7 +375,7 @@ void ExportSpreadsheetDialog::formatChanged(int index) {
 	extensions << ".txt" << ".bin" << ".tex" << ".fits" << ".db";
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(".");
-	if (index != 1) {
+	if (index != -1) {
 		if (i == -1)
 			path = path + extensions.at(index);
 		else
