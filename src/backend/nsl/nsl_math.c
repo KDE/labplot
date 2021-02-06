@@ -27,6 +27,7 @@
  ***************************************************************************/
 
 #include "nsl_math.h"
+#include <stdio.h>
 #include <gsl/gsl_math.h>
 
 bool nsl_math_approximately_equal(double a, double b) {
@@ -118,6 +119,10 @@ double nsl_math_places(double value, unsigned int n, int method) {
 		break;
 	case 3:
 		return trunc(scaled_value)/scale;
+		break;
+	default:
+		printf("ERROR: unknown rounding method %d\n", method);
+		return value;
 	}
 
 }
