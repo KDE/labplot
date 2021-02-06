@@ -1083,7 +1083,7 @@ public:
 	void redo() override {
 		m_autoScaleOld = m_private->autoScaleX(m_index);
 		if (m_autoScale) {
-			m_oldRange = m_private->yRanges.at(m_index);
+			m_oldRange = m_private->xRanges.at(m_index);
 			m_private->q->scaleAutoX(m_index);
 		}
 		m_private->setAutoScaleX(m_index, m_autoScale);
@@ -1147,7 +1147,7 @@ void CartesianPlot::setAutoScaleX(int index, const bool autoScaleX) {
 	Q_D(CartesianPlot);
 	if (autoScaleX != xRange(index).autoScale()) {
 		//d->xRanges[index].setAutoScale(autoScaleX);
-		exec(new CartesianPlotSetAutoScaleYIndexCmd(d, autoScaleX, index));
+		exec(new CartesianPlotSetAutoScaleXIndexCmd(d, autoScaleX, index));
 		if (project())
 			project()->setChanged(true);
 	}
