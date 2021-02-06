@@ -82,16 +82,16 @@ int nsl_math_rounded_decimals_max(double value, int max) {
 }
 
 double nsl_math_round_places(double value, unsigned int n) {
-	nsl_math_places(value, n, 0);
+	return nsl_math_places(value, n, 0);
 }
 double nsl_math_floor_places(double value, unsigned int n) {
-	nsl_math_places(value, n, 1);
+	return nsl_math_places(value, n, 1);
 }
 double nsl_math_ceil_places(double value, unsigned int n) {
-	nsl_math_places(value, n, 2);
+	return nsl_math_places(value, n, 2);
 }
 double nsl_math_trunc_places(double value, unsigned int n) {
-	nsl_math_places(value, n, 3);
+	return nsl_math_places(value, n, 3);
 }
 
 double nsl_math_places(double value, unsigned int n, int method) {
