@@ -228,6 +228,9 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	if (column) {
 		const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
 		updateCurveColumnDependencies(curves, column);
+
+		const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
+		updateHistogramColumnDependencies(histograms, column);
 	}
 
 	d->changed = true;

@@ -217,6 +217,12 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 }
 
 void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
+	//HACK: when doing redo/undo in MainWin and an object is being deleted,
+	//we don't want to jump to another object in the project explorer.
+	//we reuse the aspectAddedSignalSuppressed also for the deletion of aspects.
+	if (m_project->aspectAddedSignalSuppressed())
+		return;
+
 	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
 	if (tree_model)
 		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));

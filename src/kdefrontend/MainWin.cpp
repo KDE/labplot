@@ -1184,13 +1184,15 @@ bool MainWin::newProject() {
 		m_propertiesDock->setObjectName("aspect_properties_dock");
 		m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
 
-		//restore the position of the dock widgets
+		//restore the position of the dock widgets:
+		//"WindowState" doesn't always contain the positions of the dock widgets,
+		//user opened the application and closed it without creating a new project
+		//and with this the dock widgets - this creates a "WindowState" section in the settings without dock widgets positions.
+		//So, we set our default positions first and then read from the saved "WindowState" section
+		addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
+		addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
 		if (group.keyList().indexOf("WindowState") != -1)
 			restoreState(group.readEntry("WindowState", QByteArray()));
-		else {
-			addDockWidget(Qt::LeftDockWidgetArea, m_projectExplorerDock);
-			addDockWidget(Qt::RightDockWidgetArea, m_propertiesDock);
-		}
 
 		auto* scrollArea = new QScrollArea(m_propertiesDock);
 		scrollArea->setWidgetResizable(true);
@@ -2028,7 +2030,9 @@ void MainWin::createFolderContextMenu(const Folder* folder, QMenu* menu) const {
 
 void MainWin::undo() {
 	WAIT_CURSOR;
+	m_project->setSuppressAspectAddedSignal(true);//don't change the current aspect in the project explorer
 	m_project->undoStack()->undo();
+	m_project->setSuppressAspectAddedSignal(false);
 	if (m_project->undoStack()->index() == 0) {
 		updateTitleBar();
 		m_saveAction->setEnabled(false);
@@ -2041,7 +2045,9 @@ void MainWin::undo() {
 
 void MainWin::redo() {
 	WAIT_CURSOR;
+	m_project->setSuppressAspectAddedSignal(true);
 	m_project->undoStack()->redo();
+	m_project->setSuppressAspectAddedSignal(false);
 	projectChanged();
 	if (m_project->undoStack()->index() == m_project->undoStack()->count())
 		m_redoAction->setEnabled(false);
