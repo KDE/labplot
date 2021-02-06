@@ -401,7 +401,11 @@ void ImportFileDialog::checkOkButton() {
 		} else {
 			QString msg = i18n("The provided file doesn't exist.");
 			okButton->setToolTip(msg);
-			showErrorMessage(msg);
+
+			//suppress the error widget when the dialog is opened the first time.
+			//show only the error widget if the file was really a non-existing file was provided.
+			if (!fileName.isEmpty())
+				showErrorMessage(msg);
 		}
 
 		break;
@@ -433,7 +437,8 @@ void ImportFileDialog::checkOkButton() {
 			okButton->setEnabled(false);
 			QString msg = i18n("Could not connect to the provided local socket. The socket does not exist.");
 			okButton->setToolTip(msg);
-			showErrorMessage(msg);
+			if (!fileName.isEmpty())
+				showErrorMessage(msg);
 		}
 
 		break;
