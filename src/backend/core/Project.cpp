@@ -229,10 +229,13 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	const auto* column = dynamic_cast<const AbstractColumn*>(aspect);
 	if (column) {
 		const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
-		updateCurveColumnDependencies(curves, column);
+		updateColumnDependencies(curves, column);
 
 		const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
-		updateHistogramColumnDependencies(histograms, column);
+		updateColumnDependencies(histograms, column);
+
+		const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
+		updateColumnDependencies(boxPlots, column);
 	}
 
 	d->changed = true;
@@ -263,14 +266,20 @@ void Project::aspectAddedSlot(const AbstractAspect* aspect) {
 	//names in the curves, etc. and update the dependencies
 	const auto& curves = children<XYCurve>(ChildIndexFlag::Recursive);
 	for (auto column : columns)
-		updateCurveColumnDependencies(curves, column);
+		updateColumnDependencies(curves, column);
 
 	const auto& histograms = children<Histogram>(ChildIndexFlag::Recursive);
 	for (auto column : columns)
-		updateHistogramColumnDependencies(histograms, column);
+		updateColumnDependencies(histograms, column);
+
+
+	const auto& boxPlots = children<BoxPlot>(ChildIndexFlag::Recursive);
+	for (auto column : columns)
+		updateColumnDependencies(boxPlots, column);
 }
 
-void Project::updateCurveColumnDependencies(const QVector<XYCurve*>& curves, const AbstractColumn* column) const {
+//TODO: move this update*() functions into the classes, Project shouldn't be aware of the details
+void Project::updateColumnDependencies(const QVector<XYCurve*>& curves, const AbstractColumn* column) const {
 	const QString& columnPath = column->path();
 
 	// setXColumnPath must not be set, because if curve->column matches column, there already exist a
@@ -327,7 +336,7 @@ void Project::updateCurveColumnDependencies(const QVector<XYCurve*>& curves, con
 	}
 }
 
-void Project::updateHistogramColumnDependencies(const QVector<Histogram*>& histograms, const AbstractColumn* column) const {
+void Project::updateColumnDependencies(const QVector<Histogram*>& histograms, const AbstractColumn* column) const {
 	const QString& columnPath = column->path();
 	for (auto* histogram : histograms) {
 		if (histogram->dataColumnPath() == columnPath) {
@@ -343,6 +352,30 @@ void Project::updateHistogramColumnDependencies(const QVector<Histogram*>& histo
 		}
 	}
 }
+
+void Project::updateColumnDependencies(const QVector<BoxPlot*>& boxPlots, const AbstractColumn* column) const {
+	const QString& columnPath = column->path();
+	for (auto* boxPlot : boxPlots) {
+		const auto dataColumnPaths = boxPlot->dataColumnPaths();
+		auto dataColumns = boxPlot->dataColumns();
+		bool changed = false;
+		for (int i = 0; i < dataColumnPaths.count(); ++i) {
+			const auto& path = dataColumnPaths.at(i);
+
+			if (path == columnPath) {
+				dataColumns[i] = column;
+				changed = true;
+			}
+		}
+
+		if (changed) {
+			boxPlot->setUndoAware(false);
+			boxPlot->setDataColumns(dataColumns);
+			boxPlot->setUndoAware(true);
+		}
+	}
+}
+
 void Project::navigateTo(const QString& path) {
 	emit requestNavigateTo(path);
 }
@@ -654,7 +687,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 		//initialize the array for the column pointers
 		int count = boxPlot->dataColumnPaths().count();
-		QVector<AbstractColumn*> dataColumns;
+		QVector<const AbstractColumn*> dataColumns;
 		dataColumns.resize(count);
 
 		//restore the pointers

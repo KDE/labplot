@@ -60,7 +60,7 @@ public:
 	BoxPlot* const q;
 
 	//General
-	QVector<AbstractColumn*> dataColumns;
+	QVector<const AbstractColumn*> dataColumns;
 	QVector<QString> dataColumnPaths;
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::MinMax};
 	BoxPlot::Orientation orientation{BoxPlot::Orientation::Vertical};

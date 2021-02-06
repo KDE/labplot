@@ -196,7 +196,7 @@ void BoxPlot::handleResize(double horizontalRatio, double verticalRatio, bool pa
 
 /* ============================ getter methods ================= */
 //general
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
 
 //box
@@ -256,8 +256,8 @@ double BoxPlot::yMaximum() const {
 /* ============================ setter methods and undo commands ================= */
 
 //General
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetDataColumns, QVector<AbstractColumn*>, dataColumns, recalc)
-void BoxPlot::setDataColumns(const QVector<AbstractColumn*>& columns) {
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetDataColumns, QVector<const AbstractColumn*>, dataColumns, recalc)
+void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	Q_D(BoxPlot);
 	if (columns != d->dataColumns) {
 		exec(new BoxPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
