@@ -3516,7 +3516,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 					rowCount++;
 					if (rowCount == maxRows) {
 						out << endTabularTable;
-						out << QLatin1String("\\newpage \n");
+						out << QLatin1String("\\clearpage \n");
 
 						if (captions)
 							if (!captionRemoved)
@@ -3650,7 +3650,7 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 				rowCount++;
 				if (rowCount == maxRows) {
 					out << endTabularTable;
-					out << QLatin1String("\\newpage \n");
+					out << QLatin1String("\\clearpage \n");
 					if (captions)
 						if (!captionRemoved)
 							textable.removeAt(1);
