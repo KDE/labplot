@@ -1142,7 +1142,9 @@ void ImportFileWidget::filterChanged(int index) {
 }
 
 void ImportFileWidget::refreshPreview() {
-	if (m_suppressRefresh)
+	//don't generate any preview if it was explicitly suppressed
+	//or if the options box together with the preview widget is not visible
+	if (m_suppressRefresh || !ui.gbOptions->isVisible())
 		return;
 
 	DEBUG("ImportFileWidget::refreshPreview()");
