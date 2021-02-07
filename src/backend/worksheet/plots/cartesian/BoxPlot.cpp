@@ -469,8 +469,8 @@ void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	Q_D(BoxPlot);
 	for (int i = 0; i < d->dataColumns.size(); ++i) {
 		if (aspect == d->dataColumns.at(i)) {
-			d->dataColumns.remove(i);
-			d->recalc();
+			d->dataColumns[i] = nullptr;
+			d->retransform();
 			break;
 		}
 	}
@@ -523,11 +523,15 @@ void BoxPlotPrivate::retransform() {
 
 	if (count) {
 		if (orientation == BoxPlot::Orientation::Vertical) {
-			for (int i = 0; i < count; ++i)
-				verticalBoxPlot(i);
+			for (int i = 0; i < count; ++i) {
+				if (dataColumns.at(i))
+					verticalBoxPlot(i);
+			}
 		} else {
-			for (int i = 0; i < count; ++i)
-				horizontalBoxPlot(i);
+			for (int i = 0; i < count; ++i) {
+				if (dataColumns.at(i))
+					horizontalBoxPlot(i);
+			}
 		}
 	}
 
@@ -590,7 +594,11 @@ void BoxPlotPrivate::recalc() {
 
 void BoxPlotPrivate::recalcVertical(int index) {
 //	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalcVertical()");
-	const auto& statistics = static_cast<const Column*>(dataColumns.at(index))->statistics();
+	auto* column = static_cast<const Column*>(dataColumns.at(index));
+	if (!column)
+		return;
+
+	const auto& statistics = column->statistics();
 	const double x = index + 0.5;
 	const double width = 0.5;
 
@@ -626,14 +634,13 @@ void BoxPlotPrivate::recalcVertical(int index) {
 	m_outlierMin[index] = m_whiskerMin.at(index);
 	m_outliersSymbolPointsLogical[index].clear();
 
-	auto* dataColumn = dataColumns.at(index);
-	switch (dataColumn->columnMode()) {
+	switch (column->columnMode()) {
 	case AbstractColumn::ColumnMode::Numeric:
 	case AbstractColumn::ColumnMode::Integer:
 	case AbstractColumn::ColumnMode::BigInt:
-		for (int row = 0; row < dataColumn->rowCount(); ++row) {
-			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) ) {
-				const double value = dataColumn->valueAt(row);
+		for (int row = 0; row < column->rowCount(); ++row) {
+			if ( column->isValid(row) && !column->isMasked(row) ) {
+				const double value = column->valueAt(row);
 				if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
 					const QPointF point(x, value);
 					++m_outliersCount[index];
@@ -649,9 +656,9 @@ void BoxPlotPrivate::recalcVertical(int index) {
 		}
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
-		for (int row = 0; row < dataColumn->rowCount(); ++row) {
-			if ( dataColumn->isValid(row) && !dataColumn->isMasked(row) ){
-				const double value = dataColumn->dateTimeAt(row).toMSecsSinceEpoch();
+		for (int row = 0; row < column->rowCount(); ++row) {
+			if ( column->isValid(row) && !column->isMasked(row) ){
+				const double value = column->dateTimeAt(row).toMSecsSinceEpoch();
 				if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
 					const QPointF point(x, value);
 					++m_outliersCount[index];
@@ -688,7 +695,6 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	m_boxRect[index] = QRectF(topLeft, bottomRight);
 
 	//median line
-	m_medianLine[index] = QLineF();
 	lines << QLineF(m_xMinBox.at(index), m_median.at(index), m_xMaxBox.at(index), m_median.at(index));
 	lines = q->cSystem->mapLogicalToScene(lines);
 	if (!lines.isEmpty())
@@ -699,7 +705,6 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); //upper whisker
 	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); //lower whisker
 	lines = q->cSystem->mapLogicalToScene(lines);
-	m_whiskersPath[index] = QPainterPath();
 	for (const auto& line : qAsConst(lines)) {
 		m_whiskersPath[index].moveTo(line.p1());
 		m_whiskersPath[index].lineTo(line.p2());
@@ -768,6 +773,9 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	m_boxPlotShape = QPainterPath();
 
 	for (int i = 0; i < dataColumns.size(); ++i) {
+		if (!dataColumns.at(i))
+			continue;
+
 		QPainterPath boxPath;
 		boxPath.addRect(m_boxRect.at(i));
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, whiskersPen));

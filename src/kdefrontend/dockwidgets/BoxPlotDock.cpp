@@ -235,7 +235,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	//general
 	connect(m_boxPlot, &AbstractAspect::aspectDescriptionChanged,this, &BoxPlotDock::plotDescriptionChanged);
 	connect(m_boxPlot, &BoxPlot::visibilityChanged, this, &BoxPlotDock::plotVisibilityChanged);
-	connect(m_boxPlot, &BoxPlot::dataColumnChanged, this, &BoxPlotDock::plotDataColumnChanged);
+	connect(m_boxPlot, &BoxPlot::dataColumnsChanged, this, &BoxPlotDock::plotDataColumnsChanged);
 
 	//box filling
 	connect(m_boxPlot, &BoxPlot::fillingEnabledChanged, this, &BoxPlotDock::plotFillingEnabledChanged);
@@ -979,10 +979,11 @@ void BoxPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = false;
 }
 
-void BoxPlotDock::plotDataColumnChanged(const AbstractColumn* column) {
+void BoxPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
 	Lock lock(m_initializing);
-// 	cbDataColumn->setColumn(column, m_boxPlot->dataColumnPath());
+	loadDataColumns();
 }
+
 void BoxPlotDock::plotVisibilityChanged(bool on) {
 	Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);

@@ -132,7 +132,6 @@ signals:
 	//General-Tab
 	void dataChanged();
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
-	void dataColumnChanged(const AbstractColumn*);
 	void visibilityChanged(bool);
 
 	//box filling

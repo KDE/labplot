@@ -120,7 +120,7 @@ private slots:
 	//SLOTs for changes triggered in BoxPlot
 	//general
 	void plotDescriptionChanged(const AbstractAspect*);
-	void plotDataColumnChanged(const AbstractColumn*);
+	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotVisibilityChanged(bool);
 
 	//box filling
