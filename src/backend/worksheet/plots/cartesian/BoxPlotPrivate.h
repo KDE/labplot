@@ -128,6 +128,7 @@ private:
 	QVector<double> m_yMaxBox;
 	QVector<double> m_median;
 	QVector<QLineF> m_medianLine;
+	QVector<double> m_mean;
 	QVector<QPainterPath> m_whiskersPath;
 	QVector<double> m_whiskerMin;
 	QVector<double> m_whiskerMax;

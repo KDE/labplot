@@ -558,6 +558,7 @@ void BoxPlotPrivate::recalc() {
 	m_outliersSymbolPointsLogical.resize(count);
 	m_outliersSymbolPoints.resize(count);
 	m_outliersCount.resize(count);
+	m_mean.resize(count);
 	m_meanSymbolPoint.resize(count);
 
 	if (orientation == BoxPlot::Orientation::Vertical) {
@@ -608,6 +609,7 @@ void BoxPlotPrivate::recalcVertical(int index) {
 	m_yMinBox[index] = statistics.firstQuartile;
 	m_yMaxBox[index] = statistics.thirdQuartile;
 	m_median[index] = statistics.median;
+	m_mean[index] = statistics.arithmeticMean;
 
 	//whiskers
 	switch (whiskersType) {
@@ -724,7 +726,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		m_outliersSymbolPoints[index] = q->cSystem->mapLogicalToScene(m_outliersSymbolPointsLogical.at(index));
 
 	//mean symbol
-	m_meanSymbolPoint[index] = q->cSystem->mapLogicalToScene(QPointF(x, m_median.at(index)));
+	m_meanSymbolPoint[index] = q->cSystem->mapLogicalToScene(QPointF(x, m_mean.at(index)));
 }
 
 void BoxPlotPrivate::recalcHorizontal(int index) {
@@ -893,29 +895,36 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 }
 
 void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
-	//outliers
-	QPainterPath path = Symbol::pathFromStyle(symbolOutliersStyle);
-
 	QTransform trafo;
 	trafo.scale(symbolsSize, symbolsSize);
-	path = trafo.map(path);
-	trafo.reset();
-	if (symbolsRotationAngle != 0) {
-		trafo.rotate(-symbolsRotationAngle);
-		path = trafo.map(path);
-	}
 
-	for (const auto& point : qAsConst(m_outliersSymbolPoints[index])) {
-		trafo.reset();
-		trafo.translate(point.x(), point.y());
-		painter->drawPath(trafo.map(path));
+	//outliers
+	if (symbolOutliersStyle != Symbol::Style::NoSymbols) {
+		QPainterPath path = Symbol::pathFromStyle(symbolOutliersStyle);
+		if (symbolsRotationAngle != 0)
+			trafo.rotate(-symbolsRotationAngle);
+
+		path = trafo.map(path);
+
+		for (const auto& point : qAsConst(m_outliersSymbolPoints.at(index))) {
+			trafo.reset();
+			trafo.translate(point.x(), point.y());
+			painter->drawPath(trafo.map(path));
+		}
 	}
 
 	//mean
-	path = Symbol::pathFromStyle(symbolMeanStyle);
-	trafo.reset();
-	trafo.translate(m_meanSymbolPoint[index].x(), m_meanSymbolPoint[index].y());
-	painter->drawPath(trafo.map(path));
+	if (symbolMeanStyle != Symbol::Style::NoSymbols) {
+		QPainterPath path = Symbol::pathFromStyle(symbolMeanStyle);
+		if (symbolsRotationAngle != 0)
+			trafo.rotate(-symbolsRotationAngle);
+
+		path = trafo.map(path);
+
+		trafo.reset();
+		trafo.translate(m_meanSymbolPoint.at(index).x(), m_meanSymbolPoint.at(index).y());
+		painter->drawPath(trafo.map(path));
+	}
 }
 
 void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
