@@ -2623,7 +2623,7 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
 			} else {
 				xRange.extend( xRange.size() * d->autoScaleOffsetFactor );
 			}
-			setAutoScaleX(true);
+			setAutoScaleX(xIndex);
 		}
 		if (updateY) {
 			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
@@ -2636,7 +2636,7 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
 			} else {
 				yRange.extend( yRange.size()*d->autoScaleOffsetFactor );
 			}
-			setAutoScaleY(true);
+			setAutoScaleY(yIndex);
 		}
 		d->retransformScales();
 	}
@@ -2820,8 +2820,8 @@ void CartesianPlot::zoomIn() {
 	Q_D(CartesianPlot);
 
 	setUndoAware(false);
-	setAutoScaleX(false);
-	setAutoScaleY(false);
+	setAutoScaleX(-1, false);
+	setAutoScaleY(-1, false);
 	setUndoAware(true);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
@@ -2834,8 +2834,8 @@ void CartesianPlot::zoomOut() {
 	Q_D(CartesianPlot);
 
 	setUndoAware(false);
-	setAutoScaleX(false);
-	setAutoScaleY(false);
+	setAutoScaleX(-1, false);
+	setAutoScaleY(-1, false);
 	setUndoAware(true);
 	d->curvesXMinMaxIsDirty = true;
 	d->curvesYMinMaxIsDirty = true;
@@ -2848,7 +2848,7 @@ void CartesianPlot::zoomInX() {
 	Q_D(CartesianPlot);
 
 	setUndoAware(false);
-	setAutoScaleX(false);
+	setAutoScaleX(-1, false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
 	zoom(true, true); //zoom in x
@@ -2862,7 +2862,7 @@ void CartesianPlot::zoomOutX() {
 	Q_D(CartesianPlot);
 
 	setUndoAware(false);
-	setAutoScaleX(false);
+	setAutoScaleX(-1, false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
 	zoom(true, false); //zoom out x
@@ -2877,7 +2877,7 @@ void CartesianPlot::zoomInY() {
 	Q_D(CartesianPlot);
 
 	setUndoAware(false);
-	setAutoScaleY(false);
+	setAutoScaleY(-1, false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
 	zoom(false, true); //zoom in y
@@ -2892,7 +2892,7 @@ void CartesianPlot::zoomOutY() {
 	Q_D(CartesianPlot);
 
 	setUndoAware(false);
-	setAutoScaleY(false);
+	setAutoScaleY(-1, false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
 	zoom(false, false); //zoom out y
@@ -3011,7 +3011,7 @@ void CartesianPlot::shiftLeftX() {
 	Q_D(CartesianPlot);
 
 	setUndoAware(false);
-	setAutoScaleX(false);
+	setAutoScaleX(-1, false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
 	shift(true, true);
@@ -3026,7 +3026,7 @@ void CartesianPlot::shiftRightX() {
 	Q_D(CartesianPlot);
 
 	setUndoAware(false);
-	setAutoScaleX(false);
+	setAutoScaleX(-1, false);
 	setUndoAware(true);
 	d->curvesYMinMaxIsDirty = true;
 	shift(true, false);
@@ -3041,7 +3041,7 @@ void CartesianPlot::shiftUpY() {
 	Q_D(CartesianPlot);
 
 	setUndoAware(false);
-	setAutoScaleY(false);
+	setAutoScaleY(-1, false);
 	setUndoAware(true);
 	d->curvesXMinMaxIsDirty = true;
 	shift(false, false);
@@ -3056,7 +3056,7 @@ void CartesianPlot::shiftDownY() {
 	Q_D(CartesianPlot);
 
 	setUndoAware(false);
-	setAutoScaleY(false);
+	setAutoScaleY(-1, false);
 	setUndoAware(true);
 	d->curvesXMinMaxIsDirty = true;
 	shift(false, true);
@@ -3668,8 +3668,8 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			}
 
 			q->setUndoAware(false);
-			q->setAutoScaleX(false);
-			q->setAutoScaleY(false);
+			q->setAutoScaleX(-1, false);
+			q->setAutoScaleY(-1, false);
 			q->setUndoAware(true);
 
 			retransformScales();
@@ -3821,16 +3821,16 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode() {
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 		curvesXMinMaxIsDirty = true;
 		curvesYMinMaxIsDirty = true;
-		q->setAutoScaleX(false);
-		q->setAutoScaleY(false);
+		q->setAutoScaleX(-1, false);
+		q->setAutoScaleY(-1, false);
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 		curvesYMinMaxIsDirty = true;
-		q->setAutoScaleX(false);
+		q->setAutoScaleX(-1, false);
 		if (q->autoScaleY() && q->scaleAutoY())
 			retransformPlot = false;
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 		curvesXMinMaxIsDirty = true;
-		q->setAutoScaleY(false);
+		q->setAutoScaleY(-1, false);
 		if (q->autoScaleX() && q->scaleAutoX())
 			retransformPlot = false;
 	}
