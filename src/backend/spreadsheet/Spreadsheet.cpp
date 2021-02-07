@@ -1095,5 +1095,9 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	if (m_partView != nullptr && m_view != nullptr)
 		m_view->resizeHeader();
 
+	//row count most probably changed after the import, notify the dock widget.
+	//no need to notify about the column cound change, this is done already because of add/removeChild signals
+	rowCountChanged(rowCount());
+
 	DEBUG("Spreadsheet::finalizeImport() DONE");
 }
