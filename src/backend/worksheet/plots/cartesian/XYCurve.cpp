@@ -2788,12 +2788,12 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 
 	QTransform trafo;
 	trafo.scale(symbolsSize, symbolsSize);
-	path = trafo.map(path);
-	trafo.reset();
-	if (symbolsRotationAngle != 0) {
+
+	if (symbolsRotationAngle != 0)
 		trafo.rotate(-symbolsRotationAngle);
-		path = trafo.map(path);
-	}
+
+	path = trafo.map(path);
+
 	for (const auto& point : qAsConst(m_scenePoints)) {
 		trafo.reset();
 		trafo.translate(point.x(), point.y());

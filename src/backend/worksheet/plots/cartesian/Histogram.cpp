@@ -1442,6 +1442,7 @@ void HistogramPrivate::updatePixmap() {
 	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
+	update();
 }
 
 /*!
@@ -1501,12 +1502,11 @@ void HistogramPrivate::drawSymbols(QPainter* painter) {
 
 	QTransform trafo;
 	trafo.scale(symbolsSize, symbolsSize);
-	path = trafo.map(path);
-	trafo.reset();
-	if (symbolsRotationAngle != 0) {
+	if (symbolsRotationAngle != 0)
 		trafo.rotate(-symbolsRotationAngle);
-		path = trafo.map(path);
-	}
+
+	path = trafo.map(path);
+
 	for (const auto& point : pointsScene) {
 		trafo.reset();
 		trafo.translate(point.x(), point.y());
