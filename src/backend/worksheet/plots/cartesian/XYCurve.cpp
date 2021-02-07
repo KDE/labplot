@@ -1680,44 +1680,39 @@ void XYCurvePrivate::updateDropLines() {
 	const double xMin = plot()->xRange(q->cSystem->xIndex()).start();
 	const double yMin = plot()->yRange(q->cSystem->xIndex()).start();
 
-	int i{0};
+	//don't skip the invisible points, we still need to calculate
+	//the drop lines falling into the plot region
 	switch (dropLineType) {
 	case XYCurve::DropLineType::NoDropLine:
 		break;
 	case XYCurve::DropLineType::X:
 		for (const auto& point: qAsConst(m_logicalPoints)) {
-			if (!m_pointVisible.at(i++)) continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yMin)));
 		}
 		break;
 	case XYCurve::DropLineType::Y:
 		for (const auto& point: qAsConst(m_logicalPoints)) {
-			if (!m_pointVisible.at(i++)) continue;
 			dlines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
 	case XYCurve::DropLineType::XY:
 		for (const auto& point: qAsConst(m_logicalPoints)) {
-			if (!m_pointVisible.at(i++)) continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yMin)));
 			dlines.append(QLineF(point, QPointF(xMin, point.y())));
 		}
 		break;
 	case XYCurve::DropLineType::XZeroBaseline:
 		for (const auto& point: qAsConst(m_logicalPoints)) {
-			if (!m_pointVisible.at(i++)) continue;
 			dlines.append(QLineF(point, QPointF(point.x(), 0)));
 		}
 		break;
 	case XYCurve::DropLineType::XMinBaseline:
 		for (const auto& point: qAsConst(m_logicalPoints)) {
-			if (!m_pointVisible.at(i++)) continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yColumn->minimum())));
 		}
 		break;
 	case XYCurve::DropLineType::XMaxBaseline:
 		for (const auto& point: qAsConst(m_logicalPoints)) {
-			if (!m_pointVisible.at(i++)) continue;
 			dlines.append(QLineF(point, QPointF(point.x(), yColumn->maximum())));
 		}
 		break;

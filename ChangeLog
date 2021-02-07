@@ -35,6 +35,7 @@ Bug fixes:
 	* BUG 429110 - Support semicolon as function argument separator for locale with comma as decimal separator
 	* BUG 429368 - Fix validation of custom model equation in fit dock
 	* BUG 431535 - Save/Load value format
+	* BUG 432291 - Show the relevant parts of the drop lines also when the data points are outside of the plot range
 
 -----2.8.1 -----
 	* [worksheet] allow to change the background color for axis labels (default: transparent)
