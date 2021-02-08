@@ -146,8 +146,8 @@ public:
 	int yRangeCount() const;
 	const Range<double>& xRange() const;		// get x range of default plot range
 	const Range<double>& yRange() const;		// get y range of default plot range
-	void setXRange(Range<double>&);		// set x range of default plot range
-	void setYRange(Range<double>&);		// set y range of default plot range
+	void setXRange(const Range<double>);		// set x range of default plot range
+	void setYRange(const Range<double>);		// set y range of default plot range
 	BASIC_D_INDEX_ACCESSOR_DECL(const Range<double>, xRange, XRange) // x range index
 	BASIC_D_INDEX_ACCESSOR_DECL(const Range<double>, yRange, YRange) // y range index
 	void addXRange();				// add new x range

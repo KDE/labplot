@@ -1057,8 +1057,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			plot->setAutoScaleY(-1, false);
 			const Origin::GraphAxis& originXAxis = layer.xAxis;
 			const Origin::GraphAxis& originYAxis = layer.yAxis;
-			Range<double> xRange{originXAxis.min, originXAxis.max};
-			Range<double> yRange{originYAxis.min, originYAxis.max};
+			const Range<double> xRange{originXAxis.min, originXAxis.max};
+			const Range<double> yRange{originYAxis.min, originYAxis.max};
 			plot->setXRange(xRange);
 			plot->setYRange(yRange);
 
