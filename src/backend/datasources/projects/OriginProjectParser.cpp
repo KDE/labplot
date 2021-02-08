@@ -579,11 +579,11 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 }
 
 bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
-	DEBUG("loadWorkbook()");
+	DEBUG(Q_FUNC_INFO);
 	//load workbook sheets
 	const Origin::Excel& excel = m_originFile->excel(findExcelByName(workbook->name()));
-	DEBUG(" excel name = " << excel.name);
-	DEBUG(" number of sheets = " << excel.sheets.size());
+	DEBUG(Q_FUNC_INFO << " excel name = " << excel.name);
+	DEBUG(Q_FUNC_INFO << " number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
 		Spreadsheet* spreadsheet = new Spreadsheet(QString::fromLatin1(excel.sheets[s].name.c_str()));
 		loadSpreadsheet(spreadsheet, preview, workbook->name(), s);
@@ -977,11 +977,11 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 }
 
 bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
-	DEBUG("OriginProjectParser::loadWorksheet()");
+	DEBUG(Q_FUNC_INFO << ", preview = " << preview);
 
 	//load worksheet data
 	const Origin::Graph& graph = m_originFile->graph(findGraphByName(worksheet->name()));
-	DEBUG("	graph name = " << graph.name);
+	DEBUG(Q_FUNC_INFO << ", graph name = " << graph.name);
 	worksheet->setComment(graph.label.c_str());
 
 	//TODO: width, height, view mode (print view, page view, window view, draft view)
@@ -1053,8 +1053,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
 
 			//ranges
-			plot->setAutoScaleX(false);
-			plot->setAutoScaleY(false);
+			plot->setAutoScaleX(-1, false);
+			plot->setAutoScaleY(-1, false);
 			const Origin::GraphAxis& originXAxis = layer.xAxis;
 			const Origin::GraphAxis& originYAxis = layer.yAxis;
 			Range<double> xRange{originXAxis.min, originXAxis.max};
