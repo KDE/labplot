@@ -52,6 +52,7 @@ class QString;
 class RangeT {	// access enum without template
 public:
 	enum class Format {Numeric, DateTime};
+	// see Axis::Scale and https://www.originlab.com/doc/Origin-Help/AxesRef-Scale#Type
 	enum class Scale {Linear, Log10, Log2, Ln, Log10Abs, Log2Abs, LnAbs, Sqrt, X2};
 };
 

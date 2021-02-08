@@ -1214,7 +1214,7 @@ const Range<double> CartesianPlot::yRange(const int index) const {
 	return d->yRanges.at(index);
 }
 // sets x range of default plot range
-void CartesianPlot::setXRange(Range<double> range) {
+void CartesianPlot::setXRange(Range<double>& range) {
 	DEBUG(Q_FUNC_INFO << ", set x range to " << range.toStdString())
 	Q_D(CartesianPlot);
 	const int xIndex{ defaultCoordinateSystem()->xIndex() };
@@ -1222,12 +1222,13 @@ void CartesianPlot::setXRange(Range<double> range) {
 		d->curvesYMinMaxIsDirty = true;
 		//d->xRanges[xIndex] = range;
 		exec(new CartesianPlotSetXRangeIndexCmd(d, range, xIndex, ki18n("%1: set x range")));
+		//TODO: which yIndex?
 		if (autoScaleY())
 			scaleAutoY();
 	}
 }
 // sets y range of default plot range
-void CartesianPlot::setYRange(Range<double> range) {
+void CartesianPlot::setYRange(Range<double>& range) {
 	DEBUG(Q_FUNC_INFO << ", set y range to " << range.toStdString())
 	Q_D(CartesianPlot);
 	const int yIndex{ defaultCoordinateSystem()->yIndex() };
@@ -1235,6 +1236,7 @@ void CartesianPlot::setYRange(Range<double> range) {
 		d->curvesXMinMaxIsDirty = true;
 		//d->yRanges[yIndex] = range;
 		exec(new CartesianPlotSetYRangeIndexCmd(d, range, yIndex, ki18n("%1: set y range")));
+		//TODO: which xIndex?
 		if (autoScaleX())
 			scaleAutoX();
 	}
