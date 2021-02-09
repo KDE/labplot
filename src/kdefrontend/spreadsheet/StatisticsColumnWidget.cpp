@@ -231,6 +231,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 }
 
 StatisticsColumnWidget::~StatisticsColumnWidget() {
+	disconnect(m_tabWidget, 0, this, 0); //don't react on currentChanged signal
 	delete m_project;
 }
 

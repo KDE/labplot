@@ -847,6 +847,7 @@ void BoxPlotPrivate::updatePixmap() {
 	m_pixmap = pixmap;
 	m_hoverEffectImageIsDirty = true;
 	m_selectionEffectImageIsDirty = true;
+	update();
 }
 
 void BoxPlotPrivate::draw(QPainter* painter) {
