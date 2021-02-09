@@ -125,7 +125,7 @@ public:
 			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " - "
 				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
 	}
-	const char* toStdString() const { return STDSTRING(toString()); }
+	std::string toStdString() const { return STDSTRING(toString()); }
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
 private:

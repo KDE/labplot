@@ -64,7 +64,7 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 #define RESET_CURSOR QApplication::restoreOverrideCursor()
 
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
-#define STDSTRING(qstr) qstr.toUtf8().constData()
+#define STDSTRING(qstr) qstr.toStdString()
 
 #define ENUM_TO_STRING(class, enum, value) \
     (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(value)))

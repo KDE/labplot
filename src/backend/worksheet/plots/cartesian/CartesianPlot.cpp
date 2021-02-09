@@ -1217,7 +1217,7 @@ void CartesianPlot::setXRange(const Range<double> range) {
 	Q_D(CartesianPlot);
 	const int xIndex{ defaultCoordinateSystem()->xIndex() };
 	const int yIndex{ defaultCoordinateSystem()->yIndex() };
-	if (range.finite() && range != xRange()) {
+	if (range.finite() && range != xRange(xIndex)) {
 		d->curvesYMinMaxIsDirty = true;
 		//d->xRanges[xIndex] = range;
 		exec(new CartesianPlotSetXRangeIndexCmd(d, range, xIndex, ki18n("%1: set x range")));
@@ -1231,7 +1231,7 @@ void CartesianPlot::setYRange(const Range<double> range) {
 	Q_D(CartesianPlot);
 	const int xIndex{ defaultCoordinateSystem()->xIndex() };
 	const int yIndex{ defaultCoordinateSystem()->yIndex() };
-	if (range.finite() && range != yRange()) {
+	if (range.finite() && range != yRange(yIndex)) {
 		d->curvesXMinMaxIsDirty = true;
 		//d->yRanges[yIndex] = range;
 		exec(new CartesianPlotSetYRangeIndexCmd(d, range, yIndex, ki18n("%1: set y range")));
