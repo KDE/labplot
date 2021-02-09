@@ -2950,7 +2950,7 @@ void CartesianPlot::zoom(bool x, bool in) {
 		break;
 	}
 	case RangeT::Scale::Sqrt:
-	case RangeT::Scale::X2:
+	case RangeT::Scale::Square:
 		break;
 	}
 
@@ -2999,7 +2999,7 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 		break;
 	}
 	case RangeT::Scale::Sqrt:
-	case RangeT::Scale::X2:
+	case RangeT::Scale::Square:
 		break;
 	}
 
@@ -3633,7 +3633,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 				break;
 			}
 			case RangeT::Scale::Sqrt:
-			case RangeT::Scale::X2:
+			case RangeT::Scale::Square:
 				break;
 			}
 
@@ -3663,7 +3663,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 				break;
 			}
 			case RangeT::Scale::Sqrt:
-			case RangeT::Scale::X2:
+			case RangeT::Scale::Square:
 				break;
 			}
 

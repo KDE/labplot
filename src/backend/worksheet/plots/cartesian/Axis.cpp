@@ -1219,7 +1219,7 @@ void AxisPrivate::retransformTicks() {
 			case Axis::Scale::Sqrt:
 				majorTicksIncrement = (sqrt(end) - sqrt(start))/(majorTicksNumber-1);
 				break;
-			case Axis::Scale::X2:
+			case Axis::Scale::Square:
 				majorTicksIncrement = (end*end - start*start)/(majorTicksNumber-1);
 		}
 	} else if (majorTicksType == Axis::TicksType::Spacing) {
@@ -1241,7 +1241,7 @@ void AxisPrivate::retransformTicks() {
 			case Axis::Scale::Sqrt:
 				tmpMajorTicksNumber = qRound((sqrt(end)-sqrt(start))/majorTicksIncrement + 1);
 				break;
-			case Axis::Scale::X2:
+			case Axis::Scale::Square:
 				tmpMajorTicksNumber = qRound((end*end - start*start)/majorTicksIncrement + 1);
 		}
 	} else { //custom column was provided
@@ -1306,7 +1306,7 @@ void AxisPrivate::retransformTicks() {
 					majorTickPos = pow(sqrt(start) + majorTicksIncrement*iMajor, 2);
 					nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement*(iMajor+1), 2);
 					break;
-				case Axis::Scale::X2:
+				case Axis::Scale::Square:
 					majorTickPos = sqrt(start*start + majorTicksIncrement*iMajor);
 					nextMajorTickPos = sqrt(start*start + majorTicksIncrement*(iMajor+1));
 					break;
