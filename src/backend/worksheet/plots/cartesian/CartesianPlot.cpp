@@ -1166,18 +1166,16 @@ void CartesianPlot::setAutoScaleY(int index, const bool autoScaleY) {
 
 // set x/y range command with index
 class CartesianPlotSetXRangeIndexCmd: public StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>> {
-	public:
-		CartesianPlotSetXRangeIndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description)
-			: StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>>(target, &CartesianPlot::Private::xRanges, index, newValue, description) {}
-		//TODO: check emit
-		virtual void finalize() override { m_target->retransformScales(); emit m_target->q->xRangeChanged((m_target->*m_field).at(m_index)); }
+public:
+	CartesianPlotSetXRangeIndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description)
+		: StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>>(target, &CartesianPlot::Private::xRanges, index, newValue, description) {}
+	virtual void finalize() override { m_target->retransformScales(); emit m_target->q->xRangeChanged((*m_target.*m_field).at(m_index)); }
 };
 class CartesianPlotSetYRangeIndexCmd: public StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>> {
-	public:
-		CartesianPlotSetYRangeIndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description)
-			: StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>>(target, &CartesianPlot::Private::yRanges, index, newValue, description) {}
-		//TODO: check emit
-		virtual void finalize() override { m_target->retransformScales(); emit m_target->q->yRangeChanged((m_target->*m_field).at(m_index)); }
+public:
+	CartesianPlotSetYRangeIndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description)
+		: StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>>(target, &CartesianPlot::Private::yRanges, index, newValue, description) {}
+	virtual void finalize() override { m_target->retransformScales(); emit m_target->q->yRangeChanged((*m_target.*m_field).at(m_index)); }
 };
 
 

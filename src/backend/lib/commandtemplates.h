@@ -73,7 +73,7 @@ public:
 	virtual void finalize() {};
 
 	void redo() override {
-		DEBUG(Q_FUNC_INFO)
+		DEBUG(Q_FUNC_INFO);
 		initialize();
 		value_type tmp = (*m_target.*m_field).at(m_index);
 		(*m_target.*m_field)[m_index] = m_otherValue;
