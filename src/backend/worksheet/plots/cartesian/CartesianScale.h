@@ -38,6 +38,7 @@ class CartesianScale {
 public:
 	virtual ~CartesianScale();
 
+	//TODO: see Axis::Scale or RangeT::Scale
 	enum class Type {Linear, Log};
 
 	static CartesianScale* createLinearScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange);

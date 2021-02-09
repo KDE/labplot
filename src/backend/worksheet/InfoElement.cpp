@@ -262,8 +262,6 @@ void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
 			return;
 	}
 
-	Q_D(InfoElement);
-
 	if (!custompoint) {
 		custompoint = new CustomPoint(m_plot, i18n("Symbol"));
 		custompoint->setVisible(false);
