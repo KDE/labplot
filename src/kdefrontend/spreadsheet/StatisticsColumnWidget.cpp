@@ -45,6 +45,13 @@
 
 #include <cmath>
 
+extern "C" {
+#include <gsl/gsl_cdf.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_sort.h>
+#include <gsl/gsl_statistics.h>
+}
+
 StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* parent) : QWidget(parent),
 	m_column(column),
 	m_project(new Project),
@@ -223,7 +230,9 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	connect(m_tabWidget, &QTabWidget::currentChanged, this, &StatisticsColumnWidget::currentTabChanged);
 }
 
-StatisticsColumnWidget::~StatisticsColumnWidget() = default;
+StatisticsColumnWidget::~StatisticsColumnWidget() {
+	delete m_project;
+}
 
 void StatisticsColumnWidget::showStatistics() {
 	if (!m_overviewInitialized) {
@@ -332,6 +341,94 @@ void StatisticsColumnWidget::showKDEPlot() {
 }
 
 void StatisticsColumnWidget::showQQPlot() {
+	//add plot
+	CartesianPlot* plot = addPlot(&m_qqPlotWidget);
+
+	auto axes = plot->children<Axis>();
+	for (auto* axis : qAsConst(axes)) {
+		if (axis->orientation() == Axis::Orientation::Horizontal)
+			axis->title()->setText(i18n("Theoretical Quantiles"));
+		else
+			axis->title()->setText(i18n("Sample Quantiles"));
+	}
+
+	//copy the non-nan and not masked values into a new vector
+	QVector<double> rawData;
+	int rowValuesSize = 0;
+	int notNanCount = 0;
+	double val;
+	if (m_column->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+		auto* rowValues = reinterpret_cast<QVector<double>*>(m_column->data());
+		rowValuesSize = rowValues->size();
+		rawData.reserve(rowValuesSize);
+
+		for (int row = 0; row < rowValuesSize; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || m_column->isMasked(row))
+				continue;
+
+			++notNanCount;
+			rawData.push_back(val);
+		}
+	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::Integer) {
+		auto* rowValues = reinterpret_cast<QVector<int>*>(m_column->data());
+		rowValuesSize = rowValues->size();
+		rawData.reserve(rowValuesSize);
+		for (int row = 0; row < rowValuesSize; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || m_column->isMasked(row))
+				continue;
+
+			++notNanCount;
+			rawData.push_back(val);
+		}
+	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+		auto* rowValues = reinterpret_cast<QVector<qint64>*>(m_column->data());
+		rowValuesSize = rowValues->size();
+		rawData.reserve(rowValuesSize);
+		for (int row = 0; row < rowValuesSize; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || m_column->isMasked(row))
+				continue;
+
+			++notNanCount;
+			rawData.push_back(val);
+		}
+	}
+
+	if (rawData.size() < rowValuesSize)
+		rawData.squeeze();
+
+	//sort the data to calculate the percentiles
+	gsl_sort(rawData.data(), 1, notNanCount);
+
+	//calculate y-values - the percentiles for the column data
+	Column* yColumn = new Column("y");
+	m_project->addChildFast(yColumn);
+	QVector<double> yData(100);
+	for (int i = 0; i < 100; ++i)
+		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, notNanCount, double(i)/100.);
+
+	yColumn->replaceValues(0, yData);
+
+	//calculate x-values - the percentiles for the standard normal distribution
+	Column* xColumn = new Column("x");
+	m_project->addChildFast(xColumn);
+	QVector<double> xData(100);
+	for (int i = 0; i < 100; ++i)
+		xData << gsl_cdf_gaussian_Pinv(double(i)/100., 1.0);
+
+	xColumn->replaceValues(0, xData);
+
+	//add curve with the quantiles
+	XYCurve* curve = new XYCurve("");
+	plot->addChild(curve);
+	curve->setLinePen(QPen(Qt::NoPen));
+	curve->setSymbolsStyle(Symbol::Style::Circle);
+	curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
 	m_qqPlotInitialized = true;
 }
 
