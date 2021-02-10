@@ -1401,24 +1401,24 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	//scale
 	switch (originAxis.scale) {
 	case Origin::GraphAxis::Linear:
-		axis->setScale(Axis::Scale::Linear);
+		axis->setScale(RangeT::Scale::Linear);
 		break;
 	case Origin::GraphAxis::Log10:
-		axis->setScale(Axis::Scale::Log10);
+		axis->setScale(RangeT::Scale::Log10);
 		break;
 	case Origin::GraphAxis::Ln:
-		axis->setScale(Axis::Scale::Ln);
+		axis->setScale(RangeT::Scale::Ln);
 		break;
 	case Origin::GraphAxis::Log2:
-		axis->setScale(Axis::Scale::Log2);
+		axis->setScale(RangeT::Scale::Log2);
 		break;
 	case Origin::GraphAxis::Probability:
 	case Origin::GraphAxis::Probit:
 	case Origin::GraphAxis::Reciprocal:
 	case Origin::GraphAxis::OffsetReciprocal:
 	case Origin::GraphAxis::Logit:
-		//TODO:
-		axis->setScale(Axis::Scale::Linear);
+		//TODO: set if implemented
+		axis->setScale(RangeT::Scale::Linear);
 		break;
 	}
 

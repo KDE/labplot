@@ -160,7 +160,7 @@ private slots:
 	void axisOrientationChanged(Axis::Orientation);
 	void axisPositionChanged(Axis::Position);
 	void axisPositionChanged(double);
-	void axisScaleChanged(Axis::Scale);
+	void axisScaleChanged(RangeT::Scale);
 	void axisAutoScaleChanged(bool);
 	void axisStartChanged(double);
 	void axisEndChanged(double);

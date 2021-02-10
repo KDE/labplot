@@ -2925,24 +2925,21 @@ void CartesianPlot::zoom(bool x, bool in) {
 		range.extend((newRange - oldRange) / 2);
 		break;
 	}
-	case RangeT::Scale::Log10:
-	case RangeT::Scale::Log10Abs: {
+	case RangeT::Scale::Log10: {
 		double oldRange = log10(range.end()) - log10(range.start());
 		double newRange = oldRange * factor;
 		range.end() *= pow(10, (newRange - oldRange) / 2.);
 		range.start() /= pow(10, (newRange - oldRange) / 2.);
 		break;
 	}
-	case RangeT::Scale::Log2:
-	case RangeT::Scale::Log2Abs: {
+	case RangeT::Scale::Log2: {
 		double oldRange = log2(range.end()) - log2(range.start());
 		double newRange = oldRange * factor;
 		range.end() *= pow(2, (newRange - oldRange) / 2.);
 		range.start() /= pow(2, (newRange - oldRange) / 2.);
 		break;
 	}
-	case RangeT::Scale::Ln:
-	case RangeT::Scale::LnAbs: {
+	case RangeT::Scale::Ln: {
 		double oldRange = log(range.end()) - log(range.start());
 		double newRange = oldRange * factor;
 		range.end() *= exp((newRange - oldRange) / 2.);
@@ -2980,20 +2977,17 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 		range += offset;
 		break;
 	}
-	case RangeT::Scale::Log10:
-	case RangeT::Scale::Log10Abs: {
+	case RangeT::Scale::Log10: {
 		offset = (log10(range.end()) - log10(range.start())) * factor;
 		range *= pow(10, offset);
 		break;
 	}
-	case RangeT::Scale::Log2:
-	case RangeT::Scale::Log2Abs: {
+	case RangeT::Scale::Log2: {
 		offset = (log2(range.end()) - log2(range.start())) * factor;
 		range *= pow(2, offset);
 		break;
 	}
-	case RangeT::Scale::Ln:
-	case RangeT::Scale::LnAbs: {
+	case RangeT::Scale::Ln: {
 		offset = (log10(range.end()) - log10(range.start())) * factor;
 		range *= exp(offset);
 		break;
@@ -3614,20 +3608,17 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 				xRange().translate(deltaX);
 				break;
 			}
-			case RangeT::Scale::Log10:
-			case RangeT::Scale::Log10Abs: {
+			case RangeT::Scale::Log10: {
 				const double deltaX = log10(logicalStart.x()) - log10(logicalEnd.x());
 				xRange() *= pow(10, deltaX);
 				break;
 			}
-			case RangeT::Scale::Log2:
-			case RangeT::Scale::Log2Abs: {
+			case RangeT::Scale::Log2: {
 				const double deltaX = log2(logicalStart.x()) - log2(logicalEnd.x());
 				xRange() *= pow(2, deltaX);
 				break;
 			}
-			case RangeT::Scale::Ln:
-			case RangeT::Scale::LnAbs: {
+			case RangeT::Scale::Ln: {
 				const double deltaX = log(logicalStart.x()) - log(logicalEnd.x());
 				xRange() *= exp(deltaX);
 				break;
@@ -3644,20 +3635,17 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 				yRange().translate(deltaY);
 				break;
 			}
-			case RangeT::Scale::Log10:
-			case RangeT::Scale::Log10Abs: {
+			case RangeT::Scale::Log10: {
 				const double deltaY = log10(logicalStart.y()) - log10(logicalEnd.y());
 				yRange() *= pow(10, deltaY);
 				break;
 			}
-			case RangeT::Scale::Log2:
-			case RangeT::Scale::Log2Abs: {
+			case RangeT::Scale::Log2: {
 				const double deltaY = log2(logicalStart.y()) - log2(logicalEnd.y());
 				yRange() *= pow(2, deltaY);
 				break;
 			}
-			case RangeT::Scale::Ln:
-			case RangeT::Scale::LnAbs: {
+			case RangeT::Scale::Ln: {
 				const double deltaY = log(logicalStart.y()) - log(logicalEnd.y());
 				yRange() *= exp(deltaY);
 				break;
@@ -4490,13 +4478,23 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			str = attribs.value("xScale").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("xScale").toString());
-			else
-				d->xRanges[0].scale() = static_cast<RangeT::Scale>(str.toInt());
+			else {
+				int scale{ str.toInt() };
+				// convert old scale
+				if (scale > (int)RangeT::Scale::Ln)
+					scale -= 3;
+				d->xRanges[0].scale() = static_cast<RangeT::Scale>(scale);
+			}
 			str = attribs.value("yScale").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("yScale").toString());
-			else
-				d->yRanges[0].scale() = static_cast<RangeT::Scale>(str.toInt());
+			else {
+				int scale{ str.toInt() };
+				// convert old scale
+				if (scale > (int)RangeT::Scale::Ln)
+					scale -= 3;
+				d->yRanges[0].scale() = static_cast<RangeT::Scale>(scale);
+			}
 
 			str = attribs.value("xRangeFormat").toString();
 			if (str.isEmpty())

@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013-2020 Stefan Gerlach  (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2013-2021 Stefan Gerlach  (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -134,7 +134,7 @@ void Axis::init() {
 	d->autoScale = true;
 	d->position = Axis::Position::Custom;
 	d->offset = group.readEntry("PositionOffset", 0);
-	d->scale = (Scale) group.readEntry("Scale", static_cast<int>(Scale::Linear));
+	d->scale = (RangeT::Scale) group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
 	d->autoScale = group.readEntry("AutoScale", true);
 	d->range = Range<double>(group.readEntry("Start", 0), group.readEntry("End", 10));
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
@@ -381,7 +381,7 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Position, position, position)
-BASIC_SHARED_D_READER_IMPL(Axis, Axis::Scale, scale, scale)
+BASIC_SHARED_D_READER_IMPL(Axis, RangeT::Scale, scale, scale)
 BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, Range<double>, range, range)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
@@ -501,8 +501,8 @@ void Axis::setPosition(Position position) {
 		exec(new AxisSetPositionCmd(d, position, ki18n("%1: set axis position")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, Axis::Scale, scale, retransformTicks);
-void Axis::setScale(Scale scale) {
+STD_SETTER_CMD_IMPL_F_S(Axis, SetScaling, RangeT::Scale, scale, retransformTicks);
+void Axis::setScale(RangeT::Scale scale) {
 	Q_D(Axis);
 	if (scale != d->scale)
 		exec(new AxisSetScalingCmd(d, scale, ki18n("%1: set axis scale")));
@@ -1204,45 +1204,45 @@ void AxisPrivate::retransformTicks() {
 		//the total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
 		switch (scale) {
-			case Axis::Scale::Linear:
-				majorTicksIncrement = range.size()/(majorTicksNumber-1);
-				break;
-			case Axis::Scale::Log10:
-				majorTicksIncrement = (log10(end) - log10(start))/(majorTicksNumber-1);
-				break;
-			case Axis::Scale::Log2:
-				majorTicksIncrement = (log(end) - log(start))/log(2)/(majorTicksNumber-1);
-				break;
-			case Axis::Scale::Ln:
-				majorTicksIncrement = (log(end) - log(start))/(majorTicksNumber-1);
-				break;
-			case Axis::Scale::Sqrt:
-				majorTicksIncrement = (sqrt(end) - sqrt(start))/(majorTicksNumber-1);
-				break;
-			case Axis::Scale::Square:
-				majorTicksIncrement = (end*end - start*start)/(majorTicksNumber-1);
+		case RangeT::Scale::Linear:
+			majorTicksIncrement = range.size()/(majorTicksNumber-1);
+			break;
+		case RangeT::Scale::Log10:
+			majorTicksIncrement = (log10(end) - log10(start))/(majorTicksNumber-1);
+			break;
+		case RangeT::Scale::Log2:
+			majorTicksIncrement = (log(end) - log(start))/log(2)/(majorTicksNumber-1);
+			break;
+		case RangeT::Scale::Ln:
+			majorTicksIncrement = (log(end) - log(start))/(majorTicksNumber-1);
+			break;
+		case RangeT::Scale::Sqrt:
+			majorTicksIncrement = (sqrt(end) - sqrt(start))/(majorTicksNumber-1);
+			break;
+		case RangeT::Scale::Square:
+			majorTicksIncrement = (end*end - start*start)/(majorTicksNumber-1);
 		}
 	} else if (majorTicksType == Axis::TicksType::Spacing) {
 		//the increment of the major ticks is given -> determine the number
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end-start);
 		switch (scale) {
-			case Axis::Scale::Linear:
-				tmpMajorTicksNumber = qRound(range.size()/majorTicksIncrement + 1);
-				break;
-			case Axis::Scale::Log10:
-				tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksIncrement + 1);
-				break;
-			case Axis::Scale::Log2:
-				tmpMajorTicksNumber = qRound((log(end)-log(start))/log(2)/majorTicksIncrement + 1);
-				break;
-			case Axis::Scale::Ln:
-				tmpMajorTicksNumber = qRound((log(end)-log(start))/majorTicksIncrement + 1);
-				break;
-			case Axis::Scale::Sqrt:
-				tmpMajorTicksNumber = qRound((sqrt(end)-sqrt(start))/majorTicksIncrement + 1);
-				break;
-			case Axis::Scale::Square:
-				tmpMajorTicksNumber = qRound((end*end - start*start)/majorTicksIncrement + 1);
+		case RangeT::Scale::Linear:
+			tmpMajorTicksNumber = qRound(range.size()/majorTicksIncrement + 1);
+			break;
+		case RangeT::Scale::Log10:
+			tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksIncrement + 1);
+			break;
+		case RangeT::Scale::Log2:
+			tmpMajorTicksNumber = qRound((log(end)-log(start))/log(2)/majorTicksIncrement + 1);
+			break;
+		case RangeT::Scale::Ln:
+			tmpMajorTicksNumber = qRound((log(end)-log(start))/majorTicksIncrement + 1);
+			break;
+		case RangeT::Scale::Sqrt:
+			tmpMajorTicksNumber = qRound((sqrt(end)-sqrt(start))/majorTicksIncrement + 1);
+			break;
+		case RangeT::Scale::Square:
+			tmpMajorTicksNumber = qRound((end*end - start*start)/majorTicksIncrement + 1);
 		}
 	} else { //custom column was provided
 		if (majorTicksColumn) {
@@ -1286,30 +1286,30 @@ void AxisPrivate::retransformTicks() {
 		//calculate major tick's position
 		if (majorTicksType != Axis::TicksType::CustomColumn) {
 			switch (scale) {
-				case Axis::Scale::Linear:
-					majorTickPos = start + majorTicksIncrement * iMajor;
-					nextMajorTickPos = majorTickPos + majorTicksIncrement;
-					break;
-				case Axis::Scale::Log10:
-					majorTickPos = start * pow(10, majorTicksIncrement*iMajor);
-					nextMajorTickPos = majorTickPos * pow(10, majorTicksIncrement);
-					break;
-				case Axis::Scale::Log2:
-					majorTickPos = start * pow(2, majorTicksIncrement*iMajor);
-					nextMajorTickPos = majorTickPos * pow(2, majorTicksIncrement);
-					break;
-				case Axis::Scale::Ln:
-					majorTickPos = start * exp(majorTicksIncrement*iMajor);
-					nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
-					break;
-				case Axis::Scale::Sqrt:
-					majorTickPos = pow(sqrt(start) + majorTicksIncrement*iMajor, 2);
-					nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement*(iMajor+1), 2);
-					break;
-				case Axis::Scale::Square:
-					majorTickPos = sqrt(start*start + majorTicksIncrement*iMajor);
-					nextMajorTickPos = sqrt(start*start + majorTicksIncrement*(iMajor+1));
-					break;
+			case RangeT::Scale::Linear:
+				majorTickPos = start + majorTicksIncrement * iMajor;
+				nextMajorTickPos = majorTickPos + majorTicksIncrement;
+				break;
+			case RangeT::Scale::Log10:
+				majorTickPos = start * pow(10, majorTicksIncrement*iMajor);
+				nextMajorTickPos = majorTickPos * pow(10, majorTicksIncrement);
+				break;
+			case RangeT::Scale::Log2:
+				majorTickPos = start * pow(2, majorTicksIncrement*iMajor);
+				nextMajorTickPos = majorTickPos * pow(2, majorTicksIncrement);
+				break;
+			case RangeT::Scale::Ln:
+				majorTickPos = start * exp(majorTicksIncrement*iMajor);
+				nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
+				break;
+			case RangeT::Scale::Sqrt:
+				majorTickPos = pow(sqrt(start) + majorTicksIncrement*iMajor, 2);
+				nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement*(iMajor+1), 2);
+				break;
+			case RangeT::Scale::Square:
+				majorTickPos = sqrt(start*start + majorTicksIncrement*iMajor);
+				nextMajorTickPos = sqrt(start*start + majorTicksIncrement*(iMajor+1));
+				break;
 			}
 		} else {	// custom column
 			if (!majorTicksColumn->isValid(iMajor) || majorTicksColumn->isMasked(iMajor))
@@ -2407,7 +2407,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("autoScale", autoScale, bool);
 			READ_INT_VALUE("orientation", orientation, Orientation);
 			READ_INT_VALUE("position", position, Axis::Position);
-			READ_INT_VALUE("scale", scale, Axis::Scale);
+			READ_INT_VALUE("scale", scale, RangeT::Scale);
 			READ_DOUBLE_VALUE("offset", offset);
 			READ_DOUBLE_VALUE("start", range.start());
 			READ_DOUBLE_VALUE("end", range.end());

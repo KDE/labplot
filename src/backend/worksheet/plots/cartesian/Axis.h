@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2013-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2013-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
 /***************************************************************************
@@ -58,7 +58,7 @@ public:
 	enum class ArrowType {NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig};
 	enum class ArrowPosition {Left, Right, Both};
 	//TODO: use RangeT::Scale?
-	enum class Scale {Linear, Log10, Log2, Ln, Sqrt, Square};
+//	enum class Scale {Linear, Log10, Log2, Ln, Sqrt, Square};
 	enum class LabelsPosition {NoLabels, In, Out};
 	enum class LabelsBackgroundType {Transparent, Color};
 
@@ -121,7 +121,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
-	BASIC_D_ACCESSOR_DECL(Scale, scale, Scale)
+	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
 	BASIC_D_ACCESSOR_DECL(Range<double>, range, Range)
 	void setStart(const double);
 	void setEnd(const double);
@@ -233,7 +233,7 @@ signals:
 	void orientationChanged(Orientation);
 	void positionChanged(Position);
 	void positionChanged(double);
-	void scaleChanged(Scale);
+	void scaleChanged(RangeT::Scale);
 	void startChanged(double);
 	void autoScaleChanged(bool);
 	void endChanged(double);

@@ -703,7 +703,7 @@ void AxisDock::scaleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	auto scale = static_cast<Axis::Scale>(index);
+	auto scale = static_cast<RangeT::Scale>(index);
 	for (auto* axis : m_axesList)
 		axis->setScale(scale);
 }
@@ -736,8 +736,8 @@ void AxisDock::startChanged() {
 		return;
 
 	//check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set the default values.
-	auto scale = Axis::Scale(ui.cbScale->currentIndex());
-	if (scale == Axis::Scale::Log10 || scale == Axis::Scale::Log2 || scale == Axis::Scale::Ln) {
+	auto scale = RangeT::Scale(ui.cbScale->currentIndex());
+	if (scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) {
 		if (value <= 0) {
 			KMessageBox::sorry(this,
 			                   i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
@@ -745,7 +745,7 @@ void AxisDock::startChanged() {
 			value = 0.01;
 			ui.leStart->setText(numberLocale.toString(value) );
 		}
-	} else if (scale == Axis::Scale::Sqrt) {
+	} else if (scale == RangeT::Scale::Sqrt) {
 		if (value < 0) {
 			KMessageBox::sorry(this,
 			                   i18n("The axes lower limit has a negative value. Default minimal value will be used."),
@@ -1726,7 +1726,7 @@ void AxisDock::axisPositionChanged(double value) {
 	m_initializing = false;
 }
 
-void AxisDock::axisScaleChanged(Axis::Scale scale) {
+void AxisDock::axisScaleChanged(RangeT::Scale scale) {
 	m_initializing = true;
 	ui.cbScale->setCurrentIndex(static_cast<int>(scale));
 	m_initializing = false;

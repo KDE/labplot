@@ -70,7 +70,7 @@ public:
 	bool autoScale;
 	Axis::Orientation orientation;	//!< horizontal or vertical
 	Axis::Position position; 	//!< left, right, bottom, top or custom (usually not changed after creation)
-	Axis::Scale scale;
+	RangeT::Scale scale;
 	double offset;			//!< offset from zero in the direction perpendicular to the axis
 	Range<double> range;		//!< coordinate range of the axis line
 	qreal scalingFactor;

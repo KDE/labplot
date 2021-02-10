@@ -66,6 +66,8 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
 #define STDSTRING(qstr) qstr.toStdString()
 
+#define CHECK(expr) if ( !(expr) ) { DEBUG(Q_FUNC_INFO << ", ERROR: expr");  return false; }
+
 #define ENUM_TO_STRING(class, enum, value) \
     (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(value)))
 #define ENUM_COUNT(class, enum) \

@@ -5,7 +5,7 @@
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2020-2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -56,14 +56,13 @@ void CartesianScale::getProperties(Type *type, Range<double> *range,
 
 /**
  * \class CartesianCoordinateSystem::LinearScale
- * \brief implementation of the linear scale for cartesian coordinate system.
+ * \brief implementation of a linear scale for cartesian coordinate systems
  */
 class LinearScale : public CartesianScale {
 public:
 	LinearScale(const Range<double> &range, double offset, double gradient)
 		: CartesianScale(Type::Linear, range, offset, gradient, 0) {
 			Q_ASSERT(gradient != 0.0);
-
 		}
 
 	~LinearScale() override = default;
@@ -74,8 +73,7 @@ public:
 	}
 
 	bool inverseMap(double *value) const override {
-		if (m_b == 0.0)
-			return false;
+		CHECK(m_b != 0.0)
 		*value = (*value - m_a) / m_b;
 		return true;
 	}
@@ -86,13 +84,13 @@ public:
 };
 
 /**
- * \class CartesianCoordinateSystem::LinearScale
- * \brief implementation of the linear scale for cartesian coordinate system.
+ * \class CartesianCoordinateSystem::LogScale
+ * \brief implementation of a logarithmic scale for cartesian coordinate systems
  */
 class LogScale : public CartesianScale {
 public:
-	LogScale(const Range<double> &range, double offset, double scaleFactor, double base, bool abs)
-		: CartesianScale(Type::Log, range, offset, scaleFactor, base), m_abs(abs) {
+	LogScale(const Range<double> &range, double offset, double scaleFactor, double base)
+		: CartesianScale(Type::Log, range, offset, scaleFactor, base) {
 			Q_ASSERT(scaleFactor != 0.0);
 			Q_ASSERT(base > 0.0);
 	}
@@ -100,21 +98,18 @@ public:
 	~LogScale() override = default;
 
 	bool map(double *value) const override {
+		CHECK(m_c > 0)
+
 		if (*value > 0.0)
 			*value = log(*value)/log(m_c) * m_b + m_a;
-		else if (m_abs)
-			*value = log(fabs(*value))/log(m_c) * m_b + m_a;
 		else
-			return false;
+			*value = log(qAbs(*value))/log(m_c) * m_b + m_a;
 
 		return true;
 	}
 
 	bool inverseMap(double *value) const override {
-		if (m_a == 0.0)
-			return false;
-		if (m_c <= 0.0)
-			return false;
+		CHECK(m_c > 0)
 
 		*value = pow(m_c, (*value - m_a) / m_b);
 		return true;
@@ -122,9 +117,6 @@ public:
 	int direction() const override {
 		return m_b < 0 ? -1 : 1;
 	}
-
-private:
-	bool m_abs;
 };
 
 
@@ -146,25 +138,21 @@ CartesianScale* CartesianScale::createLogScale(const Range<double> &range,
 		const Range<double> &sceneRange, const Range<double> &logicalRange, RangeT::Scale scale) {
 
 	double base;
-	if (scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log10Abs)
+	if (scale == RangeT::Scale::Log10)
 		base = 10.0;
-	else if (scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Log2Abs)
+	else if (scale == RangeT::Scale::Log2)
 		base = 2.0;
 	else
 		base = M_E;
 
 
-	if (logicalRange.start() <= 0.0 || logicalRange.end() <= 0.0)
+	if (logicalRange.start() <= 0.0 || logicalRange.end() <= 0.0 || logicalRange.isZero())
 		return nullptr;
 
 	const double lDiff = (log(logicalRange.end()) - log(logicalRange.start())) / log(base);
-	if (lDiff == 0.0)
-		return nullptr;
-
 	double b = sceneRange.size() / lDiff;
-	double a = sceneRange.start() - b * log(logicalRange.start())/log(base);
+	double a = sceneRange.start() - b * log(logicalRange.start()) / log(base);
 
-	bool abs = (scale == RangeT::Scale::Log10Abs || scale == RangeT::Scale::Log2Abs || scale == RangeT::Scale::LnAbs);
-	return new LogScale(range, a, b, base, abs);
+	return new LogScale(range, a, b, base);
 }
 
