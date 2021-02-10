@@ -276,6 +276,8 @@ void AxisDock::init() {
 	ui.cbPosition->addItem(i18n("Centered"));
 	ui.cbPosition->addItem(i18n("Custom"));
 
+	//TODO: -> updateLocale()
+	//TODO: -> RangeT::Scale
 	ui.cbScale->addItem( i18n("Linear") );
 	ui.cbScale->addItem( QLatin1String("log(x)") );
 	ui.cbScale->addItem( QLatin1String("log2(x)") );
