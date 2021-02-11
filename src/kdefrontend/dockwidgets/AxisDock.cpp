@@ -276,14 +276,9 @@ void AxisDock::init() {
 	ui.cbPosition->addItem(i18n("Centered"));
 	ui.cbPosition->addItem(i18n("Custom"));
 
-	//TODO: -> updateLocale()
-	//TODO: -> RangeT::Scale
-	ui.cbScale->addItem( i18n("Linear") );
-	ui.cbScale->addItem( QLatin1String("log(x)") );
-	ui.cbScale->addItem( QLatin1String("log2(x)") );
-	ui.cbScale->addItem( QLatin1String("ln(x)") );
-	ui.cbScale->addItem( QLatin1String("sqrt(x)") );
-	ui.cbScale->addItem( QLatin1String("x^2") );
+	// scales
+	for (const auto& name: RangeT::scaleNames)
+		ui.cbScale->addItem(name);
 
 	ui.cbOrientation->addItem( i18n("Horizontal") );
 	ui.cbOrientation->addItem( i18n("Vertical") );
@@ -563,6 +558,11 @@ void AxisDock::updateLocale() {
 	ui.leStart->setText(numberLocale.toString(m_axis->range().start()));
 	ui.leEnd->setText(numberLocale.toString(m_axis->range().end()));
 
+	// scales
+	ui.cbScale->clear();
+	for (const auto& name: RangeT::scaleNames)
+		ui.cbScale->addItem(name);
+
 	//update the title label
 	labelWidget->updateLocale();
 }
@@ -609,22 +609,24 @@ void AxisDock::orientationChanged(int item) {
 		ui.cbLabelsPosition->setItemText(1, i18n("Top") );
 		ui.cbLabelsPosition->setItemText(2, i18n("Bottom") );
 
-		ui.cbScale->setItemText(1, QLatin1String("log(x)") );
+/*		ui.cbScale->setItemText(1, QLatin1String("log(x)") );
 		ui.cbScale->setItemText(2, QLatin1String("log2(x)") );
 		ui.cbScale->setItemText(3, QLatin1String("ln(x)") );
 		ui.cbScale->setItemText(4, QLatin1String("sqrt(x)") );
 		ui.cbScale->setItemText(5, QLatin1String("x^2") );
+*/
 	} else { //vertical
 		ui.cbPosition->setItemText(0, i18n("Left") );
 		ui.cbPosition->setItemText(1, i18n("Right") );
 		ui.cbLabelsPosition->setItemText(1, i18n("Right") );
 		ui.cbLabelsPosition->setItemText(2, i18n("Left") );
 
-		ui.cbScale->setItemText(1, QLatin1String("log(y)") );
+/*		ui.cbScale->setItemText(1, QLatin1String("log(y)") );
 		ui.cbScale->setItemText(2, QLatin1String("log2(y)") );
 		ui.cbScale->setItemText(3, QLatin1String("ln(y)") );
 		ui.cbScale->setItemText(4, QLatin1String("sqrt(y)") );
 		ui.cbScale->setItemText(5, QLatin1String("y^2") );
+*/
 	}
 
 	if (m_initializing)

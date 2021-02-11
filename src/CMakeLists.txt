@@ -262,6 +262,14 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/core/datatypes/DayOfWeek2BigIntFilter.h
 	${BACKEND_DIR}/core/plugin/PluginLoader.cpp
 	${BACKEND_DIR}/core/plugin/PluginManager.cpp
+	${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
+	${BACKEND_DIR}/datapicker/DatapickerImage.cpp
+	${BACKEND_DIR}/datapicker/Datapicker.cpp
+	${BACKEND_DIR}/datapicker/Transform.cpp
+	${BACKEND_DIR}/datapicker/ImageEditor.cpp
+	${BACKEND_DIR}/datapicker/Segment.cpp
+	${BACKEND_DIR}/datapicker/Segments.cpp
+	${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 	${BACKEND_DIR}/datasources/AbstractDataSource.cpp
 	${BACKEND_DIR}/datasources/DatasetHandler.cpp
 	${BACKEND_DIR}/datasources/LiveDataSource.cpp
@@ -280,13 +288,15 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/projects/ProjectParser.cpp
 	${BACKEND_DIR}/datasources/projects/LabPlotProjectParser.cpp
 	${BACKEND_DIR}/gsl/ExpressionParser.cpp
+	${BACKEND_DIR}/lib/Range.cpp
+	${BACKEND_DIR}/lib/XmlStreamReader.cpp
+	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
 	${BACKEND_DIR}/matrix/Matrix.cpp
 	${BACKEND_DIR}/matrix/matrixcommands.cpp
 	${BACKEND_DIR}/matrix/MatrixModel.cpp
+	${BACKEND_DIR}/note/Note.cpp
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
-	${BACKEND_DIR}/lib/XmlStreamReader.cpp
-	${BACKEND_DIR}/note/Note.cpp
 	${BACKEND_DIR}/worksheet/Image.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
@@ -322,15 +332,6 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierTransformCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
-	${BACKEND_DIR}/lib/SignallingUndoCommand.cpp
-	${BACKEND_DIR}/datapicker/DatapickerPoint.cpp
-	${BACKEND_DIR}/datapicker/DatapickerImage.cpp
-	${BACKEND_DIR}/datapicker/Datapicker.cpp
-	${BACKEND_DIR}/datapicker/Transform.cpp
-	${BACKEND_DIR}/datapicker/ImageEditor.cpp
-	${BACKEND_DIR}/datapicker/Segment.cpp
-	${BACKEND_DIR}/datapicker/Segments.cpp
-	${BACKEND_DIR}/datapicker/DatapickerCurve.cpp
 )
 
 if (Qt5Mqtt_FOUND)

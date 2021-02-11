@@ -589,13 +589,9 @@ void CartesianPlotDock::updateXRangeList() {
 		// scale
 		cb = new QComboBox(ui.twXRanges);
 		//TODO: -> updateLocale()
-		//TODO: -> RangeT::Scale
-		cb->addItem( i18n("linear") );
-		cb->addItem( i18n("log(x)") );
-		cb->addItem( i18n("log2(x)") );
-		cb->addItem( i18n("ln(x)") );
-		cb->addItem( i18n("sqrt(x)") );
-		cb->addItem( i18n("x^2") );
+		for (const auto& name: RangeT::scaleNames)
+			cb->addItem(name);
+
 		cb->setCurrentIndex(static_cast<int>(scale));
 		cb->setProperty("row", i);
 		ui.twXRanges->setCellWidget(i, 4, cb);
@@ -686,13 +682,9 @@ void CartesianPlotDock::updateYRangeList() {
 		// scale
 		cb = new QComboBox(ui.twYRanges);
 		//TODO: -> updateLocale()
-		cb->addItem( i18n("linear") );
-		cb->addItem( i18n("log(x)") );
-		cb->addItem( i18n("log2(x)") );
-		cb->addItem( i18n("ln(x)") );
-		cb->addItem( i18n("log(|x|)") );
-		cb->addItem( i18n("log2(|x|)") );
-		cb->addItem( i18n("ln(|x|)") );
+		for (const auto& name: RangeT::scaleNames)
+			cb->addItem(name);
+
 		cb->setCurrentIndex(static_cast<int>(scale));
 		cb->setProperty("row", i);
 		ui.twYRanges->setCellWidget(i, 4, cb);
