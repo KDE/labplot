@@ -2987,19 +2987,22 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 		break;
 	}
 	case RangeT::Scale::Log10: {
-		//TODO: if (range.end()/range.start() <= 0)
+		if (range.end()/range.start() <= 0)
+			break;
 		offset = log10(range.end()/range.start()) * factor;
 		range *= pow(10, offset);
 		break;
 	}
 	case RangeT::Scale::Log2: {
-		//TODO: if (range.end()/range.start() <= 0)
+		if (range.end()/range.start() <= 0)
+			break;
 		offset = log2(range.end()/range.start()) * factor;
 		range *= exp2(offset);
 		break;
 	}
 	case RangeT::Scale::Ln: {
-		//TODO: if (range.end()/range.start() <= 0)
+		if (range.end()/range.start() <= 0)
+			break;
 		offset = log(range.end()/range.start()) * factor;
 		range *= exp(offset);
 		break;
