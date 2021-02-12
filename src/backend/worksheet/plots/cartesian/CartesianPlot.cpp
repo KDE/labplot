@@ -2926,7 +2926,7 @@ void CartesianPlot::zoom(bool x, bool in) {
 		break;
 	}
 	case RangeT::Scale::Log10: {
-		if (range.end()/range.start() <= 0)
+		if (range.start() == 0 || range.end()/range.start() <= 0)
 			break;
 		double oldRange = log10(range.end()/range.start());
 		double newRange = oldRange * factor;
@@ -2935,7 +2935,7 @@ void CartesianPlot::zoom(bool x, bool in) {
 		break;
 	}
 	case RangeT::Scale::Log2: {
-		if (range.end()/range.start() <= 0)
+		if (range.start() == 0 || range.end()/range.start() <= 0)
 			break;
 		double oldRange = log2(range.end()/range.start());
 		double newRange = oldRange * factor;
@@ -2944,7 +2944,7 @@ void CartesianPlot::zoom(bool x, bool in) {
 		break;
 	}
 	case RangeT::Scale::Ln: {
-		if (range.end()/range.start() <= 0)
+		if (range.start() == 0 || range.end()/range.start() <= 0)
 			break;
 		double oldRange = log(range.end()/range.start());
 		double newRange = oldRange * factor;
@@ -2987,21 +2987,21 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 		break;
 	}
 	case RangeT::Scale::Log10: {
-		if (range.end()/range.start() <= 0)
+		if (range.start() == 0 || range.end()/range.start() <= 0)
 			break;
 		offset = log10(range.end()/range.start()) * factor;
 		range *= pow(10, offset);
 		break;
 	}
 	case RangeT::Scale::Log2: {
-		if (range.end()/range.start() <= 0)
+		if (range.start() == 0 || range.end()/range.start() <= 0)
 			break;
 		offset = log2(range.end()/range.start()) * factor;
 		range *= exp2(offset);
 		break;
 	}
 	case RangeT::Scale::Ln: {
-		if (range.end()/range.start() <= 0)
+		if (range.start() == 0 || range.end()/range.start() <= 0)
 			break;
 		offset = log(range.end()/range.start()) * factor;
 		range *= exp(offset);
@@ -3627,16 +3627,22 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 				break;
 			}
 			case RangeT::Scale::Log10: {
+				if (logicalEnd.x() == 0 || logicalStart.x() / logicalEnd.x() <= 0)
+					break;
 				const double deltaX = log10(logicalStart.x() / logicalEnd.x());
 				xRange() *= pow(10, deltaX);
 				break;
 			}
 			case RangeT::Scale::Log2: {
+				if (logicalEnd.x() == 0 || logicalStart.x() / logicalEnd.x() <= 0)
+					break;
 				const double deltaX = log2(logicalStart.x() / logicalEnd.x());
 				xRange() *= exp2(deltaX);
 				break;
 			}
 			case RangeT::Scale::Ln: {
+				if (logicalEnd.x() == 0 || logicalStart.x() / logicalEnd.x() <= 0)
+					break;
 				const double deltaX = log(logicalStart.x() / logicalEnd.x());
 				xRange() *= exp(deltaX);
 				break;
@@ -3657,16 +3663,22 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 				break;
 			}
 			case RangeT::Scale::Log10: {
+				if (logicalEnd.y() == 0 || logicalStart.y() / logicalEnd.y() <= 0)
+					break;
 				const double deltaY = log10(logicalStart.y() / logicalEnd.y());
 				yRange() *= pow(10, deltaY);
 				break;
 			}
 			case RangeT::Scale::Log2: {
+				if (logicalEnd.y() == 0 || logicalStart.y() / logicalEnd.y() <= 0)
+					break;
 				const double deltaY = log2(logicalStart.y() / logicalEnd.y());
 				yRange() *= exp2(deltaY);
 				break;
 			}
 			case RangeT::Scale::Ln: {
+				if (logicalEnd.y() == 0 || logicalStart.y() / logicalEnd.y() <= 0)
+					break;
 				const double deltaY = log(logicalStart.y() / logicalEnd.y());
 				yRange() *= exp(deltaY);
 				break;

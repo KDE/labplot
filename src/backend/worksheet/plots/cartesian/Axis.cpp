@@ -1207,15 +1207,15 @@ void AxisPrivate::retransformTicks() {
 			majorTicksIncrement = range.size();
 			break;
 		case RangeT::Scale::Log10:
-			if (end/start > 0)
+			if (start != 0 && end/start > 0)
 				majorTicksIncrement = log10(end/start);
 			break;
 		case RangeT::Scale::Log2:
-			if (end/start > 0)
+			if (start != 0 && end/start > 0)
 				majorTicksIncrement = log2(end/start);
 			break;
 		case RangeT::Scale::Ln:
-			if (end/start > 0)
+			if (start != 0 && end/start > 0)
 				majorTicksIncrement = log(end/start);
 			break;
 		case RangeT::Scale::Sqrt:
@@ -1237,15 +1237,15 @@ void AxisPrivate::retransformTicks() {
 			tmpMajorTicksNumber = qRound( range.size() / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Log10:
-			if (end/start > 0)
+			if (start != 0 && end/start > 0)
 				tmpMajorTicksNumber = qRound( log10(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Log2:
-			if (end/start > 0)
+			if (start != 0 && end/start > 0)
 				tmpMajorTicksNumber = qRound( log2(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Ln:
-			if (end/start > 0)
+			if (start != 0 && end/start > 0)
 				tmpMajorTicksNumber = qRound( log(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Sqrt:
