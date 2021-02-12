@@ -1199,54 +1199,65 @@ void AxisPrivate::retransformTicks() {
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
 	const double start{range.start()}, end{range.end()};
-	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
-	if (majorTicksType == Axis::TicksType::TotalNumber) {
-		//the total number of major ticks is given - > determine the increment
+	switch (majorTicksType) {
+	case Axis::TicksType::TotalNumber:	// total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
 		switch (scale) {
 		case RangeT::Scale::Linear:
 			majorTicksIncrement = range.size();
 			break;
 		case RangeT::Scale::Log10:
-			majorTicksIncrement = log10(end) - log10(start);
+			if (end/start > 0)
+				majorTicksIncrement = log10(end/start);
 			break;
 		case RangeT::Scale::Log2:
-			majorTicksIncrement = log2(end) - log2(start);
+			if (end/start > 0)
+				majorTicksIncrement = log2(end/start);
 			break;
 		case RangeT::Scale::Ln:
-			majorTicksIncrement = log(end) - log(start);
+			if (end/start > 0)
+				majorTicksIncrement = log(end/start);
 			break;
 		case RangeT::Scale::Sqrt:
-			majorTicksIncrement = sqrt(end) - sqrt(start);
+			if (start >=0 && end >= 0)
+				majorTicksIncrement = sqrt(end) - sqrt(start);
 			break;
 		case RangeT::Scale::Square:
 			majorTicksIncrement = end*end - start*start;
 		}
 		if (majorTicksNumber > 1)
 			majorTicksIncrement /= majorTicksNumber - 1;
-	} else if (majorTicksType == Axis::TicksType::Spacing) {
+		break;
+	case Axis::TicksType::Spacing:
 		//the increment of the major ticks is given -> determine the number
+		//TODO: majorTicksSpacing == 0?
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end - start);
 		switch (scale) {
 		case RangeT::Scale::Linear:
-			tmpMajorTicksNumber = qRound(range.size()/majorTicksIncrement + 1);
+			tmpMajorTicksNumber = qRound( range.size() / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Log10:
-			tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksIncrement + 1);
+			if (end/start > 0)
+				tmpMajorTicksNumber = qRound( log10(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Log2:
-			tmpMajorTicksNumber = qRound((log(end)-log(start))/log(2)/majorTicksIncrement + 1);
+			if (end/start > 0)
+				tmpMajorTicksNumber = qRound( log2(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Ln:
-			tmpMajorTicksNumber = qRound((log(end)-log(start))/majorTicksIncrement + 1);
+			if (end/start > 0)
+				tmpMajorTicksNumber = qRound( log(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Sqrt:
-			tmpMajorTicksNumber = qRound((sqrt(end)-sqrt(start))/majorTicksIncrement + 1);
+			if (start >= 0 && end >= 0)
+				tmpMajorTicksNumber = qRound( (sqrt(end) - sqrt(start)) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Square:
-			tmpMajorTicksNumber = qRound((end*end - start*start)/majorTicksIncrement + 1);
+			tmpMajorTicksNumber = qRound( (end*end - start*start) / majorTicksIncrement + 1 );
 		}
-	} else { //custom column was provided
+		break;
+	case Axis::TicksType::CustomColumn:
+	case Axis::TicksType::CustomValues:
 		if (majorTicksColumn) {
 			tmpMajorTicksNumber = majorTicksColumn->rowCount();
 		} else {
@@ -1255,17 +1266,23 @@ void AxisPrivate::retransformTicks() {
 		}
 	}
 
-	int tmpMinorTicksNumber;
-	if (minorTicksType == Axis::TicksType::TotalNumber)
+	// minor ticks
+	int tmpMinorTicksNumber{0};
+	switch (minorTicksType) {
+	case Axis::TicksType::TotalNumber:
 		tmpMinorTicksNumber = minorTicksNumber;
-	else if (minorTicksType == Axis::TicksType::Spacing)
-		tmpMinorTicksNumber = qAbs(end - start)/ (majorTicksNumber - 1)/minorTicksIncrement - 1;
-	else
+		break;
+	case Axis::TicksType::Spacing:
+		tmpMinorTicksNumber = range.length() / minorTicksIncrement - 1;
+		if (majorTicksNumber > 1)
+			tmpMinorTicksNumber /= majorTicksNumber - 1;
+		break;
+	case Axis::TicksType::CustomColumn:
+	case Axis::TicksType::CustomValues:
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
+	}
 
-	QPointF anchorPoint;
-	QPointF startPoint;
-	QPointF endPoint;
+	QPointF anchorPoint, startPoint, endPoint;
 	qreal majorTickPos = 0.0;
 	qreal minorTickPos;
 	qreal nextMajorTickPos = 0.0;
@@ -1293,24 +1310,24 @@ void AxisPrivate::retransformTicks() {
 				nextMajorTickPos = majorTickPos + majorTicksIncrement;
 				break;
 			case RangeT::Scale::Log10:
-				majorTickPos = start * pow(10, majorTicksIncrement*iMajor);
+				majorTickPos = start * pow(10, majorTicksIncrement * iMajor);
 				nextMajorTickPos = majorTickPos * pow(10, majorTicksIncrement);
 				break;
 			case RangeT::Scale::Log2:
-				majorTickPos = start * pow(2, majorTicksIncrement*iMajor);
-				nextMajorTickPos = majorTickPos * pow(2, majorTicksIncrement);
+				majorTickPos = start * exp2(majorTicksIncrement * iMajor);
+				nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
 				break;
 			case RangeT::Scale::Ln:
-				majorTickPos = start * exp(majorTicksIncrement*iMajor);
+				majorTickPos = start * exp(majorTicksIncrement * iMajor);
 				nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
 				break;
 			case RangeT::Scale::Sqrt:
-				majorTickPos = pow(sqrt(start) + majorTicksIncrement*iMajor, 2);
-				nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement*(iMajor+1), 2);
+				majorTickPos = pow(sqrt(start) + majorTicksIncrement * iMajor, 2);
+				nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement * (iMajor+1), 2);
 				break;
 			case RangeT::Scale::Square:
-				majorTickPos = sqrt(start*start + majorTicksIncrement*iMajor);
-				nextMajorTickPos = sqrt(start*start + majorTicksIncrement*(iMajor+1));
+				majorTickPos = sqrt(start*start + majorTicksIncrement * iMajor);
+				nextMajorTickPos = sqrt(start*start + majorTicksIncrement * (iMajor+1));
 				break;
 			}
 		} else {	// custom column

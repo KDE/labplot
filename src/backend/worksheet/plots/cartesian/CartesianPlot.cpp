@@ -2916,38 +2916,47 @@ void CartesianPlot::zoom(bool x, bool in) {
 
 	double factor = m_zoomFactor;
 	if (in)
-		factor = 1/factor;
+		factor = 1./factor;
 
 	switch (range.scale()) {
 	case RangeT::Scale::Linear: {
 		double oldRange = range.size();
 		double newRange = range.size() * factor;
-		range.extend((newRange - oldRange) / 2);
+		range.extend((newRange - oldRange) / 2.);
 		break;
 	}
 	case RangeT::Scale::Log10: {
-		double oldRange = log10(range.end()) - log10(range.start());
+		if (range.end()/range.start() <= 0)
+			break;
+		double oldRange = log10(range.end()/range.start());
 		double newRange = oldRange * factor;
 		range.end() *= pow(10, (newRange - oldRange) / 2.);
 		range.start() /= pow(10, (newRange - oldRange) / 2.);
 		break;
 	}
 	case RangeT::Scale::Log2: {
-		double oldRange = log2(range.end()) - log2(range.start());
+		if (range.end()/range.start() <= 0)
+			break;
+		double oldRange = log2(range.end()/range.start());
 		double newRange = oldRange * factor;
-		range.end() *= pow(2, (newRange - oldRange) / 2.);
-		range.start() /= pow(2, (newRange - oldRange) / 2.);
+		range.end() *= exp2( (newRange - oldRange) / 2. );
+		range.start() /= exp2( (newRange - oldRange) / 2. );
 		break;
 	}
 	case RangeT::Scale::Ln: {
-		double oldRange = log(range.end()) - log(range.start());
+		if (range.end()/range.start() <= 0)
+			break;
+		double oldRange = log(range.end()/range.start());
 		double newRange = oldRange * factor;
 		range.end() *= exp((newRange - oldRange) / 2.);
 		range.start() /= exp((newRange - oldRange) / 2.);
 		break;
 	}
 	case RangeT::Scale::Sqrt:
+		//TODO
+		break;
 	case RangeT::Scale::Square:
+		//TODO
 		break;
 	}
 
@@ -2978,22 +2987,28 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 		break;
 	}
 	case RangeT::Scale::Log10: {
-		offset = (log10(range.end()) - log10(range.start())) * factor;
+		//TODO: if (range.end()/range.start() <= 0)
+		offset = log10(range.end()/range.start()) * factor;
 		range *= pow(10, offset);
 		break;
 	}
 	case RangeT::Scale::Log2: {
-		offset = (log2(range.end()) - log2(range.start())) * factor;
-		range *= pow(2, offset);
+		//TODO: if (range.end()/range.start() <= 0)
+		offset = log2(range.end()/range.start()) * factor;
+		range *= exp2(offset);
 		break;
 	}
 	case RangeT::Scale::Ln: {
-		offset = (log10(range.end()) - log10(range.start())) * factor;
+		//TODO: if (range.end()/range.start() <= 0)
+		offset = log(range.end()/range.start()) * factor;
 		range *= exp(offset);
 		break;
 	}
 	case RangeT::Scale::Sqrt:
+		//TODO
+		break;
 	case RangeT::Scale::Square:
+		//TODO
 		break;
 	}
 
@@ -3609,22 +3624,25 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 				break;
 			}
 			case RangeT::Scale::Log10: {
-				const double deltaX = log10(logicalStart.x()) - log10(logicalEnd.x());
+				const double deltaX = log10(logicalStart.x() / logicalEnd.x());
 				xRange() *= pow(10, deltaX);
 				break;
 			}
 			case RangeT::Scale::Log2: {
-				const double deltaX = log2(logicalStart.x()) - log2(logicalEnd.x());
-				xRange() *= pow(2, deltaX);
+				const double deltaX = log2(logicalStart.x() / logicalEnd.x());
+				xRange() *= exp2(deltaX);
 				break;
 			}
 			case RangeT::Scale::Ln: {
-				const double deltaX = log(logicalStart.x()) - log(logicalEnd.x());
+				const double deltaX = log(logicalStart.x() / logicalEnd.x());
 				xRange() *= exp(deltaX);
 				break;
 			}
 			case RangeT::Scale::Sqrt:
+				//TODO
+				break;
 			case RangeT::Scale::Square:
+				//TODO
 				break;
 			}
 
@@ -3636,22 +3654,25 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 				break;
 			}
 			case RangeT::Scale::Log10: {
-				const double deltaY = log10(logicalStart.y()) - log10(logicalEnd.y());
+				const double deltaY = log10(logicalStart.y() / logicalEnd.y());
 				yRange() *= pow(10, deltaY);
 				break;
 			}
 			case RangeT::Scale::Log2: {
-				const double deltaY = log2(logicalStart.y()) - log2(logicalEnd.y());
-				yRange() *= pow(2, deltaY);
+				const double deltaY = log2(logicalStart.y() / logicalEnd.y());
+				yRange() *= exp2(deltaY);
 				break;
 			}
 			case RangeT::Scale::Ln: {
-				const double deltaY = log(logicalStart.y()) - log(logicalEnd.y());
+				const double deltaY = log(logicalStart.y() / logicalEnd.y());
 				yRange() *= exp(deltaY);
 				break;
 			}
 			case RangeT::Scale::Sqrt:
+				//TODO
+				break;
 			case RangeT::Scale::Square:
+				//TODO
 				break;
 			}
 
