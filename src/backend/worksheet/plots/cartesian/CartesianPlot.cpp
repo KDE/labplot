@@ -2478,7 +2478,7 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 	}
 	case Scale::Ln:
 	case Scale::LnAbs: {
-		offset = (log10(max) - log10(min)) * factor;
+		offset = (log(max) - log(min)) * factor;
 		min *= exp(offset);
 		max *= exp(offset);
 		break;

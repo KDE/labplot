@@ -26,6 +26,7 @@ Bug fixes:
 		* Properly react in the histogram when data columns are deleted or renamed
 		* Save/load the values format in xy-curve
 		* React on text changes for values prefix and suffix and not on return pressed event in the curve properties explorer
+		* Fix log scale axis for one tick and ln-scale typo
 	* [import]
 		* Don't try to parse a netCDF file when the application was compiled without any support for netCDF, and similar for other formats
 		* Show the last recently imported projects in a combobox also in ImportProjectDialog similar to how it's already done in ImportFileDialog

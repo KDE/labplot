@@ -1205,23 +1205,25 @@ void AxisPrivate::retransformTicks() {
 		tmpMajorTicksNumber = majorTicksNumber;
 		switch (scale) {
 			case Axis::Scale::Linear:
-				majorTicksIncrement = (end-start)/(majorTicksNumber-1);
+				majorTicksIncrement = end-start;
 				break;
 			case Axis::Scale::Log10:
-				majorTicksIncrement = (log10(end)-log10(start))/(majorTicksNumber-1);
+				majorTicksIncrement = log10(end)-log10(start);
 				break;
 			case Axis::Scale::Log2:
-				majorTicksIncrement = (log(end)-log(start))/log(2)/(majorTicksNumber-1);
+				majorTicksIncrement = log2(end)-log2(start);
 				break;
 			case Axis::Scale::Ln:
-				majorTicksIncrement = (log(end)-log(start))/(majorTicksNumber-1);
+				majorTicksIncrement = log(end)-log(start);
 				break;
 			case Axis::Scale::Sqrt:
-				majorTicksIncrement = (sqrt(end)-sqrt(start))/(majorTicksNumber-1);
+				majorTicksIncrement = sqrt(end)-sqrt(start);
 				break;
 			case Axis::Scale::X2:
-				majorTicksIncrement = (end*end - start*start)/(majorTicksNumber-1);
+				majorTicksIncrement = end*end - start*start;
 		}
+		if (majorTicksNumber > 1)
+			majorTicksIncrement /= majorTicksNumber - 1;
 	} else if (majorTicksType == Axis::TicksType::Spacing) {
 		//the increment of the major ticks is given -> determine the number
 		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end-start);
@@ -1233,7 +1235,7 @@ void AxisPrivate::retransformTicks() {
 				tmpMajorTicksNumber = qRound((log10(end)-log10(start))/majorTicksIncrement + 1);
 				break;
 			case Axis::Scale::Log2:
-				tmpMajorTicksNumber = qRound((log(end)-log(start))/log(2)/majorTicksIncrement + 1);
+				tmpMajorTicksNumber = qRound((log2(end)-log2(start))/majorTicksIncrement + 1);
 				break;
 			case Axis::Scale::Ln:
 				tmpMajorTicksNumber = qRound((log(end)-log(start))/majorTicksIncrement + 1);
