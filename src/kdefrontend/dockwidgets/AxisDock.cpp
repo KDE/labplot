@@ -608,25 +608,11 @@ void AxisDock::orientationChanged(int item) {
 		ui.cbPosition->setItemText(1, i18n("Bottom") );
 		ui.cbLabelsPosition->setItemText(1, i18n("Top") );
 		ui.cbLabelsPosition->setItemText(2, i18n("Bottom") );
-
-/*		ui.cbScale->setItemText(1, QLatin1String("log(x)") );
-		ui.cbScale->setItemText(2, QLatin1String("log2(x)") );
-		ui.cbScale->setItemText(3, QLatin1String("ln(x)") );
-		ui.cbScale->setItemText(4, QLatin1String("sqrt(x)") );
-		ui.cbScale->setItemText(5, QLatin1String("x^2") );
-*/
 	} else { //vertical
 		ui.cbPosition->setItemText(0, i18n("Left") );
 		ui.cbPosition->setItemText(1, i18n("Right") );
 		ui.cbLabelsPosition->setItemText(1, i18n("Right") );
 		ui.cbLabelsPosition->setItemText(2, i18n("Left") );
-
-/*		ui.cbScale->setItemText(1, QLatin1String("log(y)") );
-		ui.cbScale->setItemText(2, QLatin1String("log2(y)") );
-		ui.cbScale->setItemText(3, QLatin1String("ln(y)") );
-		ui.cbScale->setItemText(4, QLatin1String("sqrt(y)") );
-		ui.cbScale->setItemText(5, QLatin1String("y^2") );
-*/
 	}
 
 	if (m_initializing)
@@ -740,12 +726,13 @@ void AxisDock::startChanged() {
 		return;
 
 	//check first, whether the value for the lower limit is valid for the log- and square root scaling. If not, set the default values.
-	auto scale = RangeT::Scale(ui.cbScale->currentIndex());
+	const auto scale = RangeT::Scale(ui.cbScale->currentIndex());
 	if (scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 || scale == RangeT::Scale::Ln) {
 		if (value <= 0) {
 			KMessageBox::sorry(this,
 			                   i18n("The axes lower limit has a non-positive value. Default minimal value will be used."),
 			                   i18n("Wrong lower limit value") );
+			// TODO: why is this a good value?
 			value = 0.01;
 			ui.leStart->setText(numberLocale.toString(value) );
 		}
@@ -773,6 +760,8 @@ void AxisDock::endChanged() {
 	const double value{numberLocale.toDouble(ui.leEnd->text(), &ok)};
 	if (!ok)
 		return;
+
+	//TODO: also check for negative values and log-scales?
 
 	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
@@ -813,6 +802,8 @@ void AxisDock::zeroOffsetChanged() {
 
 	ui.leZeroOffset->setClearButtonEnabled(offset != 0);
 
+	//TODO: check for negative values and log scales?
+
 	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
 		axis->setZeroOffset(offset);
@@ -832,6 +823,8 @@ void AxisDock::scalingFactorChanged() {
 		return;
 
 	ui.leScalingFactor->setClearButtonEnabled(scalingFactor != 1);
+
+	//TODO: check negative values and log-scales?
 
 	if (scalingFactor != 0.0) {
 		const Lock lock(m_initializing);

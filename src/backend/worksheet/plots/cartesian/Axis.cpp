@@ -1198,33 +1198,35 @@ void AxisPrivate::retransformTicks() {
 	//determine the increment for the major ticks
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
-	double start{range.start()}, end{range.end()};
+	const double start{range.start()}, end{range.end()};
 	//TODO: check that start and end are > 0 for log and >=0 for sqrt, etc.
 	if (majorTicksType == Axis::TicksType::TotalNumber) {
 		//the total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
 		switch (scale) {
 		case RangeT::Scale::Linear:
-			majorTicksIncrement = range.size()/(majorTicksNumber-1);
+			majorTicksIncrement = range.size();
 			break;
 		case RangeT::Scale::Log10:
-			majorTicksIncrement = (log10(end) - log10(start))/(majorTicksNumber-1);
+			majorTicksIncrement = log10(end) - log10(start);
 			break;
 		case RangeT::Scale::Log2:
-			majorTicksIncrement = (log(end) - log(start))/log(2)/(majorTicksNumber-1);
+			majorTicksIncrement = log2(end) - log2(start);
 			break;
 		case RangeT::Scale::Ln:
-			majorTicksIncrement = (log(end) - log(start))/(majorTicksNumber-1);
+			majorTicksIncrement = log(end) - log(start);
 			break;
 		case RangeT::Scale::Sqrt:
-			majorTicksIncrement = (sqrt(end) - sqrt(start))/(majorTicksNumber-1);
+			majorTicksIncrement = sqrt(end) - sqrt(start);
 			break;
 		case RangeT::Scale::Square:
-			majorTicksIncrement = (end*end - start*start)/(majorTicksNumber-1);
+			majorTicksIncrement = end*end - start*start;
 		}
+		if (majorTicksNumber > 1)
+			majorTicksIncrement /= majorTicksNumber - 1;
 	} else if (majorTicksType == Axis::TicksType::Spacing) {
 		//the increment of the major ticks is given -> determine the number
-		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end-start);
+		majorTicksIncrement = majorTicksSpacing * GSL_SIGN(end - start);
 		switch (scale) {
 		case RangeT::Scale::Linear:
 			tmpMajorTicksNumber = qRound(range.size()/majorTicksIncrement + 1);
