@@ -126,7 +126,7 @@ public:
 	//! Return a string in the format '[start, end]'
 	QString toString() const {
 		if (m_format == Format::Numeric)
-			return "[" + QLocale().toString(m_start) + ", " + QLocale().toString(m_end) + "]";
+			return "[" + QLocale().toString(m_start) + "; " + QLocale().toString(m_end) + "]";
 		else
 			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " - "
 				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
