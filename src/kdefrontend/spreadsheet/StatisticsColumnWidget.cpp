@@ -406,8 +406,8 @@ void StatisticsColumnWidget::showQQPlot() {
 	//calculate y-values - the percentiles for the column data
 	Column* yColumn = new Column("y");
 	m_project->addChildFast(yColumn);
-	QVector<double> yData(100);
-	for (int i = 0; i < 100; ++i)
+	QVector<double> yData(99);
+	for (int i = 1; i < 100; ++i)
 		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, notNanCount, double(i)/100.);
 
 	yColumn->replaceValues(0, yData);
@@ -415,8 +415,8 @@ void StatisticsColumnWidget::showQQPlot() {
 	//calculate x-values - the percentiles for the standard normal distribution
 	Column* xColumn = new Column("x");
 	m_project->addChildFast(xColumn);
-	QVector<double> xData(100);
-	for (int i = 0; i < 100; ++i)
+	QVector<double> xData(99);
+	for (int i = 1; i < 100; ++i)
 		xData << gsl_cdf_gaussian_Pinv(double(i)/100., 1.0);
 
 	xColumn->replaceValues(0, xData);
@@ -429,6 +429,39 @@ void StatisticsColumnWidget::showQQPlot() {
 	curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
+
+	//add the reference line connecting (x1, y1) = (-0.6745, Q1) and (x2, y2) = (0.6745, Q2)
+	double y1 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, notNanCount, 0.25);
+	double y2 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, notNanCount, 0.75);
+	double x1 = -0.6745;
+	double x2 = 0.6745;
+
+	//we only want do show the line starting from x = PInv(0.01) = -2.32635
+	//and going to x = PInv(0.99) = 2.32635;
+	double k = (y2 - y1)/(x2 - x1);
+	double b = y1 - k*x1;
+	double x1New = -2.32635;
+	double x2New = 2.32635;
+	double y1New = k*x1New + b;
+	double y2New = k*x2New + b;
+
+	Column* xColumn2 = new Column("x2");
+	m_project->addChildFast(xColumn2);
+	xColumn2->setValueAt(0, x1New);
+	xColumn2->setValueAt(1, x2New);
+
+	Column* yColumn2 = new Column("y2");
+	m_project->addChildFast(yColumn2);
+	yColumn2->setValueAt(0, y1New);
+	yColumn2->setValueAt(1, y2New);
+
+	XYCurve* curve2 = new XYCurve("2");
+	plot->addChild(curve2);
+	curve2->setLinePen(QPen(Qt::SolidLine));
+	curve2->setSymbolsStyle(Symbol::Style::NoSymbols);
+	curve2->setFillingPosition(XYCurve::FillingPosition::NoFilling);
+	curve2->setXColumn(xColumn2);
+	curve2->setYColumn(yColumn2);
 
 	m_qqPlotInitialized = true;
 }
