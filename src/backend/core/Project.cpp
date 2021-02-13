@@ -517,8 +517,8 @@ bool Project::load(const QString& filename, bool preview) {
 
 		QString msg = i18n("The project has content written with %1. "
 						"Your installation of LabPlot lacks the support for it.\n\n "
-						"You won't be able to see this part of the project and if you modify and save the project, "
-						"the CAS content will be lost.\n\n"
+						"You won't be able to see this part of the project. "
+						"If you modify and save the project, the CAS content will be lost.\n\n"
 						"Do you want to continue?", reader.missingCASWarning());
 		auto rc = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));
 		if (rc == KMessageBox::ButtonCode::No) {
