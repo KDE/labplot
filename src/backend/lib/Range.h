@@ -31,6 +31,7 @@
 
 extern "C" {
 #include "backend/gsl/parser.h"
+#include "backend/nsl/nsl_math.h"
 }
 
 #include "macros.h"	//SET_NUMBER_LOCALE
@@ -132,6 +133,23 @@ public:
 				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
 	}
 	std::string toStdString() const { return STDSTRING(toString()); }
+	//extend range to nice numbers (used in auto scaling)
+	void niceExtend() {
+		if (length() == 0)
+			return;
+		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", size = " << size())
+		//DEBUG(Q_FUNC_INFO << ", size/10 = " << size()/10.)
+		const int places = nsl_math_rounded_decimals(size()/10.);
+		DEBUG(Q_FUNC_INFO << ", decimal places = " << (int)places)
+		if (m_start < m_end) {
+			m_start = nsl_math_floor_places(m_start, places);
+			m_end = nsl_math_ceil_places(m_end, places);
+		} else {
+			m_start = nsl_math_ceil_places(m_start, places);
+			m_end = nsl_math_floor_places(m_end, places);
+		}
+		DEBUG(Q_FUNC_INFO << ", new range = " << toStdString())
+	}
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
 private:

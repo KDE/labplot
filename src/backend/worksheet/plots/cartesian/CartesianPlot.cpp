@@ -2377,6 +2377,9 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 		} else {
 			xRange.extend( xRange.size() * d->autoScaleOffsetFactor );
 		}
+		// extend to nice values
+		xRange.niceExtend();
+
 		d->retransformScales();
 	}
 
@@ -2469,6 +2472,9 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 		} else {
 			yRange.extend( yRange.size() * d->autoScaleOffsetFactor );
 		}
+		// extend to nice values
+		yRange.niceExtend();
+
 		d->retransformScales();
 	}
 
@@ -2623,6 +2629,9 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
 			} else {
 				xRange.extend( xRange.size() * d->autoScaleOffsetFactor );
 			}
+			// extend to nice values
+			xRange.niceExtend();
+
 			setAutoScaleX(xIndex);
 		}
 		if (updateY) {
@@ -2636,6 +2645,9 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
 			} else {
 				yRange.extend( yRange.size()*d->autoScaleOffsetFactor );
 			}
+			// extend to nice values
+			yRange.niceExtend();
+
 			setAutoScaleY(yIndex);
 		}
 		d->retransformScales();
@@ -2645,8 +2657,8 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
 }
 
 /*!
- * Calculates and sets curves y min and max. This function does not respect the range
- * of the y axis
+ * Calculates and sets curves x min and max.
+ * The range of the y axis is not considered.
  */
 void CartesianPlot::calculateCurvesXMinMax(const int index, bool completeRange) {
 	DEBUG(Q_FUNC_INFO << ", complete range = " << completeRange)

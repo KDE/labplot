@@ -82,25 +82,25 @@ int nsl_math_rounded_decimals_max(double value, int max) {
 	return GSL_MIN_INT(max, nsl_math_rounded_decimals(value));
 }
 
-double nsl_math_round_places(double value, unsigned int n) {
+double nsl_math_round_places(double value, int n) {
 	return nsl_math_places(value, n, 0);
 }
-double nsl_math_floor_places(double value, unsigned int n) {
+double nsl_math_floor_places(double value, int n) {
 	return nsl_math_places(value, n, 1);
 }
-double nsl_math_ceil_places(double value, unsigned int n) {
+double nsl_math_ceil_places(double value, int n) {
 	return nsl_math_places(value, n, 2);
 }
-double nsl_math_trunc_places(double value, unsigned int n) {
+double nsl_math_trunc_places(double value, int n) {
 	return nsl_math_places(value, n, 3);
 }
 
-double nsl_math_places(double value, unsigned int n, int method) {
+double nsl_math_places(double value, int n, int method) {
 	// no need to round
 	if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value))
 		return value;
 
-	double scale = gsl_pow_uint(10., n);
+	double scale = gsl_pow_int(10., n);
 	double scaled_value = value*scale;
 	if (fabs(scaled_value) > 1.e16)
 		return value;
