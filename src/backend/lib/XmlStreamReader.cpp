@@ -59,7 +59,7 @@ const QStringList& XmlStreamReader::warningStrings() const {
  *
  * The returned text is in the form "Octave" or "Octave and Maxima" or "Octave, Maxima and Python", etc.
  */
-const QString& XmlStreamReader::missingCASWarning() const {
+QString XmlStreamReader::missingCASWarning() const {
 	const int count = m_missingCASPlugins.count();
 	if (count == 1)
 		return m_missingCASPlugins.constFirst();

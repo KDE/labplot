@@ -43,7 +43,7 @@ public:
 	explicit XmlStreamReader(const char* data);
 
 	const QStringList& warningStrings() const;
-	const QString& missingCASWarning() const;
+	QString missingCASWarning() const;
 	bool hasWarnings() const;
 	bool hasMissingCASWarnings() const;
 	void raiseWarning(const QString&);
