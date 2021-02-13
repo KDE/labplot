@@ -258,14 +258,32 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 		addChildFast(worksheet);
 		worksheet->setIsLoading(false);
-#ifdef HAVE_CANTOR_LIBS
 	} else if (element_name == QLatin1String("cantorWorksheet")) {
+#ifdef HAVE_CANTOR_LIBS
 		CantorWorksheet* cantorWorksheet = new CantorWorksheet(QLatin1String("null"), true);
 		if (!cantorWorksheet->load(reader, preview)) {
 			delete cantorWorksheet;
 			return false;
 		}
 		addChildFast(cantorWorksheet);
+#else
+	if (!preview) {
+		while (!reader->atEnd()) {
+			reader->readNext();
+			if (reader->isEndElement() && reader->name() == QLatin1String("cantorWorksheet"))
+				break;
+
+			if (!reader->isStartElement())
+				continue;
+
+			if (reader->name() == QLatin1String("general")) {
+				const QString& backendName = reader->attributes().value("backend_name").toString().trimmed();
+				if (!backendName.isEmpty())
+					reader->raiseMissingCASWarning(backendName);
+			} else
+				reader->skipToEndElement();
+		}
+	}
 #endif
 #ifdef HAVE_MQTT
 	} else if (element_name == QLatin1String("MQTTClient")) {

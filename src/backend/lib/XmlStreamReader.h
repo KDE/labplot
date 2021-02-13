@@ -42,9 +42,12 @@ public:
 	explicit XmlStreamReader(const QString& data);
 	explicit XmlStreamReader(const char* data);
 
-	QStringList warningStrings() const;
+	const QStringList& warningStrings() const;
+	const QString& missingCASWarning() const;
 	bool hasWarnings() const;
+	bool hasMissingCASWarnings() const;
 	void raiseWarning(const QString&);
+	void raiseMissingCASWarning(const QString&);
 	void raiseError(const QString&);
 
 	bool skipToNextTag();
@@ -53,6 +56,7 @@ public:
 
 private:
 	QStringList m_warnings;
+	QStringList m_missingCASPlugins;
 	void init();
 };
 
