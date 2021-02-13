@@ -2822,7 +2822,7 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 		columns = selectedColumns();
 	else if (forAll) {
 		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
-			if (m_spreadsheet->column(col)->columnMode() == AbstractColumn::ColumnMode::Numeric)
+			if (m_spreadsheet->column(col)->isNumeric())
 				columns << m_spreadsheet->column(col);
 		}
 	}
