@@ -48,12 +48,42 @@ XmlStreamReader::XmlStreamReader(const QString& data) : QXmlStreamReader(data) {
 XmlStreamReader::XmlStreamReader(const char* data) : QXmlStreamReader(data) {
 }
 
-QStringList XmlStreamReader::warningStrings() const {
+const QStringList& XmlStreamReader::warningStrings() const {
 	return m_warnings;
 }
 
+/*
+ * returns the human readable string for the missing CAS plugins in case
+ * the project has some CAS content but the application was either not compiled with
+ * CAS/Cantor support or the correspongind plugins for the required backends are missing.
+ *
+ * The returned text is in the form "Octave" or "Octave and Maxima" or "Octave, Maxima and Python", etc.
+ */
+const QString& XmlStreamReader::missingCASWarning() const {
+	const int count = m_missingCASPlugins.count();
+	if (count == 1)
+		return m_missingCASPlugins.constFirst();
+	else {
+		QString msg;
+		for (int i = 0; i < count; ++ i) {
+			if (!msg.isEmpty()) {
+				if (i == count - 1)
+					msg += QLatin1Char(' ') + i18n("and") + QLatin1Char(' ');
+				else
+					msg += QLatin1String(", ");
+			}
+			msg += m_missingCASPlugins.at(i);
+		}
+		return msg;
+	}
+}
+
 bool XmlStreamReader::hasWarnings() const {
-	return !(m_warnings.isEmpty());
+	return !m_warnings.isEmpty();
+}
+
+bool XmlStreamReader::hasMissingCASWarnings() const {
+	return !m_missingCASPlugins.isEmpty();
 }
 
 void XmlStreamReader::raiseError(const QString & message) {
@@ -62,6 +92,10 @@ void XmlStreamReader::raiseError(const QString & message) {
 
 void XmlStreamReader::raiseWarning(const QString & message) {
 	m_warnings.append(i18n("line %1, column %2: %3", lineNumber(), columnNumber(), message));
+}
+
+void XmlStreamReader::raiseMissingCASWarning(const QString& name) {
+	m_missingCASPlugins.append(name);
 }
 
 /*!
@@ -102,7 +136,7 @@ bool XmlStreamReader::skipToEndElement() {
 	do {
 		readNext();
 		if (isEndElement()) depth--;
-		if (isStartElement()) depth++; 
+		if (isStartElement()) depth++;
 	} while (!((isEndElement() && depth == 0) || atEnd()));
 
 	if (atEnd()) {

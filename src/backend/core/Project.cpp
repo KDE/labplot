@@ -497,6 +497,8 @@ bool Project::load(const QString& filename, bool preview) {
 		if (msg.isEmpty())
 			msg = i18n("Unknown error when opening the project %1.", filename);
 		KMessageBox::error(nullptr, msg, i18n("Error when opening the project"));
+		file->close();
+		delete file;
 		return false;
 	}
 
@@ -508,6 +510,22 @@ bool Project::load(const QString& filename, bool preview) {
 
 //TODO: show warnings in a kind of "log window" but not in message box
 // 		KMessageBox::error(this, msg, i18n("Project loading partly failed"));
+	}
+
+	if (reader.hasMissingCASWarnings()) {
+		RESET_CURSOR;
+
+		QString msg = i18n("The project has content written with %1. "
+						"Your installation of LabPlot lacks the support for it.\n\n "
+						"You won't be able to see this part of the project and if you modify and save the project, "
+						"the CAS content will be lost.\n\n"
+						"Do you want to continue?", reader.missingCASWarning());
+		auto rc = KMessageBox::warningYesNo(nullptr, msg, i18n("Missing Support for CAS"));
+		if (rc == KMessageBox::ButtonCode::No) {
+			file->close();
+			delete file;
+			return false;
+		}
 	}
 
 	file->close();
