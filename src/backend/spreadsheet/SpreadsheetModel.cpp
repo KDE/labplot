@@ -391,10 +391,10 @@ void SpreadsheetModel::handleRowsInserted(const AbstractColumn* col, int before,
 		return;
 
 	Q_UNUSED(before) Q_UNUSED(count)
-	updateVerticalHeader();
 	int i = m_spreadsheet->indexOfChild<Column>(col);
 	m_rowCount = col->rowCount();
 	emit dataChanged(index(0, i), index(m_rowCount-1, i));
+	updateVerticalHeader();
 	m_spreadsheet->emitRowCountChanged();
 }
 
@@ -403,10 +403,10 @@ void SpreadsheetModel::handleRowsRemoved(const AbstractColumn* col, int first, i
 		return;
 
 	Q_UNUSED(first) Q_UNUSED(count)
-	updateVerticalHeader();
 	int i = m_spreadsheet->indexOfChild<Column>(col);
 	m_rowCount = col->rowCount();
 	emit dataChanged(index(0, i), index(m_rowCount-1, i));
+	updateVerticalHeader();
 	m_spreadsheet->emitRowCountChanged();
 }
 
