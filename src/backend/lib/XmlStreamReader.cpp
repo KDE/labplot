@@ -86,6 +86,20 @@ bool XmlStreamReader::hasMissingCASWarnings() const {
 	return !m_missingCASPlugins.isEmpty();
 }
 
+void XmlStreamReader::setFailedCASMissing(bool value) {
+	m_failedCASMissing = value;
+}
+
+/*!
+ * returns \c true if the loading of an project object failed because
+ * of the missing CAS functionality (no CAS support or missing CAS plugin).
+ * returns \c false if the loadign failed because of other reasons
+ * like broken XML or missing important and required attributes.
+ */
+bool XmlStreamReader::failedCASMissing() const {
+	return m_failedCASMissing;
+}
+
 void XmlStreamReader::raiseError(const QString & message) {
 	QXmlStreamReader::raiseError(i18n("line %1, column %2: %3", lineNumber(), columnNumber(), message));
 }
