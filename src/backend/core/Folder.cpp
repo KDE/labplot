@@ -277,6 +277,15 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			//in this case we continue loading the project and show a warning about missing CAS at the end.
 			if (!reader->failedCASMissing())
 				return false;
+			else {
+				//failed because of the missing CAS. Read until the end of the current
+				//element in XML and continue loading the project.
+				while (!reader->atEnd()) {
+					reader->readNext();
+					if (reader->isEndElement() && reader->name() == QLatin1String("cantorWorksheet"))
+						break;
+				}
+			}
 		} else
 			addChildFast(cantorWorksheet);
 #else

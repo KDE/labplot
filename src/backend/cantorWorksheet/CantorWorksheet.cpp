@@ -320,10 +320,10 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 
 			QByteArray content = QByteArray::fromBase64(str.toLatin1());
 			rc = init(&content);
-			if  (!rc) {
+			if (!rc) {
 				reader->raiseMissingCASWarning(m_backendName);
 
-				//failed to load this object becaue of the missing CAS plugin
+				//failed to load this object because of the missing CAS plugin
 				//and not because of the broken project XML. Set this flag to
 				//handle this case correctly.
 				//TODO: we also can fail in the limit in cases where Cantor's content is broken
