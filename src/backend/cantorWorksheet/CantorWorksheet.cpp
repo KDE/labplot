@@ -283,6 +283,10 @@ void CantorWorksheet::save(QXmlStreamWriter* writer) const{
 
 //! Load from XML
 bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
+	//reset the status of the reader differentiating between
+	//"failed because of the missing CAS" and "failed because of the broken XML"
+	reader->setFailedCASMissing(false);
+
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -318,6 +322,13 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 			rc = init(&content);
 			if  (!rc) {
 				reader->raiseMissingCASWarning(m_backendName);
+
+				//failed to load this object becaue of the missing CAS plugin
+				//and not because of the broken project XML. Set this flag to
+				//handle this case correctly.
+				//TODO: we also can fail in the limit in cases where Cantor's content is broken
+				//and not because of the missing CAS plugin. This also needs to be treated accrodingly...
+				reader->setFailedCASMissing(true);
 				return false;
 			}
 		} else if (!preview && reader->name() == "column") {

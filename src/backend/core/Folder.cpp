@@ -263,9 +263,13 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		CantorWorksheet* cantorWorksheet = new CantorWorksheet(QLatin1String("null"), true);
 		if (!cantorWorksheet->load(reader, preview)) {
 			delete cantorWorksheet;
-			return false;
-		}
-		addChildFast(cantorWorksheet);
+
+			//if we only failed to load because of the missing CAS, don't return with false here.
+			//in this case we continue loading the project and show a warning about missing CAS at the end.
+			if (!reader->failedCASMissing())
+				return false;
+		} else
+			addChildFast(cantorWorksheet);
 #else
 	if (!preview) {
 		while (!reader->atEnd()) {

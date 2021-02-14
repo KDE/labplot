@@ -44,8 +44,13 @@ public:
 
 	const QStringList& warningStrings() const;
 	QString missingCASWarning() const;
+
 	bool hasWarnings() const;
 	bool hasMissingCASWarnings() const;
+
+	void setFailedCASMissing(bool);
+	bool failedCASMissing() const;
+
 	void raiseWarning(const QString&);
 	void raiseMissingCASWarning(const QString&);
 	void raiseError(const QString&);
@@ -57,6 +62,7 @@ public:
 private:
 	QStringList m_warnings;
 	QStringList m_missingCASPlugins;
+	bool m_failedCASMissing{false};
 	void init();
 };
 

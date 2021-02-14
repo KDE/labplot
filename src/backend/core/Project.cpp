@@ -480,7 +480,7 @@ bool Project::load(const QString& filename, bool preview) {
 	if (reader.hasMissingCASWarnings()) {
 		RESET_CURSOR;
 
-		QString msg = i18n("The project has content written with %1. "
+		const QString& msg = i18n("The project has content written with %1. "
 						"Your installation of LabPlot lacks the support for it.\n\n "
 						"You won't be able to see this part of the project. "
 						"If you modify and save the project, the CAS content will be lost.\n\n"
