@@ -450,7 +450,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (!commentCharacter.isEmpty()) {
 		do {
 			if (!device.canReadLine())
-				DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+				DEBUG(Q_FUNC_INFO << ", WARNING: device cannot 'readLine()' but using it anyway.");
 
 			if (device.atEnd()) {
 				DEBUG("device at end! Giving up.");
@@ -466,10 +466,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		firstLine = device.readLine();
 
 	// navigate to the line where we asked to start reading from
-	DEBUG("	Skipping " << startRow - 1 << " lines");
+	DEBUG(Q_FUNC_INFO << ", Skipping " << startRow - 1 << " lines");
 	for (int i = 0; i < startRow - 1; ++i) {
 		if (!device.canReadLine())
-			DEBUG("WARNING in AsciiFilterPrivate::prepareDeviceToRead(): device cannot 'readLine()' but using it anyway.");
+			DEBUG(Q_FUNC_INFO << ", WARNING: device cannot 'readLine()' but using it anyway.");
 
 		if (device.atEnd()) {
 			DEBUG("device at end! Giving up.");
@@ -524,10 +524,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		m_separator = m_separator.replace(QLatin1String("SPACE"), QLatin1String(" "), Qt::CaseInsensitive);
 		firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 	}
-	DEBUG("separator: \'" << STDSTRING(m_separator) << '\'');
-	DEBUG("number of columns: " << firstLineStringList.size());
-	QDEBUG("first line: " << firstLineStringList);
-	DEBUG("headerEnabled: " << headerEnabled);
+	DEBUG(Q_FUNC_INFO << ", separator: \'" << STDSTRING(m_separator) << '\'');
+	DEBUG(Q_FUNC_INFO << ", number of columns: " << firstLineStringList.size());
+	QDEBUG(Q_FUNC_INFO << ", first line: " << firstLineStringList);
+	DEBUG(Q_FUNC_INFO << ", headerEnabled: " << headerEnabled);
 
 	//optionally, remove potential spaces in the first line
 	//TODO: this part should be obsolete actually if we do firstLine = firstLine.simplified(); above...
@@ -599,14 +599,23 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	}
 
 	for (auto& valueString : firstLineStringList) { // parse columns available in first data line
+		const int index{ col - startColumn + 1 };
+		if (index < (int)createIndexEnabled + (int)createTimestampEnabled) {
+			col++;
+			continue;
+		}
+		if (index == m_actualCols)
+			break;
+
 		if (simplifyWhitespacesEnabled)
 			valueString = valueString.simplified();
 		if (removeQuotesEnabled)
 			valueString.remove(QLatin1Char('"'));
-		if (col == m_actualCols)
-			break;
-		columnModes[col++] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+		columnModes[index] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
+		col++;
 	}
+	for (const auto mode : columnModes)
+		DEBUG(Q_FUNC_INFO << ", column mode = " << static_cast<int>(mode));
 
 	// parsing more lines to better determine data types
 	for (unsigned int i = 0; i < m_dataTypeLines; ++i) {
@@ -617,27 +626,34 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		col = (int)createIndexEnabled + (int)createTimestampEnabled;
 
 		for (auto& valueString : firstLineStringList) {
+			const int index{col - startColumn + 1};
+			if (index < (int)createIndexEnabled + (int)createTimestampEnabled) {
+				col++;
+				continue;
+			}
+			if (index == m_actualCols)
+				break;
+
 			if (simplifyWhitespacesEnabled)
 				valueString = valueString.simplified();
 			if (removeQuotesEnabled)
 				valueString.remove(QLatin1Char('"'));
-			if (col == m_actualCols)
-				break;
 			auto mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 
 			// numeric: integer -> numeric
-			if (mode == AbstractColumn::ColumnMode::Numeric && columnModes[col] == AbstractColumn::ColumnMode::Integer)
-				columnModes[col] = mode;
+			if (mode == AbstractColumn::ColumnMode::Numeric && columnModes[index] == AbstractColumn::ColumnMode::Integer)
+				columnModes[index] = mode;
 			// text: non text -> text
-			if (mode == AbstractColumn::ColumnMode::Text && columnModes[col] != AbstractColumn::ColumnMode::Text)
-				columnModes[col] = mode;
+			if (mode == AbstractColumn::ColumnMode::Text && columnModes[index] != AbstractColumn::ColumnMode::Text)
+				columnModes[index] = mode;
 			// numeric: text -> numeric/integer
-			if (mode != AbstractColumn::ColumnMode::Text && columnModes[col] == AbstractColumn::ColumnMode::Text)
-				columnModes[col] = mode;
+			if (mode != AbstractColumn::ColumnMode::Text && columnModes[index] == AbstractColumn::ColumnMode::Text)
+				columnModes[index] = mode;
 			col++;
 		}
 	}
-	//QDEBUG("column modes = " << columnModes);
+	for (const auto mode : columnModes)
+		DEBUG(Q_FUNC_INFO << ", column mode = " << static_cast<int>(mode));
 
 	// ATTENTION: This resets the position in the device to 0
 	m_actualRows = (int)q->lineNumber(device);
@@ -662,7 +678,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
     reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG("AsciiFilterPrivate::readDataFromFile(): fileName = \'" << STDSTRING(fileName) << "\', dataSource = "
+	DEBUG(Q_FUNC_INFO << ", fileName = \'" << STDSTRING(fileName) << "\', dataSource = "
 	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	//dirty hack: set readingFile and readingFileName in order to know in lineNumber(QIODevice)
@@ -676,7 +692,7 @@ void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 }
 
 qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSource* dataSource, qint64 from) {
-	DEBUG("AsciiFilterPrivate::readFromLiveDevice(): bytes available = " << device.bytesAvailable() << ", from = " << from);
+	DEBUG(Q_FUNC_INFO << ", bytes available = " << device.bytesAvailable() << ", from = " << from);
 	if (device.bytesAvailable() <= 0) {
 		DEBUG("	No new data available");
 		return 0;
@@ -1162,13 +1178,13 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
     reads the content of device \c device to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	DEBUG("AsciiFilterPrivate::readDataFromDevice(): dataSource = " << dataSource
+	DEBUG(Q_FUNC_INFO << ", dataSource = " << dataSource
 	      << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode) << ", lines = " << lines);
 
 	if (!m_prepared) {
 		const int deviceError = prepareDeviceToRead(device);
 		if (deviceError != 0) {
-			DEBUG("Device error = " << deviceError);
+			DEBUG(Q_FUNC_INFO << ", DEVICE ERROR = " << deviceError);
 			return;
 		}
 
@@ -1212,7 +1228,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 
 	lines = qMin(lines, m_actualRows);
 	int progressIndex = 0;
-	const float progressInterval = 0.01*lines; //update on every 1% only
+	const qreal progressInterval = 0.01*lines; //update on every 1% only
 
 	for (int i = 0; i < lines; ++i) {
 		line = device.readLine();
@@ -1247,6 +1263,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		}
 
 		//parse columns
+		DEBUG(Q_FUNC_INFO << ", actual cols = " << m_actualCols)
 		for (int n = 0; n < m_actualCols; ++n) {
 			// index column if required
 			if (n == 0 && createIndexEnabled) {
@@ -1274,7 +1291,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		}
 	}
 
-	DEBUG("	Read " << currentRow << " lines");
+	DEBUG(Q_FUNC_INFO <<", Read " << currentRow << " lines");
 
 	//we might have skipped empty lines above. shrink the spreadsheet if the number of read lines (=currentRow)
 	//is smaller than the initial size of the spreadsheet (=m_actualRows).
@@ -1295,7 +1312,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
  * preview for special devices (local/UDP/TCP socket or serial port)
  */
 QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
-	DEBUG("AsciiFilterPrivate::preview(): bytesAvailable = " << device.bytesAvailable() << ", isSequential = " << device.isSequential());
+	DEBUG(Q_FUNC_INFO << ", bytesAvailable = " << device.bytesAvailable() << ", isSequential = " << device.isSequential());
 	QVector<QStringList> dataStrings;
 
 	if (!(device.bytesAvailable() > 0)) {
@@ -1390,6 +1407,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		QDEBUG(" line = " << lineStringList);
 
 		//parse columns
+		DEBUG(Q_FUNC_INFO << ", number of columns = " << lineStringList.size())
 		for (int n = 0; n < lineStringList.size(); ++n) {
 			if (n < lineStringList.size()) {
 				QString valueString = lineStringList.at(n);
@@ -1515,6 +1533,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
  * and returns its string representation.
  */
 QString AsciiFilterPrivate::previewValue(const QString& valueString, AbstractColumn::ColumnMode mode) {
+	DEBUG(Q_FUNC_INFO << ", valueString = " << valueString.toStdString() << ", mode = " << (int)mode)
+
 	QString result;
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Numeric: {
