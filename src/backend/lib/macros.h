@@ -40,14 +40,14 @@
 
 // C++ style warning (works on Windows)
 #include <iostream>
-#define WARN(x) std::cout << x << std::endl;
+#define WARN(x) std::cout << std::dec << x << std::endl;
 
 #ifndef NDEBUG
 #include <QDebug>
 #define QDEBUG(x) qDebug() << x;
 // C++ style debugging (works on Windows)
 #include <iomanip>
-#define DEBUG(x) std::cout << x << std::endl;
+#define DEBUG(x) std::cout << std::dec << x << std::endl;
 #else
 #define QDEBUG(x) {}
 #define DEBUG(x) {}

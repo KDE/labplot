@@ -3,7 +3,7 @@ File                 : AsciiFilter.cpp
 Project              : LabPlot
 Description          : ASCII I/O-filter
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2009-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2009-2019 Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
@@ -678,8 +678,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
     reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void AsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG(Q_FUNC_INFO << ", fileName = \'" << STDSTRING(fileName) << "\', dataSource = "
-	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
+//	DEBUG(Q_FUNC_INFO << ", fileName = \'" << STDSTRING(fileName) << "\', dataSource = "
+//	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	//dirty hack: set readingFile and readingFileName in order to know in lineNumber(QIODevice)
 	//that we're reading from a file and to benefit from much faster wc on linux
@@ -1466,7 +1466,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 	QDEBUG("	column names = " << vectorNames);
 
 	//skip data lines, if required
-	DEBUG("	Skipping " << m_actualStartRow << " lines");
+	DEBUG("	Skipping " << m_actualStartRow << " line(s)");
 	for (int i = 0; i < m_actualStartRow; ++i)
 		device.readLine();
 
@@ -1485,8 +1485,8 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 			continue;
 
 		QStringList lineStringList = line.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
-		QDEBUG(" line = " << lineStringList);
-		DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
+		//QDEBUG(" line = " << lineStringList);
+		//DEBUG("	Line bytes: " << line.size() << " line: " << STDSTRING(line));
 
 		if (simplifyWhitespacesEnabled) {
 			for (int i = 0; i < lineStringList.size(); ++i)
@@ -1533,7 +1533,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
  * and returns its string representation.
  */
 QString AsciiFilterPrivate::previewValue(const QString& valueString, AbstractColumn::ColumnMode mode) {
-	DEBUG(Q_FUNC_INFO << ", valueString = " << valueString.toStdString() << ", mode = " << (int)mode)
+//	DEBUG(Q_FUNC_INFO << ", valueString = " << valueString.toStdString() << ", mode = " << (int)mode)
 
 	QString result;
 	switch (mode) {
