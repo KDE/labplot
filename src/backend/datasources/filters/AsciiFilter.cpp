@@ -539,8 +539,8 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	//in GUI in AsciiOptionsWidget we start counting from 1, subtract 1 here to start from zero
 	m_actualStartRow = startRow - 1;
 
-	if (headerEnabled) {	// use first line to name vectors
-		vectorNames = firstLineStringList;
+	if (headerEnabled) {	// use first line to name vectors (starting from startColumn)
+		vectorNames = firstLineStringList.mid(startColumn - 1);
 		++m_actualStartRow;
 	}
 
@@ -570,7 +570,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		m_actualCols++;
 	}
 
-	QDEBUG("vector names =" << vectorNames);
+	QDEBUG(Q_FUNC_INFO << ", vector names =" << vectorNames);
 
 //TEST: readline-seek-readline fails
 	/*	qint64 testpos = device.pos();
