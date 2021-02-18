@@ -105,10 +105,10 @@ private:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
-	void recalcVertical(int);
+	void recalc(int);
 	void verticalBoxPlot(int);
-	void recalcHorizontal(int);
 	void horizontalBoxPlot(int);
+	void setOutlierPoint(QPointF&, double pos, double value);
 
 	void draw(QPainter*);
 	void drawFilling(QPainter*, int);
@@ -132,8 +132,6 @@ private:
 	QVector<QPainterPath> m_whiskersPath;
 	QVector<double> m_whiskerMin;
 	QVector<double> m_whiskerMax;
-	QVector<double> m_outlierMax;
-	QVector<double> m_outlierMin;
 	QVector<QVector<QPointF>> m_outliersSymbolPointsLogical;	//positions of the outlier symbols in logical coordinates
 	QVector<QVector<QPointF>> m_outliersSymbolPoints;	//positions of the outlier symbols in scene coordinates
 	QVector<int> m_outliersCount; //total number of outliers. this number is different to the size of the vector m_outliersSymbolPoints containing unique points only

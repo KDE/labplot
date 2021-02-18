@@ -128,6 +128,8 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	//Tab "General"
 	connect(ui.leName, &QLineEdit::textChanged, this, &BoxPlotDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &BoxPlotDock::commentChanged);
+	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			 this, &BoxPlotDock::orientationChanged);
 
 	//Tab "Box"
 	//box filling
@@ -235,6 +237,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	//general
 	connect(m_boxPlot, &AbstractAspect::aspectDescriptionChanged,this, &BoxPlotDock::plotDescriptionChanged);
 	connect(m_boxPlot, &BoxPlot::visibilityChanged, this, &BoxPlotDock::plotVisibilityChanged);
+	connect(m_boxPlot, &BoxPlot::orientationChanged, this, &BoxPlotDock::plotOrientationChanged);
 	connect(m_boxPlot, &BoxPlot::dataColumnsChanged, this, &BoxPlotDock::plotDataColumnsChanged);
 
 	//box filling
@@ -411,6 +414,15 @@ void BoxPlotDock::dataColumnChanged(const QModelIndex&) const {
 		return;
 
 	setDataColumns();
+}
+
+void BoxPlotDock::orientationChanged(int index) const {
+	if (m_initializing)
+		return;
+
+	auto orientation = BoxPlot::Orientation(index);
+	for (auto* boxPlot : m_boxPlots)
+		boxPlot->setOrientation(orientation);
 }
 
 void BoxPlotDock::visibilityChanged(bool state) const {
@@ -978,12 +990,14 @@ void BoxPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 
 	m_initializing = false;
 }
-
 void BoxPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
 	Lock lock(m_initializing);
 	loadDataColumns();
 }
-
+void BoxPlotDock::plotOrientationChanged(BoxPlot::Orientation orientation) {
+	Lock lock(m_initializing);
+	ui.cbOrientation->setCurrentIndex((int)orientation);
+}
 void BoxPlotDock::plotVisibilityChanged(bool on) {
 	Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);
@@ -1126,6 +1140,9 @@ void BoxPlotDock::plotWhiskersCapSizeChanged(double size) {
 void BoxPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QLatin1String("BoxPlot"));
 
+	//general
+	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int)m_boxPlot->orientation()) );
+
 	//box filling
 	ui.chkFillingEnabled->setChecked( group.readEntry("FillingEnabled", m_boxPlot->fillingEnabled()) );
 	ui.cbFillingType->setCurrentIndex( group.readEntry("FillingType", (int) m_boxPlot->fillingType()) );
@@ -1200,6 +1217,9 @@ void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {
 
 void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group("BoxPlot");
+
+	//general
+	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 
 	//box filling
 	group.writeEntry("FillingEnabled", ui.chkFillingEnabled->isChecked());

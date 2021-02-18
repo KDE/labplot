@@ -55,6 +55,7 @@ public:
 	//general
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
 	QVector<QString>& dataColumnPaths() const;
+	BASIC_D_ACCESSOR_DECL(BoxPlot::Orientation, orientation, Orientation)
 
 	//box filling
 	BASIC_D_ACCESSOR_DECL(bool, fillingEnabled, FillingEnabled)
@@ -132,6 +133,7 @@ signals:
 	//General-Tab
 	void dataChanged();
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
+	void orientationChanged(BoxPlot::Orientation);
 	void visibilityChanged(bool);
 
 	//box filling

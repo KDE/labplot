@@ -70,6 +70,7 @@ private slots:
 	void addDataColumn();
 	void removeDataColumn();
 	void dataColumnChanged(const QModelIndex&) const;
+	void orientationChanged(int) const;
 	void visibilityChanged(bool) const;
 
 	//"Box"-tab
@@ -121,6 +122,7 @@ private slots:
 	//general
 	void plotDescriptionChanged(const AbstractAspect*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
+	void plotOrientationChanged(BoxPlot::Orientation);
 	void plotVisibilityChanged(bool);
 
 	//box filling

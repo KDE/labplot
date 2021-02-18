@@ -75,6 +75,7 @@ void BoxPlot::init() {
 
 	//general
 	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::MinMax);
+	d->orientation = (BoxPlot::Orientation) group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
 
 	//box filling
 	d->fillingEnabled = group.readEntry("FillingEnabled", false);
@@ -197,6 +198,7 @@ void BoxPlot::handleResize(double horizontalRatio, double verticalRatio, bool pa
 /* ============================ getter methods ================= */
 //general
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
 
 //box
@@ -275,6 +277,13 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 			//TODO: add disconnect in the undo-function
 		}
 	}
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrientation, BoxPlot::Orientation, orientation, recalc)
+void BoxPlot::setOrientation(BoxPlot::Orientation orientation) {
+	Q_D(BoxPlot);
+	if (orientation != d->orientation)
+		exec(new BoxPlotSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(BoxPlot, SetVisible, bool, swapVisible, update);
@@ -553,38 +562,31 @@ void BoxPlotPrivate::recalc() {
 	m_whiskersPath.resize(count);
 	m_whiskerMin.resize(count);
 	m_whiskerMax.resize(count);
-	m_outlierMax.resize(count);
-	m_outlierMin.resize(count);;
 	m_outliersSymbolPointsLogical.resize(count);
 	m_outliersSymbolPoints.resize(count);
 	m_outliersCount.resize(count);
 	m_mean.resize(count);
 	m_meanSymbolPoint.resize(count);
 
-	if (orientation == BoxPlot::Orientation::Vertical) {
-		for (int i = 0; i < count; ++i)
-			recalcVertical(i);
-	} else {
-		for (int i = 0; i < count; ++i)
-			recalcHorizontal(i);
-	}
+	m_yMin = INFINITY;
+	m_yMax = -INFINITY;
 
 	//calculate the new min and max values of the box plot
 	//for the current sizes of the box and of the whiskers
-	m_yMin = INFINITY;
-	m_yMax = -INFINITY;
 	if (orientation == BoxPlot::Orientation::Vertical) {
 		m_xMin = 0.0;
 		m_xMax = count;
-
-		for (int i = 0; i < count; ++i) {
-			if (m_outlierMax.at(i) > m_yMax)
-				m_yMax = m_outlierMax.at(i);
-
-			if (m_outlierMin.at(i) < m_yMin)
-				m_yMin = m_outlierMin.at(i);
-		}
+		m_yMin = INFINITY;
+		m_yMax = -INFINITY;
+	} else { //horizontal
+		m_xMin = INFINITY;
+		m_xMax = -INFINITY;
+		m_yMin = 0.0;
+		m_yMax = count;
 	}
+
+	for (int i = 0; i < count; ++i)
+		recalc(i);
 
 	//the size of the boxplot changed because of the actual
 	//data changes or because of new boxplot settings.
@@ -593,21 +595,50 @@ void BoxPlotPrivate::recalc() {
 	emit q->dataChanged();
 }
 
-void BoxPlotPrivate::recalcVertical(int index) {
+void BoxPlotPrivate::setOutlierPoint(QPointF& point, double pos, double value) {
+	if (orientation == BoxPlot::Orientation::Vertical) {
+		point.setX(pos);
+		point.setY(value);
+
+		if (value > m_yMax)
+			m_yMax = value;
+		else if (value < m_yMin)
+			m_yMin = value;
+	} else {
+		point.setX(value);
+		point.setY(pos);
+
+		if (value > m_xMax)
+			m_xMax = value;
+		else if (value < m_xMin)
+			m_xMin = value;
+	}
+}
+
+void BoxPlotPrivate::recalc(int index) {
 //	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalcVertical()");
 	auto* column = static_cast<const Column*>(dataColumns.at(index));
 	if (!column)
 		return;
 
 	const auto& statistics = column->statistics();
-	const double x = index + 0.5;
 	const double width = 0.5;
+	const double x = index + 0.5;
 
 	//box
-	m_xMinBox[index] = x - width/2;
-	m_xMaxBox[index] = x + width/2;
-	m_yMinBox[index] = statistics.firstQuartile;
-	m_yMaxBox[index] = statistics.thirdQuartile;
+	if (orientation == BoxPlot::Orientation::Vertical) {
+		m_xMinBox[index] = x - width/2;
+		m_xMaxBox[index] = x + width/2;
+		m_yMinBox[index] = statistics.firstQuartile;
+		m_yMaxBox[index] = statistics.thirdQuartile;
+	} else {
+		m_xMinBox[index] = statistics.firstQuartile;
+		m_xMaxBox[index] = statistics.thirdQuartile;
+		m_yMinBox[index] = x - width/2;
+		m_yMaxBox[index] = x + width/2;
+	}
+
+	//mean and median
 	m_median[index] = statistics.median;
 	m_mean[index] = statistics.arithmeticMean;
 
@@ -619,22 +650,41 @@ void BoxPlotPrivate::recalcVertical(int index) {
 		break;
 	}
 	case BoxPlot::WhiskersType::IQR: {
-		m_whiskerMax[index] = m_yMaxBox.at(index) + 1.5*statistics.iqr;
-		m_whiskerMin[index] = m_yMinBox.at(index) - 1.5*statistics.iqr;
+		if (orientation == BoxPlot::Orientation::Vertical) {
+			m_whiskerMax[index] = m_yMaxBox.at(index) + 1.5*statistics.iqr;
+			m_whiskerMin[index] = m_yMinBox.at(index) - 1.5*statistics.iqr;
+		} else {
+			m_whiskerMax[index] = m_xMaxBox.at(index) + 1.5*statistics.iqr;
+			m_whiskerMin[index] = m_xMinBox.at(index) - 1.5*statistics.iqr;
+		}
 		break;
 	}
 	case BoxPlot::WhiskersType::STDDEV: {
-		m_whiskerMax[index] = m_yMaxBox.at(index) + statistics.standardDeviation;
-		m_whiskerMin[index] = m_yMinBox.at(index) - statistics.standardDeviation;
+		if (orientation == BoxPlot::Orientation::Vertical) {
+			m_whiskerMax[index] = m_yMaxBox.at(index) + statistics.standardDeviation;
+			m_whiskerMin[index] = m_yMinBox.at(index) - statistics.standardDeviation;
+		} else {
+			m_whiskerMax[index] = m_xMaxBox.at(index) + statistics.standardDeviation;
+			m_whiskerMin[index] = m_xMinBox.at(index) - statistics.standardDeviation;
+		}
 		break;
 	}
 	}
 
 	//outliers symbols
 	m_outliersCount[index] = 0;
-	m_outlierMax[index] = m_whiskerMax.at(index);
-	m_outlierMin[index] = m_whiskerMin.at(index);
 	m_outliersSymbolPointsLogical[index].clear();
+	if (orientation == BoxPlot::Orientation::Vertical) {
+		if (m_whiskerMax[index] > m_yMax)
+			m_yMax = m_whiskerMax[index];
+		else if (m_whiskerMin[index] < m_yMin)
+			m_yMin = m_whiskerMin[index];
+	} else {
+		if (m_whiskerMax[index] > m_xMax)
+			m_xMax = m_whiskerMax[index];
+		else if (m_whiskerMin[index] < m_xMin)
+			m_xMin = m_whiskerMin[index];
+	}
 
 	switch (column->columnMode()) {
 	case AbstractColumn::ColumnMode::Numeric:
@@ -644,15 +694,11 @@ void BoxPlotPrivate::recalcVertical(int index) {
 			if ( column->isValid(row) && !column->isMasked(row) ) {
 				const double value = column->valueAt(row);
 				if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
-					const QPointF point(x, value);
+					QPointF point;
+					setOutlierPoint(point, x, value);
 					++m_outliersCount[index];
-					if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1) {
+					if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1)
 						m_outliersSymbolPointsLogical[index] << point;
-						if (value > m_outlierMax.at(index))
-							m_outlierMax[index] = value;
-						else if (value < m_outlierMin.at(index))
-							m_outlierMin[index] = value;
-					}
 				}
 			}
 		}
@@ -662,15 +708,11 @@ void BoxPlotPrivate::recalcVertical(int index) {
 			if ( column->isValid(row) && !column->isMasked(row) ){
 				const double value = column->dateTimeAt(row).toMSecsSinceEpoch();
 				if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
-					const QPointF point(x, value);
+					QPointF point;
+					setOutlierPoint(point, x, value);
 					++m_outliersCount[index];
-					if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1) {
+					if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1)
 						m_outliersSymbolPointsLogical[index] << point;
-						if (value > m_outlierMax.at(index))
-							m_outlierMax[index] = value;
-						else if (value < m_outlierMin.at(index))
-							m_outlierMin[index] = value;
-					}
 				}
 			}
 		}
@@ -729,12 +771,51 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	m_meanSymbolPoint[index] = q->cSystem->mapLogicalToScene(QPointF(x, m_mean.at(index)));
 }
 
-void BoxPlotPrivate::recalcHorizontal(int index) {
-	Q_UNUSED(index)
-}
-
 void BoxPlotPrivate::horizontalBoxPlot(int index) {
-	Q_UNUSED(index)
+	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::horizontalBoxPlot()");
+
+	QVector<QLineF> lines;
+	const double y = index + 0.5;
+
+	//calculate the size and the position of the box
+	//map the box to scene coordinates
+	QPointF topLeft = QPointF(m_xMinBox.at(index), m_yMaxBox.at(index));
+	QPointF bottomRight = QPointF(m_xMaxBox.at(index), m_yMinBox.at(index));
+	topLeft = q->cSystem->mapLogicalToScene(topLeft);
+	bottomRight = q->cSystem->mapLogicalToScene(bottomRight);
+	m_boxRect[index] = QRectF(topLeft, bottomRight);
+
+	//median line
+	lines << QLineF(m_median.at(index), m_yMinBox.at(index), m_median.at(index), m_yMaxBox.at(index));
+	lines = q->cSystem->mapLogicalToScene(lines);
+	if (!lines.isEmpty())
+		m_medianLine[index] = lines.first();
+
+	//calculate the size and the position for the whiskers
+	lines.clear();
+	lines << QLineF(m_xMaxBox.at(index), y, m_whiskerMax.at(index), y); //upper whisker
+	lines << QLineF(m_xMinBox.at(index), y, m_whiskerMin.at(index), y); //lower whisker
+	lines = q->cSystem->mapLogicalToScene(lines);
+	for (const auto& line : qAsConst(lines)) {
+		m_whiskersPath[index].moveTo(line.p1());
+		m_whiskersPath[index].lineTo(line.p2());
+	}
+
+	//add caps
+	QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMax.at(index), y));
+	QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMin.at(index), y));
+	m_whiskersPath[index].moveTo(QPointF(maxPoint.x(), maxPoint.y() - whiskersCapSize/2));
+	m_whiskersPath[index].lineTo(QPointF(maxPoint.x(), maxPoint.y() + whiskersCapSize/2));
+
+	m_whiskersPath[index].moveTo(QPointF(minPoint.x(), minPoint.y() - whiskersCapSize/2));
+	m_whiskersPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize/2));
+
+	//outliers symbols
+	if (!m_outliersSymbolPointsLogical[index].isEmpty())
+		m_outliersSymbolPoints[index] = q->cSystem->mapLogicalToScene(m_outliersSymbolPointsLogical.at(index));
+
+	//mean symbol
+	m_meanSymbolPoint[index] = q->cSystem->mapLogicalToScene(QPointF(m_mean.at(index), y));
 }
 
 bool BoxPlotPrivate::swapVisible(bool on) {
@@ -1103,6 +1184,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("path", column->path());
 		writer->writeEndElement();
 	}
+	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
 	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeEndElement();
 
@@ -1181,6 +1263,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE("orientation", orientation, BoxPlot::Orientation);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 		} else if (reader->name() == "column") {
 			attribs = reader->attributes();
