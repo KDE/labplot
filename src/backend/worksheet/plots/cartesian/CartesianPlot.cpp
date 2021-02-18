@@ -2027,7 +2027,7 @@ void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAsp
 			DEBUG(Q_FUNC_INFO << ", a curve")
 			updateLegend();
 			emit curveRemoved(curve);
-			autoScale(true, curve->coordinateSystemIndex());	// update all plot ranges
+			autoScale(curve->coordinateSystemIndex());	// update all plot ranges
 		}
 	}
 }
