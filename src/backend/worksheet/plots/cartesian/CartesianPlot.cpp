@@ -187,7 +187,7 @@ void CartesianPlot::setType(Type type) {
 			d->yMax = 1.0;
 
 			//Axes
-			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
+			Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -200,7 +200,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMinorTicksNumber(1);
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("x axis 2", Axis::Orientation::Horizontal);
+			axis = new Axis(QLatin1String("x2"), Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -221,7 +221,7 @@ void CartesianPlot::setType(Type type) {
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", Axis::Orientation::Vertical);
+			axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -234,7 +234,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setMinorTicksNumber(1);
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 2", Axis::Orientation::Vertical);
+			axis = new Axis(QLatin1String("y2"), Axis::Orientation::Vertical);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -264,7 +264,7 @@ void CartesianPlot::setType(Type type) {
 			d->yMin = 0.0;
 			d->yMax = 1.0;
 
-			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
+			Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -278,7 +278,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", Axis::Orientation::Vertical);
+			axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -307,7 +307,7 @@ void CartesianPlot::setType(Type type) {
 			pen.setStyle(Qt::NoPen);
 			m_plotArea->setBorderPen(pen);
 
-			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
+			Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -322,7 +322,7 @@ void CartesianPlot::setType(Type type) {
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", Axis::Orientation::Vertical);
+			axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -352,7 +352,7 @@ void CartesianPlot::setType(Type type) {
 			pen.setStyle(Qt::NoPen);
 			m_plotArea->setBorderPen(pen);
 
-			Axis* axis = new Axis("x axis 1", Axis::Orientation::Horizontal);
+			Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -368,7 +368,7 @@ void CartesianPlot::setType(Type type) {
 			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
-			axis = new Axis("y axis 1", Axis::Orientation::Vertical);
+			axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -1456,11 +1456,21 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	if (curve) {
 		connect(curve, &XYCurve::dataChanged, this, &CartesianPlot::dataChanged);
+		connect(curve, &XYCurve::xColumnChanged, this, [this](const AbstractColumn* column) {
+			const bool firstCurve = (children<XYCurve>().size() + children<Histogram>().size() == 1);
+			if (firstCurve)
+				checkAxisFormat(column, Axis::Orientation::Horizontal);
+		});
 		connect(curve, &XYCurve::xDataChanged, this, &CartesianPlot::xDataChanged);
 		connect(curve, &XYCurve::xErrorTypeChanged, this, &CartesianPlot::dataChanged);
 		connect(curve, &XYCurve::xErrorPlusColumnChanged, this, &CartesianPlot::dataChanged);
 		connect(curve, &XYCurve::xErrorMinusColumnChanged, this, &CartesianPlot::dataChanged);
 		connect(curve, &XYCurve::yDataChanged, this, &CartesianPlot::yDataChanged);
+		connect(curve, &XYCurve::yColumnChanged, this, [this](const AbstractColumn* column) {
+			const bool firstCurve = (children<XYCurve>().size() + children<Histogram>().size() == 1);
+			if (firstCurve)
+				checkAxisFormat(column, Axis::Orientation::Vertical);
+		});
 		connect(curve, &XYCurve::yErrorTypeChanged, this, &CartesianPlot::dataChanged);
 		connect(curve, &XYCurve::yErrorPlusColumnChanged, this, &CartesianPlot::dataChanged);
 		connect(curve, &XYCurve::yErrorMinusColumnChanged, this, &CartesianPlot::dataChanged);
@@ -1536,7 +1546,10 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 
 	if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
 		setUndoAware(false);
-		setXRangeFormat(RangeFormat::DateTime);
+		if (orientation == Axis::Orientation::Horizontal)
+			setXRangeFormat(RangeT::Format::DateTime);
+		else
+			setYRangeFormat(RangeT::Format::DateTime);
 		setUndoAware(true);
 
 		//set column's datetime format for all horizontal axis
@@ -1550,6 +1563,13 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 				axis->setUndoAware(true);
 			}
 		}
+	} else {
+		setUndoAware(false);
+		if (orientation == Axis::Orientation::Horizontal)
+			setXRangeFormat(RangeT::Format::Numeric);
+		else
+			setYRangeFormat(RangeT::Format::Numeric);
+		setUndoAware(true);
 	}
 }
 
