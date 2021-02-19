@@ -3105,7 +3105,9 @@ void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int las
   selects the column \c column in the speadsheet view .
 */
 void SpreadsheetView::selectColumn(int column) {
-	QItemSelection selection(m_model->index(0, column), m_model->index(m_spreadsheet->rowCount()-1, column) );
+	const auto& index = m_model->index(0, column);
+	m_tableView->scrollTo(index);
+	QItemSelection selection(index, m_model->index(m_spreadsheet->rowCount()-1, column) );
 	m_suppressSelectionChangedEvent = true;
 	m_tableView->selectionModel()->select(selection, QItemSelectionModel::Select);
 	m_suppressSelectionChangedEvent = false;
