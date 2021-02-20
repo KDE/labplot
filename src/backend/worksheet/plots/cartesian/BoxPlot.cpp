@@ -977,12 +977,12 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 }
 
 void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
-	QTransform trafo;
-	trafo.scale(symbolsSize, symbolsSize);
 
 	//outliers
 	if (symbolOutliersStyle != Symbol::Style::NoSymbols) {
 		QPainterPath path = Symbol::pathFromStyle(symbolOutliersStyle);
+		QTransform trafo;
+		trafo.scale(symbolsSize, symbolsSize);
 		if (symbolsRotationAngle != 0)
 			trafo.rotate(-symbolsRotationAngle);
 
@@ -997,6 +997,8 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 
 	//mean
 	if (symbolMeanStyle != Symbol::Style::NoSymbols) {
+		QTransform trafo;
+		trafo.scale(symbolsSize, symbolsSize);
 		QPainterPath path = Symbol::pathFromStyle(symbolMeanStyle);
 		if (symbolsRotationAngle != 0)
 			trafo.rotate(-symbolsRotationAngle);

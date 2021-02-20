@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dock widget for the reference line on the plot
     --------------------------------------------------------------------
-    Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2020-2021 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -58,11 +58,11 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	m_gridLayout->setVerticalSpacing(2);
 	ui.frameDataColumns->setLayout(m_gridLayout);
 
-	ui.cbWhiskersType->addItem(i18n("min/max"));
-	ui.cbWhiskersType->addItem(i18n("1.5 IQR"));
-	ui.cbWhiskersType->addItem(i18n("1 stddev"));
-	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
-	ui.cbWhiskersType->addItem(i18n("2/98 percentiles"));
+	ui.cbWhiskersType->addItem(QLatin1String("min/max"));
+	ui.cbWhiskersType->addItem(QLatin1String("1.5 IQR"));
+	ui.cbWhiskersType->addItem(QLatin1String("1 stddev"));
+// 	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
+// 	ui.cbWhiskersType->addItem(i18n("2/98 percentiles"));
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -1193,6 +1193,12 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.sbWhiskersWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("WhiskersWidth", penWhiskers.widthF()), Worksheet::Unit::Point) );
 	ui.sbWhiskersOpacity->setValue( group.readEntry("WhiskersOpacity", m_boxPlot->whiskersOpacity())*100 );
 	ui.sbWhiskersCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapSize", m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point) );
+
+	Lock lock(m_initializing);
+	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	GuiTools::updatePenStyles(ui.cbMedianLineStyle, ui.kcbMedianLineColor->color());
+	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, ui.kcbSymbolBorderColor->color());
+	GuiTools::updatePenStyles(ui.cbWhiskersStyle, ui.kcbWhiskersColor->color());
 }
 
 void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {
