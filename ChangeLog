@@ -16,7 +16,9 @@
 
 -----2.8.2 -----
 Bug fixes:
-	* [CAS] Fixed the regression introduced after the python2 backend was deprecated in Cantor
+	* [CAS]
+		* Fixed the regression introduced after the python2 backend was deprecated in Cantor
+		* Warn about the potential data looses when a project with CAS content is opened but no CAS support is available
 	* [worksheet]:
 		* DateTime support for Custom Points and for Histograms
 		* Fix "power of" notations for negative values, show "0" for zero and improve auto precision for small values for axis labels
@@ -32,6 +34,7 @@ Bug fixes:
 		* adjust the range format (numeric vs. datetime) also when the the column of the first curve is changed and not only when a new curve is added
 		* simplified the naming of the initial axes for the default plot types (box blot with four axes,  etc.) - use "x" instead of "x axis 1", etc.
 		* export to more image formats (jpg, bmp, ppm, xbm, xpm)
+		* simplified the naming of the initial axes for the default plot types (box blot with four axes,  etc.) - use "x" instead of "x axis 1", etc.
 	* [spreadsheet]
 		* show column statistics also for bigint columns
 		* when selecting a column in the project explorer, make sure it becomes visible in the spreadsheet by scrolling horizontaly to its position
@@ -40,6 +43,7 @@ Bug fixes:
 		* Don't try to parse a netCDF file when the application was compiled without any support for netCDF, and similar for other formats
 		* Show the last recently imported projects in a combobox also in ImportProjectDialog similar to how it's already done in ImportFileDialog
 		* Don't show any error messages when the source file or local socket is empty when the import dialog is opened for the first time
+		* Fixed ASCII import when start column > 1
 	* Don't change the current selection in the Project Explorer when objects are being added or removed during undo or redo
 	* Improved LaTeX support in export dialog and export of big spreadsheets
 	* BUG 427190 - Fixed resetting parser error count on some platforms (Debian, Manjaro)
