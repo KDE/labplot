@@ -1547,9 +1547,9 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 	if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
 		setUndoAware(false);
 		if (orientation == Axis::Orientation::Horizontal)
-			setXRangeFormat(RangeT::Format::DateTime);
+			setXRangeFormat(RangeFormat::DateTime);
 		else
-			setYRangeFormat(RangeT::Format::DateTime);
+			setYRangeFormat(RangeFormat::DateTime);
 		setUndoAware(true);
 
 		//set column's datetime format for all horizontal axis
@@ -1566,9 +1566,9 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 	} else {
 		setUndoAware(false);
 		if (orientation == Axis::Orientation::Horizontal)
-			setXRangeFormat(RangeT::Format::Numeric);
+			setXRangeFormat(RangeFormat::Numeric);
 		else
-			setYRangeFormat(RangeT::Format::Numeric);
+			setYRangeFormat(RangeFormat::Numeric);
 		setUndoAware(true);
 	}
 }
