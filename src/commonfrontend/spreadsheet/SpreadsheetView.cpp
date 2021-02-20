@@ -277,8 +277,8 @@ void SpreadsheetView::initActions() {
 	action_insert_column_right = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("Insert Column Right"), this);
 	action_insert_columns_left = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("Insert Multiple Columns Left"), this);
 	action_insert_columns_right = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("Insert Multiple Columns Right"), this);
-	action_remove_columns = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remove Selected Columns"), this);
-	action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Selected Columns"), this);
+	action_remove_columns = new QAction(QIcon::fromTheme("edit-table-delete-column"), i18n("Remove Columns"), this);
+	action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Content"), this);
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
 	action_set_as_none = new QAction(i18n("None"), this);
@@ -411,8 +411,8 @@ void SpreadsheetView::initActions() {
 	//action_insert_row_below->setShortcut(Qt::Key_Insert);
 	action_insert_rows_above = new QAction(QIcon::fromTheme("edit-table-insert-row-above") ,i18n("Insert Multiple Rows Above"), this);
 	action_insert_rows_below = new QAction(QIcon::fromTheme("edit-table-insert-row-below"), i18n("Insert Multiple Rows Below"), this);
-	action_remove_rows = new QAction(QIcon::fromTheme("edit-table-delete-row"), i18n("Remo&ve Selected Rows"), this);
-	action_clear_rows = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Selected Rows"), this);
+	action_remove_rows = new QAction(QIcon::fromTheme("edit-table-delete-row"), i18n("Remo&ve Rows"), this);
+	action_clear_rows = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Content"), this);
 	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Row Statisti&cs"), this);
 
 	//plot data action
