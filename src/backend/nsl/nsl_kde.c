@@ -1,9 +1,9 @@
 /***************************************************************************
-	File                 : StatisticsColumnWidget.h
+    File                 : nsl_kde.c
     Project              : LabPlot
-	Description          : Widget showing statistics for column values
+    Description          : NSL functions for the kernel density estimation
     --------------------------------------------------------------------
-	Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,57 +25,31 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef STATISTICSCOLUMNWIDGET_H
-#define STATISTICSCOLUMNWIDGET_H
 
-#include <QWidget>
+#include <gsl/gsl_statistics.h>
+#include <gsl/gsl_sort.h>
+#include <gsl/gsl_randist.h>
+#include <gsl/gsl_math.h>
 
-class CartesianPlot;
-class Column;
-class Project;
+double nsl_kde_gauss_kernel(double x) {
+	return exp(-(gsl_pow_2(x)/2)) / (M_SQRT2*sqrt(M_PI));
+}
 
-class QTabWidget;
-class QTextEdit;
+double nsl_kde(double* data, double x, double h, size_t n) {
+	double density = 0;
+	for (size_t i=0; i < n; i++)
+		density += gsl_ran_gaussian_pdf((data[i] - x)/h, 1.) / (n * h);
 
-class StatisticsColumnWidget : public QWidget {
-	Q_OBJECT
+	return density;
+}
 
-public:
-	explicit StatisticsColumnWidget(const Column*, QWidget *parent = nullptr);
-	~StatisticsColumnWidget() override;
-	void showStatistics();
+double nsl_kde_normal_dist_bandwith(double* data, int n) {
+	gsl_sort(data, 1, n);
+	double sigma = gsl_stats_sd(data, 1, n);
+	double iqr = gsl_stats_quantile_from_sorted_data(data, 1, n, 0.75) -
+				gsl_stats_quantile_from_sorted_data(data, 1, n, 0.25);
 
-private:
-	void showOverview();
-	void showHistogram();
-	void showKDEPlot();
-	void showQQPlot();
-	void showBoxPlot();
-	CartesianPlot* addPlot(QWidget*);
+	return 0.9 * GSL_MIN(sigma, iqr/1.34) * pow(n, -0.2);
+}
 
-	const QString isNanValue(const double) const;
-	QString modeValue(const Column*, double) const;
-	void copyValidData(QVector<double>&) const;
 
-	const Column* m_column;
-	Project* m_project;
-	QTabWidget* m_tabWidget;
-	QTextEdit* m_teOverview;
-	QWidget m_histogramWidget;
-	QWidget m_kdePlotWidget;
-	QWidget m_qqPlotWidget;
-	QWidget m_boxPlotWidget;
-
-	QString m_htmlText;
-
-	bool m_overviewInitialized{false};
-	bool m_histogramInitialized{false};
-	bool m_kdePlotInitialized{false};
-	bool m_qqPlotInitialized{false};
-	bool m_boxPlotInitialized{false};
-
-private slots:
-	void currentTabChanged(int);
-};
-
-#endif

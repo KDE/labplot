@@ -360,6 +360,7 @@ set(NSL_SOURCES
 	${BACKEND_DIR}/nsl/nsl_geom_linesim.c
 	${BACKEND_DIR}/nsl/nsl_int.c
 	${BACKEND_DIR}/nsl/nsl_interp.c
+	${BACKEND_DIR}/nsl/nsl_kde.c
 	${BACKEND_DIR}/nsl/nsl_math.c
 	${BACKEND_DIR}/nsl/nsl_sf_basic.c
 	${BACKEND_DIR}/nsl/nsl_sf_kernel.c

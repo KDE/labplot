@@ -44,12 +44,14 @@
 #include <KLocalizedString>
 
 #include <cmath>
+#include <algorithm> //for min_element and max_element
 
 extern "C" {
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_sort.h>
 #include <gsl/gsl_statistics.h>
+#include "backend/nsl/nsl_kde.h"
 }
 
 StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* parent) : QWidget(parent),
@@ -255,37 +257,6 @@ void StatisticsColumnWidget::currentTabChanged(int index) {
 		showBoxPlot();
 }
 
-//helpers
-const QString StatisticsColumnWidget::isNanValue(const double value) {
-	SET_NUMBER_LOCALE
-	return (std::isnan(value) ? QLatin1String("-") : numberLocale.toString(value,'f'));
-}
-
-QString modeValue(const Column* column, double value) {
-	if (std::isnan(value))
-		return QLatin1String("-");
-
-	SET_NUMBER_LOCALE
-	switch (column->columnMode()) {
-	case AbstractColumn::ColumnMode::Integer:
-		return numberLocale.toString((int)value);
-	case AbstractColumn::ColumnMode::BigInt:
-		return numberLocale.toString((qint64)value);
-	case AbstractColumn::ColumnMode::Text:
-		//TODO
-	case AbstractColumn::ColumnMode::DateTime:
-		//TODO
-	case AbstractColumn::ColumnMode::Day:
-		//TODO
-	case AbstractColumn::ColumnMode::Month:
-		//TODO
-	case AbstractColumn::ColumnMode::Numeric:
-		return numberLocale.toString(value, 'f');
-	}
-
-	return QString();
-}
-
 void StatisticsColumnWidget::showOverview() {
 	WAIT_CURSOR;
 	const Column::ColumnStatistics& statistics = m_column->statistics();
@@ -338,6 +309,56 @@ void StatisticsColumnWidget::showHistogram() {
 }
 
 void StatisticsColumnWidget::showKDEPlot() {
+	//add plot
+	CartesianPlot* plot = addPlot(&m_kdePlotWidget);
+
+	//set the axes lables
+	auto axes = plot->children<Axis>();
+	for (auto* axis : qAsConst(axes)) {
+		if (axis->orientation() == Axis::Orientation::Horizontal)
+			axis->title()->setText(m_column->name());
+		else
+			axis->title()->setText(i18n("Density"));
+
+		axis->setMinorTicksDirection(Axis::noTicks);
+	}
+
+	//copy the non-nan and not masked values
+	QVector<double> data;
+	copyValidData(data);
+
+	//calculate 200 points to plot
+	int count = 200;
+	QVector<double> xData;
+	QVector<double> yData;
+	xData.resize(count);
+	yData.resize(count);
+	double min = *std::min_element(data.constBegin(), data.constEnd());
+	double max = *std::max_element(data.constBegin(), data.constEnd());
+	double step = (max - min)/count;
+	int n = data.count();
+	double h = GSL_MAX(nsl_kde_normal_dist_bandwith(data.data(), n), 1e-6);
+	for (int i = 0; i < count; ++i) {
+		double x = min + i*step;
+		xData[i] = x;
+		yData[i] = nsl_kde(data.data(), x, h, n);
+	}
+
+	auto* xColumn = new Column("x");
+	xColumn->replaceValues(0, xData);
+
+	auto* yColumn = new Column("y");
+	yColumn->replaceValues(0, yData);
+
+	//add KDE curve
+	XYCurve* curve = new XYCurve("");
+	plot->addChild(curve);
+	curve->setLinePen(QPen(Qt::SolidLine));
+	curve->setSymbolsStyle(Symbol::Style::NoSymbols);
+	curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
+	curve->setXColumn(xColumn);
+	curve->setYColumn(yColumn);
+
 	m_kdePlotInitialized = true;
 }
 
@@ -355,60 +376,18 @@ void StatisticsColumnWidget::showQQPlot() {
 
 	//copy the non-nan and not masked values into a new vector
 	QVector<double> rawData;
-	int rowValuesSize = 0;
-	int notNanCount = 0;
-	double val;
-	if (m_column->columnMode() == AbstractColumn::ColumnMode::Numeric) {
-		auto* rowValues = reinterpret_cast<QVector<double>*>(m_column->data());
-		rowValuesSize = rowValues->size();
-		rawData.reserve(rowValuesSize);
-
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || m_column->isMasked(row))
-				continue;
-
-			++notNanCount;
-			rawData.push_back(val);
-		}
-	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::Integer) {
-		auto* rowValues = reinterpret_cast<QVector<int>*>(m_column->data());
-		rowValuesSize = rowValues->size();
-		rawData.reserve(rowValuesSize);
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || m_column->isMasked(row))
-				continue;
-
-			++notNanCount;
-			rawData.push_back(val);
-		}
-	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
-		auto* rowValues = reinterpret_cast<QVector<qint64>*>(m_column->data());
-		rowValuesSize = rowValues->size();
-		rawData.reserve(rowValuesSize);
-		for (int row = 0; row < rowValuesSize; ++row) {
-			val = rowValues->value(row);
-			if (std::isnan(val) || m_column->isMasked(row))
-				continue;
-
-			++notNanCount;
-			rawData.push_back(val);
-		}
-	}
-
-	if (rawData.size() < rowValuesSize)
-		rawData.squeeze();
+	copyValidData(rawData);
+	size_t n = rawData.count();
 
 	//sort the data to calculate the percentiles
-	gsl_sort(rawData.data(), 1, notNanCount);
+	gsl_sort(rawData.data(), 1, n);
 
 	//calculate y-values - the percentiles for the column data
 	Column* yColumn = new Column("y");
 	m_project->addChildFast(yColumn);
 	QVector<double> yData(99);
 	for (int i = 1; i < 100; ++i)
-		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, notNanCount, double(i)/100.);
+		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, double(i)/100.);
 
 	yColumn->replaceValues(0, yData);
 
@@ -431,8 +410,8 @@ void StatisticsColumnWidget::showQQPlot() {
 	curve->setYColumn(yColumn);
 
 	//add the reference line connecting (x1, y1) = (-0.6745, Q1) and (x2, y2) = (0.6745, Q2)
-	double y1 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, notNanCount, 0.25);
-	double y2 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, notNanCount, 0.75);
+	double y1 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.25);
+	double y2 = gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, 0.75);
 	double x1 = -0.6745;
 	double x2 = 0.6745;
 
@@ -518,4 +497,76 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	widget->setLayout(layout);
 
 	return plot;
+}
+
+//helpers
+const QString StatisticsColumnWidget::isNanValue(const double value) const {
+	SET_NUMBER_LOCALE
+	return (std::isnan(value) ? QLatin1String("-") : numberLocale.toString(value,'f'));
+}
+
+QString StatisticsColumnWidget::modeValue(const Column* column, double value) const {
+	if (std::isnan(value))
+		return QLatin1String("-");
+
+	SET_NUMBER_LOCALE
+	switch (column->columnMode()) {
+	case AbstractColumn::ColumnMode::Integer:
+		return numberLocale.toString((int)value);
+	case AbstractColumn::ColumnMode::BigInt:
+		return numberLocale.toString((qint64)value);
+	case AbstractColumn::ColumnMode::Text:
+		//TODO
+	case AbstractColumn::ColumnMode::DateTime:
+		//TODO
+	case AbstractColumn::ColumnMode::Day:
+		//TODO
+	case AbstractColumn::ColumnMode::Month:
+		//TODO
+	case AbstractColumn::ColumnMode::Numeric:
+		return numberLocale.toString(value, 'f');
+	}
+
+	return QString();
+}
+
+/*!
+ * copy the non-nan and not masked values of the current column
+ * into the vector \c data.
+ */
+void StatisticsColumnWidget::copyValidData(QVector<double>& data) const {
+	int rowCount = m_column->rowCount();
+	data.reserve(rowCount);
+	double val;
+	if (m_column->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+		auto* rowValues = reinterpret_cast<QVector<double>*>(m_column->data());
+		for (int row = 0; row < rowCount; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || m_column->isMasked(row))
+				continue;
+
+			data.push_back(val);
+		}
+	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::Integer) {
+		auto* rowValues = reinterpret_cast<QVector<int>*>(m_column->data());
+		for (int row = 0; row < rowCount; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || m_column->isMasked(row))
+				continue;
+
+			data.push_back(val);
+		}
+	} else if (m_column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
+		auto* rowValues = reinterpret_cast<QVector<qint64>*>(m_column->data());
+		for (int row = 0; row < rowCount; ++row) {
+			val = rowValues->value(row);
+			if (std::isnan(val) || m_column->isMasked(row))
+				continue;
+
+			data.push_back(val);
+		}
+	}
+
+	if (data.size() < rowCount)
+		data.squeeze();
 }

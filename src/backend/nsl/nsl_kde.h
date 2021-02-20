@@ -1,9 +1,9 @@
 /***************************************************************************
-	File                 : StatisticsColumnWidget.h
+    File                 : nsl_sort.h
     Project              : LabPlot
-	Description          : Widget showing statistics for column values
+    Description          : NSL functions for the kernel density estimation
     --------------------------------------------------------------------
-	Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,57 +25,14 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef STATISTICSCOLUMNWIDGET_H
-#define STATISTICSCOLUMNWIDGET_H
 
-#include <QWidget>
+#ifndef NSL_KDE_H
+#define NSL_KDE_H
 
-class CartesianPlot;
-class Column;
-class Project;
+/* calculates the density at point x for the sample data with the bandwith h */
+double nsl_kde(const double* data, double x, double h, size_t n);
 
-class QTabWidget;
-class QTextEdit;
+/* calculates the "normal distribution approximation" bandwidth */
+double nsl_kde_normal_dist_bandwith(double* data, int n);
 
-class StatisticsColumnWidget : public QWidget {
-	Q_OBJECT
-
-public:
-	explicit StatisticsColumnWidget(const Column*, QWidget *parent = nullptr);
-	~StatisticsColumnWidget() override;
-	void showStatistics();
-
-private:
-	void showOverview();
-	void showHistogram();
-	void showKDEPlot();
-	void showQQPlot();
-	void showBoxPlot();
-	CartesianPlot* addPlot(QWidget*);
-
-	const QString isNanValue(const double) const;
-	QString modeValue(const Column*, double) const;
-	void copyValidData(QVector<double>&) const;
-
-	const Column* m_column;
-	Project* m_project;
-	QTabWidget* m_tabWidget;
-	QTextEdit* m_teOverview;
-	QWidget m_histogramWidget;
-	QWidget m_kdePlotWidget;
-	QWidget m_qqPlotWidget;
-	QWidget m_boxPlotWidget;
-
-	QString m_htmlText;
-
-	bool m_overviewInitialized{false};
-	bool m_histogramInitialized{false};
-	bool m_kdePlotInitialized{false};
-	bool m_qqPlotInitialized{false};
-	bool m_boxPlotInitialized{false};
-
-private slots:
-	void currentTabChanged(int);
-};
-
-#endif
+#endif /* NSL_KDE_H */
