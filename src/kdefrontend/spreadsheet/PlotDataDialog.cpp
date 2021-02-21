@@ -782,7 +782,6 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 				break;
 			}
 		}
-
 		break;
 	}
 	case PlotType::Histogram: {
@@ -810,6 +809,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 				break;
 			}
 		}
+		break;
 	}
 	case PlotType::BoxPlot: {
 		//x-axis title

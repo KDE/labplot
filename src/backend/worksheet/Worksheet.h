@@ -88,6 +88,7 @@ public:
 	void setCartesianPlotActionMode(CartesianPlotActionMode mode);
 	CartesianPlotActionMode cartesianPlotCursorMode();
 	void setCartesianPlotCursorMode(CartesianPlotActionMode mode);
+	void setInteractive(bool);
 	void setPlotsLocked(bool);
 	bool plotsLocked();
 	int plotCount();

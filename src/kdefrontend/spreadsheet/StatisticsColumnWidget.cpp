@@ -292,13 +292,13 @@ void StatisticsColumnWidget::showHistogram() {
 
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
-		if (axis->orientation() == Axis::Orientation::Horizontal)
+		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->title()->setText(m_column->name());
-		else
+			axis->setMajorGridPen(QPen(Qt::NoPen));
+		} else
 			axis->title()->setText(i18n("Frequency"));
 
 		axis->setMinorTicksDirection(Axis::noTicks);
-		//QPen pen = axis->line
 	}
 
 	Histogram* histogram = new Histogram(QString());
@@ -372,6 +372,8 @@ void StatisticsColumnWidget::showQQPlot() {
 			axis->title()->setText(i18n("Theoretical Quantiles"));
 		else
 			axis->title()->setText(i18n("Sample Quantiles"));
+
+		axis->setMinorTicksDirection(Axis::noTicks);
 	}
 
 	//copy the non-nan and not masked values into a new vector
@@ -461,6 +463,7 @@ void StatisticsColumnWidget::showBoxPlot() {
 	}
 
 	BoxPlot* boxPlot = new BoxPlot(QString());
+	boxPlot->setOrientation(BoxPlot::Orientation::Vertical);
 	plot->addChild(boxPlot);
 
 	QVector<const AbstractColumn*> columns;
@@ -477,7 +480,6 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	worksheet->setLayoutBottomMargin(0.);
 	worksheet->setLayoutLeftMargin(0.);
 	worksheet->setLayoutRightMargin(0.);
-	worksheet->setTheme(QLatin1String("Bright"));
 	m_project->addChild(worksheet);
 
 	CartesianPlot* plot = new CartesianPlot(QString());
@@ -489,11 +491,10 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 
 	worksheet->addChild(plot);
 
-	worksheet->setPlotsLocked(true);
-
 	auto* layout = new QVBoxLayout(widget);
 	layout->setSpacing(0);
 	layout->addWidget(worksheet->view());
+	worksheet->setInteractive(false);
 	widget->setLayout(layout);
 
 	return plot;

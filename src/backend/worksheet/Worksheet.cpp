@@ -492,6 +492,12 @@ void Worksheet::setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mo
 	project()->setChanged(true);
 }
 
+void Worksheet::setInteractive(bool value) {
+	if (!m_view)
+		view();
+	m_view->setInteractive(value);
+}
+
 void Worksheet::setPlotsLocked(bool lock) {
 	if (d->plotsLocked == lock)
 		return;
