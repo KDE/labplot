@@ -30,9 +30,12 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
-#include "backend/datapicker/DatapickerCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/TextLabel.h"
+#include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYDataReductionCurve.h"
@@ -42,16 +45,12 @@
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFourierFilterCurve.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
+#include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTTopic.h"
 #endif
-
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/TextLabel.h"
-#include "commonfrontend/spreadsheet/SpreadsheetView.h"
-#include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include <QDialogButtonBox>
 #include <QPushButton>
@@ -256,6 +255,7 @@ void PlotDataDialog::processColumns() {
 		processColumnsForXYCurve(columnNames, xColumnName);
 		break;
 	case PlotType::Histogram:
+	case PlotType::BoxPlot:
 		processColumnsForHistogram(columnNames);
 		break;
 	}
@@ -323,8 +323,16 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 	}
 }
 
+/*!
+ * processes columns for cases where one single column
+ * is required per "plot" (histogram, boxplot, etc.)
+ * */
 void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) {
-	ui->gbData->setTitle(i18n("Histogram Data"));
+	if (m_plotType == PlotType::Histogram)
+		ui->gbData->setTitle(i18n("Histogram Data"));
+	else
+		ui->gbData->setTitle(i18n("Box Plot Data"));
+
 	ui->line->hide();
 	ui->spacer->changeSize(0, 0);
 	ui->chkCreateDataCurve->hide();
@@ -342,13 +350,25 @@ void PlotDataDialog::processColumnsForHistogram(const QStringList& columnNames) 
 		ui->cbYColumn->hide();
 		ui->rbCurvePlacement1->setChecked(true);
 		ui->gbCurvePlacement->hide();
-		ui->gbPlotPlacement->setTitle(i18n("Add Histogram to"));
+
+		if (m_plotType == PlotType::Histogram)
+			ui->gbPlotPlacement->setTitle(i18n("Add Histogram to"));
+		else
+			ui->gbPlotPlacement->setTitle(i18n("Add Box Plot to"));
+
 		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	} else {
-		ui->gbCurvePlacement->setTitle(i18n("Histogram Placement"));
-		ui->rbCurvePlacement1->setText(i18n("All histograms in one plot"));
-		ui->rbCurvePlacement2->setText(i18n("One plot per histogram"));
-		ui->gbPlotPlacement->setTitle(i18n("Add Histograms to"));
+		if (m_plotType == PlotType::Histogram) {
+			ui->gbCurvePlacement->setTitle(i18n("Histogram Placement"));
+			ui->rbCurvePlacement1->setText(i18n("All histograms in one plot"));
+			ui->rbCurvePlacement2->setText(i18n("One plot per histogram"));
+			ui->gbPlotPlacement->setTitle(i18n("Add Histograms to"));
+		} else {
+			ui->gbCurvePlacement->setTitle(i18n("Box Plot Placement"));
+			ui->rbCurvePlacement1->setText(i18n("All box plots in one plot"));
+			ui->rbCurvePlacement2->setText(i18n("One plot per box plot"));
+			ui->gbPlotPlacement->setTitle(i18n("Add Box Plots to"));
+		}
 		ui->scrollAreaColumns->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
 		//use the already available cbYColumn combo box
@@ -503,6 +523,19 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 		}
 		break;
 	}
+	case PlotType::BoxPlot: {
+		QVector<const AbstractColumn*> columns;
+		for (auto* comboBox : m_columnComboBoxes)
+			columns << columnFromName(comboBox->currentText());
+
+		QString name;
+		if (columns.size() > 1)
+			name = i18n("Box Plot");
+		else
+			name = columns.constFirst()->name();
+		addBoxPlot(name, columns, plot);
+		break;
+	}
 	}
 
 	plot->dataChanged();
@@ -546,6 +579,21 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			addHistogram(name, column, plot);
 			plot->scaleAuto();
 		}
+		break;
+	}
+	case PlotType::BoxPlot: {
+		for (auto* comboBox : m_columnComboBoxes) {
+			const QString& name = comboBox->currentText();
+			Column* column = columnFromName(name);
+
+			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
+			plot->setType(CartesianPlot::Type::FourAxes);
+			setAxesTitles(plot, name);
+			worksheet->addChild(plot);
+			addBoxPlot(name, QVector<const AbstractColumn*>{column}, plot);
+			plot->scaleAuto();
+		}
+		break;
 	}
 	}
 
@@ -635,6 +683,13 @@ void PlotDataDialog::addHistogram(const QString& name, Column* column, Cartesian
 // 	hist->suppressRetransform(false);
 	plot->addChild(hist);
 	m_lastAddedCurve = hist;
+}
+
+void PlotDataDialog::addBoxPlot(const QString& name, const QVector<const AbstractColumn*>& columns, CartesianPlot* plot) {
+	auto* boxPlot = new BoxPlot(name);
+	boxPlot->setDataColumns(columns);
+	plot->addChild(boxPlot);
+	m_lastAddedCurve = boxPlot;
 }
 
 void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
@@ -752,6 +807,30 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		for (auto* axis : plot->children<Axis>()) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				axis->title()->setText(i18n("Frequency"));
+				break;
+			}
+		}
+	}
+	case PlotType::BoxPlot: {
+		//x-axis title
+		for (auto* axis : plot->children<Axis>()) {
+			if (axis->orientation() == Axis::Orientation::Horizontal) {
+				axis->title()->setText(QString());
+				break;
+			}
+		}
+		//x-axis title
+		for (auto* axis : plot->children<Axis>()) {
+			if (axis->orientation() == Axis::Orientation::Vertical) {
+				if (!name.isEmpty()) {
+					//multiple columns are plotted with "one curve per plot",
+					//the function is called with the column name.
+					//use it for the x-axis title
+					axis->title()->setText(name);
+				} else if (m_columnComboBoxes.size() == 1) {
+					const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
+					axis->title()->setText(yColumnName);
+				}
 				break;
 			}
 		}

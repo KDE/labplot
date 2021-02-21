@@ -420,6 +420,8 @@ void SpreadsheetView::initActions() {
 	action_plot_data_xycurve->setData(static_cast<int>(PlotDataDialog::PlotType::XYCurve));
 	action_plot_data_histogram = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
 	action_plot_data_histogram->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
+	action_plot_data_boxplot = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Box Plot"), this);
+	action_plot_data_boxplot->setData(static_cast<int>(PlotDataDialog::PlotType::BoxPlot));
 
 	//Analyze and plot menu actions
 	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Reduce Data"), this);
@@ -515,6 +517,7 @@ void SpreadsheetView::initMenus() {
 	m_plotDataMenu = new QMenu(i18n("Plot Data"), this);
 	m_plotDataMenu->addAction(action_plot_data_xycurve);
 	m_plotDataMenu->addAction(action_plot_data_histogram);
+	m_plotDataMenu->addAction(action_plot_data_boxplot);
 
 	// Column menu
 	m_columnMenu = new QMenu(this);
@@ -800,14 +803,15 @@ void SpreadsheetView::connectActions() {
 
 	connect(action_plot_data_xycurve, &QAction::triggered, this, &SpreadsheetView::plotData);
 	connect(action_plot_data_histogram, &QAction::triggered, this, &SpreadsheetView::plotData);
-	connect(addDataReductionAction, &QAction::triggered, this, &SpreadsheetView::plotData);
-	connect(addDifferentiationAction, &QAction::triggered, this, &SpreadsheetView::plotData);
-	connect(addIntegrationAction, &QAction::triggered, this, &SpreadsheetView::plotData);
-	connect(addInterpolationAction, &QAction::triggered, this, &SpreadsheetView::plotData);
-	connect(addSmoothAction, &QAction::triggered, this, &SpreadsheetView::plotData);
+	connect(action_plot_data_boxplot, &QAction::triggered, this, &SpreadsheetView::plotData);
+	connect(addDataReductionAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
+	connect(addDifferentiationAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
+	connect(addIntegrationAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
+	connect(addInterpolationAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
+	connect(addSmoothAction, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
 	for (const auto& action : addFitAction)
-		connect(action, &QAction::triggered, this, &SpreadsheetView::plotData);
-	connect(addFourierFilterAction, &QAction::triggered,this, &SpreadsheetView::plotData);
+		connect(action, &QAction::triggered, this, &SpreadsheetView::plotAnalysisData);
+	connect(addFourierFilterAction, &QAction::triggered,this, &SpreadsheetView::plotAnalysisData);
 }
 
 void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
@@ -1774,18 +1778,17 @@ void SpreadsheetView::unmaskSelection() {
 }
 
 void SpreadsheetView::plotData() {
-	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
-	PlotDataDialog::PlotType type = PlotDataDialog::PlotType::XYCurve;
-	if (action == action_plot_data_xycurve || action == action_plot_data_histogram)
-		type = (PlotDataDialog::PlotType)action->data().toInt();
-
+	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
+	auto type = static_cast<PlotDataDialog::PlotType>(action->data().toInt());
 	auto* dlg = new PlotDataDialog(m_spreadsheet, type);
+	dlg->exec();
+}
 
-	if (action != action_plot_data_xycurve && action != action_plot_data_histogram) {
-		PlotDataDialog::AnalysisAction type = (PlotDataDialog::AnalysisAction)action->data().toInt();
-		dlg->setAnalysisAction(type);
-	}
-
+void SpreadsheetView::plotAnalysisData() {
+	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
+	auto* dlg = new PlotDataDialog(m_spreadsheet, PlotDataDialog::PlotType::XYCurve);
+	auto type = static_cast<PlotDataDialog::AnalysisAction>(action->data().toInt());
+	dlg->setAnalysisAction(type);
 	dlg->exec();
 }
 

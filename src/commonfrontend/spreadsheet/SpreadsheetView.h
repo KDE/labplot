@@ -199,6 +199,7 @@ private:
 	//analysis and plot data menu actions
 	QAction* action_plot_data_xycurve;
 	QAction* action_plot_data_histogram;
+	QAction* action_plot_data_boxplot;
 	QAction* addDataOperationAction;
 	QAction* addDataReductionAction;
 	QAction* addDifferentiationAction;
@@ -249,6 +250,7 @@ private slots:
 // 		void recalculateSelectedCells();
 
 	void plotData();
+	void plotAnalysisData();
 
 	void fillSelectedCellsWithRowNumbers();
 	void fillWithRowNumbers();
