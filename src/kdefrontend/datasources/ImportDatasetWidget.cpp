@@ -133,7 +133,7 @@ void ImportDatasetWidget::loadCategories() {
 
 		m_collections = document.array();
 
-		for (const auto& col : m_collections) {
+		for (const QJsonValueRef col : m_collections) {
 			const QJsonObject& collection = col.toObject();
 			const QString& m_collection = collection[QLatin1String("name")].toString();
 
@@ -198,7 +198,7 @@ void ImportDatasetWidget::collectionChanged(int index) {
 	//update the info field
 	QString info;
 	if (!m_allCollections) {
-		for (const auto& col : m_collections) {
+		for (const QJsonValueRef col : m_collections) {
 			const QJsonObject& collection = col.toObject();
 			if ( m_collection == collection[QLatin1String("name")].toString() ) {
 				info += collection[QLatin1String("description")].toString();
@@ -207,7 +207,7 @@ void ImportDatasetWidget::collectionChanged(int index) {
 			}
 		}
 	} else {
-		for (const auto& col : m_collections) {
+		for (const QJsonValueRef col : m_collections) {
 			const QJsonObject& collection = col.toObject();
 			info += collection[QLatin1String("description")].toString();
 			info += QLatin1String("<br><br>");
@@ -394,7 +394,7 @@ void ImportDatasetWidget::import(DatasetHandler* datasetHandler) {
  * @brief Returns the QJsonObject associated with the currently selected dataset.
  */
 QJsonObject ImportDatasetWidget::loadDatasetObject() {
-	for (const auto& col : m_collections) {
+	for (const QJsonValueRef col : m_collections) {
 		const QJsonObject& collectionJson = col.toObject();
 		const QString& collection = collectionJson[QLatin1String("name")].toString();
 
@@ -414,7 +414,7 @@ QJsonObject ImportDatasetWidget::loadDatasetObject() {
 				QJsonArray categoryArray = doc.object().value(QLatin1String("categories")).toArray();
 
 				//processing categories
-				for (const auto& cat : categoryArray) {
+				for (const QJsonValueRef cat : categoryArray) {
 					const QJsonObject currentCategory = cat.toObject();
 					const QString categoryName = currentCategory.value(QLatin1String("name")).toString();
 					if (m_category.isEmpty() || categoryName.compare(m_category) == 0) {
@@ -534,7 +534,7 @@ void ImportDatasetWidget::datasetChanged() {
 	QString info;
 	if (ui.cbCollections->currentIndex() != 0) {
 		const QString& m_collection = ui.cbCollections->itemData(ui.cbCollections->currentIndex()).toString();
-		for (const auto& col : m_collections) {
+		for (const QJsonValueRef col : m_collections) {
 			const QJsonObject& collection = col.toObject();
 			if ( m_collection.startsWith(collection[QLatin1String("name")].toString()) ) {
 				info += collection[QLatin1String("description")].toString();
