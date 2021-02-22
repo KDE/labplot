@@ -4274,6 +4274,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute( "end", QString::number(range.end(), 'g', 16) );
 		writer->writeAttribute( "scale", QString::number(static_cast<int>(range.scale())) );
 		writer->writeAttribute( "format", QString::number(static_cast<int>(range.format())) );
+		writer->writeAttribute( "dateTimeFormat", range.dateTimeFormat() );
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
@@ -4285,6 +4286,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute( "end", QString::number(range.end(), 'g', 16) );
 		writer->writeAttribute( "scale", QString::number(static_cast<int>(range.scale())) );
 		writer->writeAttribute( "format", QString::number(static_cast<int>(range.format())) );
+		writer->writeAttribute( "dateTimeFormat", range.dateTimeFormat() );
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
@@ -4459,6 +4461,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("format").toString());
 			else
 				range.setFormat( static_cast<RangeT::Format>(str.toInt()) );
+			str = attribs.value("dateTimeFormat").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("dateTimeFormat").toString());
+			else
+				range.setDateTimeFormat(str);
 
 			addXRange(range);
 		} else if (!preview && reader->name() == "yRanges") {
@@ -4493,6 +4500,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("format").toString());
 			else
 				range.setFormat( static_cast<RangeT::Format>(str.toInt()) );
+			str = attribs.value("dateTimeFormat").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("dateTimeFormat").toString());
+			else
+				range.setDateTimeFormat(str);
 
 			addYRange(range);
 		} else if (!preview && reader->name() == "coordinateSystems") {
