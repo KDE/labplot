@@ -387,7 +387,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	//calculate y-values - the percentiles for the column data
 	Column* yColumn = new Column("y");
 	m_project->addChildFast(yColumn);
-	QVector<double> yData(99);
+	QVector<double> yData;
 	for (int i = 1; i < 100; ++i)
 		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, double(i)/100.);
 
@@ -396,7 +396,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	//calculate x-values - the percentiles for the standard normal distribution
 	Column* xColumn = new Column("x");
 	m_project->addChildFast(xColumn);
-	QVector<double> xData(99);
+	QVector<double> xData;
 	for (int i = 1; i < 100; ++i)
 		xData << gsl_cdf_gaussian_Pinv(double(i)/100., 1.0);
 
