@@ -2,6 +2,7 @@
 	* Support multiple plot ranges
 	* Allow to copy&paste and to duplicate single objects in the project explorer
 	* Support Mathieu functions via GSL
+	* Added Hilbert transform including envelope
 	* Added global settings for numbers
 	* Support real scientific notation and improve other notations of axes label
 	* Improved range auto scaling

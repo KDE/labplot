@@ -45,6 +45,7 @@
 #include "XYFitCurve.h"
 #include "XYFourierFilterCurve.h"
 #include "XYFourierTransformCurve.h"
+#include "XYHilbertTransformCurve.h"
 #include "XYConvolutionCurve.h"
 #include "XYCorrelationCurve.h"
 #include "../PlotArea.h"
@@ -397,6 +398,7 @@ void CartesianPlot::initActions() {
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit"), this);
 	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
 	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("Fourier Transform"), this);
+	addHilbertTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Hilbert Transform"), this);
 	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"),i18n("(De-)Convolution"), this);
 	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"),i18n("Auto-/Cross-Correlation"), this);
 
@@ -424,6 +426,7 @@ void CartesianPlot::initActions() {
 	connect(addFitCurveAction, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
 	connect(addFourierTransformCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
+	connect(addHilbertTransformCurveAction, &QAction::triggered, this, &CartesianPlot::addHilbertTransformCurve);
 	connect(addConvolutionCurveAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
 	connect(addCorrelationCurveAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
 
@@ -492,6 +495,7 @@ void CartesianPlot::initActions() {
 
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
 	addFourierTransformAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("Fourier Transform"), this);
+	addHilbertTransformAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Hilbert Transform"), this);
 
 	connect(addDataReductionAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -504,6 +508,7 @@ void CartesianPlot::initActions() {
 		connect(action, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
 	connect(addFourierTransformAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
+	connect(addHilbertTransformAction, &QAction::triggered, this, &CartesianPlot::addHilbertTransformCurve);
 
 	//zoom/navigate actions
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), this);
@@ -562,6 +567,7 @@ void CartesianPlot::initMenus() {
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addFourierFilterCurveAction);
 	addNewAnalysisMenu->addAction(addFourierTransformCurveAction);
+	addNewAnalysisMenu->addAction(addHilbertTransformCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addConvolutionCurveAction);
 	addNewAnalysisMenu->addAction(addCorrelationCurveAction);
@@ -639,6 +645,7 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addFourierFilterAction);
 	dataAnalysisMenu->addAction(addFourierTransformAction);
+	dataAnalysisMenu->addAction(addHilbertTransformAction);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addConvolutionAction);
 	dataAnalysisMenu->addAction(addCorrelationAction);
@@ -1804,6 +1811,12 @@ void CartesianPlot::addFourierFilterCurve() {
 
 void CartesianPlot::addFourierTransformCurve() {
 	auto* curve = new XYFourierTransformCurve("Fourier transform");
+	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+	this->addChild(curve);
+}
+
+void CartesianPlot::addHilbertTransformCurve() {
+	auto* curve = new XYHilbertTransformCurve("Hilbert transform");
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	this->addChild(curve);
 }
@@ -4815,6 +4828,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyFourierTransformCurve") {
 			auto* curve = new XYFourierTransformCurve(QString());
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				removeChild(curve);
+				return false;
+			}
+		} else if (reader->name() == "xyHilbertTransformCurve") {
+			auto* curve = new XYHilbertTransformCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {

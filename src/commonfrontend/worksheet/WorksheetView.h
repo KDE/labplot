@@ -259,6 +259,7 @@ private:
 	QAction* addFitAction{nullptr};
 	QAction* addFourierFilterAction{nullptr};
 	QAction* addFourierTransformAction{nullptr};
+	QAction* addHilbertTransformAction{nullptr};
 	QAction* addConvolutionAction{nullptr};
 	QAction* addCorrelationAction{nullptr};
 

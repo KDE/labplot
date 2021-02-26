@@ -70,6 +70,7 @@ class XYSmoothCurveDock;
 class XYFitCurveDock;
 class XYFourierFilterCurveDock;
 class XYFourierTransformCurveDock;
+class XYHilbertTransformCurveDock;
 class XYConvolutionCurveDock;
 class XYCorrelationCurveDock;
 class WorksheetDock;
@@ -246,6 +247,7 @@ private:
 	XYFitCurveDock* xyFitCurveDock{nullptr};
 	XYFourierFilterCurveDock* xyFourierFilterCurveDock{nullptr};
 	XYFourierTransformCurveDock* xyFourierTransformCurveDock{nullptr};
+	XYHilbertTransformCurveDock* xyHilbertTransformCurveDock{nullptr};
 	XYConvolutionCurveDock* xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* xyCorrelationCurveDock{nullptr};
 	HistogramDock* histogramDock{nullptr};

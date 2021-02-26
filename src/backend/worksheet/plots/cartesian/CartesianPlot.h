@@ -50,6 +50,7 @@ class XYSmoothCurve;
 class XYFitCurve;
 class XYFourierFilterCurve;
 class XYFourierTransformCurve;
+class XYHilbertTransformCurve;
 class XYConvolutionCurve;
 class XYCorrelationCurve;
 class InfoElementDialog;
@@ -225,6 +226,7 @@ private:
 	QAction* addFitCurveAction;
 	QAction* addFourierFilterCurveAction;
 	QAction* addFourierTransformCurveAction;
+	QAction* addHilbertTransformCurveAction;
 	QAction* addConvolutionCurveAction;
 	QAction* addCorrelationCurveAction;
 
@@ -262,6 +264,7 @@ private:
 	QVector<QAction*> addFitActions;
 	QAction* addFourierFilterAction;
 	QAction* addFourierTransformAction;
+	QAction* addHilbertTransformAction;
 	QAction* addConvolutionAction;
 	QAction* addCorrelationAction;
 
@@ -293,6 +296,7 @@ public slots:
 	void addFitCurve();
 	void addFourierFilterCurve();
 	void addFourierTransformCurve();
+	void addHilbertTransformCurve();
 	void addConvolutionCurve();
 	void addCorrelationCurve();
 

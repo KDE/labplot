@@ -364,6 +364,8 @@ void WorksheetView::initActions() {
 //	addConvolutionAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("Convolution/Deconvolution"), cartesianPlotAddNewActionGroup);
 	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
 //	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-correlation-curve"), i18n("Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
+	addHilbertTransformAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Hilbert-Transform"), cartesianPlotAddNewActionGroup);
+//	addHilbertTransformAction = new QAction(QIcon::fromTheme("labplot-xy-hilbert-curve"), i18n("Hilbert-Transform"), cartesianPlotAddNewActionGroup);
 
 	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), cartesianPlotAddNewActionGroup);
@@ -643,6 +645,7 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) {
 	menu->addSeparator();
 	menu->addAction(addFourierFilterAction);
 	menu->addAction(addFourierTransformAction);
+	menu->addAction(addHilbertTransformAction);
 	menu->addSeparator();
 	menu->addAction(addConvolutionAction);
 	menu->addAction(addCorrelationAction);
@@ -1678,6 +1681,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	addFitAction->setEnabled(plot);
 	addFourierFilterAction->setEnabled(plot);
 	addFourierTransformAction->setEnabled(plot);
+	addHilbertTransformAction->setEnabled(plot);
 	addConvolutionAction->setEnabled(plot);
 	addCorrelationAction->setEnabled(plot);
 }
@@ -2042,6 +2046,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addFourierFilterCurve();
 	else if (action == addFourierTransformAction)
 		plot->addFourierTransformCurve();
+	else if (action == addHilbertTransformAction)
+		plot->addHilbertTransformCurve();
 	else if (action == addConvolutionAction)
 		plot->addConvolutionCurve();
 	else if (action == addCorrelationAction)

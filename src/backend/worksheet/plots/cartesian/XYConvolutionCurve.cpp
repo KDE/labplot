@@ -159,7 +159,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	QVector<double> y2dataVector;
 
 	double xmin, xmax;
-	if (tmpXDataColumn != nullptr && convolutionData.autoRange) {
+	if (tmpXDataColumn && convolutionData.autoRange) {
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
 	} else {
@@ -168,7 +168,7 @@ void XYConvolutionCurvePrivate::recalculate() {
 	}
 
 	//only copy those data where values are valid and in range
-	if (tmpXDataColumn != nullptr) {	// x-axis present (with possible range)
+	if (tmpXDataColumn) {	// x-axis present (with possible range)
 		for (int row = 0; row < tmpXDataColumn->rowCount(); ++row) {
 			if (tmpXDataColumn->isValid(row) && !tmpXDataColumn->isMasked(row)
 				&& tmpYDataColumn->isValid(row) && !tmpYDataColumn->isMasked(row)) {
