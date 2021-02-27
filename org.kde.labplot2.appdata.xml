@@ -46,7 +46,7 @@
   <summary xml:lang="fr">Tracé interactif de courbes et analyse de données scientifiques</summary>
   <summary xml:lang="gl">Xeración interactiva de gráficos e a análise de datos científicos</summary>
   <summary xml:lang="id">Penggrafikan yang interaktif dan analisis data ilmiah</summary>
-  <summary xml:lang="it">Grafica interattiva e analisi dei dati scientifici</summary>
+  <summary xml:lang="it">Grafici interattivi e analisi dei dati scientifici</summary>
   <summary xml:lang="nl">Interactief maken van grafieken en analyseren van wetenschappelijke gegevens</summary>
   <summary xml:lang="nn">Interaktiv plotting og analyse av vitskaplege data</summary>
   <summary xml:lang="pl">Interaktywne przestawianie graficzne i analizy danych naukowych</summary>
@@ -73,7 +73,7 @@
     <p xml:lang="fr">LabPlot est une application pour le tracé interactif de courbes et l'analyse de données scientifiques.</p>
     <p xml:lang="gl">LabPlot é unha aplicación para a xeración interactiva de gráficos e a análise de datos científicos.</p>
     <p xml:lang="id">LabPlot adalah sebuah aplikasi untuk penggrafikan interaktif dan analisis data ilmiah.</p>
-    <p xml:lang="it">LabPlot è un'applicazione per la grafica interattiva e per l'analisi dei dati scientifici.</p>
+    <p xml:lang="it">LabPlot è un'applicazione per i grafici interattivi e per l'analisi di dati scientifici.</p>
     <p xml:lang="nl">LabPlot2 is een toepassing voor het interactief maken van grafieken en het analyseren van wetenschappelijke gegevens.</p>
     <p xml:lang="nn">LabPlot er program for interaktiv plotting og analyse av vitskaplege data.</p>
     <p xml:lang="pl">LabPlot jest aplikacją do interaktywnego przestawiania graficznego i analizy danych naukowych.</p>
@@ -98,7 +98,7 @@
     <p xml:lang="et">LabPlot võimaldab vähese vaevaga jooniseid luua, hallata ja muuta. Graafikuid saab koostada andmetabelist pärit või võrgufailidest imporditud andmete põhjal. Jooniseid saab eksportida mitmes pikselraster- ja vektorgraafika vormingus.</p>
     <p xml:lang="eu">LabPlot-ek grafikoak sortu, kudeatu eta editatzeko era erraz bat eskaintzen du. Grafikoak sortzen uzten dizu kalkulu-orrietako datuekin edo kanpoko fitxategietatik inportatutako datuekin. Grafikoak hainbat pixel-mapa eta bektore grafiko formatutara esportatu daitezke.</p>
     <p xml:lang="fi">LabPlot tarjoaa helpon tavan luoda, hallita ja muokata kaavioita. Voit tuottaa kaavioita laskentataulukon tai muiden ulkoisten tiedostojen datasta. Kaavioita voi viedä eri bittikartta- ja vektorigrafiikkamuotoihin.</p>
-    <p xml:lang="fr">LabPlot fournit une moyen facile de créer, gérer et éditer des courbes. Il vous permet de produire des courbes basées sur des données issues d'un tableur ou d'un fichier externe. Les courbes peuvent être exportées vers plusieurs format d'image matriciels ou vectoriels.</p>
+    <p xml:lang="fr">LabPlot fournit une moyen facile de créer, gérer et éditer des courbes. Il vous permet de produire des courbes produites à partir de données issues d'un tableur ou d'un fichier externe. Les courbes peuvent être exportées vers plusieurs format d'image matriciels ou vectoriels.</p>
     <p xml:lang="gl">LabPlot fornece unha forma doada de crear, xestionar e editar gráficos. Permítelle producir gráficos baseados en datos dunha folla de cálculo ou datos importados de ficheiros externos. Pode exportar os gráficos en distintos formatos de imaxe, de mapas de píxeles ou vectoriais.</p>
     <p xml:lang="id">LabPlot menyediakan cara mudah untuk menciptakan, mengelola, dan mengedit plot. Ini memungkinkanmu menghasilkan plot berdasarkan data dari lembar-kerja atau data yang diimpor dari file eksternal. Plot bisa diekspor ke beberapa format grafik pixmap dan vector.</p>
     <p xml:lang="it">LabPlot fornisce una modalità semplice per creare, gestire e modificare i grafici. Ti permette di generare grafici basati sui dati di un foglio elettronico, oppure importati da file esterni. I grafici possono essere esportati in diverse immagini e in diversi formati grafici vettoriali.</p>
@@ -157,7 +157,7 @@
       <caption xml:lang="fr">Fonction mathématique</caption>
       <caption xml:lang="gl">Función matemática.</caption>
       <caption xml:lang="id">Fungsi matematika</caption>
-      <caption xml:lang="it">Funzioni matematica</caption>
+      <caption xml:lang="it">Funzione matematica</caption>
       <caption xml:lang="nl">Wiskundige functie</caption>
       <caption xml:lang="nn">Matematisk funksjon</caption>
       <caption xml:lang="pl">Funkcja matematyczna</caption>
@@ -201,7 +201,7 @@
   <provides>
     <binary>labplot2</binary>
   </provides>
-  <content_rating type="oars-1.1" />
+  <content_rating type="oars-1.1"/>
   <releases>
     <release version="2.8.1" date="2020-11-13"/>
     <release version="2.8.0" date="2020-09-16"/>
