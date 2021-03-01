@@ -159,7 +159,7 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 #ifdef HAVE_FFTW3
 		// write gsl_halfcomplex data
 		data[0] = result[0];
-		for (i = 1; i < N+1; i++)
+		for (i = 1; i < N; i++)
 			data[i] = result[i+1];
 #endif
 		break;
