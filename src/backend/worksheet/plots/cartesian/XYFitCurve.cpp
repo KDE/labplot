@@ -2161,7 +2161,7 @@ void XYFitCurvePrivate::writeSolverState(gsl_multifit_fdfsolver* s, double chi) 
 	}
 
 	//current value of chi
-	if (isnan(chi))
+	if (std:isnan(chi))
 		chi = gsl_blas_dnrm2(s->f);
 	state += QString::number(chi*chi);
 	state += ';';
