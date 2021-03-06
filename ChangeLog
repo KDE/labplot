@@ -5,6 +5,7 @@
 	* Added Hilbert transform including envelope
 	* Added global settings for numbers
 	* Support real scientific notation and improve other notations of axes label
+	* Export worksheet to more image formats (jpg, bmp, ppm, xbm, xpm)
 	* Improved range auto scaling
 	* [spreadsheet]:
 		* Allow to freeze the first column
