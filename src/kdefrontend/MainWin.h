@@ -203,7 +203,6 @@ private:
 	QAction* m_nextWindowAction;
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
-	QAction* m_editFitsFileAction;
 
 	//toggling dock widgets, status bar and full screen
 	QAction* m_toggleProjectExplorerDockAction;
@@ -221,7 +220,6 @@ private:
 	QMenu* m_visibilityMenu{nullptr};
 	QMenu* m_newMenu{nullptr};
 	QMenu* m_importMenu;
-	QMenu* m_editMenu{nullptr};
 
 	//Docks
 	QStackedWidget* stackedWidget{nullptr};

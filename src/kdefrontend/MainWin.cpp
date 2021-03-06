@@ -66,6 +66,7 @@
 #include "commonfrontend/note/NoteView.h"
 #include "commonfrontend/widgets/MemoryWidget.h"
 
+#include "kdefrontend/colormaps/ColorMapsDialog.h"
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/datasources/ImportDatasetDialog.h"
 #include "kdefrontend/datasources/ImportDatasetWidget.h"
@@ -580,10 +581,19 @@ void MainWin::initActions() {
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
 
-	m_editFitsFileAction = new QAction(QIcon::fromTheme("editor"), i18n("FITS Metadata Editor"), this);
-	m_editFitsFileAction->setWhatsThis(i18n("Open editor to edit FITS meta data"));
-	actionCollection()->addAction("edit_fits", m_editFitsFileAction);
-	connect(m_editFitsFileAction, &QAction::triggered, this, &MainWin::editFitsFileDialog);
+	//Tools
+	auto* action = new QAction(QIcon::fromTheme("color-management"), i18n("Color Maps Browser"), this);
+	action->setWhatsThis(i18n("Open dialog to browse through the available color maps."));
+	actionCollection()->addAction("color_maps", action);
+	connect(action, &QAction::triggered, this, [=](){
+			auto* dlg = new ColorMapsDialog(this);
+			dlg->exec();
+	});
+
+	action = new QAction(QIcon::fromTheme("editor"), i18n("FITS Metadata Editor"), this);
+	action->setWhatsThis(i18n("Open editor to edit FITS meta data"));
+	actionCollection()->addAction("edit_fits", action);
+	connect(action, &QAction::triggered, this, &MainWin::editFitsFileDialog);
 
 	// Edit
 	//Undo/Redo-stuff
@@ -779,9 +789,9 @@ void MainWin::initMenus() {
 	m_visibilityMenu ->addAction(m_visibilitySubfolderAction);
 	m_visibilityMenu ->addAction(m_visibilityAllAction);
 
-	//menu for editing files
-	m_editMenu = new QMenu(i18n("Edit"), this);
-	m_editMenu->addAction(m_editFitsFileAction);
+// 	//menu for editing files
+// 	m_editMenu = new QMenu(i18n("Edit"), this);
+// 	m_editMenu->addAction(m_editFitsFileAction);
 
 	//set the action for the current color scheme checked
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));

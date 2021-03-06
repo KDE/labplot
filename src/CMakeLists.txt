@@ -28,6 +28,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
 # 	${KDEFRONTEND_DIR}/welcomescreen/WelcomeScreenHelper.cpp
+	${KDEFRONTEND_DIR}/colormaps/ColorMapsWidget.cpp
+	${KDEFRONTEND_DIR}/colormaps/ColorMapsDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
@@ -130,6 +132,7 @@ endif()
 
 
 set(UI_SOURCES
+	${KDEFRONTEND_DIR}/ui/colormapswidget.ui
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
 	${KDEFRONTEND_DIR}/ui/functionswidget.ui
 	${KDEFRONTEND_DIR}/ui/fitoptionswidget.ui
