@@ -323,6 +323,12 @@ void StatisticsColumnWidget::showKDEPlot() {
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}
 
+	//add normalized histogram
+	Histogram* histogram = new Histogram(QString());
+	plot->addChild(histogram);
+	histogram->setNormalization(Histogram::ProbabilityDensity);
+	histogram->setDataColumn(m_column);
+
 	//copy the non-nan and not masked values
 	QVector<double> data;
 	copyValidData(data);
