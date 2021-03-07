@@ -1912,8 +1912,8 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group("Histogram");
 
-	int index = parentAspect()->indexOfChild<Histogram>(this);
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	int index = plot->curveChildIndex(this);
 	QColor themeColor;
 	if (index<plot->themeColorPalette().size())
 		themeColor = plot->themeColorPalette().at(index);

@@ -3315,8 +3315,8 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
-	int index = parentAspect()->indexOfChild<XYCurve>(this);
 	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	int index = plot->curveChildIndex(this);
 	QColor themeColor;
 	if (index<plot->themeColorPalette().size())
 		themeColor = plot->themeColorPalette().at(index);

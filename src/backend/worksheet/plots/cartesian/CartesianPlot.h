@@ -113,10 +113,12 @@ public:
 	bool isHovered() const;
 	bool isPrinted() const;
 	bool isSelected() const;
+
 	void addLegend(CartesianPlotLegend*);
 	int curveCount();
 	const XYCurve* getCurve(int index);
 	double cursorPos(int cursorNumber);
+	int curveChildIndex(const WorksheetElement*) const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;

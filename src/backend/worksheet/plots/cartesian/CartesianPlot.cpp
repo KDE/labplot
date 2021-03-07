@@ -1907,6 +1907,25 @@ double CartesianPlot::cursorPos(int cursorNumber) {
 	return ( cursorNumber == 0 ? d->cursor0Pos.x() : d->cursor1Pos.x() );
 }
 
+/*!
+ * returns the index of the child \c curve in the list of all "curve-like"
+ * children (xy-curve, histogram, boxplot, etc.).
+ * This function is used when applying the theme color to the newly added "curve".:
+ */
+int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
+	int index = 0;
+	for (auto* child : children<WorksheetElement>()) {
+		if (child == curve)
+			break;
+
+		if (child->inherits(AspectType::XYCurve)
+			|| child->type() == AspectType::Histogram)
+		++index;
+	}
+
+	return index;
+}
+
 void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 
