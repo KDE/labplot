@@ -764,8 +764,23 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 		}
 		}
 
-		if (normalization == Histogram::Probability)
+		switch (normalization) {
+		case Histogram::Count:
+			break;
+		case Histogram::Probability:
 			yMaxRange = yMaxRange/totalCount;
+			break;
+		case Histogram::CountDensity: {
+			const double width = (binRangesMax - binRangesMin)/m_bins;
+			yMaxRange = yMaxRange/width;
+			break;
+		}
+		case Histogram::ProbabilityDensity: {
+			const double width = (binRangesMax - binRangesMin)/m_bins;
+			yMaxRange = yMaxRange/totalCount/width;
+			break;
+		}
+		}
 
 		return yMaxRange;
 	}
@@ -1049,6 +1064,22 @@ void HistogramPrivate::histogramValue(double& value, int bin) {
 			value = gsl_histogram_get(m_histogram, bin)/totalCount;
 		else
 			value += gsl_histogram_get(m_histogram, bin)/totalCount;
+		break;
+	}
+	case Histogram::CountDensity: {
+		const double width = (binRangesMax - binRangesMin)/m_bins;
+		if (type == Histogram::Ordinary)
+			value = gsl_histogram_get(m_histogram, bin)/width;
+		else
+			value += gsl_histogram_get(m_histogram, bin)/width;
+		break;
+	}
+	case Histogram::ProbabilityDensity: {
+		const double width = (binRangesMax - binRangesMin)/m_bins;
+		if (type == Histogram::Ordinary)
+			value = gsl_histogram_get(m_histogram, bin)/totalCount/width;
+		else
+			value += gsl_histogram_get(m_histogram, bin)/totalCount/width;
 		break;
 	}
 	}

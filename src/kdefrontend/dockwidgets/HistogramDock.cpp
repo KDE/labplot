@@ -240,6 +240,8 @@ void HistogramDock::init() {
 	//Normalization
 	ui.cbNormalization->addItem(i18n("Count"));
 	ui.cbNormalization->addItem(i18n("Probability"));
+	ui.cbNormalization->addItem(i18n("Count Density"));
+	ui.cbNormalization->addItem(i18n("Probability Density"));
 
 	//Line
 	ui.cbLineType->addItem(i18n("None"));

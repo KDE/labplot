@@ -45,7 +45,7 @@ class Histogram : public WorksheetElement, public Curve {
 public:
 	enum HistogramType {Ordinary,Cumulative, AvgShift};
 	enum HistogramOrientation {Vertical, Horizontal};
-	enum HistogramNormalization {Count, Probability};
+	enum HistogramNormalization {Count, Probability, CountDensity, ProbabilityDensity};
 	enum BinningMethod {ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott};
 	enum LineType {NoLine, Bars, Envelope, DropLines};
 	enum ValuesType {NoValues, ValuesBinEntries, ValuesCustomColumn};
