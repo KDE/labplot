@@ -79,7 +79,9 @@ public:
 	QString dataColumnPath;
 	Histogram::HistogramType type{Histogram::Ordinary};
 	Histogram::HistogramOrientation orientation{Histogram::Vertical};
+	Histogram::HistogramNormalization normalization{Histogram::Count};
 	Histogram::BinningMethod binningMethod{Histogram::SquareRoot};
+	int totalCount{0};
 	int binCount{10};
 	float binWidth{1.0f};
 	bool autoBinRanges{true};
@@ -170,6 +172,7 @@ private:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
+	void histogramValue(double& value, int bin);
 	void drawSymbols(QPainter*);
 	void drawValues(QPainter*);
 	void drawFilling(QPainter*);

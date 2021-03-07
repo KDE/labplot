@@ -124,6 +124,7 @@ HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(n
 	connect( cbDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataColumnChanged(QModelIndex)) );
 	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
 	connect( ui.cbOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(orientationChanged(int)));
+	connect(ui.cbNormalization, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HistogramDock::normalizationChanged);
 	connect( ui.cbBinningMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(binningMethodChanged(int)) );
 	connect(ui.sbBinCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &HistogramDock::binCountChanged);
 	connect(ui.leBinWidth, &QLineEdit::textChanged, this, &HistogramDock::binWidthChanged);
@@ -235,6 +236,10 @@ void HistogramDock::init() {
 	//Orientation
 	ui.cbOrientation->addItem(i18n("Vertical"));
 	ui.cbOrientation->addItem(i18n("Horizontal"));
+
+	//Normalization
+	ui.cbNormalization->addItem(i18n("Count"));
+	ui.cbNormalization->addItem(i18n("Probability"));
 
 	//Line
 	ui.cbLineType->addItem(i18n("None"));
@@ -409,6 +414,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	//show the properties of the first curve
 	ui.cbType->setCurrentIndex(m_curve->type());
 	ui.cbOrientation->setCurrentIndex(m_curve->orientation());
+	ui.cbNormalization->setCurrentIndex(m_curve->normalization());
 	ui.cbBinningMethod->setCurrentIndex(m_curve->binningMethod());
 	ui.sbBinCount->setValue(m_curve->binCount());
 	ui.leBinWidth->setText(numberLocale.toString(m_curve->binWidth()));
@@ -450,6 +456,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::dataColumnChanged, this, &HistogramDock::curveDataColumnChanged);
 	connect(m_curve, &Histogram::typeChanged, this, &HistogramDock::curveTypeChanged);
 	connect(m_curve, &Histogram::orientationChanged, this, &HistogramDock::curveOrientationChanged);
+	connect(m_curve, &Histogram::normalizationChanged, this, &HistogramDock::curveNormalizationChanged);
 	connect(m_curve, &Histogram::binningMethodChanged, this, &HistogramDock::curveBinningMethodChanged);
 	connect(m_curve, &Histogram::binCountChanged, this, &HistogramDock::curveBinCountChanged);
 	connect(m_curve, &Histogram::binWidthChanged, this, &HistogramDock::curveBinWidthChanged);
@@ -575,6 +582,15 @@ void HistogramDock::orientationChanged(int index) {
 	auto orientation = Histogram::HistogramOrientation(index);
 	for (auto* curve : m_curvesList)
 		curve->setOrientation(orientation);
+}
+
+void HistogramDock::normalizationChanged(int index) {
+	if (m_initializing)
+		return;
+
+	auto normalization = Histogram::HistogramNormalization(index);
+	for (auto* curve : m_curvesList)
+		curve->setNormalization(normalization);
 }
 
 void HistogramDock::binningMethodChanged(int index) {
@@ -1438,6 +1454,13 @@ void HistogramDock::curveOrientationChanged(Histogram::HistogramOrientation orie
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 	m_initializing = false;
 }
+
+void HistogramDock::curveNormalizationChanged(Histogram::HistogramNormalization normalization) {
+	m_initializing = true;
+	ui.cbNormalization->setCurrentIndex((int)normalization);
+	m_initializing = false;
+}
+
 
 void HistogramDock::curveBinningMethodChanged(Histogram::BinningMethod method) {
 	m_initializing = true;
