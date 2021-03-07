@@ -408,7 +408,7 @@ void CartesianPlot::initActions() {
 
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), this);
-	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), this);
+	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text"), this);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), this);
 	addInfoElementAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Info Element"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
