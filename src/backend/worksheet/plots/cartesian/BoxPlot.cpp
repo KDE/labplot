@@ -1367,12 +1367,12 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 void BoxPlot::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group;
 	if (config.hasGroup(QLatin1String("Theme")))
-		group = config.group("BoxPlot"); //when loading from the theme config, use the same properties as for BoxPlot
+		group = config.group("XYCurve"); //when loading from the theme config, use the same properties as for XYCurve
 	else
 		group = config.group("BoxPlot");
 
-	int index = parentAspect()->indexOfChild<Histogram>(this);
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	int index = plot->curveChildIndex(this);
 	QColor themeColor;
 	if (index<plot->themeColorPalette().size())
 		themeColor = plot->themeColorPalette().at(index);
