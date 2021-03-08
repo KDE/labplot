@@ -1589,6 +1589,7 @@ void CartesianPlot::addHorizontalAxis() {
 		axis->setUndoAware(false);
 		// use x range of default plot range
 		axis->setRange( xRange() );
+		axis->setMajorTicksNumber( xRange().autoTickCount() );
 		axis->setUndoAware(true);
 	}
 	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
@@ -1604,6 +1605,7 @@ void CartesianPlot::addVerticalAxis() {
 		axis->setUndoAware(false);
 		// use y range of default plot range
 		axis->setRange( yRange() );
+		axis->setMajorTicksNumber( yRange().autoTickCount() );
 		axis->setUndoAware(true);
 	}
 	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
@@ -2004,7 +2006,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			updateLegend();
 		}
 
-		const auto* infoElement= qobject_cast<const InfoElement*>(child);
+		const auto* infoElement = qobject_cast<const InfoElement*>(child);
 		if (infoElement)
 			connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
 
@@ -2061,6 +2063,10 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 			setXRangeFormat(RangeT::Format::Numeric);
 		else
 			setYRangeFormat(RangeT::Format::Numeric);
+
+		for (auto* axis : children<Axis>())
+			axis->setMajorTicksNumber(axis->range().autoTickCount());
+
 		setUndoAware(true);
 	}
 }
@@ -3439,6 +3445,7 @@ void CartesianPlotPrivate::retransformScales() {
 // 				axis->setOffset(axis->offset() + deltaXMin, false);
 // 			}
 		}
+		axis->setMajorTicksNumber(axis->range().autoTickCount());
 	}
 	// call retransform() on the parent to trigger the update of all axes and curves.
 	//no need to do this on load since all plots are retransformed again after the project is loaded.
