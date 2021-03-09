@@ -110,7 +110,7 @@ void BoxPlot::init() {
 	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
 	d->symbolsPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
 	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
-	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
+	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 
 	//whiskers
 	d->whiskersPen = QPen(group.readEntry("WhiskersColor", QColor(Qt::black)),
@@ -677,12 +677,12 @@ void BoxPlotPrivate::recalc(int index) {
 	if (orientation == BoxPlot::Orientation::Vertical) {
 		if (m_whiskerMax[index] > m_yMax)
 			m_yMax = m_whiskerMax[index];
-		else if (m_whiskerMin[index] < m_yMin)
+		if (m_whiskerMin[index] < m_yMin)
 			m_yMin = m_whiskerMin[index];
 	} else {
 		if (m_whiskerMax[index] > m_xMax)
 			m_xMax = m_whiskerMax[index];
-		else if (m_whiskerMin[index] < m_xMin)
+		if (m_whiskerMin[index] < m_xMin)
 			m_xMin = m_whiskerMin[index];
 	}
 
