@@ -580,11 +580,12 @@ void MainWin::initActions() {
 	actionCollection()->addAction("export", m_exportAction);
 	connect(m_exportAction, &QAction::triggered, this, &MainWin::exportDialog);
 
+#ifdef HAVE_FITS
 	m_editFitsFileAction = new QAction(QIcon::fromTheme("editor"), i18n("FITS Metadata Editor"), this);
 	m_editFitsFileAction->setWhatsThis(i18n("Open editor to edit FITS meta data"));
 	actionCollection()->addAction("edit_fits", m_editFitsFileAction);
 	connect(m_editFitsFileAction, &QAction::triggered, this, &MainWin::editFitsFileDialog);
-
+#endif
 	// Edit
 	//Undo/Redo-stuff
 	m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
@@ -781,8 +782,9 @@ void MainWin::initMenus() {
 
 	//menu for editing files
 	m_editMenu = new QMenu(i18n("Edit"), this);
+#ifdef HAVE_FITS
 	m_editMenu->addAction(m_editFitsFileAction);
-
+#endif
 	//set the action for the current color scheme checked
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 #if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0)	// KColorSchemeManager has a system default option
