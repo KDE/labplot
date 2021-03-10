@@ -47,25 +47,25 @@ void ConvolutionTest::testLinear() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setXDataColumn(&xDataColumn);
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setXDataColumn(&xDataColumn);
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
-	convolutionCurve.setConvolutionData(convolutionData);
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
@@ -98,25 +98,25 @@ void ConvolutionTest::testLinear2() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setXDataColumn(&xDataColumn);
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setXDataColumn(&xDataColumn);
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
-	convolutionCurve.setConvolutionData(convolutionData);
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 5);
@@ -143,24 +143,24 @@ void ConvolutionTest::testLinear_noX() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
-	convolutionCurve.setConvolutionData(convolutionData);
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
@@ -193,25 +193,25 @@ void ConvolutionTest::testLinear_swapped() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setXDataColumn(&xDataColumn);
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setXDataColumn(&xDataColumn);
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
-	convolutionCurve.setConvolutionData(convolutionData);
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
@@ -240,24 +240,24 @@ void ConvolutionTest::testLinear_swapped_noX() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
-	convolutionCurve.setConvolutionData(convolutionData);
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
@@ -286,25 +286,25 @@ void ConvolutionTest::testLinear_norm() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.normalize = nsl_conv_norm_euclidean;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
@@ -338,25 +338,25 @@ void ConvolutionTest::testLinear_swapped_norm() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.normalize = nsl_conv_norm_euclidean;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
@@ -390,25 +390,25 @@ void ConvolutionTest::testLinear_wrapMax() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.wrap = nsl_conv_wrap_max;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
@@ -442,25 +442,25 @@ void ConvolutionTest::testLinear_swapped_wrapMax() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.wrap = nsl_conv_wrap_max;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
@@ -494,25 +494,25 @@ void ConvolutionTest::testLinear_wrapCenter() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.wrap = nsl_conv_wrap_center;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
@@ -546,25 +546,25 @@ void ConvolutionTest::testLinear_swapped_wrapCenter() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.wrap = nsl_conv_wrap_max;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 6);
@@ -604,26 +604,26 @@ void ConvolutionTest::testCircular() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setXDataColumn(&xDataColumn);
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setXDataColumn(&xDataColumn);
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -653,26 +653,26 @@ void ConvolutionTest::testCircular2() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setXDataColumn(&xDataColumn);
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setXDataColumn(&xDataColumn);
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 3);
@@ -697,25 +697,25 @@ void ConvolutionTest::testCircular_noX() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -745,26 +745,26 @@ void ConvolutionTest::testCircular_swapped() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setXDataColumn(&xDataColumn);
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setXDataColumn(&xDataColumn);
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -790,25 +790,25 @@ void ConvolutionTest::testCircular_swapped_noX() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -834,26 +834,26 @@ void ConvolutionTest::testCircular_norm() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
 	convolutionData.normalize = nsl_conv_norm_euclidean;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -883,26 +883,26 @@ void ConvolutionTest::testCircular_swapped_norm() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
 	convolutionData.normalize = nsl_conv_norm_euclidean;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -932,26 +932,26 @@ void ConvolutionTest::testCircular_wrapMax() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
 	convolutionData.wrap = nsl_conv_wrap_max;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -981,26 +981,26 @@ void ConvolutionTest::testCircular_swapped_wrapMax() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
 	convolutionData.wrap = nsl_conv_wrap_max;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -1030,26 +1030,26 @@ void ConvolutionTest::testCircular_wrapCenter() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
 	convolutionData.wrap = nsl_conv_wrap_center;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -1079,26 +1079,26 @@ void ConvolutionTest::testCircular_swapped_wrapCenter() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.type = nsl_conv_type_circular;
 	convolutionData.wrap = nsl_conv_wrap_center;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -1130,25 +1130,25 @@ void ConvolutionTest::testLinearDeconv() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.direction = nsl_conv_direction_backward;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -1178,25 +1178,25 @@ void ConvolutionTest::testLinearDeconv2() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.direction = nsl_conv_direction_backward;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 3);
@@ -1224,25 +1224,25 @@ void ConvolutionTest::testLinearDeconv_swapped() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.direction = nsl_conv_direction_backward;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 3);
@@ -1270,25 +1270,25 @@ void ConvolutionTest::testLinearDeconv2_swapped() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.direction = nsl_conv_direction_backward;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 3);
@@ -1316,26 +1316,26 @@ void ConvolutionTest::testLinearDeconv_norm() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.direction = nsl_conv_direction_backward;
 	convolutionData.normalize = nsl_conv_norm_euclidean;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -1365,26 +1365,26 @@ void ConvolutionTest::testCircularDeconv() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.direction = nsl_conv_direction_backward;
 	convolutionData.type = nsl_conv_type_circular;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -1414,26 +1414,26 @@ void ConvolutionTest::testCircularDeconv2() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.direction = nsl_conv_direction_backward;
 	convolutionData.type = nsl_conv_type_circular;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 3);
@@ -1461,27 +1461,27 @@ void ConvolutionTest::testCircularDeconv_norm() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData convolutionData = curve.convolutionData();
 	convolutionData.direction = nsl_conv_direction_backward;
 	convolutionData.type = nsl_conv_type_circular;
 	convolutionData.normalize = nsl_conv_norm_euclidean;
-	convolutionCurve.setConvolutionData(convolutionData);
+	curve.setConvolutionData(convolutionData);
 
 	//perform the convolution
-	convolutionCurve.recalculate();
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	curve.recalculate();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
 	//check the results
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
-	const AbstractColumn* resultYDataColumn = convolutionCurve.yColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
+	const AbstractColumn* resultYDataColumn = curve.yColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, 4);
@@ -1518,24 +1518,24 @@ void ConvolutionTest::testPerformance() {
 	Column y2DataColumn("y2", AbstractColumn::ColumnMode::Numeric);
 	y2DataColumn.replaceValues(0, y2Data);
 
-	XYConvolutionCurve convolutionCurve("convolution");
-	convolutionCurve.setYDataColumn(&yDataColumn);
-	convolutionCurve.setY2DataColumn(&y2DataColumn);
+	XYConvolutionCurve curve("convolution");
+	curve.setYDataColumn(&yDataColumn);
+	curve.setY2DataColumn(&y2DataColumn);
 
 	//prepare and perform the convolution
-	XYConvolutionCurve::ConvolutionData convolutionData = convolutionCurve.convolutionData();
+	XYConvolutionCurve::ConvolutionData data = curve.convolutionData();
 	QBENCHMARK {
 		// triggers recalculate()
-		convolutionCurve.setConvolutionData(convolutionData);
+		curve.setConvolutionData(data);
 	}
 
 	//check the results
-	const XYConvolutionCurve::ConvolutionResult& convolutionResult = convolutionCurve.convolutionResult();
+	const XYConvolutionCurve::ConvolutionResult& result = curve.convolutionResult();
 
-	QCOMPARE(convolutionResult.available, true);
-	QCOMPARE(convolutionResult.valid, true);
+	QCOMPARE(result.available, true);
+	QCOMPARE(result.valid, true);
 
-	const AbstractColumn* resultXDataColumn = convolutionCurve.xColumn();
+	const AbstractColumn* resultXDataColumn = curve.xColumn();
 
 	const int np = resultXDataColumn->rowCount();
 	QCOMPARE(np, N + 2);

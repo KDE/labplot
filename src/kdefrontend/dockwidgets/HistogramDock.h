@@ -77,6 +77,7 @@ private slots:
 	void visibilityChanged(bool);
 	void typeChanged(int);
 	void orientationChanged(int);
+	void normalizationChanged(int);
 	void binningMethodChanged(int);
 	void binCountChanged(int);
 	void binWidthChanged();
@@ -147,6 +148,7 @@ private slots:
 	void curveDataColumnChanged(const AbstractColumn*);
 	void curveTypeChanged(Histogram::HistogramType);
 	void curveOrientationChanged(Histogram::HistogramOrientation);
+	void curveNormalizationChanged(Histogram::HistogramNormalization);
 	void curveBinningMethodChanged(Histogram::BinningMethod);
 	void curveBinCountChanged(int);
 	void curveBinWidthChanged(double);

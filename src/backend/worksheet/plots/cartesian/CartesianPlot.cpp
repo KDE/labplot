@@ -45,6 +45,7 @@
 #include "XYFitCurve.h"
 #include "XYFourierFilterCurve.h"
 #include "XYFourierTransformCurve.h"
+#include "XYHilbertTransformCurve.h"
 #include "XYConvolutionCurve.h"
 #include "XYCorrelationCurve.h"
 #include "../PlotArea.h"
@@ -397,6 +398,7 @@ void CartesianPlot::initActions() {
 	addFitCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit"), this);
 	addFourierFilterCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
 	addFourierTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("Fourier Transform"), this);
+	addHilbertTransformCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Hilbert Transform"), this);
 	addConvolutionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"),i18n("(De-)Convolution"), this);
 	addCorrelationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"),i18n("Auto-/Cross-Correlation"), this);
 
@@ -406,7 +408,7 @@ void CartesianPlot::initActions() {
 
 	addHorizontalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-horizontal"), i18n("Horizontal Axis"), this);
 	addVerticalAxisAction = new QAction(QIcon::fromTheme("labplot-axis-vertical"), i18n("Vertical Axis"), this);
-	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text Label"), this);
+	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text"), this);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), this);
 	addInfoElementAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Info Element"), this);
 	addCustomPointAction = new QAction(QIcon::fromTheme("draw-cross"), i18n("Custom Point"), this);
@@ -424,6 +426,7 @@ void CartesianPlot::initActions() {
 	connect(addFitCurveAction, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
 	connect(addFourierTransformCurveAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
+	connect(addHilbertTransformCurveAction, &QAction::triggered, this, &CartesianPlot::addHilbertTransformCurve);
 	connect(addConvolutionCurveAction, &QAction::triggered, this, &CartesianPlot::addConvolutionCurve);
 	connect(addCorrelationCurveAction, &QAction::triggered, this, &CartesianPlot::addCorrelationCurve);
 
@@ -492,6 +495,7 @@ void CartesianPlot::initActions() {
 
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
 	addFourierTransformAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-transform-curve"), i18n("Fourier Transform"), this);
+	addHilbertTransformAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Hilbert Transform"), this);
 
 	connect(addDataReductionAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -504,6 +508,7 @@ void CartesianPlot::initActions() {
 		connect(action, &QAction::triggered, this, &CartesianPlot::addFitCurve);
 	connect(addFourierFilterAction, &QAction::triggered, this, &CartesianPlot::addFourierFilterCurve);
 	connect(addFourierTransformAction, &QAction::triggered, this, &CartesianPlot::addFourierTransformCurve);
+	connect(addHilbertTransformAction, &QAction::triggered, this, &CartesianPlot::addHilbertTransformCurve);
 
 	//zoom/navigate actions
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), this);
@@ -562,6 +567,7 @@ void CartesianPlot::initMenus() {
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addFourierFilterCurveAction);
 	addNewAnalysisMenu->addAction(addFourierTransformCurveAction);
+	addNewAnalysisMenu->addAction(addHilbertTransformCurveAction);
 	addNewAnalysisMenu->addSeparator();
 	addNewAnalysisMenu->addAction(addConvolutionCurveAction);
 	addNewAnalysisMenu->addAction(addCorrelationCurveAction);
@@ -639,6 +645,7 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addFourierFilterAction);
 	dataAnalysisMenu->addAction(addFourierTransformAction);
+	dataAnalysisMenu->addAction(addHilbertTransformAction);
 	dataAnalysisMenu->addSeparator();
 	dataAnalysisMenu->addAction(addConvolutionAction);
 	dataAnalysisMenu->addAction(addCorrelationAction);
@@ -1582,6 +1589,7 @@ void CartesianPlot::addHorizontalAxis() {
 		axis->setUndoAware(false);
 		// use x range of default plot range
 		axis->setRange( xRange() );
+		axis->setMajorTicksNumber( xRange().autoTickCount() );
 		axis->setUndoAware(true);
 	}
 	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
@@ -1597,6 +1605,7 @@ void CartesianPlot::addVerticalAxis() {
 		axis->setUndoAware(false);
 		// use y range of default plot range
 		axis->setRange( yRange() );
+		axis->setMajorTicksNumber( yRange().autoTickCount() );
 		axis->setUndoAware(true);
 	}
 	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
@@ -1808,6 +1817,12 @@ void CartesianPlot::addFourierTransformCurve() {
 	this->addChild(curve);
 }
 
+void CartesianPlot::addHilbertTransformCurve() {
+	auto* curve = new XYHilbertTransformCurve("Hilbert transform");
+	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+	this->addChild(curve);
+}
+
 void CartesianPlot::addConvolutionCurve() {
 	auto* curve = new XYConvolutionCurve("Convolution");
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
@@ -1894,6 +1909,26 @@ double CartesianPlot::cursorPos(int cursorNumber) {
 	return ( cursorNumber == 0 ? d->cursor0Pos.x() : d->cursor1Pos.x() );
 }
 
+/*!
+ * returns the index of the child \c curve in the list of all "curve-like"
+ * children (xy-curve, histogram, boxplot, etc.).
+ * This function is used when applying the theme color to the newly added "curve".:
+ */
+int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
+	int index = 0;
+	for (auto* child : children<WorksheetElement>()) {
+		if (child == curve)
+			break;
+
+		if (child->inherits(AspectType::XYCurve)
+			|| child->type() == AspectType::Histogram
+			|| child->type() == AspectType::BoxPlot)
+		++index;
+	}
+
+	return index;
+}
+
 void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 
@@ -1971,7 +2006,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			updateLegend();
 		}
 
-		const auto* infoElement= qobject_cast<const InfoElement*>(child);
+		const auto* infoElement = qobject_cast<const InfoElement*>(child);
 		if (infoElement)
 			connect(this, &CartesianPlot::curveRemoved, infoElement, &InfoElement::removeCurve);
 
@@ -2028,6 +2063,10 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 			setXRangeFormat(RangeT::Format::Numeric);
 		else
 			setYRangeFormat(RangeT::Format::Numeric);
+
+		for (auto* axis : children<Axis>())
+			axis->setMajorTicksNumber(axis->range().autoTickCount());
+
 		setUndoAware(true);
 	}
 }
@@ -3406,6 +3445,7 @@ void CartesianPlotPrivate::retransformScales() {
 // 				axis->setOffset(axis->offset() + deltaXMin, false);
 // 			}
 		}
+		axis->setMajorTicksNumber(axis->range().autoTickCount());
 	}
 	// call retransform() on the parent to trigger the update of all axes and curves.
 	//no need to do this on load since all plots are retransformed again after the project is loaded.
@@ -4274,6 +4314,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute( "end", QString::number(range.end(), 'g', 16) );
 		writer->writeAttribute( "scale", QString::number(static_cast<int>(range.scale())) );
 		writer->writeAttribute( "format", QString::number(static_cast<int>(range.format())) );
+		writer->writeAttribute( "dateTimeFormat", range.dateTimeFormat() );
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
@@ -4285,6 +4326,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute( "end", QString::number(range.end(), 'g', 16) );
 		writer->writeAttribute( "scale", QString::number(static_cast<int>(range.scale())) );
 		writer->writeAttribute( "format", QString::number(static_cast<int>(range.format())) );
+		writer->writeAttribute( "dateTimeFormat", range.dateTimeFormat() );
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();
@@ -4459,6 +4501,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("format").toString());
 			else
 				range.setFormat( static_cast<RangeT::Format>(str.toInt()) );
+			str = attribs.value("dateTimeFormat").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("dateTimeFormat").toString());
+			else
+				range.setDateTimeFormat(str);
 
 			addXRange(range);
 		} else if (!preview && reader->name() == "yRanges") {
@@ -4493,6 +4540,11 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(attributeWarning.subs("format").toString());
 			else
 				range.setFormat( static_cast<RangeT::Format>(str.toInt()) );
+			str = attribs.value("dateTimeFormat").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("dateTimeFormat").toString());
+			else
+				range.setDateTimeFormat(str);
 
 			addYRange(range);
 		} else if (!preview && reader->name() == "coordinateSystems") {
@@ -4803,6 +4855,14 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyFourierTransformCurve") {
 			auto* curve = new XYFourierTransformCurve(QString());
+			if (curve->load(reader, preview))
+				addChildFast(curve);
+			else {
+				removeChild(curve);
+				return false;
+			}
+		} else if (reader->name() == "xyHilbertTransformCurve") {
+			auto* curve = new XYHilbertTransformCurve(QString());
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {

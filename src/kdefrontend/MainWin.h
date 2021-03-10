@@ -70,6 +70,7 @@ class XYSmoothCurveDock;
 class XYFitCurveDock;
 class XYFourierFilterCurveDock;
 class XYFourierTransformCurveDock;
+class XYHilbertTransformCurveDock;
 class XYConvolutionCurveDock;
 class XYCorrelationCurveDock;
 class WorksheetDock;
@@ -202,7 +203,6 @@ private:
 	QAction* m_nextWindowAction;
 	QAction* m_prevWindowAction;
 	QAction* m_newDatapickerAction;
-	QAction* m_editFitsFileAction;
 
 	//toggling dock widgets, status bar and full screen
 	QAction* m_toggleProjectExplorerDockAction;
@@ -220,7 +220,6 @@ private:
 	QMenu* m_visibilityMenu{nullptr};
 	QMenu* m_newMenu{nullptr};
 	QMenu* m_importMenu;
-	QMenu* m_editMenu{nullptr};
 
 	//Docks
 	QStackedWidget* stackedWidget{nullptr};
@@ -246,6 +245,7 @@ private:
 	XYFitCurveDock* xyFitCurveDock{nullptr};
 	XYFourierFilterCurveDock* xyFourierFilterCurveDock{nullptr};
 	XYFourierTransformCurveDock* xyFourierTransformCurveDock{nullptr};
+	XYHilbertTransformCurveDock* xyHilbertTransformCurveDock{nullptr};
 	XYConvolutionCurveDock* xyConvolutionCurveDock{nullptr};
 	XYCorrelationCurveDock* xyCorrelationCurveDock{nullptr};
 	HistogramDock* histogramDock{nullptr};

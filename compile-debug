@@ -8,5 +8,5 @@ fi
 
 cd $BUILDDIR
 
-# -DCMAKE_C_FLAGS="-ftime-report" -DCMAKE_CXX_FLAGS="-ftime-report"
+# -DCMAKE_C_FLAGS="-ftime-report" -DCMAKE_CXX_FLAGS="-ftime-report" -DENABLE_FFTW=OFF
 cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/usr && make -j 4

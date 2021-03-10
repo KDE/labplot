@@ -81,7 +81,8 @@
 <!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->
 <!-- <Menu name="script"><text>&amp;Script</text></Menu> -->
 <Menu name="tools"><text>&amp;Tools</text>
-            <Action name="edit_fits" />
+	<Action name="color_maps" />
+	<Action name="edit_fits" />
 </Menu>
 <Menu name="windows"><text>&amp;Windows</text>
 <Action name="close window" />

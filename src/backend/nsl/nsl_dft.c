@@ -119,7 +119,7 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 		break;
 	case nsl_dft_result_phase:
 		for (i = 0; i < N; i++)
-			data[i] = -atan2(result[2*i+1],result[2*i]);
+			data[i] = -atan2(result[2*i+1], result[2*i]);
 		break;
 	case nsl_dft_result_dB:
 		for (i = 0; i < N; i++) {
@@ -156,6 +156,12 @@ int nsl_dft_transform(double data[], size_t stride, size_t n, int two_sided, nsl
 		}
 		break;
 	case nsl_dft_result_raw:
+#ifdef HAVE_FFTW3
+		// write gsl_halfcomplex data
+		data[0] = result[0];
+		for (i = 1; i < N; i++)
+			data[i] = result[i+1];
+#endif
 		break;
 	}
 

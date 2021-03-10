@@ -364,6 +364,8 @@ void WorksheetView::initActions() {
 //	addConvolutionAction = new QAction(QIcon::fromTheme("labplot-xy-convolution-curve"), i18n("Convolution/Deconvolution"), cartesianPlotAddNewActionGroup);
 	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
 //	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-correlation-curve"), i18n("Auto-/Cross-Correlation"), cartesianPlotAddNewActionGroup);
+	addHilbertTransformAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Hilbert-Transform"), cartesianPlotAddNewActionGroup);
+//	addHilbertTransformAction = new QAction(QIcon::fromTheme("labplot-xy-hilbert-curve"), i18n("Hilbert-Transform"), cartesianPlotAddNewActionGroup);
 
 	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolation"), cartesianPlotAddNewActionGroup);
 	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), cartesianPlotAddNewActionGroup);
@@ -643,6 +645,7 @@ void WorksheetView::createAnalysisMenu(QMenu* menu) {
 	menu->addSeparator();
 	menu->addAction(addFourierFilterAction);
 	menu->addAction(addFourierTransformAction);
+	menu->addAction(addHilbertTransformAction);
 	menu->addSeparator();
 	menu->addAction(addConvolutionAction);
 	menu->addAction(addCorrelationAction);
@@ -1678,6 +1681,7 @@ void WorksheetView::handleCartesianPlotActions() {
 	addFitAction->setEnabled(plot);
 	addFourierFilterAction->setEnabled(plot);
 	addFourierTransformAction->setEnabled(plot);
+	addHilbertTransformAction->setEnabled(plot);
 	addConvolutionAction->setEnabled(plot);
 	addCorrelationAction->setEnabled(plot);
 }
@@ -1698,8 +1702,9 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	} else
 		sourceRect = scene()->sceneRect();
 
-	//print
-	if (format == ExportFormat::PDF) {
+	//save
+	switch (format) {
+	case ExportFormat::PDF: {
 		QPrinter printer(QPrinter::HighResolution);
 		printer.setOutputFormat(QPrinter::PdfFormat);
 
@@ -1717,7 +1722,9 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		painter.begin(&printer);
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
-	} else if (format == ExportFormat::SVG) {
+		break;
+	}
+	case ExportFormat::SVG: {
 		QSvgGenerator generator;
 		generator.setFileName(path);
 // 		if (!generator.isValid()) {
@@ -1737,9 +1744,14 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		painter.begin(&generator);
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
-	} else {
-		//PNG
-		//TODO add all formats supported by Qt in QImage
+		break;
+	}
+	case  ExportFormat::PNG:
+	case  ExportFormat::JPG:
+	case  ExportFormat::BMP:
+	case  ExportFormat::PPM:
+	case  ExportFormat::XBM:
+	case  ExportFormat::XPM: {
 		int w = Worksheet::convertFromSceneUnits(sourceRect.width(), Worksheet::Unit::Millimeter);
 		int h = Worksheet::convertFromSceneUnits(sourceRect.height(), Worksheet::Unit::Millimeter);
 		w = w*resolution/25.4;
@@ -1755,13 +1767,37 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		painter.end();
 
 		if (!path.isEmpty()) {
-			bool rc = image.save(path, "PNG");
+			bool rc{false};
+			switch (format) {
+			case  ExportFormat::PNG:
+				rc = image.save(path, "PNG");
+				break;
+			case  ExportFormat::JPG:
+				rc = image.save(path, "JPG");
+				break;
+			case  ExportFormat::BMP:
+				rc = image.save(path, "BMP");
+				break;
+			case  ExportFormat::PPM:
+				rc = image.save(path, "PPM");
+				break;
+			case  ExportFormat::XBM:
+				rc = image.save(path, "XBM");
+				break;
+			case  ExportFormat::XPM:
+				rc = image.save(path, "XPM");
+				break;
+			case ExportFormat::PDF:
+			case ExportFormat::SVG:
+				break;
+			}
 			if (!rc) {
 				RESET_CURSOR;
 				QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
 			}
 		} else
 			QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
+	}
 	}
 }
 
@@ -2042,6 +2078,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addFourierFilterCurve();
 	else if (action == addFourierTransformAction)
 		plot->addFourierTransformCurve();
+	else if (action == addHilbertTransformAction)
+		plot->addHilbertTransformCurve();
 	else if (action == addConvolutionAction)
 		plot->addConvolutionCurve();
 	else if (action == addCorrelationAction)

@@ -32,11 +32,6 @@
 #include "backend/worksheet/plots/cartesian/XYFourierTransformCurve.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
-#include <KMessageBox>
-
-#include <QMenu>
-#include <QWidgetAction>
-
 /*!
   \class XYFourierTransformCurveDock
  \brief  Provides a widget for editing the properties of the XYFourierTransformCurves

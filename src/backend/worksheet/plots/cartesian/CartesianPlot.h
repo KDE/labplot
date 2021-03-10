@@ -50,6 +50,7 @@ class XYSmoothCurve;
 class XYFitCurve;
 class XYFourierFilterCurve;
 class XYFourierTransformCurve;
+class XYHilbertTransformCurve;
 class XYConvolutionCurve;
 class XYCorrelationCurve;
 class InfoElementDialog;
@@ -112,10 +113,12 @@ public:
 	bool isHovered() const;
 	bool isPrinted() const;
 	bool isSelected() const;
+
 	void addLegend(CartesianPlotLegend*);
 	int curveCount();
 	const XYCurve* getCurve(int index);
 	double cursorPos(int cursorNumber);
+	int curveChildIndex(const WorksheetElement*) const;
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
@@ -225,6 +228,7 @@ private:
 	QAction* addFitCurveAction;
 	QAction* addFourierFilterCurveAction;
 	QAction* addFourierTransformCurveAction;
+	QAction* addHilbertTransformCurveAction;
 	QAction* addConvolutionCurveAction;
 	QAction* addCorrelationCurveAction;
 
@@ -262,6 +266,7 @@ private:
 	QVector<QAction*> addFitActions;
 	QAction* addFourierFilterAction;
 	QAction* addFourierTransformAction;
+	QAction* addHilbertTransformAction;
 	QAction* addConvolutionAction;
 	QAction* addCorrelationAction;
 
@@ -293,6 +298,7 @@ public slots:
 	void addFitCurve();
 	void addFourierFilterCurve();
 	void addFourierTransformCurve();
+	void addHilbertTransformCurve();
 	void addConvolutionCurve();
 	void addCorrelationCurve();
 

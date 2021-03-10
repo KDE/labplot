@@ -2,6 +2,7 @@
 	* Support multiple plot ranges
 	* Allow to copy&paste and to duplicate single objects in the project explorer
 	* Support Mathieu functions via GSL
+	* Added Hilbert transform including envelope
 	* Added global settings for numbers
 	* Support real scientific notation and improve other notations of axes label
 	* Improved range auto scaling
@@ -32,6 +33,7 @@ Bug fixes:
 		* Fix log scale axis for one tick and ln-scale typo
 		* adjust the range format (numeric vs. datetime) also when the the column of the first curve is changed and not only when a new curve is added
 		* simplified the naming of the initial axes for the default plot types (box blot with four axes,  etc.) - use "x" instead of "x axis 1", etc.
+		* export to more image formats (jpg, bmp, ppm, xbm, xpm)
 	* [spreadsheet]
 		* show column statistics also for bigint columns
 		* when selecting a column in the project explorer, make sure it becomes visible in the spreadsheet by scrolling horizontaly to its position

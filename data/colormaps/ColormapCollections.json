@@ -1,0 +1,27 @@
+[
+	{
+		"name" : "ColorBrewer (Sequential)",
+		"description" : "<b>Sequential schemes</b> from the <b>ColorBrewer collection</b> are suited to ordered data that progress from low to high. Lightness steps dominate the look of these schemes, with light colors for low data values to dark colors for high data values.
+						<br><br>
+						<b>ColorBrewer collection</b> is based on the research of Dr. Cynthia Brewer (<a href=\"http://www.personal.psu.edu/faculty/c/a/cab38/ColorSch/SchHome.html\">source</a>).",
+		"url" : "https://colorbrewer2.org"
+	},
+	{
+		"name" : "ColorBrewer (Diverging)",
+		"description" :"<b>Diverging schemes</b> from the <b>ColorBrewer collection</b>  put equal emphasis on mid-range critical values and extremes at both ends of the data range. The critical class or break in the middle of the legend is emphasized with light colors and low and high extremes are emphasized with dark colors that have contrasting hues.
+					<br><br>
+					Diverging schemes are most effective when the class break in the middle of the sequence, or the lightest middle color, is meaningfully related to the mapped data. Use the break or class emphasized by a hue and lightness change to represent a critical value in the data such as the mean, median, or zero. Colors increase in darkness to represent differences in both directions from this meaningful mid-range value in the data.
+					<br><br>
+					NOTE: Although we have designed the diverging schemes to be symmetrical, you may need to customize schemes by moving the critical break/class closer to one end of the sequence to suit your map data. For example, a map of population change might have two classes of population loss and five classes of growth, requiring a scheme with only two colors on one side of a zero-change break and five on the other. Choose a scheme with ten-colors and omit three colors from the loss side of the scheme.
+					<br><br>
+					<b>ColorBrewer collection</b> is based on the research of Dr. Cynthia Brewer (<a href=\"http://www.personal.psu.edu/faculty/c/a/cab38/ColorSch/SchHome.html\">source</a>).",
+		"url" : "https://colorbrewer2.org"
+	},
+	{
+		"name" : "ColorBrewer (Qualitative)",
+		"description" : "<b>Qualitative schemes</b> from the <b>ColorBrewer collection</b> do not imply magnitude differences between legend classes, and hues are used to create the primary visual differences between classes. Qualitative schemes are best suited to representing nominal or categorical data. Most of the qualitative schemes rely on differences in hue with only subtle lightness differences between colors. You may pick a subset of colors from a legend with more classes if you are not pleased with the subsets. For example, you could pick four colors  from a seven-color legend.
+					<br><br>
+					<b>ColorBrewer collection</b> is based on the research of Dr. Cynthia Brewer (<a href=\"http://www.personal.psu.edu/faculty/c/a/cab38/ColorSch/SchHome.html\">source</a>).",
+		"url" : "https://colorbrewer2.org"
+	}
+]

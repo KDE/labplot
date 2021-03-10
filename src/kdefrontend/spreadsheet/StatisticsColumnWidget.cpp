@@ -323,6 +323,12 @@ void StatisticsColumnWidget::showKDEPlot() {
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}
 
+	//add normalized histogram
+	Histogram* histogram = new Histogram(QString());
+	plot->addChild(histogram);
+	histogram->setNormalization(Histogram::ProbabilityDensity);
+	histogram->setDataColumn(m_column);
+
 	//copy the non-nan and not masked values
 	QVector<double> data;
 	copyValidData(data);
@@ -353,7 +359,9 @@ void StatisticsColumnWidget::showKDEPlot() {
 	//add KDE curve
 	XYCurve* curve = new XYCurve("");
 	plot->addChild(curve);
-	curve->setLinePen(QPen(Qt::SolidLine));
+	QPen pen = curve->linePen();
+	pen.setStyle(Qt::SolidLine);
+	curve->setLinePen(pen);
 	curve->setSymbolsStyle(Symbol::Style::NoSymbols);
 	curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
 	curve->setXColumn(xColumn);
@@ -387,7 +395,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	//calculate y-values - the percentiles for the column data
 	Column* yColumn = new Column("y");
 	m_project->addChildFast(yColumn);
-	QVector<double> yData(99);
+	QVector<double> yData;
 	for (int i = 1; i < 100; ++i)
 		yData << gsl_stats_quantile_from_sorted_data(rawData.data(), 1, n, double(i)/100.);
 
@@ -396,7 +404,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	//calculate x-values - the percentiles for the standard normal distribution
 	Column* xColumn = new Column("x");
 	m_project->addChildFast(xColumn);
-	QVector<double> xData(99);
+	QVector<double> xData;
 	for (int i = 1; i < 100; ++i)
 		xData << gsl_cdf_gaussian_Pinv(double(i)/100., 1.0);
 
@@ -405,7 +413,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	//add curve with the quantiles
 	XYCurve* curve = new XYCurve("");
 	plot->addChild(curve);
-	curve->setLinePen(QPen(Qt::NoPen));
+	curve->setLinePen(Qt::NoPen);
 	curve->setSymbolsStyle(Symbol::Style::Circle);
 	curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
 	curve->setXColumn(xColumn);
@@ -438,7 +446,9 @@ void StatisticsColumnWidget::showQQPlot() {
 
 	XYCurve* curve2 = new XYCurve("2");
 	plot->addChild(curve2);
-	curve2->setLinePen(QPen(Qt::SolidLine));
+	QPen pen = curve2->linePen();
+	pen.setStyle(Qt::SolidLine);
+	curve2->setLinePen(pen);
 	curve2->setSymbolsStyle(Symbol::Style::NoSymbols);
 	curve2->setFillingPosition(XYCurve::FillingPosition::NoFilling);
 	curve2->setXColumn(xColumn2);
@@ -454,7 +464,9 @@ void StatisticsColumnWidget::showBoxPlot() {
 	for (auto* axis : qAsConst(axes)) {
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
+			axis->setMajorTicksDirection(Axis::noTicks);
 			axis->setMajorGridPen(QPen(Qt::NoPen));
+			axis->setMinorGridPen(QPen(Qt::NoPen));
 			axis->title()->setText(QString());
 		} else
 			axis->title()->setText(m_column->name());
@@ -464,6 +476,7 @@ void StatisticsColumnWidget::showBoxPlot() {
 
 	BoxPlot* boxPlot = new BoxPlot(QString());
 	boxPlot->setOrientation(BoxPlot::Orientation::Vertical);
+	boxPlot->setWhiskersType(BoxPlot::IQR);
 	plot->addChild(boxPlot);
 
 	QVector<const AbstractColumn*> columns;

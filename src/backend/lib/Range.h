@@ -36,6 +36,7 @@ extern "C" {
 
 #include "macros.h"	//SET_NUMBER_LOCALE
 #include <klocalizedstring.h>
+#include <QtMath>
 #include <QStringList>
 
 class QString;
@@ -150,6 +151,23 @@ public:
 			m_end = nsl_math_floor_places(m_end, places);
 		}
 		DEBUG(Q_FUNC_INFO << ", new range = " << toStdString())
+	}
+	int autoTickCount() const {
+		if (length() == 0)
+			return 0;
+
+		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", size = " << size())
+		const double order = pow(10.0, qFloor(log10(size())));;
+		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order)
+		const double man = size() / order;
+		DEBUG(Q_FUNC_INFO << ", mantissa = " << man)
+
+		if (man >= 4)
+			return qRound(man) + 1;
+		else if (man * 2. >= 4)
+			return qRound(man * 2.0) + 1;
+		else
+			return qRound(man * 5.0) + 1;
 	}
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 

@@ -1,5 +1,5 @@
 /***************************************************************************
-    File                 : PrserTest.cpp
+    File                 : ParserTest.cpp
     Project              : LabPlot
     Description          : Tests for the Parser
     --------------------------------------------------------------------

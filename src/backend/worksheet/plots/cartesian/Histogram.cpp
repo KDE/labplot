@@ -83,6 +83,7 @@ void Histogram::init() {
 
 	d->type = (Histogram::HistogramType) group.readEntry("Type", (int)Histogram::Ordinary);
 	d->orientation = (Histogram::HistogramOrientation) group.readEntry("Orientation", (int)Histogram::Vertical);
+	d->normalization = (Histogram::HistogramNormalization) group.readEntry("Normalization", (int)Histogram::Count);
 	d->binningMethod = (Histogram::BinningMethod) group.readEntry("BinningMethod", (int)Histogram::SquareRoot);
 	d->binCount = group.readEntry("BinCount", 10);
 	d->binWidth = group.readEntry("BinWidth", 1.0f);
@@ -194,6 +195,7 @@ void Histogram::setHover(bool on) {
 //general
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramType, type, type)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramOrientation, orientation, orientation)
+BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::HistogramNormalization, normalization, normalization)
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::BinningMethod, binningMethod, binningMethod)
 BASIC_SHARED_D_READER_IMPL(Histogram, int, binCount, binCount)
 BASIC_SHARED_D_READER_IMPL(Histogram, float, binWidth, binWidth)
@@ -306,6 +308,13 @@ void Histogram::setOrientation(Histogram::HistogramOrientation orientation) {
 	Q_D(Histogram);
 	if (orientation != d->orientation)
 		exec(new HistogramSetHistogramOrientationCmd(d, orientation, ki18n("%1: set histogram orientation")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetHistogramNormalization, Histogram::HistogramNormalization, normalization, updateOrientation)
+void Histogram::setNormalization(Histogram::HistogramNormalization normalization) {
+	Q_D(Histogram);
+	if (normalization != d->normalization)
+		exec(new HistogramSetHistogramNormalizationCmd(d, normalization, ki18n("%1: set histogram normalization")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Histogram, SetBinningMethod, Histogram::BinningMethod, binningMethod, recalcHistogram)
@@ -754,6 +763,25 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 			//TODO
 		}
 		}
+
+		switch (normalization) {
+		case Histogram::Count:
+			break;
+		case Histogram::Probability:
+			yMaxRange = yMaxRange/totalCount;
+			break;
+		case Histogram::CountDensity: {
+			const double width = (binRangesMax - binRangesMin)/m_bins;
+			yMaxRange = yMaxRange/width;
+			break;
+		}
+		case Histogram::ProbabilityDensity: {
+			const double width = (binRangesMax - binRangesMin)/m_bins;
+			yMaxRange = yMaxRange/totalCount/width;
+			break;
+		}
+		}
+
 		return yMaxRange;
 	}
 
@@ -963,6 +991,10 @@ void HistogramPrivate::recalcHistogram() {
 			case AbstractColumn::ColumnMode::Day:
 				break;
 			}
+
+			totalCount = 0;
+			for (size_t i = 0; i < m_bins; ++i)
+				totalCount += gsl_histogram_get(m_histogram, i);
 		} else
 			DEBUG("Number of bins must be positiv integer")
 	}
@@ -1018,6 +1050,41 @@ void HistogramPrivate::updateLines() {
 	recalcShapeAndBoundingRect();
 }
 
+void HistogramPrivate::histogramValue(double& value, int bin) {
+	switch (normalization) {
+	case Histogram::Count: {
+		if (type == Histogram::Ordinary)
+			value = gsl_histogram_get(m_histogram, bin);
+		else
+			value += gsl_histogram_get(m_histogram, bin);
+		break;
+	}
+	case Histogram::Probability: {
+		if (type == Histogram::Ordinary)
+			value = gsl_histogram_get(m_histogram, bin)/totalCount;
+		else
+			value += gsl_histogram_get(m_histogram, bin)/totalCount;
+		break;
+	}
+	case Histogram::CountDensity: {
+		const double width = (binRangesMax - binRangesMin)/m_bins;
+		if (type == Histogram::Ordinary)
+			value = gsl_histogram_get(m_histogram, bin)/width;
+		else
+			value += gsl_histogram_get(m_histogram, bin)/width;
+		break;
+	}
+	case Histogram::ProbabilityDensity: {
+		const double width = (binRangesMax - binRangesMin)/m_bins;
+		if (type == Histogram::Ordinary)
+			value = gsl_histogram_get(m_histogram, bin)/totalCount/width;
+		else
+			value += gsl_histogram_get(m_histogram, bin)/totalCount/width;
+		break;
+	}
+	}
+}
+
 void HistogramPrivate::verticalHistogram() {
 	if (!m_histogram)
 		return;
@@ -1026,11 +1093,7 @@ void HistogramPrivate::verticalHistogram() {
 	double value = 0.;
 	if (lineType == Histogram::Bars) {
 		for (size_t i = 0; i < m_bins; ++i) {
-			if (type == Histogram::Ordinary)
-				value = gsl_histogram_get(m_histogram, i);
-			else
-				value += gsl_histogram_get(m_histogram, i);
-
+			histogramValue(value, i);
 			const double x = binRangesMin + i*width;
 			lines.append(QLineF(x, 0., x, value));
 			lines.append(QLineF(x, value, x + width, value));
@@ -1040,11 +1103,7 @@ void HistogramPrivate::verticalHistogram() {
 	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
 		double prevValue = 0.;
 		for (size_t i = 0; i < m_bins; ++i) {
-			if (type == Histogram::Ordinary)
-				value = gsl_histogram_get(m_histogram, i);
-			else
-				value += gsl_histogram_get(m_histogram, i);
-
+			histogramValue(value, i);
 			const double x = binRangesMin + i*width;
 			lines.append(QLineF(x, prevValue, x, value));
 			lines.append(QLineF(x, value, x + width, value));
@@ -1057,11 +1116,7 @@ void HistogramPrivate::verticalHistogram() {
 		}
 	} else { //drop lines
 		for (size_t i = 0; i < m_bins; ++i) {
-			if (type == Histogram::Ordinary)
-				value = gsl_histogram_get(m_histogram, i);
-			else
-				value += gsl_histogram_get(m_histogram, i);
-
+			histogramValue(value, i);
 			const double x = binRangesMin + i*width + width/2;
 			lines.append(QLineF(x, 0., x, value));
 			pointsLogical.append(QPointF(x, value));
@@ -1080,11 +1135,7 @@ void HistogramPrivate::horizontalHistogram() {
 	double value = 0.;
 	if (lineType == Histogram::Bars) {
 		for (size_t i = 0; i < m_bins; ++i) {
-			if (type == Histogram::Ordinary)
-				value = gsl_histogram_get(m_histogram,i);
-			else
-				value += gsl_histogram_get(m_histogram,i);
-
+			histogramValue(value, i);
 			const double y = binRangesMin + i*width;
 			lines.append(QLineF(0., y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
@@ -1094,11 +1145,7 @@ void HistogramPrivate::horizontalHistogram() {
 	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
 		double prevValue = 0.;
 		for (size_t i = 0; i < m_bins; ++i) {
-			if (type == Histogram::Ordinary)
-				value = gsl_histogram_get(m_histogram, i);
-			else
-				value += gsl_histogram_get(m_histogram, i);
-
+			histogramValue(value, i);
 			const double y = binRangesMin + i*width;
 			lines.append(QLineF(prevValue, y, value, y));
 			lines.append(QLineF(value, y, value, y + width));
@@ -1111,11 +1158,7 @@ void HistogramPrivate::horizontalHistogram() {
 		}
 	} else { //drop lines
 		for (size_t i = 0; i < m_bins; ++i) {
-			if (type == Histogram::Ordinary)
-				value = gsl_histogram_get(m_histogram, i);
-			else
-				value += gsl_histogram_get(m_histogram, i);
-
+			histogramValue(value, i);
 			const double y = binRangesMin + i*width + width/2;
 			lines.append(QLineF(0., y, value, y));
 			pointsLogical.append(QPointF(value, y));
@@ -1690,6 +1733,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->dataColumn, dataColumn);
 	writer->writeAttribute( "type", QString::number(d->type) );
 	writer->writeAttribute( "orientation", QString::number(d->orientation) );
+	writer->writeAttribute( "normalization", QString::number(d->normalization) );
 	writer->writeAttribute( "binningMethod", QString::number(d->binningMethod) );
 	writer->writeAttribute( "binCount", QString::number(d->binCount));
 	writer->writeAttribute( "binWidth", QString::number(d->binWidth));
@@ -1781,6 +1825,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(dataColumn);
 			READ_INT_VALUE("type", type, Histogram::HistogramType);
 			READ_INT_VALUE("orientation", orientation, Histogram::HistogramOrientation);
+			READ_INT_VALUE("normalization", normalization, Histogram::HistogramNormalization);
 			READ_INT_VALUE("binningMethod", binningMethod, Histogram::BinningMethod);
 			READ_INT_VALUE("binCount", binCount, int);
 			READ_DOUBLE_VALUE("binWidth", binWidth);
@@ -1898,8 +1943,8 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	else
 		group = config.group("Histogram");
 
-	int index = parentAspect()->indexOfChild<Histogram>(this);
 	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	int index = plot->curveChildIndex(this);
 	QColor themeColor;
 	if (index<plot->themeColorPalette().size())
 		themeColor = plot->themeColorPalette().at(index);

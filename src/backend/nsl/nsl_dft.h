@@ -43,8 +43,8 @@
 	normdB = dB - max(dB)
 	squaremagnitude = magnitude^2
 	squareamplitude = amplitude^2 aka MSA
-	raw = halfcomplex GSL output (TODO: FFTW)
-	TODO: PSD (aka TISA), normdB
+	raw = halfcomplex GSL output (also for FFTW)
+	TODO: PSD (aka TISA)
  */
 #define NSL_DFT_RESULT_TYPE_COUNT 11
 typedef enum {nsl_dft_result_magnitude, nsl_dft_result_amplitude, nsl_dft_result_real, nsl_dft_result_imag, nsl_dft_result_power, 

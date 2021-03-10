@@ -2,7 +2,7 @@
     File                 : LabelWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2008-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2008-2021 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
 
@@ -224,6 +224,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 
 void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	m_labelsList = labels;
+	m_axesList.clear();
 	m_label = labels.first();
 
 	ui.lOffsetX->hide();
@@ -862,10 +863,7 @@ void LabelWidget::insertDateTime(QAction* action) {
 	ui.teLabel->insertPlainText( action->text().remove('&') );
 }
 
-// geometry slots
-
-//absolute positioning
-
+// positioning using absolute coordinates
 /*!
     called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
@@ -1188,30 +1186,27 @@ void LabelWidget::labelTeXImageUpdated(bool valid) {
 }
 
 void LabelWidget::labelTeXFontChanged(const QFont& font) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kfontRequesterTeX->setFont(font);
 	ui.sbFontSize->setValue(font.pointSize());
-	m_initializing = false;
 }
 
 void LabelWidget::labelFontColorChanged(const QColor color) {
 	// this function is only called when the theme is changed. Otherwise the color
 	// is directly in the html text.
 	// when the theme changes, the hole text should change color regardless of the color it has
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbFontColor->setColor(color);
 	ui.teLabel->selectAll();
 	ui.teLabel->setTextColor(color);
-	m_initializing = false;
 }
 
 void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& position) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
 	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
 	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
-	m_initializing = false;
 }
 
 void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
@@ -1223,78 +1218,67 @@ void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
 }
 
 void LabelWidget::labelBackgroundColorChanged(const QColor color) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbBackgroundColor->setColor(color);
-	m_initializing = false;
 }
 
 void LabelWidget::labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment index) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
-	m_initializing = false;
 }
 
 void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment index) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
-	m_initializing = false;
 }
 
 void LabelWidget::labelOffsetxChanged(qreal offset) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 void LabelWidget::labelOffsetyChanged(qreal offset) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 void LabelWidget::labelRotationAngleChanged(qreal angle) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRotation->setValue(angle);
-	m_initializing = false;
 }
 
 void LabelWidget::labelVisibleChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chbVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //border
 void LabelWidget::labelBorderShapeChanged(TextLabel::BorderShape shape) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbBorderShape->setCurrentIndex(static_cast<int>(shape));
-	m_initializing = false;
 }
 
 void LabelWidget::labelBorderPenChanged(const QPen& pen) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	if (ui.cbBorderStyle->currentIndex() != pen.style())
 		ui.cbBorderStyle->setCurrentIndex(pen.style());
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
 	if (ui.sbBorderWidth->value() != pen.widthF())
 		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 void LabelWidget::labelBorderOpacityChanged(float value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	float v = (float)value*100.;
 	ui.sbBorderOpacity->setValue(v);
-	m_initializing = false;
 }
 
 void LabelWidget::labelCartesianPlotParent(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chbBindLogicalPos->setVisible(on);
 	if (!on)
 		ui.chbBindLogicalPos->setChecked(false);
-	m_initializing = false;
 }
 
 //**********************************************************
@@ -1304,7 +1288,7 @@ void LabelWidget::load() {
 	if (!m_label)
 		return;
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 
 	ui.chbVisible->setChecked(m_label->isVisible());
 
@@ -1368,36 +1352,47 @@ void LabelWidget::load() {
 	//widgets for positioning using logical plot coordinates
 	SET_NUMBER_LOCALE
 	const auto* plot = static_cast<const CartesianPlot*>(m_label->parent(AspectType::CartesianPlot));
-	bool visible = (plot && m_label->parentAspect()->type() != AspectType::Axis);
-	ui.lBindLogicalPos->setVisible(visible);
-	ui.chbBindLogicalPos->setVisible(visible);
-	ui.chbBindLogicalPos->setChecked(m_label->coordinateBindingEnabled());
-	bindingChanged(m_label->coordinateBindingEnabled());
+	bool allowLogicalCoordinates = (plot && m_label->parentAspect()->type() != AspectType::Axis);
+	ui.lBindLogicalPos->setVisible(allowLogicalCoordinates);
+	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);
 
-	if (plot && plot->xRangeFormat() == RangeT::Format::DateTime) {
+	if (allowLogicalCoordinates){
+		if (plot->xRangeFormat() == RangeT::Format::Numeric) {
+			ui.lPositionXLogical->show();
+			ui.lePositionXLogical->show();
+			ui.lPositionXLogicalDateTime->hide();
+			ui.dtePositionXLogical->hide();
+
+			ui.lePositionXLogical->setText(numberLocale.toString(m_label->positionLogical().x()));
+			ui.lePositionYLogical->setText(numberLocale.toString(m_label->positionLogical().y()));
+		} else { //DateTime
+			ui.lPositionXLogical->hide();
+			ui.lePositionXLogical->hide();
+			ui.lPositionXLogicalDateTime->show();
+			ui.dtePositionXLogical->show();
+
+			ui.dtePositionXLogical->setDisplayFormat(plot->xRangeDateTimeFormat());
+			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_label->positionLogical().x()));
+		}
+
+		ui.chbBindLogicalPos->setChecked(m_label->coordinateBindingEnabled());
+		bindingChanged(m_label->coordinateBindingEnabled());
+	} else {
 		ui.lPositionXLogical->hide();
 		ui.lePositionXLogical->hide();
-		ui.lPositionXLogicalDateTime->show();
-		ui.dtePositionXLogical->show();
-
-		ui.dtePositionXLogical->setDisplayFormat(plot->xRangeDateTimeFormat());
-		ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_label->positionLogical().x()));
-	} else {
-		ui.lPositionXLogical->show();
-		ui.lePositionXLogical->show();
+		ui.lPositionYLogical->hide();
+		ui.lePositionYLogical->hide();
 		ui.lPositionXLogicalDateTime->hide();
 		ui.dtePositionXLogical->hide();
-
-		ui.lePositionXLogical->setText(numberLocale.toString(m_label->positionLogical().x()));
 	}
 
-	ui.lePositionYLogical->setText(numberLocale.toString(m_label->positionLogical().y()));
-
-	//offsets, alignment and rotation
+	//offsets, available for axis label only
 	if (!m_axesList.isEmpty()) {
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetX(), Worksheet::Unit::Point) );
 		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(m_axesList.first()->titleOffsetY(), Worksheet::Unit::Point) );
 	}
+
+	//alignment and rotation
 	ui.cbHorizontalAlignment->setCurrentIndex( (int) m_label->horizontalAlignment() );
 	ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
 	ui.sbRotation->setValue( m_label->rotationAngle() );
@@ -1411,8 +1406,6 @@ void LabelWidget::load() {
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( round(m_label->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-
-	m_initializing = false;
 }
 
 void LabelWidget::loadConfig(KConfigGroup& group) {

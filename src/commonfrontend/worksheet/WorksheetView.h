@@ -54,7 +54,7 @@ class WorksheetView : public QGraphicsView {
 public:
 	explicit WorksheetView(Worksheet* worksheet);
 
-	enum class ExportFormat {PDF, SVG, PNG};
+	enum class ExportFormat {PDF, SVG, PNG, JPG, BMP, PPM, XBM, XPM};
 	enum class GridStyle {NoGrid, Line, Dot};
 	enum class ExportArea {BoundingBox, Selection, Worksheet};
 
@@ -259,6 +259,7 @@ private:
 	QAction* addFitAction{nullptr};
 	QAction* addFourierFilterAction{nullptr};
 	QAction* addFourierTransformAction{nullptr};
+	QAction* addHilbertTransformAction{nullptr};
 	QAction* addConvolutionAction{nullptr};
 	QAction* addCorrelationAction{nullptr};
 

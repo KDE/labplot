@@ -84,6 +84,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "kdefrontend/dockwidgets/XYFitCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierFilterCurveDock.h"
 #include "kdefrontend/dockwidgets/XYFourierTransformCurveDock.h"
+#include "kdefrontend/dockwidgets/XYHilbertTransformCurveDock.h"
 #include "kdefrontend/dockwidgets/XYConvolutionCurveDock.h"
 #include "kdefrontend/dockwidgets/XYCorrelationCurveDock.h"
 #include "kdefrontend/dockwidgets/CustomPointDock.h"
@@ -310,6 +311,11 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fourier Transform"));
 		raiseDockSetupConnect(m_mainWindow->xyFourierTransformCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->xyFourierTransformCurveDock->setCurves(castList<XYCurve>(selectedAspects));
+		break;
+	case AspectType::XYHilbertTransformCurve:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Hilbert Transform"));
+		raiseDockSetupConnect(m_mainWindow->xyHilbertTransformCurveDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+		m_mainWindow->xyHilbertTransformCurveDock->setCurves(castList<XYCurve>(selectedAspects));
 		break;
 	case AspectType::XYFourierFilterCurve:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Fourier Filter"));

@@ -28,6 +28,8 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
 # 	${KDEFRONTEND_DIR}/welcomescreen/WelcomeScreenHelper.cpp
+	${KDEFRONTEND_DIR}/colormaps/ColorMapsWidget.cpp
+	${KDEFRONTEND_DIR}/colormaps/ColorMapsDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/AsciiOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/BinaryOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerDialog.cpp
@@ -76,6 +78,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/dockwidgets/XYFitCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYFourierFilterCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYFourierTransformCurveDock.cpp
+	${KDEFRONTEND_DIR}/dockwidgets/XYHilbertTransformCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYConvolutionCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/XYCorrelationCurveDock.cpp
 	${KDEFRONTEND_DIR}/dockwidgets/WorksheetDock.cpp
@@ -129,6 +132,7 @@ endif()
 
 
 set(UI_SOURCES
+	${KDEFRONTEND_DIR}/ui/colormapswidget.ui
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
 	${KDEFRONTEND_DIR}/ui/functionswidget.ui
 	${KDEFRONTEND_DIR}/ui/fitoptionswidget.ui
@@ -180,6 +184,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfitcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfourierfiltercurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyfouriertransformcurvedockgeneraltab.ui
+	${KDEFRONTEND_DIR}/ui/dockwidgets/xyhilberttransformcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyconvolutioncurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xycorrelationcurvedockgeneraltab.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/xyequationcurvedockgeneraltab.ui
@@ -330,6 +335,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFitCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierFilterCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYFourierTransformCurve.cpp
+	${BACKEND_DIR}/worksheet/plots/cartesian/XYHilbertTransformCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYConvolutionCurve.cpp
 	${BACKEND_DIR}/worksheet/plots/cartesian/XYCorrelationCurve.cpp
 )
@@ -358,6 +364,7 @@ set(NSL_SOURCES
 	${BACKEND_DIR}/nsl/nsl_fit.c
 	${BACKEND_DIR}/nsl/nsl_geom.c
 	${BACKEND_DIR}/nsl/nsl_geom_linesim.c
+	${BACKEND_DIR}/nsl/nsl_hilbert.c
 	${BACKEND_DIR}/nsl/nsl_int.c
 	${BACKEND_DIR}/nsl/nsl_interp.c
 	${BACKEND_DIR}/nsl/nsl_kde.c

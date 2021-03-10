@@ -45,6 +45,7 @@ class Histogram : public WorksheetElement, public Curve {
 public:
 	enum HistogramType {Ordinary,Cumulative, AvgShift};
 	enum HistogramOrientation {Vertical, Horizontal};
+	enum HistogramNormalization {Count, Probability, CountDensity, ProbabilityDensity};
 	enum BinningMethod {ByNumber, ByWidth, SquareRoot, Rice, Sturges, Doane, Scott};
 	enum LineType {NoLine, Bars, Envelope, DropLines};
 	enum ValuesType {NoValues, ValuesBinEntries, ValuesCustomColumn};
@@ -69,6 +70,7 @@ public:
 
 	BASIC_D_ACCESSOR_DECL(Histogram::HistogramType, type, Type)
 	BASIC_D_ACCESSOR_DECL(Histogram::HistogramOrientation, orientation, Orientation)
+	BASIC_D_ACCESSOR_DECL(Histogram::HistogramNormalization, normalization, Normalization)
 	BASIC_D_ACCESSOR_DECL(Histogram::BinningMethod, binningMethod, BinningMethod)
 	BASIC_D_ACCESSOR_DECL(int, binCount, BinCount)
 	BASIC_D_ACCESSOR_DECL(float, binWidth, BinWidth)
@@ -166,6 +168,7 @@ signals:
 
 	void typeChanged(Histogram::HistogramType);
 	void orientationChanged(Histogram::HistogramOrientation);
+	void normalizationChanged(Histogram::HistogramNormalization);
 	void binningMethodChanged(Histogram::BinningMethod);
 	void binCountChanged(int);
 	void binWidthChanged(float);
