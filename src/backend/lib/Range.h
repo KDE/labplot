@@ -159,15 +159,30 @@ public:
 		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", size = " << size())
 		const double order = pow(10.0, qFloor(log10(size())));;
 		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order)
-		const double man = size() / order;
-		DEBUG(Q_FUNC_INFO << ", mantissa = " << man)
+		const int factor = qRound(10 * size() / order);
+		DEBUG(Q_FUNC_INFO << ", factor = " << factor)
 
-		if (man >= 4)
-			return qRound(man) + 1;
-		else if (man * 2. >= 4)
-			return qRound(man * 2.0) + 1;
-		else
-			return qRound(man * 5.0) + 1;
+		// check if multiple of small numbers
+		if (factor % 3 == 0)
+			return 3+1;
+		if (factor % 4 == 0)
+			return 4+1;
+		if (factor % 7 == 0)
+			return 7+1;
+		if (factor % 5 == 0)
+			return 5+1;
+		if (factor % 9 == 0)
+			return 9+1;
+		if (factor % 11 == 0)
+			return 11+1;
+		if (factor % 13 == 0)
+			return 13+1;
+		if (factor % 17 == 0)
+			return 17+1;
+		if (factor % 19 == 0)
+			return 19+1;
+
+		return 23+1;
 	}
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
