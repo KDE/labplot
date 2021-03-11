@@ -118,6 +118,7 @@ private:
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*) override;
 	void checkSpreadsheetMenu();
+	void checkSpreadsheetSelectionMenu();
 	void checkColumnMenus(bool numeric, bool datetime, bool hasValues);
 
 	//selection related actions

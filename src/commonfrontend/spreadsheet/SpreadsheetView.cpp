@@ -470,6 +470,7 @@ void SpreadsheetView::initMenus() {
 	//Selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
 	m_selectionMenu->setIcon(QIcon::fromTheme("selection"));
+	connect (m_selectionMenu, &QMenu::aboutToShow, this, &SpreadsheetView::checkSpreadsheetSelectionMenu);
 
 	if (!m_readOnly) {
 // 		submenu = new QMenu(i18n("Fi&ll Selection With"), this);
@@ -1304,33 +1305,32 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	}
 
 	action_clear_masks->setEnabled(hasMasked);
+}
 
+void SpreadsheetView::checkSpreadsheetSelectionMenu() {
 	//deactivate mask/unmask actions for the selection
 	//if there are no unmasked/masked cells in the current selection
-	QModelIndexList indexes = m_tableView->selectionModel()->selectedIndexes();
-	hasMasked = false;
+	const QModelIndexList& indexes = m_tableView->selectionModel()->selectedIndexes();
+	bool hasMasked = false;
 	bool hasUnmasked = false;
-	for (auto index : indexes) {
+	for (auto& index : qAsConst(indexes)) {
 		int row = index.row();
 		int col = index.column();
 		const auto* column = m_spreadsheet->column(col);
 		//TODO: the null pointer check shouldn't be actually required here
 		//but when deleting the columns the selection model in the view
 		//and the aspect model sometimes get out of sync and we crash...
-		if (column && column->isMasked(row)) {
-			hasMasked = true;
+		if (!column)
 			break;
-		}
-	}
 
-	for (auto index : indexes) {
-		int row = index.row();
-		int col = index.column();
-		const auto* column = m_spreadsheet->column(col);
-		if (column && !column->isMasked(row)) {
+		if (!hasMasked && column->isMasked(row))
+			hasMasked = true;
+
+		if (!hasUnmasked && !column->isMasked(row))
 			hasUnmasked = true;
+
+		if (hasMasked && hasUnmasked)
 			break;
-		}
 	}
 
 	action_mask_selection->setEnabled(hasUnmasked);
@@ -1694,6 +1694,9 @@ void SpreadsheetView::maskSelection() {
 		plot->setSuppressDataChangedSignal(false);
 		plot->dataChanged();
 	}
+
+	//some cells were masked, enable the "clear masks" action
+	action_clear_masks->setEnabled(true);
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
