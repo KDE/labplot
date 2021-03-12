@@ -4332,18 +4332,18 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 	writer->writeStartElement("coordinateSystems");
 	writer->writeAttribute( "defaultCoordinateSystem", QString::number(defaultCoordinateSystemIndex()) );
-	for (const auto& cSystem : m_coordinateSystems) {
-		writer->writeStartElement( "coordinateSystem" );
-		writer->writeAttribute( "xIndex", QString::number(dynamic_cast<CartesianCoordinateSystem*>(cSystem)->xIndex()) );
-		writer->writeAttribute( "yIndex", QString::number(dynamic_cast<CartesianCoordinateSystem*>(cSystem)->yIndex()) );
-		writer->writeEndElement();
-	}
 	// padding
 	writer->writeAttribute( "horizontalPadding", QString::number(d->horizontalPadding) );
 	writer->writeAttribute( "verticalPadding", QString::number(d->verticalPadding) );
 	writer->writeAttribute( "rightPadding", QString::number(d->rightPadding) );
 	writer->writeAttribute( "bottomPadding", QString::number(d->bottomPadding) );
 	writer->writeAttribute( "symmetricPadding", QString::number(d->symmetricPadding));
+	for (const auto& cSystem : m_coordinateSystems) {
+		writer->writeStartElement( "coordinateSystem" );
+		writer->writeAttribute( "xIndex", QString::number(dynamic_cast<CartesianCoordinateSystem*>(cSystem)->xIndex()) );
+		writer->writeAttribute( "yIndex", QString::number(dynamic_cast<CartesianCoordinateSystem*>(cSystem)->yIndex()) );
+		writer->writeEndElement();
+	}
 	writer->writeEndElement();
 	// OLD style (pre 2.9.0)
 //	writer->writeStartElement( "coordinateSystem" );
@@ -4411,6 +4411,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	QXmlStreamAttributes attribs;
 	QString str;
 	bool titleLabelRead = false;
+	bool hasCoordinateSystems = false;	// new since 2.9.0
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -4557,6 +4558,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("rightPadding", rightPadding);
 			READ_DOUBLE_VALUE("bottomPadding", bottomPadding);
 			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
+			hasCoordinateSystems = true;
 
 			m_coordinateSystems.clear();
 		} else if (!preview && reader->name() == "coordinateSystem") {
@@ -4577,94 +4579,96 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 
 			// old style (pre 2.9.0, to read old projects)
-			str = attribs.value("autoScaleX").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("autoScaleX").toString());
-			else
-				d->xRanges[0].setAutoScale(str.toInt());
-			str = attribs.value("autoScaleY").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("autoScaleY").toString());
-			else
-				d->yRanges[0].setAutoScale(str.toInt());
+			if (!hasCoordinateSystems) {
+				str = attribs.value("autoScaleX").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("autoScaleX").toString());
+				else
+					d->xRanges[0].setAutoScale(str.toInt());
+				str = attribs.value("autoScaleY").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("autoScaleY").toString());
+				else
+					d->yRanges[0].setAutoScale(str.toInt());
 
-			str = attribs.value("xMin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("xMin").toString());
-			else {
-				d->xRanges[0].start() = str.toDouble();
-				d->xPrevRange.start() = xRange(0).start();
+				str = attribs.value("xMin").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("xMin").toString());
+				else {
+					d->xRanges[0].start() = str.toDouble();
+					d->xPrevRange.start() = xRange(0).start();
+				}
+
+				str = attribs.value("xMax").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("xMax").toString());
+				else {
+					d->xRanges[0].end() = str.toDouble();
+					d->xPrevRange.end() = xRange(0).end();
+				}
+
+				str = attribs.value("yMin").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("yMin").toString());
+				else {
+					d->yRanges[0].start() = str.toDouble();
+					d->yPrevRange.start() = yRange(0).start();
+				}
+
+				str = attribs.value("yMax").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("yMax").toString());
+				else {
+					d->yRanges[0].end() = str.toDouble();
+					d->yPrevRange.end() = yRange(0).end();
+				}
+
+				str = attribs.value("xScale").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("xScale").toString());
+				else {
+					int scale{ str.toInt() };
+					// convert old scale
+					if (scale > (int)RangeT::Scale::Ln)
+						scale -= 3;
+					d->xRanges[0].scale() = static_cast<RangeT::Scale>(scale);
+				}
+				str = attribs.value("yScale").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("yScale").toString());
+				else {
+					int scale{ str.toInt() };
+					// convert old scale
+					if (scale > (int)RangeT::Scale::Ln)
+						scale -= 3;
+					d->yRanges[0].scale() = static_cast<RangeT::Scale>(scale);
+				}
+
+				str = attribs.value("xRangeFormat").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("xRangeFormat").toString());
+				else
+					d->xRanges[0].format() = static_cast<RangeT::Format>(str.toInt());
+				str = attribs.value("yRangeFormat").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("yRangeFormat").toString());
+				else
+					d->yRanges[0].format() = static_cast<RangeT::Format>(str.toInt());
+
+				str = attribs.value("xRangeDateTimeFormat").toString();
+				if (!str.isEmpty())
+					d->xRanges[0].setDateTimeFormat(str);
+
+				str = attribs.value("yRangeDateTimeFormat").toString();
+				if (!str.isEmpty())
+					d->yRanges[0].setDateTimeFormat(str);
+
+				READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
+				READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
+				READ_DOUBLE_VALUE("rightPadding", rightPadding);
+				READ_DOUBLE_VALUE("bottomPadding", bottomPadding);
+				READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 			}
-
-			str = attribs.value("xMax").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("xMax").toString());
-			else {
-				d->xRanges[0].end() = str.toDouble();
-				d->xPrevRange.end() = xRange(0).end();
-			}
-
-			str = attribs.value("yMin").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("yMin").toString());
-			else {
-				d->yRanges[0].start() = str.toDouble();
-				d->yPrevRange.start() = yRange(0).start();
-			}
-
-			str = attribs.value("yMax").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("yMax").toString());
-			else {
-				d->yRanges[0].end() = str.toDouble();
-				d->yPrevRange.end() = yRange(0).end();
-			}
-
-			str = attribs.value("xScale").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("xScale").toString());
-			else {
-				int scale{ str.toInt() };
-				// convert old scale
-				if (scale > (int)RangeT::Scale::Ln)
-					scale -= 3;
-				d->xRanges[0].scale() = static_cast<RangeT::Scale>(scale);
-			}
-			str = attribs.value("yScale").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("yScale").toString());
-			else {
-				int scale{ str.toInt() };
-				// convert old scale
-				if (scale > (int)RangeT::Scale::Ln)
-					scale -= 3;
-				d->yRanges[0].scale() = static_cast<RangeT::Scale>(scale);
-			}
-
-			str = attribs.value("xRangeFormat").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("xRangeFormat").toString());
-			else
-				d->xRanges[0].format() = static_cast<RangeT::Format>(str.toInt());
-			str = attribs.value("yRangeFormat").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("yRangeFormat").toString());
-			else
-				d->yRanges[0].format() = static_cast<RangeT::Format>(str.toInt());
-
-			str = attribs.value("xRangeDateTimeFormat").toString();
-			if (!str.isEmpty())
-				d->xRanges[0].setDateTimeFormat(str);
-
-			str = attribs.value("yRangeDateTimeFormat").toString();
-			if (!str.isEmpty())
-				d->yRanges[0].setDateTimeFormat(str);
-
-			READ_DOUBLE_VALUE("horizontalPadding", horizontalPadding);
-			READ_DOUBLE_VALUE("verticalPadding", verticalPadding);
-			READ_DOUBLE_VALUE("rightPadding", rightPadding);
-			READ_DOUBLE_VALUE("bottomPadding", bottomPadding);
-			READ_INT_VALUE("symmetricPadding", symmetricPadding, bool);
 		} else if (!preview && reader->name() == "xRangeBreaks") {
 			//delete default range break
 			d->xRangeBreaks.list.clear();
