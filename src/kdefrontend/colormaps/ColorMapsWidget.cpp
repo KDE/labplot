@@ -96,7 +96,8 @@ ColorMapsWidget::~ColorMapsWidget() {
 	//save the selected collection
 	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsWidget");
 	conf.writeEntry("Collection", ui.cbCollections->currentText());
-	conf.writeEntry("ColorMap", ui.lwColorMaps->currentItem()->text());
+	if (ui.lwColorMaps->currentItem())
+		conf.writeEntry("ColorMap", ui.lwColorMaps->currentItem()->text());
 }
 
 /**
@@ -188,6 +189,8 @@ void ColorMapsWidget::colorMapChanged() {
 		QStringList rgbValues = rgb.split(QLatin1Char(','));
 		if (rgbValues.count() == 3)
 			colors << QColor(rgbValues.at(0).toInt(), rgbValues.at(1).toInt(), rgbValues.at(2).toInt());
+		else if (rgbValues.count() == 4)
+			colors << QColor(rgbValues.at(1).toInt(), rgbValues.at(2).toInt(), rgbValues.at(3).toInt());
 	}
 
 	//render the preview pixmap

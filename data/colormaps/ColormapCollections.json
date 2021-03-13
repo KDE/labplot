@@ -23,5 +23,12 @@
 					<br><br>
 					<b>ColorBrewer collection</b> is based on the research of Dr. Cynthia Brewer (<a href=\"http://www.personal.psu.edu/faculty/c/a/cab38/ColorSch/SchHome.html\">source</a>).",
 		"url" : "https://colorbrewer2.org"
+	},
+	{
+		"name" : "Diverging Color Maps for Scientific Visualization",
+		"description" : "Color maps based on the paper 	<b>\"Diverging Color Maps for Scientific Visualization.\"</b> by Kenneth Moreland (<i>In Proceedings of the 5th International Symposium on Visual Computing, December 2009. DOI 10.1007/978-3-642-10520-3_9</i>).
+		<br><br>
+		One of the most fundamental features of scientific visualization is the process of mapping scalar values to colors. This process allows us to view scalar fields by coloring surfaces and volumes. Unfortunately, the majority of scientific visualization tools still use a color map that is famous for its ineffectiveness: the rainbow color map. This color map, which naively sweeps through the most saturated colors, is well known for its ability to obscure data, introduce artifacts, and confuse users. Although many alternate color maps have been proposed, none have achieved widespread adoption by the visualization community for scientific visualization. This paper explores the use of diverging color maps (sometimes also called ratio, bipolar, or double-ended color maps) for use in scientific visualization, provides a diverging color map that generally performs well in scientific visualization applications, and presents an algorithm that allows users to easily generate their own customized color maps.",
+		"url" : "https://www.kennethmoreland.com/color-maps/"
 	}
 ]
