@@ -176,6 +176,7 @@ void SpreadsheetView::init() {
 	m_horizontalHeader->setSectionsMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 	m_tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+	m_tableView->installEventFilter(this);
 
 	resizeHeader();
 
@@ -1294,6 +1295,16 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				else
 					insertRowBelow();
 			}
+		} else if (key_event->key() == Qt::Key_Left) {
+			//TODO:
+			//https://doc.qt.io/qt-5/qtwidgets-itemviews-frozencolumn-example.html
+// 			QModelIndex current = m_tableView->currentIndex();
+// 			const QRect& rect = m_tableView->visualRect(current);
+// 			auto* scrollBar = m_frozenTableView->horizontalScrollBar();
+// 			if (current.column() > 0 && rect.topLeft().x() < m_frozenTableView->columnWidth(0) ){
+// 				const int newValue = scrollBar->value() + rect.topLeft().x() - m_frozenTableView->columnWidth(0);
+// 				scrollBar->setValue(newValue);
+// 			}
 		}
 	}
 
@@ -1390,7 +1401,7 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool hasValu
 	m_columnSortMenu->setEnabled(hasValues);
 
 	if (isColumnSelected(0, true)) {
-		action_freeze_columns->setEnabled(true);
+		action_freeze_columns->setVisible(true);
 		if (m_frozenTableView) {
 			if (!m_frozenTableView->isVisible())
 				action_freeze_columns->setText(i18n("Freeze Column"));
@@ -1398,7 +1409,7 @@ void SpreadsheetView::checkColumnMenus(bool numeric, bool datetime, bool hasValu
 				action_freeze_columns->setText(i18n("Unfreeze Column"));
 		}
 	} else
-		action_freeze_columns->setEnabled(false);;
+		action_freeze_columns->setVisible(false);;
 }
 
 bool SpreadsheetView::formulaModeActive() const {
