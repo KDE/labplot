@@ -135,8 +135,9 @@ public:
 				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
 	}
 	std::string toStdString() const { return STDSTRING(toString()); }
-	//extend range to nice numbers (used in auto scaling)
-	void niceExtend() {
+	//extend/shrink range to nice numbers (used in auto scaling)
+	void niceShrink() { niceExtend(false); }
+	void niceExtend(bool extend = true) {	// extend == false means shrink
 		if (length() == 0)
 			return;
 		DEBUG(Q_FUNC_INFO << ", range : " << toStdString() << ", size = " << size())
@@ -155,7 +156,7 @@ public:
 		}
 
 		// round to decimal places
-		if (m_start < m_end) {
+		if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
 			m_start = nsl_math_floor_places(factor*m_start, places);
 			m_end = nsl_math_ceil_places(factor*m_end, places);
 		} else {
@@ -164,6 +165,7 @@ public:
 		}
 		m_start /= factor;
 		m_end /= factor;
+
 		DEBUG(Q_FUNC_INFO << ", new range : " << toStdString())
 	}
 	int autoTickCount() const {

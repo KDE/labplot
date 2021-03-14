@@ -3036,6 +3036,11 @@ void CartesianPlot::zoom(bool x, bool zoom_in) {
 		break;
 	}
 
+	// make nice again
+	if (zoom_in)
+		range.niceShrink();
+	else
+		range.niceExtend();
 	if (range.finite())
 		x ? d->xRange() = range : d->yRange() = range;
 }
