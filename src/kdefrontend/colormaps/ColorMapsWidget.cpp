@@ -194,19 +194,19 @@ void ColorMapsWidget::colorMapChanged() {
 	}
 
 	//render the preview pixmap
-	int height = 200;
-	int width = 80;
+	int height = 80;
+	int width = 200;
 	int count = colors.count();
-	QPixmap pixmap(width, height);
-	QPainter p(&pixmap);
+	m_pixmap = QPixmap(width, height);
+	QPainter p(&m_pixmap);
 	int i = 0;
 	for (auto& color : colors) {
 		p.setPen(color);
 		p.setBrush(color);
-		p.drawRect(0, i*height/count,width, height/count);
+		p.drawRect(i*width/count, 0, width/count, height);
 		++i;
 	}
-	ui.lPreview->setPixmap(pixmap);
+	ui.lPreview->setPixmap(m_pixmap);
 }
 
 void ColorMapsWidget::showInfo() {
@@ -217,4 +217,8 @@ void ColorMapsWidget::showInfo() {
 
 void ColorMapsWidget::updateColorMapsList() {
 	//TODO
+}
+
+QPixmap ColorMapsWidget::previewPixmap() const {
+	return m_pixmap;
 }

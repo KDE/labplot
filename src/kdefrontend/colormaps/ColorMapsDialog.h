@@ -39,6 +39,8 @@ public:
 	explicit ColorMapsDialog(QWidget*);
 	~ColorMapsDialog() override;
 
+	QPixmap previewPixmap() const;
+
 private:
 	ColorMapsWidget* m_colorMapsWidget;
 

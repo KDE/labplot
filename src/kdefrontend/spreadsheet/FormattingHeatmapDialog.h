@@ -1,9 +1,9 @@
 /***************************************************************************
-	File                 : ColorMapsWidget.h
-	Project              : LabPlot
-	Description          : widget showing the available color maps
-	--------------------------------------------------------------------
-	Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
+    File                 : FormattingHeatmapDialog.h
+    Project              : LabPlot
+    Description          : Dialog for the conditional formatting according to a heatmap
+    --------------------------------------------------------------------
+    Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -25,42 +25,34 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef FORMATTINGHEATMAPDIALOG_H
+#define FORMATTINGHEATMAPDIALOG_H
 
+#include <QDialog>
+#include "ui_formattingheatmapwidget.h"
 
-#ifndef COLORMAPSWIDGET_H
-#define COLORMAPSWIDGET_H
+class Column;
+class Spreadsheet;
+class QPushButton;
 
-#include "ui_colormapswidget.h"
-
-#include "QMap"
-
-class QCompleter;
-
-class ColorMapsWidget : public QWidget {
+class FormattingHeatmapDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit ColorMapsWidget(QWidget*);
-	~ColorMapsWidget() override;
-
-	QPixmap previewPixmap() const;
+	explicit FormattingHeatmapDialog(Spreadsheet*, QWidget* parent = nullptr);
+	~FormattingHeatmapDialog() override;
+	void setColumns(const QVector<Column*>&);
 
 private:
-	Ui::ColorMapsWidget ui;
-	QMap<QString, QString> m_collections; //collections (key = collection name, value = description)
-	QMap<QString, QStringList> m_colorMaps; //color maps in a collection (key = collection name, value = list of color map names)
-	QMap<QString, QStringList> m_colors; //colors (key = color map name, value = list of colors in the string representation)
-	QCompleter* m_completer{nullptr};
-	QString m_jsonDir;
-	QPixmap m_pixmap;
-
-	void loadCollections();
+	Ui::FormattingHeatmapWidget ui;
+	QVector<Column*> m_columns;
+	Spreadsheet* m_spreadsheet;
+	QPushButton* m_okButton;
 
 private slots:
-	void collectionChanged(int);
-	void colorMapChanged();
-	void showInfo();
-	void updateColorMapsList();
+	void autoRangeChanged(int);
+	void selectColorMap();
+	void checkValues();
 };
 
-#endif // COLORMAPSWIDGET_H
+#endif

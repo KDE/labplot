@@ -588,6 +588,7 @@ void MainWin::initActions() {
 	connect(action, &QAction::triggered, this, [=](){
 			auto* dlg = new ColorMapsDialog(this);
 			dlg->exec();
+			delete dlg;
 	});
 
 #ifdef HAVE_FITS

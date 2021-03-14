@@ -49,6 +49,7 @@
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
 #include "kdefrontend/spreadsheet/DropValuesDialog.h"
+#include "kdefrontend/spreadsheet/FormattingHeatmapDialog.h"
 #include "kdefrontend/spreadsheet/GoToDialog.h"
 #include "kdefrontend/spreadsheet/RescaleDialog.h"
 #include "kdefrontend/spreadsheet/SortDialog.h"
@@ -176,7 +177,7 @@ void SpreadsheetView::init() {
 	m_horizontalHeader->setSectionsMovable(true);
 	m_horizontalHeader->installEventFilter(this);
 	m_tableView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-	m_tableView->installEventFilter(this);
+// 	m_tableView->installEventFilter(this);
 
 	resizeHeader();
 
@@ -405,6 +406,9 @@ void SpreadsheetView::initActions() {
 	action_sort_desc_column = new QAction(QIcon::fromTheme("view-sort-descending"), i18n("&Descending"), this);
 	action_statistics_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Column Statisti&cs"), this);
 
+	//conditional formatting
+	action_formatting_heatmap = new QAction(QIcon::fromTheme("color-management"), i18n("Heatmap"), this);
+
 	// row related actions
 	action_insert_row_above = new QAction(QIcon::fromTheme("edit-table-insert-row-above") ,i18n("Insert Row Above"), this);
 	action_insert_row_below = new QAction(QIcon::fromTheme("edit-table-insert-row-below"), i18n("Insert Row Below"), this);
@@ -520,6 +524,9 @@ void SpreadsheetView::initMenus() {
 	m_plotDataMenu->addAction(action_plot_data_xycurve);
 	m_plotDataMenu->addAction(action_plot_data_histogram);
 	m_plotDataMenu->addAction(action_plot_data_boxplot);
+
+	m_formattingMenu = new QMenu(i18n("Conditional Formatting"), this);
+	m_formattingMenu->addAction(action_formatting_heatmap);
 
 	// Column menu
 	m_columnMenu = new QMenu(this);
@@ -666,6 +673,8 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addSeparator();
 		m_columnMenu->addMenu(m_columnSortMenu);
 		m_columnMenu->addSeparator();
+		m_columnMenu->addMenu(m_formattingMenu);
+		m_columnMenu->addSeparator();
 
 		m_columnMenu->addAction(action_insert_column_left);
 		m_columnMenu->addAction(action_insert_column_right);
@@ -675,7 +684,11 @@ void SpreadsheetView::initMenus() {
 		m_columnMenu->addSeparator();
 		m_columnMenu->addAction(action_remove_columns);
 		m_columnMenu->addAction(action_clear_columns);
+	} {
+		m_columnMenu->addSeparator();
+		m_columnMenu->addMenu(m_formattingMenu);
 	}
+
 	m_columnMenu->addSeparator();
 	m_columnMenu->addAction(action_freeze_columns);
 	m_columnMenu->addSeparator();
@@ -699,6 +712,8 @@ void SpreadsheetView::initMenus() {
 		m_spreadsheetMenu->addAction(action_clear_masks);
 		m_spreadsheetMenu->addAction(action_sort_spreadsheet);
 	}
+	m_spreadsheetMenu->addSeparator();
+	m_spreadsheetMenu->addMenu(m_formattingMenu);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
 	m_spreadsheetMenu->addSeparator();
@@ -789,6 +804,9 @@ void SpreadsheetView::connectActions() {
 	connect(action_sort_columns, &QAction::triggered, this, &SpreadsheetView::sortSelectedColumns);
 	connect(action_sort_asc_column, &QAction::triggered, this, &SpreadsheetView::sortColumnAscending);
 	connect(action_sort_desc_column, &QAction::triggered, this, &SpreadsheetView::sortColumnDescending);
+
+	//conditional formatting
+	connect(action_formatting_heatmap, &QAction::triggered, this, &SpreadsheetView::formatHeatmap);
 
 	//statistics
 	connect(action_statistics_columns, &QAction::triggered, this, &SpreadsheetView::showColumnStatistics);
@@ -2136,6 +2154,19 @@ void SpreadsheetView::fillSelectedCellsWithConstValues() {
 */
 void SpreadsheetView::sortSpreadsheet() {
 	sortDialog(m_spreadsheet->children<Column>());
+}
+
+void SpreadsheetView::formatHeatmap() {
+	auto columns = selectedColumns();
+	if (columns.isEmpty())
+		columns = m_spreadsheet->children<Column>();
+
+	if (columns.isEmpty())
+		return;
+
+	auto* dlg = new FormattingHeatmapDialog(m_spreadsheet);
+	dlg->setColumns(columns);
+	dlg->exec();
 }
 
 /*!

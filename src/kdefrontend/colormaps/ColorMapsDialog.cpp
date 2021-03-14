@@ -56,7 +56,6 @@ ColorMapsDialog::ColorMapsDialog(QWidget* parent) : QDialog(parent),
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	setWindowTitle(i18nc("@title:window", "Color Maps Browser"));
-	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowIcon(QIcon::fromTheme("color-management"));
 	create();
 
@@ -73,4 +72,8 @@ ColorMapsDialog::ColorMapsDialog(QWidget* parent) : QDialog(parent),
 ColorMapsDialog::~ColorMapsDialog() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
+}
+
+QPixmap ColorMapsDialog::previewPixmap() const {
+	return m_colorMapsWidget->previewPixmap();
 }

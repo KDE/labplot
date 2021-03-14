@@ -151,6 +151,7 @@ private:
 	QAction* action_clear_spreadsheet;
 	QAction* action_clear_masks;
 	QAction* action_sort_spreadsheet;
+	QAction* action_formatting_heatmap;
 	QAction* action_go_to_cell;
 	QAction* action_statistics_all_columns;
 
@@ -211,18 +212,19 @@ private:
 	QAction* addFourierFilterAction;
 
 	//Menus
-	QMenu* m_selectionMenu{nullptr};;
-	QMenu* m_columnMenu{nullptr};;
+	QMenu* m_selectionMenu{nullptr};
+	QMenu* m_formattingMenu{nullptr};
+	QMenu* m_columnMenu{nullptr};
 	QMenu* m_columnSetAsMenu{nullptr};
 	QMenu* m_columnGenerateDataMenu{nullptr};
 	QMenu* m_columnManipulateDataMenu;
 	QMenu* m_columnNormalizeMenu{nullptr};
 	QMenu* m_columnLadderOfPowersMenu{nullptr};
 	QMenu* m_columnSortMenu{nullptr};
-	QMenu* m_rowMenu{nullptr};;
-	QMenu* m_spreadsheetMenu{nullptr};;
-	QMenu* m_plotDataMenu{nullptr};;
-	QMenu* m_analyzePlotMenu{nullptr};;
+	QMenu* m_rowMenu{nullptr};
+	QMenu* m_spreadsheetMenu{nullptr};
+	QMenu* m_plotDataMenu{nullptr};
+	QMenu* m_analyzePlotMenu{nullptr};
 
 public slots:
 	void createContextMenu(QMenu*);
@@ -241,6 +243,7 @@ private slots:
 	void goToCell();
 	void sortSpreadsheet();
 	void sortDialog(const QVector<Column*>&);
+	void formatHeatmap();
 
 	void cutSelection();
 	void copySelection();
