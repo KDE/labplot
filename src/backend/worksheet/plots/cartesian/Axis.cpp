@@ -1729,24 +1729,11 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		}
 	}
 
-	if (precision == 0) {
-		bool hasDoubles = false;
-		for (auto value : tickLabelValues) {
-			if (floor(value) != value) {
-				hasDoubles = true;
-				break;
-			}
-		}
-
-		//if we have double values we don't want to show them as integers, keep at least one digit.
-		if (hasDoubles)
-			return 1;
-		else
-			return 0;
-	} else {
-		//no duplicates found, reduce further, and check again
+	//no duplicates found, reduce further, and check again
+	if (precision > 0)
 		return lowerLabelsPrecision(precision - 1, format);
-	}
+
+	return 0;
 }
 
 /*!
