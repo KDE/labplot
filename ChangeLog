@@ -5,7 +5,7 @@
 	* Added Hilbert transform including envelope
 	* Added global settings for numbers
 	* Support real scientific notation and improve other notations of axes label
-	* Improved range auto scaling
+	* Support axes auto tick number and improved range auto scaling
 	* [spreadsheet]:
 		* Allow to freeze the first column
 	* [worksheet]:
