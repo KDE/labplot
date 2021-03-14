@@ -668,6 +668,7 @@ void AbstractAspect::paste(bool duplicate) {
 	if (!xml.startsWith(QLatin1String("<?xml version=\"1.0\"?><!DOCTYPE LabPlotCopyPasteXML>")))
 		return;
 
+	WAIT_CURSOR;
 	AbstractAspect* aspect = nullptr;
 	XmlStreamReader reader(xml);
 	while (!reader.atEnd()) {
@@ -710,6 +711,7 @@ void AbstractAspect::paste(bool duplicate) {
 		project()->restorePointers(aspect);
 		endMacro();
 	}
+	RESET_CURSOR;
 }
 
 /*!

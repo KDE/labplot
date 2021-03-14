@@ -36,6 +36,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
@@ -109,6 +110,10 @@ public:
 			return new XYInterpolationCurve(QString());
 		else if (type == AspectType::XYSmoothCurve)
 			return new XYSmoothCurve(QString());
+		else if (type == AspectType::Histogram)
+			return new Histogram(QString());
+		else if (type == AspectType::BoxPlot)
+			return new BoxPlot(QString());
 		else if (type == AspectType::CartesianPlotLegend)
 			return new CartesianPlotLegend(QString());
 
