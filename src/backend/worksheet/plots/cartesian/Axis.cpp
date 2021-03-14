@@ -1287,6 +1287,10 @@ void AxisPrivate::retransformTicks() {
 	qreal minorTickPos;
 	qreal nextMajorTickPos = 0.0;
 
+	if (!q->cSystem) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no csystem!")
+		return;
+	}
 	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem-> yIndex() };
 	DEBUG(Q_FUNC_INFO << ", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)

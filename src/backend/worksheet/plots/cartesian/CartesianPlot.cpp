@@ -1585,6 +1585,8 @@ void CartesianPlot::setTheme(const QString& theme) {
 void CartesianPlot::addHorizontalAxis() {
 	DEBUG(Q_FUNC_INFO)
 	Axis* axis = new Axis("x-axis", Axis::Orientation::Horizontal);
+	axis->setSuppressRetransform(true);	// retransformTicks() needs plot
+	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
 		// use x range of default plot range
@@ -1592,8 +1594,6 @@ void CartesianPlot::addHorizontalAxis() {
 		axis->setMajorTicksNumber( xRange().autoTickCount() );
 		axis->setUndoAware(true);
 	}
-	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	axis->setSuppressRetransform(true);	// retransformTicks() needs plot
 	addChild(axis);
 	axis->setSuppressRetransform(false);
 	axis->retransform();
@@ -1601,6 +1601,8 @@ void CartesianPlot::addHorizontalAxis() {
 
 void CartesianPlot::addVerticalAxis() {
 	Axis* axis = new Axis("y-axis", Axis::Orientation::Vertical);
+	axis->setSuppressRetransform(true);	// retransformTicks() needs plot
+	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (axis->autoScale()) {
 		axis->setUndoAware(false);
 		// use y range of default plot range
@@ -1608,8 +1610,6 @@ void CartesianPlot::addVerticalAxis() {
 		axis->setMajorTicksNumber( yRange().autoTickCount() );
 		axis->setUndoAware(true);
 	}
-	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	axis->setSuppressRetransform(true);	// retransformTicks() needs plot
 	addChild(axis);
 	axis->setSuppressRetransform(false);
 	axis->retransform();
@@ -2021,6 +2021,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		//load default theme settings otherwise.
 		const auto* elem = dynamic_cast<const WorksheetElement*>(child);
 		if (elem) {
+//TODO			const_cast<WorksheetElement*>(elem)->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 			if (!d->theme.isEmpty()) {
 				KConfig config(ThemeHandler::themeFilePath(d->theme), KConfig::SimpleConfig);
 				const_cast<WorksheetElement*>(elem)->loadThemeConfig(config);

@@ -69,9 +69,11 @@ WorksheetElement::~WorksheetElement() {
 void WorksheetElement::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
 	m_plot = dynamic_cast<CartesianPlot*>(parentAspect());
-	if (m_plot)
+	if (m_plot) {
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
-	emit plotRangeListChanged();
+		emit plotRangeListChanged();
+	} else
+		DEBUG(Q_FUNC_INFO << ", WARNING: no plot available.")
 }
 
 /**
@@ -277,6 +279,8 @@ void  WorksheetElement::setCoordinateSystemIndex(int index) {
 	m_cSystemIndex = index;
 	if (m_plot)
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(index));
+	else
+		DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
 }
 
 int WorksheetElement::coordinateSystemCount() const {
