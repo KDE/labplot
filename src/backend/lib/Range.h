@@ -139,18 +139,32 @@ public:
 	void niceExtend() {
 		if (length() == 0)
 			return;
-		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", size = " << size())
-		//DEBUG(Q_FUNC_INFO << ", size/10 = " << size()/10.)
-		const int places = nsl_math_rounded_decimals(size()/10.);
-		DEBUG(Q_FUNC_INFO << ", decimal places = " << (int)places)
-		if (m_start < m_end) {
-			m_start = nsl_math_floor_places(m_start, places);
-			m_end = nsl_math_ceil_places(m_end, places);
-		} else {
-			m_start = nsl_math_ceil_places(m_start, places);
-			m_end = nsl_math_floor_places(m_end, places);
+		DEBUG(Q_FUNC_INFO << ", range : " << toStdString() << ", size = " << size())
+		DEBUG(Q_FUNC_INFO << ", size/10 = " << size()/10.)
+		int places = nsl_math_rounded_decimals(size()/10.);
+		DEBUG(Q_FUNC_INFO << ", decimal places (rounded) = " << (int)places)
+		const double scaledSize = size() * pow(10., places);
+		DEBUG(Q_FUNC_INFO << ", scaled size  = " << scaledSize)
+		double factor = 1.;
+		if (scaledSize > 20.) {	// use better rounding (> 20 : .5 steps)
+			factor=2.;
+			places -= 1;
+		} else if (scaledSize > 12.) {	// use better rounding (13 - 20 : .2 steps)
+			factor=5.;
+			places -= 1;
 		}
-		DEBUG(Q_FUNC_INFO << ", new range = " << toStdString())
+
+		// round to decimal places
+		if (m_start < m_end) {
+			m_start = nsl_math_floor_places(factor*m_start, places);
+			m_end = nsl_math_ceil_places(factor*m_end, places);
+		} else {
+			m_start = nsl_math_ceil_places(factor*m_start, places);
+			m_end = nsl_math_floor_places(factor*m_end, places);
+		}
+		m_start /= factor;
+		m_end /= factor;
+		DEBUG(Q_FUNC_INFO << ", new range : " << toStdString())
 	}
 	int autoTickCount() const {
 		if (length() == 0)

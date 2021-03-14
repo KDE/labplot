@@ -32,7 +32,29 @@
 //****************** Function tests ************************
 //**********************************************************
 
+void RangeTest::testNiceExtend() {
+	QVector< QPair<Range<double>, Range<double>> > tests{
+		{{0.,.95},{0.,1.}},{{0,.91},{0.,1.}},{{0,.9},{0.,.9}},
+		{{0.,.85},{0.,.9}},{{0,.81},{0.,.9}},{{0,.71},{0.,.8}},
+		{{0.,.61},{0.,.7}},{{0,.51},{0.,.6}},{{0,.46},{0.,.5}},
+		{{0.,.41},{0.,.45}},{{0,.36},{0.,.4}},{{0,.31},{0.,.35}},
+		{{0.,.26},{0.,.3}},{{0,.21},{0.,.25}},{{0,.19},{0.,.2}},
+		{{0.,.17},{0.,.18}},{{0,.15},{0.,.16}}
+		//TODO: {{0.,.13},{0.,.14}}	rounding errors
+	};
+
+	for (auto& test : tests) {
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+//		DEBUG(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+//		DEBUG(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		QCOMPARE(test.first, test.second);
+	}
+}
+
+
 void RangeTest::testTickCount() {
+
 	const QVector<QPair<Range<double>, int>> tests{
 		{{0., 1.}, 6}, {{0., 0.01}, 6}, {{0., 100.}, 6},
 		{{0., 2.}, 5}, {{0., 3.}, 4}, {{0., 4.}, 5}, {{0., 5.}, 6},
@@ -40,55 +62,15 @@ void RangeTest::testTickCount() {
 		{{1.6, 2.2}, 4}, {{1.3, 2.7}, 8}, {{0., 3.2}, 5}
 		//TODO: 0-29, 0-41
 	};
-	for ( auto& test: tests) {
+
+	for (auto& test : tests) {
 		DEBUG(test.second);
 		QCOMPARE(test.first.autoTickCount(), test.second);
 	}
 }
 
-/*void ParserTest::testVariables() {
-	assign_symbol("a", 1.);
-	const QVector<QPair<QString, double>> tests{ 
-		{"a", 1.}, {"a+1", 2.}, {"a+1.5", 2.5}, {"a!", 1.}
-	};
-
-	for ( auto& expr: tests)
-		QCOMPARE(parse(qPrintable(expr.first), "C"), expr.second);
-
-	assign_symbol("a", 0.);	// only vars set to zero get removed
-	remove_symbol("a");
-	for ( auto& expr: tests)
-		QVERIFY(qIsNaN(parse(qPrintable(expr.first), "C")));
-
-	// longer var name
-	assign_symbol("sina", 1.5);
-	const QVector<QPair<QString, double>> tests2{ 
-		{"sina", 1.5}, {"sina+1", 2.5}, {"sina+1.5", 3.}, {"2*sina", 3.}
-	};
-
-	for ( auto& expr: tests2)
-		QCOMPARE(parse(qPrintable(expr.first), "C"), expr.second);
-
-	//parse_with_vars()
-	parser_var vars[] = { {"x", 1.}, {"y", 2.}};
-	QCOMPARE(parse_with_vars("x + y", vars, 2, "C"), 3.);
-}
-
-void ParserTest::testLocale() {
-//TODO: locale test currently does not work on FreeBSD
-#ifndef __FreeBSD__
-	const QVector<QPair<QString, double>> tests{ 
-		{"1,", 1.}, {"1,5", 1.5}, {"1+0,5", 1.5}, {"2*1,5", 3.}
-	};
-
-	for ( auto& expr: tests)
-		QCOMPARE(parse(qPrintable(expr.first), "de_DE"), expr.second);
-#endif
-}
-
 ///////////// Performance ////////////////////////////////
-// see https://github.com/ArashPartow/math-parser-benchmark-project
-
+/*
 void ParserTest::testPerformance1() {
 	const int N = 1e5;
 	

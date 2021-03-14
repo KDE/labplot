@@ -34,6 +34,7 @@ class RangeTest : public CommonTest {
 	Q_OBJECT
 
 private slots:
+	void testNiceExtend();
 	void testTickCount();
 
 //	void testPerformance();
