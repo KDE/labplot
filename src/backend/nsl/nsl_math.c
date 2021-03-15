@@ -107,15 +107,19 @@ double nsl_math_places(double value, int n, int method) {
 	if (fabs(scaled_value) < .5)
 		return 0.;
 
+	double eps = 1.e-15;
+	/*printf("nsl_math_places(): DBL_EPSILON = %.19g, scale = %.19g, scaled_value = %.19g, ceil(scaled_value) = %.19g ceil(scaled_value)/scale = %.19g\n",
+			DBL_EPSILON, scale, scaled_value - eps, ceil(scaled_value - eps), ceil(scaled_value - eps)/scale);
+	*/
 	switch (method) {
 	case 0:
 		return round(scaled_value)/scale;
 		break;
 	case 1:
-		return floor(scaled_value)/scale;
+		return floor(scaled_value + eps)/scale;
 		break;
 	case 2:
-		return ceil(scaled_value)/scale;
+		return ceil(scaled_value - eps)/scale;
 		break;
 	case 3:
 		return trunc(scaled_value)/scale;

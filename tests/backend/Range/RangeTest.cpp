@@ -40,7 +40,9 @@ void RangeTest::testNiceExtend() {
 		{{0.,.41},{0.,.45}},{{0,.36},{0.,.4}},{{0,.31},{0.,.35}},
 		{{0.,.26},{0.,.3}},{{0,.21},{0.,.25}},{{0,.19},{0.,.2}},
 		{{0.,.17},{0.,.18}},{{0,.15},{0.,.16}}
-		//TODO: {{0.,.13},{0.,.14}}	rounding errors
+	};
+	QVector< QPair<Range<double>, Range<double>> > tests2{	// QCOMPARE is too strict
+		{{0.,.13},{0.,.14}}, {{0.,1000.},{0.,1000.}}
 	};
 
 	for (auto& test : tests) {
@@ -49,6 +51,12 @@ void RangeTest::testNiceExtend() {
 //		DEBUG(std::setprecision(19) << test.first.start() << " == " << test.second.start())
 //		DEBUG(std::setprecision(19) << test.first.end() << " == " << test.second.end())
 		QCOMPARE(test.first, test.second);
+	}
+	for (auto& test : tests2) {
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
+		test.first.niceExtend();
+		FuzzyCompare(test.first.start(), test.second.start(), DBL_EPSILON);
+		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);
 	}
 }
 
