@@ -2340,7 +2340,7 @@ void CartesianPlot::scaleAutoTriggered() {
 		setAutoScaleY();
 }
 
-bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
+bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransform) {
 	if (index == -1) {
 		if (!defaultCoordinateSystem())
 			return false;
@@ -2392,14 +2392,15 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 		// extend to nice values
 		xRange.niceExtend();
 
-		d->retransformScales();
+		if (!suppressRetransform)
+			d->retransformScales();
 	}
 
 	return update;
 }
 
 // TODO: copy paste code?
-bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
+bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransform) {
 	if (index == -1) {
 		if (!defaultCoordinateSystem())
 			return false;
@@ -2448,105 +2449,25 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 		// extend to nice values
 		yRange.niceExtend();
 
-		d->retransformScales();
+		if (!suppressRetransform)
+			d->retransformScales();
 	}
 
 	return update;
 }
 
-// TODO: copy paste code?
-bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
-	if (xIndex == -1) {
-		if (!defaultCoordinateSystem())
-			return false;
-		xIndex = defaultCoordinateSystem()->xIndex();
-	}
-	if (yIndex == -1) {
-		if (!defaultCoordinateSystem())
-			return false;
-		yIndex = defaultCoordinateSystem()->yIndex();
-	}
-
+bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange) {
 	DEBUG(Q_FUNC_INFO << ", x/y index = " << xIndex << ' ' << yIndex)
 	Q_D(CartesianPlot);
+	bool updateX = scaleAutoX(xIndex, fullRange, true);
+	bool updateY = scaleAutoY(yIndex, fullRange, true);
 
-	if (d->curvesXMinMaxIsDirty) {
-		calculateCurvesXMinMax(xIndex, fullRange);
-		d->curvesXMinMaxIsDirty = false;
-	}
-
-	if (d->curvesYMinMaxIsDirty) {
-		calculateCurvesYMinMax(yIndex, fullRange);
-		d->curvesYMinMaxIsDirty = false;
-	}
-
-	bool updateX = false;
-	bool updateY = false;
-
-	if (xIndex >= d->xRanges.size()) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: x index >= x ranges size:  " << xIndex << " >= " <<  d->xRanges.size())
-		return false;
-	}
-	if (yIndex >= d->yRanges.size()) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: y index >= y ranges size:  " << yIndex << " >= " <<  d->yRanges.size())
-		return false;
-	}
-
-	auto& xRange{ d->xRanges[xIndex] };
-	auto& yRange{ d->yRanges[yIndex] };
-
-	if (!qFuzzyCompare(d->curvesXRange.start(), xRange.start()) && !qIsInf(d->curvesXRange.start()) ) {
-		xRange.start() = d->curvesXRange.start();
-		updateX = true;
-	}
-	if (!qFuzzyCompare(d->curvesXRange.end(), xRange.end()) && !qIsInf(d->curvesXRange.end()) ) {
-		xRange.end() = d->curvesXRange.end();
-		updateX = true;
-	}
-	if (!qFuzzyCompare(d->curvesYRange.start(), yRange.start()) && !qIsInf(d->curvesYRange.start()) ) {
-		yRange.start() = d->curvesYRange.start();
-		updateY = true;
-	}
-	if (!qFuzzyCompare(d->curvesYRange.end(), yRange.end()) && !qIsInf(d->curvesYRange.end()) ) {
-		yRange.end() = d->curvesYRange.end();
-		updateY = true;
-	}
-	DEBUG( Q_FUNC_INFO << ", xrange = " << xRange.toStdString() << ", yrange = " << yRange.toStdString() );
-
-	//TODO: copy/paste code (see also scaleAutoX(), scaleAutoY())
 	if (updateX || updateY) {
-		if (updateX) {
-			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (xRange.isZero()) {
-				const double value{ xRange.start() };
-				if (!qFuzzyIsNull(value))
-					xRange.setRange(value * 0.9, value * 1.1);
-				else
-					xRange.setRange(-0.1, 0.1);
-			} else {
-				xRange.extend( xRange.size() * d->autoScaleOffsetFactor );
-			}
-			// extend to nice values
-			xRange.niceExtend();
-
+		if (updateX)
 			setAutoScaleX(xIndex);
-		}
-		if (updateY) {
-			//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
-			if (yRange.isZero()) {
-				const double value{ yRange.start() };
-				if (!qFuzzyIsNull(value))
-					yRange.setRange(value * 0.9, value * 1.1);
-				else
-					yRange.setRange(-0.1, 0.1);
-			} else {
-				yRange.extend( yRange.size()*d->autoScaleOffsetFactor );
-			}
-			// extend to nice values
-			yRange.niceExtend();
-
+		if (updateY)
 			setAutoScaleY(yIndex);
-		}
+
 		d->retransformScales();
 	}
 
