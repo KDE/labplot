@@ -661,7 +661,6 @@ void Column::calculateStatistics() const {
 	ColumnStatistics& statistics = d->statistics;
 
 	int rowValuesSize = 0;
-	int notNanCount = 0;
 	double val;
 	double columnSum = 0.0;
 	double columnProduct = 1.0;
@@ -671,6 +670,7 @@ void Column::calculateStatistics() const {
 	statistics.maximum = -INFINITY;
 	std::unordered_map<double, int> frequencyOfValues;
 	QVector<double> rowData;
+
 	if (columnMode() == ColumnMode::Numeric) {
 		auto* rowValues = reinterpret_cast<QVector<double>*>(data());
 		rowValuesSize = rowValues->size();
@@ -693,7 +693,6 @@ void Column::calculateStatistics() const {
 				frequencyOfValues.operator [](val)++;
 			else
 				frequencyOfValues.insert(std::make_pair(val, 1));
-			++notNanCount;
 			rowData.push_back(val);
 		}
 	} else if (columnMode() == ColumnMode::Integer) {
@@ -718,7 +717,6 @@ void Column::calculateStatistics() const {
 				frequencyOfValues.operator [](val)++;
 			else
 				frequencyOfValues.insert(std::make_pair(val, 1));
-			++notNanCount;
 			rowData.push_back(val);
 		}
 	} else if (columnMode() == ColumnMode::BigInt) {
@@ -743,10 +741,11 @@ void Column::calculateStatistics() const {
 				frequencyOfValues.operator [](val)++;
 			else
 				frequencyOfValues.insert(std::make_pair(val, 1));
-			++notNanCount;
 			rowData.push_back(val);
 		}
 	}
+
+	const int notNanCount = rowData.size();
 
 	if (notNanCount == 0) {
 		d->statisticsAvailable = true;
@@ -785,25 +784,23 @@ void Column::calculateStatistics() const {
 	}
 	statistics.mode = mode;
 
-	double columnSumVariance = 0;
-	double columnSumMeanDeviation = 0.0;
-	double columnSumMedianDeviation = 0.0;
-	double sumForCentralMoment_r3 = 0.0;
-	double sumForCentralMoment_r4 = 0.0;
 
 	//sort the data to calculate the percentiles
-	gsl_sort(rowData.data(), 1, notNanCount);
-// 	statistics.median = (notNanCount%2) ? rowData.at((int)((notNanCount-1)/2)) :
-// 	                    (rowData.at((int)((notNanCount-1)/2)) + rowData.at((int)(notNanCount/2)))/2.0;
+	std::sort(rowData.begin(), rowData.end());
 	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.25);
 	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.50);
 	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.75);
 	statistics.iqr = statistics.thirdQuartile - statistics.firstQuartile;
 	statistics.trimean = (statistics.firstQuartile + 2*statistics.median + statistics.thirdQuartile) / 4;
 
+	double columnSumVariance = 0;
+	double columnSumMeanDeviation = 0.0;
+	double columnSumMedianDeviation = 0.0;
+	double sumForCentralMoment_r3 = 0.0;
+	double sumForCentralMoment_r4 = 0.0;
 	QVector<double> absoluteMedianList;
-	absoluteMedianList.reserve((int)notNanCount);
-	absoluteMedianList.resize((int)notNanCount);
+	absoluteMedianList.reserve(notNanCount);
+	absoluteMedianList.resize(notNanCount);
 
 	for (int row = 0; row < notNanCount; ++row) {
 		val = rowData.value(row);
@@ -820,10 +817,8 @@ void Column::calculateStatistics() const {
 	statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
 
 	//sort the data to calculate the median
-	gsl_sort(absoluteMedianList.data(), 1, notNanCount);
-	statistics.medianDeviation = (notNanCount%2) ? absoluteMedianList.at((int)((notNanCount-1)/2)) :
-	                             (absoluteMedianList.at((int)((notNanCount-1)/2)) + absoluteMedianList.at((int)(notNanCount/2)))/2.0;
-
+	std::sort(absoluteMedianList.begin(), absoluteMedianList.end());
+	statistics.medianDeviation = gsl_stats_quantile_from_sorted_data(absoluteMedianList.data(), 1, notNanCount, 0.50);
 	const double centralMoment_r3 = sumForCentralMoment_r3 / notNanCount;
 	const double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
 
