@@ -2352,54 +2352,6 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 	Q_D(CartesianPlot);
 	if (d->curvesXMinMaxIsDirty) {
 		calculateCurvesXMinMax(index, fullRange);
-
-		/* TODO:
-		//take the size of the error bar cap into account if error bars with caps are plotted
-		double errorBarsCapSize = -1;
-		for (auto* curve : this->children<const XYCurve>()) {
-			if (curve->yErrorType() == XYCurve::ErrorType::NoError)
-				continue;
-
-			if (curve->errorBarsType() != XYCurve::ErrorBarsType::WithEnds)
-				continue;
-
-			if ( (curve->yErrorType() == XYCurve::ErrorType::Symmetric && curve->yErrorPlusColumn())
-				|| (curve->yErrorType() == XYCurve::ErrorType::Asymmetric && (curve->yErrorPlusColumn() && curve->yErrorMinusColumn())) )
-				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
-		}
-
-		if (errorBarsCapSize > 0) {
-			// must be done, because retransformScales uses xMin/xMax
-			if (d->curvesXMin != d->xMin && d->curvesXMin != qInf())
-				d->xMin = d->curvesXMin;
-
-			if (d->curvesXMax != d->xMax && d->curvesXMax != -qInf())
-				d->xMax = d->curvesXMax;
-			// When the previous scale is completely different. The mapTo functions scale with wrong values. To prevent
-			// this a rescale must be done.
-			// The errorBarsCapSize is in Scene coordinates. So this value must be transformed into a logical value. Due
-			// to nonlinear scalings it cannot only be multiplied with a scaling factor and depends on the position of the
-			// column value
-			// dirty hack: call setIsLoading(true) to suppress the call of retransform() in retransformScales() since a
-			// retransform is already done at the end of this function
-			setIsLoading(true);
-			d->retransformScales();
-			setIsLoading(false);
-			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMin, 0), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			point.setX(point.x() - errorBarsCapSize/2.);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			// Problem is, when the scaling is not linear (for example log(x)) and the minimum is 0. In this
-			// case mapLogicalToScene returns (0,0) which is smaller than the curves minimum
-			if (point.x() < d->curvesXMin)
-				d->curvesXMin = point.x();
-
-			point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMax, 0), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			point.setX(point.x() + errorBarsCapSize/2.);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			if (point.x() > d->curvesXMax)
-				d->curvesXMax = point.x();
-		}
-		*/
 		d->curvesYMinMaxIsDirty = true;
 		d->curvesXMinMaxIsDirty = false;
 	}
@@ -2459,45 +2411,6 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 
 	if (d->curvesYMinMaxIsDirty) {
 		calculateCurvesYMinMax(index, fullRange);
-
-		/* TODO:
-		//take the size of the error bar cap into account if error bars with caps are plotted
-		double errorBarsCapSize = -1;
-		for (auto* curve : this->children<const XYCurve>()) {
-			if (curve->xErrorType() == XYCurve::ErrorType::NoError)
-				continue;
-
-			if (curve->errorBarsType() != XYCurve::ErrorBarsType::WithEnds)
-				continue;
-
-			if ( (curve->xErrorType() == XYCurve::ErrorType::Symmetric && curve->xErrorPlusColumn())
-				|| (curve->xErrorType() == XYCurve::ErrorType::Asymmetric && (curve->xErrorPlusColumn() && curve->xErrorMinusColumn())) )
-				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
-		}
-
-		if (errorBarsCapSize > 0) {
-			if (d->curvesYMin != d->yMin && d->curvesYMin != qInf())
-				d->yMin = d->curvesYMin;
-
-			if (d->curvesYMax != d->yMax && d->curvesYMax != -qInf())
-				d->yMax = d->curvesYMax;
-			setIsLoading(true);
-			d->retransformScales();
-			setIsLoading(false);
-			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMin), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			point.setY(point.y() + errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			if (point.y() < d->curvesYMin)
-				d->curvesYMin = point.y();
-
-			point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMax), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			point.setY(point.y() - errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			if (point.y() > d->curvesYMax)
-				d->curvesYMax = point.y();
-		}
-		*/
-
 		d->curvesXMinMaxIsDirty = true;
 		d->curvesYMinMaxIsDirty = false;
 	}
@@ -2559,87 +2472,11 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, const bool fullRange) {
 
 	if (d->curvesXMinMaxIsDirty) {
 		calculateCurvesXMinMax(xIndex, fullRange);
-
-		/* TODO
-		//take the size of the error bar cap into account if error bars with caps are plotted
-		double errorBarsCapSize = -1;
-		for (auto* curve : this->children<const XYCurve>()) {
-			if (curve->yErrorType() == XYCurve::ErrorType::NoError)
-				continue;
-
-			if (curve->errorBarsType() != XYCurve::ErrorBarsType::WithEnds)
-				continue;
-
-			if ( (curve->yErrorType() == XYCurve::ErrorType::Symmetric && curve->yErrorPlusColumn())
-				|| (curve->yErrorType() == XYCurve::ErrorType::Asymmetric && (curve->yErrorPlusColumn() && curve->yErrorMinusColumn())) )
-				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
-		}
-
-		if (errorBarsCapSize > 0) {
-			if (d->curvesXMin != d->xMin && d->curvesXMin != qInf())
-				d->xMin = d->curvesXMin;
-
-			if (d->curvesXMax != d->xMax && d->curvesXMax != -qInf())
-				d->xMax = d->curvesXMax;
-			setIsLoading(true);
-			d->retransformScales();
-			setIsLoading(false);
-			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMin, 0), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			point.setX(point.x() - errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			if (point.x() < d->curvesXMin)
-				d->curvesXMin = point.x();
-
-			point = coordinateSystem()->mapLogicalToScene(QPointF(d->curvesXMax, 0), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			point.setX(point.x() + errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			if (point.x() > d->curvesXMax)
-				d->curvesXMax = point.x();
-		}
-		*/
 		d->curvesXMinMaxIsDirty = false;
 	}
 
 	if (d->curvesYMinMaxIsDirty) {
 		calculateCurvesYMinMax(yIndex, fullRange);
-
-		/*
-		//take the size of the error bar cap into account if error bars with caps are plotted
-		double errorBarsCapSize = -1;
-		for (auto* curve : this->children<const XYCurve>()) {
-			if (curve->xErrorType() == XYCurve::ErrorType::NoError)
-				continue;
-
-			if (curve->errorBarsType() != XYCurve::ErrorBarsType::WithEnds)
-				continue;
-
-			if ( (curve->xErrorType() == XYCurve::ErrorType::Symmetric && curve->xErrorPlusColumn())
-				|| (curve->xErrorType() == XYCurve::ErrorType::Asymmetric && (curve->xErrorPlusColumn() && curve->xErrorMinusColumn())) )
-				errorBarsCapSize = qMax(errorBarsCapSize, curve->errorBarsCapSize());
-		}
-
-		if (errorBarsCapSize > 0) {
-			if (d->curvesYMin != d->yMin && d->curvesYMin != qInf())
-				d->yMin = d->curvesYMin;
-
-			if (d->curvesYMax != d->yMax && d->curvesYMax != -qInf())
-				d->yMax = d->curvesYMax;
-			setIsLoading(true);
-			d->retransformScales();
-			setIsLoading(false);
-			QPointF point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMin), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			point.setY(point.y() + errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			if (point.y() < d->curvesYMin)
-				d->curvesYMin = point.y();
-
-			point = coordinateSystem()->mapLogicalToScene(QPointF(0, d->curvesYMax), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			point.setY(point.y() - errorBarsCapSize);
-			point = coordinateSystem()->mapSceneToLogical(point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			if (point.y() > d->curvesYMax)
-				d->curvesYMax = point.y();
-		}
-		*/
 		d->curvesYMinMaxIsDirty = false;
 	}
 
@@ -2772,7 +2609,6 @@ void CartesianPlot::calculateCurvesXMinMax(const int index, bool completeRange) 
 			d->curvesXRange.end() = range.end();
 		DEBUG(Q_FUNC_INFO << ", curves x range i = " << d->curvesXRange.toStdString())
 	}
-	DEBUG(Q_FUNC_INFO << ", curves x range = " << d->curvesXRange.toStdString())
 
 	//loop over all histograms and determine the maximum and minimum x-value
 	for (const auto* curve : this->children<const Histogram>()) {
@@ -2805,6 +2641,8 @@ void CartesianPlot::calculateCurvesXMinMax(const int index, bool completeRange) 
 		if (max > d->curvesXRange.end())
 			d->curvesXRange.end() = max;
 	}
+
+	DEBUG(Q_FUNC_INFO << ", curves x range = " << d->curvesXRange.toStdString())
 }
 
 /*!
