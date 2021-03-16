@@ -49,7 +49,6 @@
 extern "C" {
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_math.h>
-#include <gsl/gsl_sort.h>
 #include <gsl/gsl_statistics.h>
 #include "backend/nsl/nsl_kde.h"
 }
@@ -390,7 +389,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	size_t n = rawData.count();
 
 	//sort the data to calculate the percentiles
-	gsl_sort(rawData.data(), 1, n);
+	std::sort(rawData.begin(), rawData.end());
 
 	//calculate y-values - the percentiles for the column data
 	Column* yColumn = new Column("y");

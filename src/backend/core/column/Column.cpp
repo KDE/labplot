@@ -57,7 +57,6 @@
 
 extern "C" {
 #include <gsl/gsl_math.h>
-#include <gsl/gsl_sort.h>
 #include <gsl/gsl_statistics.h>
 }
 
