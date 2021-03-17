@@ -446,7 +446,8 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
  */
 void Project::save(QXmlStreamWriter* writer) const {
 	//save all children
-	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden)) {
+	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children) {
 		writer->writeStartElement("child_aspect");
 		child->save(writer);
 		writer->writeEndElement();
@@ -601,12 +602,12 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	QThreadPool::globalInstance()->waitForDone();
 
 	bool hasChildren = aspect->childCount<AbstractAspect>();
-	auto columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
+	const auto& columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
 
 	//LiveDataSource:
 	//call finalizeLoad() to replace relative with absolute paths if required
 	//and to create columns during the initial read
-	auto sources = aspect->children<LiveDataSource>(ChildIndexFlag::Recursive);
+	const auto& sources = aspect->children<LiveDataSource>(ChildIndexFlag::Recursive);
 	for (auto* source : sources) {
 		if (!source) continue;
 		source->finalizeLoad();
@@ -624,7 +625,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		//list of curves to be retransformed
 		curves << static_cast<XYCurve*>(aspect);
 
-	for (auto* curve : curves) {
+	for (auto* curve : qAsConst(curves)) {
 		if (!curve) continue;
 		curve->suppressRetransform(true);
 

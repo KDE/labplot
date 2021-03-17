@@ -128,7 +128,8 @@ void Folder::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden)) {
+	const auto& children = this->children<AbstractAspect>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children) {
 		writer->writeStartElement(QLatin1String("child_aspect"));
 		child->save(writer);
 		writer->writeEndElement(); // "child_aspect"
@@ -224,7 +225,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 
 			//remove the path of the current child folder
 			QStringList pathesToLoadNew;
-			for (auto path : m_pathesToLoad) {
+			for (const auto& path : qAsConst(m_pathesToLoad)) {
 				if (path.startsWith(curFolderPath))
 					pathesToLoadNew << path.right(path.length() - curFolderPath.length());
 			}

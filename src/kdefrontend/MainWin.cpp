@@ -272,7 +272,8 @@ void MainWin::initGUI(const QString& fileName) {
 		KToolBar::setToolBarsLocked(false);
 
 		//show icons only
-		for (auto* container : factory()->containers(QLatin1String("ToolBar"))) {
+		const auto& toolbars = factory()->containers(QLatin1String("ToolBar"));
+		for (auto* container : toolbars) {
 			auto* toolbar = dynamic_cast<QToolBar*>(container);
 			if (toolbar)
 				toolbar->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -1890,8 +1891,8 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect) {
-	Q_UNUSED(before);
-	Q_UNUSED(aspect);
+	Q_UNUSED(before)
+	Q_UNUSED(aspect)
 
 	//no need to react on removal of
 	// - AbstractSimpleFilter
@@ -2043,7 +2044,7 @@ void MainWin::createContextMenu(QMenu* menu) const {
 	this is called on a right click on a non-root folder in the project explorer
 */
 void MainWin::createFolderContextMenu(const Folder* folder, QMenu* menu) const {
-	Q_UNUSED(folder);
+	Q_UNUSED(folder)
 
 	//Folder provides it's own context menu. Add a separator before adding additional actions.
 	menu->addSeparator();

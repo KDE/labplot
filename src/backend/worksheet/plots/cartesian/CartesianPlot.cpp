@@ -794,7 +794,7 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 
 	//determine the first column with "x plot designation" as the x-data column for all curves to be created
 	const AbstractColumn* xColumn = nullptr;
-	for (const auto* column : columns) {
+	for (const auto* column : qAsConst(columns)) {
 		if (column->plotDesignation() == AbstractColumn::PlotDesignation::X) {
 			xColumn = column;
 			break;
@@ -814,7 +814,7 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 
 	//create curves
 	bool curvesAdded = false;
-	for (const auto* column : columns) {
+	for (const auto* column : qAsConst(columns)) {
 		if (column == xColumn)
 			continue;
 
@@ -1465,9 +1465,9 @@ void CartesianPlot::addCoordinateSystem() {
 	if (project())
 		project()->setChanged(true);
 }
-void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* cSystem) {
+void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* s) {
 	DEBUG(Q_FUNC_INFO)
-	m_coordinateSystems.append( cSystem );
+	m_coordinateSystems.append(s);
 	if (project())
 		project()->setChanged(true);
 }
@@ -1644,7 +1644,8 @@ void CartesianPlot::addBoxPlot() {
  * returns the first selected XYCurve in the plot
  */
 const XYCurve* CartesianPlot::currentCurve() const {
-	for (const auto* curve : this->children<const XYCurve>()) {
+	const auto& curves = children<const XYCurve>();
+	for (const auto* curve : curves) {
 		if (curve->graphicsItem()->isSelected())
 			return curve;
 	}
@@ -1916,7 +1917,8 @@ double CartesianPlot::cursorPos(int cursorNumber) {
  */
 int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 	int index = 0;
-	for (auto* child : children<WorksheetElement>()) {
+	const auto& children = this->children<WorksheetElement>();
+	for (auto* child : children) {
 		if (child == curve)
 			break;
 
@@ -2074,8 +2076,8 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 
 void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
 	DEBUG(Q_FUNC_INFO)
-	Q_UNUSED(parent);
-	Q_UNUSED(before);
+	Q_UNUSED(parent)
+	Q_UNUSED(before)
 	if (m_legend == child) {
 		if (m_menusInitialized)
 			addLegendAction->setEnabled(true);
@@ -3032,7 +3034,7 @@ void CartesianPlotPrivate::retransformScales() {
 	// loop over all cSystems and use the correct x/yRanges to set scales
 	DEBUG(Q_FUNC_INFO << ", number of coordinate systems = " << q->m_coordinateSystems.size())
 	i = 1; // debugging
-	for (const auto& cSystem : q->m_coordinateSystems) {
+	for (const auto& cSystem : qAsConst(q->m_coordinateSystems)) {
 		const int xRangeIndex{ dynamic_cast<CartesianCoordinateSystem*>(cSystem)->xIndex() };	// use x range of current cSystem
 		const auto xRange{ xRanges.at(xRangeIndex) };
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range is x range " << xRangeIndex+1)
@@ -3054,7 +3056,7 @@ void CartesianPlotPrivate::retransformScales() {
 		} else {
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = xRange.start();
-			for (const auto& rb : xRangeBreaks.list) {
+			for (const auto& rb : qAsConst(xRangeBreaks.list)) {
 				if (!rb.isValid())
 					break;
 
@@ -3090,7 +3092,7 @@ void CartesianPlotPrivate::retransformScales() {
 
 	// loop over all cSystems
 	i = 1; // debugging
-	for (auto cSystem : q->m_coordinateSystems) {
+	for (auto cSystem : qAsConst(q->m_coordinateSystems)) {
 		const int yRangeIndex{ dynamic_cast<CartesianCoordinateSystem*>(cSystem)->yIndex() };	// use y range of current cSystem
 		const auto yRange{ yRanges.at(yRangeIndex) };
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range is y range " << yRangeIndex+1)
@@ -3110,7 +3112,7 @@ void CartesianPlotPrivate::retransformScales() {
 		} else {
 			double sceneEndLast = plotSceneRange.start();
 			double logicalEndLast = yRange.start();
-			for (const auto& rb : yRangeBreaks.list) {
+			for (const auto& rb : qAsConst(yRangeBreaks.list)) {
 				if (!rb.isValid())
 					break;
 
@@ -3262,7 +3264,8 @@ void CartesianPlotPrivate::rangeChanged() {
 
 void CartesianPlotPrivate::xRangeFormatChanged() {
 	DEBUG(Q_FUNC_INFO)
-	for (auto* axis : q->children<Axis>()) {
+	const auto& axes = q->children<Axis>();
+	for (auto* axis : axes) {
 		//TODO: only if x range of axis's plot range is changed
 		if (axis->orientation() == Axis::Orientation::Horizontal)
 			axis->retransformTickLabelStrings();
@@ -3271,7 +3274,8 @@ void CartesianPlotPrivate::xRangeFormatChanged() {
 
 void CartesianPlotPrivate::yRangeFormatChanged() {
 	DEBUG(Q_FUNC_INFO)
-	for (auto* axis : q->children<Axis>()) {
+	const auto& axes = q->children<Axis>();
+	for (auto* axis : axes) {
 		//TODO: only if x range of axis's plot range is changed
 		if (axis->orientation() == Axis::Orientation::Vertical)
 			axis->retransformTickLabelStrings();
@@ -3510,7 +3514,8 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			}
 
 			//handle the change in y
-			start = logicalStart.y(), end = logicalEnd.y();
+			start = logicalStart.y();
+			end = logicalEnd.y();
 			switch (yRange().scale()) {
 			case RangeT::Scale::Linear: {
 				const double deltaY = (start - end);
@@ -3594,7 +3599,6 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 	const auto xRangeFormat{ xRange().format() };
 	const auto yRangeFormat{ yRange().format() };
 	const auto xRangeDateTimeFormat{ xRange().dateTimeFormat() };
-	const auto yRangeDateTimeFormat{ yRange().dateTimeFormat() };
 	const QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
@@ -3893,7 +3897,7 @@ void CartesianPlotPrivate::mouseHoverOutsideDataRect() {
 }
 
 void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
-	QVector<XYCurve*> curves = q->children<XYCurve>();
+	const auto& curves = q->children<XYCurve>();
 	for (auto* curve : curves)
 		curve->setHover(false);
 
@@ -4159,7 +4163,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	}
 
 	//serialize all children (plot area, title text label, axes and curves)
-	for (auto* elem : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
+	const auto& elements = children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* elem : elements)
 		elem->save(writer);
 
 	writer->writeEndElement(); // cartesianPlot
@@ -4756,7 +4761,8 @@ void CartesianPlot::loadThemeConfig(const KConfig& config) {
 	this->setColorPalette(config);
 
 	//load the theme for all the children
-	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
+	const auto& elements = children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : elements)
 		child->loadThemeConfig(config);
 
 	d->update(this->rect());
@@ -4771,7 +4777,8 @@ void CartesianPlot::saveTheme(KConfig &config) {
 	plotAreaElements.at(0)->saveThemeConfig(config);
 	textLabelElements.at(0)->saveThemeConfig(config);
 
-	for (auto *child : children<XYCurve>(ChildIndexFlag::IncludeHidden))
+	const auto& children = this->children<XYCurve>(ChildIndexFlag::IncludeHidden);
+	for (auto *child : children)
 		child->saveThemeConfig(config);
 }
 
