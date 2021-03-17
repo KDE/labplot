@@ -4334,17 +4334,19 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "coordinateSystem") {
 			attribs = reader->attributes();
 			// new style
-			CartesianCoordinateSystem* cSystem{ new CartesianCoordinateSystem(this) };
 			str = attribs.value("xIndex").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("xIndex").toString());
-			else
-				cSystem->setXIndex( str.toInt() );
-			str = attribs.value("yIndex").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("yIndex").toString());
 			else {
-				cSystem->setYIndex( str.toInt() );
+				CartesianCoordinateSystem* cSystem{ new CartesianCoordinateSystem(this) };
+				cSystem->setXIndex( str.toInt() );
+
+				str = attribs.value("yIndex").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("yIndex").toString());
+				else
+					cSystem->setYIndex( str.toInt() );
+
 				addCoordinateSystem(cSystem);
 			}
 
