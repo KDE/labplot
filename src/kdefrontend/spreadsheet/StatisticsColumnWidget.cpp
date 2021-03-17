@@ -29,6 +29,7 @@
 #include "StatisticsColumnWidget.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
+#include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -287,6 +288,9 @@ void StatisticsColumnWidget::showOverview() {
 }
 
 void StatisticsColumnWidget::showHistogram() {
+	WAIT_CURSOR;
+
+	//add plot
 	CartesianPlot* plot = addPlot(&m_histogramWidget);
 
 	auto axes = plot->children<Axis>();
@@ -299,15 +303,20 @@ void StatisticsColumnWidget::showHistogram() {
 
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	Histogram* histogram = new Histogram(QString());
 	plot->addChild(histogram);
 	histogram->setDataColumn(m_column);
 
+	plot->retransform();
 	m_histogramInitialized = true;
+	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showKDEPlot() {
+	WAIT_CURSOR;
+
 	//add plot
 	CartesianPlot* plot = addPlot(&m_kdePlotWidget);
 
@@ -321,6 +330,8 @@ void StatisticsColumnWidget::showKDEPlot() {
 
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}
+
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	//add normalized histogram
 	Histogram* histogram = new Histogram(QString());
@@ -357,6 +368,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 
 	//add KDE curve
 	XYCurve* curve = new XYCurve("");
+	curve->suppressRetransform(false);
 	plot->addChild(curve);
 	QPen pen = curve->linePen();
 	pen.setStyle(Qt::SolidLine);
@@ -366,10 +378,15 @@ void StatisticsColumnWidget::showKDEPlot() {
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
 
+	curve->suppressRetransform(false);
+	plot->retransform();
 	m_kdePlotInitialized = true;
+	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showQQPlot() {
+	WAIT_CURSOR;
+
 	//add plot
 	CartesianPlot* plot = addPlot(&m_qqPlotWidget);
 
@@ -382,6 +399,7 @@ void StatisticsColumnWidget::showQQPlot() {
 
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	//copy the non-nan and not masked values into a new vector
 	QVector<double> rawData;
@@ -411,6 +429,7 @@ void StatisticsColumnWidget::showQQPlot() {
 
 	//add curve with the quantiles
 	XYCurve* curve = new XYCurve("");
+	curve->suppressRetransform(true);
 	plot->addChild(curve);
 	curve->setLinePen(Qt::NoPen);
 	curve->setSymbolsStyle(Symbol::Style::Circle);
@@ -444,6 +463,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	yColumn2->setValueAt(1, y2New);
 
 	XYCurve* curve2 = new XYCurve("2");
+	curve2->suppressRetransform(true);
 	plot->addChild(curve2);
 	QPen pen = curve2->linePen();
 	pen.setStyle(Qt::SolidLine);
@@ -453,10 +473,17 @@ void StatisticsColumnWidget::showQQPlot() {
 	curve2->setXColumn(xColumn2);
 	curve2->setYColumn(yColumn2);
 
+	curve->suppressRetransform(false);
+	curve2->suppressRetransform(false);
+	plot->retransform();
 	m_qqPlotInitialized = true;
+	RESET_CURSOR;
 }
 
 void StatisticsColumnWidget::showBoxPlot() {
+	WAIT_CURSOR;
+
+	//add plot
 	CartesianPlot* plot = addPlot(&m_boxPlotWidget);
 
 	auto axes = plot->children<Axis>();
@@ -472,6 +499,7 @@ void StatisticsColumnWidget::showBoxPlot() {
 
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	BoxPlot* boxPlot = new BoxPlot(QString());
 	boxPlot->setOrientation(BoxPlot::Orientation::Vertical);
@@ -482,7 +510,9 @@ void StatisticsColumnWidget::showBoxPlot() {
 	columns << const_cast<Column*>(m_column);
 	boxPlot->setDataColumns(columns);
 
+	plot->retransform();
 	m_boxPlotInitialized = true;
+	RESET_CURSOR;
 }
 
 CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
