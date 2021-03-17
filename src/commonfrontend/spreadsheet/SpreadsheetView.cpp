@@ -314,16 +314,16 @@ void SpreadsheetView::initActions() {
 	action_set_as_yerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorPlus));
 
 	//data manipulation
-	action_add_value = new QAction(i18n("Add Value"), this);
+	action_add_value = new QAction(i18n("Add"), this);
 	action_add_value->setData(AddSubtractValueDialog::Add);
-	action_subtract_value = new QAction(i18n("Subtract Value"), this);
+	action_subtract_value = new QAction(i18n("Subtract"), this);
 	action_subtract_value->setData(AddSubtractValueDialog::Subtract);
-	action_multiply_value = new QAction(i18n("Multiply by Value"), this);
+	action_multiply_value = new QAction(i18n("Multiply"), this);
 	action_multiply_value->setData(AddSubtractValueDialog::Multiply);
-	action_divide_value = new QAction(i18n("Divide by Value"), this);
+	action_divide_value = new QAction(i18n("Divide"), this);
 	action_divide_value->setData(AddSubtractValueDialog::Divide);
-	action_drop_values = new QAction(QIcon::fromTheme(QString()), i18n("Drop Values"), this);
-	action_mask_values = new QAction(QIcon::fromTheme(QString()), i18n("Mask Values"), this);
+	action_drop_values = new QAction(QIcon::fromTheme(QString()), i18n("Delete"), this);
+	action_mask_values = new QAction(QIcon::fromTheme(QString()), i18n("Mask"), this);
 	action_reverse_columns = new QAction(QIcon::fromTheme(QString()), i18n("Reverse"), this);
 // 	action_join_columns = new QAction(QIcon::fromTheme(QString()), i18n("Join"), this);
 
