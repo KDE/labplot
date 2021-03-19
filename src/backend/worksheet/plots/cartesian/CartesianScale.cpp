@@ -99,11 +99,9 @@ public:
 
 	bool map(double *value) const override {
 		CHECK(m_c > 0)
+		CHECK(*value != 0)
 
-		if (*value > 0.0)
-			*value = log(*value)/log(m_c) * m_b + m_a;
-		else
-			*value = log(qAbs(*value))/log(m_c) * m_b + m_a;
+		*value = log(qAbs(*value))/log(m_c) * m_b + m_a;
 
 		return true;
 	}
