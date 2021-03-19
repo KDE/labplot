@@ -72,7 +72,9 @@ ExportSpreadsheetDialog::ExportSpreadsheetDialog(QWidget* parent) : QDialog(pare
 
 	ui->cbFormat->addItem("ASCII", static_cast<int>(Format::ASCII));
 	ui->cbFormat->addItem("LaTeX", static_cast<int>(Format::LaTeX));
+#ifdef HAVE_FITS
 	ui->cbFormat->addItem("FITS", static_cast<int>(Format::FITS));
+#endif
 
 	const QStringList& drivers = QSqlDatabase::drivers();
 	if (drivers.contains(QLatin1String("QSQLITE")) || drivers.contains(QLatin1String("QSQLITE3")))
@@ -374,7 +376,11 @@ void ExportSpreadsheetDialog::selectFile() {
  */
 void ExportSpreadsheetDialog::formatChanged(int index) {
 	QStringList extensions;
-	extensions << ".txt" << ".tex" << ".fits" << ".db";
+    extensions << ".txt" << ".tex";
+#ifdef HAVE_FITS
+    extensions<< ".fits";
+#endif
+    extensions << ".db";
 	QString path = ui->leFileName->text();
 	int i = path.indexOf(".");
 	if (index != -1) {

@@ -3198,8 +3198,9 @@ void SpreadsheetView::selectionChanged(const QItemSelection &selected, const QIt
 bool SpreadsheetView::exportView() {
 	auto* dlg = new ExportSpreadsheetDialog(this);
 	dlg->setFileName(m_spreadsheet->name());
-
+#ifdef HAVE_FITS
 	dlg->setExportTo(QStringList() << i18n("FITS image") << i18n("FITS table"));
+#endif
 	for (int i = 0; i < m_spreadsheet->columnCount(); ++i) {
 		if (m_spreadsheet->column(i)->columnMode() != AbstractColumn::ColumnMode::Numeric) {
 			dlg->setExportToImage(false);
@@ -3232,9 +3233,11 @@ bool SpreadsheetView::exportView() {
 			break;
 		}
 		case ExportSpreadsheetDialog::Format::FITS: {
+#ifdef HAVE_FITS
 			const int exportTo = dlg->exportToFits();
 			const bool commentsAsUnits = dlg->commentsAsUnitsFits();
 			exportToFits(path, exportTo, commentsAsUnits);
+#endif
 			break;
 		}
 		case ExportSpreadsheetDialog::Format::SQLite:
