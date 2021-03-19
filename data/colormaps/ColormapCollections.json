@@ -30,5 +30,25 @@
 		<br><br>
 		One of the most fundamental features of scientific visualization is the process of mapping scalar values to colors. This process allows us to view scalar fields by coloring surfaces and volumes. Unfortunately, the majority of scientific visualization tools still use a color map that is famous for its ineffectiveness: the rainbow color map. This color map, which naively sweeps through the most saturated colors, is well known for its ability to obscure data, introduce artifacts, and confuse users. Although many alternate color maps have been proposed, none have achieved widespread adoption by the visualization community for scientific visualization. This paper explores the use of diverging color maps (sometimes also called ratio, bipolar, or double-ended color maps) for use in scientific visualization, provides a diverging color map that generally performs well in scientific visualization applications, and presents an algorithm that allows users to easily generate their own customized color maps.",
 		"url" : "https://www.kennethmoreland.com/color-maps/"
+	},
+	{
+		"name" : "Scientific Colour Maps (Sequential)",
+		"description": "Suite of scientific, colour-vision deficiency friendly and perceptually uniform colour maps (<a href=\"http://www.fabiocrameri.ch/colourmaps\">source</a>) that prevent both excluding readers and significant visual errors, which would otherwise visually distort the underlying data and mislead the reader.",
+		"url" : "http://www.fabiocrameri.ch/colourmaps.php"
+	},
+	{
+		"name" : "Scientific Colour Maps (Diverging)",
+		"description": "Suite of scientific, colour-vision deficiency friendly and perceptually uniform colour maps (<a href=\"http://www.fabiocrameri.ch/colourmaps\">source</a>) that prevent both excluding readers and significant visual errors, which would otherwise visually distort the underlying data and mislead the reader.",
+		"url" : "http://www.fabiocrameri.ch/colourmaps.php"
+	},
+	{
+		"name" : "Scientific Colour Maps (Multi-sequential)",
+		"description": "Suite of scientific, colour-vision deficiency friendly and perceptually uniform colour maps (<a href=\"http://www.fabiocrameri.ch/colourmaps\">source</a>) that prevent both excluding readers and significant visual errors, which would otherwise visually distort the underlying data and mislead the reader.",
+		"url" : "http://www.fabiocrameri.ch/colourmaps.php"
+	},
+	{
+		"name" : "Scientific Colour Maps (Cyclic)",
+		"description": "Suite of scientific, colour-vision deficiency friendly and perceptually uniform colour maps (<a href=\"http://www.fabiocrameri.ch/colourmaps\">source</a>) that prevent both excluding readers and significant visual errors, which would otherwise visually distort the underlying data and mislead the reader.",
+		"url" : "http://www.fabiocrameri.ch/colourmaps.php"
 	}
 ]
