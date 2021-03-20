@@ -1412,9 +1412,11 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	case Origin::GraphAxis::Log2:
 		axis->setScale(RangeT::Scale::Log2);
 		break;
+	case Origin::GraphAxis::Reciprocal:
+		axis->setScale(RangeT::Scale::Inverse);
+		break;
 	case Origin::GraphAxis::Probability:
 	case Origin::GraphAxis::Probit:
-	case Origin::GraphAxis::Reciprocal:
 	case Origin::GraphAxis::OffsetReciprocal:
 	case Origin::GraphAxis::Logit:
 		//TODO: set if implemented
