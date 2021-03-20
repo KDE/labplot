@@ -514,6 +514,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::majorTicksTypeChanged, this, &AxisDock::axisMajorTicksTypeChanged);
 	connect(m_axis, &Axis::majorTicksNumberChanged, this, &AxisDock::axisMajorTicksNumberChanged);
 	connect(m_axis, &Axis::majorTicksSpacingChanged, this, &AxisDock::axisMajorTicksSpacingChanged);
+	connect(m_axis, &Axis::majorTicksColumnChanged, this, &AxisDock::axisMajorTicksColumnChanged);
 	connect(m_axis, &Axis::majorTicksPenChanged, this, &AxisDock::axisMajorTicksPenChanged);
 	connect(m_axis, &Axis::majorTicksLengthChanged, this, &AxisDock::axisMajorTicksLengthChanged);
 	connect(m_axis, &Axis::majorTicksOpacityChanged, this, &AxisDock::axisMajorTicksOpacityChanged);
@@ -521,6 +522,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::minorTicksTypeChanged, this, &AxisDock::axisMinorTicksTypeChanged);
 	connect(m_axis, &Axis::minorTicksNumberChanged, this, &AxisDock::axisMinorTicksNumberChanged);
 	connect(m_axis, &Axis::minorTicksIncrementChanged, this, &AxisDock::axisMinorTicksSpacingChanged);
+	connect(m_axis, &Axis::minorTicksColumnChanged, this, &AxisDock::axisMinorTicksColumnChanged);
 	connect(m_axis, &Axis::minorTicksPenChanged, this, &AxisDock::axisMinorTicksPenChanged);
 	connect(m_axis, &Axis::minorTicksLengthChanged, this, &AxisDock::axisMinorTicksLengthChanged);
 	connect(m_axis, &Axis::minorTicksOpacityChanged, this, &AxisDock::axisMinorTicksOpacityChanged);
@@ -1511,7 +1513,6 @@ void AxisDock::labelsTextTypeChanged(int index) {
 		return; //don't do anything when we're addItem()'ing strings and the axis is not available yet
 
 	auto type = Axis::LabelsTextType(index);
-	qDebug()<<"type " << index;
 	if (type == Axis::LabelsTextType::PositionValues) {
 		ui.lLabelsTextColumn->hide();
 		cbLabelsTextColumn->hide();
@@ -1522,7 +1523,6 @@ void AxisDock::labelsTextTypeChanged(int index) {
 		const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
-		qDebug()<<"numeric " << numeric;
 		ui.lLabelsFormat->setVisible(numeric);
 		ui.cbLabelsFormat->setVisible(numeric);
 		ui.chkLabelsAutoPrecision->setVisible(numeric);
@@ -1949,21 +1949,21 @@ void AxisDock::axisMajorTicksNumberChanged(int number) {
 	m_initializing = false;
 }
 void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
-	if (plot) {
-		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
-		if (numeric)
-			ui.sbMajorTicksSpacingNumeric->setValue(increment);
-		else {
-			dtsbMajorTicksIncrement->setValue(increment);
-		}
-	}
-	m_initializing = false;
+	if (numeric)
+		ui.sbMajorTicksSpacingNumeric->setValue(increment);
+	else
+		dtsbMajorTicksIncrement->setValue(increment);
+}
+void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
+	Lock lock(m_initializing);
+	cbMajorTicksColumn->setColumn(column, m_axis->majorTicksColumnPath());
 }
 void AxisDock::axisMajorTicksPenChanged(const QPen& pen) {
 	m_initializing = true;
@@ -2000,21 +2000,21 @@ void AxisDock::axisMinorTicksNumberChanged(int number) {
 	m_initializing = false;
 }
 void AxisDock::axisMinorTicksSpacingChanged(qreal increment) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex {cSystem->yIndex()};
-	if (plot) {
-		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
-		if (numeric)
-			ui.sbMinorTicksSpacingNumeric->setValue(increment);
-		else {
-			dtsbMinorTicksIncrement->setValue(increment);
-		}
-	}
-	m_initializing = false;
+	if (numeric)
+		ui.sbMinorTicksSpacingNumeric->setValue(increment);
+	else
+		dtsbMinorTicksIncrement->setValue(increment);
+}
+void AxisDock::axisMinorTicksColumnChanged(const AbstractColumn* column) {
+	Lock lock(m_initializing);
+	cbMinorTicksColumn->setColumn(column, m_axis->minorTicksColumnPath());
 }
 void AxisDock::axisMinorTicksPenChanged(const QPen& pen) {
 	m_initializing = true;

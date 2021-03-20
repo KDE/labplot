@@ -182,6 +182,7 @@ private slots:
 	void axisMajorTicksTypeChanged(Axis::TicksType);
 	void axisMajorTicksNumberChanged(int);
 	void axisMajorTicksSpacingChanged(qreal);
+	void axisMajorTicksColumnChanged(const AbstractColumn*);
 	void axisMajorTicksPenChanged(const QPen&);
 	void axisMajorTicksLengthChanged(qreal);
 	void axisMajorTicksOpacityChanged(qreal);
@@ -189,6 +190,7 @@ private slots:
 	void axisMinorTicksTypeChanged(Axis::TicksType);
 	void axisMinorTicksNumberChanged(int);
 	void axisMinorTicksSpacingChanged(qreal);
+	void axisMinorTicksColumnChanged(const AbstractColumn*);
 	void axisMinorTicksPenChanged(const QPen&);
 	void axisMinorTicksLengthChanged(qreal);
 	void axisMinorTicksOpacityChanged(qreal);
