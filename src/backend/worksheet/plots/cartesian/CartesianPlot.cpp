@@ -2791,10 +2791,16 @@ void CartesianPlot::zoom(bool x, bool zoom_in) {
 		range.extend(diff*diff/4.);
 		break;
 	}
-	case RangeT::Scale::Square:
+	case RangeT::Scale::Square: {
 		const double diff = (end*end - start*start) * (factor - 1.);
 		range.extend( sqrt(qAbs(diff/2.)) );
 		break;
+	}
+	case RangeT::Scale::Inverse: {
+		const double diff = (1./start - 1./end) * (factor - 1.);
+		range.extend( 1./qAbs(diff/2.) );
+		break;
+	}
 	}
 
 	// make nice again
@@ -2859,6 +2865,10 @@ void CartesianPlot::shift(bool x, bool leftOrDown) {
 	case RangeT::Scale::Square:
 		offset = (end*end - start*start) * factor;
 		range += sqrt(qAbs(offset));
+		break;
+	case RangeT::Scale::Inverse:
+		offset = (1./start - 1./end) * factor;
+		range += 1./qAbs(offset);
 		break;
 	}
 
@@ -3039,7 +3049,7 @@ void CartesianPlotPrivate::retransformScales() {
 		const auto xRange{ xRanges.at(xRangeIndex) };
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range is x range " << xRangeIndex+1)
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString())
-		//check ranges for nonlinear scales
+		//TODO: check ranges for nonlinear scales
 		if (xRange.scale() != RangeT::Scale::Linear)
 			checkXRange();
 
@@ -3097,7 +3107,7 @@ void CartesianPlotPrivate::retransformScales() {
 		const auto yRange{ yRanges.at(yRangeIndex) };
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range is y range " << yRangeIndex+1)
 		DEBUG(Q_FUNC_INFO << ", yrange = " << yRange.toStdString())
-		//check ranges for nonlinear scales
+		//TODO: check ranges for nonlinear scales
 		if (yRange.scale() != RangeT::Scale::Linear)
 			checkYRange();
 
@@ -3165,6 +3175,7 @@ void CartesianPlotPrivate::retransformScales() {
 
 	//adjust all auto-scale axes
 	for (auto* axis : q->children<Axis>()) {
+		DEBUG(Q_FUNC_INFO << ", auto-scale axis " << axis->title())
 		// use ranges of axis
 		const auto* cSystem{ q->coordinateSystem(axis->coordinateSystemIndex()) };
 		const auto xRange{ xRanges.at(cSystem->xIndex()) };
@@ -3286,6 +3297,9 @@ void CartesianPlotPrivate::yRangeFormatChanged() {
  * don't allow any negative values for the x range when log or sqrt scalings are used
  */
 void CartesianPlotPrivate::checkXRange() {
+	//TODO: disabled for testing (negative values are already checked)
+	return;
+
 	double min = 0.01;
 
 	//TODO: refactor
@@ -3302,6 +3316,9 @@ void CartesianPlotPrivate::checkXRange() {
  * don't allow any negative values for the y range when log or sqrt scalings are used
  */
 void CartesianPlotPrivate::checkYRange() {
+	//TODO: disabled for testing (negative values are already checked)
+	return;
+
 	double min = 0.01;
 
 	//TODO: refactor
@@ -3315,15 +3332,28 @@ void CartesianPlotPrivate::checkYRange() {
 }
 
 CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double> &sceneRange, const Range<double> &logicalRange) {
-	DEBUG( Q_FUNC_INFO << ", scene start/end = " << sceneRange.toStdString() << ", logical start/end = " << logicalRange.toStdString() );
+	DEBUG( Q_FUNC_INFO << ", scene range = " << sceneRange.toStdString() << ", logical range = " << logicalRange.toStdString() );
 // 	Interval<double> interval (logicalStart-0.01, logicalEnd+0.01); //TODO: move this to CartesianScale
 	//TODO
 	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
 // 	Interval<double> interval (logicalStart, logicalEnd);
-	if (scale == RangeT::Scale::Linear)
+	//TODO: SQUARE, etc.
+	switch (scale) {
+	case RangeT::Scale::Linear:
 		return CartesianScale::createLinearScale(range, sceneRange, logicalRange);
-	else
+	case RangeT::Scale::Log10:
+	case RangeT::Scale::Log2:
+	case RangeT::Scale::Ln:
 		return CartesianScale::createLogScale(range, sceneRange, logicalRange, scale);
+	case RangeT::Scale::Sqrt:
+		return CartesianScale::createSqrtScale(range, sceneRange, logicalRange);
+	case RangeT::Scale::Square:
+	case RangeT::Scale::Inverse:
+		//TODO
+		;
+	}
+
+	return nullptr;
 }
 
 /*!
@@ -3505,12 +3535,20 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 				xRange().translate(delta*delta);
 				break;
 			}
-			case RangeT::Scale::Square:
+			case RangeT::Scale::Square: {
 				if (end <= start)
 					break;
-				const double delta = start*start - end*end;
+				const double delta = end*end - start*start;
 				xRange().translate(sqrt(delta));
 				break;
+			}
+			case RangeT::Scale::Inverse: {
+				if (start == 0. || end == 0. || end <= start)
+					break;
+				const double delta = 1./start - 1./end;
+				xRange().translate(1./delta);
+				break;
+			}
 			}
 
 			//handle the change in y
@@ -3550,12 +3588,20 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 				yRange().translate(delta*delta);
 				break;
 			}
-			case RangeT::Scale::Square:
+			case RangeT::Scale::Square: {
 				if (end <= start)
 					break;
-				const double delta = start*start - end*end;
+				const double delta = end*end - start*start;
 				yRange().translate(sqrt(delta));
 				break;
+			}
+			case RangeT::Scale::Inverse: {
+				if (start == 0. || end == 0. || end <= start)
+					break;
+				const double delta = 1./start - 1./end;
+				yRange().translate(1./delta);
+				break;
+			}
 			}
 
 			q->setUndoAware(false);

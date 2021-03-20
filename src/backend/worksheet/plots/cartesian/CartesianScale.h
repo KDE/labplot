@@ -5,7 +5,7 @@
     Description          : Cartesian coordinate system for plots.
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2016 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2020-2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -38,11 +38,12 @@ class CartesianScale {
 public:
 	virtual ~CartesianScale();
 
-	//TODO: see Axis::Scale or RangeT::Scale
-	enum class Type {Linear, Log};
+	//TODO: see/use RangeT::Scale
+	enum class Type {Linear, Log, Sqrt};
 
 	static CartesianScale* createLinearScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange);
 	static CartesianScale* createLogScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange, RangeT::Scale);
+	static CartesianScale* createSqrtScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange);
 
 	virtual void getProperties(Type *type = nullptr, Range<double> *range = nullptr, double *a = nullptr, double *b = nullptr, double *c = nullptr) const;
 

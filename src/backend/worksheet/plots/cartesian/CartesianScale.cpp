@@ -57,6 +57,7 @@ void CartesianScale::getProperties(Type *type, Range<double> *range,
 /**
  * \class CartesianCoordinateSystem::LinearScale
  * \brief implementation of a linear scale for cartesian coordinate systems
+ * y =  b * x + a. a - offset, b - gradient
  */
 class LinearScale : public CartesianScale {
 public:
@@ -86,6 +87,7 @@ public:
 /**
  * \class CartesianCoordinateSystem::LogScale
  * \brief implementation of a logarithmic scale for cartesian coordinate systems
+ * y = TODO. a - offset, b - scaleFactor, c - base
  */
 class LogScale : public CartesianScale {
 public:
@@ -117,6 +119,36 @@ public:
 	}
 };
 
+/**
+ * \class CartesianCoordinateSystem::SqrtScale
+ * \brief implementation of a square-root scale for cartesian coordinate systems
+ * y = TODO. a - offset, b - scaleFactor
+ */
+class SqrtScale : public CartesianScale {
+public:
+	SqrtScale(const Range<double> &range, double offset, double scaleFactor)
+		: CartesianScale(Type::Sqrt, range, offset, scaleFactor, 0) {
+			Q_ASSERT(scaleFactor != 0.0);
+	}
+
+	~SqrtScale() override = default;
+
+	bool map(double *value) const override {
+		*value = sqrt(qAbs(*value)) * m_b + m_a;
+		return true;
+	}
+
+	bool inverseMap(double *value) const override {
+		CHECK(m_b != 0)
+
+		*value = pow((*value - m_a) / m_b, 2);
+		return true;
+	}
+	int direction() const override {
+		return m_b < 0 ? -1 : 1;
+	}
+};
+
 
 /***************************************************************/
 
@@ -135,17 +167,18 @@ CartesianScale* CartesianScale::createLinearScale(const Range<double> &range,
 CartesianScale* CartesianScale::createLogScale(const Range<double> &range,
 		const Range<double> &sceneRange, const Range<double> &logicalRange, RangeT::Scale scale) {
 
+	if (logicalRange.start() <= 0.0 || logicalRange.end() <= 0.0 || logicalRange.isZero()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: invalid range for log scale : " << logicalRange.toStdString())
+		return nullptr;
+	}
+
 	double base;
 	if (scale == RangeT::Scale::Log10)
 		base = 10.0;
 	else if (scale == RangeT::Scale::Log2)
 		base = 2.0;
-	else
+	else	// RangeT::Scale::Ln
 		base = M_E;
-
-
-	if (logicalRange.start() <= 0.0 || logicalRange.end() <= 0.0 || logicalRange.isZero())
-		return nullptr;
 
 	const double lDiff = (log(logicalRange.end()) - log(logicalRange.start())) / log(base);
 	double b = sceneRange.size() / lDiff;
@@ -154,3 +187,18 @@ CartesianScale* CartesianScale::createLogScale(const Range<double> &range,
 	return new LogScale(range, a, b, base);
 }
 
+CartesianScale* CartesianScale::createSqrtScale(const Range<double> &range,
+		const Range<double> &sceneRange, const Range<double> &logicalRange) {
+
+	if (logicalRange.start() < 0.0 || logicalRange.end() < 0.0 || logicalRange.isZero()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: invalid range for sqrt scale : " << logicalRange.toStdString())
+		return nullptr;
+	}
+
+	//TODO: check
+	const double lDiff = sqrt(logicalRange.end()) - sqrt(logicalRange.start());
+	double b = sceneRange.size() / lDiff;
+	double a = sceneRange.start() - b * sqrt(logicalRange.start());
+
+	return new SqrtScale(range, a, b);
+}

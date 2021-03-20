@@ -28,5 +28,5 @@
 
 #include "Range.h"
 
-const QStringList RangeT::scaleNames{ i18n("Linear"), i18n("Log10"), i18n("Log2"), i18n("Ln"), i18n("Sqrt"), i18n("Square") };
+const QStringList RangeT::scaleNames{ i18n("Linear"), i18n("Log10"), i18n("Log2"), i18n("Ln"), i18n("Sqrt"), i18n("Square"), i18n("Inverse") };
 

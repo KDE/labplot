@@ -1224,9 +1224,15 @@ void AxisPrivate::retransformTicks() {
 			break;
 		case RangeT::Scale::Square:
 			majorTicksIncrement = end*end - start*start;
+			break;
+		case RangeT::Scale::Inverse:
+			if (start != 0. && end != 0.)
+				majorTicksIncrement = 1./start - 1./end;
+			break;
 		}
 		if (majorTicksNumber > 1)
 			majorTicksIncrement /= majorTicksNumber - 1;
+		DEBUG(Q_FUNC_INFO << ", major ticks by number. increment = " << majorTicksIncrement << " number = " <<  majorTicksNumber)
 		break;
 	case Axis::TicksType::Spacing:
 		//the increment of the major ticks is given -> determine the number
@@ -1254,6 +1260,11 @@ void AxisPrivate::retransformTicks() {
 			break;
 		case RangeT::Scale::Square:
 			tmpMajorTicksNumber = qRound( (end*end - start*start) / majorTicksIncrement + 1 );
+			break;
+		case RangeT::Scale::Inverse:
+			if (start != 0. && end != 0.)
+				tmpMajorTicksNumber = qRound( (1./start - 1./end) / majorTicksIncrement + 1 );
+			break;
 		}
 		break;
 	case Axis::TicksType::CustomColumn:
@@ -1332,6 +1343,10 @@ void AxisPrivate::retransformTicks() {
 			case RangeT::Scale::Square:
 				majorTickPos = sqrt(start*start + majorTicksIncrement * iMajor);
 				nextMajorTickPos = sqrt(start*start + majorTicksIncrement * (iMajor+1));
+				break;
+			case RangeT::Scale::Inverse:
+				majorTickPos = 1./(1./start + majorTicksIncrement * iMajor);
+				nextMajorTickPos = 1./(1./start + majorTicksIncrement * (iMajor+1));
 				break;
 			}
 		} else {	// custom column

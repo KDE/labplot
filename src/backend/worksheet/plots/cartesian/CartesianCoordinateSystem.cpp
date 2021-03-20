@@ -191,7 +191,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 		for (const auto* yScale : d->yScales) {
 			if (!yScale) continue;
 
-			for (int i = startIndex; i <= endIndex; ++i) {
+			for (int i = startIndex; i <= endIndex; i++) {
 				const QPointF& point = logicalPoints.at(i);
 
 				double x = point.x(), y = point.y();
@@ -215,7 +215,6 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 					//TODO: check
 					const int indexX = qRound((x - xPage) / minLogicalDiffX);
 					const int indexY = qRound((y - yPage) / minLogicalDiffY);
-					//DEBUG()
 					if (scenePointsUsed.at(indexX).at(indexY))
 						continue;
 
@@ -519,28 +518,24 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 	if (noPageClippingY)
 		logicalPoint.setY(pageRect.y() + pageRect.height()/2.);
 
-	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	if (noPageClipping || limit || pageRect.contains(logicalPoint)) {
 		double x = logicalPoint.x();
 		double y = logicalPoint.y();
+		DEBUG(Q_FUNC_INFO << ", x/y = " << x << " " << y)
 
 		for (const auto* xScale : d->xScales) {
-			if (!xScale) continue;
-
+			if (!xScale)
+				continue;
 			for (const auto* yScale : d->yScales) {
-				if (!yScale) continue;
-
-				if (!xScale->inverseMap(&x))
+				if (!yScale)
 					continue;
 
-				if (!yScale->inverseMap(&y))
+				if (!xScale->inverseMap(&x) || !yScale->inverseMap(&y))
 					continue;
 
-				if (!xScale->contains(x))
-					continue;
-
-				if (!yScale->contains(y))
+				if (!xScale->contains(x) || !yScale->contains(y))
 					continue;
 
 				result.setX(x);
@@ -564,9 +559,13 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 int CartesianCoordinateSystem::xDirection() const {
 	if (d->xScales.isEmpty())
 		return 1;
+	if (!d->xScales.at(0)) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
+		return 1;
+	}
 
 	return d->xScales.at(0)->direction();
-}
+	}
 
 /**
  * \brief Determine the vertical direction relative to the page.
