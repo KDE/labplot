@@ -83,6 +83,11 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	dtsbMinorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
 	layout->addWidget(dtsbMinorTicksIncrement, 20, 2);
 
+	//"Labels"-tab
+	layout = static_cast<QGridLayout*>(ui.tabLabels->layout());
+	cbLabelsTextColumn = new TreeViewComboBox(ui.tabLabels);
+	layout->addWidget(cbLabelsTextColumn, 7, 2, 1, 2);
+
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -212,6 +217,10 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 			this, &AxisDock::labelsOffsetChanged);
 	connect(ui.sbLabelsRotation, QOverload<int>::of(&QSpinBox::valueChanged),
 			this, &AxisDock::labelsRotationChanged);
+	connect(ui.cbLabelsTextType, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			this, &AxisDock::labelsTextTypeChanged);
+	connect(cbLabelsTextColumn, &TreeViewComboBox::currentModelIndexChanged,
+			this, &AxisDock::labelsTextColumnChanged);
 	connect(ui.kfrLabelsFont, &KFontRequester::fontSelected, this, &AxisDock::labelsFontChanged);
 	connect(ui.kcbLabelsFontColor, &KColorButton::changed, this, &AxisDock::labelsFontColorChanged);
 	connect(ui.cbLabelsBackgroundType, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -404,6 +413,8 @@ void AxisDock::init() {
 	ui.cbLabelsPosition->addItem(i18n("No labels"));
 	ui.cbLabelsPosition->addItem(i18n("Top"));
 	ui.cbLabelsPosition->addItem(i18n("Bottom"));
+	ui.cbLabelsTextType->addItem(i18n("Position values"));
+	ui.cbLabelsTextType->addItem(i18n("Custom column"));
 
 	// see Axis::labelsFormatToIndex() and Axis::indexToLabelsFormat()
 	ui.cbLabelsFormat->addItem( i18n("Decimal notation") );
@@ -424,12 +435,14 @@ void AxisDock::setModel() {
 	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Column};
 	cbMajorTicksColumn->setTopLevelClasses(list);
 	cbMinorTicksColumn->setTopLevelClasses(list);
+	cbLabelsTextColumn->setTopLevelClasses(list);
 
 	list = {AspectType::Column};
 	m_aspectTreeModel->setSelectableAspects(list);
 
 	cbMajorTicksColumn->setModel(m_aspectTreeModel);
 	cbMinorTicksColumn->setModel(m_aspectTreeModel);
+	cbLabelsTextColumn->setModel(m_aspectTreeModel);
 }
 
 /*!
@@ -456,6 +469,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 		ui.leComment->setText(m_axis->comment());
 		this->setModelIndexFromColumn(cbMajorTicksColumn, m_axis->majorTicksColumn());
 		this->setModelIndexFromColumn(cbMinorTicksColumn, m_axis->minorTicksColumn());
+		this->setModelIndexFromColumn(cbLabelsTextColumn, m_axis->labelsTextColumn());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
@@ -465,6 +479,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 		ui.leComment->setText(QString());
 		cbMajorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
+		cbLabelsTextColumn->setCurrentModelIndex(QModelIndex());
 	}
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -499,6 +514,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::majorTicksTypeChanged, this, &AxisDock::axisMajorTicksTypeChanged);
 	connect(m_axis, &Axis::majorTicksNumberChanged, this, &AxisDock::axisMajorTicksNumberChanged);
 	connect(m_axis, &Axis::majorTicksSpacingChanged, this, &AxisDock::axisMajorTicksSpacingChanged);
+	connect(m_axis, &Axis::majorTicksColumnChanged, this, &AxisDock::axisMajorTicksColumnChanged);
 	connect(m_axis, &Axis::majorTicksPenChanged, this, &AxisDock::axisMajorTicksPenChanged);
 	connect(m_axis, &Axis::majorTicksLengthChanged, this, &AxisDock::axisMajorTicksLengthChanged);
 	connect(m_axis, &Axis::majorTicksOpacityChanged, this, &AxisDock::axisMajorTicksOpacityChanged);
@@ -506,6 +522,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::minorTicksTypeChanged, this, &AxisDock::axisMinorTicksTypeChanged);
 	connect(m_axis, &Axis::minorTicksNumberChanged, this, &AxisDock::axisMinorTicksNumberChanged);
 	connect(m_axis, &Axis::minorTicksIncrementChanged, this, &AxisDock::axisMinorTicksSpacingChanged);
+	connect(m_axis, &Axis::minorTicksColumnChanged, this, &AxisDock::axisMinorTicksColumnChanged);
 	connect(m_axis, &Axis::minorTicksPenChanged, this, &AxisDock::axisMinorTicksPenChanged);
 	connect(m_axis, &Axis::minorTicksLengthChanged, this, &AxisDock::axisMinorTicksLengthChanged);
 	connect(m_axis, &Axis::minorTicksOpacityChanged, this, &AxisDock::axisMinorTicksOpacityChanged);
@@ -518,6 +535,8 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::labelsPositionChanged, this, &AxisDock::axisLabelsPositionChanged);
 	connect(m_axis, &Axis::labelsOffsetChanged, this, &AxisDock::axisLabelsOffsetChanged);
 	connect(m_axis, &Axis::labelsRotationAngleChanged, this, &AxisDock::axisLabelsRotationAngleChanged);
+	connect(m_axis, &Axis::labelsTextTypeChanged, this, &AxisDock::axisLabelsTextTypeChanged);
+	connect(m_axis, &Axis::labelsTextColumnChanged, this, &AxisDock::axisLabelsTextColumnChanged);
 	connect(m_axis, &Axis::labelsFontChanged, this, &AxisDock::axisLabelsFontChanged);
 	connect(m_axis, &Axis::labelsColorChanged, this, &AxisDock::axisLabelsFontColorChanged);
 	connect(m_axis, &Axis::labelsBackgroundTypeChanged, this, &AxisDock::axisLabelsBackgroundTypeChanged);
@@ -1489,6 +1508,101 @@ void AxisDock::labelsRotationChanged(int value) {
 		axis->setLabelsRotationAngle(value);
 }
 
+void AxisDock::labelsTextTypeChanged(int index) {
+	if (!m_axis)
+		return; //don't do anything when we're addItem()'ing strings and the axis is not available yet
+
+	auto type = Axis::LabelsTextType(index);
+	if (type == Axis::LabelsTextType::PositionValues) {
+		ui.lLabelsTextColumn->hide();
+		cbLabelsTextColumn->hide();
+
+		//TODO: duplication of the code in load()
+		const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
+		const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
+		const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
+		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+		ui.lLabelsFormat->setVisible(numeric);
+		ui.cbLabelsFormat->setVisible(numeric);
+		ui.chkLabelsAutoPrecision->setVisible(numeric);
+		ui.lLabelsPrecision->setVisible(numeric);
+		ui.sbLabelsPrecision->setVisible(numeric);
+		ui.lLabelsDateTimeFormat->setVisible(!numeric);
+		ui.cbLabelsDateTimeFormat->setVisible(!numeric);
+	} else {
+		ui.lLabelsTextColumn->show();
+		cbLabelsTextColumn->show();
+		labelsTextColumnChanged(cbLabelsTextColumn->currentModelIndex());
+	}
+
+	if (m_initializing)
+		return;
+
+	for (auto* axis : m_axesList)
+		axis->setLabelsTextType(type);
+}
+
+void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+
+	if (column) {
+		//depending on data format of the column (numeric vs. datetime vs. text),
+		//show/hide the corresponding widgets for the tick labels format
+		switch (column->columnMode()) {
+		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::BigInt:
+			ui.lLabelsFormat->show();
+			ui.cbLabelsFormat->show();
+			ui.chkLabelsAutoPrecision->show();
+			ui.lLabelsPrecision->show();
+			ui.sbLabelsPrecision->show();
+			ui.lLabelsDateTimeFormat->hide();
+			ui.cbLabelsDateTimeFormat->hide();
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			ui.lLabelsFormat->hide();
+			ui.cbLabelsFormat->hide();
+			ui.chkLabelsAutoPrecision->hide();
+			ui.lLabelsPrecision->hide();
+			ui.sbLabelsPrecision->hide();
+			ui.lLabelsDateTimeFormat->hide();
+			ui.cbLabelsDateTimeFormat->hide();
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+			ui.lLabelsFormat->hide();
+			ui.cbLabelsFormat->hide();
+			ui.chkLabelsAutoPrecision->hide();
+			ui.lLabelsPrecision->hide();
+			ui.sbLabelsPrecision->hide();
+			ui.lLabelsDateTimeFormat->show();
+			ui.cbLabelsDateTimeFormat->show();
+			break;
+		}
+	} else {
+		auto type = Axis::LabelsTextType(ui.cbLabelsTextType->currentIndex());
+		if (type == Axis::LabelsTextType::CustomValues) {
+			ui.lLabelsFormat->hide();
+			ui.cbLabelsFormat->hide();
+			ui.chkLabelsAutoPrecision->hide();
+			ui.lLabelsPrecision->hide();
+			ui.sbLabelsPrecision->hide();
+			ui.lLabelsDateTimeFormat->hide();
+			ui.cbLabelsDateTimeFormat->hide();
+		}
+	}
+
+	if (m_initializing)
+		return;
+
+	for (auto* axis : m_axesList)
+		axis->setLabelsTextColumn(column);
+}
+
 void AxisDock::labelsPrefixChanged() {
 	if (m_initializing)
 		return;
@@ -1835,21 +1949,21 @@ void AxisDock::axisMajorTicksNumberChanged(int number) {
 	m_initializing = false;
 }
 void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
-	if (plot) {
-		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
-		if (numeric)
-			ui.sbMajorTicksSpacingNumeric->setValue(increment);
-		else {
-			dtsbMajorTicksIncrement->setValue(increment);
-		}
-	}
-	m_initializing = false;
+	if (numeric)
+		ui.sbMajorTicksSpacingNumeric->setValue(increment);
+	else
+		dtsbMajorTicksIncrement->setValue(increment);
+}
+void AxisDock::axisMajorTicksColumnChanged(const AbstractColumn* column) {
+	Lock lock(m_initializing);
+	cbMajorTicksColumn->setColumn(column, m_axis->majorTicksColumnPath());
 }
 void AxisDock::axisMajorTicksPenChanged(const QPen& pen) {
 	m_initializing = true;
@@ -1886,21 +2000,21 @@ void AxisDock::axisMinorTicksNumberChanged(int number) {
 	m_initializing = false;
 }
 void AxisDock::axisMinorTicksSpacingChanged(qreal increment) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex {cSystem->yIndex()};
-	if (plot) {
-		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
-		if (numeric)
-			ui.sbMinorTicksSpacingNumeric->setValue(increment);
-		else {
-			dtsbMinorTicksIncrement->setValue(increment);
-		}
-	}
-	m_initializing = false;
+	if (numeric)
+		ui.sbMinorTicksSpacingNumeric->setValue(increment);
+	else
+		dtsbMinorTicksIncrement->setValue(increment);
+}
+void AxisDock::axisMinorTicksColumnChanged(const AbstractColumn* column) {
+	Lock lock(m_initializing);
+	cbMinorTicksColumn->setColumn(column, m_axis->minorTicksColumnPath());
 }
 void AxisDock::axisMinorTicksPenChanged(const QPen& pen) {
 	m_initializing = true;
@@ -1954,6 +2068,16 @@ void AxisDock::axisLabelsOffsetChanged(double offset) {
 void AxisDock::axisLabelsRotationAngleChanged(qreal rotation) {
 	m_initializing = true;
 	ui.sbLabelsRotation->setValue(rotation);
+	m_initializing = false;
+}
+void AxisDock::axisLabelsTextTypeChanged(Axis::LabelsTextType type) {
+	m_initializing = true;
+	ui.cbLabelsTextType->setCurrentIndex(static_cast<int>(type));
+	m_initializing = false;
+}
+void AxisDock::axisLabelsTextColumnChanged(const AbstractColumn* column) {
+	m_initializing = true;
+	cbLabelsTextColumn->setColumn(column, m_axis->labelsTextColumnPath());
 	m_initializing = false;
 }
 void AxisDock::axisLabelsFontChanged(const QFont& font) {
@@ -2053,46 +2177,43 @@ void AxisDock::load() {
 	ui.sbMajorTicksSpacingNumeric->setDecimals(0);
 	ui.sbMajorTicksSpacingNumeric->setSingleStep(m_axis->majorTicksSpacing());
 
-	//depending on range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
-	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	//depending on the range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
+	const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
-	if (plot) {
-		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
-		//ranges
-		ui.lStart->setVisible(numeric);
-		ui.lEnd->setVisible(numeric);
-		ui.leStart->setVisible(numeric);
-		ui.leEnd->setVisible(numeric);
-		ui.lStartDateTime->setVisible(!numeric);
-		ui.dateTimeEditStart->setVisible(!numeric);
-		ui.lEndDateTime->setVisible(!numeric);
-		ui.dateTimeEditEnd->setVisible(!numeric);
+	const bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+		|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
-		//tick labels format
-		ui.lLabelsFormat->setVisible(numeric);
-		ui.cbLabelsFormat->setVisible(numeric);
-		ui.chkLabelsAutoPrecision->setVisible(numeric);
-		ui.lLabelsPrecision->setVisible(numeric);
-		ui.sbLabelsPrecision->setVisible(numeric);
-		ui.cbLabelsDateTimeFormat->setVisible(numeric);
-		ui.lLabelsDateTimeFormat->setVisible(!numeric);
-		ui.cbLabelsDateTimeFormat->setVisible(!numeric);
+	//ranges
+	ui.lStart->setVisible(numeric);
+	ui.lEnd->setVisible(numeric);
+	ui.leStart->setVisible(numeric);
+	ui.leEnd->setVisible(numeric);
+	ui.lStartDateTime->setVisible(!numeric);
+	ui.dateTimeEditStart->setVisible(!numeric);
+	ui.lEndDateTime->setVisible(!numeric);
+	ui.dateTimeEditEnd->setVisible(!numeric);
 
-		if (!numeric) {
-			if (m_axis->orientation() == Axis::Orientation::Horizontal) {
-				ui.dateTimeEditStart->setDisplayFormat(plot->xRangeDateTimeFormat(xIndex));
-				ui.dateTimeEditEnd->setDisplayFormat(plot->xRangeDateTimeFormat(xIndex));
-			} else {
-				//TODO
-				ui.dateTimeEditStart->setDisplayFormat(plot->yRangeDateTimeFormat());
-				ui.dateTimeEditEnd->setDisplayFormat(plot->yRangeDateTimeFormat());
-			}
-			ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().start()));
-			ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().end()));
+	//tick labels format
+	ui.lLabelsFormat->setVisible(numeric);
+	ui.cbLabelsFormat->setVisible(numeric);
+	ui.chkLabelsAutoPrecision->setVisible(numeric);
+	ui.lLabelsPrecision->setVisible(numeric);
+	ui.sbLabelsPrecision->setVisible(numeric);
+	ui.lLabelsDateTimeFormat->setVisible(!numeric);
+	ui.cbLabelsDateTimeFormat->setVisible(!numeric);
 
+	if (!numeric) {
+		if (m_axis->orientation() == Axis::Orientation::Horizontal) {
+			ui.dateTimeEditStart->setDisplayFormat(plot->xRangeDateTimeFormat(xIndex));
+			ui.dateTimeEditEnd->setDisplayFormat(plot->xRangeDateTimeFormat(xIndex));
+		} else {
+			//TODO
+			ui.dateTimeEditStart->setDisplayFormat(plot->yRangeDateTimeFormat());
+			ui.dateTimeEditEnd->setDisplayFormat(plot->yRangeDateTimeFormat());
 		}
+		ui.dateTimeEditStart->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().start()));
+		ui.dateTimeEditEnd->setDateTime(QDateTime::fromMSecsSinceEpoch(m_axis->range().end()));
 	}
 
 	ui.leZeroOffset->setText( numberLocale.toString(m_axis->zeroOffset()) );
@@ -2134,10 +2255,12 @@ void AxisDock::load() {
 	ui.cbLabelsPosition->setCurrentIndex( (int) m_axis->labelsPosition() );
 	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(m_axis->labelsOffset(), Worksheet::Unit::Point) );
 	ui.sbLabelsRotation->setValue( m_axis->labelsRotationAngle() );
+	ui.cbLabelsTextType->setCurrentIndex((int) m_axis->labelsTextType());
 	ui.cbLabelsFormat->setCurrentIndex( Axis::labelsFormatToIndex(m_axis->labelsFormat()) );
 	ui.chkLabelsAutoPrecision->setChecked( (int) m_axis->labelsAutoPrecision() );
 	ui.sbLabelsPrecision->setValue( (int)m_axis->labelsPrecision() );
 	ui.cbLabelsDateTimeFormat->setCurrentText(m_axis->labelsDateTimeFormat());
+
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
 	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
@@ -2161,12 +2284,14 @@ void AxisDock::load() {
 	ui.sbMinorGridOpacity->setValue( round(m_axis->minorGridOpacity()*100.0) );
 
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
-	this->majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
+	majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());
 	GuiTools::updatePenStyles(ui.cbMajorTicksLineStyle, ui.kcbMajorTicksColor->color());
-	this->minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
+	minorTicksTypeChanged(ui.cbMinorTicksType->currentIndex());
 	GuiTools::updatePenStyles(ui.cbMinorTicksLineStyle, ui.kcbMinorTicksColor->color());
 	GuiTools::updatePenStyles(ui.cbMajorGridStyle, ui.kcbMajorGridColor->color());
 	GuiTools::updatePenStyles(ui.cbMinorGridStyle, ui.kcbMinorGridColor->color());
+	labelsTextTypeChanged(ui.cbLabelsTextType->currentIndex());
+	labelsTextColumnChanged(cbLabelsTextColumn->currentModelIndex());
 }
 
 void AxisDock::loadConfigFromTemplate(KConfig& config) {
@@ -2192,14 +2317,11 @@ void AxisDock::loadConfigFromTemplate(KConfig& config) {
 void AxisDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group( "Axis" );
 
-	bool numeric = false;
-	const auto* plot = dynamic_cast<const CartesianPlot*>(m_axis->parentAspect());
+	const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
-	if (plot) {
-		numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+	const bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
 			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
-	}
 
 	//General
 	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int) m_axis->orientation()) );
@@ -2273,10 +2395,13 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.cbLabelsPosition->setCurrentIndex( group.readEntry("LabelsPosition", (int) m_axis->labelsPosition()) );
 	ui.sbLabelsOffset->setValue( Worksheet::convertFromSceneUnits(group.readEntry("LabelsOffset", m_axis->labelsOffset()), Worksheet::Unit::Point) );
 	ui.sbLabelsRotation->setValue( group.readEntry("LabelsRotation", m_axis->labelsRotationAngle()) );
+	ui.cbLabelsTextType->setCurrentIndex( group.readEntry("LabelsTextType", (int) m_axis->labelsTextType()) );
+
 	//we need to set the font size in points for KFontRequester
 	QFont font = m_axis->labelsFont();
 	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelsFont->setFont( group.readEntry("LabelsFont", font) );
+
 	ui.kcbLabelsFontColor->setColor( group.readEntry("LabelsFontColor", m_axis->labelsColor()) );
 	ui.cbLabelsBackgroundType->setCurrentIndex( group.readEntry("LabelsBackgroundType", (int) m_axis->labelsBackgroundType()) );
 	ui.kcbLabelsBackgroundColor->setColor( group.readEntry("LabelsBackgroundColor", m_axis->labelsBackgroundColor()) );

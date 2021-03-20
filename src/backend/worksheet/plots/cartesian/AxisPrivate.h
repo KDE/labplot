@@ -116,6 +116,9 @@ public:
 	bool labelsAutoPrecision;
 	QString labelsDateTimeFormat;
 	Axis::LabelsPosition labelsPosition;
+	Axis::LabelsTextType labelsTextType;
+	const AbstractColumn* labelsTextColumn{nullptr};
+	QString labelsTextColumnPath;
 	qreal labelsRotationAngle;
 	QColor labelsColor;
 	QFont labelsFont;
