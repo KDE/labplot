@@ -62,7 +62,7 @@ public:
 	//General
 	QVector<const AbstractColumn*> dataColumns;
 	QVector<QString> dataColumnPaths;
-	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::MinMax};
+	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
 	BoxPlot::Orientation orientation{BoxPlot::Orientation::Vertical};
 	qreal opacity{1.0};
 

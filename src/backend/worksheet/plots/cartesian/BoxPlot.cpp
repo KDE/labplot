@@ -74,7 +74,7 @@ void BoxPlot::init() {
 	KConfigGroup group = config.group("BoxPlot");
 
 	//general
-	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::MinMax);
+	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::IQR);
 	d->orientation = (BoxPlot::Orientation) group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
 
 	//box filling
@@ -90,7 +90,7 @@ void BoxPlot::init() {
 
 	//median line
 	d->medianLinePen = QPen(group.readEntry("MedianLineColor", QColor(Qt::black)),
-	                    group.readEntry("MEdianLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
+	                    group.readEntry("MedianLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
 	d->medianLineOpacity = group.readEntry("BorderOpacity", 1.0);
 
@@ -1388,7 +1388,6 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	//box border
 	p.setStyle((Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine));
 	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	p.setWidthF(group.readEntry("LineWidth", borderPen().widthF()));
 	p.setColor(themeColor);
 	setBorderPen(p);
 	setBorderOpacity(group.readEntry("LineOpacity", 1.0));
@@ -1405,13 +1404,20 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	setMedianLinePen(p);
 	setMedianLineOpacity(group.readEntry("LineOpacity", 1.0));
 
-	//symbols for the mean and for the outliers
-	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", themeColor) );
-	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", themeColor) );
-
 	//whiskers
 	setWhiskersPen(p);
 	setWhiskersOpacity(group.readEntry("LineOpacity", 1.0));
+
+	//symbols for the mean and for the outliers
+	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", 1.0));
+	QBrush brush;
+	brush.setStyle((Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern));
+	brush.setColor(themeColor);
+	this->setSymbolsBrush(brush);
+	p.setStyle((Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine));
+	p.setColor(themeColor);
+	p.setWidthF(group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+	this->setSymbolsPen(p);
 
 	d->recalcShapeAndBoundingRect();
 }
