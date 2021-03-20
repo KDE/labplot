@@ -58,6 +58,7 @@ public:
 	enum class ArrowType {NoArrow, SimpleSmall, SimpleBig, FilledSmall, FilledBig, SemiFilledSmall, SemiFilledBig};
 	enum class ArrowPosition {Left, Right, Both};
 	enum class LabelsPosition {NoLabels, In, Out};
+	enum class LabelsTextType {PositionValues, CustomValues};
 	enum class LabelsBackgroundType {Transparent, Color};
 
 	// LabelsFormat <-> index, see AxisDock::init()
@@ -166,6 +167,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(LabelsPosition, labelsPosition, LabelsPosition)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsOffset, LabelsOffset)
 	BASIC_D_ACCESSOR_DECL(qreal, labelsRotationAngle, LabelsRotationAngle)
+	BASIC_D_ACCESSOR_DECL(LabelsTextType, labelsTextType, LabelsTextType)
+	POINTER_D_ACCESSOR_DECL(const AbstractColumn, labelsTextColumn, LabelsTextColumn)
+	QString& labelsTextColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QColor, labelsColor, LabelsColor)
 	CLASS_D_ACCESSOR_DECL(QFont, labelsFont, LabelsFont)
 	BASIC_D_ACCESSOR_DECL(LabelsBackgroundType, labelsBackgroundType, LabelsBackgroundType)
@@ -278,6 +282,8 @@ signals:
 	void labelsPositionChanged(Axis::LabelsPosition);
 	void labelsOffsetChanged(double);
 	void labelsRotationAngleChanged(qreal);
+	void labelsTextTypeChanged(Axis::LabelsTextType);
+	void labelsTextColumnChanged(const AbstractColumn*);
 	void labelsColorChanged(QColor);
 	void labelsFontChanged(QFont);
 	void labelsBackgroundTypeChanged(Axis::LabelsBackgroundType);

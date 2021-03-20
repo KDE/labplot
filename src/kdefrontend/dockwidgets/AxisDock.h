@@ -61,6 +61,7 @@ private:
 	LabelWidget* labelWidget;
 	TreeViewComboBox* cbMajorTicksColumn;
 	TreeViewComboBox* cbMinorTicksColumn;
+	TreeViewComboBox* cbLabelsTextColumn;
 	bool m_dataChanged{false};
 
 	void setModel();
@@ -135,6 +136,8 @@ private slots:
 	void labelsPositionChanged(int);
 	void labelsOffsetChanged(double);
 	void labelsRotationChanged(int);
+	void labelsTextTypeChanged(int);
+	void labelsTextColumnChanged(const QModelIndex&);
 	void labelsFontChanged(const QFont&);
 	void labelsFontColorChanged(const QColor&);
 	void labelsBackgroundTypeChanged(int);
@@ -198,6 +201,8 @@ private slots:
 	void axisLabelsPositionChanged(Axis::LabelsPosition);
 	void axisLabelsOffsetChanged(double);
 	void axisLabelsRotationAngleChanged(qreal);
+	void axisLabelsTextTypeChanged(Axis::LabelsTextType);
+	void axisLabelsTextColumnChanged(const AbstractColumn*);
 	void axisLabelsFontChanged(const QFont&);
 	void axisLabelsFontColorChanged(const QColor&);
 	void axisLabelsBackgroundTypeChanged(Axis::LabelsBackgroundType);

@@ -191,6 +191,7 @@ void Axis::init() {
 	d->labelsPosition = (LabelsPosition) group.readEntry("LabelsPosition", (int) LabelsPosition::Out);
 	d->labelsOffset = group.readEntry("LabelsOffset",  Worksheet::convertToSceneUnits( 5.0, Worksheet::Unit::Point ));
 	d->labelsRotationAngle = group.readEntry("LabelsRotation", 0);
+	d->labelsTextType = (LabelsTextType) group.readEntry("LabelsTextType", static_cast<int>(LabelsTextType::PositionValues));
 	d->labelsFont = group.readEntry("LabelsFont", QFont());
 	d->labelsFont.setPixelSize( Worksheet::convertToSceneUnits( 10.0, Worksheet::Unit::Point ) );
 	d->labelsColor = group.readEntry("LabelsFontColor", QColor(Qt::black));
@@ -424,6 +425,9 @@ BASIC_SHARED_D_READER_IMPL(Axis, QString, labelsDateTimeFormat, labelsDateTimeFo
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsPosition, labelsPosition, labelsPosition);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOffset, labelsOffset);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsRotationAngle, labelsRotationAngle);
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsTextType, labelsTextType, labelsTextType);
+BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, labelsTextColumn, labelsTextColumn)
+QString& Axis::labelsTextColumnPath() const { return d_ptr->labelsTextColumnPath; }
 BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor);
 BASIC_SHARED_D_READER_IMPL(Axis, QFont, labelsFont, labelsFont);
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsBackgroundType, labelsBackgroundType, labelsBackgroundType);
@@ -795,6 +799,28 @@ void Axis::setLabelsRotationAngle(qreal angle) {
 	Q_D(Axis);
 	if (angle != d->labelsRotationAngle)
 		exec(new AxisSetLabelsRotationAngleCmd(d, angle, ki18n("%1: set label rotation angle")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsTextType, Axis::LabelsTextType, labelsTextType, retransformTickLabelPositions);
+void Axis::setLabelsTextType(LabelsTextType type) {
+	Q_D(Axis);
+	if (type != d->labelsTextType)
+		exec(new AxisSetLabelsTextTypeCmd(d, type, ki18n("%1: set labels text type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsTextColumn, const AbstractColumn*, labelsTextColumn, retransformTickLabelStrings)
+void Axis::setLabelsTextColumn(const AbstractColumn* column) {
+	Q_D(Axis);
+	if (column != d->labelsTextColumn) {
+		exec(new AxisSetLabelsTextColumnCmd(d, column, ki18n("%1: set labels text column")));
+
+		if (column) {
+			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTickLabelStrings);
+			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
+					this, &Axis::retransformTickLabelStrings);
+			//TODO: add disconnect in the undo-function
+		}
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsColor, QColor, labelsColor, update);
@@ -2361,6 +2387,8 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "position", QString::number(static_cast<int>(d->labelsPosition)) );
 	writer->writeAttribute( "offset", QString::number(d->labelsOffset) );
 	writer->writeAttribute( "rotation", QString::number(d->labelsRotationAngle) );
+	writer->writeAttribute( "textType", QString::number(static_cast<int>(d->labelsTextType)) );
+	WRITE_COLUMN(d->labelsTextColumn, labelsTextColumn);
 	writer->writeAttribute( "format", QString::number(static_cast<int>(d->labelsFormat)) );
 	writer->writeAttribute( "precision", QString::number(d->labelsPrecision) );
 	writer->writeAttribute( "autoPrecision", QString::number(d->labelsAutoPrecision) );
@@ -2471,6 +2499,8 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("position", labelsPosition, Axis::LabelsPosition);
 			READ_DOUBLE_VALUE("offset", labelsOffset);
 			READ_DOUBLE_VALUE("rotation", labelsRotationAngle);
+			READ_INT_VALUE("textType", labelsTextType, Axis::LabelsTextType);
+			READ_COLUMN(labelsTextColumn);
 			READ_INT_VALUE("format", labelsFormat, Axis::LabelsFormat);
 			READ_INT_VALUE("precision", labelsPrecision, int);
 			READ_INT_VALUE("autoPrecision", labelsAutoPrecision, bool);

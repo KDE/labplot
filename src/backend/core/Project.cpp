@@ -679,6 +679,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		if (!axis) continue;
 		RESTORE_COLUMN_POINTER(axis, majorTicksColumn, MajorTicksColumn);
 		RESTORE_COLUMN_POINTER(axis, minorTicksColumn, MinorTicksColumn);
+		RESTORE_COLUMN_POINTER(axis, labelsTextColumn, LabelsTextColumn);
 	}
 
 	//histograms
