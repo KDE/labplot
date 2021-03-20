@@ -3348,9 +3348,9 @@ CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Ran
 	case RangeT::Scale::Sqrt:
 		return CartesianScale::createSqrtScale(range, sceneRange, logicalRange);
 	case RangeT::Scale::Square:
+		return CartesianScale::createSquareScale(range, sceneRange, logicalRange);
 	case RangeT::Scale::Inverse:
-		//TODO
-		;
+		return CartesianScale::createInverseScale(range, sceneRange, logicalRange);
 	}
 
 	return nullptr;

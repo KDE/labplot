@@ -295,7 +295,7 @@ QVector<QLineF> CartesianCoordinateSystem::mapLogicalToScene(const QVector<QLine
 			const CartesianScale* nextXScale = xIterator.peekNext();
 			if (!nextXScale) continue;
 			Range<double> nextXRange;
-			nextXScale->getProperties(nullptr, &nextXRange);
+			nextXScale->getProperties(&nextXRange);
 
 			double x1 = xScale->end();
 			double x2 = nextXScale->start();
@@ -518,12 +518,12 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
 	if (noPageClippingY)
 		logicalPoint.setY(pageRect.y() + pageRect.height()/2.);
 
-	DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
+	//DEBUG(Q_FUNC_INFO << ", xScales/YScales size: " << d->xScales.size() << '/' << d->yScales.size())
 
 	if (noPageClipping || limit || pageRect.contains(logicalPoint)) {
 		double x = logicalPoint.x();
 		double y = logicalPoint.y();
-		DEBUG(Q_FUNC_INFO << ", x/y = " << x << " " << y)
+		//DEBUG(Q_FUNC_INFO << ", x/y = " << x << " " << y)
 
 		for (const auto* xScale : d->xScales) {
 			if (!xScale)
@@ -557,15 +557,13 @@ QPointF CartesianCoordinateSystem::mapSceneToLogical(QPointF logicalPoint, Mappi
  * \return 1 or -1
  */
 int CartesianCoordinateSystem::xDirection() const {
-	if (d->xScales.isEmpty())
-		return 1;
-	if (!d->xScales.at(0)) {
+	if (d->xScales.isEmpty() || !d->xScales.at(0)) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
 		return 1;
 	}
 
 	return d->xScales.at(0)->direction();
-	}
+}
 
 /**
  * \brief Determine the vertical direction relative to the page.

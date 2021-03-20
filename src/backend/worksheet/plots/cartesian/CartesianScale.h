@@ -38,14 +38,13 @@ class CartesianScale {
 public:
 	virtual ~CartesianScale();
 
-	//TODO: see/use RangeT::Scale
-	enum class Type {Linear, Log, Sqrt};
-
 	static CartesianScale* createLinearScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange);
 	static CartesianScale* createLogScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange, RangeT::Scale);
 	static CartesianScale* createSqrtScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange);
+	static CartesianScale* createSquareScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange);
+	static CartesianScale* createInverseScale(const Range<double> &range, const Range<double> &sceneRange, const Range<double> &logicalRange);
 
-	virtual void getProperties(Type *type = nullptr, Range<double> *range = nullptr, double *a = nullptr, double *b = nullptr, double *c = nullptr) const;
+	virtual void getProperties(Range<double> *range = nullptr, double *a = nullptr, double *b = nullptr, double *c = nullptr) const;
 
 	inline double start() const { return m_range.start(); }
 	inline double end() const { return m_range.end(); }
@@ -57,8 +56,7 @@ public:
 	virtual int direction() const = 0;
 
 protected:
-	CartesianScale(Type type, const Range<double> &range, double a, double b, double c);
-	Type m_type;
+	CartesianScale(const Range<double> &range, double a, double b, double c);
 	Range<double> m_range;
 	//TODO: what are these?
 	double m_a;
