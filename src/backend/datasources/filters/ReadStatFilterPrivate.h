@@ -60,7 +60,7 @@ public:
 	int endColumn{-1};
 */
 private:
-#ifdef HAVE_NETCDF
+#ifdef HAVE_READSTAT
 	int m_status;
 
 //	QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem = nullptr);
