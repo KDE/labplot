@@ -39,5 +39,6 @@
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 #include "backend/datasources/filters/NgspiceRawBinaryFilter.h"
+#include "backend/datasources/filters/ReadStatFilter.h"
 
 #endif

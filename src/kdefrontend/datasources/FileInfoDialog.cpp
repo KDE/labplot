@@ -114,6 +114,7 @@ void FileInfoDialog::setFiles(QStringList& files) {
     (number of columns and lines for ASCII, color-depth for images etc.).
  */
 QString FileInfoDialog::fileInfoString(const QString& name) const {
+	DEBUG(Q_FUNC_INFO << ", file name = " << name.toStdString())
 	QString infoString;
 	QFileInfo fileInfo;
 	QString fileTypeString;
@@ -211,6 +212,9 @@ QString FileInfoDialog::fileInfoString(const QString& name) const {
 		case AbstractFileFilter::FileType::NgspiceRawAscii:
 		case AbstractFileFilter::FileType::NgspiceRawBinary:
 			infoStrings << NgspiceRawAsciiFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::READSTAT:
+			infoStrings << ReadStatFilter::fileInfoString(fileName);
 			break;
 		}
 

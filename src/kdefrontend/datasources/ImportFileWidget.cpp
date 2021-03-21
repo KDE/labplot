@@ -120,6 +120,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #endif
 		ui.cbFileType->addItem(i18n("Ngspice RAW ASCII"), static_cast<int>(AbstractFileFilter::FileType::NgspiceRawAscii));
 		ui.cbFileType->addItem(i18n("Ngspice RAW Binary"), static_cast<int>(AbstractFileFilter::FileType::NgspiceRawBinary));
+#ifdef HAVE_READSTAT
+		ui.cbFileType->addItem(i18n("SAS, Stata or SPSS"), static_cast<int>(AbstractFileFilter::FileType::READSTAT));
+#endif
 
 		//hide widgets relevant for live data reading only
 		ui.lRelativePath->hide();
@@ -744,6 +747,17 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
+	case AbstractFileFilter::FileType::READSTAT: {
+		DEBUG(Q_FUNC_INFO << ", READSTAT");
+		if (!m_currentFilter)
+			m_currentFilter.reset(new ReadStatFilter);
+		auto filter = static_cast<ReadStatFilter*>(m_currentFilter.get());
+		Q_UNUSED(filter)
+		//filter->setStartRow(ui.sbStartRow->value());
+		//filter->setEndRow(ui.sbEndRow->value());
+
+		break;
+	}
 	}
 
 	return m_currentFilter.get();
@@ -969,6 +983,9 @@ void ImportFileWidget::fileTypeChanged(int index) {
 		ui.cbFilter->hide();
 		showJsonModel(true);
 		break;
+	case AbstractFileFilter::FileType::READSTAT:
+		//TODO
+		break;
 	default:
 		DEBUG("unknown file type");
 	}
@@ -1087,6 +1104,7 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::NgspiceRawAscii:
 	case AbstractFileFilter::FileType::NgspiceRawBinary:
+	case AbstractFileFilter::FileType::READSTAT:
 		break;
 	}
 }
@@ -1371,6 +1389,16 @@ void ImportFileWidget::refreshPreview() {
 		columnModes = filter->columnModes();
 		break;
 	}
+	case AbstractFileFilter::FileType::READSTAT: {
+		ui.tePreview->clear();
+		auto filter = static_cast<ReadStatFilter*>(currentFileFilter());
+		//TODO
+		Q_UNUSED(filter)
+		//importedStrings = filter->preview(fileName, lines);
+		//vectorNameList = filter->vectorNames();
+		//columnModes = filter->columnModes();
+		break;
+	}
 	}
 
 	// fill the table widget
@@ -1430,7 +1458,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
 
-	QDEBUG("ImportFileWidget::updateContent(): file name = " << fileName);
+	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString());
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
 		case AbstractFileFilter::FileType::HDF5:
@@ -1456,6 +1484,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::Image:
 		case AbstractFileFilter::FileType::NgspiceRawAscii:
 		case AbstractFileFilter::FileType::NgspiceRawBinary:
+		case AbstractFileFilter::FileType::READSTAT:
 			break;
 		}
 	}

@@ -187,6 +187,10 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		||  fileName.endsWith(QLatin1String("root"), Qt::CaseInsensitive)) // TODO find out file description
 		fileType = FileType::ROOT;
 #endif
+#ifdef HAVE_READSTAT	//TODO: all supported extensions
+	else if (fileName.endsWith(QLatin1String("dta"), Qt::CaseInsensitive))
+		fileType = FileType::READSTAT;
+#endif
 	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 		fileType = FileType::Image;
 	else if (NgspiceRawBinaryFilter::isNgspiceBinaryFile(fileName))

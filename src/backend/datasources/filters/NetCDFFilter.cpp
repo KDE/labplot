@@ -25,8 +25,8 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 *   Boston, MA  02110-1301  USA                                           *
 *                                                                         *
 ***************************************************************************/
-#include "backend/datasources/filters/NetCDFFilter.h"
-#include "backend/datasources/filters/NetCDFFilterPrivate.h"
+#include "NetCDFFilter.h"
+#include "NetCDFFilterPrivate.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
@@ -229,9 +229,7 @@ int NetCDFFilter::endColumn() const {
 }
 
 QString NetCDFFilter::fileInfoString(const QString& fileName) {
-	DEBUG("NetCDFFilter::fileInfoString()");
-
-	DEBUG("fileName = " << qPrintable(fileName))
+	DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName))
 
 	QString info;
 #ifdef HAVE_NETCDF
@@ -969,7 +967,7 @@ QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileNa
 void NetCDFFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
 	Q_UNUSED(fileName);
 	Q_UNUSED(dataSource);
-	//TODO: write NetCDF files not implemented yet
+	//TODO: writing NetCDF files not implemented yet
 }
 
 //##############################################################################

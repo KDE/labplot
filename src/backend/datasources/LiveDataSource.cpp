@@ -417,6 +417,7 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::ROOT:
 	case AbstractFileFilter::FileType::NgspiceRawAscii:
 	case AbstractFileFilter::FileType::NgspiceRawBinary:
+	case AbstractFileFilter::FileType::READSTAT:
 		break;
 	}
 
@@ -568,6 +569,7 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::FileType::NETCDF:
 		case AbstractFileFilter::FileType::FITS:
 		case AbstractFileFilter::FileType::JSON:
+		case AbstractFileFilter::FileType::READSTAT:
 			break;
 		}
 		break;
