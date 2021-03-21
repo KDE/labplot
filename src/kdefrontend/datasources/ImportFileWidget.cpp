@@ -4,7 +4,7 @@ Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
 Copyright            : (C) 2009-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-Copyright            : (C) 2009-2020 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2009-2021 Alexander Semke (alexander.semke@web.de)
 Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
 Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 
@@ -30,7 +30,6 @@ Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
  ***************************************************************************/
 
 #include "ImportFileWidget.h"
-#include "FileInfoDialog.h"
 #include "backend/datasources/filters/filters.h"
 #include "AsciiOptionsWidget.h"
 #include "BinaryOptionsWidget.h"
@@ -48,12 +47,14 @@ Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 #include <QInputDialog>
 #include <QIntValidator>
 #include <QLocalSocket>
+#include <QProcess>
 #include <QStandardItemModel>
 #include <QTableWidget>
 #include <QTcpSocket>
 #include <QTimer>
-#include <QUdpSocket>
 #include <QTreeWidgetItem>
+#include <QUdpSocket>
+#include <QWhatsThis>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -415,7 +416,7 @@ void ImportFileWidget::initSlots() {
 	connect(ui.lePort, &QLineEdit::textChanged, this, &ImportFileWidget::portChanged);
 	connect(ui.tvJson, &QTreeView::clicked, this, &ImportFileWidget::refreshPreview);
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImportFileWidget::selectFile);
-	connect(ui.bFileInfo, &QPushButton::clicked, this, &ImportFileWidget::fileInfoDialog);
+	connect(ui.bFileInfo, &QPushButton::clicked, this, &ImportFileWidget::showFileInfo);
 	connect(ui.bSaveFilter, &QPushButton::clicked, this, &ImportFileWidget::saveFilter);
 	connect(ui.bManageFilters, &QPushButton::clicked, this, &ImportFileWidget::manageFilters);
 	connect(ui.cbFileType, static_cast<void (KComboBox::*) (int)>(&KComboBox::currentIndexChanged),
@@ -1128,11 +1129,126 @@ const QStringList ImportFileWidget::selectedROOTNames() const {
 /*!
 	shows the dialog with the information about the file(s) to be imported.
 */
-void ImportFileWidget::fileInfoDialog() {
-	QStringList files = fileName().split(';');
-	auto* dlg = new FileInfoDialog(this);
-	dlg->setFiles(files);
-	dlg->exec();
+void ImportFileWidget::showFileInfo() {
+	const QString& info = fileInfoString(fileName());
+	QWhatsThis::showText(ui.bFileInfo->mapToGlobal(QPoint(0, 0)), info, ui.bFileInfo);
+}
+
+/*!
+	returns a string containing the general information about the file \c name
+	and some content specific information
+	(number of columns and lines for ASCII, color-depth for images etc.).
+*/
+QString ImportFileWidget::fileInfoString(const QString& name) const {
+	DEBUG(Q_FUNC_INFO << ", file name = " << name.toStdString())
+	QString infoString;
+	QFileInfo fileInfo;
+	QString fileTypeString;
+	QIODevice *file = new QFile(name);
+
+	QString fileName{name};
+#ifdef HAVE_WINDOWS
+	if (name.at(1) != QLatin1Char(':'))
+#else
+	if (name.at(0) != QLatin1String("/"))
+#endif
+		fileName = QDir::homePath() + QLatin1String("/") + name;
+
+	if (!file)
+		file = new QFile(fileName);
+
+	if (file->open(QIODevice::ReadOnly)) {
+		QStringList infoStrings;
+
+		infoStrings << "<u><b>" + fileName + "</b></u><br>";
+
+		// File type given by "file"
+#ifdef Q_OS_LINUX
+		auto* proc = new QProcess();
+		QStringList args;
+		args << "-b" << fileName;
+		proc->start( "file", args);
+
+		if (proc->waitForReadyRead(1000) == false)
+			infoStrings << i18n("Reading from file %1 failed.", fileName);
+		else {
+			fileTypeString = proc->readLine();
+			if (fileTypeString.contains(i18n("cannot open")))
+				fileTypeString.clear();
+			else {
+				fileTypeString.remove(fileTypeString.length() - 1, 1);	// remove '\n'
+			}
+		}
+		infoStrings << i18n("<b>File type:</b> %1", fileTypeString);
+#endif
+
+		// General:
+		fileInfo.setFile(fileName);
+		infoStrings << "<b>" << i18n("General:") << "</b>";
+
+		infoStrings << i18n("Readable: %1", fileInfo.isReadable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Writable: %1", fileInfo.isWritable() ? i18n("yes") : i18n("no"));
+		infoStrings << i18n("Executable: %1", fileInfo.isExecutable() ? i18n("yes") : i18n("no"));
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+		infoStrings << i18n("Birth time: %1", fileInfo.birthTime().toString());
+		infoStrings << i18n("Last metadata changed: %1", fileInfo.metadataChangeTime().toString());
+#else
+		infoStrings << i18n("Created: %1", fileInfo.created().toString());
+#endif
+		infoStrings << i18n("Last modified: %1", fileInfo.lastModified().toString());
+		infoStrings << i18n("Last read: %1", fileInfo.lastRead().toString());
+		infoStrings << i18n("Owner: %1", fileInfo.owner());
+		infoStrings << i18n("Group: %1", fileInfo.group());
+		infoStrings << i18n("Size: %1", i18np("%1 cByte", "%1 cBytes", fileInfo.size()));
+
+		// Summary:
+		infoStrings << "<b>" << i18n("Summary:") << "</b>";
+		//depending on the file type, generate summary and content information about the file
+		//TODO: content information (in BNF) for more types
+		switch (AbstractFileFilter::fileType(fileName)) {
+		case AbstractFileFilter::FileType::Ascii:
+			infoStrings << AsciiFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::Binary:
+			infoStrings << BinaryFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::Image:
+			infoStrings << ImageFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::HDF5:
+			infoStrings << HDF5Filter::fileInfoString(fileName);
+			infoStrings << "<b>" << i18n("Content:") << "</b>";
+			infoStrings << HDF5Filter::fileDDLString(fileName);
+			break;
+		case AbstractFileFilter::FileType::NETCDF:
+			infoStrings << NetCDFFilter::fileInfoString(fileName);
+			infoStrings << "<b>" << i18n("Content:") << "</b>";
+			infoStrings << NetCDFFilter::fileCDLString(fileName);
+			break;
+		case AbstractFileFilter::FileType::FITS:
+			infoStrings << FITSFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::JSON:
+			infoStrings << JsonFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::ROOT:
+			infoStrings << ROOTFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::NgspiceRawAscii:
+		case AbstractFileFilter::FileType::NgspiceRawBinary:
+			infoStrings << NgspiceRawAsciiFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::READSTAT:
+			infoStrings << ReadStatFilter::fileInfoString(fileName);
+			break;
+		}
+
+		infoString += infoStrings.join("<br>");
+	} else
+		infoString += i18n("Could not open file %1 for reading.", fileName);
+
+	return infoString;
 }
 
 /*!

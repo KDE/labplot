@@ -92,6 +92,7 @@ private:
 	void updateContent(const QString&);
 	void initOptionsWidget();
 	void initSlots();
+	QString fileInfoString(const QString&) const;
 
 	std::unique_ptr<AsciiOptionsWidget> m_asciiOptionsWidget;
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
@@ -123,7 +124,7 @@ private slots:
 	void manageFilters();
 	void filterChanged(int);
 	void selectFile();
-	void fileInfoDialog();
+	void showFileInfo();
 	void refreshPreview();
 
 signals:
