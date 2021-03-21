@@ -1351,12 +1351,12 @@ void LabelWidget::load() {
 
 	//widgets for positioning using logical plot coordinates
 	SET_NUMBER_LOCALE
-	const auto* plot = static_cast<const CartesianPlot*>(m_label->parent(AspectType::CartesianPlot));
-	bool allowLogicalCoordinates = (plot && m_label->parentAspect()->type() != AspectType::Axis);
+	bool allowLogicalCoordinates = (m_label->parentAspect()->type() == AspectType::CartesianPlot);
 	ui.lBindLogicalPos->setVisible(allowLogicalCoordinates);
 	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);
 
-	if (allowLogicalCoordinates){
+	if (allowLogicalCoordinates) {
+		const auto* plot = static_cast<const CartesianPlot*>(m_label->parentAspect());
 		if (plot->xRangeFormat() == RangeT::Format::Numeric) {
 			ui.lPositionXLogical->show();
 			ui.lePositionXLogical->show();
