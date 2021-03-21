@@ -32,6 +32,7 @@
 #include "backend/lib/macros.h"
 
 extern "C" {
+#include "gsl/gsl_math.h"
 #include "backend/nsl/nsl_math.h"
 }
 
@@ -147,6 +148,70 @@ private:
 	bool m_abs;
 };
 
+/**
+ * \class CartesianCoordinateSystem::SqrtScale
+ * \brief implementation of a square-root scale for cartesian coordinate systems
+ * y = TODO. a - offset, b - scaleFactor
+ */
+class SqrtScale : public CartesianScale {
+public:
+	SqrtScale(const Interval<double> &range, double offset, double scaleFactor)
+		: CartesianScale(ScaleType::ScaleSqrt, range, offset, scaleFactor, 0) {
+			Q_ASSERT(scaleFactor != 0.0);
+	}
+
+	~SqrtScale() override = default;
+
+	bool map(double *value) const override {
+		*value = sqrt(qAbs(*value)) * m_b + m_a;
+		return true;
+	}
+
+	bool inverseMap(double *value) const override {
+		if (m_b == 0)
+			return false;
+
+		*value = gsl_pow_2((*value - m_a) / m_b);
+		return true;
+	}
+	int direction() const override {
+		return m_b < 0 ? -1 : 1;
+	}
+};
+
+/**
+ * \class CartesianCoordinateSystem::SquareScale
+ * \brief implementation of a square scale for cartesian coordinate systems
+ * y = TODO. a - offset, b - scaleFactor
+ */
+class SquareScale : public CartesianScale {
+public:
+	SquareScale(const Interval<double> &range, double offset, double scaleFactor)
+		: CartesianScale(ScaleType::ScaleSquare, range, offset, scaleFactor, 0) {
+			Q_ASSERT(scaleFactor != 0.0);
+	}
+
+	~SquareScale() override = default;
+
+	bool map(double *value) const override {
+		*value = gsl_pow_2(*value) * m_b + m_a;
+		return true;
+	}
+
+	bool inverseMap(double *value) const override {
+		if (m_b == 0)
+			return false;
+
+		*value = sqrt(qAbs((*value - m_a) / m_b));
+		return true;
+	}
+	int direction() const override {
+		return m_b < 0 ? -1 : 1;
+	}
+};
+
+
+
 /* ============================================================================ */
 /* ========================= coordinate system ================================ */
 /* ============================================================================ */
@@ -214,6 +279,32 @@ CartesianScale* CartesianScale::createLogScale(const Interval<double> &interval,
 	bool abs = (type == CartesianPlot::Scale::Log10Abs || type == CartesianPlot::Scale::Log2Abs || type == CartesianPlot::Scale::LnAbs);
 	return new LogScale(interval, a, b, base, abs);
 }
+
+CartesianScale* CartesianScale::createSqrtScale(const Interval<double> &range,
+		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
+
+	if (logicalStart < 0.0 || logicalEnd < 0.0 || logicalStart == logicalEnd) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: invalid range for sqrt scale : " << logicalStart << " .. " << logicalEnd)
+		return nullptr;
+	}
+
+	const double lDiff = sqrt(logicalEnd) - sqrt(logicalStart);
+	double b = (sceneEnd - sceneStart) / lDiff;
+	double a = sceneStart - b * sqrt(logicalStart);
+
+	return new SqrtScale(range, a, b);
+}
+
+CartesianScale* CartesianScale::createSquareScale(const Interval<double> &range,
+		double sceneStart, double sceneEnd, double logicalStart, double logicalEnd) {
+
+	const double lDiff = logicalEnd*logicalEnd - logicalStart*logicalStart;
+	double b = (sceneEnd - sceneStart) / lDiff;
+	double a = sceneStart - b * logicalStart*logicalStart;
+
+	return new SquareScale(range, a, b);
+}
+
 
 //##############################################################################
 //######################### logical to scene mappers ###########################

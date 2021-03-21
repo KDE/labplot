@@ -28,6 +28,7 @@ Bug fixes:
 		* Save/load the values format in xy-curve
 		* React on text changes for values prefix and suffix and not on return pressed event in the curve properties explorer
 		* Fix log scale axis for one tick and ln-scale typo
+		* Fix sqrt and square axis scales
 		* adjust the range format (numeric vs. datetime) also when the the column of the first curve is changed and not only when a new curve is added
 		* simplified the naming of the initial axes for the default plot types (box blot with four axes,  etc.) - use "x" instead of "x axis 1", etc.
 		* export to more image formats (jpg, bmp, ppm, xbm, xpm)

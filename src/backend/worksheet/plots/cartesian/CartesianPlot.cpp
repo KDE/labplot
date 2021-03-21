@@ -2955,8 +2955,14 @@ CartesianScale* CartesianPlotPrivate::createScale(CartesianPlot::Scale type, dou
 // 	Interval<double> interval (logicalStart, logicalEnd);
 	if (type == CartesianPlot::Scale::Linear)
 		return CartesianScale::createLinearScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
-	else
+	else if (type == CartesianPlot::Scale::Log10 || type == CartesianPlot::Scale::Log2 || type == CartesianPlot::Scale::Ln)
 		return CartesianScale::createLogScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd, type);
+	else if (type == CartesianPlot::Scale::Sqrt)
+		return CartesianScale::createSqrtScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+	else if (type == CartesianPlot::Scale::X2)
+		return CartesianScale::createSquareScale(interval, sceneStart, sceneEnd, logicalStart, logicalEnd);
+
+	return nullptr;
 }
 
 /*!

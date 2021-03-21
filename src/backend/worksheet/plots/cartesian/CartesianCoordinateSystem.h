@@ -43,12 +43,16 @@ public:
 	virtual ~CartesianScale();
 
 	//TODO: remove "Scale"
-	enum class ScaleType {ScaleLinear, ScaleLog};
+	enum class ScaleType {ScaleLinear, ScaleLog, ScaleSqrt, ScaleSquare};
 
 	static CartesianScale* createLinearScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
 		double logicalStart, double logicalEnd);
 	static CartesianScale* createLogScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
 		double logicalStart, double logicalEnd, CartesianPlot::Scale);
+	static CartesianScale* createSqrtScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
+		double logicalStart, double logicalEnd);
+	static CartesianScale* createSquareScale(const Interval<double> &interval, double sceneStart, double sceneEnd,
+		double logicalStart, double logicalEnd);
 
 	virtual void getProperties(ScaleType *type = nullptr, Interval<double> *interval = nullptr,
 			double *a = nullptr, double *b = nullptr, double *c = nullptr) const;
