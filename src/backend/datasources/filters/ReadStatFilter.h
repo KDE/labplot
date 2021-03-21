@@ -45,7 +45,7 @@ public:
 	~ReadStatFilter() override;
 
 #ifdef HAVE_READSTAT
-	static int handle_metadata(readstat_metadata_t *metadata, void *ctx);
+	static int get_metadata(readstat_metadata_t *, void *);
 #endif
 
 	static QString fileInfoString(const QString&);

@@ -79,11 +79,10 @@ void ReadStatFilter::saveFilterSettings(const QString& filterName) const {
 
 ///////////////////////////////////////////////////////////////////////
 #ifdef HAVE_READSTAT
-int ReadStatFilter::handle_metadata(readstat_metadata_t *metadata, void *ctx) {
-    int *row_count = (int *)ctx;
-    *row_count = readstat_get_row_count(metadata);
+int ReadStatFilter::get_metadata(readstat_metadata_t *metadata, void *md) {
+	*(readstat_metadata_t *)md = *metadata;
 
-    return READSTAT_HANDLER_OK;
+	return READSTAT_HANDLER_OK;
 }
 #endif
 
@@ -96,18 +95,75 @@ QString ReadStatFilter::fileInfoString(const QString& fileName) {
 	readstat_error_t error = READSTAT_OK;
 	readstat_parser_t *parser = readstat_parser_init();
 	
-	//TODO: all meta data
-	int row_count = 0;
-	readstat_set_metadata_handler(parser, &handle_metadata);
-	// TODO: other formats
-	error = readstat_parse_dta(parser, qPrintable(fileName), &row_count);
+	readstat_set_metadata_handler(parser, &get_metadata);
+	readstat_metadata_t metadata;
+
+	if ( fileName.endsWith(QLatin1String(".dta")) )
+		error = readstat_parse_dta(parser, qPrintable(fileName), &metadata);
+	else if ( fileName.endsWith(QLatin1String(".sav")) || fileName.endsWith(QLatin1String(".zsav")) )
+		error = readstat_parse_sav(parser, qPrintable(fileName), &metadata);
+	else if (fileName.endsWith(QLatin1String(".por")) )
+		error = readstat_parse_por(parser, qPrintable(fileName), &metadata);
+	else if (fileName.endsWith(QLatin1String(".sas7bdat")) )
+		error = readstat_parse_sas7bdat(parser, qPrintable(fileName), &metadata);
+	else if (fileName.endsWith(QLatin1String(".sas7bcat")) )
+		error = readstat_parse_sas7bcat(parser, qPrintable(fileName), &metadata);
+	else if (fileName.endsWith(QLatin1String(".xpt")) || fileName.endsWith(QLatin1String(".xpt5"))  || fileName.endsWith(QLatin1String(".xpt8")) )
+		error = readstat_parse_xport(parser, qPrintable(fileName), &metadata);
+	else
+		return i18n("Unknown file extension");
 
 	readstat_parser_free(parser);
 
-	if (error != READSTAT_OK) {
-		info += i18n("Error getting file info");
+	if (error == READSTAT_OK) {
+		info += i18n("Number of records: %1", QString::number((int64_t)metadata.row_count));
+		info += QLatin1String("<br>");
+		info += i18n("Number of variables: %1", QString::number((int64_t)metadata.var_count));
+		info += QLatin1String("<br>");
+		info += i18n("Creation time: %1", QDateTime::fromTime_t(metadata.creation_time).toString());
+		info += QLatin1String("<br>");
+		info += i18n("Modification time: %1", QDateTime::fromTime_t(metadata.modified_time).toString());
+		info += QLatin1String("<br>");
+		info += i18n("Format version: %1", QString::number((int64_t)metadata.file_format_version));
+		info += QLatin1String("<br>");
+		QString compress;
+		switch (metadata.compression) {
+		case READSTAT_COMPRESS_NONE:
+			compress = "none";
+			break;
+		case READSTAT_COMPRESS_ROWS:
+			compress = "rows";
+			break;
+		case READSTAT_COMPRESS_BINARY:
+			compress = "binary";
+			break;
+		}
+		info += i18n("Compression: %1", compress);
+		info += QLatin1String("<br>");
+		QString endian;
+		switch (metadata.endianness) {
+		case READSTAT_ENDIAN_NONE:
+			endian = "none";
+			break;
+		case READSTAT_ENDIAN_LITTLE:
+			endian = "little";
+			break;
+		case READSTAT_ENDIAN_BIG:
+			endian = "big";
+			break;
+		}
+		info += i18n("Endianess: %1", endian);
+		info += QLatin1String("<br>");
+		info += i18n("Table name: %1", QString(metadata.table_name));
+		info += QLatin1String("<br>");
+		info += i18n("File label: %1", QString(metadata.file_label));
+		info += QLatin1String("<br>");
+		info += i18n("File encoding: %1", QString(metadata.file_encoding));
+		info += QLatin1String("<br>");
+		info += i18n("64bit: %1", QString::number((unsigned int)metadata.is64bit));
+		info += QLatin1String("<br>");
 	} else {
-		info += i18n("Number of records: %1", QString::number(row_count));
+		info += i18n("Error getting file info");
 	}
 #endif
 

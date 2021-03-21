@@ -158,6 +158,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		|| fileInfo.contains(QLatin1String("compressed data"))/* for gzipped ascii data */ ) {
 		if (NgspiceRawAsciiFilter::isNgspiceAsciiFile(fileName))
 			fileType = FileType::NgspiceRawAscii;
+		else if (fileName.endsWith(QLatin1String(".sas7bdat"), Qt::CaseInsensitive))
+			fileType = FileType::READSTAT;
 		else //probably ascii data
 			fileType = FileType::Ascii;
 	}
@@ -187,8 +189,16 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		||  fileName.endsWith(QLatin1String("root"), Qt::CaseInsensitive)) // TODO find out file description
 		fileType = FileType::ROOT;
 #endif
-#ifdef HAVE_READSTAT	//TODO: all supported extensions
-	else if (fileName.endsWith(QLatin1String("dta"), Qt::CaseInsensitive))
+#ifdef HAVE_READSTAT	// sas7bdat -> ASCII
+	else if (fileInfo.startsWith(QLatin1String("SAS")) || fileInfo.startsWith(QLatin1String("SPSS"))
+		|| fileName.endsWith(QLatin1String(".dta"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String(".sav"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String(".zsav"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String(".por"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String(".sas7bcat"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String(".xpt"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String(".xpt5"), Qt::CaseInsensitive)
+		|| fileName.endsWith(QLatin1String(".xpt8"), Qt::CaseInsensitive))
 		fileType = FileType::READSTAT;
 #endif
 	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
