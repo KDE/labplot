@@ -29,7 +29,11 @@ IF (BUILD_READSTAT)
         set(ext_configure ${ext_src}/configure --enable-static --disable-shared)
 	set(ext_insource ON)
 	#set(ext_make ${CMAKE_MAKE_PROGRAM} CXXFLAGS=-fPIC CFLAGS=-fPIC)
-        set(readstat_library libreadstat.a)
+	IF (ZLIB_FOUND)
+		set(readstat_library libreadstat.a ${ZLIB_LIBRARY})
+	ELSE ()
+		set(readstat_library libreadstat.a)
+	ENDIF()
 #endif()
 	ExternalProject_Add(3rdparty_readstat
 		PREFIX ${build_dir}/readstat
