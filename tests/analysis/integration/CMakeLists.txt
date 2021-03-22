@@ -7,6 +7,10 @@ IF (APPLE)
 	target_link_libraries(integrationtest KDMacTouchBar)
 ENDIF ()
 
-target_link_libraries(integrationtest labplot2lib)
+IF (ZLIB_FOUND)
+    target_link_libraries(integrationtest labplot2lib ${ZLIB_LIBRARY})
+ELSE ()
+	target_link_libraries(integrationtest labplot2lib)
+ENDIF()
 
 add_test(NAME integrationtest COMMAND integrationtest)
