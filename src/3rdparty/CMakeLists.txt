@@ -30,8 +30,7 @@ IF (BUILD_READSTAT)
 	set(ext_insource ON)
 	#set(ext_make ${CMAKE_MAKE_PROGRAM} CXXFLAGS=-fPIC CFLAGS=-fPIC)
 
-	#IF (ZLIB_FOUND)
-	set(readstat_library libreadstat.a ${ZLIB_LIBRARY} ${LDFLAGS})
+	set(readstat_library libreadstat.a ${LDFLAGS})
 #endif()
 	ExternalProject_Add(3rdparty_readstat
 		PREFIX ${build_dir}/readstat
