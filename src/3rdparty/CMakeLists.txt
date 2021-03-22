@@ -7,6 +7,8 @@ IF (ENABLE_LIBORIGIN)
 ENDIF ()
 
 IF (BUILD_READSTAT)
+	FIND_LIBRARY (ICONV_LIBRARIES NAMES iconv libiconv libiconv-2)
+
 	include(ExternalProject)
 
 	set(build_dir ${CMAKE_BINARY_DIR}/src/3rdparty)
@@ -30,7 +32,11 @@ IF (BUILD_READSTAT)
 	set(ext_insource ON)
 	#set(ext_make ${CMAKE_MAKE_PROGRAM} CXXFLAGS=-fPIC CFLAGS=-fPIC)
 
-	set(readstat_library libreadstat.a ${LDFLAGS})
+	IF (ICONV_LIBRARIES) # non-glibc
+		set(readstat_library libreadstat.a ${ICONV_LIBRARIES})
+	ELSE ()
+		set(readstat_library libreadstat.a)
+	ENDIF ()
 #endif()
 	ExternalProject_Add(3rdparty_readstat
 		PREFIX ${build_dir}/readstat
