@@ -15,6 +15,7 @@
 		* New themes "Monokai", "ggplot grey", "ggplot dark"
 		* New curve symbols "heart" and "lightning"
 		* Allow to specify text label's position in logical plot coordinates
+		* Allow to use a custom column to set the text for the axis ticks
 
 -----2.8.2 -----
 Bug fixes:

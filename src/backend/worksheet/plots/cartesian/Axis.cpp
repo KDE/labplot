@@ -801,23 +801,23 @@ void Axis::setLabelsRotationAngle(qreal angle) {
 		exec(new AxisSetLabelsRotationAngleCmd(d, angle, ki18n("%1: set label rotation angle")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsTextType, Axis::LabelsTextType, labelsTextType, retransformTickLabelPositions);
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsTextType, Axis::LabelsTextType, labelsTextType, retransformTicks);
 void Axis::setLabelsTextType(LabelsTextType type) {
 	Q_D(Axis);
 	if (type != d->labelsTextType)
 		exec(new AxisSetLabelsTextTypeCmd(d, type, ki18n("%1: set labels text type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsTextColumn, const AbstractColumn*, labelsTextColumn, retransformTickLabelStrings)
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsTextColumn, const AbstractColumn*, labelsTextColumn, retransformTicks)
 void Axis::setLabelsTextColumn(const AbstractColumn* column) {
 	Q_D(Axis);
 	if (column != d->labelsTextColumn) {
 		exec(new AxisSetLabelsTextColumnCmd(d, column, ki18n("%1: set labels text column")));
 
 		if (column) {
-			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTickLabelStrings);
+			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &Axis::retransformTickLabelStrings);
+					this, &Axis::retransformTicks);
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -1431,7 +1431,27 @@ void AxisPrivate::retransformTicks() {
 					majorTicksPath.lineTo(endPoint);
 				}
 				majorTickPoints << anchorPoint;
-				tickLabelValues << value;
+
+				if (labelsTextType == Axis::LabelsTextType::PositionValues)
+					tickLabelValues << value;
+				else {
+					if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
+						switch (labelsTextColumn->columnMode()) {
+							case AbstractColumn::ColumnMode::Numeric:
+							case AbstractColumn::ColumnMode::Integer:
+							case AbstractColumn::ColumnMode::BigInt:
+								tickLabelValues << labelsTextColumn->valueAt(iMajor);
+								break;
+							case AbstractColumn::ColumnMode::DateTime:
+							case AbstractColumn::ColumnMode::Month:
+							case AbstractColumn::ColumnMode::Day:
+								tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
+								break;
+							case AbstractColumn::ColumnMode::Text:
+								break;
+						}
+					}
+				}
 			}
 		}
 
@@ -1566,10 +1586,37 @@ void AxisPrivate::retransformTickLabelStrings() {
 	tickLabelStrings.clear();
 	QString str;
 	SET_NUMBER_LOCALE
-	auto xRangeFormat{ plot()->xRange(q->cSystem->xIndex()).format() };
-	auto yRangeFormat{ plot()->yRange(q->cSystem->yIndex()).format() };
-	if ( (orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
-		|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric) ) {
+	bool numeric = false;
+	bool datetime = false;
+	bool text = false;
+	if (labelsTextType == Axis::LabelsTextType::PositionValues) {
+		auto xRangeFormat{ plot()->xRange(q->cSystem->xIndex()).format() };
+		auto yRangeFormat{ plot()->yRange(q->cSystem->yIndex()).format() };
+		numeric = ( (orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
+						|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric) );
+
+		if (!numeric)
+			datetime = true;
+	} else {
+		if (labelsTextColumn) {
+			switch (labelsTextColumn->columnMode()) {
+				case AbstractColumn::ColumnMode::Numeric:
+				case AbstractColumn::ColumnMode::Integer:
+				case AbstractColumn::ColumnMode::BigInt:
+					numeric = true;
+					break;
+				case AbstractColumn::ColumnMode::DateTime:
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Day:
+					datetime = true;
+					break;
+				case AbstractColumn::ColumnMode::Text:
+					text = true;
+			}
+		}
+	}
+
+	if (numeric) {
 		if (labelsFormat == Axis::LabelsFormat::Decimal) {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
@@ -1649,13 +1696,18 @@ void AxisPrivate::retransformTickLabelStrings() {
 				tickLabelStrings << str;
 			}
 		}
-	} else {
+	} else if (datetime) {
 		for (const auto value : tickLabelValues) {
 			QDateTime dateTime;
 			dateTime.setMSecsSinceEpoch(value);
 			str = dateTime.toString(labelsDateTimeFormat);
 			str = labelsPrefix + str + labelsSuffix;
 			tickLabelStrings << str;
+		}
+	} else if (text) {
+		int count = labelsTextColumn->rowCount();
+		for (int i = 0; i < count; ++i) {
+			tickLabelStrings << labelsTextColumn->textAt(i);
 		}
 	}
 
@@ -1808,7 +1860,9 @@ void AxisPrivate::retransformTickLabelPositions() {
 	// TODO: M_PI/180. factor
 	const double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
 	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
-	for ( int i = 0; i < majorTickPoints.size(); i++ ) {
+
+	int size = qMin(majorTickPoints.size(), tickLabelStrings.size());
+	for ( int i = 0; i < size; i++ ) {
 		auto xRangeFormat{ plot()->xRange(xIndex).format() };
 		auto yRangeFormat{ plot()->yRange(yIndex).format() };
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
