@@ -242,31 +242,30 @@ int ReadStatFilterPrivate::getValues(int obs_index, readstat_variable_t *variabl
 
 	if (readstat_value_is_system_missing(value)) {
 		m_lineString << QString();
-		return READSTAT_HANDLER_OK;
-	}
-
-	switch (type) {
-	case READSTAT_TYPE_INT8:
-		m_lineString << QString::number(readstat_int8_value(value));
-		break;
-	case READSTAT_TYPE_INT16:
-		m_lineString << QString::number(readstat_int16_value(value));
-		break;
-	case READSTAT_TYPE_INT32:
-		m_lineString << QString::number(readstat_int32_value(value));
-		break;
-	case READSTAT_TYPE_FLOAT:
-		m_lineString << QString::number(readstat_float_value(value));
-		break;
-	case READSTAT_TYPE_DOUBLE:
-		m_lineString << QString::number(readstat_double_value(value));
-		break;
-	case READSTAT_TYPE_STRING:
-		m_lineString << readstat_string_value(value);
-		break;
-	case READSTAT_TYPE_STRING_REF:
-		//TODO
-		break;
+	} else {
+		switch (type) {
+		case READSTAT_TYPE_INT8:
+			m_lineString << QString::number(readstat_int8_value(value));
+			break;
+		case READSTAT_TYPE_INT16:
+			m_lineString << QString::number(readstat_int16_value(value));
+			break;
+		case READSTAT_TYPE_INT32:
+			m_lineString << QString::number(readstat_int32_value(value));
+			break;
+		case READSTAT_TYPE_FLOAT:
+			m_lineString << QString::number(readstat_float_value(value));
+			break;
+		case READSTAT_TYPE_DOUBLE:
+			m_lineString << QString::number(readstat_double_value(value));
+			break;
+		case READSTAT_TYPE_STRING:
+			m_lineString << readstat_string_value(value);
+			break;
+		case READSTAT_TYPE_STRING_REF:
+			//TODO
+			break;
+		}
 	}
 
 	if (var_index == m_varCount - 1) {
