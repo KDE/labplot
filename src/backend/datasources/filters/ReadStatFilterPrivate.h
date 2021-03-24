@@ -53,10 +53,10 @@ public:
 //	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
 //			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
-#ifdef HAVE_READSTAT
 	static QStringList m_varNames;
 	static QVector<AbstractColumn::ColumnMode> m_columnModes;
 	static QVector<QStringList> m_dataStrings;
+#ifdef HAVE_READSTAT
 //	static void handleError(int status, const QString& function);
 //	static QString translateFormat(int format);
 //	static QString translateDataType(nc_type type);
@@ -71,7 +71,6 @@ public:
 	int endColumn{-1};
 */
 private:
-#ifdef HAVE_READSTAT
 	int m_status;
 
 	static int m_varCount;
@@ -80,7 +79,6 @@ private:
 //	QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem = nullptr);
 //	void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);
 //	void scanVars(int ncid, int nvars, QTreeWidgetItem* parentItem);
-#endif
 };
 
 #endif

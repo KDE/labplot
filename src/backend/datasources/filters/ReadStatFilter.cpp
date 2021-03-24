@@ -185,7 +185,6 @@ QString ReadStatFilter::fileInfoString(const QString& fileName) {
 //################### Private implementation ##########################
 //#####################################################################
 
-#ifdef HAVE_READSTAT
 // static members
 int ReadStatFilterPrivate::m_varCount = 0;
 QStringList ReadStatFilterPrivate::m_varNames;
@@ -193,6 +192,7 @@ QVector<AbstractColumn::ColumnMode> ReadStatFilterPrivate::m_columnModes;
 QStringList ReadStatFilterPrivate::m_lineString;
 QVector<QStringList> ReadStatFilterPrivate::m_dataStrings;
 
+#ifdef HAVE_READSTAT
 // callbacks
 int ReadStatFilterPrivate::getMetaData(readstat_metadata_t *metadata, void *ptr) {
 	Q_UNUSED(ptr)
@@ -300,6 +300,7 @@ QVector<QStringList> ReadStatFilterPrivate::preview(const QString& fileName, int
 		return m_dataStrings;
 	}
 
+#ifdef HAVE_READSTAT
 	readstat_parser_t *parser = readstat_parser_init();
 	readstat_set_metadata_handler(parser, &getMetaData);
 	readstat_set_variable_handler(parser, &getVarName);
@@ -333,6 +334,7 @@ QVector<QStringList> ReadStatFilterPrivate::preview(const QString& fileName, int
 	} else {
 		DEBUG(Q_FUNC_INFO << ", ERROR: processing " << qPrintable(fileName))
 	}
+#endif
 
 	return m_dataStrings;
 }
