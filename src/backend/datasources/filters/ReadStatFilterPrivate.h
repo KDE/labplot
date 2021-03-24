@@ -28,7 +28,9 @@ Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 #define READSTATFILTERPRIVATE_H
 
 #ifdef HAVE_READSTAT
+extern "C" {
 #include <readstat.h>
+}
 #endif
 
 class AbstractDataSource;
@@ -38,14 +40,23 @@ class ReadStatFilterPrivate {
 public:
 	explicit ReadStatFilterPrivate(ReadStatFilter*);
 
+#ifdef HAVE_READSTAT
+	static int getMetaData(readstat_metadata_t *, void *);
+	static int getVarName(int index, readstat_variable_t*, const char *val_labels, void *);
+	static int getValues(int obs_index, readstat_variable_t*, readstat_value_t, void *);
+#endif
 //	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
+	QVector<QStringList> preview(const QString& fileName, int lines);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 //	QString readAttribute(const QString& fileName, const QString& name, const QString& varName);
 //	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
 //			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
-#ifdef HAVE_NETCDF
+#ifdef HAVE_READSTAT
+	static QStringList m_varNames;
+	static QVector<AbstractColumn::ColumnMode> m_columnModes;
+	static QVector<QStringList> m_dataStrings;
 //	static void handleError(int status, const QString& function);
 //	static QString translateFormat(int format);
 //	static QString translateDataType(nc_type type);
@@ -62,6 +73,9 @@ public:
 private:
 #ifdef HAVE_READSTAT
 	int m_status;
+
+	static int m_varCount;
+	static QStringList m_lineString;
 
 //	QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem = nullptr);
 //	void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);

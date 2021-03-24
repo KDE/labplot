@@ -45,14 +45,13 @@ public:
 	~ReadStatFilter() override;
 
 #ifdef HAVE_READSTAT
-	static int get_metadata(readstat_metadata_t *, void *);
+	static int getMetaData(readstat_metadata_t *, void *);
 #endif
 
 	static QString fileInfoString(const QString&);
-/*	static QString fileCDLString(const QString&);
+//	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 
-	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
-*/
+	QVector<QStringList> preview(const QString& fileName, int lines);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 /*	QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
 	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
@@ -60,8 +59,12 @@ public:
 */
 	void write(const QString& fileName, AbstractDataSource*) override;
 
+
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
+
+	QStringList vectorNames() const;
+	QVector<AbstractColumn::ColumnMode> columnModes() const;
 /*
 	void setCurrentVarName(const QString&);
 	const QString currentVarName() const;

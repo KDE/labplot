@@ -35,10 +35,10 @@ class NgspiceRawAsciiFilterPrivate {
 public:
 	explicit NgspiceRawAsciiFilterPrivate(NgspiceRawAsciiFilter*);
 
+	QVector<QStringList> preview(const QString& fileName, int lines);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	void write(const QString& fileName, AbstractDataSource*);
-	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	const NgspiceRawAsciiFilter* q;
 

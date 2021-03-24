@@ -131,7 +131,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 		ui.lSourceType->hide();
 		ui.cbSourceType->hide();
 		ui.gbUpdateOptions->hide();
-	} else {
+	} else {	// Live data source
 		ui.cbFileType->addItem(i18n("ASCII data"), static_cast<int>(AbstractFileFilter::FileType::Ascii));
 		ui.cbFileType->addItem(i18n("Binary data"), static_cast<int>(AbstractFileFilter::FileType::Binary));
 #ifdef HAVE_ZIP
@@ -753,6 +753,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new ReadStatFilter);
 		auto filter = static_cast<ReadStatFilter*>(m_currentFilter.get());
+		//TODO
 		Q_UNUSED(filter)
 		//filter->setStartRow(ui.sbStartRow->value());
 		//filter->setEndRow(ui.sbEndRow->value());
@@ -985,6 +986,8 @@ void ImportFileWidget::fileTypeChanged(int index) {
 		showJsonModel(true);
 		break;
 	case AbstractFileFilter::FileType::READSTAT:
+		ui.tabWidget->removeTab(0);
+		ui.tabWidget->setCurrentIndex(0);
 		//TODO
 		break;
 	default:
@@ -1296,7 +1299,7 @@ void ImportFileWidget::refreshPreview() {
 	// generic table widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary
 	        || fileType == AbstractFileFilter::FileType::JSON || fileType == AbstractFileFilter::FileType::NgspiceRawAscii
-	        || fileType == AbstractFileFilter::FileType::NgspiceRawBinary)
+	        || fileType == AbstractFileFilter::FileType::NgspiceRawBinary || fileType == AbstractFileFilter::FileType::READSTAT)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1508,11 +1511,10 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::READSTAT: {
 		ui.tePreview->clear();
 		auto filter = static_cast<ReadStatFilter*>(currentFileFilter());
-		//TODO
-		Q_UNUSED(filter)
-		//importedStrings = filter->preview(fileName, lines);
-		//vectorNameList = filter->vectorNames();
-		//columnModes = filter->columnModes();
+		importedStrings = filter->preview(fileName, lines);
+		vectorNameList = filter->vectorNames();
+		columnModes = filter->columnModes();
+		DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")
 		break;
 	}
 	}

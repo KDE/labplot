@@ -43,10 +43,9 @@ public:
 	static bool isNgspiceAsciiFile(const QString& fileName);
 	static QString fileInfoString(const QString&);
 
+	QVector<QStringList> preview(const QString& fileName, int lines);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	void write(const QString& fileName, AbstractDataSource*) override;
-
-	QVector<QStringList> preview(const QString& fileName, int lines);
 
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
