@@ -109,6 +109,7 @@ private:
 	void verticalBoxPlot(int);
 	void horizontalBoxPlot(int);
 	void setOutlierPoint(QPointF&, double pos, double value);
+	void mapOutliersToScene(int index);
 
 	void draw(QPainter*);
 	void drawFilling(QPainter*, int);

@@ -686,41 +686,43 @@ void BoxPlotPrivate::recalc(int index) {
 			m_xMin = m_whiskerMin[index];
 	}
 
-	switch (column->columnMode()) {
-	case AbstractColumn::ColumnMode::Numeric:
-	case AbstractColumn::ColumnMode::Integer:
-	case AbstractColumn::ColumnMode::BigInt:
-		for (int row = 0; row < column->rowCount(); ++row) {
-			if ( column->isValid(row) && !column->isMasked(row) ) {
-				const double value = column->valueAt(row);
-				if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
-					QPointF point;
-					setOutlierPoint(point, x, value);
-					++m_outliersCount[index];
-					if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1)
-						m_outliersSymbolPointsLogical[index] << point;
+	if (whiskersType != BoxPlot::WhiskersType::MinMax) {
+		switch (column->columnMode()) {
+		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Integer:
+		case AbstractColumn::ColumnMode::BigInt:
+			for (int row = 0; row < column->rowCount(); ++row) {
+				if ( column->isValid(row) && !column->isMasked(row) ) {
+					const double value = column->valueAt(row);
+					if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
+						QPointF point;
+						setOutlierPoint(point, x, value);
+						++m_outliersCount[index];
+						if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1)
+							m_outliersSymbolPointsLogical[index] << point;
+					}
 				}
 			}
-		}
-		break;
-	case AbstractColumn::ColumnMode::DateTime:
-		for (int row = 0; row < column->rowCount(); ++row) {
-			if ( column->isValid(row) && !column->isMasked(row) ){
-				const double value = column->dateTimeAt(row).toMSecsSinceEpoch();
-				if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
-					QPointF point;
-					setOutlierPoint(point, x, value);
-					++m_outliersCount[index];
-					if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1)
-						m_outliersSymbolPointsLogical[index] << point;
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+			for (int row = 0; row < column->rowCount(); ++row) {
+				if ( column->isValid(row) && !column->isMasked(row) ){
+					const double value = column->dateTimeAt(row).toMSecsSinceEpoch();
+					if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
+						QPointF point;
+						setOutlierPoint(point, x, value);
+						++m_outliersCount[index];
+						if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1)
+							m_outliersSymbolPointsLogical[index] << point;
+					}
 				}
 			}
+			break;
+		case AbstractColumn::ColumnMode::Text:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+			break;
 		}
-		break;
-	case AbstractColumn::ColumnMode::Text:
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::Day:
-		break;
 	}
 }
 
@@ -764,8 +766,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	m_whiskersPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
 
 	//outliers symbols
-	if (!m_outliersSymbolPointsLogical[index].isEmpty())
-		m_outliersSymbolPoints[index] = q->cSystem->mapLogicalToScene(m_outliersSymbolPointsLogical.at(index));
+	mapOutliersToScene(index);
 
 	//mean symbol
 	m_meanSymbolPoint[index] = q->cSystem->mapLogicalToScene(QPointF(x, m_mean.at(index)));
@@ -811,11 +812,42 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	m_whiskersPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize/2));
 
 	//outliers symbols
-	if (!m_outliersSymbolPointsLogical[index].isEmpty())
-		m_outliersSymbolPoints[index] = q->cSystem->mapLogicalToScene(m_outliersSymbolPointsLogical.at(index));
+	mapOutliersToScene(index);
 
 	//mean symbol
 	m_meanSymbolPoint[index] = q->cSystem->mapLogicalToScene(QPointF(m_mean.at(index), y));
+}
+
+/*!
+ * map the outlier points from logical to scene coordinates,
+ * avoid drawing overlapping points, logic similar to
+ * //XYCurvePrivate::retransform()
+ */
+void BoxPlotPrivate::mapOutliersToScene(int index) {
+	const int numberOfPoints = m_outliersSymbolPointsLogical[index].size();
+	if (numberOfPoints > 0) {
+		const auto dataRect{ q->m_plot->dataRect() };
+		const int numberOfPixelX = dataRect.width();
+		const int numberOfPixelY = dataRect.height();
+
+		if (numberOfPixelX <= 0 || numberOfPixelY <= 0)
+			return;
+
+		const int startIndex = 0;
+		const int endIndex = m_outliersSymbolPointsLogical[index].size() - 1;
+		const double minLogicalDiffX = dataRect.width()/numberOfPixelX;
+		const double minLogicalDiffY = dataRect.height()/numberOfPixelY;
+
+		// eliminate multiple scene points (size (numberOfPixelX + 1) * (numberOfPixelY + 1))
+		QVector<QVector<bool>> scenePointsUsed(numberOfPixelX + 1);
+		for (auto& col: scenePointsUsed)
+			col.resize(numberOfPixelY + 1);
+
+		QVector<bool> m_pointVisible;
+		m_pointVisible.resize(numberOfPoints);
+		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_outliersSymbolPointsLogical[index], m_outliersSymbolPoints[index],
+			m_pointVisible, scenePointsUsed, minLogicalDiffX, minLogicalDiffY);
+	}
 }
 
 bool BoxPlotPrivate::swapVisible(bool on) {
