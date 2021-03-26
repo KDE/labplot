@@ -226,7 +226,7 @@ ROOTFilterPrivate::FileType ROOTFilterPrivate::currentObjectPosition(const QStri
 
 void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource,
 		AbstractFileFilter::ImportMode importMode) {
-	DEBUG("ROOTFilterPrivate::readDataFromFile()");
+	DEBUG(Q_FUNC_INFO);
 
 	long int pos = 0;
 	auto type = currentObjectPosition(fileName, pos);

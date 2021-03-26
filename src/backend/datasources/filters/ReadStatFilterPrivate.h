@@ -41,44 +41,36 @@ public:
 	explicit ReadStatFilterPrivate(ReadStatFilter*);
 
 #ifdef HAVE_READSTAT
+	// callbacks (get*)
 	static int getMetaData(readstat_metadata_t *, void *);
 	static int getVarName(int index, readstat_variable_t*, const char *val_labels, void *);
+	static int getColumnModes(int obs_index, readstat_variable_t*, readstat_value_t, void *);
+	static int getValuesPreview(int obs_index, readstat_variable_t*, readstat_value_t, void *);
 	static int getValues(int obs_index, readstat_variable_t*, readstat_value_t, void *);
+	readstat_error_t parse(const QString& fileName, bool preview = false, bool prepare = false);
 #endif
-//	void parse(const QString & fileName, QTreeWidgetItem* rootItem);
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
+	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
-//	QString readAttribute(const QString& fileName, const QString& name, const QString& varName);
-//	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-//			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 	static QStringList m_varNames;
 	static QVector<AbstractColumn::ColumnMode> m_columnModes;
 	static QVector<QStringList> m_dataStrings;
-#ifdef HAVE_READSTAT
-//	static void handleError(int status, const QString& function);
-//	static QString translateFormat(int format);
-//	static QString translateDataType(nc_type type);
-#endif
 
 	const ReadStatFilter* q;
 
-/*	QString currentVarName;
 	int startRow{-1};
 	int endRow{-1};
-	int startColumn{1};
+/*	int startColumn{1};
 	int endColumn{-1};
 */
 private:
 	int m_status;
 
-	static int m_varCount;
+	static int m_varCount;	// nr of cols (vars)
+	static int m_rowCount;	// nr of rows
 	static QStringList m_lineString;
-
-//	QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem = nullptr);
-//	void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);
-//	void scanVars(int ncid, int nvars, QTreeWidgetItem* parentItem);
+	static std::vector<void*> m_dataContainer;
 };
 
 #endif

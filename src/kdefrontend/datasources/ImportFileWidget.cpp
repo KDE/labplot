@@ -3,7 +3,7 @@ File                 : ImportFileWidget.cpp
 Project              : LabPlot
 Description          : import file data widget
 --------------------------------------------------------------------
-Copyright            : (C) 2009-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+Copyright            : (C) 2009-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 Copyright            : (C) 2009-2021 Alexander Semke (alexander.semke@web.de)
 Copyright            : (C) 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
 Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
@@ -591,14 +591,14 @@ LiveDataSource::SourceType ImportFileWidget::currentSourceType() const {
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
-	DEBUG("ImportFileWidget::currentFileFilter()");
+	DEBUG(Q_FUNC_INFO);
 	AbstractFileFilter::FileType fileType = currentFileType();
 	if (m_currentFilter && m_currentFilter->type() != fileType)
 		m_currentFilter.reset();
 
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii: {
-		DEBUG("	ASCII");
+		DEBUG(Q_FUNC_INFO <<", ASCII");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new AsciiFilter);
 		auto filter = static_cast<AsciiFilter*>(m_currentFilter.get());
@@ -621,7 +621,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::Binary: {
-		DEBUG("	Binary");
+		DEBUG(Q_FUNC_INFO <<", Binary");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new BinaryFilter);
 		auto filter = static_cast<BinaryFilter*>(m_currentFilter.get());
@@ -642,7 +642,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::Image: {
-		DEBUG("	Image");
+		DEBUG(Q_FUNC_INFO <<", Image");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new ImageFilter);
 		auto filter = static_cast<ImageFilter*>(m_currentFilter.get());
@@ -656,24 +656,24 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::HDF5: {
-		DEBUG("ImportFileWidget::currentFileFilter(): HDF5");
+		DEBUG(Q_FUNC_INFO <<", HDF5");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new HDF5Filter);
 		auto filter = static_cast<HDF5Filter*>(m_currentFilter.get());
 		QStringList names = selectedHDF5Names();
-		QDEBUG("ImportFileWidget::currentFileFilter(): selected HDF5 names =" << names);
+		QDEBUG(Q_FUNC_INFO << ", selected HDF5 names =" << names);
 		if (!names.isEmpty())
 			filter->setCurrentDataSetName(names[0]);
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
 		filter->setEndColumn(ui.sbEndColumn->value());
-		DEBUG("ImportFileWidget::currentFileFilter(): OK");
+		DEBUG(Q_FUNC_INFO << ", OK");
 
 		break;
 	}
 	case AbstractFileFilter::FileType::NETCDF: {
-		DEBUG("	NETCDF");
+		DEBUG(Q_FUNC_INFO <<", NetCDF");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new NetCDFFilter);
 		auto filter = static_cast<NetCDFFilter*>(m_currentFilter.get());
@@ -688,7 +688,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::FITS: {
-		DEBUG("	FITS");
+		DEBUG(Q_FUNC_INFO <<", FITS");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new FITSFilter);
 		auto filter = static_cast<FITSFilter*>(m_currentFilter.get());
@@ -700,7 +700,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::JSON: {
-		DEBUG("	JSON");
+		DEBUG(Q_FUNC_INFO <<", JSON");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new JsonFilter);
 		auto filter = static_cast<JsonFilter*>(m_currentFilter.get());
@@ -714,7 +714,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::ROOT: {
-		DEBUG("	ROOT");
+		DEBUG(Q_FUNC_INFO <<", ROOT");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new ROOTFilter);
 		auto filter = static_cast<ROOTFilter*>(m_currentFilter.get());
@@ -729,7 +729,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::NgspiceRawAscii: {
-		DEBUG("	NgspiceRawAscii");
+		DEBUG(Q_FUNC_INFO <<", NgspiceRawAscii");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new NgspiceRawAsciiFilter);
 		auto filter = static_cast<NgspiceRawAsciiFilter*>(m_currentFilter.get());
@@ -739,7 +739,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		break;
 	}
 	case AbstractFileFilter::FileType::NgspiceRawBinary: {
-		DEBUG("	NgspiceRawBinary");
+		DEBUG(Q_FUNC_INFO <<", NgspiceRawBinary");
 		if (!m_currentFilter)
 			m_currentFilter.reset(new NgspiceRawBinaryFilter);
 		auto filter = static_cast<NgspiceRawBinaryFilter*>(m_currentFilter.get());
@@ -753,10 +753,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new ReadStatFilter);
 		auto filter = static_cast<ReadStatFilter*>(m_currentFilter.get());
-		//TODO
-		Q_UNUSED(filter)
-		//filter->setStartRow(ui.sbStartRow->value());
-		//filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
 
 		break;
 	}
@@ -2315,7 +2313,7 @@ void ImportFileWidget::enableWill(bool enable) {
 	saves the settings to the MQTTClient \c client.
 */
 void ImportFileWidget::saveMQTTSettings(MQTTClient* client) const {
-	DEBUG("ImportFileWidget::saveMQTTSettings");
+	DEBUG(Q_FUNC_INFO);
 	auto updateType = static_cast<MQTTClient::UpdateType>(ui.cbUpdateType->currentIndex());
 	auto readingType = static_cast<MQTTClient::ReadingType>(ui.cbReadingType->currentIndex());
 

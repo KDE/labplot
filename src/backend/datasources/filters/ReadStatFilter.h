@@ -49,14 +49,9 @@ public:
 #endif
 
 	static QString fileInfoString(const QString&);
-//	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
-/*	QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
-	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-*/
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 
@@ -65,14 +60,13 @@ public:
 
 	QStringList vectorNames() const;
 	QVector<AbstractColumn::ColumnMode> columnModes() const;
-/*
-	void setCurrentVarName(const QString&);
-	const QString currentVarName() const;
 
+	//TODO: put into base class?
 	void setStartRow(const int);
 	int startRow() const;
 	void setEndRow(const int);
 	int endRow() const;
+/*
 	void setStartColumn(const int);
 	int startColumn() const;
 	void setEndColumn(const int);

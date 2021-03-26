@@ -82,6 +82,20 @@ void ReadStatFilter::saveFilterSettings(const QString& filterName) const {
 	Q_UNUSED(filterName);
 }
 
+void ReadStatFilter::setStartRow(const int r) {
+	d->startRow = r;
+}
+int ReadStatFilter::startRow() const {
+	return d->startRow;
+}
+
+void ReadStatFilter::setEndRow(const int r) {
+	d->endRow = r;
+}
+int ReadStatFilter::endRow() const {
+	return d->endRow;
+}
+
 QStringList ReadStatFilter::vectorNames() const {
 	return d->m_varNames;
 }
@@ -185,22 +199,27 @@ QString ReadStatFilter::fileInfoString(const QString& fileName) {
 //################### Private implementation ##########################
 //#####################################################################
 
-// static members
+// static members (needed by C callbacks)
 int ReadStatFilterPrivate::m_varCount = 0;
+int ReadStatFilterPrivate::m_rowCount = 0;
 QStringList ReadStatFilterPrivate::m_varNames;
 QVector<AbstractColumn::ColumnMode> ReadStatFilterPrivate::m_columnModes;
 QStringList ReadStatFilterPrivate::m_lineString;
 QVector<QStringList> ReadStatFilterPrivate::m_dataStrings;
+std::vector<void*> ReadStatFilterPrivate::m_dataContainer;
 
 #ifdef HAVE_READSTAT
 // callbacks
 int ReadStatFilterPrivate::getMetaData(readstat_metadata_t *metadata, void *ptr) {
+	DEBUG(Q_FUNC_INFO)
 	Q_UNUSED(ptr)
 	m_varCount = readstat_get_var_count(metadata);
+	m_rowCount = readstat_get_row_count(metadata);
 
 	return READSTAT_HANDLER_OK;
 }
 int ReadStatFilterPrivate::getVarName(int index, readstat_variable_t *variable, const char *val_labels, void *ptr) {
+	DEBUG(Q_FUNC_INFO)
 	Q_UNUSED(index)
 	Q_UNUSED(val_labels)
 	Q_UNUSED(ptr)
@@ -209,41 +228,53 @@ int ReadStatFilterPrivate::getVarName(int index, readstat_variable_t *variable, 
 
 	return READSTAT_HANDLER_OK;
 }
-int ReadStatFilterPrivate::getValues(int obs_index, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
+int ReadStatFilterPrivate::getColumnModes(int obs_index, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
+	Q_UNUSED(variable)
 	Q_UNUSED(ptr)
 
-	int var_index = readstat_variable_get_index(variable);
-	//DEBUG(Q_FUNC_INFO << ", obs_index = " << obs_index << " var_index = " << var_index)
+	if (obs_index >= m_rowCount)	// more rows found than meta data said (maybe -1)
+		m_rowCount = obs_index + 1;
 
-	readstat_type_t type = readstat_value_type(value);
+	if (obs_index > 0)
+		return READSTAT_HANDLER_OK;
+	DEBUG(Q_FUNC_INFO)
+
 	// column modes
-	if (obs_index == 0) {
-		switch (type) {
-		case READSTAT_TYPE_INT8:
-		case READSTAT_TYPE_INT16:
-		case READSTAT_TYPE_INT32:
-			m_columnModes << AbstractColumn::ColumnMode::Integer;
-			break;
-		case READSTAT_TYPE_FLOAT:
-		case READSTAT_TYPE_DOUBLE:
-			m_columnModes << AbstractColumn::ColumnMode::Numeric;
-			break;
-		case READSTAT_TYPE_STRING:
-			m_columnModes << AbstractColumn::ColumnMode::Text;
-		case READSTAT_TYPE_STRING_REF:
-			//TODO
-			break;
-		}
+	switch (readstat_value_type(value)) {
+	case READSTAT_TYPE_INT8:
+	case READSTAT_TYPE_INT16:
+	case READSTAT_TYPE_INT32:
+		m_columnModes << AbstractColumn::ColumnMode::Integer;
+		break;
+	case READSTAT_TYPE_FLOAT:
+	case READSTAT_TYPE_DOUBLE:
+		m_columnModes << AbstractColumn::ColumnMode::Numeric;
+		break;
+	case READSTAT_TYPE_STRING:
+		m_columnModes << AbstractColumn::ColumnMode::Text;
+	case READSTAT_TYPE_STRING_REF:
+		//TODO
+		break;
 	}
 
-	// values
+	return READSTAT_HANDLER_OK;
+}
+int ReadStatFilterPrivate::getValuesPreview(int obs_index, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
+	Q_UNUSED(ptr)	// use for lines?
+
+	int var_index = readstat_variable_get_index(variable);
+
+	if (obs_index == 0)
+		getColumnModes(obs_index, variable, value, ptr);
+
+	// read values into m_lineString and finally into m_dataStrings
 	if (var_index == 0)
 		m_lineString.clear();
 
 	if (readstat_value_is_system_missing(value)) {
 		m_lineString << QString();
 	} else {
-		switch (type) {
+		switch (readstat_value_type(value)) {
 		case READSTAT_TYPE_INT8:
 			m_lineString << QString::number(readstat_int8_value(value));
 			break;
@@ -275,6 +306,58 @@ int ReadStatFilterPrivate::getValues(int obs_index, readstat_variable_t *variabl
 
 	return READSTAT_HANDLER_OK;
 }
+int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
+	Q_UNUSED(ptr)	// use for lines?
+
+	const int col = readstat_variable_get_index(variable);
+	//DEBUG(Q_FUNC_INFO << ", obs_index = " << obs_index << " var_index = " << var_index)
+
+	// import data
+	if (readstat_value_is_system_missing(value)) {	// empty
+		if (readstat_value_type(value) == READSTAT_TYPE_FLOAT || readstat_value_type(value) == READSTAT_TYPE_DOUBLE) {
+			QVector<double>& container = *static_cast<QVector<double>*>(m_dataContainer[col]);
+			container[row] = qQNaN();
+		}
+	} else {
+		switch (readstat_value_type(value)) {
+		case READSTAT_TYPE_INT8: {
+			QVector<int>& container = *static_cast<QVector<int>*>(m_dataContainer[col]);
+			container[row] = readstat_int8_value(value);
+			break;
+		}
+		case READSTAT_TYPE_INT16: {
+			QVector<int>& container = *static_cast<QVector<int>*>(m_dataContainer[col]);
+			container[row] = readstat_int16_value(value);
+			break;
+		}
+		case READSTAT_TYPE_INT32: {
+			QVector<int>& container = *static_cast<QVector<int>*>(m_dataContainer[col]);
+			container[row] = readstat_int32_value(value);
+			break;
+		}
+		case READSTAT_TYPE_FLOAT: {
+			QVector<double>& container = *static_cast<QVector<double>*>(m_dataContainer[col]);
+			container[row] = readstat_float_value(value);
+			break;
+		}
+		case READSTAT_TYPE_DOUBLE: {
+			QVector<double>& container = *static_cast<QVector<double>*>(m_dataContainer[col]);
+			container[row] = readstat_double_value(value);
+			break;
+		}
+		case READSTAT_TYPE_STRING: {
+			QVector<QString>& container = *static_cast<QVector<QString>*>(m_dataContainer[col]);
+			container[row] = readstat_string_value(value);
+			break;
+		}
+		case READSTAT_TYPE_STRING_REF:
+			//TODO
+			break;
+		}
+	}
+
+	return READSTAT_HANDLER_OK;
+}
 #endif
 
 ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter* owner) : q(owner) {
@@ -283,27 +366,23 @@ ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter* owner) : q(owner) {
 #endif
 }
 
-/*!
- * generates the preview for the file \c fileName reading the provided number of \c lines.
- */
-QVector<QStringList> ReadStatFilterPrivate::preview(const QString& fileName, int lines) {
-	Q_UNUSED(lines)
-
-	m_varNames.clear();
-	m_columnModes.clear();
-	m_dataStrings.clear();
-
-	QFile file(fileName);
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		DEBUG("Failed to open the file " << STDSTRING(fileName));
-		return m_dataStrings;
-	}
-
 #ifdef HAVE_READSTAT
+/*!
+ * parse the file with name fileName
+ */
+readstat_error_t ReadStatFilterPrivate::parse(const QString& fileName, bool preview, bool prepare) {
+	DEBUG(Q_FUNC_INFO << ", file " << fileName.toStdString())
+
 	readstat_parser_t *parser = readstat_parser_init();
-	readstat_set_metadata_handler(parser, &getMetaData);
-	readstat_set_variable_handler(parser, &getVarName);
-	readstat_set_value_handler(parser, &getValues);
+	readstat_set_metadata_handler(parser, &getMetaData);	// metadata
+	readstat_set_variable_handler(parser, &getVarName);	// header
+	if (preview)	// get data and save into m_dataStrings
+		readstat_set_value_handler(parser, &getValuesPreview);
+	else if (prepare)	// only read column modes
+		readstat_set_value_handler(parser, &getColumnModes);
+	else	// get and save data into d
+		readstat_set_value_handler(parser, &getValues);
+	//TODO: note_handler, fweight_handler, value_label_handler
 
 	readstat_error_t error = READSTAT_OK;
 	if ( fileName.endsWith(QLatin1String(".dta")) )
@@ -320,9 +399,32 @@ QVector<QStringList> ReadStatFilterPrivate::preview(const QString& fileName, int
 		error = readstat_parse_xport(parser, qPrintable(fileName), nullptr);
 	else {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Unknown file extension")
-		return m_dataStrings;
 	}
 	readstat_parser_free(parser);
+
+	return error;
+}
+#endif
+
+/*!
+ * generates the preview for the file \c fileName reading the provided number of \c lines.
+ */
+QVector<QStringList> ReadStatFilterPrivate::preview(const QString& fileName, int lines) {
+	Q_UNUSED(lines)
+
+	m_varNames.clear();
+	m_columnModes.clear();
+	m_dataStrings.clear();
+
+	//TODO: do we need this check?
+	QFile file(fileName);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		DEBUG("Failed to open the file " << STDSTRING(fileName));
+		return m_dataStrings;
+	}
+
+#ifdef HAVE_READSTAT
+	readstat_error_t error = parse(fileName, true);	// lines?
 
 	if (error == READSTAT_OK) {
 		DEBUG(Q_FUNC_INFO << ", var count = " << m_varCount)
@@ -339,21 +441,48 @@ QVector<QStringList> ReadStatFilterPrivate::preview(const QString& fileName, int
 }
 
 /*!
-    reads the content of the current selected variable from file \c fileName to the data source \c dataSource.
+    reads the content of file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
-QVector<QStringList> ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-	QVector<QStringList> dataStrings;
+void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+	DEBUG(Q_FUNC_INFO << ", fileName = \'" << STDSTRING(fileName) << "\', dataSource = "
+	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode));
 
-//	if (currentVarName.isEmpty()) {
-		DEBUG(" No variable selected");
-		return dataStrings;
-//	}
+	m_varNames.clear();
+	m_columnModes.clear();
+	m_dataStrings.clear();
 
-	Q_UNUSED(fileName)
-	Q_UNUSED(dataSource)
-	Q_UNUSED(mode)
-//	return readCurrentVar(fileName, dataSource, mode);
+	//TODO: do we need this check?
+	QFile file(fileName);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		DEBUG("Failed to open the file " << STDSTRING(fileName));
+		return;
+	}
+
+	DEBUG(Q_FUNC_INFO << ", Parsing meta data ...")
+	// parse meta data and column modes only
+	readstat_error_t error = parse(fileName, false, true);		//TODO option "lines" ?
+	if (error != READSTAT_OK) {
+		DEBUG(Q_FUNC_INFO << ", ERROR preparsing file " << fileName.toStdString())
+		return;
+	}
+
+	DEBUG(Q_FUNC_INFO << ", found " << m_varCount <<" cols, " << m_rowCount << " rows")
+
+	//prepare data container
+	const int startRow = 1, endRow = -1;
+	const int actualEndRow = (endRow == -1 || endRow > m_rowCount) ? m_rowCount : endRow;
+	const int actualRows = actualEndRow - startRow + 1;
+	const int actualCols = m_varCount;
+	const int columnOffset = dataSource->prepareImport(m_dataContainer, mode, actualRows, actualCols, m_varNames, m_columnModes);
+
+	error = parse(fileName);		//TODO option "lines" ?
+	if (error != READSTAT_OK) {
+		DEBUG(Q_FUNC_INFO << ", ERROR parsing file " << fileName.toStdString())
+		return;
+	}
+
+	dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), mode);
 }
 
 /*!

@@ -248,7 +248,7 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
     reads the content of the file \c fileName to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode) {
-	DEBUG("NgspiceRawAsciiFilterPrivate::readDataFromFile(): fileName = \'" << STDSTRING(fileName) << "\', dataSource = "
+	DEBUG(Q_FUNC_INFO << ", fileName = \'" << STDSTRING(fileName) << "\', dataSource = "
 	      << dataSource << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, importMode));
 
 	QFile file(fileName);

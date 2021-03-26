@@ -146,7 +146,7 @@ LiveDataSource::SourceType ImportFileDialog::sourceType() const {
   triggers data import to the live data source \c source
 */
 void ImportFileDialog::importToLiveDataSource(LiveDataSource* source, QStatusBar* statusBar) const {
-	DEBUG("ImportFileDialog::importToLiveDataSource()");
+	DEBUG(Q_FUNC_INFO);
 	m_importFileWidget->saveSettings(source);
 
 	//show a progress bar in the status bar
@@ -183,7 +183,7 @@ void ImportFileDialog::importToMQTT(MQTTClient* client) const{
   triggers data import to the currently selected data container
 */
 void ImportFileDialog::importTo(QStatusBar* statusBar) const {
-	DEBUG("ImportFileDialog::importTo()");
+	DEBUG(Q_FUNC_INFO);
 	QDEBUG("	cbAddTo->currentModelIndex() =" << cbAddTo->currentModelIndex());
 	AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
 	if (!aspect) {
@@ -217,16 +217,16 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	timer.start();
 
 	if (aspect->inherits(AspectType::Matrix)) {
-		DEBUG("ImportFileDialog::importTo(): to Matrix");
+		DEBUG(Q_FUNC_INFO <<", to Matrix");
 		auto* matrix = qobject_cast<Matrix*>(aspect);
 		filter->readDataFromFile(fileName, matrix, mode);
 	} else if (aspect->inherits(AspectType::Spreadsheet)) {
-		DEBUG("ImportFileDialog::importTo(): to Spreadsheet");
+		DEBUG(Q_FUNC_INFO << ", to Spreadsheet");
 		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
 		DEBUG(" Calling filter->readDataFromFile() with spreadsheet " << spreadsheet);
 		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits(AspectType::Workbook)) {
-		DEBUG("ImportFileDialog::importTo(): to Workbook");
+		DEBUG(Q_FUNC_INFO << ", to Workbook");
 		auto* workbook = static_cast<Workbook*>(aspect);
 		workbook->setUndoAware(false);
 		auto sheets = workbook->children<AbstractAspect>();
