@@ -380,7 +380,7 @@ readstat_error_t ReadStatFilterPrivate::parse(const QString& fileName, bool prev
 		readstat_set_value_handler(parser, &getValuesPreview);
 	else if (prepare)	// only read column modes
 		readstat_set_value_handler(parser, &getColumnModes);
-	else	// get and save data into d
+	else	// get and save data into data container
 		readstat_set_value_handler(parser, &getValues);
 	//TODO: note_handler, fweight_handler, value_label_handler
 
@@ -410,18 +410,11 @@ readstat_error_t ReadStatFilterPrivate::parse(const QString& fileName, bool prev
  * generates the preview for the file \c fileName reading the provided number of \c lines.
  */
 QVector<QStringList> ReadStatFilterPrivate::preview(const QString& fileName, int lines) {
-	Q_UNUSED(lines)
+	Q_UNUSED(lines)	//TODO
 
 	m_varNames.clear();
 	m_columnModes.clear();
 	m_dataStrings.clear();
-
-	//TODO: do we need this check?
-	QFile file(fileName);
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		DEBUG("Failed to open the file " << STDSTRING(fileName));
-		return m_dataStrings;
-	}
 
 #ifdef HAVE_READSTAT
 	readstat_error_t error = parse(fileName, true);	// lines?
@@ -435,6 +428,8 @@ QVector<QStringList> ReadStatFilterPrivate::preview(const QString& fileName, int
 	} else {
 		DEBUG(Q_FUNC_INFO << ", ERROR: processing " << qPrintable(fileName))
 	}
+#else
+	Q_UNUSED(fileName)
 #endif
 
 	return m_dataStrings;
@@ -452,13 +447,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	m_columnModes.clear();
 	m_dataStrings.clear();
 
-	//TODO: do we need this check?
-	QFile file(fileName);
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		DEBUG("Failed to open the file " << STDSTRING(fileName));
-		return;
-	}
-
+#ifdef HAVE_READSTAT
 	DEBUG(Q_FUNC_INFO << ", Parsing meta data ...")
 	// parse meta data and column modes only
 	readstat_error_t error = parse(fileName, false, true);		//TODO option "lines" ?
@@ -483,6 +472,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	}
 
 	dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), mode);
+#endif
 }
 
 /*!
