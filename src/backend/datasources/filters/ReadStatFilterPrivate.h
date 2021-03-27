@@ -59,13 +59,13 @@ public:
 
 	const ReadStatFilter* q;
 
-	int startRow{-1};
-	int endRow{-1};
+	static int m_startRow;
+	static int m_endRow;
 /*	int startColumn{1};
 	int endColumn{-1};
 */
 private:
-	int m_status;
+	//int m_status;
 
 	static int m_varCount;	// nr of cols (vars)
 	static int m_rowCount;	// nr of rows

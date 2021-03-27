@@ -767,7 +767,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 	opens a file dialog and lets the user select the file data source.
 */
 void ImportFileWidget::selectFile() {
-	DEBUG("ImportFileWidget::selectFile()")
+	DEBUG(Q_FUNC_INFO)
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("ImportFileWidget"));
 	const QString& dir = conf.readEntry(QLatin1String("LastDir"), "");
 	const QString& path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
@@ -986,7 +986,8 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	case AbstractFileFilter::FileType::READSTAT:
 		ui.tabWidget->removeTab(0);
 		ui.tabWidget->setCurrentIndex(0);
-		//TODO
+		ui.lFilter->hide();
+		ui.cbFilter->hide();
 		break;
 	default:
 		DEBUG("unknown file type");
@@ -1282,7 +1283,7 @@ void ImportFileWidget::refreshPreview() {
 	if (m_suppressRefresh || !ui.gbOptions->isVisible())
 		return;
 
-	DEBUG("ImportFileWidget::refreshPreview()");
+	DEBUG(Q_FUNC_INFO);
 	WAIT_CURSOR;
 
 	QString tempFileName = fileName();
@@ -1294,7 +1295,7 @@ void ImportFileWidget::refreshPreview() {
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
 		DEBUG("	file name = " << STDSTRING(fileName));
 
-	// generic table widget
+	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary
 	        || fileType == AbstractFileFilter::FileType::JSON || fileType == AbstractFileFilter::FileType::NgspiceRawAscii
 	        || fileType == AbstractFileFilter::FileType::NgspiceRawBinary || fileType == AbstractFileFilter::FileType::READSTAT)
