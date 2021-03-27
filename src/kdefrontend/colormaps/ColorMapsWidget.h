@@ -44,6 +44,8 @@ public:
 	~ColorMapsWidget() override;
 
 	QPixmap previewPixmap() const;
+	QString name() const;
+	QVector<QColor> colors() const;
 
 private:
 	Ui::ColorMapsWidget ui;
@@ -53,6 +55,7 @@ private:
 	QCompleter* m_completer{nullptr};
 	QString m_jsonDir;
 	QPixmap m_pixmap;
+	QVector<QColor> m_colormap;
 
 	void loadCollections();
 

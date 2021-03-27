@@ -27,7 +27,6 @@
  ***************************************************************************/
 #include "FormattingHeatmapDialog.h"
 #include "backend/core/column/Column.h"
-// #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/colormaps/ColorMapsDialog.h"
 
@@ -67,17 +66,21 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 	layout->addWidget(mainWidget);
 	layout->addWidget(buttonBox);
 	setLayout(layout);
-	setAttribute(Qt::WA_DeleteOnClose);
 
 	ui.bColorMap->setIcon(QIcon::fromTheme(QLatin1String("color-management")));
 	ui.lColorMapPreview->setMaximumHeight(ui.bColorMap->height());
 
-	ui.cbLevelsType->addItem(i18n("Count"));
-	ui.cbLevelsType->addItem(i18n("Increment"));
+// 	ui.cbLevelsType->addItem(i18n("Count"));
+// 	ui.cbLevelsType->addItem(i18n("Increment"));
 
 	ui.leMinimum->setValidator(new QDoubleValidator(ui.leMinimum));
 	ui.leMaximum->setValidator(new QDoubleValidator(ui.leMaximum));
-	ui.leLevels->setValidator(new QDoubleValidator(ui.leLevels));
+// 	ui.leLevels->setValidator(new QDoubleValidator(ui.leLevels));
+
+	//TODO: activate later once we allow to define customer levels and colors
+	ui.lLevels->hide();
+	ui.cbLevelsType->hide();
+	ui.leLevels->hide();
 
 	connect(ui.chkAutoRange, &QCheckBox::stateChanged, this, &FormattingHeatmapDialog::autoRangeChanged);
 	connect(ui.leMaximum, &QLineEdit::textChanged, this, &FormattingHeatmapDialog::checkValues);
@@ -93,9 +96,8 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
-	} else {
+	} else
 		resize( QSize(400, 0).expandedTo(minimumSize()) );
-	}
 }
 
 FormattingHeatmapDialog::~FormattingHeatmapDialog() {
@@ -111,6 +113,9 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 	double min = INFINITY;
 	double max = -INFINITY;
 	for (auto* col : m_columns) {
+		if (!col->isNumeric())
+			continue;
+
 		if (col->minimum() < min)
 			min = col->minimum();
 		if (col->maximum() > max)
@@ -126,7 +131,15 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 		ui.leMaximum->setText(QString::number(max));
 	else
 		ui.leMaximum->setText(QString());
+}
 
+SpreadsheetModel::HeatmapFormat FormattingHeatmapDialog::format() {
+	SpreadsheetModel::HeatmapFormat format;
+	format.min = ui.leMinimum->text().toDouble();
+	format.max = ui.leMaximum->text().toDouble();
+	format.colors = m_colors;
+	format.name = m_name;
+	return format;
 }
 
 void FormattingHeatmapDialog::autoRangeChanged(int index) {
@@ -140,6 +153,8 @@ void FormattingHeatmapDialog::autoRangeChanged(int index) {
 void FormattingHeatmapDialog::selectColorMap() {
 	auto* dlg = new ColorMapsDialog(this);
 	if (dlg->exec() == QDialog::Accepted) {
+		m_colors = dlg->colors();
+		m_name = dlg->name();
 		ui.lColorMapPreview->setPixmap(dlg->previewPixmap());
 		ui.lColorMapPreview->setFocus();
 	}
@@ -151,7 +166,6 @@ void FormattingHeatmapDialog::checkValues() {
 		m_okButton->setEnabled(false);
 		return;
 	}
-
 
 	m_okButton->setEnabled(true);
 }

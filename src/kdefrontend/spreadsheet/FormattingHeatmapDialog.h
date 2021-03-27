@@ -30,6 +30,7 @@
 
 #include <QDialog>
 #include "ui_formattingheatmapwidget.h"
+#include "backend/spreadsheet/SpreadsheetModel.h"
 
 class Column;
 class Spreadsheet;
@@ -42,12 +43,15 @@ public:
 	explicit FormattingHeatmapDialog(Spreadsheet*, QWidget* parent = nullptr);
 	~FormattingHeatmapDialog() override;
 	void setColumns(const QVector<Column*>&);
+	SpreadsheetModel::HeatmapFormat format();
 
 private:
 	Ui::FormattingHeatmapWidget ui;
 	QVector<Column*> m_columns;
 	Spreadsheet* m_spreadsheet;
 	QPushButton* m_okButton;
+	QString m_name;
+	QVector<QColor> m_colors;
 
 private slots:
 	void autoRangeChanged(int);

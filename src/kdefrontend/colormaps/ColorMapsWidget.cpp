@@ -183,24 +183,24 @@ void ColorMapsWidget::collectionChanged(int) {
 
 void ColorMapsWidget::colorMapChanged() {
 	//convert from the string RGB represetation to QColor
-	const QString& colorMap = ui.lwColorMaps->currentItem()->text();
-	QVector<QColor> colors;
-	for (auto& rgb : m_colors[colorMap]) {
+	const QString& name = ui.lwColorMaps->currentItem()->text();
+	m_colormap.clear();
+	for (auto& rgb : m_colors[name]) {
 		QStringList rgbValues = rgb.split(QLatin1Char(','));
 		if (rgbValues.count() == 3)
-			colors << QColor(rgbValues.at(0).toInt(), rgbValues.at(1).toInt(), rgbValues.at(2).toInt());
+			m_colormap << QColor(rgbValues.at(0).toInt(), rgbValues.at(1).toInt(), rgbValues.at(2).toInt());
 		else if (rgbValues.count() == 4)
-			colors << QColor(rgbValues.at(1).toInt(), rgbValues.at(2).toInt(), rgbValues.at(3).toInt());
+			m_colormap << QColor(rgbValues.at(1).toInt(), rgbValues.at(2).toInt(), rgbValues.at(3).toInt());
 	}
 
 	//render the preview pixmap
 	int height = 80;
 	int width = 200;
-	int count = colors.count();
+	int count = m_colormap.count();
 	m_pixmap = QPixmap(width, height);
 	QPainter p(&m_pixmap);
 	int i = 0;
-	for (auto& color : colors) {
+	for (auto& color : m_colormap) {
 		p.setPen(color);
 		p.setBrush(color);
 		p.drawRect(i*width/count, 0, width/count, height);
@@ -221,4 +221,12 @@ void ColorMapsWidget::updateColorMapsList() {
 
 QPixmap ColorMapsWidget::previewPixmap() const {
 	return m_pixmap;
+}
+
+QString ColorMapsWidget::name() const {
+	return ui.lwColorMaps->currentItem()->text();
+}
+
+QVector<QColor> ColorMapsWidget::colors() const {
+	return m_colormap;
 }

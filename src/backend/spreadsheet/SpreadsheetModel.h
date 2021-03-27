@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2009 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2013-2016 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -45,6 +45,13 @@ class SpreadsheetModel : public QAbstractItemModel {
 public:
 	explicit SpreadsheetModel(Spreadsheet*);
 
+	struct HeatmapFormat {
+		double min = 0.0;
+		double max = 1.0;
+		QString name;
+		QVector<QColor> colors;
+	};
+
 	enum class CustomDataRole {
 		MaskingRole = Qt::UserRole, //!< bool determining whether the cell is masked
 		FormulaRole = Qt::UserRole+1, //!< the cells formula
@@ -68,6 +75,8 @@ public:
 
 	void updateHorizontalHeader();
 	void suppressSignals(bool);
+
+	void setHeatmapFormat(QVector<Column*>, const HeatmapFormat&);
 
 private slots:
 	void handleAspectAdded(const AbstractAspect*);
@@ -94,6 +103,9 @@ private:
 	bool m_suppressSignals{false};
 	int m_rowCount{0};
 	int m_columnCount{0};
+	QMap<QString, HeatmapFormat> m_heatmapFormats;
+
+	QVariant backgroundColor(const Column*, int row) const;
 };
 
 #endif

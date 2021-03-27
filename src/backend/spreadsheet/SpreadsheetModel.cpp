@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2009 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2013-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -162,6 +162,8 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		if (!col_ptr->isValid(row))
 			return QVariant(QBrush(Qt::red));
 		break;
+	case Qt::BackgroundRole:
+		return backgroundColor(col_ptr, row);
 	case static_cast<int>(CustomDataRole::MaskingRole):
 		return QVariant(col_ptr->isMasked(row));
 	case static_cast<int>(CustomDataRole::FormulaRole):
@@ -526,4 +528,29 @@ void SpreadsheetModel::activateFormulaMode(bool on) {
 
 bool SpreadsheetModel::formulaModeActive() const {
 	return m_formula_mode;
+}
+
+void SpreadsheetModel::setHeatmapFormat(QVector<Column*> columns, const SpreadsheetModel::HeatmapFormat& format) {
+	for (auto* column : columns)
+		m_heatmapFormats[column->path()] = format;
+}
+
+QVariant SpreadsheetModel::backgroundColor(const Column* column, int row) const {
+	if (!column->isNumeric()
+		|| !column->isValid(row)
+		|| !m_heatmapFormats.contains(column->path()))
+		return QVariant();
+
+	const auto& format = m_heatmapFormats[column->path()];
+	double value = column->valueAt(row);
+	double range = (format.max - format.min)/format.colors.count();
+	int index = 0;
+	for (int i = 0; i < format.colors.count(); ++i) {
+		if (value <=  format.min + i*range) {
+			index = i;
+			break;
+		}
+	}
+
+	return QVariant(QColor(format.colors.at(index)));
 }

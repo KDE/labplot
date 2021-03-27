@@ -1314,14 +1314,16 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 					insertRowBelow();
 			}
 		} else if (key_event->key() == Qt::Key_Left) {
-			//TODO:
+			//adjusted example from
 			//https://doc.qt.io/qt-5/qtwidgets-itemviews-frozencolumn-example.html
 // 			QModelIndex current = m_tableView->currentIndex();
-// 			const QRect& rect = m_tableView->visualRect(current);
-// 			auto* scrollBar = m_frozenTableView->horizontalScrollBar();
-// 			if (current.column() > 0 && rect.topLeft().x() < m_frozenTableView->columnWidth(0) ){
-// 				const int newValue = scrollBar->value() + rect.topLeft().x() - m_frozenTableView->columnWidth(0);
-// 				scrollBar->setValue(newValue);
+// 			if (current.column() > 0) {
+// 				const QRect& rect = m_tableView->visualRect(current);
+// 				auto* scrollBar = m_tableView->horizontalScrollBar();
+// 				if (rect.topLeft().x() < m_frozenTableView->columnWidth(0)) {
+// 					const int newValue = scrollBar->value() + rect.topLeft().x() - m_frozenTableView->columnWidth(0);
+// 					scrollBar->setValue(newValue);
+// 				}
 // 			}
 		}
 	}
@@ -2157,7 +2159,7 @@ void SpreadsheetView::sortSpreadsheet() {
 }
 
 void SpreadsheetView::formatHeatmap() {
-	auto columns = selectedColumns();
+	auto columns = selectedColumns(true);
 	if (columns.isEmpty())
 		columns = m_spreadsheet->children<Column>();
 
@@ -2166,7 +2168,10 @@ void SpreadsheetView::formatHeatmap() {
 
 	auto* dlg = new FormattingHeatmapDialog(m_spreadsheet);
 	dlg->setColumns(columns);
-	dlg->exec();
+	if (dlg->exec() == QDialog::Accepted)
+		m_model->setHeatmapFormat(columns, dlg->format());
+
+	delete dlg;
 }
 
 /*!

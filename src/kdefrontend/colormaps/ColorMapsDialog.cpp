@@ -77,3 +77,11 @@ ColorMapsDialog::~ColorMapsDialog() {
 QPixmap ColorMapsDialog::previewPixmap() const {
 	return m_colorMapsWidget->previewPixmap();
 }
+
+QString ColorMapsDialog::name() const {
+	return m_colorMapsWidget->name();
+}
+
+QVector<QColor> ColorMapsDialog::colors() const {
+	return m_colorMapsWidget->colors();
+}
