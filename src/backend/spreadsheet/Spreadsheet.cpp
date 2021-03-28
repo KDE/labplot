@@ -1020,7 +1020,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 }
 
 void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
-	DEBUG("Spreadsheet::finalizeImport()");
+	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
 	//determine the dependent plots
 	QVector<CartesianPlot*> plots;
@@ -1038,8 +1038,9 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
 	for (int n = startColumn; n <= endColumn; n++) {
+		//DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
 		Column* column = this->column(columnOffset + n - startColumn);
-		DEBUG("	column " << n << " of type " << static_cast<int>(column->columnMode()));
+		//DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
 
 		QString comment;
 		switch (column->columnMode()) {
@@ -1095,8 +1096,8 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 		m_view->resizeHeader();
 
 	//row count most probably changed after the import, notify the dock widget.
-	//no need to notify about the column cound change, this is done already because of add/removeChild signals
+	//no need to notify about the column count change, this is already done by add/removeChild signals
 	rowCountChanged(rowCount());
 
-	DEBUG("Spreadsheet::finalizeImport() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }

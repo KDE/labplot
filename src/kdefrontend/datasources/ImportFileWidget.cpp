@@ -755,6 +755,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		auto filter = static_cast<ReadStatFilter*>(m_currentFilter.get());
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
 
 		break;
 	}

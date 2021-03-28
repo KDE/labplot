@@ -1316,6 +1316,7 @@ void ColumnPrivate::clearFormulas() {
  */
 QString ColumnPrivate::textAt(int row) const {
 	if (m_column_mode != AbstractColumn::ColumnMode::Text) return QString();
+	DEBUG(Q_FUNC_INFO << ", row = " << row)
 	return static_cast<QVector<QString>*>(m_data)->value(row);
 }
 

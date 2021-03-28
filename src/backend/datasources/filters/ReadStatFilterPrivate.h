@@ -61,9 +61,8 @@ public:
 
 	static int m_startRow;
 	static int m_endRow;
-/*	int startColumn{1};
-	int endColumn{-1};
-*/
+	static int m_startColumn;
+	static int m_endColumn;
 private:
 	//int m_status;
 

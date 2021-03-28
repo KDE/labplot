@@ -66,12 +66,11 @@ public:
 	int startRow() const;
 	void setEndRow(const int);
 	int endRow() const;
-/*
 	void setStartColumn(const int);
 	int startColumn() const;
 	void setEndColumn(const int);
 	int endColumn() const;
-*/
+
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*) override;
 
