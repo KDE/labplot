@@ -35,6 +35,7 @@
 #include "QMap"
 
 class QCompleter;
+class QStandardItemModel;
 
 class ColorMapsWidget : public QWidget {
 	Q_OBJECT
@@ -43,9 +44,10 @@ public:
 	explicit ColorMapsWidget(QWidget*);
 	~ColorMapsWidget() override;
 
-	QPixmap previewPixmap() const;
+	QPixmap previewPixmap();
 	QString name() const;
 	QVector<QColor> colors() const;
+	void render(QPixmap&, const QString& name);
 
 private:
 	Ui::ColorMapsWidget ui;
@@ -56,6 +58,7 @@ private:
 	QString m_jsonDir;
 	QPixmap m_pixmap;
 	QVector<QColor> m_colormap;
+	QStandardItemModel* m_model{nullptr};
 
 	void loadCollections();
 
@@ -63,6 +66,8 @@ private slots:
 	void collectionChanged(int);
 	void colorMapChanged();
 	void showInfo();
+	void toggleIconView();
+	void viewModeChanged(int);
 	void updateColorMapsList();
 };
 

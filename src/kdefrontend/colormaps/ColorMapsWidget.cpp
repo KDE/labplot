@@ -38,6 +38,7 @@
 #include <QJsonValue>
 #include <QMessageBox>
 #include <QPainter>
+#include <QStandardItemModel>
 #include <QStandardPaths>
 #include <QWhatsThis>
 
@@ -54,6 +55,16 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 
 	ui.setupUi(this);
 	ui.bInfo->setIcon(QIcon::fromTheme(QLatin1String("help-about")));
+	ui.bViewMode->setIcon(QIcon::fromTheme(QLatin1String("view-list-icons")));
+	ui.bViewMode->setToolTip(i18n("Switch between icon and list views"));
+
+	ui.lvColorMaps->setViewMode(QListView::IconMode);
+	ui.lvColorMaps->setSelectionMode(QAbstractItemView::SingleSelection);
+	ui.lvColorMaps->setWordWrap(true);
+	ui.lvColorMaps->setResizeMode(QListWidget::Adjust);
+	ui.lvColorMaps->setDragDropMode(QListView::NoDragDrop);
+
+	ui.lvColorMaps->setIconSize(QSize(128, 128));
 
 	const int size = ui.leSearch->height();
 	ui.lSearch->setPixmap( QIcon::fromTheme(QLatin1String("edit-find")).pixmap(size, size) );
@@ -69,6 +80,8 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 	connect(ui.cbCollections, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 			this, &ColorMapsWidget::collectionChanged);
 	connect(ui.bInfo, &QPushButton::clicked, this, &ColorMapsWidget::showInfo);
+	connect(ui.bViewMode, &QPushButton::clicked, this, &ColorMapsWidget::toggleIconView);
+	connect(ui.stackedWidget, &QStackedWidget::currentChanged, this, &ColorMapsWidget::viewModeChanged);
 	connect(ui.lwColorMaps, &QListWidget::itemSelectionChanged, this, &ColorMapsWidget::colorMapChanged);
 	connect(ui.leSearch, &QLineEdit::textChanged, this, &ColorMapsWidget::updateColorMapsList);
 
@@ -90,12 +103,15 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 		if (items.count() == 1)
 			ui.lwColorMaps->setCurrentItem(items.constFirst());
 	}
+
+	ui.stackedWidget->setCurrentIndex(conf.readEntry("ViewIndex", 0));
 }
 
 ColorMapsWidget::~ColorMapsWidget() {
 	//save the selected collection
 	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsWidget");
 	conf.writeEntry("Collection", ui.cbCollections->currentText());
+	conf.writeEntry("ViewIndex", ui.stackedWidget->currentIndex());
 	if (ui.lwColorMaps->currentItem())
 		conf.writeEntry("ColorMap", ui.lwColorMaps->currentItem()->text());
 }
@@ -137,8 +153,7 @@ void ColorMapsWidget::loadCollections() {
 void ColorMapsWidget::collectionChanged(int) {
 	const QString& collection = ui.cbCollections->currentText();
 
-	ui.lwColorMaps->clear();
-
+	//load the collection
 	if (m_colorMaps.find(collection) == m_colorMaps.end()) {
 		//color maps of the currently selected collection not loaded yet -> load them
 		QString path = m_jsonDir + QLatin1Char('/') + collection + ".json";
@@ -168,6 +183,24 @@ void ColorMapsWidget::collectionChanged(int) {
 		}
 	}
 
+	//populate the list view for the icon mode
+	if (m_model)
+		delete m_model;
+
+	m_model = new QStandardItemModel(this);
+	for (const auto& name : m_colorMaps[collection]) {
+		auto* item = new QStandardItem();
+		QPixmap pixmap;
+		render(pixmap, name);
+		item->setIcon(QIcon(pixmap));
+		item->setText(name);
+		m_model->appendRow(item);
+	}
+
+	ui.lvColorMaps->setModel(m_model);
+
+	//populate the list widget for the list mode
+	ui.lwColorMaps->clear();
 	ui.lwColorMaps->addItems(m_colorMaps[collection]);
 	ui.lwColorMaps->setCurrentRow(0);
 
@@ -182,8 +215,13 @@ void ColorMapsWidget::collectionChanged(int) {
 }
 
 void ColorMapsWidget::colorMapChanged() {
-	//convert from the string RGB represetation to QColor
 	const QString& name = ui.lwColorMaps->currentItem()->text();
+	render(m_pixmap, name);
+	ui.lPreview->setPixmap(m_pixmap);
+}
+
+void ColorMapsWidget::render(QPixmap& pixmap, const QString& name) {
+	//convert from the string RGB represetation to QColor
 	m_colormap.clear();
 	for (auto& rgb : m_colors[name]) {
 		QStringList rgbValues = rgb.split(QLatin1Char(','));
@@ -197,8 +235,8 @@ void ColorMapsWidget::colorMapChanged() {
 	int height = 80;
 	int width = 200;
 	int count = m_colormap.count();
-	m_pixmap = QPixmap(width, height);
-	QPainter p(&m_pixmap);
+	pixmap = QPixmap(width, height);
+	QPainter p(&pixmap);
 	int i = 0;
 	for (auto& color : m_colormap) {
 		p.setPen(color);
@@ -206,7 +244,6 @@ void ColorMapsWidget::colorMapChanged() {
 		p.drawRect(i*width/count, 0, width/count, height);
 		++i;
 	}
-	ui.lPreview->setPixmap(m_pixmap);
 }
 
 void ColorMapsWidget::showInfo() {
@@ -215,16 +252,39 @@ void ColorMapsWidget::showInfo() {
 	QWhatsThis::showText(ui.bInfo->mapToGlobal(QPoint(0, 0)), info, ui.bInfo);
 }
 
+void ColorMapsWidget::toggleIconView() {
+	if (ui.bViewMode->isChecked())
+		ui.stackedWidget->setCurrentIndex(0);
+	else
+		ui.stackedWidget->setCurrentIndex(1);
+}
+
+void ColorMapsWidget::viewModeChanged(int) {
+	//TODO:
+// 	if (index == 0)
+// 		//
+// 	else
+// 		ui.lwColorMaps->setCurrent
+}
+
 void ColorMapsWidget::updateColorMapsList() {
 	//TODO
 }
 
-QPixmap ColorMapsWidget::previewPixmap() const {
+QPixmap ColorMapsWidget::previewPixmap() {
+	if (ui.stackedWidget->currentIndex() == 0) {
+		const QString& name = ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
+		render(m_pixmap, name);
+	}
+
 	return m_pixmap;
 }
 
 QString ColorMapsWidget::name() const {
-	return ui.lwColorMaps->currentItem()->text();
+	if (ui.stackedWidget->currentIndex() == 0)
+		return ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
+	else
+		return ui.lwColorMaps->currentItem()->text();
 }
 
 QVector<QColor> ColorMapsWidget::colors() const {
