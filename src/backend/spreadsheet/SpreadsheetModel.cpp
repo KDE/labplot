@@ -163,12 +163,13 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			return QVariant(QBrush(Qt::red));
 		break;
 	case Qt::BackgroundRole:
-		return backgroundColor(col_ptr, row);
+		return backgroundColor(col_ptr, row, true);
 	case static_cast<int>(CustomDataRole::MaskingRole):
 		return QVariant(col_ptr->isMasked(row));
 	case static_cast<int>(CustomDataRole::FormulaRole):
 		return QVariant(col_ptr->formula(row));
-// 	case Qt::DecorationRole:
+	case Qt::DecorationRole:
+		return backgroundColor(col_ptr, row, false);
 // 		if (m_formula_mode)
 // 			return QIcon(QPixmap(":/equals.png")); //TODO
 	}
@@ -535,13 +536,16 @@ void SpreadsheetModel::setHeatmapFormat(QVector<Column*> columns, const Spreadsh
 		m_heatmapFormats[column->path()] = format;
 }
 
-QVariant SpreadsheetModel::backgroundColor(const Column* column, int row) const {
+QVariant SpreadsheetModel::backgroundColor(const Column* column, int row, bool fillBackground) const {
 	if (!column->isNumeric()
 		|| !column->isValid(row)
 		|| !m_heatmapFormats.contains(column->path()))
 		return QVariant();
 
 	const auto& format = m_heatmapFormats[column->path()];
+	if (format.fillBackground != fillBackground)
+		return QVariant();
+
 	double value = column->valueAt(row);
 	double range = (format.max - format.min)/format.colors.count();
 	int index = 0;

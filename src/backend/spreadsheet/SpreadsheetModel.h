@@ -49,6 +49,7 @@ public:
 		double min = 0.0;
 		double max = 1.0;
 		QString name;
+		bool fillBackground = true;
 		QVector<QColor> colors;
 	};
 
@@ -105,7 +106,7 @@ private:
 	int m_columnCount{0};
 	QMap<QString, HeatmapFormat> m_heatmapFormats;
 
-	QVariant backgroundColor(const Column*, int row) const;
+	QVariant backgroundColor(const Column*, int row, bool fillBackground) const;
 };
 
 #endif

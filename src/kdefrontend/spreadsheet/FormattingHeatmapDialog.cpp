@@ -73,6 +73,9 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 // 	ui.cbLevelsType->addItem(i18n("Count"));
 // 	ui.cbLevelsType->addItem(i18n("Increment"));
 
+	ui.cbHightlight->addItem(i18n("Background"));
+	ui.cbHightlight->addItem(i18n("Icon"));
+
 	ui.leMinimum->setValidator(new QDoubleValidator(ui.leMinimum));
 	ui.leMaximum->setValidator(new QDoubleValidator(ui.leMaximum));
 // 	ui.leLevels->setValidator(new QDoubleValidator(ui.leLevels));
@@ -139,6 +142,7 @@ SpreadsheetModel::HeatmapFormat FormattingHeatmapDialog::format() {
 	format.max = ui.leMaximum->text().toDouble();
 	format.colors = m_colors;
 	format.name = m_name;
+	format.fillBackground = (ui.cbHightlight->currentIndex() == 0);
 	return format;
 }
 
