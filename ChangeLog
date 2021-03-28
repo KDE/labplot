@@ -7,6 +7,7 @@
 	* Support real scientific notation and improve other notations of axes label
 	* Support axes auto tick number and improve range auto scaling
 	* Add inverse axis scale
+	* Import SAS, Stata and SPSS files via readstat
 	* [spreadsheet]:
 		* Allow to freeze the first column
 	* [worksheet]:
