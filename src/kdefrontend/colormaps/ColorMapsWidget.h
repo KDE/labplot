@@ -61,6 +61,8 @@ private:
 	QStandardItemModel* m_model{nullptr};
 
 	void loadCollections();
+	void activateIconViewItem(const QString& name);
+	void activateListViewItem(const QString& name);
 
 private slots:
 	void collectionChanged(int);
@@ -68,7 +70,7 @@ private slots:
 	void showInfo();
 	void toggleIconView();
 	void viewModeChanged(int);
-	void updateColorMapsList();
+	void activated(const QString&);
 };
 
 #endif // COLORMAPSWIDGET_H

@@ -83,7 +83,6 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 	connect(ui.bViewMode, &QPushButton::clicked, this, &ColorMapsWidget::toggleIconView);
 	connect(ui.stackedWidget, &QStackedWidget::currentChanged, this, &ColorMapsWidget::viewModeChanged);
 	connect(ui.lwColorMaps, &QListWidget::itemSelectionChanged, this, &ColorMapsWidget::colorMapChanged);
-	connect(ui.leSearch, &QLineEdit::textChanged, this, &ColorMapsWidget::updateColorMapsList);
 
 	//select the last used collection
 	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsWidget");
@@ -129,7 +128,7 @@ void ColorMapsWidget::loadCollections() {
 		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
 		file.close();
 		if (!document.isArray()) {
-			QDEBUG("Invalid definition of " + fileName);
+			QDEBUG("Invalid definition of " + fileName)
 			return;
 		}
 
@@ -162,7 +161,7 @@ void ColorMapsWidget::collectionChanged(int) {
 		if (collectionFile.open(QIODevice::ReadOnly)) {
 			QJsonDocument doc = QJsonDocument::fromJson(collectionFile.readAll());
 			if (!doc.isObject()) {
-				QDEBUG("Invalid definition of " + path);
+				QDEBUG("Invalid definition of " + path)
 				return;
 			}
 
@@ -209,6 +208,7 @@ void ColorMapsWidget::collectionChanged(int) {
 		delete m_completer;
 
 	m_completer = new QCompleter(m_colorMaps[collection], this);
+	connect(m_completer, QOverload<const QString &>::of(&QCompleter::activated), this, &ColorMapsWidget::activated);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer->setCaseSensitivity(Qt::CaseSensitive);
 	ui.leSearch->setCompleter(m_completer);
@@ -259,16 +259,41 @@ void ColorMapsWidget::toggleIconView() {
 		ui.stackedWidget->setCurrentIndex(1);
 }
 
-void ColorMapsWidget::viewModeChanged(int) {
+void ColorMapsWidget::viewModeChanged(int index) {
 	//TODO:
-// 	if (index == 0)
-// 		//
-// 	else
-// 		ui.lwColorMaps->setCurrent
+	if (index == 0) {
+		//switching form list to icon view mode
+		const auto& name = ui.lwColorMaps->currentItem()->text();
+		activateIconViewItem(name);
+	} else {
+		//switching form icon to list view mode
+		const auto& name = ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
+		activateListViewItem(name);
+	}
 }
 
-void ColorMapsWidget::updateColorMapsList() {
-	//TODO
+void ColorMapsWidget::activated(const QString& name) {
+	if (ui.bViewMode->isChecked())
+		activateListViewItem(name);
+	 else
+		activateListViewItem(name);
+}
+
+void ColorMapsWidget::activateIconViewItem(const QString& name) {
+	auto* model = ui.lvColorMaps->model();
+	for (int i = 0; i < model->rowCount(); ++i) {
+		const auto& index = model->index(i, 0);
+		if (index.data(Qt::DisplayRole).toString() == name) {
+			ui.lvColorMaps->setCurrentIndex(index);
+			ui.lvColorMaps->scrollTo(index);
+		}
+	}
+}
+
+void ColorMapsWidget::activateListViewItem(const QString& name) {
+	const auto& items = ui.lwColorMaps->findItems(name, Qt::MatchExactly);
+	if (items.count())
+		ui.lwColorMaps->setCurrentItem(items.constFirst());
 }
 
 QPixmap ColorMapsWidget::previewPixmap() {
