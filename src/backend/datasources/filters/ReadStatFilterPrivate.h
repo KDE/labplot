@@ -44,9 +44,10 @@ public:
 	// callbacks (get*)
 	static int getMetaData(readstat_metadata_t *, void *);
 	static int getVarName(int index, readstat_variable_t*, const char *val_labels, void *);
-	static int getColumnModes(int obs_index, readstat_variable_t*, readstat_value_t, void *);
-	static int getValuesPreview(int obs_index, readstat_variable_t*, readstat_value_t, void *);
-	static int getValues(int obs_index, readstat_variable_t*, readstat_value_t, void *);
+	static int getColumnModes(int row, readstat_variable_t*, readstat_value_t, void *);
+	static int getValuesPreview(int row, readstat_variable_t*, readstat_value_t, void *);
+	static int getValues(int row, readstat_variable_t*, readstat_value_t, void *);
+	static int getNotes(int index, const char* note, void *);
 	readstat_error_t parse(const QString& fileName, bool preview = false, bool prepare = false);
 #endif
 	QVector<QStringList> preview(const QString& fileName, int lines);
@@ -70,6 +71,7 @@ private:
 	static int m_rowCount;	// nr of rows
 	static QStringList m_lineString;
 	static std::vector<void*> m_dataContainer;
+	static QStringList m_notes;
 };
 
 #endif

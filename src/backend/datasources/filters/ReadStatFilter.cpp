@@ -221,6 +221,7 @@ QVector<AbstractColumn::ColumnMode> ReadStatFilterPrivate::m_columnModes;
 QStringList ReadStatFilterPrivate::m_lineString;
 QVector<QStringList> ReadStatFilterPrivate::m_dataStrings;
 std::vector<void*> ReadStatFilterPrivate::m_dataContainer;
+QStringList ReadStatFilterPrivate::m_notes;
 int ReadStatFilterPrivate::m_startRow, ReadStatFilterPrivate::m_endRow;
 int ReadStatFilterPrivate::m_startColumn, ReadStatFilterPrivate::m_endColumn;
 
@@ -336,7 +337,7 @@ int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t *variab
 	return READSTAT_HANDLER_OK;
 }
 int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
-	Q_UNUSED(ptr)	// use for lines?
+	Q_UNUSED(ptr)
 
 	// only read from start to end row/col
 	const int col = readstat_variable_get_index(variable);
@@ -396,6 +397,14 @@ int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, rea
 
 	return READSTAT_HANDLER_OK;
 }
+int ReadStatFilterPrivate::getNotes(int index, const char* note, void *ptr) {
+	Q_UNUSED(ptr)
+
+	DEBUG(Q_FUNC_INFO << " note " << index << ": " << note)
+	m_notes << note;
+
+	return READSTAT_HANDLER_OK;
+}
 #endif
 
 ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter* owner) : q(owner) {
@@ -415,9 +424,11 @@ readstat_error_t ReadStatFilterPrivate::parse(const QString& fileName, bool prev
 		readstat_set_value_handler(parser, &getValuesPreview);
 	else if (prepare)	// only read column modes
 		readstat_set_value_handler(parser, &getColumnModes);
-	else	// get and save data into data container
+	else {	// get and save data into data container
 		readstat_set_value_handler(parser, &getValues);
-	//TODO: note_handler, fweight_handler, value_label_handler
+		readstat_set_note_handler(parser, &getNotes);
+	}
+	//TODO: fweight_handler, value_label_handler
 
 	readstat_error_t error = READSTAT_OK;
 	if ( fileName.endsWith(QLatin1String(".dta")) )
@@ -483,6 +494,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	m_varNames.clear();
 	m_columnModes.clear();
 	m_dataStrings.clear();
+	m_notes.clear();
 
 #ifdef HAVE_READSTAT
 	DEBUG(Q_FUNC_INFO << ", Parsing meta data ...")
@@ -511,6 +523,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 
 	DEBUG(Q_FUNC_INFO << ", column offset = " << columnOffset << " start/end column = " << m_startColumn << " / " << actualEndColumn)
 	dataSource->finalizeImport(columnOffset, m_startColumn, actualEndColumn, QString(), mode);
+	dataSource->setComment(m_notes.join("\n"));
 #endif
 }
 
