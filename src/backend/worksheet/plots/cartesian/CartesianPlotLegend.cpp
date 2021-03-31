@@ -593,22 +593,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	calculates the position of the legend, when the position relative to the parent was specified (left, right, etc.)
 */
 void CartesianPlotLegendPrivate::updatePosition() {
-	//position the legend relative to the actual plot size minus small offset
-	//TODO: make the offset dependent on the size of axis ticks.
-	const QRectF parentRect = plot->dataRect();
-	float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
-	float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
-
-	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
-		if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
-			position.point.setX(parentRect.x() + rect.width()/2 + hOffset);
-		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Center)
-			position.point.setX(parentRect.x() + parentRect.width()/2);
-		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
-			position.point.setX(parentRect.x() + parentRect.width() - rect.width()/2 - hOffset);
-	}
-
-    QPointF pos = q->relativePosToParentPos(position.point, q->m_plot->dataRect(), rect, position);
+    QPointF pos = q->relativePosToParentPos(plot->dataRect(), rect, position);
 
 	suppressItemChangeEvent = true;
     setPos(pos);
@@ -898,7 +883,7 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
 		WorksheetElement::PositionWrapper tempPosition;
-            tempPosition.point = q->parentPosToRelativePos(value.toPointF(), q->m_plot->dataRect(), rect, position);
+            tempPosition.point = q->parentPosToRelativePos(value.toPointF(), plot->dataRect(), rect, position);
             tempPosition.horizontalPosition = position.horizontalPosition;
             tempPosition.verticalPosition = position.verticalPosition;
 
@@ -914,7 +899,7 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
 	QPointF point = pos();
-    point = q->parentPosToRelativePos(point, q->m_plot->dataRect(), rect, position);
+    point = q->parentPosToRelativePos(point, plot->dataRect(), rect, position);
 
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
@@ -934,7 +919,7 @@ void CartesianPlotLegendPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
 		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
 		const int delta = 5;
-        QPointF point = q->parentPosToRelativePos(pos(), q->m_plot->dataRect(), rect, position);
+        QPointF point = q->parentPosToRelativePos(pos(), plot->dataRect(), rect, position);
         WorksheetElement::PositionWrapper tempPosition = position;
 
 		if (event->key() == Qt::Key_Left) {

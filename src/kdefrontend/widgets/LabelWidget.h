@@ -115,8 +115,6 @@ private slots:
 	void positionXLogicalDateTimeChanged(const QDateTime&);
 	void positionYLogicalChanged(const QString&);
 
-	void horizontalAlignmentChanged(int);
-	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
 	void offsetXChanged(double);
 	void offsetYChanged(double);

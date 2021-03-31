@@ -540,7 +540,7 @@ void TextLabelPrivate::updatePosition() {
         if (!parentRect(pr))
             return;
 
-        p = q->relativePosToParentPos(position.point, pr, boundingRectangle, position);
+        p = q->relativePosToParentPos(pr, boundingRectangle, position);
         //position.point = p;
     }
 
@@ -1031,50 +1031,6 @@ void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 	}
 
 	QGraphicsItem::keyPressEvent(event);
-}
-
-/*!
- *	converts label's position in plotArea coordinates to labels position.
- */
-QPointF TextLabelPrivate::positionFromItemPosition(QPointF itemPos) {
-	double x = itemPos.x();
-	double y = itemPos.y();
-	double w, h;
-	QPointF tmpPosition;
-	if (textWrapper.teXUsed) {
-		w = teXImage.width()*scaleFactor;
-		h = teXImage.height()*scaleFactor;
-	} else {
-		w = staticText.size().width()*scaleFactor;
-		h = staticText.size().height()*scaleFactor;
-	}
-
-	//depending on the alignment, calculate the new position
-	switch (horizontalAlignment) {
-	case WorksheetElement::HorizontalAlignment::Left:
-		tmpPosition.setX(x + w/2);
-		break;
-	case WorksheetElement::HorizontalAlignment::Center:
-		tmpPosition.setX(x);
-		break;
-	case WorksheetElement::HorizontalAlignment::Right:
-		tmpPosition.setX(x - w/2);
-		break;
-	}
-
-	switch (verticalAlignment) {
-	case WorksheetElement::VerticalAlignment::Top:
-		tmpPosition.setY(y + h/2);
-		break;
-	case WorksheetElement::VerticalAlignment::Center:
-		tmpPosition.setY(y);
-		break;
-	case WorksheetElement::VerticalAlignment::Bottom:
-		tmpPosition.setY(y - h/2);
-		break;
-	}
-
-	return tmpPosition;
 }
 
 /*!

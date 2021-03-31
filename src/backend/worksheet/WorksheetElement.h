@@ -82,18 +82,17 @@ public:
      * \param parentRect Parent data rect
      * \param worksheetElementRect element rect
      * \param position contains the alignement of the element to the parent
-     * \return
+     * \return distance between the parent position to the element
      */
     QPointF parentPosToRelativePos(QPointF parentPos, QRectF parentRect, QRectF worksheetElementRect, WorksheetElement::PositionWrapper position) const;
     /*!
      * \brief relativePosToParentPos
-     * \param relPos distance between the parent position to the element
      * \param parentRect
      * \param worksheetElementRect element rect
      * \param position contains the alignement of the element to the parent
-     * \return
+     * \return parent position
      */
-    QPointF relativePosToParentPos(QPointF relPos, QRectF parentRect, QRectF worksheetElementRect, PositionWrapper position) const;
+    QPointF relativePosToParentPos(QRectF parentRect, QRectF worksheetElementRect, PositionWrapper position) const;
 	QMenu* createContextMenu() override;
 
 	virtual void loadThemeConfig(const KConfig&);
