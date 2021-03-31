@@ -136,9 +136,7 @@ signals:
 	void teXFontChanged(const QFont);
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
-	void positionChanged(const WorksheetElement::PositionWrapper&);
-	void horizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
-	void verticalAlignmentChanged(WorksheetElement::VerticalAlignment);
+    void positionChanged(const WorksheetElement::PositionWrapper&);
 	void rotationAngleChanged(qreal);
 	void visibleChanged(bool);
 	void borderShapeChanged(TextLabel::BorderShape);

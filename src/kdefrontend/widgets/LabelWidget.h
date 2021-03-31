@@ -110,8 +110,6 @@ private slots:
 	void positionYChanged(int);
 	void customPositionXChanged(double);
 	void customPositionYChanged(double);
-	void horizontalAlignmentChanged(int);
-	void verticalAlignmentChanged(int);
 	void rotationChanged(int);
 	void offsetXChanged(double);
 	void offsetYChanged(double);
@@ -130,9 +128,7 @@ private slots:
 	void labelTeXFontChanged(const QFont&);
 	void labelFontColorChanged(const QColor);
 	void labelBackgroundColorChanged(const QColor);
-	void labelPositionChanged(const TextLabel::PositionWrapper&);
-	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
-	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);
+    void labelPositionChanged(const TextLabel::PositionWrapper&);
 	void labelOffsetxChanged(qreal);
 	void labelOffsetyChanged(qreal);
 	void labelRotationAngleChanged(qreal);

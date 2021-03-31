@@ -65,10 +65,7 @@ public:
 		TextLabel::HorizontalPosition::Center, TextLabel::VerticalPosition::Center};
 	bool positionInvalid{false};
 
-	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
-	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
-
-	TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
+    TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
@@ -76,8 +73,7 @@ public:
 	void retransform();
 	bool swapVisible(bool on);
 	virtual void recalcShapeAndBoundingRect();
-	void updatePosition();
-	QPointF positionFromItemPosition(QPointF);
+    void updatePosition();
 	void updateText();
 	void updateTeXImage();
 	void updateBorder();
@@ -107,6 +103,7 @@ private:
 	void keyPressEvent(QKeyEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+    bool parentRect(QRectF& rect);
 };
 
 #endif
