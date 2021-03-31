@@ -89,7 +89,7 @@ void CartesianPlotLegend::init() {
 	d->columnCount = 0;
 
 	d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
-	d->position.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
+    d->position.verticalPosition = WorksheetElement::VerticalPosition::Top;
 
 	d->rotationAngle = group.readEntry("Rotation", 0.0);
 
@@ -608,17 +608,10 @@ void CartesianPlotLegendPrivate::updatePosition() {
 			position.point.setX(parentRect.x() + parentRect.width() - rect.width()/2 - hOffset);
 	}
 
-	if (position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
-		if (position.verticalPosition == WorksheetElement::VerticalPosition::Top)
-			position.point.setY(parentRect.y() + rect.height()/2 + vOffset);
-		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Center)
-			position.point.setY(parentRect.y() + parentRect.height()/2);
-		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
-			position.point.setY(parentRect.y() + parentRect.height() -  rect.height()/2 -vOffset);
-	}
+    QPointF pos = q->relativePosToParentPos(position.point, q->m_plot->dataRect(), rect, position);
 
 	suppressItemChangeEvent = true;
-	setPos(position.point);
+    setPos(pos);
 	suppressItemChangeEvent = false;
 	emit q->positionChanged(position);
 
@@ -905,9 +898,9 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
 		WorksheetElement::PositionWrapper tempPosition;
-			tempPosition.point = value.toPointF();
-			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
-			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
+            tempPosition.point = q->parentPosToRelativePos(value.toPointF(), q->m_plot->dataRect(), rect, position);
+            tempPosition.horizontalPosition = position.horizontalPosition;
+            tempPosition.verticalPosition = position.verticalPosition;
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -921,13 +914,15 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
 	QPointF point = pos();
+    point = q->parentPosToRelativePos(point, q->m_plot->dataRect(), rect, position);
+
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
 		WorksheetElement::PositionWrapper tempPosition;
 		tempPosition.point = point;
-		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
-		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
+        tempPosition.horizontalPosition = position.horizontalPosition;
+        tempPosition.verticalPosition = position.verticalPosition;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
 	}
@@ -939,25 +934,17 @@ void CartesianPlotLegendPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
 		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
 		const int delta = 5;
-		QPointF point = pos();
-		WorksheetElement::PositionWrapper tempPosition;
+        QPointF point = q->parentPosToRelativePos(pos(), q->m_plot->dataRect(), rect, position);
+        WorksheetElement::PositionWrapper tempPosition = position;
 
 		if (event->key() == Qt::Key_Left) {
-			point.setX(point.x() - delta);
-			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
-			tempPosition.verticalPosition = position.verticalPosition;
+            point.setX(point.x() + delta);
 		} else if (event->key() == Qt::Key_Right) {
-			point.setX(point.x() + delta);
-			tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
-			tempPosition.verticalPosition = position.verticalPosition;
+            point.setX(point.x() - delta);
 		} else if (event->key() == Qt::Key_Up) {
-			point.setY(point.y() - delta);
-			tempPosition.horizontalPosition = position.horizontalPosition;
-			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
+            point.setY(point.y() + delta);
 		} else if (event->key() == Qt::Key_Down) {
-			point.setY(point.y() + delta);
-			tempPosition.horizontalPosition = position.horizontalPosition;
-			tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
+            point.setY(point.y() - delta);
 		}
 
 		tempPosition.point = point;

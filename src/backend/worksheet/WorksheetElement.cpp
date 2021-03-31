@@ -267,6 +267,51 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	emit moveEnd();
 }
 
+QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF parentRect, QRectF worksheetElementRect, PositionWrapper position) const {
+    float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
+    float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
+
+    // positive is right
+    if (position.horizontalPosition == HorizontalPosition::Left)
+        parentPos.setX(parentPos.x() - (parentRect.x() + worksheetElementRect.width()/2 + hOffset));
+    else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
+        parentPos.setX(parentPos.x() - (parentRect.x() + parentRect.width()/2));
+    else  //position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
+        parentPos.setX(parentPos.x() - (parentRect.x() + parentRect.width() - worksheetElementRect.width()/2 - hOffset));
+
+    // positive is to top
+    if (position.verticalPosition == VerticalPosition::Center|| position.verticalPosition == VerticalPosition::Custom)
+        parentPos.setY(parentRect.y() + parentRect.height()/2 - parentPos.y());
+    else if (position.verticalPosition == VerticalPosition::Bottom)
+        parentPos.setY(parentRect.y() + parentRect.height() -  worksheetElementRect.height()/2 - vOffset - parentPos.y());
+    else // position.verticalPosition == VerticalPosition::Top // default
+        parentPos.setY(parentRect.y() + worksheetElementRect.height()/2 + vOffset - parentPos.y());
+    return parentPos;
+}
+
+QPointF WorksheetElement::relativePosToParentPos(QPointF relPos, QRectF parentRect, QRectF worksheetElementRect, PositionWrapper position) const {
+    float hOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
+    float vOffset = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
+
+    // positive is right of the anchor point
+    if (position.horizontalPosition == HorizontalPosition::Left)
+        relPos.setX(position.point.x() - (parentRect.x() + worksheetElementRect.width()/2 + hOffset));
+    else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
+        relPos.setX(position.point.x() - (parentRect.x() + parentRect.width()/2));
+    else  //position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
+        relPos.setX(position.point.x() - (parentRect.x() + parentRect.width() - worksheetElementRect.width()/2 - hOffset));
+
+    // positive is above the anchor point
+    if (position.verticalPosition == VerticalPosition::Center || position.verticalPosition == VerticalPosition::Custom)
+        relPos.setY(parentRect.y() + parentRect.height()/2 - position.point.y());
+    else if (position.verticalPosition == VerticalPosition::Bottom)
+        relPos.setY(parentRect.y() + parentRect.height() -  worksheetElementRect.height()/2 -vOffset - position.point.y());
+    else // position.verticalPosition == WorksheetElement::VerticalPosition::Top // default
+        relPos.setY(parentRect.y() + worksheetElementRect.height()/2 + vOffset - position.point.y());
+
+    return relPos;
+}
+
 void WorksheetElement::loadThemeConfig(const KConfig &) {
 }
 
