@@ -408,6 +408,7 @@ void SpreadsheetView::initActions() {
 
 	//conditional formatting
 	action_formatting_heatmap = new QAction(QIcon::fromTheme("color-management"), i18n("Heatmap"), this);
+	action_formatting_remove = new QAction(QIcon::fromTheme("edit-clear"), i18n("Remove"), this);
 
 	// row related actions
 	action_insert_row_above = new QAction(QIcon::fromTheme("edit-table-insert-row-above") ,i18n("Insert Row Above"), this);
@@ -527,6 +528,8 @@ void SpreadsheetView::initMenus() {
 
 	m_formattingMenu = new QMenu(i18n("Conditional Formatting"), this);
 	m_formattingMenu->addAction(action_formatting_heatmap);
+	m_formattingMenu->addSeparator();
+	m_formattingMenu->addAction(action_formatting_remove);
 
 	// Column menu
 	m_columnMenu = new QMenu(this);
@@ -807,6 +810,7 @@ void SpreadsheetView::connectActions() {
 
 	//conditional formatting
 	connect(action_formatting_heatmap, &QAction::triggered, this, &SpreadsheetView::formatHeatmap);
+	connect(action_formatting_remove, &QAction::triggered, this, &SpreadsheetView::removeFormat);
 
 	//statistics
 	connect(action_statistics_columns, &QAction::triggered, this, &SpreadsheetView::showColumnStatistics);
@@ -1263,7 +1267,10 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			bool plottable = true;
 			bool datetime = false;
 			bool hasValues = false;
-			for (const Column* col : selectedColumns()) {
+			bool hasFormat = false;
+			const auto& columns = selectedColumns();
+
+			for (const Column* col : columns) {
 				if (!col->isNumeric()) {
 					datetime = (col->columnMode() == AbstractColumn::ColumnMode::DateTime);
 					if (!datetime)
@@ -1274,9 +1281,16 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 				}
 			}
 
-			for (const Column* col : selectedColumns()) {
+			for (const Column* col : columns) {
 				if (col->hasValues()) {
 					hasValues = true;
+					break;
+				}
+			}
+
+			for (const Column* col : columns) {
+				if (m_model->hasFormat(col)) {
+					hasFormat = true;
 					break;
 				}
 			}
@@ -1285,6 +1299,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			m_analyzePlotMenu->setEnabled(numeric);
 			m_columnSetAsMenu->setEnabled(numeric);
 			action_statistics_columns->setEnabled(numeric && hasValues);
+			action_formatting_remove->setVisible(hasFormat);
 
 			if (!m_readOnly)
 				checkColumnMenus(numeric, datetime, hasValues);
@@ -1357,18 +1372,29 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	action_go_to_cell->setEnabled(cellsAvail);
 	action_statistics_all_columns->setEnabled(cellsAvail);
 
-	//deactivate the "Clear masks" action for the spreadsheet
-	//if there are no masked cells in the spreadsheet
+	const auto& columns = m_spreadsheet->children<Column>();
+
+	//deactivate the "Clear masks" action if there are no masked cells
 	bool hasMasked = false;
-	for (int i = 0; i < m_spreadsheet->columnCount(); ++i) {
-		const auto* column = m_spreadsheet->column(i);
+	for (auto* column : columns) {
 		if (column->maskedIntervals().size() > 0) {
 			hasMasked = true;
 			break;
 		}
 	}
 
-	action_clear_masks->setEnabled(hasMasked);
+	action_clear_masks->setVisible(hasMasked);
+
+	//deactivate the "Remove format" action if no columns are formatted
+	bool hasFormat = false;
+	for (auto* column : columns) {
+		if (m_model->hasFormat(column)) {
+			hasFormat = true;
+			break;
+		}
+	}
+
+	action_formatting_remove->setVisible(hasFormat);
 }
 
 void SpreadsheetView::checkSpreadsheetSelectionMenu() {
@@ -2172,6 +2198,14 @@ void SpreadsheetView::formatHeatmap() {
 		m_model->setHeatmapFormat(columns, dlg->format());
 
 	delete dlg;
+}
+
+void SpreadsheetView::removeFormat() {
+	auto columns = selectedColumns(true);
+	if (columns.isEmpty())
+		columns = m_spreadsheet->children<Column>();
+
+	m_model->removeFormat(columns);
 }
 
 /*!

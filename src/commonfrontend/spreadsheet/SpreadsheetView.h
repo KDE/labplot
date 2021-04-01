@@ -152,6 +152,7 @@ private:
 	QAction* action_clear_masks;
 	QAction* action_sort_spreadsheet;
 	QAction* action_formatting_heatmap;
+	QAction* action_formatting_remove;
 	QAction* action_go_to_cell;
 	QAction* action_statistics_all_columns;
 
@@ -244,6 +245,7 @@ private slots:
 	void sortSpreadsheet();
 	void sortDialog(const QVector<Column*>&);
 	void formatHeatmap();
+	void removeFormat();
 
 	void cutSelection();
 	void copySelection();

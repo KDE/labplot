@@ -531,18 +531,38 @@ bool SpreadsheetModel::formulaModeActive() const {
 	return m_formula_mode;
 }
 
-void SpreadsheetModel::setHeatmapFormat(QVector<Column*> columns, const SpreadsheetModel::HeatmapFormat& format) {
-	for (auto* column : columns)
-		m_heatmapFormats[column->path()] = format;
+bool SpreadsheetModel::hasFormat(const AbstractColumn* column) const {
+	//TODO: extend later to other formatting types
+	return m_heatmapFormats.contains(column);
 }
 
-QVariant SpreadsheetModel::backgroundColor(const Column* column, int row, bool fillBackground) const {
+bool SpreadsheetModel::hasHeatmapFormat(const AbstractColumn* column) const {
+	return m_heatmapFormats.contains(column);
+}
+
+const SpreadsheetModel::HeatmapFormat& SpreadsheetModel::heatmapFormat(const AbstractColumn* column) const {
+	return m_heatmapFormats[column];
+}
+
+void SpreadsheetModel::setHeatmapFormat(QVector<Column*> columns, const SpreadsheetModel::HeatmapFormat& format) {
+	for (auto* column : columns)
+		m_heatmapFormats[column] = format;
+}
+
+void SpreadsheetModel::removeFormat(QVector<Column*> columns) {
+	for (auto* column : columns) {
+		if (m_heatmapFormats.contains(column))
+			m_heatmapFormats.remove(column);
+	}
+}
+
+QVariant SpreadsheetModel::backgroundColor(const AbstractColumn* column, int row, bool fillBackground) const {
 	if (!column->isNumeric()
 		|| !column->isValid(row)
-		|| !m_heatmapFormats.contains(column->path()))
+		|| !m_heatmapFormats.contains(column))
 		return QVariant();
 
-	const auto& format = m_heatmapFormats[column->path()];
+	const auto& format = m_heatmapFormats[column];
 	if (format.fillBackground != fillBackground)
 		return QVariant();
 

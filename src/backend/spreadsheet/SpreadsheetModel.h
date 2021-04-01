@@ -77,7 +77,12 @@ public:
 	void updateHorizontalHeader();
 	void suppressSignals(bool);
 
+	//conditional formatting
+	bool hasFormat(const AbstractColumn*) const;
+	bool hasHeatmapFormat(const AbstractColumn*) const;
+	const HeatmapFormat& heatmapFormat(const AbstractColumn*) const;
 	void setHeatmapFormat(QVector<Column*>, const HeatmapFormat&);
+	void removeFormat(QVector<Column*>);
 
 private slots:
 	void handleAspectAdded(const AbstractAspect*);
@@ -89,8 +94,8 @@ private slots:
 	void handleDigitsChange();
 	void handlePlotDesignationChange(const AbstractColumn*);
 	void handleDataChange(const AbstractColumn*);
-	void handleRowsInserted(const AbstractColumn* col, int before, int count);
-	void handleRowsRemoved(const AbstractColumn* col, int first, int count);
+	void handleRowsInserted(const AbstractColumn*, int before, int count);
+	void handleRowsRemoved(const AbstractColumn*, int first, int count);
 
 protected:
 	void updateVerticalHeader();
@@ -104,9 +109,9 @@ private:
 	bool m_suppressSignals{false};
 	int m_rowCount{0};
 	int m_columnCount{0};
-	QMap<QString, HeatmapFormat> m_heatmapFormats;
+	QMap<const AbstractColumn*, HeatmapFormat> m_heatmapFormats;
 
-	QVariant backgroundColor(const Column*, int row, bool fillBackground) const;
+	QVariant backgroundColor(const AbstractColumn*, int row, bool fillBackground) const;
 };
 
 #endif
