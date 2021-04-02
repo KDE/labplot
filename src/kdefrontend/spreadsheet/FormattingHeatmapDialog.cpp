@@ -96,6 +96,7 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 	if (conf.exists()) {
 		auto state = (Qt::CheckState)(conf.readEntry("AutoRange", (int)Qt::Checked));
 		ui.chkAutoRange->setCheckState(state);
+		ui.cbHightlight->setCurrentIndex(conf.readEntry("Highlight", 0));
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -107,6 +108,7 @@ FormattingHeatmapDialog::~FormattingHeatmapDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "FormattingHeatmapDialog");
 	conf.writeEntry("AutoRange", (int)ui.chkAutoRange->checkState());
+	conf.writeEntry("Highlight", ui.cbHightlight->currentIndex());
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
@@ -115,6 +117,7 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 
 	double min = INFINITY;
 	double max = -INFINITY;
+	bool formatShown = false;
 	for (auto* col : m_columns) {
 		if (!col->isNumeric())
 			continue;
@@ -123,6 +126,22 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 			min = col->minimum();
 		if (col->maximum() > max)
 			max = col->maximum();
+
+		//show the format settings of the first column
+		if (!formatShown && m_spreadsheet->model()->hasHeatmapFormat(col)) {
+			const auto& format = m_spreadsheet->model()->heatmapFormat(col);
+
+			m_name = format.name;
+			m_colors = format.colors;
+			//TODO: pixmap
+			//ui.lColorMapPreview->setPixmap(ColorMapsManager->instance()->pixmap(format.name));
+			if (format.fillBackground)
+				ui.cbHightlight->setCurrentIndex(0);
+			else
+				ui.cbHightlight->setCurrentIndex(1);
+
+			formatShown = true;
+		}
 	}
 
 	if (min != INFINITY)

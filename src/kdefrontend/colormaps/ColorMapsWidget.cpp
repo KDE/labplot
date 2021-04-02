@@ -201,6 +201,9 @@ void ColorMapsWidget::collectionChanged(int) {
 	//populate the list widget for the list mode
 	ui.lwColorMaps->clear();
 	ui.lwColorMaps->addItems(m_colorMaps[collection]);
+
+	//select the first color map in the current collection
+	ui.lvColorMaps->setCurrentIndex(ui.lvColorMaps->model()->index(0, 0));
 	ui.lwColorMaps->setCurrentRow(0);
 
 	//update the completer
