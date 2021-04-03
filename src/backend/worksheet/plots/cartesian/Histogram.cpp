@@ -887,8 +887,8 @@ void HistogramPrivate::retransform() {
 	m_suppressRecalc = true;
 	updateLines();
 	updateSymbols();
-	updateValues();
 	m_suppressRecalc = false;
+	updateValues();
 }
 
 /*!
@@ -1401,8 +1401,8 @@ void HistogramPrivate::updateErrorBars() {
   recalculates the outer bounds and the shape of the curve.
   */
 void HistogramPrivate::recalcShapeAndBoundingRect() {
-	//if (m_suppressRecalc)
-	//	return;
+	if (m_suppressRecalc)
+		return;
 
 	prepareGeometryChange();
 	curveShape = QPainterPath();

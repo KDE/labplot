@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Box Plot - private implementation
     --------------------------------------------------------------------
-    Copyright            : (C) 2020 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2021 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -50,8 +50,7 @@ public:
 	double yMinimum();
 	double yMaximum();
 
-	bool m_hovered{false};
-	bool m_visible{true}; //point inside the plot (visible) or not
+	bool m_suppressRecalc{false};
 
 	//reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
@@ -115,9 +114,8 @@ private:
 	void drawFilling(QPainter*, int);
 	void drawSymbols(QPainter*, int);
 
-	bool n_suppressItemChangeEvent{false};
+	bool m_hovered{false};
 	bool m_suppressRetransform{false};
-	bool m_suppressRecalc{false};
 
 	QRectF m_boundingRectangle;
 	QPainterPath m_boxPlotShape;

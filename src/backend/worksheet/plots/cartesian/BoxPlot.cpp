@@ -1135,7 +1135,7 @@ void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
-	if (!m_visible)
+	if (!isVisible())
 		return;
 
 	painter->setPen(Qt::NoPen);
@@ -1416,6 +1416,7 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	QPen p;
 
 	Q_D(BoxPlot);
+	d->m_suppressRecalc = false;
 
 	//box border
 	p.setStyle((Qt::PenStyle) group.readEntry("LineStyle", (int)Qt::SolidLine));
@@ -1451,5 +1452,6 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	p.setWidthF(group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	this->setSymbolsPen(p);
 
+	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
 }
