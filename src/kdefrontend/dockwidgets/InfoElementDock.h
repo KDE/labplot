@@ -44,10 +44,10 @@ class InfoElementDock : public BaseDock {
 public:
 	explicit InfoElementDock(QWidget* parent = nullptr);
 	~InfoElementDock();
-	void setInfoElements(QList<InfoElement*> &list, bool sameParent);
+	void setInfoElements(QList<InfoElement*>, bool sameParent);
 
 public slots:
-	void elementCurveRemoved(QString name);
+	void elementCurveRemoved(const QString&);
 
 private slots:
 	void gluePointChanged(int index);
@@ -69,7 +69,7 @@ private slots:
 	void elementDescriptionChanged(const AbstractAspect*);
 	void elementPositionChanged(double pos);
 	void elementGluePointIndexChanged(const int);
-	void elementConnectionLineCurveChanged(const QString name);
+	void elementConnectionLineCurveChanged(const QString&);
 	void elementLabelBorderShapeChanged();
 	void elementVisibilityChanged(const bool);
 	void elementVerticalLinePenChanged(const QPen&);

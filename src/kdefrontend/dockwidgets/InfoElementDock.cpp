@@ -84,7 +84,7 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 			this, &InfoElementDock::connectionLineOpacityChanged);
 }
 
-void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent) {
+void InfoElementDock::setInfoElements(QList<InfoElement*> list, bool sameParent) {
 	const Lock lock(m_initializing);
 
 	m_elements = list;
@@ -123,9 +123,12 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 	// disable if not all worksheetelements do not have the same parent (different CartesianPlots),
 	// because then the available curves are different
 	if (sameParent) {
-		QVector<XYCurve*> curves = m_element->plot()->children<XYCurve>();
+		ui->lwCurves->setEnabled(true);
+		ui->cbConnectToCurve->setEnabled(true);
+
+		const auto& curves = m_element->plot()->children<XYCurve>();
 		for (int i = 0; i < curves.length(); ++i) {
-			auto* curve = curves.at(i);
+			const auto* curve = curves.at(i);
 			auto* item = new QListWidgetItem();
 			auto* checkBox = new QCheckBox(curve->name());
 			connect(checkBox, &QCheckBox::stateChanged, this, &InfoElementDock::curveSelectionChanged);
@@ -140,8 +143,10 @@ void InfoElementDock::setInfoElements(QList<InfoElement*>& list, bool sameParent
 				}
 			}
 		}
-	} else
+	} else {
 		ui->lwCurves->setEnabled(false);
+		ui->cbConnectToCurve->setEnabled(false);
+	}
 
 	const QString& curveName = m_element->connectionLineCurveName();
 	for (int i=0; i< ui->cbConnectToCurve->count(); i++) {
@@ -460,7 +465,7 @@ void InfoElementDock::elementGluePointIndexChanged(const int index) {
 		ui->cbConnectToAnchor->setCurrentIndex(index + 1); // automatic label is in same combo box
 }
 
-void InfoElementDock::elementConnectionLineCurveChanged(const QString name) {
+void InfoElementDock::elementConnectionLineCurveChanged(const QString& name) {
 	const Lock lock(m_initializing);
 	for (int i=0; i< ui->cbConnectToCurve->count(); i++) {
 		if (ui->cbConnectToCurve->itemData(i).toString().compare(name) == 0) {
@@ -487,7 +492,7 @@ void InfoElementDock::elementPositionChanged(double pos) {
 	ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(pos));
 }
 
-void InfoElementDock::elementCurveRemoved(QString name) {
+void InfoElementDock::elementCurveRemoved(const QString& name) {
 	const Lock lock(m_initializing);
 	for (int i = 0; i < ui->lwCurves->count(); ++i) {
 		auto* item = ui->lwCurves->item(i);

@@ -406,22 +406,17 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Info Element"));
 			raiseDock(m_mainWindow->infoElementDock, m_mainWindow->stackedWidget);
 
-			QList<InfoElement*> list;
-
 			// check if all InfoElements have the same CartesianPlot as Parent
-			// if they don't have, disable changing the curves
 			bool sameParent = true;
-            CartesianPlot* parent = static_cast<CartesianPlot*>(selectedAspects[0]->parent(AspectType::CartesianPlot));
-			for (auto* aspect: selectedAspects) {
-                // It cannot be that an InfoElement does not have a parent. So it must not be checked
-                if (static_cast<CartesianPlot*>(aspect->parent(AspectType::CartesianPlot)) != parent)
+			auto* parent = selectedAspects[0]->parentAspect();
+			for (auto* aspect : selectedAspects) {
+				if (aspect->parentAspect() != parent) {
 					sameParent = false;
-
-				list << qobject_cast<InfoElement*>(aspect);
+					break;
+				}
 			}
 
-			m_mainWindow->infoElementDock->setInfoElements(list, sameParent);
-			m_mainWindow->infoElementDock->show();
+			m_mainWindow->infoElementDock->setInfoElements(castList<InfoElement>(selectedAspects), sameParent);
 			break;
 		}
 	case AspectType::MQTTClient:
