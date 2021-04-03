@@ -84,13 +84,24 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 			this, &InfoElementDock::connectionLineOpacityChanged);
 }
 
-void InfoElementDock::setInfoElements(QList<InfoElement*> list, bool sameParent) {
+void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	const Lock lock(m_initializing);
 
 	m_elements = list;
 	m_element = list.first();
 	m_aspect = m_element;
-	m_sameParent = sameParent;
+
+	// check if all InfoElements have the same CartesianPlot as Parent
+	m_sameParent = true;
+	if (!m_elements.isEmpty()) {
+		const auto* parent = m_elements.constFirst()->parentAspect();
+		for (auto* element : m_elements) {
+			if (element->parentAspect() != parent) {
+				m_sameParent = false;
+				break;
+			}
+		}
+	}
 
 	QList<TextLabel*> labels;
 	for (auto* element : list)
@@ -122,7 +133,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list, bool sameParent)
 
 	// disable if not all worksheetelements do not have the same parent (different CartesianPlots),
 	// because then the available curves are different
-	if (sameParent) {
+	if (m_sameParent) {
 		ui->lwCurves->setEnabled(true);
 		ui->cbConnectToCurve->setEnabled(true);
 

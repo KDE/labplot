@@ -405,18 +405,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	case AspectType::InfoElement: {
 			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Info Element"));
 			raiseDock(m_mainWindow->infoElementDock, m_mainWindow->stackedWidget);
-
-			// check if all InfoElements have the same CartesianPlot as Parent
-			bool sameParent = true;
-			auto* parent = selectedAspects[0]->parentAspect();
-			for (auto* aspect : selectedAspects) {
-				if (aspect->parentAspect() != parent) {
-					sameParent = false;
-					break;
-				}
-			}
-
-			m_mainWindow->infoElementDock->setInfoElements(castList<InfoElement>(selectedAspects), sameParent);
+			m_mainWindow->infoElementDock->setInfoElements(castList<InfoElement>(selectedAspects));
 			break;
 		}
 	case AspectType::MQTTClient:

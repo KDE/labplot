@@ -44,7 +44,7 @@ class InfoElementDock : public BaseDock {
 public:
 	explicit InfoElementDock(QWidget* parent = nullptr);
 	~InfoElementDock();
-	void setInfoElements(QList<InfoElement*>, bool sameParent);
+	void setInfoElements(QList<InfoElement*>);
 
 public slots:
 	void elementCurveRemoved(const QString&);
