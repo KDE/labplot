@@ -254,7 +254,7 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 	if (!project)
 		return;
 
-	auto curves = project->children<const XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& curves = project->children<const XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 
 	//determine the plots where the column is consumed
 	for (const auto* curve : curves) {
@@ -269,7 +269,7 @@ void Column::addUsedInPlots(QVector<CartesianPlot*>& plots) {
 		}
 	}
 
-	auto hists = project->children<const Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& hists = project->children<const Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* hist : hists) {
 		if (hist->dataColumn() == this ) {
 			auto* plot = static_cast<CartesianPlot*>(hist->parentAspect());
@@ -368,6 +368,12 @@ bool Column::copy(const AbstractColumn* source, int source_start, int dest_start
 	return true;
 }
 
+void Column::invalidateProperties() {
+	d->statisticsAvailable = false;
+	d->hasValuesAvailable = false;
+	d->propertiesAvailable = false;
+}
+
 /**
  * \brief Insert some empty (or initialized with zero) rows
  */
@@ -377,9 +383,7 @@ void Column::handleRowInsertion(int before, int count) {
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
 
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
+	invalidateProperties();
 }
 
 /**
@@ -391,9 +395,7 @@ void Column::handleRowRemoval(int first, int count) {
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
 
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
+	invalidateProperties();
 }
 
 /**
@@ -478,9 +480,7 @@ void Column::setFormula(const QString& formula, const QStringList& variableNames
  * "variable columns".
  */
 void Column::updateFormula() {
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
+	invalidateProperties();
 	d->updateFormula();
 }
 
@@ -521,6 +521,7 @@ void Column::clearFormulas() {
  */
 void Column::setTextAt(int row, const QString& new_value) {
 	exec(new ColumnSetTextCmd(d, row, new_value));
+	invalidateProperties();
 }
 
 /**
@@ -529,8 +530,8 @@ void Column::setTextAt(int row, const QString& new_value) {
  * Use this only when columnMode() is Text
  */
 void Column::replaceTexts(int first, const QVector<QString>& new_values) {
-	if (!new_values.isEmpty()) //TODO: do we really need this check?
-		exec(new ColumnReplaceTextsCmd(d, first, new_values));
+	exec(new ColumnReplaceTextsCmd(d, first, new_values));
+	invalidateProperties();
 }
 
 /**
@@ -540,6 +541,7 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
  */
 void Column::setDateAt(int row, QDate new_value) {
 	setDateTimeAt(row, QDateTime(new_value, timeAt(row)));
+	invalidateProperties();
 }
 
 /**
@@ -549,6 +551,7 @@ void Column::setDateAt(int row, QDate new_value) {
  */
 void Column::setTimeAt(int row, QTime new_value) {
 	setDateTimeAt(row, QDateTime(dateAt(row), new_value));
+	invalidateProperties();
 }
 
 /**
@@ -558,6 +561,7 @@ void Column::setTimeAt(int row, QTime new_value) {
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value) {
 	exec(new ColumnSetDateTimeCmd(d, row, new_value));
+	invalidateProperties();
 }
 
 /**
@@ -566,8 +570,8 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
-	if (!new_values.isEmpty())
-		exec(new ColumnReplaceDateTimesCmd(d, first, new_values));
+	exec(new ColumnReplaceDateTimesCmd(d, first, new_values));
+	invalidateProperties();
 }
 
 /**
@@ -577,6 +581,7 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
  */
 void Column::setValueAt(int row, const double new_value) {
 	exec(new ColumnSetValueCmd(d, row, new_value));
+	invalidateProperties();
 }
 
 /**
@@ -585,8 +590,8 @@ void Column::setValueAt(int row, const double new_value) {
  * Use this only when columnMode() is Numeric
  */
 void Column::replaceValues(int first, const QVector<double>& new_values) {
-	if (!new_values.isEmpty())
-		exec(new ColumnReplaceValuesCmd(d, first, new_values));
+	exec(new ColumnReplaceValuesCmd(d, first, new_values));
+	invalidateProperties();
 }
 
 /**
@@ -596,6 +601,7 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
  */
 void Column::setIntegerAt(int row, const int new_value) {
 	exec(new ColumnSetIntegerCmd(d, row, new_value));
+	invalidateProperties();
 }
 
 /**
@@ -604,8 +610,8 @@ void Column::setIntegerAt(int row, const int new_value) {
  * Use this only when columnMode() is Integer
  */
 void Column::replaceInteger(int first, const QVector<int>& new_values) {
-	if (!new_values.isEmpty())
-		exec(new ColumnReplaceIntegerCmd(d, first, new_values));
+	exec(new ColumnReplaceIntegerCmd(d, first, new_values));
+	invalidateProperties();
 }
 
 /**
@@ -614,10 +620,8 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
  * Use this only when columnMode() is BigInt
  */
 void Column::setBigIntAt(int row, const qint64 new_value) {
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
 	exec(new ColumnSetBigIntCmd(d, row, new_value));
+	invalidateProperties();
 }
 
 /**
@@ -626,8 +630,8 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
  * Use this only when columnMode() is BigInt
  */
 void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
-	if (!new_values.isEmpty())
-		exec(new ColumnReplaceBigIntCmd(d, first, new_values));
+	exec(new ColumnReplaceBigIntCmd(d, first, new_values));
+	invalidateProperties();
 }
 
 /*!
@@ -990,13 +994,10 @@ qint64 Column::bigIntAt(int row) const {
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
-    d->propertiesAvailable = false;
-
 	if (!m_suppressDataChangedSignal)
 		emit dataChanged(this);
 
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
+	invalidateProperties();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1499,9 +1500,8 @@ void Column::handleFormatChange() {
  * for \c count < 0, the minimum of the last \p count elements is returned.
  */
 double Column::minimum(int count) const {
-	double min = qInf();
 	if (count == 0 && d->statisticsAvailable)
-		min = const_cast<Column*>(this)->statistics().minimum;
+		return const_cast<Column*>(this)->statistics().minimum;
 	else {
 		int start, end;
 
@@ -1517,8 +1517,6 @@ double Column::minimum(int count) const {
 		}
 		return minimum(start, end);
 	}
-
-	return min;
 }
 
 /*!
@@ -1644,10 +1642,8 @@ double Column::minimum(int startIndex, int endIndex) const {
  */
 double Column::maximum(int count) const {
 	DEBUG(Q_FUNC_INFO << ", count = " << count)
-	double max = -qInf();
-
 	if (count == 0 && d->statisticsAvailable)
-		max = const_cast<Column*>(this)->statistics().maximum;
+		return const_cast<Column*>(this)->statistics().maximum;
 	else {
 		int start, end;
 
@@ -1663,8 +1659,6 @@ double Column::maximum(int count) const {
 		}
 		return maximum(start, end);
 	}
-
-	return max;
 }
 
 /*!
@@ -2114,8 +2108,8 @@ int Column::indexForValue(double x) const {
 
 				double value = valueAt(row);
 				if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
-                    prevValue = value;
-                    index = row;
+					prevValue = value;
+					index = row;
 				}
 			}
 			return index;

@@ -102,6 +102,9 @@ public:
 	void* data() const;
 	bool hasValues() const;
 
+	Properties properties() const override;
+	void invalidateProperties();
+
 	void setFromColumn(int, AbstractColumn*, int);
 	QString textAt(int) const override;
 	void setTextAt(int, const QString&) override;
@@ -122,7 +125,6 @@ public:
 	qint64 bigIntAt(int) const override;
 	void setBigIntAt(int, qint64) override;
 	void replaceBigInt(int, const QVector<qint64>&) override;
-	Properties properties() const override;
 
 	double maximum(int count = 0) const override;
 	double maximum(int startIndex, int endIndex) const override;

@@ -141,6 +141,8 @@ void XYEquationCurvePrivate::recalculate() {
 			emit q->dataChanged();
 			return;
 		}
+		xColumn->invalidateProperties();
+		yColumn->invalidateProperties();
 	} else {
 		if (equationData.count < 1)
 			return;
@@ -162,7 +164,9 @@ void XYEquationCurvePrivate::recalculate() {
 
 	if (!rc) {
 		xVector->clear();
+		xColumn->invalidateProperties();
 		yVector->clear();
+		yColumn->invalidateProperties();
 	}
 
 	recalcLogicalPoints();
