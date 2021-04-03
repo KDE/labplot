@@ -170,6 +170,10 @@ void Workbook::setChildSelectedInView(int index, bool selected) {
 	}
 }
 
+QVector<AspectType> Workbook::pasteTypes() const {
+	return QVector<AspectType>{AspectType::Spreadsheet, AspectType::Matrix};
+}
+
 void Workbook::processDropEvent(const QVector<quintptr>& vec) {
 	for (auto a : vec) {
 		auto* aspect = reinterpret_cast<AbstractAspect*>(a);

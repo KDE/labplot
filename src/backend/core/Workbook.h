@@ -55,6 +55,7 @@ public:
 	Matrix* currentMatrix() const;
 	void setChildSelectedInView(int index, bool selected);
 
+	QVector<AspectType> pasteTypes() const override;
 	void processDropEvent(const QVector<quintptr>&) override;
 
 	void save(QXmlStreamWriter*) const override;
