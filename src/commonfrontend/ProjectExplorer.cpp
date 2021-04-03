@@ -439,9 +439,13 @@ bool ProjectExplorer::eventFilter(QObject* obj, QEvent* event) {
 			if (!index.isValid())
 				return false;
 
-			//process the droped objects
+			//process the dropped objects
 			auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 			aspect->processDropEvent(vec);
+
+			//expand the current aspect to see the dropped objects
+			const auto* model = static_cast<const AspectTreeModel*>(m_treeView->model());
+			m_treeView->setExpanded(model->modelIndexOfAspect(aspect), true);
 		}
 	}
 

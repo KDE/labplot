@@ -144,7 +144,7 @@ void Workbook::childSelected(const AbstractAspect* aspect) {
 	this slot is called when a worksheet element is deselected in the project explorer.
  */
 void Workbook::childDeselected(const AbstractAspect* aspect) {
-	Q_UNUSED(aspect);
+	Q_UNUSED(aspect)
 }
 
 /*!
@@ -170,6 +170,12 @@ void Workbook::setChildSelectedInView(int index, bool selected) {
 	}
 }
 
+void Workbook::processDropEvent(const QVector<quintptr>& vec) {
+	for (auto a : vec) {
+		auto* aspect = reinterpret_cast<AbstractAspect*>(a);
+		aspect->reparent(this);
+	}
+}
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################

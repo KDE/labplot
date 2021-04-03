@@ -62,6 +62,8 @@ public:
 	void* data() const;
 	void setData(void*);
 
+	QVector<AspectType> dropableOn() const override;
+
 	BASIC_D_ACCESSOR_DECL(AbstractColumn::ColumnMode, mode, Mode)
 	BASIC_D_ACCESSOR_DECL(int, rowCount, RowCount)
 	BASIC_D_ACCESSOR_DECL(int, columnCount, ColumnCount)

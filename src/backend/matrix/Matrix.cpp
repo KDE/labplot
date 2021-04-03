@@ -160,7 +160,7 @@ bool Matrix::exportView() const {
 			m_view->exportToFile(path, separator, format);
 		}
 		RESET_CURSOR;
-    	}
+	}
 	delete dlg;
 
 	return ret;
@@ -676,6 +676,12 @@ void Matrix::setData(void* data) {
 		exec(new MatrixReplaceValuesCmd(d, data));
 }
 
+QVector<AspectType> Matrix::dropableOn() const {
+	auto vec = AbstractPart::dropableOn();
+	vec << AspectType::Workbook;
+	return vec;
+}
+
 //##############################################################################
 //#########################  Public slots  #####################################
 //##############################################################################
@@ -1072,7 +1078,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//columns
-	DEBUG("	mode = " << static_cast<int>(d->mode));
+	DEBUG("	mode = " << static_cast<int>(d->mode))
 	switch (d->mode) {
 	case AbstractColumn::ColumnMode::Numeric:
 		size = d->rowCount*sizeof(double);
@@ -1128,7 +1134,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 }
 
 bool Matrix::load(XmlStreamReader* reader, bool preview) {
-	DEBUG("Matrix::load()");
+	DEBUG("Matrix::load()")
 	if (!readBasicAttributes(reader))
 		return false;
 
@@ -1299,9 +1305,9 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode mode,
 	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
-	QDEBUG("prepareImport() rows =" << actualRows << " cols =" << actualCols);
+	QDEBUG("prepareImport() rows =" << actualRows << " cols =" << actualCols)
 	//QDEBUG("	column modes = " << columnMode);
-	Q_UNUSED(colNameList);
+	Q_UNUSED(colNameList)
 	int columnOffset = 0;
 	setUndoAware(false);
 
@@ -1369,15 +1375,15 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter:
 }
 
 void Matrix::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
-	DEBUG("Matrix::finalizeImport()");
-	Q_UNUSED(columnOffset);
-	Q_UNUSED(startColumn);
-	Q_UNUSED(endColumn);
-	Q_UNUSED(dateTimeFormat);
-	Q_UNUSED(importMode);
+	DEBUG("Matrix::finalizeImport()")
+	Q_UNUSED(columnOffset)
+	Q_UNUSED(startColumn)
+	Q_UNUSED(endColumn)
+	Q_UNUSED(dateTimeFormat)
+	Q_UNUSED(importMode)
 
 	setSuppressDataChangedSignal(false);
 	setChanged();
 	setUndoAware(true);
-	DEBUG("Matrix::finalizeImport() DONE");
+	DEBUG("Matrix::finalizeImport() DONE")
 }

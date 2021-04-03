@@ -55,6 +55,8 @@ public:
 	Matrix* currentMatrix() const;
 	void setChildSelectedInView(int index, bool selected);
 
+	void processDropEvent(const QVector<quintptr>&) override;
+
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 

@@ -817,6 +817,12 @@ QVector<AspectType> Spreadsheet::pasteTypes() const {
 	return QVector<AspectType>{AspectType::Column};
 }
 
+QVector<AspectType> Spreadsheet::dropableOn() const {
+	auto vec = AbstractPart::dropableOn();
+	vec << AspectType::Workbook;
+	return vec;
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################

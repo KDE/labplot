@@ -55,6 +55,7 @@ public:
 	SpreadsheetModel* model();
 
 	QVector<AspectType> pasteTypes() const override;
+	QVector<AspectType> dropableOn() const override;
 
 	void updateHorizontalHeader();
 	void updateLocale();
