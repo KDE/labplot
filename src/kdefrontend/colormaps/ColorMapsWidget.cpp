@@ -26,20 +26,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "backend/datasources/DatasetHandler.h"
 #include "kdefrontend/colormaps/ColorMapsWidget.h"
 #include "backend/lib/macros.h"
+#include "tools/ColorMapsManager.h"
 
 #include <QCompleter>
-#include <QFile>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonValue>
 #include <QMessageBox>
 #include <QPainter>
 #include <QStandardItemModel>
-#include <QStandardPaths>
 #include <QWhatsThis>
 
 #include <KConfigGroup>
@@ -75,7 +69,8 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 	ui.leSearch->setPlaceholderText(i18n("Search..."));
 	ui.leSearch->setFocus();
 
-	loadCollections();
+	m_manager = ColorMapsManager::instance();
+	ui.cbCollections->addItems(m_manager->collectionNames());
 
 	connect(ui.cbCollections, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 			this, &ColorMapsWidget::collectionChanged);
@@ -116,81 +111,21 @@ ColorMapsWidget::~ColorMapsWidget() {
 }
 
 /**
- * @brief Processes the json metadata file that contains the list of colormap collections.
- */
-void ColorMapsWidget::loadCollections() {
-	m_jsonDir = QStandardPaths::locate(QStandardPaths::AppDataLocation, QLatin1String("colormaps"), QStandardPaths::LocateDirectory);
-
-	const QString& fileName = m_jsonDir + QLatin1String("/ColormapCollections.json");
-	QFile file(fileName);
-
-	if (file.open(QIODevice::ReadOnly)) {
-		QJsonDocument document = QJsonDocument::fromJson(file.readAll());
-		file.close();
-		if (!document.isArray()) {
-			QDEBUG("Invalid definition of " + fileName)
-			return;
-		}
-
-		for (const QJsonValueRef col : document.array()) {
-			const QJsonObject& collection = col.toObject();
-			const QString& name = collection[QLatin1String("name")].toString();
-			const QString& desc = collection[QLatin1String("description")].toString();
-			ui.cbCollections->addItem(name);
-			m_collections[name] = desc;
-		}
-
-		collectionChanged(ui.cbCollections->currentIndex());
-	} else
-		QMessageBox::critical(this, i18n("File not found"),
-							  i18n("Couldn't open the color map collections file %1. Please check your installation.", fileName));
-}
-
-/**
  * Shows all categories and sub-categories for the currently selected collection
  */
 void ColorMapsWidget::collectionChanged(int) {
 	const QString& collection = ui.cbCollections->currentText();
-
-	//load the collection
-	if (m_colorMaps.find(collection) == m_colorMaps.end()) {
-		//color maps of the currently selected collection not loaded yet -> load them
-		QString path = m_jsonDir + QLatin1Char('/') + collection + ".json";
-		QFile collectionFile(path);
-		QStringList keys;
-		if (collectionFile.open(QIODevice::ReadOnly)) {
-			QJsonDocument doc = QJsonDocument::fromJson(collectionFile.readAll());
-			if (!doc.isObject()) {
-				QDEBUG("Invalid definition of " + path)
-				return;
-			}
-
-			const QJsonObject& colorMaps = doc.object();
-			keys = colorMaps.keys();
-			m_colorMaps[collection] = keys;
-
-			//load colors
-			for (auto key : keys) {
-				if (m_colors.find(key) == m_colors.end()) {
-					QStringList colors;
-					auto colorsArray = colorMaps.value(key).toArray();
-					for (auto color : colorsArray)
-						colors << color.toString();
-					m_colors[key] = colors;
-				}
-			}
-		}
-	}
 
 	//populate the list view for the icon mode
 	if (m_model)
 		delete m_model;
 
 	m_model = new QStandardItemModel(this);
-	for (const auto& name : m_colorMaps[collection]) {
+	const auto& colorMapNames = m_manager->colorMapNames(collection);
+	for (const auto& name :colorMapNames) {
 		auto* item = new QStandardItem();
 		QPixmap pixmap;
-		render(pixmap, name);
+		m_manager->render(pixmap, name);
 		item->setIcon(QIcon(pixmap));
 		item->setText(name);
 		m_model->appendRow(item);
@@ -200,7 +135,7 @@ void ColorMapsWidget::collectionChanged(int) {
 
 	//populate the list widget for the list mode
 	ui.lwColorMaps->clear();
-	ui.lwColorMaps->addItems(m_colorMaps[collection]);
+	ui.lwColorMaps->addItems(colorMapNames);
 
 	//select the first color map in the current collection
 	ui.lvColorMaps->setCurrentIndex(ui.lvColorMaps->model()->index(0, 0));
@@ -210,7 +145,7 @@ void ColorMapsWidget::collectionChanged(int) {
 	if (m_completer)
 		delete m_completer;
 
-	m_completer = new QCompleter(m_colorMaps[collection], this);
+	m_completer = new QCompleter(colorMapNames, this);
 	connect(m_completer, QOverload<const QString &>::of(&QCompleter::activated), this, &ColorMapsWidget::activated);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer->setCaseSensitivity(Qt::CaseSensitive);
@@ -219,39 +154,13 @@ void ColorMapsWidget::collectionChanged(int) {
 
 void ColorMapsWidget::colorMapChanged() {
 	const QString& name = ui.lwColorMaps->currentItem()->text();
-	render(m_pixmap, name);
+	m_manager->render(m_pixmap, name);
 	ui.lPreview->setPixmap(m_pixmap);
-}
-
-void ColorMapsWidget::render(QPixmap& pixmap, const QString& name) {
-	//convert from the string RGB represetation to QColor
-	m_colormap.clear();
-	for (auto& rgb : m_colors[name]) {
-		QStringList rgbValues = rgb.split(QLatin1Char(','));
-		if (rgbValues.count() == 3)
-			m_colormap << QColor(rgbValues.at(0).toInt(), rgbValues.at(1).toInt(), rgbValues.at(2).toInt());
-		else if (rgbValues.count() == 4)
-			m_colormap << QColor(rgbValues.at(1).toInt(), rgbValues.at(2).toInt(), rgbValues.at(3).toInt());
-	}
-
-	//render the preview pixmap
-	int height = 80;
-	int width = 200;
-	int count = m_colormap.count();
-	pixmap = QPixmap(width, height);
-	QPainter p(&pixmap);
-	int i = 0;
-	for (auto& color : m_colormap) {
-		p.setPen(color);
-		p.setBrush(color);
-		p.drawRect(i*width/count, 0, width/count, height);
-		++i;
-	}
 }
 
 void ColorMapsWidget::showInfo() {
 	const QString& collection = ui.cbCollections->currentText();
-	const QString& info = m_collections[collection];
+	const QString& info = m_manager->collectionInfo(collection);
 	QWhatsThis::showText(ui.bInfo->mapToGlobal(QPoint(0, 0)), info, ui.bInfo);
 }
 
@@ -263,7 +172,6 @@ void ColorMapsWidget::toggleIconView() {
 }
 
 void ColorMapsWidget::viewModeChanged(int index) {
-	//TODO:
 	if (index == 0) {
 		//switching form list to icon view mode
 		const auto& name = ui.lwColorMaps->currentItem()->text();
@@ -302,12 +210,15 @@ void ColorMapsWidget::activateListViewItem(const QString& name) {
 QPixmap ColorMapsWidget::previewPixmap() {
 	if (ui.stackedWidget->currentIndex() == 0) {
 		const QString& name = ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
-		render(m_pixmap, name);
+		m_manager->render(m_pixmap, name);
 	}
 
 	return m_pixmap;
 }
 
+/*!
+ * returns the name of the currently selected color map.
+ */
 QString ColorMapsWidget::name() const {
 	if (ui.stackedWidget->currentIndex() == 0)
 		return ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
@@ -315,6 +226,9 @@ QString ColorMapsWidget::name() const {
 		return ui.lwColorMaps->currentItem()->text();
 }
 
+/*!
+ * returns the vector with the colors of the currently selected color map.
+ */
 QVector<QColor> ColorMapsWidget::colors() const {
-	return m_colormap;
+	return m_manager->colors();
 }

@@ -422,6 +422,7 @@ ELSE ()
 ENDIF ()
 
 set(TOOLS_SOURCES
+	${TOOLS_DIR}/ColorMapsManager.cpp
 	${TOOLS_DIR}/EquationHighlighter.cpp
 	${TOOLS_DIR}/ImageTools.cpp
 	${TOOLS_DIR}/TeXRenderer.cpp

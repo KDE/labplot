@@ -1,7 +1,7 @@
 /***************************************************************************
-	File                 : ColorMapsWidget.h
+	File                 : ColorMapsManager.h
 	Project              : LabPlot
-	Description          : widget showing the available color maps
+	Description          : color maps manager
 	--------------------------------------------------------------------
 	Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
@@ -27,47 +27,38 @@
  ***************************************************************************/
 
 
-#ifndef COLORMAPSWIDGET_H
-#define COLORMAPSWIDGET_H
+#ifndef COLORMAPSMANAGER_H
+#define COLORMAPSMANAGER_H
 
-#include "ui_colormapswidget.h"
+#include <QColor>
+#include <QMap>
+#include <QVector>
 
-#include "QMap"
+class QPixmap;
 
-class QCompleter;
-class QStandardItemModel;
-class ColorMapsManager;
-
-class ColorMapsWidget : public QWidget {
-	Q_OBJECT
+class ColorMapsManager {
 
 public:
-	explicit ColorMapsWidget(QWidget*);
-	~ColorMapsWidget() override;
-
-	QPixmap previewPixmap();
-	QString name() const;
+	static ColorMapsManager* instance();
+	QStringList collectionNames() const;
+	QString collectionInfo(const QString& collectionName) const;
+	QStringList colorMapNames(const QString& collectionName);
 	QVector<QColor> colors() const;
+	void render(QPixmap&, const QString& name);
 
 private:
-	Ui::ColorMapsWidget ui;
-	QCompleter* m_completer{nullptr};
-	QPixmap m_pixmap;
-	QVector<QColor> m_colormap;
-	QStandardItemModel* m_model{nullptr};
-	ColorMapsManager* m_manager{nullptr};
+	ColorMapsManager();
+	~ColorMapsManager();
 
 	void loadCollections();
-	void activateIconViewItem(const QString& name);
-	void activateListViewItem(const QString& name);
 
-private slots:
-	void collectionChanged(int);
-	void colorMapChanged();
-	void showInfo();
-	void toggleIconView();
-	void viewModeChanged(int);
-	void activated(const QString&);
+	static ColorMapsManager* m_instance;
+
+	QMap<QString, QString> m_collections; //collections (key = collection name, value = description)
+	QMap<QString, QStringList> m_colorMaps; //color maps in a collection (key = collection name, value = list of color map names)
+	QMap<QString, QStringList> m_colors; //colors (key = color map name, value = list of colors in the string representation)
+	QString m_jsonDir;
+	QVector<QColor> m_colormap;
 };
 
-#endif // COLORMAPSWIDGET_H
+#endif // COLORMAPSMANAGER_H
