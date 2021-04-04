@@ -84,13 +84,13 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 				d->position = xpos;
 				d->m_index = curve->xColumn()->indexForValue(xpos);
 				custompoint->setPosition(QPointF(xpos,y));
-				DEBUG("Value found");
+				DEBUG("Value found")
 			}
 		} else {
 			d->xPos = 0;
 			d->position = 0;
 			custompoint->setPosition(cSystem->mapSceneToLogical(QPointF(0, 0)));
-			DEBUG("Value not found");
+			DEBUG("Value not found")
 		}
 
 		TextLabel::TextWrapper text;
@@ -101,7 +101,6 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		textString.append(QString(QString(markerpoints[0].curve->name()+":")));
 		textString.append(QString::number(markerpoints[0].customPoint->position().y()));
 		text.text = textString;
-
 
 		// TODO: Find better solution than using textedit
 		QString str = QLatin1String("&(x), ") + markerpoints[0].curve->name()
@@ -155,7 +154,7 @@ void InfoElement::init() {
 
 	//use the color for the axis line from the theme also for info element's lines
 	KConfig config;
-	loadThemeConfig(config);
+	InfoElement::loadThemeConfig(config);
 }
 
 void InfoElement::initActions() {
@@ -382,8 +381,8 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	// TODO: save positions of the variables in extra variables to replace faster, because replace takes long time
 	TextLabel::TextWrapper wrapper = m_title->text();
 	if (markerPointsCount() < 1) {
-		DEBUG(wrapper.text.toStdString());
-		DEBUG(wrapper.textPlaceholder.toStdString());
+		DEBUG(wrapper.text.toStdString())
+		DEBUG(wrapper.textPlaceholder.toStdString())
 		wrapper.text = wrapper.textPlaceholder;
 		return wrapper;
 	}
@@ -405,7 +404,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	else if (columnMode== AbstractColumn::ColumnMode::Day ||
 			columnMode == AbstractColumn::ColumnMode::Month ||
 			columnMode == AbstractColumn::ColumnMode::DateTime) {
-		QDateTime dateTime = QDateTime::fromMSecsSinceEpoch(d->position);
+		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->position);
 		xValueStr = dateTime.toString(m_plot->xRangeDateTimeFormat());
 	}
 

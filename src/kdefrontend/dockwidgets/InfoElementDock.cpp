@@ -53,6 +53,9 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	ui->lePosition->setLocale(numberLocale);
 	m_labelWidget->updateLocale();
 
+	GuiTools::updatePenStyles(ui->cbConnectionLineStyle, Qt::black);
+	GuiTools::updatePenStyles(ui->cbVerticalLineStyle, Qt::black);
+
 	//**********************************  Slots **********************************************
 	//general
 	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);

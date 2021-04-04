@@ -248,10 +248,10 @@ void CustomPointPrivate::retransform() {
 		return;
 
 	//calculate the point in the scene coordinates
-	QVector<QPointF> listScene = q->cSystem->mapLogicalToScene(QVector<QPointF>{position});
+	const auto& listScene = q->cSystem->mapLogicalToScene(QVector<QPointF>{position});
 	if (!listScene.isEmpty()) {
 		m_visible = true;
-		positionScene = listScene.at(0);
+		positionScene = listScene.constFirst();
 		QPointF inParentCoords = mapPlotAreaToParent(positionScene);
 		suppressItemChangeEvent = true;
 		setPos(inParentCoords);

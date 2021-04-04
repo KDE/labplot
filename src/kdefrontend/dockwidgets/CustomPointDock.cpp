@@ -35,9 +35,6 @@
 #include <KLocalizedString>
 #include <KConfig>
 
-#include <QPainter>
-#include <QDir>
-
 CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
@@ -193,7 +190,7 @@ void CustomPointDock::positionXDateTimeChanged(const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
-	quint64 x = dateTime.toMSecsSinceEpoch();
+	qint64 x = dateTime.toMSecsSinceEpoch();
 	QPointF pos{m_point->position()};
 	pos.setX(x);
 	for (auto* point : m_pointsList)
