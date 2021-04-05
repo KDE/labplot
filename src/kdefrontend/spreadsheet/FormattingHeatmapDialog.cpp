@@ -71,21 +71,12 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 	ui.bColorMap->setIcon(QIcon::fromTheme(QLatin1String("color-management")));
 	ui.lColorMapPreview->setMaximumHeight(ui.bColorMap->height());
 
-// 	ui.cbLevelsType->addItem(i18n("Count"));
-// 	ui.cbLevelsType->addItem(i18n("Increment"));
-
 	ui.cbHightlight->addItem(i18n("Background"));
 	ui.cbHightlight->addItem(i18n("Font Color"));
 	ui.cbHightlight->addItem(i18n("Icon"));
 
 	ui.leMinimum->setValidator(new QDoubleValidator(ui.leMinimum));
 	ui.leMaximum->setValidator(new QDoubleValidator(ui.leMaximum));
-// 	ui.leLevels->setValidator(new QDoubleValidator(ui.leLevels));
-
-	//TODO: activate later once we allow to define customer levels and colors
-	ui.lLevels->hide();
-	ui.cbLevelsType->hide();
-	ui.leLevels->hide();
 
 	connect(ui.chkAutoRange, &QCheckBox::stateChanged, this, &FormattingHeatmapDialog::autoRangeChanged);
 	connect(ui.leMaximum, &QLineEdit::textChanged, this, &FormattingHeatmapDialog::checkValues);
@@ -99,6 +90,10 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 		auto state = (Qt::CheckState)(conf.readEntry("AutoRange", (int)Qt::Checked));
 		ui.chkAutoRange->setCheckState(state);
 		ui.cbHightlight->setCurrentIndex(conf.readEntry("Highlight", 0));
+
+		//"Set1_3" from ColorBrewer(Qualitative) as default color map
+		m_name = conf.readEntry("Colormap", "Set1_3");
+		m_colors << QColor(228, 26, 28) << QColor(55, 126, 184) << QColor(77, 175, 74);
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
@@ -135,13 +130,14 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 
 			m_name = format.name;
 			m_colors = format.colors;
-			//QPixmap pixmap;
-			//ColorMapsManager::instance()->render(pixmap, format.name);
-			//ui.lColorMapPreview->setPixmap(pixmap);
 			ui.cbHightlight->setCurrentIndex(static_cast<int>(format.type));
 			formatShown = true;
 		}
 	}
+
+	QPixmap pixmap;
+	ColorMapsManager::instance()->render(pixmap, m_name);
+	ui.lColorMapPreview->setPixmap(pixmap);
 
 	if (min != INFINITY)
 		ui.leMinimum->setText(QString::number(min));

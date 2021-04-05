@@ -48,7 +48,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>149</width>
+       <width>148</width>
        <height>20</height>
       </size>
      </property>
@@ -70,7 +70,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="lColormap">
      <property name="text">
-      <string>Colormaps</string>
+      <string>Colormaps:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -84,6 +84,18 @@
      </property>
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QListView" name="lvColorMaps"/>
        </item>
@@ -132,6 +144,9 @@
    </item>
    <item row="2" column="1" colspan="4">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QLabel" name="lSearch">
        <property name="sizePolicy">

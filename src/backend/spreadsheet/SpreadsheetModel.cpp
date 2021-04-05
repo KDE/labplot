@@ -563,7 +563,7 @@ QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, Formatti
 		return QVariant();
 
 	const auto& format = m_heatmapFormats[column];
-	if (format.type != type)
+	if (format.type != type || format.colors.isEmpty())
 		return QVariant();
 
 	double value = column->valueAt(row);
