@@ -101,18 +101,15 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 				return QVariant(m_matrix->text<QDateTime>(row, col));
 			case AbstractColumn::ColumnMode::Text:	// should not happen
 				return QVariant(m_matrix->text<QString>(row, col));
-			default:
-				DEBUG("	unknown column mode " << static_cast<int>(mode) << " found");
-				break;
 			}
 			break;
 		}
 		case Qt::BackgroundRole:
 			//use bluish background color to distinguish Matrix from Spreadsheet
-			return QVariant(QBrush(QColor(192,255,255)));
+			return QVariant(QColor(192,255,255));
 		case Qt::ForegroundRole:
 			//ignore current theme settings and always use black foreground color so Matrix is usable with dark themes, too.
-			return QVariant(QBrush(QColor(Qt::black)));
+			return QVariant(QColor(Qt::black));
 	}
 
 	return QVariant();
@@ -222,9 +219,6 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 		case AbstractColumn::ColumnMode::Text:
 			DEBUG("	WARNING: Text format not supported yet");	// should not happen
 			m_matrix->setCell(row, column, value.toString());
-			break;
-		default:
-			DEBUG("	Unsupported column mode " << static_cast<int>(mode));
 			break;
 		}
 

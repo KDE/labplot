@@ -192,16 +192,16 @@ int main (int argc, char *argv[]) {
 
 #ifndef NDEBUG
 	// debugging paths
-	QStringList appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+	const QStringList& appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 	DEBUG("AppDataLocation paths:")
-	for (const QString &path: appdatapaths)
-		DEBUG("	" << STDSTRING(path));
+	for (const auto& path: appdatapaths)
+		DEBUG("	" << STDSTRING(path))
 	DEBUG("Icon theme search paths:")
-	for (const QString &path: QIcon::themeSearchPaths())
-		DEBUG("	" << STDSTRING(path));
+	for (const auto& path : QIcon::themeSearchPaths())
+		DEBUG("	" << STDSTRING(path))
 	DEBUG("Library search paths:")
-	for (const QString &path: QCoreApplication::libraryPaths())
-		DEBUG("	" << STDSTRING(path));
+	for (const auto& path: QCoreApplication::libraryPaths())
+		DEBUG("	" << STDSTRING(path))
 #endif
 
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
