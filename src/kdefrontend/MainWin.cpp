@@ -787,7 +787,7 @@ void MainWin::initMenus() {
 #endif
 
 	//menu subwindow visibility policy
-	m_visibilityMenu = new QMenu(i18n("Window Visibility Policy"), this);
+	m_visibilityMenu = new QMenu(i18n("Window Visibility"), this);
 	m_visibilityMenu->setIcon(QIcon::fromTheme("window-duplicate"));
 	m_visibilityMenu ->addAction(m_visibilityFolderAction);
 	m_visibilityMenu ->addAction(m_visibilitySubfolderAction);

@@ -151,8 +151,10 @@ void ProjectExplorer::createActions() {
 	deleteSelectedTreeAction = new QAction(QIcon::fromTheme("edit-delete"), i18n("Delete Selected"), this);
 	connect(deleteSelectedTreeAction, &QAction::triggered, this, &ProjectExplorer::deleteSelected);
 
-	toggleFilterAction = new QAction(QIcon::fromTheme(QLatin1String("view-filter")), i18n("Hide Search/Filter Options"), this);
-	connect(toggleFilterAction, &QAction::triggered, this, &ProjectExplorer::toggleFilterWidgets);
+	toggleFilterAction = new QAction(QIcon::fromTheme(QLatin1String("view-filter")), i18n("Search/Filter Options"), this);
+	toggleFilterAction->setCheckable(true);
+	toggleFilterAction->setChecked(true);
+	connect(toggleFilterAction, &QAction::triggered, this, [=]() {m_frameFilter->setVisible(!m_frameFilter->isVisible());});
 
 	showAllColumnsAction = new QAction(i18n("Show All"),this);
 	showAllColumnsAction->setCheckable(true);
@@ -178,28 +180,34 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 	if (items.size()/4 == 1) {
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		menu = aspect->createContextMenu();
+
+		if (aspect == m_project) {
+			auto* firstAction = menu->actions().at(2);
+			menu->insertSeparator(firstAction);
+			menu->insertAction(firstAction, expandTreeAction);
+			menu->insertAction(firstAction, collapseTreeAction);
+		}
 	} else {
 		menu = new QMenu();
-
-		QMenu* projectMenu = m_project->createContextMenu();
-		projectMenu->setTitle(m_project->name());
-		menu->addMenu(projectMenu);
-		menu->addSeparator();
 
 		if (items.size()/4 > 1) {
 			menu->addAction(expandSelectedTreeAction);
 			menu->addAction(collapseSelectedTreeAction);
 			menu->addSeparator();
 			menu->addAction(deleteSelectedTreeAction);
-			menu->addSeparator();
 		} else {
+			QMenu* projectMenu = m_project->createContextMenu();
+			projectMenu->setTitle(m_project->name());
+			menu->addMenu(projectMenu);
+
+			menu->addSeparator();
 			menu->addAction(expandTreeAction);
 			menu->addAction(collapseTreeAction);
 			menu->addSeparator();
 			menu->addAction(toggleFilterAction);
 
 			//Menu for showing/hiding the columns in the tree view
-			QMenu* columnsMenu = menu->addMenu(i18n("Show/Hide columns"));
+			QMenu* columnsMenu = menu->addMenu(i18n("Columns"));
 			columnsMenu->addAction(showAllColumnsAction);
 			columnsMenu->addSeparator();
 			for (auto* action : qAsConst(list_showColumnActions))
@@ -224,7 +232,7 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
 	if (m_project->aspectAddedSignalSuppressed())
 		return;
 
-	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	const auto* tree_model = dynamic_cast<AspectTreeModel*>(m_treeView->model());
 	if (tree_model)
 		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
 }
@@ -536,7 +544,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 
 	//don't do anything for newly added data spreadsheets of data picker curves
 	if (aspect->inherits(AspectType::Spreadsheet) &&
-	    aspect->parentAspect()->inherits(AspectType::DatapickerCurve))
+		aspect->parentAspect()->inherits(AspectType::DatapickerCurve))
 		return;
 
 	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
@@ -558,7 +566,7 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 }
 
 void ProjectExplorer::navigateTo(const QString& path) {
-	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	const AspectTreeModel* tree_model = dynamic_cast<AspectTreeModel*>(m_treeView->model());
 	if (tree_model) {
 		const QModelIndex& index = tree_model->modelIndexOfAspect(path);
 		m_treeView->scrollTo(index);
@@ -572,7 +580,7 @@ void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIn
 	if (m_project->isLoading())
 		return;
 
-	Q_UNUSED(previous);
+	Q_UNUSED(previous)
 	emit currentAspectChanged(static_cast<AbstractAspect*>(current.internalPointer()));
 }
 
@@ -589,7 +597,7 @@ void ProjectExplorer::toggleColumn(int index) {
 		m_treeView->header()->resizeSection(0,0 );
 		m_treeView->header()->resizeSections(QHeaderView::ResizeToContents);
 
-		for (auto* action : list_showColumnActions)
+		for (auto* action : qAsConst(list_showColumnActions))
 			action->setEnabled(true);
 
 		//deactivate the "show all column"-action, if all actions are checked
@@ -622,22 +630,9 @@ void ProjectExplorer::showAllColumns() {
 	}
 	showAllColumnsAction->setEnabled(false);
 
-	for (auto* action : list_showColumnActions) {
+	for (auto* action : qAsConst(list_showColumnActions)) {
 		action->setEnabled(true);
 		action->setChecked(true);
-	}
-}
-
-/*!
-  shows/hides the frame with the search/filter widgets
-*/
-void ProjectExplorer::toggleFilterWidgets() {
-	if (m_frameFilter->isVisible()) {
-		m_frameFilter->hide();
-		toggleFilterAction->setText(i18n("Show Search/Filter Options"));
-	} else {
-		m_frameFilter->show();
-		toggleFilterAction->setText(i18n("Hide Search/Filter Options"));
 	}
 }
 
@@ -738,12 +733,11 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index) {
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
 	QModelIndex index;
-	QModelIndexList items;
 	AbstractAspect* aspect = nullptr;
 
 	//there are four model indices in each row
 	//-> divide by 4 to obtain the number of selected rows (=aspects)
-	items = selected.indexes();
+	QModelIndexList items = selected.indexes();
 	for (int i = 0; i < items.size()/4; ++i) {
 		index = items.at(i*4);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -759,7 +753,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	for (const QModelIndex& index : items) {
+	for (const QModelIndex& index : qAsConst(items)) {
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		selectedAspects<<aspect;
 	}
@@ -781,7 +775,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
  * Used to udpate the cursor Dock
  */
 void ProjectExplorer::updateSelectedAspects() {
-	QModelIndexList items = m_treeView->selectionModel()->selectedRows();
+	const auto& items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
 	for (const QModelIndex& index : items)
 		selectedAspects << static_cast<AbstractAspect*>(index.internalPointer());
@@ -790,22 +784,21 @@ void ProjectExplorer::updateSelectedAspects() {
 }
 
 void ProjectExplorer::expandSelected() {
-	const QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	const auto& items = m_treeView->selectionModel()->selectedIndexes();
 	for (const auto& index : items)
 		m_treeView->setExpanded(index, true);
 }
 
 void ProjectExplorer::collapseSelected() {
-	const QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	const auto& items = m_treeView->selectionModel()->selectedIndexes();
 	for (const auto& index : items)
 		m_treeView->setExpanded(index, false);
 }
 
 void ProjectExplorer::deleteSelected() {
-	const QModelIndexList items = m_treeView->selectionModel()->selectedIndexes();
+	const auto& items = m_treeView->selectionModel()->selectedIndexes();
 	if (!items.size())
 		return;
-
 
 	//determine all selected aspect
 	QVector<AbstractAspect*> aspects;
@@ -875,7 +868,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 	QVector<ViewState> viewStates;
 
 	int currentRow = -1; //row corresponding to the current index in the tree view, -1 for the root element (=project)
-	QModelIndexList selectedRows = m_treeView->selectionModel()->selectedRows();
+	const auto& selectedRows = m_treeView->selectionModel()->selectedRows();
 
 	//check whether the project node itself is expanded
 	if (m_treeView->isExpanded(m_treeView->model()->index(0,0)))
@@ -1079,7 +1072,7 @@ void ProjectExplorer::collapseParents(const QModelIndex& index, const QList<QMod
 	if (index.column() == 0 && index.row() == 0)
 		return;
 
-	const QModelIndex parent = index.parent();
+	const auto& parent = index.parent();
 	if (parent == QModelIndex())
 		return;
 

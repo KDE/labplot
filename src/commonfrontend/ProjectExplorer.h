@@ -103,7 +103,6 @@ private slots:
 	void filterTextChanged(const QString&);
 	void toggleFilterCaseSensitivity();
 	void toggleFilterMatchCompleteWord();
-	void toggleFilterWidgets();
 	void toggleFilterOptionsMenu(bool);
 	void resizeHeader();
 	void expandSelected();
