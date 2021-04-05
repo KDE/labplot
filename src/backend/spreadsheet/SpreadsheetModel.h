@@ -45,11 +45,13 @@ class SpreadsheetModel : public QAbstractItemModel {
 public:
 	explicit SpreadsheetModel(Spreadsheet*);
 
+	enum class Formatting {Background, Foreground, Icon};
+
 	struct HeatmapFormat {
 		double min = 0.0;
 		double max = 1.0;
 		QString name;
-		bool fillBackground = true;
+		Formatting type = SpreadsheetModel::Formatting::Background;
 		QVector<QColor> colors;
 	};
 
@@ -80,7 +82,7 @@ public:
 	//conditional formatting
 	bool hasFormat(const AbstractColumn*) const;
 	bool hasHeatmapFormat(const AbstractColumn*) const;
-	const HeatmapFormat& heatmapFormat(const AbstractColumn*) const;
+	HeatmapFormat heatmapFormat(const AbstractColumn*) const;
 	void setHeatmapFormat(QVector<Column*>, const HeatmapFormat&);
 	void removeFormat(QVector<Column*>);
 
@@ -111,7 +113,7 @@ private:
 	int m_columnCount{0};
 	QMap<const AbstractColumn*, HeatmapFormat> m_heatmapFormats;
 
-	QVariant backgroundColor(const AbstractColumn*, int row, bool fillBackground) const;
+	QVariant color(const AbstractColumn*, int row, Formatting type) const;
 };
 
 #endif

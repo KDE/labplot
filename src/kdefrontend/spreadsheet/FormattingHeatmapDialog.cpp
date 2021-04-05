@@ -29,6 +29,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/colormaps/ColorMapsDialog.h"
+#include "tools/ColorMapsManager.h"
 
 #include <QDialogButtonBox>
 #include <QDir>
@@ -74,6 +75,7 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 // 	ui.cbLevelsType->addItem(i18n("Increment"));
 
 	ui.cbHightlight->addItem(i18n("Background"));
+	ui.cbHightlight->addItem(i18n("Font Color"));
 	ui.cbHightlight->addItem(i18n("Icon"));
 
 	ui.leMinimum->setValidator(new QDoubleValidator(ui.leMinimum));
@@ -133,13 +135,10 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 
 			m_name = format.name;
 			m_colors = format.colors;
-			//TODO: pixmap
-			//ui.lColorMapPreview->setPixmap(ColorMapsManager->instance()->pixmap(format.name));
-			if (format.fillBackground)
-				ui.cbHightlight->setCurrentIndex(0);
-			else
-				ui.cbHightlight->setCurrentIndex(1);
-
+			//QPixmap pixmap;
+			//ColorMapsManager::instance()->render(pixmap, format.name);
+			//ui.lColorMapPreview->setPixmap(pixmap);
+			ui.cbHightlight->setCurrentIndex(static_cast<int>(format.type));
 			formatShown = true;
 		}
 	}
@@ -161,7 +160,7 @@ SpreadsheetModel::HeatmapFormat FormattingHeatmapDialog::format() {
 	format.max = ui.leMaximum->text().toDouble();
 	format.colors = m_colors;
 	format.name = m_name;
-	format.fillBackground = (ui.cbHightlight->currentIndex() == 0);
+	format.type = static_cast<SpreadsheetModel::Formatting>(ui.cbHightlight->currentIndex());
 	return format;
 }
 

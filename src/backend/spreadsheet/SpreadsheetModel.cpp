@@ -161,15 +161,15 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 	case Qt::ForegroundRole:
 		if (!col_ptr->isValid(row))
 			return QVariant(QBrush(Qt::red));
-		break;
+		return color(col_ptr, row, Formatting::Foreground);
 	case Qt::BackgroundRole:
-		return backgroundColor(col_ptr, row, true);
+		return color(col_ptr, row, Formatting::Background);
 	case static_cast<int>(CustomDataRole::MaskingRole):
 		return QVariant(col_ptr->isMasked(row));
 	case static_cast<int>(CustomDataRole::FormulaRole):
 		return QVariant(col_ptr->formula(row));
 	case Qt::DecorationRole:
-		return backgroundColor(col_ptr, row, false);
+		return color(col_ptr, row, Formatting::Icon);
 // 		if (m_formula_mode)
 // 			return QIcon(QPixmap(":/equals.png")); //TODO
 	}
@@ -540,7 +540,7 @@ bool SpreadsheetModel::hasHeatmapFormat(const AbstractColumn* column) const {
 	return m_heatmapFormats.contains(column);
 }
 
-const SpreadsheetModel::HeatmapFormat& SpreadsheetModel::heatmapFormat(const AbstractColumn* column) const {
+SpreadsheetModel::HeatmapFormat SpreadsheetModel::heatmapFormat(const AbstractColumn* column) const {
 	return m_heatmapFormats[column];
 }
 
@@ -556,14 +556,14 @@ void SpreadsheetModel::removeFormat(QVector<Column*> columns) {
 	}
 }
 
-QVariant SpreadsheetModel::backgroundColor(const AbstractColumn* column, int row, bool fillBackground) const {
+QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, Formatting type) const {
 	if (!column->isNumeric()
 		|| !column->isValid(row)
 		|| !m_heatmapFormats.contains(column))
 		return QVariant();
 
 	const auto& format = m_heatmapFormats[column];
-	if (format.fillBackground != fillBackground)
+	if (format.type != type)
 		return QVariant();
 
 	double value = column->valueAt(row);
