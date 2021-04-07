@@ -463,7 +463,7 @@ void BoxPlot::setWhiskersOpacity(qreal opacity) {
 		exec(new BoxPlotSetWhiskersOpacityCmd(d, opacity, ki18n("%1: set whiskers opacity")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapSize, double, whiskersCapSize, recalcShapeAndBoundingRect)
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapSize, double, whiskersCapSize, recalc)
 void BoxPlot::setWhiskersCapSize(double size) {
 	Q_D(BoxPlot);
 	if (size != d->whiskersCapSize)
