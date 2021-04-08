@@ -1707,7 +1707,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	} else if (text) {
 		int count = labelsTextColumn->rowCount();
 		for (int i = 0; i < count; ++i) {
-			tickLabelStrings << labelsTextColumn->textAt(i);
+			str = labelsPrefix + labelsTextColumn->textAt(i) + labelsSuffix;
+			tickLabelStrings << str;
 		}
 	}
 
