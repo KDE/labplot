@@ -730,7 +730,7 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 
 QVector<AspectType> CartesianPlot::pasteTypes() const {
 	QVector<AspectType> types{
-		AspectType::XYCurve, AspectType::Histogram,
+		AspectType::XYCurve, AspectType::Histogram, AspectType::BoxPlot,
 		AspectType::Axis, AspectType::XYEquationCurve,
 		AspectType::XYConvolutionCurve, AspectType::XYCorrelationCurve,
 		AspectType::XYDataReductionCurve, AspectType::XYDifferentiationCurve,
