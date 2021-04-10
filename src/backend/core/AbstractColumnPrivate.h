@@ -42,6 +42,7 @@ public:
 	QString name() const { return m_owner->name(); }
 
 	IntervalAttribute<bool> m_masking;
+	AbstractColumn::HeatmapFormat* m_heatmapFormat{nullptr};
 
 private:
 	AbstractColumn* m_owner;

@@ -31,29 +31,19 @@
 #ifndef SPREADSHEETMODEL_H
 #define SPREADSHEETMODEL_H
 
+#include "backend/core/AbstractColumn.h"
 #include <QAbstractItemModel>
 
 class QStringList;
 class Column;
 class Spreadsheet;
 class AbstractAspect;
-class AbstractColumn;
 
 class SpreadsheetModel : public QAbstractItemModel {
 	Q_OBJECT
 
 public:
 	explicit SpreadsheetModel(Spreadsheet*);
-
-	enum class Formatting {Background, Foreground, Icon};
-
-	struct HeatmapFormat {
-		double min = 0.0;
-		double max = 1.0;
-		QString name;
-		Formatting type = SpreadsheetModel::Formatting::Background;
-		QVector<QColor> colors;
-	};
 
 	enum class CustomDataRole {
 		MaskingRole = Qt::UserRole, //!< bool determining whether the cell is masked
@@ -78,13 +68,6 @@ public:
 
 	void updateHorizontalHeader();
 	void suppressSignals(bool);
-
-	//conditional formatting
-	bool hasFormat(const AbstractColumn*) const;
-	bool hasHeatmapFormat(const AbstractColumn*) const;
-	HeatmapFormat heatmapFormat(const AbstractColumn*) const;
-	void setHeatmapFormat(QVector<Column*>, const HeatmapFormat&);
-	void removeFormat(QVector<Column*>);
 
 private slots:
 	void handleAspectAdded(const AbstractAspect*);
@@ -111,9 +94,8 @@ private:
 	bool m_suppressSignals{false};
 	int m_rowCount{0};
 	int m_columnCount{0};
-	QMap<const AbstractColumn*, HeatmapFormat> m_heatmapFormats;
 
-	QVariant color(const AbstractColumn*, int row, Formatting type) const;
+	QVariant color(const AbstractColumn*, int row, AbstractColumn::Formatting type) const;
 };
 
 #endif

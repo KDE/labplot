@@ -387,6 +387,31 @@ void AbstractColumn::setFormula(int row, const QString& formula) {
  */
 void AbstractColumn::clearFormulas() {};
 
+
+//conditional formatting
+bool AbstractColumn::hasHeatmapFormat() const {
+	return (d->m_heatmapFormat != nullptr);
+}
+
+AbstractColumn::HeatmapFormat& AbstractColumn::heatmapFormat() const {
+	if (!d->m_heatmapFormat)
+		d->m_heatmapFormat = new HeatmapFormat();
+
+	return *(d->m_heatmapFormat);
+}
+
+void AbstractColumn::setHeatmapFormat(const AbstractColumn::HeatmapFormat& format) {
+	if (!d->m_heatmapFormat)
+		d->m_heatmapFormat = new HeatmapFormat();
+
+	*(d->m_heatmapFormat) = format;
+}
+
+void AbstractColumn::removeFormat() {
+	delete d->m_heatmapFormat;
+	d->m_heatmapFormat = nullptr;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -161,15 +161,15 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 	case Qt::ForegroundRole:
 		if (!col_ptr->isValid(row))
 			return QVariant(QBrush(Qt::red));
-		return color(col_ptr, row, Formatting::Foreground);
+		return color(col_ptr, row, AbstractColumn::Formatting::Foreground);
 	case Qt::BackgroundRole:
-		return color(col_ptr, row, Formatting::Background);
+		return color(col_ptr, row, AbstractColumn::Formatting::Background);
 	case static_cast<int>(CustomDataRole::MaskingRole):
 		return QVariant(col_ptr->isMasked(row));
 	case static_cast<int>(CustomDataRole::FormulaRole):
 		return QVariant(col_ptr->formula(row));
 	case Qt::DecorationRole:
-		return color(col_ptr, row, Formatting::Icon);
+		return color(col_ptr, row, AbstractColumn::Formatting::Icon);
 // 		if (m_formula_mode)
 // 			return QIcon(QPixmap(":/equals.png")); //TODO
 	}
@@ -531,38 +531,13 @@ bool SpreadsheetModel::formulaModeActive() const {
 	return m_formula_mode;
 }
 
-bool SpreadsheetModel::hasFormat(const AbstractColumn* column) const {
-	//TODO: extend later to other formatting types
-	return m_heatmapFormats.contains(column);
-}
-
-bool SpreadsheetModel::hasHeatmapFormat(const AbstractColumn* column) const {
-	return m_heatmapFormats.contains(column);
-}
-
-SpreadsheetModel::HeatmapFormat SpreadsheetModel::heatmapFormat(const AbstractColumn* column) const {
-	return m_heatmapFormats[column];
-}
-
-void SpreadsheetModel::setHeatmapFormat(QVector<Column*> columns, const SpreadsheetModel::HeatmapFormat& format) {
-	for (auto* column : columns)
-		m_heatmapFormats[column] = format;
-}
-
-void SpreadsheetModel::removeFormat(QVector<Column*> columns) {
-	for (auto* column : columns) {
-		if (m_heatmapFormats.contains(column))
-			m_heatmapFormats.remove(column);
-	}
-}
-
-QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, Formatting type) const {
+QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, AbstractColumn::Formatting type) const {
 	if (!column->isNumeric()
 		|| !column->isValid(row)
-		|| !m_heatmapFormats.contains(column))
+		|| !column->hasHeatmapFormat())
 		return QVariant();
 
-	const auto& format = m_heatmapFormats[column];
+	const auto& format = column->heatmapFormat();
 	if (format.type != type || format.colors.isEmpty())
 		return QVariant();
 

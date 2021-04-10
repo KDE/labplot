@@ -125,8 +125,8 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 			max = col->maximum();
 
 		//show the format settings of the first column
-		if (!formatShown && m_spreadsheet->model()->hasHeatmapFormat(col)) {
-			const auto& format = m_spreadsheet->model()->heatmapFormat(col);
+		if (!formatShown && col->hasHeatmapFormat()) {
+			const auto& format =col->heatmapFormat();
 
 			m_name = format.name;
 			m_colors = format.colors;
@@ -150,13 +150,13 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 		ui.leMaximum->setText(QString());
 }
 
-SpreadsheetModel::HeatmapFormat FormattingHeatmapDialog::format() {
-	SpreadsheetModel::HeatmapFormat format;
+AbstractColumn::HeatmapFormat FormattingHeatmapDialog::format() {
+	AbstractColumn::HeatmapFormat format;
 	format.min = ui.leMinimum->text().toDouble();
 	format.max = ui.leMaximum->text().toDouble();
 	format.colors = m_colors;
 	format.name = m_name;
-	format.type = static_cast<SpreadsheetModel::Formatting>(ui.cbHightlight->currentIndex());
+	format.type = static_cast<AbstractColumn::Formatting>(ui.cbHightlight->currentIndex());
 	return format;
 }
 

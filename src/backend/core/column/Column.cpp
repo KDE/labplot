@@ -1069,6 +1069,23 @@ void Column::save(QXmlStreamWriter* writer) const {
 	// 		writer->writeEndElement();
 	// 	}
 
+	//conditional formatting
+	if (hasHeatmapFormat()) {
+		writer->writeStartElement("heatmapFormat");
+		const auto& format = heatmapFormat();
+		writer->writeAttribute("min", QString::number(format.min));
+		writer->writeAttribute("max", QString::number(format.max));
+		writer->writeAttribute("name", format.name);
+		writer->writeAttribute("type", QString::number(static_cast<int>(format.type)));
+		for (const auto& color : format.colors) {
+			writer->writeStartElement("color");
+			WRITE_QCOLOR(color);
+			writer->writeEndElement(); // "color"
+		}
+		writer->writeEndElement(); // "heatmapFormat"
+	}
+
+	//data
 	int i;
 	switch (columnMode()) {
 	case ColumnMode::Numeric: {
@@ -1179,7 +1196,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	while (!reader->atEnd()) {
 		reader->readNext();
 
-		if (reader->isEndElement()) break;
+		if (reader->isEndElement()  && reader->name() == "column") break;
 
 		if (reader->isStartElement()) {
 			bool ret_val = true;
@@ -1193,6 +1210,43 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				ret_val = XmlReadMask(reader);
 			else if (reader->name() == "formula")
 				ret_val = XmlReadFormula(reader);
+			else if (reader->name() == "heatmapFormat") {
+				attribs = reader->attributes();
+
+				auto& format = heatmapFormat();
+				str = attribs.value("min").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("min").toString());
+				else
+					format.min = str.toDouble();
+
+				str = attribs.value("max").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("max").toString());
+				else
+					format.max = str.toDouble();
+
+				str = attribs.value("name").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("name").toString());
+				else
+					format.name = str;
+
+				str = attribs.value("type").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("max").toString());
+				else
+					format.type = static_cast<Formatting>(str.toInt());
+
+				ret_val = true;
+			} else if (reader->name() == "color") {
+				attribs = reader->attributes();
+				QColor color;
+				READ_QCOLOR(color);
+				auto& format = heatmapFormat();
+				format.colors << color;
+				ret_val = true;
+			}
 			else if (reader->name() == "row")
 				ret_val = XmlReadRow(reader);
 			else { // unknown element
@@ -1202,6 +1256,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 			if (!ret_val)
 				return false;
 		}
+
 		if (!preview) {
 			QString content = reader->text().toString().trimmed();
 			if (!content.isEmpty() && ( columnMode() == ColumnMode::Numeric ||
@@ -1641,7 +1696,6 @@ double Column::minimum(int startIndex, int endIndex) const {
  * for \c count < 0, the maximum of the last \p count elements is returned.
  */
 double Column::maximum(int count) const {
-	DEBUG(Q_FUNC_INFO << ", count = " << count)
 	if (count == 0 && d->statisticsAvailable)
 		return const_cast<Column*>(this)->statistics().maximum;
 	else {

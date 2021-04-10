@@ -28,9 +28,9 @@
 #ifndef FORMATTINGHEATMAPDIALOG_H
 #define FORMATTINGHEATMAPDIALOG_H
 
-#include <QDialog>
 #include "ui_formattingheatmapwidget.h"
-#include "backend/spreadsheet/SpreadsheetModel.h"
+#include "backend/core/AbstractColumn.h"
+#include <QDialog>
 
 class Column;
 class Spreadsheet;
@@ -43,7 +43,7 @@ public:
 	explicit FormattingHeatmapDialog(Spreadsheet*, QWidget* parent = nullptr);
 	~FormattingHeatmapDialog() override;
 	void setColumns(const QVector<Column*>&);
-	SpreadsheetModel::HeatmapFormat format();
+	AbstractColumn::HeatmapFormat format();
 
 private:
 	Ui::FormattingHeatmapWidget ui;

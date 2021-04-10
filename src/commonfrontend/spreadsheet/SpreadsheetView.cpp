@@ -1289,7 +1289,7 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			}
 
 			for (const Column* col : columns) {
-				if (m_model->hasFormat(col)) {
+				if (col->hasHeatmapFormat()) {
 					hasFormat = true;
 					break;
 				}
@@ -1388,7 +1388,7 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	//deactivate the "Remove format" action if no columns are formatted
 	bool hasFormat = false;
 	for (auto* column : columns) {
-		if (m_model->hasFormat(column)) {
+		if (column->hasHeatmapFormat()) {
 			hasFormat = true;
 			break;
 		}
@@ -2194,8 +2194,11 @@ void SpreadsheetView::formatHeatmap() {
 
 	auto* dlg = new FormattingHeatmapDialog(m_spreadsheet);
 	dlg->setColumns(columns);
-	if (dlg->exec() == QDialog::Accepted)
-		m_model->setHeatmapFormat(columns, dlg->format());
+	if (dlg->exec() == QDialog::Accepted) {
+		const auto& format = dlg->format();
+		for (auto* col : columns)
+			col->setHeatmapFormat(format);
+	}
 
 	delete dlg;
 }
@@ -2205,7 +2208,8 @@ void SpreadsheetView::removeFormat() {
 	if (columns.isEmpty())
 		columns = m_spreadsheet->children<Column>();
 
-	m_model->removeFormat(columns);
+	for (auto* col : columns)
+		col->removeFormat();
 }
 
 /*!

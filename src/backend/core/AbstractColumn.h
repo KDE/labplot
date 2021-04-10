@@ -217,6 +217,22 @@ public:
 	virtual void replaceBigInt(int first, const QVector<qint64>& new_values);
 	virtual Properties properties() const;
 
+	//conditional formatting
+	enum class Formatting {Background, Foreground, Icon};
+
+	struct HeatmapFormat {
+		double min = 0.0;
+		double max = 1.0;
+		QString name;
+		Formatting type = Formatting::Background;
+		QVector<QColor> colors;
+	};
+
+	bool hasHeatmapFormat() const;
+	HeatmapFormat& heatmapFormat() const;
+	void setHeatmapFormat(const HeatmapFormat&);
+	void removeFormat();
+
 signals:
 	void plotDesignationAboutToChange(const AbstractColumn* source);
 	void plotDesignationChanged(const AbstractColumn* source);

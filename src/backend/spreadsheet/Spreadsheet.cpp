@@ -835,8 +835,9 @@ void Spreadsheet::save(QXmlStreamWriter* writer) const {
 	writeCommentElement(writer);
 
 	//columns
-	for (auto* col : children<Column>(ChildIndexFlag::IncludeHidden))
-		col->save(writer);
+	const auto& columns = children<Column>(ChildIndexFlag::IncludeHidden);
+	for (auto* column : columns)
+		column->save(writer);
 
 	writer->writeEndElement(); // "spreadsheet"
 }
