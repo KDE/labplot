@@ -45,7 +45,7 @@ class AbstractAspect;
 class WorksheetElement;
 
 #ifdef Q_OS_MAC
-	class KDMacTouchBar;
+class KDMacTouchBar;
 #endif
 
 class WorksheetView : public QGraphicsView {
@@ -204,6 +204,8 @@ private:
 	//Actions for cartesian plots
 	QAction* cartesianPlotApplyToSelectionAction{nullptr};
 	QAction* cartesianPlotApplyToAllAction{nullptr};
+	QAction* cartesianPlotApplyToAllXAction{nullptr};
+	QAction* cartesianPlotApplyToAllYAction{nullptr};
 	QAction* cartesianPlotApplyToAllCursor{nullptr};
 	QAction* cartesianPlotApplyToSelectionCursor{nullptr};
 	QAction* cartesianPlotSelectionModeAction{nullptr};

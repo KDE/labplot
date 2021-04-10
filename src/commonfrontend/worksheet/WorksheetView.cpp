@@ -278,6 +278,10 @@ void WorksheetView::initActions() {
 	cartesianPlotApplyToSelectionAction->setCheckable(true);
 	cartesianPlotApplyToAllAction = new QAction(i18n("All Plots"), cartesianPlotActionModeActionGroup);
 	cartesianPlotApplyToAllAction->setCheckable(true);
+	cartesianPlotApplyToAllXAction = new QAction(i18n("All Plots X"), cartesianPlotActionModeActionGroup);
+	cartesianPlotApplyToAllXAction->setCheckable(true);
+	cartesianPlotApplyToAllYAction = new QAction(i18n("All Plots Y"), cartesianPlotActionModeActionGroup);
+	cartesianPlotApplyToAllYAction->setCheckable(true);
 	setCartesianPlotActionMode(m_worksheet->cartesianPlotActionMode());
 	connect(cartesianPlotActionModeActionGroup, &QActionGroup::triggered, this, &WorksheetView::cartesianPlotActionModeChanged);
 
@@ -553,6 +557,8 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotActionModeMenu->setIcon(QIcon::fromTheme("dialog-ok-apply"));
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToSelectionAction);
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllAction);
+	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllXAction);
+	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllYAction);
 
 	m_cartesianPlotCursorModeMenu = new QMenu(i18n("Apply Cursor to"), this);
 	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToSelectionCursor);
@@ -569,7 +575,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMenu->addAction(plotsLockedAction);
 
 	// Data manipulation menu
-	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation") ,this);
+	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation"),this);
 	m_dataManipulationMenu->setIcon(QIcon::fromTheme("zoom-draw"));
 	m_dataManipulationMenu->addAction(addDataOperationAction);
 	m_dataManipulationMenu->addAction(addDataReductionAction);
@@ -688,7 +694,7 @@ void WorksheetView::fillToolBar(QToolBar* toolBar) {
 }
 
 #ifdef Q_OS_MAC
-void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar){
+void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar) {
 	//touchBar->addAction(addCartesianPlot1Action);
 	touchBar->addAction(zoomInViewAction);
 	touchBar->addAction(zoomOutViewAction);
@@ -757,6 +763,10 @@ void WorksheetView::setIsClosing() {
 void WorksheetView::setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode mode) {
 	if (mode == Worksheet::CartesianPlotActionMode::ApplyActionToAll)
 		cartesianPlotApplyToAllAction->setChecked(true);
+	else if (mode == Worksheet::CartesianPlotActionMode::ApplyActionToAllX)
+		cartesianPlotApplyToAllXAction->setChecked(true);
+	else if (mode == Worksheet::CartesianPlotActionMode::ApplyActionToAllY)
+		cartesianPlotApplyToAllYAction->setChecked(true);
 	else
 		cartesianPlotApplyToSelectionAction->setChecked(true);
 }
@@ -1431,7 +1441,7 @@ void WorksheetView::deleteElement() {
 		return;
 
 	int rc = KMessageBox::warningYesNo( this, i18np("Do you really want to delete the selected object?", "Do you really want to delete the selected %1 objects?", m_selectedItems.size()),
-				i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
+	                                    i18np("Delete selected object", "Delete selected objects", m_selectedItems.size()));
 
 	if (rc == KMessageBox::No)
 		return;
@@ -1723,7 +1733,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 		break;
-	}
+		}
 	case ExportFormat::SVG: {
 		QSvgGenerator generator;
 		generator.setFileName(path);
@@ -1745,7 +1755,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 		exportPaint(&painter, targetRect, sourceRect, background);
 		painter.end();
 		break;
-	}
+		}
 	case  ExportFormat::PNG:
 	case  ExportFormat::JPG:
 	case  ExportFormat::BMP:
@@ -1797,7 +1807,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 			}
 		} else
 			QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
-	}
+		}
 	}
 }
 
@@ -1923,6 +1933,10 @@ void WorksheetView::unregisterShortcuts() {
 void WorksheetView::cartesianPlotActionModeChanged(QAction* action) {
 	if (action == cartesianPlotApplyToSelectionAction)
 		m_worksheet->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
+	else if (action == cartesianPlotApplyToAllXAction)
+		m_worksheet->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllX);
+	else if (action == cartesianPlotApplyToAllYAction)
+		m_worksheet->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAllY);
 	else
 		m_worksheet->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToAll);
 

@@ -189,7 +189,7 @@ QVector<AbstractAspect*> Worksheet::dependsOn() const {
 }
 
 QVector<AspectType> Worksheet::pasteTypes() const {
-	return QVector<AspectType>{AspectType::CartesianPlot, AspectType::TextLabel, AspectType::Image};
+	return QVector<AspectType> {AspectType::CartesianPlot, AspectType::TextLabel, AspectType::Image};
 }
 
 bool Worksheet::exportView() const {
@@ -734,7 +734,7 @@ STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)
 void Worksheet::setTheme(const QString& theme) {
 	if (theme != d->theme) {
 		QString info;
- 		if (!theme.isEmpty())
+		if (!theme.isEmpty())
 			info = i18n("%1: load theme %2", name(), theme);
 		else
 			info = i18n("%1: load default theme", name());
@@ -746,21 +746,41 @@ void Worksheet::setTheme(const QString& theme) {
 }
 
 void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
-	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll) {
+	auto senderPlot = static_cast<CartesianPlot*>(QObject::sender());
+	auto mouseMode = senderPlot->mouseMode();
+	auto actionMode = cartesianPlotActionMode();
+	if (actionMode == CartesianPlotActionMode::ApplyActionToAll) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mousePressZoomSelectionMode(logicPos);
-	} else {
-		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
-		plot->mousePressZoomSelectionMode(logicPos);
-	}
+	} else if ((actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
+	           (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection)) {
+		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
+		for (auto* plot : plots) {
+			if (plot != senderPlot) {
+				if (actionMode == CartesianPlotActionMode::ApplyActionToAllX)
+					plot->setMouseMode(CartesianPlot::MouseMode::ZoomXSelection);
+				else if (actionMode == CartesianPlotActionMode::ApplyActionToAllY)
+					plot->setMouseMode(CartesianPlot::MouseMode::ZoomYSelection);
+			}
+			plot->mousePressZoomSelectionMode(logicPos);
+		}
+	} else
+		senderPlot->mousePressZoomSelectionMode(logicPos);
 }
 
 void Worksheet::cartesianPlotMouseReleaseZoomSelectionMode() {
-	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll) {
+	auto senderPlot = static_cast<CartesianPlot*>(QObject::sender());
+	auto mouseMode = senderPlot->mouseMode();
+	auto actionMode = cartesianPlotActionMode();
+	if (actionMode == CartesianPlotActionMode::ApplyActionToAll ||
+	        (actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
+	        (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
-		for (auto* plot : plots)
+		for (auto* plot : plots) {
 			plot->mouseReleaseZoomSelectionMode();
+			plot->setMouseMode(mouseMode);
+		}
 	} else {
 		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
 		plot->mouseReleaseZoomSelectionMode();
@@ -781,36 +801,45 @@ void Worksheet::cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logi
 }
 
 void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
-	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll) {
+	auto senderPlot = static_cast<CartesianPlot*>(QObject::sender());
+	auto actionMode = cartesianPlotActionMode();
+	auto mouseMode = senderPlot->mouseMode();
+	if (actionMode == CartesianPlotActionMode::ApplyActionToAll ||
+	        (actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
+	        (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		QVector<CartesianPlot*> plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseMoveZoomSelectionMode(logicPos);
-	} else {
-		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
-		plot->mouseMoveZoomSelectionMode(logicPos);
-	}
+	}  else
+		senderPlot->mouseMoveZoomSelectionMode(logicPos);
 }
 
 void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
-	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll) {
+	auto senderPlot = static_cast<CartesianPlot*>(QObject::sender());
+	auto actionMode = cartesianPlotActionMode();
+	auto mouseMode = senderPlot->mouseMode();
+	if (actionMode == CartesianPlotActionMode::ApplyActionToAll ||
+	        (actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
+	        (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseHoverZoomSelectionMode(logicPos);
-	} else {
-		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
-		plot->mouseHoverZoomSelectionMode(logicPos);
-	}
+	} else
+		senderPlot->mouseHoverZoomSelectionMode(logicPos);
 }
 
 void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {
-	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll) {
+	auto senderPlot = static_cast<CartesianPlot*>(QObject::sender());
+	auto mode = cartesianPlotActionMode();
+	auto mouseMode = senderPlot->mouseMode();
+	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll ||
+	        (mode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
+	        (mode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseHoverOutsideDataRect();
-	} else {
-		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
-		plot->mouseHoverOutsideDataRect();
-	}
+	} else
+		senderPlot->mouseHoverOutsideDataRect();
 }
 
 void Worksheet::cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos) {
@@ -858,21 +887,21 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 		treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
 
 		// y values
-        for (int i = 0; i < plotCount(); i++) { // i=0 is the x Axis
+		for (int i = 0; i < plotCount(); i++) { // i=0 is the x Axis
 
-            auto* p = plot(i);
-            if (!p || !p->isVisible())
+			auto* p = plot(i);
+			if (!p || !p->isVisible())
 				continue;
 
 			QModelIndex plotIndex = treeModel->index(rowPlot, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
 
 			// curves
 			int rowCurve = 0;
-            for (int j = 0; j < p->curveCount(); j++) {
+			for (int j = 0; j < p->curveCount(); j++) {
 				// assumption: index of signals in model is the same than the index of the signal in the plot
 				bool valueFound;
 
-                const XYCurve* curve = p->getCurve(j);
+				const XYCurve* curve = p->getCurve(j);
 				if (!curve->isVisible())
 					continue;
 
@@ -1092,7 +1121,7 @@ void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName)
 		int curveCount = treeModel->rowCount(plotIndex);
 		for (int j = 0; j < curveCount; j++) {
 			QModelIndex curveIndex = treeModel->index(j, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME),
-													  plotIndex);
+			                         plotIndex);
 
 			if (curveIndex.data().toString().compare(curveName) != 0)
 				continue;
@@ -1100,8 +1129,8 @@ void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName)
 			QColor curveColor = pen.color();
 			curveColor.setAlpha(50);
 			treeModel->setTreeData(QVariant(curveColor), j,
-								   static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME),
-								   plotIndex, Qt::BackgroundRole);
+			                       static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME),
+			                       plotIndex, Qt::BackgroundRole);
 			return;
 		}
 		return;
@@ -1121,8 +1150,8 @@ void Worksheet::updateCompleteCursorTreeModel() {
 	if (treeModel->rowCount() > 0)
 		treeModel->removeRows(0, treeModel->rowCount()); // remove all data
 
-    int pc = plotCount();
-    if (pc < 1)
+	int pc = plotCount();
+	if (pc < 1)
 		return;
 
 	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
@@ -1132,7 +1161,7 @@ void Worksheet::updateCompleteCursorTreeModel() {
 		// set X data
 		QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME));
 		treeModel->setData(xName, QVariant("X"));
-        auto* plot0 = plot(0);
+		auto* plot0 = plot(0);
 		if (plot0) {
 			double valueCursor[2];
 			for (int i = 0; i < 2; i++) {
@@ -1149,12 +1178,12 @@ void Worksheet::updateCompleteCursorTreeModel() {
 	}
 
 	// set plot name, y value, background
-    for (int i = 0; i < pc; i++) {
-        auto* p = plot(i);
+	for (int i = 0; i < pc; i++) {
+		auto* p = plot(i);
 		QModelIndex plotName;
 		int addOne = 0;
 
-        if (!p || !p->isVisible())
+		if (!p || !p->isVisible())
 			continue;
 
 		// add new entry for the plot
@@ -1163,18 +1192,18 @@ void Worksheet::updateCompleteCursorTreeModel() {
 		// add plot name and X row if needed
 		if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 			plotName = treeModel->index(i + 1, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME)); // plus one because first row are the x values
-            treeModel->setData(plotName, QVariant(p->name()));
+			treeModel->setData(plotName, QVariant(p->name()));
 		} else {
 			addOne = 1;
 			plotName = treeModel->index(i, static_cast<int>(WorksheetPrivate::TreeModelColumn::PLOTNAME));
-            treeModel->setData(plotName, QVariant(p->name()));
+			treeModel->setData(plotName, QVariant(p->name()));
 			treeModel->insertRows(0, 1, plotName); // one, because the first row are the x values
 
 			QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME), plotName);
 			treeModel->setData(xName, QVariant("X"));
 			double valueCursor[2];
 			for (int i = 0; i < 2; i++) {
-                valueCursor[i] = p->cursorPos(i);
+				valueCursor[i] = p->cursorPos(i);
 				QModelIndex cursor = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i, plotName);
 
 				treeModel->setData(cursor, QVariant(valueCursor[i]));
@@ -1185,15 +1214,15 @@ void Worksheet::updateCompleteCursorTreeModel() {
 
 
 		int rowCurve = addOne;
-        for (int j = 0; j < p->curveCount(); j++) {
+		for (int j = 0; j < p->curveCount(); j++) {
 			double cursorValue[2] = {NAN, NAN};
-            const XYCurve* curve = p->getCurve(j);
+			const XYCurve* curve = p->getCurve(j);
 
 			if (!curve->isVisible())
 				continue;
 
 			for (int k = 0; k < 2; k++) {
-                double xPos = p->cursorPos(k);
+				double xPos = p->cursorPos(k);
 				bool valueFound;
 				cursorValue[k] = curve->y(xPos,valueFound);
 			}
