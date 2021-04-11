@@ -548,7 +548,7 @@ void BoxPlotPrivate::retransform() {
 }
 
 void BoxPlotPrivate::recalc() {
-	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalcVertical()");
+	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalc()");
 
 	//resize the internal containers
 	const int count = dataColumns.size();
@@ -616,7 +616,7 @@ void BoxPlotPrivate::setOutlierPoint(QPointF& point, double pos, double value) {
 }
 
 void BoxPlotPrivate::recalc(int index) {
-//	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalcVertical()");
+	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalc(index)");
 	auto* column = static_cast<const Column*>(dataColumns.at(index));
 	if (!column)
 		return;
@@ -687,6 +687,8 @@ void BoxPlotPrivate::recalc(int index) {
 	}
 
 	if (whiskersType != BoxPlot::WhiskersType::MinMax) {
+		double whiskerMax = - qInf(); //upper adjacent value
+		double whiskerMin = qInf(); //lower adjacent value
 		switch (column->columnMode()) {
 		case AbstractColumn::ColumnMode::Numeric:
 		case AbstractColumn::ColumnMode::Integer:
@@ -700,6 +702,12 @@ void BoxPlotPrivate::recalc(int index) {
 						++m_outliersCount[index];
 						if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1)
 							m_outliersSymbolPointsLogical[index] << point;
+					} else if (whiskersType == BoxPlot::WhiskersType::IQR) {
+						//determine the upper/lower adjucent values
+						if (value > whiskerMax)
+							whiskerMax = value;
+						else if (value < whiskerMin)
+							whiskerMin = value;
 					}
 				}
 			}
@@ -714,6 +722,12 @@ void BoxPlotPrivate::recalc(int index) {
 						++m_outliersCount[index];
 						if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1)
 							m_outliersSymbolPointsLogical[index] << point;
+					} else if (whiskersType == BoxPlot::WhiskersType::IQR) {
+						//determine the upper/lower adjucent values
+						if (value > whiskerMax)
+							whiskerMax = value;
+						else if (value < whiskerMin)
+							whiskerMin = value;
 					}
 				}
 			}
@@ -722,6 +736,12 @@ void BoxPlotPrivate::recalc(int index) {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 			break;
+		}
+
+		//set the whisker ends at the upper and lower adjacent values
+		if (whiskersType == BoxPlot::WhiskersType::IQR) {
+			m_whiskerMax[index] = whiskerMax;
+			m_whiskerMin[index] = whiskerMin;
 		}
 	}
 }
