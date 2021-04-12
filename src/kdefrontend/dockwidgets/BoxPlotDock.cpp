@@ -67,6 +67,10 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
+	QString msg = i18n("If checked, the box width is made proportional to the square root of the number of data points.");
+	ui.lVariableWidth->setToolTip(msg);
+	ui.chkVariableWidth->setToolTip(msg);
+
 	//Tab "Box"
 	//filling
 	ui.cbFillingType->addItem(i18n("Color"));
@@ -130,6 +134,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leComment, &QLineEdit::textChanged, this, &BoxPlotDock::commentChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &BoxPlotDock::orientationChanged);
+	connect(ui.chkVariableWidth, &QCheckBox::stateChanged, this, &BoxPlotDock::variableWidthChanged);
 
 	//Tab "Box"
 	//box filling
@@ -238,6 +243,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	connect(m_boxPlot, &AbstractAspect::aspectDescriptionChanged,this, &BoxPlotDock::plotDescriptionChanged);
 	connect(m_boxPlot, &BoxPlot::visibilityChanged, this, &BoxPlotDock::plotVisibilityChanged);
 	connect(m_boxPlot, &BoxPlot::orientationChanged, this, &BoxPlotDock::plotOrientationChanged);
+	connect(m_boxPlot, &BoxPlot::variableWidthChanged, this, &BoxPlotDock::plotVariableWidthChanged);
 	connect(m_boxPlot, &BoxPlot::dataColumnsChanged, this, &BoxPlotDock::plotDataColumnsChanged);
 
 	//box filling
@@ -423,6 +429,14 @@ void BoxPlotDock::orientationChanged(int index) const {
 	auto orientation = BoxPlot::Orientation(index);
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setOrientation(orientation);
+}
+
+void BoxPlotDock::variableWidthChanged(bool state) const {
+	if (m_initializing)
+		return;
+
+	for (auto* boxPlot : m_boxPlots)
+		boxPlot->setVariableWidth(state);
 }
 
 void BoxPlotDock::visibilityChanged(bool state) const {
@@ -998,6 +1012,10 @@ void BoxPlotDock::plotOrientationChanged(BoxPlot::Orientation orientation) {
 	Lock lock(m_initializing);
 	ui.cbOrientation->setCurrentIndex((int)orientation);
 }
+void BoxPlotDock::plotVariableWidthChanged(bool on) {
+	Lock lock(m_initializing);
+	ui.chkVariableWidth->setChecked(on);
+}
 void BoxPlotDock::plotVisibilityChanged(bool on) {
 	Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);
@@ -1142,6 +1160,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 
 	//general
 	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int)m_boxPlot->orientation()) );
+	ui.chkVariableWidth->setChecked( group.readEntry("VariableWidth", m_boxPlot->variableWidth()) );
 
 	//box filling
 	ui.chkFillingEnabled->setChecked( group.readEntry("FillingEnabled", m_boxPlot->fillingEnabled()) );
@@ -1226,6 +1245,7 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	//general
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
+	group.writeEntry("VariableWidth", ui.chkVariableWidth->isChecked());
 
 	//box filling
 	group.writeEntry("FillingEnabled", ui.chkFillingEnabled->isChecked());

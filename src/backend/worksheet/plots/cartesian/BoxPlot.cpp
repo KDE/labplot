@@ -76,6 +76,7 @@ void BoxPlot::init() {
 	//general
 	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::IQR);
 	d->orientation = (BoxPlot::Orientation) group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
+	d->variableWidth = group.readEntry("VariableWidth", false);
 
 	//box filling
 	d->fillingEnabled = group.readEntry("FillingEnabled", false);
@@ -200,6 +201,7 @@ void BoxPlot::handleResize(double horizontalRatio, double verticalRatio, bool pa
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, variableWidth, variableWidth)
 
 //box
 //filling
@@ -284,6 +286,13 @@ void BoxPlot::setOrientation(BoxPlot::Orientation orientation) {
 	Q_D(BoxPlot);
 	if (orientation != d->orientation)
 		exec(new BoxPlotSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetVariableWidth, bool, variableWidth, recalc)
+void BoxPlot::setVariableWidth(bool variableWidth) {
+	Q_D(BoxPlot);
+	if (variableWidth != d->variableWidth)
+		exec(new BoxPlotSetVariableWidthCmd(d, variableWidth, ki18n("%1: variable width changed")));
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(BoxPlot, SetVisible, bool, swapVisible, update);
@@ -585,6 +594,16 @@ void BoxPlotPrivate::recalc() {
 		m_yMax = count;
 	}
 
+	if (variableWidth) {
+		m_widthScaleFactor = -qInf();
+		for (const auto* col : dataColumns) {
+			auto* column = static_cast<const Column*>(col);
+			if (column->statistics().size > m_widthScaleFactor)
+				m_widthScaleFactor = column->statistics().size;
+		}
+		m_widthScaleFactor = std::sqrt(m_widthScaleFactor);
+	}
+
 	for (int i = 0; i < count; ++i)
 		recalc(i);
 
@@ -622,7 +641,10 @@ void BoxPlotPrivate::recalc(int index) {
 		return;
 
 	const auto& statistics = column->statistics();
-	const double width = 0.5;
+	double width = 0.5;
+	if (variableWidth && m_widthScaleFactor != 0)
+		width *= std::sqrt(statistics.size)/m_widthScaleFactor;
+
 	const double x = index + 0.5;
 
 	//box
@@ -1239,6 +1261,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 		writer->writeEndElement();
 	}
 	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
+	writer->writeAttribute("variableWidth", QString::number(d->variableWidth));
 	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeEndElement();
 
@@ -1318,6 +1341,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("orientation", orientation, BoxPlot::Orientation);
+			READ_INT_VALUE("variableWidth", variableWidth, bool);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 		} else if (reader->name() == "column") {
 			attribs = reader->attributes();
@@ -1407,8 +1431,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 		}
 	}
 
-	if (!preview)
-		retransform();
+	d->dataColumns.resize(d->dataColumnPaths.size());
 
 	return true;
 }
