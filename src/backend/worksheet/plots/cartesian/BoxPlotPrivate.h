@@ -63,6 +63,7 @@ public:
 	QVector<QString> dataColumnPaths;
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
 	BoxPlot::Orientation orientation{BoxPlot::Orientation::Vertical};
+	bool variableWidth{false};
 	qreal opacity{1.0};
 
 	//box filling
@@ -121,6 +122,7 @@ private:
 	QPainterPath m_boxPlotShape;
 
 	QVector<QRectF> m_boxRect;
+	double m_widthScaleFactor{1.0};
 	QVector<double> m_xMinBox;
 	QVector<double> m_xMaxBox;
 	QVector<double> m_yMinBox;
