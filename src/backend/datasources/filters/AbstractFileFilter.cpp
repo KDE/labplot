@@ -223,7 +223,8 @@ QStringList AbstractFileFilter::fileTypes() {
 		<< i18n("Flexible Image Transport System Data Format (FITS)")
 		<< i18n("JSON data")
 		<< i18n("ROOT (CERN) Histograms")
-		<< "Ngspice RAW ASCII"
-		<< "Ngspice RAW Binary"
+		<< i18n("Ngspice RAW ASCII")
+		<< i18n("Ngspice RAW Binary")
+		<< i18n("SAS, Stata or SPSS")
 	);
 }
