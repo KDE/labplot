@@ -71,9 +71,8 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_HILBERT_RESULT_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_hilbert_result_type_name[i]));
 
-	//TODO: use line edits
-	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
+	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
@@ -84,8 +83,8 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::commentChanged );
 	connect( uiGeneralTab.chkVisible,  &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::visibilityChanged);
 	connect( uiGeneralTab.cbAutoRange,  &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::autoRangeChanged);
-	connect( uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYHilbertTransformCurveDock::xRangeMinChanged);
-	connect( uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYHilbertTransformCurveDock::xRangeMaxChanged);
+	connect( uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMinChanged);
+	connect( uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMaxChanged);
 	connect( uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYHilbertTransformCurveDock::typeChanged);
 	connect( uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYHilbertTransformCurveDock::plotRangeChanged );
 	connect( uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYHilbertTransformCurveDock::recalculateClicked);
@@ -118,8 +117,10 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 	cbXDataColumn->setColumn(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_transformData.xRange.first());
-	uiGeneralTab.sbMax->setValue(m_transformData.xRange.last());
+	DEBUG(Q_FUNC_INFO << ", set min/max = " << m_transformCurve->xDataColumn()->minimum() << "/" << m_transformCurve->xDataColumn()->maximum())
+	SET_NUMBER_LOCALE
+	uiGeneralTab.leMin->setText( numberLocale.toString(m_transformCurve->xDataColumn()->minimum()) );
+	uiGeneralTab.leMax->setText( numberLocale.toString(m_transformCurve->xDataColumn()->maximum()) );
 	this->autoRangeChanged();
 
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
@@ -168,10 +169,6 @@ void XYHilbertTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_transformData = m_transformCurve->transformData();
 
-	SET_NUMBER_LOCALE
-	uiGeneralTab.sbMin->setLocale(numberLocale);
-	uiGeneralTab.sbMax->setLocale(numberLocale);
-
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;
@@ -198,8 +195,10 @@ void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 
 	if (column != nullptr) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
+			DEBUG(Q_FUNC_INFO << ", set min/max = " << column->minimum() << "/" << column->maximum())
+			SET_NUMBER_LOCALE
+			uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
+			uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
 		}
 	}
 
@@ -227,34 +226,46 @@ void XYHilbertTransformCurveDock::autoRangeChanged() {
 
 	if (autoRange) {
 		uiGeneralTab.lMin->setEnabled(false);
-		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.leMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
-		uiGeneralTab.sbMax->setEnabled(false);
+		uiGeneralTab.leMax->setEnabled(false);
 		m_transformCurve = dynamic_cast<XYHilbertTransformCurve*>(m_curve);
 		if (m_transformCurve->xDataColumn()) {
-			uiGeneralTab.sbMin->setValue(m_transformCurve->xDataColumn()->minimum());
-			uiGeneralTab.sbMax->setValue(m_transformCurve->xDataColumn()->maximum());
+			DEBUG(Q_FUNC_INFO << ", set min/max = " << m_transformCurve->xDataColumn()->minimum() << "/" << m_transformCurve->xDataColumn()->maximum())
+			SET_NUMBER_LOCALE
+			uiGeneralTab.leMin->setText( numberLocale.toString(m_transformCurve->xDataColumn()->minimum()) );
+			uiGeneralTab.leMax->setText( numberLocale.toString(m_transformCurve->xDataColumn()->maximum()) );
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
-		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.leMin->setEnabled(true);
 		uiGeneralTab.lMax->setEnabled(true);
-		uiGeneralTab.sbMax->setEnabled(true);
+		uiGeneralTab.leMax->setEnabled(true);
 	}
 
 }
 void XYHilbertTransformCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
-
-	m_transformData.xRange.first() = xMin;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	QString str = uiGeneralTab.leMin->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMin{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_transformData.xRange.first() = xMin;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
 void XYHilbertTransformCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
-
-	m_transformData.xRange.last() = xMax;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	QString str = uiGeneralTab.leMax->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMax{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_transformData.xRange.last() = xMax;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
 void XYHilbertTransformCurveDock::typeChanged() {

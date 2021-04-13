@@ -264,11 +264,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbMin">
-       <property name="decimals">
-        <number>6</number>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="leMin"/>
      </item>
     </layout>
    </item>
@@ -294,11 +290,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbMax">
-       <property name="decimals">
-        <number>6</number>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="leMax"/>
      </item>
     </layout>
    </item>
