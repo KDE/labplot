@@ -479,27 +479,11 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 }
 
 void XYInterpolationCurveDock::xRangeMinChanged() {
-	QString str = uiGeneralTab.leMin->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMin{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_interpolationData.xRange.first() = xMin;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_interpolationData.xRange.first(), uiGeneralTab.leMin);
 }
 
 void XYInterpolationCurveDock::xRangeMaxChanged() {
-	QString str = uiGeneralTab.leMax->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMax{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_interpolationData.xRange.last() = xMax;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_interpolationData.xRange.last(), uiGeneralTab.leMax);
 }
 
 void XYInterpolationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {

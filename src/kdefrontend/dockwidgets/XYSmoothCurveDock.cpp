@@ -406,27 +406,11 @@ void XYSmoothCurveDock::autoRangeChanged() {
 }
 
 void XYSmoothCurveDock::xRangeMinChanged() {
-	QString str = uiGeneralTab.leMin->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMin{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_smoothData.xRange.first() = xMin;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_smoothData.xRange.first(), uiGeneralTab.leMin);
 }
 
 void XYSmoothCurveDock::xRangeMaxChanged() {
-	QString str = uiGeneralTab.leMax->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMax{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_smoothData.xRange.last() = xMax;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_smoothData.xRange.last(), uiGeneralTab.leMax);
 }
 
 void XYSmoothCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {

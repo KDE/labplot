@@ -464,27 +464,11 @@ void XYConvolutionCurveDock::autoRangeChanged() {
 
 }
 void XYConvolutionCurveDock::xRangeMinChanged() {
-	QString str = uiGeneralTab.leMin->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMin{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_convolutionData.xRange.first() = xMin;
-		enableRecalculate();
-	}
+	SET_DOUBLE_FROM_LE_REC(m_convolutionData.xRange.first(), uiGeneralTab.leMin);
 }
 
 void XYConvolutionCurveDock::xRangeMaxChanged() {
-	QString str = uiGeneralTab.leMax->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMax{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_convolutionData.xRange.last() = xMax;
-		enableRecalculate();
-	}
+	SET_DOUBLE_FROM_LE_REC(m_convolutionData.xRange.last(), uiGeneralTab.leMax);
 }
 
 void XYConvolutionCurveDock::directionChanged() {

@@ -99,6 +99,20 @@ numberLocale.setNumberOptions(numberOptions);
 		var = tmp; \
 }
 
+// including enable recalculate
+#define SET_DOUBLE_FROM_LE_REC(var, le) { \
+	QString str = (le)->text().trimmed(); \
+	if (!str.isEmpty()) { \
+		bool ok; \
+		SET_NUMBER_LOCALE \
+		const double tmp = numberLocale.toDouble(str, &ok); \
+		if (ok) { \
+			var = tmp; \
+			enableRecalculate(); \
+		} \
+	} \
+}
+
 //////////////////////// Accessor ///////////////////////////////
 
 // type: BASIC (by value), CLASS (by reference)

@@ -383,27 +383,11 @@ void XYCorrelationCurveDock::autoRangeChanged() {
 
 }
 void XYCorrelationCurveDock::xRangeMinChanged() {
-	QString str = uiGeneralTab.leMin->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMin{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_correlationData.xRange.first() = xMin;
-		enableRecalculate();
-	}
+	SET_DOUBLE_FROM_LE_REC(m_correlationData.xRange.first(), uiGeneralTab.leMin);
 }
 
 void XYCorrelationCurveDock::xRangeMaxChanged() {
-	QString str = uiGeneralTab.leMax->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMax{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_correlationData.xRange.last() = xMax;
-		enableRecalculate();
-	}
+	SET_DOUBLE_FROM_LE_REC(m_correlationData.xRange.last(), uiGeneralTab.leMax);
 }
 
 void XYCorrelationCurveDock::typeChanged() {

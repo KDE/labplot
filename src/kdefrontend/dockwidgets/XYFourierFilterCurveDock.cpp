@@ -351,27 +351,11 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 
 }
 void XYFourierFilterCurveDock::xRangeMinChanged() {
-	QString str = uiGeneralTab.leMin->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMin{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_filterData.xRange.first() = xMin;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_filterData.xRange.first(), uiGeneralTab.leMin);
 }
 
 void XYFourierFilterCurveDock::xRangeMaxChanged() {
-	QString str = uiGeneralTab.leMax->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMax{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_filterData.xRange.last() = xMax;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_filterData.xRange.last(), uiGeneralTab.leMax);
 }
 
 void XYFourierFilterCurveDock::typeChanged() {

@@ -437,27 +437,11 @@ void XYDataReductionCurveDock::autoRangeChanged() {
 }
 
 void XYDataReductionCurveDock::xRangeMinChanged() {
-	QString str = uiGeneralTab.leMin->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMin{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_dataReductionData.xRange.first() = xMin;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_dataReductionData.xRange.first(), uiGeneralTab.leMin);
 }
 
 void XYDataReductionCurveDock::xRangeMaxChanged() {
-	QString str = uiGeneralTab.leMax->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMax{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_dataReductionData.xRange.last() = xMax;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_dataReductionData.xRange.last(), uiGeneralTab.leMax);
 }
 
 void XYDataReductionCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {

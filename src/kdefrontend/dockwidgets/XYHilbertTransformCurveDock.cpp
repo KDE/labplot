@@ -241,27 +241,11 @@ void XYHilbertTransformCurveDock::autoRangeChanged() {
 
 }
 void XYHilbertTransformCurveDock::xRangeMinChanged() {
-	QString str = uiGeneralTab.leMin->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMin{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_transformData.xRange.first() = xMin;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_transformData.xRange.first(), uiGeneralTab.leMin);
 }
 
 void XYHilbertTransformCurveDock::xRangeMaxChanged() {
-	QString str = uiGeneralTab.leMax->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMax{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_transformData.xRange.last() = xMax;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_transformData.xRange.last(), uiGeneralTab.leMax);
 }
 
 void XYHilbertTransformCurveDock::typeChanged() {
@@ -287,8 +271,8 @@ void XYHilbertTransformCurveDock::enableRecalculate() const {
 		return;
 
 	//no transforming possible without the x- and y-data
-	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
-	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
+	auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
+	auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 	bool data = (aspectX && aspectY);
 	if (aspectX) {
 		cbXDataColumn->useCurrentIndexText(true);

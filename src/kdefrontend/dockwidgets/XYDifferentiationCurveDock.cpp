@@ -439,27 +439,11 @@ void XYDifferentiationCurveDock::autoRangeChanged() {
 }
 
 void XYDifferentiationCurveDock::xRangeMinChanged() {
-	QString str = uiGeneralTab.leMin->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMin{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_differentiationData.xRange.first() = xMin;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_differentiationData.xRange.first(), uiGeneralTab.leMin);
 }
 
 void XYDifferentiationCurveDock::xRangeMaxChanged() {
-	QString str = uiGeneralTab.leMax->text().trimmed();
-	if (str.isEmpty()) return;
-	bool ok;
-	SET_NUMBER_LOCALE
-	const double xMax{ numberLocale.toDouble(str, &ok) };
-	if (ok) {
-		m_differentiationData.xRange.last() = xMax;
-		uiGeneralTab.pbRecalculate->setEnabled(true);
-	}
+	SET_DOUBLE_FROM_LE_REC(m_differentiationData.xRange.last(), uiGeneralTab.leMax);
 }
 
 void XYDifferentiationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
