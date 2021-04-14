@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>390</width>
-    <height>839</height>
+    <height>882</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -153,11 +153,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbMin">
-       <property name="decimals">
-        <number>6</number>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="leMin"/>
      </item>
     </layout>
    </item>
@@ -183,11 +179,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sbMax">
-       <property name="decimals">
-        <number>6</number>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="leMax"/>
      </item>
     </layout>
    </item>

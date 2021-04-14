@@ -75,28 +75,27 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_DFT_XSCALE_COUNT; i++)
 		uiGeneralTab.cbXScale->addItem(i18n(nsl_dft_xscale_name[i]));
 
-	//TODO: use line edits
-	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
+	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
 
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
 	//Slots
-	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::nameChanged );
-	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::commentChanged );
-	connect( uiGeneralTab.chkVisible,  &QCheckBox::clicked, this, &XYFourierTransformCurveDock::visibilityChanged);
-	connect( uiGeneralTab.cbAutoRange,  &QCheckBox::clicked, this, &XYFourierTransformCurveDock::autoRangeChanged);
-	connect( uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierTransformCurveDock::xRangeMinChanged);
-	connect( uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierTransformCurveDock::xRangeMaxChanged);
-	connect( uiGeneralTab.cbWindowType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::windowTypeChanged);
-	connect( uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::typeChanged);
-	connect( uiGeneralTab.cbTwoSided, &QCheckBox::stateChanged, this, &XYFourierTransformCurveDock::twoSidedChanged);
-	connect( uiGeneralTab.cbShifted, &QCheckBox::stateChanged, this, &XYFourierTransformCurveDock::shiftedChanged);
-	connect( uiGeneralTab.cbXScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::xScaleChanged);
-	connect( uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::plotRangeChanged );
-	connect( uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFourierTransformCurveDock::recalculateClicked);
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::nameChanged);
+	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::commentChanged);
+	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFourierTransformCurveDock::visibilityChanged);
+	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYFourierTransformCurveDock::autoRangeChanged);
+	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.cbWindowType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::windowTypeChanged);
+	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::typeChanged);
+	connect(uiGeneralTab.cbTwoSided, &QCheckBox::stateChanged, this, &XYFourierTransformCurveDock::twoSidedChanged);
+	connect(uiGeneralTab.cbShifted, &QCheckBox::stateChanged, this, &XYFourierTransformCurveDock::shiftedChanged);
+	connect(uiGeneralTab.cbXScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::xScaleChanged);
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::plotRangeChanged );
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFourierTransformCurveDock::recalculateClicked);
 
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierTransformCurveDock::xDataColumnChanged);
 	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYFourierTransformCurveDock::yDataColumnChanged);
@@ -126,8 +125,9 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	cbXDataColumn->setColumn(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_transformData.xRange.first());
-	uiGeneralTab.sbMax->setValue(m_transformData.xRange.last());
+	SET_NUMBER_LOCALE
+	uiGeneralTab.leMin->setText( numberLocale.toString(m_transformData.xRange.first()) );
+	uiGeneralTab.leMax->setText( numberLocale.toString(m_transformData.xRange.last()) );
 	this->autoRangeChanged();
 
 	uiGeneralTab.cbWindowType->setCurrentIndex(m_transformData.windowType);
@@ -184,10 +184,6 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_transformData = m_transformCurve->transformData();
 
-	SET_NUMBER_LOCALE
-	uiGeneralTab.sbMin->setLocale(numberLocale);
-	uiGeneralTab.sbMax->setLocale(numberLocale);
-
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;
@@ -212,10 +208,11 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYFourierTransformCurve*>(curve)->setXDataColumn(column);
 
-	if (column != nullptr) {
+	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
+			SET_NUMBER_LOCALE
+			uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
+			uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
 		}
 	}
 
@@ -243,34 +240,45 @@ void XYFourierTransformCurveDock::autoRangeChanged() {
 
 	if (autoRange) {
 		uiGeneralTab.lMin->setEnabled(false);
-		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.leMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
-		uiGeneralTab.sbMax->setEnabled(false);
+		uiGeneralTab.leMax->setEnabled(false);
 		m_transformCurve = dynamic_cast<XYFourierTransformCurve*>(m_curve);
 		if (m_transformCurve->xDataColumn()) {
-			uiGeneralTab.sbMin->setValue(m_transformCurve->xDataColumn()->minimum());
-			uiGeneralTab.sbMax->setValue(m_transformCurve->xDataColumn()->maximum());
+			SET_NUMBER_LOCALE
+			uiGeneralTab.leMin->setText( numberLocale.toString(m_transformCurve->xDataColumn()->minimum()) );
+			uiGeneralTab.leMax->setText( numberLocale.toString(m_transformCurve->xDataColumn()->maximum()) );
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
-		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.leMin->setEnabled(true);
 		uiGeneralTab.lMax->setEnabled(true);
-		uiGeneralTab.sbMax->setEnabled(true);
+		uiGeneralTab.leMax->setEnabled(true);
 	}
 
 }
 void XYFourierTransformCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
-
-	m_transformData.xRange.first() = xMin;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	QString str = uiGeneralTab.leMin->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMin{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_transformData.xRange.first() = xMin;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
 void XYFourierTransformCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
-
-	m_transformData.xRange.last() = xMax;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	QString str = uiGeneralTab.leMax->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMax{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_transformData.xRange.last() = xMax;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
 void XYFourierTransformCurveDock::windowTypeChanged() {
@@ -333,7 +341,7 @@ void XYFourierTransformCurveDock::enableRecalculate() const {
 	//no transforming possible without the x- and y-data
 	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX != nullptr && aspectY != nullptr);
+	bool data = (aspectX && aspectY);
 	if (aspectX) {
 		cbXDataColumn->useCurrentIndexText(true);
 		cbXDataColumn->setInvalid(false);

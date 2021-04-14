@@ -85,8 +85,8 @@ void XYDataReductionCurveDock::setupGeneral() {
 		uiGeneralTab.cbType->addItem(i18n(nsl_geom_linesim_type_name[i]));
 	uiGeneralTab.cbType->setItemData(nsl_geom_linesim_type_visvalingam_whyatt, i18n("This method is much slower than any other"), Qt::ToolTipRole);
 
-	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
+	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
 	uiGeneralTab.sbTolerance->setRange(0.0, std::numeric_limits<double>::max());
 	uiGeneralTab.sbTolerance2->setRange(0.0, std::numeric_limits<double>::max());
 
@@ -100,8 +100,8 @@ void XYDataReductionCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYDataReductionCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYDataReductionCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYDataReductionCurveDock::autoRangeChanged);
-	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYDataReductionCurveDock::xRangeMinChanged);
-	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYDataReductionCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYDataReductionCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYDataReductionCurveDock::xRangeMaxChanged);
 	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYDataReductionCurveDock::xRangeMinDateTimeChanged);
 	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYDataReductionCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.chkAuto, &QCheckBox::clicked, this, &XYDataReductionCurveDock::autoToleranceChanged);
@@ -149,17 +149,18 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->xIndex();
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		uiGeneralTab.sbMin->setValue(m_dataReductionData.xRange.first());
-		uiGeneralTab.sbMax->setValue(m_dataReductionData.xRange.last());
+		SET_NUMBER_LOCALE
+		uiGeneralTab.leMin->setText( numberLocale.toString(m_dataReductionData.xRange.first()) );
+		uiGeneralTab.leMax->setText( numberLocale.toString(m_dataReductionData.xRange.last()) );
 	} else {
 		uiGeneralTab.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_dataReductionData.xRange.first()) );
 		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_dataReductionData.xRange.last()) );
 	}
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
-	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.leMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
-	uiGeneralTab.sbMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.leMax->setVisible(!m_dateTimeRange);
 	uiGeneralTab.lMinDateTime->setVisible(m_dateTimeRange);
 	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
 	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
@@ -241,8 +242,6 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 	m_dataReductionData = m_dataReductionCurve->dataReductionData();
 
 	SET_NUMBER_LOCALE
-	uiGeneralTab.sbMin->setLocale(numberLocale);
-	uiGeneralTab.sbMax->setLocale(numberLocale);
 	uiGeneralTab.sbTolerance->setLocale(numberLocale);
 	uiGeneralTab.sbTolerance2->setLocale(numberLocale);
 
@@ -314,9 +313,10 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
 	//TODO: this->updateSettings(column); ?
-	if (column != nullptr && uiGeneralTab.cbAutoRange->isChecked()) {
-		uiGeneralTab.sbMin->setValue(column->minimum());
-		uiGeneralTab.sbMax->setValue(column->maximum());
+	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
+		SET_NUMBER_LOCALE
+		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
+		uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
 	}
 
 	cbXDataColumn->useCurrentIndexText(true);
@@ -406,9 +406,9 @@ void XYDataReductionCurveDock::autoRangeChanged() {
 	m_dataReductionData.autoRange = autoRange;
 
 	uiGeneralTab.lMin->setEnabled(!autoRange);
-	uiGeneralTab.sbMin->setEnabled(!autoRange);
+	uiGeneralTab.leMin->setEnabled(!autoRange);
 	uiGeneralTab.lMax->setEnabled(!autoRange);
-	uiGeneralTab.sbMax->setEnabled(!autoRange);
+	uiGeneralTab.leMax->setEnabled(!autoRange);
 	uiGeneralTab.lMinDateTime->setEnabled(!autoRange);
 	uiGeneralTab.dateTimeEditMin->setEnabled(!autoRange);
 	uiGeneralTab.lMaxDateTime->setEnabled(!autoRange);
@@ -425,8 +425,9 @@ void XYDataReductionCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-				uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+				SET_NUMBER_LOCALE
+				uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
+				uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
 			} else {
 				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
 				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
@@ -435,14 +436,28 @@ void XYDataReductionCurveDock::autoRangeChanged() {
 	}
 }
 
-void XYDataReductionCurveDock::xRangeMinChanged(double value) {
-	m_dataReductionData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+void XYDataReductionCurveDock::xRangeMinChanged() {
+	QString str = uiGeneralTab.leMin->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMin{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_dataReductionData.xRange.first() = xMin;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
-void XYDataReductionCurveDock::xRangeMaxChanged(double value) {
-	m_dataReductionData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+void XYDataReductionCurveDock::xRangeMaxChanged() {
+	QString str = uiGeneralTab.leMax->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMax{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_dataReductionData.xRange.last() = xMax;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
 void XYDataReductionCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {

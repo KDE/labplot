@@ -87,8 +87,8 @@ void XYCorrelationCurveDock::setupGeneral() {
 	cbY2DataColumn = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbY2DataColumn, 9, 2, 1, 3);
 
-	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
+	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
 
 	for (int i = 0; i < NSL_CORR_TYPE_COUNT; i++)
 		uiGeneralTab.cbType->addItem(i18n(nsl_corr_type_name[i]));
@@ -111,8 +111,8 @@ void XYCorrelationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCorrelationCurveDock::samplingIntervalChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYCorrelationCurveDock::autoRangeChanged);
-	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCorrelationCurveDock::xRangeMinChanged);
-	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCorrelationCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::xRangeMaxChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::typeChanged);
 	connect(uiGeneralTab.cbNorm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::normChanged);
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYCorrelationCurveDock::recalculateClicked);
@@ -158,8 +158,10 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	cbY2DataColumn->setColumn(m_correlationCurve->y2DataColumn(), m_correlationCurve->y2DataColumnPath());
 	uiGeneralTab.sbSamplingInterval->setValue(m_correlationData.samplingInterval);
 	uiGeneralTab.cbAutoRange->setChecked(m_correlationData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_correlationData.xRange.first());
-	uiGeneralTab.sbMax->setValue(m_correlationData.xRange.last());
+	
+	SET_NUMBER_LOCALE
+	uiGeneralTab.leMin->setText( numberLocale.toString(m_correlationData.xRange.first()) );
+	uiGeneralTab.leMax->setText( numberLocale.toString(m_correlationData.xRange.last()) );
 	this->autoRangeChanged();
 	y2DataColumnChanged(cbY2DataColumn->currentModelIndex());
 
@@ -227,8 +229,6 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 
 	SET_NUMBER_LOCALE
 	uiGeneralTab.sbSamplingInterval->setLocale(numberLocale);
-	uiGeneralTab.sbMin->setLocale(numberLocale);
-	uiGeneralTab.sbMax->setLocale(numberLocale);
 
 	initGeneralTab();
 	initTabs();
@@ -306,11 +306,10 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYCorrelationCurve*>(curve)->setXDataColumn(column);
 
-	if (column != nullptr) {
-		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
-		}
+	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
+		SET_NUMBER_LOCALE
+		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
+		uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
 	}
 
 	cbXDataColumn->useCurrentIndexText(true);
@@ -320,7 +319,6 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
-	DEBUG("yDataColumnChanged()");
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -335,7 +333,6 @@ void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
-	DEBUG("y2DataColumnChanged()");
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -360,9 +357,9 @@ void XYCorrelationCurveDock::autoRangeChanged() {
 
 	if (autoRange) {
 		uiGeneralTab.lMin->setEnabled(false);
-		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.leMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
-		uiGeneralTab.sbMax->setEnabled(false);
+		uiGeneralTab.leMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = nullptr;
 		if (m_correlationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
@@ -373,29 +370,40 @@ void XYCorrelationCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+			SET_NUMBER_LOCALE
+			uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
+			uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
-		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.leMin->setEnabled(true);
 		uiGeneralTab.lMax->setEnabled(true);
-		uiGeneralTab.sbMax->setEnabled(true);
+		uiGeneralTab.leMax->setEnabled(true);
 	}
 
 }
 void XYCorrelationCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
-
-	m_correlationData.xRange.first() = xMin;
-	enableRecalculate();
+	QString str = uiGeneralTab.leMin->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMin{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_correlationData.xRange.first() = xMin;
+		enableRecalculate();
+	}
 }
 
 void XYCorrelationCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
-
-	m_correlationData.xRange.last() = xMax;
-	enableRecalculate();
+	QString str = uiGeneralTab.leMax->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMax{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_correlationData.xRange.last() = xMax;
+		enableRecalculate();
+	}
 }
 
 void XYCorrelationCurveDock::typeChanged() {

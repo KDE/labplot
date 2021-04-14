@@ -88,9 +88,8 @@ void XYSmoothCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_SMOOTH_PAD_MODE_COUNT; i++)
 		uiGeneralTab.cbMode->addItem(i18n(nsl_smooth_pad_mode_name[i]));
 
-	//TODO: use line edits
-	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
+	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
@@ -99,13 +98,13 @@ void XYSmoothCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	//Slots
-	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYSmoothCurveDock::nameChanged );
-	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYSmoothCurveDock::commentChanged );
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYSmoothCurveDock::nameChanged);
+	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYSmoothCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYSmoothCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYSmoothCurveDock::autoRangeChanged);
-	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::xRangeMinChanged);
-	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYSmoothCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYSmoothCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYSmoothCurveDock::xRangeMaxChanged);
 	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYSmoothCurveDock::xRangeMinDateTimeChanged);
 	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYSmoothCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYSmoothCurveDock::typeChanged);
@@ -160,17 +159,18 @@ void XYSmoothCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->xIndex();
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		uiGeneralTab.sbMin->setValue(m_smoothData.xRange.first());
-		uiGeneralTab.sbMax->setValue(m_smoothData.xRange.last());
+		SET_NUMBER_LOCALE
+		uiGeneralTab.leMin->setText( numberLocale.toString(m_smoothData.xRange.first()) );
+		uiGeneralTab.leMax->setText( numberLocale.toString(m_smoothData.xRange.last()) );
 	} else {
 		uiGeneralTab.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.first()) );
 		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_smoothData.xRange.last()) );
 	}
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
-	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.leMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
-	uiGeneralTab.sbMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.leMax->setVisible(!m_dateTimeRange);
 	uiGeneralTab.lMinDateTime->setVisible(m_dateTimeRange);
 	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
 	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
@@ -251,8 +251,6 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	m_smoothData = m_smoothCurve->smoothData();
 
 	SET_NUMBER_LOCALE
-	uiGeneralTab.sbMin->setLocale(numberLocale);
-	uiGeneralTab.sbMax->setLocale(numberLocale);
 	uiGeneralTab.sbPercentile->setLocale(numberLocale);
 	uiGeneralTab.sbLeftValue->setLocale(numberLocale);
 	uiGeneralTab.sbRightValue->setLocale(numberLocale);
@@ -320,10 +318,11 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		dynamic_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
 
 	// disable types that need more data points
-	if (column != nullptr) {
+	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
+			SET_NUMBER_LOCALE
+			uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
+			uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
 		}
 
 		unsigned int n = 0;
@@ -376,9 +375,9 @@ void XYSmoothCurveDock::autoRangeChanged() {
 	m_smoothData.autoRange = autoRange;
 
 	uiGeneralTab.lMin->setEnabled(!autoRange);
-	uiGeneralTab.sbMin->setEnabled(!autoRange);
+	uiGeneralTab.leMin->setEnabled(!autoRange);
 	uiGeneralTab.lMax->setEnabled(!autoRange);
-	uiGeneralTab.sbMax->setEnabled(!autoRange);
+	uiGeneralTab.leMax->setEnabled(!autoRange);
 	uiGeneralTab.lMinDateTime->setEnabled(!autoRange);
 	uiGeneralTab.dateTimeEditMin->setEnabled(!autoRange);
 	uiGeneralTab.lMaxDateTime->setEnabled(!autoRange);
@@ -395,8 +394,9 @@ void XYSmoothCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-				uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+				SET_NUMBER_LOCALE
+				uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
+				uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
 			} else {
 				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
 				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
@@ -405,14 +405,28 @@ void XYSmoothCurveDock::autoRangeChanged() {
 	}
 }
 
-void XYSmoothCurveDock::xRangeMinChanged(double value) {
-	m_smoothData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+void XYSmoothCurveDock::xRangeMinChanged() {
+	QString str = uiGeneralTab.leMin->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMin{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_smoothData.xRange.first() = xMin;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
-void XYSmoothCurveDock::xRangeMaxChanged(double value) {
-	m_smoothData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+void XYSmoothCurveDock::xRangeMaxChanged() {
+	QString str = uiGeneralTab.leMax->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMax{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_smoothData.xRange.last() = xMax;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
 void XYSmoothCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
@@ -554,7 +568,7 @@ void XYSmoothCurveDock::enableRecalculate() const {
 	if (m_smoothCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		hasSourceData = (aspectX && aspectY);
 		if (aspectX) {
 			cbXDataColumn->useCurrentIndexText(true);
 			cbXDataColumn->setInvalid(false);

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>419</width>
-    <height>1085</height>
+    <height>1128</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -478,20 +478,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="sbMin">
-        <property name="decimals">
-         <number>6</number>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDoubleSpinBox" name="sbMax">
-        <property name="decimals">
-         <number>6</number>
-        </property>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="lMaxDateTime">
         <property name="sizePolicy">
@@ -562,6 +548,12 @@
          <bool>true</bool>
         </property>
        </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="leMin"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="leMax"/>
       </item>
      </layout>
     </widget>

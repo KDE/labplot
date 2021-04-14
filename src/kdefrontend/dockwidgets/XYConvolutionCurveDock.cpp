@@ -87,8 +87,8 @@ void XYConvolutionCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_CONV_KERNEL_COUNT; i++)
 		uiGeneralTab.cbKernel->addItem(i18n(nsl_conv_kernel_name[i]));
 
-	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
+	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
 
 	for (int i = 0; i < NSL_CONV_DIRECTION_COUNT; i++)
 		uiGeneralTab.cbDirection->addItem(i18n(nsl_conv_direction_name[i]));
@@ -118,8 +118,8 @@ void XYConvolutionCurveDock::setupGeneral() {
 	connect(uiGeneralTab.cbKernel, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::kernelChanged);
 	connect(uiGeneralTab.sbKernelSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &XYConvolutionCurveDock::kernelSizeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYConvolutionCurveDock::autoRangeChanged);
-	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYConvolutionCurveDock::xRangeMinChanged);
-	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYConvolutionCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::xRangeMaxChanged);
 	connect(uiGeneralTab.cbDirection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::directionChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::typeChanged);
 	connect(uiGeneralTab.cbNorm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYConvolutionCurveDock::normChanged);
@@ -168,8 +168,10 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.cbKernel->setCurrentIndex(m_convolutionData.kernel);
 	uiGeneralTab.sbKernelSize->setValue((int)m_convolutionData.kernelSize);
 	uiGeneralTab.cbAutoRange->setChecked(m_convolutionData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_convolutionData.xRange.first());
-	uiGeneralTab.sbMax->setValue(m_convolutionData.xRange.last());
+
+	SET_NUMBER_LOCALE
+	uiGeneralTab.leMin->setText( numberLocale.toString(m_convolutionData.xRange.first()) );
+	uiGeneralTab.leMax->setText( numberLocale.toString(m_convolutionData.xRange.last()) );
 	this->autoRangeChanged();
 	y2DataColumnChanged(cbY2DataColumn->currentModelIndex());
 
@@ -241,8 +243,6 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 
 	SET_NUMBER_LOCALE
 	uiGeneralTab.sbSamplingInterval->setLocale(numberLocale);
-	uiGeneralTab.sbMin->setLocale(numberLocale);
-	uiGeneralTab.sbMax->setLocale(numberLocale);
 
 	initGeneralTab();
 	initTabs();
@@ -327,11 +327,10 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYConvolutionCurve*>(curve)->setXDataColumn(column);
 
-	if (column != nullptr) {
-		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
-		}
+	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
+		SET_NUMBER_LOCALE
+		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
+		uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
 	}
 
 	cbXDataColumn->useCurrentIndexText(true);
@@ -341,7 +340,6 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
-	DEBUG("yDataColumnChanged()");
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -356,7 +354,6 @@ void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
-	DEBUG("y2DataColumnChanged()");
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
@@ -441,9 +438,9 @@ void XYConvolutionCurveDock::autoRangeChanged() {
 
 	if (autoRange) {
 		uiGeneralTab.lMin->setEnabled(false);
-		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.leMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
-		uiGeneralTab.sbMax->setEnabled(false);
+		uiGeneralTab.leMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = nullptr;
 		if (m_convolutionCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
@@ -454,33 +451,43 @@ void XYConvolutionCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+			SET_NUMBER_LOCALE
+			uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
+			uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
-		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.leMin->setEnabled(true);
 		uiGeneralTab.lMax->setEnabled(true);
-		uiGeneralTab.sbMax->setEnabled(true);
+		uiGeneralTab.leMax->setEnabled(true);
 	}
 
 }
 void XYConvolutionCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
-
-	m_convolutionData.xRange.first() = xMin;
-	enableRecalculate();
+	QString str = uiGeneralTab.leMin->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMin{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_convolutionData.xRange.first() = xMin;
+		enableRecalculate();
+	}
 }
 
 void XYConvolutionCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
-
-	m_convolutionData.xRange.last() = xMax;
-	enableRecalculate();
+	QString str = uiGeneralTab.leMax->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMax{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_convolutionData.xRange.last() = xMax;
+		enableRecalculate();
+	}
 }
 
 void XYConvolutionCurveDock::directionChanged() {
-	DEBUG("XYConvolutionCurveDock::directionChanged()");
 	auto dir = (nsl_conv_direction_type) uiGeneralTab.cbDirection->currentIndex();
 	m_convolutionData.direction = dir;
 

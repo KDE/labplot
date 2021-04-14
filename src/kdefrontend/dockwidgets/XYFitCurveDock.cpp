@@ -737,11 +737,11 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 		xColumn = m_fitCurve->xDataColumn();
 	} else {
 		DEBUG("	data source: Curve")
-		if (m_fitCurve->dataSourceCurve() != nullptr)
+		if (m_fitCurve->dataSourceCurve())
 			xColumn = m_fitCurve->dataSourceCurve()->xColumn();
 	}
 	// with no xColumn: show all models (assume 100 data points)
-	const int availableRowCount = (xColumn != nullptr) ? xColumn->availableRowCount() : 100;
+	const int availableRowCount = xColumn ? xColumn->availableRowCount() : 100;
 	DEBUG("	available row count = " << availableRowCount)
 
 	bool disableFit = false;
@@ -1004,11 +1004,11 @@ void XYFitCurveDock::insertConstant(const QString& constantsName) const {
  * When a custom evaluate range is specified, set the plot range too.
  */
 void XYFitCurveDock::setPlotXRange() {
-	if (m_fitData.autoEvalRange || m_curve == nullptr)
+	if (m_fitData.autoEvalRange || !m_curve)
 		return;
 
 	auto* plot = dynamic_cast<CartesianPlot*>(m_curve->parentAspect());
-	if (plot != nullptr) {
+	if (plot) {
 		Range<double> range{ m_fitData.evalRange };
 		if (!range.isZero()) {
 			range.extend(range.size() * 0.05);	// 5%
@@ -1086,7 +1086,7 @@ void XYFitCurveDock::expressionChanged() {
 
 void XYFitCurveDock::enableRecalculate() {
 	DEBUG("XYFitCurveDock::enableRecalculate()");
-	if (m_initializing || m_fitCurve == nullptr)
+	if (m_initializing || !m_fitCurve)
 		return;
 
 	//no fitting possible without the x- and y-data
@@ -1094,7 +1094,7 @@ void XYFitCurveDock::enableRecalculate() {
 	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		hasSourceData = (aspectX && aspectY);
 		if (aspectX) {
 			cbXDataColumn->useCurrentIndexText(true);
 			cbXDataColumn->setInvalid(false);

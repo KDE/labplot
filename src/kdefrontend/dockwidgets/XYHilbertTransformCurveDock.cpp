@@ -79,15 +79,15 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	layout->addWidget(generalTab);
 
 	//Slots
-	connect( uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::nameChanged );
-	connect( uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::commentChanged );
-	connect( uiGeneralTab.chkVisible,  &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::visibilityChanged);
-	connect( uiGeneralTab.cbAutoRange,  &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::autoRangeChanged);
-	connect( uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMinChanged);
-	connect( uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMaxChanged);
-	connect( uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYHilbertTransformCurveDock::typeChanged);
-	connect( uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYHilbertTransformCurveDock::plotRangeChanged );
-	connect( uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYHilbertTransformCurveDock::recalculateClicked);
+	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::nameChanged);
+	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::commentChanged);
+	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::visibilityChanged);
+	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::autoRangeChanged);
+	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYHilbertTransformCurveDock::typeChanged);
+	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYHilbertTransformCurveDock::plotRangeChanged );
+	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYHilbertTransformCurveDock::recalculateClicked);
 
 	connect(cbXDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYHilbertTransformCurveDock::xDataColumnChanged);
 	connect(cbYDataColumn, &TreeViewComboBox::currentModelIndexChanged, this, &XYHilbertTransformCurveDock::yDataColumnChanged);
@@ -117,10 +117,10 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 	cbXDataColumn->setColumn(m_transformCurve->xDataColumn(), m_transformCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_transformCurve->yDataColumn(), m_transformCurve->yDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_transformData.autoRange);
-	DEBUG(Q_FUNC_INFO << ", set min/max = " << m_transformCurve->xDataColumn()->minimum() << "/" << m_transformCurve->xDataColumn()->maximum())
+
 	SET_NUMBER_LOCALE
-	uiGeneralTab.leMin->setText( numberLocale.toString(m_transformCurve->xDataColumn()->minimum()) );
-	uiGeneralTab.leMax->setText( numberLocale.toString(m_transformCurve->xDataColumn()->maximum()) );
+	uiGeneralTab.leMin->setText( numberLocale.toString(m_transformData.xRange.first()) );
+	uiGeneralTab.leMax->setText( numberLocale.toString(m_transformData.xRange.last()) );
 	this->autoRangeChanged();
 
 	uiGeneralTab.cbType->setCurrentIndex(m_transformData.type);
@@ -193,13 +193,10 @@ void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYHilbertTransformCurve*>(curve)->setXDataColumn(column);
 
-	if (column != nullptr) {
-		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			DEBUG(Q_FUNC_INFO << ", set min/max = " << column->minimum() << "/" << column->maximum())
-			SET_NUMBER_LOCALE
-			uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
-			uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
-		}
+	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
+		SET_NUMBER_LOCALE
+		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
+		uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
 	}
 
 	cbXDataColumn->useCurrentIndexText(true);
@@ -231,7 +228,6 @@ void XYHilbertTransformCurveDock::autoRangeChanged() {
 		uiGeneralTab.leMax->setEnabled(false);
 		m_transformCurve = dynamic_cast<XYHilbertTransformCurve*>(m_curve);
 		if (m_transformCurve->xDataColumn()) {
-			DEBUG(Q_FUNC_INFO << ", set min/max = " << m_transformCurve->xDataColumn()->minimum() << "/" << m_transformCurve->xDataColumn()->maximum())
 			SET_NUMBER_LOCALE
 			uiGeneralTab.leMin->setText( numberLocale.toString(m_transformCurve->xDataColumn()->minimum()) );
 			uiGeneralTab.leMax->setText( numberLocale.toString(m_transformCurve->xDataColumn()->maximum()) );
@@ -293,7 +289,7 @@ void XYHilbertTransformCurveDock::enableRecalculate() const {
 	//no transforming possible without the x- and y-data
 	AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 	AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-	bool data = (aspectX != nullptr && aspectY != nullptr);
+	bool data = (aspectX && aspectY);
 	if (aspectX) {
 		cbXDataColumn->useCurrentIndexText(true);
 		cbXDataColumn->setInvalid(false);

@@ -85,9 +85,8 @@ void XYIntegrationCurveDock::setupGeneral() {
 	for (int i = 0; i < NSL_INT_NETHOD_COUNT; i++)
 		uiGeneralTab.cbMethod->addItem(i18n(nsl_int_method_name[i]));
 
-	//TODO: use line edits
-	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
+	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
@@ -101,8 +100,8 @@ void XYIntegrationCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYIntegrationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYIntegrationCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYIntegrationCurveDock::autoRangeChanged);
-	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYIntegrationCurveDock::xRangeMinChanged);
-	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYIntegrationCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYIntegrationCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYIntegrationCurveDock::xRangeMaxChanged);
 	connect(uiGeneralTab.dateTimeEditMin, &QDateTimeEdit::dateTimeChanged, this, &XYIntegrationCurveDock::xRangeMinDateTimeChanged);
 	connect(uiGeneralTab.dateTimeEditMax, &QDateTimeEdit::dateTimeChanged, this, &XYIntegrationCurveDock::xRangeMaxDateTimeChanged);
 	connect(uiGeneralTab.cbMethod, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYIntegrationCurveDock::methodChanged);
@@ -148,17 +147,18 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	const int xIndex = plot->coordinateSystem(m_curve->coordinateSystemIndex())->xIndex();
 	m_dateTimeRange = (plot->xRangeFormat(xIndex) != RangeT::Format::Numeric);
 	if (!m_dateTimeRange) {
-		uiGeneralTab.sbMin->setValue(m_integrationData.xRange.first());
-		uiGeneralTab.sbMax->setValue(m_integrationData.xRange.last());
+		SET_NUMBER_LOCALE
+		uiGeneralTab.leMin->setText( numberLocale.toString(m_integrationData.xRange.first()) );
+		uiGeneralTab.leMax->setText( numberLocale.toString(m_integrationData.xRange.last()) );
 	} else {
 		uiGeneralTab.dateTimeEditMin->setDateTime( QDateTime::fromMSecsSinceEpoch(m_integrationData.xRange.first()) );
 		uiGeneralTab.dateTimeEditMax->setDateTime( QDateTime::fromMSecsSinceEpoch(m_integrationData.xRange.last()) );
 	}
 
 	uiGeneralTab.lMin->setVisible(!m_dateTimeRange);
-	uiGeneralTab.sbMin->setVisible(!m_dateTimeRange);
+	uiGeneralTab.leMin->setVisible(!m_dateTimeRange);
 	uiGeneralTab.lMax->setVisible(!m_dateTimeRange);
-	uiGeneralTab.sbMax->setVisible(!m_dateTimeRange);
+	uiGeneralTab.leMax->setVisible(!m_dateTimeRange);
 	uiGeneralTab.lMinDateTime->setVisible(m_dateTimeRange);
 	uiGeneralTab.dateTimeEditMin->setVisible(m_dateTimeRange);
 	uiGeneralTab.lMaxDateTime->setVisible(m_dateTimeRange);
@@ -229,10 +229,6 @@ void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
 	this->setModel();
 	m_integrationData = m_integrationCurve->integrationData();
 
-	SET_NUMBER_LOCALE
-	uiGeneralTab.sbMin->setLocale(numberLocale);
-	uiGeneralTab.sbMax->setLocale(numberLocale);
-
 	initGeneralTab();
 	initTabs();
 	m_initializing = false;
@@ -301,10 +297,11 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	for (auto* curve : m_curvesList)
 		dynamic_cast<XYIntegrationCurve*>(curve)->setXDataColumn(column);
 
-	if (column != nullptr) {
+	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
+			SET_NUMBER_LOCALE
+			uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
+			uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
 		}
 
 		// disable integration methods that need more data points
@@ -349,9 +346,9 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 	m_integrationData.autoRange = autoRange;
 
 	uiGeneralTab.lMin->setEnabled(!autoRange);
-	uiGeneralTab.sbMin->setEnabled(!autoRange);
+	uiGeneralTab.leMin->setEnabled(!autoRange);
 	uiGeneralTab.lMax->setEnabled(!autoRange);
-	uiGeneralTab.sbMax->setEnabled(!autoRange);
+	uiGeneralTab.leMax->setEnabled(!autoRange);
 	uiGeneralTab.lMinDateTime->setEnabled(!autoRange);
 	uiGeneralTab.dateTimeEditMin->setEnabled(!autoRange);
 	uiGeneralTab.lMaxDateTime->setEnabled(!autoRange);
@@ -368,8 +365,9 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
-				uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-				uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+				SET_NUMBER_LOCALE
+				uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
+				uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
 			} else {
 				uiGeneralTab.dateTimeEditMin->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->minimum()));
 				uiGeneralTab.dateTimeEditMax->setDateTime(QDateTime::fromMSecsSinceEpoch(xDataColumn->maximum()));
@@ -378,14 +376,28 @@ void XYIntegrationCurveDock::autoRangeChanged() {
 	}
 }
 
-void XYIntegrationCurveDock::xRangeMinChanged(double value) {
-	m_integrationData.xRange.first() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+void XYIntegrationCurveDock::xRangeMinChanged() {
+	QString str = uiGeneralTab.leMin->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMin{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_integrationData.xRange.first() = xMin;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
-void XYIntegrationCurveDock::xRangeMaxChanged(double value) {
-	m_integrationData.xRange.last() = value;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+void XYIntegrationCurveDock::xRangeMaxChanged() {
+	QString str = uiGeneralTab.leMax->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMax{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_integrationData.xRange.last() = xMax;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
 void XYIntegrationCurveDock::xRangeMinDateTimeChanged(const QDateTime& dateTime) {
@@ -450,7 +462,7 @@ void XYIntegrationCurveDock::enableRecalculate() const {
 	if (m_integrationCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		hasSourceData = (aspectX && aspectY);
 		if (aspectX) {
 			cbXDataColumn->useCurrentIndexText(true);
 			cbXDataColumn->setInvalid(false);

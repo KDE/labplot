@@ -89,9 +89,8 @@ void XYFourierFilterCurveDock::setupGeneral() {
 		uiGeneralTab.cbUnit2->addItem(i18n(nsl_filter_cutoff_unit_name[i]));
 	}
 
-	//TODO: use line edits
-	uiGeneralTab.sbMin->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
-	uiGeneralTab.sbMax->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+	uiGeneralTab.leMin->setValidator( new QDoubleValidator(uiGeneralTab.leMin) );
+	uiGeneralTab.leMax->setValidator( new QDoubleValidator(uiGeneralTab.leMax) );
 
 	uiGeneralTab.pbRecalculate->setIcon(QIcon::fromTheme("run-build"));
 
@@ -105,8 +104,8 @@ void XYFourierFilterCurveDock::setupGeneral() {
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFourierFilterCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYFourierFilterCurveDock::autoRangeChanged);
-	connect(uiGeneralTab.sbMin, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierFilterCurveDock::xRangeMinChanged);
-	connect(uiGeneralTab.sbMax, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYFourierFilterCurveDock::xRangeMaxChanged);
+	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::xRangeMinChanged);
+	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYFourierFilterCurveDock::xRangeMaxChanged);
 
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::typeChanged);
 	connect(uiGeneralTab.cbForm, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierFilterCurveDock::formChanged);
@@ -150,8 +149,9 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	cbXDataColumn->setColumn(m_filterCurve->xDataColumn(), m_filterCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_filterCurve->yDataColumn(), m_filterCurve->xDataColumnPath());
 	uiGeneralTab.cbAutoRange->setChecked(m_filterData.autoRange);
-	uiGeneralTab.sbMin->setValue(m_filterData.xRange.first());
-	uiGeneralTab.sbMax->setValue(m_filterData.xRange.last());
+	SET_NUMBER_LOCALE
+	uiGeneralTab.leMin->setText( numberLocale.toString(m_filterData.xRange.first()) );
+	uiGeneralTab.leMax->setText( numberLocale.toString(m_filterData.xRange.last()) );
 	this->autoRangeChanged();
 
 	uiGeneralTab.cbType->setCurrentIndex(m_filterData.type);
@@ -221,8 +221,6 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 	m_filterData = m_filterCurve->filterData();
 
 	SET_NUMBER_LOCALE
-	uiGeneralTab.sbMin->setLocale(numberLocale);
-	uiGeneralTab.sbMax->setLocale(numberLocale);
 	uiGeneralTab.sbCutoff->setLocale(numberLocale);
 	uiGeneralTab.sbCutoff2->setLocale(numberLocale);
 
@@ -297,11 +295,10 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	unitChanged();
 	unit2Changed();
 
-	if (column != nullptr) {
-		if (uiGeneralTab.cbAutoRange->isChecked()) {
-			uiGeneralTab.sbMin->setValue(column->minimum());
-			uiGeneralTab.sbMax->setValue(column->maximum());
-		}
+	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
+		SET_NUMBER_LOCALE
+		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
+		uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
 	}
 
 	cbXDataColumn->useCurrentIndexText(true);
@@ -328,9 +325,9 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 
 	if (autoRange) {
 		uiGeneralTab.lMin->setEnabled(false);
-		uiGeneralTab.sbMin->setEnabled(false);
+		uiGeneralTab.leMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
-		uiGeneralTab.sbMax->setEnabled(false);
+		uiGeneralTab.leMax->setEnabled(false);
 
 		const AbstractColumn* xDataColumn = nullptr;
 		if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet)
@@ -341,29 +338,40 @@ void XYFourierFilterCurveDock::autoRangeChanged() {
 		}
 
 		if (xDataColumn) {
-			uiGeneralTab.sbMin->setValue(xDataColumn->minimum());
-			uiGeneralTab.sbMax->setValue(xDataColumn->maximum());
+			SET_NUMBER_LOCALE
+			uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
+			uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
 		}
 	} else {
 		uiGeneralTab.lMin->setEnabled(true);
-		uiGeneralTab.sbMin->setEnabled(true);
+		uiGeneralTab.leMin->setEnabled(true);
 		uiGeneralTab.lMax->setEnabled(true);
-		uiGeneralTab.sbMax->setEnabled(true);
+		uiGeneralTab.leMax->setEnabled(true);
 	}
 
 }
 void XYFourierFilterCurveDock::xRangeMinChanged() {
-	double xMin = uiGeneralTab.sbMin->value();
-
-	m_filterData.xRange.first() = xMin;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	QString str = uiGeneralTab.leMin->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMin{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_filterData.xRange.first() = xMin;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
 void XYFourierFilterCurveDock::xRangeMaxChanged() {
-	double xMax = uiGeneralTab.sbMax->value();
-
-	m_filterData.xRange.last() = xMax;
-	uiGeneralTab.pbRecalculate->setEnabled(true);
+	QString str = uiGeneralTab.leMax->text().trimmed();
+	if (str.isEmpty()) return;
+	bool ok;
+	SET_NUMBER_LOCALE
+	const double xMax{ numberLocale.toDouble(str, &ok) };
+	if (ok) {
+		m_filterData.xRange.last() = xMax;
+		uiGeneralTab.pbRecalculate->setEnabled(true);
+	}
 }
 
 void XYFourierFilterCurveDock::typeChanged() {
@@ -442,7 +450,7 @@ void XYFourierFilterCurveDock::unitChanged() {
 			xDataColumn = m_filterCurve->dataSourceCurve()->xColumn();
 	}
 
-	if (xDataColumn != nullptr) {
+	if (xDataColumn) {
 		n = xDataColumn->rowCount();
 		double range = xDataColumn->maximum() - xDataColumn->minimum();
 		f = (n-1)/range/2.;
@@ -519,7 +527,7 @@ void XYFourierFilterCurveDock::unit2Changed() {
 			xDataColumn = m_filterCurve->dataSourceCurve()->xColumn();
 	}
 
-	if (xDataColumn != nullptr) {
+	if (xDataColumn) {
 		n = xDataColumn->rowCount();
 		double range = xDataColumn->maximum() - xDataColumn->minimum();
 		f = (n-1)/range/2.;
@@ -609,7 +617,7 @@ void XYFourierFilterCurveDock::enableRecalculate() const {
 	if (m_filterCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		AbstractAspect* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		AbstractAspect* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
-		hasSourceData = (aspectX != nullptr && aspectY != nullptr);
+		hasSourceData = (aspectX && aspectY);
 		if (aspectX) {
 			cbXDataColumn->useCurrentIndexText(true);
 			cbXDataColumn->setInvalid(false);
