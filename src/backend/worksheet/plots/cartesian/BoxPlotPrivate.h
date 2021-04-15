@@ -121,7 +121,7 @@ private:
 	QRectF m_boundingRectangle;
 	QPainterPath m_boxPlotShape;
 
-	QVector<QRectF> m_boxRect;
+	QVector<QVector<QLineF>> m_boxRect; //QVector<QLineF> contains four lines that are clipped on the plot rectangle
 	double m_widthScaleFactor{1.0};
 	QVector<double> m_xMinBox;
 	QVector<double> m_xMaxBox;

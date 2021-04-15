@@ -532,7 +532,7 @@ void BoxPlotPrivate::retransform() {
 
 	const int count = dataColumns.size();
 	for (int i = 0; i < count; ++i) {
-		m_boxRect[i] = QRectF();
+		m_boxRect[i].clear();
 		m_medianLine[i] = QLineF();
 		m_whiskersPath[i] = QPainterPath();
 		m_outliersCount[i] = 0;
@@ -774,21 +774,22 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	QVector<QLineF> lines;
 	const double x = index + 0.5;
 
-	//calculate the size and the position of the box
-	//map the box to scene coordinates
-	QPointF topLeft = QPointF(m_xMinBox.at(index), m_yMaxBox.at(index));
-	QPointF bottomRight = QPointF(m_xMaxBox.at(index), m_yMinBox.at(index));
-	topLeft = q->cSystem->mapLogicalToScene(topLeft);
-	bottomRight = q->cSystem->mapLogicalToScene(bottomRight);
-	m_boxRect[index] = QRectF(topLeft, bottomRight);
+	//box
+	//first line starting at the top left corner of the box
+	lines << QLineF(m_xMinBox.at(index), m_yMaxBox.at(index), m_xMaxBox.at(index), m_yMaxBox.at(index));
+	lines << QLineF(m_xMaxBox.at(index), m_yMaxBox.at(index), m_xMaxBox.at(index), m_yMinBox.at(index));
+	lines << QLineF(m_xMaxBox.at(index), m_yMinBox.at(index), m_xMinBox.at(index), m_yMinBox.at(index));
+	lines << QLineF(m_xMinBox.at(index), m_yMinBox.at(index), m_xMinBox.at(index), m_yMaxBox.at(index));
+	m_boxRect[index] = q->cSystem->mapLogicalToScene(lines);
 
 	//median line
+	lines.clear();
 	lines << QLineF(m_xMinBox.at(index), m_median.at(index), m_xMaxBox.at(index), m_median.at(index));
 	lines = q->cSystem->mapLogicalToScene(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
-	//calculate the size and the position for the whiskers
+	//whiskers
 	lines.clear();
 	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); //upper whisker
 	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); //lower whisker
@@ -820,13 +821,13 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	QVector<QLineF> lines;
 	const double y = index + 0.5;
 
-	//calculate the size and the position of the box
-	//map the box to scene coordinates
-	QPointF topLeft = QPointF(m_xMinBox.at(index), m_yMaxBox.at(index));
-	QPointF bottomRight = QPointF(m_xMaxBox.at(index), m_yMinBox.at(index));
-	topLeft = q->cSystem->mapLogicalToScene(topLeft);
-	bottomRight = q->cSystem->mapLogicalToScene(bottomRight);
-	m_boxRect[index] = QRectF(topLeft, bottomRight);
+	//box
+	//first line starting at the top left corner of the box
+	lines << QLineF(m_xMinBox.at(index), m_yMaxBox.at(index), m_xMaxBox.at(index), m_yMaxBox.at(index));
+	lines << QLineF(m_xMaxBox.at(index), m_yMaxBox.at(index), m_xMaxBox.at(index), m_yMinBox.at(index));
+	lines << QLineF(m_xMaxBox.at(index), m_yMinBox.at(index), m_xMinBox.at(index), m_yMinBox.at(index));
+	lines << QLineF(m_xMinBox.at(index), m_yMinBox.at(index), m_xMinBox.at(index), m_yMaxBox.at(index));
+	m_boxRect[index] = q->cSystem->mapLogicalToScene(lines);
 
 	//median line
 	lines << QLineF(m_median.at(index), m_yMinBox.at(index), m_median.at(index), m_yMaxBox.at(index));
@@ -834,7 +835,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
-	//calculate the size and the position for the whiskers
+	//whiskers
 	lines.clear();
 	lines << QLineF(m_xMaxBox.at(index), y, m_whiskerMax.at(index), y); //upper whisker
 	lines << QLineF(m_xMinBox.at(index), y, m_whiskerMin.at(index), y); //lower whisker
@@ -930,12 +931,17 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	m_boxPlotShape = QPainterPath();
 
 	for (int i = 0; i < dataColumns.size(); ++i) {
-		if (!dataColumns.at(i))
+		if (!dataColumns.at(i)
+			|| static_cast<const Column*>(dataColumns.at(i))->statistics().size == 0)
 			continue;
 
 		QPainterPath boxPath;
-		boxPath.addRect(m_boxRect.at(i));
-		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, whiskersPen));
+		for (const auto& line : qAsConst(m_boxRect.at(i))) {
+			boxPath.moveTo(line.p1());
+			boxPath.lineTo(line.p2());
+		}
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderPen));
+
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersPen));
 
 		if (symbolOutliersStyle != Symbol::Style::NoSymbols) {
@@ -1009,31 +1015,38 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::draw()");
 
 	for (int i = 0; i < dataColumns.size(); ++i) {
-		//draw the box filling
-		if (fillingEnabled) {
-			painter->setOpacity(fillingOpacity);
-			painter->setPen(Qt::SolidLine);
-			drawFilling(painter, i);
-		}
+		//no need to draw anything if the column doesn't have any valid values
+		if (static_cast<const Column*>(dataColumns.at(i))->statistics().size == 0)
+			continue;
 
-		//draw the border
-		if (borderPen.style() != Qt::NoPen) {
-			painter->setPen(borderPen);
-			painter->setBrush(Qt::NoBrush);
-			painter->setOpacity(borderOpacity);
-			painter->drawRect(m_boxRect.at(i));
-		}
+		if (!m_boxRect.at(i).isEmpty()) {
+			//draw the box filling
+			if (fillingEnabled) {
+				painter->setOpacity(fillingOpacity);
+				painter->setPen(Qt::SolidLine);
+				drawFilling(painter, i);
+			}
 
-		//draw the median line
-		if (medianLinePen.style() != Qt::NoPen) {
-			painter->setPen(medianLinePen);
-			painter->setBrush(Qt::NoBrush);
-			painter->setOpacity(medianLineOpacity);
-			painter->drawLine(m_medianLine.at(i));
+			//draw the border
+			if (borderPen.style() != Qt::NoPen) {
+				painter->setPen(borderPen);
+				painter->setBrush(Qt::NoBrush);
+				painter->setOpacity(borderOpacity);
+				for (const auto& line : m_boxRect.at(i))
+					painter->drawLine(line);
+			}
+
+			//draw the median line
+			if (medianLinePen.style() != Qt::NoPen) {
+				painter->setPen(medianLinePen);
+				painter->setBrush(Qt::NoBrush);
+				painter->setOpacity(medianLineOpacity);
+				painter->drawLine(m_medianLine.at(i));
+			}
 		}
 
 		//draw the whiskers
-		if (whiskersPen.style() != Qt::NoPen) {
+		if (whiskersPen.style() != Qt::NoPen && !m_whiskersPath.at(i).isEmpty()) {
 			painter->setPen(whiskersPen);
 			painter->setBrush(Qt::NoBrush);
 			painter->setOpacity(whiskersOpacity);
@@ -1070,7 +1083,7 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 	}
 
 	//mean
-	if (symbolMeanStyle != Symbol::Style::NoSymbols) {
+	if (symbolMeanStyle != Symbol::Style::NoSymbols || !m_meanSymbolPoint.at(index).isNull()) {
 		QTransform trafo;
 		trafo.scale(symbolsSize, symbolsSize);
 		QPainterPath path = Symbol::pathFromStyle(symbolMeanStyle);
@@ -1087,7 +1100,17 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 
 void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::drawFilling()");
-	const QRectF& rect = m_boxRect[index];
+
+	if (m_boxRect.at(index).isEmpty())
+		return;
+
+	QPainterPath boxPath;
+	for (const auto& line : qAsConst(m_boxRect.at(index))) {
+		boxPath.moveTo(line.p1());
+		boxPath.lineTo(line.p2());
+	}
+	const QRectF& rect = boxPath.boundingRect();
+
 	if (fillingType == PlotArea::BackgroundType::Color) {
 		switch (fillingColorStyle) {
 		case PlotArea::BackgroundColorStyle::SingleColor: {
