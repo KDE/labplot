@@ -137,6 +137,7 @@ private:
 	QVector<QVector<QPointF>> m_outliersSymbolPoints;	//positions of the outlier symbols in scene coordinates
 	QVector<int> m_outliersCount; //total number of outliers. this number is different to the size of the vector m_outliersSymbolPoints containing unique points only
 	QVector<QPointF> m_meanSymbolPoint; //position of the mean symbol in scene coordinates
+	QVector<bool> m_meanSymbolPointVisible; //true/false if the mean point is visible in the plot or not
 
 	double m_xMin;
 	double m_xMax;

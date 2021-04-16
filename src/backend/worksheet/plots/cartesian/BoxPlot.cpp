@@ -576,6 +576,7 @@ void BoxPlotPrivate::recalc() {
 	m_outliersCount.resize(count);
 	m_mean.resize(count);
 	m_meanSymbolPoint.resize(count);
+	m_meanSymbolPointVisible.resize(count);
 
 	m_yMin = INFINITY;
 	m_yMax = -INFINITY;
@@ -789,7 +790,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
-	//whiskers
+	//whisker lines
 	lines.clear();
 	lines << QLineF(x, m_yMaxBox.at(index), x, m_whiskerMax.at(index)); //upper whisker
 	lines << QLineF(x, m_yMinBox.at(index), x, m_whiskerMin.at(index)); //lower whisker
@@ -799,20 +800,28 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		m_whiskersPath[index].lineTo(line.p2());
 	}
 
-	//add caps
-	QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax.at(index)));
-	QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)));
-	m_whiskersPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize/2., maxPoint.y()));
-	m_whiskersPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize/2., maxPoint.y()));
+	//whisker caps
+	if (!m_whiskersPath[index].isEmpty()) {
+		QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax.at(index)));
+		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)));
+		m_whiskersPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize/2., maxPoint.y()));
+		m_whiskersPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize/2., maxPoint.y()));
 
-	m_whiskersPath[index].moveTo(QPointF(minPoint.x() - whiskersCapSize/2., minPoint.y()));
-	m_whiskersPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
+		m_whiskersPath[index].moveTo(QPointF(minPoint.x() - whiskersCapSize/2., minPoint.y()));
+		m_whiskersPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
+	}
 
 	//outliers symbols
 	mapOutliersToScene(index);
 
 	//mean symbol
-	m_meanSymbolPoint[index] = q->cSystem->mapLogicalToScene(QPointF(x, m_mean.at(index)));
+	QVector<QPointF> points = {QPointF(x, m_mean.at(index))};
+	points = q->cSystem->mapLogicalToScene(points);
+	if (points.count() == 1) {
+		m_meanSymbolPoint[index] = points.at(0);
+		m_meanSymbolPointVisible[index] = true;
+	} else
+		m_meanSymbolPointVisible[index] = false;
 }
 
 void BoxPlotPrivate::horizontalBoxPlot(int index) {
@@ -835,7 +844,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
 
-	//whiskers
+	//whisker lines
 	lines.clear();
 	lines << QLineF(m_xMaxBox.at(index), y, m_whiskerMax.at(index), y); //upper whisker
 	lines << QLineF(m_xMinBox.at(index), y, m_whiskerMin.at(index), y); //lower whisker
@@ -845,20 +854,28 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		m_whiskersPath[index].lineTo(line.p2());
 	}
 
-	//add caps
-	QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMax.at(index), y));
-	QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMin.at(index), y));
-	m_whiskersPath[index].moveTo(QPointF(maxPoint.x(), maxPoint.y() - whiskersCapSize/2));
-	m_whiskersPath[index].lineTo(QPointF(maxPoint.x(), maxPoint.y() + whiskersCapSize/2));
+	//whisker caps
+	if (!m_whiskersPath[index].isEmpty()) {
+		QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMax.at(index), y));
+		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMin.at(index), y));
+		m_whiskersPath[index].moveTo(QPointF(maxPoint.x(), maxPoint.y() - whiskersCapSize/2));
+		m_whiskersPath[index].lineTo(QPointF(maxPoint.x(), maxPoint.y() + whiskersCapSize/2));
 
-	m_whiskersPath[index].moveTo(QPointF(minPoint.x(), minPoint.y() - whiskersCapSize/2));
-	m_whiskersPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize/2));
+		m_whiskersPath[index].moveTo(QPointF(minPoint.x(), minPoint.y() - whiskersCapSize/2));
+		m_whiskersPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize/2));
+	}
 
 	//outliers symbols
 	mapOutliersToScene(index);
 
 	//mean symbol
-	m_meanSymbolPoint[index] = q->cSystem->mapLogicalToScene(QPointF(m_mean.at(index), y));
+	QVector<QPointF> points = {QPointF(m_mean.at(index), y)};
+	points = q->cSystem->mapLogicalToScene(points);
+	if (points.count() == 1) {
+		m_meanSymbolPoint[index] = points.at(0);
+		m_meanSymbolPointVisible[index] = true;
+	} else
+		m_meanSymbolPointVisible[index] = false;
 }
 
 /*!
@@ -1083,7 +1100,7 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 	}
 
 	//mean
-	if (symbolMeanStyle != Symbol::Style::NoSymbols || !m_meanSymbolPoint.at(index).isNull()) {
+	if (symbolMeanStyle != Symbol::Style::NoSymbols && m_meanSymbolPointVisible.at(index)) {
 		QTransform trafo;
 		trafo.scale(symbolsSize, symbolsSize);
 		QPainterPath path = Symbol::pathFromStyle(symbolMeanStyle);
