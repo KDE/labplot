@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Symbol
     --------------------------------------------------------------------
-    Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -34,13 +34,102 @@
 */
 
 #include "Symbol.h"
+#include "SymbolPrivate.h"
+#include "backend/lib/commandtemplates.h"
+
 #include <KLocalizedString>
 #include <math.h>
+
+
+Symbol::Symbol(const QString& name) : AbstractAspect(name, AspectType::AbstractAspect),
+	d_ptr(new SymbolPrivate(this)) {
+
+// 	init();
+}
+
+//##############################################################################
+//##########################  getter methods  ##################################
+//##############################################################################
+BASIC_SHARED_D_READER_IMPL(Symbol, Symbol::Style, style, style)
+BASIC_SHARED_D_READER_IMPL(Symbol, qreal, opacity, opacity)
+BASIC_SHARED_D_READER_IMPL(Symbol, qreal, rotationAngle, rotationAngle)
+BASIC_SHARED_D_READER_IMPL(Symbol, qreal, size, size)
+BASIC_SHARED_D_READER_IMPL(Symbol, QBrush, brush, brush)
+BASIC_SHARED_D_READER_IMPL(Symbol, QPen, pen, pen)
+
+
+//##############################################################################
+//#################  setter methods and undo commands ##########################
+//##############################################################################
+STD_SETTER_CMD_IMPL_F_S(Symbol, SetStyle, Symbol::Style, style, updateSymbols)
+void Symbol::setStyle(Symbol::Style style) {
+	Q_D(Symbol);
+	if (style != d->style)
+		exec(new SymbolSetStyleCmd(d, style, ki18n("%1: set symbol style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Symbol, SetSize, qreal, size, updateSymbols)
+void Symbol::setSize(qreal size) {
+	Q_D(Symbol);
+	if (!qFuzzyCompare(1 + size, 1 + d->size))
+		exec(new SymbolSetSizeCmd(d, size, ki18n("%1: set symbol size")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Symbol, SetRotationAngle, qreal, rotationAngle, updateSymbols)
+void Symbol::setRotationAngle(qreal angle) {
+	Q_D(Symbol);
+	if (!qFuzzyCompare(1 + angle, 1 + d->rotationAngle))
+		exec(new SymbolSetRotationAngleCmd(d, angle, ki18n("%1: rotate symbols")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Symbol, SetBrush, QBrush, brush, updatePixmap)
+void Symbol::setBrush(const QBrush &brush) {
+	Q_D(Symbol);
+	if (brush != d->brush)
+		exec(new SymbolSetBrushCmd(d, brush, ki18n("%1: set symbol filling")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Symbol, SetPen, QPen, pen, updateSymbols)
+void Symbol::setPen(const QPen &pen) {
+	Q_D(Symbol);
+	if (pen != d->pen)
+		exec(new SymbolSetPenCmd(d, pen, ki18n("%1: set symbol outline style")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Symbol, SetOpacity, qreal, opacity, updatePixmap)
+void Symbol::setOpacity(qreal opacity) {
+	Q_D(Symbol);
+	if (opacity != d->opacity)
+		exec(new SymbolSetOpacityCmd(d, opacity, ki18n("%1: set symbols opacity")));
+}
+
+//##############################################################################
+//####################### Private implementation ###############################
+//##############################################################################
+SymbolPrivate::SymbolPrivate(Symbol* owner) : q(owner) {
+
+}
+
+QString SymbolPrivate::name() const {
+	return q->name();
+}
+
+void SymbolPrivate::updateSymbols() {
+
+}
+
+void SymbolPrivate::updatePixmap() {
+
+}
+
+//*************************************************************
+//********************* static functions **********************
+//*************************************************************
 
 int Symbol::stylesCount() {
 	return 21;
 }
-#include <QDebug>
+
 QPainterPath Symbol::pathFromStyle(Symbol::Style style) {
 	QPainterPath path;
 	QPolygonF polygon;

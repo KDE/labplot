@@ -1,9 +1,9 @@
 /***************************************************************************
-    File                 : Symbol.h
+    File                 : SymbolWidget.h
     Project              : LabPlot
-    Description          : Symbol
     --------------------------------------------------------------------
-    Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 Alexander Semke (alexander.semke@web.de)
+    Description          : symbol settings widget
 
  ***************************************************************************/
 
@@ -25,52 +25,52 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef SYMBOLWIDGET_H
+#define SYMBOLWIDGET_H
 
-#ifndef SYMBOL_H
-#define SYMBOL_H
+#include "ui_symbolwidget.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
+#include <KConfigGroup>
 
-#include "backend/core/AbstractAspect.h"
-#include "backend/lib/macros.h"
-#include <QPainterPath>
-
-class SymbolPrivate;
-
-class Symbol : public AbstractAspect {
+class SymbolWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	enum class Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
-			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
-			Star4, Star5, Line, Cross, Heart, Lightning};
+	explicit SymbolWidget(QWidget*);
 
-	static int stylesCount();
-	static QPainterPath pathFromStyle(Symbol::Style);
-	static QString nameFromStyle(Symbol::Style);
-
-	explicit Symbol(const QString &name);
-
-	BASIC_D_ACCESSOR_DECL(Symbol::Style, style, Style)
-	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
-	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, size, Size)
-	CLASS_D_ACCESSOR_DECL(QBrush, brush, Brush)
-	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
-
-	typedef SymbolPrivate Private;
-
-protected:
-	SymbolPrivate* const d_ptr;
+	void setSymbols(QList<Symbol*>);
+	void load();
+	void loadConfig(KConfigGroup&);
+	void saveConfig(KConfigGroup&);
 
 private:
-	Q_DECLARE_PRIVATE(Symbol)
+	Ui::SymbolWidget ui;
+	Symbol* m_symbol{nullptr};
+	QList<Symbol*> m_symbols;
+	bool m_initializing{false};
 
 signals:
-	void styleChanged(Symbol::Style);
-	void sizeChanged(qreal);
-	void rotationAngleChanged(qreal);
-	void opacityChanged(qreal);
-	void brushChanged(QBrush);
-	void penChanged(const QPen&);
+	void dataChanged(bool);
+
+private slots:
+	//SLOTs for changes triggered in SymbolWidget
+	void styleChanged(int);
+	void sizeChanged(double);
+	void rotationChanged(int);
+	void opacityChanged(int);
+	void fillingStyleChanged(int);
+	void fillingColorChanged(const QColor&);
+	void borderStyleChanged(int);
+	void borderColorChanged(const QColor&);
+	void borderWidthChanged(double);
+
+	//SLOTs for changes triggered in Symbol
+	void symbolStyleChanged(Symbol::Style);
+	void symbolSizeChanged(qreal);
+	void symbolRotationAngleChanged(qreal);
+	void symbolOpacityChanged(qreal);
+	void symbolBrushChanged(const QBrush&);
+	void symbolPenChanged(const QPen&);
 };
 
-#endif
+#endif //LABELWIDGET_H

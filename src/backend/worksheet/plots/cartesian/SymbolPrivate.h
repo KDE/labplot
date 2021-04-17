@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : Symbol.h
+    File                 : SymbolPrivate.h
     Project              : LabPlot
-    Description          : Symbol
+    Description          : Private members of Symbol
     --------------------------------------------------------------------
-    Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
-
+    Copyright            : (C) 2021 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -26,51 +25,28 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef SYMBOL_H
-#define SYMBOL_H
+#ifndef SYMBOLPRIVATE_H
+#define SYMBOLPRIVATE_H
 
-#include "backend/core/AbstractAspect.h"
-#include "backend/lib/macros.h"
-#include <QPainterPath>
+#include <QBrush>
+#include <QPen>
 
-class SymbolPrivate;
-
-class Symbol : public AbstractAspect {
-	Q_OBJECT
-
+class SymbolPrivate {
 public:
-	enum class Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
-			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
-			Star4, Star5, Line, Cross, Heart, Lightning};
+	explicit SymbolPrivate(Symbol*);
 
-	static int stylesCount();
-	static QPainterPath pathFromStyle(Symbol::Style);
-	static QString nameFromStyle(Symbol::Style);
+	QString name() const;
+	void updateSymbols();
+	void updatePixmap();
 
-	explicit Symbol(const QString &name);
+	Symbol::Style style;
+	QBrush brush;
+	QPen pen;
+	qreal opacity;
+	qreal rotationAngle;
+	qreal size;
 
-	BASIC_D_ACCESSOR_DECL(Symbol::Style, style, Style)
-	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
-	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, size, Size)
-	CLASS_D_ACCESSOR_DECL(QBrush, brush, Brush)
-	CLASS_D_ACCESSOR_DECL(QPen, pen, Pen)
-
-	typedef SymbolPrivate Private;
-
-protected:
-	SymbolPrivate* const d_ptr;
-
-private:
-	Q_DECLARE_PRIVATE(Symbol)
-
-signals:
-	void styleChanged(Symbol::Style);
-	void sizeChanged(qreal);
-	void rotationAngleChanged(qreal);
-	void opacityChanged(qreal);
-	void brushChanged(QBrush);
-	void penChanged(const QPen&);
+	Symbol* const q{nullptr};
 };
 
 #endif
