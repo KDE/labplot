@@ -238,15 +238,16 @@ int ReadStatFilterPrivate::getMetaData(readstat_metadata_t *metadata, void *ptr)
 int ReadStatFilterPrivate::getVarName(int index, readstat_variable_t *variable, const char *val_labels, void *ptr) {
 	//DEBUG(Q_FUNC_INFO)
 	Q_UNUSED(index)
-	Q_UNUSED(val_labels)
 	Q_UNUSED(ptr)
+	Q_UNUSED(val_labels)
 
 	// only on column from m_startColumn to m_endColumn
-	int col = readstat_variable_get_index(variable);
+	const int col = readstat_variable_get_index(variable);
 	if (col < m_startColumn - 1 || (m_endColumn != -1 && col > m_endColumn - 1)) {
 		//DEBUG(Q_FUNC_INFO << ", out of range row/col "<< index << " / " << col)
 		return READSTAT_HANDLER_OK;
 	}
+	//DEBUG(Q_FUNC_INFO << ", col = " << col << " value labels = " << val_labels)
 	m_varNames << readstat_variable_get_name(variable);
 
 	return READSTAT_HANDLER_OK;
@@ -257,13 +258,13 @@ int ReadStatFilterPrivate::getColumnModes(int row, readstat_variable_t *variable
 	if (row >= m_rowCount)	// more rows found than meta data said it has (like -1)
 		m_rowCount = row + 1;
 
-	int col = readstat_variable_get_index(variable);
+	const int col = readstat_variable_get_index(variable);
 	if (row >= m_startRow || col < m_startColumn -1
 			|| (m_endColumn != -1 && col > m_endColumn - 1))	// run only on first row and selected cols
 		return READSTAT_HANDLER_OK;
 
 	// column modes
-	switch (readstat_value_type(value)) {
+	switch (value.type) {
 	case READSTAT_TYPE_INT8:
 	case READSTAT_TYPE_INT16:
 	case READSTAT_TYPE_INT32:
@@ -283,11 +284,13 @@ int ReadStatFilterPrivate::getColumnModes(int row, readstat_variable_t *variable
 	return READSTAT_HANDLER_OK;
 }
 int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
-	//DEBUG(Q_FUNC_INFO << ", start/end row =" << m_startRow << "/" << m_endRow)
 	Q_UNUSED(ptr)
+	//TODO: get more variable properties
+
+	//DEBUG(Q_FUNC_INFO << ", start/end row =" << m_startRow << "/" << m_endRow)
 
 	// read only from start to end row/column
-	int col = readstat_variable_get_index(variable);
+	const int col = readstat_variable_get_index(variable);
 	if (row < m_startRow - 1 || (m_endRow != -1 && row > m_endRow - 1) ||
 			col < m_startColumn - 1 || (m_endColumn != -1 && col > m_endColumn - 1)) {
 		//DEBUG(Q_FUNC_INFO << ", out of range row/col "<< row << " / " << col)
@@ -301,10 +304,10 @@ int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t *variab
 	if (col == m_startColumn - 1)
 		m_lineString.clear();
 
-	if (readstat_value_is_system_missing(value)) {
+	if (value.is_system_missing) {
 		m_lineString << QString();
 	} else {
-		switch (readstat_value_type(value)) {
+		switch (value.type) {
 		case READSTAT_TYPE_INT8:
 			m_lineString << QString::number(readstat_int8_value(value));
 			break;
@@ -338,6 +341,7 @@ int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t *variab
 }
 int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
 	Q_UNUSED(ptr)
+	//TODO: get more variable properties
 
 	// only read from start to end row/col
 	const int col = readstat_variable_get_index(variable);
@@ -352,13 +356,13 @@ int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, rea
 	//DEBUG(Q_FUNC_INFO << ", row/col = " << row << " / " << col << ", row/col index = " << rowIndex << " / " << colIndex)
 
 	// import data
-	if (readstat_value_is_system_missing(value)) {	// empty
-		if (readstat_value_type(value) == READSTAT_TYPE_FLOAT || readstat_value_type(value) == READSTAT_TYPE_DOUBLE) {
+	if (value.is_system_missing) {	// empty
+		if (value.type == READSTAT_TYPE_FLOAT || value.type == READSTAT_TYPE_DOUBLE) {
 			QVector<double>& container = *static_cast<QVector<double>*>(m_dataContainer[colIndex]);
 			container[rowIndex] = qQNaN();
 		}
 	} else {
-		switch (readstat_value_type(value)) {
+		switch (value.type) {
 		case READSTAT_TYPE_INT8: {
 			QVector<int>& container = *static_cast<QVector<int>*>(m_dataContainer[colIndex]);
 			container[rowIndex] = readstat_int8_value(value);
@@ -405,6 +409,25 @@ int ReadStatFilterPrivate::getNotes(int index, const char* note, void *ptr) {
 
 	return READSTAT_HANDLER_OK;
 }
+int ReadStatFilterPrivate::getFWeights(readstat_variable_t *variable, void *ptr) {
+	Q_UNUSED(ptr)
+
+	const int col = readstat_variable_get_index(variable);
+	//TODO
+	DEBUG(Q_FUNC_INFO << ", fweight of col " << col)
+
+	return READSTAT_HANDLER_OK;
+}
+int ReadStatFilterPrivate::getValueLabels(const char *val_labels, readstat_value_t value, const char *label, void *ptr) {
+	Q_UNUSED(ptr)
+
+	//TODO: see https://github.com/tidyverse/haven/blob/master/src/DfReader.cpp
+	readstat_type_t type = value.type;
+	Q_UNUSED(type)
+	DEBUG(Q_FUNC_INFO << ", value label = " << val_labels << " label = " << label)
+
+	return READSTAT_HANDLER_OK;
+}
 #endif
 
 ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter* owner) : q(owner) {
@@ -428,7 +451,8 @@ readstat_error_t ReadStatFilterPrivate::parse(const QString& fileName, bool prev
 		readstat_set_value_handler(parser, &getValues);
 		readstat_set_note_handler(parser, &getNotes);
 	}
-	//TODO: fweight_handler, value_label_handler
+	readstat_set_fweight_handler(parser, &getFWeights);
+	readstat_set_value_label_handler(parser, &getValueLabels);
 
 	readstat_error_t error = READSTAT_OK;
 	if ( fileName.endsWith(QLatin1String(".dta")) )

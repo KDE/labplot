@@ -48,6 +48,8 @@ public:
 	static int getValuesPreview(int row, readstat_variable_t*, readstat_value_t, void *);
 	static int getValues(int row, readstat_variable_t*, readstat_value_t, void *);
 	static int getNotes(int index, const char* note, void *);
+	static int getFWeights(readstat_variable_t*, void *);
+	static int getValueLabels(const char *val_labels, readstat_value_t, const char *label, void *);
 	readstat_error_t parse(const QString& fileName, bool preview = false, bool prepare = false);
 #endif
 	QVector<QStringList> preview(const QString& fileName, int lines);
