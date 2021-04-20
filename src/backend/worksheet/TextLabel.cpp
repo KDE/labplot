@@ -965,17 +965,18 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
         QRectF pr;
         if (!parentRect(pr))
             return QVariant();
-		//convert item's center point in parent's coordinates
-        TextLabel::PositionWrapper tempPosition = position;
-        tempPosition.point = q->parentPosToRelativePos(value.toPointF(), pr, boundingRectangle, position);
 
 		//emit the signals in order to notify the UI.
 		// don't use setPosition here, because then all small changes are on the undo stack
 		if(coordinateBindingEnabled) {
-			QPointF tempPoint = q->cSystem->mapSceneToLogical(tempPosition.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+            QPointF tempPoint = q->cSystem->mapSceneToLogical(value.toPointF(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			emit q->positionLogicalChanged(tempPoint);
-		} else
+        } else {
+            //convert item's center point in parent's coordinates
+            TextLabel::PositionWrapper tempPosition = position;
+            tempPosition.point = q->parentPosToRelativePos(value.toPointF(), pr, boundingRectangle, position);
 			emit q->positionChanged(tempPosition);
+        }
 	}
 
 	return QGraphicsItem::itemChange(change, value);
