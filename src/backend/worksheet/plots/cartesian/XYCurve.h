@@ -31,7 +31,6 @@
 #define XYCURVE_H
 
 #include "Curve.h"
-#include "Symbol.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "backend/core/AbstractColumn.h"
@@ -42,6 +41,7 @@
 #include <QFont>
 #include <QPen>
 
+class Symbol;
 class XYCurvePrivate;
 
 class XYCurve: public WorksheetElement, public Curve {
@@ -98,16 +98,11 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
 
+	Symbol* symbol() const;
+
 	BASIC_D_ACCESSOR_DECL(DropLineType, dropLineType, DropLineType)
 	CLASS_D_ACCESSOR_DECL(QPen, dropLinePen, DropLinePen)
 	BASIC_D_ACCESSOR_DECL(qreal, dropLineOpacity, DropLineOpacity)
-
-	BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolsStyle, SymbolsStyle)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolsRotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolsSize)
-	CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush)
-	CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen)
 
 	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)
@@ -230,14 +225,6 @@ signals:
 	void dropLineTypeChanged(XYCurve::DropLineType);
 	void dropLinePenChanged(const QPen&);
 	void dropLineOpacityChanged(qreal);
-
-	//Symbol-Tab
-	void symbolsStyleChanged(Symbol::Style);
-	void symbolsSizeChanged(qreal);
-	void symbolsRotationAngleChanged(qreal);
-	void symbolsOpacityChanged(qreal);
-	void symbolsBrushChanged(QBrush);
-	void symbolsPenChanged(const QPen&);
 
 	//Values-Tab
 	void valuesTypeChanged(XYCurve::ValuesType);

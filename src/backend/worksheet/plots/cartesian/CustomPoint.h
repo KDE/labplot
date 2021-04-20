@@ -31,12 +31,12 @@
 #include <QPen>
 
 #include "backend/lib/macros.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/WorksheetElement.h"
 
-class QBrush;
-class CustomPointPrivate;
 class CartesianPlot;
+class CustomPointPrivate;
+class Symbol;
+class QBrush;
 
 class CustomPoint : public WorksheetElement {
 	Q_OBJECT
@@ -53,12 +53,7 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 
 	BASIC_D_ACCESSOR_DECL(QPointF, position, Position)
-	BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolStyle, SymbolStyle)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolOpacity, SymbolOpacity)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolRotationAngle, SymbolRotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolSize, SymbolSize)
-	CLASS_D_ACCESSOR_DECL(QBrush, symbolBrush, SymbolBrush)
-	CLASS_D_ACCESSOR_DECL(QPen, symbolPen, SymbolPen)
+	Symbol* symbol() const;
 
 	void setVisible(bool on) override;
 	bool isVisible() const override;
@@ -88,13 +83,6 @@ signals:
 	void positionChanged(const QPointF&);
 	void visibleChanged(bool);
 	void changed();
-
-	void symbolStyleChanged(Symbol::Style);
-	void symbolSizeChanged(qreal);
-	void symbolRotationAngleChanged(qreal);
-	void symbolOpacityChanged(qreal);
-	void symbolBrushChanged(QBrush);
-	void symbolPenChanged(const QPen&);
 };
 
 #endif

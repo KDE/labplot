@@ -36,6 +36,8 @@
 #include "Symbol.h"
 #include "SymbolPrivate.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/worksheet/Worksheet.h"
 
 #include <KLocalizedString>
 #include <math.h>
@@ -44,7 +46,19 @@
 Symbol::Symbol(const QString& name) : AbstractAspect(name, AspectType::AbstractAspect),
 	d_ptr(new SymbolPrivate(this)) {
 
-// 	init();
+}
+
+void Symbol::init(const KConfigGroup& group) {
+	Q_D(Symbol);
+	d->style = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::Circle);
+	d->size = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rotationAngle = group.readEntry("SymbolRotation", 0.0);
+	d->opacity = group.readEntry("SymbolOpacity", 1.0);
+	d->brush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
+	d->brush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::red)) );
+	d->pen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
+	d->pen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
+	d->pen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
 }
 
 //##############################################################################
@@ -56,7 +70,6 @@ BASIC_SHARED_D_READER_IMPL(Symbol, qreal, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(Symbol, qreal, size, size)
 BASIC_SHARED_D_READER_IMPL(Symbol, QBrush, brush, brush)
 BASIC_SHARED_D_READER_IMPL(Symbol, QPen, pen, pen)
-
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################
@@ -111,15 +124,78 @@ SymbolPrivate::SymbolPrivate(Symbol* owner) : q(owner) {
 }
 
 QString SymbolPrivate::name() const {
-	return q->name();
+	return q->parentAspect()->name();
 }
 
 void SymbolPrivate::updateSymbols() {
-
+	emit q->updateRequested();
 }
 
 void SymbolPrivate::updatePixmap() {
+	emit q->updatePixmapRequested();
+}
 
+//##############################################################################
+//##################  Serialization/Deserialization  ###########################
+//##############################################################################
+//! Save as XML
+void Symbol::save(QXmlStreamWriter* writer) const {
+	Q_D(const Symbol);
+
+	if (parentAspect()->type() == AspectType::CustomPoint)
+		writer->writeStartElement("symbol");
+	else
+		writer->writeStartElement("symbols"); //keep the backward compatibility for "symbols" used in XYCurve and Histogram
+
+	writer->writeAttribute("symbolsStyle", QString::number(static_cast<int>(d->style)));
+	writer->writeAttribute("opacity", QString::number(d->opacity));
+	writer->writeAttribute("rotation", QString::number(d->rotationAngle));
+	writer->writeAttribute("size", QString::number(d->size));
+	WRITE_QBRUSH(d->brush);
+	WRITE_QPEN(d->pen);
+	writer->writeEndElement(); //close "Symbol" section
+}
+
+//! Load from XML
+bool Symbol::load(XmlStreamReader* reader, bool preview) {
+
+	if (preview)
+		return true;
+	Q_D(Symbol);
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
+	QString str;
+	const auto& attribs = reader->attributes();
+	READ_INT_VALUE("symbolsStyle", style, Symbol::Style);
+	READ_DOUBLE_VALUE("opacity", opacity);
+	READ_DOUBLE_VALUE("rotation", rotationAngle);
+	READ_DOUBLE_VALUE("size", size);
+	READ_QBRUSH(d->brush);
+	READ_QPEN(d->pen);
+
+	return true;
+}
+
+//##############################################################################
+//#########################  Theme management ##################################
+//##############################################################################
+void Symbol::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor) {
+	setOpacity(group.readEntry("SymbolOpacity", 1.0));
+	QBrush brush;
+	brush.setStyle((Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern));
+	brush.setColor(themeColor);
+	setBrush(brush);
+
+	QPen p;
+	p.setStyle((Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine));
+	p.setColor(themeColor);
+	p.setWidthF(group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)));
+	setPen(p);
+}
+
+void Symbol::saveThemeConfig(const KConfigGroup& group) const {
+	Q_UNUSED(group)
+	//TODO:
+// 	group.writeEntry("SymbolOpacity", opacity());
 }
 
 //*************************************************************

@@ -34,6 +34,7 @@
 class CustomPoint;
 class CartesianPlot;
 class CartesianCoordinateSystem;
+class Symbol;
 
 class CustomPointPrivate: public QGraphicsItem {
 public:
@@ -57,14 +58,7 @@ public:
 
 	QPointF position; //position in plot coordinates
 	QPointF positionScene; //position in scene coordinates
-
-	//symbol
-	Symbol::Style symbolStyle;
-	QBrush symbolBrush;
-	QPen symbolPen;
-	qreal symbolOpacity;
-	qreal symbolRotationAngle;
-	qreal symbolSize;
+	Symbol* symbol{nullptr};
 
 	//reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;

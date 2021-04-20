@@ -40,6 +40,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -97,15 +98,13 @@ void Histogram::init() {
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->lineOpacity = group.readEntry("LineOpacity", 1.0);
 
-	d->symbolsStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::NoSymbols);
-	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
-	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
-	d->symbolsBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
-	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
-	d->symbolsPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
-	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
-	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
+	//initialize the symbol
+	d->symbol = new Symbol(QString());
+	addChild(d->symbol);
+	d->symbol->setHidden(true);
+	connect(d->symbol, &Symbol::updateRequested, [=]{d->updateSymbols();});
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
+	d->symbol->init(group);
 
 	d->valuesType = (Histogram::ValuesType) group.readEntry("ValuesType", (int)Histogram::NoValues);
 	d->valuesColumn = nullptr;
@@ -214,12 +213,10 @@ BASIC_SHARED_D_READER_IMPL(Histogram, QPen, linePen, linePen)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, lineOpacity, lineOpacity)
 
 //symbols
-BASIC_SHARED_D_READER_IMPL(Histogram, Symbol::Style, symbolsStyle, symbolsStyle)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, symbolsOpacity, symbolsOpacity)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, symbolsRotationAngle, symbolsRotationAngle)
-BASIC_SHARED_D_READER_IMPL(Histogram, qreal, symbolsSize, symbolsSize)
-BASIC_SHARED_D_READER_IMPL(Histogram, QBrush, symbolsBrush, symbolsBrush)
-BASIC_SHARED_D_READER_IMPL(Histogram, QPen, symbolsPen, symbolsPen)
+Symbol* Histogram::symbol() const {
+	Q_D(const Histogram);
+	return d->symbol;
+}
 
 //values
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
@@ -420,49 +417,6 @@ void Histogram::setLineOpacity(qreal opacity) {
 	Q_D(Histogram);
 	if (opacity != d->lineOpacity)
 		exec(new HistogramSetLineOpacityCmd(d, opacity, ki18n("%1: set line opacity")));
-}
-
-// Symbols
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsStyle, Symbol::Style, symbolsStyle, updateSymbols)
-void Histogram::setSymbolsStyle(Symbol::Style style) {
-	Q_D(Histogram);
-	if (style != d->symbolsStyle)
-		exec(new HistogramSetSymbolsStyleCmd(d, style, ki18n("%1: set symbol style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsSize, qreal, symbolsSize, updateSymbols)
-void Histogram::setSymbolsSize(qreal size) {
-	Q_D(Histogram);
-	if (!qFuzzyCompare(1 + size, 1 + d->symbolsSize))
-		exec(new HistogramSetSymbolsSizeCmd(d, size, ki18n("%1: set symbol size")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsRotationAngle, qreal, symbolsRotationAngle, updateSymbols)
-void Histogram::setSymbolsRotationAngle(qreal angle) {
-	Q_D(Histogram);
-	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
-		exec(new HistogramSetSymbolsRotationAngleCmd(d, angle, ki18n("%1: rotate symbols")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsBrush, QBrush, symbolsBrush, updatePixmap)
-void Histogram::setSymbolsBrush(const QBrush &brush) {
-	Q_D(Histogram);
-	if (brush != d->symbolsBrush)
-		exec(new HistogramSetSymbolsBrushCmd(d, brush, ki18n("%1: set symbol filling")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsPen, QPen, symbolsPen, updateSymbols)
-void Histogram::setSymbolsPen(const QPen &pen) {
-	Q_D(Histogram);
-	if (pen != d->symbolsPen)
-		exec(new HistogramSetSymbolsPenCmd(d, pen, ki18n("%1: set symbol outline style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetSymbolsOpacity, qreal, symbolsOpacity, updatePixmap)
-void Histogram::setSymbolsOpacity(qreal opacity) {
-	Q_D(Histogram);
-	if (opacity != d->symbolsOpacity)
-		exec(new HistogramSetSymbolsOpacityCmd(d, opacity, ki18n("%1: set symbols opacity")));
 }
 
 //Values
@@ -956,7 +910,6 @@ void HistogramPrivate::recalcHistogram() {
 		case Histogram::Scott: {
 			const double sigma = static_cast<const Column*>(dataColumn)->statistics().standardDeviation;
 			const double width = 3.5*sigma/cbrt(count);
-			DEBUG("blablub " << sigma << "  " << width << "  " <<(binRangesMax - binRangesMin)/width);
 			m_bins = (size_t)(binRangesMax - binRangesMin)/width;
 			break;
 		}
@@ -1171,16 +1124,16 @@ void HistogramPrivate::horizontalHistogram() {
 
 void HistogramPrivate::updateSymbols() {
 	symbolsPath = QPainterPath();
-	if (symbolsStyle != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
+	if (symbol->style() != Symbol::Style::NoSymbols) {
+		QPainterPath path = Symbol::pathFromStyle(symbol->style());
 
 		QTransform trafo;
-		trafo.scale(symbolsSize, symbolsSize);
+		trafo.scale(symbol->size(), symbol->size());
 		path = trafo.map(path);
 		trafo.reset();
 
-		if (symbolsRotationAngle != 0) {
-			trafo.rotate(symbolsRotationAngle);
+		if (symbol->rotationAngle() != 0) {
+			trafo.rotate(symbol->rotationAngle());
 			path = trafo.map(path);
 		}
 
@@ -1409,7 +1362,7 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 	if (lineType != Histogram::NoLine)
 		curveShape.addPath(WorksheetElement::shapeFromPath(linePath, linePen));
 
-	if (symbolsStyle != Symbol::Style::NoSymbols)
+	if (symbol->style() != Symbol::Style::NoSymbols)
 		curveShape.addPath(symbolsPath);
 
 	if (valuesType != Histogram::NoValues)
@@ -1446,10 +1399,10 @@ void HistogramPrivate::draw(QPainter* painter) {
 	}
 
 	//draw symbols
-	if (symbolsStyle != Symbol::Style::NoSymbols) {
-		painter->setOpacity(symbolsOpacity);
-		painter->setPen(symbolsPen);
-		painter->setBrush(symbolsBrush);
+	if (symbol->style() != Symbol::Style::NoSymbols) {
+		painter->setOpacity(symbol->opacity());
+		painter->setPen(symbol->pen());
+		painter->setBrush(symbol->brush());
 		drawSymbols(painter);
 	}
 
@@ -1537,12 +1490,12 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 }
 
 void HistogramPrivate::drawSymbols(QPainter* painter) {
-	QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
+	QPainterPath path = Symbol::pathFromStyle(symbol->style());
 
 	QTransform trafo;
-	trafo.scale(symbolsSize, symbolsSize);
-	if (symbolsRotationAngle != 0)
-		trafo.rotate(-symbolsRotationAngle);
+	trafo.scale(symbol->size(), symbol->size());
+	if (symbol->rotationAngle() != 0)
+		trafo.rotate(-symbol->rotationAngle());
 
 	path = trafo.map(path);
 
@@ -1752,14 +1705,7 @@ void Histogram::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//Symbols
-	writer->writeStartElement( "symbols" );
-	writer->writeAttribute( "symbolsStyle", QString::number(static_cast<int>(d->symbolsStyle)) );
-	writer->writeAttribute( "opacity", QString::number(d->symbolsOpacity) );
-	writer->writeAttribute( "rotation", QString::number(d->symbolsRotationAngle) );
-	writer->writeAttribute( "size", QString::number(d->symbolsSize) );
-	WRITE_QBRUSH(d->symbolsBrush);
-	WRITE_QPEN(d->symbolsPen);
-	writer->writeEndElement();
+	d->symbol->save(writer);
 
 	//Values
 	writer->writeStartElement("values");
@@ -1847,15 +1793,7 @@ bool Histogram::load(XmlStreamReader* reader, bool preview) {
 			READ_QPEN(d->linePen);
 			READ_DOUBLE_VALUE("opacity", lineOpacity);
 		} else if (!preview && reader->name() == "symbols") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("symbolsStyle", symbolsStyle, Symbol::Style);
-			READ_DOUBLE_VALUE("opacity", symbolsOpacity);
-			READ_DOUBLE_VALUE("rotation", symbolsRotationAngle);
-			READ_DOUBLE_VALUE("size", symbolsSize);
-
-			READ_QBRUSH(d->symbolsBrush);
-			READ_QPEN(d->symbolsPen);
+			d->symbol->load(reader, preview);
 		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 
@@ -1967,16 +1905,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
 
 	//Symbol
-	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", 1.0));
-
-	QBrush brush;
-	brush.setStyle((Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern));
-	brush.setColor(themeColor);
-	this->setSymbolsBrush(brush);
-	p.setStyle((Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine));
-	p.setColor(themeColor);
-	p.setWidthF(group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)));
-	this->setSymbolsPen(p);
+	d->symbol->loadThemeConfig(group, themeColor);
 
 	//Values
 	this->setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
@@ -2025,7 +1954,8 @@ void Histogram::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("FillingType",(int) this->fillingType());
 
 	//Symbol
-	group.writeEntry("SymbolOpacity", this->symbolsOpacity());
+	Q_D(const Histogram);
+	d->symbol->saveThemeConfig(group);
 
 	//Values
 	group.writeEntry("ValuesOpacity", this->valuesOpacity());

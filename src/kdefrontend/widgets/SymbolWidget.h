@@ -39,9 +39,11 @@ public:
 	explicit SymbolWidget(QWidget*);
 
 	void setSymbols(QList<Symbol*>);
+	void updateLocale();
+
 	void load();
-	void loadConfig(KConfigGroup&);
-	void saveConfig(KConfigGroup&);
+	void loadConfig(const KConfigGroup&);
+	void saveConfig(KConfigGroup&) const;
 
 private:
 	Ui::SymbolWidget ui;

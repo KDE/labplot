@@ -39,6 +39,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <KLocalizedString>
 #include <QDateTime>
@@ -62,7 +63,7 @@ XYAnalysisCurve::~XYAnalysisCurve() = default;
 void XYAnalysisCurve::init() {
 	Q_D(XYAnalysisCurve);
 	d->lineType = XYCurve::LineType::Line;
-	d->symbolsStyle = Symbol::Style::NoSymbols;
+	d->symbol->setStyle(Symbol::Style::NoSymbols);
 }
 
 void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,

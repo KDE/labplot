@@ -34,6 +34,7 @@
 #include <QPainterPath>
 
 class SymbolPrivate;
+class KConfigGroup;
 
 class Symbol : public AbstractAspect {
 	Q_OBJECT
@@ -48,6 +49,12 @@ public:
 	static QString nameFromStyle(Symbol::Style);
 
 	explicit Symbol(const QString &name);
+	void init(const KConfigGroup&);
+
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool preview) override;
+	void loadThemeConfig(const KConfigGroup&, const QColor&);
+	void saveThemeConfig(const KConfigGroup&) const;
 
 	BASIC_D_ACCESSOR_DECL(Symbol::Style, style, Style)
 	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
@@ -71,6 +78,9 @@ signals:
 	void opacityChanged(qreal);
 	void brushChanged(QBrush);
 	void penChanged(const QPen&);
+
+	void updateRequested();
+	void updatePixmapRequested();
 };
 
 #endif

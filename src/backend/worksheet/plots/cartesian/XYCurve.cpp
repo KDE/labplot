@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2021 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -42,6 +42,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
@@ -100,15 +101,13 @@ void XYCurve::init() {
 	d->dropLinePen.setWidthF( group.readEntry("DropLineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->dropLineOpacity = group.readEntry("DropLineOpacity", 1.0);
 
-	d->symbolsStyle = (Symbol::Style)group.readEntry("SymbolStyle", static_cast<int>(Symbol::Style::NoSymbols));
-	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
-	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
-	d->symbolsBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
-	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
-	d->symbolsPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
-	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
-	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
+	//initialize the symbol
+	d->symbol = new Symbol(QString());
+	addChild(d->symbol);
+	d->symbol->setHidden(true);
+	connect(d->symbol, &Symbol::updateRequested, [=]{d->updateSymbols();});
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
+	d->symbol->init(group);
 
 	d->valuesType = (ValuesType) group.readEntry("ValuesType", static_cast<int>(ValuesType::NoValues));
 	d->valuesPosition = (ValuesPosition) group.readEntry("ValuesPosition", static_cast<int>(ValuesPosition::Above));
@@ -260,12 +259,10 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, dropLinePen, dropLinePen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, dropLineOpacity, dropLineOpacity)
 
 //symbols
-BASIC_SHARED_D_READER_IMPL(XYCurve, Symbol::Style, symbolsStyle, symbolsStyle)
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsOpacity, symbolsOpacity)
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsRotationAngle, symbolsRotationAngle)
-BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, symbolsSize, symbolsSize)
-BASIC_SHARED_D_READER_IMPL(XYCurve, QBrush, symbolsBrush, symbolsBrush)
-BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, symbolsPen, symbolsPen)
+Symbol* XYCurve::symbol() const {
+	Q_D(const XYCurve);
+	return d->symbol;
+}
 
 //values
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ValuesType, valuesType, valuesType)
@@ -415,49 +412,6 @@ void XYCurve::setDropLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->dropLineOpacity)
 		exec(new XYCurveSetDropLineOpacityCmd(d, opacity, ki18n("%1: set drop line opacity")));
-}
-
-// Symbols-Tab
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsStyle, Symbol::Style, symbolsStyle, retransform)
-void XYCurve::setSymbolsStyle(Symbol::Style style) {
-	Q_D(XYCurve);
-	if (style != d->symbolsStyle)
-		exec(new XYCurveSetSymbolsStyleCmd(d, style, ki18n("%1: set symbol style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsSize, qreal, symbolsSize, updateSymbols)
-void XYCurve::setSymbolsSize(qreal size) {
-	Q_D(XYCurve);
-	if (!qFuzzyCompare(1 + size, 1 + d->symbolsSize))
-		exec(new XYCurveSetSymbolsSizeCmd(d, size, ki18n("%1: set symbol size")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsRotationAngle, qreal, symbolsRotationAngle, updateSymbols)
-void XYCurve::setSymbolsRotationAngle(qreal angle) {
-	Q_D(XYCurve);
-	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
-		exec(new XYCurveSetSymbolsRotationAngleCmd(d, angle, ki18n("%1: rotate symbols")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsBrush, QBrush, symbolsBrush, updatePixmap)
-void XYCurve::setSymbolsBrush(const QBrush &brush) {
-	Q_D(XYCurve);
-	if (brush != d->symbolsBrush)
-		exec(new XYCurveSetSymbolsBrushCmd(d, brush, ki18n("%1: set symbol filling")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsPen, QPen, symbolsPen, updateSymbols)
-void XYCurve::setSymbolsPen(const QPen &pen) {
-	Q_D(XYCurve);
-	if (pen != d->symbolsPen)
-		exec(new XYCurveSetSymbolsPenCmd(d, pen, ki18n("%1: set symbol outline style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetSymbolsOpacity, qreal, symbolsOpacity, updatePixmap)
-void XYCurve::setSymbolsOpacity(qreal opacity) {
-	Q_D(XYCurve);
-	if (opacity != d->symbolsOpacity)
-		exec(new XYCurveSetSymbolsOpacityCmd(d, opacity, ki18n("%1: set symbols opacity")));
 }
 
 //Values-Tab
@@ -772,11 +726,11 @@ void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pa
 	Q_UNUSED(pageResize);
 	Q_D(const XYCurve);
 
-	setSymbolsSize(d->symbolsSize * horizontalRatio);
+	d->symbol->setSize(d->symbol->size() * horizontalRatio);
 
-	QPen pen = d->symbolsPen;
+	QPen pen = d->symbol->pen();
 	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.);
-	setSymbolsPen(pen);
+	d->symbol->setPen(pen);
 
 	pen = d->linePen;
 	pen.setWidthF(pen.widthF() * (horizontalRatio + verticalRatio) / 2.);
@@ -1735,16 +1689,16 @@ void XYCurvePrivate::updateSymbols() {
 	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateSymbols()");
 #endif
 	symbolsPath = QPainterPath();
-	if (symbolsStyle != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
+	if (symbol->style() != Symbol::Style::NoSymbols) {
+		QPainterPath path = Symbol::pathFromStyle(symbol->style());
 
 		QTransform trafo;
-		trafo.scale(symbolsSize, symbolsSize);
+		trafo.scale(symbol->size(), symbol->size());
 		path = trafo.map(path);
 		trafo.reset();
 
-		if (symbolsRotationAngle != 0) {
-			trafo.rotate(symbolsRotationAngle);
+		if (symbol->rotationAngle() != 0) {
+			trafo.rotate(symbol->rotationAngle());
 			path = trafo.map(path);
 		}
 
@@ -2401,7 +2355,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 	int rowCount{0};
 	if (lineType != XYCurve::LineType::NoLine)
 		rowCount = m_lines.count();
-	else if (symbolsStyle != Symbol::Style::NoSymbols)
+	else if (symbol->style() != Symbol::Style::NoSymbols)
 		rowCount = m_scenePoints.size();
 	else
 		return false;
@@ -2728,7 +2682,7 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 	if (dropLineType != XYCurve::DropLineType::NoDropLine)
 		curveShape.addPath(WorksheetElement::shapeFromPath(dropLinePath, dropLinePen));
 
-	if (symbolsStyle != Symbol::Style::NoSymbols)
+	if (symbol->style() != Symbol::Style::NoSymbols)
 		curveShape.addPath(symbolsPath);
 
 	if (valuesType != XYCurve::ValuesType::NoValues)
@@ -2787,10 +2741,10 @@ void XYCurvePrivate::draw(QPainter* painter) {
 	}
 
 	//draw symbols
-	if (symbolsStyle != Symbol::Style::NoSymbols) {
-		painter->setOpacity(symbolsOpacity);
-		painter->setPen(symbolsPen);
-		painter->setBrush(symbolsBrush);
+	if (symbol->style() != Symbol::Style::NoSymbols) {
+		painter->setOpacity(symbol->opacity());
+		painter->setPen(symbol->pen());
+		painter->setBrush(symbol->brush());
 		drawSymbols(painter);
 	}
 
@@ -2897,13 +2851,13 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 	Drawing of symbolsPath is very slow, so we draw every symbol in the loop which is much faster (factor 10)
 */
 void XYCurvePrivate::drawSymbols(QPainter* painter) {
-	QPainterPath path = Symbol::pathFromStyle(symbolsStyle);
+	QPainterPath path = Symbol::pathFromStyle(symbol->style());
 
 	QTransform trafo;
-	trafo.scale(symbolsSize, symbolsSize);
+	trafo.scale(symbol->size(), symbol->size());
 
-	if (symbolsRotationAngle != 0)
-		trafo.rotate(-symbolsRotationAngle);
+	if (symbol->rotationAngle() != 0)
+		trafo.rotate(-symbol->rotationAngle());
 
 	path = trafo.map(path);
 
@@ -3095,14 +3049,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//Symbols
-	writer->writeStartElement( "symbols" );
-	writer->writeAttribute( "symbolsStyle", QString::number(static_cast<int>(d->symbolsStyle)) );
-	writer->writeAttribute( "opacity", QString::number(d->symbolsOpacity) );
-	writer->writeAttribute( "rotation", QString::number(d->symbolsRotationAngle) );
-	writer->writeAttribute( "size", QString::number(d->symbolsSize) );
-	WRITE_QBRUSH(d->symbolsBrush);
-	WRITE_QPEN(d->symbolsPen);
-	writer->writeEndElement();
+	d->symbol->save(writer);
 
 	//Values
 	writer->writeStartElement( "values" );
@@ -3204,15 +3151,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("opacity", dropLineOpacity);
 
 		} else if (!preview && reader->name() == "symbols") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("symbolsStyle", symbolsStyle, Symbol::Style);
-			READ_DOUBLE_VALUE("opacity", symbolsOpacity);
-			READ_DOUBLE_VALUE("rotation", symbolsRotationAngle);
-			READ_DOUBLE_VALUE("size", symbolsSize);
-
-			READ_QBRUSH(d->symbolsBrush);
-			READ_QPEN(d->symbolsPen);
+			d->symbol->load(reader, preview);
 		} else if (!preview && reader->name() == "values") {
 			attribs = reader->attributes();
 
@@ -3345,15 +3284,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	this->setDropLineOpacity(group.readEntry("DropLineOpacity", 1.0));
 
 	//Symbol
-	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", 1.0));
-	QBrush brush;
-	brush.setStyle((Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern));
-	brush.setColor(themeColor);
-	this->setSymbolsBrush(brush);
-	p.setStyle((Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine));
-	p.setColor(themeColor);
-	p.setWidthF(group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)));
-	this->setSymbolsPen(p);
+	d->symbol->loadThemeConfig(group, themeColor);
 
 	//Values
 	this->setValuesOpacity(group.readEntry("ValuesOpacity", 1.0));
@@ -3409,7 +3340,8 @@ void XYCurve::saveThemeConfig(const KConfig& config) {
 	group.writeEntry("LineWidth", this->linePen().widthF());
 
 	//Symbol
-	group.writeEntry("SymbolOpacity", this->symbolsOpacity());
+	Q_D(const XYCurve);
+	d->symbol->saveThemeConfig(group);
 
 	//Values
 	group.writeEntry("ValuesOpacity", this->valuesOpacity());

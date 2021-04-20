@@ -373,7 +373,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	QPen pen = curve->linePen();
 	pen.setStyle(Qt::SolidLine);
 	curve->setLinePen(pen);
-	curve->setSymbolsStyle(Symbol::Style::NoSymbols);
+	curve->symbol()->setStyle(Symbol::Style::NoSymbols);
 	curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
@@ -432,7 +432,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	curve->suppressRetransform(true);
 	plot->addChild(curve);
 	curve->setLinePen(Qt::NoPen);
-	curve->setSymbolsStyle(Symbol::Style::Circle);
+	curve->symbol()->setStyle(Symbol::Style::Circle);
 	curve->setFillingPosition(XYCurve::FillingPosition::NoFilling);
 	curve->setXColumn(xColumn);
 	curve->setYColumn(yColumn);
@@ -468,7 +468,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	QPen pen = curve2->linePen();
 	pen.setStyle(Qt::SolidLine);
 	curve2->setLinePen(pen);
-	curve2->setSymbolsStyle(Symbol::Style::NoSymbols);
+	curve2->symbol()->setStyle(Symbol::Style::NoSymbols);
 	curve2->setFillingPosition(XYCurve::FillingPosition::NoFilling);
 	curve2->setXColumn(xColumn2);
 	curve2->setYColumn(yColumn2);

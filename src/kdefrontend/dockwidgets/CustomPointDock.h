@@ -35,6 +35,7 @@
 
 class AbstractAspect;
 class CustomPoint;
+class SymbolWidget;
 class KConfig;
 
 class CustomPointDock : public BaseDock {
@@ -47,15 +48,14 @@ public:
 
 private:
 	Ui::CustomPointDock ui;
-	QList<CustomPoint*> m_pointsList;
+	QList<CustomPoint*> m_points;
 	CustomPoint* m_point{nullptr};
+	SymbolWidget* symbolWidget{nullptr};
 
 	void load();
 	void loadConfig(KConfig&);
 
 private slots:
-	void init();
-
 	//SLOTs for changes triggered in CustomPointDock
 	//General-Tab
 	void positionXChanged();
@@ -63,31 +63,12 @@ private slots:
 	void positionYChanged();
 	void visibilityChanged(bool);
 
-	//Symbol-tab
-	void symbolStyleChanged(int);
-	void symbolSizeChanged(double);
-	void symbolRotationChanged(int);
-	void symbolOpacityChanged(int);
-	void symbolFillingStyleChanged(int);
-	void symbolFillingColorChanged(const QColor&);
-	void symbolBorderStyleChanged(int);
-	void symbolBorderColorChanged(const QColor&);
-	void symbolBorderWidthChanged(double);
-
 	//SLOTs for changes triggered in CustomPoint
 	//General-Tab
 	void pointDescriptionChanged(const AbstractAspect*);
 	void pointPositionChanged(QPointF);
 	void updatePlotRanges() const override;
 	void pointVisibilityChanged(bool);
-
-	//Symbol-Tab
-	void pointSymbolStyleChanged(Symbol::Style);
-	void pointSymbolSizeChanged(qreal);
-	void pointSymbolRotationAngleChanged(qreal);
-	void pointSymbolOpacityChanged(qreal);
-	void pointSymbolBrushChanged(const QBrush&);
-	void pointSymbolPenChanged(const QPen&);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);

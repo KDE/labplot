@@ -39,6 +39,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <QIcon>
 #include <KLocalizedString>
@@ -70,7 +71,7 @@ void XYEquationCurve::init() {
 
 	//TODO: read from the saved settings for XYEquationCurve?
 	d->lineType = XYCurve::LineType::Line;
-	d->symbolsStyle = Symbol::Style::NoSymbols;
+	d->symbol->setStyle(Symbol::Style::NoSymbols);
 
 	setUndoAware(false);
 	suppressRetransform(true);

@@ -768,8 +768,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				//for the brush, use the histogram filling or symbols filling or no brush
 				if (hist->fillingEnabled())
 					painter->setBrush(QBrush(hist->fillingFirstColor(), hist->fillingBrushStyle()));
-				else if (hist->symbolsStyle() != Symbol::Style::NoSymbols)
-					painter->setBrush(hist->symbolsBrush());
+				else if (hist->symbol()->style() != Symbol::Style::NoSymbols)
+					painter->setBrush(hist->symbol()->brush());
 				else
 					painter->setBrush(Qt::NoBrush);
 
@@ -803,8 +803,8 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 
 				//curve's error bars for x
 				float errorBarsSize = Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point);
-				if (curve->symbolsStyle()!=Symbol::Style::NoSymbols && errorBarsSize<curve->symbolsSize()*1.4)
-					errorBarsSize = curve->symbolsSize()*1.4;
+				if (curve->symbol()->style()!=Symbol::Style::NoSymbols && errorBarsSize<curve->symbol()->size()*1.4)
+					errorBarsSize = curve->symbol()->size()*1.4;
 
 				switch (curve->errorBarsType()) {
 				case XYCurve::ErrorBarsType::Simple:
@@ -847,19 +847,20 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 			}
 
 			//curve's symbol
-			if (curve->symbolsStyle() != Symbol::Style::NoSymbols) {
-				painter->setOpacity(curve->symbolsOpacity());
-				painter->setBrush(curve->symbolsBrush());
-				painter->setPen(curve->symbolsPen());
+			const auto* symbol = curve->symbol();
+			if (symbol->style() != Symbol::Style::NoSymbols) {
+				painter->setOpacity(symbol->opacity());
+				painter->setBrush(symbol->brush());
+				painter->setPen(symbol->pen());
 
-				QPainterPath path = Symbol::pathFromStyle(curve->symbolsStyle());
+				QPainterPath path = Symbol::pathFromStyle(symbol->style());
 				QTransform trafo;
-				trafo.scale(curve->symbolsSize(), curve->symbolsSize());
+				trafo.scale(symbol->size(), symbol->size());
 				path = trafo.map(path);
 
-				if (curve->symbolsRotationAngle() != 0) {
+				if (symbol->rotationAngle() != 0) {
 					trafo.reset();
-					trafo.rotate(curve->symbolsRotationAngle());
+					trafo.rotate(symbol->rotationAngle());
 					path = trafo.map(path);
 				}
 

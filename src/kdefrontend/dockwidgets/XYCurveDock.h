@@ -3,7 +3,7 @@
     Project          : LabPlot
     Description      : widget for curve properties
     --------------------------------------------------------------------
-    Copyright         : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright         : (C) 2010-2021 Alexander Semke (alexander.semke@web.de)
     Copyright         : (C) 2013 Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -32,15 +32,16 @@
 
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/core/AbstractColumn.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/PlotArea.h"
+
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
 
-class TreeViewComboBox;
 class AspectTreeModel;
 class Column;
+class SymbolWidget;
+class TreeViewComboBox;
 class QLineEdit;
 
 class XYCurveDock : public BaseDock {
@@ -81,6 +82,7 @@ protected:
 	QList<XYCurve*> m_curvesList;
 	XYCurve* m_curve{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
+	SymbolWidget* symbolWidget{nullptr};
 
 public slots:
 	void visibilityChanged(bool);
@@ -108,17 +110,6 @@ private slots:
 	void dropLineColorChanged(const QColor&);
 	void dropLineWidthChanged(double);
 	void dropLineOpacityChanged(int);
-
-	//Symbol-tab
-  	void symbolsStyleChanged(int);
-	void symbolsSizeChanged(double);
-	void symbolsRotationChanged(int);
-	void symbolsOpacityChanged(int);
-	void symbolsFillingStyleChanged(int);
-	void symbolsFillingColorChanged(const QColor&);
-	void symbolsBorderStyleChanged(int);
-	void symbolsBorderColorChanged(const QColor&);
-	void symbolsBorderWidthChanged(double);
 
 	//Values-Tab
 	void valuesTypeChanged(int);
@@ -178,14 +169,6 @@ private slots:
 	void curveDropLineTypeChanged(XYCurve::DropLineType);
 	void curveDropLinePenChanged(const QPen&);
 	void curveDropLineOpacityChanged(qreal);
-
-	//Symbol-Tab
-	void curveSymbolsStyleChanged(Symbol::Style);
-	void curveSymbolsSizeChanged(qreal);
-	void curveSymbolsRotationAngleChanged(qreal);
-	void curveSymbolsOpacityChanged(qreal);
-	void curveSymbolsBrushChanged(const QBrush&);
-	void curveSymbolsPenChanged(const QPen&);
 
 	//Values-Tab
 	void curveValuesTypeChanged(XYCurve::ValuesType);

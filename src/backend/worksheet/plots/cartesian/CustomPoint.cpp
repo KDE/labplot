@@ -4,7 +4,7 @@
 	Description          : Custom user-defined point on the plot
 	--------------------------------------------------------------------
 	Copyright            : (C) 2015 Ankit Wagadre (wagadre.ankit@gmail.com)
-	Copyright            : (C) 2015-2020 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2015-2021 Alexander Semke (alexander.semke@web.de)
 	Copyright            : (C) 2020 Martin Marmsoler (martin.marmsoler@gmail.com)
 	Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
@@ -32,6 +32,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 
@@ -42,7 +43,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
-
 
 /**
  * \class CustomPoint
@@ -74,20 +74,16 @@ void CustomPoint::init() {
 	d->position.setX(m_plot->xRange(cSystem->xIndex()).center());
 	d->position.setY(m_plot->yRange(cSystem->yIndex()).center());
 
+	//initialize the symbol
+	d->symbol = new Symbol(QString());
+	addChild(d->symbol);
+	d->symbol->setHidden(true);
+	connect(d->symbol, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=]{d->update();});
 	KConfig config;
-	KConfigGroup group = config.group("CustomPoint");
+	d->symbol->init(config.group("CustomPoint"));
 
-	d->symbolStyle = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::Circle);
-	d->symbolSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->symbolRotationAngle = group.readEntry("SymbolRotation", 0.0);
-	d->symbolOpacity = group.readEntry("SymbolOpacity", 1.0);
-	d->symbolBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
-	d->symbolBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::red)) );
-	d->symbolPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
-	d->symbolPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
-	d->symbolPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
-
-	this->initActions();
+	initActions();
 }
 
 void CustomPoint::initActions() {
@@ -100,7 +96,7 @@ void CustomPoint::initActions() {
     Returns an icon to be used in the project explorer.
 */
 QIcon CustomPoint::icon() const {
-	return  QIcon::fromTheme("draw-cross");
+	return QIcon::fromTheme("draw-cross");
 }
 
 QMenu* CustomPoint::createContextMenu() {
@@ -137,13 +133,10 @@ void CustomPoint::handleResize(double horizontalRatio, double verticalRatio, boo
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(CustomPoint, QPointF, position, position)
 
-//symbols
-BASIC_SHARED_D_READER_IMPL(CustomPoint, Symbol::Style, symbolStyle, symbolStyle)
-BASIC_SHARED_D_READER_IMPL(CustomPoint, qreal, symbolOpacity, symbolOpacity)
-BASIC_SHARED_D_READER_IMPL(CustomPoint, qreal, symbolRotationAngle, symbolRotationAngle)
-BASIC_SHARED_D_READER_IMPL(CustomPoint, qreal, symbolSize, symbolSize)
-BASIC_SHARED_D_READER_IMPL(CustomPoint, QBrush, symbolBrush, symbolBrush)
-BASIC_SHARED_D_READER_IMPL(CustomPoint, QPen, symbolPen, symbolPen)
+Symbol* CustomPoint::symbol() const {
+	Q_D(const CustomPoint);
+	return d->symbol;
+}
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetPosition, QPointF, position, retransform)
@@ -151,49 +144,6 @@ void CustomPoint::setPosition(QPointF position) {
 	Q_D(CustomPoint);
 	if (position != d->position)
 		exec(new CustomPointSetPositionCmd(d, position, ki18n("%1: set position")));
-}
-
-//Symbol
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolStyle, Symbol::Style, symbolStyle, recalcShapeAndBoundingRect)
-void CustomPoint::setSymbolStyle(Symbol::Style style) {
-	Q_D(CustomPoint);
-	if (style != d->symbolStyle)
-		exec(new CustomPointSetSymbolStyleCmd(d, style, ki18n("%1: set symbol style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolSize, qreal, symbolSize, recalcShapeAndBoundingRect)
-void CustomPoint::setSymbolSize(qreal size) {
-	Q_D(CustomPoint);
-	if (!qFuzzyCompare(1 + size, 1 + d->symbolSize))
-		exec(new CustomPointSetSymbolSizeCmd(d, size, ki18n("%1: set symbol size")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolRotationAngle, qreal, symbolRotationAngle, recalcShapeAndBoundingRect)
-void CustomPoint::setSymbolRotationAngle(qreal angle) {
-	Q_D(CustomPoint);
-	if (!qFuzzyCompare(1 + angle, 1 + d->symbolRotationAngle))
-		exec(new CustomPointSetSymbolRotationAngleCmd(d, angle, ki18n("%1: rotate symbols")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolBrush, QBrush, symbolBrush, update)
-void CustomPoint::setSymbolBrush(const QBrush &brush) {
-	Q_D(CustomPoint);
-	if (brush != d->symbolBrush)
-		exec(new CustomPointSetSymbolBrushCmd(d, brush, ki18n("%1: set symbol filling")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolPen, QPen, symbolPen, recalcShapeAndBoundingRect)
-void CustomPoint::setSymbolPen(const QPen &pen) {
-	Q_D(CustomPoint);
-	if (pen != d->symbolPen)
-		exec(new CustomPointSetSymbolPenCmd(d, pen, ki18n("%1: set symbol outline style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(CustomPoint, SetSymbolOpacity, qreal, symbolOpacity, update)
-void CustomPoint::setSymbolOpacity(qreal opacity) {
-	Q_D(CustomPoint);
-	if (opacity != d->symbolOpacity)
-		exec(new CustomPointSetSymbolOpacityCmd(d, opacity, ki18n("%1: set symbol opacity")));
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(CustomPoint, SetVisible, bool, swapVisible, update);
@@ -302,20 +252,20 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 
 	pointShape = QPainterPath();
-	if (m_visible && symbolStyle != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::pathFromStyle(symbolStyle);
+	if (m_visible && symbol->style() != Symbol::Style::NoSymbols) {
+		QPainterPath path = Symbol::pathFromStyle(symbol->style());
 
 		QTransform trafo;
-		trafo.scale(symbolSize, symbolSize);
+		trafo.scale(symbol->size(), symbol->size());
 		path = trafo.map(path);
 		trafo.reset();
 
-		if (symbolRotationAngle != 0.) {
-			trafo.rotate(symbolRotationAngle);
+		if (symbol->rotationAngle() != 0.) {
+			trafo.rotate(symbol->rotationAngle());
 			path = trafo.map(path);
 		}
 
-		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbolPen));
+		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
 		transformedBoundingRectangle = pointShape.boundingRect();
 	}
 }
@@ -327,10 +277,10 @@ void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 	if (!m_visible)
 		return;
 
-	if (symbolStyle != Symbol::Style::NoSymbols) {
-		painter->setOpacity(symbolOpacity);
-		painter->setPen(symbolPen);
-		painter->setBrush(symbolBrush);
+	if (symbol->style() != Symbol::Style::NoSymbols) {
+		painter->setOpacity(symbol->opacity());
+		painter->setPen(symbol->pen());
+		painter->setBrush(symbol->brush());
 		painter->drawPath(pointShape);
 	}
 
@@ -453,15 +403,7 @@ void CustomPoint::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
-	//Symbols
-	writer->writeStartElement("symbol");
-	writer->writeAttribute( "symbolStyle", QString::number(static_cast<int>(d->symbolStyle)) );
-	writer->writeAttribute( "opacity", QString::number(d->symbolOpacity) );
-	writer->writeAttribute( "rotation", QString::number(d->symbolRotationAngle) );
-	writer->writeAttribute( "size", QString::number(d->symbolSize) );
-	WRITE_QBRUSH(d->symbolBrush);
-	WRITE_QPEN(d->symbolPen);
-	writer->writeEndElement();
+	d->symbol->save(writer);
 
 	writer->writeEndElement(); // close "CustomPoint" section
 }
@@ -510,14 +452,7 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == "symbol") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("symbolStyle", symbolStyle, Symbol::Style);
-			READ_DOUBLE_VALUE("opacity", symbolOpacity);
-			READ_DOUBLE_VALUE("rotation", symbolRotationAngle);
-			READ_DOUBLE_VALUE("size", symbolSize);
-			READ_QBRUSH(d->symbolBrush);
-			READ_QPEN(d->symbolPen);
+			d->symbol->load(reader, preview);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;

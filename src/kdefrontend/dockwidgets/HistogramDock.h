@@ -33,10 +33,11 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_histogramdock.h"
 
-class Histogram;
-class TreeViewComboBox;
 class AspectTreeModel;
 class Column;
+class Histogram;
+class SymbolWidget;
+class TreeViewComboBox;
 
 class HistogramDock : public BaseDock {
 	Q_OBJECT
@@ -63,6 +64,7 @@ protected:
 	QList<Histogram*> m_curvesList;
 	Histogram* m_curve{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
+	SymbolWidget* symbolWidget{nullptr};
 
 	virtual void setModel();
 
@@ -94,17 +96,6 @@ private slots:
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
-
-	//Symbol-tab
-  	void symbolsStyleChanged(int);
-	void symbolsSizeChanged(double);
-	void symbolsRotationChanged(int);
-	void symbolsOpacityChanged(int);
-	void symbolsFillingStyleChanged(int);
-	void symbolsFillingColorChanged(const QColor&);
-	void symbolsBorderStyleChanged(int);
-	void symbolsBorderColorChanged(const QColor&);
-	void symbolsBorderWidthChanged(double);
 
 	//Values-Tab
 	void valuesTypeChanged(int);
@@ -161,14 +152,6 @@ private slots:
 	void curveLineTypeChanged(Histogram::LineType);
 	void curveLinePenChanged(const QPen&);
 	void curveLineOpacityChanged(qreal);
-
-	//Symbol-Tab
-	void curveSymbolsStyleChanged(Symbol::Style);
-	void curveSymbolsSizeChanged(qreal);
-	void curveSymbolsRotationAngleChanged(qreal);
-	void curveSymbolsOpacityChanged(qreal);
-	void curveSymbolsBrushChanged(const QBrush&);
-	void curveSymbolsPenChanged(const QPen&);
 
 	//Values-Tab
 	void curveValuesTypeChanged(Histogram::ValuesType);

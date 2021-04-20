@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for XYCurve properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2021 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2021 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -35,6 +35,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "kdefrontend/widgets/SymbolWidget.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
@@ -62,6 +63,14 @@
 XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 
+	//"Symbol"-tab
+	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
+	symbolWidget = new SymbolWidget(ui.tabSymbol);
+	hboxLayout->addWidget(symbolWidget);
+	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setSpacing(2);
+	ui.tabSymbol->setLayout(hboxLayout);
+
 	//Tab "Values"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
 	cbValuesColumn = new TreeViewComboBox(ui.tabValues);
@@ -79,6 +88,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 		ui.cbValuesDateTimeFormat->addItem(s, QVariant(s));
 
 	ui.cbValuesDateTimeFormat->setEditable(true);
+
 
 	//Tab "Filling"
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
@@ -131,19 +141,6 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	connect( ui.kcbDropLineColor, SIGNAL(changed(QColor)), this, SLOT(dropLineColorChanged(QColor)) );
 	connect( ui.sbDropLineWidth, SIGNAL(valueChanged(double)), this, SLOT(dropLineWidthChanged(double)) );
 	connect( ui.sbDropLineOpacity, SIGNAL(valueChanged(int)), this, SLOT(dropLineOpacityChanged(int)) );
-
-	//Symbol
-	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsStyleChanged(int)) );
-	connect( ui.sbSymbolSize, SIGNAL(valueChanged(double)), this, SLOT(symbolsSizeChanged(double)) );
-	connect( ui.sbSymbolRotation, SIGNAL(valueChanged(int)), this, SLOT(symbolsRotationChanged(int)) );
-	connect( ui.sbSymbolOpacity, SIGNAL(valueChanged(int)), this, SLOT(symbolsOpacityChanged(int)) );
-
-	connect( ui.cbSymbolFillingStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsFillingStyleChanged(int)) );
-	connect( ui.kcbSymbolFillingColor, SIGNAL(changed(QColor)), this, SLOT(symbolsFillingColorChanged(QColor)) );
-
-	connect( ui.cbSymbolBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsBorderStyleChanged(int)) );
-	connect( ui.kcbSymbolBorderColor, SIGNAL(changed(QColor)), this, SLOT(symbolsBorderColorChanged(QColor)) );
-	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolsBorderWidthChanged(double)) );
 
 	//Values
 	connect( ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)) );
@@ -387,12 +384,6 @@ void XYCurveDock::init() {
 	ui.cbDropLineType->addItem(i18n("Drop Lines, X, Max Baseline"));
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, Qt::black);
 
-	//Symbols
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
-	GuiTools::addSymbolStyles(ui.cbSymbolStyle);
-	ui.cbSymbolStyle->insertItem(0, i18n("None"));
-
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
 	m_initializing = false;
 
 	//Values
@@ -514,7 +505,6 @@ void XYCurveDock::setModel() {
 	cbYErrorMinusColumn->setModel(m_aspectTreeModel);
 	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
 
-
 	//this function is called after the dock widget is initializes and the curves are set.
 	//so, we use this function to finalize the initialization even though it's not related
 	//to the actual set of the model (could also be solved by a new class XYAnalysisiCurveDock).
@@ -537,7 +527,7 @@ void XYCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYCurveDock::setCurves(QList<XYCurve*> list) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	m_curvesList = list;
 	m_curve = list.first();
 	m_aspect = m_curve;
@@ -546,7 +536,12 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	setModel();
 	initGeneralTab();
 	initTabs();
-	m_initializing = false;
+
+	QList<Symbol*> symbols;
+	for (auto* curve : m_curvesList)
+		symbols << curve->symbol();
+
+	symbolWidget->setSymbols(symbols);
 }
 
 void XYCurveDock::initGeneralTab() {
@@ -632,14 +627,6 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, SIGNAL(dropLinePenChanged(QPen)), this, SLOT(curveDropLinePenChanged(QPen)));
 	connect(m_curve, SIGNAL(dropLineOpacityChanged(qreal)), this, SLOT(curveDropLineOpacityChanged(qreal)));
 
-	//Symbol-Tab
-	connect(m_curve, SIGNAL(symbolsStyleChanged(Symbol::Style)), this, SLOT(curveSymbolsStyleChanged(Symbol::Style)));
-	connect(m_curve, SIGNAL(symbolsSizeChanged(qreal)), this, SLOT(curveSymbolsSizeChanged(qreal)));
-	connect(m_curve, SIGNAL(symbolsRotationAngleChanged(qreal)), this, SLOT(curveSymbolsRotationAngleChanged(qreal)));
-	connect(m_curve, SIGNAL(symbolsOpacityChanged(qreal)), this, SLOT(curveSymbolsOpacityChanged(qreal)));
-	connect(m_curve, SIGNAL(symbolsBrushChanged(QBrush)), this, SLOT(curveSymbolsBrushChanged(QBrush)));
-	connect(m_curve, SIGNAL(symbolsPenChanged(QPen)), this, SLOT(curveSymbolsPenChanged(QPen)));
-
 	//Values-Tab
 	connect(m_curve, SIGNAL(valuesTypeChanged(XYCurve::ValuesType)), this, SLOT(curveValuesTypeChanged(XYCurve::ValuesType)));
 	connect(m_curve, SIGNAL(valuesColumnChanged(const AbstractColumn*)), this, SLOT(curveValuesColumnChanged(const AbstractColumn*)));
@@ -683,11 +670,10 @@ void XYCurveDock::updateLocale() {
 	SET_NUMBER_LOCALE
 	ui.sbLineWidth->setLocale(numberLocale);
 	ui.sbDropLineWidth->setLocale(numberLocale);
-	ui.sbSymbolSize->setLocale(numberLocale);
-	ui.sbSymbolBorderWidth->setLocale(numberLocale);
 	ui.sbValuesDistance->setLocale(numberLocale);
 	ui.sbErrorBarsCapSize->setLocale(numberLocale);
 	ui.sbErrorBarsWidth->setLocale(numberLocale);
+	symbolWidget->updateLocale();
 }
 
 void XYCurveDock::updatePlotRanges() const {
@@ -938,160 +924,6 @@ void XYCurveDock::dropLineOpacityChanged(int value) {
 	qreal opacity = (float)value/100.;
 	for (auto* curve : m_curvesList)
 		curve->setDropLineOpacity(opacity);
-}
-
-//"Symbol"-tab
-void XYCurveDock::symbolsStyleChanged(int index) {
-	const auto style = Symbol::Style(index);
-
-	if (style == Symbol::Style::NoSymbols) {
-		ui.sbSymbolSize->setEnabled(false);
-		ui.sbSymbolRotation->setEnabled(false);
-		ui.sbSymbolOpacity->setEnabled(false);
-
-		ui.kcbSymbolFillingColor->setEnabled(false);
-		ui.cbSymbolFillingStyle->setEnabled(false);
-
-		ui.cbSymbolBorderStyle->setEnabled(false);
-		ui.kcbSymbolBorderColor->setEnabled(false);
-		ui.sbSymbolBorderWidth->setEnabled(false);
-	} else {
-		ui.sbSymbolSize->setEnabled(true);
-		ui.sbSymbolRotation->setEnabled(true);
-		ui.sbSymbolOpacity->setEnabled(true);
-
-		//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-		if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
-			ui.cbSymbolFillingStyle->setEnabled(true);
-			bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
-			ui.kcbSymbolFillingColor->setEnabled(!noBrush);
-		} else {
-			ui.kcbSymbolFillingColor->setEnabled(false);
-			ui.cbSymbolFillingStyle->setEnabled(false);
-		}
-
-		ui.cbSymbolBorderStyle->setEnabled(true);
-		bool noLine = (Qt::PenStyle(ui.cbSymbolBorderStyle->currentIndex()) == Qt::NoPen);
-		ui.kcbSymbolBorderColor->setEnabled(!noLine);
-		ui.sbSymbolBorderWidth->setEnabled(!noLine);
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setSymbolsStyle(style);
-}
-
-void XYCurveDock::symbolsSizeChanged(double value) {
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setSymbolsSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-}
-
-void XYCurveDock::symbolsRotationChanged(int value) {
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setSymbolsRotationAngle(value);
-}
-
-void XYCurveDock::symbolsOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value/100.;
-	for (auto* curve : m_curvesList)
-		curve->setSymbolsOpacity(opacity);
-}
-
-void XYCurveDock::symbolsFillingStyleChanged(int index) {
-	if (index == -1)
-		return;
-
-	const auto brushStyle = Qt::BrushStyle(index);
-	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
-
-	if (m_initializing)
-		return;
-
-	QBrush brush;
-	for (auto* curve : m_curvesList) {
-		brush = curve->symbolsBrush();
-		brush.setStyle(brushStyle);
-		curve->setSymbolsBrush(brush);
-	}
-}
-
-void XYCurveDock::symbolsFillingColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QBrush brush;
-	for (auto* curve : m_curvesList) {
-		brush = curve->symbolsBrush();
-		brush.setColor(color);
-		curve->setSymbolsBrush(brush);
-	}
-
-	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color );
-	m_initializing = false;
-}
-
-void XYCurveDock::symbolsBorderStyleChanged(int index) {
-	if (index == -1)
-		return;
-
-	const auto penStyle = Qt::PenStyle(index);
-	if ( penStyle == Qt::NoPen ) {
-		ui.kcbSymbolBorderColor->setEnabled(false);
-		ui.sbSymbolBorderWidth->setEnabled(false);
-	} else {
-		ui.kcbSymbolBorderColor->setEnabled(true);
-		ui.sbSymbolBorderWidth->setEnabled(true);
-	}
-
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->symbolsPen();
-		pen.setStyle(penStyle);
-		curve->setSymbolsPen(pen);
-	}
-}
-
-void XYCurveDock::symbolsBorderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->symbolsPen();
-		pen.setColor(color);
-		curve->setSymbolsPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, color);
-	m_initializing = false;
-}
-
-void XYCurveDock::symbolsBorderWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->symbolsPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-		curve->setSymbolsPen(pen);
-	}
 }
 
 //Values-tab
@@ -1822,43 +1654,6 @@ void XYCurveDock::curveDropLineOpacityChanged(qreal opacity) {
 	m_initializing = false;
 }
 
-//Symbol-Tab
-void XYCurveDock::curveSymbolsStyleChanged(Symbol::Style style) {
-	m_initializing = true;
-	ui.cbSymbolStyle->setCurrentIndex((int)style);
-	m_initializing = false;
-}
-void XYCurveDock::curveSymbolsSizeChanged(qreal size) {
-	m_initializing = true;
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
-	m_initializing = false;
-}
-void XYCurveDock::curveSymbolsRotationAngleChanged(qreal angle) {
-	m_initializing = true;
-	ui.sbSymbolRotation->setValue(angle);
-	m_initializing = false;
-}
-void XYCurveDock::curveSymbolsOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbSymbolOpacity->setValue( round(opacity*100.0) );
-	m_initializing = false;
-}
-void XYCurveDock::curveSymbolsBrushChanged(const QBrush& brush) {
-	m_initializing = true;
-	ui.cbSymbolFillingStyle->setCurrentIndex((int) brush.style());
-	ui.kcbSymbolFillingColor->setColor(brush.color());
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, brush.color());
-	m_initializing = false;
-}
-void XYCurveDock::curveSymbolsPenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
-	ui.kcbSymbolBorderColor->setColor( pen.color());
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, pen.color());
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-
 //Values-Tab
 void XYCurveDock::curveValuesTypeChanged(XYCurve::ValuesType type) {
 	m_initializing = true;
@@ -2054,17 +1849,6 @@ void XYCurveDock::load() {
 	ui.sbDropLineWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->dropLinePen().widthF(), Worksheet::Unit::Point) );
 	ui.sbDropLineOpacity->setValue( round(m_curve->dropLineOpacity()*100.0) );
 
-	//Symbols
-	ui.cbSymbolStyle->setCurrentIndex( (int)m_curve->symbolsStyle() );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_curve->symbolsSize(), Worksheet::Unit::Point) );
-	ui.sbSymbolRotation->setValue( m_curve->symbolsRotationAngle() );
-	ui.sbSymbolOpacity->setValue( round(m_curve->symbolsOpacity()*100.0) );
-	ui.cbSymbolFillingStyle->setCurrentIndex( (int) m_curve->symbolsBrush().style() );
-	ui.kcbSymbolFillingColor->setColor(  m_curve->symbolsBrush().color() );
-	ui.cbSymbolBorderStyle->setCurrentIndex( (int) m_curve->symbolsPen().style() );
-	ui.kcbSymbolBorderColor->setColor( m_curve->symbolsPen().color() );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->symbolsPen().widthF(), Worksheet::Unit::Point) );
-
 	//Values
 	ui.cbValuesType->setCurrentIndex( (int) m_curve->valuesType() );
 	ui.cbValuesPosition->setCurrentIndex( (int) m_curve->valuesPosition() );
@@ -2106,8 +1890,6 @@ void XYCurveDock::load() {
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, ui.kcbDropLineColor->color());
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, ui.kcbSymbolFillingColor->color());
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, ui.kcbSymbolBorderColor->color());
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
 	m_initializing = false;
 }
@@ -2157,15 +1939,7 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	ui.sbDropLineOpacity->setValue( round(group.readEntry("DropLineOpacity", m_curve->dropLineOpacity())*100.0) );
 
 	//Symbols
-	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_curve->symbolsStyle()) );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_curve->symbolsSize()), Worksheet::Unit::Point) );
-	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_curve->symbolsRotationAngle()) );
-	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", m_curve->symbolsOpacity())*100.0) );
-	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_curve->symbolsBrush().style()) );
-	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_curve->symbolsBrush().color()) );
-	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_curve->symbolsPen().style()) );
-	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", m_curve->symbolsPen().color()) );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_curve->symbolsPen().widthF()), Worksheet::Unit::Point) );
+	symbolWidget->loadConfig(group);
 
 	//Values
 	ui.cbValuesType->setCurrentIndex( group.readEntry("ValuesType", (int) m_curve->valuesType()) );
@@ -2204,15 +1978,13 @@ void XYCurveDock::loadConfig(KConfig& config) {
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	GuiTools::updatePenStyles(ui.cbDropLineStyle, ui.kcbDropLineColor->color());
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, ui.kcbSymbolFillingColor->color());
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, ui.kcbSymbolBorderColor->color());
 	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
 	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, ui.kcbFillingFirstColor->color());
 	m_initializing = false;
 }
 
 void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group( "XYCurve" );
+	KConfigGroup group = config.group("XYCurve");
 
 	//General
 	//we don't load/save the settings in the general-tab, since they are not style related.
@@ -2233,16 +2005,8 @@ void XYCurveDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("DropLineWidth", Worksheet::convertToSceneUnits(ui.sbDropLineWidth->value(), Worksheet::Unit::Point) );
 	group.writeEntry("DropLineOpacity", ui.sbDropLineOpacity->value()/100.0);
 
-	//Symbol
-	group.writeEntry("SymbolStyle", ui.cbSymbolStyle->currentIndex());
-	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(),Worksheet::Unit::Point));
-	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
-	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100.0);
-	group.writeEntry("SymbolFillingStyle", ui.cbSymbolFillingStyle->currentIndex());
-	group.writeEntry("SymbolFillingColor", ui.kcbSymbolFillingColor->color());
-	group.writeEntry("SymbolBorderStyle", ui.cbSymbolBorderStyle->currentIndex());
-	group.writeEntry("SymbolBorderColor", ui.kcbSymbolBorderColor->color());
-	group.writeEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(ui.sbSymbolBorderWidth->value(), Worksheet::Unit::Point));
+	//Symbols
+	symbolWidget->saveConfig(group);
 
 	//Values
 	group.writeEntry("ValuesType", ui.cbValuesType->currentIndex());

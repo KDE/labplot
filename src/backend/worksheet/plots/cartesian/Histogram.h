@@ -38,6 +38,7 @@
 
 class AbstractColumn;
 class HistogramPrivate;
+class Symbol;
 
 class Histogram : public WorksheetElement, public Curve {
 	Q_OBJECT
@@ -87,12 +88,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, linePen, LinePen)
 	BASIC_D_ACCESSOR_DECL(qreal, lineOpacity, LineOpacity)
 
-	BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolsStyle, SymbolsStyle)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolsRotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolsSize)
-	CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush)
-	CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen)
+	Symbol* symbol() const;
 
 	BASIC_D_ACCESSOR_DECL(ValuesType, valuesType, ValuesType)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, valuesColumn, ValuesColumn)

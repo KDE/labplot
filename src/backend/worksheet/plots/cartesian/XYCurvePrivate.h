@@ -34,6 +34,7 @@
 
 class CartesianPlot;
 class CartesianCoordinateSystem;
+class Symbol;
 class XYCurve;
 
 class XYCurvePrivate : public QGraphicsItem {
@@ -87,12 +88,7 @@ public:
 	qreal dropLineOpacity;
 
 	//symbols
-	Symbol::Style symbolsStyle;
-	QBrush symbolsBrush;
-	QPen symbolsPen;
-	qreal symbolsOpacity;
-	qreal symbolsRotationAngle;
-	qreal symbolsSize;
+	Symbol* symbol{nullptr};
 
 	//values
 	XYCurve::ValuesType valuesType;

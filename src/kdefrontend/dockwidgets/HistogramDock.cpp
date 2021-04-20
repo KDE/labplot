@@ -37,6 +37,7 @@
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "kdefrontend/widgets/SymbolWidget.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
@@ -68,6 +69,13 @@ HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(n
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
 	gridLayout->addWidget(cbDataColumn, 3, 2, 1, 1);
+
+	//Tab "Symbols"
+	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
+	symbolWidget = new SymbolWidget(ui.tabSymbol);
+	hboxLayout->addWidget(symbolWidget);
+	hboxLayout->setContentsMargins(2,2,2,2);
+	hboxLayout->setSpacing(2);
 
 	//Tab "Values"
 	gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());
@@ -141,19 +149,6 @@ HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(n
 	connect(ui.kcbLineColor, &KColorButton::changed, this, &HistogramDock::lineColorChanged);
 	connect(ui.sbLineWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), this, &HistogramDock::lineWidthChanged);
 	connect(ui.sbLineOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &HistogramDock::lineOpacityChanged);
-
-	//Symbol
-	connect( ui.cbSymbolStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsStyleChanged(int)) );
-	connect( ui.sbSymbolSize, SIGNAL(valueChanged(double)), this, SLOT(symbolsSizeChanged(double)) );
-	connect( ui.sbSymbolRotation, SIGNAL(valueChanged(int)), this, SLOT(symbolsRotationChanged(int)) );
-	connect( ui.sbSymbolOpacity, SIGNAL(valueChanged(int)), this, SLOT(symbolsOpacityChanged(int)) );
-
-	connect( ui.cbSymbolFillingStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsFillingStyleChanged(int)) );
-	connect( ui.kcbSymbolFillingColor, SIGNAL(changed(QColor)), this, SLOT(symbolsFillingColorChanged(QColor)) );
-
-	connect( ui.cbSymbolBorderStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(symbolsBorderStyleChanged(int)) );
-	connect( ui.kcbSymbolBorderColor, SIGNAL(changed(QColor)), this, SLOT(symbolsBorderColorChanged(QColor)) );
-	connect( ui.sbSymbolBorderWidth, SIGNAL(valueChanged(double)), this, SLOT(symbolsBorderWidthChanged(double)) );
 
 	//Values
 	connect( ui.cbValuesType, SIGNAL(currentIndexChanged(int)), this, SLOT(valuesTypeChanged(int)) );
@@ -250,37 +245,6 @@ void HistogramDock::init() {
 	ui.cbLineType->addItem(i18n("Drop Lines"));
 
 	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
-
-	//Symbols
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
-
-	QPainter pa;
-	//TODO size of the icon depending on the actual height of the combobox?
-	int iconSize = 20;
-	QPixmap pm(iconSize, iconSize);
-	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
-	QTransform trafo;
-	trafo.scale(15, 15);
-
-	QPen pen(Qt::SolidPattern, 0);
-	const QColor& color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
-	pen.setColor(color);
-	pa.setPen( pen );
-
-	ui.cbSymbolStyle->addItem(i18n("None"));
-	for (int i = 1; i < 19; ++i) {	//TODO: use enum count
-		auto style = (Symbol::Style)i;
-		pm.fill(Qt::transparent);
-		pa.begin(&pm);
-		pa.setPen(pen);
-		pa.setRenderHint(QPainter::Antialiasing);
-		pa.translate(iconSize/2,iconSize/2);
-		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
-		pa.end();
-		ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
-	}
-
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
 	m_initializing = false;
 
 	//Values
@@ -317,6 +281,9 @@ void HistogramDock::init() {
 	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, Qt::SolidPattern);
 
 	//Error-bars
+	QPainter pa;
+	int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
 	pm.fill(Qt::transparent);
 	pa.begin( &pm );
 	pa.setRenderHint(QPainter::Antialiasing);
@@ -373,13 +340,17 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	setModel();
 
+	QList<Symbol*> symbols;
+	for (auto* curve : m_curvesList)
+		symbols << curve->symbol();
+	symbolWidget->setSymbols(symbols);
+
 	SET_NUMBER_LOCALE
 	ui.sbLineWidth->setLocale(numberLocale);
-	ui.sbSymbolSize->setLocale(numberLocale);
-	ui.sbSymbolBorderWidth->setLocale(numberLocale);
 	ui.sbValuesDistance->setLocale(numberLocale);
 	ui.sbErrorBarsCapSize->setLocale(numberLocale);
 	ui.sbErrorBarsWidth->setLocale(numberLocale);
+	symbolWidget->updateLocale();
 
 	//if there are more then one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
@@ -470,14 +441,6 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	//Line-tab
 	connect(m_curve, &Histogram::linePenChanged, this, &HistogramDock::curveLinePenChanged);
 	connect(m_curve, &Histogram::lineOpacityChanged, this, &HistogramDock::curveLineOpacityChanged);
-
-	//Symbol-Tab
-	connect(m_curve, &Histogram::symbolsStyleChanged, this, &HistogramDock::curveSymbolsStyleChanged);
-	connect(m_curve, &Histogram::symbolsSizeChanged, this, &HistogramDock::curveSymbolsSizeChanged);
-	connect(m_curve, &Histogram::symbolsRotationAngleChanged, this, &HistogramDock::curveSymbolsRotationAngleChanged);
-	connect(m_curve, &Histogram::symbolsOpacityChanged, this, &HistogramDock::curveSymbolsOpacityChanged);
-	connect(m_curve, &Histogram::symbolsBrushChanged, this, &HistogramDock::curveSymbolsBrushChanged);
-	connect(m_curve, &Histogram::symbolsPenChanged, this, &HistogramDock::curveSymbolsPenChanged);
 
 	//Values-Tab
 	connect(m_curve, &Histogram::valuesTypeChanged, this, &HistogramDock::curveValuesTypeChanged);
@@ -789,155 +752,6 @@ void HistogramDock::lineOpacityChanged(int value) {
 	qreal opacity = (float)value/100.;
 	for (auto* curve : m_curvesList)
 		curve->setLineOpacity(opacity);
-}
-
-//"Symbol"-tab
-void HistogramDock::symbolsStyleChanged(int index) {
-	const auto style = Symbol::Style(index);
-
-	if (style == Symbol::Style::NoSymbols) {
-		ui.sbSymbolSize->setEnabled(false);
-		ui.sbSymbolRotation->setEnabled(false);
-		ui.sbSymbolOpacity->setEnabled(false);
-
-		ui.kcbSymbolFillingColor->setEnabled(false);
-		ui.cbSymbolFillingStyle->setEnabled(false);
-
-		ui.cbSymbolBorderStyle->setEnabled(false);
-		ui.kcbSymbolBorderColor->setEnabled(false);
-		ui.sbSymbolBorderWidth->setEnabled(false);
-	} else {
-		ui.sbSymbolSize->setEnabled(true);
-		ui.sbSymbolRotation->setEnabled(true);
-		ui.sbSymbolOpacity->setEnabled(true);
-
-		//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-		if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
-			ui.cbSymbolFillingStyle->setEnabled(true);
-			bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
-			ui.kcbSymbolFillingColor->setEnabled(!noBrush);
-		} else {
-			ui.kcbSymbolFillingColor->setEnabled(false);
-			ui.cbSymbolFillingStyle->setEnabled(false);
-		}
-
-		ui.cbSymbolBorderStyle->setEnabled(true);
-		bool noLine = (Qt::PenStyle(ui.cbSymbolBorderStyle->currentIndex()) == Qt::NoPen);
-		ui.kcbSymbolBorderColor->setEnabled(!noLine);
-		ui.sbSymbolBorderWidth->setEnabled(!noLine);
-	}
-
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setSymbolsStyle(style);
-}
-
-void HistogramDock::symbolsSizeChanged(double value) {
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setSymbolsSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-}
-
-void HistogramDock::symbolsRotationChanged(int value) {
-	if (m_initializing)
-		return;
-
-	for (auto* curve : m_curvesList)
-		curve->setSymbolsRotationAngle(value);
-}
-
-void HistogramDock::symbolsOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value/100.;
-	for (auto* curve : m_curvesList)
-		curve->setSymbolsOpacity(opacity);
-}
-
-void HistogramDock::symbolsFillingStyleChanged(int index) {
-	auto brushStyle = Qt::BrushStyle(index);
-	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
-
-	if (m_initializing)
-		return;
-
-	QBrush brush;
-	for (auto* curve : m_curvesList) {
-		brush = curve->symbolsBrush();
-		brush.setStyle(brushStyle);
-		curve->setSymbolsBrush(brush);
-	}
-}
-
-void HistogramDock::symbolsFillingColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QBrush brush;
-	for (auto* curve : m_curvesList) {
-		brush = curve->symbolsBrush();
-		brush.setColor(color);
-		curve->setSymbolsBrush(brush);
-	}
-
-	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color );
-	m_initializing = false;
-}
-
-void HistogramDock::symbolsBorderStyleChanged(int index) {
-	auto penStyle = Qt::PenStyle(index);
-
-	if ( penStyle == Qt::NoPen ) {
-		ui.kcbSymbolBorderColor->setEnabled(false);
-		ui.sbSymbolBorderWidth->setEnabled(false);
-	} else {
-		ui.kcbSymbolBorderColor->setEnabled(true);
-		ui.sbSymbolBorderWidth->setEnabled(true);
-	}
-
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->symbolsPen();
-		pen.setStyle(penStyle);
-		curve->setSymbolsPen(pen);
-	}
-}
-
-void HistogramDock::symbolsBorderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->symbolsPen();
-		pen.setColor(color);
-		curve->setSymbolsPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, color);
-	m_initializing = false;
-}
-
-void HistogramDock::symbolsBorderWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* curve : m_curvesList) {
-		pen = curve->symbolsPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-		curve->setSymbolsPen(pen);
-	}
 }
 
 //Values tab
@@ -1463,7 +1277,6 @@ void HistogramDock::curveNormalizationChanged(Histogram::HistogramNormalization 
 	m_initializing = false;
 }
 
-
 void HistogramDock::curveBinningMethodChanged(Histogram::BinningMethod method) {
 	m_initializing = true;
 	ui.cbBinningMethod->setCurrentIndex((int)method);
@@ -1522,43 +1335,6 @@ void HistogramDock::curveLinePenChanged(const QPen& pen) {
 void HistogramDock::curveLineOpacityChanged(qreal opacity) {
 	m_initializing = true;
 	ui.sbLineOpacity->setValue( round(opacity*100.0) );
-	m_initializing = false;
-}
-
-//Symbol-Tab
-void HistogramDock::curveSymbolsStyleChanged(Symbol::Style style) {
-	m_initializing = true;
-	ui.cbSymbolStyle->setCurrentIndex((int)style);
-	m_initializing = false;
-}
-void HistogramDock::curveSymbolsSizeChanged(qreal size) {
-	m_initializing = true;
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
-	m_initializing = false;
-}
-void HistogramDock::curveSymbolsRotationAngleChanged(qreal angle) {
-	m_initializing = true;
-	ui.sbSymbolRotation->setValue(angle);
-	m_initializing = false;
-}
-void HistogramDock::curveSymbolsOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbSymbolOpacity->setValue( round(opacity*100.0) );
-	m_initializing = false;
-}
-void HistogramDock::curveSymbolsBrushChanged(const QBrush& brush) {
-	m_initializing = true;
-	ui.cbSymbolFillingStyle->setCurrentIndex((int) brush.style());
-	ui.kcbSymbolFillingColor->setColor(brush.color());
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, brush.color());
-	m_initializing = false;
-}
-void HistogramDock::curveSymbolsPenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
-	ui.kcbSymbolBorderColor->setColor( pen.color());
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, pen.color());
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -1732,15 +1508,7 @@ void HistogramDock::loadConfig(KConfig& config) {
 	ui.sbLineOpacity->setValue( round(group.readEntry("LineOpacity", m_curve->lineOpacity())*100.0) );
 
 	//Symbols
-	ui.cbSymbolStyle->setCurrentIndex( group.readEntry("SymbolStyle", (int)m_curve->symbolsStyle()) );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_curve->symbolsSize()), Worksheet::Unit::Point) );
-	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_curve->symbolsRotationAngle()) );
-	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", m_curve->symbolsOpacity())*100.0) );
-	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_curve->symbolsBrush().style()) );
-	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_curve->symbolsBrush().color()) );
-	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int) m_curve->symbolsPen().style()) );
-	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", m_curve->symbolsPen().color()) );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth",m_curve->symbolsPen().widthF()), Worksheet::Unit::Point) );
+	symbolWidget->loadConfig(group);
 
   	//Values
   	ui.cbValuesType->setCurrentIndex( group.readEntry("ValuesType", (int) m_curve->valuesType()) );
@@ -1799,7 +1567,7 @@ void HistogramDock::loadConfigFromTemplate(KConfig& config) {
 }
 
 void HistogramDock::saveConfigAsTemplate(KConfig& config) {
-	KConfigGroup group = config.group( "Histogram" );
+	KConfigGroup group = config.group("Histogram");
 
 	//Line
 	group.writeEntry("LineType", ui.cbLineType->currentIndex());
@@ -1807,6 +1575,9 @@ void HistogramDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LineColor", ui.kcbLineColor->color());
 	group.writeEntry("LineWidth", Worksheet::convertToSceneUnits(ui.sbLineWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("LineOpacity", ui.sbLineOpacity->value()/100.0);
+
+	//Symbols
+	symbolWidget->saveConfig(group);
 
 	//Values
 	group.writeEntry("ValuesType", ui.cbValuesType->currentIndex());

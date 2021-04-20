@@ -94,12 +94,7 @@ public:
 	qreal lineOpacity;
 
 	//symbols
-	Symbol::Style symbolsStyle;
-	QBrush symbolsBrush;
-	QPen symbolsPen;
-	qreal symbolsOpacity;
-	qreal symbolsRotationAngle;
-	qreal symbolsSize;
+	Symbol* symbol{nullptr};
 
 	//values
 	int value{0};

@@ -1626,69 +1626,69 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	pen.setStyle(penStyle);
 	curve->setLinePen(pen);
 
-
 	//symbol properties
+	auto* symbol = curve->symbol();
 	if (originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		//try to map the different symbols, mapping is not exact
-		curve->setSymbolsRotationAngle(0);
+		symbol->setRotationAngle(0);
 		switch (originCurve.symbolShape) {
 		case 0: //NoSymbol
-			curve->setSymbolsStyle(Symbol::Style::NoSymbols);
+			symbol->setStyle(Symbol::Style::NoSymbols);
 			break;
 		case 1: //Rect
-			curve->setSymbolsStyle(Symbol::Style::Square);
+			symbol->setStyle(Symbol::Style::Square);
 			break;
 		case 2: //Ellipse
 		case 20://Sphere
-			curve->setSymbolsStyle(Symbol::Style::Circle);
+			symbol->setStyle(Symbol::Style::Circle);
 			break;
 		case 3: //UTriangle
-			curve->setSymbolsStyle(Symbol::Style::EquilateralTriangle);
+			symbol->setStyle(Symbol::Style::EquilateralTriangle);
 			break;
 		case 4: //DTriangle
-			curve->setSymbolsStyle(Symbol::Style::EquilateralTriangle);
+			symbol->setStyle(Symbol::Style::EquilateralTriangle);
 			break;
 		case 5: //Diamond
-			curve->setSymbolsStyle(Symbol::Style::Diamond);
+			symbol->setStyle(Symbol::Style::Diamond);
 			break;
 		case 6: //Cross +
-			curve->setSymbolsStyle(Symbol::Style::Cross);
+			symbol->setStyle(Symbol::Style::Cross);
 			break;
 		case 7: //Cross x
-			curve->setSymbolsStyle(Symbol::Style::Cross);
+			symbol->setStyle(Symbol::Style::Cross);
 			break;
 		case 8: //Snow
-			curve->setSymbolsStyle(Symbol::Style::Star4);
+			symbol->setStyle(Symbol::Style::Star4);
 			break;
 		case 9: //Horizontal -
-			curve->setSymbolsStyle(Symbol::Style::Line);
-			curve->setSymbolsRotationAngle(90);
+			symbol->setStyle(Symbol::Style::Line);
+			symbol->setRotationAngle(90);
 			break;
 		case 10: //Vertical |
-			curve->setSymbolsStyle(Symbol::Style::Line);
+			symbol->setStyle(Symbol::Style::Line);
 			break;
 		case 15: //LTriangle
-			curve->setSymbolsStyle(Symbol::Style::EquilateralTriangle);
+			symbol->setStyle(Symbol::Style::EquilateralTriangle);
 			break;
 		case 16: //RTriangle
-			curve->setSymbolsStyle(Symbol::Style::EquilateralTriangle);
+			symbol->setStyle(Symbol::Style::EquilateralTriangle);
 			break;
 		case 17: //Hexagon
 		case 19: //Pentagon
-			curve->setSymbolsStyle(Symbol::Style::Square);
+			symbol->setStyle(Symbol::Style::Square);
 			break;
 		case 18: //Star
-			curve->setSymbolsStyle(Symbol::Style::Star5);
+			symbol->setStyle(Symbol::Style::Star5);
 			break;
 		default:
-			curve->setSymbolsStyle(Symbol::Style::NoSymbols);
+			symbol->setStyle(Symbol::Style::NoSymbols);
 		}
 
 		//symbol size
-		curve->setSymbolsSize(Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point));
+		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point));
 
 		//symbol fill color
-		QBrush brush = curve->symbolsBrush();
+		QBrush brush = symbol->brush();
 		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
 			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
 			if (curve->lineType() != XYCurve::LineType::NoLine)
@@ -1698,10 +1698,10 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		} else
 			brush.setColor(color(originCurve.symbolFillColor));
 
-		curve->setSymbolsBrush(brush);
+		symbol->setBrush(brush);
 
 		//symbol border/edge color and width
-		QPen pen = curve->symbolsPen();
+		QPen pen = symbol->pen();
 		if (originCurve.symbolColor.type == Origin::Color::ColorType::Automatic) {
 			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
 			if (curve->lineType() != XYCurve::LineType::NoLine)
@@ -1712,14 +1712,14 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			pen.setColor(color(originCurve.symbolColor));
 
 		//border width (edge thickness in Origin) is given by percentage of the symbol radius
-		pen.setWidthF(originCurve.symbolThickness/100.*curve->symbolsSize()/2.);
+		pen.setWidthF(originCurve.symbolThickness/100.*symbol->size()/2.);
 
-		curve->setSymbolsPen(pen);
+		symbol->setPen(pen);
 
 		//handle unsigned char pointOffset member
 		//handle bool connectSymbols member
 	} else {
-		curve->setSymbolsStyle(Symbol::Style::NoSymbols);
+		symbol->setStyle(Symbol::Style::NoSymbols);
 	}
 
 	//filling properties
