@@ -170,6 +170,7 @@ private:
 	QVector<QPointF> minorTickPoints;//!< position of the major ticks  on the axis.
 	QVector<QPointF> tickLabelPoints; //!< position of the major tick labels (left lower edge of label's bounding rect)
 	QVector<double> tickLabelValues; //!< major tick labels values
+	QVector<QString> tickLabelValuesString; //!<major tick labels used when a custom text column is selected
 	QVector<QString> tickLabelStrings; //!< the actual text of the major tick labels
 
 	bool m_hovered{false};

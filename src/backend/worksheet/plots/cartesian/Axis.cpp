@@ -1189,6 +1189,14 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 }
 
 //! helper function for retransformTicks()
+/*!
+ * \brief AxisPrivate::transformAnchor
+ * Transform a position in logical coordinates into scene corrdinates
+ * \param anchorPoint point which should be converted. Contains the result of the conversion
+ * if the transformation was valid
+ * \return true if transformation was successful else false
+ * Successful means, that the point is inside the coordinate system
+ */
 bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	QVector<QPointF> points;
 	points.append(*anchorPoint);
@@ -1215,6 +1223,7 @@ void AxisPrivate::retransformTicks() {
 	majorTickPoints.clear();
 	minorTickPoints.clear();
 	tickLabelValues.clear();
+	tickLabelValuesString.clear();
 
 	if ( majorTicksNumber < 1 || (majorTicksDirection == Axis::noTicks && minorTicksDirection == Axis::noTicks) ) {
 		retransformTickLabelPositions(); //this calls recalcShapeAndBoundingRect()
@@ -1448,6 +1457,7 @@ void AxisPrivate::retransformTicks() {
 								tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
 								break;
 							case AbstractColumn::ColumnMode::Text:
+								tickLabelValuesString << labelsTextColumn->textAt(iMajor);
 								break;
 						}
 					}
@@ -1705,9 +1715,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 			tickLabelStrings << str;
 		}
 	} else if (text) {
-		int count = labelsTextColumn->rowCount();
-		for (int i = 0; i < count; ++i) {
-			str = labelsPrefix + labelsTextColumn->textAt(i) + labelsSuffix;
+		for (auto t : tickLabelValuesString) {
+			str = labelsPrefix + t + labelsSuffix;
 			tickLabelStrings << str;
 		}
 	}
@@ -1863,9 +1872,9 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 
 	int size = qMin(majorTickPoints.size(), tickLabelStrings.size());
+	auto xRangeFormat{ plot()->xRange(xIndex).format() };
+	auto yRangeFormat{ plot()->yRange(yIndex).format() };
 	for ( int i = 0; i < size; i++ ) {
-		auto xRangeFormat{ plot()->xRange(xIndex).format() };
-		auto yRangeFormat{ plot()->yRange(yIndex).format() };
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
 				(orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
