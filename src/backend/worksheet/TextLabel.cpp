@@ -123,6 +123,7 @@ void TextLabel::init() {
     if (m_type == Type::PlotTitle || m_type == Type::PlotLegendTitle) {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Top;
         d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+        d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
     } else if (m_type == Type::AxisTitle) {
         d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
         d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
@@ -150,6 +151,8 @@ void TextLabel::init() {
 		d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
 		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)d->position.horizontalPosition);
 		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
+        d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", static_cast<int>(d->horizontalAlignment));
+        d->verticalAlignment = (WorksheetElement::VerticalAlignment) group.readEntry("VerticalAlignment", static_cast<int>(d->verticalAlignment));
 		if (cSystem)
 			d->positionLogical = cSystem->mapSceneToLogical(d->position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	}
@@ -239,6 +242,8 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor);
 BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, backgroundColor, backgroundColor);
 BASIC_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
+BASIC_SHARED_D_READER_IMPL(TextLabel, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
+BASIC_SHARED_D_READER_IMPL(TextLabel, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment);
 BASIC_SHARED_D_READER_IMPL(TextLabel, QPointF, positionLogical, positionLogical);
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, rotationAngle, rotationAngle);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::BorderShape, borderShape, borderShape)
@@ -289,6 +294,20 @@ void TextLabel::setPosition(const PositionWrapper& pos) {
 	Q_D(TextLabel);
 	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition)
 		exec(new TextLabelSetPositionCmd(d, pos, ki18n("%1: set position")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetHorizontalAlignment, TextLabel::HorizontalAlignment, horizontalAlignment, retransform);
+void TextLabel::setHorizontalAlignment(const WorksheetElement::HorizontalAlignment hAlign) {
+    Q_D(TextLabel);
+    if (hAlign != d->horizontalAlignment)
+        exec(new TextLabelSetHorizontalAlignmentCmd(d, hAlign, ki18n("%1: set horizontal alignment")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetVerticalAlignment, WorksheetElement::VerticalAlignment, verticalAlignment, retransform);
+void TextLabel::setVerticalAlignment(const TextLabel::VerticalAlignment vAlign) {
+    Q_D(TextLabel);
+    if (vAlign != d->verticalAlignment)
+        exec(new TextLabelSetVerticalAlignmentCmd(d, vAlign, ki18n("%1: set vertical alignment")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled, retransform);
@@ -540,7 +559,7 @@ void TextLabelPrivate::updatePosition() {
         if (!parentRect(pr))
             return;
 
-        p = q->relativePosToParentPos(pr, boundingRectangle, position);
+        p = q->relativePosToParentPos(pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
         //position.point = p;
     }
 
@@ -974,7 +993,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
         } else {
             //convert item's center point in parent's coordinates
             TextLabel::PositionWrapper tempPosition = position;
-            tempPosition.point = q->parentPosToRelativePos(value.toPointF(), pr, boundingRectangle, position);
+            tempPosition.point = q->parentPosToRelativePos(value.toPointF(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 			emit q->positionChanged(tempPosition);
         }
 	}
@@ -994,7 +1013,7 @@ void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
         return;
 
 	//convert position of the item in parent coordinates to label's position
-    QPointF point = q->parentPosToRelativePos(mapParentToPlotArea(pos()), pr, boundingRectangle, position);
+    QPointF point = q->parentPosToRelativePos(mapParentToPlotArea(pos()), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
@@ -1014,7 +1033,7 @@ void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
         QRectF pr;
         if (!parentRect(pr))
             return;
-        QPointF point = q->parentPosToRelativePos(pos(), pr, boundingRectangle, position);
+        QPointF point = q->parentPosToRelativePos(pos(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
         WorksheetElement::PositionWrapper tempPosition = position;
 
 		if (event->key() == Qt::Key_Left) {

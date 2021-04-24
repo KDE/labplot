@@ -84,7 +84,7 @@ public:
      * \param position contains the alignement of the element to the parent
      * \return distance between the parent position to the element
      */
-    QPointF parentPosToRelativePos(QPointF parentPos, QRectF parentRect, QRectF worksheetElementRect, WorksheetElement::PositionWrapper position) const;
+    QPointF parentPosToRelativePos(QPointF parentPos, QRectF parentRect, QRectF worksheetElementRect, WorksheetElement::PositionWrapper position, WorksheetElement::HorizontalAlignment horAlign, WorksheetElement::VerticalAlignment vertAlign) const;
     /*!
      * \brief relativePosToParentPos
      * \param parentRect
@@ -92,7 +92,7 @@ public:
      * \param position contains the alignement of the element to the parent
      * \return parent position
      */
-    QPointF relativePosToParentPos(QRectF parentRect, QRectF worksheetElementRect, PositionWrapper position) const;
+    QPointF relativePosToParentPos(QRectF parentRect, QRectF worksheetElementRect, PositionWrapper position, HorizontalAlignment horAlign, VerticalAlignment vertAlign) const;
 	QMenu* createContextMenu() override;
 
 	virtual void loadThemeConfig(const KConfig&);

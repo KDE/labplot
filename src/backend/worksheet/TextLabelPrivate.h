@@ -69,6 +69,8 @@ public:
 	WorksheetElement::PositionWrapper position{
 		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)),
 		TextLabel::HorizontalPosition::Center, TextLabel::VerticalPosition::Center};
+    WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
+    WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
 	bool positionInvalid{false};
 	bool coordinateBindingEnabled{false};
 	QPointF positionLogical;
