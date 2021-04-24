@@ -86,13 +86,10 @@ public:
 	qreal medianLineOpacity;
 
 	//markers
-	Symbol::Style symbolOutliersStyle;
-	Symbol::Style symbolMeanStyle;
-	QBrush symbolsBrush;
-	QPen symbolsPen;
-	qreal symbolsOpacity;
-	qreal symbolsRotationAngle;
-	qreal symbolsSize;
+	Symbol* symbolMean{nullptr};
+	Symbol* symbolOutlier{nullptr};
+	Symbol* symbolFarOut{nullptr};
+	Symbol* symbolJitter{nullptr};
 
 	//whiskers
 	QPen whiskersPen;

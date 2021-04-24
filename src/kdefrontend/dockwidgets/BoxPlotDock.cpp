@@ -30,6 +30,7 @@
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
+#include "kdefrontend/widgets/SymbolWidget.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 
 #include "kdefrontend/TemplateHandler.h"
@@ -102,12 +103,9 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	GuiTools::updatePenStyles(ui.cbMedianLineStyle, Qt::black);
 
 	//Tab "Markers"
-	GuiTools::addSymbolStyles(ui.cbSymbolOutliersStyle);
-	ui.cbSymbolOutliersStyle->insertItem(0, i18n("None"));
-	GuiTools::addSymbolStyles(ui.cbSymbolMeanStyle);
-	ui.cbSymbolMeanStyle->insertItem(0, i18n("None"));
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
+	auto* gridLayout = static_cast<QGridLayout*>(ui.tabSymbol->layout());
+	symbolWidget = new SymbolWidget(ui.tabSymbol);
+	gridLayout->addWidget(symbolWidget, 2, 0, 1, 3);
 
 	//Tab "Whiskers"
 	GuiTools::updatePenStyles(ui.cbWhiskersStyle, Qt::black);
@@ -168,16 +166,10 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.sbMedianLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::medianLineOpacityChanged);
 
 	//Tab "Markers"
-	connect(ui.cbSymbolOutliersStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::symbolOutliersStyleChanged);
-	connect(ui.cbSymbolMeanStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::symbolMeanStyleChanged);
-	connect(ui.sbSymbolSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::symbolsSizeChanged);
-	connect(ui.sbSymbolRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::symbolsRotationChanged);
-	connect(ui.sbSymbolOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::symbolsOpacityChanged);
-	connect(ui.cbSymbolFillingStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::symbolsFillingStyleChanged);
-	connect(ui.kcbSymbolFillingColor, &KColorButton::changed, this, &BoxPlotDock::symbolsFillingColorChanged);
-	connect(ui.cbSymbolBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::symbolsBorderStyleChanged);
-	connect(ui.kcbSymbolBorderColor, &KColorButton::changed, this, &BoxPlotDock::symbolsBorderColorChanged);
-	connect(ui.sbSymbolBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::symbolsBorderWidthChanged);
+	connect(ui.rbMean, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
+	connect(ui.rbOutlier, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
+	connect(ui.rbFarOut, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
+	connect(ui.rbJitter, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 
 	//Tab "Whiskers"
 	connect(ui.cbWhiskersType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersTypeChanged);
@@ -264,15 +256,6 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	//median line
 	connect(m_boxPlot, &BoxPlot::medianLinePenChanged, this, &BoxPlotDock::plotMedianLinePenChanged);
 	connect(m_boxPlot, &BoxPlot::medianLineOpacityChanged, this, &BoxPlotDock::plotMedianLineOpacityChanged);
-
-	//markers
-	connect(m_boxPlot, &BoxPlot::symbolOutliersStyleChanged, this, &BoxPlotDock::plotSymbolOutliersStyleChanged);
-	connect(m_boxPlot, &BoxPlot::symbolMeanStyleChanged, this, &BoxPlotDock::plotSymbolMeanStyleChanged);
-	connect(m_boxPlot, &BoxPlot::symbolsSizeChanged, this, &BoxPlotDock::plotSymbolsSizeChanged);
-	connect(m_boxPlot, &BoxPlot::symbolsRotationAngleChanged, this, &BoxPlotDock::plotSymbolsRotationAngleChanged);
-	connect(m_boxPlot, &BoxPlot::symbolsOpacityChanged, this, &BoxPlotDock::plotSymbolsOpacityChanged);
-	connect(m_boxPlot, &BoxPlot::symbolsBrushChanged, this, &BoxPlotDock::plotSymbolsBrushChanged);
-	connect(m_boxPlot, &BoxPlot::symbolsPenChanged, this, &BoxPlotDock::plotSymbolsPenChanged);
 
 	//whiskers
 	connect(m_boxPlot, &BoxPlot::whiskersTypeChanged, this, &BoxPlotDock::plotWhiskersTypeChanged);
@@ -748,175 +731,21 @@ void BoxPlotDock::medianLineOpacityChanged(int value) const {
 }
 
 //markers
-void BoxPlotDock::symbolOutliersStyleChanged(int index) {
-	updateSymbolWidgets();
+void BoxPlotDock::symbolCategoryChanged() {
+	QList<Symbol*> symbols;
 
-	if (m_initializing)
-		return;
-
-	const auto style = Symbol::Style(index);
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setSymbolOutliersStyle(style);
-}
-
-void BoxPlotDock::symbolMeanStyleChanged(int index) {
-	updateSymbolWidgets();
-
-	if (m_initializing)
-		return;
-
-	const auto style = Symbol::Style(index);
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setSymbolMeanStyle(style);
-}
-
-void BoxPlotDock::updateSymbolWidgets() {
-	const auto styleOutliers = Symbol::Style(ui.cbSymbolOutliersStyle->currentIndex());
-	const auto styleMean = Symbol::Style(ui.cbSymbolMeanStyle->currentIndex());
-
-	if (styleOutliers == Symbol::Style::NoSymbols && styleMean == Symbol::Style::NoSymbols) {
-		ui.sbSymbolSize->setEnabled(false);
-		ui.sbSymbolRotation->setEnabled(false);
-		ui.sbSymbolOpacity->setEnabled(false);
-
-		ui.kcbSymbolFillingColor->setEnabled(false);
-		ui.cbSymbolFillingStyle->setEnabled(false);
-
-		ui.cbSymbolBorderStyle->setEnabled(false);
-		ui.kcbSymbolBorderColor->setEnabled(false);
-		ui.sbSymbolBorderWidth->setEnabled(false);
-	} else {
-		ui.sbSymbolSize->setEnabled(true);
-		ui.sbSymbolRotation->setEnabled(true);
-		ui.sbSymbolOpacity->setEnabled(true);
-
-		//enable/disable the symbol filling options in the GUI depending on the currently selected symbol.
-		if ( (styleOutliers != Symbol::Style::Line && styleOutliers != Symbol::Style::Cross)
-			|| (styleMean != Symbol::Style::Line && styleMean != Symbol::Style::Cross) ) {
-			ui.cbSymbolFillingStyle->setEnabled(true);
-			bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
-			ui.kcbSymbolFillingColor->setEnabled(!noBrush);
-		} else {
-			ui.kcbSymbolFillingColor->setEnabled(false);
-			ui.cbSymbolFillingStyle->setEnabled(false);
-		}
-
-		ui.cbSymbolBorderStyle->setEnabled(true);
-		bool noLine = (Qt::PenStyle(ui.cbSymbolBorderStyle->currentIndex()) == Qt::NoPen);
-		ui.kcbSymbolBorderColor->setEnabled(!noLine);
-		ui.sbSymbolBorderWidth->setEnabled(!noLine);
+	for (auto* plot : m_boxPlots) {
+		if (ui.rbMean->isChecked())
+			symbols << plot->symbolMean();
+		else if (ui.rbOutlier->isChecked())
+			symbols << plot->symbolOutlier();
+		else if (ui.rbFarOut->isChecked())
+			symbols << plot->symbolFarOut();
+		else if (ui.rbJitter->isChecked())
+			symbols << plot->symbolJitter();
 	}
 
-}
-void BoxPlotDock::symbolsSizeChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setSymbolsSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-}
-
-void BoxPlotDock::symbolsRotationChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setSymbolsRotationAngle(value);
-}
-
-void BoxPlotDock::symbolsOpacityChanged(int value) const {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value/100.;
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setSymbolsOpacity(opacity);
-}
-
-void BoxPlotDock::symbolsFillingStyleChanged(int index) const {
-	if (index == -1)
-		return;
-
-	const auto brushStyle = Qt::BrushStyle(index);
-	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
-
-	if (m_initializing)
-		return;
-
-	QBrush brush;
-	for (auto* boxPlot : m_boxPlots) {
-		brush = boxPlot->symbolsBrush();
-		brush.setStyle(brushStyle);
-		boxPlot->setSymbolsBrush(brush);
-	}
-}
-
-void BoxPlotDock::symbolsFillingColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QBrush brush;
-	for (auto* boxPlot : m_boxPlots) {
-		brush = boxPlot->symbolsBrush();
-		brush.setColor(color);
-		boxPlot->setSymbolsBrush(brush);
-	}
-
-	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color );
-	m_initializing = false;
-}
-
-void BoxPlotDock::symbolsBorderStyleChanged(int index) const {
-	if (index == -1)
-		return;
-
-	const auto penStyle = Qt::PenStyle(index);
-	if ( penStyle == Qt::NoPen ) {
-		ui.kcbSymbolBorderColor->setEnabled(false);
-		ui.sbSymbolBorderWidth->setEnabled(false);
-	} else {
-		ui.kcbSymbolBorderColor->setEnabled(true);
-		ui.sbSymbolBorderWidth->setEnabled(true);
-	}
-
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->symbolsPen();
-		pen.setStyle(penStyle);
-		boxPlot->setSymbolsPen(pen);
-	}
-}
-
-void BoxPlotDock::symbolsBorderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->symbolsPen();
-		pen.setColor(color);
-		boxPlot->setSymbolsPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, color);
-	m_initializing = false;
-}
-
-void BoxPlotDock::symbolsBorderWidthChanged(double value) const {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* boxPlot : m_boxPlots) {
-		pen = boxPlot->symbolsPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-		boxPlot->setSymbolsPen(pen);
-	}
+	symbolWidget->setSymbols(symbols);
 }
 
 //whiskers
@@ -1092,40 +921,6 @@ void BoxPlotDock::plotMedianLineOpacityChanged(float value) {
 	ui.sbMedianLineOpacity->setValue(v);
 }
 
-//markers
-void BoxPlotDock::plotSymbolOutliersStyleChanged(Symbol::Style style) {
-	Lock lock(m_initializing);
-	ui.cbSymbolOutliersStyle->setCurrentIndex((int)style);
-}
-void BoxPlotDock::plotSymbolMeanStyleChanged(Symbol::Style style) {
-	Lock lock(m_initializing);
-	ui.cbSymbolMeanStyle->setCurrentIndex((int)style);
-}
-void BoxPlotDock::plotSymbolsSizeChanged(qreal size) {
-	Lock lock(m_initializing);
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
-}
-void BoxPlotDock::plotSymbolsRotationAngleChanged(qreal angle) {
-	Lock lock(m_initializing);
-	ui.sbSymbolRotation->setValue(angle);
-}
-void BoxPlotDock::plotSymbolsOpacityChanged(qreal opacity) {
-	Lock lock(m_initializing);
-	ui.sbSymbolOpacity->setValue( round(opacity*100.0) );
-}
-void BoxPlotDock::plotSymbolsBrushChanged(const QBrush& brush) {
-	Lock lock(m_initializing);
-	ui.cbSymbolFillingStyle->setCurrentIndex((int) brush.style());
-	ui.kcbSymbolFillingColor->setColor(brush.color());
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, brush.color());
-}
-void BoxPlotDock::plotSymbolsPenChanged(const QPen& pen) {
-	Lock lock(m_initializing);
-	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
-	ui.kcbSymbolBorderColor->setColor( pen.color());
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, pen.color());
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-}
 
 //whiskers
 void BoxPlotDock::plotWhiskersTypeChanged(BoxPlot::WhiskersType type) {
@@ -1192,17 +987,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.sbMedianLineOpacity->setValue( group.readEntry("MedianLineOpacity", m_boxPlot->borderOpacity())*100 );
 
 	//symbols
-	const QPen& penSymbol = m_boxPlot->symbolsPen();
-	ui.cbSymbolOutliersStyle->setCurrentIndex( group.readEntry("SymbolOutliersStyle", (int)m_boxPlot->symbolOutliersStyle()) );
-	ui.cbSymbolMeanStyle->setCurrentIndex( group.readEntry("SymbolMeanStyle", (int)m_boxPlot->symbolMeanStyle()) );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolSize", m_boxPlot->symbolsSize()), Worksheet::Unit::Point) );
-	ui.sbSymbolRotation->setValue( group.readEntry("SymbolRotation", m_boxPlot->symbolsRotationAngle()) );
-	ui.sbSymbolOpacity->setValue( round(group.readEntry("SymbolOpacity", m_boxPlot->symbolsOpacity())*100.0) );
-	ui.cbSymbolFillingStyle->setCurrentIndex( group.readEntry("SymbolFillingStyle", (int) m_boxPlot->symbolsBrush().style()) );
-	ui.kcbSymbolFillingColor->setColor(  group.readEntry("SymbolFillingColor", m_boxPlot->symbolsBrush().color()) );
-	ui.cbSymbolBorderStyle->setCurrentIndex( group.readEntry("SymbolBorderStyle", (int)penSymbol.style()) );
-	ui.kcbSymbolBorderColor->setColor( group.readEntry("SymbolBorderColor", penSymbol.color()) );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("SymbolBorderWidth", penSymbol.widthF()), Worksheet::Unit::Point) );
+	symbolCategoryChanged();
 
 	//whiskers
 	const QPen& penWhiskers = m_boxPlot->whiskersPen();
@@ -1216,7 +1001,6 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	Lock lock(m_initializing);
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 	GuiTools::updatePenStyles(ui.cbMedianLineStyle, ui.kcbMedianLineColor->color());
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, ui.kcbSymbolBorderColor->color());
 	GuiTools::updatePenStyles(ui.cbWhiskersStyle, ui.kcbWhiskersColor->color());
 }
 
@@ -1271,16 +1055,6 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("MedianLineOpacity", ui.sbMedianLineOpacity->value()/100.0);
 
 	//symbols for the outliers and for the mean
-	group.writeEntry("SymbolOutliersStyle", ui.cbSymbolOutliersStyle->currentIndex());
-	group.writeEntry("SymbolMeanStyle", ui.cbSymbolMeanStyle->currentIndex());
-	group.writeEntry("SymbolSize", Worksheet::convertToSceneUnits(ui.sbSymbolSize->value(),Worksheet::Unit::Point));
-	group.writeEntry("SymbolRotation", ui.sbSymbolRotation->value());
-	group.writeEntry("SymbolOpacity", ui.sbSymbolOpacity->value()/100.0);
-	group.writeEntry("SymbolFillingStyle", ui.cbSymbolFillingStyle->currentIndex());
-	group.writeEntry("SymbolFillingColor", ui.kcbSymbolFillingColor->color());
-	group.writeEntry("SymbolBorderStyle", ui.cbSymbolBorderStyle->currentIndex());
-	group.writeEntry("SymbolBorderColor", ui.kcbSymbolBorderColor->color());
-	group.writeEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(ui.sbSymbolBorderWidth->value(), Worksheet::Unit::Point));
 
 	//whiskers
 	group.writeEntry("WhiskersType", ui.cbWhiskersType->currentIndex());

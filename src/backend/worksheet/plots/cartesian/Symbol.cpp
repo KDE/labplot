@@ -144,6 +144,8 @@ void Symbol::save(QXmlStreamWriter* writer) const {
 
 	if (parentAspect()->type() == AspectType::CustomPoint)
 		writer->writeStartElement("symbol");
+	else if (parentAspect()->type() == AspectType::BoxPlot)
+		writer->writeStartElement(name()); //BoxPlot has multiple symbols, differentiated by their names
 	else
 		writer->writeStartElement("symbols"); //keep the backward compatibility for "symbols" used in XYCurve and Histogram
 
@@ -158,9 +160,9 @@ void Symbol::save(QXmlStreamWriter* writer) const {
 
 //! Load from XML
 bool Symbol::load(XmlStreamReader* reader, bool preview) {
-
 	if (preview)
 		return true;
+
 	Q_D(Symbol);
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QString str;

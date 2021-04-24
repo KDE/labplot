@@ -35,6 +35,7 @@
 class AbstractAspect;
 class AspectTreeModel;
 class BoxPlot;
+class SymbolWidget;
 class TreeViewComboBox;
 class KConfig;
 
@@ -51,6 +52,7 @@ private:
 	QList<BoxPlot*> m_boxPlots;
 	BoxPlot* m_boxPlot{nullptr};
 	AspectTreeModel* m_aspectTreeModel{nullptr};
+	SymbolWidget* symbolWidget{nullptr};
 
 	QGridLayout* m_gridLayout;
 	QPushButton* m_buttonNew;
@@ -100,16 +102,7 @@ private slots:
 	void medianLineOpacityChanged(int) const;
 
 	//makers
-	void symbolOutliersStyleChanged(int);
-	void symbolMeanStyleChanged(int);
-	void symbolsSizeChanged(double) const;
-	void symbolsRotationChanged(int) const;
-	void symbolsOpacityChanged(int) const;
-	void symbolsFillingStyleChanged(int) const;
-	void symbolsFillingColorChanged(const QColor&);
-	void symbolsBorderStyleChanged(int) const;
-	void symbolsBorderColorChanged(const QColor&);
-	void symbolsBorderWidthChanged(double) const;
+	void symbolCategoryChanged();
 
 	//whiskers
 	void whiskersTypeChanged(int) const;
@@ -145,15 +138,6 @@ private slots:
 	//median line
 	void plotMedianLinePenChanged(QPen&);
 	void plotMedianLineOpacityChanged(float);
-
-	//markers
-	void plotSymbolOutliersStyleChanged(Symbol::Style);
-	void plotSymbolMeanStyleChanged(Symbol::Style);
-	void plotSymbolsSizeChanged(qreal);
-	void plotSymbolsRotationAngleChanged(qreal);
-	void plotSymbolsOpacityChanged(qreal);
-	void plotSymbolsBrushChanged(const QBrush&);
-	void plotSymbolsPenChanged(const QPen&);
 
 	//whiskers
 	void plotWhiskersTypeChanged(BoxPlot::WhiskersType);

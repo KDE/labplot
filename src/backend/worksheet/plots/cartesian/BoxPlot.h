@@ -34,6 +34,7 @@
 
 class BoxPlotPrivate;
 class AbstractColumn;
+class Symbol;
 
 class BoxPlot : public WorksheetElement {
 	Q_OBJECT
@@ -78,13 +79,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, medianLineOpacity, MedianLineOpacity)
 
 	//markers
-	BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolOutliersStyle, SymbolOutliersStyle)
-	BASIC_D_ACCESSOR_DECL(Symbol::Style, symbolMeanStyle, SymbolMeanStyle)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolsOpacity, SymbolsOpacity)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolsRotationAngle, SymbolsRotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, symbolsSize, SymbolsSize)
-	CLASS_D_ACCESSOR_DECL(QBrush, symbolsBrush, SymbolsBrush)
-	CLASS_D_ACCESSOR_DECL(QPen, symbolsPen, SymbolsPen)
+	Symbol* symbolMean() const;
+	Symbol* symbolOutlier() const;
+	Symbol* symbolFarOut() const;
+	Symbol* symbolJitter() const;
 
 	//whiskers
 	BASIC_D_ACCESSOR_DECL(BoxPlot::WhiskersType, whiskersType, WhiskersType)
@@ -156,15 +154,6 @@ signals:
 	//median line
 	void medianLinePenChanged(QPen&);
 	void medianLineOpacityChanged(float);
-
-	//symbols for outliers and for the mean
-	void symbolOutliersStyleChanged(Symbol::Style);
-	void symbolMeanStyleChanged(Symbol::Style);
-	void symbolsSizeChanged(qreal);
-	void symbolsRotationAngleChanged(qreal);
-	void symbolsOpacityChanged(qreal);
-	void symbolsBrushChanged(QBrush);
-	void symbolsPenChanged(const QPen&);
 
 	//whiskers
 	void whiskersTypeChanged(BoxPlot::WhiskersType);

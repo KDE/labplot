@@ -32,6 +32,7 @@
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "tools/ImageTools.h"
@@ -102,16 +103,33 @@ void BoxPlot::init() {
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 
 	//markers
-	d->symbolOutliersStyle = (Symbol::Style)group.readEntry("SymbolOutliersStyle", static_cast<int>(Symbol::Style::Circle));
-	d->symbolMeanStyle = (Symbol::Style)group.readEntry("SymbolMeanStyle", static_cast<int>(Symbol::Style::Cross));
-	d->symbolsSize = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->symbolsRotationAngle = group.readEntry("SymbolRotation", 0.0);
-	d->symbolsOpacity = group.readEntry("SymbolOpacity", 1.0);
-	d->symbolsBrush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
-	d->symbolsBrush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::black)) );
-	d->symbolsPen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
-	d->symbolsPen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
-	d->symbolsPen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
+	d->symbolMean = new Symbol("symbolMean");
+	addChild(d->symbolMean);
+	d->symbolMean->setHidden(true);
+	connect(d->symbolMean, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbolMean, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
+	d->symbolMean->init(group);
+
+	d->symbolOutlier = new Symbol("symbolOutlier");
+	addChild(d->symbolOutlier);
+	d->symbolOutlier->setHidden(true);
+	connect(d->symbolOutlier, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbolOutlier, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
+	d->symbolOutlier->init(group);
+
+	d->symbolFarOut = new Symbol("symbolFarOut");
+	addChild(d->symbolFarOut);
+	d->symbolFarOut->setHidden(true);
+	connect(d->symbolFarOut, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbolFarOut, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
+	d->symbolFarOut->init(group);
+
+	d->symbolJitter = new Symbol("symbolJitter");
+	addChild(d->symbolJitter);
+	d->symbolJitter->setHidden(true);
+	connect(d->symbolJitter, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbolJitter, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
+	d->symbolJitter->init(group);
 
 	//whiskers
 	d->whiskersPen = QPen(group.readEntry("WhiskersColor", QColor(Qt::black)),
@@ -224,13 +242,25 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, medianLinePen, medianLinePen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, medianLineOpacity, medianLineOpacity)
 
 //markers
-BASIC_SHARED_D_READER_IMPL(BoxPlot, Symbol::Style, symbolOutliersStyle, symbolOutliersStyle)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, Symbol::Style, symbolMeanStyle, symbolMeanStyle)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, symbolsOpacity, symbolsOpacity)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, symbolsRotationAngle, symbolsRotationAngle)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, symbolsSize, symbolsSize)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QBrush, symbolsBrush, symbolsBrush)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, symbolsPen, symbolsPen)
+Symbol* BoxPlot::symbolMean() const {
+	Q_D(const BoxPlot);
+	return d->symbolMean;
+}
+
+Symbol* BoxPlot::symbolOutlier() const {
+	Q_D(const BoxPlot);
+	return d->symbolOutlier;
+}
+
+Symbol* BoxPlot::symbolFarOut() const {
+	Q_D(const BoxPlot);
+	return d->symbolFarOut;
+}
+
+Symbol* BoxPlot::symbolJitter() const {
+	Q_D(const BoxPlot);
+	return d->symbolJitter;
+}
 
 //whiskers
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
@@ -398,56 +428,6 @@ void BoxPlot::setMedianLineOpacity(qreal opacity) {
 	Q_D(BoxPlot);
 	if (opacity != d->medianLineOpacity)
 		exec(new BoxPlotSetMedianLineOpacityCmd(d, opacity, ki18n("%1: set median line opacity")));
-}
-
-//markers
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolOutliersStyle, Symbol::Style, symbolOutliersStyle, recalcShapeAndBoundingRect)
-void BoxPlot::setSymbolOutliersStyle(Symbol::Style style) {
-	Q_D(BoxPlot);
-	if (style != d->symbolOutliersStyle)
-		exec(new BoxPlotSetSymbolOutliersStyleCmd(d, style, ki18n("%1: set outliers symbol style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolMeanStyle, Symbol::Style, symbolMeanStyle, recalcShapeAndBoundingRect)
-void BoxPlot::setSymbolMeanStyle(Symbol::Style style) {
-	Q_D(BoxPlot);
-	if (style != d->symbolMeanStyle)
-		exec(new BoxPlotSetSymbolMeanStyleCmd(d, style, ki18n("%1: set mean symbol style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolsSize, qreal, symbolsSize, recalcShapeAndBoundingRect)
-void BoxPlot::setSymbolsSize(qreal size) {
-	Q_D(BoxPlot);
-	if (!qFuzzyCompare(1 + size, 1 + d->symbolsSize))
-		exec(new BoxPlotSetSymbolsSizeCmd(d, size, ki18n("%1: set symbol size")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolsRotationAngle, qreal, symbolsRotationAngle, recalcShapeAndBoundingRect)
-void BoxPlot::setSymbolsRotationAngle(qreal angle) {
-	Q_D(BoxPlot);
-	if (!qFuzzyCompare(1 + angle, 1 + d->symbolsRotationAngle))
-		exec(new BoxPlotSetSymbolsRotationAngleCmd(d, angle, ki18n("%1: rotate symbols")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolsBrush, QBrush, symbolsBrush, updatePixmap)
-void BoxPlot::setSymbolsBrush(const QBrush& brush) {
-	Q_D(BoxPlot);
-	if (brush != d->symbolsBrush)
-		exec(new BoxPlotSetSymbolsBrushCmd(d, brush, ki18n("%1: set symbol filling")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolsPen, QPen, symbolsPen, recalcShapeAndBoundingRect)
-void BoxPlot::setSymbolsPen(const QPen& pen) {
-	Q_D(BoxPlot);
-	if (pen != d->symbolsPen)
-		exec(new BoxPlotSetSymbolsPenCmd(d, pen, ki18n("%1: set symbol outline style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetSymbolsOpacity, qreal, symbolsOpacity, updatePixmap)
-void BoxPlot::setSymbolsOpacity(qreal opacity) {
-	Q_D(BoxPlot);
-	if (opacity != d->symbolsOpacity)
-		exec(new BoxPlotSetSymbolsOpacityCmd(d, opacity, ki18n("%1: set symbols opacity")));
 }
 
 //whiskers
@@ -961,17 +941,17 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersPen));
 
-		if (symbolOutliersStyle != Symbol::Style::NoSymbols) {
+		if (symbolOutlier->style() != Symbol::Style::NoSymbols) {
 			QPainterPath symbolsPath = QPainterPath();
-			QPainterPath path = Symbol::pathFromStyle(symbolOutliersStyle);
+			QPainterPath path = Symbol::pathFromStyle(symbolOutlier->style());
 
 			QTransform trafo;
-			trafo.scale(symbolsSize, symbolsSize);
+			trafo.scale(symbolOutlier->size(), symbolOutlier->size());
 			path = trafo.map(path);
 			trafo.reset();
 
-			if (symbolsRotationAngle != 0) {
-				trafo.rotate(symbolsRotationAngle);
+			if (symbolOutlier->rotationAngle() != 0) {
+				trafo.rotate(symbolOutlier->rotationAngle());
 				path = trafo.map(path);
 			}
 
@@ -1071,24 +1051,21 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 		}
 
 		//draw the symbols for the outliers and for the mean
-		if (symbolOutliersStyle != Symbol::Style::NoSymbols || symbolMeanStyle != Symbol::Style::NoSymbols) {
-			painter->setOpacity(symbolsOpacity);
-			painter->setPen(symbolsPen);
-			painter->setBrush(symbolsBrush);
-			drawSymbols(painter, i);
-		}
+		drawSymbols(painter, i);
 	}
 }
 
 void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
-
 	//outliers
-	if (symbolOutliersStyle != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::pathFromStyle(symbolOutliersStyle);
+	if (symbolOutlier->style() != Symbol::Style::NoSymbols) {
+		painter->setOpacity(symbolOutlier->opacity());
+		painter->setPen(symbolOutlier->pen());
+		painter->setBrush(symbolOutlier->brush());
+		QPainterPath path = Symbol::pathFromStyle(symbolOutlier->style());
 		QTransform trafo;
-		trafo.scale(symbolsSize, symbolsSize);
-		if (symbolsRotationAngle != 0)
-			trafo.rotate(-symbolsRotationAngle);
+		trafo.scale(symbolOutlier->size(), symbolOutlier->size());
+		if (symbolOutlier->rotationAngle() != 0)
+			trafo.rotate(-symbolOutlier->rotationAngle());
 
 		path = trafo.map(path);
 
@@ -1100,12 +1077,15 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 	}
 
 	//mean
-	if (symbolMeanStyle != Symbol::Style::NoSymbols && m_meanSymbolPointVisible.at(index)) {
+	if (symbolMean->style() != Symbol::Style::NoSymbols && m_meanSymbolPointVisible.at(index)) {
+		painter->setOpacity(symbolMean->opacity());
+		painter->setPen(symbolMean->pen());
+		painter->setBrush(symbolMean->brush());
 		QTransform trafo;
-		trafo.scale(symbolsSize, symbolsSize);
-		QPainterPath path = Symbol::pathFromStyle(symbolMeanStyle);
-		if (symbolsRotationAngle != 0)
-			trafo.rotate(-symbolsRotationAngle);
+		trafo.scale(symbolMean->size(), symbolMean->size());
+		QPainterPath path = Symbol::pathFromStyle(symbolMean->style());
+		if (symbolMean->rotationAngle() != 0)
+			trafo.rotate(-symbolMean->rotationAngle());
 
 		path = trafo.map(path);
 
@@ -1334,16 +1314,11 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("opacity", QString::number(d->medianLineOpacity));
 	writer->writeEndElement();
 
-	//symbols for the outliers and for the mean
-	writer->writeStartElement("symbols");
-	writer->writeAttribute("symbolOutliersStyle", QString::number(static_cast<int>(d->symbolOutliersStyle)));
-	writer->writeAttribute("symbolMeanStyle", QString::number(static_cast<int>(d->symbolMeanStyle)) );
-	writer->writeAttribute("opacity", QString::number(d->symbolsOpacity));
-	writer->writeAttribute("rotation", QString::number(d->symbolsRotationAngle));
-	writer->writeAttribute("size", QString::number(d->symbolsSize));
-	WRITE_QBRUSH(d->symbolsBrush);
-	WRITE_QPEN(d->symbolsPen);
-	writer->writeEndElement();
+	//symbols for the outliers, mean, far out and jitter values
+	d->symbolMean->save(writer);
+	d->symbolOutlier->save(writer);
+	d->symbolFarOut->save(writer);
+	d->symbolJitter->save(writer);
 
 	//whiskers
 	writer->writeStartElement("whiskers");
@@ -1447,17 +1422,14 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QPEN(d->medianLinePen);
 			READ_DOUBLE_VALUE("opacity", medianLineOpacity);
-		} else if (!preview && reader->name() == "symbols") {
-			attribs = reader->attributes();
-
-			READ_INT_VALUE("symbolOutliersStyle", symbolOutliersStyle, Symbol::Style);
-			READ_INT_VALUE("symbolMeanStyle", symbolMeanStyle, Symbol::Style);
-			READ_DOUBLE_VALUE("opacity", symbolsOpacity);
-			READ_DOUBLE_VALUE("rotation", symbolsRotationAngle);
-			READ_DOUBLE_VALUE("size", symbolsSize);
-
-			READ_QBRUSH(d->symbolsBrush);
-			READ_QPEN(d->symbolsPen);
+		} else if (!preview && reader->name() == "symbolMean") {
+			d->symbolMean->load(reader, preview);
+		} else if (!preview && reader->name() == "symbolOutlier") {
+			d->symbolOutlier->load(reader, preview);
+		} else if (!preview && reader->name() == "symbolFarOut") {
+			d->symbolFarOut->load(reader, preview);
+		} else if (!preview && reader->name() == "symbolJitter") {
+			d->symbolJitter->load(reader, preview);
 		} else if (!preview && reader->name() == "whiskers") {
 			attribs = reader->attributes();
 
@@ -1524,16 +1496,11 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	setWhiskersPen(p);
 	setWhiskersOpacity(group.readEntry("LineOpacity", 1.0));
 
-	//symbols for the mean and for the outliers
-	this->setSymbolsOpacity(group.readEntry("SymbolOpacity", 1.0));
-	QBrush brush;
-	brush.setStyle((Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern));
-	brush.setColor(themeColor);
-	this->setSymbolsBrush(brush);
-	p.setStyle((Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine));
-	p.setColor(themeColor);
-	p.setWidthF(group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
-	this->setSymbolsPen(p);
+	//symbols
+	d->symbolMean->loadThemeConfig(group, themeColor);
+	d->symbolOutlier->loadThemeConfig(group, themeColor);
+	d->symbolFarOut->loadThemeConfig(group, themeColor);
+	d->symbolJitter->loadThemeConfig(group, themeColor);
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
