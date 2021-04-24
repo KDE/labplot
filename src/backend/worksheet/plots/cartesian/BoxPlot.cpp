@@ -875,18 +875,13 @@ void BoxPlotPrivate::mapOutliersToScene(int index) {
 
 		const int startIndex = 0;
 		const int endIndex = m_outliersSymbolPointsLogical[index].size() - 1;
-		const double minLogicalDiffX = dataRect.width()/numberOfPixelX;
-		const double minLogicalDiffY = dataRect.height()/numberOfPixelY;
-
-		// eliminate multiple scene points (size (numberOfPixelX + 1) * (numberOfPixelY + 1))
-		QVector<QVector<bool>> scenePointsUsed(numberOfPixelX + 1);
-		for (auto& col: scenePointsUsed)
-			col.resize(numberOfPixelY + 1);
 
 		QVector<bool> m_pointVisible;
 		m_pointVisible.resize(numberOfPoints);
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_outliersSymbolPointsLogical[index], m_outliersSymbolPoints[index],
-			m_pointVisible, scenePointsUsed, minLogicalDiffX, minLogicalDiffY);
+		q->cSystem->mapLogicalToScene(startIndex, endIndex,
+									m_outliersSymbolPointsLogical[index],
+									m_outliersSymbolPoints[index],
+									m_pointVisible);
 	}
 }
 

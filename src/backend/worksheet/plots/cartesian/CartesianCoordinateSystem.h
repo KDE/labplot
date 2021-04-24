@@ -36,19 +36,22 @@
 class CartesianCoordinateSystemPrivate;
 class CartesianCoordinateSystemSetScalePropertiesCmd;
 
+typedef QVector<QPointF> Points;
+typedef QVector<QLineF> Lines;
+
 class CartesianCoordinateSystem: public AbstractCoordinateSystem {
 public:
 	explicit CartesianCoordinateSystem(CartesianPlot*);
 	~CartesianCoordinateSystem() override;
 
 	//TODO: document the 5 versions
-	QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
-	void mapLogicalToScene(const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints, std::vector<bool>& visiblePoints, MappingFlags flags = MappingFlag::DefaultMapping) const;
-	void mapLogicalToScene(int startIndex, int endIndex, const QVector<QPointF>& logicalPoints, QVector<QPointF>& scenePoints, QVector<bool>& visiblePoints, QVector<QVector<bool>>& scenePointsUsed, double minLogicalDiffX, double minLogicalDiffY, MappingFlags flags = MappingFlag::DefaultMapping) const;
+	Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
+	void mapLogicalToScene(const Points& logicalPoints, Points& scenePoints, std::vector<bool>& visiblePoints, MappingFlags flags = MappingFlag::DefaultMapping) const;
+	void mapLogicalToScene(int startIndex, int endIndex, const Points& logicalPoints, Points& scenePoints, QVector<bool>& visiblePoints, MappingFlags flags = MappingFlag::DefaultMapping) const;
 	QPointF mapLogicalToScene(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const override;
-	QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
+	Lines mapLogicalToScene(const Lines&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 
-	QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
+	Points mapSceneToLogical(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 
 	int xDirection() const;

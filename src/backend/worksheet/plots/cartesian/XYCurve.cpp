@@ -1031,15 +1031,6 @@ void XYCurvePrivate::retransform() {
 		}
 
 		DEBUG(Q_FUNC_INFO << ", numberOfPixelX/numberOfPixelY = " << numberOfPixelX << '/' << numberOfPixelY)
-		//TODO: not needed with new method
-		const double minLogicalDiffX = dataRect.width()/numberOfPixelX;
-		const double minLogicalDiffY = dataRect.height()/numberOfPixelY;
-		DEBUG(Q_FUNC_INFO << ", -> minLogicalDiffX/Y = " << minLogicalDiffX << '/' << minLogicalDiffY)
-
-		// eliminate multiple scene points (size (numberOfPixelX + 1) * (numberOfPixelY + 1))
-		QVector<QVector<bool>> scenePointsUsed(numberOfPixelX + 1);
-		for (auto& col: scenePointsUsed)
-			col.resize(numberOfPixelY + 1);
 
 		const auto columnProperties = xColumn->properties();
 		int startIndex, endIndex;
@@ -1070,8 +1061,7 @@ void XYCurvePrivate::retransform() {
 
 		m_pointVisible.clear();
 		m_pointVisible.resize(numberOfPoints);
-		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints,
-				m_pointVisible, scenePointsUsed, minLogicalDiffX, minLogicalDiffY);
+		q->cSystem->mapLogicalToScene(startIndex, endIndex, m_logicalPoints, m_scenePoints, m_pointVisible);
 	}
 	}
 	//} // (symbolsStyle != Symbol::Style::NoSymbols || valuesType != XYCurve::NoValues )
