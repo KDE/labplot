@@ -311,7 +311,7 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrientation, BoxPlot::Orientation, orientation, recalc)
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrientation, BoxPlot::Orientation, orientation, recalc);
 void BoxPlot::setOrientation(BoxPlot::Orientation orientation) {
 	Q_D(BoxPlot);
 	if (orientation != d->orientation)
@@ -515,8 +515,9 @@ void BoxPlotPrivate::retransform() {
 		m_boxRect[i].clear();
 		m_medianLine[i] = QLineF();
 		m_whiskersPath[i] = QPainterPath();
-		m_outliersCount[i] = 0;
-		m_outliersSymbolPoints[i].clear();
+		m_outlierPoints[i].clear();
+		m_jitterPoints[i].clear();
+		m_farOutPoints[i].clear();
 	}
 
 	if (count) {
@@ -551,9 +552,12 @@ void BoxPlotPrivate::recalc() {
 	m_whiskersPath.resize(count);
 	m_whiskerMin.resize(count);
 	m_whiskerMax.resize(count);
-	m_outliersSymbolPointsLogical.resize(count);
-	m_outliersSymbolPoints.resize(count);
-	m_outliersCount.resize(count);
+	m_outlierPointsLogical.resize(count);
+	m_outlierPoints.resize(count);
+	m_jitterPointsLogical.resize(count);
+	m_jitterPoints.resize(count);
+	m_farOutPointsLogical.resize(count);
+	m_farOutPoints.resize(count);
 	m_mean.resize(count);
 	m_meanSymbolPoint.resize(count);
 	m_meanSymbolPointVisible.resize(count);
@@ -595,7 +599,8 @@ void BoxPlotPrivate::recalc() {
 	emit q->dataChanged();
 }
 
-void BoxPlotPrivate::setOutlierPoint(QPointF& point, double pos, double value) {
+QPointF BoxPlotPrivate::setOutlierPoint(double pos, double value) {
+	QPointF point;
 	if (orientation == BoxPlot::Orientation::Vertical) {
 		point.setX(pos);
 		point.setY(value);
@@ -613,6 +618,8 @@ void BoxPlotPrivate::setOutlierPoint(QPointF& point, double pos, double value) {
 		else if (value < m_xMin)
 			m_xMin = value;
 	}
+
+	return point;
 }
 
 void BoxPlotPrivate::recalc(int index) {
@@ -620,6 +627,15 @@ void BoxPlotPrivate::recalc(int index) {
 	auto* column = static_cast<const Column*>(dataColumns.at(index));
 	if (!column)
 		return;
+
+	//clear the containers for outliers, etc. since the their number
+	//can be changed because of the new settings for whiskers, etc.
+	m_outlierPointsLogical[index].clear();
+	m_outlierPoints[index].clear();
+	m_jitterPointsLogical[index].clear();
+	m_jitterPoints[index].clear();
+	m_farOutPointsLogical[index].clear();
+	m_farOutPoints[index].clear();
 
 	const auto& statistics = column->statistics();
 	double width = 0.5;
@@ -675,8 +691,6 @@ void BoxPlotPrivate::recalc(int index) {
 	}
 
 	//outliers symbols
-	m_outliersCount[index] = 0;
-	m_outliersSymbolPointsLogical[index].clear();
 	if (orientation == BoxPlot::Orientation::Vertical) {
 		if (m_whiskerMax[index] > m_yMax)
 			m_yMax = m_whiskerMax[index];
@@ -689,51 +703,24 @@ void BoxPlotPrivate::recalc(int index) {
 			m_xMin = m_whiskerMin[index];
 	}
 
-	if (whiskersType != BoxPlot::WhiskersType::MinMax) {
-		double whiskerMax = - qInf(); //upper adjacent value
-		double whiskerMin = qInf(); //lower adjacent value
+	double whiskerMax = - qInf(); //upper adjacent value
+	double whiskerMin = qInf(); //lower adjacent value
+	const double outerFenceMax = statistics.thirdQuartile + 3.0*statistics.iqr;
+	const double outerFenceMin = statistics.firstQuartile - 3.0*statistics.iqr;
+
+	for (int row = 0; row < column->rowCount(); ++row) {
+		if (!column->isValid(row) || column->isMasked(row) )
+			continue;
+
+		double value = 0.0;
 		switch (column->columnMode()) {
 		case AbstractColumn::ColumnMode::Numeric:
 		case AbstractColumn::ColumnMode::Integer:
 		case AbstractColumn::ColumnMode::BigInt:
-			for (int row = 0; row < column->rowCount(); ++row) {
-				if ( column->isValid(row) && !column->isMasked(row) ) {
-					const double value = column->valueAt(row);
-					if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
-						QPointF point;
-						setOutlierPoint(point, x, value);
-						++m_outliersCount[index];
-						if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1)
-							m_outliersSymbolPointsLogical[index] << point;
-					} else if (whiskersType == BoxPlot::WhiskersType::IQR) {
-						//determine the upper/lower adjucent values
-						if (value > whiskerMax)
-							whiskerMax = value;
-						else if (value < whiskerMin)
-							whiskerMin = value;
-					}
-				}
-			}
+			value = column->valueAt(row);
 			break;
 		case AbstractColumn::ColumnMode::DateTime:
-			for (int row = 0; row < column->rowCount(); ++row) {
-				if ( column->isValid(row) && !column->isMasked(row) ){
-					const double value = column->dateTimeAt(row).toMSecsSinceEpoch();
-					if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
-						QPointF point;
-						setOutlierPoint(point, x, value);
-						++m_outliersCount[index];
-						if (m_outliersSymbolPointsLogical[index].indexOf(point) == -1)
-							m_outliersSymbolPointsLogical[index] << point;
-					} else if (whiskersType == BoxPlot::WhiskersType::IQR) {
-						//determine the upper/lower adjucent values
-						if (value > whiskerMax)
-							whiskerMax = value;
-						else if (value < whiskerMin)
-							whiskerMin = value;
-					}
-				}
-			}
+			value = column->dateTimeAt(row).toMSecsSinceEpoch();
 			break;
 		case AbstractColumn::ColumnMode::Text:
 		case AbstractColumn::ColumnMode::Month:
@@ -741,11 +728,32 @@ void BoxPlotPrivate::recalc(int index) {
 			break;
 		}
 
-		//set the whisker ends at the upper and lower adjacent values
-		if (whiskersType == BoxPlot::WhiskersType::IQR) {
-			m_whiskerMax[index] = whiskerMax;
-			m_whiskerMin[index] = whiskerMin;
+		if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
+			if (whiskersType == BoxPlot::WhiskersType::IQR && (value > outerFenceMax || value < outerFenceMin))
+				m_farOutPointsLogical[index] << setOutlierPoint(x, value);
+			else
+				m_outlierPointsLogical[index] << setOutlierPoint(x, value);;
+		} else {
+			double rand = (double)std::rand() / ((double)RAND_MAX + 1);
+			if (orientation == BoxPlot::Orientation::Vertical)
+				m_jitterPointsLogical[index] << QPointF(m_xMinBox[index] + rand*width, value);
+			else
+				m_jitterPointsLogical[index] << QPointF(value, m_yMinBox[index] + rand*width);
+
+			//determine the upper/lower adjucent values
+			if (whiskersType == BoxPlot::WhiskersType::IQR) {
+				if (value > whiskerMax)
+					whiskerMax = value;
+				else if (value < whiskerMin)
+					whiskerMin = value;
+			}
 		}
+	}
+
+	//set the whisker ends at the upper and lower adjacent values
+	if (whiskersType == BoxPlot::WhiskersType::IQR) {
+		m_whiskerMax[index] = whiskerMax;
+		m_whiskerMin[index] = whiskerMin;
 	}
 }
 
@@ -793,6 +801,34 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 
 	//outliers symbols
 	mapOutliersToScene(index);
+
+	//jitter values
+	int size = m_jitterPointsLogical[index].size();
+	if (size > 0) {
+		const int startIndex = 0;
+		const int endIndex = m_jitterPointsLogical[index].size() - 1;
+		QVector<bool> m_pointVisible;
+		m_pointVisible.resize(size);
+
+		q->cSystem->mapLogicalToScene(startIndex, endIndex,
+									m_jitterPointsLogical[index],
+									m_jitterPoints[index],
+									m_pointVisible);
+	}
+
+	//far out values
+	size = m_farOutPointsLogical[index].size();
+	if (size > 0) {
+		const int startIndex = 0;
+		const int endIndex = m_farOutPointsLogical[index].size() - 1;
+		QVector<bool> m_pointVisible;
+		m_pointVisible.resize(size);
+
+		q->cSystem->mapLogicalToScene(startIndex, endIndex,
+									m_farOutPointsLogical[index],
+									m_farOutPoints[index],
+									m_pointVisible);
+	}
 
 	//mean symbol
 	QVector<QPointF> points = {QPointF(x, m_mean.at(index))};
@@ -848,6 +884,32 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	//outliers symbols
 	mapOutliersToScene(index);
 
+	int size = m_jitterPointsLogical[index].size();
+	if (size > 0) {
+		const int startIndex = 0;
+		const int endIndex = m_jitterPointsLogical[index].size() - 1;
+		QVector<bool> m_pointVisible;
+		m_pointVisible.resize(size);
+
+		q->cSystem->mapLogicalToScene(startIndex, endIndex,
+									m_jitterPointsLogical[index],
+									m_jitterPoints[index],
+									m_pointVisible);
+	}
+
+	size = m_farOutPointsLogical[index].size();
+	if (size > 0) {
+		const int startIndex = 0;
+		const int endIndex = m_farOutPointsLogical[index].size() - 1;
+		QVector<bool> m_pointVisible;
+		m_pointVisible.resize(size);
+
+		q->cSystem->mapLogicalToScene(startIndex, endIndex,
+									m_farOutPointsLogical[index],
+									m_farOutPoints[index],
+									m_pointVisible);
+	}
+
 	//mean symbol
 	QVector<QPointF> points = {QPointF(m_mean.at(index), y)};
 	points = q->cSystem->mapLogicalToScene(points);
@@ -864,23 +926,16 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
  * //XYCurvePrivate::retransform()
  */
 void BoxPlotPrivate::mapOutliersToScene(int index) {
-	const int numberOfPoints = m_outliersSymbolPointsLogical[index].size();
+	const int numberOfPoints = m_outlierPointsLogical[index].size();
 	if (numberOfPoints > 0) {
-		const auto dataRect{ q->m_plot->dataRect() };
-		const int numberOfPixelX = dataRect.width();
-		const int numberOfPixelY = dataRect.height();
-
-		if (numberOfPixelX <= 0 || numberOfPixelY <= 0)
-			return;
-
 		const int startIndex = 0;
-		const int endIndex = m_outliersSymbolPointsLogical[index].size() - 1;
-
+		const int endIndex = m_outlierPointsLogical[index].size() - 1;
 		QVector<bool> m_pointVisible;
 		m_pointVisible.resize(numberOfPoints);
+
 		q->cSystem->mapLogicalToScene(startIndex, endIndex,
-									m_outliersSymbolPointsLogical[index],
-									m_outliersSymbolPoints[index],
+									m_outlierPointsLogical[index],
+									m_outlierPoints[index],
 									m_pointVisible);
 	}
 }
@@ -936,10 +991,12 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersPen));
 
-		if (symbolOutlier->style() != Symbol::Style::NoSymbols) {
-			QPainterPath symbolsPath = QPainterPath();
-			QPainterPath path = Symbol::pathFromStyle(symbolOutlier->style());
+		//add symbols outlier, jitter and far out values
+		QPainterPath symbolsPath = QPainterPath();
 
+		//outlier values
+		if (symbolOutlier->style() != Symbol::Style::NoSymbols && !m_outlierPoints.at(i).isEmpty()) {
+			QPainterPath path = Symbol::pathFromStyle(symbolOutlier->style());
 			QTransform trafo;
 			trafo.scale(symbolOutlier->size(), symbolOutlier->size());
 			path = trafo.map(path);
@@ -950,14 +1007,54 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_outliersSymbolPoints.at(i))) {
+			for (const auto& point : qAsConst(m_outlierPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
 			}
-
-			m_boxPlotShape.addPath(symbolsPath);
 		}
+
+		//jitter values
+		if (symbolJitter->style() != Symbol::Style::NoSymbols && !m_jitterPoints.at(i).isEmpty()) {
+			QPainterPath path = Symbol::pathFromStyle(symbolJitter->style());
+			QTransform trafo;
+			trafo.scale(symbolJitter->size(), symbolJitter->size());
+			path = trafo.map(path);
+			trafo.reset();
+
+			if (symbolJitter->rotationAngle() != 0) {
+				trafo.rotate(symbolJitter->rotationAngle());
+				path = trafo.map(path);
+			}
+
+			for (const auto& point : qAsConst(m_jitterPoints.at(i))) {
+				trafo.reset();
+				trafo.translate(point.x(), point.y());
+				symbolsPath.addPath(trafo.map(path));
+			}
+		}
+
+		//far out values
+		if (symbolFarOut->style() != Symbol::Style::NoSymbols && !m_farOutPoints.at(i).isEmpty()) {
+			QPainterPath path = Symbol::pathFromStyle(symbolOutlier->style());
+			QTransform trafo;
+			trafo.scale(symbolFarOut->size(), symbolFarOut->size());
+			path = trafo.map(path);
+			trafo.reset();
+
+			if (symbolFarOut->rotationAngle() != 0) {
+				trafo.rotate(symbolFarOut->rotationAngle());
+				path = trafo.map(path);
+			}
+
+			for (const auto& point : qAsConst(m_farOutPoints.at(i))) {
+				trafo.reset();
+				trafo.translate(point.x(), point.y());
+				symbolsPath.addPath(trafo.map(path));
+			}
+		}
+
+		m_boxPlotShape.addPath(symbolsPath);
 	}
 
 	m_boundingRectangle = m_boxPlotShape.boundingRect();
@@ -1051,8 +1148,8 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 }
 
 void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
-	//outliers
-	if (symbolOutlier->style() != Symbol::Style::NoSymbols) {
+	//outlier values
+	if (symbolOutlier->style() != Symbol::Style::NoSymbols && !m_outlierPoints.at(index).isEmpty()) {
 		painter->setOpacity(symbolOutlier->opacity());
 		painter->setPen(symbolOutlier->pen());
 		painter->setBrush(symbolOutlier->brush());
@@ -1064,14 +1161,14 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 
 		path = trafo.map(path);
 
-		for (const auto& point : qAsConst(m_outliersSymbolPoints.at(index))) {
+		for (const auto& point : qAsConst(m_outlierPoints.at(index))) {
 			trafo.reset();
 			trafo.translate(point.x(), point.y());
 			painter->drawPath(trafo.map(path));
 		}
 	}
 
-	//mean
+	//mean value
 	if (symbolMean->style() != Symbol::Style::NoSymbols && m_meanSymbolPointVisible.at(index)) {
 		painter->setOpacity(symbolMean->opacity());
 		painter->setPen(symbolMean->pen());
@@ -1087,6 +1184,46 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 		trafo.reset();
 		trafo.translate(m_meanSymbolPoint.at(index).x(), m_meanSymbolPoint.at(index).y());
 		painter->drawPath(trafo.map(path));
+	}
+
+	//jitter values
+	if (symbolJitter->style() != Symbol::Style::NoSymbols && !m_jitterPoints.at(index).isEmpty()) {
+		painter->setOpacity(symbolJitter->opacity());
+		painter->setPen(symbolJitter->pen());
+		painter->setBrush(symbolJitter->brush());
+		QPainterPath path = Symbol::pathFromStyle(symbolJitter->style());
+		QTransform trafo;
+		trafo.scale(symbolJitter->size(), symbolJitter->size());
+		if (symbolJitter->rotationAngle() != 0)
+			trafo.rotate(-symbolJitter->rotationAngle());
+
+		path = trafo.map(path);
+
+		for (const auto& point : qAsConst(m_jitterPoints.at(index))) {
+			trafo.reset();
+			trafo.translate(point.x(), point.y());
+			painter->drawPath(trafo.map(path));
+		}
+	}
+
+	//far out values
+	if (symbolFarOut->style() != Symbol::Style::NoSymbols && !m_farOutPoints.at(index).isEmpty()) {
+		painter->setOpacity(symbolFarOut->opacity());
+		painter->setPen(symbolFarOut->pen());
+		painter->setBrush(symbolFarOut->brush());
+		QPainterPath path = Symbol::pathFromStyle(symbolFarOut->style());
+		QTransform trafo;
+		trafo.scale(symbolFarOut->size(), symbolFarOut->size());
+		if (symbolFarOut->rotationAngle() != 0)
+			trafo.rotate(-symbolFarOut->rotationAngle());
+
+		path = trafo.map(path);
+
+		for (const auto& point : qAsConst(m_farOutPoints.at(index))) {
+			trafo.reset();
+			trafo.translate(point.x(), point.y());
+			painter->drawPath(trafo.map(path));
+		}
 	}
 }
 

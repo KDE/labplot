@@ -34,6 +34,8 @@
 
 class CartesianCoordinateSystem;
 
+typedef QVector<QPointF> Points;
+
 class BoxPlotPrivate: public QGraphicsItem {
 public:
 	explicit BoxPlotPrivate(BoxPlot*);
@@ -105,7 +107,7 @@ private:
 	void recalc(int);
 	void verticalBoxPlot(int);
 	void horizontalBoxPlot(int);
-	void setOutlierPoint(QPointF&, double pos, double value);
+	QPointF setOutlierPoint(double pos, double value);
 	void mapOutliersToScene(int index);
 
 	void draw(QPainter*);
@@ -130,11 +132,14 @@ private:
 	QVector<QPainterPath> m_whiskersPath;
 	QVector<double> m_whiskerMin;
 	QVector<double> m_whiskerMax;
-	QVector<QVector<QPointF>> m_outliersSymbolPointsLogical;	//positions of the outlier symbols in logical coordinates
-	QVector<QVector<QPointF>> m_outliersSymbolPoints;	//positions of the outlier symbols in scene coordinates
-	QVector<int> m_outliersCount; //total number of outliers. this number is different to the size of the vector m_outliersSymbolPoints containing unique points only
-	QVector<QPointF> m_meanSymbolPoint; //position of the mean symbol in scene coordinates
+	QVector<Points> m_outlierPointsLogical;	//positions of the outlier symbols in logical coordinates
+	QVector<Points> m_outlierPoints;	//positions of the outlier symbols in scene coordinates
+	Points m_meanSymbolPoint; //position of the mean symbol in scene coordinates
 	QVector<bool> m_meanSymbolPointVisible; //true/false if the mean point is visible in the plot or not
+	QVector<Points> m_jitterPointsLogical;	//positions of the jitters in logical coordinates
+	QVector<Points> m_jitterPoints;	//positions of the jitters in scene coordinates
+	QVector<Points> m_farOutPointsLogical;	//positions of the far out values in logical coordinates
+	QVector<Points> m_farOutPoints;	//positions of the far out values in scene coordinates
 
 	double m_xMin;
 	double m_xMax;
