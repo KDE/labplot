@@ -97,8 +97,10 @@ double nsl_math_trunc_places(double value, int n) {
 
 double nsl_math_places(double value, int n, int method) {
 	// no need to round
-	if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value))
+	if (value == 0. || fabs(value) > 1.e16 || fabs(value) < 1.e-16 || isnan(value) || isinf(value)) {
+/*		printf("nsl_math_places(): not changed : %.19g\n", value); */
 		return value;
+	}
 
 	double scale = gsl_pow_int(10., n);
 	double scaled_value = value*scale;
@@ -108,9 +110,10 @@ double nsl_math_places(double value, int n, int method) {
 		return 0.;
 
 	double eps = 1.e-15;
-	/*printf("nsl_math_places(): DBL_EPSILON = %.19g, scale = %.19g, scaled_value = %.19g, ceil(scaled_value) = %.19g ceil(scaled_value)/scale = %.19g\n",
-			DBL_EPSILON, scale, scaled_value - eps, ceil(scaled_value - eps), ceil(scaled_value - eps)/scale);
-	*/
+/*
+	printf("nsl_math_places(): value = %g, n = %d, DBL_EPSILON = %.19g, scale = %.19g, scaled_value = %.19g, round(scaled_value) = %.19g round(scaled_value)/scale = %.19g\n",
+			value, n, DBL_EPSILON, scale, scaled_value, round(scaled_value), round(scaled_value)/scale);
+*/
 	switch (method) {
 	case 0:
 		return round(scaled_value)/scale;
@@ -132,6 +135,8 @@ double nsl_math_places(double value, int n, int method) {
 }
 
 double nsl_math_round_precision(double value, unsigned int p) {
+/*	printf("nsl_math_round_precision(%g, %d)\n", value, p); */
+
 	// no need to round
 	if (value == 0. || p > 16 || isnan(value) || isinf(value))
 		return value;
@@ -145,9 +150,16 @@ double nsl_math_round_precision(double value, unsigned int p) {
 		value *= 10.;
 		e--;
 	}
+	double order_of_magnitude = gsl_pow_int(10., e);
+
+	if (p <= 0)
+		return order_of_magnitude;
 
 	double scale = gsl_pow_uint(10., p);
 	double scaled_value = value*scale;
+/*
+	printf("nsl_math_round_precision(): scale = %g, scaled_value = %g, e = %d, return: %g\n", scale, scaled_value, e, round(scaled_value)/scale * gsl_pow_int(10., e));
+*/
 
-	return round(scaled_value)/scale * gsl_pow_int(10., e);
+	return round(scaled_value)/scale * order_of_magnitude;
 }

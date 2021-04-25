@@ -1356,7 +1356,10 @@ void AxisPrivate::retransformTicks() {
 		if (majorTicksType != Axis::TicksType::CustomColumn) {
 			switch (scale) {
 			case RangeT::Scale::Linear:
+//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 				majorTickPos = start + majorTicksIncrement * iMajor;
+				if (qAbs(majorTickPos) < 1.e-15 * majorTicksIncrement)	// avoid rounding errors when close to zero
+					majorTickPos = 0;
 				nextMajorTickPos = majorTickPos + majorTicksIncrement;
 				break;
 			case RangeT::Scale::Log10:
@@ -1428,6 +1431,7 @@ void AxisPrivate::retransformTicks() {
 			}
 
 			double value = scalingFactor * majorTickPos + zeroOffset;
+//			DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
 
 			//if custom column is used, we can have duplicated values in it and we need only unique values
 			if (majorTicksType == Axis::TicksType::CustomColumn && tickLabelValues.indexOf(value) != -1)
@@ -1532,6 +1536,7 @@ void AxisPrivate::retransformTicks() {
 			}
 		}
 	}
+//	QDEBUG(Q_FUNC_INFO << tickLabelValues)
 
 	//tick positions where changed -> update the position of the tick labels and grid lines
 	retransformTickLabelStrings();
@@ -1569,18 +1574,18 @@ void AxisPrivate::retransformTickLabelStrings() {
 	//and back to decimal when the numbers get smaller after the auto-switch again
 	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatDecimalOverruled) {
 		for (auto value : tickLabelValues) {
-			if ( qAbs(value) > 1.e4 || (qAbs(value) > 0 && qAbs(value) < 1e-4) ) {
+			if ( qAbs(value) > 1.e4 || (qAbs(value) > 1.e-16 && qAbs(value) < 1e-4) ) {
 				labelsFormat = Axis::LabelsFormat::Scientific;
 				emit q->labelsFormatChanged(labelsFormat);
 				labelsFormatAutoChanged = true;
 				break;
 			}
 		}
-	} else if (labelsFormatAutoChanged ) {
+	} else if (labelsFormatAutoChanged) {
 		//check whether we still have big or small numbers
 		bool changeBack = true;
 		for (auto value : tickLabelValues) {
-			if ( qAbs(value) > 1.e4 || (qAbs(value) > 0 && qAbs(value) < 1.e-4) ) {
+			if ( qAbs(value) > 1.e4 || (qAbs(value) > 1.e-16 && qAbs(value) < 1.e-4) ) {
 				changeBack = false;
 				break;
 			}
@@ -1731,11 +1736,11 @@ void AxisPrivate::retransformTickLabelStrings() {
  */
 int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFormat format) {
 	DEBUG(Q_FUNC_INFO << ", precision = " << precision);
+//	QDEBUG(Q_FUNC_INFO << ", values: " << tickLabelValues)
 
 	// avoid problems with zero range axis
 	if (tickLabelValues.isEmpty() || qFuzzyCompare(tickLabelValues.constFirst(), tickLabelValues.constLast())) {
 		DEBUG(Q_FUNC_INFO << ", zero range axis detected. ticklabel values: ")
-		QDEBUG(Q_FUNC_INFO << tickLabelValues)
 		return 0;
 	}
 
@@ -1768,6 +1773,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 		for (const auto value : tickLabelValues)
 			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
 	}
+//	QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		for (int j = 0; j < tempValues.size(); ++j) {
@@ -1775,8 +1781,11 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 				continue;
 
 			// if duplicate for the current precision found, increase the precision and check again
-			if (tempValues.at(i) == tempValues.at(j))
+			//DEBUG(Q_FUNC_INFO << ", compare " << tempValues.at(i) << " with " << tempValues.at(j))
+			if (tempValues.at(i) == tempValues.at(j)) {
+				//DEBUG(Q_FUNC_INFO << ", duplicates found : " << tempValues.at(i))
 				return upperLabelsPrecision(precision + 1, format);
+			}
 		}
 	}
 
