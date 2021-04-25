@@ -253,7 +253,7 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 	QTransform trafo;
 	trafo.scale(15, 15);
 
-	for (int i = 1; i < Symbol::stylesCount(); ++i) {
+	for (int i = 0; i < Symbol::stylesCount(); ++i) {
 		const auto style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);

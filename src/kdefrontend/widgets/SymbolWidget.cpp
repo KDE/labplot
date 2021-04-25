@@ -45,7 +45,6 @@ SymbolWidget::SymbolWidget(QWidget* parent) : QWidget(parent) {
 
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::addSymbolStyles(ui.cbStyle);
-	ui.cbStyle->insertItem(0, i18n("None")); //needed for XYCurve only
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, Qt::black);
 
 	connect( ui.cbStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolWidget::styleChanged);
@@ -299,6 +298,7 @@ void SymbolWidget::load() {
 
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, ui.kcbFillingColor->color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	styleChanged(ui.cbStyle->currentIndex());
 }
 
 void SymbolWidget::loadConfig(const KConfigGroup& group) {
@@ -317,6 +317,7 @@ void SymbolWidget::loadConfig(const KConfigGroup& group) {
 
 	GuiTools::updateBrushStyles(ui.cbFillingStyle, ui.kcbFillingColor->color());
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+	styleChanged(ui.cbStyle->currentIndex());
 }
 
 void SymbolWidget::saveConfig(KConfigGroup& group) const {

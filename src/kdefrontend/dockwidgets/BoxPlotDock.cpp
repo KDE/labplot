@@ -60,7 +60,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.frameDataColumns->setLayout(m_gridLayout);
 
 	ui.cbWhiskersType->addItem(QLatin1String("min/max"));
-	ui.cbWhiskersType->addItem(QLatin1String("1.5 IQR"));
+	ui.cbWhiskersType->addItem(QLatin1String("Tukey"));
 	ui.cbWhiskersType->addItem(QLatin1String("1 stddev"));
 // 	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
 // 	ui.cbWhiskersType->addItem(i18n("2/98 percentiles"));
@@ -754,6 +754,8 @@ void BoxPlotDock::whiskersTypeChanged(int index) const {
 		return;
 
 	auto type = BoxPlot::WhiskersType(index);
+	ui.rbOutlier->setEnabled(type != BoxPlot::WhiskersType::MinMax);
+	ui.rbFarOut->setEnabled(type == BoxPlot::WhiskersType::IQR);
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersType(type);
 }

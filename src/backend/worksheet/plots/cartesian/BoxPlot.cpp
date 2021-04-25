@@ -109,6 +109,7 @@ void BoxPlot::init() {
 	connect(d->symbolMean, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
 	connect(d->symbolMean, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 	d->symbolMean->init(group);
+	d->symbolMean->setStyle(Symbol::Style::Square);
 
 	d->symbolOutlier = new Symbol("symbolOutlier");
 	addChild(d->symbolOutlier);
@@ -123,6 +124,7 @@ void BoxPlot::init() {
 	connect(d->symbolFarOut, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
 	connect(d->symbolFarOut, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 	d->symbolFarOut->init(group);
+	d->symbolFarOut->setStyle(Symbol::Style::Plus);
 
 	d->symbolJitter = new Symbol("symbolJitter");
 	addChild(d->symbolJitter);
@@ -130,6 +132,8 @@ void BoxPlot::init() {
 	connect(d->symbolJitter, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
 	connect(d->symbolJitter, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 	d->symbolJitter->init(group);
+	d->symbolJitter->setStyle(Symbol::Style::NoSymbols);
+	d->symbolJitter->setOpacity(0.5);
 
 	//whiskers
 	d->whiskersPen = QPen(group.readEntry("WhiskersColor", QColor(Qt::black)),
