@@ -92,6 +92,7 @@ void DatasetHandler::configureFilter() {
 	m_filter->setNumberFormat(QLocale::C);
 	m_filter->setSkipEmptyParts(true);
 	m_filter->setHeaderEnabled(false);
+	m_filter->setRemoveQuotesEnabled(true);
 
 	//read properties specified in the dataset description
 	if (!m_object->isEmpty()) {
