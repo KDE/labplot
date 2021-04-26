@@ -24,13 +24,6 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
-        <widget class="QLabel" name="lName">
-         <property name="text">
-          <string>Name:</string>
-         </property>
-        </widget>
-       </item>
        <item row="5" column="0">
         <spacer name="verticalSpacer_8">
          <property name="orientation">
@@ -47,8 +40,59 @@
          </property>
         </spacer>
        </item>
-       <item row="6" column="2">
-        <widget class="KComboBox" name="cbWhiskersType"/>
+       <item row="6" column="0">
+        <widget class="QLabel" name="lWhiskersType">
+         <property name="text">
+          <string>Whiskers:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QLineEdit" name="leComment"/>
+       </item>
+       <item row="10" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>420</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lName">
+         <property name="text">
+          <string>Name:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="KComboBox" name="cbOrientation"/>
+       </item>
+       <item row="11" column="0">
+        <widget class="QCheckBox" name="chkVisible">
+         <property name="text">
+          <string>Visible</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lComment">
+         <property name="text">
+          <string>Comment:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="lOrientation">
+         <property name="text">
+          <string>Direction:</string>
+         </property>
+        </widget>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="lData">
@@ -62,6 +106,9 @@
           <string>Data</string>
          </property>
         </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="KComboBox" name="cbWhiskersType"/>
        </item>
        <item row="0" column="1">
         <spacer name="horizontalSpacer_8">
@@ -79,27 +126,6 @@
          </property>
         </spacer>
        </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lOrientation">
-         <property name="text">
-          <string>Direction:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0">
-        <widget class="QCheckBox" name="chkVisible">
-         <property name="text">
-          <string>Visible</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lWhiskersType">
-         <property name="text">
-          <string>Whiskers:</string>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="2">
         <widget class="QFrame" name="frameDataColumns">
          <property name="frameShape">
@@ -110,26 +136,10 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lComment">
+       <item row="8" column="2">
+        <widget class="QCheckBox" name="chkVariableWidth">
          <property name="text">
-          <string>Comment:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLineEdit" name="leComment"/>
-       </item>
-       <item row="7" column="2">
-        <widget class="KComboBox" name="cbOrientation"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lDataColumn">
-         <property name="text">
-          <string>Column:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+          <string/>
          </property>
         </widget>
        </item>
@@ -152,18 +162,15 @@
          </property>
         </spacer>
        </item>
-       <item row="9" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lDataColumn">
+         <property name="text">
+          <string>Column:</string>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>420</height>
-          </size>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
          </property>
-        </spacer>
+        </widget>
        </item>
        <item row="8" column="0">
         <widget class="QLabel" name="lVariableWidth">
@@ -172,8 +179,15 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="2">
-        <widget class="QCheckBox" name="chkVariableWidth">
+       <item row="9" column="0">
+        <widget class="QLabel" name="lNotches">
+         <property name="text">
+          <string>Notches</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="QCheckBox" name="chkNotches">
          <property name="text">
           <string/>
          </property>

@@ -78,6 +78,7 @@ void BoxPlot::init() {
 	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::IQR);
 	d->orientation = (BoxPlot::Orientation) group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
 	d->variableWidth = group.readEntry("VariableWidth", false);
+	d->notchesEnabled = group.readEntry("NotchesEnabled", false);
 
 	//box filling
 	d->fillingEnabled = group.readEntry("FillingEnabled", false);
@@ -224,6 +225,7 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns,
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, variableWidth, variableWidth)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, notchesEnabled, notchesEnabled)
 
 //box
 //filling
@@ -327,6 +329,13 @@ void BoxPlot::setVariableWidth(bool variableWidth) {
 	Q_D(BoxPlot);
 	if (variableWidth != d->variableWidth)
 		exec(new BoxPlotSetVariableWidthCmd(d, variableWidth, ki18n("%1: variable width changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetNotchesEnabled, bool, notchesEnabled, recalc)
+void BoxPlot::setNotchesEnabled(bool notchesEnabled) {
+	Q_D(BoxPlot);
+	if (notchesEnabled != d->notchesEnabled)
+		exec(new BoxPlotSetNotchesEnabledCmd(d, notchesEnabled, ki18n("%1: changed notches")));
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(BoxPlot, SetVisible, bool, swapVisible, update);
@@ -766,18 +775,51 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 
 	QVector<QLineF> lines;
 	const double x = index + 0.5;
+	const double xMinBox = m_xMinBox.at(index);
+	const double xMaxBox = m_xMaxBox.at(index);
+	const double yMinBox = m_yMinBox.at(index);
+	const double yMaxBox = m_yMaxBox.at(index);
+	const double median = m_median.at(index);
 
 	//box
-	//first line starting at the top left corner of the box
-	lines << QLineF(m_xMinBox.at(index), m_yMaxBox.at(index), m_xMaxBox.at(index), m_yMaxBox.at(index));
-	lines << QLineF(m_xMaxBox.at(index), m_yMaxBox.at(index), m_xMaxBox.at(index), m_yMinBox.at(index));
-	lines << QLineF(m_xMaxBox.at(index), m_yMinBox.at(index), m_xMinBox.at(index), m_yMinBox.at(index));
-	lines << QLineF(m_xMinBox.at(index), m_yMinBox.at(index), m_xMinBox.at(index), m_yMaxBox.at(index));
+	if (!notchesEnabled) {
+		//first line starting at the top left corner of the box
+		lines << QLineF(xMinBox, yMaxBox, xMaxBox, yMaxBox);
+		lines << QLineF(xMaxBox, yMaxBox, xMaxBox, yMinBox);
+		lines << QLineF(xMaxBox, yMinBox, xMinBox, yMinBox);
+		lines << QLineF(xMinBox, yMinBox, xMinBox, yMaxBox);
+	} else {
+		auto* column = static_cast<const Column*>(dataColumns.at(index));
+		const auto& statistics = column->statistics();
+		const double notch = 1.7*1.25*statistics.iqr/1.35/std::sqrt(statistics.size);
+		const double notchMax = median + notch ;
+		const double notchMin = median - notch ;
+		double width = xMaxBox - xMinBox;
+
+		//first line starting at the top left corner of the box
+		lines << QLineF(xMinBox, yMaxBox, xMaxBox, yMaxBox);
+		lines << QLineF(xMaxBox, yMaxBox, xMaxBox, notchMax);
+		lines << QLineF(xMaxBox, notchMax, xMinBox + 0.9*width, median);
+		lines << QLineF(xMinBox + 0.9*width, median, xMaxBox, notchMin);
+		lines << QLineF(xMaxBox, notchMin, xMaxBox, yMinBox);
+		lines << QLineF(xMaxBox, yMinBox, xMinBox, yMinBox);
+		lines << QLineF(xMinBox, yMinBox, xMinBox, notchMin);
+		lines << QLineF(xMinBox, notchMin, xMinBox + 0.1*width, median);
+		lines << QLineF(xMinBox + 0.1*width, median, xMinBox, notchMax);
+		lines << QLineF(xMinBox, notchMax, xMinBox, yMaxBox);
+	}
+
 	m_boxRect[index] = q->cSystem->mapLogicalToScene(lines);
 
 	//median line
 	lines.clear();
-	lines << QLineF(m_xMinBox.at(index), m_median.at(index), m_xMaxBox.at(index), m_median.at(index));
+	if (!notchesEnabled)
+		lines << QLineF(xMinBox, median, xMaxBox, median);
+	else {
+		double width = xMaxBox - xMinBox;
+		lines << QLineF(xMinBox + 0.1*width, median, m_xMaxBox.at(index) - 0.1*width, median);
+	}
+
 	lines = q->cSystem->mapLogicalToScene(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
@@ -849,17 +891,50 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 
 	QVector<QLineF> lines;
 	const double y = index + 0.5;
+	const double xMinBox = m_xMinBox.at(index);
+	const double xMaxBox = m_xMaxBox.at(index);
+	const double yMinBox = m_yMinBox.at(index);
+	const double yMaxBox = m_yMaxBox.at(index);
+	const double median = m_median.at(index);
 
 	//box
-	//first line starting at the top left corner of the box
-	lines << QLineF(m_xMinBox.at(index), m_yMaxBox.at(index), m_xMaxBox.at(index), m_yMaxBox.at(index));
-	lines << QLineF(m_xMaxBox.at(index), m_yMaxBox.at(index), m_xMaxBox.at(index), m_yMinBox.at(index));
-	lines << QLineF(m_xMaxBox.at(index), m_yMinBox.at(index), m_xMinBox.at(index), m_yMinBox.at(index));
-	lines << QLineF(m_xMinBox.at(index), m_yMinBox.at(index), m_xMinBox.at(index), m_yMaxBox.at(index));
+	if (!notchesEnabled) {
+		//first line starting at the top left corner of the box
+		lines << QLineF(xMinBox, yMaxBox, xMaxBox, yMaxBox);
+		lines << QLineF(xMaxBox, yMaxBox, xMaxBox, yMinBox);
+		lines << QLineF(xMaxBox, yMinBox, xMinBox, yMinBox);
+		lines << QLineF(xMinBox, yMinBox, xMinBox, yMaxBox);
+	} else {
+		auto* column = static_cast<const Column*>(dataColumns.at(index));
+		const auto& statistics = column->statistics();
+		const double notch = 1.7*1.25*statistics.iqr/1.35/std::sqrt(statistics.size);
+		const double notchMax = median + notch ;
+		const double notchMin = median - notch ;
+		double width = yMaxBox - yMinBox;
+
+		lines << QLineF(xMinBox, yMaxBox, notchMin, yMaxBox);
+		lines << QLineF(notchMin, yMaxBox, median, yMaxBox - 0.1*width);
+		lines << QLineF(median, yMaxBox - 0.1*width, notchMax, yMaxBox);
+		lines << QLineF(notchMax, yMaxBox, xMaxBox, yMaxBox);
+		lines << QLineF(xMaxBox, yMaxBox, xMaxBox, yMinBox);
+		lines << QLineF(xMaxBox, yMinBox, notchMax, yMinBox);
+		lines << QLineF(notchMax, yMinBox, median, yMinBox + 0.1*width);
+		lines << QLineF(median, yMinBox + 0.1*width, notchMin, yMinBox);
+		lines << QLineF(notchMin, yMinBox, xMinBox, yMinBox);
+		lines << QLineF(xMinBox, yMinBox, xMinBox, yMaxBox);
+	}
+
 	m_boxRect[index] = q->cSystem->mapLogicalToScene(lines);
 
 	//median line
-	lines << QLineF(m_median.at(index), m_yMinBox.at(index), m_median.at(index), m_yMaxBox.at(index));
+	lines.clear();
+	if (!notchesEnabled)
+		lines << QLineF(median, yMinBox, median, yMaxBox);
+	else {
+		double width = yMaxBox - yMinBox;
+		lines << QLineF(median, yMinBox + 0.1*width, median, yMaxBox - 0.1*width);
+	}
+
 	lines = q->cSystem->mapLogicalToScene(lines);
 	if (!lines.isEmpty())
 		m_medianLine[index] = lines.first();
@@ -1238,9 +1313,11 @@ void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 		return;
 
 	QPainterPath boxPath;
+	QPolygonF polygon;
 	for (const auto& line : qAsConst(m_boxRect.at(index))) {
 		boxPath.moveTo(line.p1());
 		boxPath.lineTo(line.p2());
+		polygon << line.p1();
 	}
 	const QRectF& rect = boxPath.boundingRect();
 
@@ -1326,7 +1403,7 @@ void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 	} else if (fillingType == PlotArea::BackgroundType::Pattern)
 		painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
 
-	painter->drawRect(rect);
+	painter->drawPolygon(polygon);
 }
 
 void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
@@ -1411,14 +1488,15 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement("general");
+	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
+	writer->writeAttribute("variableWidth", QString::number(d->variableWidth));
+	writer->writeAttribute("notches", QString::number(d->notchesEnabled));
+	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
 	for (auto* column : d->dataColumns) {
 		writer->writeStartElement("column");
 		writer->writeAttribute("path", column->path());
 		writer->writeEndElement();
 	}
-	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
-	writer->writeAttribute("variableWidth", QString::number(d->variableWidth));
-	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeEndElement();
 
 	//box filling
@@ -1493,6 +1571,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("orientation", orientation, BoxPlot::Orientation);
 			READ_INT_VALUE("variableWidth", variableWidth, bool);
+			READ_INT_VALUE("notches", notchesEnabled, bool);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 		} else if (reader->name() == "column") {
 			attribs = reader->attributes();

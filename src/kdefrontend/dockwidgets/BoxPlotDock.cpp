@@ -133,6 +133,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &BoxPlotDock::orientationChanged);
 	connect(ui.chkVariableWidth, &QCheckBox::stateChanged, this, &BoxPlotDock::variableWidthChanged);
+	connect(ui.chkNotches, &QCheckBox::stateChanged, this, &BoxPlotDock::notchesEnabledChanged);
 
 	//Tab "Box"
 	//box filling
@@ -236,6 +237,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	connect(m_boxPlot, &BoxPlot::visibilityChanged, this, &BoxPlotDock::plotVisibilityChanged);
 	connect(m_boxPlot, &BoxPlot::orientationChanged, this, &BoxPlotDock::plotOrientationChanged);
 	connect(m_boxPlot, &BoxPlot::variableWidthChanged, this, &BoxPlotDock::plotVariableWidthChanged);
+	connect(m_boxPlot, &BoxPlot::notchesEnabledChanged, this, &BoxPlotDock::plotNotchesEnabledChanged);
 	connect(m_boxPlot, &BoxPlot::dataColumnsChanged, this, &BoxPlotDock::plotDataColumnsChanged);
 
 	//box filling
@@ -420,6 +422,14 @@ void BoxPlotDock::variableWidthChanged(bool state) const {
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setVariableWidth(state);
+}
+
+void BoxPlotDock::notchesEnabledChanged(bool state) const {
+	if (m_initializing)
+		return;
+
+	for (auto* boxPlot : m_boxPlots)
+		boxPlot->setNotchesEnabled(state);
 }
 
 void BoxPlotDock::visibilityChanged(bool state) const {
@@ -847,6 +857,10 @@ void BoxPlotDock::plotVariableWidthChanged(bool on) {
 	Lock lock(m_initializing);
 	ui.chkVariableWidth->setChecked(on);
 }
+void BoxPlotDock::plotNotchesEnabledChanged(bool on) {
+	Lock lock(m_initializing);
+	ui.chkNotches->setChecked(on);
+}
 void BoxPlotDock::plotVisibilityChanged(bool on) {
 	Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);
@@ -958,6 +972,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	//general
 	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int)m_boxPlot->orientation()) );
 	ui.chkVariableWidth->setChecked( group.readEntry("VariableWidth", m_boxPlot->variableWidth()) );
+	ui.chkNotches->setChecked( group.readEntry("NotchesEnabled", m_boxPlot->notchesEnabled()) );
 
 	//box filling
 	ui.chkFillingEnabled->setChecked( group.readEntry("FillingEnabled", m_boxPlot->fillingEnabled()) );
@@ -1032,6 +1047,7 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	//general
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 	group.writeEntry("VariableWidth", ui.chkVariableWidth->isChecked());
+	group.writeEntry("NotchesEnabled", ui.chkNotches->isChecked());
 
 	//box filling
 	group.writeEntry("FillingEnabled", ui.chkFillingEnabled->isChecked());
