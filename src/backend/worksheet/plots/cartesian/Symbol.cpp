@@ -50,7 +50,12 @@ Symbol::Symbol(const QString& name) : AbstractAspect(name, AspectType::AbstractA
 
 void Symbol::init(const KConfigGroup& group) {
 	Q_D(Symbol);
-	d->style = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::Circle);
+
+	if (parentAspect()->type() == AspectType::CustomPoint)
+		d->style = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::Circle);
+	else
+		d->style = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::NoSymbols);
+
 	d->size = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
 	d->rotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->opacity = group.readEntry("SymbolOpacity", 1.0);

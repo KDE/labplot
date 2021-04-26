@@ -81,7 +81,7 @@ void BoxPlot::init() {
 	d->notchesEnabled = group.readEntry("NotchesEnabled", false);
 
 	//box filling
-	d->fillingEnabled = group.readEntry("FillingEnabled", false);
+	d->fillingEnabled = group.readEntry("FillingEnabled", true);
 	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color));
 	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor));
 	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled));
@@ -89,7 +89,7 @@ void BoxPlot::init() {
 	d->fillingFileName = group.readEntry("FillingFileName", QString());
 	d->fillingFirstColor = group.readEntry("FillingFirstColor", QColor(Qt::white));
 	d->fillingSecondColor = group.readEntry("FillingSecondColor", QColor(Qt::black));
-	d->fillingOpacity = group.readEntry("FillingOpacity", 1.0);
+	d->fillingOpacity = group.readEntry("FillingOpacity", 0.5);
 
 	//median line
 	d->medianLinePen = QPen(group.readEntry("MedianLineColor", QColor(Qt::black)),
@@ -1698,7 +1698,7 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	//box filling
 	setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
 	setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor)));
-	setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
+	setFillingOpacity(group.readEntry("FillingOpacity", 0.5));
 	setFillingFirstColor(themeColor);
 	setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
 	setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color)));

@@ -129,7 +129,7 @@ void Histogram::init() {
 	d->fillingFileName = group.readEntry("FillingFileName", QString());
 	d->fillingFirstColor = group.readEntry("FillingFirstColor", QColor(Qt::white));
 	d->fillingSecondColor = group.readEntry("FillingSecondColor", QColor(Qt::black));
-	d->fillingOpacity = group.readEntry("FillingOpacity", 1.0);
+	d->fillingOpacity = group.readEntry("FillingOpacity", 0.5);
 
 	d->errorType = (Histogram::ErrorType) group.readEntry("ErrorType", (int)Histogram::NoError);
 	d->errorBarsType = (XYCurve::ErrorBarsType) group.readEntry("ErrorBarsType", static_cast<int>(XYCurve::ErrorBarsType::Simple));
@@ -1914,7 +1914,7 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 	//Filling
 	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
 	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor)));
-	this->setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
+	this->setFillingOpacity(group.readEntry("FillingOpacity", 0.5));
 	this->setFillingFirstColor(themeColor);
 	this->setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
 	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color)));
