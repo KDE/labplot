@@ -3741,11 +3741,13 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode() {
 		xRange().setRange(logicalZoomStart.x(), logicalZoomEnd.x());
 	else
 		xRange().setRange(logicalZoomEnd.x(), logicalZoomStart.x());
+	xRange().niceExtend();
 
 	if (m_selectionEnd.y() > m_selectionStart.y())
 		yRange().setRange(logicalZoomEnd.y(), logicalZoomStart.y());
 	else
 		yRange().setRange(logicalZoomStart.y(), logicalZoomEnd.y());
+	yRange().niceExtend();
 
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 		curvesXMinMaxIsDirty = true;
