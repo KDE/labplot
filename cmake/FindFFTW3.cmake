@@ -59,10 +59,11 @@ if(FFTW3_FOUND AND NOT TARGET FFTW3::FFTW3)
     )
 endif()
 
-mark_as_advanced(FFTW3_LIBRARIES FFTW3_INCLUDE_DIR FFTW3_VERSUON)
+mark_as_advanced(FFTW3_LIBRARIES FFTW3_INCLUDE_DIR FFTW3_VERSION)
 
 include(FeatureSummary)
 set_package_properties(FFTW3 PROPERTIES
     DESCRIPTION "Computing the Discrete Fourier Transform in one or more dimensions"
     URL "http://fftw.org/"
 )
+
