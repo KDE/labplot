@@ -1700,7 +1700,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			for (const auto value : tickLabelValues) {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
-				else if (qAbs(value) < 10. && qAbs(value) > .1)	// use normal notation for values near 1
+				else if (qAbs(value) < 100. && qAbs(value) > .01)	// use normal notation for values near 1
 					str = numberLocale.toString(value, 'f', labelsPrecision);
 				else {
 					str = numberLocale.toString(value, 'e', labelsPrecision);
@@ -1725,6 +1725,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			tickLabelStrings << str;
 		}
 	}
+//	QDEBUG(Q_FUNC_INFO << ", strings = " << tickLabelStrings)
 
 	//recalculate the position of the tick labels
 	retransformTickLabelPositions();
