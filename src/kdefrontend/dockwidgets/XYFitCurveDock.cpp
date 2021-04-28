@@ -350,10 +350,10 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 
 	showFitResult();
 	enableRecalculate();
+	m_initializing = false;
 
 	updatePlotRanges();
 
-	m_initializing = false;
 
 	//init parameter list when not available
 	if (m_fitData.paramStartValues.size() == 0)

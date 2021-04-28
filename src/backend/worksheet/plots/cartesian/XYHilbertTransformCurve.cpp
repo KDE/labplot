@@ -186,18 +186,10 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 	double* ydata = ydataVector.data();
 
 	// transform settings
-//	const nsl_sf_window_type windowType = transformData.windowType;
 	const nsl_hilbert_result_type type = transformData.type;
-//	const bool twoSided = transformData.twoSided;
-//	const bool shifted = transformData.shifted;
-//	const nsl_dft_xscale xScale = transformData.xScale;
 
 	DEBUG("n = " << n);
-//	DEBUG("window type:" << nsl_sf_window_type_name[windowType]);
 	DEBUG("type:" << nsl_hilbert_result_type_name[type]);
-//	DEBUG("scale:" << nsl_dft_xscale_name[xScale]);
-//	DEBUG("two sided:" << twoSided);
-//	DEBUG("shifted:" << shifted);
 #ifndef NDEBUG
 //	QDebug out = qDebug();
 //	for (unsigned int i = 0; i < n; i++)
@@ -206,41 +198,10 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 
 ///////////////////////////////////////////////////////////
 	// transform with window
-//	int status = nsl_dft_transform_window(ydata, 1, n, twoSided, type, windowType);
 //	TODO: type 
 	int status = nsl_hilbert_transform(ydata, 1, n, type);
 
 	unsigned int N = n;
-//	if (twoSided == false)
-//		N = n/2;
-
-/*	switch (xScale) {
-	case nsl_dft_xscale_frequency:
-		for (unsigned int i = 0; i < N; i++) {
-			if (i >= n/2 && shifted)
-				xdata[i] = (n-1)/(xmax-xmin)*(i/(double)n-1.);
-			else
-				xdata[i] = (n-1)*i/(xmax-xmin)/n;
-		}
-		break;
-	case nsl_dft_xscale_index:
-		for (unsigned int i = 0; i < N; i++) {
-			if (i >= n/2 && shifted)
-				xdata[i] = (int)i-(int) N;
-			else
-				xdata[i] = i;
-		}
-		break;
-	case nsl_dft_xscale_period: {
-			double f0 = (n-1)/(xmax-xmin)/n;
-			for (unsigned int i = 0; i < N; i++) {
-				double f = (n-1)*i/(xmax-xmin)/n;
-				xdata[i] = 1/(f+f0);
-			}
-			break;
-		}
-	}
-*/
 #ifndef NDEBUG
 //	out = qDebug();
 //	for (unsigned int i = 0; i < N; i++)
@@ -249,15 +210,8 @@ void XYHilbertTransformCurvePrivate::recalculate() {
 
 	xVector->resize((int)N);
 	yVector->resize((int)N);
-//	if (shifted) {
-//		memcpy(xVector->data(), &xdata[n/2], n/2*sizeof(double));
-//		memcpy(&xVector->data()[n/2], xdata, n/2*sizeof(double));
-//		memcpy(yVector->data(), &ydata[n/2], n/2*sizeof(double));
-//		memcpy(&yVector->data()[n/2], ydata, n/2*sizeof(double));
-//	} else {
-		memcpy(xVector->data(), xdata, N*sizeof(double));
-		memcpy(yVector->data(), ydata, N*sizeof(double));
-//	}
+	memcpy(xVector->data(), xdata, N*sizeof(double));
+	memcpy(yVector->data(), ydata, N*sizeof(double));
 ///////////////////////////////////////////////////////////
 
 	//write the result
@@ -291,10 +245,6 @@ void XYHilbertTransformCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "xRangeMin", QString::number(d->transformData.xRange.first()) );
 	writer->writeAttribute( "xRangeMax", QString::number(d->transformData.xRange.last()) );
 	writer->writeAttribute( "type", QString::number(d->transformData.type) );
-//	writer->writeAttribute( "twoSided", QString::number(d->transformData.twoSided) );
-//	writer->writeAttribute( "shifted", QString::number(d->transformData.shifted) );
-//	writer->writeAttribute( "xScale", QString::number(d->transformData.xScale) );
-//	writer->writeAttribute( "windowType", QString::number(d->transformData.windowType) );
 	writer->writeEndElement();// transformData
 
 	//transform results (generated columns)
@@ -338,10 +288,6 @@ bool XYHilbertTransformCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("xRangeMin", transformData.xRange.first());
 			READ_DOUBLE_VALUE("xRangeMax", transformData.xRange.last());
 			READ_INT_VALUE("type", transformData.type, nsl_hilbert_result_type);
-//			READ_INT_VALUE("twoSided", transformData.twoSided, bool);
-//			READ_INT_VALUE("shifted", transformData.shifted, bool);
-//			READ_INT_VALUE("xScale", transformData.xScale, nsl_dft_xscale);
-//			READ_INT_VALUE("windowType", transformData.windowType, nsl_sf_window_type);
 		} else if (!preview && reader->name() == "transformResult") {
 			attribs = reader->attributes();
 			READ_INT_VALUE("available", transformResult.available, int);

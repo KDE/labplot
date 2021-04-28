@@ -222,6 +222,7 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = true;
 	m_curvesList = list;
 	m_curve = list.first();
+	m_aspect = m_curve;
 	m_correlationCurve = static_cast<XYCorrelationCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
 	this->setModel();
@@ -232,10 +233,9 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 
 	initGeneralTab();
 	initTabs();
+	m_initializing = false;
 
 	updatePlotRanges();
-
-	m_initializing = false;
 
 	//hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();

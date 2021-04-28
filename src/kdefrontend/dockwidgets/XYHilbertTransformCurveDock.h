@@ -70,7 +70,6 @@ private slots:
 
 //	void showOptions();
 	void recalculateClicked();
-
 	void enableRecalculate() const;
 
 	//SLOTs for changes triggered in XYCurve

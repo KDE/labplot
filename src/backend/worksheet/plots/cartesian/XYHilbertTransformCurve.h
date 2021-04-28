@@ -44,10 +44,6 @@ public:
 		TransformData() {};
 
 		nsl_hilbert_result_type type{nsl_hilbert_result_imag};
-//		bool twoSided{false};
-//		bool shifted{false};
-//		nsl_dft_xscale xScale{nsl_dft_xscale_frequency};
-//		nsl_sf_window_type windowType{nsl_sf_window_uniform};
 		bool autoRange{true};		// use all data?
 		//TODO: use Range
 		QVector<double> xRange{0, 0};	// x range for transform

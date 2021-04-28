@@ -226,10 +226,9 @@ void XYFourierFilterCurveDock::setCurves(QList<XYCurve*> list) {
 
 	initGeneralTab();
 	initTabs();
+	m_initializing = false;
 
 	updatePlotRanges();
-
-	m_initializing = false;
 }
 
 void XYFourierFilterCurveDock::updatePlotRanges() const {
