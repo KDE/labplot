@@ -611,14 +611,15 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::Day:
-			case AbstractColumn::ColumnMode::DateTime:
 				for (int j = 0; j < valueLabels.size(); j++) {
 					column->addValueLabel(m_labelSets[label].valueInt(j), valueLabels.at(j));
 					DEBUG(Q_FUNC_INFO << ", column " << i << ": add integer value label: " << m_labelSets[label].valueInt(j)  << " = " <<  valueLabels.at(j).toStdString())
 				}
 				break;
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+				// not support by readstat
 			}
 		}
 	}
