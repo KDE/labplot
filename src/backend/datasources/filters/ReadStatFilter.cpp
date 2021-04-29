@@ -620,6 +620,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 			case AbstractColumn::ColumnMode::Day:
 			case AbstractColumn::ColumnMode::DateTime:
 				// not support by readstat
+				break;
 			}
 		}
 	}
