@@ -222,6 +222,8 @@ QStringList ReadStatFilterPrivate::m_lineString;
 QVector<QStringList> ReadStatFilterPrivate::m_dataStrings;
 std::vector<void*> ReadStatFilterPrivate::m_dataContainer;
 QStringList ReadStatFilterPrivate::m_notes;
+QVector<QString> ReadStatFilterPrivate::m_valueLabels;
+QMap<QString, LabelSet> ReadStatFilterPrivate::m_labelSets;
 int ReadStatFilterPrivate::m_startRow, ReadStatFilterPrivate::m_endRow;
 int ReadStatFilterPrivate::m_startColumn, ReadStatFilterPrivate::m_endColumn;
 
@@ -232,6 +234,7 @@ int ReadStatFilterPrivate::getMetaData(readstat_metadata_t *metadata, void *ptr)
 	Q_UNUSED(ptr)
 	m_varCount = readstat_get_var_count(metadata);
 	m_rowCount = readstat_get_row_count(metadata);
+	m_valueLabels.resize(m_varCount);
 
 	return READSTAT_HANDLER_OK;
 }
@@ -239,7 +242,6 @@ int ReadStatFilterPrivate::getVarName(int index, readstat_variable_t *variable, 
 	//DEBUG(Q_FUNC_INFO)
 	Q_UNUSED(index)
 	Q_UNUSED(ptr)
-	Q_UNUSED(val_labels)
 
 	// only on column from m_startColumn to m_endColumn
 	const int col = readstat_variable_get_index(variable);
@@ -247,8 +249,13 @@ int ReadStatFilterPrivate::getVarName(int index, readstat_variable_t *variable, 
 		//DEBUG(Q_FUNC_INFO << ", out of range row/col "<< index << " / " << col)
 		return READSTAT_HANDLER_OK;
 	}
-	//DEBUG(Q_FUNC_INFO << ", col = " << col << " value labels = " << val_labels)
-	m_varNames << readstat_variable_get_name(variable);
+
+	if (val_labels) {
+		DEBUG(Q_FUNC_INFO << ", val_labels of col " << col << " : " << val_labels)
+		m_valueLabels[col] = QString(val_labels);
+		m_varNames << QString(readstat_variable_get_name(variable)) + " : " + QString(val_labels);
+	} else
+		m_varNames << readstat_variable_get_name(variable);
 
 	return READSTAT_HANDLER_OK;
 }
@@ -418,13 +425,41 @@ int ReadStatFilterPrivate::getFWeights(readstat_variable_t *variable, void *ptr)
 
 	return READSTAT_HANDLER_OK;
 }
-int ReadStatFilterPrivate::getValueLabels(const char *val_labels, readstat_value_t value, const char *label, void *ptr) {
+int ReadStatFilterPrivate::getValueLabels(const char *val_label, readstat_value_t value, const char *label, void *ptr) {
 	Q_UNUSED(ptr)
 
-	//TODO: see https://github.com/tidyverse/haven/blob/master/src/DfReader.cpp
-	readstat_type_t type = value.type;
-	Q_UNUSED(type)
-	DEBUG(Q_FUNC_INFO << ", value label = " << val_labels << " label = " << label)
+	// see https://github.com/tidyverse/haven/blob/master/src/DfReader.cpp
+	DEBUG(Q_FUNC_INFO << ", value label = " << val_label << " label = " << label << ", type = " << value.type)
+
+	LabelSet& labelSet = m_labelSets[val_label];
+	switch (value.type) {
+		case READSTAT_TYPE_STRING:
+			//DEBUG(Q_FUNC_INFO << ", string value label")
+			labelSet.add(readstat_string_value(value), QString(label));
+			break;
+		case READSTAT_TYPE_INT8:
+			//DEBUG(Q_FUNC_INFO << ", int8 value label")
+			labelSet.add(readstat_int8_value(value), QString(label));
+			break;
+		case READSTAT_TYPE_INT16:
+			//DEBUG(Q_FUNC_INFO << ", int16 value label")
+			labelSet.add(readstat_int16_value(value), QString(label));
+			break;
+		case READSTAT_TYPE_INT32:
+			//DEBUG(Q_FUNC_INFO << ", int32 value label")
+			labelSet.add(readstat_int32_value(value), QString(label));
+			break;
+		case READSTAT_TYPE_FLOAT:
+			//DEBUG(Q_FUNC_INFO << ", float value label")
+			labelSet.add(readstat_float_value(value), QString(label));
+			break;
+		case READSTAT_TYPE_DOUBLE:
+			//DEBUG(Q_FUNC_INFO << ", double value label")
+			labelSet.add(readstat_double_value(value), QString(label));
+			break;
+		case READSTAT_TYPE_STRING_REF:
+			DEBUG(Q_FUNC_INFO << ", WARNING: unsupported label type " << value.type)
+	}
 
 	return READSTAT_HANDLER_OK;
 }
@@ -439,6 +474,7 @@ ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter* owner) : q(owner) {
  */
 readstat_error_t ReadStatFilterPrivate::parse(const QString& fileName, bool preview, bool prepare) {
 	DEBUG(Q_FUNC_INFO << ", file " << fileName.toStdString() << ", start/end row: " << m_startRow << "/" << m_endRow)
+	m_labelSets.clear();
 
 	readstat_parser_t *parser = readstat_parser_init();
 	readstat_set_metadata_handler(parser, &getMetaData);	// metadata
@@ -547,6 +583,46 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 
 	DEBUG(Q_FUNC_INFO << ", column offset = " << columnOffset << " start/end column = " << m_startColumn << " / " << actualEndColumn)
 	dataSource->finalizeImport(columnOffset, m_startColumn, actualEndColumn, QString(), mode);
+
+	// value labels
+	for (const auto& label : m_valueLabels)
+		if (label.size() > 0)
+			QDEBUG(Q_FUNC_INFO << ", label " << label << ", label values = " << m_labelSets[label].labels())
+
+	QVector<Column*> columnList = dataSource->children<Column>();
+	for (int i = 0; i < columnList.size(); i++) {
+		auto* column = columnList.at(i);
+		QString label = m_valueLabels[i];
+		if (column && label.size() > 0) {
+			auto columnMode = m_columnModes[i];
+			const auto valueLabels = m_labelSets[label].labels();
+			switch (columnMode) {
+			case AbstractColumn::ColumnMode::Text:
+				for (int j = 0; j < valueLabels.size(); j++) {
+					column->addValueLabel(m_labelSets[label].valueString(j), valueLabels.at(j));
+					DEBUG(Q_FUNC_INFO << ", column " << i << ": add string value label: " << m_labelSets[label].valueString(j).toStdString()  << " = " <<  valueLabels.at(j).toStdString())
+				}
+				break;
+			case AbstractColumn::ColumnMode::Numeric:
+				for (int j = 0; j < valueLabels.size(); j++) {
+					column->addValueLabel(m_labelSets[label].valueDouble(j), valueLabels.at(j));
+					DEBUG(Q_FUNC_INFO << ", column " << i << ": add double value label: " << m_labelSets[label].valueDouble(j)  << " = " <<  valueLabels.at(j).toStdString())
+				}
+				break;
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+				for (int j = 0; j < valueLabels.size(); j++) {
+					column->addValueLabel(m_labelSets[label].valueInt(j), valueLabels.at(j));
+					DEBUG(Q_FUNC_INFO << ", column " << i << ": add integer value label: " << m_labelSets[label].valueInt(j)  << " = " <<  valueLabels.at(j).toStdString())
+				}
+				break;
+			}
+		}
+	}
+
 	dataSource->setComment(m_notes.join("\n"));
 #endif
 }

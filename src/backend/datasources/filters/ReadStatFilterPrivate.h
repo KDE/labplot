@@ -33,7 +33,56 @@ extern "C" {
 }
 #endif
 
+#include "backend/lib/macros.h"
+
 class AbstractDataSource;
+
+class LabelSet {
+	QVector<QString> m_labels;
+	QVector<QString> m_valuesString;
+	QVector<int> m_valuesInt;
+	QVector<double> m_valuesDouble;
+
+public:
+	LabelSet() {}
+
+	QVector<QString> labels() const { return m_labels; }
+	QString valueString(int i) const { return m_valuesString.at(i); }
+	int valueInt(int i) const { return m_valuesInt.at(i);}
+	int valueDouble(int i) const { return m_valuesDouble.at(i);}
+
+	void add(QString value, QString label) {
+		if (m_valuesInt.size() > 0 || m_valuesDouble.size() > 0) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: can't add string value to integer/double label set");
+			return;
+		}
+
+		m_valuesString.append(value);
+		m_labels.append(label);
+	}
+	void add(int value, QString label) {
+		if (m_valuesDouble.size() > 0 || m_valuesString.size() > 0) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: can't add integer value to double/string label set");
+			return;
+		}
+
+		m_valuesInt.append(value);
+		m_labels.append(label);
+	}
+	void add(double value, QString label) {
+		if (m_valuesInt.size() > 0 || m_valuesString.size() > 0) {
+			DEBUG(Q_FUNC_INFO << ", WARNING: can't add double value to int/string label set");
+			return;
+		}
+
+		m_valuesDouble.append(value);
+		m_labels.append(label);
+	}
+
+	int size() const {
+		return m_labels.size();
+	}
+};
 
 class ReadStatFilterPrivate {
 
@@ -74,6 +123,8 @@ private:
 	static QStringList m_lineString;
 	static std::vector<void*> m_dataContainer;
 	static QStringList m_notes;
+	static QVector<QString> m_valueLabels;
+	static QMap<QString, LabelSet> m_labelSets;
 };
 
 #endif
