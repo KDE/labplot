@@ -432,7 +432,8 @@ void AxisDock::init() {
 }
 
 void AxisDock::setModel() {
-	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::Column};
+	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet,
+				AspectType::CantorWorksheet, AspectType::Column};
 	cbMajorTicksColumn->setTopLevelClasses(list);
 	cbMinorTicksColumn->setTopLevelClasses(list);
 	cbLabelsTextColumn->setTopLevelClasses(list);
