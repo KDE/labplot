@@ -1559,6 +1559,70 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 		emit m_owner->dataChanged(m_owner);
 }
 
+void ColumnPrivate::initLabels() {
+	if (!m_labels) {
+		switch (m_column_mode) {
+		case AbstractColumn::ColumnMode::Numeric:
+			m_labels = new QMap<double, QString>();
+			break;
+		case AbstractColumn::ColumnMode::Integer:
+			m_labels = new QMap<int, QString>();
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			m_labels = new QMap<qint64, QString>();
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			m_labels = new QMap<QString, QString>();
+			break;
+		case AbstractColumn::ColumnMode::DateTime:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+			m_labels = new QMap<QDateTime, QString>();
+			break;
+		}
+	}
+}
+
+void ColumnPrivate::addValueLabel(const QString& value, const QString& label) {
+	if (m_column_mode != AbstractColumn::ColumnMode::Text)
+		return;
+
+	initLabels();
+	static_cast<QMap<QString, QString>*>(m_labels)->operator[](value) = label;
+}
+
+void ColumnPrivate::addValueLabel(const QDateTime& value, const QString& label) {
+	if (m_column_mode != AbstractColumn::ColumnMode::DateTime)
+		return;
+
+	initLabels();
+	static_cast<QMap<QDateTime, QString>*>(m_labels)->operator[](value) = label;
+}
+
+void ColumnPrivate::addValueLabel(double value, const QString& label) {
+	if (m_column_mode != AbstractColumn::ColumnMode::Numeric)
+		return;
+
+	initLabels();
+	static_cast<QMap<double, QString>*>(m_labels)->operator[](value) = label;
+}
+
+void ColumnPrivate::addValueLabel(int value, const QString& label) {
+	if (m_column_mode != AbstractColumn::ColumnMode::Integer)
+		return;
+
+	initLabels();
+	static_cast<QMap<int, QString>*>(m_labels)->operator[](value) = label;
+}
+
+void ColumnPrivate::addValueLabel(qint64 value, const QString& label) {
+	if (m_column_mode != AbstractColumn::ColumnMode::BigInt)
+		return;
+
+	initLabels();
+	static_cast<QMap<qint64, QString>*>(m_labels)->operator[](value) = label;
+}
+
 /**
  * \brief Set the content of row 'row'
  *

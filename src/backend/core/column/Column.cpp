@@ -534,6 +534,10 @@ void Column::replaceTexts(int first, const QVector<QString>& new_values) {
 	invalidateProperties();
 }
 
+void Column::addValueLabel(const QString& value, const QString& label) {
+	d->addValueLabel(value, label);
+}
+
 /**
  * \brief Set the content of row 'row'
  *
@@ -574,6 +578,10 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 	invalidateProperties();
 }
 
+void Column::addValueLabel(const QDateTime& value, const QString& label) {
+	d->addValueLabel(value, label);
+}
+
 /**
  * \brief Set the content of row 'row'
  *
@@ -592,6 +600,10 @@ void Column::setValueAt(int row, const double new_value) {
 void Column::replaceValues(int first, const QVector<double>& new_values) {
 	exec(new ColumnReplaceValuesCmd(d, first, new_values));
 	invalidateProperties();
+}
+
+void Column::addValueLabel(double value, const QString& label) {
+	d->addValueLabel(value, label);
 }
 
 /**
@@ -614,6 +626,10 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
 	invalidateProperties();
 }
 
+void Column::addValueLabel(int value, const QString& label) {
+	d->addValueLabel(value, label);
+}
+
 /**
  * \brief Set the content of row 'row'
  *
@@ -632,6 +648,10 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
 void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
 	exec(new ColumnReplaceBigIntCmd(d, first, new_values));
 	invalidateProperties();
+}
+
+void Column::addValueLabel(qint64 value, const QString& label) {
+	d->addValueLabel(value, label);
 }
 
 /*!

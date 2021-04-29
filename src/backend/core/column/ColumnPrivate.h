@@ -101,6 +101,7 @@ public:
 	QString textAt(int row) const;
 	void setTextAt(int row, const QString&);
 	void replaceTexts(int first, const QVector<QString>&);
+	void addValueLabel(const QString&, const QString&);
 
 	QDate dateAt(int row) const;
 	void setDateAt(int row, QDate);
@@ -109,18 +110,22 @@ public:
 	QDateTime dateTimeAt(int row) const;
 	void setDateTimeAt(int row, const QDateTime&);
 	void replaceDateTimes(int first, const QVector<QDateTime>&);
+	void addValueLabel(const QDateTime&, const QString&);
 
 	double valueAt(int row) const;
 	void setValueAt(int row, double new_value);
 	void replaceValues(int first, const QVector<double>&);
+	void addValueLabel(double, const QString&);
 
 	int integerAt(int row) const;
 	void setIntegerAt(int row, int new_value);
 	void replaceInteger(int first, const QVector<int>&);
+	void addValueLabel(int, const QString&);
 
 	qint64 bigIntAt(int row) const;
 	void setBigIntAt(int row, qint64 new_value);
 	void replaceBigInt(int first, const QVector<qint64>&);
+	void addValueLabel(qint64, const QString&);
 
 	void updateProperties();
 	void invalidate();
@@ -139,6 +144,7 @@ private:
 	//TODO: rename to m_columnMode
 	AbstractColumn::ColumnMode m_column_mode;	// type of column data
 	void* m_data{nullptr};	//pointer to the data container (QVector<T>)
+	void* m_labels{nullptr};	//pointer to the container for the value labels(QMap<T, QString>)
 	// TODO: rename to m_InputFilter, m_OutputFilter
 	AbstractSimpleFilter* m_input_filter{nullptr};	//input filter for string -> data type conversion
 	AbstractSimpleFilter* m_output_filter{nullptr};	//output filter for data type -> string conversion
@@ -154,7 +160,7 @@ private:
 	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
 
-private:
+	void initLabels();
 	void connectFormulaColumn(const AbstractColumn* column);
 
 private slots:

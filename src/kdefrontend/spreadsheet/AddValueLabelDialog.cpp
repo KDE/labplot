@@ -1,0 +1,130 @@
+/***************************************************************************
+    File                 : AddValueLabelDialog.cpp
+    Project              : LabPlot
+    Description          : Dialog to add a new the value label
+    --------------------------------------------------------------------
+    Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
+
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *  This program is free software; you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation; either version 2 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the Free Software           *
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
+ *   Boston, MA  02110-1301  USA                                           *
+ *                                                                         *
+ ***************************************************************************/
+#include "AddValueLabelDialog.h"
+#include "backend/lib/macros.h"
+
+#include <QDialogButtonBox>
+#include <QGridLayout>
+#include <QIntValidator>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QWindow>
+
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KWindowConfig>
+
+/*!
+	\class AddValueLabelDialog
+	\brief Dialog to add a new the value label
+
+	\ingroup kdefrontend
+ */
+AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::ColumnMode mode) : QDialog(parent) {
+	setWindowTitle(i18nc("@title:window", "Add Value Label"));
+
+	auto* layout = new QGridLayout(this);
+
+	//value
+	auto* label = new QLabel(i18n("Value:"));
+	layout->addWidget(label, 0, 0);
+
+	leValue = new QLineEdit(this);
+	leValue->setFocus();
+	layout->addWidget(leValue, 0, 1);
+
+	if (mode == AbstractColumn::ColumnMode::Numeric)
+		leValue->setValidator(new QDoubleValidator(leValue));
+	else if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
+		leValue->setValidator(new QIntValidator(leValue));
+
+	//label
+	label = new QLabel(i18n("Label:"));
+	layout->addWidget(label, 1, 0);
+
+	leLabel = new QLineEdit(this);
+	layout->addWidget(leLabel, 1, 1);
+
+	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+	connect(btnBox, &QDialogButtonBox::accepted, this, &AddValueLabelDialog::accept);
+	connect(btnBox, &QDialogButtonBox::rejected, this, &AddValueLabelDialog::reject);
+	layout->addWidget(btnBox, 2, 1);
+
+	//restore saved settings if available
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("AddValueLabelDialog"));
+
+	create(); // ensure there's a window created
+	if (conf.exists()) {
+		KWindowConfig::restoreWindowSize(windowHandle(), conf);
+		resize(windowHandle()->size()); // workaround for QTBUG-40584
+	} else
+		resize(QSize(200, 0).expandedTo(minimumSize()));
+}
+
+AddValueLabelDialog::~AddValueLabelDialog() {
+	//save the current settings
+	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("AddValueLabelDialog"));
+	KWindowConfig::saveWindowSize(windowHandle(), conf);
+}
+
+double AddValueLabelDialog::value() const {
+	SET_NUMBER_LOCALE
+	bool ok;
+	int row = numberLocale.toDouble(leValue->text(), &ok);
+
+	return ok ? row : 0.0;
+}
+
+int AddValueLabelDialog::valueInt() const {
+	SET_NUMBER_LOCALE
+	bool ok;
+	int row = numberLocale.toInt(leValue->text(), &ok);
+
+	return ok ? row : 0;
+}
+
+qint64 AddValueLabelDialog::valueBigInt() const {
+	SET_NUMBER_LOCALE
+	bool ok;
+	qint64 row = numberLocale.toLongLong(leValue->text(), &ok);
+
+	return ok ? row : 0;
+}
+
+QString AddValueLabelDialog::valueText() const {
+	return leValue->text();
+}
+
+QDateTime AddValueLabelDialog::valueDateTime() const {
+	return QDateTime();
+}
+
+QString AddValueLabelDialog::label() const {
+	return leLabel->text();
+}

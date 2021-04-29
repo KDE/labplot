@@ -2,7 +2,7 @@
     File                 : ColumnDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2021 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013-2017 by Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : widget for column properties
 
@@ -36,6 +36,7 @@
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "kdefrontend/spreadsheet/AddValueLabelDialog.h"
 
 #include <KLocalizedString>
 
@@ -64,6 +65,9 @@ ColumnDock::ColumnDock(QWidget* parent) : BaseDock(parent) {
 
 	ui.cbDateTimeFormat->setEditable(true);
 
+	ui.twLabels->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+	ui.twLabels->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+
 	connect(ui.leName, &QLineEdit::textChanged, this, &ColumnDock::nameChanged);
 	connect(ui.leComment, &QLineEdit::textChanged, this, &ColumnDock::commentChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::typeChanged);
@@ -71,6 +75,9 @@ ColumnDock::ColumnDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.sbPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &ColumnDock::precisionChanged);
 	connect(ui.cbDateTimeFormat, &QComboBox::currentTextChanged, this, &ColumnDock::dateTimeFormatChanged);
 	connect(ui.cbPlotDesignation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::plotDesignationChanged);
+	connect(ui.bAddLabel, &QPushButton::clicked, this, &ColumnDock::addLabel);
+	connect(ui.bRemoveLabel, &QPushButton::clicked, this, &ColumnDock::removeLabel);
+	connect(ui.bBatchEditLabels, &QPushButton::clicked, this, &ColumnDock::batchEditLabels);
 
 	retranslateUi();
 }
@@ -138,6 +145,9 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	ui.sbPrecision->setEnabled(sameMode);
 	ui.lDateTimeFormat->setEnabled(sameMode);
 	ui.cbDateTimeFormat->setEnabled(sameMode);
+	ui.lLabels->setEnabled(sameMode);
+	ui.twLabels->setEnabled(sameMode);
+	ui.frameLabels->setEnabled(sameMode);
 
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -348,6 +358,72 @@ void ColumnDock::plotDesignationChanged(int index) {
 	auto pd = AbstractColumn::PlotDesignation(index);
 	for (auto* col : m_columnsList)
 		col->setPlotDesignation(pd);
+}
+
+
+//value labels
+
+void ColumnDock::addLabel() {
+	auto mode = m_column->columnMode();
+	auto* dlg = new AddValueLabelDialog(this, mode);
+	if (dlg->exec() == QDialog::Accepted) {
+		const QString& label = dlg->label();
+		QString valueStr;
+		switch (mode) {
+		case AbstractColumn::ColumnMode::Numeric: {
+			double value = dlg->value();
+			valueStr = QString::number(value);
+			for (auto* col : m_columnsList)
+				col->addValueLabel(value, label);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Integer: {
+			int value = dlg->valueInt();
+			valueStr = QString::number(value);
+			for (auto* col : m_columnsList)
+				col->addValueLabel(value, label);
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			qint64 value = dlg->valueBigInt();
+			valueStr = QString::number(value);
+			for (auto* col : m_columnsList)
+				col->addValueLabel(value, label);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text: {
+			valueStr = dlg->valueText();
+			for (auto* col : m_columnsList)
+				col->addValueLabel(valueStr, label);
+			break;
+		}
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime: {
+			//TODO:
+// 			const QDateTime& value = dlg->valueDateTime();
+// 			valueStr = value.format();
+// 			for (auto* col : m_columnsList)
+// 				col->addValueLabel(value, label);
+			break;
+		}
+		}
+
+		int count = ui.twLabels->rowCount();
+		ui.twLabels->insertRow(count);
+		ui.twLabels->setItem(count, 0, new QTableWidgetItem(valueStr));
+		ui.twLabels->setItem(count, 1, new QTableWidgetItem(label));
+
+	}
+	delete dlg;
+}
+
+void ColumnDock::removeLabel() {
+	ui.twLabels->removeRow(ui.twLabels->currentRow());
+}
+
+void ColumnDock::batchEditLabels() {
+
 }
 
 //*************************************************************

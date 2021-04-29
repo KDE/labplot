@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : ColumnDock.h
+    File                 : AddValueLabelDialog.h
     Project              : LabPlot
-    Description          : widget for column properties
+    Description          : Dialog to add a new the value label
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2021 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,53 +25,32 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef ADDVALUELABELDIALOG_H
+#define ADDVALUELABELDIALOG_H
 
-#ifndef COLUMNDOCK_H
-#define COLUMNDOCK_H
+#include "backend/core/AbstractColumn.h"
+#include <QDialog>
+class QLineEdit;
 
-#include "backend/core/column/Column.h"
-#include "kdefrontend/dockwidgets/BaseDock.h"
-#include "ui_columndock.h"
-
-template <class T> class QList;
-
-class ColumnDock : public BaseDock {
+class AddValueLabelDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit ColumnDock(QWidget*);
-	void setColumns(QList<Column*>);
+	explicit AddValueLabelDialog(QWidget* parent = nullptr, AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Numeric);
+	~AddValueLabelDialog() override;
+
+	double value() const;
+	int valueInt() const;
+	qint64 valueBigInt() const;
+	QString valueText() const;
+	QDateTime valueDateTime() const;
+
+	QString label() const;
 
 private:
-	Ui::ColumnDock ui;
-	QList<Column*> m_columnsList;
-	Column* m_column{nullptr};
-
-	void updateTypeWidgets(AbstractColumn::ColumnMode);
-
-private slots:
-	void retranslateUi();
-
-	void typeChanged(int);
-	void numericFormatChanged(int);
-	void precisionChanged(int);
-	void dateTimeFormatChanged(const QString&);
-	void plotDesignationChanged(int);
-
-	//value labels
-	void addLabel();
-	void removeLabel();
-	void batchEditLabels();
-
-	//SLOTs for changes triggered in Column
-	void columnDescriptionChanged(const AbstractAspect*);
-	void columnModeChanged(const AbstractAspect*);
-	void columnFormatChanged();
-	void columnPrecisionChanged();
-	void columnPlotDesignationChanged(const AbstractColumn*);
-
-signals:
-	void info(const QString&);
+	QLineEdit* leValue;
+	QLineEdit* leLabel;
+	AbstractColumn::ColumnMode m_mode;
 };
 
-#endif // COLUMNDOCK_H
+#endif

@@ -109,6 +109,8 @@ public:
 	QString textAt(int) const override;
 	void setTextAt(int, const QString&) override;
 	void replaceTexts(int, const QVector<QString>&) override;
+	void addValueLabel(const QString&, const QString&);
+
 	QDate dateAt(int) const override;
 	void setDateAt(int, QDate) override;
 	QTime timeAt(int) const override;
@@ -116,15 +118,22 @@ public:
 	QDateTime dateTimeAt(int) const override;
 	void setDateTimeAt(int, const QDateTime&) override;
 	void replaceDateTimes(int, const QVector<QDateTime>&) override;
+	void addValueLabel(const QDateTime&, const QString&);
+
 	double valueAt(int) const override;
 	void setValueAt(int, double) override;
 	void replaceValues(int, const QVector<double>&) override;
+	void addValueLabel(double, const QString&);
+
 	int integerAt(int) const override;
 	void setIntegerAt(int, int) override;
 	void replaceInteger(int, const QVector<int>&) override;
+	void addValueLabel(int, const QString&);
+
 	qint64 bigIntAt(int) const override;
 	void setBigIntAt(int, qint64) override;
 	void replaceBigInt(int, const QVector<qint64>&) override;
+	void addValueLabel(qint64, const QString&);
 
 	double maximum(int count = 0) const override;
 	double maximum(int startIndex, int endIndex) const override;
