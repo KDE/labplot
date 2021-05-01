@@ -124,6 +124,9 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_READSTAT
 		ui.cbFileType->addItem(i18n("SAS, Stata or SPSS"), static_cast<int>(AbstractFileFilter::FileType::READSTAT));
 #endif
+#ifdef HAVE_MATIO
+		ui.cbFileType->addItem(i18n("MATLAB MAT file"), static_cast<int>(AbstractFileFilter::FileType::MATIO));
+#endif
 
 		//hide widgets relevant for live data reading only
 		ui.lRelativePath->hide();
@@ -760,6 +763,18 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 
 		break;
 	}
+	case AbstractFileFilter::FileType::MATIO: {
+		DEBUG(Q_FUNC_INFO << ", MATIO");
+		if (!m_currentFilter)
+			m_currentFilter.reset(new MatioFilter);
+		auto filter = static_cast<MatioFilter*>(m_currentFilter.get());
+		filter->setStartRow(ui.sbStartRow->value());
+		filter->setEndRow(ui.sbEndRow->value());
+		filter->setStartColumn(ui.sbStartColumn->value());
+		filter->setEndColumn(ui.sbEndColumn->value());
+
+		break;
+	}
 	}
 
 	return m_currentFilter.get();
@@ -991,6 +1006,13 @@ void ImportFileWidget::fileTypeChanged(int index) {
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		break;
+	case AbstractFileFilter::FileType::MATIO:
+		//TODO
+		ui.tabWidget->removeTab(0);
+		ui.tabWidget->setCurrentIndex(0);
+		ui.lFilter->hide();
+		ui.cbFilter->hide();
+		break;
 	default:
 		DEBUG("unknown file type");
 	}
@@ -1110,6 +1132,7 @@ void ImportFileWidget::initOptionsWidget() {
 	case AbstractFileFilter::FileType::NgspiceRawAscii:
 	case AbstractFileFilter::FileType::NgspiceRawBinary:
 	case AbstractFileFilter::FileType::READSTAT:
+	case AbstractFileFilter::FileType::MATIO:
 		break;
 	}
 }
@@ -1246,6 +1269,9 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		case AbstractFileFilter::FileType::READSTAT:
 			infoStrings << ReadStatFilter::fileInfoString(fileName);
 			break;
+		case AbstractFileFilter::FileType::MATIO:
+			infoStrings << MatioFilter::fileInfoString(fileName);
+			break;
 		}
 
 		infoString += infoStrings.join("<br>");
@@ -1300,7 +1326,8 @@ void ImportFileWidget::refreshPreview() {
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary
 	        || fileType == AbstractFileFilter::FileType::JSON || fileType == AbstractFileFilter::FileType::NgspiceRawAscii
-	        || fileType == AbstractFileFilter::FileType::NgspiceRawBinary || fileType == AbstractFileFilter::FileType::READSTAT)
+	        || fileType == AbstractFileFilter::FileType::NgspiceRawBinary || fileType == AbstractFileFilter::FileType::READSTAT
+		|| fileType == AbstractFileFilter::FileType::MATIO)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1518,6 +1545,15 @@ void ImportFileWidget::refreshPreview() {
 		DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")
 		break;
 	}
+	case AbstractFileFilter::FileType::MATIO: {
+		ui.tePreview->clear();
+		auto filter = static_cast<MatioFilter*>(currentFileFilter());
+		importedStrings = filter->preview(fileName, lines);
+		//vectorNameList = filter->vectorNames();
+		//columnModes = filter->columnModes();
+		//DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")
+		break;
+	}
 	}
 
 	// fill the table widget
@@ -1604,6 +1640,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 		case AbstractFileFilter::FileType::NgspiceRawAscii:
 		case AbstractFileFilter::FileType::NgspiceRawBinary:
 		case AbstractFileFilter::FileType::READSTAT:
+		case AbstractFileFilter::FileType::MATIO:
 			break;
 		}
 	}

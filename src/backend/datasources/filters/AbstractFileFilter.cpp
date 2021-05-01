@@ -201,6 +201,10 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		|| fileName.endsWith(QLatin1String(".xpt8"), Qt::CaseInsensitive))
 		fileType = FileType::READSTAT;
 #endif
+#ifdef HAVE_MATIO
+	else if (fileInfo.contains(QLatin1String("Matlab")) || fileName.endsWith(QLatin1String("mat"), Qt::CaseInsensitive))
+		fileType = FileType::MATIO;
+#endif
 	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 		fileType = FileType::Image;
 	else if (NgspiceRawBinaryFilter::isNgspiceBinaryFile(fileName))
