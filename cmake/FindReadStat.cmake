@@ -25,7 +25,7 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #=============================================================================
 
-find_library(READSTAT_LIBRARY readstat)
+find_library(READSTAT_LIBRARIES readstat)
 
 find_path(READSTAT_INCLUDE_DIR readstat.h)
 
@@ -34,15 +34,15 @@ find_package_handle_standard_args(ReadStat
     FOUND_VAR
         READSTAT_FOUND
     REQUIRED_VARS
-        READSTAT_LIBRARY
+    READSTAT_LIBRARIES
         READSTAT_INCLUDE_DIR
 )
 
 if(READSTAT_FOUND AND NOT TARGET readstat)
     add_library(readstat UNKNOWN IMPORTED)
     set_target_properties(readstat PROPERTIES
-	    IMPORTED_LOCATION "${READSTAT_LIBRARY}"
-	    INTERFACE_INCLUDE_DIRECTORIES "${READSTAT_INCLUDE_DIR}"
+        IMPORTED_LOCATION "${READSTAT_LIBRARIES}"
+	INTERFACE_INCLUDE_DIRECTORIES "${READSTAT_INCLUDE_DIR}"
     )
 endif()
 

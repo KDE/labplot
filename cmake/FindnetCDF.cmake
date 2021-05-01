@@ -68,6 +68,8 @@ if(netCDF_FOUND AND NOT TARGET netcdf)
         IMPORTED_LOCATION "${netCDF_LIBRARIES}"
         INTERFACE_INCLUDE_DIRECTORIES "${netCDF_INCLUDE_DIR}"
     )
+else()
+    set(netCDF_LIBRARIES "")
 endif()
 
 mark_as_advanced(netCDF_LIBRARIES netCDF_INCLUDE_DIR netCDF_VERSION)

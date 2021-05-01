@@ -28,7 +28,7 @@
 find_package(PkgConfig QUIET)
 pkg_check_modules(PC_LIBCERF libcerf QUIET)
 
-find_library(LIBCERF_LIBRARY
+find_library(LIBCERF_LIBRARIES
     NAMES cerf
     HINTS ${PC_LIBCERF_LIBRARY_DIRS}
 )
@@ -43,19 +43,21 @@ set(LIBCERF_VERSION ${PC_LIBCERF_VERSION})
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(LIBCERF
     REQUIRED_VARS
-    LIBCERF_LIBRARY
+        LIBCERF_LIBRARIES
         LIBCERF_INCLUDE_DIR
     VERSION_VAR
-    LIBCERF_VERSION
+        LIBCERF_VERSION
 )
 
 if(LIBCERF_FOUND AND NOT TARGET libcerf::libcerf)
     add_library(libcerf::libcerf UNKNOWN IMPORTED)
     set_target_properties(libcerf::libcerf PROPERTIES
-        IMPORTED_LOCATION "${LIBCERF_LIBRARY}"
-        INTERFACE_COMPILE_OPTIONS "${PC_LIBCERF_CFLAGS}"
-        INTERFACE_INCLUDE_DIRECTORIES "${LIBCERF_INCLUDE_DIR}"
+	 IMPORTED_LOCATION "${LIBCERF_LIBRARIES}"
+         INTERFACE_COMPILE_OPTIONS "${PC_LIBCERF_CFLAGS}"
+         INTERFACE_INCLUDE_DIRECTORIES "${LIBCERF_INCLUDE_DIR}"
     )
+else()
+	set(LIBCERF_LIBRARIES "")
 endif()
 
 mark_as_advanced(LIBCERF_LIBRARIES LIBCERF_INCLUDE_DIR LIBCERF_VERSION)

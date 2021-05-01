@@ -28,7 +28,7 @@
 find_package(PkgConfig QUIET)
 pkg_check_modules(PC_LZ4 lz4 QUIET)
 
-find_library(LZ4_LIBRARY
+find_library(LZ4_LIBRARIES
     NAMES lz4
     HINTS ${PC_LZ4_LIBRARY_DIRS}
 )
@@ -61,7 +61,7 @@ endif()
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(LZ4
     REQUIRED_VARS
-        LZ4_LIBRARY
+    LZ4_LIBRARIES
         LZ4_INCLUDE_DIR
     VERSION_VAR
         LZ4_VERSION
@@ -70,13 +70,15 @@ find_package_handle_standard_args(LZ4
 if(LZ4_FOUND AND NOT TARGET lz4::lz4)
     add_library(lz4::lz4 UNKNOWN IMPORTED)
     set_target_properties(lz4::lz4 PROPERTIES
-        IMPORTED_LOCATION "${LZ4_LIBRARY}"
+	IMPORTED_LOCATION "${LZ4_LIBRARIES}"
         INTERFACE_COMPILE_OPTIONS "${PC_LZ4_CFLAGS}"
         INTERFACE_INCLUDE_DIRECTORIES "${LZ4_INCLUDE_DIR}"
     )
+else()
+	set(LZ4_LIBRARIES "")
 endif()
 
-mark_as_advanced(LZ4_LIBRARY LZ4_INCLUDE_DIR LZ4_VERSION)
+mark_as_advanced(LZ4_LIBRARIES LZ4_INCLUDE_DIR LZ4_VERSION)
 
 include(FeatureSummary)
 set_package_properties(LZ4 PROPERTIES

@@ -25,7 +25,7 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #=============================================================================
 
-find_library(MATIO_LIBRARY matio)
+find_library(MATIO_LIBRARIES matio)
 
 find_path(MATIO_INCLUDE_DIR matio.h)
 
@@ -34,21 +34,21 @@ find_package_handle_standard_args(Matio
     FOUND_VAR
     	MATIO_FOUND
     REQUIRED_VARS
-        MATIO_LIBRARY
+        MATIO_LIBRARIES
 	MATIO_INCLUDE_DIR
 )
 
 if(MATIO_FOUND)
-   add_library(matio UNKNOWN IMPORTED)
+    add_library(matio UNKNOWN IMPORTED)
     set_target_properties(matio PROPERTIES
-	    IMPORTED_LOCATION "${MATIO_LIBRARY}"
-	    INTERFACE_INCLUDE_DIRECTORIES "${MATIO_INCLUDE_DIR}"
+        IMPORTED_LOCATION "${MATIO_LIBRARIES}"
+	INTERFACE_INCLUDE_DIRECTORIES "${MATIO_INCLUDE_DIR}"
     )
 else()
-   set(MATIO_LIBRARY "")
+	set(MATIO_LIBRARIES "")
 endif()
 
-mark_as_advanced(MATIO_LIBRARY MATIO_INCLUDE_DIR)
+mark_as_advanced(MATIO_LIBRARIES MATIO_INCLUDE_DIR)
 
 include(FeatureSummary)
 set_package_properties(Matio PROPERTIES
