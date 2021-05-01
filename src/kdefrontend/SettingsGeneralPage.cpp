@@ -29,6 +29,7 @@
 
 #include "SettingsGeneralPage.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/MainWin.h"	// LoadOnStart
 
 #include <KI18n/KLocalizedString>
 #include <KConfigGroup>
@@ -129,7 +130,7 @@ void SettingsGeneralPage::applySettings() {
 }
 
 void SettingsGeneralPage::restoreDefaults() {
-	ui.cbLoadOnStart->setCurrentIndex(0);
+	ui.cbLoadOnStart->setCurrentIndex(static_cast<int>(MainWin::LoadOnStart::NewProject));
 	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbInterface->setCurrentIndex(0);
 	ui.cbTabPosition->setCurrentIndex(0);
@@ -146,7 +147,7 @@ void SettingsGeneralPage::restoreDefaults() {
 
 void SettingsGeneralPage::loadSettings() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), 0));
+	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject)));
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
 	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
 	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));

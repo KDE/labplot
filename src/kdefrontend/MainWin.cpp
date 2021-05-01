@@ -342,7 +342,7 @@ void MainWin::initGUI(const QString& fileName) {
 	} else {
 		//There is no file to open. Depending on the settings do nothing,
 		//create a new project or open the last used project.
-		LoadOnStart load = (LoadOnStart)group.readEntry("LoadOnStart", static_cast<int>(LoadOnStart::Nothing));
+		LoadOnStart load = (LoadOnStart)group.readEntry("LoadOnStart", static_cast<int>(LoadOnStart::NewProject));
 		if (load != LoadOnStart::WelcomeScreen) {
 			createMdiArea();
 			setCentralWidget(m_mdiArea);
