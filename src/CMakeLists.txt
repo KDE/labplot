@@ -519,9 +519,9 @@ IF (ENABLE_READSTAT AND NOT WIN32)
 	ENDIF ()
 	target_link_libraries( labplot2lib ${READSTAT_LIBRARY} )
 ENDIF ()
-IF (ENABLE_MATIO)
-	target_link_libraries( labplot2lib ${MATIO_LIBRARY} )
-ENDIF ()
+
+target_link_libraries( labplot2lib ${MATIO_LIBRARY} )
+
 IF (ENABLE_LIBORIGIN)
 	target_link_libraries( labplot2lib liborigin-static )
 ENDIF ()
