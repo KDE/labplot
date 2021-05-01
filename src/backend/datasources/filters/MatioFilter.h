@@ -36,7 +36,8 @@ class MatioFilterPrivate;
 // LINKS:
 //  http://na-wiki.csc.kth.se/mediawiki/index.php/MatIO
 //  https://github.com/NJannasch/matio-examples
-//  examples: https://github.com/scipy/scipy/tree/master/scipy/io/matlab/tests/data/
+//  example data: https://github.com/scipy/scipy/tree/master/scipy/io/matlab/tests/data/
+//  matio_user_guide.pdf
 class MatioFilter : public AbstractFileFilter {
 	Q_OBJECT
 

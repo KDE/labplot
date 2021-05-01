@@ -153,8 +153,66 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 	QString info;
 	// see NetCDFFilter.cpp
 #ifdef HAVE_MATIO
+	mat_t *matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
 
-	//TODO: supports 7.3 (build with hdf5?)
+	if (!matfp)
+		return i18n("Error getting file info");
+
+	int version = Mat_GetVersion(matfp);
+	const char *header = Mat_GetHeader(matfp);
+	DEBUG(Q_FUNC_INFO << ", Header: " << header)
+	info += header;
+	info += QLatin1String("<br>");
+	switch (version) {
+	case MAT_FT_MAT73:
+		info += i18n("Matlab version 7.3");
+		break;
+	case MAT_FT_MAT5:
+		info += i18n("Matlab version 5");
+		break;
+	case MAT_FT_MAT4:
+		info += i18n("Matlab version 4");
+		break;
+	case MAT_FT_UNDEFINED:
+		info += i18n("Matlab version undefined");
+	}
+	info += QLatin1String("<br>");
+
+        size_t n;
+        char **dir = Mat_GetDir(matfp, &n);
+	info += i18n("Number of variables: ") + QString::number(n);
+	info += QLatin1String("<br>");
+	if (dir && n < 10) {	// only show variable info when there are not too much
+		info += i18n("Variables: ");
+		for (size_t i = 0; i < n; ++i) {
+			if (dir[i]) {
+				info += "\"" + QString(dir[i]) + "\"";
+				matvar_t* var = Mat_VarReadInfo(matfp, dir[i]);
+				if (var)
+					info += " (" + QString::number(Mat_VarGetNumberOfFields(var)) +  " fields, "
+						+ QString::number(Mat_VarGetSize(var)) + " byte)";
+				Mat_VarFree(var);
+			}
+		}
+	}
+
+	// Mat_VarRead is the same as Mat_VarReadInfo but reads the data too
+	//
+	// var info (see user guide): name, rank, dims, class_type, data_type. isComplex, isLogical, isGlobal
+	//
+	/* if ( !matvar->isComplex )
+		fprintf(stderr,"Variable ’x’ is not complex!\n");
+		if ( matvar->rank != 2 ||
+		(matvar->dims[0] > 1 && matvar->dims[1] > 1) )
+		fprintf(stderr,"Variable ’x’ is not a vector!\n");
+	*/
+
+	// loop over vars:
+	// while ( (matvar = Mat_VarReadNextInfo(matfp)) != NULL )
+
+	Mat_Close(matfp);
+
+	//TODO: supports 7.3? (build with hdf5?)
 #endif
 
 	return info;
