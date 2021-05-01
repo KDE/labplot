@@ -17,7 +17,7 @@ IF (Cantor_FOUND)
 	target_link_libraries(asciifiltertest Cantor::cantorlibs)
 ENDIF ()
 
-target_link_libraries(asciifiltertest ${HDF5_C_LIBRARIES} ${FFTW3_LIBRARIES} ${netCDF_LIBRARIES} ${CFITSIO_LIBRARIES})
+target_link_libraries(asciifiltertest ${HDF5_LIBRARIES} ${FFTW3_LIBRARIES} ${netCDF_LIBRARIES} ${CFITSIO_LIBRARIES})
 
 IF (USE_LIBORIGIN)
 	target_link_libraries(asciifiltertest liborigin-static)
