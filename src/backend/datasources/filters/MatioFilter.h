@@ -47,23 +47,20 @@ public:
 	~MatioFilter() override;
 
 	static QString fileInfoString(const QString&);
-//	static QString fileCDLString(const QString&);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
 	void parse(const QString& fileName);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
-//	QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
-//	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-//			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*) override;
 
 	void loadFilterSettings(const QString&) override;
 	void saveFilterSettings(const QString&) const override;
 
-//	void setCurrentVarName(const QString&);
-//	const QString currentVarName() const;
+	void setCurrentVarName(const QString&);
+	const QString currentVarName() const;
 	int varCount() const;
-	//QStringList varNames() const;
 	QVector<QStringList> varsInfo() const;
 
 	//TODO: -> AbstractFileFilter?

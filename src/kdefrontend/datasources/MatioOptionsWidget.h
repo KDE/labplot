@@ -41,7 +41,7 @@ public:
 	void clear();
 	void updateContent(MatioFilter*, const QString& fileName);
 	const QStringList selectedNames() const;
-	//int lines() const { return ui.sbPreviewLines->value(); }
+	int lines() const { return ui.sbPreviewLines->value(); }
 	QTableWidget* previewWidget() const { return ui.twPreview; }
 
 private:
@@ -49,7 +49,7 @@ private:
 	ImportFileWidget* m_fileWidget;
 
 private slots:
-//	void netcdfTreeWidgetSelectionChanged();
+	void selectionChanged();
 };
 
 #endif

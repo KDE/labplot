@@ -42,9 +42,8 @@ public:
 	void parse(const QString & fileName);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
-//	QString readAttribute(const QString& fileName, const QString& name, const QString& varName);
-//	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-//			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
 	void write(const QString& fileName, AbstractDataSource*);
 
 //helper functions
@@ -66,10 +65,6 @@ public:
 private:
 #ifdef HAVE_MATIO
 	int m_status;
-
-//	QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem = nullptr);
-//	void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);
-//	void scanVars(int ncid, int nvars, QTreeWidgetItem* parentItem);
 #endif
 };
 

@@ -77,8 +77,7 @@ void NetCDFOptionsWidget::updateContent(NetCDFFilter *filter, const QString& fil
 	updates the selected var name of a NetCDF file when the tree widget item is selected
 */
 void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
-	DEBUG("netcdfTreeWidgetSelectionChanged()");
-	QDEBUG("SELECTED ITEMS =" << ui.twContent->selectedItems());
+	QDEBUG(Q_FUNC_INFO << ", SELECTED ITEMS =" << ui.twContent->selectedItems());
 
 	if (ui.twContent->selectedItems().isEmpty())
 		return;
@@ -122,7 +121,7 @@ void NetCDFOptionsWidget::netcdfTreeWidgetSelectionChanged() {
 	selects all items if nothing is selected
 */
 const QStringList NetCDFOptionsWidget::selectedNames() const {
-	DEBUG("NetCDFOptionsWidget::selectedNames()");
+	DEBUG(Q_FUNC_INFO);
 	QStringList names;
 
 	if (ui.twContent->selectedItems().size() == 0)
@@ -130,7 +129,7 @@ const QStringList NetCDFOptionsWidget::selectedNames() const {
 
 	for (auto* item : ui.twContent->selectedItems())
 		names << item->text(0);
-	QDEBUG("	NetCDFOptionsWidget: selected names =" << names);
+	QDEBUG(Q_FUNC_INFO << ", selected names =" << names);
 
 	return names;
 }

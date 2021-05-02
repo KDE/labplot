@@ -61,19 +61,12 @@ void MatioFilter::parse(const QString & fileName) {
 }
 
 /*!
-  reads the content of the selected attribute from file \c fileName.
-*/
-/*QString MatioFilter::readAttribute(const QString & fileName, const QString & name, const QString & varName) {
-	return d->readAttribute(fileName, name, varName);
-}*/
-
-/*!
   reads the content of the current variable from file \c fileName.
 */
-/*QVector<QStringList> MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource,
+QVector<QStringList> MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource,
 		AbstractFileFilter::ImportMode importMode, int lines) {
 	return d->readCurrentVar(fileName, dataSource, importMode, lines);
-}*/
+}
 
 /*!
   reads the content of the file \c fileName to the data source \c dataSource.
@@ -107,13 +100,13 @@ void MatioFilter::saveFilterSettings(const QString& filterName) const {
 
 ///////////////////////////////////////////////////////////////////////
 
-/*void MatioFilter::setCurrentVarName(const QString& ds) {
+void MatioFilter::setCurrentVarName(const QString& ds) {
 	d->currentVarName = ds;
 }
 
 const QString MatioFilter::currentVarName() const {
 	return d->currentVarName;
-}*/
+}
 int MatioFilter::varCount() const {
 	return d->varCount;
 }
@@ -160,7 +153,6 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 	DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName))
 
 	QString info;
-	// see NetCDFFilter.cpp
 #ifdef HAVE_MATIO
 	mat_t *matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
 
@@ -205,23 +197,7 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 		}
 	}
 
-	// Mat_VarRead is the same as Mat_VarReadInfo but reads the data too
-	//
-	// var info (see user guide): name, rank, dims, class_type, data_type. isComplex, isLogical, isGlobal
-	//
-	/* if ( !matvar->isComplex )
-		fprintf(stderr,"Variable ’x’ is not complex!\n");
-		if ( matvar->rank != 2 ||
-		(matvar->dims[0] > 1 && matvar->dims[1] > 1) )
-		fprintf(stderr,"Variable ’x’ is not a vector!\n");
-	*/
-
-	// loop over vars:
-	// while ( (matvar = Mat_VarReadNextInfo(matfp)) != NULL )
-
 	Mat_Close(matfp);
-
-	//TODO: supports 7.3? (build with hdf5?)
 #endif
 
 	return info;
@@ -402,9 +378,12 @@ void MatioFilterPrivate::parse(const QString& fileName) {
  * generates the preview for the file \c fileName reading the provided number of \c lines.
  */
 QVector<QStringList> MatioFilterPrivate::preview(const QString& fileName, int lines) {
+	DEBUG(Q_FUNC_INFO)
 	QVector<QStringList> dataStrings;
 
 	//TODO
+	// read lines lines of current var from filelName
+
 	return dataStrings;
 }
 
@@ -413,15 +392,74 @@ QVector<QStringList> MatioFilterPrivate::preview(const QString& fileName, int li
     Uses the settings defined in the data source.
 */
 QVector<QStringList> MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+	DEBUG(Q_FUNC_INFO)
 	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
-		DEBUG(" No variable selected");
+		DEBUG(Q_FUNC_INFO << ", no variable selected");
 		return dataStrings;
 	}
 
-	//return readCurrentVar(fileName, dataSource, mode);
+	return readCurrentVar(fileName, dataSource, mode);
+}
+
+/*!
+    reads the content of the variable in the file \c fileName to a string (for preview) or to the data source.
+*/
+QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+	QVector<QStringList> dataStrings;
+
+	if (currentVarName.isEmpty()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: current var name is empty!")
+		return dataStrings << (QStringList() << i18n("No variable selected"));
+	}
+	DEBUG(Q_FUNC_INFO << ", current variable: " << STDSTRING(currentVarName));
+
+#ifdef HAVE_MATIO
+	mat_t *matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
+	if (!matfp)
+		return dataStrings << (QStringList() << i18n("File not found"));
+
+	// read info and data
+	matvar_t* var = Mat_VarRead(matfp, qPrintable(currentVarName));
+	if (!var)
+		return dataStrings << (QStringList() << i18n("Variable not found"));
+
+	if (var->rank == 2) {
+		// read data
+		//TODO: other types
+		if (var->class_type != MAT_C_DOUBLE)
+			return dataStrings << (QStringList() << i18n("Not implemented yet"));
+
+		const double *data = static_cast<const double*>(var->data);
+		const int sizeX = var->dims[0], sizeY = var->dims[1];
+		for (int i = 0; i < sizeY; i++) {
+			QStringList row;
+		for (int j = 0; j < sizeX; j++) {
+			row << QString::number(data[j + i*sizeX]);
+		}
+			dataStrings << row;
+		}
+
+		//TODO: handle sparse, struct, cell
+		//TODO: handle other classes and types
+
+	}
+	//TODO
+	if (var->rank > 2)
+		return dataStrings << (QStringList() << i18n("Not implemented yet"));
+
+	Mat_VarFree(var);
+	Mat_Close(matfp);
+#else
+	Q_UNUSED(fileName)
+	Q_UNUSED(dataSource)
+	Q_UNUSED(mode)
+	Q_UNUSED(lines)
+#endif
+
 	return dataStrings;
+
 }
 
 /*!

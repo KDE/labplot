@@ -645,8 +645,10 @@ QString NetCDFFilterPrivate::readAttribute(const QString& fileName, const QStrin
 QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
 	QVector<QStringList> dataStrings;
 
-	if (currentVarName.isEmpty())
+	if (currentVarName.isEmpty()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: current var name is empty!")
 		return dataStrings << (QStringList() << i18n("No variable selected"));
+	}
 	DEBUG(" current variable = " << STDSTRING(currentVarName));
 
 #ifdef HAVE_NETCDF

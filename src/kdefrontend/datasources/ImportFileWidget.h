@@ -77,6 +77,7 @@ public:
 	bool isFileEmpty() const;
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
+	const QStringList selectedMatioNames() const;
 	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
 	void showAsciiHeaderOptions(bool);
@@ -138,6 +139,7 @@ signals:
 	void error(const QString&);
 
 	friend class HDF5OptionsWidget;	// to access refreshPreview()
+	friend class MatioOptionsWidget;	// to access refreshPreview() and others
 	friend class NetCDFOptionsWidget;	// to access refreshPreview() and others
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;

@@ -480,7 +480,6 @@ QString ImportFileWidget::selectedObject() const {
 		name = name.left(name.lastIndexOf('.'));
 
 	//for multi-dimensional formats like HDF, netCDF and FITS add the currently selected object
-	//TODO: Matio
 	const auto format = currentFileType();
 	if (format == AbstractFileFilter::FileType::HDF5) {
 		const QStringList& hdf5Names = m_hdf5OptionsWidget->selectedNames();
@@ -496,6 +495,10 @@ QString ImportFileWidget::selectedObject() const {
 			name += QLatin1Char('/') + extensionName;
 	} else if (format == AbstractFileFilter::FileType::ROOT) {
 		const QStringList& names = m_rootOptionsWidget->selectedNames();
+		if (names.size())
+			name += QLatin1Char('/') + names.first();
+	} else if (format == AbstractFileFilter::FileType::MATIO) {
+		const QStringList& names = m_matioOptionsWidget->selectedNames();
 		if (names.size())
 			name += QLatin1Char('/') + names.first();
 	}
@@ -769,6 +772,8 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 		if (!m_currentFilter)
 			m_currentFilter.reset(new MatioFilter);
 		auto filter = static_cast<MatioFilter*>(m_currentFilter.get());
+		if (!selectedMatioNames().isEmpty())
+			filter->setCurrentVarName(selectedMatioNames()[0]);
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
@@ -1148,6 +1153,10 @@ const QStringList ImportFileWidget::selectedNetCDFNames() const {
 	return m_netcdfOptionsWidget->selectedNames();
 }
 
+const QStringList ImportFileWidget::selectedMatioNames() const {
+	return m_matioOptionsWidget->selectedNames();
+}
+
 const QStringList ImportFileWidget::selectedFITSExtensions() const {
 	return m_fitsOptionsWidget->selectedExtensions();
 }
@@ -1328,8 +1337,7 @@ void ImportFileWidget::refreshPreview() {
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary
 	        || fileType == AbstractFileFilter::FileType::JSON || fileType == AbstractFileFilter::FileType::NgspiceRawAscii
-	        || fileType == AbstractFileFilter::FileType::NgspiceRawBinary || fileType == AbstractFileFilter::FileType::READSTAT
-		|| fileType == AbstractFileFilter::FileType::MATIO)
+	        || fileType == AbstractFileFilter::FileType::NgspiceRawBinary || fileType == AbstractFileFilter::FileType::READSTAT)
 		m_twPreview->show();
 	else
 		m_twPreview->hide();
@@ -1551,7 +1559,10 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		auto filter = static_cast<MatioFilter*>(currentFileFilter());
 		importedStrings = filter->preview(fileName, lines);
-		//TODO lines = m_matioOptionsWidget->lines();
+		lines = m_matioOptionsWidget->lines();
+
+		importedStrings = filter->readCurrentVar(fileName, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
+		tmpTableWidget = m_matioOptionsWidget->previewWidget();
 		//vectorNameList = filter->vectorNames();
 		//columnModes = filter->columnModes();
 		//DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")

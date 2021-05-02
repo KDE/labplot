@@ -296,13 +296,14 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				offset = 0;
 
 			// import all sets to a different sheet
-			// TODO: Matio
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
 				if (fileType == AbstractFileFilter::FileType::HDF5)
 					static_cast<HDF5Filter*>(filter)->setCurrentDataSetName(names[i]);
 				else if (fileType == AbstractFileFilter::FileType::NETCDF)
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names[i]);
+				else if (fileType == AbstractFileFilter::FileType::MATIO)
+					static_cast<MatioFilter*>(filter)->setCurrentVarName(names[i]);
 				else
 					static_cast<ROOTFilter*>(filter)->setCurrentObject(names[i]);
 
