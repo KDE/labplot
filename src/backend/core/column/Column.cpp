@@ -1366,7 +1366,6 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 			} else if (reader->name() == "valueLabel") {
 				attribs = reader->attributes();
 				const QString& label = attribs.value("label").toString();
-				DEBUG("adding " << label.toStdString());
 				switch (columnMode()) {
 				case AbstractColumn::ColumnMode::Numeric:
 					addValueLabel(attribs.value("value").toDouble(), label);

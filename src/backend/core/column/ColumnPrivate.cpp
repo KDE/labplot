@@ -1621,7 +1621,9 @@ void ColumnPrivate::addValueLabel(const QString& value, const QString& label) {
 }
 
 void ColumnPrivate::addValueLabel(const QDateTime& value, const QString& label) {
-	if (m_column_mode != AbstractColumn::ColumnMode::DateTime)
+	if (m_column_mode != AbstractColumn::ColumnMode::DateTime
+		&& m_column_mode != AbstractColumn::ColumnMode::Day
+		&& m_column_mode != AbstractColumn::ColumnMode::Month)
 		return;
 
 	initLabels();

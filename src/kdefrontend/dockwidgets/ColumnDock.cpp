@@ -216,7 +216,16 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			//TODO:
+			auto labels = m_column->dateTimeValueLabels();
+			ui.twLabels->setRowCount(labels.size());
+			auto it = labels.constBegin();
+			const QString& format = ui.cbDateTimeFormat->currentText();
+			while (it != labels.constEnd()) {
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it.key().toString(format)));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+				++it;
+				++i;
+			}
 			break;
 		}
 		}
@@ -432,6 +441,12 @@ void ColumnDock::plotDesignationChanged(int index) {
 void ColumnDock::addLabel() {
 	auto mode = m_column->columnMode();
 	auto* dlg = new AddValueLabelDialog(this, mode);
+
+	if (mode == AbstractColumn::ColumnMode::Month
+		|| mode == AbstractColumn::ColumnMode::Day
+		|| mode == AbstractColumn::ColumnMode::DateTime)
+		dlg->setDateTimeFormat(ui.cbDateTimeFormat->currentText());
+
 	if (dlg->exec() == QDialog::Accepted) {
 		const QString& label = dlg->label();
 		QString valueStr;
@@ -466,11 +481,10 @@ void ColumnDock::addLabel() {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			//TODO:
-// 			const QDateTime& value = dlg->valueDateTime();
-// 			valueStr = value.format();
-// 			for (auto* col : m_columnsList)
-// 				col->addValueLabel(value, label);
+			const QDateTime& value = dlg->valueDateTime();
+			valueStr = value.toString(ui.cbDateTimeFormat->currentText());
+			for (auto* col : m_columnsList)
+				col->addValueLabel(value, label);
 			break;
 		}
 		}

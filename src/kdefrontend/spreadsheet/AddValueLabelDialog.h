@@ -30,6 +30,8 @@
 
 #include "backend/core/AbstractColumn.h"
 #include <QDialog>
+
+class QDateTimeEdit;
 class QLineEdit;
 
 class AddValueLabelDialog : public QDialog {
@@ -38,6 +40,8 @@ class AddValueLabelDialog : public QDialog {
 public:
 	explicit AddValueLabelDialog(QWidget* parent = nullptr, AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Numeric);
 	~AddValueLabelDialog() override;
+
+	void setDateTimeFormat(const QString&);
 
 	double value() const;
 	int valueInt() const;
@@ -50,6 +54,7 @@ public:
 private:
 	QLineEdit* leValue;
 	QLineEdit* leLabel;
+	QDateTimeEdit* dateTimeEdit;
 	AbstractColumn::ColumnMode m_mode;
 };
 

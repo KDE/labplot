@@ -28,6 +28,7 @@
 #include "AddValueLabelDialog.h"
 #include "backend/lib/macros.h"
 
+#include <QDateTimeEdit>
 #include <QDialogButtonBox>
 #include <QGridLayout>
 #include <QIntValidator>
@@ -55,14 +56,26 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::Column
 	auto* label = new QLabel(i18n("Value:"));
 	layout->addWidget(label, 0, 0);
 
-	leValue = new QLineEdit(this);
-	leValue->setFocus();
-	layout->addWidget(leValue, 0, 1);
+	if (mode == AbstractColumn::ColumnMode::Numeric
+		|| mode == AbstractColumn::ColumnMode::Integer
+		|| mode == AbstractColumn::ColumnMode::BigInt) {
 
-	if (mode == AbstractColumn::ColumnMode::Numeric)
-		leValue->setValidator(new QDoubleValidator(leValue));
-	else if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt)
-		leValue->setValidator(new QIntValidator(leValue));
+		leValue = new QLineEdit(this);
+		leValue->setFocus();
+		layout->addWidget(leValue, 0, 1);
+
+		if (mode == AbstractColumn::ColumnMode::Numeric) {
+			SET_NUMBER_LOCALE
+			leValue->setLocale(numberLocale);
+			leValue->setValidator(new QDoubleValidator(leValue));
+		} else if (mode == AbstractColumn::ColumnMode::Integer
+			|| mode == AbstractColumn::ColumnMode::BigInt)
+			leValue->setValidator(new QIntValidator(leValue));
+	} else {
+		dateTimeEdit = new QDateTimeEdit(this);
+		dateTimeEdit->setFocus();
+		layout->addWidget(dateTimeEdit, 0, 1);
+	}
 
 	//label
 	label = new QLabel(i18n("Label:"));
@@ -93,28 +106,33 @@ AddValueLabelDialog::~AddValueLabelDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
+void AddValueLabelDialog::setDateTimeFormat(const QString& format) {
+	if (dateTimeEdit)
+		dateTimeEdit->setDisplayFormat(format);
+}
+
 double AddValueLabelDialog::value() const {
 	SET_NUMBER_LOCALE
 	bool ok;
-	int row = numberLocale.toDouble(leValue->text(), &ok);
+	double value = numberLocale.toDouble(leValue->text(), &ok);
 
-	return ok ? row : 0.0;
+	return ok ? value : 0.0;
 }
 
 int AddValueLabelDialog::valueInt() const {
 	SET_NUMBER_LOCALE
 	bool ok;
-	int row = numberLocale.toInt(leValue->text(), &ok);
+	int value = numberLocale.toInt(leValue->text(), &ok);
 
-	return ok ? row : 0;
+	return ok ? value : 0;
 }
 
 qint64 AddValueLabelDialog::valueBigInt() const {
 	SET_NUMBER_LOCALE
 	bool ok;
-	qint64 row = numberLocale.toLongLong(leValue->text(), &ok);
+	qint64 value = numberLocale.toLongLong(leValue->text(), &ok);
 
-	return ok ? row : 0;
+	return ok ? value : 0;
 }
 
 QString AddValueLabelDialog::valueText() const {
@@ -122,7 +140,7 @@ QString AddValueLabelDialog::valueText() const {
 }
 
 QDateTime AddValueLabelDialog::valueDateTime() const {
-	return QDateTime();
+	return dateTimeEdit->dateTime();
 }
 
 QString AddValueLabelDialog::label() const {
