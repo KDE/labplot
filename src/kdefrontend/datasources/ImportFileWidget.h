@@ -47,6 +47,7 @@ class AsciiOptionsWidget;
 class BinaryOptionsWidget;
 class HDF5OptionsWidget;
 class ImageOptionsWidget;
+class MatioOptionsWidget;
 class NetCDFOptionsWidget;
 class FITSOptionsWidget;
 class JsonOptionsWidget;
@@ -99,6 +100,7 @@ private:
 	std::unique_ptr<HDF5OptionsWidget> m_hdf5OptionsWidget;
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
+	std::unique_ptr<MatioOptionsWidget> m_matioOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
 	std::unique_ptr<JsonOptionsWidget> m_jsonOptionsWidget;
 	std::unique_ptr<ROOTOptionsWidget> m_rootOptionsWidget;

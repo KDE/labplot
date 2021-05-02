@@ -233,6 +233,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for HDF5, NetCDF and ROOT
+		// TODO: Matio
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF ||
 			fileType == AbstractFileFilter::FileType::ROOT) {
 			QStringList names;
@@ -295,6 +296,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				offset = 0;
 
 			// import all sets to a different sheet
+			// TODO: Matio
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
 				if (fileType == AbstractFileFilter::FileType::HDF5)

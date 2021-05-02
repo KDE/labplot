@@ -56,8 +56,8 @@ QVector<QStringList> MatioFilter::preview(const QString& fileName, int lines) {
 /*!
   parses the content of the file \c ileName.
 */
-void MatioFilter::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
-	d->parse(fileName, rootItem);
+void MatioFilter::parse(const QString & fileName) {
+	d->parse(fileName);
 }
 
 /*!
@@ -114,6 +114,15 @@ void MatioFilter::saveFilterSettings(const QString& filterName) const {
 const QString MatioFilter::currentVarName() const {
 	return d->currentVarName;
 }*/
+int MatioFilter::varCount() const {
+	return d->varCount;
+}
+/*QStringList MatioFilter::varNames() const {
+	return d->varNames;
+}*/
+QVector<QStringList> MatioFilter::varsInfo() const {
+	return d->varsInfo;
+}
 
 void MatioFilter::setStartRow(const int s) {
 	d->startRow = s;
@@ -228,22 +237,164 @@ MatioFilterPrivate::MatioFilterPrivate(MatioFilter* owner) : q(owner) {
 #endif
 }
 
-#ifdef HAVE_MATIO
 // helper functions
+#ifdef HAVE_MATIO
+// see matio.h
+QString MatioFilterPrivate::className(matio_classes classType) {
+	switch (classType) {
+	case MAT_C_EMPTY:
+		return i18n("Empty");
+	case MAT_C_CELL:
+		return i18n("Cell");
+	case MAT_C_STRUCT:
+		return i18n("Struct");
+	case MAT_C_OBJECT:
+		return i18n("Object");
+	case MAT_C_CHAR:
+		return i18n("Char");
+	case MAT_C_SPARSE:
+		return i18n("Sparse");
+	case MAT_C_DOUBLE:
+		return i18n("Double");
+	case MAT_C_SINGLE:
+		return i18n("Single");
+	case MAT_C_INT8:
+		return i18n("Int8");
+	case MAT_C_UINT8:
+		return i18n("UInt8");
+	case MAT_C_INT16:
+		return i18n("Int16");
+	case MAT_C_UINT16:
+		return i18n("UInt16");
+	case MAT_C_INT32:
+		return i18n("Int32");
+	case MAT_C_UINT32:
+		return i18n("UInt32");
+	case MAT_C_INT64:
+		return i18n("Int64");
+	case MAT_C_UINT64:
+		return i18n("UInt64");
+	case MAT_C_FUNCTION:
+		return i18n("Function");
+	case MAT_C_OPAQUE:
+		return i18n("Opaque");
+	}
+
+	return i18n("Undefined");
+}
+QString MatioFilterPrivate::typeName(matio_types dataType) {
+	switch (dataType) {
+	case MAT_T_UNKNOWN:
+		return i18n("Unknown");
+	case MAT_T_INT8:
+		return i18n("Int8");
+	case MAT_T_UINT8:
+		return i18n("UInt8");
+	case MAT_T_INT16:
+		return i18n("Int16");
+	case MAT_T_UINT16:
+		return i18n("UInt16");
+	case MAT_T_INT32:
+		return i18n("Int32");
+	case MAT_T_UINT32:
+		return i18n("UInt32");
+	case MAT_T_SINGLE:
+		return i18n("Single");
+	case MAT_T_DOUBLE:
+		return i18n("Double");
+	case MAT_T_INT64:
+		return i18n("Int64");
+	case MAT_T_UINT64:
+		return i18n("UInt64");
+	case MAT_T_MATRIX:
+		return i18n("Matrix");
+	case MAT_T_COMPRESSED:
+		return i18n("Compressed");
+	case MAT_T_UTF8:
+		return i18n("UTF8");
+	case MAT_T_UTF16:
+		return i18n("UTF16");
+	case MAT_T_UTF32:
+		return i18n("UTF32");
+	case MAT_T_STRING:
+		return i18n("String");
+	case MAT_T_CELL:
+		return i18n("Cell");
+	case MAT_T_STRUCT:
+		return i18n("Struct");
+	case MAT_T_ARRAY:
+		return i18n("Array");
+	case MAT_T_FUNCTION:
+		return i18n("Function");
+	}
+
+	return i18n("Undefined");
+}
+
 #endif
 
 /*!
-    parses the content of the file \c fileName and fill the tree using rootItem.
+    parses the content of the file \c fileName
 */
-void MatioFilterPrivate::parse(const QString & fileName, QTreeWidgetItem* rootItem) {
-	DEBUG("MatioFilterPrivate::parse()");
+void MatioFilterPrivate::parse(const QString& fileName) {
 #ifdef HAVE_MATIO
-	DEBUG("fileName = " << qPrintable(fileName));
+	DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName));
 
-	// see NetCDFFIlter.cpp
+	mat_t *matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
+	if (!matfp) {
+		DEBUG(Q_FUNC_INFO << ", ERROR getting file info")
+		return;
+	}
+
+	// get names of all vars
+        char **dir = Mat_GetDir(matfp, &varCount);
+	DEBUG(Q_FUNC_INFO << ", found " << varCount << " vars")
+
+	varsInfo.clear();
+	for (size_t i = 0; i < varCount; ++i) {
+		if (dir[i]) {
+			QStringList info;
+
+			//name
+			info << QString(dir[i]);
+			matvar_t* var = Mat_VarReadInfo(matfp, dir[i]);
+
+			// rank
+			const int rank = var->rank;
+			info << QString::number(rank);
+
+			// dims
+			QString dims;
+			for (int j = 0; j < rank; j++) {
+				if (j > 0)
+					dims += ", ";
+				dims += QString::number(var->dims[j]);
+			}
+			info << dims;
+
+			// class_type
+			info << className(var->class_type);
+
+			// data_type
+			info << typeName(var->data_type);
+
+			// complex/logical
+			if (var->isComplex)
+				info << i18n("Yes");
+			else
+				info << i18n("No");
+			if (var->isLogical)
+				info << i18n("Yes");
+			else
+				info << i18n("No");
+
+			Mat_VarFree(var);
+			varsInfo.append(info);
+		}
+	}
+	Mat_Close(matfp);
 #else
 	Q_UNUSED(fileName)
-	Q_UNUSED(rootItem)
 #endif
 }
 

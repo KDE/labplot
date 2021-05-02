@@ -1,10 +1,11 @@
 /***************************************************************************
-File                 : MatioFilterPrivate.h
+File                 : MatioOptionsWidget.h
 Project              : LabPlot
-Description          : Private implementation class for MatioFilter.
+Description          : widget providing options for the import of Matio data
 --------------------------------------------------------------------
 Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
- ***************************************************************************/
+
+**************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -24,53 +25,31 @@ Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef MATIOFILTERPRIVATE_H
-#define MATIOFILTERPRIVATE_H
+#ifndef MATIOOPTIONSWIDGET_H
+#define MATIOOPTIONSWIDGET_H
 
-#ifdef HAVE_MATIO
-#include <matio.h>
-#endif
+#include "ui_matiooptionswidget.h"
 
-class AbstractDataSource;
+class MatioFilter;
+class ImportFileWidget;
 
-class MatioFilterPrivate {
+class MatioOptionsWidget : public QWidget {
+	Q_OBJECT
 
 public:
-	explicit MatioFilterPrivate(MatioFilter*);
-
-	QVector<QStringList> preview(const QString& fileName, int lines);
-	void parse(const QString & fileName);
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
-//	QString readAttribute(const QString& fileName, const QString& name, const QString& varName);
-//	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-//			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-	void write(const QString& fileName, AbstractDataSource*);
-
-//helper functions
-#ifdef HAVE_MATIO
-	static QString className(matio_classes classType);
-	static QString typeName(matio_types dataType);
-#endif
-
-	const MatioFilter* q;
-
-	size_t varCount;
-	QString currentVarName;
-	QVector<QStringList> varsInfo;
-	int startRow{-1};
-	int endRow{-1};
-	int startColumn{1};
-	int endColumn{-1};
+	explicit MatioOptionsWidget(QWidget*, ImportFileWidget*);
+	void clear();
+	void updateContent(MatioFilter*, const QString& fileName);
+	const QStringList selectedNames() const;
+	//int lines() const { return ui.sbPreviewLines->value(); }
+	QTableWidget* previewWidget() const { return ui.twPreview; }
 
 private:
-#ifdef HAVE_MATIO
-	int m_status;
+	Ui::MatioOptionsWidget ui;
+	ImportFileWidget* m_fileWidget;
 
-//	QString scanAttrs(int ncid, int varid, int attid, QTreeWidgetItem* parentItem = nullptr);
-//	void scanDims(int ncid, int ndims, QTreeWidgetItem* parentItem);
-//	void scanVars(int ncid, int nvars, QTreeWidgetItem* parentItem);
-#endif
+private slots:
+//	void netcdfTreeWidgetSelectionChanged();
 };
 
 #endif

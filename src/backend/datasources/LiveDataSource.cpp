@@ -414,10 +414,17 @@ QIcon LiveDataSource::icon() const {
 	case AbstractFileFilter::FileType::JSON:
 		icon = QIcon::fromTheme("application-json");
 		break;
+	case AbstractFileFilter::FileType::MATIO:
+		icon = QIcon::fromTheme("matlab");
+		break;
+	case AbstractFileFilter::FileType::READSTAT:
+		icon = QIcon::fromTheme("view-statistics");
+		break;
 	case AbstractFileFilter::FileType::ROOT:
+		icon = QIcon::fromTheme("application-x-root");
+		break;
 	case AbstractFileFilter::FileType::NgspiceRawAscii:
 	case AbstractFileFilter::FileType::NgspiceRawBinary:
-	case AbstractFileFilter::FileType::READSTAT:
 		break;
 	}
 

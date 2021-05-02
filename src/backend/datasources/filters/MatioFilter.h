@@ -28,16 +28,17 @@ Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 #define MATIOFILTER_H
 
 #include "backend/datasources/filters/AbstractFileFilter.h"
-#include <QTreeWidgetItem>
 
 class QStringList;
 class MatioFilterPrivate;
 
-// LINKS:
-//  http://na-wiki.csc.kth.se/mediawiki/index.php/MatIO
-//  https://github.com/NJannasch/matio-examples
-//  example data: https://github.com/scipy/scipy/tree/master/scipy/io/matlab/tests/data/
-//  matio_user_guide.pdf
+// Docu:
+//      matio_user_guide.pdf
+//      http://na-wiki.csc.kth.se/mediawiki/index.php/MatIO
+//      https://github.com/NJannasch/matio-examples
+// Example data:
+//      https://github.com/cran/R.matlab/tree/master/inst/mat-files
+//      https://github.com/scipy/scipy/tree/master/scipy/io/matlab/tests/data/
 class MatioFilter : public AbstractFileFilter {
 	Q_OBJECT
 
@@ -49,7 +50,7 @@ public:
 //	static QString fileCDLString(const QString&);
 
 	QVector<QStringList> preview(const QString& fileName, int lines);
-	void parse(const QString& fileName, QTreeWidgetItem* rootItem);
+	void parse(const QString& fileName);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 //	QString readAttribute(const QString & fileName, const QString & name, const QString & varName);
 //	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
@@ -61,6 +62,9 @@ public:
 
 //	void setCurrentVarName(const QString&);
 //	const QString currentVarName() const;
+	int varCount() const;
+	//QStringList varNames() const;
+	QVector<QStringList> varsInfo() const;
 
 	//TODO: -> AbstractFileFilter?
 	void setStartRow(const int);

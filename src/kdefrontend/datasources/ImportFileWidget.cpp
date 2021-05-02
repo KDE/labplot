@@ -35,6 +35,7 @@ Copyright            : (C) 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
 #include "BinaryOptionsWidget.h"
 #include "HDF5OptionsWidget.h"
 #include "ImageOptionsWidget.h"
+#include "MatioOptionsWidget.h"
 #include "NetCDFOptionsWidget.h"
 #include "FITSOptionsWidget.h"
 #include "JsonOptionsWidget.h"
@@ -479,6 +480,7 @@ QString ImportFileWidget::selectedObject() const {
 		name = name.left(name.lastIndexOf('.'));
 
 	//for multi-dimensional formats like HDF, netCDF and FITS add the currently selected object
+	//TODO: Matio
 	const auto format = currentFileType();
 	if (format == AbstractFileFilter::FileType::HDF5) {
 		const QStringList& hdf5Names = m_hdf5OptionsWidget->selectedNames();
@@ -594,7 +596,6 @@ LiveDataSource::SourceType ImportFileWidget::currentSourceType() const {
 	returns the currently used filter.
 */
 AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
-	DEBUG(Q_FUNC_INFO);
 	AbstractFileFilter::FileType fileType = currentFileType();
 	if (m_currentFilter && m_currentFilter->type() != fileType)
 		m_currentFilter.reset();
@@ -971,6 +972,7 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	case AbstractFileFilter::FileType::HDF5:
 	case AbstractFileFilter::FileType::NETCDF:
 	case AbstractFileFilter::FileType::FITS:
+	case AbstractFileFilter::FileType::MATIO:
 		ui.lFilter->hide();
 		ui.cbFilter->hide();
 		// hide global preview tab. we have our own
@@ -1001,13 +1003,6 @@ void ImportFileWidget::fileTypeChanged(int index) {
 		showJsonModel(true);
 		break;
 	case AbstractFileFilter::FileType::READSTAT:
-		ui.tabWidget->removeTab(0);
-		ui.tabWidget->setCurrentIndex(0);
-		ui.lFilter->hide();
-		ui.cbFilter->hide();
-		break;
-	case AbstractFileFilter::FileType::MATIO:
-		//TODO
 		ui.tabWidget->removeTab(0);
 		ui.tabWidget->setCurrentIndex(0);
 		ui.lFilter->hide();
@@ -1129,10 +1124,18 @@ void ImportFileWidget::initOptionsWidget() {
 			m_rootOptionsWidget->clear();
 		ui.swOptions->setCurrentWidget(m_rootOptionsWidget->parentWidget());
 		break;
+	case AbstractFileFilter::FileType::MATIO:
+		if (!m_matioOptionsWidget) {
+			QWidget* matiow = new QWidget();
+			m_matioOptionsWidget = std::unique_ptr<MatioOptionsWidget>(new MatioOptionsWidget(matiow, this));
+			ui.swOptions->insertWidget(static_cast<int>(AbstractFileFilter::FileType::MATIO), matiow);
+		} else
+			m_matioOptionsWidget->clear();
+		ui.swOptions->setCurrentWidget(m_matioOptionsWidget->parentWidget());
+		break;
 	case AbstractFileFilter::FileType::NgspiceRawAscii:
 	case AbstractFileFilter::FileType::NgspiceRawBinary:
 	case AbstractFileFilter::FileType::READSTAT:
-	case AbstractFileFilter::FileType::MATIO:
 		break;
 	}
 }
@@ -1311,7 +1314,6 @@ void ImportFileWidget::refreshPreview() {
 	if (m_suppressRefresh || !ui.gbOptions->isVisible())
 		return;
 
-	DEBUG(Q_FUNC_INFO);
 	WAIT_CURSOR;
 
 	QString tempFileName = fileName();
@@ -1321,7 +1323,7 @@ void ImportFileWidget::refreshPreview() {
 	int lines = ui.sbPreviewLines->value();
 
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
-		DEBUG("	file name = " << STDSTRING(fileName));
+		DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary
@@ -1337,7 +1339,7 @@ void ImportFileWidget::refreshPreview() {
 	QVector<QStringList> importedStrings;
 	QStringList vectorNameList;
 	QVector<AbstractColumn::ColumnMode> columnModes;
-	DEBUG("Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
+	DEBUG(Q_FUNC_INFO << ", Data File Type: " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	switch (fileType) {
 	case AbstractFileFilter::FileType::Ascii: {
 		ui.tePreview->clear();
@@ -1549,6 +1551,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		auto filter = static_cast<MatioFilter*>(currentFileFilter());
 		importedStrings = filter->preview(fileName, lines);
+		//TODO lines = m_matioOptionsWidget->lines();
 		//vectorNameList = filter->vectorNames();
 		//columnModes = filter->columnModes();
 		//DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")
@@ -1634,13 +1637,15 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 			m_jsonOptionsWidget->loadDocument(fileName);
 			ui.tvJson->setExpanded( m_jsonOptionsWidget->model()->index(0, 0), true); //expand the root node
 			break;
+		case AbstractFileFilter::FileType::MATIO:
+			m_matioOptionsWidget->updateContent(static_cast<MatioFilter*>(filter), fileName);
+			break;
 		case AbstractFileFilter::FileType::Ascii:
 		case AbstractFileFilter::FileType::Binary:
 		case AbstractFileFilter::FileType::Image:
 		case AbstractFileFilter::FileType::NgspiceRawAscii:
 		case AbstractFileFilter::FileType::NgspiceRawBinary:
 		case AbstractFileFilter::FileType::READSTAT:
-		case AbstractFileFilter::FileType::MATIO:
 			break;
 		}
 	}
