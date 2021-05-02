@@ -1113,6 +1113,77 @@ void Column::save(QXmlStreamWriter* writer) const {
 	// 		writer->writeEndElement();
 	// 	}
 
+	//value labels
+	if (hasValueLabels()) {
+		writer->writeStartElement("valueLabels");
+		switch (columnMode()) {
+		case AbstractColumn::ColumnMode::Numeric: {
+			auto labels = const_cast<Column*>(this)->valueLabels();
+			auto it = labels.constBegin();
+			while (it != labels.constEnd()) {
+				writer->writeStartElement("valueLabel");
+				writer->writeAttribute("value", QString::number(it.key()));
+				writer->writeAttribute("label", it.value());
+				writer->writeEndElement();
+				++it;
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::Integer: {
+			auto labels = const_cast<Column*>(this)->intValueLabels();
+			auto it = labels.constBegin();
+			while (it != labels.constEnd()) {
+				writer->writeStartElement("valueLabel");
+				writer->writeAttribute("value", QString::number(it.key()));
+				writer->writeAttribute("label", it.value());
+				writer->writeEndElement();
+				++it;
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			auto labels = const_cast<Column*>(this)->bigIntValueLabels();
+			auto it = labels.constBegin();
+			while (it != labels.constEnd()) {
+				writer->writeStartElement("valueLabel");
+				writer->writeAttribute("value", QString::number(it.key()));
+				writer->writeAttribute("label", it.value());
+				writer->writeEndElement();
+				++it;
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text: {
+			auto labels = const_cast<Column*>(this)->textValueLabels();
+			auto it = labels.constBegin();
+			while (it != labels.constEnd()) {
+				writer->writeStartElement("valueLabel");
+				writer->writeAttribute("value", it.key());
+				writer->writeAttribute("label", it.value());
+				writer->writeEndElement();
+				++it;
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime: {
+			auto labels = const_cast<Column*>(this)->dateTimeValueLabels();
+			auto it = labels.constBegin();
+			while (it != labels.constEnd()) {
+				writer->writeStartElement("valueLabel");
+				writer->writeAttribute("value", QString::number(it.key().toMSecsSinceEpoch()));
+				writer->writeAttribute("label", it.value());
+				writer->writeEndElement();
+				++it;
+			}
+			break;
+		}
+		}
+
+		writer->writeEndElement(); // "valueLabels"
+	}
+
 	//conditional formatting
 	if (hasHeatmapFormat()) {
 		writer->writeStartElement("heatmapFormat");
@@ -1290,8 +1361,32 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				auto& format = heatmapFormat();
 				format.colors << color;
 				ret_val = true;
-			}
-			else if (reader->name() == "row")
+			} else if (reader->name() == "valueLabels") {
+				continue;
+			} else if (reader->name() == "valueLabel") {
+				attribs = reader->attributes();
+				const QString& label = attribs.value("label").toString();
+				qDebug()<<"adding " << label;
+				switch (columnMode()) {
+				case AbstractColumn::ColumnMode::Numeric:
+					addValueLabel(attribs.value("value").toDouble(), label);
+					break;
+				case AbstractColumn::ColumnMode::Integer:
+					addValueLabel(attribs.value("value").toInt(), label);
+					break;
+				case AbstractColumn::ColumnMode::BigInt:
+					addValueLabel(attribs.value("value").toLongLong(), label);
+					break;
+				case AbstractColumn::ColumnMode::Text:
+					addValueLabel(attribs.value("value").toString(), label);
+					break;
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Day:
+				case AbstractColumn::ColumnMode::DateTime:
+					addValueLabel(QDateTime::fromMSecsSinceEpoch(attribs.value("value").toLongLong()), label);
+					break;
+				}
+			} else if (reader->name() == "row")
 				ret_val = XmlReadRow(reader);
 			else { // unknown element
 				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
