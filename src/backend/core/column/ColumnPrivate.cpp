@@ -1041,6 +1041,35 @@ void* ColumnPrivate::data() const {
 	return m_data;
 }
 
+bool ColumnPrivate::hasValueLabels() const {
+	return (m_labels != nullptr);
+}
+
+const QMap<QString, QString>& ColumnPrivate::textValueLabels() {
+	initLabels();
+	return *(static_cast<QMap<QString, QString>*>(m_labels));
+}
+
+const QMap<QDateTime, QString>& ColumnPrivate::dateTimeValueLabels() {
+	initLabels();
+	return *(static_cast<QMap<QDateTime, QString>*>(m_labels));
+}
+
+const QMap<double, QString>& ColumnPrivate::valueLabels() {
+	initLabels();
+	return *(static_cast<QMap<double, QString>*>(m_labels));
+}
+
+const QMap<int, QString>& ColumnPrivate::intValueLabels() {
+	initLabels();
+	return *(static_cast<QMap<int, QString>*>(m_labels));
+}
+
+const QMap<qint64, QString>& ColumnPrivate::bigIntValueLabels() {
+	initLabels();
+	return *(static_cast<QMap<qint64, QString>*>(m_labels));
+}
+
 /**
  * \brief Return the input filter (for string -> data type conversion)
  */

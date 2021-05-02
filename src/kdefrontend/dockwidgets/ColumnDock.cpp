@@ -156,6 +156,72 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	updateTypeWidgets(m_column->columnMode());
 	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
 
+	//labels
+	for (int i = 0; ui.twLabels->rowCount(); ++i)
+		ui.twLabels->removeRow(0);
+
+	if (m_column->hasValueLabels()) {
+		auto mode = m_column->columnMode();
+		int i = 0;
+
+		switch (mode) {
+		case AbstractColumn::ColumnMode::Numeric: {
+			auto labels = m_column->valueLabels();
+			ui.twLabels->setRowCount(labels.size());
+			auto it = labels.constBegin();
+			while (it != labels.constEnd()) {
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+				++it;
+				++i;
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::Integer: {
+			auto labels = m_column->intValueLabels();
+			ui.twLabels->setRowCount(labels.size());
+			auto it = labels.constBegin();
+			while (it != labels.constEnd()) {
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+				++it;
+				++i;
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::BigInt: {
+			auto labels = m_column->bigIntValueLabels();
+			ui.twLabels->setRowCount(labels.size());
+			auto it = labels.constBegin();
+			while (it != labels.constEnd()) {
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(QString::number(it.key())));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+				++it;
+				++i;
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::Text: {
+			auto labels = m_column->textValueLabels();
+			ui.twLabels->setRowCount(labels.size());
+			auto it = labels.constBegin();
+			while (it != labels.constEnd()) {
+				ui.twLabels->setItem(i, 0, new QTableWidgetItem(it.key()));
+				ui.twLabels->setItem(i, 1, new QTableWidgetItem(it.value()));
+				++it;
+				++i;
+			}
+			break;
+		}
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime: {
+			//TODO:
+			break;
+		}
+		}
+	}
+
 	// slots
 	connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::columnDescriptionChanged);
 	connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);

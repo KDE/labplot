@@ -101,6 +101,7 @@ public:
 	const AbstractColumn::ColumnStatistics& statistics() const;
 	void* data() const;
 	bool hasValues() const;
+	bool hasValueLabels() const;
 
 	Properties properties() const override;
 	void invalidateProperties();
@@ -110,6 +111,7 @@ public:
 	void setTextAt(int, const QString&) override;
 	void replaceTexts(int, const QVector<QString>&) override;
 	void addValueLabel(const QString&, const QString&);
+	const QMap<QString, QString>& textValueLabels();
 
 	QDate dateAt(int) const override;
 	void setDateAt(int, QDate) override;
@@ -119,21 +121,25 @@ public:
 	void setDateTimeAt(int, const QDateTime&) override;
 	void replaceDateTimes(int, const QVector<QDateTime>&) override;
 	void addValueLabel(const QDateTime&, const QString&);
+	const QMap<QDateTime, QString>& dateTimeValueLabels();
 
 	double valueAt(int) const override;
 	void setValueAt(int, double) override;
 	void replaceValues(int, const QVector<double>&) override;
 	void addValueLabel(double, const QString&);
+	const QMap<double, QString>& valueLabels();
 
 	int integerAt(int) const override;
 	void setIntegerAt(int, int) override;
 	void replaceInteger(int, const QVector<int>&) override;
 	void addValueLabel(int, const QString&);
+	const QMap<int, QString>& intValueLabels();
 
 	qint64 bigIntAt(int) const override;
 	void setBigIntAt(int, qint64) override;
 	void replaceBigInt(int, const QVector<qint64>&) override;
 	void addValueLabel(qint64, const QString&);
+	const QMap<qint64, QString>& bigIntValueLabels();
 
 	double maximum(int count = 0) const override;
 	double maximum(int startIndex, int endIndex) const override;

@@ -67,6 +67,7 @@ public:
 	void setWidth(int);
 
 	void* data() const;
+	bool hasValueLabels() const;
 
 	AbstractSimpleFilter* inputFilter() const;
 	AbstractSimpleFilter* outputFilter() const;
@@ -102,6 +103,7 @@ public:
 	void setTextAt(int row, const QString&);
 	void replaceTexts(int first, const QVector<QString>&);
 	void addValueLabel(const QString&, const QString&);
+	const QMap<QString, QString>& textValueLabels();
 
 	QDate dateAt(int row) const;
 	void setDateAt(int row, QDate);
@@ -111,21 +113,25 @@ public:
 	void setDateTimeAt(int row, const QDateTime&);
 	void replaceDateTimes(int first, const QVector<QDateTime>&);
 	void addValueLabel(const QDateTime&, const QString&);
+	const QMap<QDateTime, QString>& dateTimeValueLabels();
 
 	double valueAt(int row) const;
 	void setValueAt(int row, double new_value);
 	void replaceValues(int first, const QVector<double>&);
 	void addValueLabel(double, const QString&);
+	const QMap<double, QString>& valueLabels();
 
 	int integerAt(int row) const;
 	void setIntegerAt(int row, int new_value);
 	void replaceInteger(int first, const QVector<int>&);
 	void addValueLabel(int, const QString&);
+	const QMap<int, QString>& intValueLabels();
 
 	qint64 bigIntAt(int row) const;
 	void setBigIntAt(int row, qint64 new_value);
 	void replaceBigInt(int first, const QVector<qint64>&);
 	void addValueLabel(qint64, const QString&);
+	const QMap<qint64, QString>& bigIntValueLabels();
 
 	void updateProperties();
 	void invalidate();

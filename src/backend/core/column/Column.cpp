@@ -1020,6 +1020,30 @@ void Column::setChanged() {
 	invalidateProperties();
 }
 
+bool Column::hasValueLabels() const {
+	return d->hasValueLabels();
+}
+
+const QMap<QString, QString>& Column::textValueLabels() {
+	return d->textValueLabels();
+}
+
+const QMap<QDateTime, QString>& Column::dateTimeValueLabels() {
+	return d->dateTimeValueLabels();
+}
+
+const QMap<double, QString>& Column::valueLabels() {
+	return d->valueLabels();
+}
+
+const QMap<int, QString>& Column::intValueLabels() {
+	return d->intValueLabels();
+}
+
+const QMap<qint64, QString>& Column::bigIntValueLabels() {
+	return d->bigIntValueLabels();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////
