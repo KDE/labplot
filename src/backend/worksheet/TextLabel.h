@@ -176,8 +176,8 @@ signals:
 	void backgroundColorChanged(const QColor);
 
 	void positionChanged(const WorksheetElement::PositionWrapper&);
-    void horizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment);
-    void verticalAlignmentChanged(const WorksheetElement::VerticalAlignment);
+	void horizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment);
+	void verticalAlignmentChanged(const WorksheetElement::VerticalAlignment);
 	void coordinateBindingEnabledChanged(bool);
 	void positionLogicalChanged(QPointF);
 	void rotationAngleChanged(qreal);

@@ -116,13 +116,13 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	ui.sbPositionX->setSuffix(suffix);
 	ui.sbPositionY->setSuffix(suffix);
 
-    ui.cbHorizontalAlignment->addItem(i18n("Left"));
-    ui.cbHorizontalAlignment->addItem(i18n("Center"));
-    ui.cbHorizontalAlignment->addItem(i18n("Right"));
+	ui.cbHorizontalAlignment->addItem(i18n("Left"));
+	ui.cbHorizontalAlignment->addItem(i18n("Center"));
+	ui.cbHorizontalAlignment->addItem(i18n("Right"));
 
-    ui.cbVerticalAlignment->addItem(i18n("Top"));
-    ui.cbVerticalAlignment->addItem(i18n("Center"));
-    ui.cbVerticalAlignment->addItem(i18n("Bottom"));
+	ui.cbVerticalAlignment->addItem(i18n("Top"));
+	ui.cbVerticalAlignment->addItem(i18n("Center"));
+	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 
 	ui.cbBorderShape->addItem(i18n("No Border"));
 	ui.cbBorderShape->addItem(i18n("Rectangle"));
@@ -193,8 +193,8 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	connect( ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::positionYChanged);
 	connect( ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionXChanged);
 	connect( ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::customPositionYChanged);
-    connect( ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
-    connect( ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
+	connect( ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::horizontalAlignmentChanged);
+	connect( ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &LabelWidget::verticalAlignmentChanged);
 
 	connect(ui.lePositionXLogical, &QLineEdit::textChanged, this, &LabelWidget::positionXLogicalChanged);
 	connect(ui.dtePositionXLogical, &QDateTimeEdit::dateTimeChanged, this, &LabelWidget::positionXLogicalDateTimeChanged);
@@ -301,8 +301,8 @@ void LabelWidget::initConnections() const {
 	connect(m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
 
 	connect(m_label, &TextLabel::positionLogicalChanged, this, &LabelWidget::labelPositionLogicalChanged);
-    connect(m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
-    connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
+	connect(m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
+	connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
 	connect(m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
 	connect(m_label, &TextLabel::borderShapeChanged, this, &LabelWidget::labelBorderShapeChanged);
 	connect(m_label, &TextLabel::borderPenChanged, this, &LabelWidget::labelBorderPenChanged);
@@ -338,8 +338,8 @@ void LabelWidget::setFixedLabelMode(const bool b) {
 	ui.lPositionY->setVisible(!b);
 	ui.cbPositionY->setVisible(!b);
     ui.sbPositionY->setVisible(!b);
-    ui.lHorizontalAlignment->setVisible(!b);
-    ui.cbHorizontalAlignment->setVisible(!b);
+	ui.lHorizontalAlignment->setVisible(!b);
+	ui.cbHorizontalAlignment->setVisible(!b);
     ui.lVerticalAlignment->setVisible(!b);
     ui.cbVerticalAlignment->setVisible(!b);
 	ui.lOffsetX->setVisible(b);
@@ -360,8 +360,8 @@ void LabelWidget::setGeometryAvailable(const bool b) {
 	ui.lPositionY->setVisible(b);
 	ui.cbPositionY->setVisible(b);
 	ui.sbPositionY->setVisible(b);
-    ui.lHorizontalAlignment->setVisible(b);
-    ui.cbHorizontalAlignment->setVisible(b);
+	ui.lHorizontalAlignment->setVisible(b);
+	ui.cbHorizontalAlignment->setVisible(b);
     ui.lVerticalAlignment->setVisible(b);
     ui.cbVerticalAlignment->setVisible(b);
 	ui.lOffsetX->setVisible(b);
@@ -1197,15 +1197,15 @@ void LabelWidget::labelPositionChanged(const TextLabel::PositionWrapper& positio
 }
 
 void LabelWidget::labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment index) {
-    m_initializing = true;
-    ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
-    m_initializing = false;
+	m_initializing = true;
+	ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
+	m_initializing = false;
 }
 
 void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment index) {
-    m_initializing = true;
-    ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
-    m_initializing = false;
+	m_initializing = true;
+	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
+	m_initializing = false;
 }
 
 void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
@@ -1338,8 +1338,8 @@ void LabelWidget::load() {
 	positionYChanged(ui.cbPositionY->currentIndex());
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_label->position().point.y(), m_worksheetUnit) );
 
-    ui.cbHorizontalAlignment->setCurrentIndex( (int) m_label->horizontalAlignment() );
-    ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
+	ui.cbHorizontalAlignment->setCurrentIndex( (int) m_label->horizontalAlignment() );
+	ui.cbVerticalAlignment->setCurrentIndex( (int) m_label->verticalAlignment() );
 
 	//widgets for positioning using logical plot coordinates
 	SET_NUMBER_LOCALE
@@ -1418,8 +1418,8 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 		ui.sbOffsetX->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetX", m_axesList.first()->titleOffsetX()), Worksheet::Unit::Point) );
 		ui.sbOffsetY->setValue( Worksheet::convertFromSceneUnits(group.readEntry("OffsetY", m_axesList.first()->titleOffsetY()), Worksheet::Unit::Point) );
 	}
-    ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("HorizontalAlignment", (int) m_label->horizontalAlignment()) );
-    ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("VerticalAlignment", (int) m_label->verticalAlignment()) );
+	ui.cbHorizontalAlignment->setCurrentIndex( group.readEntry("HorizontalAlignment", (int) m_label->horizontalAlignment()) );
+	ui.cbVerticalAlignment->setCurrentIndex( group.readEntry("VerticalAlignment", (int) m_label->verticalAlignment()) );
 	ui.sbRotation->setValue( group.readEntry("Rotation", m_label->rotationAngle()) );
 
 	//Border
@@ -1448,8 +1448,8 @@ void LabelWidget::saveConfig(KConfigGroup& group) {
 		group.writeEntry("OffsetX",  Worksheet::convertToSceneUnits(ui.sbOffsetX->value(), Worksheet::Unit::Point) );
 		group.writeEntry("OffsetY",  Worksheet::convertToSceneUnits(ui.sbOffsetY->value(), Worksheet::Unit::Point) );
 	}
-    group.writeEntry("HorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
-    group.writeEntry("VerticalAlignment", ui.cbVerticalAlignment->currentIndex());
+	group.writeEntry("HorizontalAlignment", ui.cbHorizontalAlignment->currentIndex());
+	group.writeEntry("VerticalAlignment", ui.cbVerticalAlignment->currentIndex());
 	group.writeEntry("Rotation", ui.sbRotation->value());
 
 	//Border

@@ -271,103 +271,103 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF paren
 
     QPointF relPos;
     // positive is right
-    double xAlign;
-    switch (horAlign) {
-    case WorksheetElement::HorizontalAlignment::Left:
-        xAlign = worksheetElementRect.width()/2;
-        break;
-    case WorksheetElement::HorizontalAlignment::Right:
-        xAlign = - worksheetElementRect.width()/2;
-        break;
-    case WorksheetElement::HorizontalAlignment::Center:
-        // Fall through
-    default:
-        xAlign = 0;
-        break;
-    }
+	double xAlign;
+	switch (horAlign) {
+	case WorksheetElement::HorizontalAlignment::Left:
+		xAlign = worksheetElementRect.width()/2;
+		break;
+	case WorksheetElement::HorizontalAlignment::Right:
+		xAlign = - worksheetElementRect.width()/2;
+		break;
+	case WorksheetElement::HorizontalAlignment::Center:
+		// Fall through
+	default:
+		xAlign = 0;
+	break;
+	}
 
-    if (position.horizontalPosition == HorizontalPosition::Left)
-        relPos.setX(parentPos.x() - (parentRect.x() + xAlign));
-    else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
-        relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width()/2 + xAlign));
-    else  //position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
-        relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width() - xAlign));
+	if (position.horizontalPosition == HorizontalPosition::Left)
+		relPos.setX(parentPos.x() - (parentRect.x() + xAlign));
+	else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
+		relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width()/2 + xAlign));
+	else  //position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
+		relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width() - xAlign));
 
-    // positive is to top
-    double yAlign;
-    switch (vertAlign) {
-    case WorksheetElement::VerticalAlignment::Bottom:
-        yAlign = - worksheetElementRect.height()/2;
-        break;
-    case WorksheetElement::VerticalAlignment::Top:
-        yAlign = worksheetElementRect.height()/2;
-        break;
-    case WorksheetElement::VerticalAlignment::Center:
-        // Fall through
-    default:
-        yAlign = 0;
-        break;
-    }
+	// positive is to top
+	double yAlign;
+	switch (vertAlign) {
+	case WorksheetElement::VerticalAlignment::Bottom:
+		yAlign = - worksheetElementRect.height()/2;
+		break;
+	case WorksheetElement::VerticalAlignment::Top:
+		yAlign = worksheetElementRect.height()/2;
+		break;
+	case WorksheetElement::VerticalAlignment::Center:
+		// Fall through
+	default:
+		yAlign = 0;
+	break;
+	}
 
-    if (position.verticalPosition == VerticalPosition::Center|| position.verticalPosition == VerticalPosition::Custom)
-        relPos.setY(parentRect.y() + parentRect.height()/2 - parentPos.y() + yAlign);
-    else if (position.verticalPosition == VerticalPosition::Bottom)
-        relPos.setY(parentRect.y() + parentRect.height() + yAlign - parentPos.y());
-    else // position.verticalPosition == VerticalPosition::Top // default
-        relPos.setY(parentRect.y() + yAlign - parentPos.y());
-    return relPos;
+	if (position.verticalPosition == VerticalPosition::Center|| position.verticalPosition == VerticalPosition::Custom)
+		relPos.setY(parentRect.y() + parentRect.height()/2 - parentPos.y() + yAlign);
+	else if (position.verticalPosition == VerticalPosition::Bottom)
+		relPos.setY(parentRect.y() + parentRect.height() + yAlign - parentPos.y());
+	else // position.verticalPosition == VerticalPosition::Top // default
+		relPos.setY(parentRect.y() + yAlign - parentPos.y());
+	return relPos;
 }
 
 QPointF WorksheetElement::relativePosToParentPos(QRectF parentRect, QRectF worksheetElementRect, PositionWrapper position, WorksheetElement::HorizontalAlignment horAlign, WorksheetElement::VerticalAlignment vertAlign) const {
     QPointF parentPos;
 
-    // positive is right of the anchor point
-    double xAlign;
-    switch (horAlign) {
-    case WorksheetElement::HorizontalAlignment::Left:
-        xAlign = worksheetElementRect.width()/2;
-        break;
-    case WorksheetElement::HorizontalAlignment::Right:
-        xAlign = - worksheetElementRect.width()/2;
-        break;
-    case WorksheetElement::HorizontalAlignment::Center:
-        // Fall through
-    default:
-        xAlign = 0;
-        break;
-    }
+	// positive is right of the anchor point
+	double xAlign;
+	switch (horAlign) {
+	case WorksheetElement::HorizontalAlignment::Left:
+		xAlign = worksheetElementRect.width()/2;
+		break;
+	case WorksheetElement::HorizontalAlignment::Right:
+		xAlign = - worksheetElementRect.width()/2;
+		break;
+	case WorksheetElement::HorizontalAlignment::Center:
+		// Fall through
+	default:
+		xAlign = 0;
+	break;
+	}
 
-    if (position.horizontalPosition == HorizontalPosition::Left)
-        parentPos.setX(parentRect.x() + position.point.x() + xAlign);
-    else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
-        parentPos.setX(parentRect.x() + parentRect.width()/2 + position.point.x() + xAlign);
-    else  //position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
-        parentPos.setX(parentRect.x() + parentRect.width() + position.point.x() + xAlign);
+	if (position.horizontalPosition == HorizontalPosition::Left)
+		parentPos.setX(parentRect.x() + position.point.x() + xAlign);
+	else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
+		parentPos.setX(parentRect.x() + parentRect.width()/2 + position.point.x() + xAlign);
+	else  //position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
+		parentPos.setX(parentRect.x() + parentRect.width() + position.point.x() + xAlign);
 
 
-    // positive is above the anchor point
-    double yAlign;
-    switch (vertAlign) {
-    case WorksheetElement::VerticalAlignment::Bottom:
-        yAlign = - worksheetElementRect.height()/2;
-        break;
-    case WorksheetElement::VerticalAlignment::Top:
-        yAlign = worksheetElementRect.height()/2;
-        break;
-    case WorksheetElement::VerticalAlignment::Center:
-        // Fall through
-    default:
-        yAlign = 0;
-        break;
-    }
-    if (position.verticalPosition == VerticalPosition::Center || position.verticalPosition == VerticalPosition::Custom)
-        parentPos.setY(parentRect.y() + parentRect.height()/2 - position.point.y() + yAlign);
-    else if (position.verticalPosition == VerticalPosition::Bottom)
-        parentPos.setY(parentRect.y() + parentRect.height() +  yAlign - position.point.y());
-    else // position.verticalPosition == WorksheetElement::VerticalPosition::Top // default
-        parentPos.setY(parentRect.y() + yAlign- position.point.y());
+	// positive is above the anchor point
+	double yAlign;
+	switch (vertAlign) {
+	case WorksheetElement::VerticalAlignment::Bottom:
+		yAlign = - worksheetElementRect.height()/2;
+		break;
+	case WorksheetElement::VerticalAlignment::Top:
+		yAlign = worksheetElementRect.height()/2;
+		break;
+	case WorksheetElement::VerticalAlignment::Center:
+		// Fall through
+	default:
+		yAlign = 0;
+	break;
+	}
+	if (position.verticalPosition == VerticalPosition::Center || position.verticalPosition == VerticalPosition::Custom)
+		parentPos.setY(parentRect.y() + parentRect.height()/2 - position.point.y() + yAlign);
+	else if (position.verticalPosition == VerticalPosition::Bottom)
+		parentPos.setY(parentRect.y() + parentRect.height() +  yAlign - position.point.y());
+	else // position.verticalPosition == WorksheetElement::VerticalPosition::Top // default
+		parentPos.setY(parentRect.y() + yAlign- position.point.y());
 
-    return parentPos;
+	return parentPos;
 }
 
 void WorksheetElement::loadThemeConfig(const KConfig &) {
