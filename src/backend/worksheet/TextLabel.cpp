@@ -1228,6 +1228,8 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
 			READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
+			READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
+			READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
 			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
