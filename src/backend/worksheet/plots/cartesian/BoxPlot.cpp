@@ -682,23 +682,13 @@ void BoxPlotPrivate::recalc(int index) {
 		break;
 	}
 	case BoxPlot::WhiskersType::IQR: {
-		if (orientation == BoxPlot::Orientation::Vertical) {
-			m_whiskerMax[index] = m_yMaxBox.at(index) + 1.5*statistics.iqr;
-			m_whiskerMin[index] = m_yMinBox.at(index) - 1.5*statistics.iqr;
-		} else {
-			m_whiskerMax[index] = m_xMaxBox.at(index) + 1.5*statistics.iqr;
-			m_whiskerMin[index] = m_xMinBox.at(index) - 1.5*statistics.iqr;
-		}
+		m_whiskerMax[index] = statistics.thirdQuartile + 1.5*statistics.iqr;
+		m_whiskerMin[index] = statistics.firstQuartile - 1.5*statistics.iqr;
 		break;
 	}
 	case BoxPlot::WhiskersType::STDDEV: {
-		if (orientation == BoxPlot::Orientation::Vertical) {
-			m_whiskerMax[index] = m_yMaxBox.at(index) + statistics.standardDeviation;
-			m_whiskerMin[index] = m_yMinBox.at(index) - statistics.standardDeviation;
-		} else {
-			m_whiskerMax[index] = m_xMaxBox.at(index) + statistics.standardDeviation;
-			m_whiskerMin[index] = m_xMinBox.at(index) - statistics.standardDeviation;
-		}
+		m_whiskerMax[index] = statistics.thirdQuartile + statistics.standardDeviation;
+		m_whiskerMin[index] = statistics.firstQuartile - statistics.standardDeviation;
 		break;
 	}
 	}
@@ -765,8 +755,10 @@ void BoxPlotPrivate::recalc(int index) {
 
 	//set the whisker ends at the upper and lower adjacent values
 	if (whiskersType == BoxPlot::WhiskersType::IQR) {
-		m_whiskerMax[index] = whiskerMax;
-		m_whiskerMin[index] = whiskerMin;
+		if (whiskerMax != -qInf())
+			m_whiskerMax[index] = whiskerMax;
+		if (whiskerMin != qInf())
+			m_whiskerMin[index] = whiskerMin;
 	}
 }
 
