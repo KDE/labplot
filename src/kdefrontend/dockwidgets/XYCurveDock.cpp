@@ -552,15 +552,6 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
 		uiGeneralTab.leComment->setEnabled(true);
-
-		uiGeneralTab.lXColumn->setEnabled(true);
-		cbXColumn->setEnabled(true);
-		uiGeneralTab.lYColumn->setEnabled(true);
-		cbYColumn->setEnabled(true);
-
-		cbXColumn->setColumn(m_curve->xColumn(), m_curve->xColumnPath());
-		cbYColumn->setColumn(m_curve->yColumn(), m_curve->yColumnPath());
-
 		uiGeneralTab.leName->setText(m_curve->name());
 		uiGeneralTab.leComment->setText(m_curve->comment());
 	} else {
@@ -568,20 +559,13 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
 		uiGeneralTab.leComment->setEnabled(false);
-
-		uiGeneralTab.lXColumn->setEnabled(false);
-		cbXColumn->setEnabled(false);
-		uiGeneralTab.lYColumn->setEnabled(false);
-		cbYColumn->setEnabled(false);
-
-		cbXColumn->setCurrentModelIndex(QModelIndex());
-		cbYColumn->setCurrentModelIndex(QModelIndex());
-
 		uiGeneralTab.leName->setText(QString());
 		uiGeneralTab.leComment->setText(QString());
 	}
 
 	//show the properties of the first curve
+	cbXColumn->setColumn(m_curve->xColumn(), m_curve->xColumnPath());
+	cbYColumn->setColumn(m_curve->yColumn(), m_curve->yColumnPath());
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	updatePlotRanges();
