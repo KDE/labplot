@@ -887,14 +887,11 @@ void MainWin::updateGUIOnProjectChanges() {
 	bool hasProject = (m_project != nullptr);
 	m_saveAction->setEnabled(hasProject);
 	m_saveAsAction->setEnabled(hasProject);
-	m_printAction->setEnabled(hasProject);
-	m_printPreviewAction->setEnabled(hasProject);
 	m_importFileAction->setEnabled(hasProject);
 	m_importSqlAction->setEnabled(hasProject);
 #ifdef HAVE_LIBORIGIN
 	m_importOpjAction->setEnabled(hasProject);
 #endif
-	m_exportAction->setEnabled(hasProject);
 	m_newWorkbookAction->setEnabled(hasProject);
 	m_newSpreadsheetAction->setEnabled(hasProject);
 	m_newMatrixAction->setEnabled(hasProject);
@@ -903,6 +900,16 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_closeAction->setEnabled(hasProject);
 	m_toggleProjectExplorerDockAction->setEnabled(hasProject);
 	m_togglePropertiesDockAction->setEnabled(hasProject);
+
+	//disable print and export actions if there is no project
+	//and don't activate them if a new project was created.
+	//they will be activated later in updateGUI() once there is
+	//a view to print or to export
+	if (!hasProject) {
+		m_printAction->setEnabled(false);
+		m_printPreviewAction->setEnabled(false);
+		m_exportAction->setEnabled(false);
+	}
 
 	if (!m_mdiArea || !m_mdiArea->currentSubWindow()) {
 		factory->container("spreadsheet", this)->setEnabled(false);
@@ -989,9 +996,15 @@ void MainWin::updateGUI() {
 		factory->container("cas_worksheet", this)->setEnabled(false);
 		factory->container("cas_worksheet_toolbar", this)->hide();
 #endif
+		m_printAction->setEnabled(false);
+		m_printPreviewAction->setEnabled(false);
+		m_exportAction->setEnabled(false);
 		return;
+	} else {
+		m_printAction->setEnabled(true);
+		m_printPreviewAction->setEnabled(true);
+		m_exportAction->setEnabled(true);
 	}
-
 
 #ifdef Q_OS_MAC
 	if (dynamic_cast<Folder*>(m_currentAspect)) {
@@ -1237,6 +1250,7 @@ bool MainWin::newProject() {
 	m_projectExplorerDock->show();
 	m_propertiesDock->show();
 	updateGUIOnProjectChanges();
+	m_newProjectAction->setEnabled(false);
 
 	connect(m_project, &Project::aspectAdded, this, &MainWin::handleAspectAdded);
 	connect(m_project, &Project::aspectRemoved, this, &MainWin::handleAspectRemoved);
@@ -1527,6 +1541,7 @@ bool MainWin::closeProject() {
 		m_currentAspect = nullptr;
 		m_currentFolder = nullptr;
 		updateGUIOnProjectChanges();
+		m_newProjectAction->setEnabled(true);
 
 		if (m_autoSaveActive)
 			m_autoSaveTimer.stop();
@@ -1846,6 +1861,7 @@ void MainWin::newCantorWorksheet(QAction* action) {
 */
 void MainWin::projectChanged() {
 	updateTitleBar();
+	m_newProjectAction->setEnabled(true);
 	m_saveAction->setEnabled(true);
 	m_undoAction->setEnabled(true);
 }
