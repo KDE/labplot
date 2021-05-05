@@ -36,6 +36,23 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 ///////////// macros ///////////////////////////////////////////////
 
 // see NetCDFFilter.cpp
+#define MAT_READ_VAR(type, dtype) \
+	{ \
+	const type *data = static_cast<const type*>(var->data); \
+	if (dataSource) { \
+		for (int i = 0; i < actualRows; i++) \
+			for (int j = 0; j < actualCols; j++) \
+				static_cast<QVector<dtype>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i-startRow+1) = data[j + i*actualCols]; \
+	} else { /* preview */ \
+		for (int i = 0; i < actualRows; i++) { \
+			QStringList row; \
+			for (int j = 0; j < actualCols; j++) \
+				row << QString::number(data[j + i*actualCols]); \
+			dataStrings << row; \
+		} \
+	} \
+	}
+
 
 //////////////////////////////////////////////////////////////////////
 
@@ -48,10 +65,6 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 MatioFilter::MatioFilter():AbstractFileFilter(FileType::MATIO), d(new MatioFilterPrivate(this)) {}
 
 MatioFilter::~MatioFilter() = default;
-
-QVector<QStringList> MatioFilter::preview(const QString& fileName, int lines) {
-	return d->preview(fileName, lines);
-}
 
 /*!
   parses the content of the file \c ileName.
@@ -183,7 +196,7 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
         char **dir = Mat_GetDir(matfp, &n);
 	info += i18n("Number of variables: ") + QString::number(n);
 	info += QLatin1String("<br>");
-	if (dir && n < 10) {	// only show variable info when there are not too much
+	if (dir && n < 10) {	// only show variable info when there are not too many
 		info += i18n("Variables: ");
 		for (size_t i = 0; i < n; ++i) {
 			if (dir[i]) {
@@ -375,19 +388,6 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 }
 
 /*!
- * generates the preview for the file \c fileName reading the provided number of \c lines.
- */
-QVector<QStringList> MatioFilterPrivate::preview(const QString& fileName, int lines) {
-	DEBUG(Q_FUNC_INFO)
-	QVector<QStringList> dataStrings;
-
-	//TODO
-	// read lines lines of current var from filelName
-
-	return dataStrings;
-}
-
-/*!
     reads the content of the current selected variable from file \c fileName to the data source \c dataSource.
     Uses the settings defined in the data source.
 */
@@ -425,32 +425,108 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 	if (!var)
 		return dataStrings << (QStringList() << i18n("Variable not found"));
 
+	int actualRows = 0, actualCols = 0;
+	int columnOffset = 0;
+	std::vector<void*> dataContainer;
 	if (var->rank == 2) {
 		// read data
-		//TODO: other types
-		if (var->class_type != MAT_C_DOUBLE)
+		actualCols = var->dims[0], actualRows = var->dims[1];
+		QVector<AbstractColumn::ColumnMode> columnModes;
+		columnModes.resize(actualCols);
+
+		switch (var->class_type) {
+		case MAT_C_CHAR:
+		case MAT_C_INT8:
+		case MAT_C_UINT8:
+		case MAT_C_INT16:
+		case MAT_C_UINT16:
+		case MAT_C_INT32:
+		case MAT_C_UINT32:
+			for (int i = 0; i < actualCols; i++)
+				columnModes[i] = AbstractColumn::ColumnMode::Integer;
+			break;
+		case MAT_C_INT64:
+		case MAT_C_UINT64:
+			for (int i = 0; i < actualCols; i++)
+				columnModes[i] = AbstractColumn::ColumnMode::BigInt;
+			break;
+		case MAT_C_DOUBLE:
+		case MAT_C_SINGLE:
+			for (int i = 0; i < actualCols; i++)
+				columnModes[i] = AbstractColumn::ColumnMode::Numeric;
+			break;
+		case MAT_C_EMPTY:
+		case MAT_C_CELL:
+		case MAT_C_STRUCT:
+		case MAT_C_OBJECT:
+		case MAT_C_SPARSE:
+		case MAT_C_FUNCTION:
+		case MAT_C_OPAQUE:
 			return dataStrings << (QStringList() << i18n("Not implemented yet"));
-
-		const double *data = static_cast<const double*>(var->data);
-		const int sizeX = var->dims[0], sizeY = var->dims[1];
-		for (int i = 0; i < sizeY; i++) {
-			QStringList row;
-		for (int j = 0; j < sizeX; j++) {
-			row << QString::number(data[j + i*sizeX]);
-		}
-			dataStrings << row;
 		}
 
-		//TODO: handle sparse, struct, cell
-		//TODO: handle other classes and types
+		QStringList vectorNames;
+		if (dataSource)
+			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+
+		switch (var->class_type) {
+		case MAT_C_CHAR:
+			MAT_READ_VAR(char, int);
+			break;
+		case MAT_C_DOUBLE:
+			MAT_READ_VAR(double, double);
+			break;
+		case MAT_C_SINGLE:
+			MAT_READ_VAR(float, double);
+			break;
+		case MAT_C_INT8:
+			MAT_READ_VAR(qint8, int);
+			break;
+		case MAT_C_UINT8:
+			MAT_READ_VAR(quint8, int);
+			break;
+		case MAT_C_INT16:
+			MAT_READ_VAR(qint16, int);
+			break;
+		case MAT_C_UINT16:
+			MAT_READ_VAR(quint16, int);
+			break;
+		case MAT_C_INT32:
+			MAT_READ_VAR(qint32, int);
+			break;
+		case MAT_C_UINT32:
+			MAT_READ_VAR(quint32, int);
+			break;
+		case MAT_C_INT64:
+			MAT_READ_VAR(qint64, int);
+			break;
+		case MAT_C_UINT64:
+			MAT_READ_VAR(quint64, int);
+			break;
+		case MAT_C_EMPTY:
+		case MAT_C_CELL:
+		case MAT_C_STRUCT:
+		case MAT_C_OBJECT:
+		case MAT_C_SPARSE:
+		case MAT_C_FUNCTION:
+		case MAT_C_OPAQUE:
+			break;
+		}
+
+		//TODO: handle sparse, struct, cell	see user_guide
+		//TODO: handle other classes
+		//TODO: handle data types?
 
 	}
-	//TODO
-	if (var->rank > 2)
+	if (var->rank > 2)	// TODO
 		return dataStrings << (QStringList() << i18n("Not implemented yet"));
 
 	Mat_VarFree(var);
 	Mat_Close(matfp);
+
+	// TODO: why 1 row?
+	if (dataSource)
+		dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), mode);
 #else
 	Q_UNUSED(fileName)
 	Q_UNUSED(dataSource)

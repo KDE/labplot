@@ -577,6 +577,7 @@ void LiveDataSource::read() {
 		case AbstractFileFilter::FileType::FITS:
 		case AbstractFileFilter::FileType::JSON:
 		case AbstractFileFilter::FileType::READSTAT:
+		case AbstractFileFilter::FileType::MATIO:
 			break;
 		}
 		break;

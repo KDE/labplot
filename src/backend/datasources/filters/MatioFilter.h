@@ -48,7 +48,6 @@ public:
 
 	static QString fileInfoString(const QString&);
 
-	QVector<QStringList> preview(const QString& fileName, int lines);
 	void parse(const QString& fileName);
 	void readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr, AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace) override;
 	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,

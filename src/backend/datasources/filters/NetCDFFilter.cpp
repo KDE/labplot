@@ -936,6 +936,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 	m_status = ncclose(ncid);
 	handleError(m_status, "nc_close");
 
+	// TODO: why 1 row?
 	if (dataSource)
 		dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), mode);
 #else
@@ -953,10 +954,11 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
     Uses the settings defined in the data source.
 */
 QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+	DEBUG(Q_FUNC_INFO)
 	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
-		DEBUG(" No variable selected");
+		DEBUG(Q_FUNC_INFO << ", no variable selected");
 		return dataStrings;
 	}
 

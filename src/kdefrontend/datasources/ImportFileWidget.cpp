@@ -1556,16 +1556,11 @@ void ImportFileWidget::refreshPreview() {
 		break;
 	}
 	case AbstractFileFilter::FileType::MATIO: {
-		ui.tePreview->clear();
 		auto filter = static_cast<MatioFilter*>(currentFileFilter());
-		importedStrings = filter->preview(fileName, lines);
 		lines = m_matioOptionsWidget->lines();
 
 		importedStrings = filter->readCurrentVar(fileName, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
 		tmpTableWidget = m_matioOptionsWidget->previewWidget();
-		//vectorNameList = filter->vectorNames();
-		//columnModes = filter->columnModes();
-		//DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")
 		break;
 	}
 	}

@@ -38,7 +38,6 @@ class MatioFilterPrivate {
 public:
 	explicit MatioFilterPrivate(MatioFilter*);
 
-	QVector<QStringList> preview(const QString& fileName, int lines);
 	void parse(const QString & fileName);
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
