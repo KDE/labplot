@@ -78,6 +78,7 @@ void BoxPlot::init() {
 	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::IQR);
 	d->orientation = (BoxPlot::Orientation) group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
 	d->variableWidth = group.readEntry("VariableWidth", false);
+	d->widthFactor = group.readEntry("WidthFactor", 1.0);
 	d->notchesEnabled = group.readEntry("NotchesEnabled", false);
 
 	//box filling
@@ -225,6 +226,7 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns,
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, variableWidth, variableWidth)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, double, widthFactor, widthFactor)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, notchesEnabled, notchesEnabled)
 
 //box
@@ -329,6 +331,13 @@ void BoxPlot::setVariableWidth(bool variableWidth) {
 	Q_D(BoxPlot);
 	if (variableWidth != d->variableWidth)
 		exec(new BoxPlotSetVariableWidthCmd(d, variableWidth, ki18n("%1: variable width changed")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWidthFactor, double, widthFactor, recalc)
+void BoxPlot::setWidthFactor(double widthFactor) {
+	Q_D(BoxPlot);
+	if (widthFactor != d->widthFactor)
+		exec(new BoxPlotSetWidthFactorCmd(d, widthFactor, ki18n("%1: width factor changed")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetNotchesEnabled, bool, notchesEnabled, recalc)
@@ -651,7 +660,7 @@ void BoxPlotPrivate::recalc(int index) {
 	m_farOutPoints[index].clear();
 
 	const auto& statistics = column->statistics();
-	double width = 0.5;
+	double width = 0.5*widthFactor;
 	if (variableWidth && m_widthScaleFactor != 0)
 		width *= std::sqrt(statistics.size)/m_widthScaleFactor;
 
@@ -1482,6 +1491,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("general");
 	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
 	writer->writeAttribute("variableWidth", QString::number(d->variableWidth));
+	writer->writeAttribute("widthFactor", QString::number(d->widthFactor));
 	writer->writeAttribute("notches", QString::number(d->notchesEnabled));
 	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
 	for (auto* column : d->dataColumns) {
@@ -1563,6 +1573,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 
 			READ_INT_VALUE("orientation", orientation, BoxPlot::Orientation);
 			READ_INT_VALUE("variableWidth", variableWidth, bool);
+			READ_DOUBLE_VALUE("widthFactor", widthFactor);
 			READ_INT_VALUE("notches", notchesEnabled, bool);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 		} else if (reader->name() == "column") {

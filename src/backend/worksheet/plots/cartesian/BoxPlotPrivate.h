@@ -66,6 +66,7 @@ public:
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
 	BoxPlot::Orientation orientation{BoxPlot::Orientation::Vertical};
 	bool variableWidth{false};
+	double widthFactor{1.0};
 	bool notchesEnabled{false};
 	qreal opacity{1.0};
 

@@ -78,6 +78,8 @@ private slots:
 	void visibilityChanged(bool) const;
 
 	//"Box"-tab
+	void widthFactorChanged(int) const;
+
 	//box filling
 	void fillingEnabledChanged(int) const;
 	void fillingTypeChanged(int) const;
@@ -119,6 +121,7 @@ private slots:
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void plotOrientationChanged(BoxPlot::Orientation);
 	void plotVariableWidthChanged(bool);
+	void plotWidthFactorChanged(double);
 	void plotNotchesEnabledChanged(bool);
 	void plotVisibilityChanged(bool);
 

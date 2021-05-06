@@ -58,6 +58,7 @@ public:
 	QVector<QString>& dataColumnPaths() const;
 	BASIC_D_ACCESSOR_DECL(BoxPlot::Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(bool, variableWidth, VariableWidth)
+	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)
 	BASIC_D_ACCESSOR_DECL(bool, notchesEnabled, NotchesEnabled)
 
 	//box filling
@@ -135,6 +136,7 @@ signals:
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
 	void orientationChanged(BoxPlot::Orientation);
 	void variableWidthChanged(bool);
+	void widthFactorChanged(double);
 	void visibilityChanged(bool);
 	void notchesEnabledChanged(bool);
 

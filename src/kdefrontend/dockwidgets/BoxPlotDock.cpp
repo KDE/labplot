@@ -72,7 +72,12 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.lVariableWidth->setToolTip(msg);
 	ui.chkVariableWidth->setToolTip(msg);
 
+
 	//Tab "Box"
+	msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
+	ui.lWidthFactor->setToolTip(msg);
+	ui.sbWidthFactor->setToolTip(msg);
+
 	//filling
 	ui.cbFillingType->addItem(i18n("Color"));
 	ui.cbFillingType->addItem(i18n("Image"));
@@ -136,6 +141,9 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.chkNotches, &QCheckBox::stateChanged, this, &BoxPlotDock::notchesEnabledChanged);
 
 	//Tab "Box"
+	connect(ui.sbWidthFactor, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+			this, &BoxPlotDock::widthFactorChanged);
+
 	//box filling
 	connect(ui.chkFillingEnabled, &QCheckBox::stateChanged, this, &BoxPlotDock::fillingEnabledChanged);
 	connect(ui.cbFillingType, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -239,6 +247,8 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	connect(m_boxPlot, &BoxPlot::variableWidthChanged, this, &BoxPlotDock::plotVariableWidthChanged);
 	connect(m_boxPlot, &BoxPlot::notchesEnabledChanged, this, &BoxPlotDock::plotNotchesEnabledChanged);
 	connect(m_boxPlot, &BoxPlot::dataColumnsChanged, this, &BoxPlotDock::plotDataColumnsChanged);
+
+	connect(m_boxPlot, &BoxPlot::widthFactorChanged, this, &BoxPlotDock::plotWidthFactorChanged);
 
 	//box filling
 	connect(m_boxPlot, &BoxPlot::fillingEnabledChanged, this, &BoxPlotDock::plotFillingEnabledChanged);
@@ -441,6 +451,15 @@ void BoxPlotDock::visibilityChanged(bool state) const {
 }
 
 //"Box"-tab
+void BoxPlotDock::widthFactorChanged(int value) const {
+	if (m_initializing)
+		return;
+
+	double factor = (double)value/100.;
+	for (auto* boxPlot : m_boxPlots)
+		boxPlot->setWidthFactor(factor);
+}
+
 //box filling
 void BoxPlotDock::fillingEnabledChanged(int state) const {
 	ui.cbFillingType->setEnabled(state);
@@ -866,8 +885,14 @@ void BoxPlotDock::plotVisibilityChanged(bool on) {
 	ui.chkVisible->setChecked(on);
 }
 
+//box
+void BoxPlotDock::plotWidthFactorChanged(double factor) {
+	Lock lock(m_initializing);
+// 	float v = (float)value*100.;
+	ui.sbWidthFactor->setValue(factor*100);
+}
+
 //box filling
-//Filling
 void BoxPlotDock::plotFillingEnabledChanged(bool status) {
 	Lock lock(m_initializing);
 	ui.chkFillingEnabled->setChecked(status);
@@ -974,6 +999,9 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.chkVariableWidth->setChecked( group.readEntry("VariableWidth", m_boxPlot->variableWidth()) );
 	ui.chkNotches->setChecked( group.readEntry("NotchesEnabled", m_boxPlot->notchesEnabled()) );
 
+	//box
+	ui.sbWidthFactor->setValue( round(group.readEntry("WidthFactor", m_boxPlot->widthFactor())*100) );
+
 	//box filling
 	ui.chkFillingEnabled->setChecked( group.readEntry("FillingEnabled", m_boxPlot->fillingEnabled()) );
 	ui.cbFillingType->setCurrentIndex( group.readEntry("FillingType", (int) m_boxPlot->fillingType()) );
@@ -983,7 +1011,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.leFillingFileName->setText( group.readEntry("FillingFileName", m_boxPlot->fillingFileName()) );
 	ui.kcbFillingFirstColor->setColor( group.readEntry("FillingFirstColor", m_boxPlot->fillingFirstColor()) );
 	ui.kcbFillingSecondColor->setColor( group.readEntry("FillingSecondColor", m_boxPlot->fillingSecondColor()) );
-	ui.sbFillingOpacity->setValue( round(group.readEntry("FillingOpacity", m_boxPlot->fillingOpacity())*100.0) );
+	ui.sbFillingOpacity->setValue( round(group.readEntry("FillingOpacity", m_boxPlot->fillingOpacity())*100) );
 
 	//update the box filling widgets
 	fillingEnabledChanged(ui.chkFillingEnabled->isChecked());
@@ -1048,6 +1076,9 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 	group.writeEntry("VariableWidth", ui.chkVariableWidth->isChecked());
 	group.writeEntry("NotchesEnabled", ui.chkNotches->isChecked());
+
+	//box
+	group.writeEntry("WidthFactor", ui.sbWidthFactor->value()/100.0);
 
 	//box filling
 	group.writeEntry("FillingEnabled", ui.chkFillingEnabled->isChecked());
