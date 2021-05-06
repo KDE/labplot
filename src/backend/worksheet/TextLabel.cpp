@@ -34,6 +34,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/core/Project.h"
 
 #include <QApplication>
 #include <QBuffer>
@@ -1226,10 +1227,37 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->position.point.setY(str.toDouble());
 
-			READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
-			READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
-			READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
-			READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
+            READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
+            READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
+            if ( Project::compatibility() < 1) {
+                // Before 2.9.0 the position.point is only used when horizontalPosition or
+                // vertical position was set to custom, otherwise the label was attached to the
+                // "position" and it was not possible to arrange relative to this alignpoint
+                // From 2.9.0, the horizontalPosition and verticalPosition indicate the anchor
+                // point and position.point indicates the distance to them
+                // Custom is the same as Center, so rename it, because Custom is legacy
+                if (d->position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
+                    d->position.point.setX(0);
+                    if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
+                        d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Left;
+                    else if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
+                        d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Right;
+                } else
+                        d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+
+                if (d->position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
+                    d->position.point.setY(0);
+                    if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Top)
+                        d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
+                    else if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
+                        d->verticalAlignment = WorksheetElement::VerticalAlignment::Bottom;
+                } else
+                    d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
+                    
+            } else {
+                READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
+                READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
+            }
 			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 

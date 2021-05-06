@@ -57,6 +57,10 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
+namespace {
+    int compatibilityNumber = 1;
+}
+
 /**
  * \class Project
  * \ingroup core
@@ -113,12 +117,20 @@ public:
         return true;
     }
 
+    void setCompatibility(int c) {
+        compat = c;
+    }
+
     static QString version() {
         return versionString;
     }
 
     static int versionNumber() {
         return versionNumber_;
+    }
+
+    static int compatibility() {
+        return compat;
     }
 
 	QUndoStack undo_stack;
@@ -131,10 +143,12 @@ public:
 	Project* const q;
     static int versionNumber_;
     static QString versionString;
+    static int compat;
 };
 
 int Project::Private::versionNumber_ = INFINITY;
 QString Project::Private::versionString = "";
+int Project::Private::compat = 0;
 
 Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private(this)) {
 	//load default values for name, comment and author from config
@@ -185,6 +199,10 @@ QString Project::version() {
 
 int Project::versionNumber() {
     return Private::versionNumber();
+}
+
+int Project::compatibility() {
+    return Private::compatibility();
 }
 
 QUndoStack* Project::undoStack() const {
@@ -459,6 +477,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement("project");
 	writer->writeAttribute("version", version());
+    writer->writeAttribute("compatibility", QString::number(compatibilityNumber));
 	writer->writeAttribute("fileName", fileName());
 	writer->writeAttribute("modificationTime", modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
 	writer->writeAttribute("author", author());
@@ -589,6 +608,12 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 				reader->raiseWarning(i18n("Attribute 'version' is missing."));
             else
                 d->setVersion(version);
+
+            QString c = reader->attributes().value("compatibility").toString();
+            if (c.isEmpty())
+                d->setCompatibility(0);
+            else
+                d->setCompatibility(c.toInt());
 
 			if (!readBasicAttributes(reader)) return false;
 			if (!readProjectAttributes(reader)) return false;
