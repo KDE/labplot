@@ -70,7 +70,6 @@ public:
 	void setMdiWindowVisibility(MdiWindowVisibility visibility);
 	MdiWindowVisibility mdiWindowVisibility() const;
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
-	BASIC_D_ACCESSOR_DECL(QString, version, Version)
 	CLASS_D_ACCESSOR_DECL(QString, author, Author)
 	CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
 
@@ -89,6 +88,8 @@ public:
 	static bool isLabPlotProject(const QString& fileName);
 	static QString supportedExtensions();
 	QVector<quintptr> droppedAspects(const QMimeData*);
+    static QString version();
+    static int versionNumber();
 
 	class Private;
 

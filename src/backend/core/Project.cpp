@@ -85,26 +85,56 @@
 
 class Project::Private {
 public:
-	Private(Project* owner) :
-		version(LVERSION),
+    Private(Project* owner) :
 		author(QString(qgetenv("USER"))),
 		modificationTime(QDateTime::currentDateTime()),
 		q(owner) {
+        setVersion(LVERSION);
 	}
 	QString name() const  {
 		return q->name();
 	}
 
+    bool setVersion(const QString &v) const {
+        versionString = v;
+        auto l = v.split(".");
+        assert(l.length() == 3);
+        bool ok;
+        int major = l[0].toInt(&ok);
+        if (!ok)
+            return false;
+        int minor = l[1].toInt(&ok);
+        if (!ok)
+            return false;
+        int patch = l[2].toInt(&ok);
+        if (!ok)
+            return false;
+        versionNumber_ = QT_VERSION_CHECK(major, minor, patch);
+        return true;
+    }
+
+    static QString version() {
+        return versionString;
+    }
+
+    static int versionNumber() {
+        return versionNumber_;
+    }
+
 	QUndoStack undo_stack;
 	MdiWindowVisibility mdiWindowVisibility{Project::MdiWindowVisibility::folderOnly};
-	QString fileName;
-	QString version;
+    QString fileName;
 	QString author;
 	QDateTime modificationTime;
 	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
 	Project* const q;
+    static int versionNumber_;
+    static QString versionString;
 };
+
+int Project::Private::versionNumber_ = INFINITY;
+QString Project::Private::versionString = "";
 
 Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private(this)) {
 	//load default values for name, comment and author from config
@@ -149,6 +179,14 @@ Project::~Project() {
 	delete d;
 }
 
+QString Project::version() {
+    return Private::version();
+}
+
+int Project::versionNumber() {
+    return Private::versionNumber();
+}
+
 QUndoStack* Project::undoStack() const {
 	return &d->undo_stack;
 }
@@ -182,7 +220,6 @@ Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
 }
 
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
-BASIC_D_ACCESSOR_IMPL(Project, QString, version, Version, version)
 BASIC_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
 
@@ -413,7 +450,7 @@ QVector<quintptr> Project::droppedAspects(const QMimeData* mimeData) {
 
 void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	//set the version and the modification time to the current values
-	d->version = LVERSION;
+    d->setVersion(LVERSION);
 	d->modificationTime = QDateTime::currentDateTime();
 
 	writer->setAutoFormatting(true);
@@ -550,8 +587,8 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 			QString version = reader->attributes().value("version").toString();
 			if (version.isEmpty())
 				reader->raiseWarning(i18n("Attribute 'version' is missing."));
-			else
-				d->version = version;
+            else
+                d->setVersion(version);
 
 			if (!readBasicAttributes(reader)) return false;
 			if (!readProjectAttributes(reader)) return false;
