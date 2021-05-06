@@ -25,7 +25,7 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #=============================================================================
 
-find_library(MATIO_LIBRARIES matio)
+find_library(MATIO_LIBRARIES NAMES matio libmatio)
 
 find_path(MATIO_INCLUDE_DIR matio.h)
 
