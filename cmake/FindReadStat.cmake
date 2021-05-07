@@ -25,7 +25,7 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #=============================================================================
 
-find_library(READSTAT_LIBRARIES readstat)
+find_library(READSTAT_LIBRARIES NAMES readstat readstat.dll)
 
 find_path(READSTAT_INCLUDE_DIR readstat.h)
 
