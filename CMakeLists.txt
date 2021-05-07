@@ -381,7 +381,7 @@ ENDIF ()
 ### ReadStat (optional) #############################
 IF (ENABLE_READSTAT)
 	FIND_PACKAGE (ReadStat)
-	IF (NOT READSTAT_FOUND AND NOT WIN32)
+	IF (NOT READSTAT_FOUND AND NOT WIN32)	# own version not on Windows
 		MESSAGE (STATUS "ReadStat library NOT FOUND. Building own version")
 		set(BUILD_READSTAT TRUE)
 
@@ -395,6 +395,8 @@ IF (ENABLE_READSTAT)
 	ENDIF ()
 	IF (READSTAT_FOUND OR NOT WIN32)
 		add_definitions (-DHAVE_READSTAT)
+	ELSE ()
+		SET(READSTAT_LIBRARIES "")
 	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "ReadStat support DISABLED")
