@@ -15,7 +15,7 @@ IF (BUILD_READSTAT)
 	file(MAKE_DIRECTORY ${install_dir}/include)
 
 	set(ext_src ${build_dir}/readstat/src/readstat)
-	set(ext_version "1.1.5")
+	set(ext_version "1.1.6")
 #if(WIN32)
 #        set(ext_url http://sourceforge.net/projects/kst/files/3rdparty/zlib-develop-mingw-fixed.zip)
 #        set(ext_configure cmake ${ext_src} ${generator} -DBUILD_SHARED_LIBS=0 ${rc_compiler} ${install_prefix} ${build_type})
