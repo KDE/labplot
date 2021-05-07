@@ -379,8 +379,7 @@ ELSE ()
 ENDIF ()
 
 ### ReadStat (optional) #############################
-# TODO: disabled on Windows until tested
-IF (ENABLE_READSTAT AND NOT WIN32)
+IF (ENABLE_READSTAT)
 	FIND_PACKAGE (ReadStat)
 	IF (NOT READSTAT_FOUND)
 		MESSAGE (STATUS "ReadStat library NOT FOUND. Building own version")
