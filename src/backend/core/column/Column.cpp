@@ -813,6 +813,12 @@ void Column::calculateStatistics() const {
 	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.25);
 	statistics.median = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.50);
 	statistics.thirdQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.75);
+	statistics.percentile_1 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.01);
+	statistics.percentile_5 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.05);
+	statistics.percentile_10 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.1);
+	statistics.percentile_90 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.9);
+	statistics.percentile_95 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.95);
+	statistics.percentile_99 = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.99);
 	statistics.iqr = statistics.thirdQuartile - statistics.firstQuartile;
 	statistics.trimean = (statistics.firstQuartile + 2*statistics.median + statistics.thirdQuartile) / 4;
 

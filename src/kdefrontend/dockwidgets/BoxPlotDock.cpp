@@ -61,9 +61,13 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 
 	ui.cbWhiskersType->addItem(QLatin1String("min/max"));
 	ui.cbWhiskersType->addItem(QLatin1String("Tukey"));
-	ui.cbWhiskersType->addItem(QLatin1String("1 stddev"));
-// 	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
-// 	ui.cbWhiskersType->addItem(i18n("2/98 percentiles"));
+	ui.cbWhiskersType->addItem(QLatin1String("mean +/- 1 SD"));
+	ui.cbWhiskersType->addItem(QLatin1String("mean +/- 3 SD"));
+	ui.cbWhiskersType->addItem(QLatin1String("median +/- 1 MAD"));
+	ui.cbWhiskersType->addItem(QLatin1String("median +/- 3 MAD"));
+	ui.cbWhiskersType->addItem(i18n("10/90 percentiles"));
+	ui.cbWhiskersType->addItem(i18n("5/95 percentiles"));
+	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));

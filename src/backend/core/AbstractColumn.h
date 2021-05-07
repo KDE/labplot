@@ -135,6 +135,12 @@ public:
 		double median;
 		double thirdQuartile;
 		double iqr;
+		double percentile_1;
+		double percentile_5;
+		double percentile_10;
+		double percentile_90;
+		double percentile_95;
+		double percentile_99;
 		double trimean;
 		double variance;
 		double standardDeviation;

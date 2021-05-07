@@ -40,7 +40,7 @@ class BoxPlot : public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum WhiskersType {MinMax, IQR, STDDEV};
+	enum WhiskersType {MinMax, IQR, SD, SD_3, MAD, MAD_3, PERCENTILES_10_90, PERCENTILES_5_95, PERCENTILES_1_99};
 
 	explicit BoxPlot(const QString&);
 	~BoxPlot() override;
