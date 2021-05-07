@@ -506,13 +506,14 @@ target_link_libraries( labplot2lib ${LZ4_LIBRARIES} )
 target_link_libraries( labplot2lib ${MATIO_LIBRARIES} )
 target_link_libraries( labplot2lib ${ZLIB_LIBRARIES})
 
-# TODO: disabled on Windows until tested
-IF (ENABLE_READSTAT AND NOT WIN32)
+IF (ENABLE_READSTAT)
 	# build before using
 	IF (BUILD_READSTAT)
 		add_dependencies( labplot2lib 3rdparty_readstat )
 	ENDIF ()
-	target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} )
+	IF (READSTAT_FOUND OR NOT WIN32)
+		target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} )
+	ENDIF ()
 ENDIF ()
 
 IF (ENABLE_LIBORIGIN)
