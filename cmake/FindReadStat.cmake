@@ -25,6 +25,7 @@
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #=============================================================================
 
+# readstat build on Windows creates readstat.dll.lib when shared libs are enabled
 find_library(READSTAT_LIBRARIES NAMES readstat readstat.dll)
 
 find_path(READSTAT_INCLUDE_DIR readstat.h)
