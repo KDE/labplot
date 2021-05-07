@@ -58,7 +58,11 @@
 #include <KMessageBox>
 
 namespace {
-    int compatibilityNumber = 1;
+	// xmlVersion of this labplot version
+	// the project version will compared with this.
+	// if you make any compatibilty changes to the xmlfile
+	// or the function in labplot, increase this number
+	int buildXmlVersion = 1;
 }
 
 /**
@@ -117,10 +121,6 @@ public:
         return true;
     }
 
-    void setCompatibility(int c) {
-        compat = c;
-    }
-
     static QString version() {
         return versionString;
     }
@@ -129,8 +129,8 @@ public:
         return versionNumber_;
     }
 
-    static int compatibility() {
-        return compat;
+	static int xmlVersion() {
+		return mXmlVersion;
     }
 
 	QUndoStack undo_stack;
@@ -143,12 +143,12 @@ public:
 	Project* const q;
     static int versionNumber_;
     static QString versionString;
-    static int compat;
+	static int mXmlVersion;
 };
 
 int Project::Private::versionNumber_ = INFINITY;
 QString Project::Private::versionString = "";
-int Project::Private::compat = 0;
+int Project::Private::mXmlVersion = 0;
 
 Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private(this)) {
 	//load default values for name, comment and author from config
@@ -201,8 +201,8 @@ int Project::versionNumber() {
     return Private::versionNumber();
 }
 
-int Project::compatibility() {
-    return Private::compatibility();
+int Project::xmlVersion() {
+	return Private::xmlVersion();
 }
 
 QUndoStack* Project::undoStack() const {
@@ -477,7 +477,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement("project");
 	writer->writeAttribute("version", version());
-    writer->writeAttribute("compatibility", QString::number(compatibilityNumber));
+	writer->writeAttribute("xmlVersion", QString::number(buildXmlVersion));
 	writer->writeAttribute("fileName", fileName());
 	writer->writeAttribute("modificationTime", modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
 	writer->writeAttribute("author", author());
@@ -609,11 +609,11 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
             else
                 d->setVersion(version);
 
-            QString c = reader->attributes().value("compatibility").toString();
+			QString c = reader->attributes().value("xmlVersion").toString();
             if (c.isEmpty())
-                d->setCompatibility(0);
+				d->mXmlVersion = 0;
             else
-                d->setCompatibility(c.toInt());
+				d->mXmlVersion = c.toInt();
 
 			if (!readBasicAttributes(reader)) return false;
 			if (!readProjectAttributes(reader)) return false;

@@ -1229,7 +1229,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 
             READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
             READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
-            if ( Project::compatibility() < 1) {
+			if ( Project::xmlVersion() < 1) {
                 // Before 2.9.0 the position.point is only used when horizontalPosition or
                 // vertical position was set to custom, otherwise the label was attached to the
                 // "position" and it was not possible to arrange relative to this alignpoint

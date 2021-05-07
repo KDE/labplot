@@ -90,7 +90,7 @@ public:
 	QVector<quintptr> droppedAspects(const QMimeData*);
     static QString version();
     static int versionNumber();
-    static int compatibility();
+	static int xmlVersion();
 
 	class Private;
 
