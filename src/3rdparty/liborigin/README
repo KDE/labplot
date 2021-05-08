@@ -49,7 +49,7 @@ Doc generation requires doxygen (http://doxygen.org)
 
 To include liborigin in a project using cmake add
 	find_package(PkgConfig)
-	pkg_check_modules(liborigin liborigin=>3.0.0)
+	pkg_check_modules(liborigin liborigin>=3.0.0)
 	target_link_libraries( my_target ${liborigin_LIBRARIES} )
 	target_include_directories( my_target PUBLIC ${liborigin_INCLUDE_DIRS} )
 to the project CMakeLists.txt file.
