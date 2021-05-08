@@ -867,13 +867,18 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 
 	//whisker caps
 	if (!m_whiskersPath[index].isEmpty()) {
-		QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax.at(index)));
-		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)));
-		m_whiskersPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize/2., maxPoint.y()));
-		m_whiskersPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize/2., maxPoint.y()));
+		bool visible = false;
+		QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax.at(index)), visible);
+		if (visible) {
+			m_whiskersPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize/2., maxPoint.y()));
+			m_whiskersPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize/2., maxPoint.y()));
+		}
 
-		m_whiskersPath[index].moveTo(QPointF(minPoint.x() - whiskersCapSize/2., minPoint.y()));
-		m_whiskersPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
+		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)), visible);
+		if (visible) {
+			m_whiskersPath[index].moveTo(QPointF(minPoint.x() - whiskersCapSize/2., minPoint.y()));
+			m_whiskersPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
+		}
 	}
 
 	//outliers symbols
@@ -982,13 +987,18 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 
 	//whisker caps
 	if (!m_whiskersPath[index].isEmpty()) {
-		QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMax.at(index), y));
-		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMin.at(index), y));
-		m_whiskersPath[index].moveTo(QPointF(maxPoint.x(), maxPoint.y() - whiskersCapSize/2));
-		m_whiskersPath[index].lineTo(QPointF(maxPoint.x(), maxPoint.y() + whiskersCapSize/2));
+		bool visible = false;
+		QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMax.at(index), y), visible);
+		if (visible) {
+			m_whiskersPath[index].moveTo(QPointF(maxPoint.x(), maxPoint.y() - whiskersCapSize/2));
+			m_whiskersPath[index].lineTo(QPointF(maxPoint.x(), maxPoint.y() + whiskersCapSize/2));
+		}
 
-		m_whiskersPath[index].moveTo(QPointF(minPoint.x(), minPoint.y() - whiskersCapSize/2));
-		m_whiskersPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize/2));
+		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMin.at(index), y), visible);
+		if (visible) {
+			m_whiskersPath[index].moveTo(QPointF(minPoint.x(), minPoint.y() - whiskersCapSize/2));
+			m_whiskersPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize/2));
+		}
 	}
 
 	//outliers symbols

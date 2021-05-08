@@ -3404,9 +3404,11 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		double cursorPenWidth2 = cursorPen.width()/2.;
 		if (cursorPenWidth2 < 10.)
 			cursorPenWidth2 = 10.;
-		if (cursor0Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start())).x()) < cursorPenWidth2) {
+
+		bool visible;
+		if (cursor0Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2) {
 			selectedCursor = 0;
-		} else if (cursor1Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start())).x()) < cursorPenWidth2) {
+		} else if (cursor1Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2) {
 			selectedCursor = 1;
 		} else if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
 			cursor1Enable = true;
@@ -3425,7 +3427,8 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 void CartesianPlotPrivate::mousePressZoomSelectionMode(QPointF logicalPos) {
 	const auto* cSystem{ defaultCoordinateSystem() };
-	const QPointF scenePos = cSystem->mapLogicalToScene(logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	bool visible;
+	const QPointF scenePos = cSystem->mapLogicalToScene(logicalPos, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 		if (logicalPos.x() < xRange().start())
 			logicalPos.setX(xRange().start());
@@ -3440,7 +3443,6 @@ void CartesianPlotPrivate::mousePressZoomSelectionMode(QPointF logicalPos) {
 			logicalPos.setY(yRange().end());
 
 		m_selectionStart = scenePos;
-
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 		logicalPos.setY(yRange().start()); // must be done, because the other plots can have other ranges, value must be in the scenes
 		m_selectionStart.setX(scenePos.x());
@@ -3641,7 +3643,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 	const QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
-		m_selectionEnd = cSystem->mapLogicalToScene(logicalPos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		bool visible;
+		m_selectionEnd = cSystem->mapLogicalToScene(logicalPos, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		QPointF logicalEnd = logicalPos;
 	if (xRangeFormat == RangeT::Format::Numeric)
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
@@ -3657,7 +3660,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 						 QDateTime::fromMSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 		logicalPos.setY(yRange().start()); // must be done, because the other plots can have other ranges, value must be in the scenes
-		m_selectionEnd.setX(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).x());//event->pos().x());
+		bool visible;
+		m_selectionEnd.setX(cSystem->mapLogicalToScene(logicalPos, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).x());//event->pos().x());
 		m_selectionEnd.setY(dataRect.bottom());
 		QPointF logicalEnd = logicalPos;
 	if (xRangeFormat == RangeT::Format::Numeric)
@@ -3668,7 +3672,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos) {
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 		m_selectionEnd.setX(dataRect.right());
 		logicalPos.setX(xRange().start()); // must be done, because the other plots can have other ranges, value must be in the scenes
-		m_selectionEnd.setY(cSystem->mapLogicalToScene(logicalPos, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).y());//event->pos().y());
+		bool visible;
+		m_selectionEnd.setY(cSystem->mapLogicalToScene(logicalPos, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).y());//event->pos().y());
 		QPointF logicalEnd = logicalPos;
 		if (yRangeFormat == RangeT::Format::Numeric)
 			info = QString::fromUtf8("Δy=") + QString::number(logicalEnd.y()-logicalStart.y());
@@ -3916,8 +3921,10 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			double cursorPenWidth2 = cursorPen.width()/2.;
 			if (cursorPenWidth2 < 10.)
 				cursorPenWidth2 = 10.;
-			if ((cursor0Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start())).x()) < cursorPenWidth2) ||
-					(cursor1Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start())).x()) < cursorPenWidth2))
+
+			bool visible;
+			if ((cursor0Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2) ||
+					(cursor1Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2))
 				setCursor(Qt::SizeHorCursor);
 			else
 				setCursor(Qt::ArrowCursor);
@@ -3950,18 +3957,19 @@ void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos) {
 	m_insideDataRect = true;
 
 	const auto* cSystem{ defaultCoordinateSystem() };
+	bool visible;
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection && !m_selectionBandIsShown) {
 
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection && !m_selectionBandIsShown) {
 		QPointF p1(logicPos.x(), yRange().start());
 		QPointF p2(logicPos.x(), yRange().end());
-		m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1, CartesianCoordinateSystem::MappingFlag::Limit));
-		m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2, CartesianCoordinateSystem::MappingFlag::Limit));
+		m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1, visible, CartesianCoordinateSystem::MappingFlag::Limit));
+		m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2, visible, CartesianCoordinateSystem::MappingFlag::Limit));
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection && !m_selectionBandIsShown) {
 		QPointF p1(xRange().start(), logicPos.y());
 		QPointF p2(xRange().end(), logicPos.y());
-		m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1, CartesianCoordinateSystem::MappingFlag::Limit));
-		m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2, CartesianCoordinateSystem::MappingFlag::Limit));
+		m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1, visible, CartesianCoordinateSystem::MappingFlag::Limit));
+		m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2, visible, CartesianCoordinateSystem::MappingFlag::Limit));
 	}
 
 	update(); // because if previous another selection mode was selected, the lines must be deleted
@@ -4035,9 +4043,10 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		font.setPointSize(font.pointSize() * 4);
 		painter->setFont(font);
 
-		QPointF p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start()));
-		if (cursor0Enable && p1 != QPointF(0, 0)) {
-			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().end()));
+		bool visible;
+		QPointF p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start()), visible);
+		if (cursor0Enable && visible) {
+			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().end()), visible);
 			painter->drawLine(p1, p2);
 			QPointF textPos = p2;
 			textPos.setX(p2.x() - m_cursor0Text.size().width()/2);
@@ -4047,9 +4056,9 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			painter->drawStaticText(textPos, m_cursor0Text);
 		}
 
-		p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start()));
-		if (cursor1Enable && p1 != QPointF(0, 0)) {
-			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().end()));
+		p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start()), visible);
+		if (cursor1Enable && visible) {
+			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().end()), visible);
 			painter->drawLine(p1, p2);
 			QPointF textPos = p2;
 			// TODO: Moving this stuff into other function to not calculate it every time

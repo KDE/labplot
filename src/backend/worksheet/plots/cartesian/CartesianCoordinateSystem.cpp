@@ -244,7 +244,7 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 /*
  * Map a single point
  * */
-QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, MappingFlags flags) const {
+QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, bool& visible, MappingFlags flags) const {
 	//DEBUG(Q_FUNC_INFO << ", (single point)")
 	const QRectF pageRect = d->plot->dataRect();
 	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
@@ -278,11 +278,14 @@ QPointF CartesianCoordinateSystem::mapLogicalToScene(QPointF logicalPoint, Mappi
 				y = pageRect.y() + h/2.;
 
 			QPointF mappedPoint(x, y);
-			if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint))
+			if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
+				visible = true;
 				return mappedPoint;
+			}
 		}
 	}
 
+	visible = false;
 	return QPointF{};
 }
 

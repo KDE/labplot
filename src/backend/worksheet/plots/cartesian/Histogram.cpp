@@ -1303,10 +1303,11 @@ void HistogramPrivate::updateFilling() {
 	//in case the histogram is zoomed, handle the clipping on the l.h.s.
 	const QPointF& firstPoint = fillLines.constFirst().p1();
 	QPointF start;
+	bool visible;
 	if (plot->xRange().start() > binRangesMin) {
-		start = cSystem->mapLogicalToScene(QPointF(plot->xRange().start(), plot->yRange().start() > 0 ? plot->yRange().start() : 0));
+		start = cSystem->mapLogicalToScene(QPointF(plot->xRange().start(), plot->yRange().start() > 0 ? plot->yRange().start() : 0), visible);
 
-		if ( !qFuzzyCompare(start.x(), firstPoint.x()) )
+		if (visible && !qFuzzyCompare(start.x(), firstPoint.x()) )
 			fillPolygon << QPointF(start.x(), firstPoint.y());
 	}
 
@@ -1330,13 +1331,12 @@ void HistogramPrivate::updateFilling() {
 	const QPointF& lastPoint = fillLines.at(fillLines.size()-2).p2();
 	QPointF end;
 	if (plot->xRange().end() < binRangesMax) {
-		end = cSystem->mapLogicalToScene(QPointF(plot->xRange().end(), plot->yRange().start() > 0 ? plot->yRange().start() : 0));
+		end = cSystem->mapLogicalToScene(QPointF(plot->xRange().end(), plot->yRange().start() > 0 ? plot->yRange().start() : 0), visible);
 
-		if (end.y() != lastPoint.y())
+		if (visible && end.y() != lastPoint.y())
 			fillPolygon << QPointF(end.x(), lastPoint.y());
-	}
-	else
-		end = cSystem->mapLogicalToScene(QPointF(binRangesMax, plot->yRange().start() > 0 ? plot->yRange().start() : 0));
+	} else
+		end = cSystem->mapLogicalToScene(QPointF(binRangesMax, plot->yRange().start() > 0 ? plot->yRange().start() : 0), visible);
 
 	//close the polygon
 	fillPolygon << end;

@@ -848,8 +848,10 @@ void InfoElementPrivate::retransform() {
 	for (int i = 0; i < q->markerPointsCount(); ++i) {
 		const auto* curve = q->markerpoints[i].curve;
 		if (curve && curve->name() == connectionLineCurveName) {
+			bool visible;
 			pointPos = q->cSystem->mapLogicalToScene(q->markerpoints[i].customPoint->position(),
-					 AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+													visible,
+													AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
 	}

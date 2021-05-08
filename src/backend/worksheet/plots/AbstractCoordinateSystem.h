@@ -33,6 +33,9 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include <QVector>
 
+typedef QVector<QPointF> Points;
+typedef QVector<QLineF> Lines;
+
 class AbstractCoordinateSystem {
 public:
 	enum class MappingFlag {
@@ -47,10 +50,10 @@ public:
 	explicit AbstractCoordinateSystem(AbstractPlot*);
 	virtual ~AbstractCoordinateSystem();
 
-	virtual QVector<QPointF> mapLogicalToScene(const QVector<QPointF>&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
-	virtual QPointF mapLogicalToScene(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
-	virtual QVector<QLineF> mapLogicalToScene(const QVector<QLineF>&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
-	virtual QVector<QPointF> mapSceneToLogical(const QVector<QPointF>&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
+	virtual Points mapLogicalToScene(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
+	virtual QPointF mapLogicalToScene(QPointF, bool& visible, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
+	virtual Lines mapLogicalToScene(const Lines&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
+	virtual Points mapSceneToLogical(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
 	virtual QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const = 0;
 
 	virtual QString info() const { return QString(); };

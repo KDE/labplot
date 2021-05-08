@@ -552,7 +552,8 @@ void TextLabelPrivate::updatePosition() {
 		p = position.point;
 	} else if(coordinateBindingEnabled && q->cSystem) {
 		//the position in logical coordinates was changed, calculate the position in scene coordinates
-		position.point = q->cSystem->mapLogicalToScene(positionLogical, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		bool visible;
+		position.point = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		p = position.point;
 	} else {
 		//determine the parent item
