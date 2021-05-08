@@ -5,12 +5,18 @@ This code is a standalone library for reading OriginLab project files.
 
 It is based on the code at
 	http://sourceforge.net/projects/liborigin
-	http://soft.proindependent.com/liborigin2
+	http://soft.proindependent.com/liborigin2 (not available anymore)
 
 Additionally, some fixes were applied to silence UBSan warnings caused by
 uninitialised POD struct members.
 
-AUTHORS:  Knut Franke, Miquel Garriga, Stefan Gerlach, Alex Kargovsky, Russell Standish, Ion Vasilief
+AUTHORS:  
+	Stefan Gerlach	2005-2021
+	Miquel Garriga	2014-2018
+	Knut Franke	2010
+	Ion Vasilief	2006-2010
+	Alex Kargovsky	2007-2009
+	Russell Standish
 
 DEPENDENCIES: tree.hh (included) http://tree.phi-sci.com/
 
@@ -59,7 +65,7 @@ To enable it define a GENERATE_CODE_FOR_LOG variable at the cmake command:
 
 ---------------------------------------------------------------------------
 FEATURES:
-	* supports the import of any project from version 3.5 to latest (2017)
+	* supports the import of any project from version 3.5 to latest (2021bSR0)
 	* includes a pkg-config metadata file
 
 ---------------------------------------------------------------------------
