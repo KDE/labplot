@@ -143,6 +143,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 			 this, &BoxPlotDock::orientationChanged);
 	connect(ui.chkVariableWidth, &QCheckBox::stateChanged, this, &BoxPlotDock::variableWidthChanged);
 	connect(ui.chkNotches, &QCheckBox::stateChanged, this, &BoxPlotDock::notchesEnabledChanged);
+	connect(ui.chkVisible, &QCheckBox::toggled, this, &BoxPlotDock::visibilityChanged);
 
 	//Tab "Box"
 	connect(ui.sbWidthFactor, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
@@ -242,6 +243,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	KConfig config(QString(), KConfig::SimpleConfig);
 	loadConfig(config);
 	loadDataColumns();
+	ui.chkVisible->setChecked(m_boxPlot->isVisible() );
 
 	//SIGNALs/SLOTs
 	//general

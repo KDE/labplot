@@ -36,6 +36,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegendPrivate.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/TextLabel.h"
@@ -506,6 +507,13 @@ void CartesianPlotLegendPrivate::retransform() {
 			curvesList.push_back(hist);
 	}
 
+	//add histograms
+	for (auto* hist : plot->children<BoxPlot>()) {
+		if (hist && hist->isVisible())
+			curvesList.push_back(hist);
+	}
+
+
 	int curveCount = curvesList.size();
 	columnCount = (curveCount<layoutColumnCount) ? curveCount : layoutColumnCount;
 	if (columnCount == 0) //no curves available
@@ -533,7 +541,7 @@ void CartesianPlotLegendPrivate::retransform() {
 			if ( index >= curveCount )
 				break;
 
-			const WorksheetElement* curve = dynamic_cast<WorksheetElement*>(curvesList.at(index));
+			const auto* curve = curvesList.at(index);
 			if (curve) {
 				if (!curve->isVisible())
 					continue;
@@ -764,7 +772,18 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				continue;
 			}
 
-			//draw the legend item for histogram
+			//draw the legend item for box plot (name only at the moment)
+			const BoxPlot* boxPlot= dynamic_cast<BoxPlot*>(curvesList.at(index));
+			if (boxPlot) {
+				//curve's name
+				painter->setPen(QPen(labelColor));
+				painter->setOpacity(1.0);
+				painter->drawText(QPoint(lineSymbolWidth + layoutHorizontalSpacing, h), boxPlot->name());
+				painter->translate(0, layoutVerticalSpacing + h);
+				continue;
+			}
+
+			//draw the legend item for xy-curve
 			const XYCurve* curve = static_cast<XYCurve*>(curvesList.at(index));
 
 			//curve's line (painted at the half of the ascent size)

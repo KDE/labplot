@@ -1986,6 +1986,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		if (hist) {
 			connect(hist, &Histogram::dataChanged, this, &CartesianPlot::dataChanged);
 			connect(hist, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
+			connect(curve, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
 			d->curvesXMinMaxIsDirty = true;
@@ -1998,7 +1999,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		const auto* boxPlot = qobject_cast<const BoxPlot*>(child);
 		if (boxPlot) {
 			connect(boxPlot, &BoxPlot::dataChanged, this, &CartesianPlot::dataChanged);
-// 			connect(boxPlot, &BoxPlot::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
+			connect(boxPlot, &BoxPlot::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
+			connect(boxPlot, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
 		}
