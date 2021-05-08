@@ -2,7 +2,7 @@ IF (APPLE)
 	add_subdirectory(kdmactouchbar)
 ENDIF ()
 
-IF (ENABLE_LIBORIGIN)
+IF (ENABLE_LIBORIGIN AND NOT LIBORIGIN_FOUND)
 	add_subdirectory(liborigin)
 ENDIF ()
 
@@ -16,7 +16,7 @@ IF (BUILD_READSTAT)
 
 	set(ext_src ${build_dir}/readstat/src/readstat)
 	set(ext_version "1.1.6")
-#if(WIN32)
+#if(WIN32)	# not used (own version on Windows)
 #        set(ext_url http://sourceforge.net/projects/kst/files/3rdparty/zlib-develop-mingw-fixed.zip)
 #        set(ext_configure cmake ${ext_src} ${generator} -DBUILD_SHARED_LIBS=0 ${rc_compiler} ${install_prefix} ${build_type})
 #        set(ext_install ${install_target})

@@ -519,7 +519,11 @@ IF (ENABLE_READSTAT)
 ENDIF ()
 
 IF (ENABLE_LIBORIGIN)
-	target_link_libraries( labplot2lib liborigin-static )
+	IF (LIBORIGIN_FOUND)
+		target_link_libraries( labplot2lib ${LIBORIGIN_LIBRARIES} )
+	ELSE () # own version
+		target_link_libraries( labplot2lib liborigin-static )
+	ENDIF()
 ENDIF ()
 IF (WIN32)
 	target_link_libraries( labplot2lib ${PSAPI} )

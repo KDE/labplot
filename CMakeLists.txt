@@ -205,14 +205,17 @@ FIND_PACKAGE(GSL REQUIRED)
 
 ### liborigin (included) ###############################
 IF (ENABLE_LIBORIGIN)
-	add_definitions (-DHAVE_LIBORIGIN)
-
-	IF (CMAKE_BUILD_TYPE STREQUAL "debug" OR CMAKE_BUILD_TYPE STREQUAL "debugfull")
-		MESSAGE (STATUS "Origin project import (through internal liborigin) enabled (parser logging enabled)")
-		SET (ENABLE_ORIGIN_PARSER_LOG TRUE)
-	ELSE ()
-		MESSAGE (STATUS "Origin project import (through internal liborigin) enabled (parser logging disabled)")
+	FIND_PACKAGE (LibOrigin)
+	IF (NOT LIBORIGIN_FOUND)	# use own version
+		IF (CMAKE_BUILD_TYPE STREQUAL "debug" OR CMAKE_BUILD_TYPE STREQUAL "debugfull")
+			MESSAGE (STATUS "Origin project import (through internal liborigin) enabled (parser logging enabled)")
+			SET (ENABLE_ORIGIN_PARSER_LOG TRUE)
+		ELSE ()
+			MESSAGE (STATUS "Origin project import (through internal liborigin) enabled (parser logging disabled)")
+		ENDIF ()
 	ENDIF ()
+
+	add_definitions (-DHAVE_LIBORIGIN)
 ELSE ()
 	MESSAGE (STATUS "Origin project import DISABLED")
 ENDIF ()
