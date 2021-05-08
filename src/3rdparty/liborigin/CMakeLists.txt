@@ -1,7 +1,8 @@
 # library version
-set(LIBORIGIN_VERSION_MAJOR 3)
-set(LIBORIGIN_VERSION_MINOR 0)
-set(LIBORIGIN_VERSION_BUGFIX 0)
+project( liborigin
+  VERSION 3.0.0
+  LANGUAGES CXX
+  )
 
 # compile-time configuration variables to be linked in
 configure_file(config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
