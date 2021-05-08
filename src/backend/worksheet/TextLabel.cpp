@@ -120,14 +120,14 @@ void TextLabel::init() {
 	textOption.setWrapMode(QTextOption::NoWrap);
 	d->staticText.setTextOption(textOption);
 
-    d->position.point = QPointF(0, 0);
-    if (m_type == Type::PlotTitle || m_type == Type::PlotLegendTitle) {
+	d->position.point = QPointF(0, 0);
+	if (m_type == Type::PlotTitle || m_type == Type::PlotLegendTitle) {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Top;
-        d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+		d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
 		d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
-    } else if (m_type == Type::AxisTitle) {
-        d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
-        d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
+	} else if (m_type == Type::AxisTitle) {
+		d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+		d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 	}
 
 	// read settings from config if group exists
@@ -529,12 +529,12 @@ void TextLabelPrivate::retransform() {
 		h = staticText.size().height()*scaleFactor;
 	}
 
-    boundingRectangle.setX(-w/2);
-    boundingRectangle.setY(-h/2);
-    boundingRectangle.setWidth(w);
-    boundingRectangle.setHeight(h);
+	boundingRectangle.setX(-w/2);
+	boundingRectangle.setY(-h/2);
+	boundingRectangle.setWidth(w);
+	boundingRectangle.setHeight(h);
 
-    updatePosition();
+	updatePosition();
 	updateBorder();
 
 	emit q->changed();
@@ -545,36 +545,36 @@ void TextLabelPrivate::retransform() {
 */
 void TextLabelPrivate::updatePosition() {
 
-    QPointF p;
-    if (q->m_type == TextLabel::Type::AxisTitle) {
-        // In an axis element, the label is part of the bounding rect of the axis
-        // so it is not possible to align with the bounding rect
-        p = position.point;
-    } else if(coordinateBindingEnabled && q->cSystem) {
-        //the position in logical coordinates was changed, calculate the position in scene coordinates
-        position.point = q->cSystem->mapLogicalToScene(positionLogical, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-        p = position.point;
-    } else {
-        //determine the parent item
-        QRectF pr;
-        if (!parentRect(pr))
-            return;
+	QPointF p;
+	if (q->m_type == TextLabel::Type::AxisTitle) {
+		// In an axis element, the label is part of the bounding rect of the axis
+		// so it is not possible to align with the bounding rect
+		p = position.point;
+	} else if(coordinateBindingEnabled && q->cSystem) {
+		//the position in logical coordinates was changed, calculate the position in scene coordinates
+		position.point = q->cSystem->mapLogicalToScene(positionLogical, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		p = position.point;
+	} else {
+		//determine the parent item
+		QRectF pr;
+		if (!parentRect(pr))
+			return;
 
 		p = q->relativePosToParentPos(pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
-        //position.point = p;
-    }
+		//position.point = p;
+	}
 
-    suppressItemChangeEvent = true;
-    setPos(p);
-    suppressItemChangeEvent = false;
+	suppressItemChangeEvent = true;
+	setPos(p);
+	suppressItemChangeEvent = false;
 
 	emit q->positionChanged(position);
 
-    //the position in scene coordinates was changed, calculate the position in logical coordinates
-    if (q->cSystem) {
-        positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-        emit q->positionLogicalChanged(positionLogical);
-    }
+	//the position in scene coordinates was changed, calculate the position in logical coordinates
+	if (q->cSystem) {
+		positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		emit q->positionLogicalChanged(positionLogical);
+	}
 }
 
 /*!
@@ -618,242 +618,242 @@ void TextLabelPrivate::updateBorder() {
 	borderShapePath = QPainterPath();
 	switch (borderShape) {
 	case (TextLabel::BorderShape::NoBorder): {
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width()/2, boundingRectangle.y()), "top"));
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width(), boundingRectangle.y()+boundingRectangle.height()/2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width()/2, boundingRectangle.y()+boundingRectangle.height()), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y()+boundingRectangle.height()/2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width()/2, boundingRectangle.y()), "top"));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width(), boundingRectangle.y()+boundingRectangle.height()/2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x()+boundingRectangle.width()/2, boundingRectangle.y()+boundingRectangle.height()), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y()+boundingRectangle.height()/2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::Rect): {
-			borderShapePath.addRect(boundingRectangle);
+		borderShapePath.addRect(boundingRectangle);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width()/2, boundingRectangle.y()), "top"));
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height()/2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width()/2, boundingRectangle.y() + boundingRectangle.height()), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height()/2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width()/2, boundingRectangle.y()), "top"));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width(), boundingRectangle.y() + boundingRectangle.height()/2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x() + boundingRectangle.width()/2, boundingRectangle.y() + boundingRectangle.height()), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(boundingRectangle.x(), boundingRectangle.y() + boundingRectangle.height()/2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::Ellipse): {
-			const double xs = boundingRectangle.x();
-			const double ys = boundingRectangle.y();
-			const double w = boundingRectangle.width();
-			const double h = boundingRectangle.height();
-			const QRectF ellipseRect(xs  - 0.1 * w, ys - 0.1 * h, 1.2 * w,  1.2 * h);
-			borderShapePath.addEllipse(ellipseRect);
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		const QRectF ellipseRect(xs  - 0.1 * w, ys - 0.1 * h, 1.2 * w,  1.2 * h);
+		borderShapePath.addEllipse(ellipseRect);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width()/2, ellipseRect.y()), "top"));
-			m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width(), ellipseRect.y() + ellipseRect.height()/2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width()/2, ellipseRect.y() + ellipseRect.height()), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(ellipseRect.x(), ellipseRect.y() + ellipseRect.height()/2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width()/2, ellipseRect.y()), "top"));
+		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width(), ellipseRect.y() + ellipseRect.height()/2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x() + ellipseRect.width()/2, ellipseRect.y() + ellipseRect.height()), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(ellipseRect.x(), ellipseRect.y() + ellipseRect.height()/2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::RoundSideRect): {
-			const double xs = boundingRectangle.x();
-			const double ys = boundingRectangle.y();
-			const double w = boundingRectangle.width();
-			const double h = boundingRectangle.height();
-			borderShapePath.moveTo(xs, ys);
-			borderShapePath.lineTo(xs + w, ys);
-			borderShapePath.quadTo(xs + w + h/2, ys + h/2, xs + w, ys + h);
-			borderShapePath.lineTo(xs, ys + h);
-			borderShapePath.quadTo(xs - h/2, ys + h/2, xs, ys);
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs, ys);
+		borderShapePath.lineTo(xs + w, ys);
+		borderShapePath.quadTo(xs + w + h/2, ys + h/2, xs + w, ys + h);
+		borderShapePath.lineTo(xs, ys + h);
+		borderShapePath.quadTo(xs - h/2, ys + h/2, xs, ys);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w + h/2, ys + h/2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(xs - h/2, ys + h/2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w + h/2, ys + h/2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(xs - h/2, ys + h/2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::RoundCornerRect): {
-			const double xs = boundingRectangle.x();
-			const double ys = boundingRectangle.y();
-			const double w = boundingRectangle.width();
-			const double h = boundingRectangle.height();
-			borderShapePath.moveTo(xs + h * 0.2, ys);
-			borderShapePath.lineTo(xs + w - h * 0.2, ys);
-			borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
-			borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
-			borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
-			borderShapePath.lineTo(xs + 0.2 * h, ys + h);
-			borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
-			borderShapePath.lineTo(xs, ys + 0.2 * h);
-			borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs + h * 0.2, ys);
+		borderShapePath.lineTo(xs + w - h * 0.2, ys);
+		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + 0.2 * h);
+		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(xs+w/2,ys), "top"));
-			m_gluePoints.append(GluePoint(QPointF(xs+w,ys+h/2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(xs+w/2,ys+h), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(xs,ys+h/2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(xs+w/2,ys), "top"));
+		m_gluePoints.append(GluePoint(QPointF(xs+w,ys+h/2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(xs+w/2,ys+h), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(xs,ys+h/2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::InwardsRoundCornerRect): {
-			const double xs = boundingRectangle.x();
-			const double ys = boundingRectangle.y();
-			const double w = boundingRectangle.width();
-			const double h = boundingRectangle.height();
-			borderShapePath.moveTo(xs, ys - 0.3 * h);
-			borderShapePath.lineTo(xs + w, ys - 0.3 * h);
-			borderShapePath.quadTo(xs + w, ys, xs + w + 0.3 * h, ys);
-			borderShapePath.lineTo(xs + w + 0.3 * h, ys + h);
-			borderShapePath.quadTo(xs + w, ys + h, xs + w, ys + h + 0.3 * h);
-			borderShapePath.lineTo(xs, ys + h + 0.3 * h);
-			borderShapePath.quadTo(xs, ys + h, xs - 0.3 * h, ys + h);
-			borderShapePath.lineTo(xs - 0.3 * h, ys);
-			borderShapePath.quadTo(xs, ys, xs, ys - 0.3 * h);
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs, ys - 0.3 * h);
+		borderShapePath.lineTo(xs + w, ys - 0.3 * h);
+		borderShapePath.quadTo(xs + w, ys, xs + w + 0.3 * h, ys);
+		borderShapePath.lineTo(xs + w + 0.3 * h, ys + h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w, ys + h + 0.3 * h);
+		borderShapePath.lineTo(xs, ys + h + 0.3 * h);
+		borderShapePath.quadTo(xs, ys + h, xs - 0.3 * h, ys + h);
+		borderShapePath.lineTo(xs - 0.3 * h, ys);
+		borderShapePath.quadTo(xs, ys, xs, ys - 0.3 * h);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.3 * h), "top"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w + 0.3 * h, ys + h / 2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.3 * h), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(xs - 0.3 * h, ys + h / 2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.3 * h), "top"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.3 * h, ys + h / 2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.3 * h), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(xs - 0.3 * h, ys + h / 2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::DentedBorderRect): {
-			const double xs = boundingRectangle.x();
-			const double ys = boundingRectangle.y();
-			const double w = boundingRectangle.width();
-			const double h = boundingRectangle.height();
-			borderShapePath.moveTo(xs - 0.2 * h, ys - 0.2 * h);
-			borderShapePath.quadTo(xs + w / 2, ys, xs + w + 0.2 * h, ys - 0.2 * h);
-			borderShapePath.quadTo(xs + w, ys + h / 2, xs + w + 0.2 * h, ys + h + 0.2 * h);
-			borderShapePath.quadTo(xs + w / 2, ys + h, xs - 0.2 * h, ys + h + 0.2 * h);
-			borderShapePath.quadTo(xs, ys + h / 2, xs - 0.2 * h, ys - 0.2 * h);
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs - 0.2 * h, ys - 0.2 * h);
+		borderShapePath.quadTo(xs + w / 2, ys, xs + w + 0.2 * h, ys - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h / 2, xs + w + 0.2 * h, ys + h + 0.2 * h);
+		borderShapePath.quadTo(xs + w / 2, ys + h, xs - 0.2 * h, ys + h + 0.2 * h);
+		borderShapePath.quadTo(xs, ys + h / 2, xs - 0.2 * h, ys - 0.2 * h);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.2 * h), "top"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w + 0.2 * h, ys + h / 2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.2 * h), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(xs - 0.2 * h, ys + h / 2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.2 * h), "top"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.2 * h, ys + h / 2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h + 0.2 * h), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(xs - 0.2 * h, ys + h / 2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::Cuboid): {
-			const double xs = boundingRectangle.x();
-			const double ys = boundingRectangle.y();
-			const double w = boundingRectangle.width();
-			const double h = boundingRectangle.height();
-			borderShapePath.moveTo(xs, ys);
-			borderShapePath.lineTo(xs + w, ys);
-			borderShapePath.lineTo(xs + w, ys + h);
-			borderShapePath.lineTo(xs, ys + h);
-			borderShapePath.lineTo(xs, ys);
-			borderShapePath.lineTo(xs + 0.3 * h, ys - 0.2 * h);
-			borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
-			borderShapePath.lineTo(xs + w, ys);
-			borderShapePath.moveTo(xs + w, ys + h);
-			borderShapePath.lineTo(xs + w + 0.3 * h, ys + h - 0.2 * h);
-			borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs, ys);
+		borderShapePath.lineTo(xs + w, ys);
+		borderShapePath.lineTo(xs + w, ys + h);
+		borderShapePath.lineTo(xs, ys + h);
+		borderShapePath.lineTo(xs, ys);
+		borderShapePath.lineTo(xs + 0.3 * h, ys - 0.2 * h);
+		borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
+		borderShapePath.lineTo(xs + w, ys);
+		borderShapePath.moveTo(xs + w, ys + h);
+		borderShapePath.lineTo(xs + w + 0.3 * h, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs + w + 0.3 * h, ys - 0.2 * h);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.1 * h), "top"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w + 0.15 * h, ys + h / 2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys - 0.1 * h), "top"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.15 * h, ys + h / 2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w / 2, ys + h), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(xs, ys + h / 2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::UpPointingRectangle): {
-			const double xs = boundingRectangle.x();
-			const double ys = boundingRectangle.y();
-			const double w = boundingRectangle.width();
-			const double h = boundingRectangle.height();
-			borderShapePath.moveTo(xs + h * 0.2, ys);
-			borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys);
-			borderShapePath.lineTo(xs + w / 2, ys - 0.2 * h);
-			borderShapePath.lineTo(xs + w / 2 + 0.2 * h, ys);
-			borderShapePath.lineTo(xs + w - h * 0.2, ys);
-			borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
-			borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
-			borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
-			borderShapePath.lineTo(xs + 0.2 * h, ys + h);
-			borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
-			borderShapePath.lineTo(xs, ys + 0.2 * h);
-			borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs + h * 0.2, ys);
+		borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys);
+		borderShapePath.lineTo(xs + w / 2, ys - 0.2 * h);
+		borderShapePath.lineTo(xs + w / 2 + 0.2 * h, ys);
+		borderShapePath.lineTo(xs + w - h * 0.2, ys);
+		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + 0.2 * h);
+		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys - h * 0.2), "top"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h/2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(xs, ys + h/2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys - h * 0.2), "top"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h/2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(xs, ys + h/2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::DownPointingRectangle): {
-			const double xs = boundingRectangle.x();
-			const double ys = boundingRectangle.y();
-			const double w = boundingRectangle.width();
-			const double h = boundingRectangle.height();
-			borderShapePath.moveTo(xs +h * 0.2, ys);
-			borderShapePath.lineTo(xs + w - h * 0.2, ys);
-			borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
-			borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
-			borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
-			borderShapePath.lineTo(xs + w / 2 + 0.2 * h, ys + h);
-			borderShapePath.lineTo(xs + w / 2, ys + h + 0.2 * h);
-			borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys + h);
-			borderShapePath.lineTo(xs + 0.2 * h, ys + h);
-			borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
-			borderShapePath.lineTo(xs, ys + 0.2 * h);
-			borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs +h * 0.2, ys);
+		borderShapePath.lineTo(xs + w - h * 0.2, ys);
+		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + w / 2 + 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + w / 2, ys + h + 0.2 * h);
+		borderShapePath.lineTo(xs + w / 2 - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + 0.2 * h);
+		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h/2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h  + 0.2 * h), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(xs, ys + h/2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h/2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h  + 0.2 * h), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(xs, ys + h/2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::LeftPointingRectangle): {
-			const double xs = boundingRectangle.x();
-			const double ys = boundingRectangle.y();
-			const double w = boundingRectangle.width();
-			const double h = boundingRectangle.height();
-			borderShapePath.moveTo(xs + h*0.2, ys);
-			borderShapePath.lineTo(xs + w - h * 0.2, ys);
-			borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
-			borderShapePath.lineTo(xs + w,  ys + h - 0.2 * h);
-			borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
-			borderShapePath.lineTo(xs + 0.2 * h, ys + h);
-			borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
-			borderShapePath.lineTo(xs, ys + h / 2 + 0.2 * h);
-			borderShapePath.lineTo(xs - 0.2 * h, ys + h / 2);
-			borderShapePath.lineTo(xs, ys + h / 2 - 0.2 * h);
-			borderShapePath.lineTo(xs, ys + 0.2 * h);
-			borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs + h*0.2, ys);
+		borderShapePath.lineTo(xs + w - h * 0.2, ys);
+		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+		borderShapePath.lineTo(xs + w,  ys + h - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + h / 2 + 0.2 * h);
+		borderShapePath.lineTo(xs - 0.2 * h, ys + h / 2);
+		borderShapePath.lineTo(xs, ys + h / 2 - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + 0.2 * h);
+		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h/2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(xs - 0.2 * h, ys + h/2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w, ys + h/2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(xs - 0.2 * h, ys + h/2), "left"));
+		break;
+	}
 	case (TextLabel::BorderShape::RightPointingRectangle): {
-			const double xs = boundingRectangle.x();
-			const double ys = boundingRectangle.y();
-			const double w = boundingRectangle.width();
-			const double h = boundingRectangle.height();
-			borderShapePath.moveTo(xs + h * 0.2, ys);
-			borderShapePath.lineTo(xs + w - h * 0.2, ys);
-			borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
-			borderShapePath.lineTo(xs + w, ys + h / 2 - 0.2 * h);
-			borderShapePath.lineTo(xs + w + 0.2 * h, ys + h / 2);
-			borderShapePath.lineTo(xs + w, ys + h / 2 + 0.2 * h);
-			borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
-			borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
-			borderShapePath.lineTo(xs + 0.2 * h, ys + h);
-			borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
-			borderShapePath.lineTo(xs, ys + 0.2 * h);
-			borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
+		const double xs = boundingRectangle.x();
+		const double ys = boundingRectangle.y();
+		const double w = boundingRectangle.width();
+		const double h = boundingRectangle.height();
+		borderShapePath.moveTo(xs + h * 0.2, ys);
+		borderShapePath.lineTo(xs + w - h * 0.2, ys);
+		borderShapePath.quadTo(xs + w, ys, xs + w, ys + h * 0.2);
+		borderShapePath.lineTo(xs + w, ys + h / 2 - 0.2 * h);
+		borderShapePath.lineTo(xs + w + 0.2 * h, ys + h / 2);
+		borderShapePath.lineTo(xs + w, ys + h / 2 + 0.2 * h);
+		borderShapePath.lineTo(xs + w, ys + h - 0.2 * h);
+		borderShapePath.quadTo(xs + w, ys + h, xs + w - 0.2 * h, ys + h);
+		borderShapePath.lineTo(xs + 0.2 * h, ys + h);
+		borderShapePath.quadTo(xs, ys + h, xs, ys + h - 0.2 * h);
+		borderShapePath.lineTo(xs, ys + 0.2 * h);
+		borderShapePath.quadTo(xs, ys, xs + 0.2 * h, ys);
 
-			m_gluePoints.clear();
-			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w + 0.2 * h, ys + h/2), "right"));
-			m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
-			m_gluePoints.append(GluePoint(QPointF(xs, ys + h/2), "left"));
-			break;
-		}
+		m_gluePoints.clear();
+		m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys), "top"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w + 0.2 * h, ys + h/2), "right"));
+		m_gluePoints.append(GluePoint(QPointF(xs + w/2, ys + h), "bottom"));
+		m_gluePoints.append(GluePoint(QPointF(xs, ys + h/2), "left"));
+		break;
+	}
 	}
 
 	recalcShapeAndBoundingRect();
@@ -982,21 +982,21 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		return value;
 
 	if (change == QGraphicsItem::ItemPositionChange) {
-        QRectF pr;
-        if (!parentRect(pr))
-            return QVariant();
+		QRectF pr;
+		if (!parentRect(pr))
+			return QVariant();
 
 		//emit the signals in order to notify the UI.
 		// don't use setPosition here, because then all small changes are on the undo stack
 		if(coordinateBindingEnabled) {
-            QPointF tempPoint = q->cSystem->mapSceneToLogical(value.toPointF(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			const QPointF tempPoint = q->cSystem->mapSceneToLogical(value.toPointF(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			emit q->positionLogicalChanged(tempPoint);
-        } else {
-            //convert item's center point in parent's coordinates
+		} else {
+			//convert item's center point in parent's coordinates
 			TextLabel::PositionWrapper tempPosition = position;
 			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 			emit q->positionChanged(tempPosition);
-        }
+		}
 	}
 
 	return QGraphicsItem::itemChange(change, value);
@@ -1009,16 +1009,16 @@ void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }*/
 
 void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-    QRectF pr;
-    if (!parentRect(pr))
-        return;
+	QRectF pr;
+	if (!parentRect(pr))
+		return;
 
 	//convert position of the item in parent coordinates to label's position
-	QPointF point = q->parentPosToRelativePos(mapParentToPlotArea(pos()), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+	const QPointF point = q->parentPosToRelativePos(mapParentToPlotArea(pos()), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
-        TextLabel::PositionWrapper tempPosition = position;
+		TextLabel::PositionWrapper tempPosition = position;
 		tempPosition.point = point;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
@@ -1031,11 +1031,11 @@ void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
 	        || event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
 		const int delta = 5;
-        QRectF pr;
-        if (!parentRect(pr))
-            return;
+		QRectF pr;
+		if (!parentRect(pr))
+			return;
 		QPointF point = q->parentPosToRelativePos(pos(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
-        WorksheetElement::PositionWrapper tempPosition = position;
+		WorksheetElement::PositionWrapper tempPosition = position;
 
 		if (event->key() == Qt::Key_Left) {
 			point.setX(point.x() - delta);
@@ -1117,16 +1117,16 @@ void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 }
 
 bool TextLabelPrivate::parentRect(QRectF& rect) {
-    QGraphicsItem* parent = parentItem();
-    if (parent) {
-        rect = parent->boundingRect();
-    } else {
-        if (!scene())
-            return false;
+	QGraphicsItem* parent = parentItem();
+	if (parent) {
+		rect = parent->boundingRect();
+	} else {
+		if (!scene())
+			return false;
 
-        rect = scene()->sceneRect();
-    }
-    return true;
+		rect = scene()->sceneRect();
+	}
+	return true;
 }
 
 //##############################################################################
@@ -1227,37 +1227,37 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->position.point.setY(str.toDouble());
 
-            READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
-            READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
+			READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
+			READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
 			if ( Project::xmlVersion() < 1) {
-                // Before 2.9.0 the position.point is only used when horizontalPosition or
-                // vertical position was set to custom, otherwise the label was attached to the
-                // "position" and it was not possible to arrange relative to this alignpoint
-                // From 2.9.0, the horizontalPosition and verticalPosition indicate the anchor
-                // point and position.point indicates the distance to them
-                // Custom is the same as Center, so rename it, because Custom is legacy
-                if (d->position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
-                    d->position.point.setX(0);
-                    if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
-                        d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Left;
-                    else if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
-                        d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Right;
-                } else
-                        d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+				// Before 2.9.0 the position.point is only used when horizontalPosition or
+				// vertical position was set to custom, otherwise the label was attached to the
+				// "position" and it was not possible to arrange relative to this alignpoint
+				// From 2.9.0, the horizontalPosition and verticalPosition indicate the anchor
+				// point and position.point indicates the distance to them
+				// Custom is the same as Center, so rename it, because Custom is legacy
+				if (d->position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
+					d->position.point.setX(0);
+					if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
+						d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Left;
+					else if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
+						d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Right;
+				} else
+					d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
 
-                if (d->position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
-                    d->position.point.setY(0);
-                    if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Top)
-                        d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
-                    else if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
-                        d->verticalAlignment = WorksheetElement::VerticalAlignment::Bottom;
-                } else
-                    d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
-                    
-            } else {
-                READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
-                READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
-            }
+				if (d->position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
+					d->position.point.setY(0);
+					if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Top)
+						d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
+					else if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
+						d->verticalAlignment = WorksheetElement::VerticalAlignment::Bottom;
+				} else
+					d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
+
+			} else {
+				READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
+				READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
+			}
 			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
