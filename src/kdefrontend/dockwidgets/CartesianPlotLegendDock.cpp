@@ -351,11 +351,9 @@ void CartesianPlotLegendDock::retranslateUi() {
 	ui.cbPositionX->addItem(i18n("Left"));
 	ui.cbPositionX->addItem(i18n("Center"));
 	ui.cbPositionX->addItem(i18n("Right"));
-	ui.cbPositionX->addItem(i18n("Custom"));
 	ui.cbPositionY->addItem(i18n("Top"));
 	ui.cbPositionY->addItem(i18n("Center"));
 	ui.cbPositionY->addItem(i18n("Bottom"));
-	ui.cbPositionY->addItem(i18n("Custom"));
 
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
@@ -427,13 +425,6 @@ void CartesianPlotLegendDock::lineSymbolWidthChanged(double value) {
 	called when legend's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
 void CartesianPlotLegendDock::positionXChanged(int index) {
-	//Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionX->count()-1 ) {
-		ui.sbPositionX->setEnabled(true);
-	} else {
-		ui.sbPositionX->setEnabled(false);
-	}
-
 	if (m_initializing)
 		return;
 
@@ -447,12 +438,6 @@ void CartesianPlotLegendDock::positionXChanged(int index) {
 	called when legend's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
 */
 void CartesianPlotLegendDock::positionYChanged(int index) {
-	//Enable/disable the spinbox for the y- oordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionY->count()-1 ) {
-		ui.sbPositionY->setEnabled(true);
-	} else {
-		ui.sbPositionY->setEnabled(false);
-	}
 
 	if (m_initializing)
 		return;

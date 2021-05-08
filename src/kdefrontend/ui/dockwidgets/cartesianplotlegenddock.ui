@@ -194,7 +194,7 @@
        <item row="12" column="0">
         <widget class="QLabel" name="lPositionX">
          <property name="text">
-          <string>x:</string>
+          <string>Offset x:</string>
          </property>
         </widget>
        </item>
@@ -230,7 +230,7 @@
        <item row="13" column="0">
         <widget class="QLabel" name="lPositionY">
          <property name="text">
-          <string>y:</string>
+          <string>Offset y:</string>
          </property>
         </widget>
        </item>
@@ -848,11 +848,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KFontRequester</class>
-   <extends>QWidget</extends>
-   <header>kfontrequester.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
@@ -861,6 +856,11 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KFontRequester</class>
+   <extends>QWidget</extends>
+   <header>kfontrequester.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

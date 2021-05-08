@@ -174,11 +174,12 @@ signals:
 	void teXFontChanged(const QFont);
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
+
 	void positionChanged(const WorksheetElement::PositionWrapper&);
+	void horizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment);
+	void verticalAlignmentChanged(const WorksheetElement::VerticalAlignment);
 	void coordinateBindingEnabledChanged(bool);
 	void positionLogicalChanged(QPointF);
-	void horizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
-	void verticalAlignmentChanged(WorksheetElement::VerticalAlignment);
 	void rotationAngleChanged(qreal);
 	void visibleChanged(bool);
 	void borderShapeChanged(TextLabel::BorderShape);

@@ -50,12 +50,12 @@ public:
 	~WorksheetElement() override;
 
 	enum class WorksheetElementName {NameCartesianPlot = 1};
+    // TODO: remove Horizontal position or horizontal alignment
+    enum class HorizontalPosition {Left, Center, Right, Custom};
+    enum class VerticalPosition {Top, Center, Bottom, Custom};
 
-	enum class HorizontalPosition {Left, Center, Right, Custom};
-	enum class VerticalPosition {Top, Center, Bottom, Custom};
-
-	enum class HorizontalAlignment {Left, Center, Right};
-	enum class VerticalAlignment {Top, Center, Bottom};
+    enum class HorizontalAlignment {Left, Center, Right};
+    enum class VerticalAlignment {Top, Center, Bottom};
 
 	struct PositionWrapper {
 		QPointF point;
@@ -74,6 +74,25 @@ public:
 	virtual void setPrinting(bool);
 	bool isPrinting() const;
 
+    /*!
+     * \brief parentPosToRelativePos
+     * Converts the absolute position of the element in parent coordinates into the distance between the
+     * alignement point of the parent and the element
+     * \param parentPos Element position in parent coordinates
+     * \param parentRect Parent data rect
+     * \param worksheetElementRect element rect
+     * \param position contains the alignement of the element to the parent
+     * \return distance between the parent position to the element
+     */
+	QPointF parentPosToRelativePos(QPointF parentPos, QRectF parentRect, QRectF worksheetElementRect, WorksheetElement::PositionWrapper position, WorksheetElement::HorizontalAlignment horAlign, WorksheetElement::VerticalAlignment vertAlign) const;
+    /*!
+     * \brief relativePosToParentPos
+     * \param parentRect
+     * \param worksheetElementRect element rect
+     * \param position contains the alignement of the element to the parent
+     * \return parent position
+     */
+	QPointF relativePosToParentPos(QRectF parentRect, QRectF worksheetElementRect, PositionWrapper position, HorizontalAlignment horAlign, VerticalAlignment vertAlign) const;
 	QMenu* createContextMenu() override;
 
 	virtual void loadThemeConfig(const KConfig&);
