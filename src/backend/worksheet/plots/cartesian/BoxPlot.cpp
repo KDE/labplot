@@ -533,6 +533,12 @@ void BoxPlotPrivate::retransform() {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::retransform()");
 
 	const int count = dataColumns.size();
+	if (!count || m_boxRect.size() != count) {
+		//no columns or relacl() was not called yet, nothing to do
+		recalcShapeAndBoundingRect();
+		return;
+	}
+
 	for (int i = 0; i < count; ++i) {
 		m_boxRect[i].clear();
 		m_medianLine[i] = QLineF();
