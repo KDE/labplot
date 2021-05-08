@@ -19,6 +19,7 @@ optional
 	* Cantor version 19.12 or higher (including the devel-package, cantor-devel or similar)
 	* ZLIB and LZ4 to support ROOT (CERN) TH1 histograms (including the devel-package, zlib-devel and liblz4-devel or similar)
 	* ReadStat for importing serveral statistical data formats (will be build if not available)
+	* liborigin version 3 or higher for importing Origin project files (will be build if not available)
 	* Matio for importing binary MATLAB MAT files (including the devel-package, libmatio-devel or similar)
 	* Qt SerialPort to support serial port functionality
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
