@@ -18,7 +18,7 @@
 		* Allow to specify text label's position in logical plot coordinates
 		* Allow to use a custom column to set the text for the axis ticks
 
------2.8.2 -----
+-----2.8.2 (01.04.2021) -----
 Bug fixes:
 	* [CAS]
 		* Fixed the regression introduced after the python2 backend was deprecated in Cantor
@@ -55,7 +55,7 @@ Bug fixes:
 	* BUG 431535 - Save/Load value format
 	* BUG 432291 - Show the relevant parts of the drop lines also when the data points are outside of the plot range
 
------2.8.1 -----
+-----2.8.1 (13.11.2021) -----
 	* [worksheet] allow to change the background color for axis labels (default: transparent)
 	* [worksheet] allow to copy the plot cursor cordinates
 	* [spreadsheet] better auto-detection of datetime format for values pasted in the spreadsheet
@@ -79,7 +79,7 @@ Bug fixes:
 		* Use application number locale
 		* insert predefined functions with correct number of arguments
 
------2.8 -----
+-----2.8 (16.09.2020) -----
 	* Improved DateTime data support
 	* Show the size of the members in the JSON file in the import file dialog
 	* [worksheet] In the Export Worksheet Dialog allow to export to the clipboard

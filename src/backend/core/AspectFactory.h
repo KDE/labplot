@@ -31,7 +31,9 @@
 
 #include "backend/core/Project.h"
 #include "backend/core/Workbook.h"
+#include "backend/datapicker/Datapicker.h"
 #include "backend/datasources/LiveDataSource.h"
+#include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -62,7 +64,11 @@ public:
 	static AbstractAspect* createAspect(AspectType type, AbstractAspect* parent) {
 		if (type == AspectType::Folder)
 			return new Folder(QString());
+		if (type == AspectType::Datapicker)
+			return new Datapicker(QString());
 
+		else if (type == AspectType::Note)
+			return new Note(QString());
 		/* worksheet and all its children */
 		else if (type == AspectType::Worksheet)
 			return new Worksheet(QString());

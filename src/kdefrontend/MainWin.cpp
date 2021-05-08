@@ -1475,6 +1475,7 @@ void MainWin::openProject(const QString& filename) {
 	updateGUI(); //there are most probably worksheets or spreadsheets in the open project -> update the GUI
 	updateMdiWindowVisibility();
 	m_saveAction->setEnabled(false);
+	m_newProjectAction->setEnabled(true);
 
 	statusBar()->showMessage( i18n("Project successfully opened (in %1 seconds).", (float)timer.elapsed()/1000) );
 
