@@ -64,6 +64,7 @@ OriginFile::OriginFile(const string& fileName)
 	LOG_PRINT(logfile, "File: %s\n", fileName.c_str())
 
 	// translate version
+	// see https://www.originlab.com/index.aspx?go=SUPPORT&pid=3325
 	unsigned int newFileVersion = 0;
 	if (majorVersion == 3) {
 		if (buildVersion < 830)
@@ -137,11 +138,26 @@ OriginFile::OriginFile(const string& fileName)
 	} else if (buildVersion < 3360) { // 2019b.0 (9.6.5.169) SR0 3359
 		fileVersion = 965;
 		newFileVersion = 20195;
+	} else if (buildVersion < 3380) { // 2020.0 (9.7.0.185) SR0 ????
+		fileVersion = 970;
+		newFileVersion = 20200;
+	} else if (buildVersion < 3381) { // 2020.1 (9.7.0.188) SR1 3380
+		fileVersion = 971;
+		newFileVersion = 20201;
+	} else if (buildVersion < 3426) { // 2020b.0 (9.7.5.184) SR0 3425
+		fileVersion = 975;
+		newFileVersion = 20205;
+	} else if (buildVersion < 3446) { // 2021.0 (9.8.0.200) SR0 3445
+		fileVersion = 980;
+		newFileVersion = 20210;
+	} else if (buildVersion < 3479) { // 2021b.0 (9.8.5.201) SR0 3478
+		fileVersion = 985;
+		newFileVersion = 20215;
 	} else {
-		// > 2019bSR0
-		fileVersion = 966;
-		newFileVersion = 20196;
-		LOG_PRINT(logfile, "Found project version 2019b.1 (9.6.6) or newer\n")
+		// > 2021bSR0
+		fileVersion = 986;
+		newFileVersion = 20216;
+		LOG_PRINT(logfile, "Found project version 2021bSR1 (9.8.6) or newer\n")
 	}
 
 	if (newFileVersion == 0) {
