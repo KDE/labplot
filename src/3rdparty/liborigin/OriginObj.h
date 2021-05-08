@@ -818,7 +818,7 @@ namespace Origin
 		~Bitmap()
 		{
 			if(size > 0)
-				delete data;
+				delete[] data;
 		};
 	};
 

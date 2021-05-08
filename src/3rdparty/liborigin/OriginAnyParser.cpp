@@ -2755,13 +2755,13 @@ void OriginAnyParser::getNoteProperties(const string& nwehd, unsigned int nwehds
 	unsigned int coord;
 	stmp.str(nwehd);
 	GET_INT(stmp, coord)
-	rect.left = coord;
+	rect.left = static_cast<short>(coord);
 	GET_INT(stmp, coord)
-	rect.top = coord;
+	rect.top = static_cast<short>(coord);
 	GET_INT(stmp, coord)
-	rect.right = coord;
+	rect.right = static_cast<short>(coord);
 	GET_INT(stmp, coord)
-	rect.bottom = coord;
+	rect.bottom = static_cast<short>(coord);
 
 	string name = nwelb.c_str();
 

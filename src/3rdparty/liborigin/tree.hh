@@ -92,7 +92,7 @@ void destructor(T1* p)
    p->~T1();
    }
 
-};
+}
 
 /// A node in the tree, combining links to other nodes as well as the actual data.
 template<class T>
