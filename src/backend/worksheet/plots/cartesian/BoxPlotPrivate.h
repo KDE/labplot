@@ -58,6 +58,9 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
+	bool activateCurve(QPointF mouseScenePos, double maxDist);
+	void setHover(bool on);
+
 	BoxPlot* const q;
 
 	//General

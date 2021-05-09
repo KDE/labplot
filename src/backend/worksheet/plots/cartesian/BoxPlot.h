@@ -27,6 +27,7 @@
 #ifndef BOXPLOT_H
 #define BOXPLOT_H
 
+#include "backend/worksheet/plots/cartesian/Curve.h"
 #include "backend/lib/macros.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/PlotArea.h"
@@ -36,7 +37,7 @@ class BoxPlotPrivate;
 class AbstractColumn;
 class Symbol;
 
-class BoxPlot : public WorksheetElement {
+class BoxPlot : public WorksheetElement, Curve {
 	Q_OBJECT
 
 public:
@@ -52,6 +53,10 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
+
+	//reimplemented from Curve
+	bool activateCurve(QPointF mouseScenePos, double maxDist = -1) override;
+	void setHover(bool on) override;
 
 	//general
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)

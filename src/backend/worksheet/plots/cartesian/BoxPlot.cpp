@@ -220,6 +220,16 @@ void BoxPlot::handleResize(double horizontalRatio, double verticalRatio, bool pa
 	Q_UNUSED(pageResize)
 }
 
+bool BoxPlot::activateCurve(QPointF mouseScenePos, double maxDist) {
+	Q_D(BoxPlot);
+	return d->activateCurve(mouseScenePos, maxDist);
+}
+
+void BoxPlot::setHover(bool on) {
+	Q_D(BoxPlot);
+	d->setHover(on);
+}
+
 /* ============================ getter methods ================= */
 //general
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
@@ -514,11 +524,28 @@ void BoxPlot::visibilityChangedSlot() {
 //##############################################################################
 BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
-	setAcceptHoverEvents(true);
+	setAcceptHoverEvents(false);
 }
 
 QString BoxPlotPrivate::name() const {
 	return q->name();
+}
+
+bool BoxPlotPrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
+	Q_UNUSED(maxDist)
+	if (!isVisible())
+		return false;
+
+	return shape().contains(mouseScenePos);
+}
+
+void BoxPlotPrivate::setHover(bool on) {
+	if(on == m_hovered)
+		return; // don't update if state not changed
+
+	m_hovered = on;
+	on ? emit q->hovered() : emit q->unhovered();
+	update();
 }
 
 /*!

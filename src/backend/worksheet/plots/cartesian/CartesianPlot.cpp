@@ -3896,19 +3896,20 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			// hover the nearest curve to the mousepointer
 			// hovering curves is implemented in the parent, because no ignoreEvent() exists
 			// for it. Checking all curves and hover the first
-			bool curve_hovered = false;
+			bool hovered = false;
 			const auto& curves = q->children<Curve>();
 			for (int i = curves.count() - 1; i >= 0; i--) { // because the last curve is above the other curves
-				if (curve_hovered){ // if a curve is already hovered, disable hover for the rest
-					curves[i]->setHover(false);
+				auto* curve = curves[i];
+				if (hovered){ // if a curve is already hovered, disable hover for the rest
+					curve->setHover(false);
 					continue;
 				}
-				if (curves[i]->activateCurve(event->pos())) {
-					curves[i]->setHover(true);
-					curve_hovered = true;
+				if (curve->activateCurve(event->pos())) {
+					curve->setHover(true);
+					hovered = true;
 					continue;
 				}
-				curves[i]->setHover(false);
+				curve->setHover(false);
 			}
 		} else if (mouseMode == CartesianPlot::MouseMode::Crosshair) {
 			m_crosshairPos = event->pos();
