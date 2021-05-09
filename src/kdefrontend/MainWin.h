@@ -176,6 +176,7 @@ private:
 	QAction* m_printAction;
 	QAction* m_printPreviewAction;
 	QAction* m_importFileAction;
+	QAction* m_importFileAction_2;
 	QAction* m_importSqlAction;
 	QAction* m_importDatasetAction;
 	QAction* m_importLabPlotAction;

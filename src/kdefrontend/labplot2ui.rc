@@ -56,7 +56,7 @@
 	</Menu>
 </Menu>
 <Separator/>
-<Menu name="import"><text>Import</text>
+<Menu name="import"><text>Import Data</text>
 	<Action name="import_file" />
 	<Action name="import_sql" />
     <Action name="import_dataset_datasource" />

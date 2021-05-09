@@ -551,8 +551,14 @@ void MainWin::initActions() {
 	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import from File"), this);
 	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
-	actionCollection()->addAction("import_file", m_importFileAction);
 	connect(m_importFileAction, &QAction::triggered, this, [=]() {importFileDialog();});
+
+	//second "import from file" action, with a shorter name, to be used in the sub-menu of the "Import"-menu.
+	//the first action defined above will be used in the toolbar and touchbar where we need the more detailed name "Import From File".
+	m_importFileAction_2 = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
+	actionCollection()->addAction("import_file", m_importFileAction_2);
+	m_importFileAction_2->setWhatsThis(i18n("Import data from a regular file"));
+	connect(m_importFileAction_2, &QAction::triggered, this, [=]() {importFileDialog();});
 
 	m_importSqlAction = new QAction(QIcon::fromTheme("network-server-database"), i18n("From SQL Database"), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
@@ -749,7 +755,7 @@ void MainWin::initMenus() {
 	//import menu
 	m_importMenu = new QMenu(this);
 	m_importMenu->setIcon(QIcon::fromTheme("document-import"));
-	m_importMenu ->addAction(m_importFileAction);
+	m_importMenu ->addAction(m_importFileAction_2);
 	m_importMenu ->addAction(m_importSqlAction);
 	m_importMenu->addAction(m_importDatasetAction);
 	m_importMenu->addSeparator();
@@ -888,6 +894,7 @@ void MainWin::updateGUIOnProjectChanges() {
 	m_saveAction->setEnabled(hasProject);
 	m_saveAsAction->setEnabled(hasProject);
 	m_importFileAction->setEnabled(hasProject);
+	m_importFileAction_2->setEnabled(hasProject);
 	m_importSqlAction->setEnabled(hasProject);
 #ifdef HAVE_LIBORIGIN
 	m_importOpjAction->setEnabled(hasProject);
