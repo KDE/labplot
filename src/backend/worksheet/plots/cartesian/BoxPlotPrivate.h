@@ -66,7 +66,6 @@ public:
 	//General
 	QVector<const AbstractColumn*> dataColumns;
 	QVector<QString> dataColumnPaths;
-	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
 	BoxPlot::Orientation orientation{BoxPlot::Orientation::Vertical};
 	bool variableWidth{false};
 	double widthFactor{1.0};
@@ -99,6 +98,7 @@ public:
 	Symbol* symbolJitter{nullptr};
 
 	//whiskers
+	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
 	QPen whiskersPen;
 	double whiskersCapSize;
 	qreal whiskersOpacity;

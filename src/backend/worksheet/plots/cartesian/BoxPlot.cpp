@@ -75,7 +75,7 @@ void BoxPlot::init() {
 	KConfigGroup group = config.group("BoxPlot");
 
 	//general
-	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::IQR);
+	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::WhiskersType::IQR);
 	d->orientation = (BoxPlot::Orientation) group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
 	d->variableWidth = group.readEntry("VariableWidth", false);
 	d->widthFactor = group.readEntry("WidthFactor", 1.0);
@@ -234,7 +234,6 @@ void BoxPlot::setHover(bool on) {
 //general
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Orientation, orientation, orientation)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, variableWidth, variableWidth)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, widthFactor, widthFactor)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, notchesEnabled, notchesEnabled)
@@ -281,6 +280,7 @@ Symbol* BoxPlot::symbolJitter() const {
 }
 
 //whiskers
+BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersOpacity, whiskersOpacity)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersCapSize, whiskersCapSize)
@@ -465,6 +465,7 @@ void BoxPlot::setMedianLineOpacity(qreal opacity) {
 //whiskers
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersType, BoxPlot::WhiskersType, whiskersType, recalc)
 void BoxPlot::setWhiskersType(BoxPlot::WhiskersType type) {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(BoxPlot);
 	if (type != d->whiskersType)
 		exec(new BoxPlotSetWhiskersTypeCmd(d, type, ki18n("%1: set whiskers type")));
@@ -1594,7 +1595,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	//box border
 	writer->writeStartElement("border");
 	WRITE_QPEN(d->borderPen);
-	writer->writeAttribute("opacity", QString::number(d->borderOpacity) );
+	writer->writeAttribute( "opacity", QString::number(d->borderOpacity) );
 	writer->writeEndElement();
 
 	//median line
@@ -1611,7 +1612,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 	//whiskers
 	writer->writeStartElement("whiskers");
-	writer->writeAttribute("type", QString::number(d->whiskersType));
+	writer->writeAttribute("type", QString::number(static_cast<int>(d->whiskersType)));
 	WRITE_QPEN(d->whiskersPen);
 	writer->writeAttribute("opacity", QString::number(d->whiskersOpacity));
 	writer->writeAttribute("capSize", QString::number(d->whiskersCapSize));

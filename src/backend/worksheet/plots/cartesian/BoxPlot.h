@@ -41,7 +41,7 @@ class BoxPlot : public WorksheetElement, Curve {
 	Q_OBJECT
 
 public:
-	enum WhiskersType {MinMax, IQR, SD, SD_3, MAD, MAD_3, PERCENTILES_10_90, PERCENTILES_5_95, PERCENTILES_1_99};
+	enum class WhiskersType {MinMax, IQR, SD, SD_3, MAD, MAD_3, PERCENTILES_10_90, PERCENTILES_5_95, PERCENTILES_1_99};
 
 	explicit BoxPlot(const QString&);
 	~BoxPlot() override;

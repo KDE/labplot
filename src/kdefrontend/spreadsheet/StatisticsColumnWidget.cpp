@@ -503,7 +503,7 @@ void StatisticsColumnWidget::showBoxPlot() {
 
 	BoxPlot* boxPlot = new BoxPlot(QString());
 	boxPlot->setOrientation(BoxPlot::Orientation::Vertical);
-	boxPlot->setWhiskersType(BoxPlot::IQR);
+	boxPlot->setWhiskersType(BoxPlot::WhiskersType::IQR);
 	plot->addChild(boxPlot);
 
 	QVector<const AbstractColumn*> columns;
