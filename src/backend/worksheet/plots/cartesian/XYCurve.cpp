@@ -3014,8 +3014,8 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement( "general" );
-	WRITE_COLUMN(d->xColumn, xColumn);
-	WRITE_COLUMN(d->yColumn, yColumn);
+	writer->writeAttribute("xColumn", d->xColumnPath);
+	writer->writeAttribute("yColumn", d->yColumnPath);
 	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
@@ -3043,7 +3043,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	//Values
 	writer->writeStartElement( "values" );
 	writer->writeAttribute( "type", QString::number(static_cast<int>(d->valuesType)) );
-	WRITE_COLUMN(d->valuesColumn, valuesColumn);
+	writer->writeAttribute("valuesColumn", d->valuesColumnPath);
 	writer->writeAttribute( "position", QString::number(static_cast<int>(d->valuesPosition)) );
 	writer->writeAttribute( "distance", QString::number(d->valuesDistance) );
 	writer->writeAttribute( "rotation", QString::number(d->valuesRotationAngle) );
@@ -3077,11 +3077,11 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	//Error bars
 	writer->writeStartElement( "errorBars" );
 	writer->writeAttribute( "xErrorType", QString::number(static_cast<int>(d->xErrorType)) );
-	WRITE_COLUMN(d->xErrorPlusColumn, xErrorPlusColumn);
-	WRITE_COLUMN(d->xErrorMinusColumn, xErrorMinusColumn);
+	writer->writeAttribute("xErrorPlusColumn", d->xErrorPlusColumnPath);
+	writer->writeAttribute("xErrorMinusColumn", d->xErrorMinusColumnPath);
 	writer->writeAttribute( "yErrorType", QString::number(static_cast<int>(d->yErrorType)) );
-	WRITE_COLUMN(d->yErrorPlusColumn, yErrorPlusColumn);
-	WRITE_COLUMN(d->yErrorMinusColumn, yErrorMinusColumn);
+	writer->writeAttribute("yErrorPlusColumn", d->yErrorPlusColumnPath);
+	writer->writeAttribute("yErrorMinusColumn", d->yErrorMinusColumnPath);
 	writer->writeAttribute( "type", QString::number(static_cast<int>(d->errorBarsType)) );
 	writer->writeAttribute( "capSize", QString::number(d->errorBarsCapSize) );
 	WRITE_QPEN(d->errorBarsPen);
