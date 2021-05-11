@@ -41,9 +41,9 @@ if (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
 else (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
 
     if (NOT WIN32)
-        find_package(PkgConfig)
+	    find_package(PkgConfig QUIET)
         if (PKG_CONFIG_FOUND)
-            pkg_check_modules(PC_CFITSIO cfitsio)
+		pkg_check_modules(PC_CFITSIO cfitsio QUIET)
         endif (PKG_CONFIG_FOUND)
     endif (NOT WIN32)
 
@@ -53,7 +53,7 @@ else (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
             ${GNUWIN32_DIR}/include
             )
 
-    find_library(CFITSIO_LIBRARIES NAMES cfitsio libcfitsio
+    find_library(CFITSIO_LIBRARIES NAMES cfitsio libcfitsio QUIET
             PATHS
             ${PC_CFITSIO_LIBRARY_DIRS}
             ${_obIncDir}
@@ -68,7 +68,7 @@ else (CFITSIO_INCLUDE_DIR AND CFITSIO_LIBRARIES)
 
     if (CFITSIO_FOUND)
         if (NOT CFitsio_FIND_QUIETLY)
-            message(STATUS "Found CFITSIO: ${CFITSIO_LIBRARIES}")
+		message(STATUS "Found CFITSIO: ${CFITSIO_LIBRARIES} (found version \"${PC_CFITSIO_VERSION}\")")
         endif (NOT CFitsio_FIND_QUIETLY)
     else ()
         if (CFitsio_FIND_REQUIRED)
