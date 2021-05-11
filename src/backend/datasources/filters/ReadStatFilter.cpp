@@ -64,7 +64,6 @@ writes the content of the data source \c dataSource to the file \c fileName.
 void ReadStatFilter::write(const QString & fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
 //TODO: not implemented yet
-// 	emit()
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -282,10 +281,8 @@ int ReadStatFilterPrivate::getColumnModes(int row, readstat_variable_t *variable
 		m_columnModes << AbstractColumn::ColumnMode::Numeric;
 		break;
 	case READSTAT_TYPE_STRING:
-		m_columnModes << AbstractColumn::ColumnMode::Text;
 	case READSTAT_TYPE_STRING_REF:
-		//TODO
-		break;
+		m_columnModes << AbstractColumn::ColumnMode::Text;
 	}
 
 	return READSTAT_HANDLER_OK;
@@ -330,11 +327,8 @@ int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t *variab
 			m_lineString << QString::number(readstat_double_value(value));
 			break;
 		case READSTAT_TYPE_STRING:
-			m_lineString << readstat_string_value(value);
-			break;
 		case READSTAT_TYPE_STRING_REF:
-			//TODO
-			break;
+			m_lineString << readstat_string_value(value);
 		}
 	}
 
@@ -393,14 +387,11 @@ int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, rea
 			container[rowIndex] = readstat_double_value(value);
 			break;
 		}
-		case READSTAT_TYPE_STRING: {
+		case READSTAT_TYPE_STRING:
+		case READSTAT_TYPE_STRING_REF: {
 			QVector<QString>& container = *static_cast<QVector<QString>*>(m_dataContainer[colIndex]);
 			container[rowIndex] = readstat_string_value(value);
-			break;
 		}
-		case READSTAT_TYPE_STRING_REF:
-			//TODO
-			break;
 		}
 	}
 
@@ -418,7 +409,7 @@ int ReadStatFilterPrivate::getFWeights(readstat_variable_t *variable, void *ptr)
 	Q_UNUSED(ptr)
 
 	const int col = readstat_variable_get_index(variable);
-	//TODO
+	//TODO: not used yet
 	DEBUG(Q_FUNC_INFO << ", fweight of col " << col)
 
 	return READSTAT_HANDLER_OK;
@@ -433,6 +424,7 @@ int ReadStatFilterPrivate::getValueLabels(const char *val_label, readstat_value_
 	LabelSet& labelSet = m_labelSets[val_label];
 	switch (value.type) {
 		case READSTAT_TYPE_STRING:
+		case READSTAT_TYPE_STRING_REF:
 			//DEBUG(Q_FUNC_INFO << ", string value label")
 			labelSet.add(readstat_string_value(value), QString(label));
 			break;
@@ -456,8 +448,6 @@ int ReadStatFilterPrivate::getValueLabels(const char *val_label, readstat_value_
 			//DEBUG(Q_FUNC_INFO << ", double value label")
 			labelSet.add(readstat_double_value(value), QString(label));
 			break;
-		case READSTAT_TYPE_STRING_REF:
-			DEBUG(Q_FUNC_INFO << ", WARNING: unsupported label type " << value.type)
 	}
 
 	return READSTAT_HANDLER_OK;
