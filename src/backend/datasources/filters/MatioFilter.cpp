@@ -197,10 +197,10 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 	info += i18n("Number of variables: ") + QString::number(n);
 	info += QLatin1String("<br>");
 	if (dir && n < 10) {	// only show variable info when there are not too many
-		info += i18n("Variables: ");
+		info += i18n("Variables:");
 		for (size_t i = 0; i < n; ++i) {
 			if (dir[i]) {
-				info += "\"" + QString(dir[i]) + "\"";
+				info += " \"" + QString(dir[i]) + "\"";
 				matvar_t* var = Mat_VarReadInfo(matfp, dir[i]);
 				if (var)
 					info += " (" + QString::number(Mat_VarGetNumberOfFields(var)) +  " fields, "
@@ -428,7 +428,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 	int actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
 	std::vector<void*> dataContainer;
-	if (var->rank == 2) {
+	if (var->rank == 2) {	// rank is always >= 2
 		// read data
 		actualCols = var->dims[0], actualRows = var->dims[1];
 		QVector<AbstractColumn::ColumnMode> columnModes;
@@ -515,7 +515,6 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 		//TODO: handle sparse, struct, cell	see user_guide
 		//TODO: handle other classes
-		//TODO: handle data types?
 
 	}
 	if (var->rank > 2)	// TODO
