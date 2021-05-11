@@ -49,7 +49,7 @@ public:
 	QVector<QString> labels() const { return m_labels; }
 	QString valueString(int i) const { return m_valuesString.at(i); }
 	int valueInt(int i) const { return m_valuesInt.at(i);}
-	int valueDouble(int i) const { return m_valuesDouble.at(i);}
+	double valueDouble(int i) const { return m_valuesDouble.at(i);}
 
 	void add(QString value, QString label) {
 		if (m_valuesInt.size() > 0 || m_valuesDouble.size() > 0) {
