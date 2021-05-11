@@ -284,4 +284,4 @@ unsigned int liboriginVersionMajor() { return LIBORIGIN_VERSION_MAJOR; }
 
 unsigned int liboriginVersionMinor() { return LIBORIGIN_VERSION_MINOR; }
 
-unsigned int liboriginVersionBugfix() { return LIBORIGIN_VERSION_BUGFIX; }
+unsigned int liboriginVersionPatch() { return LIBORIGIN_VERSION_PATCH; }

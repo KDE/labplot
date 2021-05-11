@@ -38,13 +38,8 @@ This will compile and install:
 	liborigin.pc a pkg-config metadata file to get compiler and linker flags
 	c++ devel headers
 
-Individual components (origin-static, origin, opj2dat, or doc) can be generated and installed by requesting
-a specific target on the make command line.
-For example:
-	$ make origin-static
-builds the static liborigin.a library only. Then:
-	$ make install
-installs the c++ devel headers, liborigin.pc, and liborigin.a
+To disable shared or static libraries (and opj2dat in the later case) you can also specify the cmake options
+-DBUILD_SHARED_LIBS=off or -DBUILD_STATIC_LIBS=off.
 
 Doc generation requires doxygen (http://doxygen.org)
 
