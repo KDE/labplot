@@ -31,7 +31,6 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "backend/lib/macros.h"
 
 #include <KLocalizedString>
-//#include <QProcess>
 #include <QFile>
 
 ///////////// macros ///////////////////////////////////////////////
@@ -64,6 +63,7 @@ writes the content of the data source \c dataSource to the file \c fileName.
 */
 void ReadStatFilter::write(const QString & fileName, AbstractDataSource* dataSource) {
 	d->write(fileName, dataSource);
+//TODO: not implemented yet
 // 	emit()
 }
 
@@ -292,7 +292,6 @@ int ReadStatFilterPrivate::getColumnModes(int row, readstat_variable_t *variable
 }
 int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
 	Q_UNUSED(ptr)
-	//TODO: get more variable properties
 
 	//DEBUG(Q_FUNC_INFO << ", start/end row =" << m_startRow << "/" << m_endRow)
 
@@ -348,7 +347,6 @@ int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t *variab
 }
 int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
 	Q_UNUSED(ptr)
-	//TODO: get more variable properties
 
 	// only read from start to end row/col
 	const int col = readstat_variable_get_index(variable);
@@ -425,6 +423,7 @@ int ReadStatFilterPrivate::getFWeights(readstat_variable_t *variable, void *ptr)
 
 	return READSTAT_HANDLER_OK;
 }
+// value labels are read in getVarName() and assigned here
 int ReadStatFilterPrivate::getValueLabels(const char *val_label, readstat_value_t value, const char *label, void *ptr) {
 	Q_UNUSED(ptr)
 
@@ -554,6 +553,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	m_varNames.clear();
 	m_columnModes.clear();
 	m_dataStrings.clear();
+	m_valueLabels.clear();
 	m_notes.clear();
 
 #ifdef HAVE_READSTAT
@@ -592,9 +592,9 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	QVector<Column*> columnList = dataSource->children<Column>();
 	for (int i = 0; i < columnList.size(); i++) {
 		auto* column = columnList.at(i);
-		QString label = m_valueLabels[i];
+		const QString label = m_valueLabels.at(i);
 		if (column && label.size() > 0) {
-			auto columnMode = m_columnModes[i];
+			const auto columnMode = m_columnModes.at(i);
 			const auto valueLabels = m_labelSets[label].labels();
 			switch (columnMode) {
 			case AbstractColumn::ColumnMode::Text:
