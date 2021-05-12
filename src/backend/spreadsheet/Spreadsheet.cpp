@@ -1034,7 +1034,8 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		for (int n = startColumn; n <= endColumn; n++) {
 			Column* column = this->column(columnOffset + n - startColumn);
-			column->addUsedInPlots(plots);
+			if (column)
+				column->addUsedInPlots(plots);
 		}
 
 		//suppress retransform in the dependent plots

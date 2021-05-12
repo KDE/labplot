@@ -1,5 +1,6 @@
 add_subdirectory(ASCII)
 add_subdirectory(JSON)
-add_subdirectory(project)
 add_subdirectory(MQTT)
+add_subdirectory(project)
+add_subdirectory(ReadStat)
 # add_subdirectory(DATASETS)

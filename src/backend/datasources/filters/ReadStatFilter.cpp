@@ -223,8 +223,8 @@ std::vector<void*> ReadStatFilterPrivate::m_dataContainer;
 QStringList ReadStatFilterPrivate::m_notes;
 QVector<QString> ReadStatFilterPrivate::m_valueLabels;
 QMap<QString, LabelSet> ReadStatFilterPrivate::m_labelSets;
-int ReadStatFilterPrivate::m_startRow, ReadStatFilterPrivate::m_endRow;
-int ReadStatFilterPrivate::m_startColumn, ReadStatFilterPrivate::m_endColumn;
+int ReadStatFilterPrivate::m_startRow{1}, ReadStatFilterPrivate::m_endRow{-1};
+int ReadStatFilterPrivate::m_startColumn{1}, ReadStatFilterPrivate::m_endColumn{-1};
 
 #ifdef HAVE_READSTAT
 // callbacks
