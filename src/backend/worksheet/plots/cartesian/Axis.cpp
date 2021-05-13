@@ -1045,28 +1045,17 @@ void AxisPrivate::retransformLine() {
         //	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
             lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
         } else {
-            WorksheetElement::PositionWrapper wrapper;
-            if (position == Axis::Position::Top)
-                wrapper.verticalPosition = WorksheetElement::VerticalPosition::Top;
-            else if (position == Axis::Position::Centered)
-                wrapper.verticalPosition = WorksheetElement::VerticalPosition::Center;
-            else // (position == Axis::Position::Bottom) // default
-                wrapper.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
+			WorksheetElement::PositionWrapper wrapper;
+			if (position == Axis::Position::Top)
+				wrapper.verticalPosition = WorksheetElement::VerticalPosition::Top;
+			else if (position == Axis::Position::Centered)
+				wrapper.verticalPosition = WorksheetElement::VerticalPosition::Center;
+			else // (position == Axis::Position::Bottom) // default
+				wrapper.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
 
-            QRectF rect = q->m_plot->dataRect();
-//            QGraphicsItem* parent = parentItem();
-//            assert(parent);
-//            if (parent) {
-//                rect = parent->boundingRect();
-//            }/* else {
-//                if (!scene())
-//                    return false;
-
-//                rect = scene()->sceneRect();
-//            }*/
-
-            wrapper.point = QPointF(offset, offset);
-            auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+			QRectF rect = q->m_plot->dataRect();
+			wrapper.point = QPointF(offset, offset);
+			auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
 
             //auto logicPos = q->cSystem->mapSceneToLogical(pos).y();
@@ -1082,30 +1071,17 @@ void AxisPrivate::retransformLine() {
         //	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
             lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
         } else {
-            WorksheetElement::PositionWrapper wrapper;
-            if (position == Axis::Position::Left)
-                wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Left;
-            else if (position == Axis::Position::Centered)
-                wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
-            else // (position == Axis::Position::Right) // default
-                wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
+			WorksheetElement::PositionWrapper wrapper;
+			if (position == Axis::Position::Left)
+				wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Left;
+			else if (position == Axis::Position::Centered)
+				wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+			else // (position == Axis::Position::Right) // default
+				wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
 
-            QRectF rect;
-
-            rect = q->m_plot->dataRect();
-//            QGraphicsItem* parent = parentItem();
-//            assert(parent);
-//            if (parent) {
-//                rect = parent->boundingRect();
-//            }/* else {
-//                if (!scene())
-//                    return false;
-
-//                rect = scene()->sceneRect();
-//            }*/
-
-            wrapper.point = QPointF(offset, offset);
-            auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+			QRectF rect = q->m_plot->dataRect();
+			wrapper.point = QPointF(offset, offset);
+			auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
 
             //auto logicPos = q->cSystem->mapSceneToLogical(pos).x();
