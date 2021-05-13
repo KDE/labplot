@@ -47,7 +47,8 @@ public:
 	void mapLogicalToScene(int startIndex, int endIndex, const Points& logicalPoints, Points& scenePoints, QVector<bool>& visiblePoints, MappingFlags flags = MappingFlag::DefaultMapping) const;
 	QPointF mapLogicalToScene(QPointF, bool& visible, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	Lines mapLogicalToScene(const Lines&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
-
+	double mapLogicalXToScene(double x, bool& ok, MappingFlags flags = MappingFlag::DefaultMapping) const;
+	double mapLogicalYToScene(double x, bool& ok,MappingFlags flags = MappingFlag::DefaultMapping) const;
 	Points mapSceneToLogical(const Points&, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 	QPointF mapSceneToLogical(QPointF, MappingFlags flags = MappingFlag::DefaultMapping) const override;
 

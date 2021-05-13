@@ -1462,11 +1462,9 @@ void AxisPrivate::retransformTicks() {
 		//calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks) {
 			if (orientation == Axis::Orientation::Horizontal) {
-                // TODO: do the same thing as transformAnchor to validate!
-                anchorPoint.setX(q->cSystem->mapLogicalToScene(QPointF(majorTickPos, 0)).x());
-                anchorPoint.setY(yAnchorPoint);
-                //valid = transformAnchor(&anchorPoint);
-                //if (valid) {
+				anchorPoint.setX(q->cSystem->mapLogicalXToScene(majorTickPos, valid));
+				anchorPoint.setY(yAnchorPoint);
+				if (valid) {
                     if (yAnchorPoint < middleY) {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
@@ -1474,12 +1472,10 @@ void AxisPrivate::retransformTicks() {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut)  ? yDirection * majorTicksLength  : 0);
 						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
 					}
-                //}
+				}
 			} else { // vertical
-                anchorPoint.setY(q->cSystem->mapLogicalToScene(QPointF(majorTickPos, 0)).y());
+				anchorPoint.setY(q->cSystem->mapLogicalYToScene(majorTickPos, valid));
                 anchorPoint.setX(xAnchorPoint);
-                //valid = transformAnchor(&anchorPoint);
-
 				if (valid) {
                     if (xAnchorPoint < middleX) {
 						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
@@ -1557,10 +1553,8 @@ void AxisPrivate::retransformTicks() {
 
 				//calculate start and end points for minor tick's line
 				if (orientation == Axis::Orientation::Horizontal) {
-                    anchorPoint.setX(q->cSystem->mapLogicalToScene(QPointF(minorTickPos, 0)).x());
+					anchorPoint.setX(q->cSystem->mapLogicalXToScene(minorTickPos, valid));
                     anchorPoint.setY(yAnchorPoint);
-                    //valid = transformAnchor(&anchorPoint);
-
 					if (valid) {
                         if (yAnchorPoint < middleY) {
 							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
@@ -1571,10 +1565,8 @@ void AxisPrivate::retransformTicks() {
 						}
 					}
 				} else { // vertical
-                    anchorPoint.setY(q->cSystem->mapLogicalToScene(QPointF(minorTickPos, 0)).y());
+					anchorPoint.setY(q->cSystem->mapLogicalYToScene(minorTickPos, valid));
                     anchorPoint.setX(xAnchorPoint);
-                    //valid = transformAnchor(&anchorPoint);
-
 					if (valid) {
                         if (xAnchorPoint < middleX) {
 							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
