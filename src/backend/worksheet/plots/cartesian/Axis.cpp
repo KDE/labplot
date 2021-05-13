@@ -114,13 +114,13 @@ private:
  *  \ingroup worksheet
  */
 Axis::Axis(const QString& name, Orientation orientation)
-		: WorksheetElement(name, AspectType::Axis), d_ptr(new AxisPrivate(this)) {
+	: WorksheetElement(name, AspectType::Axis), d_ptr(new AxisPrivate(this)) {
 	d_ptr->orientation = orientation;
 	init();
 }
 
 Axis::Axis(const QString& name, Orientation orientation, AxisPrivate* dd)
-		: WorksheetElement(name, AspectType::Axis), d_ptr(dd) {
+	: WorksheetElement(name, AspectType::Axis), d_ptr(dd) {
 	d_ptr->orientation = orientation;
 	init();
 }
@@ -148,7 +148,7 @@ void Axis::init() {
 	d->arrowSize = group.readEntry("ArrowSize", Worksheet::convertToSceneUnits(10, Worksheet::Unit::Point));
 
 	// axis title
- 	d->title = new TextLabel(this->name(), TextLabel::Type::AxisTitle);
+	d->title = new TextLabel(this->name(), TextLabel::Type::AxisTitle);
 	connect(d->title, &TextLabel::changed, this, &Axis::labelChanged);
 	addChild(d->title);
 	d->title->setHidden(true);
@@ -404,7 +404,9 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, majorTicksType, majorTicksType
 BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksSpacing, majorTicksSpacing)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, majorTicksColumn, majorTicksColumn)
-QString& Axis::majorTicksColumnPath() const { return d_ptr->majorTicksColumnPath; }
+QString& Axis::majorTicksColumnPath() const {
+	return d_ptr->majorTicksColumnPath;
+}
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
 BASIC_SHARED_D_READER_IMPL(Axis, QPen, majorTicksPen, majorTicksPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksOpacity, majorTicksOpacity)
@@ -414,7 +416,9 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::TicksType, minorTicksType, minorTicksType
 BASIC_SHARED_D_READER_IMPL(Axis, int, minorTicksNumber, minorTicksNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksSpacing, minorTicksIncrement)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, minorTicksColumn, minorTicksColumn)
-QString& Axis::minorTicksColumnPath() const { return d_ptr->minorTicksColumnPath; }
+QString& Axis::minorTicksColumnPath() const {
+	return d_ptr->minorTicksColumnPath;
+}
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
 BASIC_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksOpacity, minorTicksOpacity)
@@ -428,7 +432,9 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsOffset, labelsOffset);
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsRotationAngle, labelsRotationAngle);
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsTextType, labelsTextType, labelsTextType);
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, labelsTextColumn, labelsTextColumn)
-QString& Axis::labelsTextColumnPath() const { return d_ptr->labelsTextColumnPath; }
+QString& Axis::labelsTextColumnPath() const {
+	return d_ptr->labelsTextColumnPath;
+}
 BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor);
 BASIC_SHARED_D_READER_IMPL(Axis, QFont, labelsFont, labelsFont);
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsBackgroundType, labelsBackgroundType, labelsBackgroundType);
@@ -559,9 +565,9 @@ void Axis::setZeroOffset(qreal zeroOffset) {
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLogicalPosition, double, logicalPosition, retransform);
 void Axis::setLogicalPosition(double pos) {
-    Q_D(Axis);
-    if (pos != d->logicalPosition)
-        exec(new AxisSetLogicalPositionCmd(d, pos, ki18n("%1: set axis logical position")));
+	Q_D(Axis);
+	if (pos != d->logicalPosition)
+		exec(new AxisSetLogicalPositionCmd(d, pos, ki18n("%1: set axis logical position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform);
@@ -659,7 +665,7 @@ void Axis::setMajorTicksColumn(const AbstractColumn* column) {
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &Axis::majorTicksColumnAboutToBeRemoved);
+			        this, &Axis::majorTicksColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -724,7 +730,7 @@ void Axis::setMinorTicksColumn(const AbstractColumn* column) {
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &Axis::minorTicksColumnAboutToBeRemoved);
+			        this, &Axis::minorTicksColumnAboutToBeRemoved);
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -825,7 +831,7 @@ void Axis::setLabelsTextColumn(const AbstractColumn* column) {
 		if (column) {
 			connect(column, &AbstractColumn::dataChanged, this, &Axis::retransformTicks);
 			connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved,
-					this, &Axis::retransformTicks);
+			        this, &Axis::retransformTicks);
 			//TODO: add disconnect in the undo-function
 		}
 	}
@@ -977,7 +983,7 @@ AxisPrivate::AxisPrivate(Axis* owner) : gridItem(new AxisGrid(this)), q(owner) {
 	setAcceptHoverEvents(true);
 }
 
-QString AxisPrivate::name() const{
+QString AxisPrivate::name() const {
 	return q->name();
 }
 
@@ -997,14 +1003,14 @@ bool AxisPrivate::swapVisible(bool on) {
 	return oldValue;
 }
 
-QRectF AxisPrivate::boundingRect() const{
+QRectF AxisPrivate::boundingRect() const {
 	return boundingRectangle;
 }
 
 /*!
   Returns the shape of the XYCurve as a QPainterPath in local coordinates
 */
-QPainterPath AxisPrivate::shape() const{
+QPainterPath AxisPrivate::shape() const {
 	return axisShape;
 }
 
@@ -1038,13 +1044,13 @@ void AxisPrivate::retransformLine() {
 
 	QPointF startPoint, endPoint;
 	if (orientation == Axis::Orientation::Horizontal) {
-        if (position == Axis::Position::Logical) {
-            startPoint = QPointF(range.start(), logicalPosition);
-            endPoint = QPointF(range.end(), logicalPosition);
-            lines.append(QLineF(startPoint, endPoint));
-        //	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
-            lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
-        } else {
+		if (position == Axis::Position::Logical) {
+			startPoint = QPointF(range.start(), logicalPosition);
+			endPoint = QPointF(range.end(), logicalPosition);
+			lines.append(QLineF(startPoint, endPoint));
+			//	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
+			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
+		} else {
 			WorksheetElement::PositionWrapper wrapper;
 			if (position == Axis::Position::Top)
 				wrapper.verticalPosition = WorksheetElement::VerticalPosition::Top;
@@ -1058,19 +1064,19 @@ void AxisPrivate::retransformLine() {
 			auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
 
-            //auto logicPos = q->cSystem->mapSceneToLogical(pos).y();
-            startPoint = QPointF(rect.x(), pos.y());
-            endPoint = QPointF(rect.x() + rect.width(), pos.y());
-            lines.append(QLineF(startPoint, endPoint));
-        }
+			//auto logicPos = q->cSystem->mapSceneToLogical(pos).y();
+			startPoint = QPointF(rect.x(), pos.y());
+			endPoint = QPointF(rect.x() + rect.width(), pos.y());
+			lines.append(QLineF(startPoint, endPoint));
+		}
 	} else { // vertical
-        if (position == Axis::Position::Logical) {
-            startPoint = QPointF(logicalPosition, range.start());
-            endPoint = QPointF(logicalPosition, range.end());
-            lines.append(QLineF(startPoint, endPoint));
-        //	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
-            lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
-        } else {
+		if (position == Axis::Position::Logical) {
+			startPoint = QPointF(logicalPosition, range.start());
+			endPoint = QPointF(logicalPosition, range.end());
+			lines.append(QLineF(startPoint, endPoint));
+			//	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
+			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
+		} else {
 			WorksheetElement::PositionWrapper wrapper;
 			if (position == Axis::Position::Left)
 				wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Left;
@@ -1084,12 +1090,12 @@ void AxisPrivate::retransformLine() {
 			auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
 
-            //auto logicPos = q->cSystem->mapSceneToLogical(pos).x();
-            startPoint = QPointF(pos.x(), rect.y() + rect.height()); // draw from bottom to top
-            endPoint = QPointF(pos.x(), rect.y());
-            lines.append(QLineF(startPoint, endPoint));
-        }
-    }
+			//auto logicPos = q->cSystem->mapSceneToLogical(pos).x();
+			startPoint = QPointF(pos.x(), rect.y() + rect.height()); // draw from bottom to top
+			endPoint = QPointF(pos.x(), rect.y());
+			lines.append(QLineF(startPoint, endPoint));
+		}
+	}
 
 	for (const auto& line : lines) {
 		linePath.moveTo(line.p1());
@@ -1138,42 +1144,42 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 		arrowPath.lineTo(endPoint);
 
 		switch (arrowType) {
-			case Axis::ArrowType::NoArrow:
-				break;
-			case Axis::ArrowType::SimpleSmall:
-				arrowPath.moveTo(endPoint);
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
-				arrowPath.moveTo(endPoint);
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
-				break;
-			case Axis::ArrowType::SimpleBig:
-				arrowPath.moveTo(endPoint);
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
-				arrowPath.moveTo(endPoint);
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
-				break;
-			case Axis::ArrowType::FilledSmall:
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
-				arrowPath.lineTo(endPoint);
-				break;
-			case Axis::ArrowType::FilledBig:
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
-				arrowPath.lineTo(endPoint);
-				break;
-			case Axis::ArrowType::SemiFilledSmall:
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/8, endPoint.y()));
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
-				arrowPath.lineTo(endPoint);
-				break;
-			case Axis::ArrowType::SemiFilledBig:
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()));
-				arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
-				arrowPath.lineTo(endPoint);
-				break;
+		case Axis::ArrowType::NoArrow:
+			break;
+		case Axis::ArrowType::SimpleSmall:
+			arrowPath.moveTo(endPoint);
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
+			arrowPath.moveTo(endPoint);
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
+			break;
+		case Axis::ArrowType::SimpleBig:
+			arrowPath.moveTo(endPoint);
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
+			arrowPath.moveTo(endPoint);
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
+			break;
+		case Axis::ArrowType::FilledSmall:
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
+			arrowPath.lineTo(endPoint);
+			break;
+		case Axis::ArrowType::FilledBig:
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
+			arrowPath.lineTo(endPoint);
+			break;
+		case Axis::ArrowType::SemiFilledSmall:
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()-arrowSize/4*cos_phi));
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/8, endPoint.y()));
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()+arrowSize/4*cos_phi));
+			arrowPath.lineTo(endPoint);
+			break;
+		case Axis::ArrowType::SemiFilledBig:
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()-arrowSize/2*cos_phi));
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/4, endPoint.y()));
+			arrowPath.lineTo(QPointF(endPoint.x()-direction*arrowSize/2, endPoint.y()+arrowSize/2*cos_phi));
+			arrowPath.lineTo(endPoint);
+			break;
 		}
 	} else { //vertical orientation
 		QPointF endPoint = QPointF(startPoint.x(), startPoint.y()-direction*arrowSize);
@@ -1181,42 +1187,42 @@ void AxisPrivate::addArrow(QPointF startPoint, int direction) {
 		arrowPath.lineTo(endPoint);
 
 		switch (arrowType) {
-			case Axis::ArrowType::NoArrow:
-				break;
-			case Axis::ArrowType::SimpleSmall:
-				arrowPath.moveTo(endPoint);
-				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
-				arrowPath.moveTo(endPoint);
-				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
-				break;
-			case Axis::ArrowType::SimpleBig:
-				arrowPath.moveTo(endPoint);
-				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
-				arrowPath.moveTo(endPoint);
-				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
-				break;
-			case Axis::ArrowType::FilledSmall:
-				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
-				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
-				arrowPath.lineTo(endPoint);
-				break;
-			case Axis::ArrowType::FilledBig:
-				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
-				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
-				arrowPath.lineTo(endPoint);
-				break;
-			case Axis::ArrowType::SemiFilledSmall:
-				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
-				arrowPath.lineTo(QPointF(endPoint.x(), endPoint.y()+direction*arrowSize/8));
-				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
-				arrowPath.lineTo(endPoint);
-				break;
-			case Axis::ArrowType::SemiFilledBig:
-				arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
-				arrowPath.lineTo(QPointF(endPoint.x(), endPoint.y()+direction*arrowSize/4));
-				arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
-				arrowPath.lineTo(endPoint);
-				break;
+		case Axis::ArrowType::NoArrow:
+			break;
+		case Axis::ArrowType::SimpleSmall:
+			arrowPath.moveTo(endPoint);
+			arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+			arrowPath.moveTo(endPoint);
+			arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+			break;
+		case Axis::ArrowType::SimpleBig:
+			arrowPath.moveTo(endPoint);
+			arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+			arrowPath.moveTo(endPoint);
+			arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+			break;
+		case Axis::ArrowType::FilledSmall:
+			arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+			arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+			arrowPath.lineTo(endPoint);
+			break;
+		case Axis::ArrowType::FilledBig:
+			arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+			arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+			arrowPath.lineTo(endPoint);
+			break;
+		case Axis::ArrowType::SemiFilledSmall:
+			arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+			arrowPath.lineTo(QPointF(endPoint.x(), endPoint.y()+direction*arrowSize/8));
+			arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/4*cos_phi, endPoint.y()+direction*arrowSize/4));
+			arrowPath.lineTo(endPoint);
+			break;
+		case Axis::ArrowType::SemiFilledBig:
+			arrowPath.lineTo(QPointF(endPoint.x()-arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+			arrowPath.lineTo(QPointF(endPoint.x(), endPoint.y()+direction*arrowSize/4));
+			arrowPath.lineTo(QPointF(endPoint.x()+arrowSize/2*cos_phi, endPoint.y()+direction*arrowSize/2));
+			arrowPath.lineTo(endPoint);
+			break;
 		}
 	}
 }
@@ -1380,7 +1386,7 @@ void AxisPrivate::retransformTicks() {
 	const int yDirection = q->cSystem->yDirection();
 	const double middleX = plot()->xRange(xIndex).center();
 	const double middleY = plot()->yRange(yIndex).center();
-    bool valid = true;
+	bool valid = true;
 
 	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
@@ -1432,8 +1438,8 @@ void AxisPrivate::retransformTicks() {
 				tmpMinorTicksNumber = 0;
 		}
 
-        auto yAnchorPoint = lines[0].p1().y();
-        auto xAnchorPoint = lines[0].p1().x();
+		auto yAnchorPoint = lines[0].p1().y();
+		auto xAnchorPoint = lines[0].p1().x();
 
 		//calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks) {
@@ -1441,7 +1447,7 @@ void AxisPrivate::retransformTicks() {
 				anchorPoint.setX(q->cSystem->mapLogicalXToScene(majorTickPos, valid));
 				anchorPoint.setY(yAnchorPoint);
 				if (valid) {
-                    if (yAnchorPoint < middleY) {
+					if (yAnchorPoint < middleY) {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
 					} else {
@@ -1451,9 +1457,9 @@ void AxisPrivate::retransformTicks() {
 				}
 			} else { // vertical
 				anchorPoint.setY(q->cSystem->mapLogicalYToScene(majorTickPos, valid));
-                anchorPoint.setX(xAnchorPoint);
+				anchorPoint.setX(xAnchorPoint);
 				if (valid) {
-                    if (xAnchorPoint < middleX) {
+					if (xAnchorPoint < middleX) {
 						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
 						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
 					} else {
@@ -1483,19 +1489,19 @@ void AxisPrivate::retransformTicks() {
 				else {
 					if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
 						switch (labelsTextColumn->columnMode()) {
-							case AbstractColumn::ColumnMode::Numeric:
-							case AbstractColumn::ColumnMode::Integer:
-							case AbstractColumn::ColumnMode::BigInt:
-								tickLabelValues << labelsTextColumn->valueAt(iMajor);
-								break;
-							case AbstractColumn::ColumnMode::DateTime:
-							case AbstractColumn::ColumnMode::Month:
-							case AbstractColumn::ColumnMode::Day:
-								tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
-								break;
-							case AbstractColumn::ColumnMode::Text:
-								tickLabelValuesString << labelsTextColumn->textAt(iMajor);
-								break;
+						case AbstractColumn::ColumnMode::Numeric:
+						case AbstractColumn::ColumnMode::Integer:
+						case AbstractColumn::ColumnMode::BigInt:
+							tickLabelValues << labelsTextColumn->valueAt(iMajor);
+							break;
+						case AbstractColumn::ColumnMode::DateTime:
+						case AbstractColumn::ColumnMode::Month:
+						case AbstractColumn::ColumnMode::Day:
+							tickLabelValues << labelsTextColumn->dateTimeAt(iMajor).toMSecsSinceEpoch();
+							break;
+						case AbstractColumn::ColumnMode::Text:
+							tickLabelValuesString << labelsTextColumn->textAt(iMajor);
+							break;
 						}
 					}
 				}
@@ -1530,9 +1536,9 @@ void AxisPrivate::retransformTicks() {
 				//calculate start and end points for minor tick's line
 				if (orientation == Axis::Orientation::Horizontal) {
 					anchorPoint.setX(q->cSystem->mapLogicalXToScene(minorTickPos, valid));
-                    anchorPoint.setY(yAnchorPoint);
+					anchorPoint.setY(yAnchorPoint);
 					if (valid) {
-                        if (yAnchorPoint < middleY) {
+						if (yAnchorPoint < middleY) {
 							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
 							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
 						} else {
@@ -1542,9 +1548,9 @@ void AxisPrivate::retransformTicks() {
 					}
 				} else { // vertical
 					anchorPoint.setY(q->cSystem->mapLogicalYToScene(minorTickPos, valid));
-                    anchorPoint.setX(xAnchorPoint);
+					anchorPoint.setX(xAnchorPoint);
 					if (valid) {
-                        if (xAnchorPoint < middleX) {
+						if (xAnchorPoint < middleX) {
 							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
 							endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
 						} else {
@@ -1637,25 +1643,25 @@ void AxisPrivate::retransformTickLabelStrings() {
 		auto xRangeFormat{ plot()->xRange(q->cSystem->xIndex()).format() };
 		auto yRangeFormat{ plot()->yRange(q->cSystem->yIndex()).format() };
 		numeric = ( (orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
-						|| (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric) );
+		            || (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric) );
 
 		if (!numeric)
 			datetime = true;
 	} else {
 		if (labelsTextColumn) {
 			switch (labelsTextColumn->columnMode()) {
-				case AbstractColumn::ColumnMode::Numeric:
-				case AbstractColumn::ColumnMode::Integer:
-				case AbstractColumn::ColumnMode::BigInt:
-					numeric = true;
-					break;
-				case AbstractColumn::ColumnMode::DateTime:
-				case AbstractColumn::ColumnMode::Month:
-				case AbstractColumn::ColumnMode::Day:
-					datetime = true;
-					break;
-				case AbstractColumn::ColumnMode::Text:
-					text = true;
+			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Integer:
+			case AbstractColumn::ColumnMode::BigInt:
+				numeric = true;
+				break;
+			case AbstractColumn::ColumnMode::DateTime:
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+				datetime = true;
+				break;
+			case AbstractColumn::ColumnMode::Text:
+				text = true;
 			}
 		}
 	}
@@ -1915,7 +1921,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 	auto yRangeFormat{ plot()->yRange(yIndex).format() };
 	for ( int i = 0; i < size; i++ ) {
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
-				(orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
+		        (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
 				width = fm.boundingRect(tickLabelStrings.at(i)).width();
 			} else {
@@ -1975,7 +1981,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() - labelsOffset);
 				}
 			}
-		// ---------------------- vertical -------------------------
+			// ---------------------- vertical -------------------------
 		} else {
 			if (offset < middleX) {
 				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
@@ -2064,7 +2070,9 @@ void AxisPrivate::retransformMajorGrid() {
 	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex() + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->yIndex() + 1)
-	const auto xRange{ plot()->xRange(q->cSystem->xIndex()) };
+	const auto xRange {
+		plot()->xRange(q->cSystem->xIndex())
+	};
 	const auto yRange{ plot()->yRange(q->cSystem->yIndex()) };
 
 	//TODO:
@@ -2308,7 +2316,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		auto xRangeFormat{ plot()->xRange(q->cSystem->xIndex()).format() };
 		auto yRangeFormat{ plot()->yRange(q->cSystem->yIndex()).format() };
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
-				(orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
+		        (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			//QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
 			for (int i = 0; i < tickLabelPoints.size(); i++) {
 				painter->translate(tickLabelPoints.at(i));
@@ -2452,7 +2460,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "position", QString::number(static_cast<int>(d->position)) );
 	writer->writeAttribute( "scale", QString::number(static_cast<int>(d->scale)) );
 	writer->writeAttribute( "offset", QString::number(d->offset) );
-    writer->writeAttribute( "logicalPosition", QString::number(d->logicalPosition) );
+	writer->writeAttribute( "logicalPosition", QString::number(d->logicalPosition) );
 	writer->writeAttribute( "start", QString::number(d->range.start()) );
 	writer->writeAttribute( "end", QString::number(d->range.end()) );
 	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
@@ -2566,7 +2574,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("position", position, Axis::Position);
 			READ_INT_VALUE("scale", scale, RangeT::Scale);
 			READ_DOUBLE_VALUE("offset", offset);
-            READ_DOUBLE_VALUE("logicalPosition", logicalPosition);
+			READ_DOUBLE_VALUE("logicalPosition", logicalPosition);
 			READ_DOUBLE_VALUE("start", range.start());
 			READ_DOUBLE_VALUE("end", range.end());
 			READ_DOUBLE_VALUE("scalingFactor", scalingFactor);

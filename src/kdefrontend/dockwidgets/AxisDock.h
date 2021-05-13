@@ -83,8 +83,8 @@ private slots:
 	void visibilityChanged(bool);
 	void orientationChanged(int);
 	void positionChanged(int);
-    void positionChanged(double value);
-    void logicalPositionChanged(double value);
+	void positionChanged(double value);
+	void logicalPositionChanged(double value);
 	void scaleChanged(int);
 	void autoScaleChanged(int);
 	void startChanged();
@@ -95,7 +95,7 @@ private slots:
 	void scalingFactorChanged();
 
 	//Line-Tab
-  	void lineStyleChanged(int);
+	void lineStyleChanged(int);
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
@@ -106,7 +106,7 @@ private slots:
 	//"Major ticks"-tab
 	void majorTicksDirectionChanged(int);
 	void majorTicksTypeChanged(int);
- 	void majorTicksNumberChanged(int);
+	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
 	void majorTicksLineStyleChanged(int);
@@ -118,7 +118,7 @@ private slots:
 	//"Minor ticks"-tab
 	void minorTicksDirectionChanged(int);
 	void minorTicksTypeChanged(int);
- 	void minorTicksNumberChanged(int);
+	void minorTicksNumberChanged(int);
 	void minorTicksSpacingChanged();
 	void minorTicksColumnChanged(const QModelIndex&);
 	void minorTicksLineStyleChanged(int);
@@ -148,12 +148,12 @@ private slots:
 	void labelsOpacityChanged(int);
 
 	//"Grid"-tab
-  	void majorGridStyleChanged(int);
+	void majorGridStyleChanged(int);
 	void majorGridColorChanged(const QColor&);
 	void majorGridWidthChanged(double);
 	void majorGridOpacityChanged(int);
 
-  	void minorGridStyleChanged(int);
+	void minorGridStyleChanged(int);
 	void minorGridColorChanged(const QColor&);
 	void minorGridWidthChanged(double);
 	void minorGridOpacityChanged(int);
@@ -164,7 +164,7 @@ private slots:
 	void axisOrientationChanged(Axis::Orientation);
 	void axisPositionChanged(Axis::Position);
 	void axisPositionChanged(double);
-    void axisLogicalPositionChanged(double);
+	void axisLogicalPositionChanged(double);
 	void axisScaleChanged(RangeT::Scale);
 	void axisAutoScaleChanged(bool);
 	void axisStartChanged(double);

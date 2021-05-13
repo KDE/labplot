@@ -75,7 +75,7 @@ public:
 	Range<double> range;		//!< coordinate range of the axis line
 	qreal scalingFactor;
 	qreal zeroOffset;
-    double logicalPosition{0};
+	double logicalPosition{0};
 
 	//line
 	QVector<QLineF> lines;
@@ -147,7 +147,9 @@ public:
 	bool labelsFormatAutoChanged{false};
 
 private:
-	CartesianPlot* plot() const { return q->m_plot; }	// convenience method
+	CartesianPlot* plot() const {
+		return q->m_plot;    // convenience method
+	}
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;

@@ -1,12 +1,12 @@
-	/***************************************************************************
-    File                 : AxisDock.cpp
-    Project              : LabPlot
-    Description          : axes widget class
-    --------------------------------------------------------------------
-    Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2021 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+/***************************************************************************
+File                 : AxisDock.cpp
+Project              : LabPlot
+Description          : axes widget class
+--------------------------------------------------------------------
+Copyright            : (C) 2011-2020 Alexander Semke (alexander.semke@web.de)
+Copyright            : (C) 2012-2021 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
- ***************************************************************************/
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -53,12 +53,12 @@ extern "C" {
 }
 
 namespace {
-    enum PositionAlignmentComboBoxIndex {
-        Top_Left = 0,
-        Bottom_Right = 1,
-        Center = 2,
-        Logical = 3,
-    };
+enum PositionAlignmentComboBoxIndex {
+	Top_Left = 0,
+	Bottom_Right = 1,
+	Center = 2,
+	Logical = 3,
+};
 }
 
 /*!
@@ -130,13 +130,13 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &AxisDock::visibilityChanged);
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::orientationChanged);
+	        this, &AxisDock::orientationChanged);
 	connect(ui.cbPosition, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, QOverload<int>::of(&AxisDock::positionChanged));
-    connect(ui.sbPosition, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
-    connect(ui.sbPositionLogical, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::logicalPositionChanged));
+	        this, QOverload<int>::of(&AxisDock::positionChanged));
+	connect(ui.sbPosition, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::positionChanged));
+	connect(ui.sbPositionLogical, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, QOverload<double>::of(&AxisDock::logicalPositionChanged));
 	connect(ui.cbScale, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::scaleChanged);
+	        this, &AxisDock::scaleChanged);
 
 	connect(ui.chkAutoScale, &QCheckBox::stateChanged, this, &AxisDock::autoScaleChanged);
 	connect(ui.leStart, &QLineEdit::textChanged, this, &AxisDock::startChanged);
@@ -149,113 +149,113 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 
 	//"Line"-tab
 	connect(ui.cbLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::lineStyleChanged);
+	        this, &AxisDock::lineStyleChanged);
 	connect(ui.kcbLineColor, &KColorButton::changed, this, &AxisDock::lineColorChanged);
 	connect(ui.sbLineWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::lineWidthChanged);
+	        this, &AxisDock::lineWidthChanged);
 	connect(ui.sbLineOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::lineOpacityChanged);
+	        this, &AxisDock::lineOpacityChanged);
 	connect(ui.cbArrowPosition, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::arrowPositionChanged);
+	        this, &AxisDock::arrowPositionChanged);
 	connect(ui.cbArrowType, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::arrowTypeChanged);
+	        this, &AxisDock::arrowTypeChanged);
 	connect(ui.sbArrowSize, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::arrowSizeChanged);
+	        this, &AxisDock::arrowSizeChanged);
 
 	//"Major ticks"-tab
 	connect(ui.cbMajorTicksDirection, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::majorTicksDirectionChanged);
+	        this, &AxisDock::majorTicksDirectionChanged);
 	connect(ui.cbMajorTicksType, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::majorTicksTypeChanged);
+	        this, &AxisDock::majorTicksTypeChanged);
 	connect(ui.sbMajorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::majorTicksNumberChanged);
+	        this, &AxisDock::majorTicksNumberChanged);
 	connect(ui.sbMajorTicksSpacingNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::majorTicksSpacingChanged);
+	        this, &AxisDock::majorTicksSpacingChanged);
 	connect(dtsbMajorTicksIncrement, &DateTimeSpinBox::valueChanged,
-			this, &AxisDock::majorTicksSpacingChanged);
+	        this, &AxisDock::majorTicksSpacingChanged);
 	connect(cbMajorTicksColumn, &TreeViewComboBox::currentModelIndexChanged,
-			this, &AxisDock::majorTicksColumnChanged);
+	        this, &AxisDock::majorTicksColumnChanged);
 	connect(ui.cbMajorTicksLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::majorTicksLineStyleChanged);
+	        this, &AxisDock::majorTicksLineStyleChanged);
 	connect(ui.kcbMajorTicksColor, &KColorButton::changed, this, &AxisDock::majorTicksColorChanged);
 	connect(ui.sbMajorTicksWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::majorTicksWidthChanged);
+	        this, &AxisDock::majorTicksWidthChanged);
 	connect(ui.sbMajorTicksLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::majorTicksLengthChanged);
+	        this, &AxisDock::majorTicksLengthChanged);
 	connect(ui.sbMajorTicksOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::majorTicksOpacityChanged);
+	        this, &AxisDock::majorTicksOpacityChanged);
 
 	//"Minor ticks"-tab
 	connect(ui.cbMinorTicksDirection, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::minorTicksDirectionChanged);
+	        this, &AxisDock::minorTicksDirectionChanged);
 	connect(ui.cbMinorTicksType, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::minorTicksTypeChanged);
+	        this, &AxisDock::minorTicksTypeChanged);
 	connect(ui.sbMinorTicksNumber, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::minorTicksNumberChanged);
+	        this, &AxisDock::minorTicksNumberChanged);
 	connect(ui.sbMinorTicksSpacingNumeric, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::minorTicksSpacingChanged);
+	        this, &AxisDock::minorTicksSpacingChanged);
 	connect(dtsbMinorTicksIncrement, &DateTimeSpinBox::valueChanged,
-			this, &AxisDock::minorTicksSpacingChanged);
+	        this, &AxisDock::minorTicksSpacingChanged);
 	connect(cbMinorTicksColumn, &TreeViewComboBox::currentModelIndexChanged,
-			this, &AxisDock::minorTicksColumnChanged);
+	        this, &AxisDock::minorTicksColumnChanged);
 	connect(ui.cbMinorTicksLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::minorTicksLineStyleChanged);
+	        this, &AxisDock::minorTicksLineStyleChanged);
 	connect(ui.kcbMinorTicksColor, &KColorButton::changed, this, &AxisDock::minorTicksColorChanged);
 	connect(ui.sbMinorTicksWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::minorTicksWidthChanged);
+	        this, &AxisDock::minorTicksWidthChanged);
 	connect(ui.sbMinorTicksLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::minorTicksLengthChanged);
+	        this, &AxisDock::minorTicksLengthChanged);
 	connect(ui.sbMinorTicksOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::minorTicksOpacityChanged);
+	        this, &AxisDock::minorTicksOpacityChanged);
 
 	//"Extra ticks"-tab
 
 	//"Tick labels"-tab
 	connect(ui.cbLabelsFormat, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::labelsFormatChanged);
+	        this, &AxisDock::labelsFormatChanged);
 	connect(ui.sbLabelsPrecision, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::labelsPrecisionChanged);
+	        this, &AxisDock::labelsPrecisionChanged);
 	connect(ui.chkLabelsAutoPrecision, &QCheckBox::stateChanged, this, &AxisDock::labelsAutoPrecisionChanged);
 	connect(ui.cbLabelsDateTimeFormat, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::labelsDateTimeFormatChanged);
+	        this, &AxisDock::labelsDateTimeFormatChanged);
 	connect(ui.cbLabelsDateTimeFormat, &QComboBox::currentTextChanged,
-			this, &AxisDock::labelsDateTimeFormatChanged);
+	        this, &AxisDock::labelsDateTimeFormatChanged);
 	connect(ui.cbLabelsPosition, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::labelsPositionChanged);
+	        this, &AxisDock::labelsPositionChanged);
 	connect(ui.sbLabelsOffset, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::labelsOffsetChanged);
+	        this, &AxisDock::labelsOffsetChanged);
 	connect(ui.sbLabelsRotation, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::labelsRotationChanged);
+	        this, &AxisDock::labelsRotationChanged);
 	connect(ui.cbLabelsTextType, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::labelsTextTypeChanged);
+	        this, &AxisDock::labelsTextTypeChanged);
 	connect(cbLabelsTextColumn, &TreeViewComboBox::currentModelIndexChanged,
-			this, &AxisDock::labelsTextColumnChanged);
+	        this, &AxisDock::labelsTextColumnChanged);
 	connect(ui.kfrLabelsFont, &KFontRequester::fontSelected, this, &AxisDock::labelsFontChanged);
 	connect(ui.kcbLabelsFontColor, &KColorButton::changed, this, &AxisDock::labelsFontColorChanged);
 	connect(ui.cbLabelsBackgroundType, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::labelsBackgroundTypeChanged);
+	        this, &AxisDock::labelsBackgroundTypeChanged);
 	connect(ui.kcbLabelsBackgroundColor, &KColorButton::changed, this, &AxisDock::labelsBackgroundColorChanged);
 	connect(ui.leLabelsPrefix, &QLineEdit::textChanged, this, &AxisDock::labelsPrefixChanged);
 	connect(ui.leLabelsSuffix, &QLineEdit::textChanged, this, &AxisDock::labelsSuffixChanged);
 	connect(ui.sbLabelsOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::labelsOpacityChanged);
+	        this, &AxisDock::labelsOpacityChanged);
 
 	//"Grid"-tab
 	connect(ui.cbMajorGridStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::majorGridStyleChanged);
+	        this, &AxisDock::majorGridStyleChanged);
 	connect(ui.kcbMajorGridColor, &KColorButton::changed, this, &AxisDock::majorGridColorChanged);
 	connect(ui.sbMajorGridWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::majorGridWidthChanged);
+	        this, &AxisDock::majorGridWidthChanged);
 	connect(ui.sbMajorGridOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::majorGridOpacityChanged);
+	        this, &AxisDock::majorGridOpacityChanged);
 
 	connect(ui.cbMinorGridStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
-			this, &AxisDock::minorGridStyleChanged);
+	        this, &AxisDock::minorGridStyleChanged);
 	connect(ui.kcbMinorGridColor, &KColorButton::changed, this, &AxisDock::minorGridColorChanged);
 	connect(ui.sbMinorGridWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
-			this, &AxisDock::minorGridWidthChanged);
+	        this, &AxisDock::minorGridWidthChanged);
 	connect(ui.sbMinorGridOpacity, QOverload<int>::of(&QSpinBox::valueChanged),
-			this, &AxisDock::minorGridOpacityChanged);
+	        this, &AxisDock::minorGridOpacityChanged);
 
 	//template handler
 	auto* frame = new QFrame(this);
@@ -288,10 +288,10 @@ void AxisDock::init() {
 	ui.leScalingFactor->setValidator( new QDoubleValidator(ui.leScalingFactor) );
 
 	//TODO move this stuff to retranslateUI()
-    ui.cbPosition->addItem(i18n("Top")); // Left
-    ui.cbPosition->addItem(i18n("Bottom")); // Right
+	ui.cbPosition->addItem(i18n("Top")); // Left
+	ui.cbPosition->addItem(i18n("Bottom")); // Right
 	ui.cbPosition->addItem(i18n("Centered"));
-    ui.cbPosition->addItem(i18n("Logical"));
+	ui.cbPosition->addItem(i18n("Logical"));
 
 	// scales
 	for (const auto& name: RangeT::scaleNames)
@@ -441,7 +441,7 @@ void AxisDock::init() {
 
 void AxisDock::setModel() {
 	QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet,
-				AspectType::CantorWorksheet, AspectType::Column};
+	                       AspectType::CantorWorksheet, AspectType::Column};
 	cbMajorTicksColumn->setTopLevelClasses(list);
 	cbMinorTicksColumn->setTopLevelClasses(list);
 	cbLabelsTextColumn->setTopLevelClasses(list);
@@ -502,7 +502,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::aspectDescriptionChanged, this, &AxisDock::axisDescriptionChanged);
 	connect(m_axis, &Axis::orientationChanged, this, QOverload<Axis::Orientation>::of(&AxisDock::axisOrientationChanged));
 	connect(m_axis, QOverload<Axis::Position>::of(&Axis::positionChanged),
-			this, QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
+	        this, QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
 	connect(m_axis, &Axis::scaleChanged, this, &AxisDock::axisScaleChanged);
 	connect(m_axis, &Axis::autoScaleChanged, this, &AxisDock::axisAutoScaleChanged);
 	connect(m_axis, &Axis::startChanged, this, &AxisDock::axisStartChanged);
@@ -582,7 +582,7 @@ void AxisDock::updateLocale() {
 
 	//update the QLineEdits, avoid the change events
 	Lock lock(m_initializing);
-    ui.sbPosition->setLocale(numberLocale);
+	ui.sbPosition->setLocale(numberLocale);
 	ui.leStart->setText(numberLocale.toString(m_axis->range().start()));
 	ui.leEnd->setText(numberLocale.toString(m_axis->range().end()));
 
@@ -609,13 +609,13 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 void AxisDock::updatePlotRanges() const {
 	updatePlotRangeList(ui.cbPlotRanges);
 
-    Axis::Orientation orientation = m_axis->orientation();
-    Range<double> logicalRange;
-    if (orientation == Axis::Orientation::Horizontal)
-        logicalRange = m_axis->plot()->yRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->yIndex());
-    else
-        logicalRange = m_axis->plot()->xRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->xIndex());
-    spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, ui.sbPositionLogical->value());
+	Axis::Orientation orientation = m_axis->orientation();
+	Range<double> logicalRange;
+	if (orientation == Axis::Orientation::Horizontal)
+		logicalRange = m_axis->plot()->yRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->yIndex());
+	else
+		logicalRange = m_axis->plot()->xRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->xIndex());
+	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, ui.sbPositionLogical->value());
 }
 
 void AxisDock::updateAutoScale() {
@@ -640,15 +640,15 @@ void AxisDock::visibilityChanged(bool state) {
 void AxisDock::orientationChanged(int item) {
 	auto orientation{Axis::Orientation(item)};
 	if (orientation == Axis::Orientation::Horizontal) {
-        ui.cbPosition->setItemText(Top_Left, i18n("Top") );
-        ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom") );
-        //ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
+		ui.cbPosition->setItemText(Top_Left, i18n("Top") );
+		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom") );
+		//ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
 		ui.cbLabelsPosition->setItemText(1, i18n("Top") );
 		ui.cbLabelsPosition->setItemText(2, i18n("Bottom") );
 	} else { //vertical
-        ui.cbPosition->setItemText(Top_Left, i18n("Left") );
-        ui.cbPosition->setItemText(Bottom_Right, i18n("Right") );
-        //ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
+		ui.cbPosition->setItemText(Top_Left, i18n("Left") );
+		ui.cbPosition->setItemText(Bottom_Right, i18n("Right") );
+		//ui.cbPosition->setItemText(Center, i18n("Center") ); // must not updated
 		ui.cbLabelsPosition->setItemText(1, i18n("Right") );
 		ui.cbLabelsPosition->setItemText(2, i18n("Left") );
 	}
@@ -694,31 +694,39 @@ void AxisDock::positionChanged(int index) {
 
 	//map from the current index in the combo box to the enum value in Axis::Position,
 	//depends on the current orientation
-    bool logical = false;
-    Axis::Position position;
-    if (index == Logical) {
-        position = Axis::Position::Logical;
-        logical = true;
-    } else if (index == Center)
-        position = Axis::Position::Centered;
-    else if ( ui.cbOrientation->currentIndex() == 0 ) {
-        // horizontal
-        switch(index) {
-        case Bottom_Right: position = Axis::Position::Bottom; break;
-        case Top_Left:
-        default: position = Axis::Position::Top; break;
-        }
-    } else {
-        // vertical
-        switch(index) {
-        case Bottom_Right: position = Axis::Position::Right; break;
-        case Top_Left:
-        default: position = Axis::Position::Left; break;
-        }
-    }
+	bool logical = false;
+	Axis::Position position;
+	if (index == Logical) {
+		position = Axis::Position::Logical;
+		logical = true;
+	} else if (index == Center)
+		position = Axis::Position::Centered;
+	else if ( ui.cbOrientation->currentIndex() == 0 ) {
+		// horizontal
+		switch(index) {
+		case Bottom_Right:
+			position = Axis::Position::Bottom;
+			break;
+		case Top_Left:
+		default:
+			position = Axis::Position::Top;
+			break;
+		}
+	} else {
+		// vertical
+		switch(index) {
+		case Bottom_Right:
+			position = Axis::Position::Right;
+			break;
+		case Top_Left:
+		default:
+			position = Axis::Position::Left;
+			break;
+		}
+	}
 
-    ui.sbPosition->setVisible(!logical);
-    ui.sbPositionLogical->setVisible(logical);
+	ui.sbPosition->setVisible(!logical);
+	ui.sbPositionLogical->setVisible(logical);
 
 	for (auto* axis : m_axesList)
 		axis->setPosition(position);
@@ -731,17 +739,17 @@ void AxisDock::positionChanged(double value) {
 	if (m_initializing)
 		return;
 
-    double offset = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
-    for (auto* axis : m_axesList)
-        axis->setOffset(offset);
+	double offset = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* axis : m_axesList)
+		axis->setOffset(offset);
 }
 
 void AxisDock::logicalPositionChanged(double value) {
-    if (m_initializing)
-        return;
+	if (m_initializing)
+		return;
 
-    for (auto* axis : m_axesList)
-        axis->setLogicalPosition(value);
+	for (auto* axis : m_axesList)
+		axis->setLogicalPosition(value);
 }
 
 void AxisDock::scaleChanged(int index) {
@@ -847,7 +855,7 @@ void AxisDock::zeroOffsetChanged() {
 		return;
 
 	if (ui.leZeroOffset->text().isEmpty())	// default value
-			ui.leZeroOffset->setText("0");
+		ui.leZeroOffset->setText("0");
 
 	bool ok;
 	SET_NUMBER_LOCALE
@@ -869,7 +877,7 @@ void AxisDock::scalingFactorChanged() {
 		return;
 
 	if (ui.leScalingFactor->text().isEmpty())	// default value
-			ui.leScalingFactor->setText("1");
+		ui.leScalingFactor->setText("1");
 
 	bool ok;
 	SET_NUMBER_LOCALE
@@ -1054,7 +1062,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 		const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-					|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+		                 || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 		if (numeric) {
 			ui.lMajorTicksIncrementDateTime->hide();
 			dtsbMajorTicksIncrement->hide();
@@ -1106,7 +1114,7 @@ void AxisDock::majorTicksSpacingChanged() {
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-		|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+	                 || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
 	double spacing = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
 	double range = m_axis->range().length();
@@ -1287,7 +1295,7 @@ void AxisDock::minorTicksTypeChanged(int index) {
 		const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 		const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-					|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+		                 || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 		if (numeric) {
 			ui.lMinorTicksSpacingNumeric->show();
 			ui.sbMinorTicksSpacingNumeric->show();
@@ -1339,7 +1347,7 @@ void AxisDock::minorTicksSpacingChanged() {
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-		|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+	                 || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
 	double spacing = numeric ? ui.sbMinorTicksSpacingNumeric->value() : dtsbMinorTicksIncrement->value();
 	double range = m_axis->range().length();
@@ -1558,7 +1566,7 @@ void AxisDock::labelsTextTypeChanged(int index) {
 		const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 		const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 		bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+		                 || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 		ui.lLabelsFormat->setVisible(numeric);
 		ui.cbLabelsFormat->setVisible(numeric);
 		ui.chkLabelsAutoPrecision->setVisible(numeric);
@@ -1858,33 +1866,33 @@ void AxisDock::axisPositionChanged(Axis::Position position) {
 
 	//map from the enum Qt::Orientation to the index in the combo box
 	int index{static_cast<int>(position)};
-    switch(index) {
-    case static_cast<int>(Axis::Position::Top):
-    case static_cast<int>(Axis::Position::Left):
-        ui.cbPosition->setCurrentIndex(Top_Left);
-        break;
-    case static_cast<int>(Axis::Position::Bottom):
-    case static_cast<int>(Axis::Position::Right):
-        ui.cbPosition->setCurrentIndex(Bottom_Right);
-        break;
-    case static_cast<int>(Axis::Position::Centered):
-        ui.cbPosition->setCurrentIndex(Center);
-        break;
-    case static_cast<int>(Axis::Position::Logical):
-        ui.cbPosition->setCurrentIndex(Logical);
-    }
+	switch(index) {
+	case static_cast<int>(Axis::Position::Top):
+	case static_cast<int>(Axis::Position::Left):
+		ui.cbPosition->setCurrentIndex(Top_Left);
+		break;
+	case static_cast<int>(Axis::Position::Bottom):
+	case static_cast<int>(Axis::Position::Right):
+		ui.cbPosition->setCurrentIndex(Bottom_Right);
+		break;
+	case static_cast<int>(Axis::Position::Centered):
+		ui.cbPosition->setCurrentIndex(Center);
+		break;
+	case static_cast<int>(Axis::Position::Logical):
+		ui.cbPosition->setCurrentIndex(Logical);
+	}
 
 	m_initializing = false;
 }
 
 void AxisDock::axisPositionChanged(double value) {
-    const Lock lock(m_initializing);
-    ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
+	const Lock lock(m_initializing);
+	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 }
 
 void AxisDock::axisLogicalPositionChanged(double value) {
-    const Lock lock(m_initializing);
-    ui.sbPositionLogical->setValue(value);
+	const Lock lock(m_initializing);
+	ui.sbPositionLogical->setValue(value);
 }
 
 void AxisDock::axisScaleChanged(RangeT::Scale scale) {
@@ -2004,7 +2012,7 @@ void AxisDock::axisMajorTicksSpacingChanged(qreal increment) {
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+	                 || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
 	if (numeric)
 		ui.sbMajorTicksSpacingNumeric->setValue(increment);
@@ -2055,7 +2063,7 @@ void AxisDock::axisMinorTicksSpacingChanged(qreal increment) {
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex {cSystem->yIndex()};
 	bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+	                 || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
 	if (numeric)
 		ui.sbMinorTicksSpacingNumeric->setValue(increment);
@@ -2210,49 +2218,49 @@ void AxisDock::load() {
 	//General
 	ui.chkVisible->setChecked( m_axis->isVisible() );
 
-    Axis::Orientation orientation = m_axis->orientation();
-    ui.cbOrientation->setCurrentIndex( static_cast<int>(orientation) );
+	Axis::Orientation orientation = m_axis->orientation();
+	ui.cbOrientation->setCurrentIndex( static_cast<int>(orientation) );
 
-    Range<double> logicalRange;
-    if (orientation == Axis::Orientation::Horizontal) {
-        logicalRange = m_axis->plot()->yRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->yIndex());
-        ui.cbPosition->setItemText(Top_Left, i18n("Top"));
-        ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
-        ui.cbPosition->setItemText(Center, i18n("Centered"));
-    } else {
-        logicalRange = m_axis->plot()->xRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->xIndex());
-        ui.cbPosition->setItemText(Top_Left, i18n("Left"));
-        ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
-        ui.cbPosition->setItemText(Center, i18n("Centered"));
-    }
+	Range<double> logicalRange;
+	if (orientation == Axis::Orientation::Horizontal) {
+		logicalRange = m_axis->plot()->yRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->yIndex());
+		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
+		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
+		ui.cbPosition->setItemText(Center, i18n("Centered"));
+	} else {
+		logicalRange = m_axis->plot()->xRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->xIndex());
+		ui.cbPosition->setItemText(Top_Left, i18n("Left"));
+		ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
+		ui.cbPosition->setItemText(Center, i18n("Centered"));
+	}
 
 	int index{ static_cast<int>(m_axis->position()) };
-    bool logical = false;
-    switch(index) {
-    case static_cast<int>(Axis::Position::Top):
-    case static_cast<int>(Axis::Position::Left):
-        ui.cbPosition->setCurrentIndex(Top_Left);
-        break;
-    case static_cast<int>(Axis::Position::Bottom):
-    case static_cast<int>(Axis::Position::Right):
-        ui.cbPosition->setCurrentIndex(Bottom_Right);
-        break;
-    case static_cast<int>(Axis::Position::Centered):
-        ui.cbPosition->setCurrentIndex(Center);
-        break;
-    case static_cast<int>(Axis::Position::Logical):
-        ui.cbPosition->setCurrentIndex(Logical);
-        logical = true;
-    }
+	bool logical = false;
+	switch(index) {
+	case static_cast<int>(Axis::Position::Top):
+	case static_cast<int>(Axis::Position::Left):
+		ui.cbPosition->setCurrentIndex(Top_Left);
+		break;
+	case static_cast<int>(Axis::Position::Bottom):
+	case static_cast<int>(Axis::Position::Right):
+		ui.cbPosition->setCurrentIndex(Bottom_Right);
+		break;
+	case static_cast<int>(Axis::Position::Centered):
+		ui.cbPosition->setCurrentIndex(Center);
+		break;
+	case static_cast<int>(Axis::Position::Logical):
+		ui.cbPosition->setCurrentIndex(Logical);
+		logical = true;
+	}
 
-    ui.sbPositionLogical->setVisible(logical);
-    ui.sbPosition->setVisible(!logical);
+	ui.sbPositionLogical->setVisible(logical);
+	ui.sbPosition->setVisible(!logical);
 
-    SET_NUMBER_LOCALE
-    ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(m_axis->offset(), m_worksheetUnit));
+	SET_NUMBER_LOCALE
+	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(m_axis->offset(), m_worksheetUnit));
 
-    spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, m_axis->logicalPosition());
-    ui.sbPositionLogical->setValue(m_axis->logicalPosition());
+	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, m_axis->logicalPosition());
+	ui.sbPositionLogical->setValue(m_axis->logicalPosition());
 
 	ui.cbScale->setCurrentIndex( (int)m_axis->scale() );
 	ui.chkAutoScale->setChecked( m_axis->autoScale() );
@@ -2267,7 +2275,7 @@ void AxisDock::load() {
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 	const bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-		|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+	                       || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
 	//ranges
 	ui.lStart->setVisible(numeric);
@@ -2406,7 +2414,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 	const bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+	                       || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
 	//General
 	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int) m_axis->orientation()) );
@@ -2418,8 +2426,8 @@ void AxisDock::loadConfig(KConfig& config) {
 		ui.cbPosition->setCurrentIndex(index);
 
 	SET_NUMBER_LOCALE
-    ui.sbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
-    ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
+	ui.sbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
+	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
 	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) m_axis->scale()) );
 	ui.chkAutoScale->setChecked( group.readEntry("AutoScale", m_axis->autoScale()) );
 	ui.leStart->setText( numberLocale.toString(group.readEntry("Start", m_axis->range().start())) );
@@ -2526,7 +2534,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 	if (plot) {
 		numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
-			|| (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+		            || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 	}
 
 	//General
@@ -2543,9 +2551,9 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 			group.writeEntry("Position", ui.cbPosition->currentIndex() + 2);
 	}
 
-    SET_NUMBER_LOCALE
-    group.writeEntry("LogicalPosition",  ui.sbPositionLogical->value());
-    group.writeEntry("PositionOffset",  Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
+	SET_NUMBER_LOCALE
+	group.writeEntry("LogicalPosition",  ui.sbPositionLogical->value());
+	group.writeEntry("PositionOffset",  Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
 	group.writeEntry("Scale", ui.cbScale->currentIndex());
 	group.writeEntry("Start", numberLocale.toDouble(ui.leStart->text()));
 	group.writeEntry("End", numberLocale.toDouble(ui.leEnd->text()));
