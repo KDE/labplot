@@ -2535,7 +2535,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	if (ui.cbPosition->currentIndex() == 2) {
 		group.writeEntry("Position", static_cast<int>(Axis::Position::Centered));
 	} else if (ui.cbPosition->currentIndex() == 3) {
-		group.writeEntry("Position", static_cast<int>(Axis::Position::Custom));
+		group.writeEntry("Position", static_cast<int>(Axis::Position::Centered));
 	} else {
 		if (ui.cbOrientation->currentIndex() == static_cast<int>(Axis::Orientation::Horizontal))
 			group.writeEntry("Position", ui.cbPosition->currentIndex());

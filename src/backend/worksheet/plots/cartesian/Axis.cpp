@@ -132,7 +132,7 @@ void Axis::init() {
 	KConfigGroup group = config.group("Axis");
 
 	d->autoScale = true;
-	d->position = Axis::Position::Custom;
+	d->position = Axis::Position::Centered;
 	d->offset = group.readEntry("PositionOffset", 0);
 	d->scale = (RangeT::Scale) group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
 	d->autoScale = group.readEntry("AutoScale", true);

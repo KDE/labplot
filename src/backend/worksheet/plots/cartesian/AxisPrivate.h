@@ -71,7 +71,7 @@ public:
 	Axis::Orientation orientation;	//!< horizontal or vertical
 	Axis::Position position; 	//!< left, right, bottom, top or custom (usually not changed after creation)
 	RangeT::Scale scale;
-	double offset;			//!< offset from zero in the direction perpendicular to the axis
+	double offset{0};			//!< offset from zero in the direction perpendicular to the axis
 	Range<double> range;		//!< coordinate range of the axis line
 	qreal scalingFactor;
 	qreal zeroOffset;
