@@ -37,6 +37,7 @@
 
 class AbstractAspect;
 class QComboBox;
+class QDoubleSpinBox;
 
 struct Lock {
 	inline explicit Lock(bool& variable)
@@ -64,6 +65,7 @@ public:
 	virtual void updateLocale() {};
 	virtual void updateUnits() {};
 	virtual void updatePlotRanges() const {};	// used in worksheet element docks
+    static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue=NAN);
 
 protected:
 	bool m_initializing{false};

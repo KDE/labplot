@@ -75,6 +75,7 @@ public:
 	Range<double> range;		//!< coordinate range of the axis line
 	qreal scalingFactor;
 	qreal zeroOffset;
+    double logicalPosition{0};
 
 	//line
 	QVector<QLineF> lines;

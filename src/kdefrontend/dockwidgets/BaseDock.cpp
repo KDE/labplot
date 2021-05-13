@@ -118,3 +118,27 @@ void BaseDock::commentChanged() {
 
 	m_aspect->setComment(m_leComment->text());
 }
+
+void BaseDock::spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue)
+{
+    double min, max;
+    if (range.start() > range.end()) {
+        min = range.end();
+        max = range.start();
+    } else {
+        min = range.start();
+        max = range.end();
+    }
+
+    if (newValue != NAN) {
+        if (newValue < min)
+            min = newValue;
+        if (newValue > max)
+            max = newValue;
+    }
+    spinbox->setMinimum(min);
+    spinbox->setMaximum(max);
+    auto singlestep = abs(min - max)/100;
+    spinbox->setSingleStep(singlestep);
+    spinbox->setDecimals(nsl_math_decimal_places(singlestep));
+}

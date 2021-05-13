@@ -83,7 +83,8 @@ private slots:
 	void visibilityChanged(bool);
 	void orientationChanged(int);
 	void positionChanged(int);
-	void positionChanged();
+    void positionChanged(double value);
+    void logicalPositionChanged(double value);
 	void scaleChanged(int);
 	void autoScaleChanged(int);
 	void startChanged();
@@ -163,6 +164,7 @@ private slots:
 	void axisOrientationChanged(Axis::Orientation);
 	void axisPositionChanged(Axis::Position);
 	void axisPositionChanged(double);
+    void axisLogicalPositionChanged(double);
 	void axisScaleChanged(RangeT::Scale);
 	void axisAutoScaleChanged(bool);
 	void axisStartChanged(double);

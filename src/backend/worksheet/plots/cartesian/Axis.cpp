@@ -387,6 +387,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, Range<double>, range, range)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
+BASIC_SHARED_D_READER_IMPL(Axis, double, logicalPosition, logicalPosition)
 
 BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, titleOffsetX, titleOffsetX)
@@ -554,6 +555,13 @@ void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
 	if (zeroOffset != d->zeroOffset)
 		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, ki18n("%1: set axis zero offset")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetLogicalPosition, double, logicalPosition, retransform);
+void Axis::setLogicalPosition(double pos) {
+    Q_D(Axis);
+    if (pos != d->logicalPosition)
+        exec(new AxisSetLogicalPositionCmd(d, pos, ki18n("%1: set axis logical position")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform);
@@ -1029,35 +1037,84 @@ void AxisPrivate::retransformLine() {
 	lines.clear();
 
 	QPointF startPoint, endPoint;
-
-	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem->yIndex() };
 	if (orientation == Axis::Orientation::Horizontal) {
-		if (position == Axis::Position::Top)
-			offset = plot()->yRange(yIndex).end();
-		else if (position == Axis::Position::Bottom)
-			offset = plot()->yRange(yIndex).start();
-		else if (position == Axis::Position::Centered)
-			offset = plot()->yRange(yIndex).center();
+        if (position == Axis::Position::Logical) {
+            startPoint = QPointF(range.start(), logicalPosition);
+            endPoint = QPointF(range.end(), logicalPosition);
+            lines.append(QLineF(startPoint, endPoint));
+        //	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
+            lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
+        } else {
+            WorksheetElement::PositionWrapper wrapper;
+            if (position == Axis::Position::Top)
+                wrapper.verticalPosition = WorksheetElement::VerticalPosition::Top;
+            else if (position == Axis::Position::Centered)
+                wrapper.verticalPosition = WorksheetElement::VerticalPosition::Center;
+            else // (position == Axis::Position::Bottom) // default
+                wrapper.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
 
-		startPoint = QPointF(range.start(), offset);
-		endPoint = QPointF(range.end(), offset);
+            QRectF rect = q->m_plot->dataRect();
+//            QGraphicsItem* parent = parentItem();
+//            assert(parent);
+//            if (parent) {
+//                rect = parent->boundingRect();
+//            }/* else {
+//                if (!scene())
+//                    return false;
+
+//                rect = scene()->sceneRect();
+//            }*/
+
+            wrapper.point = QPointF(offset, offset);
+            auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+
+
+            //auto logicPos = q->cSystem->mapSceneToLogical(pos).y();
+            startPoint = QPointF(rect.x(), pos.y());
+            endPoint = QPointF(rect.x() + rect.width(), pos.y());
+            lines.append(QLineF(startPoint, endPoint));
+        }
 	} else { // vertical
-		if (position == Axis::Position::Left)
-			offset = plot()->xRange(xIndex).start();
-		else if (position == Axis::Position::Right)
-			offset = plot()->xRange(xIndex).end();
-		else if (position == Axis::Position::Centered)
-			offset = plot()->xRange(xIndex).center();
+        if (position == Axis::Position::Logical) {
+            startPoint = QPointF(logicalPosition, range.start());
+            endPoint = QPointF(logicalPosition, range.end());
+            lines.append(QLineF(startPoint, endPoint));
+        //	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
+            lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
+        } else {
+            WorksheetElement::PositionWrapper wrapper;
+            if (position == Axis::Position::Left)
+                wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Left;
+            else if (position == Axis::Position::Centered)
+                wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
+            else // (position == Axis::Position::Right) // default
+                wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
 
-		startPoint = QPointF(offset, range.start());
-		endPoint = QPointF(offset, range.end());
-	}
+            QRectF rect;
 
-	QDEBUG(Q_FUNC_INFO << ", start/end point: " << startPoint << "/" << endPoint)
-	lines.append(QLineF(startPoint, endPoint));
-//	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
-	lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
-//	QDEBUG(Q_FUNC_INFO << ", LINES after map = " << lines)
+            rect = q->m_plot->dataRect();
+//            QGraphicsItem* parent = parentItem();
+//            assert(parent);
+//            if (parent) {
+//                rect = parent->boundingRect();
+//            }/* else {
+//                if (!scene())
+//                    return false;
+
+//                rect = scene()->sceneRect();
+//            }*/
+
+            wrapper.point = QPointF(offset, offset);
+            auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+
+
+            //auto logicPos = q->cSystem->mapSceneToLogical(pos).x();
+            startPoint = QPointF(pos.x(), rect.y() + rect.height()); // draw from bottom to top
+            endPoint = QPointF(pos.x(), rect.y());
+            lines.append(QLineF(startPoint, endPoint));
+        }
+    }
+
 	for (const auto& line : lines) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
@@ -1347,7 +1404,7 @@ void AxisPrivate::retransformTicks() {
 	const int yDirection = q->cSystem->yDirection();
 	const double middleX = plot()->xRange(xIndex).center();
 	const double middleY = plot()->yRange(yIndex).center();
-	bool valid;
+    bool valid = true;
 
 	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
@@ -1399,28 +1456,32 @@ void AxisPrivate::retransformTicks() {
 				tmpMinorTicksNumber = 0;
 		}
 
+        auto yAnchorPoint = lines[0].p1().y();
+        auto xAnchorPoint = lines[0].p1().x();
+
 		//calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks) {
 			if (orientation == Axis::Orientation::Horizontal) {
-				anchorPoint.setX(majorTickPos);
-				anchorPoint.setY(offset);
-				valid = transformAnchor(&anchorPoint);
-				if (valid) {
-					if (offset < middleY) {
+                // TODO: do the same thing as transformAnchor to validate!
+                anchorPoint.setX(q->cSystem->mapLogicalToScene(QPointF(majorTickPos, 0)).x());
+                anchorPoint.setY(yAnchorPoint);
+                //valid = transformAnchor(&anchorPoint);
+                //if (valid) {
+                    if (yAnchorPoint < middleY) {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
 					} else {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut)  ? yDirection * majorTicksLength  : 0);
 						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
 					}
-				}
+                //}
 			} else { // vertical
-				anchorPoint.setY(majorTickPos);
-				anchorPoint.setX(offset);
-				valid = transformAnchor(&anchorPoint);
+                anchorPoint.setY(q->cSystem->mapLogicalToScene(QPointF(majorTickPos, 0)).y());
+                anchorPoint.setX(xAnchorPoint);
+                //valid = transformAnchor(&anchorPoint);
 
 				if (valid) {
-					if (offset < middleX) {
+                    if (xAnchorPoint < middleX) {
 						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
 						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
 					} else {
@@ -1496,12 +1557,12 @@ void AxisPrivate::retransformTicks() {
 
 				//calculate start and end points for minor tick's line
 				if (orientation == Axis::Orientation::Horizontal) {
-					anchorPoint.setX(minorTickPos);
-					anchorPoint.setY(offset);
-					valid = transformAnchor(&anchorPoint);
+                    anchorPoint.setX(q->cSystem->mapLogicalToScene(QPointF(minorTickPos, 0)).x());
+                    anchorPoint.setY(yAnchorPoint);
+                    //valid = transformAnchor(&anchorPoint);
 
 					if (valid) {
-						if (offset < middleY) {
+                        if (yAnchorPoint < middleY) {
 							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
 							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
 						} else {
@@ -1510,12 +1571,12 @@ void AxisPrivate::retransformTicks() {
 						}
 					}
 				} else { // vertical
-					anchorPoint.setY(minorTickPos);
-					anchorPoint.setX(offset);
-					valid = transformAnchor(&anchorPoint);
+                    anchorPoint.setY(q->cSystem->mapLogicalToScene(QPointF(minorTickPos, 0)).y());
+                    anchorPoint.setX(xAnchorPoint);
+                    //valid = transformAnchor(&anchorPoint);
 
 					if (valid) {
-						if (offset < middleX) {
+                        if (xAnchorPoint < middleX) {
 							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
 							endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
 						} else {
@@ -2423,6 +2484,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "position", QString::number(static_cast<int>(d->position)) );
 	writer->writeAttribute( "scale", QString::number(static_cast<int>(d->scale)) );
 	writer->writeAttribute( "offset", QString::number(d->offset) );
+    writer->writeAttribute( "logicalPosition", QString::number(d->logicalPosition) );
 	writer->writeAttribute( "start", QString::number(d->range.start()) );
 	writer->writeAttribute( "end", QString::number(d->range.end()) );
 	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
@@ -2536,6 +2598,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("position", position, Axis::Position);
 			READ_INT_VALUE("scale", scale, RangeT::Scale);
 			READ_DOUBLE_VALUE("offset", offset);
+            READ_DOUBLE_VALUE("logicalPosition", logicalPosition);
 			READ_DOUBLE_VALUE("start", range.start());
 			READ_DOUBLE_VALUE("end", range.end());
 			READ_DOUBLE_VALUE("scalingFactor", scalingFactor);

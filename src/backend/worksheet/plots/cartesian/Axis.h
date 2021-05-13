@@ -44,7 +44,7 @@ class Axis: public WorksheetElement {
 	Q_OBJECT
 
 public:
-	enum class Position {Top, Bottom, Left, Right, Centered, Custom};
+    enum class Position {Top, Bottom, Left, Right, Centered, Custom, Logical};
 	enum class LabelsFormat {Decimal, ScientificE, Powers10, Powers2, PowersE, MultipliesPi, Scientific};
 	enum TicksFlags {
 		noTicks = 0x00,
@@ -127,6 +127,7 @@ public:
 	void setRange(const double, const double);
 	void setOffset(const double, const bool=true);
 	double offset() const;
+    BASIC_D_ACCESSOR_DECL(double, logicalPosition, LogicalPosition)
 	BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor)
 	BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset)
 
@@ -241,6 +242,7 @@ signals:
 	void endChanged(double);
 	void rangeChanged(Range<double>);
 	void zeroOffsetChanged(qreal);
+    void logicalPositionChanged(double);
 	void scalingFactorChanged(qreal);
 
 	//title
