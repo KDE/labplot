@@ -9,8 +9,8 @@ set(TOOLS_DIR tools)
 set(CMAKE_AUTOMOC ON)
 set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
-# do not process this file
-set_property(SOURCE gsl_parser.h PROPERTY SKIP_AUTOMOC ON)
+# do not process these files
+set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
 
 set(GUI_SOURCES
     ${KDEFRONTEND_DIR}/DatasetModel.cpp
@@ -506,7 +506,7 @@ target_link_libraries( labplot2lib ${CFITSIO_LIBRARIES} )
 target_link_libraries( labplot2lib ${LIBCERF_LIBRARIES} )
 target_link_libraries( labplot2lib ${LZ4_LIBRARIES} )
 target_link_libraries( labplot2lib ${MATIO_LIBRARIES} )
-target_link_libraries( labplot2lib ${ZLIB_LIBRARIES})
+target_link_libraries( labplot2lib ${ZLIB_LIBRARIES} )
 
 IF (ENABLE_READSTAT)
 	# build before using
