@@ -241,66 +241,6 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 	}
 }
 
-double CartesianCoordinateSystem::mapLogicalXToScene(double x, bool& ok, MappingFlags flags) const {
-    const QRectF pageRect = d->plot->dataRect();
-    const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
-	const bool limit = flags & MappingFlag::Limit;
-    const double xPage = pageRect.x();
-    const double w = pageRect.width();
-	ok = false;
-
-    for (const auto* xScale : d->xScales) {
-        if (!xScale) continue;
-        if (!xScale->contains(x))
-            continue;
-        if (!xScale->map(&x))
-            continue;
-
-        if (limit) {
-            // set to max/min if passed over
-            x = qBound(xPage, x, xPage + w);
-        }
-
-		// TODO: create the limit x >= xPage &&
-		// Implement as in rectContainsPoint()
-		if (noPageClipping || limit || (x >= xPage && x <= xPage + w)) {
-			ok = true;
-            return x;
-		}
-    }
-    return NAN;
-}
-
-double CartesianCoordinateSystem::mapLogicalYToScene(double y, bool& ok, MappingFlags flags) const {
-	const QRectF pageRect = d->plot->dataRect();
-	const bool noPageClipping = pageRect.isNull() || (flags & MappingFlag::SuppressPageClipping);
-	const bool limit = flags & MappingFlag::Limit;
-	const double yPage = pageRect.y();
-	const double h = pageRect.height();
-	ok = false;
-
-	for (const auto* yScale : d->yScales) {
-		if (!yScale) continue;
-		if (!yScale->contains(y))
-			continue;
-		if (!yScale->map(&y))
-			continue;
-
-		if (limit) {
-			// set to max/min if passed over
-			y = qBound(yPage, y, yPage + h);
-		}
-
-		// TODO: create the limit y >= yPage && ...
-		// Implement as in rectContainsPoint()
-		if (noPageClipping || limit || (y >= yPage && y <= yPage + h)) {
-			ok = true;
-			return y;
-		}
-	}
-	return NAN;
-}
-
 /*
  * Map a single point
  * */

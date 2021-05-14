@@ -1444,7 +1444,10 @@ void AxisPrivate::retransformTicks() {
 		//calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks) {
 			if (orientation == Axis::Orientation::Horizontal) {
-				anchorPoint.setX(q->cSystem->mapLogicalXToScene(majorTickPos, valid));
+				auto startY = q->plot()->yRange(q->plot()->coordinateSystem(q->coordinateSystemIndex())->yIndex()).start();
+				anchorPoint.setX(majorTickPos);
+				anchorPoint.setY(startY); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
+				valid = transformAnchor(&anchorPoint);
 				anchorPoint.setY(yAnchorPoint);
 				if (valid) {
 					if (yAnchorPoint < middleY) {
@@ -1456,7 +1459,10 @@ void AxisPrivate::retransformTicks() {
 					}
 				}
 			} else { // vertical
-				anchorPoint.setY(q->cSystem->mapLogicalYToScene(majorTickPos, valid));
+				auto startX = q->plot()->xRange(q->plot()->coordinateSystem(q->coordinateSystemIndex())->xIndex()).start();
+				anchorPoint.setY(majorTickPos);
+				anchorPoint.setX(startX); // set dummy logical point, but it must be within the datarect, otherwise valid will be always false
+				valid = transformAnchor(&anchorPoint);
 				anchorPoint.setX(xAnchorPoint);
 				if (valid) {
 					if (xAnchorPoint < middleX) {
@@ -1535,7 +1541,10 @@ void AxisPrivate::retransformTicks() {
 
 				//calculate start and end points for minor tick's line
 				if (orientation == Axis::Orientation::Horizontal) {
-					anchorPoint.setX(q->cSystem->mapLogicalXToScene(minorTickPos, valid));
+					auto startY = q->plot()->yRange(q->plot()->coordinateSystem(q->coordinateSystemIndex())->yIndex()).start();
+					anchorPoint.setX(minorTickPos);
+					anchorPoint.setY(startY);
+					valid = transformAnchor(&anchorPoint);
 					anchorPoint.setY(yAnchorPoint);
 					if (valid) {
 						if (yAnchorPoint < middleY) {
@@ -1547,7 +1556,10 @@ void AxisPrivate::retransformTicks() {
 						}
 					}
 				} else { // vertical
-					anchorPoint.setY(q->cSystem->mapLogicalYToScene(minorTickPos, valid));
+					auto startX = q->plot()->xRange(q->plot()->coordinateSystem(q->coordinateSystemIndex())->xIndex()).start();
+					anchorPoint.setY(minorTickPos);
+					anchorPoint.setX(startX);
+					valid = transformAnchor(&anchorPoint);
 					anchorPoint.setX(xAnchorPoint);
 					if (valid) {
 						if (xAnchorPoint < middleX) {
