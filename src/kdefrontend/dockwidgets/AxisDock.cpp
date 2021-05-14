@@ -2224,14 +2224,18 @@ void AxisDock::load() {
 	Axis::Orientation orientation = m_axis->orientation();
 	ui.cbOrientation->setCurrentIndex( static_cast<int>(orientation) );
 
-	Range<double> logicalRange;
+	const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
+	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
+	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
+
+	Range<double> logicalRange(0,0);
 	if (orientation == Axis::Orientation::Horizontal) {
-		logicalRange = m_axis->plot()->yRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->yIndex());
+		logicalRange = plot->yRange(yIndex);
 		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
 		ui.cbPosition->setItemText(Bottom_Right, i18n("Bottom"));
 		ui.cbPosition->setItemText(Center, i18n("Centered"));
 	} else {
-		logicalRange = m_axis->plot()->xRange(m_axis->plot()->coordinateSystem(m_axis->coordinateSystemIndex())->xIndex());
+		logicalRange = plot->xRange(xIndex);
 		ui.cbPosition->setItemText(Top_Left, i18n("Left"));
 		ui.cbPosition->setItemText(Bottom_Right, i18n("Right"));
 		ui.cbPosition->setItemText(Center, i18n("Centered"));
@@ -2274,9 +2278,6 @@ void AxisDock::load() {
 	ui.sbMajorTicksSpacingNumeric->setSingleStep(m_axis->majorTicksSpacing());
 
 	//depending on the range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
-	const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
-	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
-	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 	const bool numeric = ( (m_axis->orientation() == Axis::Orientation::Horizontal && plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
 	                       || (m_axis->orientation() == Axis::Orientation::Vertical && plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
 
