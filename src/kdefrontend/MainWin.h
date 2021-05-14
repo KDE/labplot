@@ -45,6 +45,7 @@ class Datapicker;
 class Spreadsheet;
 class Matrix;
 class GuiObserver;
+class AspectDock;
 class AxisDock;
 class CursorDock;
 class InfoElementDock;
@@ -224,6 +225,7 @@ private:
 
 	//Docks
 	QStackedWidget* stackedWidget{nullptr};
+	AspectDock* aspectDock{nullptr};
 	AxisDock* axisDock{nullptr};
 	QDockWidget* cursorDock{nullptr};
 	CursorDock* cursorWidget{nullptr};

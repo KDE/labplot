@@ -60,6 +60,7 @@ Copyright            : (C) 2016 Garvit Khatri (garvitdelhi@gmail.com)
 #include "backend/datapicker/DatapickerCurve.h"
 #include "commonfrontend/ProjectExplorer.h"
 #include "kdefrontend/MainWin.h"
+#include "kdefrontend/dockwidgets/AspectDock.h"
 #include "kdefrontend/dockwidgets/AxisDock.h"
 #include "kdefrontend/dockwidgets/InfoElementDock.h"
 #include "kdefrontend/dockwidgets/NoteDock.h"
@@ -444,9 +445,17 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	case AspectType::DatapickerImage:
 	case AspectType::DatapickerPoint:
 	case AspectType::Folder:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Folder"));
+		raiseDock(m_mainWindow->aspectDock, m_mainWindow->stackedWidget);
+		m_mainWindow->aspectDock->setAspects(selectedAspects);
+		break;
 	case AspectType::PlotArea:
 	case AspectType::SimpleFilterColumn:
 	case AspectType::Workbook:
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Workbook"));
+		raiseDock(m_mainWindow->aspectDock, m_mainWindow->stackedWidget);
+		m_mainWindow->aspectDock->setAspects(selectedAspects);
+		break;
 	case AspectType::WorksheetElement:
 	case AspectType::WorksheetElementContainer:
 	case AspectType::WorksheetElementGroup:
