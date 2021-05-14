@@ -609,6 +609,9 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 void AxisDock::updatePlotRanges() const {
 	updatePlotRangeList(ui.cbPlotRanges);
 
+	if (m_axis->coordinateSystemCount() == 0)
+		return;
+
 	Axis::Orientation orientation = m_axis->orientation();
 	Range<double> logicalRange;
 	if (orientation == Axis::Orientation::Horizontal)
