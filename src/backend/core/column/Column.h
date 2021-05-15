@@ -102,6 +102,8 @@ public:
 	void* data() const;
 	bool hasValues() const;
 	bool hasValueLabels() const;
+	void removeValueLabel(const QString&);
+	void clearValueLabels();
 
 	Properties properties() const override;
 	void invalidateProperties();

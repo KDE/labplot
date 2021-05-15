@@ -89,6 +89,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/spreadsheet/ExportSpreadsheetDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/AddSubtractValueDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/AddValueLabelDialog.cpp
+	${KDEFRONTEND_DIR}/spreadsheet/BatchEditValueLabelsDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/DropValuesDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/FormattingHeatmapDialog.cpp
 	${KDEFRONTEND_DIR}/spreadsheet/GoToDialog.cpp

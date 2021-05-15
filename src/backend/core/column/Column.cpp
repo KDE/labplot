@@ -1030,6 +1030,46 @@ bool Column::hasValueLabels() const {
 	return d->hasValueLabels();
 }
 
+void Column::removeValueLabel(const QString& key) {
+	if (!d->hasValueLabels())
+		return;
+
+	switch (d->columnMode()) {
+	case AbstractColumn::ColumnMode::Numeric: {
+		auto labels = valueLabels();
+		labels.remove(key.toDouble());
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: {
+		auto labels = intValueLabels();
+		labels.remove(key.toInt());
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		auto labels = bigIntValueLabels();
+		labels.remove(key.toLongLong());
+		break;
+	}
+	case AbstractColumn::ColumnMode::Text: {
+		auto labels = textValueLabels();
+		labels.remove(key);
+		break;
+	}
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::DateTime: {
+		auto labels = dateTimeValueLabels();
+		auto* filter = static_cast<DateTime2StringFilter*>(outputFilter());
+		labels.remove(QDateTime::fromString(key, filter->format()));
+		break;
+	}
+	}
+}
+
+void Column::clearValueLabels() {
+	d->clearValueLabels();
+}
+
 const QMap<QString, QString>& Column::textValueLabels() {
 	return d->textValueLabels();
 }

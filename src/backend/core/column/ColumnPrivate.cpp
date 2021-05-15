@@ -1045,6 +1045,36 @@ bool ColumnPrivate::hasValueLabels() const {
 	return (m_labels != nullptr);
 }
 
+void ColumnPrivate::clearValueLabels() {
+	if (!hasValueLabels())
+		return;
+
+	switch (m_column_mode) {
+	case AbstractColumn::ColumnMode::Numeric: {
+		static_cast<QMap<double, QString>*>(m_labels)->clear();
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: {
+		static_cast<QMap<int, QString>*>(m_labels)->clear();
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		static_cast<QMap<qint64, QString>*>(m_labels)->clear();
+		break;
+	}
+	case AbstractColumn::ColumnMode::Text: {
+		static_cast<QMap<QString, QString>*>(m_labels)->clear();
+		break;
+	}
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::DateTime: {
+		static_cast<QMap<QDateTime, QString>*>(m_labels)->clear();
+		break;
+	}
+	}
+}
+
 const QMap<QString, QString>& ColumnPrivate::textValueLabels() {
 	initLabels();
 	return *(static_cast<QMap<QString, QString>*>(m_labels));

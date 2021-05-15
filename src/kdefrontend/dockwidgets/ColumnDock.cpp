@@ -37,6 +37,7 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "kdefrontend/spreadsheet/AddValueLabelDialog.h"
+#include "kdefrontend/spreadsheet/BatchEditValueLabelsDialog.h"
 
 #include <KLocalizedString>
 
@@ -156,7 +157,84 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	updateTypeWidgets(m_column->columnMode());
 	ui.cbPlotDesignation->setCurrentIndex( int(m_column->plotDesignation()) );
 
-	//labels
+	//show value labels of the first column if all selected columns have the same mode
+	if (sameMode)
+		showValueLabels();
+	else {
+		for (int i = 0; ui.twLabels->rowCount(); ++i)
+			ui.twLabels->removeRow(0);
+	}
+
+	// slots
+	connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::columnDescriptionChanged);
+	connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
+	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
+	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
+	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
+
+	//don't allow to change the column type at least one non-editable column
+	if (sameMode)
+		ui.cbType->setEnabled(!nonEditable);
+
+	m_initializing = false;
+}
+
+/*!
+  depending on the currently selected column type (column mode) updates the widgets for the column format,
+  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
+  Called when the type (column mode) is changed.
+*/
+void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
+	const Lock lock(m_initializing);
+	ui.cbType->setCurrentIndex(ui.cbType->findData(static_cast<int>(mode)));
+	switch (mode) {
+	case AbstractColumn::ColumnMode::Numeric: {
+			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
+			ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
+			ui.sbPrecision->setValue(filter->numDigits());
+			break;
+		}
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::DateTime: {
+			auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
+// 			DEBUG("	set column format: " << STDSTRING(filter->format()));
+			ui.cbDateTimeFormat->setCurrentIndex(ui.cbDateTimeFormat->findData(filter->format()));
+			break;
+		}
+	case AbstractColumn::ColumnMode::Integer:	// nothing to set
+	case AbstractColumn::ColumnMode::BigInt:
+	case AbstractColumn::ColumnMode::Text:
+		break;
+	}
+
+	//hide all the format related widgets first and
+	//then show only what is required depending of the column mode(s)
+	ui.lNumericFormat->hide();
+	ui.cbNumericFormat->hide();
+	ui.lPrecision->hide();
+	ui.sbPrecision->hide();
+	ui.lDateTimeFormat->hide();
+	ui.cbDateTimeFormat->hide();
+
+	if (mode == AbstractColumn::ColumnMode::Numeric) {
+		ui.lNumericFormat->show();
+		ui.cbNumericFormat->show();
+	}
+
+	//precision is only available for Numeric
+	if (mode == AbstractColumn::ColumnMode::Numeric) {
+		ui.lPrecision->show();
+		ui.sbPrecision->show();
+	}
+
+	if (mode == AbstractColumn::ColumnMode::DateTime) {
+		ui.lDateTimeFormat->show();
+		ui.cbDateTimeFormat->show();
+	}
+}
+
+void ColumnDock::showValueLabels() {
 	for (int i = 0; ui.twLabels->rowCount(); ++i)
 		ui.twLabels->removeRow(0);
 
@@ -230,81 +308,13 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		}
 		}
 	}
-
-	// slots
-	connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::columnDescriptionChanged);
-	connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
-	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
-	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
-	connect(m_column, &AbstractColumn::plotDesignationChanged, this, &ColumnDock::columnPlotDesignationChanged);
-
-	//don't allow to change the column type at least one non-editable column
-	if (sameMode)
-		ui.cbType->setEnabled(!nonEditable);
-
-	m_initializing = false;
-}
-
-/*!
-  depending on the currently selected column type (column mode) updates the widgets for the column format,
-  shows/hides the allowed widgets, fills the corresponding combobox with the possible entries.
-  Called when the type (column mode) is changed.
-*/
-void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
-	const Lock lock(m_initializing);
-	ui.cbType->setCurrentIndex(ui.cbType->findData((int)mode));
-	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric: {
-			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
-			ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
-			ui.sbPrecision->setValue(filter->numDigits());
-			break;
-		}
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::DateTime: {
-			auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
-// 			DEBUG("	set column format: " << STDSTRING(filter->format()));
-			ui.cbDateTimeFormat->setCurrentIndex(ui.cbDateTimeFormat->findData(filter->format()));
-			break;
-		}
-	case AbstractColumn::ColumnMode::Integer:	// nothing to set
-	case AbstractColumn::ColumnMode::BigInt:
-	case AbstractColumn::ColumnMode::Text:
-		break;
-	}
-
-	//hide all the format related widgets first and
-	//then show only what is required depending of the column mode(s)
-	ui.lNumericFormat->hide();
-	ui.cbNumericFormat->hide();
-	ui.lPrecision->hide();
-	ui.sbPrecision->hide();
-	ui.lDateTimeFormat->hide();
-	ui.cbDateTimeFormat->hide();
-
-	if (mode == AbstractColumn::ColumnMode::Numeric) {
-		ui.lNumericFormat->show();
-		ui.cbNumericFormat->show();
-	}
-
-	//precision is only available for Numeric
-	if (mode == AbstractColumn::ColumnMode::Numeric) {
-		ui.lPrecision->show();
-		ui.sbPrecision->show();
-	}
-
-	if (mode == AbstractColumn::ColumnMode::DateTime) {
-		ui.lDateTimeFormat->show();
-		ui.cbDateTimeFormat->show();
-	}
 }
 
 //*************************************************************
 //******** SLOTs for changes triggered in ColumnDock **********
 //*************************************************************
 void ColumnDock::retranslateUi() {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 
 	ui.cbType->clear();
 	ui.cbType->addItem(i18n("Numeric"), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Numeric)));
@@ -327,23 +337,26 @@ void ColumnDock::retranslateUi() {
 	ui.cbPlotDesignation->addItem(i18n("Y-error -"));
 	ui.cbPlotDesignation->addItem(i18n("Y-error +"));
 
-	m_initializing = false;
+	ui.bAddLabel->setToolTip(i18n("Add a new value label"));
+	ui.bRemoveLabel->setToolTip(i18n("Remove the selected value label"));
+	ui.bBatchEditLabels->setToolTip(i18n("Modify multiple values labels in a batch mode"));
 }
 
 /*!
   called when the type (column mode - numeric, text etc.) of the column was changed.
 */
 void ColumnDock::typeChanged(int index) {
-	DEBUG("ColumnDock::typeChanged()");
+	DEBUG("ColumnDock::typeChanged()")
 	if (m_initializing)
 		return;
 
-	auto columnMode = (AbstractColumn::ColumnMode)ui.cbType->itemData(index).toInt();
+	auto columnMode = static_cast<AbstractColumn::ColumnMode>(ui.cbType->itemData(index).toInt());
+	const auto& columns = m_columnsList;
 
 	switch (columnMode) {
 	case AbstractColumn::ColumnMode::Numeric: {
 		int digits = ui.sbPrecision->value();
-		for (auto* col : m_columnsList) {
+		for (auto* col : columns) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
 			col->setColumnMode(columnMode);
 			auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
@@ -362,15 +375,15 @@ void ColumnDock::typeChanged(int index) {
 	case AbstractColumn::ColumnMode::Integer:
 	case AbstractColumn::ColumnMode::BigInt:
 	case AbstractColumn::ColumnMode::Text:
-		for (auto* col : m_columnsList)
+		for (auto* col : columns)
 			col->setColumnMode(columnMode);
 		break;
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day:
-		for (auto* col : m_columnsList) {
+		for (auto* col : columns) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
 			// the format is saved as item data
-			QString format = ui.cbDateTimeFormat->itemData(ui.cbDateTimeFormat->currentIndex()).toString();
+			const QString& format = ui.cbDateTimeFormat->itemData(ui.cbDateTimeFormat->currentIndex()).toString();
 			col->setColumnMode(columnMode);
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
@@ -378,10 +391,10 @@ void ColumnDock::typeChanged(int index) {
 		}
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
-		for (auto* col : m_columnsList) {
+		for (auto* col : columns) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
 			// the format is the current text
-			QString format = ui.cbDateTimeFormat->currentText();
+			const QString& format = ui.cbDateTimeFormat->currentText();
 			col->setColumnMode(columnMode);
 			auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 			filter->setFormat(format);
@@ -391,8 +404,6 @@ void ColumnDock::typeChanged(int index) {
 	}
 
 	updateTypeWidgets(columnMode);
-
-	DEBUG("ColumnDock::typeChanged() DONE");
 }
 
 void ColumnDock::numericFormatChanged(int index) {
@@ -400,7 +411,7 @@ void ColumnDock::numericFormatChanged(int index) {
 		return;
 
 	char format = ui.cbNumericFormat->itemData(index).toChar().toLatin1();
-	for (auto* col : m_columnsList) {
+	for (auto* col : qAsConst(m_columnsList)) {
 		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		filter->setNumericFormat(format);
 	}
@@ -410,7 +421,7 @@ void ColumnDock::precisionChanged(int digits) {
 	if (m_initializing)
 		return;
 
-	for (auto* col : m_columnsList) {
+	for (auto* col : qAsConst(m_columnsList)) {
 		auto* filter = static_cast<Double2StringFilter*>(col->outputFilter());
 		filter->setNumDigits(digits);
 	}
@@ -420,7 +431,7 @@ void ColumnDock::dateTimeFormatChanged(const QString& format) {
 	if (m_initializing)
 		return;
 
-	for (auto* col : m_columnsList) {
+	for (auto* col : qAsConst(m_columnsList)) {
 		auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 		filter->setFormat(format);
 	}
@@ -431,13 +442,11 @@ void ColumnDock::plotDesignationChanged(int index) {
 		return;
 
 	auto pd = AbstractColumn::PlotDesignation(index);
-	for (auto* col : m_columnsList)
+	for (auto* col :qAsConst(m_columnsList))
 		col->setPlotDesignation(pd);
 }
 
-
 //value labels
-
 void ColumnDock::addLabel() {
 	auto mode = m_column->columnMode();
 	auto* dlg = new AddValueLabelDialog(this, mode);
@@ -449,32 +458,33 @@ void ColumnDock::addLabel() {
 
 	if (dlg->exec() == QDialog::Accepted) {
 		const QString& label = dlg->label();
+		const auto& columns = m_columnsList;
 		QString valueStr;
 		switch (mode) {
 		case AbstractColumn::ColumnMode::Numeric: {
 			double value = dlg->value();
 			valueStr = QString::number(value);
-			for (auto* col : m_columnsList)
+			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
 			int value = dlg->valueInt();
 			valueStr = QString::number(value);
-			for (auto* col : m_columnsList)
+			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
 			qint64 value = dlg->valueBigInt();
 			valueStr = QString::number(value);
-			for (auto* col : m_columnsList)
+			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
 			valueStr = dlg->valueText();
-			for (auto* col : m_columnsList)
+			for (auto* col : columns)
 				col->addValueLabel(valueStr, label);
 			break;
 		}
@@ -483,7 +493,7 @@ void ColumnDock::addLabel() {
 		case AbstractColumn::ColumnMode::DateTime: {
 			const QDateTime& value = dlg->valueDateTime();
 			valueStr = value.toString(ui.cbDateTimeFormat->currentText());
-			for (auto* col : m_columnsList)
+			for (auto* col : columns)
 				col->addValueLabel(value, label);
 			break;
 		}
@@ -499,11 +509,25 @@ void ColumnDock::addLabel() {
 }
 
 void ColumnDock::removeLabel() {
+	auto* item = ui.twLabels->currentItem();
+	if (!item)
+		return;
+
+	int row = ui.twLabels->currentRow();
+	const auto& value = ui.twLabels->itemAt(row, 0)->text();
+	for (auto* col : qAsConst(m_columnsList))
+		col->removeValueLabel(value);
+
 	ui.twLabels->removeRow(ui.twLabels->currentRow());
 }
 
 void ColumnDock::batchEditLabels() {
+	auto* dlg = new BatchEditValueLabelsDialog(this);
+	dlg->setColumns(m_columnsList);
+	if (dlg->exec() == QDialog::Accepted)
+		showValueLabels(); //new value labels were saved in the dialog, show them here
 
+	delete dlg;
 }
 
 //*************************************************************
@@ -529,7 +553,7 @@ void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
 }
 
 void ColumnDock::columnFormatChanged() {
-	DEBUG("ColumnDock::columnFormatChanged()");
+	DEBUG("ColumnDock::columnFormatChanged()")
 	const Lock lock(m_initializing);
 	auto columnMode = m_column->columnMode();
 	switch (columnMode) {

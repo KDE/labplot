@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : ColumnDock.h
+	File                 : BatchEditValueLabelsDialog.h
     Project              : LabPlot
-    Description          : widget for column properties
+	Description          : Dialog to modify multiply value labels in a batch mode
     --------------------------------------------------------------------
-    Copyright            : (C) 2011-2021 Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -26,54 +25,31 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
+#ifndef BATCHEDITVALUELABELSDIALOG_H
+#define BATCHEDITVALUELABELSDIALOG_H
 
-#ifndef COLUMNDOCK_H
-#define COLUMNDOCK_H
+#include <QDialog>
 
-#include "backend/core/column/Column.h"
-#include "kdefrontend/dockwidgets/BaseDock.h"
-#include "ui_columndock.h"
+class Column;
+class QTextEdit;
 
-template <class T> class QList;
-
-class ColumnDock : public BaseDock {
+class BatchEditValueLabelsDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit ColumnDock(QWidget*);
+	explicit BatchEditValueLabelsDialog(QWidget* parent = nullptr);
+	~BatchEditValueLabelsDialog() override;
+
 	void setColumns(QList<Column*>);
 
 private:
-	Ui::ColumnDock ui;
-	QList<Column*> m_columnsList;
-	Column* m_column{nullptr};
-
-	void updateTypeWidgets(AbstractColumn::ColumnMode);
-	void showValueLabels();
+	QTextEdit* teValueLabels;
+	QList<Column*> m_columns;
+	Column* m_column;
+	QString m_dateTimeFormat;
 
 private slots:
-	void retranslateUi();
-
-	void typeChanged(int);
-	void numericFormatChanged(int);
-	void precisionChanged(int);
-	void dateTimeFormatChanged(const QString&);
-	void plotDesignationChanged(int);
-
-	//value labels
-	void addLabel();
-	void removeLabel();
-	void batchEditLabels();
-
-	//SLOTs for changes triggered in Column
-	void columnDescriptionChanged(const AbstractAspect*);
-	void columnModeChanged(const AbstractAspect*);
-	void columnFormatChanged();
-	void columnPrecisionChanged();
-	void columnPlotDesignationChanged(const AbstractColumn*);
-
-signals:
-	void info(const QString&);
+	void save() const;
 };
 
-#endif // COLUMNDOCK_H
+#endif

@@ -68,6 +68,7 @@ public:
 
 	void* data() const;
 	bool hasValueLabels() const;
+	void clearValueLabels();
 
 	AbstractSimpleFilter* inputFilter() const;
 	AbstractSimpleFilter* outputFilter() const;
