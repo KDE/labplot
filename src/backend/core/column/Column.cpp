@@ -580,6 +580,7 @@ void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
 
 void Column::addValueLabel(const QDateTime& value, const QString& label) {
 	d->addValueLabel(value, label);
+	project()->setChanged(true);
 }
 
 /**
@@ -604,6 +605,7 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
 
 void Column::addValueLabel(double value, const QString& label) {
 	d->addValueLabel(value, label);
+	project()->setChanged(true);
 }
 
 /**
@@ -628,6 +630,7 @@ void Column::replaceInteger(int first, const QVector<int>& new_values) {
 
 void Column::addValueLabel(int value, const QString& label) {
 	d->addValueLabel(value, label);
+	project()->setChanged(true);
 }
 
 /**
@@ -652,6 +655,7 @@ void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
 
 void Column::addValueLabel(qint64 value, const QString& label) {
 	d->addValueLabel(value, label);
+	project()->setChanged(true);
 }
 
 /*!
@@ -1032,10 +1036,12 @@ bool Column::hasValueLabels() const {
 
 void Column::removeValueLabel(const QString& key) {
 	d->removeValueLabel(key);
+	project()->setChanged(true);
 }
 
 void Column::clearValueLabels() {
 	d->clearValueLabels();
+	project()->setChanged(true);
 }
 
 const QMap<QString, QString>& Column::textValueLabels() {
@@ -1132,7 +1138,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 		writer->writeStartElement("valueLabels");
 		switch (columnMode()) {
 		case AbstractColumn::ColumnMode::Numeric: {
-			auto labels = const_cast<Column*>(this)->valueLabels();
+			const auto& labels = const_cast<Column*>(this)->valueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
 				writer->writeStartElement("valueLabel");
@@ -1144,7 +1150,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			auto labels = const_cast<Column*>(this)->intValueLabels();
+			const auto& labels = const_cast<Column*>(this)->intValueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
 				writer->writeStartElement("valueLabel");
@@ -1156,7 +1162,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			auto labels = const_cast<Column*>(this)->bigIntValueLabels();
+			const auto& labels = const_cast<Column*>(this)->bigIntValueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
 				writer->writeStartElement("valueLabel");
@@ -1168,7 +1174,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 			break;
 		}
 		case AbstractColumn::ColumnMode::Text: {
-			auto labels = const_cast<Column*>(this)->textValueLabels();
+			const auto& labels = const_cast<Column*>(this)->textValueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
 				writer->writeStartElement("valueLabel");
@@ -1182,7 +1188,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 		case AbstractColumn::ColumnMode::Month:
 		case AbstractColumn::ColumnMode::Day:
 		case AbstractColumn::ColumnMode::DateTime: {
-			auto labels = const_cast<Column*>(this)->dateTimeValueLabels();
+			const auto& labels = const_cast<Column*>(this)->dateTimeValueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
 				writer->writeStartElement("valueLabel");
@@ -1208,7 +1214,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("type", QString::number(static_cast<int>(format.type)));
 		for (const auto& color : format.colors) {
 			writer->writeStartElement("color");
-			WRITE_QCOLOR(color);
+			WRITE_QCOLOR(color)
 			writer->writeEndElement(); // "color"
 		}
 		writer->writeEndElement(); // "heatmapFormat"
