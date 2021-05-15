@@ -1045,6 +1045,48 @@ bool ColumnPrivate::hasValueLabels() const {
 	return (m_labels != nullptr);
 }
 
+void ColumnPrivate::removeValueLabel(const QString& key) {
+	if (!hasValueLabels())
+		return;
+
+	SET_NUMBER_LOCALE
+	bool ok;
+	switch (m_column_mode) {
+	case AbstractColumn::ColumnMode::Numeric: {
+		double value = numberLocale.toDouble(key, &ok);
+		if (!ok)
+			return;
+		static_cast<QMap<double, QString>*>(m_labels)->remove(value);
+		break;
+	}
+	case AbstractColumn::ColumnMode::Integer: {
+		int value = numberLocale.toInt(key, &ok);
+		if (!ok)
+			return;
+		static_cast<QMap<int, QString>*>(m_labels)->remove(value);
+		break;
+	}
+	case AbstractColumn::ColumnMode::BigInt: {
+		qint64 value = numberLocale.toLongLong(key, &ok);
+		if (!ok)
+			return;
+		static_cast<QMap<qint64, QString>*>(m_labels)->remove(value);
+		break;
+	}
+	case AbstractColumn::ColumnMode::Text: {
+		static_cast<QMap<QString, QString>*>(m_labels)->remove(key);
+		break;
+	}
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+	case AbstractColumn::ColumnMode::DateTime: {
+		auto* filter = static_cast<DateTime2StringFilter*>(m_output_filter);
+		static_cast<QMap<QDateTime, QString>*>(m_labels)->remove(QDateTime::fromString(key, filter->format()));
+		break;
+	}
+	}
+}
+
 void ColumnPrivate::clearValueLabels() {
 	if (!hasValueLabels())
 		return;

@@ -199,7 +199,7 @@ void  BatchEditValueLabelsDialog::save() const {
 			break;
 		}
 		case AbstractColumn::ColumnMode::Integer: {
-			double value = numberLocale.toInt(valueStr, &ok);
+			int value = numberLocale.toInt(valueStr, &ok);
 			if (!ok)
 				continue;
 			for (auto* col : m_columns)
@@ -207,7 +207,7 @@ void  BatchEditValueLabelsDialog::save() const {
 			break;
 		}
 		case AbstractColumn::ColumnMode::BigInt: {
-			double value = numberLocale.toLongLong(valueStr, &ok);
+			qint64 value = numberLocale.toLongLong(valueStr, &ok);
 			if (!ok)
 				continue;
 			for (auto* col : m_columns)
@@ -224,7 +224,6 @@ void  BatchEditValueLabelsDialog::save() const {
 		case AbstractColumn::ColumnMode::DateTime: {
 			const auto* filter = static_cast<DateTime2StringFilter*>(m_column->outputFilter());
 			const QDateTime& value = QDateTime::fromString(valueStr, filter->format());
-			qDebug()<<"value " << pair.at(0) << "  " << value;
 			if (!value.isValid())
 				continue;
 			for (auto* col : m_columns)

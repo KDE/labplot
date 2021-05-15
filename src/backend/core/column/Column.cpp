@@ -197,7 +197,7 @@ QMenu* Column::createContextMenu() {
 }
 
 void Column::updateLocale() {
-	SET_NUMBER_LOCALE;
+	SET_NUMBER_LOCALE
 	d->inputFilter()->setNumberLocale(numberLocale);
 	d->outputFilter()->setNumberLocale(numberLocale);
 }
@@ -214,7 +214,7 @@ void Column::copyData() {
 	int rows = rowCount();
 
 	//TODO: use locale of filter?
-	SET_NUMBER_LOCALE;
+	SET_NUMBER_LOCALE
 	if (columnMode() == ColumnMode::Numeric) {
 		const Double2StringFilter* filter = static_cast<Double2StringFilter*>(outputFilter());
 		char format = filter->numericFormat();
@@ -1031,39 +1031,7 @@ bool Column::hasValueLabels() const {
 }
 
 void Column::removeValueLabel(const QString& key) {
-	if (!d->hasValueLabels())
-		return;
-
-	switch (d->columnMode()) {
-	case AbstractColumn::ColumnMode::Numeric: {
-		auto labels = valueLabels();
-		labels.remove(key.toDouble());
-		break;
-	}
-	case AbstractColumn::ColumnMode::Integer: {
-		auto labels = intValueLabels();
-		labels.remove(key.toInt());
-		break;
-	}
-	case AbstractColumn::ColumnMode::BigInt: {
-		auto labels = bigIntValueLabels();
-		labels.remove(key.toLongLong());
-		break;
-	}
-	case AbstractColumn::ColumnMode::Text: {
-		auto labels = textValueLabels();
-		labels.remove(key);
-		break;
-	}
-	case AbstractColumn::ColumnMode::Month:
-	case AbstractColumn::ColumnMode::Day:
-	case AbstractColumn::ColumnMode::DateTime: {
-		auto labels = dateTimeValueLabels();
-		auto* filter = static_cast<DateTime2StringFilter*>(outputFilter());
-		labels.remove(QDateTime::fromString(key, filter->format()));
-		break;
-	}
-	}
+	d->removeValueLabel(key);
 }
 
 void Column::clearValueLabels() {

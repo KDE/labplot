@@ -68,6 +68,7 @@ public:
 
 	void* data() const;
 	bool hasValueLabels() const;
+	void removeValueLabel(const QString&);
 	void clearValueLabels();
 
 	AbstractSimpleFilter* inputFilter() const;
