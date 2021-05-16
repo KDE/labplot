@@ -665,7 +665,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 			//TODO: complex
 
-			char *data = (char *)sparse->data;
+			double *data = (double *)sparse->data;
 			if (dataSource) {
 				// set default values
 				for (int i = 0; i < actualRows; i++)
@@ -675,7 +675,8 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				for (size_t i = 0; i < (size_t)sparse->njc - 1; i++)
 					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++)
 						//DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride))
-						static_cast<QVector<double>*>(dataContainer[(int)(sparse->ir[j]-(size_t)startColumn+1)])->operator[](i-startRow+1) = *(double*)(data + j * stride); \
+						static_cast<QVector<double>*>(dataContainer[(int)(sparse->ir[j]-(size_t)startColumn+1)])->operator[](i-startRow+1)
+							= *(data + j * stride/sizeof(double));
 			} else {	// preview
 				QVector<QVector<double>> matrix;
 				// set default value
@@ -689,7 +690,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				for (size_t i = 0; i < (size_t)sparse->njc - 1; i++)
 					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++)
 						//DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride))
-						matrix[sparse->ir[j]][i] = *(double*)(data + j * stride);
+						matrix[sparse->ir[j]][i] = *(data + j * stride/sizeof(double));
 
 				for (size_t i = 0; i < var->dims[1]; i++) {
 					QStringList row;
