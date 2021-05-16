@@ -2397,7 +2397,7 @@ void MainWin::handleSettingsChanges() {
 
 	//update spreadsheet header
 	if (m_project) {
-		auto spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+		const auto& spreadsheets = m_project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
 		for (auto* spreadsheet : spreadsheets) {
 			spreadsheet->updateHorizontalHeader();
 			spreadsheet->updateLocale();
