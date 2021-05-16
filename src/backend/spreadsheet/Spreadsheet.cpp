@@ -123,8 +123,23 @@ bool Spreadsheet::printPreview() const {
 	return m_view->printPreview();
 }
 
+/*!
+ * \brief Called when the application settings were changed.
+ *  adjusts the appearence of the spreadsheet header.
+ */
 void Spreadsheet::updateHorizontalHeader() {
+	const QString& oldHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
 	m_model->updateHorizontalHeader();
+	const QString& newHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
+
+	//if the header name of the first column has changed (column mode to be shown, etc.),
+	//reset the column widths and request the view to adjuste the column sizes to the  content
+	if (oldHeader != newHeader && m_view) {
+		const auto& columns = children<Column>();
+		for (auto col: columns)
+			col->setWidth(0);
+		m_view->resizeHeader();
+	}
 }
 
 void Spreadsheet::updateLocale() {
