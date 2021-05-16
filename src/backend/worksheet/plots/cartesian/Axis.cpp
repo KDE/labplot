@@ -30,9 +30,10 @@
 #include "AxisPrivate.h"
 #include "CartesianCoordinateSystem.h"
 #include "CartesianPlot.h"
+#include "backend/core/AbstractColumn.h"
+#include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
@@ -359,7 +360,7 @@ void Axis::setSuppressRetransform(bool value) {
 
 void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	Q_D(Axis);
-	Q_UNUSED(pageResize);
+	Q_UNUSED(pageResize)
 
 	double ratio = 0;
 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
@@ -1061,10 +1062,8 @@ void AxisPrivate::retransformLine() {
 
 			QRectF rect = q->m_plot->dataRect();
 			wrapper.point = QPointF(offset, offset);
-			auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+			const auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
-
-			//auto logicPos = q->cSystem->mapSceneToLogical(pos).y();
 			startPoint = QPointF(rect.x(), pos.y());
 			endPoint = QPointF(rect.x() + rect.width(), pos.y());
 			lines.append(QLineF(startPoint, endPoint));
@@ -1087,17 +1086,15 @@ void AxisPrivate::retransformLine() {
 
 			QRectF rect = q->m_plot->dataRect();
 			wrapper.point = QPointF(offset, offset);
-			auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+			const auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
-
-			//auto logicPos = q->cSystem->mapSceneToLogical(pos).x();
 			startPoint = QPointF(pos.x(), rect.y() + rect.height()); // draw from bottom to top
 			endPoint = QPointF(pos.x(), rect.y());
 			lines.append(QLineF(startPoint, endPoint));
 		}
 	}
 
-	for (const auto& line : lines) {
+	for (const auto& line : qAsConst(lines)) {
 		linePath.moveTo(line.p1());
 		linePath.lineTo(line.p2());
 	}
@@ -1281,19 +1278,19 @@ void AxisPrivate::retransformTicks() {
 			majorTicksIncrement = range.size();
 			break;
 		case RangeT::Scale::Log10:
-			if (start != 0 && end/start > 0)
+			if (start != 0. && end/start > 0.)
 				majorTicksIncrement = log10(end/start);
 			break;
 		case RangeT::Scale::Log2:
-			if (start != 0 && end/start > 0)
+			if (start != 0. && end/start > 0.)
 				majorTicksIncrement = log2(end/start);
 			break;
 		case RangeT::Scale::Ln:
-			if (start != 0 && end/start > 0)
+			if (start != 0. && end/start > 0.)
 				majorTicksIncrement = log(end/start);
 			break;
 		case RangeT::Scale::Sqrt:
-			if (start >=0 && end >= 0)
+			if (start >=0. && end >= 0.)
 				majorTicksIncrement = sqrt(end) - sqrt(start);
 			break;
 		case RangeT::Scale::Square:
@@ -1317,19 +1314,19 @@ void AxisPrivate::retransformTicks() {
 			tmpMajorTicksNumber = qRound( range.size() / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Log10:
-			if (start != 0 && end/start > 0)
+			if (start != 0. && end/start > 0.)
 				tmpMajorTicksNumber = qRound( log10(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Log2:
-			if (start != 0 && end/start > 0)
+			if (start != 0. && end/start > 0.)
 				tmpMajorTicksNumber = qRound( log2(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Ln:
-			if (start != 0 && end/start > 0)
+			if (start != 0. && end/start > 0.)
 				tmpMajorTicksNumber = qRound( log(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Sqrt:
-			if (start >= 0 && end >= 0)
+			if (start >= 0. && end >= 0.)
 				tmpMajorTicksNumber = qRound( (sqrt(end) - sqrt(start)) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Square:
@@ -1384,9 +1381,15 @@ void AxisPrivate::retransformTicks() {
 
 	const int xDirection = q->cSystem->xDirection();
 	const int yDirection = q->cSystem->yDirection();
+
+	//calculate the position of the center point in scene coordinates,
+	//will be used later to differentiate between "in" and "out" depending
+	//on the position relative to the center.
 	const double middleX = plot()->xRange(xIndex).center();
 	const double middleY = plot()->yRange(yIndex).center();
+	QPointF center(middleX, middleY);
 	bool valid = true;
+	center = q->cSystem->mapLogicalToScene(center, valid);
 
 	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
@@ -1438,8 +1441,12 @@ void AxisPrivate::retransformTicks() {
 				tmpMinorTicksNumber = 0;
 		}
 
-		auto yAnchorPoint = lines[0].p1().y();
-		auto xAnchorPoint = lines[0].p1().x();
+		double xAnchorPoint = 0.0;
+		double yAnchorPoint = 0.0;
+		if (!lines.isEmpty()) {
+			yAnchorPoint = lines.first().p1().y();
+			xAnchorPoint = lines.first().p1().x();
+		}
 
 		//calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks) {
@@ -1450,7 +1457,7 @@ void AxisPrivate::retransformTicks() {
 				valid = transformAnchor(&anchorPoint);
 				anchorPoint.setY(yAnchorPoint);
 				if (valid) {
-					if (yAnchorPoint < middleY) {
+					if (yAnchorPoint > center.y()) {
 						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
 						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
 					} else {
@@ -1465,7 +1472,7 @@ void AxisPrivate::retransformTicks() {
 				valid = transformAnchor(&anchorPoint);
 				anchorPoint.setX(xAnchorPoint);
 				if (valid) {
-					if (xAnchorPoint < middleX) {
+					if (xAnchorPoint < center.x()) {
 						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
 						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
 					} else {
@@ -1547,7 +1554,7 @@ void AxisPrivate::retransformTicks() {
 					valid = transformAnchor(&anchorPoint);
 					anchorPoint.setY(yAnchorPoint);
 					if (valid) {
-						if (yAnchorPoint < middleY) {
+						if (yAnchorPoint > center.y()) {
 							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
 							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
 						} else {
@@ -1562,7 +1569,7 @@ void AxisPrivate::retransformTicks() {
 					valid = transformAnchor(&anchorPoint);
 					anchorPoint.setX(xAnchorPoint);
 					if (valid) {
-						if (xAnchorPoint < middleX) {
+						if (xAnchorPoint < center.x()) {
 							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
 							endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
 						} else {
@@ -2593,8 +2600,19 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("zeroOffset", zeroOffset);
 			READ_DOUBLE_VALUE("titleOffsetX", titleOffsetX);
 			READ_DOUBLE_VALUE("titleOffsetY", titleOffsetY);
-
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+
+			if (Project::xmlVersion() < 2) {
+				//earlier, offset was only used when the enum  value Custom was used.
+				//after the positioning rework, it is possible to specify the offset for
+				//all other positions like Left, Right, etc.
+				//Also, Custom was renamed to Logical and d->logicalPosition is used now.
+				//Adjust the values from older projects.
+				if (d->position == Axis::Position::Logical)
+					d->logicalPosition = d->offset;
+				else
+					d->offset = 0.0;
+			}
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())
