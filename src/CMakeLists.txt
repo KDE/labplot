@@ -502,7 +502,7 @@ ENDIF ()
 
 target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
 target_link_libraries( labplot2lib ${FFTW3_LIBRARIES} )
-target_link_libraries( labplot2lib ${netCDF_LIBRARIES} )
+target_link_libraries( labplot2lib ${netCDF_LIBRARIES} ${Zip_LIBRARIES} )
 target_link_libraries( labplot2lib ${CFITSIO_LIBRARIES} )
 target_link_libraries( labplot2lib ${LIBCERF_LIBRARIES} )
 target_link_libraries( labplot2lib ${LZ4_LIBRARIES} )
