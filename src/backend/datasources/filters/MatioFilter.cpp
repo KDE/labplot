@@ -511,12 +511,31 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			}
 			break;
 		}
+		case MAT_C_SPARSE:
+			DEBUG(Q_FUNC_INFO << ", found SPARSE. name = " << var->name << ", type = " << typeName(var->data_type).toStdString()  << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
+			DEBUG(Q_FUNC_INFO << ", rank " << var->rank << ", dim = " << var->dims[0] << " x " << var->dims[1])
+
+			if (dataSource) {
+				//change data source settings
+				actualCols = var->dims[0];
+				actualRows = var->dims[1];
+				columnModes.resize(actualCols);
+				//TODO: other types
+				for (int i = 0; i < actualCols; i++)	// should always be double (if not "extended")
+					columnModes[i] = AbstractColumn::ColumnMode::Numeric;
+			}
+			break;
+		case MAT_C_STRUCT:	//TODO
+			DEBUG(Q_FUNC_INFO << ", found STRUCT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
+			return dataStrings << (QStringList() << i18n("Not implemented yet"));
+			break;
+		case MAT_C_OBJECT:	//TODO
+			DEBUG(Q_FUNC_INFO << ", found OBJECT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
+			return dataStrings << (QStringList() << i18n("Not implemented yet"));
+			break;
 		case MAT_C_FUNCTION:	// TODO: not clear how to access (not supported by matio yet)
 			DEBUG(Q_FUNC_INFO << ", found FUNCTION. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			QDEBUG(Q_FUNC_INFO << ", data: " << (const char *)var->data)
-		case MAT_C_STRUCT:
-		case MAT_C_OBJECT:
-		case MAT_C_SPARSE:
 		case MAT_C_OPAQUE:
 			return dataStrings << (QStringList() << i18n("Not implemented yet"));
 		}
@@ -639,9 +658,51 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			}
 			break;
 		}
+		case MAT_C_SPARSE: {
+			mat_sparse_t* sparse = (mat_sparse_t*)var->data;
+			size_t stride = Mat_SizeOf(var->data_type);
+			//DEBUG(Q_FUNC_INFO << ", stride = " << stride << ", njc = " << sparse->njc << ", ndata = " << sparse->ndata)
+
+			//TODO: complex
+
+			char *data = (char *)sparse->data;
+			if (dataSource) {
+				// set default values
+				for (int i = 0; i < actualRows; i++)
+					for (int j = 0; j < actualCols; j++)
+						static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = 0;
+
+				for (size_t i = 0; i < (size_t)sparse->njc - 1; i++)
+					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++)
+						//DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride))
+						static_cast<QVector<double>*>(dataContainer[(int)(sparse->ir[j]-(size_t)startColumn+1)])->operator[](i-startRow+1) = *(double*)(data + j * stride); \
+			} else {	// preview
+				QVector<QVector<double>> matrix;
+				// set default value
+				for (size_t i = 0; i < var->dims[0]; i++) {
+					QVector<double> tmp;
+					for (size_t j = 0; j < var->dims[1]; j++)
+						tmp.append(0);
+					matrix.append(tmp);
+				}
+
+				for (size_t i = 0; i < (size_t)sparse->njc - 1; i++)
+					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++)
+						//DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride))
+						matrix[sparse->ir[j]][i] = *(double*)(data + j * stride);
+
+				for (size_t i = 0; i < var->dims[1]; i++) {
+					QStringList row;
+					for (size_t j = 0; j < var->dims[0]; j++)
+						row << QString::number(matrix[j][i]);
+					dataStrings << row;
+				}
+			}
+
+			break;
+		}
 		case MAT_C_STRUCT:
 		case MAT_C_OBJECT:
-		case MAT_C_SPARSE:
 		case MAT_C_FUNCTION:
 		case MAT_C_OPAQUE:
 			break;
