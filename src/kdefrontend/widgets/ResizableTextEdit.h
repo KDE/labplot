@@ -51,6 +51,7 @@ private:
 	ResizableTextEdit* m_parent;
 	QPoint m_pos;
 	bool m_pressed{false};
+	bool m_hovered{false};
 	bool m_vertResizeOnly;
 };
 

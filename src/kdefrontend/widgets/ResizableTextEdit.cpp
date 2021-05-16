@@ -30,6 +30,8 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QStyle>
+#include <QStyleOption>
 
 GrabBar::GrabBar(ResizableTextEdit* parent, bool vertResizeOnly) : QWidget(parent),
 	m_parent(parent), m_vertResizeOnly(vertResizeOnly) {
@@ -43,8 +45,21 @@ QSize GrabBar::sizeHint() const {
 
 void GrabBar::paintEvent(QPaintEvent*) {
 	QPainter p(this);
-	p.setBrush(QApplication::palette().color(QPalette::AlternateBase));
-	p.drawRect(rect());
+
+	//s. qsplitter.cpp
+	QStyleOption opt(0);
+	opt.rect = rect();
+	opt.palette = palette();
+	opt.state = QStyle::State_Horizontal;
+
+	if (m_hovered)
+		opt.state |= QStyle::State_MouseOver;
+	if (m_pressed)
+		opt.state |= QStyle::State_Sunken;
+	if (isEnabled())
+		opt.state |= QStyle::State_Enabled;
+
+	parentWidget()->style()->drawControl(QStyle::CE_Splitter, &opt, &p, this);
 }
 
 void GrabBar::mousePressEvent(QMouseEvent* e) {
@@ -76,16 +91,21 @@ void GrabBar::mouseMoveEvent(QMouseEvent* e) {
 }
 
 void GrabBar::enterEvent(QEvent* e) {
-	if (m_vertResizeOnly)
-		QApplication::setOverrideCursor(QCursor(Qt::SizeVerCursor));
-	else
-		QApplication::setOverrideCursor(QCursor(Qt::SizeFDiagCursor));
+	if (isEnabled()) {
+		if (m_vertResizeOnly)
+			QApplication::setOverrideCursor(QCursor(Qt::SizeVerCursor));
+		else
+			QApplication::setOverrideCursor(QCursor(Qt::SizeFDiagCursor));
+
+		m_hovered = true;
+	}
 
 	e->accept();
 }
 
 void GrabBar::leaveEvent(QEvent* e) {
 	QApplication::restoreOverrideCursor();
+	m_hovered = false;
 	e->accept();
 }
 
