@@ -591,21 +591,21 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 			switch (columnMode) {
 			case AbstractColumn::ColumnMode::Text:
 				for (int j = 0; j < valueLabels.size(); j++) {
-					column->addValueLabel(m_labelSets[label].valueString(j), valueLabels.at(j));
 					DEBUG(Q_FUNC_INFO << ", column " << i << ": add string value label: " << m_labelSets[label].valueString(j).toStdString()  << " = " <<  valueLabels.at(j).toStdString())
+					column->addValueLabel(m_labelSets[label].valueString(j), valueLabels.at(j));
 				}
 				break;
 			case AbstractColumn::ColumnMode::Numeric:
 				for (int j = 0; j < valueLabels.size(); j++) {
-					column->addValueLabel(m_labelSets[label].valueDouble(j), valueLabels.at(j));
 					DEBUG(Q_FUNC_INFO << ", column " << i << ": add double value label: " << m_labelSets[label].valueDouble(j)  << " = " <<  valueLabels.at(j).toStdString())
+					column->addValueLabel(m_labelSets[label].valueDouble(j), valueLabels.at(j));
 				}
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
 				for (int j = 0; j < valueLabels.size(); j++) {
-					column->addValueLabel(m_labelSets[label].valueInt(j), valueLabels.at(j));
 					DEBUG(Q_FUNC_INFO << ", column " << i << ": add integer value label: " << m_labelSets[label].valueInt(j)  << " = " <<  valueLabels.at(j).toStdString())
+					column->addValueLabel(m_labelSets[label].valueInt(j), valueLabels.at(j));
 				}
 				break;
 			case AbstractColumn::ColumnMode::Month:

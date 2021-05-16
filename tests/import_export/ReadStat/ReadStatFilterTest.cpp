@@ -33,13 +33,6 @@ Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 
 #include <KLocalizedString>
 
-void ReadStatFilterTest::initTestCase() {
-	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-	//TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
-
 void ReadStatFilterTest::testDTAImport() {
 	Spreadsheet spreadsheet("test", false);
 	ReadStatFilter filter;

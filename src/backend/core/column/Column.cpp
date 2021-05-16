@@ -605,7 +605,8 @@ void Column::replaceValues(int first, const QVector<double>& new_values) {
 
 void Column::addValueLabel(double value, const QString& label) {
 	d->addValueLabel(value, label);
-	project()->setChanged(true);
+	if (project())
+		project()->setChanged(true);
 }
 
 /**
