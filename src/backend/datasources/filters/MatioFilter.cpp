@@ -36,6 +36,7 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 ///////////// macros ///////////////////////////////////////////////
 
 // see NetCDFFilter.cpp
+// type - var data type, dtype - container data type
 #define MAT_READ_VAR(type, dtype) \
 	{ \
 	const type *data = static_cast<const type*>(var->data); \
@@ -53,6 +54,24 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	} \
 	}
 
+// type - cell data type, dtype - container data type
+#define MAT_READ_CELL(type, dtype) \
+	{ \
+	const type* data = (const type*)cell->data; \
+	if (dataSource) { \
+		for (unsigned int j = 0; j < cell->dims[1]; j++) \
+			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = data[j]; \
+		for (int j = cell->dims[1]; j < actualCols; j++) /* reset not defined values */ \
+			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = qQNaN(); \
+	} else { /* preview */ \
+		QStringList row; \
+		if (cell->dims[1] == 0)	/* handle empty cells */ \
+			row << QString(); \
+		for (unsigned int j = 0; j < cell->dims[1]; j++) \
+			row << QString::number(data[j]); \
+		dataStrings << row; \
+	} \
+	}
 
 //////////////////////////////////////////////////////////////////////
 
@@ -537,10 +556,10 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			MAT_READ_VAR(quint32, int);
 			break;
 		case MAT_C_INT64:
-			MAT_READ_VAR(qint64, int);
+			MAT_READ_VAR(qint64, qint64);
 			break;
 		case MAT_C_UINT64:
-			MAT_READ_VAR(quint64, int);
+			MAT_READ_VAR(quint64, qint64);
 			break;
 		case MAT_C_EMPTY:
 			break;
@@ -560,13 +579,13 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 				// read cell data (see MAT_READ_VAR)
 				if (cell->rank == 2 && cell->dims[0] <= 1) {	// read only rank 2 and cells with zero/one row
-					QStringList row;
-					// only these types are read
-					if (cell->class_type == MAT_C_CHAR) {	// strings are not imported (yet)
+					switch(cell->class_type) {
+					case MAT_C_CHAR:	// strings are not imported (yet)
 						if (dataSource) {
 							for (int j = 0; j < actualCols; j++)	// reset not defined values
 								static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = qQNaN();
 						} else {
+							QStringList row;
 							// see mat.c for supported data types
 							if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16)
 								row << QString::fromUtf16((const mat_uint16_t*)cell->data);
@@ -574,35 +593,48 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 								row << QString::fromUtf8((const char*)cell->data);
 							else
 								row << QString((const char*)cell->data);
+							dataStrings << row;
 						}
-					} else if (cell->class_type == MAT_C_DOUBLE) {
-						const double* data = (const double*)cell->data;
-						if (dataSource) {
-							for (unsigned int j = 0; j < cell->dims[1]; j++)
-								static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = data[j];
-							for (int j = cell->dims[1]; j < actualCols; j++)	// reset not defined values
-								static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = qQNaN();
-						} else {	// preview
-							if (cell->dims[1] == 0)	// handle empty cells
-								row << QString();
-							for (unsigned int j = 0; j < cell->dims[1]; j++)
-								row << QString::number(data[j]);
-						}
-					} else if (cell->class_type == MAT_C_SINGLE) {
-						const float* data = (const float*)cell->data;
-						if (dataSource) {
-							for (unsigned int j = 0; j < cell->dims[1]; j++)
-								static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = data[j];
-							for (int j = cell->dims[1]; j < actualCols; j++)	// reset not defined values
-								static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = qQNaN();
-						} else {	// preview
-							if (cell->dims[1] == 0)	// handle empty cells
-								row << QString();
-							for (unsigned int j = 0; j < cell->dims[1]; j++)
-								row << QString::number(data[j]);
-						}
-					} //TODO: other number types
-					dataStrings << row;
+						break;
+					case MAT_C_DOUBLE:
+						MAT_READ_CELL(double, double)
+						break;
+					case MAT_C_SINGLE:
+						MAT_READ_CELL(float, double)
+						break;
+					case MAT_C_INT8:
+						MAT_READ_CELL(qint8, int);
+						break;
+					case MAT_C_UINT8:
+						MAT_READ_CELL(quint8, int);
+						break;
+					case MAT_C_INT16:
+						MAT_READ_CELL(qint16, int);
+						break;
+					case MAT_C_UINT16:
+						MAT_READ_CELL(quint16, int);
+						break;
+					case MAT_C_INT32:
+						MAT_READ_CELL(qint32, int);
+						break;
+					case MAT_C_UINT32:
+						MAT_READ_CELL(quint32, int);
+						break;
+					case MAT_C_INT64:
+						MAT_READ_CELL(qint64, qint64);
+						break;
+					case MAT_C_UINT64:
+						MAT_READ_CELL(quint64, qint64);
+						break;
+					case MAT_C_CELL:	// TODO
+					case MAT_C_EMPTY:
+					case MAT_C_STRUCT:
+					case MAT_C_OBJECT:
+					case MAT_C_SPARSE:
+					case MAT_C_FUNCTION:
+					case MAT_C_OPAQUE:
+						break;
+					}
 				}
 			}
 			break;
