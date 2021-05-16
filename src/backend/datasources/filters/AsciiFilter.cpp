@@ -614,8 +614,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		columnModes[index] = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 		col++;
 	}
+#ifndef NDEBUG
 	for (const auto mode : columnModes)
 		DEBUG(Q_FUNC_INFO << ", column mode = " << static_cast<int>(mode));
+#endif
 
 	// parsing more lines to better determine data types
 	for (unsigned int i = 0; i < m_dataTypeLines; ++i) {
@@ -652,8 +654,10 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			col++;
 		}
 	}
+#ifndef NDEBUG
 	for (const auto mode : columnModes)
 		DEBUG(Q_FUNC_INFO << ", column mode = " << static_cast<int>(mode));
+#endif
 
 	// ATTENTION: This resets the position in the device to 0
 	m_actualRows = (int)q->lineNumber(device);

@@ -399,6 +399,7 @@ int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, rea
 }
 int ReadStatFilterPrivate::getNotes(int index, const char* note, void *ptr) {
 	Q_UNUSED(ptr)
+	Q_UNUSED(index)
 
 	DEBUG(Q_FUNC_INFO << " note " << index << ": " << note)
 	m_notes << note;
@@ -410,6 +411,7 @@ int ReadStatFilterPrivate::getFWeights(readstat_variable_t *variable, void *ptr)
 
 	const int col = readstat_variable_get_index(variable);
 	//TODO: not used yet
+	Q_UNUSED(col)
 	DEBUG(Q_FUNC_INFO << ", fweight of col " << col)
 
 	return READSTAT_HANDLER_OK;

@@ -3026,11 +3026,13 @@ void CartesianPlotPrivate::retransform() {
  */
 void CartesianPlotPrivate::retransformScales() {
 	int i{1}; // debugging
+#ifndef NDEBUG
 	for (auto& range : xRanges)
 		DEBUG( Q_FUNC_INFO << ", x range " << i++ << " = " << range.toStdString() << ", scale = " << (int)range.scale() );
 	i = 1;	// debugging
 	for (auto& range : yRanges)
 		DEBUG( Q_FUNC_INFO << ", y range " << i++ << " = " << range.toStdString() << ", scale = " << (int)range.scale() );
+#endif
 	PERFTRACE(Q_FUNC_INFO);
 
 	QVector<CartesianScale*> scales;
