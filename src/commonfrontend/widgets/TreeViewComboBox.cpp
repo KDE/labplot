@@ -204,13 +204,15 @@ void TreeViewComboBox::setText(const QString& text) {
 
 void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 	if (invalid) {
-		setStyleSheet("background: red;");
-		setToolTip(tooltip);
-		return;
-	}
+		QPalette pal = palette();
+		pal.setColor(QPalette::Text, Qt::red);
+		setPalette(pal);
 
-	setToolTip("");
-	setStyleSheet("");
+		setToolTip(tooltip);
+	} else {
+		setPalette(qApp->palette());
+		setToolTip("");
+	}
 }
 
 /*!
