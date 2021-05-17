@@ -395,10 +395,13 @@ IF (ENABLE_READSTAT)
 		MESSAGE (STATUS "ReadStat library NOT FOUND. Building own version")
 		set(BUILD_READSTAT TRUE)
 
+		# link own readstat with iconv
 		FIND_LIBRARY (ICONV_LIBRARIES NAMES iconv libiconv libiconv-2)
 		IF (ICONV_LIBRARIES) # non-glibc
+			MESSAGE (STATUS "Iconv library FOUND (${ICONV_LIBRARIES})")
 			set(READSTAT_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/install/lib/libreadstat.a ${ICONV_LIBRARIES})
 		ELSE ()
+			MESSAGE (STATUS "Iconv library NOT FOUND")
 			set(READSTAT_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/install/lib/libreadstat.a)
 		ENDIF ()
 		include_directories (${CMAKE_BINARY_DIR}/src/3rdparty/install/include)
