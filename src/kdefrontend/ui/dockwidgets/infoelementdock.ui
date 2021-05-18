@@ -86,6 +86,9 @@
          <property name="text">
           <string>Comment:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item row="7" column="3">
@@ -166,7 +169,7 @@
         </spacer>
        </item>
        <item row="1" column="3">
-        <widget class="QLineEdit" name="leComment">
+        <widget class="ResizableTextEdit" name="teComment">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -417,6 +420,11 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

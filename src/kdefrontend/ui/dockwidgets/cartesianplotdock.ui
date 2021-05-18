@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>416</width>
-    <height>1021</height>
+    <height>1052</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -110,11 +110,7 @@
         </widget>
        </item>
        <item row="1" column="4">
-        <widget class="QLineEdit" name="leComment">
-         <property name="clearButtonEnabled" stdset="0">
-          <bool>true</bool>
-         </property>
-        </widget>
+        <widget class="ResizableTextEdit" name="teComment"/>
        </item>
        <item row="4" column="4">
         <widget class="QDoubleSpinBox" name="sbLeft">
@@ -243,7 +239,7 @@
        </item>
        <item row="0" column="4">
         <widget class="QLineEdit" name="leName">
-         <property name="clearButtonEnabled" stdset="0">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -375,8 +371,7 @@
            </property>
            <property name="icon">
             <iconset theme="list-add">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -390,8 +385,7 @@
            </property>
            <property name="icon">
             <iconset theme="list-remove">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -401,6 +395,9 @@
         <widget class="QLabel" name="lComment">
          <property name="text">
           <string>Comment:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -479,8 +476,7 @@
            </property>
            <property name="icon">
             <iconset theme="list-add">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -491,8 +487,7 @@
            </property>
            <property name="icon">
             <iconset theme="list-remove">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -625,8 +620,7 @@
            </property>
            <property name="icon">
             <iconset theme="list-add">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -640,8 +634,7 @@
            </property>
            <property name="icon">
             <iconset theme="list-remove">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -851,7 +844,16 @@
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -1275,7 +1277,7 @@
          <property name="toolTip">
           <string>Specify the name of the image file.</string>
          </property>
-         <property name="clearButtonEnabled" stdset="0">
+         <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
         </widget>
@@ -1544,10 +1546,15 @@
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
   </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>leName</tabstop>
-  <tabstop>leComment</tabstop>
+  <tabstop>teComment</tabstop>
   <tabstop>sbLeft</tabstop>
   <tabstop>sbTop</tabstop>
   <tabstop>sbWidth</tabstop>

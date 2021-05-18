@@ -68,7 +68,8 @@ void XYCorrelationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
-	m_leComment = uiGeneralTab.leComment;
+	m_teComment = uiGeneralTab.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2,2,2,2);
@@ -106,7 +107,7 @@ void XYCorrelationCurveDock::setupGeneral() {
 
 	//Slots
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::nameChanged );
-	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYCorrelationCurveDock::commentChanged );
+	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYCorrelationCurveDock::commentChanged );
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYCorrelationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCorrelationCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.sbSamplingInterval, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCorrelationCurveDock::samplingIntervalChanged);
@@ -131,18 +132,18 @@ void XYCorrelationCurveDock::initGeneralTab() {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.leComment->setEnabled(true);
+		uiGeneralTab.teComment->setEnabled(true);
 
 		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.leComment->setText(m_curve->comment());
+		uiGeneralTab.teComment->setText(m_curve->comment());
 	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.leComment->setEnabled(false);
+		uiGeneralTab.teComment->setEnabled(false);
 
 		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.leComment->setText(QString());
+		uiGeneralTab.teComment->setText(QString());
 	}
 
 	//show the properties of the first curve
@@ -158,7 +159,7 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	cbY2DataColumn->setColumn(m_correlationCurve->y2DataColumn(), m_correlationCurve->y2DataColumnPath());
 	uiGeneralTab.sbSamplingInterval->setValue(m_correlationData.samplingInterval);
 	uiGeneralTab.cbAutoRange->setChecked(m_correlationData.autoRange);
-	
+
 	SET_NUMBER_LOCALE
 	uiGeneralTab.leMin->setText( numberLocale.toString(m_correlationData.xRange.first()) );
 	uiGeneralTab.leMax->setText( numberLocale.toString(m_correlationData.xRange.last()) );
@@ -483,8 +484,8 @@ void XYCorrelationCurveDock::curveDescriptionChanged(const AbstractAspect* aspec
 	m_initializing = true;
 	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.leComment->text())
-		uiGeneralTab.leComment->setText(aspect->comment());
+	else if (aspect->comment() != uiGeneralTab.teComment->text())
+		uiGeneralTab.teComment->setText(aspect->comment());
 	m_initializing = false;
 }
 

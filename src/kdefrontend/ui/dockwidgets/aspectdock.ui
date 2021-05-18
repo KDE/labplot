@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>301</width>
-    <height>572</height>
+    <width>357</width>
+    <height>410</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -22,9 +22,9 @@
     <widget class="QLineEdit" name="leName"/>
    </item>
    <item row="1" column="2">
-    <widget class="QLineEdit" name="leComment">
+    <widget class="ResizableTextEdit" name="teComment">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -35,6 +35,9 @@
     <widget class="QLabel" name="lComment">
      <property name="text">
       <string>Comment:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -69,6 +72,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

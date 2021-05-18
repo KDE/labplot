@@ -37,7 +37,8 @@
 InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui::InfoElementDock) {
 	ui->setupUi(this);
 	m_leName = ui->leName;
-	m_leComment = ui->leComment;
+	m_teComment = ui->teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	ui->lePosition->setValidator( new QDoubleValidator(ui->lePosition) );
 
@@ -59,7 +60,7 @@ InfoElementDock::InfoElementDock(QWidget* parent) : BaseDock(parent), ui(new Ui:
 	//**********************************  Slots **********************************************
 	//general
 	connect(ui->leName, &QLineEdit::textChanged, this, &InfoElementDock::nameChanged);
-	connect(ui->leComment, &QLineEdit::textChanged, this, &InfoElementDock::commentChanged);
+	connect(ui->teComment, &QTextEdit::textChanged, this, &InfoElementDock::commentChanged);
 	connect(ui->lePosition, &QLineEdit::textChanged, this, &InfoElementDock::positionChanged);
 	connect(ui->dateTimeEditPosition, &QDateTimeEdit::dateTimeChanged, this, &InfoElementDock::positionDateTimeChanged);
 	connect(ui->cbConnectToCurve, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &InfoElementDock::curveChanged);
@@ -120,16 +121,16 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->lName->setEnabled(true);
 		ui->leName->setEnabled(true);
 		ui->lComment->setEnabled(true);
-		ui->leComment->setEnabled(true);
+		ui->teComment->setEnabled(true);
 		ui->leName->setText(m_element->name());
-		ui->leComment->setText(m_element->comment());
+		ui->teComment->setText(m_element->comment());
 	} else {
 		ui->lName->setEnabled(false);
 		ui->leName->setEnabled(false);
 		ui->lComment->setEnabled(false);
-		ui->leComment->setEnabled(false);
+		ui->teComment->setEnabled(false);
 		ui->leName->setText(QString());
-		ui->leComment->setText(QString());
+		ui->teComment->setText(QString());
 	}
 
 	ui->chbVisible->setChecked(m_element->isVisible());
@@ -462,8 +463,8 @@ void InfoElementDock::elementDescriptionChanged(const AbstractAspect* aspect) {
 	const Lock lock(m_initializing);
 	if (aspect->name() != ui->leName->text())
 		ui->leName->setText(aspect->name());
-	else if (aspect->comment() != ui->leComment->text())
-		ui->leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui->teComment->text())
+		ui->teComment->setText(aspect->comment());
 }
 
 void InfoElementDock::elementVisibilityChanged(const bool visible) {

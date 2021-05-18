@@ -64,7 +64,8 @@
 HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(new TreeViewComboBox) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	// Tab "General"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabGeneral->layout());
@@ -127,7 +128,7 @@ HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(n
 	//Slots
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &HistogramDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &HistogramDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &HistogramDock::commentChanged);
 	connect( ui.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)) );
 	connect( cbDataColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(dataColumnChanged(QModelIndex)) );
 	connect( ui.cbType, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)) );
@@ -357,7 +358,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 
 		ui.lXColumn->setEnabled(true);
 		cbDataColumn->setEnabled(true);
@@ -365,12 +366,12 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 		cbDataColumn->setColumn(m_curve->dataColumn(), m_curve->dataColumnPath());
 		cbValuesColumn->setColumn(m_curve->valuesColumn(), m_curve->valuesColumnPath());
 		ui.leName->setText(m_curve->name());
-		ui.leComment->setText(m_curve->comment());
+		ui.teComment->setText(m_curve->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 
 		ui.lXColumn->setEnabled(false);
 		cbDataColumn->setEnabled(false);
@@ -378,7 +379,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 		cbValuesColumn->setCurrentModelIndex(QModelIndex());
 
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 
 	ui.leName->setStyleSheet("");
@@ -1247,8 +1248,8 @@ void HistogramDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 
 	m_initializing = false;
 }

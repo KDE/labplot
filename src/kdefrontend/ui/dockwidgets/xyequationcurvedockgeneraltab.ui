@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>495</width>
-    <height>1190</height>
+    <width>429</width>
+    <height>1180</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
@@ -63,6 +63,9 @@
      <property name="text">
       <string>Comment:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="3" column="0">
@@ -99,7 +102,16 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <property name="spacing">
@@ -226,7 +238,7 @@
     </widget>
    </item>
    <item row="1" column="4" colspan="2">
-    <widget class="QLineEdit" name="leComment"/>
+    <widget class="ResizableTextEdit" name="teComment"/>
    </item>
    <item row="4" column="0" colspan="3">
     <widget class="QLabel" name="lType">
@@ -302,7 +314,16 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <property name="spacing">
@@ -387,6 +408,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
   <customwidget>
    <class>ExpressionTextEdit</class>

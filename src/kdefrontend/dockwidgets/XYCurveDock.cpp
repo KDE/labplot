@@ -89,7 +89,6 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 
 	ui.cbValuesDateTimeFormat->setEditable(true);
 
-
 	//Tab "Filling"
 	ui.cbFillingColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
 	ui.bFillingOpen->setIcon( QIcon::fromTheme("document-open") );
@@ -210,7 +209,9 @@ void XYCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
-	m_leComment = uiGeneralTab.leComment;
+	m_teComment = uiGeneralTab.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
+
 	auto* layout = new QHBoxLayout(ui.tabGeneral);
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
@@ -228,7 +229,7 @@ void XYCurveDock::setupGeneral() {
 
 	//General
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYCurveDock::nameChanged);
-	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYCurveDock::commentChanged);
+	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, SIGNAL(clicked(bool)), this, SLOT(visibilityChanged(bool)));
 	connect(cbXColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(xColumnChanged(QModelIndex)));
 	connect(cbYColumn, SIGNAL(currentModelIndexChanged(QModelIndex)), this, SLOT(yColumnChanged(QModelIndex)));
@@ -551,16 +552,16 @@ void XYCurveDock::initGeneralTab() {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.leComment->setEnabled(true);
+		uiGeneralTab.teComment->setEnabled(true);
 		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.leComment->setText(m_curve->comment());
+		uiGeneralTab.teComment->setText(m_curve->comment());
 	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.leComment->setEnabled(false);
+		uiGeneralTab.teComment->setEnabled(false);
 		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.leComment->setText(QString());
+		uiGeneralTab.teComment->setText(QString());
 	}
 
 	//show the properties of the first curve
@@ -1560,8 +1561,8 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.leComment->text())
-		uiGeneralTab.leComment->setText(aspect->comment());
+	else if (aspect->comment() != uiGeneralTab.teComment->text())
+		uiGeneralTab.teComment->setText(aspect->comment());
 	m_initializing = false;
 }
 

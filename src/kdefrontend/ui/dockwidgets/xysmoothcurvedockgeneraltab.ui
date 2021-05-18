@@ -45,6 +45,9 @@
      <property name="text">
       <string>Comment:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="2" column="3">
@@ -191,7 +194,16 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item row="1" column="1">
@@ -429,7 +441,7 @@
     <widget class="QLineEdit" name="leName"/>
    </item>
    <item row="1" column="2" colspan="3">
-    <widget class="QLineEdit" name="leComment"/>
+    <widget class="ResizableTextEdit" name="teComment"/>
    </item>
    <item row="4" column="2" colspan="3">
     <widget class="QComboBox" name="cbDataSourceType">
@@ -585,6 +597,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

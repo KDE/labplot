@@ -123,12 +123,20 @@ ResizableTextEdit::ResizableTextEdit(QWidget* parent, bool vertResizeOnly) : QTe
 }
 
 void ResizableTextEdit::addSize(QSize size) {
+	if (m_size.height() + size.height() < minimumHeight())
+		return;
+
 	m_size = QSize(m_size.width(), m_size.height() + size.height());
 	updateGeometry();
+	setMaximumHeight(m_size.height());
 }
 
 QSize ResizableTextEdit::sizeHint() const {
 	return m_size;
+}
+
+QString ResizableTextEdit::text() const {
+	return document()->toPlainText();
 }
 
 void ResizableTextEdit::resizeEvent(QResizeEvent* e) {

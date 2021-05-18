@@ -58,10 +58,13 @@
      <property name="text">
       <string>Comment:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="1" column="2" colspan="4">
-    <widget class="QLineEdit" name="leComment"/>
+    <widget class="ResizableTextEdit" name="teComment"/>
    </item>
    <item row="2" column="2">
     <spacer name="verticalSpacer_3">
@@ -376,6 +379,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

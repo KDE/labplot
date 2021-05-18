@@ -26,10 +26,13 @@
      <property name="text">
       <string>Comment:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="QLineEdit" name="leComment">
+    <widget class="ResizableTextEdit" name="teComment">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -238,7 +241,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset theme="list-add"/>
+         <iconset theme="list-add">
+          <normaloff>.</normaloff>.</iconset>
         </property>
        </widget>
       </item>
@@ -248,7 +252,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset theme="list-remove"/>
+         <iconset theme="list-remove">
+          <normaloff>.</normaloff>.</iconset>
         </property>
        </widget>
       </item>
@@ -274,7 +279,8 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset theme="format-list-unordered"/>
+         <iconset theme="format-list-unordered">
+          <normaloff>.</normaloff>.</iconset>
         </property>
        </widget>
       </item>
@@ -301,6 +307,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

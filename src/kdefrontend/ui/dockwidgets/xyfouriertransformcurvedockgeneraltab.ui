@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>688</width>
-    <height>1096</height>
+    <width>415</width>
+    <height>1041</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -94,6 +94,9 @@
     <widget class="QLabel" name="lComment">
      <property name="text">
       <string>Comment:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
@@ -221,7 +224,7 @@
     </widget>
    </item>
    <item row="1" column="2" colspan="2">
-    <widget class="QLineEdit" name="leComment"/>
+    <widget class="ResizableTextEdit" name="teComment"/>
    </item>
    <item row="19" column="2" colspan="2">
     <widget class="KComboBox" name="cbXScale"/>
@@ -349,6 +352,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

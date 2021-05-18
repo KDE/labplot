@@ -126,7 +126,7 @@ void HistogramView::drawBackground(QPainter* painter, const QRectF& rect) {
 DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent), m_image(nullptr) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
 
 	ui.leFileName->setClearButtonEnabled(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
@@ -216,7 +216,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	//SLOTS
 	//general
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerImageWidget::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &DatapickerImageWidget::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &DatapickerImageWidget::commentChanged);
 	connect(ui.bOpen, &QPushButton::clicked, this, &DatapickerImageWidget::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &DatapickerImageWidget::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &DatapickerImageWidget::fileNameChanged);
@@ -329,16 +329,16 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 		ui.leName->setText(m_image->parentAspect()->name());
-		ui.leComment->setText(m_image->parentAspect()->comment());
+		ui.teComment->setText(m_image->parentAspect()->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 
 	this->load();
@@ -749,8 +749,8 @@ void DatapickerImageWidget::imageDescriptionChanged(const AbstractAspect* aspect
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text()) {
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
-		ui.leComment->setText(aspect->comment());
+	} else if (aspect->comment() != ui.teComment->document()->toPlainText()) {
+		ui.teComment->setText(aspect->comment());
 	}
 	m_initializing = false;
 }

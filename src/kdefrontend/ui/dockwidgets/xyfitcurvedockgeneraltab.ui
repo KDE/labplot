@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>446</width>
-    <height>1207</height>
+    <height>1230</height>
    </rect>
   </property>
   <property name="autoFillBackground">
@@ -62,8 +62,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -134,8 +133,7 @@
      </property>
      <property name="icon">
       <iconset theme="configure">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
     </widget>
    </item>
@@ -601,7 +599,7 @@
     </widget>
    </item>
    <item row="1" column="3" colspan="4">
-    <widget class="QLineEdit" name="leComment"/>
+    <widget class="ResizableTextEdit" name="teComment"/>
    </item>
    <item row="17" column="0">
     <widget class="QLabel" name="lEquation">
@@ -671,8 +669,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -742,8 +739,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -800,8 +796,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -891,8 +886,7 @@
      </property>
      <property name="icon">
       <iconset theme="arrow-down">
-       <normaloff/>
-      </iconset>
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -967,6 +961,9 @@
      <property name="text">
       <string>Comment:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="10" column="3" colspan="4">
@@ -1016,7 +1013,16 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <property name="spacing">
@@ -1133,6 +1139,11 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
   <customwidget>
    <class>ExpressionTextEdit</class>

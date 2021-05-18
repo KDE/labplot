@@ -38,7 +38,8 @@
 CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	//"Symbol"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabSymbol);
@@ -67,7 +68,7 @@ CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	//SLOTS
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &CustomPointDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &CustomPointDock::commentChanged);
 	connect(ui.lePositionX, &QLineEdit::textChanged, this, &CustomPointDock::positionXChanged);
 	connect(ui.dateTimeEditPositionX, &QDateTimeEdit::dateTimeChanged, this, &CustomPointDock::positionXDateTimeChanged);
 	connect(ui.lePositionY, &QLineEdit::textChanged, this, &CustomPointDock::positionYChanged);
@@ -100,16 +101,16 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 		ui.leName->setText(m_point->name());
-		ui.leComment->setText(m_point->comment());
+		ui.teComment->setText(m_point->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -214,8 +215,8 @@ void CustomPointDock::pointDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text()) {
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
-		ui.leComment->setText(aspect->comment());
+	} else if (aspect->comment() != ui.teComment->text()) {
+		ui.teComment->setText(aspect->comment());
 	}
 	m_initializing = false;
 }

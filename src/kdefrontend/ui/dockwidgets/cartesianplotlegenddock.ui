@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
-    <height>985</height>
+    <width>391</width>
+    <height>805</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -67,10 +67,13 @@
          <property name="text">
           <string>Comment:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item row="1" column="2" colspan="2">
-        <widget class="QLineEdit" name="leComment">
+        <widget class="ResizableTextEdit" name="teComment">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
@@ -861,6 +864,11 @@
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

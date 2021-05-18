@@ -48,7 +48,8 @@
 SpreadsheetDock::SpreadsheetDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	//leComment = ui.teComment; // is not a lineedit
+	m_teComment = ui.teComment;
+	ui.teComment->setFixedHeight(ui.leName->height());
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &SpreadsheetDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &SpreadsheetDock::commentChanged);
@@ -124,13 +125,6 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 //*************************************************************
 //****** SLOTs for changes triggered in SpreadsheetDock *******
 //*************************************************************
-void SpreadsheetDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_spreadsheet->setComment(ui.teComment->document()->toPlainText());
-}
-
 void SpreadsheetDock::rowCountChanged(int rows) {
 	if (m_initializing)
 		return;
@@ -168,7 +162,7 @@ void SpreadsheetDock::spreadsheetDescriptionChanged(const AbstractAspect* aspect
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->toPlainText())
+	else if (aspect->comment() != ui.teComment->text())
 		ui.teComment->document()->setPlainText(aspect->comment());
 
 	m_initializing = false;

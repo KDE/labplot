@@ -39,7 +39,8 @@
 ReferenceLineDock::ReferenceLineDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
@@ -52,7 +53,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent) : BaseDock(parent) {
 	//SLOTS
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &ReferenceLineDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &ReferenceLineDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &ReferenceLineDock::commentChanged);
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
 	connect(ui.lePosition, &QLineEdit::textChanged, this, &ReferenceLineDock::positionChanged);
@@ -81,16 +82,16 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 		ui.leName->setText(m_line->name());
-		ui.leComment->setText(m_line->comment());
+		ui.teComment->setText(m_line->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -227,8 +228,8 @@ void ReferenceLineDock::lineDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 
 	m_initializing = false;
 }

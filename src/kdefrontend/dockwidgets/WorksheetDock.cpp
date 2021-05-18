@@ -51,7 +51,8 @@
 WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	//Background-tab
 	ui.cbBackgroundColorStyle->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
@@ -83,7 +84,7 @@ WorksheetDock::WorksheetDock(QWidget *parent): BaseDock(parent) {
 	//SLOTs
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &WorksheetDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &WorksheetDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &WorksheetDock::commentChanged);
 	connect(ui.cbSize, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, static_cast<void (WorksheetDock::*)(int)>(&WorksheetDock::sizeChanged));
 	connect(ui.sbWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
@@ -163,18 +164,18 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 
 		ui.leName->setText(m_worksheet->name());
-		ui.leComment->setText(m_worksheet->comment());
+		ui.teComment->setText(m_worksheet->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -795,8 +796,8 @@ void WorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 	m_initializing = false;
 }
 

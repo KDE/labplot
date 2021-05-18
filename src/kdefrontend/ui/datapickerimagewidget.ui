@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>656</width>
-    <height>1181</height>
+    <width>599</width>
+    <height>778</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
@@ -52,18 +52,18 @@
          <property name="text">
           <string>Comment:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item row="1" column="5">
-        <widget class="QLineEdit" name="leComment">
+        <widget class="ResizableTextEdit" name="teComment">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -1064,10 +1064,15 @@
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
   </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>leName</tabstop>
-  <tabstop>leComment</tabstop>
+  <tabstop>teComment</tabstop>
   <tabstop>leFileName</tabstop>
   <tabstop>bOpen</tabstop>
   <tabstop>cbGraphType</tabstop>

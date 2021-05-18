@@ -76,7 +76,8 @@ void XYFitCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
-	m_leComment = uiGeneralTab.leComment;
+	m_teComment = uiGeneralTab.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2, 2, 2, 2);
@@ -196,7 +197,7 @@ void XYFitCurveDock::setupGeneral() {
 
 	//Slots
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYFitCurveDock::nameChanged);
-	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYFitCurveDock::commentChanged);
+	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYFitCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYFitCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbDataSourceType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFitCurveDock::dataSourceTypeChanged);
 	connect(uiGeneralTab.lWeights, &QPushButton::clicked, this, &XYFitCurveDock::showWeightsOptions);
@@ -232,18 +233,18 @@ void XYFitCurveDock::initGeneralTab() {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.leComment->setEnabled(true);
+		uiGeneralTab.teComment->setEnabled(true);
 
 		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.leComment->setText(m_curve->comment());
+		uiGeneralTab.teComment->setText(m_curve->comment());
 	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.leComment->setEnabled(false);
+		uiGeneralTab.teComment->setEnabled(false);
 
 		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.leComment->setText(QString());
+		uiGeneralTab.teComment->setText(QString());
 	}
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_fitCurve->dataSourceType()));
@@ -1372,8 +1373,8 @@ void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.leComment->text())
-		uiGeneralTab.leComment->setText(aspect->comment());
+	else if (aspect->comment() != uiGeneralTab.teComment->text())
+		uiGeneralTab.teComment->setText(aspect->comment());
 	m_initializing = false;
 }
 

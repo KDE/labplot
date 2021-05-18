@@ -67,7 +67,8 @@ void XYEquationCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
-	m_leComment = uiGeneralTab.leComment;
+	m_teComment = uiGeneralTab.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	auto* gridLayout = dynamic_cast<QGridLayout*>(generalTab->layout());
 	if (gridLayout) {
@@ -103,7 +104,7 @@ void XYEquationCurveDock::setupGeneral() {
 
 	//Slots
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYEquationCurveDock::nameChanged);
-	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYEquationCurveDock::commentChanged);
+	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYEquationCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYEquationCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYEquationCurveDock::typeChanged);
 	connect(uiGeneralTab.teEquation1, &ExpressionTextEdit::expressionChanged, this, &XYEquationCurveDock::enableRecalculate);
@@ -125,18 +126,18 @@ void XYEquationCurveDock::initGeneralTab() {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.leComment->setEnabled(true);
+		uiGeneralTab.teComment->setEnabled(true);
 
 		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.leComment->setText(m_curve->comment());
+		uiGeneralTab.teComment->setText(m_curve->comment());
 	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.leComment->setEnabled(false);
+		uiGeneralTab.teComment->setEnabled(false);
 
 		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.leComment->setText(QString());
+		uiGeneralTab.teComment->setText(QString());
 	}
 
 	//show the properties of the first curve
@@ -356,8 +357,8 @@ void XYEquationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) 
 	const Lock lock(m_initializing);
 	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.leComment->text())
-		uiGeneralTab.leComment->setText(aspect->comment());
+	else if (aspect->comment() != uiGeneralTab.teComment->text())
+		uiGeneralTab.teComment->setText(aspect->comment());
 }
 
 void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& data) {

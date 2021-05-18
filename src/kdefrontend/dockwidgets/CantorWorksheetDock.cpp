@@ -36,12 +36,13 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	ui.tabWidget->setMovable(true);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	//SLOTs
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CantorWorksheetDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &CantorWorksheetDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &CantorWorksheetDock::commentChanged);
 	connect(ui.bEvaluate, &QPushButton::pressed, this, &CantorWorksheetDock::evaluateWorksheet);
 	connect(ui.bRestart, &QPushButton::pressed, this, &CantorWorksheetDock::restartBackend);
 }
@@ -56,7 +57,7 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	ui.leName->setText(m_worksheet->name());
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
-	ui.leComment->setText(m_worksheet->comment());
+	ui.teComment->setText(m_worksheet->comment());
 
 	//show all available plugins
 	int k = 0;
@@ -125,7 +126,7 @@ void CantorWorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspe
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 	m_initializing = false;
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>648</width>
-    <height>380</height>
+    <width>326</width>
+    <height>386</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -42,10 +42,13 @@
      <property name="text">
       <string>Comment:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
     </widget>
    </item>
    <item row="1" column="3">
-    <widget class="QLineEdit" name="leComment"/>
+    <widget class="ResizableTextEdit" name="teComment"/>
    </item>
    <item row="2" column="1">
     <spacer name="verticalSpacer_8">
@@ -121,6 +124,11 @@
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

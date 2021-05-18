@@ -71,7 +71,8 @@ enum PositionAlignmentComboBoxIndex {
 AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	//"Title"-tab
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -126,7 +127,7 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 
 	//"General"-tab
 	connect(ui.leName, &QLineEdit::textChanged, this, &AxisDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &AxisDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &AxisDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &AxisDock::visibilityChanged);
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -473,9 +474,9 @@ void AxisDock::setAxes(QList<Axis*> list) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 		ui.leName->setText(m_axis->name());
-		ui.leComment->setText(m_axis->comment());
+		ui.teComment->setText(m_axis->comment());
 		this->setModelIndexFromColumn(cbMajorTicksColumn, m_axis->majorTicksColumn());
 		this->setModelIndexFromColumn(cbMinorTicksColumn, m_axis->minorTicksColumn());
 		this->setModelIndexFromColumn(cbLabelsTextColumn, m_axis->labelsTextColumn());
@@ -483,9 +484,9 @@ void AxisDock::setAxes(QList<Axis*> list) {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 		cbMajorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbMinorTicksColumn->setCurrentModelIndex(QModelIndex());
 		cbLabelsTextColumn->setCurrentModelIndex(QModelIndex());
@@ -1854,8 +1855,8 @@ void AxisDock::axisDescriptionChanged(const AbstractAspect* aspect) {
 	const Lock lock(m_initializing);
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 }
 
 void AxisDock::axisOrientationChanged(Axis::Orientation orientation) {

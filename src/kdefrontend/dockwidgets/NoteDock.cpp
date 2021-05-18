@@ -37,10 +37,11 @@
 NoteDock::NoteDock(QWidget *parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &NoteDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &NoteDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &NoteDock::commentChanged);
 
 	connect(ui.kcbBgColor, &KColorButton::changed, this, &NoteDock::backgroundColorChanged);
 	connect(ui.kcbTextColor, &KColorButton::changed, this, &NoteDock::textColorChanged);

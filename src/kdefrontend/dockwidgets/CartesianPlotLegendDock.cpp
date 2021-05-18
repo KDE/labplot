@@ -50,7 +50,8 @@
 CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	//"Title"-tab
 	auto hboxLayout = new QHBoxLayout(ui.tabTitle);
@@ -82,7 +83,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CartesianPlotLegendDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &CartesianPlotLegendDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &CartesianPlotLegendDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotLegendDock::visibilityChanged);
 	connect(ui.kfrLabelFont, &KFontRequester::fontSelected, this, &CartesianPlotLegendDock::labelFontChanged);
 	connect(ui.kcbLabelColor, &KColorButton::changed, this, &CartesianPlotLegendDock::labelColorChanged);
@@ -178,18 +179,18 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 
 		ui.leName->setText(m_legend->name());
-		ui.leComment->setText(m_legend->comment());
+		ui.teComment->setText(m_legend->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -784,8 +785,8 @@ void CartesianPlotLegendDock::legendDescriptionChanged(const AbstractAspect* asp
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text()) {
 		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.leComment->text()) {
-		ui.leComment->setText(aspect->comment());
+	} else if (aspect->comment() != ui.teComment->text()) {
+		ui.teComment->setText(aspect->comment());
 	}
 	m_initializing = false;
 }

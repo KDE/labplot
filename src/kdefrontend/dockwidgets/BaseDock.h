@@ -36,6 +36,7 @@
 #include <QLineEdit>
 
 class AbstractAspect;
+class ResizableTextEdit;
 class QComboBox;
 class QDoubleSpinBox;
 
@@ -70,7 +71,7 @@ public:
 protected:
 	bool m_initializing{false};
 	QLineEdit* m_leName{nullptr};
-	QLineEdit* m_leComment{nullptr};
+	ResizableTextEdit* m_teComment{nullptr};
 	AbstractAspect* m_aspect{nullptr};
 	QList<AbstractAspect*> m_aspects;
 	Units m_units{Units::Metric};

@@ -53,7 +53,6 @@ private:
 
 private slots:
 	//SLOTs for changes triggered in SpreadsheetDock
-	void commentChanged();
 	void rowCountChanged(int);
 	void columnCountChanged(int);
 	void commentsShownChanged(int);

@@ -43,7 +43,8 @@
 MatrixDock::MatrixDock(QWidget* parent): BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	ui.cbFormat->addItem(i18n("Decimal"), QVariant('f'));
 	ui.cbFormat->addItem(i18n("Scientific (e)"), QVariant('e'));
@@ -62,7 +63,7 @@ MatrixDock::MatrixDock(QWidget* parent): BaseDock(parent) {
 	ui.leYEnd->setValidator( new QDoubleValidator(ui.leYEnd) );
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &MatrixDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &MatrixDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &MatrixDock::commentChanged);
 	connect(ui.sbColumnCount, SIGNAL(valueChanged(int)), this, SLOT(columnCountChanged(int)));
 	connect(ui.sbRowCount, SIGNAL(valueChanged(int)), this, SLOT(rowCountChanged(int)));
 	connect(ui.leXStart, SIGNAL(returnPressed()), this, SLOT(xStartChanged()));
@@ -89,17 +90,17 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 
 	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 
 		ui.leName->setText(m_matrix->name());
-		ui.leComment->setText(m_matrix->comment());
+		ui.teComment->setText(m_matrix->comment());
 	} else {
 		//disable these fields if there is more than one matrix
 		ui.leName->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -242,8 +243,8 @@ void MatrixDock::matrixDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 
 	m_initializing = false;
 }

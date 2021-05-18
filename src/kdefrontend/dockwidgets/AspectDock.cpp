@@ -40,10 +40,11 @@
 AspectDock::AspectDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	ui.teComment->setFixedHeight(ui.leName->height());
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &AspectDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &AspectDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &AspectDock::commentChanged);
 }
 
 void AspectDock::setAspects(QList<AbstractAspect*> list) {
@@ -52,16 +53,16 @@ void AspectDock::setAspects(QList<AbstractAspect*> list) {
 	const Lock lock(m_initializing);
 	if (list.size() == 1) {
 		ui.leName->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 
 		ui.leName->setText(m_aspect->name());
-		ui.leComment->setText(m_aspect->comment());
+		ui.teComment->setText(m_aspect->comment());
 	} else {
 		ui.leName->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 
 	// slots
@@ -78,7 +79,7 @@ void AspectDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 	m_initializing = false;
 }

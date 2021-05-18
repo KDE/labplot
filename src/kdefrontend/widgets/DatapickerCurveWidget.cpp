@@ -40,7 +40,7 @@
 DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
 
 	ui.cbXErrorType->addItem(i18n("No Error"));
 	ui.cbXErrorType->addItem(i18n("Symmetric"));
@@ -60,7 +60,7 @@ DatapickerCurveWidget::DatapickerCurveWidget(QWidget* parent) : BaseDock(parent)
 	DatapickerCurveWidget::updateLocale();
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &DatapickerCurveWidget::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &DatapickerCurveWidget::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &DatapickerCurveWidget::commentChanged);
 	connect(ui.cbXErrorType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
 			this, &DatapickerCurveWidget::xErrorTypeChanged);
 	connect(ui.cbYErrorType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
@@ -143,16 +143,16 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 		ui.leName->setText(m_curve->name());
-		ui.leComment->setText(m_curve->comment());
+		ui.teComment->setText(m_curve->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 
 	load();
@@ -427,8 +427,8 @@ void DatapickerCurveWidget::curveDescriptionChanged(const AbstractAspect* aspect
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->document()->toPlainText())
+		ui.teComment->setText(aspect->comment());
 
 	m_initializing = false;
 }

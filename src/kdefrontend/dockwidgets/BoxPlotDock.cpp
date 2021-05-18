@@ -46,7 +46,8 @@
 BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	// Tab "General"
 	m_buttonNew = new QPushButton();
@@ -75,7 +76,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	QString msg = i18n("If checked, the box width is made proportional to the square root of the number of data points.");
 	ui.lVariableWidth->setToolTip(msg);
 	ui.chkVariableWidth->setToolTip(msg);
-
 
 	//Tab "Box"
 	msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
@@ -138,7 +138,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	//SLOTS
 	//Tab "General"
 	connect(ui.leName, &QLineEdit::textChanged, this, &BoxPlotDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &BoxPlotDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &BoxPlotDock::commentChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &BoxPlotDock::orientationChanged);
 	connect(ui.chkVariableWidth, &QCheckBox::stateChanged, this, &BoxPlotDock::variableWidthChanged);
@@ -221,18 +221,18 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 		ui.leName->setText(m_boxPlot->name());
-		ui.leComment->setText(m_boxPlot->comment());
+		ui.teComment->setText(m_boxPlot->comment());
 
 		ui.lDataColumn->setEnabled(true);
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 
 		ui.lDataColumn->setEnabled(false);
 	}
@@ -865,8 +865,8 @@ void BoxPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 
 	m_initializing = false;
 }

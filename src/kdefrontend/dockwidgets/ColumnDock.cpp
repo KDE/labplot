@@ -51,7 +51,8 @@
 ColumnDock::ColumnDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	//add formats for numeric values
 	ui.cbNumericFormat->addItem(i18n("Decimal"), QVariant('f'));
@@ -70,7 +71,7 @@ ColumnDock::ColumnDock(QWidget* parent) : BaseDock(parent) {
 	ui.twLabels->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &ColumnDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &ColumnDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &ColumnDock::commentChanged);
 	connect(ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::typeChanged);
 	connect(ui.cbNumericFormat, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ColumnDock::numericFormatChanged);
 	connect(ui.sbPrecision, QOverload<int>::of(&QSpinBox::valueChanged), this, &ColumnDock::precisionChanged);
@@ -114,20 +115,20 @@ void ColumnDock::setColumns(QList<Column*> list) {
 		//names and comments of non-editable columns in a file data source can be changed.
 		if (!nonEditable && m_column->parentAspect()->type() == AspectType::LiveDataSource) {
 			ui.leName->setEnabled(false);
-			ui.leComment->setEnabled(false);
+			ui.teComment->setEnabled(false);
 		} else {
 			ui.leName->setEnabled(true);
-			ui.leComment->setEnabled(true);
+			ui.teComment->setEnabled(true);
 		}
 
 		ui.leName->setText(m_column->name());
-		ui.leComment->setText(m_column->comment());
+		ui.teComment->setText(m_column->comment());
 	} else {
 		ui.leName->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 
 		auto mode = m_column->columnMode();
 		for (auto* col : m_columnsList) {
@@ -540,8 +541,8 @@ void ColumnDock::columnDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 	m_initializing = false;
 }
 

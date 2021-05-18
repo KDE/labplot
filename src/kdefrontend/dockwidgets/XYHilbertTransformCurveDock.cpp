@@ -56,7 +56,8 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
-	m_leComment = uiGeneralTab.leComment;
+	m_teComment = uiGeneralTab.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	auto* gridLayout = static_cast<QGridLayout*>(generalTab->layout());
 	gridLayout->setContentsMargins(2,2,2,2);
@@ -80,7 +81,7 @@ void XYHilbertTransformCurveDock::setupGeneral() {
 
 	//Slots
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::nameChanged);
-	connect(uiGeneralTab.leComment, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::commentChanged);
+	connect(uiGeneralTab.teComment, &QTextEdit::textChanged, this, &XYHilbertTransformCurveDock::commentChanged);
 	connect(uiGeneralTab.chkVisible, &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::visibilityChanged);
 	connect(uiGeneralTab.cbAutoRange, &QCheckBox::clicked, this, &XYHilbertTransformCurveDock::autoRangeChanged);
 	connect(uiGeneralTab.leMin, &QLineEdit::textChanged, this, &XYHilbertTransformCurveDock::xRangeMinChanged);
@@ -99,18 +100,18 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 		uiGeneralTab.lName->setEnabled(true);
 		uiGeneralTab.leName->setEnabled(true);
 		uiGeneralTab.lComment->setEnabled(true);
-		uiGeneralTab.leComment->setEnabled(true);
+		uiGeneralTab.teComment->setEnabled(true);
 
 		uiGeneralTab.leName->setText(m_curve->name());
-		uiGeneralTab.leComment->setText(m_curve->comment());
+		uiGeneralTab.teComment->setText(m_curve->comment());
 	} else {
 		uiGeneralTab.lName->setEnabled(false);
 		uiGeneralTab.leName->setEnabled(false);
 		uiGeneralTab.lComment->setEnabled(false);
-		uiGeneralTab.leComment->setEnabled(false);
+		uiGeneralTab.teComment->setEnabled(false);
 
 		uiGeneralTab.leName->setText(QString());
-		uiGeneralTab.leComment->setText(QString());
+		uiGeneralTab.teComment->setText(QString());
 	}
 
 	//show the properties of the first curve
@@ -325,8 +326,8 @@ void XYHilbertTransformCurveDock::curveDescriptionChanged(const AbstractAspect* 
 	m_initializing = true;
 	if (aspect->name() != uiGeneralTab.leName->text())
 		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.leComment->text())
-		uiGeneralTab.leComment->setText(aspect->comment());
+	else if (aspect->comment() != uiGeneralTab.teComment->text())
+		uiGeneralTab.teComment->setText(aspect->comment());
 	m_initializing = false;
 }
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
-    <height>1130</height>
+    <width>306</width>
+    <height>721</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -68,18 +68,18 @@
          <property name="text">
           <string>Comment:</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLineEdit" name="leComment">
+        <widget class="ResizableTextEdit" name="teComment">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -543,14 +543,19 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

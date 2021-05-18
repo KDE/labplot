@@ -61,6 +61,7 @@ public:
 	explicit ResizableTextEdit(QWidget*, bool vertResizeOnly = true);
 	void addSize(QSize);
 	QSize sizeHint() const override;
+	QString text() const;
 
 protected:
 	void resizeEvent(QResizeEvent*) override;

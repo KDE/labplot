@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>395</width>
-    <height>1285</height>
+    <height>1338</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -215,12 +215,15 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLineEdit" name="leComment"/>
+        <widget class="ResizableTextEdit" name="teComment"/>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="lComment">
          <property name="text">
           <string>Comment:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -1216,11 +1219,16 @@
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
   </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
   <tabstop>leName</tabstop>
-  <tabstop>leComment</tabstop>
+  <tabstop>teComment</tabstop>
   <tabstop>cbType</tabstop>
   <tabstop>cbOrientation</tabstop>
   <tabstop>cbBinningMethod</tabstop>

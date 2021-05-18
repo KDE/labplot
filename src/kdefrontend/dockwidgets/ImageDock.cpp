@@ -52,7 +52,8 @@
 ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
@@ -103,7 +104,7 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 	//SLOTs
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &ImageDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &ImageDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &ImageDock::commentChanged);
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImageDock::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &ImageDock::fileNameChanged);
 	connect(ui.leFileName, &QLineEdit::textChanged, this, &ImageDock::fileNameChanged);
@@ -150,18 +151,18 @@ void ImageDock::setImages(QList<Image*> list) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 
 		ui.leName->setText(m_image->name());
-		ui.leComment->setText(m_image->comment());
+		ui.teComment->setText(m_image->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
@@ -473,8 +474,8 @@ void ImageDock::imageDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 	m_initializing = false;
 }
 

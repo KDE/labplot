@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
+    <width>399</width>
     <height>705</height>
    </rect>
   </property>
@@ -137,9 +137,9 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLineEdit" name="leComment">
+        <widget class="ResizableTextEdit" name="teComment">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -169,6 +169,9 @@
          </property>
          <property name="text">
           <string>Comment:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -667,11 +670,16 @@
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
   </customwidget>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget</tabstop>
   <tabstop>leName</tabstop>
-  <tabstop>leComment</tabstop>
+  <tabstop>teComment</tabstop>
   <tabstop>cbSize</tabstop>
   <tabstop>cbOrientation</tabstop>
   <tabstop>sbWidth</tabstop>

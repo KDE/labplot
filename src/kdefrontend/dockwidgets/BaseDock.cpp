@@ -116,7 +116,7 @@ void BaseDock::commentChanged() {
 	if (m_initializing || !m_aspect)
 		return;
 
-	m_aspect->setComment(m_leComment->text());
+	m_aspect->setComment(m_teComment->text());
 }
 
 void BaseDock::spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue)

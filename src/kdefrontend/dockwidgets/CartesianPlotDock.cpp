@@ -60,7 +60,8 @@
 CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	m_leComment = ui.leComment;
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	//"General"-tab
 	auto* rangeButtonsGroup(new QButtonGroup);
@@ -123,7 +124,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	//SIGNAL/SLOT
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CartesianPlotDock::nameChanged);
-	connect(ui.leComment, &QLineEdit::textChanged, this, &CartesianPlotDock::commentChanged);
+	connect(ui.teComment, &QTextEdit::textChanged, this, &CartesianPlotDock::commentChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &CartesianPlotDock::visibilityChanged);
 	connect(ui.sbLeft, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
 	connect(ui.sbTop, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
@@ -278,18 +279,18 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 		ui.lName->setEnabled(true);
 		ui.leName->setEnabled(true);
 		ui.lComment->setEnabled(true);
-		ui.leComment->setEnabled(true);
+		ui.teComment->setEnabled(true);
 
 		ui.leName->setText(m_plot->name());
-		ui.leComment->setText(m_plot->comment());
+		ui.teComment->setText(m_plot->comment());
 	} else {
 		ui.lName->setEnabled(false);
 		ui.leName->setEnabled(false);
 		ui.lComment->setEnabled(false);
-		ui.leComment->setEnabled(false);
+		ui.teComment->setEnabled(false);
 
 		ui.leName->setText(QString());
-		ui.leComment->setText(QString());
+		ui.teComment->setText(QString());
 	}
 
 	symmetricPaddingChanged(m_plot->symmetricPadding());
@@ -2058,8 +2059,8 @@ void CartesianPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 	m_initializing = true;
 	if (aspect->name() != ui.leName->text())
 		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.leComment->text())
-		ui.leComment->setText(aspect->comment());
+	else if (aspect->comment() != ui.teComment->text())
+		ui.teComment->setText(aspect->comment());
 	m_initializing = false;
 }
 

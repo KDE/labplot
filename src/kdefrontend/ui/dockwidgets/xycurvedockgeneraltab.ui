@@ -7,20 +7,36 @@
     <x>0</x>
     <y>0</y>
     <width>367</width>
-    <height>218</height>
+    <height>286</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
     <number>2</number>
    </property>
    <property name="spacing">
     <number>2</number>
    </property>
-   <item row="0" column="0">
-    <widget class="QLabel" name="lName">
+   <item row="6" column="0">
+    <widget class="QCheckBox" name="chkVisible">
      <property name="text">
-      <string>Name:</string>
+      <string>Visible</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lPlotRange">
+     <property name="text">
+      <string>Plot range:</string>
      </property>
     </widget>
    </item>
@@ -40,18 +56,8 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="2">
-    <widget class="QLineEdit" name="leName"/>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lComment">
-     <property name="text">
-      <string>Comment:</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="2">
-    <widget class="QLineEdit" name="leComment"/>
+    <widget class="ResizableTextEdit" name="teComment"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="lXColumn">
@@ -60,10 +66,10 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="lYColumn">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lName">
      <property name="text">
-      <string>y-data:</string>
+      <string>Name:</string>
      </property>
     </widget>
    </item>
@@ -83,25 +89,38 @@
      </property>
     </spacer>
    </item>
-   <item row="6" column="0">
-    <widget class="QCheckBox" name="chkVisible">
-     <property name="text">
-      <string>Visible</string>
-     </property>
-    </widget>
+   <item row="0" column="2">
+    <widget class="QLineEdit" name="leName"/>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lPlotRange">
+   <item row="1" column="0">
+    <widget class="QLabel" name="lComment">
      <property name="text">
-      <string>Plot range:</string>
+      <string>Comment:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
    <item row="4" column="2">
     <widget class="QComboBox" name="cbPlotRanges"/>
    </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lYColumn">
+     <property name="text">
+      <string>y-data:</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ResizableTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
