@@ -221,11 +221,11 @@ void XYCurveDock::setupGeneral() {
 
 	cbXColumn = new TreeViewComboBox(generalTab);
 	cbXColumn->useCurrentIndexText(false);
-	gridLayout->addWidget(cbXColumn, 2, 2, 1, 1);
+	gridLayout->addWidget(cbXColumn, 4, 2, 1, 1);
 
 	cbYColumn = new TreeViewComboBox(generalTab);
 	cbYColumn->useCurrentIndexText(false);
-	gridLayout->addWidget(cbYColumn, 3, 2, 1, 1);
+	gridLayout->addWidget(cbYColumn, 5, 2, 1, 1);
 
 	//General
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYCurveDock::nameChanged);
