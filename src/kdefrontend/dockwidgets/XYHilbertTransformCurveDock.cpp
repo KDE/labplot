@@ -134,7 +134,7 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_transformCurve, &XYHilbertTransformCurve::aspectDescriptionChanged, this, &XYHilbertTransformCurveDock::curveDescriptionChanged);
+	connect(m_transformCurve, &XYHilbertTransformCurve::aspectDescriptionChanged, this, &XYHilbertTransformCurveDock::aspectDescriptionChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::xDataColumnChanged, this, &XYHilbertTransformCurveDock::curveXDataColumnChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::yDataColumnChanged, this, &XYHilbertTransformCurveDock::curveYDataColumnChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::transformDataChanged, this, &XYHilbertTransformCurveDock::curveTransformDataChanged);
@@ -319,18 +319,6 @@ void XYHilbertTransformCurveDock::showTransformResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 //General-Tab
-void XYHilbertTransformCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text())
-		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.teComment->text())
-		uiGeneralTab.teComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
 void XYHilbertTransformCurveDock::curveXDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	cbXDataColumn->setColumn(column, m_transformCurve->xDataColumnPath());

@@ -76,7 +76,6 @@ private slots:
 	void errorBarSizeChanged(double);
 
 	//SLOTs for changes triggered in DatapickerCurve
-	void curveDescriptionChanged(const AbstractAspect*);
 	void curveErrorsChanged(DatapickerCurve::Errors);
 	void symbolStyleChanged(Symbol::Style);
 	void symbolSizeChanged(qreal);

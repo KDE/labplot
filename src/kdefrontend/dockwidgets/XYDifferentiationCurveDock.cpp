@@ -183,7 +183,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_differentiationCurve, &XYDifferentiationCurve::aspectDescriptionChanged, this, &XYDifferentiationCurveDock::curveDescriptionChanged);
+	connect(m_differentiationCurve, &XYDifferentiationCurve::aspectDescriptionChanged, this, &XYDifferentiationCurveDock::aspectDescriptionChanged);
 	connect(m_differentiationCurve, &XYDifferentiationCurve::dataSourceTypeChanged, this, &XYDifferentiationCurveDock::curveDataSourceTypeChanged);
 	connect(m_differentiationCurve, &XYDifferentiationCurve::dataSourceCurveChanged, this, &XYDifferentiationCurveDock::curveDataSourceCurveChanged);
 	connect(m_differentiationCurve, &XYDifferentiationCurve::xDataColumnChanged, this, &XYDifferentiationCurveDock::curveXDataColumnChanged);
@@ -581,18 +581,6 @@ void XYDifferentiationCurveDock::showDifferentiationResult() {
 //*** SLOTs for changes triggered in XYDifferentiationCurve ***
 //*************************************************************
 //General-Tab
-void XYDifferentiationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text())
-		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.teComment->text())
-		uiGeneralTab.teComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
 void XYDifferentiationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));

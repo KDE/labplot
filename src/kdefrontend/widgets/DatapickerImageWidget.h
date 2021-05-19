@@ -122,7 +122,6 @@ private slots:
 
 
 	//SLOTs for changes triggered in DatapickerImageWidget
-	void imageDescriptionChanged(const AbstractAspect*);
 	void imageFileNameChanged(const QString&);
 	void imageRotationAngleChanged(float);
 	void imageAxisPointsChanged(const DatapickerImage::ReferencePoints&);

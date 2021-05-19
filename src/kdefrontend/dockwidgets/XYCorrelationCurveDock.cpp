@@ -176,7 +176,7 @@ void XYCorrelationCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_correlationCurve, &XYCorrelationCurve::aspectDescriptionChanged, this, &XYCorrelationCurveDock::curveDescriptionChanged);
+	connect(m_correlationCurve, &XYCorrelationCurve::aspectDescriptionChanged, this, &XYCorrelationCurveDock::aspectDescriptionChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::dataSourceTypeChanged, this, &XYCorrelationCurveDock::curveDataSourceTypeChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::dataSourceCurveChanged, this, &XYCorrelationCurveDock::curveDataSourceCurveChanged);
 	connect(m_correlationCurve, &XYCorrelationCurve::xDataColumnChanged, this, &XYCorrelationCurveDock::curveXDataColumnChanged);
@@ -477,18 +477,6 @@ void XYCorrelationCurveDock::showCorrelationResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 //General-Tab
-void XYCorrelationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text())
-		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.teComment->text())
-		uiGeneralTab.teComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
 void XYCorrelationCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));

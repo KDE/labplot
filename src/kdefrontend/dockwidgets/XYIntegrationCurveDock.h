@@ -81,7 +81,6 @@ private slots:
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
-	void curveDescriptionChanged(const AbstractAspect*);
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
 	void curveXDataColumnChanged(const AbstractColumn*);

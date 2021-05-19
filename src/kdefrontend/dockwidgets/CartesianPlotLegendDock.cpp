@@ -216,7 +216,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 
 	//SIGNALs/SLOTs
 	//General
-	connect(m_legend, &AbstractAspect::aspectDescriptionChanged, this, &CartesianPlotLegendDock::legendDescriptionChanged);
+	connect(m_legend, &AbstractAspect::aspectDescriptionChanged, this, &CartesianPlotLegendDock::aspectDescriptionChanged);
 	connect(m_legend, &CartesianPlotLegend::labelFontChanged, this, &CartesianPlotLegendDock::legendLabelFontChanged);
 	connect(m_legend, &CartesianPlotLegend::labelColorChanged, this, &CartesianPlotLegendDock::legendLabelColorChanged);
 	connect(m_legend, &CartesianPlotLegend::labelColumnMajorChanged, this, &CartesianPlotLegendDock::legendLabelOrderChanged);
@@ -778,19 +778,6 @@ void CartesianPlotLegendDock::layoutColumnCountChanged(int count) {
 //**** SLOTs for changes triggered in CartesianPlotLegend *****
 //*************************************************************
 //General
-void CartesianPlotLegendDock::legendDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_legend != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
-		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.teComment->text()) {
-		ui.teComment->setText(aspect->comment());
-	}
-	m_initializing = false;
-}
-
 void CartesianPlotLegendDock::legendLabelFontChanged(QFont& font) {
 	m_initializing = true;
 	//we need to set the font size in points for KFontRequester

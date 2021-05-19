@@ -278,7 +278,7 @@ void XYFitCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked(m_curve->isVisible());
 
 	//Slots
-	connect(m_fitCurve, &XYFitCurve::aspectDescriptionChanged, this, &XYFitCurveDock::curveDescriptionChanged);
+	connect(m_fitCurve, &XYFitCurve::aspectDescriptionChanged, this, &XYFitCurveDock::aspectDescriptionChanged);
 	connect(m_fitCurve, &XYFitCurve::dataSourceTypeChanged, this, &XYFitCurveDock::curveDataSourceTypeChanged);
 	connect(m_fitCurve, &XYFitCurve::dataSourceCurveChanged, this, &XYFitCurveDock::curveDataSourceCurveChanged);
 	connect(m_fitCurve, &XYFitCurve::xDataColumnChanged, this, &XYFitCurveDock::curveXDataColumnChanged);
@@ -1366,18 +1366,6 @@ void XYFitCurveDock::showFitResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 //General-Tab
-void XYFitCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text())
-		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.teComment->text())
-		uiGeneralTab.teComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
 void XYFitCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));

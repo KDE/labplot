@@ -322,7 +322,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	}
 
 	//SIGNALs/SLOTs
-	connect(m_plot, &CartesianPlot::aspectDescriptionChanged, this, &CartesianPlotDock::plotDescriptionChanged);
+	connect(m_plot, &CartesianPlot::aspectDescriptionChanged, this, &CartesianPlotDock::aspectDescriptionChanged);
 	connect(m_plot, &CartesianPlot::rectChanged, this, &CartesianPlotDock::plotRectChanged);
 	connect(m_plot, &CartesianPlot::rangeTypeChanged, this, &CartesianPlotDock::plotRangeTypeChanged);
 	connect(m_plot, &CartesianPlot::rangeFirstValuesChanged, this, &CartesianPlotDock::plotRangeFirstValuesChanged);
@@ -2052,18 +2052,6 @@ void CartesianPlotDock::cursorLineStyleChanged(int index) {
 //****** SLOTs for changes triggered in CartesianPlot *********
 //*************************************************************
 //general
-void CartesianPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_plot != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
 void CartesianPlotDock::plotRectChanged(QRectF& rect) {
 	m_initializing = true;
 	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), m_worksheetUnit));

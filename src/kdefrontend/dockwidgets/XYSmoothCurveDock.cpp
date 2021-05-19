@@ -200,7 +200,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_smoothCurve, &XYSmoothCurve::aspectDescriptionChanged, this, &XYSmoothCurveDock::curveDescriptionChanged);
+	connect(m_smoothCurve, &XYSmoothCurve::aspectDescriptionChanged, this, &XYSmoothCurveDock::aspectDescriptionChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::dataSourceTypeChanged, this, &XYSmoothCurveDock::curveDataSourceTypeChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::dataSourceCurveChanged, this, &XYSmoothCurveDock::curveDataSourceCurveChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::xDataColumnChanged, this, &XYSmoothCurveDock::curveXDataColumnChanged);
@@ -605,18 +605,6 @@ void XYSmoothCurveDock::showSmoothResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 //General-Tab
-void XYSmoothCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text())
-		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.teComment->text())
-		uiGeneralTab.teComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
 void XYSmoothCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));

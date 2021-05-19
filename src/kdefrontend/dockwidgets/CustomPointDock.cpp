@@ -129,7 +129,7 @@ void CustomPointDock::setPoints(QList<CustomPoint*> points) {
 
 	//SIGNALs/SLOTs
 	// general
-	connect(m_point, &CustomPoint::aspectDescriptionChanged, this, &CustomPointDock::pointDescriptionChanged);
+	connect(m_point, &CustomPoint::aspectDescriptionChanged, this, &CustomPointDock::aspectDescriptionChanged);
 	connect(m_point, &CustomPoint::positionChanged, this, &CustomPointDock::pointPositionChanged);
 	connect(m_point, &WorksheetElement::plotRangeListChanged, this, &CustomPointDock::updatePlotRanges);
 	connect(m_point, &CustomPoint::visibleChanged, this, &CustomPointDock::pointVisibilityChanged);
@@ -208,19 +208,6 @@ void CustomPointDock::visibilityChanged(bool state) {
 //**** SLOTs for changes triggered in CustomPoint *********
 //*********************************************************
 //"General"-tab
-void CustomPointDock::pointDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_point != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
-		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.teComment->text()) {
-		ui.teComment->setText(aspect->comment());
-	}
-	m_initializing = false;
-}
-
 void CustomPointDock::pointPositionChanged(QPointF position) {
 	m_initializing = true;
 	SET_NUMBER_LOCALE

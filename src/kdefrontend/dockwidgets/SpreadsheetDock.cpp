@@ -105,7 +105,7 @@ void SpreadsheetDock::setSpreadsheets(QList<Spreadsheet*> list) {
 	this->load();
 
 	// undo functions
-	connect(m_spreadsheet, &AbstractAspect::aspectDescriptionChanged, this, &SpreadsheetDock::spreadsheetDescriptionChanged);
+	connect(m_spreadsheet, &AbstractAspect::aspectDescriptionChanged, this, &SpreadsheetDock::aspectDescriptionChanged);
 	connect(m_spreadsheet, &Spreadsheet::rowCountChanged, this, &SpreadsheetDock::spreadsheetRowCountChanged);
 	connect(m_spreadsheet, &Spreadsheet::columnCountChanged, this, &SpreadsheetDock::spreadsheetColumnCountChanged);
 	//TODO: show comments
@@ -155,19 +155,6 @@ void SpreadsheetDock::commentsShownChanged(int state) {
 //*************************************************************
 //******** SLOTs for changes triggered in Spreadsheet *********
 //*************************************************************
-void SpreadsheetDock::spreadsheetDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_spreadsheet != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->document()->setPlainText(aspect->comment());
-
-	m_initializing = false;
-}
-
 void SpreadsheetDock::spreadsheetRowCountChanged(int count) {
 	m_initializing = true;
   	ui.sbRowCount->setValue(count);

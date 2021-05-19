@@ -82,7 +82,6 @@ private slots:
 	void visibilityChanged(bool);
 
 	//SLOTs for changes triggered in Image
-	void imageDescriptionChanged(const AbstractAspect*);
 	void imageFileNameChanged(const QString&);
 	void imageOpacityChanged(float);
 	void imageWidthChanged(int);

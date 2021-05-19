@@ -58,7 +58,6 @@ private slots:
 	void commentsShownChanged(int);
 
 	//SLOTs for changes triggered in Spreadsheet
-	void spreadsheetDescriptionChanged(const AbstractAspect*);
 	void spreadsheetRowCountChanged(int);
 	void spreadsheetColumnCountChanged(int);
 	void spreadsheetShowCommentsChanged(int);

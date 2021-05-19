@@ -67,8 +67,6 @@ private slots:
 	void headerFormatChanged(int);
 
 	//SLOTs for changes triggered in Matrix
-	void matrixDescriptionChanged(const AbstractAspect*);
-
 	void matrixXStartChanged(double);
 	void matrixXEndChanged(double);
 	void matrixYStartChanged(double);

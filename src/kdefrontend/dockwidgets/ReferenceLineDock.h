@@ -68,7 +68,6 @@ private slots:
 	void opacityChanged(int);
 
 	//SLOTs for changes triggered in ReferenceLine
-	void lineDescriptionChanged(const AbstractAspect*);
 	void updatePlotRanges() const override;
 	void lineVisibilityChanged(bool);
 

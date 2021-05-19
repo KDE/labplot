@@ -59,9 +59,6 @@ private slots:
 	void restartBackend();
 	void visibilityRequested();
 
-	//SLOTs for changes triggered in Worksheet
-	void worksheetDescriptionChanged(const AbstractAspect*);
-
 signals:
 	void info(const QString&);
 

@@ -90,7 +90,7 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 	}
 
 	//SIGNALs/SLOTs
-	connect(m_worksheet, &AbstractAspect::aspectDescriptionChanged, this, &CantorWorksheetDock::worksheetDescriptionChanged);
+	connect(m_worksheet, &AbstractAspect::aspectDescriptionChanged, this, &CantorWorksheetDock::aspectDescriptionChanged);
 	m_initializing = false;
 }
 
@@ -114,19 +114,4 @@ void CantorWorksheetDock::restartBackend() {
  */
 void CantorWorksheetDock::visibilityRequested() {
 	ui.tabWidget->setCurrentIndex(1);
-}
-
-//*************************************************************
-//******** SLOTs for changes triggered in CantorWorksheet ***********
-//*************************************************************
-void CantorWorksheetDock::worksheetDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_worksheet != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->setText(aspect->comment());
-	m_initializing = false;
 }

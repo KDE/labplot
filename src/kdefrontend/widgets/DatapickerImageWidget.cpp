@@ -349,7 +349,7 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 }
 
 void DatapickerImageWidget::initConnections() {
-	connect(m_image->parentAspect(), &AbstractAspect::aspectDescriptionChanged, this, &DatapickerImageWidget::imageDescriptionChanged);
+	connect(m_image->parentAspect(), &AbstractAspect::aspectDescriptionChanged, this, &DatapickerImageWidget::aspectDescriptionChanged);
 	connect(m_image, &DatapickerImage::fileNameChanged, this, &DatapickerImageWidget::imageFileNameChanged);
 	connect(m_image, &DatapickerImage::rotationAngleChanged, this, &DatapickerImageWidget::imageRotationAngleChanged);
 	connect(m_image, &AbstractAspect::aspectRemoved, this, &DatapickerImageWidget::updateSymbolWidgets);
@@ -739,22 +739,6 @@ void DatapickerImageWidget::pointSeparationChanged(int value) {
 //*******************************************************************
 //******** SLOTs for changes triggered in DatapickerImage ***********
 //*******************************************************************
-/*!
- * called when the name or comment of image's parent (datapicker) was changed.
- */
-void DatapickerImageWidget::imageDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_image->parentAspect() != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text()) {
-		ui.leName->setText(aspect->name());
-	} else if (aspect->comment() != ui.teComment->document()->toPlainText()) {
-		ui.teComment->setText(aspect->comment());
-	}
-	m_initializing = false;
-}
-
 void DatapickerImageWidget::imageFileNameChanged(const QString& name) {
 	m_initializing = true;
 	ui.leFileName->setText(name);

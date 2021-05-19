@@ -135,7 +135,6 @@ private slots:
 
 	//SLOTs for changes triggered in Histogram
 	//General-Tab
-	void curveDescriptionChanged(const AbstractAspect*);
 	void curveDataColumnChanged(const AbstractColumn*);
 	void curveTypeChanged(Histogram::HistogramType);
 	void curveOrientationChanged(Histogram::HistogramOrientation);

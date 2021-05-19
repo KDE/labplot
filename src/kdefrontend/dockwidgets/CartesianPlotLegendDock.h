@@ -102,7 +102,6 @@ private slots:
 	void layoutColumnCountChanged(int);
 
 	//SLOTs for changes triggered in CartesianPlotLegend
-	void legendDescriptionChanged(const AbstractAspect*);
 	void legendLabelFontChanged(QFont&);
 	void legendLabelColorChanged(QColor&);
 	void legendLabelOrderChanged(bool);

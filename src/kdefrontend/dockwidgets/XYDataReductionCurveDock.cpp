@@ -193,7 +193,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_dataReductionCurve, &XYDataReductionCurve::aspectDescriptionChanged, this, &XYDataReductionCurveDock::curveDescriptionChanged);
+	connect(m_dataReductionCurve, &XYDataReductionCurve::aspectDescriptionChanged, this, &XYDataReductionCurveDock::aspectDescriptionChanged);
 	connect(m_dataReductionCurve, &XYDataReductionCurve::dataSourceTypeChanged, this, &XYDataReductionCurveDock::curveDataSourceTypeChanged);
 	connect(m_dataReductionCurve, &XYDataReductionCurve::dataSourceCurveChanged, this, &XYDataReductionCurveDock::curveDataSourceCurveChanged);
 	connect(m_dataReductionCurve, &XYDataReductionCurve::xDataColumnChanged, this, &XYDataReductionCurveDock::curveXDataColumnChanged);
@@ -681,18 +681,6 @@ void XYDataReductionCurveDock::showDataReductionResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 //General-Tab
-void XYDataReductionCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text())
-		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.teComment->text())
-		uiGeneralTab.teComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
 void XYDataReductionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));

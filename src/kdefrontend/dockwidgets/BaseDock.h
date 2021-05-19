@@ -81,6 +81,7 @@ protected:
 protected slots:
 	void nameChanged();
 	void commentChanged();
+	void aspectDescriptionChanged(const AbstractAspect*);
 	void plotRangeChanged(int index);	// used in worksheet element docks
 };
 

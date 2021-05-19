@@ -156,7 +156,7 @@ void XYEquationCurveDock::initGeneralTab() {
 
 	//Slots
 	connect(m_equationCurve, &XYEquationCurve::aspectDescriptionChanged,
-			this, &XYEquationCurveDock::curveDescriptionChanged);
+			this, &XYEquationCurveDock::aspectDescriptionChanged);
 	connect(m_equationCurve, &XYEquationCurve::equationDataChanged,
 			this, &XYEquationCurveDock::curveEquationDataChanged);
 	connect(m_equationCurve, &WorksheetElement::plotRangeListChanged, this, &XYEquationCurveDock::updatePlotRanges);
@@ -350,17 +350,6 @@ void XYEquationCurveDock::enableRecalculate() const {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 //General-Tab
-void XYEquationCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	const Lock lock(m_initializing);
-	if (aspect->name() != uiGeneralTab.leName->text())
-		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.teComment->text())
-		uiGeneralTab.teComment->setText(aspect->comment());
-}
-
 void XYEquationCurveDock::curveEquationDataChanged(const XYEquationCurve::EquationData& data) {
 	const Lock lock(m_initializing);
 	uiGeneralTab.cbType->setCurrentIndex(static_cast<int>(data.type));

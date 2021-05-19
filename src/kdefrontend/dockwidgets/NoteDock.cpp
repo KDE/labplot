@@ -67,6 +67,8 @@ void NoteDock::setNotesList(QList< Note* > list) {
 	ui.kcbTextColor->setColor(m_notes->textColor());
 	ui.kfrTextFont->setFont(m_notes->textFont());
 	m_initializing = false;
+
+	connect(m_notes, &Note::aspectDescriptionChanged, this, &NoteDock::aspectDescriptionChanged);
 }
 
 //*************************************************************

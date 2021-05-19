@@ -158,7 +158,7 @@ void DatapickerCurveWidget::setCurves(QList<DatapickerCurve*> list) {
 	load();
 	updateSymbolWidgets();
 
-	connect(m_curve, &AbstractAspect::aspectDescriptionChanged,this, &DatapickerCurveWidget::curveDescriptionChanged);
+	connect(m_curve, &AbstractAspect::aspectDescriptionChanged,this, &DatapickerCurveWidget::aspectDescriptionChanged);
 	connect(m_curve, &AbstractAspect::aspectRemoved,this, &DatapickerCurveWidget::updateSymbolWidgets);
 	connect(m_curve, &AbstractAspect::aspectAdded, this, &DatapickerCurveWidget::updateSymbolWidgets);
 	connect(m_curve, &DatapickerCurve::curveErrorTypesChanged, this, &DatapickerCurveWidget::curveErrorsChanged);
@@ -420,19 +420,6 @@ void DatapickerCurveWidget::updateSymbolWidgets() {
 //*************************************************************
 //******** SLOTs for changes triggered in DatapickerCurve *****
 //*************************************************************
-void DatapickerCurveWidget::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->document()->toPlainText())
-		ui.teComment->setText(aspect->comment());
-
-	m_initializing = false;
-}
-
 void DatapickerCurveWidget::curveErrorsChanged(DatapickerCurve::Errors errors) {
 	m_initializing = true;
 	ui.cbXErrorType->setCurrentIndex((int) errors.x);

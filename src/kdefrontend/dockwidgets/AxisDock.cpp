@@ -500,7 +500,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	updatePlotRanges();
 
 	// general
-	connect(m_axis, &Axis::aspectDescriptionChanged, this, &AxisDock::axisDescriptionChanged);
+	connect(m_axis, &Axis::aspectDescriptionChanged, this, &AxisDock::aspectDescriptionChanged);
 	connect(m_axis, &Axis::orientationChanged, this, QOverload<Axis::Orientation>::of(&AxisDock::axisOrientationChanged));
 	connect(m_axis, QOverload<Axis::Position>::of(&Axis::positionChanged),
 	        this, QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
@@ -1848,17 +1848,6 @@ void AxisDock::minorGridOpacityChanged(int value) {
 //*************************************************************
 //************ SLOTs for changes triggered in Axis ************
 //*************************************************************
-void AxisDock::axisDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_axis != aspect)
-		return;
-
-	const Lock lock(m_initializing);
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->setText(aspect->comment());
-}
-
 void AxisDock::axisOrientationChanged(Axis::Orientation orientation) {
 	m_initializing = true;
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));

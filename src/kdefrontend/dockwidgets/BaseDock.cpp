@@ -119,8 +119,18 @@ void BaseDock::commentChanged() {
 	m_aspect->setComment(m_teComment->text());
 }
 
-void BaseDock::spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue)
-{
+void BaseDock::aspectDescriptionChanged(const AbstractAspect* aspect) {
+	if (m_aspect != aspect)
+		return;
+
+	Lock lock(m_initializing);
+	if (aspect->name() != m_leName->text())
+		m_leName->setText(aspect->name());
+	else if (aspect->comment() != m_teComment->text())
+		m_teComment->document()->setPlainText(aspect->comment());
+}
+
+void BaseDock::spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue) {
     double min, max;
     if (range.start() > range.end()) {
         min = range.end();

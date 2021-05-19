@@ -190,7 +190,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
 
 	//Slots
-	connect(m_convolutionCurve, &XYConvolutionCurve::aspectDescriptionChanged, this, &XYConvolutionCurveDock::curveDescriptionChanged);
+	connect(m_convolutionCurve, &XYConvolutionCurve::aspectDescriptionChanged, this, &XYConvolutionCurveDock::aspectDescriptionChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::dataSourceTypeChanged, this, &XYConvolutionCurveDock::curveDataSourceTypeChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::dataSourceCurveChanged, this, &XYConvolutionCurveDock::curveDataSourceCurveChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::xDataColumnChanged, this, &XYConvolutionCurveDock::curveXDataColumnChanged);
@@ -581,18 +581,6 @@ void XYConvolutionCurveDock::showConvolutionResult() {
 //*********** SLOTs for changes triggered in XYCurve **********
 //*************************************************************
 //General-Tab
-void XYConvolutionCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != uiGeneralTab.leName->text())
-		uiGeneralTab.leName->setText(aspect->name());
-	else if (aspect->comment() != uiGeneralTab.teComment->text())
-		uiGeneralTab.teComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
 void XYConvolutionCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType type) {
 	m_initializing = true;
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(type));

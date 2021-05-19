@@ -65,7 +65,6 @@ private slots:
 
 	//SLOTs for changes triggered in CustomPoint
 	//General-Tab
-	void pointDescriptionChanged(const AbstractAspect*);
 	void pointPositionChanged(QPointF);
 	void updatePlotRanges() const override;
 	void pointVisibilityChanged(bool);

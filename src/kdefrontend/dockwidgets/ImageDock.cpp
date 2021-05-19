@@ -172,6 +172,7 @@ void ImageDock::setImages(QList<Image*> list) {
 
 	//init connections
 	//General
+	connect(m_image, &Image::aspectDescriptionChanged, this, &ImageDock::aspectDescriptionChanged);
 	connect(m_image, &Image::fileNameChanged, this, &ImageDock::imageFileNameChanged);
 	connect(m_image, &Image::opacityChanged, this, &ImageDock::imageOpacityChanged);
 	connect(m_image, &Image::visibleChanged, this, &ImageDock::imageVisibleChanged);
@@ -467,18 +468,6 @@ void ImageDock::borderOpacityChanged(int value) {
 //*************************************************************
 //********** SLOTs for changes triggered in Image *************
 //*************************************************************
-void ImageDock::imageDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_image != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
 void ImageDock::imageFileNameChanged(const QString& name) {
 	m_initializing = true;
 	ui.leFileName->setText(name);

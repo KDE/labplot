@@ -167,7 +167,7 @@ void ColumnDock::setColumns(QList<Column*> list) {
 	}
 
 	// slots
-	connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::columnDescriptionChanged);
+	connect(m_column, &AbstractColumn::aspectDescriptionChanged, this, &ColumnDock::aspectDescriptionChanged);
 	connect(m_column, &AbstractColumn::modeChanged, this, &ColumnDock::columnModeChanged);
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::formatChanged, this, &ColumnDock::columnFormatChanged);
 	connect(m_column->outputFilter(), &AbstractSimpleFilter::digitsChanged, this, &ColumnDock::columnPrecisionChanged);
@@ -534,18 +534,6 @@ void ColumnDock::batchEditLabels() {
 //*************************************************************
 //********* SLOTs for changes triggered in Column *************
 //*************************************************************
-void ColumnDock::columnDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_column != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->setText(aspect->comment());
-	m_initializing = false;
-}
-
 void ColumnDock::columnModeChanged(const AbstractAspect* aspect) {
 	if (m_column != aspect)
 		return;

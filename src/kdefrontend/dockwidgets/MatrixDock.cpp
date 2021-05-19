@@ -109,7 +109,7 @@ void MatrixDock::setMatrices(QList<Matrix*> list) {
 	this->load();
 
 	// undo functions
-	connect(m_matrix, SIGNAL(aspectDescriptionChanged(const AbstractAspect*)), this, SLOT(matrixDescriptionChanged(const AbstractAspect*)));
+	connect(m_matrix, &Matrix::aspectDescriptionChanged, this, &MatrixDock::aspectDescriptionChanged);
 
 	connect(m_matrix, SIGNAL(rowCountChanged(int)), this, SLOT(matrixRowCountChanged(int)));
 	connect(m_matrix, SIGNAL(columnCountChanged(int)), this, SLOT(matrixColumnCountChanged(int)));
@@ -236,19 +236,6 @@ void MatrixDock::columnCountChanged(int columns) {
 //*************************************************************
 //******** SLOTs for changes triggered in Matrix *********
 //*************************************************************
-void MatrixDock::matrixDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_matrix != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->setText(aspect->comment());
-
-	m_initializing = false;
-}
-
 //matrix dimensions
 void MatrixDock::matrixRowCountChanged(int count) {
 	m_initializing = true;

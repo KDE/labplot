@@ -66,7 +66,6 @@ private slots:
 	void batchEditLabels();
 
 	//SLOTs for changes triggered in Column
-	void columnDescriptionChanged(const AbstractAspect*);
 	void columnModeChanged(const AbstractAspect*);
 	void columnFormatChanged();
 	void columnPrecisionChanged();

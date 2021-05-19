@@ -34,11 +34,11 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "ui_xyequationcurvedockgeneraltab.h"
 
-class XYEquationCurveDock: public XYCurveDock {
+class XYEquationCurveDock : public XYCurveDock {
 	Q_OBJECT
 
 public:
-	explicit XYEquationCurveDock(QWidget *parent);
+	explicit XYEquationCurveDock(QWidget*);
 	void setupGeneral() override;
 	void setCurves(QList<XYCurve*>);
 
@@ -63,7 +63,6 @@ private slots:
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
-	void curveDescriptionChanged(const AbstractAspect*);
 	void curveEquationDataChanged(const XYEquationCurve::EquationData&);
 };
 

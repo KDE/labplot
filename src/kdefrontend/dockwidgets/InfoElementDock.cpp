@@ -211,6 +211,8 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	updatePlotRanges();	// needed when loading project
 
 	//general
+	connect(m_element, &InfoElement::aspectDescriptionChanged,
+				this, &InfoElementDock::aspectDescriptionChanged);
 	connect(m_element, &InfoElement::positionChanged,
 				this, &InfoElementDock::elementPositionChanged);
 	connect(m_element, &InfoElement::gluePointIndexChanged,
@@ -456,17 +458,6 @@ void InfoElementDock::connectionLineOpacityChanged(int value) {
 //***********************************************************
 //******* SLOTs for changes triggered in InfoElement ********
 //***********************************************************
-void InfoElementDock::elementDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_element != aspect)
-		return;
-
-	const Lock lock(m_initializing);
-	if (aspect->name() != ui->leName->text())
-		ui->leName->setText(aspect->name());
-	else if (aspect->comment() != ui->teComment->text())
-		ui->teComment->setText(aspect->comment());
-}
-
 void InfoElementDock::elementVisibilityChanged(const bool visible) {
 	const Lock lock(m_initializing);
 	ui->chbVisible->setChecked(visible);

@@ -426,7 +426,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 
 	//Slots
 	//General-tab
-	connect(m_curve, &Histogram::aspectDescriptionChanged, this, &HistogramDock::curveDescriptionChanged);
+	connect(m_curve, &Histogram::aspectDescriptionChanged, this, &HistogramDock::aspectDescriptionChanged);
 	connect(m_curve, &Histogram::dataColumnChanged, this, &HistogramDock::curveDataColumnChanged);
 	connect(m_curve, &Histogram::typeChanged, this, &HistogramDock::curveTypeChanged);
 	connect(m_curve, &Histogram::orientationChanged, this, &HistogramDock::curveOrientationChanged);
@@ -1239,21 +1239,7 @@ void HistogramDock::fillingOpacityChanged(int value) {
 //*************************************************************
 //*********** SLOTs for changes triggered in Histogram *******
 //*************************************************************
-
 //General-Tab
-void HistogramDock::curveDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_curve != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->setText(aspect->comment());
-
-	m_initializing = false;
-}
-
 void HistogramDock::curveDataColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	cbDataColumn->setColumn(column, m_curve->dataColumnPath());

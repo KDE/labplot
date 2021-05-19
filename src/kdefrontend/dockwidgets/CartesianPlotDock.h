@@ -157,7 +157,6 @@ private slots:
 
 	//SLOTs for changes triggered in CartesianPlot
 	//general
-	void plotDescriptionChanged(const AbstractAspect*);
 	void plotRectChanged(QRectF&);
 	void plotRangeTypeChanged(CartesianPlot::RangeType);
 	void plotRangeFirstValuesChanged(int);

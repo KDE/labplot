@@ -102,7 +102,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 	updatePlotRanges();
 
 	//SIGNALs/SLOTs
-	connect(m_line, &AbstractAspect::aspectDescriptionChanged,this, &ReferenceLineDock::lineDescriptionChanged);
+	connect(m_line, &AbstractAspect::aspectDescriptionChanged,this, &ReferenceLineDock::aspectDescriptionChanged);
 	connect(m_line, &WorksheetElement::plotRangeListChanged, this, &ReferenceLineDock::updatePlotRanges);
 	connect(m_line, &ReferenceLine::visibleChanged, this, &ReferenceLineDock::lineVisibilityChanged);
 
@@ -221,19 +221,6 @@ void ReferenceLineDock::visibilityChanged(bool state) {
 //*************************************************************
 //******* SLOTs for changes triggered in ReferenceLine ********
 //*************************************************************
-void ReferenceLineDock::lineDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_line != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.teComment->text())
-		ui.teComment->setText(aspect->comment());
-
-	m_initializing = false;
-}
-
 void ReferenceLineDock::linePositionChanged(double position) {
 	m_initializing = true;
 	ui.lePosition->setText(QString::number(position));

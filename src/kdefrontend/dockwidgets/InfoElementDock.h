@@ -66,7 +66,6 @@ private slots:
 	void connectionLineOpacityChanged(int);
 
 	// slots triggered in the InfoElement
-	void elementDescriptionChanged(const AbstractAspect*);
 	void elementPositionChanged(double pos);
 	void elementGluePointIndexChanged(const int);
 	void elementConnectionLineCurveChanged(const QString&);
