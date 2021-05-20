@@ -339,6 +339,39 @@ QString MatioFilterPrivate::typeName(matio_types dataType) {
 	return i18n("Undefined");
 }
 
+AbstractColumn::ColumnMode MatioFilterPrivate::typeMode(matio_types dataType) {
+	switch (dataType) {
+	case MAT_T_INT8:
+	case MAT_T_UINT8:
+	case MAT_T_INT16:
+	case MAT_T_UINT16:
+	case MAT_T_INT32:
+	case MAT_T_UINT32:
+		return AbstractColumn::ColumnMode::Integer;
+		break;
+	case MAT_T_INT64:
+	case MAT_T_UINT64:
+		return AbstractColumn::ColumnMode::BigInt;
+		break;
+	case MAT_T_SINGLE:
+	case MAT_T_DOUBLE:
+	case MAT_T_UNKNOWN:
+	case MAT_T_MATRIX:
+	case MAT_T_COMPRESSED:
+	case MAT_T_UTF8:
+	case MAT_T_UTF16:
+	case MAT_T_UTF32:
+	case MAT_T_STRING:
+	case MAT_T_CELL:
+	case MAT_T_STRUCT:
+	case MAT_T_ARRAY:
+	case MAT_T_FUNCTION:
+		break;
+	}
+
+	return AbstractColumn::ColumnMode::Numeric;
+}
+
 #endif
 
 /*!
@@ -520,20 +553,21 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				actualCols = var->dims[0];
 				actualRows = var->dims[1];
 				columnModes.resize(actualCols);
-				//TODO: other types
-				for (int i = 0; i < actualCols; i++)	// should always be double (if not "extended")
-					columnModes[i] = AbstractColumn::ColumnMode::Numeric;
+				auto mode = typeMode(var->data_type);
+				for (int i = 0; i < actualCols; i++)
+					columnModes[i] = mode;
 			}
 			break;
-		case MAT_C_STRUCT:	//TODO
+		case MAT_C_STRUCT:	//TODO: how to import? see users_guide
 			DEBUG(Q_FUNC_INFO << ", found STRUCT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
+			DEBUG(Q_FUNC_INFO << ", data type = " << typeName(var->data_type).toStdString())
 			return dataStrings << (QStringList() << i18n("Not implemented yet"));
 			break;
-		case MAT_C_OBJECT:	//TODO
+		case MAT_C_OBJECT:	// not available (not supported by matio yet)
 			DEBUG(Q_FUNC_INFO << ", found OBJECT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			return dataStrings << (QStringList() << i18n("Not implemented yet"));
 			break;
-		case MAT_C_FUNCTION:	// TODO: not clear how to access (not supported by matio yet)
+		case MAT_C_FUNCTION:	// not available (not supported by matio yet)
 			DEBUG(Q_FUNC_INFO << ", found FUNCTION. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			QDEBUG(Q_FUNC_INFO << ", data: " << (const char *)var->data)
 		case MAT_C_OPAQUE:
@@ -645,7 +679,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					case MAT_C_UINT64:
 						MAT_READ_CELL(quint64, qint64);
 						break;
-					case MAT_C_CELL:	// TODO
+					case MAT_C_CELL:	// TODO ...
 					case MAT_C_EMPTY:
 					case MAT_C_STRUCT:
 					case MAT_C_OBJECT:
@@ -664,8 +698,9 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			//DEBUG(Q_FUNC_INFO << ", stride = " << stride << ", njc = " << sparse->njc << ", ndata = " << sparse->ndata)
 
 			//TODO: complex
+			//TODO: other columnModes (s.a.)
 
-			double *data = (double *)sparse->data;
+			double *data = (double*)sparse->data;
 			if (dataSource) {
 				// set default values
 				for (int i = 0; i < actualRows; i++)
@@ -679,7 +714,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 							= *(data + j * stride/sizeof(double));
 			} else {	// preview
 				QVector<QVector<double>> matrix;
-				// set default value
+				// set default values
 				for (size_t i = 0; i < var->dims[0]; i++) {
 					QVector<double> tmp;
 					for (size_t j = 0; j < var->dims[1]; j++)
@@ -702,16 +737,12 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 			break;
 		}
-		case MAT_C_STRUCT:
-		case MAT_C_OBJECT:
-		case MAT_C_FUNCTION:
-		case MAT_C_OPAQUE:
+		case MAT_C_STRUCT:	//TODO: s.a.
+		case MAT_C_OBJECT:	// unsupported (s.a.)
+		case MAT_C_FUNCTION:	// unsupported (s.a.)
+		case MAT_C_OPAQUE:	// ???
 			break;
 		}
-
-		//TODO: handle sparse, struct	see user_guide
-		//TODO: handle other classes
-
 	}
 	if (var->rank > 2)	// TODO
 		return dataStrings << (QStringList() << i18n("Not implemented yet"));
