@@ -469,7 +469,6 @@
       <attribute name="title">
        <string>Symbol</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_15"/>
      </widget>
      <widget class="QWidget" name="tabValues">
       <attribute name="title">

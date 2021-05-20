@@ -69,7 +69,6 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	hboxLayout->addWidget(symbolWidget);
 	hboxLayout->setContentsMargins(2,2,2,2);
 	hboxLayout->setSpacing(2);
-	ui.tabSymbol->setLayout(hboxLayout);
 
 	//Tab "Values"
 	auto* gridLayout = qobject_cast<QGridLayout*>(ui.tabValues->layout());

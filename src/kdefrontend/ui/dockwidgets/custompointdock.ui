@@ -212,7 +212,6 @@
       <attribute name="title">
        <string>Symbol</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout"/>
      </widget>
     </widget>
    </item>
