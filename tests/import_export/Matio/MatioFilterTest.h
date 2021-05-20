@@ -1,10 +1,12 @@
 /***************************************************************************
-File                 : MatioFilterPrivate.h
+File                 : MatioFilterTest.h
 Project              : LabPlot
-Description          : Private implementation class for MatioFilter.
+Description          : Tests for the Matio I/O-filter.
+--------------------------------------------------------------------
 --------------------------------------------------------------------
 Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
- ***************************************************************************/
+
+***************************************************************************/
 
 /***************************************************************************
  *                                                                         *
@@ -24,48 +26,21 @@ Copyright            : (C) 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef MATIOFILTERPRIVATE_H
-#define MATIOFILTERPRIVATE_H
 
-#ifdef HAVE_MATIO
-#include <matio.h>
-#endif
+#ifndef MATIOFILTERTEST_H
+#define MATIOFILTERTEST_H
 
-class AbstractDataSource;
+#include "../../CommonTest.h"
+#include <QtTest>
 
-class MatioFilterPrivate {
+class MatioFilterTest : public CommonTest {
+	Q_OBJECT
 
-public:
-	explicit MatioFilterPrivate(MatioFilter*);
-
-	void parse(const QString & fileName);
-	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
-	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
-	void write(const QString& fileName, AbstractDataSource*);
-
-//helper functions
-#ifdef HAVE_MATIO
-	static QString className(matio_classes classType);
-	static QString typeName(matio_types dataType);
-	static AbstractColumn::ColumnMode typeMode(matio_types dataType);
-#endif
-
-	const MatioFilter* q;
-
-	size_t varCount;
-	QString currentVarName;
-	QVector<QStringList> varsInfo;
-	int startRow{1};
-	int endRow{-1};
-	int startColumn{1};
-	int endColumn{-1};
-
-private:
-#ifdef HAVE_MATIO
-	int m_status;
-#endif
+private slots:
+	void testImportDouble();
+	void testImportSpreadsheet();
+	void testImportMatrix();
 };
+
 
 #endif
