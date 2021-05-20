@@ -1073,7 +1073,7 @@ const QMap<qint64, QString>& Column::bigIntValueLabels() {
  * \brief Return an icon to be used for decorating the views and spreadsheet column headers
  */
 QIcon Column::icon() const {
-	return iconForMode(columnMode());
+	return modeIcon(columnMode());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

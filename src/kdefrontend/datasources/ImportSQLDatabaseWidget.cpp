@@ -375,7 +375,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		//header item
 		auto* item = new QTableWidgetItem(m_columnNames[i] + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, mode) + QLatin1String("}"));
 		item->setTextAlignment(Qt::AlignLeft);
-		item->setIcon(AbstractColumn::iconForMode(mode));
+		item->setIcon(AbstractColumn::modeIcon(mode));
 		ui.twPreview->setHorizontalHeaderItem(i, item);
 
 		//create checked items

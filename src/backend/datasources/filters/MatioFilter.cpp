@@ -535,7 +535,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 						mode = AbstractColumn::ColumnMode::Numeric;
 				}
 			}
-			DEBUG(Q_FUNC_INFO << ", set mode to " << (int)mode)	// TODO: toString()
+			DEBUG(Q_FUNC_INFO << ", set mode to " << AbstractColumn::modeName(mode).toStdString())
 			if (dataSource) {
 				//change data source settings
 				actualRows = ncells;

@@ -158,7 +158,8 @@ public:
 	static QStringList dateFormats();	// supported date formats
 	static QStringList timeFormats();	// supported time formats
 	static QStringList dateTimeFormats();	// supported datetime formats
-	static QIcon iconForMode(ColumnMode mode);
+	static QString modeName(ColumnMode mode);
+	static QIcon modeIcon(ColumnMode mode);
 
 	virtual bool isReadOnly() const {
 		return true;

@@ -1601,7 +1601,7 @@ void ImportFileWidget::refreshPreview() {
 
 				auto* item = new QTableWidgetItem(columnName + QLatin1String(" {") + ENUM_TO_STRING(AbstractColumn, ColumnMode, columnModes[i]) + QLatin1String("}"));
 				item->setTextAlignment(Qt::AlignLeft);
-				item->setIcon(AbstractColumn::iconForMode(columnModes[i]));
+				item->setIcon(AbstractColumn::modeIcon(columnModes[i]));
 
 				tmpTableWidget->setHorizontalHeaderItem(i, item);
 			}
