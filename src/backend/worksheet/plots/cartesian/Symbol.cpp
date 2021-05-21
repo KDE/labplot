@@ -51,19 +51,29 @@ Symbol::Symbol(const QString& name) : AbstractAspect(name, AspectType::AbstractA
 void Symbol::init(const KConfigGroup& group) {
 	Q_D(Symbol);
 
-	if (parentAspect()->type() == AspectType::CustomPoint)
-		d->style = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::Circle);
-	else
-		d->style = (Symbol::Style)group.readEntry("SymbolStyle", (int)Symbol::Style::NoSymbols);
+	Symbol::Style defaultStyle = Symbol::Style::NoSymbols;
+	double defaultSize = Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point);
+	QColor defaultBorderColor(Qt::black);
+	double defaultBorderWidth = Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point);
 
-	d->size = group.readEntry("SymbolSize", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	if (parentAspect()->type() == AspectType::CustomPoint)
+		defaultStyle = Symbol::Style::Circle;
+	else if (parentAspect()->type() == AspectType::DatapickerImage) {
+		defaultStyle = Symbol::Style::Cross;
+		defaultSize = Worksheet::convertToSceneUnits(7, Worksheet::Unit::Point);
+		defaultBorderColor = Qt::red;
+		defaultBorderWidth = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point);
+	}
+
+	d->style = (Symbol::Style)group.readEntry("SymbolStyle", (int)defaultStyle);
+	d->size = group.readEntry("SymbolSize", defaultSize);
 	d->rotationAngle = group.readEntry("SymbolRotation", 0.0);
 	d->opacity = group.readEntry("SymbolOpacity", 1.0);
 	d->brush.setStyle( (Qt::BrushStyle)group.readEntry("SymbolFillingStyle", (int)Qt::SolidPattern) );
 	d->brush.setColor( group.readEntry("SymbolFillingColor", QColor(Qt::red)) );
 	d->pen.setStyle( (Qt::PenStyle)group.readEntry("SymbolBorderStyle", (int)Qt::SolidLine) );
-	d->pen.setColor( group.readEntry("SymbolBorderColor", QColor(Qt::black)) );
-	d->pen.setWidthF( group.readEntry("SymbolBorderWidth", Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point)) );
+	d->pen.setColor( group.readEntry("SymbolBorderColor", defaultBorderColor) );
+	d->pen.setWidthF( group.readEntry("SymbolBorderWidth", defaultBorderWidth) );
 }
 
 //##############################################################################
