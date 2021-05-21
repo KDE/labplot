@@ -48,6 +48,7 @@ public:
 	void xRangeFormatChanged();
 	void yRangeFormatChanged();
 	void mouseMoveZoomSelectionMode(QPointF logicalPos);
+	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
 	void mouseReleaseZoomSelectionMode();
 	void mouseHoverZoomSelectionMode(QPointF logicPos);

@@ -2951,6 +2951,12 @@ void CartesianPlot::mouseMoveZoomSelectionMode(QPointF logicPos) {
 	Q_D(CartesianPlot);
 	d->mouseMoveZoomSelectionMode(logicPos);
 }
+
+void CartesianPlot::mouseMoveSelectionMode(QPointF logicStart, QPointF logicEnd) {
+	Q_D(CartesianPlot);
+	d->mouseMoveSelectionMode(logicStart, logicEnd);
+}
+
 void CartesianPlot::mouseMoveCursorMode(int cursorNumber, QPointF logicPos) {
 	Q_D(CartesianPlot);
 	d->mouseMoveCursorMode(cursorNumber, logicPos);
@@ -3498,119 +3504,8 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 			const QPointF logicalEnd = cSystem->mapSceneToLogical(event->pos());
 			const QPointF logicalStart = cSystem->mapSceneToLogical(m_panningStart);
-
-			//handle the change in x
-			double start{ logicalStart.x() }, end{ logicalEnd.x() };
-			switch (xRange().scale()) {
-			case RangeT::Scale::Linear: {
-				const double delta = (start - end);
-				xRange().translate(delta);
-				break;
-			}
-			case RangeT::Scale::Log10: {
-				if (end == 0 || start / end <= 0)
-					break;
-				const double delta = log10(start / end);
-				xRange() *= pow(10, delta);
-				break;
-			}
-			case RangeT::Scale::Log2: {
-				if (end == 0 || start / end <= 0)
-					break;
-				const double delta = log2(start / end);
-				xRange() *= exp2(delta);
-				break;
-			}
-			case RangeT::Scale::Ln: {
-				if (end == 0 || start / end <= 0)
-					break;
-				const double delta = log(start / end);
-				xRange() *= exp(delta);
-				break;
-			}
-			case RangeT::Scale::Sqrt: {
-				if (start < 0 || end < 0)
-					break;
-				const double delta = sqrt(start) - sqrt(end);
-				xRange().translate(delta*delta);
-				break;
-			}
-			case RangeT::Scale::Square: {
-				if (end <= start)
-					break;
-				const double delta = end*end - start*start;
-				xRange().translate(sqrt(delta));
-				break;
-			}
-			case RangeT::Scale::Inverse: {
-				if (start == 0. || end == 0. || end <= start)
-					break;
-				const double delta = 1./start - 1./end;
-				xRange().translate(1./delta);
-				break;
-			}
-			}
-
-			//handle the change in y
-			start = logicalStart.y();
-			end = logicalEnd.y();
-			switch (yRange().scale()) {
-			case RangeT::Scale::Linear: {
-				const double deltaY = (start - end);
-				yRange().translate(deltaY);
-				break;
-			}
-			case RangeT::Scale::Log10: {
-				if (end == 0 || start / end <= 0)
-					break;
-				const double deltaY = log10(start / end);
-				yRange() *= pow(10, deltaY);
-				break;
-			}
-			case RangeT::Scale::Log2: {
-				if (end == 0 || start / end <= 0)
-					break;
-				const double deltaY = log2(start / end);
-				yRange() *= exp2(deltaY);
-				break;
-			}
-			case RangeT::Scale::Ln: {
-				if (end == 0 || start / end <= 0)
-					break;
-				const double deltaY = log(start / end);
-				yRange() *= exp(deltaY);
-				break;
-			}
-			case RangeT::Scale::Sqrt: {
-				if (start < 0 || end < 0)
-					break;
-				const double delta = sqrt(start) - sqrt(end);
-				yRange().translate(delta*delta);
-				break;
-			}
-			case RangeT::Scale::Square: {
-				if (end <= start)
-					break;
-				const double delta = end*end - start*start;
-				yRange().translate(sqrt(delta));
-				break;
-			}
-			case RangeT::Scale::Inverse: {
-				if (start == 0. || end == 0. || end <= start)
-					break;
-				const double delta = 1./start - 1./end;
-				yRange().translate(1./delta);
-				break;
-			}
-			}
-
-			q->setUndoAware(false);
-			q->setAutoScaleX(-1, false);
-			q->setAutoScaleY(-1, false);
-			q->setUndoAware(true);
-
-			retransformScales();
 			m_panningStart = event->pos();
+			emit q->mouseMoveSelectionModeSignal(logicalStart, logicalEnd);
 		} else
 			QGraphicsItem::mouseMoveEvent(event);
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection
@@ -3636,6 +3531,129 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		// multiple plots must be updated
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
 		emit q->mouseMoveCursorModeSignal(selectedCursor, logicalPos);
+	}
+}
+
+void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd) {
+	//handle the change in x
+	bool translation = false;
+	if (logicalStart.x() - logicalEnd.x() != 0) { // TODO: find better method
+		translation = true;
+		double start{ logicalStart.x() }, end{ logicalEnd.x() };
+		switch (xRange().scale()) {
+		case RangeT::Scale::Linear: {
+			const double delta = (start - end);
+			xRange().translate(delta);
+			break;
+		}
+		case RangeT::Scale::Log10: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double delta = log10(start / end);
+			xRange() *= pow(10, delta);
+			break;
+		}
+		case RangeT::Scale::Log2: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double delta = log2(start / end);
+			xRange() *= exp2(delta);
+			break;
+		}
+		case RangeT::Scale::Ln: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double delta = log(start / end);
+			xRange() *= exp(delta);
+			break;
+		}
+		case RangeT::Scale::Sqrt: {
+			if (start < 0 || end < 0)
+				break;
+			const double delta = sqrt(start) - sqrt(end);
+			xRange().translate(delta*delta);
+			break;
+		}
+		case RangeT::Scale::Square: {
+			if (end <= start)
+				break;
+			const double delta = end*end - start*start;
+			xRange().translate(sqrt(delta));
+			break;
+		}
+		case RangeT::Scale::Inverse: {
+			if (start == 0. || end == 0. || end <= start)
+				break;
+			const double delta = 1./start - 1./end;
+			xRange().translate(1./delta);
+			break;
+		}
+		}
+	}
+
+	if (logicalStart.y() - logicalEnd.y() != 0) {
+		translation = true;
+		//handle the change in y
+		double start = logicalStart.y();
+		double end = logicalEnd.y();
+		switch (yRange().scale()) {
+		case RangeT::Scale::Linear: {
+			const double deltaY = (start - end);
+			yRange().translate(deltaY);
+			break;
+		}
+		case RangeT::Scale::Log10: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double deltaY = log10(start / end);
+			yRange() *= pow(10, deltaY);
+			break;
+		}
+		case RangeT::Scale::Log2: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double deltaY = log2(start / end);
+			yRange() *= exp2(deltaY);
+			break;
+		}
+		case RangeT::Scale::Ln: {
+			if (end == 0 || start / end <= 0)
+				break;
+			const double deltaY = log(start / end);
+			yRange() *= exp(deltaY);
+			break;
+		}
+		case RangeT::Scale::Sqrt: {
+			if (start < 0 || end < 0)
+				break;
+			const double delta = sqrt(start) - sqrt(end);
+			yRange().translate(delta*delta);
+			break;
+		}
+		case RangeT::Scale::Square: {
+			if (end <= start)
+				break;
+			const double delta = end*end - start*start;
+			yRange().translate(sqrt(delta));
+			break;
+		}
+		case RangeT::Scale::Inverse: {
+			if (start == 0. || end == 0. || end <= start)
+				break;
+			const double delta = 1./start - 1./end;
+			yRange().translate(1./delta);
+			break;
+		}
+		}
+	}
+
+	if (translation) {
+		q->setUndoAware(false);
+		q->setAutoScaleX(-1, false);
+		q->setAutoScaleY(-1, false);
+		q->setUndoAware(true);
+
+		retransformScales();
 	}
 }
 

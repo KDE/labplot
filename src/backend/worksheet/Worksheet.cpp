@@ -244,6 +244,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect);
 	if (plot) {
 		connect(plot, &CartesianPlot::mouseMoveCursorModeSignal, this, &Worksheet::cartesianPlotMouseMoveCursorMode);
+		connect(plot, &CartesianPlot::mouseMoveSelectionModeSignal, this, &Worksheet::cartesianPlotMouseMoveSelectionMode);
 		connect(plot, &CartesianPlot::mouseMoveZoomSelectionModeSignal, this, &Worksheet::cartesianPlotMouseMoveZoomSelectionMode);
 		connect(plot, &CartesianPlot::mousePressCursorModeSignal, this, &Worksheet::cartesianPlotMousePressCursorMode);
 		connect(plot, &CartesianPlot::mousePressZoomSelectionModeSignal, this, &Worksheet::cartesianPlotMousePressZoomSelectionMode);
@@ -812,6 +813,33 @@ void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
 			plot->mouseMoveZoomSelectionMode(logicPos);
 	}  else
 		senderPlot->mouseMoveZoomSelectionMode(logicPos);
+}
+
+void Worksheet::cartesianPlotMouseMoveSelectionMode(QPointF logicStart, QPointF logicEnd) {
+	auto* senderPlot = static_cast<CartesianPlot*>(QObject::sender());
+	auto actionMode = cartesianPlotActionMode();
+	if (actionMode == CartesianPlotActionMode::ApplyActionToAll) {
+		const auto& plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
+		for (auto* plot : plots)
+			plot->mouseMoveSelectionMode(logicStart, logicEnd);
+	} else if (actionMode == CartesianPlotActionMode::ApplyActionToSelection) {
+		senderPlot->mouseMoveSelectionMode(logicStart, logicEnd);
+	} else {
+		const auto& plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
+		if (actionMode == CartesianPlotActionMode::ApplyActionToAllX) {
+			// value does not matter, only difference
+			logicStart.setY(0);
+			logicEnd.setY(0);
+			for (auto* plot : plots)
+				plot->mouseMoveSelectionMode(logicStart, logicEnd);
+		} else if (actionMode == CartesianPlotActionMode::ApplyActionToAllY) {
+			// value does not matter, only difference
+			logicStart.setX(0);
+			logicEnd.setX(0);
+			for (auto* plot : plots)
+				plot->mouseMoveSelectionMode(logicStart, logicEnd);
+		}
+	}
 }
 
 void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {

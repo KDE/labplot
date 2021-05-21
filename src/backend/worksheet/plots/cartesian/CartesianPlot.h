@@ -127,6 +127,7 @@ public:
 	void mousePressZoomSelectionMode(QPointF logicPos);
 	void mousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void mouseMoveZoomSelectionMode(QPointF logicPos);
+	void mouseMoveSelectionMode(QPointF logicStart, QPointF logicEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicPos);
 	void mouseReleaseZoomSelectionMode();
 	void mouseHoverZoomSelectionMode(QPointF logicPos);
@@ -374,6 +375,7 @@ signals:
 	void themeChanged(const QString&);
 	void mousePressZoomSelectionModeSignal(QPointF logicPos);
 	void mousePressCursorModeSignal(int cursorNumber, QPointF logicPos);
+	void mouseMoveSelectionModeSignal(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveZoomSelectionModeSignal(QPointF logicPos);
 	void mouseMoveCursorModeSignal(int cursorNumber, QPointF logicPos);
 	void mouseReleaseCursorModeSignal();

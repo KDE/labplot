@@ -134,6 +134,7 @@ public slots:
 	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
 	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);
 	void cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos);
+	void cartesianPlotMouseMoveSelectionMode(QPointF logicStart, QPointF logicEnd);
 	void cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logicPos);
 	void cartesianPlotMouseReleaseZoomSelectionMode();
 	void cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos);
