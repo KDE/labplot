@@ -43,12 +43,12 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	if (dataSource) { \
 		for (int i = 0; i < actualRows; i++) \
 			for (int j = 0; j < actualCols; j++) \
-				static_cast<QVector<dtype>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i-startRow+1) = data[j + i*actualCols]; \
+				static_cast<QVector<dtype>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i-startRow+1) = data[i + j*actualRows]; \
 	} else { /* preview */ \
 		for (int i = 0; i < actualRows; i++) { \
 			QStringList row; \
 			for (int j = 0; j < actualCols; j++) \
-				row << QString::number(data[j + i*actualCols]); \
+				row << QString::number(data[i + j*actualRows]); \
 			dataStrings << row; \
 		} \
 	} \
@@ -482,7 +482,11 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 	std::vector<void*> dataContainer;
 	if (var->rank == 2) {	// rank is always >= 2
 		// read data
-		actualCols = var->dims[0], actualRows = var->dims[1];
+		actualRows = var->dims[0], actualCols = var->dims[1];
+		if (actualRows == 1) { // only one row: read as column
+			actualRows = actualCols;
+			actualCols = 1;
+		}
 
 		// column modes
 		QVector<AbstractColumn::ColumnMode> columnModes;
@@ -550,8 +554,6 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 			if (dataSource) {
 				//change data source settings
-				actualCols = var->dims[0];
-				actualRows = var->dims[1];
 				columnModes.resize(actualCols);
 				auto mode = typeMode(var->data_type);
 				for (int i = 0; i < actualCols; i++)
@@ -737,7 +739,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 			break;
 		}
-		case MAT_C_STRUCT:	//TODO: s.a.
+		case MAT_C_STRUCT:	// s.a.
 		case MAT_C_OBJECT:	// unsupported (s.a.)
 		case MAT_C_FUNCTION:	// unsupported (s.a.)
 		case MAT_C_OPAQUE:	// ???

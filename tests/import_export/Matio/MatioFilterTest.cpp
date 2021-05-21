@@ -75,35 +75,41 @@ void MatioFilterTest::testImportSpreadsheet() {
 	const auto mode = AbstractFileFilter::ImportMode::Replace;
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-	QCOMPARE(spreadsheet.columnCount(), 3);
-	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.columnCount(), 5);
+	QCOMPARE(spreadsheet.rowCount(), 3);
 	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
 	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(3)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(4)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
-	//QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("sepallength"));
-	//QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("sepalwidth"));
-	//QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("petallength"));
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Column 3"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("Column 4"));
+	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("Column 5"));
 
 	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
 	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2);
 	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3);
-	QCOMPARE(spreadsheet.column(0)->valueAt(3), 4);
-	QCOMPARE(spreadsheet.column(0)->valueAt(4), 5);
 	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2);
 	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0);
 	QCOMPARE(spreadsheet.column(1)->valueAt(2), 0);
-	QCOMPARE(spreadsheet.column(1)->valueAt(3), 0);
-	QCOMPARE(spreadsheet.column(1)->valueAt(4), 0);
 	QCOMPARE(spreadsheet.column(2)->valueAt(0), 3);
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0);
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0);
-	QCOMPARE(spreadsheet.column(2)->valueAt(3), 0);
-	QCOMPARE(spreadsheet.column(2)->valueAt(4), 0);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 4);
+	QCOMPARE(spreadsheet.column(3)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(3)->valueAt(2), 0);
+	QCOMPARE(spreadsheet.column(4)->valueAt(0), 5);
+	QCOMPARE(spreadsheet.column(4)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0);
 
 	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
 
@@ -118,8 +124,8 @@ void MatioFilterTest::testImportMatrix() {
 	const auto mode = AbstractFileFilter::ImportMode::Replace;
 	filter.readDataFromFile(fileName, &matrix, mode);
 
-	QCOMPARE(matrix.columnCount(), 3);
-	QCOMPARE(matrix.rowCount(), 5);
+	QCOMPARE(matrix.columnCount(), 5);
+	QCOMPARE(matrix.rowCount(), 3);
 	//QCOMPARE(matrix.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 	//QCOMPARE(matrix.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
 	//QCOMPARE(matrix.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
@@ -128,21 +134,21 @@ void MatioFilterTest::testImportMatrix() {
 	//QCOMPARE(matrix.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 	//QCOMPARE(matrix.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
-	QCOMPARE(matrix.cell<double>(0, 0), 1.);
+	QCOMPARE(matrix.cell<double>(0, 0), 1);
 	QCOMPARE(matrix.cell<double>(1, 0), 2);
 	QCOMPARE(matrix.cell<double>(2, 0), 3);
-	QCOMPARE(matrix.cell<double>(3, 0), 4);
-	QCOMPARE(matrix.cell<double>(4, 0), 5);
 	QCOMPARE(matrix.cell<double>(0, 1), 2);
 	QCOMPARE(matrix.cell<double>(1, 1), 0);
 	QCOMPARE(matrix.cell<double>(2, 1), 0);
-	QCOMPARE(matrix.cell<double>(3, 1), 0);
-	QCOMPARE(matrix.cell<double>(4, 1), 0);
 	QCOMPARE(matrix.cell<double>(0, 2), 3);
 	QCOMPARE(matrix.cell<double>(1, 2), 0);
 	QCOMPARE(matrix.cell<double>(2, 2), 0);
-	QCOMPARE(matrix.cell<double>(3, 2), 0);
-	QCOMPARE(matrix.cell<double>(4, 2), 0);
+	QCOMPARE(matrix.cell<double>(0, 3), 4);
+	QCOMPARE(matrix.cell<double>(1, 3), 0);
+	QCOMPARE(matrix.cell<double>(2, 3), 0);
+	QCOMPARE(matrix.cell<double>(0, 4), 5);
+	QCOMPARE(matrix.cell<double>(1, 4), 0);
+	QCOMPARE(matrix.cell<double>(2, 4), 0);
 }
 
 QTEST_MAIN(MatioFilterTest)
