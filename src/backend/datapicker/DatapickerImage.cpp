@@ -4,7 +4,7 @@
     Description          : Worksheet for Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -33,6 +33,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "backend/datapicker/Segments.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/Worksheet.h"
 #include "commonfrontend/datapicker/DatapickerImageView.h"
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
@@ -69,6 +70,13 @@ DatapickerImage::DatapickerImage(const QString& name, bool loading) :
 
 	if (!loading)
 		init();
+	else {
+		d->symbol = new Symbol(QString());
+		addChild(d->symbol);
+		d->symbol->setHidden(true);
+		connect(d->symbol, &Symbol::updateRequested, [=]{d->retransform();});
+		connect(d->symbol, &Symbol::updatePixmapRequested, [=]{d->retransform();});
+	}
 }
 
 DatapickerImage::~DatapickerImage() {
@@ -83,7 +91,7 @@ DatapickerImage::~DatapickerImage() {
 
 void DatapickerImage::init() {
 	KConfig config;
-	KConfigGroup group = config.group( "DatapickerImage" );
+	KConfigGroup group = config.group("DatapickerImage");
 
 	//general properties
 	d->fileName = group.readEntry("FileName", QString());
@@ -107,15 +115,12 @@ void DatapickerImage::init() {
 	d->settings.valueThresholdLow = group.readEntry("ValueThresholdLow", 30);
 
 	// reference point symbol properties
-	d->pointStyle = (Symbol::Style)group.readEntry("PointStyle", (int)Symbol::Style::Cross);
-	d->pointSize = group.readEntry("Size", Worksheet::convertToSceneUnits(7, Worksheet::Unit::Point));
-	d->pointRotationAngle = group.readEntry("Rotation", 0.0);
-	d->pointOpacity = group.readEntry("Opacity", 1.0);
-	d->pointBrush.setStyle( (Qt::BrushStyle)group.readEntry("FillingStyle", (int)Qt::NoBrush) );
-	d->pointBrush.setColor( group.readEntry("FillingColor", QColor(Qt::black)) );
-	d->pointPen.setStyle( (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine) );
-	d->pointPen.setColor( group.readEntry("BorderColor", QColor(Qt::red)) );
-	d->pointPen.setWidthF( group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)) );
+	d->symbol = new Symbol(QString());
+	addChild(d->symbol);
+	d->symbol->setHidden(true);
+	connect(d->symbol, &Symbol::updateRequested, [=]{d->retransform();});
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=]{d->retransform();});
+	d->symbol->init(group);
 	d->pointVisibility = group.readEntry("PointVisibility", true);
 }
 
@@ -233,12 +238,13 @@ BASIC_D_READER_IMPL(DatapickerImage, float, rotationAngle, rotationAngle)
 BASIC_D_READER_IMPL(DatapickerImage, DatapickerImage::PointsType, plotPointsType, plotPointsType)
 BASIC_D_READER_IMPL(DatapickerImage, int, pointSeparation, pointSeparation)
 BASIC_D_READER_IMPL(DatapickerImage, int, minSegmentLength, minSegmentLength)
-BASIC_D_READER_IMPL(DatapickerImage, Symbol::Style, pointStyle, pointStyle)
-BASIC_D_READER_IMPL(DatapickerImage, qreal, pointOpacity, pointOpacity)
-BASIC_D_READER_IMPL(DatapickerImage, qreal, pointRotationAngle, pointRotationAngle)
-BASIC_D_READER_IMPL(DatapickerImage, qreal, pointSize, pointSize)
-BASIC_D_READER_IMPL(DatapickerImage, QBrush, pointBrush, pointBrush)
-BASIC_D_READER_IMPL(DatapickerImage, QPen, pointPen, pointPen)
+
+//symbols
+Symbol* DatapickerImage::symbol() const {
+// 	Q_D(const DatapickerImage);
+	return d->symbol;
+}
+
 BASIC_D_READER_IMPL(DatapickerImage, bool, pointVisibility, pointVisibility)
 /* ============================ setter methods and undo commands  for background options  ================= */
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetFileName, QString, fileName, updateFileName)
@@ -272,42 +278,6 @@ STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetMinSegmentLength, int, minSegmentLen
 void DatapickerImage::setminSegmentLength(const int value) {
 	if (d->minSegmentLength != value)
 		exec(new DatapickerImageSetMinSegmentLengthCmd(d, value, ki18n("%1: set minimum segment length")));        ;
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointStyle, Symbol::Style, pointStyle, retransform)
-void DatapickerImage::setPointStyle(Symbol::Style newStyle) {
-	if (newStyle != d->pointStyle)
-		exec(new DatapickerImageSetPointStyleCmd(d, newStyle, ki18n("%1: set point's style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointSize, qreal, pointSize, retransform)
-void DatapickerImage::setPointSize(qreal value) {
-	if (!qFuzzyCompare(1 + value, 1 + d->pointSize))
-		exec(new DatapickerImageSetPointSizeCmd(d, value, ki18n("%1: set point's size")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointRotationAngle, qreal, pointRotationAngle, retransform)
-void DatapickerImage::setPointRotationAngle(qreal angle) {
-	if (!qFuzzyCompare(1 + angle, 1 + d->pointRotationAngle))
-		exec(new DatapickerImageSetPointRotationAngleCmd(d, angle, ki18n("%1: rotate point")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointBrush, QBrush, pointBrush, retransform)
-void DatapickerImage::setPointBrush(const QBrush& newBrush) {
-	if (newBrush != d->pointBrush)
-		exec(new DatapickerImageSetPointBrushCmd(d, newBrush, ki18n("%1: set point's filling")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointPen, QPen, pointPen, retransform)
-void DatapickerImage::setPointPen(const QPen &newPen) {
-	if (newPen != d->pointPen)
-		exec(new DatapickerImageSetPointPenCmd(d, newPen, ki18n("%1: set outline style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointOpacity, qreal, pointOpacity, retransform)
-void DatapickerImage::setPointOpacity(qreal newOpacity) {
-	if (newOpacity != d->pointOpacity)
-		exec(new DatapickerImageSetPointOpacityCmd(d, newOpacity, ki18n("%1: set point's opacity")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(DatapickerImage, SetPointVisibility, bool, pointVisibility, retransform)
@@ -460,6 +430,7 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement( "general" );
 	writer->writeAttribute( "fileName", d->fileName );
 	writer->writeAttribute( "plotPointsType", QString::number(static_cast<int>(d->plotPointsType)) );
+	writer->writeAttribute( "pointVisibility", QString::number(d->pointVisibility) );
 	writer->writeEndElement();
 
 	writer->writeStartElement( "axisPoint" );
@@ -500,16 +471,8 @@ void DatapickerImage::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "valueThresholdLow", QString::number(d->settings.valueThresholdLow) );
 	writer->writeEndElement();
 
-	//symbol properties
-	writer->writeStartElement( "symbolProperties" );
-	writer->writeAttribute( "pointRotationAngle", QString::number(d->pointRotationAngle) );
-	writer->writeAttribute( "pointOpacity", QString::number(d->pointOpacity) );
-	writer->writeAttribute( "pointSize", QString::number(d->pointSize) );
-	writer->writeAttribute( "pointStyle", QString::number(static_cast<int>(d->pointStyle)) );
-	writer->writeAttribute( "pointVisibility", QString::number(d->pointVisibility) );
-	WRITE_QBRUSH(d->pointBrush);
-	WRITE_QPEN(d->pointPen);
-	writer->writeEndElement();
+	//Symbols
+	d->symbol->save(writer);
 
 	//serialize all children
 	for (auto* child : children<AbstractAspect>(ChildIndexFlag::IncludeHidden))
@@ -542,6 +505,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			d->fileName = str;
 
 			READ_INT_VALUE("plotPointsType", plotPointsType, DatapickerImage::PointsType);
+			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
 		} else if (!preview && reader->name() == "axisPoint") {
 			attribs = reader->attributes();
 
@@ -656,15 +620,104 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("valueThresholdHigh", settings.valueThresholdHigh, int);
 			READ_INT_VALUE("valueThresholdLow", settings.valueThresholdLow, int);
 		} else if (!preview && reader->name() == "symbolProperties") {
+			//old serialization that was used bevor the switch to Symbol::load().
+			//in the old serialization the symbol properties and "point visibility" where saved
+			//under "symbolProperties".
 			attribs = reader->attributes();
 
-			READ_DOUBLE_VALUE("pointRotationAngle", pointRotationAngle);
-			READ_DOUBLE_VALUE("pointOpacity", pointOpacity);
-			READ_DOUBLE_VALUE("pointSize", pointSize);
-			READ_INT_VALUE("pointStyle", pointStyle, Symbol::Style);
+			str = attribs.value("pointRotationAngle").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("pointRotationAngle").toString());
+			else
+				d->symbol->setRotationAngle(str.toDouble());
+
+			str = attribs.value("pointOpacity").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("pointOpacity").toString());
+			else
+				d->symbol->setOpacity(str.toDouble());
+
+			str = attribs.value("pointSize").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("pointSize").toString());
+			else
+				d->symbol->setSize(str.toDouble());
+
+			str = attribs.value("pointStyle").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("pointStyle").toString());
+			else
+				d->symbol->setStyle(static_cast<Symbol::Style>(str.toInt()));
+
+			//brush
+			QBrush brush;
+			str = attribs.value("brush_style").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("brush_style").toString());
+			else
+				brush.setStyle( static_cast<Qt::BrushStyle>(str.toInt()) );
+
+			QColor color;
+			str = attribs.value("brush_color_r").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("brush_color_r").toString());
+			else
+				color.setRed(str.toInt());
+
+			str = attribs.value("brush_color_g").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("brush_color_g").toString());
+			else
+				color.setGreen(str.toInt());
+
+			str = attribs.value("brush_color_b").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("brush_color_b").toString());
+			else
+				color.setBlue(str.toInt());
+
+			brush.setColor(color);
+			d->symbol->setBrush(brush);
+
+			//pen
+			QPen pen;
+			str = attribs.value("style").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("style").toString());
+			else
+				pen.setStyle( static_cast<Qt::PenStyle>(str.toInt()) );
+
+			str = attribs.value("color_r").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("color_r").toString());
+			else
+				color.setRed( str.toInt() );
+
+			str = attribs.value("color_g").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("color_g").toString());
+			else
+				color.setGreen( str.toInt() );
+
+			str = attribs.value("color_b").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("color_b").toString());
+			else
+				color.setBlue( str.toInt() );
+
+			pen.setColor(color);
+
+			str = attribs.value("width").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("width").toString());
+			else
+				pen.setWidthF( str.toDouble() );
+
+			d->symbol->setPen(pen);
+
 			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
-			READ_QBRUSH(d->pointBrush);
-			READ_QPEN(d->pointPen);
+		} else if (!preview && reader->name() == "symbols") {
+			d->symbol->load(reader, preview);
 		} else if (reader->name() == "datapickerPoint") {
 			auto* datapickerPoint = new DatapickerPoint(QString());
 			datapickerPoint->setHidden(true);

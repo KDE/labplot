@@ -4,7 +4,7 @@
   Description          : Worksheet for Datapicker
   --------------------------------------------------------------------
   Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-  Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+  Copyright            : (C) 2015-2021 by Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 /***************************************************************************
@@ -36,12 +36,10 @@
 #include <QVector3D>
 #include <QPen>
 
-class QImage;
-class QBrush;
 class DatapickerImagePrivate;
 class DatapickerImageView;
-class ImageEditor;
 class Segments;
+class Symbol;
 
 class QGraphicsScene;
 class QGraphicsPixmapItem;
@@ -120,12 +118,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, pointSeparation, PointSeparation)
 	BASIC_D_ACCESSOR_DECL(int, minSegmentLength, minSegmentLength)
 
-	BASIC_D_ACCESSOR_DECL(Symbol::Style, pointStyle, PointStyle)
-	BASIC_D_ACCESSOR_DECL(qreal, pointOpacity, PointOpacity)
-	BASIC_D_ACCESSOR_DECL(qreal, pointRotationAngle, PointRotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, pointSize, PointSize)
-	CLASS_D_ACCESSOR_DECL(QBrush, pointBrush, PointBrush)
-	CLASS_D_ACCESSOR_DECL(QPen, pointPen, PointPen)
+	Symbol* symbol() const;
 	BASIC_D_ACCESSOR_DECL(bool, pointVisibility, PointVisibility)
 
 	typedef DatapickerImagePrivate Private;

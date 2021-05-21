@@ -4,7 +4,7 @@
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -35,6 +35,7 @@
 #include "backend/datapicker/DatapickerImage.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
+class SymbolWidget;
 class QxtSpanSlider;
 
 class HistogramView : public QGraphicsView {
@@ -69,11 +70,10 @@ public:
 
 private:
 	Ui::DatapickerImageWidget ui;
-	void init();
-	void initConnections();
 
 	DatapickerImage* m_image;
 	QList<DatapickerImage*> m_imagesList;
+	SymbolWidget* symbolWidget{nullptr};
 
 	QxtSpanSlider* ssIntensity;
 	QxtSpanSlider* ssForeground;
@@ -109,17 +109,7 @@ private slots:
 	void logicalPositionChanged();
 
 	//symbol properties
-	void pointsStyleChanged(int);
-	void pointsSizeChanged(double);
-	void pointsRotationChanged(int);
-	void pointsOpacityChanged(int);
-	void pointsFillingStyleChanged(int);
-	void pointsFillingColorChanged(const QColor&);
-	void pointsBorderStyleChanged(int);
-	void pointsBorderColorChanged(const QColor&);
-	void pointsBorderWidthChanged(double);
 	void pointsVisibilityChanged(bool);
-
 
 	//SLOTs for changes triggered in DatapickerImageWidget
 	void imageFileNameChanged(const QString&);
@@ -129,13 +119,6 @@ private slots:
 	void imageMinSegmentLengthChanged(const int);
 	void updateSymbolWidgets();
 	void handleWidgetActions();
-	//symbol
-	void symbolStyleChanged(Symbol::Style);
-	void symbolSizeChanged(qreal);
-	void symbolRotationAngleChanged(qreal);
-	void symbolOpacityChanged(qreal);
-	void symbolBrushChanged(const QBrush&);
-	void symbolPenChanged(const QPen&);
 	void symbolVisibleChanged(bool);
 };
 

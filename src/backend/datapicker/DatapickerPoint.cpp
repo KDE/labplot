@@ -4,7 +4,7 @@
     Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-	Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
+	Copyright            : (C) 2015-2021 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -26,11 +26,12 @@
  ***************************************************************************/
 
 #include "DatapickerPoint.h"
-#include "backend/worksheet/Worksheet.h"
 #include "DatapickerPointPrivate.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/datapicker/DatapickerCurve.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <QPainter>
 #include <QGraphicsScene>
@@ -357,12 +358,12 @@ void DatapickerPointPrivate::updatePropeties() {
 	auto* curve = dynamic_cast<DatapickerCurve*>(q->parentAspect());
 	auto* image = dynamic_cast<DatapickerImage*>(q->parentAspect());
 	if (image) {
-		rotationAngle = image->pointRotationAngle();
-		pointStyle = image->pointStyle();
-		brush = image->pointBrush();
-		pen = image->pointPen();
-		opacity = image->pointOpacity();
-		size = image->pointSize();
+		rotationAngle = image->symbol()->rotationAngle();
+		pointStyle = image->symbol()->style();
+		brush = image->symbol()->brush();
+		pen = image->symbol()->pen();
+		opacity = image->symbol()->opacity();
+		size = image->symbol()->size();
 		setVisible(image->pointVisibility());
 	} else if (curve) {
 		rotationAngle = curve->pointRotationAngle();

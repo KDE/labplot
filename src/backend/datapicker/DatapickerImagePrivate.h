@@ -4,7 +4,7 @@
   Description          : Worksheet for Datapicker, private class
   --------------------------------------------------------------------
   Copyright            : (C) 2015-2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
-  Copyright            : (C) 2015-2016 by Alexander Semke (alexander.semke@web.de)
+  Copyright            : (C) 2015-2021 by Alexander Semke (alexander.semke@web.de)
 
 ***************************************************************************/
 /***************************************************************************
@@ -28,7 +28,7 @@
 #ifndef DATAPICKERIMAGEPRIVATE_H
 #define DATAPICKERIMAGEPRIVATE_H
 
-class QBrush;
+class Symbol;
 class QGraphicsScene;
 
 class DatapickerImagePrivate {
@@ -49,12 +49,8 @@ public:
 	int pointSeparation{30};
 	int minSegmentLength{30};
 
-	qreal pointRotationAngle{0.0};
-	Symbol::Style pointStyle;
-	QBrush pointBrush;
-	QPen pointPen;
-	qreal pointOpacity;
-	qreal pointSize;
+	//symbols
+	Symbol* symbol{nullptr};
 	bool pointVisibility{true};
 
 	QString name() const;

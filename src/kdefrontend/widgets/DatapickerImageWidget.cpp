@@ -4,7 +4,7 @@
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015-2016 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2019 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -29,10 +29,9 @@
 #include "DatapickerImageWidget.h"
 #include "backend/datapicker/DatapickerPoint.h"
 #include "commonfrontend/widgets/qxtspanslider.h"
-#include "kdefrontend/GuiTools.h"
-#include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/datapicker/ImageEditor.h"
+#include "kdefrontend/GuiTools.h"
+#include "kdefrontend/widgets/SymbolWidget.h"
 
 #include <QCompleter>
 #include <QDir>
@@ -128,10 +127,18 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 
+	//"General"-tab
 	ui.leFileName->setClearButtonEnabled(true);
 	ui.bOpen->setIcon( QIcon::fromTheme("document-open") );
 	ui.leFileName->setCompleter(new QCompleter(new QDirModel, this));
 
+	//"Symbol"-tab
+	symbolWidget = new SymbolWidget(ui.tSymbol);
+	auto* gridLayout = dynamic_cast<QGridLayout*>(ui.tSymbol->layout());
+	if (gridLayout)
+		gridLayout->addWidget(symbolWidget, 0, 0, 1, 1);
+
+	//"Edit Image"-tab
 	auto* editTabLayout = static_cast<QGridLayout*>(ui.tEdit->layout());
 	editTabLayout->setContentsMargins(2,2,2,2);
 	editTabLayout->setHorizontalSpacing(2);
@@ -265,58 +272,7 @@ DatapickerImageWidget::DatapickerImageWidget(QWidget* parent) : BaseDock(parent)
 	connect(ui.sbPositionZ3, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
 			this, &DatapickerImageWidget::logicalPositionChanged);
 
-	//SYMBOL
-	connect(ui.cbSymbolStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &DatapickerImageWidget::pointsStyleChanged);
-	connect(ui.sbSymbolSize, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::pointsSizeChanged);
-	connect(ui.sbSymbolRotation,static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-			this, &DatapickerImageWidget::pointsRotationChanged);
-	connect(ui.sbSymbolOpacity, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
-			this, &DatapickerImageWidget::pointsOpacityChanged);
-
-	//Filling
-	connect(ui.cbSymbolFillingStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &DatapickerImageWidget::pointsFillingStyleChanged);
-	connect(ui.kcbSymbolFillingColor, &KColorButton::changed, this, &DatapickerImageWidget::pointsFillingColorChanged);
-
-	//border
-	connect(ui.cbSymbolBorderStyle, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &DatapickerImageWidget::pointsBorderStyleChanged);
-	connect(ui.kcbSymbolBorderColor, &KColorButton::changed, this, &DatapickerImageWidget::pointsBorderColorChanged);
-	connect(ui.sbSymbolBorderWidth, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
-			this, &DatapickerImageWidget::pointsBorderWidthChanged);
-
 	connect(ui.chbSymbolVisible, &QCheckBox::clicked, this, &DatapickerImageWidget::pointsVisibilityChanged);
-
-	init();
-}
-
-void DatapickerImageWidget::init() {
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, Qt::black);
-
-	QPainter pa;
-	int iconSize = 20;
-	QPixmap pm(iconSize, iconSize);
-	QPen pen(Qt::SolidPattern, 0);
-	ui.cbSymbolStyle->setIconSize(QSize(iconSize, iconSize));
-	QTransform trafo;
-	trafo.scale(15, 15);
-	//TODO: constant?
-	for (int i = 1; i < 19; ++i) {
-		auto style = (Symbol::Style)i;
-		pm.fill(Qt::transparent);
-		pa.begin(&pm);
-		pa.setPen( pen );
-		pa.setRenderHint(QPainter::Antialiasing);
-		pa.translate(iconSize/2,iconSize/2);
-		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
-		pa.end();
-		ui.cbSymbolStyle->addItem(QIcon(pm), Symbol::nameFromStyle(style));
-	}
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, Qt::black);
-	m_initializing = false;
 }
 
 void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
@@ -342,13 +298,13 @@ void DatapickerImageWidget::setImages(QList<DatapickerImage*> list) {
 	}
 
 	this->load();
-	initConnections();
-	handleWidgetActions();
-	updateSymbolWidgets();
-	m_initializing = false;
-}
 
-void DatapickerImageWidget::initConnections() {
+	QList<Symbol*> symbols;
+	for (auto* image : m_imagesList)
+		symbols << image->symbol();
+
+	symbolWidget->setSymbols(symbols);
+
 	connect(m_image->parentAspect(), &AbstractAspect::aspectDescriptionChanged, this, &DatapickerImageWidget::aspectDescriptionChanged);
 	connect(m_image, &DatapickerImage::fileNameChanged, this, &DatapickerImageWidget::imageFileNameChanged);
 	connect(m_image, &DatapickerImage::rotationAngleChanged, this, &DatapickerImageWidget::imageRotationAngleChanged);
@@ -357,13 +313,11 @@ void DatapickerImageWidget::initConnections() {
 	connect(m_image, &DatapickerImage::axisPointsChanged, this, &DatapickerImageWidget::imageAxisPointsChanged);
 	connect(m_image, &DatapickerImage::settingsChanged, this, &DatapickerImageWidget::imageEditorSettingsChanged);
 	connect(m_image, &DatapickerImage::minSegmentLengthChanged, this, &DatapickerImageWidget::imageMinSegmentLengthChanged);
-	connect(m_image, &DatapickerImage::pointStyleChanged, this, &DatapickerImageWidget::symbolStyleChanged);
-	connect(m_image, &DatapickerImage::pointSizeChanged, this, &DatapickerImageWidget::symbolSizeChanged);
-	connect(m_image, &DatapickerImage::pointRotationAngleChanged, this, &DatapickerImageWidget::symbolRotationAngleChanged);
-	connect(m_image, &DatapickerImage::pointOpacityChanged, this, &DatapickerImageWidget::symbolOpacityChanged);
-	connect(m_image, &DatapickerImage::pointBrushChanged, this, &DatapickerImageWidget::symbolBrushChanged);
-	connect(m_image, &DatapickerImage::pointPenChanged, this, &DatapickerImageWidget::symbolPenChanged);
 	connect(m_image, &DatapickerImage::pointVisibilityChanged, this, &DatapickerImageWidget::symbolVisibleChanged);
+
+	handleWidgetActions();
+	updateSymbolWidgets();
+	m_initializing = false;
 }
 
 void DatapickerImageWidget::handleWidgetActions() {
@@ -400,8 +354,6 @@ void DatapickerImageWidget::updateLocale() {
 	ui.sbPositionY1->setLocale(numberLocale);
 	ui.sbPositionY2->setLocale(numberLocale);
 	ui.sbPositionY3->setLocale(numberLocale);
-	ui.sbSymbolSize->setLocale(numberLocale);
-	ui.sbSymbolBorderWidth->setLocale(numberLocale);
 }
 
 //**********************************************************
@@ -510,135 +462,6 @@ void DatapickerImageWidget::logicalPositionChanged() {
 	const Lock lock(m_initializing);
 	for (auto* image : m_imagesList)
 		image->setAxisPoints(points);
-}
-
-void DatapickerImageWidget::pointsStyleChanged(int index) {
-	auto style = Symbol::Style(index + 1);
-	//enable/disable the  filling options in the GUI depending on the currently selected points.
-	if (style != Symbol::Style::Line && style != Symbol::Style::Cross) {
-		ui.cbSymbolFillingStyle->setEnabled(true);
-		bool noBrush = (Qt::BrushStyle(ui.cbSymbolFillingStyle->currentIndex()) == Qt::NoBrush);
-		ui.kcbSymbolFillingColor->setEnabled(!noBrush);
-	} else {
-		ui.kcbSymbolFillingColor->setEnabled(false);
-		ui.cbSymbolFillingStyle->setEnabled(false);
-	}
-
-	bool noLine = (Qt::PenStyle(ui.cbSymbolBorderStyle->currentIndex()) == Qt::NoPen);
-	ui.kcbSymbolBorderColor->setEnabled(!noLine);
-	ui.sbSymbolBorderWidth->setEnabled(!noLine);
-
-	if (m_initializing)
-		return;
-
-	for (auto* image : m_imagesList)
-		image->setPointStyle(style);
-}
-
-void DatapickerImageWidget::pointsSizeChanged(double value) {
-	if (m_initializing)
-		return;
-
-	for (auto* image : m_imagesList)
-		image->setPointSize( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-}
-
-void DatapickerImageWidget::pointsRotationChanged(int value) {
-	if (m_initializing)
-		return;
-
-	for (auto* image : m_imagesList)
-		image->setPointRotationAngle(value);
-}
-
-void DatapickerImageWidget::pointsOpacityChanged(int value) {
-	if (m_initializing)
-		return;
-
-	qreal opacity = (float)value/100.;
-	for (auto* image : m_imagesList)
-		image->setPointOpacity(opacity);
-}
-
-void DatapickerImageWidget::pointsFillingStyleChanged(int index) {
-	auto brushStyle = Qt::BrushStyle(index);
-	ui.kcbSymbolFillingColor->setEnabled(!(brushStyle == Qt::NoBrush));
-
-	if (m_initializing)
-		return;
-
-	QBrush brush;
-	for (auto* image : m_imagesList) {
-		brush = image->pointBrush();
-		brush.setStyle(brushStyle);
-		image->setPointBrush(brush);
-	}
-}
-
-void DatapickerImageWidget::pointsFillingColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QBrush brush;
-	for (auto* image : m_imagesList) {
-		brush = image->pointBrush();
-		brush.setColor(color);
-		image->setPointBrush(brush);
-	}
-
-	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, color );
-	m_initializing = false;
-}
-
-void DatapickerImageWidget::pointsBorderStyleChanged(int index) {
-	auto penStyle = Qt::PenStyle(index);
-
-	if ( penStyle == Qt::NoPen ) {
-		ui.kcbSymbolBorderColor->setEnabled(false);
-		ui.sbSymbolBorderWidth->setEnabled(false);
-	} else {
-		ui.kcbSymbolBorderColor->setEnabled(true);
-		ui.sbSymbolBorderWidth->setEnabled(true);
-	}
-
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* image : m_imagesList) {
-		pen = image->pointPen();
-		pen.setStyle(penStyle);
-		image->setPointPen(pen);
-	}
-}
-
-void DatapickerImageWidget::pointsBorderColorChanged(const QColor& color) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* image : m_imagesList) {
-		pen = image->pointPen();
-		pen.setColor(color);
-		image->setPointPen(pen);
-	}
-
-	m_initializing = true;
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, color);
-	m_initializing = false;
-}
-
-void DatapickerImageWidget::pointsBorderWidthChanged(double value) {
-	if (m_initializing)
-		return;
-
-	QPen pen;
-	for (auto* image : m_imagesList) {
-		pen = image->pointPen();
-		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
-		image->setPointPen(pen);
-	}
 }
 
 void DatapickerImageWidget::pointsVisibilityChanged(bool state) {
@@ -798,47 +621,6 @@ void DatapickerImageWidget::updateSymbolWidgets() {
 		ui.tSymbol->setEnabled(false);
 }
 
-void DatapickerImageWidget::symbolStyleChanged(Symbol::Style style) {
-	m_initializing = true;
-	ui.cbSymbolStyle->setCurrentIndex((int)style - 1);
-	m_initializing = false;
-}
-
-void DatapickerImageWidget::symbolSizeChanged(qreal size) {
-	m_initializing = true;
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point) );
-	m_initializing = false;
-}
-
-void DatapickerImageWidget::symbolRotationAngleChanged(qreal angle) {
-	m_initializing = true;
-	ui.sbSymbolRotation->setValue(round(angle));
-	m_initializing = false;
-}
-
-void DatapickerImageWidget::symbolOpacityChanged(qreal opacity) {
-	m_initializing = true;
-	ui.sbSymbolOpacity->setValue( round(opacity*100.0) );
-	m_initializing = false;
-}
-
-void DatapickerImageWidget::symbolBrushChanged(const QBrush& brush) {
-	m_initializing = true;
-	ui.cbSymbolFillingStyle->setCurrentIndex((int) brush.style());
-	ui.kcbSymbolFillingColor->setColor(brush.color());
-	GuiTools::updateBrushStyles(ui.cbSymbolFillingStyle, brush.color());
-	m_initializing = false;
-}
-
-void DatapickerImageWidget::symbolPenChanged(const QPen& pen) {
-	m_initializing = true;
-	ui.cbSymbolBorderStyle->setCurrentIndex( (int) pen.style());
-	ui.kcbSymbolBorderColor->setColor( pen.color());
-	GuiTools::updatePenStyles(ui.cbSymbolBorderStyle, pen.color());
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
-}
-
 void DatapickerImageWidget::symbolVisibleChanged(bool on) {
 	m_initializing = true;
 	ui.chbSymbolVisible->setChecked(on);
@@ -884,15 +666,6 @@ void DatapickerImageWidget::load() {
 	gvValue->setSpan(m_image->settings().valueThresholdLow, m_image->settings().valueThresholdHigh);
 	ui.sbPointSeparation->setValue(m_image->pointSeparation());
 	ui.sbMinSegmentLength->setValue(m_image->minSegmentLength());
-	ui.cbSymbolStyle->setCurrentIndex( (int)m_image->pointStyle() - 1 );
-	ui.sbSymbolSize->setValue( Worksheet::convertFromSceneUnits(m_image->pointSize(), Worksheet::Unit::Point) );
-	ui.sbSymbolRotation->setValue( m_image->pointRotationAngle() );
-	ui.sbSymbolOpacity->setValue( round(m_image->pointOpacity()*100.0) );
-	ui.cbSymbolFillingStyle->setCurrentIndex( (int) m_image->pointBrush().style() );
-	ui.kcbSymbolFillingColor->setColor(  m_image->pointBrush().color() );
-	ui.cbSymbolBorderStyle->setCurrentIndex( (int) m_image->pointPen().style() );
-	ui.kcbSymbolBorderColor->setColor( m_image->pointPen().color() );
-	ui.sbSymbolBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_image->pointPen().widthF(), Worksheet::Unit::Point) );
 	ui.chbSymbolVisible->setChecked( m_image->pointVisibility() );
 	m_initializing = false;
 }
