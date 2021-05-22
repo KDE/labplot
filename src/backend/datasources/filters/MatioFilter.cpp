@@ -41,13 +41,13 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	{ \
 	const type *data = static_cast<const type*>(var->data); \
 	if (dataSource) { \
-		for (int i = 0; i < actualRows; i++) \
-			for (int j = 0; j < actualCols; j++) \
+		for (size_t i = 0; i < actualRows; i++) \
+			for (size_t j = 0; j < actualCols; j++) \
 				static_cast<QVector<dtype>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i-startRow+1) = data[i + j*actualRows]; \
 	} else { /* preview */ \
-		for (int i = 0; i < actualRows; i++) { \
+		for (size_t i = 0; i < actualRows; i++) { \
 			QStringList row; \
-			for (int j = 0; j < actualCols; j++) \
+			for (size_t j = 0; j < actualCols; j++) \
 				row << QString::number(data[i + j*actualRows]); \
 			dataStrings << row; \
 		} \
@@ -59,15 +59,15 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	{ \
 	const type* data = (const type*)cell->data; \
 	if (dataSource) { \
-		for (unsigned int j = 0; j < cell->dims[1]; j++) \
+		for (size_t j = 0; j < cellsize; j++) \
 			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = data[j]; \
-		for (int j = cell->dims[1]; j < actualCols; j++) /* reset not defined values */ \
+		for (size_t j = cellsize; j < actualCols; j++) /* reset not defined values */ \
 			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = qQNaN(); \
 	} else { /* preview */ \
 		QStringList row; \
-		if (cell->dims[1] == 0)	/* handle empty cells */ \
+		if (cellsize == 0)	/* handle empty cells */ \
 			row << QString(); \
-		for (unsigned int j = 0; j < cell->dims[1]; j++) \
+		for (size_t j = 0; j < cellsize; j++) \
 			row << QString::number(data[j]); \
 		dataStrings << row; \
 	} \
@@ -477,7 +477,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 	if (!var)
 		return dataStrings << (QStringList() << i18n("Variable not found"));
 
-	int actualRows = 0, actualCols = 0;
+	size_t actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
 	std::vector<void*> dataContainer;
 	if (var->rank == 2) {	// rank is always >= 2
@@ -500,17 +500,17 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		case MAT_C_UINT16:
 		case MAT_C_INT32:
 		case MAT_C_UINT32:
-			for (int i = 0; i < actualCols; i++)
+			for (size_t i = 0; i < actualCols; i++)
 				columnModes[i] = AbstractColumn::ColumnMode::Integer;
 			break;
 		case MAT_C_INT64:
 		case MAT_C_UINT64:
-			for (int i = 0; i < actualCols; i++)
+			for (size_t i = 0; i < actualCols; i++)
 				columnModes[i] = AbstractColumn::ColumnMode::BigInt;
 			break;
 		case MAT_C_DOUBLE:
 		case MAT_C_SINGLE:
-			for (int i = 0; i < actualCols; i++)
+			for (size_t i = 0; i < actualCols; i++)
 				columnModes[i] = AbstractColumn::ColumnMode::Numeric;
 			break;
 		case MAT_C_EMPTY:
@@ -556,7 +556,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				//change data source settings
 				columnModes.resize(actualCols);
 				auto mode = typeMode(var->data_type);
-				for (int i = 0; i < actualCols; i++)
+				for (size_t i = 0; i < actualCols; i++)
 					columnModes[i] = mode;
 			}
 			break;
@@ -634,10 +634,11 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 				// read cell data (see MAT_READ_VAR)
 				if (cell->rank == 2 && cell->dims[0] <= 1) {	// read only rank 2 and cells with zero/one row
+					const size_t cellsize = cell->dims[1];
 					switch(cell->class_type) {
 					case MAT_C_CHAR:	// strings are not imported (yet)
 						if (dataSource) {
-							for (int j = 0; j < actualCols; j++)	// reset not defined values
+							for (size_t j = 0; j < actualCols; j++)	// reset not defined values
 								static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = qQNaN();
 						} else {
 							QStringList row;
@@ -690,6 +691,8 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					case MAT_C_OPAQUE:
 						break;
 					}
+				} else {
+					DEBUG(Q_FUNC_INFO << ", not supported yet.")
 				}
 			}
 			break;
@@ -705,21 +708,23 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			double *data = (double*)sparse->data;
 			if (dataSource) {
 				// set default values
-				for (int i = 0; i < actualRows; i++)
-					for (int j = 0; j < actualCols; j++)
+				for (size_t i = 0; i < actualRows; i++)
+					for (size_t j = 0; j < actualCols; j++)
 						static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = 0;
+				DEBUG("OK")
 
 				for (size_t i = 0; i < (size_t)sparse->njc - 1; i++)
-					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++)
+					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) {
 						//DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride))
-						static_cast<QVector<double>*>(dataContainer[(int)(sparse->ir[j]-(size_t)startColumn+1)])->operator[](i-startRow+1)
+						static_cast<QVector<double>*>(dataContainer[(int)(i-(size_t)startColumn+1)])->operator[](sparse->ir[j]-startRow+1)
 							= *(data + j * stride/sizeof(double));
+					}
 			} else {	// preview
 				QVector<QVector<double>> matrix;
 				// set default values
-				for (size_t i = 0; i < var->dims[0]; i++) {
+				for (size_t i = 0; i < actualRows; i++) {
 					QVector<double> tmp;
-					for (size_t j = 0; j < var->dims[1]; j++)
+					for (size_t j = 0; j < actualCols; j++)
 						tmp.append(0);
 					matrix.append(tmp);
 				}
@@ -729,10 +734,10 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 						//DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride))
 						matrix[sparse->ir[j]][i] = *(data + j * stride/sizeof(double));
 
-				for (size_t i = 0; i < var->dims[1]; i++) {
+				for (size_t i = 0; i < actualRows; i++) {
 					QStringList row;
-					for (size_t j = 0; j < var->dims[0]; j++)
-						row << QString::number(matrix[j][i]);
+					for (size_t j = 0; j < actualCols; j++)
+						row << QString::number(matrix[i][j]);
 					dataStrings << row;
 				}
 			}

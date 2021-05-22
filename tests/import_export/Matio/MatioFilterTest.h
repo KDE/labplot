@@ -40,6 +40,9 @@ private slots:
 	void testImportDouble();
 	void testImportSpreadsheet();
 	void testImportMatrix();
+
+	void testImportSparse();
+	void testImportCell();
 };
 
 
