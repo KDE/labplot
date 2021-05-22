@@ -4,6 +4,7 @@
     Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
+    Copyright            : (C) 2015-2021 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -27,6 +28,7 @@
 #ifndef DATAPICKERCURVEPRIVATE_H
 #define DATAPICKERCURVEPRIVATE_H
 
+class Symbol;
 class QBrush;
 class QPen;
 
@@ -39,13 +41,8 @@ public:
 	DatapickerCurve* const q;
 	void retransform();
 
+	Symbol* symbol;
 	DatapickerCurve::Errors curveErrorTypes;
-	qreal pointRotationAngle;
-	Symbol::Style pointStyle;
-	QBrush pointBrush;
-	QPen pointPen;
-	qreal pointOpacity;
-	qreal pointSize;
 	QBrush pointErrorBarBrush;
 	QPen pointErrorBarPen;
 	qreal pointErrorBarSize;

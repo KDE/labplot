@@ -5,7 +5,7 @@
                            of datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2021 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -61,13 +61,8 @@ public:
 	void updatePoints();
 	void updatePoint(const DatapickerPoint*);
 
+	Symbol* symbol() const;
 	BASIC_D_ACCESSOR_DECL(Errors, curveErrorTypes, CurveErrorTypes)
-	BASIC_D_ACCESSOR_DECL(Symbol::Style, pointStyle, PointStyle)
-	BASIC_D_ACCESSOR_DECL(qreal, pointOpacity, PointOpacity)
-	BASIC_D_ACCESSOR_DECL(qreal, pointRotationAngle, PointRotationAngle)
-	BASIC_D_ACCESSOR_DECL(qreal, pointSize, PointSize)
-	CLASS_D_ACCESSOR_DECL(QBrush, pointBrush, PointBrush)
-	CLASS_D_ACCESSOR_DECL(QPen, pointPen, PointPen)
 	BASIC_D_ACCESSOR_DECL(qreal, pointErrorBarSize, PointErrorBarSize)
 	CLASS_D_ACCESSOR_DECL(QBrush, pointErrorBarBrush, PointErrorBarBrush)
 	CLASS_D_ACCESSOR_DECL(QPen, pointErrorBarPen, PointErrorBarPen)

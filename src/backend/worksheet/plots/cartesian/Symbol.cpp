@@ -56,9 +56,10 @@ void Symbol::init(const KConfigGroup& group) {
 	QColor defaultBorderColor(Qt::black);
 	double defaultBorderWidth = Worksheet::convertToSceneUnits(0.0, Worksheet::Unit::Point);
 
-	if (parentAspect()->type() == AspectType::CustomPoint)
+	auto type = parentAspect()->type();
+	if (type == AspectType::CustomPoint)
 		defaultStyle = Symbol::Style::Circle;
-	else if (parentAspect()->type() == AspectType::DatapickerImage) {
+	else if (type == AspectType::DatapickerImage || type == AspectType::DatapickerCurve) {
 		defaultStyle = Symbol::Style::Cross;
 		defaultSize = Worksheet::convertToSceneUnits(7, Worksheet::Unit::Point);
 		defaultBorderColor = Qt::red;

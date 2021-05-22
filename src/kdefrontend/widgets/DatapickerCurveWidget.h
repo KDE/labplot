@@ -4,7 +4,7 @@
     Description          : widget for datapicker properties
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 /***************************************************************************
@@ -34,6 +34,7 @@
 #include "backend/datapicker/DatapickerCurve.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
+class SymbolWidget;
 
 class DatapickerCurveWidget : public BaseDock {
 	Q_OBJECT
@@ -48,12 +49,11 @@ public:
 
 private:
 	Ui::DatapickerCurveWidget ui;
-	void init();
 	void hideErrorBarWidgets(bool);
 
 	DatapickerCurve* m_curve{nullptr};
 	QList<DatapickerCurve*> m_curveList;
-	bool m_initializing;
+	SymbolWidget* symbolWidget{nullptr};
 	bool m_suppressTypeChange{false};
 
 private slots:
@@ -61,15 +61,6 @@ private slots:
 	void updateSymbolWidgets();
 	void xErrorTypeChanged(int);
 	void yErrorTypeChanged(int);
-	void styleChanged(int);
-	void sizeChanged(double);
-	void rotationChanged(int);
-	void opacityChanged(int);
-	void fillingStyleChanged(int);
-	void fillingColorChanged(const QColor&);
-	void borderStyleChanged(int);
-	void borderColorChanged(const QColor&);
-	void borderWidthChanged(double);
 	void visibilityChanged(bool);
 	void errorBarFillingStyleChanged(int);
 	void errorBarFillingColorChanged(const QColor&);
@@ -77,12 +68,6 @@ private slots:
 
 	//SLOTs for changes triggered in DatapickerCurve
 	void curveErrorsChanged(DatapickerCurve::Errors);
-	void symbolStyleChanged(Symbol::Style);
-	void symbolSizeChanged(qreal);
-	void symbolRotationAngleChanged(qreal);
-	void symbolOpacityChanged(qreal);
-	void symbolBrushChanged(const QBrush&);
-	void symbolPenChanged(const QPen&);
 	void symbolVisibleChanged(bool);
 	void symbolErrorBarSizeChanged(qreal);
 	void symbolErrorBarBrushChanged(const QBrush&);

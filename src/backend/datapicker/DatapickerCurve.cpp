@@ -5,7 +5,7 @@
                            of datapicker
     --------------------------------------------------------------------
     Copyright            : (C) 2015 by Ankit Wagadre (wagadre.ankit@gmail.com)
-    Copyright            : (C) 2015-2019 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2015-2021 Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 /***************************************************************************
  *                                                                         *
@@ -34,6 +34,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 
 #include <QIcon>
 #include <QVector3D>
@@ -70,26 +71,25 @@ void DatapickerCurve::init() {
 	KConfig config;
 	KConfigGroup group;
 	group = config.group("DatapickerCurve");
+	d->pointVisibility = group.readEntry("PointVisibility", true);
+
+	//error bars
 	d->curveErrorTypes.x = (ErrorType) group.readEntry("CurveErrorType_X", static_cast<int>(ErrorType::NoError));
 	d->curveErrorTypes.y = (ErrorType) group.readEntry("CurveErrorType_Y", static_cast<int>(ErrorType::NoError));
-
-	// point properties
-	d->pointStyle = (Symbol::Style)group.readEntry("PointStyle", static_cast<int>(Symbol::Style::Cross));
-	d->pointSize = group.readEntry("Size", Worksheet::convertToSceneUnits(7, Worksheet::Unit::Point));
-	d->pointRotationAngle = group.readEntry("Rotation", 0.0);
-	d->pointOpacity = group.readEntry("Opacity", 1.0);
-	d->pointBrush.setStyle( (Qt::BrushStyle)group.readEntry("FillingStyle", (int)Qt::NoBrush) );
-	d->pointBrush.setColor( group.readEntry("FillingColor", QColor(Qt::black)) );
-	d->pointPen.setStyle( (Qt::PenStyle)group.readEntry("BorderStyle", (int)Qt::SolidLine) );
-	d->pointPen.setColor( group.readEntry("BorderColor", QColor(Qt::red)) );
-	d->pointPen.setWidthF( group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)) );
 	d->pointErrorBarSize = group.readEntry("ErrorBarSize", Worksheet::convertToSceneUnits(8, Worksheet::Unit::Point));
 	d->pointErrorBarBrush.setStyle( (Qt::BrushStyle)group.readEntry("ErrorBarFillingStyle", (int)Qt::NoBrush) );
 	d->pointErrorBarBrush.setColor( group.readEntry("ErrorBarFillingColor", QColor(Qt::black)) );
 	d->pointErrorBarPen.setStyle( (Qt::PenStyle)group.readEntry("ErrorBarBorderStyle", (int)Qt::SolidLine) );
 	d->pointErrorBarPen.setColor( group.readEntry("ErrorBarBorderColor", QColor(Qt::black)) );
 	d->pointErrorBarPen.setWidthF( group.readEntry("ErrorBarBorderWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)) );
-	d->pointVisibility = group.readEntry("PointVisibility", true);
+
+	//initialize the symbol
+	d->symbol = new Symbol(QString());
+	addChild(d->symbol);
+	d->symbol->setHidden(true);
+	connect(d->symbol, &Symbol::updateRequested, [=]{d->retransform();});
+	connect(d->symbol, &Symbol::updatePixmapRequested, [=]{d->retransform();});
+	d->symbol->init(group);
 }
 
 /*!
@@ -111,13 +111,12 @@ Column* DatapickerCurve::appendColumn(const QString& name) {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+Symbol* DatapickerCurve::symbol() const {
+	Q_D(const DatapickerCurve);
+	return d->symbol;
+}
+
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, DatapickerCurve::Errors, curveErrorTypes, curveErrorTypes)
-BASIC_SHARED_D_READER_IMPL(DatapickerCurve, Symbol::Style, pointStyle, pointStyle)
-BASIC_SHARED_D_READER_IMPL(DatapickerCurve, qreal, pointOpacity, pointOpacity)
-BASIC_SHARED_D_READER_IMPL(DatapickerCurve, qreal, pointRotationAngle, pointRotationAngle)
-BASIC_SHARED_D_READER_IMPL(DatapickerCurve, qreal, pointSize, pointSize)
-BASIC_SHARED_D_READER_IMPL(DatapickerCurve, QBrush, pointBrush, pointBrush)
-BASIC_SHARED_D_READER_IMPL(DatapickerCurve, QPen, pointPen, pointPen)
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, qreal, pointErrorBarSize, pointErrorBarSize)
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, QBrush, pointErrorBarBrush, pointErrorBarBrush)
 BASIC_SHARED_D_READER_IMPL(DatapickerCurve, QPen, pointErrorBarPen, pointErrorBarPen)
@@ -281,48 +280,6 @@ void DatapickerCurve::setMinusDeltaYColumn(AbstractColumn* column) {
 		exec(new DatapickerCurveSetMinusDeltaYColumnCmd(d, column, ki18n("%1: set -delta_Y column")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointStyle, Symbol::Style, pointStyle, retransform)
-void DatapickerCurve::setPointStyle(Symbol::Style newStyle) {
-	Q_D(DatapickerCurve);
-	if (newStyle != d->pointStyle)
-		exec(new DatapickerCurveSetPointStyleCmd(d, newStyle, ki18n("%1: set point's style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointSize, qreal, pointSize, retransform)
-void DatapickerCurve::setPointSize(qreal value) {
-	Q_D(DatapickerCurve);
-	if (!qFuzzyCompare(1 + value, 1 + d->pointSize))
-		exec(new DatapickerCurveSetPointSizeCmd(d, value, ki18n("%1: set point's size")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointRotationAngle, qreal, pointRotationAngle, retransform)
-void DatapickerCurve::setPointRotationAngle(qreal angle) {
-	Q_D(DatapickerCurve);
-	if (!qFuzzyCompare(1 + angle, 1 + d->pointRotationAngle))
-		exec(new DatapickerCurveSetPointRotationAngleCmd(d, angle, ki18n("%1: rotate point")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointBrush, QBrush, pointBrush, retransform)
-void DatapickerCurve::setPointBrush(const QBrush& newBrush) {
-	Q_D(DatapickerCurve);
-	if (newBrush != d->pointBrush)
-		exec(new DatapickerCurveSetPointBrushCmd(d, newBrush, ki18n("%1: set point's filling")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointPen, QPen, pointPen, retransform)
-void DatapickerCurve::setPointPen(const QPen &newPen) {
-	Q_D(DatapickerCurve);
-	if (newPen != d->pointPen)
-		exec(new DatapickerCurveSetPointPenCmd(d, newPen, ki18n("%1: set outline style")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointOpacity, qreal, pointOpacity, retransform)
-void DatapickerCurve::setPointOpacity(qreal newOpacity) {
-	Q_D(DatapickerCurve);
-	if (newOpacity != d->pointOpacity)
-		exec(new DatapickerCurveSetPointOpacityCmd(d, newOpacity, ki18n("%1: set point's opacity")));
-}
-
 STD_SETTER_CMD_IMPL_F_S(DatapickerCurve, SetPointErrorBarSize, qreal, pointErrorBarSize, retransform)
 void DatapickerCurve::setPointErrorBarSize(qreal size) {
 	Q_D(DatapickerCurve);
@@ -366,6 +323,7 @@ void DatapickerCurve::setSelectedInView(bool b) {
 	else
 		emit childAspectDeselectedInView(this);
 }
+
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
@@ -460,18 +418,11 @@ void DatapickerCurve::save(QXmlStreamWriter* writer) const {
 	WRITE_COLUMN(d->minusDeltaYColumn, minusDeltaYColumn);
 	writer->writeAttribute( "curveErrorType_X", QString::number(static_cast<int>(d->curveErrorTypes.x)) );
 	writer->writeAttribute( "curveErrorType_Y", QString::number(static_cast<int>(d->curveErrorTypes.y)) );
+	writer->writeAttribute( "vibible", QString::number(d->pointVisibility) );
 	writer->writeEndElement();
 
-	//symbol properties
-	writer->writeStartElement("symbolProperties");
-	writer->writeAttribute( "pointRotationAngle", QString::number(d->pointRotationAngle) );
-	writer->writeAttribute( "pointOpacity", QString::number(d->pointOpacity) );
-	writer->writeAttribute( "pointSize", QString::number(d->pointSize) );
-	writer->writeAttribute( "pointStyle", QString::number(static_cast<int>(d->pointStyle)) );
-	writer->writeAttribute( "pointVisibility", QString::number(d->pointVisibility) );
-	WRITE_QBRUSH(d->pointBrush);
-	WRITE_QPEN(d->pointPen);
-	writer->writeEndElement();
+	//Symbols
+	d->symbol->save(writer);
 
 	//error bar properties
 	writer->writeStartElement("errorBarProperties");
@@ -511,6 +462,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE("visible", pointVisibility, bool);
 			READ_INT_VALUE("curveErrorType_X", curveErrorTypes.x, ErrorType);
 			READ_INT_VALUE("curveErrorType_Y", curveErrorTypes.y, ErrorType);
 
@@ -522,16 +474,104 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_COLUMN(plusDeltaYColumn);
 			READ_COLUMN(minusDeltaYColumn);
 		} else if (!preview && reader->name() == "symbolProperties") {
+			//old serialization that was used before the switch to Symbol::load().
+			//in the old serialization the symbol properties and "point visibility" where saved
+			//under "symbolProperties".
 			attribs = reader->attributes();
 
-			READ_DOUBLE_VALUE("pointRotationAngle", pointRotationAngle);
-			READ_DOUBLE_VALUE("pointOpacity", pointOpacity);
-			READ_DOUBLE_VALUE("pointSize", pointSize);
-			READ_INT_VALUE("pointStyle", pointStyle, Symbol::Style);
-			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
+			str = attribs.value("pointRotationAngle").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("pointRotationAngle").toString());
+			else
+				d->symbol->setRotationAngle(str.toDouble());
 
-			READ_QBRUSH(d->pointBrush);
-			READ_QPEN(d->pointPen);
+			str = attribs.value("pointOpacity").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("pointOpacity").toString());
+			else
+				d->symbol->setOpacity(str.toDouble());
+
+			str = attribs.value("pointSize").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("pointSize").toString());
+			else
+				d->symbol->setSize(str.toDouble());
+
+			str = attribs.value("pointStyle").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("pointStyle").toString());
+			else
+				d->symbol->setStyle(static_cast<Symbol::Style>(str.toInt()));
+
+			//brush
+			QBrush brush;
+			str = attribs.value("brush_style").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("brush_style").toString());
+			else
+				brush.setStyle( static_cast<Qt::BrushStyle>(str.toInt()) );
+
+			QColor color;
+			str = attribs.value("brush_color_r").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("brush_color_r").toString());
+			else
+				color.setRed(str.toInt());
+
+			str = attribs.value("brush_color_g").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("brush_color_g").toString());
+			else
+				color.setGreen(str.toInt());
+
+			str = attribs.value("brush_color_b").toString();
+			if(str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("brush_color_b").toString());
+			else
+				color.setBlue(str.toInt());
+
+			brush.setColor(color);
+			d->symbol->setBrush(brush);
+
+			//pen
+			QPen pen;
+			str = attribs.value("style").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("style").toString());
+			else
+				pen.setStyle( static_cast<Qt::PenStyle>(str.toInt()) );
+
+			str = attribs.value("color_r").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("color_r").toString());
+			else
+				color.setRed( str.toInt() );
+
+			str = attribs.value("color_g").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("color_g").toString());
+			else
+				color.setGreen( str.toInt() );
+
+			str = attribs.value("color_b").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("color_b").toString());
+			else
+				color.setBlue( str.toInt() );
+
+			pen.setColor(color);
+
+			str = attribs.value("width").toString();
+			if (str.isEmpty())
+				reader->raiseWarning(attributeWarning.subs("width").toString());
+			else
+				pen.setWidthF( str.toDouble() );
+
+			d->symbol->setPen(pen);
+
+			READ_INT_VALUE("pointVisibility", pointVisibility, bool);
+		} else if (!preview && reader->name() == "symbols") {
+			d->symbol->load(reader, preview);
 		} else if (!preview && reader->name() == "errorBarProperties") {
 			attribs = reader->attributes();
 

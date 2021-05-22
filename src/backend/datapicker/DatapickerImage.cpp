@@ -620,7 +620,7 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("valueThresholdHigh", settings.valueThresholdHigh, int);
 			READ_INT_VALUE("valueThresholdLow", settings.valueThresholdLow, int);
 		} else if (!preview && reader->name() == "symbolProperties") {
-			//old serialization that was used bevor the switch to Symbol::load().
+			//old serialization that was used before the switch to Symbol::load().
 			//in the old serialization the symbol properties and "point visibility" where saved
 			//under "symbolProperties".
 			attribs = reader->attributes();

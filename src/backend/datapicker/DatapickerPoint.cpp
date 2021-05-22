@@ -366,12 +366,12 @@ void DatapickerPointPrivate::updatePropeties() {
 		size = image->symbol()->size();
 		setVisible(image->pointVisibility());
 	} else if (curve) {
-		rotationAngle = curve->pointRotationAngle();
-		pointStyle = curve->pointStyle();
-		brush = curve->pointBrush();
-		pen = curve->pointPen();
-		opacity = curve->pointOpacity();
-		size = curve->pointSize();
+		rotationAngle = curve->symbol()->rotationAngle();
+		pointStyle = curve->symbol()->style();
+		brush = curve->symbol()->brush();
+		pen = curve->symbol()->pen();
+		opacity = curve->symbol()->opacity();
+		size = curve->symbol()->size();
 		errorBarBrush = curve->pointErrorBarBrush();
 		errorBarPen = curve->pointErrorBarPen();
 		errorBarSize = curve->pointErrorBarSize();
