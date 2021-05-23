@@ -4,7 +4,7 @@
     Description          : widget for worksheet properties
     --------------------------------------------------------------------
     Copyright            : (C) 2012 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2012-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -34,7 +34,6 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
 class Project;
-class AbstractAspect;
 class KConfig;
 
 class ProjectDock : public BaseDock {
@@ -49,16 +48,10 @@ private:
 	Project* m_project{nullptr};
 
 private slots:
-	void retranslateUi();
 	void authorChanged();
 
 	//SLOTs for changes triggered in Project
-	void projectDescriptionChanged(const AbstractAspect*);
 	void projectAuthorChanged(const QString&);
-
-	void loadConfig(KConfig&);
-	void saveConfig(KConfig&);
-	void commentChanged();
 };
 
 #endif // PROJECTDOCK_H

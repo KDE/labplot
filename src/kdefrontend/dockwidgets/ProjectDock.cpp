@@ -4,7 +4,7 @@
     Description          : widget for project properties
     --------------------------------------------------------------------
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    Copyright            : (C) 2013-2020 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -29,9 +29,6 @@
 
 #include "ProjectDock.h"
 #include "backend/core/Project.h"
-#include "kdefrontend/TemplateHandler.h"
-#include <KConfigGroup>
-#include <KConfig>
 
 /*!
   \class ProjectDock
@@ -43,50 +40,37 @@
 ProjectDock::ProjectDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
-	// leComment = ui.tbComment; // not a qlineedit
+	m_teComment = ui.teComment;
+	m_teComment->setFixedHeight(m_leName->height());
 
 	// SLOTS
 	connect(ui.leName, &QLineEdit::textChanged, this, &ProjectDock::nameChanged);
 	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);
-	connect(ui.tbComment, &QTextBrowser::textChanged, this, &ProjectDock::commentChanged);
-
-	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Worksheet);
-	ui.verticalLayout->addWidget(templateHandler);
-	templateHandler->show();
-	connect(templateHandler, &TemplateHandler::loadConfigRequested, this, &ProjectDock::loadConfig);
-	connect(templateHandler, &TemplateHandler::saveConfigRequested, this, &ProjectDock::saveConfig);
-
-	this->retranslateUi();
+	connect(ui.teComment, &QTextEdit::textChanged, this, &ProjectDock::commentChanged);
 }
 
 void ProjectDock::setProject(Project* project) {
 	m_project = project;
 	m_aspect = project;
 
-	m_initializing = true;
+	Lock lock(m_initializing);
 	ui.leFileName->setText(project->fileName());
 	ui.leName->setStyleSheet("");
 	ui.leName->setToolTip("");
+	ui.leName->setText(m_project->name());
+	ui.leAuthor->setText(m_project->author());
+	ui.teComment->setText(m_project->comment());
 	ui.lVersion->setText(project->version());
 	ui.lCreated->setText(project->creationTime().toString());
 	ui.lModified->setText(project->modificationTime().toString());
 
-	//show default properties of the project
-	KConfig config(QString(), KConfig::SimpleConfig);
-	loadConfig(config);
-
-	connect(m_project, &Project::aspectDescriptionChanged, this, &ProjectDock::projectDescriptionChanged);
+	connect(m_project, &Project::aspectDescriptionChanged, this, &ProjectDock::aspectDescriptionChanged);
 	connect(m_project, &Project::authorChanged, this, &ProjectDock::projectAuthorChanged);
-
-	m_initializing = false;
 }
 
 //************************************************************
 //****************** SLOTS ********************************
 //************************************************************
-void ProjectDock::retranslateUi() {
-}
-
 void ProjectDock::authorChanged() {
 	if (m_initializing)
 		return;
@@ -94,48 +78,10 @@ void ProjectDock::authorChanged() {
 	m_project->setAuthor(ui.leAuthor->text());
 }
 
-void ProjectDock::commentChanged() {
-	if (m_initializing)
-		return;
-
-	m_project->setComment(ui.tbComment->toPlainText());
-}
-
 //*************************************************************
 //******** SLOTs for changes triggered in Project   ***********
 //*************************************************************
-void ProjectDock::projectDescriptionChanged(const AbstractAspect* aspect) {
-	if (m_project != aspect)
-		return;
-
-	m_initializing = true;
-	if (aspect->name() != ui.leName->text())
-		ui.leName->setText(aspect->name());
-	else if (aspect->comment() != ui.tbComment->toPlainText())
-		ui.tbComment->setText(aspect->comment());
-
-	m_initializing = false;
-}
-
 void ProjectDock::projectAuthorChanged(const QString& author) {
 	Lock lock(m_initializing);
 	ui.leAuthor->setText(author);
-}
-//*************************************************************
-//************************* Settings **************************
-//*************************************************************
-void ProjectDock::loadConfig(KConfig& config) {
-	KConfigGroup group = config.group( "Project" );
-
-	ui.leName->setText( group.readEntry("Name", m_project->name()) );
-	ui.leAuthor->setText( group.readEntry("Author", m_project->author()) );
-	ui.tbComment->setText( group.readEntry("Comment", m_project->comment()) );
-}
-
-void ProjectDock::saveConfig(KConfig& config) {
-	KConfigGroup group = config.group( "Project" );
-
-	group.writeEntry("Name", ui.leName->text());
-	group.writeEntry("Author", ui.leAuthor->text());
-	group.writeEntry("Comment", ui.tbComment->toPlainText());
 }
