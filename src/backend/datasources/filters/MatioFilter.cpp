@@ -476,10 +476,13 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 	matvar_t* var = Mat_VarRead(matfp, qPrintable(currentVarName));
 	if (!var)
 		return dataStrings << (QStringList() << i18n("Variable not found"));
+	if (!var->data)
+		return dataStrings << (QStringList() << i18n("Variable contains no data"));
 
 	size_t actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
 	std::vector<void*> dataContainer;
+	QStringList vectorNames;
 	if (var->rank == 2) {	// rank is always >= 2
 		// read data
 		actualRows = var->dims[0], actualCols = var->dims[1];
@@ -492,6 +495,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		QVector<AbstractColumn::ColumnMode> columnModes;
 		columnModes.resize(actualCols);
 
+		// set column modes
 		switch (var->class_type) {
 		case MAT_C_CHAR:
 		case MAT_C_INT8:
@@ -519,7 +523,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		case MAT_C_CELL: {
 			DEBUG(Q_FUNC_INFO << ", found CELL. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			// Each element of the cell array can be a different type: only import numbers atm
-			if (var->nbytes == 0 || var->data_size == 0 || var->data == NULL)
+			if (var->nbytes == 0 || var->data_size == 0 || var->data == nullptr)
 				break;
 			const int ncells = var->nbytes / var->data_size;
 			DEBUG(Q_FUNC_INFO << ", found " << ncells << " cells")
@@ -560,11 +564,59 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					columnModes[i] = mode;
 			}
 			break;
-		case MAT_C_STRUCT:	//TODO: how to import? see users_guide
+		case MAT_C_STRUCT: {
 			DEBUG(Q_FUNC_INFO << ", found STRUCT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
-			DEBUG(Q_FUNC_INFO << ", data type = " << typeName(var->data_type).toStdString())
-			return dataStrings << (QStringList() << i18n("Not implemented yet"));
+			DEBUG(Q_FUNC_INFO << ", data type = " << typeName(var->data_type).toStdString() << ", dims = " << var->dims[0] << " x " << var->dims[1])
+			const int nelem = var->dims[0]*var->dims[1];
+			const int nfields = Mat_VarGetNumberOfFields(var);
+			DEBUG(Q_FUNC_INFO << ", nelements = " << nelem << ", nfields = " << nfields)
+			actualCols = nfields;
+
+			if (nfields <= 0)
+				return dataStrings << (QStringList() << i18n("Sruct contains no fields"));
+
+			if (nelem < 1) {
+				DEBUG(Q_FUNC_INFO << ", no elements")
+				char *const *fieldnames = Mat_VarGetStructFieldnames(var);
+				if (fieldnames) {
+					for (int i = 0; i < nfields; i++ )
+						DEBUG(Q_FUNC_INFO << ", field " << i << " name = " << fieldnames[i])
+				}
+			}
+
+			//set actualRows
+			matvar_t **fields = (matvar_t **)var->data;
+			for (int i = 0; i < nfields; i++) {
+				if (fields[i]->name)
+					vectorNames << fields[i]->name;
+				else
+					vectorNames << QLatin1String("Column ") + QString::number(i);
+			}
+			for (int i = 0; i < nfields * nelem; i++) {
+				if (fields[i]->rank == 2) {
+					DEBUG(Q_FUNC_INFO << ", dims = " << fields[i]->dims[0] << " x " << fields[i]->dims[1])
+					size_t size;
+					if (fields[i]->class_type == MAT_C_CHAR)	// read as string
+						size = fields[i]->dims[0];
+					else
+						size = fields[i]->dims[0] * fields[i]->dims[1];
+
+					if (actualRows < size)
+						actualRows = size;
+				} else
+					DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
+			}
+			DEBUG(Q_FUNC_INFO << ", Setting rows/cols to: " << actualRows << "/" << actualCols)
+			if (!dataSource) {
+				dataStrings.resize(actualRows + 1);	// +1: header
+				for (auto& string : dataStrings ) {
+					string.reserve(actualCols);
+					for (size_t j = 0; j < actualCols; j++)
+						string << QString();
+				}
+			}
 			break;
+		}
 		case MAT_C_OBJECT:	// not available (not supported by matio yet)
 			DEBUG(Q_FUNC_INFO << ", found OBJECT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			return dataStrings << (QStringList() << i18n("Not implemented yet"));
@@ -577,7 +629,6 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		}
 
 		//prepare import
-		QStringList vectorNames;
 		if (dataSource)
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
 
@@ -711,7 +762,6 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				for (size_t i = 0; i < actualRows; i++)
 					for (size_t j = 0; j < actualCols; j++)
 						static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = 0;
-				DEBUG("OK")
 
 				for (size_t i = 0; i < (size_t)sparse->njc - 1; i++)
 					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) {
@@ -744,7 +794,68 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 			break;
 		}
-		case MAT_C_STRUCT:	// s.a.
+		case MAT_C_STRUCT: {
+			const int nelem = var->dims[0]*var->dims[1];
+			const int nfields = Mat_VarGetNumberOfFields(var);
+
+			//TODO: TEST nelem < 1
+
+			// show column names on first line
+			if (!dataSource)
+
+			DEBUG(Q_FUNC_INFO << ", Reading data ...")
+			matvar_t **fields = (matvar_t **)var->data;
+
+			if (dataSource) {
+				//TODO
+			} else {	// preview
+				dataStrings[0] = vectorNames;
+				for (int i = 0; i < nfields * nelem; i++) {
+					const int field = i % nfields, elem = i/nfields;
+					DEBUG(Q_FUNC_INFO << ", var " << i + 1 << "(field " << field + 1 << ", elem " << elem + 1 <<"): name = " << fields[i]->name
+							<< ", type = " << className(fields[i]->class_type).toStdString())
+					//TODO: all types
+					if (fields[i]->class_type == MAT_C_DOUBLE) {
+						//TODO: complex
+						double* data = (double *)fields[i]->data;
+						if (fields[i]->rank == 2) {
+							DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
+							for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) {
+								//DEBUG(Q_FUNC_INFO << ", data " << j + 1 << " : " << data[j])
+								//DEBUG(Q_FUNC_INFO << ", set rows/col " << j << "/" << field << " to " << data[j])
+								//DEBUG(Q_FUNC_INFO << ", dataStrings size = " << dataStrings.size() << "/" << dataStrings[0].size())
+								dataStrings[j+1][field] = QString::number(data[j]);
+							}
+						} else
+							DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank << " not supported")
+					}
+					if (fields[i]->class_type == MAT_C_CHAR) {
+						if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
+							mat_uint16_t* data = (mat_uint16_t*)fields[i]->data;
+							if (fields[i]->rank == 2) {
+								DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
+							} else
+								DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
+							DEBUG(Q_FUNC_INFO << ", data: \"" << QString::fromUtf16(data).toStdString() << "\"")
+							//TODO: row fields[i]->dims[0]
+							dataStrings[1][field] = QString::fromUtf16(data);
+						} else {
+							char* data = (char*)fields[i]->data;
+							if (fields[i]->data_type == MAT_T_UTF8) {
+								DEBUG(Q_FUNC_INFO << ", data: \"" << QString::fromUtf8(data).toStdString() << "\"")
+								//TODO: row
+								dataStrings[1][field] = QString::fromUtf8(data);
+							} else {
+								DEBUG(Q_FUNC_INFO << ", data: \"" << QString(data).toStdString() << "\"")
+								//TODO: row
+								dataStrings[1][field] = QString(data);
+							}
+						}
+					}
+				}
+			}
+			break;
+		}
 		case MAT_C_OBJECT:	// unsupported (s.a.)
 		case MAT_C_FUNCTION:	// unsupported (s.a.)
 		case MAT_C_OPAQUE:	// ???
