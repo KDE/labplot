@@ -460,25 +460,18 @@ void PlotDataDialog::plot() {
 		parent->endMacro();
 	}
 
-	//if more than two curves are produced, select the parent plot of the last added curve in the project explorer.
+	//if new curves are created via this dialog, select the parent plot of the last added curve in the project explorer.
 	//if a custom fit is being done, select the last created fit curve independent of the number of created curves.
 	m_spreadsheet->project()->setSuppressAspectAddedSignal(false);
 	if (m_lastAddedCurve) {
 		QString path;
 		if (!m_analysisMode) {
-			if (m_columns.size() > 2)
-				path = m_lastAddedCurve->parentAspect()->path();
-			else
-				path = m_lastAddedCurve->path();
+			path = m_lastAddedCurve->parentAspect()->path();
 		} else {
 			if (m_analysisAction == AnalysisAction::FitCustom)
 				path = m_lastAddedCurve->path();
-			else {
-				if (m_columns.size() > 2)
-					path = m_lastAddedCurve->parentAspect()->path();
-				else
-					path = m_lastAddedCurve->path();
-			}
+			else
+				path = m_lastAddedCurve->parentAspect()->path();
 		}
 
 		emit m_spreadsheet->project()->requestNavigateTo(path);
@@ -686,6 +679,7 @@ void PlotDataDialog::addHistogram(const QString& name, Column* column, Cartesian
 }
 
 void PlotDataDialog::addBoxPlot(const QString& name, const QVector<const AbstractColumn*>& columns, CartesianPlot* plot) {
+	QApplication::processEvents(QEventLoop::AllEvents, 100);
 	auto* boxPlot = new BoxPlot(name);
 	boxPlot->setDataColumns(columns);
 	plot->addChild(boxPlot);
