@@ -308,11 +308,14 @@ QMenu* AbstractAspect::createContextMenu() {
 // 	menu->addAction( KStandardAction::cut(this) );
 
 	if (this != project()) {
-		auto* action = KStandardAction::copy(this);
-		connect(action, &QAction::triggered, this, &AbstractAspect::copy);
-		menu->addAction(action);
+		//don't allow to copy columns in a CAS worksheet, the variables are managed in the CAS
+		if (parentAspect()->type() != AspectType::CantorWorksheet) {
+			auto* action = KStandardAction::copy(this);
+			connect(action, &QAction::triggered, this, &AbstractAspect::copy);
+			menu->addAction(action);
+		}
 
-		if (m_type != AspectType::CartesianPlotLegend) {
+		if (m_type != AspectType::CartesianPlotLegend && parentAspect()->type() != AspectType::CantorWorksheet) {
 			auto* actionDuplicate = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Duplicate Here"), this);
 			actionDuplicate->setShortcut(Qt::CTRL + Qt::Key_D);
 			connect(actionDuplicate, &QAction::triggered, this, &AbstractAspect::duplicate);
@@ -337,12 +340,14 @@ QMenu* AbstractAspect::createContextMenu() {
 	// - data spreadsheets of datapicker curves
 	// - columns in data spreadsheets of datapicker curves
 	// - columns in live-data source
+	// - columns in CAS worksheets
 	// - Mqtt subscriptions
 	// - Mqtt topics
 	// - Columns in Mqtt topics
 	bool disabled = (type() == AspectType::Spreadsheet && parentAspect()->type() == AspectType::DatapickerCurve)
 		|| (type() == AspectType::Column && parentAspect()->parentAspect() && parentAspect()->parentAspect()->type() == AspectType::DatapickerCurve)
 		|| (type() == AspectType::Column && parentAspect()->type() == AspectType::LiveDataSource)
+		|| (type() == AspectType::Column && parentAspect()->type() == AspectType::CantorWorksheet)
 #ifdef HAVE_MQTT
 		|| (type() == AspectType::MQTTSubscription)
 		|| (type() == AspectType::MQTTTopic)

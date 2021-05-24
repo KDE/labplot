@@ -175,8 +175,8 @@ void CantorWorksheet::modified() {
 }
 
 void CantorWorksheet::modelReset() {
-	for (int i = 0; i < childCount<Column>(); ++i)
-		child<Column>(i)->remove();
+	for (auto* column : children<Column>())
+		column->remove();
 }
 
 void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {

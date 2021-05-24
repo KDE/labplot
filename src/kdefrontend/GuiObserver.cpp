@@ -223,11 +223,22 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		raiseDockConnect(m_mainWindow->spreadsheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 		m_mainWindow->spreadsheetDock->setSpreadsheets(castList<Spreadsheet>(selectedAspects));
 		break;
-	case AspectType::Column:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Column"));
-		raiseDockConnect(m_mainWindow->columnDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
-		m_mainWindow->columnDock->setColumns(castList<Column>(selectedAspects));
+	case AspectType::Column: {
+		auto* casParent = dynamic_cast<CantorWorksheet*>(selectedAspects.first()->parentAspect());
+		if (casParent) {
+			//a column from a CAS-worksheets was selected, show the dock widget for the CAS worksheet
+#ifdef HAVE_CANTOR_LIBS
+			raiseDockConnect(m_mainWindow->cantorWorksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Worksheet", casParent->backendName()));
+			m_mainWindow->cantorWorksheetDock->setCantorWorksheets(QList<CantorWorksheet*>{casParent});
+#endif
+		} else {
+			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Column"));
+			raiseDockConnect(m_mainWindow->columnDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
+			m_mainWindow->columnDock->setColumns(castList<Column>(selectedAspects));
+		}
 		break;
+	}
 	case AspectType::Matrix:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Matrix"));
 		raiseDockConnect(m_mainWindow->matrixDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
@@ -371,7 +382,6 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	case AspectType::Datapicker:
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Datapicker"));
 		raiseDock(m_mainWindow->datapickerImageDock, m_mainWindow->stackedWidget);
-
 		{
 			QList<DatapickerImage*> list;
 			for (auto* aspect : selectedAspects)
@@ -387,9 +397,8 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	case AspectType::CantorWorksheet:
 #ifdef HAVE_CANTOR_LIBS
 		raiseDockConnect(m_mainWindow->cantorWorksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
-
 		{
-			QList<CantorWorksheet*> list = castList<CantorWorksheet>(selectedAspects);
+			auto list = castList<CantorWorksheet>(selectedAspects);
 			if (list.size() == 1)
 				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Worksheet", list.first()->backendName()));
 			else
@@ -503,4 +512,3 @@ void GuiObserver::hiddenAspectSelected(const AbstractAspect* aspect) const {
 		break;
 	}
 }
-
