@@ -37,6 +37,7 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 // see NetCDFFilter.cpp
 // type - var data type, dtype - container data type
+// TODO: complex
 #define MAT_READ_VAR(type, dtype) \
 	{ \
 	const type *data = static_cast<const type*>(var->data); \
@@ -816,18 +817,30 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 							<< ", type = " << className(fields[i]->class_type).toStdString())
 					//TODO: all types
 					if (fields[i]->class_type == MAT_C_DOUBLE) {
-						//TODO: complex
-						double* data = (double *)fields[i]->data;
-						if (fields[i]->rank == 2) {
-							DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
-							for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) {
-								//DEBUG(Q_FUNC_INFO << ", data " << j + 1 << " : " << data[j])
-								//DEBUG(Q_FUNC_INFO << ", set rows/col " << j << "/" << field << " to " << data[j])
-								//DEBUG(Q_FUNC_INFO << ", dataStrings size = " << dataStrings.size() << "/" << dataStrings[0].size())
-								dataStrings[j+1][field] = QString::number(data[j]);
-							}
-						} else
-							DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank << " not supported")
+						if (fields[i]->isComplex) {
+							mat_complex_split_t* complex_data = (mat_complex_split_t*)fields[i]->data;
+							double *re = (double *)complex_data->Re;
+							double *im = (double *)complex_data->Im;
+							if (fields[i]->rank == 2) {
+								DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
+								for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++)
+									dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" + ")
+										+ QString::number(im[j]) + QLatin1String("i");
+							} else
+								DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank << " not supported")
+						} else {	// real
+							double* data = (double *)fields[i]->data;
+							if (fields[i]->rank == 2) {
+								DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
+								for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) {
+									//DEBUG(Q_FUNC_INFO << ", data " << j + 1 << " : " << data[j])
+									//DEBUG(Q_FUNC_INFO << ", set rows/col " << j << "/" << field << " to " << data[j])
+									//DEBUG(Q_FUNC_INFO << ", dataStrings size = " << dataStrings.size() << "/" << dataStrings[0].size())
+									dataStrings[j+1][field] = QString::number(data[j]);
+								}
+							} else
+								DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank << " not supported")
+						}
 					}
 					if (fields[i]->class_type == MAT_C_CHAR) {
 						if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
