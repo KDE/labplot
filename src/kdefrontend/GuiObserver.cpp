@@ -224,15 +224,16 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->spreadsheetDock->setSpreadsheets(castList<Spreadsheet>(selectedAspects));
 		break;
 	case AspectType::Column: {
+#ifdef HAVE_CANTOR_LIBS
 		auto* casParent = dynamic_cast<CantorWorksheet*>(selectedAspects.first()->parentAspect());
 		if (casParent) {
 			//a column from a CAS-worksheets was selected, show the dock widget for the CAS worksheet
-#ifdef HAVE_CANTOR_LIBS
 			raiseDockConnect(m_mainWindow->cantorWorksheetDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Worksheet", casParent->backendName()));
 			m_mainWindow->cantorWorksheetDock->setCantorWorksheets(QList<CantorWorksheet*>{casParent});
+		} else
 #endif
-		} else {
+		{
 			m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Column"));
 			raiseDockConnect(m_mainWindow->columnDock, m_mainWindow->statusBar(), m_mainWindow->stackedWidget);
 			m_mainWindow->columnDock->setColumns(castList<Column>(selectedAspects));
