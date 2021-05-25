@@ -901,18 +901,28 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 	TreeModel* treeModel = cursorModel();
 
 	// if ApplyActionToSelection, each plot has it's own x value
+	bool isDatetime = sender->xRangeFormat() == RangeT::Format::DateTime;
 	if (cartesianPlotCursorMode() == CartesianPlotActionMode::ApplyActionToAll) {
 		// x values
 		int rowPlot = 1;
 		QModelIndex xName = treeModel->index(0, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME));
 		treeModel->setData(xName, QVariant("X"));
 		double valueCursor[2];
+		QDateTime datetime[2];
 		for (int i = 0; i < 2; i++) { // need both cursors to calculate diff
+			QVariant data;
 			valueCursor[i] = sender->cursorPos(i);
-			treeModel->setTreeData(QVariant(valueCursor[i]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i);
-
+			if (isDatetime) {
+				datetime[i].setTime_t(valueCursor[i]);
+				data = datetime[i].toString(sender->xRangeDateTimeFormat());
+			} else
+				data = QVariant(valueCursor[i]);
+			treeModel->setTreeData(data, 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i);
 		}
-		treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
+		if (isDatetime)
+			treeModel->setTreeData(QString::number(datetime[0].msecsTo(datetime[1])) + "ms", 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
+		else
+			treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
 
 		// y values
 		for (int i = 0; i < plotCount(); i++) { // i=0 is the x Axis
