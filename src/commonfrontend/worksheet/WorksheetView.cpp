@@ -1156,6 +1156,7 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 	if ( (m_magnificationWindow && m_magnificationWindow->isVisible() && items(e->pos()).size() == 1) || !itemAt(e->pos()) ) {
 		//no item or only the magnification window under the cursor -> show the context menu for the worksheet
 		QMenu* menu = m_worksheet->createContextMenu();
+		m_cursorPos = mapToScene(e->pos());
 		menu->exec(QCursor::pos());
 	} else {
 		//propagate the event to the scene and graphics items
@@ -1376,10 +1377,21 @@ void WorksheetView::addNew(QAction* action) {
 	} else if (action == addTextLabelAction) {
 		TextLabel* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
+
+		//position the label at the point where the context menu was called
+		auto position = l->position();
+		position.point = l->parentPosToRelativePos(m_cursorPos,
+												   m_worksheet->pageRect(),
+												   l->graphicsItem()->boundingRect(),
+												   position,
+												   l->horizontalAlignment(),
+												   l->verticalAlignment()
+		);
+		l->setPosition(position);
 		aspect = l;
 	} else if (action == addImageAction) {
-		Image* l = new Image(i18n("Image"));
-		aspect = l;
+		Image* image = new Image(i18n("Image"));
+		aspect = image;
 	}
 	if (!aspect)
 		return;
@@ -1387,7 +1399,7 @@ void WorksheetView::addNew(QAction* action) {
 	m_worksheet->addChild(aspect);
 
 	//labels and images with their initial positions need to be retransformed
-	//ater they have gotten a parent
+	//after they have gotten a parent
 	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image)
 		aspect->retransform();
 

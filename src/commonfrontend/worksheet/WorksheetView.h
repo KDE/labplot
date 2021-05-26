@@ -116,6 +116,7 @@ private:
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
+	QPointF m_cursorPos;
 	int magnificationFactor{0};
 	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 	GridSettings m_gridSettings;

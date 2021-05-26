@@ -42,7 +42,7 @@
  * \brief Base class for all Worksheet children.
  *
  */
-WorksheetElement::WorksheetElement(const QString &name, AspectType type)
+WorksheetElement::WorksheetElement(const QString& name, AspectType type)
 	: AbstractAspect(name, type) {
 
 	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
@@ -267,17 +267,28 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	emit moveEnd();
 }
 
-QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF parentRect, QRectF worksheetElementRect, PositionWrapper position, WorksheetElement::HorizontalAlignment horAlign, WorksheetElement::VerticalAlignment vertAlign) const {
+/*!
+	* \brief parentPosToRelativePos
+	* Converts the absolute position of the element in parent coordinates into the distance between the
+	* alignement point of the parent and the element
+	* \param parentPos Element position in parent coordinates
+	* \param parentRect Parent data rect
+	* \param rect element's rect
+	* \param position contains the alignement of the element to the parent
+	* \return distance between the parent position to the element
+	*/
+QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF parentRect, QRectF rect, PositionWrapper position,
+												 HorizontalAlignment horAlign, VerticalAlignment vertAlign) const {
+	QPointF relPos;
 
-    QPointF relPos;
     // positive is right
 	double xAlign;
 	switch (horAlign) {
 	case WorksheetElement::HorizontalAlignment::Left:
-		xAlign = worksheetElementRect.width()/2;
+		xAlign = rect.width()/2;
 		break;
 	case WorksheetElement::HorizontalAlignment::Right:
-		xAlign = - worksheetElementRect.width()/2;
+		xAlign = - rect.width()/2;
 		break;
 	case WorksheetElement::HorizontalAlignment::Center:
 		// Fall through
@@ -297,10 +308,10 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF paren
 	double yAlign;
 	switch (vertAlign) {
 	case WorksheetElement::VerticalAlignment::Bottom:
-		yAlign = - worksheetElementRect.height()/2;
+		yAlign = - rect.height()/2;
 		break;
 	case WorksheetElement::VerticalAlignment::Top:
-		yAlign = worksheetElementRect.height()/2;
+		yAlign = rect.height()/2;
 		break;
 	case WorksheetElement::VerticalAlignment::Center:
 		// Fall through
@@ -318,17 +329,25 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF paren
 	return relPos;
 }
 
-QPointF WorksheetElement::relativePosToParentPos(QRectF parentRect, QRectF worksheetElementRect, PositionWrapper position, WorksheetElement::HorizontalAlignment horAlign, WorksheetElement::VerticalAlignment vertAlign) const {
-    QPointF parentPos;
+/*!
+* \brief relativePosToParentPos
+* \param parentRect
+* \param rect element's rect
+* \param position contains the alignement of the element to the parent
+* \return parent position
+*/
+QPointF WorksheetElement::relativePosToParentPos(QRectF parentRect, QRectF rect, PositionWrapper position,
+												 HorizontalAlignment horAlign, VerticalAlignment vertAlign) const {
+	QPointF parentPos;
 
 	// positive is right of the anchor point
 	double xAlign;
 	switch (horAlign) {
 	case WorksheetElement::HorizontalAlignment::Left:
-		xAlign = worksheetElementRect.width()/2;
+		xAlign = rect.width()/2;
 		break;
 	case WorksheetElement::HorizontalAlignment::Right:
-		xAlign = - worksheetElementRect.width()/2;
+		xAlign = - rect.width()/2;
 		break;
 	case WorksheetElement::HorizontalAlignment::Center:
 		// Fall through
@@ -344,15 +363,14 @@ QPointF WorksheetElement::relativePosToParentPos(QRectF parentRect, QRectF works
 	else  //position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
 		parentPos.setX(parentRect.x() + parentRect.width() + position.point.x() + xAlign);
 
-
 	// positive is above the anchor point
 	double yAlign;
 	switch (vertAlign) {
 	case WorksheetElement::VerticalAlignment::Bottom:
-		yAlign = - worksheetElementRect.height()/2;
+		yAlign = - rect.height()/2;
 		break;
 	case WorksheetElement::VerticalAlignment::Top:
-		yAlign = worksheetElementRect.height()/2;
+		yAlign = rect.height()/2;
 		break;
 	case WorksheetElement::VerticalAlignment::Center:
 		// Fall through
