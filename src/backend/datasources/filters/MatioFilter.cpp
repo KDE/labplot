@@ -37,25 +37,53 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
 // see NetCDFFilter.cpp
 // type - var data type, dtype - container data type
-// TODO: complex
 #define MAT_READ_VAR(type, dtype) \
 	{ \
-	const type *data = static_cast<const type*>(var->data); \
-	if (dataSource) { \
-		for (size_t i = 0; i < actualRows; i++) \
-			for (size_t j = 0; j < actualCols; j++) \
-				static_cast<QVector<dtype>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i-startRow+1) = data[i + j*actualRows]; \
-	} else { /* preview */ \
-		for (size_t i = 0; i < actualRows; i++) { \
-			QStringList row; \
-			for (size_t j = 0; j < actualCols; j++) \
-				row << QString::number(data[i + j*actualRows]); \
-			dataStrings << row; \
+	if (var->isComplex) { \
+		mat_complex_split_t* complex_data = (mat_complex_split_t*)var->data; \
+		type* re = (type*)complex_data->Re; \
+		type* im = (type*)complex_data->Im; \
+		if (dataSource) { \
+			/* TODO: not working */ \
+			for (size_t j = 0; j < actualCols/2; j++) \
+				vectorNames << QLatin1String("Re") << QLatin1String("Im"); \
+			for (size_t i = 0; i < actualRows; i++) \
+				for (size_t j = 0; j < actualCols/2; j++) { \
+					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j - (size_t)startColumn+1)])->operator[](i-startRow+1) = re[i + j*actualRows]; \
+					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j + 1 - (size_t)startColumn+1)])->operator[](i-startRow+1) = im[i + j*actualRows]; \
+				} \
+		} else { /* preview */ \
+			QStringList header; \
+			for (size_t j = 0; j < actualCols/2; j++) { \
+				header << QLatin1String("Re") << QLatin1String("Im"); \
+			} \
+			dataStrings << header; \
+			for (size_t i = 0; i < actualRows; i++) { \
+				QStringList row; \
+				for (size_t j = 0; j < actualCols/2; j++) \
+					row << QString::number(re[i + j*actualRows]) << QString::number(im[i + j*actualRows]); \
+				dataStrings << row; \
+			} \
+		} \
+	} else { \
+		const type *data = static_cast<const type*>(var->data); \
+		if (dataSource) { \
+			for (size_t i = 0; i < actualRows; i++) \
+				for (size_t j = 0; j < actualCols; j++) \
+					static_cast<QVector<dtype>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i-startRow+1) = data[i + j*actualRows]; \
+		} else { /* preview */ \
+			for (size_t i = 0; i < actualRows; i++) { \
+				QStringList row; \
+				for (size_t j = 0; j < actualCols; j++) \
+					row << QString::number(data[i + j*actualRows]); \
+				dataStrings << row; \
+			} \
 		} \
 	} \
 	}
 
 // type - cell data type, dtype - container data type
+// TODO: complex
 #define MAT_READ_CELL(type, dtype) \
 	{ \
 	const type* data = (const type*)cell->data; \
@@ -491,6 +519,9 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			actualRows = actualCols;
 			actualCols = 1;
 		}
+		// double the number of cols for complex data (not for CELL or STRUCT)
+		if (var->isComplex && var->class_type != MAT_C_CELL && var->class_type != MAT_C_STRUCT)
+			actualCols *= 2;
 
 		// column modes
 		QVector<AbstractColumn::ColumnMode> columnModes;
@@ -819,17 +850,26 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					if (fields[i]->class_type == MAT_C_DOUBLE) {
 						if (fields[i]->isComplex) {
 							mat_complex_split_t* complex_data = (mat_complex_split_t*)fields[i]->data;
-							double *re = (double *)complex_data->Re;
-							double *im = (double *)complex_data->Im;
+							double* re = (double*)complex_data->Re;
+							double* im = (double*)complex_data->Im;
 							if (fields[i]->rank == 2) {
 								DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
-								for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++)
-									dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" + ")
-										+ QString::number(im[j]) + QLatin1String("i");
+								for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) {
+									if (im[j] < 0)
+										dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" - ")
+											+ QString::number(fabs(im[j])) + QLatin1String("i");
+									else if (im[j] == 0)
+										dataStrings[j+1][field] = QString::number(re[j]);
+									else if (re[j] == 0)
+										dataStrings[j+1][field] = QString::number(im[j]) + QLatin1String("i");
+									else
+										dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" + ")
+											+ QString::number(im[j]) + QLatin1String("i");
+								}
 							} else
 								DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank << " not supported")
 						} else {	// real
-							double* data = (double *)fields[i]->data;
+							double* data = (double*)fields[i]->data;
 							if (fields[i]->rank == 2) {
 								DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
 								for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) {
