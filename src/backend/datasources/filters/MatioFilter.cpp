@@ -44,9 +44,6 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 		type* re = (type*)complex_data->Re; \
 		type* im = (type*)complex_data->Im; \
 		if (dataSource) { \
-			/* TODO: not working */ \
-			for (size_t j = 0; j < actualCols/2; j++) \
-				vectorNames << QLatin1String("Re") << QLatin1String("Im"); \
 			for (size_t i = 0; i < actualRows; i++) \
 				for (size_t j = 0; j < actualCols/2; j++) { \
 					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j - (size_t)startColumn+1)])->operator[](i-startRow+1) = re[i + j*actualRows]; \
@@ -520,8 +517,11 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			actualCols = 1;
 		}
 		// double the number of cols for complex data (not for CELL or STRUCT)
-		if (var->isComplex && var->class_type != MAT_C_CELL && var->class_type != MAT_C_STRUCT)
+		if (var->isComplex && var->class_type != MAT_C_CELL && var->class_type != MAT_C_STRUCT) {
 			actualCols *= 2;
+			for (size_t j = 0; j < actualCols/2; j++)
+				vectorNames << QLatin1String("Re") << QLatin1String("Im");
+		}
 
 		// column modes
 		QVector<AbstractColumn::ColumnMode> columnModes;
