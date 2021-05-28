@@ -55,7 +55,7 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 				header << QLatin1String("Re") << QLatin1String("Im"); \
 			} \
 			dataStrings << header; \
-			for (size_t i = 0; i < actualRows; i++) { \
+			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
 				QStringList row; \
 				for (size_t j = 0; j < actualCols/2; j++) \
 					row << QString::number(re[i + j*actualRows]) << QString::number(im[i + j*actualRows]); \
@@ -69,7 +69,7 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 				for (size_t j = 0; j < actualCols; j++) \
 					static_cast<QVector<dtype>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i-startRow+1) = data[i + j*actualRows]; \
 		} else { /* preview */ \
-			for (size_t i = 0; i < actualRows; i++) { \
+			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
 				QStringList row; \
 				for (size_t j = 0; j < actualCols; j++) \
 					row << QString::number(data[i + j*actualRows]); \
@@ -123,7 +123,7 @@ void MatioFilter::parse(const QString & fileName) {
 */
 QVector<QStringList> MatioFilter::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource,
 		AbstractFileFilter::ImportMode importMode, int lines) {
-	return d->readCurrentVar(fileName, dataSource, importMode, lines);
+	return d->readCurrentVar(fileName, dataSource, importMode, (size_t)lines);
 }
 
 /*!
@@ -484,7 +484,7 @@ QVector<QStringList> MatioFilterPrivate::readDataFromFile(const QString& fileNam
 /*!
     reads the content of the variable in the file \c fileName to a string (for preview) or to the data source.
 */
-QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, int lines) {
+QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, size_t lines) {
 	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
@@ -516,6 +516,8 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			actualRows = actualCols;
 			actualCols = 1;
 		}
+		if (lines == 0)
+			lines = actualRows;
 		// double the number of cols for complex data (not for CELL or STRUCT)
 		if (var->isComplex && var->class_type != MAT_C_CELL && var->class_type != MAT_C_STRUCT) {
 			actualCols *= 2;
@@ -640,6 +642,9 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			}
 			DEBUG(Q_FUNC_INFO << ", Setting rows/cols to: " << actualRows << "/" << actualCols)
 			if (!dataSource) {
+				if (actualRows > lines)
+					actualRows = lines;
+
 				dataStrings.resize(actualRows + 1);	// +1: header
 				for (auto& string : dataStrings ) {
 					string.reserve(actualCols);
@@ -816,7 +821,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 						//DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride))
 						matrix[sparse->ir[j]][i] = *(data + j * stride/sizeof(double));
 
-				for (size_t i = 0; i < actualRows; i++) {
+				for (size_t i = 0; i < qMin(actualRows, lines); i++) {
 					QStringList row;
 					for (size_t j = 0; j < actualCols; j++)
 						row << QString::number(matrix[i][j]);
@@ -846,6 +851,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					const int field = i % nfields, elem = i/nfields;
 					DEBUG(Q_FUNC_INFO << ", var " << i + 1 << "(field " << field + 1 << ", elem " << elem + 1 <<"): name = " << fields[i]->name
 							<< ", type = " << className(fields[i]->class_type).toStdString())
+
 					//TODO: all types
 					if (fields[i]->class_type == MAT_C_DOUBLE) {
 						if (fields[i]->isComplex) {
@@ -854,7 +860,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 							double* im = (double*)complex_data->Im;
 							if (fields[i]->rank == 2) {
 								DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
-								for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) {
+								for (size_t j = 0; j < qMin(fields[i]->dims[0] * fields[i]->dims[1], lines); j++) {
 									if (im[j] < 0)
 										dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" - ")
 											+ QString::number(fabs(im[j])) + QLatin1String("i");
@@ -872,7 +878,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 							double* data = (double*)fields[i]->data;
 							if (fields[i]->rank == 2) {
 								DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
-								for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) {
+								for (size_t j = 0; j < qMin(fields[i]->dims[0] * fields[i]->dims[1], lines); j++) {
 									//DEBUG(Q_FUNC_INFO << ", data " << j + 1 << " : " << data[j])
 									//DEBUG(Q_FUNC_INFO << ", set rows/col " << j << "/" << field << " to " << data[j])
 									//DEBUG(Q_FUNC_INFO << ", dataStrings size = " << dataStrings.size() << "/" << dataStrings[0].size())
