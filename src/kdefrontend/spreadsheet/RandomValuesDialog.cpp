@@ -281,8 +281,8 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter2->setText(numberLocale.toString(0.0));
 		break;
 	case nsl_sf_stats_lognormal:
-		ui.lParameter1->setText(UTF8_QSTRING("σ ="));
-		ui.lParameter2->setText(UTF8_QSTRING("μ ="));
+		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("σ ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
 		ui.leParameter2->setText(numberLocale.toString(1.0));
 		break;
@@ -686,8 +686,8 @@ void RandomValuesDialog::generate() {
 	}
 	case nsl_sf_stats_lognormal: {
 		double s{1.0}, mu{1.0};
-		SET_DOUBLE_FROM_LE(s, ui.leParameter1)
-		SET_DOUBLE_FROM_LE(mu, ui.leParameter2)
+		SET_DOUBLE_FROM_LE(mu, ui.leParameter1)
+		SET_DOUBLE_FROM_LE(s, ui.leParameter2)
 		for (auto* col : m_columns) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
 				for (int i = 0; i < rows; ++i)
