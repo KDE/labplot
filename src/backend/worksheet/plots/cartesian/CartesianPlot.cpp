@@ -1902,6 +1902,13 @@ int CartesianPlot::curveCount() {
 	return children<XYCurve>().size();
 }
 
+int CartesianPlot::curveTotalCount() const {
+	int count = children<XYCurve>().size();
+	count += children<Histogram>().size();
+	count += children<BoxPlot>().size();
+	return count;
+}
+
 const XYCurve* CartesianPlot::getCurve(int index) {
 	return children<XYCurve>().at(index);
 }
@@ -1935,13 +1942,11 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 
-	const bool firstCurve = (children<XYCurve>().size() + children<Histogram>().size() == 1);
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	if (curve) {
 		connect(curve, &XYCurve::dataChanged, this, &CartesianPlot::dataChanged);
 		connect(curve, &XYCurve::xColumnChanged, this, [this](const AbstractColumn* column) {
-			const bool firstCurve = (children<XYCurve>().size() + children<Histogram>().size() == 1);
-			if (firstCurve)
+			if (curveTotalCount() == 1) //first curve addded
 				checkAxisFormat(column, Axis::Orientation::Horizontal);
 		});
 		connect(curve, &XYCurve::xDataChanged, this, &CartesianPlot::xDataChanged);
@@ -1950,8 +1955,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::xErrorMinusColumnChanged, this, &CartesianPlot::dataChanged);
 		connect(curve, &XYCurve::yDataChanged, this, &CartesianPlot::yDataChanged);
 		connect(curve, &XYCurve::yColumnChanged, this, [this](const AbstractColumn* column) {
-			const bool firstCurve = (children<XYCurve>().size() + children<Histogram>().size() == 1);
-			if (firstCurve)
+			if (curveTotalCount() == 1)
 				checkAxisFormat(column, Axis::Orientation::Vertical);
 		});
 		connect(curve, &XYCurve::yErrorTypeChanged, this, &CartesianPlot::dataChanged);
@@ -1975,7 +1979,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		d->curvesYMinMaxIsDirty = true;
 
 		//in case the first curve is added, check whether we start plotting datetime data
-		if (firstCurve) {
+		if (curveTotalCount() == 1) {
 			checkAxisFormat(curve->xColumn(), Axis::Orientation::Horizontal);
 			checkAxisFormat(curve->yColumn(), Axis::Orientation::Vertical);
 		}
@@ -1993,7 +1997,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			d->curvesXMinMaxIsDirty = true;
 			d->curvesYMinMaxIsDirty = true;
 
-			if (firstCurve)
+			if (curveTotalCount() == 1)
 				checkAxisFormat(hist->dataColumn(), Axis::Orientation::Horizontal);
 		}
 
@@ -2004,6 +2008,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(boxPlot, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
+
+			if (curveTotalCount() == 1) {
+				connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
+				boxPlotOrientationChanged(boxPlot->orientation());
+			}
 		}
 
 		const auto* infoElement = qobject_cast<const InfoElement*>(child);
@@ -2070,6 +2079,35 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 
 		setUndoAware(true);
 	}
+}
+
+void CartesianPlot::boxPlotOrientationChanged(BoxPlot::Orientation orientation) {
+	const auto& axes = children<Axis>();
+
+	//don't show any labels for the first axis orthogonal to the orientation of the boxplot
+	for (auto* axis : axes) {
+		if (axis->orientation() != orientation) {
+			if (axis->labelsTextType() != Axis::LabelsTextType::CustomValues) {
+				axis->setUndoAware(false);
+				axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
+				axis->setUndoAware(true);
+			}
+			break;
+		}
+	}
+
+	//don't show any labels for the first axis parallel to the orientation of the boxplot
+	for (auto* axis : axes) {
+		if (axis->orientation() == orientation) {
+			if (axis->labelsTextType() != Axis::LabelsTextType::CustomValues) {
+				axis->setUndoAware(false);
+				axis->setLabelsPosition(Axis::LabelsPosition::Out);
+				axis->setUndoAware(true);
+			}
+			break;
+		}
+	}
+
 }
 
 void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {

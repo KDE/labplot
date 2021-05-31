@@ -748,11 +748,12 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 }
 
 void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) const {
+	const auto& axes = plot->children<Axis>();
 	switch (m_plotType) {
 	case PlotType::XYCurve: {
 		//x-axis title
 		const QString& xColumnName = ui->cbXColumn->currentText();
-		for (auto* axis : plot->children<Axis>()) {
+		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {
 				axis->title()->setText(xColumnName);
 				break;
@@ -760,7 +761,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		}
 
 		//y-axis title
-		for (auto* axis : plot->children<Axis>()) {
+		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				if (!name.isEmpty()) {
 					//multiple columns are plotted with "one curve per plot",
@@ -780,7 +781,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 	}
 	case PlotType::Histogram: {
 		//x-axis title
-		for (auto* axis : plot->children<Axis>()) {
+		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {
 				if (!name.isEmpty()) {
 					//multiple columns are plotted with "one curve per plot",
@@ -797,7 +798,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		}
 
 		//y-axis title
-		for (auto* axis : plot->children<Axis>()) {
+		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				axis->title()->setText(i18n("Frequency"));
 				break;
@@ -807,14 +808,14 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 	}
 	case PlotType::BoxPlot: {
 		//x-axis title
-		for (auto* axis : plot->children<Axis>()) {
+		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {
 				axis->title()->setText(QString());
 				break;
 			}
 		}
 		//x-axis title
-		for (auto* axis : plot->children<Axis>()) {
+		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				if (!name.isEmpty()) {
 					//multiple columns are plotted with "one curve per plot",
