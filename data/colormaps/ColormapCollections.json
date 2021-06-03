@@ -50,5 +50,10 @@
 		"name" : "Scientific Colour Maps (Cyclic)",
 		"description": "Suite of scientific, colour-vision deficiency friendly and perceptually uniform colour maps (<a href=\"http://www.fabiocrameri.ch/colourmaps\">source</a>) that prevent both excluding readers and significant visual errors, which would otherwise visually distort the underlying data and mislead the reader.",
 		"url" : "http://www.fabiocrameri.ch/colourmaps.php"
+	},
+	{
+		"name" : "viridis",
+		"description": "viridis provides a series of color maps that are designed to improve graph readability for readers with common forms of color blindness and/or color vision deficiency. The color maps are also perceptually-uniform, both in regular form and also when converted to black-and-white for printing (<a href=\"https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html\">source</a>).",
+		"url" : "https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html"
 	}
 ]
