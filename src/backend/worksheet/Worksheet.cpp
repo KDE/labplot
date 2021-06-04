@@ -883,6 +883,60 @@ void Worksheet::cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logic
 	cursorPosChanged(cursorNumber, logicPos.x());
 }
 
+QString dateTimeDiffToString(const QDateTime& dt0, const QDateTime& dt1)
+{
+    QString result;
+    qint64 diff;
+    bool negative = false;;
+    if (dt0 < dt1) {
+        diff = dt0.msecsTo(dt1);
+        negative = true;
+    } else
+        diff = dt1.msecsTo(dt0);
+    const qint64 dayToMsecs = 24 * 3600 * 1000;
+    const qint64 hourToMsecs = 3600 * 1000;
+    const qint64 minutesToMsecs = 60 * 1000;
+
+    qint64 mod;
+    qint64 days = diff / dayToMsecs;
+    diff -= days * dayToMsecs;
+    qint64 hours = diff / hourToMsecs;
+    diff -= hours * hourToMsecs;
+    qint64 minutes = diff / minutesToMsecs;
+    diff -= minutes * minutesToMsecs;
+    qint64 seconds = diff / 1000;
+    diff -= seconds * 1000;
+    qint64 msecs = diff;
+
+    if (negative)
+        result += "- ";
+
+    if (days > 0)
+        result += QString::number(days) + " " + QObject::tr("days") + " ";
+
+    if (hours > 0)
+        result += QString::number(hours) + ":";
+    else
+        result += "00:";
+
+    if (minutes > 0)
+        result += QString::number(minutes) + ":";
+    else
+        result += "00:";
+
+    if (seconds > 0)
+        result += QString::number(seconds) + ".";
+    else
+        result += "00.";
+
+    if (msecs > 0)
+        result += QString::number(msecs);
+    else
+        result += "000";
+
+    return result;
+}
+
 /*!
  * \brief Worksheet::cursorPosChanged
  * Updates the cursor treemodel with the new data
@@ -913,14 +967,14 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 			QVariant data;
 			valueCursor[i] = sender->cursorPos(i);
 			if (isDatetime) {
-				datetime[i].setTime_t(valueCursor[i]);
+                datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i]);
 				data = datetime[i].toString(sender->xRangeDateTimeFormat());
 			} else
 				data = QVariant(valueCursor[i]);
 			treeModel->setTreeData(data, 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i);
 		}
 		if (isDatetime)
-			treeModel->setTreeData(QString::number(datetime[0].msecsTo(datetime[1])) + "ms", 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
+            treeModel->setTreeData(dateTimeDiffToString(datetime[0], datetime[1]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
 		else
 			treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
 
