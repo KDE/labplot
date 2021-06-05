@@ -76,7 +76,7 @@ void WorksheetElement::finalizeAdd() {
 		m_plot = dynamic_cast<CartesianPlot*>(parentAspect());
 	}
 
-	if (m_plot)
+	if (m_plot) {
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
 		emit plotRangeListChanged();
 	} else
