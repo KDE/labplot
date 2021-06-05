@@ -98,6 +98,8 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 			ui.lwColorMaps->setCurrentItem(items.constFirst());
 	}
 
+	collectionChanged(ui.cbCollections->currentIndex());
+
 	ui.stackedWidget->setCurrentIndex(conf.readEntry("ViewIndex", 0));
 }
 
