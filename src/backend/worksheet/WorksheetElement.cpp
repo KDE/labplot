@@ -68,8 +68,15 @@ WorksheetElement::~WorksheetElement() {
 
 void WorksheetElement::finalizeAdd() {
 	DEBUG(Q_FUNC_INFO)
-	m_plot = dynamic_cast<CartesianPlot*>(parentAspect());
-	if (m_plot) {
+	if (!m_plot) {
+		/*Not in every case the parentAspect is a cartesian plot. When creating an infoelement, the parent
+		 * of a custom point is not the CartesianPlot (and so this function returns a nullptr), but the InfoElement.
+		 * So the plot is set manally in the custompoint and therefore the plot should not be set anymore.
+		*/
+		m_plot = dynamic_cast<CartesianPlot*>(parentAspect());
+	}
+
+	if (m_plot)
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
 		emit plotRangeListChanged();
 	} else
