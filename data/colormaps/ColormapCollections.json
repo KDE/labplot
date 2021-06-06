@@ -75,5 +75,47 @@
 		"name" : "cmocean (Multi-sequential)",
 		"description": "A suite of perceptually-uniform colormaps inspired by oceanography and developed by Kristen Thyng. (<a href=\"https://matplotlib.org/cmocean/\">source</a>).",
 		"url" : "https://matplotlib.org/cmocean/"
+	},
+	{
+		"name" : "ColorCET (Colour Blind)",
+		"description": "These colour maps avoid points of locally high colour contrast leading to the perception of false anomalies in your data when there are none. The colour maps have been designed to avoid this phenomenon by having uniform perceptual contrast over their whole range (<a href=\"https://colorcet.com/\">source</a>).
+		<br><br>
+		<b>Colour Blind</b> colour maps. These are not designed to be merely 'colour blind safe'. These maps have been constructed to lie within either the 2D model of protanopic/deuteranopic colour space, or the 2D model of tritanopic colour space. Hopefully by working within these colour spaces people who are colour blind will be able to share a common perceptual interpretation of data with those who have normal colour vision. It also ensures maximal use of the available colour spaces, and allows chroma and lightness to be properly used in the design of colour maps. I would value any feedback on the usefulness, or otherwise, of these maps.",
+		"url" : "https://colorcet.com/"
+	},
+	{
+		"name" : "ColorCET (Cyclic)",
+		"description": "These colour maps avoid points of locally high colour contrast leading to the perception of false anomalies in your data when there are none. The colour maps have been designed to avoid this phenomenon by having uniform perceptual contrast over their whole range (<a href=\"https://colorcet.com/\">source</a>).
+		<br><br>
+		<b>Cyclic</b> colour maps have colours that are matched at each end. They are intended for the presentation of data that is cyclic such as orientation values or angular phase data. They require particular care in their design (the standard colour circle is not a good map).",
+		"url" : "https://colorcet.com/"
+	},
+	{
+		"name" : "ColorCET (Diverging)",
+		"description": "These colour maps avoid points of locally high colour contrast leading to the perception of false anomalies in your data when there are none. The colour maps have been designed to avoid this phenomenon by having uniform perceptual contrast over their whole range (<a href=\"https://colorcet.com/\">source</a>).
+		<br><br>
+		<b>Diverging</b> colour maps are suitable where the data being displayed has a well defined reference value and we are interested in differentiating values that lie above, or below, the reference value. The centre point of the colour map will be white, black or grey. It should be noted that, in general, diverging colour maps have a small perceptual flat spot at the centre. The exception being linear-diverging maps which avoid this problem.",
+		"url" : "https://colorcet.com/"
+	},
+	{
+		"name" : "ColorCET (Isoluminant)",
+		"description": "These colour maps avoid points of locally high colour contrast leading to the perception of false anomalies in your data when there are none. The colour maps have been designed to avoid this phenomenon by having uniform perceptual contrast over their whole range (<a href=\"https://colorcet.com/\">source</a>).
+		<br><br>
+		<b>Isoluminant</b> colour maps are constructed from colours of equal perceptual lightness. These colour maps are designed for use with relief shading. On their own these colour maps are not very useful because features in the data are very hard to discern. However, when used in conjunction with relief shading their constant lightness means that the colour map does not induce an independent shading pattern that will interfere with, or even hide, the structures induced by the relief shading. The relief shading provides the structural information and the colours provide the data classification information.",
+		"url" : "https://colorcet.com/"
+	},
+	{
+		"name" : "ColorCET (Linear)",
+		"description": "These colour maps avoid points of locally high colour contrast leading to the perception of false anomalies in your data when there are none. The colour maps have been designed to avoid this phenomenon by having uniform perceptual contrast over their whole range (<a href=\"https://colorcet.com/\">source</a>).
+		<br><br>
+		<b>Linear</b> colour maps are intended for general use and have colour lightness values that increase or decrease linearly over the colour map's range. Such maps are also known as sequential maps.",
+		"url" : "https://colorcet.com/"
+	},
+	{
+		"name" : "ColorCET (Rainbow)",
+		"description": "These colour maps avoid points of locally high colour contrast leading to the perception of false anomalies in your data when there are none. The colour maps have been designed to avoid this phenomenon by having uniform perceptual contrast over their whole range (<a href=\"https://colorcet.com/\">source</a>).
+		<br><br>
+		<b>Rainbow</b> colour maps are widely used but often misused. It is suggested that they be avoided because they have reversals in the lightness gradient at yellow and red which can upset a viewer's perceptual ordering of the colours in the colour map. However, they are attractive and perhaps can have a legitimate use where the main aim is to differentiate data values rather than communicate a data ordering. I believe the rainbow colour maps presented here have minimal badness though they do have localised perceptual flat spots at yellow and red.",
+		"url" : "https://colorcet.com/"
 	}
 ]
