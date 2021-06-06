@@ -52,7 +52,7 @@
 		"url" : "http://www.fabiocrameri.ch/colourmaps.php"
 	},
 	{
-		"name" : "viridis",
+		"name" : "viridis (Sequential)",
 		"description": "viridis provides a series of color maps that are designed to improve graph readability for readers with common forms of color blindness and/or color vision deficiency. The color maps are also perceptually-uniform, both in regular form and also when converted to black-and-white for printing (<a href=\"https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html\">source</a>).",
 		"url" : "https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html"
 	},
