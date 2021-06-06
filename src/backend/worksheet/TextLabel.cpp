@@ -1058,25 +1058,50 @@ void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
 	        || event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
-		const int delta = 5;
-		QRectF pr;
-		if (!parentRect(pr))
-			return;
-		QPointF point = q->parentPosToRelativePos(pos(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+		const int delta = 5; // always in scene coordinates
+
 		WorksheetElement::PositionWrapper tempPosition = position;
+		if(coordinateBindingEnabled && q->cSystem) {
+			QPointF p;
+			QRectF pr;
+			if (q->plot()) {
+				pr = q->plot()->dataRect();
+			} else {
+				if (!parentRect(pr))
+					return;
+			}
+			//the position in logical coordinates was changed, calculate the position in scene coordinates
+			bool visible;
+			p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			if (event->key() == Qt::Key_Left) {
+				p.setX(p.x() - delta);
+			} else if (event->key() == Qt::Key_Right) {
+				p.setX(p.x() + delta);
+			} else if (event->key() == Qt::Key_Up) {
+				p.setY(p.y() - delta); // Don't understand why I need a negative here and below a positive delta
+			} else if (event->key() == Qt::Key_Down) {
+				p.setY(p.y() + delta);
+			}
+			auto pLogic = q->cSystem->mapSceneToLogical(p, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			q->setPositionLogical(pLogic);
+		} else {
+			QRectF pr;
+			if (!parentRect(pr))
+				return;
+			QPointF point = q->parentPosToRelativePos(pos(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 
-		if (event->key() == Qt::Key_Left) {
-			point.setX(point.x() - delta);
-		} else if (event->key() == Qt::Key_Right) {
-			point.setX(point.x() + delta);
-		} else if (event->key() == Qt::Key_Up) {
-			point.setY(point.y() + delta);
-		} else if (event->key() == Qt::Key_Down) {
-			point.setY(point.y() - delta);
+			if (event->key() == Qt::Key_Left) {
+				point.setX(point.x() - delta);
+			} else if (event->key() == Qt::Key_Right) {
+				point.setX(point.x() + delta);
+			} else if (event->key() == Qt::Key_Up) {
+				point.setY(point.y() + delta);
+			} else if (event->key() == Qt::Key_Down) {
+				point.setY(point.y() - delta);
+			}
+			tempPosition.point = point;
+			q->setPosition(tempPosition);
 		}
-
-		tempPosition.point = point;
-		q->setPosition(tempPosition);
 	}
 
 	QGraphicsItem::keyPressEvent(event);
