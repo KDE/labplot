@@ -735,6 +735,43 @@
    <header>src/kdefrontend/widgets/ResizableTextEdit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>tbFontBold</tabstop>
+  <tabstop>tbFontItalic</tabstop>
+  <tabstop>tbFontUnderline</tabstop>
+  <tabstop>tbFontStrikeOut</tabstop>
+  <tabstop>tbFontSuperScript</tabstop>
+  <tabstop>tbFontSubScript</tabstop>
+  <tabstop>tbSymbols</tabstop>
+  <tabstop>tbDateTime</tabstop>
+  <tabstop>tbTexUsed</tabstop>
+  <tabstop>teLabel</tabstop>
+  <tabstop>chbShowPlaceholderText</tabstop>
+  <tabstop>kfontRequester</tabstop>
+  <tabstop>kfontRequesterTeX</tabstop>
+  <tabstop>sbFontSize</tabstop>
+  <tabstop>kcbFontColor</tabstop>
+  <tabstop>kcbBackgroundColor</tabstop>
+  <tabstop>chbBindLogicalPos</tabstop>
+  <tabstop>cbPositionX</tabstop>
+  <tabstop>sbPositionX</tabstop>
+  <tabstop>cbPositionY</tabstop>
+  <tabstop>sbPositionY</tabstop>
+  <tabstop>lePositionXLogical</tabstop>
+  <tabstop>dtePositionXLogical</tabstop>
+  <tabstop>lePositionYLogical</tabstop>
+  <tabstop>sbOffsetX</tabstop>
+  <tabstop>sbOffsetY</tabstop>
+  <tabstop>sbRotation</tabstop>
+  <tabstop>cbHorizontalAlignment</tabstop>
+  <tabstop>cbVerticalAlignment</tabstop>
+  <tabstop>cbBorderShape</tabstop>
+  <tabstop>cbBorderStyle</tabstop>
+  <tabstop>kcbBorderColor</tabstop>
+  <tabstop>sbBorderWidth</tabstop>
+  <tabstop>sbBorderOpacity</tabstop>
+  <tabstop>chbVisible</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
