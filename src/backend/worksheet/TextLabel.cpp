@@ -561,10 +561,10 @@ void TextLabelPrivate::updatePosition() {
 		//the position in logical coordinates was changed, calculate the position in scene coordinates
 		bool visible;
 		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		if (q->plot())
-			p = mapPlotAreaToParent(p);
 		p = q->considerAlignment(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
 		position.point = q->parentPosToRelativePos(p, pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+		if (q->plot())
+			p = mapPlotAreaToParent(p);
 	} else {
 		//determine the parent item
 		QRectF pr;
