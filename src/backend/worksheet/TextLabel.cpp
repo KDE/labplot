@@ -1070,9 +1070,9 @@ void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 		} else if (event->key() == Qt::Key_Right) {
 			point.setX(point.x() + delta);
 		} else if (event->key() == Qt::Key_Up) {
-			point.setY(point.y() - delta);
-		} else if (event->key() == Qt::Key_Down) {
 			point.setY(point.y() + delta);
+		} else if (event->key() == Qt::Key_Down) {
+			point.setY(point.y() - delta);
 		}
 
 		tempPosition.point = point;
