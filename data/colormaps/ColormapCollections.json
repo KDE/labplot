@@ -55,5 +55,25 @@
 		"name" : "viridis",
 		"description": "viridis provides a series of color maps that are designed to improve graph readability for readers with common forms of color blindness and/or color vision deficiency. The color maps are also perceptually-uniform, both in regular form and also when converted to black-and-white for printing (<a href=\"https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html\">source</a>).",
 		"url" : "https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html"
+	},
+	{
+		"name" : "cmocean (Circular)",
+		"description": "A suite of perceptually-uniform colormaps inspired by oceanography and developed by Kristen Thyng. (<a href=\"https://matplotlib.org/cmocean/\">source</a>).",
+		"url" : "https://matplotlib.org/cmocean/"
+	},
+	{
+		"name" : "cmocean (Diverging)",
+		"description": "A suite of perceptually-uniform colormaps inspired by oceanography and developed by Kristen Thyng. (<a href=\"https://matplotlib.org/cmocean/\">source</a>).",
+		"url" : "https://matplotlib.org/cmocean/"
+	},
+	{
+		"name" : "cmocean (Sequential)",
+		"description": "A suite of perceptually-uniform colormaps inspired by oceanography and developed by Kristen Thyng. (<a href=\"https://matplotlib.org/cmocean/\">source</a>).",
+		"url" : "https://matplotlib.org/cmocean/"
+	},
+	{
+		"name" : "cmocean (Multi-sequential)",
+		"description": "A suite of perceptually-uniform colormaps inspired by oceanography and developed by Kristen Thyng. (<a href=\"https://matplotlib.org/cmocean/\">source</a>).",
+		"url" : "https://matplotlib.org/cmocean/"
 	}
 ]
