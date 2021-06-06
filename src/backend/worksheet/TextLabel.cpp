@@ -560,11 +560,11 @@ void TextLabelPrivate::updatePosition() {
 		}
 		//the position in logical coordinates was changed, calculate the position in scene coordinates
 		bool visible;
-		position.point = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		// TODO: alignment is missing
-		p = position.point; //q->relativePosToParentPos(pr,  boundingRectangle, position, horizontalAlignment, verticalAlignment);
+		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		if (q->plot())
 			p = mapPlotAreaToParent(p);
+		p = q->considerAlignment(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
+		position.point = q->parentPosToRelativePos(p, pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 	} else {
 		//determine the parent item
 		QRectF pr;
@@ -578,7 +578,7 @@ void TextLabelPrivate::updatePosition() {
 		p = q->relativePosToParentPos(pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 		if (q->plot())
 			p = mapPlotAreaToParent(p);
-		//position.point = p; // do not set!
+		//position.point = p; // do not set, because position.point are relative coordinates not absolute!
 	}
 
 	suppressItemChangeEvent = true;
@@ -589,7 +589,8 @@ void TextLabelPrivate::updatePosition() {
 
 	//the position in scene coordinates was changed, calculate the position in logical coordinates
 	if (q->cSystem) {
-		positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		if (!coordinateBindingEnabled)
+			positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		emit q->positionLogicalChanged(positionLogical);
 	}
 }
@@ -1000,22 +1001,24 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 
+		QRectF pr;
+		QPointF pos;
+		if (!q->plot()) {
+			pos = value.toPointF();
+			if (!parentRect(pr))
+				return QVariant();
+		} else {
+			pr = q->plot()->dataRect();
+			pos = mapParentToPlotArea(value.toPointF());
+		}
+
 		//emit the signals in order to notify the UI.
 		// don't use setPosition here, because then all small changes are on the undo stack
 		if(coordinateBindingEnabled) {
-			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(value.toPointF()), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			pos = q->considerAlignment(pos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			emit q->positionLogicalChanged(positionLogical);
-		} else {
-			QPointF pos;
-			QRectF pr;
-			if (!q->plot()) {
-				pos = value.toPointF();
-				if (!parentRect(pr))
-					return QVariant();
-			} else {
-				pr = q->plot()->dataRect();
-				pos = mapParentToPlotArea(value.toPointF());
-			}
+		} else {				
 			//convert item's center point in parent's coordinates
 			TextLabel::PositionWrapper tempPosition = position;
 			tempPosition.point = q->parentPosToRelativePos(pos, pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
