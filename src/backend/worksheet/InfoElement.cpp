@@ -814,7 +814,7 @@ InfoElementPrivate::InfoElementPrivate(InfoElement* owner, const XYCurve* curve)
 
 void InfoElementPrivate::init() {
 	setFlag(QGraphicsItem::ItemIsMovable, false);
-	setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+	setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
