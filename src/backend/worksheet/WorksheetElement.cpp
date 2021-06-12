@@ -388,7 +388,7 @@ void  WorksheetElement::setCoordinateSystemIndex(int index) {
 
 int WorksheetElement::coordinateSystemCount() const {
 	if (m_plot)
-		return m_plot->coordinateSystems().size();
+		return m_plot->coordinateSystemCount();
 	DEBUG(Q_FUNC_INFO << ", WARNING: no plot set!")
 
 	return 0;

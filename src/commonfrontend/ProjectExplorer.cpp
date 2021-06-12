@@ -318,6 +318,12 @@ QModelIndex ProjectExplorer::currentIndex() const {
 	return m_treeView->currentIndex();
 }
 
+AbstractAspect* ProjectExplorer::currentAspect() const {
+	if (!currentIndex().isValid())
+		return nullptr;
+	return static_cast<AbstractAspect*>(currentIndex().internalPointer());
+}
+
 void ProjectExplorer::search() {
 	m_leFilter->setFocus();
 }

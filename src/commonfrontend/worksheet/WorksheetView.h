@@ -78,6 +78,7 @@ public:
 	void setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode);
 	void setPlotLock(bool lock);
 	void suppressSelectionChangedEvent(bool);
+	WorksheetElement* selectedElement() const;
 
 	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
 	void registerShortcuts();
@@ -95,6 +96,9 @@ private:
 	CartesianPlot* plotAt(QPoint) const;
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
+	void handleAxisSelected(const Axis* a);
+	void handleCartesianPlotSelected();
+	void handleXYCurveSelected();
 
 	//events
 	void resizeEvent(QResizeEvent*) override;
@@ -120,6 +124,7 @@ private:
 	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 	GridSettings m_gridSettings;
 	QList<QGraphicsItem*> m_selectedItems;
+	WorksheetElement* m_selectedElement{nullptr}; // used to determine which range should be used for navigation
 	bool m_suppressSelectionChangedEvent{false};
 	WorksheetElement* lastAddedWorksheetElement{nullptr};
 	QTimeLine* m_fadeInTimeLine{nullptr};

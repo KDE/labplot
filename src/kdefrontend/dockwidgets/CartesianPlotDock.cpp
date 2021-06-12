@@ -1416,7 +1416,7 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 		}
 	}
 
-	m_plot->dataChanged();	// update plot
+	m_plot->dataChanged(-1);	// update plot
 }
 void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	const int plotRangeIndex{ sender()->property("row").toInt() };
@@ -2174,6 +2174,7 @@ void CartesianPlotDock::plotXRangeChanged(Range<double> range) {
 
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
+	// TODO: use indices and not always the default, which is wrong
 	const int index{ m_plot ? m_plot->defaultCoordinateSystem()->xIndex() : 0 };
 	auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(index, 2));
 	if (le) {	// Numeric

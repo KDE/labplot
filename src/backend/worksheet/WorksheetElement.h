@@ -49,7 +49,7 @@ public:
 	WorksheetElement(const QString&, AspectType);
 	~WorksheetElement() override;
 
-	enum class WorksheetElementName {NameCartesianPlot = 1};
+	enum class WorksheetElementName {NameCartesianPlot = 1, Axis, XYCurve};
     // TODO: remove Horizontal position or horizontal alignment
     enum class HorizontalPosition {Left, Center, Right, Custom};
     enum class VerticalPosition {Top, Center, Bottom, Custom};

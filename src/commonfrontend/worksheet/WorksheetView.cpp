@@ -31,7 +31,7 @@
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
 #include "commonfrontend/core/PartMdiView.h"
@@ -1450,6 +1450,7 @@ void WorksheetView::deleteElement() {
 	m_worksheet->beginMacro(i18n("%1: Remove selected worksheet elements.", m_worksheet->name()));
 	for (auto* item : m_selectedItems)
 		m_worksheet->deleteAspectFromGraphicsItem(item);
+	m_selectedElement = nullptr;
 	m_worksheet->endMacro();
 	m_suppressSelectionChangedEvent = false;
 }
@@ -1649,31 +1650,165 @@ void WorksheetView::selectionChanged() {
 	handleCartesianPlotActions();
 }
 
+void WorksheetView::handleCartesianPlotSelected()
+{
+	/* Action to All: action is applied to all ranges
+	 *	- Applied to all plots and all ranges
+	 * Action to X: action is applied to all x ranges
+	 *	- x zoom selection: zooming into all x ranges of all plots (Normaly all plots will have the same x ranges so it makes sense
+	 *  - y zoom selection: makes no sense. disable
+	 * Action to Y: action is applied to all y ranges
+	 *  - x zoom selection: makes no sense. disable
+	 *  - y zoom selection: zooming into all y ranges of all plots
+	 * Action to Selection
+	 * - x zoom selection: makes no sense, because the range is unknown, disable
+	 * - y zoom selection: makes no sense, because the range is unknown, disable
+	 *		- What happens when only one range is available?
+	*/
+
+	switch(m_worksheet->cartesianPlotActionMode()) {
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAll: // Is there a usecase for this?
+		cartesianPlotZoomSelectionModeAction->setEnabled(true);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
+		break;
+	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
+		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		break;
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
+		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		break;
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
+		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
+		break;
+	default:
+		break;
+	}
+
+	cartesianPlotSelectionModeAction->setEnabled(true);
+	cartesianPlotCursorModeAction->setEnabled(true);
+}
+
+void WorksheetView::handleXYCurveSelected()
+{
+	/* Action to All: action is applied to all ranges
+	 *	- Disable
+	 * Action to X: action is applied to all x ranges
+	 *	- x zoom selection: Zooming into all ranges of all plots (mostly the x ranges are the same for all plots --> usecase)
+	 *  - y zoom selection: zoom only into the range from the curve
+	 * Action to Y: action is applied to all y ranges
+	 *  - x zoom selection: zoom only into the range from the curve
+	 *  - y zoom selection: Zooming into all ranges of all plots
+	 * Action to Selection
+	 * - x zoom selection: zoom only into the range from the curve
+	 * - y zoom selection: zoom only into the range from the curve
+	*/
+
+	switch(m_worksheet->cartesianPlotActionMode()) {
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAll:
+		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		break;
+	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
+		cartesianPlotZoomSelectionModeAction->setEnabled(true);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
+		break;
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
+		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		break;
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
+		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
+		break;
+	default:
+		break;
+	}
+	cartesianPlotSelectionModeAction->setEnabled(true);
+	cartesianPlotCursorModeAction->setEnabled(false);
+}
+
+void WorksheetView::handleAxisSelected(const Axis* a)
+{
+	if (a->orientation() == Axis::Orientation::Horizontal) {
+		/* HORIZONTAL:
+		 * Action to All: action is applied to all ranges
+		 *	- Disable
+		 * Action to X: action is applied to all x ranges
+		 *	- x zoom selection: Zooming
+		 *  - y zoom selection: makes no sense. disable
+		 * Action to Y: action is applied to all y ranges
+		 *  - x zoom selection: zooming into the range of the axis
+		 *  - y zoom selection: makes no sense. disable
+		 * Action to Selection
+		 * - x zoom selection: apply to range assigned to the axis, but only for the plot where the axis is child
+		 * - y zoom selection: makes no sense. disable
+		*/
+		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
+	} else {
+		/* VERTICAL:
+		 * Action to All: action is applied to all ranges
+		 *	- Disable
+		 * Action to Y: action is applied to all y ranges
+		 *	- y zoom selection: Zooming
+		 *  - x zoom selection: makes no sense. disable
+		 * Action to X: action is applied to all x ranges
+		 *  - x zoom selection: makes no sense. disable
+		 *  - y zoom selection: makes no sense. disable
+		 * Action to Selection
+		 * - x zoom selection: apply to range assigned to the axis, but only for the plot where the axis is child
+		 * - y zoom selection: makes no sense. disable
+		*/
+		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
+		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+	}
+
+	cartesianPlotSelectionModeAction->setEnabled(true);
+	cartesianPlotCursorModeAction->setEnabled(false);
+}
+
 //check whether we have cartesian plots selected and activate/deactivate
 void WorksheetView::handleCartesianPlotActions() {
 	if (!m_menusInitialized)
 		return;
 
-	bool plot = false;
-	if (m_worksheet->cartesianPlotActionMode() == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
-		//check whether we have cartesian plots selected
-		for (auto* item : m_selectedItems) {
-			//TODO: or if a children of a plot is selected
-			if (item->data(0).toInt() == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot)) {
-				plot = true;
-				break;
-			}
-		}
-	} else {
-		//actions are applied to all available plots -> check whether we have plots
-		plot = (m_worksheet->children<CartesianPlot>().size() != 0);
-	}
+	m_selectedElement = nullptr;
 
-	cartesianPlotSelectionModeAction->setEnabled(plot);
-	cartesianPlotZoomSelectionModeAction->setEnabled(plot);
-	cartesianPlotZoomXSelectionModeAction->setEnabled(plot);
-	cartesianPlotZoomYSelectionModeAction->setEnabled(plot);
-	cartesianPlotCursorModeAction->setEnabled(plot);
+	bool handled = false, plot = false;
+	for (auto* item : m_selectedItems) {
+		//TODO: or if a children of a plot is selected
+		int key = item->data(0).toInt();
+		if (key == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot)) {
+			handled = true;
+			plot = true;
+			m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
+			handleCartesianPlotSelected();
+			break;
+		} else if (key == static_cast<int>(WorksheetElement::WorksheetElementName::XYCurve)) {
+			handled = true;
+			m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
+			handleXYCurveSelected();
+			break;
+		} else if (key == static_cast<int>(WorksheetElement::WorksheetElementName::Axis)) {
+			handled = true;
+			m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
+			handleAxisSelected(static_cast<Axis*>(m_selectedElement));
+			break;
+		}
+	}
 
 	m_cartesianPlotAddNewMenu->setEnabled(plot);
 	m_cartesianPlotZoomMenu->setEnabled(plot);
@@ -1909,6 +2044,11 @@ void WorksheetView::suppressSelectionChangedEvent(bool value) {
 	m_suppressSelectionChangedEvent = value;
 }
 
+WorksheetElement* WorksheetView::selectedElement() const
+{
+	return m_selectedElement;
+}
+
 void WorksheetView::registerShortcuts() {
 	selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
 	deleteAction->setShortcut(Qt::Key_Delete);
@@ -1961,6 +2101,7 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 		return;
 
 	m_cartesianPlotMouseMode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+	// TODO: find out, which element is selected. So the corresponding range can be modified
 
 	for (auto* plot : m_worksheet->children<CartesianPlot>() )
 		plot->setMouseMode(m_cartesianPlotMouseMode);
@@ -2101,6 +2242,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 }
 
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
+	// TODO: find out, which element was selected to find out which range should be changed
+	//Project().projectExplorer().currentAspect()
 	CartesianPlot::NavigationOperation op = (CartesianPlot::NavigationOperation)action->data().toInt();
 	if (m_worksheet->cartesianPlotActionMode() == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
 		for (auto* plot : m_worksheet->children<CartesianPlot>() ) {

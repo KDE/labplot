@@ -59,6 +59,7 @@ public:
 	void setModel(AspectTreeModel*);
 	void setProject(Project*);
 	QModelIndex currentIndex() const;
+	AbstractAspect* currentAspect() const;
 	void updateSelectedAspects();
 	void search();
 

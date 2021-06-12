@@ -124,13 +124,13 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
-	void mousePressZoomSelectionMode(QPointF logicPos);
+	void mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mousePressCursorMode(int cursorNumber, QPointF logicPos);
-	void mouseMoveZoomSelectionMode(QPointF logicPos);
+	void mouseMoveZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicStart, QPointF logicEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicPos);
-	void mouseReleaseZoomSelectionMode();
-	void mouseHoverZoomSelectionMode(QPointF logicPos);
+	void mouseReleaseZoomSelectionMode(int cSystemIndex);
+	void mouseHoverZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mouseHoverOutsideDataRect();
 
 	const QString xRangeDateTimeFormat() const;
@@ -148,6 +148,8 @@ public:
 
 	int xRangeCount() const;
 	int yRangeCount() const;
+	void setXRange(const int index, const Range<double>& value);
+	void setYRange(const int index, const Range<double>& value);
 	const Range<double>& xRange() const;		// get x range of default plot range
 	const Range<double>& yRange() const;		// get y range of default plot range
 	void setXRange(const Range<double>);		// set x range of default plot range
@@ -156,8 +158,8 @@ public:
 	BASIC_D_INDEX_ACCESSOR_DECL(const Range<double>, yRange, YRange) // y range index
 	void addXRange();				// add new x range
 	void addYRange();				// add new y range
-	void addXRange(Range<double>);			// add x range
-	void addYRange(Range<double>);			// add y range
+	void addXRange(const Range<double> &);			// add x range
+	void addYRange(const Range<double> &);			// add y range
 	void removeXRange(int index);			// remove selected x range
 	void removeYRange(int index);			// remove selected y range
 	// convenience methods
@@ -330,7 +332,7 @@ public slots:
 	void cursor();
 
 	bool autoScale(int cSystemIndex = -1, bool fullRange = true);
-	void dataChanged();
+	void dataChanged(int rangeIndex);
 
 private slots:
 	void updateLegend();

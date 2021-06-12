@@ -41,19 +41,20 @@
 class CartesianPlotPrivate : public AbstractPlotPrivate {
 public:
 	explicit CartesianPlotPrivate(CartesianPlot*);
+	~CartesianPlotPrivate();
 
 	void retransform() override;
 	void retransformScales();
 	void rangeChanged();
 	void xRangeFormatChanged();
 	void yRangeFormatChanged();
-	void mouseMoveZoomSelectionMode(QPointF logicalPos);
+	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
-	void mouseReleaseZoomSelectionMode();
-	void mouseHoverZoomSelectionMode(QPointF logicPos);
+	bool mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform=false);
+	void mouseHoverZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mouseHoverOutsideDataRect();
-	void mousePressZoomSelectionMode(QPointF logicalPos);
+	void mousePressZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mousePressCursorMode(int cursorNumber, QPointF logicalPos);
 	void updateCursor();
 	void setZoomSelectionBandShow(bool show);
@@ -64,40 +65,53 @@ public:
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 
-	QVector<Range<double>> xRanges{{}}, yRanges{{}};	// x, y ranges
 	const Range<double> xRange() const {
-		return xRanges.at(defaultCoordinateSystem()->xIndex());
+		return m_coordinateSystemsProperties.at(defaultCoordinateSystem()->yIndex()).xRange;
 	}
 	Range<double>& xRange() {
-		return xRanges[defaultCoordinateSystem()->xIndex()];
+		return m_coordinateSystemsProperties[defaultCoordinateSystem()->xIndex()].xRange;
 	}
 	const Range<double> yRange() const {
-		return yRanges.at(defaultCoordinateSystem()->yIndex());
+		return m_coordinateSystemsProperties.at(defaultCoordinateSystem()->yIndex()).yRange;
 	}
 	Range<double>& yRange() {
-		return yRanges[defaultCoordinateSystem()->yIndex()];
+		return m_coordinateSystemsProperties[defaultCoordinateSystem()->yIndex()].yRange;
 	}
 	Range<double> xPrevRange{}, yPrevRange{};
 
 	bool autoScaleX(int index = -1) {
-		if (index == -1)
-			index = defaultCoordinateSystem()->xIndex();
-		return xRanges.at(index).autoScale();
+		if (index == -1) {
+			for (int i=0; i < m_coordinateSystemsProperties.count(); i++)
+				if (!autoScaleX())
+					return false;
+			return true;
+		}
+		m_coordinateSystemsProperties[index].xRange.autoScale();
 	}
 	bool autoScaleY(int index = -1) {
-		if (index == -1)
-			index = defaultCoordinateSystem()->yIndex();
-		return yRanges.at(index).autoScale();
+		if (index == -1) {
+			for (int i=0; i < m_coordinateSystemsProperties.count(); i++)
+				if (!autoScaleY())
+					return false;
+			return true;
+		}
+		m_coordinateSystemsProperties[index].yRange.autoScale();
 	}
 	void setAutoScaleX(int index = -1, bool b = true) {
-		if (index == -1)
-			index = defaultCoordinateSystem()->xIndex();
-		xRanges[index].setAutoScale(b);
+		if (index == -1) {
+			for (int i=0; i < m_coordinateSystemsProperties.count(); i++)
+				setAutoScaleX(i, b);
+			return;
+		}
+		m_coordinateSystemsProperties[index].xRange.setAutoScale(b);
 	}
 	void setAutoScaleY(int index = -1, bool b = true) {
-		if (index == -1)
-			index = defaultCoordinateSystem()->yIndex();
-		yRanges[index].setAutoScale(b);
+		if (index == -1) {
+			for (int i=0; i < m_coordinateSystemsProperties.count(); i++)
+				setAutoScaleY(i, b);
+			return;
+		}
+		m_coordinateSystemsProperties[index].yRange.setAutoScale(b);
 	}
 
 	//the following factor determines the size of the offset between the min/max points of the curves
@@ -111,13 +125,24 @@ public:
 	CartesianPlot::RangeBreaks xRangeBreaks, yRangeBreaks;
 
 	//cached values of minimum and maximum for all visible curves
-	bool curvesXMinMaxIsDirty{false}, curvesYMinMaxIsDirty{false};
 	Range<double> curvesXRange{qInf(), -qInf()}, curvesYRange{qInf(), -qInf()};
 
 	CartesianPlot* const q;
 	int defaultCoordinateSystemIndex{0};
+
+	struct RangeP {
+		RangeP(const Range<double>& r=Range<double>(), const bool d=false): range(r), dirty(d) {}
+		bool dirty{false};
+		Range<double> range;
+	};
+
+	QVector<RangeP> xRanges;
+	QVector<RangeP> yRanges;
+
+	CartesianCoordinateSystem* coordinateSystem(int index) const;
+	QVector<AbstractCoordinateSystem*> coordinateSystems() const;
 	CartesianCoordinateSystem* defaultCoordinateSystem() const {
-		return dynamic_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(defaultCoordinateSystemIndex));
+		return q->m_coordinateSystems.at(defaultCoordinateSystemIndex);
 	}
 
 	CartesianPlot::MouseMode mouseMode{CartesianPlot::MouseMode::Selection};

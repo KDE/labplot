@@ -916,6 +916,7 @@ void XYCurve::navigateTo() {
 XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
+	setData(0, static_cast<int>(WorksheetElement::WorksheetElementName::XYCurve));
 	setAcceptHoverEvents(false);
 }
 
