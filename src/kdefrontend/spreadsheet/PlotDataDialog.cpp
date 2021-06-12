@@ -413,9 +413,9 @@ void PlotDataDialog::plot() {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot - %1", m_spreadsheet->name()) );
 			plot->setType(CartesianPlot::Type::FourAxes);
-			setAxesTitles(plot);
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
+			setAxesTitles(plot);
 		} else {
 			//one plot per curve
 			addCurvesToPlots(worksheet);
@@ -440,9 +440,9 @@ void PlotDataDialog::plot() {
 			//all curves in one plot
 			CartesianPlot* plot = new CartesianPlot( i18n("Plot - %1", m_spreadsheet->name()) );
 			plot->setType(CartesianPlot::Type::FourAxes);
-			setAxesTitles(plot);
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
+			setAxesTitles(plot);
 		} else {
 			//one plot per curve
 			addCurvesToPlots(worksheet);
@@ -553,10 +553,10 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
-			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
 			addCurve(name, xColumn, yColumn, plot);
 			plot->scaleAuto();
+			setAxesTitles(plot, name);
 		}
 		break;
 	}
@@ -581,10 +581,10 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
-			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
 			addBoxPlot(name, QVector<const AbstractColumn*>{column}, plot);
 			plot->scaleAuto();
+			setAxesTitles(plot, name);
 		}
 		break;
 	}
@@ -807,14 +807,20 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		break;
 	}
 	case PlotType::BoxPlot: {
+		auto* boxPlot = static_cast<BoxPlot*>(m_lastAddedCurve);
+		auto orientation = boxPlot->orientation();
+		int count = m_columnComboBoxes.count();
+
 		//x-axis title
 		for (auto* axis : axes) {
-			if (axis->orientation() == Axis::Orientation::Horizontal) {
+			if (axis->orientation() != orientation) {
 				axis->title()->setText(QString());
-				break;
+				axis->setMajorTicksNumber(count + 2);
+				axis->setMinorTicksNumber(0);
 			}
 		}
-		//x-axis title
+
+		//y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
 				if (!name.isEmpty()) {
@@ -822,7 +828,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 					//the function is called with the column name.
 					//use it for the x-axis title
 					axis->title()->setText(name);
-				} else if (m_columnComboBoxes.size() == 1) {
+				} else if (count == 1) {
 					const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
 					axis->title()->setText(yColumnName);
 				}

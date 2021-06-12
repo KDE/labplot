@@ -624,15 +624,15 @@ void BoxPlotPrivate::recalc() {
 	//calculate the new min and max values of the box plot
 	//for the current sizes of the box and of the whiskers
 	if (orientation == BoxPlot::Orientation::Vertical) {
-		m_xMin = 0.0;
-		m_xMax = count;
+		m_xMin = 0.5;
+		m_xMax = count + 0.5;
 		m_yMin = INFINITY;
 		m_yMax = -INFINITY;
 	} else { //horizontal
 		m_xMin = INFINITY;
 		m_xMax = -INFINITY;
-		m_yMin = 0.0;
-		m_yMax = count;
+		m_yMin = 0.5;
+		m_yMax = count + 0.5;
 	}
 
 	if (variableWidth) {
@@ -698,7 +698,7 @@ void BoxPlotPrivate::recalc(int index) {
 	if (variableWidth && m_widthScaleFactor != 0)
 		width *= std::sqrt(statistics.size)/m_widthScaleFactor;
 
-	const double x = index + 0.5;
+	const double x = index + 1.0;
 
 	//box
 	if (orientation == BoxPlot::Orientation::Vertical) {
@@ -839,7 +839,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::verticalBoxPlot()");
 
 	QVector<QLineF> lines;
-	const double x = index + 0.5;
+	const double x = index + 1.0;
 	const double xMinBox = m_xMinBox.at(index);
 	const double xMaxBox = m_xMaxBox.at(index);
 	const double yMinBox = m_yMinBox.at(index);
@@ -960,7 +960,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::horizontalBoxPlot()");
 
 	QVector<QLineF> lines;
-	const double y = index + 0.5;
+	const double y = index + 1.0;
 	const double xMinBox = m_xMinBox.at(index);
 	const double xMaxBox = m_xMaxBox.at(index);
 	const double yMinBox = m_yMinBox.at(index);
