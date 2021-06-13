@@ -1169,7 +1169,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 		//retransform the dependent plots
 		for (auto* plot : plots) {
 			plot->setSuppressDataChangedSignal(false);
-			plot->dataChanged();
+			plot->dataChanged(-1); // TODO: check if all ranges must be updated!
 		}
 	} else
 		m_prepared = true;
@@ -2450,7 +2450,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 		for (auto* const plot : plots) {
 			//TODO setting this back to true triggers again a lot of retransforms in the plot (one for each curve).
 			// 				plot->setSuppressDataChangedSignal(false);
-			plot->dataChanged();
+			plot->dataChanged(-1); // TODO: check if all ranges must be updated!
 		}
 	} else
 		m_prepared = true;

@@ -30,7 +30,9 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
@@ -1650,7 +1652,7 @@ void WorksheetView::selectionChanged() {
 	handleCartesianPlotActions();
 }
 
-void WorksheetView::handleCartesianPlotSelected()
+void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot)
 {
 	/* Action to All: action is applied to all ranges
 	 *	- Applied to all plots and all ranges
@@ -1671,21 +1673,77 @@ void WorksheetView::handleCartesianPlotSelected()
 		cartesianPlotZoomSelectionModeAction->setEnabled(true);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
 		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
+		zoomInAction->setEnabled(true);
+		zoomOutAction->setEnabled(true);
+		zoomInXAction->setEnabled(true);
+		zoomOutXAction->setEnabled(true);
+		zoomInYAction->setEnabled(true);
+		zoomOutYAction->setEnabled(true);
+		shiftLeftXAction->setEnabled(true);
+		shiftRightXAction->setEnabled(true);
+		shiftUpYAction->setEnabled(true);
+		shiftDownYAction->setEnabled(true);
+		scaleAutoAction->setEnabled(true);
+		scaleAutoXAction->setEnabled(true);
+		scaleAutoYAction->setEnabled(true);
 		break;
-	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
-		cartesianPlotZoomSelectionModeAction->setEnabled(false);
-		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection: {
+
+		bool enableX = plot->xRangeCount() == 1;
+		bool enableY = plot->yRangeCount() == 1;
+		// only when only one range available
+		cartesianPlotZoomSelectionModeAction->setEnabled(enableX && enableY);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(enableX);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(enableY);
+		zoomInAction->setEnabled(true);
+		zoomOutAction->setEnabled(true);
+		zoomInXAction->setEnabled(true);
+		zoomOutXAction->setEnabled(true);
+		zoomInYAction->setEnabled(true);
+		zoomOutYAction->setEnabled(true);
+		shiftLeftXAction->setEnabled(true);
+		shiftRightXAction->setEnabled(true);
+		shiftUpYAction->setEnabled(true);
+		shiftDownYAction->setEnabled(true);
+		scaleAutoAction->setEnabled(true);
+		scaleAutoXAction->setEnabled(true);
+		scaleAutoYAction->setEnabled(true);
 		break;
-	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
+	} case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
 		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		zoomInAction->setEnabled(false);
+		zoomOutAction->setEnabled(false);
+		zoomInXAction->setEnabled(true);
+		zoomOutXAction->setEnabled(true);
+		zoomInYAction->setEnabled(false);
+		zoomOutYAction->setEnabled(false);
+		shiftLeftXAction->setEnabled(true);
+		shiftRightXAction->setEnabled(true);
+		shiftUpYAction->setEnabled(false);
+		shiftDownYAction->setEnabled(false);
+		scaleAutoAction->setEnabled(false);
+		scaleAutoXAction->setEnabled(true);
+		scaleAutoYAction->setEnabled(true);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
+		zoomInAction->setEnabled(false);
+		zoomOutAction->setEnabled(false);
+		zoomInXAction->setEnabled(false);
+		zoomOutXAction->setEnabled(false);
+		zoomInYAction->setEnabled(true);
+		zoomOutYAction->setEnabled(true);
+		shiftLeftXAction->setEnabled(false);
+		shiftRightXAction->setEnabled(false);
+		shiftUpYAction->setEnabled(true);
+		shiftDownYAction->setEnabled(true);
+		scaleAutoAction->setEnabled(false);
+		scaleAutoXAction->setEnabled(false);
+		scaleAutoYAction->setEnabled(true);
 		break;
 	default:
 		break;
@@ -1715,27 +1773,80 @@ void WorksheetView::handleXYCurveSelected()
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		zoomInAction->setEnabled(false);
+		zoomOutAction->setEnabled(false);
+		zoomInXAction->setEnabled(false);
+		zoomOutXAction->setEnabled(false);
+		zoomInYAction->setEnabled(false);
+		zoomOutYAction->setEnabled(false);
+		shiftLeftXAction->setEnabled(false);
+		shiftRightXAction->setEnabled(false);
+		shiftUpYAction->setEnabled(false);
+		shiftDownYAction->setEnabled(false);
+		scaleAutoAction->setEnabled(true);
+		scaleAutoXAction->setEnabled(true);
+		scaleAutoYAction->setEnabled(true);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
 		cartesianPlotZoomSelectionModeAction->setEnabled(true);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
 		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
+		zoomInAction->setEnabled(true);
+		zoomOutAction->setEnabled(true);
+		zoomInXAction->setEnabled(true);
+		zoomOutXAction->setEnabled(true);
+		zoomInYAction->setEnabled(true);
+		zoomOutYAction->setEnabled(true);
+		shiftLeftXAction->setEnabled(true);
+		shiftRightXAction->setEnabled(true);
+		shiftUpYAction->setEnabled(true);
+		shiftDownYAction->setEnabled(true);
+		scaleAutoAction->setEnabled(true);
+		scaleAutoXAction->setEnabled(true);
+		scaleAutoYAction->setEnabled(true);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
 		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		zoomInAction->setEnabled(false);
+		zoomOutAction->setEnabled(false);
+		zoomInXAction->setEnabled(true);
+		zoomOutXAction->setEnabled(true);
+		zoomInYAction->setEnabled(true);
+		zoomOutYAction->setEnabled(true);
+		shiftLeftXAction->setEnabled(true);
+		shiftRightXAction->setEnabled(true);
+		shiftUpYAction->setEnabled(true);
+		shiftDownYAction->setEnabled(true);
+		scaleAutoAction->setEnabled(true);
+		scaleAutoXAction->setEnabled(true);
+		scaleAutoYAction->setEnabled(true);
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
+		zoomInAction->setEnabled(false);
+		zoomOutAction->setEnabled(false);
+		zoomInXAction->setEnabled(true);
+		zoomOutXAction->setEnabled(true);
+		zoomInYAction->setEnabled(true);
+		zoomOutYAction->setEnabled(true);
+		shiftLeftXAction->setEnabled(true);
+		shiftRightXAction->setEnabled(true);
+		shiftUpYAction->setEnabled(true);
+		shiftDownYAction->setEnabled(true);
+		scaleAutoAction->setEnabled(true);
+		scaleAutoXAction->setEnabled(true);
+		scaleAutoYAction->setEnabled(true);
 		break;
 	default:
 		break;
 	}
 	cartesianPlotSelectionModeAction->setEnabled(true);
 	cartesianPlotCursorModeAction->setEnabled(false);
+
 }
 
 void WorksheetView::handleAxisSelected(const Axis* a)
@@ -1757,6 +1868,19 @@ void WorksheetView::handleAxisSelected(const Axis* a)
 		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
+		zoomInAction->setEnabled(false);
+		zoomOutAction->setEnabled(false);
+		zoomInXAction->setEnabled(true);
+		zoomOutXAction->setEnabled(true);
+		zoomInYAction->setEnabled(false);
+		zoomOutYAction->setEnabled(false);
+		shiftLeftXAction->setEnabled(true);
+		shiftRightXAction->setEnabled(true);
+		shiftUpYAction->setEnabled(false);
+		shiftDownYAction->setEnabled(false);
+		scaleAutoAction->setEnabled(false);
+		scaleAutoXAction->setEnabled(true);
+		scaleAutoYAction->setEnabled(false);
 	} else {
 		/* VERTICAL:
 		 * Action to All: action is applied to all ranges
@@ -1774,6 +1898,19 @@ void WorksheetView::handleAxisSelected(const Axis* a)
 		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+		zoomInAction->setEnabled(false);
+		zoomOutAction->setEnabled(false);
+		zoomInXAction->setEnabled(false);
+		zoomOutXAction->setEnabled(false);
+		zoomInYAction->setEnabled(true);
+		zoomOutYAction->setEnabled(true);
+		shiftLeftXAction->setEnabled(false);
+		shiftRightXAction->setEnabled(false);
+		shiftUpYAction->setEnabled(true);
+		shiftDownYAction->setEnabled(true);
+		scaleAutoAction->setEnabled(false);
+		scaleAutoXAction->setEnabled(false);
+		scaleAutoYAction->setEnabled(true);
 	}
 
 	cartesianPlotSelectionModeAction->setEnabled(true);
@@ -1795,19 +1932,42 @@ void WorksheetView::handleCartesianPlotActions() {
 			handled = true;
 			plot = true;
 			m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
-			handleCartesianPlotSelected();
+			handleCartesianPlotSelected(static_cast<CartesianPlot*>(m_selectedElement));
 			break;
 		} else if (key == static_cast<int>(WorksheetElement::WorksheetElementName::XYCurve)) {
 			handled = true;
-			m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
+			m_selectedElement = static_cast<XYCurvePrivate*>(item)->q;
+			// XYCurvePrivate does not depend yet on WorksheetElementContainerPrivate
+			//m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
 			handleXYCurveSelected();
 			break;
 		} else if (key == static_cast<int>(WorksheetElement::WorksheetElementName::Axis)) {
 			handled = true;
-			m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
+			m_selectedElement = static_cast<AxisPrivate*>(item)->q;
+			// AxisPrivate does not depend yet on WorksheetElementContainerPrivate
+			//m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
 			handleAxisSelected(static_cast<Axis*>(m_selectedElement));
 			break;
 		}
+	}
+
+	if (!handled) {
+		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+		zoomInAction->setEnabled(false);
+		zoomOutAction->setEnabled(false);
+		zoomInXAction->setEnabled(false);
+		zoomOutXAction->setEnabled(false);
+		zoomInYAction->setEnabled(false);
+		zoomOutYAction->setEnabled(false);
+		shiftLeftXAction->setEnabled(false);
+		shiftRightXAction->setEnabled(false);
+		shiftUpYAction->setEnabled(false);
+		shiftDownYAction->setEnabled(false);
+		scaleAutoAction->setEnabled(false);
+		scaleAutoXAction->setEnabled(false);
+		scaleAutoYAction->setEnabled(false);
 	}
 
 	m_cartesianPlotAddNewMenu->setEnabled(plot);
@@ -2244,16 +2404,18 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	// TODO: find out, which element was selected to find out which range should be changed
 	//Project().projectExplorer().currentAspect()
+
 	CartesianPlot::NavigationOperation op = (CartesianPlot::NavigationOperation)action->data().toInt();
 	if (m_worksheet->cartesianPlotActionMode() == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
+		int cSystemIndex = Worksheet::cSystemIndex(m_selectedElement);
 		for (auto* plot : m_worksheet->children<CartesianPlot>() ) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
-				plot->navigate(op);
+				plot->navigate(cSystemIndex, op);
 			else {
 				// check if one of the plots childrend is selected. Do the operation there too.
 				for (auto* child : plot->children<WorksheetElement>()) {
 					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
-						plot->navigate(op);
+						plot->navigate(cSystemIndex, op);
 						break;
 					}
 				}
@@ -2261,7 +2423,7 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 		}
 	} else {
 		for (auto* plot : m_worksheet->children<CartesianPlot>() )
-			plot->navigate(op);
+			plot->navigate(-1, op);
 	}
 }
 

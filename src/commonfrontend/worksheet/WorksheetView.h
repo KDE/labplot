@@ -97,7 +97,7 @@ private:
 	void exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool);
 	void cartesianPlotAdd(CartesianPlot*, QAction*);
 	void handleAxisSelected(const Axis* a);
-	void handleCartesianPlotSelected();
+	void handleCartesianPlotSelected(const CartesianPlot *plot);
 	void handleXYCurveSelected();
 
 	//events

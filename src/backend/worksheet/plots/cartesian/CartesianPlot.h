@@ -105,7 +105,7 @@ public:
 	void setMouseMode(MouseMode);
 	MouseMode mouseMode() const;
 	BASIC_D_ACCESSOR_DECL(bool, isLocked, Locked)
-	void navigate(NavigationOperation);
+	void navigate(int cSystemIndex, NavigationOperation);
 	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
 	void processDropEvent(const QVector<quintptr>&) override;
@@ -141,21 +141,27 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
-	bool autoScaleX(int index = -1) const;	// is x range index auto scaled?
-	void setAutoScaleX(int index = -1, bool = true);	// auto scale x range index
-	bool autoScaleY(int index = -1) const;	// is y range index auto scaled?
-	void setAutoScaleY(int index = -1, bool = true);	// auto scale y range index
+	bool autoScaleX(int cSystemIndex = -1) const;	// is x range index auto scaled?
+	void setAutoScaleX(int cSystemIndex = -1, bool = true);	// auto scale x range index
+	bool autoScaleY(int cSystemIndex = -1) const;	// is y range index auto scaled?
+	void setAutoScaleY(int cSystemIndex = -1, bool = true);	// auto scale y range index
 
 	int xRangeCount() const;
 	int yRangeCount() const;
-	void setXRange(const int index, const Range<double>& value);
-	void setYRange(const int index, const Range<double>& value);
 	const Range<double>& xRange() const;		// get x range of default plot range
 	const Range<double>& yRange() const;		// get y range of default plot range
 	void setXRange(const Range<double>);		// set x range of default plot range
 	void setYRange(const Range<double>);		// set y range of default plot range
-	BASIC_D_INDEX_ACCESSOR_DECL(const Range<double>, xRange, XRange) // x range index
-	BASIC_D_INDEX_ACCESSOR_DECL(const Range<double>, yRange, YRange) // y range index
+	const Range<double>& xRange_(const int index) const;
+	const Range<double>& yRange_(const int index) const;
+	const Range<double> &xRangeCSystem(int cSystemIndex) const;
+	void setXRange(int index, const Range<double>& value);
+	const Range<double> &yRangeCSystem(int cSystemIndex) const;
+	bool xRangeDirty(int cSystemIndex);
+	bool yRangeDirty(int cSystemIndex);
+	void setXRangeDirty(int cSystemIndex, bool dirty);
+	void setYRangeDirty(int cSystemIndex, bool dirty);
+	void setYRange(int index, const Range<double>& value);
 	void addXRange();				// add new x range
 	void addYRange();				// add new y range
 	void addXRange(const Range<double> &);			// add x range
@@ -205,11 +211,11 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
-	void shift(bool x, bool leftOrDown);
-	void zoom(bool x, bool in);
+	void shift(int cSystemIndex, bool x, bool leftOrDown);
+	void zoom(int cSystemIndex, bool x, bool in);
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
-	void calculateCurvesXMinMax(int index, bool completeRange = true);
-	void calculateCurvesYMinMax(int index, bool completeRange = true);
+	Range<double> calculateCurvesXMinMax(int cSystemIndex, bool completeRange = true);
+	void calculateCurvesYMinMax(int cSystemIndex, bool completeRange = true);
 
 	CartesianPlotLegend* m_legend{nullptr};
 	double m_zoomFactor{1.2};
@@ -317,22 +323,22 @@ public slots:
 	bool scaleAutoX(int index = -1, bool fullRange = false, bool suppressRetransform = false);
 	bool scaleAutoY(int index = -1, bool fullRange = false, bool suppressRetransform = false);
 
-	void zoomIn();
-	void zoomOut();
-	void zoomInX();
-	void zoomOutX();
-	void zoomInY();
-	void zoomOutY();
+	void zoomIn(int cSystemIndex);
+	void zoomOut(int cSystemIndex);
+	void zoomInX(int cSystemIndex);
+	void zoomOutX(int cSystemIndex);
+	void zoomInY(int cSystemIndex);
+	void zoomOutY(int cSystemIndex);
 
-	void shiftLeftX();
-	void shiftRightX();
-	void shiftUpY();
-	void shiftDownY();
+	void shiftLeftX(int cSystemIndex);
+	void shiftRightX(int cSystemIndex);
+	void shiftUpY(int cSystemIndex);
+	void shiftDownY(int cSystemIndex);
 
 	void cursor();
 
 	bool autoScale(int cSystemIndex = -1, bool fullRange = true);
-	void dataChanged(int rangeIndex);
+	void dataChanged(int cSystemIndex);
 
 private slots:
 	void updateLegend();
@@ -340,8 +346,8 @@ private slots:
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 
-	void xDataChanged();
-	void yDataChanged();
+	void xDataChanged(int cSystemIndex);
+	void yDataChanged(int cSystemIndex);
 	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
 

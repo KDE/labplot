@@ -1103,7 +1103,7 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 		//retransform the dependent plots
 		for (auto* plot : plots) {
 			plot->setSuppressDataChangedSignal(false);
-			plot->dataChanged();
+			plot->dataChanged(-1); // TODO: check if all ranges must be updated
 		}
 	}
 

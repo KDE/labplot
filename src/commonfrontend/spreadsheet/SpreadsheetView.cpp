@@ -1793,7 +1793,8 @@ void SpreadsheetView::maskSelection() {
 	//retransform the dependent plots
 	for (auto* plot : plots) {
 		plot->setSuppressDataChangedSignal(false);
-		plot->dataChanged();
+		// TODO: hceck which ranges must be updated
+		plot->dataChanged(-1);
 	}
 
 	//some cells were masked, enable the "clear masks" action
@@ -1830,7 +1831,8 @@ void SpreadsheetView::unmaskSelection() {
 	//retransform the dependent plots
 	for (auto* plot : plots) {
 		plot->setSuppressDataChangedSignal(false);
-		plot->dataChanged();
+		// TODO: check which ranges must be updated
+		plot->dataChanged(-1);
 	}
 
 	m_spreadsheet->endMacro();

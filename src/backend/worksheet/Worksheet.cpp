@@ -755,6 +755,8 @@ int Worksheet::cSystemIndex(WorksheetElement* e)
 	case AspectType::XYCurve: // fall through
 	case AspectType::Axis:
 		return e->coordinateSystemIndex();
+	default:
+		return -1;
 	}
 	return -1;
 }
@@ -777,7 +779,7 @@ void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
 				else if (actionMode == CartesianPlotActionMode::ApplyActionToAllY)
 					plot->setMouseMode(CartesianPlot::MouseMode::ZoomYSelection);
 			}
-			plot->mousePressZoomSelectionMode(logicPos -1);
+			plot->mousePressZoomSelectionMode(logicPos, -1);
 		}
 	} else {
 		int index = cSystemIndex(m_view->selectedElement());
@@ -794,12 +796,13 @@ void Worksheet::cartesianPlotMouseReleaseZoomSelectionMode() {
 	        (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots) {
-			plot->mouseReleaseZoomSelectionMode();
+			plot->mouseReleaseZoomSelectionMode(-1);
 			plot->setMouseMode(mouseMode);
 		}
 	} else {
+		int index = cSystemIndex(m_view->selectedElement());
 		CartesianPlot* plot = static_cast<CartesianPlot*>(QObject::sender());
-		plot->mouseReleaseZoomSelectionMode();
+		plot->mouseReleaseZoomSelectionMode(index);
 	}
 }
 
@@ -825,9 +828,9 @@ void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
 	        (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		QVector<CartesianPlot*> plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
-			plot->mouseMoveZoomSelectionMode(logicPos);
+			plot->mouseMoveZoomSelectionMode(logicPos, -1);
 	}  else
-		senderPlot->mouseMoveZoomSelectionMode(logicPos);
+		senderPlot->mouseMoveZoomSelectionMode(logicPos, cSystemIndex(m_view->selectedElement()));
 }
 
 void Worksheet::cartesianPlotMouseMoveSelectionMode(QPointF logicStart, QPointF logicEnd) {
@@ -866,9 +869,9 @@ void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 	        (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
-			plot->mouseHoverZoomSelectionMode(logicPos);
+			plot->mouseHoverZoomSelectionMode(logicPos, -1);
 	} else
-		senderPlot->mouseHoverZoomSelectionMode(logicPos);
+		senderPlot->mouseHoverZoomSelectionMode(logicPos, cSystemIndex(m_view->selectedElement()));
 }
 
 void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {

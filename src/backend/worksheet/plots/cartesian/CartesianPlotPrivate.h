@@ -66,52 +66,69 @@ public:
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 
 	const Range<double> xRange() const {
-		return m_coordinateSystemsProperties.at(defaultCoordinateSystem()->yIndex()).xRange;
+		return xRanges.at(defaultCoordinateSystem()->xIndex()).range;
 	}
 	Range<double>& xRange() {
-		return m_coordinateSystemsProperties[defaultCoordinateSystem()->xIndex()].xRange;
+		return xRanges[defaultCoordinateSystem()->xIndex()].range;
 	}
+
+	Range<double>& xRange(int cSystemIndex) {
+		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].range;
+	}
+
+	Range<double>& xRangeAutoScale(int cSystemIndex) {
+		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].autoScaleRange;
+	}
+
 	const Range<double> yRange() const {
-		return m_coordinateSystemsProperties.at(defaultCoordinateSystem()->yIndex()).yRange;
+		return yRanges.at(defaultCoordinateSystem()->yIndex()).range;
 	}
 	Range<double>& yRange() {
-		return m_coordinateSystemsProperties[defaultCoordinateSystem()->yIndex()].yRange;
+		return yRanges[defaultCoordinateSystem()->yIndex()].range;
+	}
+
+	Range<double>& yRange(int cSystemIndex) {
+		return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].range;
+	}
+
+	Range<double>& yRangeAutoScale(int cSystemIndex) {
+		return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].autoScaleRange;
 	}
 	Range<double> xPrevRange{}, yPrevRange{};
 
 	bool autoScaleX(int index = -1) {
 		if (index == -1) {
-			for (int i=0; i < m_coordinateSystemsProperties.count(); i++)
-				if (!autoScaleX())
+			for (int i=0; i < q->m_coordinateSystems.count(); i++)
+				if (!autoScaleX(i))
 					return false;
 			return true;
 		}
-		m_coordinateSystemsProperties[index].xRange.autoScale();
+		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->xIndex()].range.autoScale();
 	}
 	bool autoScaleY(int index = -1) {
 		if (index == -1) {
-			for (int i=0; i < m_coordinateSystemsProperties.count(); i++)
-				if (!autoScaleY())
+			for (int i=0; i < q->m_coordinateSystems.count(); i++)
+				if (!autoScaleY(i))
 					return false;
 			return true;
 		}
-		m_coordinateSystemsProperties[index].yRange.autoScale();
+		return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->yIndex()].range.autoScale();
 	}
 	void setAutoScaleX(int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i=0; i < m_coordinateSystemsProperties.count(); i++)
+			for (int i=0; i < q->m_coordinateSystems.count(); i++)
 				setAutoScaleX(i, b);
 			return;
 		}
-		m_coordinateSystemsProperties[index].xRange.setAutoScale(b);
+		xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->xIndex()].range.setAutoScale(b);
 	}
 	void setAutoScaleY(int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i=0; i < m_coordinateSystemsProperties.count(); i++)
+			for (int i=0; i < q->m_coordinateSystems.count(); i++)
 				setAutoScaleY(i, b);
 			return;
 		}
-		m_coordinateSystemsProperties[index].yRange.setAutoScale(b);
+		yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->yIndex()].range.setAutoScale(b);
 	}
 
 	//the following factor determines the size of the offset between the min/max points of the curves
@@ -125,7 +142,7 @@ public:
 	CartesianPlot::RangeBreaks xRangeBreaks, yRangeBreaks;
 
 	//cached values of minimum and maximum for all visible curves
-	Range<double> curvesXRange{qInf(), -qInf()}, curvesYRange{qInf(), -qInf()};
+	//Range<double> curvesXRange{qInf(), -qInf()}, curvesYRange{qInf(), -qInf()};
 
 	CartesianPlot* const q;
 	int defaultCoordinateSystemIndex{0};
@@ -133,16 +150,16 @@ public:
 	struct RangeP {
 		RangeP(const Range<double>& r=Range<double>(), const bool d=false): range(r), dirty(d) {}
 		bool dirty{false};
-		Range<double> range;
+		Range<double> range; // current range
+		Range<double> autoScaleRange; // autoscale range. Cached to be faster in rescaling
 	};
 
-	QVector<RangeP> xRanges;
-	QVector<RangeP> yRanges;
+	QVector<RangeP> xRanges{{}}, yRanges{{}}; // at least one range must exist.
 
 	CartesianCoordinateSystem* coordinateSystem(int index) const;
 	QVector<AbstractCoordinateSystem*> coordinateSystems() const;
 	CartesianCoordinateSystem* defaultCoordinateSystem() const {
-		return q->m_coordinateSystems.at(defaultCoordinateSystemIndex);
+		return static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(defaultCoordinateSystemIndex));
 	}
 
 	CartesianPlot::MouseMode mouseMode{CartesianPlot::MouseMode::Selection};

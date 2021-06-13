@@ -127,6 +127,8 @@ public:
 	void registerShortcuts() override;
 	void unregisterShortcuts() override;
 
+	static int cSystemIndex(WorksheetElement* e);
+
 	typedef WorksheetPrivate Private;
 
 public slots:
@@ -153,7 +155,6 @@ private:
 	void init();
 	WorksheetElement* aspectFromGraphicsItem(const WorksheetElement*, const QGraphicsItem*) const;
 	void loadTheme(const QString&);
-	int cSystemIndex(WorksheetElement* e);
 
 	WorksheetPrivate* const d;
 	mutable WorksheetView* m_view{nullptr};

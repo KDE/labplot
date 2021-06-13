@@ -531,7 +531,8 @@ void PlotDataDialog::addCurvesToPlot(CartesianPlot* plot) {
 	}
 	}
 
-	plot->dataChanged();
+	// TODO: check if it really needs to update all ranges
+	plot->dataChanged(-1);
 }
 
 /*!

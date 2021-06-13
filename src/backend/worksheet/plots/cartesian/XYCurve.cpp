@@ -1180,7 +1180,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64&
 
 	const auto xIndex{ q->cSystem->xIndex() };
 	if (plot()->xRangeScale(xIndex) == RangeT::Scale::Linear) {
-		double minLogicalDiffX = plot()->xRange(xIndex).size()/numberOfPixelX;
+		double minLogicalDiffX = plot()->xRange_(xIndex).size()/numberOfPixelX;
 		//DEBUG("	plot->xMax() - plot->xMin() = " << plot->xMax() - plot->xMin())
 		//DEBUG("	plot->dataRect().width() = " << plot->dataRect().width())
 		//DEBUG("	-> minLogicalDiffX = " << minLogicalDiffX)
@@ -1317,8 +1317,8 @@ void XYCurvePrivate::updateLines() {
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 	if (columnProperties == AbstractColumn::Properties::Constant) {
 		DEBUG(Q_FUNC_INFO << ", CONSTANT column")
-		const auto xRange{ plot()->xRange(q->cSystem->xIndex()) };
-		const auto yRange{ plot()->yRange(q->cSystem->yIndex()) };
+		const auto xRange{ plot()->xRange_(q->cSystem->xIndex()) };
+		const auto yRange{ plot()->yRange_(q->cSystem->yIndex()) };
 		tempPoint1 = QPointF(xRange.start(), yRange.start());
 		tempPoint2 = QPointF(xRange.start(), yRange.end());
 		m_lines.append(QLineF(tempPoint1, tempPoint2));
@@ -1620,8 +1620,8 @@ void XYCurvePrivate::updateDropLines() {
 
 	//calculate drop lines
 	QVector<QLineF> dlines;
-	const double xMin = plot()->xRange(q->cSystem->xIndex()).start();
-	const double yMin = plot()->yRange(q->cSystem->xIndex()).start();
+	const double xMin = plot()->xRange_(q->cSystem->xIndex()).start();
+	const double yMin = plot()->yRange_(q->cSystem->xIndex()).start();
 
 	//don't skip the invisible points, we still need to calculate
 	//the drop lines falling into the plot region
@@ -1726,7 +1726,7 @@ void XYCurvePrivate::updateValues() {
 	switch (valuesType) {
 	case XYCurve::ValuesType::NoValues:
 	case XYCurve::ValuesType::X: {
-		auto xRangeFormat{ plot()->xRange(q->cSystem->xIndex()).format() };
+		auto xRangeFormat{ plot()->xRange_(q->cSystem->xIndex()).format() };
 		int precision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1742,7 +1742,7 @@ void XYCurvePrivate::updateValues() {
 		break;
 	}
 	case XYCurve::ValuesType::Y: {
-		auto rangeFormat{ plot()->yRange(q->cSystem->yIndex()).format() };
+		auto rangeFormat{ plot()->yRange_(q->cSystem->yIndex()).format() };
 		int precision = valuesPrecision;
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1759,8 +1759,8 @@ void XYCurvePrivate::updateValues() {
 	}
 	case XYCurve::ValuesType::XY:
 	case XYCurve::ValuesType::XYBracketed: {
-		auto xRangeFormat{ plot()->xRange(q->cSystem->xIndex()).format() };
-		auto yRangeFormat{ plot()->yRange(q->cSystem->yIndex()).format() };
+		auto xRangeFormat{ plot()->xRange_(q->cSystem->xIndex()).format() };
+		auto yRangeFormat{ plot()->yRange_(q->cSystem->yIndex()).format() };
 
 		int xPrecision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
@@ -1927,8 +1927,8 @@ void XYCurvePrivate::updateFilling() {
 	const QPointF& last = m_logicalPoints.at(m_logicalPoints.size()-1);//last point of the curve, may not be visible currently
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
-	const auto xRange{ plot()->xRange(q->cSystem->xIndex()) };
-	const auto yRange{ plot()->yRange(q->cSystem->yIndex()) };
+	const auto xRange{ plot()->xRange_(q->cSystem->xIndex()) };
+	const auto yRange{ plot()->yRange_(q->cSystem->yIndex()) };
 	const double xMin{ xRange.start() }, xMax{ xRange.end() };
 	const double yMin{ yRange.start() }, yMax{ yRange.end() };
 	bool visible;
