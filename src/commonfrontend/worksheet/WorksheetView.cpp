@@ -1391,6 +1391,18 @@ void WorksheetView::addNew(QAction* action) {
 		aspect = l;
 	} else if (action == addImageAction) {
 		Image* image = new Image(i18n("Image"));
+
+		//position the image at the point where the context menu was called
+		auto position = image->position();
+		position.point = image->parentPosToRelativePos(m_cursorPos,
+												   m_worksheet->pageRect(),
+												   image->graphicsItem()->boundingRect(),
+												   position,
+												   image->horizontalAlignment(),
+												   image->verticalAlignment()
+		);
+		image->setPosition(position);
+
 		aspect = image;
 	}
 	if (!aspect)

@@ -328,12 +328,6 @@ void ImageDock::keepRatioChanged(int state) {
     called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
 void ImageDock::positionXChanged(int index) {
-	//Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionX->count()-1 )
-		ui.sbPositionX->setEnabled(true);
-	else
-		ui.sbPositionX->setEnabled(false);
-
 	if (m_initializing)
 		return;
 
@@ -347,16 +341,10 @@ void ImageDock::positionXChanged(int index) {
     called when label's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
 */
 void ImageDock::positionYChanged(int index) {
-	//Enable/disable the spinbox for the y-coordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionY->count()-1 )
-		ui.sbPositionY->setEnabled(true);
-	else
-		ui.sbPositionY->setEnabled(false);
-
 	if (m_initializing)
 		return;
 
-	WorksheetElement::PositionWrapper position = m_image->position();
+	auto position = m_image->position();
 	position.verticalPosition = WorksheetElement::VerticalPosition(index);
 	for (auto* image : m_imageList)
 		image->setPosition(position);
@@ -366,7 +354,7 @@ void ImageDock::customPositionXChanged(double value) {
 	if (m_initializing)
 		return;
 
-	WorksheetElement::PositionWrapper position = m_image->position();
+	auto position = m_image->position();
 	position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 	for (auto* image : m_imageList)
 		image->setPosition(position);
