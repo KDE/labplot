@@ -561,7 +561,7 @@ void TextLabelPrivate::updatePosition() {
 		//the position in logical coordinates was changed, calculate the position in scene coordinates
 		bool visible;
 		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		p = q->considerAlignment(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
+		p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
 		position.point = q->parentPosToRelativePos(p, pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 		if (q->plot())
 			p = mapPlotAreaToParent(p);
@@ -1015,7 +1015,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		//emit the signals in order to notify the UI.
 		// don't use setPosition here, because then all small changes are on the undo stack
 		if(coordinateBindingEnabled) {
-			pos = q->considerAlignment(pos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			pos = q->align(pos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
 			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			emit q->positionLogicalChanged(positionLogical);
 		} else {				
