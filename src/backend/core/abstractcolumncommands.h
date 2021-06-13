@@ -95,7 +95,7 @@ protected:
 
 class AbstractColumnSetHeatmapFormatCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnSetHeatmapFormatCmd(AbstractColumnPrivate*, const AbstractColumn::HeatmapFormat& , QUndoCommand* parent = nullptr);
+	explicit AbstractColumnSetHeatmapFormatCmd(AbstractColumnPrivate*, const AbstractColumn::HeatmapFormat&, QUndoCommand* parent = nullptr);
 	~AbstractColumnSetHeatmapFormatCmd() override;
 
 	void redo() override;
@@ -104,7 +104,19 @@ public:
 private:
 	AbstractColumnPrivate* m_col;
 	AbstractColumn::HeatmapFormat m_format;
+};
 
+class AbstractColumnRemoveHeatmapFormatCmd : public QUndoCommand {
+public:
+	explicit AbstractColumnRemoveHeatmapFormatCmd(AbstractColumnPrivate*, QUndoCommand* parent = nullptr);
+	~AbstractColumnRemoveHeatmapFormatCmd() override;
+
+	void redo() override;
+	void undo() override;
+
+private:
+	AbstractColumnPrivate* m_col;
+	AbstractColumn::HeatmapFormat m_format;
 };
 
 #endif // ifndef ABSTRACTCOLUMNCOMMANDS_H

@@ -271,3 +271,34 @@ void AbstractColumnSetHeatmapFormatCmd::redo() {
 void AbstractColumnSetHeatmapFormatCmd::undo() {
 	redo();
 }
+
+/** ***************************************************************************
+ * \class AbstractColumnRemoveHeatmapFormatCmd
+ * \brief Set the heatmap format
+ ** ***************************************************************************/
+AbstractColumnRemoveHeatmapFormatCmd::AbstractColumnRemoveHeatmapFormatCmd(AbstractColumnPrivate* col, QUndoCommand* parent)
+: QUndoCommand(parent), m_col(col) {
+	setText(i18n("%1: remove heatmap format", col->name()));
+}
+
+AbstractColumnRemoveHeatmapFormatCmd::~AbstractColumnRemoveHeatmapFormatCmd()
+= default;
+
+void AbstractColumnRemoveHeatmapFormatCmd::redo() {
+	if (m_col->m_heatmapFormat) {
+		m_format = *(m_col->m_heatmapFormat);
+		delete m_col->m_heatmapFormat;
+		m_col->m_heatmapFormat = nullptr;
+	}
+
+	emit m_col->owner()->formatChanged(m_col->owner());
+}
+
+void AbstractColumnRemoveHeatmapFormatCmd::undo() {
+	if (!m_col->m_heatmapFormat)
+		m_col->m_heatmapFormat = new AbstractColumn::HeatmapFormat();
+
+	*(m_col->m_heatmapFormat) = m_format;
+
+	emit m_col->owner()->formatChanged(m_col->owner());
+}

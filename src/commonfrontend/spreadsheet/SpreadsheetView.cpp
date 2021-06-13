@@ -2214,8 +2214,13 @@ void SpreadsheetView::removeFormat() {
 	if (columns.isEmpty())
 		columns = m_spreadsheet->children<Column>();
 
+	int count = columns.count();
+	if (count > 1)
+		m_spreadsheet->beginMacro(i18n("%1: remove heatmap format", m_spreadsheet->name()));
 	for (auto* col : columns)
 		col->removeFormat();
+	if (count > 1)
+		m_spreadsheet->endMacro();
 }
 
 /*!
