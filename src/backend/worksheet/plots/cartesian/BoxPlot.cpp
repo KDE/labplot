@@ -1258,6 +1258,9 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::draw()");
 
 	for (int i = 0; i < dataColumns.size(); ++i) {
+		if (!dataColumns.at(i))
+			continue;
+
 		//no need to draw anything if the column doesn't have any valid values
 		if (static_cast<const Column*>(dataColumns.at(i))->statistics().size == 0)
 			continue;
