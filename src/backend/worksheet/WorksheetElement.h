@@ -80,7 +80,7 @@ public:
 	QPointF relativePosToParentPos(QRectF parentRect, QRectF rect,
 								   PositionWrapper, HorizontalAlignment, VerticalAlignment) const;
 
-	QPointF considerAlignment(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const;
+	QPointF align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const;
 
 	QMenu* createContextMenu() override;
 

@@ -274,7 +274,7 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	emit moveEnd();
 }
 
-QPointF WorksheetElement::considerAlignment(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const
+QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const
 {
 	// positive is right
 	double xAlign;
@@ -343,7 +343,7 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF paren
 	else // position.verticalPosition == VerticalPosition::Top // default
 		relPos.setY(parentRect.y() - parentPos.y());
 
-	return considerAlignment(relPos, rect, horAlign, vertAlign, false);
+	return align(relPos, rect, horAlign, vertAlign, false);
 }
 
 /*!
@@ -371,7 +371,7 @@ QPointF WorksheetElement::relativePosToParentPos(QRectF parentRect, QRectF rect,
 	else // position.verticalPosition == WorksheetElement::VerticalPosition::Top // default
 		parentPos.setY(parentRect.y() - position.point.y());
 
-	return considerAlignment(parentPos, rect, horAlign, vertAlign, true);
+	return align(parentPos, rect, horAlign, vertAlign, true);
 }
 
 void WorksheetElement::loadThemeConfig(const KConfig &) {
