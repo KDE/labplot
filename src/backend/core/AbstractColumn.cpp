@@ -426,10 +426,7 @@ AbstractColumn::HeatmapFormat& AbstractColumn::heatmapFormat() const {
 }
 
 void AbstractColumn::setHeatmapFormat(const AbstractColumn::HeatmapFormat& format) {
-	if (!d->m_heatmapFormat)
-		d->m_heatmapFormat = new HeatmapFormat();
-
-	*(d->m_heatmapFormat) = format;
+	exec(new AbstractColumnSetHeatmapFormatCmd(d, format));
 }
 
 void AbstractColumn::removeFormat() {

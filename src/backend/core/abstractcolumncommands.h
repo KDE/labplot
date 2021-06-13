@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2010 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2014-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -35,21 +36,21 @@
 
 class AbstractColumnClearMasksCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnClearMasksCmd(AbstractColumnPrivate* col, QUndoCommand* parent = nullptr);
+	explicit AbstractColumnClearMasksCmd(AbstractColumnPrivate*, QUndoCommand* parent = nullptr);
 	~AbstractColumnClearMasksCmd() override;
 
 	void redo() override;
 	void undo() override;
 
 private:
-	AbstractColumnPrivate *m_col;
+	AbstractColumnPrivate* m_col;
 	IntervalAttribute<bool> m_masking;
 	bool m_copied;
 };
 
 class AbstractColumnSetMaskedCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate* col, const Interval<int>& interval, bool masked, QUndoCommand* parent = nullptr);
+	explicit AbstractColumnSetMaskedCmd(AbstractColumnPrivate*, const Interval<int>& interval, bool masked, QUndoCommand* parent = nullptr);
 	~AbstractColumnSetMaskedCmd() override;
 
 	void redo() override;
@@ -65,7 +66,7 @@ private:
 
 class AbstractColumnInsertRowsCmd : public QUndoCommand {
 public:
-	explicit AbstractColumnInsertRowsCmd(AbstractColumn* col, int before, int count, QUndoCommand* parent = nullptr);
+	explicit AbstractColumnInsertRowsCmd(AbstractColumn*, int before, int count, QUndoCommand* parent = nullptr);
 	~AbstractColumnInsertRowsCmd() override;
 
 	void redo() override;
@@ -90,6 +91,20 @@ protected:
 	int m_first;
 	int m_count;
 	IntervalAttribute<bool> m_masking;
+};
+
+class AbstractColumnSetHeatmapFormatCmd : public QUndoCommand {
+public:
+	explicit AbstractColumnSetHeatmapFormatCmd(AbstractColumnPrivate*, const AbstractColumn::HeatmapFormat& , QUndoCommand* parent = nullptr);
+	~AbstractColumnSetHeatmapFormatCmd() override;
+
+	void redo() override;
+	void undo() override;
+
+private:
+	AbstractColumnPrivate* m_col;
+	AbstractColumn::HeatmapFormat m_format;
+
 };
 
 #endif // ifndef ABSTRACTCOLUMNCOMMANDS_H
