@@ -35,10 +35,8 @@
 
 #include <QCompleter>
 #include <QDir>
-#include <QFileDialog>
 #include <QDirModel>
 #include <QGraphicsScene>
-#include <QImageReader>
 #include <QPainter>
 
 #include <KConfigGroup>
@@ -361,27 +359,11 @@ void DatapickerImageWidget::updateLocale() {
 //**********************************************************
 //"General"-tab
 void DatapickerImageWidget::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "DatapickerImageWidget");
-	QString dir = conf.readEntry("LastImageDir", "");
-	QString formats;
-	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
-		QString f = "*." + QString(format.constData());
-		if (f == QLatin1String("*.svg"))
-			continue;
-		formats.isEmpty() ? formats += f : formats += " " + f;
-	}
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
+	const QString& path = GuiTools::openImageFile(QLatin1String("DatapickerImageWidget"));
 	if (path.isEmpty())
-		return; //cancel was clicked in the file-dialog
+		return;
 
-	int pos = path.lastIndexOf(QLatin1String("/"));
-	if (pos != -1) {
-		QString newDir = path.left(pos);
-		if (newDir != dir)
-			conf.writeEntry("LastImageDir", newDir);
-	}
-
-	ui.leFileName->setText( path );
+	ui.leFileName->setText(path);
 	handleWidgetActions();
 
 	for (auto* image : m_imagesList)

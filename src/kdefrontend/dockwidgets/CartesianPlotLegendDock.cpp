@@ -2,7 +2,7 @@
     File                 : CartesianPlotLegendDock.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2013-2020 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2013-2021 by Alexander Semke (alexander.semke@web.de)
     Description          : widget for cartesian plot legend properties
 
  ***************************************************************************/
@@ -36,8 +36,6 @@
 #include <QCompleter>
 #include <QDir>
 #include <QDirModel>
-#include <QFileDialog>
-#include <QImageReader>
 
 #include <KLocalizedString>
 
@@ -606,29 +604,11 @@ void CartesianPlotLegendDock::backgroundSecondColorChanged(const QColor& c) {
 	opens a file dialog and lets the user select the image file.
 */
 void CartesianPlotLegendDock::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotLegendDock");
-	QString dir = conf.readEntry("LastImageDir", "");
-
-	QString formats;
-	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
-		QString f = "*." + QString(format.constData());
-		if (f == QLatin1String("*.svg"))
-			continue;
-		formats.isEmpty() ? formats += f : formats += ' ' + f;
-	}
-
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
+	const QString& path = GuiTools::openImageFile(QLatin1String("CartesianPlotLegendDock"));
 	if (path.isEmpty())
-		return; //cancel was clicked in the file-dialog
+		return;
 
-	int pos = path.lastIndexOf(QLatin1String("/"));
-	if (pos != -1) {
-		QString newDir = path.left(pos);
-		if (newDir != dir)
-			conf.writeEntry("LastImageDir", newDir);
-	}
-
-    ui.leBackgroundFileName->setText( path );
+	ui.leBackgroundFileName->setText(path);
 
 	for (auto* legend : m_legendList)
 		legend->setBackgroundFileName(path);
