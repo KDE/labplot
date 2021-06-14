@@ -1895,6 +1895,9 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
 }
 
 void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
+	//register the signal-slot connections for aspects having a view.
+	//if a folder is being added, loop recursively through all its children
+	//and register the connections.
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 // 		connect(part, &AbstractPart::importFromFileRequested, this, &MainWin::importFileDialog);
@@ -1911,7 +1914,9 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 			connect(worksheet, &Worksheet::cartesianPlotMouseModeChanged, this, &MainWin::cartesianPlotMouseModeChanged);
 			connect(worksheet, &Worksheet::propertiesExplorerRequested, this, &MainWin::propertiesExplorerRequested);
 		}
-	}
+	} else if (aspect->type() == AspectType::Folder)
+		for (auto* child : aspect->children<AbstractAspect>())
+			handleAspectAdded(child);
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect) {
