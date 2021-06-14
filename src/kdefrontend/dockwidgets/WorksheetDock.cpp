@@ -749,9 +749,6 @@ void WorksheetDock::selectFile() {
 		return;
 
 	ui.leBackgroundFileName->setText(path);
-
-	for (auto* worksheet : m_worksheetList)
-		worksheet->setBackgroundFileName(path);
 }
 
 void WorksheetDock::fileNameChanged() {

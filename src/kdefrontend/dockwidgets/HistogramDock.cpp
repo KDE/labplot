@@ -1193,9 +1193,6 @@ void HistogramDock::selectFile() {
 		return;
 
 	ui.leFillingFileName->setText(path);
-
-	for (auto* curve : m_curvesList)
-		curve->setFillingFileName(path);
 }
 
 void HistogramDock::fileNameChanged() {

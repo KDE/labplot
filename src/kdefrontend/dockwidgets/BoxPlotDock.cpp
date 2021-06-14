@@ -620,9 +620,6 @@ void BoxPlotDock::selectFile() {
 		return;
 
 	ui.leFillingFileName->setText(path);
-
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setFillingFileName(path);
 }
 
 void BoxPlotDock::fileNameChanged() const {

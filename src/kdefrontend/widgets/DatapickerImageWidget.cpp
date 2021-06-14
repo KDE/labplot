@@ -364,10 +364,6 @@ void DatapickerImageWidget::selectFile() {
 		return;
 
 	ui.leFileName->setText(path);
-	handleWidgetActions();
-
-	for (auto* image : m_imagesList)
-		image->setFileName(path);
 }
 
 void DatapickerImageWidget::fileNameChanged() {

@@ -1821,9 +1821,6 @@ void CartesianPlotDock::selectFile() {
 		return;
 
 	ui.leBackgroundFileName->setText(path);
-
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBackgroundFileName(path);
 }
 
 void CartesianPlotDock::fileNameChanged() {

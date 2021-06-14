@@ -609,9 +609,6 @@ void CartesianPlotLegendDock::selectFile() {
 		return;
 
 	ui.leBackgroundFileName->setText(path);
-
-	for (auto* legend : m_legendList)
-		legend->setBackgroundFileName(path);
 }
 
 void CartesianPlotLegendDock::fileNameChanged() {
