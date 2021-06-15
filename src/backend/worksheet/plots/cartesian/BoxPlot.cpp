@@ -290,19 +290,19 @@ QVector<QString>& BoxPlot::dataColumnPaths() const {
 }
 
 double BoxPlot::xMinimum() const {
-	return d_ptr->xMinimum();
+	return d_ptr->xMin;
 }
 
 double BoxPlot::xMaximum() const {
-	return d_ptr->xMaximum();
+	return d_ptr->xMax;
 }
 
 double BoxPlot::yMinimum() const {
-	return d_ptr->yMinimum();
+	return d_ptr->yMin;
 }
 
 double BoxPlot::yMaximum() const {
-	return d_ptr->yMaximum();
+	return d_ptr->yMax;
 }
 
 /* ============================ setter methods and undo commands ================= */
@@ -314,7 +314,7 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	if (columns != d->dataColumns) {
 		exec(new BoxPlotSetDataColumnsCmd(d, columns, ki18n("%1: set data columns")));
 
-		for (auto * column : columns) {
+		for (auto* column : columns) {
 			if (!column)
 				continue;
 
@@ -618,21 +618,18 @@ void BoxPlotPrivate::recalc() {
 	m_meanSymbolPoint.resize(count);
 	m_meanSymbolPointVisible.resize(count);
 
-	m_yMin = INFINITY;
-	m_yMax = -INFINITY;
-
 	//calculate the new min and max values of the box plot
 	//for the current sizes of the box and of the whiskers
 	if (orientation == BoxPlot::Orientation::Vertical) {
-		m_xMin = 0.5;
-		m_xMax = count + 0.5;
-		m_yMin = INFINITY;
-		m_yMax = -INFINITY;
+		xMin = 0.5;
+		xMax = count + 0.5;
+		yMin = INFINITY;
+		yMax = -INFINITY;
 	} else { //horizontal
-		m_xMin = INFINITY;
-		m_xMax = -INFINITY;
-		m_yMin = 0.5;
-		m_yMax = count + 0.5;
+		xMin = INFINITY;
+		xMax = -INFINITY;
+		yMin = 0.5;
+		yMax = count + 0.5;
 	}
 
 	if (variableWidth) {
@@ -661,18 +658,18 @@ QPointF BoxPlotPrivate::setOutlierPoint(double pos, double value) {
 		point.setX(pos);
 		point.setY(value);
 
-		if (value > m_yMax)
-			m_yMax = value;
-		else if (value < m_yMin)
-			m_yMin = value;
+		if (value > yMax)
+			yMax = value;
+		else if (value < yMin)
+			yMin = value;
 	} else {
 		point.setX(value);
 		point.setY(pos);
 
-		if (value > m_xMax)
-			m_xMax = value;
-		else if (value < m_xMin)
-			m_xMin = value;
+		if (value > xMax)
+			xMax = value;
+		else if (value < xMin)
+			xMin = value;
 	}
 
 	return point;
@@ -768,15 +765,15 @@ void BoxPlotPrivate::recalc(int index) {
 
 	//outliers symbols
 	if (orientation == BoxPlot::Orientation::Vertical) {
-		if (m_whiskerMax[index] > m_yMax)
-			m_yMax = m_whiskerMax[index];
-		if (m_whiskerMin[index] < m_yMin)
-			m_yMin = m_whiskerMin[index];
+		if (m_whiskerMax[index] > yMax)
+			yMax = m_whiskerMax[index];
+		if (m_whiskerMin[index] < yMin)
+			yMin = m_whiskerMin[index];
 	} else {
-		if (m_whiskerMax[index] > m_xMax)
-			m_xMax = m_whiskerMax[index];
-		if (m_whiskerMin[index] < m_xMin)
-			m_xMin = m_whiskerMin[index];
+		if (m_whiskerMax[index] > xMax)
+			xMax = m_whiskerMax[index];
+		if (m_whiskerMin[index] < xMin)
+			xMin = m_whiskerMin[index];
 	}
 
 	double whiskerMax = - qInf(); //upper adjacent value
@@ -1215,22 +1212,6 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	updatePixmap();
 }
 
-double BoxPlotPrivate::xMinimum() {
-	return m_xMin;
-}
-
-double BoxPlotPrivate::xMaximum() {
-	return m_xMax;
-}
-
-double BoxPlotPrivate::yMinimum() {
-	return m_yMin;
-}
-
-double BoxPlotPrivate::yMaximum() {
-	return m_yMax;
-}
-
 void BoxPlotPrivate::updatePixmap() {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::updatePixmap()");
 	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
@@ -1571,6 +1552,10 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("widthFactor", QString::number(d->widthFactor));
 	writer->writeAttribute("notches", QString::number(d->notchesEnabled));
 	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
+	writer->writeAttribute("xMin", QString::number(d->xMin));
+	writer->writeAttribute("xMax", QString::number(d->xMax));
+	writer->writeAttribute("yMin", QString::number(d->yMin));
+	writer->writeAttribute("yMax", QString::number(d->yMax));
 	for (auto* column : d->dataColumns) {
 		writer->writeStartElement("column");
 		writer->writeAttribute("path", column->path());
@@ -1653,6 +1638,11 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("widthFactor", widthFactor);
 			READ_INT_VALUE("notches", notchesEnabled, bool);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
+
+			READ_DOUBLE_VALUE("xMin", xMin);
+			READ_DOUBLE_VALUE("xMax", xMax);
+			READ_DOUBLE_VALUE("yMin", yMin);
+			READ_DOUBLE_VALUE("yMax", yMax);
 		} else if (reader->name() == "column") {
 			attribs = reader->attributes();
 
