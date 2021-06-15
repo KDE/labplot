@@ -732,6 +732,9 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index) {
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
+	if (m_project->isLoading())
+		return;
+
 	QModelIndex index;
 	AbstractAspect* aspect = nullptr;
 
