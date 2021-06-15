@@ -4137,7 +4137,7 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	const bool hovered = (m_hovered && !isSelected());
 	const bool selected = isSelected();
 	if ((hovered || selected)  && !m_printing) {
-		static double penWidth = 20.;
+		static double penWidth = 2.;
 		const QRectF& br = q->m_plotArea->graphicsItem()->boundingRect();
 		const qreal width = br.width();
 		const qreal height = br.height();
