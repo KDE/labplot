@@ -62,6 +62,7 @@ public:
 	QWidget* view() const override;
 
 	QVector<AbstractAspect*> dependsOn() const override;
+	WorksheetElement* currentSelection();
 	QVector<AspectType> pasteTypes() const override;
 
 	bool exportView() const override;

@@ -515,6 +515,13 @@ void Worksheet::registerShortcuts() {
 	m_view->registerShortcuts();
 }
 
+WorksheetElement* Worksheet::currentSelection()
+{
+	if (!m_view)
+		view();
+	return m_view->selectedElement();
+}
+
 void Worksheet::unregisterShortcuts() {
 	m_view->unregisterShortcuts();
 }
@@ -748,16 +755,13 @@ void Worksheet::setTheme(const QString& theme) {
 
 int Worksheet::cSystemIndex(WorksheetElement* e)
 {
-	switch(e->type()) {
-	case AspectType::CartesianPlot:
-		// update all ranges
+	auto type = e->type();
+
+	if (type == AspectType::CartesianPlot)
 		return -1;
-	case AspectType::XYCurve: // fall through
-	case AspectType::Axis:
+	else if (((int)type & (int)AspectType::XYCurve) == (int)AspectType::XYCurve || // All subclasses of xycurve
+			 type == AspectType::Axis)
 		return e->coordinateSystemIndex();
-	default:
-		return -1;
-	}
 	return -1;
 }
 

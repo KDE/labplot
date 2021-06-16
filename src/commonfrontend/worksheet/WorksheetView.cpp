@@ -1922,6 +1922,9 @@ void WorksheetView::handleCartesianPlotActions() {
 	if (!m_menusInitialized)
 		return;
 
+	if (m_mouseMode != MouseMode::Selection || m_cartesianPlotMouseMode != CartesianPlot::MouseMode::Selection)
+		return; // Do not change selection when the mousemode is not selection!
+
 	m_selectedElement = nullptr;
 
 	bool handled = false, plot = false;
