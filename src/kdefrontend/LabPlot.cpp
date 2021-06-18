@@ -215,6 +215,10 @@ int main (int argc, char *argv[]) {
 	KColorSchemeManager manager;
 	manager.activateScheme(manager.indexForScheme(schemeName));
 
+#if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+	QApplication::setStyle(QStringLiteral("breeze"));
+#endif
+
 	MainWin* window = new MainWin(nullptr, filename);
 	window->show();
 
