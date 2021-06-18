@@ -877,8 +877,12 @@ void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseHoverZoomSelectionMode(logicPos, -1);
-	} else
-		senderPlot->mouseHoverZoomSelectionMode(logicPos, cSystemIndex(m_view->selectedElement()));
+	} else {
+		if (m_view->selectedElement()->parent(AspectType::CartesianPlot) == senderPlot)
+			senderPlot->mouseHoverZoomSelectionMode(logicPos, cSystemIndex(m_view->selectedElement()));
+		else
+			senderPlot->mouseHoverZoomSelectionMode(logicPos, -1);
+	}
 }
 
 void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {

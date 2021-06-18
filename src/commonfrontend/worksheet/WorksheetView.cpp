@@ -2409,7 +2409,8 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	//Project().projectExplorer().currentAspect()
 
 	CartesianPlot::NavigationOperation op = (CartesianPlot::NavigationOperation)action->data().toInt();
-	if (m_worksheet->cartesianPlotActionMode() == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
+	auto plotActionMode = m_worksheet->cartesianPlotActionMode();
+	if (plotActionMode == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
 		int cSystemIndex = Worksheet::cSystemIndex(m_selectedElement);
 		for (auto* plot : m_worksheet->children<CartesianPlot>() ) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
@@ -2423,6 +2424,26 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 					}
 				}
 			}
+		}
+	} else if ((plotActionMode == Worksheet::CartesianPlotActionMode::ApplyActionToAllY &&
+				(op == CartesianPlot::NavigationOperation::ScaleAutoX ||
+				op == CartesianPlot::NavigationOperation::ShiftLeftX||
+			   op == CartesianPlot::NavigationOperation::ShiftRightX ||
+				op == CartesianPlot::NavigationOperation::ZoomInX ||
+				op == CartesianPlot::NavigationOperation::ZoomOutX))||
+			   (plotActionMode == Worksheet::CartesianPlotActionMode::ApplyActionToAllX &&
+			   (op == CartesianPlot::NavigationOperation::ScaleAutoY ||
+				op == CartesianPlot::NavigationOperation::ShiftUpY||
+				op == CartesianPlot::NavigationOperation::ShiftDownY ||
+				op == CartesianPlot::NavigationOperation::ZoomInY ||
+				op == CartesianPlot::NavigationOperation::ZoomOutY))) {
+		int cSystemIndex = Worksheet::cSystemIndex(m_selectedElement);
+		if (m_selectedElement->type() == AspectType::CartesianPlot)
+			static_cast<CartesianPlot*>(m_selectedElement)->navigate(-1, op);
+		else {
+			auto parentPlot = static_cast<CartesianPlot*>(m_selectedElement->parent(AspectType::CartesianPlot));
+			if (parentPlot) // really needed?
+				parentPlot->navigate(cSystemIndex, op);
 		}
 	} else {
 		for (auto* plot : m_worksheet->children<CartesianPlot>() )

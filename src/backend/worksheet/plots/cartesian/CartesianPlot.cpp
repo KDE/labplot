@@ -4099,7 +4099,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
 	QString info;
 	const auto* cSystem{ defaultCoordinateSystem() };
-	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
 	int index = Worksheet::cSystemIndex(w);
 	if (!w || w->parent(AspectType::CartesianPlot) != q)
 		index = -1;
