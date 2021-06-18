@@ -1808,7 +1808,7 @@ void WorksheetView::handleXYCurveSelected()
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
 		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
-		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
 		zoomInAction->setEnabled(false);
 		zoomOutAction->setEnabled(false);
 		zoomInXAction->setEnabled(true);
@@ -1825,7 +1825,7 @@ void WorksheetView::handleXYCurveSelected()
 		break;
 	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
 		cartesianPlotZoomSelectionModeAction->setEnabled(false);
-		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomXSelectionModeAction->setEnabled(true);
 		cartesianPlotZoomYSelectionModeAction->setEnabled(true);
 		zoomInAction->setEnabled(false);
 		zoomOutAction->setEnabled(false);

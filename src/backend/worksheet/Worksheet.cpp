@@ -755,6 +755,9 @@ void Worksheet::setTheme(const QString& theme) {
 
 int Worksheet::cSystemIndex(WorksheetElement* e)
 {
+	if (!e) // TODO: really needed?
+		return -1;
+
 	auto type = e->type();
 
 	if (type == AspectType::CartesianPlot)

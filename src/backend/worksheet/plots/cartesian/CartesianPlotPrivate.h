@@ -73,7 +73,9 @@ public:
 	}
 
 	Range<double>& xRange(int cSystemIndex) {
-		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].range;
+		if (cSystemIndex >= 0)
+			return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].range;
+		return xRange();
 	}
 
 	Range<double>& xRangeAutoScale(int cSystemIndex) {
@@ -88,7 +90,9 @@ public:
 	}
 
 	Range<double>& yRange(int cSystemIndex) {
-		return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].range;
+		if (cSystemIndex >= 0)
+			return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].range;
+		return yRange();
 	}
 
 	Range<double>& yRangeAutoScale(int cSystemIndex) {

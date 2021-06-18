@@ -301,8 +301,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	//show the properties of the first plot
 	this->load();
 
-	updateXRangeList();
-	updateYRangeList();
+//	updateXRangeList();
+//	updateYRangeList();
 	updatePlotRangeList();
 
 	//update active widgets
@@ -400,7 +400,7 @@ void CartesianPlotDock::updateLocale() {
 
 		// x ranges
 		bool isDateTime{ false };
-		for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
+		for (int row{0}; row < qMin(ui.twXRanges->rowCount(), m_plot->xRangeCount()); row++) {
 			const auto xRange{ m_plot->xRange_(row) };
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
@@ -429,7 +429,7 @@ void CartesianPlotDock::updateLocale() {
 
 		// y ranges
 		isDateTime = false;
-		for (int row{0}; row < ui.twYRanges->rowCount(); row++) {
+		for (int row{0}; row < qMin(ui.twYRanges->rowCount(), m_plot->yRangeCount()); row++) {
 			const auto yRange{ m_plot->yRange_(row) };
 			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
@@ -2435,70 +2435,72 @@ void CartesianPlotDock::load() {
 	ui.leRangeLast->setText( numberLocale.toString(m_plot->rangeLastValues()) );
 
 	// x ranges
-	for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
-		const auto xRange{ m_plot->xRange_(row) };
-		DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
+//	for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
+//		const auto xRange{ m_plot->xRange_(row) };
+//		DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 
-		auto* chk = qobject_cast<QCheckBox*>(ui.twXRanges->cellWidget(row, 0));
-		chk->setChecked(xRange.autoScale());
+//		auto* chk = qobject_cast<QCheckBox*>(ui.twXRanges->cellWidget(row, 0));
+//		chk->setChecked(xRange.autoScale());
 
-		auto* cb = qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(row, 1));
-		cb->setCurrentIndex(static_cast<int>(xRange.format()));
+//		auto* cb = qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(row, 1));
+//		cb->setCurrentIndex(static_cast<int>(xRange.format()));
 
-		if (xRange.format() == RangeT::Format::Numeric) {
-			auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, 2));
-			if (le) {	// may be nullptr
-				le->setText( numberLocale.toString(xRange.start()) );
-				le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, 3));
-				le->setText( numberLocale.toString(xRange.end()) );
-			}
-		} else {
-			auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, 2));
-			if (dte) {	// may be nullptr
-				dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(row) );
-				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(xRange.start())) );
-				dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, 3));
-				dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(row) );
-				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(xRange.end())) );
-			}
-		}
+//		if (xRange.format() == RangeT::Format::Numeric) {
+//			auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, 2));
+//			if (le) {	// may be nullptr
+//				le->setText( numberLocale.toString(xRange.start()) );
+//				le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, 3));
+//				le->setText( numberLocale.toString(xRange.end()) );
+//			}
+//		} else {
+//			auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, 2));
+//			if (dte) {	// may be nullptr
+//				dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(row) );
+//				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(xRange.start())) );
+//				dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, 3));
+//				dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(row) );
+//				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(xRange.end())) );
+//			}
+//		}
 
-		cb = qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(row, 4));
-		cb->setCurrentIndex(static_cast<int>(xRange.scale()));
-	}
+//		cb = qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(row, 4));
+//		cb->setCurrentIndex(static_cast<int>(xRange.scale()));
+//	}
+	updateXRangeList();
+	updateYRangeList();
 
 	// y ranges
-	for (int row{0}; row < ui.twYRanges->rowCount(); row++) {
-		const auto yRange{ m_plot->yRange_(row) };
-		DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
+//	for (int row{0}; row < ui.twYRanges->rowCount(); row++) {
+//		const auto yRange{ m_plot->yRange_(row) };
+//		DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 
-		auto* chk = qobject_cast<QCheckBox*>(ui.twYRanges->cellWidget(row, 0));
-		chk->setChecked(yRange.autoScale());
+//		auto* chk = qobject_cast<QCheckBox*>(ui.twYRanges->cellWidget(row, 0));
+//		chk->setChecked(yRange.autoScale());
 
-		auto* cb = qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(row, 1));
-		cb->setCurrentIndex(static_cast<int>(yRange.format()));
+//		auto* cb = qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(row, 1));
+//		cb->setCurrentIndex(static_cast<int>(yRange.format()));
 
-		if (yRange.format() == RangeT::Format::Numeric) {
-			auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, 2));
-			if (le) {	// may be nullptr
-				le->setText( numberLocale.toString(yRange.start()) );
-				le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, 3));
-				le->setText( numberLocale.toString(yRange.end()) );
-			}
-		} else {
-			auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, 2));
-			if (dte) {	// may be nullptr
-				dte->setDisplayFormat( m_plot->yRangeDateTimeFormat(row) );
-				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(yRange.start())) );
-				dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, 3));
-				dte->setDisplayFormat( m_plot->yRangeDateTimeFormat(row) );
-				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(yRange.end())) );
-			}
-		}
+//		if (yRange.format() == RangeT::Format::Numeric) {
+//			auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, 2));
+//			if (le) {	// may be nullptr
+//				le->setText( numberLocale.toString(yRange.start()) );
+//				le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, 3));
+//				le->setText( numberLocale.toString(yRange.end()) );
+//			}
+//		} else {
+//			auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, 2));
+//			if (dte) {	// may be nullptr
+//				dte->setDisplayFormat( m_plot->yRangeDateTimeFormat(row) );
+//				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(yRange.start())) );
+//				dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, 3));
+//				dte->setDisplayFormat( m_plot->yRangeDateTimeFormat(row) );
+//				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(yRange.end())) );
+//			}
+//		}
 
-		cb = qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(row, 4));
-		cb->setCurrentIndex(static_cast<int>(yRange.scale()));
-	}
+//		cb = qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(row, 4));
+//		cb->setCurrentIndex(static_cast<int>(yRange.scale()));
+//	}
 
 
 	//Title

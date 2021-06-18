@@ -774,8 +774,8 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 			}
 			scaleAuto(cSystemIndex);
 		}
-	} else if (op == NavigationOperation::ScaleAutoX) scaleAutoX(cSystemIndex);
-	else if (op == NavigationOperation::ScaleAutoY) scaleAutoY(cSystemIndex);
+	} else if (op == NavigationOperation::ScaleAutoX) scaleAutoX(cSystemIndex, true);
+	else if (op == NavigationOperation::ScaleAutoY) scaleAutoY(cSystemIndex, true);
 	else if (op == NavigationOperation::ZoomIn) zoomIn(cSystemIndex);
 	else if (op == NavigationOperation::ZoomOut) zoomOut(cSystemIndex);
 	else if (op == NavigationOperation::ZoomInX) zoomInX(cSystemIndex);
@@ -2472,18 +2472,20 @@ void CartesianPlot::scaleAutoTriggered() {
 }
 
 bool CartesianPlot::scaleAutoX(int cSystemIndex, bool fullRange, bool suppressRetransform) {
+	Q_D(CartesianPlot);
 	if (cSystemIndex == -1) {
 		bool updated = false;
 		for (int i=0; i < coordinateSystemCount(); i++) {
-			if (scaleAutoX(i, fullRange, suppressRetransform)) {
+			if (scaleAutoX(i, fullRange, true)) {
 				updated = true; // at least one was updated
 			}
 		}
+		if (!suppressRetransform)
+			d->retransformScales();
 		return updated;
 	}
 
 	DEBUG(Q_FUNC_INFO << ", cSystemIndex = " << cSystemIndex << " full range = " << fullRange)
-	Q_D(CartesianPlot);
 	if (xRangeDirty(cSystemIndex)) {
 		calculateCurvesXMinMax(cSystemIndex, fullRange);
 		setXRangeDirty(cSystemIndex, false);
@@ -2531,18 +2533,20 @@ bool CartesianPlot::scaleAutoX(int cSystemIndex, bool fullRange, bool suppressRe
 
 // TODO: copy paste code?
 bool CartesianPlot::scaleAutoY(int cSystemIndex, bool fullRange, bool suppressRetransform) {
+	Q_D(CartesianPlot);
 	if (cSystemIndex == -1) {
 		bool updated = false;
 		for (int i=0; i < coordinateSystemCount(); i++) {
-			if (scaleAutoY(i, fullRange, suppressRetransform)) {
+			if (scaleAutoY(i, fullRange, true)) {
 				updated = true; // at least one was updated
 			}
 		}
+		if (!suppressRetransform)
+			d->retransformScales();
 		return updated;
 	}
 
 	DEBUG(Q_FUNC_INFO << ", cSystemIndex = " << cSystemIndex << " full range = " << fullRange)
-	Q_D(CartesianPlot);
 
 	if (yRangeDirty(cSystemIndex)) {
 		calculateCurvesYMinMax(cSystemIndex, fullRange);
@@ -2614,9 +2618,10 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int cSystemIndex, bool
 	d->xRangeAutoScale(cSystemIndex).setRange(qInf(), -qInf());
 
 	//loop over all xy-curves and determine the maximum and minimum x-values
+	int cSystemXIndex = static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex();
 	for (const auto* curve : this->children<const XYCurve>()) {
 		//only curves with correct xIndex
-		if (coordinateSystem(curve->coordinateSystemIndex())->xIndex() != cSystemIndex)
+		if (coordinateSystem(curve->coordinateSystemIndex())->xIndex() != cSystemXIndex)
 			continue;
 		if (!curve->isVisible())
 			continue;
@@ -2708,9 +2713,10 @@ void CartesianPlot::calculateCurvesYMinMax(const int cSystemIndex, bool complete
 	Range<double> range{d->yRangeAutoScale(cSystemIndex)};
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
+	int cSystemYIndex = static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex();
 	for (const auto* curve : this->children<const XYCurve>()) {
 		//only curves with correct yIndex
-		if (coordinateSystem(curve->coordinateSystemIndex())->yIndex() != cSystemIndex)
+		if (coordinateSystem(curve->coordinateSystemIndex())->yIndex() != cSystemYIndex)
 			continue;
 		if (!curve->isVisible())
 			continue;
@@ -3564,8 +3570,11 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
  */
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{ defaultCoordinateSystem() };
-	int index = Worksheet::cSystemIndex(static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection());
-	if (index >= 0)
+	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	int index = Worksheet::cSystemIndex(w);
+	if (!w || w->parent(AspectType::CartesianPlot) != q)
+		index = -1;
+	else if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index]);
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
 		if (!locked && dataRect.contains(event->pos())) {
@@ -3668,8 +3677,11 @@ void CartesianPlotPrivate::setZoomSelectionBandShow(bool show) {
 
 void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{ defaultCoordinateSystem() };
-	int index = Worksheet::cSystemIndex(static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection());
-	if (index >= 0)
+	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	int index = Worksheet::cSystemIndex(w);
+	if (!w || w->parent(AspectType::CartesianPlot) != q)
+		index = -1;
+	else if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index]);
 
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
@@ -3713,57 +3725,64 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd) {
+	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	int index = Worksheet::cSystemIndex(w);
+	if (!w || w->parent(AspectType::CartesianPlot) != q)
+		index = -1;
+	else if (index < 0)
+		index = defaultCoordinateSystemIndex;
+
 	//handle the change in x
 	bool translation = false;
 	if (logicalStart.x() - logicalEnd.x() != 0) { // TODO: find better method
 		translation = true;
 		double start{ logicalStart.x() }, end{ logicalEnd.x() };
-		switch (xRange().scale()) {
+		switch (xRange(index).scale()) {
 		case RangeT::Scale::Linear: {
 			const double delta = (start - end);
-			xRange().translate(delta);
+			xRange(index).translate(delta);
 			break;
 		}
 		case RangeT::Scale::Log10: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double delta = log10(start / end);
-			xRange() *= pow(10, delta);
+			xRange(index) *= pow(10, delta);
 			break;
 		}
 		case RangeT::Scale::Log2: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double delta = log2(start / end);
-			xRange() *= exp2(delta);
+			xRange(index) *= exp2(delta);
 			break;
 		}
 		case RangeT::Scale::Ln: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double delta = log(start / end);
-			xRange() *= exp(delta);
+			xRange(index) *= exp(delta);
 			break;
 		}
 		case RangeT::Scale::Sqrt: {
 			if (start < 0 || end < 0)
 				break;
 			const double delta = sqrt(start) - sqrt(end);
-			xRange().translate(delta*delta);
+			xRange(index).translate(delta*delta);
 			break;
 		}
 		case RangeT::Scale::Square: {
 			if (end <= start)
 				break;
 			const double delta = end*end - start*start;
-			xRange().translate(sqrt(delta));
+			xRange(index).translate(sqrt(delta));
 			break;
 		}
 		case RangeT::Scale::Inverse: {
 			if (start == 0. || end == 0. || end <= start)
 				break;
 			const double delta = 1./start - 1./end;
-			xRange().translate(1./delta);
+			xRange(index).translate(1./delta);
 			break;
 		}
 		}
@@ -3774,52 +3793,52 @@ void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF 
 		//handle the change in y
 		double start = logicalStart.y();
 		double end = logicalEnd.y();
-		switch (yRange().scale()) {
+		switch (yRange(index).scale()) {
 		case RangeT::Scale::Linear: {
 			const double deltaY = (start - end);
-			yRange().translate(deltaY);
+			yRange(index).translate(deltaY);
 			break;
 		}
 		case RangeT::Scale::Log10: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double deltaY = log10(start / end);
-			yRange() *= pow(10, deltaY);
+			yRange(index) *= pow(10, deltaY);
 			break;
 		}
 		case RangeT::Scale::Log2: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double deltaY = log2(start / end);
-			yRange() *= exp2(deltaY);
+			yRange(index) *= exp2(deltaY);
 			break;
 		}
 		case RangeT::Scale::Ln: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double deltaY = log(start / end);
-			yRange() *= exp(deltaY);
+			yRange(index) *= exp(deltaY);
 			break;
 		}
 		case RangeT::Scale::Sqrt: {
 			if (start < 0 || end < 0)
 				break;
 			const double delta = sqrt(start) - sqrt(end);
-			yRange().translate(delta*delta);
+			yRange(index).translate(delta*delta);
 			break;
 		}
 		case RangeT::Scale::Square: {
 			if (end <= start)
 				break;
 			const double delta = end*end - start*start;
-			yRange().translate(sqrt(delta));
+			yRange(index).translate(sqrt(delta));
 			break;
 		}
 		case RangeT::Scale::Inverse: {
 			if (start == 0. || end == 0. || end <= start)
 				break;
 			const double delta = 1./start - 1./end;
-			yRange().translate(1./delta);
+			yRange(index).translate(1./delta);
 			break;
 		}
 		}
@@ -3827,8 +3846,8 @@ void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF 
 
 	if (translation) {
 		q->setUndoAware(false);
-		q->setAutoScaleX(-1, false);
-		q->setAutoScaleY(-1, false);
+		q->setAutoScaleX(index, false);
+		q->setAutoScaleY(index, false);
 		q->setUndoAware(true);
 
 		retransformScales();
@@ -3976,18 +3995,18 @@ bool CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 			q->setYRangeDirty(cSystemIndex, true);
 			q->setAutoScaleX(cSystemIndex, false);
-			if (q->autoScaleY(cSystemIndex) && q->scaleAutoY(cSystemIndex))
+			if (q->autoScaleY(cSystemIndex) && q->scaleAutoY(cSystemIndex, false, true))
 				retransformPlot = false;
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 			q->setXRangeDirty(cSystemIndex, true);
 			q->setAutoScaleY(cSystemIndex, false);
-			if (q->autoScaleX(cSystemIndex) && q->scaleAutoX(cSystemIndex))
+			if (q->autoScaleX(cSystemIndex) && q->scaleAutoX(cSystemIndex, false, true))
 				retransformPlot = false;
 		}
 	}
 
 	if (!suppressRetransform) {
-		if (retransformPlot)
+		//if (retransformPlot), because autoscale suppress and therefore a retransform is neccessary
 			retransformScales();
 
 		m_selectionBandIsShown = false;
@@ -4000,8 +4019,10 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	if (locked)
 		return;
 
-	int cSystemIndex = Worksheet::cSystemIndex(static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection());
-
+	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	int cSystemIndex = Worksheet::cSystemIndex(w);
+	if (!w || w->parent(AspectType::CartesianPlot) != q)
+		cSystemIndex = -1;
 
 	//determine first, which axes are selected and zoom only in the corresponding direction.
 	//zoom the entire plot if no axes selected.
@@ -4078,14 +4099,17 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	QPointF point = event->pos();
 	QString info;
 	const auto* cSystem{ defaultCoordinateSystem() };
-	int index = Worksheet::cSystemIndex(static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection());
-	if (index >= 0)
+	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	int index = Worksheet::cSystemIndex(w);
+	if (!w || w->parent(AspectType::CartesianPlot) != q)
+		index = -1;
+	else if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index]);
 
-	const auto xRangeFormat{ xRange().format() };
-	const auto yRangeFormat{ yRange().format() };
-	const auto xRangeDateTimeFormat{ xRange().dateTimeFormat() };
-	const auto yRangeDateTimeFormat{ yRange().dateTimeFormat() };
+	const auto xRangeFormat{ xRange(index).format() };
+	const auto yRangeFormat{ yRange(index).format() };
+	const auto xRangeDateTimeFormat{ xRange(index).dateTimeFormat() };
+	const auto yRangeDateTimeFormat{ yRange(index).dateTimeFormat() };
 	if (dataRect.contains(point)) {
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 
