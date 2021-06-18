@@ -813,6 +813,11 @@ void MainWin::initMenus() {
 	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
 	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
 #endif
+#if defined(HAVE_WINDOWS)	// use 'Breeze' if no scheme is previously set (default scheme may be dark which is broken atm)
+	if (schemeName.isEmpty())
+		schemeName = QLatin1String("Breeze");
+#endif
+	DEBUG(Q_FUNC_INFO << ", Color scheme = " << schemeName.toStdString())
 	KActionMenu* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
