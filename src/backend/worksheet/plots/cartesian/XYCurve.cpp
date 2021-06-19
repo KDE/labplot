@@ -1180,7 +1180,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64&
 
 	const auto xIndex{ q->cSystem->xIndex() };
 	if (plot()->xRangeScale(xIndex) == RangeT::Scale::Linear) {
-		double minLogicalDiffX = plot()->xRange_(xIndex).size()/numberOfPixelX;
+		double minLogicalDiffX = plot()->xRangeCSystem(q->coordinateSystemIndex()).size()/numberOfPixelX;
 		//DEBUG("	plot->xMax() - plot->xMin() = " << plot->xMax() - plot->xMin())
 		//DEBUG("	plot->dataRect().width() = " << plot->dataRect().width())
 		//DEBUG("	-> minLogicalDiffX = " << minLogicalDiffX)

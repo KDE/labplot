@@ -2090,10 +2090,8 @@ void AxisPrivate::retransformMajorGrid() {
 	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex() + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->yIndex() + 1)
-	const auto xRange {
-		plot()->xRange_(q->cSystem->xIndex())
-	};
-	const auto yRange{ plot()->yRange_(q->cSystem->yIndex()) };
+	const auto xRange {plot()->xRangeCSystem(q->coordinateSystemIndex())};
+	const auto yRange{ plot()->yRangeCSystem(q->coordinateSystemIndex())};
 
 	//TODO:
 	//when iterating over all grid lines, skip the first and the last points for auto scaled axes,
