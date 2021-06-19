@@ -2263,7 +2263,22 @@ void WorksheetView::cartesianPlotMouseModeChanged(QAction* action) {
 	if (m_suppressMouseModeChange)
 		return;
 
+	auto oldMouseMode = m_cartesianPlotMouseMode;
 	m_cartesianPlotMouseMode = static_cast<CartesianPlot::MouseMode>(action->data().toInt());
+
+
+	if (m_cartesianPlotMouseMode == CartesianPlot::MouseMode::Selection &&
+			(oldMouseMode == CartesianPlot::MouseMode::ZoomSelection ||
+			oldMouseMode == CartesianPlot::MouseMode::ZoomXSelection ||
+			oldMouseMode == CartesianPlot::MouseMode::ZoomYSelection)) {
+		// restore selection after zoom selection
+		auto item = m_selectedElement->graphicsItem();
+		for (auto i: m_selectedItems)
+			i->setSelected(false);
+		item->setSelected(true);
+		//selectItem(m_selectedElement->graphicsItem());
+		//m_worksheet->setItemSelectedInView(m_selectedElement->graphicsItem(), true);
+	}
 	// TODO: find out, which element is selected. So the corresponding range can be modified
 
 	for (auto* plot : m_worksheet->children<CartesianPlot>() )
