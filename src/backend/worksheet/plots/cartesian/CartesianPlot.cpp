@@ -2232,11 +2232,11 @@ bool CartesianPlot::autoScale(int cSystemIndex, bool fullRange) {
 	int yIndex{ coordinateSystem(cSystemIndex)->yIndex() };
 	DEBUG(Q_FUNC_INFO << ", auto scale x/y = " << autoScaleX(xIndex) << "/" << autoScaleY(yIndex))
 	if (autoScaleX(xIndex) && autoScaleY(yIndex))
-		updated = scaleAuto(xIndex, yIndex, fullRange);
-	else if (autoScaleX(xIndex))
-		updated = scaleAutoX(xIndex, fullRange);
-	else if (autoScaleY(yIndex))
-		updated = scaleAutoY(yIndex, fullRange);
+		updated = scaleAuto(cSystemIndex, fullRange);
+	else if (autoScaleX(cSystemIndex))
+		updated = scaleAutoX(cSystemIndex, fullRange);
+	else if (autoScaleY(cSystemIndex))
+		updated = scaleAutoY(cSystemIndex, fullRange);
 
 	return updated;
 }
@@ -2589,17 +2589,16 @@ bool CartesianPlot::scaleAutoY(int cSystemIndex, bool fullRange, bool suppressRe
 	return update;
 }
 
-bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange) {
-	DEBUG(Q_FUNC_INFO << ", x/y index = " << xIndex << ' ' << yIndex)
+bool CartesianPlot::scaleAuto(int cSystemIndex, bool fullRange) {
 	Q_D(CartesianPlot);
-	bool updateX = scaleAutoX(xIndex, fullRange, true);
-	bool updateY = scaleAutoY(yIndex, fullRange, true);
+	bool updateX = scaleAutoX(cSystemIndex, fullRange, true);
+	bool updateY = scaleAutoY(cSystemIndex, fullRange, true);
 
 	if (updateX || updateY) {
 		if (updateX)
-			setAutoScaleX(xIndex);
+			setAutoScaleX(cSystemIndex);
 		if (updateY)
-			setAutoScaleY(yIndex);
+			setAutoScaleY(cSystemIndex);
 
 		d->retransformScales();
 	}
@@ -2633,9 +2632,9 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int cSystemIndex, bool
 		Range<int> indexRange{0, 0};
 		if (d->rangeType == RangeType::Free && curve->yColumn()
 				&& !completeRange) {
-			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << yRange().toStdString())
+			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << yRangeCSystem(curve->coordinateSystemIndex()).toStdString())
 			//TODO: Range
-			curve->yColumn()->indicesMinMax(yRange().start(), yRange().end(), indexRange.start(), indexRange.end());
+			curve->yColumn()->indicesMinMax(yRangeCSystem(curve->coordinateSystemIndex()).start(), yRangeCSystem(curve->coordinateSystemIndex()).end(), indexRange.start(), indexRange.end());
 			//if (indexRange.range.end() < curve->yColumn()->rowCount())	// NO
 			//	indexRange.range.end()++;
 		} else {
