@@ -4,7 +4,7 @@
     Description          : Worksheet
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2021 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -339,7 +339,7 @@ void Worksheet::childDeselected(const AbstractAspect* aspect) {
  */
 void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
 	//determine the corresponding aspect
-	const AbstractAspect* aspect(nullptr);
+	AbstractAspect* aspect(nullptr);
 	for (const auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden) ) {
 		aspect = this->aspectFromGraphicsItem(child, item);
 		if (aspect)
@@ -354,6 +354,12 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
 		emit childAspectSelectedInView(aspect);
 	else
 		emit childAspectDeselectedInView(aspect);
+
+	if (layout() == Worksheet::Layout::NoLayout) {
+		auto* container =  dynamic_cast<WorksheetElementContainer*>(aspect);
+		if (container)
+			container->setResizeEnabled(b);
+	}
 }
 
 /*!
@@ -1169,7 +1175,6 @@ void Worksheet::curveAdded(const XYCurve* curve) {
 }
 
 void Worksheet::curveRemoved(const XYCurve* curve) {
-
 	auto* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
 	if (!plot)
 		return;

@@ -314,6 +314,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/spreadsheet/Spreadsheet.cpp
 	${BACKEND_DIR}/spreadsheet/SpreadsheetModel.cpp
 	${BACKEND_DIR}/worksheet/Image.cpp
+	${BACKEND_DIR}/worksheet/ResizeItem.cpp
 	${BACKEND_DIR}/worksheet/WorksheetElement.cpp
 	${BACKEND_DIR}/worksheet/TextLabel.cpp
 	${BACKEND_DIR}/worksheet/InfoElement.cpp

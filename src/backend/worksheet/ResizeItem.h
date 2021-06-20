@@ -1,10 +1,9 @@
 /***************************************************************************
-    File                 : WorksheetElementContainer.h
+    File                 : ResizeItem.h
     Project              : LabPlot
-    Description          : Worksheet element container - parent of multiple elements.
+    Description          : Item allowing to resize worksheet elements with the mouse
     --------------------------------------------------------------------
-    Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2021 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -27,55 +26,67 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef WORKSHEETELEMENTCONTAINER_H
-#define WORKSHEETELEMENTCONTAINER_H
+#ifndef RESIZEITEM_H
+#define RESIZEITEM_H
 
-#include "backend/worksheet/WorksheetElement.h"
+#include <QGraphicsItem>
+#include <QGraphicsRectItem>
 
-class WorksheetElementContainerPrivate;
-class ResizeItem;
+class WorksheetElementContainer;
+class QGraphicsSceneHoverEvent;
 
-class WorksheetElementContainer : public WorksheetElement {
-	Q_OBJECT
-
+class ResizeItem : public QGraphicsItem {
 public:
-	WorksheetElementContainer(const QString&, AspectType);
-	~WorksheetElementContainer() override;
-
-	QGraphicsItem* graphicsItem() const override;
-
-	void setVisible(bool) override;
-	bool isVisible() const override;
-	bool isFullyVisible() const override;
-	void setPrinting(bool) override;
-	void setResizeEnabled(bool);
-
-	QRectF rect() const;
-	virtual void setRect(const QRectF&) = 0;
-	virtual void prepareGeometryChange();
-	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
-
-	typedef WorksheetElementContainerPrivate Private;
-
-public slots:
-	void retransform() override;
-	void childHovered();
-	void childUnhovered();
-
-protected:
-	WorksheetElementContainerPrivate* const d_ptr;
-	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*, AspectType);
-	ResizeItem* m_resizeItem{nullptr};
-
-protected slots:
-	virtual void handleAspectAdded(const AbstractAspect*);
+	ResizeItem(WorksheetElementContainer*);
+	virtual ~ResizeItem();
+	void setRect(QRectF);
 
 private:
-	Q_DECLARE_PRIVATE(WorksheetElementContainer)
+	enum Position {
+		Top         = 0x1,
+		Bottom      = 0x2,
+		Left        = 0x4,
+		TopLeft     = Top | Left,
+		BottomLeft  = Bottom | Left,
+		Right       = 0x8,
+		TopRight    = Top | Right,
+		BottomRight = Bottom | Right
+	};
 
-signals:
-	friend class WorksheetElementContainerSetVisibleCmd;
-	void visibleChanged(bool);
+	class HandleItem : public QGraphicsRectItem {
+	public:
+		HandleItem(int positionFlags, ResizeItem*);
+		int position() const;
+
+	protected:
+		QVariant itemChange(GraphicsItemChange, const QVariant&) override;
+		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
+		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+
+	private:
+		QPointF restrictPosition(const QPointF&);
+		int m_position;
+		ResizeItem* m_parent;
+	};
+
+	QRectF boundingRect() const override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+
+	void setTopLeft(const QPointF&);
+	void setTop(qreal);
+	void setTopRight(const QPointF&);
+	void setRight(qreal);
+	void setBottomRight(const QPointF&);
+	void setBottom(qreal);
+	void setBottomLeft(const QPointF&);
+	void setLeft(qreal);
+
+private:
+	void updateHandleItemPositions();
+
+	QVector<HandleItem*> m_handleItems;
+	QRectF m_rect;
+	WorksheetElementContainer* m_container;
 };
 
-#endif
+#endif // SIZEGRIPITEM_H
