@@ -39,15 +39,15 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 // type - var data type, dtype - container data type
 #define MAT_READ_VAR(type, dtype) \
 	{ \
-	if (var->isComplex) { \
+	if (var->isComplex) { /*TODO: start/end col! */ \
 		mat_complex_split_t* complex_data = (mat_complex_split_t*)var->data; \
 		type* re = (type*)complex_data->Re; \
 		type* im = (type*)complex_data->Im; \
 		if (dataSource) { \
 			for (size_t i = 0; i < actualRows; i++) \
 				for (size_t j = 0; j < actualCols/2; j++) { \
-					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j - (size_t)startColumn+1)])->operator[](i) = re[i + startRow - 1 + j*actualRows]; \
-					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j + 1 - (size_t)startColumn+1)])->operator[](i) = im[i + startRow - 1 + j*actualRows]; \
+					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j - (size_t)startColumn+1)])->operator[](i) = re[i + startRow - 1 + j*rows]; \
+					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j + 1 - (size_t)startColumn+1)])->operator[](i) = im[i + startRow - 1 + j*rows]; \
 				} \
 		} else { /* preview */ \
 			QStringList header; \
@@ -58,7 +58,7 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
 				QStringList row; \
 				for (size_t j = 0; j < actualCols/2; j++) \
-					row << QString::number(re[i + startRow - 1 + j*actualRows]) << QString::number(im[i + startRow - 1 + j*actualRows]); \
+					row << QString::number(re[i + startRow - 1 + j*rows]) << QString::number(im[i + startRow - 1 + j*rows]); \
 				dataStrings << row; \
 			} \
 		} \
@@ -67,12 +67,12 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 		if (dataSource) { \
 			for (size_t i = 0; i < actualRows; i++) \
 				for (size_t j = 0; j < actualCols; j++) \
-					static_cast<QVector<dtype>*>(dataContainer[(int)(j-(size_t)startColumn+1)])->operator[](i) = data[i + startRow - 1 + j*actualRows]; \
+					static_cast<QVector<dtype>*>(dataContainer[(int)j])->operator[](i) = data[i + startRow - 1 + (j + startColumn - 1) * rows]; \
 		} else { /* preview */ \
 			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
 				QStringList row; \
 				for (size_t j = 0; j < actualCols; j++) \
-					row << QString::number(data[i + startRow - 1 + j*actualRows]); \
+					row << QString::number(data[i + startRow - 1 + (j + startColumn - 1) * rows]); \
 				dataStrings << row; \
 			} \
 		} \
@@ -523,8 +523,8 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		actualRows = actualEndRow - startRow + 1;
 		const size_t actualEndColumn = (endColumn == -1 || endColumn > (int)cols) ? cols : endColumn;
 		actualCols = actualEndColumn - startColumn + 1;
-		DEBUG(Q_FUNC_INFO << " actual end rows/cols = " << actualEndRow << " / " << actualEndColumn)
-		DEBUG(Q_FUNC_INFO << " actual rows/cols = " << actualRows << " / " << actualCols)
+		DEBUG(Q_FUNC_INFO << ", actual end row/col = " << actualEndRow << " / " << actualEndColumn)
+		DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << " / " << actualCols)
 
 		if (lines == 0)
 			lines = actualRows;
