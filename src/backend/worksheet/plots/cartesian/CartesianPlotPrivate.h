@@ -58,6 +58,7 @@ public:
 	void mousePressCursorMode(int cursorNumber, QPointF logicalPos);
 	void updateCursor();
 	void setZoomSelectionBandShow(bool show);
+	bool translateRange(int cSystemIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY);
 
 	CartesianPlot::Type type{CartesianPlot::Type::FourAxes};
 	QString theme;

@@ -3723,134 +3723,176 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	}
 }
 
-void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd) {
-	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
-	int index = Worksheet::cSystemIndex(w);
-	if (!w || w->parent(AspectType::CartesianPlot) != q)
-		index = -1;
-	else if (index < 0)
-		index = defaultCoordinateSystemIndex;
-
+bool CartesianPlotPrivate::translateRange(int cSystemIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY)
+{
 	//handle the change in x
-	bool translation = false;
-	if (logicalStart.x() - logicalEnd.x() != 0) { // TODO: find better method
-		translation = true;
+	bool translationX = false, translationY = false;
+	if (translateX && logicalStart.x() - logicalEnd.x() != 0) { // TODO: find better method
+		translationX = true;
 		double start{ logicalStart.x() }, end{ logicalEnd.x() };
-		switch (xRange(index).scale()) {
+		switch (xRange(cSystemIndex).scale()) {
 		case RangeT::Scale::Linear: {
 			const double delta = (start - end);
-			xRange(index).translate(delta);
+			xRange(cSystemIndex).translate(delta);
 			break;
 		}
 		case RangeT::Scale::Log10: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double delta = log10(start / end);
-			xRange(index) *= pow(10, delta);
+			xRange(cSystemIndex) *= pow(10, delta);
 			break;
 		}
 		case RangeT::Scale::Log2: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double delta = log2(start / end);
-			xRange(index) *= exp2(delta);
+			xRange(cSystemIndex) *= exp2(delta);
 			break;
 		}
 		case RangeT::Scale::Ln: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double delta = log(start / end);
-			xRange(index) *= exp(delta);
+			xRange(cSystemIndex) *= exp(delta);
 			break;
 		}
 		case RangeT::Scale::Sqrt: {
 			if (start < 0 || end < 0)
 				break;
 			const double delta = sqrt(start) - sqrt(end);
-			xRange(index).translate(delta*delta);
+			xRange(cSystemIndex).translate(delta*delta);
 			break;
 		}
 		case RangeT::Scale::Square: {
 			if (end <= start)
 				break;
 			const double delta = end*end - start*start;
-			xRange(index).translate(sqrt(delta));
+			xRange(cSystemIndex).translate(sqrt(delta));
 			break;
 		}
 		case RangeT::Scale::Inverse: {
 			if (start == 0. || end == 0. || end <= start)
 				break;
 			const double delta = 1./start - 1./end;
-			xRange(index).translate(1./delta);
+			xRange(cSystemIndex).translate(1./delta);
 			break;
 		}
 		}
 	}
 
-	if (logicalStart.y() - logicalEnd.y() != 0) {
-		translation = true;
+	if (translateY && logicalStart.y() - logicalEnd.y() != 0) {
+		translationY = true;
 		//handle the change in y
 		double start = logicalStart.y();
 		double end = logicalEnd.y();
-		switch (yRange(index).scale()) {
+		switch (yRange(cSystemIndex).scale()) {
 		case RangeT::Scale::Linear: {
 			const double deltaY = (start - end);
-			yRange(index).translate(deltaY);
+			yRange(cSystemIndex).translate(deltaY);
 			break;
 		}
 		case RangeT::Scale::Log10: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double deltaY = log10(start / end);
-			yRange(index) *= pow(10, deltaY);
+			yRange(cSystemIndex) *= pow(10, deltaY);
 			break;
 		}
 		case RangeT::Scale::Log2: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double deltaY = log2(start / end);
-			yRange(index) *= exp2(deltaY);
+			yRange(cSystemIndex) *= exp2(deltaY);
 			break;
 		}
 		case RangeT::Scale::Ln: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double deltaY = log(start / end);
-			yRange(index) *= exp(deltaY);
+			yRange(cSystemIndex) *= exp(deltaY);
 			break;
 		}
 		case RangeT::Scale::Sqrt: {
 			if (start < 0 || end < 0)
 				break;
 			const double delta = sqrt(start) - sqrt(end);
-			yRange(index).translate(delta*delta);
+			yRange(cSystemIndex).translate(delta*delta);
 			break;
 		}
 		case RangeT::Scale::Square: {
 			if (end <= start)
 				break;
 			const double delta = end*end - start*start;
-			yRange(index).translate(sqrt(delta));
+			yRange(cSystemIndex).translate(sqrt(delta));
 			break;
 		}
 		case RangeT::Scale::Inverse: {
 			if (start == 0. || end == 0. || end <= start)
 				break;
 			const double delta = 1./start - 1./end;
-			yRange(index).translate(1./delta);
+			yRange(cSystemIndex).translate(1./delta);
 			break;
 		}
 		}
 	}
 
-	if (translation) {
-		q->setUndoAware(false);
-		q->setAutoScaleX(index, false);
-		q->setAutoScaleY(index, false);
-		q->setUndoAware(true);
+	q->setUndoAware(false);
+	if (translationX)
+		q->setAutoScaleX(cSystemIndex, false);
+	if (translationY)
+		q->setAutoScaleY(cSystemIndex, false);
+	q->setUndoAware(true);
 
-		retransformScales();
+	if (translationX || translationY) {
+		q->setXRangeDirty(cSystemIndex, true);
+		q->setYRangeDirty(cSystemIndex, true);
 	}
+
+	return translationX || translationY;
+}
+
+void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd) {
+	const bool autoscaleRanges = true; // consumes a lot of power, maybe making an option to turn off/on!
+	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	int index = Worksheet::cSystemIndex(w);
+	if (!w || w->parent(AspectType::CartesianPlot) != q)
+		index = -1;
+
+	bool translated = false;
+	if (index < 0) {
+		QVector<int> translatedIndicesX, translatedIndicesY;
+		for (int i=0; i < q->m_coordinateSystems.count(); i++) {
+			bool translateX = !translatedIndicesX.contains(static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[i])->xIndex());
+			bool translateY = !translatedIndicesY.contains(static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[i])->yIndex());
+			if (translateRange(i, logicalStart, logicalEnd, translateX, translateY)) {
+				translated = true;
+				if (autoscaleRanges && logicalStart.y() == logicalEnd.y() && autoScaleY(i)) {
+					// only x was changed, so autoscale y
+					q->scaleAutoY(i, false, true);
+				}
+				if (autoscaleRanges && logicalStart.x() == logicalEnd.x() && autoScaleX(i)) {
+					// only y was changed, so autoscale x
+					q->scaleAutoX(i, false, true);
+				}
+			}
+			translatedIndicesX.append(static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[i])->xIndex());
+			translatedIndicesY.append(static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[i])->yIndex());
+		}
+	} else {
+		translated = translateRange(index, logicalStart, logicalEnd, true, true);
+		if (autoscaleRanges && logicalStart.y() == logicalEnd.y() && autoScaleY(index)) {
+			// only x was changed, so autoscale y
+			q->scaleAutoY(index, false, true);
+		}
+		if (autoscaleRanges && logicalStart.x() == logicalEnd.x() && autoScaleX(index)) {
+			// only y was changed, so autoscale x
+			q->scaleAutoX(index, false, true);
+		}
+	}
+
+	if (translated)
+		retransformScales();
 }
 
 void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex) {
@@ -3943,6 +3985,8 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		newRect.setY(y - h/2);
 		newRect.setWidth(w);
 		newRect.setHeight(h);
+
+		// TODO: autoscale
 
 		suppressRetransform = true;
 		q->setRect(newRect);
