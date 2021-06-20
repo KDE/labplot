@@ -2169,12 +2169,12 @@ void AxisPrivate::retransformMinorGrid() {
 
 	QVector<QLineF> lines;
 	if (orientation == Axis::Orientation::Horizontal) { //horizontal axis
-		const Range<double> yRange{plot()->yRange_(q->cSystem->yIndex())};
+		const Range<double> yRange{plot()->yRangeFromIndex(q->cSystem->yIndex())};
 
 		for (const auto& point : logicalMinorTickPoints)
 			lines.append( QLineF(point.x(), yRange.start(), point.x(), yRange.end()) );
 	} else { //vertical axis
-		const Range<double> xRange{plot()->xRange_(q->cSystem->xIndex())};
+		const Range<double> xRange{plot()->xRangeFromIndex(q->cSystem->xIndex())};
 
 		for (const auto& point: logicalMinorTickPoints)
 			lines.append( QLineF(xRange.start(), point.y(), xRange.end(), point.y()) );

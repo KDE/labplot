@@ -1300,11 +1300,11 @@ const Range<double>& CartesianPlot::yRange() const {
 	Q_D(const CartesianPlot);
 	return d->yRanges.at( defaultCoordinateSystem()->yIndex() ).range;
 }
-const Range<double>& CartesianPlot::xRange_(const int index) const {
+const Range<double>& CartesianPlot::xRangeFromIndex(const int index) const {
 	Q_D(const CartesianPlot);
 	return d->xRanges.at(index).range;
 }
-const Range<double>& CartesianPlot::yRange_(const int index) const {
+const Range<double>& CartesianPlot::yRangeFromIndex(const int index) const {
 	Q_D(const CartesianPlot);
 	return d->yRanges.at(index).range;
 }
@@ -1402,28 +1402,28 @@ void CartesianPlot::removeYRange(int index) {
 }
 void CartesianPlot::setXMin(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO)
-	Range<double> range{ xRange_(index) };
+	Range<double> range{ xRangeFromIndex(index) };
 	range.setStart(value);
 
 	setXRange(index, range);
 }
 void CartesianPlot::setXMax(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO)
-	Range<double> range{ xRange_(index) };
+	Range<double> range{ xRangeFromIndex(index) };
 	range.setEnd(value);
 
 	setXRange(index, range);
 }
 void CartesianPlot::setYMin(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO)
-	Range<double> range{ yRange_(index) };
+	Range<double> range{ yRangeFromIndex(index) };
 	range.setStart(value);
 
 	setYRange(index, range);
 }
 void CartesianPlot::setYMax(const int index, const double value) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " value = " << value)
-	Range<double> range{ yRange_(index) };
+	Range<double> range{ yRangeFromIndex(index) };
 	range.setEnd(value);
 
 	setYRange(index, range);
@@ -1498,7 +1498,7 @@ RangeT::Scale CartesianPlot::yRangeScale(const int index) const {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return RangeT::Scale::Linear;
 	}
-	return yRange_(index).scale();
+	return yRangeFromIndex(index).scale();
 }
 void CartesianPlot::setXRangeScale(const RangeT::Scale scale) {
 	setXRangeScale(defaultCoordinateSystem()->xIndex(), scale);
@@ -4678,7 +4678,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("xMin").toString());
 				else {
 					d->xRanges[0].range.start() = str.toDouble();
-					d->xPrevRange.start() = xRange_(0).start();
+					d->xPrevRange.start() = xRangeFromIndex(0).start();
 				}
 
 				str = attribs.value("xMax").toString();
@@ -4686,7 +4686,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("xMax").toString());
 				else {
 					d->xRanges[0].range.end() = str.toDouble();
-					d->xPrevRange.end() = xRange_(0).end();
+					d->xPrevRange.end() = xRangeFromIndex(0).end();
 				}
 
 				str = attribs.value("yMin").toString();
@@ -4694,7 +4694,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("yMin").toString());
 				else {
 					d->yRanges[0].range.start() = str.toDouble();
-					d->yPrevRange.start() = yRange_(0).start();
+					d->yPrevRange.start() = yRangeFromIndex(0).start();
 				}
 
 				str = attribs.value("yMax").toString();
@@ -4702,7 +4702,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("yMax").toString());
 				else {
 					d->yRanges[0].range.end() = str.toDouble();
-					d->yPrevRange.end() = yRange_(0).end();
+					d->yPrevRange.end() = yRangeFromIndex(0).end();
 				}
 
 				str = attribs.value("xScale").toString();

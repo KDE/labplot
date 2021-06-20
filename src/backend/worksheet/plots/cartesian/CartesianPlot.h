@@ -152,8 +152,8 @@ public:
 	const Range<double>& yRange() const;		// get y range of default plot range
 	void setXRange(const Range<double>);		// set x range of default plot range
 	void setYRange(const Range<double>);		// set y range of default plot range
-	const Range<double>& xRange_(const int index) const;
-	const Range<double>& yRange_(const int index) const;
+	const Range<double>& xRangeFromIndex(const int index) const;
+	const Range<double>& yRangeFromIndex(const int index) const;
 	const Range<double> &xRangeCSystem(int cSystemIndex) const;
 	void setXRange(int index, const Range<double>& value);
 	const Range<double> &yRangeCSystem(int cSystemIndex) const;
