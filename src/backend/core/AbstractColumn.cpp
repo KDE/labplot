@@ -430,8 +430,7 @@ void AbstractColumn::setHeatmapFormat(const AbstractColumn::HeatmapFormat& forma
 }
 
 void AbstractColumn::removeFormat() {
-	delete d->m_heatmapFormat;
-	d->m_heatmapFormat = nullptr;
+	exec(new AbstractColumnRemoveHeatmapFormatCmd(d));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

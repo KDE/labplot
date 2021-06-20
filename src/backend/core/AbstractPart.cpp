@@ -126,7 +126,7 @@ QMenu* AbstractPart::createContextMenu() {
 			menu->addSeparator();
 		}
 
-		menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, SIGNAL(exportRequested()));
+		menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, &AbstractPart::exportRequested);
 		menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
 		menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
 		menu->addSeparator();
