@@ -1771,25 +1771,23 @@ void MainWin::newDatapicker() {
 	Datapicker* datapicker = new Datapicker(i18n("Datapicker"));
 	this->addAspectToProject(datapicker);
 }
+
 /*!
 	adds a new Spreadsheet to the project.
 */
 void MainWin::newSpreadsheet() {
 	Spreadsheet* spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
 
-	//if the current active window is a workbook and no folder/project is selected in the project explorer,
-	//add the new spreadsheet to the workbook
+	//if the current active window is a workbook or one of its children,
+	//add the new matrix to the workbook
 	Workbook* workbook = dynamic_cast<Workbook*>(m_currentAspect);
-	if (workbook) {
-		QModelIndex index = m_projectExplorer->currentIndex();
-		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		if (!aspect->inherits(AspectType::Folder)) {
-			workbook->addChild(spreadsheet);
-			return;
-		}
-	}
+	if (!workbook)
+		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
 
-	this->addAspectToProject(spreadsheet);
+	if (workbook)
+		workbook->addChild(spreadsheet);
+	else
+		this->addAspectToProject(spreadsheet);
 }
 
 /*!
@@ -1798,19 +1796,16 @@ void MainWin::newSpreadsheet() {
 void MainWin::newMatrix() {
 	Matrix* matrix = new Matrix(i18n("Matrix"));
 
-	//if the current active window is a workbook and no folder/project is selected in the project explorer,
+	//if the current active window is a workbook or one of its children,
 	//add the new matrix to the workbook
 	Workbook* workbook = dynamic_cast<Workbook*>(m_currentAspect);
-	if (workbook) {
-		QModelIndex index = m_projectExplorer->currentIndex();
-		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		if (!aspect->inherits(AspectType::Folder)) {
-			workbook->addChild(matrix);
-			return;
-		}
-	}
+	if (!workbook)
+		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
 
-	this->addAspectToProject(matrix);
+	if (workbook)
+		workbook->addChild(matrix);
+	else
+		this->addAspectToProject(matrix);
 }
 
 /*!
