@@ -2132,7 +2132,8 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	if (preview)	// results not available yet
 		paramValues = fitData.paramStartValues;
 
-	bool rc = parser->evaluateCartesian(fitData.model, QString::number(xRange.start()), QString::number(xRange.end()), (int)fitData.evaluatedPoints,
+	SET_NUMBER_LOCALE
+	bool rc = parser->evaluateCartesian(fitData.model, numberLocale.toString(xRange.start()), numberLocale.toString(xRange.end()), (int)fitData.evaluatedPoints,
 						xVector, yVector, fitData.paramNames, paramValues);
 	if (!rc) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Parsing fit function failed")
