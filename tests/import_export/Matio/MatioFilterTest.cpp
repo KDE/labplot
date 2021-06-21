@@ -112,10 +112,41 @@ void MatioFilterTest::testImportSpreadsheet() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0);
 
 	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
-
 }
 
-//TODO: same test but with start/end row/col
+// same test but with start/end row/col
+void MatioFilterTest::testImportSpreadsheetPortion() {
+	Spreadsheet spreadsheet("test", false);
+	MatioFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testmatrix_7.4_GLNX86.mat"));
+	filter.setCurrentVarName(QLatin1String("testmatrix"));
+	const auto mode = AbstractFileFilter::ImportMode::Replace;
+	// set start/end row/col
+	filter.setStartRow(2);
+	filter.setEndRow(3);
+	filter.setStartColumn(2);
+	filter.setEndColumn(3);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0);
+
+	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
+}
 
 void MatioFilterTest::testImportMatrix() {
 	Matrix matrix("test", false);
