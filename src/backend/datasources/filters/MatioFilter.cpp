@@ -636,9 +636,13 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			//set actualRows
 			matvar_t **fields = (matvar_t **)var->data;
 			for (int i = 0; i < nfields; i++) {
-				if (fields[i]->name)
-					vectorNames << fields[i]->name;
-				else
+				if (fields[i]->name) {
+					//TODO: not needed when supporting complex column mode
+					if (fields[i]->isComplex)
+						vectorNames << fields[i]->name + QLatin1String(" - Re") << fields[i]->name + QLatin1String(" - Im");
+					else
+						vectorNames << fields[i]->name;
+				} else
 					vectorNames << QLatin1String("Column ") + QString::number(i);
 			}
 			for (int i = 0; i < nfields * nelem; i++) {
@@ -654,6 +658,10 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 						actualRows = size;
 				} else
 					DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
+
+				//TODO: not needed when supporting complex column mode
+				if (fields[i]->isComplex)	// if complex: add column
+					actualCols++;
 			}
 			DEBUG(Q_FUNC_INFO << ", Setting rows/cols to: " << actualRows << "/" << actualCols)
 			if (!dataSource) {
@@ -862,9 +870,13 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				//TODO
 			} else {	// preview
 				dataStrings[0] = vectorNames;
+				int colIndex = 1;
 				for (int i = 0; i < nfields * nelem; i++) {
 					const int field = i % nfields;
 					const int elem = i/nfields;
+					if (field == 1)
+						colIndex = 1;
+
 					DEBUG(Q_FUNC_INFO << ", var " << i + 1 << "(field " << field + 1 << ", elem " << elem + 1 <<"): name = " << fields[i]->name
 							<< ", type = " << className(fields[i]->class_type).toStdString())
 
@@ -877,7 +889,8 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 							if (fields[i]->rank == 2) {
 								DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
 								for (size_t j = 0; j < qMin(fields[i]->dims[0] * fields[i]->dims[1], lines); j++) {
-									if (im[j] < 0)
+									//TODO: use when complex column  mode is supported
+									/*if (im[j] < 0)
 										dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" - ")
 											+ QString::number(fabs(im[j])) + QLatin1String("i");
 									else if (im[j] == 0)
@@ -887,9 +900,14 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 									else
 										dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" + ")
 											+ QString::number(im[j]) + QLatin1String("i");
+									*/
+
+									dataStrings[j+1][colIndex] = QString::number(re[j]);
+									dataStrings[j+1][colIndex+1] = QString::number(im[j]);
 								}
 							} else
 								DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank << " not supported")
+							colIndex++;	// complex uses two cols
 						} else {	// real
 							double* data = (double*)fields[i]->data;
 							if (fields[i]->rank == 2) {
@@ -927,6 +945,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 							}
 						}
 					}
+					colIndex++;
 				}
 			}
 			break;
