@@ -3844,12 +3844,14 @@ bool CartesianPlotPrivate::translateRange(int cSystemIndex, const QPointF& logic
 		q->setAutoScaleY(cSystemIndex, false);
 	q->setUndoAware(true);
 
-	if (translationX || translationY) {
+	// If x or y should not be translated, means, that it was done before
+	// so the ranges must get dirty.
+	if (translationX || translationY || !translateX || !translateY) {
 		q->setXRangeDirty(cSystemIndex, true);
 		q->setYRangeDirty(cSystemIndex, true);
 	}
 
-	return translationX || translationY;
+	return translationX || translationY || !translateX || !translateY;
 }
 
 void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd) {
@@ -3876,8 +3878,10 @@ void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF 
 					q->scaleAutoX(i, false, true);
 				}
 			}
-			translatedIndicesX.append(static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[i])->xIndex());
-			translatedIndicesY.append(static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[i])->yIndex());
+			if (translateX)
+				translatedIndicesX.append(static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[i])->xIndex());
+			if (translateY)
+				translatedIndicesY.append(static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[i])->yIndex());
 		}
 	} else {
 		translated = translateRange(index, logicalStart, logicalEnd, true, true);
