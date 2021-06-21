@@ -49,6 +49,7 @@ public:
 #ifdef HAVE_MATIO
 	static QString className(matio_classes classType);
 	static QString typeName(matio_types dataType);
+	static AbstractColumn::ColumnMode classMode(matio_classes classType);
 	static AbstractColumn::ColumnMode typeMode(matio_types dataType);
 #endif
 

@@ -111,8 +111,14 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 		mat_complex_split_t* complex_data = (mat_complex_split_t*)fields[i]->data; \
 		type* re = (type*)complex_data->Re; \
 		type* im = (type*)complex_data->Im; \
-		if (fields[i]->rank == 2) { \
-			DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")") \
+		\
+		DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")") \
+		if (dataSource) { \
+			for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) { \
+				static_cast<QVector<type>*>(dataContainer[colIndex])->operator[](j) = re[j]; \
+				static_cast<QVector<type>*>(dataContainer[colIndex+1])->operator[](j) = im[j]; \
+			} \
+		} else { \
 			for (size_t j = 0; j < qMin(fields[i]->dims[0] * fields[i]->dims[1], lines); j++) { \
 				/* TODO: use when complex column  mode is supported */ \
 				/* if (im[j] < 0) \
@@ -129,21 +135,21 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 				dataStrings[j+1][colIndex] = QString::number(re[j]); \
 				dataStrings[j+1][colIndex+1] = QString::number(im[j]); \
 			} \
-		} else \
-			DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank << " not supported") \
+		} \
 		colIndex++;	/* complex uses two columns atm */ \
 	} else {	/* real */ \
 		type* data = (type*)fields[i]->data; \
-		if (fields[i]->rank == 2) { \
-			DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")") \
-			for (size_t j = 0; j < qMin(fields[i]->dims[0] * fields[i]->dims[1], lines); j++) { \
-				/* DEBUG(Q_FUNC_INFO << ", data " << j + 1 << " : " << data[j]) */ \
-				/* DEBUG(Q_FUNC_INFO << ", set rows/col " << j << "/" << field << " to " << data[j]) */ \
-				/* DEBUG(Q_FUNC_INFO << ", dataStrings size = " << dataStrings.size() << "/" << dataStrings[0].size()) */ \
-				dataStrings[j+1][field] = QString::number(data[j]); \
-			} \
-		} else \
-			DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank << " not supported") \
+		DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")") \
+		if (dataSource) { \
+			for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) \
+				static_cast<QVector<type>*>(dataContainer[colIndex])->operator[](j) = data[j]; \
+		} else { /* preview */ \
+			/* DEBUG(Q_FUNC_INFO << ", data " << j + 1 << " : " << data[j]) */ \
+			/* DEBUG(Q_FUNC_INFO << ", set rows/col " << j << "/" << field << " to " << data[j]) */ \
+			/* DEBUG(Q_FUNC_INFO << ", dataStrings size = " << dataStrings.size() << "/" << dataStrings[0].size()) */ \
+			for (size_t j = 0; j < qMin(fields[i]->dims[0] * fields[i]->dims[1], lines); j++) \
+				dataStrings[j+1][colIndex] = QString::number(data[j]); \
+		} \
 	} \
 	}
 //////////////////////////////////////////////////////////////////////
@@ -410,6 +416,39 @@ QString MatioFilterPrivate::typeName(matio_types dataType) {
 	}
 
 	return i18n("Undefined");
+}
+
+AbstractColumn::ColumnMode MatioFilterPrivate::classMode(matio_classes classType) {
+	switch (classType) {
+	case MAT_C_INT8:
+	case MAT_C_UINT8:
+	case MAT_C_INT16:
+	case MAT_C_UINT16:
+	case MAT_C_INT32:
+	case MAT_C_UINT32:
+		return AbstractColumn::ColumnMode::Integer;
+		break;
+	case MAT_C_INT64:
+	case MAT_C_UINT64:
+		return AbstractColumn::ColumnMode::BigInt;
+		break;
+	case MAT_C_CHAR:
+		return AbstractColumn::ColumnMode::Text;
+		break;
+	case MAT_C_EMPTY:
+	case MAT_C_CELL:
+	case MAT_C_STRUCT:
+	case MAT_C_OBJECT:
+	case MAT_C_SPARSE:
+	case MAT_C_DOUBLE:
+	case MAT_C_SINGLE:
+	case MAT_C_FUNCTION:
+	case MAT_C_OPAQUE:
+		break;
+	}
+
+	return AbstractColumn::ColumnMode::Numeric;
+
 }
 
 AbstractColumn::ColumnMode MatioFilterPrivate::typeMode(matio_types dataType) {
@@ -710,7 +749,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				columnModes.resize(actualCols);
 				int index = 0;
 				for (int i = 0; i < nfields; i++) {
-					auto mode = typeMode(fields[i]->data_type);
+					auto mode = classMode(fields[i]->class_type);
 					//TODO: not needed when supporting complex column mode
 					if (fields[i]->isComplex)	// additional column for complex
 						columnModes[index++] = mode;
@@ -720,7 +759,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				if (actualRows > lines)
 					actualRows = lines;
 
-				dataStrings.resize(actualRows + 1);	// +1: header
+				dataStrings.resize(actualRows + 1);	// + 1 for header
 				for (auto& string : dataStrings ) {
 					string.reserve(actualCols);
 					for (size_t j = 0; j < actualCols; j++)
@@ -915,91 +954,100 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			DEBUG(Q_FUNC_INFO << ", Reading data ...")
 			matvar_t **fields = (matvar_t **)var->data;
 
-			if (dataSource) {
-				//TODO
-				for (size_t i = 0; i < actualRows; i++)
-					for (size_t j = 0; j < actualCols; j++)
-						static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = i+j;
-			} else {	// preview
+			if (!dataSource)
 				dataStrings[0] = vectorNames;
-				int colIndex = 1;	// count cols (only needed since complex uses two cols atm)
-				for (int i = 0; i < nfields * nelem; i++) {
-					const int field = i % nfields;
-					const int elem = i/nfields;
-					if (field == 1)
-						colIndex = 1;
 
-					DEBUG(Q_FUNC_INFO << ", var " << i + 1 << "(field " << field + 1 << ", elem " << elem + 1 <<"): name = " << fields[i]->name
-							<< ", type = " << className(fields[i]->class_type).toStdString())
+			int colIndex = 1;	// count cols (only needed since complex uses two cols atm)
 
-					switch (fields[i]->class_type) {
-					case MAT_C_INT8:
-						MAT_READ_STRUCT(qint8);
-						break;
-					case MAT_C_UINT8:
-						MAT_READ_STRUCT(quint8);
-						break;
-					case MAT_C_INT16:
-						MAT_READ_STRUCT(qint16);
-						break;
-					case MAT_C_UINT16:
-						MAT_READ_STRUCT(quint16);
-						break;
-					case MAT_C_INT32:
-						MAT_READ_STRUCT(qint32);
-						break;
-					case MAT_C_UINT32:
-						MAT_READ_STRUCT(quint32);
-						break;
-					case MAT_C_INT64:
-						MAT_READ_STRUCT(qint64);
-						break;
-					case MAT_C_UINT64:
-						MAT_READ_STRUCT(quint64);
-						break;
-					case MAT_C_SINGLE:
-						MAT_READ_STRUCT(float);
-						break;
-					case MAT_C_DOUBLE:
-						MAT_READ_STRUCT(double);
-						break;
-					case MAT_C_CHAR:
-						if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
-							mat_uint16_t* data = (mat_uint16_t*)fields[i]->data;
-							if (fields[i]->rank == 2) {
-								DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
-							} else
-								DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
-							DEBUG(Q_FUNC_INFO << ", data: \"" << QString::fromUtf16(data).toStdString() << "\"")
-							//TODO: row fields[i]->dims[0]
-							dataStrings[1][field] = QString::fromUtf16(data);
-						} else {
-							char* data = (char*)fields[i]->data;
-							if (fields[i]->data_type == MAT_T_UTF8) {
-								DEBUG(Q_FUNC_INFO << ", data: \"" << QString::fromUtf8(data).toStdString() << "\"")
-								//TODO: row
-								dataStrings[1][field] = QString::fromUtf8(data);
-							} else {
-								DEBUG(Q_FUNC_INFO << ", data: \"" << QString(data).toStdString() << "\"")
-								//TODO: row
-								dataStrings[1][field] = QString(data);
-							}
-						}
-						break;
-					case MAT_C_CELL:
-					case MAT_C_STRUCT:
-					case MAT_C_OBJECT:
-					case MAT_C_SPARSE:
-					case MAT_C_FUNCTION:
-					case MAT_C_OPAQUE:
-						DEBUG(Q_FUNC_INFO << ", not support struct field class type " << className(fields[i]->class_type).toStdString())
-						break;
-					case MAT_C_EMPTY:
-						break;
-					}
-
-					colIndex++;
+			for (int i = 0; i < nfields * nelem; i++) {
+				if (fields[i]->rank > 2) {
+					DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank << " not supported")
+					continue;
 				}
+				const int field = i % nfields;
+				const int elem = i/nfields;
+				if (field == 1)
+					colIndex = 1;
+
+				DEBUG(Q_FUNC_INFO << ", var " << i + 1 << "(field " << field + 1 << ", elem " << elem + 1 <<"): name = " << fields[i]->name
+						<< ", type = " << className(fields[i]->class_type).toStdString())
+
+				switch (fields[i]->class_type) {
+				case MAT_C_INT8:
+					MAT_READ_STRUCT(qint8);
+					break;
+				case MAT_C_UINT8:
+					MAT_READ_STRUCT(quint8);
+					break;
+				case MAT_C_INT16:
+					MAT_READ_STRUCT(qint16);
+					break;
+				case MAT_C_UINT16:
+					MAT_READ_STRUCT(quint16);
+					break;
+				case MAT_C_INT32:
+					MAT_READ_STRUCT(qint32);
+					break;
+				case MAT_C_UINT32:
+					MAT_READ_STRUCT(quint32);
+					break;
+				case MAT_C_INT64:
+					MAT_READ_STRUCT(qint64);
+					break;
+				case MAT_C_UINT64:
+					MAT_READ_STRUCT(quint64);
+					break;
+				case MAT_C_SINGLE:
+					MAT_READ_STRUCT(float);
+					break;
+				case MAT_C_DOUBLE:
+					MAT_READ_STRUCT(double);
+					break;
+				case MAT_C_CHAR:
+					if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
+						mat_uint16_t* data = (mat_uint16_t*)fields[i]->data;
+						if (fields[i]->rank == 2) {
+							DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
+						} else
+							DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
+						DEBUG(Q_FUNC_INFO << ", UTF16 data: \"" << QString::fromUtf16(data).toStdString() << "\"")
+						//TODO: row
+						if (dataSource)
+							static_cast<QVector<QString>*>(dataContainer[colIndex - 1])->operator[](0) = QString::fromUtf16(data);
+						else
+							dataStrings[1][colIndex - 1] = QString::fromUtf16(data);
+					} else {
+						char* data = (char*)fields[i]->data;
+						if (fields[i]->data_type == MAT_T_UTF8) {
+							DEBUG(Q_FUNC_INFO << ", UTF8 data: \"" << QString::fromUtf8(data).toStdString() << "\"")
+							//TODO: row
+							if (dataSource)
+								static_cast<QVector<QString>*>(dataContainer[colIndex - 1])->operator[](0) = QString::fromUtf8(data);
+							else
+								dataStrings[1][colIndex - 1] = QString::fromUtf8(data);
+						} else {
+							DEBUG(Q_FUNC_INFO << ", STRING data: \"" << QString(data).toStdString() << "\"")
+							//TODO: row
+							if (dataSource)
+								static_cast<QVector<QString>*>(dataContainer[colIndex - 1])->operator[](0) = QString(data);
+							else
+								dataStrings[1][colIndex - 1] = QString(data);
+						}
+					}
+					break;
+				case MAT_C_CELL:
+				case MAT_C_STRUCT:
+				case MAT_C_OBJECT:
+				case MAT_C_SPARSE:
+				case MAT_C_FUNCTION:
+				case MAT_C_OPAQUE:
+					DEBUG(Q_FUNC_INFO << ", not support struct field class type " << className(fields[i]->class_type).toStdString())
+					break;
+				case MAT_C_EMPTY:
+					break;
+				}
+
+				colIndex++;
 			}
 			break;
 		}
