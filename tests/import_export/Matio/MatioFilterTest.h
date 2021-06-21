@@ -43,6 +43,7 @@ private slots:
 	void testImportMatrix();
 
 	void testImportSparse();
+	void testImportStruct();
 	void testImportCell();
 };
 

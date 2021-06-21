@@ -230,7 +230,40 @@ void MatioFilterTest::testImportSparse() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0);
 
 	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
+}
 
+void MatioFilterTest::testImportStruct() {
+	Spreadsheet spreadsheet("test", false);
+	MatioFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/teststruct_7.4_GLNX86.mat"));
+	filter.setCurrentVarName(QLatin1String("teststruct"));
+	const auto mode = AbstractFileFilter::ImportMode::Replace;
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.columnCount(), 4);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Text);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(3)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("stringfield"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("doublefield"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("complexfield - Re"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("complexfield - Im"));
+
+	QCOMPARE(spreadsheet.column(0)->textAt(0), QLatin1String("Rats live on no evil star."));
+	for (int i = 1; i < 4; i++) {
+		QCOMPARE(spreadsheet.column(i)->valueAt(0), M_SQRT2);
+		QCOMPARE(spreadsheet.column(i)->valueAt(1), M_E);
+		QCOMPARE(spreadsheet.column(i)->valueAt(2), M_PI);
+	}
 }
 
 void MatioFilterTest::testImportCell() {
@@ -270,7 +303,6 @@ void MatioFilterTest::testImportCell() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 3);
 
 	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
-
 }
 
 QTEST_MAIN(MatioFilterTest)
