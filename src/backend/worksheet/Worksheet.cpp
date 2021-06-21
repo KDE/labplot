@@ -355,10 +355,31 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
 	else
 		emit childAspectDeselectedInView(aspect);
 
+	//handle the resize items on selection changes
 	if (layout() == Worksheet::Layout::NoLayout) {
-		auto* container =  dynamic_cast<WorksheetElementContainer*>(aspect);
-		if (container)
-			container->setResizeEnabled(b);
+		//only one selected plot can be made resizable
+		if (b) {
+			const auto& items = m_view->selectedItems();
+			if (items.size() == 1) {
+				//only one object is selected.
+				//make it resiable if its a container
+				auto* container = dynamic_cast<WorksheetElementContainer*>(aspect);
+				if (container)
+					container->setResizeEnabled(true);
+			} else if (items.size() > 1) {
+				//multiple objects are selected, make all containers non-resizable
+				const auto& elements = children<WorksheetElement>();
+				for (auto* element : elements) {
+					auto* container =  dynamic_cast<WorksheetElementContainer*>(element);
+					if (container)
+						container->setResizeEnabled(false);
+				}
+			}
+		} else {
+			auto* container = dynamic_cast<WorksheetElementContainer*>(aspect);
+			if (container)
+				container->setResizeEnabled(false);
+		}
 	}
 }
 
@@ -1394,10 +1415,27 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	if (suppressLayoutUpdate)
 		return;
 
-	auto list = q->children<WorksheetElementContainer>();
+	const auto& list = q->children<WorksheetElementContainer>();
 	int count = list.count();
 	if (count == 0)
 		return;
+
+	//determine the currently selected plot/container and make it
+	//resizable or not depending on the layout settings
+	bool resizable = (layout == Worksheet::Layout::NoLayout);
+	const auto& items = q->m_view->selectedItems();
+	if (items.size() == 1) {
+		const auto& item = items.constFirst();
+		const auto& children = q->children<WorksheetElement>();
+		for (auto* child : children) {
+			if (child->graphicsItem() == item) {
+				auto* container =  dynamic_cast<WorksheetElementContainer*>(child);
+				if (container)
+					container->setResizeEnabled(resizable);
+				break;
+			}
+		}
+	}
 
 	if (layout == Worksheet::Layout::NoLayout) {
 		for (auto* elem : list)

@@ -1933,6 +1933,10 @@ void WorksheetView::suppressSelectionChangedEvent(bool value) {
 	m_suppressSelectionChangedEvent = value;
 }
 
+QList<QGraphicsItem*> WorksheetView::selectedItems() const {
+	return m_selectedItems;
+}
+
 void WorksheetView::registerShortcuts() {
 	selectAllAction->setShortcut(Qt::CTRL+Qt::Key_A);
 	deleteAction->setShortcut(Qt::Key_Delete);

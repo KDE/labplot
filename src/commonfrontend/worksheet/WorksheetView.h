@@ -78,6 +78,7 @@ public:
 	void setCartesianPlotCursorMode(Worksheet::CartesianPlotActionMode mode);
 	void setPlotLock(bool lock);
 	void suppressSelectionChangedEvent(bool);
+	QList<QGraphicsItem*> selectedItems() const;
 
 	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
 	void registerShortcuts();
