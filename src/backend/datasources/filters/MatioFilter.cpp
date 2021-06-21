@@ -39,15 +39,16 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 // type - var data type, dtype - container data type
 #define MAT_READ_VAR(type, dtype) \
 	{ \
-	if (var->isComplex) { /*TODO: start/end col! */ \
+	if (var->isComplex) { \
 		mat_complex_split_t* complex_data = (mat_complex_split_t*)var->data; \
 		type* re = (type*)complex_data->Re; \
 		type* im = (type*)complex_data->Im; \
 		if (dataSource) { \
 			for (size_t i = 0; i < actualRows; i++) \
 				for (size_t j = 0; j < actualCols/2; j++) { \
-					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j - (size_t)startColumn+1)])->operator[](i) = re[i + startRow - 1 + j*rows]; \
-					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j + 1 - (size_t)startColumn+1)])->operator[](i) = im[i + startRow - 1 + j*rows]; \
+					const size_t index = i + startRow - 1 + (j + startColumn - 1) * rows; \
+					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j)])->operator[](i) = re[index]; \
+					static_cast<QVector<dtype>*>(dataContainer[(int)(2*j + 1)])->operator[](i) = im[index]; \
 				} \
 		} else { /* preview */ \
 			QStringList header; \
@@ -57,8 +58,10 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 			dataStrings << header; \
 			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
 				QStringList row; \
-				for (size_t j = 0; j < actualCols/2; j++) \
-					row << QString::number(re[i + startRow - 1 + j*rows]) << QString::number(im[i + startRow - 1 + j*rows]); \
+				for (size_t j = 0; j < actualCols/2; j++) { \
+					const size_t index = i + startRow - 1 + (j + startColumn - 1) * rows; \
+					row << QString::number(re[index]) << QString::number(im[index]); \
+				} \
 				dataStrings << row; \
 			} \
 		} \
@@ -66,8 +69,10 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 		const type *data = static_cast<const type*>(var->data); \
 		if (dataSource) { \
 			for (size_t i = 0; i < actualRows; i++) \
-				for (size_t j = 0; j < actualCols; j++) \
-					static_cast<QVector<dtype>*>(dataContainer[(int)j])->operator[](i) = data[i + startRow - 1 + (j + startColumn - 1) * rows]; \
+				for (size_t j = 0; j < actualCols; j++) { \
+					const size_t index = i + startRow - 1 + (j + startColumn - 1) * rows; \
+					static_cast<QVector<dtype>*>(dataContainer[(int)j])->operator[](i) = data[index]; \
+				} \
 		} else { /* preview */ \
 			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
 				QStringList row; \

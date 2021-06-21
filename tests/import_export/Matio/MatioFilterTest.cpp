@@ -115,6 +115,8 @@ void MatioFilterTest::testImportSpreadsheet() {
 
 }
 
+//TODO: same test but with start/end row/col
+
 void MatioFilterTest::testImportMatrix() {
 	Matrix matrix("test", false);
 	MatioFilter filter;
