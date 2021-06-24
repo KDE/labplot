@@ -2594,6 +2594,21 @@ bool CartesianPlot::scaleAuto(int cSystemIndex, bool fullRange) {
 	bool updateX = scaleAutoX(cSystemIndex, fullRange, true);
 	bool updateY = scaleAutoY(cSystemIndex, fullRange, true);
 
+	// x range is dirty, because scaleAutoY sets it to dirty.
+	if (cSystemIndex <= 0)
+	{
+		for (int i=0; i < m_coordinateSystems.count(); i++)
+		{
+			setXRangeDirty(static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i])->xIndex(), false);
+			//setYRangeDirty(static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i])->yIndex(), false);
+		}
+	}
+	else
+	{
+		setXRangeDirty(static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex(), false);
+		//setYRangeDirty(static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex(), false);
+	}
+
 	if (updateX || updateY) {
 		if (updateX)
 			setAutoScaleX(cSystemIndex);
