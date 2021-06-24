@@ -778,7 +778,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 		if (scaleAutoX(cSystemIndex, true)) {
 			auto cs_ = coordinateSystem(cSystemIndex);
 			for (int i=0; i < m_coordinateSystems.count(); i++) {
-				auto cs = static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i]);
+				auto cs = coordinateSystem(i);
 				if ((cSystemIndex == -1 || cs_->xIndex() == cs->xIndex()) && autoScaleY(i))
 					scaleAutoY(cSystemIndex);
 			}
@@ -787,7 +787,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 		if (scaleAutoY(cSystemIndex, true)) {
 			auto cs_ = coordinateSystem(cSystemIndex);
 			for (int i=0; i < m_coordinateSystems.count(); i++) {
-				auto cs = static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i]);
+				auto cs = coordinateSystem(i);
 				if ((cSystemIndex == -1 || cs_->yIndex() == cs->yIndex()) && autoScaleX(i))
 					scaleAutoX(cSystemIndex);
 			}
@@ -1327,23 +1327,23 @@ const Range<double>& CartesianPlot::yRangeFromIndex(const int index) const {
 
 const Range<double>& CartesianPlot::xRangeCSystem(const int cSystemIndex) const {
 	Q_D(const CartesianPlot);
-	return d->xRanges.at(static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex()).range;
+	return d->xRanges.at(coordinateSystem(cSystemIndex)->xIndex()).range;
 }
 const Range<double>& CartesianPlot::yRangeCSystem(const int cSystemIndex) const {
 	Q_D(const CartesianPlot);
-	return d->yRanges.at(static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex()).range;
+	return d->yRanges.at(coordinateSystem(cSystemIndex)->yIndex()).range;
 }
 
 bool CartesianPlot::xRangeDirty(int cSystemIndex)
 {
 	Q_D(CartesianPlot);
-	return d->xRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex()].dirty;
+	return d->xRanges[coordinateSystem(cSystemIndex)->xIndex()].dirty;
 }
 
 bool CartesianPlot::yRangeDirty(int cSystemIndex)
 {
 	Q_D(CartesianPlot);
-	return d->yRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex()].dirty;
+	return d->yRanges[coordinateSystem(cSystemIndex)->yIndex()].dirty;
 }
 
 void CartesianPlot::setXRangeDirty(int cSystemIndex, bool dirty)
@@ -1351,7 +1351,7 @@ void CartesianPlot::setXRangeDirty(int cSystemIndex, bool dirty)
 	Q_D(CartesianPlot);
 
 	if (cSystemIndex >= 0)
-		d->xRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex()].dirty = dirty;
+		d->xRanges[coordinateSystem(cSystemIndex)->xIndex()].dirty = dirty;
 	else {
 		for (auto cSystem: m_coordinateSystems) {
 			d->xRanges[static_cast<CartesianCoordinateSystem*>(cSystem)->xIndex()].dirty = dirty;
@@ -1363,7 +1363,7 @@ void CartesianPlot::setYRangeDirty(int cSystemIndex, bool dirty)
 {
 	Q_D(CartesianPlot);
 	if (cSystemIndex >= 0)
-		d->yRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex()].dirty = dirty;
+		d->yRanges[coordinateSystem(cSystemIndex)->yIndex()].dirty = dirty;
 	else {
 		for (auto cSystem: m_coordinateSystems) {
 			d->yRanges[static_cast<CartesianCoordinateSystem*>(cSystem)->yIndex()].dirty = dirty;
@@ -2268,13 +2268,13 @@ void CartesianPlot::dataChanged(int cSystemIndex) {
 	Q_D(CartesianPlot);
 	if (cSystemIndex == -1) {
 		for (int i=0; i < m_coordinateSystems.count(); i++) {
-			d->xRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i])->xIndex()].dirty = true;
-			d->yRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i])->yIndex()].dirty = true;
+			d->xRanges[coordinateSystem(i)->xIndex()].dirty = true;
+			d->yRanges[coordinateSystem(i)->yIndex()].dirty = true;
 		}
 		// no return!
 	} else {
-		d->xRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex()].dirty = true;
-		d->yRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex()].dirty = true;
+		d->xRanges[coordinateSystem(cSystemIndex)->xIndex()].dirty = true;
+		d->yRanges[coordinateSystem(cSystemIndex)->yIndex()].dirty = true;
 	}
 
 	const bool updated{ autoScale(cSystemIndex) };
@@ -2313,11 +2313,11 @@ void CartesianPlot::xDataChanged(int cSystemIndex) {
 
 	if (cSystemIndex == -1) {
 		for (int i=0; i < m_coordinateSystems.count(); i++) {
-			d->xRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i])->xIndex()].dirty = true;
+			d->xRanges[coordinateSystem(i)->xIndex()].dirty = true;
 		}
 		// no return!
 	} else {
-		d->xRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex()].dirty = true;
+		d->xRanges[coordinateSystem(cSystemIndex)->xIndex()].dirty = true;
 	}
 
 	bool updated = false;
@@ -2368,11 +2368,11 @@ void CartesianPlot::yDataChanged(int cSystemIndex) {
 
 	if (cSystemIndex == -1) {
 		for (int i=0; i < m_coordinateSystems.count(); i++) {
-			d->yRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i])->yIndex()].dirty = true;
+			d->yRanges[coordinateSystem(i)->yIndex()].dirty = true;
 		}
 		// no return!
 	} else {
-		d->yRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex()].dirty = true;
+		d->yRanges[coordinateSystem(cSystemIndex)->yIndex()].dirty = true;
 	}
 
 	bool updated = false;
@@ -2506,10 +2506,10 @@ bool CartesianPlot::scaleAutoX(int cSystemIndex, bool fullRange, bool suppressRe
 		calculateCurvesXMinMax(cSystemIndex, fullRange);
 		//if (fullRange)
 			setXRangeDirty(cSystemIndex, false);
-		auto xIndex = static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex();
+		auto xIndex = coordinateSystem(cSystemIndex)->xIndex();
 		for (int i=0; i < m_coordinateSystems.count(); i++)
 		{
-			auto cs = static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i]);
+			auto cs = coordinateSystem(i);
 			if (cs->xIndex() == xIndex)
 				setYRangeDirty(i, true);
 		}
@@ -2576,11 +2576,11 @@ bool CartesianPlot::scaleAutoY(int cSystemIndex, bool fullRange, bool suppressRe
 		//if (fullRange)
 			setYRangeDirty(cSystemIndex, false);
 
-		auto yIndex = static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex();
+		auto yIndex = coordinateSystem(cSystemIndex)->yIndex();
 		for (int i=0; i < m_coordinateSystems.count(); i++)
 		{
 			// All x ranges with this yIndex must be dirty
-			auto cs = static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i]);
+			auto cs = coordinateSystem(i);
 			if (cs->yIndex() == yIndex)
 				setXRangeDirty(i, true);
 		}
@@ -2631,14 +2631,14 @@ bool CartesianPlot::scaleAuto(int cSystemIndex, bool fullRange) {
 	{
 		for (int i=0; i < m_coordinateSystems.count(); i++)
 		{
-			setXRangeDirty(static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i])->xIndex(), false);
-			//setYRangeDirty(static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[i])->yIndex(), false);
+			setXRangeDirty(coordinateSystem(i)->xIndex(), false);
+			//setYRangeDirty(coordinateSystem(i)->yIndex(), false);
 		}
 	}
 	else
 	{
-		setXRangeDirty(static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex(), false);
-		//setYRangeDirty(static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex(), false);
+		setXRangeDirty(coordinateSystem(cSystemIndex)->xIndex(), false);
+		//setYRangeDirty(coordinateSystem(cSystemIndex)->yIndex(), false);
 	}
 
 	if (updateX || updateY) {
@@ -2664,7 +2664,7 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int cSystemIndex, bool
 	d->xRangeAutoScale(cSystemIndex).setRange(qInf(), -qInf());
 
 	//loop over all xy-curves and determine the maximum and minimum x-values
-	int cSystemXIndex = static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex();
+	int cSystemXIndex = coordinateSystem(cSystemIndex)->xIndex();
 	for (const auto* curve : this->children<const XYCurve>()) {
 		//only curves with correct xIndex
 		if (coordinateSystem(curve->coordinateSystemIndex())->xIndex() != cSystemXIndex)
@@ -2759,7 +2759,7 @@ void CartesianPlot::calculateCurvesYMinMax(const int cSystemIndex, bool complete
 	Range<double> range{d->yRangeAutoScale(cSystemIndex)};
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
-	int cSystemYIndex = static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex();
+	int cSystemYIndex = coordinateSystem(cSystemIndex)->yIndex();
 	for (const auto* curve : this->children<const XYCurve>()) {
 		//only curves with correct yIndex
 		if (coordinateSystem(curve->coordinateSystemIndex())->yIndex() != cSystemYIndex)
@@ -2961,13 +2961,20 @@ void CartesianPlot::zoom(int cSystemIndex, bool x, bool zoom_in) {
 
 	Range<double> range;
 	if (cSystemIndex == -1) {
+		QVector<int> zoomedIndices;
 		for (int i=0; i < m_coordinateSystems.count(); i++) {
+			auto index = x ? coordinateSystem(i)->xIndex() : coordinateSystem(i)->yIndex();
+			bool zoomed = zoomedIndices.contains(index);
+			if (zoomed)
+				continue;
 			zoom(i, x, zoom_in);
+			zoomedIndices.append(index);
 		}
+		return;
 	} else if (x)
-		range = d->xRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->xIndex()].range;
+		range = d->xRanges[coordinateSystem(cSystemIndex)->xIndex()].range;
 	else
-		range = d->yRanges[static_cast<CartesianCoordinateSystem*>(m_coordinateSystems[cSystemIndex])->yIndex()].range;
+		range = d->yRanges[coordinateSystem(cSystemIndex)->yIndex()].range;
 
 	double factor = m_zoomFactor;
 	if (zoom_in)
