@@ -1423,16 +1423,18 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 	//determine the currently selected plot/container and make it
 	//resizable or not depending on the layout settings
 	bool resizable = (layout == Worksheet::Layout::NoLayout);
-	const auto& items = q->m_view->selectedItems();
-	if (items.size() == 1) {
-		const auto& item = items.constFirst();
-		const auto& children = q->children<WorksheetElement>();
-		for (auto* child : children) {
-			if (child->graphicsItem() == item) {
-				auto* container =  dynamic_cast<WorksheetElementContainer*>(child);
-				if (container)
-					container->setResizeEnabled(resizable);
-				break;
+	if (q->m_view) {
+		const auto& items = q->m_view->selectedItems();
+		if (items.size() == 1) {
+			const auto& item = items.constFirst();
+			const auto& children = q->children<WorksheetElement>();
+			for (auto* child : children) {
+				if (child->graphicsItem() == item) {
+					auto* container =  dynamic_cast<WorksheetElementContainer*>(child);
+					if (container)
+						container->setResizeEnabled(resizable);
+					break;
+				}
 			}
 		}
 	}
