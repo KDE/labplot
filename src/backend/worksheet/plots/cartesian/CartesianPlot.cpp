@@ -3063,7 +3063,7 @@ void CartesianPlot::shift(int cSystemIndex, bool x, bool leftOrDown) {
 
 	double offset = 0.0, factor = 0.1;
 
-	if ((leftOrDown && x) || (!leftOrDown && !x))
+	if (!leftOrDown)
 		factor *= -1.;
 
 	const double start{range.start()}, end{range.end()};
