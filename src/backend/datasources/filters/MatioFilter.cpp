@@ -763,7 +763,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				int index = 0;
 				for (int i = startColumn - 1; i < qMin(nfields, endColumn); i++) {
 					auto mode = classMode(fields[i]->class_type);
-					if (mode == AbstractColumn::ColumnMode::Text)	// text not supported
+					if (dynamic_cast<Matrix*>(dataSource) && mode == AbstractColumn::ColumnMode::Text)	// text not supported for matrix
 						mode = AbstractColumn::ColumnMode::Numeric;
 
 					//TODO: not needed when supporting complex column mode

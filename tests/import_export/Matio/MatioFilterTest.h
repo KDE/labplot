@@ -44,6 +44,7 @@ private slots:
 
 	void testImportSparse();
 	void testImportStruct();
+	void testImportStructPortion();
 	void testImportCell();
 };
 
