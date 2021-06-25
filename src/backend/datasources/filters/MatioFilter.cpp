@@ -702,7 +702,9 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			const int nelem = var->dims[0]*var->dims[1];
 			const int nfields = Mat_VarGetNumberOfFields(var);
 			DEBUG(Q_FUNC_INFO << ", nelements = " << nelem << ", nfields = " << nfields)
-			actualCols = nfields;
+			if (endColumn == -1)
+				endColumn = nfields;
+			actualCols = endColumn - startColumn + 1;
 
 			if (nfields <= 0)
 				return dataStrings << (QStringList() << i18n("Sruct contains no fields"));
@@ -718,7 +720,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 			//set actualRows
 			matvar_t **fields = (matvar_t **)var->data;
-			for (int i = 0; i < nfields; i++) {
+			for (int i = startColumn - 1; i < qMin(nfields, endColumn); i++) {
 				if (fields[i]->name) {
 					//TODO: not needed when supporting complex column mode
 					if (fields[i]->isComplex)
@@ -729,6 +731,10 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					vectorNames << QLatin1String("Column ") + QString::number(i);
 			}
 			for (int i = 0; i < nfields * nelem; i++) {
+				const int field = i % nfields;
+				if (field < startColumn - 1 || field > endColumn - 1)
+					continue;
+
 				if (fields[i]->rank == 2) {
 					DEBUG(Q_FUNC_INFO << ", dims = " << fields[i]->dims[0] << " x " << fields[i]->dims[1])
 					size_t size;
@@ -754,7 +760,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			if (dataSource) {
 				columnModes.resize(actualCols);
 				int index = 0;
-				for (int i = 0; i < nfields; i++) {
+				for (int i = startColumn - 1; i < qMin(nfields, endColumn); i++) {
 					auto mode = classMode(fields[i]->class_type);
 					//TODO: not needed when supporting complex column mode
 					if (fields[i]->isComplex)	// additional column for complex
@@ -974,8 +980,10 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					continue;
 				}
 				const int field = i % nfields;
-				if (field == 1)
-					colIndex = 1;
+				if (field < startColumn - 1 || field > endColumn - 1)
+					continue;
+				if (field == startColumn -1)
+					colIndex = 0;
 				const int elem = i/nfields;
 
 				DEBUG(Q_FUNC_INFO << ", var " << i + 1 << "(field " << field + 1 << ", elem " << elem + 1 <<"): name = " << fields[i]->name
@@ -1022,25 +1030,25 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 						DEBUG(Q_FUNC_INFO << ", UTF16 data: \"" << QString::fromUtf16(data).toStdString() << "\"")
 						//TODO: row
 						if (dataSource)
-							static_cast<QVector<QString>*>(dataContainer[colIndex - 1])->operator[](0) = QString::fromUtf16(data);
+							static_cast<QVector<QString>*>(dataContainer[colIndex])->operator[](0) = QString::fromUtf16(data);
 						else
-							dataStrings[1][colIndex - 1] = QString::fromUtf16(data);
+							dataStrings[1][colIndex] = QString::fromUtf16(data);
 					} else {
 						char* data = (char*)fields[i]->data;
 						if (fields[i]->data_type == MAT_T_UTF8) {
 							DEBUG(Q_FUNC_INFO << ", UTF8 data: \"" << QString::fromUtf8(data).toStdString() << "\"")
 							//TODO: row
 							if (dataSource)
-								static_cast<QVector<QString>*>(dataContainer[colIndex - 1])->operator[](0) = QString::fromUtf8(data);
+								static_cast<QVector<QString>*>(dataContainer[colIndex])->operator[](0) = QString::fromUtf8(data);
 							else
-								dataStrings[1][colIndex - 1] = QString::fromUtf8(data);
+								dataStrings[1][colIndex] = QString::fromUtf8(data);
 						} else {
 							DEBUG(Q_FUNC_INFO << ", STRING data: \"" << QString(data).toStdString() << "\"")
 							//TODO: row
 							if (dataSource)
-								static_cast<QVector<QString>*>(dataContainer[colIndex - 1])->operator[](0) = QString(data);
+								static_cast<QVector<QString>*>(dataContainer[colIndex])->operator[](0) = QString(data);
 							else
-								dataStrings[1][colIndex - 1] = QString(data);
+								dataStrings[1][colIndex] = QString(data);
 						}
 					}
 					break;
