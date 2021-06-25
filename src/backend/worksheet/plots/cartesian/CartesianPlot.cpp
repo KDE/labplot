@@ -4237,7 +4237,6 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Escape) {
-		q->setMouseMode(CartesianPlot::MouseMode::Selection);
 		m_selectionBandIsShown = false;
 	} else if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
 		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {

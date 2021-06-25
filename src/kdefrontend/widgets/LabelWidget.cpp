@@ -1323,11 +1323,11 @@ void LabelWidget::load() {
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
 
-	//move the cursor to the end and set the focus to the text editor
+	//move the cursor to the end
 	QTextCursor cursor = ui.teLabel->textCursor();
 	cursor.movePosition(QTextCursor::End);
 	ui.teLabel->setTextCursor(cursor);
-	ui.teLabel->setFocus();
+	//ui.teLabel->setFocus(); // Do not set focus, otherwise the WorksheetView is not able to catch key input events!
 
 	// Geometry
 	//widgets for positioning using absolute plot distances

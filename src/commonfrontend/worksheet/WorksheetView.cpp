@@ -129,6 +129,7 @@ WorksheetView::WorksheetView(Worksheet* worksheet) : QGraphicsView(), m_workshee
 	setTransform(QTransform::fromScale(hscale, vscale));
 
 	initBasicActions();
+	installEventFilter(this);
 }
 
 /*!
@@ -2107,6 +2108,42 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 			QApplication::clipboard()->setImage(image, QClipboard::Clipboard);
 		}
 	}
+}
+
+bool WorksheetView::eventFilter(QObject *watched, QEvent *event)
+{
+	if (event->type() == QEvent::KeyPress) {
+		QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+		int key = keyEvent->key();
+		switch(key) {
+		case Qt::Key_S:
+			if (cartesianPlotSelectionModeAction->isEnabled())
+				cartesianPlotSelectionModeAction->trigger();
+			return true;
+		case Qt::Key_X:
+			if (cartesianPlotZoomXSelectionModeAction->isEnabled())
+				cartesianPlotZoomXSelectionModeAction->trigger();
+			return true;
+		case Qt::Key_Y:
+			if (cartesianPlotZoomYSelectionModeAction->isEnabled())
+				cartesianPlotZoomYSelectionModeAction->trigger();
+			return true;
+		case Qt::Key_Z:
+			if (cartesianPlotZoomSelectionModeAction->isEnabled())
+			cartesianPlotZoomSelectionModeAction->trigger();
+			return true;
+		case Qt::Key_C:
+			if (cartesianPlotCursorModeAction->isEnabled())
+				cartesianPlotCursorModeAction->trigger();
+		case Qt::Key_Escape:
+			if (cartesianPlotSelectionModeAction->isEnabled())
+				cartesianPlotSelectionModeAction->trigger();
+			return false; // so the plot can handle the event too
+		default:
+			return false;
+		}
+	}
+	return false;
 }
 
 void WorksheetView::exportToClipboard() {

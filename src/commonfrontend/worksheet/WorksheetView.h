@@ -99,6 +99,7 @@ private:
 	void handleAxisSelected(const Axis* a);
 	void handleCartesianPlotSelected(const CartesianPlot *plot);
 	void handleXYCurveSelected();
+	bool eventFilter(QObject *watched, QEvent *event) override;
 
 	//events
 	void resizeEvent(QResizeEvent*) override;
