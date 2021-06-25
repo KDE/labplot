@@ -279,7 +279,7 @@ void ImportFileWidget::loadSettings() {
 
 	if (m_fileName.isEmpty()) {
 		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
-		m_cbFileName->setUrl(conf.readEntry("LastImportedFile", ""));
+		m_cbFileName->setUrl(QUrl(conf.readEntry("LastImportedFile", "")));
 		QStringList urls = m_cbFileName->urls();
 		urls.append(conf.readXdgListEntry("LastImportedFiles"));
 		m_cbFileName->setUrls(urls);

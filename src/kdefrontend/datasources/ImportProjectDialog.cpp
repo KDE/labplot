@@ -170,7 +170,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	}
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
-	m_cbFileName->setUrl(conf.readEntry(file, ""));
+	m_cbFileName->setUrl(QUrl(conf.readEntry(file, "")));
 	QStringList urls = m_cbFileName->urls();
 	urls.append(conf.readXdgListEntry(files));
 	m_cbFileName->setUrls(urls);
