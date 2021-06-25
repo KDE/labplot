@@ -27,6 +27,7 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 #include "MatioFilter.h"
 #include "MatioFilterPrivate.h"
 #include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/matrix/Matrix.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 
@@ -762,6 +763,9 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				int index = 0;
 				for (int i = startColumn - 1; i < qMin(nfields, endColumn); i++) {
 					auto mode = classMode(fields[i]->class_type);
+					if (mode == AbstractColumn::ColumnMode::Text)	// text not supported
+						mode = AbstractColumn::ColumnMode::Numeric;
+
 					//TODO: not needed when supporting complex column mode
 					if (fields[i]->isComplex)	// additional column for complex
 						columnModes[index++] = mode;
@@ -1021,6 +1025,10 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					MAT_READ_STRUCT(double);
 					break;
 				case MAT_C_CHAR:
+					if (dynamic_cast<Matrix*>(dataSource)) {
+						QDEBUG(Q_FUNC_INFO << ", WARNING: string import into matrix not supported.")
+						break;
+					}
 					if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
 						mat_uint16_t* data = (mat_uint16_t*)fields[i]->data;
 						if (fields[i]->rank == 2) {
