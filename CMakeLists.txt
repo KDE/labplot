@@ -150,6 +150,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions (-DLVERSION=\"2.8.2\")
 add_definitions (-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions (-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
+add_definitions (-DQT_NO_URL_CAST_FROM_STRING)
 set(BUILD_SHARED_LIBS true)
 
 #cmake_policy(SET CMP0002 OLD)

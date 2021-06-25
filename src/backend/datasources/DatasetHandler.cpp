@@ -177,7 +177,7 @@ void DatasetHandler::prepareForDataset() {
 	if (!m_object->isEmpty()) {
 		if (m_object->contains("url")) {
 			const QString& url =  m_object->value("url").toString();
-			doDownload(url);
+			doDownload(QUrl(url));
 		}
 		else {
 			QMessageBox::critical(nullptr, i18n("Invalid metadata file"), i18n("There is no download URL present in the metadata file!"));
