@@ -114,12 +114,12 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 		\
 		DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")") \
 		if (dataSource) { \
-			for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) { \
-				static_cast<QVector<type>*>(dataContainer[colIndex])->operator[](j) = re[j]; \
-				static_cast<QVector<type>*>(dataContainer[colIndex+1])->operator[](j) = im[j]; \
+			for (size_t j = 0; j < actualRows; j++) { \
+				static_cast<QVector<type>*>(dataContainer[colIndex])->operator[](j) = re[j + startRow - 1]; \
+				static_cast<QVector<type>*>(dataContainer[colIndex+1])->operator[](j) = im[j + startRow - 1]; \
 			} \
 		} else { \
-			for (size_t j = 0; j < qMin(fields[i]->dims[0] * fields[i]->dims[1], lines); j++) { \
+			for (size_t j = 0; j < qMin(actualRows, lines); j++) { \
 				/* TODO: use when complex column  mode is supported */ \
 				/* if (im[j] < 0) \
 					dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" - ") \
@@ -132,8 +132,8 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 					dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" + ") \
 								+ QString::number(im[j]) + QLatin1String("i"); \
 				*/ \
-				dataStrings[j+1][colIndex] = QString::number(re[j]); \
-				dataStrings[j+1][colIndex+1] = QString::number(im[j]); \
+				dataStrings[j+1][colIndex] = QString::number(re[j + startRow - 1]); \
+				dataStrings[j+1][colIndex+1] = QString::number(im[j + startRow - 1]); \
 			} \
 		} \
 		colIndex++;	/* complex uses two columns atm */ \
@@ -141,14 +141,11 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 		type* data = (type*)fields[i]->data; \
 		DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")") \
 		if (dataSource) { \
-			for (size_t j = 0; j < fields[i]->dims[0] * fields[i]->dims[1]; j++) \
-				static_cast<QVector<type>*>(dataContainer[colIndex])->operator[](j) = data[j]; \
+			for (size_t j = 0; j < actualRows; j++) \
+				static_cast<QVector<type>*>(dataContainer[colIndex])->operator[](j) = data[j + startRow - 1]; \
 		} else { /* preview */ \
-			/* DEBUG(Q_FUNC_INFO << ", data " << j + 1 << " : " << data[j]) */ \
-			/* DEBUG(Q_FUNC_INFO << ", set rows/col " << j << "/" << field << " to " << data[j]) */ \
-			/* DEBUG(Q_FUNC_INFO << ", dataStrings size = " << dataStrings.size() << "/" << dataStrings[0].size()) */ \
-			for (size_t j = 0; j < qMin(fields[i]->dims[0] * fields[i]->dims[1], lines); j++) \
-				dataStrings[j+1][colIndex] = QString::number(data[j]); \
+			for (size_t j = 0; j < qMin(actualRows, lines); j++) \
+				dataStrings[j+1][colIndex] = QString::number(data[j + startRow - 1]); \
 		} \
 	} \
 	}
@@ -609,6 +606,11 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		actualRows = actualEndRow - startRow + 1;
 		const size_t actualEndColumn = (endColumn == -1 || endColumn > (int)cols) ? cols : endColumn;
 		actualCols = actualEndColumn - startColumn + 1;
+		if (var->class_type == MAT_C_STRUCT) {
+			if (endRow != -1)
+				actualRows = endRow - startRow + 1;
+			//TODO: actualCols
+		}
 		DEBUG(Q_FUNC_INFO << ", actual end row/col = " << actualEndRow << " / " << actualEndColumn)
 		DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << " / " << actualCols)
 
@@ -732,8 +734,12 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					size_t size;
 					if (fields[i]->class_type == MAT_C_CHAR)	// read as string
 						size = fields[i]->dims[0];
-					else
-						size = fields[i]->dims[0] * fields[i]->dims[1];
+					else {
+						if (endRow == -1)
+							size = fields[i]->dims[0] * fields[i]->dims[1] - startRow + 1;
+						else
+							size = qMin(fields[i]->dims[0] * fields[i]->dims[1], actualRows);
+					}
 
 					if (actualRows < size)
 						actualRows = size;
@@ -755,12 +761,12 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 						columnModes[index++] = mode;
 					columnModes[index++] = mode;
 				}
-			} else {
+			} else {	// preview
 				if (actualRows > lines)
 					actualRows = lines;
 
 				dataStrings.resize(actualRows + 1);	// + 1 for header
-				for (auto& string : dataStrings ) {
+				for (auto& string : dataStrings) {
 					string.reserve(actualCols);
 					for (size_t j = 0; j < actualCols; j++)
 						string << QString();
@@ -949,7 +955,10 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			const int nelem = var->dims[0]*var->dims[1];
 			const int nfields = Mat_VarGetNumberOfFields(var);
 
-			//TODO: TEST nelem < 1
+			if (nelem < 1) {
+				DEBUG(Q_FUNC_INFO << ", WARNING: nr of elements is zero")
+				break;
+			}
 
 			DEBUG(Q_FUNC_INFO << ", Reading data ...")
 			matvar_t **fields = (matvar_t **)var->data;
@@ -965,9 +974,9 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					continue;
 				}
 				const int field = i % nfields;
-				const int elem = i/nfields;
 				if (field == 1)
 					colIndex = 1;
+				const int elem = i/nfields;
 
 				DEBUG(Q_FUNC_INFO << ", var " << i + 1 << "(field " << field + 1 << ", elem " << elem + 1 <<"): name = " << fields[i]->name
 						<< ", type = " << className(fields[i]->class_type).toStdString())
