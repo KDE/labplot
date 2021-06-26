@@ -266,59 +266,36 @@ void MatioFilterTest::testImportLogicalSparse() {
 	QCOMPARE(matrix.cell<int>(4, 3), 0);
 }
 
-/* void MatioFilterTest::testImportLogicalSparsePortion() {
+void MatioFilterTest::testImportLogicalSparsePortion() {
 	Spreadsheet spreadsheet("test", false);
 	MatioFilter filter;
 
-	//TODO: sparse UInt8
 	const QString& fileName = QFINDTESTDATA(QLatin1String("data/logical_sparse.mat"));
-	filter.setCurrentVarName(QLatin1String("testsparse"));
+	filter.setCurrentVarName(QLatin1String("sp_log_5_4"));
 	const auto mode = AbstractFileFilter::ImportMode::Replace;
-	//TODO: set start/end row/col
-	//filter.setStartRow(2);
-	//filter.setEndRow(3);
-	//filter.setStartColumn(2);
-	//filter.setEndColumn(3);
+	// set start/end row/col
+	filter.setStartRow(2);
+	filter.setEndRow(3);
+	filter.setStartColumn(2);
+	filter.setEndColumn(3);
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
 
-	QCOMPARE(spreadsheet.columnCount(), 5);
-	QCOMPARE(spreadsheet.rowCount(), 3);
-	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.columnCount(), 2);
+	QCOMPARE(spreadsheet.rowCount(), 2);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
 	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
-	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
-	QCOMPARE(spreadsheet.column(3)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
-	QCOMPARE(spreadsheet.column(4)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
 
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
-	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Column 3"));
-	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("Column 4"));
-	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("Column 5"));
 
-	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
-	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2);
-	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3);
-	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2);
-	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0);
-	QCOMPARE(spreadsheet.column(1)->valueAt(2), 0);
-	QCOMPARE(spreadsheet.column(2)->valueAt(0), 3);
-	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0);
-	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0);
-	QCOMPARE(spreadsheet.column(3)->valueAt(0), 4);
-	QCOMPARE(spreadsheet.column(3)->valueAt(1), 0);
-	QCOMPARE(spreadsheet.column(3)->valueAt(2), 0);
-	QCOMPARE(spreadsheet.column(4)->valueAt(0), 5);
-	QCOMPARE(spreadsheet.column(4)->valueAt(1), 0);
-	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0);
-
-	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
-}*/
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 0);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 1);
+}
 
 void MatioFilterTest::testImportSparseComplex() {
 	Matrix matrix("test", false);
