@@ -320,6 +320,35 @@ void MatioFilterTest::testImportLogicalSparse() {
 	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
 }*/
 
+void MatioFilterTest::testImportSparseComplex() {
+	Matrix matrix("test", false);
+	MatioFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testsparsecomplex_7.4_GLNX86.mat"));
+	filter.setCurrentVarName(QLatin1String("testsparsecomplex"));
+	const auto mode = AbstractFileFilter::ImportMode::Replace;
+	filter.readDataFromFile(fileName, &matrix, mode);
+
+	QCOMPARE(matrix.columnCount(), 10);
+	QCOMPARE(matrix.rowCount(), 3);
+
+	/*DEBUG(Q_FUNC_INFO << ", value = " << matrix.cell<double>(1, 1)) */
+	QCOMPARE(matrix.cell<double>(0, 0), 1.);
+	QCOMPARE(matrix.cell<double>(1, 0), 2.);
+	QCOMPARE(matrix.cell<double>(2, 0), 3.);
+	QCOMPARE(matrix.cell<double>(0, 1), 1.);
+	QCOMPARE(matrix.cell<double>(1, 1), 0.);
+	QCOMPARE(matrix.cell<double>(2, 1), 0.);
+	QCOMPARE(matrix.cell<double>(0, 2), 2.);
+	QCOMPARE(matrix.cell<double>(0, 3), 0.);
+	QCOMPARE(matrix.cell<double>(0, 4), 3.);
+	QCOMPARE(matrix.cell<double>(0, 5), 0.);
+	QCOMPARE(matrix.cell<double>(0, 6), 4.);
+	QCOMPARE(matrix.cell<double>(0, 7), 0.);
+	QCOMPARE(matrix.cell<double>(0, 8), 5.);
+	QCOMPARE(matrix.cell<double>(0, 9), 0.);
+}
+
 void MatioFilterTest::testImportStruct() {
 	Spreadsheet spreadsheet("test", false);
 	MatioFilter filter;
