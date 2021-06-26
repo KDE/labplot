@@ -105,6 +105,47 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	} \
 	}
 
+// type - sparse data type, dtype - container data type
+#define MAT_READ_SPARSE(type, dtype) \
+	{ \
+	type* data = (type*)sparse->data; \
+	if (dataSource) { \
+		/* set default values */ \
+		for (size_t i = 0; i < actualRows; i++) \
+			for (size_t j = 0; j < actualCols; j++) \
+				static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = 0; \
+		\
+		for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
+			for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) { \
+				/* DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride)) */ \
+				static_cast<QVector<dtype>*>(dataContainer[(int)(i-(size_t)startColumn+1)])->operator[](sparse->ir[j]-startRow+1) \
+							= *(data + j * stride/sizeof(type)); \
+			} \
+	} else { /* preview */ \
+		QVector<QVector<type>> matrix; \
+		\
+		/* set default values */ \
+		for (size_t i = 0; i < actualRows; i++) { \
+			QVector<type> tmp; \
+			for (size_t j = 0; j < actualCols; j++) \
+				tmp.append(0); \
+			matrix.append(tmp); \
+		} \
+		\
+		for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
+			for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) \
+				/* DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride)) */ \
+				matrix[sparse->ir[j]][i] = *(data + j * stride/sizeof(type)); \
+				\
+			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
+				QStringList row; \
+				for (size_t j = 0; j < actualCols; j++) \
+					row << QString::number(matrix[i][j]); \
+				dataStrings << row; \
+			} \
+	} \
+	}
+
 // type - struct data type
 #define MAT_READ_STRUCT(type) \
 	{ \
@@ -508,7 +549,8 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 
 			//name
 			info << QString(dir[i]);
-			matvar_t* var = Mat_VarReadInfo(matfp, dir[i]);
+			// Mat_VarReadInfo() does not determine the data type of sparse
+			matvar_t* var = Mat_VarRead(matfp, dir[i]);
 
 			// rank
 			const int rank = var->rank;
@@ -610,7 +652,6 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		if (var->class_type == MAT_C_STRUCT) {
 			if (endRow != -1)
 				actualRows = endRow - startRow + 1;
-			//TODO: actualCols
 		}
 		DEBUG(Q_FUNC_INFO << ", actual end row/col = " << actualEndRow << " / " << actualEndColumn)
 		DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << " / " << actualCols)
@@ -690,7 +731,6 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			DEBUG(Q_FUNC_INFO << ", rank " << var->rank << ", dim = " << var->dims[0] << " x " << var->dims[1])
 
 			if (dataSource) {
-				//change data source settings
 				columnModes.resize(actualCols);
 				auto mode = typeMode(var->data_type);
 				for (size_t i = 0; i < actualCols; i++)
@@ -921,42 +961,51 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			//DEBUG(Q_FUNC_INFO << ", stride = " << stride << ", njc = " << sparse->njc << ", ndata = " << sparse->ndata)
 
 			//TODO: complex
-			//TODO: other columnModes (s.a.)
 
-			double *data = (double*)sparse->data;
-			if (dataSource) {
-				// set default values
-				for (size_t i = 0; i < actualRows; i++)
-					for (size_t j = 0; j < actualCols; j++)
-						static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = 0;
-
-				for (size_t i = 0; i < (size_t)sparse->njc - 1; i++)
-					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) {
-						//DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride))
-						static_cast<QVector<double>*>(dataContainer[(int)(i-(size_t)startColumn+1)])->operator[](sparse->ir[j]-startRow+1)
-							= *(data + j * stride/sizeof(double));
-					}
-			} else {	// preview
-				QVector<QVector<double>> matrix;
-				// set default values
-				for (size_t i = 0; i < actualRows; i++) {
-					QVector<double> tmp;
-					for (size_t j = 0; j < actualCols; j++)
-						tmp.append(0);
-					matrix.append(tmp);
-				}
-
-				for (size_t i = 0; i < (size_t)sparse->njc - 1; i++)
-					for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++)
-						//DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride))
-						matrix[sparse->ir[j]][i] = *(data + j * stride/sizeof(double));
-
-				for (size_t i = 0; i < qMin(actualRows, lines); i++) {
-					QStringList row;
-					for (size_t j = 0; j < actualCols; j++)
-						row << QString::number(matrix[i][j]);
-					dataStrings << row;
-				}
+			switch (var->data_type) {
+			case MAT_T_INT8:
+				MAT_READ_SPARSE(qint8, int)
+				break;
+			case MAT_T_UINT8:
+				MAT_READ_SPARSE(quint8, int)
+				break;
+			case MAT_T_INT16:
+				MAT_READ_SPARSE(qint16, int)
+				break;
+			case MAT_T_UINT16:
+				MAT_READ_SPARSE(quint16, int)
+				break;
+			case MAT_T_INT32:
+				MAT_READ_SPARSE(qint32, int)
+				break;
+			case MAT_T_UINT32:
+				MAT_READ_SPARSE(quint32, int)
+				break;
+			case MAT_T_INT64:
+				MAT_READ_SPARSE(qint64, qint64)
+				break;
+			case MAT_T_UINT64:
+				MAT_READ_SPARSE(quint64, qint64)
+				break;
+			case MAT_T_SINGLE:
+				MAT_READ_SPARSE(float, double)
+				break;
+			case MAT_T_DOUBLE:
+				MAT_READ_SPARSE(double, double)
+				break;
+			case MAT_T_MATRIX:
+			case MAT_T_CELL:
+			case MAT_T_STRUCT:
+			case MAT_T_FUNCTION:
+			case MAT_T_COMPRESSED:
+			case MAT_T_UTF8:
+			case MAT_T_UTF16:
+			case MAT_T_UTF32:
+			case MAT_T_STRING:
+			case MAT_T_ARRAY:
+			case MAT_T_UNKNOWN:
+				DEBUG(Q_FUNC_INFO << ", data type " << var->data_type << " not supported yet")
+				break;
 			}
 
 			break;
