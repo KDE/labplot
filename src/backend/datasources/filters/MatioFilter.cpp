@@ -54,7 +54,7 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 		} else { /* preview */ \
 			QStringList header; \
 			for (size_t j = 0; j < actualCols/2; j++) { \
-				header << QLatin1String("Re") << QLatin1String("Im"); \
+				header << QLatin1String("Re ") + QString::number(j+1) << QLatin1String("Im ") + QString::number(j+1); \
 			} \
 			dataStrings << header; \
 			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
@@ -108,41 +108,61 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 // type - sparse data type, dtype - container data type
 #define MAT_READ_SPARSE(type, dtype) \
 	{ \
-	type* data = (type*)sparse->data; \
+	/* set default values */ \
+	QVector<QVector<type>> matrix; /* for preview */ \
 	if (dataSource) { \
-		/* set default values */ \
 		for (size_t i = 0; i < actualRows; i++) \
 			for (size_t j = 0; j < actualCols; j++) \
 				static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = 0; \
-		\
-		for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
-			for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) { \
-				/* DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride)) */ \
-				static_cast<QVector<dtype>*>(dataContainer[(int)(i-(size_t)startColumn+1)])->operator[](sparse->ir[j]-startRow+1) \
-							= *(data + j * stride/sizeof(type)); \
-			} \
 	} else { /* preview */ \
-		QVector<QVector<type>> matrix; \
-		\
-		/* set default values */ \
 		for (size_t i = 0; i < actualRows; i++) { \
 			QVector<type> tmp; \
 			for (size_t j = 0; j < actualCols; j++) \
 				tmp.append(0); \
 			matrix.append(tmp); \
 		} \
-		\
-		for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
-			for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) \
-				/* DEBUG(Q_FUNC_INFO << ", (" << sparse->ir[j] + 1 << "," << i + 1 << ") = " << *(double*)(data + j * stride)) */ \
-				matrix[sparse->ir[j]][i] = *(data + j * stride/sizeof(type)); \
-				\
-			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
-				QStringList row; \
-				for (size_t j = 0; j < actualCols; j++) \
-					row << QString::number(matrix[i][j]); \
-				dataStrings << row; \
+	} \
+	\
+	if (var->isComplex) { \
+		mat_complex_split_t* complex_data = (mat_complex_split_t*)sparse->data; \
+		type* re = (type*)complex_data->Re; \
+		type* im = (type*)complex_data->Im; \
+		if (dataSource) { \
+			for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
+				for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) { \
+					static_cast<QVector<dtype>*>(dataContainer[(int)(2*i - (size_t)startColumn + 1)])->operator[](sparse->ir[j] - startRow + 1) \
+								= *(re + j * stride/sizeof(type)); \
+					static_cast<QVector<dtype>*>(dataContainer[(int)(2*i+1 - (size_t)startColumn + 1)])->operator[](sparse->ir[j] - startRow + 1) \
+								= *(im + j * stride/sizeof(type)); \
+				} \
+		} else { /* preview */ \
+			for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
+				for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) { \
+					matrix[sparse->ir[j]][2*i] = *(re + j * stride/sizeof(type)); \
+					matrix[sparse->ir[j]][2*i + 1] = *(im + j * stride/sizeof(type)); \
+				} \
+		} \
+	} else { /* real */ \
+		type* data = (type*)sparse->data; \
+		if (dataSource) { \
+			for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
+				for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) { \
+					static_cast<QVector<dtype>*>(dataContainer[(int)(i-(size_t)startColumn + 1)])->operator[](sparse->ir[j] - startRow + 1) \
+								= *(data + j * stride/sizeof(type)); \
 			} \
+		} else { /* preview */ \
+			for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
+				for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) \
+					matrix[sparse->ir[j]][i] = *(data + j * stride/sizeof(type)); \
+		} \
+	} \
+	if (!dataSource) { /* preview */ \
+		for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
+			QStringList row; \
+			for (size_t j = 0; j < actualCols; j++) \
+				row << QString::number(matrix[i][j]); \
+			dataStrings << row; \
+		} \
 	} \
 	}
 
@@ -160,7 +180,7 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 				static_cast<QVector<type>*>(dataContainer[colIndex])->operator[](j) = re[j + startRow - 1]; \
 				static_cast<QVector<type>*>(dataContainer[colIndex+1])->operator[](j) = im[j + startRow - 1]; \
 			} \
-		} else { \
+		} else { /* preview */ \
 			for (size_t j = 0; j < qMin(actualRows, lines); j++) { \
 				/* TODO: use when complex column  mode is supported */ \
 				/* if (im[j] < 0) \
@@ -179,7 +199,7 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 			} \
 		} \
 		colIndex++;	/* complex uses two columns atm */ \
-	} else {	/* real */ \
+	} else { /* real */ \
 		type* data = (type*)fields[i]->data; \
 		DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")") \
 		if (dataSource) { \
@@ -662,7 +682,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		if (var->isComplex && var->class_type != MAT_C_CELL && var->class_type != MAT_C_STRUCT) {
 			actualCols *= 2;
 			for (size_t j = 0; j < actualCols/2; j++)
-				vectorNames << QLatin1String("Re") << QLatin1String("Im");
+				vectorNames << QLatin1String("Re ") + QString::number(j+1) << QLatin1String("Im ") + QString::number(j+1);
 		}
 
 		// column modes
@@ -947,6 +967,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					case MAT_C_SPARSE:
 					case MAT_C_FUNCTION:
 					case MAT_C_OPAQUE:
+						DEBUG(Q_FUNC_INFO << ", class type " << cell->class_type << " not supported yet")
 						break;
 					}
 				} else {
@@ -956,11 +977,17 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			break;
 		}
 		case MAT_C_SPARSE: {
+			//TODO: not needed when supporting complex column mode
+			if (var->isComplex && !dataSource) {	// header for preview
+				QStringList row;
+				for (size_t j = 0; j < actualCols/2; j++)
+					row << QLatin1String("Re ") + QString::number(j+1) << QLatin1String("Im ") + QString::number(j+1);
+				dataStrings << row;
+			}
+
 			mat_sparse_t* sparse = (mat_sparse_t*)var->data;
 			size_t stride = Mat_SizeOf(var->data_type);
 			//DEBUG(Q_FUNC_INFO << ", stride = " << stride << ", njc = " << sparse->njc << ", ndata = " << sparse->ndata)
-
-			//TODO: complex
 
 			switch (var->data_type) {
 			case MAT_T_INT8:
