@@ -238,10 +238,10 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	//add the GraphicsItem of the added child to the scene
-	QGraphicsItem* item = addedElement->graphicsItem();
+	auto* item = addedElement->graphicsItem();
 	d->m_scene->addItem(item);
 
-	const CartesianPlot* plot = dynamic_cast<const CartesianPlot*>(aspect);
+	const auto* plot = dynamic_cast<const CartesianPlot*>(aspect);
 	if (plot) {
 		connect(plot, &CartesianPlot::mouseMoveCursorModeSignal, this, &Worksheet::cartesianPlotMouseMoveCursorMode);
 		connect(plot, &CartesianPlot::mouseMoveSelectionModeSignal, this, &Worksheet::cartesianPlotMouseMoveSelectionMode);
@@ -275,10 +275,21 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		const_cast<WorksheetElement*>(addedElement)->loadThemeConfig(config);
 	}
 
-	//recalculated the layout
+	//recalculate the layout if enabled, set the currently added plot resizable otherwise
 	if (!isLoading()) {
 		if (d->layout != Worksheet::Layout::NoLayout)
 			d->updateLayout(false);
+		else {
+			if (plot) {
+				//make other plots non-resizable
+				const auto& containers = children<WorksheetElementContainer>();
+				for (auto* container : containers)
+						container->setResizeEnabled(false);
+
+				//make the newly added plot resizable
+				const_cast<CartesianPlot*>(plot)->setResizeEnabled(true);
+			}
+		}
 	}
 }
 
@@ -1427,12 +1438,10 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		const auto& items = q->m_view->selectedItems();
 		if (items.size() == 1) {
 			const auto& item = items.constFirst();
-			const auto& children = q->children<WorksheetElement>();
-			for (auto* child : children) {
-				if (child->graphicsItem() == item) {
-					auto* container =  dynamic_cast<WorksheetElementContainer*>(child);
-					if (container)
-						container->setResizeEnabled(resizable);
+			const auto& containers = q->children<WorksheetElementContainer>();
+			for (auto* container : containers) {
+				if (container->graphicsItem() == item) {
+					container->setResizeEnabled(resizable);
 					break;
 				}
 			}

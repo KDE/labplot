@@ -37,6 +37,7 @@ ResizeItem::HandleItem::HandleItem(int position, ResizeItem* parent) : QGraphics
 	setBrush(QBrush(Qt::red));
 	setFlag(ItemIsMovable);
 	setFlag(ItemSendsGeometryChanges);
+	setAcceptHoverEvents(true);
 }
 
 int ResizeItem::HandleItem::position() const {
@@ -83,9 +84,13 @@ QVariant ResizeItem::HandleItem::itemChange(GraphicsItemChange change, const QVa
 }
 
 void ResizeItem::HandleItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
+	//HACK: make the parent container/plot non-movable otherwise
+	//the move event doesn't reach HandleItem. Better solution?
+	m_parent->container()->graphicsItem()->setFlag(ItemIsMovable, false);
+
 	switch (m_position) {
 	case TopLeft:
-		setCursor(Qt::SizeBDiagCursor);
+		setCursor(Qt::SizeFDiagCursor);
 		break;
 	case Top:
 		setCursor(Qt::SizeVerCursor);
@@ -97,7 +102,7 @@ void ResizeItem::HandleItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
 		setCursor(Qt::SizeHorCursor);
 		break;
 	case BottomRight:
-		setCursor(Qt::SizeBDiagCursor);
+		setCursor(Qt::SizeFDiagCursor);
 		break;
 	case Bottom:
 		setCursor(Qt::SizeVerCursor);
@@ -113,6 +118,7 @@ void ResizeItem::HandleItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
 }
 
 void ResizeItem::HandleItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
+	m_parent->container()->graphicsItem()->setFlag(ItemIsMovable, true);
 	QGraphicsItem::hoverLeaveEvent(event);
 }
 
@@ -162,6 +168,10 @@ void ResizeItem::setRect(QRectF rect) {
 
 QRectF ResizeItem::boundingRect() const {
 	return m_rect;
+}
+
+WorksheetElementContainer* ResizeItem::container() {
+	return m_container;
 }
 
 void ResizeItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
