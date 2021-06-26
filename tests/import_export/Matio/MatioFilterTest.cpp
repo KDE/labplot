@@ -232,6 +232,93 @@ void MatioFilterTest::testImportSparse() {
 	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
 }
 
+void MatioFilterTest::testImportLogicalSparse() {
+	Matrix matrix("test", false);
+	MatioFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/logical_sparse.mat"));
+	filter.setCurrentVarName(QLatin1String("sp_log_5_4"));
+	const auto mode = AbstractFileFilter::ImportMode::Replace;
+	filter.readDataFromFile(fileName, &matrix, mode);
+
+	QCOMPARE(matrix.columnCount(), 4);
+	QCOMPARE(matrix.rowCount(), 5);
+
+	QCOMPARE(matrix.cell<int>(0, 0), 1);
+	QCOMPARE(matrix.cell<int>(1, 0), 0);
+	QCOMPARE(matrix.cell<int>(2, 0), 0);
+	QCOMPARE(matrix.cell<int>(3, 0), 0);
+	QCOMPARE(matrix.cell<int>(4, 0), 0);
+	QCOMPARE(matrix.cell<int>(0, 1), 1);
+	QCOMPARE(matrix.cell<int>(1, 1), 0);
+	QCOMPARE(matrix.cell<int>(2, 1), 0);
+	QCOMPARE(matrix.cell<int>(3, 1), 0);
+	QCOMPARE(matrix.cell<int>(4, 1), 0);
+	QCOMPARE(matrix.cell<int>(0, 2), 1);
+	QCOMPARE(matrix.cell<int>(1, 2), 1);
+	QCOMPARE(matrix.cell<int>(2, 2), 1);
+	QCOMPARE(matrix.cell<int>(3, 2), 0);
+	QCOMPARE(matrix.cell<int>(4, 2), 0);
+	QCOMPARE(matrix.cell<int>(0, 3), 0);
+	QCOMPARE(matrix.cell<int>(1, 3), 0);
+	QCOMPARE(matrix.cell<int>(2, 3), 0);
+	QCOMPARE(matrix.cell<int>(3, 3), 0);
+	QCOMPARE(matrix.cell<int>(4, 3), 0);
+}
+
+/* void MatioFilterTest::testImportLogicalSparsePortion() {
+	Spreadsheet spreadsheet("test", false);
+	MatioFilter filter;
+
+	//TODO: sparse UInt8
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/logical_sparse.mat"));
+	filter.setCurrentVarName(QLatin1String("testsparse"));
+	const auto mode = AbstractFileFilter::ImportMode::Replace;
+	//TODO: set start/end row/col
+	//filter.setStartRow(2);
+	//filter.setEndRow(3);
+	//filter.setStartColumn(2);
+	//filter.setEndColumn(3);
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.columnCount(), 5);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(spreadsheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	QCOMPARE(spreadsheet.column(1)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(2)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(3)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(4)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Column 3"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("Column 4"));
+	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("Column 5"));
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), 3);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 3);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 4);
+	QCOMPARE(spreadsheet.column(3)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(3)->valueAt(2), 0);
+	QCOMPARE(spreadsheet.column(4)->valueAt(0), 5);
+	QCOMPARE(spreadsheet.column(4)->valueAt(1), 0);
+	QCOMPARE(spreadsheet.column(4)->valueAt(2), 0);
+
+	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
+}*/
 
 void MatioFilterTest::testImportStruct() {
 	Spreadsheet spreadsheet("test", false);
