@@ -127,35 +127,37 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 		type* re = (type*)complex_data->Re; \
 		type* im = (type*)complex_data->Im; \
 		if (dataSource) { \
-			for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
+			for (size_t i = 0; i < qMin((size_t)sparse->njc - 1, actualCols/2); i++) \
 				for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) { \
 					if (sparse->ir[j] >= (size_t)startRow - 1 && sparse->ir[j] < actualEndRow) { /* only read requested rows */ \
-						static_cast<QVector<dtype>*>(dataContainer[(int)(2*i - (size_t)startColumn + 1)])->operator[](sparse->ir[j] - startRow + 1) \
+						static_cast<QVector<dtype>*>(dataContainer[(int)2*i])->operator[](sparse->ir[j] - startRow + 1) \
 								= *(re + j * stride/sizeof(type)); \
-						static_cast<QVector<dtype>*>(dataContainer[(int)(2*i+1 - (size_t)startColumn + 1)])->operator[](sparse->ir[j] - startRow + 1) \
+						static_cast<QVector<dtype>*>(dataContainer[(int)2*i+1])->operator[](sparse->ir[j] - startRow + 1) \
 								= *(im + j * stride/sizeof(type)); \
 					} \
 				} \
 		} else { /* preview */ \
-			for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
+			for (size_t i = 0; i < qMin((size_t)sparse->njc - 1, actualEndColumn/2 + 1); i++) \
 				for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) { \
 					if (sparse->ir[j] >= (size_t)startRow - 1 && sparse->ir[j] < actualEndRow) { /* only read requested rows */ \
-						matrix[sparse->ir[j]][2*i] = *(re + j * stride/sizeof(type)); \
-						matrix[sparse->ir[j]][2*i + 1] = *(im + j * stride/sizeof(type)); \
+						if (2*i < actualEndColumn) /* Im may be last col */ \
+							matrix[sparse->ir[j]][2*i] = *(re + j * stride/sizeof(type)); \
+						if (2*i+1 < actualEndColumn) /* Re may be last col */ \
+							matrix[sparse->ir[j]][2*i + 1] = *(im + j * stride/sizeof(type)); \
 					} \
 				} \
 		} \
 	} else { /* real */ \
 		type* data = (type*)sparse->data; \
 		if (dataSource) { \
-			for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
+			for (size_t i = startColumn - 1; i < qMin((size_t)sparse->njc - 1, actualEndColumn); i++) \
 				for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) { \
 					if (sparse->ir[j] >= (size_t)startRow - 1 && sparse->ir[j] < actualEndRow) /* only read requested rows */ \
-						static_cast<QVector<dtype>*>(dataContainer[(int)i])->operator[](sparse->ir[j] - startRow + 1) \
+						static_cast<QVector<dtype>*>(dataContainer[(int)i - startColumn + 1])->operator[](sparse->ir[j] - startRow + 1) \
 								= *(data + j * stride/sizeof(type)); \
 			} \
 		} else { /* preview */ \
-			for (size_t i = 0; i < (size_t)sparse->njc - 1; i++) \
+			for (size_t i = 0; i < qMin((size_t)sparse->njc - 1, actualEndColumn); i++) \
 				for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) \
 					if (sparse->ir[j] < actualEndRow) /* don't read beyond last row */ \
 						matrix[sparse->ir[j]][i] = *(data + j * stride/sizeof(type)); \
@@ -164,8 +166,10 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	if (!dataSource) { /* preview */ \
 		for (size_t i = startRow - 1; i < qMin(actualEndRow, lines); i++) { \
 			QStringList row; \
-			for (size_t j = 0; j < actualCols; j++) \
+			for (size_t j = startColumn - 1; j < actualEndColumn; j++) { \
+				DEBUG(matrix[i][j]) \
 				row << QString::number(matrix[i][j]); \
+			} \
 			dataStrings << row; \
 		} \
 	} \
@@ -685,10 +689,16 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			lines = actualRows;
 		// double the number of cols for complex data (not for CELL or STRUCT)
 		if (var->isComplex && var->class_type != MAT_C_CELL && var->class_type != MAT_C_STRUCT) {
-			actualCols *= 2;
-			actualEndColumn *= 2;
-			for (size_t j = 0; j < actualCols/2; j++)
-				vectorNames << QLatin1String("Re ") + QString::number(j+1) << QLatin1String("Im ") + QString::number(j+1);
+			if (endColumn == -1) {
+				actualCols *= 2;
+				actualEndColumn *= 2;
+			}
+			for (size_t j = startColumn - 1; j < actualEndColumn; j++) {
+				if (j % 2)
+					vectorNames << QLatin1String("Im ") + QString::number(j/2 + 1);
+				else
+					vectorNames << QLatin1String("Re ") + QString::number(j/2 + 1);
+			}
 		}
 
 		// column modes
@@ -986,8 +996,11 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			//TODO: not needed when supporting complex column mode
 			if (var->isComplex && !dataSource) {	// header for preview
 				QStringList row;
-				for (size_t j = 0; j < actualCols/2; j++)
-					row << QLatin1String("Re ") + QString::number(j+1) << QLatin1String("Im ") + QString::number(j+1);
+				for (size_t j = startColumn - 1; j < actualEndColumn; j++)
+					if (j % 2)
+						row << QLatin1String("Im ") + QString::number(j/2 + 1);
+					else
+						row << QLatin1String("Re ") + QString::number(j/2 + 1);
 				dataStrings << row;
 			}
 
