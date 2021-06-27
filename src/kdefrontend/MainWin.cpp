@@ -1320,7 +1320,7 @@ void MainWin::openProject() {
 }
 
 void MainWin::openProject(const QString& filename) {
-	if (filename == m_currentFileName) {
+	if (m_project && filename == m_project->fileName()) {
 		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename), i18n("Open Project"));
 		return;
 	}
@@ -1476,7 +1476,6 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
-	m_currentFileName = filename;
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl( QUrl(filename) );
@@ -1541,7 +1540,6 @@ bool MainWin::closeProject() {
 	m_aspectTreeModel = nullptr;
 	delete m_project;
 	m_project = nullptr;
-	m_currentFileName.clear();
 	m_projectClosing = false;
 
 	//update the UI if we're just closing a project

@@ -478,7 +478,6 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	writer->writeStartElement("project");
 	writer->writeAttribute("version", version());
 	writer->writeAttribute("xmlVersion", QString::number(buildXmlVersion));
-	writer->writeAttribute("fileName", fileName());
 	writer->writeAttribute("modificationTime", modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
 	writer->writeAttribute("author", author());
 
