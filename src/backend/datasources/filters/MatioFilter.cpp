@@ -91,17 +91,15 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	{ \
 	const type* data = (const type*)cell->data; \
 	if (dataSource) { \
-		for (size_t j = 0; j < cellsize; j++) \
-			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = data[j]; \
-		for (size_t j = cellsize; j < actualCols; j++) /* reset not defined values */ \
+		if (i < cellsize) \
+			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = data[i]; \
+		else \
 			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = qQNaN(); \
 	} else { /* preview */ \
-		QStringList row; \
-		if (cellsize == 0)	/* handle empty cells */ \
+		if (i < cellsize) \
+			row << QString::number(data[i]); \
+		else \
 			row << QString(); \
-		for (size_t j = 0; j < cellsize; j++) \
-			row << QString::number(data[j]); \
-		dataStrings << row; \
 	} \
 	}
 
@@ -732,34 +730,35 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			break;
 		case MAT_C_CELL: {
 			DEBUG(Q_FUNC_INFO << ", found CELL. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
-			// Each element of the cell array can be a different type: only import numbers atm
+			// Each element of the cell array can be a different type: one column per cell
 			if (var->nbytes == 0 || var->data_size == 0 || var->data == nullptr)
 				break;
 			const int ncells = var->nbytes / var->data_size;
 			DEBUG(Q_FUNC_INFO << ", found " << ncells << " cells")
-			auto mode = AbstractColumn::ColumnMode::Integer;	// start from here
-			unsigned int colCount = 0;
+			actualCols = ncells;
+			columnModes.resize(actualCols);
+
+			// find out number of rows
+			unsigned int rowCount = 0;
 			for (int i = 0; i < ncells; i++) {
 				matvar_t* cell = Mat_VarGetCell(var, i);
-				if (cell->rank == 2 && cell->dims[0] == 1 && cell->class_type != MAT_C_CHAR) {	// read only rank 2 and cells with one row, omit strings
-					if (colCount < cell->dims[1])	// find max column count
-					       colCount = cell->dims[1];
+				if (cell->rank == 2 && cell->dims[0] <= 1) {	// read only rank 2 and cells with one row, omit strings
+					if (rowCount < cell->dims[1] && cell->class_type != MAT_C_CHAR)	// find max row count
+					       rowCount = cell->dims[1];
 
-					// promote type if found
-					if (mode == AbstractColumn::ColumnMode::Integer && (cell->class_type == MAT_C_INT64 || cell->class_type == MAT_C_UINT64))
-						mode = AbstractColumn::ColumnMode::BigInt;
-					else if ((mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::BigInt) && 
-							(cell->class_type == MAT_C_DOUBLE || cell->class_type == MAT_C_SINGLE) )
+					if (cell->name)
+						vectorNames << cell->name;
+					else
+						vectorNames << QLatin1String("Column ") + QString::number(i+1);
+
+					auto mode = classMode(cell->class_type);
+					if (dynamic_cast<Matrix*>(dataSource) && mode == AbstractColumn::ColumnMode::Text)	// text not supported for matrix
 						mode = AbstractColumn::ColumnMode::Numeric;
+
+					columnModes[i] = mode;
 				}
 			}
-			DEBUG(Q_FUNC_INFO << ", set mode to " << AbstractColumn::modeName(mode).toStdString())
-			if (dataSource) {
-				//change data source settings
-				actualRows = ncells;
-				actualCols = colCount;
-				columnModes.resize(actualCols);
-			}
+			actualRows = rowCount;
 			break;
 		}
 		case MAT_C_SPARSE:
@@ -915,6 +914,9 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		case MAT_C_CELL: {
 			if (var->nbytes == 0 || var->data_size == 0 || var->data == NULL)
 				break;
+
+			//TODO: complex not supported yet
+
 			const int ncells = var->nbytes / var->data_size;
 			for (int i = 0; i < ncells; i++) {
 				matvar_t* cell = Mat_VarGetCell(var, i);
@@ -922,75 +924,92 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				QString dims;
 				for (int j = 0; j < cell->rank; j++)
 					dims += QString::number(cell->dims[j]) + " ";
-				DEBUG(Q_FUNC_INFO << ", cell " << i << " : class = " << className(cell->class_type).toStdString()
+				DEBUG(Q_FUNC_INFO << ", cell " << i+1 << " : class = " << className(cell->class_type).toStdString()
 						<< ", type = " << typeName(cell->data_type).toStdString() << ", rank = "
 						<< cell->rank << ", dims = " << dims.toStdString() << ", nbytes = " << cell->nbytes << ", size = " << cell->data_size)
-				//TODO: complex not supported yet
+			}
 
-				// read cell data (see MAT_READ_VAR)
-				if (cell->rank == 2 && cell->dims[0] <= 1) {	// read only rank 2 and cells with zero/one row
+			// read cell data (see MAT_READ_VAR)
+			for (size_t i = 0; i < actualRows; i++) {
+				QStringList row;
+				for (int j = 0; j < ncells; j++) {
+					matvar_t* cell = Mat_VarGetCell(var, j);
 					const size_t cellsize = cell->dims[1];
-					switch(cell->class_type) {
-					case MAT_C_CHAR:	// strings are not imported (yet)
-						if (dataSource) {
-							for (size_t j = 0; j < actualCols; j++)	// reset not defined values
-								static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = qQNaN();
-						} else {
-							QStringList row;
-							// see mat.c for supported data types
-							if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16)
-								row << QString::fromUtf16((const mat_uint16_t*)cell->data);
-							else if (cell->data_type == MAT_T_UTF8)
-								row << QString::fromUtf8((const char*)cell->data);
-							else
-								row << QString((const char*)cell->data);
-							dataStrings << row;
+					if (cell->rank == 2 && cell->dims[0] <= 1) {	// read only rank 2 and cells with zero/one row
+						switch (cell->class_type) {
+						case MAT_C_CHAR:
+							if (dataSource) {
+								if (dynamic_cast<Matrix*>(dataSource)) {
+									QDEBUG(Q_FUNC_INFO << ", WARNING: string import into matrix not supported.")
+									continue;
+								}
+								if (i == 0) {	// first line
+									if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16)
+										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0)
+											= QString::fromUtf16((const mat_uint16_t*)cell->data);
+									else if (cell->data_type == MAT_T_UTF8)
+										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0)
+											= QString::fromUtf8((const char*)cell->data);
+									else
+										static_cast<QVector<QString>*>(dataContainer[j])->operator[](0)
+											= QString((const char*)cell->data);
+								}
+							} else {	// preview
+								if (i == 0) {	// first line
+									if (cell->data_type == MAT_T_UINT16 || cell->data_type == MAT_T_INT16)
+										 row << QString::fromUtf16((const mat_uint16_t*)cell->data);
+									else if (cell->data_type == MAT_T_UTF8)
+										row << QString::fromUtf8((const char*)cell->data);
+									else
+										row << QString((const char*)cell->data);
+								} else
+									row << QString();
+							}
+							break;
+						case MAT_C_DOUBLE:
+							MAT_READ_CELL(double, double);
+							break;
+						case MAT_C_SINGLE:
+							MAT_READ_CELL(float, double)
+							break;
+						case MAT_C_INT8:
+							MAT_READ_CELL(qint8, int);
+							break;
+						case MAT_C_UINT8:
+							MAT_READ_CELL(quint8, int);
+							break;
+						case MAT_C_INT16:
+							MAT_READ_CELL(qint16, int);
+							break;
+						case MAT_C_UINT16:
+							MAT_READ_CELL(quint16, int);
+							break;
+						case MAT_C_INT32:
+							MAT_READ_CELL(qint32, int);
+							break;
+						case MAT_C_UINT32:
+							MAT_READ_CELL(quint32, int);
+							break;
+						case MAT_C_INT64:
+							MAT_READ_CELL(qint64, qint64);
+							break;
+						case MAT_C_UINT64:
+							MAT_READ_CELL(quint64, qint64);
+							break;
+						case MAT_C_CELL:
+						case MAT_C_STRUCT:
+						case MAT_C_OBJECT:
+						case MAT_C_SPARSE:
+						case MAT_C_FUNCTION:
+						case MAT_C_OPAQUE:
+							DEBUG(Q_FUNC_INFO << ", class type \"" << className(cell->class_type).toStdString() << "\" not supported yet")
+							break;
+						case MAT_C_EMPTY:
+							break;
 						}
-						break;
-					case MAT_C_DOUBLE:
-						MAT_READ_CELL(double, double)
-						break;
-					case MAT_C_SINGLE:
-						MAT_READ_CELL(float, double)
-						break;
-					case MAT_C_INT8:
-						MAT_READ_CELL(qint8, int);
-						break;
-					case MAT_C_UINT8:
-						MAT_READ_CELL(quint8, int);
-						break;
-					case MAT_C_INT16:
-						MAT_READ_CELL(qint16, int);
-						break;
-					case MAT_C_UINT16:
-						MAT_READ_CELL(quint16, int);
-						break;
-					case MAT_C_INT32:
-						MAT_READ_CELL(qint32, int);
-						break;
-					case MAT_C_UINT32:
-						MAT_READ_CELL(quint32, int);
-						break;
-					case MAT_C_INT64:
-						MAT_READ_CELL(qint64, qint64);
-						break;
-					case MAT_C_UINT64:
-						MAT_READ_CELL(quint64, qint64);
-						break;
-					case MAT_C_CELL:
-					case MAT_C_STRUCT:
-					case MAT_C_OBJECT:
-					case MAT_C_SPARSE:
-					case MAT_C_FUNCTION:
-					case MAT_C_OPAQUE:
-						DEBUG(Q_FUNC_INFO << ", class type \"" << className(cell->class_type).toStdString() << "\" not supported yet")
-						break;
-					case MAT_C_EMPTY:
-						break;
 					}
-				} else {
-					DEBUG(Q_FUNC_INFO << ", not supported yet.")
 				}
+				dataStrings << row;
 			}
 			break;
 		}
