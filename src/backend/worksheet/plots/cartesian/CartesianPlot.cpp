@@ -1327,11 +1327,11 @@ const Range<double>& CartesianPlot::yRangeFromIndex(const int index) const {
 
 const Range<double>& CartesianPlot::xRangeCSystem(const int cSystemIndex) const {
 	Q_D(const CartesianPlot);
-	return d->xRanges.at(coordinateSystem(cSystemIndex)->xIndex()).range;
+	return d->xRanges[coordinateSystem(cSystemIndex)->xIndex()].range;
 }
 const Range<double>& CartesianPlot::yRangeCSystem(const int cSystemIndex) const {
 	Q_D(const CartesianPlot);
-	return d->yRanges.at(coordinateSystem(cSystemIndex)->yIndex()).range;
+	return d->yRanges[coordinateSystem(cSystemIndex)->yIndex()].range;
 }
 
 bool CartesianPlot::xRangeDirty(int cSystemIndex)
@@ -1556,14 +1556,15 @@ int CartesianPlot::coordinateSystemCount() const {
 	return m_coordinateSystems.size();
 }
 
-CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
+CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const
+{
 	Q_D(const CartesianPlot);
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	DEBUG(Q_FUNC_INFO << ", nr of cSystems = " << coordinateSystemCount())
 	if (index > coordinateSystemCount() || index < 0)
 		return nullptr;
 
-	return dynamic_cast<CartesianCoordinateSystem*>(m_coordinateSystems.at(index));
+	return dynamic_cast<CartesianCoordinateSystem*>(m_coordinateSystems[index]);
 }
 
 void CartesianPlot::addCoordinateSystem() {
