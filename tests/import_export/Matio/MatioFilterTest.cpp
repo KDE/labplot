@@ -429,8 +429,30 @@ void MatioFilterTest::testImportCell() {
 	QCOMPARE(spreadsheet.column(2)->valueAt(1), qQNaN());
 	QCOMPARE(spreadsheet.column(2)->valueAt(2), qQNaN());
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 3);
+}
 
-	//DEBUG(Q_FUNC_INFO << ", value = " << matrix.column(0)->valueAt(0))
+void MatioFilterTest::testImportEmptyCell() {
+	Spreadsheet spreadsheet("test", false);
+	MatioFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testemptycell_7.4_GLNX86.mat"));
+	filter.setCurrentVarName(QLatin1String("testemptycell"));
+	const auto mode = AbstractFileFilter::ImportMode::Replace;
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.columnCount(), 1);
+	QCOMPARE(spreadsheet.rowCount(), 5);
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(0)->valueAt(1), 2);
+	QCOMPARE(spreadsheet.column(0)->valueAt(2), qQNaN());
+	QCOMPARE(spreadsheet.column(0)->valueAt(3), qQNaN());
+	QCOMPARE(spreadsheet.column(0)->valueAt(4), 3);
 }
 
 QTEST_MAIN(MatioFilterTest)

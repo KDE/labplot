@@ -925,6 +925,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				DEBUG(Q_FUNC_INFO << ", cell " << i << " : class = " << className(cell->class_type).toStdString()
 						<< ", type = " << typeName(cell->data_type).toStdString() << ", rank = "
 						<< cell->rank << ", dims = " << dims.toStdString() << ", nbytes = " << cell->nbytes << ", size = " << cell->data_size)
+				//TODO: complex not supported yet
 
 				// read cell data (see MAT_READ_VAR)
 				if (cell->rank == 2 && cell->dims[0] <= 1) {	// read only rank 2 and cells with zero/one row
@@ -976,14 +977,15 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					case MAT_C_UINT64:
 						MAT_READ_CELL(quint64, qint64);
 						break;
-					case MAT_C_CELL:	// TODO ...
-					case MAT_C_EMPTY:
+					case MAT_C_CELL:
 					case MAT_C_STRUCT:
 					case MAT_C_OBJECT:
 					case MAT_C_SPARSE:
 					case MAT_C_FUNCTION:
 					case MAT_C_OPAQUE:
-						DEBUG(Q_FUNC_INFO << ", class type " << cell->class_type << " not supported yet")
+						DEBUG(Q_FUNC_INFO << ", class type \"" << className(cell->class_type).toStdString() << "\" not supported yet")
+						break;
+					case MAT_C_EMPTY:
 						break;
 					}
 				} else {
