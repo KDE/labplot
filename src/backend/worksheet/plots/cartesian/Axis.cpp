@@ -2331,8 +2331,8 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		QTextDocument doc;
 		doc.setDefaultFont(labelsFont);
 		QFontMetrics fm(labelsFont);
-		auto xRangeFormat{ plot()->xRangeCSystem(q->cSystem->xIndex()).format() };
-		auto yRangeFormat{ plot()->yRangeCSystem(q->cSystem->yIndex()).format() };
+		auto xRangeFormat{ plot()->xRangeCSystem(q->coordinateSystemIndex()).format() };
+		auto yRangeFormat{ plot()->yRangeCSystem(q->coordinateSystemIndex()).format() };
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
 		        (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			//QDEBUG(Q_FUNC_INFO << ", axis tick label strings: " << tickLabelStrings)
