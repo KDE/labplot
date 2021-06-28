@@ -1559,9 +1559,8 @@ int CartesianPlot::coordinateSystemCount() const {
 CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const
 {
 	Q_D(const CartesianPlot);
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	DEBUG(Q_FUNC_INFO << ", nr of cSystems = " << coordinateSystemCount())
-	if (index > coordinateSystemCount() || index < 0)
+	//DEBUG(Q_FUNC_INFO << ", nr of cSystems = " << coordinateSystemCount() << ", index = " << index)
+	if (index >= coordinateSystemCount() || index < 0)
 		return nullptr;
 
 	return dynamic_cast<CartesianCoordinateSystem*>(m_coordinateSystems[index]);
