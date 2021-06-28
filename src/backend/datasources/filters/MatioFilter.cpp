@@ -91,13 +91,13 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	{ \
 	const type* data = (const type*)cell->data; \
 	if (dataSource) { \
-		if (i < cellsize) \
-			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = data[i]; \
+		if (i + startRow - 1 < cellsize) \
+			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = data[i + startRow - 1]; \
 		else \
 			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = qQNaN(); \
 	} else { /* preview */ \
-		if (i < cellsize) \
-			row << QString::number(data[i]); \
+		if (i + startRow - 1 < cellsize) \
+			row << QString::number(data[i + startRow - 1]); \
 		else \
 			row << QString(); \
 	} \
@@ -668,20 +668,25 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 	if (var->rank == 2) {	// rank is always >= 2
 		// read data
 		size_t rows = var->dims[0], cols = var->dims[1];
-		if (rows == 1) {	// only one row: read as column
+		if (var->class_type == MAT_C_CELL)
+			cols = var->nbytes / var->data_size;
+		else if (rows == 1) {	// only one row: read as column
 			rows = cols;
 			cols = 1;
 		}
-		const size_t actualEndRow = (endRow == -1 || endRow > (int)rows) ? rows : endRow;
+		size_t actualEndRow = (endRow == -1 || endRow > (int)rows) ? rows : endRow;
 		actualRows = actualEndRow - startRow + 1;
 		size_t actualEndColumn = (endColumn == -1 || endColumn > (int)cols) ? cols : endColumn;
 		actualCols = actualEndColumn - startColumn + 1;
 		if (var->class_type == MAT_C_STRUCT) {
 			if (endRow != -1)
 				actualRows = endRow - startRow + 1;
+		} else if (var->class_type == MAT_C_CELL) {	// calculated later
+			actualEndRow = 0;
+			actualRows = 0;
 		}
-		DEBUG(Q_FUNC_INFO << ", actual end row/col = " << actualEndRow << " / " << actualEndColumn)
-		DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << " / " << actualCols)
+		DEBUG(Q_FUNC_INFO << ", start row = " << startRow << ", actual end row = " << actualEndRow << ", actual rows = " << actualRows)
+		DEBUG(Q_FUNC_INFO << ", start col = " << startColumn << ", actual end col = " << actualEndColumn << ", actual cols = " << actualCols)
 
 		if (lines == 0)
 			lines = actualRows;
@@ -733,18 +738,16 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			// Each element of the cell array can be a different type: one column per cell
 			if (var->nbytes == 0 || var->data_size == 0 || var->data == nullptr)
 				break;
-			const int ncells = var->nbytes / var->data_size;
-			DEBUG(Q_FUNC_INFO << ", found " << ncells << " cells")
-			actualCols = ncells;
+			//const int ncells = var->nbytes / var->data_size;
+			//DEBUG(Q_FUNC_INFO << ", found " << ncells << " cells")
 			columnModes.resize(actualCols);
 
 			// find out number of rows
-			unsigned int rowCount = 0;
-			for (int i = 0; i < ncells; i++) {
-				matvar_t* cell = Mat_VarGetCell(var, i);
+			for (size_t i = 0; i < actualCols; i++) {
+				matvar_t* cell = Mat_VarGetCell(var, i + startColumn - 1);
 				if (cell->rank == 2 && cell->dims[0] <= 1) {	// read only rank 2 and cells with one row, omit strings
-					if (rowCount < cell->dims[1] && cell->class_type != MAT_C_CHAR)	// find max row count
-					       rowCount = cell->dims[1];
+					if (rows < cell->dims[1] && cell->class_type != MAT_C_CHAR)	// find max row count
+					       rows = cell->dims[1];
 
 					if (cell->name)
 						vectorNames << cell->name;
@@ -758,7 +761,10 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					columnModes[i] = mode;
 				}
 			}
-			actualRows = rowCount;
+			// calculate from startRow and endRow
+			actualEndRow = (endRow == -1 || endRow > (int)rows) ? rows : endRow;
+			actualRows = actualEndRow - startRow + 1;
+			DEBUG(Q_FUNC_INFO << ", start row = " << startRow <<  ", actual end row = " << actualEndRow << ", actual rows = " << actualRows)
 			break;
 		}
 		case MAT_C_SPARSE:
@@ -917,9 +923,8 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 			//TODO: complex not supported yet
 
-			const int ncells = var->nbytes / var->data_size;
-			for (int i = 0; i < ncells; i++) {
-				matvar_t* cell = Mat_VarGetCell(var, i);
+			for (size_t i = 0; i < actualCols; i++) {
+				matvar_t* cell = Mat_VarGetCell(var, i + startColumn - 1);
 				// cell->name can be NULL
 				QString dims;
 				for (int j = 0; j < cell->rank; j++)
@@ -932,8 +937,8 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			// read cell data (see MAT_READ_VAR)
 			for (size_t i = 0; i < actualRows; i++) {
 				QStringList row;
-				for (int j = 0; j < ncells; j++) {
-					matvar_t* cell = Mat_VarGetCell(var, j);
+				for (size_t j = 0; j < actualCols; j++) {
+					matvar_t* cell = Mat_VarGetCell(var, j + startColumn - 1);
 					const size_t cellsize = cell->dims[1];
 					if (cell->rank == 2 && cell->dims[0] <= 1) {	// read only rank 2 and cells with zero/one row
 						switch (cell->class_type) {
