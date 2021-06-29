@@ -57,9 +57,9 @@
 const QString getSystemInfo() {
 	// build type
 #ifdef NDEBUG
-	const QString buildType(i18n("Release build"));
+	const QString buildType(i18n("Release build ") + QLatin1String(GIT_COMMIT));
 #else
-	const QString buildType(i18n("Debug build"));
+	const QString buildType(i18n("Debug build ") + QLatin1String(GIT_COMMIT));
 #endif
 	QLocale locale;
 	const QString numberSystemInfo{ '('

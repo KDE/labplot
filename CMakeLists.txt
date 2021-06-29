@@ -142,8 +142,7 @@ else ()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
 endif ()
 
-##########################################################ESC[m
-
+##########################################################
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
@@ -178,6 +177,16 @@ if (CMAKE_VERSION VERSION_GREATER "3.5")
     message(STATUS "Clang-tidy supported but disabled")
   endif()
 endif()
+
+# get git commit hash
+execute_process(
+  COMMAND git describe --always --tags
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_COMMIT
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+add_definitions (-DGIT_COMMIT=\"${GIT_COMMIT}\")
+
 
 ### Options ######################################
 option(ENABLE_CANTOR "Build with Cantor support" ON)
