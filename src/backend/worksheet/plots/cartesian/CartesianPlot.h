@@ -55,6 +55,7 @@ class XYConvolutionCurve;
 class XYCorrelationCurve;
 class InfoElementDialog;
 class KConfig;
+class CartesianPlotDock;
 
 class CartesianPlot : public AbstractPlot {
 	Q_OBJECT
@@ -216,6 +217,7 @@ private:
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
 	Range<double> calculateCurvesXMinMax(int cSystemIndex, bool completeRange = true);
 	void calculateCurvesYMinMax(int cSystemIndex, bool completeRange = true);
+	void retransformScales();
 
 	CartesianPlotLegend* m_legend{nullptr};
 	double m_zoomFactor{1.2};
@@ -401,6 +403,8 @@ signals:
 	void mouseModeChanged(CartesianPlot::MouseMode);
 	void cursor0EnableChanged(bool enable);
 	void cursor1EnableChanged(bool enable);
+
+	friend CartesianPlotDock;
 };
 
 #endif

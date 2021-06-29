@@ -1128,67 +1128,67 @@ bool CartesianPlot::autoScaleY(int cSystemIndex) const {
 
 class CartesianPlotSetAutoScaleXIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotSetAutoScaleXIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index) :
-		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
-		setText(i18n("%1: change x-range %2 auto scaling", m_private->name(), index + 1));
+	CartesianPlotSetAutoScaleXIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int cSystemIndex) :
+		m_private(private_obj), m_autoScale(autoScale), m_cSystemIndex(cSystemIndex), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
+		setText(i18n("%1: change x-range %2 auto scaling", m_private->name(), m_cSystemIndex + 1));
 	}
 
 	void redo() override {
-		m_autoScaleOld = m_private->autoScaleX(m_index);
+		m_autoScaleOld = m_private->autoScaleX(m_cSystemIndex);
 		if (m_autoScale) {
-			m_oldRange = m_private->xRanges.at(m_index).range;
-			m_private->q->scaleAutoX(m_index);
+			m_oldRange = m_private->xRange(m_cSystemIndex);
+			m_private->q->scaleAutoX(m_cSystemIndex);
 		}
-		m_private->setAutoScaleX(m_index, m_autoScale);
+		m_private->setAutoScaleX(m_cSystemIndex, m_autoScale);
 		emit m_private->q->xAutoScaleChanged(m_autoScale);
 	}
 
 	void undo() override {
 		if (!m_autoScaleOld) {
-			m_private->xRanges[m_index] = m_oldRange;
+			m_private->xRange(m_cSystemIndex) = m_oldRange;
 			m_private->retransformScales();
 		}
-		m_private->setAutoScaleX(m_index, m_autoScaleOld);
+		m_private->setAutoScaleX(m_cSystemIndex, m_autoScaleOld);
 		emit m_private->q->xAutoScaleChanged(m_autoScaleOld);
 	}
 
 private:
 	CartesianPlotPrivate* m_private;
 	bool m_autoScale;
-	int m_index;
+	int m_cSystemIndex;
 	bool m_autoScaleOld;
 	Range<double> m_oldRange;
 };
 class CartesianPlotSetAutoScaleYIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotSetAutoScaleYIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index) :
-		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
-		setText(i18n("%1: change y-range %2 auto scaling", m_private->name(), index + 1));
+	CartesianPlotSetAutoScaleYIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int cSystemIndex) :
+		m_private(private_obj), m_autoScale(autoScale), m_cSystemIndex(cSystemIndex), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
+		setText(i18n("%1: change y-range %2 auto scaling", m_private->name(), cSystemIndex + 1));
 	}
 
 	void redo() override {
-		m_autoScaleOld = m_private->autoScaleY(m_index);
+		m_autoScaleOld = m_private->autoScaleY(m_cSystemIndex);
 		if (m_autoScale) {
-			m_oldRange = m_private->yRanges.at(m_index).range;
-			m_private->q->scaleAutoY(m_index);
+			m_oldRange = m_private->yRange(m_cSystemIndex);
+			m_private->q->scaleAutoY(m_cSystemIndex);
 		}
-		m_private->setAutoScaleY(m_index, m_autoScale);
+		m_private->setAutoScaleY(m_cSystemIndex, m_autoScale);
 		emit m_private->q->yAutoScaleChanged(m_autoScale);
 	}
 
 	void undo() override {
 		if (!m_autoScaleOld) {
-			m_private->yRanges[m_index] = m_oldRange;
+			m_private->yRange(m_cSystemIndex) = m_oldRange;
 			m_private->retransformScales();
 		}
-		m_private->setAutoScaleY(m_index, m_autoScaleOld);
+		m_private->setAutoScaleY(m_cSystemIndex, m_autoScaleOld);
 		emit m_private->q->yAutoScaleChanged(m_autoScaleOld);
 	}
 
 private:
 	CartesianPlotPrivate* m_private;
 	bool m_autoScale;
-	int m_index;
+	int m_cSystemIndex;
 	bool m_autoScaleOld;
 	Range<double> m_oldRange;
 };
@@ -1269,8 +1269,14 @@ void CartesianPlot::setXRange(const int index, const Range<double>& range) {
 	if (index > 0 && index < d->xRanges.count() && range.finite() && range != d->xRanges[index].range) {
 		d->yRanges[index].dirty = true;
 		exec(new CartesianPlotSetxRangeIndexCmd(d, range, index, ki18n("%1: set x range")));
-		if (autoScaleY(index))
-			scaleAutoY(index);
+		int scaled = 0;
+		for (int i=0; i < coordinateSystemCount(); i++)
+		{
+			if (coordinateSystem(i)->xIndex() == index && autoScaleY(i))
+				scaled += scaleAutoY(i, false, true);
+		}
+		if (scaled)
+			d->retransformScales();
 	}
 }
 CartesianPlotSetRangeIndexCmd(yRange)
@@ -1278,8 +1284,14 @@ void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 	Q_D(CartesianPlot);
 	if (index > 0 && index < d->yRanges.count() && range.finite() && range != d->yRanges[index].range) {
 		exec(new CartesianPlotSetyRangeIndexCmd(d, range, index, ki18n("%1: set y range")));
-		if (autoScaleX(index))
-			scaleAutoX(index);
+		int scaled = 0;
+		for (int i=0; i < coordinateSystemCount(); i++)
+		{
+			if (coordinateSystem(i)->yIndex() == index && autoScaleX(i))
+				scaled += scaleAutoX(i, false, true);
+		}
+		if (scaled)
+			d->retransformScales();
 	}
 }
 
@@ -1287,14 +1299,14 @@ void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 void CartesianPlot::setXRange(const Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", set x range to " << range.toStdString())
 	Q_D(CartesianPlot);
-	const int index{ defaultCoordinateSystemIndex() };
+	const int index{ defaultCoordinateSystem()->xIndex() };
 	setXRange(index, range);
 }
 // sets y range of default plot range
 void CartesianPlot::setYRange(const Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", set y range to " << range.toStdString())
 	Q_D(CartesianPlot);
-	const int index{ defaultCoordinateSystemIndex() };
+	const int index{ defaultCoordinateSystem()->yIndex()};
 	setYRange(index, range);
 }
 
@@ -2748,6 +2760,12 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int cSystemIndex, bool
 	return d->xRangeAutoScale(cSystemIndex);
 }
 
+void CartesianPlot::retransformScales()
+{
+	Q_D(CartesianPlot);
+	d->retransformScales();
+}
+
 /*!
  * Calculates and sets curves y min and max. This function does not respect the range
  * of the x axis
@@ -2773,7 +2791,7 @@ void CartesianPlot::calculateCurvesYMinMax(const int cSystemIndex, bool complete
 
 		Range<int> indexRange{0, 0};
 		if (d->rangeType == RangeType::Free && curve->xColumn() && !completeRange) {
-			curve->xColumn()->indicesMinMax(xRange().start(), xRange().end(), indexRange.start(), indexRange.end());
+			curve->xColumn()->indicesMinMax(xRangeCSystem(curve->coordinateSystemIndex()).start(), xRangeCSystem(curve->coordinateSystemIndex()).end(), indexRange.start(), indexRange.end());
 			//if (indexRange.range.end() < curve->xColumn()->rowCount())	// No
 			//	indexRange.range.end()++; // because minMaxY excludes indexMax
 		} else {

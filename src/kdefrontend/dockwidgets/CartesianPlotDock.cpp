@@ -948,14 +948,23 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 	}
 
 	for (auto* plot : m_plotList) {
-		plot->setAutoScaleX(index, checked);
-		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRangeFromIndex(index).autoScale())
-		if (checked) { // && index == plot->defaultCoordinateSystem()->xIndex()
-			plot->scaleAutoX(index);
-			//TODO: which yIndex?
-			if (plot->autoScaleY())
-				plot->scaleAutoY();
+		int retransform = 0;
+		for (int i=0; i < plot->coordinateSystemCount(); i++)
+		{
+			if (plot->coordinateSystem(i)->xIndex() == index) {
+				plot->setAutoScaleX(i, checked);
+				DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRangeFromIndex(index).autoScale())
+				if (checked) { // && index == plot->defaultCoordinateSystem()->xIndex()
+					retransform = plot->scaleAutoX(i, false, true);
+					//TODO: which yIndex?
+					if (plot->autoScaleY(i))
+						retransform += plot->scaleAutoY(i, false, true);
+				}
+			}
 		}
+		if (retransform)
+			plot->retransformScales();
+
 	}
 	updateXRangeList();	// see range changes
 	updatePlotRangeList();
@@ -983,14 +992,22 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 	}
 
 	for (auto* plot : m_plotList) {
-		plot->setAutoScaleY(index, checked);
-		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRangeFromIndex(index).autoScale())
-		if (checked) {	// && index == plot->defaultCoordinateSystem()->yIndex()
-			plot->scaleAutoY(index);
-			//TODO: which xIndex?
-			if (plot->autoScaleX())
-				plot->scaleAutoX();
+		int retransform = 0;
+		for (int i=0; i < plot->coordinateSystemCount(); i++)
+		{
+			if (plot->coordinateSystem(i)->yIndex() == index) {
+				plot->setAutoScaleY(i, checked);
+				DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRangeFromIndex(index).autoScale())
+				if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
+					retransform = plot->scaleAutoY(i, false, true);
+					//TODO: which yIndex?
+					if (plot->autoScaleX(i))
+						retransform += plot->scaleAutoX(i, false, true);
+				}
+			}
 		}
+		if (retransform)
+			plot->retransformScales();
 	}
 	updateYRangeList();	// see range changes
 	updatePlotRangeList();
