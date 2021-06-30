@@ -91,14 +91,14 @@ void HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged() {
 
 /*!
 	return list of selected HDF5 item names
-	selects all items if nothing is selected
+	selects first item if nothing is selected
 */
 const QStringList HDF5OptionsWidget::selectedNames() const {
 	DEBUG("HDF5OptionsWidget::selectedNames()");
 	QStringList names;
 
-	if (ui.twContent->selectedItems().size() == 0)
-		ui.twContent->selectAll();
+	if (ui.twContent->selectedItems().size() == 0 && ui.twContent->topLevelItem(0))
+		ui.twContent->setCurrentItem(ui.twContent->topLevelItem(0)->child(0));
 
 	// the data link is saved in the second column
 	for (auto* item : ui.twContent->selectedItems())

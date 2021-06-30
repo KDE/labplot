@@ -88,14 +88,14 @@ void MatioOptionsWidget::selectionChanged() {
 
 /*!
 	return list of selected Matio variable names
-	selects all items if nothing is selected
+	selects first item if nothing is selected
 */
 const QStringList MatioOptionsWidget::selectedNames() const {
 	QDEBUG(Q_FUNC_INFO);
 	QStringList names;
 
 	if (ui.twContent->selectedItems().size() == 0)
-		ui.twContent->selectAll();
+		ui.twContent->selectRow(0);
 
 	for (auto* item : ui.twContent->selectedItems())
 		names << item->text();
