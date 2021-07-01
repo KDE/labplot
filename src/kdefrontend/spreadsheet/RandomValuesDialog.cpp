@@ -4,7 +4,7 @@
     Description          : Dialog for generating non-uniformly distributed random numbers
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2019 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -74,8 +74,12 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 	layout->addWidget(buttonBox);
 	setLayout(layout);
 	setAttribute(Qt::WA_DeleteOnClose);
+	QVector<QPair<QString, int>> distros;
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
-		ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
+		distros << QPair<QString, int>(i18n(nsl_sf_stats_distribution_name[i]), i);
+	std::sort(std::begin(distros), std::end(distros));
+	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
+		ui.cbDistribution->addItem(distros[i].first, distros[i].second);
 
 	//use white background in the preview label
 	QPalette p;
