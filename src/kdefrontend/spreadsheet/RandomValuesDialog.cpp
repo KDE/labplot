@@ -78,8 +78,8 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
 		distros << QPair<QString, int>(i18n(nsl_sf_stats_distribution_name[i]), i);
 	std::sort(std::begin(distros), std::end(distros));
-	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
-		ui.cbDistribution->addItem(distros[i].first, distros[i].second);
+	for (const auto& d : distros)
+		ui.cbDistribution->addItem(d.first, d.second);
 
 	//use white background in the preview label
 	QPalette p;
