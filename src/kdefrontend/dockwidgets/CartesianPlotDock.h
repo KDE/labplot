@@ -162,18 +162,18 @@ private slots:
 	void plotRangeFirstValuesChanged(int);
 	void plotRangeLastValuesChanged(int);
 
-	void plotXAutoScaleChanged(bool);
-	void plotYAutoScaleChanged(bool);
-	void plotXMinChanged(double);
-	void plotYMinChanged(double);
-	void plotXMaxChanged(double);
-	void plotYMaxChanged(double);
-	void plotXRangeChanged(Range<double>);
-	void plotYRangeChanged(Range<double>);
-	void plotXRangeFormatChanged(RangeT::Format);
-	void plotYRangeFormatChanged(RangeT::Format);
-	void plotXScaleChanged(RangeT::Scale);
-	void plotYScaleChanged(RangeT::Scale);
+	void plotXAutoScaleChanged(int xRangeIndex, bool);
+	void plotYAutoScaleChanged(int yRangeIndex, bool);
+	void plotXMinChanged(int xRangeIndex, double);
+	void plotYMinChanged(int yRangeIndex, double);
+	void plotXMaxChanged(int xRangeIndex, double);
+	void plotYMaxChanged(int yRangeIndex, double);
+	void plotXRangeChanged(int xRangeIndex, Range<double>);
+	void plotYRangeChanged(int yRangeIndex, Range<double>);
+	void plotXRangeFormatChanged(int xRangeIndex, RangeT::Format);
+	void plotYRangeFormatChanged(int yRangeIndex, RangeT::Format);
+	void plotXScaleChanged(int xRangeIndex, RangeT::Scale);
+	void plotYScaleChanged(int yRangeIndex, RangeT::Scale);
 
 	void defaultPlotRangeChanged();
 

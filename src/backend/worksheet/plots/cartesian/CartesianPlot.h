@@ -153,7 +153,9 @@ public:
 	const Range<double>& yRange() const;		// get y range of default plot range
 	void setXRange(const Range<double>);		// set x range of default plot range
 	void setYRange(const Range<double>);		// set y range of default plot range
-	const Range<double>& xRangeFromIndex(const int index) const;
+	const Range<double> &xRangeFromIndex(int index) const;
+	Range<double> &xRangeFromIndex(int index);
+	Range<double>& yRangeFromIndex(const int index);
 	const Range<double>& yRangeFromIndex(const int index) const;
 	const Range<double> &xRangeCSystem(int cSystemIndex) const;
 	void setXRange(int index, const Range<double>& value);
@@ -362,21 +364,21 @@ protected:
 
 signals:
 	void rangeTypeChanged(CartesianPlot::RangeType);
-	void xRangeFormatChanged(RangeT::Format);
-	void yRangeFormatChanged(RangeT::Format);
+	void xRangeFormatChanged(int xRangeIndex, RangeT::Format);
+	void yRangeFormatChanged(int yRangeIndex, RangeT::Format);
 	void rangeLastValuesChanged(int);
 	void rangeFirstValuesChanged(int);
 	void rectChanged(QRectF&);
-	void xAutoScaleChanged(bool);
-	void yAutoScaleChanged(bool);
-	void xRangeChanged(Range<double>);
-	void yRangeChanged(Range<double>);
-	void xMinChanged(double);
-	void xMaxChanged(double);
-	void yMinChanged(double);
-	void yMaxChanged(double);
-	void xScaleChanged(RangeT::Scale);
-	void yScaleChanged(RangeT::Scale);
+	void xAutoScaleChanged(int xRangeIndex, bool);
+	void yAutoScaleChanged(int yRangeIndex, bool);
+	void xRangeChanged(int xRangeIndex, Range<double>);
+	void yRangeChanged(int yRangeIndex, Range<double>);
+	void xMinChanged(int xRangeIndex, double);
+	void xMaxChanged(int xRangeIndex, double);
+	void yMinChanged(int yRangeIndex, double);
+	void yMaxChanged(int yRangeIndex, double);
+	void xScaleChanged(int xRangeIndex, RangeT::Scale);
+	void yScaleChanged(int yRangeIndex, RangeT::Scale);
 	void defaultCoordinateSystemIndexChanged(int);
 	void xRangeBreakingEnabledChanged(bool);
 	void xRangeBreaksChanged(const CartesianPlot::RangeBreaks&);

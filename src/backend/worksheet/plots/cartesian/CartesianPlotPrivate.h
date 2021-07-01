@@ -66,34 +66,34 @@ public:
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 
-	const Range<double> xRange() const {
+	const Range<double> xRangeCSystem() const {
 		return xRanges.at(defaultCoordinateSystem()->xIndex()).range;
 	}
-	Range<double>& xRange() {
+	Range<double>& xRangeCSystem() {
 		return xRanges[defaultCoordinateSystem()->xIndex()].range;
 	}
 
-	Range<double>& xRange(int cSystemIndex) {
+	Range<double>& xRangeCSystem(int cSystemIndex) {
 		if (cSystemIndex >= 0)
 			return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].range;
-		return xRange();
+		return xRangeCSystem();
 	}
 
 	Range<double>& xRangeAutoScale(int cSystemIndex) {
 		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].autoScaleRange;
 	}
 
-	const Range<double> yRange() const {
+	const Range<double> yRangeCSystem() const {
 		return yRanges.at(defaultCoordinateSystem()->yIndex()).range;
 	}
-	Range<double>& yRange() {
+	Range<double>& yRangeCSystem() {
 		return yRanges[defaultCoordinateSystem()->yIndex()].range;
 	}
 
-	Range<double>& yRange(int cSystemIndex) {
+	Range<double>& yRangeCSystem(int cSystemIndex) {
 		if (cSystemIndex >= 0)
 			return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].range;
-		return yRange();
+		return yRangeCSystem();
 	}
 
 	Range<double>& yRangeAutoScale(int cSystemIndex) {
@@ -200,8 +200,8 @@ private:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void updateDataRect();
-	void checkXRange();
-	void checkYRange();
+	void checkXRange(int xRangeIndex);
+	void checkYRange(int yRangeIndex);
 	CartesianScale* createScale(RangeT::Scale,
 		const Range<double> &sceneRange, const Range<double> &logicalRange);
 

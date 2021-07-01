@@ -1002,12 +1002,12 @@ public:
 	void redo() override {
 		m_formatOld = m_private->xRanges.at(m_index).range.format();
 		m_private->xRanges[m_index].range.setFormat(m_format);
-		emit m_private->q->xRangeFormatChanged(m_format);
+		emit m_private->q->xRangeFormatChanged(m_index, m_format);
 	}
 
 	void undo() override {
 		m_private->xRanges[m_index].range.setFormat(m_formatOld);
-		emit m_private->q->xRangeFormatChanged(m_formatOld);
+		emit m_private->q->xRangeFormatChanged(m_index, m_formatOld);
 	}
 
 private:
@@ -1026,12 +1026,12 @@ public:
 	void redo() override {
 		m_formatOld = m_private->yRanges.at(m_index).range.format();
 		m_private->yRanges[m_index].range.setFormat(m_format);
-		emit m_private->q->yRangeFormatChanged(m_format);
+		emit m_private->q->yRangeFormatChanged(m_index, m_format);
 	}
 
 	void undo() override {
 		m_private->yRanges[m_index].range.setFormat(m_formatOld);
-		emit m_private->q->yRangeFormatChanged(m_formatOld);
+		emit m_private->q->yRangeFormatChanged(m_index, m_formatOld);
 	}
 
 private:
@@ -1136,20 +1136,20 @@ public:
 	void redo() override {
 		m_autoScaleOld = m_private->autoScaleX(m_cSystemIndex);
 		if (m_autoScale) {
-			m_oldRange = m_private->xRange(m_cSystemIndex);
+			m_oldRange = m_private->xRangeCSystem(m_cSystemIndex);
 			m_private->q->scaleAutoX(m_cSystemIndex);
 		}
 		m_private->setAutoScaleX(m_cSystemIndex, m_autoScale);
-		emit m_private->q->xAutoScaleChanged(m_autoScale);
+		emit m_private->q->xAutoScaleChanged(m_private->q->coordinateSystem(m_cSystemIndex)->xIndex(), m_autoScale);
 	}
 
 	void undo() override {
 		if (!m_autoScaleOld) {
-			m_private->xRange(m_cSystemIndex) = m_oldRange;
+			m_private->xRangeCSystem(m_cSystemIndex) = m_oldRange;
 			m_private->retransformScales();
 		}
 		m_private->setAutoScaleX(m_cSystemIndex, m_autoScaleOld);
-		emit m_private->q->xAutoScaleChanged(m_autoScaleOld);
+		emit m_private->q->xAutoScaleChanged(m_private->q->coordinateSystem(m_cSystemIndex)->xIndex(), m_autoScaleOld);
 	}
 
 private:
@@ -1169,20 +1169,20 @@ public:
 	void redo() override {
 		m_autoScaleOld = m_private->autoScaleY(m_cSystemIndex);
 		if (m_autoScale) {
-			m_oldRange = m_private->yRange(m_cSystemIndex);
+			m_oldRange = m_private->yRangeCSystem(m_cSystemIndex);
 			m_private->q->scaleAutoY(m_cSystemIndex);
 		}
 		m_private->setAutoScaleY(m_cSystemIndex, m_autoScale);
-		emit m_private->q->yAutoScaleChanged(m_autoScale);
+		emit m_private->q->yAutoScaleChanged(m_private->q->coordinateSystem(m_cSystemIndex)->yIndex(), m_autoScale);
 	}
 
 	void undo() override {
 		if (!m_autoScaleOld) {
-			m_private->yRange(m_cSystemIndex) = m_oldRange;
+			m_private->yRangeCSystem(m_cSystemIndex) = m_oldRange;
 			m_private->retransformScales();
 		}
 		m_private->setAutoScaleY(m_cSystemIndex, m_autoScaleOld);
-		emit m_private->q->yAutoScaleChanged(m_autoScaleOld);
+		emit m_private->q->yAutoScaleChanged(m_private->q->coordinateSystem(m_cSystemIndex)->yIndex(), m_autoScaleOld);
 	}
 
 private:
@@ -1256,7 +1256,7 @@ public: \
 		finalize(); \
 	} \
 	void undo() override { redo(); } \
-	virtual void finalize() { m_target->retransformScales(); emit m_target->q->element ## Changed(m_target->element ## s.at(m_index).range); } \
+	virtual void finalize() { m_target->retransformScales(); emit m_target->q->element ## Changed(m_index, m_target->element ## s.at(m_index).range); } \
 private:\
 	CartesianPlot::Private* m_target; \
 	Range<double> m_otherValue; \
@@ -1328,13 +1328,24 @@ const Range<double>& CartesianPlot::yRange() const {
 	Q_D(const CartesianPlot);
 	return d->yRanges.at( defaultCoordinateSystem()->yIndex() ).range;
 }
-const Range<double>& CartesianPlot::xRangeFromIndex(const int index) const {
-	Q_D(const CartesianPlot);
-	return d->xRanges.at(index).range;
+Range<double>& CartesianPlot::xRangeFromIndex(int index) {
+	Q_D(CartesianPlot);
+	return d->xRanges[index].range;
 }
+
+const Range<double>& CartesianPlot::xRangeFromIndex(int index) const {
+	Q_D(const CartesianPlot);
+	return d->xRanges[index].range;
+}
+
+Range<double>& CartesianPlot::yRangeFromIndex(const int index) {
+	Q_D(CartesianPlot);
+	return d->yRanges[index].range;
+}
+
 const Range<double>& CartesianPlot::yRangeFromIndex(const int index) const {
 	Q_D(const CartesianPlot);
-	return d->yRanges.at(index).range;
+	return d->yRanges[index].range;
 }
 
 const Range<double>& CartesianPlot::xRangeCSystem(const int cSystemIndex) const {
@@ -1469,12 +1480,12 @@ public:
 	void redo() override {
 		m_scaleOld = m_private->xRanges.at(m_index).range.scale();
 		m_private->xRanges[m_index].range.setScale(m_scale);
-		emit m_private->q->xScaleChanged(m_scale);
+		emit m_private->q->xScaleChanged(m_index, m_scale);
 	}
 
 	void undo() override {
 		m_private->xRanges[m_index].range.setScale(m_scaleOld);
-		emit m_private->q->xScaleChanged(m_scaleOld);
+		emit m_private->q->xScaleChanged(m_index, m_scaleOld);
 	}
 
 private:
@@ -1493,12 +1504,12 @@ public:
 	void redo() override {
 		m_scaleOld = m_private->yRanges.at(m_index).range.scale();
 		m_private->yRanges[m_index].range.setScale(m_scale);
-		emit m_private->q->yScaleChanged(m_scale);
+		emit m_private->q->yScaleChanged(m_index, m_scale);
 	}
 
 	void undo() override {
 		m_private->yRanges[m_index].range.setScale(m_scaleOld);
-		emit m_private->q->yScaleChanged(m_scaleOld);
+		emit m_private->q->yScaleChanged(m_index, m_scaleOld);
 	}
 
 private:
@@ -2528,7 +2539,7 @@ bool CartesianPlot::scaleAutoX(int cSystemIndex, bool fullRange, bool suppressRe
 	}
 
 
-	auto& xRange{ d->xRange(cSystemIndex) };
+	auto& xRange{ d->xRangeCSystem(cSystemIndex) };
 
 	// if no curve: do not reset to [0, 1] but don't change
 
@@ -2598,7 +2609,7 @@ bool CartesianPlot::scaleAutoY(int cSystemIndex, bool fullRange, bool suppressRe
 		}
 	}
 
-	auto& yRange{ d->yRange(cSystemIndex) };
+	auto& yRange{ d->yRangeCSystem(cSystemIndex) };
 
 	bool update = false;
 	DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", curves y range = " << d->yRangeAutoScale(cSystemIndex).toStdString())
@@ -2712,7 +2723,7 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int cSystemIndex, bool
 		}
 		DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
 
-		auto range{d->xRange(cSystemIndex)};	// value does not matter, will be overwritten
+		auto range{d->xRangeCSystem(cSystemIndex)};	// value does not matter, will be overwritten
 		curve->minMaxX(indexRange, range, true);
 
 		if (range.start() < d->xRangeAutoScale(cSystemIndex).start())
@@ -3056,7 +3067,7 @@ void CartesianPlot::zoom(int cSystemIndex, bool x, bool zoom_in) {
 	else
 		range.niceExtend();
 	if (range.finite())
-		x ? d->xRange(cSystemIndex) = range : d->yRange(cSystemIndex) = range;
+		x ? d->xRangeCSystem(cSystemIndex) = range : d->yRangeCSystem(cSystemIndex) = range;
 }
 
 /*!
@@ -3136,7 +3147,7 @@ void CartesianPlot::shift(int cSystemIndex, bool x, bool leftOrDown) {
 	}
 
 	if (range.finite())
-		x ? d->xRange(cSystemIndex) = range : d->yRange(cSystemIndex) = range;
+		x ? d->xRangeCSystem(cSystemIndex) = range : d->yRangeCSystem(cSystemIndex) = range;
 }
 
 void CartesianPlot::shiftLeftX(int cSystemIndex) {
@@ -3357,7 +3368,7 @@ void CartesianPlotPrivate::retransformScales() {
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.range.toStdString())
 		//TODO: check ranges for nonlinear scales
 		if (xRange.range.scale() != RangeT::Scale::Linear)
-			checkXRange();
+			checkXRange(xRangeIndex);
 
 		//check whether we have x-range breaks - the first break, if available, should be valid
 		bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
@@ -3415,7 +3426,7 @@ void CartesianPlotPrivate::retransformScales() {
 		DEBUG(Q_FUNC_INFO << ", yrange = " << yRange.range.toStdString())
 		//TODO: check ranges for nonlinear scales
 		if (yRange.range.scale() != RangeT::Scale::Linear)
-			checkYRange();
+			checkYRange(yRangeIndex);
 
 		//check whether we have y-range breaks - the first break, if available, should be valid
 		bool hasValidBreak = (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty() && yRangeBreaks.list.first().isValid());
@@ -3462,22 +3473,22 @@ void CartesianPlotPrivate::retransformScales() {
 	// also check delta* usage later
 
 	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
-	double deltaXMin = xRange().start() - xPrevRange.start();
-	double deltaXMax = xRange().end() - xPrevRange.end();
-	double deltaYMin = yRange().start() - yPrevRange.start();
-	double deltaYMax = yRange().end() - yPrevRange.end();
+	double deltaXMin = xRangeCSystem().start() - xPrevRange.start();
+	double deltaXMax = xRangeCSystem().end() - xPrevRange.end();
+	double deltaYMin = yRangeCSystem().start() - yPrevRange.start();
+	double deltaYMax = yRangeCSystem().end() - yPrevRange.end();
 
 	if (!qFuzzyIsNull(deltaXMin))
-		emit q->xMinChanged(xRange().start());
+		emit q->xMinChanged(defaultCoordinateSystem()->xIndex(), xRangeCSystem().start());
 	if (!qFuzzyIsNull(deltaXMax))
-		emit q->xMaxChanged(xRange().end());
+		emit q->xMaxChanged(defaultCoordinateSystem()->xIndex(), xRangeCSystem().end());
 	if (!qFuzzyIsNull(deltaYMin))
-		emit q->yMinChanged(yRange().start());
+		emit q->yMinChanged(defaultCoordinateSystem()->xIndex(), yRangeCSystem().start());
 	if (!qFuzzyIsNull(deltaYMax))
-		emit q->yMaxChanged(yRange().end());
+		emit q->yMaxChanged(defaultCoordinateSystem()->xIndex(), yRangeCSystem().end());
 
-	xPrevRange = xRange();
-	yPrevRange = yRange();
+	xPrevRange = xRangeCSystem();
+	yPrevRange = yRangeCSystem();
 
 	//adjust all auto-scale axes
 	for (auto* axis : q->children<Axis>()) {
@@ -3617,38 +3628,38 @@ void CartesianPlotPrivate::yRangeFormatChanged() {
 /*!
  * don't allow any negative values for the x range when log or sqrt scalings are used
  */
-void CartesianPlotPrivate::checkXRange() {
+void CartesianPlotPrivate::checkXRange(int xRangeIndex) {
 	//TODO: disabled for testing (negative values are already checked)
 	return;
 
 	double min = 0.01;
 
 	//TODO: refactor
-	if (xRange().start() <= 0.0) {
-		(min < xRange().end() * min) ? xRange().start() = min : xRange().start() = xRange().end() * min;
-		emit q->xMinChanged(xRange().start());
-	} else if (xRange().end() <= 0.0) {
-		(-min > xRange().start() * min) ? xRange().end() = -min : xRange().end() = xRange().start() * min;
-		emit q->xMaxChanged(xRange().end());
+	if (q->xRangeFromIndex(xRangeIndex).start() <= 0.0) {
+		(min < q->xRangeFromIndex(xRangeIndex).end() * min) ? q->xRangeFromIndex(xRangeIndex).start() = min : q->xRangeFromIndex(xRangeIndex).start() = q->xRangeFromIndex(xRangeIndex).end() * min;
+		emit q->xMinChanged(xRangeIndex, q->xRangeFromIndex(xRangeIndex).start());
+	} else if (q->xRangeFromIndex(xRangeIndex).end() <= 0.0) {
+		(-min > q->xRangeFromIndex(xRangeIndex).start() * min) ? q->xRangeFromIndex(xRangeIndex).end() = -min : q->xRangeFromIndex(xRangeIndex).end() = q->xRangeFromIndex(xRangeIndex).start() * min;
+		emit q->xMaxChanged(xRangeIndex, q->xRangeFromIndex(xRangeIndex).end());
 	}
 }
 
 /*!
  * don't allow any negative values for the y range when log or sqrt scalings are used
  */
-void CartesianPlotPrivate::checkYRange() {
+void CartesianPlotPrivate::checkYRange(int yRangeIndex) {
 	//TODO: disabled for testing (negative values are already checked)
 	return;
 
 	double min = 0.01;
 
 	//TODO: refactor
-	if (yRange().start() <= 0.0) {
-		(min < yRange().end()*min) ? yRange().start() = min : yRange().start() = yRange().end()*min;
-		emit q->yMinChanged(yRange().start());
-	} else if (yRange().end() <= 0.0) {
-		(-min > yRange().start()*min) ? yRange().end() = -min : yRange().end() = yRange().start()*min;
-		emit q->yMaxChanged(yRange().end());
+	if (q->yRangeFromIndex(yRangeIndex).start() <= 0.0) {
+		(min < q->yRangeFromIndex(yRangeIndex).end()*min) ? q->yRangeFromIndex(yRangeIndex).start() = min : q->yRangeFromIndex(yRangeIndex).start() = q->yRangeFromIndex(yRangeIndex).end()*min;
+		emit q->yMinChanged(yRangeIndex, q->yRangeFromIndex(yRangeIndex).start());
+	} else if (q->yRangeFromIndex(yRangeIndex).end() <= 0.0) {
+		(-min > q->yRangeFromIndex(yRangeIndex).start()*min) ? q->yRangeFromIndex(yRangeIndex).end() = -min : q->yRangeFromIndex(yRangeIndex).end() = q->yRangeFromIndex(yRangeIndex).start()*min;
+		emit q->yMaxChanged(yRangeIndex, q->yRangeFromIndex(yRangeIndex).end());
 	}
 }
 
@@ -3738,9 +3749,9 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 			cursorPenWidth2 = 10.;
 
 		bool visible;
-		if (cursor0Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2) {
+		if (cursor0Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), yRangeCSystem().start()), visible).x()) < cursorPenWidth2) {
 			selectedCursor = 0;
-		} else if (cursor1Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2) {
+		} else if (cursor1Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), yRangeCSystem().start()), visible).x()) < cursorPenWidth2) {
 			selectedCursor = 1;
 		} else if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
 			cursor1Enable = true;
@@ -3767,25 +3778,25 @@ void CartesianPlotPrivate::mousePressZoomSelectionMode(QPointF logicalPos, int c
 	bool visible;
 	const QPointF scenePos = cSystem->mapLogicalToScene(logicalPos, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
-		if (logicalPos.x() < xRange(cSystemIndex).start())
-			logicalPos.setX(xRange(cSystemIndex).start());
+		if (logicalPos.x() < xRangeCSystem(cSystemIndex).start())
+			logicalPos.setX(xRangeCSystem(cSystemIndex).start());
 
-		if (logicalPos.x() > xRange(cSystemIndex).end())
-			logicalPos.setX(xRange(cSystemIndex).end());
+		if (logicalPos.x() > xRangeCSystem(cSystemIndex).end())
+			logicalPos.setX(xRangeCSystem(cSystemIndex).end());
 
-		if (logicalPos.y() < yRange(cSystemIndex).start())
-			logicalPos.setY(yRange(cSystemIndex).start());
+		if (logicalPos.y() < yRangeCSystem(cSystemIndex).start())
+			logicalPos.setY(yRangeCSystem(cSystemIndex).start());
 
-		if (logicalPos.y() > yRange(cSystemIndex).end())
-			logicalPos.setY(yRange(cSystemIndex).end());
+		if (logicalPos.y() > yRangeCSystem(cSystemIndex).end())
+			logicalPos.setY(yRangeCSystem(cSystemIndex).end());
 
 		m_selectionStart = scenePos;
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
-		logicalPos.setY(yRange(cSystemIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
+		logicalPos.setY(yRangeCSystem(cSystemIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
 		m_selectionStart.setX(scenePos.x());
 		m_selectionStart.setY(dataRect.y());
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
-		logicalPos.setX(xRange(cSystemIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
+		logicalPos.setX(xRangeCSystem(cSystemIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
 		m_selectionStart.setX(dataRect.x());
 		m_selectionStart.setY(scenePos.y());
 	}
@@ -3797,8 +3808,8 @@ void CartesianPlotPrivate::mousePressCursorMode(int cursorNumber, QPointF logica
 
 	cursorNumber == 0 ? cursor0Enable = true : cursor1Enable = true;
 
-	QPointF p1(logicalPos.x(), yRange().start());
-	QPointF p2(logicalPos.x(), yRange().end());
+	QPointF p1(logicalPos.x(), yRangeCSystem().start());
+	QPointF p2(logicalPos.x(), yRangeCSystem().end());
 
 	if (cursorNumber == 0) {
 		cursor0Pos.setX(logicalPos.x());
@@ -3874,52 +3885,52 @@ bool CartesianPlotPrivate::translateRange(int cSystemIndex, const QPointF& logic
 	if (translateX && logicalStart.x() - logicalEnd.x() != 0) { // TODO: find better method
 		translationX = true;
 		double start{ logicalStart.x() }, end{ logicalEnd.x() };
-		switch (xRange(cSystemIndex).scale()) {
+		switch (xRangeCSystem(cSystemIndex).scale()) {
 		case RangeT::Scale::Linear: {
 			const double delta = (start - end);
-			xRange(cSystemIndex).translate(delta);
+			xRangeCSystem(cSystemIndex).translate(delta);
 			break;
 		}
 		case RangeT::Scale::Log10: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double delta = log10(start / end);
-			xRange(cSystemIndex) *= pow(10, delta);
+			xRangeCSystem(cSystemIndex) *= pow(10, delta);
 			break;
 		}
 		case RangeT::Scale::Log2: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double delta = log2(start / end);
-			xRange(cSystemIndex) *= exp2(delta);
+			xRangeCSystem(cSystemIndex) *= exp2(delta);
 			break;
 		}
 		case RangeT::Scale::Ln: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double delta = log(start / end);
-			xRange(cSystemIndex) *= exp(delta);
+			xRangeCSystem(cSystemIndex) *= exp(delta);
 			break;
 		}
 		case RangeT::Scale::Sqrt: {
 			if (start < 0 || end < 0)
 				break;
 			const double delta = sqrt(start) - sqrt(end);
-			xRange(cSystemIndex).translate(delta*delta);
+			xRangeCSystem(cSystemIndex).translate(delta*delta);
 			break;
 		}
 		case RangeT::Scale::Square: {
 			if (end <= start)
 				break;
 			const double delta = end*end - start*start;
-			xRange(cSystemIndex).translate(sqrt(delta));
+			xRangeCSystem(cSystemIndex).translate(sqrt(delta));
 			break;
 		}
 		case RangeT::Scale::Inverse: {
 			if (start == 0. || end == 0. || end <= start)
 				break;
 			const double delta = 1./start - 1./end;
-			xRange(cSystemIndex).translate(1./delta);
+			xRangeCSystem(cSystemIndex).translate(1./delta);
 			break;
 		}
 		}
@@ -3930,52 +3941,52 @@ bool CartesianPlotPrivate::translateRange(int cSystemIndex, const QPointF& logic
 		//handle the change in y
 		double start = logicalStart.y();
 		double end = logicalEnd.y();
-		switch (yRange(cSystemIndex).scale()) {
+		switch (yRangeCSystem(cSystemIndex).scale()) {
 		case RangeT::Scale::Linear: {
 			const double deltaY = (start - end);
-			yRange(cSystemIndex).translate(deltaY);
+			yRangeCSystem(cSystemIndex).translate(deltaY);
 			break;
 		}
 		case RangeT::Scale::Log10: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double deltaY = log10(start / end);
-			yRange(cSystemIndex) *= pow(10, deltaY);
+			yRangeCSystem(cSystemIndex) *= pow(10, deltaY);
 			break;
 		}
 		case RangeT::Scale::Log2: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double deltaY = log2(start / end);
-			yRange(cSystemIndex) *= exp2(deltaY);
+			yRangeCSystem(cSystemIndex) *= exp2(deltaY);
 			break;
 		}
 		case RangeT::Scale::Ln: {
 			if (end == 0 || start / end <= 0)
 				break;
 			const double deltaY = log(start / end);
-			yRange(cSystemIndex) *= exp(deltaY);
+			yRangeCSystem(cSystemIndex) *= exp(deltaY);
 			break;
 		}
 		case RangeT::Scale::Sqrt: {
 			if (start < 0 || end < 0)
 				break;
 			const double delta = sqrt(start) - sqrt(end);
-			yRange(cSystemIndex).translate(delta*delta);
+			yRangeCSystem(cSystemIndex).translate(delta*delta);
 			break;
 		}
 		case RangeT::Scale::Square: {
 			if (end <= start)
 				break;
 			const double delta = end*end - start*start;
-			yRange(cSystemIndex).translate(sqrt(delta));
+			yRangeCSystem(cSystemIndex).translate(sqrt(delta));
 			break;
 		}
 		case RangeT::Scale::Inverse: {
 			if (start == 0. || end == 0. || end <= start)
 				break;
 			const double delta = 1./start - 1./end;
-			yRange(cSystemIndex).translate(1./delta);
+			yRangeCSystem(cSystemIndex).translate(1./delta);
 			break;
 		}
 		}
@@ -4049,18 +4060,18 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 	if (cSystemIndex == -1 || cSystemIndex >= q->m_coordinateSystems.count())
 		cSystem = defaultCoordinateSystem();
 	else
-		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex]);
+		cSystem = q->coordinateSystem(cSystemIndex);
 
-	const auto xRangeFormat{ xRange(cSystemIndex).format() };
-	const auto yRangeFormat{ yRange(cSystemIndex).format() };
-	const auto xRangeDateTimeFormat{ xRange(cSystemIndex).dateTimeFormat() };
+	const auto xRangeFormat{ xRangeCSystem(cSystemIndex).format() };
+	const auto yRangeFormat{ yRangeCSystem(cSystemIndex).format() };
+	const auto xRangeDateTimeFormat{ xRangeCSystem(cSystemIndex).dateTimeFormat() };
 	const QPointF logicalStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 		bool visible;
 		m_selectionEnd = cSystem->mapLogicalToScene(logicalPos, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		QPointF logicalEnd = logicalPos;
-	if (xRangeFormat == RangeT::Format::Numeric)
+		if (xRangeFormat == RangeT::Format::Numeric)
 			info = QString::fromUtf8("Δx=") + QString::number(logicalEnd.x()-logicalStart.x());
 		else
 			info = i18n("from x=%1 to x=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.x()).toString(xRangeDateTimeFormat),
@@ -4073,7 +4084,7 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 			info += i18n("from y=%1 to y=%2", QDateTime::fromMSecsSinceEpoch(logicalStart.y()).toString(xRangeDateTimeFormat),
 						 QDateTime::fromMSecsSinceEpoch(logicalEnd.y()).toString(xRangeDateTimeFormat));
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
-		logicalPos.setY(yRange(cSystemIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
+		logicalPos.setY(yRangeCSystem(cSystemIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
 		bool visible;
 		m_selectionEnd.setX(cSystem->mapLogicalToScene(logicalPos, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).x());//event->pos().x());
 		m_selectionEnd.setY(dataRect.bottom());
@@ -4085,7 +4096,7 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 						QDateTime::fromMSecsSinceEpoch(logicalEnd.x()).toString(xRangeDateTimeFormat));
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 		m_selectionEnd.setX(dataRect.right());
-		logicalPos.setX(xRange(cSystemIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
+		logicalPos.setX(xRangeCSystem(cSystemIndex).start()); // must be done, because the other plots can have other ranges, value must be in the scenes
 		bool visible;
 		m_selectionEnd.setY(cSystem->mapLogicalToScene(logicalPos, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping).y());//event->pos().y());
 		QPointF logicalEnd = logicalPos;
@@ -4100,8 +4111,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 }
 
 void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logicalPos) {
-	const auto xRangeFormat{ xRange().format() };
-	const auto xRangeDateTimeFormat{ xRange().dateTimeFormat() };
+	const auto xRangeFormat{ xRangeCSystem().format() };
+	const auto xRangeDateTimeFormat{ xRangeCSystem().dateTimeFormat() };
 
 	QPointF p1(logicalPos.x(), 0);
 	cursorNumber == 0 ? cursor0Pos = p1 : cursor1Pos = p1;
@@ -4167,16 +4178,16 @@ bool CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		QPointF logicalZoomStart = cSystem->mapSceneToLogical(m_selectionStart, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		QPointF logicalZoomEnd = cSystem->mapSceneToLogical(m_selectionEnd, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		if (m_selectionEnd.x() > m_selectionStart.x())
-			xRange(cSystemIndex).setRange(logicalZoomStart.x(), logicalZoomEnd.x());
+			xRangeCSystem(cSystemIndex).setRange(logicalZoomStart.x(), logicalZoomEnd.x());
 		else
-			xRange(cSystemIndex).setRange(logicalZoomEnd.x(), logicalZoomStart.x());
-		xRange(cSystemIndex).niceExtend();
+			xRangeCSystem(cSystemIndex).setRange(logicalZoomEnd.x(), logicalZoomStart.x());
+		xRangeCSystem(cSystemIndex).niceExtend();
 
 		if (m_selectionEnd.y() > m_selectionStart.y())
-			yRange(cSystemIndex).setRange(logicalZoomEnd.y(), logicalZoomStart.y());
+			yRangeCSystem(cSystemIndex).setRange(logicalZoomEnd.y(), logicalZoomStart.y());
 		else
-			yRange(cSystemIndex).setRange(logicalZoomStart.y(), logicalZoomEnd.y());
-		yRange(cSystemIndex).niceExtend();
+			yRangeCSystem(cSystemIndex).setRange(logicalZoomStart.y(), logicalZoomEnd.y());
+		yRangeCSystem(cSystemIndex).niceExtend();
 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 			q->setXRangeDirty(cSystemIndex, true);
@@ -4296,10 +4307,10 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	else if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index]);
 
-	const auto xRangeFormat{ xRange(index).format() };
-	const auto yRangeFormat{ yRange(index).format() };
-	const auto xRangeDateTimeFormat{ xRange(index).dateTimeFormat() };
-	const auto yRangeDateTimeFormat{ yRange(index).dateTimeFormat() };
+	const auto xRangeFormat{ xRangeCSystem(index).format() };
+	const auto yRangeFormat{ yRangeCSystem(index).format() };
+	const auto xRangeDateTimeFormat{ xRangeCSystem(index).dateTimeFormat() };
+	const auto yRangeDateTimeFormat{ yRangeCSystem(index).dateTimeFormat() };
 	if (dataRect.contains(point)) {
 		QPointF logicalPoint = cSystem->mapSceneToLogical(point);
 
@@ -4369,8 +4380,8 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 				cursorPenWidth2 = 10.;
 
 			bool visible;
-			if ((cursor0Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2) ||
-					(cursor1Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2))
+			if ((cursor0Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRangeCSystem().start()), visible).x()) < cursorPenWidth2) ||
+					(cursor1Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRangeCSystem().start()), visible).x()) < cursorPenWidth2))
 				setCursor(Qt::SizeHorCursor);
 			else
 				setCursor(Qt::ArrowCursor);
@@ -4412,13 +4423,13 @@ void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos, int cSy
 	if (mouseMode == CartesianPlot::MouseMode::ZoomSelection && !m_selectionBandIsShown) {
 
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection && !m_selectionBandIsShown) {
-		QPointF p1(logicPos.x(), yRange(cSystemIndex).start());
-		QPointF p2(logicPos.x(), yRange(cSystemIndex).end());
+		QPointF p1(logicPos.x(), yRangeCSystem(cSystemIndex).start());
+		QPointF p2(logicPos.x(), yRangeCSystem(cSystemIndex).end());
 		m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1, visible, CartesianCoordinateSystem::MappingFlag::Limit));
 		m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2, visible, CartesianCoordinateSystem::MappingFlag::Limit));
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection && !m_selectionBandIsShown) {
-		QPointF p1(xRange(cSystemIndex).start(), logicPos.y());
-		QPointF p2(xRange(cSystemIndex).end(), logicPos.y());
+		QPointF p1(xRangeCSystem(cSystemIndex).start(), logicPos.y());
+		QPointF p2(xRangeCSystem(cSystemIndex).end(), logicPos.y());
 		m_selectionStartLine.setP1(cSystem->mapLogicalToScene(p1, visible, CartesianCoordinateSystem::MappingFlag::Limit));
 		m_selectionStartLine.setP2(cSystem->mapLogicalToScene(p2, visible, CartesianCoordinateSystem::MappingFlag::Limit));
 	}
@@ -4495,9 +4506,9 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		painter->setFont(font);
 
 		bool visible;
-		QPointF p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start()), visible);
+		QPointF p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRangeCSystem().start()), visible);
 		if (cursor0Enable && visible) {
-			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().end()), visible);
+			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRangeCSystem().end()), visible);
 			painter->drawLine(p1, p2);
 			QPointF textPos = p2;
 			textPos.setX(p2.x() - m_cursor0Text.size().width()/2);
@@ -4507,9 +4518,9 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			painter->drawStaticText(textPos, m_cursor0Text);
 		}
 
-		p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start()), visible);
+		p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRangeCSystem().start()), visible);
 		if (cursor1Enable && visible) {
-			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().end()), visible);
+			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRangeCSystem().end()), visible);
 			painter->drawLine(p1, p2);
 			QPointF textPos = p2;
 			// TODO: Moving this stuff into other function to not calculate it every time
