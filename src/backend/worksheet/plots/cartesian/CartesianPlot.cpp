@@ -3344,7 +3344,7 @@ void CartesianPlotPrivate::checkXRange() {
 	//TODO: disabled for testing (negative values are already checked)
 	return;
 
-	double min = 0.01;
+/*	double min = 0.01;
 
 	//TODO: refactor
 	if (xRange().start() <= 0.0) {
@@ -3353,7 +3353,7 @@ void CartesianPlotPrivate::checkXRange() {
 	} else if (xRange().end() <= 0.0) {
 		(-min > xRange().start() * min) ? xRange().end() = -min : xRange().end() = xRange().start() * min;
 		emit q->xMaxChanged(xRange().end());
-	}
+	}*/
 }
 
 /*!
@@ -3363,7 +3363,7 @@ void CartesianPlotPrivate::checkYRange() {
 	//TODO: disabled for testing (negative values are already checked)
 	return;
 
-	double min = 0.01;
+/*	double min = 0.01;
 
 	//TODO: refactor
 	if (yRange().start() <= 0.0) {
@@ -3372,7 +3372,7 @@ void CartesianPlotPrivate::checkYRange() {
 	} else if (yRange().end() <= 0.0) {
 		(-min > yRange().start()*min) ? yRange().end() = -min : yRange().end() = yRange().start()*min;
 		emit q->yMaxChanged(yRange().end());
-	}
+	}*/
 }
 
 CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double> &sceneRange, const Range<double> &logicalRange) {

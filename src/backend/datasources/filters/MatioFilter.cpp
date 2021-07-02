@@ -1109,8 +1109,9 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					continue;
 				if (field == startColumn -1)
 					colIndex = 0;
+#ifndef NDEBUG
 				const int elem = i/nfields;
-
+#endif
 				DEBUG(Q_FUNC_INFO << ", var " << i + 1 << "(field " << field + 1 << ", elem " << elem + 1 <<"): name = " << fields[i]->name
 						<< ", type = " << className(fields[i]->class_type).toStdString())
 
