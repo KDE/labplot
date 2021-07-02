@@ -793,7 +793,7 @@ void Worksheet::cartesianPlotMousePressZoomSelectionMode(QPointF logicPos) {
 		for (auto* plot : plots)
 			plot->mousePressZoomSelectionMode(logicPos);
 	} else if ((actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
-	           (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection)) {
+			   (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection)) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots) {
 			if (plot != senderPlot) {
@@ -813,8 +813,8 @@ void Worksheet::cartesianPlotMouseReleaseZoomSelectionMode() {
 	auto mouseMode = senderPlot->mouseMode();
 	auto actionMode = cartesianPlotActionMode();
 	if (actionMode == CartesianPlotActionMode::ApplyActionToAll ||
-	        (actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
-	        (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
+			(actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
+			(actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots) {
 			plot->mouseReleaseZoomSelectionMode();
@@ -844,8 +844,8 @@ void Worksheet::cartesianPlotMouseMoveZoomSelectionMode(QPointF logicPos) {
 	auto actionMode = cartesianPlotActionMode();
 	auto mouseMode = senderPlot->mouseMode();
 	if (actionMode == CartesianPlotActionMode::ApplyActionToAll ||
-	        (actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
-	        (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
+			(actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
+			(actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		QVector<CartesianPlot*> plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseMoveZoomSelectionMode(logicPos);
@@ -885,8 +885,8 @@ void Worksheet::cartesianPlotMouseHoverZoomSelectionMode(QPointF logicPos) {
 	auto actionMode = cartesianPlotActionMode();
 	auto mouseMode = senderPlot->mouseMode();
 	if (actionMode == CartesianPlotActionMode::ApplyActionToAll ||
-	        (actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
-	        (actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
+			(actionMode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
+			(actionMode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseHoverZoomSelectionMode(logicPos);
@@ -899,8 +899,8 @@ void Worksheet::cartesianPlotMouseHoverOutsideDataRect() {
 	auto mode = cartesianPlotActionMode();
 	auto mouseMode = senderPlot->mouseMode();
 	if (cartesianPlotActionMode() == CartesianPlotActionMode::ApplyActionToAll ||
-	        (mode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
-	        (mode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
+			(mode == CartesianPlotActionMode::ApplyActionToAllX && mouseMode != CartesianPlot::MouseMode::ZoomYSelection) ||
+			(mode == CartesianPlotActionMode::ApplyActionToAllY && mouseMode != CartesianPlot::MouseMode::ZoomXSelection )) {
 		auto plots = children<CartesianPlot>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
 		for (auto* plot : plots)
 			plot->mouseHoverOutsideDataRect();
@@ -921,58 +921,56 @@ void Worksheet::cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logic
 	cursorPosChanged(cursorNumber, logicPos.x());
 }
 
-QString dateTimeDiffToString(const QDateTime& dt0, const QDateTime& dt1)
-{
-    QString result;
-    qint64 diff;
-    bool negative = false;;
-    if (dt0 < dt1) {
-        diff = dt0.msecsTo(dt1);
-        negative = true;
-    } else
-        diff = dt1.msecsTo(dt0);
-    const qint64 dayToMsecs = 24 * 3600 * 1000;
-    const qint64 hourToMsecs = 3600 * 1000;
-    const qint64 minutesToMsecs = 60 * 1000;
+QString dateTimeDiffToString(const QDateTime& dt0, const QDateTime& dt1) {
+	QString result;
+	qint64 diff;
+	bool negative = false;;
+	if (dt0 < dt1) {
+		diff = dt0.msecsTo(dt1);
+		negative = true;
+	} else
+		diff = dt1.msecsTo(dt0);
+	const qint64 dayToMsecs = 24 * 3600 * 1000;
+	const qint64 hourToMsecs = 3600 * 1000;
+	const qint64 minutesToMsecs = 60 * 1000;
 
-    qint64 mod;
-    qint64 days = diff / dayToMsecs;
-    diff -= days * dayToMsecs;
-    qint64 hours = diff / hourToMsecs;
-    diff -= hours * hourToMsecs;
-    qint64 minutes = diff / minutesToMsecs;
-    diff -= minutes * minutesToMsecs;
-    qint64 seconds = diff / 1000;
-    diff -= seconds * 1000;
-    qint64 msecs = diff;
+	qint64 days = diff / dayToMsecs;
+	diff -= days * dayToMsecs;
+	qint64 hours = diff / hourToMsecs;
+	diff -= hours * hourToMsecs;
+	qint64 minutes = diff / minutesToMsecs;
+	diff -= minutes * minutesToMsecs;
+	qint64 seconds = diff / 1000;
+	diff -= seconds * 1000;
+	qint64 msecs = diff;
 
-    if (negative)
-        result += "- ";
+	if (negative)
+		result += "- ";
 
-    if (days > 0)
-        result += QString::number(days) + " " + QObject::tr("days") + " ";
+	if (days > 0)
+		result += QString::number(days) + " " + QObject::tr("days") + " ";
 
-    if (hours > 0)
-        result += QString::number(hours) + ":";
-    else
-        result += "00:";
+	if (hours > 0)
+		result += QString::number(hours) + ":";
+	else
+		result += "00:";
 
-    if (minutes > 0)
-        result += QString::number(minutes) + ":";
-    else
-        result += "00:";
+	if (minutes > 0)
+		result += QString::number(minutes) + ":";
+	else
+		result += "00:";
 
-    if (seconds > 0)
-        result += QString::number(seconds) + ".";
-    else
-        result += "00.";
+	if (seconds > 0)
+		result += QString::number(seconds) + ".";
+	else
+		result += "00.";
 
-    if (msecs > 0)
-        result += QString::number(msecs);
-    else
-        result += "000";
+	if (msecs > 0)
+		result += QString::number(msecs);
+	else
+		result += "000";
 
-    return result;
+	return result;
 }
 
 /*!
@@ -1005,14 +1003,14 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 			QVariant data;
 			valueCursor[i] = sender->cursorPos(i);
 			if (isDatetime) {
-                datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i]);
+				datetime[i] = QDateTime::fromMSecsSinceEpoch(valueCursor[i]);
 				data = datetime[i].toString(sender->xRangeDateTimeFormat());
 			} else
 				data = QVariant(valueCursor[i]);
 			treeModel->setTreeData(data, 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSOR0) + i);
 		}
 		if (isDatetime)
-            treeModel->setTreeData(dateTimeDiffToString(datetime[0], datetime[1]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
+			treeModel->setTreeData(dateTimeDiffToString(datetime[0], datetime[1]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
 		else
 			treeModel->setTreeData(QVariant(valueCursor[1] - valueCursor[0]), 0, static_cast<int>(WorksheetPrivate::TreeModelColumn::CURSORDIFF));
 
@@ -1250,7 +1248,7 @@ void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName)
 		int curveCount = treeModel->rowCount(plotIndex);
 		for (int j = 0; j < curveCount; j++) {
 			QModelIndex curveIndex = treeModel->index(j, static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME),
-			                         plotIndex);
+											plotIndex);
 
 			if (curveIndex.data().toString().compare(curveName) != 0)
 				continue;
@@ -1258,8 +1256,8 @@ void Worksheet::updateCurveBackground(const QPen& pen, const QString& curveName)
 			QColor curveColor = pen.color();
 			curveColor.setAlpha(50);
 			treeModel->setTreeData(QVariant(curveColor), j,
-			                       static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME),
-			                       plotIndex, Qt::BackgroundRole);
+						static_cast<int>(WorksheetPrivate::TreeModelColumn::SIGNALNAME),
+						plotIndex, Qt::BackgroundRole);
 			return;
 		}
 		return;
