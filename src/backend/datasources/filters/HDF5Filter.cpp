@@ -1723,14 +1723,18 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			handleError((int)order, "H5Tget_order");
 #endif
 			QDEBUG(translateHDF5Class(dclass) << '(' << typeSize << ')' << translateHDF5Order(order) << "," << rows << "x" << cols);
-			DEBUG("startRow/endRow" << startRow << endRow);
-			DEBUG("startColumn/endColumn" << startColumn << endColumn);
-			DEBUG("actual rows/cols" << actualRows << actualCols);
-			DEBUG("lines" << lines);
+			DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << "/" << endRow);
+			DEBUG(Q_FUNC_INFO << ", start/end column = " << startColumn << "/" << endColumn);
+			DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << "/" << actualCols);
+			DEBUG(Q_FUNC_INFO << ", lines = " << lines);
 
-			//TODO: support other modes
 			QVector<AbstractColumn::ColumnMode> columnModes;
 			columnModes.resize(actualCols);
+			//TODO: support other modes
+			if (dclass == H5T_STRING) {
+				for (auto& mode : columnModes)
+					mode = AbstractColumn::ColumnMode::Text;
+			}
 
 			// use current data set name (without path) append by "_" and column number for column names
 			QStringList vectorNames;
@@ -1827,10 +1831,46 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 					break;
 				}
 			case H5T_STRING: {
-					// TODO: implement this
-					ok = false;
-					dataStrings << (QStringList() << i18n("rank 2 not implemented yet for type %1, size = %2", translateHDF5Class(dclass), typeSize));
-					QDEBUG(dataStrings);
+					DEBUG("rank 2 H5T_STRING");
+					hid_t memtype = H5Tcopy(H5T_C_S1);
+					handleError((int)memtype, "H5Tcopy");
+
+					char** data = (char **) malloc(rows*cols * sizeof (char *));
+
+					if (H5Tis_variable_str(dtype)) {
+						m_status = H5Tset_size(memtype, H5T_VARIABLE);
+						handleError((int)memtype, "H5Tset_size");
+						m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+						handleError(m_status, "H5Dread");
+					} else {
+						data[0] = (char *) malloc(rows*cols * typeSize * sizeof (char));
+						for (int i = 1; i < rows*cols; ++i)
+							data[i] = data[0] + i * typeSize;
+
+						m_status = H5Tset_size(memtype, typeSize);
+						handleError((int)memtype, "H5Tset_size");
+
+						m_status = H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data[0]);
+						handleError(m_status, "H5Dread");
+					}
+
+					if (dataSource) {
+						for (int i = 0; i < actualRows; ++i) {
+							for (int j = 0; j < actualCols; ++j) {
+								static_cast<QVector<QString>*>(dataContainer[(int)(j)])->operator[](i)
+									= data[(j + startColumn - 1) + (i + startRow - 1) * cols];
+							}
+						}
+					} else {
+						for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) {
+							QStringList row;
+							for (int j = startColumn - 1; j < endColumn; ++j)
+								row << data[j + i*cols];
+							dataStrings << row;
+						}
+					}
+
+					free(data);
 					break;
 				}
 			case H5T_TIME:
