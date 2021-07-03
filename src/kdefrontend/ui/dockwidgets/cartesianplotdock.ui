@@ -986,35 +986,8 @@
        <string>Plot Area</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="13" column="2">
-        <widget class="QDoubleSpinBox" name="sbBorderWidth">
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lBackgroundColorStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lBackgroundOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="20" column="2">
-        <widget class="QDoubleSpinBox" name="sbPaddingHorizontal">
-         <property name="prefix">
-          <string/>
-         </property>
+       <item row="24" column="2">
+        <widget class="QDoubleSpinBox" name="sbPaddingBottom">
          <property name="suffix">
           <string> cm</string>
          </property>
@@ -1026,29 +999,8 @@
          </property>
         </widget>
        </item>
-       <item row="15" column="0">
-        <widget class="QLabel" name="lBorderOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lBackgroundType">
-         <property name="text">
-          <string>Type:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lBackgroundBrushStyle">
-         <property name="text">
-          <string>Style:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="16" column="0">
-        <spacer name="verticalSpacer_5">
+       <item row="9" column="0">
+        <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -1063,7 +1015,55 @@
          </property>
         </spacer>
        </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lBackgroundColorStyle">
+         <property name="text">
+          <string>Style:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="23" column="0">
+        <widget class="QLabel" name="lPaddingHorizontalRight">
+         <property name="text">
+          <string>Right:</string>
+         </property>
+        </widget>
+       </item>
        <item row="15" column="2">
+        <widget class="QDoubleSpinBox" name="sbBorderCornerRadius">
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="0">
+        <widget class="QLabel" name="lBorderColor">
+         <property name="text">
+          <string>Color:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="2">
+        <widget class="QDoubleSpinBox" name="sbBorderWidth">
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="0">
+        <widget class="QLabel" name="lPaddingHorizontal">
+         <property name="text">
+          <string>Horizontal:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="2">
         <widget class="QSpinBox" name="sbBorderOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1094,8 +1094,21 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
-        <spacer name="verticalSpacer_3">
+       <item row="2" column="2">
+        <widget class="QLineEdit" name="leBackgroundFileName">
+         <property name="toolTip">
+          <string>Specify the name of the image file.</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2">
+        <widget class="QComboBox" name="cbBackgroundBrushStyle"/>
+       </item>
+       <item row="17" column="0">
+        <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -1110,31 +1123,50 @@
          </property>
         </spacer>
        </item>
-       <item row="20" column="0">
-        <widget class="QLabel" name="lPaddingHorizontal">
+       <item row="4" column="2">
+        <widget class="QComboBox" name="cbBackgroundImageStyle"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="lBackgroundFirstColor">
          <property name="text">
-          <string>Horizontal:</string>
+          <string>First color:</string>
          </property>
         </widget>
        </item>
-       <item row="11" column="2">
-        <widget class="QComboBox" name="cbBorderStyle">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="0">
-        <widget class="QLabel" name="lBorderWidth">
+       <item row="16" column="0">
+        <widget class="QLabel" name="lBorderOpacity">
          <property name="text">
-          <string>Width:</string>
+          <string>Opacity:</string>
          </property>
         </widget>
        </item>
-       <item row="22" column="2">
+       <item row="1" column="0">
+        <widget class="QLabel" name="lBackgroundType">
+         <property name="text">
+          <string>Type:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="21" column="2">
+        <widget class="QDoubleSpinBox" name="sbPaddingHorizontal">
+         <property name="prefix">
+          <string/>
+         </property>
+         <property name="suffix">
+          <string> cm</string>
+         </property>
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.100000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="KColorButton" name="kcbBackgroundSecondColor"/>
+       </item>
+       <item row="23" column="2">
         <widget class="QDoubleSpinBox" name="sbPaddingRight">
          <property name="suffix">
           <string> cm</string>
@@ -1147,36 +1179,34 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="lBorder">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Border</string>
+       <item row="12" column="2">
+        <widget class="QComboBox" name="cbBorderStyle">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
         </widget>
        </item>
-       <item row="17" column="0">
+       <item row="3" column="2">
+        <widget class="QComboBox" name="cbBackgroundColorStyle"/>
+       </item>
+       <item row="24" column="0">
+        <widget class="QLabel" name="lPaddingVerticalDown">
+         <property name="text">
+          <string>Bottom:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="20" column="2">
+        <widget class="QCheckBox" name="cbPaddingSymmetric">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="0">
         <widget class="QLabel" name="lPadding">
          <property name="font">
           <font>
@@ -1188,56 +1218,6 @@
           <string>Padding</string>
          </property>
         </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lBackground">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Background</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="0">
-        <widget class="QLabel" name="lBorderColor">
-         <property name="text">
-          <string>Color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="22" column="0">
-        <widget class="QLabel" name="lPaddingHorizontalRight">
-         <property name="text">
-          <string>Right:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="23" column="2">
-        <widget class="QDoubleSpinBox" name="sbPaddingBottom">
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lBackgroundFirstColor">
-         <property name="text">
-          <string>First color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="KColorButton" name="kcbBackgroundSecondColor"/>
        </item>
        <item row="2" column="3">
         <widget class="QPushButton" name="bOpen">
@@ -1255,37 +1235,19 @@
          </property>
         </widget>
        </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="lBorderStyle">
-         <property name="text">
-          <string>Style:</string>
+       <item row="22" column="2">
+        <widget class="QDoubleSpinBox" name="sbPaddingVertical">
+         <property name="prefix">
+          <string/>
          </property>
-        </widget>
-       </item>
-       <item row="14" column="2">
-        <widget class="QDoubleSpinBox" name="sbBorderCornerRadius">
          <property name="suffix">
           <string> cm</string>
          </property>
+         <property name="maximum">
+          <double>1000.000000000000000</double>
+         </property>
          <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLineEdit" name="leBackgroundFileName">
-         <property name="toolTip">
-          <string>Specify the name of the image file.</string>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="lBorderCornerRadius">
-         <property name="text">
-          <string>Corner radius:</string>
+          <double>0.100000000000000</double>
          </property>
         </widget>
        </item>
@@ -1320,16 +1282,138 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="2">
-        <widget class="QComboBox" name="cbBackgroundImageStyle"/>
-       </item>
        <item row="6" column="2">
         <widget class="KColorButton" name="kcbBackgroundFirstColor"/>
        </item>
-       <item row="3" column="2">
-        <widget class="QComboBox" name="cbBackgroundColorStyle"/>
+       <item row="20" column="0">
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Symmetric:</string>
+         </property>
+        </widget>
        </item>
-       <item row="12" column="2">
+       <item row="25" column="0">
+        <spacer name="verticalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="22" column="0">
+        <widget class="QLabel" name="lPaddingVertical">
+         <property name="text">
+          <string>Vertical:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="lBorderCornerRadius">
+         <property name="text">
+          <string>Corner radius:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QComboBox" name="cbBackgroundType">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="lBackground">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Background</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="lBackgroundBrushStyle">
+         <property name="text">
+          <string>Style:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lBackgroundOpacity">
+         <property name="text">
+          <string>Opacity:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lBorder">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Border</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="lBorderWidth">
+         <property name="text">
+          <string>Width:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="0">
+        <widget class="QLabel" name="lBorderStyle">
+         <property name="text">
+          <string>Style:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="lBackgroundFileName">
+         <property name="text">
+          <string>File name:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="lBackgroundSecondColor">
+         <property name="text">
+          <string>Second color:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
         <widget class="KColorButton" name="kcbBorderColor">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1346,89 +1430,92 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lBackgroundSecondColor">
+       <item row="11" column="0">
+        <widget class="QLabel" name="label_10">
          <property name="text">
-          <string>Second color:</string>
+          <string>Type:</string>
          </property>
         </widget>
        </item>
-       <item row="21" column="0">
-        <widget class="QLabel" name="lPaddingVertical">
-         <property name="text">
-          <string>Vertical:</string>
+       <item row="11" column="2">
+        <widget class="QFrame" name="frameBorderType">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
          </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QToolButton" name="tbBorderTypeLeft">
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="tbBorderTypeTop">
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="tbBorderTypeRight">
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="tbBorderTypeBottom">
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_10">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </widget>
-       </item>
-       <item row="23" column="0">
-        <widget class="QLabel" name="lPaddingVerticalDown">
-         <property name="text">
-          <string>Bottom:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lBackgroundFileName">
-         <property name="text">
-          <string>File name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QComboBox" name="cbBackgroundType">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="21" column="2">
-        <widget class="QDoubleSpinBox" name="sbPaddingVertical">
-         <property name="prefix">
-          <string/>
-         </property>
-         <property name="suffix">
-          <string> cm</string>
-         </property>
-         <property name="maximum">
-          <double>1000.000000000000000</double>
-         </property>
-         <property name="singleStep">
-          <double>0.100000000000000</double>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QComboBox" name="cbBackgroundBrushStyle"/>
-       </item>
-       <item row="19" column="0">
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>Symmetric:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="19" column="2">
-        <widget class="QCheckBox" name="cbPaddingSymmetric">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="24" column="0">
-        <spacer name="verticalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
        </item>
       </layout>
      </widget>

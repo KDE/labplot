@@ -46,6 +46,13 @@ public:
 	enum class BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
 			TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient, RadialGradient};
 	enum class BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
+	enum class BorderTypeFlags {
+			BorderLeft = 0x0,
+			BorderTop = 0x1,
+			BorderRight = 0x2,
+			BorderBottom = 0x4
+	};
+	Q_DECLARE_FLAGS(BorderType, BorderTypeFlags)
 
 	QGraphicsItem* graphicsItem() const override;
 	void setVisible(bool on) override;
@@ -64,6 +71,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, backgroundFileName, BackgroundFileName)
 	BASIC_D_ACCESSOR_DECL(qreal, backgroundOpacity, BackgroundOpacity)
 
+	BASIC_D_ACCESSOR_DECL(PlotArea::BorderType, borderType, BorderType)
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderCornerRadius, BorderCornerRadius)
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
@@ -96,6 +104,7 @@ signals:
 	void backgroundSecondColorChanged(QColor&);
 	void backgroundFileNameChanged(QString&);
 	void backgroundOpacityChanged(float);
+	void borderTypeChanged(PlotArea::BorderType);
 	void borderPenChanged(QPen&);
 	void borderCornerRadiusChanged(float);
 	void borderOpacityChanged(float);
@@ -103,5 +112,7 @@ signals:
 private:
 	CartesianPlot* m_parent;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(PlotArea::BorderType)
 
 #endif

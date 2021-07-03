@@ -139,6 +139,7 @@ private slots:
 	void selectFile();
 	void fileNameChanged();
 	void backgroundOpacityChanged(int);
+	void borderTypeChanged();
 	void borderStyleChanged(int);
 	void borderColorChanged(const QColor&);
 	void borderWidthChanged(double);
@@ -194,6 +195,7 @@ private slots:
 	void plotBackgroundSecondColorChanged(QColor&);
 	void plotBackgroundFileNameChanged(QString&);
 	void plotBackgroundOpacityChanged(float);
+	void plotBorderTypeChanged(PlotArea::BorderType);
 	void plotBorderPenChanged(QPen&);
 	void plotBorderCornerRadiusChanged(float);
 	void plotBorderOpacityChanged(float);
@@ -212,7 +214,7 @@ private slots:
 
 	//save/load themes
 	void loadTheme(const QString&);
-	void saveTheme(KConfig& config) const;
+	void saveTheme(KConfig&) const;
 
 	void load();
 

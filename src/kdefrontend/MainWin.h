@@ -144,7 +144,6 @@ private:
 	QDockWidget* m_propertiesDock{nullptr};
 	AbstractAspect* m_currentAspect{nullptr};
 	Folder* m_currentFolder{nullptr};
-	QString m_currentFileName;
 	QString m_undoViewEmptyLabel;
 	bool m_suppressCurrentSubWindowChangedEvent{false};
 	bool m_closing{false};

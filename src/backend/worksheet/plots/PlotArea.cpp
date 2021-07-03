@@ -86,6 +86,10 @@ void PlotArea::init() {
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 
 	//Border
+	d->borderType.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
+	d->borderType.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
+	d->borderType.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
+	d->borderType.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
 	                    group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
@@ -93,7 +97,7 @@ void PlotArea::init() {
 	d->borderOpacity = group.readEntry("BorderOpacity", 1.0);
 }
 
-QGraphicsItem *PlotArea::graphicsItem() const {
+QGraphicsItem* PlotArea::graphicsItem() const {
 	return d_ptr;
 }
 
@@ -143,10 +147,10 @@ BASIC_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundSecondColor, backgroundSe
 BASIC_SHARED_D_READER_IMPL(PlotArea, QString, backgroundFileName, backgroundFileName)
 BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, backgroundOpacity, backgroundOpacity)
 
+BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BorderType, borderType, borderType)
 BASIC_SHARED_D_READER_IMPL(PlotArea, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderCornerRadius, borderCornerRadius)
 BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderOpacity, borderOpacity)
-
 
 /* ============================ setter methods and undo commands ================= */
 
@@ -224,6 +228,13 @@ void PlotArea::setBackgroundOpacity(qreal opacity) {
 }
 
 //Border
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderType, PlotArea::BorderType, borderType, update)
+void PlotArea::setBorderType(BorderType type) {
+	Q_D(PlotArea);
+	if (type != d->borderType)
+		exec(new PlotAreaSetBorderTypeCmd(d, type, ki18n("%1: border type changed")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBorderPen, QPen, borderPen, update)
 void PlotArea::setBorderPen(const QPen &pen) {
 	Q_D(PlotArea);

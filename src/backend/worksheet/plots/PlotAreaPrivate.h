@@ -59,6 +59,8 @@ public:
 	QColor backgroundSecondColor;
 	QString backgroundFileName;
 	qreal backgroundOpacity;
+
+	PlotArea::BorderType borderType;
 	QPen borderPen;
 	qreal borderOpacity;
 	qreal borderCornerRadius;
