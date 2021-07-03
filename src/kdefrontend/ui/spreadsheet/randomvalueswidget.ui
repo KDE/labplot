@@ -27,7 +27,7 @@
       </sizepolicy>
      </property>
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Distributions are in the order found in the &lt;a href=&quot;https://www.gnu.org/software/gsl/doc/html/randist.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;GSL documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Random number distributions as defined in &lt;a href=&quot;https://www.gnu.org/software/gsl/doc/html/randist.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;GSL documentation&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>
