@@ -13,7 +13,8 @@
 	* [import]
 		* Import SAS, Stata and SPSS files using readstat library
 		* Import MATLAB MAT files using matio library
-		* Select first variable when loading HDF5 file
+		* HDF5: Select first variable when loading file
+		* HDF5: Preview and import 2d data of strings
 	* [spreadsheet]:
 		* Allow to freeze the first column
 		* Conditional heatmap formatting
