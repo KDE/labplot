@@ -11,12 +11,13 @@
 		* Added Hilbert transform including envelope
 		* Improve entering ranges for various methods
 	* [import]
-		* Import SAS, Stata and SPSS files via readstat
-		* Import MATLAB MAT files via matio
+		* Import SAS, Stata and SPSS files using readstat library
+		* Import MATLAB MAT files using matio library
 		* Select first variable when loading HDF5 file
 	* [spreadsheet]:
 		* Allow to freeze the first column
 		* Conditional heatmap formatting
+		* Support value labels
 		* Extended statistics dialog - show additional visualizations (histogram, KDE plot, normal Q-Q plot, BoxPlot)
 		* List random number distributions alphabetically
 	* [worksheet]:
@@ -35,6 +36,7 @@
 		* Add inverse axis scale
 Bug fixes:
 	* Fitting: Fix missing locale support in evaluating range of fit function
+	* Fix crash in convolution and correlation
 	* Windows: use breeze as default for better dark mode
 
 -----2.8.2 (01.04.2021) -----
