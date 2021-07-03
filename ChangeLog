@@ -3,16 +3,22 @@
 		* Allow to copy&paste and to duplicate single objects in the project explorer
 		* Added global settings for numbers
 		* Color maps manager allowing the access to multiple collections of color maps
+		* Show git hash in about dialog for convenience
+		* Use system liborigin when available
+		* Open new project per default on startup
 	* [analysis]
 		* Support Mathieu functions via GSL
 		* Added Hilbert transform including envelope
+		* Improve entering ranges for various methods
 	* [import]
 		* Import SAS, Stata and SPSS files via readstat
 		* Import MATLAB MAT files via matio
+		* Select first variable when loading HDF5 file
 	* [spreadsheet]:
 		* Allow to freeze the first column
 		* Conditional heatmap formatting
 		* Extended statistics dialog - show additional visualizations (histogram, KDE plot, normal Q-Q plot, BoxPlot)
+		* List random number distributions alphabetically
 	* [worksheet]:
 		* Info Element - a new worksheet element to annotate curve values on the plot
 		* BoxPlot
@@ -27,6 +33,9 @@
 		* Support real scientific notation and improve other notations of axes label
 		* Support axes auto tick number and improve range auto scaling
 		* Add inverse axis scale
+Bug fixes:
+	* Fitting: Fix missing locale support in evaluating range of fit function
+	* Windows: use breeze as default for better dark mode
 
 -----2.8.2 (01.04.2021) -----
 Bug fixes:
