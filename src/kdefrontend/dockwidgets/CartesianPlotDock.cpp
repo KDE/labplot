@@ -2688,6 +2688,11 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	ui.cbPaddingSymmetric->setChecked(group.readEntry("SymmetricPadding", m_plot->symmetricPadding()));
 
 	//Border-tab
+	auto type = static_cast<PlotArea::BorderType>(group.readEntry("BorderType", static_cast<int>(plotArea->borderType())));
+	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
 	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", plotArea->borderPen().color()) );
 	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) plotArea->borderPen().style()) );
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", plotArea->borderPen().widthF()), Worksheet::Unit::Point) );
@@ -2730,6 +2735,7 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("SymmetricPadding", ui.cbPaddingSymmetric->isChecked());
 
 	//Border
+	group.writeEntry("BorderType", static_cast<int>(m_plot->plotArea()->borderType()));
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));

@@ -86,10 +86,13 @@ void PlotArea::init() {
 	d->backgroundOpacity = group.readEntry("BackgroundOpacity", 1.0);
 
 	//Border
-	d->borderType.setFlag(PlotArea::BorderTypeFlags::BorderLeft, true);
-	d->borderType.setFlag(PlotArea::BorderTypeFlags::BorderRight, true);
-	d->borderType.setFlag(PlotArea::BorderTypeFlags::BorderTop, true);
-	d->borderType.setFlag(PlotArea::BorderTypeFlags::BorderBottom, true);
+	PlotArea::BorderType type; //default value
+	type.setFlag(PlotArea::BorderTypeFlags::BorderLeft);
+	type.setFlag(PlotArea::BorderTypeFlags::BorderTop);
+	type.setFlag(PlotArea::BorderTypeFlags::BorderRight);
+	type.setFlag(PlotArea::BorderTypeFlags::BorderBottom);
+	d->borderType = static_cast<PlotArea::BorderType>(group.readEntry("BorderType", static_cast<int>(type)));
+
 	d->borderPen = QPen(group.readEntry("BorderColor", QColor(Qt::black)),
 	                    group.readEntry("BorderWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
 	                    (Qt::PenStyle) group.readEntry("BorderStyle", (int)Qt::SolidLine));
@@ -310,7 +313,6 @@ QPainterPath PlotAreaPrivate::shape() const {
 }
 
 void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget) {
-// 	DEBUG("PlotAreaPrivate::paint()");
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
@@ -401,39 +403,42 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 		painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 	}
 
-	if ( qFuzzyIsNull(borderCornerRadius) )
-		painter->drawRect(rect);
-	else
-		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
-
 	//draw the border
-	if (borderPen.style() != Qt::NoPen && !q->isHovered() && !isSelected()) {
+	if (borderPen.style() != Qt::NoPen) {
 		painter->setPen(borderPen);
 		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(borderOpacity);
-		if ( qFuzzyIsNull(borderCornerRadius) )
-			painter->drawRect(rect);
-		else
+		if ( qFuzzyIsNull(borderCornerRadius) ) {
+			const double w = rect.width();
+			const double h = rect.height();
+			if (borderType.testFlag(PlotArea::BorderTypeFlags::BorderLeft))
+				painter->drawLine(-w/2, -h/2, -w/2, h/2);
+			if (borderType.testFlag(PlotArea::BorderTypeFlags::BorderTop))
+				painter->drawLine(-w/2, -h/2, w/2 , -h/2);
+			if (borderType.testFlag(PlotArea::BorderTypeFlags::BorderRight))
+				painter->drawLine(-w/2 + w, -h/2, w/2, h/2);
+			if (borderType.testFlag(PlotArea::BorderTypeFlags::BorderBottom))
+				painter->drawLine(w/2, h/2, -w/2, h/2);
+		} else
 			painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 	}
 
-	double penWidth = 6.;
-	QRectF rect = boundingRect();
-	rect = QRectF(-rect.width()/2 + penWidth / 2, -rect.height()/2 + penWidth / 2,
-				  rect.width() - penWidth, rect.height() - penWidth);
+	if (q->isHovered() || q->isSelected()) {
+		const double penWidth = 6.;
+		QRectF rect = boundingRect();
+		rect = QRectF(-rect.width()/2 + penWidth / 2, -rect.height()/2 + penWidth / 2,
+					rect.width() - penWidth, rect.height() - penWidth);
 
-	if (q->isHovered() && !q->isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth, Qt::SolidLine));
-		painter->drawRect(rect);
+		if (q->isHovered() && !q->isSelected() && !q->isPrinting()) {
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), penWidth, Qt::SolidLine));
+			painter->drawRect(rect);
+		}
+
+		if (q->isSelected() && !q->isPrinting()) {
+			painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth, Qt::SolidLine));
+			painter->drawRect(rect);
+		}
 	}
-
-	if (q->isSelected() && !q->isPrinting()) {
-		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), penWidth, Qt::SolidLine));
-		painter->drawRect(rect);
-	}
-
-
-// 	DEBUG("PlotAreaPrivate::paint() DONE");
 }
 
 //##############################################################################
@@ -466,6 +471,7 @@ void PlotArea::save(QXmlStreamWriter* writer) const {
 	//border
 	writer->writeStartElement( "border" );
 	WRITE_QPEN(d->borderPen);
+	writer->writeAttribute( "borderType", QString::number(d->borderType) );
 	writer->writeAttribute( "borderOpacity", QString::number(d->borderOpacity) );
 	writer->writeAttribute( "borderCornerRadius", QString::number(d->borderCornerRadius) );
 	writer->writeEndElement();
@@ -568,6 +574,7 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE("borderType", borderType, PlotArea::BorderType);
 			READ_QPEN(d->borderPen);
 
 			str = attribs.value("borderOpacity").toString();

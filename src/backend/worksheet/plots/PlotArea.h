@@ -47,10 +47,11 @@ public:
 			TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient, RadialGradient};
 	enum class BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 	enum class BorderTypeFlags {
-			BorderLeft = 0x0,
-			BorderTop = 0x1,
-			BorderRight = 0x2,
-			BorderBottom = 0x4
+			NoBorder = 0x0,
+			BorderLeft = 0x1,
+			BorderTop = 0x2,
+			BorderRight = 0x4,
+			BorderBottom = 0x8
 	};
 	Q_DECLARE_FLAGS(BorderType, BorderTypeFlags)
 

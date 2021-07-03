@@ -1,22 +1,32 @@
 -----2.9.0 -----
-	* Support multiple plot ranges
-	* Allow to copy&paste and to duplicate single objects in the project explorer
-	* Support Mathieu functions via GSL
-	* Added Hilbert transform including envelope
-	* Added global settings for numbers
-	* Support real scientific notation and improve other notations of axes label
-	* Support axes auto tick number and improve range auto scaling
-	* Add inverse axis scale
-	* Import SAS, Stata and SPSS files via readstat
+	* [general]
+		* Allow to copy&paste and to duplicate single objects in the project explorer
+		* Added global settings for numbers
+		* Color maps manager allowing the access to multiple collections of color maps
+	* [analysis]
+		* Support Mathieu functions via GSL
+		* Added Hilbert transform including envelope
+	* [import]
+		* Import SAS, Stata and SPSS files via readstat
+		* Import MATLAB MAT files via matio
 	* [spreadsheet]:
 		* Allow to freeze the first column
+		* Conditional heatmap formatting
+		* Extended statistics dialog - show additional visualizations (histogram, KDE plot, normal Q-Q plot, BoxPlot)
 	* [worksheet]:
 		* Info Element - a new worksheet element to annotate curve values on the plot
+		* BoxPlot
 		* Crosshair cursor mode in the plot
 		* New themes "Monokai", "ggplot grey", "ggplot dark"
 		* New curve symbols "heart" and "lightning"
 		* Allow to specify text label's position in logical plot coordinates
 		* Allow to use a custom column to set the text for the axis ticks
+		* Allow to resize the plots on the worksheet with the mouse when no layout is active
+		* Plot border type - allow to specify which lines of the plot rectangular to draw (left, top, etc.)
+		* Support multiple plot ranges
+		* Support real scientific notation and improve other notations of axes label
+		* Support axes auto tick number and improve range auto scaling
+		* Add inverse axis scale
 
 -----2.8.2 (01.04.2021) -----
 Bug fixes:
