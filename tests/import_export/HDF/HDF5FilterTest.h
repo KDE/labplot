@@ -39,6 +39,8 @@ class HDF5FilterTest : public CommonTest {
 private slots:
 	void testImportDouble();
 	void testImportDoublePortion();
+	void testImportInt();
+	void testImportIntPortion();
 };
 
 
