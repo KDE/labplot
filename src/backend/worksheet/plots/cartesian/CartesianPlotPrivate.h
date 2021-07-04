@@ -101,7 +101,6 @@ public:
 	Range<double>& yRangeAutoScale(int cSystemIndex) {
 		return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].autoScaleRange;
 	}
-	Range<double> xPrevRange{}, yPrevRange{};
 
 	bool autoScaleX(int index = -1) {
 		if (index == -1) {
@@ -158,6 +157,7 @@ public:
 		RangeP(const Range<double>& r=Range<double>(), const bool d=false): range(r), dirty(d) {}
 		bool dirty{false};
 		Range<double> range; // current range
+		Range<double> prev;
 		Range<double> autoScaleRange; // autoscale range. Cached to be faster in rescaling
 	};
 

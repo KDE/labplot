@@ -365,8 +365,8 @@ void CartesianPlot::setType(Type type) {
 		}
 	}
 
-	d->xPrevRange = xRange();
-	d->yPrevRange = yRange();
+	d->xRanges[0].prev = xRange();
+	d->yRanges[0].prev = yRange();
 
 	//Geometry, specify the plot rect in scene coordinates.
 	//TODO: Use default settings for left, top, width, height and for min/max for the coordinate system
@@ -3487,47 +3487,36 @@ void CartesianPlotPrivate::retransformScales(int cSystemIndex) {
 	//TODO: what to do with these?
 	// also check delta* usage later
 
-	//calculate the changes in x and y and save the current values for xMin, xMax, yMin, yMax
-	double deltaXMin = xRangeCSystem().start() - xPrevRange.start();
-	double deltaXMax = xRangeCSystem().end() - xPrevRange.end();
-	double deltaYMin = yRangeCSystem().start() - yPrevRange.start();
-	double deltaYMax = yRangeCSystem().end() - yPrevRange.end();
+	for (int i=0; i < xRanges.count(); i++) {
+		auto& rangep = xRanges[i];
+		double deltaXMin = rangep.range.start() - rangep.prev.start();
+		double deltaXMax = rangep.range.end() - rangep.prev.end();
 
-	if (!qFuzzyIsNull(deltaXMin))
-		emit q->xMinChanged(defaultCoordinateSystem()->xIndex(), xRangeCSystem().start());
-	if (!qFuzzyIsNull(deltaXMax))
-		emit q->xMaxChanged(defaultCoordinateSystem()->xIndex(), xRangeCSystem().end());
-	if (!qFuzzyIsNull(deltaYMin))
-		emit q->yMinChanged(defaultCoordinateSystem()->xIndex(), yRangeCSystem().start());
-	if (!qFuzzyIsNull(deltaYMax))
-		emit q->yMaxChanged(defaultCoordinateSystem()->xIndex(), yRangeCSystem().end());
+		if (!qFuzzyIsNull(deltaXMin))
+			emit q->xMinChanged(i, rangep.range.start());
+		if (!qFuzzyIsNull(deltaXMax))
+			emit q->xMaxChanged(i, rangep.range.end());
 
-	xPrevRange = xRangeCSystem();
-	yPrevRange = yRangeCSystem();
+		rangep.prev = rangep.range;
 
-	//adjust all auto-scale axes
-	// TODO: adapt to multirange
-	for (auto* axis : q->children<Axis>()) {
-		DEBUG(Q_FUNC_INFO << ", auto-scale axis " << axis->title())
-		// use ranges of axis
-		const auto* cSystem{ q->coordinateSystem(axis->coordinateSystemIndex()) };
-		const auto xRange{ xRanges.at(cSystem->xIndex()) };
-		const auto yRange{ yRanges.at(cSystem->yIndex()) };
-		if (!axis->autoScale())
-			continue;
+		for (auto* axis : q->children<Axis>()) {
+			DEBUG(Q_FUNC_INFO << ", auto-scale axis " << axis->title())
+			// use ranges of axis
+			int axisXIndex = q->coordinateSystem(axis->coordinateSystemIndex())->xIndex();
+			if (!axis->autoScale() || axis->orientation() != Axis::Orientation::Horizontal || axisXIndex != i)
+				continue;
 
-		if (axis->orientation() == Axis::Orientation::Horizontal) {	// x
 			if (!qFuzzyIsNull(deltaXMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setEnd(xRange.range.end());
+				axis->setEnd(rangep.range.end());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
 			if (!qFuzzyIsNull(deltaXMin)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setStart(xRange.range.start());
+				axis->setStart(rangep.range.start());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
@@ -3535,29 +3524,51 @@ void CartesianPlotPrivate::retransformScales(int cSystemIndex) {
 // 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
-		} else {	// y
+			axis->setMajorTicksNumber(axis->range().autoTickCount());
+		}
+	}
+
+	for (int i=0; i < yRanges.count(); i++) {
+		auto& rangep = yRanges[i];
+		double deltaYMin = rangep.range.start() - rangep.prev.start();
+		double deltaYMax = rangep.range.end() - rangep.prev.end();
+
+		if (!qFuzzyIsNull(deltaYMin))
+			emit q->yMinChanged(i, rangep.range.start());
+		if (!qFuzzyIsNull(deltaYMax))
+			emit q->yMaxChanged(i, rangep.range.end());
+
+		rangep.prev = rangep.range;
+
+		for (auto* axis : q->children<Axis>()) {
+			DEBUG(Q_FUNC_INFO << ", auto-scale axis " << axis->title())
+			// use ranges of axis
+			int axisYIndex = q->coordinateSystem(axis->coordinateSystemIndex())->yIndex();
+			if (!axis->autoScale() || axis->orientation() != Axis::Orientation::Vertical || axisYIndex != i)
+				continue;
+
 			if (!qFuzzyIsNull(deltaYMax)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setEnd(yRange.range.end());
+				axis->setEnd(rangep.range.end());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
 			if (!qFuzzyIsNull(deltaYMin)) {
 				axis->setUndoAware(false);
 				axis->setSuppressRetransform(true);
-				axis->setStart(yRange.range.start());
+				axis->setStart(rangep.range.start());
 				axis->setUndoAware(true);
 				axis->setSuppressRetransform(false);
 			}
-
-			//TODO
-// 			if (axis->position() == Axis::Position::Centered && deltaXMin != 0) {
-// 				axis->setOffset(axis->offset() + deltaXMin, false);
+			//TODO;
+// 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
+// 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
+			axis->setMajorTicksNumber(axis->range().autoTickCount());
 		}
-		axis->setMajorTicksNumber(axis->range().autoTickCount());
 	}
+
 	// call retransform() on the parent to trigger the update of all axes and curves.
 	//no need to do this on load since all plots are retransformed again after the project is loaded.
 	if (!q->isLoading())
@@ -4900,7 +4911,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("xMin").toString());
 				else {
 					d->xRanges[0].range.start() = str.toDouble();
-					d->xPrevRange.start() = xRangeFromIndex(0).start();
+					d->xRanges[0].prev.start() = xRangeFromIndex(0).start();
 				}
 
 				str = attribs.value("xMax").toString();
@@ -4908,7 +4919,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("xMax").toString());
 				else {
 					d->xRanges[0].range.end() = str.toDouble();
-					d->xPrevRange.end() = xRangeFromIndex(0).end();
+					d->xRanges[0].prev.end() = xRangeFromIndex(0).end();
 				}
 
 				str = attribs.value("yMin").toString();
@@ -4916,7 +4927,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("yMin").toString());
 				else {
 					d->yRanges[0].range.start() = str.toDouble();
-					d->yPrevRange.start() = yRangeFromIndex(0).start();
+					d->yRanges[0].prev.start() = yRangeFromIndex(0).start();
 				}
 
 				str = attribs.value("yMax").toString();
@@ -4924,7 +4935,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 					reader->raiseWarning(attributeWarning.subs("yMax").toString());
 				else {
 					d->yRanges[0].range.end() = str.toDouble();
-					d->yPrevRange.end() = yRangeFromIndex(0).end();
+					d->yRanges[0].prev.end() = yRangeFromIndex(0).end();
 				}
 
 				str = attribs.value("xScale").toString();
