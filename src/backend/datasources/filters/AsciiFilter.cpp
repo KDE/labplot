@@ -2011,8 +2011,11 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 	}
 
 	//TODO: bool sampleSizeReached = false;
-	const QStringList newDataList = message.split(QRegularExpression(QStringLiteral("\n|\r\n|\r")),
-													QString::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	const QStringList newDataList = message.split(QRegularExpression(QStringLiteral("\n|\r\n|\r")), Qt::SkipEmptyParts);
+#else
+	const QStringList newDataList = message.split(QRegularExpression(QStringLiteral("\n|\r\n|\r")), QString::SkipEmptyParts);
+#endif
 	for (auto& line : newDataList) {
 		newData.push_back(line);
 		newLinesTillEnd++;

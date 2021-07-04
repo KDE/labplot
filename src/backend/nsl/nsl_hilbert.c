@@ -45,7 +45,7 @@ int nsl_hilbert_transform(double data[], size_t stride, size_t n, nsl_hilbert_re
 	/* 1. DFT of data: dft_transform returns gsl_halfcomplex (raw) */
 	nsl_dft_transform(data, stride, n, 1, nsl_dft_result_raw);
 
-	const double N = 2 * n;
+	const size_t N = 2 * n;
 	double* result = (double*)malloc(N*sizeof(double));
 	gsl_fft_halfcomplex_unpack(data, result, stride, n);
 

@@ -717,7 +717,11 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 	QChar sep = '/';
 	QString rootName;
 	if (topicName.contains(sep)) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		QStringList list = topicName.split(sep, Qt::SkipEmptyParts);
+#else
 		QStringList list = topicName.split(sep, QString::SkipEmptyParts);
+#endif
 
 		if (!list.isEmpty()) {
 			rootName = list.at(0);
@@ -781,7 +785,11 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 
 	//if a subscribed topic contains the new topic, we have to update twSubscriptions
 	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', Qt::SkipEmptyParts);
+#else
 		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', QString::SkipEmptyParts);
+#endif
 		if (rootName == subscriptionName[0]) {
 			emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 			break;
@@ -843,7 +851,11 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
  * \param topic
  */
 bool LiveDataDock::testSubscribe(const QString& topic) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	QStringList topicList = topic.split('/', Qt::SkipEmptyParts);
+#else
 	QStringList topicList = topic.split('/', QString::SkipEmptyParts);
+#endif
 	QTreeWidgetItem* currentItem = nullptr;
 	for (int i = 0; i < m_subscriptionWidget->topicCount(); ++i) {
 		if (m_subscriptionWidget->topLevelTopic(i)->text(0) == topicList[0]) {
