@@ -92,11 +92,12 @@ public:
 		// etc.
 	};
 	enum class Properties {	// TODO: why bit pattern? Aren't they exclusive?
-		No = 0x00,
+		No = 0x00, // invalid values or masked values
 		Constant = 0x01,
 		MonotonicIncreasing = 0x02, // prev_value >= value for all values in column
-		MonotonicDecreasing = 0x04 // prev_value <= value for all values in column
-		// add new values with next bit set (0x08)
+		MonotonicDecreasing = 0x04, // prev_value <= value for all values in column
+		NonMonotonic = 0x8,
+		// add new values with next bit set (0x10)
 	};
 
 	struct ColumnStatistics {
