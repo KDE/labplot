@@ -164,10 +164,8 @@ Copyright            : (C) 2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 	if (!dataSource) { /* preview */ \
 		for (size_t i = startRow - 1; i < qMin(actualEndRow, lines); i++) { \
 			QStringList row; \
-			for (size_t j = startColumn - 1; j < actualEndColumn; j++) { \
-				DEBUG(matrix[i][j]) \
+			for (size_t j = startColumn - 1; j < actualEndColumn; j++) \
 				row << QString::number(matrix[i][j]); \
-			} \
 			dataStrings << row; \
 		} \
 	} \
@@ -717,18 +715,18 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		case MAT_C_UINT16:
 		case MAT_C_INT32:
 		case MAT_C_UINT32:
-			for (size_t i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::ColumnMode::Integer;
+			for (auto& col : columnModes)
+				col = AbstractColumn::ColumnMode::Integer;
 			break;
 		case MAT_C_INT64:
 		case MAT_C_UINT64:
-			for (size_t i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::ColumnMode::BigInt;
+			for (auto& col : columnModes)
+				col = AbstractColumn::ColumnMode::BigInt;
 			break;
 		case MAT_C_DOUBLE:
 		case MAT_C_SINGLE:
-			for (size_t i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::ColumnMode::Numeric;
+			for (auto& col : columnModes)
+				col = AbstractColumn::ColumnMode::Numeric;
 			break;
 		case MAT_C_EMPTY:
 			return dataStrings << (QStringList() << i18n("Empty"));
