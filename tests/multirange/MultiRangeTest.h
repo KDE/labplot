@@ -37,6 +37,11 @@ private slots:
 
 	//import of LabPlot projects
 	void testApplyActionToSelection_CurveSelected_ZoomSelection();
-	void testApplyActionToSelection_horAxisSelected_ZoomXSelection();
+
+	void testZoomSelection_SingleRange();
+	void testZoomXSelection_AllRanges();
+	void testZoomXSelection_SingleRange();
+	void testZoomYSelection_AllRanges();
+	void testZoomYSelection_SingleRange();
 };
 #endif
