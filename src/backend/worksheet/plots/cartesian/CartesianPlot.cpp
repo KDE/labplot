@@ -1266,7 +1266,7 @@ private:\
 CartesianPlotSetRangeIndexCmd(xRange);
 void CartesianPlot::setXRange(const int index, const Range<double>& range) {
 	Q_D(CartesianPlot);
-	if (index > 0 && index < d->xRanges.count() && range.finite() && range != d->xRanges[index].range) {
+	if (index >= 0 && index < d->xRanges.count() && range.finite() && range != d->xRanges[index].range) {
 		d->yRanges[index].dirty = true;
 		exec(new CartesianPlotSetxRangeIndexCmd(d, range, index, ki18n("%1: set x range")));
 		int scaled = 0;
@@ -1282,7 +1282,7 @@ void CartesianPlot::setXRange(const int index, const Range<double>& range) {
 CartesianPlotSetRangeIndexCmd(yRange)
 void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 	Q_D(CartesianPlot);
-	if (index > 0 && index < d->yRanges.count() && range.finite() && range != d->yRanges[index].range) {
+	if (index >= 0 && index < d->yRanges.count() && range.finite() && range != d->yRanges[index].range) {
 		exec(new CartesianPlotSetyRangeIndexCmd(d, range, index, ki18n("%1: set y range")));
 		int scaled = 0;
 		for (int i=0; i < coordinateSystemCount(); i++)
@@ -2650,7 +2650,7 @@ bool CartesianPlot::scaleAuto(int cSystemIndex, bool fullRange) {
 	bool updateY = scaleAutoY(cSystemIndex, fullRange, true);
 
 	// x range is dirty, because scaleAutoY sets it to dirty.
-	if (cSystemIndex <= 0)
+	if (cSystemIndex < 0)
 	{
 		for (int i=0; i < m_coordinateSystems.count(); i++)
 		{
@@ -3468,15 +3468,13 @@ void CartesianPlotPrivate::retransformScales(int cSystemIndex) {
 		//////////// Create X-scales ////////////////
 		// loop over all cSystems and use the correct x/yRanges to set scales
 		DEBUG(Q_FUNC_INFO << ", number of coordinate systems = " << q->m_coordinateSystems.size())
-		for (const auto& cSystem : qAsConst(q->m_coordinateSystems)) {
+		for (const auto& cSystem : qAsConst(q->m_coordinateSystems))
 			retransformXScale(static_cast<CartesianCoordinateSystem*>(cSystem));
-		}
 
 		//////// Create Y-scales /////////////
 		// loop over all cSystems
-		for (auto cSystem : qAsConst(q->m_coordinateSystems)) {
+		for (auto cSystem : qAsConst(q->m_coordinateSystems))
 			retransformYScale(static_cast<CartesianCoordinateSystem*>(cSystem));
-		}
 	}
 	else
 	{

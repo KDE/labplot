@@ -463,9 +463,9 @@ void Axis::setAutoScale(const bool autoScale) {
 			return;
 
 		if (d->orientation == Axis::Orientation::Horizontal)
-			d->range = plot->xRangeCSystem(cSystem->xIndex());
+			d->range = plot->xRangeCSystem(coordinateSystemIndex());
 		else
-			d->range = plot->yRangeCSystem(cSystem->yIndex());
+			d->range = plot->yRangeCSystem(coordinateSystemIndex());
 
 		DEBUG(Q_FUNC_INFO << ", new range = " << d->range.toStdString())
 		retransform();
@@ -1386,8 +1386,8 @@ void AxisPrivate::retransformTicks() {
 	//calculate the position of the center point in scene coordinates,
 	//will be used later to differentiate between "in" and "out" depending
 	//on the position relative to the center.
-	const double middleX = plot()->xRangeCSystem(xIndex).center();
-	const double middleY = plot()->yRangeCSystem(yIndex).center();
+	const double middleX = plot()->xRangeCSystem(q->coordinateSystemIndex()).center();
+	const double middleY = plot()->yRangeCSystem(q->coordinateSystemIndex()).center();
 	QPointF center(middleX, middleY);
 	bool valid = true;
 	center = q->cSystem->mapLogicalToScene(center, valid);
@@ -1660,8 +1660,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	bool datetime = false;
 	bool text = false;
 	if (labelsTextType == Axis::LabelsTextType::PositionValues) {
-		auto xRangeFormat{ plot()->xRangeCSystem(q->cSystem->xIndex()).format() };
-		auto yRangeFormat{ plot()->yRangeCSystem(q->cSystem->yIndex()).format() };
+		auto xRangeFormat{ plot()->xRangeCSystem(q->coordinateSystemIndex()).format() };
+		auto yRangeFormat{ plot()->yRangeCSystem(q->coordinateSystemIndex()).format() };
 		numeric = ( (orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric)
 		            || (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric) );
 
@@ -1923,8 +1923,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << q->m_cSystemIndex)
 	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
 	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
-	const double middleX = plot()->xRangeCSystem(xIndex).center();
-	const double middleY = plot()->yRangeCSystem(yIndex).center();
+	const double middleX = plot()->xRangeCSystem(q->coordinateSystemIndex()).center();
+	const double middleY = plot()->yRangeCSystem(q->coordinateSystemIndex()).center();
 	const int xDirection = q->cSystem->xDirection();
 	const int yDirection = q->cSystem->yDirection();
 
@@ -1937,8 +1937,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
 
 	int size = qMin(majorTickPoints.size(), tickLabelStrings.size());
-	auto xRangeFormat{ plot()->xRangeCSystem(xIndex).format() };
-	auto yRangeFormat{ plot()->yRangeCSystem(yIndex).format() };
+	auto xRangeFormat{ plot()->xRangeCSystem(q->coordinateSystemIndex()).format() };
+	auto yRangeFormat{ plot()->yRangeCSystem(q->coordinateSystemIndex()).format() };
 	for ( int i = 0; i < size; i++ ) {
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
 		        (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {

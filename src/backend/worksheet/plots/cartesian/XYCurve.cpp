@@ -2357,7 +2357,7 @@ bool XYCurvePrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
 		maxDist = (linePen.width() < 10) ? 10. : linePen.width();
 
 	auto properties{q->xColumn()->properties()};
-	if (properties == AbstractColumn::Properties::No) {
+	if (properties == AbstractColumn::Properties::No || properties == AbstractColumn::Properties::NonMonotonic) {
 		// assumption: points exist if no line. otherwise previously returned false
 		if (lineType == XYCurve::LineType::NoLine) {
 			QPointF curvePosPrevScene = m_scenePoints.at(0);
