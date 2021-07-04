@@ -1759,7 +1759,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 
 	ColumnMode mode = columnMode();
 	Properties property = properties();
-	if (property == Properties::No) {
+	if (property == Properties::No || property == Properties::NonMonotonic) {
 		// skipping values is only in Properties::No needed, because
 		// when there are invalid values the property must be Properties::No
 		switch (mode) {
@@ -1898,7 +1898,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 
 	ColumnMode mode = columnMode();
 	Properties property = properties();
-	if (property == Properties::No) {
+	if (property == Properties::No || property == Properties::NonMonotonic) {
 		switch (mode) {
 		case ColumnMode::Numeric: {
 			auto* vec = static_cast<QVector<double>*>(data());
@@ -2071,7 +2071,7 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 	} else if (properties == AbstractColumn::Properties::Constant) {
 		return 0;
 	} else {
-		// AbstractColumn::Properties::No
+		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// simple way
 		int index = 0;
 		prevValue = column[0];
@@ -2140,7 +2140,7 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
 	} else if (properties == AbstractColumn::Properties::Constant) {
 		return 0;
 	} else {
-		// AbstractColumn::Properties::No
+		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// naiv way
 		prevValue = points[0].x();
 		int index = 0;
@@ -2209,7 +2209,7 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 	} else if (properties == AbstractColumn::Properties::Constant) {
 		return 0;
 	} else {
-		// AbstractColumn::Properties::No
+		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// naiv way
 		int index = 0;
 		prevValue = lines[0].p1().x();
@@ -2417,7 +2417,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		end = rowCount() - 1;
 		return true;
 	}
-	// property == Properties::No
+	// property == Properties::No || AbstractColumn::Properties::NonMonotonic
 	switch (columnMode()) {
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:

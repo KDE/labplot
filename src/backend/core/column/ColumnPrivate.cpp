@@ -1858,7 +1858,6 @@ void ColumnPrivate::updateProperties() {
 	int valueInt;
 	qint64 valueBigInt;
 	qint64 valueDateTime;
-
 	for (int row = 1; row < rowCount(); row++) {
 		if (!m_owner->isValid(row) || m_owner->isMasked(row)) {
 			// if there is one invalid or masked value, the property is No, because
@@ -1982,7 +1981,7 @@ void ColumnPrivate::updateProperties() {
 		}
 	}
 
-	properties = AbstractColumn::Properties::No;
+	properties = AbstractColumn::Properties::NonMonotonic;
 	if (monotonic_increasing > 0 && monotonic_decreasing > 0) {
 		properties = AbstractColumn::Properties::Constant;
 		DEBUG("	setting column CONSTANT")
