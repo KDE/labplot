@@ -41,6 +41,36 @@ Copyright            : (C) 2017 Alexander Semke (alexander.semke@web.de)
 #include <QProcess>
 #include <QFile>
 
+///////////// macros ///////////////////////////////////////////////
+// type - data type
+#define HDF5_READ_1D(type) \
+	{ \
+	for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) { \
+		if (dataContainer) \
+			static_cast<QVector<type>*>(dataContainer)->operator[](i-startRow+1) = data[i]; \
+		else	/* for preview */ \
+			dataString << QString::number(static_cast<type>(data[i])); \
+	} \
+	}
+
+// type - data type
+#define HDF5_READ_2D(type) \
+	{ \
+	for (int i = 0; i < qMin(rows, lines); ++i) { \
+		QStringList line; \
+		line.reserve(cols); \
+		for (int j = 0; j < cols; ++j) { \
+			if (dataPointer[0]) \
+				static_cast<QVector<type>*>(dataPointer[j-startColumn+1])->operator[](i-startRow+1) = data[i][j]; \
+			else \
+				line << QString::number(static_cast<type>(data[i][j])); \
+		} \
+		dataStrings << line; \
+	} \
+	}
+
+//////////////////////////////////////////////////////////////////////
+
 /*!
 	\class HDF5Filter
 	\brief Manages the import/export of data from/to a HDF5 file.
@@ -508,31 +538,36 @@ QStringList HDF5FilterPrivate::readHDF5Compound(hid_t tid) {
 }
 
 template <typename T>
-QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t type, int rows, int lines, void* dataContainer) {
+QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t dtype, int rows, int lines, void* dataContainer) {
 	DEBUG("readHDF5Data1D() rows = " << rows << ", lines = " << lines);
 	QStringList dataString;
 
 	// we read all rows of data
 	T* data = new T[rows];
 
-	m_status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
+	m_status = H5Dread(dataset, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 	handleError(m_status, "H5Dread");
 	DEBUG(" startRow = " << startRow << ", endRow = " << endRow);
 	DEBUG("	dataContainer = " << dataContainer);
-	for (int i = startRow - 1; i < qMin(endRow, lines + startRow - 1); ++i) {
-		if (dataContainer)	// read to data source
-			static_cast<QVector<double>*>(dataContainer)->operator[](i-startRow+1) = data[i];
-		else				// for preview
-			dataString << QString::number(static_cast<double>(data[i]));
-	}
+
+	H5T_class_t dclass = H5Tget_class(dtype);
+	handleError((int)dclass, "H5Dget_class");
+	if (dclass == H5T_INTEGER) {
+		if (H5Tequal(dtype, H5T_STD_I64LE) || H5Tequal(dtype, H5T_STD_I64BE) || H5Tequal(dtype, H5T_NATIVE_LLONG)
+				|| H5Tequal(dtype, H5T_STD_U64LE) || H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG)) {
+			HDF5_READ_1D(qint64);
+		} else
+			HDF5_READ_1D(int);
+	} else
+		HDF5_READ_1D(double);
+
 	delete[] data;
 
 	return dataString;
 }
 
 QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, std::vector<void*>& dataContainer) {
-	DEBUG("HDF5FilterPrivate::readHDF5CompoundData1D()");
-	DEBUG(" dataContainer size = " << dataContainer.size());
+	DEBUG(Q_FUNC_INFO << ", dataContainer size = " << dataContainer.size());
 	int members = H5Tget_nmembers(tid);
 	handleError(members, "H5Tget_nmembers");
 	DEBUG(" # members = " << members);
@@ -644,7 +679,7 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 }
 
 template <typename T>
-QVector<QStringList> HDF5FilterPrivate::readHDF5Data2D(hid_t dataset, hid_t type, int rows, int cols, int lines, std::vector<void*>& dataPointer) {
+QVector<QStringList> HDF5FilterPrivate::readHDF5Data2D(hid_t dataset, hid_t dtype, int rows, int cols, int lines, std::vector<void*>& dataPointer) {
 	DEBUG("readHDF5Data2D() rows = " << rows << ", cols =" << cols << ", lines =" << lines);
 	QVector<QStringList> dataStrings;
 
@@ -656,20 +691,20 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5Data2D(hid_t dataset, hid_t type
 	for (int i = 1; i < rows; ++i)
 		data[i] = data[0] + i*cols;
 
-	m_status = H5Dread(dataset, type, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data[0][0]);
+	m_status = H5Dread(dataset, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &data[0][0]);
 	handleError(m_status,"H5Dread");
 
-	for (int i = 0; i < qMin(rows, lines); ++i) {
-		QStringList line;
-		line.reserve(cols);
-		for (int j = 0; j < cols; ++j) {
-			if (dataPointer[0])
-				static_cast<QVector<double>*>(dataPointer[j-startColumn+1])->operator[](i-startRow+1) = data[i][j];
-			else
-				line << QString::number(static_cast<double>(data[i][j]));
-		}
-		dataStrings << line;
-	}
+	H5T_class_t dclass = H5Tget_class(dtype);
+	handleError((int)dclass, "H5Dget_class");
+	if (dclass == H5T_INTEGER) {
+		if (H5Tequal(dtype, H5T_STD_I64LE) || H5Tequal(dtype, H5T_STD_I64BE) || H5Tequal(dtype, H5T_NATIVE_LLONG)
+				|| H5Tequal(dtype, H5T_STD_U64LE) || H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG)) {
+			HDF5_READ_2D(qint64);
+		} else
+			HDF5_READ_2D(int);
+	} else
+		HDF5_READ_2D(double);
+
 	free(data[0]);
 	free(data);
 
@@ -1544,9 +1579,21 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			QDEBUG(translateHDF5Class(dclass) << '(' << typeSize << ')' << translateHDF5Order(order)
 			         << ", rows:" << rows << " max:" << maxSize);
 
-			//TODO: support other modes
 			QVector<AbstractColumn::ColumnMode> columnModes;
 			columnModes.resize(actualCols);
+			// set other modes
+			if (dclass == H5T_STRING)
+				for (auto& mode : columnModes)
+					mode = AbstractColumn::ColumnMode::Text;
+			else if (dclass == H5T_INTEGER) {
+				if (H5Tequal(dtype, H5T_STD_I64LE) || H5Tequal(dtype, H5T_STD_I64BE) || H5Tequal(dtype, H5T_NATIVE_LLONG)
+						|| H5Tequal(dtype, H5T_STD_U64LE) || H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG))
+					for (auto& mode : columnModes)
+						mode = AbstractColumn::ColumnMode::BigInt;
+				else
+					for (auto& mode : columnModes)
+						mode = AbstractColumn::ColumnMode::Integer;
+			}
 
 			// use current data set name (without path) for column name
 			QStringList vectorNames = {currentDataSetName.mid(currentDataSetName.lastIndexOf("/") + 1)};
@@ -1730,10 +1777,18 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 
 			QVector<AbstractColumn::ColumnMode> columnModes;
 			columnModes.resize(actualCols);
-			//TODO: support other modes
-			if (dclass == H5T_STRING) {
+			// set other modes
+			if (dclass == H5T_STRING)
 				for (auto& mode : columnModes)
 					mode = AbstractColumn::ColumnMode::Text;
+			else if (dclass == H5T_INTEGER) {
+				if (H5Tequal(dtype, H5T_STD_I64LE) || H5Tequal(dtype, H5T_STD_I64BE) || H5Tequal(dtype, H5T_NATIVE_LLONG)
+						|| H5Tequal(dtype, H5T_STD_U64LE) || H5Tequal(dtype, H5T_STD_U64BE) || H5Tequal(dtype, H5T_NATIVE_ULLONG))
+					for (auto& mode : columnModes)
+						mode = AbstractColumn::ColumnMode::BigInt;
+				else
+					for (auto& mode : columnModes)
+						mode = AbstractColumn::ColumnMode::Integer;
 			}
 
 			// use current data set name (without path) append by "_" and column number for column names
