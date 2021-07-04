@@ -25,7 +25,7 @@
 		* Info Element - a new worksheet element to annotate curve values on the plot
 		* BoxPlot
 		* Crosshair cursor mode in the plot
-		* New themes "Monokai", "ggplot grey", "ggplot dark"
+		* New themes "Monokai", "ggplot grey", "ggplot dark", "Tufte"
 		* New curve symbols "heart" and "lightning"
 		* Allow to specify text label's position in logical plot coordinates
 		* Allow to use a custom column to set the text for the axis ticks
@@ -35,10 +35,12 @@
 		* Support real scientific notation and improve other notations of axes label
 		* Support axes auto tick number and improve range auto scaling
 		* Add inverse axis scale
+
 Bug fixes:
 	* Fitting: Fix missing locale support in evaluating range of fit function
 	* Fix crash in convolution and correlation
 	* Windows: use breeze as default for better dark mode
+	* Properly save the geometry of visible windows in the project
 
 -----2.8.2 (01.04.2021) -----
 Bug fixes:

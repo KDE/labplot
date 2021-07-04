@@ -884,7 +884,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 		const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 		if (part && part->hasMdiSubWindow()) {
 			withView.push_back(row);
-			ViewState s = {part->view()->windowState(), part->view()->geometry()};
+			ViewState s = {part->view()->windowState(), part->mdiSubWindow()->geometry()};
 			viewStates.push_back(s);
 		}
 
