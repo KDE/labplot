@@ -44,7 +44,9 @@ public:
 	~CartesianPlotPrivate();
 
 	void retransform() override;
-	void retransformScales();
+	void retransformYScale(CartesianCoordinateSystem* cSystem);
+	void retransformXScale(CartesianCoordinateSystem* cSystem);
+	void retransformScales(int cSystemIndex);
 	void rangeChanged();
 	void xRangeFormatChanged();
 	void yRangeFormatChanged();
