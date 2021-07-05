@@ -787,7 +787,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			actualCols = endColumn - startColumn + 1;
 
 			if (nfields <= 0)
-				return dataStrings << (QStringList() << i18n("Sruct contains no fields"));
+				return dataStrings << (QStringList() << i18n("Struct contains no fields"));
 
 			if (nelem < 1) {
 				DEBUG(Q_FUNC_INFO << ", no elements")
