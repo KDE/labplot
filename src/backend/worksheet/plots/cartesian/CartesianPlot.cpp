@@ -3069,11 +3069,12 @@ void CartesianPlotPrivate::retransform() {
  * calculate x and y scales from scence range and logical range (x/y range) for all coordinate systems
  */
 void CartesianPlotPrivate::retransformScales() {
-	int i{1}; // debugging
+	int i = 1; // debugging
+	Q_UNUSED(i)
 #ifndef NDEBUG
 	for (auto& range : xRanges)
 		DEBUG( Q_FUNC_INFO << ", x range " << i++ << " = " << range.toStdString() << ", scale = " << (int)range.scale() );
-	i = 1;	// debugging
+	i = 1;
 	for (auto& range : yRanges)
 		DEBUG( Q_FUNC_INFO << ", y range " << i++ << " = " << range.toStdString() << ", scale = " << (int)range.scale() );
 #endif
@@ -3087,7 +3088,7 @@ void CartesianPlotPrivate::retransformScales() {
 	//////////// Create X-scales ////////////////
 	// loop over all cSystems and use the correct x/yRanges to set scales
 	DEBUG(Q_FUNC_INFO << ", number of coordinate systems = " << q->m_coordinateSystems.size())
-	i = 1; // debugging
+	i = 1; // debug
 	for (const auto& cSystem : qAsConst(q->m_coordinateSystems)) {
 		const int xRangeIndex{ dynamic_cast<CartesianCoordinateSystem*>(cSystem)->xIndex() };	// use x range of current cSystem
 		const auto xRange{ xRanges.at(xRangeIndex) };
@@ -3145,7 +3146,7 @@ void CartesianPlotPrivate::retransformScales() {
 	plotSceneRange.setRange(dataRect.y() + dataRect.height(), dataRect.y());
 
 	// loop over all cSystems
-	i = 1; // debugging
+	i = 1; // debug
 	for (auto cSystem : qAsConst(q->m_coordinateSystems)) {
 		const int yRangeIndex{ dynamic_cast<CartesianCoordinateSystem*>(cSystem)->yIndex() };	// use y range of current cSystem
 		const auto yRange{ yRanges.at(yRangeIndex) };
