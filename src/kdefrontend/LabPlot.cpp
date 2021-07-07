@@ -198,7 +198,7 @@ int main (int argc, char *argv[]) {
 	// append application path to PATH to find Cantor backends
 	QString path = qEnvironmentVariable("PATH");
 	DEBUG("OLD PATH = " << path.toStdString())
-	path.append(QLatin1String(":") + applicationPath);
+	path.append(QLatin1String(";") + applicationPath);
 	qputenv("PATH", qPrintable(path));
 	DEBUG("NEW PATH = " << qEnvironmentVariable("PATH").toStdString())
 #endif
