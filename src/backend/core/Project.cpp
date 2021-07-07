@@ -93,7 +93,7 @@ namespace {
 
 class Project::Private {
 public:
-	Private(Project* owner) : author(QString(qgetenv("USER"))),
+	Private(Project* owner) : author(QString()),
 			modificationTime(QDateTime::currentDateTime()), q(owner) {
 		setVersion(LVERSION);
 	}
@@ -153,7 +153,10 @@ Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private
 	KConfig config;
 	KConfigGroup group = config.group("Project");
 
-	d->author = group.readEntry("Author", QString());
+	QString user = qEnvironmentVariable("USER");	// !Windows
+	if (user.isEmpty())
+		user = qEnvironmentVariable("USERNAME");	// Windows
+	d->author = group.readEntry("Author", user);
 
 	//we don't have direct access to the members name and comment
 	//->temporary disable the undo stack and call the setters
