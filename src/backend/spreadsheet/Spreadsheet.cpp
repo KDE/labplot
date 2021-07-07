@@ -1048,7 +1048,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 	QVector<CartesianPlot*> plots;
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		for (size_t n = startColumn; n <= endColumn; n++) {
-			Column* column = this->column(columnOffset + n - startColumn);
+			Column* column = this->column((int)(columnOffset + n - startColumn));
 			if (column)
 				column->addUsedInPlots(plots);
 		}
@@ -1062,7 +1062,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 	const int rows = rowCount();
 	for (size_t n = startColumn; n <= endColumn; n++) {
 		//DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
-		Column* column = this->column(columnOffset + n - startColumn);
+		Column* column = this->column((int)(columnOffset + n - startColumn));
 		//DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
 
 		QString comment;

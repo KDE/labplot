@@ -59,7 +59,7 @@ public:
 
 	void setCurrentVarName(const QString&);
 	const QString currentVarName() const;
-	int varCount() const;
+	size_t varCount() const;
 	QVector<QStringList> varsInfo() const;
 
 	//TODO: -> AbstractFileFilter?

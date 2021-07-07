@@ -282,7 +282,7 @@ void MatioFilter::setCurrentVarName(const QString& ds) {
 const QString MatioFilter::currentVarName() const {
 	return d->currentVarName;
 }
-int MatioFilter::varCount() const {
+size_t MatioFilter::varCount() const {
 	return d->varCount;
 }
 /*QStringList MatioFilter::varNames() const {
