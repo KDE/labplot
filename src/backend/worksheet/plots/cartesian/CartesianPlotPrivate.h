@@ -110,7 +110,7 @@ public:
 	bool xRangeBreakingEnabled{false}, yRangeBreakingEnabled{false};
 	CartesianPlot::RangeBreaks xRangeBreaks, yRangeBreaks;
 
-	//cached values of minimum and maximum for all visible curves
+	//cached minimum and maximum values of all visible curves
 	bool curvesXMinMaxIsDirty{false}, curvesYMinMaxIsDirty{false};
 	Range<double> curvesXRange{qInf(), -qInf()}, curvesYRange{qInf(), -qInf()};
 
