@@ -38,7 +38,6 @@ const char* nsl_hilbert_result_type_name[] = {i18n("Imaginary part"), i18n("Enve
 
 /* algorithm from https://de.wikipedia.org/wiki/Hilbert-Transformation#Berechnung_%C3%BCber_Fouriertransformation */
 int nsl_hilbert_transform(double data[], size_t stride, size_t n, nsl_hilbert_result_type type) {
-	printf("nsl_hilbert_transform()\n");
 	if (n < 2)	/* we need at least 2 points */
 		return 1;
 

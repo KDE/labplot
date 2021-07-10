@@ -933,7 +933,7 @@ void FitTest::testNonLinearMisra1a() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1.-exp(-b2*x))";
+	fitData.model = "b1*(1-exp(-b2*x))";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -987,7 +987,7 @@ void FitTest::testNonLinearMisra1a_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1.-exp(-b2*x))";
+	fitData.model = "b1*(1-exp(-b2*x))";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1041,7 +1041,7 @@ void FitTest::testNonLinearMisra1a_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1.-exp(-b2*x))";
+	fitData.model = "b1*(1-exp(-b2*x))";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1096,7 +1096,7 @@ void FitTest::testNonLinearMisra1b() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1.-1./(1.+b2*x/2)^2)";
+	fitData.model = "b1*(1-1/(1+b2*x/2)^2)";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1150,7 +1150,7 @@ void FitTest::testNonLinearMisra1b_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1.-1./(1.+b2*x/2)^2)";
+	fitData.model = "b1*(1-1/(1+b2*x/2)^2)";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1204,7 +1204,7 @@ void FitTest::testNonLinearMisra1b_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1.-1./(1.+b2*x/2)^2)";
+	fitData.model = "b1*(1-1/(1+b2*x/2)^2)";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1258,7 +1258,7 @@ void FitTest::testNonLinearMisra1c() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1.-1./sqrt(1.+2.*b2*x))";
+	fitData.model = "b1*(1-1/sqrt(1+2*b2*x))";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1312,7 +1312,7 @@ void FitTest::testNonLinearMisra1c_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1.-1./sqrt(1.+2.*b2*x))";
+	fitData.model = "b1*(1-1/sqrt(1+2*b2*x))";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1366,7 +1366,7 @@ void FitTest::testNonLinearMisra1c_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*(1.-1./sqrt(1.+2.*b2*x))";
+	fitData.model = "b1*(1-1/sqrt(1+2*b2*x))";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1420,7 +1420,7 @@ void FitTest::testNonLinearMisra1d() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*b2*x/(1.+b2*x)";
+	fitData.model = "b1*b2*x/(1+b2*x)";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1474,7 +1474,7 @@ void FitTest::testNonLinearMisra1d_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*b2*x/(1.+b2*x)";
+	fitData.model = "b1*b2*x/(1+b2*x)";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1528,7 +1528,7 @@ void FitTest::testNonLinearMisra1d_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1*b2*x/(1.+b2*x)";
+	fitData.model = "b1*b2*x/(1+b2*x)";
 	fitData.paramNames << "b1" << "b2";
 	fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
@@ -1956,7 +1956,7 @@ void FitTest::testNonLinearRat43() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1/pow(1. + exp(b2-b3*x), 1/b4)";
+	fitData.model = "b1/pow(1 + exp(b2-b3*x), 1/b4)";
 	fitData.paramNames << "b1" << "b2" << "b3" << "b4";
 	fitData.eps = 1.e-9;
 	const int np = fitData.paramNames.size();
@@ -2018,7 +2018,7 @@ void FitTest::testNonLinearRat43_2() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1/pow(1. + exp(b2-b3*x), 1/b4)";
+	fitData.model = "b1/pow(1 + exp(b2-b3*x), 1/b4)";
 	fitData.paramNames << "b1" << "b2" << "b3" << "b4";
 	fitData.eps = 1.e-10;
 	const int np = fitData.paramNames.size();
@@ -2080,7 +2080,7 @@ void FitTest::testNonLinearRat43_3() {
 	XYFitCurve::FitData fitData = fitCurve.fitData();
 	fitData.modelCategory = nsl_fit_model_custom;
 	XYFitCurve::initFitData(fitData);
-	fitData.model = "b1/pow(1. + exp(b2-b3*x), 1/b4)";
+	fitData.model = "b1/pow(1 + exp(b2-b3*x), 1/b4)";
 	fitData.paramNames << "b1" << "b2" << "b3" << "b4";
 	//fitData.eps = 1.e-12;
 	const int np = fitData.paramNames.size();
