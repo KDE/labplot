@@ -127,6 +127,7 @@ private:
 	QTimeLine* m_fadeInTimeLine{nullptr};
 	QTimeLine* m_fadeOutTimeLine{nullptr};
 	bool m_isClosing{false};
+	bool m_isPrinting{false};
 	bool m_actionsInitialized{false};
 	bool m_menusInitialized{false};
 	int m_numScheduledScalings{0};

@@ -881,7 +881,7 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 	}
 
 	//grid
-	if (m_gridSettings.style != GridStyle::NoGrid) {
+	if (m_gridSettings.style != GridStyle::NoGrid && !m_isPrinting) {
 		QColor c = m_gridSettings.color;
 		c.setAlphaF(m_gridSettings.opacity);
 		painter->setPen(c);
@@ -1865,6 +1865,7 @@ void WorksheetView::exportToClipboard() {
 
 void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background) {
 	//draw the background
+	m_isPrinting = true;
 	if (background) {
 		painter->save();
 		painter->scale(targetRect.width()/sourceRect.width(), targetRect.height()/sourceRect.height());
@@ -1876,9 +1877,11 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	m_worksheet->setPrinting(true);
 	scene()->render(painter, QRectF(), sourceRect);
 	m_worksheet->setPrinting(false);
+	m_isPrinting = false;
 }
 
 void WorksheetView::print(QPrinter* printer) {
+	m_isPrinting = true;
 	m_worksheet->setPrinting(true);
 	QPainter painter(printer);
 	painter.setRenderHint(QPainter::Antialiasing);
@@ -1892,6 +1895,7 @@ void WorksheetView::print(QPrinter* printer) {
 	// draw scene
 	scene()->render(&painter);
 	m_worksheet->setPrinting(false);
+	m_isPrinting = false;
 }
 
 void WorksheetView::updateBackground() {
