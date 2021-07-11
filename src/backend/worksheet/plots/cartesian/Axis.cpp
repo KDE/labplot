@@ -1374,7 +1374,7 @@ void AxisPrivate::retransformTicks() {
 		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no csystem!")
 		return;
 	}
-	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem-> yIndex() };
+//	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem-> yIndex() };
 	DEBUG(Q_FUNC_INFO << ", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
@@ -1919,7 +1919,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 	double width = 0, height = fm.ascent();
 	QPointF pos;
 
-	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem->yIndex() };
+//	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem->yIndex() };
 	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << q->m_cSystemIndex)
 	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
 	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)

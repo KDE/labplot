@@ -1101,11 +1101,8 @@ void CartesianPlot::setYRangeFormat(const int index, const RangeT::Format format
 // auto scale
 
 bool CartesianPlot::autoScaleX(int cSystemIndex) const {
-
-	Q_D(const CartesianPlot);
 	if (cSystemIndex == -1) {
-		for (int i=0; i < coordinateSystemCount(); i++)
-		{
+		for (int i = 0; i < coordinateSystemCount(); i++) {
 			if (!xRangeCSystem(i).autoScale())
 				return false;
 		}
@@ -1114,10 +1111,8 @@ bool CartesianPlot::autoScaleX(int cSystemIndex) const {
 	return xRangeCSystem(cSystemIndex).autoScale();
 }
 bool CartesianPlot::autoScaleY(int cSystemIndex) const {
-	Q_D(const CartesianPlot);
 	if (cSystemIndex == -1) {
-		for (int i=0; i < coordinateSystemCount(); i++)
-		{
+		for (int i = 0; i < coordinateSystemCount(); i++) {
 			if (!yRangeCSystem(i).autoScale())
 				return false;
 		}
@@ -1560,7 +1555,6 @@ void CartesianPlot::setYRangeScale(const int index, const RangeT::Scale scale) {
 // coordinate systems
 
 int CartesianPlot::coordinateSystemCount() const {
-	Q_D(const CartesianPlot);
 	return m_coordinateSystems.size();
 }
 
@@ -2476,7 +2470,6 @@ void CartesianPlot::yDataChanged(int cSystemIndex) {
 }
 
 void CartesianPlot::curveVisibilityChanged() {
-	Q_D(CartesianPlot);
 	int index = static_cast<WorksheetElement*>(QObject::sender())->coordinateSystemIndex();
 	setXRangeDirty(index, true);
 	setYRangeDirty(index, true);
@@ -3494,7 +3487,7 @@ void CartesianPlotPrivate::retransformXScale(CartesianCoordinateSystem* cSystem)
  * calculate x and y scales from scence range and logical range (x/y range) for all coordinate systems
  */
 void CartesianPlotPrivate::retransformScales(int cSystemIndex) {
-	int i{1}; // debugging
+//	int i{1}; // debugging
 #ifndef NDEBUG
 	for (auto& range : xRanges)
 		DEBUG( Q_FUNC_INFO << ", x range " << i++ << " = " << range.range.toStdString() << ", scale = " << (int)range.range.scale() );
@@ -3504,8 +3497,7 @@ void CartesianPlotPrivate::retransformScales(int cSystemIndex) {
 #endif
 	PERFTRACE(Q_FUNC_INFO);
 
-	if (cSystemIndex == -1)
-	{
+	if (cSystemIndex == -1) {
 		//////////// Create X-scales ////////////////
 		// loop over all cSystems and use the correct x/yRanges to set scales
 		DEBUG(Q_FUNC_INFO << ", number of coordinate systems = " << q->m_coordinateSystems.size())
@@ -3516,9 +3508,7 @@ void CartesianPlotPrivate::retransformScales(int cSystemIndex) {
 		// loop over all cSystems
 		for (auto cSystem : qAsConst(q->m_coordinateSystems))
 			retransformYScale(static_cast<CartesianCoordinateSystem*>(cSystem));
-	}
-	else
-	{
+	} else {
 		retransformXScale(q->coordinateSystem(cSystemIndex));
 		retransformYScale(q->coordinateSystem(cSystemIndex));
 	}
@@ -3526,7 +3516,7 @@ void CartesianPlotPrivate::retransformScales(int cSystemIndex) {
 	//TODO: what to do with these?
 	// also check delta* usage later
 
-	for (int i=0; i < xRanges.count(); i++) {
+	for (int i = 0; i < xRanges.count(); i++) {
 		auto& rangep = xRanges[i];
 		double deltaXMin = rangep.range.start() - rangep.prev.start();
 		double deltaXMax = rangep.range.end() - rangep.prev.end();
@@ -3567,7 +3557,7 @@ void CartesianPlotPrivate::retransformScales(int cSystemIndex) {
 		}
 	}
 
-	for (int i=0; i < yRanges.count(); i++) {
+	for (int i = 0; i < yRanges.count(); i++) {
 		auto& rangep = yRanges[i];
 		double deltaYMin = rangep.range.start() - rangep.prev.start();
 		double deltaYMax = rangep.range.end() - rangep.prev.end();
@@ -3695,6 +3685,7 @@ void CartesianPlotPrivate::yRangeFormatChanged() {
  * don't allow any negative values for the x range when log or sqrt scalings are used
  */
 void CartesianPlotPrivate::checkXRange(int xRangeIndex) {
+	Q_UNUSED(xRangeIndex);
 	//TODO: disabled for testing (negative values are already checked)
 	return;
 
@@ -3714,6 +3705,7 @@ void CartesianPlotPrivate::checkXRange(int xRangeIndex) {
  * don't allow any negative values for the y range when log or sqrt scalings are used
  */
 void CartesianPlotPrivate::checkYRange(int yRangeIndex) {
+	Q_UNUSED(yRangeIndex)
 	//TODO: disabled for testing (negative values are already checked)
 	return;
 
