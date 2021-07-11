@@ -38,14 +38,13 @@ const char* nsl_hilbert_result_type_name[] = {i18n("Imaginary part"), i18n("Enve
 
 /* algorithm from https://de.wikipedia.org/wiki/Hilbert-Transformation#Berechnung_%C3%BCber_Fouriertransformation */
 int nsl_hilbert_transform(double data[], size_t stride, size_t n, nsl_hilbert_result_type type) {
-	printf("nsl_hilbert_transform()\n");
 	if (n < 2)	/* we need at least 2 points */
 		return 1;
 
 	/* 1. DFT of data: dft_transform returns gsl_halfcomplex (raw) */
 	nsl_dft_transform(data, stride, n, 1, nsl_dft_result_raw);
 
-	const double N = 2 * n;
+	const size_t N = 2 * n;
 	double* result = (double*)malloc(N*sizeof(double));
 	gsl_fft_halfcomplex_unpack(data, result, stride, n);
 

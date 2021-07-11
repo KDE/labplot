@@ -1867,7 +1867,7 @@ void CartesianPlot::addSmoothCurve() {
 
 void CartesianPlot::addFitCurve() {
 	auto* curve = new XYFitCurve("fit");
-	const XYCurve* curCurve = currentCurve();
+	const auto* curCurve = currentCurve();
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro( i18n("%1: fit to '%2'", name(), curCurve->name()) );
@@ -1878,7 +1878,7 @@ void CartesianPlot::addFitCurve() {
 		//set the fit model category and type
 		const auto* action = qobject_cast<const QAction*>(QObject::sender());
 		if (action) {
-			auto type = (PlotDataDialog::AnalysisAction)action->data().toInt();
+			auto type = static_cast<PlotDataDialog::AnalysisAction>(action->data().toInt());
 			curve->initFitData(type);
 		} else {
 			DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
@@ -1976,9 +1976,15 @@ void CartesianPlot::addInfoElement() {
 	if (curves.count())
 		curve = curves.first();
 
-	const double pos = xRange().center();
+	double pos;
+	Q_D(CartesianPlot);
+	if (d->calledFromContextMenu) {
+		pos = d->logicalPos.x();
+		d->calledFromContextMenu = false;
+	} else
+		pos = xRange().center();
 
-	InfoElement* element = new InfoElement("Info Element", this, curve, pos);
+	auto* element = new InfoElement("Info Element", this, curve, pos);
 	this->addChild(element);
 	element->setParentGraphicsItem(graphicsItem());
 	element->retransform(); // must be done, because the element must be retransformed (see https://invent.kde.org/marmsoler/labplot/issues/9)
@@ -1996,15 +2002,32 @@ void CartesianPlot::addImage() {
 }
 
 void CartesianPlot::addCustomPoint() {
+	Q_D(CartesianPlot);
 	auto* point = new CustomPoint(this, "custom point");
 	point->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+
+	if (d->calledFromContextMenu)  {
+		point->setPosition(d->logicalPos);
+		d->calledFromContextMenu = false;
+	}
+
 	this->addChild(point);
 	point->retransform();
 }
 
 void CartesianPlot::addReferenceLine() {
+	Q_D(CartesianPlot);
 	auto* line = new ReferenceLine(this, "reference line");
 	line->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+
+	if (d->calledFromContextMenu)  {
+		if (line->orientation() == WorksheetElement::Orientation::Vertical)
+			line->setPosition(d->logicalPos.x());
+		else
+			line->setPosition(d->logicalPos.y());
+		d->calledFromContextMenu = false;
+	}
+
 	this->addChild(line);
 	line->retransform();
 }
@@ -2013,12 +2036,19 @@ int CartesianPlot::curveCount() {
 	return children<XYCurve>().size();
 }
 
+int CartesianPlot::curveTotalCount() const {
+	int count = children<XYCurve>().size();
+	count += children<Histogram>().size();
+	count += children<BoxPlot>().size();
+	return count;
+}
+
 const XYCurve* CartesianPlot::getCurve(int index) {
 	return children<XYCurve>().at(index);
 }
 
 double CartesianPlot::cursorPos(int cursorNumber) {
-	Q_D(CartesianPlot);
+	Q_D(const CartesianPlot);
 	return ( cursorNumber == 0 ? d->cursor0Pos.x() : d->cursor1Pos.x() );
 }
 
@@ -2046,13 +2076,11 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 
-	const bool firstCurve = (children<XYCurve>().size() + children<Histogram>().size() == 1);
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	if (curve) {
 		connect(curve, &XYCurve::dataChanged, this, [this, curve]() {int cSystemIndex = curve->coordinateSystemIndex(); this->dataChanged(cSystemIndex);});
 		connect(curve, &XYCurve::xColumnChanged, this, [this](const AbstractColumn* column) {
-			const bool firstCurve = (children<XYCurve>().size() + children<Histogram>().size() == 1);
-			if (firstCurve)
+			if (curveTotalCount() == 1) //first curve addded
 				checkAxisFormat(column, Axis::Orientation::Horizontal);
 		});
 		connect(curve, &XYCurve::xDataChanged, [this, curve] () {int cSystemIndex = curve->coordinateSystemIndex(); this->xDataChanged(cSystemIndex);});
@@ -2061,8 +2089,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::xErrorMinusColumnChanged, [this, curve] () {int cSystemIndex = curve->coordinateSystemIndex(); this->dataChanged(cSystemIndex);});
 		connect(curve, &XYCurve::yDataChanged, [this, curve] () {int cSystemIndex = curve->coordinateSystemIndex(); this->xDataChanged(cSystemIndex);});
 		connect(curve, &XYCurve::yColumnChanged, this, [this](const AbstractColumn* column) {
-			const bool firstCurve = (children<XYCurve>().size() + children<Histogram>().size() == 1);
-			if (firstCurve)
+			if (curveTotalCount() == 1)
 				checkAxisFormat(column, Axis::Orientation::Vertical);
 		});
 		connect(curve, &XYCurve::yErrorTypeChanged, [this, curve] () {int cSystemIndex = curve->coordinateSystemIndex(); this->dataChanged(cSystemIndex);});
@@ -2089,7 +2116,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 
 		//in case the first curve is added, check whether we start plotting datetime data
-		if (firstCurve) {
+		if (curveTotalCount() == 1) {
 			checkAxisFormat(curve->xColumn(), Axis::Orientation::Horizontal);
 			checkAxisFormat(curve->yColumn(), Axis::Orientation::Vertical);
 		}
@@ -2111,7 +2138,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 				setYRangeDirty(index, true);
 			}
 
-			if (firstCurve)
+			if (curveTotalCount() == 1)
 				checkAxisFormat(hist->dataColumn(), Axis::Orientation::Horizontal);
 		}
 
@@ -2123,6 +2150,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(boxPlot, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
+
+			if (curveTotalCount() == 1) {
+				connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
+				boxPlotOrientationChanged(boxPlot->orientation());
+			}
 		}
 
 		const auto* infoElement = qobject_cast<const InfoElement*>(child);
@@ -2189,6 +2221,35 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 
 		setUndoAware(true);
 	}
+}
+
+void CartesianPlot::boxPlotOrientationChanged(BoxPlot::Orientation orientation) {
+	const auto& axes = children<Axis>();
+
+	//don't show any labels for the first axis orthogonal to the orientation of the boxplot
+	for (auto* axis : axes) {
+		if (axis->orientation() != orientation) {
+			if (axis->labelsTextType() != Axis::LabelsTextType::CustomValues) {
+				axis->setUndoAware(false);
+				axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
+				axis->setUndoAware(true);
+			}
+			break;
+		}
+	}
+
+	//don't show any labels for the first axis parallel to the orientation of the boxplot
+	for (auto* axis : axes) {
+		if (axis->orientation() == orientation) {
+			if (axis->labelsTextType() != Axis::LabelsTextType::CustomValues) {
+				axis->setUndoAware(false);
+				axis->setLabelsPosition(Axis::LabelsPosition::Out);
+				axis->setUndoAware(true);
+			}
+			break;
+		}
+	}
+
 }
 
 void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
@@ -3320,8 +3381,7 @@ void CartesianPlotPrivate::retransform() {
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }
 
-void CartesianPlotPrivate::retransformYScale(CartesianCoordinateSystem* cSystem)
-{
+void CartesianPlotPrivate::retransformYScale(CartesianCoordinateSystem* cSystem) {
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
 	Range<double> sceneRange, logicalRange;
@@ -3375,8 +3435,7 @@ void CartesianPlotPrivate::retransformYScale(CartesianCoordinateSystem* cSystem)
 	cSystem->setYScales(scales);
 }
 
-void CartesianPlotPrivate::retransformXScale(CartesianCoordinateSystem* cSystem)
-{
+void CartesianPlotPrivate::retransformXScale(CartesianCoordinateSystem* cSystem) {
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
 	Range<double> sceneRange, logicalRange;
@@ -3639,7 +3698,7 @@ void CartesianPlotPrivate::checkXRange(int xRangeIndex) {
 	//TODO: disabled for testing (negative values are already checked)
 	return;
 
-	double min = 0.01;
+/*	double min = 0.01;
 
 	//TODO: refactor
 	if (q->xRangeFromIndex(xRangeIndex).start() <= 0.0) {
@@ -3648,7 +3707,7 @@ void CartesianPlotPrivate::checkXRange(int xRangeIndex) {
 	} else if (q->xRangeFromIndex(xRangeIndex).end() <= 0.0) {
 		(-min > q->xRangeFromIndex(xRangeIndex).start() * min) ? q->xRangeFromIndex(xRangeIndex).end() = -min : q->xRangeFromIndex(xRangeIndex).end() = q->xRangeFromIndex(xRangeIndex).start() * min;
 		emit q->xMaxChanged(xRangeIndex, q->xRangeFromIndex(xRangeIndex).end());
-	}
+	} */
 }
 
 /*!
@@ -3658,7 +3717,7 @@ void CartesianPlotPrivate::checkYRange(int yRangeIndex) {
 	//TODO: disabled for testing (negative values are already checked)
 	return;
 
-	double min = 0.01;
+/*	double min = 0.01;
 
 	//TODO: refactor
 	if (q->yRangeFromIndex(yRangeIndex).start() <= 0.0) {
@@ -3667,7 +3726,7 @@ void CartesianPlotPrivate::checkYRange(int yRangeIndex) {
 	} else if (q->yRangeFromIndex(yRangeIndex).end() <= 0.0) {
 		(-min > q->yRangeFromIndex(yRangeIndex).start()*min) ? q->yRangeFromIndex(yRangeIndex).end() = -min : q->yRangeFromIndex(yRangeIndex).end() = q->yRangeFromIndex(yRangeIndex).start()*min;
 		emit q->yMaxChanged(yRangeIndex, q->yRangeFromIndex(yRangeIndex).end());
-	}
+	} */
 }
 
 CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double> &sceneRange, const Range<double> &logicalRange) {
@@ -3718,6 +3777,14 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 //##############################################################################
 //##################################  Events  ##################################
 //##############################################################################
+
+void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	const auto* cSystem{ defaultCoordinateSystem() };
+	logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
+	calledFromContextMenu = true;
+	auto* menu = q->createContextMenu();
+	menu->exec(event->screenPos());
+}
 
 /*!
  * \brief CartesianPlotPrivate::mousePressEvent
@@ -4548,7 +4615,7 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	const bool hovered = (m_hovered && !isSelected());
 	const bool selected = isSelected();
 	if ((hovered || selected)  && !m_printing) {
-		static double penWidth = 20.;
+		static double penWidth = 2.;
 		const QRectF& br = q->m_plotArea->graphicsItem()->boundingRect();
 		const qreal width = br.width();
 		const qreal height = br.height();

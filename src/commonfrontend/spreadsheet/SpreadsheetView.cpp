@@ -4,7 +4,7 @@
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
     Copyright            : (C) 2011-2020 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016      by Fabian Kristof (fkristofszabolcs@gmail.com)
+    Copyright            : (C) 2016 by Fabian Kristof (fkristofszabolcs@gmail.com)
     Copyright            : (C) 2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
@@ -123,6 +123,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 	layout->addWidget(m_tableView);
 	if (m_readOnly)
 		m_tableView->setEditTriggers(QTableView::NoEditTriggers);
+
 	init();
 
 	//resize the view to show alls columns and the first 10 rows.
@@ -2198,8 +2199,13 @@ void SpreadsheetView::formatHeatmap() {
 	dlg->setColumns(columns);
 	if (dlg->exec() == QDialog::Accepted) {
 		const auto& format = dlg->format();
+		int count = columns.count();
+		if (count > 1)
+			m_spreadsheet->beginMacro(i18n("%1: set heatmap format", m_spreadsheet->name()));
 		for (auto* col : columns)
 			col->setHeatmapFormat(format);
+		if (count > 1)
+			m_spreadsheet->endMacro();
 	}
 
 	delete dlg;
@@ -2210,8 +2216,13 @@ void SpreadsheetView::removeFormat() {
 	if (columns.isEmpty())
 		columns = m_spreadsheet->children<Column>();
 
+	int count = columns.count();
+	if (count > 1)
+		m_spreadsheet->beginMacro(i18n("%1: remove heatmap format", m_spreadsheet->name()));
 	for (auto* col : columns)
 		col->removeFormat();
+	if (count > 1)
+		m_spreadsheet->endMacro();
 }
 
 /*!

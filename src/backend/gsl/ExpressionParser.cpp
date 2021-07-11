@@ -1441,11 +1441,12 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
 		int count, QVector<double>* xVector, QVector<double>* yVector,
 		const QStringList& paramNames, const QVector<double>& paramValues) {
-	DEBUG(Q_FUNC_INFO << ", v1")
+	DEBUG(Q_FUNC_INFO << ", v1: range = " << min.toStdString() << " .. " << max.toStdString())
 	gsl_set_error_handler_off();
 
 	const Range<double> range{min, max};
 	const double step = range.stepSize(count);
+	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", step = " << step)
 
 	for (int i = 0; i < paramNames.size(); ++i)
 		assign_symbol(qPrintable(paramNames.at(i)), paramValues.at(i));

@@ -113,7 +113,6 @@ QVector<QColor> ColorMapsManager::colors() const {
 	return m_colormap;
 }
 
-
 void ColorMapsManager::render(QPixmap& pixmap, const QString& name) {
 	if (name.isEmpty())
 		return;

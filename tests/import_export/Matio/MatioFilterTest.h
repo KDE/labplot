@@ -39,10 +39,18 @@ class MatioFilterTest : public CommonTest {
 private slots:
 	void testImportDouble();
 	void testImportSpreadsheet();
+	void testImportSpreadsheetPortion();
 	void testImportMatrix();
 
 	void testImportSparse();
+	void testImportLogicalSparse();
+	void testImportLogicalSparsePortion();
+	void testImportSparseComplex();
+	void testImportStruct();
+	void testImportStructPortion();
 	void testImportCell();
+	void testImportCellPortion();
+	void testImportEmptyCell();
 };
 
 

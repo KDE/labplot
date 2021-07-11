@@ -79,6 +79,7 @@ public:
 	void setPlotLock(bool lock);
 	void suppressSelectionChangedEvent(bool);
 	WorksheetElement* selectedElement() const;
+	QList<QGraphicsItem*> selectedItems() const;
 
 	Worksheet::CartesianPlotActionMode getCartesianPlotActionMode();
 	void registerShortcuts();
@@ -121,6 +122,7 @@ private:
 	bool m_selectionBandIsShown{false};
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
+	QPointF m_cursorPos;
 	int magnificationFactor{0};
 	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 	GridSettings m_gridSettings;
@@ -131,6 +133,7 @@ private:
 	QTimeLine* m_fadeInTimeLine{nullptr};
 	QTimeLine* m_fadeOutTimeLine{nullptr};
 	bool m_isClosing{false};
+	bool m_isPrinting{false};
 	bool m_actionsInitialized{false};
 	bool m_menusInitialized{false};
 	int m_numScheduledScalings{0};

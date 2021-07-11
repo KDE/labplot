@@ -220,6 +220,7 @@ private:
 	Range<double> calculateCurvesXMinMax(int cSystemIndex, bool completeRange = true);
 	void calculateCurvesYMinMax(int cSystemIndex, bool completeRange = true);
 	void retransformScales();
+	int curveTotalCount() const;
 
 	CartesianPlotLegend* m_legend{nullptr};
 	double m_zoomFactor{1.2};
@@ -354,6 +355,7 @@ private slots:
 	void yDataChanged(int cSystemIndex);
 	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
+	void boxPlotOrientationChanged(WorksheetElement::Orientation);
 
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();

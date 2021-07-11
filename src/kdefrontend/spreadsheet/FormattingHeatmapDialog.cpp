@@ -115,7 +115,7 @@ void FormattingHeatmapDialog::setColumns(const QVector<Column*>& columns) {
 	double min = INFINITY;
 	double max = -INFINITY;
 	bool formatShown = false;
-	for (auto* col : m_columns) {
+	for (const auto* col : qAsConst(m_columns)) {
 		if (!col->isNumeric())
 			continue;
 
@@ -171,9 +171,9 @@ void FormattingHeatmapDialog::autoRangeChanged(int index) {
 void FormattingHeatmapDialog::selectColorMap() {
 	auto* dlg = new ColorMapsDialog(this);
 	if (dlg->exec() == QDialog::Accepted) {
-		m_colors = dlg->colors();
 		m_name = dlg->name();
 		ui.lColorMapPreview->setPixmap(dlg->previewPixmap());
+		m_colors = dlg->colors(); //fetch the colors _after_ the preview pixmap was fetched to get the proper colors from the color manager
 		ui.lColorMapPreview->setFocus();
 	}
 }

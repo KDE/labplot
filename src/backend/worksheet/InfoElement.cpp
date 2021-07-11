@@ -814,14 +814,10 @@ InfoElementPrivate::InfoElementPrivate(InfoElement* owner, const XYCurve* curve)
 
 void InfoElementPrivate::init() {
 	setFlag(QGraphicsItem::ItemIsMovable, false);
-	setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
+	setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
-
-	//TODO
-	if(q->m_plot)
-		q->cSystem = q->m_plot->defaultCoordinateSystem();
 }
 
 QString InfoElementPrivate::name() const {

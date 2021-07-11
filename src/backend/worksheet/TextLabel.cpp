@@ -551,18 +551,34 @@ void TextLabelPrivate::updatePosition() {
 		// so it is not possible to align with the bounding rect
 		p = position.point;
 	} else if(coordinateBindingEnabled && q->cSystem) {
+		QRectF pr;
+		if (q->plot()) {
+			pr = q->plot()->dataRect();
+		} else {
+			if (!parentRect(pr))
+				return;
+		}
 		//the position in logical coordinates was changed, calculate the position in scene coordinates
 		bool visible;
-		position.point = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		p = position.point;
+		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
+		position.point = q->parentPosToRelativePos(p, pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+		if (q->plot())
+			p = mapPlotAreaToParent(p);
 	} else {
 		//determine the parent item
 		QRectF pr;
-		if (!parentRect(pr))
-			return;
+		if (q->plot()) {
+			pr = q->plot()->dataRect();
+		} else {
+			if (!parentRect(pr))
+				return;
+		}
 
 		p = q->relativePosToParentPos(pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
-		//position.point = p;
+		if (q->plot())
+			p = mapPlotAreaToParent(p);
+		//position.point = p; // do not set, because position.point are relative coordinates not absolute!
 	}
 
 	suppressItemChangeEvent = true;
@@ -573,7 +589,8 @@ void TextLabelPrivate::updatePosition() {
 
 	//the position in scene coordinates was changed, calculate the position in logical coordinates
 	if (q->cSystem) {
-		positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		if (!coordinateBindingEnabled)
+			positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		emit q->positionLogicalChanged(positionLogical);
 	}
 }
@@ -983,19 +1000,28 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		return value;
 
 	if (change == QGraphicsItem::ItemPositionChange) {
+
 		QRectF pr;
-		if (!parentRect(pr))
-			return QVariant();
+		QPointF pos;
+		if (!q->plot()) {
+			pos = value.toPointF();
+			if (!parentRect(pr))
+				return QVariant();
+		} else {
+			pr = q->plot()->dataRect();
+			pos = mapParentToPlotArea(value.toPointF());
+		}
 
 		//emit the signals in order to notify the UI.
 		// don't use setPosition here, because then all small changes are on the undo stack
 		if(coordinateBindingEnabled) {
-			const QPointF tempPoint = q->cSystem->mapSceneToLogical(value.toPointF(), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			emit q->positionLogicalChanged(tempPoint);
-		} else {
+			pos = q->align(pos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			emit q->positionLogicalChanged(positionLogical);
+		} else {				
 			//convert item's center point in parent's coordinates
 			TextLabel::PositionWrapper tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+			tempPosition.point = q->parentPosToRelativePos(pos, pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 			emit q->positionChanged(tempPosition);
 		}
 	}
@@ -1010,9 +1036,10 @@ void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }*/
 
 void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	QRectF pr;
-	if (!parentRect(pr))
+	if (!q->plot())
 		return;
+
+	QRectF pr = q->plot()->dataRect();
 
 	//convert position of the item in parent coordinates to label's position
 	const QPointF point = q->parentPosToRelativePos(mapParentToPlotArea(pos()), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
@@ -1031,25 +1058,50 @@ void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
 	        || event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
-		const int delta = 5;
-		QRectF pr;
-		if (!parentRect(pr))
-			return;
-		QPointF point = q->parentPosToRelativePos(pos(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+		const int delta = 5; // always in scene coordinates
+
 		WorksheetElement::PositionWrapper tempPosition = position;
+		if(coordinateBindingEnabled && q->cSystem) {
+			QPointF p;
+			QRectF pr;
+			if (q->plot()) {
+				pr = q->plot()->dataRect();
+			} else {
+				if (!parentRect(pr))
+					return;
+			}
+			//the position in logical coordinates was changed, calculate the position in scene coordinates
+			bool visible;
+			p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			if (event->key() == Qt::Key_Left) {
+				p.setX(p.x() - delta);
+			} else if (event->key() == Qt::Key_Right) {
+				p.setX(p.x() + delta);
+			} else if (event->key() == Qt::Key_Up) {
+				p.setY(p.y() - delta); // Don't understand why I need a negative here and below a positive delta
+			} else if (event->key() == Qt::Key_Down) {
+				p.setY(p.y() + delta);
+			}
+			auto pLogic = q->cSystem->mapSceneToLogical(p, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			q->setPositionLogical(pLogic);
+		} else {
+			QRectF pr;
+			if (!parentRect(pr))
+				return;
+			QPointF point = q->parentPosToRelativePos(pos(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 
-		if (event->key() == Qt::Key_Left) {
-			point.setX(point.x() - delta);
-		} else if (event->key() == Qt::Key_Right) {
-			point.setX(point.x() + delta);
-		} else if (event->key() == Qt::Key_Up) {
-			point.setY(point.y() - delta);
-		} else if (event->key() == Qt::Key_Down) {
-			point.setY(point.y() + delta);
+			if (event->key() == Qt::Key_Left) {
+				point.setX(point.x() - delta);
+			} else if (event->key() == Qt::Key_Right) {
+				point.setX(point.x() + delta);
+			} else if (event->key() == Qt::Key_Up) {
+				point.setY(point.y() + delta);
+			} else if (event->key() == Qt::Key_Down) {
+				point.setY(point.y() - delta);
+			}
+			tempPosition.point = point;
+			q->setPosition(tempPosition);
 		}
-
-		tempPosition.point = point;
-		q->setPosition(tempPosition);
 	}
 
 	QGraphicsItem::keyPressEvent(event);

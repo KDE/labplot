@@ -9,5 +9,8 @@ ENDIF ()
 IF (MATIO_FOUND)
 	add_subdirectory(Matio)
 ENDIF ()
+IF (HDF5_FOUND)
+	add_subdirectory(HDF)
+ENDIF ()
 
 # add_subdirectory(DATASETS)

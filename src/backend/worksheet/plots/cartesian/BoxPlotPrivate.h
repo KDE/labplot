@@ -47,11 +47,6 @@ public:
 	virtual void recalcShapeAndBoundingRect();
 	void updatePixmap();
 
-	double xMinimum();
-	double xMaximum();
-	double yMinimum();
-	double yMaximum();
-
 	bool m_suppressRecalc{false};
 
 	//reimplemented from QGraphicsItem
@@ -71,6 +66,11 @@ public:
 	double widthFactor{1.0};
 	bool notchesEnabled{false};
 	qreal opacity{1.0};
+
+	double xMin;
+	double xMax;
+	double yMin;
+	double yMax;
 
 	//box filling
 	bool fillingEnabled{true};
@@ -145,11 +145,6 @@ private:
 	QVector<Points> m_jitterPoints;	//positions of the jitters in scene coordinates
 	QVector<Points> m_farOutPointsLogical;	//positions of the far out values in logical coordinates
 	QVector<Points> m_farOutPoints;	//positions of the far out values in scene coordinates
-
-	double m_xMin;
-	double m_xMax;
-	double m_yMin;
-	double m_yMax;
 
 	QPixmap m_pixmap;
 	QImage m_hoverEffectImage;

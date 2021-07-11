@@ -33,11 +33,14 @@
 #include <KI18n/KLocalizedString>
 
 #include <array>
+
 #include <QApplication>
+#include <QColor>
 #include <QComboBox>
+#include <QFileDialog>
+#include <QImageReader>
 #include <QLineEdit>
 #include <QMenu>
-#include <QColor>
 #include <QPainter>
 
 static const int colorsCount = 26;
@@ -264,4 +267,29 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 		pa.end();
 		cb->addItem(QIcon(pm), Symbol::nameFromStyle(style), (int)style);
 	}
+}
+
+QString GuiTools::openImageFile(const QString& className) {
+	KConfigGroup conf(KSharedConfig::openConfig(), className);
+	const QString& dir = conf.readEntry(QLatin1String("LastImageDir"), QString());
+
+	QString formats;
+	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
+		QString f = "*." + QString(format.constData());
+		if (f == QLatin1String("*.svg"))
+			continue;
+		formats += f + QLatin1Char(' ');
+	}
+
+	const QString& path = QFileDialog::getOpenFileName(nullptr, i18n("Open Image File"), dir, i18n("Images (%1)", formats));
+	if (!path.isEmpty()) {
+		int pos = path.lastIndexOf(QLatin1String("/"));
+		if (pos != -1) {
+			QString newDir = path.left(pos);
+			if (newDir != dir)
+				conf.writeEntry(QLatin1String("LastImageDir"), newDir);
+		}
+	}
+
+	return path;
 }

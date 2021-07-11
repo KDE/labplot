@@ -1604,18 +1604,16 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		case AbstractColumn::ColumnMode::BigInt:
 			ui.lLabelsFormat->show();
 			ui.cbLabelsFormat->show();
-			ui.chkLabelsAutoPrecision->show();
 			ui.lLabelsPrecision->show();
-			ui.sbLabelsPrecision->show();
+			ui.framePrecision->show();
 			ui.lLabelsDateTimeFormat->hide();
 			ui.cbLabelsDateTimeFormat->hide();
 			break;
 		case AbstractColumn::ColumnMode::Text:
 			ui.lLabelsFormat->hide();
 			ui.cbLabelsFormat->hide();
-			ui.chkLabelsAutoPrecision->hide();
 			ui.lLabelsPrecision->hide();
-			ui.sbLabelsPrecision->hide();
+			ui.framePrecision->hide();
 			ui.lLabelsDateTimeFormat->hide();
 			ui.cbLabelsDateTimeFormat->hide();
 			break;
@@ -1624,9 +1622,8 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		case AbstractColumn::ColumnMode::Day:
 			ui.lLabelsFormat->hide();
 			ui.cbLabelsFormat->hide();
-			ui.chkLabelsAutoPrecision->hide();
 			ui.lLabelsPrecision->hide();
-			ui.sbLabelsPrecision->hide();
+			ui.framePrecision->hide();
 			ui.lLabelsDateTimeFormat->show();
 			ui.cbLabelsDateTimeFormat->show();
 			break;
@@ -1636,9 +1633,8 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		if (type == Axis::LabelsTextType::CustomValues) {
 			ui.lLabelsFormat->hide();
 			ui.cbLabelsFormat->hide();
-			ui.chkLabelsAutoPrecision->hide();
 			ui.lLabelsPrecision->hide();
-			ui.sbLabelsPrecision->hide();
+			ui.framePrecision->hide();
 			ui.lLabelsDateTimeFormat->hide();
 			ui.cbLabelsDateTimeFormat->hide();
 		}
@@ -1655,7 +1651,7 @@ void AxisDock::labelsPrefixChanged() {
 	if (m_initializing)
 		return;
 
-	QString prefix = ui.leLabelsPrefix->text();
+	const QString& prefix = ui.leLabelsPrefix->text();
 	for (auto* axis : m_axesList)
 		axis->setLabelsPrefix(prefix);
 }
@@ -1664,7 +1660,7 @@ void AxisDock::labelsSuffixChanged() {
 	if (m_initializing)
 		return;
 
-	QString suffix = ui.leLabelsSuffix->text();
+	const QString& suffix = ui.leLabelsSuffix->text();
 	for (auto* axis : m_axesList)
 		axis->setLabelsSuffix(suffix);
 }

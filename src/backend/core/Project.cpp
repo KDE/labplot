@@ -93,60 +93,58 @@ namespace {
 
 class Project::Private {
 public:
-    Private(Project* owner) :
-		author(QString(qgetenv("USER"))),
-		modificationTime(QDateTime::currentDateTime()),
-		q(owner) {
-        setVersion(LVERSION);
+	Private(Project* owner) : author(QString()),
+			modificationTime(QDateTime::currentDateTime()), q(owner) {
+		setVersion(LVERSION);
 	}
 	QString name() const  {
 		return q->name();
 	}
 
-    bool setVersion(const QString &v) const {
-        versionString = v;
-        auto l = v.split(".");
-        assert(l.length() == 3);
-        bool ok;
-        int major = l[0].toInt(&ok);
-        if (!ok)
-            return false;
-        int minor = l[1].toInt(&ok);
-        if (!ok)
-            return false;
-        int patch = l[2].toInt(&ok);
-        if (!ok)
-            return false;
-        versionNumber_ = QT_VERSION_CHECK(major, minor, patch);
-        return true;
-    }
+	bool setVersion(const QString &v) const {
+		versionString = v;
+		auto l = v.split(".");
+		assert(l.length() == 3);
+		bool ok;
+		int major = l[0].toInt(&ok);
+		if (!ok)
+			return false;
+		int minor = l[1].toInt(&ok);
+		if (!ok)
+			return false;
+		int patch = l[2].toInt(&ok);
+		if (!ok)
+			return false;
+		m_versionNumber = QT_VERSION_CHECK(major, minor, patch);
+		return true;
+	}
 
-    static QString version() {
-        return versionString;
-    }
+	static QString version() {
+		return versionString;
+	}
 
-    static int versionNumber() {
-        return versionNumber_;
-    }
+	static int versionNumber() {
+		return m_versionNumber;
+	}
 
 	static int xmlVersion() {
 		return mXmlVersion;
-    }
+	}
 
 	QUndoStack undo_stack;
 	MdiWindowVisibility mdiWindowVisibility{Project::MdiWindowVisibility::folderOnly};
-    QString fileName;
+	QString fileName;
 	QString author;
 	QDateTime modificationTime;
 	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
 	Project* const q;
-    static int versionNumber_;
-    static QString versionString;
+	static int m_versionNumber;
+	static QString versionString;
 	static int mXmlVersion;
 };
 
-int Project::Private::versionNumber_ = INFINITY;
+int Project::Private::m_versionNumber = 0;
 QString Project::Private::versionString = "";
 int Project::Private::mXmlVersion = 0;
 
@@ -155,7 +153,10 @@ Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private
 	KConfig config;
 	KConfigGroup group = config.group("Project");
 
-	d->author = group.readEntry("Author", QString());
+	QString user = qEnvironmentVariable("USER");	// !Windows
+	if (user.isEmpty())
+		user = qEnvironmentVariable("USERNAME");	// Windows
+	d->author = group.readEntry("Author", user);
 
 	//we don't have direct access to the members name and comment
 	//->temporary disable the undo stack and call the setters
@@ -194,11 +195,11 @@ Project::~Project() {
 }
 
 QString Project::version() {
-    return Private::version();
+	return Private::version();
 }
 
 int Project::versionNumber() {
-    return Private::versionNumber();
+	return Private::versionNumber();
 }
 
 int Project::xmlVersion() {
@@ -468,7 +469,7 @@ QVector<quintptr> Project::droppedAspects(const QMimeData* mimeData) {
 
 void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	//set the version and the modification time to the current values
-    d->setVersion(LVERSION);
+	d->setVersion(LVERSION);
 	d->modificationTime = QDateTime::currentDateTime();
 
 	writer->setAutoFormatting(true);
@@ -478,7 +479,6 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	writer->writeStartElement("project");
 	writer->writeAttribute("version", version());
 	writer->writeAttribute("xmlVersion", QString::number(buildXmlVersion));
-	writer->writeAttribute("fileName", fileName());
 	writer->writeAttribute("modificationTime", modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
 	writer->writeAttribute("author", author());
 
@@ -606,13 +606,13 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 			QString version = reader->attributes().value("version").toString();
 			if (version.isEmpty())
 				reader->raiseWarning(i18n("Attribute 'version' is missing."));
-            else
-                d->setVersion(version);
+			else
+				d->setVersion(version);
 
 			QString c = reader->attributes().value("xmlVersion").toString();
-            if (c.isEmpty())
+			if (c.isEmpty())
 				d->mXmlVersion = 0;
-            else
+			else
 				d->mXmlVersion = c.toInt();
 
 			if (!readBasicAttributes(reader)) return false;

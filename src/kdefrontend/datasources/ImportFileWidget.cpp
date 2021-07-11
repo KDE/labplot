@@ -279,7 +279,7 @@ void ImportFileWidget::loadSettings() {
 
 	if (m_fileName.isEmpty()) {
 		ui.cbFilter->setCurrentIndex(conf.readEntry("Filter", 0));
-		m_cbFileName->setUrl(conf.readEntry("LastImportedFile", ""));
+		m_cbFileName->setUrl(QUrl(conf.readEntry("LastImportedFile", "")));
 		QStringList urls = m_cbFileName->urls();
 		urls.append(conf.readXdgListEntry("LastImportedFiles"));
 		m_cbFileName->setUrls(urls);
@@ -319,7 +319,11 @@ void ImportFileWidget::loadSettings() {
 	m_willSettings.willTimeInterval = conf.readEntry("mqttWillUpdateInterval", m_willSettings.willTimeInterval);
 
 	const QString& willStatistics = conf.readEntry("mqttWillStatistics","");
-	const QStringList& statisticsList = willStatistics.split('|', QString::SplitBehavior::SkipEmptyParts);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+	const QStringList& statisticsList = willStatistics.split('|', Qt::SkipEmptyParts);
+#else
+	const QStringList& statisticsList = willStatistics.split('|', QString::SkipEmptyParts);
+#endif
 	for (auto value : statisticsList)
 		m_willSettings.willStatistics[value.toInt()] = true;
 #endif
@@ -2136,7 +2140,11 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 	const QChar sep = '/';
 
 	if (topic.name().contains(sep)) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		const QStringList& list = topic.name().split(sep, Qt::SkipEmptyParts);
+#else
 		const QStringList& list = topic.name().split(sep, QString::SkipEmptyParts);
+#endif
 
 		if (!list.isEmpty()) {
 			rootName = list.at(0);
@@ -2200,7 +2208,11 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqt
 
 	//if a subscribed topic contains the new topic, we have to update twSubscriptions
 	for (int i = 0; i < m_subscriptionWidget->subscriptionCount(); ++i) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+		const QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(sep, Qt::SkipEmptyParts);
+#else
 		const QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split(sep, QString::SkipEmptyParts);
+#endif
 		if (!subscriptionName.isEmpty()) {
 			if (rootName == subscriptionName.first()) {
 				QVector<QString> subscriptions;

@@ -75,7 +75,7 @@ void HDF5OptionsWidget::updateContent(HDF5Filter* filter, const QString& fileNam
 	updates the selected data set of a HDF5 file when a new tree widget item is selected
 */
 void HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged() {
-	DEBUG("hdf5TreeWidgetSelectionChanged()");
+	DEBUG(Q_FUNC_INFO);
 	auto items = ui.twContent->selectedItems();
 	QDEBUG("SELECTED ITEMS =" << items);
 
@@ -86,24 +86,29 @@ void HDF5OptionsWidget::hdf5TreeWidgetSelectionChanged() {
 	if (item->data(2, Qt::DisplayRole).toString() == i18n("data set"))
 		m_fileWidget->refreshPreview();
 	else
-		DEBUG("non data set selected in HDF5 tree widget");
+		DEBUG(Q_FUNC_INFO << ", non data set selected in HDF5 tree widget");
 }
 
 /*!
 	return list of selected HDF5 item names
-	selects all items if nothing is selected
+	selects first item if nothing is selected
 */
 const QStringList HDF5OptionsWidget::selectedNames() const {
-	DEBUG("HDF5OptionsWidget::selectedNames()");
+	DEBUG(Q_FUNC_INFO);
 	QStringList names;
 
-	if (ui.twContent->selectedItems().size() == 0)
-		ui.twContent->selectAll();
+	if (ui.twContent->selectedItems().size() == 0 && ui.twContent->topLevelItem(0)) {
+		const auto& child = ui.twContent->topLevelItem(0)->child(0);
+		if (child && child->child(0))
+			ui.twContent->setCurrentItem(child->child(0));
+		else
+			ui.twContent->setCurrentItem(child);
+	}
 
 	// the data link is saved in the second column
 	for (auto* item : ui.twContent->selectedItems())
 		names << item->text(1);
-	QDEBUG("	HDF5OptionsWidget: selected names =" << names);
+	QDEBUG(Q_FUNC_INFO << ", selected names =" << names);
 
 	return names;
 }

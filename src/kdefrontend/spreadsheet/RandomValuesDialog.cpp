@@ -4,7 +4,7 @@
     Description          : Dialog for generating non-uniformly distributed random numbers
     --------------------------------------------------------------------
     Copyright            : (C) 2014-2019 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2016-2020 by Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2016-2021 by Stefan Gerlach (stefan.gerlach@uni.kn)
 
  ***************************************************************************/
 
@@ -74,8 +74,12 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 	layout->addWidget(buttonBox);
 	setLayout(layout);
 	setAttribute(Qt::WA_DeleteOnClose);
+	QVector<QPair<QString, int>> distros;
 	for (int i = 0; i < NSL_SF_STATS_DISTRIBUTION_RNG_COUNT; i++)
-		ui.cbDistribution->addItem(i18n(nsl_sf_stats_distribution_name[i]), i);
+		distros << QPair<QString, int>(i18n(nsl_sf_stats_distribution_name[i]), i);
+	std::sort(std::begin(distros), std::end(distros));
+	for (const auto& d : distros)
+		ui.cbDistribution->addItem(d.first, d.second);
 
 	//use white background in the preview label
 	QPalette p;
@@ -281,8 +285,8 @@ void RandomValuesDialog::distributionChanged(int index) {
 		ui.leParameter2->setText(numberLocale.toString(0.0));
 		break;
 	case nsl_sf_stats_lognormal:
-		ui.lParameter1->setText(UTF8_QSTRING("σ ="));
-		ui.lParameter2->setText(UTF8_QSTRING("μ ="));
+		ui.lParameter1->setText(UTF8_QSTRING("μ ="));
+		ui.lParameter2->setText(UTF8_QSTRING("σ ="));
 		ui.leParameter1->setText(numberLocale.toString(1.0));
 		ui.leParameter2->setText(numberLocale.toString(1.0));
 		break;
@@ -360,6 +364,7 @@ void RandomValuesDialog::distributionChanged(int index) {
 
 	QString file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + ".png");
 	DEBUG("Distribution pixmap path = " << STDSTRING(file));
+	ui.lFuncPic->setScaledContents(false);
 	ui.lFuncPic->setPixmap(QPixmap(file));
 }
 
@@ -686,8 +691,8 @@ void RandomValuesDialog::generate() {
 	}
 	case nsl_sf_stats_lognormal: {
 		double s{1.0}, mu{1.0};
-		SET_DOUBLE_FROM_LE(s, ui.leParameter1)
-		SET_DOUBLE_FROM_LE(mu, ui.leParameter2)
+		SET_DOUBLE_FROM_LE(mu, ui.leParameter1)
+		SET_DOUBLE_FROM_LE(s, ui.leParameter2)
 		for (auto* col : m_columns) {
 			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
 				for (int i = 0; i < rows; ++i)

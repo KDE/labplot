@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for worksheet properties
     --------------------------------------------------------------------
-    Copyright            : (C) 2010-2016 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2021 by Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
  ***************************************************************************/
@@ -34,8 +34,6 @@
 
 #include <QCompleter>
 #include <QDirModel>
-#include <QFileDialog>
-#include <QImageReader>
 #include <QPageSize>
 
 #include <KConfig>
@@ -746,32 +744,11 @@ void WorksheetDock::layoutColumnCountChanged(int count) {
 	opens a file dialog and lets the user select the image file.
 */
 void WorksheetDock::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "WorksheetDock");
-	QString dir = conf.readEntry("LastImageDir", "");
-
-	QString formats;
-	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
-		QString f = "*." + QString(format.constData());
-		if (f == QLatin1String("*.svg"))
-			continue;
-		formats.isEmpty() ? formats += f : formats += ' ' + f;
-	}
-
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
+	const QString& path = GuiTools::openImageFile(QLatin1String("WorksheetDock"));
 	if (path.isEmpty())
-		return; //cancel was clicked in the file-dialog
+		return;
 
-	int pos = path.lastIndexOf(QLatin1String("/"));
-	if (pos != -1) {
-		QString newDir = path.left(pos);
-		if (newDir != dir)
-			conf.writeEntry("LastImageDir", newDir);
-	}
-
-	ui.leBackgroundFileName->setText( path );
-
-	for (auto* worksheet : m_worksheetList)
-		worksheet->setBackgroundFileName(path);
+	ui.leBackgroundFileName->setText(path);
 }
 
 void WorksheetDock::fileNameChanged() {

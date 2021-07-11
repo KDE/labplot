@@ -4,7 +4,7 @@
     Description          : Worksheet element container - parent of multiple elements
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2015 by Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2021 by Alexander Semke (alexander.semke@web.de)
  ***************************************************************************/
 
 /***************************************************************************
@@ -28,8 +28,9 @@
 
 #include "backend/worksheet/WorksheetElementContainer.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/ResizeItem.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
@@ -88,8 +89,9 @@ void WorksheetElementContainer::setVisible(bool on) {
 		beginMacro( i18n("%1: set invisible", name()) );
 
 	//change the visibility of all children
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
-	for (auto* elem : childList) {
+	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden
+													| AbstractAspect::ChildIndexFlag::Compress);
+	for (auto* elem : elements) {
 		auto* curve = dynamic_cast<XYCurve*>(elem);
 		if (curve) {
 			//making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
@@ -114,8 +116,9 @@ bool WorksheetElementContainer::isVisible() const {
 }
 
 bool WorksheetElementContainer::isFullyVisible() const {
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
-	for (const auto* elem : childList) {
+	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden
+													| AbstractAspect::ChildIndexFlag::Compress);
+	for (const auto* elem : elements) {
 		if (!elem->isVisible())
 			return false;
 	}
@@ -127,6 +130,17 @@ void WorksheetElementContainer::setPrinting(bool on) {
 	d->m_printing = on;
 }
 
+void WorksheetElementContainer::setResizeEnabled(bool enabled) {
+	if (m_resizeItem)
+		m_resizeItem->setVisible(enabled);
+	else {
+		if (enabled) {
+			m_resizeItem = new ResizeItem(this);
+			m_resizeItem->setRect(rect());
+		}
+	}
+}
+
 void WorksheetElementContainer::retransform() {
 // 	if (isLoading())
 // 		return;
@@ -134,11 +148,15 @@ void WorksheetElementContainer::retransform() {
 	PERFTRACE("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
 
-	QVector<WorksheetElement*> childList = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
-	for (auto* child : childList)
+	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden
+													| AbstractAspect::ChildIndexFlag::Compress);
+	for (auto* child : elements)
 		child->retransform();
 
 	d->recalcShapeAndBoundingRect();
+
+	if (m_resizeItem)
+		m_resizeItem->setRect(rect());
 }
 
 /*!

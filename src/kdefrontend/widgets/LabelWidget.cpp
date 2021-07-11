@@ -812,16 +812,16 @@ void LabelWidget::dateTimeMenu() {
 		m_dateTimeMenu->addSeparator()->setText(i18n("Date"));
 		m_dateTimeMenu->addAction( date.toString(Qt::TextDate) );
 		m_dateTimeMenu->addAction( date.toString(Qt::ISODate) );
-		m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleShortDate) );
-		m_dateTimeMenu->addAction( date.toString(Qt::SystemLocaleLongDate) );
+		m_dateTimeMenu->addAction( QLocale::system().toString(date, QLocale::ShortFormat) );
+		m_dateTimeMenu->addAction( QLocale::system().toString(date, QLocale::LongFormat) );
 		m_dateTimeMenu->addAction( date.toString(Qt::RFC2822Date) );
 
 		QDateTime time = QDateTime::currentDateTime();
 		m_dateTimeMenu->addSeparator()->setText(i18n("Date and Time"));
 		m_dateTimeMenu->addAction( time.toString(Qt::TextDate) );
 		m_dateTimeMenu->addAction( time.toString(Qt::ISODate) );
-		m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleShortDate) );
-		m_dateTimeMenu->addAction( time.toString(Qt::SystemLocaleLongDate) );
+		m_dateTimeMenu->addAction( QLocale::system().toString(time, QLocale::ShortFormat) );
+		m_dateTimeMenu->addAction( QLocale::system().toString(time, QLocale::LongFormat) );
 		m_dateTimeMenu->addAction( time.toString(Qt::RFC2822Date) );
 	} else {
 		//application language was changed:
@@ -1343,12 +1343,12 @@ void LabelWidget::load() {
 
 	//widgets for positioning using logical plot coordinates
 	SET_NUMBER_LOCALE
-	bool allowLogicalCoordinates = (m_label->parentAspect()->type() == AspectType::CartesianPlot);
+	bool allowLogicalCoordinates = (m_label->plot() != nullptr);
 	ui.lBindLogicalPos->setVisible(allowLogicalCoordinates);
 	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);
 
 	if (allowLogicalCoordinates) {
-		const auto* plot = static_cast<const CartesianPlot*>(m_label->parentAspect());
+		const auto* plot = static_cast<const CartesianPlot*>(m_label->plot());
 		if (plot->xRangeFormat() == RangeT::Format::Numeric) {
 			ui.lPositionXLogical->show();
 			ui.lePositionXLogical->show();

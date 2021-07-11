@@ -36,8 +36,6 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
 
-#include <QFileDialog>
-#include <QImageReader>
 #include <QPushButton>
 
 #include <KLocalizedString>
@@ -617,32 +615,11 @@ void BoxPlotDock::fillingSecondColorChanged(const QColor& c) const {
 	opens a file dialog and lets the user select the image file.
 */
 void BoxPlotDock::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "BoxPlotDock");
-	QString dir = conf.readEntry("LastImageDir", "");
-
-	QString formats;
-	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
-		QString f = "*." + QString(format.constData());
-		if (f == QLatin1String("*.svg"))
-			continue;
-		formats.isEmpty() ? formats += f : formats += ' ' + f;
-	}
-
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
+	const QString& path = GuiTools::openImageFile(QLatin1String("BoxPlotDock"));
 	if (path.isEmpty())
-		return; //cancel was clicked in the file-dialog
+		return;
 
-	int pos = path.lastIndexOf(QLatin1String("/"));
-	if (pos != -1) {
-		QString newDir = path.left(pos);
-		if (newDir != dir)
-			conf.writeEntry("LastImageDir", newDir);
-	}
-
-	ui.leFillingFileName->setText( path );
-
-	for (auto* boxPlot : m_boxPlots)
-		boxPlot->setFillingFileName(path);
+	ui.leFillingFileName->setText(path);
 }
 
 void BoxPlotDock::fileNameChanged() const {

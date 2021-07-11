@@ -738,6 +738,9 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index) {
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
+	if (m_project->isLoading())
+		return;
+
 	QModelIndex index;
 	AbstractAspect* aspect = nullptr;
 
@@ -887,7 +890,7 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 		const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 		if (part && part->hasMdiSubWindow()) {
 			withView.push_back(row);
-			ViewState s = {part->view()->windowState(), part->view()->geometry()};
+			ViewState s = {part->view()->windowState(), part->mdiSubWindow()->geometry()};
 			viewStates.push_back(s);
 		}
 

@@ -1041,14 +1041,14 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	return columnOffset;
 }
 
-void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
+void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
 	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
 	//determine the dependent plots
 	QVector<CartesianPlot*> plots;
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
-		for (int n = startColumn; n <= endColumn; n++) {
-			Column* column = this->column(columnOffset + n - startColumn);
+		for (size_t n = startColumn; n <= endColumn; n++) {
+			Column* column = this->column((int)(columnOffset + n - startColumn));
 			if (column)
 				column->addUsedInPlots(plots);
 		}
@@ -1060,9 +1060,9 @@ void Spreadsheet::finalizeImport(int columnOffset, int startColumn, int endColum
 
 	// set the comments for each of the columns if datasource is a spreadsheet
 	const int rows = rowCount();
-	for (int n = startColumn; n <= endColumn; n++) {
+	for (size_t n = startColumn; n <= endColumn; n++) {
 		//DEBUG(Q_FUNC_INFO << ", column " << columnOffset + n - startColumn);
-		Column* column = this->column(columnOffset + n - startColumn);
+		Column* column = this->column((int)(columnOffset + n - startColumn));
 		//DEBUG(Q_FUNC_INFO << ", type " << static_cast<int>(column->columnMode()));
 
 		QString comment;

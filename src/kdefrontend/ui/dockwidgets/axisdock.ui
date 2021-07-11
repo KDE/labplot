@@ -1002,48 +1002,86 @@
        <string>Labels</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="10" column="0">
-        <widget class="QLabel" name="lLabelsSuffix">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lMajorGrid_2">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
-          <string>Suffix:</string>
+          <string>Position</string>
          </property>
         </widget>
        </item>
-       <item row="13" column="0">
-        <widget class="QLabel" name="lLabelsFont">
+       <item row="1" column="0">
+        <widget class="QLabel" name="lLabelsPosition">
          <property name="text">
-          <string>Font:</string>
+          <string>Position:</string>
          </property>
         </widget>
        </item>
-       <item row="14" column="2" colspan="2">
-        <widget class="KColorButton" name="kcbLabelsFontColor">
+       <item row="1" column="1">
+        <spacer name="horizontalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>17</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="2">
+        <widget class="KComboBox" name="cbLabelsPosition">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="lLabelsDateTimeFormat">
+       <item row="2" column="0">
+        <widget class="QLabel" name="lLabelsOffset">
          <property name="text">
-          <string>Format:</string>
+          <string>Offset:</string>
          </property>
         </widget>
        </item>
-       <item row="19" column="0">
-        <widget class="QLabel" name="lLabelsBackgroundType">
-         <property name="text">
-          <string>Type</string>
+       <item row="2" column="2">
+        <widget class="QDoubleSpinBox" name="sbLabelsOffset">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="suffix">
+          <string> pt</string>
+         </property>
+         <property name="minimum">
+          <double>-99.989999999999995</double>
+         </property>
+         <property name="singleStep">
+          <double>0.500000000000000</double>
          </property>
         </widget>
        </item>
-       <item row="13" column="2" colspan="2">
-        <widget class="KFontRequester" name="kfrLabelsFont"/>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lLabelsRotation">
+         <property name="text">
+          <string>Rotation:</string>
+         </property>
+        </widget>
        </item>
-       <item row="3" column="2" colspan="2">
+       <item row="3" column="2">
         <widget class="QSpinBox" name="sbLabelsRotation">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1071,8 +1109,24 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lMajorGrid_2">
+       <item row="4" column="0">
+        <spacer name="verticalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>58</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="lLabelsText">
          <property name="font">
           <font>
            <weight>75</weight>
@@ -1080,7 +1134,122 @@
           </font>
          </property>
          <property name="text">
-          <string>Position</string>
+          <string>Text</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="lLabelsFormat">
+         <property name="text">
+          <string>Format:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2">
+        <widget class="KComboBox" name="cbLabelsFormat"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="lLabelsPrecision">
+         <property name="toolTip">
+          <string>Number of digits after the decimal point</string>
+         </property>
+         <property name="text">
+          <string>Precision:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2">
+        <widget class="QFrame" name="framePrecision">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QSpinBox" name="sbLabelsPrecision">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip">
+             <string>Number of digits after the decimal point</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkLabelsAutoPrecision">
+            <property name="toolTip">
+             <string>Automatically determine the optimal number of digits after the decimal point</string>
+            </property>
+            <property name="text">
+             <string>Auto</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QLabel" name="lLabelsDateTimeFormat">
+         <property name="text">
+          <string>Format:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="2">
+        <widget class="KComboBox" name="cbLabelsDateTimeFormat">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="lLabelsPrefix">
+         <property name="text">
+          <string>Prefix:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="2">
+        <widget class="QLineEdit" name="leLabelsPrefix">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lLabelsSuffix">
+         <property name="text">
+          <string>Suffix:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QLineEdit" name="leLabelsSuffix">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
         </widget>
        </item>
@@ -1100,75 +1269,6 @@
          </property>
         </spacer>
        </item>
-       <item row="19" column="2" colspan="2">
-        <widget class="QComboBox" name="cbLabelsBackgroundType"/>
-       </item>
-       <item row="8" column="2" colspan="2">
-        <widget class="KComboBox" name="cbLabelsDateTimeFormat">
-         <property name="editable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="20" column="2" colspan="2">
-        <widget class="KColorButton" name="kcbLabelsBackgroundColor"/>
-       </item>
-       <item row="1" column="2" colspan="2">
-        <widget class="KComboBox" name="cbLabelsPosition"/>
-       </item>
-       <item row="10" column="2" colspan="2">
-        <widget class="QLineEdit" name="leLabelsSuffix"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lLabelsOffset">
-         <property name="text">
-          <string>Offset:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="24" column="0">
-        <spacer name="verticalSpacer_9">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>83</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="16" column="0">
-        <widget class="QLabel" name="lLabelsOpacity">
-         <property name="text">
-          <string>Opacity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="3">
-        <widget class="QCheckBox" name="chkLabelsAutoPrecision">
-         <property name="toolTip">
-          <string>Automatically determine the optimal number of digits after the decimal point</string>
-         </property>
-         <property name="text">
-          <string>Auto</string>
-         </property>
-        </widget>
-       </item>
-       <item row="18" column="0">
-        <widget class="QLabel" name="lLabelsBackground">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Background</string>
-         </property>
-        </widget>
-       </item>
        <item row="12" column="0">
         <widget class="QLabel" name="label_4">
          <property name="font">
@@ -1182,7 +1282,41 @@
          </property>
         </widget>
        </item>
-       <item row="16" column="2" colspan="2">
+       <item row="13" column="0">
+        <widget class="QLabel" name="lLabelsFont">
+         <property name="text">
+          <string>Font:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
+        <widget class="KFontRequester" name="kfrLabelsFont"/>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="lLabelsColor">
+         <property name="text">
+          <string>Font Color:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="2">
+        <widget class="KColorButton" name="kcbLabelsFontColor">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="0">
+        <widget class="QLabel" name="lLabelsOpacity">
+         <property name="text">
+          <string>Opacity:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="2">
         <widget class="QSpinBox" name="sbLabelsOpacity">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1210,130 +1344,7 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lLabelsPrefix">
-         <property name="text">
-          <string>Prefix:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="QSpinBox" name="sbLabelsPrecision">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>Number of digits after the decimal point</string>
-         </property>
-        </widget>
-       </item>
-       <item row="20" column="0">
-        <widget class="QLabel" name="lLabelsBackgroundColor">
-         <property name="text">
-          <string>Color</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lLabelsPosition">
-         <property name="text">
-          <string>Position:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <spacer name="horizontalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>17</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lLabelsRotation">
-         <property name="text">
-          <string>Rotation:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="lLabelsColor">
-         <property name="text">
-          <string>Font Color:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="lLabelsText">
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="text">
-          <string>Text</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2" colspan="2">
-        <widget class="KComboBox" name="cbLabelsFormat"/>
-       </item>
-       <item row="4" column="0">
-        <spacer name="verticalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>58</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lLabelsPrecision">
-         <property name="toolTip">
-          <string>Number of digits after the decimal point</string>
-         </property>
-         <property name="text">
-          <string>Precision:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lLabelsFormat">
-         <property name="text">
-          <string>Format:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="2" colspan="2">
-        <widget class="QLineEdit" name="leLabelsPrefix">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
-       </item>
-       <item row="17" column="0">
+       <item row="16" column="0">
         <spacer name="verticalSpacer_14">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -1349,24 +1360,58 @@
          </property>
         </spacer>
        </item>
-       <item row="2" column="2" colspan="2">
-        <widget class="QDoubleSpinBox" name="sbLabelsOffset">
+       <item row="17" column="0">
+        <widget class="QLabel" name="lLabelsBackground">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Background</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="0">
+        <widget class="QLabel" name="lLabelsBackgroundType">
+         <property name="text">
+          <string>Type</string>
+         </property>
+        </widget>
+       </item>
+       <item row="18" column="2">
+        <widget class="QComboBox" name="cbLabelsBackgroundType"/>
+       </item>
+       <item row="19" column="0">
+        <widget class="QLabel" name="lLabelsBackgroundColor">
+         <property name="text">
+          <string>Color</string>
+         </property>
+        </widget>
+       </item>
+       <item row="19" column="2">
+        <widget class="KColorButton" name="kcbLabelsBackgroundColor">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="suffix">
-          <string> pt</string>
-         </property>
-         <property name="minimum">
-          <double>-99.989999999999995</double>
-         </property>
-         <property name="singleStep">
-          <double>0.500000000000000</double>
-         </property>
         </widget>
+       </item>
+       <item row="20" column="0">
+        <spacer name="verticalSpacer_9">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>83</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

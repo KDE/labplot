@@ -81,13 +81,23 @@ void BaseDock::updatePlotRangeList(QComboBox* cb) const {
 
 void BaseDock::plotRangeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	const auto* plot = dynamic_cast<const CartesianPlot*>(m_aspect->parentAspect());
+
+	auto* element{ static_cast<WorksheetElement*>(m_aspect) };
+	const CartesianPlot* plot;
+	if (element->plot()) {
+		plot = element->plot();
+	} else {
+		plot = dynamic_cast<const CartesianPlot*>(m_aspect->parentAspect());
+	}
+
+	if (!plot)
+		return;
+
 	if (index < 0 || index > plot->coordinateSystemCount()) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
 
-	auto* element{ static_cast<WorksheetElement*>(m_aspect) };
 	if (index != element->coordinateSystemIndex()) {
 		element->setCoordinateSystemIndex(index);
 		if (dynamic_cast<Axis*>(element))

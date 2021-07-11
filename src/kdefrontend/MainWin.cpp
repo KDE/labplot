@@ -813,6 +813,9 @@ void MainWin::initMenus() {
 	QString defaultSchemeName = generalGlobalsGroup.readEntry("ColorScheme", QStringLiteral("Breeze"));
 	QString schemeName = group.readEntry("ColorScheme", defaultSchemeName);
 #endif
+	// default dark scheme on Windows is not optimal (Breeze dark is better)
+	// we can't find out if light or dark mode is used, so we don't switch to Breeze/Breeze dark here
+	DEBUG(Q_FUNC_INFO << ", Color scheme = " << schemeName.toStdString())
 	KActionMenu* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);
@@ -1317,7 +1320,7 @@ void MainWin::openProject() {
 }
 
 void MainWin::openProject(const QString& filename) {
-	if (filename == m_currentFileName) {
+	if (m_project && filename == m_project->fileName()) {
 		KMessageBox::information(this, i18n("The project file %1 is already opened.", filename), i18n("Open Project"));
 		return;
 	}
@@ -1473,7 +1476,6 @@ void MainWin::openProject(const QString& filename) {
 		return;
 	}
 
-	m_currentFileName = filename;
 	m_project->undoStack()->clear();
 	m_undoViewEmptyLabel = i18n("%1: opened", m_project->name());
 	m_recentProjectsAction->addUrl( QUrl(filename) );
@@ -1538,7 +1540,6 @@ bool MainWin::closeProject() {
 	m_aspectTreeModel = nullptr;
 	delete m_project;
 	m_project = nullptr;
-	m_currentFileName.clear();
 	m_projectClosing = false;
 
 	//update the UI if we're just closing a project
@@ -1768,25 +1769,23 @@ void MainWin::newDatapicker() {
 	Datapicker* datapicker = new Datapicker(i18n("Datapicker"));
 	this->addAspectToProject(datapicker);
 }
+
 /*!
 	adds a new Spreadsheet to the project.
 */
 void MainWin::newSpreadsheet() {
 	Spreadsheet* spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
 
-	//if the current active window is a workbook and no folder/project is selected in the project explorer,
-	//add the new spreadsheet to the workbook
+	//if the current active window is a workbook or one of its children,
+	//add the new matrix to the workbook
 	Workbook* workbook = dynamic_cast<Workbook*>(m_currentAspect);
-	if (workbook) {
-		QModelIndex index = m_projectExplorer->currentIndex();
-		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		if (!aspect->inherits(AspectType::Folder)) {
-			workbook->addChild(spreadsheet);
-			return;
-		}
-	}
+	if (!workbook)
+		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
 
-	this->addAspectToProject(spreadsheet);
+	if (workbook)
+		workbook->addChild(spreadsheet);
+	else
+		this->addAspectToProject(spreadsheet);
 }
 
 /*!
@@ -1795,19 +1794,16 @@ void MainWin::newSpreadsheet() {
 void MainWin::newMatrix() {
 	Matrix* matrix = new Matrix(i18n("Matrix"));
 
-	//if the current active window is a workbook and no folder/project is selected in the project explorer,
+	//if the current active window is a workbook or one of its children,
 	//add the new matrix to the workbook
 	Workbook* workbook = dynamic_cast<Workbook*>(m_currentAspect);
-	if (workbook) {
-		QModelIndex index = m_projectExplorer->currentIndex();
-		const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		if (!aspect->inherits(AspectType::Folder)) {
-			workbook->addChild(matrix);
-			return;
-		}
-	}
+	if (!workbook)
+		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
 
-	this->addAspectToProject(matrix);
+	if (workbook)
+		workbook->addChild(matrix);
+	else
+		this->addAspectToProject(matrix);
 }
 
 /*!
@@ -1895,6 +1891,9 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
 }
 
 void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
+	//register the signal-slot connections for aspects having a view.
+	//if a folder is being added, loop recursively through all its children
+	//and register the connections.
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
 // 		connect(part, &AbstractPart::importFromFileRequested, this, &MainWin::importFileDialog);
@@ -1911,7 +1910,9 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 			connect(worksheet, &Worksheet::cartesianPlotMouseModeChanged, this, &MainWin::cartesianPlotMouseModeChanged);
 			connect(worksheet, &Worksheet::propertiesExplorerRequested, this, &MainWin::propertiesExplorerRequested);
 		}
-	}
+	} else if (aspect->type() == AspectType::Folder)
+		for (auto* child : aspect->children<AbstractAspect>())
+			handleAspectAdded(child);
 }
 
 void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect) {

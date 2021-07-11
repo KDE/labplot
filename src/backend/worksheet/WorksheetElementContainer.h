@@ -4,7 +4,7 @@
     Description          : Worksheet element container - parent of multiple elements.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2012-2017 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -33,6 +33,7 @@
 #include "backend/worksheet/WorksheetElement.h"
 
 class WorksheetElementContainerPrivate;
+class ResizeItem;
 
 class WorksheetElementContainer : public WorksheetElement {
 	Q_OBJECT
@@ -47,6 +48,7 @@ public:
 	bool isVisible() const override;
 	bool isFullyVisible() const override;
 	void setPrinting(bool) override;
+	void setResizeEnabled(bool);
 
 	QRectF rect() const;
 	virtual void setRect(const QRectF&) = 0;
@@ -63,6 +65,7 @@ public slots:
 protected:
 	WorksheetElementContainerPrivate* const d_ptr;
 	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*, AspectType);
+	ResizeItem* m_resizeItem{nullptr};
 
 protected slots:
 	virtual void handleAspectAdded(const AbstractAspect*);

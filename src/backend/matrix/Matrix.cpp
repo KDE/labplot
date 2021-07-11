@@ -1374,8 +1374,8 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter:
 	return columnOffset;
 }
 
-void Matrix::finalizeImport(int columnOffset, int startColumn, int endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
-	DEBUG("Matrix::finalizeImport()")
+void Matrix::finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
+	DEBUG(Q_FUNC_INFO)
 	Q_UNUSED(columnOffset)
 	Q_UNUSED(startColumn)
 	Q_UNUSED(endColumn)
@@ -1385,5 +1385,5 @@ void Matrix::finalizeImport(int columnOffset, int startColumn, int endColumn, co
 	setSuppressDataChangedSignal(false);
 	setChanged();
 	setUndoAware(true);
-	DEBUG("Matrix::finalizeImport() DONE")
+	DEBUG(Q_FUNC_INFO << " DONE")
 }

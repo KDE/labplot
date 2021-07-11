@@ -545,7 +545,7 @@ QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, Abstract
 	double range = (format.max - format.min)/format.colors.count();
 	int index = 0;
 	for (int i = 0; i < format.colors.count(); ++i) {
-		if (value <=  format.min + i*range) {
+		if (value <=  format.min + (i+1)*range) {
 			index = i;
 			break;
 		}

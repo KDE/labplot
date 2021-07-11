@@ -88,8 +88,8 @@ public:
 	static bool isLabPlotProject(const QString& fileName);
 	static QString supportedExtensions();
 	QVector<quintptr> droppedAspects(const QMimeData*);
-    static QString version();
-    static int versionNumber();
+	static QString version();
+	static int versionNumber();
 	static int xmlVersion();
 
 	class Private;

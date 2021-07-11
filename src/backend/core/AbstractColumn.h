@@ -33,6 +33,7 @@
 
 #include "backend/core/AbstractAspect.h"
 #include <cmath>	// NAN
+#include <QColor>
 
 class AbstractColumnPrivate;
 class AbstractSimpleFilter;

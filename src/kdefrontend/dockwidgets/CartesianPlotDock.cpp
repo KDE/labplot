@@ -45,8 +45,6 @@
 #include <QTimer>
 #include <QDir>
 #include <QDirModel>
-#include <QFileDialog>
-#include <QImageReader>
 #include <QButtonGroup>
 #include <QIntValidator>
 
@@ -189,6 +187,10 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.sbBackgroundOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotDock::backgroundOpacityChanged);
 
 	//Border
+	connect(ui.tbBorderTypeLeft, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
+	connect(ui.tbBorderTypeTop, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
+	connect(ui.tbBorderTypeRight, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
+	connect(ui.tbBorderTypeBottom, &QToolButton::clicked, this, &CartesianPlotDock::borderTypeChanged);
 	connect(ui.cbBorderStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::borderStyleChanged);
 	connect(ui.kcbBorderColor, &KColorButton::changed, this, &CartesianPlotDock::borderColorChanged);
 	connect(ui.sbBorderWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::borderWidthChanged);
@@ -235,6 +237,80 @@ void CartesianPlotDock::init() {
 	this->retranslateUi();
 
 	GuiTools::updatePenStyles(ui.cbCursorLineStyle, Qt::black);
+
+	//draw the icons for the for border sides
+	QPainter pa;
+	pa.setRenderHint(QPainter::Antialiasing);
+	int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
+
+	QPen pen(Qt::SolidPattern);
+	const QColor& color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	pen.setColor(color);
+
+
+	//left
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pen.setStyle(Qt::SolidLine);
+	pen.setWidthF(1.0);
+	pa.setPen(pen);
+	pa.drawLine(1, 1, 1, 19);
+	pen.setStyle(Qt::DotLine);
+	pen.setWidthF(0.0);
+	pa.setPen(pen);
+	pa.drawLine(1, 19, 19, 19);
+	pa.drawLine(19, 19, 19, 1);
+	pa.drawLine(19, 1, 1, 1);
+	ui.tbBorderTypeLeft->setIcon(pm);
+
+	//top
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pen.setStyle(Qt::SolidLine);
+	pen.setWidthF(1.0);
+	pa.setPen(pen);
+	pa.drawLine(19, 1, 1, 1);
+	pen.setStyle(Qt::DotLine);
+	pen.setWidthF(0.0);
+	pa.setPen(pen);
+	pa.drawLine(1, 19, 19, 19);
+	pa.drawLine(1, 1, 1, 19);
+	pa.drawLine(19, 19, 19, 1);
+	pa.end();
+	ui.tbBorderTypeTop->setIcon(pm);
+
+	//right
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pen.setStyle(Qt::SolidLine);
+	pen.setWidthF(1.0);
+	pa.setPen(pen);
+	pa.drawLine(19, 19, 19, 1);
+	pen.setStyle(Qt::DotLine);
+	pen.setWidthF(0.0);
+	pa.setPen(pen);
+	pa.drawLine(1, 1, 1, 19);
+	pa.drawLine(1, 19, 19, 19);
+	pa.drawLine(19, 1, 1, 1);
+	pa.end();
+	ui.tbBorderTypeRight->setIcon(pm);
+
+	//bottom
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pen.setStyle(Qt::SolidLine);
+	pen.setWidthF(1.0);
+	pa.setPen(pen);
+	pa.drawLine(1, 19, 19, 19);
+	pen.setStyle(Qt::DotLine);
+	pen.setWidthF(0.0);
+	pa.setPen(pen);
+	pa.drawLine(1, 1, 1, 19);
+	pa.drawLine(19, 19, 19, 1);
+	pa.drawLine(19, 1, 1, 1);
+	pa.end();
+	ui.tbBorderTypeBottom->setIcon(pm);
 
 	/*
 	 //TODO: activate later once range breaking is implemented
@@ -381,6 +457,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot->plotArea(), &PlotArea::backgroundSecondColorChanged, this, &CartesianPlotDock::plotBackgroundSecondColorChanged);
 	connect(m_plot->plotArea(), &PlotArea::backgroundFileNameChanged, this, &CartesianPlotDock::plotBackgroundFileNameChanged);
 	connect(m_plot->plotArea(), &PlotArea::backgroundOpacityChanged, this, &CartesianPlotDock::plotBackgroundOpacityChanged);
+	connect(m_plot->plotArea(), &PlotArea::borderTypeChanged, this, &CartesianPlotDock::plotBorderTypeChanged);
 	connect(m_plot->plotArea(), &PlotArea::borderPenChanged, this, &CartesianPlotDock::plotBorderPenChanged);
 	connect(m_plot->plotArea(), &PlotArea::borderOpacityChanged, this, &CartesianPlotDock::plotBorderOpacityChanged);
 	connect(m_plot, &CartesianPlot::horizontalPaddingChanged, this, &CartesianPlotDock::plotHorizontalPaddingChanged);
@@ -1845,32 +1922,11 @@ void CartesianPlotDock::backgroundSecondColorChanged(const QColor& c) {
     opens a file dialog and lets the user select the image file.
 */
 void CartesianPlotDock::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "CartesianPlotDock");
-	QString dir = conf.readEntry("LastImageDir", "");
-
-	QString formats;
-	for (const auto& format : QImageReader::supportedImageFormats()) {
-		QString f = "*." + QString(format.constData());
-		if (f == QLatin1String("*.svg"))
-			continue;
-		formats.isEmpty() ? formats += f : formats += ' ' + f;
-	}
-
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
+	const QString& path = GuiTools::openImageFile(QLatin1String("CartesianPlotDock"));
 	if (path.isEmpty())
-		return; //cancel was clicked in the file-dialog
-
-	const int pos = path.lastIndexOf(QLatin1String("/"));
-	if (pos != -1) {
-		QString newDir{path.left(pos)};
-		if (newDir != dir)
-			conf.writeEntry("LastImageDir", newDir);
-	}
+		return;
 
 	ui.leBackgroundFileName->setText(path);
-
-	for (auto* plot : m_plotList)
-		plot->plotArea()->setBackgroundFileName(path);
 }
 
 void CartesianPlotDock::fileNameChanged() {
@@ -1895,6 +1951,26 @@ void CartesianPlotDock::backgroundOpacityChanged(int value) {
 }
 
 // "Border"-tab
+void CartesianPlotDock::borderTypeChanged() {
+	if (m_initializing)
+		return;
+
+	auto type = m_plot->plotArea()->borderType();
+	auto* tb = static_cast<QToolButton*>(QObject::sender());
+	bool checked = tb->isChecked();
+	if (tb == ui.tbBorderTypeLeft)
+		type.setFlag(PlotArea::BorderTypeFlags::BorderLeft, checked);
+	else if (tb == ui.tbBorderTypeTop)
+		type.setFlag(PlotArea::BorderTypeFlags::BorderTop, checked);
+	else if (tb == ui.tbBorderTypeRight)
+		type.setFlag(PlotArea::BorderTypeFlags::BorderRight, checked);
+	else if (tb == ui.tbBorderTypeBottom)
+		type.setFlag(PlotArea::BorderTypeFlags::BorderBottom, checked);
+
+	for (auto* plot : m_plotList)
+		plot->plotArea()->setBorderType(type);
+}
+
 void CartesianPlotDock::borderStyleChanged(int index) {
 	if (m_initializing)
 		return;
@@ -2174,8 +2250,8 @@ void CartesianPlotDock::plotYMaxChanged(int yRangeIndex, double value) {
 
 void CartesianPlotDock::plotXRangeChanged(int xRangeIndex, Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", x range = " << range.toStdString())
-        if (m_initializing)
-                return;
+	if (m_initializing)
+			return;
 
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
@@ -2304,6 +2380,14 @@ void CartesianPlotDock::plotBackgroundOpacityChanged(float opacity) {
 	m_initializing = true;
 	ui.sbBackgroundOpacity->setValue( round(opacity*100.0) );
 	m_initializing = false;
+}
+
+void CartesianPlotDock::plotBorderTypeChanged(PlotArea::BorderType type) {
+	Lock lock(m_initializing);
+	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
 }
 
 void CartesianPlotDock::plotBorderPenChanged(QPen& pen) {
@@ -2512,19 +2596,21 @@ void CartesianPlotDock::load() {
 	ui.cbYBreak->setCurrentIndex(0);
 
 	//"Plot Area"-tab
+	const auto* plotArea = m_plot->plotArea();
+
 	//Background
-	ui.cbBackgroundType->setCurrentIndex( (int)m_plot->plotArea()->backgroundType() );
+	ui.cbBackgroundType->setCurrentIndex( (int)plotArea->backgroundType() );
 	backgroundTypeChanged(ui.cbBackgroundType->currentIndex());
-	ui.cbBackgroundColorStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundColorStyle() );
-	ui.cbBackgroundImageStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundImageStyle() );
-	ui.cbBackgroundBrushStyle->setCurrentIndex( (int) m_plot->plotArea()->backgroundBrushStyle() );
-	ui.leBackgroundFileName->setText( m_plot->plotArea()->backgroundFileName() );
-	ui.kcbBackgroundFirstColor->setColor( m_plot->plotArea()->backgroundFirstColor() );
-	ui.kcbBackgroundSecondColor->setColor( m_plot->plotArea()->backgroundSecondColor() );
-	ui.sbBackgroundOpacity->setValue( round(m_plot->plotArea()->backgroundOpacity()*100.0) );
+	ui.cbBackgroundColorStyle->setCurrentIndex( (int) plotArea->backgroundColorStyle() );
+	ui.cbBackgroundImageStyle->setCurrentIndex( (int) plotArea->backgroundImageStyle() );
+	ui.cbBackgroundBrushStyle->setCurrentIndex( (int) plotArea->backgroundBrushStyle() );
+	ui.leBackgroundFileName->setText( plotArea->backgroundFileName() );
+	ui.kcbBackgroundFirstColor->setColor( plotArea->backgroundFirstColor() );
+	ui.kcbBackgroundSecondColor->setColor( plotArea->backgroundSecondColor() );
+	ui.sbBackgroundOpacity->setValue( round(plotArea->backgroundOpacity()*100.0) );
 
 	//highlight the text field for the background image red if an image is used and cannot be found
-	const QString& fileName = m_plot->plotArea()->backgroundFileName();
+	const QString& fileName = plotArea->backgroundFileName();
 	bool invalid = (!fileName.isEmpty() && !QFile::exists(fileName));
 	GuiTools::highlight(ui.leBackgroundFileName, invalid);
 
@@ -2536,11 +2622,15 @@ void CartesianPlotDock::load() {
 	ui.cbPaddingSymmetric->setChecked(m_plot->symmetricPadding());
 
 	//Border
-	ui.kcbBorderColor->setColor( m_plot->plotArea()->borderPen().color() );
-	ui.cbBorderStyle->setCurrentIndex( (int) m_plot->plotArea()->borderPen().style() );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderPen().widthF(), Worksheet::Unit::Point) );
-	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(m_plot->plotArea()->borderCornerRadius(), m_worksheetUnit) );
-	ui.sbBorderOpacity->setValue( round(m_plot->plotArea()->borderOpacity()*100) );
+	ui.tbBorderTypeLeft->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(plotArea->borderType().testFlag(PlotArea::BorderTypeFlags::BorderBottom));
+	ui.kcbBorderColor->setColor( plotArea->borderPen().color() );
+	ui.cbBorderStyle->setCurrentIndex( (int) plotArea->borderPen().style() );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(plotArea->borderPen().widthF(), Worksheet::Unit::Point) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(plotArea->borderCornerRadius(), m_worksheetUnit) );
+	ui.sbBorderOpacity->setValue( round(plotArea->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 
 	// Cursor
@@ -2567,14 +2657,15 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	//TODO
 
 	//Background-tab
-	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) m_plot->plotArea()->backgroundType()) );
-	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) m_plot->plotArea()->backgroundColorStyle()) );
-	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) m_plot->plotArea()->backgroundImageStyle()) );
-	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) m_plot->plotArea()->backgroundBrushStyle()) );
-	ui.leBackgroundFileName->setText( group.readEntry("BackgroundFileName", m_plot->plotArea()->backgroundFileName()) );
-	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", m_plot->plotArea()->backgroundFirstColor()) );
-	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", m_plot->plotArea()->backgroundSecondColor()) );
-	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", m_plot->plotArea()->backgroundOpacity())*100.0) );
+	const auto* plotArea = m_plot->plotArea();
+	ui.cbBackgroundType->setCurrentIndex( group.readEntry("BackgroundType", (int) plotArea->backgroundType()) );
+	ui.cbBackgroundColorStyle->setCurrentIndex( group.readEntry("BackgroundColorStyle", (int) plotArea->backgroundColorStyle()) );
+	ui.cbBackgroundImageStyle->setCurrentIndex( group.readEntry("BackgroundImageStyle", (int) plotArea->backgroundImageStyle()) );
+	ui.cbBackgroundBrushStyle->setCurrentIndex( group.readEntry("BackgroundBrushStyle", (int) plotArea->backgroundBrushStyle()) );
+	ui.leBackgroundFileName->setText( group.readEntry("BackgroundFileName", plotArea->backgroundFileName()) );
+	ui.kcbBackgroundFirstColor->setColor( group.readEntry("BackgroundFirstColor", plotArea->backgroundFirstColor()) );
+	ui.kcbBackgroundSecondColor->setColor( group.readEntry("BackgroundSecondColor", plotArea->backgroundSecondColor()) );
+	ui.sbBackgroundOpacity->setValue( round(group.readEntry("BackgroundOpacity", plotArea->backgroundOpacity())*100.0) );
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(group.readEntry("HorizontalPadding", m_plot->horizontalPadding()), m_worksheetUnit));
 	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(group.readEntry("VerticalPadding", m_plot->verticalPadding()), m_worksheetUnit));
 	ui.sbPaddingRight->setValue(Worksheet::convertFromSceneUnits(group.readEntry("RightPadding", m_plot->rightPadding()), m_worksheetUnit));
@@ -2582,11 +2673,16 @@ void CartesianPlotDock::loadConfig(KConfig& config) {
 	ui.cbPaddingSymmetric->setChecked(group.readEntry("SymmetricPadding", m_plot->symmetricPadding()));
 
 	//Border-tab
-	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", m_plot->plotArea()->borderPen().color()) );
-	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) m_plot->plotArea()->borderPen().style()) );
-	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", m_plot->plotArea()->borderPen().widthF()), Worksheet::Unit::Point) );
-	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", m_plot->plotArea()->borderCornerRadius()), m_worksheetUnit) );
-	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", m_plot->plotArea()->borderOpacity())*100 );
+	auto type = static_cast<PlotArea::BorderType>(group.readEntry("BorderType", static_cast<int>(plotArea->borderType())));
+	ui.tbBorderTypeLeft->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderLeft));
+	ui.tbBorderTypeRight->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderRight));
+	ui.tbBorderTypeTop->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderTop));
+	ui.tbBorderTypeBottom->setChecked(type.testFlag(PlotArea::BorderTypeFlags::BorderBottom));
+	ui.kcbBorderColor->setColor( group.readEntry("BorderColor", plotArea->borderPen().color()) );
+	ui.cbBorderStyle->setCurrentIndex( group.readEntry("BorderStyle", (int) plotArea->borderPen().style()) );
+	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderWidth", plotArea->borderPen().widthF()), Worksheet::Unit::Point) );
+	ui.sbBorderCornerRadius->setValue( Worksheet::convertFromSceneUnits(group.readEntry("BorderCornerRadius", plotArea->borderCornerRadius()), m_worksheetUnit) );
+	ui.sbBorderOpacity->setValue( group.readEntry("BorderOpacity", plotArea->borderOpacity())*100 );
 
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
@@ -2624,6 +2720,7 @@ void CartesianPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("SymmetricPadding", ui.cbPaddingSymmetric->isChecked());
 
 	//Border
+	group.writeEntry("BorderType", static_cast<int>(m_plot->plotArea()->borderType()));
 	group.writeEntry("BorderStyle", ui.cbBorderStyle->currentIndex());
 	group.writeEntry("BorderColor", ui.kcbBorderColor->color());
 	group.writeEntry("BorderWidth", Worksheet::convertToSceneUnits(ui.sbBorderWidth->value(), Worksheet::Unit::Point));

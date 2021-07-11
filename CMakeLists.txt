@@ -1,9 +1,10 @@
 project(labplot2)
 
-# minimum 3.2.0 for FindGSL.cmake
+# minimum may be 3.16.0 for FindIcoTool.cmake and FindSharedMimeInfo.cmake
 cmake_minimum_required (VERSION 3.2.0 FATAL_ERROR)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -141,8 +142,7 @@ else ()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GENERIC_CXX_FLAGS}")
 endif ()
 
-##########################################################ESC[m
-
+##########################################################
 
 add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
@@ -150,6 +150,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions (-DLVERSION=\"2.9.0\")
 add_definitions (-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions (-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
+add_definitions (-DQT_NO_URL_CAST_FROM_STRING)
 set(BUILD_SHARED_LIBS true)
 
 #cmake_policy(SET CMP0002 OLD)
@@ -176,6 +177,16 @@ if (CMAKE_VERSION VERSION_GREATER "3.5")
     message(STATUS "Clang-tidy supported but disabled")
   endif()
 endif()
+
+# get git commit hash
+execute_process(
+  COMMAND git describe --always --tags
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_COMMIT
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+add_definitions (-DGIT_COMMIT=\"${GIT_COMMIT}\")
+
 
 ### Options ######################################
 option(ENABLE_CANTOR "Build with Cantor support" ON)

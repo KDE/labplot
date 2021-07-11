@@ -293,50 +293,14 @@ void ImagePrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
-	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom
-	        || position.verticalPosition != WorksheetElement::VerticalPosition::Custom)
-		updatePosition();
-
-	float x = position.point.x();
-	float y = position.point.y();
 	float w = image.width();
 	float h = image.height();
-
- 	//depending on the alignment, calculate the new GraphicsItem's position in parent's coordinate system
-	QPointF itemPos;
-	switch (horizontalAlignment) {
-	case WorksheetElement::HorizontalAlignment::Left:
-		itemPos.setX(x - w/2);
-		break;
-	case WorksheetElement::HorizontalAlignment::Center:
-		itemPos.setX(x);
-		break;
-	case WorksheetElement::HorizontalAlignment::Right:
-		itemPos.setX(x + w/2);
-		break;
-	}
-
-	switch (verticalAlignment) {
-	case WorksheetElement::VerticalAlignment::Top:
-		itemPos.setY(y - h/2);
-		break;
-	case WorksheetElement::VerticalAlignment::Center:
-		itemPos.setY(y);
-		break;
-	case WorksheetElement::VerticalAlignment::Bottom:
-		itemPos.setY(y + h/2);
-		break;
-	}
-
-	suppressItemChangeEvent = true;
-	setPos(itemPos);
-	suppressItemChangeEvent = false;
-
 	boundingRectangle.setX(-w/2);
 	boundingRectangle.setY(-h/2);
 	boundingRectangle.setWidth(w);
 	boundingRectangle.setHeight(h);
 
+	updatePosition();
 	updateBorder();
 }
 
@@ -385,36 +349,31 @@ void ImagePrivate::scaleImage() {
 /*!
 	calculates the position of the label, when the position relative to the parent was specified (left, right, etc.)
 */
-void ImagePrivate::updatePosition() {
-	//determine the parent item
-	QRectF parentRect;
+
+bool ImagePrivate::parentRect(QRectF& rect) {
 	QGraphicsItem* parent = parentItem();
 	if (parent) {
-		parentRect = parent->boundingRect();
+		rect = parent->boundingRect();
 	} else {
 		if (!scene())
-			return;
+			return false;
 
-		parentRect = scene()->sceneRect();
+		rect = scene()->sceneRect();
 	}
+	return true;
+}
 
-	if (position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
-		if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
-			position.point.setX( parentRect.x() );
-		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Center)
-			position.point.setX( parentRect.x() + parentRect.width()/2 );
-		else if (position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
-			position.point.setX( parentRect.x() + parentRect.width() );
-	}
+void ImagePrivate::updatePosition() {
+	//determine the parent item
+	QRectF pr;
+	if (!parentRect(pr))
+		return;
 
-	if (position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
-		if (position.verticalPosition == WorksheetElement::VerticalPosition::Top)
-			position.point.setY( parentRect.y() );
-		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Center)
-			position.point.setY( parentRect.y() + parentRect.height()/2 );
-		else if (position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
-			position.point.setY( parentRect.y() + parentRect.height() );
-	}
+	QPointF p = q->relativePosToParentPos(pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+
+	suppressItemChangeEvent = true;
+	setPos(p);
+	suppressItemChangeEvent = false;
 
 	emit q->positionChanged(position);
 }
@@ -507,11 +466,13 @@ QVariant ImagePrivate::itemChange(GraphicsItemChange change, const QVariant &val
 		return value;
 
 	if (change == QGraphicsItem::ItemPositionChange) {
+		QRectF pr;
+		if (!parentRect(pr))
+			return QVariant();
+
 		//convert item's center point in parent's coordinates
-		WorksheetElement::PositionWrapper tempPosition;
-		tempPosition.point = positionFromItemPosition(value.toPointF());
-		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
-		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
+		TextLabel::PositionWrapper tempPosition = position;
+		tempPosition.point = q->parentPosToRelativePos(value.toPointF(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
@@ -523,6 +484,7 @@ QVariant ImagePrivate::itemChange(GraphicsItemChange change, const QVariant &val
 }
 
 void ImagePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
+	//TODO:
 	//convert position of the item in parent coordinates to label's position
 	QPointF point = positionFromItemPosition(pos());
 	if (qAbs(point.x()-position.point.x())>20 && qAbs(point.y()-position.point.y())>20 ) {

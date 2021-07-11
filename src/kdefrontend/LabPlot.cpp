@@ -57,9 +57,9 @@
 const QString getSystemInfo() {
 	// build type
 #ifdef NDEBUG
-	const QString buildType(i18n("Release build"));
+	const QString buildType(i18n("Release build ") + QLatin1String(GIT_COMMIT));
 #else
-	const QString buildType(i18n("Debug build"));
+	const QString buildType(i18n("Debug build ") + QLatin1String(GIT_COMMIT));
 #endif
 	QLocale locale;
 	const QString numberSystemInfo{ '('
@@ -190,6 +190,19 @@ int main (int argc, char *argv[]) {
 	DEBUG("DEBUG debugging enabled")
 	QDEBUG("QDEBUG debugging enabled")
 
+	DEBUG("Current path: " << QDir::currentPath().toStdString())
+	const QString applicationPath = QCoreApplication::applicationDirPath();
+	DEBUG("Application dir: " << applicationPath.toStdString())
+
+#ifdef _WIN32
+	// append application path to PATH to find Cantor backends
+	QString path = qEnvironmentVariable("PATH");
+	DEBUG("OLD PATH = " << path.toStdString())
+	path.append(QLatin1String(";") + applicationPath);
+	qputenv("PATH", qPrintable(path));
+	DEBUG("NEW PATH = " << qEnvironmentVariable("PATH").toStdString())
+#endif
+
 #ifndef NDEBUG
 	// debugging paths
 	const QStringList& appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
@@ -214,6 +227,10 @@ int main (int argc, char *argv[]) {
 #endif
 	KColorSchemeManager manager;
 	manager.activateScheme(manager.indexForScheme(schemeName));
+
+#if defined(Q_OS_MACOS) || defined(Q_OS_WIN)
+	QApplication::setStyle(QStringLiteral("breeze"));
+#endif
 
 	MainWin* window = new MainWin(nullptr, filename);
 	window->show();

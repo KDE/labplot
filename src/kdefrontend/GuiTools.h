@@ -53,6 +53,8 @@ public:
 	static QColor& colorFromAction(QActionGroup*, QAction*);
 
 	static void highlight(QLineEdit*, bool);
+
+	static QString openImageFile(const QString&);
 };
 
 #endif // GUITOOLS_H

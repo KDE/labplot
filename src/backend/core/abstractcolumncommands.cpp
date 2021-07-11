@@ -5,6 +5,7 @@
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2009 Tilman Benkert (thzs@gmx.net)
     Copyright            : (C) 2010 Knut Franke (knut.franke@gmx.de)
+    Copyright            : (C) 2014-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -244,3 +245,60 @@ void AbstractColumnRemoveRowsCmd::undo() {
 	m_col->m_masking = m_masking;
 }
 
+/** ***************************************************************************
+ * \class AbstractColumnSetHeatmapFormatCmd
+ * \brief Set the heatmap format
+ ** ***************************************************************************/
+AbstractColumnSetHeatmapFormatCmd::AbstractColumnSetHeatmapFormatCmd(AbstractColumnPrivate* col, const AbstractColumn::HeatmapFormat& format, QUndoCommand* parent)
+: QUndoCommand(parent), m_col(col), m_format(format) {
+	setText(i18n("%1: set heatmap format", col->name()));
+}
+
+AbstractColumnSetHeatmapFormatCmd::~AbstractColumnSetHeatmapFormatCmd()
+= default;
+
+void AbstractColumnSetHeatmapFormatCmd::redo() {
+	if (!m_col->m_heatmapFormat)
+		m_col->m_heatmapFormat = new AbstractColumn::HeatmapFormat();
+
+	AbstractColumn::HeatmapFormat tmp = *(m_col->m_heatmapFormat);
+	*(m_col->m_heatmapFormat) = m_format;
+	m_format = tmp;
+
+	emit m_col->owner()->formatChanged(m_col->owner());
+}
+
+void AbstractColumnSetHeatmapFormatCmd::undo() {
+	redo();
+}
+
+/** ***************************************************************************
+ * \class AbstractColumnRemoveHeatmapFormatCmd
+ * \brief Set the heatmap format
+ ** ***************************************************************************/
+AbstractColumnRemoveHeatmapFormatCmd::AbstractColumnRemoveHeatmapFormatCmd(AbstractColumnPrivate* col, QUndoCommand* parent)
+: QUndoCommand(parent), m_col(col) {
+	setText(i18n("%1: remove heatmap format", col->name()));
+}
+
+AbstractColumnRemoveHeatmapFormatCmd::~AbstractColumnRemoveHeatmapFormatCmd()
+= default;
+
+void AbstractColumnRemoveHeatmapFormatCmd::redo() {
+	if (m_col->m_heatmapFormat) {
+		m_format = *(m_col->m_heatmapFormat);
+		delete m_col->m_heatmapFormat;
+		m_col->m_heatmapFormat = nullptr;
+	}
+
+	emit m_col->owner()->formatChanged(m_col->owner());
+}
+
+void AbstractColumnRemoveHeatmapFormatCmd::undo() {
+	if (!m_col->m_heatmapFormat)
+		m_col->m_heatmapFormat = new AbstractColumn::HeatmapFormat();
+
+	*(m_col->m_heatmapFormat) = m_format;
+
+	emit m_col->owner()->formatChanged(m_col->owner());
+}

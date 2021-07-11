@@ -35,8 +35,6 @@
 
 #include <QCompleter>
 #include <QDirModel>
-#include <QFileDialog>
-#include <QImageReader>
 #include <QPageSize>
 
 #include <KConfig>
@@ -241,32 +239,13 @@ void ImageDock::updateUnits() {
 //*************************************************************
 //******** SLOTs for changes triggered in ImageDock ***********
 //*************************************************************
-
 /*!
 	opens a file dialog and lets the user select the image file.
 */
 void ImageDock::selectFile() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ImageDock");
-	QString dir = conf.readEntry("LastImageDir", "");
-
-	QString formats;
-	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
-		QString f = "*." + QString(format.constData());
-		if (f == QLatin1String("*.svg"))
-			continue;
-		formats.isEmpty() ? formats += f : formats += ' ' + f;
-	}
-
-	QString path = QFileDialog::getOpenFileName(this, i18n("Select the image file"), dir, i18n("Images (%1)", formats));
+	const QString& path = GuiTools::openImageFile(QLatin1String("ImageDock"));
 	if (path.isEmpty())
-		return; //cancel was clicked in the file-dialog
-
-	int pos = path.lastIndexOf(QLatin1String("/"));
-	if (pos != -1) {
-		QString newDir = path.left(pos);
-		if (newDir != dir)
-			conf.writeEntry("LastImageDir", newDir);
-	}
+		return;
 
 	ui.leFileName->setText(path);
 }
@@ -328,12 +307,6 @@ void ImageDock::keepRatioChanged(int state) {
     called when label's current horizontal position relative to its parent (left, center, right, custom ) is changed.
 */
 void ImageDock::positionXChanged(int index) {
-	//Enable/disable the spinbox for the x- oordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionX->count()-1 )
-		ui.sbPositionX->setEnabled(true);
-	else
-		ui.sbPositionX->setEnabled(false);
-
 	if (m_initializing)
 		return;
 
@@ -347,16 +320,10 @@ void ImageDock::positionXChanged(int index) {
     called when label's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
 */
 void ImageDock::positionYChanged(int index) {
-	//Enable/disable the spinbox for the y-coordinates if the "custom position"-item is selected/deselected
-	if (index == ui.cbPositionY->count()-1 )
-		ui.sbPositionY->setEnabled(true);
-	else
-		ui.sbPositionY->setEnabled(false);
-
 	if (m_initializing)
 		return;
 
-	WorksheetElement::PositionWrapper position = m_image->position();
+	auto position = m_image->position();
 	position.verticalPosition = WorksheetElement::VerticalPosition(index);
 	for (auto* image : m_imageList)
 		image->setPosition(position);
@@ -366,7 +333,7 @@ void ImageDock::customPositionXChanged(double value) {
 	if (m_initializing)
 		return;
 
-	WorksheetElement::PositionWrapper position = m_image->position();
+	auto position = m_image->position();
 	position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
 	for (auto* image : m_imageList)
 		image->setPosition(position);

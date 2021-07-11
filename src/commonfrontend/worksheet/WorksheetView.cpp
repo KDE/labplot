@@ -884,7 +884,7 @@ void WorksheetView::drawBackgroundItems(QPainter* painter, const QRectF& scene_r
 	}
 
 	//grid
-	if (m_gridSettings.style != GridStyle::NoGrid) {
+	if (m_gridSettings.style != GridStyle::NoGrid && !m_isPrinting) {
 		QColor c = m_gridSettings.color;
 		c.setAlphaF(m_gridSettings.opacity);
 		painter->setPen(c);
@@ -1159,6 +1159,7 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 	if ( (m_magnificationWindow && m_magnificationWindow->isVisible() && items(e->pos()).size() == 1) || !itemAt(e->pos()) ) {
 		//no item or only the magnification window under the cursor -> show the context menu for the worksheet
 		QMenu* menu = m_worksheet->createContextMenu();
+		m_cursorPos = mapToScene(e->pos());
 		menu->exec(QCursor::pos());
 	} else {
 		//propagate the event to the scene and graphics items
@@ -1379,10 +1380,33 @@ void WorksheetView::addNew(QAction* action) {
 	} else if (action == addTextLabelAction) {
 		TextLabel* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
+
+		//position the label at the point where the context menu was called
+		auto position = l->position();
+		position.point = l->parentPosToRelativePos(m_cursorPos,
+												   m_worksheet->pageRect(),
+												   l->graphicsItem()->boundingRect(),
+												   position,
+												   l->horizontalAlignment(),
+												   l->verticalAlignment()
+		);
+		l->setPosition(position);
 		aspect = l;
 	} else if (action == addImageAction) {
-		Image* l = new Image(i18n("Image"));
-		aspect = l;
+		Image* image = new Image(i18n("Image"));
+
+		//position the image at the point where the context menu was called
+		auto position = image->position();
+		position.point = image->parentPosToRelativePos(m_cursorPos,
+												   m_worksheet->pageRect(),
+												   image->graphicsItem()->boundingRect(),
+												   position,
+												   image->horizontalAlignment(),
+												   image->verticalAlignment()
+		);
+		image->setPosition(position);
+
+		aspect = image;
 	}
 	if (!aspect)
 		return;
@@ -1390,7 +1414,7 @@ void WorksheetView::addNew(QAction* action) {
 	m_worksheet->addChild(aspect);
 
 	//labels and images with their initial positions need to be retransformed
-	//ater they have gotten a parent
+	//after they have gotten a parent
 	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image)
 		aspect->retransform();
 
@@ -2176,6 +2200,7 @@ void WorksheetView::exportToClipboard() {
 
 void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, const QRectF& sourceRect, const bool background) {
 	//draw the background
+	m_isPrinting = true;
 	if (background) {
 		painter->save();
 		painter->scale(targetRect.width()/sourceRect.width(), targetRect.height()/sourceRect.height());
@@ -2187,9 +2212,11 @@ void WorksheetView::exportPaint(QPainter* painter, const QRectF& targetRect, con
 	m_worksheet->setPrinting(true);
 	scene()->render(painter, QRectF(), sourceRect);
 	m_worksheet->setPrinting(false);
+	m_isPrinting = false;
 }
 
 void WorksheetView::print(QPrinter* printer) {
+	m_isPrinting = true;
 	m_worksheet->setPrinting(true);
 	QPainter painter(printer);
 	painter.setRenderHint(QPainter::Antialiasing);
@@ -2203,6 +2230,7 @@ void WorksheetView::print(QPrinter* printer) {
 	// draw scene
 	scene()->render(&painter);
 	m_worksheet->setPrinting(false);
+	m_isPrinting = false;
 }
 
 void WorksheetView::updateBackground() {
@@ -2244,9 +2272,11 @@ void WorksheetView::suppressSelectionChangedEvent(bool value) {
 	m_suppressSelectionChangedEvent = value;
 }
 
-WorksheetElement* WorksheetView::selectedElement() const
-{
+WorksheetElement* WorksheetView::selectedElement() const {
 	return m_selectedElement;
+}
+QList<QGraphicsItem*> WorksheetView::selectedItems() const {
+	return m_selectedItems;
 }
 
 void WorksheetView::registerShortcuts() {

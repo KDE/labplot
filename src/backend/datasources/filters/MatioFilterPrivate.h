@@ -42,13 +42,14 @@ public:
 	QVector<QStringList> readDataFromFile(const QString& fileName, AbstractDataSource* = nullptr,
 			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace);
 	QVector<QStringList> readCurrentVar(const QString& fileName, AbstractDataSource* = nullptr,
-			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, int lines = -1);
+			AbstractFileFilter::ImportMode = AbstractFileFilter::ImportMode::Replace, size_t lines = 0);
 	void write(const QString& fileName, AbstractDataSource*);
 
 //helper functions
 #ifdef HAVE_MATIO
 	static QString className(matio_classes classType);
 	static QString typeName(matio_types dataType);
+	static AbstractColumn::ColumnMode classMode(matio_classes classType);
 	static AbstractColumn::ColumnMode typeMode(matio_types dataType);
 #endif
 

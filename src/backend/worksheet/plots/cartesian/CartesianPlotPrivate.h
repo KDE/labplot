@@ -168,6 +168,8 @@ public:
 	bool suppressRetransform{false};
 	bool panningStarted{false};
 	bool locked{false};
+	QPointF logicalPos; //current position under the mouse cursor in plot coordinates
+	bool calledFromContextMenu{false}; //we set the current position under the cursor when "add new" is called via the context menu
 
 	// Cursor
 	bool cursor0Enable{false};
@@ -187,6 +189,7 @@ signals:
 
 private:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;
