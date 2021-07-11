@@ -1298,19 +1298,15 @@ void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 // sets x range of default plot range
 void CartesianPlot::setXRange(const Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", set x range to " << range.toStdString())
-	Q_D(CartesianPlot);
 	const int index{ defaultCoordinateSystem()->xIndex() };
 	setXRange(index, range);
 }
 // sets y range of default plot range
 void CartesianPlot::setYRange(const Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", set y range to " << range.toStdString())
-	Q_D(CartesianPlot);
 	const int index{ defaultCoordinateSystem()->yIndex()};
 	setYRange(index, range);
 }
-
-
 
 int CartesianPlot::xRangeCount() const {
 	Q_D(const CartesianPlot);
@@ -1328,26 +1324,22 @@ const Range<double>& CartesianPlot::yRange() const {
 	Q_D(const CartesianPlot);
 	return d->yRanges.at( defaultCoordinateSystem()->yIndex() ).range;
 }
-Range<double>& CartesianPlot::xRangeFromIndex(int index) {
+Range<double>& CartesianPlot::xRangeFromIndex(const int index) {
 	Q_D(CartesianPlot);
 	return d->xRanges[index].range;
 }
-
-const Range<double>& CartesianPlot::xRangeFromIndex(int index) const {
-	Q_D(const CartesianPlot);
-	return d->xRanges[index].range;
-}
-
 Range<double>& CartesianPlot::yRangeFromIndex(const int index) {
 	Q_D(CartesianPlot);
 	return d->yRanges[index].range;
 }
-
+const Range<double>& CartesianPlot::xRangeFromIndex(const int index) const {
+	Q_D(const CartesianPlot);
+	return d->xRanges[index].range;
+}
 const Range<double>& CartesianPlot::yRangeFromIndex(const int index) const {
 	Q_D(const CartesianPlot);
 	return d->yRanges[index].range;
 }
-
 const Range<double>& CartesianPlot::xRangeCSystem(const int cSystemIndex) const {
 	Q_D(const CartesianPlot);
 	return d->xRanges[coordinateSystem(cSystemIndex)->xIndex()].range;

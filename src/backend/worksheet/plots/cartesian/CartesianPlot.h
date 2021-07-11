@@ -153,22 +153,22 @@ public:
 	const Range<double>& yRange() const;		// get y range of default plot range
 	void setXRange(const Range<double>);		// set x range of default plot range
 	void setYRange(const Range<double>);		// set y range of default plot range
-	const Range<double> &xRangeFromIndex(int index) const;
-	Range<double> &xRangeFromIndex(int index);
-	Range<double>& yRangeFromIndex(const int index);
+	const Range<double>& xRangeFromIndex(const int index) const;
 	const Range<double>& yRangeFromIndex(const int index) const;
-	const Range<double> &xRangeCSystem(int cSystemIndex) const;
+	Range<double>& xRangeFromIndex(const int index);
+	Range<double>& yRangeFromIndex(const int index);
+	const Range<double>& xRangeCSystem(int cSystemIndex) const;
+	const Range<double>& yRangeCSystem(int cSystemIndex) const;
 	void setXRange(int index, const Range<double>& value);
-	const Range<double> &yRangeCSystem(int cSystemIndex) const;
+	void setYRange(int index, const Range<double>& value);
 	bool xRangeDirty(int cSystemIndex);
 	bool yRangeDirty(int cSystemIndex);
 	void setXRangeDirty(int cSystemIndex, bool dirty);
 	void setYRangeDirty(int cSystemIndex, bool dirty);
-	void setYRange(int index, const Range<double>& value);
 	void addXRange();				// add new x range
 	void addYRange();				// add new y range
-	void addXRange(const Range<double> &);			// add x range
-	void addYRange(const Range<double> &);			// add y range
+	void addXRange(const Range<double>&);		// add x range
+	void addYRange(const Range<double>&);		// add y range
 	void removeXRange(int index);			// remove selected x range
 	void removeYRange(int index);			// remove selected y range
 	// convenience methods

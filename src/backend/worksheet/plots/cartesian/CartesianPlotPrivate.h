@@ -71,33 +71,28 @@ public:
 	const Range<double> xRangeCSystem() const {
 		return xRanges.at(defaultCoordinateSystem()->xIndex()).range;
 	}
+	const Range<double> yRangeCSystem() const {
+		return yRanges.at(defaultCoordinateSystem()->yIndex()).range;
+	}
 	Range<double>& xRangeCSystem() {
 		return xRanges[defaultCoordinateSystem()->xIndex()].range;
 	}
-
+	Range<double>& yRangeCSystem() {
+		return yRanges[defaultCoordinateSystem()->yIndex()].range;
+	}
 	Range<double>& xRangeCSystem(int cSystemIndex) {
 		if (cSystemIndex >= 0)
 			return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].range;
 		return xRangeCSystem();
 	}
-
-	Range<double>& xRangeAutoScale(int cSystemIndex) {
-		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].autoScaleRange;
-	}
-
-	const Range<double> yRangeCSystem() const {
-		return yRanges.at(defaultCoordinateSystem()->yIndex()).range;
-	}
-	Range<double>& yRangeCSystem() {
-		return yRanges[defaultCoordinateSystem()->yIndex()].range;
-	}
-
 	Range<double>& yRangeCSystem(int cSystemIndex) {
 		if (cSystemIndex >= 0)
 			return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].range;
 		return yRangeCSystem();
 	}
-
+	Range<double>& xRangeAutoScale(int cSystemIndex) {
+		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].autoScaleRange;
+	}
 	Range<double>& yRangeAutoScale(int cSystemIndex) {
 		return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].autoScaleRange;
 	}
@@ -155,10 +150,10 @@ public:
 
 	struct RangeP {
 		RangeP(const Range<double>& r=Range<double>(), const bool d=false): range(r), dirty(d) {}
-		bool dirty{false};
 		Range<double> range; // current range
 		Range<double> prev;
 		Range<double> autoScaleRange; // autoscale range. Cached to be faster in rescaling
+		bool dirty{false};
 	};
 
 	QVector<RangeP> xRanges{{}}, yRanges{{}}; // at least one range must exist.
