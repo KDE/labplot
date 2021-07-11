@@ -1388,25 +1388,25 @@ void CartesianPlot::setYRangeDirty(int cSystemIndex, bool dirty)
 
 void CartesianPlot::addXRange() {
 	Q_D(CartesianPlot);
-	d->xRanges.append(CartesianPlot::Private::RangeP());
+	d->xRanges.append(CartesianPlot::Private::PlotRange());
 	if (project())
 		project()->setChanged(true);
 }
 void CartesianPlot::addYRange() {
 	Q_D(CartesianPlot);
-	d->yRanges.append(CartesianPlot::Private::RangeP());
+	d->yRanges.append(CartesianPlot::Private::PlotRange());
 	if (project())
 		project()->setChanged(true);
 }
 void CartesianPlot::addXRange(const Range<double>& range) {
 	Q_D(CartesianPlot);
-	d->xRanges.append(CartesianPlot::Private::RangeP(range));
+	d->xRanges.append(CartesianPlot::Private::PlotRange(range));
 	if (project())
 		project()->setChanged(true);
 }
 void CartesianPlot::addYRange(const Range<double>& range) {
 	Q_D(CartesianPlot);
-	d->yRanges.append(CartesianPlot::Private::RangeP(range));
+	d->yRanges.append(CartesianPlot::Private::PlotRange(range));
 	if (project())
 		project()->setChanged(true);
 }

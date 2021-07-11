@@ -148,15 +148,15 @@ public:
 	CartesianPlot* const q;
 	int defaultCoordinateSystemIndex{0};
 
-	struct RangeP {
-		RangeP(const Range<double>& r=Range<double>(), const bool d=false): range(r), dirty(d) {}
+	struct PlotRange {
+		PlotRange(const Range<double>& r=Range<double>(), const bool d=false): range(r), dirty(d) {}
 		Range<double> range; // current range
 		Range<double> prev;
 		Range<double> autoScaleRange; // autoscale range. Cached to be faster in rescaling
 		bool dirty{false};
 	};
 
-	QVector<RangeP> xRanges{{}}, yRanges{{}}; // at least one range must exist.
+	QVector<PlotRange> xRanges{{}}, yRanges{{}}; // at least one range must exist.
 
 	CartesianCoordinateSystem* coordinateSystem(int index) const;
 	QVector<AbstractCoordinateSystem*> coordinateSystems() const;
