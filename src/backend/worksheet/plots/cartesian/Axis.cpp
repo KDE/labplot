@@ -1376,8 +1376,8 @@ void AxisPrivate::retransformTicks() {
 	}
 //	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem-> yIndex() };
 	DEBUG(Q_FUNC_INFO << ", coordinate system " << q->m_cSystemIndex + 1)
-	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)
-	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
+//	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)
+//	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
 //	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->xIndex() )
 
 	const int xDirection = q->cSystem->xDirection();
@@ -1921,8 +1921,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 //	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem->yIndex() };
 	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << q->m_cSystemIndex)
-	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
-	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
+//	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
+//	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
 	const double middleX = plot()->xRangeCSystem(q->coordinateSystemIndex()).center();
 	const double middleY = plot()->yRangeCSystem(q->coordinateSystemIndex()).center();
 	const int xDirection = q->cSystem->xDirection();

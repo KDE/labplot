@@ -2134,8 +2134,8 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 	}
 }
 
-bool WorksheetView::eventFilter(QObject *watched, QEvent *event)
-{
+bool WorksheetView::eventFilter(QObject *watched, QEvent *event) {
+	Q_UNUSED(watched)
 	if (event->type() == QEvent::KeyPress) {
 		QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
 		int key = keyEvent->key();
