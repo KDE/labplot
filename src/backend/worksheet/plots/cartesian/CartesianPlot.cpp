@@ -1756,7 +1756,7 @@ void CartesianPlot::addSmoothCurve() {
 
 void CartesianPlot::addFitCurve() {
 	auto* curve = new XYFitCurve("fit");
-	const XYCurve* curCurve = currentCurve();
+	const auto* curCurve = currentCurve();
 	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 	if (curCurve) {
 		beginMacro( i18n("%1: fit to '%2'", name(), curCurve->name()) );
@@ -1767,7 +1767,7 @@ void CartesianPlot::addFitCurve() {
 		//set the fit model category and type
 		const auto* action = qobject_cast<const QAction*>(QObject::sender());
 		if (action) {
-			auto type = (PlotDataDialog::AnalysisAction)action->data().toInt();
+			auto type = static_cast<PlotDataDialog::AnalysisAction>(action->data().toInt());
 			curve->initFitData(type);
 		} else {
 			DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
@@ -1865,9 +1865,15 @@ void CartesianPlot::addInfoElement() {
 	if (curves.count())
 		curve = curves.first();
 
-	const double pos = xRange().center();
+	double pos;
+	Q_D(CartesianPlot);
+	if (d->calledFromContextMenu) {
+		pos = d->logicalPos.x();
+		d->calledFromContextMenu = false;
+	} else
+		pos = xRange().center();
 
-	InfoElement* element = new InfoElement("Info Element", this, curve, pos);
+	auto* element = new InfoElement("Info Element", this, curve, pos);
 	this->addChild(element);
 	element->setParentGraphicsItem(graphicsItem());
 	element->retransform(); // must be done, because the element must be retransformed (see https://invent.kde.org/marmsoler/labplot/issues/9)
@@ -1885,15 +1891,32 @@ void CartesianPlot::addImage() {
 }
 
 void CartesianPlot::addCustomPoint() {
+	Q_D(CartesianPlot);
 	auto* point = new CustomPoint(this, "custom point");
 	point->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+
+	if (d->calledFromContextMenu)  {
+		point->setPosition(d->logicalPos);
+		d->calledFromContextMenu = false;
+	}
+
 	this->addChild(point);
 	point->retransform();
 }
 
 void CartesianPlot::addReferenceLine() {
+	Q_D(CartesianPlot);
 	auto* line = new ReferenceLine(this, "reference line");
 	line->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+
+	if (d->calledFromContextMenu)  {
+		if (line->orientation() == WorksheetElement::Orientation::Vertical)
+			line->setPosition(d->logicalPos.x());
+		else
+			line->setPosition(d->logicalPos.y());
+		d->calledFromContextMenu = false;
+	}
+
 	this->addChild(line);
 	line->retransform();
 }
@@ -1914,7 +1937,7 @@ const XYCurve* CartesianPlot::getCurve(int index) {
 }
 
 double CartesianPlot::cursorPos(int cursorNumber) {
-	Q_D(CartesianPlot);
+	Q_D(const CartesianPlot);
 	return ( cursorNumber == 0 ? d->cursor0Pos.x() : d->cursor1Pos.x() );
 }
 
@@ -3424,6 +3447,14 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 //##############################################################################
 //##################################  Events  ##################################
 //##############################################################################
+
+void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
+	const auto* cSystem{ defaultCoordinateSystem() };
+	logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
+	calledFromContextMenu = true;
+	auto* menu = q->createContextMenu();
+	menu->exec(event->screenPos());
+}
 
 /*!
  * \brief CartesianPlotPrivate::mousePressEvent
