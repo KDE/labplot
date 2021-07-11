@@ -99,7 +99,7 @@ public:
 
 	bool autoScaleX(int index = -1) {
 		if (index == -1) {
-			for (int i=0; i < q->m_coordinateSystems.count(); i++)
+			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
 				if (!autoScaleX(i))
 					return false;
 			return true;
@@ -108,7 +108,7 @@ public:
 	}
 	bool autoScaleY(int index = -1) {
 		if (index == -1) {
-			for (int i=0; i < q->m_coordinateSystems.count(); i++)
+			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
 				if (!autoScaleY(i))
 					return false;
 			return true;
@@ -117,7 +117,7 @@ public:
 	}
 	void setAutoScaleX(int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i=0; i < q->m_coordinateSystems.count(); i++)
+			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
 				setAutoScaleX(i, b);
 			return;
 		}
@@ -125,7 +125,7 @@ public:
 	}
 	void setAutoScaleY(int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i=0; i < q->m_coordinateSystems.count(); i++)
+			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
 				setAutoScaleY(i, b);
 			return;
 		}
@@ -149,7 +149,7 @@ public:
 	int defaultCoordinateSystemIndex{0};
 
 	struct PlotRange {
-		PlotRange(const Range<double>& r=Range<double>(), const bool d=false): range(r), dirty(d) {}
+		PlotRange(const Range<double>& r = Range<double>(), const bool d = false): range(r), dirty(d) {}
 		Range<double> range; // current range
 		Range<double> prev;
 		Range<double> autoScaleRange; // autoscale range. Cached to be faster in rescaling
