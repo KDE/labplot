@@ -68,27 +68,27 @@ public:
 	CartesianPlot::RangeType rangeType{CartesianPlot::RangeType::Free};
 	int rangeFirstValues{1000}, rangeLastValues{1000};
 
-	const Range<double> xRangeCSystem() const {
-		return xRanges.at(defaultCoordinateSystem()->xIndex()).range;
-	}
-	const Range<double> yRangeCSystem() const {
-		return yRanges.at(defaultCoordinateSystem()->yIndex()).range;
-	}
-	Range<double>& xRangeCSystem() {
+//	const Range<double> xRange() const {
+//		return xRanges.at(defaultCoordinateSystem()->xIndex()).range;
+//	}
+//	const Range<double> yRange() const {
+//		return yRanges.at(defaultCoordinateSystem()->yIndex()).range;
+//	}
+	Range<double>& xRange() {
 		return xRanges[defaultCoordinateSystem()->xIndex()].range;
 	}
-	Range<double>& yRangeCSystem() {
+	Range<double>& yRange() {
 		return yRanges[defaultCoordinateSystem()->yIndex()].range;
 	}
 	Range<double>& xRangeCSystem(int cSystemIndex) {
 		if (cSystemIndex >= 0)
 			return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].range;
-		return xRangeCSystem();
+		return xRange();
 	}
 	Range<double>& yRangeCSystem(int cSystemIndex) {
 		if (cSystemIndex >= 0)
 			return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].range;
-		return yRangeCSystem();
+		return yRange();
 	}
 	Range<double>& xRangeAutoScale(int cSystemIndex) {
 		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].autoScaleRange;

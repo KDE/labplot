@@ -1329,11 +1329,11 @@ Range<double>& CartesianPlot::yRangeFromIndex(const int index) {
 }
 const Range<double>& CartesianPlot::xRangeFromIndex(const int index) const {
 	Q_D(const CartesianPlot);
-	return d->xRanges[index].range;
+	return d->xRanges.at(index).range;
 }
 const Range<double>& CartesianPlot::yRangeFromIndex(const int index) const {
 	Q_D(const CartesianPlot);
-	return d->yRanges[index].range;
+	return d->yRanges.at(index).range;
 }
 const Range<double>& CartesianPlot::xRangeCSystem(const int cSystemIndex) const {
 	Q_D(const CartesianPlot);
@@ -1346,12 +1346,12 @@ const Range<double>& CartesianPlot::yRangeCSystem(const int cSystemIndex) const 
 
 bool CartesianPlot::xRangeDirty(int cSystemIndex) {
 	Q_D(CartesianPlot);
-	return d->xRanges[coordinateSystem(cSystemIndex)->xIndex()].dirty;
+	return d->xRanges.at(coordinateSystem(cSystemIndex)->xIndex()).dirty;
 }
 
 bool CartesianPlot::yRangeDirty(int cSystemIndex) {
 	Q_D(CartesianPlot);
-	return d->yRanges[coordinateSystem(cSystemIndex)->yIndex()].dirty;
+	return d->yRanges.at(coordinateSystem(cSystemIndex)->yIndex()).dirty;
 }
 
 void CartesianPlot::setXRangeDirty(int cSystemIndex, bool dirty) {
@@ -3374,6 +3374,61 @@ void CartesianPlotPrivate::retransform() {
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }
 
+void CartesianPlotPrivate::retransformXScale(CartesianCoordinateSystem* cSystem) {
+	static const int breakGap = 20;
+	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
+	Range<double> sceneRange, logicalRange;
+	QVector<CartesianScale*> scales;
+
+	const int xRangeIndex{cSystem->xIndex() };	// use x range of current cSystem
+	const auto xRange{ xRanges.at(xRangeIndex) };
+	//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range is x range " << xRangeIndex+1)
+	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.range.toStdString())
+	//TODO: check ranges for nonlinear scales
+	if (xRange.range.scale() != RangeT::Scale::Linear)
+		checkXRange(xRangeIndex);
+
+	//check whether we have x-range breaks - the first break, if available, should be valid
+	bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
+	if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
+		sceneRange = plotSceneRange;
+		logicalRange = xRange.range;
+
+		//TODO: how should we handle the case sceneRange.length() == 0?
+		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
+		if (sceneRange.length() > 0)
+			scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
+	} else {
+		double sceneEndLast = plotSceneRange.start();
+		double logicalEndLast = xRange.range.start();
+		for (const auto& rb : qAsConst(xRangeBreaks.list)) {
+			if (!rb.isValid())
+				break;
+
+			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
+			sceneRange.start() = sceneEndLast;
+			if (&rb == &xRangeBreaks.list.first()) sceneRange.start() += breakGap;
+			sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
+			logicalRange = Range<double>(logicalEndLast, rb.range.start());
+
+			if (sceneRange.length() > 0)
+				scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
+
+			sceneEndLast = sceneRange.end();
+			logicalEndLast = rb.range.end();
+		}
+
+		//add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
+		sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
+		logicalRange.setRange(logicalEndLast, xRange.range.end());
+
+		if (sceneRange.length() > 0)
+			scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
+	}
+
+	cSystem->setXScales(scales);
+}
+
 void CartesianPlotPrivate::retransformYScale(CartesianCoordinateSystem* cSystem) {
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.y() + dataRect.height(), dataRect.y()};
@@ -3424,63 +3479,7 @@ void CartesianPlotPrivate::retransformYScale(CartesianCoordinateSystem* cSystem)
 			scales << this->createScale(yRange.range.scale(), sceneRange, logicalRange);
 	}
 
-	//set y scales of cSystem
 	cSystem->setYScales(scales);
-}
-
-void CartesianPlotPrivate::retransformXScale(CartesianCoordinateSystem* cSystem) {
-	static const int breakGap = 20;
-	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
-	Range<double> sceneRange, logicalRange;
-	QVector<CartesianScale*> scales;
-	const int xRangeIndex{cSystem->xIndex() };	// use x range of current cSystem
-	const auto xRange{ xRanges.at(xRangeIndex) };
-	//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range is x range " << xRangeIndex+1)
-	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.range.toStdString())
-	//TODO: check ranges for nonlinear scales
-	if (xRange.range.scale() != RangeT::Scale::Linear)
-		checkXRange(xRangeIndex);
-
-	//check whether we have x-range breaks - the first break, if available, should be valid
-	bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
-	if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
-		sceneRange = plotSceneRange;
-		logicalRange = xRange.range;
-
-		//TODO: how should we handle the case sceneRange.length() == 0?
-		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
-		if (sceneRange.length() > 0)
-			scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
-	} else {
-		double sceneEndLast = plotSceneRange.start();
-		double logicalEndLast = xRange.range.start();
-		for (const auto& rb : qAsConst(xRangeBreaks.list)) {
-			if (!rb.isValid())
-				break;
-
-			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
-			sceneRange.start() = sceneEndLast;
-			if (&rb == &xRangeBreaks.list.first()) sceneRange.start() += breakGap;
-			sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
-			logicalRange = Range<double>(logicalEndLast, rb.range.start());
-
-			if (sceneRange.length() > 0)
-				scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
-
-			sceneEndLast = sceneRange.end();
-			logicalEndLast = rb.range.end();
-		}
-
-		//add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
-		sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
-		logicalRange.setRange(logicalEndLast, xRange.range.end());
-
-		if (sceneRange.length() > 0)
-			scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
-	}
-
-	//set x scales of cSystem
-	cSystem->setXScales(scales);
 }
 
 /*
@@ -3636,9 +3635,8 @@ void CartesianPlotPrivate::updateDataRect() {
 
 CartesianCoordinateSystem* CartesianPlotPrivate::coordinateSystem(const int index) const {
 	if (index < 0)
-	{
 		return defaultCoordinateSystem();
-	}
+
 	return static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
 }
 
@@ -3662,18 +3660,15 @@ void CartesianPlotPrivate::rangeChanged() {
 
 void CartesianPlotPrivate::xRangeFormatChanged() {
 	DEBUG(Q_FUNC_INFO)
-	const auto& axes = q->children<Axis>();
-	for (auto* axis : axes) {
+	for (auto* axis : q->children<Axis>()) {
 		//TODO: only if x range of axis's plot range is changed
 		if (axis->orientation() == Axis::Orientation::Horizontal)
 			axis->retransformTickLabelStrings();
 	}
 }
-
 void CartesianPlotPrivate::yRangeFormatChanged() {
 	DEBUG(Q_FUNC_INFO)
-	const auto& axes = q->children<Axis>();
-	for (auto* axis : axes) {
+	for (auto* axis : q->children<Axis>()) {
 		//TODO: only if x range of axis's plot range is changed
 		if (axis->orientation() == Axis::Orientation::Vertical)
 			axis->retransformTickLabelStrings();
@@ -3720,7 +3715,7 @@ void CartesianPlotPrivate::checkYRange(int yRangeIndex) {
 	} */
 }
 
-CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double> &sceneRange, const Range<double> &logicalRange) {
+CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double>& sceneRange, const Range<double>& logicalRange) {
 	DEBUG( Q_FUNC_INFO << ", scene range = " << sceneRange.toStdString() << ", logical range = " << logicalRange.toStdString() );
 
 	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
@@ -3814,9 +3809,9 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 			cursorPenWidth2 = 10.;
 
 		bool visible;
-		if (cursor0Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), yRangeCSystem().start()), visible).x()) < cursorPenWidth2) {
+		if (cursor0Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2) {
 			selectedCursor = 0;
-		} else if (cursor1Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), yRangeCSystem().start()), visible).x()) < cursorPenWidth2) {
+		} else if (cursor1Enable && qAbs(event->pos().x() - cSystem->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2) {
 			selectedCursor = 1;
 		} else if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
 			cursor1Enable = true;
@@ -3873,8 +3868,8 @@ void CartesianPlotPrivate::mousePressCursorMode(int cursorNumber, QPointF logica
 
 	cursorNumber == 0 ? cursor0Enable = true : cursor1Enable = true;
 
-	QPointF p1(logicalPos.x(), yRangeCSystem().start());
-	QPointF p2(logicalPos.x(), yRangeCSystem().end());
+	QPointF p1(logicalPos.x(), yRange().start());
+	QPointF p2(logicalPos.x(), yRange().end());
 
 	if (cursorNumber == 0) {
 		cursor0Pos.setX(logicalPos.x());
@@ -4176,8 +4171,8 @@ void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cS
 }
 
 void CartesianPlotPrivate::mouseMoveCursorMode(int cursorNumber, QPointF logicalPos) {
-	const auto xRangeFormat{ xRangeCSystem().format() };
-	const auto xRangeDateTimeFormat{ xRangeCSystem().dateTimeFormat() };
+	const auto xRangeFormat{ xRange().format() };
+	const auto xRangeDateTimeFormat{ xRange().dateTimeFormat() };
 
 	QPointF p1(logicalPos.x(), 0);
 	cursorNumber == 0 ? cursor0Pos = p1 : cursor1Pos = p1;
@@ -4445,8 +4440,8 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 				cursorPenWidth2 = 10.;
 
 			bool visible;
-			if ((cursor0Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRangeCSystem().start()), visible).x()) < cursorPenWidth2) ||
-					(cursor1Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRangeCSystem().start()), visible).x()) < cursorPenWidth2))
+			if ((cursor0Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2) ||
+					(cursor1Enable && qAbs(point.x() - defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start()), visible).x()) < cursorPenWidth2))
 				setCursor(Qt::SizeHorCursor);
 			else
 				setCursor(Qt::ArrowCursor);
@@ -4575,9 +4570,9 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 		painter->setFont(font);
 
 		bool visible;
-		QPointF p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRangeCSystem().start()), visible);
+		QPointF p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().start()), visible);
 		if (cursor0Enable && visible) {
-			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRangeCSystem().end()), visible);
+			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor0Pos.x(), yRange().end()), visible);
 			painter->drawLine(p1, p2);
 			QPointF textPos = p2;
 			textPos.setX(p2.x() - m_cursor0Text.size().width()/2);
@@ -4587,9 +4582,9 @@ void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 			painter->drawStaticText(textPos, m_cursor0Text);
 		}
 
-		p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRangeCSystem().start()), visible);
+		p1 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().start()), visible);
 		if (cursor1Enable && visible) {
-			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRangeCSystem().end()), visible);
+			QPointF p2 = defaultCoordinateSystem()->mapLogicalToScene(QPointF(cursor1Pos.x(), yRange().end()), visible);
 			painter->drawLine(p1, p2);
 			QPointF textPos = p2;
 			// TODO: Moving this stuff into other function to not calculate it every time
