@@ -1374,7 +1374,7 @@ void AxisPrivate::retransformTicks() {
 		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no csystem!")
 		return;
 	}
-//	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem-> yIndex() };
+//	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem->yIndex() };
 	DEBUG(Q_FUNC_INFO << ", coordinate system " << q->m_cSystemIndex + 1)
 //	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)
 //	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
@@ -1382,6 +1382,7 @@ void AxisPrivate::retransformTicks() {
 
 	const int xDirection = q->cSystem->xDirection();
 	const int yDirection = q->cSystem->yDirection();
+	DEBUG(Q_FUNC_INFO << ", x/y direction: " << xDirection << "/" << yDirection)
 
 	//calculate the position of the center point in scene coordinates,
 	//will be used later to differentiate between "in" and "out" depending
@@ -1394,12 +1395,12 @@ void AxisPrivate::retransformTicks() {
 
 	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
-		//DEBUG("major tick " << iMajor)
+		DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
 		//calculate major tick's position
 		if (majorTicksType != Axis::TicksType::CustomColumn) {
 			switch (scale) {
 			case RangeT::Scale::Linear:
-//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
+				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 				majorTickPos = start + majorTicksIncrement * iMajor;
 				if (qAbs(majorTickPos) < 1.e-15 * majorTicksIncrement)	// avoid rounding errors when close to zero
 					majorTickPos = 0;
@@ -1484,7 +1485,7 @@ void AxisPrivate::retransformTicks() {
 			}
 
 			double value = scalingFactor * majorTickPos + zeroOffset;
-//			DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
+			DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
 
 			//if custom column is used, we can have duplicated values in it and we need only unique values
 			if (majorTicksType == Axis::TicksType::CustomColumn && tickLabelValues.indexOf(value) != -1)

@@ -589,7 +589,7 @@ int CartesianCoordinateSystem::xDirection() const {
  */
 int CartesianCoordinateSystem::yDirection() const {
 	if (d->yScales.isEmpty() || !d->yScales.at(0)) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: no x scale!")
+		DEBUG(Q_FUNC_INFO << ", WARNING: no y scale!")
 		return 1;
 	}
 

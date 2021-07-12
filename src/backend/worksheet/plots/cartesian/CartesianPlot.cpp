@@ -3376,7 +3376,7 @@ void CartesianPlotPrivate::retransform() {
 
 void CartesianPlotPrivate::retransformYScale(CartesianCoordinateSystem* cSystem) {
 	static const int breakGap = 20;
-	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
+	Range<double> plotSceneRange{dataRect.y() + dataRect.height(), dataRect.y()};
 	Range<double> sceneRange, logicalRange;
 	QVector<CartesianScale*> scales;
 
@@ -3648,8 +3648,7 @@ QVector<AbstractCoordinateSystem*> CartesianPlotPrivate::coordinateSystems() con
 
 void CartesianPlotPrivate::rangeChanged() {
 	DEBUG(Q_FUNC_INFO)
-	for (int i=0; i < q->m_coordinateSystems.count(); i++)
-	{
+	for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
 		xRanges[i].dirty = true;
 		yRanges[i].dirty = true;
 		if (autoScaleX(i) && autoScaleY(i))
