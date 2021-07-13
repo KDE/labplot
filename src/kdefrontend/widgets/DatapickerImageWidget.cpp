@@ -381,30 +381,36 @@ void DatapickerImageWidget::fileNameChanged() {
 }
 
 void DatapickerImageWidget::graphTypeChanged() {
+	auto points = m_image->axisPoints();
+	points.type = DatapickerImage::GraphType(ui.cbGraphType->currentIndex());
+
+	const bool ternary = (points.type == DatapickerImage::GraphType::Ternary);
+	ui.lTernaryScale->setVisible(ternary);
+	ui.sbTernaryScale->setVisible(ternary);
+	ui.lPositionZ1->setVisible(ternary);
+	ui.lPositionZ2->setVisible(ternary);
+	ui.lPositionZ3->setVisible(ternary);
+	ui.sbPositionZ1->setVisible(ternary);
+	ui.sbPositionZ2->setVisible(ternary);
+	ui.sbPositionZ3->setVisible(ternary);
+
 	if (m_initializing)
 		return;
 
-	DatapickerImage::ReferencePoints points = m_image->axisPoints();
-	points.type = DatapickerImage::GraphType(ui.cbGraphType->currentIndex());
-
-	if (points.type != DatapickerImage::GraphType::Ternary) {
-		ui.lTernaryScale->setHidden(true);
-		ui.sbTernaryScale->setHidden(true);
-		ui.lPositionZ1->setHidden(true);
-		ui.lPositionZ2->setHidden(true);
-		ui.lPositionZ3->setHidden(true);
-		ui.sbPositionZ1->setHidden(true);
-		ui.sbPositionZ2->setHidden(true);
-		ui.sbPositionZ3->setHidden(true);
-	} else {
-		ui.lTernaryScale->setHidden(false);
-		ui.sbTernaryScale->setHidden(false);
-		ui.lPositionZ1->setHidden(false);
-		ui.lPositionZ2->setHidden(false);
-		ui.lPositionZ3->setHidden(false);
-		ui.sbPositionZ1->setHidden(false);
-		ui.sbPositionZ2->setHidden(false);
-		ui.sbPositionZ3->setHidden(false);
+	if (ui.cbGraphType->currentIndex() == 3) { //"Logarithmic (ln(x), y)"
+		if (points.logicalPos[0].x() == 0.0f)
+			points.logicalPos[0].setX(0.01f);
+		if (points.logicalPos[1].x() == 0.0f)
+			points.logicalPos[1].setX(0.01f);
+		if (points.logicalPos[2].x() == 0.0f)
+			points.logicalPos[2].setX(0.01f);
+	} else if (ui.cbGraphType->currentIndex() == 4) { //"Logarithmic (x, ln(y))"
+		if (points.logicalPos[0].y() == 0.0f)
+			points.logicalPos[0].setY(0.01f);
+		if (points.logicalPos[1].y() == 0.0f)
+			points.logicalPos[1].setY(0.01f);
+		if (points.logicalPos[2].y() == 0.0f)
+			points.logicalPos[2].setY(0.01f);
 	}
 
 	for (auto* image : m_imagesList)
@@ -426,7 +432,7 @@ void DatapickerImageWidget::logicalPositionChanged() {
 	if (m_initializing)
 		return;
 
-	DatapickerImage::ReferencePoints points = m_image->axisPoints();
+	auto points = m_image->axisPoints();
 	points.logicalPos[0].setX(ui.sbPositionX1->value());
 	points.logicalPos[0].setY(ui.sbPositionY1->value());
 	points.logicalPos[1].setX(ui.sbPositionX2->value());
@@ -454,7 +460,7 @@ void DatapickerImageWidget::intensitySpanChanged(int lowerLimit, int upperLimit)
 	if (m_initializing)
 		return;
 
-	DatapickerImage::EditorSettings settings = m_image->settings();
+	auto settings = m_image->settings();
 	settings.intensityThresholdHigh = upperLimit;
 	settings.intensityThresholdLow = lowerLimit;
 	for (auto* image : m_imagesList)
@@ -465,7 +471,7 @@ void DatapickerImageWidget::foregroundSpanChanged(int lowerLimit, int upperLimit
 	if (m_initializing)
 		return;
 
-	DatapickerImage::EditorSettings settings = m_image->settings();
+	auto settings = m_image->settings();
 	settings.foregroundThresholdHigh = upperLimit;
 	settings.foregroundThresholdLow = lowerLimit;
 	for (auto* image : m_imagesList)
@@ -476,7 +482,7 @@ void DatapickerImageWidget::hueSpanChanged(int lowerLimit, int upperLimit) {
 	if (m_initializing)
 		return;
 
-	DatapickerImage::EditorSettings settings = m_image->settings();
+	auto settings = m_image->settings();
 	settings.hueThresholdHigh = upperLimit;
 	settings.hueThresholdLow = lowerLimit;
 	for (auto* image : m_imagesList)
@@ -487,7 +493,7 @@ void DatapickerImageWidget::saturationSpanChanged(int lowerLimit, int upperLimit
 	if (m_initializing)
 		return;
 
-	DatapickerImage::EditorSettings settings = m_image->settings();
+	auto settings = m_image->settings();
 	settings.saturationThresholdHigh = upperLimit;
 	settings.saturationThresholdLow = lowerLimit;
 	for (auto* image : m_imagesList)
@@ -498,7 +504,7 @@ void DatapickerImageWidget::valueSpanChanged(int lowerLimit, int upperLimit) {
 	if (m_initializing)
 		return;
 
-	DatapickerImage::EditorSettings settings = m_image->settings();
+	auto settings = m_image->settings();
 	settings.valueThresholdHigh = upperLimit;
 	settings.valueThresholdLow = lowerLimit;
 	for (auto* image : m_imagesList)
