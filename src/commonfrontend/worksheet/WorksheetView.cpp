@@ -2154,11 +2154,12 @@ bool WorksheetView::eventFilter(QObject *watched, QEvent *event) {
 			return true;
 		case Qt::Key_Z:
 			if (cartesianPlotZoomSelectionModeAction->isEnabled())
-			cartesianPlotZoomSelectionModeAction->trigger();
+				cartesianPlotZoomSelectionModeAction->trigger();
 			return true;
 		case Qt::Key_C:
 			if (cartesianPlotCursorModeAction->isEnabled())
 				cartesianPlotCursorModeAction->trigger();
+			return true;
 		case Qt::Key_Escape:
 			if (cartesianPlotSelectionModeAction->isEnabled())
 				cartesianPlotSelectionModeAction->trigger();
