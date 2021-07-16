@@ -161,10 +161,10 @@ public:
 	const Range<double>& yRangeCSystem(int cSystemIndex) const;
 	void setXRange(int index, const Range<double>& value);
 	void setYRange(int index, const Range<double>& value);
-	bool xRangeDirty(int cSystemIndex);
-	bool yRangeDirty(int cSystemIndex);
-	void setXRangeDirty(int cSystemIndex, bool dirty);
-	void setYRangeDirty(int cSystemIndex, bool dirty);
+	bool xRangeDirtyCSystem(int cSystemIndex);
+	bool yRangeDirtyCSystem(int cSystemIndex);
+	void setXRangeDirtyCSystem(int cSystemIndex, bool dirty);
+	void setYRangeDirtyCSystem(int cSystemIndex, bool dirty);
 	void addXRange();				// add new x range
 	void addYRange();				// add new y range
 	void addXRange(const Range<double>&);		// add x range

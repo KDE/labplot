@@ -755,22 +755,22 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	if (op == NavigationOperation::ScaleAuto) {
 		if (cSystemIndex == -1) {
 			for (int i = 0; i < coordinateSystemCount(); i++) {
-				auto xDirty = xRangeDirty(i);
-				auto yDirty = yRangeDirty(i);
+				auto xDirty = xRangeDirtyCSystem(i);
+				auto yDirty = yRangeDirtyCSystem(i);
 
 				if (xDirty || yDirty || !autoScaleXCSystem(i) || !autoScaleYCSystem(i)) {
-					setXRangeDirty(i, true);
-					setYRangeDirty(i, true);
+					setXRangeDirtyCSystem(i, true);
+					setYRangeDirtyCSystem(i, true);
 				}
 				scaleAutoCSystem(i);
 			}
 		} else {
-			auto xDirty = xRangeDirty(cSystemIndex);
-			auto yDirty = yRangeDirty(cSystemIndex);
+			auto xDirty = xRangeDirtyCSystem(cSystemIndex);
+			auto yDirty = yRangeDirtyCSystem(cSystemIndex);
 
 			if (xDirty || yDirty || !autoScaleXCSystem(cSystemIndex) || !autoScaleYCSystem(cSystemIndex)) {
-				setXRangeDirty(cSystemIndex, true);
-				setYRangeDirty(cSystemIndex, true);
+				setXRangeDirtyCSystem(cSystemIndex, true);
+				setYRangeDirtyCSystem(cSystemIndex, true);
 			}
 			scaleAutoCSystem(cSystemIndex);
 		}
@@ -1344,17 +1344,17 @@ const Range<double>& CartesianPlot::yRangeCSystem(const int cSystemIndex) const 
 	return d->yRanges.at(coordinateSystem(cSystemIndex)->yIndex()).range;
 }
 
-bool CartesianPlot::xRangeDirty(int cSystemIndex) {
+bool CartesianPlot::xRangeDirtyCSystem(int cSystemIndex) {
 	Q_D(CartesianPlot);
 	return d->xRanges.at(coordinateSystem(cSystemIndex)->xIndex()).dirty;
 }
 
-bool CartesianPlot::yRangeDirty(int cSystemIndex) {
+bool CartesianPlot::yRangeDirtyCSystem(int cSystemIndex) {
 	Q_D(CartesianPlot);
 	return d->yRanges.at(coordinateSystem(cSystemIndex)->yIndex()).dirty;
 }
 
-void CartesianPlot::setXRangeDirty(int cSystemIndex, bool dirty) {
+void CartesianPlot::setXRangeDirtyCSystem(int cSystemIndex, bool dirty) {
 	Q_D(CartesianPlot);
 	if (cSystemIndex >= 0)
 		d->xRanges[coordinateSystem(cSystemIndex)->xIndex()].dirty = dirty;
@@ -1364,7 +1364,7 @@ void CartesianPlot::setXRangeDirty(int cSystemIndex, bool dirty) {
 	}
 }
 
-void CartesianPlot::setYRangeDirty(int cSystemIndex, bool dirty) {
+void CartesianPlot::setYRangeDirtyCSystem(int cSystemIndex, bool dirty) {
 	Q_D(CartesianPlot);
 	if (cSystemIndex >= 0)
 		d->yRanges[coordinateSystem(cSystemIndex)->yIndex()].dirty = dirty;
@@ -2105,8 +2105,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		updateLegend();
 		int cSystemIndex = curve->coordinateSystemIndex();
 		if (cSystemIndex >= 0 && cSystemIndex < d->q->m_coordinateSystems.count()) {
-			setXRangeDirty(cSystemIndex, true);
-			setYRangeDirty(cSystemIndex, true);
+			setXRangeDirtyCSystem(cSystemIndex, true);
+			setYRangeDirtyCSystem(cSystemIndex, true);
 		}
 
 		//in case the first curve is added, check whether we start plotting datetime data
@@ -2128,8 +2128,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			updateLegend();
 			int index = curve->coordinateSystemIndex();
 			if (index >= 0 && index < d->q->m_coordinateSystems.count()) {
-				setXRangeDirty(index, true);
-				setYRangeDirty(index, true);
+				setXRangeDirtyCSystem(index, true);
+				setYRangeDirtyCSystem(index, true);
 			}
 
 			if (curveTotalCount() == 1)
@@ -2471,8 +2471,8 @@ void CartesianPlot::yDataChangedCSystem(int cSystemIndex) {
 
 void CartesianPlot::curveVisibilityChanged() {
 	int index = static_cast<WorksheetElement*>(QObject::sender())->coordinateSystemIndex();
-	setXRangeDirty(index, true);
-	setYRangeDirty(index, true);
+	setXRangeDirtyCSystem(index, true);
+	setYRangeDirtyCSystem(index, true);
 	updateLegend();
 	if (autoScaleXCSystem() && autoScaleYCSystem())
 		this->scaleAutoCSystem();
@@ -2561,16 +2561,16 @@ bool CartesianPlot::scaleAutoXCSystem(int cSystemIndex, bool fullRange, bool sup
 	}
 
 	DEBUG(Q_FUNC_INFO << ", cSystemIndex = " << cSystemIndex << " full range = " << fullRange)
-	if (xRangeDirty(cSystemIndex)) {
+	if (xRangeDirtyCSystem(cSystemIndex)) {
 		calculateCurvesXMinMax(cSystemIndex, fullRange);
 		//if (fullRange)
-			setXRangeDirty(cSystemIndex, false);
+			setXRangeDirtyCSystem(cSystemIndex, false);
 		auto xIndex = coordinateSystem(cSystemIndex)->xIndex();
 		for (int i=0; i < m_coordinateSystems.count(); i++)
 		{
 			auto cs = coordinateSystem(i);
 			if (cs->xIndex() == xIndex)
-				setYRangeDirty(i, true);
+				setYRangeDirtyCSystem(i, true);
 		}
 	}
 
