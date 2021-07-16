@@ -1053,8 +1053,8 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
 
 			//ranges
-			plot->setAutoScaleX(-1, false);
-			plot->setAutoScaleY(-1, false);
+			plot->setAutoScaleXCSystem(-1, false);
+			plot->setAutoScaleYCSystem(-1, false);
 			const Origin::GraphAxis& originXAxis = layer.xAxis;
 			const Origin::GraphAxis& originYAxis = layer.yAxis;
 

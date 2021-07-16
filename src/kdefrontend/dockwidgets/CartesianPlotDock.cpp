@@ -1041,11 +1041,11 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 		for (int i=0; i < plot->coordinateSystemCount(); i++)
 		{
 			if (plot->coordinateSystem(i)->xIndex() == index) {
-				plot->setAutoScaleX(i, checked);
+				plot->setAutoScaleXCSystem(i, checked);
 				DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRangeFromIndex(index).autoScale())
 				if (checked) { // && index == plot->defaultCoordinateSystem()->xIndex()
 					retransform = plot->scaleAutoXCSystem(i, true, true);
-					if (plot->autoScaleY(i))
+					if (plot->autoScaleYCSystem(i))
 						retransform += plot->scaleAutoYCSystem(i, false, true);
 				}
 			}
@@ -1082,12 +1082,12 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 		for (int i=0; i < plot->coordinateSystemCount(); i++)
 		{
 			if (plot->coordinateSystem(i)->yIndex() == index) {
-				plot->setAutoScaleY(i, checked);
+				plot->setAutoScaleYCSystem(i, checked);
 				DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRangeFromIndex(index).autoScale())
 				if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
 					retransform = plot->scaleAutoYCSystem(i, true, true);
 					//TODO: which yIndex?
-					if (plot->autoScaleX(i))
+					if (plot->autoScaleXCSystem(i))
 						retransform += plot->scaleAutoXCSystem(i, false, true);
 				}
 			}

@@ -142,10 +142,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
-	bool autoScaleX(int cSystemIndex = -1) const;	// is x range index auto scaled?
-	void setAutoScaleX(int cSystemIndex = -1, bool = true);	// auto scale x range index
-	bool autoScaleY(int cSystemIndex = -1) const;	// is y range index auto scaled?
-	void setAutoScaleY(int cSystemIndex = -1, bool = true);	// auto scale y range index
+	bool autoScaleXCSystem(int cSystemIndex = -1) const;	// is x range index auto scaled?
+	void setAutoScaleXCSystem(int cSystemIndex = -1, bool = true);	// auto scale x range index
+	bool autoScaleYCSystem(int cSystemIndex = -1) const;	// is y range index auto scaled?
+	void setAutoScaleYCSystem(int cSystemIndex = -1, bool = true);	// auto scale y range index
 
 	int xRangeCount() const;
 	int yRangeCount() const;

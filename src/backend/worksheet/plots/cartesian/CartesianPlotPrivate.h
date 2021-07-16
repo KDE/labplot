@@ -46,7 +46,7 @@ public:
 	void retransform() override;
 	void retransformYScale(CartesianCoordinateSystem* cSystem);
 	void retransformXScale(CartesianCoordinateSystem* cSystem);
-	void retransformScales(int cSystemIndex);
+	void retransformScalesCSystem(int cSystemIndex);
 	void rangeChanged();
 	void xRangeFormatChanged();
 	void yRangeFormatChanged();
