@@ -115,10 +115,10 @@ public:
 		}
 		return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->yIndex()].range.autoScale();
 	}
-	void setAutoScaleX(int index = -1, bool b = true) {
+	void setAutoScaleXCSystem(int index = -1, bool b = true) {
 		if (index == -1) {
 			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
-				setAutoScaleX(i, b);
+				setAutoScaleXCSystem(i, b);
 			return;
 		}
 		xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->xIndex()].range.setAutoScale(b);

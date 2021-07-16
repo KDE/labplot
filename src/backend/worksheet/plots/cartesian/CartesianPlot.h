@@ -324,26 +324,26 @@ public slots:
 	void addInfoElement();
 
 	void scaleAutoTriggered();
-	bool scaleAuto(int cSystemIndex = -1, bool fullRange = true);
-	bool scaleAutoX(int index = -1, bool fullRange = false, bool suppressRetransform = false);
-	bool scaleAutoY(int index = -1, bool fullRange = false, bool suppressRetransform = false);
+	bool scaleAutoCSystem(int cSystemIndex = -1, bool fullRange = true);
+	bool scaleAutoXCSystem(int index = -1, bool fullRange = false, bool suppressRetransform = false);
+	bool scaleAutoYCSystem(int index = -1, bool fullRange = false, bool suppressRetransform = false);
 
-	void zoomIn(int cSystemIndex);
-	void zoomOut(int cSystemIndex);
-	void zoomInX(int cSystemIndex);
-	void zoomOutX(int cSystemIndex);
-	void zoomInY(int cSystemIndex);
-	void zoomOutY(int cSystemIndex);
+	void zoomInCSystem(int cSystemIndex);
+	void zoomOutCSystem(int cSystemIndex);
+	void zoomInXCSystem(int cSystemIndex);
+	void zoomOutXCSystem(int cSystemIndex);
+	void zoomInYCSystem(int cSystemIndex);
+	void zoomOutYCSystem(int cSystemIndex);
 
-	void shiftLeftX(int cSystemIndex);
-	void shiftRightX(int cSystemIndex);
-	void shiftUpY(int cSystemIndex);
-	void shiftDownY(int cSystemIndex);
+	void shiftLeftXCSystem(int cSystemIndex);
+	void shiftRightXCSystem(int cSystemIndex);
+	void shiftUpYCSystem(int cSystemIndex);
+	void shiftDownYCSystem(int cSystemIndex);
 
 	void cursor();
 
-	bool autoScale(int cSystemIndex = -1, bool fullRange = true);
-	void dataChanged(int cSystemIndex);
+	bool autoScaleCSystem(int cSystemIndex = -1, bool fullRange = true);
+	void dataChangedCSystem(int cSystemIndex);
 
 private slots:
 	void updateLegend();
@@ -351,8 +351,8 @@ private slots:
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 
-	void xDataChanged(int cSystemIndex);
-	void yDataChanged(int cSystemIndex);
+	void xDataChangedCSystem(int cSystemIndex);
+	void yDataChangedCSystem(int cSystemIndex);
 	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);
@@ -371,7 +371,7 @@ signals:
 	void rangeLastValuesChanged(int);
 	void rangeFirstValuesChanged(int);
 	void rectChanged(QRectF&);
-	void xAutoScaleChanged(int xRangeIndex, bool);
+	void xAutoScaleChangedCSystem(int xRangeIndex, bool);
 	void yAutoScaleChanged(int yRangeIndex, bool);
 	void xRangeChanged(int xRangeIndex, Range<double>);
 	void yRangeChanged(int yRangeIndex, Range<double>);

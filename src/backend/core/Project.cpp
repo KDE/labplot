@@ -872,7 +872,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	//loop over all affected plots and retransform them
 	for (auto* plot : plots) {
 		plot->setSuppressDataChangedSignal(false);
-		plot->dataChanged(-1);
+		plot->dataChangedCSystem(-1);
 	}
 }
 

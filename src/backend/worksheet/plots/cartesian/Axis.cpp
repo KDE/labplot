@@ -2430,9 +2430,9 @@ void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
 			if (deltaXScene > 0)
-				plot->shiftRightX(q->m_cSystemIndex);
+				plot->shiftRightXCSystem(q->m_cSystemIndex);
 			else
-				plot->shiftLeftX(q->m_cSystemIndex);
+				plot->shiftLeftXCSystem(q->m_cSystemIndex);
 		} else {
 			setCursor(Qt::SizeVerCursor);
 			const int deltaYScene = (m_panningStart.y() - event->pos().y());
@@ -2441,9 +2441,9 @@ void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
 			if (deltaYScene > 0)
-				plot->shiftUpY(q->m_cSystemIndex);
+				plot->shiftUpYCSystem(q->m_cSystemIndex);
 			else
-				plot->shiftDownY(q->m_cSystemIndex);
+				plot->shiftDownYCSystem(q->m_cSystemIndex);
 		}
 
 		m_panningStart = event->pos();

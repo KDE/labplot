@@ -1795,7 +1795,7 @@ void SpreadsheetView::maskSelection() {
 	for (auto* plot : plots) {
 		plot->setSuppressDataChangedSignal(false);
 		// TODO: hceck which ranges must be updated
-		plot->dataChanged(-1);
+		plot->dataChangedCSystem(-1);
 	}
 
 	//some cells were masked, enable the "clear masks" action
@@ -1833,7 +1833,7 @@ void SpreadsheetView::unmaskSelection() {
 	for (auto* plot : plots) {
 		plot->setSuppressDataChangedSignal(false);
 		// TODO: check which ranges must be updated
-		plot->dataChanged(-1);
+		plot->dataChangedCSystem(-1);
 	}
 
 	m_spreadsheet->endMacro();

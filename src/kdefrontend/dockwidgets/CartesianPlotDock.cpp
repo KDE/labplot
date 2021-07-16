@@ -427,7 +427,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::rangeFirstValuesChanged, this, &CartesianPlotDock::plotRangeFirstValuesChanged);
 	connect(m_plot, &CartesianPlot::rangeLastValuesChanged, this, &CartesianPlotDock::plotRangeLastValuesChanged);
 	//TODO: check if needed
-	connect(m_plot, &CartesianPlot::xAutoScaleChanged, this, &CartesianPlotDock::plotXAutoScaleChanged);
+	connect(m_plot, &CartesianPlot::xAutoScaleChangedCSystem, this, &CartesianPlotDock::plotXAutoScaleChanged);
 	connect(m_plot, &CartesianPlot::xMinChanged, this, &CartesianPlotDock::plotXMinChanged);
 	connect(m_plot, &CartesianPlot::xMaxChanged, this, &CartesianPlotDock::plotXMaxChanged);
 	connect(m_plot, &CartesianPlot::xRangeChanged, this, &CartesianPlotDock::plotXRangeChanged);
@@ -1044,9 +1044,9 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 				plot->setAutoScaleX(i, checked);
 				DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRangeFromIndex(index).autoScale())
 				if (checked) { // && index == plot->defaultCoordinateSystem()->xIndex()
-					retransform = plot->scaleAutoX(i, true, true);
+					retransform = plot->scaleAutoXCSystem(i, true, true);
 					if (plot->autoScaleY(i))
-						retransform += plot->scaleAutoY(i, false, true);
+						retransform += plot->scaleAutoYCSystem(i, false, true);
 				}
 			}
 		}
@@ -1085,10 +1085,10 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 				plot->setAutoScaleY(i, checked);
 				DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRangeFromIndex(index).autoScale())
 				if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
-					retransform = plot->scaleAutoY(i, true, true);
+					retransform = plot->scaleAutoYCSystem(i, true, true);
 					//TODO: which yIndex?
 					if (plot->autoScaleX(i))
-						retransform += plot->scaleAutoX(i, false, true);
+						retransform += plot->scaleAutoXCSystem(i, false, true);
 				}
 			}
 		}
@@ -1519,7 +1519,7 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 		}
 	}
 
-	m_plot->dataChanged(-1);	// update plot
+	m_plot->dataChangedCSystem(-1);	// update plot
 }
 void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	const int plotRangeIndex{ sender()->property("row").toInt() };
@@ -1544,7 +1544,7 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	}
 
 	// TODO: cha
-	m_plot->dataChanged(-1);	// update plot
+	m_plot->dataChangedCSystem(-1);	// update plot
 }
 
 // "Range Breaks"-tab
