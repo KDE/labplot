@@ -1129,7 +1129,7 @@ public:
 	}
 
 	void redo() override {
-		m_autoScaleOld = m_private->autoScaleX(m_cSystemIndex);
+		m_autoScaleOld = m_private->autoScaleXCSystem(m_cSystemIndex);
 		if (m_autoScale) {
 			m_oldRange = m_private->xRangeCSystem(m_cSystemIndex);
 			m_private->q->scaleAutoXCSystem(m_cSystemIndex);
@@ -1162,7 +1162,7 @@ public:
 	}
 
 	void redo() override {
-		m_autoScaleOld = m_private->autoScaleY(m_cSystemIndex);
+		m_autoScaleOld = m_private->autoScaleYCSystem(m_cSystemIndex);
 		if (m_autoScale) {
 			m_oldRange = m_private->yRangeCSystem(m_cSystemIndex);
 			m_private->q->scaleAutoYCSystem(m_cSystemIndex);
@@ -2562,7 +2562,7 @@ bool CartesianPlot::scaleAutoXCSystem(int cSystemIndex, bool fullRange, bool sup
 
 	DEBUG(Q_FUNC_INFO << ", cSystemIndex = " << cSystemIndex << " full range = " << fullRange)
 	if (xRangeDirtyCSystem(cSystemIndex)) {
-		calculateCurvesXMinMax(cSystemIndex, fullRange);
+		calculateCurvesXMinMaxCSystem(cSystemIndex, fullRange);
 		//if (fullRange)
 			setXRangeDirtyCSystem(cSystemIndex, false);
 		auto xIndex = coordinateSystem(cSystemIndex)->xIndex();
@@ -2579,15 +2579,15 @@ bool CartesianPlot::scaleAutoXCSystem(int cSystemIndex, bool fullRange, bool sup
 
 	// if no curve: do not reset to [0, 1] but don't change
 
-	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << "., curves x range = " << d->xRangeAutoScale(cSystemIndex).toStdString())
+	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << "., curves x range = " << d->xRangeAutoScaleCSystem(cSystemIndex).toStdString())
 	bool update = false;
-	if (!qFuzzyCompare(d->xRangeAutoScale(cSystemIndex).start(), xRange.start()) && !qIsInf(d->xRangeAutoScale(cSystemIndex).start())) {
-		xRange.start() = d->xRangeAutoScale(cSystemIndex).start();
+	if (!qFuzzyCompare(d->xRangeAutoScaleCSystem(cSystemIndex).start(), xRange.start()) && !qIsInf(d->xRangeAutoScaleCSystem(cSystemIndex).start())) {
+		xRange.start() = d->xRangeAutoScaleCSystem(cSystemIndex).start();
 		update = true;
 	}
 
-	if (!qFuzzyCompare(d->xRangeAutoScale(cSystemIndex).end(), xRange.end()) && !qIsInf(d->xRangeAutoScale(cSystemIndex).end()) ) {
-		xRange.end() = d->xRangeAutoScale(cSystemIndex).end();
+	if (!qFuzzyCompare(d->xRangeAutoScaleCSystem(cSystemIndex).end(), xRange.end()) && !qIsInf(d->xRangeAutoScaleCSystem(cSystemIndex).end()) ) {
+		xRange.end() = d->xRangeAutoScaleCSystem(cSystemIndex).end();
 		update = true;
 	}
 
@@ -2630,10 +2630,10 @@ bool CartesianPlot::scaleAutoYCSystem(int cSystemIndex, bool fullRange, bool sup
 
 	DEBUG(Q_FUNC_INFO << ", cSystemIndex = " << cSystemIndex << " full range = " << fullRange)
 
-	if (yRangeDirty(cSystemIndex)) {
-		calculateCurvesYMinMax(cSystemIndex, fullRange);
+	if (yRangeDirtyCSystem(cSystemIndex)) {
+		calculateCurvesYMinMaxCSystem(cSystemIndex, fullRange);
 		//if (fullRange)
-			setYRangeDirty(cSystemIndex, false);
+			setYRangeDirtyCSystem(cSystemIndex, false);
 
 		auto yIndex = coordinateSystem(cSystemIndex)->yIndex();
 		for (int i=0; i < m_coordinateSystems.count(); i++)
@@ -2641,21 +2641,21 @@ bool CartesianPlot::scaleAutoYCSystem(int cSystemIndex, bool fullRange, bool sup
 			// All x ranges with this yIndex must be dirty
 			auto cs = coordinateSystem(i);
 			if (cs->yIndex() == yIndex)
-				setXRangeDirty(i, true);
+				setXRangeDirtyCSystem(i, true);
 		}
 	}
 
 	auto& yRange{ d->yRangeCSystem(cSystemIndex) };
 
 	bool update = false;
-	DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", curves y range = " << d->yRangeAutoScale(cSystemIndex).toStdString())
-	if (!qFuzzyCompare(d->yRangeAutoScale(cSystemIndex).start(), yRange.start()) && !qIsInf(d->yRangeAutoScale(cSystemIndex).start()) ) {
-		yRange.start() = d->yRangeAutoScale(cSystemIndex).start();
+	DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", curves y range = " << d->yRangeAutoScaleCSystem(cSystemIndex).toStdString())
+	if (!qFuzzyCompare(d->yRangeAutoScaleCSystem(cSystemIndex).start(), yRange.start()) && !qIsInf(d->yRangeAutoScaleCSystem(cSystemIndex).start()) ) {
+		yRange.start() = d->yRangeAutoScaleCSystem(cSystemIndex).start();
 		update = true;
 	}
 
-	if (!qFuzzyCompare(d->yRangeAutoScale(cSystemIndex).end(), yRange.end()) && !qIsInf(d->yRangeAutoScale(cSystemIndex).end()) ) {
-		yRange.end() = d->yRangeAutoScale(cSystemIndex).end();
+	if (!qFuzzyCompare(d->yRangeAutoScaleCSystem(cSystemIndex).end(), yRange.end()) && !qIsInf(d->yRangeAutoScaleCSystem(cSystemIndex).end()) ) {
+		yRange.end() = d->yRangeAutoScaleCSystem(cSystemIndex).end();
 		update = true;
 	}
 	if (update) {
@@ -2690,13 +2690,13 @@ bool CartesianPlot::scaleAutoCSystem(int cSystemIndex, bool fullRange) {
 	{
 		for (int i=0; i < m_coordinateSystems.count(); i++)
 		{
-			setXRangeDirty(coordinateSystem(i)->xIndex(), false);
+			setXRangeDirtyCSystem(coordinateSystem(i)->xIndex(), false);
 			//setYRangeDirty(coordinateSystem(i)->yIndex(), false);
 		}
 	}
 	else
 	{
-		setXRangeDirty(coordinateSystem(cSystemIndex)->xIndex(), false);
+		setXRangeDirtyCSystem(coordinateSystem(cSystemIndex)->xIndex(), false);
 		//setYRangeDirty(coordinateSystem(cSystemIndex)->yIndex(), false);
 	}
 
@@ -2716,11 +2716,11 @@ bool CartesianPlot::scaleAutoCSystem(int cSystemIndex, bool fullRange) {
  * Calculates and sets curves x min and max.
  * The range of the y axis is not considered.
  */
-Range<double> CartesianPlot::calculateCurvesXMinMax(const int cSystemIndex, bool completeRange) {
+Range<double> CartesianPlot::calculateCurvesXMinMaxCSystem(const int cSystemIndex, bool completeRange) {
 	DEBUG(Q_FUNC_INFO << ", complete range = " << completeRange)
 	Q_D(CartesianPlot);
 
-	d->xRangeAutoScale(cSystemIndex).setRange(qInf(), -qInf());
+	d->xRangeAutoScaleCSystem(cSystemIndex).setRange(qInf(), -qInf());
 
 	//loop over all xy-curves and determine the maximum and minimum x-values
 	int cSystemXIndex = coordinateSystem(cSystemIndex)->xIndex();
@@ -2762,12 +2762,12 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int cSystemIndex, bool
 		auto range{d->xRangeCSystem(cSystemIndex)};	// value does not matter, will be overwritten
 		curve->minMaxX(indexRange, range, true);
 
-		if (range.start() < d->xRangeAutoScale(cSystemIndex).start())
-			d->xRangeAutoScale(cSystemIndex).start() = range.start();
+		if (range.start() < d->xRangeAutoScaleCSystem(cSystemIndex).start())
+			d->xRangeAutoScaleCSystem(cSystemIndex).start() = range.start();
 
-		if (range.end() > d->xRangeAutoScale(cSystemIndex).end())
-			d->xRangeAutoScale(cSystemIndex).end() = range.end();
-		DEBUG(Q_FUNC_INFO << ", curves x range i = " << d->xRangeAutoScale(cSystemIndex).toStdString())
+		if (range.end() > d->xRangeAutoScaleCSystem(cSystemIndex).end())
+			d->xRangeAutoScaleCSystem(cSystemIndex).end() = range.end();
+		DEBUG(Q_FUNC_INFO << ", curves x range i = " << d->xRangeAutoScaleCSystem(cSystemIndex).toStdString())
 	}
 
 	//loop over all histograms and determine the maximum and minimum x-value
@@ -2778,12 +2778,12 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int cSystemIndex, bool
 			continue;
 
 		const double min = curve->xMinimum();
-		if (d->xRangeAutoScale(cSystemIndex).start() > min)
-			d->xRangeAutoScale(cSystemIndex).start() = min;
+		if (d->xRangeAutoScaleCSystem(cSystemIndex).start() > min)
+			d->xRangeAutoScaleCSystem(cSystemIndex).start() = min;
 
 		const double max = curve->xMaximum();
-		if (max > d->xRangeAutoScale(cSystemIndex).end())
-			d->xRangeAutoScale(cSystemIndex).end() = max;
+		if (max > d->xRangeAutoScaleCSystem(cSystemIndex).end())
+			d->xRangeAutoScaleCSystem(cSystemIndex).end() = max;
 	}
 
 	//loop over all box plots and determine the maximum and minimum x-values
@@ -2794,17 +2794,17 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int cSystemIndex, bool
 			continue;
 
 		const double min = curve->xMinimum();
-		if (d->xRangeAutoScale(cSystemIndex).start() > min)
-			d->xRangeAutoScale(cSystemIndex).start() = min;
+		if (d->xRangeAutoScaleCSystem(cSystemIndex).start() > min)
+			d->xRangeAutoScaleCSystem(cSystemIndex).start() = min;
 
 		const double max = curve->xMaximum();
-		if (max > d->xRangeAutoScale(cSystemIndex).end())
-			d->xRangeAutoScale(cSystemIndex).end() = max;
+		if (max > d->xRangeAutoScaleCSystem(cSystemIndex).end())
+			d->xRangeAutoScaleCSystem(cSystemIndex).end() = max;
 	}
 
-	DEBUG(Q_FUNC_INFO << ", curves x range = " << d->xRangeAutoScale(cSystemIndex).toStdString())
+	DEBUG(Q_FUNC_INFO << ", curves x range = " << d->xRangeAutoScaleCSystem(cSystemIndex).toStdString())
 
-	return d->xRangeAutoScale(cSystemIndex);
+	return d->xRangeAutoScaleCSystem(cSystemIndex);
 }
 
 void CartesianPlot::retransformScales()
@@ -2817,11 +2817,11 @@ void CartesianPlot::retransformScales()
  * Calculates and sets curves y min and max. This function does not respect the range
  * of the x axis
  */
-void CartesianPlot::calculateCurvesYMinMax(const int cSystemIndex, bool completeRange) {
+void CartesianPlot::calculateCurvesYMinMaxCSystem(const int cSystemIndex, bool completeRange) {
 	Q_D(CartesianPlot);
 
-	d->yRangeAutoScale(cSystemIndex).setRange(qInf(), -qInf());
-	Range<double> range{d->yRangeAutoScale(cSystemIndex)};
+	d->yRangeAutoScaleCSystem(cSystemIndex).setRange(qInf(), -qInf());
+	Range<double> range{d->yRangeAutoScaleCSystem(cSystemIndex)};
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
 	int cSystemYIndex = coordinateSystem(cSystemIndex)->yIndex();
@@ -2857,11 +2857,11 @@ void CartesianPlot::calculateCurvesYMinMax(const int cSystemIndex, bool complete
 
 		curve->minMaxY(indexRange, range, true);
 
-		if (range.start() < d->yRangeAutoScale(cSystemIndex).start())
-			d->yRangeAutoScale(cSystemIndex).start() = range.start();
+		if (range.start() < d->yRangeAutoScaleCSystem(cSystemIndex).start())
+			d->yRangeAutoScaleCSystem(cSystemIndex).start() = range.start();
 
-		if (range.end() > d->yRangeAutoScale(cSystemIndex).end())
-			d->yRangeAutoScale(cSystemIndex).end() = range.end();
+		if (range.end() > d->yRangeAutoScaleCSystem(cSystemIndex).end())
+			d->yRangeAutoScaleCSystem(cSystemIndex).end() = range.end();
 	}
 
 	//loop over all histograms and determine the maximum y-value
@@ -2870,12 +2870,12 @@ void CartesianPlot::calculateCurvesYMinMax(const int cSystemIndex, bool complete
 			continue;
 
 		const double min = curve->yMinimum();
-		if (d->yRangeAutoScale(cSystemIndex).start() > min)
-			d->yRangeAutoScale(cSystemIndex).start() = min;
+		if (d->yRangeAutoScaleCSystem(cSystemIndex).start() > min)
+			d->yRangeAutoScaleCSystem(cSystemIndex).start() = min;
 
 		const double max = curve->yMaximum();
-		if (max > d->yRangeAutoScale(cSystemIndex).end())
-			d->yRangeAutoScale(cSystemIndex).end() = max;
+		if (max > d->yRangeAutoScaleCSystem(cSystemIndex).end())
+			d->yRangeAutoScaleCSystem(cSystemIndex).end() = max;
 	}
 
 	//loop over all box plots and determine the maximum y-value
@@ -2884,12 +2884,12 @@ void CartesianPlot::calculateCurvesYMinMax(const int cSystemIndex, bool complete
 			continue;
 
 		const double min = curve->yMinimum();
-		if (d->yRangeAutoScale(cSystemIndex).start() > min)
-			d->yRangeAutoScale(cSystemIndex).start() = min;
+		if (d->yRangeAutoScaleCSystem(cSystemIndex).start() > min)
+			d->yRangeAutoScaleCSystem(cSystemIndex).start() = min;
 
 		const double max = curve->yMaximum();
-		if (max > d->yRangeAutoScale(cSystemIndex).end())
-			d->yRangeAutoScale(cSystemIndex).end() = max;
+		if (max > d->yRangeAutoScaleCSystem(cSystemIndex).end())
+			d->yRangeAutoScaleCSystem(cSystemIndex).end() = max;
 	}
 }
 
@@ -2902,8 +2902,8 @@ void CartesianPlot::zoomInCSystem(int cSystemIndex) {
 	setAutoScaleXCSystem(cSystemIndex, false);
 	setAutoScaleYCSystem(cSystemIndex, false);
 	setUndoAware(true);
-	setXRangeDirty(cSystemIndex, true);
-	setYRangeDirty(cSystemIndex, true);
+	setXRangeDirtyCSystem(cSystemIndex, true);
+	setYRangeDirtyCSystem(cSystemIndex, true);
 	zoom(cSystemIndex, true, true); //zoom in x
 	zoom(cSystemIndex, false, true); //zoom in y
 	d->retransformScalesCSystem(cSystemIndex);
@@ -2916,8 +2916,8 @@ void CartesianPlot::zoomOutCSystem(int cSystemIndex) {
 	setAutoScaleXCSystem(cSystemIndex, false);
 	setAutoScaleYCSystem(cSystemIndex, false);
 	setUndoAware(true);
-	setXRangeDirty(cSystemIndex, true);
-	setYRangeDirty(cSystemIndex, true);
+	setXRangeDirtyCSystem(cSystemIndex, true);
+	setYRangeDirtyCSystem(cSystemIndex, true);
 	zoom(cSystemIndex, true, false); //zoom out x
 	zoom(cSystemIndex, false, false); //zoom out y
 	d->retransformScalesCSystem(cSystemIndex);
@@ -2929,7 +2929,7 @@ void CartesianPlot::zoomInXCSystem(int cSystemIndex) {
 	setUndoAware(false);
 	setAutoScaleXCSystem(cSystemIndex, false);
 	setUndoAware(true);
-	setYRangeDirty(cSystemIndex, true);
+	setYRangeDirtyCSystem(cSystemIndex, true);
 	zoom(cSystemIndex, true, true); //zoom in x
 
 	auto cSystem = coordinateSystem(cSystemIndex);
@@ -2952,7 +2952,7 @@ void CartesianPlot::zoomOutXCSystem(int cSystemIndex) {
 	setUndoAware(false);
 	setAutoScaleXCSystem(cSystemIndex, false);
 	setUndoAware(true);
-	setYRangeDirty(cSystemIndex, true);
+	setYRangeDirtyCSystem(cSystemIndex, true);
 	zoom(cSystemIndex, true, false); //zoom out x
 
 	auto cSystem = coordinateSystem(cSystemIndex);
@@ -2975,7 +2975,7 @@ void CartesianPlot::zoomInYCSystem(int cSystemIndex) {
 	setUndoAware(false);
 	setAutoScaleYCSystem(cSystemIndex, false);
 	setUndoAware(true);
-	setXRangeDirty(cSystemIndex, true);
+	setXRangeDirtyCSystem(cSystemIndex, true);
 	zoom(cSystemIndex, false, true); //zoom in y
 
 	auto cSystem = coordinateSystem(cSystemIndex);
@@ -2998,7 +2998,7 @@ void CartesianPlot::zoomOutYCSystem(int cSystemIndex) {
 	setUndoAware(false);
 	setAutoScaleYCSystem(cSystemIndex, false);
 	setUndoAware(true);
-	setXRangeDirty(cSystemIndex, true);
+	setXRangeDirtyCSystem(cSystemIndex, true);
 	zoom(cSystemIndex, false, false); //zoom out y
 
 	auto cSystem = coordinateSystem(cSystemIndex);
@@ -3199,7 +3199,7 @@ void CartesianPlot::shiftLeftXCSystem(int cSystemIndex) {
 	for (int i=0; i < m_coordinateSystems.count(); i++)
 	{
 		if ((cSystem == nullptr || cSystem->xIndex() == coordinateSystem(i)->xIndex()) && autoScaleYCSystem(i)) {
-			setYRangeDirty(i, true);
+			setYRangeDirtyCSystem(i, true);
 			scaleAutoYCSystem(i, true);
 			retransform = true;
 		}
@@ -3222,7 +3222,7 @@ void CartesianPlot::shiftRightXCSystem(int cSystemIndex) {
 	for (int i=0; i < m_coordinateSystems.count(); i++)
 	{
 		if ((cSystem == nullptr || cSystem->xIndex() == coordinateSystem(i)->xIndex()) && autoScaleYCSystem(i)) {
-			setYRangeDirty(i, true);
+			setYRangeDirtyCSystem(i, true);
 			scaleAutoYCSystem(i, true);
 			retransform = true;
 		}
@@ -3245,7 +3245,7 @@ void CartesianPlot::shiftUpYCSystem(int cSystemIndex) {
 	for (int i=0; i < m_coordinateSystems.count(); i++)
 	{
 		if ((cSystem == nullptr || cSystem->yIndex() == coordinateSystem(i)->yIndex()) && autoScaleXCSystem(i)) {
-			setXRangeDirty(i, true);
+			setXRangeDirtyCSystem(i, true);
 			scaleAutoXCSystem(i, true);
 			retransform = true;
 		}
@@ -3268,7 +3268,7 @@ void CartesianPlot::shiftDownYCSystem(int cSystemIndex) {
 	for (int i=0; i < m_coordinateSystems.count(); i++)
 	{
 		if ((cSystem == nullptr || cSystem->yIndex() == coordinateSystem(i)->yIndex()) && autoScaleXCSystem(i)) {
-			setXRangeDirty(i, true);
+			setXRangeDirtyCSystem(i, true);
 			scaleAutoXCSystem(i, true);
 			retransform = true;
 		}
@@ -3649,11 +3649,11 @@ void CartesianPlotPrivate::rangeChanged() {
 	for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
 		xRanges[i].dirty = true;
 		yRanges[i].dirty = true;
-		if (autoScaleX(i) && autoScaleY(i))
+		if (autoScaleXCSystem(i) && autoScaleYCSystem(i))
 			q->scaleAutoCSystem(i);
-		else if (autoScaleX(i))
+		else if (autoScaleXCSystem(i))
 			q->scaleAutoXCSystem(i);
-		else if (autoScaleY(i))
+		else if (autoScaleYCSystem(i))
 			q->scaleAutoYCSystem(i);
 	}
 }
@@ -4062,8 +4062,8 @@ bool CartesianPlotPrivate::translateRange(int cSystemIndex, const QPointF& logic
 	// If x or y should not be translated, means, that it was done before
 	// so the ranges must get dirty.
 	if (translationX || translationY || !translateX || !translateY) {
-		q->setXRangeDirty(cSystemIndex, true);
-		q->setYRangeDirty(cSystemIndex, true);
+		q->setXRangeDirtyCSystem(cSystemIndex, true);
+		q->setYRangeDirtyCSystem(cSystemIndex, true);
 	}
 
 	return translationX || translationY || !translateX || !translateY;
@@ -4084,11 +4084,11 @@ void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF 
 			bool translateY = !translatedIndicesY.contains(static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[i])->yIndex());
 			if (translateRange(i, logicalStart, logicalEnd, translateX, translateY)) {
 				translated = true;
-				if (autoscaleRanges && logicalStart.y() == logicalEnd.y() && autoScaleY(i)) {
+				if (autoscaleRanges && logicalStart.y() == logicalEnd.y() && autoScaleYCSystem(i)) {
 					// only x was changed, so autoscale y
 					q->scaleAutoYCSystem(i, false, true);
 				}
-				if (autoscaleRanges && logicalStart.x() == logicalEnd.x() && autoScaleX(i)) {
+				if (autoscaleRanges && logicalStart.x() == logicalEnd.x() && autoScaleXCSystem(i)) {
 					// only y was changed, so autoscale x
 					q->scaleAutoXCSystem(i, false, true);
 				}
@@ -4100,11 +4100,11 @@ void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF 
 		}
 	} else {
 		translated = translateRange(index, logicalStart, logicalEnd, true, true);
-		if (autoscaleRanges && logicalStart.y() == logicalEnd.y() && autoScaleY(index)) {
+		if (autoscaleRanges && logicalStart.y() == logicalEnd.y() && autoScaleYCSystem(index)) {
 			// only x was changed, so autoscale y
 			q->scaleAutoYCSystem(index, false, true);
 		}
-		if (autoscaleRanges && logicalStart.x() == logicalEnd.x() && autoScaleX(index)) {
+		if (autoscaleRanges && logicalStart.x() == logicalEnd.x() && autoScaleXCSystem(index)) {
 			// only y was changed, so autoscale x
 			q->scaleAutoXCSystem(index, false, true);
 		}
@@ -4250,17 +4250,17 @@ bool CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		yRangeCSystem(cSystemIndex).niceExtend();
 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
-			q->setXRangeDirty(cSystemIndex, true);
-			q->setYRangeDirty(cSystemIndex, true);
+			q->setXRangeDirtyCSystem(cSystemIndex, true);
+			q->setYRangeDirtyCSystem(cSystemIndex, true);
 			q->setAutoScaleXCSystem(cSystemIndex, false);
 			q->setAutoScaleYCSystem(cSystemIndex, false);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
-			q->setYRangeDirty(cSystemIndex, true);
+			q->setYRangeDirtyCSystem(cSystemIndex, true);
 			q->setAutoScaleXCSystem(cSystemIndex, false);
 			if (q->autoScaleYCSystem(cSystemIndex) && q->scaleAutoYCSystem(cSystemIndex, false, true))
 				retransformPlot = false;
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
-			q->setXRangeDirty(cSystemIndex, true);
+			q->setXRangeDirtyCSystem(cSystemIndex, true);
 			q->setAutoScaleYCSystem(cSystemIndex, false);
 			if (q->autoScaleXCSystem(cSystemIndex) && q->scaleAutoXCSystem(cSystemIndex, false, true))
 				retransformPlot = false;

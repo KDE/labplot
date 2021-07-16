@@ -90,26 +90,26 @@ public:
 			return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].range;
 		return yRange();
 	}
-	Range<double>& xRangeAutoScale(int cSystemIndex) {
+	Range<double>& xRangeAutoScaleCSystem(int cSystemIndex) {
 		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].autoScaleRange;
 	}
-	Range<double>& yRangeAutoScale(int cSystemIndex) {
+	Range<double>& yRangeAutoScaleCSystem(int cSystemIndex) {
 		return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].autoScaleRange;
 	}
 
-	bool autoScaleX(int index = -1) {
+	bool autoScaleXCSystem(int index = -1) {
 		if (index == -1) {
 			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
-				if (!autoScaleX(i))
+				if (!autoScaleXCSystem(i))
 					return false;
 			return true;
 		}
 		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->xIndex()].range.autoScale();
 	}
-	bool autoScaleY(int index = -1) {
+	bool autoScaleYCSystem(int index = -1) {
 		if (index == -1) {
 			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
-				if (!autoScaleY(i))
+				if (!autoScaleYCSystem(i))
 					return false;
 			return true;
 		}

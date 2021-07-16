@@ -217,8 +217,8 @@ private:
 	void shift(int cSystemIndex, bool x, bool leftOrDown);
 	void zoom(int cSystemIndex, bool x, bool in);
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
-	Range<double> calculateCurvesXMinMax(int cSystemIndex, bool completeRange = true);
-	void calculateCurvesYMinMax(int cSystemIndex, bool completeRange = true);
+	Range<double> calculateCurvesXMinMaxCSystem(int cSystemIndex, bool completeRange = true);
+	void calculateCurvesYMinMaxCSystem(int cSystemIndex, bool completeRange = true);
 	void retransformScales();
 	int curveTotalCount() const;
 
