@@ -1251,7 +1251,7 @@ public: \
 		finalize(); \
 	} \
 	void undo() override { redo(); } \
-	virtual void finalize() { m_target->retransformScales(-1); emit m_target->q->element ## Changed(m_index, m_target->element ## s.at(m_index).range); } \
+	virtual void finalize() { m_target->retransformScalesCSystem(-1); emit m_target->q->element ## Changed(m_index, m_target->element ## s.at(m_index).range); } \
 private:\
 	CartesianPlot::Private* m_target; \
 	Range<double> m_otherValue; \
@@ -1589,7 +1589,7 @@ void CartesianPlot::removeCoordinateSystem(int index) {
 		project()->setChanged(true);
 }
 
-STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetDefaultCoordinateSystemIndex, int, defaultCoordinateSystemIndex, retransformScales(-1))
+STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetDefaultCoordinateSystemIndex, int, defaultCoordinateSystemIndex, retransformScalesCSystem(-1))
 int CartesianPlot::defaultCoordinateSystemIndex() const {
 	Q_D(const CartesianPlot);
 	return d->defaultCoordinateSystemIndex;
@@ -1608,27 +1608,27 @@ CartesianCoordinateSystem* CartesianPlot::defaultCoordinateSystem() const {
 
 // range breaks
 
-STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBreakingEnabled, retransformScales(-1))
+STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBreakingEnabled, retransformScalesCSystem(-1))
 void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	Q_D(CartesianPlot);
 	if (enabled != d->xRangeBreakingEnabled)
 		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, ki18n("%1: x-range breaking enabled")));
 }
 
-STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks, retransformScales(-1))
+STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks, retransformScalesCSystem(-1))
 void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, ki18n("%1: x-range breaks changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled, retransformScales(-1))
+STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled, retransformScalesCSystem(-1))
 void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
 	Q_D(CartesianPlot);
 	if (enabled != d->yRangeBreakingEnabled)
 		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, ki18n("%1: y-range breaking enabled")));
 }
 
-STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks, retransformScales(-1))
+STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks, retransformScalesCSystem(-1))
 void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, ki18n("%1: y-range breaks changed")));
