@@ -345,6 +345,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 
 	initGeneralTab();
 	initTabs();
+	setSymbols(list);
 
 	if (m_messageWidget && m_messageWidget->isVisible())
 		m_messageWidget->close();
@@ -354,7 +355,6 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_initializing = false;
 
 	updatePlotRanges();
-
 
 	//init parameter list when not available
 	if (m_fitData.paramStartValues.size() == 0)

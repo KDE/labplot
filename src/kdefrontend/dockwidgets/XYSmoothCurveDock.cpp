@@ -258,10 +258,10 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 
 	initGeneralTab();
 	initTabs();
+	setSymbols(list);
 	m_initializing = false;
 
 	updatePlotRanges();
-
 
 	//hide the "skip gaps" option after the curves were set
 	ui.lLineSkipGaps->hide();

@@ -248,7 +248,7 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 
 	initGeneralTab();
 	initTabs();
-
+	setSymbols(list);
 	updatePlotRanges();
 
 	m_initializing = false;
