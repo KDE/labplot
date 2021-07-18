@@ -1691,7 +1691,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 		if (labelsFormat == Axis::LabelsFormat::Decimal) {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
-				str = numberLocale.toString(value, 'f', labelsPrecision);
+				// toString does not round: use NSL function
+				str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
@@ -1702,7 +1703,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else
-					str = numberLocale.toString(value, 'e', labelsPrecision);
+					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'e', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
@@ -1712,7 +1713,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else  {
-					str = "10<sup>" + numberLocale.toString(log10(qAbs(value)), 'f', labelsPrecision) + "</sup>";
+					str = "10<sup>" + numberLocale.toString(nsl_math_round_places(log10(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + "</sup>";
 					if (value < 0)
 						str.prepend("-");
 				}
@@ -1724,7 +1725,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else  {
-					str = "2<span style=\"vertical-align:super\">" + numberLocale.toString(log2(qAbs(value)), 'f', labelsPrecision) + "</span>";
+					str = "2<span style=\"vertical-align:super\">" + numberLocale.toString(nsl_math_round_places(log2(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + "</spanlabelsPrecision)>";
 					if (value < 0)
 						str.prepend("-");
 				}
@@ -1736,7 +1737,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
-					str = "e<span style=\"vertical-align:super\">" + numberLocale.toString(log(qAbs(value)), 'f', labelsPrecision) + "</span>";
+					str = "e<span style=\"vertical-align:super\">" + numberLocale.toString(nsl_math_round_places(log(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + "</span>";
 					if (value < 0)
 						str.prepend("-");
 				}
@@ -1748,7 +1749,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else
-					str = "<span>" + numberLocale.toString(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
+					str = "<span>" + numberLocale.toString(nsl_math_round_places(value / M_PI, labelsPrecision), 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
@@ -1757,9 +1758,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else if (qAbs(value) < 100. && qAbs(value) > .01)	// use normal notation for values near 1
-					str = numberLocale.toString(value, 'f', labelsPrecision);
+					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				else {
-					str = numberLocale.toString(value, 'e', labelsPrecision);
+					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'e', labelsPrecision);
 					str.remove("+");	// remove '+' in exponent
 					str.replace( QRegExp("e(.*)"), "×10<sup>\\1</sup>" );	// e(-)NN -> ×10<sup>(-)NN</sup>
 				}
@@ -1863,38 +1864,45 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 	switch (format) {
 	case Axis::LabelsFormat::Decimal:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(value, precision-1) );
+			tempValues.append( nsl_math_round_places(value, precision) );
 		break;
 	case Axis::LabelsFormat::MultipliesPi:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(value / M_PI, precision-1) );
+			tempValues.append( nsl_math_round_places(value / M_PI, precision) );
 		break;
 	case Axis::LabelsFormat::ScientificE:
 	case Axis::LabelsFormat::Scientific:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_precision(value, precision-1) );
+			tempValues.append( nsl_math_round_precision(value, precision) );
 		break;
 	case Axis::LabelsFormat::Powers10:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision-1) );
+			tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision) );
 		break;
 	case Axis::LabelsFormat::Powers2:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log2(qAbs(value)), precision-1) );
+			tempValues.append( nsl_math_round_places(log2(qAbs(value)), precision) );
 		break;
 	case Axis::LabelsFormat::PowersE:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision-1) );
+			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
 	}
-
+	QDEBUG(Q_FUNC_INFO << ", values = " << tempValues)
 
 	//check whether we have duplicates with reduced precision
-	//-> current precision cannot be reduced, return the current value
+	//-> current precision cannot be reduced, return the previous value
 	for (int i = 0; i < tempValues.size(); ++i) {
+		// return if rounded value differs too much
+		const double scale = std::abs(tickLabelValues.last() - tickLabelValues.first());
+		const double relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+		DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+		DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
+		if (relDiff > 0.01)	// > 1 %
+			return precision + 1;
 		for (int j = 0; j < tempValues.size(); ++j) {
 			if (i == j) continue;
 			if (tempValues.at(i) == tempValues.at(j))
-				return precision;
+				return precision + 1;
 		}
 	}
 
