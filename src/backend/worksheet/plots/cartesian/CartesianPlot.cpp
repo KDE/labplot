@@ -2071,6 +2071,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 
 	const auto* curve = qobject_cast<const XYCurve*>(child);
+	int cSystemIndex = -1;
 	if (curve) {
 		connect(curve, &XYCurve::dataChanged, this, [this, curve]() {int cSystemIndex = curve->coordinateSystemIndex(); this->dataChanged(cSystemIndex);});
 		connect(curve, &XYCurve::xColumnChanged, this, [this](const AbstractColumn* column) {
@@ -2103,11 +2104,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::linePenChanged, this, QOverload<QPen>::of(&CartesianPlot::curveLinePenChanged)); // forward to Worksheet to update CursorDock
 
 		updateLegend();
-		int cSystemIndex = curve->coordinateSystemIndex();
-		if (cSystemIndex >= 0 && cSystemIndex < d->q->m_coordinateSystems.count()) {
-			setXRangeDirty(cSystemIndex, true);
-			setYRangeDirty(cSystemIndex, true);
-		}
+		cSystemIndex = curve->coordinateSystemIndex();
 
 		//in case the first curve is added, check whether we start plotting datetime data
 		if (curveTotalCount() == 1) {
@@ -2116,7 +2113,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 
 		emit curveAdded(curve);
-
 	} else {
 		const auto* hist = qobject_cast<const Histogram*>(child);
 		if (hist) {
@@ -2126,11 +2122,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(hist, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
-			int index = curve->coordinateSystemIndex();
-			if (index >= 0 && index < d->q->m_coordinateSystems.count()) {
-				setXRangeDirty(index, true);
-				setYRangeDirty(index, true);
-			}
+			cSystemIndex = hist->coordinateSystemIndex();
 
 			if (curveTotalCount() == 1)
 				checkAxisFormat(hist->dataColumn(), Axis::Orientation::Horizontal);
@@ -2144,6 +2136,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(boxPlot, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
+			cSystemIndex = boxPlot->coordinateSystemIndex();
 
 			if (curveTotalCount() == 1) {
 				connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
@@ -2159,6 +2152,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// must be unhovered
 		const auto* element = static_cast<const WorksheetElement*>(child);
 		connect(element, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
+	}
+
+	if (cSystemIndex >= 0 && cSystemIndex < d->q->m_coordinateSystems.count()) {
+		setXRangeDirty(cSystemIndex, true);
+		setYRangeDirty(cSystemIndex, true);
 	}
 
 	if (!isLoading()) {
