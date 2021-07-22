@@ -1155,7 +1155,7 @@ void Worksheet::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mode)
 
 void Worksheet::curveDataChanged(const XYCurve* curve) {
 	auto* plot = dynamic_cast<CartesianPlot*>(QObject::sender());
-	if (!plot)
+	if (!plot || !curve)
 		return;
 
 	TreeModel* treeModel = cursorModel();
@@ -1167,7 +1167,6 @@ void Worksheet::curveDataChanged(const XYCurve* curve) {
 			continue;
 
 		for (int j = 0; j < plot->curveCount(); j++) {
-
 			if (plot->getCurve(j)->name().compare(curve->name()) != 0)
 				continue;
 
