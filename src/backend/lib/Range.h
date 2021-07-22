@@ -150,7 +150,10 @@ public:
 		if (scaledSize > 20.) {	// use better rounding (> 20 : .5 steps)
 			factor=2.;
 			places -= 1;
-		} else if (scaledSize > 12.) {	// use better rounding (13 - 20 : .2 steps)
+		} else if (scaledSize > 15.) {	// use better rounding (16 - 20 : .25 steps)
+			factor=4.;
+			places -= 1;
+		} else if (scaledSize > 12.) {	// use better rounding (13 - 15 : .2 steps)
 			factor=5.;
 			places -= 1;
 		}
@@ -175,27 +178,31 @@ public:
 		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", size = " << size())
 		const double order = pow(10.0, qFloor(log10(size())));;
 		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order)
-		const int factor = qRound(10 * size() / order);
+		const int factor = qRound(100 * size() / order);
 		DEBUG(Q_FUNC_INFO << ", factor = " << factor)
 
 		// check if multiple of small numbers
-		if (factor % 3 == 0)
+		if (factor % 30 == 0)
 			return 3+1;
-		if (factor % 4 == 0)
+		if (factor % 40 == 0)
 			return 4+1;
-		if (factor % 7 == 0)
+		if (factor % 70 == 0)
 			return 7+1;
-		if (factor % 5 == 0)
+		if (factor % 50 == 0)
 			return 5+1;
-		if (factor % 9 == 0)
+		if (factor % 175 == 0)
+			return 7+1;
+		if (factor % 25 == 0)
+			return 5+1;
+		if (factor % 90 == 0)
 			return 9+1;
-		if (factor % 11 == 0)
+		if (factor % 110 == 0)
 			return 11+1;
-		if (factor % 13 == 0)
+		if (factor % 130 == 0)
 			return 13+1;
-		if (factor % 17 == 0)
+		if (factor % 170 == 0)
 			return 17+1;
-		if (factor % 19 == 0)
+		if (factor % 190 == 0)
 			return 19+1;
 
 		return 23+1;

@@ -39,7 +39,7 @@ void RangeTest::testNiceExtend() {
 		{{0.,.61},{0.,.7}},{{0,.51},{0.,.6}},{{0,.46},{0.,.5}},
 		{{0.,.41},{0.,.45}},{{0,.36},{0.,.4}},{{0,.31},{0.,.35}},
 		{{0.,.26},{0.,.3}},{{0,.21},{0.,.25}},{{0,.19},{0.,.2}},
-		{{0.,.17},{0.,.18}},{{0,.15},{0.,.16}}
+		{{0.,.17},{0.,.175}},{{0,.15},{0.,.16}}
 	};
 	QVector< QPair<Range<double>, Range<double>> > tests2{	// QCOMPARE is too strict
 		{{0.,.13},{0.,.14}}, {{0.,1000.},{0.,1000.}}
@@ -48,8 +48,8 @@ void RangeTest::testNiceExtend() {
 	for (auto& test : tests) {
 		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
-//		DEBUG(std::setprecision(19) << test.first.start() << " == " << test.second.start())
-//		DEBUG(std::setprecision(19) << test.first.end() << " == " << test.second.end())
+		//DEBUG(std::setprecision(19) << test.first.start() << " == " << test.second.start())
+		//DEBUG(std::setprecision(19) << test.first.end() << " == " << test.second.end())
 		QCOMPARE(test.first, test.second);
 	}
 	for (auto& test : tests2) {
@@ -67,8 +67,9 @@ void RangeTest::testTickCount() {
 		{{0., 1.}, 6}, {{0., 0.01}, 6}, {{0., 100.}, 6},
 		{{0., 2.}, 5}, {{0., 3.}, 4}, {{0., 4.}, 5}, {{0., 5.}, 6},
 		{{0., 6.}, 4}, {{0., 7.}, 8}, {{0., 8.}, 5}, {{0., 9.}, 4},
-		{{1.6, 2.2}, 4}, {{1.3, 2.7}, 8}, {{0., 3.2}, 5}
-		//TODO: 0-29, 0-41
+		{{1.6, 2.2}, 4}, {{1.3, 2.7}, 8}, {{0., 3.2}, 5}, {{0.4, 2.}, 5},
+		{{0.5, 2.5}, 5}
+		// size=29,41 should not happen when nice extended
 	};
 
 	for (auto& test : tests) {
