@@ -144,27 +144,65 @@ public:
 		DEBUG(Q_FUNC_INFO << ", size/10 = " << size()/10.)
 		int places = nsl_math_rounded_decimals(size()/10.);
 		DEBUG(Q_FUNC_INFO << ", decimal places (rounded) = " << (int)places)
-		const double scaledSize = size() * pow(10., places);
+		const double scaledSize = size() * pow(10., places);	// range: 4.5 - 44.9
 		DEBUG(Q_FUNC_INFO << ", scaled size  = " << scaledSize)
+
+		// keep certain sizes that can be handled by autoTickCount()
+		if ( qFuzzyCompare(scaledSize, 10.5) )
+			return;
+
 		double factor = 1.;
-		if (scaledSize > 20.) {	// use better rounding (> 20 : .5 steps)
-			factor=2.;
+		// use special rounding for certain values
+		if ( (scaledSize > 32. && scaledSize < 35.)
+			|| (scaledSize > 42. && scaledSize < 45.) ) {	// 0.5 steps
+			factor = 2.;
 			places -= 1;
-		} else if (scaledSize > 15.) {	// use better rounding (16 - 20 : .25 steps)
-			factor=4.;
+		} else if (scaledSize > 7.2 && scaledSize < 7.5) {
+			factor = 2.;
+		} else if ( (scaledSize > 12. && scaledSize < 12.5)
+			|| (scaledSize > 16. && scaledSize < 17.5)
+			|| (scaledSize > 21. && scaledSize < 22.5)
+			|| (scaledSize > 36. && scaledSize < 40.) ) {	// 0.25 steps
+			factor = 4.;
 			places -= 1;
-		} else if (scaledSize > 12.) {	// use better rounding (13 - 15 : .2 steps)
-			factor=5.;
+		} else if ( (scaledSize > 10. && scaledSize < 12.)
+			|| (scaledSize > 12.5 && scaledSize < 14.)
+			|| (scaledSize > 17.5 && scaledSize < 20.)
+			|| (scaledSize > 22.5 && scaledSize < 24.)
+			|| (scaledSize > 27. && scaledSize < 32.)
+			|| (scaledSize > 35. && scaledSize < 36.)
+			|| (scaledSize > 40. && scaledSize < 42.) ) {	// 0.2 steps
+			factor = 5.;
 			places -= 1;
+		} else if ( (scaledSize > 4.6 && scaledSize < 5.)
+                        || (scaledSize > 5.2 && scaledSize < 5.6)
+			|| (scaledSize > 6.2 && scaledSize < 6.4)
+                        || (scaledSize > 7. && scaledSize < 7.2)
+			|| (scaledSize > 8.2 && scaledSize < 8.4)
+			|| (scaledSize > 9.4 && scaledSize < 9.6) ) {
+			factor = 5.;
+		} else if (scaledSize > 8. && scaledSize < 8.1) {	// .1 steps
+			factor = 10.;
+		} else if (scaledSize > 25. && scaledSize < 26.) {	// .3 steps -> 27.
+			factor = 1./.3;
+			places -= 1;
+		} else if ( (scaledSize > 4.5 && scaledSize < 4.6)	// .3 steps -> 4.8
+			|| (scaledSize > 6 && scaledSize < 6.2)		// -> 6.3
+			|| (scaledSize > 8.1 && scaledSize < 8.2) ) {	// -> 8.4
+			factor = 1./.3;
+		} else if ( (scaledSize > 5. && scaledSize < 5.2)	// .6 steps -> 5.4
+			|| (scaledSize > 9. && scaledSize < 9.4) ) {	// -> 9.6
+			factor = 1./.6;
 		}
+		DEBUG(Q_FUNC_INFO << ", factor = " << factor << ", places = " << places)
 
 		// round to decimal places
 		if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
-			m_start = nsl_math_floor_places(factor*m_start, places);
-			m_end = nsl_math_ceil_places(factor*m_end, places);
+			m_start = nsl_math_floor_places(factor * m_start, places);
+			m_end = nsl_math_ceil_places(factor * m_end, places);
 		} else {
-			m_start = nsl_math_ceil_places(factor*m_start, places);
-			m_end = nsl_math_floor_places(factor*m_end, places);
+			m_start = nsl_math_ceil_places(factor * m_start, places);
+			m_end = nsl_math_floor_places(factor * m_end, places);
 		}
 		m_start /= factor;
 		m_end /= factor;
@@ -181,7 +219,7 @@ public:
 		const int factor = qRound(100 * size() / order);
 		DEBUG(Q_FUNC_INFO << ", factor = " << factor)
 
-		// check if multiple of small numbers
+		// set number of ticks for certain multiple of small numbers
 		if (factor % 30 == 0)
 			return 3+1;
 		if (factor % 40 == 0)
@@ -190,22 +228,18 @@ public:
 			return 7+1;
 		if (factor % 50 == 0)
 			return 5+1;
+		if (factor % 90 == 0)
+			return 9+1;
 		if (factor % 175 == 0)
 			return 7+1;
 		if (factor % 25 == 0)
 			return 5+1;
-		if (factor % 90 == 0)
-			return 9+1;
-		if (factor % 110 == 0)
-			return 11+1;
-		if (factor % 130 == 0)
-			return 13+1;
-		if (factor % 170 == 0)
-			return 17+1;
-		if (factor % 190 == 0)
-			return 19+1;
+		if (factor % 105 == 0)
+			return 7+1;
+		if (factor % 115 == 0)
+			return 5+1;
 
-		return 23+1;
+		return 7+1;
 	}
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 

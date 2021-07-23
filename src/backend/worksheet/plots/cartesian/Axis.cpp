@@ -1834,13 +1834,18 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 //	QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
 
 	for (int i = 0; i < tempValues.size(); ++i) {
+		// check if rounded value differs too much
+		const double scale = std::abs(tickLabelValues.last() - tickLabelValues.first());
+		const double relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+		DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+		DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 		for (int j = 0; j < tempValues.size(); ++j) {
 			if (i == j)
 				continue;
 
-			// if duplicate for the current precision found, increase the precision and check again
+			// if duplicate for the current precision found or differs too much, increase the precision and check again
 			//DEBUG(Q_FUNC_INFO << ", compare " << tempValues.at(i) << " with " << tempValues.at(j))
-			if (tempValues.at(i) == tempValues.at(j)) {
+			if (tempValues.at(i) == tempValues.at(j) || relDiff > 0.01) {
 				//DEBUG(Q_FUNC_INFO << ", duplicates found : " << tempValues.at(i))
 				return upperLabelsPrecision(precision + 1, format);
 			}
