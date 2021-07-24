@@ -182,6 +182,7 @@ public:
 			m_start = qCeil(m_start / spacing) * spacing;
 			m_end = qFloor(m_end / spacing) * spacing;
 		}
+		DEBUG(Q_FUNC_INFO << ", new range : " << toStdString())
 	}
 /* Old version
  * void niceExtend(bool extend = true) {	// extend == false means shrink
