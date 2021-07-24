@@ -125,16 +125,24 @@ public:
 	Range<T>& operator+=(const T value) { m_start += value; m_end += value; return *this; }
 	Range<T>& operator*=(const T value) { m_start *= value; m_end *= value; return *this; }
 
-	//! Return a string in the format '[start, end]'
+	//! Return a string in the format 'start .. end' and uses system locale
 	QString toString() const {
 		if (m_format == Format::Numeric)
 			return QLocale().toString(m_start) + " .. " + QLocale().toString(m_end);
-			//return "[" + QLocale().toString(m_start) + "; " + QLocale().toString(m_end) + "]";
 		else
 			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " .. "
 				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
 	}
 	std::string toStdString() const { return STDSTRING(toString()); }
+	//! Return a string in the format 'start .. end' and uses number locale
+	QString toLocaleString() const {
+		SET_NUMBER_LOCALE
+		if (m_format == Format::Numeric)
+			return numberLocale.toString(m_start) + " .. " + numberLocale.toString(m_end);
+		else
+			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " .. "
+				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
+	}
 //extend/shrink range to nice numbers (used in auto scaling)
 	// get nice size to extend to (see Glassner: Graphic Gems)
 	double niceSize(double size, bool round) {
