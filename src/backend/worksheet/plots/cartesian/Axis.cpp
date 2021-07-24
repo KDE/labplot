@@ -1837,8 +1837,8 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 		// check if rounded value differs too much
 		const double scale = std::abs(tickLabelValues.last() - tickLabelValues.first());
 		const double relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
-		DEBUG(Q_FUNC_INFO << ", scale = " << scale)
-		DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
+		//DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+		//DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 		for (int j = 0; j < tempValues.size(); ++j) {
 			if (i == j)
 				continue;
@@ -1900,8 +1900,8 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		// return if rounded value differs too much
 		const double scale = std::abs(tickLabelValues.last() - tickLabelValues.first());
 		const double relDiff = std::abs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
-		DEBUG(Q_FUNC_INFO << ", scale = " << scale)
-		DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
+		//DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+		//DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 		if (relDiff > 0.01)	// > 1 %
 			return precision + 1;
 		for (int j = 0; j < tempValues.size(); ++j) {

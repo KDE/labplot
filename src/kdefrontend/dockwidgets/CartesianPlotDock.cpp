@@ -60,7 +60,7 @@ enum TwRangesColumn{
 
 #define CELLWIDGET(treewidget, rangeIndex, Column, castObject, function) \
 	if (rangeIndex < 0) { \
-		for (int i=0; i < ui.treewidget->rowCount(); i++) { \
+		for (int i = 0; i < ui.treewidget->rowCount(); i++) { \
 			auto obj = qobject_cast<castObject*>(ui.treewidget->cellWidget(i, Column)); \
 			if (obj) \
 				obj->function; \
@@ -500,12 +500,20 @@ void CartesianPlotDock::updateLocale() {
 
 		// x ranges
 		bool isDateTime{ false };
-		for (int row{0}; row < qMin(ui.twXRanges->rowCount(), m_plot->xRangeCount()); row++) {
+		for (int row = 0; row < qMin(ui.twXRanges->rowCount(), m_plot->xRangeCount()); row++) {
 			const auto xRange{ m_plot->xRangeFromIndex(row) };
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
+				auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
+				// save cursor position
+				int pos = le->cursorPosition();
 				CELLWIDGET(twXRanges, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(xRange.start())));
+				le->setCursorPosition(pos);
+				le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Max));
+				pos = le->cursorPosition();
 				CELLWIDGET(twXRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(xRange.end())));
+				le->setCursorPosition(pos);
+
 			} else {
 				CELLWIDGET(twXRanges, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime( QDateTime::fromMSecsSinceEpoch(xRange.start())));
 				CELLWIDGET(twXRanges, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime( QDateTime::fromMSecsSinceEpoch(xRange.start())));
@@ -523,19 +531,19 @@ void CartesianPlotDock::updateLocale() {
 
 		// y ranges
 		isDateTime = false;
-		for (int row{0}; row < qMin(ui.twYRanges->rowCount(), m_plot->yRangeCount()); row++) {
+		for (int row = 0; row < qMin(ui.twYRanges->rowCount(), m_plot->yRangeCount()); row++) {
 			const auto yRange{ m_plot->yRangeFromIndex(row) };
 			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
 				auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
-				if (le) {
-					QDEBUG(Q_FUNC_INFO << ", MIN SIZE = " << le->minimumSize())
-					QDEBUG(Q_FUNC_INFO << ", MIN SIZE HINT = " << le->minimumSizeHint())
-					QDEBUG(Q_FUNC_INFO << ", SIZE = " << le->size())
-					QDEBUG(Q_FUNC_INFO << ", SIZE HINT = " << le->sizeHint())
-				}
+				// save cursor position
+				int pos = le->cursorPosition();
 				CELLWIDGET(twYRanges, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(yRange.start())));
+				le->setCursorPosition(pos);
+				le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Max));
+				pos = le->cursorPosition();
 				CELLWIDGET(twYRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(yRange.end())));
+				le->setCursorPosition(pos);
 			} else {
 				CELLWIDGET(twYRanges, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime( QDateTime::fromMSecsSinceEpoch(yRange.start())));
 				CELLWIDGET(twYRanges, row, TwRangesColumn::Max, QDateTimeEdit, setDateTime( QDateTime::fromMSecsSinceEpoch(yRange.end())));
@@ -621,7 +629,7 @@ void CartesianPlotDock::updateXRangeList() {
 	DEBUG(Q_FUNC_INFO << ", x range count = " << xRangeCount)
 
 	ui.twXRanges->setRowCount(xRangeCount);
-	for (int i{0}; i < xRangeCount; i++) {
+	for (int i = 0; i < xRangeCount; i++) {
 		const auto xRange{ m_plot->xRangeFromIndex(i) };
 		const auto format{ xRange.format() };
 		const auto scale { xRange.scale() };
@@ -712,7 +720,7 @@ void CartesianPlotDock::updateYRangeList() {
 	DEBUG(Q_FUNC_INFO << ", y range count = " << yRangeCount)
 
 	ui.twYRanges->setRowCount(yRangeCount);
-	for (int i{0}; i < yRangeCount; i++) {
+	for (int i = 0; i < yRangeCount; i++) {
 		const auto yRange{ m_plot->yRangeFromIndex(i) };
 		const auto format{ yRange.format() };
 		const auto scale { yRange.scale() };
@@ -804,7 +812,7 @@ void CartesianPlotDock::updateYRangeList() {
 	updatePlotRangeList();	// update y ranges used in plot ranges
 
 	// enable/disable widgets
-	for (int i{0}; i < yRangeCount; i++) {
+	for (int i = 0; i < yRangeCount; i++) {
 		const bool checked{ m_plot->yRangeFromIndex(i).autoScale() };
 		CELLWIDGET(twYRanges, i, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
 		CELLWIDGET(twYRanges, i, TwRangesColumn::Min, QWidget, setEnabled(!checked));
@@ -1038,8 +1046,7 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 
 	for (auto* plot : m_plotList) {
 		int retransform = 0;
-		for (int i=0; i < plot->coordinateSystemCount(); i++)
-		{
+		for (int i = 0; i < plot->coordinateSystemCount(); i++) {
 			if (plot->coordinateSystem(i)->xIndex() == index) {
 				plot->setAutoScaleX(i, checked);
 				DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRangeFromIndex(index).autoScale())
@@ -1079,8 +1086,7 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 
 	for (auto* plot : m_plotList) {
 		int retransform = 0;
-		for (int i=0; i < plot->coordinateSystemCount(); i++)
-		{
+		for (int i = 0; i < plot->coordinateSystemCount(); i++) {
 			if (plot->coordinateSystem(i)->yIndex() == index) {
 				plot->setAutoScaleY(i, checked);
 				DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRangeFromIndex(index).autoScale())
