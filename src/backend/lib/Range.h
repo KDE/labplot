@@ -2,7 +2,7 @@
     File                 : Range.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    Copyright            : (C) 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    Copyright            : (C) 2020-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : basic data range class
 
  ***************************************************************************/
@@ -135,9 +135,56 @@ public:
 				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
 	}
 	std::string toStdString() const { return STDSTRING(toString()); }
-	//extend/shrink range to nice numbers (used in auto scaling)
+//extend/shrink range to nice numbers (used in auto scaling)
+	// get nice size to extend to (see Glassner: Graphic Gems)
+	double niceSize(double size, bool round) {
+		const double exponent = qFloor(log10(size));
+		const double fraction = size / qPow(10, exponent);
+
+		double niceFraction; // nice (rounded) fraction
+		if (round) {
+			if (fraction < 1.5)
+				niceFraction = 1;
+			else if (fraction < 3)
+				niceFraction = 2;
+			else if (fraction < 7)
+				niceFraction = 5;
+			else
+				niceFraction = 10;
+		} else {
+			if (fraction <= 1)
+				niceFraction = 1;
+			else if (fraction <= 2)
+				niceFraction = 2;
+			else if (fraction <= 5)
+				niceFraction = 5;
+			else
+				niceFraction = 10;
+		}
+		DEBUG(Q_FUNC_INFO << ", fraction = " << fraction);
+		DEBUG(Q_FUNC_INFO << ", nice fraction = " << niceFraction);
+
+		return niceFraction * qPow(10, exponent);
+	}
 	void niceShrink() { niceExtend(false); }
 	void niceExtend(bool extend = true) {	// extend == false means shrink
+		if (length() == 0)
+			return;
+
+		const double newSize = niceSize(size(), false);
+		DEBUG(Q_FUNC_INFO << ", new size = " << newSize);
+		const double maxTicks = 10;	// TODO: parameter?
+		const double spacing = niceSize(newSize / (maxTicks - 1), true);
+		if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
+			m_start = qFloor(m_start / spacing) * spacing;
+			m_end = qCeil(m_end / spacing) * spacing;
+		} else {
+			m_start = qCeil(m_start / spacing) * spacing;
+			m_end = qFloor(m_end / spacing) * spacing;
+		}
+	}
+/* Old version
+ * void niceExtend(bool extend = true) {	// extend == false means shrink
 		if (length() == 0)
 			return;
 		DEBUG(Q_FUNC_INFO << ", range : " << toStdString() << ", size = " << size())
@@ -209,6 +256,7 @@ public:
 
 		DEBUG(Q_FUNC_INFO << ", new range : " << toStdString())
 	}
+*/
 	int autoTickCount() const {
 		if (length() == 0)
 			return 0;
