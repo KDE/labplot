@@ -145,6 +145,10 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.dateTimeEditStart, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::startDateTimeChanged);
 	connect(ui.dateTimeEditEnd, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::endDateTimeChanged);
 	connect(ui.leZeroOffset, &KLineEdit::textChanged, this, &AxisDock::zeroOffsetChanged);
+	connect(ui.tbOffsetLeft, &QToolButton::clicked, this, &AxisDock::setLeftOffset);
+	connect(ui.tbOffsetCenter, &QToolButton::clicked, this, &AxisDock::setCenterOffset);
+	connect(ui.tbOffsetRight, &QToolButton::clicked, this, &AxisDock::setRightOffset);
+
 	connect(ui.leScalingFactor, &KLineEdit::textChanged, this, &AxisDock::scalingFactorChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
 
@@ -874,6 +878,21 @@ void AxisDock::zeroOffsetChanged() {
 	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
 		axis->setZeroOffset(offset);
+}
+
+void AxisDock::setOffset(double offset) {
+	DEBUG(Q_FUNC_INFO << ", offset = " << offset)
+	SET_NUMBER_LOCALE
+	ui.leZeroOffset->setText(numberLocale.toString(-offset));
+}
+void AxisDock::setLeftOffset() {
+	setOffset(m_axis->range().start());
+}
+void AxisDock::setCenterOffset() {
+	setOffset(m_axis->range().center());
+}
+void AxisDock::setRightOffset() {
+	setOffset(m_axis->range().end());
 }
 
 void AxisDock::scalingFactorChanged() {
