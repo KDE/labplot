@@ -75,6 +75,7 @@ void BoxPlot::init() {
 	KConfigGroup group = config.group("BoxPlot");
 
 	//general
+	d->ordering = (BoxPlot::Ordering) group.readEntry("Ordering", (int)BoxPlot::Ordering::None);
 	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::WhiskersType::IQR);
 	d->orientation = (BoxPlot::Orientation) group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
 	d->variableWidth = group.readEntry("VariableWidth", false);
@@ -234,6 +235,7 @@ void BoxPlot::setHover(bool on) {
 /* ============================ getter methods ================= */
 //general
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Ordering, ordering, ordering)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, variableWidth, variableWidth)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, widthFactor, widthFactor)
@@ -330,6 +332,13 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 			//TODO: add disconnect in the undo-function
 		}
 	}
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrdering, BoxPlot::Ordering, ordering, recalc);
+void BoxPlot::setOrdering(BoxPlot::Ordering ordering) {
+	Q_D(BoxPlot);
+	if (ordering != d->ordering)
+		exec(new BoxPlotSetOrderingCmd(d, ordering, ki18n("%1: set ordering")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrientation, BoxPlot::Orientation, orientation, recalc);
@@ -653,6 +662,37 @@ void BoxPlotPrivate::recalc() {
 		m_widthScaleFactor = std::sqrt(m_widthScaleFactor);
 	}
 
+	if (ordering == BoxPlot::Ordering::None)
+		dataColumnsOrdered = dataColumns;
+	else {
+		std::vector<std::pair<double, int>> newOrdering;
+
+		if (ordering == BoxPlot::Ordering::MedianAscending
+			|| ordering == BoxPlot::Ordering::MedianDescending) {
+			for (int i = 0; i < count; ++i) {
+				auto* column = static_cast<const Column*>(dataColumns.at(i));
+				newOrdering.push_back(std::make_pair(column->statistics().median, i));
+			}
+		} else {
+			for (int i = 0; i < count; ++i) {
+				auto* column = static_cast<const Column*>(dataColumns.at(i));
+				newOrdering.push_back(std::make_pair(column->statistics().arithmeticMean, i));
+			}
+		}
+
+		std::sort(newOrdering.begin(), newOrdering.end());
+		dataColumnsOrdered.clear();
+
+		if (ordering == BoxPlot::Ordering::MedianAscending
+			|| ordering == BoxPlot::Ordering::MeanAscending) {
+			for (int i = 0; i < count; ++i)
+				dataColumnsOrdered << dataColumns.at(newOrdering.at(i).second);
+		} else {
+			for (int i = count - 1; i >= 0; --i)
+				dataColumnsOrdered << dataColumns.at(newOrdering.at(i).second);
+		}
+	}
+
 	for (int i = 0; i < count; ++i)
 		recalc(i);
 
@@ -688,7 +728,7 @@ QPointF BoxPlotPrivate::setOutlierPoint(double pos, double value) {
 
 void BoxPlotPrivate::recalc(int index) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalc(index)");
-	auto* column = static_cast<const Column*>(dataColumns.at(index));
+	auto* column = static_cast<const Column*>(dataColumnsOrdered.at(index));
 	if (!column)
 		return;
 
@@ -864,7 +904,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		lines << QLineF(xMaxBox, yMinBox, xMinBox, yMinBox);
 		lines << QLineF(xMinBox, yMinBox, xMinBox, yMaxBox);
 	} else {
-		auto* column = static_cast<const Column*>(dataColumns.at(index));
+		auto* column = static_cast<const Column*>(dataColumnsOrdered.at(index));
 		const auto& statistics = column->statistics();
 		const double notch = 1.7*1.25*statistics.iqr/1.35/std::sqrt(statistics.size);
 		const double notchMax = median + notch ;
@@ -985,7 +1025,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		lines << QLineF(xMaxBox, yMinBox, xMinBox, yMinBox);
 		lines << QLineF(xMinBox, yMinBox, xMinBox, yMaxBox);
 	} else {
-		auto* column = static_cast<const Column*>(dataColumns.at(index));
+		auto* column = static_cast<const Column*>(dataColumnsOrdered.at(index));
 		const auto& statistics = column->statistics();
 		const double notch = 1.7*1.25*statistics.iqr/1.35/std::sqrt(statistics.size);
 		const double notchMax = median + notch ;
@@ -1141,9 +1181,9 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	m_boxPlotShape = QPainterPath();
 
-	for (int i = 0; i < dataColumns.size(); ++i) {
-		if (!dataColumns.at(i)
-			|| static_cast<const Column*>(dataColumns.at(i))->statistics().size == 0)
+	for (int i = 0; i < dataColumnsOrdered.size(); ++i) {
+		if (!dataColumnsOrdered.at(i)
+			|| static_cast<const Column*>(dataColumnsOrdered.at(i))->statistics().size == 0)
 			continue;
 
 		QPainterPath boxPath;
@@ -1251,12 +1291,12 @@ void BoxPlotPrivate::updatePixmap() {
 void BoxPlotPrivate::draw(QPainter* painter) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::draw()");
 
-	for (int i = 0; i < dataColumns.size(); ++i) {
-		if (!dataColumns.at(i))
+	for (int i = 0; i < dataColumnsOrdered.size(); ++i) {
+		if (!dataColumnsOrdered.at(i))
 			continue;
 
 		//no need to draw anything if the column doesn't have any valid values
-		if (static_cast<const Column*>(dataColumns.at(i))->statistics().size == 0)
+		if (static_cast<const Column*>(dataColumnsOrdered.at(i))->statistics().size == 0)
 			continue;
 
 		if (!m_boxRect.at(i).isEmpty()) {
@@ -1560,6 +1600,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement("general");
+	writer->writeAttribute("ordering", QString::number(static_cast<int>(d->ordering)));
 	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
 	writer->writeAttribute("variableWidth", QString::number(d->variableWidth));
 	writer->writeAttribute("widthFactor", QString::number(d->widthFactor));
@@ -1647,6 +1688,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE("ordering", ordering, BoxPlot::Ordering);
 			READ_INT_VALUE("orientation", orientation, BoxPlot::Orientation);
 			READ_INT_VALUE("variableWidth", variableWidth, bool);
 			READ_DOUBLE_VALUE("widthFactor", widthFactor);

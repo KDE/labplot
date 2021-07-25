@@ -304,6 +304,9 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
  * \param aspect
  */
 void Project::aspectAddedSlot(const AbstractAspect* aspect) {
+	if(isLoading())
+		return;
+
 	//check whether new columns were added and if yes,
 	//update the dependencies in the project
 	QVector<const AbstractColumn*> columns;

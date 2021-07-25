@@ -60,8 +60,10 @@ public:
 
 	//General
 	QVector<const AbstractColumn*> dataColumns;
+	QVector<const AbstractColumn*> dataColumnsOrdered;
 	QVector<QString> dataColumnPaths;
 	BoxPlot::Orientation orientation{BoxPlot::Orientation::Vertical};
+	BoxPlot::Ordering ordering{BoxPlot::Ordering::None};
 	bool variableWidth{false};
 	double widthFactor{1.0};
 	bool notchesEnabled{false};
