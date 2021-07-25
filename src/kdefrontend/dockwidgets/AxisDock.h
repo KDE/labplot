@@ -98,6 +98,8 @@ private slots:
 	void setCenterOffset();
 	void setRightOffset();
 	void scalingFactorChanged();
+	void setUnityScale();
+	void setUnityRange();
 
 	//Line-Tab
 	void lineStyleChanged(int);

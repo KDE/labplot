@@ -150,6 +150,8 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.tbOffsetRight, &QToolButton::clicked, this, &AxisDock::setRightOffset);
 
 	connect(ui.leScalingFactor, &KLineEdit::textChanged, this, &AxisDock::scalingFactorChanged);
+	connect(ui.tbUnityScale, &QToolButton::clicked, this, &AxisDock::setUnityScale);
+	connect(ui.tbUnityRange, &QToolButton::clicked, this, &AxisDock::setUnityRange);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
 
 	//"Line"-tab
@@ -881,7 +883,6 @@ void AxisDock::zeroOffsetChanged() {
 }
 
 void AxisDock::setOffset(double offset) {
-	DEBUG(Q_FUNC_INFO << ", offset = " << offset)
 	SET_NUMBER_LOCALE
 	ui.leZeroOffset->setText(numberLocale.toString(-offset));
 }
@@ -917,6 +918,16 @@ void AxisDock::scalingFactorChanged() {
 		for (auto* axis : m_axesList)
 			axis->setScalingFactor(scalingFactor);
 	}
+}
+void AxisDock::setUnityScale() {
+	SET_NUMBER_LOCALE
+	ui.leScalingFactor->setText(numberLocale.toString(1./m_axis->range().size()));
+}
+// set scale and offset to get a range of 0 .. 1
+void AxisDock::setUnityRange() {
+	SET_NUMBER_LOCALE
+	ui.leScalingFactor->setText(numberLocale.toString(1./m_axis->range().size()));
+	ui.leZeroOffset->setText(numberLocale.toString(-m_axis->range().start()/m_axis->range().size()));
 }
 
 // "Line"-tab

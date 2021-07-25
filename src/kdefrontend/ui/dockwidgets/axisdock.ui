@@ -125,9 +125,6 @@
        <item row="19" column="2">
         <widget class="QComboBox" name="cbPlotRanges"/>
        </item>
-       <item row="17" column="2">
-        <widget class="KLineEdit" name="leScalingFactor"/>
-       </item>
        <item row="8" column="2">
         <widget class="KComboBox" name="cbScale"/>
        </item>
@@ -325,6 +322,27 @@
             <iconset theme="align-horizontal-right">
              <normaloff/>
             </iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="17" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="KLineEdit" name="leScalingFactor"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbUnityScale">
+           <property name="text">
+            <string>1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbUnityRange">
+           <property name="text">
+            <string>0 .. 1</string>
            </property>
           </widget>
          </item>
