@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>326</width>
+    <width>365</width>
     <height>888</height>
    </rect>
   </property>
@@ -24,6 +24,39 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
+       <item row="10" column="2">
+        <widget class="QCheckBox" name="chkNotches">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QLineEdit" name="leName"/>
+       </item>
+       <item row="8" column="2">
+        <widget class="KComboBox" name="cbOrientation"/>
+       </item>
+       <item row="4" column="2">
+        <widget class="QFrame" name="frameDataColumns">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lComment">
+         <property name="text">
+          <string>Comment:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
        <item row="5" column="0">
         <spacer name="verticalSpacer_8">
          <property name="orientation">
@@ -40,28 +73,19 @@
          </property>
         </spacer>
        </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="lWhiskersType">
+       <item row="12" column="0">
+        <widget class="QCheckBox" name="chkVisible">
          <property name="text">
-          <string>Whiskers:</string>
+          <string>Visible</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="ResizableTextEdit" name="teComment"/>
-       </item>
-       <item row="10" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
+       <item row="9" column="2">
+        <widget class="QCheckBox" name="chkVariableWidth">
+         <property name="text">
+          <string/>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>420</height>
-          </size>
-         </property>
-        </spacer>
+        </widget>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="lName">
@@ -70,30 +94,10 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="2">
-        <widget class="KComboBox" name="cbOrientation"/>
-       </item>
-       <item row="11" column="0">
-        <widget class="QCheckBox" name="chkVisible">
+       <item row="9" column="0">
+        <widget class="QLabel" name="lVariableWidth">
          <property name="text">
-          <string>Visible</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lComment">
-         <property name="text">
-          <string>Comment:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="lOrientation">
-         <property name="text">
-          <string>Direction:</string>
+          <string>Variable Width:</string>
          </property>
         </widget>
        </item>
@@ -109,45 +113,6 @@
           <string>Data</string>
          </property>
         </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="KComboBox" name="cbWhiskersType"/>
-       </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer_8">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>13</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="2">
-        <widget class="QFrame" name="frameDataColumns">
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="QCheckBox" name="chkVariableWidth">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="leName"/>
        </item>
        <item row="2" column="0">
         <spacer name="verticalSpacer_7">
@@ -165,6 +130,39 @@
          </property>
         </spacer>
        </item>
+       <item row="0" column="1">
+        <spacer name="horizontalSpacer_8">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>13</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="2">
+        <widget class="ResizableTextEdit" name="teComment"/>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLabel" name="lWhiskersType">
+         <property name="text">
+          <string>Whiskers:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0">
+        <widget class="QLabel" name="lNotches">
+         <property name="text">
+          <string>Notches</string>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="0">
         <widget class="QLabel" name="lDataColumn">
          <property name="text">
@@ -175,26 +173,38 @@
          </property>
         </widget>
        </item>
+       <item row="11" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>420</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="8" column="0">
-        <widget class="QLabel" name="lVariableWidth">
+        <widget class="QLabel" name="lOrientation">
          <property name="text">
-          <string>Variable Width:</string>
+          <string>Direction:</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="lNotches">
+       <item row="7" column="2">
+        <widget class="KComboBox" name="cbWhiskersType"/>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="lOrdering">
          <property name="text">
-          <string>Notches</string>
+          <string>Ordering:</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="2">
-        <widget class="QCheckBox" name="chkNotches">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
+       <item row="6" column="2">
+        <widget class="QComboBox" name="cbOrdering"/>
        </item>
       </layout>
      </widget>
@@ -655,7 +665,7 @@
       <attribute name="title">
        <string>Markers</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout">
+      <layout class="QGridLayout" name="gridLayout_5">
        <item row="0" column="0">
         <widget class="QLabel" name="lSymbolCategory">
          <property name="font">
@@ -672,22 +682,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>10</width>
-           <height>23</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="0" column="2">
         <widget class="QFrame" name="frameSymbolCategory">
          <property name="sizePolicy">
@@ -703,18 +697,6 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
           <item>
            <widget class="QRadioButton" name="rbMean">
             <property name="text">
@@ -742,6 +724,29 @@
           <item>
            <widget class="QRadioButton" name="rbJitter">
             <property name="text">
+             <string>Data</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>10</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkJitteringEnabled">
+            <property name="text">
              <string>Jitter</string>
             </property>
            </widget>
@@ -749,7 +754,23 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0">
+       <item row="1" column="1">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>23</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="0">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

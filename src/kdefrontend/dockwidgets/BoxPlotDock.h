@@ -72,6 +72,7 @@ private slots:
 	void addDataColumn();
 	void removeDataColumn();
 	void dataColumnChanged(const QModelIndex&) const;
+	void orderingChanged(int) const;
 	void orientationChanged(int) const;
 	void variableWidthChanged(bool) const;
 	void notchesEnabledChanged(bool) const;
@@ -104,8 +105,9 @@ private slots:
 	void medianLineWidthChanged(double) const;
 	void medianLineOpacityChanged(int) const;
 
-	//makers
+	//symbols
 	void symbolCategoryChanged();
+	void jitteringEnabledChanged(int) const;
 
 	//whiskers
 	void whiskersTypeChanged(int) const;
@@ -119,6 +121,7 @@ private slots:
 	//general
 	void plotDescriptionChanged(const AbstractAspect*);
 	void plotDataColumnsChanged(const QVector<const AbstractColumn*>&);
+	void plotOrderingChanged(BoxPlot::Ordering);
 	void plotOrientationChanged(BoxPlot::Orientation);
 	void plotVariableWidthChanged(bool);
 	void plotWidthFactorChanged(double);
@@ -143,6 +146,9 @@ private slots:
 	//median line
 	void plotMedianLinePenChanged(QPen&);
 	void plotMedianLineOpacityChanged(float);
+
+	//symbols
+	void plotJitteringEnabledChanged(bool);
 
 	//whiskers
 	void plotWhiskersTypeChanged(BoxPlot::WhiskersType);

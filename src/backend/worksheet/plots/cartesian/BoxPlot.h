@@ -91,7 +91,7 @@ public:
 	Symbol* symbolMean() const;
 	Symbol* symbolOutlier() const;
 	Symbol* symbolFarOut() const;
-	Symbol* symbolJitter() const;
+	Symbol* symbolData() const;
 	BASIC_D_ACCESSOR_DECL(bool, jitteringEnabled, JitteringEnabled)
 
 	//whiskers
