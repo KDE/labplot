@@ -128,6 +128,7 @@ void BoxPlot::init() {
 	d->symbolFarOut->init(group);
 	d->symbolFarOut->setStyle(Symbol::Style::Plus);
 
+	d->jitteringEnabled = group.readEntry("JitteringEnabled", true);
 	d->symbolJitter = new Symbol("symbolJitter");
 	addChild(d->symbolJitter);
 	d->symbolJitter->setHidden(true);
@@ -273,6 +274,8 @@ Symbol* BoxPlot::symbolFarOut() const {
 	Q_D(const BoxPlot);
 	return d->symbolFarOut;
 }
+
+BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, jitteringEnabled, jitteringEnabled)
 
 Symbol* BoxPlot::symbolJitter() const {
 	Q_D(const BoxPlot);
@@ -490,6 +493,14 @@ void BoxPlot::setWhiskersCapSize(double size) {
 	Q_D(BoxPlot);
 	if (size != d->whiskersCapSize)
 		exec(new BoxPlotSetWhiskersCapSizeCmd(d, size, ki18n("%1: set whiskers cap size")));
+}
+
+//Symbols
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetJitteringEnabled, bool, jitteringEnabled, recalc)
+void BoxPlot::setJitteringEnabled(bool enabled) {
+	Q_D(BoxPlot);
+	if (enabled != d->jitteringEnabled)
+		exec(new BoxPlotSetJitteringEnabledCmd(d, enabled, ki18n("%1: jitterring changed")));
 }
 
 //##############################################################################
@@ -807,7 +818,9 @@ void BoxPlotPrivate::recalc(int index) {
 			else
 				m_outlierPointsLogical[index] << setOutlierPoint(x, value);;
 		} else {
-			double rand = (double)std::rand() / ((double)RAND_MAX + 1);
+			double rand = 0.5;
+			if (jitteringEnabled)
+				rand = (double)std::rand() / ((double)RAND_MAX + 1);
 			if (orientation == BoxPlot::Orientation::Vertical)
 				m_jitterPointsLogical[index] << QPointF(m_xMinBox[index] + rand*width, value);
 			else
@@ -1551,6 +1564,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("variableWidth", QString::number(d->variableWidth));
 	writer->writeAttribute("widthFactor", QString::number(d->widthFactor));
 	writer->writeAttribute("notches", QString::number(d->notchesEnabled));
+	writer->writeAttribute("jitteringEnabled", QString::number(d->jitteringEnabled));
 	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
 	writer->writeAttribute("xMin", QString::number(d->xMin));
 	writer->writeAttribute("xMax", QString::number(d->xMax));
@@ -1637,6 +1651,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("variableWidth", variableWidth, bool);
 			READ_DOUBLE_VALUE("widthFactor", widthFactor);
 			READ_INT_VALUE("notches", notchesEnabled, bool);
+			READ_INT_VALUE("jitteringEnabled", jitteringEnabled, bool);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 			READ_DOUBLE_VALUE("xMin", xMin);

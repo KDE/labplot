@@ -96,6 +96,7 @@ public:
 	Symbol* symbolOutlier{nullptr};
 	Symbol* symbolFarOut{nullptr};
 	Symbol* symbolJitter{nullptr};
+	bool jitteringEnabled{true};
 
 	//whiskers
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
