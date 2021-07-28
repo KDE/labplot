@@ -539,8 +539,11 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetRange, Range<double>, range, retransform);
 void Axis::setRange(Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString())
 	Q_D(Axis);
-	if (range != d->range)
+	if (range != d->range) {
 		exec(new AxisSetRangeCmd(d, range, ki18n("%1: set axis range")));
+		// auto set tick count when changing range (only changed here)
+		setMajorTicksNumber(d->range.autoTickCount());
+	}
 }
 void Axis::setStart(double min) {
 	Q_D(Axis);
@@ -645,6 +648,7 @@ void Axis::setMajorTicksType(TicksType majorTicksType) {
 }
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retransformTicks);
 void Axis::setMajorTicksNumber(int majorTicksNumber) {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(Axis);
 	if (majorTicksNumber != d->majorTicksNumber)
 		exec(new AxisSetMajorTicksNumberCmd(d, majorTicksNumber, ki18n("%1: set the total number of the major ticks")));

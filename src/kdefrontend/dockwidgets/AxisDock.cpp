@@ -1133,6 +1133,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 }
 
 void AxisDock::majorTicksNumberChanged(int value) {
+	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
 
@@ -2021,6 +2022,7 @@ void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
 	m_initializing = false;
 }
 void AxisDock::axisMajorTicksNumberChanged(int number) {
+	DEBUG(Q_FUNC_INFO)
 	m_initializing = true;
 	ui.sbMajorTicksNumber->setValue(number);
 	m_initializing = false;
