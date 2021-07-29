@@ -271,10 +271,10 @@ public:
 		if (length() == 0)
 			return 0;
 
-		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", size = " << size())
-		const double order = pow(10.0, qFloor(log10(size())));;
+		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", length() = " << length())
+		const double order = pow(10.0, qFloor(log10(length())));;
 		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order)
-		const int factor = qRound(100 * size() / order);
+		const int factor = qRound(100 * length() / order);
 		DEBUG(Q_FUNC_INFO << ", factor = " << factor)
 
 		// set number of ticks for certain multiple of small numbers
