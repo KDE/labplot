@@ -1296,7 +1296,7 @@ void AxisPrivate::retransformTicks() {
 			break;
 		case RangeT::Scale::Sqrt:
 			if (start >=0. && end >= 0.)
-				majorTicksIncrement = sqrt(end) - sqrt(start);
+				majorTicksIncrement = qSqrt(end) - qSqrt(start);
 			break;
 		case RangeT::Scale::Square:
 			majorTicksIncrement = end*end - start*start;
@@ -1328,11 +1328,11 @@ void AxisPrivate::retransformTicks() {
 			break;
 		case RangeT::Scale::Ln:
 			if (start != 0. && end/start > 0.)
-				tmpMajorTicksNumber = qRound( log(end/start) / majorTicksIncrement + 1 );
+				tmpMajorTicksNumber = qRound( qLn(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Sqrt:
 			if (start >= 0. && end >= 0.)
-				tmpMajorTicksNumber = qRound( (sqrt(end) - sqrt(start)) / majorTicksIncrement + 1 );
+				tmpMajorTicksNumber = qRound( (qSqrt(end) - qSqrt(start)) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Square:
 			tmpMajorTicksNumber = qRound( (end*end - start*start) / majorTicksIncrement + 1 );
@@ -1354,7 +1354,7 @@ void AxisPrivate::retransformTicks() {
 	}
 
 	// minor ticks
-	int tmpMinorTicksNumber{0};
+	int tmpMinorTicksNumber = 0;
 	switch (minorTicksType) {
 	case Axis::TicksType::TotalNumber:
 		tmpMinorTicksNumber = minorTicksNumber;
@@ -1369,13 +1369,8 @@ void AxisPrivate::retransformTicks() {
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
 	}
 
-	QPointF anchorPoint, startPoint, endPoint;
-	qreal majorTickPos = 0.0;
-	qreal minorTickPos;
-	qreal nextMajorTickPos = 0.0;
-
 	if (!q->cSystem) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no csystem!")
+		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")
 		return;
 	}
 //	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem->yIndex() };
@@ -1384,22 +1379,26 @@ void AxisPrivate::retransformTicks() {
 //	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
 //	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->xIndex() )
 
-	const int xDirection = q->cSystem->xDirection();
-	const int yDirection = q->cSystem->yDirection();
+	const int xRangeDirection = plot()->xRangeCSystem(q->coordinateSystemIndex()).direction();
+	const int yRangeDirection = plot()->yRangeCSystem(q->coordinateSystemIndex()).direction();
+	DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
+	const int xDirection = q->cSystem->xDirection() * xRangeDirection;
+	const int yDirection = q->cSystem->yDirection() * yRangeDirection;
 	DEBUG(Q_FUNC_INFO << ", x/y direction: " << xDirection << "/" << yDirection)
 
 	//calculate the position of the center point in scene coordinates,
 	//will be used later to differentiate between "in" and "out" depending
 	//on the position relative to the center.
-	const double middleX = plot()->xRangeCSystem(q->coordinateSystemIndex()).center();
-	const double middleY = plot()->yRangeCSystem(q->coordinateSystemIndex()).center();
+	const qreal middleX = plot()->xRangeCSystem(q->coordinateSystemIndex()).center();
+	const qreal middleY = plot()->yRangeCSystem(q->coordinateSystemIndex()).center();
 	QPointF center(middleX, middleY);
 	bool valid = true;
 	center = q->cSystem->mapLogicalToScene(center, valid);
 
-	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
 		DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
+		qreal majorTickPos = 0.0;
+		qreal nextMajorTickPos = 0.0;
 		//calculate major tick's position
 		if (majorTicksType != Axis::TicksType::CustomColumn) {
 			switch (scale) {
@@ -1411,24 +1410,24 @@ void AxisPrivate::retransformTicks() {
 				nextMajorTickPos = majorTickPos + majorTicksIncrement;
 				break;
 			case RangeT::Scale::Log10:
-				majorTickPos = start * pow(10, majorTicksIncrement * iMajor);
-				nextMajorTickPos = majorTickPos * pow(10, majorTicksIncrement);
+				majorTickPos = start * qPow(10, majorTicksIncrement * iMajor);
+				nextMajorTickPos = majorTickPos * qPow(10, majorTicksIncrement);
 				break;
 			case RangeT::Scale::Log2:
 				majorTickPos = start * exp2(majorTicksIncrement * iMajor);
 				nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
 				break;
 			case RangeT::Scale::Ln:
-				majorTickPos = start * exp(majorTicksIncrement * iMajor);
+				majorTickPos = start * qExp(majorTicksIncrement * iMajor);
 				nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
 				break;
 			case RangeT::Scale::Sqrt:
-				majorTickPos = pow(sqrt(start) + majorTicksIncrement * iMajor, 2);
-				nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement * (iMajor+1), 2);
+				majorTickPos = qPow(qSqrt(start) + majorTicksIncrement * iMajor, 2);
+				nextMajorTickPos = qPow(qSqrt(start) + majorTicksIncrement * (iMajor+1), 2);
 				break;
 			case RangeT::Scale::Square:
-				majorTickPos = sqrt(start*start + majorTicksIncrement * iMajor);
-				nextMajorTickPos = sqrt(start*start + majorTicksIncrement * (iMajor+1));
+				majorTickPos = qSqrt(start*start + majorTicksIncrement * iMajor);
+				nextMajorTickPos = qSqrt(start*start + majorTicksIncrement * (iMajor+1));
 				break;
 			case RangeT::Scale::Inverse:
 				majorTickPos = 1./(1./start + majorTicksIncrement * iMajor);
@@ -1447,13 +1446,14 @@ void AxisPrivate::retransformTicks() {
 				tmpMinorTicksNumber = 0;
 		}
 
-		double xAnchorPoint = 0.0;
-		double yAnchorPoint = 0.0;
+		qreal xAnchorPoint = 0.0;
+		qreal yAnchorPoint = 0.0;
 		if (!lines.isEmpty()) {
-			yAnchorPoint = lines.first().p1().y();
 			xAnchorPoint = lines.first().p1().x();
+			yAnchorPoint = lines.first().p1().y();
 		}
 
+		QPointF anchorPoint, startPoint, endPoint;
 		//calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks) {
 			if (orientation == Axis::Orientation::Horizontal) {
@@ -1463,12 +1463,13 @@ void AxisPrivate::retransformTicks() {
 				valid = transformAnchor(&anchorPoint);
 				anchorPoint.setY(yAnchorPoint);
 				if (valid) {
-					if (yAnchorPoint > center.y()) {
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
-						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
-					} else {
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut)  ? yDirection * majorTicksLength  : 0);
-						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
+					// for yDirection == -1 start is above end
+					if (anchorPoint.y() >= center.y()) {	// below
+						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? yDirection * majorTicksLength : 0);
+						endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
+					} else {				// above
+						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? yDirection * majorTicksLength : 0);
+						endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
 					}
 				}
 			} else { // vertical
@@ -1478,17 +1479,18 @@ void AxisPrivate::retransformTicks() {
 				valid = transformAnchor(&anchorPoint);
 				anchorPoint.setX(xAnchorPoint);
 				if (valid) {
-					if (xAnchorPoint < center.x()) {
-						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
+					// for xDirection == 1 start is right of end
+					if (anchorPoint.x() < center.x()) {	// left
+						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? xDirection * majorTicksLength : 0, 0);
 						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
-					} else {
+					} else {				// right
 						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? xDirection * majorTicksLength : 0, 0);
-						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? -xDirection *  majorTicksLength  : 0, 0);
+						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? -xDirection *  majorTicksLength : 0, 0);
 					}
 				}
 			}
 
-			double value = scalingFactor * majorTickPos + zeroOffset;
+			const qreal value = scalingFactor * majorTickPos + zeroOffset;
 			DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
 
 			//if custom column is used, we can have duplicated values in it and we need only unique values
@@ -1536,6 +1538,7 @@ void AxisPrivate::retransformTicks() {
 			//DEBUG("	majorTickPos = " << majorTickPos)
 			//DEBUG("	minorTicksIncrement = " << minorTicksIncrement)
 
+			qreal minorTickPos;
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				//calculate minor tick's position
 				if (minorTicksType != Axis::TicksType::CustomColumn) {
@@ -1552,7 +1555,7 @@ void AxisPrivate::retransformTicks() {
 				}
 				//DEBUG("		minorTickPos = " << minorTickPos)
 
-				//calculate start and end points for minor tick's line
+				//calculate start and end points for minor tick's line (same as major ticks)
 				if (orientation == Axis::Orientation::Horizontal) {
 					auto startY = q->plot()->yRangeCSystem(q->coordinateSystemIndex()).start();
 					anchorPoint.setX(minorTickPos);
@@ -1560,12 +1563,12 @@ void AxisPrivate::retransformTicks() {
 					valid = transformAnchor(&anchorPoint);
 					anchorPoint.setY(yAnchorPoint);
 					if (valid) {
-						if (yAnchorPoint > center.y()) {
-							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
-							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
+						if (anchorPoint.y() >= center.y()) { // below
+							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? yDirection * minorTicksLength : 0);
+							endPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
 						} else {
-							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut)  ? yDirection * minorTicksLength  : 0);
-							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? -yDirection * minorTicksLength : 0);
+							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? yDirection * minorTicksLength : 0);
+							endPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? -yDirection * minorTicksLength : 0);
 						}
 					}
 				} else { // vertical
@@ -1575,12 +1578,12 @@ void AxisPrivate::retransformTicks() {
 					valid = transformAnchor(&anchorPoint);
 					anchorPoint.setX(xAnchorPoint);
 					if (valid) {
-						if (xAnchorPoint < center.x()) {
-							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
-							endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
+						if (anchorPoint.x() < center.x()) {
+							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? xDirection * minorTicksLength : 0, 0);
+							endPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
 						} else {
-							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut)  ? xDirection * minorTicksLength  : 0, 0);
-							endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? -xDirection * minorTicksLength : 0, 0);
+							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? xDirection * minorTicksLength : 0, 0);
+							endPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? -xDirection * minorTicksLength : 0, 0);
 						}
 					}
 				}
@@ -1943,21 +1946,19 @@ void AxisPrivate::retransformTickLabelPositions() {
 //	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
 	const double middleX = plot()->xRangeCSystem(q->coordinateSystemIndex()).center();
 	const double middleY = plot()->yRangeCSystem(q->coordinateSystemIndex()).center();
-	const int xDirection = q->cSystem->xDirection();
-	const int yDirection = q->cSystem->yDirection();
-
-	QPointF startPoint, endPoint, anchorPoint;
+	QPointF center(middleX, middleY);
+	bool valid = true;
+	center = q->cSystem->mapLogicalToScene(center, valid);
 
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
-	// TODO: M_PI/180. factor
-	const double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
-	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
+	const double cosine = qCos( qDegreesToRadians(labelsRotationAngle) ); // calculate only once
+	const double sine = qSin( qDegreesToRadians(labelsRotationAngle) ); // calculate only once
 
-	int size = qMin(majorTickPoints.size(), tickLabelStrings.size());
 	auto xRangeFormat{ plot()->xRangeCSystem(q->coordinateSystemIndex()).format() };
 	auto yRangeFormat{ plot()->yRangeCSystem(q->coordinateSystemIndex()).format() };
-	for ( int i = 0; i < size; i++ ) {
+	const int nrOfTicks = qMin(majorTickPoints.size(), tickLabelStrings.size());
+	for (int i = 0; i < nrOfTicks; i++) {
 		if ((orientation == Axis::Orientation::Horizontal && xRangeFormat == RangeT::Format::Numeric) ||
 		        (orientation == Axis::Orientation::Vertical && yRangeFormat == RangeT::Format::Numeric)) {
 			if (labelsFormat == Axis::LabelsFormat::Decimal || labelsFormat == Axis::LabelsFormat::ScientificE) {
@@ -1973,20 +1974,27 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 		const double diffx = cosine * width;
 		const double diffy = sine * width;
-		anchorPoint = majorTickPoints.at(i);
+		QPointF anchorPoint = majorTickPoints.at(i);
 
 		//center align all labels with respect to the end point of the tick line
+		const int xRangeDirection = plot()->xRangeCSystem(q->coordinateSystemIndex()).direction();
+		const int yRangeDirection = plot()->yRangeCSystem(q->coordinateSystemIndex()).direction();
+		DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
+		const int xDirection = q->cSystem->xDirection() * xRangeDirection;
+		const int yDirection = q->cSystem->yDirection() * yRangeDirection;
+		DEBUG(Q_FUNC_INFO << ", x/y direction = " << xDirection << "/" << yDirection)
+		QPointF startPoint, endPoint;
 		if (orientation == Axis::Orientation::Horizontal) {
-			if (offset < middleY) {
-				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
-				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
-			} else {
-				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut)  ? yDirection * majorTicksLength  : 0);
-				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
+			if (anchorPoint.y() >= center.y()) {	// below
+				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? yDirection * majorTicksLength : 0);
+				endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
+			} else {				// above
+				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? yDirection * majorTicksLength : 0);
+				endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
 			}
 
 			// for rotated labels (angle is not zero), align label's corner at the position of the tick
-			if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
+			if (qAbs(qAbs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() + width/2);
 					pos.setY(endPoint.y() + labelsOffset );
@@ -2019,17 +2027,16 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() - labelsOffset);
 				}
 			}
-			// ---------------------- vertical -------------------------
-		} else {
-			if (offset < middleX) {
-				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
+		} else {	// ---------------------- vertical -------------------------
+			if (anchorPoint.x() < center.x()) {
+				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? xDirection * majorTicksLength : 0, 0);
 				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
 			} else {
 				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? xDirection * majorTicksLength : 0, 0);
-				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? -xDirection *  majorTicksLength  : 0, 0);
+				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? -xDirection * majorTicksLength : 0, 0);
 			}
 
-			if (fabs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
+			if (qAbs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() + width/2 );
@@ -2037,7 +2044,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() + width/2);
 				}
-			} else if (fabs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
+			} else if (qAbs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset - height);
 					pos.setY(endPoint.y() - width/2);
@@ -2045,7 +2052,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() - width/2);
 				}
-			} else if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
+			} else if (qAbs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() - height/2);
@@ -2053,7 +2060,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset + width);
 					pos.setY(startPoint.y() - height/2);
 				}
-			} else if (fabs(labelsRotationAngle) >= 0.01 && fabs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
+			} else if (qAbs(labelsRotationAngle) >= 0.01 && fabs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
 					pos.setX(endPoint.x() - labelsOffset - diffx + sine * height/2);
@@ -2062,7 +2069,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset + sine * height/2);
 					pos.setY(startPoint.y() + cosine * height/2);
 				}
-			} else if (fabs(labelsRotationAngle) >= 90.01 && fabs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
+			} else if (qAbs(labelsRotationAngle) >= 90.01 && fabs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
 					pos.setX(endPoint.x() - labelsOffset + sine * height/2);
