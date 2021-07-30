@@ -137,9 +137,10 @@ void Axis::init() {
 	d->offset = group.readEntry("PositionOffset", 0);
 	d->scale = (RangeT::Scale) group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
 	d->autoScale = group.readEntry("AutoScale", true);
-	d->range = Range<double>(group.readEntry("Start", 0), group.readEntry("End", 10));
+	d->range = Range<double>(group.readEntry("Start", 0.), group.readEntry("End", 10.));	// not auto ticked of already set to 1. here!
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
+	d->showScaleOffset = group.readEntry("ShowScaleOffset", true);
 
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int) Qt::SolidLine) );
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point) ) );
@@ -388,6 +389,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, Range<double>, range, range)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
+BASIC_SHARED_D_READER_IMPL(Axis, bool, showScaleOffset, showScaleOffset)
 BASIC_SHARED_D_READER_IMPL(Axis, double, logicalPosition, logicalPosition)
 
 BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title)
@@ -565,6 +567,12 @@ void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
 	if (zeroOffset != d->zeroOffset)
 		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, ki18n("%1: set axis zero offset")));
+}
+STD_SETTER_CMD_IMPL_F_S(Axis, ShowScaleOffset, bool, showScaleOffset, retransform);
+void Axis::setShowScaleOffset(bool b) {
+	Q_D(Axis);
+	if (b != d->showScaleOffset)
+		exec(new AxisShowScaleOffsetCmd(d, b, ki18n("%1: show scale and offset")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLogicalPosition, double, logicalPosition, retransform);
@@ -2398,7 +2406,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 		}
 
 		// scale + offset label
-		if (tickLabelPoints.size() > 0) {
+		if (showScaleOffset && tickLabelPoints.size() > 0) {
 			QString text;
 			SET_NUMBER_LOCALE
 			if (scalingFactor != 1)
@@ -2546,6 +2554,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "end", QString::number(d->range.end()) );
 	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
 	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
+	writer->writeAttribute( "showScaleOffset", QString::number(d->showScaleOffset) );
 	writer->writeAttribute( "titleOffsetX", QString::number(d->titleOffsetX) );
 	writer->writeAttribute( "titleOffsetY", QString::number(d->titleOffsetY) );
 	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
@@ -2660,6 +2669,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("end", range.end());
 			READ_DOUBLE_VALUE("scalingFactor", scalingFactor);
 			READ_DOUBLE_VALUE("zeroOffset", zeroOffset);
+			READ_INT_VALUE("showScaleOffset", showScaleOffset, bool);
 			READ_DOUBLE_VALUE("titleOffsetX", titleOffsetX);
 			READ_DOUBLE_VALUE("titleOffsetY", titleOffsetY);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);

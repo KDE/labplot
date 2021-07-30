@@ -130,6 +130,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, logicalPosition, LogicalPosition)
 	BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor)
 	BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset)
+	BASIC_D_ACCESSOR_DECL(bool, showScaleOffset, ShowScaleOffset)
 
 	POINTER_D_ACCESSOR_DECL(TextLabel, title, Title)
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetX, TitleOffsetX)
@@ -242,6 +243,7 @@ signals:
 	void endChanged(double);
 	void rangeChanged(Range<double>);
 	void zeroOffsetChanged(qreal);
+	void showScaleOffsetChanged(bool);
 	void logicalPositionChanged(double);
 	void scalingFactorChanged(qreal);
 

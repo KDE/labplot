@@ -94,6 +94,7 @@ private slots:
 	void startDateTimeChanged(const QDateTime&);
 	void endDateTimeChanged(const QDateTime&);
 	void zeroOffsetChanged();
+	void showScaleOffsetChanged();
 	void setLeftOffset();
 	void setCenterOffset();
 	void setRightOffset();
@@ -176,6 +177,7 @@ private slots:
 	void axisStartChanged(double);
 	void axisEndChanged(double);
 	void axisZeroOffsetChanged(qreal);
+	void axisShowScaleOffsetChanged(bool);
 	void axisScalingFactorChanged(qreal);
 
 	//line

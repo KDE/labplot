@@ -348,6 +348,16 @@
          </item>
         </layout>
        </item>
+       <item row="18" column="2">
+        <widget class="QCheckBox" name="chkShowScaleOffset">
+         <property name="toolTip">
+          <string>Show scale and offset beside axis</string>
+         </property>
+         <property name="text">
+          <string>Show scale and offset</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabTitle">
