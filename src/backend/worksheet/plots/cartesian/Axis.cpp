@@ -137,7 +137,7 @@ void Axis::init() {
 	d->offset = group.readEntry("PositionOffset", 0);
 	d->scale = (RangeT::Scale) group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
 	d->autoScale = group.readEntry("AutoScale", true);
-	d->range = Range<double>(group.readEntry("Start", 0.), group.readEntry("End", 10.));	// not auto ticked of already set to 1. here!
+	d->range = Range<double>(group.readEntry("Start", 0.), group.readEntry("End", 10.));	// not auto ticked if already set to 1 here!
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
 	d->showScaleOffset = group.readEntry("ShowScaleOffset", true);
