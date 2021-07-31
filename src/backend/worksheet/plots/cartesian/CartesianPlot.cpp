@@ -3375,57 +3375,59 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
 	Range<double> sceneRange, logicalRange;
-	QVector<CartesianScale*> scales;
-
-	const auto xRange{ xRanges.at(index) };
-	//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range is x range " << xRangeIndex+1)
-	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.range.toStdString())
-	//TODO: check ranges for nonlinear scales
-	if (xRange.range.scale() != RangeT::Scale::Linear)
-		checkXRange(index);
-
-	//check whether we have x-range breaks - the first break, if available, should be valid
-	bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
-	if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
-		sceneRange = plotSceneRange;
-		logicalRange = xRange.range;
-
-		//TODO: how should we handle the case sceneRange.length() == 0?
-		//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
-		if (sceneRange.length() > 0)
-			scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
-	} else {
-		double sceneEndLast = plotSceneRange.start();
-		double logicalEndLast = xRange.range.start();
-		for (const auto& rb : qAsConst(xRangeBreaks.list)) {
-			if (!rb.isValid())
-				break;
-
-			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
-			sceneRange.start() = sceneEndLast;
-			if (&rb == &xRangeBreaks.list.first()) sceneRange.start() += breakGap;
-			sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
-			logicalRange = Range<double>(logicalEndLast, rb.range.start());
-
-			if (sceneRange.length() > 0)
-				scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
-
-			sceneEndLast = sceneRange.end();
-			logicalEndLast = rb.range.end();
-		}
-
-		//add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
-		sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
-		logicalRange.setRange(logicalEndLast, xRange.range.end());
-
-		if (sceneRange.length() > 0)
-			scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
-	}
 
 	for (auto cSystem: coordinateSystems()) {
 		auto c = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if (c->xIndex() == index)
-			c->setXScales(scales);
+		if (c->xIndex() != index)
+			continue;
+
+		QVector<CartesianScale*> scales;
+
+		const auto xRange{ xRanges.at(index) };
+		//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range is x range " << xRangeIndex+1)
+		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.range.toStdString())
+		//TODO: check ranges for nonlinear scales
+		if (xRange.range.scale() != RangeT::Scale::Linear)
+			checkXRange(index);
+
+		//check whether we have x-range breaks - the first break, if available, should be valid
+		bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
+		if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
+			sceneRange = plotSceneRange;
+			logicalRange = xRange.range;
+
+			//TODO: how should we handle the case sceneRange.length() == 0?
+			//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
+			if (sceneRange.length() > 0)
+				scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
+		} else {
+			double sceneEndLast = plotSceneRange.start();
+			double logicalEndLast = xRange.range.start();
+			for (const auto& rb : qAsConst(xRangeBreaks.list)) {
+				if (!rb.isValid())
+					break;
+
+				//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
+				sceneRange.start() = sceneEndLast;
+				if (&rb == &xRangeBreaks.list.first()) sceneRange.start() += breakGap;
+				sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
+				logicalRange = Range<double>(logicalEndLast, rb.range.start());
+
+				if (sceneRange.length() > 0)
+					scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
+
+				sceneEndLast = sceneRange.end();
+				logicalEndLast = rb.range.end();
+			}
+
+			//add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
+			sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
+			logicalRange.setRange(logicalEndLast, xRange.range.end());
+
+			if (sceneRange.length() > 0)
+				scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
+		}
+		c->setXScales(scales);
 	}
 }
 
@@ -3433,55 +3435,56 @@ void CartesianPlotPrivate::retransformYScale(int index) {
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.y() + dataRect.height(), dataRect.y()};
 	Range<double> sceneRange, logicalRange;
-	QVector<CartesianScale*> scales;
-
-	const auto yRange{ yRanges.at(index) };
-	//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range is y range " << yRangeIndex+1)
-	DEBUG(Q_FUNC_INFO << ", yrange = " << yRange.range.toStdString())
-	//TODO: check ranges for nonlinear scales
-	if (yRange.range.scale() != RangeT::Scale::Linear)
-		checkYRange(index);
-
-	//check whether we have y-range breaks - the first break, if available, should be valid
-	bool hasValidBreak = (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty() && yRangeBreaks.list.first().isValid());
-	if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
-		sceneRange = plotSceneRange;
-		logicalRange = yRange.range;
-
-		if (sceneRange.length() > 0)
-			scales << this->createScale(yRange.range.scale(), sceneRange, logicalRange);
-	} else {
-		double sceneEndLast = plotSceneRange.start();
-		double logicalEndLast = yRange.range.start();
-		for (const auto& rb : qAsConst(yRangeBreaks.list)) {
-			if (!rb.isValid())
-				break;
-
-			//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
-			sceneRange.start() = sceneEndLast;
-			if (&rb == &yRangeBreaks.list.first()) sceneRange.start() -= breakGap;
-			sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
-			logicalRange = Range<double>(logicalEndLast, rb.range.start());
-
-			if (sceneRange.length() > 0)
-				scales << this->createScale(yRange.range.scale(), sceneRange, logicalRange);
-
-			sceneEndLast = sceneRange.end();
-			logicalEndLast = rb.range.end();
-		}
-
-		//add the remaining range going from the last available range break to the end of the plot (=end of the y-data range)
-		sceneRange.setRange(sceneEndLast - breakGap, plotSceneRange.end());
-		logicalRange.setRange(logicalEndLast, yRange.range.end());
-
-		if (sceneRange.length() > 0)
-			scales << this->createScale(yRange.range.scale(), sceneRange, logicalRange);
-	}
 
 	for (auto cSystem: coordinateSystems()) {
 		auto c = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if (c->yIndex() == index)
-			c->setYScales(scales);
+		if (c->yIndex() != index)
+			continue;
+		QVector<CartesianScale*> scales;
+
+		const auto yRange{ yRanges.at(index) };
+		//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range is y range " << yRangeIndex+1)
+		DEBUG(Q_FUNC_INFO << ", yrange = " << yRange.range.toStdString())
+		//TODO: check ranges for nonlinear scales
+		if (yRange.range.scale() != RangeT::Scale::Linear)
+			checkYRange(index);
+
+		//check whether we have y-range breaks - the first break, if available, should be valid
+		bool hasValidBreak = (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty() && yRangeBreaks.list.first().isValid());
+		if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
+			sceneRange = plotSceneRange;
+			logicalRange = yRange.range;
+
+			if (sceneRange.length() > 0)
+				scales << this->createScale(yRange.range.scale(), sceneRange, logicalRange);
+		} else {
+			double sceneEndLast = plotSceneRange.start();
+			double logicalEndLast = yRange.range.start();
+			for (const auto& rb : qAsConst(yRangeBreaks.list)) {
+				if (!rb.isValid())
+					break;
+
+				//current range goes from the end of the previous one (or from the plot beginning) to curBreak.start
+				sceneRange.start() = sceneEndLast;
+				if (&rb == &yRangeBreaks.list.first()) sceneRange.start() -= breakGap;
+				sceneRange.end() = plotSceneRange.start() + plotSceneRange.size() * rb.position;
+				logicalRange = Range<double>(logicalEndLast, rb.range.start());
+
+				if (sceneRange.length() > 0)
+					scales << this->createScale(yRange.range.scale(), sceneRange, logicalRange);
+
+				sceneEndLast = sceneRange.end();
+				logicalEndLast = rb.range.end();
+			}
+
+			//add the remaining range going from the last available range break to the end of the plot (=end of the y-data range)
+			sceneRange.setRange(sceneEndLast - breakGap, plotSceneRange.end());
+			logicalRange.setRange(logicalEndLast, yRange.range.end());
+
+			if (sceneRange.length() > 0)
+				scales << this->createScale(yRange.range.scale(), sceneRange, logicalRange);
+		}
+		c->setYScales(scales);
 	}
 }
 
