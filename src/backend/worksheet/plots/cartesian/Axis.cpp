@@ -1388,9 +1388,9 @@ void AxisPrivate::retransformTicks() {
 //	DEBUG(Q_FUNC_INFO << ", x range " << xIndex + 1)
 //	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
 //	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->xIndex() )
-
-	const int xRangeDirection = plot()->xRangeCSystem(q->coordinateSystemIndex()).direction();
-	const int yRangeDirection = plot()->yRangeCSystem(q->coordinateSystemIndex()).direction();
+	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+	const int xRangeDirection = plot()->xRange(cs->xIndex()).direction();
+	const int yRangeDirection = plot()->yRange(cs->yIndex()).direction();
 //	DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
 	const int xDirection = q->cSystem->xDirection() * xRangeDirection;
 	const int yDirection = q->cSystem->yDirection() * yRangeDirection;
@@ -1399,7 +1399,6 @@ void AxisPrivate::retransformTicks() {
 	//calculate the position of the center point in scene coordinates,
 	//will be used later to differentiate between "in" and "out" depending
 	//on the position relative to the center.
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 	const double middleX = plot()->xRange(cs->xIndex()).center();
 	const double middleY = plot()->yRange(cs->yIndex()).center();
 	QPointF center(middleX, middleY);
@@ -1957,6 +1956,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 	const double middleX = plot()->xRange(cs->xIndex()).center();
 	const double middleY = plot()->yRange(cs->yIndex()).center();
+	QPointF center(middleX, middleY);
 	const int xDirection = q->cSystem->xDirection();
 	const int yDirection = q->cSystem->yDirection();
 
@@ -1989,8 +1989,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 		QPointF anchorPoint = majorTickPoints.at(i);
 
 		//center align all labels with respect to the end point of the tick line
-		const int xRangeDirection = plot()->xRangeCSystem(q->coordinateSystemIndex()).direction();
-		const int yRangeDirection = plot()->yRangeCSystem(q->coordinateSystemIndex()).direction();
+		const int xRangeDirection = plot()->xRange(cs->xIndex()).direction();
+		const int yRangeDirection = plot()->yRange(cs->yIndex()).direction();
 //		DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
 		const int xDirection = q->cSystem->xDirection() * xRangeDirection;
 		const int yDirection = q->cSystem->yDirection() * yRangeDirection;
@@ -2430,8 +2430,9 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 			}
 
 			// used to determinde direction (up/down, left/right)
-			const qreal middleX = plot()->xRangeCSystem(q->coordinateSystemIndex()).center();
-			const qreal middleY = plot()->yRangeCSystem(q->coordinateSystemIndex()).center();
+			auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+			const qreal middleX = plot()->xRange(cs->xIndex()).center();
+			const qreal middleY = plot()->yRange(cs->yIndex()).center();
 			QPointF center(middleX, middleY);
 			bool valid = true;
 			center = q->cSystem->mapLogicalToScene(center, valid);
