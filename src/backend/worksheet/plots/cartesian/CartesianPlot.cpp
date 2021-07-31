@@ -2101,11 +2101,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::linePenChanged, this, QOverload<QPen>::of(&CartesianPlot::curveLinePenChanged)); // forward to Worksheet to update CursorDock
 
 		updateLegend();
-		int cSystemIndex = curve->coordinateSystemIndex();
-		if (cSystemIndex >= 0 && cSystemIndex < d->q->m_coordinateSystems.count()) {
-			setXRangeDirty(coordinateSystem(cSystemIndex)->xIndex(), true);
-			setYRangeDirty(coordinateSystem(cSystemIndex)->yIndex(), true);
-		}
+		cSystemIndex = curve->coordinateSystemIndex();
 
 		//in case the first curve is added, check whether we start plotting datetime data
 		if (curveTotalCount() == 1) {
@@ -2123,11 +2119,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(hist, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
-			int index = curve->coordinateSystemIndex();
-			if (index >= 0 && index < d->q->m_coordinateSystems.count()) {
-				setXRangeDirty(coordinateSystem(index)->xIndex(), true);
-				setYRangeDirty(coordinateSystem(index)->yIndex(), true);
-			}
+			cSystemIndex = hist->coordinateSystemIndex();
 
 			if (curveTotalCount() == 1)
 				checkAxisFormat(hist->dataColumn(), Axis::Orientation::Horizontal);
