@@ -2515,74 +2515,8 @@ void CartesianPlotDock::load() {
 	ui.leRangeFirst->setText( numberLocale.toString(m_plot->rangeFirstValues()) );
 	ui.leRangeLast->setText( numberLocale.toString(m_plot->rangeLastValues()) );
 
-	// x ranges
-//	for (int row{0}; row < ui.twXRanges->rowCount(); row++) {
-//		const auto xRange{ m_plot->xRangeFromIndex(row) };
-//		DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
-
-//		auto* chk = qobject_cast<QCheckBox*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Automatic));
-//		chk->setChecked(xRange.autoScale());
-
-//		auto* cb = qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Format));
-//		cb->setCurrentIndex(static_cast<int>(xRange.format()));
-
-//		if (xRange.format() == RangeT::Format::Numeric) {
-//			auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
-//			if (le) {	// may be nullptr
-//				le->setText( numberLocale.toString(xRange.start()) );
-//				le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Max));
-//				le->setText( numberLocale.toString(xRange.end()) );
-//			}
-//		} else {
-//			auto* dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
-//			if (dte) {	// may be nullptr
-//				dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(row) );
-//				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(xRange.start())) );
-//				dte = qobject_cast<QDateTimeEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Max));
-//				dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(row) );
-//				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(xRange.end())) );
-//			}
-//		}
-
-//		cb = qobject_cast<QComboBox*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Scale));
-//		cb->setCurrentIndex(static_cast<int>(xRange.scale()));
-//	}
 	updateXRangeList();
 	updateYRangeList();
-
-	// y ranges
-//	for (int row{0}; row < ui.twYRanges->rowCount(); row++) {
-//		const auto yRange{ m_plot->yRangeFromIndex(row) };
-//		DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
-
-//		auto* chk = qobject_cast<QCheckBox*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Automatic));
-//		chk->setChecked(yRange.autoScale());
-
-//		auto* cb = qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Format));
-//		cb->setCurrentIndex(static_cast<int>(yRange.format()));
-
-//		if (yRange.format() == RangeT::Format::Numeric) {
-//			auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
-//			if (le) {	// may be nullptr
-//				le->setText( numberLocale.toString(yRange.start()) );
-//				le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Max));
-//				le->setText( numberLocale.toString(yRange.end()) );
-//			}
-//		} else {
-//			auto* dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
-//			if (dte) {	// may be nullptr
-//				dte->setDisplayFormat( m_plot->yRangeDateTimeFormat(row) );
-//				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(yRange.start())) );
-//				dte = qobject_cast<QDateTimeEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Max));
-//				dte->setDisplayFormat( m_plot->yRangeDateTimeFormat(row) );
-//				dte->setDateTime(QDateTime::fromMSecsSinceEpoch( static_cast<qint64>(yRange.end())) );
-//			}
-//		}
-
-//		cb = qobject_cast<QComboBox*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Scale));
-//		cb->setCurrentIndex(static_cast<int>(yRange.scale()));
-//	}
-
 
 	//Title
 	labelWidget->load();
