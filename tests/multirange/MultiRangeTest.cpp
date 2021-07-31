@@ -106,7 +106,7 @@ void MultiRangeTest::initTestCase() {
 	VALUES_EQUAL(range.end(), end_);
 
 #define CHECK_RANGE(plot, aspect, xy, start_, end_) \
-	RANGE_CORRECT(plot->xy ## RangeCSystem(aspect->coordinateSystemIndex()), start_, end_)
+	RANGE_CORRECT(plot->xy ## Range(aspect->coordinateSystemIndex()), start_, end_)
 
 // Test1:
 // Check if the correct actions are enabled/disabled. Oder schränkt es zu viel ein?
