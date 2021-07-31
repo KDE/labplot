@@ -1345,7 +1345,6 @@ bool CartesianPlot::xRangeDirty(int index) {
 	Q_D(CartesianPlot);
 	return d->xRanges.at(index).dirty;
 }
-
 bool CartesianPlot::yRangeDirty(int index) {
 	Q_D(CartesianPlot);
 	return d->yRanges.at(index).dirty;
@@ -1353,21 +1352,20 @@ bool CartesianPlot::yRangeDirty(int index) {
 
 void CartesianPlot::setXRangeDirty(int index, bool dirty) {
 	Q_D(CartesianPlot);
-	if (index >= 0)
+	if (index >= 0 && index < xRangeCount())
 		d->xRanges[index].dirty = dirty;
 	else {
-		for (int i=0; i < xRangeCount(); i++)
-			d->xRanges[i].dirty = dirty;
+		for (auto r : d->xRanges)
+			r.dirty = dirty;
 	}
 }
-
 void CartesianPlot::setYRangeDirty(int index, bool dirty) {
 	Q_D(CartesianPlot);
-	if (index >= 0)
+	if (index >= 0 && index < yRangeCount())
 		d->yRanges[index].dirty = dirty;
 	else {
-		for (int i=0; i < yRangeCount(); i++)
-			d->yRanges[i].dirty = dirty;
+		for (auto r : d->yRanges)
+			r.dirty = dirty;
 	}
 }
 
