@@ -35,6 +35,7 @@
 		* Support multiple plot ranges
 		* Support real scientific notation and improve other notations of axes label
 		* Support axes auto tick number and improve range auto scaling
+		* Optional showing axis scale and offset in plot
 		* Add inverse axis scale
 
 Bug fixes:

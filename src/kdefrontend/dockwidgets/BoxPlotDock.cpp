@@ -71,7 +71,16 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.cbOrientation->addItem(i18n("Horizontal"));
 	ui.cbOrientation->addItem(i18n("Vertical"));
 
-	QString msg = i18n("If checked, the box width is made proportional to the square root of the number of data points.");
+	ui.cbOrdering->addItem(i18n("None"));
+	ui.cbOrdering->addItem(i18n("By Median, Ascending"));
+	ui.cbOrdering->addItem(i18n("By Median, Descending"));
+	ui.cbOrdering->addItem(i18n("By Mean, Ascending"));
+	ui.cbOrdering->addItem(i18n("By Mean, Descending"));
+	QString msg = i18n("If multiple data sets are provided, define how they should be ordered or use 'None' to keep the original order.");
+	ui.lOrdering->setToolTip(msg);
+	ui.cbOrdering->setToolTip(msg);
+
+	msg = i18n("If checked, the box width is made proportional to the square root of the number of data points.");
 	ui.lVariableWidth->setToolTip(msg);
 	ui.chkVariableWidth->setToolTip(msg);
 
@@ -137,6 +146,8 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	//Tab "General"
 	connect(ui.leName, &QLineEdit::textChanged, this, &BoxPlotDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &BoxPlotDock::commentChanged);
+	connect(ui.cbOrdering, QOverload<int>::of(&QComboBox::currentIndexChanged),
+			 this, &BoxPlotDock::orderingChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &BoxPlotDock::orientationChanged);
 	connect(ui.chkVariableWidth, &QCheckBox::stateChanged, this, &BoxPlotDock::variableWidthChanged);
@@ -182,6 +193,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.rbOutlier, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbFarOut, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbJitter, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
+	connect(ui.chkJitteringEnabled, &QCheckBox::stateChanged, this, &BoxPlotDock::jitteringEnabledChanged);
 
 	//Tab "Whiskers"
 	connect(ui.cbWhiskersType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersTypeChanged);
@@ -272,6 +284,9 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	//median line
 	connect(m_boxPlot, &BoxPlot::medianLinePenChanged, this, &BoxPlotDock::plotMedianLinePenChanged);
 	connect(m_boxPlot, &BoxPlot::medianLineOpacityChanged, this, &BoxPlotDock::plotMedianLineOpacityChanged);
+
+	//symbols
+	connect(m_boxPlot, &BoxPlot::jitteringEnabledChanged, this, &BoxPlotDock::plotJitteringEnabledChanged);
 
 	//whiskers
 	connect(m_boxPlot, &BoxPlot::whiskersTypeChanged, this, &BoxPlotDock::plotWhiskersTypeChanged);
@@ -375,6 +390,9 @@ void BoxPlotDock::addDataColumn() {
 		connect(button, &QPushButton::clicked, this, &BoxPlotDock::removeDataColumn);
 		m_gridLayout->addWidget(button, index, 1, 1, 1);
 		m_removeButtons << button;
+
+		ui.lOrdering->setEnabled(true);
+		ui.cbOrdering->setEnabled(true);
 	}
 
 	m_gridLayout->addWidget(cb, index, 0, 1, 1);
@@ -405,10 +423,15 @@ void BoxPlotDock::removeDataColumn() {
 		}
 	}
 
-	if (!m_removeButtons.isEmpty())
+	if (!m_removeButtons.isEmpty()) {
 		ui.lDataColumn->setText(i18n("Columns:"));
-	else
+		ui.lOrdering->setEnabled(true);
+		ui.cbOrdering->setEnabled(true);
+	} else {
 		ui.lDataColumn->setText(i18n("Column:"));
+		ui.lOrdering->setEnabled(false);
+		ui.cbOrdering->setEnabled(false);
+	}
 
 	if (!m_initializing)
 		setDataColumns();
@@ -419,6 +442,15 @@ void BoxPlotDock::dataColumnChanged(const QModelIndex&) const {
 		return;
 
 	setDataColumns();
+}
+
+void BoxPlotDock::orderingChanged(int index) const {
+	if (m_initializing)
+		return;
+
+	auto ordering = static_cast<BoxPlot::Ordering>(index);
+	for (auto* boxPlot : m_boxPlots)
+		boxPlot->setOrdering(ordering);
 }
 
 void BoxPlotDock::orientationChanged(int index) const {
@@ -754,10 +786,18 @@ void BoxPlotDock::symbolCategoryChanged() {
 		else if (ui.rbFarOut->isChecked())
 			symbols << plot->symbolFarOut();
 		else if (ui.rbJitter->isChecked())
-			symbols << plot->symbolJitter();
+			symbols << plot->symbolData();
 	}
 
 	symbolWidget->setSymbols(symbols);
+}
+
+void BoxPlotDock::jitteringEnabledChanged(int state) const {
+	if (m_initializing)
+		return;
+
+	for (auto* boxPlot : m_boxPlots)
+		boxPlot->setJitteringEnabled(state);
 }
 
 //whiskers
@@ -850,6 +890,10 @@ void BoxPlotDock::plotDescriptionChanged(const AbstractAspect* aspect) {
 void BoxPlotDock::plotDataColumnsChanged(const QVector<const AbstractColumn*>&) {
 	Lock lock(m_initializing);
 	loadDataColumns();
+}
+void BoxPlotDock::plotOrderingChanged(BoxPlot::Ordering ordering) {
+	Lock lock(m_initializing);
+	ui.cbOrdering->setCurrentIndex((int)ordering);
 }
 void BoxPlotDock::plotOrientationChanged(BoxPlot::Orientation orientation) {
 	Lock lock(m_initializing);
@@ -945,6 +989,11 @@ void BoxPlotDock::plotMedianLineOpacityChanged(float value) {
 	ui.sbMedianLineOpacity->setValue(v);
 }
 
+//symbols
+void BoxPlotDock::plotJitteringEnabledChanged(bool status) {
+	Lock lock(m_initializing);
+	ui.chkJitteringEnabled->setChecked(status);
+}
 
 //whiskers
 void BoxPlotDock::plotWhiskersTypeChanged(BoxPlot::WhiskersType type) {
@@ -978,6 +1027,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	KConfigGroup group = config.group(QLatin1String("BoxPlot"));
 
 	//general
+	ui.cbOrdering->setCurrentIndex( group.readEntry("Ordering", (int)m_boxPlot->ordering()) );
 	ui.cbOrientation->setCurrentIndex( group.readEntry("Orientation", (int)m_boxPlot->orientation()) );
 	ui.chkVariableWidth->setChecked( group.readEntry("VariableWidth", m_boxPlot->variableWidth()) );
 	ui.chkNotches->setChecked( group.readEntry("NotchesEnabled", m_boxPlot->notchesEnabled()) );
@@ -1016,6 +1066,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 
 	//symbols
 	symbolCategoryChanged();
+	ui.chkJitteringEnabled->setChecked( group.readEntry("JitteringEnabled", m_boxPlot->jitteringEnabled()) );
 
 	//whiskers
 	const QPen& penWhiskers = m_boxPlot->whiskersPen();
@@ -1056,6 +1107,7 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	KConfigGroup group = config.group("BoxPlot");
 
 	//general
+	group.writeEntry("Ordering", ui.cbOrdering->currentIndex());
 	group.writeEntry("Orientation", ui.cbOrientation->currentIndex());
 	group.writeEntry("VariableWidth", ui.chkVariableWidth->isChecked());
 	group.writeEntry("NotchesEnabled", ui.chkNotches->isChecked());
@@ -1086,7 +1138,9 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("MedianLineWidth", Worksheet::convertToSceneUnits(ui.sbMedianLineWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("MedianLineOpacity", ui.sbMedianLineOpacity->value()/100.0);
 
-	//symbols for the outliers and for the mean
+	//symbols
+	//TODO: save symbol properties for outliers, etc.?
+	group.writeEntry("JitteringEnabled", ui.chkFillingEnabled->isChecked());
 
 	//whiskers
 	group.writeEntry("WhiskersType", ui.cbWhiskersType->currentIndex());

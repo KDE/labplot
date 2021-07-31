@@ -534,9 +534,12 @@ void XYCurveDock::setCurves(QList<XYCurve*> list) {
 	setModel();
 	initGeneralTab();
 	initTabs();
+	setSymbols(list);
+}
 
+void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
 	QList<Symbol*> symbols;
-	for (auto* curve : m_curvesList)
+	for (auto* curve : curves)
 		symbols << curve->symbol();
 
 	symbolWidget->setSymbols(symbols);

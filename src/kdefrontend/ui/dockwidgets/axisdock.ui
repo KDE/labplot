@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>443</width>
-    <height>1042</height>
+    <width>540</width>
+    <height>1143</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -106,9 +106,6 @@
          </property>
         </widget>
        </item>
-       <item row="15" column="2">
-        <widget class="KLineEdit" name="leZeroOffset"/>
-       </item>
        <item row="0" column="1">
         <spacer name="horizontalSpacer">
          <property name="orientation">
@@ -127,9 +124,6 @@
        </item>
        <item row="19" column="2">
         <widget class="QComboBox" name="cbPlotRanges"/>
-       </item>
-       <item row="17" column="2">
-        <widget class="KLineEdit" name="leScalingFactor"/>
        </item>
        <item row="8" column="2">
         <widget class="KComboBox" name="cbScale"/>
@@ -289,6 +283,80 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="15" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="KLineEdit" name="leZeroOffset"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOffsetLeft">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="align-horizontal-left">
+             <normaloff/>
+            </iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOffsetCenter">
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset theme="align-horizontal-center">
+             <normaloff/>
+            </iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbOffsetRight">
+           <property name="text">
+            <string notr="true"/>
+           </property>
+           <property name="icon">
+            <iconset theme="align-horizontal-right">
+             <normaloff/>
+            </iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="17" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="KLineEdit" name="leScalingFactor"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbUnityScale">
+           <property name="text">
+            <string>1</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbUnityRange">
+           <property name="text">
+            <string>0 .. 1</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="18" column="2">
+        <widget class="QCheckBox" name="chkShowScaleOffset">
+         <property name="toolTip">
+          <string>Show scale and offset beside axis</string>
+         </property>
+         <property name="text">
+          <string>Show scale and offset</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -1167,16 +1235,7 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
@@ -1653,16 +1712,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
-  <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
@@ -1671,6 +1720,16 @@
    <class>KFontRequester</class>
    <extends>QWidget</extends>
    <header>kfontrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>

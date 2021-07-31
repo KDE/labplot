@@ -145,7 +145,16 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.dateTimeEditStart, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::startDateTimeChanged);
 	connect(ui.dateTimeEditEnd, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::endDateTimeChanged);
 	connect(ui.leZeroOffset, &KLineEdit::textChanged, this, &AxisDock::zeroOffsetChanged);
+	connect(ui.tbOffsetLeft, &QToolButton::clicked, this, &AxisDock::setLeftOffset);
+	connect(ui.tbOffsetCenter, &QToolButton::clicked, this, &AxisDock::setCenterOffset);
+	connect(ui.tbOffsetRight, &QToolButton::clicked, this, &AxisDock::setRightOffset);
+
 	connect(ui.leScalingFactor, &KLineEdit::textChanged, this, &AxisDock::scalingFactorChanged);
+	connect(ui.tbUnityScale, &QToolButton::clicked, this, &AxisDock::setUnityScale);
+	connect(ui.tbUnityRange, &QToolButton::clicked, this, &AxisDock::setUnityRange);
+
+	connect(ui.chkShowScaleOffset, &QCheckBox::stateChanged, this, &AxisDock::showScaleOffsetChanged);
+
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
 
 	//"Line"-tab
@@ -510,6 +519,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::endChanged, this, &AxisDock::axisEndChanged);
 	connect(m_axis, &Axis::zeroOffsetChanged, this, &AxisDock::axisZeroOffsetChanged);
 	connect(m_axis, &Axis::scalingFactorChanged, this, &AxisDock::axisScalingFactorChanged);
+	connect(m_axis, &Axis::showScaleOffsetChanged, this, &AxisDock::axisShowScaleOffsetChanged);
 	connect(m_axis, &WorksheetElement::plotRangeListChanged, this, &AxisDock::updatePlotRanges);
 
 	// line
@@ -876,6 +886,20 @@ void AxisDock::zeroOffsetChanged() {
 		axis->setZeroOffset(offset);
 }
 
+void AxisDock::setOffset(double offset) {
+	SET_NUMBER_LOCALE
+	ui.leZeroOffset->setText(numberLocale.toString(-offset));
+}
+void AxisDock::setLeftOffset() {
+	setOffset(m_axis->range().start());
+}
+void AxisDock::setCenterOffset() {
+	setOffset(m_axis->range().center());
+}
+void AxisDock::setRightOffset() {
+	setOffset(m_axis->range().end());
+}
+
 void AxisDock::scalingFactorChanged() {
 	if (m_initializing)
 		return;
@@ -898,6 +922,26 @@ void AxisDock::scalingFactorChanged() {
 		for (auto* axis : m_axesList)
 			axis->setScalingFactor(scalingFactor);
 	}
+}
+void AxisDock::setUnityScale() {
+	SET_NUMBER_LOCALE
+	ui.leScalingFactor->setText(numberLocale.toString(1./m_axis->range().size()));
+}
+// set scale and offset to get a range of 0 .. 1
+void AxisDock::setUnityRange() {
+	SET_NUMBER_LOCALE
+	ui.leScalingFactor->setText(numberLocale.toString(1./m_axis->range().size()));
+	ui.leZeroOffset->setText(numberLocale.toString(-m_axis->range().start()/m_axis->range().size()));
+}
+
+void AxisDock::showScaleOffsetChanged() {
+	DEBUG(Q_FUNC_INFO)
+	if (m_initializing)
+		return;
+
+	const Lock lock(m_initializing);
+	for (auto* axis : m_axesList)
+		axis->setShowScaleOffset(ui.chkShowScaleOffset->isChecked());
 }
 
 // "Line"-tab
@@ -1103,6 +1147,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 }
 
 void AxisDock::majorTicksNumberChanged(int value) {
+	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
 
@@ -1937,12 +1982,16 @@ void AxisDock::axisZeroOffsetChanged(qreal value) {
 	SET_NUMBER_LOCALE
 	ui.leZeroOffset->setText(numberLocale.toString(value));
 }
-
 void AxisDock::axisScalingFactorChanged(qreal value) {
 	if (m_initializing) return;
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leScalingFactor->setText(numberLocale.toString(value));
+}
+void AxisDock::axisShowScaleOffsetChanged(bool b) {
+	if (m_initializing) return;
+	const Lock lock(m_initializing);
+	ui.chkShowScaleOffset->setChecked(b);
 }
 
 //line
@@ -1991,6 +2040,7 @@ void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
 	m_initializing = false;
 }
 void AxisDock::axisMajorTicksNumberChanged(int number) {
+	DEBUG(Q_FUNC_INFO)
 	m_initializing = true;
 	ui.sbMajorTicksNumber->setValue(number);
 	m_initializing = false;
@@ -2301,6 +2351,7 @@ void AxisDock::load() {
 
 	ui.leZeroOffset->setText( numberLocale.toString(m_axis->zeroOffset()) );
 	ui.leScalingFactor->setText( numberLocale.toString(m_axis->scalingFactor()) );
+	ui.chkShowScaleOffset->setChecked( m_axis->showScaleOffset() );
 
 	//Line
 	ui.cbLineStyle->setCurrentIndex( (int) m_axis->linePen().style() );
@@ -2418,12 +2469,13 @@ void AxisDock::loadConfig(KConfig& config) {
 	SET_NUMBER_LOCALE
 	ui.sbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
 	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
-	ui.cbScale->setCurrentIndex( group.readEntry("Scale", (int) m_axis->scale()) );
+	ui.cbScale->setCurrentIndex( group.readEntry("Scale", static_cast<int>(m_axis->scale())) );
 	ui.chkAutoScale->setChecked( group.readEntry("AutoScale", m_axis->autoScale()) );
 	ui.leStart->setText( numberLocale.toString(group.readEntry("Start", m_axis->range().start())) );
 	ui.leEnd->setText( numberLocale.toString(group.readEntry("End", m_axis->range().end())) );
 	ui.leZeroOffset->setText( numberLocale.toString(group.readEntry("ZeroOffset", m_axis->zeroOffset())) );
 	ui.leScalingFactor->setText( numberLocale.toString(group.readEntry("ScalingFactor", m_axis->scalingFactor())) );
+	ui.chkShowScaleOffset->setChecked( group.readEntry("ShowScaleOffset", static_cast<int>(m_axis->showScaleOffset())) );
 
 	//Title
 	KConfigGroup axisLabelGroup = config.group("AxisLabel");
@@ -2549,6 +2601,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("End", numberLocale.toDouble(ui.leEnd->text()));
 	group.writeEntry("ZeroOffset", numberLocale.toDouble(ui.leZeroOffset->text()));
 	group.writeEntry("ScalingFactor", numberLocale.toDouble(ui.leScalingFactor->text()));
+	group.writeEntry("ShowScaleOffset", ui.chkShowScaleOffset->isChecked());
 
 	//Title
 	KConfigGroup axisLabelGroup = config.group("AxisLabel");

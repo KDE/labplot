@@ -71,6 +71,8 @@ private:
 	void load();
 	void loadConfig(KConfig&);
 
+	void setOffset(double);
+
 	// own created widgets
 	DateTimeSpinBox* dtsbMajorTicksIncrement {nullptr};
 	DateTimeSpinBox* dtsbMinorTicksIncrement {nullptr};
@@ -92,7 +94,13 @@ private slots:
 	void startDateTimeChanged(const QDateTime&);
 	void endDateTimeChanged(const QDateTime&);
 	void zeroOffsetChanged();
+	void showScaleOffsetChanged();
+	void setLeftOffset();
+	void setCenterOffset();
+	void setRightOffset();
 	void scalingFactorChanged();
+	void setUnityScale();
+	void setUnityRange();
 
 	//Line-Tab
 	void lineStyleChanged(int);
@@ -169,6 +177,7 @@ private slots:
 	void axisStartChanged(double);
 	void axisEndChanged(double);
 	void axisZeroOffsetChanged(qreal);
+	void axisShowScaleOffsetChanged(bool);
 	void axisScalingFactorChanged(qreal);
 
 	//line

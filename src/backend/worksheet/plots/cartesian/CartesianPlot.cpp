@@ -186,7 +186,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setPosition(Axis::Position::Bottom);
 			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksIn);
-			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
 			axis->setSuppressRetransform(false);
@@ -201,7 +200,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setPosition(Axis::Position::Top);
 			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksIn);
-			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
 			QPen pen = axis->minorGridPen();
@@ -221,7 +219,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setPosition(Axis::Position::Left);
 			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksIn);
-			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
 			axis->setSuppressRetransform(false);
@@ -233,7 +230,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setPosition(Axis::Position::Right);
 			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksIn);
-			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksIn);
 			axis->setMinorTicksNumber(1);
 			pen = axis->minorGridPen();
@@ -256,7 +252,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setPosition(Axis::Position::Bottom);
 			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
@@ -269,7 +264,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setPosition(Axis::Position::Left);
 			axis->setRange(0., 1.);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
@@ -295,7 +289,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setPosition(Axis::Position::Centered);
 			axis->setRange(-0.5, 0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
@@ -309,7 +302,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setPosition(Axis::Position::Centered);
 			axis->setRange(-0.5, 0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
@@ -338,7 +330,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setLogicalPosition(0);
 			axis->setRange(-0.5, 0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
@@ -354,7 +345,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setLogicalPosition(0);
 			axis->setRange(-0.5, 0.5);
 			axis->setMajorTicksDirection(Axis::ticksBoth);
-			axis->setMajorTicksNumber(6);
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
@@ -2078,6 +2068,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	Q_D(CartesianPlot);
 
 	const auto* curve = qobject_cast<const XYCurve*>(child);
+	int cSystemIndex = -1;
 	if (curve) {
 		connect(curve, &XYCurve::dataChanged, this, [this, curve]() {auto cs = coordinateSystem(curve->coordinateSystemIndex()); this->dataChanged(cs->xIndex(), cs->yIndex());});
 		connect(curve, &XYCurve::xColumnChanged, this, [this](const AbstractColumn* column) {
@@ -2123,7 +2114,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 
 		emit curveAdded(curve);
-
 	} else {
 		const auto* hist = qobject_cast<const Histogram*>(child);
 		if (hist) {
@@ -2151,6 +2141,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(boxPlot, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
+			cSystemIndex = boxPlot->coordinateSystemIndex();
 
 			if (curveTotalCount() == 1) {
 				connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
@@ -2166,6 +2157,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		// must be unhovered
 		const auto* element = static_cast<const WorksheetElement*>(child);
 		connect(element, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
+	}
+
+	if (cSystemIndex >= 0 && cSystemIndex < d->q->m_coordinateSystems.count()) {
+		setXRangeDirty(cSystemIndex, true);
+		setYRangeDirty(cSystemIndex, true);
 	}
 
 	if (!isLoading()) {
@@ -2185,6 +2181,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	}
 }
 
+// set format of axis from data column
 void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientation orientation) {
 	Q_D(CartesianPlot);
 	const auto* col = dynamic_cast<const Column*>(column);
@@ -2203,7 +2200,7 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 		for (auto* axis : children<Axis>()) {
 			const auto* cSystem{ coordinateSystem(axis->coordinateSystemIndex()) };
 			if (axis->orientation() == orientation) {
-				auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
+				const auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 				d->xRanges[cSystem->xIndex()].range.setDateTimeFormat(filter->format());
 				axis->setUndoAware(false);
 				axis->setLabelsDateTimeFormat(xRangeDateTimeFormat());
@@ -2216,9 +2213,6 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 			setXRangeFormat(RangeT::Format::Numeric);
 		else
 			setYRangeFormat(RangeT::Format::Numeric);
-
-		for (auto* axis : children<Axis>())
-			axis->setMajorTicksNumber(axis->range().autoTickCount());
 
 		setUndoAware(true);
 	}
@@ -2804,8 +2798,7 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int index, bool comple
 	return d->xRangeAutoScale(index);
 }
 
-void CartesianPlot::retransformScales()
-{
+void CartesianPlot::retransformScales() {
 	Q_D(CartesianPlot);
 	d->retransformScales(-1, -1);
 }
@@ -3516,6 +3509,7 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 	//TODO: what to do with these?
 	// also check delta* usage later
 
+	// X ranges
 	for (int i = 0; i < xRanges.count(); i++) {
 		auto& rangep = xRanges[i];
 		double deltaXMin = rangep.range.start() - rangep.prev.start();
@@ -3529,7 +3523,7 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 		rangep.prev = rangep.range;
 
 		for (auto* axis : q->children<Axis>()) {
-			DEBUG(Q_FUNC_INFO << ", auto-scale axis " << axis->title())
+			DEBUG(Q_FUNC_INFO << ", auto-scale axis \"" << axis->name().toStdString() << "\"")
 			// use ranges of axis
 			int axisXIndex = q->coordinateSystem(axis->coordinateSystemIndex())->xIndex();
 			if (!axis->autoScale() || axis->orientation() != Axis::Orientation::Horizontal || axisXIndex != i)
@@ -3553,10 +3547,10 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 // 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
-			axis->setMajorTicksNumber(axis->range().autoTickCount());
 		}
 	}
 
+	// Y ranges
 	for (int i = 0; i < yRanges.count(); i++) {
 		auto& rangep = yRanges[i];
 		double deltaYMin = rangep.range.start() - rangep.prev.start();
@@ -3570,7 +3564,7 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 		rangep.prev = rangep.range;
 
 		for (auto* axis : q->children<Axis>()) {
-			DEBUG(Q_FUNC_INFO << ", auto-scale axis " << axis->title())
+			DEBUG(Q_FUNC_INFO << ", auto-scale axis \"" << axis->name().toStdString() << "\"")
 			// use ranges of axis
 			int axisYIndex = q->coordinateSystem(axis->coordinateSystemIndex())->yIndex();
 			if (!axis->autoScale() || axis->orientation() != Axis::Orientation::Vertical || axisYIndex != i)
@@ -3594,7 +3588,6 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 // 			if (axis->position() == Axis::Position::Centered && deltaYMin != 0) {
 // 				axis->setOffset(axis->offset() + deltaYMin, false);
 // 			}
-			axis->setMajorTicksNumber(axis->range().autoTickCount());
 		}
 	}
 

@@ -176,6 +176,7 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	XYCurveDock::setModel();
 	initGeneralTab();
 	initTabs();
+	setSymbols(list);
 	m_initializing = false;
 
 	updatePlotRanges();

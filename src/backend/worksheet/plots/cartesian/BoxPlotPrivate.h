@@ -60,8 +60,10 @@ public:
 
 	//General
 	QVector<const AbstractColumn*> dataColumns;
+	QVector<const AbstractColumn*> dataColumnsOrdered;
 	QVector<QString> dataColumnPaths;
 	BoxPlot::Orientation orientation{BoxPlot::Orientation::Vertical};
+	BoxPlot::Ordering ordering{BoxPlot::Ordering::None};
 	bool variableWidth{false};
 	double widthFactor{1.0};
 	bool notchesEnabled{false};
@@ -95,7 +97,8 @@ public:
 	Symbol* symbolMean{nullptr};
 	Symbol* symbolOutlier{nullptr};
 	Symbol* symbolFarOut{nullptr};
-	Symbol* symbolJitter{nullptr};
+	Symbol* symbolData{nullptr};
+	bool jitteringEnabled{true};
 
 	//whiskers
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
@@ -141,8 +144,8 @@ private:
 	QVector<Points> m_outlierPoints;	//positions of the outlier symbols in scene coordinates
 	Points m_meanSymbolPoint; //position of the mean symbol in scene coordinates
 	QVector<bool> m_meanSymbolPointVisible; //true/false if the mean point is visible in the plot or not
-	QVector<Points> m_jitterPointsLogical;	//positions of the jitters in logical coordinates
-	QVector<Points> m_jitterPoints;	//positions of the jitters in scene coordinates
+	QVector<Points> m_dataPointsLogical;	//positions of the data points in logical coordinates
+	QVector<Points> m_dataPoints;	//positions of the data points in scene coordinates
 	QVector<Points> m_farOutPointsLogical;	//positions of the far out values in logical coordinates
 	QVector<Points> m_farOutPoints;	//positions of the far out values in scene coordinates
 

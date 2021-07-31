@@ -55,7 +55,6 @@ public:
 	virtual void setupGeneral();
 	void updateLocale() override;
 
-
 private:
 	virtual void initGeneralTab();
 	void updateValuesWidgets();
@@ -77,6 +76,7 @@ private:
 protected:
 	void initTabs();
 	virtual void setModel();
+	void setSymbols(QList<XYCurve*>);
 
 	Ui::XYCurveDock ui;
 	QList<XYCurve*> m_curvesList;

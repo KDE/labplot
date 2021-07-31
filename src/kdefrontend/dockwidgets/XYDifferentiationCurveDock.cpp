@@ -233,6 +233,7 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 
 	initGeneralTab();
 	initTabs();
+	setSymbols(list);
 	m_initializing = false;
 
 	updatePlotRanges();

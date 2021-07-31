@@ -75,6 +75,7 @@ void BoxPlot::init() {
 	KConfigGroup group = config.group("BoxPlot");
 
 	//general
+	d->ordering = (BoxPlot::Ordering) group.readEntry("Ordering", (int)BoxPlot::Ordering::None);
 	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::WhiskersType::IQR);
 	d->orientation = (BoxPlot::Orientation) group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
 	d->variableWidth = group.readEntry("VariableWidth", false);
@@ -128,14 +129,16 @@ void BoxPlot::init() {
 	d->symbolFarOut->init(group);
 	d->symbolFarOut->setStyle(Symbol::Style::Plus);
 
-	d->symbolJitter = new Symbol("symbolJitter");
-	addChild(d->symbolJitter);
-	d->symbolJitter->setHidden(true);
-	connect(d->symbolJitter, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
-	connect(d->symbolJitter, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
-	d->symbolJitter->init(group);
-	d->symbolJitter->setStyle(Symbol::Style::NoSymbols);
-	d->symbolJitter->setOpacity(0.5);
+	d->symbolData = new Symbol("symbolData");
+	addChild(d->symbolData);
+	d->symbolData->setHidden(true);
+	connect(d->symbolData, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbolData, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
+	d->symbolData->init(group);
+	d->symbolData->setStyle(Symbol::Style::NoSymbols);
+	d->symbolData->setOpacity(0.5);
+
+	d->jitteringEnabled = group.readEntry("JitteringEnabled", true);
 
 	//whiskers
 	d->whiskersPen = QPen(group.readEntry("WhiskersColor", QColor(Qt::black)),
@@ -233,6 +236,7 @@ void BoxPlot::setHover(bool on) {
 /* ============================ getter methods ================= */
 //general
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QVector<const AbstractColumn*>, dataColumns, dataColumns)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Ordering, ordering, ordering)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, variableWidth, variableWidth)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, widthFactor, widthFactor)
@@ -274,9 +278,11 @@ Symbol* BoxPlot::symbolFarOut() const {
 	return d->symbolFarOut;
 }
 
-Symbol* BoxPlot::symbolJitter() const {
+BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, jitteringEnabled, jitteringEnabled)
+
+Symbol* BoxPlot::symbolData() const {
 	Q_D(const BoxPlot);
-	return d->symbolJitter;
+	return d->symbolData;
 }
 
 //whiskers
@@ -327,6 +333,13 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 			//TODO: add disconnect in the undo-function
 		}
 	}
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrdering, BoxPlot::Ordering, ordering, recalc);
+void BoxPlot::setOrdering(BoxPlot::Ordering ordering) {
+	Q_D(BoxPlot);
+	if (ordering != d->ordering)
+		exec(new BoxPlotSetOrderingCmd(d, ordering, ki18n("%1: set ordering")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrientation, BoxPlot::Orientation, orientation, recalc);
@@ -492,6 +505,14 @@ void BoxPlot::setWhiskersCapSize(double size) {
 		exec(new BoxPlotSetWhiskersCapSizeCmd(d, size, ki18n("%1: set whiskers cap size")));
 }
 
+//Symbols
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetJitteringEnabled, bool, jitteringEnabled, recalc)
+void BoxPlot::setJitteringEnabled(bool enabled) {
+	Q_D(BoxPlot);
+	if (enabled != d->jitteringEnabled)
+		exec(new BoxPlotSetJitteringEnabledCmd(d, enabled, ki18n("%1: jitterring changed")));
+}
+
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
@@ -572,7 +593,7 @@ void BoxPlotPrivate::retransform() {
 		m_medianLine[i] = QLineF();
 		m_whiskersPath[i] = QPainterPath();
 		m_outlierPoints[i].clear();
-		m_jitterPoints[i].clear();
+		m_dataPoints[i].clear();
 		m_farOutPoints[i].clear();
 	}
 
@@ -610,8 +631,8 @@ void BoxPlotPrivate::recalc() {
 	m_whiskerMax.resize(count);
 	m_outlierPointsLogical.resize(count);
 	m_outlierPoints.resize(count);
-	m_jitterPointsLogical.resize(count);
-	m_jitterPoints.resize(count);
+	m_dataPointsLogical.resize(count);
+	m_dataPoints.resize(count);
 	m_farOutPointsLogical.resize(count);
 	m_farOutPoints.resize(count);
 	m_mean.resize(count);
@@ -640,6 +661,37 @@ void BoxPlotPrivate::recalc() {
 				m_widthScaleFactor = column->statistics().size;
 		}
 		m_widthScaleFactor = std::sqrt(m_widthScaleFactor);
+	}
+
+	if (ordering == BoxPlot::Ordering::None)
+		dataColumnsOrdered = dataColumns;
+	else {
+		std::vector<std::pair<double, int>> newOrdering;
+
+		if (ordering == BoxPlot::Ordering::MedianAscending
+			|| ordering == BoxPlot::Ordering::MedianDescending) {
+			for (int i = 0; i < count; ++i) {
+				auto* column = static_cast<const Column*>(dataColumns.at(i));
+				newOrdering.push_back(std::make_pair(column->statistics().median, i));
+			}
+		} else {
+			for (int i = 0; i < count; ++i) {
+				auto* column = static_cast<const Column*>(dataColumns.at(i));
+				newOrdering.push_back(std::make_pair(column->statistics().arithmeticMean, i));
+			}
+		}
+
+		std::sort(newOrdering.begin(), newOrdering.end());
+		dataColumnsOrdered.clear();
+
+		if (ordering == BoxPlot::Ordering::MedianAscending
+			|| ordering == BoxPlot::Ordering::MeanAscending) {
+			for (int i = 0; i < count; ++i)
+				dataColumnsOrdered << dataColumns.at(newOrdering.at(i).second);
+		} else {
+			for (int i = count - 1; i >= 0; --i)
+				dataColumnsOrdered << dataColumns.at(newOrdering.at(i).second);
+		}
 	}
 
 	for (int i = 0; i < count; ++i)
@@ -677,7 +729,7 @@ QPointF BoxPlotPrivate::setOutlierPoint(double pos, double value) {
 
 void BoxPlotPrivate::recalc(int index) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalc(index)");
-	auto* column = static_cast<const Column*>(dataColumns.at(index));
+	auto* column = static_cast<const Column*>(dataColumnsOrdered.at(index));
 	if (!column)
 		return;
 
@@ -685,8 +737,8 @@ void BoxPlotPrivate::recalc(int index) {
 	//can be changed because of the new settings for whiskers, etc.
 	m_outlierPointsLogical[index].clear();
 	m_outlierPoints[index].clear();
-	m_jitterPointsLogical[index].clear();
-	m_jitterPoints[index].clear();
+	m_dataPointsLogical[index].clear();
+	m_dataPoints[index].clear();
 	m_farOutPointsLogical[index].clear();
 	m_farOutPoints[index].clear();
 
@@ -801,17 +853,20 @@ void BoxPlotPrivate::recalc(int index) {
 			break;
 		}
 
+		double rand = 0.5;
+		if (jitteringEnabled)
+			rand = (double)std::rand() / ((double)RAND_MAX + 1);
+
 		if (value > m_whiskerMax.at(index) || value < m_whiskerMin.at(index)) {
 			if (whiskersType == BoxPlot::WhiskersType::IQR && (value > outerFenceMax || value < outerFenceMin))
-				m_farOutPointsLogical[index] << setOutlierPoint(x, value);
+				m_farOutPointsLogical[index] << setOutlierPoint(x - width/2 + rand*width, value);
 			else
-				m_outlierPointsLogical[index] << setOutlierPoint(x, value);;
+				m_outlierPointsLogical[index] << setOutlierPoint(x - width/2 + rand*width, value);;
 		} else {
-			double rand = (double)std::rand() / ((double)RAND_MAX + 1);
 			if (orientation == BoxPlot::Orientation::Vertical)
-				m_jitterPointsLogical[index] << QPointF(m_xMinBox[index] + rand*width, value);
+				m_dataPointsLogical[index] << QPointF(x - width/2 + rand*width, value);
 			else
-				m_jitterPointsLogical[index] << QPointF(value, m_yMinBox[index] + rand*width);
+				m_dataPointsLogical[index] << QPointF(value, x - width/2 + rand*width);
 
 			//determine the upper/lower adjucent values
 			if (whiskersType == BoxPlot::WhiskersType::IQR) {
@@ -851,7 +906,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		lines << QLineF(xMaxBox, yMinBox, xMinBox, yMinBox);
 		lines << QLineF(xMinBox, yMinBox, xMinBox, yMaxBox);
 	} else {
-		auto* column = static_cast<const Column*>(dataColumns.at(index));
+		auto* column = static_cast<const Column*>(dataColumnsOrdered.at(index));
 		const auto& statistics = column->statistics();
 		const double notch = 1.7*1.25*statistics.iqr/1.35/std::sqrt(statistics.size);
 		const double notchMax = median + notch ;
@@ -916,16 +971,16 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	mapOutliersToScene(index);
 
 	//jitter values
-	int size = m_jitterPointsLogical[index].size();
+	int size = m_dataPointsLogical[index].size();
 	if (size > 0) {
 		const int startIndex = 0;
-		const int endIndex = m_jitterPointsLogical[index].size() - 1;
+		const int endIndex = m_dataPointsLogical[index].size() - 1;
 		QVector<bool> m_pointVisible;
 		m_pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex,
-									m_jitterPointsLogical[index],
-									m_jitterPoints[index],
+									m_dataPointsLogical[index],
+									m_dataPoints[index],
 									m_pointVisible);
 	}
 
@@ -972,7 +1027,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		lines << QLineF(xMaxBox, yMinBox, xMinBox, yMinBox);
 		lines << QLineF(xMinBox, yMinBox, xMinBox, yMaxBox);
 	} else {
-		auto* column = static_cast<const Column*>(dataColumns.at(index));
+		auto* column = static_cast<const Column*>(dataColumnsOrdered.at(index));
 		const auto& statistics = column->statistics();
 		const double notch = 1.7*1.25*statistics.iqr/1.35/std::sqrt(statistics.size);
 		const double notchMax = median + notch ;
@@ -1035,16 +1090,16 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	//outliers symbols
 	mapOutliersToScene(index);
 
-	int size = m_jitterPointsLogical[index].size();
+	int size = m_dataPointsLogical[index].size();
 	if (size > 0) {
 		const int startIndex = 0;
-		const int endIndex = m_jitterPointsLogical[index].size() - 1;
+		const int endIndex = m_dataPointsLogical[index].size() - 1;
 		QVector<bool> m_pointVisible;
 		m_pointVisible.resize(size);
 
 		q->cSystem->mapLogicalToScene(startIndex, endIndex,
-									m_jitterPointsLogical[index],
-									m_jitterPoints[index],
+									m_dataPointsLogical[index],
+									m_dataPoints[index],
 									m_pointVisible);
 	}
 
@@ -1128,9 +1183,9 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 	prepareGeometryChange();
 	m_boxPlotShape = QPainterPath();
 
-	for (int i = 0; i < dataColumns.size(); ++i) {
-		if (!dataColumns.at(i)
-			|| static_cast<const Column*>(dataColumns.at(i))->statistics().size == 0)
+	for (int i = 0; i < dataColumnsOrdered.size(); ++i) {
+		if (!dataColumnsOrdered.at(i)
+			|| static_cast<const Column*>(dataColumnsOrdered.at(i))->statistics().size == 0)
 			continue;
 
 		QPainterPath boxPath;
@@ -1166,19 +1221,19 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 		}
 
 		//jitter values
-		if (symbolJitter->style() != Symbol::Style::NoSymbols && !m_jitterPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::pathFromStyle(symbolJitter->style());
+		if (symbolData->style() != Symbol::Style::NoSymbols && !m_dataPoints.at(i).isEmpty()) {
+			QPainterPath path = Symbol::pathFromStyle(symbolData->style());
 			QTransform trafo;
-			trafo.scale(symbolJitter->size(), symbolJitter->size());
+			trafo.scale(symbolData->size(), symbolData->size());
 			path = trafo.map(path);
 			trafo.reset();
 
-			if (symbolJitter->rotationAngle() != 0) {
-				trafo.rotate(symbolJitter->rotationAngle());
+			if (symbolData->rotationAngle() != 0) {
+				trafo.rotate(symbolData->rotationAngle());
 				path = trafo.map(path);
 			}
 
-			for (const auto& point : qAsConst(m_jitterPoints.at(i))) {
+			for (const auto& point : qAsConst(m_dataPoints.at(i))) {
 				trafo.reset();
 				trafo.translate(point.x(), point.y());
 				symbolsPath.addPath(trafo.map(path));
@@ -1238,12 +1293,12 @@ void BoxPlotPrivate::updatePixmap() {
 void BoxPlotPrivate::draw(QPainter* painter) {
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::draw()");
 
-	for (int i = 0; i < dataColumns.size(); ++i) {
-		if (!dataColumns.at(i))
+	for (int i = 0; i < dataColumnsOrdered.size(); ++i) {
+		if (!dataColumnsOrdered.at(i))
 			continue;
 
 		//no need to draw anything if the column doesn't have any valid values
-		if (static_cast<const Column*>(dataColumns.at(i))->statistics().size == 0)
+		if (static_cast<const Column*>(dataColumnsOrdered.at(i))->statistics().size == 0)
 			continue;
 
 		if (!m_boxRect.at(i).isEmpty()) {
@@ -1325,19 +1380,19 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 	}
 
 	//jitter values
-	if (symbolJitter->style() != Symbol::Style::NoSymbols && !m_jitterPoints.at(index).isEmpty()) {
-		painter->setOpacity(symbolJitter->opacity());
-		painter->setPen(symbolJitter->pen());
-		painter->setBrush(symbolJitter->brush());
-		QPainterPath path = Symbol::pathFromStyle(symbolJitter->style());
+	if (symbolData->style() != Symbol::Style::NoSymbols && !m_dataPoints.at(index).isEmpty()) {
+		painter->setOpacity(symbolData->opacity());
+		painter->setPen(symbolData->pen());
+		painter->setBrush(symbolData->brush());
+		QPainterPath path = Symbol::pathFromStyle(symbolData->style());
 		QTransform trafo;
-		trafo.scale(symbolJitter->size(), symbolJitter->size());
-		if (symbolJitter->rotationAngle() != 0)
-			trafo.rotate(-symbolJitter->rotationAngle());
+		trafo.scale(symbolData->size(), symbolData->size());
+		if (symbolData->rotationAngle() != 0)
+			trafo.rotate(-symbolData->rotationAngle());
 
 		path = trafo.map(path);
 
-		for (const auto& point : qAsConst(m_jitterPoints.at(index))) {
+		for (const auto& point : qAsConst(m_dataPoints.at(index))) {
 			trafo.reset();
 			trafo.translate(point.x(), point.y());
 			painter->drawPath(trafo.map(path));
@@ -1547,10 +1602,12 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement("general");
+	writer->writeAttribute("ordering", QString::number(static_cast<int>(d->ordering)));
 	writer->writeAttribute("orientation", QString::number(static_cast<int>(d->orientation)));
 	writer->writeAttribute("variableWidth", QString::number(d->variableWidth));
 	writer->writeAttribute("widthFactor", QString::number(d->widthFactor));
 	writer->writeAttribute("notches", QString::number(d->notchesEnabled));
+	writer->writeAttribute("jitteringEnabled", QString::number(d->jitteringEnabled));
 	writer->writeAttribute("plotRangeIndex", QString::number(m_cSystemIndex));
 	writer->writeAttribute("xMin", QString::number(d->xMin));
 	writer->writeAttribute("xMax", QString::number(d->xMax));
@@ -1596,7 +1653,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	d->symbolMean->save(writer);
 	d->symbolOutlier->save(writer);
 	d->symbolFarOut->save(writer);
-	d->symbolJitter->save(writer);
+	d->symbolData->save(writer);
 
 	//whiskers
 	writer->writeStartElement("whiskers");
@@ -1633,10 +1690,12 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
+			READ_INT_VALUE("ordering", ordering, BoxPlot::Ordering);
 			READ_INT_VALUE("orientation", orientation, BoxPlot::Orientation);
 			READ_INT_VALUE("variableWidth", variableWidth, bool);
 			READ_DOUBLE_VALUE("widthFactor", widthFactor);
 			READ_INT_VALUE("notches", notchesEnabled, bool);
+			READ_INT_VALUE("jitteringEnabled", jitteringEnabled, bool);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 			READ_DOUBLE_VALUE("xMin", xMin);
@@ -1713,8 +1772,8 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			d->symbolOutlier->load(reader, preview);
 		} else if (!preview && reader->name() == "symbolFarOut") {
 			d->symbolFarOut->load(reader, preview);
-		} else if (!preview && reader->name() == "symbolJitter") {
-			d->symbolJitter->load(reader, preview);
+		} else if (!preview && reader->name() == "symbolData") {
+			d->symbolData->load(reader, preview);
 		} else if (!preview && reader->name() == "whiskers") {
 			attribs = reader->attributes();
 
@@ -1785,7 +1844,7 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	d->symbolMean->loadThemeConfig(group, themeColor);
 	d->symbolOutlier->loadThemeConfig(group, themeColor);
 	d->symbolFarOut->loadThemeConfig(group, themeColor);
-	d->symbolJitter->loadThemeConfig(group, themeColor);
+	d->symbolData->loadThemeConfig(group, themeColor);
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

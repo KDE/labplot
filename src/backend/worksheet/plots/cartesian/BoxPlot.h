@@ -41,6 +41,7 @@ class BoxPlot : public WorksheetElement, Curve {
 	Q_OBJECT
 
 public:
+	enum class Ordering {None, MedianAscending, MedianDescending, MeanAscending, MeanDescending};
 	enum class WhiskersType {MinMax, IQR, SD, SD_3, MAD, MAD_3, PERCENTILES_10_90, PERCENTILES_5_95, PERCENTILES_1_99};
 
 	explicit BoxPlot(const QString&);
@@ -61,6 +62,7 @@ public:
 	//general
 	BASIC_D_ACCESSOR_DECL(QVector<const AbstractColumn*>, dataColumns, DataColumns)
 	QVector<QString>& dataColumnPaths() const;
+	BASIC_D_ACCESSOR_DECL(BoxPlot::Ordering, ordering, Ordering)
 	BASIC_D_ACCESSOR_DECL(BoxPlot::Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(bool, variableWidth, VariableWidth)
 	BASIC_D_ACCESSOR_DECL(double, widthFactor, WidthFactor)
@@ -85,11 +87,12 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, medianLinePen, MedianLinePen)
 	BASIC_D_ACCESSOR_DECL(qreal, medianLineOpacity, MedianLineOpacity)
 
-	//markers
+	//symbols
 	Symbol* symbolMean() const;
 	Symbol* symbolOutlier() const;
 	Symbol* symbolFarOut() const;
-	Symbol* symbolJitter() const;
+	Symbol* symbolData() const;
+	BASIC_D_ACCESSOR_DECL(bool, jitteringEnabled, JitteringEnabled)
 
 	//whiskers
 	BASIC_D_ACCESSOR_DECL(BoxPlot::WhiskersType, whiskersType, WhiskersType)
@@ -139,6 +142,7 @@ signals:
 	//General-Tab
 	void dataChanged();
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);
+	void orderingChanged(BoxPlot::Ordering);
 	void orientationChanged(BoxPlot::Orientation);
 	void variableWidthChanged(bool);
 	void widthFactorChanged(double);
@@ -163,6 +167,9 @@ signals:
 	//median line
 	void medianLinePenChanged(QPen&);
 	void medianLineOpacityChanged(float);
+
+	//symbols
+	void jitteringEnabledChanged(bool);
 
 	//whiskers
 	void whiskersTypeChanged(BoxPlot::WhiskersType);

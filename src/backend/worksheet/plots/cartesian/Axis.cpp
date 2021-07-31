@@ -137,9 +137,10 @@ void Axis::init() {
 	d->offset = group.readEntry("PositionOffset", 0);
 	d->scale = (RangeT::Scale) group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
 	d->autoScale = group.readEntry("AutoScale", true);
-	d->range = Range<double>(group.readEntry("Start", 0), group.readEntry("End", 10));
+	d->range = Range<double>(group.readEntry("Start", 0.), group.readEntry("End", 10.));	// not auto ticked if already set to 1 here!
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
+	d->showScaleOffset = group.readEntry("ShowScaleOffset", true);
 
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int) Qt::SolidLine) );
 	d->linePen.setWidthF( group.readEntry("LineWidth", Worksheet::convertToSceneUnits( 1.0, Worksheet::Unit::Point) ) );
@@ -388,6 +389,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, Range<double>, range, range)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
+BASIC_SHARED_D_READER_IMPL(Axis, bool, showScaleOffset, showScaleOffset)
 BASIC_SHARED_D_READER_IMPL(Axis, double, logicalPosition, logicalPosition)
 
 BASIC_SHARED_D_READER_IMPL(Axis, TextLabel*, title, title)
@@ -541,8 +543,11 @@ STD_SETTER_CMD_IMPL_F_S(Axis, SetRange, Range<double>, range, retransform);
 void Axis::setRange(Range<double> range) {
 	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString())
 	Q_D(Axis);
-	if (range != d->range)
+	if (range != d->range) {
 		exec(new AxisSetRangeCmd(d, range, ki18n("%1: set axis range")));
+		// auto set tick count when changing range (only changed here)
+		setMajorTicksNumber(d->range.autoTickCount());
+	}
 }
 void Axis::setStart(double min) {
 	Q_D(Axis);
@@ -564,6 +569,12 @@ void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
 	if (zeroOffset != d->zeroOffset)
 		exec(new AxisSetZeroOffsetCmd(d, zeroOffset, ki18n("%1: set axis zero offset")));
+}
+STD_SETTER_CMD_IMPL_F_S(Axis, ShowScaleOffset, bool, showScaleOffset, retransform);
+void Axis::setShowScaleOffset(bool b) {
+	Q_D(Axis);
+	if (b != d->showScaleOffset)
+		exec(new AxisShowScaleOffsetCmd(d, b, ki18n("%1: show scale and offset")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLogicalPosition, double, logicalPosition, retransform);
@@ -647,6 +658,7 @@ void Axis::setMajorTicksType(TicksType majorTicksType) {
 }
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retransformTicks);
 void Axis::setMajorTicksNumber(int majorTicksNumber) {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(Axis);
 	if (majorTicksNumber != d->majorTicksNumber)
 		exec(new AxisSetMajorTicksNumberCmd(d, majorTicksNumber, ki18n("%1: set the total number of the major ticks")));
@@ -1294,7 +1306,7 @@ void AxisPrivate::retransformTicks() {
 			break;
 		case RangeT::Scale::Sqrt:
 			if (start >=0. && end >= 0.)
-				majorTicksIncrement = sqrt(end) - sqrt(start);
+				majorTicksIncrement = qSqrt(end) - qSqrt(start);
 			break;
 		case RangeT::Scale::Square:
 			majorTicksIncrement = end*end - start*start;
@@ -1326,11 +1338,11 @@ void AxisPrivate::retransformTicks() {
 			break;
 		case RangeT::Scale::Ln:
 			if (start != 0. && end/start > 0.)
-				tmpMajorTicksNumber = qRound( log(end/start) / majorTicksIncrement + 1 );
+				tmpMajorTicksNumber = qRound( qLn(end/start) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Sqrt:
 			if (start >= 0. && end >= 0.)
-				tmpMajorTicksNumber = qRound( (sqrt(end) - sqrt(start)) / majorTicksIncrement + 1 );
+				tmpMajorTicksNumber = qRound( (qSqrt(end) - qSqrt(start)) / majorTicksIncrement + 1 );
 			break;
 		case RangeT::Scale::Square:
 			tmpMajorTicksNumber = qRound( (end*end - start*start) / majorTicksIncrement + 1 );
@@ -1352,7 +1364,7 @@ void AxisPrivate::retransformTicks() {
 	}
 
 	// minor ticks
-	int tmpMinorTicksNumber{0};
+	int tmpMinorTicksNumber = 0;
 	switch (minorTicksType) {
 	case Axis::TicksType::TotalNumber:
 		tmpMinorTicksNumber = minorTicksNumber;
@@ -1367,13 +1379,8 @@ void AxisPrivate::retransformTicks() {
 		(minorTicksColumn) ? tmpMinorTicksNumber = minorTicksColumn->rowCount() : tmpMinorTicksNumber = 0;
 	}
 
-	QPointF anchorPoint, startPoint, endPoint;
-	qreal majorTickPos = 0.0;
-	qreal minorTickPos;
-	qreal nextMajorTickPos = 0.0;
-
 	if (!q->cSystem) {
-		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no csystem!")
+		DEBUG(Q_FUNC_INFO << ", WARNING: axis has no coordinate system!")
 		return;
 	}
 //	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem->yIndex() };
@@ -1382,9 +1389,12 @@ void AxisPrivate::retransformTicks() {
 //	DEBUG(Q_FUNC_INFO << ", y range " << yIndex + 1)
 //	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->xIndex() )
 
-	const int xDirection = q->cSystem->xDirection();
-	const int yDirection = q->cSystem->yDirection();
-	DEBUG(Q_FUNC_INFO << ", x/y direction: " << xDirection << "/" << yDirection)
+	const int xRangeDirection = plot()->xRangeCSystem(q->coordinateSystemIndex()).direction();
+	const int yRangeDirection = plot()->yRangeCSystem(q->coordinateSystemIndex()).direction();
+//	DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
+	const int xDirection = q->cSystem->xDirection() * xRangeDirection;
+	const int yDirection = q->cSystem->yDirection() * yRangeDirection;
+//	DEBUG(Q_FUNC_INFO << ", x/y direction: " << xDirection << "/" << yDirection)
 
 	//calculate the position of the center point in scene coordinates,
 	//will be used later to differentiate between "in" and "out" depending
@@ -1396,38 +1406,39 @@ void AxisPrivate::retransformTicks() {
 	bool valid = true;
 	center = q->cSystem->mapLogicalToScene(center, valid);
 
-	//DEBUG("tmpMajorTicksNumber = " << tmpMajorTicksNumber)
 	for (int iMajor = 0; iMajor < tmpMajorTicksNumber; iMajor++) {
-		DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
+//		DEBUG(Q_FUNC_INFO << ", major tick " << iMajor)
+		qreal majorTickPos = 0.0;
+		qreal nextMajorTickPos = 0.0;
 		//calculate major tick's position
 		if (majorTicksType != Axis::TicksType::CustomColumn) {
 			switch (scale) {
 			case RangeT::Scale::Linear:
-				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
+//				DEBUG(Q_FUNC_INFO << ", start = " << start << ", incr = " << majorTicksIncrement << ", i = " << iMajor)
 				majorTickPos = start + majorTicksIncrement * iMajor;
 				if (qAbs(majorTickPos) < 1.e-15 * majorTicksIncrement)	// avoid rounding errors when close to zero
 					majorTickPos = 0;
 				nextMajorTickPos = majorTickPos + majorTicksIncrement;
 				break;
 			case RangeT::Scale::Log10:
-				majorTickPos = start * pow(10, majorTicksIncrement * iMajor);
-				nextMajorTickPos = majorTickPos * pow(10, majorTicksIncrement);
+				majorTickPos = start * qPow(10, majorTicksIncrement * iMajor);
+				nextMajorTickPos = majorTickPos * qPow(10, majorTicksIncrement);
 				break;
 			case RangeT::Scale::Log2:
 				majorTickPos = start * exp2(majorTicksIncrement * iMajor);
 				nextMajorTickPos = majorTickPos * exp2(majorTicksIncrement);
 				break;
 			case RangeT::Scale::Ln:
-				majorTickPos = start * exp(majorTicksIncrement * iMajor);
+				majorTickPos = start * qExp(majorTicksIncrement * iMajor);
 				nextMajorTickPos = majorTickPos * exp(majorTicksIncrement);
 				break;
 			case RangeT::Scale::Sqrt:
-				majorTickPos = pow(sqrt(start) + majorTicksIncrement * iMajor, 2);
-				nextMajorTickPos = pow(sqrt(start) + majorTicksIncrement * (iMajor+1), 2);
+				majorTickPos = qPow(qSqrt(start) + majorTicksIncrement * iMajor, 2);
+				nextMajorTickPos = qPow(qSqrt(start) + majorTicksIncrement * (iMajor+1), 2);
 				break;
 			case RangeT::Scale::Square:
-				majorTickPos = sqrt(start*start + majorTicksIncrement * iMajor);
-				nextMajorTickPos = sqrt(start*start + majorTicksIncrement * (iMajor+1));
+				majorTickPos = qSqrt(start*start + majorTicksIncrement * iMajor);
+				nextMajorTickPos = qSqrt(start*start + majorTicksIncrement * (iMajor+1));
 				break;
 			case RangeT::Scale::Inverse:
 				majorTickPos = 1./(1./start + majorTicksIncrement * iMajor);
@@ -1446,13 +1457,14 @@ void AxisPrivate::retransformTicks() {
 				tmpMinorTicksNumber = 0;
 		}
 
-		double xAnchorPoint = 0.0;
-		double yAnchorPoint = 0.0;
+		qreal xAnchorPoint = 0.0;
+		qreal yAnchorPoint = 0.0;
 		if (!lines.isEmpty()) {
-			yAnchorPoint = lines.first().p1().y();
 			xAnchorPoint = lines.first().p1().x();
+			yAnchorPoint = lines.first().p1().y();
 		}
 
+		QPointF anchorPoint, startPoint, endPoint;
 		//calculate start and end points for major tick's line
 		if (majorTicksDirection != Axis::noTicks) {
 			if (orientation == Axis::Orientation::Horizontal) {
@@ -1462,12 +1474,13 @@ void AxisPrivate::retransformTicks() {
 				valid = transformAnchor(&anchorPoint);
 				anchorPoint.setY(yAnchorPoint);
 				if (valid) {
-					if (yAnchorPoint > center.y()) {
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
-						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
-					} else {
-						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut)  ? yDirection * majorTicksLength  : 0);
-						endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
+					// for yDirection == -1 start is above end
+					if (anchorPoint.y() >= center.y()) {	// below
+						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? yDirection * majorTicksLength : 0);
+						endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
+					} else {				// above
+						startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? yDirection * majorTicksLength : 0);
+						endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
 					}
 				}
 			} else { // vertical
@@ -1477,18 +1490,19 @@ void AxisPrivate::retransformTicks() {
 				valid = transformAnchor(&anchorPoint);
 				anchorPoint.setX(xAnchorPoint);
 				if (valid) {
-					if (xAnchorPoint < center.x()) {
-						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
+					// for xDirection == 1 start is right of end
+					if (anchorPoint.x() < center.x()) {	// left
+						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? xDirection * majorTicksLength : 0, 0);
 						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
-					} else {
+					} else {				// right
 						startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? xDirection * majorTicksLength : 0, 0);
-						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? -xDirection *  majorTicksLength  : 0, 0);
+						endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? -xDirection *  majorTicksLength : 0, 0);
 					}
 				}
 			}
 
-			double value = scalingFactor * majorTickPos + zeroOffset;
-			DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
+			const qreal value = scalingFactor * majorTickPos + zeroOffset;
+//			DEBUG(Q_FUNC_INFO << ", value = " << value << " " << scalingFactor << " " << majorTickPos << " " << zeroOffset)
 
 			//if custom column is used, we can have duplicated values in it and we need only unique values
 			if (majorTicksType == Axis::TicksType::CustomColumn && tickLabelValues.indexOf(value) != -1)
@@ -1535,6 +1549,7 @@ void AxisPrivate::retransformTicks() {
 			//DEBUG("	majorTickPos = " << majorTickPos)
 			//DEBUG("	minorTicksIncrement = " << minorTicksIncrement)
 
+			qreal minorTickPos;
 			for (int iMinor = 0; iMinor < tmpMinorTicksNumber; iMinor++) {
 				//calculate minor tick's position
 				if (minorTicksType != Axis::TicksType::CustomColumn) {
@@ -1551,7 +1566,7 @@ void AxisPrivate::retransformTicks() {
 				}
 				//DEBUG("		minorTickPos = " << minorTickPos)
 
-				//calculate start and end points for minor tick's line
+				//calculate start and end points for minor tick's line (same as major ticks)
 				if (orientation == Axis::Orientation::Horizontal) {
 					auto startY = q->plot()->yRange(cs->yIndex()).start();
 					anchorPoint.setX(minorTickPos);
@@ -1559,12 +1574,12 @@ void AxisPrivate::retransformTicks() {
 					valid = transformAnchor(&anchorPoint);
 					anchorPoint.setY(yAnchorPoint);
 					if (valid) {
-						if (yAnchorPoint > center.y()) {
-							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn)  ? yDirection * minorTicksLength  : 0);
-							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
+						if (anchorPoint.y() >= center.y()) { // below
+							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? yDirection * minorTicksLength : 0);
+							endPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? -yDirection * minorTicksLength : 0);
 						} else {
-							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut)  ? yDirection * minorTicksLength  : 0);
-							endPoint   = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? -yDirection * minorTicksLength : 0);
+							startPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksOut) ? yDirection * minorTicksLength : 0);
+							endPoint = anchorPoint + QPointF(0, (minorTicksDirection & Axis::ticksIn) ? -yDirection * minorTicksLength : 0);
 						}
 					}
 				} else { // vertical
@@ -1574,12 +1589,12 @@ void AxisPrivate::retransformTicks() {
 					valid = transformAnchor(&anchorPoint);
 					anchorPoint.setX(xAnchorPoint);
 					if (valid) {
-						if (xAnchorPoint < center.x()) {
-							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn)  ? xDirection * minorTicksLength  : 0, 0);
-							endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
+						if (anchorPoint.x() < center.x()) {
+							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? xDirection * minorTicksLength : 0, 0);
+							endPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? -xDirection * minorTicksLength : 0, 0);
 						} else {
-							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut)  ? xDirection * minorTicksLength  : 0, 0);
-							endPoint   = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? -xDirection * minorTicksLength : 0, 0);
+							startPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksOut) ? xDirection * minorTicksLength : 0, 0);
+							endPoint = anchorPoint + QPointF((minorTicksDirection & Axis::ticksIn) ? -xDirection * minorTicksLength : 0, 0);
 						}
 					}
 				}
@@ -1604,8 +1619,8 @@ void AxisPrivate::retransformTicks() {
 }
 
 /*!
-	creates the tick label strings starting with the most optimal
-	(=the smallest possible number of float digits) precision for the floats
+	creates the tick label strings starting with the optimal
+	(=the smallest possible number of digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
 	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", labels precision = " << labelsPrecision)
@@ -1660,11 +1675,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	}
 
 	tickLabelStrings.clear();
-	QString str;
-	SET_NUMBER_LOCALE
-	bool numeric = false;
-	bool datetime = false;
-	bool text = false;
+	bool numeric = false, datetime = false, text = false;
 	if (labelsTextType == Axis::LabelsTextType::PositionValues) {
 		auto xRangeFormat{ plot()->xRange(cs->xIndex()).format() };
 		auto yRangeFormat{ plot()->yRange(cs->yIndex()).format() };
@@ -1692,11 +1703,14 @@ void AxisPrivate::retransformTickLabelStrings() {
 		}
 	}
 
+	QString str;
+	SET_NUMBER_LOCALE
 	if (numeric) {
 		if (labelsFormat == Axis::LabelsFormat::Decimal) {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
-				str = numberLocale.toString(value, 'f', labelsPrecision);
+				// toString does not round: use NSL function
+				str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
@@ -1707,7 +1721,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else
-					str = numberLocale.toString(value, 'e', labelsPrecision);
+					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'e', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
@@ -1717,7 +1731,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else  {
-					str = "10<sup>" + numberLocale.toString(log10(qAbs(value)), 'f', labelsPrecision) + "</sup>";
+					str = "10<sup>" + numberLocale.toString(nsl_math_round_places(log10(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + "</sup>";
 					if (value < 0)
 						str.prepend("-");
 				}
@@ -1729,7 +1743,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else  {
-					str = "2<span style=\"vertical-align:super\">" + numberLocale.toString(log2(qAbs(value)), 'f', labelsPrecision) + "</span>";
+					str = "2<span style=\"vertical-align:super\">" + numberLocale.toString(nsl_math_round_places(log2(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + "</spanlabelsPrecision)>";
 					if (value < 0)
 						str.prepend("-");
 				}
@@ -1741,7 +1755,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else {
-					str = "e<span style=\"vertical-align:super\">" + numberLocale.toString(log(qAbs(value)), 'f', labelsPrecision) + "</span>";
+					str = "e<span style=\"vertical-align:super\">" + numberLocale.toString(nsl_math_round_places(log(qAbs(value)), labelsPrecision), 'f', labelsPrecision) + "</span>";
 					if (value < 0)
 						str.prepend("-");
 				}
@@ -1753,7 +1767,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else
-					str = "<span>" + numberLocale.toString(value / M_PI, 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
+					str = "<span>" + numberLocale.toString(nsl_math_round_places(value / M_PI, labelsPrecision), 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
@@ -1762,9 +1776,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
 				else if (qAbs(value) < 100. && qAbs(value) > .01)	// use normal notation for values near 1
-					str = numberLocale.toString(value, 'f', labelsPrecision);
+					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				else {
-					str = numberLocale.toString(value, 'e', labelsPrecision);
+					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'e', labelsPrecision);
 					str.remove("+");	// remove '+' in exponent
 					str.replace( QRegExp("e(.*)"), "×10<sup>\\1</sup>" );	// e(-)NN -> ×10<sup>(-)NN</sup>
 				}
@@ -1798,7 +1812,6 @@ void AxisPrivate::retransformTickLabelStrings() {
  */
 int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFormat format) {
 	DEBUG(Q_FUNC_INFO << ", precision = " << precision);
-//	QDEBUG(Q_FUNC_INFO << ", values: " << tickLabelValues)
 
 	// avoid problems with zero range axis
 	if (tickLabelValues.isEmpty() || qFuzzyCompare(tickLabelValues.constFirst(), tickLabelValues.constLast())) {
@@ -1838,13 +1851,18 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 //	QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
 
 	for (int i = 0; i < tempValues.size(); ++i) {
+		// check if rounded value differs too much
+		const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
+		const double relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+		//DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+		//DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 		for (int j = 0; j < tempValues.size(); ++j) {
 			if (i == j)
 				continue;
 
-			// if duplicate for the current precision found, increase the precision and check again
+			// if duplicate for the current precision found or differs too much, increase the precision and check again
 			//DEBUG(Q_FUNC_INFO << ", compare " << tempValues.at(i) << " with " << tempValues.at(j))
-			if (tempValues.at(i) == tempValues.at(j)) {
+			if (tempValues.at(i) == tempValues.at(j) || relDiff > 0.01) {
 				//DEBUG(Q_FUNC_INFO << ", duplicates found : " << tempValues.at(i))
 				return upperLabelsPrecision(precision + 1, format);
 			}
@@ -1868,38 +1886,45 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 	switch (format) {
 	case Axis::LabelsFormat::Decimal:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(value, precision-1) );
+			tempValues.append( nsl_math_round_places(value, precision) );
 		break;
 	case Axis::LabelsFormat::MultipliesPi:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(value / M_PI, precision-1) );
+			tempValues.append( nsl_math_round_places(value / M_PI, precision) );
 		break;
 	case Axis::LabelsFormat::ScientificE:
 	case Axis::LabelsFormat::Scientific:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_precision(value, precision-1) );
+			tempValues.append( nsl_math_round_precision(value, precision) );
 		break;
 	case Axis::LabelsFormat::Powers10:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision-1) );
+			tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision) );
 		break;
 	case Axis::LabelsFormat::Powers2:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log2(qAbs(value)), precision-1) );
+			tempValues.append( nsl_math_round_places(log2(qAbs(value)), precision) );
 		break;
 	case Axis::LabelsFormat::PowersE:
 		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision-1) );
+			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
 	}
-
+//	QDEBUG(Q_FUNC_INFO << ", values = " << tempValues)
 
 	//check whether we have duplicates with reduced precision
-	//-> current precision cannot be reduced, return the current value
+	//-> current precision cannot be reduced, return the previous value
 	for (int i = 0; i < tempValues.size(); ++i) {
+		// return if rounded value differs too much
+		const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
+		const double relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+		//DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+		//DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
+		if (relDiff > 0.01)	// > 1 %
+			return precision + 1;
 		for (int j = 0; j < tempValues.size(); ++j) {
 			if (i == j) continue;
 			if (tempValues.at(i) == tempValues.at(j))
-				return precision;
+				return precision + 1;
 		}
 	}
 
@@ -1939,9 +1964,8 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
-	// TODO: M_PI/180. factor
-	const double cosine = cos(labelsRotationAngle * M_PI / 180.); // calculate only one time
-	const double sine = sin(labelsRotationAngle * M_PI / 180.); // calculate only one time
+	const double cosine = qCos( qDegreesToRadians(labelsRotationAngle) ); // calculate only once
+	const double sine = qSin( qDegreesToRadians(labelsRotationAngle) ); // calculate only once
 
 	int size = qMin(majorTickPoints.size(), tickLabelStrings.size());
 	auto xRangeFormat{ plot()->xRange(cs->xIndex()).format() };
@@ -1962,20 +1986,27 @@ void AxisPrivate::retransformTickLabelPositions() {
 
 		const double diffx = cosine * width;
 		const double diffy = sine * width;
-		anchorPoint = majorTickPoints.at(i);
+		QPointF anchorPoint = majorTickPoints.at(i);
 
 		//center align all labels with respect to the end point of the tick line
+		const int xRangeDirection = plot()->xRangeCSystem(q->coordinateSystemIndex()).direction();
+		const int yRangeDirection = plot()->yRangeCSystem(q->coordinateSystemIndex()).direction();
+//		DEBUG(Q_FUNC_INFO << ", x/y range direction = " << xRangeDirection << "/" << yRangeDirection)
+		const int xDirection = q->cSystem->xDirection() * xRangeDirection;
+		const int yDirection = q->cSystem->yDirection() * yRangeDirection;
+//		DEBUG(Q_FUNC_INFO << ", x/y direction = " << xDirection << "/" << yDirection)
+		QPointF startPoint, endPoint;
 		if (orientation == Axis::Orientation::Horizontal) {
-			if (offset < middleY) {
-				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn)  ? yDirection * majorTicksLength  : 0);
-				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
-			} else {
-				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut)  ? yDirection * majorTicksLength  : 0);
-				endPoint   = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
+			if (anchorPoint.y() >= center.y()) {	// below
+				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? yDirection * majorTicksLength : 0);
+				endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? -yDirection * majorTicksLength : 0);
+			} else {				// above
+				startPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksOut) ? yDirection * majorTicksLength : 0);
+				endPoint = anchorPoint + QPointF(0, (majorTicksDirection & Axis::ticksIn) ? -yDirection * majorTicksLength : 0);
 			}
 
 			// for rotated labels (angle is not zero), align label's corner at the position of the tick
-			if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
+			if (qAbs(qAbs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() + width/2);
 					pos.setY(endPoint.y() + labelsOffset );
@@ -2008,17 +2039,16 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setY(startPoint.y() - labelsOffset);
 				}
 			}
-			// ---------------------- vertical -------------------------
-		} else {
-			if (offset < middleX) {
-				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? xDirection * majorTicksLength  : 0, 0);
+		} else {	// ---------------------- vertical -------------------------
+			if (anchorPoint.x() < center.x()) {
+				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? xDirection * majorTicksLength : 0, 0);
 				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? -xDirection * majorTicksLength : 0, 0);
 			} else {
 				startPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksOut) ? xDirection * majorTicksLength : 0, 0);
-				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn)  ? -xDirection *  majorTicksLength  : 0, 0);
+				endPoint = anchorPoint + QPointF((majorTicksDirection & Axis::ticksIn) ? -xDirection * majorTicksLength : 0, 0);
 			}
 
-			if (fabs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
+			if (qAbs(labelsRotationAngle - 90.) < 1.e-2) { // +90°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() + width/2 );
@@ -2026,7 +2056,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() + width/2);
 				}
-			} else if (fabs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
+			} else if (qAbs(labelsRotationAngle + 90.) < 1.e-2) { // -90°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset - height);
 					pos.setY(endPoint.y() - width/2);
@@ -2034,7 +2064,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset);
 					pos.setY(startPoint.y() - width/2);
 				}
-			} else if (fabs(fabs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
+			} else if (qAbs(qAbs(labelsRotationAngle) - 180.) < 1.e-2) { // +-180°
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					pos.setX(endPoint.x() - labelsOffset);
 					pos.setY(endPoint.y() - height/2);
@@ -2042,7 +2072,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset + width);
 					pos.setY(startPoint.y() - height/2);
 				}
-			} else if (fabs(labelsRotationAngle) >= 0.01 && fabs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
+			} else if (qAbs(labelsRotationAngle) >= 0.01 && qAbs(labelsRotationAngle) <= 89.99) { // [0.01°, 90°)
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
 					pos.setX(endPoint.x() - labelsOffset - diffx + sine * height/2);
@@ -2051,7 +2081,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 					pos.setX(startPoint.x() + labelsOffset + sine * height/2);
 					pos.setY(startPoint.y() + cosine * height/2);
 				}
-			} else if (fabs(labelsRotationAngle) >= 90.01 && fabs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
+			} else if (qAbs(labelsRotationAngle) >= 90.01 && qAbs(labelsRotationAngle) <= 179.99) { // [90.01, 180)
 				if (labelsPosition == Axis::LabelsPosition::Out) {
 					// left
 					pos.setX(endPoint.x() - labelsOffset + sine * height/2);
@@ -2298,10 +2328,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
-	if (!isVisible())
-		return;
-
-	if (linePath.isEmpty())
+	if (!isVisible() || linePath.isEmpty())
 		return;
 
 	//draw the line
@@ -2386,6 +2413,50 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* optio
 				painter->restore();
 				painter->translate(-tickLabelPoints.at(i));
 			}
+		}
+
+		// scale + offset label
+		if (showScaleOffset && tickLabelPoints.size() > 0) {
+			QString text;
+			SET_NUMBER_LOCALE
+			if (scalingFactor != 1)
+				text += UTF8_QSTRING("×") + numberLocale.toString(1./scalingFactor);
+			if (zeroOffset != 0) {
+//				if (!text.isEmpty())
+//					text += QLatin1String(" ");
+				if (zeroOffset < 0)
+					text += QLatin1String("+");
+				text += numberLocale.toString(-zeroOffset);
+			}
+
+			// used to determinde direction (up/down, left/right)
+			const qreal middleX = plot()->xRangeCSystem(q->coordinateSystemIndex()).center();
+			const qreal middleY = plot()->yRangeCSystem(q->coordinateSystemIndex()).center();
+			QPointF center(middleX, middleY);
+			bool valid = true;
+			center = q->cSystem->mapLogicalToScene(center, valid);
+
+			QPointF lastTickPoint = tickLabelPoints.at(tickLabelPoints.size() - 1);
+			QPointF labelPosition;
+			QFontMetrics fm(labelsFont);
+			if (orientation == Axis::Orientation::Horizontal) {
+				if (center.y() < lastTickPoint.y())
+					labelPosition = QPointF(-fm.boundingRect(text).width(), 40);
+				else
+					labelPosition = QPointF(-fm.boundingRect(text).width(), -40);
+			} else {
+				if (center.x() < lastTickPoint.x())
+					labelPosition = QPointF(40, 40);
+				else
+					labelPosition = QPointF(-fm.boundingRect(text).width() - 10, 40);
+			}
+			const QPointF offsetLabelPoint = lastTickPoint + labelPosition;
+			painter->translate(offsetLabelPoint);
+			// TODO: own format, rotation, etc.
+			//	painter->save();
+			painter->drawText(QPoint(0, 0), text);
+			//	painter->restore();
+			painter->translate(-offsetLabelPoint);
 		}
 	}
 
@@ -2494,6 +2565,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "end", QString::number(d->range.end()) );
 	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
 	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
+	writer->writeAttribute( "showScaleOffset", QString::number(d->showScaleOffset) );
 	writer->writeAttribute( "titleOffsetX", QString::number(d->titleOffsetX) );
 	writer->writeAttribute( "titleOffsetY", QString::number(d->titleOffsetY) );
 	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
@@ -2608,6 +2680,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("end", range.end());
 			READ_DOUBLE_VALUE("scalingFactor", scalingFactor);
 			READ_DOUBLE_VALUE("zeroOffset", zeroOffset);
+			READ_INT_VALUE("showScaleOffset", showScaleOffset, bool);
 			READ_DOUBLE_VALUE("titleOffsetX", titleOffsetX);
 			READ_DOUBLE_VALUE("titleOffsetY", titleOffsetY);
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
