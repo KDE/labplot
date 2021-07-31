@@ -427,7 +427,7 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	connect(m_plot, &CartesianPlot::rangeFirstValuesChanged, this, &CartesianPlotDock::plotRangeFirstValuesChanged);
 	connect(m_plot, &CartesianPlot::rangeLastValuesChanged, this, &CartesianPlotDock::plotRangeLastValuesChanged);
 	//TODO: check if needed
-	connect(m_plot, &CartesianPlot::xAutoScaleChangedCSystem, this, &CartesianPlotDock::plotXAutoScaleChanged);
+	connect(m_plot, &CartesianPlot::xAutoScaleChanged, this, &CartesianPlotDock::plotXAutoScaleChanged);
 	connect(m_plot, &CartesianPlot::xMinChanged, this, &CartesianPlotDock::plotXMinChanged);
 	connect(m_plot, &CartesianPlot::xMaxChanged, this, &CartesianPlotDock::plotXMaxChanged);
 	connect(m_plot, &CartesianPlot::xRangeChanged, this, &CartesianPlotDock::plotXRangeChanged);
@@ -823,7 +823,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 	for (int i{0}; i < cSystemCount; i++) {
 		const auto* cSystem{ m_plot->coordinateSystem(i) };
 		const int xIndex{ cSystem->xIndex() }, yIndex{ cSystem->yIndex() };
-		const auto xRange{ m_plot->xRangeCSystem(xIndex) }, yRange{ m_plot->yRangeCSystem(yIndex) };
+		const auto xRange{ m_plot->xRange(xIndex) }, yRange{ m_plot->yRange(yIndex) };
 
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i+1 << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << " auto scale = " << xRange.autoScale())
@@ -1038,20 +1038,26 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 
 	for (auto* plot : m_plotList) {
 		int retransform = 0;
-		for (int i=0; i < plot->coordinateSystemCount(); i++)
-		{
-			if (plot->coordinateSystem(i)->xIndex() == index) {
-				plot->setAutoScaleXCSystem(i, checked);
-				DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRangeFromIndex(index).autoScale())
-				if (checked) { // && index == plot->defaultCoordinateSystem()->xIndex()
-					retransform = plot->scaleAutoXCSystem(i, true, true);
-					if (plot->autoScaleYCSystem(i))
-						retransform += plot->scaleAutoYCSystem(i, false, true);
+		plot->setAutoScaleX(index, checked);
+		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRange(index).autoScale())
+		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
+			retransform = plot->scaleAutoX(index, true, true);
+
+			for (int i=0; i < plot->coordinateSystemCount(); i++)
+			{
+				auto cSystem = plot->coordinateSystem(i);
+				if (cSystem->xIndex() == index) {
+					if (plot->autoScaleY(cSystem->xIndex()))
+						retransform += plot->scaleAutoY(cSystem->yIndex(), false, true);
 				}
 			}
 		}
-		if (retransform)
+		if (retransform) // TODO: not necessay to retransform all coordinatesystems. Maybe storing in a vector all system indices and then retransform only them
 			plot->retransformScales();
+		else {
+			// TODO:when no object used the range, handle it differently
+
+		}
 
 	}
 	updateXRangeList();	// see range changes
@@ -1079,19 +1085,21 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 
 	for (auto* plot : m_plotList) {
 		int retransform = 0;
-		for (int i=0; i < plot->coordinateSystemCount(); i++)
-		{
-			if (plot->coordinateSystem(i)->yIndex() == index) {
-				plot->setAutoScaleYCSystem(i, checked);
-				DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRangeFromIndex(index).autoScale())
-				if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
-					retransform = plot->scaleAutoYCSystem(i, true, true);
-					//TODO: which yIndex?
-					if (plot->autoScaleXCSystem(i))
-						retransform += plot->scaleAutoXCSystem(i, false, true);
+		plot->setAutoScaleY(index, checked);
+		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRange(index).autoScale())
+		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
+			retransform = plot->scaleAutoY(index, true, true);
+
+			for (int i=0; i < plot->coordinateSystemCount(); i++)
+			{
+				auto cSystem = plot->coordinateSystem(i);
+				if (cSystem->yIndex() == index) {
+					if (plot->autoScaleX(cSystem->xIndex()))
+						retransform += plot->scaleAutoX(cSystem->xIndex(), false, true);
 				}
 			}
 		}
+
 		if (retransform)
 			plot->retransformScales();
 	}
@@ -1519,7 +1527,7 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 		}
 	}
 
-	m_plot->dataChangedCSystem(-1);	// update plot
+	m_plot->dataChanged(index, -1);	// update plot
 }
 void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	const int plotRangeIndex{ sender()->property("row").toInt() };
@@ -1544,7 +1552,7 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	}
 
 	// TODO: cha
-	m_plot->dataChangedCSystem(-1);	// update plot
+	m_plot->dataChanged(-1, index);	// update plot
 }
 
 // "Range Breaks"-tab

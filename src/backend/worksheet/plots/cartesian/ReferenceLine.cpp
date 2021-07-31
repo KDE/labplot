@@ -274,8 +274,9 @@ void ReferenceLinePrivate::retransform() {
 	if (suppressRetransform || ! q->cSystem)
 		return;
 
-	const auto xRange{ q->m_plot->xRangeCSystem(q->coordinateSystemIndex()) };
-	const auto yRange{ q->m_plot->yRangeCSystem(q->coordinateSystemIndex()) };
+	auto cs = q->m_plot->coordinateSystem(q->coordinateSystemIndex());
+	const auto xRange{ q->m_plot->xRange(cs->xIndex()) };
+	const auto yRange{ q->m_plot->yRange(cs->yIndex()) };
 
 	//calculate the position in the scene coordinates
 	QVector<QPointF> listLogical;

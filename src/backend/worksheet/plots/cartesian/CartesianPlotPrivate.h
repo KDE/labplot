@@ -44,9 +44,9 @@ public:
 	~CartesianPlotPrivate();
 
 	void retransform() override;
-	void retransformYScale(CartesianCoordinateSystem* cSystem);
-	void retransformXScale(CartesianCoordinateSystem* cSystem);
-	void retransformScalesCSystem(int cSystemIndex);
+	void retransformYScale(int index);
+	void retransformXScale(int index);
+	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
 	void xRangeFormatChanged();
 	void yRangeFormatChanged();
@@ -60,7 +60,7 @@ public:
 	void mousePressCursorMode(int cursorNumber, QPointF logicalPos);
 	void updateCursor();
 	void setZoomSelectionBandShow(bool show);
-	bool translateRange(int cSystemIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY);
+	bool translateRange(int xIndex, int yIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY);
 
 	CartesianPlot::Type type{CartesianPlot::Type::FourAxes};
 	QString theme;
@@ -80,56 +80,56 @@ public:
 	Range<double>& yRange() {
 		return yRanges[defaultCoordinateSystem()->yIndex()].range;
 	}
-	Range<double>& xRangeCSystem(int cSystemIndex) {
-		if (cSystemIndex >= 0)
-			return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].range;
+	Range<double>& xRange(int index) {
+		if (index >= 0)
+			return xRanges[index].range;
 		return xRange();
 	}
-	Range<double>& yRangeCSystem(int cSystemIndex) {
-		if (cSystemIndex >= 0)
-			return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].range;
+	Range<double>& yRange(int index) {
+		if (index >= 0)
+			return yRanges[index].range;
 		return yRange();
 	}
-	Range<double>& xRangeAutoScaleCSystem(int cSystemIndex) {
-		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->xIndex()].autoScaleRange;
+	Range<double>& xRangeAutoScale(int index) {
+		return xRanges[index].autoScaleRange;
 	}
-	Range<double>& yRangeAutoScaleCSystem(int cSystemIndex) {
-		return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex])->yIndex()].autoScaleRange;
+	Range<double>& yRangeAutoScale(int index) {
+		return yRanges[index].autoScaleRange;
 	}
 
-	bool autoScaleXCSystem(int index = -1) {
+	bool autoScaleX(int index = -1) {
 		if (index == -1) {
-			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
-				if (!autoScaleXCSystem(i))
+			for (int i = 0; i < q->xRangeCount(); i++)
+				if (!autoScaleX(i))
 					return false;
 			return true;
 		}
-		return xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->xIndex()].range.autoScale();
+		return xRanges[index].range.autoScale();
 	}
-	bool autoScaleYCSystem(int index = -1) {
+	bool autoScaleY(int index = -1) {
 		if (index == -1) {
-			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
-				if (!autoScaleYCSystem(i))
+			for (int i = 0; i < q->yRangeCount(); i++)
+				if (!autoScaleY(i))
 					return false;
 			return true;
 		}
-		return yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->yIndex()].range.autoScale();
+		return yRanges[index].range.autoScale();
 	}
-	void setAutoScaleXCSystem(int index = -1, bool b = true) {
+	void setAutoScaleX(int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
-				setAutoScaleXCSystem(i, b);
+			for (int i = 0; i < q->xRangeCount(); i++)
+				setAutoScaleX(i, b);
 			return;
 		}
-		xRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->xIndex()].range.setAutoScale(b);
+		xRanges[index].range.setAutoScale(b);
 	}
 	void setAutoScaleY(int index = -1, bool b = true) {
 		if (index == -1) {
-			for (int i = 0; i < q->m_coordinateSystems.count(); i++)
+			for (int i = 0; i < q->yRangeCount(); i++)
 				setAutoScaleY(i, b);
 			return;
 		}
-		yRanges[static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index])->yIndex()].range.setAutoScale(b);
+		yRanges[index].range.setAutoScale(b);
 	}
 
 	//the following factor determines the size of the offset between the min/max points of the curves
@@ -200,8 +200,8 @@ private:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void updateDataRect();
-	void checkXRange(int xRangeIndex);
-	void checkYRange(int yRangeIndex);
+	void checkXRange(int index);
+	void checkYRange(int index);
 	CartesianScale* createScale(RangeT::Scale,
 		const Range<double> &sceneRange, const Range<double> &logicalRange);
 

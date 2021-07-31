@@ -1316,8 +1316,9 @@ void XYCurvePrivate::updateLines() {
 	QPointF tempPoint1, tempPoint2; // used as temporaryPoints to interpolate datapoints if set
 	if (columnProperties == AbstractColumn::Properties::Constant) {
 		DEBUG(Q_FUNC_INFO << ", CONSTANT column")
-		const auto xRange{ plot()->xRangeCSystem(q->coordinateSystemIndex()) };
-		const auto yRange{ plot()->yRangeCSystem(q->coordinateSystemIndex()) };
+		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+		const auto xRange{ plot()->xRange(cs->xIndex()) };
+		const auto yRange{ plot()->yRange(cs->yIndex()) };
 		tempPoint1 = QPointF(xRange.start(), yRange.start());
 		tempPoint2 = QPointF(xRange.start(), yRange.end());
 		m_lines.append(QLineF(tempPoint1, tempPoint2));
@@ -1325,7 +1326,8 @@ void XYCurvePrivate::updateLines() {
 		QPointF lastPoint{qQNaN(), qQNaN()};	// last x value
 		qint64 pixelDiff;
 		QPointF p0, p1;
-		double minLogicalDiffX = plot()->xRangeCSystem(q->coordinateSystemIndex()).size()/numberOfPixelX;
+		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+		double minLogicalDiffX = plot()->xRange(cs->xIndex()).size()/numberOfPixelX;
 
 		switch (lineType) {
 		case XYCurve::LineType::NoLine:
@@ -1620,8 +1622,9 @@ void XYCurvePrivate::updateDropLines() {
 
 	//calculate drop lines
 	QVector<QLineF> dlines;
-	const double xMin = plot()->xRangeCSystem(q->coordinateSystemIndex()).start();
-	const double yMin = plot()->yRangeCSystem(q->coordinateSystemIndex()).start();
+	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+	const double xMin = plot()->xRange(cs->xIndex()).start();
+	const double yMin = plot()->yRange(cs->yIndex()).start();
 
 	//don't skip the invisible points, we still need to calculate
 	//the drop lines falling into the plot region
@@ -1722,11 +1725,12 @@ void XYCurvePrivate::updateValues() {
 
 	//determine the value string for all points that are currently visible in the plot
 	int i{0};
+	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 	SET_NUMBER_LOCALE
 	switch (valuesType) {
 	case XYCurve::ValuesType::NoValues:
 	case XYCurve::ValuesType::X: {
-		auto xRangeFormat{ plot()->xRangeCSystem(q->coordinateSystemIndex()).format() };
+		auto xRangeFormat{ plot()->xRange(cs->xIndex()).format() };
 		int precision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1742,7 +1746,7 @@ void XYCurvePrivate::updateValues() {
 		break;
 	}
 	case XYCurve::ValuesType::Y: {
-		auto rangeFormat{ plot()->yRangeCSystem(q->coordinateSystemIndex()).format() };
+		auto rangeFormat{ plot()->yRange(cs->yIndex()).format() };
 		int precision = valuesPrecision;
 		if (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			precision = 0;
@@ -1759,8 +1763,8 @@ void XYCurvePrivate::updateValues() {
 	}
 	case XYCurve::ValuesType::XY:
 	case XYCurve::ValuesType::XYBracketed: {
-		auto xRangeFormat{ plot()->xRangeCSystem(q->coordinateSystemIndex()).format() };
-		auto yRangeFormat{ plot()->yRangeCSystem(q->coordinateSystemIndex()).format() };
+		auto xRangeFormat{ plot()->xRange(cs->xIndex()).format() };
+		auto yRangeFormat{ plot()->yRange(cs->yIndex()).format() };
 
 		int xPrecision = valuesPrecision;
 		if (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
@@ -1927,8 +1931,9 @@ void XYCurvePrivate::updateFilling() {
 	const QPointF& last = m_logicalPoints.at(m_logicalPoints.size()-1);//last point of the curve, may not be visible currently
 	QPointF edge;
 	double xEnd{0.}, yEnd{0.};
-	const auto xRange{ plot()->xRangeCSystem(q->coordinateSystemIndex()) };
-	const auto yRange{ plot()->yRangeCSystem(q->coordinateSystemIndex()) };
+	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+	const auto xRange{ plot()->xRange(cs->xIndex()) };
+	const auto yRange{ plot()->yRange(cs->yIndex()) };
 	const double xMin{ xRange.start() }, xMax{ xRange.end() };
 	const double yMin{ yRange.start() }, yMax{ yRange.end() };
 	bool visible;

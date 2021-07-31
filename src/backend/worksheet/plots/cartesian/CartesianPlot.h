@@ -142,10 +142,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
-	bool autoScaleXCSystem(int cSystemIndex = -1) const;	// is x range index auto scaled?
-	void setAutoScaleXCSystem(int cSystemIndex = -1, bool = true);	// auto scale x range index
-	bool autoScaleYCSystem(int cSystemIndex = -1) const;	// is y range index auto scaled?
-	void setAutoScaleYCSystem(int cSystemIndex = -1, bool = true);	// auto scale y range index
+	bool autoScaleX(int index = -1) const;	// is x range index auto scaled?
+	void setAutoScaleX(int index = -1, bool = true);	// auto scale x range index
+	bool autoScaleY(int index = -1) const;	// is y range index auto scaled?
+	void setAutoScaleY(int index = -1, bool = true);	// auto scale y range index
 
 	int xRangeCount() const;
 	int yRangeCount() const;
@@ -157,14 +157,14 @@ public:
 	const Range<double>& yRangeFromIndex(int index) const;
 	Range<double>& xRangeFromIndex(int index);
 	Range<double>& yRangeFromIndex(int index);
-	const Range<double>& xRangeCSystem(int cSystemIndex) const;
-	const Range<double>& yRangeCSystem(int cSystemIndex) const;
+	const Range<double>& xRange(int index) const;
+	const Range<double>& yRange(int index) const;
 	void setXRange(int index, const Range<double>& value);
 	void setYRange(int index, const Range<double>& value);
-	bool xRangeDirtyCSystem(int cSystemIndex);
-	bool yRangeDirtyCSystem(int cSystemIndex);
-	void setXRangeDirtyCSystem(int cSystemIndex, bool dirty);
-	void setYRangeDirtyCSystem(int cSystemIndex, bool dirty);
+	bool xRangeDirty(int index);
+	bool yRangeDirty(int index);
+	void setXRangeDirty(int index, bool dirty);
+	void setYRangeDirty(int index, bool dirty);
 	void addXRange();				// add new x range
 	void addYRange();				// add new y range
 	void addXRange(const Range<double>&);		// add x range
@@ -214,11 +214,11 @@ private:
 	void initMenus();
 	void setColorPalette(const KConfig&);
 	const XYCurve* currentCurve() const;
-	void shift(int cSystemIndex, bool x, bool leftOrDown);
-	void zoom(int cSystemIndex, bool x, bool in);
+	void shift(int index, bool x, bool leftOrDown);
+	void zoom(int index, bool x, bool in);
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
-	Range<double> calculateCurvesXMinMaxCSystem(int cSystemIndex, bool completeRange = true);
-	void calculateCurvesYMinMaxCSystem(int cSystemIndex, bool completeRange = true);
+	Range<double> calculateCurvesXMinMax(int index, bool completeRange = true);
+	void calculateCurvesYMinMax(int index, bool completeRange = true);
 	void retransformScales();
 	int curveTotalCount() const;
 
@@ -324,26 +324,26 @@ public slots:
 	void addInfoElement();
 
 	void scaleAutoTriggered();
-	bool scaleAutoCSystem(int cSystemIndex = -1, bool fullRange = true);
-	bool scaleAutoXCSystem(int index = -1, bool fullRange = false, bool suppressRetransform = false);
-	bool scaleAutoYCSystem(int index = -1, bool fullRange = false, bool suppressRetransform = false);
+	bool scaleAuto(int xIndex, int yIndex, bool fullRange = true);
+	bool scaleAutoX(int index = -1, bool fullRange = false, bool suppressRetransform = false);
+	bool scaleAutoY(int index = -1, bool fullRange = false, bool suppressRetransform = false);
 
-	void zoomInCSystem(int cSystemIndex);
-	void zoomOutCSystem(int cSystemIndex);
-	void zoomInXCSystem(int cSystemIndex);
-	void zoomOutXCSystem(int cSystemIndex);
-	void zoomInYCSystem(int cSystemIndex);
-	void zoomOutYCSystem(int cSystemIndex);
+	void zoomIn(int xIndex = -1, int yIndex = -1);
+	void zoomOut(int xIndex = -1, int yIndex = -1);
+	void zoomInX(int index = -1);
+	void zoomOutX(int index = -1);
+	void zoomInY(int index = -1);
+	void zoomOutY(int index = -1);
 
-	void shiftLeftXCSystem(int cSystemIndex);
-	void shiftRightXCSystem(int cSystemIndex);
-	void shiftUpYCSystem(int cSystemIndex);
-	void shiftDownYCSystem(int cSystemIndex);
+	void shiftLeftX(int index = -1);
+	void shiftRightX(int index = -1);
+	void shiftUpY(int index = -1);
+	void shiftDownY(int index = -1);
 
 	void cursor();
 
-	bool autoScaleCSystem(int cSystemIndex = -1, bool fullRange = true);
-	void dataChangedCSystem(int cSystemIndex);
+	bool autoScale(int xIndex = -1, int yIndex = -1, bool fullRange = true);
+	void dataChanged(int xIndex, int yIndex);
 
 private slots:
 	void updateLegend();
@@ -351,8 +351,8 @@ private slots:
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 
-	void xDataChangedCSystem(int cSystemIndex);
-	void yDataChangedCSystem(int cSystemIndex);
+	void xDataChanged(int index);
+	void yDataChanged(int index);
 	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);
@@ -371,7 +371,7 @@ signals:
 	void rangeLastValuesChanged(int);
 	void rangeFirstValuesChanged(int);
 	void rectChanged(QRectF&);
-	void xAutoScaleChangedCSystem(int xRangeIndex, bool);
+	void xAutoScaleChanged(int xRangeIndex, bool);
 	void yAutoScaleChanged(int yRangeIndex, bool);
 	void xRangeChanged(int xRangeIndex, Range<double>);
 	void yRangeChanged(int yRangeIndex, Range<double>);

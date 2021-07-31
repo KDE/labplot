@@ -71,8 +71,9 @@ void CustomPoint::init() {
 	Q_D(CustomPoint);
 
 	// default position
-	d->position.setX(m_plot->xRangeCSystem(coordinateSystemIndex()).center());
-	d->position.setY(m_plot->yRangeCSystem(coordinateSystemIndex()).center());
+	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
+	d->position.setX(m_plot->xRange(cs->xIndex()).center());
+	d->position.setY(m_plot->yRange(cs->yIndex()).center());
 
 	//initialize the symbol
 	d->symbol = new Symbol(QString());
