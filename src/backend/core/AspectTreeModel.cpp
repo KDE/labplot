@@ -90,6 +90,10 @@ void AspectTreeModel::setSelectableAspects(const QList<AspectType>& list) {
 	m_selectableAspects = list;
 }
 
+const QList<AspectType>& AspectTreeModel::selectableAspects() const {
+	return m_selectableAspects;
+}
+
 void AspectTreeModel::setReadOnly(bool readOnly) {
 	m_readOnly = readOnly;
 }
@@ -131,10 +135,15 @@ QModelIndex AspectTreeModel::parent(const QModelIndex &index) const {
 	if (!index.isValid())
 		return QModelIndex{};
 
-	auto* parent_aspect = static_cast<AbstractAspect*>(index.internalPointer())->parentAspect();
-	if (!parent_aspect)
+	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+	if (!aspect)
 		return QModelIndex{};
-	return modelIndexOfAspect(parent_aspect);
+
+	auto* parent = aspect->parentAspect();
+	if (!parent)
+		return QModelIndex{};
+
+	return modelIndexOfAspect(parent);
 }
 
 int AspectTreeModel::rowCount(const QModelIndex &parent) const {
@@ -146,7 +155,7 @@ int AspectTreeModel::rowCount(const QModelIndex &parent) const {
 }
 
 int AspectTreeModel::columnCount(const QModelIndex &parent) const {
-	Q_UNUSED(parent);
+	Q_UNUSED(parent)
 	return 4;
 }
 
@@ -298,7 +307,7 @@ void AspectTreeModel::aspectDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void AspectTreeModel::aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
-	Q_UNUSED(child);
+	Q_UNUSED(child)
 	int index = parent->indexOfChild<AbstractAspect>(before);
 	if (index == -1)
 		index = parent->childCount<AbstractAspect>();

@@ -85,8 +85,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget* parent) : QComboBox(parent),
 	connect(m_lineEdit, &QLineEdit::textChanged, this, &TreeViewComboBox::filterChanged);
 }
 
-void TreeViewComboBox::setTopLevelClasses(const QList<AspectType>& list)
-{
+void TreeViewComboBox::setTopLevelClasses(const QList<AspectType>& list) {
 	m_topLevelClasses = list;
 }
 
@@ -152,8 +151,7 @@ void TreeViewComboBox::showPopup() {
 	TODO: why do I have to reimplement paintEvent. It should work
 	also without
 */
-void TreeViewComboBox::paintEvent(QPaintEvent *)
-{
+void TreeViewComboBox::paintEvent(QPaintEvent*) {
 	QStylePainter painter(this);
 	painter.setPen(palette().color(QPalette::Text));
 	// draw the combobox frame, focusrect and selected etc.
@@ -297,11 +295,29 @@ bool TreeViewComboBox::filter(const QModelIndex& index, const QString& text) {
 
 /*!
 	checks whether \c aspect is one of the allowed top level types
+	and has selectable children
 */
 bool TreeViewComboBox::isTopLevel(const AbstractAspect* aspect) const {
+	const auto& selectableTypes = m_model->selectableAspects();
 	for (AspectType type : m_topLevelClasses) {
-		if (aspect->type() == type)
-			return true;
+		if (aspect->type() == type) {
+			//curent aspect is a top level aspect,
+			//check whether its selectable
+			if (selectableTypes.indexOf(type) != -1)
+				return true;
+
+			//check whether the current aspect has selectable children
+			bool hasSelectableAspects = false;
+			for (auto selectableType : selectableTypes) {
+				const auto&  children = aspect->children(selectableType, AbstractAspect::ChildIndexFlag::Recursive);
+				if (!children.isEmpty()) {
+					hasSelectableAspects = true;
+					break;
+				}
+			}
+
+			return hasSelectableAspects;
+		}
 
 		if (type == AspectType::XYAnalysisCurve)
 			if (aspect->inherits(AspectType::XYAnalysisCurve))

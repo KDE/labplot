@@ -483,13 +483,13 @@ void XYCurveDock::setModel() {
 	cbYErrorPlusColumn->setTopLevelClasses(list);
 
 	if (m_curve->inherits(AspectType::XYAnalysisCurve))
-		//the model is use in the combobox for curve data sources -> allow to also select analysis curves
+		//the model is used in the combobox for curve data sources -> allow to also select analysis curves
 		list = {AspectType::Column, AspectType::XYCurve,
 			AspectType::XYFitCurve, AspectType::XYIntegrationCurve, AspectType::XYInterpolationCurve,
 			AspectType::XYSmoothCurve, AspectType::XYFourierFilterCurve, AspectType::XYFourierTransformCurve,
 			AspectType::XYConvolutionCurve, AspectType::XYCorrelationCurve, AspectType::XYDataReductionCurve};
 	else
-		list = {AspectType::Column, AspectType::XYCurve};
+		list = {AspectType::Column};
 
 	m_aspectTreeModel->setSelectableAspects(list);
 
