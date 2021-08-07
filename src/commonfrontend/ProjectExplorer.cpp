@@ -582,7 +582,8 @@ void ProjectExplorer::navigateTo(const QString& path) {
 	}
 }
 
-void ProjectExplorer::currentChanged(const QModelIndex & current, const QModelIndex & previous) {
+void ProjectExplorer::currentChanged(const QModelIndex& current, const QModelIndex& previous) {
+	DEBUG(Q_FUNC_INFO)
 	if (m_project->isLoading())
 		return;
 
@@ -716,6 +717,7 @@ void ProjectExplorer::toggleFilterMatchCompleteWord() {
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index) {
+	DEBUG(Q_FUNC_INFO)
 	if (m_project->isLoading())
 		return;
 
@@ -738,6 +740,7 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index) {
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
+	DEBUG(Q_FUNC_INFO)
 	if (m_project->isLoading())
 		return;
 
@@ -764,7 +767,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	QList<AbstractAspect*> selectedAspects;
 	for (const QModelIndex& index : qAsConst(items)) {
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
-		selectedAspects<<aspect;
+		selectedAspects << aspect;
 	}
 
 	emit selectedAspectsChanged(selectedAspects);

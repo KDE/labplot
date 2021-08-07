@@ -114,7 +114,7 @@ private slots:
 	void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 	void selectIndex(const QModelIndex&);
 	void deselectIndex(const QModelIndex&);
-	void selectionChanged(const QItemSelection&, const QItemSelection&);
+	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 
 	void save(QXmlStreamWriter*) const;
 	bool load(XmlStreamReader*);

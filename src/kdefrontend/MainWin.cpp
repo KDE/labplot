@@ -1950,6 +1950,7 @@ void MainWin::handleAspectAboutToBeRemoved(const AbstractAspect *aspect) {
 	Selects the new aspect.
 */
 void MainWin::handleCurrentAspectChanged(AbstractAspect* aspect) {
+	DEBUG(Q_FUNC_INFO)
 	if (!aspect)
 		aspect = m_project; // should never happen, just in case
 
