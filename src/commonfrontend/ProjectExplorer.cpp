@@ -5,7 +5,7 @@
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
     Copyright            : (C) 2007-2008 by Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2010-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2010-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -249,7 +249,6 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 	connect(treeModel, &AspectTreeModel::indexDeselected, this, &ProjectExplorer::deselectIndex);
 	connect(treeModel, &AspectTreeModel::hiddenAspectSelected, this, &ProjectExplorer::hiddenAspectSelected);
 
-	connect(m_treeView->selectionModel(), &QItemSelectionModel::currentChanged, this, &ProjectExplorer::currentChanged);
 	connect(m_treeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ProjectExplorer::selectionChanged);
 
 	//create action for showing/hiding the columns in the tree.
@@ -553,8 +552,8 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 		aspect->parentAspect()->inherits(AspectType::DatapickerCurve))
 		return;
 
-	const AspectTreeModel* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	const QModelIndex& index =  tree_model->modelIndexOfAspect(aspect);
+	const auto* tree_model = qobject_cast<AspectTreeModel*>(m_treeView->model());
+	const auto& index =  tree_model->modelIndexOfAspect(aspect);
 
 	//expand and make the aspect visible
 	m_treeView->setExpanded(index, true);
@@ -572,23 +571,14 @@ void ProjectExplorer::aspectAdded(const AbstractAspect* aspect) {
 }
 
 void ProjectExplorer::navigateTo(const QString& path) {
-	const AspectTreeModel* tree_model = dynamic_cast<AspectTreeModel*>(m_treeView->model());
+	const auto* tree_model = dynamic_cast<AspectTreeModel*>(m_treeView->model());
 	if (tree_model) {
-		const QModelIndex& index = tree_model->modelIndexOfAspect(path);
+		const auto& index = tree_model->modelIndexOfAspect(path);
 		m_treeView->scrollTo(index);
 		m_treeView->setCurrentIndex(index);
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspect->setSelected(true);
 	}
-}
-
-void ProjectExplorer::currentChanged(const QModelIndex& current, const QModelIndex& previous) {
-	DEBUG(Q_FUNC_INFO)
-	if (m_project->isLoading())
-		return;
-
-	Q_UNUSED(previous)
-	emit currentAspectChanged(static_cast<AbstractAspect*>(current.internalPointer()));
 }
 
 void ProjectExplorer::toggleColumn(int index) {
@@ -770,7 +760,12 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 		selectedAspects << aspect;
 	}
 
+	//notify GuiObserver about the new selection
 	emit selectedAspectsChanged(selectedAspects);
+
+	//notify MainWin about the new current aspect (last selected aspect).
+	if (!selectedAspects.isEmpty())
+		emit currentAspectChanged(selectedAspects.last());
 
 	//emitting the signal above is done to show the properties widgets for the selected aspect(s).
 	//with this the project explorer looses the focus and don't react on the key events like DEL key press, etc.

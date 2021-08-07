@@ -111,7 +111,6 @@ private slots:
 	void deleteSelected();
 
 	void navigateTo(const QString& path);
-	void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 	void selectIndex(const QModelIndex&);
 	void deselectIndex(const QModelIndex&);
 	void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
