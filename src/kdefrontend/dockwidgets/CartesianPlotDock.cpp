@@ -494,7 +494,6 @@ void CartesianPlotDock::updateLocale() {
 
 	//update the QLineEdits, avoid the change events
 	if (m_plot) {
-		Lock lock(m_initializing);
 		ui.leRangeFirst->setText( numberLocale.toString(m_plot->rangeFirstValues()) );
 		ui.leRangeLast->setText( numberLocale.toString(m_plot->rangeLastValues()) );
 
@@ -2521,6 +2520,7 @@ void CartesianPlotDock::load() {
 	//Title
 	labelWidget->load();
 
+
 	//x-range breaks, show the first break
 	ui.chkXBreak->setChecked(m_plot->xRangeBreakingEnabled());
 	this->toggleXBreak(m_plot->xRangeBreakingEnabled());
@@ -2544,6 +2544,7 @@ void CartesianPlotDock::load() {
 	} else
 		ui.cbYBreak->addItem("1");
 	ui.cbYBreak->setCurrentIndex(0);
+
 
 	//"Plot Area"-tab
 	const auto* plotArea = m_plot->plotArea();

@@ -135,111 +135,111 @@ public:
 	static QString typeName(AspectType type) {
 		switch(type) {
 		case AspectType::AbstractAspect:
-			return QString("AbstractAspect");
+			return QStringLiteral("AbstractAspect");
 		case AspectType::AbstractFilter:
-			return QString("AbstractFilter");
+			return QStringLiteral("AbstractFilter");
 		case AspectType::DatapickerCurve:
-			return QString("DatapickerCurve");
+			return QStringLiteral("DatapickerCurve");
 		case AspectType::DatapickerPoint:
-			return QString("DatapickerPoint");
+			return QStringLiteral("DatapickerPoint");
 		case AspectType::WorksheetElement:
-			return QString("WorksheetElement");
+			return QStringLiteral("WorksheetElement");
 		case AspectType::Axis:
-			return QString("Axis");
+			return QStringLiteral("Axis");
 		case AspectType::CartesianPlotLegend:
-			return QString("CartesianPlotLegend");
+			return QStringLiteral("CartesianPlotLegend");
 		case AspectType::CustomPoint:
-			return QString("CustomPoint");
+			return QStringLiteral("CustomPoint");
 		case AspectType::Histogram:
-			return QString("Histogram");
+			return QStringLiteral("Histogram");
 		case AspectType::PlotArea:
-			return QString("PlotArea");
+			return QStringLiteral("PlotArea");
 		case AspectType::TextLabel:
-			return QString("TextLabel");
+			return QStringLiteral("TextLabel");
 		case AspectType::Image:
-			return QString("Image");
+			return QStringLiteral("Image");
 		case AspectType::ReferenceLine:
-			return QString("ReferenceLine");
+			return QStringLiteral("ReferenceLine");
 		case AspectType::InfoElement:
-			return QString("InfoElement");
+			return QStringLiteral("InfoElement");
 		case AspectType::WorksheetElementContainer:
-			return QString("WorksheetElementContainer");
+			return QStringLiteral("WorksheetElementContainer");
 		case AspectType::AbstractPlot:
-			return QString("AbstractPlot");
+			return QStringLiteral("AbstractPlot");
 		case AspectType::CartesianPlot:
-			return QString("CartesianPlot");
+			return QStringLiteral("CartesianPlot");
 		case AspectType::WorksheetElementGroup:
-			return QString("WorksheetElementGroup");
+			return QStringLiteral("WorksheetElementGroup");
 		case AspectType::XYCurve:
-			return QString("XYCurve");
+			return QStringLiteral("XYCurve");
 		case AspectType::XYEquationCurve:
-			return QString("XYEquationCurve");
+			return QStringLiteral("XYEquationCurve");
 		case AspectType::XYAnalysisCurve:
-			return QString("XYAnalysisCurve");
+			return QStringLiteral("XYAnalysisCurve");
 		case AspectType::XYConvolutionCurve:
-			return QString("XYConvolutionCurve");
+			return QStringLiteral("XYConvolutionCurve");
 		case AspectType::XYCorrelationCurve:
-			return QString("XYCorrelationCurve");
+			return QStringLiteral("XYCorrelationCurve");
 		case AspectType::XYDataReductionCurve:
-			return QString("XYDataReductionCurve");
+			return QStringLiteral("XYDataReductionCurve");
 		case AspectType::XYDifferentiationCurve:
-			return QString("XYDifferentiationCurve");
+			return QStringLiteral("XYDifferentiationCurve");
 		case AspectType::XYFitCurve:
-			return QString("XYFitCurve");
+			return QStringLiteral("XYFitCurve");
 		case AspectType::XYFourierFilterCurve:
-			return QString("XYFourierFilterCurve");
+			return QStringLiteral("XYFourierFilterCurve");
 		case AspectType::XYFourierTransformCurve:
-			return QString("XYFourierTransformCurve");
+			return QStringLiteral("XYFourierTransformCurve");
 		case AspectType::XYInterpolationCurve:
-			return QString("XYInterpolationCurve");
+			return QStringLiteral("XYInterpolationCurve");
 		case AspectType::XYIntegrationCurve:
-			return QString("XYIntegrationCurve");
+			return QStringLiteral("XYIntegrationCurve");
 		case AspectType::XYSmoothCurve:
-			return QString("XYSmoothCurve");
+			return QStringLiteral("XYSmoothCurve");
 		case AspectType::XYHilbertTransformCurve:
-			return QString("XYHilbertTransformCurve");
+			return QStringLiteral("XYHilbertTransformCurve");
 		case AspectType::BoxPlot:
-			return QString("BoxPlot");
+			return QStringLiteral("BoxPlot");
 		case AspectType::AbstractPart:
-			return QString("AbstractPart");
+			return QStringLiteral("AbstractPart");
 		case AspectType::AbstractDataSource:
-			return QString("AbstractDataSource");
+			return QStringLiteral("AbstractDataSource");
 		case AspectType::Matrix:
-			return QString("Matrix");
+			return QStringLiteral("Matrix");
 		case AspectType::Spreadsheet:
-			return QString("Spreadsheet");
+			return QStringLiteral("Spreadsheet");
 		case AspectType::LiveDataSource:
-			return QString("LiveDataSource");
+			return QStringLiteral("LiveDataSource");
 		case AspectType::MQTTTopic:
-			return QString("MQTTTopic");
+			return QStringLiteral("MQTTTopic");
 		case AspectType::CantorWorksheet:
-			return QString("CantorWorksheet");
+			return QStringLiteral("CantorWorksheet");
 		case AspectType::Datapicker:
-			return QString("Datapicker");
+			return QStringLiteral("Datapicker");
 		case AspectType::DatapickerImage:
-			return QString("DatapickerImage");
+			return QStringLiteral("DatapickerImage");
 		case AspectType::Note:
-			return QString("Note");
+			return QStringLiteral("Note");
 		case AspectType::Workbook:
-			return QString("Workbook");
+			return QStringLiteral("Workbook");
 		case AspectType::Worksheet:
-			return QString("Worksheet");
+			return QStringLiteral("Worksheet");
 		case AspectType::AbstractColumn:
-			return QString("AbstractColumn");
+			return QStringLiteral("AbstractColumn");
 		case AspectType::Column:
-			return QString("Column");
+			return QStringLiteral("Column");
 		case AspectType::SimpleFilterColumn:
-			return QString("SimpleFilterColumn");
+			return QStringLiteral("SimpleFilterColumn");
 		case AspectType::ColumnStringIO:
-			return QString("ColumnStringIO");
+			return QStringLiteral("ColumnStringIO");
 		case AspectType::Folder:
-			return QString("Folder");
+			return QStringLiteral("Folder");
 		case AspectType::Project:
-			return QString("Project");
+			return QStringLiteral("Project");
 		case AspectType::MQTTClient:
-			return QString("MQTTClient");
+			return QStringLiteral("MQTTClient");
 		case AspectType::MQTTSubscription:
-			return QString("MQTTSubscription");
+			return QStringLiteral("MQTTSubscription");
 		}
 
 		return QString();
