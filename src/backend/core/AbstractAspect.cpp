@@ -583,7 +583,7 @@ QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFla
 	QVector<AbstractAspect*> result;
 	for (auto* child : children()) {
 		if (flags & ChildIndexFlag::IncludeHidden || !child->hidden()) {
-			if (child->type() == type)
+			if (child->inherits(type))
 				result << child;
 
 			if (flags & ChildIndexFlag::Recursive)
