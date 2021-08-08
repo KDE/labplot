@@ -297,7 +297,7 @@ public:
 		if (factor % 115 == 0)
 			return 5+1;
 
-		return 7+1;
+		return 11+1;
 	}
 	//TODO: touches(), merge(), subtract(), split(), etc. (see Interval)
 
