@@ -863,6 +863,7 @@ void XYCurve::yErrorMinusColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
+//TODO: where are these two functions used?
 void XYCurve::xColumnNameChanged() {
 	Q_D(XYCurve);
 	setXColumnPath(d->xColumn->path());
@@ -3020,8 +3021,20 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement( "general" );
-	writer->writeAttribute("xColumn", d->xColumnPath);
-	writer->writeAttribute("yColumn", d->yColumnPath);
+
+	//if the data columns are valid, write their current paths.
+	//if not, write the last used paths so the columns can be restored later
+	//when the columns with the same path are added again to the project
+	if (d->xColumn)
+		writer->writeAttribute("xColumn", d->xColumn->path());
+	else
+		writer->writeAttribute("xColumn", d->xColumnPath);
+
+	if (d->yColumn)
+		writer->writeAttribute("yColumn", d->yColumn->path());
+	else
+		writer->writeAttribute("yColumn", d->yColumnPath);
+
 	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
