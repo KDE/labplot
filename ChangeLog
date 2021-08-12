@@ -1,6 +1,7 @@
 -----2.9.0 -----
 	* [general]
 		* Allow to copy&paste and to duplicate single objects in the project explorer
+		* Allow to change the order of objects in the project explorer (move up and down)
 		* Added global settings for numbers
 		* Color maps manager allowing the access to multiple collections of color maps
 		* Show git hash in about dialog for convenience

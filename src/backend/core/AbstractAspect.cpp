@@ -357,11 +357,29 @@ QMenu* AbstractAspect::createContextMenu() {
 		;
 
 	if(!disabled) {
-		menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, SIGNAL(renameRequested()));
+		menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, &AbstractAspect::renameRequested);
 		if (type() != AspectType::Project)
-			menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, SLOT(remove()));
+			menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, &AbstractAspect::remove);
 	}
 
+	//move up and down actions. Don't shown them for worksheet elements
+	//since they implement their own "Drawing order" menu.
+	if (!dynamic_cast<WorksheetElement*>(this) && this != project()) {
+		const auto* parent = parentAspect();
+		int count = parent->childCount<AbstractAspect>();
+		if (count > 1) {
+			auto* moveMenu = new QMenu(i18n("Move"));
+			moveMenu->setIcon(QIcon::fromTheme("layer-bottom"));
+			if (parent->indexOfChild<AbstractAspect>(this) != 0)
+				moveMenu->addAction(QIcon::fromTheme(QLatin1String("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
+
+			if (parent->indexOfChild<AbstractAspect>(this) != count - 1)
+			moveMenu->addAction(QIcon::fromTheme(QLatin1String("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
+			menu->addSeparator();
+			menu->addMenu(moveMenu);
+		}
+
+	}
 	return menu;
 }
 
@@ -605,6 +623,26 @@ const QVector<AbstractAspect*>& AbstractAspect::children() const {
 void AbstractAspect::remove() {
 	if (parentAspect())
 		parentAspect()->removeChild(this);
+}
+
+void AbstractAspect::moveUp() {
+	auto* parent = parentAspect();
+	int index = parent->indexOfChild<AbstractAspect>(this);
+	auto* sibling = parent->child<AbstractAspect>(index - 1);
+	beginMacro(i18n("%1: move up", name()));
+	remove();
+	parent->insertChildBefore(this, sibling);
+	endMacro();
+}
+
+void AbstractAspect::moveDown() {
+	auto* parent = parentAspect();
+	int index = parent->indexOfChild<AbstractAspect>(this);
+	auto* sibling = parent->child<AbstractAspect>(index + 1);
+	beginMacro(i18n("%1: move down", name()));
+	remove();
+	parent->insertChildBefore(this, sibling);
+	endMacro();
 }
 
 /*!

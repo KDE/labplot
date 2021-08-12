@@ -392,6 +392,10 @@ public slots:
 	void duplicate();
 	void paste(bool duplicate = false);
 
+private slots:
+	void moveUp();
+	void moveDown();
+
 protected slots:
 	virtual void childSelected(const AbstractAspect*);
 	virtual void childDeselected(const AbstractAspect*);
