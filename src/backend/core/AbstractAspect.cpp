@@ -374,7 +374,7 @@ QMenu* AbstractAspect::createContextMenu() {
 				moveMenu->addAction(QIcon::fromTheme(QLatin1String("draw-arrow-up")), i18n("Up"), this, &AbstractAspect::moveUp);
 
 			if (parent->indexOfChild<AbstractAspect>(this) != count - 1)
-			moveMenu->addAction(QIcon::fromTheme(QLatin1String("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
+				moveMenu->addAction(QIcon::fromTheme(QLatin1String("draw-arrow-down")), i18n("Down"), this, &AbstractAspect::moveDown);
 			menu->addSeparator();
 			menu->addMenu(moveMenu);
 		}

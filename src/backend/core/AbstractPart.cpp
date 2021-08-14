@@ -4,7 +4,7 @@
     Description          : Base class of Aspects with MDI windows as views.
     --------------------------------------------------------------------
     Copyright            : (C) 2008 Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2012 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2012-2021 Alexander Semke (alexander.semke@web.de)
 
  ***************************************************************************/
 
@@ -30,14 +30,7 @@
 #include "backend/core/AbstractPart.h"
 #include "backend/core/Workbook.h"
 #include "backend/datapicker/Datapicker.h"
-#include "backend/datapicker/DatapickerCurve.h"
-#include "backend/datasources/LiveDataSource.h"
-#include "backend/matrix/Matrix.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/core/PartMdiView.h"
-#ifdef HAVE_MQTT
-#include "backend/datasources/MQTTTopic.h"
-#endif
 
 #include <QMenu>
 #include <QStyle>
@@ -109,47 +102,52 @@ void AbstractPart::deleteView() const {
  */
 QMenu* AbstractPart::createContextMenu() {
 	QMenu* menu = AbstractAspect::createContextMenu();
-	Q_ASSERT(menu);
+	menu->addSeparator();
+	auto type = this->type();
+
+	//import actions for spreadsheet and matrix
+	if ( (type == AspectType::Spreadsheet || type == AspectType::Matrix)
+		&& type != AspectType::LiveDataSource && type != AspectType::MQTTTopic ) {
+		QMenu* subMenu = new QMenu(i18n("Import Data"), menu);
+		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From File"), this, &AbstractPart::importFromFileRequested);
+		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From SQL Database"), this, &AbstractPart::importFromSQLDatabaseRequested);
+		menu->addMenu(subMenu);
+		menu->addSeparator();
+	}
+
+	//export/print actions
+	menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, &AbstractPart::exportRequested);
+	menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, &AbstractPart::printRequested);
+	menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, &AbstractPart::printPreviewRequested);
 	menu->addSeparator();
 
+	//window state related actions
 	if (m_mdiWindow) {
-		if ( (dynamic_cast<Spreadsheet*>(this) || dynamic_cast<Matrix*>(this))
-			&& !dynamic_cast<const LiveDataSource*>(this)
-#ifdef HAVE_MQTT
-			&& !dynamic_cast<const MQTTTopic*>(this)
-#endif
-		) {
-			QMenu* subMenu = new QMenu(i18n("Import Data"), menu);
-			subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From File"), this, SIGNAL(importFromFileRequested()));
-			subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From SQL Database"), this, SIGNAL(importFromSQLDatabaseRequested()));
-			menu->addMenu(subMenu);
-			menu->addSeparator();
-		}
-
-		menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, &AbstractPart::exportRequested);
-		menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, SIGNAL(printRequested()));
-		menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, SIGNAL(printPreviewRequested()));
-		menu->addSeparator();
-
-		const QStyle *widget_style = m_mdiWindow->style();
+		const QStyle* style = m_mdiWindow->style();
 		if (m_mdiWindow->windowState() & (Qt::WindowMinimized | Qt::WindowMaximized)) {
-			QAction* action = menu->addAction(i18n("&Restore"), m_mdiWindow, SLOT(showNormal()));
-			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarNormalButton));
+			auto* action = menu->addAction(i18n("&Restore"), m_mdiWindow, &QMdiSubWindow::showNormal);
+			action->setIcon(style->standardIcon(QStyle::SP_TitleBarNormalButton));
 		}
 
-		if (!(m_mdiWindow->windowState() & Qt::WindowMinimized))	{
-			QAction* action = menu->addAction(i18n("Mi&nimize"), m_mdiWindow, SLOT(showMinimized()));
-			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMinButton));
+		if (!(m_mdiWindow->windowState() & Qt::WindowMinimized)) {
+			auto* action = menu->addAction(i18n("Mi&nimize"), m_mdiWindow, &QMdiSubWindow::showMinimized);
+			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMinButton));
 		}
 
-		if (!(m_mdiWindow->windowState() & Qt::WindowMaximized))	{
-			QAction* action = menu->addAction(i18n("Ma&ximize"), m_mdiWindow, SLOT(showMaximized()));
-			action->setIcon(widget_style->standardIcon(QStyle::SP_TitleBarMaxButton));
+		if (!(m_mdiWindow->windowState() & Qt::WindowMaximized)) {
+			auto* action = menu->addAction(i18n("Ma&ximize"), m_mdiWindow, &QMdiSubWindow::showMaximized);
+			action->setIcon(style->standardIcon(QStyle::SP_TitleBarMaxButton));
 		}
 	} else {
-		//data spreadsheets in the datapicker curves cannot be hidden/minimized, don't show this menu entry
-		if ( !(dynamic_cast<const Spreadsheet*>(this) && dynamic_cast<const DatapickerCurve*>(this->parentAspect())) )
-			menu->addAction(i18n("Show"), this, SIGNAL(showRequested()));
+		//if the mdi window was closed, add the "Show" action.
+		//Don't add it for:
+		//* children of a workbook, cannot be hidden/minimized
+		//* data spreadsheets in datapicker curves
+		auto parentType = parentAspect()->type();
+		bool disableShow = ((type == AspectType::Spreadsheet || type == AspectType::Matrix) && parentType == AspectType::Workbook) ||
+							(type == AspectType::Spreadsheet && parentType == AspectType::DatapickerCurve);
+		if (!disableShow)
+			menu->addAction(i18n("Show"), this, &AbstractPart::showRequested);
 	}
 
 	return menu;
