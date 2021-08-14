@@ -1025,11 +1025,11 @@ void MainWin::updateGUI() {
 #endif
 
 	Q_ASSERT(m_currentAspect);
-
 	//Handle the Worksheet-object
-	const Worksheet* w = dynamic_cast<Worksheet*>(m_currentAspect);
+	const auto* w = dynamic_cast<Worksheet*>(m_currentAspect);
 	if (!w)
 		w = dynamic_cast<Worksheet*>(m_currentAspect->parent(AspectType::Worksheet));
+
 	if (w) {
 		//populate worksheet menu
 		auto* view = qobject_cast<WorksheetView*>(w->view());
@@ -1103,7 +1103,7 @@ void MainWin::updateGUI() {
 	}
 
 	//Handle the Matrix-object
-	const  Matrix* matrix = dynamic_cast<Matrix*>(m_currentAspect);
+	const auto* matrix = dynamic_cast<Matrix*>(m_currentAspect);
 	if (!matrix)
 		matrix = dynamic_cast<Matrix*>(m_currentAspect->parent(AspectType::Matrix));
 	if (matrix) {
@@ -1123,7 +1123,7 @@ void MainWin::updateGUI() {
 		factory->container("matrix", this)->setEnabled(false);
 
 #ifdef HAVE_CANTOR_LIBS
-	const CantorWorksheet* cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect);
+	const auto* cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect);
 	if (!cantorworksheet)
 		cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect->parent(AspectType::CantorWorksheet));
 	if (cantorworksheet) {
@@ -1144,7 +1144,7 @@ void MainWin::updateGUI() {
 	}
 #endif
 
-	const Datapicker* datapicker = dynamic_cast<Datapicker*>(m_currentAspect);
+	const auto* datapicker = dynamic_cast<Datapicker*>(m_currentAspect);
 	if (!datapicker)
 		datapicker = dynamic_cast<Datapicker*>(m_currentAspect->parent(AspectType::Datapicker));
 	if (!datapicker) {
@@ -1892,7 +1892,7 @@ void MainWin::handleCurrentSubWindowChanged(QMdiSubWindow* win) {
 
 void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 	//register the signal-slot connections for aspects having a view.
-	//if a folder is being added, loop recursively through all its children
+	//if a folder or a workbook is being added, loop recursively through their children
 	//and register the connections.
 	const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 	if (part) {
@@ -1909,6 +1909,9 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 		if (worksheet) {
 			connect(worksheet, &Worksheet::cartesianPlotMouseModeChanged, this, &MainWin::cartesianPlotMouseModeChanged);
 			connect(worksheet, &Worksheet::propertiesExplorerRequested, this, &MainWin::propertiesExplorerRequested);
+		} else if (aspect->type() == AspectType::Workbook) {
+			for (auto* child : aspect->children<AbstractAspect>())
+				handleAspectAdded(child);
 		}
 	} else if (aspect->type() == AspectType::Folder)
 		for (auto* child : aspect->children<AbstractAspect>())
