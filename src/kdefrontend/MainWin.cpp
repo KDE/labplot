@@ -2083,10 +2083,10 @@ void MainWin::undo() {
 	m_project->undoStack()->undo();
 	m_project->setSuppressAspectAddedSignal(false);
 	if (m_project->undoStack()->index() == 0) {
-		updateTitleBar();
 		m_saveAction->setEnabled(false);
 		m_undoAction->setEnabled(false);
 		m_project->setChanged(false);
+		updateTitleBar();
 	}
 	m_redoAction->setEnabled(true);
 	RESET_CURSOR;
@@ -2097,6 +2097,7 @@ void MainWin::redo() {
 	m_project->setSuppressAspectAddedSignal(true);
 	m_project->undoStack()->redo();
 	m_project->setSuppressAspectAddedSignal(false);
+	m_project->setChanged(true);
 	projectChanged();
 	if (m_project->undoStack()->index() == m_project->undoStack()->count())
 		m_redoAction->setEnabled(false);
