@@ -870,95 +870,81 @@ struct ViewState {
  * (expanded items and the currently selected item) as XML
  */
 void ProjectExplorer::save(QXmlStreamWriter* writer) const {
-	auto* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	QList<int> selected;
-	QList<int> expanded;
-	QList<int> withView;
-	QVector<ViewState> viewStates;
-
-	int currentRow = -1; //row corresponding to the current index in the tree view, -1 for the root element (=project)
+	const auto* model = static_cast<AspectTreeModel*>(m_treeView->model());
 	const auto& selectedRows = m_treeView->selectionModel()->selectedRows();
-
-	//check whether the project node itself is expanded
-	if (m_treeView->isExpanded(m_treeView->model()->index(0,0)))
-		expanded.push_back(-1);
-
-	int row = 0;
-	const auto& children = m_project->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden);
-	for (const auto* aspect : children) {
-		const auto& index = model->modelIndexOfAspect(aspect);
-
-		const auto* part = dynamic_cast<const AbstractPart*>(aspect);
-		if (part && part->hasMdiSubWindow()) {
-			withView.push_back(row);
-			ViewState s = {part->view()->windowState(), part->mdiSubWindow()->geometry()};
-			viewStates.push_back(s);
-		}
-
-		if (model->rowCount(index)>0 && m_treeView->isExpanded(index))
-			expanded.push_back(row);
-
-		if (selectedRows.indexOf(index) != -1)
-			selected.push_back(row);
-
-		if (index == m_treeView->currentIndex())
-			currentRow = row;
-
-		row++;
-	}
 
 	writer->writeStartElement("state");
 
-	writer->writeStartElement("expanded");
-	for (const auto e : expanded)
-		writer->writeTextElement("row", QString::number(e));
-	writer->writeEndElement();
-
-	writer->writeStartElement("selected");
-	for (const auto s : selected)
-		writer->writeTextElement("row", QString::number(s));
-	writer->writeEndElement();
-
-	writer->writeStartElement("view");
-	for (int i = 0; i < withView.size(); ++i) {
-		writer->writeStartElement("row");
-		const ViewState& s = viewStates.at(i);
-		writer->writeAttribute( "state", QString::number(s.state) );
-		writer->writeAttribute( "x", QString::number(s.geometry.x()) );
-		writer->writeAttribute( "y", QString::number(s.geometry.y()) );
-		writer->writeAttribute( "width", QString::number(s.geometry.width()) );
-		writer->writeAttribute( "height", QString::number(s.geometry.height()) );
-		writer->writeCharacters(QString::number(withView.at(i)));
+	//check whether the project node itself is expanded
+	if (m_treeView->isExpanded(m_treeView->model()->index(0,0))) {
+		writer->writeStartElement("expanded");
+		writer->writeAttribute("path", m_project->path());
 		writer->writeEndElement();
 	}
-	writer->writeEndElement();
 
-	writer->writeStartElement("current");
-	writer->writeTextElement("row", QString::number(currentRow));
-	writer->writeEndElement();
+	const auto& children = m_project->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* aspect : children) {
+		const QString& path = aspect->path();
+		const auto* part = dynamic_cast<const AbstractPart*>(aspect);
 
-	writer->writeEndElement();
+		if (part && part->hasMdiSubWindow()) {
+			writer->writeStartElement("view");
+			const auto& geometry = part->mdiSubWindow()->geometry();
+			writer->writeAttribute("path", path);
+			writer->writeAttribute("state", QString::number(part->view()->windowState()) );
+			writer->writeAttribute("x", QString::number(geometry.x()) );
+			writer->writeAttribute("y", QString::number(geometry.y()) );
+			writer->writeAttribute("width", QString::number(geometry.width()) );
+			writer->writeAttribute("height", QString::number(geometry.height()) );
+			writer->writeEndElement();
+		}
+
+		const auto& index = model->modelIndexOfAspect(aspect);
+		if (model->rowCount(index)>0 && m_treeView->isExpanded(index)) {
+			writer->writeStartElement("expanded");
+			writer->writeAttribute("path", path);
+			writer->writeEndElement();
+		}
+
+		if (selectedRows.indexOf(index) != -1) {
+			writer->writeStartElement("selected");
+			writer->writeAttribute("path", path);
+			writer->writeEndElement();
+		}
+
+		if (index == m_treeView->currentIndex()) {
+			writer->writeStartElement("current");
+			writer->writeAttribute("path", path);
+			writer->writeEndElement();
+		}
+	}
+
+	writer->writeEndElement(); //"state"
 }
 
 /**
  * \brief Load from XML
  */
 bool ProjectExplorer::load(XmlStreamReader* reader) {
-	const AspectTreeModel* model = qobject_cast<AspectTreeModel*>(m_treeView->model());
-	const auto& aspects = m_project->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto* model = static_cast<AspectTreeModel*>(m_treeView->model());
+	QList<QModelIndex> selected;
+	QList<QModelIndex> expanded;
+	QModelIndex currentIndex;
+	QString str;
+	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 
+	//xmlVersion < 3: old logic where the "rows" for the selected and expanded items were saved
+	//ignoring the sub-folder structure. Remove it later.
+	if (Project::xmlVersion() < 3) {
+
+	const auto& aspects = m_project->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive);
 	bool expandedItem = false;
 	bool selectedItem = false;
 	bool viewItem = false;
 	(void)viewItem; // because of a strange g++-warning about unused viewItem
 	bool currentItem = false;
-	QModelIndex currentIndex;
-	QString str;
 	int row;
-	QVector<QModelIndex> selected;
-	QList<QModelIndex> expanded;
 	QXmlStreamAttributes attribs;
-	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -996,7 +982,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 			QModelIndex index;
 			if (row == -1)
 				index = model->modelIndexOfAspect(m_project); //-1 corresponds to the project-item (s.a. ProjectExplorer::save())
-			else if (row >= aspects.size() || row < 0 /* checking for <0 to protect against wrong values in the XML */)
+			else if (row >= aspects.size() || row < 0) //checking for <0 to protect against wrong values in the XML
 				continue;
 			else
 				index = model->modelIndexOfAspect(aspects.at(row));
@@ -1012,6 +998,74 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 					continue;
 
 				auto* part = dynamic_cast<AbstractPart*>(aspects.at(row));
+				if (!part)
+					continue; //TODO: add error/warning message here?
+
+				emit activateView(part); //request to show the view in MainWin
+
+				str = attribs.value("state").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("state").toString());
+				else {
+					part->view()->setWindowState(Qt::WindowStates(str.toInt()));
+					part->mdiSubWindow()->setWindowState(Qt::WindowStates(str.toInt()));
+				}
+
+				if (str != "0")
+					continue; //no geometry settings required for maximized/minimized windows
+
+				QRect geometry;
+				str = attribs.value("x").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("x").toString());
+				else
+					geometry.setX(str.toInt());
+
+				str = attribs.value("y").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("y").toString());
+				else
+					geometry.setY(str.toInt());
+
+				str = attribs.value("width").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("width").toString());
+				else
+					geometry.setWidth(str.toInt());
+
+				str = attribs.value("height").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("height").toString());
+				else
+					geometry.setHeight(str.toInt());
+
+				part->mdiSubWindow()->setGeometry(geometry);
+			}
+		}
+	}
+
+	} else {
+		while (!reader->atEnd()) {
+			reader->readNext();
+			if (reader->isEndElement() && reader->name() == "state")
+				break;
+
+			if (!reader->isStartElement())
+				continue;
+
+			const auto& attribs = reader->attributes();
+			const auto& path = attribs.value("path").toString();
+			const auto& index = model->modelIndexOfAspect(path);
+
+			if (reader->name() == "expanded")
+				expanded << index;
+			else if (reader->name() == "selected")
+				selected << index;
+			else if (reader->name() == "current")
+				currentIndex = index;
+			else if (reader->name() == "view") {
+				auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+				auto* part = dynamic_cast<AbstractPart*>(aspect);
 				if (!part)
 					continue; //TODO: add error/warning message here?
 
