@@ -638,7 +638,7 @@ void AbstractAspect::moveUp() {
 void AbstractAspect::moveDown() {
 	auto* parent = parentAspect();
 	int index = parent->indexOfChild<AbstractAspect>(this);
-	auto* sibling = parent->child<AbstractAspect>(index + 1);
+	auto* sibling = parent->child<AbstractAspect>(index + 2);
 	beginMacro(i18n("%1: move down", name()));
 	remove();
 	parent->insertChildBefore(this, sibling);

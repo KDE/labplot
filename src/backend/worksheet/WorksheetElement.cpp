@@ -213,7 +213,7 @@ void WorksheetElement::prepareMoveBehindMenu() {
 	m_moveBehindMenu->clear();
 	AbstractAspect* parent = parentAspect();
 	int index = parent->indexOfChild<WorksheetElement>(this);
-	const QVector<WorksheetElement*>& children = parent->children<WorksheetElement>();
+	const auto& children = parent->children<WorksheetElement>();
 
 	for (int i = 0; i < index; ++i) {
 		const WorksheetElement* elem = children.at(i);
@@ -233,7 +233,7 @@ void WorksheetElement::prepareMoveInFrontOfMenu() {
 	m_moveInFrontOfMenu->clear();
 	AbstractAspect* parent = parentAspect();
 	int index = parent->indexOfChild<WorksheetElement>(this);
-	const QVector<WorksheetElement*>& children = parent->children<WorksheetElement>();
+	const auto& children = parent->children<WorksheetElement>();
 
 	for (int i = index + 1; i < children.size(); ++i) {
 		const WorksheetElement* elem = children.at(i);
