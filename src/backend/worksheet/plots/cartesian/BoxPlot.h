@@ -89,6 +89,7 @@ public:
 
 	//symbols
 	Symbol* symbolMean() const;
+	Symbol* symbolMedian() const;
 	Symbol* symbolOutlier() const;
 	Symbol* symbolFarOut() const;
 	Symbol* symbolData() const;

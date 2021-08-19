@@ -95,6 +95,7 @@ public:
 
 	//markers
 	Symbol* symbolMean{nullptr};
+	Symbol* symbolMedian{nullptr};
 	Symbol* symbolOutlier{nullptr};
 	Symbol* symbolFarOut{nullptr};
 	Symbol* symbolData{nullptr};
@@ -144,6 +145,8 @@ private:
 	QVector<Points> m_outlierPoints;	//positions of the outlier symbols in scene coordinates
 	Points m_meanSymbolPoint; //position of the mean symbol in scene coordinates
 	QVector<bool> m_meanSymbolPointVisible; //true/false if the mean point is visible in the plot or not
+	Points m_medianSymbolPoint; //position of the median symbol in scene coordinates
+	QVector<bool> m_medianSymbolPointVisible; //true/false if the median point is visible in the plot or not
 	QVector<Points> m_dataPointsLogical;	//positions of the data points in logical coordinates
 	QVector<Points> m_dataPoints;	//positions of the data points in scene coordinates
 	QVector<Points> m_farOutPointsLogical;	//positions of the far out values in logical coordinates

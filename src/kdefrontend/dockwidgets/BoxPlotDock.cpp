@@ -190,6 +190,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 
 	//Tab "Markers"
 	connect(ui.rbMean, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
+	connect(ui.rbMedian, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbOutlier, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbFarOut, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbJitter, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
@@ -781,6 +782,8 @@ void BoxPlotDock::symbolCategoryChanged() {
 	for (auto* plot : m_boxPlots) {
 		if (ui.rbMean->isChecked())
 			symbols << plot->symbolMean();
+		else if (ui.rbMedian->isChecked())
+			symbols << plot->symbolMedian();
 		else if (ui.rbOutlier->isChecked())
 			symbols << plot->symbolOutlier();
 		else if (ui.rbFarOut->isChecked())

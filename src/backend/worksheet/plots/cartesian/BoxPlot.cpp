@@ -114,6 +114,13 @@ void BoxPlot::init() {
 	d->symbolMean->init(group);
 	d->symbolMean->setStyle(Symbol::Style::Square);
 
+	d->symbolMedian = new Symbol("symbolMedian");
+	addChild(d->symbolMedian);
+	connect(d->symbolMedian, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbolMedian, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
+	d->symbolMedian->init(group);
+	d->symbolMedian->setStyle(Symbol::Style::NoSymbols);
+
 	d->symbolOutlier = new Symbol("symbolOutlier");
 	addChild(d->symbolOutlier);
 	d->symbolOutlier->setHidden(true);
@@ -266,6 +273,11 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, medianLineOpacity, medianLineOpacity)
 Symbol* BoxPlot::symbolMean() const {
 	Q_D(const BoxPlot);
 	return d->symbolMean;
+}
+
+Symbol* BoxPlot::symbolMedian() const {
+	Q_D(const BoxPlot);
+	return d->symbolMedian;
 }
 
 Symbol* BoxPlot::symbolOutlier() const {
@@ -638,6 +650,8 @@ void BoxPlotPrivate::recalc() {
 	m_mean.resize(count);
 	m_meanSymbolPoint.resize(count);
 	m_meanSymbolPointVisible.resize(count);
+	m_medianSymbolPoint.resize(count);
+	m_medianSymbolPointVisible.resize(count);
 
 	//calculate the new min and max values of the box plot
 	//for the current sizes of the box and of the whiskers
@@ -1006,6 +1020,15 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		m_meanSymbolPointVisible[index] = true;
 	} else
 		m_meanSymbolPointVisible[index] = false;
+
+	//median symbol
+	points = {QPointF(x, median)};
+	points = q->cSystem->mapLogicalToScene(points);
+	if (points.count() == 1) {
+		m_medianSymbolPoint[index] = points.at(0);
+		m_medianSymbolPointVisible[index] = true;
+	} else
+		m_medianSymbolPointVisible[index] = false;
 }
 
 void BoxPlotPrivate::horizontalBoxPlot(int index) {
@@ -1124,6 +1147,15 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		m_meanSymbolPointVisible[index] = true;
 	} else
 		m_meanSymbolPointVisible[index] = false;
+
+	//median symbol
+	points = {QPointF(m_mean.at(index), y)};
+	points = q->cSystem->mapLogicalToScene(points);
+	if (points.count() == 1) {
+		m_medianSymbolPoint[index] = points.at(0);
+		m_medianSymbolPointVisible[index] = true;
+	} else
+		m_medianSymbolPointVisible[index] = false;
 }
 
 /*!
@@ -1376,6 +1408,24 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 
 		trafo.reset();
 		trafo.translate(m_meanSymbolPoint.at(index).x(), m_meanSymbolPoint.at(index).y());
+		painter->drawPath(trafo.map(path));
+	}
+
+	//median value
+	if (symbolMedian->style() != Symbol::Style::NoSymbols && m_medianSymbolPointVisible.at(index)) {
+		painter->setOpacity(symbolMedian->opacity());
+		painter->setPen(symbolMedian->pen());
+		painter->setBrush(symbolMedian->brush());
+		QTransform trafo;
+		trafo.scale(symbolMedian->size(), symbolMedian->size());
+		QPainterPath path = Symbol::pathFromStyle(symbolMedian->style());
+		if (symbolMedian->rotationAngle() != 0)
+			trafo.rotate(-symbolMedian->rotationAngle());
+
+		path = trafo.map(path);
+
+		trafo.reset();
+		trafo.translate(m_medianSymbolPoint.at(index).x(), m_medianSymbolPoint.at(index).y());
 		painter->drawPath(trafo.map(path));
 	}
 
@@ -1842,9 +1892,26 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 
 	//symbols
 	d->symbolMean->loadThemeConfig(group, themeColor);
+	d->symbolMedian->loadThemeConfig(group, themeColor);
 	d->symbolOutlier->loadThemeConfig(group, themeColor);
 	d->symbolFarOut->loadThemeConfig(group, themeColor);
 	d->symbolData->loadThemeConfig(group, themeColor);
+
+	//Tufte's theme goes beyond what we can implement when using the them properties of XYCurve.
+	//So, instead of introducing a dedicated section for BoxPlot, which would be a big overkill,
+	//for all other themes, we add here a special handling for "Tufte".
+	if (plot->theme() == QLatin1String("Tufte")) {
+		p.setStyle(Qt::NoPen);
+		setBorderPen(p);
+		setMedianLinePen(p);
+		setFillingEnabled(false);
+		d->symbolMean->setStyle(Symbol::Style::NoSymbols);
+		d->symbolMedian->setStyle(Symbol::Style::Circle);
+		d->symbolOutlier->setStyle(Symbol::Style::NoSymbols);
+		d->symbolFarOut->setStyle(Symbol::Style::NoSymbols);
+		d->symbolData->setStyle(Symbol::Style::NoSymbols);
+		setWhiskersCapSize(0.0);
+	}
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
