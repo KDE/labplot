@@ -145,6 +145,13 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
 
+	//margin plots
+	BASIC_D_ACCESSOR_DECL(bool, rugEnabled, RugEnabled)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::Orientation, rugOrientation, RugOrientation)
+	BASIC_D_ACCESSOR_DECL(double, rugOffset, RugOffset)
+	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
+	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
+
 	void setVisible(bool on) override;
 	bool isVisible() const override;
 	void suppressRetransform(bool);
@@ -263,6 +270,13 @@ signals:
 	void errorBarsTypeChanged(XYCurve::ErrorBarsType);
 	void errorBarsPenChanged(QPen);
 	void errorBarsOpacityChanged(qreal);
+
+	//Margin Plots
+	void rugEnabledChanged(bool);
+	void rugOrientationChanged(WorksheetElement::Orientation);
+	void rugLengthChanged(double);
+	void rugWidthChanged(double);
+	void rugOffsetChanged(double);
 };
 
 #endif

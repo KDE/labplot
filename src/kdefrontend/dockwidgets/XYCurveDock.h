@@ -100,13 +100,13 @@ private slots:
 	void lineSkipGapsChanged(bool);
 	void lineIncreasingXOnlyChanged(bool);
 	void lineInterpolationPointsCountChanged(int);
-  	void lineStyleChanged(int);
+	void lineStyleChanged(int);
 	void lineColorChanged(const QColor&);
 	void lineWidthChanged(double);
 	void lineOpacityChanged(int);
 
 	void dropLineTypeChanged(int);
-  	void dropLineStyleChanged(int);
+	void dropLineStyleChanged(int);
 	void dropLineColorChanged(const QColor&);
 	void dropLineWidthChanged(double);
 	void dropLineOpacityChanged(int);
@@ -128,7 +128,7 @@ private slots:
 
 	//Filling-tab
 	void fillingPositionChanged(int);
-  	void fillingTypeChanged(int);
+	void fillingTypeChanged(int);
 	void fillingColorStyleChanged(int);
 	void fillingImageStyleChanged(int);
 	void fillingBrushStyleChanged(int);
@@ -147,10 +147,17 @@ private slots:
 	void yErrorMinusColumnChanged(const QModelIndex&) const;
 	void errorBarsTypeChanged(int) const;
 	void errorBarsCapSizeChanged(double) const;
-  	void errorBarsStyleChanged(int) const;
+	void errorBarsStyleChanged(int) const;
 	void errorBarsColorChanged(const QColor&);
 	void errorBarsWidthChanged(double) const;
 	void errorBarsOpacityChanged(int) const;
+
+	//"Margin Plots"-Tab
+	void rugEnabledChanged(int) const;
+	void rugOrientationChanged(int) const;
+	void rugLengthChanged(double) const;
+	void rugWidthChanged(double) const;
+	void rugOffsetChanged(double) const;
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab
@@ -207,6 +214,13 @@ private slots:
 	void curveErrorBarsTypeChanged(XYCurve::ErrorBarsType);
 	void curveErrorBarsPenChanged(const QPen&);
 	void curveErrorBarsOpacityChanged(qreal);
+
+	//"Margin Plots"-Tab
+	void curveRugEnabledChanged(bool);
+	void curveRugOrientationChanged(WorksheetElement::Orientation);
+	void curveRugLengthChanged(double);
+	void curveRugWidthChanged(double);
+	void curveRugOffsetChanged(double);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);

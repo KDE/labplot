@@ -141,6 +141,13 @@ void XYCurve::init() {
 	d->errorBarsPen.setColor( group.readEntry("ErrorBarsColor", QColor(Qt::black)) );
 	d->errorBarsPen.setWidthF( group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)) );
 	d->errorBarsOpacity = group.readEntry("ErrorBarsOpacity", 1.0);
+
+	//marginal plots (rug, histogram, boxplot)
+	d->rugEnabled = group.readEntry("RugEnabled", false);
+	d->rugOrientation = (WorksheetElement::Orientation) group.readEntry("RugOrientation", (int)WorksheetElement::Orientation::Both);
+	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry("RugWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
+	d->rugOffset = group.readEntry("RugOffset", 0.0);
 }
 
 void XYCurve::initActions() {
@@ -309,6 +316,13 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::ErrorBarsType, errorBarsType, error
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsCapSize, errorBarsCapSize)
 BASIC_SHARED_D_READER_IMPL(XYCurve, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(XYCurve, qreal, errorBarsOpacity, errorBarsOpacity)
+
+//margin plots
+BASIC_SHARED_D_READER_IMPL(XYCurve, bool, rugEnabled, rugEnabled)
+BASIC_SHARED_D_READER_IMPL(XYCurve, WorksheetElement::Orientation, rugOrientation, rugOrientation)
+BASIC_SHARED_D_READER_IMPL(XYCurve, double, rugLength, rugLength)
+BASIC_SHARED_D_READER_IMPL(XYCurve, double, rugWidth, rugWidth)
+BASIC_SHARED_D_READER_IMPL(XYCurve, double, rugOffset, rugOffset)
 
 /*!
  * return \c true if the data in the source columns (x, y) used in the analysis curves, \c false otherwise
@@ -693,6 +707,42 @@ void XYCurve::setErrorBarsOpacity(qreal opacity) {
 		exec(new XYCurveSetErrorBarsOpacityCmd(d, opacity, ki18n("%1: set error bar opacity")));
 }
 
+//margin plots
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetRugEnabled, bool, rugEnabled, updateRug)
+void XYCurve::setRugEnabled(bool enabled) {
+	Q_D(XYCurve);
+	if (enabled != d->rugEnabled)
+		exec(new XYCurveSetRugEnabledCmd(d, enabled, ki18n("%1: change rug enabled")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetRugOrientation, WorksheetElement::Orientation, rugOrientation, updateRug)
+void XYCurve::setRugOrientation(WorksheetElement::Orientation orientation) {
+	Q_D(XYCurve);
+	if (orientation != d->rugOrientation)
+		exec(new XYCurveSetRugOrientationCmd(d, orientation, ki18n("%1: set rug orientation")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetRugWidth, double, rugWidth, updatePixmap)
+void XYCurve::setRugWidth(double width) {
+	Q_D(XYCurve);
+	if (width != d->rugWidth)
+		exec(new XYCurveSetRugWidthCmd(d, width, ki18n("%1: change rug width")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetRugLength, double, rugLength, updateRug)
+void XYCurve::setRugLength(double length) {
+	Q_D(XYCurve);
+	if (length != d->rugLength)
+		exec(new XYCurveSetRugLengthCmd(d, length, ki18n("%1: change rug length")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetRugOffset, double, rugOffset, updateRug)
+void XYCurve::setRugOffset(double offset) {
+	Q_D(XYCurve);
+	if (offset != d->rugOffset)
+		exec(new XYCurveSetRugOffsetCmd(d, offset, ki18n("%1: change rug offset")));
+}
+
 void XYCurve::suppressRetransform(bool b) {
 	Q_D(XYCurve);
 	d->suppressRetransform(b);
@@ -987,6 +1037,7 @@ void XYCurvePrivate::retransform() {
 		symbolsPath = QPainterPath();
 		valuesPath = QPainterPath();
 		errorBarsPath = QPainterPath();
+		rugPath = QPainterPath();
 		curveShape = QPainterPath();
 		m_lines.clear();
 		m_valuePoints.clear();
@@ -1075,6 +1126,7 @@ void XYCurvePrivate::retransform() {
 	updateLines();
 	updateDropLines();
 	updateSymbols();
+	updateRug();
 	updateValues();
 	m_suppressRecalc = false;
 	updateErrorBars();
@@ -1690,7 +1742,7 @@ void XYCurvePrivate::updateSymbols() {
 		path = trafo.map(path);
 		trafo.reset();
 
-		if (symbol->rotationAngle() != 0) {
+		if (symbol->rotationAngle() != 0.) {
 			trafo.rotate(symbol->rotationAngle());
 			path = trafo.map(path);
 		}
@@ -1699,6 +1751,53 @@ void XYCurvePrivate::updateSymbols() {
 			trafo.reset();
 			trafo.translate(point.x(), point.y());
 			symbolsPath.addPath(trafo.map(path));
+		}
+	}
+
+	recalcShapeAndBoundingRect();
+}
+
+void XYCurvePrivate::updateRug() {
+	rugPath = QPainterPath();
+
+	if (!rugEnabled) {
+		recalcShapeAndBoundingRect();
+		return;
+	}
+
+	QVector<QPointF> points;
+	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+	const double xMin = plot()->xRange(cs->xIndex()).start();
+	const double yMin = plot()->yRange(cs->yIndex()).start();
+
+	//vertical rug
+	if (rugOrientation == WorksheetElement::Orientation::Vertical || rugOrientation == WorksheetElement::Orientation::Both) {
+		for (const auto& point : qAsConst(m_logicalPoints))
+			points << QPointF(xMin, point.y());
+
+		//map the points to scene coordinates
+		points = q->cSystem->mapLogicalToScene(points);
+
+		//path for the vertical rug lines
+		for (const auto& point : qAsConst(points)) {
+			rugPath.moveTo(point.x() + rugOffset, point.y());
+			rugPath.lineTo(point.x() + rugOffset + rugLength, point.y());
+		}
+	}
+
+	//horizontal rug
+	if (rugOrientation == WorksheetElement::Orientation::Horizontal || rugOrientation == WorksheetElement::Orientation::Both) {
+		points.clear();
+		for (const auto& point : qAsConst(m_logicalPoints))
+			points << QPointF(point.x(), yMin);
+
+		//map the points to scene coordinates
+		points = q->cSystem->mapLogicalToScene(points);
+
+		//path for the horizontal rug lines
+		for (const auto& point : qAsConst(points)) {
+			rugPath.moveTo(point.x(), point.y() + rugOffset);
+			rugPath.lineTo(point.x(), point.y() + rugOffset + rugLength);
 		}
 	}
 
@@ -2461,7 +2560,7 @@ bool XYCurvePrivate::pointLiesNearLine(const QPointF p1, const QPointF p2, const
 
 	const double dx1m{pos.x() - p1.x()};
 	const double dy1m{pos.y() - p1.y()};
-	if (vecLength == 0) {
+	if (vecLength == 0.) {
 		if (gsl_hypot(dx1m, dy1m) <= maxDist)
 			return true;
 		return false;
@@ -2583,15 +2682,15 @@ void XYCurvePrivate::updateErrorBars() {
 			}
 
 			//draw the error bars
-			if (errorMinus != 0 || errorPlus != 0)
+			if (errorMinus != 0. || errorPlus != 0.)
 				elines.append(QLineF(QPointF(point.x()-errorMinus, point.y()),
 									QPointF(point.x()+errorPlus, point.y())));
 
 			//determine the end points of the errors bars in logical coordinates to draw later the cap
 			if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
-				if (errorMinus != 0)
+				if (errorMinus != 0.)
 					pointsErrorBarAnchorX << QPointF(point.x() - errorMinus, point.y());
-				if (errorPlus != 0)
+				if (errorPlus != 0.)
 					pointsErrorBarAnchorX << QPointF(point.x() + errorPlus, point.y());
 			}
 		}
@@ -2614,15 +2713,15 @@ void XYCurvePrivate::updateErrorBars() {
 			}
 
 			//draw the error bars
-			if (errorMinus != 0 || errorPlus != 0)
+			if (errorMinus != 0. || errorPlus != 0.)
 				elines.append(QLineF(QPointF(point.x(), point.y() + errorPlus),
 									QPointF(point.x(), point.y() - errorMinus)));
 
 			//determine the end points of the errors bars in logical coordinates to draw later the cap
 			if (errorBarsType == XYCurve::ErrorBarsType::WithEnds) {
-				if (errorMinus != 0)
+				if (errorMinus != 0.)
 					pointsErrorBarAnchorY << QPointF(point.x(), point.y() + errorPlus);
-				if (errorPlus != 0)
+				if (errorPlus != 0.)
 					pointsErrorBarAnchorY << QPointF(point.x(), point.y() - errorMinus);
 			}
 		}
@@ -2680,6 +2779,8 @@ void XYCurvePrivate::recalcShapeAndBoundingRect() {
 
 	if (symbol->style() != Symbol::Style::NoSymbols)
 		curveShape.addPath(symbolsPath);
+
+	curveShape.addPath(rugPath);
 
 	if (valuesType != XYCurve::ValuesType::NoValues)
 		curveShape.addPath(valuesPath);
@@ -2751,6 +2852,16 @@ void XYCurvePrivate::draw(QPainter* painter) {
 		painter->setFont(valuesFont);
 		drawValues(painter);
 	}
+
+	//draw rug
+	if (rugEnabled) {
+		QPen pen;
+		pen.setColor(symbol->brush().color());
+		pen.setWidthF(rugWidth);
+		painter->setPen(pen);
+		painter->setOpacity(symbol->opacity());
+		painter->drawPath(rugPath);
+	}
 }
 
 void XYCurvePrivate::updatePixmap() {
@@ -2796,8 +2907,8 @@ QVariant XYCurvePrivate::itemChange(GraphicsItemChange change, const QVariant & 
   \sa QGraphicsItem::paint().
 */
 void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option);
-	Q_UNUSED(widget);
+	Q_UNUSED(option)
+	Q_UNUSED(widget)
 	if (!isVisible())
 		return;
 
@@ -2852,7 +2963,7 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 	QTransform trafo;
 	trafo.scale(symbol->size(), symbol->size());
 
-	if (symbol->rotationAngle() != 0)
+	if (symbol->rotationAngle() != 0.)
 		trafo.rotate(-symbol->rotationAngle());
 
 	path = trafo.map(path);
@@ -2868,12 +2979,12 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
 	int i = 0;
 	for (const auto& point : qAsConst(m_valuePoints)) {
 		painter->translate(point);
-		if (valuesRotationAngle != 0)
+		if (valuesRotationAngle != 0.)
 			painter->rotate(-valuesRotationAngle);
 
 		painter->drawText(QPoint(0, 0), m_valueStrings.at(i++));
 
-		if (valuesRotationAngle != 0)
+		if (valuesRotationAngle != 0.)
 			painter->rotate(valuesRotationAngle);
 		painter->translate(-point);
 	}
@@ -3312,7 +3423,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	p.setWidthF(group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	p.setColor(themeColor);
 	this->setErrorBarsPen(p);
-	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", 1.0));
+	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", 1.0))
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

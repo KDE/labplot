@@ -107,6 +107,11 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	cbYErrorMinusColumn = new TreeViewComboBox(ui.tabErrorBars);
 	gridLayout->addWidget(cbYErrorMinusColumn, 8, 2, 1, 1);
 
+	//Tab "Margin Plots"
+	ui.cbRugOrientation->addItem(i18n("Vertical"));
+	ui.cbRugOrientation->addItem(i18n("Horizontal"));
+	ui.cbRugOrientation->addItem(i18n("Both"));
+
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
 		auto* layout = dynamic_cast<QGridLayout*>(ui.tabWidget->widget(i)->layout());
@@ -179,6 +184,13 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	connect( ui.kcbErrorBarsColor, SIGNAL(changed(QColor)), this, SLOT(errorBarsColorChanged(QColor)) );
 	connect( ui.sbErrorBarsWidth, SIGNAL(valueChanged(double)), this, SLOT(errorBarsWidthChanged(double)) );
 	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
+
+	//Margin Plots
+	connect(ui.chkRugEnabled, &QCheckBox::stateChanged, this, &XYCurveDock::rugEnabledChanged);
+	connect(ui.cbRugOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::rugOrientationChanged);
+	connect(ui.sbRugLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::rugLengthChanged);
+	connect(ui.sbRugWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::rugWidthChanged);
+	connect(ui.sbRugOffset, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::rugOffsetChanged);
 
 	//template handler
 	auto* frame = new QFrame(this);
@@ -649,6 +661,13 @@ void XYCurveDock::initTabs() {
 	connect(m_curve, SIGNAL(errorBarsTypeChanged(XYCurve::ErrorBarsType)), this, SLOT(curveErrorBarsTypeChanged(XYCurve::ErrorBarsType)));
 	connect(m_curve, SIGNAL(errorBarsPenChanged(QPen)), this, SLOT(curveErrorBarsPenChanged(QPen)));
 	connect(m_curve, SIGNAL(errorBarsOpacityChanged(qreal)), this, SLOT(curveErrorBarsOpacityChanged(qreal)));
+
+	//"Margin Plots"-Tab
+	connect(m_curve, &XYCurve::rugEnabledChanged, this, &XYCurveDock::curveRugEnabledChanged);
+	connect(m_curve, &XYCurve::rugOrientationChanged, this, &XYCurveDock::curveRugOrientationChanged);
+	connect(m_curve, &XYCurve::rugLengthChanged, this, &XYCurveDock::curveRugLengthChanged);
+	connect(m_curve, &XYCurve::rugWidthChanged, this, &XYCurveDock::curveRugWidthChanged);
+	connect(m_curve, &XYCurve::rugOffsetChanged, this, &XYCurveDock::curveRugOffsetChanged);
 }
 
 void XYCurveDock::updateLocale() {
@@ -1362,7 +1381,6 @@ void XYCurveDock::xErrorTypeChanged(int index) const {
 }
 
 void XYCurveDock::xErrorPlusColumnChanged(const QModelIndex& index) const {
-	Q_UNUSED(index);
 	if (m_initializing)
 		return;
 
@@ -1375,7 +1393,6 @@ void XYCurveDock::xErrorPlusColumnChanged(const QModelIndex& index) const {
 }
 
 void XYCurveDock::xErrorMinusColumnChanged(const QModelIndex& index) const {
-	Q_UNUSED(index);
 	if (m_initializing)
 		return;
 
@@ -1432,7 +1449,6 @@ void XYCurveDock::yErrorTypeChanged(int index) const {
 }
 
 void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) const {
-	Q_UNUSED(index);
 	if (m_initializing)
 		return;
 
@@ -1445,7 +1461,6 @@ void XYCurveDock::yErrorPlusColumnChanged(const QModelIndex& index) const {
 }
 
 void XYCurveDock::yErrorMinusColumnChanged(const QModelIndex& index) const {
-	Q_UNUSED(index);
 	if (m_initializing)
 		return;
 
@@ -1527,6 +1542,51 @@ void XYCurveDock::errorBarsOpacityChanged(int value) const {
 	qreal opacity = (float)value/100.;
 	for (auto* curve : m_curvesList)
 		curve->setErrorBarsOpacity(opacity);
+}
+
+//"Margin Plots"-Tab
+void XYCurveDock::rugEnabledChanged(int state) const {
+	if (m_initializing)
+		return;
+
+	for (auto* curve : qAsConst(m_curvesList))
+		curve->setRugEnabled(state);
+}
+
+void XYCurveDock::rugOrientationChanged(int index) const {
+	if (m_initializing)
+		return;
+
+	auto orientation = static_cast<WorksheetElement::Orientation>(index);
+	for (auto* curve : qAsConst(m_curvesList))
+		curve->setRugOrientation(orientation);
+}
+
+void XYCurveDock::rugLengthChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	const double length = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* curve : qAsConst(m_curvesList))
+		curve->setRugLength(length);
+}
+
+void XYCurveDock::rugWidthChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	const double width = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* curve : qAsConst(m_curvesList))
+		curve->setRugWidth(width);
+}
+
+void XYCurveDock::rugOffsetChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	const double offset = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
+	for (auto* curve : qAsConst(m_curvesList))
+		curve->setRugOffset(offset);
 }
 
 //*************************************************************
@@ -1760,7 +1820,6 @@ void XYCurveDock::curveYErrorPlusColumnChanged(const AbstractColumn* column) {
 	cbYErrorPlusColumn->setColumn(column, m_curve->yErrorPlusColumnPath());
 	m_initializing = false;
 }
-
 void XYCurveDock::curveYErrorMinusColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	cbYErrorMinusColumn->setColumn(column, m_curve->yErrorMinusColumnPath());
@@ -1787,6 +1846,33 @@ void XYCurveDock::curveErrorBarsPenChanged(const QPen& pen) {
 void XYCurveDock::curveErrorBarsOpacityChanged(qreal opacity) {
 	m_initializing = true;
 	ui.sbErrorBarsOpacity->setValue( round(opacity*100.0) );
+	m_initializing = false;
+}
+
+//"Margin Plot"-Tab
+void XYCurveDock::curveRugEnabledChanged(bool status) {
+	m_initializing = true;
+	ui.chkRugEnabled->setChecked(status);
+	m_initializing = false;
+}
+void XYCurveDock::curveRugOrientationChanged(WorksheetElement::Orientation orientation) {
+	m_initializing = true;
+	ui.cbRugOrientation->setCurrentIndex(static_cast<int>(orientation));
+	m_initializing = false;
+}
+void XYCurveDock::curveRugLengthChanged(double value) {
+	m_initializing = true;
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+	m_initializing = false;
+}
+void XYCurveDock::curveRugWidthChanged(double value) {
+	m_initializing = true;
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
+	m_initializing = false;
+}
+void XYCurveDock::curveRugOffsetChanged(double value) {
+	m_initializing = true;
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(value, Worksheet::Unit::Point));
 	m_initializing = false;
 }
 
@@ -1850,6 +1936,13 @@ void XYCurveDock::load() {
 	ui.kcbErrorBarsColor->setColor( m_curve->errorBarsPen().color() );
 	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(m_curve->errorBarsPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbErrorBarsOpacity->setValue( round(m_curve->errorBarsOpacity()*100.0) );
+
+	//Margin plots
+	ui.chkRugEnabled->setChecked(m_curve->rugEnabled());
+	ui.cbRugOrientation->setCurrentIndex(static_cast<int>(m_curve->rugOrientation()));
+	ui.sbRugWidth->setValue(Worksheet::convertFromSceneUnits(m_curve->rugWidth(), Worksheet::Unit::Point));
+	ui.sbRugLength->setValue(Worksheet::convertFromSceneUnits(m_curve->rugLength(), Worksheet::Unit::Point));
+	ui.sbRugOffset->setValue(Worksheet::convertFromSceneUnits(m_curve->rugOffset(), Worksheet::Unit::Point));
 
 	m_initializing = true;
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());

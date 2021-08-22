@@ -46,7 +46,7 @@ class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
 
 public:
-	enum class Orientation {Horizontal, Vertical};
+	enum class Orientation {Horizontal, Vertical, Both};
 	WorksheetElement(const QString&, AspectType);
 	~WorksheetElement() override;
 

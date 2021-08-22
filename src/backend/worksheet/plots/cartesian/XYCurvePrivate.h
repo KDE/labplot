@@ -53,6 +53,7 @@ public:
 	void addUniqueLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff);	// finally add line if unique (no overlay)
 	void updateDropLines();
 	void updateSymbols();
+	void updateRug();
 	void updateValues();
 	void updateFilling();
 	void updateErrorBars();
@@ -89,6 +90,14 @@ public:
 
 	//symbols
 	Symbol* symbol{nullptr};
+
+	//rug
+	bool rugEnabled{false};
+	WorksheetElement::Orientation rugOrientation{WorksheetElement::Orientation::Vertical};
+	double rugOffset;
+	double rugLength;
+	double rugWidth;
+	QPainterPath rugPath;
 
 	//values
 	XYCurve::ValuesType valuesType;
