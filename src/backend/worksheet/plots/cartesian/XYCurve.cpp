@@ -146,7 +146,7 @@ void XYCurve::init() {
 	d->rugEnabled = group.readEntry("RugEnabled", false);
 	d->rugOrientation = (WorksheetElement::Orientation) group.readEntry("RugOrientation", (int)WorksheetElement::Orientation::Both);
 	d->rugLength = group.readEntry("RugLength", Worksheet::convertToSceneUnits(5, Worksheet::Unit::Point));
-	d->rugWidth = group.readEntry("RugWidth", Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point));
+	d->rugWidth = group.readEntry("RugWidth", 0.0);
 	d->rugOffset = group.readEntry("RugOffset", 0.0);
 }
 
@@ -1760,7 +1760,7 @@ void XYCurvePrivate::updateSymbols() {
 void XYCurvePrivate::updateRug() {
 	rugPath = QPainterPath();
 
-	if (!rugEnabled) {
+	if (!rugEnabled || !plot()) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1796,8 +1796,8 @@ void XYCurvePrivate::updateRug() {
 
 		//path for the horizontal rug lines
 		for (const auto& point : qAsConst(points)) {
-			rugPath.moveTo(point.x(), point.y() + rugOffset);
-			rugPath.lineTo(point.x(), point.y() + rugOffset + rugLength);
+			rugPath.moveTo(point.x(), point.y() - rugOffset);
+			rugPath.lineTo(point.x(), point.y() - rugOffset - rugLength);
 		}
 	}
 
@@ -3423,7 +3423,12 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	p.setWidthF(group.readEntry("ErrorBarsWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
 	p.setColor(themeColor);
 	this->setErrorBarsPen(p);
-	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", 1.0))
+	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", 1.0));
+
+	if (plot->theme() == QLatin1String("Tufte")) {
+		setRugEnabled(true);
+		setRugOrientation(WorksheetElement::Orientation::Both);
+	}
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
