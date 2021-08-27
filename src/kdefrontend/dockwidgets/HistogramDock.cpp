@@ -242,6 +242,7 @@ void HistogramDock::init() {
 	ui.cbLineType->addItem(i18n("Bars"));
 	ui.cbLineType->addItem(i18n("Envelope"));
 	ui.cbLineType->addItem(i18n("Drop Lines"));
+	ui.cbLineType->addItem(i18n("Half-Bars"));
 
 	GuiTools::updatePenStyles(ui.cbLineStyle, Qt::black);
 	m_initializing = false;
@@ -651,7 +652,7 @@ void HistogramDock::binRangesMinDateTimeChanged(const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
-	quint64 min = dateTime.toMSecsSinceEpoch();
+	qint64 min = dateTime.toMSecsSinceEpoch();
 	for (auto* hist : m_curvesList)
 		hist->setBinRangesMin(min);
 }
@@ -660,7 +661,7 @@ void HistogramDock::binRangesMaxDateTimeChanged(const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
-	quint64 max = dateTime.toMSecsSinceEpoch();
+	qint64 max = dateTime.toMSecsSinceEpoch();
 	for (auto* hist : m_curvesList)
 		hist->setBinRangesMax(max);
 }
@@ -748,7 +749,7 @@ void HistogramDock::lineOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = static_cast<qreal>(value)/100.;
 	for (auto* curve : m_curvesList)
 		curve->setLineOpacity(opacity);
 }
@@ -880,7 +881,7 @@ void HistogramDock::valuesOpacityChanged(int value) {
 	if (m_initializing)
 		return;
 
-	qreal opacity = (float)value/100.;
+	qreal opacity = static_cast<qreal>(value)/100.;
 	for (auto* curve : m_curvesList)
 		curve->setValuesOpacity(opacity);
 }
@@ -1350,23 +1351,23 @@ void HistogramDock::curveValuesDateTimeFormatChanged(const QString& format) {
 }
 void HistogramDock::curveValuesPrefixChanged(const QString& prefix) {
 	m_initializing = true;
-  	ui.leValuesPrefix->setText(prefix);
+	ui.leValuesPrefix->setText(prefix);
 	m_initializing = false;
 }
 void HistogramDock::curveValuesSuffixChanged(const QString& suffix) {
 	m_initializing = true;
-  	ui.leValuesSuffix->setText(suffix);
+	ui.leValuesSuffix->setText(suffix);
 	m_initializing = false;
 }
 void HistogramDock::curveValuesFontChanged(QFont font) {
 	m_initializing = true;
 	font.setPointSizeF( round(Worksheet::convertFromSceneUnits(font.pixelSize(), Worksheet::Unit::Point)) );
-  	ui.kfrValuesFont->setFont(font);
+	ui.kfrValuesFont->setFont(font);
 	m_initializing = false;
 }
 void HistogramDock::curveValuesColorChanged(QColor color) {
 	m_initializing = true;
-  	ui.kcbValuesColor->setColor(color);
+	ui.kcbValuesColor->setColor(color);
 	m_initializing = false;
 }
 
@@ -1474,19 +1475,19 @@ void HistogramDock::loadConfig(KConfig& config) {
 	//Symbols
 	symbolWidget->loadConfig(group);
 
-  	//Values
-  	ui.cbValuesType->setCurrentIndex( group.readEntry("ValuesType", (int) m_curve->valuesType()) );
-  	ui.cbValuesPosition->setCurrentIndex( group.readEntry("ValuesPosition", (int) m_curve->valuesPosition()) );
+	//Values
+	ui.cbValuesType->setCurrentIndex( group.readEntry("ValuesType", (int) m_curve->valuesType()) );
+	ui.cbValuesPosition->setCurrentIndex( group.readEntry("ValuesPosition", (int) m_curve->valuesPosition()) );
 	ui.sbValuesDistance->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ValuesDistance", m_curve->valuesDistance()), Worksheet::Unit::Point) );
 	ui.sbValuesRotation->setValue( group.readEntry("ValuesRotation", m_curve->valuesRotationAngle()) );
 	ui.sbValuesOpacity->setValue( round(group.readEntry("ValuesOpacity",m_curve->valuesOpacity())*100.0) );
 	this->updateValuesWidgets();
-  	ui.leValuesPrefix->setText( group.readEntry("ValuesPrefix", m_curve->valuesPrefix()) );
-  	ui.leValuesSuffix->setText( group.readEntry("ValuesSuffix", m_curve->valuesSuffix()) );
+	ui.leValuesPrefix->setText( group.readEntry("ValuesPrefix", m_curve->valuesPrefix()) );
+	ui.leValuesSuffix->setText( group.readEntry("ValuesSuffix", m_curve->valuesSuffix()) );
 	QFont valuesFont = m_curve->valuesFont();
 	valuesFont.setPointSizeF( round(Worksheet::convertFromSceneUnits(valuesFont.pixelSize(), Worksheet::Unit::Point)) );
-  	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", valuesFont) );
-  	ui.kcbValuesColor->setColor( group.readEntry("ValuesColor", m_curve->valuesColor()) );
+	ui.kfrValuesFont->setFont( group.readEntry("ValuesFont", valuesFont) );
+	ui.kcbValuesColor->setColor( group.readEntry("ValuesColor", m_curve->valuesColor()) );
 
 	//Filling
 	ui.chkFillingEnabled->setChecked( group.readEntry("FillingEnabled", m_curve->fillingEnabled()) );

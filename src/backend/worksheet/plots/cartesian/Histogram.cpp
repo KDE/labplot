@@ -1044,7 +1044,8 @@ void HistogramPrivate::verticalHistogram() {
 
 	const double width = (binRangesMax - binRangesMin)/m_bins;
 	double value = 0.;
-	if (lineType == Histogram::Bars) {
+	switch (lineType) {
+	case Histogram::Bars: {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i*width;
@@ -1053,7 +1054,10 @@ void HistogramPrivate::verticalHistogram() {
 			lines.append(QLineF(x + width, value, x + width, 0.));
 			pointsLogical.append(QPointF(x+width/2, value));
 		}
-	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
+		break;
+	}
+	case Histogram::NoLine:
+	case Histogram::Envelope: {
 		double prevValue = 0.;
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
@@ -1067,16 +1071,30 @@ void HistogramPrivate::verticalHistogram() {
 
 			prevValue = value;
 		}
-	} else { //drop lines
+		break;
+	}
+	case Histogram::DropLines: {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double x = binRangesMin + i*width + width/2;
 			lines.append(QLineF(x, 0., x, value));
 			pointsLogical.append(QPointF(x, value));
 		}
+		break;
+	}
+	case Histogram::HalfBars :{
+		for (size_t i = 0; i < m_bins; ++i) {
+			histogramValue(value, i);
+			const double x = binRangesMin + i*width + width/2;
+			lines.append(QLineF(x, 0., x, value));
+			lines.append(QLineF(x, value, x - width/4, value));
+			pointsLogical.append(QPointF(x, value));
+		}
+		break;
+	}
 	}
 
-	if (lineType != Histogram::DropLines)
+	if (lineType != Histogram::DropLines && lineType != Histogram::HalfBars)
 		lines.append(QLineF(binRangesMax, 0., binRangesMin, 0.));
 }
 
@@ -1086,7 +1104,8 @@ void HistogramPrivate::horizontalHistogram() {
 
 	const double width = (binRangesMax - binRangesMin)/m_bins;
 	double value = 0.;
-	if (lineType == Histogram::Bars) {
+	switch (lineType) {
+	case Histogram::Bars: {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i*width;
@@ -1095,7 +1114,10 @@ void HistogramPrivate::horizontalHistogram() {
 			lines.append(QLineF(value, y + width, 0., y + width));
 			pointsLogical.append(QPointF(value, y+width/2));
 		}
-	} else if (lineType == Histogram::NoLine || lineType == Histogram::Envelope) {
+		break;
+	}
+	case Histogram::NoLine:
+	case Histogram::Envelope: {
 		double prevValue = 0.;
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
@@ -1109,16 +1131,30 @@ void HistogramPrivate::horizontalHistogram() {
 
 			prevValue = value;
 		}
-	} else { //drop lines
+		break;
+	}
+	case Histogram::DropLines: {
 		for (size_t i = 0; i < m_bins; ++i) {
 			histogramValue(value, i);
 			const double y = binRangesMin + i*width + width/2;
 			lines.append(QLineF(0., y, value, y));
 			pointsLogical.append(QPointF(value, y));
 		}
+		break;
+	}
+	case Histogram::HalfBars :{
+		for (size_t i = 0; i < m_bins; ++i) {
+			histogramValue(value, i);
+			const double y = binRangesMin + i*width + width/2;
+			lines.append(QLineF(0., y, value, y));
+			lines.append(QLineF(value, y, value, y + width/4));
+			pointsLogical.append(QPointF(value, y));
+		}
+		break;
+	}
 	}
 
-	if (lineType != Histogram::DropLines)
+	if (lineType != Histogram::DropLines && lineType != Histogram::HalfBars)
 		lines.append(QLineF(0., binRangesMin, 0., binRangesMax));
 }
 
@@ -1132,7 +1168,7 @@ void HistogramPrivate::updateSymbols() {
 		path = trafo.map(path);
 		trafo.reset();
 
-		if (symbol->rotationAngle() != 0) {
+		if (symbol->rotationAngle() != 0.) {
 			trafo.rotate(symbol->rotationAngle());
 			path = trafo.map(path);
 		}
@@ -1263,7 +1299,7 @@ void HistogramPrivate::updateValues() {
 
 		trafo.reset();
 		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
-		if (valuesRotationAngle!=0)
+		if (valuesRotationAngle != 0.)
 			trafo.rotate( -valuesRotationAngle );
 
 		valuesPath.addPath(trafo.map(path));
@@ -1275,7 +1311,7 @@ void HistogramPrivate::updateValues() {
 void HistogramPrivate::updateFilling() {
 	fillPolygon.clear();
 
-	if (!fillingEnabled || lineType == Histogram::DropLines) {
+	if (!fillingEnabled || lineType == Histogram::DropLines || lineType == Histogram::HalfBars) {
 		recalcShapeAndBoundingRect();
 		return;
 	}
@@ -1494,7 +1530,7 @@ void HistogramPrivate::drawSymbols(QPainter* painter) {
 
 	QTransform trafo;
 	trafo.scale(symbol->size(), symbol->size());
-	if (symbol->rotationAngle() != 0)
+	if (symbol->rotationAngle() != 0.)
 		trafo.rotate(-symbol->rotationAngle());
 
 	path = trafo.map(path);
@@ -1515,7 +1551,7 @@ void HistogramPrivate::drawValues(QPainter* painter) {
 
 		trafo.reset();
 		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
-		if (valuesRotationAngle!=0)
+		if (valuesRotationAngle != 0.)
 			trafo.rotate(-valuesRotationAngle );
 
 		painter->drawPath(trafo.map(path));
@@ -1926,6 +1962,9 @@ void Histogram::loadThemeConfig(const KConfig& config) {
 // 	p.setColor(themeColor);
 // 	this->setErrorBarsPen(p);
 // 	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity",this->errorBarsOpacity()));
+
+	if (plot->theme() == QLatin1String("Tufte"))
+		setLineType(Histogram::LineType::HalfBars);
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();
