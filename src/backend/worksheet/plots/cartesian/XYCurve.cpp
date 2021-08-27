@@ -3218,6 +3218,15 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "opacity", QString::number(d->errorBarsOpacity) );
 	writer->writeEndElement();
 
+	//margin plots
+	writer->writeStartElement("margins");
+	writer->writeAttribute("rugEnabled", QString::number(d->rugEnabled));
+	writer->writeAttribute("rugOrientation", QString::number(static_cast<int>(d->rugOrientation)));
+	writer->writeAttribute("rugLength", QString::number(d->rugLength));
+	writer->writeAttribute("rugWidth", QString::number(d->rugWidth));
+	writer->writeAttribute("rugOffset",QString::number(d->rugOffset));
+	writer->writeEndElement();
+
 	writer->writeEndElement(); //close "xyCurve" section
 }
 
@@ -3361,6 +3370,14 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_QPEN(d->errorBarsPen);
 
 			READ_DOUBLE_VALUE("opacity", errorBarsOpacity);
+		} else if (!preview && reader->name() == "margins") {
+			attribs = reader->attributes();
+
+			READ_INT_VALUE("rugEnabled", rugEnabled, bool);
+			READ_INT_VALUE("rugOrientation", rugOrientation, Orientation);
+			READ_DOUBLE_VALUE("rugLength", rugLength);
+			READ_DOUBLE_VALUE("rugWidth", rugWidth);
+			READ_DOUBLE_VALUE("rugOFfset", rugOffset);
 		}
 	}
 

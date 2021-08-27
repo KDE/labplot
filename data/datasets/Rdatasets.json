@@ -5748,6 +5748,7 @@
                             "filename": "mtcars",
                             "name": "Motor Trend Car Road Tests",
                             "separator": ",",
+                            "skip_empty_parts": "false",
                             "use_first_row_for_vectorname": true,
                             "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/datasets/mtcars.html"
                         },
