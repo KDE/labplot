@@ -202,6 +202,7 @@ option(ENABLE_MATIO "Build with Matio support" ON)
 option(ENABLE_TESTS "Build with tests" ON)
 option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
+option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
 
 ### OS macros ####################################
@@ -323,6 +324,9 @@ IF (ENABLE_MQTT)
 # ATTENTION: unit test uses qWaitFor() which needs Qt >= 5.10
 # avoid warning for the moment using QUIET
 	find_package(Qt5Mqtt ${QT_MIN_VERSION} NO_MODULE)
+	SET_PACKAGE_PROPERTIES (Qt5Mqtt PROPERTIES
+		DESCRIPTION "Qt Module to implement MQTT protocol version 3.1 and 3.1.1"
+		URL "https://github.com/qt/qtmqtt")
 	IF (Qt5Mqtt_FOUND)
 		MESSAGE (STATUS "Found MQTT Library")
 		add_definitions (-DHAVE_MQTT)
@@ -347,7 +351,7 @@ IF (ENABLE_QTSERIALPORT)
 		MESSAGE (STATUS "Qt5SerialPort Library NOT FOUND")
 	ENDIF ()
 ELSE ()
-        MESSAGE (STATUS "Qt5SerialPort Library DISABLED")
+	MESSAGE (STATUS "Qt5SerialPort Library DISABLED")
 ENDIF ()
 
 ### FITS (optional) ###############################
@@ -423,6 +427,7 @@ IF (ENABLE_READSTAT)
 ELSE ()
 	MESSAGE (STATUS "ReadStat support DISABLED")
 ENDIF ()
+
 ###  Matio (optional) ##############################################
 IF (ENABLE_MATIO)
 	FIND_PACKAGE (Matio)
@@ -434,6 +439,23 @@ IF (ENABLE_MATIO)
 ELSE ()
 	MESSAGE (STATUS "Matio support DISABLED")
 ENDIF ()
+
+### Discount (optional) #############################
+IF (ENABLE_DISCOUNT)
+	FIND_PACKAGE(Discount)
+	SET_PACKAGE_PROPERTIES (Discount PROPERTIES
+		DESCRIPTION "A C implementation of the Markdown markup language"
+		URL "https://www.pell.portland.or.us/~orc/Code/discount/"
+		TYPE OPTIONAL)
+	IF (Discount_FOUND)
+		add_definitions (-DHAVE_DISCOUNT)
+	ELSE ()
+		MESSAGE (STATUS "Discount library NOT FOUND.")
+	ENDIF ()
+ELSE ()
+	MESSAGE (STATUS "Discount DISABLED")
+ENDIF ()
+
 #################################################
 IF (ENABLE_REPRODUCIBLE)
 	add_definitions (-DREPRODUCIBLE_BUILD)
