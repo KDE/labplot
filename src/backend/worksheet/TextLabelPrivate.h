@@ -42,7 +42,7 @@ class CartesianPlot;
 class CartesianCoordinateSystem;
 class TextLabel;
 
-class TextLabelPrivate: public QGraphicsItem {
+class TextLabelPrivate : public QGraphicsItem {
 public:
 	explicit TextLabelPrivate(TextLabel*);
 
@@ -75,7 +75,7 @@ public:
 	bool coordinateBindingEnabled{false};
 	QPointF positionLogical;
 
-    TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
+	TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
@@ -83,7 +83,7 @@ public:
 	void retransform();
 	bool swapVisible(bool on);
 	virtual void recalcShapeAndBoundingRect();
-    void updatePosition();
+	void updatePosition();
 	void updateText();
 	void updateTeXImage();
 	void updateBorder();
@@ -122,9 +122,9 @@ private:
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
-	QPointF mapPlotAreaToParent(QPointF point);
-	QPointF mapParentToPlotArea(QPointF point);
-    bool parentRect(QRectF& rect);
+	QPointF mapPlotAreaToParent(QPointF);
+	QPointF mapParentToPlotArea(QPointF);
+	bool parentRect(QRectF&);
 };
 
 #endif

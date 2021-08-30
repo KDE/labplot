@@ -494,6 +494,9 @@ ENDIF ()
 if (KUserFeedback_FOUND)
     target_link_libraries( labplot2lib KUserFeedbackWidgets )
 endif()
+IF (Discount_FOUND)
+	target_link_libraries( labplot2lib Discount::Lib )
+ENDIF ()
 #TODO: KF5::NewStuff
 
 IF (RECENT_CANTOR)

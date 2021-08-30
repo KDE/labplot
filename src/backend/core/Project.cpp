@@ -62,7 +62,7 @@ namespace {
 	// the project version will compared with this.
 	// if you make any compatibilty changes to the xmlfile
 	// or the function in labplot, increase this number
-	int buildXmlVersion = 3;
+	int buildXmlVersion = 4;
 }
 
 /**
@@ -93,8 +93,7 @@ namespace {
 
 class Project::Private {
 public:
-	Private(Project* owner) : author(QString()),
-			modificationTime(QDateTime::currentDateTime()), q(owner) {
+	Private(Project* owner) : modificationTime(QDateTime::currentDateTime()), q(owner) {
 		setVersion(LVERSION);
 	}
 	QString name() const  {
@@ -131,17 +130,19 @@ public:
 		return mXmlVersion;
 	}
 
-	QUndoStack undo_stack;
 	MdiWindowVisibility mdiWindowVisibility{Project::MdiWindowVisibility::folderOnly};
-	QString fileName;
-	QString author;
-	QDateTime modificationTime;
 	bool changed{false};
 	bool aspectAddedSignalSuppressed{false};
-	Project* const q;
+
 	static int m_versionNumber;
-	static QString versionString;
 	static int mXmlVersion;
+	static QString versionString;
+
+	QDateTime modificationTime;
+	Project* const q;
+	QString fileName;
+	QString author;
+	QUndoStack undo_stack;
 };
 
 int Project::Private::m_versionNumber = 0;

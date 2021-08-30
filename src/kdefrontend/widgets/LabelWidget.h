@@ -88,7 +88,7 @@ private slots:
 	//SLOTs for changes triggered in LabelWidget
 	void textChanged();
 	void charFormatChanged(const QTextCharFormat&);
-	void teXUsedChanged(bool);
+	void modeChanged(int);
 	void fontColorChanged(const QColor&);
 	void updateBackground() const;
 	void backgroundColorChanged(const QColor&);

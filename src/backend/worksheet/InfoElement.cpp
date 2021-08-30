@@ -408,15 +408,15 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		xValueStr = dateTime.toString(m_plot->xRangeDateTimeFormat());
 	}
 
-	if (!wrapper.teXUsed)
+	if (wrapper.mode == TextLabel::Mode::Text)
 		text.replace("&amp;(x)", xValueStr);
 	else
 		text.replace("&(x)", xValueStr);
 
 	//replace the placeholders for curve's y-values
-	for (const auto& markerpoint : markerpoints) {
+	for (const auto& markerpoint : qAsConst(markerpoints)) {
 		QString replace;
-		if(!wrapper.teXUsed)
+		if (wrapper.mode == TextLabel::Mode::Text)
 			replace = QLatin1String("&amp;(");
 		else
 			replace = QLatin1String("&(");
@@ -727,7 +727,7 @@ BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, connectionLineOpacity, connection
 STD_SETTER_CMD_IMPL_F_S(InfoElement, SetPosition, double, position, retransform);
 void InfoElement::setPosition(double pos) {
 	Q_D(InfoElement);
-	double value;
+	double value = 0.;
 	int index = currentIndex(pos, &value);
 	if (index < 0)
 		return;
@@ -1244,6 +1244,7 @@ void InfoElement::loadThemeConfig(const KConfig& config) {
 	this->setConnectionLineOpacity(group.readEntry("LineOpacity", 1.0));
 
 	//load the theme for all the children
-	for (auto* child : children<WorksheetElement>(ChildIndexFlag::IncludeHidden))
+	const auto& children = this->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
 		child->loadThemeConfig(config);
 }

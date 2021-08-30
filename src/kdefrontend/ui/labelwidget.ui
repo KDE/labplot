@@ -504,86 +504,8 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="0" column="10">
-       <widget class="QToolButton" name="tbTexUsed">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>TeX mode</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="tbFontUnderline">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="8">
-       <widget class="QToolButton" name="tbDateTime">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="9">
-       <spacer name="spacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>18</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="1" colspan="10">
-       <widget class="ResizableTextEdit" name="teLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QToolButton" name="tbFontBold">
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="5">
-       <widget class="QToolButton" name="tbFontSuperScript">
         <property name="text">
          <string/>
         </property>
@@ -612,6 +534,29 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="9">
+       <spacer name="spacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>18</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="7">
+       <widget class="QToolButton" name="tbSymbols">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="6">
        <widget class="QToolButton" name="tbFontSubScript">
         <property name="text">
@@ -622,10 +567,49 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="7">
-       <widget class="QToolButton" name="tbSymbols">
+      <item row="0" column="8">
+       <widget class="QToolButton" name="tbDateTime">
         <property name="text">
          <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="10">
+       <widget class="QComboBox" name="cbMode"/>
+      </item>
+      <item row="0" column="3">
+       <widget class="QToolButton" name="tbFontUnderline">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="5">
+       <widget class="QToolButton" name="tbFontSuperScript">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="11">
+       <widget class="ResizableTextEdit" name="teLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
         </property>
        </widget>
       </item>
@@ -744,7 +728,6 @@
   <tabstop>tbFontSubScript</tabstop>
   <tabstop>tbSymbols</tabstop>
   <tabstop>tbDateTime</tabstop>
-  <tabstop>tbTexUsed</tabstop>
   <tabstop>teLabel</tabstop>
   <tabstop>chbShowPlaceholderText</tabstop>
   <tabstop>kfontRequester</tabstop>

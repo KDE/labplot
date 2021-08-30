@@ -54,6 +54,12 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
+#ifdef HAVE_DISCOUNT
+extern "C" {
+#include <mkdio.h>
+}
+#endif
+
 /**
  * \class TextLabel
  * \brief A label supporting rendering of html- and tex-formatted texts.
@@ -133,7 +139,7 @@ void TextLabel::init() {
 	// read settings from config if group exists
 	if (group.isValid()) {
 		//properties common to all types
-		d->textWrapper.teXUsed = group.readEntry("TeXUsed", d->textWrapper.teXUsed);
+		d->textWrapper.mode = static_cast<TextLabel::Mode>(group.readEntry("Mode", static_cast<int>(d->textWrapper.mode)));
 		d->teXFont.setFamily(group.readEntry("TeXFontFamily", d->teXFont.family()));
 		d->teXFont.setPointSize(group.readEntry("TeXFontSize", d->teXFont.pointSize()));
 		d->fontColor = group.readEntry("TeXFontColor", d->fontColor);
@@ -256,7 +262,7 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, bool, coordinateBindingEnabled, coordinate
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText);
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
-	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.teXUsed != d->textWrapper.teXUsed)
+	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.mode != d->textWrapper.mode)
 	        || ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
 	        textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder)
 		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
@@ -265,7 +271,7 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPlaceholderText, TextLabel::TextWrapper, textWrapper, updateText);
 void TextLabel::setPlaceholderText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
-	if ( (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder) || (textWrapper.teXUsed != d->textWrapper.teXUsed) )
+	if ( (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder) || (textWrapper.mode != d->textWrapper.mode) )
 		exec(new TextLabelSetPlaceholderTextCmd(d, textWrapper, ki18n("%1: set label placeholdertext")));
 }
 
@@ -442,8 +448,8 @@ QString TextLabelPrivate::name() const {
  * \return Size and position of the TextLabel in scene coords
  */
 QRectF TextLabelPrivate::size() {
-	float w, h;
-	if (textWrapper.teXUsed) {
+	double w, h;
+	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
 		//image size is in pixel, convert to scene units
 		w = teXImage.width()*teXImageScaleFactor;
 		h = teXImage.height()*teXImageScaleFactor;
@@ -452,8 +458,8 @@ QRectF TextLabelPrivate::size() {
 		w = staticText.size().width()*scaleFactor;
 		h = staticText.size().height()*scaleFactor;
 	}
-	float x = position.point.x();
-	float y = position.point.y();
+	qreal x = position.point.x();
+	qreal y = position.point.y();
 	return QRectF(x,y,w,h);
 }
 
@@ -519,7 +525,7 @@ void TextLabelPrivate::retransform() {
 
 	//determine the size of the label in scene units.
 	double w, h;
-	if (textWrapper.teXUsed) {
+	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
 		//image size is in pixel, convert to scene units
 		w = teXImage.width()*teXImageScaleFactor;
 		h = teXImage.height()*teXImageScaleFactor;
@@ -602,7 +608,8 @@ void TextLabelPrivate::updateText() {
 	if (suppressRetransform)
 		return;
 
-	if (textWrapper.teXUsed) {
+	switch (textWrapper.mode) {
+	case TextLabel::Mode::LaTeX: {
 		TeXRenderer::Formatting format;
 		format.fontColor = fontColor;
 		format.backgroundColor = backgroundColor;
@@ -614,12 +621,36 @@ void TextLabelPrivate::updateText() {
 
 		//don't need to call retransorm() here since it is done in updateTeXImage
 		//when the asynchronous rendering of the image is finished.
-	} else {
+		break;
+	}
+	case TextLabel::Mode::Text: {
 		staticText.setText(textWrapper.text);
 
 		//the size of the label was most probably changed.
 		//call retransform() to recalculate the position and the bounding box of the label
 		retransform();
+		break;
+	}
+	case TextLabel::Mode::Markdown: {
+#ifdef HAVE_DISCOUNT
+		QByteArray mdCharArray = textWrapper.text.toUtf8();
+		MMIOT* mdHandle = mkd_string(mdCharArray.data(), mdCharArray.size()+1, 0);
+		if(!mkd_compile(mdHandle, MKD_LATEX | MKD_FENCEDCODE | MKD_GITHUBTAGS))
+		{
+			qDebug()<<"Failed to compile the markdown document";
+			mkd_cleanup(mdHandle);
+			return;
+		}
+		char *htmlDocument;
+		int htmlSize = mkd_document(mdHandle, &htmlDocument);
+		QString html = QString::fromUtf8(htmlDocument, htmlSize);
+
+		mkd_cleanup(mdHandle);
+
+		staticText.setText(html);
+		retransform();
+#endif
+	}
 	}
 }
 
@@ -947,10 +978,13 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	painter->rotate(-rotationAngle);
 
 	//draw the text
-	if (textWrapper.teXUsed) {
+	switch (textWrapper.mode) {
+	case TextLabel::Mode::LaTeX: {
 		if (boundingRect().width() != 0.0 &&  boundingRect().height() != 0.0)
 			painter->drawImage(boundingRect(), teXImage);
-	} else {
+		break;
+	}
+	case TextLabel::Mode::Text: {
 		// don't set pen color, the color is already in the HTML code
 		//painter->setPen(fontColor);
 		painter->scale(scaleFactor, scaleFactor);
@@ -959,6 +993,11 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 		//staticText.setPerformanceHint(QStaticText::AggressiveCaching);
 		//QDEBUG(Q_FUNC_INFO << ", Drawing text:" << staticText.text())
 		painter->drawStaticText(QPointF(-w/2., -h/2.), staticText);
+		break;
+	}
+	case TextLabel::Mode::Markdown: {
+		//TODO:
+	}
 	}
 	painter->restore();
 
@@ -1217,7 +1256,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement( "format" );
 	writer->writeAttribute( "placeholder", QString::number(d->textWrapper.allowPlaceholder) );
-	writer->writeAttribute( "teXUsed", QString::number(d->textWrapper.teXUsed) );
+	writer->writeAttribute( "mode", QString::number(static_cast<int>(d->textWrapper.mode)) );
 	WRITE_QFONT(d->teXFont);
 	writer->writeAttribute( "fontColor_r", QString::number(d->fontColor.red()) );
 	writer->writeAttribute( "fontColor_g", QString::number(d->fontColor.green()) );
@@ -1231,7 +1270,7 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("borderOpacity", QString::number(d->borderOpacity));
 	writer->writeEndElement();
 
-	if (d->textWrapper.teXUsed) {
+	if (d->textWrapper.mode ==  TextLabel::Mode::LaTeX) {
 		writer->writeStartElement("teXImage");
 		QByteArray ba;
 		QBuffer buffer(&ba);
@@ -1341,20 +1380,17 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		else if (!preview && reader->name() == "format") {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("teXUsed", textWrapper.teXUsed, bool);
+			if (project()->xmlVersion() < 4) {
+				str = attribs.value("teXUsed").toString();
+				d->textWrapper.mode = static_cast<TextLabel::Mode>(str.toInt());
+			} else
+				READ_INT_VALUE("mode", textWrapper.mode, TextLabel::Mode);
+
 			READ_QFONT(d->teXFont);
 
 			str = attribs.value("placeholder").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("teXUsed").toString());
-			else
+			if(!str.isEmpty())
 				d->textWrapper.allowPlaceholder = str.toInt();
-
-			str = attribs.value("teXUsed").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("teXUsed").toString());
-			else
-				d->textWrapper.teXUsed = str.toInt();
 
 			str = attribs.value("fontColor_r").toString();
 			if (str.isEmpty())
@@ -1395,7 +1431,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 	//in case we use latex and the image was stored (older versions of LabPlot didn't save the image)and loaded,
 	//we just need to retransform.
 	//otherwise, we set the static text and retransform in updateText()
-	if ( !(d->textWrapper.teXUsed && teXImageFound) )
+	if ( !(d->textWrapper.mode == TextLabel::Mode::LaTeX && teXImageFound) )
 		d->updateText();
 	else
 		retransform();
@@ -1413,7 +1449,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	d->fontColor = group.readEntry("FontColor", QColor(Qt::black)); // used when it's latex text
 	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::white)); // used when it's latex text
 
-	if (!d->textWrapper.teXUsed && !d->textWrapper.text.isEmpty()) {
+	if (d->textWrapper.mode == TextLabel::Mode::Text && !d->textWrapper.text.isEmpty()) {
 		// TODO: Replace QTextEdit by QTextDocument, because this does not contain the graphical stuff
 		// to set the color in a html text, a qTextEdit must be used
 		QTextEdit te;
@@ -1422,7 +1458,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 		te.setTextColor(d->fontColor);
 		//te.setTextBackgroundColor(backgroundColor); // for plain text no background color supported, due to bug https://bugreports.qt.io/browse/QTBUG-25420
 
-		TextWrapper wrapper(te.toHtml(), false, true);
+		TextWrapper wrapper(te.toHtml(), TextLabel::Mode::Text, true);
 		te.setHtml(d->textWrapper.textPlaceholder);
 		te.selectAll();
 		te.setTextColor(d->fontColor);

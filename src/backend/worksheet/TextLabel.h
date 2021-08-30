@@ -48,6 +48,7 @@ class TextLabel : public WorksheetElement {
 
 public:
 	enum class Type {General, PlotTitle, AxisTitle, PlotLegendTitle, InfoElementLabel};
+	enum class Mode {Text, LaTeX, Markdown};
 	enum class BorderShape {NoBorder, Rect, Ellipse, RoundSideRect, RoundCornerRect, InwardsRoundCornerRect, DentedBorderRect,
 	                        Cuboid, UpPointingRectangle, DownPointingRectangle, LeftPointingRectangle, RightPointingRectangle
 	                       };
@@ -55,9 +56,9 @@ public:
 	// The text is always in HMTL format
 	struct TextWrapper {
 		TextWrapper() {}
-		TextWrapper(const QString& text, bool teXUsed, bool html): teXUsed(teXUsed) {
-			if (teXUsed) {
-				this->text = text; // LaTeX does not support HTML, so assume t is a plain text string
+		TextWrapper(const QString& text, TextLabel::Mode mode, bool html): mode(mode) {
+			if (mode != TextLabel::Mode::Text) {
+				this->text = text; //LaTeX and markdown use plain string
 				return;
 			}
 			this->text = createHtml(text, html);
@@ -65,12 +66,12 @@ public:
 		TextWrapper(const QString& text, bool html = false) {
 			this->text = createHtml(text, html);
 		}
-		TextWrapper(const QString& text, bool html, QString& placeholder): teXUsed(false), allowPlaceholder(true), textPlaceholder(placeholder) {
+		TextWrapper(const QString& text, bool html, QString& placeholder): allowPlaceholder(true), textPlaceholder(placeholder) {
 			this->text = createHtml(text, html);
 		}
-		TextWrapper(const QString& text, bool teXUsed, bool html, bool allowPlaceholder): teXUsed(teXUsed), allowPlaceholder(allowPlaceholder) {
-			if (teXUsed) {
-				this->text = text; // latex does not support html, so assume t is a plain string
+		TextWrapper(const QString& text, TextLabel::Mode mode, bool html, bool allowPlaceholder): mode(mode), allowPlaceholder(allowPlaceholder) {
+			if (mode != TextLabel::Mode::Text) {
+				this->text = text; //LaTeX and markdown use plain string
 				return;
 			}
 			this->text = createHtml(text, html);
@@ -84,7 +85,7 @@ public:
 		}
 
 		QString text;
-		bool teXUsed{false};
+		TextLabel::Mode mode{TextLabel::Mode::Text};
 		/*! Determines if the Textlabe can have a placeholder or not.
 		 * Depending on this variable in the LabelWidget between
 		 * the text and the placeholder text can be switched
