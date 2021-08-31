@@ -1192,6 +1192,11 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 	} else
 		aspect = m_worksheet;
 
+	if  (!aspect) {
+		QGraphicsView::keyPressEvent(event);
+		return;
+	}
+
 	if (event->matches(QKeySequence::Copy)) {
 		exportToClipboard(); //export the image to the clipboard
 		if (aspect != m_worksheet)
@@ -1770,16 +1775,13 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot)
 		scaleAutoXAction->setEnabled(false);
 		scaleAutoYAction->setEnabled(true);
 		break;
-	default:
-		break;
 	}
 
 	cartesianPlotSelectionModeAction->setEnabled(true);
 	cartesianPlotCursorModeAction->setEnabled(true);
 }
 
-void WorksheetView::handleXYCurveSelected()
-{
+void WorksheetView::handleXYCurveSelected() {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
 	 * Action to X: action is applied to all x ranges
@@ -1866,16 +1868,12 @@ void WorksheetView::handleXYCurveSelected()
 		scaleAutoXAction->setEnabled(true);
 		scaleAutoYAction->setEnabled(true);
 		break;
-	default:
-		break;
 	}
 	cartesianPlotSelectionModeAction->setEnabled(true);
 	cartesianPlotCursorModeAction->setEnabled(false);
-
 }
 
-void WorksheetView::handleAxisSelected(const Axis* a)
-{
+void WorksheetView::handleAxisSelected(const Axis* a) {
 	if (a->orientation() == Axis::Orientation::Horizontal) {
 		/* HORIZONTAL:
 		 * Action to All: action is applied to all ranges
@@ -2372,7 +2370,7 @@ void WorksheetView::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode m
 }
 
 void WorksheetView::cartesianPlotAddNew(QAction* action) {
-	QVector<CartesianPlot*> plots = m_worksheet->children<CartesianPlot>();
+	const auto& plots = m_worksheet->children<CartesianPlot>();
 	if (m_worksheet->cartesianPlotActionMode() == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
 		int selectedPlots = 0;
 		for (auto* plot : plots) {
@@ -2380,7 +2378,7 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 				++selectedPlots;
 			else {
 				//current plot is not selected, check if one of its children is selected
-				auto children = plot->children<WorksheetElement>();
+				const auto& children = plot->children<WorksheetElement>();
 				for (auto* child : children) {
 					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
 						++selectedPlots;
@@ -2398,7 +2396,7 @@ void WorksheetView::cartesianPlotAddNew(QAction* action) {
 				this->cartesianPlotAdd(plot, action);
 			else {
 				//current plot is not selected, check if one of its children is selected
-				auto children = plot->children<WorksheetElement>();
+				const auto& children = plot->children<WorksheetElement>();
 				for (auto* child : children) {
 					if (m_selectedItems.indexOf(child->graphicsItem()) != -1) {
 						this->cartesianPlotAdd(plot, action);
