@@ -291,37 +291,43 @@
          </item>
          <item>
           <widget class="QToolButton" name="tbOffsetLeft">
+           <property name="toolTip">
+            <string>Set offset to start at zero</string>
+           </property>
            <property name="text">
             <string/>
            </property>
            <property name="icon">
             <iconset theme="align-horizontal-left">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QToolButton" name="tbOffsetCenter">
+           <property name="toolTip">
+            <string>Set offset to center around zero</string>
+           </property>
            <property name="text">
             <string notr="true"/>
            </property>
            <property name="icon">
             <iconset theme="align-horizontal-center">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QToolButton" name="tbOffsetRight">
+           <property name="toolTip">
+            <string>Set offset to end at zero</string>
+           </property>
            <property name="text">
             <string notr="true"/>
            </property>
            <property name="icon">
             <iconset theme="align-horizontal-right">
-             <normaloff/>
-            </iconset>
+             <normaloff>.</normaloff>.</iconset>
            </property>
           </widget>
          </item>
@@ -334,6 +340,9 @@
          </item>
          <item>
           <widget class="QToolButton" name="tbUnityScale">
+           <property name="toolTip">
+            <string>Set factor to unity scale</string>
+           </property>
            <property name="text">
             <string>1</string>
            </property>
@@ -341,6 +350,9 @@
          </item>
          <item>
           <widget class="QToolButton" name="tbUnityRange">
+           <property name="toolTip">
+            <string>Set factor and offset to get 0 .. 1</string>
+           </property>
            <property name="text">
             <string>0 .. 1</string>
            </property>
@@ -1235,7 +1247,16 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -1712,16 +1733,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KFontRequester</class>
-   <extends>QWidget</extends>
-   <header>kfontrequester.h</header>
-  </customwidget>
-  <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
@@ -1730,6 +1741,16 @@
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KFontRequester</class>
+   <extends>QWidget</extends>
+   <header>kfontrequester.h</header>
   </customwidget>
   <customwidget>
    <class>ResizableTextEdit</class>
