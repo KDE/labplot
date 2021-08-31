@@ -387,7 +387,7 @@ QString ImportDatasetWidget::getSelectedDataset() const {
  * @param datasetHandler the DatasetHanlder that downloads processes the dataset
  */
 void ImportDatasetWidget::import(DatasetHandler* datasetHandler) {
-	datasetHandler->processMetadata(m_datasetObject);
+	datasetHandler->processMetadata(m_datasetObject, m_datasetDescription);
 }
 
 /**
@@ -551,16 +551,15 @@ void ImportDatasetWidget::datasetChanged() {
 		info += m_datasetObject[QLatin1String("name")].toString();
 		info += QLatin1String("<br><br>");
 
-		if (m_datasetObject.contains(QLatin1String("description_url"))) {
+		if (m_datasetObject.contains(QLatin1String("description_url"))
+				&& m_networkManager->networkAccessible() == QNetworkAccessManager::Accessible) {
 			WAIT_CURSOR;
-			if (m_networkManager->networkAccessible() == QNetworkAccessManager::Accessible)
-				m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject[QLatin1String("description_url")].toString())));
-			else
-				info += m_datasetObject[QLatin1String("description")].toString();
+			m_networkManager->get(QNetworkRequest(QUrl(m_datasetObject[QLatin1String("description_url")].toString())));
 		} else {
 			info += QLatin1String("<b>") + i18n("Description") + QLatin1String(":</b><br>");
-			info += m_datasetObject[QLatin1String("description")].toString();
+			m_datasetDescription = m_datasetObject[QLatin1String("description")].toString();
 		}
+		info += m_datasetDescription;
 	} else
 		m_datasetObject = QJsonObject();
 
@@ -619,9 +618,11 @@ void ImportDatasetWidget::downloadFinished(QNetworkReply* reply) {
 			info = info.replace(QLatin1String("SUBMITTED BY:"), QLatin1String("<b>SUBMITTED BY:</b>"), Qt::CaseSensitive);
 		}
 		ui.lInfo->setText(ui.lInfo->text() + info);
+		m_datasetDescription = info;
 	} else {
 		DEBUG("Failed to fetch the description.");
-		ui.lInfo->setText(ui.lInfo->text() + m_datasetObject[QLatin1String("description")].toString());
+		m_datasetDescription =  m_datasetObject[QLatin1String("description")].toString();
+		ui.lInfo->setText(ui.lInfo->text() + m_datasetDescription);
 	}
 	reply->deleteLater();
 	RESET_CURSOR;

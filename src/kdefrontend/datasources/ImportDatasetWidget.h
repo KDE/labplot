@@ -77,6 +77,7 @@ private:
 	QNetworkAccessManager* m_networkManager;
 	QJsonArray m_collections;
 	QJsonObject m_datasetObject;
+	QString m_datasetDescription;
 
 	void updateDatasetCompleter();
 	void updateCategoryCompleter();

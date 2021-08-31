@@ -37,6 +37,7 @@
 #include <QJsonObject>
 #include <QMessageBox>
 #include <QStandardPaths>
+#include <QTextEdit>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 
@@ -65,13 +66,13 @@ DatasetHandler::~DatasetHandler() {
  * @brief Initiates processing the metadata file,, located at the given path, belonging to a dataset.
  * @param path the path to the metadata file
  */
-void DatasetHandler::processMetadata(const QJsonObject& object) {
+void DatasetHandler::processMetadata(const QJsonObject& object, const QString& description) {
 	m_object = new QJsonObject(object);
 	DEBUG("Start processing dataset...");
 
 	if (!m_object->isEmpty()) {
 		configureFilter();
-		configureSpreadsheet();
+		configureSpreadsheet(description);
 		prepareForDataset();
 	}
 }
@@ -140,7 +141,7 @@ void DatasetHandler::configureFilter() {
 /**
  * @brief Configures the spreadsheet based on the metadata file.
  */
-void DatasetHandler::configureSpreadsheet() {
+void DatasetHandler::configureSpreadsheet(const QString& description) {
 	DEBUG("Start preparing spreadsheet");
 	if (!m_object->isEmpty()) {
 		if (m_object->contains("name"))
@@ -148,27 +149,15 @@ void DatasetHandler::configureSpreadsheet() {
 		else
 			markMetadataAsInvalid();
 
-		if (m_object->contains("description_url")) {
-			auto* manager = new QNetworkAccessManager(this);
-			connect(manager, &QNetworkAccessManager::finished, [this] (QNetworkReply* reply) {
-				if (reply->error() == QNetworkReply::NoError) {
-					QByteArray ba = reply->readAll();
-					QString info(ba);
-					m_spreadsheet->setComment(info);
-				} else {
-					DEBUG("Failed to fetch the description.");
-					if (m_object->contains("description"))
-						m_spreadsheet->setComment(m_object->value("description").toString());
-				}
-				reply->deleteLater();
-			}
-			);
-			manager->get(QNetworkRequest(QUrl(m_object->value("description_url").toString())));
-		} else if (m_object->contains("description"))
-			m_spreadsheet->setComment(m_object->value("description").toString());
-	} else {
+		if (description.startsWith(QLatin1String("<!DOCTYPE html"))) {
+			//remove html-formatting
+			QTextEdit te;
+			te.setHtml(description);
+			m_spreadsheet->setComment(te.toPlainText());
+		} else
+			m_spreadsheet->setComment(description);
+	} else
 		markMetadataAsInvalid();
-	}
 }
 
 /**
@@ -184,10 +173,8 @@ void DatasetHandler::prepareForDataset() {
 		else {
 			QMessageBox::critical(nullptr, i18n("Invalid metadata file"), i18n("There is no download URL present in the metadata file!"));
 		}
-
-	} else {
+	} else
 		markMetadataAsInvalid();
-	}
 }
 
 /**

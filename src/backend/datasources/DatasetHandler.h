@@ -42,7 +42,7 @@ class DatasetHandler : public QObject{
 public:
 	explicit DatasetHandler(Spreadsheet*);
 	~DatasetHandler();
-	void processMetadata(const QJsonObject&);
+	void processMetadata(const QJsonObject&, const QString&);
 
 private:
 	Spreadsheet* m_spreadsheet;
@@ -56,7 +56,7 @@ private:
 
 	void loadJsonDocument(const QString& path);
 	void configureFilter();
-	void configureSpreadsheet();
+	void configureSpreadsheet(const QString&);
 	void prepareForDataset();
 	void processDataset();
 	void doDownload(const QUrl&);
