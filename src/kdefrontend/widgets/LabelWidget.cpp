@@ -158,10 +158,10 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 
 	msg = i18n("Text setting mode:"
 	"<ul>"
-	"<li>Text - text setting using richt-text formatting</li>"
-	"<li>LaTeX  - text setting using LaTeX, installation of LaTeX required</li>"
+	"<li>Text - text setting using rich-text formatting</li>"
+	"<li>LaTeX - text setting using LaTeX, installation of LaTeX required</li>"
 #ifdef HAVE_DISCOUNT
-	"<li>Markdown  - text settting using Markdown markup language</li>"
+	"<li>Markdown - text setting using Markdown markup language</li>"
 #endif
 	"</ul>");
 	ui.cbMode->setToolTip(msg);
