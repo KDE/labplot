@@ -1,0 +1,24 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: LabPlot
+Upstream-Contact: Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+Source: https://invent.kde.org/education/labplot/
+
+Files: data/colormaps/cmocean*
+Copyright: 2020 Fabio Crameri
+License: MIT
+
+Files: data/colormaps/ColorBrewer*
+Copyright: 2002 Cynthia Brewer, Mark Harrower, and The Pennsylvania State University.
+License: Apache-2.0
+
+Files: data/colormaps/ColorCET*
+Copyright: 2015 Peter Kovesi. Good Colour Maps: How to Design Them
+License: CC0-1.0
+
+Files: data/colormaps/Scientific Colour Maps*
+Copyright: 2020 Fabio Crameri
+License: MIT
+ 
+Files: data/colormaps/viridis*
+Copyright: Nathaniel J. Smith, Stefan van der Walt and (in the case of viridis) Eric Firing. <https://github.com/BIDS/colormap/>
+License: CC0-1.0

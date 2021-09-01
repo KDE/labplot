@@ -1,4 +1,0 @@
-These colour maps are released under the Creative Commons BY License. A summary of the conditions can be found here. Basically, you are free to use these colour maps in anyway you wish as long as you give appropriate credit. If you find this work useful please cite this site and the paper:
-
-Peter Kovesi. Good Colour Maps: How to Design Them.
-arXiv:1509.03700 [cs.GR] 2015
