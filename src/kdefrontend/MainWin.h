@@ -102,6 +102,7 @@ class QToolButton;
 class QQuickWidget;
 
 class KColorSchemeManager;
+class KHamburgerMenu;
 class KRecentFilesAction;
 class KToggleAction;
 class KToggleFullScreenAction;
@@ -220,7 +221,8 @@ private:
 	//Menus
 	QMenu* m_visibilityMenu{nullptr};
 	QMenu* m_newMenu{nullptr};
-	QMenu* m_importMenu;
+	QMenu* m_importMenu{nullptr};
+	KHamburgerMenu* m_hamburgerMenu{nullptr};
 
 	//Docks
 	QStackedWidget* stackedWidget{nullptr};
@@ -283,7 +285,6 @@ protected:
 	void closeEvent(QCloseEvent*) override;
 	void dragEnterEvent(QDragEnterEvent*) override;
 	void dropEvent(QDropEvent*) override;
-
 
 private slots:
 	void initGUI(const QString&);

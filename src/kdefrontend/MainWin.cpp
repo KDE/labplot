@@ -300,6 +300,16 @@ void MainWin::initGUI(const QString& fileName) {
 		qobject_cast<QMenu*>(factory()->container("import", this))->setIcon(QIcon::fromTheme("document-import"));
 	}
 
+	//hamburger menu
+	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection());
+	toolBar()->addAction(m_hamburgerMenu);
+	m_hamburgerMenu->hideActionsOf(toolBar());
+	m_hamburgerMenu->setMenuBar(menuBar());
+
+	QMenu* menu = new QMenu;
+	menu->addAction(new QAction("test"));
+	m_hamburgerMenu->setMenu(menu);
+
 	setWindowIcon(QIcon::fromTheme("LabPlot2", QGuiApplication::windowIcon()));
 	setAttribute( Qt::WA_DeleteOnClose );
 
