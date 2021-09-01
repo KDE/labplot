@@ -1981,13 +1981,47 @@ void CartesianPlot::addInfoElement() {
 
 void CartesianPlot::addTextLabel() {
 	auto* label = new TextLabel("text label", this);
+
+	Q_D(CartesianPlot);
+	if (d->calledFromContextMenu)  {
+		auto position = label->position();
+		position.point = label->parentPosToRelativePos(d->scenePos,
+												   d->boundingRect(),
+												   label->graphicsItem()->boundingRect(),
+												   position,
+												   label->horizontalAlignment(),
+												   label->verticalAlignment()
+		);
+		label->setPosition(position);
+		d->calledFromContextMenu = false;
+	}
+
 	this->addChild(label);
 	label->setParentGraphicsItem(graphicsItem());
 }
 
 void CartesianPlot::addImage() {
 	auto* image = new Image("image");
+
+	Q_D(CartesianPlot);
+	if (d->calledFromContextMenu)  {
+		auto position = image->position();
+		position.point = image->parentPosToRelativePos(d->scenePos,
+												   d->boundingRect(),
+												   image->graphicsItem()->boundingRect(),
+												   position,
+												   image->horizontalAlignment(),
+												   image->verticalAlignment()
+		);
+		image->setPosition(position);
+		d->calledFromContextMenu = false;
+	}
+
+	//make the new image somewhat smaller so it's completely visible also on smaller plots
+	image->setWidth((int)Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter));
+
 	this->addChild(image);
+	image->retransform();
 }
 
 void CartesianPlot::addCustomPoint() {
@@ -1995,7 +2029,7 @@ void CartesianPlot::addCustomPoint() {
 	auto* point = new CustomPoint(this, "custom point");
 	point->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 
-	if (d->calledFromContextMenu)  {
+	if (d->calledFromContextMenu) {
 		point->setPosition(d->logicalPos);
 		d->calledFromContextMenu = false;
 	}
@@ -3752,7 +3786,8 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 
 void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	const auto* cSystem{ defaultCoordinateSystem() };
-	logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
+	scenePos = event->pos();
+	logicalPos = cSystem->mapSceneToLogical(scenePos, AbstractCoordinateSystem::MappingFlag::Limit);
 	calledFromContextMenu = true;
 	auto* menu = q->createContextMenu();
 	menu->exec(event->screenPos());

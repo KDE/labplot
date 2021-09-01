@@ -168,6 +168,7 @@ public:
 	bool suppressRetransform{false};
 	bool panningStarted{false};
 	bool locked{false};
+	QPointF scenePos; //current position under the mouse cursor in scene coordinates
 	QPointF logicalPos; //current position under the mouse cursor in plot coordinates
 	bool calledFromContextMenu{false}; //we set the current position under the cursor when "add new" is called via the context menu
 
