@@ -1,6 +1,6 @@
 #ifndef QXTSPANSLIDER_H
 /****************************************************************************
-** Copyright (c) 2006 - 2011, the LibQxt project.
+** SPDX-FileCopyrightText: 2006-2011 the LibQxt project.
 ** See the Qxt AUTHORS file for a list of authors and copyright holders.
 ** All rights reserved.
 **

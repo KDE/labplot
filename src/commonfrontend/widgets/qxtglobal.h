@@ -1,6 +1,6 @@
 
 /****************************************************************************
-** Copyright (c) 2006 - 2011, the LibQxt project.
+** SPDX-FileCopyrightText: 2006-2011 the LibQxt project.
 ** See the Qxt AUTHORS file for a list of authors and copyright holders.
 ** All rights reserved.
 **
@@ -148,7 +148,7 @@ QXT_CORE_EXPORT const char* qxtVersion();
 ** is not legally recognized, anyone who receives a copy of this file is
 ** permitted to use, modify, duplicate, and redistribute this file, in whole
 ** or in part, with no restrictions or conditions. In these jurisdictions,
-** this file shall be copyright (C) 2006-2008 by Adam Higerd.
+** this file shall be SPDX-FileCopyrightText: 2006-2008 Adam Higerd.
 ****************************************************************************/
 
 #define QXT_DECLARE_PRIVATE(PUB) friend class PUB##Private; QxtPrivateInterface<PUB, PUB##Private> qxt_d;

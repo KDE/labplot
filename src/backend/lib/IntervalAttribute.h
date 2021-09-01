@@ -1,13 +1,13 @@
-/***************************************************************************
+/*
     File                 : IntervalAttribute.h
     Project              : LabPlot
     --------------------------------------------------------------------
 
-    Copyright            : (C) 2007 by Knut Franke (knut.franke@gmx.de)
-    Copyright            : (C) 2007 by Tilman Benkert (thzs@gmx.net)
+    SPDX-FileCopyrightText: 2007 Knut Franke (knut.franke@gmx.de)
+    SPDX-FileCopyrightText: 2007 Tilman Benkert (thzs@gmx.net)
     Description          : A class representing an interval-based attribute
 
- ***************************************************************************/
+*/
 
 /***************************************************************************
  *                                                                         *

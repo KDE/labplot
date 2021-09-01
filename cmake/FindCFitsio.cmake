@@ -5,7 +5,7 @@
 #  CFITSIO_INCLUDE_DIR - the CFITSIO include directory
 #  CFITSIO_LIBRARIES - Link these to use CFITSIO
 
-# Copyright (c) 2006, Jasem Mutlaq <mutlaqja@ikarustech.com>
+# SPDX-FileCopyrightText: 2006 Jasem Mutlaq <mutlaqja@ikarustech.com>
 # Based on FindLibfacile by Carsten Niehaus, <cniehaus@gmx.de>
 #
 # Redistribution and use in source and binary forms, with or without

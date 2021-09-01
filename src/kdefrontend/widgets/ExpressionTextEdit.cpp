@@ -1,34 +1,21 @@
-/***************************************************************************
+/*
     File             : ExpressionTextEdit.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
-    Copyright        : (C) 2014-2017 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2014-2017 Alexander Semke (alexander.semke@web.de)
     Description      : widget for defining mathematical expressions
 	modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
- ***************************************************************************/
+*/
 
 /***************************************************************************
  *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  *                                                                         *
  ***************************************************************************/
 
 /****************************************************************************
  **
- ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+ ** SPDX-FileCopyrightText: 2013 Digia Plc and /or its subsidiary(-ies).
  ** Contact: http://www.qt-project.org/legal
  **
  ** This file is part of the examples of the Qt Toolkit.
