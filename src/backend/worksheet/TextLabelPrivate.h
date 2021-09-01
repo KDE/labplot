@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Private members of TextLabel
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012-2014 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2012-2014 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for CantorWorksheet properties
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Garvit Khatri (garvitdelhi@gmail.com)
+    SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

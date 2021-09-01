@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Graphic Item for coordinate points of Datapicker
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre (wagadre.ankit@gmail.com)
+    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

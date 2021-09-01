@@ -2,7 +2,7 @@
     File                 : NewsDelegate.qml
     Project              : LabPlot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Ferencz Kovacs (kferike98@gmail.com)
+    SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
     Description          : Delegate item for RssNews
 
     SPDX-License-Identifier: GPL-2.0-or-later

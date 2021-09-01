@@ -2,8 +2,8 @@
     File                 : SymbolWidget.cc
     Project              : LabPlot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2021 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2012-2017 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2012-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
     Description          : label settings widget
     SPDX-License-Identifier: GPL-2.0-or-later
 */

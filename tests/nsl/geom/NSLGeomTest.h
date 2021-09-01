@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL Tests for geometric functions
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

@@ -4,8 +4,8 @@
     Project              : LabPlot
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007-2008 Tilman Benkert (thzs@gmx.net)
-    SPDX-FileCopyrightText: 2010-2021 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
+    SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
 
  **************************************************************************
     SPDX-License-Identifier: GPL-2.0-or-later

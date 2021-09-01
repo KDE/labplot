@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of AbstractPlot
     -------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012-2015 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2012-2015 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

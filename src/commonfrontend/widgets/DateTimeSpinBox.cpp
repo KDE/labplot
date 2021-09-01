@@ -3,7 +3,7 @@
 	Project              : LabPlot
 	Description          : widget for setting datetimes with a spinbox
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

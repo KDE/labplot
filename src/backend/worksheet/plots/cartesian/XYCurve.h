@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : A xy-curve
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2020 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2010-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

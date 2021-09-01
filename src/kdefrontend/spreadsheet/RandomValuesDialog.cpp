@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Dialog for generating non-uniformly distributed random numbers
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2019 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2014-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

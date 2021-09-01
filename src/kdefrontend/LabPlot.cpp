@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : main function
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008 Stefan Gerlach (stefan.gerlach@uni.kn)
-    SPDX-FileCopyrightText: 2008-2016 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2008 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

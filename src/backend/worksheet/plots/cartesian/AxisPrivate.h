@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Private members of Axis.
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-21 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2011-21 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

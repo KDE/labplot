@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL complex data type support
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

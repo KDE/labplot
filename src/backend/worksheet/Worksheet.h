@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Worksheet (2D visualization) part
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009 Tilman Benkert (thzs@gmx.net)
-    SPDX-FileCopyrightText: 2011-2019 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
+    SPDX-FileCopyrightText: 2011-2019 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

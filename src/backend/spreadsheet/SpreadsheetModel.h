@@ -3,9 +3,9 @@
     Project              : LabPlot
     Description          : Model for the access to a Spreadsheet
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007 Tilman Benkert (thzs@gmx.net)
-    SPDX-FileCopyrightText: 2009 Knut Franke (knut.franke@gmx.de)
-    SPDX-FileCopyrightText: 2013-2021 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
+    SPDX-FileCopyrightText: 2009 Knut Franke <knut.franke@gmx.de>
+    SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

@@ -3,9 +3,9 @@
     Project              : LabPlot
     Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2020 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2007-2008 Tilman Benkert (thzs@gmx.net)
-    SPDX-FileCopyrightText: 2007 Knut Franke (knut.franke@gmx.de)
+    SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
+    SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

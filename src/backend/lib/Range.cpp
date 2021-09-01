@@ -2,7 +2,7 @@
     File                 : Range.cpp
     Project              : LabPlot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     Description          : basic data range class
     SPDX-License-Identifier: GPL-2.0-or-later
 */

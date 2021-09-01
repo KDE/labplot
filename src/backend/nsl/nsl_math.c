@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL math functions
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Widget for handling saving and loading of templates
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    SPDX-FileCopyrightText: 2012-2019 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2012 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+    SPDX-FileCopyrightText: 2012-2019 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

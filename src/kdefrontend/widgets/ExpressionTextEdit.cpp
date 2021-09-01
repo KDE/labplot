@@ -2,7 +2,7 @@
     File             : ExpressionTextEdit.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2017 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
     Description      : widget for defining mathematical expressions
 	modified version of https://doc.qt.io/qt-5/qtwidgets-tools-customcompleter-example.html
 

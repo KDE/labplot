@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget showing the amount of memory consumed by the process
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

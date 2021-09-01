@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Widget providing options for the import of FITS data
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Fabian Kristof (fkristofszabolcs@gmail.com)
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 */

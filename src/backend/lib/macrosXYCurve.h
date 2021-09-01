@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Various preprocessor macros for the curve class
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+    SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

@@ -3,7 +3,7 @@ File                 : ImageOptionsWidget.h
 Project              : LabPlot
 Description          : widget providing options for the import of image data
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

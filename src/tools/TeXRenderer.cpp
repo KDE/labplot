@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : TeX renderer class
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2016 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2012 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+    SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2012 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

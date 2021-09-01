@@ -3,9 +3,9 @@
     Project              : LabPlot
     Description          : Matrix data model
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2016 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2008-2009 Tilman Benkert (thzs@gmx.net)
-    SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2015-2016 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
+    SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

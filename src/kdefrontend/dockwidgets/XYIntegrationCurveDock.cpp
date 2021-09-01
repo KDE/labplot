@@ -2,7 +2,7 @@
     File             : XYIntegrationCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     Description      : widget for editing properties of integration curves
 
     SPDX-License-Identifier: GPL-2.0-or-later

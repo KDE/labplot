@@ -2,7 +2,7 @@
     File                 : Integer2DoubleFilter.h
     Project              : AbstractColumn
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
     Description          : conversion filter int -> double.
     SPDX-License-Identifier: GPL-2.0-or-later
 */

@@ -3,7 +3,7 @@ File                 : DatabaseManagerWidget.cpp
 Project              : LabPlot
 Description          : widget for managing database connections
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2017-2018 Alexander Semke (alexander.semke@web.de)
+SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

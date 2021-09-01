@@ -3,8 +3,8 @@ File                 : AxisDock.cpp
 Project              : LabPlot
 Description          : axes widget class
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2011-2020 Alexander Semke (alexander.semke@web.de)
-SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
 */
 

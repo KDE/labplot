@@ -3,7 +3,7 @@ File                 : TreeModel.cpp
 Project              : LabPlot
 Description 	     : This is an abstract treemodel which can be used by a treeview
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
+SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 */

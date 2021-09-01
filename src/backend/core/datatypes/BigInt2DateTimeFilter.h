@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Knut Franke Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     Description          : Conversion filter int -> QDateTime, interpreting
     the input numbers as Julian days.
     SPDX-License-Identifier: GPL-2.0-or-later

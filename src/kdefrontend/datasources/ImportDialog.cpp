@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : import file data dialog
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2018 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2008-2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2008-2015 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

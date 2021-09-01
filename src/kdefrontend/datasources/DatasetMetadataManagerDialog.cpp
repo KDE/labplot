@@ -3,7 +3,7 @@ File                 : DatasetMetadataManagerDialog.cpp
 Project              : LabPlot
 Description          : Dialog for managing a metadata file of a dataset
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2019 Ferencz Kovacs (kferike98@gmail.com)
+SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

@@ -3,7 +3,7 @@ File                 : ImageFilterPrivate.h
 Project              : LabPlot
 Description          : Private implementation class for ImageFilter.
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
+SPDX-FileCopyrightText: 2015 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

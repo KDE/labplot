@@ -3,7 +3,7 @@ File                 : ReadStatFilterPrivate.h
 Project              : LabPlot
 Description          : Private implementation class for ReadStatFilter.
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
+SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

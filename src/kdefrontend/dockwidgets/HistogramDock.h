@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : widget for histogram plot properties
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Anu Mittal (anu22mittal@gmail.com)
+    SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

@@ -3,10 +3,10 @@
     Project              : AbstractColumn
     Description          : Commands to be called by Column to modify ColumnPrivate
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert (thzs@gmx.net)
-    SPDX-FileCopyrightText: 2010 Knut Franke (knut.franke@gmx.de)
-    SPDX-FileCopyrightText: 2009-2017 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
+    SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke@gmx.de>
+    SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

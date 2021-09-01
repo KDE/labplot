@@ -3,9 +3,9 @@
     Project              : AbstractColumn
     Description          : Private data class of Column
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007-2008 Tilman Benkert (thzs@gmx.net)
-    SPDX-FileCopyrightText: 2012-2019 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
+    SPDX-FileCopyrightText: 2012-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

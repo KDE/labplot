@@ -4,8 +4,8 @@
     Project              : LabPlot
     Description          : Cartesian plot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2021 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
  **************************************************************************
     SPDX-License-Identifier: GPL-2.0-or-later

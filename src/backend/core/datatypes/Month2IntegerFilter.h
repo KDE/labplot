@@ -2,7 +2,7 @@
     File                 : Month2IntegerFilter.h
     Project              : AbstractColumn
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
     Description          : Conversion filter QDateTime -> double, translating
     dates into months (January -> 1).
 

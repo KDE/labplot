@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : String-IO interface of Column.
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007-2009 Tilman Benkert (thzs@gmx.net)
-    SPDX-FileCopyrightText: 2013-2017 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
+    SPDX-FileCopyrightText: 2013-2017 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

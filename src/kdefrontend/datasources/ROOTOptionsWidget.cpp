@@ -3,7 +3,7 @@ File                 : ROOTOptionsWidget.cpp
 Project              : LabPlot
 Description          : widget providing options for the import of ROOT data
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2018 Christoph Roick (chrisito@gmx.de)
+SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

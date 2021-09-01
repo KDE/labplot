@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating plots for the spreadsheet data
     --------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2017-2019 Alexander Semke (alexander.semke@web.de)
+	SPDX-FileCopyrightText: 2017-2019 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

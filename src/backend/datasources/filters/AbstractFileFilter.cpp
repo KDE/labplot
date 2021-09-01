@@ -3,8 +3,8 @@ File                 : AbstractFileFilter.h
 Project              : LabPlot
 Description          : file I/O-filter related interface
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2009-2017 Alexander Semke (alexander.semke@web.de)
-SPDX-FileCopyrightText: 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+SPDX-FileCopyrightText: 2009-2017 Alexander Semke <alexander.semke@web.de>
+SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

@@ -2,8 +2,8 @@
     File             : XYInterpolationCurveDock.cpp
     Project          : LabPlot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
-    SPDX-FileCopyrightText: 2016-2017 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
     Description      : widget for editing properties of interpolation curves
 
     SPDX-License-Identifier: GPL-2.0-or-later

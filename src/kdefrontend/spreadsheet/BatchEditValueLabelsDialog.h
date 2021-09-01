@@ -3,7 +3,7 @@
     Project              : LabPlot
 	Description          : Dialog to modify multiply value labels in a batch mode
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2021 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

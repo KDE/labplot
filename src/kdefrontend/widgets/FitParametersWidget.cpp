@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : widget for editing fit parameters
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2016 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2014-2016 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2016-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

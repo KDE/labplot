@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : NSL smooth functions
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010 Knut Franke (knut.franke@gmx.de)
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke@gmx.de>
+    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

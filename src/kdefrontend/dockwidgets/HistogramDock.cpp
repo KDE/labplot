@@ -3,9 +3,9 @@
     Project              : LabPlot
     Description          : widget for Histogram properties
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Anu Mittal (anu22mittal@gmail.com)
-    SPDX-FileCopyrightText: 2018-2021 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
+    SPDX-FileCopyrightText: 2018-2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

@@ -3,7 +3,7 @@ File                 : HDF5Filter.h
 Project              : LabPlot
 Description          : HDF5 I/O-filter
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef HDF5FILTER_H

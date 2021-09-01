@@ -3,7 +3,7 @@ File                 : HDF5FilterPrivate.h
 Project              : LabPlot
 Description          : Private implementation class for HDF5Filter.
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL special window functions
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2016-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

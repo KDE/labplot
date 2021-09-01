@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by an differentiation
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

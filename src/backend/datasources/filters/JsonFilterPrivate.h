@@ -4,8 +4,8 @@
     Description          : Private implementation class for JsonFilter.
     --------------------------------------------------------------------
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018 Andrey Cygankov (craftplace.ms@gmail.com)
-    SPDX-FileCopyrightText: 2018-2020 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
+    SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

@@ -4,7 +4,7 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007, 2008 Knut Franke Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     Description          : Simplified filter interface for filters with
     only one output port.
     SPDX-License-Identifier: GPL-2.0-or-later

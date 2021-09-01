@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Tests for the Parser
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

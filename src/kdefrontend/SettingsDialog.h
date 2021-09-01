@@ -2,7 +2,7 @@
     File                 : SettingsDialog.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2020 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
     Description          : application settings dialog
     SPDX-License-Identifier: GPL-2.0-or-later
 */

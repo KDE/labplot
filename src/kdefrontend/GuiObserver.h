@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : GUI observer
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2016 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2010-2016 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

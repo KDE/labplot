@@ -3,9 +3,9 @@ File                 : GuiObserver.cpp
 Project              : LabPlot
 Description 	     : GUI observer
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2010-2021 Alexander Semke (alexander.semke@web.de)
-SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-SPDX-FileCopyrightText: 2016 Garvit Khatri (garvitdelhi@gmail.com)
+SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+SPDX-FileCopyrightText: 2016 Garvit Khatri <garvitdelhi@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 */

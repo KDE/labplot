@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL (non)linear fit functions
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2016-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

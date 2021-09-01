@@ -2,7 +2,7 @@
     File                 : Integer2BigIntFilter.h
     Project              : AbstractColumn
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     Description          : conversion filter int -> bigint
     SPDX-License-Identifier: GPL-2.0-or-later
 */

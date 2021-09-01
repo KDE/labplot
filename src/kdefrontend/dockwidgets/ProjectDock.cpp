@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : widget for project properties
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
-    SPDX-FileCopyrightText: 2013-2021 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+    SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

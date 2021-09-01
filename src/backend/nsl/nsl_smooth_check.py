@@ -4,7 +4,7 @@
 #    Project              : LabPlot
 #    Description          : NSL smooth functions
 #    --------------------------------------------------------------------
-#    SPDX-FileCopyrightText: 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
+#    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
 #
 ###########################################################################
 

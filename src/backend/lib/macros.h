@@ -3,9 +3,9 @@
     Project              : LabPlot
     Description          : Various preprocessor macros
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008 Tilman Benkert (thzs@gmx.net)
-    SPDX-FileCopyrightText: 2013-2015 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2008 Tilman Benkert <thzs@gmx.net>
+    SPDX-FileCopyrightText: 2013-2015 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

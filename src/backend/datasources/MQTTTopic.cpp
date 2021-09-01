@@ -3,7 +3,7 @@ File		: MQTTTopic.cpp
 Project		: LabPlot
 Description	: Represents a topic of a MQTTSubscription
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2018 Kovacs Ferencz (kferike98@gmail.com)
+SPDX-FileCopyrightText: 2018 Kovacs Ferencz <kferike98@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 */

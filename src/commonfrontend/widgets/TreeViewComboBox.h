@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Provides a QTreeView in a QComboBox
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2016 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

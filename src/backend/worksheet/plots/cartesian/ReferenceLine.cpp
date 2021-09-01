@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Custom user-defined point on the plot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke (alexander.semke@web.de)
-    SPDX-FileCopyrightText: 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
+    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

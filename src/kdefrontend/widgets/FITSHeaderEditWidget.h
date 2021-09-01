@@ -3,7 +3,7 @@ File                 : FITSHeaderEditWidget.h
 Project              : LabPlot
 Description          : Widget for listing/editing FITS header keywords
 --------------------------------------------------------------------
-SPDX-FileCopyrightText: 2016 Fabian Kristof (fkristofszabolcs@gmail.com)
+SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
 SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef FITSHEADEREDITWIDGET_H

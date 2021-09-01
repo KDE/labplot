@@ -2,9 +2,9 @@
     File                 : aspectcommands.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007-2010 Knut Franke (knut.franke@gmx.de)
-    SPDX-FileCopyrightText: 2007-2009 Tilman Benkert (thzs@gmx.net)
-    SPDX-FileCopyrightText: 2013-2017 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
+    SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
+    SPDX-FileCopyrightText: 2013-2017 Alexander Semke <alexander.semke@web.de>
     Description          : Undo commands used by AbstractAspect.
     Only meant to be used within AbstractAspect.cpp
     SPDX-License-Identifier: GPL-2.0-or-later

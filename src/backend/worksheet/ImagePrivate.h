@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Worksheet element to draw images
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2019 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

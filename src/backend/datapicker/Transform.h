@@ -4,7 +4,7 @@
     Description          : transformation for mapping between scene and
     logical coordinates of Datapicker-image
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015 Ankit Wagadre (wagadre.ankit@gmail.com)
+    SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
