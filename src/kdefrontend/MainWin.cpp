@@ -301,6 +301,7 @@ void MainWin::initGUI(const QString& fileName) {
 	}
 
 	//hamburger menu
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection());
 	toolBar()->addAction(m_hamburgerMenu);
 	m_hamburgerMenu->hideActionsOf(toolBar());
@@ -309,6 +310,7 @@ void MainWin::initGUI(const QString& fileName) {
 	QMenu* menu = new QMenu;
 	menu->addAction(new QAction("test"));
 	m_hamburgerMenu->setMenu(menu);
+#endif
 
 	setWindowIcon(QIcon::fromTheme("LabPlot2", QGuiApplication::windowIcon()));
 	setAttribute( Qt::WA_DeleteOnClose );
