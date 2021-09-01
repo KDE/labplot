@@ -2,8 +2,7 @@
     File                 : GuiTools.h
     Project              : LabPlot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011 Alexander Semke (alexander.semke*web.de)
-    (replace * with @ in the email addresses)
+    SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke*web.de  (use @ for *)>
     Description          :  contains several static functions which are used on frequently throughout the kde frontend.
     SPDX-License-Identifier: GPL-2.0-or-later
 */

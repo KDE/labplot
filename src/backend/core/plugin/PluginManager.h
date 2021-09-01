@@ -3,8 +3,7 @@
     Project              : LabPlot/SciDAVis
     Description          : This class manages all plugins.
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009 Tilman Benkert (thzs*gmx.net)
-    (replace * with @ in the email addresses)
+    SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs*gmx.net  (use @ for *)>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

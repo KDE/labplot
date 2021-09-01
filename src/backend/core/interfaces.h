@@ -2,8 +2,7 @@
     File                 : interfaces.h
     Project              : SciDAVis
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008 Knut Franke
-    Email (use @ for *)  : knut.franke*gmx.de
+    SPDX-FileCopyrightText: 2008 Knut Franke <knut.franke*gmx.de (use @ for *)>
     Description          : Interfaces the kernel uses to talk to modules
     SPDX-License-Identifier: GPL-2.0-or-later
 */

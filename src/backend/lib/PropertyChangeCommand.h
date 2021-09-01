@@ -2,12 +2,10 @@
     File                 : PropertyChangeCommand.h
     Project              : SciDAVis / LabPlot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010 Knut Franke
-    Email (use @ for *)  : Knut.Franke*gmx.net
+    SPDX-FileCopyrightText: 2010 Knut Franke <Knut.Franke*gmx.net (use @ for *)>
     Description          : Generic undo command changing a single variable.
     SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef PROPERTY_CHANGE_COMMAND_H
 #define PROPERTY_CHANGE_COMMAND_H

@@ -2,8 +2,8 @@
     File                 : AbstractFilter.h
     Project              : SciDAVis
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2007, 2008 Knut Franke Tilman Benkert
-    Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
+    SPDX-FileCopyrightText: 2007, 2008 Knut Franke <knut.franke*gmx.de (use @ for *)>
+    SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert <thzs@gmx.net>
     Description          : Base class for all analysis operations.
     SPDX-License-Identifier: GPL-2.0-or-later
 */
