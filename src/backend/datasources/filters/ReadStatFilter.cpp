@@ -4,13 +4,8 @@ Project              : LabPlot
 Description          : ReadStat I/O-filter
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
+SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-/***************************************************************************
-*                                                                         *
-*  SPDX-License-Identifier: GPL-2.0-or-later
-*                                                                         *
-***************************************************************************/
 #include "ReadStatFilter.h"
 #include "ReadStatFilterPrivate.h"
 #include "backend/spreadsheet/Spreadsheet.h"

@@ -4,13 +4,9 @@
 	Description          : Tests for Dataset related features
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019 Kovacs Ferencz (kferike98@gmail.com)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "DatasetsUnitTest.h"
 

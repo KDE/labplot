@@ -5,13 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007-2008 Tilman Benkert (thzs@gmx.net)
     SPDX-FileCopyrightText: 2011-2016 Alexander Semke (alexander.semke@web.de)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef PROJECT_EXPLORER_H
 #define PROJECT_EXPLORER_H
 

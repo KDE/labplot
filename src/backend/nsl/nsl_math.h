@@ -4,14 +4,9 @@
     Description          : NSL math functions
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef NSL_MATH_H
 #define NSL_MATH_H

@@ -5,14 +5,9 @@
     SPDX-FileCopyrightText: 2014 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description      : c++ wrapper for the bison generated parser.
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef EXPRESSIONPARSER_H
 #define EXPRESSIONPARSER_H

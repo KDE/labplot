@@ -7,13 +7,9 @@
     SPDX-FileCopyrightText: 2010 Knut Franke (knut.franke@gmx.de)
     SPDX-FileCopyrightText: 2009-2017 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "columncommands.h"
 #include "ColumnPrivate.h"

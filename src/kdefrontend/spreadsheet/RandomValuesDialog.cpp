@@ -5,14 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014-2019 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #include "RandomValuesDialog.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"

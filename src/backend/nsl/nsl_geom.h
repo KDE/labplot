@@ -4,14 +4,9 @@
     Description          : NSL geometry functions
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef NSL_GEOM_H
 #define NSL_GEOM_H

@@ -4,14 +4,9 @@
     Description          : Translatable strings for GSL error codes
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef GSL_ERRORS_H
 #define GSL_ERRORS_H

@@ -4,14 +4,9 @@
     Description          : Dialog for generating values from a mathematical function
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014-2015 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef FUNCTIONVALUESDIALOG_H
 #define FUNCTIONVALUESDIALOG_H
 

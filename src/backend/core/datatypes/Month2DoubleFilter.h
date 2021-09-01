@@ -6,14 +6,9 @@
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
     Description          : Conversion filter QDateTime -> double, translating
     dates into months (January -> 1).
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef MONTH2DOUBLE_FILTER_H
 #define MONTH2DOUBLE_FILTER_H
 

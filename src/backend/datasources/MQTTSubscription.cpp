@@ -5,13 +5,8 @@ Description	: Represents a subscription made in MQTTClient
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2018 Kovacs Ferencz (kferike98@gmail.com)
 
+SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-/***************************************************************************
-*                                                                         *
-*  SPDX-License-Identifier: GPL-2.0-or-later
-*                                                                         *
-***************************************************************************/
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/MQTTClient.h"

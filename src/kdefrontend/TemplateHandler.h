@@ -5,14 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2012 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     SPDX-FileCopyrightText: 2012-2019 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef TEMPLATEHANDLER_H
 #define TEMPLATEHANDLER_H

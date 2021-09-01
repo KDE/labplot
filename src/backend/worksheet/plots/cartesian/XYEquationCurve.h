@@ -4,14 +4,9 @@
     Description          : A xy-curve defined by a mathematical equation
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014-2017 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef XYEQUATIONCURVE_H
 #define XYEQUATIONCURVE_H

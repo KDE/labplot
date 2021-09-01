@@ -5,13 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2010 Knut Franke (knut.franke@gmx.de)
     SPDX-FileCopyrightText: 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "nsl_smooth.h"
 #include "nsl_common.h"

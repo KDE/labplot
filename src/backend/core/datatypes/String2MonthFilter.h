@@ -6,14 +6,9 @@
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
     Description          : Conversion filter String -> QDateTime, interpreting
     the input as months of the year (either numeric or "Jan" etc).
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef STRING2MONTH_FILTER_H
 #define STRING2MONTH_FILTER_H
 

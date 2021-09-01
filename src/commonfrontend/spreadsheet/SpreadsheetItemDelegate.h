@@ -4,14 +4,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Tilman Benkert (thzs@gmx.net)
     SPDX-FileCopyrightText: 2010-2017 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef SPREADSHEETITEMDELEGATE_H
 #define SPREADSHEETITEMDELEGATE_H

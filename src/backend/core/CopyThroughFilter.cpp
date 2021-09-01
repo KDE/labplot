@@ -6,14 +6,9 @@
     Email (use @ for *)  : knut.franke*gmx.de
     Description          : Filter which copies all provided inputs unaltered
     to an equal number of outputs.
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "CopyThroughFilter.h"
 

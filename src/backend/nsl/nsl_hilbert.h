@@ -4,14 +4,9 @@
     Description          : NSL Hilbert transform
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef NSL_HILBERT_H
 #define NSL_HILBERT_H

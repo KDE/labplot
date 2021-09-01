@@ -5,14 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2009 Tilman Benkert (thzs*gmx.net)
     (replace * with @ in the email addresses)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef PLUGINMANAGER_H
 #define PLUGINMANAGER_H

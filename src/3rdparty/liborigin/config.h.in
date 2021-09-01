@@ -4,14 +4,9 @@
     SPDX-FileCopyrightText: 2010 Knut Franke
     Email (use @ for *)  : knut.franke*gmx.de
     Description          : compile-time configuration defines
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef CONFIG_H
 #define CONFIG_H

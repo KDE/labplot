@@ -6,14 +6,9 @@
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
     Description          : Conversion filter double -> QDateTime, interpreting
     the input numbers as months of the year.
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef DOUBLE2MONTH_FILTER_H
 #define DOUBLE2MONTH_FILTER_H
 

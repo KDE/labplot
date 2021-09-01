@@ -5,14 +5,9 @@
     SPDX-FileCopyrightText: 2007, 2008 Knut Franke Tilman Benkert
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
     Description          : Base class for all analysis operations.
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef ABSTRACT_FILTER_H
 #define ABSTRACT_FILTER_H
 

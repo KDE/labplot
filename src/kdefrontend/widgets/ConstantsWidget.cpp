@@ -4,14 +4,9 @@
     Description          : widget for selecting constants
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #include "ConstantsWidget.h"
 #include "backend/gsl/ExpressionParser.h"
 #include <QTimer>

@@ -6,14 +6,9 @@
     SPDX-FileCopyrightText: 2007, 2008 Tilman Benkert (thzs@gmx.net)
     SPDX-FileCopyrightText: 2013-2019 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef COLUMNPRIVATE_H
 #define COLUMNPRIVATE_H

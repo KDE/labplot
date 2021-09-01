@@ -4,13 +4,9 @@
     Description          : Tests for data convolution
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef CONVOLUTIONTEST_H
 #define CONVOLUTIONTEST_H
 

@@ -5,14 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016 Anu Mittal (anu22mittal@gmail.com)
     SPDX-FileCopyrightText: 2018 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H

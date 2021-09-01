@@ -4,14 +4,9 @@
 	Description          : import dataset data dialog
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2019 Ferencz Koovacs (kferike98@gmail.com)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "ImportDatasetDialog.h"
 #include "ImportDatasetWidget.h"

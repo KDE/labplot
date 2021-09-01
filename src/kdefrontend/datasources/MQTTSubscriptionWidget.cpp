@@ -4,13 +4,8 @@ Project              : LabPlot
 Description          : Widget for managing topics and subscribing
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2019 Kovacs Ferencz (kferike98@gmail.com)
+SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-/***************************************************************************
-*                                                                         *
-*  SPDX-License-Identifier: GPL-2.0-or-later
-*                                                                         *
-***************************************************************************/
 
 #include "MQTTSubscriptionWidget.h"
 

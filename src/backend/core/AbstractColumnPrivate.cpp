@@ -5,14 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007-2009 Tilman Benkert (thzs@gmx.net),
     SPDX-FileCopyrightText: 2007-2009 Knut Franke (knut.franke@gmx.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "AbstractColumnPrivate.h"
 

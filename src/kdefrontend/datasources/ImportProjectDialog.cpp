@@ -4,14 +4,9 @@
     Description          : import project dialog
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017-2021 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "ImportProjectDialog.h"
 #include "backend/core/AspectTreeModel.h"

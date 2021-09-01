@@ -4,13 +4,8 @@ Project              : LabPlot
 Description          : Ngspice RAW ASCII filter
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2018 Alexander Semke (alexander.semke@web.de)
+SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-/***************************************************************************
-*                                                                         *
-*  SPDX-License-Identifier: GPL-2.0-or-later
-*                                                                         *
-***************************************************************************/
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/NgspiceRawAsciiFilter.h"
 #include "backend/datasources/filters/NgspiceRawAsciiFilterPrivate.h"

@@ -4,13 +4,9 @@
     Description          : NSL Tests for special window functions
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2019 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef NSLSFWINDOWTEST_H
 #define NSLSFWINDOWTEST_H
 

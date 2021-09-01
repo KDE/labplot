@@ -4,13 +4,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2019 Ferencz Kovacs (kferike98@gmail.com)
     Description          : Helper class for the welcome screen
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef WELCOMESCREENHELPER_H
 #define WELCOMESCREENHELPER_H
 

@@ -5,13 +5,9 @@
 						   show their values
 	--------------------------------------------------------------------
     SPDX-FileCopyrightText: 2020 Martin Marmsoler (martin.marmsoler@gmail.com)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 
 #ifndef INFOELEMENT_H

@@ -4,14 +4,9 @@
     Description          : Dialog for droping and masking values in columns
     --------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2015-2020 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #include "DropValuesDialog.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"

@@ -4,14 +4,9 @@
     Description          : Dialog for the conditional formatting according to a heatmap
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2021 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #include "FormattingHeatmapDialog.h"
 #include "backend/core/column/Column.h"
 #include "backend/spreadsheet/Spreadsheet.h"

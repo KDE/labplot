@@ -4,13 +4,9 @@
     Description          : Tests for project imports
     --------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Martin Marmsoler (martin.marmsoler@gmail.com)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "MultiRangeTest.h"
 

@@ -7,14 +7,9 @@
     SPDX-FileCopyrightText: 2009-2019 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2017-2018 Fabian Kristof (fkristofszabolcs@gmail.com)
     SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz (kferike98@gmail.com)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef IMPORTFILEWIDGET_H
 #define IMPORTFILEWIDGET_H
 

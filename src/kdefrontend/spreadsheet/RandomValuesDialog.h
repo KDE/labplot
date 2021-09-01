@@ -4,14 +4,9 @@
     Description          : Dialog for generating uniformly and non-uniformly distributed random numbers
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef RANDOMVALUESDIALOG_H
 #define RANDOMVALUESDIALOG_H
 

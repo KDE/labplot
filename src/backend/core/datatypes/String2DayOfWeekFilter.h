@@ -6,14 +6,9 @@
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
     Description          : Conversion filter String -> QDateTime, interpreting
     the input as days of the week (either numeric or "Mon" etc).
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef STRING2DAYOFWEEK_FILTER_H
 #define STRING2DAYOFWEEK_FILTER_H
 

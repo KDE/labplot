@@ -4,13 +4,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2019 Ferencz Kovacs (kferike98@gmail.com)
     Description          : Grid containing example projects
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 import QtQuick 2.6
 import QtQuick.XmlListModel 2.0
 import QtQuick.Layouts 1.3

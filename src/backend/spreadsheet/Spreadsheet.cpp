@@ -7,13 +7,9 @@
     SPDX-FileCopyrightText: 2006-2009 Knut Franke (knut.franke@gmx.de)
     SPDX-FileCopyrightText: 2012-2021 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "Spreadsheet.h"
 #include "SpreadsheetModel.h"
 #include "backend/core/AspectPrivate.h"

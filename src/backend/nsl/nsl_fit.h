@@ -4,14 +4,9 @@
     Description          : NSL (non)linear fitting functions
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef NSL_FIT_H
 #define NSL_FIT_H

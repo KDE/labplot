@@ -4,13 +4,8 @@ Project              : LabPlot
 Description          : FITS I/O-filter
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2016 Fabian Kristof (fkristofszabolcs@gmail.com)
+SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-/***************************************************************************
-*                                                                         *
-*  SPDX-License-Identifier: GPL-2.0-or-later
-*                                                                         *
-***************************************************************************/
 #ifndef FITSFILTER_H
 #define FITSFILTER_H
 

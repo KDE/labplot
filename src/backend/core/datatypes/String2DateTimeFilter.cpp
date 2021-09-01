@@ -6,14 +6,9 @@
     SPDX-FileCopyrightText: 2007 Knut Franke (knut.franke@gmx.de)
     SPDX-FileCopyrightText: 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Conversion filter QString -> QDateTime.
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #include "String2DateTimeFilter.h"
 #include <QStringList>
 #include "backend/lib/XmlStreamReader.h"

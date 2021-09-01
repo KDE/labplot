@@ -7,14 +7,9 @@
     SPDX-FileCopyrightText: 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Conversion filter int -> QDateTime, interpreting
     the input numbers as Julian days.
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef BIGINT2DATE_TIME_FILTER_H
 #define BIGINT2DATE_TIME_FILTER_H
 

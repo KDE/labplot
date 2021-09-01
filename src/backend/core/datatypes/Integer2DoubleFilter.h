@@ -4,14 +4,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : conversion filter int -> double.
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef INTEGER2DOUBLE_FILTER_H
 #define INTEGER2DOUBLE_FILTER_H
 

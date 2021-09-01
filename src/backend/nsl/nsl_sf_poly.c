@@ -4,14 +4,9 @@
     Description          : NSL special polynomial functions
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "nsl_sf_poly.h"
 #include <stdio.h>	// debugging

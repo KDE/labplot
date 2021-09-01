@@ -4,13 +4,9 @@
     Description          : Tests for the Parser
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef PARSERTEST_H
 #define PARSERTEST_H

@@ -5,13 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2009 Tilman Benkert (thzs@gmx.net)
     SPDX-FileCopyrightText: 2011-2019 Alexander Semke (alexander.semke@web.de)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef WORKSHEET_H
 #define WORKSHEET_H

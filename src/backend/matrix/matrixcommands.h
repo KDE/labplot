@@ -6,14 +6,9 @@
     SPDX-FileCopyrightText: 2008 Tilman Benkert (thzs@gmx.net)
     SPDX-FileCopyrightText: 2015 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef MATRIX_COMMANDS_H
 #define MATRIX_COMMANDS_H

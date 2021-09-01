@@ -4,13 +4,8 @@ Project              : LabPlot
 Description          : Widget for adding or modifying FITS header keyword units
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2016-2017 Fabian Kristof (fkristofszabolcs@gmail.com)
+SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-/***************************************************************************
-*                                                                         *
-*  SPDX-License-Identifier: GPL-2.0-or-later
-*                                                                         *
-***************************************************************************/
 #ifndef FITSHEADEREDITADDUNITDIALOG_H
 #define FITSHEADEREDITADDUNITDIALOG_H
 

@@ -4,13 +4,9 @@ Project              : LabPlot
 Description          : Private implementation class for ImageFilter.
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2015 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef IMAGEFILTERPRIVATE_H
 #define IMAGEFILTERPRIVATE_H
 

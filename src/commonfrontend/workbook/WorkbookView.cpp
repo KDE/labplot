@@ -4,14 +4,9 @@
     Description          : View class for Workbook
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015-2020 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "WorkbookView.h"
 #include "backend/core/AbstractAspect.h"

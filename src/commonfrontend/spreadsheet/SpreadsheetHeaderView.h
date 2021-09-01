@@ -5,14 +5,9 @@
     SPDX-FileCopyrightText: 2016 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2007 Tilman Benkert (thzs@gmx.net)
     Description          : Horizontal header for SpreadsheetView displaying comments in a second header
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef SPREADSHEETHEADERVIEW_H
 #define SPREADSHEETHEADERVIEW_H

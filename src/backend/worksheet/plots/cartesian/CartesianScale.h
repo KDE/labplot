@@ -7,13 +7,9 @@
     SPDX-FileCopyrightText: 2012-2016 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+ **************************************************************************
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #ifndef CARTESIANSCALE_H
 #define CARTESIANSCALE_H

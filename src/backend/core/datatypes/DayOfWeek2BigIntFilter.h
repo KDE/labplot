@@ -5,14 +5,9 @@
     SPDX-FileCopyrightText: 2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Conversion filter QDateTime -> bigint, translating
     dates into days of the week (Monday -> 1).
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef DAY_OF_WEEK2BIGINT_FILTER_H
 #define DAY_OF_WEEK2BIGINT_FILTER_H
 

@@ -7,13 +7,8 @@ SPDX-FileCopyrightText: 2010-2021 Alexander Semke (alexander.semke@web.de)
 SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
 SPDX-FileCopyrightText: 2016 Garvit Khatri (garvitdelhi@gmail.com)
 
+SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-/***************************************************************************
-*                                                                         *
-*  SPDX-License-Identifier: GPL-2.0-or-later
-*                                                                         *
-***************************************************************************/
 
 #include "kdefrontend/GuiObserver.h"
 #include "backend/core/AspectTreeModel.h"

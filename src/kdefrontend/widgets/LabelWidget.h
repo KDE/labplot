@@ -5,14 +5,9 @@
     SPDX-FileCopyrightText: 2008-2020 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2012-2014 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
     Description          : label settings widget
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef LABELWIDGET_H
 #define LABELWIDGET_H
 

@@ -6,14 +6,9 @@
     SPDX-FileCopyrightText: 2009 Tilman Benkert (thzs@gmx.net)
     SPDX-FileCopyrightText: 2012-2015 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef WORKSHEETELEMENT_H
 #define WORKSHEETELEMENT_H

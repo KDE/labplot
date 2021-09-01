@@ -5,13 +5,8 @@ Description          : ASCII I/O-filter
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2009-2019 Alexander Semke (alexander.semke@web.de)
 SPDX-FileCopyrightText: 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
+SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-/***************************************************************************
-*                                                                         *
-*  SPDX-License-Identifier: GPL-2.0-or-later
-*                                                                         *
-***************************************************************************/
 #ifndef ASCIIFILTER_H
 #define ASCIIFILTER_H
 

@@ -4,13 +4,9 @@
 	Description          : Tests for MQTT related features
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2018 Kovacs Ferencz (kferike98@gmail.com)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef MQTTUNITTEST_H
 #define MQTTUNITTEST_H
 

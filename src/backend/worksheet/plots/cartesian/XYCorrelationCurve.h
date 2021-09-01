@@ -4,14 +4,9 @@
     Description          : A xy-curve defined by a correlation
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef XYCORRELATIONCURVE_H
 #define XYCORRELATIONCURVE_H

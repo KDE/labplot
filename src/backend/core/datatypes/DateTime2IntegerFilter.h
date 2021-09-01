@@ -4,14 +4,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Conversion filter QDateTime -> int (using Julian day).
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef DATE_TIME2INTEGER_FILTER_H
 #define DATE_TIME2INTEGER_FILTER_H
 

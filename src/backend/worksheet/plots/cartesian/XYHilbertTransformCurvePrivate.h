@@ -4,14 +4,9 @@
     Description          : Private members of XYHilbertTransformCurve
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef XYHILBERTTRANSFORMCURVEPRIVATE_H
 #define XYHILBERTTRANSFORMCURVEPRIVATE_H

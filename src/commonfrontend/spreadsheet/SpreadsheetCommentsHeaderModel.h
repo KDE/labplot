@@ -3,14 +3,9 @@
     Project              : LabPlot
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Tilman Benkert (thzs@gmx.net)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef SPREADSHEETCOMMENTSHEADERMODEL_H
 #define SPREADSHEETCOMMENTSHEADERMODEL_H

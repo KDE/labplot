@@ -5,14 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2009-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
     SPDX-FileCopyrightText: 2009 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef BINARYOPTIONSWIDGET_H
 #define BINARYOPTIONSWIDGET_H
 

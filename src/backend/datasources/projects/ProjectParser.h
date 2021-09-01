@@ -4,14 +4,9 @@
     Description          : base class for project parsers
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef PROJECTPARSER_H
 #define PROJECTPARSER_H
 

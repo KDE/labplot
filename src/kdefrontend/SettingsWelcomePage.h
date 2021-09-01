@@ -5,14 +5,9 @@
     --------------------------------------------------------------------
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2020 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef SETTINGWELCOMEPAGE_H
 #define SETTINGWELCOMEPAGE_H

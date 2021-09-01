@@ -6,14 +6,9 @@
     Email (use @ for *)  : knut.franke*gmx.de, thzs@gmx.net
     Description          : Conversion filter double -> QDateTime, interpreting
     the input numbers as days of the week (1 -> Monday).
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef DOUBLE2DAY_OF_WEEK_FILTER_H
 #define DOUBLE2DAY_OF_WEEK_FILTER_H
 

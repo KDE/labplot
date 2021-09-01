@@ -4,14 +4,9 @@
     Description          : NSL special window functions
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "nsl_sf_window.h"
 #include "nsl_common.h"

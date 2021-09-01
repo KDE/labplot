@@ -4,14 +4,9 @@
 	Description          : Dialog to modify multiply value labels in a batch mode
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2021 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #include "BatchEditValueLabelsDialog.h"
 #include "backend/core/column/Column.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"

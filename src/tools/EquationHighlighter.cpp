@@ -5,14 +5,9 @@
     SPDX-FileCopyrightText: 2014 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2006 David Saxton <david@bluehaze.org>
     Description      : syntax highligher for mathematical equations
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "EquationHighlighter.h"
 #include "backend/gsl/ExpressionParser.h"

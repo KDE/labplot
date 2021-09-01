@@ -4,14 +4,9 @@
     Description          : export worksheet dialog
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2011-2019 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef EXPORTWORKSHEETDIALOG_H
 #define EXPORTWORKSHEETDIALOG_H

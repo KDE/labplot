@@ -4,14 +4,9 @@
     Description          : Preview of all themes in a QComboBox
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "kdefrontend/widgets/ThemesComboBox.h"
 #include "kdefrontend/widgets/ThemesWidget.h"

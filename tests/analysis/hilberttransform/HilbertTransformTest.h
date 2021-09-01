@@ -4,13 +4,9 @@
     Description          : Tests for Hilbert transform
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2021 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef HILBERTTRANSFORMTEST_H
 #define HILBERTTRANSFORMTEST_H
 

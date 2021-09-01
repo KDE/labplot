@@ -7,13 +7,9 @@
     SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach (stefan.gerlach@uni.kn)
     Description          : Simplified filter interface for filters with
     only one output port.
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef ABSTRACTSIMPLEFILTER_H
 #define ABSTRACTSIMPLEFILTER_H
 

@@ -4,14 +4,9 @@
     Description          : Private members of PlotArea.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2011 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef PLOTAREAPRIVATE_H
 #define PLOTAREAPRIVATE_H

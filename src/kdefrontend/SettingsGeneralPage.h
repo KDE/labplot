@@ -5,14 +5,9 @@
     --------------------------------------------------------------------
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2011-2016 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef SETTINGSGENERALPAGE_H
 #define SETTINGSGENERALPAGE_H

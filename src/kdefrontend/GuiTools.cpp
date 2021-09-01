@@ -5,14 +5,9 @@
     SPDX-FileCopyrightText: 2011-2013 Alexander Semke (alexander.semke*web.de)
     (replace * with @ in the email addresses)
     Description          :  contains several static functions which are used on frequently throughout the kde frontend.
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "GuiTools.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"

@@ -6,14 +6,9 @@
     Email (use @ for *)  : Knut.Franke*gmx.net
     Description          : An undo command calling a method/signal/slot on a
     QObject on redo/undo.
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef SIGNALLING_UNDO_COMMAND_H
 #define SIGNALLING_UNDO_COMMAND_H

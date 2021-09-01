@@ -4,14 +4,9 @@
     Description          : NSL functions for the kernel density estimation
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2021 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef NSL_KDE_H
 #define NSL_KDE_H

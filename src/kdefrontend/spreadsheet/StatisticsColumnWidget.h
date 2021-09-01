@@ -4,14 +4,9 @@
 	Description          : Widget showing statistics for column values
     --------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef STATISTICSCOLUMNWIDGET_H
 #define STATISTICSCOLUMNWIDGET_H
 

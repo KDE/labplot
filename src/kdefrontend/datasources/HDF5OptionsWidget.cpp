@@ -4,13 +4,9 @@
     Description          : widget providing options for the import of HDF5 data
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #include "HDF5OptionsWidget.h"
 #include "ImportFileWidget.h"
 #include "backend/datasources/filters/HDF5Filter.h"

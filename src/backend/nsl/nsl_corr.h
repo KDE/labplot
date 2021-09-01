@@ -4,14 +4,9 @@
     Description          : NSL discrete correlation functions
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef NSL_CORR_H
 #define NSL_CORR_H

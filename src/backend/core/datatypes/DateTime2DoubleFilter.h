@@ -5,14 +5,9 @@
     SPDX-FileCopyrightText: 2007 Tilman Benkert (thzs@gmx.net)
     SPDX-FileCopyrightText: 2007 Knut Franke (knut.franke@gmx.de)
     Description          : Conversion filter QDateTime -> double (using Julian day).
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef DATE_TIME2DOUBLE_FILTER_H
 #define DATE_TIME2DOUBLE_FILTER_H
 

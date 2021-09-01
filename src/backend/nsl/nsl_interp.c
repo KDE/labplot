@@ -4,13 +4,9 @@
     Description          : NSL interpolation functions
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "nsl_interp.h"
 #include "nsl_common.h"

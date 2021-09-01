@@ -5,14 +5,9 @@
     ------------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015-2019 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #include "MatrixFunctionDialog.h"
 #include "backend/lib/macros.h"
 #include "backend/gsl/ExpressionParser.h"

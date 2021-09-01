@@ -5,14 +5,9 @@
     SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky Ion Vasilief
     Email (use @ for *)  : kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr
     Description          : Origin file import class
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef ORIGIN_FILE_H
 #define ORIGIN_FILE_H

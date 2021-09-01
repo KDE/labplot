@@ -5,14 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016 Prakriti Bhardwaj (p_bhardwaj14@informatik.uni-kl.de)
     SPDX-FileCopyrightText: 2016 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #include "ThemesWidget.h"
 #include "kdefrontend/ThemeHandler.h"
 

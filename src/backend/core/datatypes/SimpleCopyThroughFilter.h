@@ -6,14 +6,9 @@
     Email (use @ for *)  : knut.franke*gmx.de, thzs*gmx.net
     Description          : Filter which copies the provided input unaltered
     to the output
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef SIMPLE_COPY_THROUGH_FILTER_H
 #define SIMPLE_COPY_THROUGH_FILTER_H
 

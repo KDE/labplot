@@ -5,14 +5,9 @@
 				   in form of spreadsheets and matrices
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "Workbook.h"
 #include "backend/spreadsheet/Spreadsheet.h"

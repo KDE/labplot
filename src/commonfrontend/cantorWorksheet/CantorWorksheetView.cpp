@@ -4,14 +4,9 @@
     Description          : View class for CantorWorksheet
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015 Garvit Khatri (garvitdelhi@gmail.com)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "CantorWorksheetView.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"

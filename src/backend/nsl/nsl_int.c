@@ -4,13 +4,9 @@
     Description          : NSL numerical integration functions
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 /* TODO:
 	* absolute area for Simpson/Simpson-3/8 rules (needs more numerics)

@@ -5,14 +5,9 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014-2020 Alexander Semke (alexander.semke@web.de)
     SPDX-FileCopyrightText: 2017-2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #ifndef FITOPTIONSWIDGET_H
 #define FITOPTIONSWIDGET_H
 

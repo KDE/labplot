@@ -4,14 +4,9 @@
     Description          : Extended TextEdit to allow the manual resize by the user
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2018 Alexander Semke (alexander.semke@web.de)
-
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 #include "ResizableTextEdit.h"
 
 #include <QApplication>

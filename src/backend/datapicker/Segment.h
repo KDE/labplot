@@ -4,12 +4,8 @@
     Description          : Graphics-item for curve of Datapicker
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015 Ankit Wagadre (wagadre.ankit@gmail.com)
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #ifndef SEGMENT_H
 #define SEGMENT_H

@@ -4,13 +4,9 @@ Project              : LabPlot
 Description          : Private implementation class for BinaryFilter.
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 #ifndef BINARYFILTERPRIVATE_H
 #define BINARYFILTERPRIVATE_H
 

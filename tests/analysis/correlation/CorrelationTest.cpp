@@ -4,13 +4,9 @@
     Description          : Tests for data correlation
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2018 Stefan Gerlach (stefan.gerlach@uni.kn)
-*/
 
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "CorrelationTest.h"
 #include "backend/core/column/Column.h"

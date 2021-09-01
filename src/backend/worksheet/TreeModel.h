@@ -5,13 +5,8 @@ Description 	     : This is an abstract treemodel which can be used by a treevie
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2019 Martin Marmsoler (martin.marmsoler@gmail.com)
 
+SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-/***************************************************************************
-*                                                                         *
-*  SPDX-License-Identifier: GPL-2.0-or-later
-*                                                                         *
-***************************************************************************/
 
 #ifndef TREEMODEL_H
 #define TREEMODEL_H
