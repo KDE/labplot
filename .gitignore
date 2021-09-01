@@ -7,3 +7,5 @@ TODO
 labplot.kdev4
 compile_commands.json
 CMakeLists.txt.user*
+.cache
+.clangd
