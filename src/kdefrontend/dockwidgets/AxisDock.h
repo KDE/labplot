@@ -88,7 +88,7 @@ private slots:
 	void positionChanged(double value);
 	void logicalPositionChanged(double value);
 	void scaleChanged(int);
-	void autoScaleChanged(int);
+	void rangeTypeChanged(int);
 	void startChanged();
 	void endChanged();
 	void startDateTimeChanged(const QDateTime&);
@@ -173,7 +173,7 @@ private slots:
 	void axisPositionChanged(double);
 	void axisLogicalPositionChanged(double);
 	void axisScaleChanged(RangeT::Scale);
-	void axisAutoScaleChanged(bool);
+	void axisRangeTypeChanged(Axis::RangeType);
 	void axisStartChanged(double);
 	void axisEndChanged(double);
 	void axisZeroOffsetChanged(qreal);

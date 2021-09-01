@@ -4,7 +4,7 @@
     Description          : Axis for cartesian coordinate systems.
     --------------------------------------------------------------------
     Copyright            : (C) 2009 Tilman Benkert (thzs@gmx.net)
-    Copyright            : (C) 2011-2018 Alexander Semke (alexander.semke@web.de)
+    Copyright            : (C) 2011-2021 Alexander Semke (alexander.semke@web.de)
     Copyright            : (C) 2013-2021 Stefan Gerlach (stefan.gerlach@uni.kn)
  ***************************************************************************/
 
@@ -44,6 +44,7 @@ class Axis: public WorksheetElement {
 	Q_OBJECT
 
 public:
+	enum class RangeType {Auto, AutoData, Custom};
 	enum class Position {Top, Bottom, Left, Right, Centered, Custom, Logical};
 	enum class LabelsFormat {Decimal, ScientificE, Powers10, Powers2, PowersE, MultipliesPi, Scientific};
 	enum TicksFlags {
@@ -117,7 +118,7 @@ public:
 	void loadThemeConfig(const KConfig&) override;
 	void saveThemeConfig(const KConfig&) override;
 
-	BASIC_D_ACCESSOR_DECL(bool, autoScale, AutoScale)
+	BASIC_D_ACCESSOR_DECL(RangeType, rangeType, RangeType)
 	BASIC_D_ACCESSOR_DECL(Orientation, orientation, Orientation)
 	BASIC_D_ACCESSOR_DECL(Position, position, Position)
 	BASIC_D_ACCESSOR_DECL(RangeT::Scale, scale, Scale)
@@ -239,7 +240,7 @@ signals:
 	void positionChanged(double);
 	void scaleChanged(RangeT::Scale);
 	void startChanged(double);
-	void autoScaleChanged(bool);
+	void rangeTypeChanged(RangeType);
 	void endChanged(double);
 	void rangeChanged(Range<double>);
 	void zeroOffsetChanged(qreal);
@@ -254,13 +255,13 @@ signals:
 	// line
 	void linePenChanged(const QPen&);
 	void lineOpacityChanged(qreal);
-	void arrowTypeChanged(Axis::ArrowType);
-	void arrowPositionChanged(Axis::ArrowPosition);
+	void arrowTypeChanged(ArrowType);
+	void arrowPositionChanged(ArrowPosition);
 	void arrowSizeChanged(qreal);
 
 	// major ticks
-	void majorTicksDirectionChanged(Axis::TicksDirection);
-	void majorTicksTypeChanged(Axis::TicksType);
+	void majorTicksDirectionChanged(TicksDirection);
+	void majorTicksTypeChanged(TicksType);
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged(qreal);
 	void majorTicksColumnChanged(const AbstractColumn*);
@@ -269,8 +270,8 @@ signals:
 	void majorTicksOpacityChanged(qreal);
 
 	// minor ticks
-	void minorTicksDirectionChanged(Axis::TicksDirection);
-	void minorTicksTypeChanged(Axis::TicksType);
+	void minorTicksDirectionChanged(TicksDirection);
+	void minorTicksTypeChanged(TicksType);
 	void minorTicksNumberChanged(int);
 	void minorTicksIncrementChanged(qreal);
 	void minorTicksColumnChanged(const AbstractColumn*);
@@ -279,18 +280,18 @@ signals:
 	void minorTicksOpacityChanged(qreal);
 
 	//labels
-	void labelsFormatChanged(Axis::LabelsFormat);
+	void labelsFormatChanged(LabelsFormat);
 	void labelsAutoPrecisionChanged(bool);
 	void labelsPrecisionChanged(int);
 	void labelsDateTimeFormatChanged(const QString&);
-	void labelsPositionChanged(Axis::LabelsPosition);
+	void labelsPositionChanged(LabelsPosition);
 	void labelsOffsetChanged(double);
 	void labelsRotationAngleChanged(qreal);
-	void labelsTextTypeChanged(Axis::LabelsTextType);
+	void labelsTextTypeChanged(LabelsTextType);
 	void labelsTextColumnChanged(const AbstractColumn*);
 	void labelsColorChanged(QColor);
 	void labelsFontChanged(QFont);
-	void labelsBackgroundTypeChanged(Axis::LabelsBackgroundType);
+	void labelsBackgroundTypeChanged(LabelsBackgroundType);
 	void labelsBackgroundColorChanged(QColor);
 	void labelsPrefixChanged(QString);
 	void labelsSuffixChanged(QString);

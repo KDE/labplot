@@ -1688,7 +1688,7 @@ void CartesianPlot::addHorizontalAxis() {
 	Axis* axis = new Axis("x-axis", Axis::Orientation::Horizontal);
 	axis->setSuppressRetransform(true);	// retransformTicks() needs plot
 	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	if (axis->autoScale()) {
+	if (axis->rangeType() == Axis::RangeType::Auto) {
 		axis->setUndoAware(false);
 		// use x range of default plot range
 		axis->setRange( xRange() );
@@ -1704,7 +1704,7 @@ void CartesianPlot::addVerticalAxis() {
 	Axis* axis = new Axis("y-axis", Axis::Orientation::Vertical);
 	axis->setSuppressRetransform(true);	// retransformTicks() needs plot
 	axis->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	if (axis->autoScale()) {
+	if (axis->rangeType() == Axis::RangeType::Auto) {
 		axis->setUndoAware(false);
 		// use y range of default plot range
 		axis->setRange( yRange() );
@@ -3550,7 +3550,7 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 			DEBUG(Q_FUNC_INFO << ", auto-scale axis \"" << axis->name().toStdString() << "\"")
 			// use ranges of axis
 			int axisXIndex = q->coordinateSystem(axis->coordinateSystemIndex())->xIndex();
-			if (!axis->autoScale() || axis->orientation() != Axis::Orientation::Horizontal || axisXIndex != i)
+			if (axis->rangeType() != Axis::RangeType::Auto || axis->orientation() != Axis::Orientation::Horizontal || axisXIndex != i)
 				continue;
 
 			if (!qFuzzyIsNull(deltaXMax)) {
@@ -3591,7 +3591,7 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 			DEBUG(Q_FUNC_INFO << ", auto-scale axis \"" << axis->name().toStdString() << "\"")
 			// use ranges of axis
 			int axisYIndex = q->coordinateSystem(axis->coordinateSystemIndex())->yIndex();
-			if (!axis->autoScale() || axis->orientation() != Axis::Orientation::Vertical || axisYIndex != i)
+			if (axis->rangeType() != Axis::RangeType::Auto || axis->orientation() != Axis::Orientation::Vertical || axisYIndex != i)
 				continue;
 
 			if (!qFuzzyIsNull(deltaYMax)) {

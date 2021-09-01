@@ -132,11 +132,10 @@ void Axis::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Axis");
 
-	d->autoScale = true;
+	d->rangeType = (Axis::RangeType) group.readEntry("RangeType", static_cast<int>(RangeType::Auto));
 	d->position = Axis::Position::Centered;
 	d->offset = group.readEntry("PositionOffset", 0);
 	d->scale = (RangeT::Scale) group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
-	d->autoScale = group.readEntry("AutoScale", true);
 	d->range = Range<double>(group.readEntry("Start", 0.), group.readEntry("End", 10.));	// not auto ticked if already set to 1 here!
 	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
@@ -381,7 +380,7 @@ void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageR
 }
 
 /* ============================ getter methods ================= */
-BASIC_SHARED_D_READER_IMPL(Axis, bool, autoScale, autoScale)
+BASIC_SHARED_D_READER_IMPL(Axis, Axis::RangeType, rangeType, rangeType)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Orientation, orientation, orientation)
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Axis, RangeT::Scale, scale, scale)
@@ -452,16 +451,15 @@ BASIC_SHARED_D_READER_IMPL(Axis, QPen, minorGridPen, minorGridPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorGridOpacity, minorGridOpacity)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(Axis, SetAutoScale, bool, autoScale, retransform);
-void Axis::setAutoScale(const bool autoScale) {
-	DEBUG(Q_FUNC_INFO << ", auto scale = " << autoScale)
+STD_SETTER_CMD_IMPL_F_S(Axis, SetRangeType, Axis::RangeType, rangeType, retransform);
+void Axis::setRangeType(Axis::RangeType rangeType) {
 	Q_D(Axis);
-	if (autoScale != d->autoScale)
-		exec(new AxisSetAutoScaleCmd(d, autoScale, ki18n("%1: set axis auto scaling")));
+	if (rangeType != d->rangeType)
+		exec(new AxisSetRangeTypeCmd(d, rangeType, ki18n("%1: set axis range type")));
 
 	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
 
-	if (autoScale) {	// also if not changing (like on plot range changes)
+	if (rangeType == Axis::RangeType::Auto) {	// also if not changing (like on plot range changes)
 		const auto* plot = qobject_cast<CartesianPlot*>(parentAspect());
 		if (!plot)
 			return;
@@ -2556,7 +2554,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement( "general" );
-	writer->writeAttribute( "autoScale", QString::number(d->autoScale) );
+	writer->writeAttribute( "rangeType", QString::number(static_cast<int>(d->rangeType)) );
 	writer->writeAttribute( "orientation", QString::number(static_cast<int>(d->orientation)) );
 	writer->writeAttribute( "position", QString::number(static_cast<int>(d->position)) );
 	writer->writeAttribute( "scale", QString::number(static_cast<int>(d->scale)) );
@@ -2671,7 +2669,15 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("autoScale", autoScale, bool);
+			if (project()->xmlVersion() < 5) {
+				bool autoScale = attribs.value("autoScale").toInt();
+				if (autoScale)
+					d->rangeType = Axis::RangeType::Auto;
+				else
+					d->rangeType = Axis::RangeType::Custom;
+			} else
+				READ_INT_VALUE("rangeType", rangeType, Axis::RangeType);
+
 			READ_INT_VALUE("orientation", orientation, Orientation);
 			READ_INT_VALUE("position", position, Axis::Position);
 			READ_INT_VALUE("scale", scale, RangeT::Scale);

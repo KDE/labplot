@@ -139,7 +139,7 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.cbScale, QOverload<int>::of(&QComboBox::currentIndexChanged),
 	        this, &AxisDock::scaleChanged);
 
-	connect(ui.chkAutoScale, &QCheckBox::stateChanged, this, &AxisDock::autoScaleChanged);
+	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::rangeTypeChanged);
 	connect(ui.leStart, &QLineEdit::textChanged, this, &AxisDock::startChanged);
 	connect(ui.leEnd, &QLineEdit::textChanged, this, &AxisDock::endChanged);
 	connect(ui.dateTimeEditStart, &QDateTimeEdit::dateTimeChanged, this, &AxisDock::startDateTimeChanged);
@@ -302,6 +302,20 @@ void AxisDock::init() {
 	ui.cbPosition->addItem(i18n("Bottom")); // Right
 	ui.cbPosition->addItem(i18n("Centered"));
 	ui.cbPosition->addItem(i18n("Logical"));
+
+	//range types
+	ui.cbRangeType->addItem(i18n("Auto"));
+	ui.cbRangeType->addItem(i18n("Auto Data"));
+	ui.cbRangeType->addItem(i18n("Custom"));
+
+	QString msg = i18n("Axis range:"
+	"<ul>"
+	"<li>Auto - automatically set the start and end points of the axis to the current plot ranges</li>"
+	"<li>Auto Data - automatically set the start and end points of the axis to the minimal and maximal plotted data points, respectively</li>"
+	"<li>Custom - manually specify the start and end points of the axis</li>"
+	"</ul>");
+	ui.lRangeType->setToolTip(msg);
+	ui.cbRangeType->setToolTip(msg);
 
 	// scales
 	for (const auto& name: RangeT::scaleNames)
@@ -514,7 +528,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, QOverload<Axis::Position>::of(&Axis::positionChanged),
 	        this, QOverload<Axis::Position>::of(&AxisDock::axisPositionChanged));
 	connect(m_axis, &Axis::scaleChanged, this, &AxisDock::axisScaleChanged);
-	connect(m_axis, &Axis::autoScaleChanged, this, &AxisDock::axisAutoScaleChanged);
+	connect(m_axis, &Axis::rangeTypeChanged, this, &AxisDock::axisRangeTypeChanged);
 	connect(m_axis, &Axis::startChanged, this, &AxisDock::axisStartChanged);
 	connect(m_axis, &Axis::endChanged, this, &AxisDock::axisEndChanged);
 	connect(m_axis, &Axis::zeroOffsetChanged, this, &AxisDock::axisZeroOffsetChanged);
@@ -572,7 +586,6 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::minorGridOpacityChanged, this, &AxisDock::axisMinorGridOpacityChanged);
 
 	connect(m_axis, &Axis::visibilityChanged, this, &AxisDock::axisVisibilityChanged);
-
 }
 
 /*
@@ -633,7 +646,7 @@ void AxisDock::updatePlotRanges() const {
 }
 
 void AxisDock::updateAutoScale() {
-	m_axis->setAutoScale(ui.chkAutoScale->isChecked());
+	m_axis->setRangeType(static_cast<Axis::RangeType>(ui.cbRangeType->currentIndex()));
 }
 
 //*************************************************************
@@ -775,9 +788,9 @@ void AxisDock::scaleChanged(int index) {
 		axis->setScale(scale);
 }
 
-void AxisDock::autoScaleChanged(int index) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
-	bool autoScale = index == Qt::Checked;
+void AxisDock::rangeTypeChanged(int index) {
+	auto rangeType = static_cast<Axis::RangeType>(index);
+	bool autoScale = (rangeType != Axis::RangeType::Custom);
 	ui.leStart->setEnabled(!autoScale);
 	ui.leEnd->setEnabled(!autoScale);
 	ui.dateTimeEditStart->setEnabled(!autoScale);
@@ -787,7 +800,7 @@ void AxisDock::autoScaleChanged(int index) {
 		return;
 
 	for (auto* axis : m_axesList)
-		axis->setAutoScale(autoScale);
+		axis->setRangeType(rangeType);
 
 	updateLocale();	// update values
 }
@@ -1930,15 +1943,13 @@ void AxisDock::axisLogicalPositionChanged(double value) {
 }
 
 void AxisDock::axisScaleChanged(RangeT::Scale scale) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbScale->setCurrentIndex(static_cast<int>(scale));
-	m_initializing = false;
 }
 
-void AxisDock::axisAutoScaleChanged(bool on) {
-	m_initializing = true;
-	ui.chkAutoScale->setChecked(on);
-	m_initializing = false;
+void AxisDock::axisRangeTypeChanged(Axis::RangeType type) {
+	const Lock lock(m_initializing);
+	ui.cbRangeType->setCurrentIndex(static_cast<int>(type));
 }
 
 void AxisDock::axisStartChanged(double value) {
@@ -2305,8 +2316,8 @@ void AxisDock::load() {
 	spinBoxCalculateMinMax(ui.sbPositionLogical, logicalRange, m_axis->logicalPosition());
 	ui.sbPositionLogical->setValue(m_axis->logicalPosition());
 
-	ui.cbScale->setCurrentIndex( (int)m_axis->scale() );
-	ui.chkAutoScale->setChecked( m_axis->autoScale() );
+	ui.cbScale->setCurrentIndex( static_cast<int>(m_axis->scale()) );
+	ui.cbRangeType->setCurrentIndex( static_cast<int>(m_axis->rangeType()) );
 	ui.leStart->setText( numberLocale.toString(m_axis->range().start()) );
 	ui.leEnd->setText( numberLocale.toString(m_axis->range().end()) );
 
@@ -2470,7 +2481,7 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.sbPositionLogical->setValue(group.readEntry("LogicalPosition", m_axis->logicalPosition()));
 	ui.sbPosition->setValue(Worksheet::convertFromSceneUnits(group.readEntry("PositionOffset", m_axis->offset()), m_worksheetUnit));
 	ui.cbScale->setCurrentIndex( group.readEntry("Scale", static_cast<int>(m_axis->scale())) );
-	ui.chkAutoScale->setChecked( group.readEntry("AutoScale", m_axis->autoScale()) );
+	ui.cbRangeType->setCurrentIndex( group.readEntry("RangeType", static_cast<int>(m_axis->rangeType())) );
 	ui.leStart->setText( numberLocale.toString(group.readEntry("Start", m_axis->range().start())) );
 	ui.leEnd->setText( numberLocale.toString(group.readEntry("End", m_axis->range().end())) );
 	ui.leZeroOffset->setText( numberLocale.toString(group.readEntry("ZeroOffset", m_axis->zeroOffset())) );
@@ -2597,6 +2608,7 @@ void AxisDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("LogicalPosition",  ui.sbPositionLogical->value());
 	group.writeEntry("PositionOffset",  Worksheet::convertToSceneUnits(ui.sbPosition->value(), m_worksheetUnit));
 	group.writeEntry("Scale", ui.cbScale->currentIndex());
+	group.writeEntry("RangeType", ui.cbRangeType->currentIndex());
 	group.writeEntry("Start", numberLocale.toDouble(ui.leStart->text()));
 	group.writeEntry("End", numberLocale.toDouble(ui.leEnd->text()));
 	group.writeEntry("ZeroOffset", numberLocale.toDouble(ui.leZeroOffset->text()));

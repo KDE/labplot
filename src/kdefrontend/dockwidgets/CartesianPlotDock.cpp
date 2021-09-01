@@ -1527,7 +1527,7 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 		DEBUG(Q_FUNC_INFO << ", Axis \"" << axis->name().toStdString() << "\" cSystem index = " << cSystemIndex)
 		if (cSystemIndex == plotRangeIndex) {
 			DEBUG(Q_FUNC_INFO << ", Plot range used in axis \"" << axis->name().toStdString() << "\" has changed")
-			if (axis->autoScale() && axis->orientation() == Axis::Orientation::Horizontal) {
+			if (axis->rangeType() == Axis::RangeType::Auto && axis->orientation() == Axis::Orientation::Horizontal) {
 				DEBUG(Q_FUNC_INFO << ", set x range of axis to " << m_plot->xRangeFromIndex(index).toStdString())
 				axis->setRange(m_plot->xRangeFromIndex(index));
 			}
@@ -1551,7 +1551,7 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 		const int cSystemIndex{ axis->coordinateSystemIndex() };
 		if (cSystemIndex == plotRangeIndex) {
 			DEBUG(Q_FUNC_INFO << ", plot range used in axis \"" << axis->name().toStdString() << "\" has changed")
-			if (axis->autoScale() && axis->orientation() == Axis::Orientation::Vertical) {
+			if (axis->rangeType() == Axis::RangeType::Auto  && axis->orientation() == Axis::Orientation::Vertical) {
 				DEBUG(Q_FUNC_INFO << ", set range to " << m_plot->yRangeFromIndex(index).toStdString())
 				axis->setRange(m_plot->yRangeFromIndex(index));
 			}
