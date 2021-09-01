@@ -1,31 +1,13 @@
-/***************************************************************************
+/*
     File                 : SpreadsheetDock.cpp
     Project              : LabPlot
     Description          : widget for spreadsheet properties
 	--------------------------------------------------------------------
-	Copyright            : (C) 2010-2019 by Alexander Semke (alexander.semke@web.de)
-    Copyright            : (C) 2012-2013 by Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
+	SPDX-FileCopyrightText: 2010-2019 Alexander Semke (alexander.semke@web.de)
+    SPDX-FileCopyrightText: 2012-2013 Stefan Gerlach (stefan.gerlach@uni-konstanz.de)
 
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *  This program is free software; you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation; either version 2 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the Free Software           *
- *   Foundation, Inc., 51 Franklin Street, Fifth Floor,                    *
- *   Boston, MA  02110-1301  USA                                           *
- *                                                                         *
- ***************************************************************************/
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
 
 #include "SpreadsheetDock.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
