@@ -1,4 +1,0 @@
-#YEAR: 2015
-#COPYRIGHT HOLDER: Simon Garnier
-
-#https://github.com/marcosci/cividis/blob/master/LICENSE
