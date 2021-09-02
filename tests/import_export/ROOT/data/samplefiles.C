@@ -3,7 +3,7 @@ File                 : samplefiles.C
 Project              : LabPlot
 Description          : ROOT script to create test files for ROOT importer
 -------------------------------------------------------------------------
-SPDX-FileCopyrightText: 2018 by Christoph Roick <chrisito@gmx.de>
+SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
 SPDX-License-Identifier: GPL-2.0-or-later
 */
 
