@@ -1,10 +1,10 @@
 /*
-File                 : SlidingPanel.cpp
-Project              : LabPlot
-Description          : Sliding panel shown in the presenter widget
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : SlidingPanel.cpp
+    Project              : LabPlot
+    Description          : Sliding panel shown in the presenter widget
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "SlidingPanel.h"
 

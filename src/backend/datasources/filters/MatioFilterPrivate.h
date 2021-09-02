@@ -1,11 +1,11 @@
 /*
-File                 : MatioFilterPrivate.h
-Project              : LabPlot
-Description          : Private implementation class for MatioFilter.
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    File                 : MatioFilterPrivate.h
+    Project              : LabPlot
+    Description          : Private implementation class for MatioFilter.
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef MATIOFILTERPRIVATE_H
 #define MATIOFILTERPRIVATE_H

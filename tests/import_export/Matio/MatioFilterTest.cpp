@@ -1,12 +1,11 @@
 /*
-File                 : MatioFilterTest.cpp
-Project              : LabPlot
-Description          : Tests for the Matio I/O-filter.
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : MatioFilterTest.cpp
+    Project              : LabPlot
+    Description          : Tests for the Matio I/O-filter.
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "MatioFilterTest.h"
 #include "backend/datasources/filters/MatioFilter.h"

@@ -1,11 +1,11 @@
 /*
-File                 : ROOTFilter.cpp
-Project              : LabPlot
-Description          : ROOT(CERN) I/O-filter
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
-SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : ROOTFilter.cpp
+    Project              : LabPlot
+    Description          : ROOT(CERN) I/O-filter
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
+    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "backend/datasources/filters/ROOTFilter.h"

@@ -1,11 +1,12 @@
 /*
-File                 : PresenterWidget_mac.mm
-Project              : LabPlot
-Description          : Reimplementation of QWidget::closeEvent() to workaround QTBUG-46701
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : PresenterWidget_mac.mm
+    Project              : LabPlot
+    Description          : Reimplementation of QWidget::closeEvent() to workaround QTBUG-46701
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
+
 #include "PresenterWidget.h"
 #include <AppKit/AppKit.h>
 

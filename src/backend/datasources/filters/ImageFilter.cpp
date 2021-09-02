@@ -1,10 +1,10 @@
 /*
-File                 : ImageFilter.cpp
-Project              : LabPlot
-Description          : Image I/O-filter
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2015 Stefan Gerlach <stefan.gerlach@uni.kn>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : ImageFilter.cpp
+    Project              : LabPlot
+    Description          : Image I/O-filter
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2015 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "backend/datasources/filters/ImageFilter.h"
 #include "backend/datasources/filters/ImageFilterPrivate.h"

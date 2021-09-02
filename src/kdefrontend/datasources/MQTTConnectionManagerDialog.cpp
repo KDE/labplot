@@ -1,12 +1,11 @@
 /*
-File                 : MQTTConnectionManagerDialog.cpp
-Project              : LabPlot
-Description          : widget for managing MQTT connections
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : MQTTConnectionManagerDialog.cpp
+    Project              : LabPlot
+    Description          : widget for managing MQTT connections
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "MQTTConnectionManagerDialog.h"
 #include "MQTTConnectionManagerWidget.h"

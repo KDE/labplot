@@ -1,10 +1,10 @@
 /*
-File                 : MatioFilter.h
-Project              : LabPlot
-Description          : Matio I/O-filter
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : MatioFilter.h
+    Project              : LabPlot
+    Description          : Matio I/O-filter
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef MATIOFILTER_H
 #define MATIOFILTER_H

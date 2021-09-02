@@ -1,12 +1,11 @@
 /*
-File                 : DatasetMetadataManagerDialog.cpp
-Project              : LabPlot
-Description          : Dialog for managing a metadata file of a dataset
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : DatasetMetadataManagerDialog.cpp
+    Project              : LabPlot
+    Description          : Dialog for managing a metadata file of a dataset
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "src/kdefrontend/datasources/DatasetMetadataManagerDialog.h"
 #include "src/kdefrontend/datasources/DatasetMetadataManagerWidget.h"

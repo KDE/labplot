@@ -1,12 +1,11 @@
 /*
-File                 : HDF5FilterTest.cpp
-Project              : LabPlot
-Description          : Tests for the HDF5 I/O-filter.
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : HDF5FilterTest.cpp
+    Project              : LabPlot
+    Description          : Tests for the HDF5 I/O-filter.
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "HDF5FilterTest.h"
 #include "backend/datasources/filters/HDF5Filter.h"

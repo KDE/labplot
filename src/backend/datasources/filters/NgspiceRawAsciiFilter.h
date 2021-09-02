@@ -1,10 +1,10 @@
 /*
-File                 : NgspiceRawAsciiFilter.h
-Project              : LabPlot
-Description          : Ngspice RAW ASCII filter
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : NgspiceRawAsciiFilter.h
+    Project              : LabPlot
+    Description          : Ngspice RAW ASCII filter
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef NGSPICERAWASCIIFILTER_H
 #define NGSPICERAWASCIIFILTER_H

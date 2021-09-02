@@ -1,10 +1,10 @@
 /*
-File                 : ReadStatFilter.h
-Project              : LabPlot
-Description          : ReadStat I/O-filter
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : ReadStatFilter.h
+    Project              : LabPlot
+    Description          : ReadStat I/O-filter
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef READSTATFILTER_H
 #define READSTATFILTER_H

@@ -1,12 +1,11 @@
 /*
-File                 : DatasetMetadataManagerWidget.cpp
-Project              : LabPlot
-Description          : widget for managing a metadata file of a dataset
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : DatasetMetadataManagerWidget.cpp
+    Project              : LabPlot
+    Description          : widget for managing a metadata file of a dataset
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "src/kdefrontend/DatasetModel.h"

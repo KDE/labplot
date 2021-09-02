@@ -1,11 +1,11 @@
 /*
-File                 : NgspiceRawBinaryFilter.cpp
-Project              : LabPlot
-Description          : Ngspice RAW Binary filter
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
-SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : NgspiceRawBinaryFilter.cpp
+    Project              : LabPlot
+    Description          : Ngspice RAW Binary filter
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/datasources/filters/NgspiceRawBinaryFilter.h"

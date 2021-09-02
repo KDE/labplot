@@ -1,11 +1,11 @@
 /*
-File                 : HDF5Filter.cpp
-Project              : LabPlot
-Description          : HDF5 I/O-filter
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-SPDX-License-Identifier: GPL-2.0-or-later
+    File                 : HDF5Filter.cpp
+    Project              : LabPlot
+    Description          : HDF5 I/O-filter
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 /* TODO:

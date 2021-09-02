@@ -1,11 +1,11 @@
 /*
-File                 : ROOTOptionsWidget.h
-Project              : LabPlot
-Description          : widget providing options for the import of ROOT data
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
+    File                 : ROOTOptionsWidget.h
+    Project              : LabPlot
+    Description          : widget providing options for the import of ROOT data
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2018 Christoph Roick <chrisito@gmx.de>
 
-SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef ROOTOPTIONSWIDGET_H
