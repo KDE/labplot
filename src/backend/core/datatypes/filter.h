@@ -1,9 +1,9 @@
 /*
     File                 : filter.h
     Project              : AbstractColumn
+    Description          : Conversion filter header.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    Description          : Conversion filter header.
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

@@ -1,9 +1,9 @@
 /*
     File                 : SymbolWidget.h
     Project              : LabPlot
+    Description          : symbol settings widget
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
-    Description          : symbol settings widget
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

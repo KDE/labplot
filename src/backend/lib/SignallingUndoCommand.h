@@ -1,10 +1,10 @@
 /*
     File                 : SignallingUndoCommand.h
     Project              : SciDAVis / LabPlot
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010 Knut Franke <Knut.Franke*gmx.net (use @ for *)>
     Description          : An undo command calling a method/signal/slot on a
     QObject on redo/undo.
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2010 Knut Franke <Knut.Franke*gmx.net (use @ for *)>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

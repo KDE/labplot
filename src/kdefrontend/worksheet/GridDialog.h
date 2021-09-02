@@ -1,9 +1,9 @@
 /*
     File                 : GridDialog.h
     Project              : LabPlot
+    Description          : dialog for editing the grid properties for the worksheet view
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2011 Alexander Semke <alexander.semke@web.de>
-    Description          : dialog for editing the grid properties for the worksheet view
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

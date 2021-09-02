@@ -5,7 +5,7 @@ Description          : Private implementation class for HDF5Filter.
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef HDF5FILTERPRIVATE_H
 #define HDF5FILTERPRIVATE_H

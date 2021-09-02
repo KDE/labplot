@@ -1,9 +1,9 @@
 /*
     File                 : SettingsPage.h
     Project              : LabPlot
+    Description          : base class for all pages in the Settings-Dialog
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2008-2014 Alexander Semke <alexander.semke@web.de>
-    Description          : base class for all pages in the Settings-Dialog
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

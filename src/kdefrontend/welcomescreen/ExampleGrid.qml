@@ -1,9 +1,9 @@
 /*
     File                 : ExampleGrid.qml
     Project              : LabPlot
+    Description          : Grid containing example projects
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2019 Ferencz Kovacs <kferike98@gmail.com>
-    Description          : Grid containing example projects
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

@@ -1,10 +1,10 @@
 /*
     File             : XYDifferentiationCurveDock.cpp
     Project          : LabPlot
+    Description      : widget for editing properties of differentiation curves
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    Description      : widget for editing properties of differentiation curves
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

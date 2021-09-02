@@ -3,9 +3,8 @@ File                 : HDF5FilterTest.h
 Project              : LabPlot
 Description          : Tests for the HDF5 I/O-filter.
 --------------------------------------------------------------------
---------------------------------------------------------------------
 SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-License-Identifier: GPL-2.0-or-later
+SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 

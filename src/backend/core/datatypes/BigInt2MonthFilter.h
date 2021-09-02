@@ -1,10 +1,10 @@
 /*
     File                 : BigInt2MonthFilter.h
     Project              : AbstractColumn
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     Description          : Conversion filter bigint -> QDateTime, interpreting
     the input numbers as months of the year.
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

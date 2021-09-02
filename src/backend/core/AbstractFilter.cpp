@@ -1,9 +1,9 @@
 /*
     File                 : AbstractFilter.cpp
     Project              : LabPlot
+    Description          : Base class for all analysis operations.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Knut Franke Tilman Benkert <knut.franke*gmx.de, thzs*gmx.net (use @ for *)>
-    Description          : Base class for all analysis operations.
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

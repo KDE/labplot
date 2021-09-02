@@ -1,9 +1,9 @@
 /*
     File                 : OriginFile.h
+    Description          : Origin file import class
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2005-2007 Stefan Gerlach
     SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky Ion Vasilief <kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr (use @ for *)>
-    Description          : Origin file import class
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

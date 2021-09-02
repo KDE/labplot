@@ -1,10 +1,10 @@
 /*
     File             : ExpressionParser.cpp
     Project          : LabPlot
+    Description      : C++ wrapper for the bison generated parser.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2014-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    Description      : C++ wrapper for the bison generated parser.
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

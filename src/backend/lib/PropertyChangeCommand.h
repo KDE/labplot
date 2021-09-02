@@ -1,9 +1,9 @@
 /*
     File                 : PropertyChangeCommand.h
     Project              : SciDAVis / LabPlot
+    Description          : Generic undo command changing a single variable.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2010 Knut Franke <Knut.Franke*gmx.net (use @ for *)>
-    Description          : Generic undo command changing a single variable.
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

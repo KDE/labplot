@@ -1,8 +1,7 @@
 /*
     File                 : endianfstream.hh
-    --------------------------------------------------------------------
     Description          : Endianless file stream class
-
+    --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2008 Alex Kargovsky <kargovsky@yumr.phys.msu.su>
     SPDX-License-Identifier: GPL-2.0-or-later
 */

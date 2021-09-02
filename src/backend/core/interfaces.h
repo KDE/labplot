@@ -1,9 +1,9 @@
 /*
     File                 : interfaces.h
     Project              : SciDAVis
+    Description          : Interfaces the kernel uses to talk to modules
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2008 Knut Franke <knut.franke*gmx.de (use @ for *)>
-    Description          : Interfaces the kernel uses to talk to modules
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

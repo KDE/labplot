@@ -1,10 +1,10 @@
 /*
     File                 : String2DoubleFilter.h
     Project              : AbstractColumn
+    Description          : Locale-aware conversion filter QString -> double.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
     SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    Description          : Locale-aware conversion filter QString -> double.
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

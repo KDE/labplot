@@ -1,11 +1,11 @@
 /*
     File                 : Integer2DateTimeFilter.h
     Project              : AbstractColumn
+    Description          : Conversion filter int -> QDateTime, interpreting
+    the input numbers as Julian days.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
     SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    Description          : Conversion filter int -> QDateTime, interpreting
-    the input numbers as Julian days.
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

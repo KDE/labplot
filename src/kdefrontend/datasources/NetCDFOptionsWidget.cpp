@@ -5,7 +5,7 @@ Description          : widget providing options for the import of NetCDF data
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2015-2017 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "NetCDFOptionsWidget.h"
 #include "ImportFileWidget.h"

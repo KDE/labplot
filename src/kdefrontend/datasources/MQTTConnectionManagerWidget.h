@@ -5,7 +5,7 @@ Description          : widget for managing MQTT connections
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2018 Ferencz Kovacs <kferike98@gmail.com>
 SPDX-FileCopyrightText: 2018-2019 Alexander Semke <alexander.semke@web.de>
-    SPDX-License-Identifier: GPL-2.0-or-later
+SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef MQTTCONNECTIONMANAGERWIDGET_H

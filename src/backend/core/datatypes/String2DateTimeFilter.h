@@ -1,10 +1,10 @@
 /*
     File                 : String2DateTimeFilter.h
     Project              : LabPlot
+    Description          : Conversion filter QString -> QDateTime.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
     SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
-    Description          : Conversion filter QString -> QDateTime.
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

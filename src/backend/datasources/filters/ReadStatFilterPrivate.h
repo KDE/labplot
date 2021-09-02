@@ -5,7 +5,7 @@ Description          : Private implementation class for ReadStatFilter.
 --------------------------------------------------------------------
 SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
-    SPDX-License-Identifier: GPL-2.0-or-later
+SPDX-License-Identifier: GPL-2.0-or-later
 */
 #ifndef READSTATFILTERPRIVATE_H
 #define READSTATFILTERPRIVATE_H

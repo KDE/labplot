@@ -1,9 +1,9 @@
 /*
     File                 : CartesianPlotLegendDock.cpp
     Project              : LabPlot
+    Description          : widget for cartesian plot legend properties
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
-    Description          : widget for cartesian plot legend properties
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

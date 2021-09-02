@@ -1,10 +1,10 @@
 /*
     File                 : Integer2DayOfWeekFilter.h
     Project              : AbstractColumn
-    --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
     Description          : Conversion filter int -> QDateTime, interpreting
     the input numbers as days of the week (1 -> Monday).
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

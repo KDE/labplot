@@ -3,7 +3,6 @@
     Project              : LabPlot
     Description          : Widget providing options for the import of json data.
     --------------------------------------------------------------------
-    --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2018 Andrey Cygankov <craftplace.ms@gmail.com>
     SPDX-FileCopyrightText: 2018-2020 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later

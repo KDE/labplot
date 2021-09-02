@@ -1,11 +1,11 @@
 /*
     File                 : DayOfWeek2DoubleFilter.h
     Project              : AbstractColumn
+    Description          : Conversion filter QDateTime -> double, translating
+    dates into days of the week (Monday -> 1).
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
     SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    Description          : Conversion filter QDateTime -> double, translating
-    dates into days of the week (Monday -> 1).
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

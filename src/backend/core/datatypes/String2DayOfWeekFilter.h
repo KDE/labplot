@@ -1,11 +1,11 @@
 /*
     File                 : String2DayOfWeekFilter.h
     Project              : AbstractColumn
+    Description          : Conversion filter String -> QDateTime, interpreting
+    the input as days of the week (either numeric or "Mon" etc).
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
     SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    Description          : Conversion filter String -> QDateTime, interpreting
-    the input as days of the week (either numeric or "Mon" etc).
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

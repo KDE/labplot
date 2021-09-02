@@ -1,11 +1,11 @@
 /*
     File                 : SimpleCopyThroughFilter.h
     Project              : AbstractColumn
+    Description          : Filter which copies the provided input unaltered
+    to the output
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke*gmx.de (use @ for *)>
     SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    Description          : Filter which copies the provided input unaltered
-    to the output
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

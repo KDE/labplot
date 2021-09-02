@@ -1,9 +1,9 @@
 /*
     File                 : BigInt2IntegerFilter.h
     Project              : AbstractColumn
+    Description          : conversion filter bigint -> integer
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    Description          : conversion filter bigint -> integer
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

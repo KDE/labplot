@@ -1,9 +1,9 @@
 /*
     File                 : OriginObj.h
+    Description          : Origin internal object classes
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2005-2007, 2017 Stefan Gerlach
     SPDX-FileCopyrightText: 2007-2008 Alex Kargovsky Ion Vasilief <kargovsky*yumr.phys.msu.su, ion_vasilief*yahoo.fr (use @ for *)>
-    Description          : Origin internal object classes
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

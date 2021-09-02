@@ -1,8 +1,8 @@
 /*
     File                 : config.h.in
+    Description          : compile-time configuration defines
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2010 Knut Franke <knut.franke*gmx.de (use @ for *)>
-    Description          : compile-time configuration defines
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

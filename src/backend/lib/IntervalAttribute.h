@@ -1,11 +1,10 @@
 /*
     File                 : IntervalAttribute.h
     Project              : LabPlot
+    Description          : A class representing an interval-based attribute
     --------------------------------------------------------------------
-
     SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
     SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
-    Description          : A class representing an interval-based attribute
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

@@ -1,9 +1,9 @@
 /*
     File                 : Double2BigIntFilter.h
     Project              : AbstractColumn
+    Description          : conversion filter double -> bigint
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    Description          : conversion filter double -> bigint
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

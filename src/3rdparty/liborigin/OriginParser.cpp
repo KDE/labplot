@@ -1,9 +1,9 @@
 /*
     File                 : OriginParser.cpp
+    Description          : Origin file parser base class
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2008 Alex Kargovsky <kargovsky@yumr.phys.msu.su>
     SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
-    Description          : Origin file parser base class
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

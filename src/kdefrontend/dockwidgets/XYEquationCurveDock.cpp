@@ -1,9 +1,9 @@
 /*
     File             : XYEquationCurveDock.cpp
     Project          : LabPlot
+    Description      : widget for editing properties of equation curves
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
-    Description      : widget for editing properties of equation curves
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */

@@ -1,11 +1,11 @@
 /*
     File                 : Interval.h
     Project              : LabPlot
+    Description          : Auxiliary class for interval based data
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007 Tilman Benkert <thzs@gmx.net>
     SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
     SPDX-FileCopyrightText: 2012 Alexander Semke <alexander.semke@web.de>
-    Description          : Auxiliary class for interval based data
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

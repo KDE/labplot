@@ -1,9 +1,9 @@
 /*
     File                 : String2IntegerFilter.h
     Project              : AbstractColumn
+    Description          : Locale-aware conversion filter QString -> int.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    Description          : Locale-aware conversion filter QString -> int.
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

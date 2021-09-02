@@ -1,9 +1,9 @@
 /*
     File                 : DateTime2BigIntFilter.h
     Project              : AbstractColumn
+    Description          : Conversion filter QDateTime -> bigint (using Julian day).
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
-    Description          : Conversion filter QDateTime -> bigint (using Julian day).
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
