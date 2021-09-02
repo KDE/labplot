@@ -1,8 +1,8 @@
-/***************************************************************************
+/*
     File                 : parser.y
     Project              : LabPlot
     Description          : Parser for mathematical expressions
-    --------------------------------------------------------------------
+
     SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2014-2016 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later

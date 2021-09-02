@@ -1,5 +1,4 @@
-
-/***************************************************************************
+/*
     File                 : CartesianScale.cpp
     Project              : LabPlot
     Description          : Cartesian coordinate system for plots.
@@ -7,7 +6,6 @@
     SPDX-FileCopyrightText: 2012-2016 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
- **************************************************************************
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

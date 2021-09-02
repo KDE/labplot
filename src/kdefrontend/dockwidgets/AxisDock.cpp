@@ -1,18 +1,12 @@
 /*
-File                 : AxisDock.cpp
-Project              : LabPlot
-Description          : axes widget class
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
-SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
-
+    File                 : AxisDock.cpp
+    Project              : LabPlot
+    Description          : axes widget class
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
-
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "AxisDock.h"
 #include "backend/core/AspectTreeModel.h"

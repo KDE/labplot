@@ -1,12 +1,10 @@
-
-/***************************************************************************
+/*
     File                 : HistoryDialog.h
     Project              : LabPlot
     Description          : history dialog
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2012-2016 Alexander Semke <alexander.semke@web.de>
 
- **************************************************************************
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

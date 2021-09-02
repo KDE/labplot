@@ -5,12 +5,8 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
-/***************************************************************************
- *                                                                         *
- *  SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include "CustomPointDock.h"
 #include "backend/worksheet/Worksheet.h"

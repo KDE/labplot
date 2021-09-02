@@ -1,5 +1,4 @@
-
-/***************************************************************************
+/*
     File                 : XYFitCurve.cpp
     Project              : LabPlot
     Description          : A xy-curve defined by a fit model
@@ -7,7 +6,6 @@
     SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2016-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
 
- **************************************************************************
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 

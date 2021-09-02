@@ -1,19 +1,15 @@
 /*
-File                 : LiveDataDock.cpp
-Project              : LabPlot
-Description          : Dock widget for live data properties
---------------------------------------------------------------------
-SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
-SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
-SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-SPDX-FileCopyrightText: 2017-2020 Alexander Semke <alexander.semke@web.de>
+    File                 : LiveDataDock.cpp
+    Project              : LabPlot
+    Description          : Dock widget for live data properties
+    --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2017 Fabian Kristof <fkristofszabolcs@gmail.com>
+    SPDX-FileCopyrightText: 2018-2019 Kovacs Ferencz <kferike98@gmail.com>
+    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2017-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-/***************************************************************************
-*                                                                         *
-*  SPDX-License-Identifier: GPL-2.0-or-later
-*                                                                         *
-***************************************************************************/
 #include "LiveDataDock.h"
 #include "kdefrontend/GuiTools.h"
 

@@ -1,7 +1,6 @@
 /*
     SPDX-License-Identifier: GPL-2.0-or-later
 
-    ---
     SPDX-FileCopyrightText: 2009 Alexander Rieder <alexanderrieder@gmail.com>
 */
 
