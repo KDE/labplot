@@ -452,26 +452,43 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorGridOpacity, minorGridOpacity)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(Axis, SetRangeType, Axis::RangeType, rangeType, retransform);
-void Axis::setRangeType(Axis::RangeType rangeType) {
+void Axis::setRangeType(const Axis::RangeType rangeType) {
 	Q_D(Axis);
 	if (rangeType != d->rangeType)
 		exec(new AxisSetRangeTypeCmd(d, rangeType, ki18n("%1: set axis range type")));
 
-	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
+	const auto* cs = plot()->coordinateSystem(coordinateSystemIndex());
+	auto* plot = qobject_cast<CartesianPlot*>(parentAspect());
+	if (!plot) {
+		DEBUG(Q_FUNC_INFO << ", no plot available")
+		return;
+	}
 
-	if (rangeType == Axis::RangeType::Auto) {	// also if not changing (like on plot range changes)
-		const auto* plot = qobject_cast<CartesianPlot*>(parentAspect());
-		if (!plot)
-			return;
-
+	switch (rangeType) {	// also if not changing (like on plot range changes)
+	case Axis::RangeType::Auto: {
 		if (d->orientation == Axis::Orientation::Horizontal)
 			d->range = plot->xRange(cs->xIndex());
 		else
 			d->range = plot->yRange(cs->yIndex());
 
-		DEBUG(Q_FUNC_INFO << ", new range = " << d->range.toStdString())
-		retransform();
+		DEBUG(Q_FUNC_INFO << ", new auto range = " << d->range.toStdString())
+		retransform();	// TODO: this calls retransform() again?
 		emit rangeChanged(d->range);
+		break;
+	}
+	case Axis::RangeType::AutoData:
+		//TODO
+		if (d->orientation == Axis::Orientation::Horizontal)
+			d->range = plot->xRangeAutoScale(cs->xIndex());
+		else
+			d->range = plot->yRangeAutoScale(cs->yIndex());
+
+		DEBUG(Q_FUNC_INFO << ", new auto data range = " << d->range.toStdString())
+		retransform();	// TODO: this calls retransform() again?
+		emit rangeChanged(d->range);
+		break;
+	case Axis::RangeType::Custom:
+		break;
 	}
 }
 

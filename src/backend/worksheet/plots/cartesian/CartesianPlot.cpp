@@ -1340,6 +1340,14 @@ const Range<double>& CartesianPlot::yRange(const int index) const {
 	Q_D(const CartesianPlot);
 	return d->yRanges.at(index).range;
 }
+const Range<double>& CartesianPlot::xRangeAutoScale(const int index) {
+	Q_D(CartesianPlot);
+	return d->xRangeAutoScale(index);
+}
+const Range<double>& CartesianPlot::yRangeAutoScale(const int index) {
+	Q_D(CartesianPlot);
+	return d->yRangeAutoScale(index);
+}
 
 bool CartesianPlot::xRangeDirty(int index) {
 	Q_D(CartesianPlot);
