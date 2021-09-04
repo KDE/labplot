@@ -1,7 +1,7 @@
 /***************************************************************************
-	File                 : ColorMapsDialog.cpp
+	File                 : ExamplesDialog.cpp
 	Project              : LabPlot
-	Description          : dialog showing the available color maps
+	Description          : dialog showing the available example projects
 	--------------------------------------------------------------------
 	Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
@@ -26,8 +26,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "ColorMapsDialog.h"
-#include "kdefrontend/colormaps/ColorMapsWidget.h"
+#include "ExamplesDialog.h"
+#include "kdefrontend/examples/ExamplesWidget.h"
 
 #include <QDialogButtonBox>
 #include <QWindow>
@@ -37,16 +37,16 @@
 #include <KWindowConfig>
 
 /*!
-	\class ColorMapsDialog
-	\brief Dialog showing the available color maps. Embeds \c ColorMapsWidget and provides the standard buttons.
+	\class ExamplesDialog
+	\brief Dialog showing the available example projects.
 
 	\ingroup kdefrontend
  */
-ColorMapsDialog::ColorMapsDialog(QWidget* parent) : QDialog(parent),
-	m_colorMapsWidget(new ColorMapsWidget(this)){
+ExamplesDialog::ExamplesDialog(QWidget* parent) : QDialog(parent),
+	m_examplesWidget(new ExamplesWidget(this)){
 
 	auto* layout = new QVBoxLayout(this);
-	layout->addWidget(m_colorMapsWidget);
+	layout->addWidget(m_examplesWidget);
 
 	//dialog buttons
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |QDialogButtonBox::Cancel);
@@ -55,13 +55,13 @@ ColorMapsDialog::ColorMapsDialog(QWidget* parent) : QDialog(parent),
 	connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-	setWindowTitle(i18nc("@title:window", "Color Maps Browser"));
+	setWindowTitle(i18nc("@title:window", "Example Projects"));
 	setWindowIcon(QIcon::fromTheme("color-management"));
 	create();
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 
-	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsDialog");
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesDialog");
 	if (conf.exists()) {
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size());
@@ -69,19 +69,11 @@ ColorMapsDialog::ColorMapsDialog(QWidget* parent) : QDialog(parent),
 		resize(QSize(0, 0).expandedTo(minimumSize()));
 }
 
-ColorMapsDialog::~ColorMapsDialog() {
-	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsDialog");
+ExamplesDialog::~ExamplesDialog() {
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-QPixmap ColorMapsDialog::previewPixmap() const {
-	return m_colorMapsWidget->previewPixmap();
-}
-
-QString ColorMapsDialog::name() const {
-	return m_colorMapsWidget->name();
-}
-
-QVector<QColor> ColorMapsDialog::colors() const {
-	return m_colorMapsWidget->colors();
+QString ExamplesDialog::name() const {
+	return m_examplesWidget->name();
 }

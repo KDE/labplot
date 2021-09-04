@@ -1,5 +1,5 @@
 /***************************************************************************
-	File                 : ColorMapsWidget.h
+	File                 : ExamplesWidget.h
 	Project              : LabPlot
 	Description          : widget showing the available color maps
 	--------------------------------------------------------------------
@@ -26,9 +26,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "kdefrontend/colormaps/ColorMapsWidget.h"
+#include "kdefrontend/examples/ExamplesWidget.h"
+#include "kdefrontend/examples/ExamplesManager.h"
 #include "backend/lib/macros.h"
-#include "tools/ColorMapsManager.h"
 
 #include <QCompleter>
 #include <QMessageBox>
@@ -40,25 +40,24 @@
 #include <KLocalizedString>
 
 /*!
-	\class ColorMapsWidget
-	\brief Widget for importing data from a dataset.
+	\class ExamplesWidget
+	\brief Widget showing all available example projects.
 
 	\ingroup kdefrontend
  */
-ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
-
+ExamplesWidget::ExamplesWidget(QWidget* parent) : QWidget(parent) {
 	ui.setupUi(this);
 	ui.bInfo->setIcon(QIcon::fromTheme(QLatin1String("help-about")));
 	ui.bViewMode->setIcon(QIcon::fromTheme(QLatin1String("view-list-icons")));
 	ui.bViewMode->setToolTip(i18n("Switch between icon and list views"));
 
-	ui.lvColorMaps->setViewMode(QListView::IconMode);
-	ui.lvColorMaps->setSelectionMode(QAbstractItemView::SingleSelection);
-	ui.lvColorMaps->setWordWrap(true);
-	ui.lvColorMaps->setResizeMode(QListWidget::Adjust);
-	ui.lvColorMaps->setDragDropMode(QListView::NoDragDrop);
+	ui.lvExamples->setViewMode(QListView::IconMode);
+	ui.lvExamples->setSelectionMode(QAbstractItemView::SingleSelection);
+	ui.lvExamples->setWordWrap(true);
+	ui.lvExamples->setResizeMode(QListWidget::Adjust);
+	ui.lvExamples->setDragDropMode(QListView::NoDragDrop);
 
-	ui.lvColorMaps->setIconSize(QSize(128, 128));
+	ui.lvExamples->setIconSize(QSize(128, 128));
 
 	const int size = ui.leSearch->height();
 	ui.lSearch->setPixmap( QIcon::fromTheme(QLatin1String("edit-find")).pixmap(size, size) );
@@ -69,18 +68,18 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 	ui.leSearch->setPlaceholderText(i18n("Search..."));
 	ui.leSearch->setFocus();
 
-	m_manager = ColorMapsManager::instance();
+	m_manager = ExamplesManager::instance();
 	ui.cbCollections->addItems(m_manager->collectionNames());
 
 	connect(ui.cbCollections, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-			this, &ColorMapsWidget::collectionChanged);
-	connect(ui.bInfo, &QPushButton::clicked, this, &ColorMapsWidget::showInfo);
-	connect(ui.bViewMode, &QPushButton::clicked, this, &ColorMapsWidget::toggleIconView);
-	connect(ui.stackedWidget, &QStackedWidget::currentChanged, this, &ColorMapsWidget::viewModeChanged);
-	connect(ui.lwColorMaps, &QListWidget::itemSelectionChanged, this, &ColorMapsWidget::colorMapChanged);
+			this, &ExamplesWidget::collectionChanged);
+	connect(ui.bInfo, &QPushButton::clicked, this, &ExamplesWidget::showInfo);
+	connect(ui.bViewMode, &QPushButton::clicked, this, &ExamplesWidget::toggleIconView);
+	connect(ui.stackedWidget, &QStackedWidget::currentChanged, this, &ExamplesWidget::viewModeChanged);
+	connect(ui.lwExamples, &QListWidget::itemSelectionChanged, this, &ExamplesWidget::colorMapChanged);
 
 	//select the last used collection
-	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsWidget");
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesWidget");
 	const QString& collection = conf.readEntry("Collection", QString());
 	if (collection.isEmpty())
 		ui.cbCollections->setCurrentIndex(0);
@@ -93,9 +92,9 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 		}
 
 		const QString& colorMap = conf.readEntry("ColorMap", QString());
-		auto items = ui.lwColorMaps->findItems(colorMap, Qt::MatchExactly);
+		auto items = ui.lwExamples->findItems(colorMap, Qt::MatchExactly);
 		if (items.count() == 1)
-			ui.lwColorMaps->setCurrentItem(items.constFirst());
+			ui.lwExamples->setCurrentItem(items.constFirst());
 	}
 
 	collectionChanged(ui.cbCollections->currentIndex());
@@ -103,19 +102,19 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 	ui.stackedWidget->setCurrentIndex(conf.readEntry("ViewIndex", 0));
 }
 
-ColorMapsWidget::~ColorMapsWidget() {
+ExamplesWidget::~ExamplesWidget() {
 	//save the selected collection
-	KConfigGroup conf(KSharedConfig::openConfig(), "ColorMapsWidget");
+	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesWidget");
 	conf.writeEntry("Collection", ui.cbCollections->currentText());
 	conf.writeEntry("ViewIndex", ui.stackedWidget->currentIndex());
-	if (ui.lwColorMaps->currentItem())
-		conf.writeEntry("ColorMap", ui.lwColorMaps->currentItem()->text());
+	if (ui.lwExamples->currentItem())
+		conf.writeEntry("Example", ui.lwExamples->currentItem()->text());
 }
 
 /**
  * Shows all categories and sub-categories for the currently selected collection
  */
-void ColorMapsWidget::collectionChanged(int) {
+void ExamplesWidget::collectionChanged(int) {
 	const QString& collection = ui.cbCollections->currentText();
 
 	//populate the list view for the icon mode
@@ -123,122 +122,99 @@ void ColorMapsWidget::collectionChanged(int) {
 		delete m_model;
 
 	m_model = new QStandardItemModel(this);
-	const auto& colorMapNames = m_manager->colorMapNames(collection);
-	for (const auto& name :colorMapNames) {
+	const auto& exampleNames = m_manager->exampleNames(collection);
+	for (const auto& name : exampleNames) {
 		auto* item = new QStandardItem();
-		QPixmap pixmap;
-		m_manager->render(pixmap, name);
-		item->setIcon(QIcon(pixmap));
+		item->setIcon(QIcon(m_manager->pixmap(name)));
 		item->setText(name);
 		m_model->appendRow(item);
 	}
 
-	ui.lvColorMaps->setModel(m_model);
+	ui.lvExamples->setModel(m_model);
 
 	//populate the list widget for the list mode
-	ui.lwColorMaps->clear();
-	ui.lwColorMaps->addItems(colorMapNames);
+	ui.lwExamples->clear();
+	ui.lwExamples->addItems(exampleNames);
 
 	//select the first color map in the current collection
-	ui.lvColorMaps->setCurrentIndex(ui.lvColorMaps->model()->index(0, 0));
-	ui.lwColorMaps->setCurrentRow(0);
+	ui.lvExamples->setCurrentIndex(ui.lvExamples->model()->index(0, 0));
+	ui.lwExamples->setCurrentRow(0);
 
 	//update the completer
 	if (m_completer)
 		delete m_completer;
 
-	m_completer = new QCompleter(colorMapNames, this);
-	connect(m_completer, QOverload<const QString &>::of(&QCompleter::activated), this, &ColorMapsWidget::activated);
+	m_completer = new QCompleter(exampleNames, this);
+	connect(m_completer, QOverload<const QString &>::of(&QCompleter::activated), this, &ExamplesWidget::activated);
 	m_completer->setCompletionMode(QCompleter::PopupCompletion);
 	m_completer->setCaseSensitivity(Qt::CaseSensitive);
 	ui.leSearch->setCompleter(m_completer);
 }
 
-void ColorMapsWidget::colorMapChanged() {
-	const QString& name = ui.lwColorMaps->currentItem()->text();
-	m_manager->render(m_pixmap, name);
-	ui.lPreview->setPixmap(m_pixmap);
+void ExamplesWidget::colorMapChanged() {
+	const QString& name = ui.lwExamples->currentItem()->text();
+	ui.lPreview->setPixmap(m_manager->pixmap(name));
 }
 
-void ColorMapsWidget::showInfo() {
+void ExamplesWidget::showInfo() {
 	const QString& collection = ui.cbCollections->currentText();
 	const QString& info = m_manager->collectionInfo(collection);
 	QWhatsThis::showText(ui.bInfo->mapToGlobal(QPoint(0, 0)), info, ui.bInfo);
 }
 
-void ColorMapsWidget::toggleIconView() {
+void ExamplesWidget::toggleIconView() {
 	if (ui.bViewMode->isChecked())
 		ui.stackedWidget->setCurrentIndex(0);
 	else
 		ui.stackedWidget->setCurrentIndex(1);
 }
 
-void ColorMapsWidget::viewModeChanged(int index) {
+void ExamplesWidget::viewModeChanged(int index) {
 	if (index == 0) {
 		//switching form list to icon view mode
-		if (ui.lwColorMaps->currentItem()) {
-			const auto& name = ui.lwColorMaps->currentItem()->text();
+		if (ui.lwExamples->currentItem()) {
+			const auto& name = ui.lwExamples->currentItem()->text();
 			activateIconViewItem(name);
 		}
 	} else {
 		//switching form icon to list view mode
-		if (ui.lvColorMaps->currentIndex().isValid()) {
-			const auto& name = ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
+		if (ui.lvExamples->currentIndex().isValid()) {
+			const auto& name = ui.lvExamples->currentIndex().data(Qt::DisplayRole).toString();
 			activateListViewItem(name);
 		}
 	}
 }
 
-void ColorMapsWidget::activated(const QString& name) {
+void ExamplesWidget::activated(const QString& name) {
 	if (ui.bViewMode->isChecked())
 		activateListViewItem(name);
 	 else
 		activateListViewItem(name);
 }
 
-void ColorMapsWidget::activateIconViewItem(const QString& name) {
-	auto* model = ui.lvColorMaps->model();
+void ExamplesWidget::activateIconViewItem(const QString& name) {
+	auto* model = ui.lvExamples->model();
 	for (int i = 0; i < model->rowCount(); ++i) {
 		const auto& index = model->index(i, 0);
 		if (index.data(Qt::DisplayRole).toString() == name) {
-			ui.lvColorMaps->setCurrentIndex(index);
-			ui.lvColorMaps->scrollTo(index);
+			ui.lvExamples->setCurrentIndex(index);
+			ui.lvExamples->scrollTo(index);
 		}
 	}
 }
 
-void ColorMapsWidget::activateListViewItem(const QString& name) {
-	const auto& items = ui.lwColorMaps->findItems(name, Qt::MatchExactly);
+void ExamplesWidget::activateListViewItem(const QString& name) {
+	const auto& items = ui.lwExamples->findItems(name, Qt::MatchExactly);
 	if (items.count())
-		ui.lwColorMaps->setCurrentItem(items.constFirst());
-}
-
-QPixmap ColorMapsWidget::previewPixmap() {
-	if (ui.stackedWidget->currentIndex() == 0 && ui.lvColorMaps->currentIndex().isValid()) {
-		const QString& name = ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
-		m_manager->render(m_pixmap, name);
-	}
-
-	return m_pixmap;
+		ui.lwExamples->setCurrentItem(items.constFirst());
 }
 
 /*!
  * returns the name of the currently selected color map.
  */
-QString ColorMapsWidget::name() const {
+QString ExamplesWidget::name() const {
 	if (ui.stackedWidget->currentIndex() == 0)
-		if (ui.lvColorMaps->currentIndex().isValid())
-			return ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
+		return ui.lvExamples->currentIndex().data(Qt::DisplayRole).toString();
 	else
-		if (ui.lwColorMaps->currentItem())
-			return ui.lwColorMaps->currentItem()->text();
-
-	return QString();
-}
-
-/*!
- * returns the vector with the colors of the currently selected color map.
- */
-QVector<QColor> ColorMapsWidget::colors() const {
-	return m_manager->colors();
+		return ui.lwExamples->currentItem()->text();
 }

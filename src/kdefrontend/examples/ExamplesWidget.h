@@ -1,7 +1,7 @@
 /***************************************************************************
-	File                 : ColorMapsDialog.h
+	File                 : ExamplesWidget.h
 	Project              : LabPlot
-	Description          : dialog showing the available color maps
+	Description          : widget showing the available example projects
 	--------------------------------------------------------------------
 	Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
@@ -25,26 +25,43 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef COLORMAPSDIALOG_H
-#define COLORMAPSDIALOG_H
 
-#include <QDialog>
 
-class ColorMapsWidget;
+#ifndef EXAMPLESWIDGET_H
+#define EXAMPLESWIDGET_H
 
-class ColorMapsDialog : public QDialog {
+#include "ui_exampleswidget.h"
+
+class QCompleter;
+class QStandardItemModel;
+class ExamplesManager;
+
+class ExamplesWidget : public QWidget {
 	Q_OBJECT
 
 public:
-	explicit ColorMapsDialog(QWidget*);
-	~ColorMapsDialog() override;
+	explicit ExamplesWidget(QWidget*);
+	~ExamplesWidget() override;
 
-	QPixmap previewPixmap() const;
 	QString name() const;
-	QVector<QColor> colors() const;
 
 private:
-	ColorMapsWidget* m_colorMapsWidget;
+	Ui::ExamplesWidget ui;
+	QCompleter* m_completer{nullptr};
+	QStandardItemModel* m_model{nullptr};
+	ExamplesManager* m_manager{nullptr};
+
+	void loadCollections();
+	void activateIconViewItem(const QString& name);
+	void activateListViewItem(const QString& name);
+
+private slots:
+	void collectionChanged(int);
+	void colorMapChanged();
+	void showInfo();
+	void toggleIconView();
+	void viewModeChanged(int);
+	void activated(const QString&);
 };
 
-#endif // COLORMAPSDIALOG_H
+#endif // EXAMPLESWIDGET_H

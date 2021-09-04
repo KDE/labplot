@@ -66,6 +66,7 @@
 #include "commonfrontend/note/NoteView.h"
 #include "commonfrontend/widgets/MemoryWidget.h"
 
+#include "kdefrontend/examples/ExamplesDialog.h"
 #include "kdefrontend/colormaps/ColorMapsDialog.h"
 #include "kdefrontend/datasources/ImportFileDialog.h"
 #include "kdefrontend/datasources/ImportDatasetDialog.h"
@@ -502,6 +503,15 @@ void MainWin::initActions() {
 	m_saveAsAction = KStandardAction::saveAs(this, &MainWin::saveProjectAs, actionCollection());
 	m_printAction = KStandardAction::print(this, &MainWin::print, actionCollection());
 	m_printPreviewAction = KStandardAction::printPreview(this, &MainWin::printPreview, actionCollection());
+
+	QAction* openExample = new QAction(i18n("&Open Example"), actionCollection());
+	openExample->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
+	actionCollection()->addAction(QLatin1String("file_example_open"), openExample);
+	connect(openExample, &QAction::triggered, this, [=](){
+			auto* dlg = new ExamplesDialog(this);
+			dlg->exec();
+			delete dlg;
+	});
 
 	m_toggleFullScreenAction = KStandardAction::fullScreen(this, &MainWin::toggleFullScreen, this, actionCollection());
 

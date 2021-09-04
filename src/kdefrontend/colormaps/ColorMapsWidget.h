@@ -32,8 +32,6 @@
 
 #include "ui_colormapswidget.h"
 
-#include "QMap"
-
 class QCompleter;
 class QStandardItemModel;
 class ColorMapsManager;

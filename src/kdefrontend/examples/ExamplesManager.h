@@ -1,7 +1,7 @@
 /***************************************************************************
-	File                 : ColorMapsDialog.h
+	File                 : ExamplesManager.h
 	Project              : LabPlot
-	Description          : dialog showing the available color maps
+	Description          : examples projects manager
 	--------------------------------------------------------------------
 	Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
@@ -25,26 +25,39 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef COLORMAPSDIALOG_H
-#define COLORMAPSDIALOG_H
 
-#include <QDialog>
 
-class ColorMapsWidget;
+#ifndef COLORMAPSMANAGER_H
+#define COLORMAPSMANAGER_H
 
-class ColorMapsDialog : public QDialog {
-	Q_OBJECT
+#include <QColor>
+#include <QMap>
+#include <QVector>
+
+class QPixmap;
+
+class ExamplesManager {
 
 public:
-	explicit ColorMapsDialog(QWidget*);
-	~ColorMapsDialog() override;
-
-	QPixmap previewPixmap() const;
-	QString name() const;
-	QVector<QColor> colors() const;
+	static ExamplesManager* instance();
+	QStringList collectionNames() const;
+	QString collectionInfo(const QString& collectionName) const;
+	QStringList exampleNames(const QString& collectionName);
+	QPixmap pixmap(const QString&) const;
 
 private:
-	ColorMapsWidget* m_colorMapsWidget;
+	ExamplesManager();
+	~ExamplesManager();
+
+	void loadCollections();
+
+	static ExamplesManager* m_instance;
+
+	QMap<QString, QString> m_collections; //collections (key = collection name, value = description)
+	QMap<QString, QStringList> m_examples; //names of the example projects in a collection (key = collection name, value = list of project names)
+	QMap<QString, QString> m_descriptions; //example desciptions (key = example project name, value = description)
+	QMap<QString, QPixmap> m_pixmaps; //preview pixmaps (key = example project name, value = pixmap)
+	QString m_jsonDir;
 };
 
-#endif // COLORMAPSDIALOG_H
+#endif // COLORMAPSMANAGER_H

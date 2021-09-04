@@ -27,6 +27,9 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/SettingsPage.h
 	${KDEFRONTEND_DIR}/TemplateHandler.cpp
 	${KDEFRONTEND_DIR}/ThemeHandler.cpp
+	${KDEFRONTEND_DIR}/examples/ExamplesDialog.cpp
+	${KDEFRONTEND_DIR}/examples/ExamplesManager.cpp
+	${KDEFRONTEND_DIR}/examples/ExamplesWidget.cpp
 # 	${KDEFRONTEND_DIR}/welcomescreen/WelcomeScreenHelper.cpp
 	${KDEFRONTEND_DIR}/colormaps/ColorMapsWidget.cpp
 	${KDEFRONTEND_DIR}/colormaps/ColorMapsDialog.cpp
@@ -139,6 +142,7 @@ endif()
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/colormapswidget.ui
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
+	${KDEFRONTEND_DIR}/ui/exampleswidget.ui
 	${KDEFRONTEND_DIR}/ui/functionswidget.ui
 	${KDEFRONTEND_DIR}/ui/fitoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/fitparameterswidget.ui

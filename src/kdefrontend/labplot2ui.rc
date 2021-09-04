@@ -38,6 +38,7 @@
 
 <MenuBar>
 <Menu name="file" ><text>&amp;File</text>
+<Action name="file_example_open" />
 <Menu name="new"><text>&amp;Add New</text>
 	<Action name="new_workbook" />
 	<Action name="new_spreadsheet" />

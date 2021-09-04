@@ -45,7 +45,7 @@ ColorMapsManager* ColorMapsManager::m_instance{nullptr};
 
 /*!
 	\class ColorMapsManager
-	\brief Widget for importing data from a dataset.
+	\brief color maps manager. singleton class holding the information about the data and metadata of the available color maps.
 
 	\ingroup kdefrontend
  */

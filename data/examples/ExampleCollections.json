@@ -1,0 +1,10 @@
+[
+	{
+		"name" : "Statistics",
+		"description" : "Various example projects demoing LabPlot's features and capabilities relevant for statistical analysis of data"
+	},
+	{
+		"name" : "Analysis",
+		"description" : "Various example projects demoing LabPlot's features and capabilities relevant for statistical analysis of data"
+	}
+]

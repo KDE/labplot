@@ -1,7 +1,7 @@
 /***************************************************************************
-	File                 : ColorMapsDialog.h
+	File                 : ExamplesDialog.h
 	Project              : LabPlot
-	Description          : dialog showing the available color maps
+	Description          : dialog showing the available example projects
 	--------------------------------------------------------------------
 	Copyright            : (C) 2021 by Alexander Semke (alexander.semke@web.de)
 
@@ -25,26 +25,25 @@
  *   Boston, MA  02110-1301  USA                                           *
  *                                                                         *
  ***************************************************************************/
-#ifndef COLORMAPSDIALOG_H
-#define COLORMAPSDIALOG_H
+#ifndef EXAMPLESDIALOG_H
+#define EXAMPLESDIALOG_H
 
 #include <QDialog>
 
-class ColorMapsWidget;
+class ExamplesWidget;
 
-class ColorMapsDialog : public QDialog {
+class ExamplesDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit ColorMapsDialog(QWidget*);
-	~ColorMapsDialog() override;
+	explicit ExamplesDialog(QWidget*);
+	~ExamplesDialog() override;
 
-	QPixmap previewPixmap() const;
 	QString name() const;
-	QVector<QColor> colors() const;
 
 private:
-	ColorMapsWidget* m_colorMapsWidget;
+	ExamplesWidget* m_examplesWidget;
+
 };
 
-#endif // COLORMAPSDIALOG_H
+#endif // EXAMPLESDIALOG_H
