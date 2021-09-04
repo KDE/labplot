@@ -3,9 +3,9 @@
 	Project              : LabPlot
 	Description          : Base Dock widget
 	--------------------------------------------------------------------
-	SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
-	SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
-	SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2019 Martin Marmsoler <martin.marmsoler@gmail.com>
+    SPDX-FileCopyrightText: 2019-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
