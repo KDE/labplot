@@ -1078,7 +1078,7 @@ void AxisPrivate::retransformLine() {
 			startPoint = QPointF(range.start(), logicalPosition);
 			endPoint = QPointF(range.end(), logicalPosition);
 			lines.append(QLineF(startPoint, endPoint));
-			//	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
+			// QDEBUG(Q_FUNC_INFO << ", Logical LINE = " << lines)
 			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 		} else {
 			WorksheetElement::PositionWrapper wrapper;
@@ -1093,9 +1093,17 @@ void AxisPrivate::retransformLine() {
 			wrapper.point = QPointF(offset, offset);
 			const auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
-			startPoint = QPointF(rect.x(), pos.y());
-			endPoint = QPointF(rect.x() + rect.width(), pos.y());
+			// previous: over whole plot range
+			//startPoint = QPointF(rect.x(), pos.y());
+			//endPoint = QPointF(rect.x() + rect.width(), pos.y());
+
+			Lines ranges{QLineF(QPointF(range.start(), 0), QPointF(range.end(), 0))};
+			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges).at(0);
+			startPoint = QPointF(sceneRange.x1(), pos.y());
+			endPoint = QPointF(sceneRange	.x2(), pos.y());
+
 			lines.append(QLineF(startPoint, endPoint));
+			// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
 		}
 	} else { // vertical
 		if (position == Axis::Position::Logical) {
