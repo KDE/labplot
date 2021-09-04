@@ -1,6 +1,6 @@
 /*
     This file is part of the KD MacTouchBar library.
-    SPDX-FileCopyrightText: 2019-2020 Klaralvdalens Datakonsult AB a KDAB Group company, info@kdab.com.
+    SPDX-FileCopyrightText: 2019-2020 Klaralvdalens Datakonsult AB a KDAB Group company <info@kdab.com>
 
     SPDX-License-Identifier: LGPL-3.0-or-later
 */
