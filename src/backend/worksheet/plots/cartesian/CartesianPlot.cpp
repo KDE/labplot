@@ -1342,10 +1342,14 @@ const Range<double>& CartesianPlot::yRange(const int index) const {
 }
 const Range<double>& CartesianPlot::xRangeAutoScale(const int index) {
 	Q_D(CartesianPlot);
+	if (xRangeDirty(index))
+		calculateCurvesXMinMax(index, true);
 	return d->xRangeAutoScale(index);
 }
 const Range<double>& CartesianPlot::yRangeAutoScale(const int index) {
 	Q_D(CartesianPlot);
+	if (yRangeDirty(index))
+		calculateCurvesYMinMax(index, true);
 	return d->yRangeAutoScale(index);
 }
 

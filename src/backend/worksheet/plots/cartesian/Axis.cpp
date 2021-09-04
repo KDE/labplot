@@ -472,24 +472,23 @@ void Axis::setRangeType(const Axis::RangeType rangeType) {
 			d->range = plot->yRange(cs->yIndex());
 
 		DEBUG(Q_FUNC_INFO << ", new auto range = " << d->range.toStdString())
-		retransform();	// TODO: this calls retransform() again?
-		emit rangeChanged(d->range);
 		break;
 	}
 	case Axis::RangeType::AutoData:
-		//TODO
 		if (d->orientation == Axis::Orientation::Horizontal)
 			d->range = plot->xRangeAutoScale(cs->xIndex());
 		else
 			d->range = plot->yRangeAutoScale(cs->yIndex());
 
 		DEBUG(Q_FUNC_INFO << ", new auto data range = " << d->range.toStdString())
-		retransform();	// TODO: this calls retransform() again?
-		emit rangeChanged(d->range);
 		break;
 	case Axis::RangeType::Custom:
+		return;
 		break;
 	}
+
+	retransform();	// TODO: this calls retransform() again?
+	emit rangeChanged(d->range);
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Axis, SetVisible, bool, swapVisible);
