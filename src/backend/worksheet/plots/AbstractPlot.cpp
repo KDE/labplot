@@ -83,6 +83,7 @@ TextLabel* AbstractPlot::title() {
 }
 
 void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
+	Q_UNUSED(pageResize)
 	if (isLoading())
 		return;
 	DEBUG("AbstractPlot::handleResize()");

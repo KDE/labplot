@@ -226,12 +226,13 @@ QPixmap ColorMapsWidget::previewPixmap() {
  * returns the name of the currently selected color map.
  */
 QString ColorMapsWidget::name() const {
-	if (ui.stackedWidget->currentIndex() == 0)
+	if (ui.stackedWidget->currentIndex() == 0) {
 		if (ui.lvColorMaps->currentIndex().isValid())
 			return ui.lvColorMaps->currentIndex().data(Qt::DisplayRole).toString();
-	else
+	} else {
 		if (ui.lwColorMaps->currentItem())
 			return ui.lwColorMaps->currentItem()->text();
+	}
 
 	return QString();
 }

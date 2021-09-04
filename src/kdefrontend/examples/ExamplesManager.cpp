@@ -92,7 +92,7 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 		while (it.hasNext()) {
 			const auto& fileName = it.next();
 			const auto& name = QFileInfo(fileName).baseName();
-			qDebug()<<"file name " << fileName;
+			DEBUG(Q_FUNC_INFO << ", file name: " << fileName.toStdString())
 			names << name;
 
 			//parse the XML and read the description and the preview pixmap of the project file
