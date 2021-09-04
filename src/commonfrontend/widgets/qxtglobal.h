@@ -1,6 +1,7 @@
 /*
- * SPDX-FileCopyrightText: 2006-2011 the LibQxt project <http://libqxt.org, foundation@libqxt.org>
- * SPDX-License-Identifier: BSD-3-Clause
+    SPDX-FileCopyrightText: 2006-2011 the LibQxt project <http://libqxt.org, foundation@libqxt.org>
+    SPDX-FileCopyrightText: 2006-2008 Adam Higerd
+    SPDX-License-Identifier: BSD-3-Clause
 */
 
 #ifndef QXTGLOBAL_H
@@ -112,18 +113,6 @@ QXT_CORE_EXPORT const char* qxtVersion();
 #ifndef QT_FORWARD_DECLARE_CLASS
 #define QT_FORWARD_DECLARE_CLASS(Class) class Class;
 #endif
-
-/****************************************************************************
-** This file is derived from code bearing the following notice:
-** The sole author of this file, Adam Higerd, has explicitly disclaimed all
-** copyright interest and protection for the content within. This file has
-** been placed in the public domain according to United States copyright
-** statute and case law. In jurisdictions where this public domain dedication
-** is not legally recognized, anyone who receives a copy of this file is
-** permitted to use, modify, duplicate, and redistribute this file, in whole
-** or in part, with no restrictions or conditions. In these jurisdictions,
-** this file shall be SPDX-FileCopyrightText: 2006-2008 Adam Higerd.
-****************************************************************************/
 
 #define QXT_DECLARE_PRIVATE(PUB) friend class PUB##Private; QxtPrivateInterface<PUB, PUB##Private> qxt_d;
 #define QXT_DECLARE_PUBLIC(PUB) friend class PUB;
