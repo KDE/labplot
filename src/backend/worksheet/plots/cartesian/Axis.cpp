@@ -1097,13 +1097,15 @@ void AxisPrivate::retransformLine() {
 			//startPoint = QPointF(rect.x(), pos.y());
 			//endPoint = QPointF(rect.x() + rect.width(), pos.y());
 
-			Lines ranges{QLineF(QPointF(range.start(), 0), QPointF(range.end(), 0))};
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges).at(0);
-			startPoint = QPointF(sceneRange.x1(), pos.y());
-			endPoint = QPointF(sceneRange.x2(), pos.y());
+			Lines ranges{QLineF(QPointF(range.start(), 0.), QPointF(range.end(), 0.))};
+			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges);
+			if (sceneRange.size() > 0) {
+				startPoint = QPointF(sceneRange.at(0).x1(), pos.y());
+				endPoint = QPointF(sceneRange.at(0).x2(), pos.y());
 
-			lines.append(QLineF(startPoint, endPoint));
-			// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
+				lines.append(QLineF(startPoint, endPoint));
+				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
+			}
 		}
 	} else { // vertical
 		if (position == Axis::Position::Logical) {
