@@ -1100,7 +1100,7 @@ void AxisPrivate::retransformLine() {
 			Lines ranges{QLineF(QPointF(range.start(), 0), QPointF(range.end(), 0))};
 			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges).at(0);
 			startPoint = QPointF(sceneRange.x1(), pos.y());
-			endPoint = QPointF(sceneRange	.x2(), pos.y());
+			endPoint = QPointF(sceneRange.x2(), pos.y());
 
 			lines.append(QLineF(startPoint, endPoint));
 			// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
