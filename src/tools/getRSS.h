@@ -1,8 +1,6 @@
 /*
-    Author:  David Robert Nadeau
-    Site:    http://NadeauSoftware.com/
-    License: Creative Commons Attribution 3.0 Unported License
-    http://creativecommons.org/licenses/by/3.0/deed.en_US
+    SPDX-FileCopyrightText: David Robert Nadeau <http://NadeauSoftware.com/>
+    SPDX-License-Identifier: CC-BY-3.0
 */
 
 //http://nadeausoftware.com/articles/2012/07/c_c_tip_how_get_process_resident_set_size_physical_memory_use
