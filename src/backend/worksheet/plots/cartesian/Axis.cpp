@@ -1979,10 +1979,10 @@ void AxisPrivate::retransformTickLabelPositions() {
 	const double middleX = plot()->xRange(cs->xIndex()).center();
 	const double middleY = plot()->yRange(cs->yIndex()).center();
 	QPointF center(middleX, middleY);
-	const int xDirection = q->cSystem->xDirection();
-	const int yDirection = q->cSystem->yDirection();
+//	const int xDirection = q->cSystem->xDirection();
+//	const int yDirection = q->cSystem->yDirection();
 
-	QPointF startPoint, endPoint, anchorPoint;
+//	QPointF startPoint, endPoint, anchorPoint;
 
 	QTextDocument td;
 	td.setDefaultFont(labelsFont);
