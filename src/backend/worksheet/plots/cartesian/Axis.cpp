@@ -1127,9 +1127,19 @@ void AxisPrivate::retransformLine() {
 			wrapper.point = QPointF(offset, offset);
 			const auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
-			startPoint = QPointF(pos.x(), rect.y() + rect.height()); // draw from bottom to top
-			endPoint = QPointF(pos.x(), rect.y());
-			lines.append(QLineF(startPoint, endPoint));
+			// previous: over whole plot range
+			//startPoint = QPointF(pos.x(), rect.y() + rect.height()); // draw from bottom to top
+			//endPoint = QPointF(pos.x(), rect.y());
+
+			Lines ranges{QLineF(QPointF(0., range.start()), QPointF(0., range.end()))};
+			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges);
+			if (sceneRange.size() > 0) {
+				startPoint = QPointF(pos.x(), sceneRange.at(0).y1());
+				endPoint = QPointF(pos.x(), sceneRange.at(0).y2());
+
+				lines.append(QLineF(startPoint, endPoint));
+				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
+			}
 		}
 	}
 
