@@ -18,7 +18,7 @@ License: CC0-1.0
 Files: data/colormaps/Scientific Colour Maps*
 Copyright: 2020 Fabio Crameri
 License: MIT
- 
+
 Files: data/colormaps/viridis*
 Copyright: Nathaniel J. Smith, Stefan van der Walt and (in the case of viridis) Eric Firing. <https://github.com/BIDS/colormap/>
 License: CC0-1.0
@@ -26,3 +26,7 @@ License: CC0-1.0
 Files: src/3rdparty/liborigin/*
 Copyright: liborigin Authors <https://github.com/SciDAVis/liborigin>
 License: GPL-3.0-or-later
+
+Files: src/3rdparty/kdmactouchbar/*
+Copyright: 2019-2021 Klarälvdalens Datakonsult AB <info@kdab.com>
+License: LGPL-3.0-or-later
