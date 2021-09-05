@@ -2786,6 +2786,8 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("textType", labelsTextType, Axis::LabelsTextType);
 			READ_COLUMN(labelsTextColumn);
 			READ_INT_VALUE("format", labelsFormat, Axis::LabelsFormat);
+			if (d->labelsFormat == LabelsFormat::Decimal)
+				d->labelsFormatDecimalOverruled = true;
 			READ_INT_VALUE("precision", labelsPrecision, int);
 			READ_INT_VALUE("autoPrecision", labelsAutoPrecision, bool);
 			d->labelsDateTimeFormat = attribs.value("dateTimeFormat").toString();
