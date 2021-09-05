@@ -44,6 +44,8 @@ public:
 	QString collectionInfo(const QString& collectionName) const;
 	QStringList exampleNames(const QString& collectionName);
 	QPixmap pixmap(const QString&) const;
+	QString description(const QString&) const;
+	QString path(const QString&) const;
 
 private:
 	ExamplesManager();
@@ -57,6 +59,7 @@ private:
 	QMap<QString, QStringList> m_examples; //names of the example projects in a collection (key = collection name, value = list of project names)
 	QMap<QString, QString> m_descriptions; //example desciptions (key = example project name, value = description)
 	QMap<QString, QPixmap> m_pixmaps; //preview pixmaps (key = example project name, value = pixmap)
+	QMap<QString, QString> m_paths; //paths for the example projects (key = example project name, value = path)
 	QString m_jsonDir;
 };
 

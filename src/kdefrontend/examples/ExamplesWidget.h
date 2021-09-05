@@ -43,7 +43,7 @@ public:
 	explicit ExamplesWidget(QWidget*);
 	~ExamplesWidget() override;
 
-	QString name() const;
+	QString path() const;
 
 private:
 	Ui::ExamplesWidget ui;
@@ -62,6 +62,9 @@ private slots:
 	void toggleIconView();
 	void viewModeChanged(int);
 	void activated(const QString&);
+
+signals:
+	void doubleClicked();
 };
 
 #endif // EXAMPLESWIDGET_H

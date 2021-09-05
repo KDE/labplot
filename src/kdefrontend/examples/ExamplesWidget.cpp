@@ -32,7 +32,6 @@
 
 #include <QCompleter>
 #include <QMessageBox>
-#include <QPainter>
 #include <QStandardItemModel>
 #include <QWhatsThis>
 
@@ -56,8 +55,9 @@ ExamplesWidget::ExamplesWidget(QWidget* parent) : QWidget(parent) {
 	ui.lvExamples->setWordWrap(true);
 	ui.lvExamples->setResizeMode(QListWidget::Adjust);
 	ui.lvExamples->setDragDropMode(QListView::NoDragDrop);
-
-	ui.lvExamples->setIconSize(QSize(128, 128));
+	ui.lvExamples->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	ui.lvExamples->setIconSize(QSize(256, 256));
+	connect(ui.lvExamples, &QAbstractItemView::doubleClicked, this, &ExamplesWidget::doubleClicked);
 
 	const int size = ui.leSearch->height();
 	ui.lSearch->setPixmap( QIcon::fromTheme(QLatin1String("edit-find")).pixmap(size, size) );
@@ -91,7 +91,7 @@ ExamplesWidget::ExamplesWidget(QWidget* parent) : QWidget(parent) {
 			}
 		}
 
-		const QString& colorMap = conf.readEntry("ColorMap", QString());
+		const QString& colorMap = conf.readEntry("Example", QString());
 		auto items = ui.lwExamples->findItems(colorMap, Qt::MatchExactly);
 		if (items.count() == 1)
 			ui.lwExamples->setCurrentItem(items.constFirst());
@@ -127,6 +127,7 @@ void ExamplesWidget::collectionChanged(int) {
 		auto* item = new QStandardItem();
 		item->setIcon(QIcon(m_manager->pixmap(name)));
 		item->setText(name);
+		item->setToolTip(m_manager->description(name));
 		m_model->appendRow(item);
 	}
 
@@ -136,7 +137,7 @@ void ExamplesWidget::collectionChanged(int) {
 	ui.lwExamples->clear();
 	ui.lwExamples->addItems(exampleNames);
 
-	//select the first color map in the current collection
+	//select the first example in the current collection
 	ui.lvExamples->setCurrentIndex(ui.lvExamples->model()->index(0, 0));
 	ui.lwExamples->setCurrentRow(0);
 
@@ -210,11 +211,14 @@ void ExamplesWidget::activateListViewItem(const QString& name) {
 }
 
 /*!
- * returns the name of the currently selected color map.
+ * returns the path of the currently selected example project.
  */
-QString ExamplesWidget::name() const {
+QString ExamplesWidget::path() const {
+	QString name;
 	if (ui.stackedWidget->currentIndex() == 0)
-		return ui.lvExamples->currentIndex().data(Qt::DisplayRole).toString();
+		name = ui.lvExamples->currentIndex().data(Qt::DisplayRole).toString();
 	else
-		return ui.lwExamples->currentItem()->text();
+		name = ui.lwExamples->currentItem()->text();
+
+	return m_manager->path(name);
 }

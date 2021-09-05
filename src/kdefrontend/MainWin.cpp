@@ -505,11 +505,12 @@ void MainWin::initActions() {
 	m_printPreviewAction = KStandardAction::printPreview(this, &MainWin::printPreview, actionCollection());
 
 	QAction* openExample = new QAction(i18n("&Open Example"), actionCollection());
-	openExample->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
+	openExample->setIcon(QIcon::fromTheme(QLatin1String("folder-documents")));
 	actionCollection()->addAction(QLatin1String("file_example_open"), openExample);
 	connect(openExample, &QAction::triggered, this, [=](){
 			auto* dlg = new ExamplesDialog(this);
-			dlg->exec();
+			if (dlg->exec() == QDialog::Accepted)
+				openProject(dlg->path());
 			delete dlg;
 	});
 

@@ -66,6 +66,9 @@ private slots:
 	void toggleIconView();
 	void viewModeChanged(int);
 	void activated(const QString&);
+
+signals:
+	void doubleClicked();
 };
 
 #endif // COLORMAPSWIDGET_H

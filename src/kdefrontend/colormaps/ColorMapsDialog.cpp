@@ -43,7 +43,9 @@
 	\ingroup kdefrontend
  */
 ColorMapsDialog::ColorMapsDialog(QWidget* parent) : QDialog(parent),
-	m_colorMapsWidget(new ColorMapsWidget(this)){
+	m_colorMapsWidget(new ColorMapsWidget(this)) {
+
+	connect(m_colorMapsWidget, &ColorMapsWidget::doubleClicked, this, &QDialog::accept);
 
 	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(m_colorMapsWidget);

@@ -43,7 +43,9 @@
 	\ingroup kdefrontend
  */
 ExamplesDialog::ExamplesDialog(QWidget* parent) : QDialog(parent),
-	m_examplesWidget(new ExamplesWidget(this)){
+	m_examplesWidget(new ExamplesWidget(this)) {
+
+	connect(m_examplesWidget, &ExamplesWidget::doubleClicked, this, &QDialog::accept);
 
 	auto* layout = new QVBoxLayout(this);
 	layout->addWidget(m_examplesWidget);
@@ -56,7 +58,7 @@ ExamplesDialog::ExamplesDialog(QWidget* parent) : QDialog(parent),
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
 	setWindowTitle(i18nc("@title:window", "Example Projects"));
-	setWindowIcon(QIcon::fromTheme("color-management"));
+	setWindowIcon(QIcon::fromTheme("folder-documents"));
 	create();
 
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
@@ -74,6 +76,9 @@ ExamplesDialog::~ExamplesDialog() {
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
 }
 
-QString ExamplesDialog::name() const {
-	return m_examplesWidget->name();
+/*!
+ * return the path for the current selected example project
+ */
+QString ExamplesDialog::path() const {
+	return m_examplesWidget->path();
 }

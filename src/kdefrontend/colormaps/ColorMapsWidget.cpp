@@ -57,8 +57,9 @@ ColorMapsWidget::ColorMapsWidget(QWidget* parent) : QWidget(parent) {
 	ui.lvColorMaps->setWordWrap(true);
 	ui.lvColorMaps->setResizeMode(QListWidget::Adjust);
 	ui.lvColorMaps->setDragDropMode(QListView::NoDragDrop);
-
+	ui.lvColorMaps->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui.lvColorMaps->setIconSize(QSize(128, 128));
+	connect(ui.lvColorMaps, &QAbstractItemView::doubleClicked, this, &ColorMapsWidget::doubleClicked);
 
 	const int size = ui.leSearch->height();
 	ui.lSearch->setPixmap( QIcon::fromTheme(QLatin1String("edit-find")).pixmap(size, size) );

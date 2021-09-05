@@ -39,7 +39,7 @@ public:
 	explicit ExamplesDialog(QWidget*);
 	~ExamplesDialog() override;
 
-	QString name() const;
+	QString path() const;
 
 private:
 	ExamplesWidget* m_examplesWidget;

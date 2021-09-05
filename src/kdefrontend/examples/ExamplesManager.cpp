@@ -92,8 +92,8 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 		while (it.hasNext()) {
 			const auto& fileName = it.next();
 			const auto& name = QFileInfo(fileName).baseName();
-			DEBUG(Q_FUNC_INFO << ", file name: " << fileName.toStdString())
 			names << name;
+			m_paths[name] = fileName;
 
 			//parse the XML and read the description and the preview pixmap of the project file
 			QIODevice* file;
@@ -121,8 +121,10 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 						QPixmap pixmap;
 						pixmap.loadFromData(ba);
 						m_pixmaps[name] = pixmap;
-					} else if (reader.name() == "comment")
+					} else if (reader.name() == "comment"){
 						m_descriptions[name] = reader.readElementText();
+						break;
+					}
 				}
 			}
 
@@ -144,6 +146,14 @@ QPixmap ExamplesManager::pixmap(const QString& name) const {
 		return QPixmap();
 
 	return m_pixmaps[name];
+}
+
+QString ExamplesManager::description(const QString& name) const {
+	return m_descriptions[name];
+}
+
+QString ExamplesManager::path(const QString& name) const {
+	return m_paths[name];
 }
 
 /**
