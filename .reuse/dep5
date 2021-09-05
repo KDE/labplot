@@ -22,3 +22,7 @@ License: MIT
 Files: data/colormaps/viridis*
 Copyright: Nathaniel J. Smith, Stefan van der Walt and (in the case of viridis) Eric Firing. <https://github.com/BIDS/colormap/>
 License: CC0-1.0
+
+Files: src/3rdparty/liborigin/*
+Copyright: liborigin Authors <https://github.com/SciDAVis/liborigin>
+License: GPL-3.0-or-later
