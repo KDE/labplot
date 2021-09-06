@@ -1242,8 +1242,7 @@ void CartesianPlot::setXRange(const int index, const Range<double>& range) {
 		d->yRanges[index].dirty = true;
 		exec(new CartesianPlotSetxRangeIndexCmd(d, range, index, ki18n("%1: set x range")));
 		int scaled = 0;
-		for (int i=0; i < coordinateSystemCount(); i++)
-		{
+		for (int i = 0; i < coordinateSystemCount(); i++) {
 			auto cs = coordinateSystem(i);
 			if (cs->xIndex() == index && autoScaleY(cs->yIndex()))
 				scaled += scaleAutoY(cs->yIndex(), false, true);
@@ -1258,8 +1257,7 @@ void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 	if (index >= 0 && index < d->yRanges.count() && range.finite() && range != d->yRanges[index].range) {
 		exec(new CartesianPlotSetyRangeIndexCmd(d, range, index, ki18n("%1: set y range")));
 		int scaled = 0;
-		for (int i=0; i < coordinateSystemCount(); i++)
-		{
+		for (int i = 0; i < coordinateSystemCount(); i++) {
 			auto cs = coordinateSystem(i);
 			if (cs->yIndex() == index && autoScaleX(cs->xIndex()))
 				scaled += scaleAutoX(cs->xIndex(), false, true);
