@@ -557,7 +557,8 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 			//name
 			info << QString(dir[i]);
 			// Mat_VarReadInfo() does not determine the data type of sparse
-			matvar_t* var = Mat_VarRead(matfp, dir[i]);
+			// Don't use Mat_VarRead(matfp, dir[i]). It searches the whole file for every var
+			matvar_t* var = Mat_VarReadNext(matfp);
 
 			// rank
 			const int rank = var->rank;
