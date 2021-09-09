@@ -367,17 +367,22 @@ void ImportFileDialog::checkOkButton() {
 	}
 
 	QString fileName = m_importFileWidget->fileName();
-#ifdef HAVE_WINDOWS
-	if (!fileName.isEmpty() && fileName.at(1) != QLatin1String(":"))
-#else
-	if (!fileName.isEmpty() && fileName.at(0) != QLatin1String("/"))
+	if (fileName.isEmpty()) {
+		DEBUG(Q_FUNC_INFO << ", ERROR: empty file name.")
+		return;
+	}
+	// handle relative paths
+#ifdef HAVE_WINDOWS	// not starting with '/' or "X:"
+	if ( fileName.at(0) != QChar('/') || (fileName.size() > 1 && fileName.at(1) != QChar(':')) )
+#else	// not starting with '/'
+	if (fileName.at(0) != QChar('/'))
 #endif
 		fileName = QDir::homePath() + QLatin1String("/") + fileName;
 
 	DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
 	switch (m_importFileWidget->currentSourceType()) {
 	case LiveDataSource::SourceType::FileOrPipe: {
-		DEBUG("	fileName = " << fileName.toUtf8().constData());
+		DEBUG("	fileName = " << qPrintable(fileName));
 		const bool enable = QFile::exists(fileName);
 		okButton->setEnabled(enable);
 		if (enable) {
@@ -388,9 +393,8 @@ void ImportFileDialog::checkOkButton() {
 			okButton->setToolTip(msg);
 
 			//suppress the error widget when the dialog is opened the first time.
-			//show only the error widget if the file was really a non-existing file was provided.
-			if (!fileName.isEmpty())
-				showErrorMessage(msg);
+			//show only the error widget if the file was really a non-existing file.
+			showErrorMessage(msg);
 		}
 
 		break;
@@ -422,8 +426,7 @@ void ImportFileDialog::checkOkButton() {
 			okButton->setEnabled(false);
 			QString msg = i18n("Could not connect to the provided local socket. The socket does not exist.");
 			okButton->setToolTip(msg);
-			if (!fileName.isEmpty())
-				showErrorMessage(msg);
+			showErrorMessage(msg);
 		}
 
 		break;
