@@ -45,6 +45,8 @@ class ImportFileWidget : public QWidget {
 	Q_OBJECT
 
 public:
+	static QString absolutePath(const QString& fileName);
+
 	explicit ImportFileWidget(QWidget*, bool liveDataSource, const QString& fileName = QString());
 	~ImportFileWidget() override;
 

@@ -369,18 +369,9 @@ void ImportFileDialog::checkOkButton() {
 		}
 	}
 
-	QString fileName = m_importFileWidget->fileName();
-	if (fileName.isEmpty()) {
-		DEBUG(Q_FUNC_INFO << ", ERROR: empty file name.")
+	QString fileName = ImportFileWidget::absolutePath(m_importFileWidget->fileName());
+	if (fileName.isEmpty())
 		return;
-	}
-	// handle relative paths
-#ifdef HAVE_WINDOWS	// not starting with '/' or "X:"
-	if ( fileName.at(0) != QChar('/') || (fileName.size() > 1 && fileName.at(1) != QChar(':')) )
-#else	// not starting with '/'
-	if (fileName.at(0) != QChar('/'))
-#endif
-		fileName = QDir::homePath() + QLatin1String("/") + fileName;
 
 	DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, m_importFileWidget->currentSourceType()));
 	switch (m_importFileWidget->currentSourceType()) {

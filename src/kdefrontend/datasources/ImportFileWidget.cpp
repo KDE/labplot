@@ -56,11 +56,14 @@
 #include <QMenu>
 #endif
 
-QString absolutePath(const QString& fileName) {
+QString ImportFileWidget::absolutePath(const QString& fileName) {
+	if (fileName.isEmpty())
+		return fileName;
+
 #ifdef HAVE_WINDOWS
-	if (!fileName.isEmpty() && fileName.at(1) != QLatin1String(":"))
+	if (fileName.at(0) != QChar('/') || (fileName.size() > 1 && fileName.at(1) != QChar(':')))
 #else
-	if (!fileName.isEmpty() && fileName.at(0) != QLatin1String("/"))
+	if (fileName.at(0) != QChar('/'))
 #endif
 		return QDir::homePath() + QLatin1String("/") + fileName;
 
@@ -322,10 +325,9 @@ void ImportFileWidget::loadSettings() {
 	QTimer::singleShot(100, this, [=] () {
 		WAIT_CURSOR;
 		if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
-			QString tempFileName = fileName();
-			const QString& fileName = absolutePath(tempFileName);
-			if (QFile::exists(fileName))
-				updateContent(fileName);
+			const QString& file = absolutePath(fileName());
+			if (QFile::exists(file))
+				updateContent(file);
 		}
 
 		refreshPreview();
@@ -1012,10 +1014,9 @@ void ImportFileWidget::fileTypeChanged(int index) {
 	filterChanged(lastUsedFilterIndex);
 
 	if (currentSourceType() == LiveDataSource::SourceType::FileOrPipe) {
-		QString tempFileName = fileName();
-		const QString& fileName = absolutePath(tempFileName);
-		if (QFile::exists(fileName))
-			updateContent(fileName);
+		const QString& file = absolutePath(fileName());
+		if (QFile::exists(file))
+			updateContent(file);
 	}
 
 	//for file types other than ASCII and binary we support re-reading the whole file only
@@ -1170,13 +1171,7 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 	QString fileTypeString;
 	QIODevice *file = new QFile(name);
 
-	QString fileName{name};
-#ifdef HAVE_WINDOWS
-	if (name.at(1) != QLatin1Char(':'))
-#else
-	if (name.at(0) != QLatin1String("/"))
-#endif
-		fileName = QDir::homePath() + QLatin1String("/") + name;
+	QString fileName = absolutePath(name);
 
 	if (!file)
 		file = new QFile(fileName);
@@ -1310,14 +1305,13 @@ void ImportFileWidget::refreshPreview() {
 
 	WAIT_CURSOR;
 
-	QString tempFileName = fileName();
-	QString fileName = absolutePath(tempFileName);
+	QString file = absolutePath(fileName());
 	AbstractFileFilter::FileType fileType = currentFileType();
 	LiveDataSource::SourceType sourceType = currentSourceType();
 	int lines = ui.sbPreviewLines->value();
 
 	if (sourceType == LiveDataSource::SourceType::FileOrPipe)
-		DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
+		DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(file));
 
 	// default preview widget
 	if (fileType == AbstractFileFilter::FileType::Ascii || fileType == AbstractFileFilter::FileType::Binary
@@ -1342,22 +1336,22 @@ void ImportFileWidget::refreshPreview() {
 		DEBUG("Data Source Type: " << ENUM_TO_STRING(LiveDataSource, SourceType, sourceType));
 		switch (sourceType) {
 		case LiveDataSource::SourceType::FileOrPipe: {
-			importedStrings = filter->preview(fileName, lines);
+			importedStrings = filter->preview(file, lines);
 			break;
 		}
 		case LiveDataSource::SourceType::LocalSocket: {
 			QLocalSocket lsocket{this};
 			DEBUG("Local socket: CONNECT PREVIEW");
-			lsocket.connectToServer(fileName, QLocalSocket::ReadOnly);
+			lsocket.connectToServer(file, QLocalSocket::ReadOnly);
 			if (lsocket.waitForConnected()) {
-				DEBUG("connected to local socket " << STDSTRING(fileName));
+				DEBUG("connected to local socket " << STDSTRING(file));
 				if (lsocket.waitForReadyRead())
 					importedStrings = filter->preview(lsocket);
 				DEBUG("Local socket: DISCONNECT PREVIEW");
 				lsocket.disconnectFromServer();
 				// read-only socket is disconnected immediately (no waitForDisconnected())
 			} else
-				DEBUG("failed connect to local socket " << STDSTRING(fileName) << " - " << STDSTRING(lsocket.errorString()));
+				DEBUG("failed connect to local socket " << STDSTRING(file) << " - " << STDSTRING(lsocket.errorString()));
 
 			break;
 		}
@@ -1442,13 +1436,13 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::Binary: {
 		ui.tePreview->clear();
 		auto filter = static_cast<BinaryFilter*>(currentFileFilter());
-		importedStrings = filter->preview(fileName, lines);
+		importedStrings = filter->preview(file, lines);
 		break;
 	}
 	case AbstractFileFilter::FileType::Image: {
 		ui.tePreview->clear();
 
-		QImage image(fileName);
+		QImage image(file);
 		QTextCursor cursor = ui.tePreview->textCursor();
 		cursor.insertImage(image);
 		RESET_CURSOR;
@@ -1459,7 +1453,7 @@ void ImportFileWidget::refreshPreview() {
 		auto filter = static_cast<HDF5Filter*>(currentFileFilter());
 		lines = m_hdf5OptionsWidget->lines();
 
-		importedStrings = filter->readCurrentDataSet(fileName, nullptr, ok, AbstractFileFilter::ImportMode::Replace, lines);
+		importedStrings = filter->readCurrentDataSet(file, nullptr, ok, AbstractFileFilter::ImportMode::Replace, lines);
 		tmpTableWidget = m_hdf5OptionsWidget->previewWidget();
 		break;
 	}
@@ -1467,7 +1461,7 @@ void ImportFileWidget::refreshPreview() {
 		auto filter = static_cast<NetCDFFilter*>(currentFileFilter());
 		lines = m_netcdfOptionsWidget->lines();
 
-		importedStrings = filter->readCurrentVar(fileName, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
+		importedStrings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
 		tmpTableWidget = m_netcdfOptionsWidget->previewWidget();
 		break;
 	}
@@ -1478,11 +1472,11 @@ void ImportFileWidget::refreshPreview() {
 		QString extensionName = m_fitsOptionsWidget->extensionName(&ok);
 		if (!extensionName.isEmpty()) {
 			DEBUG("	extension name = " << STDSTRING(extensionName));
-			fileName = extensionName;
+			file = extensionName;
 		}
 
 		bool readFitsTableToMatrix;
-		importedStrings = filter->readChdu(fileName, &readFitsTableToMatrix, lines);
+		importedStrings = filter->readChdu(file, &readFitsTableToMatrix, lines);
 		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 		tmpTableWidget = m_fitsOptionsWidget->previewWidget();
@@ -1492,7 +1486,7 @@ void ImportFileWidget::refreshPreview() {
 		ui.tePreview->clear();
 		auto filter = static_cast<JsonFilter*>(currentFileFilter());
 		m_jsonOptionsWidget->applyFilterSettings(filter, ui.tvJson->currentIndex());
-		importedStrings = filter->preview(fileName, lines);
+		importedStrings = filter->preview(file, lines);
 
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
@@ -1501,9 +1495,9 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::ROOT: {
 		auto filter = static_cast<ROOTFilter*>(currentFileFilter());
 		lines = m_rootOptionsWidget->lines();
-		m_rootOptionsWidget->setNRows(filter->rowsInCurrentObject(fileName));
+		m_rootOptionsWidget->setNRows(filter->rowsInCurrentObject(file));
 		importedStrings = filter->previewCurrentObject(
-		                      fileName,
+				      file,
 		                      m_rootOptionsWidget->startRow(),
 		                      qMin(m_rootOptionsWidget->startRow() + lines - 1,
 		                           m_rootOptionsWidget->endRow())
@@ -1518,7 +1512,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::NgspiceRawAscii: {
 		ui.tePreview->clear();
 		auto filter = static_cast<NgspiceRawAsciiFilter*>(currentFileFilter());
-		importedStrings = filter->preview(fileName, lines);
+		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -1526,7 +1520,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::NgspiceRawBinary: {
 		ui.tePreview->clear();
 		auto filter = static_cast<NgspiceRawBinaryFilter*>(currentFileFilter());
-		importedStrings = filter->preview(fileName, lines);
+		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		break;
@@ -1534,7 +1528,7 @@ void ImportFileWidget::refreshPreview() {
 	case AbstractFileFilter::FileType::READSTAT: {
 		ui.tePreview->clear();
 		auto filter = static_cast<ReadStatFilter*>(currentFileFilter());
-		importedStrings = filter->preview(fileName, lines);
+		importedStrings = filter->preview(file, lines);
 		vectorNameList = filter->vectorNames();
 		columnModes = filter->columnModes();
 		DEBUG(Q_FUNC_INFO << ", got " << columnModes.size() << " columns and " << importedStrings.size() << " rows")
@@ -1544,7 +1538,7 @@ void ImportFileWidget::refreshPreview() {
 		auto filter = static_cast<MatioFilter*>(currentFileFilter());
 		lines = m_matioOptionsWidget->lines();
 
-		importedStrings = filter->readCurrentVar(fileName, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
+		importedStrings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
 		tmpTableWidget = m_matioOptionsWidget->previewWidget();
 		break;
 	}
