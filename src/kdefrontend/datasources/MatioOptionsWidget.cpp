@@ -80,8 +80,9 @@ const QStringList MatioOptionsWidget::selectedNames() const {
 		ui.twContent->selectRow(0);
 
 	for (auto* item : ui.twContent->selectedItems())
-		names << item->text();
-	//QDEBUG(Q_FUNC_INFO << ", selected var: " << names);
+		if (item->column() == 0)
+			names << item->text();
+	//QDEBUG(Q_FUNC_INFO << ", selected vars: " << names);
 
 	return names;
 }

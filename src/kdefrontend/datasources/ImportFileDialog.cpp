@@ -217,16 +217,19 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		// multiple data sets/variables for special types
 		//TODO: MATIO (single sheets vs. all in one)
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF ||
-			fileType == AbstractFileFilter::FileType::ROOT) {
+			fileType == AbstractFileFilter::FileType::ROOT || fileType == AbstractFileFilter::FileType::MATIO) {
 			QStringList names;
 			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
 			else if (fileType == AbstractFileFilter::FileType::NETCDF)
 				names = m_importFileWidget->selectedNetCDFNames();
+			else if (fileType == AbstractFileFilter::FileType::MATIO)
+				names = m_importFileWidget->selectedMatioNames();
 			else
 				names = m_importFileWidget->selectedROOTNames();
 
 			int nrNames = names.size(), offset = sheets.size();
+			//QDEBUG(Q_FUNC_INFO << ", selected names: " << names)
 
 			//TODO: think about importing multiple sets into one sheet
 
@@ -241,7 +244,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				// delete the unneeded spreadsheets
 				if (offset > nrNames) {
 					for (int i = nrNames; i < offset; i++)
-						sheets[i]->remove();
+						sheets.at(i)->remove();
 					offset = nrNames;
 				}
 
@@ -250,7 +253,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					//HDF5 variable names contain the whole path, remove it and keep the name only
 					QString sheetName = names.at(i);
 					if (fileType == AbstractFileFilter::FileType::HDF5)
-						sheetName = names[i].mid(names[i].lastIndexOf("/") + 1);
+						sheetName = names.at(i).mid(names.at(i).lastIndexOf("/") + 1);
 
 					auto* sheet = sheets.at(i);
 					sheet->setUndoAware(false);
