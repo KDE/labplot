@@ -214,8 +214,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		auto sheets = workbook->children<AbstractAspect>();
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
-		// multiple data sets/variables for HDF5, NetCDF and ROOT
-		// TODO: Matio
+		// multiple data sets/variables for special types
+		//TODO: MATIO (single sheets vs. all in one)
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF ||
 			fileType == AbstractFileFilter::FileType::ROOT) {
 			QStringList names;
@@ -264,11 +264,11 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				//HDF5 variable names contain the whole path, remove it and keep the name only
 				QString sheetName = names.at(i);
 				if (fileType == AbstractFileFilter::FileType::HDF5)
-					sheetName = names[i].mid(names[i].lastIndexOf("/") + 1);
+					sheetName = names.at(i).mid(names.at(i).lastIndexOf("/") + 1);
 
 				auto* spreadsheet = new Spreadsheet(sheetName);
 				if (mode == AbstractFileFilter::ImportMode::Prepend && !sheets.isEmpty())
-					workbook->insertChildBefore(spreadsheet, sheets[0]);
+					workbook->insertChildBefore(spreadsheet, sheets.at(0));
 				else
 					workbook->addChildFast(spreadsheet);
 			}
@@ -281,16 +281,16 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
 				if (fileType == AbstractFileFilter::FileType::HDF5)
-					static_cast<HDF5Filter*>(filter)->setCurrentDataSetName(names[i]);
+					static_cast<HDF5Filter*>(filter)->setCurrentDataSetName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::NETCDF)
-					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names[i]);
+					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::MATIO)
-					static_cast<MatioFilter*>(filter)->setCurrentVarName(names[i]);
+					static_cast<MatioFilter*>(filter)->setCurrentVarName(names.at(i));
 				else
-					static_cast<ROOTFilter*>(filter)->setCurrentObject(names[i]);
+					static_cast<ROOTFilter*>(filter)->setCurrentObject(names.at(i));
 
 				int index = i + offset;
-				filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets[index]));
+				filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets.at(index)));
 			}
 
 			workbook->setUndoAware(true);
@@ -344,7 +344,7 @@ void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
 }
 
 void ImportFileDialog::checkOkButton() {
-	DEBUG("ImportFileDialog::checkOkButton()");
+	DEBUG(Q_FUNC_INFO);
 	if (cbAddTo) { //only check for the target container when no file data source is being added
 		QDEBUG(" cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());

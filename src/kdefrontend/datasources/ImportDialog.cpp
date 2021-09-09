@@ -130,9 +130,9 @@ void ImportDialog::setCurrentIndex(const QModelIndex& index) {
 }
 
 void ImportDialog::newDataContainer(QAction* action) {
-	DEBUG("ImportDialog::newDataContainer()");
+	DEBUG(Q_FUNC_INFO);
 	QString name = selectedObject();
-	QString type = action->iconText().split(' ')[1];
+	QString type = action->iconText().split(' ').at(1);
 	if (name.isEmpty())
 		name = action->iconText();
 

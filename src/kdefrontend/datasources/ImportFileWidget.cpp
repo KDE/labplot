@@ -758,7 +758,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			m_currentFilter.reset(new MatioFilter);
 		auto filter = static_cast<MatioFilter*>(m_currentFilter.get());
 		if (!selectedMatioNames().isEmpty())
-			filter->setCurrentVarName(selectedMatioNames()[0]);
+			filter->setCurrentVarName(selectedMatioNames().first());
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());

@@ -257,19 +257,21 @@ void MatioFilter::saveFilterSettings(const QString& filterName) const {
 
 ///////////////////////////////////////////////////////////////////////
 
-void MatioFilter::setCurrentVarName(const QString& ds) {
-	d->currentVarName = ds;
+void MatioFilter::setCurrentVarName(const QString& name) {
+	d->currentVarName = name;
 }
-
 const QString MatioFilter::currentVarName() const {
 	return d->currentVarName;
 }
+/*void MatioFilter::setCurrentVarName(const QStringList& names) {
+	d->currentVarNames = names;
+}
+const QStringList MatioFilter::currentVarNames() const {
+	return d->currentVarNames;
+}*/
 size_t MatioFilter::varCount() const {
 	return d->varCount;
 }
-/*QStringList MatioFilter::varNames() const {
-	return d->varNames;
-}*/
 QVector<QStringList> MatioFilter::varsInfo() const {
 	return d->varsInfo;
 }
