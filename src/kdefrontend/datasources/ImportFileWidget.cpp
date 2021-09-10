@@ -61,7 +61,7 @@ QString ImportFileWidget::absolutePath(const QString& fileName) {
 		return fileName;
 
 #ifdef HAVE_WINDOWS
-	if (fileName.size() == 1 || (fileName.at(0) != QChar('/') && fileName.at(1) != QChar(':'))
+	if ( fileName.size() == 1 || (fileName.at(0) != QChar('/') && fileName.at(1) != QChar(':')) )
 #else
 	if (fileName.at(0) != QChar('/'))
 #endif
