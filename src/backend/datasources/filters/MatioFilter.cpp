@@ -614,11 +614,12 @@ QVector<QStringList> MatioFilterPrivate::readDataFromFile(const QString& fileNam
 		return dataStrings;
 	}
 
+	//TODO: support reading multiple variables (here or in readCurrentVar)
 	return readCurrentVar(fileName, dataSource, mode);
 }
 
 /*!
-    reads the content of the variable in the file \c fileName to a string (for preview) or to the data source.
+    reads the content of the current variable in the file \c fileName to a string (for preview) or to the data source.
 */
 QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, size_t lines) {
 	QVector<QStringList> dataStrings;

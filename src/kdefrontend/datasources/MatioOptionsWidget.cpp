@@ -45,7 +45,8 @@ void MatioOptionsWidget::updateContent(MatioFilter *filter, const QString& fileN
 	const int n = filter->varCount();
 	const QVector<QStringList> varsInfo = filter->varsInfo();
 	ui.twContent->setRowCount(n);
-	for (int j = 0; j < 7; j++) {
+	const int nrCols = 7;
+	for (int j = 0; j < nrCols; j++) {
 		for (int i = 0; i < n; i++) {
 			QTableWidgetItem *item = new QTableWidgetItem(varsInfo.at(i).at(j));
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);	// readonly
