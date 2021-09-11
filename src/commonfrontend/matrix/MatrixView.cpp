@@ -4,7 +4,7 @@
     Description          : View class for Matrix
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,13 +15,12 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/matrix/MatrixModel.h"
 #include "backend/matrix/matrixcommands.h"
-#include "backend/lib/macros.h"
 #include "backend/core/column/Column.h"
-#include "backend/core/column/ColumnPrivate.h"
 
 #include "kdefrontend/spreadsheet/AddSubtractValueDialog.h"
 #include "kdefrontend/matrix/MatrixFunctionDialog.h"
 #include "kdefrontend/spreadsheet/StatisticsDialog.h"
+#include "backend/datasources/filters/FITSFilter.h"
 
 #include <KLocalizedString>
 
@@ -42,6 +41,7 @@
 #include <QProcess>
 #include <QHeaderView>
 #include <QIcon>
+#include <QShortcut>
 
 #include <cfloat>
 #include <cmath>
@@ -74,10 +74,6 @@ MatrixModel* MatrixView::model() const {
 }
 
 void MatrixView::init() {
-	initActions();
-	connectActions();
-	initMenus();
-
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
 	setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
@@ -114,7 +110,7 @@ void MatrixView::init() {
 	connect(m_model, &MatrixModel::changed, this, &MatrixView::matrixDataChanged);
 
 	//keyboard shortcuts
-	sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
+	auto* sel_all = new QShortcut(QKeySequence(tr("Ctrl+A", "Matrix: select all")), m_tableView);
 	connect(sel_all, &QShortcut::activated, m_tableView, &QTableView::selectAll);
 
 	//TODO: add shortcuts for copy&paste,
@@ -170,6 +166,13 @@ void MatrixView::initActions() {
 	action_header_format_3->setCheckable(true);
 	connect(headerFormatActionGroup, &QActionGroup::triggered, this, &MatrixView::headerFormatChanged);
 
+	if (m_matrix->headerFormat() == Matrix::HeaderFormat::HeaderRowsColumns)
+		action_header_format_1->setChecked(true);
+	else if (m_matrix->headerFormat() == Matrix::HeaderFormat::HeaderValues)
+		action_header_format_2->setChecked(true);
+	else
+		action_header_format_3->setChecked(true);
+
 	// column related actions
 	action_add_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-right"), i18n("&Add Columns"), this);
 	action_insert_columns = new QAction(QIcon::fromTheme("edit-table-insert-column-left"), i18n("&Insert Empty Columns"), this);
@@ -183,17 +186,9 @@ void MatrixView::initActions() {
 	action_remove_rows = new QAction(QIcon::fromTheme("edit-table-delete-row"), i18n("Remo&ve Rows"), this);
 	action_clear_rows = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clea&r Rows"), this);
 	action_statistics_rows = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs"), this);
-}
 
-void MatrixView::modifyValues() {
-	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
-	AddSubtractValueDialog::Operation op = (AddSubtractValueDialog::Operation)action->data().toInt();
-	auto* dlg = new AddSubtractValueDialog(m_matrix, op);
-	dlg->setMatrices();
-	dlg->exec();
-}
+	//connections
 
-void MatrixView::connectActions() {
 	// selection related actions
 	connect(action_cut_selection, &QAction::triggered, this, &MatrixView::cutSelection);
 	connect(action_copy_selection, &QAction::triggered, this, &MatrixView::copySelection);
@@ -232,6 +227,8 @@ void MatrixView::connectActions() {
 }
 
 void MatrixView::initMenus() {
+	initActions();
+
 	//selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
 	m_selectionMenu->setIcon(QIcon::fromTheme("selection"));
@@ -310,8 +307,11 @@ void MatrixView::initMenus() {
  *   - as the "matrix menu" in the main menu-bar (called form MainWin)
  *   - as a part of the matrix context menu in project explorer
  */
-void MatrixView::createContextMenu(QMenu* menu) const {
+void MatrixView::createContextMenu(QMenu* menu) {
 	Q_ASSERT(menu);
+
+	if (!m_selectionMenu)
+		initMenus();
 
 	QAction* firstAction = nullptr;
 	// if we're populating the context menu for the project explorer, then
@@ -397,13 +397,6 @@ void MatrixView::adjustHeaders() {
 void MatrixView::resizeHeaders() {
 	m_tableView->resizeColumnsToContents();
 	m_tableView->resizeRowsToContents();
-
-	if (m_matrix->headerFormat() == Matrix::HeaderFormat::HeaderRowsColumns)
-		action_header_format_1->setChecked(true);
-	else if (m_matrix->headerFormat() == Matrix::HeaderFormat::HeaderValues)
-		action_header_format_2->setChecked(true);
-	else
-		action_header_format_3->setChecked(true);
 }
 
 /*!
@@ -785,7 +778,7 @@ void MatrixView::updateImage() {
 
 	//find min/max value
 	double dmax = -DBL_MAX, dmin = DBL_MAX;
-	const QVector<QVector<double>>* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	const auto* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 	const int width = m_matrix->columnCount();
 	const int height = m_matrix->rowCount();
 	for (int col = 0; col < width; ++col) {
@@ -1104,7 +1097,7 @@ void MatrixView::exportToFile(const QString& path, const QString& separator, QLo
 	//export values
 	const int cols = m_matrix->columnCount();
 	const int rows = m_matrix->rowCount();
-	const QVector<QVector<double> >* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
+	const auto* data = static_cast<QVector<QVector<double>>*>(m_matrix->data());
 	//TODO: use general setting for number locale?
 	QLocale locale(language);
 	for (int row = 0; row < rows; ++row) {
@@ -1458,6 +1451,9 @@ void MatrixView::exportToLaTeX(const QString& path, const bool verticalHeaders, 
 		out << QLatin1String("\\end{document} \n");
 }
 
+//##############################################################################
+//############################  Dialogs  ######################################
+//##############################################################################
 void MatrixView::showColumnStatistics() {
 	if (selectedColumnCount() > 0) {
 		QString dlgTitle (m_matrix->name() + " column statistics");
@@ -1475,6 +1471,14 @@ void MatrixView::showColumnStatistics() {
 			columns.clear();
 		}
 	}
+}
+
+void MatrixView::modifyValues() {
+	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
+	AddSubtractValueDialog::Operation op = (AddSubtractValueDialog::Operation)action->data().toInt();
+	auto* dlg = new AddSubtractValueDialog(m_matrix, op);
+	dlg->setMatrices();
+	dlg->exec();
 }
 
 void MatrixView::showRowStatistics() {

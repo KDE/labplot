@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Matrix
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2008-2009 Tilman Benkert <thzs@gmx.net>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,10 +13,7 @@
 #define MATRIXVIEW_H
 
 #include <QWidget>
-#include <QList>
-#include <QShortcut>
-#include "backend/datasources/filters/FITSFilter.h"
-#include "kdefrontend/widgets/FITSHeaderEditWidget.h"
+#include <QLocale>
 
 class Matrix;
 class MatrixModel;
@@ -59,14 +56,13 @@ public:
 	void exportToFits(const QString& fileName, const int exportTo) const;
 
 public slots:
-	void createContextMenu(QMenu*) const;
+	void createContextMenu(QMenu*);
 	void print(QPrinter*) const;
 
 private:
 	void init();
 	void initActions();
 	void initMenus();
-	void connectActions();
 	void goToCell(int row, int col);
 	void updateImage();
 
@@ -124,13 +120,11 @@ private:
 	QAction* action_fill_const;
 
 	//Menus
-	QMenu* m_selectionMenu;
-	QMenu* m_columnMenu;
-	QMenu* m_rowMenu;
-	QMenu* m_matrixMenu;
-	QMenu* m_headerFormatMenu;
-
-	QShortcut* sel_all;
+	QMenu* m_selectionMenu{nullptr};
+	QMenu* m_columnMenu{nullptr};
+	QMenu* m_rowMenu{nullptr};
+	QMenu* m_matrixMenu{nullptr};
+	QMenu* m_headerFormatMenu{nullptr};
 
 private slots:
 	void goToCell();
