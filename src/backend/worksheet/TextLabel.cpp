@@ -1040,7 +1040,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 			pos = q->align(pos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
 			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			emit q->positionLogicalChanged(positionLogical);
-		} else {				
+		} else {
 			//convert item's center point in parent's coordinates
 			TextLabel::PositionWrapper tempPosition = position;
 			tempPosition.point = q->parentPosToRelativePos(pos, pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);

@@ -14,9 +14,11 @@
 #include "backend/lib/macros.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/TextLabel.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/lib/macros.h"
 
 #include <QTabWidget>

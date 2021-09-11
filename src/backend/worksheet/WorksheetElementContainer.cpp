@@ -14,6 +14,8 @@
 #include "backend/worksheet/ResizeItem.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"

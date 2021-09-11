@@ -4,7 +4,7 @@
     Description          : Worksheet (2D visualization) part
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2011-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -24,7 +24,6 @@ class WorksheetPrivate;
 class WorksheetView;
 class TreeModel;
 class XYCurve;
-class CartesianPlot;
 
 class Worksheet : public AbstractPart {
 	Q_OBJECT

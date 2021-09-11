@@ -26,7 +26,7 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 
-#include <KMessageBox>
+// #include <KMessageBox>
 // #include <KNS3/UploadDialog>
 
 /*!
@@ -166,6 +166,7 @@ void ThemeHandler::loadSelected(const QString& name) {
 }
 
 void ThemeHandler::showPanel() {
+#ifndef SDK
 	QMenu menu;
 	ThemesWidget themeWidget(&menu);
 	themeWidget.setFixedMode();
@@ -179,6 +180,7 @@ void ThemeHandler::showPanel() {
 
 	QPoint pos(-menu.sizeHint().width()+m_pbLoadTheme->width(),-menu.sizeHint().height());
 	menu.exec(m_pbLoadTheme->mapToGlobal(pos));
+#endif
 }
 
 // void ThemeHandler::saveMenu() {

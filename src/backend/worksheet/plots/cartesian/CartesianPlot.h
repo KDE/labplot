@@ -12,10 +12,9 @@
 #ifndef CARTESIANPLOT_H
 #define CARTESIANPLOT_H
 
-#include "Axis.h"
-#include "Histogram.h"
-#include "../AbstractPlot.h"
 #include "backend/lib/Range.h"
+#include "backend/worksheet/plots/AbstractPlot.h"
+#include "backend/worksheet/plots/cartesian/Axis.h"
 
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
