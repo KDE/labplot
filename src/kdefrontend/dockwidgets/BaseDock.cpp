@@ -14,6 +14,9 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/Project.h"
 
+extern "C" {
+#include "backend/nsl/nsl_math.h"
+}
 
 #include <KLocalizedString>
 #include <KConfigGroup>

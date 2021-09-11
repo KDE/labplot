@@ -7,19 +7,18 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #ifndef RANGE_H
 #define RANGE_H
 
+#include "macros.h"	//SET_NUMBER_LOCALE
+
 extern "C" {
 #include "backend/gsl/parser.h"
-#include "backend/nsl/nsl_math.h"
 }
 
-#include "macros.h"	//SET_NUMBER_LOCALE
 #include <klocalizedstring.h>
-#include <QtMath>
 #include <QStringList>
+#include <cmath>
 
 class QString;
 
@@ -129,8 +128,8 @@ public:
 //extend/shrink range to nice numbers (used in auto scaling)
 	// get nice size to extend to (see Glassner: Graphic Gems)
 	double niceSize(double size, bool round) {
-		const double exponent = qFloor(log10(size));
-		const double fraction = size / qPow(10, exponent);
+		const double exponent = std::floor(log10(size));
+		const double fraction = size / std::pow(10., exponent);
 
 		double niceFraction; // nice (rounded) fraction
 		if (round) {
@@ -155,7 +154,7 @@ public:
 		DEBUG(Q_FUNC_INFO << ", fraction = " << fraction);
 		DEBUG(Q_FUNC_INFO << ", nice fraction = " << niceFraction);
 
-		return niceFraction * qPow(10, exponent);
+		return niceFraction * std::pow(10., exponent);
 	}
 	void niceShrink() { niceExtend(false); }
 	void niceExtend(bool extend = true) {	// extend == false means shrink
@@ -167,94 +166,20 @@ public:
 		const double maxTicks = 10;	// TODO: parameter?
 		const double spacing = niceSize(newSize / (maxTicks - 1), true);
 		if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
-			m_start = qFloor(m_start / spacing) * spacing;
-			m_end = qCeil(m_end / spacing) * spacing;
+			m_start = std::floor(m_start / spacing) * spacing;
+			m_end = std::ceil(m_end / spacing) * spacing;
 		} else {
-			m_start = qCeil(m_start / spacing) * spacing;
-			m_end = qFloor(m_end / spacing) * spacing;
+			m_start = std::ceil(m_start / spacing) * spacing;
+			m_end = std::floor(m_end / spacing) * spacing;
 		}
 		DEBUG(Q_FUNC_INFO << ", new range : " << toStdString())
 	}
-/* Old version
- * void niceExtend(bool extend = true) {	// extend == false means shrink
-		if (length() == 0)
-			return;
-		DEBUG(Q_FUNC_INFO << ", range : " << toStdString() << ", size = " << size())
-		DEBUG(Q_FUNC_INFO << ", size/10 = " << size()/10.)
-		int places = nsl_math_rounded_decimals(size()/10.);
-		DEBUG(Q_FUNC_INFO << ", decimal places (rounded) = " << (int)places)
-		const double scaledSize = size() * pow(10., places);	// range: 4.5 - 44.9
-		DEBUG(Q_FUNC_INFO << ", scaled size  = " << scaledSize)
-
-		// keep certain sizes that can be handled by autoTickCount()
-		if ( qFuzzyCompare(scaledSize, 10.5) )
-			return;
-
-		double factor = 1.;
-		// use special rounding for certain values
-		if ( (scaledSize > 32. && scaledSize < 35.)
-			|| (scaledSize > 42. && scaledSize < 45.) ) {	// 0.5 steps
-			factor = 2.;
-			places -= 1;
-		} else if (scaledSize > 7.2 && scaledSize < 7.5) {
-			factor = 2.;
-		} else if ( (scaledSize > 12. && scaledSize < 12.5)
-			|| (scaledSize > 16. && scaledSize < 17.5)
-			|| (scaledSize > 21. && scaledSize < 22.5)
-			|| (scaledSize > 36. && scaledSize < 40.) ) {	// 0.25 steps
-			factor = 4.;
-			places -= 1;
-		} else if ( (scaledSize > 10. && scaledSize < 12.)
-			|| (scaledSize > 12.5 && scaledSize < 14.)
-			|| (scaledSize > 17.5 && scaledSize < 20.)
-			|| (scaledSize > 22.5 && scaledSize < 24.)
-			|| (scaledSize > 27. && scaledSize < 32.)
-			|| (scaledSize > 35. && scaledSize < 36.)
-			|| (scaledSize > 40. && scaledSize < 42.) ) {	// 0.2 steps
-			factor = 5.;
-			places -= 1;
-		} else if ( (scaledSize > 4.6 && scaledSize < 5.)
-                        || (scaledSize > 5.2 && scaledSize < 5.6)
-			|| (scaledSize > 6.2 && scaledSize < 6.4)
-                        || (scaledSize > 7. && scaledSize < 7.2)
-			|| (scaledSize > 8.2 && scaledSize < 8.4)
-			|| (scaledSize > 9.4 && scaledSize < 9.6) ) {
-			factor = 5.;
-		} else if (scaledSize > 8. && scaledSize < 8.1) {	// .1 steps
-			factor = 10.;
-		} else if (scaledSize > 25. && scaledSize < 26.) {	// .3 steps -> 27.
-			factor = 1./.3;
-			places -= 1;
-		} else if ( (scaledSize > 4.5 && scaledSize < 4.6)	// .3 steps -> 4.8
-			|| (scaledSize > 6 && scaledSize < 6.2)		// -> 6.3
-			|| (scaledSize > 8.1 && scaledSize < 8.2) ) {	// -> 8.4
-			factor = 1./.3;
-		} else if ( (scaledSize > 5. && scaledSize < 5.2)	// .6 steps -> 5.4
-			|| (scaledSize > 9. && scaledSize < 9.4) ) {	// -> 9.6
-			factor = 1./.6;
-		}
-		DEBUG(Q_FUNC_INFO << ", factor = " << factor << ", places = " << places)
-
-		// round to decimal places
-		if ((extend && m_start < m_end) || (!extend && m_start > m_end)) {
-			m_start = nsl_math_floor_places(factor * m_start, places);
-			m_end = nsl_math_ceil_places(factor * m_end, places);
-		} else {
-			m_start = nsl_math_ceil_places(factor * m_start, places);
-			m_end = nsl_math_floor_places(factor * m_end, places);
-		}
-		m_start /= factor;
-		m_end /= factor;
-
-		DEBUG(Q_FUNC_INFO << ", new range : " << toStdString())
-	}
-*/
 	int autoTickCount() const {
 		if (length() == 0)
 			return 0;
 
 		DEBUG(Q_FUNC_INFO << ", range = " << toStdString() << ", length() = " << length())
-		const double order = pow(10.0, qFloor(log10(length())));;
+		const double order = pow(10.0, std::floor(log10(length())));;
 		DEBUG(Q_FUNC_INFO << ", order of magnitude = " << order)
 		const int factor = qRound(100 * length() / order);
 		DEBUG(Q_FUNC_INFO << ", factor = " << factor)

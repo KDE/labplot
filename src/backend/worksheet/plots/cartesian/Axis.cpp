@@ -22,6 +22,11 @@
 // #include "backend/lib/trace.h"
 #include "kdefrontend/GuiTools.h"
 
+extern "C" {
+#include <gsl/gsl_math.h>
+#include "backend/nsl/nsl_math.h"
+}
+
 #include <KConfig>
 #include <KLocalizedString>
 
@@ -29,11 +34,7 @@
 #include <QMenu>
 #include <QPainter>
 #include <QTextDocument>
-
-extern "C" {
-#include <gsl/gsl_math.h>
-#include "backend/nsl/nsl_math.h"
-}
+#include <QtMath>
 
 /**
  * \class AxisGrid
