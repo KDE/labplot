@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2016 Fabian Kristof <fkristofszabolcs@gmail.com>
     SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
@@ -20,7 +20,6 @@
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/core/column/Column.h"
-#include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/datatypes/SimpleCopyThroughFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/core/datatypes/String2DoubleFilter.h"
@@ -134,9 +133,6 @@ SpreadsheetView::~SpreadsheetView() {
 }
 
 void SpreadsheetView::init() {
-	initActions();
-	initMenus();
-
 	m_tableView->setModel(m_model);
 	auto* delegate = new SpreadsheetItemDelegate(this);
 	connect(delegate, &SpreadsheetItemDelegate::returnPressed, this, &SpreadsheetView::advanceCell);
@@ -179,7 +175,6 @@ void SpreadsheetView::init() {
 	setFocusPolicy(Qt::StrongFocus);
 	setFocus();
 	installEventFilter(this);
-	connectActions();
 	showComments(false);
 
 	connect(m_model, &SpreadsheetModel::headerDataChanged, this, &SpreadsheetView::updateHeaderGeometry);
@@ -473,9 +468,13 @@ void SpreadsheetView::initActions() {
 
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
 	addFourierFilterAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FourierFilter));
+
+	connectActions();
 }
 
 void SpreadsheetView::initMenus() {
+	initActions();
+
 	//Selection menu
 	m_selectionMenu = new QMenu(i18n("Selection"), this);
 	m_selectionMenu->setIcon(QIcon::fromTheme("selection"));
@@ -859,6 +858,9 @@ void SpreadsheetView::fillTouchBar(KDMacTouchBar* touchBar){
 void SpreadsheetView::createContextMenu(QMenu* menu) {
 	Q_ASSERT(menu);
 
+	if (!m_selectionMenu)
+		initMenus();
+
 	checkSpreadsheetMenu();
 
 	QAction* firstAction = nullptr;
@@ -897,6 +899,9 @@ void SpreadsheetView::createColumnContextMenu(QMenu* menu) {
 	const Column* column = dynamic_cast<Column*>(QObject::sender());
 	if (!column)
 		return; //should never happen, since the sender is always a Column
+
+	if (!m_selectionMenu)
+		initMenus();
 
 	QAction* firstAction = menu->actions().at(1);
 	//TODO: add these menus and synchronize the behavior with the context menu creation

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -20,7 +20,6 @@
 class AbstractAspect;
 class Column;
 class Spreadsheet;
-class SpreadsheetItemDelegate;
 class SpreadsheetHeaderView;
 class SpreadsheetModel;
 
@@ -43,7 +42,7 @@ class SpreadsheetView : public QWidget {
 	friend class SpreadsheetTest;
 
 public:
-	explicit SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly = false);
+	explicit SpreadsheetView(Spreadsheet*, bool readOnly = false);
 	~SpreadsheetView() override;
 
 	void resizeHeader();
@@ -101,7 +100,6 @@ private:
 	QTableView* m_frozenTableView{nullptr};
 	bool m_editorEntered{false};
 	Spreadsheet* m_spreadsheet;
-	SpreadsheetItemDelegate* m_delegate;
 	SpreadsheetModel* m_model;
 	SpreadsheetHeaderView* m_horizontalHeader;
 	bool m_suppressSelectionChangedEvent{false};
@@ -286,11 +284,11 @@ private slots:
 	void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);
 	void handleHorizontalSectionMoved(int index, int from, int to);
 	void handleHorizontalHeaderDoubleClicked(int index);
-	void handleHeaderDataChanged(Qt::Orientation orientation, int first, int last);
+	void handleHeaderDataChanged(Qt::Orientation, int first, int last);
 	void currentColumnChanged(const QModelIndex& current, const QModelIndex & previous);
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
-	void updateHeaderGeometry(Qt::Orientation o, int first, int last);
+	void updateHeaderGeometry(Qt::Orientation, int first, int last);
 
 	void selectColumn(int);
 	void deselectColumn(int);
