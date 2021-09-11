@@ -22,7 +22,7 @@ extern "C" {
 
 class QString;
 
-//! Auxiliary class for a data range 
+//! Auxiliary class for a data range
 /**
  *	This class represents a data range [start, end] where start can be > end.
  *	It replaces the Interval class and has following attributes:

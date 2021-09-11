@@ -15,6 +15,7 @@
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TreeModel.h"
 #include "backend/worksheet/TextLabel.h"
@@ -23,9 +24,12 @@
 #include "kdefrontend/worksheet/ExportWorksheetDialog.h"
 #include "kdefrontend/ThemeHandler.h"
 
+#ifndef SDK
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
+#endif
+
 #include <QDir>
 #include <QGraphicsItem>
 #include <QIcon>
@@ -176,6 +180,7 @@ QVector<AspectType> Worksheet::pasteTypes() const {
 }
 
 bool Worksheet::exportView() const {
+#ifndef SDK
 	auto* dlg = new ExportWorksheetDialog(m_view);
 	dlg->setFileName(name());
 	bool ret;
@@ -192,9 +197,13 @@ bool Worksheet::exportView() const {
 	}
 	delete dlg;
 	return ret;
+#else
+	return true;
+#endif
 }
 
 bool Worksheet::printView() {
+#ifndef SDK
 	QPrinter printer;
 	auto* dlg = new QPrintDialog(&printer, m_view);
 	dlg->setWindowTitle(i18nc("@title:window", "Print Worksheet"));
@@ -204,12 +213,19 @@ bool Worksheet::printView() {
 
 	delete dlg;
 	return ret;
+#else
+	return true;
+#endif
 }
 
 bool Worksheet::printPreview() const {
+#ifndef SDK
 	auto* dlg = new QPrintPreviewDialog(m_view);
 	connect(dlg, &QPrintPreviewDialog::paintRequested, m_view, &WorksheetView::print);
 	return dlg->exec();
+#else
+	return true;
+#endif
 }
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {

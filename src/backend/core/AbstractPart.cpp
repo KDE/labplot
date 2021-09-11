@@ -8,10 +8,7 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #include "backend/core/AbstractPart.h"
-#include "backend/core/Workbook.h"
-#include "backend/datapicker/Datapicker.h"
 #include "commonfrontend/core/PartMdiView.h"
 
 #include <QMenu>
@@ -49,10 +46,12 @@ AbstractPart::~AbstractPart() {
  * after that, a pointer to the pre-existing view is returned.
  */
 PartMdiView* AbstractPart::mdiSubWindow() const {
+#ifndef SDK
 	if (!m_mdiWindow)
 		m_mdiWindow = new PartMdiView(const_cast<AbstractPart*>(this));
-
+#endif
 	return m_mdiWindow;
+
 }
 
 bool AbstractPart::hasMdiSubWindow() const {
@@ -66,8 +65,9 @@ bool AbstractPart::hasMdiSubWindow() const {
 void AbstractPart::deleteView() const {
 	//if the parent is a Workbook or Datapicker, the actual view was already deleted when QTabWidget was deleted.
 	//here just set the pointer to 0.
-	if (dynamic_cast<const Workbook*>(parentAspect()) || dynamic_cast<const Datapicker*>(parentAspect())
-			|| dynamic_cast<const Datapicker*>(parentAspect()->parentAspect())) {
+	if (parentAspect()->type() == AspectType::Workbook
+		|| parentAspect()->type() == AspectType::Datapicker
+		|| parentAspect()->parentAspect()->type() == AspectType::Datapicker) {
 		m_partView = nullptr;
 		return;
 	}

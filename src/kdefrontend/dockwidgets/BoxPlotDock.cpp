@@ -8,6 +8,7 @@
 */
 
 #include "BoxPlotDock.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"

@@ -1475,7 +1475,7 @@ void MatrixView::showColumnStatistics() {
 
 void MatrixView::modifyValues() {
 	const QAction* action = dynamic_cast<const QAction*>(QObject::sender());
-	AddSubtractValueDialog::Operation op = (AddSubtractValueDialog::Operation)action->data().toInt();
+	auto op = (AddSubtractValueDialog::Operation)action->data().toInt();
 	auto* dlg = new AddSubtractValueDialog(m_matrix, op);
 	dlg->setMatrices();
 	dlg->exec();

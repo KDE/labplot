@@ -9,7 +9,7 @@
 */
 
 #include "AspectDock.h"
-
+#include "backend/core/AbstractColumn.h"
 
 /*!
   \class AspectDock

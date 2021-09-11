@@ -18,6 +18,7 @@
 #include "../AbstractPlotPrivate.h"
 
 #include <QGraphicsSceneMouseEvent>
+#include <QPen>
 #include <QStaticText>
 
 class CartesianPlotPrivate : public AbstractPlotPrivate {
