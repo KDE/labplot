@@ -8,6 +8,8 @@ set(CMAKE_AUTOMOC ON)
 set(SRC_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 add_definitions (-DSDK)
 
+include(GenerateExportHeader)
+
 # do not process these files
 set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
 
@@ -197,12 +199,25 @@ ENDIF ()
 ############## installation ################################
 install( TARGETS labplot DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/labplot_export.h  DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot COMPONENT Devel)
+
 install( FILES labplot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/ COMPONENT Devel )
 install( FILES ../src/backend/core/AbstractAspect.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel )
+install( FILES ../src/backend/core/AbstractColumn.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel )
 install( FILES ../src/backend/core/AbstractPart.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel )
+# install( FILES ../src/backend/core/AbstractFilter.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel )
+# install( FILES ../src/backend/core/AbstractSimpleFilter.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/ COMPONENT Devel )
+install( FILES ../src/backend/core/column/Column.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/column/ COMPONENT Devel )
+install( FILES ../src/backend/core/column/ColumnPrivate.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/core/column/ COMPONENT Devel )
 install( FILES ../src/backend/gsl/parser.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/gsl/ COMPONENT Devel )
+# install( FILES ../src/backend/lib/Interval.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
+# install( FILES ../src/backend/lib/IntervalAttribute.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
 install( FILES ../src/backend/lib/macros.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
+install( FILES ../src/backend/lib/macrosXYCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
+# install( FILES ../src/backend/lib/commandtemplates.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
 install( FILES ../src/backend/lib/Range.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/lib/ COMPONENT Devel )
+install( FILES ../src/backend/nsl/nsl_math.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/nsl/ COMPONENT Devel )
 install( FILES ../src/backend/worksheet/Worksheet.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/ COMPONENT Devel )
 install( FILES ../src/backend/worksheet/WorksheetElement.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/ COMPONENT Devel )
 install( FILES ../src/backend/worksheet/WorksheetElementContainer.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/ COMPONENT Devel )
@@ -210,3 +225,8 @@ install( FILES ../src/backend/worksheet/plots/AbstractPlot.h DESTINATION ${KDE_I
 install( FILES ../src/backend/worksheet/plots/PlotArea.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/ COMPONENT Devel )
 install( FILES ../src/backend/worksheet/plots/cartesian/Axis.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
 install( FILES ../src/backend/worksheet/plots/cartesian/CartesianPlot.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
+install( FILES ../src/backend/worksheet/plots/cartesian/CartesianPlotLegend.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
+install( FILES ../src/backend/worksheet/plots/cartesian/Curve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
+install( FILES ../src/backend/worksheet/plots/cartesian/XYCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
+# install( FILES ../src/backend/worksheet/plots/cartesian/XYAnalysisCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )
+# install( FILES ../src/backend/worksheet/plots/cartesian/XYFitCurve.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/labplot/backend/worksheet/plots/cartesian/ COMPONENT Devel )

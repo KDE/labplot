@@ -15,6 +15,7 @@
 
 class QJsonObject;
 class AsciiFilter;
+class QIODevice;
 class QNetworkAccessManager;
 class QNetworkReply;
 

@@ -13,8 +13,8 @@
 
 #include "backend/lib/commandtemplates.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/core/AbstractColumn.h"
 #include <QObject>
-class AbstractColumn;
 
 /*!
   This macro is used to connect the column to the XYCurve slots:

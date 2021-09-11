@@ -16,6 +16,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/trace.h"
 
 #ifdef HAVE_MQTT

@@ -13,16 +13,21 @@
 #ifndef COLUMN_H
 #define COLUMN_H
 
-#include "backend/core/AbstractSimpleFilter.h"
-#include "backend/lib/XmlStreamReader.h"
 #include "backend/core/column/ColumnPrivate.h"
 
+class AbstractSimpleFilter;
 class CartesianPlot;
 class ColumnStringIO;
 class QAction;
 class QActionGroup;
+class XmlStreamReader;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Column : public AbstractColumn {
+#else
 class Column : public AbstractColumn {
+#endif
 	Q_OBJECT
 
 public:
@@ -56,6 +61,7 @@ public:
 	void setPlotDesignation(AbstractColumn::PlotDesignation) override;
 
 	bool isReadOnly() const override;
+	void resizeTo(int);
 	int rowCount() const override;
 	int availableRowCount() const override;
 	int width() const;

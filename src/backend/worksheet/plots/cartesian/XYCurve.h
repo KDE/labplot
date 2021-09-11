@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2013-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -15,7 +15,6 @@
 #include "Curve.h"
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/core/AbstractColumn.h"
 #include "backend/lib/Range.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/macrosXYCurve.h"
@@ -23,10 +22,16 @@
 #include <QFont>
 #include <QPen>
 
+class AbstractColumn;
 class Symbol;
 class XYCurvePrivate;
 
-class XYCurve: public WorksheetElement, public Curve {
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYCurve : public WorksheetElement, public Curve {
+#else
+class XYCurve : public WorksheetElement, public Curve {
+#endif
 	Q_OBJECT
 
 public:

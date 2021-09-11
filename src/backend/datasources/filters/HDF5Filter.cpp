@@ -17,6 +17,7 @@
 #include "backend/datasources/filters/HDF5FilterPrivate.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
 #include <QTreeWidgetItem>

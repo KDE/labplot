@@ -12,6 +12,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/column/ColumnStringIO.h"
+#include "backend/core/AbstractSimpleFilter.h"
 
 /**
  * \class ColumnStringIO

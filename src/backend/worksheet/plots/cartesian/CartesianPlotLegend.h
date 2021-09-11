@@ -18,7 +18,12 @@
 class CartesianPlotLegendPrivate;
 class TextLabel;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT CartesianPlotLegend : public WorksheetElement {
+#else
 class CartesianPlotLegend : public WorksheetElement {
+#endif
 	Q_OBJECT
 	Q_ENUMS(HorizontalPosition)
 	Q_ENUMS(VerticalPosition)

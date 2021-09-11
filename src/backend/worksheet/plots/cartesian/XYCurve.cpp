@@ -18,6 +18,7 @@
 
 #include "XYCurve.h"
 #include "XYCurvePrivate.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -27,7 +28,6 @@
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
 #include "backend/gsl/errors.h"
 #include "tools/ImageTools.h"

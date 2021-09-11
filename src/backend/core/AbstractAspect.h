@@ -94,7 +94,12 @@ enum class AspectType : quint64 {
 		MQTTSubscription = 0x2000004,
 };
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT AbstractAspect : public QObject {
+#else
 class AbstractAspect : public QObject {
+#endif
 	Q_OBJECT
 
 public:

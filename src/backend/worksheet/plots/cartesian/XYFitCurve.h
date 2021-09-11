@@ -22,7 +22,12 @@ extern "C" {
 
 class XYFitCurvePrivate;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT XYFitCurve : public XYAnalysisCurve {
+#else
 class XYFitCurve : public XYAnalysisCurve {
+#endif
 	Q_OBJECT
 
 public:

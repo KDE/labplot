@@ -13,6 +13,7 @@
 
 #include "backend/core/Project.h"
 #include "backend/core/Folder.h"
+#include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Workbook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -29,6 +30,7 @@
 #include "backend/datapicker/Datapicker.h"
 #include "backend/note/Note.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 #ifdef HAVE_MQTT

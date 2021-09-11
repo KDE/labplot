@@ -20,6 +20,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
 #include <QIcon>

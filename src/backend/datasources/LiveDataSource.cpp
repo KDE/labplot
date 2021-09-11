@@ -16,6 +16,7 @@
 #include "backend/datasources/filters/BinaryFilter.h"
 #include "backend/datasources/filters/ROOTFilter.h"
 #include "backend/core/Project.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 

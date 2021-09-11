@@ -37,7 +37,12 @@ class InfoElementDialog;
 class KConfig;
 class CartesianPlotDock;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT CartesianPlot : public AbstractPlot {
+#else
 class CartesianPlot : public AbstractPlot {
+#endif
 	Q_OBJECT
 
 public:

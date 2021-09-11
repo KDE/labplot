@@ -20,6 +20,7 @@
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 

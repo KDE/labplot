@@ -25,7 +25,12 @@ class WorksheetView;
 class TreeModel;
 class XYCurve;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Worksheet : public AbstractPart {
+#else
 class Worksheet : public AbstractPart {
+#endif
 	Q_OBJECT
 
 public:

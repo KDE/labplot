@@ -27,6 +27,7 @@
 #endif
 #endif
 
+#include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 

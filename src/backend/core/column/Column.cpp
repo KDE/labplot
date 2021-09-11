@@ -14,6 +14,7 @@
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/column/columncommands.h"
+#include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/Project.h"
 #include "backend/lib/trace.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -1580,6 +1581,9 @@ AbstractColumn::ColumnMode Column::columnMode() const {
 	return d->columnMode();
 }
 
+void Column::resizeTo(int rows) {
+	d->resizeTo(rows);
+}
 /**
  * \brief Return the data vector size
  */

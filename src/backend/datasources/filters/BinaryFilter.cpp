@@ -12,6 +12,7 @@
 #include "backend/datasources/AbstractDataSource.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <QDataStream>
 #include <KLocalizedString>
