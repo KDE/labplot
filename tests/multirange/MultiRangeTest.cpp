@@ -18,6 +18,7 @@
 #include "commonfrontend/worksheet/WorksheetView.h"
 #undef private
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QAction>
