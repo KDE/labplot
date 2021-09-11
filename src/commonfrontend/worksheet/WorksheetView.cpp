@@ -568,6 +568,7 @@ void WorksheetView::initMenus() {
 	//themes menu
 	m_themeMenu = new QMenu(i18n("Apply Theme"), this);
 	m_themeMenu->setIcon(QIcon::fromTheme("color-management"));
+#ifndef SDK
 	auto* themeWidget = new ThemesWidget(nullptr);
 	themeWidget->setFixedMode();
 	connect(themeWidget, &ThemesWidget::themeSelected, m_worksheet, &Worksheet::setTheme);
@@ -576,7 +577,7 @@ void WorksheetView::initMenus() {
 	auto* widgetAction = new QWidgetAction(this);
 	widgetAction->setDefaultWidget(themeWidget);
 	m_themeMenu->addAction(widgetAction);
-
+#endif
 	m_menusInitialized = true;
 }
 
@@ -1570,10 +1571,12 @@ void WorksheetView::changeGrid(QAction* action) {
 		m_gridSettings.horizontalSpacing = 15;
 		m_gridSettings.verticalSpacing = 15;
 	} else if (action == customGridAction) {
+#ifndef SDK
 		auto* dlg = new GridDialog(this);
 		if (dlg->exec() == QDialog::Accepted)
 			dlg->save(m_gridSettings);
 		else
+#endif
 			return;
 	}
 
@@ -2519,6 +2522,7 @@ Worksheet::CartesianPlotActionMode WorksheetView::getCartesianPlotActionMode() {
 }
 
 void WorksheetView::presenterMode() {
+#ifndef SDK
 	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
 
 	//show dynamic presenter widget, if enabled
@@ -2555,4 +2559,5 @@ void WorksheetView::presenterMode() {
 
 	auto* presenterWidget = new PresenterWidget(QPixmap::fromImage(image), m_worksheet->name());
 	presenterWidget->showFullScreen();
+#endif
 }

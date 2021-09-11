@@ -86,24 +86,40 @@ SpreadsheetModel* Spreadsheet::model() {
   called at all. Aspects must not depend on the existence of a view for their operation.
 */
 QWidget* Spreadsheet::view() const {
+#ifndef SDK
 	if (!m_partView) {
 		bool readOnly = (this->parentAspect()->type() == AspectType::DatapickerCurve);
 		m_view = new SpreadsheetView(const_cast<Spreadsheet*>(this), readOnly);
 		m_partView = m_view;
 	}
 	return m_partView;
+#else
+	return nullptr;
+#endif
 }
 
 bool Spreadsheet::exportView() const {
+#ifndef SDK
 	return m_view->exportView();
+#else
+	return true;
+#endif
 }
 
 bool Spreadsheet::printView() {
+#ifndef SDK
 	return m_view->printView();
+#else
+	return true;
+#endif
 }
 
 bool Spreadsheet::printPreview() const {
+#ifndef SDK
 	return m_view->printPreview();
+#else
+	return true;
+#endif
 }
 
 /*!
@@ -111,6 +127,7 @@ bool Spreadsheet::printPreview() const {
  *  adjusts the appearence of the spreadsheet header.
  */
 void Spreadsheet::updateHorizontalHeader() {
+#ifndef SDK
 	const QString& oldHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
 	m_model->updateHorizontalHeader();
 	const QString& newHeader = m_model->headerData(0, Qt::Horizontal, Qt::DisplayRole).toString();
@@ -123,6 +140,7 @@ void Spreadsheet::updateHorizontalHeader() {
 			col->setWidth(0);
 		m_view->resizeHeader();
 	}
+#endif
 }
 
 void Spreadsheet::updateLocale() {
@@ -1098,9 +1116,10 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 	if (m_model != nullptr)
 		m_model->suppressSignals(false);
 
+#ifndef SDK
 	if (m_partView != nullptr && m_view != nullptr)
 		m_view->resizeHeader();
-
+#endif
 	//row count most probably changed after the import, notify the dock widget.
 	//no need to notify about the column count change, this is already done by add/removeChild signals
 	rowCountChanged(rowCount());

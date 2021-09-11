@@ -482,6 +482,7 @@ add_subdirectory(data)
 add_subdirectory(icons)
 add_subdirectory(src)
 add_subdirectory(doc)
+#add_subdirectory(lib)
 
 if (ENABLE_TESTS)
     enable_testing(true)

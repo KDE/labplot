@@ -11,20 +11,23 @@
 
 
 #include "backend/core/Folder.h"
-#include "backend/datapicker/Datapicker.h"
-#include "backend/core/Project.h"
-#include "backend/core/Workbook.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/Project.h"
+#ifndef SDK
+#include "backend/datapicker/Datapicker.h"
+#include "backend/core/Workbook.h"
 #include "backend/datasources/LiveDataSource.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/note/Note.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #ifdef HAVE_CANTOR_LIBS
 #include "backend/cantorWorksheet/CantorWorksheet.h"
 #endif
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
 #endif
+#endif
+
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 
 #include <QDropEvent>
@@ -222,26 +225,32 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 		addChildFast(folder);
 	} else if (element_name == QLatin1String("workbook")) {
+#ifndef SDK
 		Workbook* workbook = new Workbook(QString());
 		if (!workbook->load(reader, preview)) {
 			delete workbook;
 			return false;
 		}
 		addChildFast(workbook);
+#endif
 	} else if (element_name == QLatin1String("spreadsheet")) {
+#ifndef SDK
 		Spreadsheet* spreadsheet = new Spreadsheet(QString(), true);
 		if (!spreadsheet->load(reader, preview)) {
 			delete spreadsheet;
 			return false;
 		}
 		addChildFast(spreadsheet);
+#endif
 	} else if (element_name == QLatin1String("matrix")) {
+#ifndef SDK
 		Matrix* matrix = new Matrix(QString(), true);
 		if (!matrix->load(reader, preview)) {
 			delete matrix;
 			return false;
 		}
 		addChildFast(matrix);
+#endif
 	} else if (element_name == QLatin1String("worksheet")) {
 		Worksheet* worksheet = new Worksheet(QString());
 		worksheet->setIsLoading(true);
@@ -253,6 +262,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		worksheet->setIsLoading(false);
 	} else if (element_name == QLatin1String("cantorWorksheet")) {
 #ifdef HAVE_CANTOR_LIBS
+#ifndef SDK
 		CantorWorksheet* cantorWorksheet = new CantorWorksheet(QLatin1String("null"), true);
 		if (!cantorWorksheet->load(reader, preview)) {
 			delete cantorWorksheet;
@@ -272,6 +282,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 			}
 		} else
 			addChildFast(cantorWorksheet);
+#endif
 #else
 	if (!preview) {
 		while (!reader->atEnd()) {
@@ -292,6 +303,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 	}
 #endif
 #ifdef HAVE_MQTT
+#ifndef SDK
 	} else if (element_name == QLatin1String("MQTTClient")) {
 		MQTTClient* client = new MQTTClient(QString());
 		if (!client->load(reader, preview)) {
@@ -300,28 +312,35 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		}
 		addChildFast(client);
 #endif
+#endif
 	} else if (element_name == QLatin1String("liveDataSource")
 		|| element_name == QLatin1String("LiveDataSource")) { //TODO: remove "LiveDataSources" in couple of releases
+#ifndef SDK
 		auto* liveDataSource = new LiveDataSource(QString(), true);
 		if (!liveDataSource->load(reader, preview)) {
 			delete liveDataSource;
 			return false;
 		}
 		addChildFast(liveDataSource);
+#endif
 	} else if (element_name == QLatin1String("datapicker")) {
+#ifndef SDK
 		Datapicker* datapicker = new Datapicker(QString(), true);
 		if (!datapicker->load(reader, preview)) {
 			delete datapicker;
 			return false;
 		}
 		addChildFast(datapicker);
+#endif
 	} else if (element_name == QLatin1String("note")) {
+#ifndef SDK
 		Note* note = new Note(QString());
 		if (!note->load(reader, preview)) {
 			delete note;
 			return false;
 		}
 		addChildFast(note);
+#endif
 	} else {
 		reader->raiseWarning(i18n("unknown element '%1' found", element_name));
 		if (!reader->skipToEndElement())

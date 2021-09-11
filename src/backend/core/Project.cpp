@@ -11,7 +11,6 @@
 */
 #include "backend/core/Project.h"
 #include "backend/lib/XmlStreamReader.h"
-#include "backend/datasources/LiveDataSource.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -21,9 +20,13 @@
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/InfoElement.h"
+
+#ifndef SDK
+#include "backend/datasources/LiveDataSource.h"
 #include "backend/datapicker/DatapickerCurve.h"
 #ifdef HAVE_MQTT
 #include "backend/datasources/MQTTClient.h"
+#endif
 #endif
 
 #include <QDateTime>
@@ -157,6 +160,7 @@ Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private
 }
 
 Project::~Project() {
+#ifndef SDK
 	//if the project is being closed and the live data sources still continue reading the data,
 	//the dependent objects (columns, etc.), which are already deleted maybe here,  are still being notified about the changes.
 	//->stop reading the live data sources prior to deleting all objects.
@@ -167,7 +171,7 @@ Project::~Project() {
 	for (auto* client : children<MQTTClient>())
 		client->pauseReading();
 #endif
-
+#endif
 	//if the project is being closed, in Worksheet the scene items are being removed and the selection in the view can change.
 	//don't react on these changes since this can lead crashes (worksheet object is already in the destructor).
 	//->notify all worksheets about the project being closed.
@@ -503,7 +507,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 	writer->writeEndDocument();
 }
-
+#include <QDebug>
 bool Project::load(const QString& filename, bool preview) {
 	QIODevice* file;
 	// first try gzip compression, because projects can be gzipped and end with .lml
@@ -653,6 +657,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	bool hasChildren = aspect->childCount<AbstractAspect>();
 	const auto& columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
 
+#ifndef SDK
 	//LiveDataSource:
 	//call finalizeLoad() to replace relative with absolute paths if required
 	//and to create columns during the initial read
@@ -661,6 +666,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		if (!source) continue;
 		source->finalizeLoad();
 	}
+#endif
 
 	//xy-curves
 	// cannot be removed by the column observer, because it does not react
@@ -776,6 +782,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	}
 
 	//data picker curves
+#ifndef SDK
 	QVector<DatapickerCurve*> dataPickerCurves;
 	if (hasChildren)
 		dataPickerCurves = aspect->children<DatapickerCurve>(ChildIndexFlag::Recursive);
@@ -791,6 +798,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		RESTORE_COLUMN_POINTER(dataPickerCurve, plusDeltaYColumn, PlusDeltaYColumn);
 		RESTORE_COLUMN_POINTER(dataPickerCurve, minusDeltaYColumn, MinusDeltaYColumn);
 	}
+#endif
 
 	//if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {
@@ -832,6 +840,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		plot->retransform();
 	}
 
+#ifndef SDK
 	//all data was read in live-data sources:
 	//call CartesianPlot::dataChanged() to notify affected plots about the new data.
 	//this needs to be done here since in LiveDataSource::finalizeImport() called above
@@ -855,6 +864,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			column->setChanged();
 		}
 	}
+#endif
 
 	//loop over all affected plots and retransform them
 	for (auto* plot : plots) {

@@ -12,10 +12,6 @@
 #ifndef ASPECTFACTORY_H
 
 #include "backend/core/Project.h"
-#include "backend/core/Workbook.h"
-#include "backend/datapicker/Datapicker.h"
-#include "backend/datasources/LiveDataSource.h"
-#include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
@@ -39,18 +35,22 @@
 #include "backend/worksheet/plots/cartesian/XYSmoothCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/InfoElement.h"
+
+#ifndef SDK
 #include "backend/datapicker/DatapickerCurve.h"
+#include "backend/core/Workbook.h"
+#include "backend/datapicker/Datapicker.h"
+#include "backend/matrix/Matrix.h"
+// #include "backend/datasources/LiveDataSource.h"
+#include "backend/note/Note.h"
+#endif
 
 class AspectFactory {
 public:
 	static AbstractAspect* createAspect(AspectType type, AbstractAspect* parent) {
 		if (type == AspectType::Folder)
 			return new Folder(QString());
-		if (type == AspectType::Datapicker)
-			return new Datapicker(QString());
 
-		else if (type == AspectType::Note)
-			return new Note(QString());
 		/* worksheet and all its children */
 		else if (type == AspectType::Worksheet)
 			return new Worksheet(QString());
@@ -105,17 +105,22 @@ public:
 		else if (type == AspectType::CartesianPlotLegend)
 			return new CartesianPlotLegend(QString());
 
-		/* spreadsheet and its children */
+		/* data containers */
 		else if (type == AspectType::Spreadsheet)
 			return new Spreadsheet(QString(), true /*loading*/);
 		else if (type == AspectType::Column)
 			return new Column(QString());
 
+#ifndef SDK
 		else if (type == AspectType::Matrix)
 			return new Matrix(QString());
+		else if (type == AspectType::Datapicker)
+			return new Datapicker(QString());
+		else if (type == AspectType::Note)
+			return new Note(QString());
 		else if (type == AspectType::Workbook)
 			return new Workbook(QString());
-
+#endif
 		return nullptr;
 	}
 };
