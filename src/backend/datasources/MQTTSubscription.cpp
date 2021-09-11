@@ -10,6 +10,7 @@
 #include "backend/datasources/MQTTSubscription.h"
 #include "backend/datasources/MQTTTopic.h"
 #include "backend/datasources/MQTTClient.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
 #include <QIcon>

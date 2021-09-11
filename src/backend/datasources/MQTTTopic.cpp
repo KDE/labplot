@@ -14,6 +14,7 @@
 #include "kdefrontend/spreadsheet/PlotDataDialog.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
 #include "backend/datasources/filters/AsciiFilter.h"
+#include "backend/lib/XmlStreamReader.h"
 
 #include <QMenu>
 #include <QIcon>

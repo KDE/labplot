@@ -171,6 +171,7 @@ add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50500)
 
 # dynamic library
 add_library(labplot ${GUI_SOURCES} ${BACKEND_SOURCES} ${NSL_SOURCES} ${COMMONFRONTEND_SOURCES} ${TOOLS_SOURCES} ${GENERATED_SOURCES} ${QTMOC_HDRS})
+generate_export_header(labplot)
 
 target_link_libraries( labplot
 	KF5::Archive

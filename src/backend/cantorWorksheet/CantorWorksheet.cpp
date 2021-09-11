@@ -13,6 +13,7 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/column/ColumnPrivate.h"
 #include "backend/core/Project.h"
+#include "backend/lib/XmlStreamReader.h"
 #include "commonfrontend/cantorWorksheet/CantorWorksheetView.h"
 
 #include <cantor/cantorlibs_version.h>
@@ -63,6 +64,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 			return false;
 		}
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
+// // 		if (!m_worksheetAccess)
 
 		//load worksheet content if available
 		if (content)
