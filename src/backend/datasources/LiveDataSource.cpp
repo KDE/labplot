@@ -48,6 +48,9 @@ LiveDataSource::LiveDataSource(const QString& name, bool loading) : Spreadsheet(
 
 	initActions();
 
+	//stop reading from the source before removing the child from the project
+	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, &LiveDataSource::pauseReading);
+
 	connect(m_updateTimer, &QTimer::timeout, this, &LiveDataSource::read);
 	connect(m_watchTimer, &QTimer::timeout, this, &LiveDataSource::readOnUpdate);
 }

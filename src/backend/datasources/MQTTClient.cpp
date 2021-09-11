@@ -27,6 +27,9 @@ MQTTClient::MQTTClient(const QString& name) : Folder(name, AspectType::MQTTClien
 	m_client(new QMqttClient(this)),
 	m_willTimer(new QTimer(this)) {
 
+	//stop reading from the source before removing the child from the project
+	connect(this, &AbstractAspect::aspectAboutToBeRemoved, this, &MQTTClient::pauseReading);
+
 	connect(m_updateTimer, &QTimer::timeout, this, &MQTTClient::read);
 	connect(m_client, &QMqttClient::connected, this, &MQTTClient::onMQTTConnect);
 	connect(m_willTimer, &QTimer::timeout, this, &MQTTClient::updateWillMessage);
@@ -37,7 +40,6 @@ MQTTClient::~MQTTClient() {
 	emit clientAboutToBeDeleted(m_client->hostname(), m_client->port());
 	//stop reading before deleting the objects
 	pauseReading();
-	qDebug() << "Delete MQTTClient: " << m_client->hostname() << m_client->port();
 
 	delete m_filter;
 	delete m_updateTimer;
