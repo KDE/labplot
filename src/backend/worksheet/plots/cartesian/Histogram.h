@@ -4,25 +4,25 @@
     Description          : Histogram
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-    SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2018-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 
-#include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/plots/PlotArea.h"
-#include "backend/lib/macros.h"
 
 class AbstractColumn;
 class HistogramPrivate;
 class Symbol;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT Histogram : public WorksheetElement, public Curve {
+#else
 class Histogram : public WorksheetElement, public Curve {
+#endif
 	Q_OBJECT
 
 public:
@@ -153,14 +153,6 @@ signals:
 	void autoBinRangesChanged(bool);
 	void binRangesMinChanged(double);
 	void binRangesMaxChanged(double);
-
-	//Symbol-Tab
-	void symbolsStyleChanged(Symbol::Style);
-	void symbolsSizeChanged(qreal);
-	void symbolsRotationAngleChanged(qreal);
-	void symbolsOpacityChanged(qreal);
-	void symbolsBrushChanged(QBrush);
-	void symbolsPenChanged(const QPen&);
 
 	//Line-Tab
 	void lineTypeChanged(Histogram::LineType);

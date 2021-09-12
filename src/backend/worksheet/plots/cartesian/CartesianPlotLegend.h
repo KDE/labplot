@@ -16,6 +16,7 @@
 #include "backend/lib/macros.h"
 
 class CartesianPlotLegendPrivate;
+class Symbol;
 class TextLabel;
 
 #ifdef SDK

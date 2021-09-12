@@ -11,16 +11,20 @@
 #define BOXPLOT_H
 
 #include "backend/worksheet/plots/cartesian/Curve.h"
-#include "backend/lib/macros.h"
-#include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/worksheet/WorksheetElement.h"
+#include "backend/lib/macros.h"
 
 class BoxPlotPrivate;
 class AbstractColumn;
 class Symbol;
 
+#ifdef SDK
+#include "labplot_export.h"
+class LABPLOT_EXPORT BoxPlot : public WorksheetElement, Curve {
+#else
 class BoxPlot : public WorksheetElement, Curve {
+#endif
 	Q_OBJECT
 
 public:
