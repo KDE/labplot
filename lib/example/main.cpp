@@ -49,6 +49,16 @@ int main(int argc, char **argv) {
 	fitCurve->recalculate();
 	plot->addChild(fitCurve);
 
+	//add a curve defined via a mathematical equation
+	auto* eqCurve = new XYEquationCurve("eq");
+	plot->addChild(eqCurve);
+	auto data = XYEquationCurve::EquationData();
+	data.expression1 = "50*sin(x)";
+	data.min = "0.0";
+	data.max = "10.0";
+	eqCurve->setEquationData(data);
+	eqCurve->recalculate();
+
 	//add legend
 	plot->addLegend();
 
