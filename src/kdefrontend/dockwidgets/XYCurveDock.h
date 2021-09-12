@@ -176,9 +176,9 @@ private slots:
 
 	//Filling-Tab
 	void curveFillingPositionChanged(XYCurve::FillingPosition);
-	void curveFillingTypeChanged(PlotArea::BackgroundType);
-	void curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void curveFillingTypeChanged(WorksheetElement::BackgroundType);
+	void curveFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
+	void curveFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
 	void curveFillingBrushStyleChanged(Qt::BrushStyle);
 	void curveFillingFirstColorChanged(QColor&);
 	void curveFillingSecondColorChanged(QColor&);

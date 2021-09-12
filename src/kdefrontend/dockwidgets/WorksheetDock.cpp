@@ -477,9 +477,9 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 	if (index == -1)
 		return;
 
-	auto type = (PlotArea::BackgroundType)index;
+	auto type = (WorksheetElement::BackgroundType)index;
 
-	if (type == PlotArea::BackgroundType::Color) {
+	if (type == WorksheetElement::BackgroundType::Color) {
 		ui.lBackgroundColorStyle->show();
 		ui.cbBackgroundColorStyle->show();
 		ui.lBackgroundImageStyle->hide();
@@ -494,8 +494,8 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 
-		auto style = (PlotArea::BackgroundColorStyle)ui.cbBackgroundColorStyle->currentIndex();
-		if (style == PlotArea::BackgroundColorStyle::SingleColor) {
+		auto style = (WorksheetElement::BackgroundColorStyle)ui.cbBackgroundColorStyle->currentIndex();
+		if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
 			ui.lBackgroundFirstColor->setText(i18n("Color:"));
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
@@ -504,7 +504,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
-	} else if (type == PlotArea::BackgroundType::Image) {
+	} else if (type == WorksheetElement::BackgroundType::Image) {
 		ui.lBackgroundFirstColor->hide();
 		ui.kcbBackgroundFirstColor->hide();
 		ui.lBackgroundSecondColor->hide();
@@ -519,7 +519,7 @@ void WorksheetDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundFileName->show();
 		ui.leBackgroundFileName->show();
 		ui.bOpen->show();
-	} else if (type == PlotArea::BackgroundType::Pattern) {
+	} else if (type == WorksheetElement::BackgroundType::Pattern) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
@@ -548,9 +548,9 @@ void WorksheetDock::backgroundColorStyleChanged(int index) {
 	if (index == -1)
 		return;
 
-	auto style = (PlotArea::BackgroundColorStyle)index;
+	auto style = (WorksheetElement::BackgroundColorStyle)index;
 
-	if (style == PlotArea::BackgroundColorStyle::SingleColor) {
+	if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
@@ -577,7 +577,7 @@ void WorksheetDock::backgroundImageStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	auto style = (PlotArea::BackgroundImageStyle)index;
+	auto style = (WorksheetElement::BackgroundImageStyle)index;
 	for (auto* worksheet : m_worksheetList)
 		worksheet->setBackgroundImageStyle(style);
 }
@@ -774,19 +774,19 @@ void WorksheetDock::worksheetPageRectChanged(const QRectF& rect) {
 	m_initializing = false;
 }
 
-void WorksheetDock::worksheetBackgroundTypeChanged(PlotArea::BackgroundType type) {
+void WorksheetDock::worksheetBackgroundTypeChanged(WorksheetElement::BackgroundType type) {
 	m_initializing = true;
 	ui.cbBackgroundType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 
-void WorksheetDock::worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle style) {
+void WorksheetDock::worksheetBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle style) {
 	m_initializing = true;
 	ui.cbBackgroundColorStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
 
-void WorksheetDock::worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle style) {
+void WorksheetDock::worksheetBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle style) {
 	m_initializing = true;
 	ui.cbBackgroundImageStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;

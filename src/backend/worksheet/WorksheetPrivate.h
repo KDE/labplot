@@ -38,9 +38,9 @@ public:
 	void setContainerRect(WorksheetElementContainer*, double x, double y, double h, double w, bool undoable);
 	void updatePageRect();
 
-	PlotArea::BackgroundType backgroundType;
-	PlotArea::BackgroundColorStyle backgroundColorStyle;
-	PlotArea::BackgroundImageStyle backgroundImageStyle;
+	WorksheetElement::BackgroundType backgroundType;
+	WorksheetElement::BackgroundColorStyle backgroundColorStyle;
+	WorksheetElement::BackgroundImageStyle backgroundImageStyle;
 	Qt::BrushStyle backgroundBrushStyle;
 	QColor backgroundFirstColor;
 	QColor backgroundSecondColor;

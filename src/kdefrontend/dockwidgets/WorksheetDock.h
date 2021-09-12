@@ -13,7 +13,6 @@
 #define WORKSHEETDOCK_H
 
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/PlotArea.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "ui_worksheetdock.h"
 
@@ -78,9 +77,9 @@ private slots:
 	void worksheetScaleContentChanged(bool);
 	void worksheetPageRectChanged(const QRectF&);
 
-	void worksheetBackgroundTypeChanged(PlotArea::BackgroundType);
-	void worksheetBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void worksheetBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void worksheetBackgroundTypeChanged(WorksheetElement::BackgroundType);
+	void worksheetBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
+	void worksheetBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
 	void worksheetBackgroundBrushStyleChanged(Qt::BrushStyle);
 	void worksheetBackgroundFirstColorChanged(const QColor&);
 	void worksheetBackgroundSecondColorChanged(const QColor&);

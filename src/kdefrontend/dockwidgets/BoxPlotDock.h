@@ -112,9 +112,9 @@ private slots:
 
 	//box filling
 	void plotFillingEnabledChanged(bool);
-	void plotFillingTypeChanged(PlotArea::BackgroundType);
-	void plotFillingColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void plotFillingImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void plotFillingTypeChanged(WorksheetElement::BackgroundType);
+	void plotFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
+	void plotFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
 	void plotFillingBrushStyleChanged(Qt::BrushStyle);
 	void plotFillingFirstColorChanged(QColor&);
 	void plotFillingSecondColorChanged(QColor&);

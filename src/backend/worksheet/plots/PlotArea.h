@@ -25,10 +25,6 @@ public:
 	explicit PlotArea(const QString& name, CartesianPlot *parent);
 	~PlotArea() override;
 
-	enum class BackgroundType {Color, Image, Pattern};
-	enum class BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
-			TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient, RadialGradient};
-	enum class BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 	enum class BorderTypeFlags {
 			NoBorder = 0x0,
 			BorderLeft = 0x1,
@@ -46,9 +42,9 @@ public:
 	bool isHovered() const;
 	bool isSelected() const;
 
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, backgroundType, BackgroundType)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
 	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
 	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
 	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
@@ -80,9 +76,9 @@ private:
 	void init();
 
 signals:
-	void backgroundTypeChanged(PlotArea::BackgroundType);
-	void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void backgroundTypeChanged(WorksheetElement::BackgroundType);
+	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
+	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
 	void backgroundBrushStyleChanged(Qt::BrushStyle);
 	void backgroundFirstColorChanged(QColor&);
 	void backgroundSecondColorChanged(QColor&);

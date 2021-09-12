@@ -97,9 +97,9 @@ public:
 
 	//filling
 	bool fillingEnabled{true};
-	PlotArea::BackgroundType fillingType;
-	PlotArea::BackgroundColorStyle fillingColorStyle;
-	PlotArea::BackgroundImageStyle fillingImageStyle;
+	WorksheetElement::BackgroundType fillingType;
+	WorksheetElement::BackgroundColorStyle fillingColorStyle;
+	WorksheetElement::BackgroundImageStyle fillingImageStyle;
 	Qt::BrushStyle fillingBrushStyle;
 	QColor fillingFirstColor;
 	QColor fillingSecondColor;

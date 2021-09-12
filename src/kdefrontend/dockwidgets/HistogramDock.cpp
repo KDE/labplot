@@ -949,9 +949,9 @@ void HistogramDock::fillingEnabledChanged(int state) {
 }
 
 void HistogramDock::fillingTypeChanged(int index) {
-	auto type = (PlotArea::BackgroundType)index;
+	auto type = (WorksheetElement::BackgroundType)index;
 
-	if (type == PlotArea::BackgroundType::Color) {
+	if (type == WorksheetElement::BackgroundType::Color) {
 		ui.lFillingColorStyle->show();
 		ui.cbFillingColorStyle->show();
 		ui.lFillingImageStyle->hide();
@@ -966,8 +966,8 @@ void HistogramDock::fillingTypeChanged(int index) {
 		ui.lFillingFirstColor->show();
 		ui.kcbFillingFirstColor->show();
 
-		auto style = (PlotArea::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
-		if (style == PlotArea::BackgroundColorStyle::SingleColor) {
+		auto style = (WorksheetElement::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
+		if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
 			ui.lFillingFirstColor->setText(i18n("Color:"));
 			ui.lFillingSecondColor->hide();
 			ui.kcbFillingSecondColor->hide();
@@ -976,7 +976,7 @@ void HistogramDock::fillingTypeChanged(int index) {
 			ui.lFillingSecondColor->show();
 			ui.kcbFillingSecondColor->show();
 		}
-	} else if (type == PlotArea::BackgroundType::Image) {
+	} else if (type == WorksheetElement::BackgroundType::Image) {
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
 		ui.lFillingImageStyle->show();
@@ -991,7 +991,7 @@ void HistogramDock::fillingTypeChanged(int index) {
 		ui.kcbFillingFirstColor->hide();
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
-	} else if (type == PlotArea::BackgroundType::Pattern) {
+	} else if (type == WorksheetElement::BackgroundType::Pattern) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
@@ -1017,9 +1017,9 @@ void HistogramDock::fillingTypeChanged(int index) {
 }
 
 void HistogramDock::fillingColorStyleChanged(int index) {
-	auto style = (PlotArea::BackgroundColorStyle)index;
+	auto style = (WorksheetElement::BackgroundColorStyle)index;
 
-	if (style == PlotArea::BackgroundColorStyle::SingleColor) {
+	if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
@@ -1042,7 +1042,7 @@ void HistogramDock::fillingImageStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	auto style = (PlotArea::BackgroundImageStyle)index;
+	auto style = (WorksheetElement::BackgroundImageStyle)index;
 	for (auto* curve : m_curvesList)
 		curve->setFillingImageStyle(style);
 }
@@ -1365,17 +1365,17 @@ void HistogramDock::curveFillingEnabledChanged(bool status) {
 	ui.chkFillingEnabled->setChecked(status);
 	m_initializing = false;
 }
-void HistogramDock::curveFillingTypeChanged(PlotArea::BackgroundType type) {
+void HistogramDock::curveFillingTypeChanged(WorksheetElement::BackgroundType type) {
 	m_initializing = true;
 	ui.cbFillingType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
-void HistogramDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style) {
+void HistogramDock::curveFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle style) {
 	m_initializing = true;
 	ui.cbFillingColorStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
-void HistogramDock::curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle style) {
+void HistogramDock::curveFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle style) {
 	m_initializing = true;
 	ui.cbFillingImageStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;

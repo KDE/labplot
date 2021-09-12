@@ -88,9 +88,9 @@ public:
 	CLASS_D_ACCESSOR_DECL(QFont, valuesFont, ValuesFont)
 
 	BASIC_D_ACCESSOR_DECL(bool, fillingEnabled, FillingEnabled)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, fillingType, FillingType)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, fillingColorStyle, FillingColorStyle)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, fillingImageStyle, FillingImageStyle)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, fillingType, FillingType)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, fillingColorStyle, FillingColorStyle)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, fillingImageStyle, FillingImageStyle)
 	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, fillingBrushStyle, FillingBrushStyle)
 	CLASS_D_ACCESSOR_DECL(QColor, fillingFirstColor, FillingFirstColor)
 	CLASS_D_ACCESSOR_DECL(QColor, fillingSecondColor, FillingSecondColor)
@@ -176,9 +176,9 @@ signals:
 
 	//Filling
 	void fillingEnabledChanged(bool);
-	void fillingTypeChanged(PlotArea::BackgroundType);
-	void fillingColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void fillingImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void fillingTypeChanged(WorksheetElement::BackgroundType);
+	void fillingColorStyleChanged(WorksheetElement::BackgroundColorStyle);
+	void fillingImageStyleChanged(WorksheetElement::BackgroundImageStyle);
 	void fillingBrushStyleChanged(Qt::BrushStyle);
 	void fillingFirstColorChanged(QColor&);
 	void fillingSecondColorChanged(QColor&);

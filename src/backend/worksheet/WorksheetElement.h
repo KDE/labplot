@@ -40,6 +40,11 @@ public:
 	enum class HorizontalAlignment {Left, Center, Right};
 	enum class VerticalAlignment {Top, Center, Bottom};
 
+	enum class BackgroundType {Color, Image, Pattern};
+	enum class BackgroundColorStyle {SingleColor, HorizontalLinearGradient, VerticalLinearGradient,
+			TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient, RadialGradient};
+	enum class BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
+
 	struct PositionWrapper {
 		QPointF point;
 		WorksheetElement::HorizontalPosition horizontalPosition;

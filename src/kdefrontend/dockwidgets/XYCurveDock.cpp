@@ -623,9 +623,9 @@ void XYCurveDock::initTabs() {
 
 	//Filling-Tab
 	connect( m_curve, SIGNAL(fillingPositionChanged(XYCurve::FillingPosition)), this, SLOT(curveFillingPositionChanged(XYCurve::FillingPosition)) );
-	connect( m_curve, SIGNAL(fillingTypeChanged(PlotArea::BackgroundType)), this, SLOT(curveFillingTypeChanged(PlotArea::BackgroundType)) );
-	connect( m_curve, SIGNAL(fillingColorStyleChanged(PlotArea::BackgroundColorStyle)), this, SLOT(curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle)) );
-	connect( m_curve, SIGNAL(fillingImageStyleChanged(PlotArea::BackgroundImageStyle)), this, SLOT(curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle)) );
+	connect( m_curve, SIGNAL(fillingTypeChanged(WorksheetElement::BackgroundType)), this, SLOT(curveFillingTypeChanged(WorksheetElement::BackgroundType)) );
+	connect( m_curve, SIGNAL(fillingColorStyleChanged(WorksheetElement::BackgroundColorStyle)), this, SLOT(curveFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle)) );
+	connect( m_curve, SIGNAL(fillingImageStyleChanged(WorksheetElement::BackgroundImageStyle)), this, SLOT(curveFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle)) );
 	connect( m_curve, SIGNAL(fillingBrushStyleChanged(Qt::BrushStyle)), this, SLOT(curveFillingBrushStyleChanged(Qt::BrushStyle)) );
 	connect( m_curve, SIGNAL(fillingFirstColorChanged(QColor&)), this, SLOT(curveFillingFirstColorChanged(QColor&)) );
 	connect( m_curve, SIGNAL(fillingSecondColorChanged(QColor&)), this, SLOT(curveFillingSecondColorChanged(QColor&)) );
@@ -1162,9 +1162,9 @@ void XYCurveDock::fillingPositionChanged(int index) {
 }
 
 void XYCurveDock::fillingTypeChanged(int index) {
-	const auto type = (PlotArea::BackgroundType)index;
+	const auto type = (WorksheetElement::BackgroundType)index;
 
-	if (type == PlotArea::BackgroundType::Color) {
+	if (type == WorksheetElement::BackgroundType::Color) {
 		ui.lFillingColorStyle->show();
 		ui.cbFillingColorStyle->show();
 		ui.lFillingImageStyle->hide();
@@ -1179,8 +1179,8 @@ void XYCurveDock::fillingTypeChanged(int index) {
 		ui.lFillingFirstColor->show();
 		ui.kcbFillingFirstColor->show();
 
-		auto style = (PlotArea::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
-		if (style == PlotArea::BackgroundColorStyle::SingleColor) {
+		auto style = (WorksheetElement::BackgroundColorStyle) ui.cbFillingColorStyle->currentIndex();
+		if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
 			ui.lFillingFirstColor->setText(i18n("Color:"));
 			ui.lFillingSecondColor->hide();
 			ui.kcbFillingSecondColor->hide();
@@ -1189,7 +1189,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 			ui.lFillingSecondColor->show();
 			ui.kcbFillingSecondColor->show();
 		}
-	} else if (type == PlotArea::BackgroundType::Image) {
+	} else if (type == WorksheetElement::BackgroundType::Image) {
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
 		ui.lFillingImageStyle->show();
@@ -1204,7 +1204,7 @@ void XYCurveDock::fillingTypeChanged(int index) {
 		ui.kcbFillingFirstColor->hide();
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
-	} else if (type == PlotArea::BackgroundType::Pattern) {
+	} else if (type == WorksheetElement::BackgroundType::Pattern) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingColorStyle->hide();
 		ui.cbFillingColorStyle->hide();
@@ -1230,9 +1230,9 @@ void XYCurveDock::fillingTypeChanged(int index) {
 }
 
 void XYCurveDock::fillingColorStyleChanged(int index) {
-	const auto style = (PlotArea::BackgroundColorStyle)index;
+	const auto style = (WorksheetElement::BackgroundColorStyle)index;
 
-	if (style == PlotArea::BackgroundColorStyle::SingleColor) {
+	if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
@@ -1255,7 +1255,7 @@ void XYCurveDock::fillingImageStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	auto style = (PlotArea::BackgroundImageStyle)index;
+	auto style = (WorksheetElement::BackgroundImageStyle)index;
 	for (auto* curve : m_curvesList)
 		curve->setFillingImageStyle(style);
 }
@@ -1734,17 +1734,17 @@ void XYCurveDock::curveFillingPositionChanged(XYCurve::FillingPosition position)
 	ui.cbFillingPosition->setCurrentIndex((int)position);
 	m_initializing = false;
 }
-void XYCurveDock::curveFillingTypeChanged(PlotArea::BackgroundType type) {
+void XYCurveDock::curveFillingTypeChanged(WorksheetElement::BackgroundType type) {
 	m_initializing = true;
 	ui.cbFillingType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
-void XYCurveDock::curveFillingColorStyleChanged(PlotArea::BackgroundColorStyle style) {
+void XYCurveDock::curveFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle style) {
 	m_initializing = true;
 	ui.cbFillingColorStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
-void XYCurveDock::curveFillingImageStyleChanged(PlotArea::BackgroundImageStyle style) {
+void XYCurveDock::curveFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle style) {
 	m_initializing = true;
 	ui.cbFillingImageStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;

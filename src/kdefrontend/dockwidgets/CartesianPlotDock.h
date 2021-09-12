@@ -14,6 +14,7 @@
 
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/PlotArea.h"
 #include "ui_cartesianplotdock.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
@@ -169,9 +170,9 @@ private slots:
 	void plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&);
 
 	//background
-	void plotBackgroundTypeChanged(PlotArea::BackgroundType);
-	void plotBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void plotBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void plotBackgroundTypeChanged(WorksheetElement::BackgroundType);
+	void plotBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
+	void plotBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
 	void plotBackgroundBrushStyleChanged(Qt::BrushStyle);
 	void plotBackgroundFirstColorChanged(QColor&);
 	void plotBackgroundSecondColorChanged(QColor&);

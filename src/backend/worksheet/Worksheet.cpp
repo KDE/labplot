@@ -568,9 +568,9 @@ BASIC_D_READER_IMPL(Worksheet, bool, scaleContent, scaleContent)
 BASIC_D_READER_IMPL(Worksheet, bool, useViewSize, useViewSize)
 
 /* =============================== getter methods for background options ================================= */
-BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundType, backgroundType, backgroundType)
-BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
-BASIC_D_READER_IMPL(Worksheet, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
+BASIC_D_READER_IMPL(Worksheet, WorksheetElement::BackgroundType, backgroundType, backgroundType)
+BASIC_D_READER_IMPL(Worksheet, WorksheetElement::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
+BASIC_D_READER_IMPL(Worksheet, WorksheetElement::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
 BASIC_D_READER_IMPL(Worksheet, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle)
 BASIC_D_READER_IMPL(Worksheet, QColor, backgroundFirstColor, backgroundFirstColor)
 BASIC_D_READER_IMPL(Worksheet, QColor, backgroundSecondColor, backgroundSecondColor)
@@ -605,20 +605,20 @@ void Worksheet::setScaleContent(bool scaleContent) {
 }
 
 /* ============================ setter methods and undo commands  for background options  ================= */
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
-void Worksheet::setBackgroundType(PlotArea::BackgroundType type) {
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundType, WorksheetElement::BackgroundType, backgroundType, update)
+void Worksheet::setBackgroundType(WorksheetElement::BackgroundType type) {
 	if (type != d->backgroundType)
 		exec(new WorksheetSetBackgroundTypeCmd(d, type, ki18n("%1: background type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
-void Worksheet::setBackgroundColorStyle(PlotArea::BackgroundColorStyle style) {
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundColorStyle, WorksheetElement::BackgroundColorStyle, backgroundColorStyle, update)
+void Worksheet::setBackgroundColorStyle(WorksheetElement::BackgroundColorStyle style) {
 	if (style != d->backgroundColorStyle)
 		exec(new WorksheetSetBackgroundColorStyleCmd(d, style, ki18n("%1: background color style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
-void Worksheet::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
+STD_SETTER_CMD_IMPL_F_S(Worksheet, SetBackgroundImageStyle, WorksheetElement::BackgroundImageStyle, backgroundImageStyle, update)
+void Worksheet::setBackgroundImageStyle(WorksheetElement::BackgroundImageStyle style) {
 	if (style != d->backgroundImageStyle)
 		exec(new WorksheetSetBackgroundImageStyleCmd(d, style, ki18n("%1: background image style changed")));
 }
@@ -1679,9 +1679,9 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "background") {
 			attribs = reader->attributes();
 
-			READ_INT_VALUE("type", backgroundType, PlotArea::BackgroundType);
-			READ_INT_VALUE("colorStyle", backgroundColorStyle, PlotArea::BackgroundColorStyle);
-			READ_INT_VALUE("imageStyle", backgroundImageStyle, PlotArea::BackgroundImageStyle);
+			READ_INT_VALUE("type", backgroundType, WorksheetElement::BackgroundType);
+			READ_INT_VALUE("colorStyle", backgroundColorStyle, WorksheetElement::BackgroundColorStyle);
+			READ_INT_VALUE("imageStyle", backgroundImageStyle, WorksheetElement::BackgroundImageStyle);
 			READ_INT_VALUE("brushStyle", backgroundBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
@@ -1791,9 +1791,9 @@ void Worksheet::loadTheme(const QString& theme) {
 		group = config->group("Worksheet");
 	}
 
-	this->setBackgroundType((PlotArea::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(PlotArea::BackgroundType::Color)));
-	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor)));
-	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled)));
+	this->setBackgroundType((WorksheetElement::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(WorksheetElement::BackgroundType::Color)));
+	this->setBackgroundColorStyle((WorksheetElement::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor)));
+	this->setBackgroundImageStyle((WorksheetElement::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", static_cast<int>(WorksheetElement::BackgroundImageStyle::Scaled)));
 	this->setBackgroundBrushStyle((Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern)));
 	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
 	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));

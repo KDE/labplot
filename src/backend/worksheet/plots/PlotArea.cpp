@@ -157,22 +157,22 @@ void PlotArea::setRect(const QRectF &newRect) {
 }
 
 //Background
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundType, PlotArea::BackgroundType, backgroundType, update)
-void PlotArea::setBackgroundType(BackgroundType type) {
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundType, WorksheetElement::BackgroundType, backgroundType, update)
+void PlotArea::setBackgroundType(WorksheetElement::BackgroundType type) {
 	Q_D(PlotArea);
 	if (type != d->backgroundType)
 		exec(new PlotAreaSetBackgroundTypeCmd(d, type, ki18n("%1: background type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundColorStyle, PlotArea::BackgroundColorStyle, backgroundColorStyle, update)
-void PlotArea::setBackgroundColorStyle(BackgroundColorStyle style) {
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundColorStyle, WorksheetElement::BackgroundColorStyle, backgroundColorStyle, update)
+void PlotArea::setBackgroundColorStyle(WorksheetElement::BackgroundColorStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundColorStyle)
 		exec(new PlotAreaSetBackgroundColorStyleCmd(d, style, ki18n("%1: background color style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundImageStyle, PlotArea::BackgroundImageStyle, backgroundImageStyle, update)
-void PlotArea::setBackgroundImageStyle(PlotArea::BackgroundImageStyle style) {
+STD_SETTER_CMD_IMPL_F_S(PlotArea, SetBackgroundImageStyle, WorksheetElement::BackgroundImageStyle, backgroundImageStyle, update)
+void PlotArea::setBackgroundImageStyle(WorksheetElement::BackgroundImageStyle style) {
 	Q_D(PlotArea);
 	if (style != d->backgroundImageStyle)
 		exec(new PlotAreaSetBackgroundImageStyleCmd(d, style, ki18n("%1: background image style changed")));
@@ -305,41 +305,41 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 	//draw the area
 	painter->setOpacity(backgroundOpacity);
 	painter->setPen(Qt::NoPen);
-	if (backgroundType == PlotArea::BackgroundType::Color) {
+	if (backgroundType == WorksheetElement::BackgroundType::Color) {
 		switch (backgroundColorStyle) {
 		case PlotArea::BackgroundColorStyle::SingleColor: {
 			painter->setBrush(QBrush(backgroundFirstColor));
 			break;
 		}
-		case PlotArea::BackgroundColorStyle::HorizontalLinearGradient: {
+		case WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
 			linearGrad.setColorAt(0, backgroundFirstColor);
 			linearGrad.setColorAt(1, backgroundSecondColor);
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case PlotArea::BackgroundColorStyle::VerticalLinearGradient: {
+		case WorksheetElement::BackgroundColorStyle::VerticalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
 			linearGrad.setColorAt(0, backgroundFirstColor);
 			linearGrad.setColorAt(1, backgroundSecondColor);
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
+		case WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
 			linearGrad.setColorAt(0, backgroundFirstColor);
 			linearGrad.setColorAt(1, backgroundSecondColor);
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
+		case WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
 			linearGrad.setColorAt(0, backgroundFirstColor);
 			linearGrad.setColorAt(1, backgroundSecondColor);
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case PlotArea::BackgroundColorStyle::RadialGradient: {
+		case WorksheetElement::BackgroundColorStyle::RadialGradient: {
 			QRadialGradient radialGrad(rect.center(), rect.width()/2);
 			radialGrad.setColorAt(0, backgroundFirstColor);
 			radialGrad.setColorAt(1, backgroundSecondColor);
@@ -347,42 +347,42 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 			break;
 		}
 		}
-	} else if (backgroundType == PlotArea::BackgroundType::Image) {
+	} else if (backgroundType == WorksheetElement::BackgroundType::Image) {
 		if ( !backgroundFileName.trimmed().isEmpty() ) {
 			QPixmap pix(backgroundFileName);
 			switch (backgroundImageStyle) {
-			case PlotArea::BackgroundImageStyle::ScaledCropped:
+			case WorksheetElement::BackgroundImageStyle::ScaledCropped:
 				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 				break;
-			case PlotArea::BackgroundImageStyle::Scaled:
+			case WorksheetElement::BackgroundImageStyle::Scaled:
 				pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 				break;
-			case PlotArea::BackgroundImageStyle::ScaledAspectRatio:
+			case WorksheetElement::BackgroundImageStyle::ScaledAspectRatio:
 				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 				break;
-			case PlotArea::BackgroundImageStyle::Centered:
+			case WorksheetElement::BackgroundImageStyle::Centered:
 				painter->drawPixmap(QPointF(rect.center().x()-pix.size().width()/2,rect.center().y()-pix.size().height()/2),pix);
 				break;
-			case PlotArea::BackgroundImageStyle::Tiled:
+			case WorksheetElement::BackgroundImageStyle::Tiled:
 				painter->setBrush(QBrush(pix));
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 				break;
-			case PlotArea::BackgroundImageStyle::CenterTiled:
+			case WorksheetElement::BackgroundImageStyle::CenterTiled:
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 				painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 			}
 		}
-	} else if (backgroundType == PlotArea::BackgroundType::Pattern) {
+	} else if (backgroundType == WorksheetElement::BackgroundType::Pattern) {
 		painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 	}
 
@@ -490,19 +490,19 @@ bool PlotArea::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("type").toString());
 			else
-				d->backgroundType = PlotArea::BackgroundType(str.toInt());
+				d->backgroundType = WorksheetElement::BackgroundType(str.toInt());
 
 			str = attribs.value("colorStyle").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("colorStyle").toString());
 			else
-				d->backgroundColorStyle = PlotArea::BackgroundColorStyle(str.toInt());
+				d->backgroundColorStyle = WorksheetElement::BackgroundColorStyle(str.toInt());
 
 			str = attribs.value("imageStyle").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("imageStyle").toString());
 			else
-				d->backgroundImageStyle = PlotArea::BackgroundImageStyle(str.toInt());
+				d->backgroundImageStyle = WorksheetElement::BackgroundImageStyle(str.toInt());
 
 			str = attribs.value("brushStyle").toString();
 			if (str.isEmpty())
@@ -588,9 +588,9 @@ void PlotArea::loadThemeConfig(const KConfig& config) {
 		group = config.group("PlotArea");
 
 	//background
-	this->setBackgroundType((PlotArea::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(PlotArea::BackgroundType::Color)));
-	this->setBackgroundColorStyle((PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor)));
-	this->setBackgroundImageStyle((PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled)));
+	this->setBackgroundType((WorksheetElement::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(WorksheetElement::BackgroundType::Color)));
+	this->setBackgroundColorStyle((WorksheetElement::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor)));
+	this->setBackgroundImageStyle((WorksheetElement::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", static_cast<int>(WorksheetElement::BackgroundImageStyle::Scaled)));
 	this->setBackgroundBrushStyle((Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern)));
 	this->setBackgroundFirstColor(group.readEntry("BackgroundFirstColor", QColor(Qt::white)));
 	this->setBackgroundSecondColor(group.readEntry("BackgroundSecondColor", QColor(Qt::black)));

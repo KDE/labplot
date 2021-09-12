@@ -13,7 +13,6 @@
 #define WORKSHEET_H
 
 #include "backend/core/AbstractPart.h"
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 
 class QGraphicsItem;
@@ -87,9 +86,9 @@ public:
 	void cursorModelPlotRemoved(const QString& name);
 
 	BASIC_D_ACCESSOR_DECL(double, backgroundOpacity, BackgroundOpacity)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, backgroundType, BackgroundType)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
 	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
 	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
 	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
@@ -166,9 +165,9 @@ signals:
 	void showCursorDock(TreeModel*, QVector<CartesianPlot*>);
 	void propertiesExplorerRequested();
 
-	void backgroundTypeChanged(PlotArea::BackgroundType);
-	void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void backgroundTypeChanged(WorksheetElement::BackgroundType);
+	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
+	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
 	void backgroundBrushStyleChanged(Qt::BrushStyle);
 	void backgroundFirstColorChanged(const QColor&);
 	void backgroundSecondColorChanged(const QColor&);

@@ -13,6 +13,7 @@
 #include "CustomPoint.h"
 #include "CustomPointPrivate.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"

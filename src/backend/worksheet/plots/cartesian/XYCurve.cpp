@@ -106,9 +106,9 @@ void XYCurve::init() {
 	d->valuesColor = group.readEntry("ValuesColor", QColor(Qt::black));
 
 	d->fillingPosition = (FillingPosition) group.readEntry("FillingPosition", static_cast<int>(FillingPosition::NoFilling));
-	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color));
-	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor));
-	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled));
+	d->fillingType = (WorksheetElement::BackgroundType) group.readEntry("FillingType", static_cast<int>(WorksheetElement::BackgroundType::Color));
+	d->fillingColorStyle = (WorksheetElement::BackgroundColorStyle) group.readEntry("FillingColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor));
+	d->fillingImageStyle = (WorksheetElement::BackgroundImageStyle) group.readEntry("FillingImageStyle", static_cast<int>(WorksheetElement::BackgroundImageStyle::Scaled));
 	d->fillingBrushStyle = (Qt::BrushStyle) group.readEntry("FillingBrushStyle", static_cast<int>(Qt::SolidPattern));
 	d->fillingFileName = group.readEntry("FillingFileName", QString());
 	d->fillingFirstColor = group.readEntry("FillingFirstColor", QColor(Qt::white));
@@ -272,9 +272,9 @@ BASIC_SHARED_D_READER_IMPL(XYCurve, QFont, valuesFont, valuesFont)
 
 //filling
 BASIC_SHARED_D_READER_IMPL(XYCurve, XYCurve::FillingPosition, fillingPosition, fillingPosition)
-BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundType, fillingType, fillingType)
-BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
-BASIC_SHARED_D_READER_IMPL(XYCurve, PlotArea::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
+BASIC_SHARED_D_READER_IMPL(XYCurve, WorksheetElement::BackgroundType, fillingType, fillingType)
+BASIC_SHARED_D_READER_IMPL(XYCurve, WorksheetElement::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
+BASIC_SHARED_D_READER_IMPL(XYCurve, WorksheetElement::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
 BASIC_SHARED_D_READER_IMPL(XYCurve, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
 BASIC_SHARED_D_READER_IMPL(XYCurve, QColor, fillingFirstColor, fillingFirstColor)
 BASIC_SHARED_D_READER_IMPL(XYCurve, QColor, fillingSecondColor, fillingSecondColor)
@@ -518,22 +518,22 @@ void XYCurve::setFillingPosition(FillingPosition position) {
 		exec(new XYCurveSetFillingPositionCmd(d, position, ki18n("%1: filling position changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingType, PlotArea::BackgroundType, fillingType, updatePixmap)
-void XYCurve::setFillingType(PlotArea::BackgroundType type) {
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingType, WorksheetElement::BackgroundType, fillingType, updatePixmap)
+void XYCurve::setFillingType(WorksheetElement::BackgroundType type) {
 	Q_D(XYCurve);
 	if (type != d->fillingType)
 		exec(new XYCurveSetFillingTypeCmd(d, type, ki18n("%1: filling type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingColorStyle, PlotArea::BackgroundColorStyle, fillingColorStyle, updatePixmap)
-void XYCurve::setFillingColorStyle(PlotArea::BackgroundColorStyle style) {
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingColorStyle, WorksheetElement::BackgroundColorStyle, fillingColorStyle, updatePixmap)
+void XYCurve::setFillingColorStyle(WorksheetElement::BackgroundColorStyle style) {
 	Q_D(XYCurve);
 	if (style != d->fillingColorStyle)
 		exec(new XYCurveSetFillingColorStyleCmd(d, style, ki18n("%1: filling color style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingImageStyle, PlotArea::BackgroundImageStyle, fillingImageStyle, updatePixmap)
-void XYCurve::setFillingImageStyle(PlotArea::BackgroundImageStyle style) {
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetFillingImageStyle, WorksheetElement::BackgroundImageStyle, fillingImageStyle, updatePixmap)
+void XYCurve::setFillingImageStyle(WorksheetElement::BackgroundImageStyle style) {
 	Q_D(XYCurve);
 	if (style != d->fillingImageStyle)
 		exec(new XYCurveSetFillingImageStyleCmd(d, style, ki18n("%1: filling image style changed")));
@@ -2975,41 +2975,41 @@ void XYCurvePrivate::drawValues(QPainter* painter) {
 void XYCurvePrivate::drawFilling(QPainter* painter) {
 	for (const auto& pol : qAsConst(m_fillPolygons)) {
 		QRectF rect = pol.boundingRect();
-		if (fillingType == PlotArea::BackgroundType::Color) {
+		if (fillingType == WorksheetElement::BackgroundType::Color) {
 			switch (fillingColorStyle) {
-			case PlotArea::BackgroundColorStyle::SingleColor: {
+			case WorksheetElement::BackgroundColorStyle::SingleColor: {
 					painter->setBrush(QBrush(fillingFirstColor));
 					break;
 				}
-			case PlotArea::BackgroundColorStyle::HorizontalLinearGradient: {
+			case WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient: {
 					QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-			case PlotArea::BackgroundColorStyle::VerticalLinearGradient: {
+			case WorksheetElement::BackgroundColorStyle::VerticalLinearGradient: {
 					QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-			case PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
+			case WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
 					QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-			case PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
+			case WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
 					QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
 					linearGrad.setColorAt(0, fillingFirstColor);
 					linearGrad.setColorAt(1, fillingSecondColor);
 					painter->setBrush(QBrush(linearGrad));
 					break;
 				}
-			case PlotArea::BackgroundColorStyle::RadialGradient: {
+			case WorksheetElement::BackgroundColorStyle::RadialGradient: {
 					QRadialGradient radialGrad(rect.center(), rect.width()/2);
 					radialGrad.setColorAt(0, fillingFirstColor);
 					radialGrad.setColorAt(1, fillingSecondColor);
@@ -3017,26 +3017,26 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 					break;
 				}
 			}
-		} else if (fillingType == PlotArea::BackgroundType::Image) {
+		} else if (fillingType == WorksheetElement::BackgroundType::Image) {
 			if ( !fillingFileName.trimmed().isEmpty() ) {
 				QPixmap pix(fillingFileName);
 				switch (fillingImageStyle) {
-				case PlotArea::BackgroundImageStyle::ScaledCropped:
+				case WorksheetElement::BackgroundImageStyle::ScaledCropped:
 					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 					break;
-				case PlotArea::BackgroundImageStyle::Scaled:
+				case WorksheetElement::BackgroundImageStyle::Scaled:
 					pix = pix.scaled(rect.size().toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 					break;
-				case PlotArea::BackgroundImageStyle::ScaledAspectRatio:
+				case WorksheetElement::BackgroundImageStyle::ScaledAspectRatio:
 					pix = pix.scaled(rect.size().toSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 					break;
-				case PlotArea::BackgroundImageStyle::Centered: {
+				case WorksheetElement::BackgroundImageStyle::Centered: {
 						QPixmap backpix(rect.size().toSize());
 						backpix.fill();
 						QPainter p(&backpix);
@@ -3046,15 +3046,15 @@ void XYCurvePrivate::drawFilling(QPainter* painter) {
 						painter->setBrushOrigin(-pix.size().width()/2, -pix.size().height()/2);
 						break;
 					}
-				case PlotArea::BackgroundImageStyle::Tiled:
+				case WorksheetElement::BackgroundImageStyle::Tiled:
 					painter->setBrush(QBrush(pix));
 					break;
-				case PlotArea::BackgroundImageStyle::CenterTiled:
+				case WorksheetElement::BackgroundImageStyle::CenterTiled:
 					painter->setBrush(QBrush(pix));
 					painter->setBrushOrigin(pix.size().width()/2, pix.size().height()/2);
 				}
 			}
-		} else if (fillingType == PlotArea::BackgroundType::Pattern)
+		} else if (fillingType == WorksheetElement::BackgroundType::Pattern)
 			painter->setBrush(QBrush(fillingFirstColor, fillingBrushStyle));
 
 		painter->drawPolygon(pol);
@@ -3292,9 +3292,9 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("position", fillingPosition, FillingPosition);
-			READ_INT_VALUE("type", fillingType, PlotArea::BackgroundType);
-			READ_INT_VALUE("colorStyle", fillingColorStyle, PlotArea::BackgroundColorStyle);
-			READ_INT_VALUE("imageStyle", fillingImageStyle, PlotArea::BackgroundImageStyle );
+			READ_INT_VALUE("type", fillingType, WorksheetElement::BackgroundType);
+			READ_INT_VALUE("colorStyle", fillingColorStyle, WorksheetElement::BackgroundColorStyle);
+			READ_INT_VALUE("imageStyle", fillingImageStyle, WorksheetElement::BackgroundImageStyle );
 			READ_INT_VALUE("brushStyle", fillingBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
@@ -3410,12 +3410,12 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 
 	//Filling
 	this->setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
-	this->setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor)));
+	this->setFillingColorStyle((WorksheetElement::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor)));
 	this->setFillingOpacity(group.readEntry("FillingOpacity", 1.0));
 	this->setFillingPosition((FillingPosition)group.readEntry("FillingPosition", static_cast<int>(FillingPosition::NoFilling)));
 	this->setFillingFirstColor(themeColor);
 	this->setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
-	this->setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color)));
+	this->setFillingType((WorksheetElement::BackgroundType)group.readEntry("FillingType", static_cast<int>(WorksheetElement::BackgroundType::Color)));
 
 	//Error Bars
 	p.setStyle((Qt::PenStyle)group.readEntry("ErrorBarsStyle", (int)Qt::SolidLine));

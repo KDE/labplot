@@ -503,9 +503,9 @@ void BoxPlotDock::fillingTypeChanged(int index) const {
 	if (index == -1)
 		return;
 
-	auto type = (PlotArea::BackgroundType)index;
+	auto type = (WorksheetElement::BackgroundType)index;
 
-	if (type == PlotArea::BackgroundType::Color) {
+	if (type == WorksheetElement::BackgroundType::Color) {
 		ui.lFillingColorStyle->show();
 		ui.cbFillingColorStyle->show();
 		ui.lFillingImageStyle->hide();
@@ -520,8 +520,8 @@ void BoxPlotDock::fillingTypeChanged(int index) const {
 		ui.lFillingFirstColor->show();
 		ui.kcbFillingFirstColor->show();
 
-		auto style = (PlotArea::BackgroundColorStyle)ui.cbFillingColorStyle->currentIndex();
-		if (style == PlotArea::BackgroundColorStyle::SingleColor) {
+		auto style = (WorksheetElement::BackgroundColorStyle)ui.cbFillingColorStyle->currentIndex();
+		if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
 			ui.lFillingFirstColor->setText(i18n("Color:"));
 			ui.lFillingSecondColor->hide();
 			ui.kcbFillingSecondColor->hide();
@@ -530,7 +530,7 @@ void BoxPlotDock::fillingTypeChanged(int index) const {
 			ui.lFillingSecondColor->show();
 			ui.kcbFillingSecondColor->show();
 		}
-	} else if (type == PlotArea::BackgroundType::Image) {
+	} else if (type == WorksheetElement::BackgroundType::Image) {
 		ui.lFillingFirstColor->hide();
 		ui.kcbFillingFirstColor->hide();
 		ui.lFillingSecondColor->hide();
@@ -545,7 +545,7 @@ void BoxPlotDock::fillingTypeChanged(int index) const {
 		ui.lFillingFileName->show();
 		ui.leFillingFileName->show();
 		ui.bFillingOpen->show();
-	} else if (type == PlotArea::BackgroundType::Pattern) {
+	} else if (type == WorksheetElement::BackgroundType::Pattern) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingFirstColor->show();
 		ui.kcbFillingFirstColor->show();
@@ -574,9 +574,9 @@ void BoxPlotDock::fillingColorStyleChanged(int index) const {
 	if (index == -1)
 		return;
 
-	auto style = (PlotArea::BackgroundColorStyle)index;
+	auto style = (WorksheetElement::BackgroundColorStyle)index;
 
-	if (style == PlotArea::BackgroundColorStyle::SingleColor) {
+	if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
 		ui.lFillingFirstColor->setText(i18n("Color:"));
 		ui.lFillingSecondColor->hide();
 		ui.kcbFillingSecondColor->hide();
@@ -597,7 +597,7 @@ void BoxPlotDock::fillingImageStyleChanged(int index) const {
 	if (m_initializing)
 		return;
 
-	auto style = (PlotArea::BackgroundImageStyle)index;
+	auto style = (WorksheetElement::BackgroundImageStyle)index;
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setFillingImageStyle(style);
 }
@@ -910,15 +910,15 @@ void BoxPlotDock::plotFillingEnabledChanged(bool status) {
 	Lock lock(m_initializing);
 	ui.chkFillingEnabled->setChecked(status);
 }
-void BoxPlotDock::plotFillingTypeChanged(PlotArea::BackgroundType type) {
+void BoxPlotDock::plotFillingTypeChanged(WorksheetElement::BackgroundType type) {
 	Lock lock(m_initializing);
 	ui.cbFillingType->setCurrentIndex(static_cast<int>(type));
 }
-void BoxPlotDock::plotFillingColorStyleChanged(PlotArea::BackgroundColorStyle style) {
+void BoxPlotDock::plotFillingColorStyleChanged(WorksheetElement::BackgroundColorStyle style) {
 	Lock lock(m_initializing);
 	ui.cbFillingColorStyle->setCurrentIndex(static_cast<int>(style));
 }
-void BoxPlotDock::plotFillingImageStyleChanged(PlotArea::BackgroundImageStyle style) {
+void BoxPlotDock::plotFillingImageStyleChanged(WorksheetElement::BackgroundImageStyle style) {
 	Lock lock(m_initializing);
 	ui.cbFillingImageStyle->setCurrentIndex(static_cast<int>(style));
 }

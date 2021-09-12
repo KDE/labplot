@@ -67,9 +67,9 @@ void BoxPlot::init() {
 
 	//box filling
 	d->fillingEnabled = group.readEntry("FillingEnabled", true);
-	d->fillingType = (PlotArea::BackgroundType) group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color));
-	d->fillingColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor));
-	d->fillingImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("FillingImageStyle", static_cast<int>(PlotArea::BackgroundImageStyle::Scaled));
+	d->fillingType = (WorksheetElement::BackgroundType) group.readEntry("FillingType", static_cast<int>(WorksheetElement::BackgroundType::Color));
+	d->fillingColorStyle = (WorksheetElement::BackgroundColorStyle) group.readEntry("FillingColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor));
+	d->fillingImageStyle = (WorksheetElement::BackgroundImageStyle) group.readEntry("FillingImageStyle", static_cast<int>(WorksheetElement::BackgroundImageStyle::Scaled));
 	d->fillingBrushStyle = (Qt::BrushStyle) group.readEntry("FillingBrushStyle", static_cast<int>(Qt::SolidPattern));
 	d->fillingFileName = group.readEntry("FillingFileName", QString());
 	d->fillingFirstColor = group.readEntry("FillingFirstColor", QColor(Qt::white));
@@ -235,9 +235,9 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, notchesEnabled, notchesEnabled)
 //box
 //filling
 BASIC_SHARED_D_READER_IMPL(BoxPlot, bool, fillingEnabled, fillingEnabled)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, PlotArea::BackgroundType, fillingType, fillingType)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, PlotArea::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
-BASIC_SHARED_D_READER_IMPL(BoxPlot, PlotArea::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, WorksheetElement::BackgroundType, fillingType, fillingType)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, WorksheetElement::BackgroundColorStyle, fillingColorStyle, fillingColorStyle)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, WorksheetElement::BackgroundImageStyle, fillingImageStyle, fillingImageStyle)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, Qt::BrushStyle, fillingBrushStyle, fillingBrushStyle)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QColor, fillingFirstColor, fillingFirstColor)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QColor, fillingSecondColor, fillingSecondColor)
@@ -384,22 +384,22 @@ void BoxPlot::setFillingEnabled(bool enabled) {
 		exec(new BoxPlotSetFillingEnabledCmd(d, enabled, ki18n("%1: filling changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetFillingType, PlotArea::BackgroundType, fillingType, updatePixmap)
-void BoxPlot::setFillingType(PlotArea::BackgroundType type) {
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetFillingType, WorksheetElement::BackgroundType, fillingType, updatePixmap)
+void BoxPlot::setFillingType(WorksheetElement::BackgroundType type) {
 	Q_D(BoxPlot);
 	if (type != d->fillingType)
 		exec(new BoxPlotSetFillingTypeCmd(d, type, ki18n("%1: filling type changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetFillingColorStyle, PlotArea::BackgroundColorStyle, fillingColorStyle, updatePixmap)
-void BoxPlot::setFillingColorStyle(PlotArea::BackgroundColorStyle style) {
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetFillingColorStyle, WorksheetElement::BackgroundColorStyle, fillingColorStyle, updatePixmap)
+void BoxPlot::setFillingColorStyle(WorksheetElement::BackgroundColorStyle style) {
 	Q_D(BoxPlot);
 	if (style != d->fillingColorStyle)
 		exec(new BoxPlotSetFillingColorStyleCmd(d, style, ki18n("%1: filling color style changed")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetFillingImageStyle, PlotArea::BackgroundImageStyle, fillingImageStyle, updatePixmap)
-void BoxPlot::setFillingImageStyle(PlotArea::BackgroundImageStyle style) {
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetFillingImageStyle, WorksheetElement::BackgroundImageStyle, fillingImageStyle, updatePixmap)
+void BoxPlot::setFillingImageStyle(WorksheetElement::BackgroundImageStyle style) {
 	Q_D(BoxPlot);
 	if (style != d->fillingImageStyle)
 		exec(new BoxPlotSetFillingImageStyleCmd(d, style, ki18n("%1: filling image style changed")));
@@ -1468,41 +1468,41 @@ void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 	}
 	const QRectF& rect = boxPath.boundingRect();
 
-	if (fillingType == PlotArea::BackgroundType::Color) {
+	if (fillingType == WorksheetElement::BackgroundType::Color) {
 		switch (fillingColorStyle) {
-		case PlotArea::BackgroundColorStyle::SingleColor: {
+		case WorksheetElement::BackgroundColorStyle::SingleColor: {
 			painter->setBrush(QBrush(fillingFirstColor));
 			break;
 		}
-		case PlotArea::BackgroundColorStyle::HorizontalLinearGradient: {
+		case WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.topRight());
 			linearGrad.setColorAt(0, fillingFirstColor);
 			linearGrad.setColorAt(1, fillingSecondColor);
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case PlotArea::BackgroundColorStyle::VerticalLinearGradient: {
+		case WorksheetElement::BackgroundColorStyle::VerticalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.bottomLeft());
 			linearGrad.setColorAt(0, fillingFirstColor);
 			linearGrad.setColorAt(1, fillingSecondColor);
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
+		case WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(rect.topLeft(), rect.bottomRight());
 			linearGrad.setColorAt(0, fillingFirstColor);
 			linearGrad.setColorAt(1, fillingSecondColor);
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
+		case WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient: {
 			QLinearGradient linearGrad(rect.bottomLeft(), rect.topRight());
 			linearGrad.setColorAt(0, fillingFirstColor);
 			linearGrad.setColorAt(1, fillingSecondColor);
 			painter->setBrush(QBrush(linearGrad));
 			break;
 		}
-		case PlotArea::BackgroundColorStyle::RadialGradient: {
+		case WorksheetElement::BackgroundColorStyle::RadialGradient: {
 			QRadialGradient radialGrad(rect.center(), rect.width()/2);
 			radialGrad.setColorAt(0, fillingFirstColor);
 			radialGrad.setColorAt(1, fillingSecondColor);
@@ -1510,26 +1510,26 @@ void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 			break;
 		}
 		}
-	} else if (fillingType == PlotArea::BackgroundType::Image) {
+	} else if (fillingType == WorksheetElement::BackgroundType::Image) {
 		if ( !fillingFileName.trimmed().isEmpty() ) {
 			QPixmap pix(fillingFileName);
 			switch (fillingImageStyle) {
-			case PlotArea::BackgroundImageStyle::ScaledCropped:
+			case WorksheetElement::BackgroundImageStyle::ScaledCropped:
 				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatioByExpanding,Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 				break;
-			case PlotArea::BackgroundImageStyle::Scaled:
+			case WorksheetElement::BackgroundImageStyle::Scaled:
 				pix = pix.scaled(rect.size().toSize(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 				break;
-			case PlotArea::BackgroundImageStyle::ScaledAspectRatio:
+			case WorksheetElement::BackgroundImageStyle::ScaledAspectRatio:
 				pix = pix.scaled(rect.size().toSize(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 				break;
-			case PlotArea::BackgroundImageStyle::Centered: {
+			case WorksheetElement::BackgroundImageStyle::Centered: {
 				QPixmap backpix(rect.size().toSize());
 				backpix.fill();
 				QPainter p(&backpix);
@@ -1539,15 +1539,15 @@ void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 				painter->setBrushOrigin(-pix.size().width()/2,-pix.size().height()/2);
 				break;
 			}
-			case PlotArea::BackgroundImageStyle::Tiled:
+			case WorksheetElement::BackgroundImageStyle::Tiled:
 				painter->setBrush(QBrush(pix));
 				break;
-			case PlotArea::BackgroundImageStyle::CenterTiled:
+			case WorksheetElement::BackgroundImageStyle::CenterTiled:
 				painter->setBrush(QBrush(pix));
 				painter->setBrushOrigin(pix.size().width()/2,pix.size().height()/2);
 			}
 		}
-	} else if (fillingType == PlotArea::BackgroundType::Pattern)
+	} else if (fillingType == WorksheetElement::BackgroundType::Pattern)
 		painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
 
 	painter->drawPolygon(polygon);
@@ -1746,9 +1746,9 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("enabled", fillingEnabled, bool);
-			READ_INT_VALUE("type", fillingType, PlotArea::BackgroundType);
-			READ_INT_VALUE("colorStyle", fillingColorStyle, PlotArea::BackgroundColorStyle);
-			READ_INT_VALUE("imageStyle", fillingImageStyle, PlotArea::BackgroundImageStyle);
+			READ_INT_VALUE("type", fillingType, WorksheetElement::BackgroundType);
+			READ_INT_VALUE("colorStyle", fillingColorStyle, WorksheetElement::BackgroundColorStyle);
+			READ_INT_VALUE("imageStyle", fillingImageStyle, WorksheetElement::BackgroundImageStyle);
 			READ_INT_VALUE("brushStyle", fillingBrushStyle, Qt::BrushStyle);
 
 			str = attribs.value("firstColor_r").toString();
@@ -1859,11 +1859,11 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 
 	//box filling
 	setFillingBrushStyle((Qt::BrushStyle)group.readEntry("FillingBrushStyle", (int)Qt::SolidPattern));
-	setFillingColorStyle((PlotArea::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(PlotArea::BackgroundColorStyle::SingleColor)));
+	setFillingColorStyle((WorksheetElement::BackgroundColorStyle)group.readEntry("FillingColorStyle", static_cast<int>(WorksheetElement::BackgroundColorStyle::SingleColor)));
 	setFillingOpacity(group.readEntry("FillingOpacity", 0.5));
 	setFillingFirstColor(themeColor);
 	setFillingSecondColor(group.readEntry("FillingSecondColor", QColor(Qt::black)));
-	setFillingType((PlotArea::BackgroundType)group.readEntry("FillingType", static_cast<int>(PlotArea::BackgroundType::Color)));
+	setFillingType((WorksheetElement::BackgroundType)group.readEntry("FillingType", static_cast<int>(WorksheetElement::BackgroundType::Color)));
 
 	//median line
 	setMedianLinePen(p);
