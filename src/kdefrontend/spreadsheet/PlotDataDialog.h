@@ -3,12 +3,14 @@
     Project              : LabPlot
     Description          : Dialog for generating plots for the spreadsheet data
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #ifndef PLOTDATADIALOG_H
 #define PLOTDATADIALOG_H
+
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
 
 namespace Ui {
 	class PlotDataWidget;
@@ -31,15 +33,11 @@ class PlotDataDialog : public QDialog {
 
 public:
 	enum class PlotType {XYCurve, Histogram, BoxPlot};
-	enum class AnalysisAction {DataReduction,
-		Differentiation, Integration, Interpolation, Smoothing,
-		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
-		FourierFilter};
 
 	explicit PlotDataDialog(Spreadsheet*, PlotType = PlotType::XYCurve, QWidget* parent = nullptr);
 	~PlotDataDialog() override;
 
-	void setAnalysisAction(AnalysisAction);
+	void setAnalysisAction(XYAnalysisCurve::AnalysisAction);
 
 private:
 	Ui::PlotDataWidget* ui;
@@ -52,7 +50,7 @@ private:
 	AspectTreeModel* m_plotsModel;
 	AspectTreeModel* m_worksheetsModel;
 	PlotType m_plotType;
-	AnalysisAction m_analysisAction{AnalysisAction::Differentiation};
+	XYAnalysisCurve::AnalysisAction m_analysisAction{XYAnalysisCurve::AnalysisAction::Differentiation};
 	bool m_analysisMode{false};
 	AbstractAspect* m_lastAddedCurve{nullptr};
 

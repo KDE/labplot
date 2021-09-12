@@ -21,6 +21,10 @@ class XYAnalysisCurve : public XYCurve {
 
 public:
 	enum class DataSourceType {Spreadsheet, Curve};
+	enum class AnalysisAction {DataReduction,
+		Differentiation, Integration, Interpolation, Smoothing,
+		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,
+		FourierFilter};
 
 	XYAnalysisCurve(const QString&, AspectType type);
 	~XYAnalysisCurve() override;

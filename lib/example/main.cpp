@@ -44,10 +44,10 @@ int main(int argc, char **argv) {
 	plot->autoScale();
 
 	//perform a fit to the raw data and show it
+	auto* fitCurve = new XYFitCurve("fit ");
 	//TODO:
-// 	auto* fitCurve = new XYFitCurve("fit");
-// 	fitCurve->recalculate();
-// 	plot->addChild(fitCurve);
+	fitCurve->recalculate();
+	plot->addChild(fitCurve);
 
 	//add legend
 	plot->addLegend();

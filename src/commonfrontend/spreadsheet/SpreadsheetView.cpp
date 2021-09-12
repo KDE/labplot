@@ -410,64 +410,64 @@ void SpreadsheetView::initActions() {
 	//Analyze and plot menu actions
 	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Reduce Data"), this);
 //	addDataReductionAction = new QAction(QIcon::fromTheme("labplot-xy-data-reduction-curve"), i18n("Reduce Data"), this);
-	addDataReductionAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::DataReduction));
+	addDataReductionAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::DataReduction));
 	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Differentiate"), this);
 //	addDifferentiationAction = new QAction(QIcon::fromTheme("labplot-xy-differentiation-curve"), i18n("Differentiate"), this);
-	addDifferentiationAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::Differentiation));
+	addDifferentiationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Differentiation));
 	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Integrate"), this);
 //	addIntegrationAction = new QAction(QIcon::fromTheme("labplot-xy-integration-curve"), i18n("Integrate"), this);
-	addIntegrationAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::Integration));
+	addIntegrationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Integration));
 	addInterpolationAction = new QAction(QIcon::fromTheme("labplot-xy-interpolation-curve"), i18n("Interpolate"), this);
-	addInterpolationAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::Interpolation));
+	addInterpolationAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Interpolation));
 	addSmoothAction = new QAction(QIcon::fromTheme("labplot-xy-smoothing-curve"), i18n("Smooth"), this);
-	addSmoothAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::Smoothing));
+	addSmoothAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::Smoothing));
 
 	QAction* fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Linear"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitLinear));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Power"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitPower));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPower));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Exponential (degree 1)"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitExp1));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp1));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Exponential (degree 2)"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitExp2));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp2));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Inverse Exponential"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitInvExp));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitInvExp));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Gauss"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitGauss));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitGauss));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Cauchy-Lorentz"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitCauchyLorentz));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCauchyLorentz));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Arc Tangent"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitTan));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTan));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Hyperbolic Tangent"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitTanh));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTanh));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Error Function"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitErrFunc));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitErrFunc));
 	addFitAction.append(fitAction);
 
 	fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Custom"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitCustom));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCustom));
 	addFitAction.append(fitAction);
 
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
-	addFourierFilterAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FourierFilter));
+	addFourierFilterAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FourierFilter));
 
 	connectActions();
 }
@@ -1837,7 +1837,7 @@ void SpreadsheetView::plotData() {
 void SpreadsheetView::plotAnalysisData() {
 	const auto* action = dynamic_cast<const QAction*>(QObject::sender());
 	auto* dlg = new PlotDataDialog(m_spreadsheet, PlotDataDialog::PlotType::XYCurve);
-	auto type = static_cast<PlotDataDialog::AnalysisAction>(action->data().toInt());
+	auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 	dlg->setAnalysisAction(type);
 	dlg->exec();
 }

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2016-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -14,7 +14,6 @@
 
 #include "backend/lib/Range.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
-#include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
 
 extern "C" {
 #include "backend/nsl/nsl_fit.h"
@@ -101,7 +100,7 @@ public:
 
 	void recalculate() override;
 	void evaluate(bool preview);
-	void initFitData(PlotDataDialog::AnalysisAction);
+	void initFitData(XYAnalysisCurve::AnalysisAction);
 	static void initFitData(XYFitCurve::FitData&);
 	void initStartValues(const XYCurve*);
 	static void initStartValues(XYFitCurve::FitData&, const XYCurve*);

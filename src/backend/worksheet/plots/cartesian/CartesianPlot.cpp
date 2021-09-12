@@ -51,7 +51,6 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/trace.h"
-#include "kdefrontend/spreadsheet/PlotDataDialog.h" //for PlotDataDialog::AnalysisAction. TODO: find a better place for this enum.
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/ThemesWidget.h"
 
@@ -424,47 +423,47 @@ void CartesianPlot::initActions() {
 	addCorrelationAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Auto-/Cross-Correlation"), this);
 
 	QAction* fitAction = new QAction(i18n("Linear"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitLinear));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitLinear));
 	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Power"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitPower));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitPower));
 	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Exponential (degree 1)"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitExp1));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp1));
 	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Exponential (degree 2)"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitExp2));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitExp2));
 	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Inverse exponential"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitInvExp));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitInvExp));
 	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Gauss"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitGauss));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitGauss));
 	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Cauchy-Lorentz"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitCauchyLorentz));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCauchyLorentz));
 	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Arc Tangent"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitTan));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTan));
 	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Hyperbolic Tangent"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitTanh));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitTanh));
 	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Error Function"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitErrFunc));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitErrFunc));
 	addFitActions.append(fitAction);
 
 	fitAction = new QAction(i18n("Custom"), this);
-	fitAction->setData(static_cast<int>(PlotDataDialog::AnalysisAction::FitCustom));
+	fitAction->setData(static_cast<int>(XYAnalysisCurve::AnalysisAction::FitCustom));
 	addFitActions.append(fitAction);
 
 	addFourierFilterAction = new QAction(QIcon::fromTheme("labplot-xy-fourier-filter-curve"), i18n("Fourier Filter"), this);
@@ -1861,7 +1860,7 @@ void CartesianPlot::addFitCurve() {
 		//set the fit model category and type
 		const auto* action = qobject_cast<const QAction*>(QObject::sender());
 		if (action) {
-			auto type = static_cast<PlotDataDialog::AnalysisAction>(action->data().toInt());
+			auto type = static_cast<XYAnalysisCurve::AnalysisAction>(action->data().toInt());
 			curve->initFitData(type);
 		} else {
 			DEBUG(Q_FUNC_INFO << "WARNING: no action found!")
