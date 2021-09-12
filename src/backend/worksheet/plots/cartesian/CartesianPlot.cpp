@@ -30,7 +30,6 @@
 #include "XYHilbertTransformCurve.h"
 #include "XYConvolutionCurve.h"
 #include "XYCorrelationCurve.h"
-#include "../PlotArea.h"
 #include "../AbstractPlotPrivate.h"
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"

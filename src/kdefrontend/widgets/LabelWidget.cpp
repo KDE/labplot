@@ -10,6 +10,7 @@
 
 #include "LabelWidget.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"

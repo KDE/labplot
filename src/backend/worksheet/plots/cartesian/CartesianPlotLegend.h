@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Legend for the cartesian plot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2013-2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -12,11 +12,9 @@
 #define CARTESIANPLOTLEGEND_H
 
 #include "backend/worksheet/WorksheetElement.h"
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/lib/macros.h"
 
 class CartesianPlotLegendPrivate;
-class Symbol;
 class TextLabel;
 
 #ifdef SDK
@@ -54,9 +52,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(float, lineSymbolWidth, LineSymbolWidth)
 
 	BASIC_D_ACCESSOR_DECL(float, backgroundOpacity, BackgroundOpacity)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundType, backgroundType, BackgroundType)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
-	BASIC_D_ACCESSOR_DECL(PlotArea::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundType, backgroundType, BackgroundType)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundColorStyle, backgroundColorStyle, BackgroundColorStyle)
+	BASIC_D_ACCESSOR_DECL(WorksheetElement::BackgroundImageStyle, backgroundImageStyle, BackgroundImageStyle)
 	BASIC_D_ACCESSOR_DECL(Qt::BrushStyle, backgroundBrushStyle, BackgroundBrushStyle)
 	CLASS_D_ACCESSOR_DECL(QColor, backgroundFirstColor, BackgroundFirstColor)
 	CLASS_D_ACCESSOR_DECL(QColor, backgroundSecondColor, BackgroundSecondColor)
@@ -101,9 +99,9 @@ signals:
 	void lineSymbolWidthChanged(float);
 	void positionChanged(const CartesianPlotLegend::PositionWrapper&);
 	void rotationAngleChanged(qreal);
-	void backgroundTypeChanged(PlotArea::BackgroundType);
-	void backgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void backgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void backgroundTypeChanged(WorksheetElement::BackgroundType);
+	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
+	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
 	void backgroundBrushStyleChanged(Qt::BrushStyle);
 	void backgroundFirstColorChanged(QColor&);
 	void backgroundSecondColorChanged(QColor&);

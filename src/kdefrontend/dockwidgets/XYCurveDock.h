@@ -15,7 +15,6 @@
 #include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/plots/PlotArea.h"
 
 #include "ui_xycurvedock.h"
 #include "ui_xycurvedockgeneraltab.h"
@@ -24,7 +23,6 @@ class AspectTreeModel;
 class Column;
 class SymbolWidget;
 class TreeViewComboBox;
-class QLineEdit;
 
 class XYCurveDock : public BaseDock {
 	Q_OBJECT
