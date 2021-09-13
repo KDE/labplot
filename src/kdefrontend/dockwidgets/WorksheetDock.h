@@ -46,7 +46,8 @@ private slots:
 	//SLOTs for changes triggered in WorksheetDock
 	//"General"-tab
 	void scaleContentChanged(bool);
-	void sizeChanged(int);
+	void sizeTypeChanged(int);
+	void pageChanged(int);
 	void sizeChanged();
 	void orientationChanged(int);
 
