@@ -334,7 +334,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 							xScale->end() - xScale->start(), yScale->end() - yScale->start()).normalized();
 
 			for (auto line : lines) {
-//				QDEBUG(Q_FUNC_INFO << ", LINE " << line)
+				// QDEBUG(Q_FUNC_INFO << ", LINE " << line)
 				LineClipResult clipResult;
 				if (!AbstractCoordinateSystem::clipLineToRect(&line, scaleRect, &clipResult))
 					continue;
@@ -416,7 +416,7 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 				QLineF mappedLine(QPointF(x1, y1), QPointF(x2, y2));
 				if (doPageClipping) {
 					if (!AbstractCoordinateSystem::clipLineToRect(&mappedLine, pageRect)) {
-						DEBUG(Q_FUNC_INFO << ", OMIT line!")
+						DEBUG(Q_FUNC_INFO << ", WARNING: OMIT mapped line!")
 						continue;
 					}
 				}

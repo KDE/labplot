@@ -1081,7 +1081,8 @@ void AxisPrivate::retransformLine() {
 			//endPoint = QPointF(rect.x() + rect.width(), pos.y());
 
 			Lines ranges{QLineF(QPointF(range.start(), 0.), QPointF(range.end(), 0.))};
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges);
+			// y=0 may be outside clip range: suppress clipping
+			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (sceneRange.size() > 0) {
 				startPoint = QPointF(sceneRange.at(0).x1(), pos.y());
 				endPoint = QPointF(sceneRange.at(0).x2(), pos.y());
@@ -1095,7 +1096,7 @@ void AxisPrivate::retransformLine() {
 			startPoint = QPointF(logicalPosition, range.start());
 			endPoint = QPointF(logicalPosition, range.end());
 			lines.append(QLineF(startPoint, endPoint));
-			//	QDEBUG(Q_FUNC_INFO << ", LINES = " << lines)
+			// QDEBUG(Q_FUNC_INFO << ", LOGICAL LINES = " << lines)
 			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 		} else {
 			WorksheetElement::PositionWrapper wrapper;
@@ -1115,7 +1116,8 @@ void AxisPrivate::retransformLine() {
 			//endPoint = QPointF(pos.x(), rect.y());
 
 			Lines ranges{QLineF(QPointF(0., range.start()), QPointF(0., range.end()))};
-			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges);
+			// x=0 may be outside clip range: suppress clipping
+			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (sceneRange.size() > 0) {
 				startPoint = QPointF(pos.x(), sceneRange.at(0).y1());
 				endPoint = QPointF(pos.x(), sceneRange.at(0).y2());
