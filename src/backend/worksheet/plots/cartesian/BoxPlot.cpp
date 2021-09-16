@@ -1684,6 +1684,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 
 	//symbols for the outliers, mean, far out and jitter values
 	d->symbolMean->save(writer);
+	d->symbolMedian->save(writer);
 	d->symbolOutlier->save(writer);
 	d->symbolFarOut->save(writer);
 	d->symbolData->save(writer);
@@ -1799,15 +1800,17 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 
 			READ_QPEN(d->medianLinePen);
 			READ_DOUBLE_VALUE("opacity", medianLineOpacity);
-		} else if (!preview && reader->name() == "symbolMean") {
+		} else if (!preview && reader->name() == "symbolMean")
 			d->symbolMean->load(reader, preview);
-		} else if (!preview && reader->name() == "symbolOutlier") {
+		else if (!preview && reader->name() == "symbolMean")
+			d->symbolMean->load(reader, preview);
+		else if (!preview && reader->name() == "symbolOutlier")
 			d->symbolOutlier->load(reader, preview);
-		} else if (!preview && reader->name() == "symbolFarOut") {
+		else if (!preview && reader->name() == "symbolFarOut")
 			d->symbolFarOut->load(reader, preview);
-		} else if (!preview && reader->name() == "symbolData") {
+		else if (!preview && reader->name() == "symbolData")
 			d->symbolData->load(reader, preview);
-		} else if (!preview && reader->name() == "whiskers") {
+		else if (!preview && reader->name() == "whiskers") {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", whiskersType, BoxPlot::WhiskersType);
@@ -1880,8 +1883,8 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	d->symbolFarOut->loadThemeConfig(group, themeColor);
 	d->symbolData->loadThemeConfig(group, themeColor);
 
-	//Tufte's theme goes beyond what we can implement when using the them properties of XYCurve.
-	//So, instead of introducing a dedicated section for BoxPlot, which would be a big overkill,
+	//Tufte's theme goes beyond what we can implement when using the theme properties of XYCurve.
+	//So, instead of introducing a dedicated section for BoxPlot, which would be a big overkill
 	//for all other themes, we add here a special handling for "Tufte".
 	if (plot->theme() == QLatin1String("Tufte")) {
 		p.setStyle(Qt::NoPen);

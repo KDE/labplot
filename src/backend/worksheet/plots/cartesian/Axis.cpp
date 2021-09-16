@@ -2848,9 +2848,17 @@ void Axis::loadThemeConfig(const KConfig& config) {
 
 	//Line
 	this->setLineOpacity(group.readEntry("LineOpacity", 1.0));
-	p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+
 	p.setColor(group.readEntry("LineColor", QColor(Qt::black)));
 	p.setWidthF(group.readEntry("LineWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)));
+
+	const auto* plot = static_cast<const CartesianPlot*>(parentAspect());
+	if (firstAxis && plot->theme() == QLatin1String("Tufte")) {
+		setRangeType(RangeType::AutoData);
+		p.setStyle(Qt::SolidLine);
+	} else
+		p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+
 	this->setLinePen(p);
 
 	//Major grid
@@ -2890,6 +2898,8 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity", 1.0));
 	this->setMinorTicksDirection((Axis::TicksDirection)group.readEntry("MinorTicksDirection", (int)Axis::ticksIn));
 	this->setMinorTicksLength(group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point)));
+
+
 
 	//load the theme for the title label
 	Q_D(Axis);
