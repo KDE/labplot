@@ -16,26 +16,14 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 
+class AbstractColumn;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
 class CartesianCoordinateSystem;
-class AbstractColumn;
-class XYCurve;
-class XYEquationCurve;
-class XYDataReductionCurve;
-class XYDifferentiationCurve;
-class XYIntegrationCurve;
-class XYInterpolationCurve;
-class XYSmoothCurve;
-class XYFitCurve;
-class XYFourierFilterCurve;
-class XYFourierTransformCurve;
-class XYHilbertTransformCurve;
-class XYConvolutionCurve;
-class XYCorrelationCurve;
-class InfoElementDialog;
-class KConfig;
 class CartesianPlotDock;
+class InfoElementDialog;
+class XYCurve;
+class KConfig;
 
 #ifdef SDK
 #include "labplot_export.h"

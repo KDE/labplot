@@ -12,12 +12,8 @@
 
 #include "CartesianPlot.h"
 #include "CartesianPlotPrivate.h"
-#include "CartesianPlotLegend.h"
-#include "Axis.h"
 #include "XYCurve.h"
 #include "Histogram.h"
-#include "CustomPoint.h"
-#include "ReferenceLine.h"
 #include "XYEquationCurve.h"
 #include "XYDataReductionCurve.h"
 #include "XYDifferentiationCurve.h"
@@ -30,11 +26,10 @@
 #include "XYHilbertTransformCurve.h"
 #include "XYConvolutionCurve.h"
 #include "XYCorrelationCurve.h"
-#include "../AbstractPlotPrivate.h"
+#include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/AbstractAspect.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
@@ -72,8 +67,6 @@
 /**
  * \class CartesianPlot
  * \brief A xy-plot.
- *
- *
  */
 CartesianPlot::CartesianPlot(const QString &name)
 	: AbstractPlot(name, new CartesianPlotPrivate(this), AspectType::CartesianPlot) {
@@ -693,10 +686,10 @@ QVector<AbstractAspect*> CartesianPlot::dependsOn() const {
 	QVector<AbstractAspect*> aspects;
 
 	for (const auto* curve : children<XYCurve>()) {
-		if (curve->xColumn() && dynamic_cast<Spreadsheet*>(curve->xColumn()->parentAspect()) )
+		if (curve->xColumn() && curve->xColumn()->parentAspect()->type() == AspectType::Spreadsheet)
 			aspects << curve->xColumn()->parentAspect();
 
-		if (curve->yColumn() && dynamic_cast<Spreadsheet*>(curve->yColumn()->parentAspect()) )
+		if (curve->yColumn() && curve->yColumn()->parentAspect()->type() == AspectType::Spreadsheet)
 			aspects << curve->yColumn()->parentAspect();
 	}
 
