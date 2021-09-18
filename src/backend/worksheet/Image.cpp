@@ -276,8 +276,8 @@ void ImagePrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
-	float w = image.width();
-	float h = image.height();
+	int w = image.width();
+	int h = image.height();
 	boundingRectangle.setX(-w/2);
 	boundingRectangle.setY(-h/2);
 	boundingRectangle.setWidth(w);
@@ -292,14 +292,14 @@ void ImagePrivate::updateImage() {
 		image = QImage(fileName);
 		width = image.width();
 		height = image.height();
-		q->widthChanged(width);
-		q->heightChanged(height);
+		emit q->widthChanged(width);
+		emit q->heightChanged(height);
 	} else {
 		width = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
 		height = Worksheet::convertToSceneUnits(3, Worksheet::Unit::Centimeter);
 		image = QIcon::fromTheme("viewimage").pixmap(width, height).toImage();
-		q->widthChanged(width);
-		q->heightChanged(height);
+		emit q->widthChanged(width);
+		emit q->heightChanged(height);
 	}
 
 	retransform();
@@ -313,19 +313,20 @@ void ImagePrivate::scaleImage() {
 				height = image.height()*width/image.width();
 			else
 				height = 0;
-			q->heightChanged(height);
+			emit q->heightChanged(height);
 		} else {
 			//height was changed -> rescale the width to keep the ratio
 			if (image.height() != 0)
 				width = image.width()*height/image.height();
 			else
 				width = 0;
-			q->widthChanged(width);
+			emit q->widthChanged(width);
 		}
 	}
 
 	if (width != 0 && height != 0)
-		image = image.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+		image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
 	retransform();
 }
 
@@ -488,10 +489,10 @@ void ImagePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
  *	converts label's position to GraphicsItem's position.
  */
 QPointF ImagePrivate::positionFromItemPosition(QPointF itemPos) {
-	float x = itemPos.x();
-	float y = itemPos.y();
-	float w = image.width();
-	float h = image.height();
+	double x = itemPos.x();
+	double y = itemPos.y();
+	int w = image.width();
+	int h = image.height();
 	QPointF tmpPosition;
 
 	//depending on the alignment, calculate the new position
