@@ -500,6 +500,15 @@ bool Axis::isHovered() const {
 	return d->isHovered();
 }
 
+bool Axis::isNumeric() const {
+	Q_D(const Axis);
+	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
+	bool numeric = ( (d->orientation == Axis::Orientation::Horizontal && m_plot->xRangeFormat(xIndex) == RangeT::Format::Numeric)
+						|| (d->orientation == Axis::Orientation::Vertical && m_plot->yRangeFormat(yIndex) == RangeT::Format::Numeric) );
+	return numeric;
+}
+
+
 STD_SETTER_CMD_IMPL_F_S(Axis, SetOrientation, Axis::Orientation, orientation, retransform);
 void Axis::setOrientation(Orientation orientation) {
 	Q_D(Axis);

@@ -169,6 +169,8 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, minorGridPen, MinorGridPen)
 	BASIC_D_ACCESSOR_DECL(qreal, minorGridOpacity, MinorGridOpacity)
 
+	bool isNumeric() const;
+
 	void setDefault(bool);
 	bool isDefault() const;
 
