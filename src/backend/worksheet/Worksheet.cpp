@@ -166,7 +166,7 @@ QWidget* Worksheet::view() const {
  */
 QVector<AbstractAspect*> Worksheet::dependsOn() const {
 	//add all parent aspects (folders and sub-folders)
-	QVector<AbstractAspect*> aspects = AbstractAspect::dependsOn();
+	auto aspects = AbstractAspect::dependsOn();
 
 	//traverse all plots and add all data containers they depend on
 	for (const auto* plot : children<AbstractPlot>())
@@ -591,9 +591,10 @@ BASIC_D_READER_IMPL(Worksheet, int, layoutColumnCount, layoutColumnCount)
 BASIC_D_READER_IMPL(Worksheet, QString, theme, theme)
 
 /* ============================ setter methods and undo commands for general options  ===================== */
+STD_SETTER_CMD_IMPL_S(Worksheet, SetUseViewSize, bool, useViewSize)
 void Worksheet::setUseViewSize(bool useViewSize) {
 	if (useViewSize != d->useViewSize) {
-		d->useViewSize = useViewSize;
+		exec(new WorksheetSetUseViewSizeCmd(d, useViewSize, ki18n("%1: change size type")));
 		emit useViewSizeRequested();
 	}
 }
@@ -1423,16 +1424,16 @@ void WorksheetPrivate::updatePageRect() {
 		if (scaleContent) {
 			qreal horizontalRatio = pageRect.width() / oldRect.width();
 			qreal verticalRatio = pageRect.height() / oldRect.height();
-			QVector<WorksheetElement*> childElements = q->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+			const auto& children = q->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 			if (useViewSize) {
 				//don't make the change of the geometry undoable/redoable if the view size is used.
-				for (auto* elem : childElements) {
+				for (auto* elem : children) {
 					elem->setUndoAware(false);
 					elem->handleResize(horizontalRatio, verticalRatio, true);
 					elem->setUndoAware(true);
 				}
 			} else {
-// 				for (auto* child : childElements)
+// 				for (auto* child : children)
 // 					child->handleResize(horizontalRatio, verticalRatio, true);
 			}
 		}

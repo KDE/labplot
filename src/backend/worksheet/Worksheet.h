@@ -173,8 +173,11 @@ signals:
 	void backgroundSecondColorChanged(const QColor&);
 	void backgroundFileNameChanged(const QString&);
 	void backgroundOpacityChanged(float);
+
 	void scaleContentChanged(bool);
+	void useViewSizeChanged(bool);
 	void pageRectChanged(const QRectF&);
+
 	void layoutChanged(Worksheet::Layout);
 	void layoutTopMarginChanged(float);
 	void layoutBottomMarginChanged(float);
@@ -184,6 +187,7 @@ signals:
 	void layoutHorizontalSpacingChanged(float);
 	void layoutRowCountChanged(int);
 	void layoutColumnCountChanged(int);
+
 	void themeChanged(const QString&);
 };
 
