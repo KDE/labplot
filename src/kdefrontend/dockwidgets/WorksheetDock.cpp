@@ -166,6 +166,7 @@ void WorksheetDock::setWorksheets(QList<Worksheet*> list) {
 	connect(m_worksheet, &Worksheet::aspectDescriptionChanged, this, &WorksheetDock::worksheetDescriptionChanged);
 	connect(m_worksheet, &Worksheet::pageRectChanged, this, &WorksheetDock::worksheetPageRectChanged);
 	connect(m_worksheet, &Worksheet::scaleContentChanged, this, &WorksheetDock::worksheetScaleContentChanged);
+	connect(m_worksheet, &Worksheet::useViewSizeChanged, this, &WorksheetDock::worksheetUseViewSizeChanged);
 
 	connect(m_worksheet, &Worksheet::backgroundTypeChanged, this, &WorksheetDock::worksheetBackgroundTypeChanged);
 	connect(m_worksheet, &Worksheet::backgroundColorStyleChanged, this, &WorksheetDock::worksheetBackgroundColorStyleChanged);
@@ -778,7 +779,14 @@ void WorksheetDock::worksheetScaleContentChanged(bool scaled) {
 	ui.chScaleContent->setChecked(scaled);
 	m_initializing = false;
 }
-
+void WorksheetDock::worksheetUseViewSizeChanged(bool useViewSize) {
+	m_initializing = true;
+	if (useViewSize)
+		ui.cbSizeType->setCurrentIndex(0);
+	else
+		updatePaperSize();
+	m_initializing = false;
+}
 void WorksheetDock::worksheetPageRectChanged(const QRectF& rect) {
 	m_initializing = true;
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), m_worksheetUnit));
