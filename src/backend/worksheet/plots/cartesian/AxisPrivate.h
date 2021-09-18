@@ -21,8 +21,6 @@
 class QGraphicsSceneHoverEvent;
 
 class AxisGrid;
-class CartesianPlot;
-class CartesianCoordinateSystem;
 class TextLabel;
 
 class AxisPrivate: public QGraphicsItem {

@@ -13,7 +13,6 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/TemplateHandler.h"
@@ -2216,10 +2215,10 @@ void AxisDock::load() {
 	ui.cbOrientation->setCurrentIndex( static_cast<int>(orientation) );
 
 	const auto* plot = static_cast<const CartesianPlot*>(m_axis->parentAspect());
-	const auto* cSystem{ plot->coordinateSystem(m_axis->coordinateSystemIndex()) };
+	const auto* cSystem = plot->coordinateSystem(m_axis->coordinateSystemIndex());
 	const int xIndex{cSystem->xIndex()}, yIndex{cSystem->yIndex()};
 
-	Range<double> logicalRange(0,0);
+	Range<double> logicalRange(0, 0);
 	if (orientation == Axis::Orientation::Horizontal) {
 		logicalRange = plot->yRange(yIndex);
 		ui.cbPosition->setItemText(Top_Left, i18n("Top"));
@@ -2311,7 +2310,7 @@ void AxisDock::load() {
 	ui.cbLineStyle->setCurrentIndex( (int) m_axis->linePen().style() );
 	ui.kcbLineColor->setColor( m_axis->linePen().color() );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->linePen().widthF(), Worksheet::Unit::Point) );
-	ui.sbLineOpacity->setValue( round(m_axis->lineOpacity()*100.0) );
+	ui.sbLineOpacity->setValue( round(m_axis->lineOpacity() * 100.0) );
 	ui.cbArrowType->setCurrentIndex( (int)m_axis->arrowType() );
 	ui.cbArrowPosition->setCurrentIndex( (int)m_axis->arrowPosition() );
 	ui.sbArrowSize->setValue( (int)Worksheet::convertFromSceneUnits(m_axis->arrowSize(), Worksheet::Unit::Point) );
@@ -2324,7 +2323,7 @@ void AxisDock::load() {
 	ui.kcbMajorTicksColor->setColor( m_axis->majorTicksPen().color() );
 	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbMajorTicksLength->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksLength(), Worksheet::Unit::Point) );
-	ui.sbMajorTicksOpacity->setValue( round(m_axis->majorTicksOpacity()*100.0) );
+	ui.sbMajorTicksOpacity->setValue( round(m_axis->majorTicksOpacity() * 100.0) );
 
 	//Minor ticks
 	ui.cbMinorTicksDirection->setCurrentIndex( (int) m_axis->minorTicksDirection() );
@@ -2334,7 +2333,7 @@ void AxisDock::load() {
 	ui.kcbMinorTicksColor->setColor( m_axis->minorTicksPen().color() );
 	ui.sbMinorTicksWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorTicksPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbMinorTicksLength->setValue( Worksheet::convertFromSceneUnits(m_axis->minorTicksLength(), Worksheet::Unit::Point) );
-	ui.sbMinorTicksOpacity->setValue( round(m_axis->minorTicksOpacity()*100.0) );
+	ui.sbMinorTicksOpacity->setValue( round(m_axis->minorTicksOpacity() * 100.0) );
 
 	//Extra ticks
 	//TODO
@@ -2358,18 +2357,18 @@ void AxisDock::load() {
 	ui.kcbLabelsBackgroundColor->setColor( m_axis->labelsBackgroundColor() );
 	ui.leLabelsPrefix->setText( m_axis->labelsPrefix() );
 	ui.leLabelsSuffix->setText( m_axis->labelsSuffix() );
-	ui.sbLabelsOpacity->setValue( round(m_axis->labelsOpacity()*100.0) );
+	ui.sbLabelsOpacity->setValue( round(m_axis->labelsOpacity() * 100.0) );
 
 	//Grid
 	ui.cbMajorGridStyle->setCurrentIndex( (int) m_axis->majorGridPen().style() );
 	ui.kcbMajorGridColor->setColor( m_axis->majorGridPen().color() );
 	ui.sbMajorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->majorGridPen().widthF(), Worksheet::Unit::Point) );
-	ui.sbMajorGridOpacity->setValue( round(m_axis->majorGridOpacity()*100.0) );
+	ui.sbMajorGridOpacity->setValue( round(m_axis->majorGridOpacity() * 100.0) );
 
 	ui.cbMinorGridStyle->setCurrentIndex( (int) m_axis->minorGridPen().style() );
 	ui.kcbMinorGridColor->setColor( m_axis->minorGridPen().color() );
 	ui.sbMinorGridWidth->setValue( Worksheet::convertFromSceneUnits(m_axis->minorGridPen().widthF(), Worksheet::Unit::Point) );
-	ui.sbMinorGridOpacity->setValue( round(m_axis->minorGridOpacity()*100.0) );
+	ui.sbMinorGridOpacity->setValue( round(m_axis->minorGridOpacity() * 100.0) );
 
 	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
 	majorTicksTypeChanged(ui.cbMajorTicksType->currentIndex());

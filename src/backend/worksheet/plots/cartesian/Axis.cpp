@@ -10,8 +10,6 @@
 
 
 #include "AxisPrivate.h"
-#include "CartesianCoordinateSystem.h"
-#include "CartesianPlot.h"
 #include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
