@@ -105,6 +105,7 @@ private:
 	QPoint m_selectionStart;
 	QPoint m_selectionEnd;
 	QPointF m_cursorPos;
+	bool m_calledFromContextMenu{false};
 	int magnificationFactor{0};
 	QGraphicsPixmapItem* m_magnificationWindow{nullptr};
 	GridSettings m_gridSettings;

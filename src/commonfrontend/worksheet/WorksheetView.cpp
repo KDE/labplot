@@ -1143,6 +1143,7 @@ void WorksheetView::contextMenuEvent(QContextMenuEvent* e) {
 		//no item or only the magnification window under the cursor -> show the context menu for the worksheet
 		QMenu* menu = m_worksheet->createContextMenu();
 		m_cursorPos = mapToScene(e->pos());
+		m_calledFromContextMenu = true;
 		menu->exec(QCursor::pos());
 	} else {
 		//propagate the event to the scene and graphics items
@@ -1369,30 +1370,36 @@ void WorksheetView::addNew(QAction* action) {
 		TextLabel* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
 
-		//position the label at the point where the context menu was called
-		auto position = l->position();
-		position.point = l->parentPosToRelativePos(m_cursorPos,
-												   m_worksheet->pageRect(),
-												   l->graphicsItem()->boundingRect(),
-												   position,
-												   l->horizontalAlignment(),
-												   l->verticalAlignment()
-		);
-		l->setPosition(position);
+		if (m_calledFromContextMenu) {
+			//position the label at the point where the context menu was called
+			auto position = l->position();
+			position.point = l->parentPosToRelativePos(m_cursorPos,
+													m_worksheet->pageRect(),
+													l->graphicsItem()->boundingRect(),
+													position,
+													l->horizontalAlignment(),
+													l->verticalAlignment()
+			);
+			l->setPosition(position);
+			m_calledFromContextMenu = false;
+		}
 		aspect = l;
 	} else if (action == addImageAction) {
 		Image* image = new Image(i18n("Image"));
 
-		//position the image at the point where the context menu was called
-		auto position = image->position();
-		position.point = image->parentPosToRelativePos(m_cursorPos,
-												   m_worksheet->pageRect(),
-												   image->graphicsItem()->boundingRect(),
-												   position,
-												   image->horizontalAlignment(),
-												   image->verticalAlignment()
-		);
-		image->setPosition(position);
+		if (m_calledFromContextMenu) {
+			//position the image at the point where the context menu was called
+			auto position = image->position();
+			position.point = image->parentPosToRelativePos(m_cursorPos,
+													m_worksheet->pageRect(),
+													image->graphicsItem()->boundingRect(),
+													position,
+													image->horizontalAlignment(),
+													image->verticalAlignment()
+			);
+			image->setPosition(position);
+			m_calledFromContextMenu = false;
+		}
 
 		aspect = image;
 	}
