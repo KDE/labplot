@@ -59,9 +59,9 @@ void PlotArea::init() {
 	KConfigGroup group = config.group("PlotArea");
 
 	//Background
-	d->backgroundType = (PlotArea::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(BackgroundType::Color));
-	d->backgroundColorStyle = (PlotArea::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", static_cast<int>(BackgroundColorStyle::SingleColor));
-	d->backgroundImageStyle = (PlotArea::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", static_cast<int>(BackgroundImageStyle::Scaled));
+	d->backgroundType = (WorksheetElement::BackgroundType) group.readEntry("BackgroundType", static_cast<int>(BackgroundType::Color));
+	d->backgroundColorStyle = (WorksheetElement::BackgroundColorStyle) group.readEntry("BackgroundColorStyle", static_cast<int>(BackgroundColorStyle::SingleColor));
+	d->backgroundImageStyle = (WorksheetElement::BackgroundImageStyle) group.readEntry("BackgroundImageStyle", static_cast<int>(BackgroundImageStyle::Scaled));
 	d->backgroundBrushStyle = (Qt::BrushStyle) group.readEntry("BackgroundBrushStyle", static_cast<int>(Qt::SolidPattern));
 	d->backgroundFileName = group.readEntry("BackgroundFileName", QString());
 	d->backgroundFirstColor = group.readEntry("BackgroundFirstColor", QColor(Qt::white));
@@ -124,9 +124,9 @@ void PlotArea::retransform() {
 BASIC_SHARED_D_READER_IMPL(PlotArea, bool, clippingEnabled, clippingEnabled())
 BASIC_SHARED_D_READER_IMPL(PlotArea, QRectF, rect, rect)
 
-BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundType, backgroundType, backgroundType)
-BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
-BASIC_SHARED_D_READER_IMPL(PlotArea, PlotArea::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
+BASIC_SHARED_D_READER_IMPL(PlotArea, WorksheetElement::BackgroundType, backgroundType, backgroundType)
+BASIC_SHARED_D_READER_IMPL(PlotArea, WorksheetElement::BackgroundColorStyle, backgroundColorStyle, backgroundColorStyle)
+BASIC_SHARED_D_READER_IMPL(PlotArea, WorksheetElement::BackgroundImageStyle, backgroundImageStyle, backgroundImageStyle)
 BASIC_SHARED_D_READER_IMPL(PlotArea, Qt::BrushStyle, backgroundBrushStyle, backgroundBrushStyle)
 BASIC_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundFirstColor, backgroundFirstColor)
 BASIC_SHARED_D_READER_IMPL(PlotArea, QColor, backgroundSecondColor, backgroundSecondColor)
@@ -307,7 +307,7 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
 	painter->setPen(Qt::NoPen);
 	if (backgroundType == WorksheetElement::BackgroundType::Color) {
 		switch (backgroundColorStyle) {
-		case PlotArea::BackgroundColorStyle::SingleColor: {
+		case WorksheetElement::BackgroundColorStyle::SingleColor: {
 			painter->setBrush(QBrush(backgroundFirstColor));
 			break;
 		}

@@ -19,6 +19,7 @@
 #include "backend/note/Note.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
@@ -1714,9 +1715,9 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		curve->setFillingPosition(XYCurve::FillingPosition::Below);
 
 		if (originCurve.fillAreaPattern == 0) {
-			curve->setFillingType(PlotArea::BackgroundType::Color);
+			curve->setFillingType(WorksheetElement::BackgroundType::Color);
 		} else {
-			curve->setFillingType(PlotArea::BackgroundType::Pattern);
+			curve->setFillingType(WorksheetElement::BackgroundType::Pattern);
 
 			//map different patterns in originCurve.fillAreaPattern (has the values of Origin::FillPattern) to Qt::BrushStyle;
 			switch (originCurve.fillAreaPattern) {
@@ -1884,31 +1885,31 @@ QColor OriginProjectParser::color(Origin::Color color) const {
 	return QColor(Qt::white);
 }
 
-PlotArea::BackgroundColorStyle OriginProjectParser::backgroundColorStyle(Origin::ColorGradientDirection colorGradient) const {
+WorksheetElement::BackgroundColorStyle OriginProjectParser::backgroundColorStyle(Origin::ColorGradientDirection colorGradient) const {
 	switch (colorGradient) {
 		case Origin::ColorGradientDirection::NoGradient:
-			return PlotArea::BackgroundColorStyle::SingleColor;
+			return WorksheetElement::BackgroundColorStyle::SingleColor;
 		case Origin::ColorGradientDirection::TopLeft:
-			return PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient;
+			return WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient;
 		case Origin::ColorGradientDirection::Left:
-			return PlotArea::BackgroundColorStyle::HorizontalLinearGradient;
+			return WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient;
 		case Origin::ColorGradientDirection::BottomLeft:
-			return PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient;
+			return WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient;
 		case Origin::ColorGradientDirection::Top:
-			return PlotArea::BackgroundColorStyle::VerticalLinearGradient;
+			return WorksheetElement::BackgroundColorStyle::VerticalLinearGradient;
 		case Origin::ColorGradientDirection::Center:
-			return PlotArea::BackgroundColorStyle::RadialGradient;
+			return WorksheetElement::BackgroundColorStyle::RadialGradient;
 		case Origin::ColorGradientDirection::Bottom:
-			return PlotArea::BackgroundColorStyle::VerticalLinearGradient;
+			return WorksheetElement::BackgroundColorStyle::VerticalLinearGradient;
 		case Origin::ColorGradientDirection::TopRight:
-			return PlotArea::BackgroundColorStyle::BottomLeftDiagonalLinearGradient;
+			return WorksheetElement::BackgroundColorStyle::BottomLeftDiagonalLinearGradient;
 		case Origin::ColorGradientDirection::Right:
-			return PlotArea::BackgroundColorStyle::HorizontalLinearGradient;
+			return WorksheetElement::BackgroundColorStyle::HorizontalLinearGradient;
 		case Origin::ColorGradientDirection::BottomRight:
-			return PlotArea::BackgroundColorStyle::TopLeftDiagonalLinearGradient;
+			return WorksheetElement::BackgroundColorStyle::TopLeftDiagonalLinearGradient;
 	}
 
-	return PlotArea::BackgroundColorStyle::SingleColor;
+	return WorksheetElement::BackgroundColorStyle::SingleColor;
 }
 
 QString strreverse(const QString &str) {	//QString reversing

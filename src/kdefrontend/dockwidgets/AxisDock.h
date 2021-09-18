@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : axes widget class
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
@@ -12,9 +12,7 @@
 #define AXISDOCK_H
 
 #include "ui_axisdock.h"
-#include "backend/worksheet/plots/cartesian/Axis.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
-#include <KConfig>
 
 class AbstractAspect;
 class LabelWidget;
@@ -22,6 +20,7 @@ class TreeViewComboBox;
 class AspectTreeModel;
 class AbstractColumn;
 class DateTimeSpinBox;
+class KConfig;
 
 class AxisDock : public BaseDock {
 	Q_OBJECT

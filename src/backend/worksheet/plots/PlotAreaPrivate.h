@@ -33,9 +33,9 @@ public:
 	QPainterPath shape() const override;
 
 	QRectF rect;
-	PlotArea::BackgroundType backgroundType;
-	PlotArea::BackgroundColorStyle backgroundColorStyle;
-	PlotArea::BackgroundImageStyle backgroundImageStyle;
+	WorksheetElement::BackgroundType backgroundType;
+	WorksheetElement::BackgroundColorStyle backgroundColorStyle;
+	WorksheetElement::BackgroundImageStyle backgroundImageStyle;
 	Qt::BrushStyle backgroundBrushStyle;
 	QColor backgroundFirstColor;
 	QColor backgroundSecondColor;

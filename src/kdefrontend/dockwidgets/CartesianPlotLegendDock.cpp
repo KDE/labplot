@@ -459,9 +459,9 @@ void CartesianPlotLegendDock::rotationChanged(int value) {
 
 // "Background"-tab
 void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
-	const auto type = (PlotArea::BackgroundType)index;
+	const auto type = (WorksheetElement::BackgroundType)index;
 
-	if (type == PlotArea::BackgroundType::Color) {
+	if (type == WorksheetElement::BackgroundType::Color) {
 		ui.lBackgroundColorStyle->show();
 		ui.cbBackgroundColorStyle->show();
 		ui.lBackgroundImageStyle->hide();
@@ -476,8 +476,8 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.lBackgroundFirstColor->show();
 		ui.kcbBackgroundFirstColor->show();
 
-		auto style = (PlotArea::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
-		if (style == PlotArea::BackgroundColorStyle::SingleColor) {
+		auto style = (WorksheetElement::BackgroundColorStyle) ui.cbBackgroundColorStyle->currentIndex();
+		if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
 			ui.lBackgroundFirstColor->setText(i18n("Color:"));
 			ui.lBackgroundSecondColor->hide();
 			ui.kcbBackgroundSecondColor->hide();
@@ -486,7 +486,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 			ui.lBackgroundSecondColor->show();
 			ui.kcbBackgroundSecondColor->show();
 		}
-	} else if (type == PlotArea::BackgroundType::Image) {
+	} else if (type == WorksheetElement::BackgroundType::Image) {
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
 		ui.lBackgroundImageStyle->show();
@@ -501,7 +501,7 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 		ui.kcbBackgroundFirstColor->hide();
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
-	} else if (type == PlotArea::BackgroundType::Pattern) {
+	} else if (type == WorksheetElement::BackgroundType::Pattern) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundColorStyle->hide();
 		ui.cbBackgroundColorStyle->hide();
@@ -527,9 +527,9 @@ void CartesianPlotLegendDock::backgroundTypeChanged(int index) {
 }
 
 void CartesianPlotLegendDock::backgroundColorStyleChanged(int index) {
-	auto style = (PlotArea::BackgroundColorStyle)index;
+	auto style = (WorksheetElement::BackgroundColorStyle)index;
 
-	if (style == PlotArea::BackgroundColorStyle::SingleColor) {
+	if (style == WorksheetElement::BackgroundColorStyle::SingleColor) {
 		ui.lBackgroundFirstColor->setText(i18n("Color:"));
 		ui.lBackgroundSecondColor->hide();
 		ui.kcbBackgroundSecondColor->hide();
@@ -552,7 +552,7 @@ void CartesianPlotLegendDock::backgroundImageStyleChanged(int index) {
 	if (m_initializing)
 		return;
 
-	auto style = (PlotArea::BackgroundImageStyle)index;
+	auto style = (WorksheetElement::BackgroundImageStyle)index;
 	for (auto* legend : m_legendList)
 		legend->setBackgroundImageStyle(style);
 }
@@ -790,19 +790,19 @@ void CartesianPlotLegendDock::legendVisibilityChanged(bool on) {
 }
 
 //Background
-void CartesianPlotLegendDock::legendBackgroundTypeChanged(PlotArea::BackgroundType type) {
+void CartesianPlotLegendDock::legendBackgroundTypeChanged(WorksheetElement::BackgroundType type) {
 	m_initializing = true;
 	ui.cbBackgroundType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
 
-void CartesianPlotLegendDock::legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle style) {
+void CartesianPlotLegendDock::legendBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle style) {
 	m_initializing = true;
 	ui.cbBackgroundColorStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;
 }
 
-void CartesianPlotLegendDock::legendBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle style) {
+void CartesianPlotLegendDock::legendBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle style) {
 	m_initializing = true;
 	ui.cbBackgroundImageStyle->setCurrentIndex(static_cast<int>(style));
 	m_initializing = false;

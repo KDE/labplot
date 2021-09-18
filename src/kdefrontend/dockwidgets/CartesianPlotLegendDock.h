@@ -12,14 +12,11 @@
 #define CARTESIANPLOTLEGENDDOCK_H
 
 #include "ui_cartesianplotlegenddock.h"
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "kdefrontend/dockwidgets/BaseDock.h"
 
-#include <QList>
-#include <KConfig>
-
 class LabelWidget;
+class KConfig;
 
 class CartesianPlotLegendDock : public BaseDock {
 	Q_OBJECT
@@ -92,9 +89,9 @@ private slots:
 	void legendRotationAngleChanged(qreal);
 	void legendVisibilityChanged(bool);
 
-	void legendBackgroundTypeChanged(PlotArea::BackgroundType);
-	void legendBackgroundColorStyleChanged(PlotArea::BackgroundColorStyle);
-	void legendBackgroundImageStyleChanged(PlotArea::BackgroundImageStyle);
+	void legendBackgroundTypeChanged(WorksheetElement::BackgroundType);
+	void legendBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
+	void legendBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);
 	void legendBackgroundBrushStyleChanged(Qt::BrushStyle);
 	void legendBackgroundFirstColorChanged(QColor&);
 	void legendBackgroundSecondColorChanged(QColor&);

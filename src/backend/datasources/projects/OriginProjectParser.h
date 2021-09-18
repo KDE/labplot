@@ -11,8 +11,8 @@
 #ifndef ORIGINPROJECTPARSER_H
 #define ORIGINPROJECTPARSER_H
 
-#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/datasources/projects/ProjectParser.h"
+#include "backend/worksheet/WorksheetElement.h"
 #include "3rdparty/liborigin/OriginFile.h"
 
 class Axis;
@@ -58,7 +58,7 @@ private:
 	QString parseOriginTags(const QString&) const;
 	QDateTime creationTime(tree<Origin::ProjectNode>::iterator) const;
 	QColor color(Origin::Color) const;
-	PlotArea::BackgroundColorStyle backgroundColorStyle(Origin::ColorGradientDirection) const;
+	WorksheetElement::BackgroundColorStyle backgroundColorStyle(Origin::ColorGradientDirection) const;
 
 	QList<QPair<QString, QString>> charReplacementList() const;
 	QString replaceSpecialChars(const QString&) const;
