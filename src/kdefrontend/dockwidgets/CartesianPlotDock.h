@@ -61,9 +61,8 @@ private slots:
 	void geometryChanged();
 	void layoutChanged(Worksheet::Layout);
 
-	void rangeTypeChanged();
-	void rangeFirstChanged(const QString&);
-	void rangeLastChanged(const QString&);
+	void rangeTypeChanged(int);
+	void rangePointsChanged(const QString&);
 
 	void autoScaleXChanged(int);
 	void xMinChanged(const QString&);

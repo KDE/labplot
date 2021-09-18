@@ -22,13 +22,13 @@
 
 #include <KMessageBox>
 
+#include <QButtonGroup>
 #include <QCompleter>
-#include <QPainter>
-#include <QTimer>
 #include <QDir>
 #include <QDirModel>
-#include <QButtonGroup>
 #include <QIntValidator>
+#include <QPainter>
+#include <QRadioButton>
 
 namespace {
 enum TwRangesColumn{
@@ -67,11 +67,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	m_teComment->setFixedHeight(m_leName->height());
 
 	//"General"-tab
-	auto* rangeButtonsGroup(new QButtonGroup);
-	rangeButtonsGroup->addButton(ui.rbRangeFirst);
-	rangeButtonsGroup->addButton(ui.rbRangeLast);
-	rangeButtonsGroup->addButton(ui.rbRangeFree);
-
 	ui.twXRanges->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
 	ui.twYRanges->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
 	ui.twPlotRanges->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -114,8 +109,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 		ui.cbCursorLineStyle->addItem(list[i], i);
 
 	//Validators
-	ui.leRangeFirst->setValidator( new QIntValidator(ui.leRangeFirst) );
-	ui.leRangeLast->setValidator( new QIntValidator(ui.leRangeLast) );
+	ui.leRangePoints->setValidator( new QIntValidator(ui.leRangePoints) );
 	ui.leXBreakStart->setValidator( new QDoubleValidator(ui.leXBreakStart) );
 	ui.leXBreakEnd->setValidator( new QDoubleValidator(ui.leXBreakEnd) );
 	ui.leYBreakStart->setValidator( new QDoubleValidator(ui.leYBreakStart) );
@@ -134,9 +128,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.sbWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
 	connect(ui.sbHeight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
 
-	connect(ui.leRangeFirst, &QLineEdit::textChanged, this, &CartesianPlotDock::rangeFirstChanged);
-	connect(ui.leRangeLast, &QLineEdit::textChanged, this, &CartesianPlotDock::rangeLastChanged);
-	connect(rangeButtonsGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &CartesianPlotDock::rangeTypeChanged);
+	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::rangeTypeChanged);
+	connect(ui.leRangePoints, &QLineEdit::textChanged, this, &CartesianPlotDock::rangePointsChanged);
 
 	//Range breaks
 	connect(ui.chkXBreak, &QCheckBox::toggled, this, &CartesianPlotDock::toggleXBreak);
@@ -229,7 +222,6 @@ void CartesianPlotDock::init() {
 	QPen pen(Qt::SolidPattern);
 	const QColor& color = (palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
 	pen.setColor(color);
-
 
 	//left
 	pm.fill(Qt::transparent);
@@ -476,8 +468,10 @@ void CartesianPlotDock::updateLocale() {
 
 	//update the QLineEdits, avoid the change events
 	if (m_plot) {
-		ui.leRangeFirst->setText( numberLocale.toString(m_plot->rangeFirstValues()) );
-		ui.leRangeLast->setText( numberLocale.toString(m_plot->rangeLastValues()) );
+		if (m_plot->rangeType() == CartesianPlot::RangeType::First)
+			ui.leRangePoints->setText( numberLocale.toString(m_plot->rangeFirstValues()) );
+		else if (m_plot->rangeType() == CartesianPlot::RangeType::Last)
+			ui.leRangePoints->setText( numberLocale.toString(m_plot->rangeLastValues()) );
 
 		// x ranges
 		bool isDateTime{ false };
@@ -879,6 +873,21 @@ void CartesianPlotDock::updatePlotRangeList() {
 void CartesianPlotDock::retranslateUi() {
 	Lock lock(m_initializing);
 
+	//data range types
+	ui.cbRangeType->clear();
+	ui.cbRangeType->addItem(i18n("Free"));
+	ui.cbRangeType->addItem(i18n("Last Points"));
+	ui.cbRangeType->addItem(i18n("First Points"));
+
+	QString msg = i18n("Data Range:"
+	"<ul>"
+	"<li>Free - full data range in plotted</li>"
+	"<li>Last Points - specified number of last points is plotted</li>"
+	"<li>First Points - specified number of first points is plotted</li>"
+	"</ul>");
+	ui.lRangeType->setToolTip(msg);
+	ui.cbRangeType->setToolTip(msg);
+
 	//scale breakings
 	ui.cbXBreakStyle->addItem( i18n("Simple") );
 	ui.cbXBreakStyle->addItem( i18n("Vertical") );
@@ -962,20 +971,19 @@ void CartesianPlotDock::layoutChanged(Worksheet::Layout layout) {
 	ui.sbHeight->setEnabled(b);
 }
 
-void CartesianPlotDock::rangeTypeChanged() {
-	CartesianPlot::RangeType type;
-	if (ui.rbRangeFirst->isChecked()) {
-		ui.leRangeFirst->setEnabled(true);
-		ui.leRangeLast->setEnabled(false);
-		type = CartesianPlot::RangeType::First;
-	} else if (ui.rbRangeLast->isChecked()) {
-		ui.leRangeFirst->setEnabled(false);
-		ui.leRangeLast->setEnabled(true);
-		type = CartesianPlot::RangeType::Last;
+void CartesianPlotDock::rangeTypeChanged(int index) {
+	auto type = static_cast<CartesianPlot::RangeType>(index);
+	if (type == CartesianPlot::RangeType::Free) {
+		ui.lRangePoints->hide();
+		ui.leRangePoints->hide();
 	} else {
-		ui.leRangeFirst->setEnabled(false);
-		ui.leRangeLast->setEnabled(false);
-		type = CartesianPlot::RangeType::Free;
+		ui.lRangePoints->show();
+		ui.leRangePoints->show();
+		SET_NUMBER_LOCALE;
+		if (type == CartesianPlot::RangeType::First)
+			ui.leRangePoints->setText( numberLocale.toString(m_plot->rangeFirstValues()) );
+		else
+			ui.leRangePoints->setText( numberLocale.toString(m_plot->rangeLastValues()) );
 	}
 
 	if (m_initializing)
@@ -985,26 +993,22 @@ void CartesianPlotDock::rangeTypeChanged() {
 		plot->setRangeType(type);
 }
 
-void CartesianPlotDock::rangeFirstChanged(const QString& text) {
+void CartesianPlotDock::rangePointsChanged(const QString& text) {
 	if (m_initializing)
 		return;
 
 	const int value = text.toInt();
-	for (auto* plot : m_plotList)
-		plot->setRangeFirstValues(value);
-}
-
-void CartesianPlotDock::rangeLastChanged(const QString& text) {
-	if (m_initializing)
-		return;
-
-	const int value = text.toInt();
-	for (auto* plot : m_plotList)
+	auto type = static_cast<CartesianPlot::RangeType>(ui.cbRangeType->currentIndex());
+	if (type == CartesianPlot::RangeType::First) {
+		for (auto* plot : m_plotList)
+			plot->setRangeFirstValues(value);
+	} else {
+		for (auto* plot : m_plotList)
 		plot->setRangeLastValues(value);
+	}
 }
 
 // x/y Ranges
-
 void CartesianPlotDock::autoScaleXChanged(int state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
 	if (m_initializing)
@@ -2163,31 +2167,19 @@ void CartesianPlotDock::plotRectChanged(QRectF& rect) {
 
 void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
 	m_initializing = true;
-	switch (type) {
-	case CartesianPlot::RangeType::Free:
-		ui.rbRangeFree->setChecked(true);
-		break;
-	case CartesianPlot::RangeType::First:
-		ui.rbRangeFirst->setChecked(true);
-		break;
-	case CartesianPlot::RangeType::Last:
-		ui.rbRangeLast->setChecked(true);
-		break;
-	}
+	ui.cbRangeType->setCurrentIndex(static_cast<int>(type));
 	m_initializing = false;
 }
-
 void CartesianPlotDock::plotRangeFirstValuesChanged(int value) {
 	m_initializing = true;
 	SET_NUMBER_LOCALE
-	ui.leRangeFirst->setText(numberLocale.toString(value));
+	ui.leRangePoints->setText(numberLocale.toString(value));
 	m_initializing = false;
 }
-
 void CartesianPlotDock::plotRangeLastValuesChanged(int value) {
 	m_initializing = true;
 	SET_NUMBER_LOCALE
-	ui.leRangeLast->setText(numberLocale.toString(value));
+	ui.leRangePoints->setText(numberLocale.toString(value));
 	m_initializing = false;
 }
 
@@ -2480,28 +2472,15 @@ void CartesianPlotDock::load() {
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().width(), m_worksheetUnit));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(m_plot->rect().height(), m_worksheetUnit));
 
-	switch (m_plot->rangeType()) {
-	case CartesianPlot::RangeType::Free:
-		ui.rbRangeFree->setChecked(true);
-		break;
-	case CartesianPlot::RangeType::First:
-		ui.rbRangeFirst->setChecked(true);
-		break;
-	case CartesianPlot::RangeType::Last:
-		ui.rbRangeLast->setChecked(true);
-		break;
-	}
-	rangeTypeChanged();
-	SET_NUMBER_LOCALE
-	ui.leRangeFirst->setText( numberLocale.toString(m_plot->rangeFirstValues()) );
-	ui.leRangeLast->setText( numberLocale.toString(m_plot->rangeLastValues()) );
+	int index = static_cast<int>(m_plot->rangeType());
+	ui.cbRangeType->setCurrentIndex(index);
+	rangeTypeChanged(index);
 
 	updateXRangeList();
 	updateYRangeList();
 
 	//Title
 	labelWidget->load();
-
 
 	//x-range breaks, show the first break
 	ui.chkXBreak->setChecked(m_plot->xRangeBreakingEnabled());
