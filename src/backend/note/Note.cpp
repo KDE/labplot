@@ -13,6 +13,7 @@
 #include "commonfrontend/note/NoteView.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/lib/macros.h"
+#include "backend/core/Project.h"
 
 #include <QPalette>
 #include <QPrinter>
@@ -60,6 +61,7 @@ bool Note::exportView() const {
 
 void Note::setNote(const QString& note) {
 	m_note = note;
+	project()->setChanged(true);
 }
 
 const QString& Note::note() const {
