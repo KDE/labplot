@@ -376,13 +376,16 @@ QModelIndex AspectTreeModel::modelIndexOfAspect(const AbstractAspect* aspect, in
 QModelIndex AspectTreeModel::modelIndexOfAspect(const QString& path, int column) const {
 	//determine the aspect out of aspect path
 	AbstractAspect* aspect = nullptr;
-	const auto& children = m_root->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive);
-	for (auto* child : children) {
-		if (child->path() == path) {
-			aspect = child;
-			break;
+	if (m_root->path() != path) {
+		const auto& children = m_root->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive);
+		for (auto* child : children) {
+			if (child->path() == path) {
+				aspect = child;
+				break;
+			}
 		}
-	}
+	} else
+		aspect = m_root;
 
 	//return the model index of the aspect
 	if (aspect)

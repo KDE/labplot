@@ -691,9 +691,10 @@ void ProjectExplorer::toggleFilterMatchCompleteWord() {
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index) {
-	DEBUG(Q_FUNC_INFO)
 	if (m_project->isLoading())
 		return;
+
+	DEBUG(Q_FUNC_INFO)
 
 	if ( !m_treeView->selectionModel()->isSelected(index) ) {
 		m_changeSelectionFromView = true;
@@ -714,16 +715,17 @@ void ProjectExplorer::deselectIndex(const QModelIndex & index) {
 }
 
 void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
-	DEBUG(Q_FUNC_INFO)
 	if (m_project->isLoading())
 		return;
+
+	DEBUG(Q_FUNC_INFO)
 
 	QModelIndex index;
 	AbstractAspect* aspect = nullptr;
 
 	//there are four model indices in each row
 	//-> divide by 4 to obtain the number of selected rows (=aspects)
-	QModelIndexList items = selected.indexes();
+	auto items = selected.indexes();
 	for (int i = 0; i < items.size()/4; ++i) {
 		index = items.at(i*4);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -739,7 +741,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	for (const QModelIndex& index : qAsConst(items)) {
+	for (const auto& index : qAsConst(items)) {
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		selectedAspects << aspect;
 	}
@@ -857,13 +859,27 @@ void ProjectExplorer::save(QXmlStreamWriter* writer) const {
 
 	writer->writeStartElement("state");
 
-	//check whether the project node itself is expanded
-	if (m_treeView->isExpanded(m_treeView->model()->index(0,0))) {
+	//check whether the project node itself is expanded or selected or current
+	const auto& index = m_treeView->model()->index(0,0);
+	if (m_treeView->isExpanded(index)) {
 		writer->writeStartElement("expanded");
 		writer->writeAttribute("path", m_project->path());
 		writer->writeEndElement();
 	}
 
+	if (selectedRows.indexOf(index) != -1) {
+		writer->writeStartElement("selected");
+		writer->writeAttribute("path", m_project->path());
+		writer->writeEndElement();
+	}
+
+	if (index == m_treeView->currentIndex()) {
+		writer->writeStartElement("current");
+		writer->writeAttribute("path", m_project->path());
+		writer->writeEndElement();
+	}
+
+	//traverse the children nodes
 	const auto& children = m_project->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* aspect : children) {
 		const QString& path = aspect->path();
@@ -1107,21 +1123,19 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	auto* aspect = static_cast<AbstractAspect*>(currentIndex.internalPointer());
 	emit currentAspectChanged(aspect);
 
-	//when setting the current index above it gets expanded, collapse all parent indices if they are were not expanded when saved
+	//when setting the current index above it gets expanded, collapse all parent indices if they were not expanded when saved
 	collapseParents(currentIndex, expanded);
 
 	return true;
 }
 
 void ProjectExplorer::collapseParents(const QModelIndex& index, const QList<QModelIndex>& expanded) {
-	//root index doesn't have any parents - this case is not caught by the second if-statement below
-	if (index.column() == 0 && index.row() == 0)
-		return;
-
-	const auto& parent = index.parent();
-	if (parent == QModelIndex())
-		return;
-
-	if (expanded.indexOf(parent) == -1)
-		m_treeView->collapse(parent);
+	if (index.column() == 0 && index.row() == 0) { //root/project index, doesn't have any parent
+		if (expanded.indexOf(index) == -1)
+			m_treeView->collapse(index);
+	} else {
+		const auto& parent = index.parent();
+		if (parent != QModelIndex() && expanded.indexOf(parent) == -1)
+			m_treeView->collapse(parent);
+	}
 }
