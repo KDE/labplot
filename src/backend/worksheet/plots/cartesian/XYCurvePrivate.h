@@ -31,8 +31,8 @@ public:
 	void retransform();
 	void recalcLogicalPoints();
 	void updateLines();
-	void addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff, int numberOfPixelX, double minLogicalDiffX); // for any x scale
-	void addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, double minLogicalDiffX, qint64& pixelDiff);	// optimized for linear x scale
+	void addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff, int numberOfPixelX, double minLogicalDiffX, double minLogicalDiffY); // for any x scale
+	void addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, double minLogicalDiffX, double minLogicalDiffY, qint64& pixelDiff);	// optimized for linear x scale
 	void addUniqueLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff);	// finally add line if unique (no overlay)
 	void updateDropLines();
 	void updateSymbols();
