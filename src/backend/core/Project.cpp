@@ -476,7 +476,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	QByteArray bArray;
 	QBuffer buffer(&bArray);
 	buffer.open(QIODevice::WriteOnly);
-	QPixmap scaledThumbnail = thumbnail.scaled(512,512, Qt::KeepAspectRatio);
+	QPixmap scaledThumbnail = thumbnail.scaled(512, 512, Qt::KeepAspectRatio);
 	scaledThumbnail.save(&buffer, "JPEG");
 	QString image = QString::fromLatin1(bArray.toBase64().data());
 	writer->writeAttribute("thumbnail", image);
@@ -507,14 +507,44 @@ void Project::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 	writer->writeEndDocument();
 }
-#include <QDebug>
+
 bool Project::load(const QString& filename, bool preview) {
+	DEBUG(Q_FUNC_INFO << ", LOADING file " << filename.toStdString())
 	QIODevice* file;
-	// first try gzip compression, because projects can be gzipped and end with .lml
-	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
-		file = new KCompressionDevice(filename,KFilterDev::compressionTypeForMimeType("application/x-gzip"));
-	else	// opens filename using file ending
+	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive)) {
+		DEBUG(Q_FUNC_INFO << ", filename ends with .lml")
+
+		// check compression
+		file = new QFile(filename);
+		if (!file->open(QIODevice::ReadOnly)) {
+			KMessageBox::error(nullptr, i18n("Sorry. Could not open file for reading."));
+			return false;
+		}
+		QDataStream in(file);
+		quint16 magic;
+		in >> magic;
+		file->close();
+		delete file;
+
+		if (!magic) {
+			KMessageBox::error(nullptr, i18n("The project file is empty."), i18n("Error opening project"));
+			return false;
+		}
+		QDEBUG(Q_FUNC_INFO << ", got magic: " << magic << hex  << "0x" << magic)
+
+		if (magic == 0x1f8b)	// gzip compressed data
+			file = new KCompressionDevice(filename, KCompressionDevice::GZip);
+		else if (magic == 0xfd37)	// XZ compressed data
+			file = new KCompressionDevice(filename, KCompressionDevice::Xz);
+		else {
+			KMessageBox::error(nullptr, i18n("Unknown compression."), i18n("Error opening project"));
+			return false;
+		}
+	} else {	// opens filename using file ending
+		//DEBUG(Q_FUNC_INFO << ", filename does not end with .lml. Guessing by extension")
 		file = new KFilterDev(filename);
+		DEBUG(Q_FUNC_INFO << ", found compression type " << ((KFilterDev *)file)->compressionType())
+	}
 
 	if (!file)
 		file = new QFile(filename);
