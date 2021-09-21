@@ -31,9 +31,11 @@ private:
 
 private slots:
 	void authorChanged();
+	void saveCalculationsChanged();
 
 	//SLOTs for changes triggered in Project
 	void projectAuthorChanged(const QString&);
+	void projectSaveCalculationsChanged(bool);
 };
 
 #endif // PROJECTDOCK_H

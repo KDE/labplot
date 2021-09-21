@@ -54,6 +54,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
 	CLASS_D_ACCESSOR_DECL(QString, author, Author)
 	CLASS_D_ACCESSOR_DECL(QDateTime, modificationTime, ModificationTime)
+	BASIC_D_ACCESSOR_DECL(bool, saveCalculations, SaveCalculations)
 
 	void setChanged(const bool value=true);
 	bool hasChanged() const;
@@ -82,6 +83,7 @@ public slots:
 
 signals:
 	void authorChanged(const QString&);
+	void saveCalculationsChanged(bool);
 	void requestSaveState(QXmlStreamWriter*) const;
 	void requestLoadState(XmlStreamReader*);
 	void requestProjectContextMenu(QMenu*);

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Base class for all analysis curves
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -45,6 +45,8 @@ public:
 	CLASS_D_ACCESSOR_DECL(QString, xDataColumnPath, XDataColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, yDataColumnPath, YDataColumnPath)
 	CLASS_D_ACCESSOR_DECL(QString, y2DataColumnPath, Y2DataColumnPath)
+
+	bool saveCalculations() const;
 
 	typedef XYAnalysisCurvePrivate Private;
 

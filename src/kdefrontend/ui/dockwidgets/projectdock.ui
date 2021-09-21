@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
-    <height>479</height>
+    <width>404</width>
+    <height>518</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,16 +44,16 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item row="3" column="2">
-       <widget class="QLineEdit" name="leName">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
+      <item row="1" column="2">
+       <widget class="QLabel" name="lVersion">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
@@ -73,12 +73,8 @@
         </property>
        </spacer>
       </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>Created:</string>
-        </property>
-       </widget>
+      <item row="4" column="2">
+       <widget class="QLineEdit" name="leAuthor"/>
       </item>
       <item row="0" column="2">
        <widget class="QLineEdit" name="leFileName">
@@ -96,31 +92,25 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QLabel" name="lVersion">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string/>
+      <item row="7" column="2">
+       <widget class="ResizableTextEdit" name="teComment">
+        <property name="readOnly">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
-      <item row="6" column="2">
-       <widget class="QLabel" name="lModified">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+      <item row="8" column="0">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
-        <property name="text">
-         <string/>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
         </property>
-       </widget>
+       </spacer>
       </item>
       <item row="0" column="1">
        <spacer name="horizontalSpacer_5">
@@ -138,10 +128,16 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
+      <item row="10" column="0">
+       <widget class="QLabel" name="lSettings">
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
-         <string>File name:</string>
+         <string>Settings:</string>
         </property>
        </widget>
       </item>
@@ -152,23 +148,50 @@
         </property>
        </widget>
       </item>
+      <item row="11" column="0">
+       <widget class="QLabel" name="lSaveCalculations">
+        <property name="text">
+         <string>Save Calculations:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="leName">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>File name:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLabel" name="lModified">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
          <string>Name:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="2">
-       <widget class="QLineEdit" name="leAuthor"/>
-      </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="label_9">
-        <property name="text">
-         <string>Comment:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -192,13 +215,6 @@
         </property>
        </widget>
       </item>
-      <item row="7" column="2">
-       <widget class="ResizableTextEdit" name="teComment">
-        <property name="readOnly">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
@@ -206,18 +222,36 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="0">
-       <spacer name="verticalSpacer">
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Comment:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Created:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0" colspan="3">
+       <widget class="Line" name="lineSettings">
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
+       </widget>
+      </item>
+      <item row="11" column="2">
+       <widget class="QCheckBox" name="chkSaveCalculations">
+        <property name="text">
+         <string/>
         </property>
-       </spacer>
+       </widget>
       </item>
      </layout>
     </widget>

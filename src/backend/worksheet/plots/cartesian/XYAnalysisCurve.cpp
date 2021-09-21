@@ -19,6 +19,7 @@
 #include "XYAnalysisCurve.h"
 #include "XYAnalysisCurvePrivate.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/Project.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/macros.h"
 #include "backend/lib/XmlStreamReader.h"
@@ -119,6 +120,11 @@ BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, y2DataColumn,
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, QString, xDataColumnPath, xDataColumnPath)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, QString, yDataColumnPath, yDataColumnPath)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, QString, y2DataColumnPath, y2DataColumnPath)
+
+
+bool XYAnalysisCurve::saveCalculations() const {
+	return const_cast<XYAnalysisCurve*>(this)->project()->saveCalculations();
+}
 
 //##############################################################################
 //#################  setter methods and undo commands ##########################

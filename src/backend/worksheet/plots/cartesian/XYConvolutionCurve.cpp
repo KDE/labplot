@@ -296,7 +296,7 @@ void XYConvolutionCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "time", QString::number(d->convolutionResult.elapsedTime) );
 
 	//save calculated columns if available
-	if (d->xColumn) {
+	if (saveCalculations() && d->xColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 	}

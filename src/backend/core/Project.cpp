@@ -128,6 +128,7 @@ public:
 	Project* const q;
 	QString fileName;
 	QString author;
+	bool saveCalculations{true};
 	QUndoStack undo_stack;
 };
 
@@ -229,11 +230,18 @@ Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
 CLASS_D_ACCESSOR_IMPL(Project, QString, fileName, FileName, fileName)
 BASIC_D_READER_IMPL(Project, QString, author, author)
 CLASS_D_ACCESSOR_IMPL(Project, QDateTime, modificationTime, ModificationTime, modificationTime)
+BASIC_D_READER_IMPL(Project, bool, saveCalculations, saveCalculations)
 
 STD_SETTER_CMD_IMPL_S(Project, SetAuthor, QString, author)
 void Project::setAuthor(const QString& author) {
 	if (author != d->author)
 		exec(new ProjectSetAuthorCmd(d, author, ki18n("%1: set author")));
+}
+
+STD_SETTER_CMD_IMPL_S(Project, SetSaveCalculations, bool, saveCalculations)
+void Project::setSaveCalculations(bool save) {
+	if (save != d->saveCalculations)
+		exec(new ProjectSetSaveCalculationsCmd(d, save, ki18n("%1: save calculation changed")));
 }
 
 void Project::setChanged(const bool value) {
@@ -472,6 +480,7 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	writer->writeAttribute("xmlVersion", QString::number(buildXmlVersion));
 	writer->writeAttribute("modificationTime", modificationTime().toString("yyyy-dd-MM hh:mm:ss:zzz"));
 	writer->writeAttribute("author", author());
+	writer->writeAttribute("saveCalculations", QString::number(d->saveCalculations));
 
 	QByteArray bArray;
 	QBuffer buffer(&bArray);
@@ -849,6 +858,13 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	if (preview)
 		return;
 
+	//recalculate all analysis curves if the results of the calculations were not saved in the project
+	if (!aspect->project()->saveCalculations()) {
+		const auto& curves = aspect->children<XYAnalysisCurve>(ChildIndexFlag::Recursive);
+		for (auto* curve : curves)
+			curve->recalculate();
+	}
+
 	//all data was read in spreadsheets:
 	//call CartesianPlot::retransform() to retransform the plots
 	QVector<CartesianPlot*> plots;
@@ -900,7 +916,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 }
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {
-	QXmlStreamAttributes attribs = reader->attributes();
+	const auto& attribs = reader->attributes();
 	QString str = attribs.value(reader->namespaceUri().toString(), "modificationTime").toString();
 	QDateTime modificationTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
 	if (str.isEmpty() || !modificationTime.isValid()) {
@@ -910,6 +926,7 @@ bool Project::readProjectAttributes(XmlStreamReader* reader) {
 		d->modificationTime = modificationTime;
 
 	d->author = attribs.value(reader->namespaceUri().toString(), "author").toString();
+	d->saveCalculations = attribs.value(reader->namespaceUri().toString(), "saveCalculations").toInt();
 
 	return true;
 }

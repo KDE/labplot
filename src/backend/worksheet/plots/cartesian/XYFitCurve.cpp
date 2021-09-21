@@ -2279,7 +2279,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	//save calculated columns if available
-	if (d->xColumn && d->yColumn && d->residualsColumn) {
+	if (saveCalculations() && d->xColumn && d->yColumn && d->residualsColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 		d->residualsColumn->save(writer);

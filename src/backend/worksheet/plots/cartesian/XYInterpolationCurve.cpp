@@ -439,7 +439,7 @@ void XYInterpolationCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "time", QString::number(d->interpolationResult.elapsedTime) );
 
 	//save calculated columns if available
-	if (d->xColumn) {
+	if (saveCalculations() && d->xColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 	}

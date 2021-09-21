@@ -287,7 +287,7 @@ void XYFourierFilterCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "time", QString::number(d->filterResult.elapsedTime) );
 
 	//save calculated columns if available
-	if (d->xColumn && d->yColumn) {
+	if (saveCalculations() && d->xColumn && d->yColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 	}

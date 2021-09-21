@@ -240,7 +240,7 @@ void XYIntegrationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "value", QString::number(d->integrationResult.value) );
 
 	//save calculated columns if available
-	if (d->xColumn) {
+	if (saveCalculations() && d->xColumn) {
 		d->xColumn->save(writer);
 		d->yColumn->save(writer);
 	}
