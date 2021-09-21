@@ -532,14 +532,10 @@ bool Project::load(const QString& filename, bool preview) {
 		}
 		QDEBUG(Q_FUNC_INFO << ", got magic: " << magic << hex  << "0x" << magic)
 
-		if (magic == 0x1f8b)	// gzip compressed data
-			file = new KCompressionDevice(filename, KCompressionDevice::GZip);
-		else if (magic == 0xfd37)	// XZ compressed data
+		if (magic == 0xfd37)	// XZ compressed data
 			file = new KCompressionDevice(filename, KCompressionDevice::Xz);
-		else {
-			KMessageBox::error(nullptr, i18n("Unknown compression."), i18n("Error opening project"));
-			return false;
-		}
+		else	// gzip or not compressed data
+			file = new KCompressionDevice(filename, KCompressionDevice::GZip);
 	} else {	// opens filename using file ending
 		//DEBUG(Q_FUNC_INFO << ", filename does not end with .lml. Guessing by extension")
 		file = new KFilterDev(filename);
