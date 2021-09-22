@@ -1551,6 +1551,7 @@ void ImportFileWidget::refreshPreview() {
 					importedStrings[i] << strings.at(i);
 			}
 		}
+
 		tmpTableWidget = m_matioOptionsWidget->previewWidget();
 		break;
 	}

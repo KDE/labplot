@@ -608,20 +608,20 @@ void MatioFilterPrivate::parse(const QString& fileName) {
     (Not used for preview)
     Uses the settings defined in the data source.
 */
-QVector<QStringList> MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-	DEBUG(Q_FUNC_INFO)
+void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
 	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no variable selected");
-		return dataStrings;
+		return;
 	}
 
-	//TODO: support reading multiple variables (calling this for every variable?)
-	// idea: loop over all currentVarNames setting private currentVarName
 	QDEBUG(Q_FUNC_INFO << ", current var names:" << currentVarNames)
-	// if more than one variable: set append mode after reading first
-	return readCurrentVar(fileName, dataSource, mode);
+	for (const auto var : currentVarNames) {
+		currentVarName = var;
+		readCurrentVar(fileName, dataSource, mode);
+		mode = AbstractFileFilter::ImportMode::Append;	// append other vars
+	}
 }
 
 /*!
