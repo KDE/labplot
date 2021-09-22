@@ -40,9 +40,8 @@ public:
 	void saveFilterSettings(const QString&) const override;
 
 	void setCurrentVarName(const QString&);
-//	const QString currentVarName() const;
-	void setCurrentVarNames(const QStringList&);
-	const QStringList currentVarNames() const;
+	void setSelectedVarNames(const QStringList&);
+	const QStringList selectedVarNames() const;
 	size_t varCount() const;
 	QVector<QStringList> varsInfo() const;
 

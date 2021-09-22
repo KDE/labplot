@@ -146,6 +146,10 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		else //probably ascii data
 			fileType = FileType::Ascii;
 	}
+#ifdef HAVE_MATIO	// before HDF5 to prefer this filter for MAT 7.4 files
+	else if (fileInfo.contains(QLatin1String("Matlab")) || fileName.endsWith(QLatin1String("mat"), Qt::CaseInsensitive))
+		fileType = FileType::MATIO;
+#endif
 #ifdef HAVE_HDF5
 	else if (fileInfo.contains(QLatin1String("Hierarchical Data Format"))
 		|| fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
@@ -183,10 +187,6 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 		|| fileName.endsWith(QLatin1String(".xpt5"), Qt::CaseInsensitive)
 		|| fileName.endsWith(QLatin1String(".xpt8"), Qt::CaseInsensitive))
 		fileType = FileType::READSTAT;
-#endif
-#ifdef HAVE_MATIO
-	else if (fileInfo.contains(QLatin1String("Matlab")) || fileName.endsWith(QLatin1String("mat"), Qt::CaseInsensitive))
-		fileType = FileType::MATIO;
 #endif
 	else if (fileInfo.contains("image") || fileInfo.contains("bitmap") || !imageFormat.isEmpty())
 		fileType = FileType::Image;

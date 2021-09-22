@@ -261,15 +261,12 @@ void MatioFilter::saveFilterSettings(const QString& filterName) const {
 void MatioFilter::setCurrentVarName(const QString& name) {
 	d->currentVarName = name;
 }
-//const QString MatioFilter::currentVarName() const {
-//	return d->currentVarName;
-//}
-void MatioFilter::setCurrentVarNames(const QStringList& names) {
+void MatioFilter::setSelectedVarNames(const QStringList& names) {
 	d->currentVarName = names.first();
-	d->currentVarNames = names;
+	d->selectedVarNames = names;
 }
-const QStringList MatioFilter::currentVarNames() const {
-	return d->currentVarNames;
+const QStringList MatioFilter::selectedVarNames() const {
+	return d->selectedVarNames;
 }
 size_t MatioFilter::varCount() const {
 	return d->varCount;
@@ -616,8 +613,8 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 		return;
 	}
 
-	QDEBUG(Q_FUNC_INFO << ", current var names:" << currentVarNames)
-	for (const auto var : currentVarNames) {
+	QDEBUG(Q_FUNC_INFO << ", selected var names:" << selectedVarNames)
+	for (const auto var : selectedVarNames) {
 		currentVarName = var;
 		readCurrentVar(fileName, dataSource, mode);
 		mode = AbstractFileFilter::ImportMode::Append;	// append other vars

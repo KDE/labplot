@@ -205,7 +205,6 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 	} else if (aspect->inherits(AspectType::Spreadsheet)) {
 		DEBUG(Q_FUNC_INFO << ", to Spreadsheet");
 		auto* spreadsheet = qobject_cast<Spreadsheet*>(aspect);
-		DEBUG(" Calling filter->readDataFromFile() with spreadsheet " << spreadsheet);
 		filter->readDataFromFile(fileName, spreadsheet, mode);
 	} else if (aspect->inherits(AspectType::Workbook)) {
 		DEBUG(Q_FUNC_INFO << ", to Workbook");

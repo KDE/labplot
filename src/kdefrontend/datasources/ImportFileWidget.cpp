@@ -760,7 +760,7 @@ AbstractFileFilter* ImportFileWidget::currentFileFilter() const {
 			m_currentFilter.reset(new MatioFilter);
 		auto filter = static_cast<MatioFilter*>(m_currentFilter.get());
 		if (!selectedMatioNames().isEmpty())
-			filter->setCurrentVarNames(selectedMatioNames());
+			filter->setSelectedVarNames(selectedMatioNames());
 		filter->setStartRow(ui.sbStartRow->value());
 		filter->setEndRow(ui.sbEndRow->value());
 		filter->setStartColumn(ui.sbStartColumn->value());
@@ -1540,7 +1540,7 @@ void ImportFileWidget::refreshPreview() {
 
 		QVector<QStringList> strings;
 		// loop over all selected vars
-		for (const QString var : filter->currentVarNames()) {
+		for (const QString var : filter->selectedVarNames()) {
 			DEBUG(Q_FUNC_INFO << " read variable" << var.toStdString())
 			filter->setCurrentVarName(var);
 			strings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
