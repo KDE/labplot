@@ -40,10 +40,9 @@ public:
 	void saveFilterSettings(const QString&) const override;
 
 	void setCurrentVarName(const QString&);
-	const QString currentVarName() const;
-//TODO: support importing multiple vars?
-//	void setCurrentVarNames(const QStringList&);
-//	const QStringList currentVarNames() const;
+//	const QString currentVarName() const;
+	void setCurrentVarNames(const QStringList&);
+	const QStringList currentVarNames() const;
 	size_t varCount() const;
 	QVector<QStringList> varsInfo() const;
 

@@ -215,7 +215,6 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for special types
-		//TODO: MATIO (single sheets vs. all in one)
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF ||
 			fileType == AbstractFileFilter::FileType::ROOT || fileType == AbstractFileFilter::FileType::MATIO) {
 			QStringList names;
@@ -280,7 +279,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 			if (mode != AbstractFileFilter::ImportMode::Append)
 				offset = 0;
 
-			// import all sets to a different sheet
+			// import every set to a different sheet
 			sheets = workbook->children<AbstractAspect>();
 			for (int i = 0; i < nrNames; ++i) {
 				if (fileType == AbstractFileFilter::FileType::HDF5)
@@ -289,7 +288,7 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::MATIO)
 					static_cast<MatioFilter*>(filter)->setCurrentVarName(names.at(i));
-				else
+				else if (fileType == AbstractFileFilter::FileType::ROOT)
 					static_cast<ROOTFilter*>(filter)->setCurrentObject(names.at(i));
 
 				int index = i + offset;

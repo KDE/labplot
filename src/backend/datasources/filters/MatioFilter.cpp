@@ -261,15 +261,16 @@ void MatioFilter::saveFilterSettings(const QString& filterName) const {
 void MatioFilter::setCurrentVarName(const QString& name) {
 	d->currentVarName = name;
 }
-const QString MatioFilter::currentVarName() const {
-	return d->currentVarName;
-}
-/*void MatioFilter::setCurrentVarName(const QStringList& names) {
+//const QString MatioFilter::currentVarName() const {
+//	return d->currentVarName;
+//}
+void MatioFilter::setCurrentVarNames(const QStringList& names) {
+	d->currentVarName = names.first();
 	d->currentVarNames = names;
 }
 const QStringList MatioFilter::currentVarNames() const {
 	return d->currentVarNames;
-}*/
+}
 size_t MatioFilter::varCount() const {
 	return d->varCount;
 }
@@ -604,6 +605,7 @@ void MatioFilterPrivate::parse(const QString& fileName) {
 
 /*!
     reads the content of the current selected variable from file \c fileName to the data source \c dataSource.
+    (Not used for preview)
     Uses the settings defined in the data source.
 */
 QVector<QStringList> MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
@@ -615,7 +617,10 @@ QVector<QStringList> MatioFilterPrivate::readDataFromFile(const QString& fileNam
 		return dataStrings;
 	}
 
-	//TODO: support reading multiple variables (here or in readCurrentVar)
+	//TODO: support reading multiple variables (calling this for every variable?)
+	// idea: loop over all currentVarNames setting private currentVarName
+	QDEBUG(Q_FUNC_INFO << ", current var names:" << currentVarNames)
+	// if more than one variable: set append mode after reading first
 	return readCurrentVar(fileName, dataSource, mode);
 }
 

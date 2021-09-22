@@ -40,7 +40,7 @@ public:
 
 	size_t varCount;
 	QString currentVarName;
-	//QStringList currentVarNames;
+	QStringList currentVarNames;
 	QVector<QStringList> varsInfo;
 	int startRow{1};
 	int endRow{-1};
