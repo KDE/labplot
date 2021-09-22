@@ -26,6 +26,12 @@ ProjectDock::ProjectDock(QWidget* parent) : BaseDock(parent) {
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(m_leName->height());
 
+	QString msg = i18n("If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
+	"Uncheck this option to reduce the size of the project file at costs of the longer project load times.");
+
+	ui.lSaveCalculations->setToolTip(msg);
+	ui.chkSaveCalculations->setToolTip(msg);
+
 	// SLOTS
 	connect(ui.leName, &QLineEdit::textChanged, this, &ProjectDock::nameChanged);
 	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);

@@ -8,6 +8,7 @@
 		* Use system liborigin when available
 		* Open new project per default on startup
 		* Examples Dialog - an easy way to browse through all available example projects and to open them directly in the application
+		* Allow to save the project without the results of the calculations in the analysis curves to reduce the size of project file
 	* [analysis]
 		* Support Mathieu functions via GSL
 		* Added Hilbert transform including envelope

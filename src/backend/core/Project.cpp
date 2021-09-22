@@ -917,16 +917,16 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {
 	const auto& attribs = reader->attributes();
-	QString str = attribs.value(reader->namespaceUri().toString(), "modificationTime").toString();
-	QDateTime modificationTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
+	auto str = attribs.value("modificationTime").toString();
+	auto modificationTime = QDateTime::fromString(str, "yyyy-dd-MM hh:mm:ss:zzz");
 	if (str.isEmpty() || !modificationTime.isValid()) {
 		reader->raiseWarning(i18n("Invalid project modification time. Using current time."));
 		d->modificationTime = QDateTime::currentDateTime();
 	} else
 		d->modificationTime = modificationTime;
 
-	d->author = attribs.value(reader->namespaceUri().toString(), "author").toString();
-	d->saveCalculations = attribs.value(reader->namespaceUri().toString(), "saveCalculations").toInt();
+	d->author = attribs.value("author").toString();
+	d->saveCalculations = attribs.value("saveCalculations").toInt();
 
 	return true;
 }
