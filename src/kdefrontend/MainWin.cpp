@@ -1617,12 +1617,11 @@ bool MainWin::save(const QString& fileName) {
 	DEBUG("Using temporary file " << STDSTRING(tempFileName))
 	tempFile.close();
 
-	// use file ending to find out how to compress file
 	QIODevice* file;
-	// if ending is .lml, do gzip compression anyway
+	// if ending is .lml, do xz compression anyway
 	if (fileName.endsWith(QLatin1String(".lml")))
-		file = new KCompressionDevice(tempFileName, KCompressionDevice::GZip);
-	else
+		file = new KCompressionDevice(tempFileName, KCompressionDevice::Xz);
+	else	// use file ending to find out how to compress file
 		file = new KFilterDev(tempFileName);
 
 	if (file == nullptr)

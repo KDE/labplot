@@ -3,6 +3,7 @@
     Project              : LabPlot
     Description          : Represents a LabPlot project.
     --------------------------------------------------------------------
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
     SPDX-FileCopyrightText: 2007 Knut Franke <knut.franke@gmx.de>
