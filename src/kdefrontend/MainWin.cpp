@@ -2474,7 +2474,7 @@ void MainWin::historyDialog() {
   Opens the dialog to import data to the selected workbook, spreadsheet or matrix
 */
 void MainWin::importFileDialog(const QString& fileName) {
-	DEBUG("MainWin::importFileDialog()");
+	DEBUG(Q_FUNC_INFO);
 	auto* dlg = new ImportFileDialog(this, false, fileName);
 
 	// select existing container

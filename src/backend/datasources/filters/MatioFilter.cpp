@@ -55,7 +55,7 @@
 			for (size_t i = 0; i < actualRows; i++) \
 				for (size_t j = 0; j < actualCols; j++) { \
 					const size_t index = i + startRow - 1 + (j + startColumn - 1) * rows; \
-					static_cast<QVector<dtype>*>(dataContainer[(int)j])->operator[](i) = data[index]; \
+					static_cast<QVector<dtype>*>(dataContainer[(int)j + columnOffset])->operator[](i) = data[index]; \
 				} \
 		} else { /* preview */ \
 			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
@@ -260,6 +260,7 @@ void MatioFilter::saveFilterSettings(const QString& filterName) const {
 
 void MatioFilter::setCurrentVarName(const QString& name) {
 	d->currentVarName = name;
+	d->selectedVarNames = QStringList() << name;
 }
 void MatioFilter::setSelectedVarNames(const QStringList& names) {
 	d->currentVarName = names.first();
@@ -614,7 +615,7 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	}
 
 	QDEBUG(Q_FUNC_INFO << ", selected var names:" << selectedVarNames)
-	for (const auto var : selectedVarNames) {
+	for (const auto& var : selectedVarNames) {
 		currentVarName = var;
 		readCurrentVar(fileName, dataSource, mode);
 		mode = AbstractFileFilter::ImportMode::Append;	// append other vars
@@ -866,6 +867,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		//prepare import
 		if (dataSource)
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
+		DEBUG(Q_FUNC_INFO << ", column offset = " << columnOffset)
 
 		// B: read data
 		switch (var->class_type) {

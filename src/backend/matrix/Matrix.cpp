@@ -1286,7 +1286,9 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode mode,
 	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
-	QDEBUG("prepareImport() rows =" << actualRows << " cols =" << actualCols)
+	DEBUG(Q_FUNC_INFO << ", rows = " << actualRows << " cols = " << actualCols
+	      << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode)
+	      << ", column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, columnMode.at(0)))
 	//QDEBUG("	column modes = " << columnMode);
 	Q_UNUSED(colNameList)
 	int columnOffset = 0;
@@ -1298,16 +1300,22 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter:
 	if (mode == AbstractFileFilter::ImportMode::Replace) {
 		clear();
 		setDimensions(actualRows, actualCols);
-	} else {
+	} else {	// Append
+		//TODO: only one column mode supported. How to handle missmatch in Append mode?
+		columnOffset = columnCount();
+		actualCols += columnOffset;
+		DEBUG(Q_FUNC_INFO << ", col count = " << columnCount() << ", actualCols = " << actualCols)
 		if (rowCount() < actualRows)
 			setDimensions(actualRows, actualCols);
 		else
 			setDimensions(rowCount(), actualCols);
 	}
 
+
+	DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << "/" << actualCols)
 	// data() returns a void* which is a pointer to a matrix of any data type (see ColumnPrivate.cpp)
 	dataContainer.resize(actualCols);
-	switch (columnMode[0]) {	// only columnMode[0] is used
+	switch (columnMode.at(0)) {	// prepare all columns. Only first columnMode is used
 	case AbstractColumn::ColumnMode::Numeric:
 		for (int n = 0; n < actualCols; n++) {
 			QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
@@ -1366,5 +1374,4 @@ void Matrix::finalizeImport(size_t columnOffset, size_t startColumn, size_t endC
 	setSuppressDataChangedSignal(false);
 	setChanged();
 	setUndoAware(true);
-	DEBUG(Q_FUNC_INFO << " DONE")
 }
