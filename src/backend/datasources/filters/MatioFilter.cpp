@@ -55,7 +55,7 @@
 			for (size_t i = 0; i < actualRows; i++) \
 				for (size_t j = 0; j < actualCols; j++) { \
 					const size_t index = i + startRow - 1 + (j + startColumn - 1) * rows; \
-					static_cast<QVector<dtype>*>(dataContainer[(int)j + columnOffset])->operator[](i) = data[index]; \
+					static_cast<QVector<dtype>*>(dataContainer[(int)j + (dynamic_cast<Matrix*>(dataSource) ? columnOffset : 0)])->operator[](i) = data[index]; \
 				} \
 		} else { /* preview */ \
 			for (size_t i = 0; i < qMin(actualRows, lines); i++) { \
