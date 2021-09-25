@@ -483,12 +483,16 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	writer->writeAttribute("author", author());
 	writer->writeAttribute("saveCalculations", QString::number(d->saveCalculations));
 
-	QByteArray bArray;
-	QBuffer buffer(&bArray);
-	buffer.open(QIODevice::WriteOnly);
-	QPixmap scaledThumbnail = thumbnail.scaled(512, 512, Qt::KeepAspectRatio);
-	scaledThumbnail.save(&buffer, "JPEG");
-	QString image = QString::fromLatin1(bArray.toBase64().data());
+	QString image;
+	if (!thumbnail.isNull()) {
+		QByteArray bArray;
+		QBuffer buffer(&bArray);
+		buffer.open(QIODevice::WriteOnly);
+		QPixmap scaledThumbnail = thumbnail.scaled(512, 512, Qt::KeepAspectRatio);
+		scaledThumbnail.save(&buffer, "JPEG");
+		image = QString::fromLatin1(bArray.toBase64().data());
+	}
+
 	writer->writeAttribute("thumbnail", image);
 
 	writeBasicAttributes(writer);
