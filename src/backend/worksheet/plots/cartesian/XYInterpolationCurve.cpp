@@ -163,12 +163,17 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax);
 
-	// only use range of available data points
+	// only use range of valid data points
+	const double validXMin = *std::min_element(xdataVector.constBegin(), xdataVector.constEnd());
+	const double validXMax = *std::max_element(xdataVector.constBegin(), xdataVector.constEnd());
 	if (interpolationData.autoRange) {
-		xmin = *std::min_element(xdataVector.constBegin(), xdataVector.constEnd());
-		xmax = *std::max_element(xdataVector.constBegin(), xdataVector.constEnd());
-		DEBUG(Q_FUNC_INFO << ", x range = " << xmin << " .. " << xmax)
+		xmin = validXMin;
+		xmax = validXMax;
+	} else {
+		xmin = qMax(xmin, validXMin);
+		xmax = qMin(xmax, validXMax);
 	}
+	DEBUG(Q_FUNC_INFO << ", x range = " << xmin << " .. " << xmax)
 
 	//number of data points to interpolate
 	const size_t n = (size_t)xdataVector.size();
