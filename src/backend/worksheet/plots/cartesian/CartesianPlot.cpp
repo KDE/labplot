@@ -1212,7 +1212,7 @@ void CartesianPlot::setAutoScaleY(int index, const bool autoScaleY) {
 class CartesianPlotSet ## element ## IndexCmd: public QUndoCommand \
 { \
 public: \
-	CartesianPlotSet ## element ## IndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description) \
+	CartesianPlotSet ## element ## IndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index) \
 		: QUndoCommand(), m_target(target), m_otherValue(newValue), m_index(index) {} \
 	void redo() override { \
 		DEBUG(Q_FUNC_INFO); \
@@ -1234,7 +1234,7 @@ void CartesianPlot::setXRange(const int index, const Range<double>& range) {
 	Q_D(CartesianPlot);
 	if (index >= 0 && index < d->xRanges.count() && range.finite() && range != d->xRanges[index].range) {
 		d->yRanges[index].dirty = true;
-		exec(new CartesianPlotSetxRangeIndexCmd(d, range, index, ki18n("%1: set x range")));
+		exec(new CartesianPlotSetxRangeIndexCmd(d, range, index));
 		int scaled = 0;
 		for (int i = 0; i < coordinateSystemCount(); i++) {
 			auto cs = coordinateSystem(i);
@@ -1249,7 +1249,7 @@ CartesianPlotSetRangeIndexCmd(yRange)
 void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 	Q_D(CartesianPlot);
 	if (index >= 0 && index < d->yRanges.count() && range.finite() && range != d->yRanges[index].range) {
-		exec(new CartesianPlotSetyRangeIndexCmd(d, range, index, ki18n("%1: set y range")));
+		exec(new CartesianPlotSetyRangeIndexCmd(d, range, index));
 		int scaled = 0;
 		for (int i = 0; i < coordinateSystemCount(); i++) {
 			auto cs = coordinateSystem(i);
