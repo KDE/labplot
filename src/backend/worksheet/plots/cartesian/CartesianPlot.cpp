@@ -2111,6 +2111,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		//update the legend on changes of the name, line and symbol styles
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::curveNameChanged);
+		connect(curve, &XYCurve::legendVisibleChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::linePenChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::linePenChanged, this, static_cast<void (CartesianPlot::*)(QPen)>(&CartesianPlot::curveLinePenChanged));

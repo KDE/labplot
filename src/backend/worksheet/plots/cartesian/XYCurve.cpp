@@ -68,6 +68,8 @@ void XYCurve::init() {
 	KConfig config;
 	KConfigGroup group = config.group("XYCurve");
 
+	d->legendVisible = group.readEntry("LegendVisible", true);
+
 	d->lineType = (LineType) group.readEntry("LineType", static_cast<int>(LineType::Line));
 	d->lineIncreasingXOnly = group.readEntry("LineIncreasingXOnly", false);
 	d->lineSkipGaps = group.readEntry("SkipLineGaps", false);
@@ -227,6 +229,8 @@ void XYCurve::setHover(bool on) {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+//general
+BASIC_SHARED_D_READER_IMPL(XYCurve, bool, legendVisible, legendVisible)
 
 //data source
 BASIC_SHARED_D_READER_IMPL(XYCurve, const AbstractColumn*, xColumn, xColumn)
@@ -343,6 +347,13 @@ void XYCurve::setXColumnPath(const QString& path) {
 void XYCurve::setYColumnPath(const QString& path) {
 	Q_D(XYCurve);
 	d->yColumnPath = path;
+}
+
+STD_SETTER_CMD_IMPL_S(XYCurve, SetLegendVisible, bool, legendVisible)
+void XYCurve::setLegendVisible(bool visible) {
+	Q_D(XYCurve);
+	if (visible != d->legendVisible)
+		exec(new XYCurveSetLegendVisibleCmd(d, visible, ki18n("%1: legend visibility changed")));
 }
 
 //Line
@@ -3132,6 +3143,7 @@ void XYCurve::save(QXmlStreamWriter* writer) const {
 		writer->writeAttribute("yColumn", d->yColumnPath);
 
 	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
+	writer->writeAttribute( "legendVisible", QString::number(d->legendVisible) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
 	writer->writeEndElement();
 
@@ -3240,6 +3252,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			READ_COLUMN(xColumn);
 			READ_COLUMN(yColumn);
+			READ_INT_VALUE("legendVisible", legendVisible, bool);
 
 			str = attribs.value("visible").toString();
 			if (str.isEmpty())

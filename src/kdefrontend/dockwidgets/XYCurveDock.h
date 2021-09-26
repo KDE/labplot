@@ -74,6 +74,7 @@ private slots:
 	//SLOTs for changes triggered in XYCurveDock
 	void xColumnChanged(const QModelIndex&);
 	void yColumnChanged(const QModelIndex&);
+	void legendVisibleChanged(bool);
 
 	//Line-Tab
 	void lineTypeChanged(int);
@@ -144,6 +145,7 @@ private slots:
 	void curveDescriptionChanged(const AbstractAspect*);
 	void curveXColumnChanged(const AbstractColumn*);
 	void curveYColumnChanged(const AbstractColumn*);
+	void curveLegendVisibleChanged(bool);
 	void curveVisibilityChanged(bool);
 
 	//Line-Tab
