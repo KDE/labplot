@@ -12,18 +12,16 @@
 #ifndef CARTESIANPLOTDOCK_H
 #define CARTESIANPLOTDOCK_H
 
-#include "backend/worksheet/Worksheet.h"
+#include "kdefrontend/dockwidgets/BaseDock.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/PlotArea.h"
 #include "ui_cartesianplotdock.h"
-#include "kdefrontend/dockwidgets/BaseDock.h"
 
 #include <KConfig>
 
 template <class T> class QList;
 class LabelWidget;
 class ThemeHandler;
-class KLocalizedString;
 
 class CartesianPlotDock : public BaseDock {
 	Q_OBJECT

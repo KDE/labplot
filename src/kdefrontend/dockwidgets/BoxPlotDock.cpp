@@ -12,12 +12,10 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/worksheet/Worksheet.h"
-#include "backend/worksheet/plots/cartesian/BoxPlot.h"
-#include "kdefrontend/widgets/SymbolWidget.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
-
-#include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/GuiTools.h"
+#include "kdefrontend/TemplateHandler.h"
+#include "kdefrontend/widgets/SymbolWidget.h"
 
 #include <QPushButton>
 

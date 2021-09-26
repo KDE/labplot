@@ -13,7 +13,6 @@
 
 #include "backend/core/Project.h"
 #include "backend/core/Folder.h"
-#include "backend/core/AbstractSimpleFilter.h"
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Workbook.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -64,7 +63,6 @@
 #include "kdefrontend/GuiObserver.h"
 #include "kdefrontend/widgets/LabelWidget.h"
 #include "kdefrontend/widgets/FITSHeaderEditDialog.h"
-#include "DatasetModel.h"
 
 #ifdef HAVE_KUSERFEEDBACK
 #include <KUserFeedback/ApplicationVersionSource>
@@ -89,7 +87,6 @@
 #include <QFileDialog>
 #include <QMimeData>
 #include <QElapsedTimer>
-#include <QHash>
 #include <QStatusBar>
 #include <QTemporaryFile>
 #include <QTimeLine>
@@ -1951,7 +1948,7 @@ void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAsp
 	// - AbstractSimpleFilter
 	// - columns in the data spreadsheet of a datapicker curve,
 	//   this can only happen when changing the error type and is done on the level of DatapickerImage
-	if (!dynamic_cast<const AbstractSimpleFilter*>(aspect)
+	if (!aspect->inherits(AspectType::AbstractFilter)
 		&& !(parent->parentAspect() && parent->parentAspect()->type() == AspectType::DatapickerCurve) )
 		m_projectExplorer->setCurrentAspect(parent);
 }
