@@ -204,6 +204,7 @@ option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
+option(ENABLE_EXCEL "Build with Excel (xlsx) support" ON)
 
 ### OS macros ####################################
 IF (WIN32)
@@ -428,6 +429,23 @@ ELSE ()
 	MESSAGE (STATUS "ReadStat support DISABLED")
 ENDIF ()
 
+### Excel (optional) #############################
+IF (ENABLE_EXCEL)
+        FIND_PACKAGE (QXlsx)
+        IF (QXLSX_FOUND)
+                add_definitions (-DHAVE_EXCEL)
+        ELSE ()
+                set(BUILD_EXCEL TRUE)
+
+                MESSAGE (STATUS "QXlsx library NOT FOUND. Building own version.")
+        ENDIF ()
+        set(QXLSX_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/QXlsx/src/QXlsx/QXlsx/QXlsx/QXlsx.lib)
+        include_directories (${CMAKE_BINARY_DIR}/src/3rdparty/QXlsx/src/QXlsx/QXlsx/QXlsx/header)
+
+ELSE ()
+        MESSAGE (STATUS "Excel support DISABLED")
+ENDIF ()
+
 ###  Matio (optional) ##############################################
 IF (ENABLE_MATIO)
 	FIND_PACKAGE (Matio)
@@ -462,6 +480,13 @@ IF (ENABLE_REPRODUCIBLE)
 	message(STATUS "Reproducable build ENABLED")
 ELSE ()
 	message(STATUS "Reproducable build DISABLED")
+ENDIF ()
+### Excel (optional) #############################
+IF (ENABLE_EXCEL)
+    add_definitions (-DHAVE_EXCEL)
+    message(STATUS "Excel support ENABLED")
+ELSE ()
+    message(STATUS "Excel support DISABLED")
 ENDIF ()
 #################################################
 #################################################

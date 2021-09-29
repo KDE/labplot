@@ -39,6 +39,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/datasources/DatabaseManagerWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerDialog.cpp
 	${KDEFRONTEND_DIR}/datasources/DatasetMetadataManagerWidget.cpp
+        ${KDEFRONTEND_DIR}/datasources/ExcelOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/HDF5OptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImageOptionsWidget.cpp
 	${KDEFRONTEND_DIR}/datasources/ImportDatasetWidget.cpp
@@ -169,6 +170,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/datasources/rootoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/fitsoptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/datasources/jsonoptionswidget.ui
+	${KDEFRONTEND_DIR}/ui/datasources/exceloptionswidget.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/aspectdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/axisdock.ui
 	${KDEFRONTEND_DIR}/ui/dockwidgets/cursordock.ui
@@ -295,6 +297,7 @@ set(BACKEND_SOURCES
 	${BACKEND_DIR}/datasources/filters/AsciiFilter.cpp
 	${BACKEND_DIR}/datasources/filters/BinaryFilter.cpp
 	${BACKEND_DIR}/datasources/filters/HDF5Filter.cpp
+        ${BACKEND_DIR}/datasources/filters/ExcelFilter.cpp
 	${BACKEND_DIR}/datasources/filters/ImageFilter.cpp
 	${BACKEND_DIR}/datasources/filters/JsonFilter.cpp
 	${BACKEND_DIR}/datasources/filters/MatioFilter.cpp
@@ -527,7 +530,15 @@ IF (ENABLE_READSTAT)
 		FIND_LIBRARY ( ICONV_LIBRARIES NAMES iconv libiconv libconv-2 )
 		target_link_libraries (labplot2lib ${ICONV_LIBRARIES} )
 	ENDIF ()
-	target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} )
+        target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} )
+ENDIF ()
+
+IF (ENABLE_EXCEL)
+        # build before using
+        IF (BUILD_EXCEL)
+                add_dependencies( labplot2lib 3rdparty_QXlsx )
+        ENDIF ()
+        target_link_libraries( labplot2lib ${QXLSX_LIBRARIES} )
 ENDIF ()
 
 IF (ENABLE_LIBORIGIN)

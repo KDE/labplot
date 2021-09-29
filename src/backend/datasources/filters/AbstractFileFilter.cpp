@@ -150,6 +150,11 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 	else if (fileInfo.contains(QLatin1String("Matlab")) || fileName.endsWith(QLatin1String("mat"), Qt::CaseInsensitive))
 		fileType = FileType::MATIO;
 #endif
+#ifdef HAVE_EXCEL
+    else if (fileInfo.contains("Microsoft Excel Worksheet (.xlsx)") || fileName.endsWith(QLatin1String("xlsx", Qt::CaseInsensitive))) {
+        fileType = FileType::Excel;
+	}
+#endif
 #ifdef HAVE_HDF5
 	else if (fileInfo.contains(QLatin1String("Hierarchical Data Format"))
 		|| fileName.endsWith(QLatin1String("h5"), Qt::CaseInsensitive)
@@ -204,7 +209,8 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
 QStringList AbstractFileFilter::fileTypes() {
 	return (QStringList() << i18n("ASCII data")
 		<< i18n("Binary data")
-		<< i18n("Image")
+        << i18n("Image")
+        << i18n("Excel")
 		<< i18n("Hierarchical Data Format 5 (HDF5)")
 		<< i18n("Network Common Data Format (NetCDF)")
 		<< i18n("Flexible Image Transport System Data Format (FITS)")

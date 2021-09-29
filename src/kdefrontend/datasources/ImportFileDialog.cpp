@@ -93,7 +93,7 @@ ImportFileDialog::ImportFileDialog(MainWin* parent, bool liveDataSource, const Q
 
 	m_importFileWidget->showOptions(m_showOptions);
 	//do the signal-slot connections after all settings were loaded in import file widget and check the OK button after this
-	connect(m_importFileWidget, &ImportFileWidget::checkedFitsTableToMatrix, this, &ImportFileDialog::checkOnFitsTableToMatrix);
+    connect(m_importFileWidget, &ImportFileWidget::enableImportToMatrix, this, &ImportFileDialog::enableImportToMatrix);
 	connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::fileNameChanged), this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, static_cast<void (ImportFileWidget::*)()>(&ImportFileWidget::sourceTypeChanged), this, &ImportFileDialog::checkOkButton);
 	connect(m_importFileWidget, &ImportFileWidget::hostChanged, this, &ImportFileDialog::checkOkButton);
@@ -215,7 +215,8 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 		AbstractFileFilter::FileType fileType = m_importFileWidget->currentFileType();
 		// multiple data sets/variables for special types
 		if (fileType == AbstractFileFilter::FileType::HDF5 || fileType == AbstractFileFilter::FileType::NETCDF ||
-			fileType == AbstractFileFilter::FileType::ROOT || fileType == AbstractFileFilter::FileType::MATIO) {
+            fileType == AbstractFileFilter::FileType::ROOT || fileType == AbstractFileFilter::FileType::MATIO || fileType == AbstractFileFilter::FileType::Excel) {
+
 			QStringList names;
 			if (fileType == AbstractFileFilter::FileType::HDF5)
 				names = m_importFileWidget->selectedHDF5Names();
@@ -223,8 +224,10 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 				names = m_importFileWidget->selectedNetCDFNames();
 			else if (fileType == AbstractFileFilter::FileType::MATIO)
 				names = m_importFileWidget->selectedMatioNames();
-			else
+            else if (fileType == AbstractFileFilter::FileType::ROOT)
 				names = m_importFileWidget->selectedROOTNames();
+            else if (fileType == AbstractFileFilter::FileType::Excel)
+                names = m_importFileWidget->selectedExcelRegionNames();
 
 			int nrNames = names.size(), offset = sheets.size();
 			//QDEBUG(Q_FUNC_INFO << ", selected names: " << names)
@@ -287,8 +290,15 @@ void ImportFileDialog::importTo(QStatusBar* statusBar) const {
 					static_cast<NetCDFFilter*>(filter)->setCurrentVarName(names.at(i));
 				else if (fileType == AbstractFileFilter::FileType::MATIO)
 					static_cast<MatioFilter*>(filter)->setCurrentVarName(names.at(i));
-				else if (fileType == AbstractFileFilter::FileType::ROOT)
-					static_cast<ROOTFilter*>(filter)->setCurrentObject(names.at(i));
+                else if (fileType == AbstractFileFilter::FileType::Excel){
+                    const auto& nameSplit = names[i].split(QLatin1Char('!'));
+                    const auto& sheet = nameSplit[0];
+                    const auto& range = nameSplit[1];
+                    static_cast<ExcelFilter*>(filter)->setCurrentSheet(sheet);
+                    static_cast<ExcelFilter*>(filter)->setCurrentRange(range);
+                }
+                else
+                    static_cast<ROOTFilter*>(filter)->setCurrentObject(names.at(i));
 
 				int index = i + offset;
 				filter->readDataFromFile(fileName, qobject_cast<Spreadsheet*>(sheets.at(index)));
@@ -325,7 +335,7 @@ void ImportFileDialog::toggleOptions() {
 	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
 }
 
-void ImportFileDialog::checkOnFitsTableToMatrix(const bool enable) {
+void ImportFileDialog::enableImportToMatrix(const bool enable) {
 	if (cbAddTo) {
 		QDEBUG("cbAddTo->currentModelIndex() = " << cbAddTo->currentModelIndex());
 		AbstractAspect* aspect = static_cast<AbstractAspect*>(cbAddTo->currentModelIndex().internalPointer());
@@ -364,6 +374,7 @@ void ImportFileDialog::checkOkButton() {
 			//to name the columns since the column names are fixed in a matrix
 			const auto* matrix = dynamic_cast<const Matrix*>(aspect);
 			m_importFileWidget->showAsciiHeaderOptions(matrix == nullptr);
+            m_importFileWidget->showExcelFirstRowAsColumnOption(matrix == nullptr);
 		}
 	}
 

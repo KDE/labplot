@@ -30,6 +30,7 @@ class BinaryOptionsWidget;
 class HDF5OptionsWidget;
 class ImageOptionsWidget;
 class MatioOptionsWidget;
+class ExcelOptionsWidget;
 class NetCDFOptionsWidget;
 class FITSOptionsWidget;
 class JsonOptionsWidget;
@@ -59,13 +60,18 @@ public:
 	QString fileName() const;
 	QString selectedObject() const;
 	bool isFileEmpty() const;
+    bool excelUseFirstRowAsColNames() const;
 	const QStringList selectedHDF5Names() const;
 	const QStringList selectedNetCDFNames() const;
 	const QStringList selectedMatioNames() const;
 	const QStringList selectedFITSExtensions() const;
 	const QStringList selectedROOTNames() const;
+    const QStringList selectedExcelRegionNames() const;
+
 	void showAsciiHeaderOptions(bool);
+    void showExcelFirstRowAsColumnOption(bool);
 	void showJsonModel(bool);
+    void enableExcelFirstRowAsColNames(bool enable);
 
 	QString host() const;
 	QString port() const;
@@ -84,6 +90,7 @@ private:
 	std::unique_ptr<BinaryOptionsWidget> m_binaryOptionsWidget;
 	std::unique_ptr<HDF5OptionsWidget> m_hdf5OptionsWidget;
 	std::unique_ptr<ImageOptionsWidget> m_imageOptionsWidget;
+    std::unique_ptr<ExcelOptionsWidget> m_excelOptionsWidget;
 	std::unique_ptr<NetCDFOptionsWidget> m_netcdfOptionsWidget;
 	std::unique_ptr<MatioOptionsWidget> m_matioOptionsWidget;
 	std::unique_ptr<FITSOptionsWidget> m_fitsOptionsWidget;
@@ -106,6 +113,7 @@ private slots:
 	void sourceTypeChanged(int);
 	void updateTypeChanged(int);
 	void readingTypeChanged(int);
+    void excelFirstRowAsColNamesChanged(bool checked);
 
 	void saveFilter();
 	void manageFilters();
@@ -114,12 +122,13 @@ private slots:
 	void showFileInfo();
 	void refreshPreview();
 
+    void enableDataPortionSelection(bool);
 signals:
 	void fileNameChanged();
 	void sourceTypeChanged();
 	void hostChanged();
 	void portChanged();
-	void checkedFitsTableToMatrix(const bool enable);
+    void enableImportToMatrix(const bool enable);
 	void error(const QString&);
 
 	friend class HDF5OptionsWidget;	// to access refreshPreview()
@@ -128,7 +137,7 @@ signals:
 	friend class FITSOptionsWidget;
 	friend class JsonOptionsWidget;
 	friend class ROOTOptionsWidget;	// to access refreshPreview() and others
-
+    friend class ExcelOptionsWidget; // to access refreshPreview()
 #ifdef HAVE_MQTT
 private:
 	QMqttClient* m_client{nullptr};

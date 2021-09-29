@@ -51,7 +51,7 @@ protected slots:
 
 private slots:
 	void toggleOptions();
-	void checkOnFitsTableToMatrix(const bool enable);
+    void enableImportToMatrix(const bool enable);
 	void showErrorMessage(const QString&);
 };
 
