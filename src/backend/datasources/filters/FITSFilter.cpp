@@ -355,7 +355,8 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				else
 					static_cast<QVector<double>*>(dataContainer[jj++])->operator[](ii) = data[i* naxes[0] + j];
 			}
-			dataStrings << line;
+            if (noDataSource)
+                dataStrings << line;
 			j = jstart;
 			ii++;
 		}
@@ -417,7 +418,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 
 		if (endRow != -1)
 			lines = endRow;
-		QVector<QStringList*> stringDataPointers;
+        QVector<QVector<QString>*> stringDataPointers;
 		std::vector<void*> numericDataPointers;
 		QList<bool> columnNumericTypes;
 
@@ -504,7 +505,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 							datap->clear();
 					} else {
 						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Text);
-						auto* list = static_cast<QStringList*>(spreadsheet->column(columnOffset+n)->data());
+                        auto* list = static_cast<QVector<QString>*>(spreadsheet->column(columnOffset+n)->data());
 						stringDataPointers.push_back(list);
 						if (importMode == AbstractFileFilter::ImportMode::Replace)
 							list->clear();
@@ -580,7 +581,8 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 						line << tmpColstr;
 				}
 			}
-			dataStrings << line;
+            if (noDataSource)
+                dataStrings << line;
 		}
 
 		if (!noDataSource)
