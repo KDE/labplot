@@ -58,6 +58,8 @@ public:
 	QString yColumnPath;
 	bool sourceDataChangedSinceLastRecalc{false};
 
+	bool legendVisible;
+
 	//line
 	XYCurve::LineType lineType;
 	bool lineSkipGaps;

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by an interpolation
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -152,9 +152,8 @@ void XYInterpolationCurvePrivate::recalculate() {
 	QVector<double> xdataVector;
 	QVector<double> ydataVector;
 
-	double xmin;
-	double xmax;
-	if (interpolationData.autoRange) {
+	double xmin, xmax;
+	if (interpolationData.autoRange) {	// all points
 		xmin = tmpXDataColumn->minimum();
 		xmax = tmpXDataColumn->maximum();
 	} else {
@@ -163,6 +162,18 @@ void XYInterpolationCurvePrivate::recalculate() {
 	}
 
 	XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax);
+
+	// only use range of valid data points
+	const double validXMin = *std::min_element(xdataVector.constBegin(), xdataVector.constEnd());
+	const double validXMax = *std::max_element(xdataVector.constBegin(), xdataVector.constEnd());
+	if (interpolationData.autoRange) {
+		xmin = validXMin;
+		xmax = validXMax;
+	} else {
+		xmin = qMax(xmin, validXMin);
+		xmax = qMin(xmax, validXMax);
+	}
+	DEBUG(Q_FUNC_INFO << ", x range = " << xmin << " .. " << xmax)
 
 	//number of data points to interpolate
 	const size_t n = (size_t)xdataVector.size();
@@ -188,10 +199,11 @@ void XYInterpolationCurvePrivate::recalculate() {
 	const nsl_interp_evaluate evaluate = interpolationData.evaluate;
 	const size_t npoints = interpolationData.npoints;
 
-	DEBUG("type:"<<nsl_interp_type_name[type]);
-	DEBUG("cubic Hermite variant:"<<nsl_interp_pch_variant_name[variant]<<tension<<continuity<<bias);
-	DEBUG("evaluate:"<<nsl_interp_evaluate_name[evaluate]);
-	DEBUG("npoints ="<<npoints);
+	DEBUG(Q_FUNC_INFO << ", type = " << nsl_interp_type_name[type]);
+	DEBUG(Q_FUNC_INFO << ", cubic Hermite variant: " << nsl_interp_pch_variant_name[variant] << " (" << tension << continuity << bias << ")");
+	DEBUG(Q_FUNC_INFO << ", evaluate: " << nsl_interp_evaluate_name[evaluate]);
+	DEBUG(Q_FUNC_INFO << ", npoints = " << npoints);
+	DEBUG(Q_FUNC_INFO << ", data points = " << n);
 
 ///////////////////////////////////////////////////////////
 	int status = 0;
@@ -239,9 +251,9 @@ void XYInterpolationCurvePrivate::recalculate() {
 	xVector->resize((int)npoints);
 	yVector->resize((int)npoints);
 	for (unsigned int i = 0; i < npoints; i++) {
-		size_t a = 0, b = n-1;
+		size_t a = 0, b = n - 1;
 
-		double x = xmin + i*(xmax-xmin)/(npoints-1);
+		double x = xmin + i * (xmax - xmin) / (npoints - 1);
 		(*xVector)[(int)i] = x;
 
 		// find index a,b for interval [x[a],x[b]] around x[i] using bisection

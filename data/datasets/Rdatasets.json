@@ -11167,45 +11167,10 @@
                             "separator": ",",
                             "use_first_row_for_vectorname": true,
                             "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/boot/tau.html"
-                        },
-                        {
-                            "description": "A classical data of Michelson (but not this one with Morley) on measurements done in 1879 on the speed of light. The data consists of five experiments, each consisting of 20 consecutive \"runs\". The response is the speed of light measurement, suitably coded (km/sec, with 299000 subtracted).",
-                            "url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/morley.csv",
-                            "filename": "morley",
-                            "name": "Michelson Speed of Light Data",
-                            "separator": ",",
-                            "use_first_row_for_vectorname": true,
-                            "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/datasets/morley.html"
-                        },
-                        {
-                            "description": "Annual averages of the daily sunspot areas (in units of millionths of a hemisphere) for the full sun. Sunspots are magnetic regions that appear as dark spots on the surface of the sun. The Royal Greenwich Observatory compiled daily sunspot observations from May 1874 to 1976. Later data are from the US Air Force and the US National Oceanic and Atmospheric Administration. The data have been calibrated to be consistent across the whole history of observations.",
-                            "url": "https://vincentarelbundock.github.io/Rdatasets/csv/fpp2/sunspotarea.csv",
-                            "filename": "sunspotarea",
-                            "name": "Annual average sunspot area (1875-2015)",
-                            "separator": ",",
-                            "use_first_row_for_vectorname": true,
-                            "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/fpp2/sunspotarea.html"
-                        },
-                        {
-                            "description": "Measurements made beteween 1675 and 1972 ",
-                            "url": "https://vincentarelbundock.github.io/Rdatasets/csv/gamclass/cvalues.csv",
-                            "filename": "cvalues",
-                            "name": " Historical speed of light measurements ",
-                            "separator": ",",
-                            "use_first_row_for_vectorname": true,
-                            "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/gamclass/cvalues.html"
-                        },
-                        {
-                            "description": "The data frame Michelson gives Albert Michelson's measurements of the velocity of light in air, made from June 5 to July 2, 1879, reported in Michelson (1882). The given values + 299,000 are Michelson's measurements in km/sec. The number of cases is 100 and the \"true\" value on this scale is 734.5. \nStigler (1977) used these data to illustrate properties of robust estimators with real, historical data. For this purpose, he divided the 100 measurements into 5 sets of 20 each. These are contained in MichelsonSets.",
-                            "url": "https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Michelson.csv",
-                            "filename": "Michelson",
-                            "name": " Michelson's Determinations of the Velocity of Light ",
-                            "separator": ",",
-                            "use_first_row_for_vectorname": true,
-                            "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/HistData/Michelson.html"
                         }
+
                     ],
-                    "name": "Nuclear"
+                    "name": "Particle Physics"
                 },
                 {
                     "datasets": [
@@ -11289,6 +11254,42 @@
                             "separator": ",",
                             "use_first_row_for_vectorname": true,
                             "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/robustbase/starsCYG.html"
+                        },
+                        {
+                            "description": "A classical data of Michelson (but not this one with Morley) on measurements done in 1879 on the speed of light. The data consists of five experiments, each consisting of 20 consecutive \"runs\". The response is the speed of light measurement, suitably coded (km/sec, with 299000 subtracted).",
+                            "url": "https://vincentarelbundock.github.io/Rdatasets/csv/datasets/morley.csv",
+                            "filename": "morley",
+                            "name": "Michelson Speed of Light Data",
+                            "separator": ",",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/datasets/morley.html"
+                        },
+                        {
+                            "description": "Annual averages of the daily sunspot areas (in units of millionths of a hemisphere) for the full sun. Sunspots are magnetic regions that appear as dark spots on the surface of the sun. The Royal Greenwich Observatory compiled daily sunspot observations from May 1874 to 1976. Later data are from the US Air Force and the US National Oceanic and Atmospheric Administration. The data have been calibrated to be consistent across the whole history of observations.",
+                            "url": "https://vincentarelbundock.github.io/Rdatasets/csv/fpp2/sunspotarea.csv",
+                            "filename": "sunspotarea",
+                            "name": "Annual average sunspot area (1875-2015)",
+                            "separator": ",",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/fpp2/sunspotarea.html"
+                        },
+                        {
+                            "description": "Measurements made beteween 1675 and 1972 ",
+                            "url": "https://vincentarelbundock.github.io/Rdatasets/csv/gamclass/cvalues.csv",
+                            "filename": "cvalues",
+                            "name": " Historical speed of light measurements ",
+                            "separator": ",",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/gamclass/cvalues.html"
+                        },
+                        {
+                            "description": "The data frame Michelson gives Albert Michelson's measurements of the velocity of light in air, made from June 5 to July 2, 1879, reported in Michelson (1882). The given values + 299,000 are Michelson's measurements in km/sec. The number of cases is 100 and the \"true\" value on this scale is 734.5. \nStigler (1977) used these data to illustrate properties of robust estimators with real, historical data. For this purpose, he divided the 100 measurements into 5 sets of 20 each. These are contained in MichelsonSets.",
+                            "url": "https://vincentarelbundock.github.io/Rdatasets/csv/HistData/Michelson.csv",
+                            "filename": "Michelson",
+                            "name": " Michelson's Determinations of the Velocity of Light ",
+                            "separator": ",",
+                            "use_first_row_for_vectorname": true,
+                            "description_url": "https://vincentarelbundock.github.io/Rdatasets/doc/HistData/Michelson.html"
                         }
                     ],
                     "name": "Astronomy"

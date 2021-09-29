@@ -26,59 +26,6 @@
    <property name="spacing">
     <number>2</number>
    </property>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer_5">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Fixed</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>10</width>
-       <height>23</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="lPlotRange">
-     <property name="text">
-      <string>Plot range:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="lXColumn">
-     <property name="text">
-      <string>x-data:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lComment">
-     <property name="text">
-      <string>Comment:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2">
-    <widget class="QComboBox" name="cbPlotRanges"/>
-   </item>
-   <item row="8" column="0">
-    <widget class="QCheckBox" name="chkVisible">
-     <property name="text">
-      <string>Visible</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
-    <widget class="ResizableTextEdit" name="teComment"/>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="lName">
      <property name="text">
@@ -102,6 +49,33 @@
      </property>
     </spacer>
    </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Data</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QCheckBox" name="chkVisible">
+     <property name="text">
+      <string>Visible</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="lXColumn">
+     <property name="text">
+      <string>x-data:</string>
+     </property>
+    </widget>
+   </item>
    <item row="7" column="0">
     <spacer name="verticalSpacerGeneral">
      <property name="orientation">
@@ -118,8 +92,14 @@
      </property>
     </spacer>
    </item>
+   <item row="6" column="2">
+    <widget class="QComboBox" name="cbPlotRanges"/>
+   </item>
    <item row="0" column="2">
     <widget class="QLineEdit" name="leName"/>
+   </item>
+   <item row="1" column="2">
+    <widget class="ResizableTextEdit" name="teComment"/>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="lYColumn">
@@ -128,16 +108,43 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
+   <item row="6" column="0">
+    <widget class="QLabel" name="lPlotRange">
      <property name="text">
-      <string>Data</string>
+      <string>Plot range:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lComment">
+     <property name="text">
+      <string>Comment:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>10</width>
+       <height>23</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="0">
+    <widget class="QCheckBox" name="chkLegendVisible">
+     <property name="text">
+      <string>Legend</string>
      </property>
     </widget>
    </item>

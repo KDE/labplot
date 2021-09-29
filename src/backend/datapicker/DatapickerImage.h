@@ -22,7 +22,6 @@
 class DatapickerImagePrivate;
 class DatapickerImageView;
 class Segments;
-class Symbol;
 
 class QGraphicsScene;
 class QGraphicsPixmapItem;

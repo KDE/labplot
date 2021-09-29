@@ -943,9 +943,9 @@ bool WorksheetView::isPlotAtPos(QPoint pos) const {
 	bool plot = false;
 	QGraphicsItem* item = itemAt(pos);
 	if (item) {
-		plot = item->data(0).toInt() == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot);
+		plot = item->data(0).toInt() == static_cast<int>(AspectType::CartesianPlot);
 		if (!plot && item->parentItem())
-			plot = item->parentItem()->data(0).toInt() == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot);
+			plot = item->parentItem()->data(0).toInt() == static_cast<int>(AspectType::CartesianPlot);
 	}
 
 	return plot;
@@ -957,10 +957,10 @@ CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
 		return nullptr;
 
 	QGraphicsItem* plotItem = nullptr;
-	if (item->data(0).toInt() == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot))
+	if (item->data(0).toInt() == static_cast<int>(AspectType::CartesianPlot))
 		plotItem = item;
 	else {
-		if (item->parentItem() && item->parentItem()->data(0).toInt() == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot))
+		if (item->parentItem() && item->parentItem()->data(0).toInt() == static_cast<int>(AspectType::CartesianPlot))
 			plotItem = item->parentItem();
 	}
 
@@ -1946,20 +1946,20 @@ void WorksheetView::handleCartesianPlotActions() {
 	for (auto* item : m_selectedItems) {
 		//TODO: or if a children of a plot is selected
 		int key = item->data(0).toInt();
-		if (key == static_cast<int>(WorksheetElement::WorksheetElementName::NameCartesianPlot)) {
+		if (key == static_cast<int>(AspectType::CartesianPlot)) {
 			handled = true;
 			plot = true;
 			m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
 			handleCartesianPlotSelected(static_cast<CartesianPlot*>(m_selectedElement));
 			break;
-		} else if (key == static_cast<int>(WorksheetElement::WorksheetElementName::XYCurve)) {
+		} else if (key == static_cast<int>(AspectType::XYCurve)) {
 			handled = true;
 			m_selectedElement = static_cast<XYCurvePrivate*>(item)->q;
 			// XYCurvePrivate does not depend yet on WorksheetElementContainerPrivate
 			//m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
 			handleXYCurveSelected();
 			break;
-		} else if (key == static_cast<int>(WorksheetElement::WorksheetElementName::Axis)) {
+		} else if (key == static_cast<int>(AspectType::Axis)) {
 			handled = true;
 			m_selectedElement = static_cast<AxisPrivate*>(item)->q;
 			// AxisPrivate does not depend yet on WorksheetElementContainerPrivate

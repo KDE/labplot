@@ -482,7 +482,7 @@ void CartesianPlotLegendPrivate::retransform() {
 
 	//add xy-curves
 	for (auto* curve : plot->children<XYCurve>()) {
-		if (curve && curve->isVisible())
+		if (curve && curve->isVisible() && curve->legendVisible())
 			curvesList.push_back(curve);
 	}
 
@@ -492,10 +492,10 @@ void CartesianPlotLegendPrivate::retransform() {
 			curvesList.push_back(hist);
 	}
 
-	//add histograms
-	for (auto* hist : plot->children<BoxPlot>()) {
-		if (hist && hist->isVisible())
-			curvesList.push_back(hist);
+	//add box plots
+	for (auto* boxPlot : plot->children<BoxPlot>()) {
+		if (boxPlot && boxPlot->isVisible())
+			curvesList.push_back(boxPlot);
 	}
 
 
