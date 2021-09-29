@@ -338,6 +338,7 @@ void XYInterpolationCurveDock::updateSettings(const AbstractColumn* column) {
 	// disable types that need more data points
 	if (uiGeneralTab.cbAutoRange->isChecked()) {
 		SET_NUMBER_LOCALE
+		//TODO: this does not check if there are valid data points
 		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
 		uiGeneralTab.leMax->setText( numberLocale.toString(column->maximum()) );
 	}
@@ -452,6 +453,7 @@ void XYInterpolationCurveDock::autoRangeChanged() {
 		if (xDataColumn) {
 			if (!m_dateTimeRange) {
 				SET_NUMBER_LOCALE
+				//TODO: this does not check if there are valid data points
 				uiGeneralTab.leMin->setText( numberLocale.toString(xDataColumn->minimum()) );
 				uiGeneralTab.leMax->setText( numberLocale.toString(xDataColumn->maximum()) );
 			} else {
