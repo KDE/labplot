@@ -260,7 +260,7 @@ symbol* assign_symbol(const char* symbol_name, double value) {
 	return ptr;
 };
 
-static char getcharstr(param *p) {
+static int getcharstr(param *p) {
 	pdebug(" getcharstr() pos = %d\n", (int)(p->pos));
 
 	if (p->string[p->pos] == '\0')
@@ -327,7 +327,7 @@ int yylex(param *p) {
 	pdebug("PARSER: YYLEX()");
 
 	/* get char and skip white space */
-	char c;
+	int c;
 	while ((c = getcharstr(p)) == ' ' || c == '\t');
 
 	/* finish if reached EOF */
