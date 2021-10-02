@@ -439,9 +439,11 @@ IF (ENABLE_EXCEL)
 
                 MESSAGE (STATUS "QXlsx library NOT FOUND. Building own version.")
         ENDIF ()
-	set(QXLSX_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/QXlsx/src/QXlsx/QXlsx/QXlsx.lib)
-	# on Linux
-	#set(QXLSX_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/QXlsx/src/QXlsx/QXlsx/libQXlsx.a)
+	IF (WIN32)
+		set(QXLSX_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/QXlsx/src/QXlsx/QXlsx/QXlsx.lib)
+	ELSE ()
+		set(QXLSX_LIBRARIES ${CMAKE_BINARY_DIR}/src/3rdparty/QXlsx/src/QXlsx/QXlsx/libQXlsx.a)
+	ENDIF ()
         include_directories (${CMAKE_BINARY_DIR}/src/3rdparty/QXlsx/src/QXlsx/QXlsx/header)
 
 ELSE ()

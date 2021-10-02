@@ -56,17 +56,18 @@ IF (BUILD_EXCEL)
         set(ext_src ${build_dir}/QXlsx/src/QXlsx)
         set(ext_insource ON)
         set(install_dir ${build_dir}/install)
-        set(qxlsx_library QXlsx.lib)
         if(WIN32)
+        set(qxlsx_library QXlsx.lib)
         ExternalProject_Add(3rdparty_QXlsx
                 GIT_REPOSITORY https://github.com/QtExcel/QXlsx.git
                 PREFIX ${build_dir}/QXlsx
 		SOURCE_DIR ${ext_src}
 		SOURCE_SUBDIR QXlsx
                 BUILD_IN_SOURCE ${ext_insource}
-                #INSTALL_COMMAND "")
-                INSTALL_COMMAND Robocopy . ${install_dir}/lib ${qxlsx_library} /njs /njh & Robocopy header ${install_dir}/include /njs /njh /MIR )
+		#INSTALL_COMMAND "")
+		INSTALL_COMMAND Robocopy . ${install_dir}/lib ${qxlsx_library} /njs /njh & Robocopy header ${install_dir}/include /njs /njh /MIR)
         else()
+        set(qxlsx_library QXlsx.a)
         ExternalProject_Add(3rdparty_QXlsx
                 GIT_REPOSITORY https://github.com/QtExcel/QXlsx.git
                 PREFIX ${build_dir}/QXlsx
