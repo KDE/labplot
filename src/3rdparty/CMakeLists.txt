@@ -47,22 +47,22 @@ ENDIF ()
 IF (BUILD_EXCEL)
         include(ExternalProject)
 
-        set(build_dir ${CMAKE_BINARY_DIR}/src/3rdparty )
+        set(build_dir ${CMAKE_BINARY_DIR}/src/3rdparty)
 
         set(install_dir ${build_dir}/install)
         file(MAKE_DIRECTORY ${install_dir}/lib)
         file(MAKE_DIRECTORY ${install_dir}/include)
 
-        set(ext_src ${build_dir}/QXlsx/src/QXlsx )
+        set(ext_src ${build_dir}/QXlsx/src/QXlsx)
         set(ext_insource ON)
         set(install_dir ${build_dir}/install)
-        set(qxlsx_library QXlsx.lib )
+        set(qxlsx_library QXlsx.lib)
         if(WIN32)
         ExternalProject_Add(3rdparty_QXlsx
                 GIT_REPOSITORY https://github.com/QtExcel/QXlsx.git
                 PREFIX ${build_dir}/QXlsx
-                SOURCE_DIR ${ext_src}/QXlsx
-                SOURCE_SUBDIR QXlsx
+		SOURCE_DIR ${ext_src}
+		SOURCE_SUBDIR QXlsx
                 BUILD_IN_SOURCE ${ext_insource}
                 #INSTALL_COMMAND "")
                 INSTALL_COMMAND Robocopy . ${install_dir}/lib ${qxlsx_library} /njs /njh & Robocopy header ${install_dir}/include /njs /njh /MIR )
@@ -70,8 +70,8 @@ IF (BUILD_EXCEL)
         ExternalProject_Add(3rdparty_QXlsx
                 GIT_REPOSITORY https://github.com/QtExcel/QXlsx.git
                 PREFIX ${build_dir}/QXlsx
-                SOURCE_DIR ${ext_src}/QXlsx
-                SOURCE_SUBDIR QXlsx
+		SOURCE_DIR ${ext_src}
+		SOURCE_SUBDIR QXlsx
                 BUILD_IN_SOURCE ${ext_insource}
                 INSTALL_COMMAND "")
                 #INSTALL_COMMAND  cp -av ./${qxlsx_library} ${install_dir}/lib && cp  ./header/* ${install_dir}/include )

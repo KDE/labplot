@@ -33,7 +33,7 @@ Copyright            : (C) 2021 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include "src/kdefrontend/datasources/ImportFileWidget.h"
 
 #ifdef HAVE_EXCEL
-#include "3rdparty/QXlsx/src/QXlsx/QXlsx/QXlsx/header/xlsxcellrange.h"
+#include "3rdparty/QXlsx/src/QXlsx/QXlsx/header/xlsxcellrange.h"
 #endif
 
 #include <QTreeWidgetItem>

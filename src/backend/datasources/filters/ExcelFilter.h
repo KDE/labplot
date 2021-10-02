@@ -33,9 +33,9 @@ Copyright            : (C) 2021 by Fabian Kristof (fkristofszabolcs@gmail.com)
 #include <QObject>
 
 #ifdef HAVE_EXCEL
-#include "3rdparty/QXlsx/src/QXlsx/QXlsx/QXlsx/header/xlsxdocument.h"
-#include "3rdparty/QXlsx/src/QXlsx/QXlsx/QXlsx/header/xlsxcellreference.h"
-#include "3rdparty/QXlsx/src/QXlsx/QXlsx/QXlsx/header/xlsxcellrange.h"
+#include "3rdparty/QXlsx/src/QXlsx/QXlsx/header/xlsxdocument.h"
+#include "3rdparty/QXlsx/src/QXlsx/QXlsx/header/xlsxcellreference.h"
+#include "3rdparty/QXlsx/src/QXlsx/QXlsx/header/xlsxcellrange.h"
 #endif
 
 class ExcelFilterPrivate;
