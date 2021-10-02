@@ -4,7 +4,7 @@
     Description          : Text label supporting reach text and latex formatting
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2012-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
@@ -43,6 +43,34 @@ extern "C" {
 #include <mkdio.h>
 }
 #endif
+
+class ScaledTextItem : public QGraphicsTextItem {
+public:
+	ScaledTextItem(QGraphicsItem* parent = nullptr) : QGraphicsTextItem(parent) {
+
+	}
+
+	void setScaleFactor(double scaleFactor) {
+		m_scaleFactor = scaleFactor;
+	}
+
+	void setRotationAngle(double rotationAngle) {
+		m_rotationAngle = rotationAngle;
+	}
+
+protected:
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override {
+		painter->rotate(-m_rotationAngle);
+		painter->scale(m_scaleFactor, m_scaleFactor);
+		painter->translate(QPointF(-boundingRect().width()/2, -boundingRect().height()/2));
+		QGraphicsTextItem::paint(painter, option, widget);
+	}
+
+private:
+	double m_scaleFactor = 1.;
+	double m_rotationAngle = 0.;
+};
+
 
 /**
  * \class TextLabel
@@ -102,13 +130,6 @@ void TextLabel::init() {
 	KConfigGroup group;
 	if (config.hasGroup(groupName))
 		group = config.group(groupName);
-
-	// non-default settings
-	d->staticText.setTextFormat(Qt::RichText);
-	// explicitly set no wrap mode for text label to avoid unnecessary line breaks
-	QTextOption textOption;
-	textOption.setWrapMode(QTextOption::NoWrap);
-	d->staticText.setTextOption(textOption);
 
 	d->position.point = QPointF(0, 0);
 	if (m_type == Type::PlotTitle || m_type == Type::PlotLegendTitle) {
@@ -421,6 +442,10 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
+
+	m_textItem = new ScaledTextItem(this);
+	m_textItem->setScaleFactor(scaleFactor);
+	m_textItem->setTextInteractionFlags(Qt::NoTextInteraction);
 }
 
 QString TextLabelPrivate::name() const {
@@ -439,8 +464,8 @@ QRectF TextLabelPrivate::size() {
 		h = teXImage.height()*teXImageScaleFactor;
 	} else {
 		//size is in points, convert to scene units
-		w = staticText.size().width()*scaleFactor;
-		h = staticText.size().height()*scaleFactor;
+		w = m_textItem->boundingRect().width()*scaleFactor;
+		h = m_textItem->boundingRect().height()*scaleFactor;
 	}
 	qreal x = position.point.x();
 	qreal y = position.point.y();
@@ -515,8 +540,8 @@ void TextLabelPrivate::retransform() {
 		h = teXImage.height()*teXImageScaleFactor;
 	} else {
 		//size is in points, convert to scene units
-		w = staticText.size().width()*scaleFactor;
-		h = staticText.size().height()*scaleFactor;
+		w = m_textItem->boundingRect().width()*scaleFactor;
+		h = m_textItem->boundingRect().height()*scaleFactor;
 	}
 
 	boundingRectangle.setX(-w/2);
@@ -608,7 +633,7 @@ void TextLabelPrivate::updateText() {
 		break;
 	}
 	case TextLabel::Mode::Text: {
-		staticText.setText(textWrapper.text);
+		m_textItem->setHtml(textWrapper.text);
 
 		//the size of the label was most probably changed.
 		//call retransform() to recalculate the position and the bounding box of the label
@@ -631,11 +656,13 @@ void TextLabelPrivate::updateText() {
 
 		mkd_cleanup(mdHandle);
 
-		staticText.setText(html);
+		m_textItem->setHtml(html);
 		retransform();
 #endif
 	}
 	}
+
+	m_textItem->update();
 }
 
 void TextLabelPrivate::updateTeXImage() {
@@ -948,6 +975,8 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	for (int i=0; i < m_gluePoints.length(); i++)
 		m_gluePoints[i].point = matrix.map(m_gluePoints[i].point);
 
+	m_textItem->setRotationAngle(rotationAngle);
+
 	emit q->changed();
 }
 
@@ -958,29 +987,19 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 	if (positionInvalid || textWrapper.text.isEmpty())
 		return;
 
-	painter->save();
-	painter->rotate(-rotationAngle);
-
 	//draw the text
+	painter->save();
 	switch (textWrapper.mode) {
 	case TextLabel::Mode::LaTeX: {
+		painter->rotate(-rotationAngle);
 		if (boundingRect().width() != 0.0 &&  boundingRect().height() != 0.0)
 			painter->drawImage(boundingRect(), teXImage);
 		break;
 	}
-	case TextLabel::Mode::Text: {
-		// don't set pen color, the color is already in the HTML code
-		//painter->setPen(fontColor);
-		painter->scale(scaleFactor, scaleFactor);
-		qreal w = staticText.size().width();
-		qreal h = staticText.size().height();
-		//staticText.setPerformanceHint(QStaticText::AggressiveCaching);
-		//QDEBUG(Q_FUNC_INFO << ", Drawing text:" << staticText.text())
-		painter->drawStaticText(QPointF(-w/2., -h/2.), staticText);
-		break;
-	}
+	case TextLabel::Mode::Text:
 	case TextLabel::Mode::Markdown: {
-		//TODO:
+		//nothing to do here, the painting is done in the ScaledTextItem child
+		break;
 	}
 	}
 	painter->restore();

@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of TextLabel
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2012-2014 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -22,6 +22,7 @@
 class QGraphicsSceneHoverEvent;
 class CartesianPlot;
 class CartesianCoordinateSystem;
+class ScaledTextItem;
 class TextLabel;
 
 class TextLabelPrivate : public QGraphicsItem {
@@ -73,8 +74,7 @@ public:
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	TextLabel::GluePoint gluePointAt(int index);
 
-	QStaticText staticText;
-
+	ScaledTextItem* m_textItem{nullptr};
 	bool suppressItemChangeEvent{false};
 	bool suppressRetransform{false};
 	bool m_hovered{false};
