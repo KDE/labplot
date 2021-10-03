@@ -451,7 +451,6 @@ void AbstractAspect::addChild(AbstractAspect* child) {
 	}
 
 	exec(new AspectChildAddCmd(d, child, d->m_children.count()));
-	child->finalizeAdd();
 	endMacro();
 }
 
@@ -498,6 +497,7 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
 
 	emit aspectAboutToBeAdded(this, nullptr, child);
 	d->insertChild(index, child);
+	child->finalizeAdd();
 	emit aspectAdded(child);
 }
 

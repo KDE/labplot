@@ -55,6 +55,7 @@ public:
 
 		emit m_target->q->aspectAboutToBeAdded(m_target->q, nullptr, m_child);
 		m_target->insertChild(m_index, m_child);
+		m_child->finalizeAdd();
 		emit m_target->q->aspectAdded(m_child);
 // 		m_removed = false;
 	}
