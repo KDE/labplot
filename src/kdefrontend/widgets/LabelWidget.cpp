@@ -23,6 +23,7 @@
 #include <QSettings>
 #include <QSplitter>
 #include <QTextDocumentFragment>
+#include <QStandardItemModel>
 #include <QWidgetAction>
 
 #include <KCharSelect>
@@ -149,14 +150,15 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	"</ul>");
 	ui.cbMode->setToolTip(msg);
 
-	//check whether the used latex compiler is available.
-	//Following logic is implemented (s.a. LabelWidget::teXUsedChanged()):
-	//1. in case latex was used to generate the text label in the stored project
-	//and no latex is available on the target system, latex button is toggled and
-	//the user still can switch to the non-latex mode.
-	//2. in case the label was in the non-latex mode and no latex is available,
-	//deactivate the latex button so the user cannot switch to this mode.
+	//check whether LaTeX is available and deactivate the item in the combobox, if not.
+	//in case LaTeX was used to generate the text label in the stored project
+	//and no LaTeX is available on the target system, the disabled LaTeX item is selected
+	//in the combobox in load() and the user still can switch to the non-latex mode.
 	m_teXEnabled = TeXRenderer::enabled();
+	if (!m_teXEnabled) {
+		auto* model = qobject_cast<QStandardItemModel*>(ui.cbMode->model());
+		model->item(1)->setEnabled(false);
+	}
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
@@ -555,7 +557,6 @@ void LabelWidget::modeChanged(int index) {
 
 	ui.tbFontSubScript->setVisible(!plain);
 	ui.tbFontSuperScript->setVisible(!plain);
-	ui.tbSymbols->setVisible(!plain);
 
 	ui.lFont->setVisible(!plain);
 	ui.kfontRequester->setVisible(!plain);
@@ -608,17 +609,6 @@ void LabelWidget::modeChanged(int index) {
 		//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
 		ui.teLabel->setStyleSheet(QString());
 	}
-
-	//no latex is available and the user switched to the text mode,
-	//deactivate the button since it shouldn't be possible anymore to switch to the TeX-mode
-	//TODO:
-	/*
-	if (!m_teXEnabled && !plain) {
-		ui.tbTexUsed->setEnabled(false);
-		ui.tbTexUsed->setToolTip(i18n("LaTeX typesetting not possible. Please check the settings."));
-	} else
-		ui.tbTexUsed->setEnabled(true);
-		*/
 
 	if (m_initializing)
 		return;
