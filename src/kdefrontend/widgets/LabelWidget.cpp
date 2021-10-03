@@ -162,7 +162,6 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 	m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(ui.teLabel->document());
-	m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("LaTeX")));
 	m_highlighter->setTheme(  (palette().color(QPalette::Base).lightness() < 128)
 	                          ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
 	                          : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme) );
@@ -578,6 +577,10 @@ void LabelWidget::modeChanged(int index) {
 
 #ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
 		m_highlighter->setDocument(ui.teLabel->document());
+		if (mode == TextLabel::Mode::LaTeX)
+			m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("LaTeX")));
+		else
+			m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("Markdown")));
 #endif
 		KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("Settings_Worksheet"));
 		QString engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
@@ -604,11 +607,12 @@ void LabelWidget::modeChanged(int index) {
 		ui.kfontRequesterTeX->setVisible(false);
 		ui.lFontSize->setVisible(false);
 		ui.sbFontSize->setVisible(false);
-
-		//when switching to the text mode, set the background color to white just for the case the latex code provided by the user
-		//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
-		ui.teLabel->setStyleSheet(QString());
 	}
+
+	//when switching to non-LaTeX mode, set the background color to white just for the case the latex code provided by the user
+	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
+	if (mode != TextLabel::Mode::LaTeX)
+		ui.teLabel->setStyleSheet(QString());
 
 	if (m_initializing)
 		return;

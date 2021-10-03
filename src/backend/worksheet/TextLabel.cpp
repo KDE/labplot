@@ -648,7 +648,7 @@ void TextLabelPrivate::updateText() {
 		MMIOT* mdHandle = mkd_string(mdCharArray.data(), mdCharArray.size()+1, 0);
 		if(!mkd_compile(mdHandle, MKD_LATEX | MKD_FENCEDCODE | MKD_GITHUBTAGS))
 		{
-			qDebug()<<"Failed to compile the markdown document";
+			DEBUG("Failed to compile the markdown document");
 			mkd_cleanup(mdHandle);
 			return;
 		}
@@ -664,8 +664,6 @@ void TextLabelPrivate::updateText() {
 #endif
 	}
 	}
-
-	m_textItem->update();
 }
 
 void TextLabelPrivate::updateTeXImage() {
@@ -1472,6 +1470,9 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 		// update the text. also in the Widget to which is connected
 
 		setText(wrapper);
+	} else if (d->textWrapper.mode == TextLabel::Mode::LaTeX) {
+		//call updateText() to re-render the LaTeX-image with the new text colors
+		d->updateText();
 	}
 
 	// otherwise when changing theme while the textlabel dock is visible, the
