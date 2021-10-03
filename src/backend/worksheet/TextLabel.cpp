@@ -619,6 +619,7 @@ void TextLabelPrivate::updateText() {
 
 	switch (textWrapper.mode) {
 	case TextLabel::Mode::LaTeX: {
+		m_textItem->hide();
 		TeXRenderer::Formatting format;
 		format.fontColor = fontColor;
 		format.backgroundColor = backgroundColor;
@@ -633,6 +634,7 @@ void TextLabelPrivate::updateText() {
 		break;
 	}
 	case TextLabel::Mode::Text: {
+		m_textItem->show();
 		m_textItem->setHtml(textWrapper.text);
 
 		//the size of the label was most probably changed.
@@ -656,6 +658,7 @@ void TextLabelPrivate::updateText() {
 
 		mkd_cleanup(mdHandle);
 
+		m_textItem->show();
 		m_textItem->setHtml(html);
 		retransform();
 #endif

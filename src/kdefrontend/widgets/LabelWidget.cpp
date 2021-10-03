@@ -134,10 +134,10 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	ui.kcbBorderColor->setColor(QColor(255,255,255, 255)); // black
 
 	//Text mode
-	ui.cbMode->addItem(i18n("Text"));
-	ui.cbMode->addItem(i18n("LaTeX"));
+	ui.cbMode->addItem(QIcon::fromTheme(QLatin1String("text-x-plain")), i18n("Text"));
+	ui.cbMode->addItem(QIcon::fromTheme(QLatin1String("text-x-tex")), i18n("LaTeX"));
 #ifdef HAVE_DISCOUNT
-	ui.cbMode->addItem(i18n("Markdown"));
+	ui.cbMode->addItem(QIcon::fromTheme(QLatin1String("text-x-markdown")), i18n("Markdown"));
 #endif
 
 	msg = i18n("Text setting mode:"
