@@ -22,7 +22,9 @@
 #include <QTemporaryFile>
 #include <QTextStream>
 
+#ifdef HAVE_POPPLER
 #include <poppler-qt5.h>
+#endif
 
 /*!
 	\class TeXRenderer
@@ -152,6 +154,10 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 		return QImage();
 	}
 
+	QFile::remove(baseName + ".aux");
+	QFile::remove(baseName + ".log");
+
+#ifdef HAVE_POPPLER
 	// convert PDF to QImage using Poppler
 	auto* document = Poppler::Document::load(baseName + ".pdf");
 	if (!document || document->isLocked()) {
@@ -177,14 +183,13 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 		return QImage();
 	}
 
-	// final clean up
-	QFile::remove(baseName + ".aux");
-	QFile::remove(baseName + ".log");
 	QFile::remove(baseName + ".pdf");
-// 	QFile::remove(baseName + ".png");
-
 	*success = true;
 	return image;
+#else
+	WARN("Poppler not available.")
+	return QImage();
+#endif
 }
 
 // TEX -> DVI -> PS -> PNG

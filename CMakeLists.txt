@@ -215,8 +215,11 @@ ENDIF ()
 ### GSL (required) ###############################
 FIND_PACKAGE(GSL REQUIRED)
 
-FIND_PACKAGE(Poppler "0.62.0" REQUIRED COMPONENTS Qt5)
-include_directories(${Poppler_INCLUDE_DIRS})
+FIND_PACKAGE(Poppler "0.62.0" COMPONENTS Qt5)
+IF (Poppler_FOUND)
+	include_directories(${Poppler_INCLUDE_DIRS})
+	add_definitions (-DHAVE_POPPLER)
+ENDIF ()
 
 ### liborigin (included) ###############################
 IF (ENABLE_LIBORIGIN)
@@ -247,7 +250,6 @@ IF (Cantor_FOUND)
 	IF (${Cantor_VERSION} VERSION_GREATER "19.11")
 		add_definitions (-DHAVE_CANTOR_LIBS)
 		set(RECENT_CANTOR TRUE)
-		FIND_PACKAGE(Poppler "0.62.0" REQUIRED COMPONENTS Qt5)
 	ELSE ()
 		MESSAGE (STATUS "Cantor Library ${Cantor_VERSION} TOO OLD. Minimum usable version is 19.12")
 	ENDIF ()

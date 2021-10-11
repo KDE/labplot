@@ -485,7 +485,8 @@ target_link_libraries( labplot2lib
 # 	Qt5::QuickWidgets
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES}
-	${Poppler_LIBRARIES} )
+	${Poppler_LIBRARIES}
+	)
 
 IF (Qt5SerialPort_FOUND)
 	target_link_libraries( labplot2lib Qt5::SerialPort )
@@ -506,7 +507,7 @@ ENDIF ()
 
 IF (RECENT_CANTOR)
 	# KF5::Service, KF5::Parts is optional but probably required by Cantor
-	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts Poppler::Qt5 )
+	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts )
 ENDIF ()
 
 target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
