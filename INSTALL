@@ -5,12 +5,13 @@ To compile LabPlot following packages are required:
 		optional 5.28.0 or higher for syntax highlighting
 	* Qt version 5.6 or higher (including the devel-package, libqt5-devel or similar)
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
+	* Poppler version 0.62 or higher (including the devel-package, libpoppler-qt5-devel or similar)
 
 optional
-	* LaTeX to enable LaTeX typesetting in LabPlot, requires also 'convert' from ImageMagick and 'dvips'.
-		* Required LaTeX packages: 'color', 'preview' and, in case xelatex or lualatex are used, 'xltxtra'.
-		* On Windows you need a LaTeX installation (like MiKTeX) and ghostscript for LaTeX support.
-		* On macOS you need a LaTeX installation (like MacTeX) and ImageMagick for LaTeX support.
+	* LaTeX to enable LaTeX typesetting in LabPlot
+		* Required LaTeX packages: 'color', 'preview' and, in case xelatex or lualatex is used, 'xltxtra'.
+		* On Windows you need a LaTeX installation (like MiKTeX) for LaTeX support.
+		* On macOS you need a LaTeX installation (like MacTeX) for LaTeX support.
 	* FFTW version 3.3 or higher (including the devel-package, fftw3-devel or similar)
 	* HDF5 version 1.8 or higher (including the devel-package, hdf5-devel or similar)
 	* NetCDF version 3 or higher (including the devel-package, netcdf-devel or similar)
