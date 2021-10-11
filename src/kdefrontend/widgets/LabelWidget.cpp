@@ -34,8 +34,6 @@
 #include <KF5/KSyntaxHighlighting/Theme>
 #endif
 
-#include <cmath>
-
 /*!
 	\class LabelWidget
  	\brief Widget for editing the properties of a TextLabel object, mostly used in an appropriate dock widget.
