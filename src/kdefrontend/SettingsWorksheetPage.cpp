@@ -4,6 +4,7 @@
     Description          : settings page for Worksheet
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2008-2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -134,37 +135,36 @@ void SettingsWorksheetPage::checkTeX(int engineIndex) {
 		return;
 	}
 
-	//engine found, check the presence of other required tools (s.a. TeXRenderer.cpp):
-	//to convert the generated PDF/PS files to PNG we need 'convert' from the ImageMagic package
-	if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
-		return;
-	}
-
 	QString engine = ui.cbTexEngine->itemData(engineIndex).toString();
+
 	if (engine == "latex") {
+		// need convert to convert to PNG
+		if (!TeXRenderer::executableExists(QLatin1String("convert"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No 'convert' found. LaTeX typesetting not possible."));
+			return;
+		}
 		//to convert the generated PS files to DVI we need 'dvips'
 		if (!TeXRenderer::executableExists(QLatin1String("dvips"))) {
 			ui.lLatexWarning->show();
 			ui.lLatexWarning->setToolTip(i18n("No 'dvips' found. LaTeX typesetting not possible."));
 			return;
 		}
-	}
 
 #if defined(_WIN64)
-	if (!TeXRenderer::executableExists(QLatin1String("gswin64c"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
-		return;
-	}
+		if (!TeXRenderer::executableExists(QLatin1String("gswin64c"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
+			return;
+		}
 #elif defined(HAVE_WINDOWS)
-	if (!TeXRenderer::executableExists(QLatin1String("gswin32c"))) {
-		ui.lLatexWarning->show();
-		ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
-		return;
-	}
+		if (!TeXRenderer::executableExists(QLatin1String("gswin32c"))) {
+			ui.lLatexWarning->show();
+			ui.lLatexWarning->setToolTip(i18n("No Ghostscript found. LaTeX typesetting not possible."));
+			return;
+		}
 #endif
+	}
 
 	ui.lLatexWarning->hide();
 }
