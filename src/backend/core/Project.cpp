@@ -90,7 +90,7 @@ public:
 	bool setVersion(const QString &v) const {
 		versionString = v;
 		auto l = v.split(".");
-		assert(l.length() == 3);
+		Q_ASSERT(l.length() == 3);
 		bool ok;
 		int major = l[0].toInt(&ok);
 		if (!ok)
@@ -142,9 +142,15 @@ Project::Project() : Folder(i18n("Project"), AspectType::Project), d(new Private
 	KConfig config;
 	KConfigGroup group = config.group("Project");
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
 	QString user = qEnvironmentVariable("USER");	// !Windows
 	if (user.isEmpty())
 		user = qEnvironmentVariable("USERNAME");	// Windows
+#else
+	QString user = qgetenv("USER");	// !Windows
+	if (user.isEmpty())
+		user = qgetenv("USERNAME");	// Windows
+#endif
 	d->author = group.readEntry("Author", user);
 
 	//we don't have direct access to the members name and comment
