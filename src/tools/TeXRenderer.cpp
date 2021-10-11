@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : TeX renderer class
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2016 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2012 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+    SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2012-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,6 +21,8 @@
 #include <QStandardPaths>
 #include <QTemporaryFile>
 #include <QTextStream>
+
+#include <poppler-qt5.h>
 
 /*!
 	\class TeXRenderer
@@ -129,6 +131,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 
 // TEX -> PDF -> PNG
 QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, bool* success) {
+	DEBUG(Q_FUNC_INFO << ", tmp file = " << file.fileName().toStdString() << ", engine = " << engine.toStdString() << ", dpi = " << dpi)
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
@@ -149,35 +152,36 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 		return QImage();
 	}
 
-	// convert: PDF -> PNG
-	QProcess convertProcess;
-#if defined(HAVE_WINDOWS)
-	// need to set path to magick coder modules (which are in the labplot2 directory)
-	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(qgetenv("PROGRAMFILES") + QString("\\labplot2")));
-	convertProcess.setProcessEnvironment(env);
-#endif
-
-	const QStringList params{"-density", QString::number(dpi), baseName + ".pdf", baseName + ".png"};
-	convertProcess.start("convert", params);
-
-	if (!convertProcess.waitForFinished() || convertProcess.exitCode() != 0) {
-		WARN("convert process failed, exit code = " << convertProcess.exitCode());
-		*success = false;
-		QFile::remove(baseName + ".aux");
-		QFile::remove(baseName + ".log");
-		QFile::remove(baseName + ".pdf");
+	// convert PDF to QImage using Poppler
+	auto* document = Poppler::Document::load(baseName + ".pdf");
+	if (!document || document->isLocked()) {
+		WARN("Failed to process PDF file " << baseName.toStdString() << ".pdf");
+		delete document;
 		return QImage();
 	}
 
-	// read png file
-	QImage image(baseName + ".png", "png");
+	auto* page = document->page(0);
+	if (!page) {
+		WARN("Failed to process the first page in the PDF file.")
+		delete document;
+		return QImage();
+	}
+
+	QImage image = page->renderToImage((double)dpi, (double)dpi);
+
+	delete page;
+	delete document;
+
+	if (image.isNull()) {
+		WARN("Failed to render PDF to image.")
+		return QImage();
+	}
 
 	// final clean up
 	QFile::remove(baseName + ".aux");
 	QFile::remove(baseName + ".log");
 	QFile::remove(baseName + ".pdf");
-	QFile::remove(baseName + ".png");
+// 	QFile::remove(baseName + ".png");
 
 	*success = true;
 	return image;

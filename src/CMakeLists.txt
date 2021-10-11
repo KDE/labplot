@@ -484,7 +484,8 @@ target_link_libraries( labplot2lib
 # 	Qt5::Quick
 # 	Qt5::QuickWidgets
 	${GSL_LIBRARIES}
-	${GSL_CBLAS_LIBRARIES} )
+	${GSL_CBLAS_LIBRARIES}
+	${Poppler_LIBRARIES} )
 
 IF (Qt5SerialPort_FOUND)
 	target_link_libraries( labplot2lib Qt5::SerialPort )

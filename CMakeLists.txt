@@ -215,6 +215,9 @@ ENDIF ()
 ### GSL (required) ###############################
 FIND_PACKAGE(GSL REQUIRED)
 
+FIND_PACKAGE(Poppler "0.62.0" REQUIRED COMPONENTS Qt5)
+include_directories(${Poppler_INCLUDE_DIRS})
+
 ### liborigin (included) ###############################
 IF (ENABLE_LIBORIGIN)
 	FIND_PACKAGE (LibOrigin)
