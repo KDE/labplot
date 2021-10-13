@@ -187,6 +187,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	*success = true;
 	return image;
 #else
+	Q_UNUSED(dpi)
 	WARN("Poppler not available.")
 	return QImage();
 #endif

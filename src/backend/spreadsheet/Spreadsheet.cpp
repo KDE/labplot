@@ -403,9 +403,9 @@ int Spreadsheet::colY(int col) {
   If 'leading' is a null pointer, each column is sorted separately.
 */
 void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, bool ascending) {
-	DEBUG("Spreadsheet::sortColumns() : ascending = " << ascending)
-	if (cols.isEmpty()) return;
-
+	DEBUG(Q_FUNC_INFO << ", ascending = " << ascending)
+	if (cols.isEmpty())
+		return;
 
 	// the normal QPair comparison does not work properly with descending sorting
 	// therefore we use our own compare functions
@@ -447,7 +447,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: sort columns", name()));
 
-	if (leading == nullptr) { // sort separately
+	if (!leading) { // sort separately
 		DEBUG("	sort separately")
 		for (auto* col : cols) {
 			int rows = col->rowCount();
