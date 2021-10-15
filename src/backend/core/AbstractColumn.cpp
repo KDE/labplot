@@ -98,27 +98,27 @@ QStringList AbstractColumn::dateTimeFormats() {
 
 /**
  * \brief Convenience method for getting mode name
- * not translated since not used in UI
+ * translated since used in UI
  */
 QString AbstractColumn::modeName(ColumnMode mode) {
 	switch (mode) {
 	case ColumnMode::Numeric:
-		return QLatin1String("Numeric");
+		return i18n("Double");
 	case ColumnMode::Integer:
-		return QLatin1String("Integer");
+		return i18n("Integer");
 	case ColumnMode::BigInt:
-		return QLatin1String("BigInt");
+		return i18n("Big Integer");
 	case ColumnMode::Text:
-		return QLatin1String("Text");
+		return i18n("Text");
 	case ColumnMode::DateTime:
-		return QLatin1String("DateTime");
+		return i18n("Date & Time");
 	case ColumnMode::Month:
-		return QLatin1String("Month");
+		return i18n("Month Names");
 	case ColumnMode::Day:
-		return QLatin1String("Day");
+		return i18n("Day Names");
 	}
 
-	return QLatin1String("UNDEFINED");
+	return i18n("UNDEFINED");
 }
 
 /**

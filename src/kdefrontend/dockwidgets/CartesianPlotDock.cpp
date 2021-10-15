@@ -619,8 +619,8 @@ void CartesianPlotDock::updateXRangeList() {
 
 		// format
 		QComboBox *cb = new QComboBox(ui.twXRanges);
-		cb->addItem( i18n("Numeric") );
-		cb->addItem( i18n("Date/Time") );
+		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::Numeric) );
+		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::DateTime) );
 		cb->setProperty("row", i);
 		cb->setCurrentIndex(static_cast<int>(format));
 		ui.twXRanges->setCellWidget(i, TwRangesColumn::Format, cb);
@@ -710,8 +710,8 @@ void CartesianPlotDock::updateYRangeList() {
 
 		// format
 		QComboBox *cb = new QComboBox(ui.twYRanges);
-		cb->addItem( i18n("Numeric") );
-		cb->addItem( i18n("Date/Time") );
+		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::Numeric) );
+		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::DateTime) );
 		cb->setProperty("row", i);
 		cb->setCurrentIndex(static_cast<int>(format));
 		ui.twYRanges->setCellWidget(i, TwRangesColumn::Format, cb);
@@ -723,9 +723,9 @@ void CartesianPlotDock::updateYRangeList() {
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
 //TODO			le->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-			QDEBUG(Q_FUNC_INFO << ", SIZE HINT = " << le->sizeHint())
-			QDEBUG(Q_FUNC_INFO << ", MIN SIZE HINT = " << le->minimumSizeHint())
-			QDEBUG(Q_FUNC_INFO << ", SIZE = " << le->size())
+//			QDEBUG(Q_FUNC_INFO << ", SIZE HINT = " << le->sizeHint())
+//			QDEBUG(Q_FUNC_INFO << ", MIN SIZE HINT = " << le->minimumSizeHint())
+//			QDEBUG(Q_FUNC_INFO << ", SIZE = " << le->size())
 //			le->resize(le->minimumSizeHint());
 //			QDEBUG(Q_FUNC_INFO << ", resize SIZE = " << le->size())
 			ui.twYRanges->setCellWidget(i, TwRangesColumn::Min, le);

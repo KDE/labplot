@@ -434,31 +434,8 @@ void SpreadsheetModel::updateHorizontalHeader() {
 		Column* col = m_spreadsheet->child<Column>(i);
 		QString header = col->name();
 
-		if (showColumnType) {
-			switch (col->columnMode()) {
-			case AbstractColumn::ColumnMode::Numeric:
-				header += QLatin1String(" {") + i18n("Numeric") + QLatin1Char('}');
-				break;
-			case AbstractColumn::ColumnMode::Integer:
-				header += QLatin1String(" {") + i18n("Integer") + QLatin1Char('}');
-				break;
-			case AbstractColumn::ColumnMode::BigInt:
-				header += QLatin1String(" {") + i18n("Big Integer") + QLatin1Char('}');
-				break;
-			case AbstractColumn::ColumnMode::Text:
-				header += QLatin1String(" {") + i18n("Text") + QLatin1Char('}');
-				break;
-			case AbstractColumn::ColumnMode::Month:
-				header += QLatin1String(" {") + i18n("Month Names") + QLatin1Char('}');
-				break;
-			case AbstractColumn::ColumnMode::Day:
-				header += QLatin1String(" {") + i18n("Day Names") + QLatin1Char('}');
-				break;
-			case AbstractColumn::ColumnMode::DateTime:
-				header += QLatin1String(" {") + i18n("Date and Time") + QLatin1Char('}');
-				break;
-			}
-		}
+		if (showColumnType)
+			header += QLatin1String(" {") + AbstractColumn::modeName(col->columnMode()) + QLatin1Char('}');
 
 		if (showPlotDesignation) {
 			switch (col->plotDesignation()) {
