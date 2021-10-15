@@ -1506,7 +1506,7 @@ void ImportFileWidget::refreshPreview() {
 		// the last vector element contains the column names
 		vectorNameList = importedStrings.last();
 		importedStrings.removeLast();
-		columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::ColumnMode::Numeric);
+		columnModes = QVector<AbstractColumn::ColumnMode>(vectorNameList.size(), AbstractColumn::ColumnMode::Double);
 		break;
 	}
 	case AbstractFileFilter::FileType::NgspiceRawAscii: {

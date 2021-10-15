@@ -93,8 +93,8 @@ void XYDifferentiationCurvePrivate::recalculate() {
 
 	//create differentiation result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 
@@ -286,7 +286,7 @@ bool XYDifferentiationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", differentiationResult.status);
 			READ_INT_VALUE("time", differentiationResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

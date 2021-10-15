@@ -314,7 +314,7 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 				continue;
 
 			switch (column->columnMode()) {
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
 				if (!std::isnan(column->valueAt(row)))

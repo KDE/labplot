@@ -78,7 +78,7 @@ void BatchEditValueLabelsDialog::setColumns(QList<Column*> columns) {
 		QString text;
 
 		switch (mode) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			auto labels = m_column->valueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
@@ -172,7 +172,7 @@ void  BatchEditValueLabelsDialog::save() const {
 			continue;
 
 		switch(mode) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			double value = numberLocale.toDouble(valueStr, &ok);
 			if (!ok)
 				continue;

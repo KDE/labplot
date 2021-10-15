@@ -132,7 +132,7 @@ class MaskValuesTask : public QRunnable {
 			auto mode = m_column->columnMode();
 			switch (m_operator) {
 			case Operator::EqualTo:
-				if (mode == AbstractColumn::ColumnMode::Numeric) {
+				if (mode == AbstractColumn::ColumnMode::Double) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) == m_value1) {
 							m_column->setMasked(i, true);
@@ -156,7 +156,7 @@ class MaskValuesTask : public QRunnable {
 				}
 				break;
 			case Operator::BetweenIncl:
-				if (mode == AbstractColumn::ColumnMode::Numeric) {
+				if (mode == AbstractColumn::ColumnMode::Double) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) >= m_value1 && data->at(i) <= m_value2) {
 							m_column->setMasked(i, true);
@@ -180,7 +180,7 @@ class MaskValuesTask : public QRunnable {
 				}
 				break;
 			case Operator::BetweenExcl:
-				if (mode == AbstractColumn::ColumnMode::Numeric) {
+				if (mode == AbstractColumn::ColumnMode::Double) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) > m_value1 && data->at(i) < m_value2) {
 							m_column->setMasked(i, true);
@@ -204,7 +204,7 @@ class MaskValuesTask : public QRunnable {
 				}
 				break;
 			case Operator::GreaterThan:
-				if (mode == AbstractColumn::ColumnMode::Numeric) {
+				if (mode == AbstractColumn::ColumnMode::Double) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) > m_value1) {
 							m_column->setMasked(i, true);
@@ -228,7 +228,7 @@ class MaskValuesTask : public QRunnable {
 				}
 				break;
 			case Operator::GreaterThanEqualTo:
-				if (mode == AbstractColumn::ColumnMode::Numeric) {
+				if (mode == AbstractColumn::ColumnMode::Double) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) >= m_value1) {
 							m_column->setMasked(i, true);
@@ -252,7 +252,7 @@ class MaskValuesTask : public QRunnable {
 				}
 				break;
 			case Operator::LessThan:
-				if (mode == AbstractColumn::ColumnMode::Numeric) {
+				if (mode == AbstractColumn::ColumnMode::Double) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) < m_value1) {
 							m_column->setMasked(i, true);
@@ -276,7 +276,7 @@ class MaskValuesTask : public QRunnable {
 				}
 				break;
 			case Operator::LessThanEqualTo:
-				if (mode == AbstractColumn::ColumnMode::Numeric) {
+				if (mode == AbstractColumn::ColumnMode::Double) {
 					for (int i = 0; i < rows; ++i) {
 						if (data->at(i) <= m_value1) {
 							m_column->setMasked(i, true);
@@ -326,7 +326,7 @@ class DropValuesTask : public QRunnable {
 			bool changed = false;
 
 			auto mode = m_column->columnMode();
-			if (mode == AbstractColumn::ColumnMode::Numeric) {
+			if (mode == AbstractColumn::ColumnMode::Double) {
 				auto* data = static_cast<QVector<double>* >(m_column->data());
 				QVector<double> new_data(*data);
 

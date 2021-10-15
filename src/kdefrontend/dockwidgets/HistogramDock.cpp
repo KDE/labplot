@@ -777,7 +777,7 @@ void HistogramDock::updateValuesWidgets() {
 
 		auto* column = static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
 		if (column) {
-			if (column->columnMode() == AbstractColumn::ColumnMode::Numeric)
+			if (column->columnMode() == AbstractColumn::ColumnMode::Double)
 				hasNumeric = true;
 			else if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt)
 				hasInteger = true;

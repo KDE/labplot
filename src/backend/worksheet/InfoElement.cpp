@@ -380,7 +380,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	//replace the placeholder for the x-value
 	QString xValueStr;
 	auto columnMode = markerpoints[0].curve->xColumn()->columnMode();
-	if (columnMode== AbstractColumn::ColumnMode::Numeric
+	if (columnMode== AbstractColumn::ColumnMode::Double
 		|| columnMode == AbstractColumn::ColumnMode::Integer
 		|| columnMode == AbstractColumn::ColumnMode::BigInt)
 		xValueStr = QString::number(d->position);
@@ -608,7 +608,7 @@ int InfoElement::currentIndex(double x, double* found_x) {
 			if (found_x && index >= 0) {
 				auto mode = markerpoint.curve->xColumn()->columnMode();
 				switch (mode) {
-				case AbstractColumn::ColumnMode::Numeric:
+				case AbstractColumn::ColumnMode::Double:
 				case AbstractColumn::ColumnMode::Integer:
 				case AbstractColumn::ColumnMode::BigInt:
 					*found_x = markerpoint.curve->xColumn()->valueAt(index);

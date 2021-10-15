@@ -404,7 +404,7 @@ void RandomValuesDialog::generate() {
 		DEBUG(Q_FUNC_INFO << ", mu = " << mu << ", sigma = " << sigma);
 		for (auto* col : m_columns) {
 			auto mode = col->columnMode();
-			if (mode == AbstractColumn::ColumnMode::Numeric) {
+			if (mode == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_gaussian(r, sigma) + mu;
 				col->replaceValues(0, data);
@@ -426,7 +426,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(sigma, ui.leParameter2)
 		SET_DOUBLE_FROM_LE(a, ui.leParameter3)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_gaussian_tail(r, a, sigma) + mu;
 				col->replaceValues(0, data);
@@ -447,7 +447,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(l, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(mu, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				//GSL uses the inverse for exp. distrib.
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_exponential(r, 1./l) + mu;
@@ -469,7 +469,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(mu, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(s, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_laplace(r, s) + mu;
 				col->replaceValues(0, data);
@@ -491,7 +491,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(a, ui.leParameter2)
 		SET_DOUBLE_FROM_LE(b, ui.leParameter3)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_exppow(r, a, b) + mu;
 				col->replaceValues(0, data);
@@ -512,7 +512,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(gamma, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(mu, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_cauchy(r, gamma) + mu;
 				col->replaceValues(0, data);
@@ -532,7 +532,7 @@ void RandomValuesDialog::generate() {
 		double s{1.0};
 		SET_DOUBLE_FROM_LE(s, ui.leParameter1)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_rayleigh(r, s);
 				col->replaceValues(0, data);
@@ -553,7 +553,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(mu, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(sigma, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_rayleigh_tail(r, mu, sigma);
 				col->replaceValues(0, data);
@@ -571,7 +571,7 @@ void RandomValuesDialog::generate() {
 	}
 	case nsl_sf_stats_landau:
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_landau(r);
 				col->replaceValues(0, data);
@@ -591,7 +591,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(c, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(alpha, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_levy(r, c, alpha);
 				col->replaceValues(0, data);
@@ -613,7 +613,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(alpha, ui.leParameter2)
 		SET_DOUBLE_FROM_LE(beta, ui.leParameter3)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_levy_skew(r, c, alpha, beta);
 				col->replaceValues(0, data);
@@ -634,7 +634,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(a, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(b, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_flat(r, a, b);
 				col->replaceValues(0, data);
@@ -655,7 +655,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(a, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(b, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_gamma(r, a, b);
 				col->replaceValues(0, data);
@@ -676,7 +676,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(mu, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(s, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_lognormal(r, mu, s);
 				col->replaceValues(0, data);
@@ -696,7 +696,7 @@ void RandomValuesDialog::generate() {
 		double n{1.0};
 		SET_DOUBLE_FROM_LE(n, ui.leParameter1)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_chisq(r, n);
 				col->replaceValues(0, data);
@@ -717,7 +717,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(nu1, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(nu2, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_fdist(r, nu1, nu2);
 				col->replaceValues(0, data);
@@ -737,7 +737,7 @@ void RandomValuesDialog::generate() {
 		double nu{1.0};
 		SET_DOUBLE_FROM_LE(nu, ui.leParameter1)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_tdist(r, nu);
 				col->replaceValues(0, data);
@@ -758,7 +758,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(a, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(b, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_beta(r, a, b);
 				col->replaceValues(0, data);
@@ -779,7 +779,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(s, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(mu, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_logistic(r, s) + mu;
 				col->replaceValues(0, data);
@@ -800,7 +800,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(a, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(b, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_pareto(r, a, b);
 				col->replaceValues(0, data);
@@ -822,7 +822,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(l, ui.leParameter2)
 		SET_DOUBLE_FROM_LE(mu, ui.leParameter3)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_weibull(r, l, k) + mu;
 				col->replaceValues(0, data);
@@ -844,7 +844,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(b, ui.leParameter2)
 		SET_DOUBLE_FROM_LE(mu, ui.leParameter3)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_gumbel1(r, 1./s, b) + mu;
 				col->replaceValues(0, data);
@@ -866,7 +866,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(b, ui.leParameter2)
 		SET_DOUBLE_FROM_LE(mu, ui.leParameter3)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_gumbel2(r, a, b) + mu;
 				col->replaceValues(0, data);
@@ -886,7 +886,7 @@ void RandomValuesDialog::generate() {
 		double l{1.0};
 		SET_DOUBLE_FROM_LE(l, ui.leParameter1)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_poisson(r, l);
 				col->replaceValues(0, data);
@@ -906,7 +906,7 @@ void RandomValuesDialog::generate() {
 		double p{1.0};
 		SET_DOUBLE_FROM_LE(p, ui.leParameter1)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_bernoulli(r, p);
 				col->replaceValues(0, data);
@@ -927,7 +927,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(p, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(n, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_binomial(r, p, n);
 				col->replaceValues(0, data);
@@ -948,7 +948,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(p, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(n, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_negative_binomial(r, p, n);
 				col->replaceValues(0, data);
@@ -969,7 +969,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(p, ui.leParameter1)
 		SET_DOUBLE_FROM_LE(n, ui.leParameter2)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_pascal(r, p, n);
 				col->replaceValues(0, data);
@@ -989,7 +989,7 @@ void RandomValuesDialog::generate() {
 		double p{0.5};
 		SET_DOUBLE_FROM_LE(p, ui.leParameter1)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_geometric(r, p);
 				col->replaceValues(0, data);
@@ -1011,7 +1011,7 @@ void RandomValuesDialog::generate() {
 		SET_DOUBLE_FROM_LE(n2, ui.leParameter2)
 		SET_DOUBLE_FROM_LE(t, ui.leParameter3)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_hypergeometric(r, n1, n2, t);
 				col->replaceValues(0, data);
@@ -1031,7 +1031,7 @@ void RandomValuesDialog::generate() {
 		double p{0.5};
 		SET_DOUBLE_FROM_LE(p, ui.leParameter1)
 		for (auto* col : m_columns) {
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (int i = 0; i < rows; ++i)
 					data[i] = gsl_ran_logarithmic(r, p);
 				col->replaceValues(0, data);

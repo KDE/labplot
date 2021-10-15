@@ -986,7 +986,7 @@ void XYCurveDock::updateValuesWidgets() {
 
 		auto* column = static_cast<Column*>(cbValuesColumn->currentModelIndex().internalPointer());
 		if (column) {
-			if (column->columnMode() == AbstractColumn::ColumnMode::Numeric)
+			if (column->columnMode() == AbstractColumn::ColumnMode::Double)
 				hasNumeric = true;
 			else if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt)
 				hasInteger = true;
@@ -1021,8 +1021,8 @@ void XYCurveDock::updateValuesWidgets() {
 		hasInteger = (xColumn && (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::Integer))
 						|| (yColumn && (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::Integer));
 
-		hasNumeric = (xColumn && xColumn->columnMode() == AbstractColumn::ColumnMode::Numeric)
-						|| (yColumn && yColumn->columnMode() == AbstractColumn::ColumnMode::Numeric);
+		hasNumeric = (xColumn && xColumn->columnMode() == AbstractColumn::ColumnMode::Double)
+						|| (yColumn && yColumn->columnMode() == AbstractColumn::ColumnMode::Double);
 
 		hasDateTime = (xColumn && xColumn->columnMode() == AbstractColumn::ColumnMode::DateTime)
 						|| (yColumn && yColumn->columnMode() == AbstractColumn::ColumnMode::DateTime);

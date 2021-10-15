@@ -42,7 +42,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 		return AbstractColumn::ColumnMode::Integer;
 
 	if (isNan(valueString))
-		return AbstractColumn::ColumnMode::Numeric;
+		return AbstractColumn::ColumnMode::Double;
 
 	// check if integer first
 	bool ok;
@@ -60,7 +60,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 		return AbstractColumn::ColumnMode::BigInt;
 
 	//try to convert to a double
-	auto mode = AbstractColumn::ColumnMode::Numeric;
+	auto mode = AbstractColumn::ColumnMode::Double;
 	double value = locale.toDouble(valueString, &ok);
 	DEBUG(Q_FUNC_INFO << ", " << STDSTRING(valueString) << " : toDouble " << value << " ?: " << ok);
 	Q_UNUSED(value)

@@ -20,7 +20,7 @@ class AddValueLabelDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit AddValueLabelDialog(QWidget* parent = nullptr, AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Numeric);
+	explicit AddValueLabelDialog(QWidget* parent = nullptr, AbstractColumn::ColumnMode = AbstractColumn::ColumnMode::Double);
 	~AddValueLabelDialog() override;
 
 	void setDateTimeFormat(const QString&);

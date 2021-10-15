@@ -98,8 +98,8 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	//create filter result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 
@@ -333,7 +333,7 @@ bool XYFourierFilterCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", filterResult.status);
 			READ_INT_VALUE("time", filterResult.elapsedTime, int);
 		} else if (reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

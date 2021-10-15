@@ -836,7 +836,7 @@ void BoxPlotPrivate::recalc(int index) {
 
 		double value = 0.0;
 		switch (column->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 		case AbstractColumn::ColumnMode::Integer:
 		case AbstractColumn::ColumnMode::BigInt:
 			value = column->valueAt(row);

@@ -38,7 +38,7 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::Column
 	auto* label = new QLabel(i18n("Value:"));
 	layout->addWidget(label, 0, 0);
 
-	if (mode == AbstractColumn::ColumnMode::Numeric
+	if (mode == AbstractColumn::ColumnMode::Double
 		|| mode == AbstractColumn::ColumnMode::Integer
 		|| mode == AbstractColumn::ColumnMode::BigInt) {
 
@@ -46,7 +46,7 @@ AddValueLabelDialog::AddValueLabelDialog(QWidget* parent, AbstractColumn::Column
 		leValue->setFocus();
 		layout->addWidget(leValue, 0, 1);
 
-		if (mode == AbstractColumn::ColumnMode::Numeric) {
+		if (mode == AbstractColumn::ColumnMode::Double) {
 			SET_NUMBER_LOCALE
 			leValue->setLocale(numberLocale);
 			leValue->setValidator(new QDoubleValidator(leValue));

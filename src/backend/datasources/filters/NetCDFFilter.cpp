@@ -682,7 +682,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		case NC_UINT64:	// converted to double (int is too small)
 		case NC_DOUBLE:
 		case NC_FLOAT:
-			columnModes[0] = AbstractColumn::ColumnMode::Numeric;
+			columnModes[0] = AbstractColumn::ColumnMode::Double;
 			break;
 		case NC_CHAR:
 			columnModes[0] = AbstractColumn::ColumnMode::Text;
@@ -757,7 +757,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		case NC_UINT64:	// converted to double (int is too small)
 		case NC_DOUBLE:
 		case NC_FLOAT:
-			columnModes[0] = AbstractColumn::ColumnMode::Numeric;
+			columnModes[0] = AbstractColumn::ColumnMode::Double;
 			break;
 		case NC_CHAR:
 			columnModes[0] = AbstractColumn::ColumnMode::Text;
@@ -851,7 +851,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 		case NC_DOUBLE:
 		case NC_FLOAT:
 			for (int i = 0; i < actualCols; i++)
-				columnModes[i] = AbstractColumn::ColumnMode::Numeric;
+				columnModes[i] = AbstractColumn::ColumnMode::Double;
 			break;
 		case NC_CHAR:
 			for (int i = 0; i < actualCols; i++)

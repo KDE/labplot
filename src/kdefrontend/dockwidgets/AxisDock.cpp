@@ -1612,7 +1612,7 @@ void AxisDock::labelsTextColumnChanged(const QModelIndex& index) {
 		//depending on data format of the column (numeric vs. datetime vs. text),
 		//show/hide the corresponding widgets for the tick labels format
 		switch (column->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 		case AbstractColumn::ColumnMode::Integer:
 		case AbstractColumn::ColumnMode::BigInt:
 			ui.lLabelsFormat->show();

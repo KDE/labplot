@@ -315,7 +315,7 @@ int JsonFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 
 		switch (columnValue.type()) {
 			case QJsonValue::Double:
-				columnModes << AbstractColumn::ColumnMode::Numeric;
+				columnModes << AbstractColumn::ColumnMode::Double;
 				break;
 			case QJsonValue::String:
 				columnModes << AbstractFileFilter::columnMode(columnValue.toString(), dateTimeFormat, numberFormat);
@@ -334,7 +334,7 @@ int JsonFilterPrivate::parseColumnModes(const QJsonValue& row, const QString& ro
 
 void JsonFilterPrivate::setEmptyValue(int column, int row) {
 	switch (columnModes[column]) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 			static_cast<QVector<double>*>(m_dataContainer[column])->operator[](row) = nanValue;
 			break;
 		case AbstractColumn::ColumnMode::Integer:
@@ -358,7 +358,7 @@ void JsonFilterPrivate::setEmptyValue(int column, int row) {
 void JsonFilterPrivate::setValueFromString(int column, int row, const QString& valueString) {
 	QLocale locale(numberFormat);
 	switch (columnModes[column]) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			bool isNumber;
 			const double value = locale.toDouble(valueString, &isNumber);
 			static_cast<QVector<double>*>(m_dataContainer[column])->operator[](row) = isNumber ? value : nanValue;
@@ -597,7 +597,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 
 			switch (value.type()) {
 			case QJsonValue::Double:
-				if (columnModes[colOffset + n] == AbstractColumn::ColumnMode::Numeric)
+				if (columnModes[colOffset + n] == AbstractColumn::ColumnMode::Double)
 					static_cast<QVector<double>*>(m_dataContainer[colOffset + n])->operator[](i) = value.toDouble();
 				else
 					setEmptyValue(colOffset + n, i + startRow - 1);

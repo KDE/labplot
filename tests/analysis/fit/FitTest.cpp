@@ -29,10 +29,10 @@ void FitTest::testLinearNorris() {
 		998.0,888.8,119.6,0.3,0.6,557.6,339.3,888.0,998.5,778.9,10.2,117.6,228.9,668.4,449.2,0.2};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -84,7 +84,7 @@ void FitTest::testLinearPontius() {
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -347,10 +347,10 @@ void FitTest::testLinearFilip() {
 		0.8809,0.8301,0.8664,0.8834,0.8898,0.8964,0.8963,0.9074,0.9119,0.9228};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -495,7 +495,7 @@ void FitTest::testLinearWampler2() {
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -558,7 +558,7 @@ void FitTest::testLinearWampler3() {
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -723,10 +723,10 @@ void FitTest::testLinearWP_OLS() {
 	QVector<double> yData = {52.21, 53.12, 54.48, 55.84, 57.20, 58.57, 59.93, 61.29, 63.11, 64.47, 66.28, 68.10, 69.92, 72.19, 74.46};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -902,10 +902,10 @@ void FitTest::testNonLinearMisra1a() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -956,10 +956,10 @@ void FitTest::testNonLinearMisra1a_2() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1010,10 +1010,10 @@ void FitTest::testNonLinearMisra1a_3() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1065,10 +1065,10 @@ void FitTest::testNonLinearMisra1b() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1119,10 +1119,10 @@ void FitTest::testNonLinearMisra1b_2() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1173,10 +1173,10 @@ void FitTest::testNonLinearMisra1b_3() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1227,10 +1227,10 @@ void FitTest::testNonLinearMisra1c() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1281,10 +1281,10 @@ void FitTest::testNonLinearMisra1c_2() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1335,10 +1335,10 @@ void FitTest::testNonLinearMisra1c_3() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1389,10 +1389,10 @@ void FitTest::testNonLinearMisra1d() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1443,10 +1443,10 @@ void FitTest::testNonLinearMisra1d_2() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1497,10 +1497,10 @@ void FitTest::testNonLinearMisra1d_3() {
 	QVector<double> yData = {10.07E0,14.73E0,17.94E0,23.93E0,29.61E0,35.18E0,40.02E0,44.82E0,50.76E0,55.05E0,61.01E0,66.40E0,75.47E0,81.78E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1553,10 +1553,10 @@ void FitTest::testNonLinearMGH09() {
 		3.230000E-02,2.350000E-02,2.460000E-02};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1619,10 +1619,10 @@ void FitTest::testNonLinearMGH09_2() {
 		3.230000E-02,2.350000E-02,2.460000E-02};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1683,10 +1683,10 @@ void FitTest::testNonLinearMGH09_3() {
 		3.230000E-02,2.350000E-02,2.460000E-02};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1747,10 +1747,10 @@ void FitTest::testNonLinearMGH10() {
 		7.030000E+03,6.005000E+03,5.147000E+03,4.427000E+03,3.820000E+03,3.307000E+03,2.872000E+03};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1807,10 +1807,10 @@ void FitTest::testNonLinearMGH10_2() {
 		7.030000E+03,6.005000E+03,5.147000E+03,4.427000E+03,3.820000E+03,3.307000E+03,2.872000E+03};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1867,10 +1867,10 @@ void FitTest::testNonLinearMGH10_3() {
 		7.030000E+03,6.005000E+03,5.147000E+03,4.427000E+03,3.820000E+03,3.307000E+03,2.872000E+03};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1925,10 +1925,10 @@ void FitTest::testNonLinearRat43() {
 	QVector<double> yData = {16.08E0,33.83E0,65.80E0,97.20E0,191.55E0,326.20E0,386.87E0,520.53E0,590.03E0,651.92E0,724.93E0,699.56E0,689.96E0,637.56E0,717.41E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -1987,10 +1987,10 @@ void FitTest::testNonLinearRat43_2() {
 	QVector<double> yData = {16.08E0,33.83E0,65.80E0,97.20E0,191.55E0,326.20E0,386.87E0,520.53E0,590.03E0,651.92E0,724.93E0,699.56E0,689.96E0,637.56E0,717.41E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -2049,10 +2049,10 @@ void FitTest::testNonLinearRat43_3() {
 	QVector<double> yData = {16.08E0,33.83E0,65.80E0,97.20E0,191.55E0,326.20E0,386.87E0,520.53E0,590.03E0,651.92E0,724.93E0,699.56E0,689.96E0,637.56E0,717.41E0};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -2112,10 +2112,10 @@ void FitTest::testNonLinearMichaelis_Menten() {
 	QVector<double> yData = {0.0,0.6,0.65,0.7,0.75,0.75,0.8,0.9,0.85,0.95,0.9};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYFitCurve fitCurve("fit");
@@ -2179,13 +2179,13 @@ void FitTest::testNonLinearGP_lcdemo() {
 		0.010,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Numeric);
+	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
 	XYFitCurve fitCurve("fit");
@@ -2263,13 +2263,13 @@ void FitTest::testLinearGP_PY_noerror() {
 //	QVector<double> yError = {1.0,1.8,4.,8.,20.,20.,70.,70.,100.,500.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-//	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Numeric);
+//	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
 //	yErrorColumn.replaceValues(0, yError);
 
 	XYFitCurve fitCurve("fit");
@@ -2329,13 +2329,13 @@ void FitTest::testLinearGP_PY_yerror_polynomial() {
 	QVector<double> yError = {1.0,1.8,4.,8.,20.,20.,70.,70.,100.,500.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Numeric);
+	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
 	XYFitCurve fitCurve("fit");
@@ -2390,13 +2390,13 @@ void FitTest::testLinearGP_PY_yerror_custom() {
 	QVector<double> yError = {1.0,1.8,4.,8.,20.,20.,70.,70.,100.,500.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Numeric);
+	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
 	XYFitCurve fitCurve("fit");
@@ -2456,16 +2456,16 @@ void FitTest::testLinearGP_PY_xyerror_polynomial() {
 	QVector<double> yError = {1.0,1.8,4.,8.,20.,20.,70.,70.,100.,500.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Numeric);
+	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Double);
 	xErrorColumn.replaceValues(0, xError);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Numeric);
+	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
 	XYFitCurve fitCurve("fit");
@@ -2525,16 +2525,16 @@ void FitTest::testLinearGP_PY_xyerror_custom() {
 	QVector<double> yError = {1.0,1.8,4.,8.,20.,20.,70.,70.,100.,500.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Numeric);
+	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Double);
 	xErrorColumn.replaceValues(0, xError);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Numeric);
+	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
 	XYFitCurve fitCurve("fit");
@@ -2605,16 +2605,16 @@ void FitTest::testLinearGP_PY_xyerror_custom_instrumental_weight() {
 	}
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Numeric);
+	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Double);
 	xErrorColumn.replaceValues(0, xError);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Numeric);
+	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
 	XYFitCurve fitCurve("fit");
@@ -2685,16 +2685,16 @@ void FitTest::testLinearGP_PY_xyerror_custom_inverse_weight() {
 	}
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Numeric);
+	Column xErrorColumn("xerr", AbstractColumn::ColumnMode::Double);
 	xErrorColumn.replaceValues(0, xError);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Numeric);
+	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
 	XYFitCurve fitCurve("fit");
@@ -2757,13 +2757,13 @@ void FitTest::testNonLinear_yerror_zero_bug408535() {
 	QVector<double> yError = {0.0,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.,15.};
 
 	//data source columns
-	Column xDataColumn("x", AbstractColumn::ColumnMode::Numeric);
+	Column xDataColumn("x", AbstractColumn::ColumnMode::Double);
 	xDataColumn.replaceValues(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
-	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Numeric);
+	Column yErrorColumn("yerr", AbstractColumn::ColumnMode::Double);
 	yErrorColumn.replaceValues(0, yError);
 
 	XYFitCurve fitCurve("fit");

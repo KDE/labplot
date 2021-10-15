@@ -102,7 +102,7 @@ QStringList AbstractColumn::dateTimeFormats() {
  */
 QString AbstractColumn::modeName(ColumnMode mode) {
 	switch (mode) {
-	case ColumnMode::Numeric:
+	case ColumnMode::Double:
 		return i18n("Double");
 	case ColumnMode::Integer:
 		return i18n("Integer");
@@ -126,7 +126,7 @@ QString AbstractColumn::modeName(ColumnMode mode) {
  */
 QIcon AbstractColumn::modeIcon(ColumnMode mode) {
 	switch (mode) {
-	case ColumnMode::Numeric:
+	case ColumnMode::Double:
 	case ColumnMode::Integer:
 	case ColumnMode::BigInt:
 		break;
@@ -255,12 +255,12 @@ void AbstractColumn::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
 
 bool AbstractColumn::isNumeric() const {
 	const auto mode = columnMode();
-	return (mode == ColumnMode::Numeric || mode == ColumnMode::Integer || mode == ColumnMode::BigInt);
+	return (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt);
 }
 
 bool AbstractColumn::isPlottable() const {
 	const auto mode = columnMode();
-	return (mode == ColumnMode::Numeric || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::DateTime);
+	return (mode == ColumnMode::Double || mode == ColumnMode::Integer || mode == ColumnMode::BigInt || mode == ColumnMode::DateTime);
 }
 
 /**
@@ -273,7 +273,7 @@ void AbstractColumn::clear() {}
  */
 bool AbstractColumn::isValid(int row) const {
 	switch (columnMode()) {
-	case ColumnMode::Numeric:
+	case ColumnMode::Double:
 		return !(std::isnan(valueAt(row)) || std::isinf(valueAt(row)));
 	case ColumnMode::Integer:	// there is no invalid integer
 	case ColumnMode::BigInt:

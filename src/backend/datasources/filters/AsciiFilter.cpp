@@ -626,7 +626,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 			auto mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 
 			// numeric: integer -> numeric
-			if (mode == AbstractColumn::ColumnMode::Numeric && columnModes[index] == AbstractColumn::ColumnMode::Integer)
+			if (mode == AbstractColumn::ColumnMode::Double && columnModes[index] == AbstractColumn::ColumnMode::Integer)
 				columnModes[index] = mode;
 			// text: non text -> text
 			if (mode == AbstractColumn::ColumnMode::Text && columnModes[index] != AbstractColumn::ColumnMode::Text)
@@ -726,7 +726,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			}
 
 			//add column for the actual value
-			columnModes << AbstractColumn::ColumnMode::Numeric;
+			columnModes << AbstractColumn::ColumnMode::Double;
 			vectorNames << i18n("Value");
 
 			QDEBUG("	vector names = " << vectorNames);
@@ -988,7 +988,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			for (int row = 0; row < linesToRead; ++row) {
 				for (int col = 0; col < m_actualCols; ++col) {
 					switch (columnModes[col]) {
-					case AbstractColumn::ColumnMode::Numeric: {
+					case AbstractColumn::ColumnMode::Double: {
 						auto* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->resize(m_actualRows);
@@ -1180,7 +1180,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 			auto mode = columnModes[0];
 			//TODO: remove this when Matrix supports text type
 			if (mode == AbstractColumn::ColumnMode::Text)
-				mode = AbstractColumn::ColumnMode::Numeric;
+				mode = AbstractColumn::ColumnMode::Double;
 			for (auto& c : columnModes)
 				if (c != mode)
 					c = mode;
@@ -1524,7 +1524,7 @@ QString AsciiFilterPrivate::previewValue(const QString& valueString, AbstractCol
 
 	QString result;
 	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric: {
+	case AbstractColumn::ColumnMode::Double: {
 		bool isNumber;
 		const double value = locale.toDouble(valueString, &isNumber);
 		result = QString::number(isNumber ? value : nanValue, 'g', 15);
@@ -1561,7 +1561,7 @@ QString AsciiFilterPrivate::previewValue(const QString& valueString, AbstractCol
 void AsciiFilterPrivate::setValue(int col, int row, const QString& valueString) {
 	if (!valueString.isEmpty()) {
 		switch (columnModes.at(col)) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			bool isNumber;
 			const double value = locale.toDouble(valueString, &isNumber);
 			static_cast<QVector<double>*>(m_dataContainer[col])->operator[](row) = (isNumber ? value : nanValue);
@@ -1595,7 +1595,7 @@ void AsciiFilterPrivate::setValue(int col, int row, const QString& valueString) 
 		}
 	} else {	// missing columns in this line
 		switch (columnModes.at(col)) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 			static_cast<QVector<double>*>(m_dataContainer[col])->operator[](row) = nanValue;
 			break;
 		case AbstractColumn::ColumnMode::Integer:
@@ -1623,7 +1623,7 @@ void AsciiFilterPrivate::initDataContainers(Spreadsheet* spreadsheet) {
 		// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 		spreadsheet->child<Column>(n)->setColumnMode(columnModes[n]);
 		switch (columnModes[n]) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			auto* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
 			vector->reserve(m_actualRows);
 			vector->resize(m_actualRows);
@@ -2046,7 +2046,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 				for (int n = 0; n < columnModes.size(); ++n) {
 					// data() returns a void* which is a pointer to any data type (see ColumnPrivate.cpp)
 					switch (columnModes[n]) {
-					case AbstractColumn::ColumnMode::Numeric: {
+					case AbstractColumn::ColumnMode::Double: {
 						QVector<double>*  vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(n)->data());
 						m_dataContainer[n] = static_cast<void *>(vector);
 
@@ -2289,7 +2289,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 			for (int row = 0; row < linesToRead; ++row) {
 				for (int col = 0;  col < m_actualCols; ++col) {
 					switch (columnModes[col]) {
-					case AbstractColumn::ColumnMode::Numeric: {
+					case AbstractColumn::ColumnMode::Double: {
 						QVector<double>* vector = static_cast<QVector<double>* >(spreadsheet->child<Column>(col)->data());
 						vector->pop_front();
 						vector->reserve(m_actualRows);

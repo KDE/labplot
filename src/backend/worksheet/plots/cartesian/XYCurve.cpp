@@ -816,7 +816,7 @@ int XYCurve::getNextValue(double xpos, int offset, double& x, double& y, bool& v
 
 	AbstractColumn::ColumnMode xMode = xColumn()->columnMode();
 
-	if (xMode == AbstractColumn::ColumnMode::Numeric ||
+	if (xMode == AbstractColumn::ColumnMode::Double ||
 			xMode == AbstractColumn::ColumnMode::Integer)
 		x = xColumn()->valueAt(index);
 	else if (xMode == AbstractColumn::ColumnMode::DateTime ||
@@ -829,7 +829,7 @@ int XYCurve::getNextValue(double xpos, int offset, double& x, double& y, bool& v
 
 	AbstractColumn::ColumnMode yMode = yColumn()->columnMode();
 
-	if (yMode == AbstractColumn::ColumnMode::Numeric ||
+	if (yMode == AbstractColumn::ColumnMode::Double ||
 			yMode == AbstractColumn::ColumnMode::Integer)
 		y = yColumn()->valueAt(index);
 	else if (yMode == AbstractColumn::ColumnMode::DateTime ||
@@ -1152,7 +1152,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
 			QPointF tempPoint;
 
 			switch (xColMode) {
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
 				tempPoint.setX(xColumn->valueAt(row));
@@ -1167,7 +1167,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
 			}
 
 			switch (yColMode) {
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
 				tempPoint.setY(yColumn->valueAt(row));
@@ -1907,7 +1907,7 @@ void XYCurvePrivate::updateValues() {
 				continue;
 
 			switch (xColMode) {
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 				m_valueStrings << valuesPrefix + numberLocale.toString(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:
@@ -2247,7 +2247,7 @@ double XYCurve::y(double x, bool &valueFound) const {
 	}
 
 	valueFound = true;
-	if (yColumnMode == AbstractColumn::ColumnMode::Numeric || yColumnMode == AbstractColumn::ColumnMode::Integer ||
+	if (yColumnMode == AbstractColumn::ColumnMode::Double || yColumnMode == AbstractColumn::ColumnMode::Integer ||
             yColumnMode == AbstractColumn::ColumnMode::BigInt)
 		return yColumn()->valueAt(index);
 	else {
@@ -2271,7 +2271,7 @@ double XYCurve::y(double x, double &x_new, bool &valueFound) const {
 	}
 
 	AbstractColumn::ColumnMode xColumnMode = xColumn()->columnMode();
-	if (xColumnMode == AbstractColumn::ColumnMode::Numeric ||
+	if (xColumnMode == AbstractColumn::ColumnMode::Double ||
 			xColumnMode == AbstractColumn::ColumnMode::Integer)
 		x_new = xColumn()->valueAt(index);
 	else if(xColumnMode == AbstractColumn::ColumnMode::DateTime ||
@@ -2286,7 +2286,7 @@ double XYCurve::y(double x, double &x_new, bool &valueFound) const {
 
 
 	valueFound = true;
-	if (yColumnMode == AbstractColumn::ColumnMode::Numeric ||
+	if (yColumnMode == AbstractColumn::ColumnMode::Double ||
 			yColumnMode == AbstractColumn::ColumnMode::Integer)
 		return yColumn()->valueAt(index);
 	else {
@@ -2377,7 +2377,7 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 			continue;
 
 		double value;
-		if (column1->columnMode() == AbstractColumn::ColumnMode::Numeric || column1->columnMode() == AbstractColumn::ColumnMode::Integer ||
+		if (column1->columnMode() == AbstractColumn::ColumnMode::Double || column1->columnMode() == AbstractColumn::ColumnMode::Integer ||
 				column1->columnMode() == AbstractColumn::ColumnMode::BigInt)
 			value = column1->valueAt(i);
 		else if (column1->columnMode() == AbstractColumn::ColumnMode::DateTime ||
@@ -2397,7 +2397,7 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 			//determine the values for the errors
 			double errorPlus, errorMinus;
 			if (errorPlusColumn && errorPlusColumn->isValid(i) && !errorPlusColumn->isMasked(i))
-				if (errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Numeric ||
+				if (errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Double ||
 						errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::Integer ||
 						errorPlusColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 					errorPlus = errorPlusColumn->valueAt(i);
@@ -2414,7 +2414,7 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 				errorMinus = errorPlus;
 			else {
 				if (errorMinusColumn && errorMinusColumn->isValid(i) && !errorMinusColumn->isMasked(i))
-					if (errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Numeric ||
+					if (errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Double ||
 						errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::Integer ||
 						errorMinusColumn->columnMode() == AbstractColumn::ColumnMode::BigInt)
 						errorMinus = errorMinusColumn->valueAt(i);

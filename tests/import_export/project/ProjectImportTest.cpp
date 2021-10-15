@@ -336,7 +336,7 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	//1st column, Origin::TextNumeric:
 	//first non-empty value is numerical, column is set to Numeric, empty or text values in the column a set to NAN
 	Column* column = spreadsheet->column(0);
-	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(!std::isnan(column->valueAt(0)), false);
 	QCOMPARE(column->valueAt(1), 1.1);
 	QCOMPARE(column->valueAt(2), 2.2);
@@ -356,7 +356,7 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	//3rd column, Origin::TextNumeric:
 	//first is numerical, column is set to Numeric, empty or text values in the column a set to NAN
 	column = spreadsheet->column(2);
-	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(column->valueAt(0), 1.1);
 	QCOMPARE(column->valueAt(1), 2.2);
 	QCOMPARE(!std::isnan(column->valueAt(2)), false);
@@ -376,7 +376,7 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	//5th column, Origin::Numeric
 	//column is set to Numeric, empty values in the column a set to NAN
 	column = spreadsheet->column(4);
-	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(!std::isnan(column->valueAt(0)), false);
 	QCOMPARE(column->valueAt(1), 1.1);
 	QCOMPARE(column->valueAt(2), 2.2);
@@ -386,7 +386,7 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	//6th column, Origin::Numeric
 	//column is set to Numeric, empty values in the column a set to NAN
 	column = spreadsheet->column(5);
-	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(column->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(column->valueAt(0), 1.1);
 	QCOMPARE(column->valueAt(1), 2.2);
 	QCOMPARE(column->valueAt(2), 3.3);

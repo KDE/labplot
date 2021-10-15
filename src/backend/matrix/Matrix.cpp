@@ -283,7 +283,7 @@ void Matrix::removeColumns(int first, int count) {
 	if (count < 1 || first < 0 || first+count > columnCount()) return;
 	WAIT_CURSOR;
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixRemoveColumnsCmd<double>(d, first, count));
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -307,7 +307,7 @@ void Matrix::removeColumns(int first, int count) {
 void Matrix::clearColumn(int c) {
 	WAIT_CURSOR;
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixClearColumnCmd<double>(d, c));
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -344,7 +344,7 @@ void Matrix::removeRows(int first, int count) {
 	if (count < 1 || first < 0 || first+count > rowCount()) return;
 	WAIT_CURSOR;
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixRemoveRowsCmd<double>(d, first, count));
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -367,7 +367,7 @@ void Matrix::removeRows(int first, int count) {
 
 void Matrix::clearRow(int r) {
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		for (int c = 0; c < columnCount(); ++c)
 			exec(new MatrixSetCellValueCmd<double>(d, r, c, 0.0));
 		break;
@@ -437,7 +437,7 @@ template void Matrix::setCell<QDateTime>(int row, int col, QDateTime value);
 
 void Matrix::clearCell(int row, int col) {
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixSetCellValueCmd<double>(d, row, col, 0.0));
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -496,7 +496,7 @@ void Matrix::copy(Matrix* other) {
 
 	d->suppressDataChange = true;
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		for (int i = 0; i < columns; i++)
 			setColumnCells(i, 0, rows-1, other->columnCells<double>(i, 0, rows-1));
 		break;
@@ -629,7 +629,7 @@ void Matrix::setData(void* data) {
 	bool isEmpty = false;
 
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		if (static_cast<QVector<QVector<double>>*>(data)->isEmpty())
 			isEmpty = true;
 		break;
@@ -671,7 +671,7 @@ void Matrix::clear() {
 	WAIT_CURSOR;
 	beginMacro(i18n("%1: clear", name()));
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixClearCmd<double>(d));
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -696,7 +696,7 @@ void Matrix::clear() {
 void Matrix::transpose() {
 	WAIT_CURSOR;
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixTransposeCmd<double>(d));
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -720,7 +720,7 @@ void Matrix::transpose() {
 void Matrix::mirrorHorizontally() {
 	WAIT_CURSOR;
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixMirrorHorizontallyCmd<double>(d));
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -744,7 +744,7 @@ void Matrix::mirrorHorizontally() {
 void Matrix::mirrorVertically() {
 	WAIT_CURSOR;
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		exec(new MatrixMirrorVerticallyCmd<double>(d));
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -773,7 +773,7 @@ MatrixPrivate::MatrixPrivate(Matrix* owner, const AbstractColumn::ColumnMode m)
 		: q(owner), data(nullptr), mode(m), rowCount(0), columnCount(0), suppressDataChange(false) {
 
 	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		data = new QVector<QVector<double>>();
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -796,7 +796,7 @@ MatrixPrivate::MatrixPrivate(Matrix* owner, const AbstractColumn::ColumnMode m)
 MatrixPrivate::~MatrixPrivate() {
 	if (data) {
 		switch (mode) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 			delete static_cast<QVector<QVector<double>>*>(data);
 			break;
 		case AbstractColumn::ColumnMode::Text:
@@ -830,7 +830,7 @@ void MatrixPrivate::insertColumns(int before, int count) {
 
 	emit q->columnsAboutToBeInserted(before, count);
 	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		for (int i = 0; i < count; i++) {
 			static_cast<QVector<QVector<double>>*>(data)->insert(before+i, QVector<double>(rowCount));
 			columnWidths.insert(before+i, 0);
@@ -877,7 +877,7 @@ void MatrixPrivate::removeColumns(int first, int count) {
 	Q_ASSERT(first + count <= columnCount);
 
 	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		(static_cast<QVector<QVector<double>>*>(data))->remove(first, count);
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -911,7 +911,7 @@ void MatrixPrivate::insertRows(int before, int count) {
 	Q_ASSERT(before <= rowCount);
 
 	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		for (int col = 0; col < columnCount; col++)
 			for (int i = 0; i < count; i++)
 				(static_cast<QVector<QVector<double>>*>(data))->operator[](col).insert(before+i, 0.0);
@@ -955,7 +955,7 @@ void MatrixPrivate::removeRows(int first, int count) {
 	Q_ASSERT(first+count <= rowCount);
 
 	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		for (int col = 0; col < columnCount; col++)
 			(static_cast<QVector<QVector<double>>*>(data))->operator[](col).remove(first, count);
 		break;
@@ -989,7 +989,7 @@ void MatrixPrivate::removeRows(int first, int count) {
 //! Fill column with zeroes
 void MatrixPrivate::clearColumn(int col) {
 	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		static_cast<QVector<QVector<double>>*>(data)->operator[](col).fill(0.0);
 		break;
 	case AbstractColumn::ColumnMode::Text:
@@ -1061,7 +1061,7 @@ void Matrix::save(QXmlStreamWriter* writer) const {
 	//columns
 	DEBUG("	mode = " << static_cast<int>(d->mode))
 	switch (d->mode) {
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		size = d->rowCount*sizeof(double);
 		for (int i = 0; i < d->columnCount; ++i) {
 			data = reinterpret_cast<const char*>(static_cast<QVector<QVector<double>>*>(d->data)->at(i).constData());
@@ -1225,7 +1225,7 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 			QByteArray bytes = QByteArray::fromBase64(content.toLatin1());
 
 			switch (d->mode) {
-			case AbstractColumn::ColumnMode::Numeric: {
+			case AbstractColumn::ColumnMode::Double: {
 				int count = bytes.size()/sizeof(double);
 				QVector<double> column;
 				column.resize(count);
@@ -1310,7 +1310,7 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter:
 		}
 		// catch some cases
 		if ( (d->mode == AbstractColumn::ColumnMode::Integer || d->mode == AbstractColumn::ColumnMode::BigInt)
-			&& newColumnMode == AbstractColumn::ColumnMode::Numeric)
+			&& newColumnMode == AbstractColumn::ColumnMode::Double)
 			d->mode = newColumnMode;
 
 		columnOffset = columnCount();
@@ -1327,13 +1327,13 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter:
 	// data() returns a void* which is a pointer to a matrix of any data type (see ColumnPrivate.cpp)
 	dataContainer.resize(actualCols);
 	switch (newColumnMode) {	// prepare all columns
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		for (int n = 0; n < actualCols; n++) {
 			QVector<double>* vector = &(static_cast<QVector<QVector<double>>*>(data())->operator[](n));
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
 		}
-		d->mode = AbstractColumn::ColumnMode::Numeric;
+		d->mode = AbstractColumn::ColumnMode::Double;
 		break;
 	case AbstractColumn::ColumnMode::Integer:
 		for (int n = 0; n < actualCols; n++) {

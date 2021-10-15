@@ -91,7 +91,7 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 	if (m_undone) {
 		if (m_new_data != m_old_data)
 			switch (m_mode) {
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 				delete static_cast<QVector<double>*>(m_new_data);
 				break;
 			case AbstractColumn::ColumnMode::Integer:
@@ -112,7 +112,7 @@ ColumnSetModeCmd::~ColumnSetModeCmd() {
 	} else {
 		if (m_new_data != m_old_data)
 			switch (m_old_mode) {
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 				delete static_cast<QVector<double>*>(m_old_data);
 				break;
 			case AbstractColumn::ColumnMode::Integer:
@@ -548,7 +548,7 @@ ColumnClearCmd::~ColumnClearCmd() {
 	if (m_undone) {
 		if (!m_empty_data) return;
 		switch (m_col->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 			delete static_cast<QVector<double>*>(m_empty_data);
 			break;
 		case AbstractColumn::ColumnMode::Integer:
@@ -569,7 +569,7 @@ ColumnClearCmd::~ColumnClearCmd() {
 	} else {
 		if (!m_data) return;
 		switch (m_col->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 			delete static_cast<QVector<double>*>(m_data);
 			break;
 		case AbstractColumn::ColumnMode::Integer:
@@ -597,7 +597,7 @@ void ColumnClearCmd::redo() {
 	if (!m_empty_data) {
 		const int rowCount = m_col->rowCount();
 		switch (m_col->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			auto* vec = new QVector<double>(rowCount);
 			m_empty_data = vec;
 			for (int i = 0; i < rowCount; ++i)

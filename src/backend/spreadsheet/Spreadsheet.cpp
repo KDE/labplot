@@ -67,7 +67,7 @@ void Spreadsheet::init() {
 	const int rows = group.readEntry(QLatin1String("RowCount"), 100);
 
 	for (int i = 0; i < columns; i++) {
-		Column* new_col = new Column(QString::number(i+1), AbstractColumn::ColumnMode::Numeric);
+		Column* new_col = new Column(QString::number(i+1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(i == 0 ? AbstractColumn::PlotDesignation::X : AbstractColumn::PlotDesignation::Y);
 		addChild(new_col);
 	}
@@ -262,7 +262,7 @@ void Spreadsheet::insertColumns(int before, int count) {
 	Column * before_col = column(before);
 	int rows = rowCount();
 	for (int i = 0; i < count; i++) {
-		Column * new_col = new Column(QString::number(i+1), AbstractColumn::ColumnMode::Numeric);
+		Column * new_col = new Column(QString::number(i+1), AbstractColumn::ColumnMode::Double);
 		new_col->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 		new_col->insertRows(0, rows);
 		insertChildBefore(new_col, before_col);
@@ -454,7 +454,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 			std::unique_ptr<Column> tempCol(new Column("temp", col->columnMode()));
 
 			switch (col->columnMode()) {
-			case AbstractColumn::ColumnMode::Numeric: {
+			case AbstractColumn::ColumnMode::Double: {
 					QVector< QPair<double, int> > map;
 
 					for (int i = 0; i < rows; i++)
@@ -571,7 +571,7 @@ void Spreadsheet::sortColumns(Column* leading, const QVector<Column*>& cols, boo
 		int rows = leading->rowCount();
 
 		switch (leading->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 				QVector<QPair<double, int>> map;
 				QVector<int> invalidIndex;
 
@@ -941,7 +941,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		column->setPlotDesignation(desig);
 
 		switch (columnMode[n]) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			auto* vector = static_cast<QVector<double>*>(column->data());
 			vector->resize(actualRows);
 			dataContainer[n] = static_cast<void*>(vector);
@@ -999,14 +999,14 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	if (mode == AbstractFileFilter::ImportMode::Append) {
 		columnOffset = childCount<Column>();
 		for (int n = 0; n < cols; n++ ) {
-			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Numeric);
+			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->setUndoAware(false);
 			addChild(newColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
 		Column* firstColumn = child<Column>(0);
 		for (int n = 0; n < cols; n++ ) {
-			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Numeric);
+			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->setUndoAware(false);
 			insertChildBefore(newColumn, firstColumn);
 		}
@@ -1022,7 +1022,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		} else {
 			//create additional columns if needed
 			for (int i = columns; i < cols; i++) {
-				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Numeric);
+				newColumn = new Column(colNameList.at(i), AbstractColumn::ColumnMode::Double);
 				newColumn->setUndoAware(false);
 				addChildFast(newColumn); //in the replace mode, we can skip checking the uniqueness of the names and use the "fast" method
 			}
@@ -1069,8 +1069,8 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 
 		QString comment;
 		switch (column->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
-			comment = i18np("numerical data, %1 element", "numerical data, %1 elements", rows);
+		case AbstractColumn::ColumnMode::Double:
+			comment = i18np("double precision data, %1 element", "numerical data, %1 elements", rows);
 			break;
 		case AbstractColumn::ColumnMode::Integer:
 			comment = i18np("integer data, %1 element", "integer data, %1 elements", rows);

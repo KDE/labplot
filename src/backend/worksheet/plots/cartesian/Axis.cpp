@@ -1546,7 +1546,7 @@ void AxisPrivate::retransformTicks() {
 				else {
 					if (labelsTextColumn && iMajor < labelsTextColumn->rowCount()) {
 						switch (labelsTextColumn->columnMode()) {
-						case AbstractColumn::ColumnMode::Numeric:
+						case AbstractColumn::ColumnMode::Double:
 						case AbstractColumn::ColumnMode::Integer:
 						case AbstractColumn::ColumnMode::BigInt:
 							tickLabelValues << labelsTextColumn->valueAt(iMajor);
@@ -1712,7 +1712,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	} else {
 		if (labelsTextColumn) {
 			switch (labelsTextColumn->columnMode()) {
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
 				numeric = true;

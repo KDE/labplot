@@ -198,7 +198,7 @@ void Column::copyData() {
 
 	//TODO: use locale of filter?
 	SET_NUMBER_LOCALE
-	if (columnMode() == ColumnMode::Numeric) {
+	if (columnMode() == ColumnMode::Double) {
 		const Double2StringFilter* filter = static_cast<Double2StringFilter*>(outputFilter());
 		char format = filter->numericFormat();
 		for (int r = 0; r < rows; r++) {
@@ -662,7 +662,7 @@ const Column::ColumnStatistics& Column::statistics() const {
 }
 
 void Column::calculateStatistics() const {
-	if ( (columnMode() != ColumnMode::Numeric) && (columnMode() != ColumnMode::Integer)
+	if ( (columnMode() != ColumnMode::Double) && (columnMode() != ColumnMode::Integer)
 			&& (columnMode() != ColumnMode::BigInt) )
 		return;
 
@@ -682,7 +682,7 @@ void Column::calculateStatistics() const {
 	std::unordered_map<double, int> frequencyOfValues;
 	QVector<double> rowData;
 
-	if (columnMode() == ColumnMode::Numeric) {
+	if (columnMode() == ColumnMode::Double) {
 		auto* rowValues = reinterpret_cast<QVector<double>*>(data());
 		rowValuesSize = rowValues->size();
 		rowData.reserve(rowValuesSize);
@@ -874,7 +874,7 @@ bool Column::hasValues() const {
 
 	bool foundValues = false;
 	switch (columnMode()) {
-	case ColumnMode::Numeric: {
+	case ColumnMode::Double: {
 		for (int row = 0; row < rowCount(); ++row) {
 			if (!std::isnan(valueAt(row))) {
 				foundValues = true;
@@ -924,7 +924,7 @@ void Column::setFromColumn(int i, AbstractColumn* col, int j) {
 		return;
 
 	switch (columnMode()) {
-	case ColumnMode::Numeric:
+	case ColumnMode::Double:
 		setValueAt(i, col->valueAt(j));
 		break;
 	case ColumnMode::Integer:
@@ -1121,7 +1121,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	if (hasValueLabels()) {
 		writer->writeStartElement("valueLabels");
 		switch (columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			const auto& labels = const_cast<Column*>(this)->valueLabels();
 			auto it = labels.constBegin();
 			while (it != labels.constEnd()) {
@@ -1207,7 +1207,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 	//data
 	int i;
 	switch (columnMode()) {
-	case ColumnMode::Numeric: {
+	case ColumnMode::Double: {
 			const char* data = reinterpret_cast<const char*>(static_cast< QVector<double>* >(d->data())->constData());
 			size_t size = d->rowCount() * sizeof(double);
 			writer->writeCharacters(QByteArray::fromRawData(data, (int)size).toBase64());
@@ -1257,7 +1257,7 @@ public:
 	};
 	void run() override {
 		QByteArray bytes = QByteArray::fromBase64(m_content.toLatin1());
-		if (m_private->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+		if (m_private->columnMode() == AbstractColumn::ColumnMode::Double) {
 			auto* data = new QVector<double>(bytes.size()/(int)sizeof(double));
 			memcpy(data->data(), bytes.data(), bytes.size());
 			m_private->replaceData(data);
@@ -1371,7 +1371,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 				attribs = reader->attributes();
 				const QString& label = attribs.value("label").toString();
 				switch (columnMode()) {
-				case AbstractColumn::ColumnMode::Numeric:
+				case AbstractColumn::ColumnMode::Double:
 					addValueLabel(attribs.value("value").toDouble(), label);
 					break;
 				case AbstractColumn::ColumnMode::Integer:
@@ -1401,7 +1401,7 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 
 		if (!preview) {
 			QString content = reader->text().toString().trimmed();
-			if (!content.isEmpty() && ( columnMode() == ColumnMode::Numeric ||
+			if (!content.isEmpty() && ( columnMode() == ColumnMode::Double ||
 				columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt)) {
 				auto* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
@@ -1517,7 +1517,7 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 
 	QString str = reader->readElementText();
 	switch (columnMode()) {
-	case ColumnMode::Numeric: {
+	case ColumnMode::Double: {
 		double value = str.toDouble(&ok);
 		if (!ok) {
 			reader->raiseError(i18n("invalid row value"));
@@ -1749,7 +1749,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		// skipping values is only in Properties::No needed, because
 		// when there are invalid values the property must be Properties::No
 		switch (mode) {
-		case ColumnMode::Numeric: {
+		case ColumnMode::Double: {
 			auto* vec = static_cast<QVector<double>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
@@ -1819,7 +1819,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		foundIndex = endIndex;
 
 	switch (mode) {
-		case ColumnMode::Numeric:
+		case ColumnMode::Double:
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
 			return valueAt(foundIndex);
@@ -1886,7 +1886,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 	Properties property = properties();
 	if (property == Properties::No || property == Properties::NonMonotonic) {
 		switch (mode) {
-		case ColumnMode::Numeric: {
+		case ColumnMode::Double: {
 			auto* vec = static_cast<QVector<double>*>(data());
 			for (int row = startIndex; row < endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
@@ -1952,7 +1952,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 		foundIndex = endIndex;
 
 	switch (mode) {
-		case ColumnMode::Numeric:
+		case ColumnMode::Double:
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
 			return valueAt(foundIndex);
@@ -2228,7 +2228,7 @@ int Column::indexForValue(double x) const {
 		unsigned int maxSteps = calculateMaxSteps(static_cast<unsigned int>(rowCount())) + 1;
 
 		switch (mode) {
-		case ColumnMode::Numeric:
+		case ColumnMode::Double:
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
 			for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
@@ -2296,7 +2296,7 @@ int Column::indexForValue(double x) const {
 		// naiv way
 		int index = 0;
 		switch (mode) {
-		case ColumnMode::Numeric:
+		case ColumnMode::Double:
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
 			for (int row = 0; row < rowCount(); row++) {
@@ -2367,7 +2367,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 		switch (columnMode()) {
 			case ColumnMode::Integer:
 			case ColumnMode::BigInt:
-			case ColumnMode::Numeric: {
+			case ColumnMode::Double: {
 			if (start > 0 && valueAt(start - 1) <= v2 && valueAt(start - 1) >= v1)
 				start--;
 			if (end < rowCount() - 1 && valueAt(end + 1) <= v2 && valueAt(end + 1) >= v1)
@@ -2407,7 +2407,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 	switch (columnMode()) {
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
-		case ColumnMode::Numeric: {
+		case ColumnMode::Double: {
 			double value;
 			for (int i = 0; i < rowCount(); i++) {
 				if (!isValid(i) || isMasked(i))

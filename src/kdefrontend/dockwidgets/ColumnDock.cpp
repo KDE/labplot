@@ -171,7 +171,7 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	const Lock lock(m_initializing);
 	ui.cbType->setCurrentIndex(ui.cbType->findData(static_cast<int>(mode)));
 	switch (mode) {
-	case AbstractColumn::ColumnMode::Numeric: {
+	case AbstractColumn::ColumnMode::Double: {
 			auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 			ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
 			ui.sbPrecision->setValue(filter->numDigits());
@@ -200,13 +200,9 @@ void ColumnDock::updateTypeWidgets(AbstractColumn::ColumnMode mode) {
 	ui.lDateTimeFormat->hide();
 	ui.cbDateTimeFormat->hide();
 
-	if (mode == AbstractColumn::ColumnMode::Numeric) {
+	if (mode == AbstractColumn::ColumnMode::Double) {
 		ui.lNumericFormat->show();
 		ui.cbNumericFormat->show();
-	}
-
-	//precision is only available for Numeric
-	if (mode == AbstractColumn::ColumnMode::Numeric) {
 		ui.lPrecision->show();
 		ui.sbPrecision->show();
 	}
@@ -226,7 +222,7 @@ void ColumnDock::showValueLabels() {
 		int i = 0;
 
 		switch (mode) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			auto labels = m_column->valueLabels();
 			ui.twLabels->setRowCount(labels.size());
 			auto it = labels.constBegin();
@@ -300,7 +296,7 @@ void ColumnDock::retranslateUi() {
 	const Lock lock(m_initializing);
 
 	ui.cbType->clear();
-	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::Numeric), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Numeric)));
+	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::Double), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Double)));
 	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::Integer), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Integer)));
 	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::BigInt), QVariant(static_cast<int>(AbstractColumn::ColumnMode::BigInt)));
 	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::Text), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Text)));
@@ -337,7 +333,7 @@ void ColumnDock::typeChanged(int index) {
 	const auto& columns = m_columnsList;
 
 	switch (columnMode) {
-	case AbstractColumn::ColumnMode::Numeric: {
+	case AbstractColumn::ColumnMode::Double: {
 		int digits = ui.sbPrecision->value();
 		for (auto* col : columns) {
 			col->beginMacro(i18n("%1: change column type", col->name()));
@@ -444,7 +440,7 @@ void ColumnDock::addLabel() {
 		const auto& columns = m_columnsList;
 		QString valueStr;
 		switch (mode) {
-		case AbstractColumn::ColumnMode::Numeric: {
+		case AbstractColumn::ColumnMode::Double: {
 			double value = dlg->value();
 			valueStr = QString::number(value);
 			for (auto* col : columns)
@@ -528,7 +524,7 @@ void ColumnDock::columnFormatChanged() {
 	const Lock lock(m_initializing);
 	auto columnMode = m_column->columnMode();
 	switch (columnMode) {
-	case AbstractColumn::ColumnMode::Numeric: {
+	case AbstractColumn::ColumnMode::Double: {
 		auto* filter = static_cast<Double2StringFilter*>(m_column->outputFilter());
 		ui.cbNumericFormat->setCurrentIndex(ui.cbNumericFormat->findData(filter->numericFormat()));
 		break;

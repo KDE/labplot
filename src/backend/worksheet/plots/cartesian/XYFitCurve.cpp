@@ -1502,9 +1502,9 @@ void XYFitCurvePrivate::prepareResultColumns() {
 	//create fit result columns if not available yet, clear them otherwise
 	if (!xColumn) {	// all columns are treated together
 		DEBUG("	Creating columns")
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
-		residualsColumn = new Column("residuals", AbstractColumn::ColumnMode::Numeric);
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
+		residualsColumn = new Column("residuals", AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 		residualsVector = static_cast<QVector<double>* >(residualsColumn->data());
@@ -1608,7 +1608,7 @@ void XYFitCurvePrivate::recalculate() {
 
 		double x = qQNaN();
 		switch (tmpXDataColumn->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 			x = tmpXDataColumn->valueAt(row);
 			break;
 		case AbstractColumn::ColumnMode::Integer:
@@ -1627,7 +1627,7 @@ void XYFitCurvePrivate::recalculate() {
 
 		double y = qQNaN();
 		switch (tmpYDataColumn->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 			y = tmpYDataColumn->valueAt(row);
 			break;
 		case AbstractColumn::ColumnMode::Integer:
@@ -2017,7 +2017,7 @@ void XYFitCurvePrivate::recalculate() {
 		xVector->resize(tmpXDataColumn->rowCount());
 		auto mode = tmpXDataColumn->columnMode();
 		for (int i = 0; i < tmpXDataColumn->rowCount(); i++)
-			if (mode == AbstractColumn::ColumnMode::Numeric)
+			if (mode == AbstractColumn::ColumnMode::Double)
 				(*xVector)[i] = tmpXDataColumn->valueAt(i);
 			else if (mode == AbstractColumn::ColumnMode::Integer)
 				(*xVector)[i] = tmpXDataColumn->integerAt(i);
@@ -2403,7 +2403,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("bic", fitResult.bic);
 			READ_STRING_VALUE("solverOutput", fitResult.solverOutput);
 		} else if (reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

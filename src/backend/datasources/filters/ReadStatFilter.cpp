@@ -261,7 +261,7 @@ int ReadStatFilterPrivate::getColumnModes(int row, readstat_variable_t *variable
 		break;
 	case READSTAT_TYPE_FLOAT:
 	case READSTAT_TYPE_DOUBLE:
-		m_columnModes << AbstractColumn::ColumnMode::Numeric;
+		m_columnModes << AbstractColumn::ColumnMode::Double;
 		break;
 	case READSTAT_TYPE_STRING:
 	case READSTAT_TYPE_STRING_REF:
@@ -578,7 +578,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 					column->addValueLabel(m_labelSets[label].valueString(j), valueLabels.at(j));
 				}
 				break;
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 				for (int j = 0; j < valueLabels.size(); j++) {
 					DEBUG(Q_FUNC_INFO << ", column " << i << ": add double value label: " << m_labelSets[label].valueDouble(j)  << " = " <<  valueLabels.at(j).toStdString())
 					column->addValueLabel(m_labelSets[label].valueDouble(j), valueLabels.at(j));

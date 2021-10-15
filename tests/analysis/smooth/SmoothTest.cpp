@@ -29,7 +29,7 @@ void SmoothTest::testPercentile() {
 	Column xDataColumn("x", AbstractColumn::ColumnMode::Integer);
 	xDataColumn.replaceInteger(0, xData);
 
-	Column yDataColumn("y", AbstractColumn::ColumnMode::Numeric);
+	Column yDataColumn("y", AbstractColumn::ColumnMode::Double);
 	yDataColumn.replaceValues(0, yData);
 
 	XYSmoothCurve smoothCurve("smooth");

@@ -92,8 +92,8 @@ void XYCorrelationCurvePrivate::recalculate() {
 
 	//create correlation result columns if not available yet, clear them otherwise
 	if (!xColumn) {
-		xColumn = new Column("x", AbstractColumn::ColumnMode::Numeric);
-		yColumn = new Column("y", AbstractColumn::ColumnMode::Numeric);
+		xColumn = new Column("x", AbstractColumn::ColumnMode::Double);
+		yColumn = new Column("y", AbstractColumn::ColumnMode::Double);
 		xVector = static_cast<QVector<double>* >(xColumn->data());
 		yVector = static_cast<QVector<double>* >(yColumn->data());
 
@@ -318,7 +318,7 @@ bool XYCorrelationCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_STRING_VALUE("status", correlationResult.status);
 			READ_INT_VALUE("time", correlationResult.elapsedTime, int);
 		} else if (!preview && reader->name() == "column") {
-			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Numeric);
+			Column* column = new Column(QString(), AbstractColumn::ColumnMode::Double);
 			if (!column->load(reader, preview)) {
 				delete column;
 				return false;

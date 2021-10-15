@@ -34,7 +34,7 @@ public:
 	}
 
 	//! Return the data type of the column
-	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Numeric; }
+	AbstractColumn::ColumnMode columnMode() const override { return AbstractColumn::ColumnMode::Double; }
 
 protected:
 	//! Using typed ports: only DateTime inputs are accepted.

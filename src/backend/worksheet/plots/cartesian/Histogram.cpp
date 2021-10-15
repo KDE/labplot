@@ -907,7 +907,7 @@ void HistogramPrivate::recalcHistogram() {
 			gsl_histogram_set_ranges_uniform (m_histogram, binRangesMin, binRangesMax);
 
 			switch (dataColumn->columnMode()) {
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
 				for (int row = 0; row < dataColumn->rowCount(); ++row) {
@@ -1214,7 +1214,7 @@ void HistogramPrivate::updateValues() {
 				continue;
 
 			switch (xColMode) {
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 				valuesStrings << valuesPrefix + QString::number(valuesColumn->valueAt(i), valuesNumericFormat, valuesPrecision) + valuesSuffix;
 				break;
 			case AbstractColumn::ColumnMode::Integer:

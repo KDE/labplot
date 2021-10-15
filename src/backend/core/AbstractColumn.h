@@ -36,7 +36,7 @@ public:
 	enum class PlotDesignation {NoDesignation, X, Y, Z, XError, XErrorPlus, XErrorMinus, YError, YErrorMinus, YErrorPlus};
 	enum class ColumnMode {
 		// BASIC FORMATS
-		Numeric = 0,	// double
+		Double = 0,	// double
 		Text = 1,	// QString
 		// Time = 2 and Date = 3 are skipped to avoid problems with old obsolete values
 		Month = 4,	// month of year: numeric or "Jan", etc.

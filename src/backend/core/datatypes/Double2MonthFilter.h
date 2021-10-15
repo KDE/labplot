@@ -46,7 +46,7 @@ public:
 
 protected:
 	bool inputAcceptable(int, const AbstractColumn *source) override {
-		return source->columnMode() == AbstractColumn::ColumnMode::Numeric;
+		return source->columnMode() == AbstractColumn::ColumnMode::Double;
 	}
 };
 

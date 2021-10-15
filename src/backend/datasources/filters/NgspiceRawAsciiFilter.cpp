@@ -186,11 +186,11 @@ QVector<QStringList> NgspiceRawAsciiFilterPrivate::preview(const QString& fileNa
 		if (hasComplexValues) {
 			vectorNames << name + QLatin1String(" REAL");
 			vectorNames << name + QLatin1String(" IMAGINARY");
-			columnModes << AbstractColumn::ColumnMode::Numeric;
-			columnModes << AbstractColumn::ColumnMode::Numeric;
+			columnModes << AbstractColumn::ColumnMode::Double;
+			columnModes << AbstractColumn::ColumnMode::Double;
 		} else {
 			vectorNames << name;
-			columnModes << AbstractColumn::ColumnMode::Numeric;
+			columnModes << AbstractColumn::ColumnMode::Double;
 		}
 	}
 
@@ -272,11 +272,11 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 		if (hasComplexValues) {
 			vectorNames << name + QLatin1String(" REAL");
 			vectorNames << name + QLatin1String(" IMAGINARY");
-			columnModes << AbstractColumn::ColumnMode::Numeric;
-			columnModes << AbstractColumn::ColumnMode::Numeric;
+			columnModes << AbstractColumn::ColumnMode::Double;
+			columnModes << AbstractColumn::ColumnMode::Double;
 		} else {
 			vectorNames << name;
-			columnModes << AbstractColumn::ColumnMode::Numeric;
+			columnModes << AbstractColumn::ColumnMode::Double;
 		}
 	}
 

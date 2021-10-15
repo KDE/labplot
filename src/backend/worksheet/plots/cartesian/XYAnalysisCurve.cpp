@@ -61,7 +61,7 @@ void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
 
 		double x = qQNaN();
 		switch (xDataColumn->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 			x = xDataColumn->valueAt(row);
 			break;
 		case AbstractColumn::ColumnMode::Integer:
@@ -80,7 +80,7 @@ void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
 
 		double y = qQNaN();
 		switch (yDataColumn->columnMode()) {
-		case AbstractColumn::ColumnMode::Numeric:
+		case AbstractColumn::ColumnMode::Double:
 			y = yDataColumn->valueAt(row);
 			break;
 		case AbstractColumn::ColumnMode::Integer:

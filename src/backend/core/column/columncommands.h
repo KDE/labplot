@@ -32,7 +32,7 @@ public:
 
 private:
 	ColumnPrivate* m_col;
-	AbstractColumn::ColumnMode m_old_mode{AbstractColumn::ColumnMode::Numeric};
+	AbstractColumn::ColumnMode m_old_mode{AbstractColumn::ColumnMode::Double};
 	AbstractColumn::ColumnMode m_mode;
 	void* m_old_data{nullptr};
 	void* m_new_data{nullptr};

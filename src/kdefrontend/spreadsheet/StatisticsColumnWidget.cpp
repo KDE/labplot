@@ -551,7 +551,7 @@ QString StatisticsColumnWidget::modeValue(const Column* column, double value) co
 		//TODO
 	case AbstractColumn::ColumnMode::Month:
 		//TODO
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		return numberLocale.toString(value, 'f');
 	}
 
@@ -566,7 +566,7 @@ void StatisticsColumnWidget::copyValidData(QVector<double>& data) const {
 	int rowCount = m_column->rowCount();
 	data.reserve(rowCount);
 	double val;
-	if (m_column->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+	if (m_column->columnMode() == AbstractColumn::ColumnMode::Double) {
 		auto* rowValues = reinterpret_cast<QVector<double>*>(m_column->data());
 		for (int row = 0; row < rowCount; ++row) {
 			val = rowValues->value(row);

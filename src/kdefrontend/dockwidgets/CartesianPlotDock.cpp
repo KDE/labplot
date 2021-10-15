@@ -619,7 +619,7 @@ void CartesianPlotDock::updateXRangeList() {
 
 		// format
 		QComboBox *cb = new QComboBox(ui.twXRanges);
-		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::Numeric) );
+		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::Double) );
 		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::DateTime) );
 		cb->setProperty("row", i);
 		cb->setCurrentIndex(static_cast<int>(format));
@@ -710,7 +710,7 @@ void CartesianPlotDock::updateYRangeList() {
 
 		// format
 		QComboBox *cb = new QComboBox(ui.twYRanges);
-		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::Numeric) );
+		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::Double) );
 		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::DateTime) );
 		cb->setProperty("row", i);
 		cb->setCurrentIndex(static_cast<int>(format));

@@ -495,7 +495,7 @@ AbstractColumn::ColumnMode MatioFilterPrivate::classMode(matio_classes classType
 		break;
 	}
 
-	return AbstractColumn::ColumnMode::Numeric;
+	return AbstractColumn::ColumnMode::Double;
 
 }
 
@@ -529,7 +529,7 @@ AbstractColumn::ColumnMode MatioFilterPrivate::typeMode(matio_types dataType) {
 		break;
 	}
 
-	return AbstractColumn::ColumnMode::Numeric;
+	return AbstractColumn::ColumnMode::Double;
 }
 
 #endif
@@ -716,7 +716,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		case MAT_C_DOUBLE:
 		case MAT_C_SINGLE:
 			for (auto& col : columnModes)
-				col = AbstractColumn::ColumnMode::Numeric;
+				col = AbstractColumn::ColumnMode::Double;
 			break;
 		case MAT_C_EMPTY:
 			return dataStrings << (QStringList() << i18n("Empty"));
@@ -744,7 +744,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 
 					auto mode = classMode(cell->class_type);
 					if (dynamic_cast<Matrix*>(dataSource) && mode == AbstractColumn::ColumnMode::Text)	// text not supported for matrix
-						mode = AbstractColumn::ColumnMode::Numeric;
+						mode = AbstractColumn::ColumnMode::Double;
 
 					columnModes[i] = mode;
 				}
@@ -833,7 +833,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				for (int i = startColumn - 1; i < qMin(nfields, endColumn); i++) {
 					auto mode = classMode(fields[i]->class_type);
 					if (dynamic_cast<Matrix*>(dataSource) && mode == AbstractColumn::ColumnMode::Text)	// text not supported for matrix
-						mode = AbstractColumn::ColumnMode::Numeric;
+						mode = AbstractColumn::ColumnMode::Double;
 
 					//TODO: not needed when supporting complex column mode
 					if (fields[i]->isComplex)	// additional column for complex

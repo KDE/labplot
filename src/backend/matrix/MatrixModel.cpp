@@ -71,7 +71,7 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 			auto mode = m_matrix->mode();
 			//DEBUG("MatrixModel::data() DisplayRole, mode = " << mode);
 			switch (mode) {
-			case AbstractColumn::ColumnMode::Numeric:
+			case AbstractColumn::ColumnMode::Double:
 				return QVariant(m_matrix->text<double>(row, col));
 			case AbstractColumn::ColumnMode::Integer:
 				return QVariant(m_matrix->text<int>(row, col));
@@ -183,7 +183,7 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 	if (role == Qt::EditRole) {
 		const auto mode = m_matrix->mode();
 		switch (mode) {
-		case AbstractColumn::ColumnMode::Numeric: 
+		case AbstractColumn::ColumnMode::Double: 
 			m_matrix->setCell(row, column, value.toDouble());
 			break;
 		case AbstractColumn::ColumnMode::Integer:

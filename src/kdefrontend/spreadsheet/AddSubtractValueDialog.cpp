@@ -151,7 +151,7 @@ void AddSubtractValueDialog::setColumns(const QVector<Column*>& columns) {
 		//TODO: QLongLongValidator
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(numberLocale.toString(column->bigIntAt(0)));
-	} else 	if (mode == AbstractColumn::ColumnMode::Numeric) {
+	} else 	if (mode == AbstractColumn::ColumnMode::Double) {
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
@@ -197,7 +197,7 @@ void AddSubtractValueDialog::setMatrices() {
 		ui.leValue->setValidator(new QIntValidator(ui.leValue));
 		ui.leValue->setText(numberLocale.toString(m_matrix->cell<qint64>(0,0)));
 		break;
-	case AbstractColumn::ColumnMode::Numeric:
+	case AbstractColumn::ColumnMode::Double:
 		ui.lTimeValue->setVisible(false);
 		ui.dateTimeEdit->setVisible(false);
 		ui.leValue->setValidator(new QDoubleValidator(ui.leValue));
@@ -337,7 +337,7 @@ void AddSubtractValueDialog::generateForColumns() {
 			}
 			break;
 		}
-	} else if (mode == AbstractColumn::ColumnMode::Numeric) {
+	} else if (mode == AbstractColumn::ColumnMode::Double) {
 		QVector<double> new_data(rows);
 		double value = numberLocale.toDouble(ui.leValue->text(), &ok);
 		if (!ok) {
@@ -499,7 +499,7 @@ void AddSubtractValueDialog::generateForMatrices() {
 				}
 			break;
 		}
-	} else if (mode == AbstractColumn::ColumnMode::Numeric) {
+	} else if (mode == AbstractColumn::ColumnMode::Double) {
 		double new_data;
 		double value = numberLocale.toDouble(ui.leValue->text(), &ok);
 		if (!ok) {

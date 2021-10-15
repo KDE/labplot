@@ -352,7 +352,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		const QString valueString = q.record().value(i).toString();
 		AbstractColumn::ColumnMode mode = AbstractFileFilter::columnMode(valueString, dateTimeFormat, lang);
 		m_columnModes << mode;
-		if (mode != AbstractColumn::ColumnMode::Numeric)
+		if (mode != AbstractColumn::ColumnMode::Double)
 			numeric = false;
 
 		//header item
@@ -453,7 +453,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 
 			// set value depending on data type
 			switch (m_columnModes[col]) {
-			case AbstractColumn::ColumnMode::Numeric: {
+			case AbstractColumn::ColumnMode::Double: {
 				bool isNumber;
 				const double value = numberFormat.toDouble(valueString, &isNumber);
 				static_cast<QVector<double>*>(dataContainer[col])->operator[](row) = (isNumber ? value : NAN);

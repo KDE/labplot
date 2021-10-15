@@ -681,7 +681,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 				}
 			}
 
-			if (col->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+			if (col->columnMode() == AbstractColumn::ColumnMode::Double) {
 				for (unsigned int i = column.beginRow; i < column.endRow; ++i) {
 					const double value = column.data.at(i).as_double();
 					if (column.data.at(i).type() == Origin::Variant::V_DOUBLE && value != _ONAN)

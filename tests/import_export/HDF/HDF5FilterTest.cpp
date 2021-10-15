@@ -26,7 +26,7 @@ void HDF5FilterTest::testImportDouble() {
 	QCOMPARE(spreadsheet.columnCount(), 50);
 	QCOMPARE(spreadsheet.rowCount(), 100);
 	for (int i = 0; i < spreadsheet.columnCount(); i++) {
-		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Double);
 		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("2D float array_") + QString::number(i+1));
 	}
 
@@ -73,7 +73,7 @@ void HDF5FilterTest::testImportDoublePortion() {
 	QCOMPARE(spreadsheet.columnCount(), 2);
 	QCOMPARE(spreadsheet.rowCount(), 2);
 	for (int i = 0; i < 2; i++) {
-		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Double);
 		QCOMPARE(spreadsheet.column(i)->name(), QLatin1String("2D float array_") + QString::number(i+1));
 	}
 

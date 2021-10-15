@@ -498,7 +498,7 @@ QVector<QStringList> FITSFilterPrivate::readCHDU(const QString& fileName, Abstra
 				DEBUG("Reading columns ...");
 				for (int n = 0; n < actualCols - startCol; ++n) {
 					if (columnNumericTypes.at(n)) {
-						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Numeric);
+						spreadsheet->column(columnOffset+ n)->setColumnMode(AbstractColumn::ColumnMode::Double);
 						auto* datap = static_cast<QVector<double>* >(spreadsheet->column(columnOffset+n)->data());
 						numericDataPointers.push_back(datap);
 						if (importMode == AbstractFileFilter::ImportMode::Replace)
@@ -813,7 +813,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 					tunit[i][0] = '\0';
 				}
 				switch (column->columnMode()) {
-				case AbstractColumn::ColumnMode::Numeric: {
+				case AbstractColumn::ColumnMode::Double: {
 						int maxSize = -1;
 						for (int row = 0; row < nrows; ++row) {
 							if (QString::number(column->valueAt(row)).size() > maxSize)
@@ -895,7 +895,7 @@ void FITSFilterPrivate::writeCHDU(const QString &fileName, AbstractDataSource *d
 				const Column* c =  spreadsheet->column(col-1);
 				auto columnMode = c->columnMode();
 
-				if (columnMode == AbstractColumn::ColumnMode::Numeric) {
+				if (columnMode == AbstractColumn::ColumnMode::Double) {
 					for (int row = 0; row < nrows; ++row)
 						columnNumeric[row] = c->valueAt(row);
 

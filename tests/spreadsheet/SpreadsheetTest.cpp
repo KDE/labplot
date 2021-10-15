@@ -57,8 +57,8 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
 	QCOMPARE(sheet.rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
 	//values
 	QCOMPARE(sheet.column(0)->valueAt(0), 10.0);
@@ -119,7 +119,7 @@ void SpreadsheetTest::testCopyPasteColumnMode02() {
 
 	//column modes
 	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
 	//values
 	QCOMPARE(sheet.column(0)->integerAt(0), 10);
@@ -154,9 +154,9 @@ void SpreadsheetTest::testCopyPasteColumnMode03() {
 
 	//column modes
 	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Integer);
-	QCOMPARE(sheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(3)->columnMode(), AbstractColumn::ColumnMode::Double);
 	QCOMPARE(sheet.column(4)->columnMode(), AbstractColumn::ColumnMode::Integer);
 
 	//values
@@ -213,7 +213,7 @@ void SpreadsheetTest::testCopyPasteColumnMode04() {
 
 	//column modes
 	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
 	//values
 	auto* filter = static_cast<DateTime2StringFilter*>(sheet.column(0)->outputFilter());
@@ -248,7 +248,7 @@ void SpreadsheetTest::testCopyPasteColumnMode05() {
 
 	//column modes
 	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::DateTime);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
 	//values
 	auto* filter = static_cast<DateTime2StringFilter*>(sheet.column(0)->outputFilter());
@@ -336,8 +336,8 @@ void SpreadsheetTest::testCopyPasteSizeChange00() {
 	QCOMPARE(sheet->rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet->column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet->column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
 
 	//values
 	QCOMPARE((bool)std::isnan(sheet->column(0)->valueAt(0)), true);
@@ -381,9 +381,9 @@ void SpreadsheetTest::testCopyPasteSizeChange01() {
 	QCOMPARE(sheet.rowCount(), 100);
 
 	//column modes
-	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Numeric);
-	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Numeric);
+	QCOMPARE(sheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(sheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
 
 	//values
 	QCOMPARE((bool)std::isnan(sheet.column(0)->valueAt(0)), true);

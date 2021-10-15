@@ -103,7 +103,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 				return QVariant(i18n("invalid cell (ignored in all operations)"));
 		}
 	case Qt::EditRole:
-		if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+		if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Double) {
 			double value = col_ptr->valueAt(row);
 			if (std::isnan(value))
 				return QVariant("-");
@@ -122,7 +122,7 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 
 		break;
 	case Qt::DisplayRole:
-		if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+		if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Double) {
 			double value = col_ptr->valueAt(row);
 			if (std::isnan(value))
 				return QVariant("-");
@@ -209,7 +209,7 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	//DEBUG("SpreadsheetModel::setData() value = " << STDSTRING(value.toString()))
 
 	//don't do anything if no new value was provided
-	if (column->columnMode() == AbstractColumn::ColumnMode::Numeric) {
+	if (column->columnMode() == AbstractColumn::ColumnMode::Double) {
 		bool ok;
 		double new_value = numberLocale.toDouble(value.toString(), &ok);
 		if (ok) {

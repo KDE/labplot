@@ -31,10 +31,10 @@ class Column : public AbstractColumn {
 	Q_OBJECT
 
 public:
-	explicit Column(const QString& name, AbstractColumn::ColumnMode = ColumnMode::Numeric);
+	explicit Column(const QString& name, AbstractColumn::ColumnMode = ColumnMode::Double);
 	// template constructor for all supported data types (AbstractColumn::ColumnMode) must be defined in header
 	template <typename T>
-	Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode = ColumnMode::Numeric)
+	Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode = ColumnMode::Double)
 		: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, mode, new QVector<T>(data))) {
 		init();
 	}
