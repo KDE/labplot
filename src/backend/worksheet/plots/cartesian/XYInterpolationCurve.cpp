@@ -121,11 +121,9 @@ void XYInterpolationCurvePrivate::recalculate() {
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		//spreadsheet columns as data source
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
-	} else {
-		//curve columns as data source
+	} else { // curve columns as data source
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
 	}
@@ -189,6 +187,15 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	double* xdata = xdataVector.data();
 	double* ydata = ydataVector.data();
+
+	for(unsigned int i = 1; i < n; i++) {
+		if (xdata[i-1] >= xdata[i]) {
+			DEBUG("ERROR: x data not strictly increasing: x_{i-1} >= x_i @ i = " << i << ": " << xdata[i-1] << " >= " << xdata[i])
+			interpolationResult.status = i18n("interpolation failed since x data is not strictly monotonic increasing!");
+			interpolationResult.available = true;
+			return;
+		}
+	}
 
 	// interpolation settings
 	const nsl_interp_type type = interpolationData.type;

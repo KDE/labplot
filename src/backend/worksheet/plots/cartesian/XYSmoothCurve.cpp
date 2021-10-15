@@ -89,7 +89,7 @@ XYSmoothCurvePrivate::XYSmoothCurvePrivate(XYSmoothCurve* owner) : XYAnalysisCur
 XYSmoothCurvePrivate::~XYSmoothCurvePrivate() = default;
 
 void XYSmoothCurvePrivate::recalculate() {
-	DEBUG("XYSmoothCurvePrivate::recalculate()")
+	DEBUG(Q_FUNC_INFO)
 	QElapsedTimer timer;
 	timer.start();
 

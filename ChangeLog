@@ -51,7 +51,7 @@ Bug fixes:
 	* Fix crash in convolution and correlation
 	* Windows: use breeze as default for better dark mode
 	* Properly save the geometry of visible windows in the project
-	* Interpolation: avoid crash when x range contains invalid data points
+	* Interpolation: avoid crash when x data contains invalid data points or is not strictly increasing
 
 -----2.8.2 (01.04.2021) -----
 Bug fixes:
