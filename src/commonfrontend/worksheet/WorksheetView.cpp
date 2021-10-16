@@ -236,6 +236,7 @@ void WorksheetView::initActions() {
 	snapToGridAction->setCheckable(true);
 
 	showPresenterMode = new QAction(QIcon::fromTheme("view-fullscreen"), i18n("Show in Presenter Mode"), this);
+	showPresenterMode->setShortcut(Qt::Key_F);
 
 	//check the action corresponding to the currently active layout in worksheet
 	this->layoutChanged(m_worksheet->layout());
@@ -367,22 +368,40 @@ void WorksheetView::initActions() {
 	auto* cartesianPlotNavigationGroup = new QActionGroup(this);
 	scaleAutoAction = new QAction(QIcon::fromTheme("labplot-auto-scale-all"), i18n("Auto Scale"), cartesianPlotNavigationGroup);
 	scaleAutoAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAuto));
+	scaleAutoAction->setShortcut(Qt::Key_1);
+
 	scaleAutoXAction = new QAction(QIcon::fromTheme("labplot-auto-scale-x"), i18n("Auto Scale X"), cartesianPlotNavigationGroup);
 	scaleAutoXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
+	scaleAutoXAction->setShortcut(Qt::CTRL + Qt::Key_X);
+
 	scaleAutoYAction = new QAction(QIcon::fromTheme("labplot-auto-scale-y"), i18n("Auto Scale Y"), cartesianPlotNavigationGroup);
 	scaleAutoYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoY));
+	scaleAutoYAction->setShortcut(Qt::CTRL + Qt::Key_Y);
+
 	zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), cartesianPlotNavigationGroup);
 	zoomInAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomIn));
+	zoomInAction->setShortcut(Qt::Key_Plus);
+
 	zoomOutAction = new QAction(QIcon::fromTheme("zoom-out"), i18n("Zoom Out"), cartesianPlotNavigationGroup);
 	zoomOutAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOut));
+	zoomOutAction->setShortcut(Qt::Key_Minus);
+
 	zoomInXAction = new QAction(QIcon::fromTheme("labplot-zoom-in-x"), i18n("Zoom In X"), cartesianPlotNavigationGroup);
 	zoomInXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInX));
+	zoomInXAction->setShortcut(Qt::Key_X);
+
 	zoomOutXAction = new QAction(QIcon::fromTheme("labplot-zoom-out-x"), i18n("Zoom Out X"), cartesianPlotNavigationGroup);
 	zoomOutXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutX));
+	zoomOutXAction->setShortcut(Qt::SHIFT + Qt::Key_X);
+
 	zoomInYAction = new QAction(QIcon::fromTheme("labplot-zoom-in-y"), i18n("Zoom In Y"), cartesianPlotNavigationGroup);
 	zoomInYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomInY));
+	zoomInYAction->setShortcut(Qt::Key_Y);
+
 	zoomOutYAction = new QAction(QIcon::fromTheme("labplot-zoom-out-y"), i18n("Zoom Out Y"), cartesianPlotNavigationGroup);
 	zoomOutYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomOutY));
+	zoomOutYAction->setShortcut(Qt::SHIFT + Qt::Key_Y);
+
 	shiftLeftXAction = new QAction(QIcon::fromTheme("labplot-shift-left-x"), i18n("Shift Left X"), cartesianPlotNavigationGroup);
 	shiftLeftXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ShiftLeftX));
 	shiftRightXAction = new QAction(QIcon::fromTheme("labplot-shift-right-x"), i18n("Shift Right X"), cartesianPlotNavigationGroup);
@@ -992,8 +1011,8 @@ void WorksheetView::resizeEvent(QResizeEvent* event) {
 }
 
 void WorksheetView::wheelEvent(QWheelEvent* event) {
-	//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 	if (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
+		//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
 		int numDegrees = event->delta() / 8;
 		int numSteps = numDegrees / 15; // see QWheelEvent documentation
 		zoom(numSteps);
@@ -2481,11 +2500,12 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 	// TODO: find out, which element was selected to find out which range should be changed
 	//Project().projectExplorer().currentAspect()
 
-	CartesianPlot::NavigationOperation op = (CartesianPlot::NavigationOperation)action->data().toInt();
+	auto op = (CartesianPlot::NavigationOperation)action->data().toInt();
 	auto plotActionMode = m_worksheet->cartesianPlotActionMode();
 	if (plotActionMode == Worksheet::CartesianPlotActionMode::ApplyActionToSelection) {
 		int cSystemIndex = Worksheet::cSystemIndex(m_selectedElement);
-		for (auto* plot : m_worksheet->children<CartesianPlot>() ) {
+		const auto& plots = m_worksheet->children<CartesianPlot>();
+		for (auto* plot : plots) {
 			if (m_selectedItems.indexOf(plot->graphicsItem()) != -1)
 				plot->navigate(cSystemIndex, op);
 			else {
@@ -2519,7 +2539,8 @@ void WorksheetView::cartesianPlotNavigationChanged(QAction* action) {
 				parentPlot->navigate(cSystemIndex, op);
 		}
 	} else {
-		for (auto* plot : m_worksheet->children<CartesianPlot>() )
+		const auto& plots = m_worksheet->children<CartesianPlot>();
+		for (auto* plot : plots)
 			plot->navigate(-1, op);
 	}
 }
