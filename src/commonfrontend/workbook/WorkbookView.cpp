@@ -99,9 +99,7 @@ void WorkbookView::tabChanged(int index) {
 	lastSelectedIndex = index;
 }
 
-void WorkbookView::tabMoved(int from, int to) {
-	Q_UNUSED(from);
-	Q_UNUSED(to);
+void WorkbookView::tabMoved(int /*from*/, int /*to*/) {
 	//TODO:
 // 	AbstractAspect* aspect = m_workbook->child<AbstractAspect>(to);
 // 	if (aspect) {

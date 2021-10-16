@@ -163,13 +163,11 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 	return QVariant();
 }
 
-int MatrixModel::rowCount(const QModelIndex& parent) const {
-	Q_UNUSED(parent)
+int MatrixModel::rowCount(const QModelIndex& /*parent*/) const {
 	return m_matrix->rowCount();
 }
 
-int MatrixModel::columnCount(const QModelIndex& parent) const {
-	Q_UNUSED(parent)
+int MatrixModel::columnCount(const QModelIndex& /*parent*/) const {
 	return m_matrix->columnCount();
 }
 
@@ -210,13 +208,11 @@ bool MatrixModel::setData(const QModelIndex& index, const QVariant& value, int r
 	return false;
 }
 
-QModelIndex MatrixModel::index(int row, int column, const QModelIndex& parent) const {
-	Q_UNUSED(parent)
+QModelIndex MatrixModel::index(int row, int column, const QModelIndex& /*parent*/) const {
 	return createIndex(row, column);
 }
 
-QModelIndex MatrixModel::parent(const QModelIndex& child) const {
-	Q_UNUSED(child)
+QModelIndex MatrixModel::parent(const QModelIndex& /*child*/) const {
 	return QModelIndex{};
 }
 
@@ -229,9 +225,7 @@ void MatrixModel::handleColumnsAboutToBeInserted(int before, int count) {
 	beginInsertColumns(QModelIndex(), before, before+count-1);
 }
 
-void MatrixModel::handleColumnsInserted(int first, int count) {
-	Q_UNUSED(first)
-	Q_UNUSED(count)
+void MatrixModel::handleColumnsInserted(int /*first*/, int /*count*/) {
 	endInsertColumns();
 	if (!m_suppressDataChangedSignal) emit changed();
 }
@@ -240,9 +234,7 @@ void MatrixModel::handleColumnsAboutToBeRemoved(int first, int count) {
 	beginRemoveColumns(QModelIndex(), first, first+count-1);
 }
 
-void MatrixModel::handleColumnsRemoved(int first, int count) {
-	Q_UNUSED(first)
-	Q_UNUSED(count)
+void MatrixModel::handleColumnsRemoved(int /*first*/, int /*count*/) {
 	endRemoveColumns();
 	if (!m_suppressDataChangedSignal) emit changed();
 }
@@ -251,9 +243,7 @@ void MatrixModel::handleRowsAboutToBeInserted(int before, int count) {
 	beginInsertRows(QModelIndex(), before, before+count-1);
 }
 
-void MatrixModel::handleRowsInserted(int first, int count) {
-	Q_UNUSED(first)
-	Q_UNUSED(count)
+void MatrixModel::handleRowsInserted(int /*first*/, int /*count*/) {
 	endInsertRows();
 	if (!m_suppressDataChangedSignal) emit changed();
 }
@@ -262,9 +252,7 @@ void MatrixModel::handleRowsAboutToBeRemoved(int first, int count) {
 	beginRemoveRows(QModelIndex(), first, first+count-1);
 }
 
-void MatrixModel::handleRowsRemoved(int first, int count) {
-	Q_UNUSED(first)
-	Q_UNUSED(count)
+void MatrixModel::handleRowsRemoved(int /*first*/, int /*count*/) {
 	endRemoveRows();
 	if (!m_suppressDataChangedSignal) emit changed();
 }

@@ -74,15 +74,13 @@ void JsonFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 /*!
 loads the predefined filter settings for \c filterName
 */
-void JsonFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName);
+void JsonFilter::loadFilterSettings(const QString& /*filterName*/) {
 }
 
 /*!
 saves the current settings as a new filter with the name \c filterName
 */
-void JsonFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName);
+void JsonFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 /*!
@@ -543,8 +541,6 @@ void JsonFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSource
 import the content of document \c m_preparedDoc to the data source \c dataSource. Uses the settings defined in the data source.
 */
 void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileFilter::ImportMode importMode, int lines) {
-	Q_UNUSED(lines)
-
 	m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
 	int rowOffset = startRow - 1;
 	int colOffset = (int)createIndexEnabled + (int)importObjectNames;
@@ -552,7 +548,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 	DEBUG("reading " << m_actualCols << " columns");
 
 	int progressIndex = 0;
-	const float progressInterval = 0.01*lines; //update on every 1% only
+	const float progressInterval = 0.01 * lines; //update on every 1% only
 
 	const auto& array = m_preparedDoc.array();
 	const auto& arrayIterator = array.begin();
@@ -740,10 +736,7 @@ QVector<QStringList> JsonFilterPrivate::preview(int lines) {
 /*!
 writes the content of \c dataSource to the file \c fileName.
 */
-void JsonFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
-	Q_UNUSED(fileName);
-	Q_UNUSED(dataSource);
-
+void JsonFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
 	//TODO: saving data to json file not supported yet
 }
 

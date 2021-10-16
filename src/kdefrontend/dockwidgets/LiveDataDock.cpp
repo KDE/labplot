@@ -682,8 +682,7 @@ void LiveDataDock::onMQTTConnect() {
  *\brief called when the client receives a message
  * if the message arrived from a new topic, the topic is put in twTopics
  */
-void LiveDataDock::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
-	Q_UNUSED(message)
+void LiveDataDock::mqttMessageReceived(const QByteArray& /*message*/, const QMqttTopicName& topic) {
 	if (!m_currentHost->addedTopics.contains(topic.name())) {
 		m_currentHost->addedTopics.push_back(topic.name());
 		addTopicToTree(topic.name());
@@ -788,8 +787,7 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
  *\brief called when a client receives a message, if the clients hostname isn't identic with the host name of MQTTClient
  * if the message arrived from a new topic, the topic is added to the host data
  */
-void LiveDataDock::mqttMessageReceivedInBackground(const QByteArray& message, const QMqttTopicName& topic) {
-	Q_UNUSED(message)
+void LiveDataDock::mqttMessageReceivedInBackground(const QByteArray& /*message*/, const QMqttTopicName& topic) {
 	if (!m_currentHost->addedTopics.contains(topic.name()))
 		m_currentHost->addedTopics.push_back(topic.name());
 }

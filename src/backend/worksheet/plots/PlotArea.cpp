@@ -106,10 +106,9 @@ bool PlotArea::isSelected() const {
 	return m_parent->isSelected();
 }
 
-void PlotArea::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	DEBUG("PlotArea::handleResize()");
+void PlotArea::handleResize(double horizontalRatio, double verticalRatio, bool /*pageResize*/) {
+	DEBUG(Q_FUNC_INFO);
 	Q_D(PlotArea);
-	Q_UNUSED(pageResize);
 
 	d->rect.setWidth(d->rect.width()*horizontalRatio);
 	d->rect.setHeight(d->rect.height()*verticalRatio);
@@ -295,10 +294,7 @@ QPainterPath PlotAreaPrivate::shape() const {
 	return path;
 }
 
-void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget *widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;
 

@@ -109,10 +109,7 @@ void CustomPoint::retransform() {
 	d->retransform();
 }
 
-void CustomPoint::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(horizontalRatio)
-	Q_UNUSED(verticalRatio)
-	Q_UNUSED(pageResize)
+void CustomPoint::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
 /* ============================ getter methods ================= */
@@ -255,10 +252,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 	}
 }
 
-void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void CustomPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!m_visible)
 		return;
 

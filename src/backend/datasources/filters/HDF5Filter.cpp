@@ -96,15 +96,13 @@ void HDF5Filter::write(const QString& fileName, AbstractDataSource* dataSource) 
 /*!
   loads the predefined filter settings for \c filterName
 */
-void HDF5Filter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName);
+void HDF5Filter::loadFilterSettings(const QString& /*filterName*/) {
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
-void HDF5Filter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName);
+void HDF5Filter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -269,7 +267,6 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
 	}
 	double hit_rate;
 	status = H5Fget_mdc_hit_rate(file, &hit_rate);
-	Q_UNUSED(status);
 	info += i18n("Metadata cache hit rate: %1", QString::number(hit_rate));
 	info += QLatin1String("<br>");
 	//TODO: herr_t H5Fget_mdc_image_info(hid_t file_id, haddr_t *image_addr, hsize_t *image_len)
@@ -1981,9 +1978,7 @@ void HDF5FilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void HDF5FilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
-	Q_UNUSED(fileName);
-	Q_UNUSED(dataSource);
+void HDF5FilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
 	//TODO: writing HDF5 not implemented yet
 }
 
@@ -2002,8 +1997,7 @@ void HDF5Filter::save(QXmlStreamWriter* writer) const {
 /*!
   Loads from XML.
 */
-bool HDF5Filter::load(XmlStreamReader* reader) {
-	Q_UNUSED(reader);
+bool HDF5Filter::load(XmlStreamReader*) {
 // 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 // 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;

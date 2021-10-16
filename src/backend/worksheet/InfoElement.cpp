@@ -429,8 +429,7 @@ bool InfoElement::isTextLabel() const {
  * Will be called, when the label changes his position
  * @param position
  */
-void InfoElement::labelPositionChanged(TextLabel::PositionWrapper position) {
-	Q_UNUSED(position)
+void InfoElement::labelPositionChanged(TextLabel::PositionWrapper /*position*/) {
 	if (m_suppressChildPositionChanged)
 		return;
 
@@ -438,14 +437,12 @@ void InfoElement::labelPositionChanged(TextLabel::PositionWrapper position) {
 	d->retransform();
 }
 
-void InfoElement::labelVisibleChanged(bool visible) {
-	Q_UNUSED(visible)
+void InfoElement::labelVisibleChanged(bool /*visible*/) {
 	Q_D(InfoElement);
 	d->update();
 }
 
-void InfoElement::labelTextWrapperChanged(TextLabel::TextWrapper wrapper) {
-	Q_UNUSED(wrapper)
+void InfoElement::labelTextWrapperChanged(TextLabel::TextWrapper) {
 	if (m_setTextLabelText)
 		return;
 
@@ -520,8 +517,7 @@ void InfoElement::labelBorderShapeChanged() {
 /*!
  * Delete child and remove from markerpoint list if it is a markerpoint. If it is a textlabel delete complete InfoElement
  */
-void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
-	Q_UNUSED(before)
+void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* child) {
 	Q_D(InfoElement);
 
 	// when childs are reordered, don't remove them
@@ -660,8 +656,7 @@ double InfoElement::setMarkerpointPosition(double x) {
  * Will be called, when the customPoint changes his position
  * @param pos
  */
-void InfoElement::pointPositionChanged(QPointF pos) {
-	Q_UNUSED(pos)
+void InfoElement::pointPositionChanged(QPointF /*pos*/) {
 	if (m_suppressChildPositionChanged)
 		return;
 
@@ -687,10 +682,7 @@ void InfoElement::retransform() {
 	d->retransform();
 }
 
-void InfoElement::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(horizontalRatio)
-	Q_UNUSED(verticalRatio)
-	Q_UNUSED(pageResize)
+void InfoElement::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
 //##############################################################################
@@ -789,9 +781,8 @@ InfoElementPrivate::InfoElementPrivate(InfoElement* owner):
 	init();
 }
 
-InfoElementPrivate::InfoElementPrivate(InfoElement* owner, const XYCurve* curve):
+InfoElementPrivate::InfoElementPrivate(InfoElement* owner, const XYCurve*):
 	q(owner) {
-	Q_UNUSED(curve)
 	init();
 }
 
@@ -903,8 +894,7 @@ QRectF InfoElementPrivate::boundingRect() const {
 	return boundingRectangle;
 }
 
-void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget* widget) {
-	Q_UNUSED(widget)
+void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
 	if (!visible)
 		return;
 

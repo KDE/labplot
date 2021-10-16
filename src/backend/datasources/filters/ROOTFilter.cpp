@@ -47,12 +47,10 @@ void ROOTFilter::write(const QString& fileName, AbstractDataSource* dataSource) 
 	d->write(fileName, dataSource);
 }
 
-void ROOTFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName);
+void ROOTFilter::loadFilterSettings(const QString& /*filterName*/) {
 }
 
-void ROOTFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName);
+void ROOTFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 void ROOTFilter::setCurrentObject(const QString& object) {
@@ -315,9 +313,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 	}
 }
 
-void ROOTFilterPrivate::write(const QString& fileName, AbstractDataSource* dataSource) {
-	Q_UNUSED(fileName);
-	Q_UNUSED(dataSource);
+void ROOTFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
 }
 
 ROOTFilter::Directory ROOTFilterPrivate::listContent(const std::map<long int, ROOTData::Directory>& dataContent, std::string (ROOTData::*nameFunc)(long int))
@@ -1478,8 +1474,6 @@ QString ROOTFilter::fileInfoString(const QString& fileName) {
 	int infoBytes = read<int>(is);
 	info += i18n("Size of TStreamerInfo record: %1 bytes", QString::number(infoBytes));
 	info += QLatin1String("<br>");
-
-	Q_UNUSED(fileName);
 
 	return info;
 }

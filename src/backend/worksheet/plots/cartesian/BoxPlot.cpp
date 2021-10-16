@@ -207,10 +207,7 @@ void BoxPlot::recalc() {
 	d->recalc();
 }
 
-void BoxPlot::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(horizontalRatio)
-	Q_UNUSED(verticalRatio)
-	Q_UNUSED(pageResize)
+void BoxPlot::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
 bool BoxPlot::activateCurve(QPointF mouseScenePos, double maxDist) {
@@ -526,8 +523,7 @@ void BoxPlot::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void BoxPlot::orientationChangedSlot(QAction* action) {
-	Q_UNUSED(action)
+void BoxPlot::orientationChangedSlot(QAction*) {
 	//TODO
 }
 
@@ -548,8 +544,7 @@ QString BoxPlotPrivate::name() const {
 	return q->name();
 }
 
-bool BoxPlotPrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
-	Q_UNUSED(maxDist)
+bool BoxPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
 	if (!isVisible())
 		return false;
 
@@ -1553,10 +1548,7 @@ void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 	painter->drawPolygon(polygon);
 }
 
-void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;
 

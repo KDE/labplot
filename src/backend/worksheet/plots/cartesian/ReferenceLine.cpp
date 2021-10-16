@@ -155,10 +155,7 @@ void ReferenceLine::retransform() {
 	d->retransform();
 }
 
-void ReferenceLine::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(horizontalRatio)
-	Q_UNUSED(verticalRatio)
-	Q_UNUSED(pageResize)
+void ReferenceLine::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 }
 
 /* ============================ getter methods ================= */
@@ -349,10 +346,7 @@ void ReferenceLinePrivate::recalcShapeAndBoundingRect() {
 	}
 }
 
-void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!m_visible)
 		return;
 

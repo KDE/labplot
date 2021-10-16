@@ -965,10 +965,7 @@ void SpreadsheetView::handleAspectAboutToBeRemoved(const AbstractAspect* aspect)
 	disconnect(col, nullptr, this, nullptr);
 }
 
-void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize) {
-	Q_UNUSED(logicalIndex);
-	Q_UNUSED(oldSize);
-
+void SpreadsheetView::handleHorizontalSectionResized(int logicalIndex, int /*oldSize*/, int newSize) {
 	//save the new size in the column
 	Column* col = m_spreadsheet->child<Column>(logicalIndex);
 	col->setWidth(newSize);
@@ -986,8 +983,6 @@ void SpreadsheetView::goToCell(int row, int col) {
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
-	Q_UNUSED(index);
-
 	static bool inside = false;
 	if (inside) return;
 
@@ -1000,8 +995,7 @@ void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) 
 }
 
 //TODO Implement the "change of the column name"-mode upon a double click
-void SpreadsheetView::handleHorizontalHeaderDoubleClicked(int index) {
-	Q_UNUSED(index);
+void SpreadsheetView::handleHorizontalHeaderDoubleClicked(int /*index*/) {
 }
 
 /*!
@@ -1028,8 +1022,7 @@ void SpreadsheetView::showComments(bool on) {
 	m_horizontalHeader->showComments(on);
 }
 
-void SpreadsheetView::currentColumnChanged(const QModelIndex & current, const QModelIndex & previous) {
-	Q_UNUSED(previous);
+void SpreadsheetView::currentColumnChanged(const QModelIndex& current, const QModelIndex& /*previous*/) {
 	int col = current.column();
 	if (col < 0 || col >= m_spreadsheet->columnCount())
 		return;
@@ -3182,9 +3175,7 @@ void SpreadsheetView::sortColumnDescending() {
 /*!
   Cause a repaint of the header.
 */
-void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int first, int last) {
-	Q_UNUSED(first)
-	Q_UNUSED(last)
+void SpreadsheetView::updateHeaderGeometry(Qt::Orientation o, int /*first*/, int /*last*/) {
 	//TODO
 	if (o != Qt::Horizontal) return;
 	m_tableView->horizontalHeader()->setStretchLastSection(true);  // ugly hack (flaw in Qt? Does anyone know a better way?)
@@ -3226,10 +3217,7 @@ void SpreadsheetView::columnClicked(int column) {
 /*!
   called on selections changes. Propagates the selection/deselection of columns to the \c Spreadsheet object.
 */
-void SpreadsheetView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) {
-	Q_UNUSED(selected);
-	Q_UNUSED(deselected);
-
+void SpreadsheetView::selectionChanged(const QItemSelection& /*selected*/, const QItemSelection& /*deselected*/) {
 	if (m_suppressSelectionChangedEvent)
 		return;
 

@@ -331,9 +331,7 @@ bool ImportProjectDialog::isTopLevel(const AbstractAspect* aspect) const {
 //##############################################################################
 //#################################  SLOTS  ####################################
 //##############################################################################
-void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected) {
-	Q_UNUSED(deselected);
-
+void ImportProjectDialog::selectionChanged(const QItemSelection& selected, const QItemSelection& /*deselected*/) {
 	//determine the dependent objects and select/deselect them too
 	const QModelIndexList& indexes = selected.indexes();
 	if (indexes.isEmpty())

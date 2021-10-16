@@ -106,10 +106,7 @@ void SegmentPrivate::recalcShapeAndBoundingRect() {
 	itemShape.addRect(boundingRectangle);
 }
 
-void SegmentPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void SegmentPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	painter->setPen(pen);
 	painter->drawPath(linePath);
 

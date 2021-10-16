@@ -1940,10 +1940,7 @@ void MainWin::handleAspectAdded(const AbstractAspect* aspect) {
 			handleAspectAdded(child);
 }
 
-void MainWin::handleAspectRemoved(const AbstractAspect* parent,const AbstractAspect* before,const AbstractAspect* aspect) {
-	Q_UNUSED(before)
-	Q_UNUSED(aspect)
-
+void MainWin::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* aspect) {
 	//no need to react on removal of
 	// - AbstractSimpleFilter
 	// - columns in the data spreadsheet of a datapicker curve,
@@ -2094,9 +2091,7 @@ void MainWin::createContextMenu(QMenu* menu) const {
 /*!
 	this is called on a right click on a non-root folder in the project explorer
 */
-void MainWin::createFolderContextMenu(const Folder* folder, QMenu* menu) const {
-	Q_UNUSED(folder)
-
+void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 	//Folder provides it's own context menu. Add a separator before adding additional actions.
 	menu->addSeparator();
 	this->createContextMenu(menu);

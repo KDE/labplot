@@ -2258,10 +2258,8 @@ void CartesianPlot::boxPlotOrientationChanged(BoxPlot::Orientation orientation) 
 
 }
 
-void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
+void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
 	DEBUG(Q_FUNC_INFO)
-	Q_UNUSED(parent)
-	Q_UNUSED(before)
 	if (m_legend == child) {
 		if (m_menusInitialized)
 			addLegendAction->setEnabled(true);
@@ -3685,8 +3683,7 @@ void CartesianPlotPrivate::yRangeFormatChanged() {
 /*!
  * don't allow any negative values for the x range when log or sqrt scalings are used
  */
-void CartesianPlotPrivate::checkXRange(int index) {
-	Q_UNUSED(index);
+void CartesianPlotPrivate::checkXRange(int /*index*/) {
 	//TODO: disabled for testing (negative values are already checked)
 	return;
 
@@ -3705,8 +3702,7 @@ void CartesianPlotPrivate::checkXRange(int index) {
 /*!
  * don't allow any negative values for the y range when log or sqrt scalings are used
  */
-void CartesianPlotPrivate::checkYRange(int index) {
-	Q_UNUSED(index)
+void CartesianPlotPrivate::checkYRange(int /*index*/) {
 	//TODO: disabled for testing (negative values are already checked)
 	return;
 
@@ -4538,14 +4534,8 @@ void CartesianPlotPrivate::mouseHoverZoomSelectionMode(QPointF logicPos, int cSy
 	update(); // because if previous another selection mode was selected, the lines must be deleted
 }
 
-void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
-	if (!isVisible())
-		return;
-
-	if (m_printing)
+void CartesianPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
+	if (!isVisible() || m_printing)
 		return;
 
 	if ((mouseMode == CartesianPlot::MouseMode::ZoomXSelection

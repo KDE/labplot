@@ -64,11 +64,10 @@ TextLabel* AbstractPlot::title() {
 	return m_title;
 }
 
-void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(pageResize)
+void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bool /*pageResize*/) {
 	if (isLoading())
 		return;
-	DEBUG("AbstractPlot::handleResize()");
+	DEBUG(Q_FUNC_INFO);
 	Q_D(AbstractPlot);
 
 // 	qDebug()<<name() << ": ratios - " << horizontalRatio << "  " << verticalRatio;

@@ -579,13 +579,11 @@ void MatrixView::goToCell(int row, int col) {
 	m_tableView->setCurrentIndex(index);
 }
 
-void MatrixView::handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize) {
-	Q_UNUSED(oldSize)
+void MatrixView::handleHorizontalSectionResized(int logicalIndex, int /*oldSize*/, int newSize) {
 	m_matrix->setColumnWidth(logicalIndex, newSize);
 }
 
-void MatrixView::handleVerticalSectionResized(int logicalIndex, int oldSize, int newSize) {
-	Q_UNUSED(oldSize)
+void MatrixView::handleVerticalSectionResized(int logicalIndex, int /*oldSize*/, int newSize) {
 	m_matrix->setRowHeight(logicalIndex, newSize);
 }
 

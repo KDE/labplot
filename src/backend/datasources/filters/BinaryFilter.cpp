@@ -108,15 +108,13 @@ size_t BinaryFilter::rowNumber(const QString& fileName, const size_t vectors, co
 /*!
   loads the predefined filter settings for \c filterName
 */
-void BinaryFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName);
+void BinaryFilter::loadFilterSettings(const QString& /*filterName*/) {
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
-void BinaryFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName);
+void BinaryFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -189,13 +187,11 @@ bool BinaryFilter::isAutoModeEnabled() const {
 	return d->autoModeEnabled;
 }
 
-QString BinaryFilter::fileInfoString(const QString& fileName) {
+QString BinaryFilter::fileInfoString(const QString& /*fileName*/) {
 	DEBUG("BinaryFilter::fileInfoString()");
 	QString info;
 
 	//TODO
-	Q_UNUSED(fileName);
-
 	return info;
 }
 
@@ -504,9 +500,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void BinaryFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
-	Q_UNUSED(fileName);
-	Q_UNUSED(dataSource);
+void BinaryFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
 	//TODO: writing binary files not supported yet
 }
 

@@ -404,10 +404,7 @@ void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	setCursor(Qt::CrossCursor);
 }
 
-void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	QPainterPath path = Symbol::pathFromStyle(pointStyle);
 	QTransform trafo;
 	trafo.scale(size, size);

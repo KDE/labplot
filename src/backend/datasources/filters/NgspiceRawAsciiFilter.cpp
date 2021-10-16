@@ -102,15 +102,13 @@ void NgspiceRawAsciiFilter::write(const QString& fileName, AbstractDataSource* d
 /*!
   loads the predefined filter settings for \c filterName
 */
-void NgspiceRawAsciiFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName);
+void NgspiceRawAsciiFilter::loadFilterSettings(const QString& /*filterName*/) {
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
-void NgspiceRawAsciiFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName);
+void NgspiceRawAsciiFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 void NgspiceRawAsciiFilter::setStartRow(const int r) {
@@ -343,9 +341,7 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void NgspiceRawAsciiFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
-	Q_UNUSED(fileName);
-	Q_UNUSED(dataSource);
+void NgspiceRawAsciiFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
 	//TODO: not implemented yet
 }
 
@@ -355,14 +351,12 @@ void NgspiceRawAsciiFilterPrivate::write(const QString & fileName, AbstractDataS
 /*!
   Saves as XML.
  */
-void NgspiceRawAsciiFilter::save(QXmlStreamWriter* writer) const {
-	Q_UNUSED(writer);
+void NgspiceRawAsciiFilter::save(QXmlStreamWriter*) const {
 }
 
 /*!
   Loads from XML.
 */
-bool NgspiceRawAsciiFilter::load(XmlStreamReader* reader) {
-	Q_UNUSED(reader);
+bool NgspiceRawAsciiFilter::load(XmlStreamReader*) {
 	return true;
 }

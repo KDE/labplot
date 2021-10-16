@@ -170,8 +170,7 @@ void AbstractColumn::setColumnMode(AbstractColumn::ColumnMode) {}
  * of 'other' is not the same as the type of 'this'.
  * Use a filter to convert a column to another type.
  */
-bool AbstractColumn::copy(const AbstractColumn *other) {
-	Q_UNUSED(other)
+bool AbstractColumn::copy(const AbstractColumn* /*other*/) {
 	return false;
 }
 
@@ -185,11 +184,7 @@ bool AbstractColumn::copy(const AbstractColumn *other) {
  * \param destination_start first row to copy in
  * \param num_rows the number of rows to copy
  */
-bool AbstractColumn::copy(const AbstractColumn *source, int source_start, int destination_start, int num_rows) {
-	Q_UNUSED(source)
-	Q_UNUSED(source_start)
-	Q_UNUSED(destination_start)
-	Q_UNUSED(num_rows)
+bool AbstractColumn::copy(const AbstractColumn* /*source*/, int /*source_start*/, int /*destination_start*/, int /*num_rows*/) {
 	return false;
 }
 
@@ -249,8 +244,7 @@ void AbstractColumn::handleRowRemoval(int first, int count) {
 /**
  * \brief Set the column plot designation
  */
-void AbstractColumn::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
-	Q_UNUSED(pd)
+void AbstractColumn::setPlotDesignation(AbstractColumn::PlotDesignation) {
 }
 
 bool AbstractColumn::isNumeric() const {
@@ -353,8 +347,7 @@ void AbstractColumn::setMasked(int row, bool mask) {
 /**
  * \brief Return the formula associated with row 'row'
  */
-QString AbstractColumn::formula(int row) const {
-	Q_UNUSED(row);
+QString AbstractColumn::formula(int /*row*/) const {
 	return QString();
 }
 
@@ -378,15 +371,13 @@ QVector< Interval<int> > AbstractColumn::formulaIntervals() const {
 /**
  * \brief Set a formula string for an interval of rows
  */
-void AbstractColumn::setFormula(const Interval<int>& i, const QString& formula) {
-	Q_UNUSED(i) Q_UNUSED(formula)
+void AbstractColumn::setFormula(const Interval<int>&, const QString& /*formula*/) {
 }
 
 /**
  * \brief Overloaded function for convenience
  */
-void AbstractColumn::setFormula(int row, const QString& formula) {
-	Q_UNUSED(row) Q_UNUSED(formula)
+void AbstractColumn::setFormula(int /*row*/, const QString& /*formula*/) {
 }
 
 /**
@@ -429,8 +420,7 @@ void AbstractColumn::removeFormat() {
  *
  * Use this only when columnMode() is Text
  */
-QString AbstractColumn::textAt(int row) const {
-	Q_UNUSED(row);
+QString AbstractColumn::textAt(int /*row*/) const {
 	return QString();
 }
 
@@ -439,8 +429,7 @@ QString AbstractColumn::textAt(int row) const {
  *
  * Use this only when columnMode() is Text
  */
-void AbstractColumn::setTextAt(int row, const QString& new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
+void AbstractColumn::setTextAt(int /*row*/, const QString& /*new_text*/) {
 }
 
 /**
@@ -448,8 +437,7 @@ void AbstractColumn::setTextAt(int row, const QString& new_value) {
  *
  * Use this only when columnMode() is Text
  */
-void AbstractColumn::replaceTexts(int first, const QVector<QString>& new_values) {
-	Q_UNUSED(first) Q_UNUSED(new_values)
+void AbstractColumn::replaceTexts(int /*first*/, const QVector<QString>& /*new_text*/) {
 };
 
 /**
@@ -457,8 +445,7 @@ void AbstractColumn::replaceTexts(int first, const QVector<QString>& new_values)
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-QDate AbstractColumn::dateAt(int row) const {
-	Q_UNUSED(row);
+QDate AbstractColumn::dateAt(int /*row*/) const {
 	return QDate{};
 }
 
@@ -467,8 +454,7 @@ QDate AbstractColumn::dateAt(int row) const {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::setDateAt(int row, QDate new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
+void AbstractColumn::setDateAt(int /*row*/, QDate) {
 };
 
 /**
@@ -476,8 +462,7 @@ void AbstractColumn::setDateAt(int row, QDate new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-QTime AbstractColumn::timeAt(int row) const {
-	Q_UNUSED(row);
+QTime AbstractColumn::timeAt(int /*row*/) const {
 	return QTime{};
 }
 
@@ -486,8 +471,7 @@ QTime AbstractColumn::timeAt(int row) const {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::setTimeAt(int row, QTime new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
+void AbstractColumn::setTimeAt(int /*row*/, QTime) {
 }
 
 /**
@@ -495,8 +479,7 @@ void AbstractColumn::setTimeAt(int row, QTime new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-QDateTime AbstractColumn::dateTimeAt(int row) const {
-	Q_UNUSED(row);
+QDateTime AbstractColumn::dateTimeAt(int /*row*/) const {
 	return QDateTime();
 }
 
@@ -505,8 +488,7 @@ QDateTime AbstractColumn::dateTimeAt(int row) const {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::setDateTimeAt(int row, const QDateTime& new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
+void AbstractColumn::setDateTimeAt(int /*row*/, const QDateTime&) {
 };
 
 /**
@@ -514,8 +496,7 @@ void AbstractColumn::setDateTimeAt(int row, const QDateTime& new_value) {
  *
  * Use this only when columnMode() is DateTime, Month or Day
  */
-void AbstractColumn::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
-	Q_UNUSED(first) Q_UNUSED(new_values)
+void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) {
 };
 
 /**
@@ -523,8 +504,7 @@ void AbstractColumn::replaceDateTimes(int first, const QVector<QDateTime>& new_v
  *
  * Use this only when columnMode() is Numeric
  */
-double AbstractColumn::valueAt(int row) const {
-	Q_UNUSED(row);
+double AbstractColumn::valueAt(int /*row*/) const {
 	return NAN;
 }
 
@@ -533,8 +513,7 @@ double AbstractColumn::valueAt(int row) const {
  *
  * Use this only when columnMode() is Numeric
  */
-void AbstractColumn::setValueAt(int row, const double new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
+void AbstractColumn::setValueAt(int /*row*/, const double) {
 };
 
 /**
@@ -542,8 +521,7 @@ void AbstractColumn::setValueAt(int row, const double new_value) {
  *
  * Use this only when columnMode() is Numeric
  */
-void AbstractColumn::replaceValues(int first, const QVector<double>& new_values) {
-	Q_UNUSED(first) Q_UNUSED(new_values)
+void AbstractColumn::replaceValues(int /*first*/, const QVector<double>&) {
 }
 
 /**
@@ -551,8 +529,7 @@ void AbstractColumn::replaceValues(int first, const QVector<double>& new_values)
  *
  * Use this only when columnMode() is Integer
  */
-int AbstractColumn::integerAt(int row) const {
-	Q_UNUSED(row);
+int AbstractColumn::integerAt(int /*row*/) const {
 	return 42;
 }
 
@@ -561,8 +538,7 @@ int AbstractColumn::integerAt(int row) const {
  *
  * Use this only when columnMode() is Integer
  */
-void AbstractColumn::setIntegerAt(int row, const int new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
+void AbstractColumn::setIntegerAt(int /*row*/, const int) {
 };
 
 /**
@@ -570,8 +546,7 @@ void AbstractColumn::setIntegerAt(int row, const int new_value) {
  *
  * Use this only when columnMode() is Integer
  */
-void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
-	Q_UNUSED(first) Q_UNUSED(new_values)
+void AbstractColumn::replaceInteger(int /*first*/, const QVector<int>&) {
 }
 
 /**
@@ -579,8 +554,7 @@ void AbstractColumn::replaceInteger(int first, const QVector<int>& new_values) {
  *
  * Use this only when columnMode() is BigInt
  */
-qint64 AbstractColumn::bigIntAt(int row) const {
-	Q_UNUSED(row);
+qint64 AbstractColumn::bigIntAt(int /*row*/) const {
 	return 42;
 }
 
@@ -589,8 +563,7 @@ qint64 AbstractColumn::bigIntAt(int row) const {
  *
  * Use this only when columnMode() is BigInt
  */
-void AbstractColumn::setBigIntAt(int row, const qint64 new_value) {
-	Q_UNUSED(row) Q_UNUSED(new_value)
+void AbstractColumn::setBigIntAt(int /*row*/, const qint64) {
 };
 
 /**
@@ -598,8 +571,7 @@ void AbstractColumn::setBigIntAt(int row, const qint64 new_value) {
  *
  * Use this only when columnMode() is BigInt
  */
-void AbstractColumn::replaceBigInt(int first, const QVector<qint64>& new_values) {
-	Q_UNUSED(first) Q_UNUSED(new_values)
+void AbstractColumn::replaceBigInt(int /*first*/, const QVector<qint64>&) {
 }
 
 /**
@@ -611,38 +583,27 @@ AbstractColumn::Properties AbstractColumn::properties() const {
 }
 
 /**********************************************************************/
-double AbstractColumn::minimum(int count) const {
-	Q_UNUSED(count);
+double AbstractColumn::minimum(int /*count*/) const {
 	return -INFINITY;
 }
 
-double AbstractColumn::minimum(int startIndex, int endIndex) const {
-	Q_UNUSED(startIndex);
-	Q_UNUSED(endIndex);
+double AbstractColumn::minimum(int /*startIndex*/, int /*endIndex*/) const {
 	return -INFINITY;
 }
 
-double AbstractColumn::maximum(int count) const {
-	Q_UNUSED(count);
+double AbstractColumn::maximum(int /*count*/) const {
 	return INFINITY;
 }
 
-double AbstractColumn::maximum(int startIndex, int endIndex) const {
-	Q_UNUSED(startIndex);
-	Q_UNUSED(endIndex);
+double AbstractColumn::maximum(int /*startIndex*/, int /*endIndex*/) const {
 	return INFINITY;
 }
 
-bool AbstractColumn::indicesMinMax(double v1, double v2, int& start, int& end)  const {
-	Q_UNUSED(v1)
-	Q_UNUSED(v2)
-	Q_UNUSED(start)
-	Q_UNUSED(end)
+bool AbstractColumn::indicesMinMax(double /*v1*/, double /*v2*/, int& /*start*/, int& /*end*/) const {
 	return false;
 }
 
-int AbstractColumn::indexForValue(double x) const {
-	Q_UNUSED(x)
+int AbstractColumn::indexForValue(double /*x*/) const {
 	return 0;
 }
 

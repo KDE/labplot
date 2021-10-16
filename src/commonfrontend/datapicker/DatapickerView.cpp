@@ -113,9 +113,7 @@ void DatapickerView::tabChanged(int index) {
 	lastSelectedIndex = index;
 }
 
-void DatapickerView::tabMoved(int from, int to) {
-	Q_UNUSED(from);
-	Q_UNUSED(to);
+void DatapickerView::tabMoved(int /*from*/, int /*to*/) {
 	//TODO:
 // 	AbstractAspect* aspect = m_datapicker->child<AbstractAspect>(to);
 // 	if (aspect) {

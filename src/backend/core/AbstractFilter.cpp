@@ -220,8 +220,8 @@ int AbstractFilter::portIndexOf(const AbstractColumn* column) {
  *
  * If not reimplemented, all connections to ports within [0, inputCount()-1] will be accepted.
  */
-bool AbstractFilter::inputAcceptable(int port, const AbstractColumn* source) {
-	Q_UNUSED(port); Q_UNUSED(source); return true;
+bool AbstractFilter::inputAcceptable(int /*port*/, const AbstractColumn* /*source*/) {
+	return true;
 }
 
 /**
@@ -230,8 +230,7 @@ bool AbstractFilter::inputAcceptable(int port, const AbstractColumn* source) {
  * This is only to notify implementations of the event, the default implementation is a
  * no-op.
  */
-void AbstractFilter::inputAboutToBeDisconnected(const AbstractColumn* source) {
-	Q_UNUSED(source);
+void AbstractFilter::inputAboutToBeDisconnected(const AbstractColumn* /*source*/) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -244,8 +243,7 @@ void AbstractFilter::inputAboutToBeDisconnected(const AbstractColumn* source) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputDescriptionAboutToChange(const AbstractColumn* source) {
-	Q_UNUSED(source);
+void AbstractFilter::inputDescriptionAboutToChange(const AbstractColumn* /*source*/) {
 } 
 
 void AbstractFilter::inputDescriptionAboutToChange(const AbstractAspect* aspect) {
@@ -258,8 +256,7 @@ void AbstractFilter::inputDescriptionAboutToChange(const AbstractAspect* aspect)
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputDescriptionChanged(const AbstractColumn* source) {
-	Q_UNUSED(source);
+void AbstractFilter::inputDescriptionChanged(const AbstractColumn* /*source*/) {
 }
 
 void AbstractFilter::inputDescriptionChanged(const AbstractAspect* aspect) {
@@ -272,8 +269,7 @@ void AbstractFilter::inputDescriptionChanged(const AbstractAspect* aspect) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputPlotDesignationAboutToChange(const AbstractColumn* source) {
-	Q_UNUSED(source);
+void AbstractFilter::inputPlotDesignationAboutToChange(const AbstractColumn* /*source*/) {
 }
 
 /**
@@ -281,8 +277,7 @@ void AbstractFilter::inputPlotDesignationAboutToChange(const AbstractColumn* sou
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputPlotDesignationChanged(const AbstractColumn* source) {
-	Q_UNUSED(source);
+void AbstractFilter::inputPlotDesignationChanged(const AbstractColumn* /*source*/) {
 }
 
 /**
@@ -290,8 +285,7 @@ void AbstractFilter::inputPlotDesignationChanged(const AbstractColumn* source) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputModeAboutToChange(const AbstractColumn* source) {
-	Q_UNUSED(source);
+void AbstractFilter::inputModeAboutToChange(const AbstractColumn* /*source*/) {
 }
 
 /**
@@ -299,8 +293,7 @@ void AbstractFilter::inputModeAboutToChange(const AbstractColumn* source) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputModeChanged(const AbstractColumn* source) {
-	Q_UNUSED(source);
+void AbstractFilter::inputModeChanged(const AbstractColumn* /*source*/) {
 }
 
 /**
@@ -308,8 +301,7 @@ void AbstractFilter::inputModeChanged(const AbstractColumn* source) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputDataAboutToChange(const AbstractColumn* source) { 
-	Q_UNUSED(source);
+void AbstractFilter::inputDataAboutToChange(const AbstractColumn* /*source*/) { 
 }
 
 /**
@@ -317,8 +309,7 @@ void AbstractFilter::inputDataAboutToChange(const AbstractColumn* source) {
  *
  * \param source is always the this pointer of the column that emitted the signal.
  */
-void AbstractFilter::inputDataChanged(const AbstractColumn* source) {
-	Q_UNUSED(source);
+void AbstractFilter::inputDataChanged(const AbstractColumn* /*source*/) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -136,8 +136,7 @@ int AspectTreeModel::rowCount(const QModelIndex &parent) const {
 	return parent_aspect->childCount<AbstractAspect>();
 }
 
-int AspectTreeModel::columnCount(const QModelIndex &parent) const {
-	Q_UNUSED(parent)
+int AspectTreeModel::columnCount(const QModelIndex& /*parent*/) const {
 	return 4;
 }
 
@@ -288,8 +287,7 @@ void AspectTreeModel::aspectDescriptionChanged(const AbstractAspect* aspect) {
 	emit dataChanged(modelIndexOfAspect(aspect), modelIndexOfAspect(aspect, 3));
 }
 
-void AspectTreeModel::aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
-	Q_UNUSED(child)
+void AspectTreeModel::aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* /*child*/) {
 	int index = parent->indexOfChild<AbstractAspect>(before);
 	if (index == -1)
 		index = parent->childCount<AbstractAspect>();

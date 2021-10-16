@@ -169,10 +169,7 @@ void CartesianPlotLegend::setZValue(qreal) {
 	d->setZValue(std::numeric_limits<double>::max());
 }
 
-void CartesianPlotLegend::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(horizontalRatio);
-	Q_UNUSED(verticalRatio);
-	Q_UNUSED(pageResize);
+void CartesianPlotLegend::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
 	//TODO
 // 	Q_D(const CartesianPlotLegend);
 }
@@ -602,9 +599,7 @@ void CartesianPlotLegendPrivate::updatePosition() {
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the legend.
   \sa QGraphicsItem::paint().
 */
-void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option);
-	Q_UNUSED(widget);
+void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;
 

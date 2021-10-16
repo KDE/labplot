@@ -285,10 +285,7 @@ QRectF WorksheetElementContainerPrivate::boundingRect() const {
 }
 
 // Inherited from QGraphicsItem
-void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;
 

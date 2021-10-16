@@ -1285,13 +1285,12 @@ bool Matrix::load(XmlStreamReader* reader, bool preview) {
 //########################  Data Import  #######################################
 //##############################################################################
 int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode mode,
-	int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
+	int actualRows, int actualCols, QStringList /*colNameList*/, QVector<AbstractColumn::ColumnMode> columnMode) {
 	auto newColumnMode = columnMode.at(0);	// only first column mode used
 	DEBUG(Q_FUNC_INFO << ", rows = " << actualRows << " cols = " << actualCols
 	      << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode)
 	      << ", column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, newColumnMode))
 	//QDEBUG("	column modes = " << columnMode);
-	Q_UNUSED(colNameList)
 	int columnOffset = 0;
 	setUndoAware(false);
 
@@ -1374,13 +1373,8 @@ int Matrix::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter:
 	return columnOffset;
 }
 
-void Matrix::finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
+void Matrix::finalizeImport(size_t /*columnOffset*/, size_t /*startColumn*/, size_t /*endColumn*/, const QString& /*dateTimeFormat*/, AbstractFileFilter::ImportMode)  {
 	DEBUG(Q_FUNC_INFO)
-	Q_UNUSED(columnOffset)
-	Q_UNUSED(startColumn)
-	Q_UNUSED(endColumn)
-	Q_UNUSED(dateTimeFormat)
-	Q_UNUSED(importMode)
 
 	setSuppressDataChangedSignal(false);
 	setChanged();

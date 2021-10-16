@@ -125,8 +125,7 @@ void Workbook::childSelected(const AbstractAspect* aspect) {
 /*!
 	this slot is called when a worksheet element is deselected in the project explorer.
  */
-void Workbook::childDeselected(const AbstractAspect* aspect) {
-	Q_UNUSED(aspect)
+void Workbook::childDeselected(const AbstractAspect*) {
 }
 
 /*!

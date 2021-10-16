@@ -65,9 +65,7 @@ void PartMdiView::closeEvent(QCloseEvent *event) {
 	event->accept();
 }
 
-void PartMdiView::slotWindowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState) {
-	Q_UNUSED(oldState);
-
+void PartMdiView::slotWindowStateChanged(Qt::WindowStates /*oldState*/, Qt::WindowStates newState) {
 	if (m_closing)
 		return;
 

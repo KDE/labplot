@@ -56,15 +56,13 @@ void ImageFilter::write(const QString & fileName, AbstractDataSource* dataSource
 /*!
   loads the predefined filter settings for \c filterName
 */
-void ImageFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName);
+void ImageFilter::loadFilterSettings(const QString& /*filterName*/) {
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
-void ImageFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName);
+void ImageFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -108,13 +106,11 @@ int ImageFilter::endColumn() const {
 	return d->endColumn;
 }
 
-QString ImageFilter::fileInfoString(const QString& fileName) {
+QString ImageFilter::fileInfoString(const QString& /*fileName*/) {
 	DEBUG("ImageFilter::fileInfoString()");
 	QString info;
 
 	//TODO
-	Q_UNUSED(fileName);
-
 	return info;
 }
 
@@ -248,9 +244,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void ImageFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
-	Q_UNUSED(fileName);
-	Q_UNUSED(dataSource);
+void ImageFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
 	//TODO
 }
 
@@ -269,8 +263,7 @@ void ImageFilter::save(QXmlStreamWriter* writer) const {
 /*!
   Loads from XML.
 */
-bool ImageFilter::load(XmlStreamReader* reader) {
-	Q_UNUSED(reader);
+bool ImageFilter::load(XmlStreamReader*) {
 // 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 // 	QXmlStreamAttributes attribs = reader->attributes();
 

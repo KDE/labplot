@@ -76,12 +76,10 @@ QList<FITSFilter::Keyword> FITSFilter::chduKeywords(const QString &fileName) {
 	return d->chduKeywords(fileName);
 }
 
-void FITSFilter::loadFilterSettings(const QString& fileName) {
-	Q_UNUSED(fileName)
+void FITSFilter::loadFilterSettings(const QString& /*fileName*/) {
 }
 
-void FITSFilter::saveFilterSettings(const QString& fileName) const {
-	Q_UNUSED(fileName)
+void FITSFilter::saveFilterSettings(const QString& /*fileName*/) const {
 }
 
 /*!
@@ -1042,7 +1040,7 @@ void FITSFilterPrivate::printError(int status) const {
 #ifdef HAVE_FITS
 	if (status) {
 		char errorText[FLEN_ERRMSG];
-		fits_get_errstatus(status, errorText );
+		fits_get_errstatus(status, errorText);
 		qDebug() << QLatin1String(errorText);
 	}
 #else
@@ -1574,15 +1572,13 @@ FITSFilterPrivate::~FITSFilterPrivate() = default;
   Saves as XML.
 */
 
-void FITSFilter::save(QXmlStreamWriter * writer) const {
-	Q_UNUSED(writer)
+void FITSFilter::save(QXmlStreamWriter*) const {
 }
 
 /*!
   Loads from XML.
 */
 
-bool FITSFilter::load(XmlStreamReader * loader) {
-	Q_UNUSED(loader)
+bool FITSFilter::load(XmlStreamReader*) {
 	return false;
 }

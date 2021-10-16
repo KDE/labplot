@@ -188,13 +188,11 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 	return QVariant();
 }
 
-int SpreadsheetModel::rowCount(const QModelIndex& parent) const {
-	Q_UNUSED(parent)
+int SpreadsheetModel::rowCount(const QModelIndex& /*parent*/) const {
 	return m_rowCount;
 }
 
-int SpreadsheetModel::columnCount(const QModelIndex& parent) const {
-	Q_UNUSED(parent)
+int SpreadsheetModel::columnCount(const QModelIndex& /*parent*/) const {
 	return m_columnCount;
 }
 
@@ -244,18 +242,15 @@ bool SpreadsheetModel::setData(const QModelIndex& index, const QVariant& value, 
 	return false;
 }
 
-QModelIndex SpreadsheetModel::index(int row, int column, const QModelIndex& parent) const {
-	Q_UNUSED(parent)
+QModelIndex SpreadsheetModel::index(int row, int column, const QModelIndex& /*parent*/) const {
 	return createIndex(row, column);
 }
 
-QModelIndex SpreadsheetModel::parent(const QModelIndex& child) const {
-	Q_UNUSED(child)
+QModelIndex SpreadsheetModel::parent(const QModelIndex& /*child*/) const {
 	return QModelIndex{};
 }
 
-bool SpreadsheetModel::hasChildren(const QModelIndex& parent) const {
-	Q_UNUSED(parent)
+bool SpreadsheetModel::hasChildren(const QModelIndex& /*parent*/) const {
 	return false;
 }
 
@@ -299,8 +294,7 @@ void SpreadsheetModel::handleAspectAboutToBeRemoved(const AbstractAspect* aspect
 	disconnect(col, nullptr, this, nullptr);
 }
 
-void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
-	Q_UNUSED(before)
+void SpreadsheetModel::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* child) {
 	const Column* col = dynamic_cast<const Column*>(child);
 	if (!col || parent != m_spreadsheet)
 		return;
@@ -372,11 +366,10 @@ void SpreadsheetModel::handleDataChange(const AbstractColumn* col) {
 	emit dataChanged(index(0, i), index(m_rowCount-1, i));
 }
 
-void SpreadsheetModel::handleRowsInserted(const AbstractColumn* col, int before, int count) {
+void SpreadsheetModel::handleRowsInserted(const AbstractColumn* col, int /*before*/, int /*count*/) {
 	if (m_suppressSignals)
 		return;
 
-	Q_UNUSED(before) Q_UNUSED(count)
 	int i = m_spreadsheet->indexOfChild<Column>(col);
 	m_rowCount = col->rowCount();
 	emit dataChanged(index(0, i), index(m_rowCount-1, i));
@@ -384,11 +377,10 @@ void SpreadsheetModel::handleRowsInserted(const AbstractColumn* col, int before,
 	m_spreadsheet->emitRowCountChanged();
 }
 
-void SpreadsheetModel::handleRowsRemoved(const AbstractColumn* col, int first, int count) {
+void SpreadsheetModel::handleRowsRemoved(const AbstractColumn* col, int /*first*/, int /*count*/) {
 	if (m_suppressSignals)
 		return;
 
-	Q_UNUSED(first) Q_UNUSED(count)
 	int i = m_spreadsheet->indexOfChild<Column>(col);
 	m_rowCount = col->rowCount();
 	emit dataChanged(index(0, i), index(m_rowCount-1, i));

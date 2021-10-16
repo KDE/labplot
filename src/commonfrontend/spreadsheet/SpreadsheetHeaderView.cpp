@@ -133,9 +133,7 @@ void SpreadsheetHeaderView::refresh() {
 /*!
   Reacts to a header data change.
 */
-void SpreadsheetHeaderView::headerDataChanged(Qt::Orientation orientation, int logicalFirst, int logicalLast) {
-	Q_UNUSED(logicalFirst);
-	Q_UNUSED(logicalLast);
+void SpreadsheetHeaderView::headerDataChanged(Qt::Orientation orientation, int /*logicalFirst*/, int /*logicalLast*/) {
 	if (orientation == Qt::Horizontal)
 		refresh();
 }

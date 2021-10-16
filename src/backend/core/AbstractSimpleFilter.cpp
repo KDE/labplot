@@ -277,28 +277,22 @@ void AbstractSimpleFilter::inputDataChanged(const AbstractColumn*) {
 	emit m_output_column->dataChanged(m_output_column);
 }
 
-void AbstractSimpleFilter::inputRowsAboutToBeInserted(const AbstractColumn * source, int before, int count) {
-	Q_UNUSED(source);
-	Q_UNUSED(count);
+void AbstractSimpleFilter::inputRowsAboutToBeInserted(const AbstractColumn* /*source*/, int before, int /*count*/) {
 	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
 		emit m_output_column->rowsAboutToBeInserted(m_output_column, output_range.start(), output_range.size());
 }
 
-void AbstractSimpleFilter::inputRowsInserted(const AbstractColumn * source, int before, int count) {
-	Q_UNUSED(source);
-	Q_UNUSED(count);
+void AbstractSimpleFilter::inputRowsInserted(const AbstractColumn* /*source*/, int before, int /*count*/) {
 	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(before, before)))
 		emit m_output_column->rowsInserted(m_output_column, output_range.start(), output_range.size());
 }
 
-void AbstractSimpleFilter::inputRowsAboutToBeRemoved(const AbstractColumn * source, int first, int count) {
-	Q_UNUSED(source);
+void AbstractSimpleFilter::inputRowsAboutToBeRemoved(const AbstractColumn* /*source*/, int first, int count) {
 	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(first, first+count-1)))
 		emit m_output_column->rowsAboutToBeRemoved(m_output_column, output_range.start(), output_range.size());
 }
 
-void AbstractSimpleFilter::inputRowsRemoved(const AbstractColumn * source, int first, int count) {
-	Q_UNUSED(source);
+void AbstractSimpleFilter::inputRowsRemoved(const AbstractColumn* /*source*/, int first, int count) {
 	foreach (const Interval<int>& output_range, dependentRows(Interval<int>(first, first+count-1)))
 		emit m_output_column->rowsRemoved(m_output_column, output_range.start(), output_range.size());
 }
@@ -338,8 +332,7 @@ void AbstractSimpleFilter::save(QXmlStreamWriter * writer) const {
 /**
  * \brief Override this in derived classes if they have other attributes than filter_name
  */
-void AbstractSimpleFilter::writeExtraAttributes(QXmlStreamWriter * writer) const {
-	Q_UNUSED(writer)
+void AbstractSimpleFilter::writeExtraAttributes(QXmlStreamWriter*) const {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -349,9 +342,7 @@ void AbstractSimpleFilter::writeExtraAttributes(QXmlStreamWriter * writer) const
 /**
  * \brief Load from XML
  */
-bool AbstractSimpleFilter::load(XmlStreamReader* reader, bool preview) {
-	Q_UNUSED(preview); //TODO
-
+bool AbstractSimpleFilter::load(XmlStreamReader* reader, bool /*preview*/) {
 	if (!readBasicAttributes(reader))
 		return false;
 

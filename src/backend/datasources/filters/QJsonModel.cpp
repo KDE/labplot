@@ -331,8 +331,7 @@ int QJsonModel::rowCount(const QModelIndex& parent) const {
 	return parentItem->childCount();
 }
 
-int QJsonModel::columnCount(const QModelIndex& parent) const {
-	Q_UNUSED(parent)
+int QJsonModel::columnCount(const QModelIndex& /*parent*/) const {
 	return 3;
 }
 

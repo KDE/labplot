@@ -192,8 +192,7 @@ void Symbol::loadThemeConfig(const KConfigGroup& group, const QColor& themeColor
 	setPen(p);
 }
 
-void Symbol::saveThemeConfig(const KConfigGroup& group) const {
-	Q_UNUSED(group)
+void Symbol::saveThemeConfig(const KConfigGroup& /*group*/) const {
 	//TODO:
 // 	group.writeEntry("SymbolOpacity", opacity());
 }

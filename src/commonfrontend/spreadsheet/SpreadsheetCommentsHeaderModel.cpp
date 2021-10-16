@@ -40,9 +40,7 @@ Qt::ItemFlags SpreadsheetCommentsHeaderModel::flags(const QModelIndex& index ) c
 		return Qt::ItemIsEnabled;
 }
 
-QVariant SpreadsheetCommentsHeaderModel::data(const QModelIndex& index, int role) const {
-	Q_UNUSED(index);
-	Q_UNUSED(role);
+QVariant SpreadsheetCommentsHeaderModel::data(const QModelIndex& /*index*/, int /*role*/) const {
 	return QVariant();
 }
 
@@ -53,12 +51,10 @@ QVariant SpreadsheetCommentsHeaderModel::headerData(int section, Qt::Orientation
 	return QVariant(m_spreadsheet_model->headerData(section, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::CommentRole)));
 }
 
-int SpreadsheetCommentsHeaderModel::rowCount(const QModelIndex& parent) const{
-	Q_UNUSED(parent)
+int SpreadsheetCommentsHeaderModel::rowCount(const QModelIndex& /*parent*/) const{
 	return m_spreadsheet_model->rowCount();
 }
 
-int SpreadsheetCommentsHeaderModel::columnCount(const QModelIndex& parent) const{
-	Q_UNUSED(parent)
+int SpreadsheetCommentsHeaderModel::columnCount(const QModelIndex& /*parent*/) const{
 	return m_spreadsheet_model->columnCount();
 }

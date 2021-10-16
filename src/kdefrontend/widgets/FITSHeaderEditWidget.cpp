@@ -615,7 +615,6 @@ void FITSHeaderEditWidget::enableButtonAddUnit() {
 		ui->bAddUnit->setEnabled(false);
 }
 
-void FITSHeaderEditWidget::enableButtonCloseFile(QTreeWidgetItem* item,int col) {
-	Q_UNUSED(col)
+void FITSHeaderEditWidget::enableButtonCloseFile(QTreeWidgetItem* item,int /*col*/) {
 	ui->bClose->setEnabled(item->parent() ? false : true);
 }

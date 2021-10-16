@@ -53,15 +53,13 @@ void ReadStatFilter::write(const QString & fileName, AbstractDataSource* dataSou
 /*!
   loads the predefined filter settings for \c filterName
 */
-void ReadStatFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName);
+void ReadStatFilter::loadFilterSettings(const QString& /*filterName*/) {
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
-void ReadStatFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName);
+void ReadStatFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 void ReadStatFilter::setStartRow(const int r) {
@@ -211,19 +209,16 @@ int ReadStatFilterPrivate::m_startColumn{1}, ReadStatFilterPrivate::m_endColumn{
 
 #ifdef HAVE_READSTAT
 // callbacks
-int ReadStatFilterPrivate::getMetaData(readstat_metadata_t *metadata, void *ptr) {
+int ReadStatFilterPrivate::getMetaData(readstat_metadata_t *metadata, void*) {
 	DEBUG(Q_FUNC_INFO)
-	Q_UNUSED(ptr)
 	m_varCount = readstat_get_var_count(metadata);
 	m_rowCount = readstat_get_row_count(metadata);
 	m_valueLabels.resize(m_varCount);
 
 	return READSTAT_HANDLER_OK;
 }
-int ReadStatFilterPrivate::getVarName(int index, readstat_variable_t *variable, const char *val_labels, void *ptr) {
+int ReadStatFilterPrivate::getVarName(int /*index*/, readstat_variable_t* variable, const char* val_labels, void*) {
 	//DEBUG(Q_FUNC_INFO)
-	Q_UNUSED(index)
-	Q_UNUSED(ptr)
 
 	// only on column from m_startColumn to m_endColumn
 	const int col = readstat_variable_get_index(variable);
@@ -241,9 +236,7 @@ int ReadStatFilterPrivate::getVarName(int index, readstat_variable_t *variable, 
 
 	return READSTAT_HANDLER_OK;
 }
-int ReadStatFilterPrivate::getColumnModes(int row, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
-	Q_UNUSED(ptr)
-
+int ReadStatFilterPrivate::getColumnModes(int row, readstat_variable_t *variable, readstat_value_t value, void*) {
 	if (row >= m_rowCount)	// more rows found than meta data said it has (like -1)
 		m_rowCount = row + 1;
 
@@ -270,9 +263,7 @@ int ReadStatFilterPrivate::getColumnModes(int row, readstat_variable_t *variable
 
 	return READSTAT_HANDLER_OK;
 }
-int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
-	Q_UNUSED(ptr)
-
+int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t *variable, readstat_value_t value, void* ptr) {
 	//DEBUG(Q_FUNC_INFO << ", start/end row =" << m_startRow << "/" << m_endRow)
 
 	// read only from start to end row/column
@@ -322,9 +313,7 @@ int ReadStatFilterPrivate::getValuesPreview(int row, readstat_variable_t *variab
 
 	return READSTAT_HANDLER_OK;
 }
-int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, readstat_value_t value, void *ptr) {
-	Q_UNUSED(ptr)
-
+int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, readstat_value_t value, void*) {
 	// only read from start to end row/col
 	const int col = readstat_variable_get_index(variable);
 	if (row < m_startRow - 1 || (m_endRow != -1 && row > m_endRow - 1) ||
@@ -380,29 +369,22 @@ int ReadStatFilterPrivate::getValues(int row, readstat_variable_t *variable, rea
 
 	return READSTAT_HANDLER_OK;
 }
-int ReadStatFilterPrivate::getNotes(int index, const char* note, void *ptr) {
-	Q_UNUSED(ptr)
+int ReadStatFilterPrivate::getNotes(int index, const char* note, void*) {
 	Q_UNUSED(index)
-
 	DEBUG(Q_FUNC_INFO << " note " << index << ": " << note)
 	m_notes << note;
 
 	return READSTAT_HANDLER_OK;
 }
-int ReadStatFilterPrivate::getFWeights(readstat_variable_t *variable, void *ptr) {
-	Q_UNUSED(ptr)
-
-	const int col = readstat_variable_get_index(variable);
+int ReadStatFilterPrivate::getFWeights(readstat_variable_t* /*var*/, void*) {
 	//TODO: not used yet
-	Q_UNUSED(col)
-	DEBUG(Q_FUNC_INFO << ", fweight of col " << col)
+	//const int col = readstat_variable_get_index(var);
+	//DEBUG(Q_FUNC_INFO << ", fweight of col " << col)
 
 	return READSTAT_HANDLER_OK;
 }
 // value labels are read in getVarName() and assigned here
-int ReadStatFilterPrivate::getValueLabels(const char *val_label, readstat_value_t value, const char *label, void *ptr) {
-	Q_UNUSED(ptr)
-
+int ReadStatFilterPrivate::getValueLabels(const char* val_label, readstat_value_t value, const char* label, void*) {
 	// see https://github.com/tidyverse/haven/blob/master/src/DfReader.cpp
 	DEBUG(Q_FUNC_INFO << ", value label = " << val_label << " label = " << label << ", type = " << value.type)
 
@@ -607,9 +589,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void ReadStatFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
-	Q_UNUSED(fileName);
-	Q_UNUSED(dataSource);
+void ReadStatFilterPrivate::write(const QString & /*fileName*/, AbstractDataSource* /*dataSource*/) {
 	//TODO: writing ReadStat files not implemented yet
 }
 
@@ -628,8 +608,7 @@ void ReadStatFilter::save(QXmlStreamWriter* writer) const {
 /*!
   Loads from XML.
 */
-bool ReadStatFilter::load(XmlStreamReader* reader) {
-	Q_UNUSED(reader);
+bool ReadStatFilter::load(XmlStreamReader*) {
 // 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 // 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;

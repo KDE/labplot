@@ -717,8 +717,7 @@ QString MQTTSubscriptionWidget::checkCommonLevel(const QString& first, const QSt
 /*!
  *\brief When a leaf topic is double clicked in the topics tree widget we subscribe on that
  */
-void MQTTSubscriptionWidget::mqttAvailableTopicDoubleClicked(QTreeWidgetItem* item, int column) {
-	Q_UNUSED(column)
+void MQTTSubscriptionWidget::mqttAvailableTopicDoubleClicked(QTreeWidgetItem* item, int /*column*/) {
 	// Only for leaf topics
 	if (item->childCount() == 0)
 		mqttSubscribe();
@@ -727,8 +726,7 @@ void MQTTSubscriptionWidget::mqttAvailableTopicDoubleClicked(QTreeWidgetItem* it
 /*!
  *\brief When a leaf subscription is double clicked in the topics tree widget we unsubscribe
  */
-void MQTTSubscriptionWidget::mqttSubscribedTopicDoubleClicked(QTreeWidgetItem* item, int column) {
-	Q_UNUSED(column)
+void MQTTSubscriptionWidget::mqttSubscribedTopicDoubleClicked(QTreeWidgetItem* item, int /*column*/) {
 	// Only for leaf subscriptions
 	if (item->childCount() == 0)
 		mqttUnsubscribe();

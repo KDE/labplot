@@ -158,15 +158,13 @@ void NetCDFFilter::write(const QString & fileName, AbstractDataSource* dataSourc
 /*!
   loads the predefined filter settings for \c filterName
 */
-void NetCDFFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName);
+void NetCDFFilter::loadFilterSettings(const QString& /*filterName*/) {
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
-void NetCDFFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName);
+void NetCDFFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -296,11 +294,11 @@ NetCDFFilterPrivate::NetCDFFilterPrivate(NetCDFFilter* owner) : q(owner) {
 
 #ifdef HAVE_NETCDF
 void NetCDFFilterPrivate::handleError(int err, const QString& function) {
+	Q_UNUSED(function);
 	if (err != NC_NOERR) {
 		DEBUG("NETCDF ERROR:" << STDSTRING(function) << "() - " << nc_strerror(err));
 		return;
 	}
-	Q_UNUSED(function);
 }
 
 QString NetCDFFilterPrivate::translateDataType(nc_type type) {
@@ -951,9 +949,7 @@ QVector<QStringList> NetCDFFilterPrivate::readDataFromFile(const QString& fileNa
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void NetCDFFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
-	Q_UNUSED(fileName);
-	Q_UNUSED(dataSource);
+void NetCDFFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
 	//TODO: writing NetCDF files not implemented yet
 }
 
@@ -972,8 +968,7 @@ void NetCDFFilter::save(QXmlStreamWriter* writer) const {
 /*!
   Loads from XML.
 */
-bool NetCDFFilter::load(XmlStreamReader* reader) {
-	Q_UNUSED(reader);
+bool NetCDFFilter::load(XmlStreamReader*) {
 // 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 // 	QXmlStreamAttributes attribs = reader->attributes();
 	return true;

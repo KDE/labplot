@@ -107,6 +107,5 @@ void ImportDatasetDialog::checkOkButton() {
 	okButton->setEnabled(enable);
 }
 
-void ImportDatasetDialog::importTo(QStatusBar* statusBar) const {
-	Q_UNUSED(statusBar);
+void ImportDatasetDialog::importTo(QStatusBar*) const {
 }

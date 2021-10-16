@@ -211,9 +211,7 @@ void QxtSpanSliderPrivate::swapControls() {
 	mainControl = (mainControl == QxtSpanSlider::LowerHandle ? QxtSpanSlider::UpperHandle : QxtSpanSlider::LowerHandle);
 }
 
-void QxtSpanSliderPrivate::updateRange(int min, int max) {
-	Q_UNUSED(min);
-	Q_UNUSED(max);
+void QxtSpanSliderPrivate::updateRange(int /*min*/, int /*max*/) {
 	// setSpan() takes care of keeping span in range
 	qxt_p().setSpan(lower, upper);
 }
@@ -595,8 +593,7 @@ void QxtSpanSlider::mouseReleaseEvent(QMouseEvent* event) {
 /*!
     \reimp
  */
-void QxtSpanSlider::paintEvent(QPaintEvent* event) {
-	Q_UNUSED(event);
+void QxtSpanSlider::paintEvent(QPaintEvent*) {
 	QStylePainter painter(this);
 
 	// groove & ticks

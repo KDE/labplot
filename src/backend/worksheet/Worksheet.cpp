@@ -300,10 +300,7 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	}
 }
 
-void Worksheet::handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child) {
-	Q_UNUSED(parent);
-	Q_UNUSED(before);
-
+void Worksheet::handleAspectRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
 	if (d->layout != Worksheet::Layout::NoLayout)
 		d->updateLayout(false);
 	auto* plot = dynamic_cast<const CartesianPlot*>(child);
@@ -1120,8 +1117,7 @@ void Worksheet::cursorPosChanged(int cursorNumber, double xPos) {
 	}
 }
 
-void Worksheet::cursorModelPlotAdded(const QString& name) {
-	Q_UNUSED(name);
+void Worksheet::cursorModelPlotAdded(const QString& /*name*/) {
 //	TreeModel* treeModel = cursorModel();
 //	int rowCount = treeModel->rowCount();
 //	// add plot at the end

@@ -61,12 +61,8 @@ public:
 		return boundingRectangle;
 	}
 
-	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override {
-		Q_UNUSED(option)
-		Q_UNUSED(widget)
-
-		if (!axis->isVisible()) return;
-		if (axis->linePath.isEmpty()) return;
+	void paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) override {
+		if (!axis->isVisible() || axis->linePath.isEmpty()) return;
 
 		//draw major grid
 		if (axis->majorGridPen.style() != Qt::NoPen) {
@@ -341,7 +337,6 @@ void Axis::setSuppressRetransform(bool value) {
 
 void Axis::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
 	Q_D(Axis);
-	Q_UNUSED(pageResize)
 
 	double ratio = 0;
 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
@@ -2351,10 +2346,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	paints the content of the axis. Reimplemented from \c QGraphicsItem.
 	\sa QGraphicsItem::paint()
  */
-void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible() || linePath.isEmpty())
 		return;
 

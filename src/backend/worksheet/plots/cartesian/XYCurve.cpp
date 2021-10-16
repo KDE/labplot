@@ -765,8 +765,7 @@ void XYCurve::updateErrorBars() {
 }
 
 //TODO
-void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(pageResize);
+void XYCurve::handleResize(double horizontalRatio, double verticalRatio, bool /*pageResize*/) {
 	Q_D(const XYCurve);
 
 	d->symbol->setSize(d->symbol->size() * horizontalRatio);
@@ -2902,9 +2901,7 @@ QVariant XYCurvePrivate::itemChange(GraphicsItemChange change, const QVariant & 
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
   \sa QGraphicsItem::paint().
 */
-void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
+void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;
 

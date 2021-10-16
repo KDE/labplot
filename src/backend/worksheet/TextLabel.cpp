@@ -198,9 +198,8 @@ void TextLabel::retransform() {
 	d->retransform();
 }
 
-void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	DEBUG("TextLabel::handleResize()");
-	Q_UNUSED(pageResize);
+void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool /*pageResize*/) {
+	DEBUG(Q_FUNC_INFO);
 	Q_D(TextLabel);
 
 	double ratio = 0;
@@ -981,10 +980,7 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	emit q->changed();
 }
 
-void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (positionInvalid || textWrapper.text.isEmpty())
 		return;
 

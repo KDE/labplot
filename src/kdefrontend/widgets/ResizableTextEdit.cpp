@@ -25,7 +25,7 @@ QSize GrabBar::sizeHint() const {
 	return QSize{20, 10};
 }
 
-void GrabBar::paintEvent(QPaintEvent* e) {
+void GrabBar::paintEvent(QPaintEvent*) {
 	QPainter p(this);
 
 	// show at least a rect

@@ -533,8 +533,7 @@ void DatapickerImageView::updateMagnificationWindow() {
 	m_image->m_magnificationWindow->setVisible(true);
 }
 
-void DatapickerImageView::contextMenuEvent(QContextMenuEvent* e) {
-	Q_UNUSED(e);
+void DatapickerImageView::contextMenuEvent(QContextMenuEvent*) {
 	//no need to propagate the event to the scene and graphics items
 	QMenu *menu = new QMenu(this);
 	this->createContextMenu(menu);

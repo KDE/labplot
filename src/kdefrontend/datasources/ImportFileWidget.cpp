@@ -919,8 +919,7 @@ void ImportFileWidget::manageFilters() {
 	Depending on the selected file type, activates the corresponding options in the data portion tab
 	and populates the combobox with the available pre-defined filter settings for the selected type.
 */
-void ImportFileWidget::fileTypeChanged(int index) {
-	Q_UNUSED(index);
+void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	AbstractFileFilter::FileType fileType = currentFileType();
 	DEBUG("ImportFileWidget::fileTypeChanged " << ENUM_TO_STRING(AbstractFileFilter, FileType, fileType));
 	initOptionsWidget();
@@ -2115,8 +2114,7 @@ void ImportFileWidget::unsubscribeTopic(const QString& topicName, QVector<QTreeW
  *\brief called when the client receives a message
  * if the message arrived from a new topic, the topic is put in twTopics
  */
-void ImportFileWidget::mqttMessageReceived(const QByteArray& message, const QMqttTopicName& topic) {
-	Q_UNUSED(message);
+void ImportFileWidget::mqttMessageReceived(const QByteArray& /*message*/, const QMqttTopicName& topic) {
 // 	qDebug()<<"received " << topic.name();
 	if (m_addedTopics.contains(topic.name()))
 		return;

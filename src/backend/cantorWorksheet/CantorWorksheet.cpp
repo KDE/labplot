@@ -120,8 +120,7 @@ void CantorWorksheet::dataChanged(const QModelIndex& index) {
 
 }
 
-void CantorWorksheet::rowsInserted(const QModelIndex& parent, int first, int last) {
-	Q_UNUSED(parent)
+void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int last) {
 	for (int i = first; i <= last; ++i) {
 		const QString& name = m_variableModel->data(m_variableModel->index(i, 0)).toString();
 		QVariant dataValue = m_variableModel->data(m_variableModel->index(i, 1), 257);
@@ -163,9 +162,7 @@ void CantorWorksheet::modelReset() {
 		column->remove();
 }
 
-void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last) {
-	Q_UNUSED(parent);
-
+void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex& /*parent*/, int first, int last) {
 	for (int i = first; i <= last; ++i) {
 		const QString& name = m_variableModel->data(m_variableModel->index(first, 0)).toString();
 		Column* column = child<Column>(name);

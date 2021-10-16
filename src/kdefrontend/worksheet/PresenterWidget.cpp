@@ -41,8 +41,7 @@ PresenterWidget::~PresenterWidget() {
 	delete m_timeLine;
 }
 
-bool PresenterWidget::eventFilter(QObject* watched, QEvent* event) {
-	Q_UNUSED(watched);
+bool PresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		if (m_panel->y() != 0 && m_panel->rect().contains(QCursor::pos()))
 			slideDown();

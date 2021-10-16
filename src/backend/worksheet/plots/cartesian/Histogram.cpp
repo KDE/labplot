@@ -611,9 +611,7 @@ void Histogram::recalcHistogram() {
 }
 
 //TODO
-void Histogram::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	Q_UNUSED(pageResize);
-	Q_UNUSED(verticalRatio);
+void Histogram::handleResize(double horizontalRatio, double /*verticalRatio*/, bool /*pageResize*/) {
 	Q_D(const Histogram);
 
 	//setValuesDistance(d->distance*);
@@ -1459,9 +1457,7 @@ void HistogramPrivate::updatePixmap() {
   Reimplementation of QGraphicsItem::paint(). This function does the actual painting of the curve.
   \sa QGraphicsItem::paint().
   */
-void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option);
-	Q_UNUSED(widget);
+void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	if (!isVisible())
 		return;
 
@@ -1645,8 +1641,7 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	}
 }
 
-bool HistogramPrivate::activateCurve(QPointF mouseScenePos, double maxDist) {
-	Q_UNUSED(maxDist)
+bool HistogramPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
 	if (!isVisible())
 		return false;
 

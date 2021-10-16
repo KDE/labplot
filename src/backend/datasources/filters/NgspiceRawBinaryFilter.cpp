@@ -104,15 +104,13 @@ void NgspiceRawBinaryFilter::write(const QString& fileName, AbstractDataSource* 
 /*!
   loads the predefined filter settings for \c filterName
 */
-void NgspiceRawBinaryFilter::loadFilterSettings(const QString& filterName) {
-	Q_UNUSED(filterName);
+void NgspiceRawBinaryFilter::loadFilterSettings(const QString& /*filterName*/) {
 }
 
 /*!
   saves the current settings as a new filter with the name \c filterName
 */
-void NgspiceRawBinaryFilter::saveFilterSettings(const QString& filterName) const {
-	Q_UNUSED(filterName);
+void NgspiceRawBinaryFilter::saveFilterSettings(const QString& /*filterName*/) const {
 }
 
 void NgspiceRawBinaryFilter::setStartRow(const int r) {
@@ -317,9 +315,7 @@ QVector<QStringList> NgspiceRawBinaryFilterPrivate::preview(const QString& fileN
 /*!
     writes the content of \c dataSource to the file \c fileName.
 */
-void NgspiceRawBinaryFilterPrivate::write(const QString & fileName, AbstractDataSource* dataSource) {
-	Q_UNUSED(fileName);
-	Q_UNUSED(dataSource);
+void NgspiceRawBinaryFilterPrivate::write(const QString& /*fileName*/, AbstractDataSource* /*dataSource*/) {
 }
 
 //##############################################################################
@@ -328,14 +324,12 @@ void NgspiceRawBinaryFilterPrivate::write(const QString & fileName, AbstractData
 /*!
   Saves as XML.
  */
-void NgspiceRawBinaryFilter::save(QXmlStreamWriter* writer) const {
-	Q_UNUSED(writer);
+void NgspiceRawBinaryFilter::save(QXmlStreamWriter*) const {
 }
 
 /*!
   Loads from XML.
 */
-bool NgspiceRawBinaryFilter::load(XmlStreamReader* reader) {
-	Q_UNUSED(reader);
+bool NgspiceRawBinaryFilter::load(XmlStreamReader*) {
 	return true;
 }

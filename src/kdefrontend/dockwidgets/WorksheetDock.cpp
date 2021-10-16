@@ -478,8 +478,7 @@ void WorksheetDock::sizeChanged() {
 		worksheet->setPageRect(QRect(0,0,w,h));
 }
 
-void WorksheetDock::orientationChanged(int index) {
-	Q_UNUSED(index);
+void WorksheetDock::orientationChanged(int /*index*/) {
 	if (m_initializing)
 		return;
 

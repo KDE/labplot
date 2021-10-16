@@ -25,8 +25,7 @@ extern "C" {
  *  \ingroup backend\worksheet
  */
 
-AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot* plot) {
-	Q_UNUSED(plot)
+AbstractCoordinateSystem::AbstractCoordinateSystem(AbstractPlot*) {
 }
 
 AbstractCoordinateSystem::~AbstractCoordinateSystem() = default;

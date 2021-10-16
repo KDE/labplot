@@ -2300,8 +2300,7 @@ void CartesianPlotDock::plotXRangeBreakingEnabledChanged(bool on) {
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks& breaks) {
-	Q_UNUSED(breaks);
+void CartesianPlotDock::plotXRangeBreaksChanged(const CartesianPlot::RangeBreaks&) {
 }
 
 void CartesianPlotDock::plotYRangeBreakingEnabledChanged(bool on) {
@@ -2310,8 +2309,7 @@ void CartesianPlotDock::plotYRangeBreakingEnabledChanged(bool on) {
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks& breaks) {
-	Q_UNUSED(breaks);
+void CartesianPlotDock::plotYRangeBreaksChanged(const CartesianPlot::RangeBreaks&) {
 }
 
 void CartesianPlotDock::plotVisibleChanged(bool on) {

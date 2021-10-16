@@ -254,8 +254,7 @@ void ImageDock::opacityChanged(int value) {
 }
 
 //Size
-void ImageDock::sizeChanged(int index) {
-	Q_UNUSED(index);
+void ImageDock::sizeChanged(int /*index*/) {
 }
 
 void ImageDock::widthChanged(double value) {

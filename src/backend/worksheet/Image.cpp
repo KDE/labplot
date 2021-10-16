@@ -93,11 +93,8 @@ void Image::retransform() {
 	d->retransform();
 }
 
-void Image::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	DEBUG("Image::handleResize()");
-	Q_UNUSED(pageResize);
-	Q_UNUSED(horizontalRatio);
-	Q_UNUSED(verticalRatio);
+void Image::handleResize(double /*horizontalRatio*/, double /*verticalRatio*/, bool /*pageResize*/) {
+	DEBUG(Q_FUNC_INFO);
 // 	Q_D(Image);
 
 // 	double ratio = 0;
@@ -412,10 +409,7 @@ void ImagePrivate::recalcShapeAndBoundingRect() {
 	emit q->changed();
 }
 
-void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	Q_UNUSED(option)
-	Q_UNUSED(widget)
-
+void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
 	painter->save();
 
 	//draw the image
@@ -659,10 +653,8 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 //#########################  Theme management ##################################
 //##############################################################################
-void Image::loadThemeConfig(const KConfig& config) {
-	Q_UNUSED(config)
+void Image::loadThemeConfig(const KConfig&) {
 }
 
-void Image::saveThemeConfig(const KConfig& config) {
-	Q_UNUSED(config)
+void Image::saveThemeConfig(const KConfig&) {
 }

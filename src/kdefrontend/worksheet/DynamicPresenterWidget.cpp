@@ -47,8 +47,7 @@ DynamicPresenterWidget::~DynamicPresenterWidget() {
 	delete m_view;
 }
 
-bool DynamicPresenterWidget::eventFilter(QObject* watched, QEvent* event) {
-	Q_UNUSED(watched);
+bool DynamicPresenterWidget::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::MouseMove) {
 		if (m_panel->y() != 0 && m_panel->rect().contains(QCursor::pos()))
 			slideDown();
