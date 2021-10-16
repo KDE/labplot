@@ -1114,7 +1114,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
 
-		// Check if spacing is not to small
+		// Check if spacing is not too small
 		majorTicksSpacingChanged();
 	} else {
 		ui.lMajorTicksNumber->hide();
@@ -1135,7 +1135,7 @@ void AxisDock::majorTicksTypeChanged(int index) {
 }
 
 void AxisDock::majorTicksNumberChanged(int value) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", number = " << value)
 	if (m_initializing)
 		return;
 
@@ -1150,7 +1150,7 @@ void AxisDock::majorTicksSpacingChanged() {
 	bool numeric = m_axis->isNumeric();
 	double spacing = numeric ? ui.sbMajorTicksSpacingNumeric->value() : dtsbMajorTicksIncrement->value();
 	double range = m_axis->range().length();
-	DEBUG("major spacing = " << spacing << ", range = " << range)
+	DEBUG(Q_FUNC_INFO << ", major spacing = " << spacing << ", range = " << range)
 
 	// fix spacing if incorrect (not set or > 100 ticks)
 	if (spacing == 0. || range / spacing > 100.) {
@@ -2006,7 +2006,6 @@ void AxisDock::axisMajorTicksTypeChanged(Axis::TicksType type) {
 	m_initializing = false;
 }
 void AxisDock::axisMajorTicksNumberChanged(int number) {
-	DEBUG(Q_FUNC_INFO)
 	m_initializing = true;
 	ui.sbMajorTicksNumber->setValue(number);
 	m_initializing = false;
@@ -2264,9 +2263,6 @@ void AxisDock::load() {
 	ui.leStart->setText( numberLocale.toString(m_axis->range().start()) );
 	ui.leEnd->setText( numberLocale.toString(m_axis->range().end()) );
 
-	ui.sbMajorTicksSpacingNumeric->setDecimals(0);
-	ui.sbMajorTicksSpacingNumeric->setSingleStep(m_axis->majorTicksSpacing());
-
 	//depending on the range format of the axis (numeric vs. datetime), show/hide the corresponding widgets
 	bool numeric = m_axis->isNumeric();
 
@@ -2319,6 +2315,13 @@ void AxisDock::load() {
 	ui.cbMajorTicksDirection->setCurrentIndex( (int) m_axis->majorTicksDirection() );
 	ui.cbMajorTicksType->setCurrentIndex( (int) m_axis->majorTicksType() );
 	ui.sbMajorTicksNumber->setValue( m_axis->majorTicksNumber() );
+	auto value{ m_axis->majorTicksSpacing() };
+	if (numeric) {
+		ui.sbMajorTicksSpacingNumeric->setDecimals(nsl_math_decimal_places(value) + 1);
+		ui.sbMajorTicksSpacingNumeric->setValue(value);
+		ui.sbMajorTicksSpacingNumeric->setSingleStep(value/10.);
+	} else
+		dtsbMajorTicksIncrement->setValue(value);
 	ui.cbMajorTicksLineStyle->setCurrentIndex( (int) m_axis->majorTicksPen().style() );
 	ui.kcbMajorTicksColor->setColor( m_axis->majorTicksPen().color() );
 	ui.sbMajorTicksWidth->setValue( Worksheet::convertFromSceneUnits( m_axis->majorTicksPen().widthF(), Worksheet::Unit::Point) );
@@ -2443,9 +2446,11 @@ void AxisDock::loadConfig(KConfig& config) {
 	ui.sbMajorTicksNumber->setValue( group.readEntry("MajorTicksNumber", m_axis->majorTicksNumber()) );
 	auto value{ group.readEntry("MajorTicksIncrement", m_axis->majorTicksSpacing()) };
 	bool numeric = m_axis->isNumeric();
-	if (numeric)
+	if (numeric) {
+		ui.sbMajorTicksSpacingNumeric->setDecimals(nsl_math_decimal_places(value) + 1);
 		ui.sbMajorTicksSpacingNumeric->setValue(value);
-	else
+		ui.sbMajorTicksSpacingNumeric->setSingleStep(value/10.);
+	} else
 		dtsbMajorTicksIncrement->setValue(value);
 	ui.cbMajorTicksLineStyle->setCurrentIndex( group.readEntry("MajorTicksLineStyle", (int) m_axis->majorTicksPen().style()) );
 	ui.kcbMajorTicksColor->setColor( group.readEntry("MajorTicksColor", m_axis->majorTicksPen().color()) );

@@ -661,11 +661,11 @@ void Axis::setMajorTicksType(TicksType majorTicksType) {
 		exec(new AxisSetMajorTicksTypeCmd(d, majorTicksType, ki18n("%1: set major ticks type")));
 }
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksNumber, int, majorTicksNumber, retransformTicks);
-void Axis::setMajorTicksNumber(int majorTicksNumber) {
-	DEBUG(Q_FUNC_INFO)
+void Axis::setMajorTicksNumber(int number) {
+	DEBUG(Q_FUNC_INFO << ", number = " << number)
 	Q_D(Axis);
-	if (majorTicksNumber != d->majorTicksNumber)
-		exec(new AxisSetMajorTicksNumberCmd(d, majorTicksNumber, ki18n("%1: set the total number of the major ticks")));
+	if (number != d->majorTicksNumber)
+		exec(new AxisSetMajorTicksNumberCmd(d, number, ki18n("%1: set the total number of the major ticks")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTicksSpacing, qreal, majorTicksSpacing, retransformTicks);
@@ -1311,6 +1311,7 @@ void AxisPrivate::retransformTicks() {
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
 	const double start{range.start()}, end{range.end()};
+	DEBUG(Q_FUNC_INFO << ", ticks type = " << (int)majorTicksType)
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber:	// total number of major ticks is given - > determine the increment
 		tmpMajorTicksNumber = majorTicksNumber;
