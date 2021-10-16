@@ -8,27 +8,31 @@
 */
 
 #include "ResizableTextEdit.h"
+#include "backend/lib/macros.h"
 
 #include <QApplication>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QStyle>
 #include <QStyleOption>
 
 GrabBar::GrabBar(ResizableTextEdit* parent, bool vertResizeOnly) : QWidget(parent),
 	m_parent(parent), m_vertResizeOnly(vertResizeOnly) {
 
-	resize(20,10);
+	resize(20, 10);
 }
 
 QSize GrabBar::sizeHint() const {
 	return QSize{20, 10};
 }
 
-void GrabBar::paintEvent(QPaintEvent*) {
+void GrabBar::paintEvent(QPaintEvent* e) {
 	QPainter p(this);
 
-	//s. qsplitter.cpp
+	// show at least a rect
+	QDEBUG(Q_FUNC_INFO << ", rect = " << rect())
+	p.fillRect(rect(), QColor(Qt::darkGray));
+
+	//see qsplitter.cpp
 	QStyleOption opt(0);
 	opt.rect = rect();
 	opt.palette = palette();
@@ -41,7 +45,7 @@ void GrabBar::paintEvent(QPaintEvent*) {
 	if (isEnabled())
 		opt.state |= QStyle::State_Enabled;
 
-	parentWidget()->style()->drawControl(QStyle::CE_Splitter, &opt, &p, this);
+	m_parent->style()->drawControl(QStyle::CE_Splitter, &opt, &p, m_parent);
 }
 
 void GrabBar::mousePressEvent(QMouseEvent* e) {
@@ -130,6 +134,5 @@ void ResizableTextEdit::resizeEvent(QResizeEvent* e) {
 	m_size = e->size();
 
 	QTextEdit::resizeEvent(e);
-
 	e->accept();
 }
