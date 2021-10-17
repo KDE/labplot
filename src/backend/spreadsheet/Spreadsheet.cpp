@@ -937,8 +937,10 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		//Other columns provide mostly y-data or errors.
 		//TODO: this has to be configurable for the user in the import widget,
 		//it should be possible to specify x-error plot designation, etc.
-		auto desig =  (n == 0) ? AbstractColumn::PlotDesignation::X : AbstractColumn::PlotDesignation::Y;
-		column->setPlotDesignation(desig);
+		if (n == 0 && importMode == AbstractFileFilter::ImportMode::Replace)
+			column->setPlotDesignation(AbstractColumn::PlotDesignation::X);
+		else
+			column->setPlotDesignation(AbstractColumn::PlotDesignation::Y);
 
 		switch (columnMode[n]) {
 		case AbstractColumn::ColumnMode::Double: {

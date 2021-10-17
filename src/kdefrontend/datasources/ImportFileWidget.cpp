@@ -1543,7 +1543,6 @@ void ImportFileWidget::refreshPreview() {
 			DEBUG(Q_FUNC_INFO << ", reading variable: " << var.toStdString())
 			filter->setCurrentVarName(var);
 			strings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
-			QDEBUG(Q_FUNC_INFO << ", strings: " << strings)
 			if (importedStrings.size() == 0)	// first var
 				importedStrings = strings;
 			else {	// append

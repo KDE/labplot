@@ -8,7 +8,6 @@
 */
 #include "MatioFilter.h"
 #include "MatioFilterPrivate.h"
-#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
@@ -170,7 +169,7 @@
 			} \
 		} else { /* preview */ \
 			for (size_t j = 0; j < qMin(actualRows, lines); j++) { \
-				/* TODO: use when complex column  mode is supported */ \
+				/* TODO: use when complex column mode is supported */ \
 				/* if (im[j] < 0) \
 					dataStrings[j+1][field] = QString::number(re[j]) + QLatin1String(" - ") \
 								+ QString::number(fabs(im[j])) + QLatin1String("i"); \

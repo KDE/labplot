@@ -497,9 +497,8 @@ void MatioFilterTest::testImportMultipleVars() {
 		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Double);
 
 	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
-	for (int i = 1; i < 5; i++)
+	for (int i = 1; i < 6; i++)
 		QCOMPARE(spreadsheet.column(i)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
-	QCOMPARE(spreadsheet.column(5)->plotDesignation(), AbstractColumn::PlotDesignation::X);
 
 	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
 	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
