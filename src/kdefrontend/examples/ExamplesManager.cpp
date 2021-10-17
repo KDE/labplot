@@ -67,7 +67,7 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 		//example projects of the currently selected collection not loaded yet -> load them
 		QStringList names;
 		QDirIterator it(m_jsonDir + QLatin1Char('/') + collectionName,
-						QStringList() << "*.lml" << "*.lml.xz",
+						QStringList() << "*.lml",
 						QDir::Files,
 						QDirIterator::Subdirectories);
 		while (it.hasNext()) {
@@ -77,15 +77,12 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 			m_paths[name] = fileName;
 
 			//parse the XML and read the description and the preview pixmap of the project file
-			QIODevice* file;
-			// first try gzip compression, because projects can be gzipped and end with .lml
-			if (fileName.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
-				file = new KCompressionDevice(fileName, KFilterDev::compressionTypeForMimeType("application/x-gzip"));
-			else	// opens filename using file ending
-				file = new KFilterDev(fileName);
-
-			if (!file->open(QIODevice::ReadOnly))
+			auto* file = new KCompressionDevice(fileName, KCompressionDevice::Xz);
+			if (!file->open(QIODevice::ReadOnly)) {
+				file->close();
+				delete file;
 				continue;
+			}
 
 			//parse XML
 			QXmlStreamReader reader(file);
