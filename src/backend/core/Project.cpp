@@ -688,7 +688,6 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 	//everything is read now, restore the pointers
 	restorePointers(this, preview);
 
-	emit loaded();
 	return !reader->hasError();
 }
 

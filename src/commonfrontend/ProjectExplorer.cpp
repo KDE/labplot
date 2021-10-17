@@ -153,11 +153,11 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 	if (!m_treeView->model())
 		return;
 
-	const QModelIndex& index = m_treeView->indexAt(m_treeView->viewport()->mapFrom(this, event->pos()));
+	const auto& index = m_treeView->indexAt(m_treeView->viewport()->mapFrom(this, event->pos()));
 	if (!index.isValid())
 		m_treeView->clearSelection();
 
-	const QModelIndexList& items = m_treeView->selectionModel()->selectedIndexes();
+	const auto& items = m_treeView->selectionModel()->selectedIndexes();
 	QMenu* menu = nullptr;
 	if (items.size()/4 == 1) {
 		auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -286,7 +286,6 @@ void ProjectExplorer::setProject(Project* project) {
 	connect(project, &Project::requestSaveState, this, &ProjectExplorer::save);
 	connect(project, &Project::requestLoadState, this, &ProjectExplorer::load);
 	connect(project, &Project::requestNavigateTo, this, &ProjectExplorer::navigateTo);
-	connect(project, &Project::loaded, this, &ProjectExplorer::projectLoaded);
 	m_project = project;
 
 	//for newly created projects, resize the header to fit the size of the header section names.
@@ -505,18 +504,6 @@ void ProjectExplorer::showErrorMessage(const QString& message) {
 //#################################  SLOTS  ####################################
 //##############################################################################
 /*!
- * called after the project was loaded.
- * resize the header of the view to adjust to the content
- * and re-select the currently selected object to show
- * its final properties in the dock widget after in Project::load() all
- * pointers were restored, relative paths replaced by absolute, etc.
- */
-void ProjectExplorer::projectLoaded() {
-	resizeHeader();
-	selectionChanged(m_treeView->selectionModel()->selection(), QItemSelection());
-}
-
-/*!
   expand the aspect \c aspect (the tree index corresponding to it) in the tree view
   and makes it visible and selected. Called when a new aspect is added to the project.
  */
@@ -644,7 +631,7 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 }
 
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
-	Qt::CaseSensitivity sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+	auto sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
 	bool matchCompleteWord = matchCompleteWordAction->isChecked();
 
 	bool childVisible = false;
@@ -1121,10 +1108,14 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	m_treeView->setCurrentIndex(currentIndex);
 	m_treeView->scrollTo(currentIndex);
 	auto* aspect = static_cast<AbstractAspect*>(currentIndex.internalPointer());
-	emit currentAspectChanged(aspect);
+	emit currentAspectChanged(aspect); //notify MainWin to bring up the proper view
+	emit selectedAspectsChanged(QList<AbstractAspect*>()<<aspect); //notify GuiObserver to bring up the proper dock widget
 
 	//when setting the current index above it gets expanded, collapse all parent indices if they were not expanded when saved
 	collapseParents(currentIndex, expanded);
+
+	//resize the header of the view to adjust to the content
+	resizeHeader();
 
 	return true;
 }

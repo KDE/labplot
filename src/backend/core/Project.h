@@ -91,7 +91,6 @@ signals:
 	void mdiWindowVisibilityChanged();
 	void changed();
 	void requestNavigateTo(const QString& path);
-	void loaded();
 	void closeRequested();
 
 private:

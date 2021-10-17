@@ -243,7 +243,6 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		}
 	}
 
-	emit project->loaded();
 	project->setIsLoading(false);
 
 	delete m_originFile;
