@@ -481,4 +481,43 @@ void MatioFilterTest::testImportEmptyCell() {
 	QCOMPARE(spreadsheet.column(4)->valueAt(0), 3);
 }
 
+void MatioFilterTest::testImportMultipleVars() {
+	Spreadsheet spreadsheet("test", false);
+	MatioFilter filter;
+
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/testmulti_7.4_GLNX86.mat"));
+	filter.setSelectedVarNames(QStringList() << QLatin1String("a") << QLatin1String("theta"));
+	const auto mode = AbstractFileFilter::ImportMode::Replace;
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	QCOMPARE(spreadsheet.columnCount(), 6);
+	QCOMPARE(spreadsheet.rowCount(), 9);
+
+	for (int i = 0; i < 6; i++)
+		QCOMPARE(spreadsheet.column(i)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	QCOMPARE(spreadsheet.column(0)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+	for (int i = 1; i < 5; i++)
+		QCOMPARE(spreadsheet.column(i)->plotDesignation(), AbstractColumn::PlotDesignation::Y);
+	QCOMPARE(spreadsheet.column(5)->plotDesignation(), AbstractColumn::PlotDesignation::X);
+
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("Column 1"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("Column 2"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("Column 3"));
+	QCOMPARE(spreadsheet.column(3)->name(), QLatin1String("Column 4"));
+	QCOMPARE(spreadsheet.column(4)->name(), QLatin1String("Column 5"));
+	QCOMPARE(spreadsheet.column(5)->name(), QLatin1String("Column 6"));
+
+	QCOMPARE(spreadsheet.column(0)->valueAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 2);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 3);
+	QCOMPARE(spreadsheet.column(3)->valueAt(0), 4);
+	QCOMPARE(spreadsheet.column(4)->valueAt(0), 5);
+	QCOMPARE(spreadsheet.column(5)->valueAt(0), 0);
+	QCOMPARE(spreadsheet.column(5)->valueAt(2), M_PI/2.);
+	QCOMPARE(spreadsheet.column(5)->valueAt(4), M_PI);
+	QCOMPARE(spreadsheet.column(5)->valueAt(6), 3./2. * M_PI);
+	QCOMPARE(spreadsheet.column(5)->valueAt(8), 2.*M_PI);
+}
+
 QTEST_MAIN(MatioFilterTest)

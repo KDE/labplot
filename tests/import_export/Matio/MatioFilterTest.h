@@ -31,6 +31,8 @@ private slots:
 	void testImportCell();
 	void testImportCellPortion();
 	void testImportEmptyCell();
+
+	void testImportMultipleVars();
 };
 
 
