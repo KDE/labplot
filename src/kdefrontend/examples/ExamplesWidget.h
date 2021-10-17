@@ -37,7 +37,7 @@ private:
 
 private slots:
 	void collectionChanged(int);
-	void colorMapChanged();
+	void exampleChanged();
 	void showInfo();
 	void toggleIconView();
 	void viewModeChanged(int);

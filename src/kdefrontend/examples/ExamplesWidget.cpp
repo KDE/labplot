@@ -40,6 +40,9 @@ ExamplesWidget::ExamplesWidget(QWidget* parent) : QWidget(parent) {
 	ui.lvExamples->setIconSize(QSize(256, 256));
 	connect(ui.lvExamples, &QAbstractItemView::doubleClicked, this, &ExamplesWidget::doubleClicked);
 
+	ui.lPreview->setScaledContents(false);
+	ui.lPreview->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
 	const int size = ui.leSearch->height();
 	ui.lSearch->setPixmap( QIcon::fromTheme(QLatin1String("edit-find")).pixmap(size, size) );
 
@@ -57,7 +60,7 @@ ExamplesWidget::ExamplesWidget(QWidget* parent) : QWidget(parent) {
 	connect(ui.bInfo, &QPushButton::clicked, this, &ExamplesWidget::showInfo);
 	connect(ui.bViewMode, &QPushButton::clicked, this, &ExamplesWidget::toggleIconView);
 	connect(ui.stackedWidget, &QStackedWidget::currentChanged, this, &ExamplesWidget::viewModeChanged);
-	connect(ui.lwExamples, &QListWidget::itemSelectionChanged, this, &ExamplesWidget::colorMapChanged);
+	connect(ui.lwExamples, &QListWidget::itemSelectionChanged, this, &ExamplesWidget::exampleChanged);
 
 	//select the last used collection
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExamplesWidget");
@@ -133,7 +136,7 @@ void ExamplesWidget::collectionChanged(int) {
 	ui.leSearch->setCompleter(m_completer);
 }
 
-void ExamplesWidget::colorMapChanged() {
+void ExamplesWidget::exampleChanged() {
 	const QString& name = ui.lwExamples->currentItem()->text();
 	ui.lPreview->setPixmap(m_manager->pixmap(name));
 }

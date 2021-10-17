@@ -43,7 +43,6 @@ public:
 	void setProject(Project*);
 	QModelIndex currentIndex() const;
 	AbstractAspect* currentAspect() const;
-	void updateSelectedAspects();
 	void search();
 
 private:

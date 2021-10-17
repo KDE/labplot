@@ -751,18 +751,6 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 		m_changeSelectionFromView = false;
 }
 
-/*!
- * Used to udpate the cursor Dock
- */
-void ProjectExplorer::updateSelectedAspects() {
-	const auto& items = m_treeView->selectionModel()->selectedRows();
-	QList<AbstractAspect*> selectedAspects;
-	for (const QModelIndex& index : items)
-		selectedAspects << static_cast<AbstractAspect*>(index.internalPointer());
-
-	emit selectedAspectsChanged(selectedAspects);
-}
-
 void ProjectExplorer::expandSelected() {
 	const auto& items = m_treeView->selectionModel()->selectedIndexes();
 	for (const auto& index : items)
