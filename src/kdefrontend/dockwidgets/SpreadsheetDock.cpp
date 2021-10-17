@@ -31,7 +31,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
-	ui.teComment->setFixedHeight(ui.leName->height());
+	ui.teComment->setFixedHeight(1.2 * ui.leName->height());
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &SpreadsheetDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &SpreadsheetDock::commentChanged);

@@ -24,7 +24,7 @@ ProjectDock::ProjectDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
 	QString msg = i18n("If checked, the results of the calculations in the analysis curves will be saved in the project file.\n"
 	"Uncheck this option to reduce the size of the project file at costs of the longer project load times.");

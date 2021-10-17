@@ -131,7 +131,7 @@ void WorkbookView::createContextMenu(QMenu* menu) const {
 	// if we're populating the context menu for the project explorer, then
 	//there're already actions available there. Skip the first title-action
 	//and insert the action at the beginning of the menu.
-	if (menu->actions().size()>1)
+	if (menu->actions().size() > 1)
 		firstAction = menu->actions().at(1);
 
 	auto* addNewMenu = new QMenu(i18n("Add New"));

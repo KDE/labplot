@@ -20,7 +20,7 @@ NoteDock::NoteDock(QWidget *parent) : BaseDock(parent) {
 	ui.setupUi(this);
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
-	m_teComment->setFixedHeight(m_leName->height());
+	m_teComment->setFixedHeight(1.2 * m_leName->height());
 
 	connect(ui.leName, &QLineEdit::textChanged, this, &NoteDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &NoteDock::commentChanged);
