@@ -1727,7 +1727,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	QString str;
 	SET_NUMBER_LOCALE
 	if (numeric) {
-		if (labelsFormat == Axis::LabelsFormat::Decimal) {
+		switch (labelsFormat) {
+		case Axis::LabelsFormat::Decimal: {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
 				// toString does not round: use NSL function
@@ -1736,7 +1737,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::LabelsFormat::ScientificE) {
+			break;
+		}
+		case Axis::LabelsFormat::ScientificE: {
 			QString nullStr = numberLocale.toString(0., 'e', labelsPrecision);
 			for (const auto value : tickLabelValues) {
 				if (value == 0)	// just show "0"
@@ -1747,7 +1750,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::LabelsFormat::Powers10) {
+			break;
+		}
+		case Axis::LabelsFormat::Powers10: {
 			for (const auto value : tickLabelValues) {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
@@ -1759,7 +1764,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::LabelsFormat::Powers2) {
+			break;
+		}
+		case Axis::LabelsFormat::Powers2: {
 			for (const auto value : tickLabelValues) {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
@@ -1771,7 +1778,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::LabelsFormat::PowersE) {
+			break;
+		}
+		case Axis::LabelsFormat::PowersE: {
 			for (const auto value : tickLabelValues) {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
@@ -1783,7 +1792,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::LabelsFormat::MultipliesPi) {
+			break;
+		}
+		case Axis::LabelsFormat::MultipliesPi: {
 			for (const auto value : tickLabelValues) {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
@@ -1792,7 +1803,9 @@ void AxisPrivate::retransformTickLabelStrings() {
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
-		} else if (labelsFormat == Axis::LabelsFormat::Scientific) {
+			break;
+		}
+		case Axis::LabelsFormat::Scientific: {
 			for (const auto value : tickLabelValues) {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
@@ -1806,6 +1819,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
 			}
+		}
 		}
 	} else if (datetime) {
 		for (const auto value : tickLabelValues) {
@@ -1821,6 +1835,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			tickLabelStrings << str;
 		}
 	}
+
 //	QDEBUG(Q_FUNC_INFO << ", strings = " << tickLabelStrings)
 
 	//recalculate the position of the tick labels
@@ -2310,7 +2325,10 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	}
 
 	//add title label, if available
-	if ( title->isVisible() && !title->text().text.isEmpty() ) {
+	QTextDocument doc;	// text may be Html, so check if plain text is empty
+	doc.setHtml(title->text().text);
+	// QDEBUG(Q_FUNC_INFO << ", title text plain: " << doc.toPlainText())
+	if ( title->isVisible() && !doc.toPlainText().isEmpty() ) {
 		const QRectF& titleRect = title->graphicsItem()->boundingRect();
 		if (titleRect.width() != 0.0 &&  titleRect.height() != 0.0) {
 			//determine the new position of the title label:

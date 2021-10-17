@@ -29,7 +29,7 @@ void GrabBar::paintEvent(QPaintEvent*) {
 	QPainter p(this);
 
 	// show at least a rect
-	QDEBUG(Q_FUNC_INFO << ", rect = " << rect())
+	//QDEBUG(Q_FUNC_INFO << ", rect = " << rect())
 	p.fillRect(rect(), QColor(Qt::darkGray));
 
 	//see qsplitter.cpp
