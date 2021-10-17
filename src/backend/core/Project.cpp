@@ -20,7 +20,9 @@
 #include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
+#include "backend/worksheet/Image.h"
 #include "backend/worksheet/InfoElement.h"
+#include "backend/worksheet/TextLabel.h"
 
 #ifndef SDK
 #include "backend/datasources/LiveDataSource.h"
@@ -768,6 +770,26 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 	for (auto* element : elements)
 		element->assignCurve(curves);
+
+	// retransform all labels so their positioning relative to the parent is properly updated
+	QVector<TextLabel*> labels;
+	if (aspect->type() == AspectType::TextLabel)
+		labels << static_cast<TextLabel*>(aspect);
+	else if (hasChildren)
+		labels = aspect->children<TextLabel>(ChildIndexFlag::Recursive);
+
+	for (auto* label : labels)
+		label->retransform();
+
+	// retransform all images so their positioning relative to the parent is properly updated
+	QVector<Image*> images;
+	if (aspect->type() == AspectType::Image)
+		images << static_cast<Image*>(aspect);
+	else if (hasChildren)
+		images = aspect->children<Image>(ChildIndexFlag::Recursive);
+
+	for (auto* image : images)
+		image->retransform();
 
 	//axes
 	QVector<Axis*> axes;

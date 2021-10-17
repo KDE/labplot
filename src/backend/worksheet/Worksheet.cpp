@@ -283,7 +283,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 				//make other plots non-resizable
 				const auto& containers = children<WorksheetElementContainer>();
 				for (auto* container : containers)
-						container->setResizeEnabled(false);
+					container->setResizeEnabled(false);
 
 				//make the newly added plot resizable
 				const_cast<CartesianPlot*>(plot)->setResizeEnabled(true);
