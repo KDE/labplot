@@ -159,7 +159,7 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 
 #ifdef HAVE_POPPLER
 	// convert PDF to QImage using Poppler
-	auto* document = Poppler::Document::load(baseName + ".pdf");
+	auto* document = Poppler::Document::load( baseName + QLatin1String(".pdf") );
 	if (!document || document->isLocked()) {
 		WARN("Failed to process PDF file " << baseName.toStdString() << ".pdf");
 		delete document;
@@ -173,6 +173,11 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 		return QImage();
 	}
 
+	document->setRenderHint(Poppler::Document::TextAntialiasing);
+	document->setRenderHint(Poppler::Document::Antialiasing);
+	document->setRenderHint(Poppler::Document::TextHinting);
+	document->setRenderHint(Poppler::Document::TextSlightHinting);
+	document->setRenderHint(Poppler::Document::ThinLineSolid);
 	QImage image = page->renderToImage((double)dpi, (double)dpi);
 
 	delete page;

@@ -21,6 +21,10 @@
 #include "kdefrontend/widgets/FitOptionsWidget.h"
 #include "kdefrontend/widgets/FitParametersWidget.h"
 
+extern "C" {
+#include "backend/nsl/nsl_sf_stats.h"
+}
+
 #include <KMessageWidget>
 
 #include <QMenu>
@@ -28,10 +32,11 @@
 #include <QStandardItemModel>
 #include <QStandardPaths>
 #include <QClipboard>
+#include <QDesktopWidget>
 
-extern "C" {
-#include "backend/nsl/nsl_sf_stats.h"
-}
+#ifdef HAVE_POPPLER
+#include <poppler-qt5.h>
+#endif
 
 /*!
   \class XYFitCurveDock
@@ -825,7 +830,7 @@ void XYFitCurveDock::updateModelEquation() {
 		if ((nsl_fit_model_type_basic)m_fitData.modelType == nsl_fit_model_power && degree > 2)
 			numSuffix = '2';
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
-			+ QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".png");
+			+ QString(nsl_fit_model_basic_pic_name[m_fitData.modelType]) + numSuffix + ".pdf");
 		break;
 	}
 	case nsl_fit_model_peak: {
@@ -834,16 +839,16 @@ void XYFitCurveDock::updateModelEquation() {
 		if (degree > 4)
 			numSuffix = '4';
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
-			+ QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".png");
+			+ QString(nsl_fit_model_peak_pic_name[m_fitData.modelType]) + numSuffix + ".pdf");
 		break;
 	}
 	case nsl_fit_model_growth:
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/fit_models/"
-			+ QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".png");
+			+ QString(nsl_fit_model_growth_pic_name[m_fitData.modelType]) + ".pdf");
 		break;
 	case nsl_fit_model_distribution:
 		file = QStandardPaths::locate(QStandardPaths::AppDataLocation, "pics/gsl_distributions/"
-			+ QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".png");
+			+ QString(nsl_sf_stats_distribution_pic_name[m_fitData.modelType]) + ".pdf");
 		// change label
 		if (m_fitData.modelType == nsl_sf_stats_poisson)
 			uiGeneralTab.lEquation->setText(QLatin1String("f(k)/A ="));
@@ -857,9 +862,42 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
+		// convert PDF to QImage using Poppler
 		DEBUG("Model pixmap path = " << STDSTRING(file));
-		uiGeneralTab.lFuncPic->setPixmap(file);
+#ifdef HAVE_POPPLER
+		auto* document = Poppler::Document::load(file);
+		if (!document) {
+			WARN("Failed to process PDF file" << file.toStdString());
+			delete document;
+			uiGeneralTab.lFuncPic->hide();
+			return;
+		}
+
+		auto* page = document->page(0);
+		if (!page) {
+			WARN("Failed to process the first page in the PDF file.")
+			delete document;
+			uiGeneralTab.lFuncPic->hide();
+			return;
+		}
+
+		document->setRenderHint(Poppler::Document::TextAntialiasing);
+		document->setRenderHint(Poppler::Document::Antialiasing);
+		document->setRenderHint(Poppler::Document::TextHinting);
+		document->setRenderHint(Poppler::Document::TextSlightHinting);
+		document->setRenderHint(Poppler::Document::ThinLineSolid);
+		const double scaling = 1.5;	// scale to reasonable size
+		QImage image = page->renderToImage(scaling * QApplication::desktop()->logicalDpiX(), scaling * QApplication::desktop()->logicalDpiY());
+
+		delete page;
+		delete document;
+
+		uiGeneralTab.lFuncPic->setPixmap(QPixmap::fromImage(image));
 		uiGeneralTab.lFuncPic->show();
+#else
+		uiGeneralTab.lEquation->hide();
+		uiGeneralTab.lFuncPic->hide();
+#endif
 		uiGeneralTab.teEquation->hide();
 	}
 
