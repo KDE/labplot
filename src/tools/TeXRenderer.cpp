@@ -10,6 +10,7 @@
 
 #include "TeXRenderer.h"
 #include "backend/lib/macros.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <KConfigGroup>
 #include <KSharedConfig>
@@ -131,9 +132,9 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 		return imageFromPDF(file, dpi, engine, success);
 }
 
-// TEX -> PDF -> PNG
+// TEX -> PDF -> QImage
 QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, bool* success) {
-	DEBUG(Q_FUNC_INFO << ", tmp file = " << file.fileName().toStdString() << ", engine = " << engine.toStdString() << ", dpi = " << dpi)
+	//DEBUG(Q_FUNC_INFO << ", tmp file = " << file.fileName().toStdString() << ", engine = " << engine.toStdString() << ", dpi = " << dpi)
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
@@ -157,45 +158,11 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 	QFile::remove(baseName + ".aux");
 	QFile::remove(baseName + ".log");
 
-#ifdef HAVE_POPPLER
-	// convert PDF to QImage using Poppler
-	auto* document = Poppler::Document::load( baseName + QLatin1String(".pdf") );
-	if (!document || document->isLocked()) {
-		WARN("Failed to process PDF file " << baseName.toStdString() << ".pdf");
-		delete document;
-		return QImage();
-	}
-
-	auto* page = document->page(0);
-	if (!page) {
-		WARN("Failed to process the first page in the PDF file.")
-		delete document;
-		return QImage();
-	}
-
-	document->setRenderHint(Poppler::Document::TextAntialiasing);
-	document->setRenderHint(Poppler::Document::Antialiasing);
-	document->setRenderHint(Poppler::Document::TextHinting);
-	document->setRenderHint(Poppler::Document::TextSlightHinting);
-	document->setRenderHint(Poppler::Document::ThinLineSolid);
-	QImage image = page->renderToImage((double)dpi, (double)dpi);
-
-	delete page;
-	delete document;
-
-	if (image.isNull()) {
-		WARN("Failed to render PDF to image.")
-		return QImage();
-	}
+	QImage image = GuiTools::importPDFFile(baseName + QLatin1String(".pdf"), dpi);
 
 	QFile::remove(baseName + ".pdf");
 	*success = true;
 	return image;
-#else
-	Q_UNUSED(dpi)
-	WARN("Poppler not available.")
-	return QImage();
-#endif
 }
 
 // TEX -> DVI -> PS -> PNG

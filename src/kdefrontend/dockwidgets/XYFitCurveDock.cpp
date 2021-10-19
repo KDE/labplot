@@ -16,6 +16,7 @@
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
+#include "kdefrontend/GuiTools.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
 #include "kdefrontend/widgets/FunctionsWidget.h"
 #include "kdefrontend/widgets/FitOptionsWidget.h"
@@ -862,42 +863,15 @@ void XYFitCurveDock::updateModelEquation() {
 	}
 
 	if (m_fitData.modelCategory != nsl_fit_model_custom) {
-		// convert PDF to QImage using Poppler
-		DEBUG("Model pixmap path = " << STDSTRING(file));
-#ifdef HAVE_POPPLER
-		auto* document = Poppler::Document::load(file);
-		if (!document) {
-			WARN("Failed to process PDF file" << file.toStdString());
-			delete document;
+		QImage image = GuiTools::importPDFFile(file);
+
+		if (image.isNull()) {
+			uiGeneralTab.lEquation->hide();
 			uiGeneralTab.lFuncPic->hide();
-			return;
+		} else {
+			uiGeneralTab.lFuncPic->setPixmap(QPixmap::fromImage(image));
+			uiGeneralTab.lFuncPic->show();
 		}
-
-		auto* page = document->page(0);
-		if (!page) {
-			WARN("Failed to process the first page in the PDF file.")
-			delete document;
-			uiGeneralTab.lFuncPic->hide();
-			return;
-		}
-
-		document->setRenderHint(Poppler::Document::TextAntialiasing);
-		document->setRenderHint(Poppler::Document::Antialiasing);
-		document->setRenderHint(Poppler::Document::TextHinting);
-		document->setRenderHint(Poppler::Document::TextSlightHinting);
-		document->setRenderHint(Poppler::Document::ThinLineSolid);
-		const double scaling = 1.5;	// scale to reasonable size
-		QImage image = page->renderToImage(scaling * QApplication::desktop()->logicalDpiX(), scaling * QApplication::desktop()->logicalDpiY());
-
-		delete page;
-		delete document;
-
-		uiGeneralTab.lFuncPic->setPixmap(QPixmap::fromImage(image));
-		uiGeneralTab.lFuncPic->show();
-#else
-		uiGeneralTab.lEquation->hide();
-		uiGeneralTab.lFuncPic->hide();
-#endif
 		uiGeneralTab.teEquation->hide();
 	}
 

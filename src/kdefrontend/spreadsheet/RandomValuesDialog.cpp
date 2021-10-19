@@ -8,12 +8,12 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
+#include "kdefrontend/GuiTools.h"
 #include "RandomValuesDialog.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
-#include <QDesktopWidget>
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QPushButton>
@@ -28,10 +28,6 @@ extern "C" {
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
 }
-
-#ifdef HAVE_POPPLER
-#include <poppler-qt5.h>
-#endif
 
 /*!
 	\class RandomValuesDialog
@@ -350,45 +346,17 @@ void RandomValuesDialog::distributionChanged(int index) {
 		break;
 	}
 
-#ifdef HAVE_POPPLER
 	QString file = QStandardPaths::locate( QStandardPaths::AppDataLocation,
 			"pics/gsl_distributions/" + QString(nsl_sf_stats_distribution_pic_name[dist]) + QLatin1String(".pdf") );
-	DEBUG(Q_FUNC_INFO << ", distribution pixmap path = " << STDSTRING(file));
+	QImage image = GuiTools::importPDFFile(file);
 
-	// convert PDF to QImage using Poppler
-	auto* document = Poppler::Document::load(file);
-	if (!document) {
-		WARN("Failed to process PDF file" << file.toStdString());
-		delete document;
+	if (image.isNull()) {
+		ui.lFunc->hide();
 		ui.lFuncPic->hide();
-		return;
+	} else {
+		ui.lFuncPic->setPixmap(QPixmap::fromImage(image));
+		ui.lFuncPic->show();
 	}
-
-	auto* page = document->page(0);
-	if (!page) {
-		WARN("Failed to process the first page in the PDF file.")
-		delete document;
-		ui.lFuncPic->hide();
-		return;
-	}
-
-	document->setRenderHint(Poppler::Document::TextAntialiasing);
-	document->setRenderHint(Poppler::Document::Antialiasing);
-	document->setRenderHint(Poppler::Document::TextHinting);
-	document->setRenderHint(Poppler::Document::TextSlightHinting);
-	document->setRenderHint(Poppler::Document::ThinLineSolid);
-	const double scaling = 1.5;	// scale to reasonable size
-	QImage image = page->renderToImage(scaling * QApplication::desktop()->logicalDpiX(), scaling * QApplication::desktop()->logicalDpiY());
-
-	delete page;
-	delete document;
-
-	ui.lFuncPic->setPixmap(QPixmap::fromImage(image));
-	ui.lFuncPic->show();
-#else
-	ui.lFunc->hide();
-	ui.lFuncPic->hide();
-#endif
 }
 
 void RandomValuesDialog::checkValues() {

@@ -3,7 +3,8 @@
     Project              : LabPlot
     Description          :  contains several static functions which are used on frequently throughout the kde frontend.
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2013 Alexander Semke <alexander.semke*web.de  (use @ for *)>
+    SPDX-FileCopyrightText: 2011-2013 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -13,9 +14,8 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <array>
-
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QColor>
 #include <QComboBox>
 #include <QFileDialog>
@@ -23,6 +23,12 @@
 #include <QLineEdit>
 #include <QMenu>
 #include <QPainter>
+
+#ifdef HAVE_POPPLER
+#include <poppler-qt5.h>
+#endif
+
+#include <array>
 
 static const int colorsCount = 26;
 static std::array<QColor, colorsCount> colors = {QColor(255,255,255), QColor(0,0,0),
@@ -273,4 +279,43 @@ QString GuiTools::openImageFile(const QString& className) {
 	}
 
 	return path;
+}
+
+// convert PDF to QImage using Poppler
+QImage GuiTools::importPDFFile(const QString& fileName, const int dpi) {
+	//DEBUG(Q_FUNC_INFO << ", PDF file name = " << fileName.toStdString());
+#ifdef HAVE_POPPLER
+	auto* document = Poppler::Document::load(fileName);
+	if (!document) {
+		WARN("Failed to process PDF file" << fileName.toStdString());
+		delete document;
+		return QImage();
+	}
+
+	auto* page = document->page(0);
+	if (!page) {
+		WARN("Failed to process the first page in the PDF file.")
+		delete document;
+		return QImage();
+	}
+
+	document->setRenderHint(Poppler::Document::TextAntialiasing);
+	document->setRenderHint(Poppler::Document::Antialiasing);
+	document->setRenderHint(Poppler::Document::TextHinting);
+	document->setRenderHint(Poppler::Document::TextSlightHinting);
+	document->setRenderHint(Poppler::Document::ThinLineSolid);
+	const double scaling = 1.5;	// scale to reasonable size
+	QImage image;
+	if (dpi)
+		image = page->renderToImage((double)dpi, (double)dpi);
+	else
+		image = page->renderToImage(scaling * QApplication::desktop()->logicalDpiX(), scaling * QApplication::desktop()->logicalDpiY());
+
+	delete page;
+	delete document;
+
+	return image;
+#else
+	return QImage();
+#endif
 }
