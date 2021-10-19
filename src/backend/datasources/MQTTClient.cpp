@@ -814,7 +814,7 @@ void MQTTClient::updateWillMessage() {
 				//TODO: check this logic again - why last column only?
 				const auto* col = willTopic->child<Column>(willTopic->childCount<Column>() - 1);
 				auto mode = col->columnMode();
-				if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::Numeric)
+				if (mode == AbstractColumn::ColumnMode::Integer || mode == AbstractColumn::ColumnMode::Double)
 					m_client->setWillMessage(this->statistics(willTopic).toUtf8());
 				else
 					m_client->setWillMessage(QByteArray()); //empty message
