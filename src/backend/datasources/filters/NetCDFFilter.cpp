@@ -248,6 +248,8 @@ QString NetCDFFilter::fileInfoString(const QString& fileName) {
 
 	status = ncclose(ncid);
 	NetCDFFilterPrivate::handleError(status, "nc_close");
+#else
+	Q_UNUSED(fileName)
 #endif
 
 	return info;

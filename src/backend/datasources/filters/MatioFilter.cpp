@@ -355,6 +355,8 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 	}
 
 	Mat_Close(matfp);
+#else
+	Q_UNUSED(fileName)
 #endif
 
 	return info;
