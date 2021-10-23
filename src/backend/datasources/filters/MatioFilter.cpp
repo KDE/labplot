@@ -364,7 +364,7 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 //################### Private implementation ##########################
 //#####################################################################
 
-MatioFilterPrivate::MatioFilterPrivate(MatioFilter* owner) : q(owner), matfp(NULL) {
+MatioFilterPrivate::MatioFilterPrivate(MatioFilter* owner) : q(owner) {
 }
 
 // helper functions

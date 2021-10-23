@@ -69,7 +69,6 @@ Column::Column(const QString& name, ColumnMode mode)
  * \brief Common part of ctors
  */
 void Column::init() {
-	PERFTRACE(Q_FUNC_INFO);
 
 	m_string_io = new ColumnStringIO(this);
 	d->inputFilter()->input(0, m_string_io);

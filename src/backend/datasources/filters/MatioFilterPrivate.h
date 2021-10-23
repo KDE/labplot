@@ -49,7 +49,7 @@ public:
 
 private:
 #ifdef HAVE_MATIO
-	mat_t* matfp;	
+	mat_t* matfp{nullptr};
 #endif
 };
 
