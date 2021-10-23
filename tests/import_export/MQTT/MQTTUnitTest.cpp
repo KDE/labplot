@@ -294,7 +294,7 @@ void MQTTUnitTest::testNumericMessage() {
 
 			if (testTopic) {
 				Column* value = testTopic->column(testTopic->columnCount() - 1);
-				QCOMPARE(value->columnMode(), Column::ColumnMode::Numeric);
+				QCOMPARE(value->columnMode(), Column::ColumnMode::Double);
 				QCOMPARE(value->rowCount(), 3);
 				QCOMPARE(value->valueAt(0), 1.5);
 				QCOMPARE(value->valueAt(1), 2.7);
