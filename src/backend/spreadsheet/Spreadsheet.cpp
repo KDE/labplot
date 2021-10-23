@@ -16,6 +16,7 @@
 #include "backend/core/AbstractAspect.h"
 #include "backend/core/column/ColumnStringIO.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
+#include "backend/lib/trace.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "commonfrontend/spreadsheet/SpreadsheetView.h"
@@ -898,6 +899,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 //##############################################################################
 int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFilter::ImportMode importMode,
                                int actualRows, int actualCols, QStringList colNameList, QVector<AbstractColumn::ColumnMode> columnMode) {
+	PERFTRACE(Q_FUNC_INFO);
 	DEBUG(Q_FUNC_INFO << ", resize spreadsheet to rows = " << actualRows << " and cols = " << actualCols)
 	QDEBUG(Q_FUNC_INFO << ", column name list = " << colNameList)
 	int columnOffset = 0;
@@ -979,7 +981,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 	}
 //	QDEBUG("dataPointers =" << dataPointers);
 
-	DEBUG(Q_FUNC_INFO << ", DONE");
+	//DEBUG(Q_FUNC_INFO << ", DONE");
 
 	return columnOffset;
 }
@@ -989,10 +991,11 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 	returns column offset depending on import mode
 */
 int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colNameList, int cols) {
-	DEBUG("Spreadsheet::resize()")
-	QDEBUG("	column name list = " << colNameList)
+//	PERFTRACE(Q_FUNC_INFO);
+	DEBUG(Q_FUNC_INFO << ", mode = " << ENUM_TO_STRING(AbstractFileFilter, ImportMode, mode) << ", cols = " << cols)
+	//QDEBUG("	column name list = " << colNameList)
 	// name additional columns
-	for (int k = colNameList.size(); k < cols; k++ )
+	for (int k = colNameList.size(); k < cols; k++)
 		colNameList.append( "Column " + QString::number(k+1) );
 
 	int columnOffset = 0; //indexes the "start column" in the spreadsheet. Starting from this column the data will be imported.
@@ -1000,14 +1003,15 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 	Column* newColumn = nullptr;
 	if (mode == AbstractFileFilter::ImportMode::Append) {
 		columnOffset = childCount<Column>();
-		for (int n = 0; n < cols; n++ ) {
+		for (int n = 0; n < cols; n++) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->setUndoAware(false);
-			addChild(newColumn);
+			PERFTRACE(Q_FUNC_INFO);
+			addChildFast(newColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
 		Column* firstColumn = child<Column>(0);
-		for (int n = 0; n < cols; n++ ) {
+		for (int n = 0; n < cols; n++) {
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->setUndoAware(false);
 			insertChildBefore(newColumn, firstColumn);
@@ -1046,7 +1050,8 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 }
 
 void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t endColumn, const QString& dateTimeFormat, AbstractFileFilter::ImportMode importMode)  {
-	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
+	PERFTRACE(Q_FUNC_INFO);
+	//DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << " / " << endColumn);
 
 	//determine the dependent plots
 	QVector<CartesianPlot*> plots;
@@ -1127,5 +1132,5 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 	//no need to notify about the column count change, this is already done by add/removeChild signals
 	rowCountChanged(rowCount());
 
-	DEBUG(Q_FUNC_INFO << " DONE");
+	//DEBUG(Q_FUNC_INFO << " DONE");
 }

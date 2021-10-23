@@ -11,6 +11,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/core/column/Column.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 #include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
@@ -363,10 +364,7 @@ QString MatioFilter::fileInfoString(const QString& fileName) {
 //################### Private implementation ##########################
 //#####################################################################
 
-MatioFilterPrivate::MatioFilterPrivate(MatioFilter* owner) : q(owner) {
-#ifdef HAVE_MATIO
-	m_status = 0;
-#endif
+MatioFilterPrivate::MatioFilterPrivate(MatioFilter* owner) : q(owner), matfp(NULL) {
 }
 
 // helper functions
@@ -604,6 +602,7 @@ void MatioFilterPrivate::parse(const QString& fileName) {
     Uses the settings defined in the data source.
 */
 void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
+	PERFTRACE(Q_FUNC_INFO);
 	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
@@ -612,17 +611,29 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 	}
 
 	QDEBUG(Q_FUNC_INFO << ", selected var names:" << selectedVarNames)
+#ifdef HAVE_MATIO
+	//open file only once
+	if (!selectedVarNames.isEmpty())
+		matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
+#endif
 	for (const auto& var : selectedVarNames) {
 		currentVarName = var;
 		readCurrentVar(fileName, dataSource, mode);
 		mode = AbstractFileFilter::ImportMode::Append;	// append other vars
 	}
+#ifdef HAVE_MATIO
+	if (matfp) {	// only if opened
+		Mat_Close(matfp);
+		matfp = NULL;
+	}
+#endif
 }
 
 /*!
     reads the content of the current variable in the file \c fileName to a string (for preview) or to the data source.
 */
 QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode, size_t lines) {
+	PERFTRACE(Q_FUNC_INFO);
 	QVector<QStringList> dataStrings;
 
 	if (currentVarName.isEmpty()) {
@@ -632,19 +643,27 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 	DEBUG(Q_FUNC_INFO << ", current variable: " << STDSTRING(currentVarName));
 
 #ifdef HAVE_MATIO
-	mat_t *matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
-	if (!matfp)
+	bool openedFile = false;
+	if (!matfp) {	// file not open
+		matfp = Mat_Open(qPrintable(fileName), MAT_ACC_RDONLY);
+		openedFile = true;
+	}
+	if (!matfp)	// open failed
 		return dataStrings << (QStringList() << i18n("File not found"));
 
 	// read info and data
-	matvar_t* var = Mat_VarRead(matfp, qPrintable(currentVarName));
+	matvar_t* var = Mat_VarReadNext(matfp);	// try next first (faster)
+	if (QString(var->name) != currentVarName)
+		var = Mat_VarRead(matfp, qPrintable(currentVarName));
+	//else
+	//	DEBUG(Q_FUNC_INFO << ", was NEXT!")
 	if (!var)
 		return dataStrings << (QStringList() << i18n("Variable not found"));
 	if (!var->data)
 		return dataStrings << (QStringList() << i18n("Variable contains no data"));
 
-	DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << '/' << endRow)
-	DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << '/' << endColumn)
+	//DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << '/' << endRow)
+	//DEBUG(Q_FUNC_INFO << ", start/end col = " << startColumn << '/' << endColumn)
 
 	size_t actualRows = 0, actualCols = 0;
 	int columnOffset = 0;
@@ -670,8 +689,8 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			actualEndRow = 0;
 			actualRows = 0;
 		}
-		DEBUG(Q_FUNC_INFO << ", start row = " << startRow << ", actual end row = " << actualEndRow << ", actual rows = " << actualRows)
-		DEBUG(Q_FUNC_INFO << ", start col = " << startColumn << ", actual end col = " << actualEndColumn << ", actual cols = " << actualCols)
+		//DEBUG(Q_FUNC_INFO << ", start row = " << startRow << ", actual end row = " << actualEndRow << ", actual rows = " << actualRows)
+		//DEBUG(Q_FUNC_INFO << ", start col = " << startColumn << ", actual end col = " << actualEndColumn << ", actual cols = " << actualCols)
 
 		if (lines == 0)
 			lines = actualRows;
@@ -1194,7 +1213,10 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		return dataStrings << (QStringList() << i18n("Not implemented yet"));
 
 	Mat_VarFree(var);
-	Mat_Close(matfp);
+	if (openedFile) {
+		Mat_Close(matfp);
+		matfp = NULL;
+	}
 
 	if (dataSource)
 		dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), mode);

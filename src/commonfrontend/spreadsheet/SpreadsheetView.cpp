@@ -947,7 +947,9 @@ void SpreadsheetView::handleAspectAdded(const AbstractAspect* aspect) {
 	if (!col || col->parentAspect() != m_spreadsheet)
 		return;
 
-	int index = m_spreadsheet->indexOfChild<Column>(col);
+	PERFTRACE(Q_FUNC_INFO);
+	const int index = m_spreadsheet->indexOfChild<Column>(col);
+	//TODO: this makes it slow!
 	if (col->width() == 0)
 		m_tableView->resizeColumnToContents(index);
 	else

@@ -13,9 +13,10 @@
 #include "ColumnPrivate.h"
 #include "ColumnStringIO.h"
 #include "Column.h"
-#include "backend/spreadsheet/Spreadsheet.h"
+#include "backend/lib/trace.h"
 #include "backend/core/datatypes/filter.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 
 ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 	m_column_mode(mode), m_owner(owner) {
@@ -173,8 +174,8 @@ AbstractColumn::ColumnMode ColumnPrivate::columnMode() const {
  * initial value) is not supported.
  */
 void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
-	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_column_mode)
-		<< " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode))
+//	DEBUG(Q_FUNC_INFO << ", " << ENUM_TO_STRING(AbstractColumn, ColumnMode, m_column_mode)
+//		<< " -> " << ENUM_TO_STRING(AbstractColumn, ColumnMode, mode))
 	if (mode == m_column_mode) return;
 
 	void* old_data = m_data;
@@ -495,9 +496,9 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 
 	if (temp_col) { // if temp_col == 0, only the input/output filters need to be changed
 		// copy the filtered, i.e. converted, column (mode is orig mode)
-		DEBUG("	temp_col column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, temp_col->columnMode()));
+//		DEBUG("	temp_col column mode = " << ENUM_TO_STRING(AbstractColumn, ColumnMode, temp_col->columnMode()));
 		filter->input(0, temp_col);
-		DEBUG("	filter->output size = " << filter->output(0)->rowCount());
+//		DEBUG("	filter->output size = " << filter->output(0)->rowCount());
 		copy(filter->output(0));
 		delete temp_col;
 	}
@@ -1217,7 +1218,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
  * after the project was loaded in Project::load().
  */
  void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames,
-								const QStringList& variableColumnPaths, bool autoUpdate) {
+		const QStringList& variableColumnPaths, bool autoUpdate) {
 	m_formula = formula;
 	m_formulaVariableNames = variableNames;
 	m_formulaVariableColumnPaths = variableColumnPaths;
@@ -1330,11 +1331,12 @@ void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 }
 
 void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
+	PERFTRACE(Q_FUNC_INFO);
 	int index = m_formulaVariableColumnPaths.indexOf(aspect->path());
 	if (index != -1) {
 		const Column* column = dynamic_cast<const Column*>(aspect);
 		m_formulaVariableColumns[index] = const_cast<Column*>(column);
-		DEBUG("ColumnPrivate::formulaVariableColumnAdded():updateFormula()")
+		DEBUG(Q_FUNC_INFO << ", calling updateFormula()")
 		updateFormula();
 	}
 }

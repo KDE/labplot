@@ -1540,7 +1540,7 @@ void ImportFileWidget::refreshPreview() {
 		QVector<QStringList> strings;
 		// loop over all selected vars
 		for (const QString& var : filter->selectedVarNames()) {
-			DEBUG(Q_FUNC_INFO << ", reading variable: " << var.toStdString())
+			//DEBUG(Q_FUNC_INFO << ", reading variable: " << var.toStdString())
 			filter->setCurrentVarName(var);
 			strings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
 			if (importedStrings.size() == 0)	// first var

@@ -14,6 +14,7 @@
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
 #include "backend/lib/macros.h"
+#include "backend/lib/trace.h"
 
 #include <QBrush>
 #include <QIcon>
@@ -255,6 +256,8 @@ bool SpreadsheetModel::hasChildren(const QModelIndex& /*parent*/) const {
 }
 
 void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
+	PERFTRACE(Q_FUNC_INFO);
+
 	const Column* col = dynamic_cast<const Column*>(aspect);
 	if (!col || aspect->parentAspect() != m_spreadsheet)
 		return;
