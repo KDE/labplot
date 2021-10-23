@@ -18,6 +18,7 @@
 #include "commonfrontend/worksheet/WorksheetView.h"
 #undef private
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
@@ -83,14 +84,27 @@ void MultiRangeTest::initTestCase() {
 	a.setData(static_cast<int>(mode)); \
 	view->cartesianPlotMouseModeChanged(&a);
 
-#define VALUES_EQUAL(v1, v2) QCOMPARE(abs(v1 - v2) <= qMin(0.1*v2, 0.1*v1), true)
+#define VALUES_EQUAL(v1, v2) QCOMPARE(nsl_math_approximately_equal(v1, v2), true)
 
 #define RANGE_CORRECT(range, start_, end_) \
 	VALUES_EQUAL(range.start(), start_); \
 	VALUES_EQUAL(range.end(), end_);
 
 #define CHECK_RANGE(plot, aspect, xy, start_, end_) \
-	RANGE_CORRECT(plot->xy ## Range(aspect->coordinateSystemIndex()), start_, end_)
+	RANGE_CORRECT(plot->xy ## Range(plot->coordinateSystem(aspect->coordinateSystemIndex())->xy ## Index()), start_, end_)
+
+#define DEBUG_RANGE(plot, aspect) \
+{\
+	int cSystem = aspect->coordinateSystemIndex(); \
+	WARN(Q_FUNC_INFO << ", csystem index = " << cSystem) \
+	int xIndex = plot->coordinateSystem(cSystem)->xIndex(); \
+	int yIndex = plot->coordinateSystem(cSystem)->yIndex(); \
+\
+	auto xrange = plot->xRange(xIndex); \
+	auto yrange = plot->yRange(yIndex); \
+	WARN(Q_FUNC_INFO << ", x index = " << xIndex << ", range = " << xrange.start() << " .. " << xrange.end()) \
+	WARN(Q_FUNC_INFO << ", y index = " << yIndex << ", range = " << yrange.start() << " .. " << yrange.end()) \
+}
 
 // Test1:
 // Check if the correct actions are enabled/disabled. Oder schränkt es zu viel ein?
@@ -174,8 +188,7 @@ void MultiRangeTest::testApplyActionToSelection_CurveSelected_ZoomSelection()
 //	CHECK_RANGE(p2, cosCurve, y, -1, 1);
 }
 
-void MultiRangeTest::testZoomXSelection_AllRanges()
-{
+void MultiRangeTest::testZoomXSelection_AllRanges() {
 	LOAD_PROJECT
 	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
 	horAxisP1->setSelected(true);
@@ -185,15 +198,15 @@ void MultiRangeTest::testZoomXSelection_AllRanges()
 	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 0.3), -1);
 	p1->mouseReleaseZoomSelectionMode(-1);
 
-	// TODO
-	//CHECK_RANGE(p1, sinCurve, x, 0.2, 0.6);
-	//CHECK_RANGE(p1, sinCurve, y, -0.5, 0.3);
+	//DEBUG_RANGE(p1, sinCurve)
+
+	CHECK_RANGE(p1, sinCurve, x, 0.2, 0.6);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
 	CHECK_RANGE(p1, tanCurve, x, 0.2, 0.6);
-	//CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 }
 
-void MultiRangeTest::testZoomXSelection_SingleRange()
-{
+void MultiRangeTest::testZoomXSelection_SingleRange() {
 	LOAD_PROJECT
 	horAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
@@ -202,11 +215,13 @@ void MultiRangeTest::testZoomXSelection_SingleRange()
 	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 0.3), 0);
 	p1->mouseReleaseZoomSelectionMode(0);
 
+	DEBUG_RANGE(p1, sinCurve)
+	DEBUG_RANGE(p1, tanCurve)
 	// TODO
 	//CHECK_RANGE(p1, sinCurve, x, 0, 1);
-	//CHECK_RANGE(p1, sinCurve, y, -0.5, 0.3);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
 	//CHECK_RANGE(p1, tanCurve, x, 0, 1);
-	//CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
 }
 
 void MultiRangeTest::testZoomYSelection_AllRanges()
