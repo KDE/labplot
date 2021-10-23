@@ -43,7 +43,7 @@ mark_as_advanced(LIBORIGIN_LIBRARIES LIBORIGIN_INCLUDE_DIR LIBORIGIN_VERSION)
 
 include(FeatureSummary)
 set_package_properties(LibOrigin PROPERTIES
-	DESCRIPTION "A library for reading OriginLab project files"
+    DESCRIPTION "A library for reading OriginLab project files"
     URL "http://sourceforge.net/projects/liborigin"
 )
 

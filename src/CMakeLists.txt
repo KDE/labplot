@@ -486,6 +486,14 @@ target_link_libraries( labplot2lib
 	${GSL_LIBRARIES}
 	${GSL_CBLAS_LIBRARIES}
 	${Poppler_LIBRARIES}
+	${HDF5_LIBRARIES}
+	${FFTW3_LIBRARIES}
+	${netCDF_LIBRARIES}
+	${CFITSIO_LIBRARIES}
+	${LIBCERF_LIBRARIES}
+	${LZ4_LIBRARIES}
+	${MATIO_LIBRARIES}
+	${ZLIB_LIBRARIES}
 	)
 
 IF (Qt5SerialPort_FOUND)
@@ -509,15 +517,6 @@ IF (RECENT_CANTOR)
 	# KF5::Service, KF5::Parts is optional but probably required by Cantor
 	target_link_libraries( labplot2lib Cantor::cantorlibs KF5::Service KF5::Parts )
 ENDIF ()
-
-target_link_libraries( labplot2lib ${HDF5_LIBRARIES} )
-target_link_libraries( labplot2lib ${FFTW3_LIBRARIES} )
-target_link_libraries( labplot2lib ${netCDF_LIBRARIES} )
-target_link_libraries( labplot2lib ${CFITSIO_LIBRARIES} )
-target_link_libraries( labplot2lib ${LIBCERF_LIBRARIES} )
-target_link_libraries( labplot2lib ${LZ4_LIBRARIES} )
-target_link_libraries( labplot2lib ${MATIO_LIBRARIES} )
-target_link_libraries( labplot2lib ${ZLIB_LIBRARIES} )
 
 IF (ENABLE_READSTAT)
 	# build before using

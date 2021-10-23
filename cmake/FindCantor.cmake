@@ -4,10 +4,15 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #=============================================================================
 
+include(FeatureSummary)
+SET_PACKAGE_PROPERTIES(Cantor PROPERTIES
+    DESCRIPTION "Provide a nice Interface for doing Mathematics and Scientific Computing"
+    URL "https://edu.kde.org/cantor/"
+)
 # Try to find via config. If that isn't available fall back to manual lookup.
 # Config is vastly preferable because it will also make sure link dependencies
 # are found and actually in the target link interface.
-find_package(Cantor ${Cantor_FIND_VERSION} ${Cantor_FIND_REQUIRED} CONFIG QUIET)
+find_package(Cantor ${Cantor_FIND_VERSION} ${Cantor_FIND_REQUIRED} CONFIG)
 if(Cantor_FOUND)
     return()
 endif()
@@ -51,6 +56,4 @@ if(Cantor_FOUND AND NOT TARGET Cantor::cantorlibs)
 endif()
 
 mark_as_advanced(Cantor_LIBRARIES Cantor_INCLUDE_DIR Cantor_VERSION)
-
-include(FeatureSummary)
 
