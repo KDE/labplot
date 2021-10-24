@@ -92,8 +92,8 @@ QMenu* AbstractPart::createContextMenu() {
 	if ( (type == AspectType::Spreadsheet || type == AspectType::Matrix)
 		&& type != AspectType::LiveDataSource && type != AspectType::MQTTTopic ) {
 		QMenu* subMenu = new QMenu(i18n("Import Data"), menu);
-		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From File"), this, &AbstractPart::importFromFileRequested);
-		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From SQL Database"), this, &AbstractPart::importFromSQLDatabaseRequested);
+		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From File..."), this, &AbstractPart::importFromFileRequested);
+		subMenu->addAction(QIcon::fromTheme("document-import"), i18n("From SQL Database..."), this, &AbstractPart::importFromSQLDatabaseRequested);
 		menu->addMenu(subMenu);
 		menu->addSeparator();
 	}

@@ -268,7 +268,7 @@ QString GuiTools::openImageFile(const QString& className) {
 		formats += f + QLatin1Char(' ');
 	}
 
-	const QString& path = QFileDialog::getOpenFileName(nullptr, i18n("Open Image File"), dir, i18n("Images (%1)", formats));
+	const QString& path = QFileDialog::getOpenFileName(nullptr, i18nc("@title:window", "Open Image File"), dir, i18n("Images (%1)", formats));
 	if (!path.isEmpty()) {
 		int pos = path.lastIndexOf(QLatin1String("/"));
 		if (pos != -1) {

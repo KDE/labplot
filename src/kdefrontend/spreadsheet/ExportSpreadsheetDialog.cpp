@@ -340,7 +340,7 @@ void ExportSpreadsheetDialog::selectFile() {
 		break;
 	}
 
-	const QString path = QFileDialog::getSaveFileName(this, i18n("Export to file"), dir, extensions);
+	const QString path = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Export to File"), dir, extensions);
 	if (!path.isEmpty()) {
 		ui->leFileName->setText(path);
 

@@ -67,9 +67,9 @@ ExportWorksheetDialog::ExportWorksheetDialog(QWidget* parent) : QDialog(parent),
 	ui->cbExportTo->addItem(i18n("File"));
 	ui->cbExportTo->addItem(i18n("Clipboard"));
 
-	ui->cbExportArea->addItem(i18n("Object's bounding box"));
-	ui->cbExportArea->addItem(i18n("Current selection"));
-	ui->cbExportArea->addItem(i18n("Complete worksheet"));
+	ui->cbExportArea->addItem(i18n("Object's Bounding Box"));
+	ui->cbExportArea->addItem(i18n("Current Selection"));
+	ui->cbExportArea->addItem(i18n("Complete Worksheet"));
 
 	ui->cbResolution->addItem(i18nc("%1 is the value of DPI of the current screen", "%1 (desktop)", QString::number(QApplication::desktop()->physicalDpiX())));
 	ui->cbResolution->addItem(QLatin1String("100"));
@@ -250,7 +250,7 @@ void ExportWorksheetDialog::selectFile() {
 		break;
 	}
 
-	const QString path = QFileDialog::getSaveFileName(this, i18n("Export to file"), dir, format);
+	const QString path = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Export to File"), dir, format);
 	if (!path.isEmpty()) {
 		//if the file is already existing, the user was already asked
 		//in QFileDialog whether to overwrite or not.

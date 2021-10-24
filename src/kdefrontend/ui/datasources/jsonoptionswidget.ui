@@ -37,7 +37,7 @@
    <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="lDateTimeFormat">
      <property name="text">
-      <string>DateTime Format:</string>
+      <string>DateTime format:</string>
      </property>
     </widget>
    </item>
@@ -73,7 +73,7 @@
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="lDecimalSeparator">
      <property name="text">
-      <string>Decimal Separator:</string>
+      <string>Decimal separator:</string>
      </property>
     </widget>
    </item>

@@ -37,7 +37,7 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 	ui.setupUi(this);
 
 	ui.cbImportFrom->addItem(i18n("Table"));
-	ui.cbImportFrom->addItem(i18n("Custom query"));
+	ui.cbImportFrom->addItem(i18n("Custom Query"));
 
 	ui.bDatabaseManager->setIcon(QIcon::fromTheme("network-server-database"));
 	ui.bDatabaseManager->setToolTip(i18n("Manage connections"));

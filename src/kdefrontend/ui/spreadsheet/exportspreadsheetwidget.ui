@@ -149,7 +149,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="lDecimalSeparator">
         <property name="text">
-         <string>Decimal Separator:</string>
+         <string>Decimal separator:</string>
         </property>
        </widget>
       </item>

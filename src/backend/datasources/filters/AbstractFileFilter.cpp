@@ -202,13 +202,13 @@ AbstractFileFilter::FileType AbstractFileFilter::fileType(const QString& fileNam
   returns the list of all supported data file formats
 */
 QStringList AbstractFileFilter::fileTypes() {
-	return (QStringList() << i18n("ASCII data")
-		<< i18n("Binary data")
+	return (QStringList() << i18n("ASCII Data")
+		<< i18n("Binary Data")
 		<< i18n("Image")
 		<< i18n("Hierarchical Data Format 5 (HDF5)")
 		<< i18n("Network Common Data Format (NetCDF)")
 		<< i18n("Flexible Image Transport System Data Format (FITS)")
-		<< i18n("JSON data")
+		<< i18n("JSON Data")
 		<< i18n("ROOT (CERN) Histograms")
 		<< i18n("Ngspice RAW ASCII")
 		<< i18n("Ngspice RAW Binary")

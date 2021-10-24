@@ -53,7 +53,7 @@
          <string> Select the file to import</string>
         </property>
         <property name="text">
-         <string>Open File</string>
+         <string>Open File...</string>
         </property>
        </widget>
       </item>

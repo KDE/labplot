@@ -117,13 +117,13 @@ int main (int argc, char *argv[]) {
 	parser.addHelpOption();
 	parser.addVersionOption();
 
-	QCommandLineOption nosplashOption("no-splash", i18n("disable splash screen"));
+	QCommandLineOption nosplashOption("no-splash", i18n("Disable splash screen"));
 	parser.addOption(nosplashOption);
 
-	QCommandLineOption presenterOption("presenter", i18n("start in the presenter mode"));
+	QCommandLineOption presenterOption("presenter", i18n("Start in the presenter mode"));
 	parser.addOption(presenterOption);
 
-	parser.addPositionalArgument("+[file]", i18n( "open a project file"));
+	parser.addPositionalArgument("+[file]", i18n( "Open a project file."));
 
 	aboutData.setupCommandLine(&parser);
 	parser.process(app);

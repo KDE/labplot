@@ -100,7 +100,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 #ifdef HAVE_FITS
 		ui.cbFileType->addItem(i18n("Flexible Image Transport System Data Format (FITS)"), static_cast<int>(AbstractFileFilter::FileType::FITS));
 #endif
-		ui.cbFileType->addItem(i18n("JSON data"), static_cast<int>(AbstractFileFilter::FileType::JSON));
+		ui.cbFileType->addItem(i18n("JSON Data"), static_cast<int>(AbstractFileFilter::FileType::JSON));
 #ifdef HAVE_ZIP
 		ui.cbFileType->addItem(i18n("ROOT (CERN)"), static_cast<int>(AbstractFileFilter::FileType::ROOT));
 #endif
@@ -120,8 +120,8 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 		ui.cbSourceType->hide();
 		ui.gbUpdateOptions->hide();
 	} else {	// Live data source
-		ui.cbFileType->addItem(i18n("ASCII data"), static_cast<int>(AbstractFileFilter::FileType::Ascii));
-		ui.cbFileType->addItem(i18n("Binary data"), static_cast<int>(AbstractFileFilter::FileType::Binary));
+		ui.cbFileType->addItem(i18n("ASCII Data"), static_cast<int>(AbstractFileFilter::FileType::Ascii));
+		ui.cbFileType->addItem(i18n("Binary Data"), static_cast<int>(AbstractFileFilter::FileType::Binary));
 #ifdef HAVE_ZIP
 		ui.cbFileType->addItem(i18n("ROOT (CERN)"), static_cast<int>(AbstractFileFilter::FileType::ROOT));
 #endif
@@ -146,7 +146,7 @@ ImportFileWidget::ImportFileWidget(QWidget* parent, bool liveDataSource, const Q
 	ui.gbUpdateOptions->hide();
 	setMQTTVisible(false);
 
-	ui.cbReadingType->addItem(i18n("Whole file"), static_cast<int>(LiveDataSource::ReadingType::WholeFile));
+	ui.cbReadingType->addItem(i18n("Whole File"), static_cast<int>(LiveDataSource::ReadingType::WholeFile));
 
 	ui.bOpen->setIcon( QIcon::fromTheme(QLatin1String("document-open")) );
 	ui.bFileInfo->setIcon( QIcon::fromTheme(QLatin1String("help-about")) );
@@ -780,7 +780,7 @@ void ImportFileWidget::selectFile() {
 	DEBUG(Q_FUNC_INFO)
 	KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("ImportFileWidget"));
 	const QString& dir = conf.readEntry(QLatin1String("LastDir"), "");
-	const QString& path = QFileDialog::getOpenFileName(this, i18n("Select the File Data Source"), dir);
+	const QString& path = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Select the File Data Source"), dir);
 	DEBUG("	dir = " << STDSTRING(dir))
 	DEBUG("	path = " << STDSTRING(path))
 	if (path.isEmpty())	//cancel was clicked in the file-dialog
@@ -934,10 +934,10 @@ void ImportFileWidget::fileTypeChanged(int /*index*/) {
 	for (int i = 0; i<ui.tabWidget->count(); ++i)
 		ui.tabWidget->removeTab(0);
 
-	ui.tabWidget->addTab(ui.tabDataFormat, i18n("Data format"));
+	ui.tabWidget->addTab(ui.tabDataFormat, i18n("Data Format"));
 	ui.tabWidget->addTab(ui.tabDataPreview, i18n("Preview"));
 	if (!m_liveDataSource)
-		ui.tabWidget->addTab(ui.tabDataPortion, i18n("Data portion to read"));
+		ui.tabWidget->addTab(ui.tabDataPortion, i18n("Data Portion to Read"));
 
 	ui.lPreviewLines->show();
 	ui.sbPreviewLines->show();

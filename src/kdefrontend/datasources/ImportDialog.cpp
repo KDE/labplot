@@ -72,7 +72,7 @@ void ImportDialog::setModel() {
 	frameAddTo = new QGroupBox(this);
 	frameAddTo->setTitle(i18n("Import to"));
 
-	auto* label = new QLabel(i18n("Data container"));
+	auto* label = new QLabel(i18n("Data container:"));
 	label->setToolTip(i18n("Data container where the data has to be imported into"));
 
 	auto* grid = new QGridLayout(frameAddTo);
@@ -99,7 +99,7 @@ void ImportDialog::setModel() {
 	tbNewDataContainer->setToolTip(i18n("Add new data container to the project"));
 	grid->addWidget( tbNewDataContainer, 0, 2);
 
-	lPosition = new QLabel(i18n("Position"), frameAddTo);
+	lPosition = new QLabel(i18n("Position:"), frameAddTo);
 	lPosition->setEnabled(false);
 	grid->addWidget(lPosition, 1, 0);
 

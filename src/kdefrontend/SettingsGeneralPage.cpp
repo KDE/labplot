@@ -153,10 +153,10 @@ void SettingsGeneralPage::loadSettings() {
 
 void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->clear();
-	ui.cbLoadOnStart->addItem(i18n("Do nothing"));
-	ui.cbLoadOnStart->addItem(i18n("Create new empty project"));
-	ui.cbLoadOnStart->addItem(i18n("Create new project with worksheet"));
-	ui.cbLoadOnStart->addItem(i18n("Load last used project"));
+	ui.cbLoadOnStart->addItem(i18n("Do Nothing"));
+	ui.cbLoadOnStart->addItem(i18n("Create New Empty Project"));
+	ui.cbLoadOnStart->addItem(i18n("Create New Project with Worksheet"));
+	ui.cbLoadOnStart->addItem(i18n("Load Last Used Project"));
 // 	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
 
 	ui.cbTitleBar->clear();
@@ -165,13 +165,13 @@ void SettingsGeneralPage::retranslateUi() {
 	ui.cbTitleBar->addItem(i18n("Show Project Name"));
 
 	ui.cbInterface->clear();
-	ui.cbInterface->addItem(i18n("Sub-window view"));
-	ui.cbInterface->addItem(i18n("Tabbed view"));
+	ui.cbInterface->addItem(i18n("Sub-window View"));
+	ui.cbInterface->addItem(i18n("Tabbed View"));
 
 	ui.cbMdiVisibility->clear();
-	ui.cbMdiVisibility->addItem(i18n("Show windows of the current folder only"));
-	ui.cbMdiVisibility->addItem(i18n("Show windows of the current folder and its subfolders only"));
-	ui.cbMdiVisibility->addItem(i18n("Show all windows"));
+	ui.cbMdiVisibility->addItem(i18n("Show Windows of the Current Folder Only"));
+	ui.cbMdiVisibility->addItem(i18n("Show Windows of the Current Folder and its Subfolders Only"));
+	ui.cbMdiVisibility->addItem(i18n("Show all Windows"));
 
 	ui.cbTabPosition->clear();
 	ui.cbTabPosition->addItem(i18n("Top"));

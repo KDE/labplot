@@ -546,47 +546,47 @@ void MainWin::initActions() {
 	connect(m_newFolderAction, &QAction::triggered, this, &MainWin::newFolder);
 
 	//"New file datasources"
-	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("Live Data Source"),this);
+	m_newLiveDataSourceAction = new QAction(QIcon::fromTheme("application-octet-stream"),i18n("Live Data Source..."),this);
 	m_newLiveDataSourceAction->setWhatsThis(i18n("Creates a live data source to read data from a real time device"));
 	actionCollection()->addAction("new_live_datasource", m_newLiveDataSourceAction);
 	connect(m_newLiveDataSourceAction, &QAction::triggered, this, &MainWin::newLiveDataSourceActionTriggered);
 
 	//Import/Export
-	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("Import from File"), this);
+	m_importFileAction = new QAction(QIcon::fromTheme("document-import"), i18n("From File..."), this);
 	actionCollection()->setDefaultShortcut(m_importFileAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
 	m_importFileAction->setWhatsThis(i18n("Import data from a regular file"));
 	connect(m_importFileAction, &QAction::triggered, this, [=]() {importFileDialog();});
 
 	//second "import from file" action, with a shorter name, to be used in the sub-menu of the "Import"-menu.
 	//the first action defined above will be used in the toolbar and touchbar where we need the more detailed name "Import From File".
-	m_importFileAction_2 = new QAction(QIcon::fromTheme("document-import"), i18n("From File"), this);
+	m_importFileAction_2 = new QAction(QIcon::fromTheme("document-import"), i18n("From File..."), this);
 	actionCollection()->addAction("import_file", m_importFileAction_2);
 	m_importFileAction_2->setWhatsThis(i18n("Import data from a regular file"));
 	connect(m_importFileAction_2, &QAction::triggered, this, [=]() {importFileDialog();});
 
-	m_importSqlAction = new QAction(QIcon::fromTheme("network-server-database"), i18n("From SQL Database"), this);
+	m_importSqlAction = new QAction(QIcon::fromTheme("network-server-database"), i18n("From SQL Database..."), this);
 	m_importSqlAction->setWhatsThis(i18n("Import data from a SQL database"));
 	actionCollection()->addAction("import_sql", m_importSqlAction);
 	connect(m_importSqlAction, &QAction::triggered, this, &MainWin::importSqlDialog);
 
-	m_importDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("database-index")), i18n("From Dataset Collection"), this);
+	m_importDatasetAction = new QAction(QIcon::fromTheme(QLatin1String("database-index")), i18n("From Dataset Collection..."), this);
 	m_importDatasetAction->setWhatsThis(i18n("Imports data from an online dataset"));
 	actionCollection()->addAction("import_dataset_datasource", m_importDatasetAction);
 	connect(m_importDatasetAction, &QAction::triggered, this, &MainWin::importDatasetDialog);
 
-	m_importLabPlotAction = new QAction(QIcon::fromTheme("project-open"), i18n("LabPlot Project"), this);
+	m_importLabPlotAction = new QAction(QIcon::fromTheme("project-open"), i18n("LabPlot Project..."), this);
 	m_importLabPlotAction->setWhatsThis(i18n("Import a project from a LabPlot project file (.lml)"));
 	actionCollection()->addAction("import_labplot", m_importLabPlotAction);
 	connect(m_importLabPlotAction, &QAction::triggered, this, &MainWin::importProjectDialog);
 
 #ifdef HAVE_LIBORIGIN
-	m_importOpjAction = new QAction(QIcon::fromTheme("project-open"), i18n("Origin Project (OPJ)"), this);
+	m_importOpjAction = new QAction(QIcon::fromTheme("project-open"), i18n("Origin Project (OPJ)..."), this);
 	m_importOpjAction->setWhatsThis(i18n("Import a project from an OriginLab Origin project file (.opj)"));
 	actionCollection()->addAction("import_opj", m_importOpjAction);
 	connect(m_importOpjAction, &QAction::triggered, this, &MainWin::importProjectDialog);
 #endif
 
-	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export"), this);
+	m_exportAction = new QAction(QIcon::fromTheme("document-export"), i18n("Export..."), this);
 	m_exportAction->setWhatsThis(i18n("Export selected element"));
 	actionCollection()->setDefaultShortcut(m_exportAction, Qt::CTRL+Qt::SHIFT+Qt::Key_E);
 	actionCollection()->addAction("export", m_exportAction);
@@ -603,7 +603,7 @@ void MainWin::initActions() {
 	});
 
 #ifdef HAVE_FITS
-	action = new QAction(QIcon::fromTheme("editor"), i18n("FITS Metadata Editor"), this);
+	action = new QAction(QIcon::fromTheme("editor"), i18n("FITS Metadata Editor..."), this);
 	action->setWhatsThis(i18n("Open editor to edit FITS meta data"));
 	actionCollection()->addAction("edit_fits", action);
 	connect(action, &QAction::triggered, this, &MainWin::editFitsFileDialog);
@@ -613,7 +613,7 @@ void MainWin::initActions() {
 	//Undo/Redo-stuff
 	m_undoAction = KStandardAction::undo(this, SLOT(undo()), actionCollection());
 	m_redoAction = KStandardAction::redo(this, SLOT(redo()), actionCollection());
-	m_historyAction = new QAction(QIcon::fromTheme("view-history"), i18n("Undo/Redo History"),this);
+	m_historyAction = new QAction(QIcon::fromTheme("view-history"), i18n("Undo/Redo History..."),this);
 	actionCollection()->addAction("history", m_historyAction);
 	connect(m_historyAction, &QAction::triggered, this, &MainWin::historyDialog);
 
@@ -836,7 +836,7 @@ void MainWin::initMenus() {
 	}
 
 #ifdef HAVE_CANTOR_LIBS
-	QAction* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS"), this);
+	QAction* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
 	connect(action, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
 	action->setMenuRole(QAction::NoRole);	// prevent macOS Qt heuristics to select this action for preferences
 	if (settingsMenu)
@@ -1308,7 +1308,7 @@ void MainWin::openProject() {
 
 	KConfigGroup group(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = group.readEntry("LastOpenDir", "");
-	const QString& path = QFileDialog::getOpenFileName(this,i18n("Open Project"), dir, extensions, &m_lastOpenFileFilter);
+	const QString& path = QFileDialog::getOpenFileName(this,i18nc("@title:window", "Open Project"), dir, extensions, &m_lastOpenFileFilter);
 	if (path.isEmpty())// "Cancel" was clicked
 		return;
 
@@ -1579,7 +1579,7 @@ bool MainWin::saveProject() {
 bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
-	QString path  = QFileDialog::getSaveFileName(this, i18n("Save Project As"), dir,
+	QString path  = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Save Project As"), dir,
 		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if (path.isEmpty())// "Cancel" was clicked

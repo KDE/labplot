@@ -169,7 +169,7 @@ void FITSHeaderEditWidget::fillTableSlot(QTreeWidgetItem *item, int col) {
 void FITSHeaderEditWidget::openFile() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "FITSHeaderEditWidget");
 	QString dir = conf.readEntry("LastDir", "");
-	QString fileName = QFileDialog::getOpenFileName(this, i18n("Open FITS file"), dir,
+	QString fileName = QFileDialog::getOpenFileName(this, i18nc("@title:window", "Open FITS File"), dir,
 	                   i18n("FITS files (*.fits *.fit *.fts)"));
 	if (fileName.isEmpty())
 		return;

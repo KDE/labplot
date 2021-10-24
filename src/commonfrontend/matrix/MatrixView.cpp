@@ -138,7 +138,7 @@ void MatrixView::initActions() {
 	action_fill_function = new QAction(QIcon::fromTheme(QString()), i18n("Function Values"), this);
 	action_fill_const = new QAction(QIcon::fromTheme(QString()), i18n("Const Values"), this);
 	action_clear_matrix = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Matrix"), this);
-	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell"), this);
+	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell..."), this);
 
 	action_transpose = new QAction(i18n("&Transpose"), this);
 	action_mirror_horizontally = new QAction(QIcon::fromTheme("object-flip-horizontal"), i18n("Mirror &Horizontally"), this);
