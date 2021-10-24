@@ -2175,7 +2175,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		setYRangeDirty(cSystemIndex, true);
 	}
 
-	if (!isLoading()) {
+	if (!isLoading() && !this->pasted() && !child->pasted()) {
 		//if a theme was selected, apply the theme settings for newly added children,
 		//load default theme settings otherwise.
 		const auto* elem = dynamic_cast<const WorksheetElement*>(child);

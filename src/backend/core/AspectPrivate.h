@@ -36,6 +36,7 @@ public:
 	AbstractAspect* m_parent{nullptr};
 	bool m_undoAware{true};
 	bool m_isLoading{false};
+	bool m_pasted{false};
 };
 
 #endif // ifndef ASPECT_PRIVATE_H

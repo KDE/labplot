@@ -350,6 +350,8 @@ public:
 	//save/load
 	virtual void save(QXmlStreamWriter*) const = 0;
 	virtual bool load(XmlStreamReader*, bool preview) = 0;
+	void setPasted(bool);
+	bool pasted() const;
 
 	static AspectType clipboardAspectType(QString&);
 
