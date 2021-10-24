@@ -32,6 +32,7 @@ public:
 
 	QString name() const;
 	void retransform();
+	void retransformRange();
 	void retransformLine();
 	void retransformArrow();
 	void retransformTicks();

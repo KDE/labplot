@@ -427,44 +427,11 @@ BASIC_SHARED_D_READER_IMPL(Axis, QPen, minorGridPen, minorGridPen)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorGridOpacity, minorGridOpacity)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(Axis, SetRangeType, Axis::RangeType, rangeType, retransform);
+STD_SETTER_CMD_IMPL_F(Axis, SetRangeType, Axis::RangeType, rangeType, retransformRange);
 void Axis::setRangeType(const Axis::RangeType rangeType) {
 	Q_D(Axis);
 	if (rangeType != d->rangeType)
 		exec(new AxisSetRangeTypeCmd(d, rangeType, ki18n("%1: set axis range type")));
-
-	const auto* cs = plot()->coordinateSystem(coordinateSystemIndex());
-	auto* plot = qobject_cast<CartesianPlot*>(parentAspect());
-	if (!plot) {
-		DEBUG(Q_FUNC_INFO << ", no plot available")
-		return;
-	}
-
-	switch (rangeType) {	// also if not changing (like on plot range changes)
-	case Axis::RangeType::Auto: {
-		if (d->orientation == Axis::Orientation::Horizontal)
-			d->range = plot->xRange(cs->xIndex());
-		else
-			d->range = plot->yRange(cs->yIndex());
-
-		DEBUG(Q_FUNC_INFO << ", new auto range = " << d->range.toStdString())
-		break;
-	}
-	case Axis::RangeType::AutoData:
-		if (d->orientation == Axis::Orientation::Horizontal)
-			d->range = plot->xRangeAutoScale(cs->xIndex());
-		else
-			d->range = plot->yRangeAutoScale(cs->yIndex());
-
-		DEBUG(Q_FUNC_INFO << ", new auto data range = " << d->range.toStdString())
-		break;
-	case Axis::RangeType::Custom:
-		return;
-		break;
-	}
-
-	retransform();	// TODO: this calls retransform() again?
-	emit rangeChanged(d->range);
 }
 
 STD_SWAP_METHOD_SETTER_CMD_IMPL(Axis, SetVisible, bool, swapVisible);
@@ -1042,6 +1009,34 @@ void AxisPrivate::retransform() {
 	retransformLine();
 	m_suppressRecalc = false;
 	recalcShapeAndBoundingRect();
+}
+
+void AxisPrivate::retransformRange() {
+	switch (rangeType) {	// also if not changing (like on plot range changes)
+	case Axis::RangeType::Auto: {
+		if (orientation == Axis::Orientation::Horizontal)
+			range = q->m_plot->xRange(q->cSystem->xIndex());
+		else
+			range = q->m_plot->yRange(q->cSystem->yIndex());
+
+		DEBUG(Q_FUNC_INFO << ", new auto range = " << range.toStdString())
+		break;
+	}
+	case Axis::RangeType::AutoData:
+		if (orientation == Axis::Orientation::Horizontal)
+			range = q->m_plot->xRangeAutoScale(q->cSystem->xIndex());
+		else
+			range = q->m_plot->yRangeAutoScale(q->cSystem->yIndex());
+
+		DEBUG(Q_FUNC_INFO << ", new auto data range = " << range.toStdString())
+		break;
+	case Axis::RangeType::Custom:
+		return;
+		break;
+	}
+
+	retransform();
+	emit q->rangeChanged(range);
 }
 
 void AxisPrivate::retransformLine() {
