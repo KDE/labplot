@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Plot area (for background filling and clipping).
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -281,7 +281,6 @@ QRectF PlotAreaPrivate::boundingRect () const {
 					width + penWidth, height + penWidth};
 	} else
 		return rect;
-
 }
 
 QPainterPath PlotAreaPrivate::shape() const {
@@ -381,6 +380,13 @@ void PlotAreaPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /
 	} else if (backgroundType == WorksheetElement::BackgroundType::Pattern) {
 		painter->setBrush(QBrush(backgroundFirstColor,backgroundBrushStyle));
 	}
+
+
+	//draw the background
+	if ( qFuzzyIsNull(borderCornerRadius) )
+		painter->drawRect(rect);
+	else
+		painter->drawRoundedRect(rect, borderCornerRadius, borderCornerRadius);
 
 	//draw the border
 	if (borderPen.style() != Qt::NoPen) {
