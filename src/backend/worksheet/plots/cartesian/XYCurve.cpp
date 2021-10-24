@@ -3438,8 +3438,10 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	this->setErrorBarsOpacity(group.readEntry("ErrorBarsOpacity", 1.0));
 
 	if (plot->theme() == QLatin1String("Tufte")) {
-		setRugEnabled(true);
-		setRugOrientation(WorksheetElement::Orientation::Both);
+		if (d->xColumn && d->xColumn->rowCount() < 100) {
+			setRugEnabled(true);
+			setRugOrientation(WorksheetElement::Orientation::Both);
+		}
 	}
 
 	d->m_suppressRecalc = false;
