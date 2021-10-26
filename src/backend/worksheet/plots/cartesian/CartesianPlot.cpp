@@ -1165,7 +1165,7 @@ private:
 void CartesianPlot::setAutoScaleX(int index, const bool autoScaleX) {
 	Q_D(CartesianPlot);
 	if (index == -1) {
-		for (int i=0; i < xRangeCount(); i++)
+		for (int i = 0; i < xRangeCount(); i++)
 			setAutoScaleX(i, autoScaleX);
 		return;
 	}
@@ -1180,10 +1180,8 @@ void CartesianPlot::setAutoScaleX(int index, const bool autoScaleX) {
 void CartesianPlot::setAutoScaleY(int index, const bool autoScaleY) {
 	Q_D(CartesianPlot);
 	if (index == -1) {
-		for (int i=0; i < yRangeCount(); i++)
-		{
+		for (int i = 0; i < yRangeCount(); i++)
 			setAutoScaleY(i, autoScaleY);
-		}
 		return;
 	}
 	if (autoScaleY != yRange(index).autoScale()) {
@@ -2895,8 +2893,6 @@ void CartesianPlot::calculateCurvesYMinMax(const int index, bool completeRange) 
 // zoom
 
 void CartesianPlot::zoomIn(int xIndex, int yIndex) {
-	Q_D(CartesianPlot);
-
 	setUndoAware(false);
 	setAutoScaleX(xIndex, false);
 	setAutoScaleY(yIndex, false);
@@ -2905,12 +2901,12 @@ void CartesianPlot::zoomIn(int xIndex, int yIndex) {
 	setYRangeDirty(yIndex, true);
 	zoom(xIndex, true, true); //zoom in x
 	zoom(yIndex, false, true); //zoom in y
+
+	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
 }
 
 void CartesianPlot::zoomOut(int xIndex, int yIndex) {
-	Q_D(CartesianPlot);
-
 	setUndoAware(false);
 	setAutoScaleX(xIndex, false);
 	setAutoScaleY(yIndex, false);
@@ -2919,12 +2915,12 @@ void CartesianPlot::zoomOut(int xIndex, int yIndex) {
 	setYRangeDirty(yIndex, true);
 	zoom(xIndex, true, false); //zoom out x
 	zoom(yIndex, false, false); //zoom out y
+
+	Q_D(CartesianPlot);
 	d->retransformScales(xIndex, yIndex);
 }
 
 void CartesianPlot::zoomInX(int index) {
-	Q_D(CartesianPlot);
-
 	setUndoAware(false);
 	setAutoScaleX(index, false);
 	setUndoAware(true);
@@ -2932,22 +2928,21 @@ void CartesianPlot::zoomInX(int index) {
 	zoom(index, true, true); //zoom in x
 
 	bool retransform = false;
-	for (int i=0; i < m_coordinateSystems.count(); i++)
-	{
-		auto cs = coordinateSystem(i);
-		if ((index == -1 || index == cs->xIndex()) && autoScaleY(cs->yIndex())) {
-			scaleAutoY(cs->yIndex(), true);
+	for (int i = 0; i < m_coordinateSystems.count(); i++) {
+		const auto cs = coordinateSystem(i);
+		if (index == -1 || index == cs->xIndex()) {
+			if (autoScaleY(cs->yIndex()))
+				scaleAutoY(cs->yIndex(), true);
 			retransform = true;
 		}
 	}
 
+	Q_D(CartesianPlot);
 	if (retransform)
 		d->retransformScales(index, -1);
 }
 
 void CartesianPlot::zoomOutX(int index) {
-	Q_D(CartesianPlot);
-
 	setUndoAware(false);
 	setAutoScaleX(index, false);
 	setUndoAware(true);
@@ -2955,22 +2950,21 @@ void CartesianPlot::zoomOutX(int index) {
 	zoom(index, true, false); //zoom out x
 
 	bool retransform = false;
-	for (int i=0; i < m_coordinateSystems.count(); i++)
-	{
-		auto cs = coordinateSystem(i);
-		if ((index == -1 || index == cs->xIndex()) && autoScaleY(cs->yIndex())) {
-			scaleAutoY(cs->yIndex(), true);
+	for (int i = 0; i < m_coordinateSystems.count(); i++) {
+		const auto cs = coordinateSystem(i);
+		if ((index == -1 || index == cs->xIndex())) {
+			if (autoScaleY(cs->yIndex()))
+				scaleAutoY(cs->yIndex(), true);
 			retransform = true;
 		}
 	}
 
+	Q_D(CartesianPlot);
 	if (retransform)
 		d->retransformScales(index, -1);
 }
 
 void CartesianPlot::zoomInY(int index) {
-	Q_D(CartesianPlot);
-
 	setUndoAware(false);
 	setAutoScaleY(index, false);
 	setUndoAware(true);
@@ -2978,22 +2972,21 @@ void CartesianPlot::zoomInY(int index) {
 	zoom(index, false, true); //zoom in y
 
 	bool retransform = false;
-	for (int i=0; i < m_coordinateSystems.count(); i++)
-	{
-		auto cs = coordinateSystem(i);
-		if ((index == -1 || index == cs->yIndex()) && autoScaleX(cs->xIndex())) {
-			scaleAutoX(cs->yIndex(), true);
+	for (int i = 0; i < m_coordinateSystems.count(); i++) {
+		const auto cs = coordinateSystem(i);
+		if ((index == -1 || index == cs->yIndex())) {
+			if (autoScaleX(cs->xIndex()))
+				scaleAutoX(cs->yIndex(), true);
 			retransform = true;
 		}
 	}
 
+	Q_D(CartesianPlot);
 	if (retransform)
 		d->retransformScales(-1, index);
 }
 
 void CartesianPlot::zoomOutY(int index) {
-	Q_D(CartesianPlot);
-
 	setUndoAware(false);
 	setAutoScaleY(index, false);
 	setUndoAware(true);
@@ -3001,15 +2994,16 @@ void CartesianPlot::zoomOutY(int index) {
 	zoom(index, false, false); //zoom out y
 
 	bool retransform = false;
-	for (int i=0; i < m_coordinateSystems.count(); i++)
-	{
-		auto cs = coordinateSystem(i);
-		if ((index == -1 || index == cs->yIndex()) && autoScaleX(cs->xIndex())) {
-			scaleAutoX(cs->xIndex(), true);
+	for (int i = 0; i < m_coordinateSystems.count(); i++) {
+		const auto cs = coordinateSystem(i);
+		if ((index == -1 || index == cs->yIndex())) {
+			if (autoScaleX(cs->xIndex()))
+				scaleAutoX(cs->xIndex(), true);
 			retransform = true;
 		}
 	}
 
+	Q_D(CartesianPlot);
 	if (retransform)
 		d->retransformScales(-1, index);
 }
@@ -3026,7 +3020,7 @@ void CartesianPlot::zoom(int index, bool x, bool zoom_in) {
 	Range<double> range;
 	if (index == -1) {
 		QVector<int> zoomedIndices;
-		for (int i=0; i < m_coordinateSystems.count(); i++) {
+		for (int i = 0; i < m_coordinateSystems.count(); i++) {
 			auto idx = x ? coordinateSystem(i)->xIndex() : coordinateSystem(i)->yIndex();
 			bool zoomed = zoomedIndices.contains(idx);
 			if (zoomed)
@@ -3101,6 +3095,7 @@ void CartesianPlot::zoom(int index, bool x, bool zoom_in) {
 		range.niceShrink();
 	else
 		range.niceExtend();
+
 	if (range.finite())
 		x ? d->xRange(index) = range : d->yRange(index) = range;
 }
@@ -3128,9 +3123,9 @@ void CartesianPlot::shift(int index, bool x, bool leftOrDown) {
 		}
 		return;
 	} else if (x)
-		range = d->xRanges[index].range;
+		range = d->xRanges.at(index).range;
 	else
-		range = d->yRanges[index].range;
+		range = d->yRanges.at(index).range;
 
 	double offset = 0.0, factor = 0.1;
 
@@ -3186,93 +3181,93 @@ void CartesianPlot::shift(int index, bool x, bool leftOrDown) {
 }
 
 void CartesianPlot::shiftLeftX(int index) {
-	Q_D(CartesianPlot);
-
 	setUndoAware(false);
 	setAutoScaleX(index, false);
 	setUndoAware(true);
 	shift(index, true, true);
 
 	bool retransform = false;
-	for (int i=0; i < m_coordinateSystems.count(); i++)
-	{
-		auto cs = coordinateSystem(i);
-		if ((index == -1 || index == cs->xIndex()) && autoScaleY(cs->yIndex())) {
-			setYRangeDirty(cs->yIndex(), true);
-			scaleAutoY(cs->yIndex(), true);
+	for (int i = 0; i < m_coordinateSystems.count(); i++) {
+		const auto cs = coordinateSystem(i);
+		if ((index == -1 || index == cs->xIndex())) {
+			if (autoScaleY(cs->yIndex())) {
+				setYRangeDirty(cs->yIndex(), true);
+				scaleAutoY(cs->yIndex(), true);
+			}
 			retransform = true;
 		}
 	}
 
+	Q_D(CartesianPlot);
 	if (retransform)
 		d->retransformScales(index, -1);
 }
 
 void CartesianPlot::shiftRightX(int index) {
-	Q_D(CartesianPlot);
-
 	setUndoAware(false);
 	setAutoScaleX(index, false);
 	setUndoAware(true);
 	shift(index, true, false);
 
 	bool retransform = false;
-	for (int i=0; i < m_coordinateSystems.count(); i++)
-	{
-		auto cs = coordinateSystem(i);
-		if ((cSystem == nullptr || index == cs->xIndex()) && autoScaleY(cs->yIndex())) {
-			setYRangeDirty(cs->yIndex(), true);
-			scaleAutoY(cs->yIndex(), true);
+	for (int i = 0; i < m_coordinateSystems.count(); i++) {
+		const auto cs = coordinateSystem(i);
+		if ((index == -1 || index == cs->xIndex())) {
+			if (autoScaleY(cs->yIndex())) {
+				setYRangeDirty(cs->yIndex(), true);
+				scaleAutoY(cs->yIndex(), true);
+			}
 			retransform = true;
 		}
 	}
 
+	Q_D(CartesianPlot);
 	if (retransform)
 		d->retransformScales(index, -1);
 }
 
 void CartesianPlot::shiftUpY(int index) {
-	Q_D(CartesianPlot);
-
 	setUndoAware(false);
 	setAutoScaleY(index, false);
 	setUndoAware(true);
 	shift(index, false, false);
 
 	bool retransform = false;
-	for (int i=0; i < m_coordinateSystems.count(); i++)
-	{
-		auto cs = coordinateSystem(i);
-		if ((index == -1 || index == cs->yIndex()) && autoScaleX(cs->xIndex())) {
-			setXRangeDirty(cs->xIndex(), true);
-			scaleAutoX(cs->xIndex(), true);
+	for (int i = 0; i < m_coordinateSystems.count(); i++) {
+		const auto cs = coordinateSystem(i);
+		if ((index == -1 || index == cs->yIndex())) {
+			if (autoScaleX(cs->xIndex())) {
+				setXRangeDirty(cs->xIndex(), true);
+				scaleAutoX(cs->xIndex(), true);
+			}
 			retransform = true;
 		}
 	}
 
+	Q_D(CartesianPlot);
 	if (retransform)
 		d->retransformScales(-1, index);
 }
 
 void CartesianPlot::shiftDownY(int index) {
-	Q_D(CartesianPlot);
-
 	setUndoAware(false);
 	setAutoScaleY(index, false);
 	setUndoAware(true);
 	shift(index, false, true);
 
 	bool retransform = false;
-	for (int i=0; i < m_coordinateSystems.count(); i++)
-	{
-		auto cs = coordinateSystem(i);
-		if ((index == -1 || index == cs->yIndex()) && autoScaleX(cs->xIndex())) {
-			setXRangeDirty(cs->xIndex(), true);
-			scaleAutoX(cs->xIndex(), true);
+	for (int i = 0; i < m_coordinateSystems.count(); i++) {
+		const auto cs = coordinateSystem(i);
+		if ((index == -1 || index == cs->yIndex())) {
+			if (autoScaleX(cs->xIndex())) {
+				setXRangeDirty(cs->xIndex(), true);
+				scaleAutoX(cs->xIndex(), true);
+			}
 			retransform = true;
 		}
 	}
 
+	Q_D(CartesianPlot);
 	if (retransform)
 		d->retransformScales(-1, index);
 }
@@ -3834,14 +3829,13 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 
 void CartesianPlotPrivate::mousePressZoomSelectionMode(QPointF logicalPos, int cSystemIndex) {
 	const CartesianCoordinateSystem* cSystem;
-	int xIndex, yIndex;
 	if (cSystemIndex == -1 || cSystemIndex >= q->m_coordinateSystems.count())
 		cSystem = defaultCoordinateSystem();
 	else
-		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[cSystemIndex]);
+		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(cSystemIndex));
 
-	xIndex = cSystem->xIndex();
-	yIndex = cSystem->yIndex();
+	int xIndex = cSystem->xIndex();
+	int yIndex = cSystem->yIndex();
 
 	bool visible;
 	const QPointF scenePos = cSystem->mapLogicalToScene(logicalPos, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
@@ -4231,7 +4225,8 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		suppressRetransform = false;
 
 		QGraphicsItem::mouseReleaseEvent(event);
-	} else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection || mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
+	} else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection
+			|| mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 		emit q->mouseReleaseZoomSelectionModeSignal();
 	}
 }
