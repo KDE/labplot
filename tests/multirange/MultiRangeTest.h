@@ -4,6 +4,7 @@
     Description          : Tests for project imports
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,12 +20,13 @@ private slots:
 	void initTestCase();
 
 	//import of LabPlot projects
-	void testApplyActionToSelection_CurveSelected_ZoomSelection();
+	void applyActionToSelection_CurveSelected_ZoomSelection();
 
-	void testZoomSelection_SingleRange();
-	void testZoomXSelection_AllRanges();
-	void testZoomXSelection_SingleRange();
-	void testZoomYSelection_AllRanges();
-	void testZoomYSelection_SingleRange();
+	void zoomXSelection_AllRanges();
+	void zoomXSelection_SingleRange();
+	void zoomYSelection_AllRanges();
+	void zoomYSelection_SingleRange();
+	void zoomSelection_AllRanges();
+	void zoomSelection_SingleRange();
 };
 #endif

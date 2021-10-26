@@ -3828,6 +3828,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 }
 
 void CartesianPlotPrivate::mousePressZoomSelectionMode(QPointF logicalPos, int cSystemIndex) {
+	//DEBUG(Q_FUNC_INFO << ", csystem index = " << cSystemIndex)
 	const CartesianCoordinateSystem* cSystem;
 	if (cSystemIndex == -1 || cSystemIndex >= q->m_coordinateSystems.count())
 		cSystem = defaultCoordinateSystem();

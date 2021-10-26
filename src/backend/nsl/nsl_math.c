@@ -45,7 +45,6 @@ bool nsl_math_definitely_less_than_eps(double a, double b, double epsilon) {
 }
 
 
-
 int nsl_math_decimal_places(double value) {
 	return -(int)floor(log10(fabs(value)));
 }

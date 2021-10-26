@@ -4,6 +4,7 @@
     Description          : Tests for project imports
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2021 Martin Marmsoler <martin.marmsoler@gmail.com>
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -107,7 +108,7 @@ void MultiRangeTest::initTestCase() {
 }
 
 // Test1:
-// Check if the correct actions are enabled/disabled. Oder schränkt es zu viel ein?
+// Check if the correct actions are enabled/disabled.
 
 // Combinations: Curve selected. Zoom SelectionX , Plot selected: Autoscale X, Autoscale
 
@@ -132,11 +133,10 @@ void MultiRangeTest::initTestCase() {
 // Apply Action to AllY
 
 /*!
- * \brief MultiRangeTest::testApplyActionToSelection_CurveSelected_ZoomSelection
+ * \brief MultiRangeTest::applyActionToSelection_CurveSelected_ZoomSelection
  *
  */
-void MultiRangeTest::testApplyActionToSelection_CurveSelected_ZoomSelection()
-{
+void MultiRangeTest::applyActionToSelection_CurveSelected_ZoomSelection() {
 	LOAD_PROJECT
 //	QActionGroup* cartesianPlotActionGroup = nullptr;
 //	auto children = view->findChildren<QActionGroup*>();
@@ -188,98 +188,117 @@ void MultiRangeTest::testApplyActionToSelection_CurveSelected_ZoomSelection()
 //	CHECK_RANGE(p2, cosCurve, y, -1, 1);
 }
 
-void MultiRangeTest::testZoomXSelection_AllRanges() {
+void MultiRangeTest::zoomXSelection_AllRanges() {
 	LOAD_PROJECT
 	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
 	horAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
 
-	p1->mousePressZoomSelectionMode(QPointF(0.2, -0.5), -1);
-	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 0.3), -1);
+	// select x range from 0.2 to 0.6
+	p1->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
+	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
 	p1->mouseReleaseZoomSelectionMode(-1);
 
 	//DEBUG_RANGE(p1, sinCurve)
+	//DEBUG_RANGE(p1, tanCurve)
+	//DEBUG_RANGE(p1, logCurve)
 
-	CHECK_RANGE(p1, sinCurve, x, 0.2, 0.6);
+	CHECK_RANGE(p1, sinCurve, x, 0.2, 0.6);	// zoom
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
-	CHECK_RANGE(p1, tanCurve, x, 0.2, 0.6);
+	CHECK_RANGE(p1, tanCurve, x, 0.2, 0.6);	// zoom
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 20., 60.);	// zoom
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
 }
 
-void MultiRangeTest::testZoomXSelection_SingleRange() {
+void MultiRangeTest::zoomXSelection_SingleRange() {
 	LOAD_PROJECT
 	horAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
 
-	p1->mousePressZoomSelectionMode(QPointF(0.2, -0.5), 0);
-	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 0.3), 0);
+	p1->mousePressZoomSelectionMode(QPointF(0.2, -150), 0);
+	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), 0);
 	p1->mouseReleaseZoomSelectionMode(0);
 
-	DEBUG_RANGE(p1, sinCurve)
-	DEBUG_RANGE(p1, tanCurve)
-	// TODO
-	//CHECK_RANGE(p1, sinCurve, x, 0, 1);
+	CHECK_RANGE(p1, sinCurve, x, 0.2, 0.6);	// zoom
 	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
-	//CHECK_RANGE(p1, tanCurve, x, 0, 1);
+	CHECK_RANGE(p1, tanCurve, x, 0.2, 0.6);	// zoom
 	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0., 100.);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
 }
 
-void MultiRangeTest::testZoomYSelection_AllRanges()
-{
+void MultiRangeTest::zoomYSelection_AllRanges() {
 	LOAD_PROJECT
+	vertAxisP1->setSelected(true);
 	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
-	horAxisP1->setSelected(true);
-	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
+	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomYSelection)
 
-	p1->mousePressZoomSelectionMode(QPointF(0.2, -0.5), -1);
-	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 0.3), -1);
+	p1->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
+	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
 	p1->mouseReleaseZoomSelectionMode(-1);
 
-	// TODO
-	//CHECK_RANGE(p1, sinCurve, x, 0, 1);
-	//CHECK_RANGE(p1, sinCurve, y, -0.5, 0.3);
-	//CHECK_RANGE(p1, tanCurve, x, 0, 1);
-	//CHECK_RANGE(p1, tanCurve, y, -0.5, 0.3);
-	//CHECK_RANGE(p1, logCurve, x, 0, 100);
-	//CHECK_RANGE(p1, logCurve, y, -10, 6);
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -0.8, 0.6);	// zoom
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -150., 100.);	// zoom
+	CHECK_RANGE(p1, logCurve, x, 0., 100.);
+	CHECK_RANGE(p1, logCurve, y, -7, 2);		// zoom
 }
 
-void MultiRangeTest::testZoomYSelection_SingleRange()
-{
+void MultiRangeTest::zoomYSelection_SingleRange() {
 	LOAD_PROJECT
-	horAxisP1->setSelected(true);
-	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
+	vertAxisP1->setSelected(true);
+	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomYSelection)
 
-	p1->mousePressZoomSelectionMode(QPointF(0.2, -0.5), 0);
-	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 0.3), 0);
+	p1->mousePressZoomSelectionMode(QPointF(0.2, -150), 0);
+	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), 0);
 	p1->mouseReleaseZoomSelectionMode(0);
 
-	// TODO
-	//CHECK_RANGE(p1, sinCurve, x, 0, 1);
-	//CHECK_RANGE(p1, sinCurve, y, -0.5, 0.3);
-	//CHECK_RANGE(p1, tanCurve, x, 0, 1);
-	//CHECK_RANGE(p1, tanCurve, y, -250, 250);
-	//CHECK_RANGE(p1, logCurve, x, 0, 100);
-	//CHECK_RANGE(p1, logCurve, y, -10, 6);
+	CHECK_RANGE(p1, sinCurve, x, 0, 1);
+	CHECK_RANGE(p1, sinCurve, y, -1, 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0, 1);
+	CHECK_RANGE(p1, tanCurve, y, -150, 100);	// zoom
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
 }
 
-void MultiRangeTest::testZoomSelection_SingleRange()
-{
+void MultiRangeTest::zoomSelection_AllRanges() {
 	LOAD_PROJECT
 	horAxisP1->setSelected(true);
+	vertAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomSelection)
 
-	p1->mousePressZoomSelectionMode(QPointF(0.2, -0.5), 0);
-	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 0.3), 0);
+	p1->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
+	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
+	p1->mouseReleaseZoomSelectionMode(-1);
+
+	CHECK_RANGE(p1, sinCurve, x, 0.2, 0.6);	// zoom
+	CHECK_RANGE(p1, sinCurve, y, -0.8, 0.6);	// zoom
+	CHECK_RANGE(p1, tanCurve, x, 0.2, 0.6);	// zoom
+	CHECK_RANGE(p1, tanCurve, y, -150, 100);	// zoom
+	CHECK_RANGE(p1, logCurve, x, 20, 60);	// zoom
+	CHECK_RANGE(p1, logCurve, y, -7, 2);	// zoom
+}
+
+void MultiRangeTest::zoomSelection_SingleRange() {
+	LOAD_PROJECT
+	horAxisP1->setSelected(true);
+	vertAxisP1->setSelected(true);
+	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomSelection)
+
+	p1->mousePressZoomSelectionMode(QPointF(0.2, -150), 0);
+	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), 0);
 	p1->mouseReleaseZoomSelectionMode(0);
 
-	// TODO
-	//CHECK_RANGE(p1, sinCurve, x, 0.2, 0.6);
-	//CHECK_RANGE(p1, sinCurve, y, -0.5, 0.3);
-	CHECK_RANGE(p1, tanCurve, x, 0, 1);
-	//CHECK_RANGE(p1, tanCurve, y, -250, 250);
-	//CHECK_RANGE(p1, logCurve, x, 0, 100);
-	//CHECK_RANGE(p1, logCurve, y, -10, 6);
+	CHECK_RANGE(p1, sinCurve, x, 0.2, 0.6);	// zoom
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0.2, 0.6);	// zoom
+	CHECK_RANGE(p1, tanCurve, y, -150, 100);	// zoom
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
 }
+
+//TODO: shift, autoscale?
 
 QTEST_MAIN(MultiRangeTest)
