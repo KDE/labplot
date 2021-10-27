@@ -788,7 +788,7 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 	QVector<AbstractColumn*> columns;
 	for (auto a : vec) {
 		auto* aspect = (AbstractAspect*)a;
-		auto* column = dynamic_cast<AbstractColumn*>(aspect);
+		auto* column = qobject_cast<AbstractColumn*>(aspect);
 		if (column)
 			columns << column;
 	}
@@ -2164,11 +2164,12 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		// if an element is hovered, the curves which are handled manually in this class
 		// must be unhovered
-		const auto* element = static_cast<const WorksheetElement*>(child);
-		connect(element, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
+		const auto* wsElement = qobject_cast<const WorksheetElement*>(child);
+		if (wsElement)
+			connect(wsElement, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
 	}
 
-	if (cSystemIndex >= 0 && cSystemIndex < d->q->m_coordinateSystems.count()) {
+	if (INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
 		setXRangeDirty(cSystemIndex, true);
 		setYRangeDirty(cSystemIndex, true);
 	}
@@ -2176,7 +2177,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (!isLoading() && !this->pasted() && !child->pasted()) {
 		//if a theme was selected, apply the theme settings for newly added children,
 		//load default theme settings otherwise.
-		const auto* elem = dynamic_cast<const WorksheetElement*>(child);
+		const auto* elem = qobject_cast<const WorksheetElement*>(child);
 		if (elem) {
 //TODO			const_cast<WorksheetElement*>(elem)->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 			if (!d->theme.isEmpty()) {
@@ -2192,11 +2193,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 // set format of axis from data column
 void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientation orientation) {
-	Q_D(CartesianPlot);
-	const auto* col = dynamic_cast<const Column*>(column);
+	const auto* col = qobject_cast<const Column*>(column);
 	if (!col)
 		return;
 
+	Q_D(CartesianPlot);
 	if (col->columnMode() == AbstractColumn::ColumnMode::DateTime) {
 		setUndoAware(false);
 		if (orientation == Axis::Orientation::Horizontal)
@@ -2282,7 +2283,7 @@ void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const Abstrac
  */
 void CartesianPlot::childHovered() {
 	Q_D(CartesianPlot);
-	bool curveSender = dynamic_cast<XYCurve*>(QObject::sender()) != nullptr;
+	bool curveSender = qobject_cast<XYCurve*>(QObject::sender()) != nullptr;
 	if (!d->isSelected()) {
 		if (d->m_hovered)
 			d->m_hovered = false;
@@ -2300,9 +2301,9 @@ void CartesianPlot::updateLegend() {
 }
 
 bool CartesianPlot::autoScale(int xIndex, int yIndex, bool fullRange) {
+	DEBUG(Q_FUNC_INFO << ", auto scale x/y = " << autoScaleX(xIndex) << "/" << autoScaleY(yIndex))
 
 	bool updated{ false };
-	DEBUG(Q_FUNC_INFO << ", auto scale x/y = " << autoScaleX(xIndex) << "/" << autoScaleY(yIndex))
 	if (autoScaleX(xIndex) && autoScaleY(yIndex))
 		updated = scaleAuto(xIndex, yIndex, fullRange);
 	else if (autoScaleX(xIndex))
@@ -2324,13 +2325,13 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex) {
 	Q_D(CartesianPlot);
 
 	if (xIndex == -1) {
-		for (int i=0; i < xRangeCount(); i++)
+		for (int i = 0; i < xRangeCount(); i++)
 			d->xRanges[i].dirty = true;
 	} else
 		d->xRanges[xIndex].dirty = true;
 
 	if (yIndex == -1) {
-		for (int i=0; i < yRangeCount(); i++)
+		for (int i = 0; i < yRangeCount(); i++)
 			d->yRanges[i].dirty = true;
 	} else
 		d->yRanges[yIndex].dirty = true;
@@ -2341,16 +2342,16 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
-		auto* element = dynamic_cast<WorksheetElement*>(QObject::sender());
+		auto* element = qobject_cast<WorksheetElement*>(QObject::sender());
 		if (element)
 			element->retransform();
 		else {
 			//no sender available, the function was called directly in the file filter (live data source got new data)
 			//or in Project::load() -> retransform all available curves since we don't know which curves are affected.
 			//TODO: this logic can be very expensive
-			for (auto* c : children<XYCurve>()) {
-				c->recalcLogicalPoints();
-				c->retransform();
+			for (auto* child : children<XYCurve>()) {
+				child->recalcLogicalPoints();
+				child->retransform();
 			}
 		}
 	}
@@ -2370,13 +2371,11 @@ void CartesianPlot::xDataChanged(int index) {
 		return;
 
 	if (index == -1) {
-		for (int i=0; i < xRangeCount(); i++) {
+		for (int i = 0; i < xRangeCount(); i++)
 			d->xRanges[coordinateSystem(i)->xIndex()].dirty = true;
-		}
-		// no return!
-	} else {
+		// don't return!
+	} else
 		d->xRanges[index].dirty = true;
-	}
 
 	bool updated = false;
 	if (autoScaleX(index))
@@ -2386,11 +2385,11 @@ void CartesianPlot::xDataChanged(int index) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
-		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		auto* curve = qobject_cast<XYCurve*>(QObject::sender());
 		if (curve)
 			curve->retransform();
 		else {
-			auto* hist = dynamic_cast<Histogram*>(QObject::sender());
+			auto* hist = qobject_cast<Histogram*>(QObject::sender());
 			if (hist)
 				hist->retransform();
 		}
@@ -2398,7 +2397,7 @@ void CartesianPlot::xDataChanged(int index) {
 
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
-		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		auto* curve = qobject_cast<XYCurve*>(QObject::sender());
 		if (curve) {
 			const AbstractColumn* col = curve->xColumn();
 			const auto xRangeFormat{ xRange().format() };
@@ -2409,7 +2408,7 @@ void CartesianPlot::xDataChanged(int index) {
 			}
 		}
 	}
-	emit curveDataChanged(dynamic_cast<XYCurve*>(QObject::sender()));
+	emit curveDataChanged(qobject_cast<XYCurve*>(QObject::sender()));
 }
 
 /*!
@@ -2425,13 +2424,11 @@ void CartesianPlot::yDataChanged(int index) {
 		return;
 
 	if (index == -1) {
-		for (int i=0; i < yRangeCount(); i++) {
+		for (int i = 0; i < yRangeCount(); i++)
 			d->yRanges[coordinateSystem(i)->yIndex()].dirty = true;
-		}
-		// no return!
-	} else {
+		// don't return!
+	} else
 		d->yRanges[index].dirty = true;
-	}
 
 	bool updated = false;
 	if (autoScaleY(index))
@@ -2441,11 +2438,11 @@ void CartesianPlot::yDataChanged(int index) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
-		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		auto* curve = qobject_cast<XYCurve*>(QObject::sender());
 		if (curve)
 			curve->retransform();
 		else {
-			auto* hist = dynamic_cast<Histogram*>(QObject::sender());
+			auto* hist = qobject_cast<Histogram*>(QObject::sender());
 			if (hist)
 				hist->retransform();
 		}
@@ -2453,7 +2450,7 @@ void CartesianPlot::yDataChanged(int index) {
 
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
-		auto* curve = dynamic_cast<XYCurve*>(QObject::sender());
+		auto* curve = qobject_cast<XYCurve*>(QObject::sender());
 		if (curve) {
 			const AbstractColumn* col = curve->yColumn();
 			const auto yRangeFormat{ yRange().format() };
@@ -2464,7 +2461,7 @@ void CartesianPlot::yDataChanged(int index) {
 			}
 		}
 	}
-	emit curveDataChanged(dynamic_cast<XYCurve*>(QObject::sender()));
+	emit curveDataChanged(qobject_cast<XYCurve*>(QObject::sender()));
 }
 
 void CartesianPlot::curveVisibilityChanged() {
@@ -2515,7 +2512,7 @@ void CartesianPlot::setMouseMode(MouseMode mouseMode) {
 
 	//when doing zoom selection, prevent the graphics item from being movable
 	//if it's currently movable (no worksheet layout available)
-	const auto* worksheet = dynamic_cast<const Worksheet*>(parentAspect());
+	const auto* worksheet = qobject_cast<const Worksheet*>(parentAspect());
 	if (worksheet) {
 		if (mouseMode == MouseMode::Selection) {
 			if (worksheet->layout() != Worksheet::Layout::NoLayout)
@@ -2534,7 +2531,7 @@ BASIC_SHARED_D_ACCESSOR_IMPL(CartesianPlot, bool, isLocked, Locked, locked)
 // auto scale
 
 void CartesianPlot::scaleAutoTriggered() {
-	QAction* action = dynamic_cast<QAction*>(QObject::sender());
+	QAction* action = qobject_cast<QAction*>(QObject::sender());
 	if (!action)
 		return;
 
@@ -2550,7 +2547,7 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 	Q_D(CartesianPlot);
 	if (index == -1) {
 		bool updated = false;
-		for (int i=0; i < xRangeCount(); i++) {
+		for (int i = 0; i < xRangeCount(); i++) {
 			if (scaleAutoX(i, fullRange, true)) {
 				updated = true; // at least one was updated
 			}
@@ -2565,18 +2562,16 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 		calculateCurvesXMinMax(index, fullRange);
 		//if (fullRange)
 			setXRangeDirty(index, false);
-		for (int i=0; i < m_coordinateSystems.count(); i++)
-		{
+		for (int i = 0; i < m_coordinateSystems.count(); i++) {
 			auto cs = coordinateSystem(i);
 			if (cs->xIndex() == index)
 				setYRangeDirty(cs->yIndex(), true);
 		}
 	}
 
-
 	auto& xRange{ d->xRange(index) };
 
-	// if no curve: do not reset to [0, 1] but don't change
+	// if no curve: do not reset to [0, 1]
 
 	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << "., curves x range = " << d->xRangeAutoScale(index).toStdString())
 	bool update = false;
@@ -2617,7 +2612,7 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 	Q_D(CartesianPlot);
 	if (index == -1) {
 		bool updated = false;
-		for (int i=0; i < yRangeCount(); i++) {
+		for (int i = 0; i < yRangeCount(); i++) {
 			if (scaleAutoY(i, fullRange, true)) {
 				updated = true; // at least one was updated
 			}
@@ -2634,8 +2629,7 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 		//if (fullRange)
 			setYRangeDirty(index, false);
 
-		for (int i=0; i < m_coordinateSystems.count(); i++)
-		{
+		for (int i = 0; i < m_coordinateSystems.count(); i++) {
 			// All x ranges with this yIndex must be dirty
 			auto cs = coordinateSystem(i);
 			if (cs->yIndex() == index)
@@ -2679,25 +2673,21 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 }
 
 bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange) {
-	Q_D(CartesianPlot);
 	bool updateX = scaleAutoX(xIndex, fullRange, true);
 	bool updateY = scaleAutoY(yIndex, fullRange, true);
 
 	// x range is dirty, because scaleAutoY sets it to dirty.
-	if (xIndex < 0)
-	{
-		for (int i=0; i < m_coordinateSystems.count(); i++)
-		{
+	if (xIndex < 0) {
+		for (int i = 0; i < m_coordinateSystems.count(); i++) {
 			setXRangeDirty(coordinateSystem(i)->xIndex(), false);
 			//setYRangeDirty(coordinateSystem(i)->yIndex(), false);
 		}
-	}
-	else
-	{
+	} else {
 		setXRangeDirty(xIndex, false);
 		//setYRangeDirty(coordinateSystem(cSystemIndex)->yIndex(), false);
 	}
 
+	Q_D(CartesianPlot);
 	if (updateX || updateY) {
 		if (updateX)
 			setAutoScaleX(xIndex);
@@ -3021,18 +3011,17 @@ void CartesianPlot::zoom(int index, bool x, bool zoom_in) {
 	if (index == -1) {
 		QVector<int> zoomedIndices;
 		for (int i = 0; i < m_coordinateSystems.count(); i++) {
-			auto idx = x ? coordinateSystem(i)->xIndex() : coordinateSystem(i)->yIndex();
-			bool zoomed = zoomedIndices.contains(idx);
-			if (zoomed)
+			int idx = x ? coordinateSystem(i)->xIndex() : coordinateSystem(i)->yIndex();
+			if (zoomedIndices.contains(idx))
 				continue;
 			zoom(idx, x, zoom_in);
 			zoomedIndices.append(idx);
 		}
 		return;
 	} else if (x)
-		range = d->xRanges[index].range;
+		range = d->xRanges.at(index).range;
 	else
-		range = d->yRanges[index].range;
+		range = d->yRanges.at(index).range;
 
 	double factor = m_zoomFactor;
 	if (zoom_in)
@@ -3114,9 +3103,8 @@ void CartesianPlot::shift(int index, bool x, bool leftOrDown) {
 	if (index == -1) {
 		QVector<int> shiftedIndices;
 		for (int i=0; i < m_coordinateSystems.count(); i++) {
-			auto idx = x ? coordinateSystem(i)->xIndex() : coordinateSystem(i)->yIndex();
-			bool shifted = shiftedIndices.contains(idx);
-			if (shifted)
+			int idx = x ? coordinateSystem(i)->xIndex() : coordinateSystem(i)->yIndex();
+			if (shiftedIndices.contains(idx))
 				continue;
 			shift(idx, x, leftOrDown);
 			shiftedIndices.append(idx);
@@ -4234,7 +4222,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 
 bool CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform) {
 	//don't zoom if very small region was selected, avoid occasional/unwanted zooming
-	if ( qAbs(m_selectionEnd.x()-m_selectionStart.x()) < 20 || qAbs(m_selectionEnd.y()-m_selectionStart.y()) < 20 ) {
+	if ( qAbs(m_selectionEnd.x() - m_selectionStart.x()) < 20 && qAbs(m_selectionEnd.y() - m_selectionStart.y()) < 20 ) {
 		m_selectionBandIsShown = false;
 		return false;
 	}

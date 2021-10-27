@@ -299,7 +299,7 @@ public slots:
 	void addInfoElement();
 
 	void scaleAutoTriggered();
-	bool scaleAuto(int xIndex, int yIndex, bool fullRange = true);
+	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true);
 	bool scaleAutoX(int index = -1, bool fullRange = false, bool suppressRetransform = false);
 	bool scaleAutoY(int index = -1, bool fullRange = false, bool suppressRetransform = false);
 
