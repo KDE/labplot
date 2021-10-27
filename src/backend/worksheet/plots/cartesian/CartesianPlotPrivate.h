@@ -184,6 +184,7 @@ private:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void updateDataRect();
+	Range<double> checkRange(Range<double>);
 	void checkXRange(int index);
 	void checkYRange(int index);
 	CartesianScale* createScale(RangeT::Scale,

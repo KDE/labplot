@@ -147,10 +147,10 @@ public:
 	void removeXRange(int index);			// remove selected x range
 	void removeYRange(int index);			// remove selected y range
 	// convenience methods
-	void setXMin(int index, double value);	// set x min of x range index
-	void setXMax(int index, double value);	// set x max of x range index
-	void setYMin(int index, double value);	// set y min of y range index
-	void setYMax(int index, double value);	// set y max of y range index
+	void setXMin(int index, double);	// set x min of x range index
+	void setXMax(int index, double);	// set x max of x range index
+	void setYMin(int index, double);	// set y min of y range index
+	void setYMax(int index, double);	// set y max of y range index
 	BASIC_D_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat)	// x range format of default cSystem
 	BASIC_D_INDEX_ACCESSOR_DECL(RangeT::Format, xRangeFormat, XRangeFormat) // range format of x range index
 	BASIC_D_ACCESSOR_DECL(RangeT::Format, yRangeFormat, YRangeFormat)	// y range format of default cSystem

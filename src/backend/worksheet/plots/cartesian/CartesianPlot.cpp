@@ -3362,32 +3362,33 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 	Range<double> sceneRange, logicalRange;
 
 	for (auto cSystem: coordinateSystems()) {
-		auto c = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if (c->xIndex() != index)
+		auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
+		if (cs->xIndex() != index)
 			continue;
 
-		QVector<CartesianScale*> scales;
-
-		const auto xRange{ xRanges.at(index) };
-		//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range is x range " << xRangeIndex+1)
-		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.range.toStdString())
-		//TODO: check ranges for nonlinear scales
-		if (xRange.range.scale() != RangeT::Scale::Linear)
+		// check ranges for nonlinear scales
+		if (xRanges.at(index).range.scale() != RangeT::Scale::Linear)
 			checkXRange(index);
+
+		const auto xRange{ xRanges.at(index).range };
+		//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", x range is x range " << xRangeIndex+1)
+		DEBUG(Q_FUNC_INFO << ", x range : " << xRange.toStdString())
+
+		QVector<CartesianScale*> scales;
 
 		//check whether we have x-range breaks - the first break, if available, should be valid
 		bool hasValidBreak = (xRangeBreakingEnabled && !xRangeBreaks.list.isEmpty() && xRangeBreaks.list.first().isValid());
 		if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
 			sceneRange = plotSceneRange;
-			logicalRange = xRange.range;
+			logicalRange = xRange;
 
 			//TODO: how should we handle the case sceneRange.length() == 0?
 			//(to reproduce, create plots and adjust the spacing/pading to get zero size for the plots)
 			if (sceneRange.length() > 0)
-				scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
+				scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
 		} else {
 			double sceneEndLast = plotSceneRange.start();
-			double logicalEndLast = xRange.range.start();
+			double logicalEndLast = xRange.start();
 			for (const auto& rb : qAsConst(xRangeBreaks.list)) {
 				if (!rb.isValid())
 					break;
@@ -3399,7 +3400,7 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 				logicalRange = Range<double>(logicalEndLast, rb.range.start());
 
 				if (sceneRange.length() > 0)
-					scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
+					scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
 
 				sceneEndLast = sceneRange.end();
 				logicalEndLast = rb.range.end();
@@ -3407,12 +3408,12 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 
 			//add the remaining range going from the last available range break to the end of the plot (=end of the x-data range)
 			sceneRange.setRange(sceneEndLast + breakGap, plotSceneRange.end());
-			logicalRange.setRange(logicalEndLast, xRange.range.end());
+			logicalRange.setRange(logicalEndLast, xRange.end());
 
 			if (sceneRange.length() > 0)
-				scales << this->createScale(xRange.range.scale(), sceneRange, logicalRange);
+				scales << this->createScale(xRange.scale(), sceneRange, logicalRange);
 		}
-		c->setXScales(scales);
+		cs->setXScales(scales);
 	}
 }
 
@@ -3422,29 +3423,30 @@ void CartesianPlotPrivate::retransformYScale(int index) {
 	Range<double> sceneRange, logicalRange;
 
 	for (auto cSystem: coordinateSystems()) {
-		auto c = static_cast<CartesianCoordinateSystem*>(cSystem);
-		if (c->yIndex() != index)
+		auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
+		if (cs->yIndex() != index)
 			continue;
-		QVector<CartesianScale*> scales;
 
-		const auto yRange{ yRanges.at(index) };
-		//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range is y range " << yRangeIndex+1)
-		DEBUG(Q_FUNC_INFO << ", yrange = " << yRange.range.toStdString())
-		//TODO: check ranges for nonlinear scales
-		if (yRange.range.scale() != RangeT::Scale::Linear)
+		if (yRanges.at(index).range.scale() != RangeT::Scale::Linear)
 			checkYRange(index);
+
+		const auto yRange{ yRanges.at(index).range };
+		//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range is y range " << yRangeIndex+1)
+		DEBUG(Q_FUNC_INFO << ", yrange = " << yRange.toStdString())
+
+		QVector<CartesianScale*> scales;
 
 		//check whether we have y-range breaks - the first break, if available, should be valid
 		bool hasValidBreak = (yRangeBreakingEnabled && !yRangeBreaks.list.isEmpty() && yRangeBreaks.list.first().isValid());
 		if (!hasValidBreak) {	//no breaks available -> range goes from the start to the end of the plot
 			sceneRange = plotSceneRange;
-			logicalRange = yRange.range;
+			logicalRange = yRange;
 
 			if (sceneRange.length() > 0)
-				scales << this->createScale(yRange.range.scale(), sceneRange, logicalRange);
+				scales << this->createScale(yRange.scale(), sceneRange, logicalRange);
 		} else {
 			double sceneEndLast = plotSceneRange.start();
-			double logicalEndLast = yRange.range.start();
+			double logicalEndLast = yRange.start();
 			for (const auto& rb : qAsConst(yRangeBreaks.list)) {
 				if (!rb.isValid())
 					break;
@@ -3456,7 +3458,7 @@ void CartesianPlotPrivate::retransformYScale(int index) {
 				logicalRange = Range<double>(logicalEndLast, rb.range.start());
 
 				if (sceneRange.length() > 0)
-					scales << this->createScale(yRange.range.scale(), sceneRange, logicalRange);
+					scales << this->createScale(yRange.scale(), sceneRange, logicalRange);
 
 				sceneEndLast = sceneRange.end();
 				logicalEndLast = rb.range.end();
@@ -3464,12 +3466,12 @@ void CartesianPlotPrivate::retransformYScale(int index) {
 
 			//add the remaining range going from the last available range break to the end of the plot (=end of the y-data range)
 			sceneRange.setRange(sceneEndLast - breakGap, plotSceneRange.end());
-			logicalRange.setRange(logicalEndLast, yRange.range.end());
+			logicalRange.setRange(logicalEndLast, yRange.end());
 
 			if (sceneRange.length() > 0)
-				scales << this->createScale(yRange.range.scale(), sceneRange, logicalRange);
+				scales << this->createScale(yRange.scale(), sceneRange, logicalRange);
 		}
-		c->setYScales(scales);
+		cs->setYScales(scales);
 	}
 }
 
@@ -3477,29 +3479,25 @@ void CartesianPlotPrivate::retransformYScale(int index) {
  * calculate x and y scales from scence range and logical range (x/y range) for all coordinate systems
  */
 void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
-#ifndef NDEBUG
-	int i = 1; // debugging
-	for (auto& range : xRanges)
-		DEBUG( Q_FUNC_INFO << ", x range " << i++ << " = " << range.range.toStdString() << ", scale = " << (int)range.range.scale() );
-	i = 1;	// debugging
-	for (auto& range : yRanges)
-		DEBUG( Q_FUNC_INFO << ", y range " << i++ << " = " << range.range.toStdString() << ", scale = " << (int)range.range.scale() );
-#endif
+	for (int i = 0; i < xRanges.count(); i++)
+		DEBUG( Q_FUNC_INFO << ", x range " << i+1 << " : " << xRanges.at(i).range.toStdString()
+			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()) );
+	for (int i = 0; i < yRanges.count(); i++)
+		DEBUG( Q_FUNC_INFO << ", y range " << i+1 << " : " << yRanges.at(i).range.toStdString()
+			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, yRanges.at(i).range.scale()) );
+
 	PERFTRACE(Q_FUNC_INFO);
 
 	if (xIndex == -1) {
-		for (int i=0; i < xRanges.count(); i++)
+		for (int i = 0; i < xRanges.count(); i++)
 			retransformXScale(i);
 	} else
 		retransformXScale(xIndex);
 	if (yIndex == -1) {
-		for (int i=0; i < yRanges.count(); i++)
+		for (int i = 0; i < yRanges.count(); i++)
 			retransformYScale(i);
 	} else
 		retransformYScale(yIndex);
-
-	//TODO: what to do with these?
-	// also check delta* usage later
 
 	// X ranges
 	for (int i = 0; i < xRanges.count(); i++) {
@@ -3664,45 +3662,77 @@ void CartesianPlotPrivate::yRangeFormatChanged() {
 }
 
 /*!
- * don't allow any negative values for the x range when log or sqrt scalings are used
- */
-void CartesianPlotPrivate::checkXRange(int /*index*/) {
-	//TODO: disabled for testing (negative values are already checked)
-	return;
+* helper function for checkXRange() and checkYRange()
+*/
+Range<double> CartesianPlotPrivate::checkRange(Range<double> range) {
+	double start = range.start(), end = range.end();
+	const auto scale = range.scale();
+	if (start > 0 && end > 0)	// nothing to do
+		return range;
+	if (start >= 0 && end >= 0 && scale == RangeT::Scale::Sqrt)	// nothing to do
+		return range;
+	//TODO: check if start == end?
 
-/*	double min = 0.01;
+	double min = 0.01, max = 1.;
 
-	//TODO: refactor
-	if (q->xRangeFromIndex(xRangeIndex).start() <= 0.0) {
-		(min < q->xRangeFromIndex(xRangeIndex).end() * min) ? q->xRangeFromIndex(xRangeIndex).start() = min : q->xRangeFromIndex(xRangeIndex).start() = q->xRangeFromIndex(xRangeIndex).end() * min;
-		emit q->xMinChanged(xRangeIndex, q->xRangeFromIndex(xRangeIndex).start());
-	} else if (q->xRangeFromIndex(xRangeIndex).end() <= 0.0) {
-		(-min > q->xRangeFromIndex(xRangeIndex).start() * min) ? q->xRangeFromIndex(xRangeIndex).end() = -min : q->xRangeFromIndex(xRangeIndex).end() = q->xRangeFromIndex(xRangeIndex).start() * min;
-		emit q->xMaxChanged(xRangeIndex, q->xRangeFromIndex(xRangeIndex).end());
-	} */
+	if (scale == RangeT::Scale::Sqrt) {
+		if (start < 0)
+			start = 0.;
+	} else if (start <= 0)
+		start = min;
+	if (scale == RangeT::Scale::Sqrt) {
+		if (end < 0)
+			end = max;
+	} else if (end <= 0)
+		end = max;
+
+	return Range<double>(start, end);
 }
 
 /*!
- * don't allow any negative values for the y range when log or sqrt scalings are used
+ * check for negative values in the x range when non-linear scalings are used
  */
-void CartesianPlotPrivate::checkYRange(int /*index*/) {
-	//TODO: disabled for testing (negative values are already checked)
-	return;
+void CartesianPlotPrivate::checkXRange(int index) {
+	const auto xRange = xRanges.at(index).range;
+	DEBUG(Q_FUNC_INFO << ", x range " << index+1 << " : " << xRange.toStdString()
+		<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRange.scale()))
 
-/*	double min = 0.01;
+	const auto newRange = checkRange(xRange);
 
-	//TODO: refactor
-	if (q->yRangeFromIndex(yRangeIndex).start() <= 0.0) {
-		(min < q->yRangeFromIndex(yRangeIndex).end()*min) ? q->yRangeFromIndex(yRangeIndex).start() = min : q->yRangeFromIndex(yRangeIndex).start() = q->yRangeFromIndex(yRangeIndex).end()*min;
-		emit q->yMinChanged(yRangeIndex, q->yRangeFromIndex(yRangeIndex).start());
-	} else if (q->yRangeFromIndex(yRangeIndex).end() <= 0.0) {
-		(-min > q->yRangeFromIndex(yRangeIndex).start()*min) ? q->yRangeFromIndex(yRangeIndex).end() = -min : q->yRangeFromIndex(yRangeIndex).end() = q->yRangeFromIndex(yRangeIndex).start()*min;
-		emit q->yMaxChanged(yRangeIndex, q->yRangeFromIndex(yRangeIndex).end());
-	} */
+	const double start = newRange.start(), end = newRange.end();
+	if (start != xRange.start()) {
+		DEBUG(Q_FUNC_INFO << ", old/new start = " << xRange.start() << "/" << start)
+		q->setXMin(index, start);
+	}
+	if (end != xRange.end()) {
+		DEBUG(Q_FUNC_INFO << ", old/new end = " << xRange.end() << "/" << end)
+		q->setXMax(index, end);
+	}
+}
+
+/*!
+ * check for negative values in the y range when non-linear scalings are used
+ */
+void CartesianPlotPrivate::checkYRange(int index) {
+	const auto yRange = yRanges.at(index).range;
+	DEBUG(Q_FUNC_INFO << ", y range " << index+1 << " : " << yRange.toStdString()
+		<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, yRange.scale()))
+
+	const auto newRange = checkRange(yRange);
+
+	const double start = newRange.start(), end = newRange.end();
+	if (start != yRange.start()) {
+		DEBUG(Q_FUNC_INFO << ", old/new start = " << yRange.start() << "/" << start)
+		q->setYMin(index, start);
+	}
+	if (end != yRange.end()) {
+		DEBUG(Q_FUNC_INFO << ", old/new end = " << yRange.end() << "/" << end)
+		q->setYMax(index, end);
+	}
 }
 
 CartesianScale* CartesianPlotPrivate::createScale(RangeT::Scale scale, const Range<double>& sceneRange, const Range<double>& logicalRange) {
-	DEBUG( Q_FUNC_INFO << ", scene range = " << sceneRange.toStdString() << ", logical range = " << logicalRange.toStdString() );
+	DEBUG( Q_FUNC_INFO << ", scene range : " << sceneRange.toStdString() << ", logical range : " << logicalRange.toStdString() );
 
 	Range<double> range(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::max());
 

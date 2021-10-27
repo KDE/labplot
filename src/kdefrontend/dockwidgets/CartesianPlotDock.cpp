@@ -1288,7 +1288,7 @@ void CartesianPlotDock::xScaleChanged(int index) {
 		return;
 
 	const int xRangeIndex{ sender()->property("row").toInt() };
-	DEBUG(Q_FUNC_INFO << ", x range " << xRangeIndex << " scale changed to " << index)
+	DEBUG(Q_FUNC_INFO << ", x range " << xRangeIndex << " scale changed to " << ENUM_TO_STRING(RangeT, Scale, index))
 	const auto scale{ static_cast<RangeT::Scale>(index) };
 	for (auto* plot : m_plotList)
 		plot->setXRangeScale(xRangeIndex, scale);
@@ -1298,7 +1298,7 @@ void CartesianPlotDock::yScaleChanged(int index) {
 		return;
 
 	const int yRangeIndex{ sender()->property("row").toInt() };
-	DEBUG(Q_FUNC_INFO << ", y range " << yRangeIndex << " scale changed to " << index)
+	DEBUG(Q_FUNC_INFO << ", y range " << yRangeIndex << " scale changed to " << ENUM_TO_STRING(RangeT, Scale, index))
 	const auto scale{ static_cast<RangeT::Scale>(index) };
 	for (auto* plot : m_plotList)
 		plot->setYRangeScale(yRangeIndex, scale);
@@ -2263,7 +2263,7 @@ void CartesianPlotDock::plotYRangeChanged(int yRangeIndex, Range<double> range) 
 }
 
 void CartesianPlotDock::plotXScaleChanged(int xRangeIndex, RangeT::Scale scale) {
-	DEBUG(Q_FUNC_INFO << ", scale = " << (int)scale)
+	DEBUG(Q_FUNC_INFO << ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale))
 	m_initializing = true;
 	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Scale, QComboBox, setCurrentIndex(static_cast<int>(scale)));
 	m_initializing = false;
@@ -2275,7 +2275,7 @@ void CartesianPlotDock::plotYScaleChanged(int yRangeIndex, RangeT::Scale scale) 
 }
 
 void CartesianPlotDock::plotXRangeFormatChanged(int xRangeIndex, RangeT::Format format) {
-	DEBUG(Q_FUNC_INFO << ", format = " << static_cast<int>(format))
+	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(RangeT, Format, format))
 	m_initializing = true;
 	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Format, QComboBox, setCurrentIndex(static_cast<int>(format)));
 	m_initializing = false;

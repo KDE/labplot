@@ -53,8 +53,8 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 #define INRANGE(var, min, max) (var >= min && var < max)
 
 // access enums in Q_OBJECT/Q_GADGET classes
-#define ENUM_TO_STRING(class, enum, value) \
-    (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(value)))
+#define ENUM_TO_STRING(class, enum, index) \
+    (class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).valueToKey(static_cast<int>(index)))
 #define ENUM_COUNT(class, enum) \
 	(class::staticMetaObject.enumerator(class::staticMetaObject.indexOfEnumerator(#enum)).keyCount())
 
