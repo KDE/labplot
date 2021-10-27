@@ -1007,7 +1007,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 			newColumn = new Column(colNameList.at(n), AbstractColumn::ColumnMode::Double);
 			newColumn->setUndoAware(false);
 			PERFTRACE(Q_FUNC_INFO);
-			addChildFast(newColumn);
+			addChild(newColumn);
 		}
 	} else if (mode == AbstractFileFilter::ImportMode::Prepend) {
 		Column* firstColumn = child<Column>(0);
