@@ -188,13 +188,15 @@ void MultiRangeTest::applyActionToSelection_CurveSelected_ZoomSelection() {
 //	CHECK_RANGE(p2, cosCurve, y, -1, 1);
 }
 
+// ZOOM SELECTION
+
 void MultiRangeTest::zoomXSelection_AllRanges() {
 	LOAD_PROJECT
 	w->setCartesianPlotActionMode(Worksheet::CartesianPlotActionMode::ApplyActionToSelection);
 	horAxisP1->setSelected(true);
 	SET_CARTESIAN_MOUSE_MODE(CartesianPlot::MouseMode::ZoomXSelection)
 
-	// select x range from 0.2 to 0.6
+	// select range with mouse
 	p1->mousePressZoomSelectionMode(QPointF(0.2, -150), -1);
 	p1->mouseMoveZoomSelectionMode(QPointF(0.6, 100), -1);
 	p1->mouseReleaseZoomSelectionMode(-1);
@@ -299,6 +301,377 @@ void MultiRangeTest::zoomSelection_SingleRange() {
 	CHECK_RANGE(p1, logCurve, y, -10, 6);
 }
 
-//TODO: shift, autoscale?
+// ZOOM
+
+void MultiRangeTest::zoomInX_SingleRange() {
+	LOAD_PROJECT
+	horAxisP1->setSelected(true);
+	p1->zoomInX(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0.1, 0.9);	// zoom
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0.1, 0.9);	// zoom
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale
+	p1->scaleAutoX(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+}
+
+void MultiRangeTest::zoomInX_AllRanges() {
+	LOAD_PROJECT
+	horAxisP1->setSelected(true);
+	p1->zoomInX();
+
+	CHECK_RANGE(p1, sinCurve, x, 0.1, 0.9);	// zoom
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0.1, 0.9);	// zoom
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 10, 90);	// zoom
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale (all)
+	p1->scaleAuto();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::zoomInY_SingleRange() {
+	LOAD_PROJECT
+	vertAxisP1->setSelected(true);
+	p1->zoomInY(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -200, 200);	// zoom
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale
+	p1->scaleAutoY(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::zoomInY_AllRanges() {
+	LOAD_PROJECT
+	vertAxisP1->setSelected(true);
+	p1->zoomInY();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -0.8, 0.8);	// zoom
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -200, 200);	// zoom
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -8, 4);		// zoom
+
+	// check auto scale
+	p1->scaleAutoY();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::zoomOutX_SingleRange() {
+	LOAD_PROJECT
+	horAxisP1->setSelected(true);
+	p1->zoomOutX(0);
+
+	CHECK_RANGE(p1, sinCurve, x, -0.2, 1.2);	// zoom
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, -0.2, 1.2);	// zoom
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale
+	p1->scaleAutoX(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::zoomOutX_AllRanges() {
+	LOAD_PROJECT
+	horAxisP1->setSelected(true);
+	p1->zoomOutX();
+
+	CHECK_RANGE(p1, sinCurve, x, -0.2, 1.2);	// zoom
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, -0.2, 1.2);	// zoom
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, -20, 120);		// zoom
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale
+	p1->scaleAutoX();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::zoomOutY_SingleRange() {
+	LOAD_PROJECT
+	vertAxisP1->setSelected(true);
+	p1->zoomOutY(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -300, 300);	// zoom
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale
+	p1->scaleAutoY(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::zoomOutY_AllRanges() {
+	LOAD_PROJECT
+	vertAxisP1->setSelected(true);
+	p1->zoomOutY();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1.5, 1.5);	// zoom
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -300, 300);	// zoom
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -12, 8);		// zoom
+
+	// check auto scale (all)
+	p1->scaleAuto();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+// SHIFT
+
+void MultiRangeTest::shiftLeft_SingleRange() {
+	LOAD_PROJECT
+	horAxisP1->setSelected(true);
+	p1->shiftLeftX(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0.1, 1.1);	// shift
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0.1, 1.1);	// shift
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale
+	p1->scaleAutoX(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::shiftRight_SingleRange() {
+	LOAD_PROJECT
+	horAxisP1->setSelected(true);
+	p1->shiftRightX(0);
+
+	CHECK_RANGE(p1, sinCurve, x, -0.1, 0.9);	// shift
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, -0.1, 0.9);	// shift
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale
+	p1->scaleAutoX(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::shiftLeft_AllRanges() {
+	LOAD_PROJECT
+	horAxisP1->setSelected(true);
+	p1->shiftLeftX();
+
+	CHECK_RANGE(p1, sinCurve, x, 0.1, 1.1);	// shift
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0.1, 1.1);	// shift
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 10, 110);	// shift
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale (all)
+	p1->scaleAuto();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::shiftRight_AllRanges() {
+	LOAD_PROJECT
+	horAxisP1->setSelected(true);
+	p1->shiftRightX();
+
+	CHECK_RANGE(p1, sinCurve, x, -0.1, 0.9);	// shift
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, -0.1, 0.9);	// shift
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, -10, 90);		// shift
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale
+	p1->scaleAutoX();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::shiftUp_SingleRange() {
+	LOAD_PROJECT
+	vertAxisP1->setSelected(true);
+	p1->shiftUpY(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -300, 200);	// shift
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale
+	p1->scaleAutoY(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::shiftDown_SingleRange() {
+	LOAD_PROJECT
+	vertAxisP1->setSelected(true);
+	p1->shiftDownY(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.)
+	CHECK_RANGE(p1, tanCurve, y, -200, 300);	// shift
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+
+	// check auto scale
+	p1->scaleAutoY(0);
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::shiftUp_AllRanges() {
+	LOAD_PROJECT
+	vertAxisP1->setSelected(true);
+	p1->shiftUpY();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1.2, 0.8);	// shift
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -300, 200);	// shift
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -11.6, 4.4);	// shift
+
+	// check auto scale
+	p1->scaleAutoY();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
+
+void MultiRangeTest::shiftDown_AllRanges() {
+	LOAD_PROJECT
+	vertAxisP1->setSelected(true);
+	p1->shiftDownY();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -0.8, 1.2);	// shift
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -200, 300);	// shift
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -8.4, 7.6);	// shift
+
+	// check auto scale (all)
+	p1->scaleAuto();
+
+	CHECK_RANGE(p1, sinCurve, x, 0., 1.);
+	CHECK_RANGE(p1, sinCurve, y, -1., 1.);
+	CHECK_RANGE(p1, tanCurve, x, 0., 1.);
+	CHECK_RANGE(p1, tanCurve, y, -250, 250);
+	CHECK_RANGE(p1, logCurve, x, 0, 100);
+	CHECK_RANGE(p1, logCurve, y, -10, 6);
+}
 
 QTEST_MAIN(MultiRangeTest)
