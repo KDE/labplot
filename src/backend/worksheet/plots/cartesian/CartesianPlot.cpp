@@ -1729,8 +1729,7 @@ void CartesianPlot::addBoxPlot() {
  * returns the first selected XYCurve in the plot
  */
 const XYCurve* CartesianPlot::currentCurve() const {
-	const auto& curves = children<const XYCurve>();
-	for (const auto* curve : curves) {
+	for (const auto* curve : children<const XYCurve>()) {
 		if (curve->graphicsItem()->isSelected())
 			return curve;
 	}
@@ -4461,7 +4460,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			const auto& curves = q->children<Curve>();
 			for (int i = curves.count() - 1; i >= 0; i--) { // because the last curve is above the other curves
 				auto* curve = curves[i];
-				if (hovered){ // if a curve is already hovered, disable hover for the rest
+				if (hovered) { // if a curve is already hovered, disable hover for the rest
 					curve->setHover(false);
 					continue;
 				}
@@ -4509,8 +4508,7 @@ void CartesianPlotPrivate::mouseHoverOutsideDataRect() {
 }
 
 void CartesianPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent* event) {
-	const auto& curves = q->children<XYCurve>();
-	for (auto* curve : curves)
+	for (auto* curve : q->children<XYCurve>())
 		curve->setHover(false);
 
 	m_hovered = false;

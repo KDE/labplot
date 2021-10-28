@@ -1222,7 +1222,7 @@ void XYCurvePrivate::addLinearLine(QPointF p0, QPointF p1, QPointF& lastPoint, d
  * @param pixelCount pixel count
  */
 void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff, int numberOfPixelX, double minLogicalDiffX, double minLogicalDiffY) {
-	//DEBUG(Q_FUNC_INFO << ", coordinate system index: " << cSystem->xIndex())
+	//DEBUG(Q_FUNC_INFO << ", number of x pixel = " << numberOfPixelX)
 
 	const auto xIndex{ q->cSystem->xIndex() };
 	if (plot()->xRangeScale(xIndex) == RangeT::Scale::Linear) {
@@ -1237,7 +1237,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64&
 		QPointF p1Scene = q->cSystem->mapLogicalToScene(p1, visible, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 		// if the point is not valid, don't create a line
-		if (visible)
+		if (!visible)
 			return;
 
 		// using only the difference between the points is not sufficient, because p0 is updated always
@@ -1262,7 +1262,7 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64&
 void XYCurvePrivate::addUniqueLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff) {
 	//QDEBUG(Q_FUNC_INFO << " :" << p0 << " ->" << p1 << ", lastPoint =" << lastPoint << ", pixelDiff =" << pixelDiff)
 	if (pixelDiff == 0) {
-		//QDEBUG("	pixelDiff == 0!")
+		//DEBUG(Q_FUNC_INFO << ", pixelDiff == 0!")
 		if (std::isnan(lastPoint.x()))	// save last point
 			lastPoint = p0;
 	} else {	// pixelDiff > 0
