@@ -57,7 +57,6 @@ public:
 	}
 
 	bool inverseMap(double *value) const override {
-		CHECK(m_b != 0.0)
 		*value = (*value - m_a) / m_b;
 		return true;
 	}
@@ -83,18 +82,14 @@ public:
 	~LogScale() override = default;
 
 	bool map(double *value) const override {
-		CHECK(m_c > 0)
 		CHECK(*value > 0)
 
-		//TODO: qAbs leads to wrong results!
 		*value = log(*value)/log(m_c) * m_b + m_a;
 
 		return true;
 	}
 
 	bool inverseMap(double *value) const override {
-		CHECK(m_c > 0)
-
 		*value = pow(m_c, (*value - m_a) / m_b);
 		return true;
 	}
@@ -124,8 +119,6 @@ public:
 	}
 
 	bool inverseMap(double *value) const override {
-		CHECK(m_b != 0)
-
 		*value = gsl_pow_2((*value - m_a) / m_b);
 		return true;
 	}
@@ -154,8 +147,6 @@ public:
 	}
 
 	bool inverseMap(double *value) const override {
-		CHECK(m_b != 0)
-
 		*value = sqrt(qAbs((*value - m_a) / m_b));
 		return true;
 	}
