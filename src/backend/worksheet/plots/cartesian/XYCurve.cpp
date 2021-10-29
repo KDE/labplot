@@ -3372,7 +3372,7 @@ bool XYCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("rugOrientation", rugOrientation, Orientation);
 			READ_DOUBLE_VALUE("rugLength", rugLength);
 			READ_DOUBLE_VALUE("rugWidth", rugWidth);
-			READ_DOUBLE_VALUE("rugOFfset", rugOffset);
+			READ_DOUBLE_VALUE("rugOffset", rugOffset);
 		}
 	}
 
