@@ -84,9 +84,10 @@ public:
 
 	bool map(double *value) const override {
 		CHECK(m_c > 0)
-		CHECK(*value != 0)
+		CHECK(*value > 0)
 
-		*value = log(qAbs(*value))/log(m_c) * m_b + m_a;
+		//TODO: qAbs leads to wrong results!
+		*value = log(*value)/log(m_c) * m_b + m_a;
 
 		return true;
 	}
@@ -117,7 +118,8 @@ public:
 	~SqrtScale() override = default;
 
 	bool map(double *value) const override {
-		*value = sqrt(qAbs(*value)) * m_b + m_a;
+		CHECK(*value >= 0)
+		*value = sqrt(*value) * m_b + m_a;
 		return true;
 	}
 

@@ -1044,7 +1044,7 @@ void AxisPrivate::retransformLine() {
 	DEBUG(Q_FUNC_INFO << ", x range is x range " << q->cSystem->xIndex() + 1)
 	DEBUG(Q_FUNC_INFO << ", y range is y range " << q->cSystem->yIndex() + 1)
 //	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->xIndex() )
-	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << " scale = " << static_cast<int>(range.scale()))
+	DEBUG(Q_FUNC_INFO << ", axis range = " << range.toStdString() << " scale = " << ENUM_TO_STRING(RangeT, Scale, range.scale()))
 
 	if (suppressRetransform)
 		return;
@@ -1077,8 +1077,8 @@ void AxisPrivate::retransformLine() {
 			//startPoint = QPointF(rect.x(), pos.y());
 			//endPoint = QPointF(rect.x() + rect.width(), pos.y());
 
-			Lines ranges{QLineF(QPointF(range.start(), 0.), QPointF(range.end(), 0.))};
-			// y=0 may be outside clip range: suppress clipping
+			Lines ranges{QLineF(QPointF(range.start(), 1.), QPointF(range.end(), 1.))};
+			// y=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
 			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (sceneRange.size() > 0) {
 				startPoint = QPointF(sceneRange.at(0).x1(), pos.y());
@@ -1112,8 +1112,8 @@ void AxisPrivate::retransformLine() {
 			//startPoint = QPointF(pos.x(), rect.y() + rect.height()); // draw from bottom to top
 			//endPoint = QPointF(pos.x(), rect.y());
 
-			Lines ranges{QLineF(QPointF(0., range.start()), QPointF(0., range.end()))};
-			// x=0 may be outside clip range: suppress clipping
+			Lines ranges{QLineF(QPointF(1., range.start()), QPointF(1., range.end()))};
+			// x=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
 			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (sceneRange.size() > 0) {
 				startPoint = QPointF(pos.x(), sceneRange.at(0).y1());
