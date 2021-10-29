@@ -168,7 +168,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
 	};
 
-	if (selectedAspects.isEmpty()) {
+	if (selectedAspects.isEmpty() || selectedAspects.front() == nullptr) {
 		clearDock();
 		return;
 	}
