@@ -372,11 +372,11 @@ void WorksheetView::initActions() {
 
 	scaleAutoXAction = new QAction(QIcon::fromTheme("labplot-auto-scale-x"), i18n("Auto Scale X"), cartesianPlotNavigationGroup);
 	scaleAutoXAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoX));
-	scaleAutoXAction->setShortcut(Qt::CTRL + Qt::Key_X);
+	scaleAutoXAction->setShortcut(Qt::CTRL + Qt::SHIFT +  Qt::Key_X);
 
 	scaleAutoYAction = new QAction(QIcon::fromTheme("labplot-auto-scale-y"), i18n("Auto Scale Y"), cartesianPlotNavigationGroup);
 	scaleAutoYAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ScaleAutoY));
-	scaleAutoYAction->setShortcut(Qt::CTRL + Qt::Key_Y);
+	scaleAutoYAction->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Y);
 
 	zoomInAction = new QAction(QIcon::fromTheme("zoom-in"), i18n("Zoom In"), cartesianPlotNavigationGroup);
 	zoomInAction->setData(static_cast<int>(CartesianPlot::NavigationOperation::ZoomIn));
@@ -1219,6 +1219,17 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 		auto* we = dynamic_cast<WorksheetElement*>(aspect);
 		if (we)
 			we->setVisible(!we->isVisible());
+	} else if (m_worksheet->layout() != Worksheet::Layout::NoLayout) {
+		//use the arrow keys to navigate only if a layout is active in the worksheet.
+		//without any layout the arrow keys are used to move the plot within the worksheet
+		if (event->key() == Qt::Key_Left)
+			cartesianPlotNavigationChanged(shiftRightXAction);
+		else if (event->key() == Qt::Key_Right)
+			cartesianPlotNavigationChanged(shiftLeftXAction);
+		else if (event->key() == Qt::Key_Up)
+			cartesianPlotNavigationChanged(shiftDownYAction);
+		else if (event->key() == Qt::Key_Down)
+			cartesianPlotNavigationChanged(shiftUpYAction);
 	}
 
 	QGraphicsView::keyPressEvent(event);

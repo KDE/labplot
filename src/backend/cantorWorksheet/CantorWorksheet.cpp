@@ -193,11 +193,13 @@ QWidget* CantorWorksheet::view() const {
 		// 	connect(m_view, SIGNAL(statusInfo(QString)), this, SIGNAL(statusInfo(QString)));
 
 		//set the current path in the session to the path of the project file
-		const Project* project = const_cast<CantorWorksheet*>(this)->project();
-		const QString& fileName = project->fileName();
-		if (!fileName.isEmpty()) {
-			QFileInfo fi(fileName);
-			m_session->setWorksheetPath(fi.filePath());
+		if (m_session) {
+			const Project* project = const_cast<CantorWorksheet*>(this)->project();
+			const QString& fileName = project->fileName();
+			if (!fileName.isEmpty()) {
+				QFileInfo fi(fileName);
+				m_session->setWorksheetPath(fi.filePath());
+			}
 		}
 	}
 	return m_partView;
