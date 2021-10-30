@@ -268,7 +268,7 @@ public slots:
 	void print(QPrinter*);
 	void selectItem(QGraphicsItem*);
 	void presenterMode();
-	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mouseMode); // from cartesian Plot
+	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mouseMode); // from cartesian plot
 	void cartesianPlotMouseModeChanged(QAction*);
 
 private slots:

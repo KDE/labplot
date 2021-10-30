@@ -444,7 +444,7 @@ QString AbstractAspect::path() const {
 void AbstractAspect::addChild(AbstractAspect* child) {
 	Q_CHECK_PTR(child);
 
-	QString new_name = uniqueNameFor(child->name());
+	const QString new_name = uniqueNameFor(child->name());
 	beginMacro(i18n("%1: add %2", name(), new_name));
 	if (new_name != child->name()) {
 		info(i18n(R"(Renaming "%1" to "%2" in order to avoid name collision.)", child->name(), new_name));
@@ -462,7 +462,7 @@ void AbstractAspect::addChildFast(AbstractAspect* child) {
 	emit aspectAboutToBeAdded(this, nullptr, child); //TODO: before-pointer is 0 here, also in the commands classes. why?
 	d->insertChild(d->m_children.count(), child);
 	child->finalizeAdd();
-	PERFTRACE(Q_FUNC_INFO);
+	//PERFTRACE(Q_FUNC_INFO);
 	emit aspectAdded(child);
 	//print_callstack();
 }

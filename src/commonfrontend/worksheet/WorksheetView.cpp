@@ -788,6 +788,7 @@ void WorksheetView::setPlotLock(bool lock) {
 }
 
 void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
+	// QDEBUG(Q_FUNC_INFO << ", painter = " << painter << ", rect = " << rect)
 	if (m_mouseMode == MouseMode::ZoomSelection && m_selectionBandIsShown) {
 		painter->save();
 		const QRectF& selRect = mapToScene(QRect(m_selectionStart, m_selectionEnd).normalized()).boundingRect();
@@ -799,6 +800,8 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
 		painter->drawRect(selRect);
 		painter->restore();
 	}
+	DEBUG(Q_FUNC_INFO << ", CALLING QGraphicsView::drawForeground. items = " << QGraphicsView::items().size()
+		<< ", scene items = " << scene()->items().count() )
 	QGraphicsView::drawForeground(painter, rect);
 }
 

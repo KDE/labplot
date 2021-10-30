@@ -150,6 +150,7 @@ QMenu* Worksheet::createContextMenu() {
  * called at all. Aspects must not depend on the existence of a view for their operation.
  */
 QWidget* Worksheet::view() const {
+	DEBUG(Q_FUNC_INFO)
 	if (!m_partView) {
 		m_view = new WorksheetView(const_cast<Worksheet*>(this));
 		m_partView = m_view;
@@ -229,6 +230,7 @@ bool Worksheet::printPreview() const {
 }
 
 void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
+	DEBUG(Q_FUNC_INFO)
 	const auto* addedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (!addedElement)
 		return;
@@ -237,6 +239,7 @@ void Worksheet::handleAspectAdded(const AbstractAspect* aspect) {
 		return;
 
 	//add the GraphicsItem of the added child to the scene
+	DEBUG(Q_FUNC_INFO << ", ADDING child to SCENE")
 	auto* item = addedElement->graphicsItem();
 	d->m_scene->addItem(item);
 
@@ -296,7 +299,9 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	const auto* removedElement = qobject_cast<const WorksheetElement*>(aspect);
 	if (removedElement) {
 		QGraphicsItem* item = removedElement->graphicsItem();
-		d->m_scene->removeItem(item);
+		//TODO: disabled until project import fixed
+		//if (item->scene() == d->m_scene)
+		//	d->m_scene->removeItem(item);
 	}
 }
 
@@ -395,7 +400,7 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
  * Returns a pointer to \c WorksheetElement having this item.
  */
 WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* parent, const QGraphicsItem* item) const {
-	if ( parent->graphicsItem() == item )
+	if (parent->graphicsItem() == item)
 		return const_cast<WorksheetElement*>(parent);
 	else {
 		for (const auto* child : parent->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden) ) {
@@ -549,8 +554,7 @@ void Worksheet::registerShortcuts() {
 	m_view->registerShortcuts();
 }
 
-WorksheetElement* Worksheet::currentSelection()
-{
+WorksheetElement* Worksheet::currentSelection() {
 	if (!m_view)
 		view();
 	return m_view->selectedElement();

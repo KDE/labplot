@@ -1032,7 +1032,6 @@ void AxisPrivate::retransformRange() {
 		break;
 	case Axis::RangeType::Custom:
 		return;
-		break;
 	}
 
 	retransform();

@@ -35,6 +35,7 @@
 #include <QDateTime>
 #include <QFontMetrics>
 #include <QRegularExpression>
+#include <QGraphicsScene>
 
 /*!
 \class OriginProjectParser
@@ -61,8 +62,7 @@ void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
 bool OriginProjectParser::hasUnusedObjects() {
 	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
 	if (!m_originFile->parse()) {
-		delete m_originFile;
-		m_originFile = nullptr;
+		DELETE(m_originFile)
 		return false;
 	}
 
@@ -82,8 +82,7 @@ bool OriginProjectParser::hasUnusedObjects() {
 			return true;
 	}
 
-	delete m_originFile;
-	m_originFile = nullptr;
+	DELETE(m_originFile)
 	return false;
 }
 
@@ -148,13 +147,12 @@ unsigned int OriginProjectParser::findNoteByName(const QString& name) {
 //############## Deserialization from Origin's project tree ####################
 //##############################################################################
 bool OriginProjectParser::load(Project* project, bool preview) {
-	DEBUG("OriginProjectParser::load()");
+	DEBUG(Q_FUNC_INFO);
 
 	//read and parse the m_originFile-file
 	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
 	if (!m_originFile->parse()) {
-		delete m_originFile;
-		m_originFile = nullptr;
+		DELETE(m_originFile)
 		return false;
 	}
 
@@ -171,13 +169,13 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	//convert the project tree from liborigin's representation to LabPlot's project object
 	project->setIsLoading(true);
 	if (projectIt.node) { // only opj files from version >= 6.0 do have project tree
-		DEBUG("	have a project tree");
+		DEBUG(Q_FUNC_INFO << ", project tree found");
 		QString name(QString::fromLatin1(projectIt->name.c_str()));
 		project->setName(name);
 		project->setCreationTime(creationTime(projectIt));
 		loadFolder(project, projectIt, preview);
 	} else { // for lower versions put all windows on rootfolder
-		DEBUG("	have no project tree");
+		DEBUG(Q_FUNC_INFO << ", no project tree");
 		int pos = m_projectFileName.lastIndexOf(QLatin1String("/")) + 1;
 		project->setName((const char*)m_projectFileName.mid(pos).toLocal8Bit());
 	}
@@ -211,7 +209,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 			}
 		}
 
-		//x-column
+		//y-column
 		spreadsheetName = curve->yColumnPath().left(curve->yColumnPath().indexOf(QLatin1Char('/')));
 		for (const auto* spreadsheet : spreadsheets) {
 			if (spreadsheet->name() == spreadsheetName) {
@@ -245,14 +243,13 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 
 	project->setIsLoading(false);
 
-	delete m_originFile;
-	m_originFile = nullptr;
+	DELETE(m_originFile)
 
 	return true;
 }
 
 bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::iterator baseIt, bool preview) {
-	DEBUG("OriginProjectParser::loadFolder()")
+	DEBUG(Q_FUNC_INFO)
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
 
 	// do not skip anything if pathesToLoad() contains only root folder
@@ -284,7 +281,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 		AbstractAspect* aspect = nullptr;
 		switch (it->type) {
 		case Origin::ProjectNode::Folder: {
-			DEBUG("	top level folder");
+			DEBUG(Q_FUNC_INFO << ", top level FOLDER");
 			Folder* f = new Folder(name);
 
 			if (!folder->pathesToLoad().isEmpty()) {
@@ -318,14 +315,14 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 			break;
 		}
 		case Origin::ProjectNode::SpreadSheet: {
-			DEBUG("	top level spreadsheet");
+			DEBUG(Q_FUNC_INFO << ", top level SPREADSHEET");
 			Spreadsheet* spreadsheet = new Spreadsheet(name);
 			loadSpreadsheet(spreadsheet, preview, name);
 			aspect = spreadsheet;
 			break;
 		}
 		case Origin::ProjectNode::Graph: {
-			DEBUG("	top level graph");
+			DEBUG(Q_FUNC_INFO << ", top level GRAPH");
 			Worksheet* worksheet = new Worksheet(name);
 			worksheet->setIsLoading(true);
 			worksheet->setTheme(QString());
@@ -334,7 +331,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 			break;
 		}
 		case Origin::ProjectNode::Matrix: {
-			DEBUG("	top level matrix");
+			DEBUG(Q_FUNC_INFO << ", top level MATRIX");
 			const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(name));
 			DEBUG("	matrix name = " << originMatrix.name);
 			DEBUG("	number of sheets = " << originMatrix.sheets.size());
@@ -352,14 +349,14 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 			break;
 		}
 		case Origin::ProjectNode::Excel: {
-			DEBUG("	top level excel");
+			DEBUG(Q_FUNC_INFO << ", top level EXCEL");
 			Workbook* workbook = new Workbook(name);
 			loadWorkbook(workbook, preview);
 			aspect = workbook;
 			break;
 		}
 		case Origin::ProjectNode::Note: {
-			DEBUG("top level note");
+			DEBUG(Q_FUNC_INFO << ", top level NOTE");
 			Note* note = new Note(name);
 			loadNote(note, preview);
 			aspect = note;
@@ -401,8 +398,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 }
 
 void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
-	DEBUG("OriginProjectParser::handleLooseWindows()");
-	QDEBUG("pathes to load:" << folder->pathesToLoad());
+	QDEBUG(Q_FUNC_INFO << ", paths to load:" << folder->pathesToLoad());
 	m_spreadNameList.removeDuplicates();
 	m_excelNameList.removeDuplicates();
 	m_matrixNameList.removeDuplicates();
@@ -587,15 +583,15 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		spread = m_originFile->spread(findSpreadByName(name));
 	else {
 		excel = m_originFile->excel(findExcelByName(name));
-		spread = excel.sheets[sheetIndex];
+		spread = excel.sheets.at(sheetIndex);
 	}
 
 	const size_t cols = spread.columns.size();
 	int rows = 0;
 	for (size_t j = 0; j < cols; ++j)
-		rows = std::max((int)spread.columns[j].data.size(), rows);
+		rows = std::max((int)spread.columns.at(j).data.size(), rows);
 	// alternative: int rows = excel.maxRows;
-	DEBUG("loadSpreadsheet() cols/maxRows = " << cols << "/" << rows);
+	DEBUG(Q_FUNC_INFO << ", cols/maxRows = " << cols << "/" << rows);
 
 	//TODO QLocale locale = mw->locale();
 
@@ -890,7 +886,7 @@ void OriginProjectParser::loadColumnNumericFormat(const Origin::SpreadColumn& or
 }
 
 bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
-	DEBUG("loadMatrixWorkbook()");
+	DEBUG(Q_FUNC_INFO)
 	//load matrix workbook sheets
 	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(workbook->name()));
 	for (size_t s = 0; s < originMatrix.sheets.size(); ++s) {
@@ -903,13 +899,12 @@ bool OriginProjectParser::loadMatrixWorkbook(Workbook* workbook, bool preview) {
 }
 
 bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetIndex, const QString& mwbName) {
-	DEBUG("loadMatrix()");
+	DEBUG(Q_FUNC_INFO)
 	//import matrix data
 	const Origin::Matrix& originMatrix = m_originFile->matrix(findMatrixByName(mwbName));
 
 	if (preview)
 		return true;
-
 
 	//in Origin column width is measured in characters, we need to convert to pixels
 	//TODO: determine the font used in Origin in order to get the same column width as in Origin
@@ -1012,12 +1007,15 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	//add plots
 	int index = 1;
 	for (const auto& layer : graph.layers) {
+		DEBUG(Q_FUNC_INFO << ", next GRAPH")
 		if (!layer.is3D()) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot%1", QString::number(index)));
 			worksheet->addChildFast(plot);
+			DEBUG(Q_FUNC_INFO << ", DONE adding PLOT to WORKSHEET. preview = " << preview)
 
 			if (preview)
 				continue;
+			DEBUG(Q_FUNC_INFO << ", scene items = " << worksheet->scene()->items().count())
 
 			plot->setIsLoading(true);
 			//TODO: width, height
@@ -1240,7 +1238,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			//curves
 			int curveIndex = 1;
 			for (const auto& originCurve : layer.curves) {
-
 				QString data(originCurve.dataName.c_str());
 				switch (data[0].toLatin1()) {
 				case 'T':
@@ -1353,6 +1350,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		}
 	}
 
+	DEBUG(Q_FUNC_INFO << " DONE");
 	return true;
 }
 

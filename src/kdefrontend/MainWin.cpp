@@ -2531,7 +2531,7 @@ void MainWin::importProjectDialog() {
 
 	delete dlg;
 
-	DEBUG("MainWin::importProjectDialog() DONE");
+	DEBUG(Q_FUNC_INFO << ", DONE");
 }
 
 /*!

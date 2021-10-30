@@ -26,18 +26,13 @@ ProjectParser::ProjectParser() : QObject() {
 }
 
 ProjectParser::~ProjectParser() {
-	if (m_project != nullptr)
-		delete m_project;
 }
 
 void ProjectParser::setProjectFileName(const QString& name) {
 	m_projectFileName = name;
 
 	//delete the previous project object
-	if (m_project) {
-		delete m_project;
-		m_project = nullptr;
-	}
+	DELETE(m_project)
 }
 
 const QString& ProjectParser::projectFileName() const {
@@ -66,9 +61,8 @@ QAbstractItemModel* ProjectParser::model() {
 }
 
 void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPathes) {
-	DEBUG("ProjectParser::importTo()");
-	QDEBUG("	Starting the import of " + m_projectFileName);
-	QDEBUG("	Selected pathes: " << selectedPathes);
+	DEBUG(Q_FUNC_INFO << ", starting import of " + STDSTRING(m_projectFileName));
+	QDEBUG(Q_FUNC_INFO << ", selected pathes: " << selectedPathes);
 
 	//import the selected objects into a temporary project
 	auto* project = new Project();
@@ -76,7 +70,7 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 	bool rc = load(project, false);
 	if (!rc) {
 		delete project;
-		QDEBUG("Import of " + m_projectFileName + " failed.");
+		DEBUG(Q_FUNC_INFO << ", ERROR: import of " + STDSTRING(m_projectFileName) + " failed.");
 		return;
 	}
 
@@ -84,7 +78,7 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 	//we want to navigate to in the project explorer after the import
 	auto* lastTopLevelChild = project->child<AbstractAspect>(project->childCount<AbstractAspect>() - 1);
 	AbstractAspect* childToNavigate = nullptr;
-	if (lastTopLevelChild != nullptr && lastTopLevelChild->childCount<AbstractAspect>() > 0) {
+	if (lastTopLevelChild && lastTopLevelChild->childCount<AbstractAspect>() > 0) {
 		childToNavigate = lastTopLevelChild->child<AbstractAspect>(0);
 
 		//we don't want to select columns, select rather their parent spreadsheet
@@ -118,7 +112,7 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 	if (childToNavigate != nullptr)
 		targetFolder->project()->navigateTo(childToNavigate->path());
 
-	QDEBUG("Import of " + m_projectFileName + " done.");
+	DEBUG(Q_FUNC_INFO << ", import of " + STDSTRING(m_projectFileName) + " done.");
 }
 
 /*
