@@ -800,8 +800,8 @@ void WorksheetView::drawForeground(QPainter* painter, const QRectF& rect) {
 		painter->drawRect(selRect);
 		painter->restore();
 	}
-	DEBUG(Q_FUNC_INFO << ", CALLING QGraphicsView::drawForeground. items = " << QGraphicsView::items().size()
-		<< ", scene items = " << scene()->items().count() )
+//	DEBUG(Q_FUNC_INFO << ", CALLING QGraphicsView::drawForeground. items = " << QGraphicsView::items().size()
+//		<< ", scene items = " << scene()->items().count() )
 	QGraphicsView::drawForeground(painter, rect);
 }
 

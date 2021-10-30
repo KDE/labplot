@@ -26,6 +26,7 @@ ProjectParser::ProjectParser() : QObject() {
 }
 
 ProjectParser::~ProjectParser() {
+	DELETE(m_project)
 }
 
 void ProjectParser::setProjectFileName(const QString& name) {
