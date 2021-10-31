@@ -1034,13 +1034,13 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				plot->plotArea()->setBorderPen(QPen(Qt::SolidLine));
 
 			//ranges
-			plot->setAutoScaleX(-1, false);
-			plot->setAutoScaleY(-1, false);
 			const Origin::GraphAxis& originXAxis = layer.xAxis;
 			const Origin::GraphAxis& originYAxis = layer.yAxis;
 
-			const Range<double> xRange(originXAxis.min, originXAxis.max);
-			const Range<double> yRange(originYAxis.min, originYAxis.max);
+			Range<double> xRange(originXAxis.min, originXAxis.max);
+			Range<double> yRange(originYAxis.min, originYAxis.max);
+			xRange.setAutoScale(false);
+			yRange.setAutoScale(false);
 			plot->setXRange(xRange);
 			plot->setYRange(yRange);
 
