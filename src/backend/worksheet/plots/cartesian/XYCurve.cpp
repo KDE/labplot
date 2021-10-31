@@ -23,6 +23,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/lib/macrosXYCurve.h"
 #include "backend/core/Project.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
@@ -45,6 +46,14 @@ extern "C" {
 #include <gsl/gsl_spline.h>
 #include <gsl/gsl_errno.h>
 }
+
+XYCURVE_COLUMN_CONNECT(x)
+XYCURVE_COLUMN_CONNECT(y)
+XYCURVE_COLUMN_CONNECT(xErrorPlus)
+XYCURVE_COLUMN_CONNECT(xErrorMinus)
+XYCURVE_COLUMN_CONNECT(yErrorPlus)
+XYCURVE_COLUMN_CONNECT(yErrorMinus)
+XYCURVE_COLUMN_CONNECT(values)
 
 XYCurve::XYCurve(const QString &name, AspectType type)
 	: WorksheetElement(name, type), d_ptr(new XYCurvePrivate(this)) {

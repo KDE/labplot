@@ -9,6 +9,7 @@
 */
 
 #include "FitOptionsWidget.h"
+#include "backend/core/AbstractColumn.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 

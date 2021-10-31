@@ -12,6 +12,7 @@
 
 #include "InfoElement.h"
 
+#include "backend/core/AbstractColumn.h"
 #include "backend/core/Project.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"

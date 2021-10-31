@@ -300,8 +300,8 @@ void Worksheet::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 	if (removedElement) {
 		QGraphicsItem* item = removedElement->graphicsItem();
 		//TODO: disabled until Origin project import is fixed
-		//if (item->scene() == d->m_scene)
-		//	d->m_scene->removeItem(item);
+		if (item->scene() == d->m_scene)
+			d->m_scene->removeItem(item);
 	}
 }
 

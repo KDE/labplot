@@ -16,6 +16,7 @@
 #include "backend/core/AbstractColumn.h"
 #include <QObject>
 
+
 /*!
   This macro is used to connect the column to the XYCurve slots:
 	- <column_prefix>ColumnAboutToBeRemoved
@@ -26,13 +27,8 @@
   \param column_prefix columnnames should have always the same style. For example xColumn -> column_prefix = x, xErrorPlusColumn -> column_prefix = xErrorPlus
   */
 #define XYCURVE_COLUMN_CONNECT(column_prefix) \
-void columnConnect ## column_prefix ## Column(const AbstractColumn* column) { \
+void XYCurve::connect ## column_prefix ## Column(const AbstractColumn* column) { \
 	connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &XYCurve::column_prefix ## ColumnAboutToBeRemoved); \
-	auto* parent = column->parentAspect(); \
-	while (parent) { \
-		connect(parent, &AbstractAspect::aspectAboutToBeRemoved, this, &XYCurve::column_prefix ## ColumnAboutToBeRemoved); \
-		parent = parent->parentAspect(); \
-	} \
 	/* When the column is reused with different name, the curve should be informed to disconnect */ \
 	connect(column, &AbstractColumn::reset, this, &XYCurve::column_prefix ## ColumnAboutToBeRemoved); \
 	connect(column, &AbstractAspect::aspectDescriptionChanged, this, &XYCurve::column_prefix ## ColumnNameChanged); \
@@ -42,7 +38,7 @@ void columnConnect ## column_prefix ## Column(const AbstractColumn* column) { \
 }
 
 #define XYCURVE_COLUMN_CONNECT_CALL(curve, column, column_prefix) \
-	curve->columnConnect ## column_prefix ## Column(column); \
+	curve->connect ## column_prefix ## Column(column); \
 
 /*!
  * This macro is used to connect and disconnect the column from the curve

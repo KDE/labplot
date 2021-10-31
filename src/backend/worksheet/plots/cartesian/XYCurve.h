@@ -16,7 +16,6 @@
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/lib/Range.h"
 #include "backend/lib/macros.h"
-#include "backend/lib/macrosXYCurve.h"
 
 #include <QFont>
 #include <QPen>
@@ -181,13 +180,13 @@ private:
 	Q_DECLARE_PRIVATE(XYCurve)
 	void init();
 	void initActions();
-	XYCURVE_COLUMN_CONNECT(x)
-	XYCURVE_COLUMN_CONNECT(y)
-	XYCURVE_COLUMN_CONNECT(xErrorPlus)
-	XYCURVE_COLUMN_CONNECT(xErrorMinus)
-	XYCURVE_COLUMN_CONNECT(yErrorPlus)
-	XYCURVE_COLUMN_CONNECT(yErrorMinus)
-	XYCURVE_COLUMN_CONNECT(values)
+	void connectxColumn(const AbstractColumn*);
+	void connectyColumn(const AbstractColumn*);
+	void connectxErrorPlusColumn(const AbstractColumn*);
+	void connectxErrorMinusColumn(const AbstractColumn*);
+	void connectyErrorPlusColumn(const AbstractColumn*);
+	void connectyErrorMinusColumn(const AbstractColumn*);
+	void connectvaluesColumn(const AbstractColumn*);
 
 	QAction* visibilityAction{nullptr};
 	QAction* navigateToAction{nullptr};

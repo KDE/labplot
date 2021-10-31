@@ -11,6 +11,7 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 #include "backend/core/Project.h"
+#include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/Worksheet.h"
