@@ -1149,7 +1149,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			//add legend if available
 			const Origin::TextBox& originLegend = layer.legend;
 			const QString& legendText = QString::fromLatin1(originLegend.text.c_str());
-			DEBUG(" legend text = " << STDSTRING(legendText));
+			DEBUG(Q_FUNC_INFO << ", legend text = \"" << STDSTRING(legendText) << "\"");
 			if (!originLegend.text.empty()) {
 				auto* legend = new CartesianPlotLegend(i18n("legend"));
 				plot->addLegend(legend);
@@ -1174,9 +1174,12 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				legendTitle = legendTitle.trimmed();
 				if (!legendTitle.isEmpty())
 					legendTitle = parseOriginText(legendTitle);
-
-				DEBUG(" legend title = " << STDSTRING(legendTitle));
-				legend->title()->setText(legendTitle);
+				if (!legendTitle.isEmpty()) {
+					DEBUG(Q_FUNC_INFO << ", legend title = \"" << STDSTRING(legendTitle) << "\"");
+					legend->title()->setText(legendTitle);
+				} else {
+					DEBUG(Q_FUNC_INFO << ", legend title is empty");
+				}
 
 				//TODO: text color
 				//const Origin::Color& originColor = originLegend.color;
@@ -1530,7 +1533,8 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 
 	QFont font;
 	//TODO: font family?
-	font.setPixelSize( Worksheet::convertToSceneUnits(tickAxis.fontSize, Worksheet::Unit::Point) );
+	// use half the font size to be closer to original
+	font.setPixelSize( Worksheet::convertToSceneUnits(tickAxis.fontSize/2, Worksheet::Unit::Point) );
 	font.setBold(tickAxis.fontBold);
 	axis->setLabelsFont(font);
 	//TODO: handle string dataName member in GraphAxisTick
