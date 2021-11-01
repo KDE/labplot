@@ -39,8 +39,7 @@ public:
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
 		//emit the "about to be removed" signal also for all children columns so the curves can react
-		for (auto* child : m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive
-													| AbstractAspect::ChildIndexFlag::IncludeHidden))
+		for (auto* child : m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden))
 			emit child->parentAspect()->aspectAboutToBeRemoved(child);
 
 		emit m_target->q->aspectAboutToBeRemoved(m_child);

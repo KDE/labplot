@@ -467,7 +467,7 @@ void XYCurveDock::setModel() {
 	                       AspectType::Column, AspectType::Worksheet, AspectType::CartesianPlot,
 	                       AspectType::XYFitCurve, AspectType::XYSmoothCurve, AspectType::CantorWorksheet};
 
-	if (cbXColumn) {
+	if (cbXColumn && cbYColumn) {
 		cbXColumn->setTopLevelClasses(list);
 		cbYColumn->setTopLevelClasses(list);
 	}
@@ -488,7 +488,8 @@ void XYCurveDock::setModel() {
 
 	m_aspectTreeModel->setSelectableAspects(list);
 
-	if (cbXColumn) {
+	if (cbXColumn && cbYColumn) {
+		DEBUG(Q_FUNC_INFO << ", set MODEL")
 		cbXColumn->setModel(m_aspectTreeModel);
 		cbYColumn->setModel(m_aspectTreeModel);
 	}
@@ -541,7 +542,7 @@ void XYCurveDock::setSymbols(QList<XYCurve*> curves) {
 }
 
 void XYCurveDock::initGeneralTab() {
-	DEBUG("XYCurveDock::initGeneralTab()");
+	DEBUG(Q_FUNC_INFO);
 	//if there is more than one curve in the list, disable the content in the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
@@ -561,6 +562,7 @@ void XYCurveDock::initGeneralTab() {
 
 	//show the properties of the first curve
 	cbXColumn->setColumn(m_curve->xColumn(), m_curve->xColumnPath());
+	DEBUG(Q_FUNC_INFO << ", x column = " << m_curve->xColumn() << ", x column path = " << STDSTRING(m_curve->xColumnPath()))
 	cbYColumn->setColumn(m_curve->yColumn(), m_curve->yColumnPath());
 	uiGeneralTab.chkLegendVisible->setChecked(m_curve->legendVisible()) ;
 	uiGeneralTab.chkVisible->setChecked( m_curve->isVisible() );
@@ -996,7 +998,6 @@ void XYCurveDock::updateValuesWidgets() {
 	} else {
 		ui.lValuesColumn->hide();
 		cbValuesColumn->hide();
-
 
 		const AbstractColumn* xColumn = nullptr;
 		const AbstractColumn* yColumn = nullptr;
@@ -1602,6 +1603,7 @@ void XYCurveDock::curveDescriptionChanged(const AbstractAspect* aspect) {
 void XYCurveDock::curveXColumnChanged(const AbstractColumn* column) {
 	m_initializing = true;
 	cbXColumn->setColumn(column, m_curve->xColumnPath());
+	DEBUG(Q_FUNC_INFO << ", x column = " << m_curve->xColumn() << ", x column path = " << STDSTRING(m_curve->xColumnPath()))
 	updateValuesWidgets();
 	m_initializing = false;
 }

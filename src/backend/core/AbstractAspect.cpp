@@ -462,7 +462,7 @@ void AbstractAspect::addChildFast(AbstractAspect* child) {
 	emit aspectAboutToBeAdded(this, nullptr, child); //TODO: before-pointer is 0 here, also in the commands classes. why?
 	d->insertChild(d->m_children.count(), child);
 	child->finalizeAdd();
-	//PERFTRACE(Q_FUNC_INFO);
+	PERFTRACE(Q_FUNC_INFO);
 	emit aspectAdded(child);
 	//print_callstack();
 }

@@ -324,6 +324,7 @@ AbstractAspect* TreeViewComboBox::currentAspect() const {
 }
 
 void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& path) {
+	DEBUG(Q_FUNC_INFO)
 	setAspect(column);
 
 	// don't make the comboboxe red for initially created curves
@@ -334,7 +335,6 @@ void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& pa
 	}
 
 	if (column) {
-		// current index text should be used
 		useCurrentIndexText(true);
 		setInvalid(false);
 	} else {

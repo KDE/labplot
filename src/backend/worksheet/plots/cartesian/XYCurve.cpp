@@ -1026,13 +1026,15 @@ void XYCurvePrivate::retransform() {
 
 	{
 #ifdef PERFTRACE_CURVES
-		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::retransform()");
+	PERFTRACE(QString(Q_FUNC_INFO).toLatin1() + ", curve " + name().toLatin1());
 #endif
 
 	m_scenePoints.clear();
 
+	DEBUG(Q_FUNC_INFO << ", x/y column = " << xColumn << "/" << yColumn);
+	Q_ASSERT(xColumn != nullptr);
 	if (!xColumn || !yColumn) {
-		DEBUG(Q_FUNC_INFO << ", xColumn or yColumn not available");
+		DEBUG(Q_FUNC_INFO << ", WARNING: xColumn or yColumn not available");
 		linePath = QPainterPath();
 		dropLinePath = QPainterPath();
 		symbolsPath = QPainterPath();
@@ -1048,8 +1050,8 @@ void XYCurvePrivate::retransform() {
 		return;
 	}
 
-		if (!plot()->isPanningActive())
-			WAIT_CURSOR;
+	if (!plot()->isPanningActive())
+		WAIT_CURSOR;
 
 	//calculate the scene coordinates
 	// This condition cannot be used, because m_logicalPoints is also used in updateErrorBars(), updateDropLines() and in updateFilling()

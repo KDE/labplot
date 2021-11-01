@@ -179,6 +179,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		int pos = m_projectFileName.lastIndexOf(QLatin1String("/")) + 1;
 		project->setName((const char*)m_projectFileName.mid(pos).toLocal8Bit());
 	}
+	DEBUG(Q_FUNC_INFO << ", PROJECT name = \"" << STDSTRING(project->name()) << "\"")
 	// imports all loose windows (like prior version 6 which has no project tree)
 	handleLooseWindows(project, preview);
 
@@ -188,18 +189,25 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	const QVector<Column*> columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 	const QVector<Spreadsheet*> spreadsheets = project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (auto* curve : project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive)) {
+		DEBUG(Q_FUNC_INFO << ", Restore COLUMN. number of spreads/cols = " << spreadsheets.count() << "/" << columns.count())
 		curve->suppressRetransform(true);
 
 		//x-column
 		QString spreadsheetName = curve->xColumnPath().left(curve->xColumnPath().indexOf(QLatin1Char('/')));
 		for (const auto* spreadsheet : spreadsheets) {
+			DEBUG(Q_FUNC_INFO << ", spreadsheet names = \"" << STDSTRING(spreadsheet->name())
+				<< "\"/\"" << STDSTRING(spreadsheetName) << "\"")
 			if (spreadsheet->name() == spreadsheetName) {
 				const QString& newPath = spreadsheet->parentAspect()->path() + '/' + curve->xColumnPath();
+				//const QString& newPath = QLatin1String("Project") + '/' + curve->xColumnPath();
+				DEBUG(Q_FUNC_INFO << ", set column path to \"" << STDSTRING(newPath) << "\"")
 				curve->setXColumnPath(newPath);
 
 				for (auto* column : columns) {
 					if (!column)
 						continue;
+					DEBUG(Q_FUNC_INFO << ", column paths = \"" << STDSTRING(column->path())
+						<< "\" / \"" << STDSTRING(newPath) << "\"" )
 					if (column->path() == newPath) {
 						curve->setXColumn(column);
 						break;
@@ -219,6 +227,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 				for (auto* column : columns) {
 					if (!column)
 						continue;
+					DEBUG(Q_FUNC_INFO << ", column paths = \"" << STDSTRING(column->path())
+						<< "\" / \"" << STDSTRING(newPath) << "\"" )
 					if (column->path() == newPath) {
 						curve->setYColumn(column);
 						break;
@@ -227,6 +237,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 				break;
 			}
 		}
+		DEBUG(Q_FUNC_INFO << ", curve x/y COLUMNS = " << curve->xColumn() << "/" << curve->yColumn())
 
 		//TODO: error columns
 
@@ -1256,7 +1267,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						// replace %(1), %(2), etc. with curve name
 						curveText.replace(QString("%(%1)").arg(curveIndex), QString::fromLatin1(originCurve.yColumnName.c_str()));
 						curveText = curveText.trimmed();
-						DEBUG(" curve " << curveIndex << " text = " << STDSTRING(curveText));
+						DEBUG(" curve " << curveIndex << " text = \"" << STDSTRING(curveText) << "\"");
 
 						//XYCurve* xyCurve = new XYCurve(i18n("Curve%1", QString::number(curveIndex)));
 						//TODO: curve (legend) does not support HTML text yet.
@@ -1265,6 +1276,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						const QString& tableName = data.right(data.length() - 2);
 						curve->setXColumnPath(tableName + '/' + originCurve.xColumnName.c_str());
 						curve->setYColumnPath(tableName + '/' + originCurve.yColumnName.c_str());
+						DEBUG(Q_FUNC_INFO << ", x column path = \"" << STDSTRING(curve->xColumnPath()) << "\"")
 
 						curve->suppressRetransform(true);
 						if (!preview)
@@ -1543,6 +1555,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 }
 
 void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCurve* curve) const {
+	DEBUG(Q_FUNC_INFO)
 	//line properties
 	QPen pen = curve->linePen();
 	Qt::PenStyle penStyle(Qt::NoPen);
@@ -1778,7 +1791,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 }
 
 bool OriginProjectParser::loadNote(Note* note, bool preview) {
-	DEBUG("OriginProjectParser::loadNote()");
+	DEBUG(Q_FUNC_INFO);
 	//load note data
 	const Origin::Note& originNote = m_originFile->note(findNoteByName(note->name()));
 
@@ -1802,7 +1815,7 @@ QDateTime OriginProjectParser::creationTime(tree<Origin::ProjectNode>::iterator 
 }
 
 QString OriginProjectParser::parseOriginText(const QString &str) const {
-	DEBUG("parseOriginText()");
+	DEBUG(Q_FUNC_INFO);
 	QStringList lines = str.split('\n');
 	QString text;
 	for (int i = 0; i < lines.size(); ++i) {
@@ -1811,7 +1824,7 @@ QString OriginProjectParser::parseOriginText(const QString &str) const {
 		text.append(parseOriginTags(lines[i]));
 	}
 
-	DEBUG(" PARSED TEXT = " << STDSTRING(text));
+	DEBUG(Q_FUNC_INFO << ", PARSED TEXT = " << STDSTRING(text));
 
 	return text;
 }
