@@ -92,12 +92,10 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 	//move all children from the temp project to the target folder
 	targetFolder->beginMacro(i18n("%1: Import from %2", targetFolder->name(), m_projectFileName));
 	for (auto* child : project->children<AbstractAspect>()) {
-		DEBUG(Q_FUNC_INFO << ", MOVE child to target folder: " << STDSTRING(child->name()))
 		auto* folder = dynamic_cast<Folder*>(child);
 		if (folder)
 			moveFolder(targetFolder, folder);
 		else if (child) {
-			//TODO: this sends abouttoberemoved and deletes all columns of a spreadsheet!
 			project->removeChild(child);
 
 			//remove the object to be imported in the target folder if it already exists
@@ -113,8 +111,7 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 
 	targetFolder->endMacro();
 
-	DEBUG(Q_FUNC_INFO << ", project NAME = " << STDSTRING(project->name()));
-	DEBUG(Q_FUNC_INFO << ", target folder NAME = " << STDSTRING(targetFolder->name()));
+	Project::restorePointers(targetFolder);
 	delete project;
 
 	if (childToNavigate != nullptr)

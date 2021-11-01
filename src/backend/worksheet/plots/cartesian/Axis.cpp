@@ -1289,7 +1289,7 @@ bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	recalculates the position of the axis ticks.
  */
 void AxisPrivate::retransformTicks() {
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString())
+	// DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString())
 	if (suppressRetransform)
 		return;
 

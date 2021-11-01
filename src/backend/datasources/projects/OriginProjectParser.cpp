@@ -179,7 +179,6 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		int pos = m_projectFileName.lastIndexOf(QLatin1String("/")) + 1;
 		project->setName((const char*)m_projectFileName.mid(pos).toLocal8Bit());
 	}
-	DEBUG(Q_FUNC_INFO << ", PROJECT name = \"" << STDSTRING(project->name()) << "\"")
 	// imports all loose windows (like prior version 6 which has no project tree)
 	handleLooseWindows(project, preview);
 
@@ -189,25 +188,25 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	const QVector<Column*> columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 	const QVector<Spreadsheet*> spreadsheets = project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (auto* curve : project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive)) {
-		DEBUG(Q_FUNC_INFO << ", Restore COLUMN. number of spreads/cols = " << spreadsheets.count() << "/" << columns.count())
+		// DEBUG(Q_FUNC_INFO << ", Restore COLUMN. number of spreads/cols = " << spreadsheets.count() << "/" << columns.count())
 		curve->suppressRetransform(true);
 
 		//x-column
 		QString spreadsheetName = curve->xColumnPath().left(curve->xColumnPath().indexOf(QLatin1Char('/')));
 		for (const auto* spreadsheet : spreadsheets) {
-			DEBUG(Q_FUNC_INFO << ", spreadsheet names = \"" << STDSTRING(spreadsheet->name())
-				<< "\"/\"" << STDSTRING(spreadsheetName) << "\"")
+			//DEBUG(Q_FUNC_INFO << ", spreadsheet names = \"" << STDSTRING(spreadsheet->name())
+			//	<< "\"/\"" << STDSTRING(spreadsheetName) << "\"")
 			if (spreadsheet->name() == spreadsheetName) {
 				const QString& newPath = spreadsheet->parentAspect()->path() + '/' + curve->xColumnPath();
 				//const QString& newPath = QLatin1String("Project") + '/' + curve->xColumnPath();
-				DEBUG(Q_FUNC_INFO << ", set column path to \"" << STDSTRING(newPath) << "\"")
+				// DEBUG(Q_FUNC_INFO << ", set column path to \"" << STDSTRING(newPath) << "\"")
 				curve->setXColumnPath(newPath);
 
 				for (auto* column : columns) {
 					if (!column)
 						continue;
-					DEBUG(Q_FUNC_INFO << ", column paths = \"" << STDSTRING(column->path())
-						<< "\" / \"" << STDSTRING(newPath) << "\"" )
+					//DEBUG(Q_FUNC_INFO << ", column paths = \"" << STDSTRING(column->path())
+					//	<< "\" / \"" << STDSTRING(newPath) << "\"" )
 					if (column->path() == newPath) {
 						curve->setXColumn(column);
 						break;
@@ -227,8 +226,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 				for (auto* column : columns) {
 					if (!column)
 						continue;
-					DEBUG(Q_FUNC_INFO << ", column paths = \"" << STDSTRING(column->path())
-						<< "\" / \"" << STDSTRING(newPath) << "\"" )
+					//DEBUG(Q_FUNC_INFO << ", column paths = \"" << STDSTRING(column->path())
+					//	<< "\" / \"" << STDSTRING(newPath) << "\"" )
 					if (column->path() == newPath) {
 						curve->setYColumn(column);
 						break;
@@ -237,7 +236,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 				break;
 			}
 		}
-		DEBUG(Q_FUNC_INFO << ", curve x/y COLUMNS = " << curve->xColumn() << "/" << curve->yColumn())
+		//DEBUG(Q_FUNC_INFO << ", curve x/y COLUMNS = " << curve->xColumn() << "/" << curve->yColumn())
 
 		//TODO: error columns
 
