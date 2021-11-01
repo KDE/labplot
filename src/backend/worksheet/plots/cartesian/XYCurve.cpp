@@ -3451,7 +3451,8 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 			setRugEnabled(true);
 			setRugOrientation(WorksheetElement::Orientation::Both);
 		}
-	}
+	} else
+		setRugEnabled(false);
 
 	d->m_suppressRecalc = false;
 	d->recalcShapeAndBoundingRect();

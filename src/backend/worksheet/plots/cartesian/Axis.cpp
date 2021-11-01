@@ -2880,8 +2880,14 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	if (firstAxis && plot->theme() == QLatin1String("Tufte")) {
 		setRangeType(RangeType::AutoData);
 		p.setStyle(Qt::SolidLine);
-	} else
+	} else {
+		//switch back to "Auto" range type when "AutoData" was selected (either because of Tufte or manually selected),
+		//don't do anything if "Custom" is selected
+		if (rangeType() == RangeType::AutoData)
+			setRangeType(RangeType::Auto);
+
 		p.setStyle((Qt::PenStyle)group.readEntry("LineStyle", (int)Qt::SolidLine));
+	}
 
 	this->setLinePen(p);
 
@@ -2922,8 +2928,6 @@ void Axis::loadThemeConfig(const KConfig& config) {
 	this->setMinorTicksOpacity(group.readEntry("MinorTicksOpacity", 1.0));
 	this->setMinorTicksDirection((Axis::TicksDirection)group.readEntry("MinorTicksDirection", (int)Axis::ticksIn));
 	this->setMinorTicksLength(group.readEntry("MinorTicksLength", Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Point)));
-
-
 
 	//load the theme for the title label
 	Q_D(Axis);
