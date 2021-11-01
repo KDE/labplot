@@ -20,7 +20,7 @@
 class AspectChildRemoveCmd : public QUndoCommand {
 public:
 	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child)
-		: m_target(target), m_child(child), m_index(-1) {
+		: m_target(target), m_child(child) {
 		setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
 	}
 
@@ -39,7 +39,8 @@ public:
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
 		//emit the "about to be removed" signal also for all children columns so the curves can react
-		for (auto* child : m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden))
+		for (auto* child : m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive
+													| AbstractAspect::ChildIndexFlag::IncludeHidden))
 			emit child->parentAspect()->aspectAboutToBeRemoved(child);
 
 		emit m_target->q->aspectAboutToBeRemoved(m_child);
@@ -60,9 +61,9 @@ public:
 	}
 
 protected:
-	AbstractAspectPrivate* m_target;
-	AbstractAspect* m_child;
-	int m_index;
+	AbstractAspectPrivate* m_target{nullptr};
+	AbstractAspect* m_child{nullptr};
+	int m_index{-1};
 // 	bool m_removed{false};
 };
 
@@ -110,8 +111,8 @@ public:
 	}
 
 protected:
-	AbstractAspectPrivate * m_target;
-	AbstractAspectPrivate * m_new_parent;
+	AbstractAspectPrivate* m_target;
+	AbstractAspectPrivate* m_new_parent;
 	AbstractAspect* m_child;
 	int m_index{-1};
 	int m_new_index;
