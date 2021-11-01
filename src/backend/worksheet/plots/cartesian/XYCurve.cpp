@@ -1032,7 +1032,7 @@ void XYCurvePrivate::retransform() {
 	m_scenePoints.clear();
 
 	DEBUG(Q_FUNC_INFO << ", x/y column = " << xColumn << "/" << yColumn);
-	Q_ASSERT(xColumn != nullptr);
+	// Q_ASSERT(xColumn != nullptr);
 	if (!xColumn || !yColumn) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: xColumn or yColumn not available");
 		linePath = QPainterPath();
