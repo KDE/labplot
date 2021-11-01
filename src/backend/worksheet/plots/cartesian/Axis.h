@@ -109,12 +109,12 @@ public:
 	void setStart(const double);
 	void setEnd(const double);
 	void setRange(const double, const double);
-	void setOffset(const double, const bool=true);
+	void setOffset(const double, const bool = true);
 	double offset() const;
-	BASIC_D_ACCESSOR_DECL(double, logicalPosition, LogicalPosition)
 	BASIC_D_ACCESSOR_DECL(qreal, scalingFactor, ScalingFactor)
 	BASIC_D_ACCESSOR_DECL(qreal, zeroOffset, ZeroOffset)
 	BASIC_D_ACCESSOR_DECL(bool, showScaleOffset, ShowScaleOffset)
+	BASIC_D_ACCESSOR_DECL(double, logicalPosition, LogicalPosition)
 
 	POINTER_D_ACCESSOR_DECL(TextLabel, title, Title)
 	BASIC_D_ACCESSOR_DECL(double, titleOffsetX, TitleOffsetX)
@@ -130,6 +130,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(TicksType, majorTicksType, MajorTicksType)
 	BASIC_D_ACCESSOR_DECL(int, majorTicksNumber, MajorTicksNumber)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
+	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
 	QString& majorTicksColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
@@ -229,9 +230,9 @@ signals:
 	void endChanged(double);
 	void rangeChanged(Range<double>);
 	void zeroOffsetChanged(qreal);
+	void scalingFactorChanged(qreal);
 	void showScaleOffsetChanged(bool);
 	void logicalPositionChanged(double);
-	void scalingFactorChanged(qreal);
 
 	//title
 	void titleOffsetXChanged(qreal);
@@ -250,6 +251,7 @@ signals:
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged(qreal);
 	void majorTicksColumnChanged(const AbstractColumn*);
+	void majorTickStartOffsetChanged(qreal);
 	void majorTicksPenChanged(QPen);
 	void majorTicksLengthChanged(qreal);
 	void majorTicksOpacityChanged(qreal);

@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : Private members of Axis.
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2011-21 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -54,6 +54,7 @@ public:
 	RangeT::Scale scale;
 	double offset{0}; //!< offset from zero in the direction perpendicular to the axis
 	Range<double> range; //!< coordinate range of the axis line
+	qreal majorTickStartOffset{0};
 	qreal scalingFactor{1};
 	qreal zeroOffset{0};
 	bool showScaleOffset{true};

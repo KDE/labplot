@@ -4,7 +4,7 @@
     Description          : axes widget class
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2013 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
+    SPDX-FileCopyrightText: 2013-2021 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -75,11 +75,11 @@ private slots:
 	void startDateTimeChanged(const QDateTime&);
 	void endDateTimeChanged(const QDateTime&);
 	void zeroOffsetChanged();
+	void scalingFactorChanged();
 	void showScaleOffsetChanged();
 	void setLeftOffset();
 	void setCenterOffset();
 	void setRightOffset();
-	void scalingFactorChanged();
 	void setUnityScale();
 	void setUnityRange();
 
@@ -98,6 +98,7 @@ private slots:
 	void majorTicksNumberChanged(int);
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
+	void majorTickStartOffsetChanged();
 	void majorTicksLineStyleChanged(int);
 	void majorTicksColorChanged(const QColor&);
 	void majorTicksWidthChanged(double);
@@ -157,9 +158,9 @@ private slots:
 	void axisRangeTypeChanged(Axis::RangeType);
 	void axisStartChanged(double);
 	void axisEndChanged(double);
+	void axisScalingFactorChanged(qreal);
 	void axisZeroOffsetChanged(qreal);
 	void axisShowScaleOffsetChanged(bool);
-	void axisScalingFactorChanged(qreal);
 
 	//line
 	void axisLinePenChanged(const QPen&);
@@ -173,6 +174,7 @@ private slots:
 	void axisMajorTicksTypeChanged(Axis::TicksType);
 	void axisMajorTicksNumberChanged(int);
 	void axisMajorTicksSpacingChanged(qreal);
+	void axisMajorTickStartOffsetChanged(qreal);
 	void axisMajorTicksColumnChanged(const AbstractColumn*);
 	void axisMajorTicksPenChanged(const QPen&);
 	void axisMajorTicksLengthChanged(qreal);

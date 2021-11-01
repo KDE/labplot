@@ -114,8 +114,9 @@ void Axis::init() {
 	d->offset = group.readEntry("PositionOffset", 0);
 	d->scale = (RangeT::Scale) group.readEntry("Scale", static_cast<int>(RangeT::Scale::Linear));
 	d->range = Range<double>(group.readEntry("Start", 0.), group.readEntry("End", 10.));	// not auto ticked if already set to 1 here!
-	d->zeroOffset = group.readEntry("ZeroOffset", 0);
+	d->majorTickStartOffset = group.readEntry("MajorTickStartOffset", 0.0);
 	d->scalingFactor = group.readEntry("ScalingFactor", 1.0);
+	d->zeroOffset = group.readEntry("ZeroOffset", 0);
 	d->showScaleOffset = group.readEntry("ShowScaleOffset", true);
 
 	d->linePen.setStyle( (Qt::PenStyle) group.readEntry("LineStyle", (int) Qt::SolidLine) );
@@ -362,6 +363,7 @@ BASIC_SHARED_D_READER_IMPL(Axis, Axis::Position, position, position)
 BASIC_SHARED_D_READER_IMPL(Axis, RangeT::Scale, scale, scale)
 BASIC_SHARED_D_READER_IMPL(Axis, double, offset, offset)
 BASIC_SHARED_D_READER_IMPL(Axis, Range<double>, range, range)
+BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTickStartOffset, majorTickStartOffset)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, scalingFactor, scalingFactor)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, zeroOffset, zeroOffset)
 BASIC_SHARED_D_READER_IMPL(Axis, bool, showScaleOffset, showScaleOffset)
@@ -530,6 +532,20 @@ void Axis::setRange(double min, double max) {
 	setRange(range);
 }
 
+STD_SETTER_CMD_IMPL_F_S(Axis, SetMajorTickStartOffset, qreal, majorTickStartOffset, retransform);
+void Axis::setMajorTickStartOffset(qreal offset) {
+	Q_D(Axis);
+	if (offset != d->majorTickStartOffset)
+		exec(new AxisSetMajorTickStartOffsetCmd(d, offset, ki18n("%1: set major tick start offset")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform);
+void Axis::setScalingFactor(qreal scalingFactor) {
+	Q_D(Axis);
+	if (scalingFactor != d->scalingFactor)
+		exec(new AxisSetScalingFactorCmd(d, scalingFactor, ki18n("%1: set axis scaling factor")));
+}
+
 STD_SETTER_CMD_IMPL_F_S(Axis, SetZeroOffset, qreal, zeroOffset, retransform);
 void Axis::setZeroOffset(qreal zeroOffset) {
 	Q_D(Axis);
@@ -548,13 +564,6 @@ void Axis::setLogicalPosition(double pos) {
 	Q_D(Axis);
 	if (pos != d->logicalPosition)
 		exec(new AxisSetLogicalPositionCmd(d, pos, ki18n("%1: set axis logical position")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Axis, SetScalingFactor, qreal, scalingFactor, retransform);
-void Axis::setScalingFactor(qreal scalingFactor) {
-	Q_D(Axis);
-	if (scalingFactor != d->scalingFactor)
-		exec(new AxisSetScalingFactorCmd(d, scalingFactor, ki18n("%1: set axis scaling factor")));
 }
 
 //Title
@@ -1299,7 +1308,8 @@ void AxisPrivate::retransformTicks() {
 	//determine the increment for the major ticks
 	double majorTicksIncrement = 0;
 	int tmpMajorTicksNumber = 0;
-	const double start{range.start()}, end{range.end()};
+	double start{range.start()}, end{range.end()};
+	start += majorTickStartOffset;
 	DEBUG(Q_FUNC_INFO << ", ticks type = " << (int)majorTicksType)
 	switch (majorTicksType) {
 	case Axis::TicksType::TotalNumber:	// total number of major ticks is given - > determine the increment
@@ -2595,6 +2605,7 @@ void Axis::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "logicalPosition", QString::number(d->logicalPosition) );
 	writer->writeAttribute( "start", QString::number(d->range.start()) );
 	writer->writeAttribute( "end", QString::number(d->range.end()) );
+	writer->writeAttribute( "majorTickStartOffset", QString::number(d->majorTickStartOffset) );
 	writer->writeAttribute( "scalingFactor", QString::number(d->scalingFactor) );
 	writer->writeAttribute( "zeroOffset", QString::number(d->zeroOffset) );
 	writer->writeAttribute( "showScaleOffset", QString::number(d->showScaleOffset) );
@@ -2718,6 +2729,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("logicalPosition", logicalPosition);
 			READ_DOUBLE_VALUE("start", range.start());
 			READ_DOUBLE_VALUE("end", range.end());
+			READ_DOUBLE_VALUE("majorTickStartOffset", majorTickStartOffset);
 			READ_DOUBLE_VALUE("scalingFactor", scalingFactor);
 			READ_DOUBLE_VALUE("zeroOffset", zeroOffset);
 			READ_INT_VALUE("showScaleOffset", showScaleOffset, bool);

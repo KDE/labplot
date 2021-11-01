@@ -1213,22 +1213,22 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			}
 
 			//texts
-			for (const auto& s : layer.texts) {
-				DEBUG("EXTRA TEXT = " << s.text.c_str());
+			for (const auto& t : layer.texts) {
+				DEBUG("EXTRA TEXT = " << t.text.c_str());
 				TextLabel* label = new TextLabel("text label");
-				label->setText(parseOriginText(QString::fromLatin1(s.text.c_str())));
+				label->setText(parseOriginText(QString::fromLatin1(t.text.c_str())));
 				plot->addChild(label);
 				label->setParentGraphicsItem(plot->graphicsItem());
 
 				//position
 				//determine the relative position inside of the layer rect
-				const float horRatio = (float)(s.clientRect.left-layer.clientRect.left)/(layer.clientRect.right-layer.clientRect.left);
-				const float vertRatio = (float)(s.clientRect.top-layer.clientRect.top)/(layer.clientRect.bottom-layer.clientRect.top);
+				const qreal horRatio = (qreal)(t.clientRect.left-layer.clientRect.left)/(layer.clientRect.right-layer.clientRect.left);
+				const qreal vertRatio = (qreal)(t.clientRect.top-layer.clientRect.top)/(layer.clientRect.bottom-layer.clientRect.top);
 				textLabelPositions[label] = QSizeF(horRatio, vertRatio);
 				DEBUG("horizontal/vertical ratio = " << horRatio << ", " << vertRatio);
 
 				//rotation
-				label->setRotationAngle(s.rotation);
+				label->setRotationAngle(t.rotation);
 
 				//TODO:
 // 				Color color;
