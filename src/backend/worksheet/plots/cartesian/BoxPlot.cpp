@@ -99,6 +99,7 @@ void BoxPlot::init() {
 
 	d->symbolMedian = new Symbol("symbolMedian");
 	addChild(d->symbolMedian);
+	d->symbolMedian->setHidden(true);
 	connect(d->symbolMedian, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
 	connect(d->symbolMedian, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 	d->symbolMedian->init(group);
