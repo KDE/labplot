@@ -693,7 +693,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 }
 
 /*!
- * this function is used to restore the pointers to to the columns in xy-curves etc.
+ * this function is used to restore the pointers to the columns in xy-curves etc.
  * from the stored column paths. This function is called after the project was loaded
  * and when an aspect is being pasted. In both cases we deserialized from XML and need
  * to restore the pointers.

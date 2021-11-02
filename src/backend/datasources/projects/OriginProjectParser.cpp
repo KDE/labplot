@@ -4,7 +4,7 @@
     Description          : parser for Origin projects
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017-2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2017-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -1017,15 +1017,12 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	//add plots
 	int index = 1;
 	for (const auto& layer : graph.layers) {
-		DEBUG(Q_FUNC_INFO << ", next GRAPH")
 		if (!layer.is3D()) {
 			CartesianPlot* plot = new CartesianPlot(i18n("Plot%1", QString::number(index)));
 			worksheet->addChildFast(plot);
-			DEBUG(Q_FUNC_INFO << ", DONE adding PLOT to WORKSHEET. preview = " << preview)
 
 			if (preview)
 				continue;
-			DEBUG(Q_FUNC_INFO << ", scene items = " << worksheet->scene()->items().count())
 
 			plot->setIsLoading(true);
 			//TODO: width, height
@@ -1389,6 +1386,8 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	//ticks
 	axis->setMajorTicksType(Axis::TicksType::Spacing);
 	axis->setMajorTicksSpacing(originAxis.step);
+	//TODO: set offset from step and anchor (not currently available in liborigin)
+	axis->setMajorTickStartOffset(0.0);
 	axis->setMinorTicksType(Axis::TicksType::TotalNumber);
 	axis->setMinorTicksNumber(originAxis.minorTicks);
 
