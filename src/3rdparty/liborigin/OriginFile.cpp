@@ -32,16 +32,16 @@ OriginFile::OriginFile(const string& fileName)
 		return;
 	}
 #endif // GENERATE_CODE_FOR_LOG
+	LOG_PRINT(logfile, "File: %s\n", fileName.c_str())
 
 	string vers;
 	getline(file, vers);
+	file.close();
+
 	long majorVersion = strtol(vers.substr(5,1).c_str(),nullptr,10);
 	//char locale_decpoint = vers[6];
 	buildVersion = strtol(vers.substr(7).c_str(),nullptr,10);
 	//long buildNumber = strtol(vers.substr(12).c_str(),0,10);
-	file.close();
-
-	LOG_PRINT(logfile, "File: %s\n", fileName.c_str())
 
 	// translate version
 	// see https://www.originlab.com/index.aspx?go=SUPPORT&pid=3325
@@ -150,11 +150,12 @@ OriginFile::OriginFile(const string& fileName)
 	// There are ways to keep logfile open and pass it to parser routine,
 	// but I choose to do the same as with 'file', close it and reopen in 'parse'
 	// routines.
-#ifdef GENERATE_CODE_FOR_LOG
-	fclose(logfile);
-#endif // GENERATE_CODE_FOR_LOG
 	parser.reset(createOriginAnyParser(fileName));
 	ioError=0;
+
+#ifdef GENERATE_CODE_FOR_LOG
+	fclose(logfile);
+#endif
 }
 
 bool OriginFile::parse()

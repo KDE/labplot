@@ -1663,9 +1663,12 @@ void OriginAnyParser::getAnnotationProperties(const string& anhd, unsigned int a
 		double width = (double)w1/500.0;
 
 		Figure figure;
-		stmp.str(andt1.substr(0x05));
-		GET_SHORT(stmp, w1)
-		figure.width = (double)w1/500.0;
+		LOG_PRINT(logfile, " andt1 = %s (size = %" PRId64 ")\n", andt1.c_str(), andt1.size())
+		if (andt1.size() > 4) {
+			stmp.str(andt1.substr(0x05));
+			GET_SHORT(stmp, w1)
+			figure.width = (double)w1/500.0;
+		}
 		figure.style = andt1[0x08];
 
 		if (andt1sz > 0x4D) {
