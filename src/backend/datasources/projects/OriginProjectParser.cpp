@@ -1386,6 +1386,7 @@ void OriginProjectParser::loadAxis(const Origin::GraphAxis& originAxis, Axis* ax
 	//ticks
 	axis->setMajorTicksType(Axis::TicksType::Spacing);
 	axis->setMajorTicksSpacing(originAxis.step);
+	DEBUG(Q_FUNC_INFO << ", anchor = " << originAxis.anchor)
 	//TODO: set offset from step and anchor (not currently available in liborigin)
 	axis->setMajorTickStartOffset(0.0);
 	axis->setMinorTicksType(Axis::TicksType::TotalNumber);

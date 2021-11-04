@@ -693,6 +693,7 @@ namespace Origin
 		double min;
 		double max;
 		double step;
+		double anchor;
 		unsigned char majorTicks;
 		unsigned char minorTicks;
 		unsigned char scale;
