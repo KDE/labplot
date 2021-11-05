@@ -4,7 +4,7 @@
     Description          : definition of functions
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2014-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -336,6 +336,24 @@ struct funs _functions[] = {
 	{"hzeta", (func_t)gsl_sf_hzeta, 2},
 	{"etaint", (func_t)nsl_sf_etaint, 1},
 	{"eta", (func_t)gsl_sf_eta, 1},
+
+	/* GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html */
+	{"randgaussian", (func_t)nsl_sf_ran_gaussian, 1},
+	{"randexponential", (func_t)nsl_sf_ran_exponential, 1},
+	{"randlaplace", (func_t)nsl_sf_ran_laplace, 1},
+	{"randcauchy", (func_t)nsl_sf_ran_cauchy, 1},
+	{"randrayleigh", (func_t)nsl_sf_ran_rayleigh, 1},
+	{"randlandau", (func_t)nsl_sf_ran_landau, 0},
+	{"randlevy", (func_t)nsl_sf_ran_levy, 2},
+	{"randgamma", (func_t)nsl_sf_ran_gamma, 2},
+	{"randflat", (func_t)nsl_sf_ran_flat, 2},
+	{"randlognormal", (func_t)nsl_sf_ran_lognormal, 2},
+	{"randchisq", (func_t)nsl_sf_ran_chisq, 1},
+	{"randtdist", (func_t)nsl_sf_ran_tdist, 1},
+	{"randlogistic", (func_t)nsl_sf_ran_logistic, 1},
+	{"randpoisson", (func_t)nsl_sf_ran_poisson, 1},
+	{"randbernoulli", (func_t)nsl_sf_ran_bernoulli, 1},
+	{"randbinomial", (func_t)nsl_sf_ran_binomial, 2},
 
 	/* GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html */
 	/* Gaussian Distribution */

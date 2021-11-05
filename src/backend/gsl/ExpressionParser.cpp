@@ -4,7 +4,7 @@
     Description      : C++ wrapper for the bison generated parser.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2014-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2014-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -33,7 +33,7 @@ ExpressionParser::ExpressionParser() {
 	initConstants();
 }
 
-// initialize function list	(sync with functions.h!)
+// initialize function list	(sync with functions.h and FunctionsWidget.cpp!)
 void ExpressionParser::initFunctions() {
 	for (int i = 0; _functions[i].name != nullptr; i++)
 		m_functions << _functions[i].name;
@@ -78,6 +78,8 @@ void ExpressionParser::initFunctions() {
 	m_functionsGroups << i18n("Transport Functions");
 	m_functionsGroups << i18n("Trigonometric Functions");
 	m_functionsGroups << i18n("Zeta Functions");
+	// GSL random numbers
+	m_functionsGroups << i18n("Random number generator");
 	// GSL random distribution functions
 	m_functionsGroups << i18n("Gaussian Distribution");
 	m_functionsGroups << i18n("Exponential Distribution");
@@ -146,6 +148,8 @@ void ExpressionParser::initFunctions() {
 	for (int i = 0; i < 22; i++)
 #endif
 		m_functionsGroupIndex << index;
+
+	index++;	// separator
 
 	// Airy Functions and Derivatives
 	m_functionsNames << i18n("Airy function of the first kind");
@@ -566,6 +570,33 @@ void ExpressionParser::initFunctions() {
 	index++;
 	for (int i = 0; i < 7; i++)
 		m_functionsGroupIndex << index;
+
+	index++;	// separator
+
+	// GSL Random Number Generators: see https://www.gnu.org/software/gsl/doc/html/randist.html
+	m_functionsNames << i18n("Gaussian random numbers");
+	m_functionsNames << i18n("Exponential random numbers");
+	m_functionsNames << i18n("Laplacian random numbers");
+	m_functionsNames << i18n("Cauchy/Lorentz random numbers");
+	m_functionsNames << i18n("Rayleigh random numbers");
+	m_functionsNames << i18n("Landau random numbers");
+	m_functionsNames << i18n("Levy alpha-stable random numbers");
+	m_functionsNames << i18n("Gamma random numbers");
+	m_functionsNames << i18n("Flat random numbers");
+	m_functionsNames << i18n("Lognormal random numbers");
+
+	m_functionsNames << i18n("Chi-squared random numbers");
+	m_functionsNames << i18n("t-distributed random numbers");
+	m_functionsNames << i18n("Logistic random numbers");
+	m_functionsNames << i18n("Poisson random numbers");
+	m_functionsNames << i18n("Bernoulli random numbers");
+	m_functionsNames << i18n("Binomial random numbers");
+
+	index++;
+	for (int i = 0; i < 16; i++)
+		m_functionsGroupIndex << index;
+
+	index++;	// separator
 
 	// GSL Random Number Distributions: see https://www.gnu.org/software/gsl/doc/html/randist.html
 	// Gaussian Distribution

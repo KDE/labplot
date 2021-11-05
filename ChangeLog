@@ -11,6 +11,7 @@
 		* Allow to save the project without the results of the calculations in the analysis curves to reduce the size of project file
 		* Use XZ compression of project files per default
 		* Improve preview resolution of distributions and fit functions
+		* Add parser functions to generate non-uniform random numbers of several distributions
 	* [analysis]
 		* Support Mathieu functions via GSL
 		* Added Hilbert transform including envelope

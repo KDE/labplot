@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : NSL special basic functions
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2018-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -46,6 +46,81 @@ double nsl_sf_theta(double x) {
 		return 1;
 	else
 		return 0;
+}
+
+/* non-uniform random number generation
+ * using a generator chosen by the environment variable GSL_RNG_TYPE
+ */
+#define SETUP_GSL_RNG \
+        gsl_rng_env_setup(); \
+        const gsl_rng_type* T = gsl_rng_default; \
+        gsl_rng* r = gsl_rng_alloc(T); \
+        gsl_rng_set(r, rand());	/*seed*/
+
+double nsl_sf_ran_gaussian(double sigma) {
+	SETUP_GSL_RNG
+	return gsl_ran_gaussian_ziggurat(r, sigma);
+}
+double nsl_sf_ran_exponential(double mu) {
+	SETUP_GSL_RNG
+	return gsl_ran_exponential(r, mu);
+}
+double nsl_sf_ran_laplace(double a) {
+	SETUP_GSL_RNG
+	return gsl_ran_laplace(r, a);
+}
+double nsl_sf_ran_cauchy(double a) {
+	SETUP_GSL_RNG
+	return gsl_ran_cauchy(r, a);
+}
+double nsl_sf_ran_rayleigh(double sigma) {
+	SETUP_GSL_RNG
+	return gsl_ran_rayleigh(r, sigma);
+}
+double nsl_sf_ran_landau(void) {
+	SETUP_GSL_RNG
+	return gsl_ran_landau(r);
+}
+double nsl_sf_ran_levy(double c, double alpha) {
+	SETUP_GSL_RNG
+	return gsl_ran_levy(r, c, alpha);
+}
+double nsl_sf_ran_gamma(double a, double b) {
+	SETUP_GSL_RNG
+	return gsl_ran_gamma(r, a, b);
+}
+double nsl_sf_ran_flat(double a, double b) {
+	SETUP_GSL_RNG
+	return gsl_ran_flat(r, a, b);
+}
+double nsl_sf_ran_lognormal(double zeta, double sigma) {
+	SETUP_GSL_RNG
+	return gsl_ran_lognormal(r, zeta, sigma);
+}
+double nsl_sf_ran_chisq(double nu) {
+	SETUP_GSL_RNG
+	return gsl_ran_chisq(r, nu);
+}
+double nsl_sf_ran_tdist(double nu) {
+	SETUP_GSL_RNG
+	return gsl_ran_tdist(r, nu);
+}
+double nsl_sf_ran_logistic(double a) {
+	SETUP_GSL_RNG
+	return gsl_ran_logistic(r, a);
+}
+
+double nsl_sf_ran_poisson(double mu) {
+	SETUP_GSL_RNG
+	return (double)gsl_ran_poisson(r, mu);
+}
+double nsl_sf_ran_bernoulli(double p) {
+	SETUP_GSL_RNG
+	return (double)gsl_ran_bernoulli(r, p);
+}
+double nsl_sf_ran_binomial(double p, double n) {
+	SETUP_GSL_RNG
+	return (double)gsl_ran_binomial(r, p, (unsigned int)round(n));
 }
 
 /*
