@@ -99,7 +99,7 @@ SpreadsheetView::SpreadsheetView(Spreadsheet* spreadsheet, bool readOnly) : QWid
 	m_model(new SpreadsheetModel(spreadsheet)),
 	m_readOnly(readOnly) {
 
-	auto* layout = new QHBoxLayout(this);
+	auto* layout = new QVBoxLayout(this);
 	layout->setContentsMargins(0,0,0,0);
 	layout->addWidget(m_tableView);
 	if (m_readOnly)
@@ -250,6 +250,7 @@ void SpreadsheetView::initActions() {
 	action_clear_masks = new QAction(QIcon::fromTheme("format-remove-node"), i18n("Clear Masks"), this);
 	action_sort_spreadsheet = new QAction(QIcon::fromTheme("view-sort-ascending"), i18n("&Sort Spreadsheet"), this);
 	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell..."), this);
+	action_search = new QAction(QIcon::fromTheme("edit-search"), i18n("&Search"), this);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs..."), this );
 
 	// column related actions
@@ -701,6 +702,7 @@ void SpreadsheetView::initMenus() {
 	m_spreadsheetMenu->addMenu(m_formattingMenu);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_go_to_cell);
+	m_spreadsheetMenu->addAction(action_search);
 	m_spreadsheetMenu->addSeparator();
 	m_spreadsheetMenu->addAction(action_toggle_comments);
 	m_spreadsheetMenu->addSeparator();
@@ -753,6 +755,7 @@ void SpreadsheetView::connectActions() {
 	connect(action_sort_spreadsheet, &QAction::triggered, this, &SpreadsheetView::sortSpreadsheet);
 	connect(action_go_to_cell, &QAction::triggered, this,
 			static_cast<void (SpreadsheetView::*)()>(&SpreadsheetView::goToCell));
+	connect(action_search, &QAction::triggered, this, &SpreadsheetView::showSearch);
 
 	connect(action_insert_column_left, &QAction::triggered, this, &SpreadsheetView::insertColumnLeft);
 	connect(action_insert_column_right, &QAction::triggered, this, &SpreadsheetView::insertColumnRight);
@@ -982,6 +985,12 @@ void SpreadsheetView::goToCell(int row, int col) {
 	QModelIndex index = m_model->index(row, col);
 	m_tableView->scrollTo(index);
 	m_tableView->setCurrentIndex(index);
+}
+
+void SpreadsheetView::searchTextChanged(const QString& text) {
+	m_model->setSearchText(text);
+	m_tableView->setFocus(); //set the focus so the table gets updated with the highlighted found entries
+	m_leSearch->setFocus(); //set the focus back to the line edit so we can continue typing
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
@@ -3131,6 +3140,42 @@ void SpreadsheetView::goToCell() {
 		goToCell(row-1, col-1);
 	}
 	delete dlg;
+}
+
+void SpreadsheetView::showSearch() {
+	if (!m_frameSearch) {
+		//initialize the widgets for search options
+		m_frameSearch = new QFrame(this);
+		auto* layout = new QHBoxLayout(m_frameSearch);
+		layout->setSpacing(0);
+		layout->setContentsMargins(0, 0, 0, 0);
+
+		m_leSearch = new QLineEdit(m_frameSearch);
+		m_leSearch->setClearButtonEnabled(true);
+		m_leSearch->setPlaceholderText(i18n("Search..."));
+		layout->addWidget(m_leSearch);
+/*
+		auto* bFilterOptions = new QToolButton(m_frameSearch);
+		bFilterOptions->setIcon(QIcon::fromTheme("configure"));
+		bFilterOptions->setCheckable(true);
+		layoutSearch->addWidget(bFilterOptions);
+*/
+		auto* bCloseSearch = new QPushButton(this);
+		//bCloseSearch->setIcon(QIcon::fromTheme("close"));
+		bCloseSearch->setToolTip(i18n("Hide Search Options"));
+		layout->addWidget(bCloseSearch);
+		connect(bCloseSearch, &QPushButton::clicked, this, [=]() {
+			m_leSearch->clear();
+			m_frameSearch->hide();
+		});
+
+		static_cast<QVBoxLayout*>(this->layout())->addWidget(m_frameSearch);
+
+		connect(m_leSearch, &QLineEdit::textChanged, this, &SpreadsheetView::searchTextChanged);
+		//connect(bFilterOptions, &QPushButton::toggled, this, &SpreadsheetView::toggleSearchOptionsMenu);
+	}
+	m_frameSearch->show();
+	m_leSearch->setFocus();
 }
 
 //! Open the sort dialog for the given columns

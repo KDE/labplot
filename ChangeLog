@@ -24,6 +24,7 @@
 		* HDF5: Preview and import 2d data of strings
 	* [spreadsheet]:
 		* Allow to freeze the first column
+		* Search in the spreadsheet
 		* Conditional heatmap formatting
 		* Support value labels
 		* Extended statistics dialog - show additional visualizations (histogram, KDE plot, normal Q-Q plot, BoxPlot)

@@ -24,7 +24,9 @@ class SpreadsheetHeaderView;
 class SpreadsheetModel;
 
 class QActionGroup;
+class QFrame;
 class QItemSelection;
+class QLineEdit;
 class QMenu;
 class QPrinter;
 class QModelIndex;
@@ -102,6 +104,8 @@ private:
 	Spreadsheet* m_spreadsheet;
 	SpreadsheetModel* m_model;
 	SpreadsheetHeaderView* m_horizontalHeader;
+	QFrame* m_frameSearch{nullptr};
+	QLineEdit* m_leSearch{nullptr};
 	bool m_suppressSelectionChangedEvent{false};
 	bool m_readOnly;
 	bool eventFilter(QObject*, QEvent*) override;
@@ -134,6 +138,7 @@ private:
 	QAction* action_formatting_heatmap;
 	QAction* action_formatting_remove;
 	QAction* action_go_to_cell;
+	QAction* action_search;
 	QAction* action_statistics_all_columns;
 
 	//column related actions
@@ -218,12 +223,14 @@ public slots:
 private slots:
 	void createColumnContextMenu(QMenu*);
 	void goToCell(int row, int col);
+	void showSearch();
 	void toggleComments();
 	void goToNextColumn();
 	void goToPreviousColumn();
 	void goToCell();
 	void sortSpreadsheet();
 	void sortDialog(const QVector<Column*>&);
+	void searchTextChanged(const QString&);
 	void formatHeatmap();
 	void removeFormat();
 

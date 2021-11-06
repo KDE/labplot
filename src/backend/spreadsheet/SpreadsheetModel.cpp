@@ -18,6 +18,7 @@
 
 #include <QBrush>
 #include <QIcon>
+#include <QPalette>
 
 #include <KLocalizedString>
 
@@ -77,6 +78,10 @@ Qt::ItemFlags SpreadsheetModel::flags(const QModelIndex& index) const {
 		return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 	else
 		return Qt::ItemIsEnabled;
+}
+
+void SpreadsheetModel::setSearchText(const QString& text) {
+	m_searchText = text;
 }
 
 QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
@@ -146,7 +151,14 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			return QVariant(QBrush(Qt::red));
 		return color(col_ptr, row, AbstractColumn::Formatting::Foreground);
 	case Qt::BackgroundRole:
-		return color(col_ptr, row, AbstractColumn::Formatting::Background);
+		if (m_searchText.isEmpty())
+			return color(col_ptr, row, AbstractColumn::Formatting::Background);
+		else {
+			if (col_ptr->asStringColumn()->textAt(row).indexOf(m_searchText) == -1)
+				return color(col_ptr, row, AbstractColumn::Formatting::Background);
+			else
+				return QVariant(QApplication::palette().color(QPalette::Highlight));
+		}
 	case static_cast<int>(CustomDataRole::MaskingRole):
 		return QVariant(col_ptr->isMasked(row));
 	case static_cast<int>(CustomDataRole::FormulaRole):

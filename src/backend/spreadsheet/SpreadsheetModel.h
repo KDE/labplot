@@ -51,6 +51,8 @@ public:
 	void updateHorizontalHeader();
 	void suppressSignals(bool);
 
+	void setSearchText(const QString&);
+
 private slots:
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
@@ -76,6 +78,7 @@ private:
 	bool m_suppressSignals{false};
 	int m_rowCount{0};
 	int m_columnCount{0};
+	QString m_searchText;
 
 	QVariant color(const AbstractColumn*, int row, AbstractColumn::Formatting type) const;
 };
