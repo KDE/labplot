@@ -108,7 +108,6 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 		}
 	}
 	targetFolder->setName(project->name());
-
 	targetFolder->endMacro();
 
 	Project::restorePointers(targetFolder);

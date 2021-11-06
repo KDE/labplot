@@ -1289,16 +1289,24 @@ void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 	}
 }
 
-const Range<double>& CartesianPlot::xRangeAutoScale(const int index) {
-	Q_D(CartesianPlot);
+const Range<double>& CartesianPlot::xRangeAutoScale(int index) {
+	if (index == -1)
+		index = defaultCoordinateSystem()->xIndex();
+
 	if (xRangeDirty(index))
 		calculateCurvesXMinMax(index, true);
+
+	Q_D(CartesianPlot);
 	return d->xRangeAutoScale(index);
 }
-const Range<double>& CartesianPlot::yRangeAutoScale(const int index) {
-	Q_D(CartesianPlot);
+const Range<double>& CartesianPlot::yRangeAutoScale(int index) {
+	if (index == -1)
+		index = defaultCoordinateSystem()->xIndex();
+
 	if (yRangeDirty(index))
 		calculateCurvesYMinMax(index, true);
+
+	Q_D(CartesianPlot);
 	return d->yRangeAutoScale(index);
 }
 
@@ -1397,7 +1405,6 @@ void CartesianPlot::setYMin(const int index, const double value) {
 	setYRange(index, range);
 }
 void CartesianPlot::setYMax(const int index, const double value) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index << " value = " << value)
 	Range<double> range{ yRange(index) };
 	range.setEnd(value);
 
@@ -1523,17 +1530,14 @@ CartesianCoordinateSystem* CartesianPlot::coordinateSystem(int index) const {
 }
 
 void CartesianPlot::addCoordinateSystem() {
-	DEBUG(Q_FUNC_INFO)
 	addCoordinateSystem(new CartesianCoordinateSystem(this));
 }
 void CartesianPlot::addCoordinateSystem(CartesianCoordinateSystem* s) {
-	DEBUG(Q_FUNC_INFO)
 	m_coordinateSystems.append(s);
 	if (project())
 		project()->setChanged(true);
 }
 void CartesianPlot::removeCoordinateSystem(int index) {
-	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	if (index < 0 || index > coordinateSystemCount()) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
@@ -1946,11 +1950,11 @@ void CartesianPlot::addTextLabel() {
 	if (d->calledFromContextMenu)  {
 		auto position = label->position();
 		position.point = label->parentPosToRelativePos(d->scenePos,
-												   d->boundingRect(),
-												   label->graphicsItem()->boundingRect(),
-												   position,
-												   label->horizontalAlignment(),
-												   label->verticalAlignment()
+							d->boundingRect(),
+							label->graphicsItem()->boundingRect(),
+							position,
+							label->horizontalAlignment(),
+							label->verticalAlignment()
 		);
 		label->setPosition(position);
 		d->calledFromContextMenu = false;
@@ -1967,11 +1971,11 @@ void CartesianPlot::addImage() {
 	if (d->calledFromContextMenu)  {
 		auto position = image->position();
 		position.point = image->parentPosToRelativePos(d->scenePos,
-												   d->boundingRect(),
-												   image->graphicsItem()->boundingRect(),
-												   position,
-												   image->horizontalAlignment(),
-												   image->verticalAlignment()
+							d->boundingRect(),
+							image->graphicsItem()->boundingRect(),
+							position,
+							image->horizontalAlignment(),
+							image->verticalAlignment()
 		);
 		image->setPosition(position);
 		d->calledFromContextMenu = false;

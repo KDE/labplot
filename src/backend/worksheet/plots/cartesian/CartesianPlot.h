@@ -129,8 +129,8 @@ public:
 	void setXRange(int index, const Range<double>&);
 	void setYRange(int index, const Range<double>&);
 
-	const Range<double>& xRangeAutoScale(int index);
-	const Range<double>& yRangeAutoScale(int index);
+	const Range<double>& xRangeAutoScale(int index = -1);
+	const Range<double>& yRangeAutoScale(int index = -1);
 	bool xRangeDirty(int index);
 	bool yRangeDirty(int index);
 	void setXRangeDirty(int index, bool dirty);
