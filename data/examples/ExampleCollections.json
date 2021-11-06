@@ -1,5 +1,9 @@
 [
 	{
+		"name" : "General",
+		"description" : "Various example projects demoing LabPlot's features and capabilities"
+	},
+	{
 		"name" : "Statistics",
 		"description" : "Various example projects demoing LabPlot's features and capabilities relevant for statistical analysis of data"
 	},
