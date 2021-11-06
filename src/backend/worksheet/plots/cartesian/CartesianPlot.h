@@ -122,18 +122,13 @@ public:
 
 	int xRangeCount() const;
 	int yRangeCount() const;
-	const Range<double>& xRange() const;		// get x range of default plot range
-	const Range<double>& yRange() const;		// get y range of default plot range
+	const Range<double>& xRange(int index = -1) const;	// get x range of (default) plot range
+	const Range<double>& yRange(int index = -1) const;	// get y range of (default) plot range
 	void setXRange(const Range<double>);		// set x range of default plot range
 	void setYRange(const Range<double>);		// set y range of default plot range
-	const Range<double>& xRangeFromIndex(int index) const;
-	const Range<double>& yRangeFromIndex(int index) const;
-	Range<double>& xRangeFromIndex(int index);
-	Range<double>& yRangeFromIndex(int index);
-	const Range<double>& xRange(int index) const;
-	const Range<double>& yRange(int index) const;
-	void setXRange(int index, const Range<double>& value);
-	void setYRange(int index, const Range<double>& value);
+	void setXRange(int index, const Range<double>&);
+	void setYRange(int index, const Range<double>&);
+
 	const Range<double>& xRangeAutoScale(int index);
 	const Range<double>& yRangeAutoScale(int index);
 	bool xRangeDirty(int index);
