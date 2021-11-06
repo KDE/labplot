@@ -1301,7 +1301,7 @@ const Range<double>& CartesianPlot::xRangeAutoScale(int index) {
 }
 const Range<double>& CartesianPlot::yRangeAutoScale(int index) {
 	if (index == -1)
-		index = defaultCoordinateSystem()->xIndex();
+		index = defaultCoordinateSystem()->yIndex();
 
 	if (yRangeDirty(index))
 		calculateCurvesYMinMax(index, true);
