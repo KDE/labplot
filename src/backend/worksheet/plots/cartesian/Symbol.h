@@ -24,7 +24,7 @@ class Symbol : public AbstractAspect {
 public:
 	enum class Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
 			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
-			Star4, Star5, Line, Cross, Heart, Lightning};
+			Star4, Star5, Line, Cross, X, Heart, Lightning};
 
 	static int stylesCount();
 	static QPainterPath pathFromStyle(Symbol::Style);

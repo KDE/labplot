@@ -288,6 +288,12 @@ QPainterPath Symbol::pathFromStyle(Symbol::Style style) {
 		path.moveTo(-0.5, 0);
 		path.lineTo(0.5, 0);
 		break;
+	case Style::X:
+		path = QPainterPath(QPointF(-0.4, -0.5));
+		path.lineTo(0.4, 0.5);
+		path.moveTo(0.4, -0.5);
+		path.lineTo(-0.4, 0.5);
+		break;
 	case Style::Heart: {
 		//https://mathworld.wolfram.com/HeartCurve.html with additional
 		//normalization to fit into a 1.0x1.0 rectangular
@@ -380,6 +386,9 @@ QString Symbol::nameFromStyle(Symbol::Style style) {
 		break;
 	case Style::Cross:
 		name = i18n("cross");
+		break;
+	case Style::X:
+		name = i18n("character 'X'");
 		break;
 	case Style::Heart:
 		name = i18n("heart");
