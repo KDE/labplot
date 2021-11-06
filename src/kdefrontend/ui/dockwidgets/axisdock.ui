@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>1186</height>
+    <height>1190</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -1064,9 +1064,6 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="2">
-        <widget class="QLineEdit" name="leMajorTickStartOffset"/>
-       </item>
        <item row="7" column="0">
         <widget class="QLabel" name="lMajorTickStartOffset">
          <property name="toolTip">
@@ -1076,6 +1073,38 @@
           <string>First Tick Offset:</string>
          </property>
         </widget>
+       </item>
+       <item row="7" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLineEdit" name="leMajorTickStartOffset"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbFirstTickData">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set offset to start ticks at first data point&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="icon">
+            <iconset theme="application-vnd.oasis.opendocument.chart">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="tbFirstTickAuto">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set offset to start ticks at round value&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="autocorrection">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>

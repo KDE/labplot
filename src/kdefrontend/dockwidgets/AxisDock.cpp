@@ -164,6 +164,7 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	connect(dtsbMajorTicksIncrement, &DateTimeSpinBox::valueChanged,
 	        this, &AxisDock::majorTicksSpacingChanged);
 	connect(ui.leMajorTickStartOffset, &KLineEdit::textChanged, this, &AxisDock::majorTickStartOffsetChanged);
+	connect(ui.tbFirstTickData, &QToolButton::clicked, this, &AxisDock::setTickOffsetData);
 	connect(cbMajorTicksColumn, &TreeViewComboBox::currentModelIndexChanged,
 	        this, &AxisDock::majorTicksColumnChanged);
 	connect(ui.cbMajorTicksLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -1200,6 +1201,25 @@ void AxisDock::majorTickStartOffsetChanged() {
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartOffset(offset);
+}
+
+void AxisDock::setTickOffsetData() {
+	Range<double> dataRange;
+	if (m_axis->orientation() == Axis::Orientation::Horizontal)
+		dataRange = m_axis->plot()->xRangeAutoScale();
+	else
+		dataRange = m_axis->plot()->yRangeAutoScale();
+
+	DEBUG(Q_FUNC_INFO << ", data range = " << dataRange.toStdString())
+	const double offset = dataRange.start() - m_axis->range().start();
+
+	SET_NUMBER_LOCALE
+	ui.leMajorTickStartOffset->setText(numberLocale.toString(offset));
+}
+void AxisDock::setTickOffsetAuto() {
+	const double offset = 0; // TODO: How
+	SET_NUMBER_LOCALE
+	ui.leMajorTickStartOffset->setText(numberLocale.toString(offset));
 }
 
 void AxisDock::majorTicksLineStyleChanged(int index) {

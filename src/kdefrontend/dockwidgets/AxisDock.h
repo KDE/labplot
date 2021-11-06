@@ -99,6 +99,8 @@ private slots:
 	void majorTicksSpacingChanged();
 	void majorTicksColumnChanged(const QModelIndex&);
 	void majorTickStartOffsetChanged();
+	void setTickOffsetData();
+	void setTickOffsetAuto();
 	void majorTicksLineStyleChanged(int);
 	void majorTicksColorChanged(const QColor&);
 	void majorTicksWidthChanged(double);
