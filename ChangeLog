@@ -12,6 +12,7 @@
 		* Use XZ compression of project files per default
 		* Improve preview resolution of distributions and fit functions
 		* Add parser functions to generate non-uniform random numbers of several distributions
+		* Fuzzy matching when doing search/filter in the Project Explorer
 	* [analysis]
 		* Support Mathieu functions via GSL
 		* Added Hilbert transform including envelope

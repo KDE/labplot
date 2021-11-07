@@ -22,7 +22,7 @@ class QFrame;
 class QLabel;
 class QLineEdit;
 class QModelIndex;
-class QToolButton;
+class QPushButton;
 class QSignalMapper;
 class QTreeView;
 class QXmlStreamWriter;
@@ -62,6 +62,7 @@ private:
 	bool m_dragStarted{false};
 	bool m_changeSelectionFromView{false};
 
+	QAction* fuzzyMatchingAction{nullptr};
 	QAction* caseSensitiveAction;
 	QAction* matchCompleteWordAction;
 	QAction* expandTreeAction;
@@ -76,15 +77,13 @@ private:
 
 	QFrame* m_frameFilter;
 	QLineEdit* m_leFilter;
-	QToolButton* bFilterOptions;
+	QPushButton* bFilterOptions;
 
 private slots:
 	void aspectAdded(const AbstractAspect*);
 	void toggleColumn(int);
 	void showAllColumns();
 	void filterTextChanged(const QString&);
-	void toggleFilterCaseSensitivity();
-	void toggleFilterMatchCompleteWord();
 	void toggleFilterOptionsMenu(bool);
 	void resizeHeader();
 	void expandSelected();

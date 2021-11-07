@@ -25,16 +25,16 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QPushButton>
-#include <QToolButton>
 #include <QTreeView>
 #include <QVBoxLayout>
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KSharedConfig>
+#include <KFuzzyMatcher>
 #include <KLocalizedString>
-#include <KMessageWidget>
 #include <KMessageBox>
+#include <KMessageWidget>
+#include <KSharedConfig>
 
 /*!
   \class ProjectExplorer
@@ -65,9 +65,10 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) :
 	m_leFilter->setPlaceholderText(i18n("Search/Filter"));
 	layoutFilter->addWidget(m_leFilter);
 
-	bFilterOptions = new QToolButton(m_frameFilter);
+	bFilterOptions = new QPushButton(m_frameFilter);
 	bFilterOptions->setIcon(QIcon::fromTheme("configure"));
 	bFilterOptions->setCheckable(true);
+	bFilterOptions->setFlat(true);
 	layoutFilter->addWidget(bFilterOptions);
 
 	layout->addWidget(m_frameFilter);
@@ -111,12 +112,24 @@ void ProjectExplorer::createActions() {
 	caseSensitiveAction = new QAction(i18n("Case Sensitive"), this);
 	caseSensitiveAction->setCheckable(true);
 	caseSensitiveAction->setChecked(false);
-	connect(caseSensitiveAction, &QAction::triggered, this, &ProjectExplorer::toggleFilterCaseSensitivity);
+	connect(caseSensitiveAction, &QAction::triggered, this, [=](){ filterTextChanged(m_leFilter->text()); });
 
 	matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
 	matchCompleteWordAction->setCheckable(true);
 	matchCompleteWordAction->setChecked(false);
-	connect(matchCompleteWordAction, &QAction::triggered, this, &ProjectExplorer::toggleFilterMatchCompleteWord);
+	connect(matchCompleteWordAction, &QAction::triggered, this, [=](){ filterTextChanged(m_leFilter->text()); });
+
+	fuzzyMatchingAction = new QAction(i18n("Fuzzy Matching"), this);
+	fuzzyMatchingAction->setCheckable(true);
+	fuzzyMatchingAction->setChecked(true);
+	connect(fuzzyMatchingAction, &QAction::triggered, this, [=]() {
+		bool enabled  = !fuzzyMatchingAction->isChecked();
+		caseSensitiveAction->setEnabled(enabled);
+		matchCompleteWordAction->setEnabled(enabled);
+		filterTextChanged(m_leFilter->text());
+	});
+	caseSensitiveAction->setEnabled(false);
+	matchCompleteWordAction->setEnabled(false);
 
 	expandTreeAction = new QAction(QIcon::fromTheme(QLatin1String("expand-all")), i18n("Expand All"), this);
 	connect(expandTreeAction, &QAction::triggered, m_treeView, &QTreeView::expandAll);
@@ -609,7 +622,9 @@ void ProjectExplorer::showAllColumns() {
 */
 void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 	if (checked) {
-		QMenu menu;
+	QMenu menu;
+		menu.addAction(fuzzyMatchingAction);
+		menu.addSeparator();
 		menu.addAction(caseSensitiveAction);
 		menu.addAction(matchCompleteWordAction);
 		connect(&menu, &QMenu::aboutToHide, bFilterOptions, &QPushButton::toggle);
@@ -631,9 +646,7 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 }
 
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
-	auto sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
-	bool matchCompleteWord = matchCompleteWordAction->isChecked();
-
+	bool fuzzyFiltering = fuzzyMatchingAction->isChecked();
 	bool childVisible = false;
 	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
@@ -642,10 +655,18 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 		bool visible;
 		if (text.isEmpty())
 			visible = true;
-		else if (matchCompleteWord)
-			visible = aspect->name().startsWith(text, sensitivity);
-		else
-			visible = aspect->name().contains(text, sensitivity);
+		else {
+			if (fuzzyFiltering)
+				visible = KFuzzyMatcher::matchSimple(text, aspect->name());
+			else {
+				bool matchCompleteWord = matchCompleteWordAction->isChecked();
+				auto sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+				if (matchCompleteWord)
+					visible = aspect->name().startsWith(text, sensitivity);
+				else
+					visible = aspect->name().contains(text, sensitivity);
+			}
+		}
 
 		if (visible) {
 			//current item is visible -> make all its children visible without applying the filter
@@ -667,14 +688,6 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 	}
 
 	return childVisible;
-}
-
-void ProjectExplorer::toggleFilterCaseSensitivity() {
-	filterTextChanged(m_leFilter->text());
-}
-
-void ProjectExplorer::toggleFilterMatchCompleteWord() {
-	filterTextChanged(m_leFilter->text());
 }
 
 void ProjectExplorer::selectIndex(const QModelIndex&  index) {
