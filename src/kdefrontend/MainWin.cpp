@@ -713,9 +713,9 @@ void MainWin::initActions() {
 	connect(docksActions, &QActionGroup::triggered, this, &MainWin::toggleDockWidget);
 
 	//global search
-	QAction* searchAction = new QAction(actionCollection());
-	searchAction->setShortcut(QKeySequence::Find);
-	connect(searchAction, &QAction::triggered, this, [=]() {
+	m_searchAction = new QAction(actionCollection());
+	m_searchAction->setShortcut(QKeySequence::Find);
+	connect(m_searchAction, &QAction::triggered, this, [=]() {
 		if (m_project) {
 			if (!m_projectExplorerDock->isVisible()) {
 				m_toggleProjectExplorerDockAction->setChecked(true);
@@ -724,7 +724,7 @@ void MainWin::initActions() {
 			m_projectExplorer->search();
 		}
 	});
-	this->addAction(searchAction);
+	this->addAction(m_searchAction);
 }
 
 void MainWin::initMenus() {
@@ -1101,9 +1101,13 @@ void MainWin::updateGUI() {
 		m_touchBar->addAction(m_importFileAction);
 		view->fillTouchBar(m_touchBar);
 #endif
+
+		//spreadsheet has it's own search, unregister the shortcut for the global search here
+		m_searchAction->setShortcut(QKeySequence());
 	} else {
 		factory->container("spreadsheet", this)->setEnabled(false);
 		factory->container("spreadsheet_toolbar", this)->setVisible(false);
+		m_searchAction->setShortcut(QKeySequence::Find);
 	}
 
 	//Handle the Matrix-object

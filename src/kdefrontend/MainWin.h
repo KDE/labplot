@@ -155,6 +155,7 @@ private:
 #endif
 
 	KRecentFilesAction* m_recentProjectsAction;
+	QAction* m_searchAction;
 	QAction* m_saveAction;
 	QAction* m_saveAsAction;
 	QAction* m_printAction;

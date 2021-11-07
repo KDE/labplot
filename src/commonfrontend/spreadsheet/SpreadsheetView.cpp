@@ -250,7 +250,8 @@ void SpreadsheetView::initActions() {
 	action_clear_masks = new QAction(QIcon::fromTheme("format-remove-node"), i18n("Clear Masks"), this);
 	action_sort_spreadsheet = new QAction(QIcon::fromTheme("view-sort-ascending"), i18n("&Sort Spreadsheet"), this);
 	action_go_to_cell = new QAction(QIcon::fromTheme("go-jump"), i18n("&Go to Cell..."), this);
-	action_search = new QAction(QIcon::fromTheme("edit-search"), i18n("&Search"), this);
+	action_search = new QAction(QIcon::fromTheme("edit-find"), i18n("&Search"), this);
+	action_search->setShortcut(QKeySequence::Find);
 	action_statistics_all_columns = new QAction(QIcon::fromTheme("view-statistics"), i18n("Statisti&cs..."), this );
 
 	// column related actions
@@ -1332,6 +1333,9 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 // 					scrollBar->setValue(newValue);
 // 				}
 // 			}
+		} else if (key_event->key() == Qt::Key_Escape && m_frameSearch && m_frameSearch->isVisible()) {
+			m_leSearch->clear();
+			m_frameSearch->hide();
 		}
 	}
 
@@ -3161,8 +3165,9 @@ void SpreadsheetView::showSearch() {
 		layoutSearch->addWidget(bFilterOptions);
 */
 		auto* bCloseSearch = new QPushButton(this);
-		//bCloseSearch->setIcon(QIcon::fromTheme("close"));
-		bCloseSearch->setToolTip(i18n("Hide Search Options"));
+		bCloseSearch->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
+		bCloseSearch->setToolTip(i18n("End Search"));
+		bCloseSearch->setFlat(true);
 		layout->addWidget(bCloseSearch);
 		connect(bCloseSearch, &QPushButton::clicked, this, [=]() {
 			m_leSearch->clear();
