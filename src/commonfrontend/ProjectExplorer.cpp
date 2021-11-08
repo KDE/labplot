@@ -30,11 +30,18 @@
 
 #include <KConfig>
 #include <KConfigGroup>
-#include <KFuzzyMatcher>
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KMessageWidget>
 #include <KSharedConfig>
+
+#include <kcoreaddons_version.h>
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 79, 0)
+#define HAS_FUZZY_MATCHER true
+#include <KFuzzyMatcher>
+#else
+#define HAS_FUZZY_MATCHER false
+#endif
 
 /*!
   \class ProjectExplorer
@@ -119,6 +126,7 @@ void ProjectExplorer::createActions() {
 	matchCompleteWordAction->setChecked(false);
 	connect(matchCompleteWordAction, &QAction::triggered, this, [=](){ filterTextChanged(m_leFilter->text()); });
 
+#if HAS_FUZZY_MATCHER
 	fuzzyMatchingAction = new QAction(i18n("Fuzzy Matching"), this);
 	fuzzyMatchingAction->setCheckable(true);
 	fuzzyMatchingAction->setChecked(true);
@@ -130,6 +138,7 @@ void ProjectExplorer::createActions() {
 	});
 	caseSensitiveAction->setEnabled(false);
 	matchCompleteWordAction->setEnabled(false);
+#endif
 
 	expandTreeAction = new QAction(QIcon::fromTheme(QLatin1String("expand-all")), i18n("Expand All"), this);
 	connect(expandTreeAction, &QAction::triggered, m_treeView, &QTreeView::expandAll);
@@ -623,8 +632,10 @@ void ProjectExplorer::showAllColumns() {
 void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
 	if (checked) {
 	QMenu menu;
+#if HAS_FUZZY_MATCHER
 		menu.addAction(fuzzyMatchingAction);
 		menu.addSeparator();
+#endif
 		menu.addAction(caseSensitiveAction);
 		menu.addAction(matchCompleteWordAction);
 		connect(&menu, &QMenu::aboutToHide, bFilterOptions, &QPushButton::toggle);
@@ -646,7 +657,9 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 }
 
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
+#if HAS_FUZZY_MATCHER
 	bool fuzzyFiltering = fuzzyMatchingAction->isChecked();
+#endif
 	bool childVisible = false;
 	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
@@ -656,9 +669,12 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 		if (text.isEmpty())
 			visible = true;
 		else {
+#if HAS_FUZZY_MATCHER
 			if (fuzzyFiltering)
 				visible = KFuzzyMatcher::matchSimple(text, aspect->name());
-			else {
+			else
+#endif
+			{
 				bool matchCompleteWord = matchCompleteWordAction->isChecked();
 				auto sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
 				if (matchCompleteWord)
