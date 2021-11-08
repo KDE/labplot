@@ -2656,7 +2656,11 @@ void MainWin::cantorSettingsDialog() {
 	for (auto* backend : Cantor::Backend::availableBackends())
 		if (backend->config()) //It has something to configure, so add it to the dialog
 			cantorDialog->addPage(backend->settingsWidget(cantorDialog), backend->config(), backend->name(),  backend->icon());
-
 	cantorDialog->show();
+
+	DEBUG(Q_FUNC_INFO << ", found " << Cantor::Backend::availableBackends().size() << " backends")
+	if (Cantor::Backend::availableBackends().size() == 0)
+		KMessageBox::error(nullptr, i18n("No Cantor backends found. Please install the ones you want to use."));
+
 }
 #endif
