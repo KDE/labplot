@@ -1657,7 +1657,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 	//automatically switch from 'decimal' to 'scientific' format for large and small numbers
 	//and back to decimal when the numbers get smaller after the auto-switch
 	QDEBUG(Q_FUNC_INFO << ", values = " << tickLabelValues)
-	//QDEBUG(Q_FUNC_INFO << ", format = " << (int)labelsFormat << ", decimal overruled = " << labelsFormatDecimalOverruled)
+	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat) << ", decimal overruled = " << labelsFormatDecimalOverruled)
 	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatDecimalOverruled) {
 		for (auto value : tickLabelValues) {
 			// switch to Scientific for large and small values
@@ -1867,11 +1867,15 @@ void AxisPrivate::retransformTickLabelStrings() {
 	where no duplicates for the tick label values occur.
  */
 int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFormat format) {
-	DEBUG(Q_FUNC_INFO << ", precision = " << precision);
+	DEBUG(Q_FUNC_INFO << ", precision = " << precision << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, format));
+
+	// catch out of limit values
+	if (precision > 6)
+		return 6;
 
 	// avoid problems with zero range axis
 	if (tickLabelValues.isEmpty() || qFuzzyCompare(tickLabelValues.constFirst(), tickLabelValues.constLast())) {
-		DEBUG(Q_FUNC_INFO << ", zero range axis detected. ticklabel values: ")
+		DEBUG(Q_FUNC_INFO << ", zero range axis detected.")
 		return 0;
 	}
 
@@ -1899,18 +1903,32 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 		}
 		break;
 	case Axis::LabelsFormat::Powers10:
-		for (const auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision) );
+		for (const auto value : tickLabelValues) {
+			if (value == 0)
+				tempValues.append(log10(DBL_MIN));
+			else {
+				DEBUG(Q_FUNC_INFO << ", rounded value = " << nsl_math_round_places(log10(qAbs(value)), precision))
+				tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision) );
+			}
+		}
 		break;
 	case Axis::LabelsFormat::Powers2:
-		for (const auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log2(qAbs(value)), precision) );
+		for (const auto value : tickLabelValues) {
+			if (value == 0)
+				tempValues.append(log2(DBL_MIN));
+			else
+				tempValues.append( nsl_math_round_places(log2(qAbs(value)), precision) );
+		}
 		break;
 	case Axis::LabelsFormat::PowersE:
-		for (const auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
+		for (const auto value : tickLabelValues) {
+			if (value == 0)
+				tempValues.append(log(DBL_MIN));
+			else
+				tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
+		}
 	}
-	//QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
+	QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// check if rounded value differs too much
@@ -1941,9 +1959,14 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 	where no duplicates for the tick label values occur.
 */
 int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFormat format) {
-	DEBUG(Q_FUNC_INFO << ", precision = " << precision);
+	DEBUG(Q_FUNC_INFO << ", precision = " << precision << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, format));
 	//round value to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
+
+	// catch out of limit values
+	if (precision > 6)
+		return 6;
+
 	QVector<double> tempValues;
 	tempValues.reserve(tickLabelValues.size());
 
@@ -1967,16 +1990,28 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		}
 		break;
 	case Axis::LabelsFormat::Powers10:
-		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision) );
+		for (auto value : tickLabelValues) {
+			if (value == 0)
+				tempValues.append(log10(DBL_MIN));
+			else
+				tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision) );
+		}
 		break;
 	case Axis::LabelsFormat::Powers2:
-		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log2(qAbs(value)), precision) );
+		for (auto value : tickLabelValues) {
+			if (value == 0)
+				tempValues.append(log2(DBL_MIN));
+			else
+				tempValues.append( nsl_math_round_places(log2(qAbs(value)), precision) );
+		}
 		break;
 	case Axis::LabelsFormat::PowersE:
-		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
+		for (auto value : tickLabelValues) {
+			if (value == 0)
+				tempValues.append(log(DBL_MIN));
+			else
+				tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
+		}
 	}
 	//QDEBUG(Q_FUNC_INFO << ", rounded values = " << tempValues)
 

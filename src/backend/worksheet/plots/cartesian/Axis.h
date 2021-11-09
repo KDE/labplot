@@ -30,6 +30,7 @@ public:
 	enum class RangeType {Auto, AutoData, Custom};
 	enum class Position {Top, Bottom, Left, Right, Centered, Custom, Logical};
 	enum class LabelsFormat {Decimal, ScientificE, Powers10, Powers2, PowersE, MultipliesPi, Scientific};
+	Q_ENUM(LabelsFormat)
 	enum TicksFlags {
 		noTicks = 0x00,
 		ticksIn = 0x01,
