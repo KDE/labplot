@@ -41,7 +41,7 @@
 		* Allow to resize the plots on the worksheet with the mouse when no layout is active
 		* Plot border type - allow to specify which lines of the plot rectangular to draw (left, top, etc.)
 		* Support multiple plot ranges
-		* Support real scientific notation and improve other notations of axes label
+		* Support real scientific notation and improve all formats of axes tick label
 		* Support axes auto tick number and improve range auto scaling
 		* Optional showing axis scale and offset in plot
 		* Add inverse axis scale

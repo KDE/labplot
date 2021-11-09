@@ -1654,27 +1654,13 @@ void AxisPrivate::retransformTickLabelStrings() {
 
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 
-	if (labelsAutoPrecision) {
-		//check, whether we need to increase the current precision
-		int newPrecision = upperLabelsPrecision(labelsPrecision, labelsFormat);
-		if (newPrecision != labelsPrecision) {
-			labelsPrecision = newPrecision;
-			emit q->labelsPrecisionChanged(labelsPrecision);
-		} else {
-			//check, whether we can reduce the current precision
-			newPrecision = lowerLabelsPrecision(labelsPrecision, labelsFormat);
-			if (newPrecision != labelsPrecision) {
-				labelsPrecision = newPrecision;
-				emit q->labelsPrecisionChanged(labelsPrecision);
-			}
-		}
-		DEBUG(Q_FUNC_INFO << ", auto labels precision = " << labelsPrecision)
-	}
-
-	//automatically switch from 'decimal' to 'scientific' format for big and small numbers
-	//and back to decimal when the numbers get smaller after the auto-switch again
+	//automatically switch from 'decimal' to 'scientific' format for large and small numbers
+	//and back to decimal when the numbers get smaller after the auto-switch
+	QDEBUG(Q_FUNC_INFO << ", values = " << tickLabelValues)
+	//QDEBUG(Q_FUNC_INFO << ", format = " << (int)labelsFormat << ", decimal overruled = " << labelsFormatDecimalOverruled)
 	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatDecimalOverruled) {
 		for (auto value : tickLabelValues) {
+			// switch to Scientific for large and small values
 			if ( qAbs(value) > 1.e4 || (qAbs(value) > 1.e-16 && qAbs(value) < 1e-4) ) {
 				labelsFormat = Axis::LabelsFormat::Scientific;
 				emit q->labelsFormatChanged(labelsFormat);
@@ -1683,7 +1669,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			}
 		}
 	} else if (labelsFormatAutoChanged) {
-		//check whether we still have big or small numbers
+		//check whether we still have large or small numbers
 		bool changeBack = true;
 		for (auto value : tickLabelValues) {
 			if ( qAbs(value) > 1.e4 || (qAbs(value) > 1.e-16 && qAbs(value) < 1.e-4) ) {
@@ -1697,6 +1683,24 @@ void AxisPrivate::retransformTickLabelStrings() {
 			labelsFormat = Axis::LabelsFormat::Decimal;
 			emit q->labelsFormatChanged(labelsFormat);
 		}
+	}
+
+	// determine labels precision
+	if (labelsAutoPrecision) {
+		//do we need to increase the current precision?
+		int newPrecision = upperLabelsPrecision(labelsPrecision, labelsFormat);
+		if (newPrecision != labelsPrecision) {
+			labelsPrecision = newPrecision;
+			emit q->labelsPrecisionChanged(labelsPrecision);
+		} else {
+			//can we can reduce the current precision?
+			newPrecision = lowerLabelsPrecision(labelsPrecision, labelsFormat);
+			if (newPrecision != labelsPrecision) {
+				labelsPrecision = newPrecision;
+				emit q->labelsPrecisionChanged(labelsPrecision);
+			}
+		}
+		DEBUG(Q_FUNC_INFO << ", auto labels precision = " << labelsPrecision)
 	}
 
 	tickLabelStrings.clear();
@@ -1748,10 +1752,15 @@ void AxisPrivate::retransformTickLabelStrings() {
 			for (const auto value : tickLabelValues) {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
-				else
-					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'e', labelsPrecision);
-				if (str == "-" + nullStr) str = nullStr;
+				else {
+					int e;
+					const double frac = nsl_math_frexp10(value, &e);
+					//DEBUG(Q_FUNC_INFO << ", rounded frac * pow (10, e) = " << nsl_math_round_places(frac, labelsPrecision) * pow(10, e))
+					str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * pow(10, e), 'e', labelsPrecision);
+				}
+				if (str == "-" + nullStr) str = nullStr;	// avoid "-O"
 				str = labelsPrefix + str + labelsSuffix;
+				//DEBUG(Q_FUNC_INFO << ", tick label = " << STDSTRING(str))
 				tickLabelStrings << str;
 			}
 			break;
@@ -1811,16 +1820,23 @@ void AxisPrivate::retransformTickLabelStrings() {
 		}
 		case Axis::LabelsFormat::Scientific: {
 			for (const auto value : tickLabelValues) {
+				//DEBUG(Q_FUNC_INFO << ", value = " << value << ", precision = " << labelsPrecision)
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
-				else if (qAbs(value) < 100. && qAbs(value) > .01)	// use normal notation for values near 1
-					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				else {
-					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'e', labelsPrecision);
-					str.remove("+");	// remove '+' in exponent
-					str.replace( QRegExp("e(.*)"), "×10<sup>\\1</sup>" );	// e(-)NN -> ×10<sup>(-)NN</sup>
+					int e;
+					const double frac = nsl_math_frexp10(value, &e);
+					if (qAbs(value) < 100. && qAbs(value) > .01)	// use normal notation for values near 1
+						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * pow(10, e), 'f', labelsPrecision - e);
+					else {
+						// only round fraction
+						//DEBUG(Q_FUNC_INFO << ", nsl rounded = " << nsl_math_round_places(frac, labelsPrecision))
+						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision), 'f', labelsPrecision);
+						str = str + "×10<sup>" + numberLocale.toString(e) + "</sup>";
+					}
 				}
 				str = labelsPrefix + str + labelsSuffix;
+				//DEBUG(Q_FUNC_INFO << ", tick label = " << STDSTRING(str))
 				tickLabelStrings << str;
 			}
 		}
@@ -1862,6 +1878,8 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 	//round values to the current precision and look for duplicates.
 	//if there are duplicates, increase the precision.
 	QVector<double> tempValues;
+	tempValues.reserve(tickLabelValues.size());
+
 	switch (format) {
 	case Axis::LabelsFormat::Decimal:
 		for (const auto value : tickLabelValues)
@@ -1873,8 +1891,12 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 		break;
 	case Axis::LabelsFormat::ScientificE:
 	case Axis::LabelsFormat::Scientific:
-		for (const auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_precision(value, precision) );
+		for (const auto value : tickLabelValues) {
+			int e;
+			const double frac = nsl_math_frexp10(value, &e);
+			//DEBUG(Q_FUNC_INFO << ", frac = " << frac << ", exp = " << e)
+			tempValues.append( nsl_math_round_precision(frac, precision) * pow (10, e) );
+		}
 		break;
 	case Axis::LabelsFormat::Powers10:
 		for (const auto value : tickLabelValues)
@@ -1888,7 +1910,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 		for (const auto value : tickLabelValues)
 			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
 	}
-//	QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
+	//QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
 
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// check if rounded value differs too much
@@ -1923,6 +1945,8 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 	//round value to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 	QVector<double> tempValues;
+	tempValues.reserve(tickLabelValues.size());
+
 	switch (format) {
 	case Axis::LabelsFormat::Decimal:
 		for (auto value : tickLabelValues)
@@ -1934,8 +1958,13 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		break;
 	case Axis::LabelsFormat::ScientificE:
 	case Axis::LabelsFormat::Scientific:
-		for (auto value : tickLabelValues)
-			tempValues.append( nsl_math_round_precision(value, precision) );
+		for (auto value : tickLabelValues) {
+			int e;
+			const double frac = nsl_math_frexp10(value, &e);
+			//DEBUG(Q_FUNC_INFO << ", frac = " << frac << ", exp = " << e)
+			//DEBUG(Q_FUNC_INFO << ", rounded frac = " << nsl_math_round_precision(frac, precision))
+			tempValues.append( nsl_math_round_precision(frac, precision) * pow(10, e) );
+		}
 		break;
 	case Axis::LabelsFormat::Powers10:
 		for (auto value : tickLabelValues)
@@ -1949,7 +1978,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		for (auto value : tickLabelValues)
 			tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
 	}
-//	QDEBUG(Q_FUNC_INFO << ", values = " << tempValues)
+	//QDEBUG(Q_FUNC_INFO << ", rounded values = " << tempValues)
 
 	//check whether we have duplicates with reduced precision
 	//-> current precision cannot be reduced, return the previous value

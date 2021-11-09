@@ -29,6 +29,11 @@ bool nsl_math_essentially_equal_eps(double a, double b, double epsilon);
 bool nsl_math_definitely_greater_than_eps(double a, double b, double epsilon);
 bool nsl_math_definitely_less_than_eps(double a, double b, double epsilon);
 
+/*
+ * split x into fraction and (optional) exponent where x = fraction * 10^e
+ */
+double nsl_math_frexp10(double x, int *e);
+
 /* returns decimal places of signed value
 * 0.1 -> 1, 0.06 -> 2, 23 -> -1, 100 -> -2
 */
