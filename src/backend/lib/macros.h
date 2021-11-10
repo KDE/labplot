@@ -22,6 +22,7 @@
 
 // C++ style warning (works on Windows)
 #include <iostream>
+#include <iomanip>
 #define WARN(x) std::cout << std::dec << std::boolalpha << std::setprecision (15) << x << std::endl;
 
 #ifndef NDEBUG
