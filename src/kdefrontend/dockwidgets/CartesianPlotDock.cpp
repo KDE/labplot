@@ -211,7 +211,7 @@ void CartesianPlotDock::init() {
 
 	GuiTools::updatePenStyles(ui.cbCursorLineStyle, Qt::black);
 
-	//draw the icons for the for border sides
+	//draw the icons for the border sides
 	QPainter pa;
 	pa.setRenderHint(QPainter::Antialiasing);
 	int iconSize = 20;
@@ -372,8 +372,6 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	//show the properties of the first plot
 	this->load();
 
-//	updateXRangeList();
-//	updateYRangeList();
 	updatePlotRangeList();
 
 	//update active widgets
@@ -448,7 +446,7 @@ void CartesianPlotDock::activateTitleTab() {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void CartesianPlotDock::updateLocale() {
 	DEBUG(Q_FUNC_INFO)
@@ -482,11 +480,11 @@ void CartesianPlotDock::updateLocale() {
 				auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
 				// save cursor position
 				int pos = le->cursorPosition();
-				CELLWIDGET(twXRanges, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(xRange.start())));
+				CELLWIDGET(twXRanges, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(xRange.start(), 'g', 15)));
 				le->setCursorPosition(pos);
 				le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Max));
 				pos = le->cursorPosition();
-				CELLWIDGET(twXRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(xRange.end())));
+				CELLWIDGET(twXRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(xRange.end(), 'g', 15)));
 				le->setCursorPosition(pos);
 
 			} else {
@@ -513,11 +511,11 @@ void CartesianPlotDock::updateLocale() {
 				auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
 				// save cursor position
 				int pos = le->cursorPosition();
-				CELLWIDGET(twYRanges, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(yRange.start())));
+				CELLWIDGET(twYRanges, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(yRange.start(), 'g', 15)));
 				le->setCursorPosition(pos);
 				le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Max));
 				pos = le->cursorPosition();
-				CELLWIDGET(twYRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(yRange.end())));
+				CELLWIDGET(twYRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(yRange.end(), 'g', 15)));
 				le->setCursorPosition(pos);
 			} else {
 				CELLWIDGET(twYRanges, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime( QDateTime::fromMSecsSinceEpoch(yRange.start())));
@@ -637,6 +635,7 @@ void CartesianPlotDock::updateXRangeList() {
 //			le->resize(le->minimumSizeHint());
 			ui.twXRanges->setCellWidget(i, TwRangesColumn::Min, le);
 			connect(le, &QLineEdit::textChanged, this, &CartesianPlotDock::xMinChanged);
+			DEBUG(Q_FUNC_INFO << ", max length = " << le->maxLength())
 			le = new QLineEdit(ui.twXRanges);
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
@@ -809,8 +808,8 @@ void CartesianPlotDock::updatePlotRangeList() {
 		const auto xRange{ m_plot->xRange(xIndex) }, yRange{ m_plot->yRange(yIndex) };
 
 		DEBUG(Q_FUNC_INFO << ", coordinate system " << i+1 << " : xIndex = " << xIndex << ", yIndex = " << yIndex)
-		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << " auto scale = " << xRange.autoScale())
-		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << " auto scale = " << yRange.autoScale())
+		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << ", auto scale = " << xRange.autoScale())
+		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", auto scale = " << yRange.autoScale())
 
 		QComboBox *cb = new QComboBox(ui.twPlotRanges);
 		cb->setEditable(true);	// to have a line edit
@@ -1101,7 +1100,7 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 }
 
 void CartesianPlotDock::xMinChanged(const QString& value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
+	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
 

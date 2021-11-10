@@ -110,7 +110,7 @@ public:
 	Range<T>& operator+=(const T value) { m_start += value; m_end += value; return *this; }
 	Range<T>& operator*=(const T value) { m_start *= value; m_end *= value; return *this; }
 
-	//! Return a string in the format 'start .. end' and uses system locale
+	//! Return a string in the format 'start .. end' and uses system locale (specialization see below)
 	QString toString() const {
 		if (m_format == Format::Numeric)
 			return QLocale().toString(m_start) + " .. " + QLocale().toString(m_end);
@@ -122,11 +122,7 @@ public:
 	//! Return a string in the format 'start .. end' and uses number locale
 	QString toLocaleString() const {
 		SET_NUMBER_LOCALE
-		if (m_format == Format::Numeric)
-			return numberLocale.toString(m_start) + " .. " + numberLocale.toString(m_end);
-		else
-			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " .. "
-				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
+		return this->toString();
 	}
 //extend/shrink range to nice numbers (used in auto scaling)
 	// get nice size to extend to (see Glassner: Graphic Gems)
@@ -219,6 +215,17 @@ private:
 	Scale m_scale{Scale::Linear};	// scale (Linear, Log , ...)
 	bool m_autoScale{true};	// auto adapt start and end to all curves using this range (in plot)
 };
+
+// specialization
+template<>
+inline QString Range<double>::toString() const {
+		DEBUG(Q_FUNC_INFO)
+		if (m_format == Format::Numeric)
+			return QLocale().toString(m_start, 'g', 15) + " .. " + QLocale().toString(m_end, 'g', 15);
+		else
+			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " .. "
+				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
+	}
 
 #endif
 

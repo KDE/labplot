@@ -1384,9 +1384,10 @@ void CartesianPlot::removeYRange(int index) {
 		project()->setChanged(true);
 }
 void CartesianPlot::setXMin(const int index, const double value) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", value = " << value)
 	Range<double> range{ xRange(index) };
 	range.setStart(value);
+	DEBUG(Q_FUNC_INFO << ", new range = " << range.toStdString())
 
 	setXRange(index, range);
 }
