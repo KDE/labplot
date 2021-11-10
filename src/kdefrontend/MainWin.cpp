@@ -1583,7 +1583,8 @@ bool MainWin::saveProject() {
 bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
-	QString path  = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Save Project As"), dir,
+	QString path  = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Save Project As"),
+												 dir + m_project->fileName(),
 		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if (path.isEmpty())// "Cancel" was clicked
