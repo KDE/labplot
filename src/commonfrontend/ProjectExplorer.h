@@ -4,7 +4,7 @@
     Description       	 : A tree view for displaying and editing an AspectTreeModel.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007-2008 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2011-2016 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -63,21 +63,21 @@ private:
 	bool m_changeSelectionFromView{false};
 
 	QAction* fuzzyMatchingAction{nullptr};
-	QAction* caseSensitiveAction;
-	QAction* matchCompleteWordAction;
-	QAction* expandTreeAction;
-	QAction* expandSelectedTreeAction;
-	QAction* collapseTreeAction;
-	QAction* collapseSelectedTreeAction;
-	QAction* deleteSelectedTreeAction;
-	QAction* toggleFilterAction;
-	QAction* showAllColumnsAction;
+	QAction* caseSensitiveAction{nullptr};
+	QAction* matchCompleteWordAction{nullptr};
+	QAction* expandTreeAction{nullptr};
+	QAction* expandSelectedTreeAction{nullptr};
+	QAction* collapseTreeAction{nullptr};
+	QAction* collapseSelectedTreeAction{nullptr};
+	QAction* deleteSelectedTreeAction{nullptr};
+	QAction* toggleFilterAction{nullptr};
+	QAction* showAllColumnsAction{nullptr};
 	QList<QAction*> list_showColumnActions;
-	QSignalMapper* showColumnsSignalMapper;
+	QSignalMapper* showColumnsSignalMapper{nullptr};
 
-	QFrame* m_frameFilter;
-	QLineEdit* m_leFilter;
-	QPushButton* bFilterOptions;
+	QFrame* m_frameFilter{nullptr};
+	QLineEdit* m_leFilter{nullptr};
+	QPushButton* bFilterOptions{nullptr};
 
 private slots:
 	void aspectAdded(const AbstractAspect*);

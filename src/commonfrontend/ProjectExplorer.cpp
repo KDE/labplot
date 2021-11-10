@@ -95,8 +95,6 @@ ProjectExplorer::ProjectExplorer(QWidget* parent) :
 
 	layout->addWidget(m_treeView);
 
-	this->createActions();
-
 	connect(m_leFilter, &QLineEdit::textChanged, this, &ProjectExplorer::filterTextChanged);
 	connect(bFilterOptions, &QPushButton::toggled, this, &ProjectExplorer::toggleFilterOptionsMenu);
 }
@@ -116,30 +114,6 @@ ProjectExplorer::~ProjectExplorer() {
 }
 
 void ProjectExplorer::createActions() {
-	caseSensitiveAction = new QAction(i18n("Case Sensitive"), this);
-	caseSensitiveAction->setCheckable(true);
-	caseSensitiveAction->setChecked(false);
-	connect(caseSensitiveAction, &QAction::triggered, this, [=](){ filterTextChanged(m_leFilter->text()); });
-
-	matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
-	matchCompleteWordAction->setCheckable(true);
-	matchCompleteWordAction->setChecked(false);
-	connect(matchCompleteWordAction, &QAction::triggered, this, [=](){ filterTextChanged(m_leFilter->text()); });
-
-#if HAS_FUZZY_MATCHER
-	fuzzyMatchingAction = new QAction(i18n("Fuzzy Matching"), this);
-	fuzzyMatchingAction->setCheckable(true);
-	fuzzyMatchingAction->setChecked(true);
-	connect(fuzzyMatchingAction, &QAction::triggered, this, [=]() {
-		bool enabled  = !fuzzyMatchingAction->isChecked();
-		caseSensitiveAction->setEnabled(enabled);
-		matchCompleteWordAction->setEnabled(enabled);
-		filterTextChanged(m_leFilter->text());
-	});
-	caseSensitiveAction->setEnabled(false);
-	matchCompleteWordAction->setEnabled(false);
-#endif
-
 	expandTreeAction = new QAction(QIcon::fromTheme(QLatin1String("expand-all")), i18n("Expand All"), this);
 	connect(expandTreeAction, &QAction::triggered, m_treeView, &QTreeView::expandAll);
 
@@ -159,12 +133,6 @@ void ProjectExplorer::createActions() {
 	toggleFilterAction->setCheckable(true);
 	toggleFilterAction->setChecked(true);
 	connect(toggleFilterAction, &QAction::triggered, this, [=]() {m_frameFilter->setVisible(!m_frameFilter->isVisible());});
-
-	showAllColumnsAction = new QAction(i18n("Show All"),this);
-	showAllColumnsAction->setCheckable(true);
-	showAllColumnsAction->setChecked(true);
-	showAllColumnsAction->setEnabled(false);
-	connect(showAllColumnsAction, &QAction::triggered, this, &ProjectExplorer::showAllColumns);
 }
 
 /*!
@@ -174,6 +142,9 @@ void ProjectExplorer::createActions() {
 void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 	if (!m_treeView->model())
 		return;
+
+	if (!expandTreeAction)
+		createActions();
 
 	const auto& index = m_treeView->indexAt(m_treeView->viewport()->mapFrom(this, event->pos()));
 	if (!index.isValid())
@@ -266,6 +237,14 @@ void ProjectExplorer::setModel(AspectTreeModel* treeModel) {
 			QStringList strList = status.split(QLatin1Char(' '));
 			for (int i = 0; i < strList.size(); ++i)
 				checkedActions << strList.at(i).toInt();
+		}
+
+		if (!showAllColumnsAction) {
+			showAllColumnsAction = new QAction(i18n("Show All"),this);
+			showAllColumnsAction->setCheckable(true);
+			showAllColumnsAction->setChecked(true);
+			showAllColumnsAction->setEnabled(false);
+			connect(showAllColumnsAction, &QAction::triggered, this, &ProjectExplorer::showAllColumns);
 		}
 
 		if (checkedActions.size() != m_treeView->model()->columnCount()) {
@@ -630,6 +609,35 @@ void ProjectExplorer::showAllColumns() {
   toggles the menu for the filter/search options
 */
 void ProjectExplorer::toggleFilterOptionsMenu(bool checked) {
+	if (!checked)
+		return;
+
+	if (!caseSensitiveAction) {
+		caseSensitiveAction = new QAction(i18n("Case Sensitive"), this);
+		caseSensitiveAction->setCheckable(true);
+		caseSensitiveAction->setChecked(false);
+		connect(caseSensitiveAction, &QAction::triggered, this, [=](){ filterTextChanged(m_leFilter->text()); });
+
+		matchCompleteWordAction = new QAction(i18n("Match Complete Word"), this);
+		matchCompleteWordAction->setCheckable(true);
+		matchCompleteWordAction->setChecked(false);
+		connect(matchCompleteWordAction, &QAction::triggered, this, [=](){ filterTextChanged(m_leFilter->text()); });
+
+#if HAS_FUZZY_MATCHER
+		fuzzyMatchingAction = new QAction(i18n("Fuzzy Matching"), this);
+		fuzzyMatchingAction->setCheckable(true);
+		fuzzyMatchingAction->setChecked(true);
+		connect(fuzzyMatchingAction, &QAction::triggered, this, [=]() {
+			bool enabled  = !fuzzyMatchingAction->isChecked();
+			caseSensitiveAction->setEnabled(enabled);
+			matchCompleteWordAction->setEnabled(enabled);
+			filterTextChanged(m_leFilter->text());
+		});
+		caseSensitiveAction->setEnabled(false);
+		matchCompleteWordAction->setEnabled(false);
+#endif
+	}
+
 	if (checked) {
 	QMenu menu;
 #if HAS_FUZZY_MATCHER
@@ -658,12 +666,15 @@ void ProjectExplorer::filterTextChanged(const QString& text) {
 
 bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 #if HAS_FUZZY_MATCHER
-	bool fuzzyFiltering = fuzzyMatchingAction->isChecked();
+	bool fuzzyFiltering = true;
+	if (fuzzyMatchingAction && !fuzzyMatchingAction->isChecked())
+		fuzzyFiltering = false;
 #endif
+
 	bool childVisible = false;
 	const int rows = index.model()->rowCount(index);
 	for (int i = 0; i < rows; i++) {
-		QModelIndex child = index.model()->index(i, 0, index);
+		const auto& child = index.model()->index(i, 0, index);
 		auto* aspect =  static_cast<AbstractAspect*>(child.internalPointer());
 		bool visible;
 		if (text.isEmpty())
@@ -675,8 +686,14 @@ bool ProjectExplorer::filter(const QModelIndex& index, const QString& text) {
 			else
 #endif
 			{
-				bool matchCompleteWord = matchCompleteWordAction->isChecked();
-				auto sensitivity = caseSensitiveAction->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive;
+				bool matchCompleteWord = false;
+				if (matchCompleteWordAction && matchCompleteWordAction->isChecked())
+					matchCompleteWord = true;
+
+				Qt::CaseSensitivity sensitivity = Qt::CaseInsensitive;
+				if (caseSensitiveAction && caseSensitiveAction->isChecked())
+					sensitivity = Qt::CaseSensitive;
+
 				if (matchCompleteWord)
 					visible = aspect->name().startsWith(text, sensitivity);
 				else
@@ -797,7 +814,7 @@ void ProjectExplorer::deleteSelected() {
 	if (!items.size())
 		return;
 
-	//determine all selected aspect
+	//determine all selected aspects
 	QVector<AbstractAspect*> aspects;
 	for (int i = 0; i < items.size()/4; ++i) {
 		const QModelIndex& index = items.at(i*4);
