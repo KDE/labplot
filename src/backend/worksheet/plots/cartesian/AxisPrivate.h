@@ -126,7 +126,7 @@ public:
 	QPainterPath majorGridPath;
 	QPainterPath minorGridPath;
 	bool suppressRetransform{false};
-	bool labelsFormatDecimalOverruled{false};
+	bool labelsFormatOverruled{false};
 	bool labelsFormatAutoChanged{false};
 
 private:

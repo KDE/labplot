@@ -750,14 +750,11 @@ void Axis::setMinorTicksOpacity(qreal opacity) {
 //Labels
 STD_SETTER_CMD_IMPL_F_S(Axis, SetLabelsFormat, Axis::LabelsFormat, labelsFormat, retransformTicks);
 void Axis::setLabelsFormat(LabelsFormat labelsFormat) {
+	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis,LabelsFormat, labelsFormat))
 	Q_D(Axis);
 	if (labelsFormat != d->labelsFormat) {
-
 		//TODO: this part is not undo/redo-aware
-		if (labelsFormat == LabelsFormat::Decimal)
-			d->labelsFormatDecimalOverruled = true;
-		else
-			d->labelsFormatDecimalOverruled = false;
+		d->labelsFormatOverruled = true;	// keep format
 
 		exec(new AxisSetLabelsFormatCmd(d, labelsFormat, ki18n("%1: set labels format")));
 	}
@@ -1657,8 +1654,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 	//automatically switch from 'decimal' to 'scientific' format for large and small numbers
 	//and back to decimal when the numbers get smaller after the auto-switch
 	QDEBUG(Q_FUNC_INFO << ", values = " << tickLabelValues)
-	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat) << ", decimal overruled = " << labelsFormatDecimalOverruled)
-	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatDecimalOverruled) {
+	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat) << ", decimal overruled = " << labelsFormatOverruled)
+	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatOverruled) {
 		for (auto value : tickLabelValues) {
 			// switch to Scientific for large and small values
 			if ( qAbs(value) > 1.e4 || (qAbs(value) > 1.e-16 && qAbs(value) < 1e-4) ) {
@@ -2859,8 +2856,7 @@ bool Axis::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("textType", labelsTextType, Axis::LabelsTextType);
 			READ_COLUMN(labelsTextColumn);
 			READ_INT_VALUE("format", labelsFormat, Axis::LabelsFormat);
-			if (d->labelsFormat == LabelsFormat::Decimal)
-				d->labelsFormatDecimalOverruled = true;
+			d->labelsFormatOverruled = true;	// keep decimal format when saved
 			READ_INT_VALUE("precision", labelsPrecision, int);
 			READ_INT_VALUE("autoPrecision", labelsAutoPrecision, bool);
 			d->labelsDateTimeFormat = attribs.value("dateTimeFormat").toString();

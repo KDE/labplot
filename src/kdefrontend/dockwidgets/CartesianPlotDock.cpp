@@ -608,8 +608,8 @@ void CartesianPlotDock::updateXRangeList() {
 		const auto xRange{ m_plot->xRange(i) };
 		const auto format{ xRange.format() };
 		const auto scale { xRange.scale() };
-		DEBUG(Q_FUNC_INFO << ", x range " << i << " format : " << static_cast<int>(format)
-			<< " scale : " << static_cast<int>(scale) << " auto scale = " << xRange.autoScale())
+		DEBUG(Q_FUNC_INFO << ", x range " << i << ": format = " << ENUM_TO_STRING(RangeT, Format, format)
+			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale) << ", auto scale = " << xRange.autoScale())
 
 		// auto scale
 		QCheckBox *chk = new QCheckBox(ui.twXRanges);
@@ -698,9 +698,9 @@ void CartesianPlotDock::updateYRangeList() {
 	for (int i = 0; i < yRangeCount; i++) {
 		const auto yRange{ m_plot->yRange(i) };
 		const auto format{ yRange.format() };
-		const auto scale { yRange.scale() };
-		DEBUG(Q_FUNC_INFO << ", y range " << i << " format : " << static_cast<int>(format)
-			<< " scale : " << static_cast<int>(scale) << " auto scale = " << yRange.autoScale())
+		const auto scale{ yRange.scale() };
+		DEBUG(Q_FUNC_INFO << ", y range " << i << ": format = " << ENUM_TO_STRING(RangeT, Format, format)
+			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale) << ", auto scale = " << yRange.autoScale())
 
 		// auto scale
 		QCheckBox *chk = new QCheckBox(ui.twYRanges);
@@ -1102,7 +1102,6 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 
 void CartesianPlotDock::xMinChanged(const QString& value) {
 	DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
-	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
 
