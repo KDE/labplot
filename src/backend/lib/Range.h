@@ -219,7 +219,6 @@ private:
 // specialization
 template<>
 inline QString Range<double>::toString() const {
-		DEBUG(Q_FUNC_INFO)
 		if (m_format == Format::Numeric)
 			return QLocale().toString(m_start, 'g', 15) + " .. " + QLocale().toString(m_end, 'g', 15);
 		else

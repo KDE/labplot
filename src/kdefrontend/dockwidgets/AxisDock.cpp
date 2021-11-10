@@ -1194,11 +1194,16 @@ void AxisDock::majorTickStartOffsetChanged() {
 	if (m_initializing)
 		return;
 
+	if (ui.leMajorTickStartOffset->text().isEmpty())	// default value
+		ui.leMajorTickStartOffset->setText("0");
+
 	bool ok;
 	SET_NUMBER_LOCALE
 	const double offset = numberLocale.toDouble(ui.leMajorTickStartOffset->text(), &ok);
 	if (!ok)
 		return;
+
+	ui.leMajorTickStartOffset->setClearButtonEnabled(offset != 0);
 
 	for (auto* axis : m_axesList)
 		axis->setMajorTickStartOffset(offset);

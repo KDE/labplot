@@ -1077,7 +1077,7 @@
        <item row="7" column="2">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QLineEdit" name="leMajorTickStartOffset"/>
+          <widget class="KLineEdit" name="leMajorTickStartOffset"/>
          </item>
          <item>
           <widget class="QToolButton" name="tbFirstTickData">
