@@ -1645,16 +1645,16 @@ void AxisPrivate::retransformTicks() {
 	(=the smallest possible number of digits) precision for the floats
 */
 void AxisPrivate::retransformTickLabelStrings() {
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", labels precision = " << labelsPrecision)
+	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", labels precision = " << labelsPrecision)
 	if (suppressRetransform)
 		return;
+	QDEBUG(Q_FUNC_INFO << ", values = " << tickLabelValues)
 
-	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
+	const auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
 
 	//automatically switch from 'decimal' to 'scientific' format for large and small numbers
 	//and back to decimal when the numbers get smaller after the auto-switch
-	QDEBUG(Q_FUNC_INFO << ", values = " << tickLabelValues)
-	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat) << ", decimal overruled = " << labelsFormatOverruled)
+	DEBUG(Q_FUNC_INFO << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, labelsFormat) << ", format overruled = " << labelsFormatOverruled)
 	if (labelsFormat == Axis::LabelsFormat::Decimal && !labelsFormatOverruled) {
 		for (auto value : tickLabelValues) {
 			// switch to Scientific for large and small values
@@ -1700,7 +1700,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		DEBUG(Q_FUNC_INFO << ", auto labels precision = " << labelsPrecision)
 	}
 
-	tickLabelStrings.clear();
+	// category of format
 	bool numeric = false, datetime = false, text = false;
 	if (labelsTextType == Axis::LabelsTextType::PositionValues) {
 		auto xRangeFormat{ plot()->xRange(cs->xIndex()).format() };
@@ -1729,6 +1729,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		}
 	}
 
+	tickLabelStrings.clear();
 	QString str;
 	SET_NUMBER_LOCALE
 	if (numeric) {
@@ -1753,11 +1754,10 @@ void AxisPrivate::retransformTickLabelStrings() {
 					int e;
 					const double frac = nsl_math_frexp10(value, &e);
 					//DEBUG(Q_FUNC_INFO << ", rounded frac * pow (10, e) = " << nsl_math_round_places(frac, labelsPrecision) * pow(10, e))
-					str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * pow(10, e), 'e', labelsPrecision);
+					str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'e', labelsPrecision);
 				}
 				if (str == "-" + nullStr) str = nullStr;	// avoid "-O"
 				str = labelsPrefix + str + labelsSuffix;
-				//DEBUG(Q_FUNC_INFO << ", tick label = " << STDSTRING(str))
 				tickLabelStrings << str;
 			}
 			break;
@@ -1824,19 +1824,20 @@ void AxisPrivate::retransformTickLabelStrings() {
 					int e;
 					const double frac = nsl_math_frexp10(value, &e);
 					if (qAbs(value) < 100. && qAbs(value) > .01)	// use normal notation for values near 1
-						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * pow(10, e), 'f', labelsPrecision - e);
+						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'f', labelsPrecision - e);
 					else {
-						// only round fraction
 						//DEBUG(Q_FUNC_INFO << ", nsl rounded = " << nsl_math_round_places(frac, labelsPrecision))
+						// only round fraction
 						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision), 'f', labelsPrecision);
 						str = str + "×10<sup>" + numberLocale.toString(e) + "</sup>";
 					}
 				}
 				str = labelsPrefix + str + labelsSuffix;
-				//DEBUG(Q_FUNC_INFO << ", tick label = " << STDSTRING(str))
 				tickLabelStrings << str;
 			}
 		}
+
+		DEBUG(Q_FUNC_INFO << ", tick label = " << STDSTRING(str))
 		}
 	} else if (datetime) {
 		for (const auto value : tickLabelValues) {
@@ -1853,7 +1854,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		}
 	}
 
-//	QDEBUG(Q_FUNC_INFO << ", strings = " << tickLabelStrings)
+	QDEBUG(Q_FUNC_INFO << ", strings = " << tickLabelStrings)
 
 	//recalculate the position of the tick labels
 	retransformTickLabelPositions();
@@ -1896,7 +1897,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			int e;
 			const double frac = nsl_math_frexp10(value, &e);
 			//DEBUG(Q_FUNC_INFO << ", frac = " << frac << ", exp = " << e)
-			tempValues.append( nsl_math_round_precision(frac, precision) * pow (10, e) );
+			tempValues.append( nsl_math_round_precision(frac, precision) * gsl_pow_int(10., e) );
 		}
 		break;
 	case Axis::LabelsFormat::Powers10:

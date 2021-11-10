@@ -52,7 +52,7 @@ double nsl_math_frexp10(double x, int *e) {
 	if (e != NULL)
 		*e = expo;
 
-	return x / pow(10, expo);
+	return x / gsl_pow_int(10., expo);
 }
 
 /* rounding methods */
