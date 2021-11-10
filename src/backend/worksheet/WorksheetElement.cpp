@@ -4,7 +4,7 @@
     Description          : Base class for all Worksheet children.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2012-2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -36,8 +36,7 @@ WorksheetElement::WorksheetElement(const QString& name, AspectType type)
 	m_drawingOrderMenu->addMenu(m_moveBehindMenu);
 	m_drawingOrderMenu->addMenu(m_moveInFrontOfMenu);
 
-	connect(m_moveBehindMenu, &QMenu::aboutToShow, this, &WorksheetElement::prepareMoveBehindMenu);
-	connect(m_moveInFrontOfMenu, &QMenu::aboutToShow, this, &WorksheetElement::prepareMoveInFrontOfMenu);
+	connect(m_drawingOrderMenu, &QMenu::aboutToShow, this, &WorksheetElement::prepareDrawingOrderMenu);
 	connect(m_moveBehindMenu, &QMenu::triggered, this, &WorksheetElement::execMoveBehind);
 	connect(m_moveInFrontOfMenu, &QMenu::triggered, this, &WorksheetElement::execMoveInFrontOf);
 }
@@ -191,44 +190,36 @@ QMenu* WorksheetElement::createContextMenu() {
 	return menu;
 }
 
-void WorksheetElement::prepareMoveBehindMenu() {
+void WorksheetElement::prepareDrawingOrderMenu() {
+	const AbstractAspect* parent = parentAspect();
+	const int index = parent->indexOfChild<WorksheetElement>(this);
+	const auto& children = parent->children<WorksheetElement>();
+
+	//"move behind" sub-menu
 	m_moveBehindMenu->clear();
-	AbstractAspect* parent = parentAspect();
-	int index = parent->indexOfChild<WorksheetElement>(this);
-	const auto& children = parent->children<WorksheetElement>();
-
 	for (int i = 0; i < index; ++i) {
-		const WorksheetElement* elem = children.at(i);
+		const auto* elem = children.at(i);
 		//axes and legends are always drawn on top of other elements, don't add them to the menu
 		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
-			QAction* action = m_moveBehindMenu->addAction(elem->icon(), elem->name());
+			auto* action = m_moveBehindMenu->addAction(elem->icon(), elem->name());
 			action->setData(i);
 		}
 	}
 
-	//TODO: doesn't always work properly
-	//hide the "move behind" menu if it doesn't have any entries, show if not shown yet otherwise
-	//m_moveBehindMenu->menuAction()->setVisible(!m_moveBehindMenu->isEmpty());
-}
-
-void WorksheetElement::prepareMoveInFrontOfMenu() {
+	//"move in front of" sub-menu
 	m_moveInFrontOfMenu->clear();
-	AbstractAspect* parent = parentAspect();
-	int index = parent->indexOfChild<WorksheetElement>(this);
-	const auto& children = parent->children<WorksheetElement>();
-
 	for (int i = index + 1; i < children.size(); ++i) {
-		const WorksheetElement* elem = children.at(i);
+		const auto* elem = children.at(i);
 		//axes and legends are always drawn on top of other elements, don't add them to the menu
 		if (elem->type() != AspectType::Axis && elem->type() != AspectType::CartesianPlotLegend) {
-			QAction* action = m_moveInFrontOfMenu->addAction(elem->icon(), elem->name());
+			auto* action = m_moveInFrontOfMenu->addAction(elem->icon(), elem->name());
 			action->setData(i);
 		}
 	}
 
-	//TODO: doesn't alway work properly
-	//hide the "move in front" menu if it doesn't have any entries, show if not shown yet otherwise
-	//m_moveInFrontOfMenu->menuAction()->setVisible(!m_moveInFrontOfMenu->isEmpty());
+	//hide the sub-menus if they don't have any entries
+	m_moveInFrontOfMenu->menuAction()->setVisible(!m_moveInFrontOfMenu->isEmpty());
+	m_moveBehindMenu->menuAction()->setVisible(!m_moveBehindMenu->isEmpty());
 }
 
 void WorksheetElement::execMoveInFrontOf(QAction* action) {

@@ -99,8 +99,7 @@ private:
 	bool m_printing{false};
 
 private slots:
-	void prepareMoveBehindMenu();
-	void prepareMoveInFrontOfMenu();
+	void prepareDrawingOrderMenu();
 	void execMoveBehind(QAction*);
 	void execMoveInFrontOf(QAction*);
 
