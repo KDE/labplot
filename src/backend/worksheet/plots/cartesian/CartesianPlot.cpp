@@ -2859,7 +2859,7 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 			d->dataYRange(index).end() = max;
 	}
 
-	DEBUG(Q_FUNC_INFO << ", data y range = " << d->dataXRange(index).toStdString())
+	DEBUG(Q_FUNC_INFO << ", data y range = " << d->dataYRange(index).toStdString())
 }
 
 // zoom
