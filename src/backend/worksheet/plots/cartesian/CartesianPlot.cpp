@@ -2526,7 +2526,7 @@ void CartesianPlot::scaleAutoTriggered() {
 
 bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransform) {
 	Q_D(CartesianPlot);
-	if (index == -1) {
+	if (index == -1) {	// all ranges
 		bool updated = false;
 		for (int i = 0; i < xRangeCount(); i++) {
 			if (scaleAutoX(i, fullRange, true)) {
@@ -2541,8 +2541,8 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 	DEBUG(Q_FUNC_INFO << ", csystem index = " << index << " full range = " << fullRange)
 	if (xRangeDirty(index)) {
 		calculateDataXRange(index, fullRange);
-		//if (fullRange)
-			setXRangeDirty(index, false);
+		setXRangeDirty(index, false);
+
 		for (int i = 0; i < m_coordinateSystems.count(); i++) {
 			auto cs = coordinateSystem(i);
 			if (cs->xIndex() == index)
@@ -2551,18 +2551,20 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 	}
 
 	auto& xRange{ d->xRange(index) };
+	auto dataRange = d->dataXRange(index);
+	dataRange.niceExtend();	// auto scale to nice data range
 
 	// if no curve: do not reset to [0, 1]
 
 	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << "., curves x range = " << d->dataXRange(index).toStdString())
 	bool update = false;
-	if (!qFuzzyCompare(d->dataXRange(index).start(), xRange.start()) && !qIsInf(d->dataXRange(index).start())) {
-		xRange.start() = d->dataXRange(index).start();
+	if (!qFuzzyCompare(dataRange.start(), xRange.start()) && !qIsInf(dataRange.start())) {
+		xRange.start() = dataRange.start();
 		update = true;
 	}
 
-	if (!qFuzzyCompare(d->dataXRange(index).end(), xRange.end()) && !qIsInf(d->dataXRange(index).end()) ) {
-		xRange.end() = d->dataXRange(index).end();
+	if (!qFuzzyCompare(dataRange.end(), xRange.end()) && !qIsInf(dataRange.end()) ) {
+		xRange.end() = dataRange.end();
 		update = true;
 	}
 
@@ -2579,7 +2581,7 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 			xRange.extend( xRange.size() * d->autoScaleOffsetFactor );
 		}
 		// extend to nice values
-		xRange.niceExtend();
+//		xRange.niceExtend();
 
 		if (!suppressRetransform)
 			d->retransformScales(index, -1); // TODO: all y?
@@ -2607,8 +2609,7 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 
 	if (yRangeDirty(index)) {
 		calculateDataYRange(index, fullRange);
-		//if (fullRange)
-			setYRangeDirty(index, false);
+		setYRangeDirty(index, false);
 
 		for (int i = 0; i < m_coordinateSystems.count(); i++) {
 			// All x ranges with this yIndex must be dirty
@@ -2619,16 +2620,18 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 	}
 
 	auto& yRange{ d->yRange(index) };
+	auto dataRange = d->dataYRange(index);
+	dataRange.niceExtend();	// auto scale to nice data range
 
 	bool update = false;
 	DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", curves y range = " << d->dataYRange(index).toStdString())
-	if (!qFuzzyCompare(d->dataYRange(index).start(), yRange.start()) && !qIsInf(d->dataYRange(index).start()) ) {
-		yRange.start() = d->dataYRange(index).start();
+	if (!qFuzzyCompare(dataRange.start(), yRange.start()) && !qIsInf(dataRange.start()) ) {
+		yRange.start() = dataRange.start();
 		update = true;
 	}
 
-	if (!qFuzzyCompare(d->dataYRange(index).end(), yRange.end()) && !qIsInf(d->dataYRange(index).end()) ) {
-		yRange.end() = d->dataYRange(index).end();
+	if (!qFuzzyCompare(dataRange.end(), yRange.end()) && !qIsInf(dataRange.end()) ) {
+		yRange.end() = dataRange.end();
 		update = true;
 	}
 	if (update) {
@@ -2643,8 +2646,6 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 		} else {
 			yRange.extend( yRange.size() * d->autoScaleOffsetFactor );
 		}
-		// extend to nice values
-		yRange.niceExtend();
 
 		if (!suppressRetransform)
 			d->retransformScales(-1, index); // TODO: all x?
