@@ -1030,9 +1030,9 @@ void AxisPrivate::retransformRange() {
 	}
 	case Axis::RangeType::AutoData:
 		if (orientation == Axis::Orientation::Horizontal)
-			range = q->m_plot->xRangeAutoScale(q->cSystem->xIndex());
+			range = q->m_plot->dataXRange(q->cSystem->xIndex());
 		else
-			range = q->m_plot->yRangeAutoScale(q->cSystem->yIndex());
+			range = q->m_plot->dataYRange(q->cSystem->yIndex());
 
 		DEBUG(Q_FUNC_INFO << ", new auto data range = " << range.toStdString())
 		break;

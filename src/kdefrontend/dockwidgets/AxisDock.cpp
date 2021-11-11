@@ -1212,9 +1212,9 @@ void AxisDock::majorTickStartOffsetChanged() {
 void AxisDock::setTickOffsetData(bool nice) {
 	Range<double> dataRange;
 	if (m_axis->orientation() == Axis::Orientation::Horizontal)
-		dataRange = m_axis->plot()->xRangeAutoScale();
+		dataRange = m_axis->plot()->dataXRange();
 	else
-		dataRange = m_axis->plot()->yRangeAutoScale();
+		dataRange = m_axis->plot()->dataYRange();
 
 	if (nice)
 		dataRange.niceExtend();

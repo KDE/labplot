@@ -129,8 +129,8 @@ public:
 	void setXRange(int index, const Range<double>&);
 	void setYRange(int index, const Range<double>&);
 
-	const Range<double>& xRangeAutoScale(int index = -1);
-	const Range<double>& yRangeAutoScale(int index = -1);
+	const Range<double>& dataXRange(int index = -1);
+	const Range<double>& dataYRange(int index = -1);
 	bool xRangeDirty(int index);
 	bool yRangeDirty(int index);
 	void setXRangeDirty(int index, bool dirty);
@@ -187,8 +187,8 @@ private:
 	void shift(int index, bool x, bool leftOrDown);
 	void zoom(int index, bool x, bool in);
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
-	Range<double> calculateCurvesXMinMax(int index, bool completeRange = true);
-	void calculateCurvesYMinMax(int index, bool completeRange = true);
+	void calculateDataXRange(int index, bool completeRange = true);
+	void calculateDataYRange(int index, bool completeRange = true);
 	void retransformScales();
 	int curveTotalCount() const;
 

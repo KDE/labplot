@@ -1289,25 +1289,25 @@ void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 	}
 }
 
-const Range<double>& CartesianPlot::xRangeAutoScale(int index) {
+const Range<double>& CartesianPlot::dataXRange(int index) {
 	if (index == -1)
 		index = defaultCoordinateSystem()->xIndex();
 
 	if (xRangeDirty(index))
-		calculateCurvesXMinMax(index, true);
+		calculateDataXRange(index, true);
 
 	Q_D(CartesianPlot);
-	return d->xRangeAutoScale(index);
+	return d->dataXRange(index);
 }
-const Range<double>& CartesianPlot::yRangeAutoScale(int index) {
+const Range<double>& CartesianPlot::dataYRange(int index) {
 	if (index == -1)
 		index = defaultCoordinateSystem()->yIndex();
 
 	if (yRangeDirty(index))
-		calculateCurvesYMinMax(index, true);
+		calculateDataYRange(index, true);
 
 	Q_D(CartesianPlot);
-	return d->yRangeAutoScale(index);
+	return d->dataYRange(index);
 }
 
 bool CartesianPlot::xRangeDirty(int index) {
@@ -2540,7 +2540,7 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 
 	DEBUG(Q_FUNC_INFO << ", csystem index = " << index << " full range = " << fullRange)
 	if (xRangeDirty(index)) {
-		calculateCurvesXMinMax(index, fullRange);
+		calculateDataXRange(index, fullRange);
 		//if (fullRange)
 			setXRangeDirty(index, false);
 		for (int i = 0; i < m_coordinateSystems.count(); i++) {
@@ -2554,15 +2554,15 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 
 	// if no curve: do not reset to [0, 1]
 
-	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << "., curves x range = " << d->xRangeAutoScale(index).toStdString())
+	DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << "., curves x range = " << d->dataXRange(index).toStdString())
 	bool update = false;
-	if (!qFuzzyCompare(d->xRangeAutoScale(index).start(), xRange.start()) && !qIsInf(d->xRangeAutoScale(index).start())) {
-		xRange.start() = d->xRangeAutoScale(index).start();
+	if (!qFuzzyCompare(d->dataXRange(index).start(), xRange.start()) && !qIsInf(d->dataXRange(index).start())) {
+		xRange.start() = d->dataXRange(index).start();
 		update = true;
 	}
 
-	if (!qFuzzyCompare(d->xRangeAutoScale(index).end(), xRange.end()) && !qIsInf(d->xRangeAutoScale(index).end()) ) {
-		xRange.end() = d->xRangeAutoScale(index).end();
+	if (!qFuzzyCompare(d->dataXRange(index).end(), xRange.end()) && !qIsInf(d->dataXRange(index).end()) ) {
+		xRange.end() = d->dataXRange(index).end();
 		update = true;
 	}
 
@@ -2606,7 +2606,7 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 	//DEBUG(Q_FUNC_INFO << ", cSystemIndex = " << cSystemIndex << " full range = " << fullRange)
 
 	if (yRangeDirty(index)) {
-		calculateCurvesYMinMax(index, fullRange);
+		calculateDataYRange(index, fullRange);
 		//if (fullRange)
 			setYRangeDirty(index, false);
 
@@ -2621,14 +2621,14 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 	auto& yRange{ d->yRange(index) };
 
 	bool update = false;
-	DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", curves y range = " << d->yRangeAutoScale(index).toStdString())
-	if (!qFuzzyCompare(d->yRangeAutoScale(index).start(), yRange.start()) && !qIsInf(d->yRangeAutoScale(index).start()) ) {
-		yRange.start() = d->yRangeAutoScale(index).start();
+	DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", curves y range = " << d->dataYRange(index).toStdString())
+	if (!qFuzzyCompare(d->dataYRange(index).start(), yRange.start()) && !qIsInf(d->dataYRange(index).start()) ) {
+		yRange.start() = d->dataYRange(index).start();
 		update = true;
 	}
 
-	if (!qFuzzyCompare(d->yRangeAutoScale(index).end(), yRange.end()) && !qIsInf(d->yRangeAutoScale(index).end()) ) {
-		yRange.end() = d->yRangeAutoScale(index).end();
+	if (!qFuzzyCompare(d->dataYRange(index).end(), yRange.end()) && !qIsInf(d->dataYRange(index).end()) ) {
+		yRange.end() = d->dataYRange(index).end();
 		update = true;
 	}
 	if (update) {
@@ -2682,14 +2682,14 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange) {
 }
 
 /*!
- * Calculates and sets curves x min and max.
+ * Calculates and saves data x range.
  * The range of the y axis is not considered.
  */
-Range<double> CartesianPlot::calculateCurvesXMinMax(const int index, bool completeRange) {
+void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 	DEBUG(Q_FUNC_INFO << ", complete range = " << completeRange)
 	Q_D(CartesianPlot);
 
-	d->xRangeAutoScale(index).setRange(qInf(), -qInf());
+	d->dataXRange(index).setRange(qInf(), -qInf());
 
 	//loop over all xy-curves and determine the maximum and minimum x-values
 	for (const auto* curve : this->children<const XYCurve>()) {
@@ -2731,12 +2731,12 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int index, bool comple
 		auto range{d->xRange(index)};	// value does not matter, will be overwritten
 		curve->minMaxX(indexRange, range, true);
 
-		if (range.start() < d->xRangeAutoScale(index).start())
-			d->xRangeAutoScale(index).start() = range.start();
+		if (range.start() < d->dataXRange(index).start())
+			d->dataXRange(index).start() = range.start();
 
-		if (range.end() > d->xRangeAutoScale(index).end())
-			d->xRangeAutoScale(index).end() = range.end();
-		DEBUG(Q_FUNC_INFO << ", curves x range i = " << d->xRangeAutoScale(index).toStdString())
+		if (range.end() > d->dataXRange(index).end())
+			d->dataXRange(index).end() = range.end();
+		DEBUG(Q_FUNC_INFO << ", curves x range i = " << d->dataXRange(index).toStdString())
 	}
 
 	//loop over all histograms and determine the maximum and minimum x-value
@@ -2747,12 +2747,12 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int index, bool comple
 			continue;
 
 		const double min = curve->xMinimum();
-		if (d->xRangeAutoScale(index).start() > min)
-			d->xRangeAutoScale(index).start() = min;
+		if (d->dataXRange(index).start() > min)
+			d->dataXRange(index).start() = min;
 
 		const double max = curve->xMaximum();
-		if (max > d->xRangeAutoScale(index).end())
-			d->xRangeAutoScale(index).end() = max;
+		if (max > d->dataXRange(index).end())
+			d->dataXRange(index).end() = max;
 	}
 
 	//loop over all box plots and determine the maximum and minimum x-values
@@ -2763,17 +2763,15 @@ Range<double> CartesianPlot::calculateCurvesXMinMax(const int index, bool comple
 			continue;
 
 		const double min = curve->xMinimum();
-		if (d->xRangeAutoScale(index).start() > min)
-			d->xRangeAutoScale(index).start() = min;
+		if (d->dataXRange(index).start() > min)
+			d->dataXRange(index).start() = min;
 
 		const double max = curve->xMaximum();
-		if (max > d->xRangeAutoScale(index).end())
-			d->xRangeAutoScale(index).end() = max;
+		if (max > d->dataXRange(index).end())
+			d->dataXRange(index).end() = max;
 	}
 
-	DEBUG(Q_FUNC_INFO << ", curves x range = " << d->xRangeAutoScale(index).toStdString())
-
-	return d->xRangeAutoScale(index);
+	DEBUG(Q_FUNC_INFO << ", data x range = " << d->dataXRange(index).toStdString())
 }
 
 void CartesianPlot::retransformScales() {
@@ -2782,14 +2780,14 @@ void CartesianPlot::retransformScales() {
 }
 
 /*!
- * Calculates and sets curves y min and max. This function does not respect the range
- * of the x axis
+ * Calculates and sets data y range.
+ * The range of the x axis is not considered.
  */
-void CartesianPlot::calculateCurvesYMinMax(const int index, bool completeRange) {
+void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 	Q_D(CartesianPlot);
 
-	d->yRangeAutoScale(index).setRange(qInf(), -qInf());
-	Range<double> range{d->yRangeAutoScale(index)};
+	d->dataYRange(index).setRange(qInf(), -qInf());
+	Range<double> range{d->dataYRange(index)};
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
 	for (const auto* curve : this->children<const XYCurve>()) {
@@ -2825,11 +2823,11 @@ void CartesianPlot::calculateCurvesYMinMax(const int index, bool completeRange) 
 
 		curve->minMaxY(indexRange, range, true);
 
-		if (range.start() < d->yRangeAutoScale(index).start())
-			d->yRangeAutoScale(index).start() = range.start();
+		if (range.start() < d->dataYRange(index).start())
+			d->dataYRange(index).start() = range.start();
 
-		if (range.end() > d->yRangeAutoScale(index).end())
-			d->yRangeAutoScale(index).end() = range.end();
+		if (range.end() > d->dataYRange(index).end())
+			d->dataYRange(index).end() = range.end();
 	}
 
 	//loop over all histograms and determine the maximum y-value
@@ -2838,12 +2836,12 @@ void CartesianPlot::calculateCurvesYMinMax(const int index, bool completeRange) 
 			continue;
 
 		const double min = curve->yMinimum();
-		if (d->yRangeAutoScale(index).start() > min)
-			d->yRangeAutoScale(index).start() = min;
+		if (d->dataYRange(index).start() > min)
+			d->dataYRange(index).start() = min;
 
 		const double max = curve->yMaximum();
-		if (max > d->yRangeAutoScale(index).end())
-			d->yRangeAutoScale(index).end() = max;
+		if (max > d->dataYRange(index).end())
+			d->dataYRange(index).end() = max;
 	}
 
 	//loop over all box plots and determine the maximum y-value
@@ -2852,13 +2850,15 @@ void CartesianPlot::calculateCurvesYMinMax(const int index, bool completeRange) 
 			continue;
 
 		const double min = curve->yMinimum();
-		if (d->yRangeAutoScale(index).start() > min)
-			d->yRangeAutoScale(index).start() = min;
+		if (d->dataYRange(index).start() > min)
+			d->dataYRange(index).start() = min;
 
 		const double max = curve->yMaximum();
-		if (max > d->yRangeAutoScale(index).end())
-			d->yRangeAutoScale(index).end() = max;
+		if (max > d->dataYRange(index).end())
+			d->dataYRange(index).end() = max;
 	}
+
+	DEBUG(Q_FUNC_INFO << ", data y range = " << d->dataXRange(index).toStdString())
 }
 
 // zoom
@@ -3524,8 +3524,8 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 	// Y ranges
 	for (int i = 0; i < yRanges.count(); i++) {
 		auto& rangep = yRanges[i];
-		double deltaYMin = rangep.range.start() - rangep.prev.start();
-		double deltaYMax = rangep.range.end() - rangep.prev.end();
+		const double deltaYMin = rangep.range.start() - rangep.prev.start();
+		const double deltaYMax = rangep.range.end() - rangep.prev.end();
 
 		if (!qFuzzyIsNull(deltaYMin))
 			emit q->yMinChanged(i, rangep.range.start());

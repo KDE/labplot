@@ -61,15 +61,15 @@ public:
 			index = defaultCoordinateSystem()->yIndex();
 		return yRanges[index].range;
 	}
-	Range<double>& xRangeAutoScale(int index = -1) {
+	Range<double>& dataXRange(int index = -1) {	// get x range of data
 		if (index == -1)
 			index = defaultCoordinateSystem()->xIndex();
-		return xRanges[index].autoScaleRange;
+		return xRanges[index].dataRange;
 	}
-	Range<double>& yRangeAutoScale(int index = -1) {
+	Range<double>& dataYRange(int index = -1) {	// get y range of data
 		if (index == -1)
 			index = defaultCoordinateSystem()->yIndex();
-		return yRanges[index].autoScaleRange;
+		return yRanges[index].dataRange;
 	}
 
 	bool autoScaleX(int index = -1) {
@@ -127,7 +127,7 @@ public:
 		RichRange(const Range<double>& r = Range<double>(), const bool d = false): range(r), dirty(d) {}
 		Range<double> range; // current range
 		Range<double> prev;
-		Range<double> autoScaleRange; // autoscale range. Cached to be faster in rescaling
+		Range<double> dataRange; // range of data in plot. Cached to be faster in autoscaling/rescaling
 		bool dirty{false};
 	};
 
