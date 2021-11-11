@@ -2704,16 +2704,13 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 		if (!xColumn)
 			continue;
 
+		// range of indices
 		Range<int> indexRange{0, 0};
-		if (d->rangeType == RangeType::Free && curve->yColumn()
-				&& !completeRange) {
-			auto cs = coordinateSystem(curve->coordinateSystemIndex());
-			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << yRange(cs->yIndex()).toStdString())
-			//TODO: Range
-			curve->yColumn()->indicesMinMax(yRange(cs->yIndex()).start(), yRange(cs->yIndex()).end(), indexRange.start(), indexRange.end());
-			//if (indexRange.range.end() < curve->yColumn()->rowCount())	// NO
-			//	indexRange.range.end()++;
-		} else {
+		if (!completeRange && d->rangeType == RangeType::Free && curve->yColumn()) { // only data within y range
+			const int yIndex = coordinateSystem(curve->coordinateSystemIndex())->yIndex();
+			DEBUG(Q_FUNC_INFO << ", free incomplete range with y column. y range = " << yRange(yIndex).toStdString())
+			curve->yColumn()->indicesMinMax(yRange(yIndex).start(), yRange(yIndex).end(), indexRange.start(), indexRange.end());
+		} else {	// all data
 			DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
 			switch (d->rangeType) {
 			case RangeType::Free:
@@ -2792,7 +2789,6 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
 	for (const auto* curve : this->children<const XYCurve>()) {
-		//only curves with correct yIndex
 		if (coordinateSystem(curve->coordinateSystemIndex())->yIndex() != index)
 			continue;
 		if (!curve->isVisible())
@@ -2803,11 +2799,9 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 			continue;
 
 		Range<int> indexRange{0, 0};
-		if (d->rangeType == RangeType::Free && curve->xColumn() && !completeRange) {
-			int xIndex = coordinateSystem(curve->coordinateSystemIndex())->xIndex();
+		if (!completeRange && d->rangeType == RangeType::Free && curve->xColumn()) {
+			const int xIndex = coordinateSystem(curve->coordinateSystemIndex())->xIndex();
 			curve->xColumn()->indicesMinMax(xRange(xIndex).start(), xRange(xIndex).end(), indexRange.start(), indexRange.end());
-			//if (indexRange.range.end() < curve->xColumn()->rowCount())	// No
-			//	indexRange.range.end()++; // because minMaxY excludes indexMax
 		} else {
 			switch (d->rangeType) {
 				case RangeType::Free:

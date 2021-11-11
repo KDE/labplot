@@ -2336,7 +2336,6 @@ QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
 }
 
 bool XYCurve::minMaxX(const Range<int>& indexRange, Range<double>& xRange, bool includeErrorBars) const {
-	DEBUG(Q_FUNC_INFO << ", x column max = " << xColumn()->maximum())
 	return minMax(xColumn(), yColumn(), xErrorType(), xErrorPlusColumn(), xErrorMinusColumn(), indexRange, xRange, includeErrorBars);
 }
 
@@ -2348,7 +2347,8 @@ bool XYCurve::minMaxY(const Range<int>& indexRange, Range<double>& yRange, bool 
  * Calculates the minimum \p min and maximum \p max of a curve with optionally respecting the error bars
  * This function does not check if the values are out of range
  * \p indexMax is not included
- * \p column
+ * \p column1
+ * \p column2
  * \p errorType
  * \p errorPlusColumn
  * \p errorMinusColumn
@@ -2356,7 +2356,7 @@ bool XYCurve::minMaxY(const Range<int>& indexRange, Range<double>& yRange, bool 
  * \p indexMax
  * \p min
  * \p max
- * \ includeErrorBars If true respect the error bars in the min/max calculation
+ * \p includeErrorBars If true respect the error bars in the min/max calculation
  */
 bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column2, const ErrorType errorType, const AbstractColumn* errorPlusColumn, const AbstractColumn* errorMinusColumn, const Range<int>& indexRange, Range<double>& range, bool includeErrorBars) const {
 	// when property is increasing or decreasing there is a benefit in finding minimum and maximum
