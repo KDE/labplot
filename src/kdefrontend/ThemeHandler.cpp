@@ -109,6 +109,8 @@ QStringList ThemeHandler::themes() {
 		QDEBUG("	themes = " << themes);
 	}
 
+	themes.sort();
+
 	return themes;
 }
 
