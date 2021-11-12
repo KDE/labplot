@@ -28,9 +28,12 @@ QSize GrabBar::sizeHint() const {
 void GrabBar::paintEvent(QPaintEvent*) {
 	QPainter p(this);
 
-	// show at least a rect
 	//QDEBUG(Q_FUNC_INFO << ", rect = " << rect())
+
+#ifdef Q_OS_LINUX
+	// fallback rect
 	p.fillRect(rect(), QColor(Qt::darkGray));
+#endif
 
 	//see qsplitter.cpp
 	QStyleOption opt(0);
