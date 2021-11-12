@@ -2552,7 +2552,8 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 
 	auto& xRange{ d->xRange(index) };
 	auto dataRange = d->dataXRange(index);
-	dataRange.niceExtend();	// auto scale to nice data range
+	if (dataRange.finite())
+		dataRange.niceExtend();	// auto scale to nice data range
 
 	// if no curve: do not reset to [0, 1]
 
@@ -2621,7 +2622,8 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 
 	auto& yRange{ d->yRange(index) };
 	auto dataRange = d->dataYRange(index);
-	dataRange.niceExtend();	// auto scale to nice data range
+	if (dataRange.finite())
+		dataRange.niceExtend();	// auto scale to nice data range
 
 	bool update = false;
 	DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", curves y range = " << d->dataYRange(index).toStdString())
