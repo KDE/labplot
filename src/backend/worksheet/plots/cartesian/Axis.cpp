@@ -1063,7 +1063,7 @@ void AxisPrivate::retransformLine() {
 			startPoint = QPointF(range.start(), logicalPosition);
 			endPoint = QPointF(range.end(), logicalPosition);
 			lines.append(QLineF(startPoint, endPoint));
-			// QDEBUG(Q_FUNC_INFO << ", Logical LINE = " << lines)
+			//QDEBUG(Q_FUNC_INFO << ", Logical LINE = " << lines)
 			lines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::MarkGaps);
 		} else {
 			WorksheetElement::PositionWrapper wrapper;
@@ -1075,6 +1075,7 @@ void AxisPrivate::retransformLine() {
 				wrapper.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
 
 			QRectF rect = q->m_plot->dataRect();
+			//QDEBUG(Q_FUNC_INFO << ", rect = " << rect)
 			wrapper.point = QPointF(offset, offset);
 			const auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
@@ -1085,12 +1086,14 @@ void AxisPrivate::retransformLine() {
 			Lines ranges{QLineF(QPointF(range.start(), 1.), QPointF(range.end(), 1.))};
 			// y=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
 			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+			//QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 			if (sceneRange.size() > 0) {
-				startPoint = QPointF(sceneRange.at(0).x1(), pos.y());
-				endPoint = QPointF(sceneRange.at(0).x2(), pos.y());
+				// qMax/qMin: stay inside rect()
+				startPoint = QPointF(qMax(sceneRange.at(0).x1(), rect.x()), pos.y());
+				endPoint = QPointF(qMin(sceneRange.at(0).x2(),rect.x() + rect.width()), pos.y());
 
 				lines.append(QLineF(startPoint, endPoint));
-				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
+				//QDEBUG(Q_FUNC_INFO << ", Non Logical LINE =" << lines)
 			}
 		}
 	} else { // vertical
@@ -1110,6 +1113,7 @@ void AxisPrivate::retransformLine() {
 				wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
 
 			QRectF rect = q->m_plot->dataRect();
+			//QDEBUG(Q_FUNC_INFO << ", rect = " << rect)
 			wrapper.point = QPointF(offset, offset);
 			const auto pos = q->relativePosToParentPos(rect, boundingRectangle, wrapper, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
@@ -1120,12 +1124,14 @@ void AxisPrivate::retransformLine() {
 			Lines ranges{QLineF(QPointF(1., range.start()), QPointF(1., range.end()))};
 			// x=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
 			const auto sceneRange = q->cSystem->mapLogicalToScene(ranges, CartesianCoordinateSystem::MappingFlag::SuppressPageClipping);
+			//QDEBUG(Q_FUNC_INFO << ", scene range = " << sceneRange)
 			if (sceneRange.size() > 0) {
-				startPoint = QPointF(pos.x(), sceneRange.at(0).y1());
-				endPoint = QPointF(pos.x(), sceneRange.at(0).y2());
+				// qMax/qMin: stay inside rect()
+				startPoint = QPointF(pos.x(), qMin(sceneRange.at(0).y1(),rect.y() + rect.height()));
+				endPoint = QPointF(pos.x(), qMax(sceneRange.at(0).y2(), rect.y()));
 
 				lines.append(QLineF(startPoint, endPoint));
-				// QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
+				//QDEBUG(Q_FUNC_INFO << ", Non Logical LINE = " << lines)
 			}
 		}
 	}
