@@ -722,7 +722,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	QVector<XYCurve*> curves;
 	if (hasChildren)
 		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
-	else if (aspect->type() == AspectType::XYCurve || aspect->inherits(AspectType::XYAnalysisCurve))
+	else if (aspect->inherits(AspectType::XYCurve) || aspect->inherits(AspectType::XYAnalysisCurve))
 		//the object doesn't have any children -> one single aspect is being pasted.
 		//check whether the object being pasted is a XYCurve and add it to the
 		//list of curves to be retransformed
