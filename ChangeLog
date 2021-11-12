@@ -53,6 +53,7 @@
 
 Bug fixes:
 	* Fitting: Fix missing locale support in evaluating range of fit function
+	* Fitting: Fix pseudovoigt model
 	* Fix crash in convolution and correlation
 	* Windows: use breeze as default for better dark mode
 	* Properly save the geometry of visible windows in the project

@@ -287,8 +287,8 @@ double nsl_sf_voigt(double x, double sigma, double gamma) {
 #elif defined(_MSC_VER)
 	return 0.;	// not supported yet
 #else
-	COMPLEX z = (x + I*gamma)/(sqrt(2.)*sigma);
-	return creal(Faddeeva_w(z, 0))/(M_SQRT2*M_SQRTPI*sigma);
+	COMPLEX z = (x + I*gamma)/(M_SQRT2 * sigma);
+	return creal(Faddeeva_w(z, 0))/(M_SQRT2 * M_SQRTPI * sigma);
 #endif
 }
 
@@ -302,7 +302,7 @@ double nsl_sf_pseudovoigt(double x, double eta, double sigma, double gamma) {
 
 double nsl_sf_pseudovoigt1(double x, double eta, double w) {
 	// 2w - FWHM, sigma_G = w/sqrt(2ln(2))
-	return nsl_sf_pseudovoigt(x, eta, w/sqrt(2.*log(2.)), w);
+	return nsl_sf_pseudovoigt(x, eta, w/sqrt(2. * M_LN2), w);
 }
 
 /* wrapper for GSL functions with integer parameters */

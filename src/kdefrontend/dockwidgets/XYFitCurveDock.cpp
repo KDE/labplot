@@ -60,7 +60,7 @@ XYFitCurveDock::XYFitCurveDock(QWidget* parent) : XYCurveDock(parent) {
  * 	set up "General" tab
  */
 void XYFitCurveDock::setupGeneral() {
-	DEBUG("XYFitCurveDock::setupGeneral()");
+	DEBUG(Q_FUNC_INFO);
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
@@ -283,8 +283,8 @@ void XYFitCurveDock::initGeneralTab() {
 }
 
 void XYFitCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
-							AspectType::CartesianPlot, AspectType::XYCurve, AspectType::XYAnalysisCurve};
+	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet, AspectType::CartesianPlot,
+		AspectType::XYCurve, AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
 
 	QList<const AbstractAspect*> hiddenAspects;

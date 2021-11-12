@@ -4,7 +4,7 @@
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2016-2020 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -453,7 +453,7 @@ void XYFitCurve::initFitData(XYFitCurve::FitData& fitData) {
 		case nsl_fit_model_pseudovoigt1:
 			switch (degree) {
 			case 1:
-				paramNames << "a" << "et" << "w" << "mu";	// eta function exists!
+				paramNames << "a" << "et" << "w" << "mu";	// eta already exists as function!
 				paramNamesUtf8 << "A" << UTF8_QSTRING("η") << "w" << UTF8_QSTRING("μ");
 				break;
 			default:
@@ -731,7 +731,7 @@ struct data {
  * \param f vector with the weighted residuals weight[i]*(Yi - y[i])
  */
 int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
-	//DEBUG("func_f");
+	//DEBUG(Q_FUNC_INFO);
 	size_t n = ((struct data*)params)->n;
 	double* x = ((struct data*)params)->x;
 	double* y = ((struct data*)params)->y;
@@ -765,13 +765,14 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		}
 
 		assign_symbol("x", x[i]);
-		//DEBUG("evaluate function \"" << func << "\" @ x = " << x[i] << ":");
+		//DEBUG("evaluate function \"" << STDSTRING(func) << "\" @ x = " << x[i] << ":");
 		double Yi = parse(qPrintable(func), qPrintable(numberLocale.name()));
 		//DEBUG("	f(x["<< i <<"]) = " << Yi);
 
 		if (parse_errors() > 0)
 			return GSL_EINVAL;
 
+		//DEBUG("	weight["<< i <<"]) = " << weight[i]);
 		gsl_vector_set(f, i, sqrt(weight[i]) * (Yi - y[i]));
 	}
 
@@ -785,7 +786,7 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
  * \param J Jacobian matrix
  * */
 int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
-	//DEBUG("func_df");
+	//DEBUG(Q_FUNC_INFO);
 	const size_t n = ((struct data*)params)->n;
 	double* xVector = ((struct data*)params)->x;
 	double* weight = ((struct data*)params)->weight;
@@ -989,10 +990,10 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 					const double w = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+2), min[4*j+2], max[4*j+2]);
 					const double mu = nsl_fit_map_bound(gsl_vector_get(paramValues, 4*j+3), min[4*j+3], max[4*j+3]);
 
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j), nsl_fit_model_voigt_param_deriv(0, x, a, eta, w, mu, weight[i]));
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+1), nsl_fit_model_voigt_param_deriv(1, x, a, eta, w, mu, weight[i]));
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+2), nsl_fit_model_voigt_param_deriv(2, x, a, eta, w, mu, weight[i]));
-					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+3), nsl_fit_model_voigt_param_deriv(3, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j), nsl_fit_model_pseudovoigt1_param_deriv(0, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+1), nsl_fit_model_pseudovoigt1_param_deriv(1, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+2), nsl_fit_model_pseudovoigt1_param_deriv(2, x, a, eta, w, mu, weight[i]));
+					gsl_matrix_set(J, (size_t)i, (size_t)(4*j+3), nsl_fit_model_pseudovoigt1_param_deriv(3, x, a, eta, w, mu, weight[i]));
 				}
 				for (unsigned int j = 0; j < 4*degree; j++)
 					if (fixed[j])
@@ -1489,7 +1490,7 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 }
 
 int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
-	//DEBUG("func_fdf");
+	//DEBUG(Q_FUNC_INFO);
 	func_f(x, params, f);
 	func_df(x, params, J);
 
@@ -1498,7 +1499,7 @@ int func_fdf(const gsl_vector* x, void* params, gsl_vector* f, gsl_matrix* J) {
 
 /* prepare the fit result columns */
 void XYFitCurvePrivate::prepareResultColumns() {
-	DEBUG("XYFitCurvePrivate::prepareResultColumns()")
+	//DEBUG(Q_FUNC_INFO)
 	//create fit result columns if not available yet, clear them otherwise
 	if (!xColumn) {	// all columns are treated together
 		DEBUG("	Creating columns")
