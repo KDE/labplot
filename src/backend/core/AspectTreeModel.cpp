@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007-2009 Knut Franke <knut.franke@gmx.de>
     SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2011-2016 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2011-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -56,6 +56,7 @@
 AspectTreeModel::AspectTreeModel(AbstractAspect* root, QObject* parent)
 	: QAbstractItemModel(parent), m_root(root) {
 
+	connect(m_root, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 	connect(m_root, &AbstractAspect::aspectDescriptionChanged, this, &AspectTreeModel::aspectDescriptionChanged);
 	connect(m_root, &AbstractAspect::aspectAboutToBeAdded, this, &AspectTreeModel::aspectAboutToBeAdded);
 	connect(m_root, &AbstractAspect::aspectAboutToBeRemoved, this, &AspectTreeModel::aspectAboutToBeRemoved);

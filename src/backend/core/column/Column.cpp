@@ -118,10 +118,11 @@ QMenu* Column::createContextMenu() {
 		m_usedInActionGroup->removeAction(action);
 
 	Project* project = this->project();
+	bool showIsUsed = false;
 
 	//add curves where the column is currently in use
 	usedInMenu->addSection(i18n("XY-Curves"));
-	auto curves = project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& curves = project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* curve : curves) {
 		bool used = false;
 
@@ -139,24 +140,26 @@ QMenu* Column::createContextMenu() {
 			QAction* action = new QAction(curve->icon(), curve->name(), m_usedInActionGroup);
 			action->setData(curve->path());
 			usedInMenu->addAction(action);
+			showIsUsed = true;
 		}
 	}
 
 	//add histograms where the column is used
 	usedInMenu->addSection(i18n("Histograms"));
-	auto hists = project->children<Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& hists = project->children<Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* hist : hists) {
 		bool used = (hist->dataColumn() == this);
 		if (used) {
 			QAction* action = new QAction(hist->icon(), hist->name(), m_usedInActionGroup);
 			action->setData(hist->path());
 			usedInMenu->addAction(action);
+			showIsUsed = true;
 		}
 	}
 
 	//add calculated columns where the column is used in formula variables
 	usedInMenu->addSection(i18n("Calculated Columns"));
-	QVector<Column*> columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+	const auto& columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 	const QString& path = this->path();
 	for (const auto* column : columns) {
 		auto paths = column->formulaVariableColumnPaths();
@@ -164,15 +167,17 @@ QMenu* Column::createContextMenu() {
 			QAction* action = new QAction(column->icon(), column->name(), m_usedInActionGroup);
 			action->setData(column->path());
 			usedInMenu->addAction(action);
+			showIsUsed = true;
 		}
 	}
-
 
 	if (firstAction)
 		menu->insertSeparator(firstAction);
 
-	menu->insertMenu(firstAction, usedInMenu);
-	menu->insertSeparator(firstAction);
+	if (showIsUsed) {
+		menu->insertMenu(firstAction, usedInMenu);
+		menu->insertSeparator(firstAction);
+	}
 
 	menu->insertAction(firstAction, m_copyDataAction);
 	menu->insertSeparator(firstAction);
