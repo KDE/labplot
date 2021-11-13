@@ -921,6 +921,7 @@ bool LiveDataSource::load(XmlStreamReader* reader, bool preview) {
 				setColumnCount(0);
 				return false;
 			}
+			column->setFixed(true);
 			addChild(column);
 		} else {// unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

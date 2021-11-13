@@ -6,7 +6,7 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007-2010 Knut Franke <knut.franke@gmx.de>
     SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2013-2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2013-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -39,7 +39,7 @@ public:
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
 		//emit the "about to be removed" signal also for all children columns so the curves can react
-		for (auto* child : m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden))
+		for (auto* child : m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive))
 			emit child->parentAspect()->aspectAboutToBeRemoved(child);
 
 		emit m_target->q->aspectAboutToBeRemoved(m_child);

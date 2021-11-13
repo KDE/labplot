@@ -54,6 +54,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 	if (curve) {
 		d->connectionLineCurveName = curve->name();
 		CustomPoint* custompoint = new CustomPoint(m_plot, curve->name());
+		custompoint->setFixed(true);
 		addChild(custompoint);
 		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
 		markerpoints.append(markerpoint);
