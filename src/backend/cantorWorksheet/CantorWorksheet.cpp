@@ -135,6 +135,7 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 			} else {
 				col = new Column(name, parser.values());
 				col->setUndoAware(false);
+				col->setFixed(true);
 				addChild(col);
 
 				//TODO: Cantor currently ignores the order of variables in the worksheets
@@ -321,6 +322,7 @@ bool CantorWorksheet::load(XmlStreamReader* reader, bool preview) {
 				delete column;
 				return false;
 			}
+			column->setFixed(true);
 			addChild(column);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

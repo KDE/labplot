@@ -86,6 +86,7 @@ Column* DatapickerCurve::appendColumn(const QString& name) {
 	Column* col = new Column(i18n("Column"), AbstractColumn::ColumnMode::Double);
 	col->insertRows(0, m_datasheet->rowCount());
 	col->setName(name);
+	col->setFixed(true);
 	m_datasheet->addChild(col);
 
 	return col;
@@ -147,6 +148,7 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 	Q_D(DatapickerCurve);
 
 	m_datasheet = new Spreadsheet(i18n("Data"));
+	m_datasheet->setFixed(true);
 	addChild(m_datasheet);
 	QString xLabel('x');
 	QString yLabel('y');
@@ -170,9 +172,11 @@ void DatapickerCurve::addDatasheet(DatapickerImage::GraphType type) {
 
 	d->posXColumn = m_datasheet->column(0);
 	d->posXColumn->setName(xLabel);
+	d->posXColumn->setFixed(true);
 
 	d->posYColumn = m_datasheet->column(1);
 	d->posYColumn->setName(yLabel);
+	d->posYColumn->setFixed(true);
 }
 
 STD_SETTER_CMD_IMPL_S(DatapickerCurve, SetCurveErrorTypes, DatapickerCurve::Errors, curveErrorTypes)
@@ -374,7 +378,7 @@ QString DatapickerCurvePrivate::name() const {
 }
 
 void DatapickerCurvePrivate::retransform() {
-	auto points = q->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+	const auto& points = q->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->retransform();
 }
@@ -578,6 +582,10 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 				return false;
 			} else {
 				addChild(datasheet);
+				datasheet->setFixed(true);
+				const auto& columns = datasheet->children<Column>();
+				for (auto* col : columns)
+					col->setFixed(true);
 				m_datasheet = datasheet;
 			}
 		} else { // unknown element

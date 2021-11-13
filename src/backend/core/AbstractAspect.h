@@ -240,6 +240,8 @@ public:
 	virtual QString path() const;
 	void setHidden(bool);
 	bool hidden() const;
+	void setFixed(bool);
+	bool isFixed() const;
 	void setSelected(bool);
 	void setIsLoading(bool);
 	bool isLoading() const;

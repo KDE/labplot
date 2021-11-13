@@ -1516,6 +1516,7 @@ void XYFitCurvePrivate::prepareResultColumns() {
 		yColumn->setHidden(true);
 		q->addChild(yColumn);
 
+		residualsColumn->setFixed(true); //visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		q->addChild(residualsColumn);
 
 		q->setUndoAware(false);

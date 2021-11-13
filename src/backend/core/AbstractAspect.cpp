@@ -260,6 +260,19 @@ void AbstractAspect::setHidden(bool value) {
 	d->m_hidden = value;
 }
 
+/**
+ * \brief Set "fixed" property which defines whether the object can be renamed, deleted, etc.
+ */
+void AbstractAspect::setFixed(bool value) {
+	if (value == d->m_fixed)
+		return;
+	d->m_fixed = value;
+}
+
+bool AbstractAspect::isFixed() const {
+	return d->m_fixed;
+}
+
 void AbstractAspect::setIsLoading(bool load) {
 	d->m_isLoading = load;
 }
@@ -287,15 +300,16 @@ QMenu* AbstractAspect::createContextMenu() {
 	//TODO: activate this again when the functionality is implemented
 // 	menu->addAction( KStandardAction::cut(this) );
 
-	if (this != project()) {
-		//don't allow to copy columns in a CAS worksheet, the variables are managed in the CAS
-		if (parentAspect()->type() != AspectType::CantorWorksheet) {
-			auto* action = KStandardAction::copy(this);
-			connect(action, &QAction::triggered, this, &AbstractAspect::copy);
-			menu->addAction(action);
-		}
+	if (!isFixed() && m_type != AspectType::Project) {
+		//copy action:
+		//don't allow to copy fixed aspects
+		auto* action = KStandardAction::copy(this);
+		connect(action, &QAction::triggered, this, &AbstractAspect::copy);
+		menu->addAction(action);
 
-		if (m_type != AspectType::CartesianPlotLegend && parentAspect()->type() != AspectType::CantorWorksheet) {
+		//duplicate action:
+		//don't allow to duplicate legends in the plots
+		if (m_type != AspectType::CartesianPlotLegend) {
 			auto* actionDuplicate = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("Duplicate Here"), this);
 			actionDuplicate->setShortcut(Qt::CTRL + Qt::Key_D);
 			connect(actionDuplicate, &QAction::triggered, this, &AbstractAspect::duplicate);
@@ -303,6 +317,7 @@ QMenu* AbstractAspect::createContextMenu() {
 		}
 	}
 
+	//paste action:
 	//determine the aspect type of the content available in the clipboard
 	//and enable the paste entry if the content is labplot specific
 	//and if it can be pasted into the current aspect
@@ -316,34 +331,31 @@ QMenu* AbstractAspect::createContextMenu() {
 	}
 	menu->addSeparator();
 
-	//don't allow to rename and delete
-	// - data spreadsheets of datapicker curves
-	// - columns in data spreadsheets of datapicker curves
+	//don't allow to rename and delete fixed objects and
 	// - columns in live-data source
-	// - columns in CAS worksheets
 	// - Mqtt subscriptions
 	// - Mqtt topics
 	// - Columns in Mqtt topics
-	bool disabled = (type() == AspectType::Spreadsheet && parentAspect()->type() == AspectType::DatapickerCurve)
-		|| (type() == AspectType::Column && parentAspect()->parentAspect() && parentAspect()->parentAspect()->type() == AspectType::DatapickerCurve)
-		|| (type() == AspectType::Column && parentAspect()->type() == AspectType::LiveDataSource)
-		|| (type() == AspectType::Column && parentAspect()->type() == AspectType::CantorWorksheet)
+	//TODO: make also these objects fixed and remove this additional handling for them here
+	bool disabled = isFixed()
+		|| (m_type == AspectType::Column && parentAspect()->type() == AspectType::LiveDataSource)
 #ifdef HAVE_MQTT
-		|| (type() == AspectType::MQTTSubscription)
-		|| (type() == AspectType::MQTTTopic)
-		| (type() == AspectType::Column && parentAspect()->type() == AspectType::MQTTTopic)
+		|| (m_type == AspectType::MQTTSubscription)
+		|| (m_type == AspectType::MQTTTopic)
+		| (m_type == AspectType::Column && parentAspect()->type() == AspectType::MQTTTopic)
 #endif
-		|| (type() == AspectType::CustomPoint && parentAspect()->type() == AspectType::InfoElement)
 		;
 
-	if(!disabled) {
-		menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, &AbstractAspect::renameRequested);
-		if (type() != AspectType::Project)
-			menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, &AbstractAspect::remove);
-	}
+	if (disabled)
+		return menu;
 
-	//move up and down actions. Don't shown them for worksheet elements
-	//since they implement their own "Drawing order" menu.
+	//rename and delete actions:
+	menu->addAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename"), this, &AbstractAspect::renameRequested);
+	if (m_type != AspectType::Project)
+		menu->addAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete"), this, &AbstractAspect::remove);
+
+	//move up and down actions:
+	//don't shown them for worksheet elements since they implement their own "Drawing order" menu
 	if (!dynamic_cast<WorksheetElement*>(this) && this != project()) {
 		const auto* parent = parentAspect();
 		int count = parent->childCount<AbstractAspect>();
@@ -358,8 +370,8 @@ QMenu* AbstractAspect::createContextMenu() {
 			menu->addSeparator();
 			menu->addMenu(moveMenu);
 		}
-
 	}
+
 	return menu;
 }
 

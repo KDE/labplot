@@ -120,6 +120,7 @@ void XYSmoothCurvePrivate::recalculate() {
 
 	if (!roughColumn) {
 		roughColumn = new Column("rough", AbstractColumn::ColumnMode::Double);
+		roughColumn->setFixed(true); //visible in the project explorer but cannot be modified (renamed, deleted, etc.)
 		roughVector = static_cast<QVector<double>* >(roughColumn->data());
 		q->addChild(roughColumn);
 	}
