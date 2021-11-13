@@ -30,7 +30,7 @@ void GrabBar::paintEvent(QPaintEvent*) {
 
 	//QDEBUG(Q_FUNC_INFO << ", rect = " << rect())
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_WIN)
 	// fallback rect
 	p.fillRect(rect(), QColor(Qt::darkGray));
 #endif
