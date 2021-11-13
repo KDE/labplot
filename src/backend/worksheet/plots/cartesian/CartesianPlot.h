@@ -313,7 +313,7 @@ public slots:
 	void cursor();
 
 	bool autoScale(int xIndex = -1, int yIndex = -1, bool fullRange = true);
-	void dataChanged(int xIndex, int yIndex);
+	void dataChanged(int xIndex = -1, int yIndex = -1, WorksheetElement* sender = nullptr);
 
 private slots:
 	void updateLegend();
@@ -321,8 +321,8 @@ private slots:
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childHovered();
 
-	void xDataChanged(int index);
-	void yDataChanged(int index);
+	void xDataChanged(XYCurve*);
+	void yDataChanged(XYCurve*);
 	void curveLinePenChanged(QPen);
 	void curveVisibilityChanged();
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);

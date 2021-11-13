@@ -2067,25 +2067,34 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	int cSystemIndex = -1;
 	if (curve) {
-		connect(curve, &XYCurve::dataChanged, this, [this, curve]() {auto cs = coordinateSystem(curve->coordinateSystemIndex()); this->dataChanged(cs->xIndex(), cs->yIndex());});
+		//x and y data
+		connect(curve, &XYCurve::dataChanged, this, [this, curve]() {
+			auto cs = coordinateSystem(curve->coordinateSystemIndex());
+			this->dataChanged(cs->xIndex(), cs->yIndex(), const_cast<XYCurve*>(curve));
+		});
+
+		//x data
 		connect(curve, &XYCurve::xColumnChanged, this, [this](const AbstractColumn* column) {
 			if (curveTotalCount() == 1) //first curve addded
 				checkAxisFormat(column, Axis::Orientation::Horizontal);
 		});
-		connect(curve, &XYCurve::xDataChanged, [this, curve] () {int cSystemIndex = curve->coordinateSystemIndex(); this->xDataChanged(coordinateSystem(cSystemIndex)->xIndex());});
-		connect(curve, &XYCurve::xErrorTypeChanged, [this, curve] () {int cSystemIndex = curve->coordinateSystemIndex(); this->xDataChanged(coordinateSystem(cSystemIndex)->xIndex());});
-		connect(curve, &XYCurve::xErrorPlusColumnChanged, [this, curve] () {auto cs = coordinateSystem(curve->coordinateSystemIndex()); this->dataChanged(cs->xIndex(), cs->yIndex());});
-		connect(curve, &XYCurve::xErrorMinusColumnChanged, [this, curve] () {auto cs = coordinateSystem(curve->coordinateSystemIndex()); this->dataChanged(cs->xIndex(), cs->yIndex());});
-		connect(curve, &XYCurve::yDataChanged, [this, curve] () {int cSystemIndex = curve->coordinateSystemIndex(); this->yDataChanged(coordinateSystem(cSystemIndex)->yIndex());});
+		connect(curve, &XYCurve::xDataChanged, [this, curve] () {this->xDataChanged(const_cast<XYCurve*>(curve));});
+		connect(curve, &XYCurve::xErrorTypeChanged, [this, curve] () {this->xDataChanged(const_cast<XYCurve*>(curve));});
+		connect(curve, &XYCurve::xErrorPlusColumnChanged, [this, curve] () {this->xDataChanged(const_cast<XYCurve*>(curve));});
+		connect(curve, &XYCurve::xErrorMinusColumnChanged, [this, curve] () {this->xDataChanged(const_cast<XYCurve*>(curve));});
+
+		//y data
 		connect(curve, &XYCurve::yColumnChanged, this, [this](const AbstractColumn* column) {
 			if (curveTotalCount() == 1)
 				checkAxisFormat(column, Axis::Orientation::Vertical);
 		});
-		connect(curve, &XYCurve::yErrorTypeChanged, [this, curve] () {auto cs = coordinateSystem(curve->coordinateSystemIndex()); this->dataChanged(cs->xIndex(), cs->yIndex());});
-		connect(curve, &XYCurve::yErrorPlusColumnChanged, [this, curve] () {auto cs = coordinateSystem(curve->coordinateSystemIndex()); this->dataChanged(cs->xIndex(), cs->yIndex());});
-		connect(curve, &XYCurve::yErrorMinusColumnChanged, [this, curve] () {auto cs = coordinateSystem(curve->coordinateSystemIndex()); this->dataChanged(cs->xIndex(), cs->yIndex());});
-		connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged),
-				this, &CartesianPlot::curveVisibilityChanged);
+		connect(curve, &XYCurve::yDataChanged, [this, curve] () {this->yDataChanged(const_cast<XYCurve*>(curve));});
+		connect(curve, &XYCurve::yErrorTypeChanged, [this, curve] () {this->yDataChanged(const_cast<XYCurve*>(curve));});
+		connect(curve, &XYCurve::yErrorPlusColumnChanged, [this, curve] () {this->yDataChanged(const_cast<XYCurve*>(curve));});
+		connect(curve, &XYCurve::yErrorMinusColumnChanged, [this, curve] () {this->yDataChanged(const_cast<XYCurve*>(curve));});
+
+		//visibility
+		connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged),this, &CartesianPlot::curveVisibilityChanged);
 
 		//update the legend on changes of the name, line and symbol styles
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
@@ -2093,10 +2102,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::legendVisibleChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::lineTypeChanged, this, &CartesianPlot::updateLegend);
 		connect(curve, &XYCurve::linePenChanged, this, &CartesianPlot::updateLegend);
-		connect(curve, &XYCurve::linePenChanged, this, static_cast<void (CartesianPlot::*)(QPen)>(&CartesianPlot::curveLinePenChanged));
+		connect(curve, &XYCurve::linePenChanged, this, QOverload<QPen>::of(&CartesianPlot::curveLinePenChanged)); // forward to Worksheet to update CursorDock
 		connect(curve, &XYCurve::lineOpacityChanged, this, &CartesianPlot::updateLegend);
 		connect(curve->symbol(), &Symbol::updateRequested, this, &CartesianPlot::updateLegend);
-		connect(curve, &XYCurve::linePenChanged, this, QOverload<QPen>::of(&CartesianPlot::curveLinePenChanged)); // forward to Worksheet to update CursorDock
 
 		updateLegend();
 		cSystemIndex = curve->coordinateSystemIndex();
@@ -2112,7 +2120,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		const auto* hist = qobject_cast<const Histogram*>(child);
 		if (hist) {
 			// TODO: check if all ranges must be updated
-			connect(hist, &Histogram::dataChanged, [this] {this->dataChanged(-1, -1);}); // TODO: check if all ranges change
+			connect(hist, &Histogram::dataChanged, [this, hist] {this->dataChanged(-1, -1, const_cast<Histogram*>(hist));});
 			connect(hist, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
 			connect(hist, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
@@ -2126,7 +2134,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		const auto* boxPlot = qobject_cast<const BoxPlot*>(child);
 		if (boxPlot) {
 			// TODO: check if all ranges must be updated
-			connect(boxPlot, &BoxPlot::dataChanged, [this] {this->dataChanged(-1, -1);}); // TODO: check if all ranges must be change!
+			connect(boxPlot, &BoxPlot::dataChanged, [this, boxPlot] {this->dataChanged(-1, -1, const_cast<BoxPlot*>(boxPlot));});
 			connect(boxPlot, &BoxPlot::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
 			connect(boxPlot, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
@@ -2299,7 +2307,7 @@ bool CartesianPlot::autoScale(int xIndex, int yIndex, bool fullRange) {
 	called when in one of the curves the data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
-void CartesianPlot::dataChanged(int xIndex, int yIndex) {
+void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender) {
 	if (project() && project()->isLoading())
 		return;
 
@@ -2319,13 +2327,12 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex) {
 
 	const bool updated{ autoScale(xIndex, yIndex) };
 
-	if (!updated || !QObject::sender()) {
+	if (!updated || !sender) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
-		auto* element = qobject_cast<WorksheetElement*>(QObject::sender());
-		if (element)
-			element->retransform();
+		if (sender)
+			sender->retransform();
 		else {
 			//no sender available, the function was called directly in the file filter (live data source got new data)
 			//or in Project::load() -> retransform all available curves since we don't know which curves are affected.
@@ -2342,7 +2349,7 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex) {
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
-void CartesianPlot::xDataChanged(int index) {
+void CartesianPlot::xDataChanged(XYCurve* curve) {
 	DEBUG(Q_FUNC_INFO)
 	if (project() && project()->isLoading())
 		return;
@@ -2351,6 +2358,11 @@ void CartesianPlot::xDataChanged(int index) {
 	if (d->suppressRetransform)
 		return;
 
+	if (!curve)
+		return;
+
+	int cSystemIndex = curve->coordinateSystemIndex();
+	int index = coordinateSystem(cSystemIndex)->xIndex();
 	if (index == -1) {
 		for (int i = 0; i < xRangeCount(); i++)
 			d->xRanges[coordinateSystem(i)->xIndex()].dirty = true;
@@ -2366,37 +2378,27 @@ void CartesianPlot::xDataChanged(int index) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
-		auto* curve = qobject_cast<XYCurve*>(QObject::sender());
-		if (curve)
-			curve->retransform();
-		else {
-			auto* hist = qobject_cast<Histogram*>(QObject::sender());
-			if (hist)
-				hist->retransform();
-		}
+		curve->retransform();
 	}
 
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
-		auto* curve = qobject_cast<XYCurve*>(QObject::sender());
-		if (curve) {
-			const AbstractColumn* col = curve->xColumn();
-			const auto xRangeFormat{ xRange().format() };
-			if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && xRangeFormat != RangeT::Format::DateTime) {
-				setUndoAware(false);
-				setXRangeFormat(RangeT::Format::DateTime);
-				setUndoAware(true);
-			}
+		const AbstractColumn* col = curve->xColumn();
+		const auto xRangeFormat{ xRange().format() };
+		if (col->columnMode() == AbstractColumn::ColumnMode::DateTime && xRangeFormat != RangeT::Format::DateTime) {
+			setUndoAware(false);
+			setXRangeFormat(RangeT::Format::DateTime);
+			setUndoAware(true);
 		}
 	}
-	emit curveDataChanged(qobject_cast<XYCurve*>(QObject::sender()));
+	emit curveDataChanged(curve);
 }
 
 /*!
 	called when in one of the curves the x-data was changed.
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
-void CartesianPlot::yDataChanged(int index) {
+void CartesianPlot::yDataChanged(XYCurve* curve) {
 	if (project() && project()->isLoading())
 		return;
 
@@ -2404,6 +2406,11 @@ void CartesianPlot::yDataChanged(int index) {
 	if (d->suppressRetransform)
 		return;
 
+	if (!curve)
+		return;
+
+	int cSystemIndex = curve->coordinateSystemIndex();
+	int index = coordinateSystem(cSystemIndex)->yIndex();
 	if (index == -1) {
 		for (int i = 0; i < yRangeCount(); i++)
 			d->yRanges[coordinateSystem(i)->yIndex()].dirty = true;
@@ -2419,30 +2426,21 @@ void CartesianPlot::yDataChanged(int index) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
-		auto* curve = qobject_cast<XYCurve*>(QObject::sender());
-		if (curve)
-			curve->retransform();
-		else {
-			auto* hist = qobject_cast<Histogram*>(QObject::sender());
-			if (hist)
-				hist->retransform();
-		}
+		curve->retransform();
+
 	}
 
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
 	if (children<XYCurve>().size() == 1) {
-		auto* curve = qobject_cast<XYCurve*>(QObject::sender());
-		if (curve) {
-			const AbstractColumn* col = curve->yColumn();
-			const auto yRangeFormat{ yRange().format() };
-			if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && yRangeFormat != RangeT::Format::DateTime) {
-				setUndoAware(false);
-				setYRangeFormat(RangeT::Format::DateTime);
-				setUndoAware(true);
-			}
+		const AbstractColumn* col = curve->yColumn();
+		const auto yRangeFormat{ yRange().format() };
+		if (col && col->columnMode() == AbstractColumn::ColumnMode::DateTime && yRangeFormat != RangeT::Format::DateTime) {
+			setUndoAware(false);
+			setYRangeFormat(RangeT::Format::DateTime);
+			setUndoAware(true);
 		}
 	}
-	emit curveDataChanged(qobject_cast<XYCurve*>(QObject::sender()));
+	emit curveDataChanged(curve);
 }
 
 void CartesianPlot::curveVisibilityChanged() {
