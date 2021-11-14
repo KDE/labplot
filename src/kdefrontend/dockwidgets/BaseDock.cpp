@@ -35,7 +35,6 @@ BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
 BaseDock::~BaseDock() = default;
 
 void BaseDock::updatePlotRangeList(QComboBox* cb) const {
-	DEBUG(Q_FUNC_INFO)
 	auto* element{ static_cast<WorksheetElement*>(m_aspect) };
 	if (!element) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no worksheet element!")
@@ -79,8 +78,8 @@ void BaseDock::plotRangeChanged(int index) {
 		return;
 
 	if (index < 0 || index > plot->coordinateSystemCount()) {
-		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
-		return;
+		index = element->coordinateSystemIndex();
+		DEBUG(Q_FUNC_INFO << ", using default index " << index)
 	}
 
 	if (index != element->coordinateSystemIndex()) {

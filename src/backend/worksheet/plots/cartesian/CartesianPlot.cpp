@@ -2067,6 +2067,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	int cSystemIndex = -1;
 	if (curve) {
+		DEBUG(Q_FUNC_INFO << ", CURVE")
 		//x and y data
 		connect(curve, &XYCurve::dataChanged, this, [this, curve]() {
 			auto cs = coordinateSystem(curve->coordinateSystemIndex());
@@ -2107,7 +2108,6 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve->symbol(), &Symbol::updateRequested, this, &CartesianPlot::updateLegend);
 
 		updateLegend();
-		cSystemIndex = curve->coordinateSystemIndex();
 
 		//in case the first curve is added, check whether we start plotting datetime data
 		if (curveTotalCount() == 1) {
@@ -2115,10 +2115,13 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			checkAxisFormat(curve->yColumn(), Axis::Orientation::Vertical);
 		}
 
+		cSystemIndex = curve->coordinateSystemIndex();
 		emit curveAdded(curve);
+
 	} else {
 		const auto* hist = qobject_cast<const Histogram*>(child);
 		if (hist) {
+			DEBUG(Q_FUNC_INFO << ", HISTOGRAM")
 			// TODO: check if all ranges must be updated
 			connect(hist, &Histogram::dataChanged, [this, hist] {this->dataChanged(-1, -1, const_cast<Histogram*>(hist));});
 			connect(hist, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
@@ -2133,6 +2136,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		const auto* boxPlot = qobject_cast<const BoxPlot*>(child);
 		if (boxPlot) {
+			DEBUG(Q_FUNC_INFO << ", BOX PLOT")
 			// TODO: check if all ranges must be updated
 			connect(boxPlot, &BoxPlot::dataChanged, [this, boxPlot] {this->dataChanged(-1, -1, const_cast<BoxPlot*>(boxPlot));});
 			connect(boxPlot, &BoxPlot::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
@@ -2161,6 +2165,9 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 	if (INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
 		setXRangeDirty(cSystemIndex, true);
 		setYRangeDirty(cSystemIndex, true);
+
+		auto cs = coordinateSystem(cSystemIndex);
+		autoScale(cs->xIndex(), cs->yIndex());	// update all plot ranges
 	}
 
 	if (!isLoading() && !this->pasted() && !child->pasted()) {
@@ -2247,13 +2254,12 @@ void CartesianPlot::boxPlotOrientationChanged(BoxPlot::Orientation orientation) 
 }
 
 void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
-	DEBUG(Q_FUNC_INFO)
 	if (m_legend == child) {
+		DEBUG(Q_FUNC_INFO << ", a legend")
 		if (m_menusInitialized)
 			addLegendAction->setEnabled(true);
 		m_legend = nullptr;
 	} else {
-		DEBUG(Q_FUNC_INFO << ", not a legend")
 		const auto* curve = qobject_cast<const XYCurve*>(child);
 		if (curve) {
 			DEBUG(Q_FUNC_INFO << ", a curve")
@@ -2308,11 +2314,11 @@ bool CartesianPlot::autoScale(int xIndex, int yIndex, bool fullRange) {
 	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
 */
 void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender) {
+	DEBUG(Q_FUNC_INFO << ", x/y index = " << xIndex << "/" << yIndex)
 	if (project() && project()->isLoading())
 		return;
 
 	Q_D(CartesianPlot);
-
 	if (xIndex == -1) {
 		for (int i = 0; i < xRangeCount(); i++)
 			d->xRanges[i].dirty = true;
@@ -2326,7 +2332,6 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 		d->yRanges[yIndex].dirty = true;
 
 	const bool updated{ autoScale(xIndex, yIndex) };
-
 	if (!updated || !sender) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
@@ -2782,6 +2787,7 @@ void CartesianPlot::retransformScales() {
  * The range of the x axis is not considered.
  */
 void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
+	DEBUG(Q_FUNC_INFO << ", index = " << index << ", complete range = " << completeRange)
 	Q_D(CartesianPlot);
 
 	d->dataYRange(index).setRange(qInf(), -qInf());
@@ -2789,6 +2795,7 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
 	for (const auto* curve : this->children<const XYCurve>()) {
+		DEBUG( Q_FUNC_INFO << ", curve " << STDSTRING(curve->name()) )
 		if (coordinateSystem(curve->coordinateSystemIndex())->yIndex() != index)
 			continue;
 		if (!curve->isVisible())
