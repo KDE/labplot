@@ -273,6 +273,14 @@ bool AbstractAspect::isFixed() const {
 	return d->m_fixed;
 }
 
+void AbstractAspect::setMoved(bool value) {
+	d->m_moved = value;
+}
+
+bool AbstractAspect::isMoved() const {
+	return d->m_moved;
+}
+
 void AbstractAspect::setIsLoading(bool load) {
 	d->m_isLoading = load;
 }
@@ -615,8 +623,10 @@ void AbstractAspect::moveUp() {
 	int index = parent->indexOfChild<AbstractAspect>(this);
 	auto* sibling = parent->child<AbstractAspect>(index - 1);
 	beginMacro(i18n("%1: move up", name()));
+	setMoved(true);
 	remove();
 	parent->insertChildBefore(this, sibling);
+	setMoved(false);
 	endMacro();
 }
 
@@ -625,8 +635,10 @@ void AbstractAspect::moveDown() {
 	int index = parent->indexOfChild<AbstractAspect>(this);
 	auto* sibling = parent->child<AbstractAspect>(index + 2);
 	beginMacro(i18n("%1: move down", name()));
+	setMoved(true);
 	remove();
 	parent->insertChildBefore(this, sibling);
+	setMoved(false);
 	endMacro();
 }
 

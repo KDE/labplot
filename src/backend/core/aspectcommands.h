@@ -38,9 +38,14 @@ public:
 		else
 			nextSibling = m_target->m_children.at(m_target->indexOfChild(m_child) + 1);
 
-		//emit the "about to be removed" signal also for all children columns so the curves can react
-		for (auto* child : m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive))
-			emit child->parentAspect()->aspectAboutToBeRemoved(child);
+		//emit the "about to be removed" signal also for all children columns so the curves can react.
+		//no need to notify when the parent is just being moved (move up, moved down in the project explorer),
+		//(move = delete at the current position + insert at the new position)
+		if (!m_child->isMoved()) {
+			const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
+			for (auto* col : columns)
+				emit col->parentAspect()->aspectAboutToBeRemoved(col);
+		}
 
 		emit m_target->q->aspectAboutToBeRemoved(m_child);
 		m_index = m_target->removeChild(m_child);

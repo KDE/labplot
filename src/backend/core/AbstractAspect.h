@@ -243,6 +243,8 @@ public:
 	void setFixed(bool);
 	bool isFixed() const;
 	void setSelected(bool);
+	void setMoved(bool);
+	bool isMoved() const;
 	void setIsLoading(bool);
 	bool isLoading() const;
 	virtual QIcon icon() const;

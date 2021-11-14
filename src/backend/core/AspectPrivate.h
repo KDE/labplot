@@ -33,6 +33,7 @@ public:
 	QDateTime m_creation_time;
 	bool m_hidden{false};
 	bool m_fixed{false};
+	bool m_moved{false};
 	AbstractAspect* const q;
 	AbstractAspect* m_parent{nullptr};
 	bool m_undoAware{true};
