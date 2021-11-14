@@ -2166,8 +2166,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		setXRangeDirty(cSystemIndex, true);
 		setYRangeDirty(cSystemIndex, true);
 
-		auto cs = coordinateSystem(cSystemIndex);
-		autoScale(cs->xIndex(), cs->yIndex());	// update all plot ranges
+		autoScale(-1, -1);	// update all plot ranges
 	}
 
 	if (!isLoading() && !this->pasted() && !child->pasted()) {
@@ -2609,7 +2608,7 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 		return updated;
 	}
 
-	//DEBUG(Q_FUNC_INFO << ", cSystemIndex = " << cSystemIndex << " full range = " << fullRange)
+	DEBUG(Q_FUNC_INFO << ", index = " << index << " full range = " << fullRange)
 
 	if (yRangeDirty(index)) {
 		calculateDataYRange(index, fullRange);
@@ -2795,7 +2794,8 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
 	for (const auto* curve : this->children<const XYCurve>()) {
-		DEBUG( Q_FUNC_INFO << ", curve " << STDSTRING(curve->name()) )
+		DEBUG( Q_FUNC_INFO << ", curve " << STDSTRING(curve->name()) << ", range type = "
+			<< ENUM_TO_STRING(CartesianPlot, RangeType, d->rangeType) )
 		if (coordinateSystem(curve->coordinateSystemIndex())->yIndex() != index)
 			continue;
 		if (!curve->isVisible())

@@ -42,6 +42,7 @@ public:
 	enum class NavigationOperation {ScaleAuto, ScaleAutoX, ScaleAutoY, ZoomIn, ZoomOut, ZoomInX, ZoomOutX,
 				  ZoomInY, ZoomOutY, ShiftLeftX, ShiftRightX, ShiftUpY, ShiftDownY};
 	enum class RangeType {Free, Last, First};
+	Q_ENUM(RangeType)
 	enum class RangeBreakStyle {Simple, Vertical, Sloped};
 
 	struct RangeBreak {
