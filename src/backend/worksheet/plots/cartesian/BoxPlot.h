@@ -86,6 +86,8 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, whiskersPen, WhiskersPen)
 	BASIC_D_ACCESSOR_DECL(qreal, whiskersOpacity, WhiskersOpacity)
 	BASIC_D_ACCESSOR_DECL(double, whiskersCapSize, WhiskersCapSize)
+	CLASS_D_ACCESSOR_DECL(QPen, whiskersCapPen, WhiskersCapPen)
+	BASIC_D_ACCESSOR_DECL(qreal, whiskersCapOpacity, WhiskersCapOpacity)
 
 	void setVisible(bool on) override;
 	bool isVisible() const override;
@@ -163,6 +165,8 @@ signals:
 	void whiskersPenChanged(QPen&);
 	void whiskersOpacityChanged(float);
 	void whiskersCapSizeChanged(double);
+	void whiskersCapPenChanged(QPen&);
+	void whiskersCapOpacityChanged(float);
 };
 
 #endif

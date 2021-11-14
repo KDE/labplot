@@ -106,6 +106,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 
 	//Tab "Whiskers"
 	GuiTools::updatePenStyles(ui.cbWhiskersStyle, Qt::black);
+	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, Qt::black);
 
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {
@@ -180,10 +181,14 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	//Tab "Whiskers"
 	connect(ui.cbWhiskersType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersTypeChanged);
 	connect(ui.cbWhiskersStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersStyleChanged);
-	connect(ui.sbWhiskersCapSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapSizeChanged);
 	connect(ui.kcbWhiskersColor, &KColorButton::changed, this, &BoxPlotDock::whiskersColorChanged);
 	connect(ui.sbWhiskersWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::whiskersWidthChanged);
 	connect(ui.sbWhiskersOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::whiskersOpacityChanged);
+	connect(ui.sbWhiskersCapSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapSizeChanged);
+	connect(ui.cbWhiskersCapStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersCapStyleChanged);
+	connect(ui.kcbWhiskersCapColor, &KColorButton::changed, this, &BoxPlotDock::whiskersCapColorChanged);
+	connect(ui.sbWhiskersCapWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapWidthChanged);
+	connect(ui.sbWhiskersCapOpacity, QOverload<int>::of(&QSpinBox::valueChanged), this, &BoxPlotDock::whiskersCapOpacityChanged);
 
 	//template handler
 	auto* frame = new QFrame(this);
@@ -273,8 +278,10 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	//whiskers
 	connect(m_boxPlot, &BoxPlot::whiskersTypeChanged, this, &BoxPlotDock::plotWhiskersTypeChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersPenChanged, this, &BoxPlotDock::plotWhiskersPenChanged);
-	connect(m_boxPlot, &BoxPlot::whiskersCapSizeChanged, this, &BoxPlotDock::plotWhiskersCapSizeChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersOpacityChanged, this, &BoxPlotDock::plotWhiskersOpacityChanged);
+	connect(m_boxPlot, &BoxPlot::whiskersCapSizeChanged, this, &BoxPlotDock::plotWhiskersCapSizeChanged);
+	connect(m_boxPlot, &BoxPlot::whiskersCapPenChanged, this, &BoxPlotDock::plotWhiskersCapPenChanged);
+	connect(m_boxPlot, &BoxPlot::whiskersCapOpacityChanged, this, &BoxPlotDock::plotWhiskersCapOpacityChanged);
 }
 
 void BoxPlotDock::setModel() {
@@ -846,6 +853,7 @@ void BoxPlotDock::whiskersOpacityChanged(int value) const {
 		boxPlot->setWhiskersOpacity(opacity);
 }
 
+//whiskers cap
 void BoxPlotDock::whiskersCapSizeChanged(double value) const {
 	if (m_initializing)
 		return;
@@ -853,6 +861,56 @@ void BoxPlotDock::whiskersCapSizeChanged(double value) const {
 	float size = Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point);
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersCapSize(size);
+}
+
+void BoxPlotDock::whiskersCapStyleChanged(int index) const {
+	if (m_initializing)
+		return;
+
+	auto penStyle = Qt::PenStyle(index);
+	QPen pen;
+	for (auto* boxPlot : m_boxPlots) {
+		pen = boxPlot->whiskersCapPen();
+		pen.setStyle(penStyle);
+		boxPlot->setWhiskersCapPen(pen);
+	}
+}
+
+void BoxPlotDock::whiskersCapColorChanged(const QColor& color) {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* boxPlot : m_boxPlots) {
+		pen = boxPlot->whiskersCapPen();
+		pen.setColor(color);
+		boxPlot->setWhiskersCapPen(pen);
+	}
+
+	m_initializing = true;
+	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, color);
+	m_initializing = false;
+}
+
+void BoxPlotDock::whiskersCapWidthChanged(double value) const {
+	if (m_initializing)
+		return;
+
+	QPen pen;
+	for (auto* boxPlot : m_boxPlots) {
+		pen = boxPlot->whiskersCapPen();
+		pen.setWidthF( Worksheet::convertToSceneUnits(value, Worksheet::Unit::Point) );
+		boxPlot->setWhiskersCapPen(pen);
+	}
+}
+
+void BoxPlotDock::whiskersCapOpacityChanged(int value) const {
+	if (m_initializing)
+		return;
+
+	qreal opacity = (float)value/100.;
+	for (auto* boxPlot : m_boxPlots)
+		boxPlot->setWhiskersCapOpacity(opacity);
 }
 
 //*************************************************************
@@ -984,7 +1042,6 @@ void BoxPlotDock::plotWhiskersTypeChanged(BoxPlot::WhiskersType type) {
 	Lock lock(m_initializing);
 	ui.cbWhiskersType->setCurrentIndex((int)type);
 }
-
 void BoxPlotDock::plotWhiskersPenChanged(QPen& pen) {
 	Lock lock(m_initializing);
 	if (ui.cbWhiskersStyle->currentIndex() != pen.style())
@@ -997,11 +1054,27 @@ void BoxPlotDock::plotWhiskersPenChanged(QPen& pen) {
 void BoxPlotDock::plotWhiskersOpacityChanged(float value) {
 	Lock lock(m_initializing);
 	float v = (float)value*100.;
-	ui.sbBorderOpacity->setValue(v);
+	ui.sbWhiskersOpacity->setValue(v);
 }
+
+//whiskers cap
 void BoxPlotDock::plotWhiskersCapSizeChanged(double size) {
 	Lock lock(m_initializing);
 	ui.sbWhiskersCapSize->setValue(Worksheet::convertFromSceneUnits(size, Worksheet::Unit::Point));
+}
+void BoxPlotDock::plotWhiskersCapPenChanged(QPen& pen) {
+	Lock lock(m_initializing);
+	if (ui.cbWhiskersCapStyle->currentIndex() != pen.style())
+		ui.cbWhiskersCapStyle->setCurrentIndex(pen.style());
+	if (ui.kcbWhiskersCapColor->color() != pen.color())
+		ui.kcbWhiskersCapColor->setColor(pen.color());
+	if (ui.sbWhiskersCapWidth->value() != pen.widthF())
+		ui.sbWhiskersCapWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
+}
+void BoxPlotDock::plotWhiskersCapOpacityChanged(float value) {
+	Lock lock(m_initializing);
+	float v = (float)value*100.;
+	ui.sbWhiskersCapOpacity->setValue(v);
 }
 
 //**********************************************************
@@ -1059,7 +1132,14 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	ui.kcbWhiskersColor->setColor( group.readEntry("WhiskersColor", penWhiskers.color()) );
 	ui.sbWhiskersWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("WhiskersWidth", penWhiskers.widthF()), Worksheet::Unit::Point) );
 	ui.sbWhiskersOpacity->setValue( group.readEntry("WhiskersOpacity", m_boxPlot->whiskersOpacity())*100 );
+
+	//whiskers cap
+	const QPen& penCap = m_boxPlot->whiskersCapPen();
 	ui.sbWhiskersCapSize->setValue( Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapSize", m_boxPlot->whiskersCapSize()), Worksheet::Unit::Point) );
+	ui.cbWhiskersCapStyle->setCurrentIndex( group.readEntry("WhiskersCapStyle", (int)penCap.style()) );
+	ui.kcbWhiskersCapColor->setColor( group.readEntry("WhiskersCapColor", penCap.color()) );
+	ui.sbWhiskersCapWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("WhiskersCapWidth", penCap.widthF()), Worksheet::Unit::Point) );
+	ui.sbWhiskersCapOpacity->setValue( group.readEntry("WhiskersCapOpacity", m_boxPlot->whiskersCapOpacity())*100 );
 
 	Lock lock(m_initializing);
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
@@ -1132,7 +1212,12 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 	group.writeEntry("WhiskersColor", ui.kcbWhiskersColor->color());
 	group.writeEntry("WhiskersWidth", Worksheet::convertToSceneUnits(ui.sbWhiskersWidth->value(), Worksheet::Unit::Point));
 	group.writeEntry("WhiskersOpacity", ui.sbWhiskersOpacity->value()/100.0);
-	group.writeEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(ui.sbWhiskersCapSize->value(), Worksheet::Unit::Point));
 
+	//whiskers cap
+	group.writeEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(ui.sbWhiskersCapSize->value(), Worksheet::Unit::Point));
+	group.writeEntry("WhiskersCapStyle", ui.cbWhiskersCapStyle->currentIndex());
+	group.writeEntry("WhiskersCapColor", ui.kcbWhiskersCapColor->color());
+	group.writeEntry("WhiskersCapWidth", Worksheet::convertToSceneUnits(ui.sbWhiskersCapWidth->value(), Worksheet::Unit::Point));
+	group.writeEntry("WhiskersCapOpacity", ui.sbWhiskersCapOpacity->value()/100.0);
 	config.sync();
 }

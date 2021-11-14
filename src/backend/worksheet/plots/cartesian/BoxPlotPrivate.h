@@ -87,8 +87,10 @@ public:
 	//whiskers
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
 	QPen whiskersPen;
-	double whiskersCapSize;
 	qreal whiskersOpacity;
+	double whiskersCapSize;
+	QPen whiskersCapPen;
+	qreal whiskersCapOpacity;
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
@@ -122,6 +124,7 @@ private:
 	QVector<QLineF> m_medianLine;
 	QVector<double> m_mean;
 	QVector<QPainterPath> m_whiskersPath;
+	QVector<QPainterPath> m_whiskersCapPath;
 	QVector<double> m_whiskerMin;
 	QVector<double> m_whiskerMax;
 	QVector<Points> m_outlierPointsLogical;	//positions of the outlier symbols in logical coordinates

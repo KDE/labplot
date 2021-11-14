@@ -94,10 +94,14 @@ private slots:
 	//whiskers
 	void whiskersTypeChanged(int) const;
 	void whiskersStyleChanged(int) const;
-	void whiskersCapSizeChanged(double) const;
 	void whiskersColorChanged(const QColor&);
 	void whiskersWidthChanged(double) const;
 	void whiskersOpacityChanged(int) const;
+	void whiskersCapSizeChanged(double) const;
+	void whiskersCapStyleChanged(int) const;
+	void whiskersCapColorChanged(const QColor&);
+	void whiskersCapWidthChanged(double) const;
+	void whiskersCapOpacityChanged(int) const;
 
 	//SLOTs for changes triggered in BoxPlot
 	//general
@@ -135,8 +139,10 @@ private slots:
 	//whiskers
 	void plotWhiskersTypeChanged(BoxPlot::WhiskersType);
 	void plotWhiskersPenChanged(QPen&);
-	void plotWhiskersCapSizeChanged(double);
 	void plotWhiskersOpacityChanged(float);
+	void plotWhiskersCapSizeChanged(double);
+	void plotWhiskersCapPenChanged(QPen&);
+	void plotWhiskersCapOpacityChanged(float);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);

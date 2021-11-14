@@ -137,6 +137,10 @@ void BoxPlot::init() {
 	                    (Qt::PenStyle) group.readEntry("WhiskersStyle", (int)Qt::SolidLine));
 	d->whiskersOpacity = group.readEntry("WhiskersOpacity", 1.0);
 	d->whiskersCapSize = group.readEntry("WhiskersCapSize", Worksheet::convertToSceneUnits(5.0, Worksheet::Unit::Point));
+	d->whiskersCapPen = QPen(group.readEntry("WhiskersCapColor", QColor(Qt::black)),
+	                    group.readEntry("WhiskersCapWidth", Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point)),
+	                    (Qt::PenStyle) group.readEntry("WhiskersCapStyle", (int)Qt::SolidLine));
+	d->whiskersCapOpacity = group.readEntry("WhiskersCapOpacity", 1.0);
 }
 
 /*!
@@ -283,6 +287,8 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whisker
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersOpacity, whiskersOpacity)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersCapSize, whiskersCapSize)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersCapPen, whiskersCapPen)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersCapOpacity, whiskersCapOpacity)
 
 QVector<QString>& BoxPlot::dataColumnPaths() const {
 	return d_ptr->dataColumnPaths;
@@ -498,6 +504,20 @@ void BoxPlot::setWhiskersCapSize(double size) {
 		exec(new BoxPlotSetWhiskersCapSizeCmd(d, size, ki18n("%1: set whiskers cap size")));
 }
 
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapPen, QPen, whiskersCapPen, recalcShapeAndBoundingRect)
+void BoxPlot::setWhiskersCapPen(const QPen& pen) {
+	Q_D(BoxPlot);
+	if (pen != d->whiskersCapPen)
+		exec(new BoxPlotSetWhiskersCapPenCmd(d, pen, ki18n("%1: set whiskers cap pen")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersCapOpacity, qreal, whiskersCapOpacity, updatePixmap)
+void BoxPlot::setWhiskersCapOpacity(qreal opacity) {
+	Q_D(BoxPlot);
+	if (opacity != d->whiskersCapOpacity)
+		exec(new BoxPlotSetWhiskersCapOpacityCmd(d, opacity, ki18n("%1: set whiskers cap opacity")));
+}
+
 //Symbols
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetJitteringEnabled, bool, jitteringEnabled, recalc)
 void BoxPlot::setJitteringEnabled(bool enabled) {
@@ -583,6 +603,7 @@ void BoxPlotPrivate::retransform() {
 		m_boxRect[i].clear();
 		m_medianLine[i] = QLineF();
 		m_whiskersPath[i] = QPainterPath();
+		m_whiskersCapPath[i] = QPainterPath();
 		m_outlierPoints[i].clear();
 		m_dataPoints[i].clear();
 		m_farOutPoints[i].clear();
@@ -618,6 +639,7 @@ void BoxPlotPrivate::recalc() {
 	m_median.resize(count);
 	m_medianLine.resize(count);
 	m_whiskersPath.resize(count);
+	m_whiskersCapPath.resize(count);
 	m_whiskerMin.resize(count);
 	m_whiskerMax.resize(count);
 	m_outlierPointsLogical.resize(count);
@@ -949,14 +971,14 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 		bool visible = false;
 		QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMax.at(index)), visible);
 		if (visible) {
-			m_whiskersPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize/2., maxPoint.y()));
-			m_whiskersPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize/2., maxPoint.y()));
+			m_whiskersCapPath[index].moveTo(QPointF(maxPoint.x() - whiskersCapSize/2., maxPoint.y()));
+			m_whiskersCapPath[index].lineTo(QPointF(maxPoint.x() + whiskersCapSize/2., maxPoint.y()));
 		}
 
 		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(x, m_whiskerMin.at(index)), visible);
 		if (visible) {
-			m_whiskersPath[index].moveTo(QPointF(minPoint.x() - whiskersCapSize/2., minPoint.y()));
-			m_whiskersPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
+			m_whiskersCapPath[index].moveTo(QPointF(minPoint.x() - whiskersCapSize/2., minPoint.y()));
+			m_whiskersCapPath[index].lineTo(QPointF(minPoint.x() + whiskersCapSize/2., minPoint.y()));
 		}
 	}
 
@@ -1078,14 +1100,14 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 		bool visible = false;
 		QPointF maxPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMax.at(index), y), visible);
 		if (visible) {
-			m_whiskersPath[index].moveTo(QPointF(maxPoint.x(), maxPoint.y() - whiskersCapSize/2));
-			m_whiskersPath[index].lineTo(QPointF(maxPoint.x(), maxPoint.y() + whiskersCapSize/2));
+			m_whiskersCapPath[index].moveTo(QPointF(maxPoint.x(), maxPoint.y() - whiskersCapSize/2));
+			m_whiskersCapPath[index].lineTo(QPointF(maxPoint.x(), maxPoint.y() + whiskersCapSize/2));
 		}
 
 		QPointF minPoint = q->cSystem->mapLogicalToScene(QPointF(m_whiskerMin.at(index), y), visible);
 		if (visible) {
-			m_whiskersPath[index].moveTo(QPointF(minPoint.x(), minPoint.y() - whiskersCapSize/2));
-			m_whiskersPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize/2));
+			m_whiskersCapPath[index].moveTo(QPointF(minPoint.x(), minPoint.y() - whiskersCapSize/2));
+			m_whiskersCapPath[index].lineTo(QPointF(minPoint.x(), minPoint.y() + whiskersCapSize/2));
 		}
 	}
 
@@ -1207,6 +1229,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(boxPath, borderPen));
 
 		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersPath.at(i), whiskersPen));
+		m_boxPlotShape.addPath(WorksheetElement::shapeFromPath(m_whiskersCapPath.at(i), whiskersCapPen));
 
 		//add symbols outlier, jitter and far out values
 		QPainterPath symbolsPath = QPainterPath();
@@ -1346,7 +1369,15 @@ void BoxPlotPrivate::draw(QPainter* painter) {
 			painter->drawPath(m_whiskersPath.at(i));
 		}
 
-		//draw the symbols for the outliers and for the mean
+		//draw the whiskers cap
+		if (whiskersCapPen.style() != Qt::NoPen && !m_whiskersCapPath.at(i).isEmpty()) {
+			painter->setPen(whiskersCapPen);
+			painter->setBrush(Qt::NoBrush);
+			painter->setOpacity(whiskersCapOpacity);
+			painter->drawPath(m_whiskersCapPath.at(i));
+		}
+
+		//draw the symbols
 		drawSymbols(painter, i);
 	}
 }
@@ -1687,7 +1718,12 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute("type", QString::number(static_cast<int>(d->whiskersType)));
 	WRITE_QPEN(d->whiskersPen);
 	writer->writeAttribute("opacity", QString::number(d->whiskersOpacity));
-	writer->writeAttribute("capSize", QString::number(d->whiskersCapSize));
+	writer->writeEndElement();
+
+	writer->writeStartElement("whiskersCap");
+	writer->writeAttribute("size", QString::number(d->whiskersCapSize));
+	WRITE_QPEN(d->whiskersCapPen);
+	writer->writeAttribute("opacity", QString::number(d->whiskersCapOpacity));
 	writer->writeEndElement();
 
 	writer->writeEndElement(); // close "BoxPlot" section
@@ -1810,6 +1846,12 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_QPEN(d->whiskersPen);
 			READ_DOUBLE_VALUE("opacity", whiskersOpacity);
 			READ_DOUBLE_VALUE("capSize", whiskersCapSize);
+		} else if (!preview && reader->name() == "whiskersCap") {
+			attribs = reader->attributes();
+
+			READ_DOUBLE_VALUE("size", whiskersCapSize);
+			READ_QPEN(d->whiskersCapPen);
+			READ_DOUBLE_VALUE("opacity", whiskersCapOpacity);
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;
@@ -1868,6 +1910,8 @@ void BoxPlot::loadThemeConfig(const KConfig& config) {
 	//whiskers
 	setWhiskersPen(p);
 	setWhiskersOpacity(group.readEntry("LineOpacity", 1.0));
+	setWhiskersCapPen(p);
+	setWhiskersCapOpacity(group.readEntry("LineOpacity", 1.0));
 
 	//symbols
 	d->symbolMean->loadThemeConfig(group, themeColor);
