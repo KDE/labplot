@@ -25,7 +25,7 @@ class StatisticsColumnWidget : public QWidget {
 public:
 	explicit StatisticsColumnWidget(const Column*, QWidget *parent = nullptr);
 	~StatisticsColumnWidget() override;
-	void showStatistics();
+	void setCurrentTab(int);
 
 private:
 	void showOverview();
@@ -58,6 +58,9 @@ private:
 
 private slots:
 	void currentTabChanged(int);
+
+signals:
+	void tabChanged(int);
 };
 
 #endif

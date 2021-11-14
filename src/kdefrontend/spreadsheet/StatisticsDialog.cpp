@@ -51,8 +51,11 @@ StatisticsDialog::StatisticsDialog(const QString& title, const QVector<Column*>&
 	m_columns = columns;
 
 	//create tab widgets for every column and show the initial text with the placeholders
-	for (auto* col : m_columns)
-		m_twStatistics->addTab(new StatisticsColumnWidget(col, this), col->name());
+	for (auto* col : m_columns) {
+		auto* w = new StatisticsColumnWidget(col, this);
+		connect(w, &StatisticsColumnWidget::tabChanged, this, &StatisticsDialog::currentWidgetTabChanged);
+		m_twStatistics->addTab(w, col->name());
+	}
 
 	connect(m_twStatistics, &QTabWidget::currentChanged, this, &StatisticsDialog::currentTabChanged);
 
@@ -81,5 +84,13 @@ void StatisticsDialog::currentTabChanged(int) {
 	if (!w)
 		return;
 
-	w->showStatistics();
+	w->setCurrentTab(m_currentWidgetTab);
+}
+
+/*!
+ * slot called when the user switches between the different tabs in StatisticsWidget.
+ * we keep the last used tab index and use it when the user navigates to a different column
+ */
+void StatisticsDialog::currentWidgetTabChanged(int index) {
+	m_currentWidgetTab = index;
 }

@@ -27,9 +27,11 @@ public:
 private:
 	QTabWidget* m_twStatistics;
 	QVector<Column*> m_columns;
+	int m_currentWidgetTab{0};
 
 private slots:
 	void currentTabChanged(int);
+	void currentWidgetTabChanged(int);
 };
 
 #endif

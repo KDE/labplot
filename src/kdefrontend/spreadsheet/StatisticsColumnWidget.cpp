@@ -222,11 +222,8 @@ StatisticsColumnWidget::~StatisticsColumnWidget() {
 	delete m_project;
 }
 
-void StatisticsColumnWidget::showStatistics() {
-	if (!m_overviewInitialized) {
-		QApplication::processEvents(QEventLoop::AllEvents, 0);
-		QTimer::singleShot(0, this, [=] () {currentTabChanged(0);});
-	}
+void StatisticsColumnWidget::setCurrentTab(int index) {
+	m_tabWidget->setCurrentIndex(index);
 }
 
 void StatisticsColumnWidget::currentTabChanged(int index) {
@@ -240,6 +237,8 @@ void StatisticsColumnWidget::currentTabChanged(int index) {
 		showQQPlot();
 	else if (index == 4 && !m_boxPlotInitialized)
 		showBoxPlot();
+
+	emit tabChanged(index);
 }
 
 void StatisticsColumnWidget::showOverview() {
