@@ -95,9 +95,13 @@ void ExpressionTextEdit::validateExpression(bool force) {
 
 	if (textChanged || force) {
 		m_isValid = ExpressionParser::getInstance()->isValid(text, m_variables);
-		if (!m_isValid)
-			setStyleSheet("QTextEdit{background: red;}");
-		else
+		if (!m_isValid) {
+			QPalette palette;
+			if (qGray(palette.color(QPalette::Base).rgb()) > 160)	// light
+				setStyleSheet("QTextEdit{background: rgb(255, 200, 200);}");
+			else	// dark
+				setStyleSheet("QTextEdit{background: rgb(128, 0, 0);}");
+		} else
 			setStyleSheet(QString());
 
 		m_currentExpression = text;

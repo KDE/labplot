@@ -39,14 +39,14 @@ void EquationHighlighter::highlightBlock(const QString& text) {
 	QTextCharFormat matchedParenthesis;
 
 	QPalette palette;
-	if (qGray(palette.color(QPalette::Base).rgb()) > 160) {
+	if (qGray(palette.color(QPalette::Base).rgb()) > 160) {	// light
 		number.setForeground(QColor(0, 0, 127));
 		function.setForeground(QColor(85, 0, 0));
 		function.setFontWeight(QFont::Bold);
 		variable.setForeground(QColor(0, 85, 0));
 		constant.setForeground(QColor(85, 0, 0));
 		matchedParenthesis.setBackground(QColor(255, 255, 183));
-	} else {
+	} else {	// dark
 		number.setForeground(QColor(160, 160, 255));
 		function.setForeground(QColor(255, 160, 160));
 		function.setFontWeight(QFont::Bold);

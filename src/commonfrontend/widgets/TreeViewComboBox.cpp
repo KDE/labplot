@@ -185,7 +185,10 @@ void TreeViewComboBox::setText(const QString& text) {
 void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 	if (invalid) {
 		QPalette pal = palette();
-		pal.setColor(QPalette::Text, Qt::red);
+		if (qGray(pal.color(QPalette::Base).rgb()) > 160)	// light
+			pal.setColor(QPalette::Text, QColor(255, 200, 200));
+		else // dark
+			pal.setColor(QPalette::Text, QColor(128, 0, 0));
 		setPalette(pal);
 
 		setToolTip(tooltip);
@@ -327,7 +330,7 @@ void TreeViewComboBox::setColumn(const AbstractColumn* column, const QString& pa
 	DEBUG(Q_FUNC_INFO)
 	setAspect(column);
 
-	// don't make the comboboxe red for initially created curves
+	// don't make the combobox red for initially created curves
 	if (!column && path.isEmpty()) {
 		setText("");
 		setInvalid(false);
