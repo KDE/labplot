@@ -20,7 +20,7 @@
 class AspectChildRemoveCmd : public QUndoCommand {
 public:
 	AspectChildRemoveCmd(AbstractAspectPrivate* target, AbstractAspect* child)
-		: m_target(target), m_child(child) {
+		: m_target(target), m_child(child), m_moved(child->isMoved()) {
 		setText(i18n("%1: remove %2", m_target->m_name, m_child->name()));
 	}
 
@@ -41,7 +41,7 @@ public:
 		//emit the "about to be removed" signal also for all children columns so the curves can react.
 		//no need to notify when the parent is just being moved (move up, moved down in the project explorer),
 		//(move = delete at the current position + insert at the new position)
-		if (!m_child->isMoved()) {
+		if (!m_moved) {
 			const auto& columns = m_child->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 			for (auto* col : columns)
 				emit col->parentAspect()->aspectAboutToBeRemoved(col);
@@ -57,10 +57,16 @@ public:
 	void undo() override {
 		Q_ASSERT(m_index != -1); // m_child must be a child of m_target->q
 
+		if (m_moved)
+			m_child->setMoved(true);
+
 		emit m_target->q->aspectAboutToBeAdded(m_target->q, nullptr, m_child);
 		m_target->insertChild(m_index, m_child);
 		m_child->finalizeAdd();
 		emit m_target->q->aspectAdded(m_child);
+
+		if (m_moved)
+			m_child->setMoved(false);
 // 		m_removed = false;
 	}
 
@@ -68,6 +74,7 @@ protected:
 	AbstractAspectPrivate* m_target{nullptr};
 	AbstractAspect* m_child{nullptr};
 	int m_index{-1};
+	bool m_moved{false};
 // 	bool m_removed{false};
 };
 
