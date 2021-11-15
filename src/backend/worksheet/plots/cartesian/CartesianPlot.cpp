@@ -2169,7 +2169,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		autoScale(-1, -1);	// update all plot ranges
 	}
 
-	if (!isLoading() && !this->pasted() && !child->pasted()) {
+	if (!isLoading() && !this->pasted() && !child->pasted() && !child->isMoved()) {
 		//if a theme was selected, apply the theme settings for newly added children,
 		//load default theme settings otherwise.
 		const auto* elem = qobject_cast<const WorksheetElement*>(child);
