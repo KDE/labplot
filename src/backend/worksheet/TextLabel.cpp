@@ -1236,6 +1236,8 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "y", QString::number(d->position.point.y()) );
 	writer->writeAttribute( "horizontalPosition", QString::number(static_cast<int>(d->position.horizontalPosition)) );
 	writer->writeAttribute( "verticalPosition", QString::number(static_cast<int>(d->position.verticalPosition)) );
+	writer->writeAttribute( "horizontalAlignment", QString::number(static_cast<int>(d->horizontalAlignment)) );
+	writer->writeAttribute( "verticalAlignment", QString::number(static_cast<int>(d->verticalAlignment)) );
 	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
 	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
 	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
