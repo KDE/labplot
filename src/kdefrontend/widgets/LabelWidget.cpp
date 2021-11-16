@@ -1161,13 +1161,13 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
 }
 
 /*!
- * \brief Highlights the text field red if wrong latex syntax was used (null image was produced)
+ * \brief Highlights the text field if wrong latex syntax was used (null image was produced)
  * or something else went wrong during rendering (\sa ExpressionTextEdit::validateExpression())
  */
 void LabelWidget::labelTeXImageUpdated(bool valid) {
 	if (!valid) {
 		if (ui.teLabel->styleSheet().isEmpty())
-			ui.teLabel->setStyleSheet(QLatin1String("QTextEdit{background: red;}"));
+			SET_WARNING_STYLE(ui.teLabel)
 	} else
 		ui.teLabel->setStyleSheet(QString());
 }

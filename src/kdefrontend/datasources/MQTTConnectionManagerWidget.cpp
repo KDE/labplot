@@ -131,7 +131,7 @@ void MQTTConnectionManagerWidget::connectionChanged(int index) {
  */
 void MQTTConnectionManagerWidget::nameChanged(const QString &name) {
 	if (name.isEmpty()) {
-		ui.leName->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.leName)
 		ui.leHost->setToolTip(i18n("Please set a valid name."));
 	} else {
 		//check uniqueness of the provided name
@@ -156,7 +156,7 @@ void MQTTConnectionManagerWidget::nameChanged(const QString &name) {
 				emit changed();
 			}
 		} else {
-			ui.leName->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+			SET_WARNING_STYLE(ui.leName)
 			ui.leHost->setToolTip(i18n("Please provide a unique name."));
 		}
 	}
@@ -168,7 +168,7 @@ void MQTTConnectionManagerWidget::nameChanged(const QString &name) {
  */
 void MQTTConnectionManagerWidget::hostChanged(const QString& hostName) {
 	if (hostName.isEmpty()) {
-		ui.leHost->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.leHost)
 		ui.leHost->setToolTip(i18n("Please set a valid host name."));
 	} else {
 		m_currentConnection->hostName = hostName;
@@ -185,14 +185,14 @@ void MQTTConnectionManagerWidget::hostChanged(const QString& hostName) {
 		}
 
 		if (!unique) {
-			ui.leHost->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+			SET_WARNING_STYLE(ui.leHost)
+			SET_WARNING_STYLE(ui.lePort)
 			ui.leHost->setToolTip(i18n("Host name and port must be unique."));
-			ui.lePort->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
 			ui.lePort->setToolTip(i18n("Host name and port must be unique."));
 		} else {
 			ui.leHost->setStyleSheet(QString());
-			ui.leHost->setToolTip(QString());
 			ui.lePort->setStyleSheet(QString());
+			ui.leHost->setToolTip(QString());
 			ui.lePort->setToolTip(QString());
 
 			if (!m_initializing)
@@ -207,7 +207,7 @@ void MQTTConnectionManagerWidget::hostChanged(const QString& hostName) {
  */
 void MQTTConnectionManagerWidget::portChanged(const QString& portString) {
 	if (portString.isEmpty()) {
-		ui.leHost->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.leHost)
 		ui.leHost->setToolTip(i18n("Please set a valid port."));
 	} else {
 		m_currentConnection->port = portString.simplified().toInt();
@@ -224,9 +224,9 @@ void MQTTConnectionManagerWidget::portChanged(const QString& portString) {
 		}
 
 		if (!unique) {
-			ui.leHost->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+			SET_WARNING_STYLE(ui.leHost)
+			SET_WARNING_STYLE(ui.lePort)
 			ui.leHost->setToolTip(i18n("Host name and port must be unique."));
-			ui.lePort->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
 			ui.lePort->setToolTip(i18n("Host name and port must be unique."));
 		} else {
 			ui.leHost->setStyleSheet(QString());
@@ -331,7 +331,7 @@ void MQTTConnectionManagerWidget::retainChecked(int state) {
  */
 void MQTTConnectionManagerWidget::userNameChanged(const QString& userName) {
 	if (userName.isEmpty()) {
-		ui.leUserName->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.leUserName)
 		ui.leUserName->setToolTip(i18n("Please set a username."));
 	} else {
 		ui.leUserName->setStyleSheet(QString());
@@ -352,7 +352,7 @@ void MQTTConnectionManagerWidget::userNameChanged(const QString& userName) {
  */
 void MQTTConnectionManagerWidget::passwordChanged(const QString& password) {
 	if (password.isEmpty()) {
-		ui.lePassword->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.lePassword)
 		ui.lePassword->setToolTip(i18n("Please set a password."));
 	} else {
 		ui.lePassword->setStyleSheet(QString());
@@ -373,7 +373,7 @@ void MQTTConnectionManagerWidget::passwordChanged(const QString& password) {
  */
 void MQTTConnectionManagerWidget::clientIdChanged(const QString& clientID) {
 	if (clientID.isEmpty()) {
-		ui.leID->setStyleSheet(QStringLiteral("QLineEdit{background: red;}"));
+		SET_WARNING_STYLE(ui.leID)
 		ui.leID->setToolTip(i18n("Please set a client ID."));
 	} else {
 		ui.leID->setStyleSheet(QString());
@@ -572,7 +572,7 @@ bool MQTTConnectionManagerWidget::checkConnections() {
 
 		if (!allOk) {
 			connectionsOk = false;
-			ui.lwConnections->item(i)->setBackground(QBrush(Qt::red));
+			SET_WARNING_BACKGROUND(ui.lwConnections->item(i))
 		} else
 			ui.lwConnections->item(i)->setBackground(QBrush());
 	}

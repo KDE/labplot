@@ -157,12 +157,12 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 }
 
 bool FunctionValuesDialog::validVariableName(QLineEdit* le) {
-	bool isValid{false};
+	bool isValid = false;
 	if (ExpressionParser::getInstance()->constants().indexOf(le->text()) != -1) {
-		le->setStyleSheet("QLineEdit{background: red;}");
+		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a constant. Please use another name."));
 	} else if (ExpressionParser::getInstance()->functions().indexOf(le->text()) != -1) {
-		le->setStyleSheet("QLineEdit{background: red;}");
+		SET_WARNING_STYLE(le)
 		le->setToolTip(i18n("Provided variable name is already reserved for a name of a function. Please use another name."));
 	} else {
 		le->setStyleSheet(QString());

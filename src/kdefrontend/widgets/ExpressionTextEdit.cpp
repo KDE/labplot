@@ -85,7 +85,7 @@ void ExpressionTextEdit::insertCompletion(const QString& completion) {
 }
 
 /*!
- * \brief Validates the current expression if the text was changed and highlights the text field red if the expression is invalid.
+ * \brief Validates the current expression if the text was changed and highlights the text field if the expression is invalid.
  * \param force forces the validation and highlighting when no text changes were made, used when new parameters/variables were provided
  */
 void ExpressionTextEdit::validateExpression(bool force) {
@@ -95,13 +95,9 @@ void ExpressionTextEdit::validateExpression(bool force) {
 
 	if (textChanged || force) {
 		m_isValid = ExpressionParser::getInstance()->isValid(text, m_variables);
-		if (!m_isValid) {
-			QPalette palette;
-			if (qGray(palette.color(QPalette::Base).rgb()) > 160)	// light
-				setStyleSheet("QTextEdit{background: rgb(255, 200, 200);}");
-			else	// dark
-				setStyleSheet("QTextEdit{background: rgb(128, 0, 0);}");
-		} else
+		if (!m_isValid)
+			SET_WARNING_STYLE(this)
+		else
 			setStyleSheet(QString());
 
 		m_currentExpression = text;

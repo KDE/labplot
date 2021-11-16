@@ -184,12 +184,7 @@ void TreeViewComboBox::setText(const QString& text) {
 
 void TreeViewComboBox::setInvalid(bool invalid, const QString& tooltip) {
 	if (invalid) {
-		QPalette pal = palette();
-		if (qGray(pal.color(QPalette::Base).rgb()) > 160)	// light
-			pal.setColor(QPalette::Text, QColor(255, 200, 200));
-		else // dark
-			pal.setColor(QPalette::Text, QColor(128, 0, 0));
-		setPalette(pal);
+		SET_WARNING_PALETTE
 
 		setToolTip(tooltip);
 	} else {

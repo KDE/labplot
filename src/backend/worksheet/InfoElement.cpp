@@ -822,8 +822,7 @@ void InfoElementPrivate::retransform() {
 		if (curve && curve->name() == connectionLineCurveName) {
 			bool visible;
 			pointPos = q->cSystem->mapLogicalToScene(q->markerpoints[i].customPoint->position(),
-													visible,
-													AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+					visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
 	}
@@ -849,12 +848,11 @@ void InfoElementPrivate::retransform() {
 
 	//vertical line
 	xposLine = QLineF(pointPosItemCoords.x(), boundingRectangle.bottom(),
-					  pointPosItemCoords.x(), boundingRectangle.top());
+			pointPosItemCoords.x(), boundingRectangle.top());
 
 	//new item position
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-	QPointF itemPos(qMin(rect.top(), rect.bottom()),
-					qMin(rect.left(), rect.right()));
+	QPointF itemPos(qMin(rect.top(), rect.bottom()), qMin(rect.left(), rect.right()));
 	setPos(itemPos);
 	update(boundingRectangle);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);

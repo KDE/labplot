@@ -225,7 +225,7 @@ QColor& GuiTools::colorFromAction(QActionGroup* actionGroup, QAction* action) {
 
 void GuiTools::highlight(QLineEdit* le, bool invalid) {
 	if (invalid)
-		le->setStyleSheet(QStringLiteral("QLineEdit{color:red;}"));
+		SET_WARNING_STYLE(le)
 	else
 		le->setStyleSheet(QString());
 }

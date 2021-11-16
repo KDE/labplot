@@ -422,7 +422,7 @@ void FitParametersWidget::upperLimitChanged() {
 void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) {
 	QLineEdit* le = ((QLineEdit*)ui.tableWidget->cellWidget(row, col));
 	if (invalid)
-		le->setStyleSheet("QLineEdit{background: red;}");
+		SET_WARNING_STYLE(le)
 	else
 		le->setStyleSheet(QString());
 

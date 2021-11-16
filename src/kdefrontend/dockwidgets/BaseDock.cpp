@@ -97,13 +97,12 @@ void BaseDock::nameChanged() {
 		return;
 
 	if (!m_aspect->setName(m_leName->text(), false)) {
-		m_leName->setStyleSheet("background:red;");
+		SET_WARNING_STYLE(m_leName)
 		m_leName->setToolTip(i18n("Please choose another name, because this is already in use."));
-		return;
+	} else {
+		m_leName->setStyleSheet("");
+		m_leName->setToolTip("");
 	}
-
-	m_leName->setStyleSheet("");
-	m_leName->setToolTip("");
 }
 
 void BaseDock::commentChanged() {
