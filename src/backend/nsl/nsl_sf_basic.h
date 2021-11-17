@@ -25,6 +25,9 @@ double nsl_sf_sgn(double x);
 /* Heavyside theta function */
 double nsl_sf_theta(double x);
 
+/* non-standard function */
+double nsl_sf_exp10(double x);
+
 /* non-uniform random number generation */
 double nsl_sf_ran_gaussian(double sigma);
 double nsl_sf_ran_exponential(double mu);

@@ -48,6 +48,15 @@ double nsl_sf_theta(double x) {
 		return 0;
 }
 
+double nsl_sf_exp10(double x) {
+#ifdef _GNU_SOURCE
+	return exp10(x);
+#else
+	return pow(10., x);
+#endif
+}
+
+
 /* non-uniform random number generation
  * using a generator chosen by the environment variable GSL_RNG_TYPE
  */

@@ -23,6 +23,7 @@
 extern "C" {
 #include <gsl/gsl_math.h>
 #include "backend/nsl/nsl_math.h"
+#include "backend/nsl/nsl_sf_basic.h"
 }
 
 #include <KConfig>
@@ -33,8 +34,6 @@ extern "C" {
 #include <QPainter>
 #include <QTextDocument>
 #include <QtMath>
-
-#include <cmath>	// exp10
 
 /**
  * \class AxisGrid
@@ -1950,7 +1949,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers10:
-			relDiff = qAbs(exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = qAbs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers2:
 			relDiff = qAbs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
@@ -2052,7 +2051,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 			relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers10:
-			relDiff = qAbs(exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			relDiff = qAbs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers2:
 			relDiff = qAbs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
