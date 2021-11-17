@@ -805,6 +805,7 @@ QString InfoElementPrivate::name() const {
 	Or when the label or the point where moved
  */
 void InfoElementPrivate::retransform() {
+	DEBUG(Q_FUNC_INFO)
 	if (!q->m_title || q->markerpoints.isEmpty())
 		return;
 
@@ -818,10 +819,10 @@ void InfoElementPrivate::retransform() {
 	//determine the position to connect the line to
 	QPointF pointPos;
 	for (int i = 0; i < q->markerPointsCount(); ++i) {
-		const auto* curve = q->markerpoints[i].curve;
+		const auto* curve = q->markerpoints.at(i).curve;
 		if (curve && curve->name() == connectionLineCurveName) {
 			bool visible;
-			pointPos = q->cSystem->mapLogicalToScene(q->markerpoints[i].customPoint->position(),
+			pointPos = q->cSystem->mapLogicalToScene(q->markerpoints.at(i).customPoint->position(),
 					visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
@@ -837,18 +838,22 @@ void InfoElementPrivate::retransform() {
 	//new bounding rectangle
 	const QRectF& rect = q->m_plot->dataRect();
 	boundingRectangle = mapFromParent(rect).boundingRect();
+	QDEBUG(Q_FUNC_INFO << ", rect = " << rect)
+	QDEBUG(Q_FUNC_INFO << ", bounding rect = " << boundingRectangle)
 
 	//connection line
 	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
 	const QPointF pointPosItemCoords = mapFromParent(pointPos); // calculate item coords from scene coords
 	if (boundingRectangle.contains(m_titlePosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
-		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), pointPosItemCoords.x(), pointPosItemCoords.y());
+		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), 
+					pointPosItemCoords.x(), pointPosItemCoords.y());
 	else
 		connectionLine = QLineF();
+	QDEBUG(Q_FUNC_INFO << ", connection line = " << connectionLine)
 
 	//vertical line
-	xposLine = QLineF(pointPosItemCoords.x(), boundingRectangle.bottom(),
-			pointPosItemCoords.x(), boundingRectangle.top());
+	xposLine = QLineF(pointPosItemCoords.x(), boundingRectangle.bottom(), pointPosItemCoords.x(), boundingRectangle.top());
+	QDEBUG(Q_FUNC_INFO << ", vertical line " << xposLine)
 
 	//new item position
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
@@ -861,7 +866,7 @@ void InfoElementPrivate::retransform() {
 }
 
 void InfoElementPrivate::updatePosition() {
-
+	//TODO?
 }
 
 /*!

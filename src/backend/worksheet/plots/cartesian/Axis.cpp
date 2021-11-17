@@ -1911,7 +1911,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (value == 0)
 				tempValues.append(log10(DBL_MIN));
 			else {
-				DEBUG(Q_FUNC_INFO << ", rounded value = " << nsl_math_round_places(log10(qAbs(value)), precision))
+				//DEBUG(Q_FUNC_INFO << ", rounded value = " << nsl_math_round_places(log10(qAbs(value)), precision))
 				tempValues.append( nsl_math_round_places(log10(qAbs(value)), precision) );
 			}
 		}
@@ -1932,21 +1932,37 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 				tempValues.append( nsl_math_round_places(log(qAbs(value)), precision) );
 		}
 	}
-	QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
+	//QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
 
+	const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
+	//DEBUG(Q_FUNC_INFO << ", scale = " << scale)
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// check if rounded value differs too much
-		const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
-		const double relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
-		//DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+		double relDiff = 0;
+		//DEBUG(Q_FUNC_INFO << ", round value = " << tempValues.at(i) << ", tick label =  " << tickLabelValues.at(i))
+		switch(format) {
+		case Axis::LabelsFormat::Decimal:
+		case Axis::LabelsFormat::MultipliesPi:
+		case Axis::LabelsFormat::Scientific:
+		case Axis::LabelsFormat::ScientificE:
+			relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			break;
+		case Axis::LabelsFormat::Powers10:
+			relDiff = qAbs(exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			break;
+		case Axis::LabelsFormat::Powers2:
+			relDiff = qAbs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			break;
+		case Axis::LabelsFormat::PowersE:
+			relDiff = qAbs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+		}
 		//DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
 		for (int j = 0; j < tempValues.size(); ++j) {
-			if (i == j)
-				continue;
+			if (i == j) continue;
 
 			// if duplicate for the current precision found or differs too much, increase the precision and check again
-			//DEBUG(Q_FUNC_INFO << ", compare " << tempValues.at(i) << " with " << tempValues.at(j))
-			if (tempValues.at(i) == tempValues.at(j) || relDiff > 0.01) {
+			// DEBUG(Q_FUNC_INFO << ", compare " << tempValues.at(i) << " with " << tempValues.at(j))
+			if (tempValues.at(i) == tempValues.at(j) || relDiff > 0.01) {	// > 1%
 				//DEBUG(Q_FUNC_INFO << ", duplicates found : " << tempValues.at(i))
 				return upperLabelsPrecision(precision + 1, format);
 			}
@@ -1990,7 +2006,7 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 			const double frac = nsl_math_frexp10(value, &e);
 			//DEBUG(Q_FUNC_INFO << ", frac = " << frac << ", exp = " << e)
 			//DEBUG(Q_FUNC_INFO << ", rounded frac = " << nsl_math_round_precision(frac, precision))
-			tempValues.append( nsl_math_round_precision(frac, precision) * pow(10, e) );
+			tempValues.append( nsl_math_round_precision(frac, precision) * gsl_pow_int(10., e) );
 		}
 		break;
 	case Axis::LabelsFormat::Powers10:
@@ -2021,12 +2037,29 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 
 	//check whether we have duplicates with reduced precision
 	//-> current precision cannot be reduced, return the previous value
+	const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
+	//DEBUG(Q_FUNC_INFO << ", scale = " << scale)
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// return if rounded value differs too much
-		const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
-		const double relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
-		//DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+		double relDiff = 0;
+		switch(format) {
+		case Axis::LabelsFormat::Decimal:
+		case Axis::LabelsFormat::MultipliesPi:
+		case Axis::LabelsFormat::Scientific:
+		case Axis::LabelsFormat::ScientificE:
+			relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			break;
+		case Axis::LabelsFormat::Powers10:
+			relDiff = qAbs(exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			break;
+		case Axis::LabelsFormat::Powers2:
+			relDiff = qAbs(exp2(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+			break;
+		case Axis::LabelsFormat::PowersE:
+			relDiff = qAbs(exp(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
+		}
 		//DEBUG(Q_FUNC_INFO << ", rel. diff = " << relDiff)
+
 		if (relDiff > 0.01)	// > 1 %
 			return precision + 1;
 		for (int j = 0; j < tempValues.size(); ++j) {
