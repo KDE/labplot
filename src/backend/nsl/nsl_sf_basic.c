@@ -49,7 +49,7 @@ double nsl_sf_theta(double x) {
 }
 
 double nsl_sf_exp10(double x) {
-#ifdef _GNU_SOURCE
+#ifdef __linux__
 	return exp10(x);
 #else
 	return pow(10., x);
