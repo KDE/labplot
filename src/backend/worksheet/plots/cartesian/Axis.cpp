@@ -34,6 +34,8 @@ extern "C" {
 #include <QTextDocument>
 #include <QtMath>
 
+#include <cmath>	// exp10
+
 /**
  * \class AxisGrid
  * \brief Helper class to get the axis grid drawn with the z-Value=0.
