@@ -1936,17 +1936,19 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 	//QDEBUG(Q_FUNC_INFO << ", rounded values: " << tempValues)
 
 	const double scale = qAbs(tickLabelValues.last() - tickLabelValues.first());
-	//DEBUG(Q_FUNC_INFO << ", scale = " << scale)
+	DEBUG(Q_FUNC_INFO << ", scale = " << scale)
 	for (int i = 0; i < tempValues.size(); ++i) {
 		// check if rounded value differs too much
 		double relDiff = 0;
 		//DEBUG(Q_FUNC_INFO << ", round value = " << tempValues.at(i) << ", tick label =  " << tickLabelValues.at(i))
 		switch(format) {
 		case Axis::LabelsFormat::Decimal:
-		case Axis::LabelsFormat::MultipliesPi:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
 			relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			break;
+		case Axis::LabelsFormat::MultipliesPi:
+			relDiff = qAbs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers10:
 			relDiff = qAbs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
@@ -1962,7 +1964,7 @@ int AxisPrivate::upperLabelsPrecision(const int precision, const Axis::LabelsFor
 			if (i == j) continue;
 
 			// if duplicate for the current precision found or differs too much, increase the precision and check again
-			// DEBUG(Q_FUNC_INFO << ", compare " << tempValues.at(i) << " with " << tempValues.at(j))
+			//DEBUG(Q_FUNC_INFO << ", compare " << tempValues.at(i) << " with " << tempValues.at(j))
 			if (tempValues.at(i) == tempValues.at(j) || relDiff > 0.01) {	// > 1%
 				//DEBUG(Q_FUNC_INFO << ", duplicates found : " << tempValues.at(i))
 				return upperLabelsPrecision(precision + 1, format);
@@ -1983,10 +1985,6 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 	DEBUG(Q_FUNC_INFO << ", precision = " << precision << ", format = " << ENUM_TO_STRING(Axis, LabelsFormat, format));
 	//round value to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
-
-	// catch out of limit values
-	if (precision > 6)
-		return 6;
 
 	QVector<double> tempValues;
 	tempValues.reserve(tickLabelValues.size());
@@ -2045,10 +2043,12 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 		double relDiff = 0;
 		switch(format) {
 		case Axis::LabelsFormat::Decimal:
-		case Axis::LabelsFormat::MultipliesPi:
 		case Axis::LabelsFormat::Scientific:
 		case Axis::LabelsFormat::ScientificE:
 			relDiff = qAbs(tempValues.at(i) - tickLabelValues.at(i)) / scale;
+			break;
+		case Axis::LabelsFormat::MultipliesPi:
+			relDiff = qAbs(M_PI * tempValues.at(i) - tickLabelValues.at(i)) / scale;
 			break;
 		case Axis::LabelsFormat::Powers10:
 			relDiff = qAbs(nsl_sf_exp10(tempValues.at(i)) - tickLabelValues.at(i)) / scale;
