@@ -1830,8 +1830,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 				else {
 					int e;
 					const double frac = nsl_math_frexp10(value, &e);
-					if (qAbs(value) < 100. && qAbs(value) > .01)	// use normal notation for values near 1
-						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'f', labelsPrecision - e);
+					if (qAbs(value) < 100. && qAbs(value) > .01)	// use normal notation for values near 1, precision reduced by exponent but >= 0
+						str = numberLocale.toString(nsl_math_round_places(frac, labelsPrecision) * gsl_pow_int(10., e), 'f', qMax(labelsPrecision - e, 0));
 					else {
 						//DEBUG(Q_FUNC_INFO << ", nsl rounded = " << nsl_math_round_places(frac, labelsPrecision))
 						// only round fraction
