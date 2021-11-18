@@ -1815,6 +1815,8 @@ void AxisPrivate::retransformTickLabelStrings() {
 			for (const auto value : tickLabelValues) {
 				if (value == 0)	// just show "0"
 					str = numberLocale.toString(value, 'f', 0);
+				else if (nsl_math_approximately_equal_eps(value, M_PI, 1.e-3))
+					str = QChar(0x03C0);
 				else
 					str = "<span>" + numberLocale.toString(nsl_math_round_places(value / M_PI, labelsPrecision), 'f', labelsPrecision) + "</span>" + QChar(0x03C0);
 				str = labelsPrefix + str + labelsSuffix;
