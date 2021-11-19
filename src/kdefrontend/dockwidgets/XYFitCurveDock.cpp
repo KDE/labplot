@@ -278,6 +278,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, &XYFitCurve::aspectDescriptionChanged, this, &XYFitCurveDock::aspectDescriptionChanged);
 	connect(m_fitCurve, &XYFitCurve::dataSourceTypeChanged, this, &XYFitCurveDock::curveDataSourceTypeChanged);
 	connect(m_fitCurve, &XYFitCurve::dataSourceCurveChanged, this, &XYFitCurveDock::curveDataSourceCurveChanged);
+	connect(m_fitCurve, &XYFitCurve::dataSourceHistogramChanged, this, &XYFitCurveDock::curveDataSourceHistogramChanged);
 	connect(m_fitCurve, &XYFitCurve::xDataColumnChanged, this, &XYFitCurveDock::curveXDataColumnChanged);
 	connect(m_fitCurve, &XYFitCurve::yDataColumnChanged, this, &XYFitCurveDock::curveYDataColumnChanged);
 	connect(m_fitCurve, &XYFitCurve::xErrorColumnChanged, this, &XYFitCurveDock::curveXErrorColumnChanged);
@@ -1406,6 +1407,12 @@ void XYFitCurveDock::curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType 
 void XYFitCurveDock::curveDataSourceCurveChanged(const XYCurve* curve) {
 	m_initializing = true;
 	cbDataSourceCurve->setAspect(curve);
+	m_initializing = false;
+}
+
+void XYFitCurveDock::curveDataSourceHistogramChanged(const Histogram* hist) {
+	m_initializing = true;
+	cbDataSourceCurve->setAspect(hist);
 	m_initializing = false;
 }
 

@@ -31,6 +31,7 @@ public:
 	void evaluate(bool preview = false);
 
 	const Histogram* dataSourceHistogram{nullptr};
+	QString dataSourceHistogramPath;
 	const AbstractColumn* xErrorColumn{nullptr}; //<! column storing the values for the x-error to be used in the fit
 	const AbstractColumn* yErrorColumn{nullptr}; //<! column storing the values for the y-error to be used in the fit
 	QString xErrorColumnPath;

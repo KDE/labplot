@@ -652,11 +652,16 @@ QIcon XYFitCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
-BASIC_SHARED_D_READER_IMPL(XYFitCurve, const Histogram*, dataSourceHistogram, dataSourceHistogram)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xErrorColumn, xErrorColumn)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yErrorColumn, yErrorColumn)
 const QString& XYFitCurve::xErrorColumnPath() const { Q_D(const XYFitCurve); return d->xErrorColumnPath; }
 const QString& XYFitCurve::yErrorColumnPath() const { Q_D(const XYFitCurve); return d->yErrorColumnPath; }
+
+BASIC_SHARED_D_READER_IMPL(XYFitCurve, const Histogram*, dataSourceHistogram, dataSourceHistogram)
+const QString& XYFitCurve::dataSourceHistogramPath() const {
+	Q_D(const XYFitCurve);
+	return d->dataSourceHistogramPath;
+}
 
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, XYFitCurve::FitData, fitData, fitData)
 
@@ -2340,6 +2345,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 			READ_COLUMN(xErrorColumn);
 			READ_COLUMN(yErrorColumn);
+			READ_PATH(dataSourceHistogram);
 
 			READ_INT_VALUE("autoRange", fitData.autoRange, bool);
 			READ_DOUBLE_VALUE("xRangeMin", fitData.fitRange.start());	// old name

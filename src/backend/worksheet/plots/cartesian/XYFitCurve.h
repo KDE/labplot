@@ -32,7 +32,7 @@ class XYFitCurve : public XYAnalysisCurve {
 
 public:
 	struct FitData {
-		FitData() {};
+		FitData() {}
 
 		nsl_fit_model_category modelCategory{nsl_fit_model_basic};
 		int modelType{0};
@@ -62,7 +62,7 @@ public:
 	};
 
 	struct FitResult {
-		FitResult() {};
+		FitResult() {}
 
 		bool available{false};
 		bool valid{false};
@@ -100,6 +100,7 @@ public:
 	~XYFitCurve() override;
 
 	POINTER_D_ACCESSOR_DECL(const Histogram, dataSourceHistogram, DataSourceHistogram)
+	const QString& dataSourceHistogramPath() const;
 
 	void recalculate() override;
 	void evaluate(bool preview);

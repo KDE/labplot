@@ -704,6 +704,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 	bool hasChildren = aspect->childCount<AbstractAspect>();
 	const auto& columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
+	const auto& histograms = aspect->project()->children<Histogram>(ChildIndexFlag::Recursive); //needed for fit curves only. why a better implementation?
 
 #ifndef SDK
 	//LiveDataSource:
@@ -745,6 +746,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			if (fitCurve) {
 				RESTORE_COLUMN_POINTER(fitCurve, xErrorColumn, XErrorColumn);
 				RESTORE_COLUMN_POINTER(fitCurve, yErrorColumn, YErrorColumn);
+				RESTORE_POINTER(fitCurve, dataSourceHistogram, DataSourceHistogram, Histogram, histograms);
 			}
 		} else {
 			RESTORE_COLUMN_POINTER(curve, xColumn, XColumn);

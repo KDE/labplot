@@ -96,6 +96,7 @@ private slots:
 	//General-Tab
 	void curveDataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void curveDataSourceCurveChanged(const XYCurve*);
+	void curveDataSourceHistogramChanged(const Histogram*);
 	void curveXDataColumnChanged(const AbstractColumn*);
 	void curveYDataColumnChanged(const AbstractColumn*);
 	void curveXErrorColumnChanged(const AbstractColumn*);
