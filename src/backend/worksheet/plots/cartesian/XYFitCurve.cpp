@@ -1685,6 +1685,8 @@ void XYFitCurvePrivate::recalculate() {
 		}
 	}
 
+	//QDEBUG(Q_FUNC_INFO << ", data: " << ydataVector)
+
 	//number of data points to fit
 	const size_t n = xdataVector.size();
 	DEBUG(Q_FUNC_INFO << ", number of data points: " << n);
@@ -2087,10 +2089,14 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		DEBUG(Q_FUNC_INFO << ", spreadsheet columns as data source");
 		tmpXDataColumn = xDataColumn;
-	} else {
+	} else if (dataSourceType == XYAnalysisCurve::DataSourceType::Curve) {
 		DEBUG(Q_FUNC_INFO << ", curve columns as data source");
 		if (dataSourceCurve)
 			tmpXDataColumn = dataSourceCurve->xColumn();
+	} else {
+		DEBUG(Q_FUNC_INFO << ", histogram as data source");
+		if (dataSourceHistogram)
+			tmpXDataColumn = dataSourceHistogram->bins();
 	}
 
 	if (!tmpXDataColumn) {
