@@ -4,11 +4,10 @@
     Description          : Histogram
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-    SPDX-FileCopyrightText: 2016-2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2016-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2017-2018 Garvit Khatri <garvitdelhi@gmail.com>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 /*!
   \class Histogram
@@ -250,6 +249,15 @@ double Histogram::yMinimum() const {
 
 double Histogram::yMaximum() const {
 	return d_ptr->yMaximum();
+}
+
+
+const AbstractColumn* Histogram::bins() const {
+	return d_ptr->bins;
+}
+
+const AbstractColumn* Histogram::binValues() const {
+	return d_ptr->binValues;
 }
 
 //##############################################################################
@@ -656,6 +664,9 @@ void Histogram::visibilityChangedSlot() {
 HistogramPrivate::HistogramPrivate(Histogram *owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
+
+	bins = new Column("bins");
+	binValues = new Column("values");
 }
 
 HistogramPrivate::~HistogramPrivate() {
@@ -928,6 +939,17 @@ void HistogramPrivate::recalcHistogram() {
 			totalCount = 0;
 			for (size_t i = 0; i < m_bins; ++i)
 				totalCount += gsl_histogram_get(m_histogram, i);
+
+			//fill the columns for the positions and values of the bins
+			bins->resizeTo(m_bins);
+			binValues->resizeTo(m_bins);
+
+			const double width = (binRangesMax - binRangesMin)/m_bins;
+			for (size_t i = 0; i < m_bins; ++i) {
+				const double x = binRangesMin + i*width;
+				bins->setValueAt(i, x);
+				binValues->setValueAt(i, gsl_histogram_get(m_histogram, i)/totalCount/width); //probability density normalization
+			}
 		} else
 			DEBUG("Number of bins must be positiv integer")
 	}

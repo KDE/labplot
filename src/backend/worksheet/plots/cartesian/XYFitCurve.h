@@ -20,6 +20,7 @@ extern "C" {
 }
 
 class XYFitCurvePrivate;
+class Histogram;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -98,6 +99,8 @@ public:
 	explicit XYFitCurve(const QString& name);
 	~XYFitCurve() override;
 
+	POINTER_D_ACCESSOR_DECL(const Histogram, dataSourceHistogram, DataSourceHistogram)
+
 	void recalculate() override;
 	void evaluate(bool preview);
 	void initFitData(XYAnalysisCurve::AnalysisAction);
@@ -126,6 +129,7 @@ private:
 	Q_DECLARE_PRIVATE(XYFitCurve)
 
 signals:
+	void dataSourceHistogramChanged(const Histogram*);
 	void xErrorColumnChanged(const AbstractColumn*);
 	void yErrorColumnChanged(const AbstractColumn*);
 	void fitDataChanged(const XYFitCurve::FitData&);

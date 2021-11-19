@@ -20,7 +20,7 @@ class XYAnalysisCurve : public XYCurve {
 	Q_OBJECT
 
 public:
-	enum class DataSourceType {Spreadsheet, Curve};
+	enum class DataSourceType {Spreadsheet, Curve, Histogram};
 	enum class AnalysisAction {DataReduction,
 		Differentiation, Integration, Interpolation, Smoothing,
 		FitLinear, FitPower, FitExp1, FitExp2, FitInvExp, FitGauss, FitCauchyLorentz, FitTan, FitTanh, FitErrFunc, FitCustom,

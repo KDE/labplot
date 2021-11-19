@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by a fit model
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
@@ -25,6 +25,7 @@
 #include "backend/lib/macros.h"
 #include "backend/gsl/errors.h"
 #include "backend/gsl/ExpressionParser.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 
 extern "C" {
 #include <gsl/gsl_blas.h>
@@ -651,6 +652,7 @@ QIcon XYFitCurve::icon() const {
 //##############################################################################
 //##########################  getter methods  ##################################
 //##############################################################################
+BASIC_SHARED_D_READER_IMPL(XYFitCurve, const Histogram*, dataSourceHistogram, dataSourceHistogram)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, xErrorColumn, xErrorColumn)
 BASIC_SHARED_D_READER_IMPL(XYFitCurve, const AbstractColumn*, yErrorColumn, yErrorColumn)
 const QString& XYFitCurve::xErrorColumnPath() const { Q_D(const XYFitCurve); return d->xErrorColumnPath; }
@@ -666,6 +668,18 @@ const XYFitCurve::FitResult& XYFitCurve::fitResult() const {
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
+STD_SETTER_CMD_IMPL_F_S(XYFitCurve, SetDataSourceHistogram, const Histogram*, dataSourceHistogram, retransform)
+void XYFitCurve::setDataSourceHistogram(const Histogram* histogram) {
+	Q_D(XYFitCurve);
+	if (histogram != d->dataSourceHistogram) {
+		exec(new XYFitCurveSetDataSourceHistogramCmd(d, histogram, ki18n("%1: data source histogram changed")));
+		handleSourceDataChanged();
+
+		connect(histogram, &Histogram::dataChanged, this, &XYFitCurve::handleSourceDataChanged);
+// 		//TODO: add disconnect in the undo-function
+	}
+}
+
 STD_SETTER_CMD_IMPL_S(XYFitCurve, SetXErrorColumn, const AbstractColumn*, xErrorColumn)
 void XYFitCurve::setXErrorColumn(const AbstractColumn* column) {
 	Q_D(XYFitCurve);
@@ -1542,10 +1556,14 @@ void XYFitCurvePrivate::recalculate() {
 		DEBUG(Q_FUNC_INFO << ", spreadsheet columns as data source");
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
-	} else {
+	} else if (dataSourceType == XYAnalysisCurve::DataSourceType::Curve) {
 		DEBUG(Q_FUNC_INFO << ", curve columns as data source");
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
+	} else {
+		DEBUG(Q_FUNC_INFO << ", histogram columns as data source");
+		tmpXDataColumn = dataSourceHistogram->bins();
+		tmpYDataColumn = dataSourceHistogram->binValues();
 	}
 
 	// clear the previous result
@@ -2174,6 +2192,7 @@ void XYFitCurve::save(QXmlStreamWriter* writer) const {
 	writer->writeStartElement("fitData");
 	WRITE_COLUMN(d->xErrorColumn, xErrorColumn);
 	WRITE_COLUMN(d->yErrorColumn, yErrorColumn);
+	WRITE_PATH(d->dataSourceHistogram, dataSourceHistogram);
 	writer->writeAttribute("autoRange", QString::number(d->fitData.autoRange));
 	writer->writeAttribute("fitRangeMin", QString::number(d->fitData.fitRange.start(), 'g', 15));
 	writer->writeAttribute("fitRangeMax", QString::number(d->fitData.fitRange.end(), 'g', 15));

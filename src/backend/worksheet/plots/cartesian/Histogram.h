@@ -112,6 +112,9 @@ public:
 	double yMinimum() const;
 	double yMaximum() const;
 
+	const AbstractColumn* bins() const;
+	const AbstractColumn* binValues() const;
+
 	typedef WorksheetElement BaseClass;
 	typedef HistogramPrivate Private;
 

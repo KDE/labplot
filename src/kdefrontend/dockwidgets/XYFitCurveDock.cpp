@@ -3,7 +3,7 @@
     Project          : LabPlot
     Description      : widget for editing properties of fit curves
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2016-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
@@ -15,6 +15,7 @@
 #include "backend/lib/macros.h"
 #include "backend/gsl/ExpressionParser.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "commonfrontend/widgets/TreeViewComboBox.h"
 #include "kdefrontend/GuiTools.h"
 #include "kdefrontend/widgets/ConstantsWidget.h"
@@ -74,6 +75,7 @@ void XYFitCurveDock::setupGeneral() {
 
 	uiGeneralTab.cbDataSourceType->addItem(i18n("Spreadsheet"));
 	uiGeneralTab.cbDataSourceType->addItem(i18n("XY-Curve"));
+	uiGeneralTab.cbDataSourceType->addItem(i18n("Histogram"));
 
 	cbDataSourceCurve = new TreeViewComboBox(generalTab);
 	gridLayout->addWidget(cbDataSourceCurve, 5, 3, 1, 4);
@@ -237,7 +239,14 @@ void XYFitCurveDock::initGeneralTab() {
 
 	uiGeneralTab.cbDataSourceType->setCurrentIndex(static_cast<int>(m_fitCurve->dataSourceType()));
 	this->dataSourceTypeChanged(uiGeneralTab.cbDataSourceType->currentIndex());
-	cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());
+
+	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Curve)
+		cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());
+	else if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Histogram)
+		cbDataSourceCurve->setAspect(m_fitCurve->dataSourceHistogram());
+	else
+		cbDataSourceCurve->setAspect(nullptr);
+
 	cbXDataColumn->setColumn(m_fitCurve->xDataColumn(), m_fitCurve->xDataColumnPath());
 	cbYDataColumn->setColumn(m_fitCurve->yDataColumn(), m_fitCurve->yDataColumnPath());
 	cbXErrorColumn->setColumn(m_fitCurve->xErrorColumn(), m_fitCurve->xErrorColumnPath());
@@ -371,6 +380,7 @@ bool XYFitCurveDock::eventFilter(QObject* obj, QEvent* event) {
 void XYFitCurveDock::dataSourceTypeChanged(int index) {
 	const auto type = (XYAnalysisCurve::DataSourceType)index;
 	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+		uiGeneralTab.cbCategory->setEnabled(true);
 		uiGeneralTab.lDataSourceCurve->hide();
 		cbDataSourceCurve->hide();
 		uiGeneralTab.lXColumn->show();
@@ -384,6 +394,26 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		cbXDataColumn->hide();
 		uiGeneralTab.lYColumn->hide();
 		cbYDataColumn->hide();
+
+		if (type == XYAnalysisCurve::DataSourceType::Curve) {
+			uiGeneralTab.cbCategory->setEnabled(true);
+			uiGeneralTab.lDataSourceCurve->setText(i18n("Curve"));
+			QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet, AspectType::CartesianPlot,
+			AspectType::XYCurve, AspectType::XYAnalysisCurve};
+			cbDataSourceCurve->setTopLevelClasses(list);
+		} else {
+			uiGeneralTab.cbCategory->setEnabled(false);
+			uiGeneralTab.cbCategory->setCurrentIndex(3); //select "statistics (distributions);
+
+			uiGeneralTab.lDataSourceCurve->setText(i18n("Histogram"));
+			QList<AspectType> list{AspectType::Folder, AspectType::Worksheet, AspectType::CartesianPlot,
+				AspectType::Histogram};
+			cbDataSourceCurve->setTopLevelClasses(list);
+
+			list = {AspectType::Histogram};
+			m_aspectTreeModel->setSelectableAspects(list);
+			cbDataSourceCurve->setModel(m_aspectTreeModel);
+		}
 	}
 
 	if (m_initializing)
@@ -398,10 +428,17 @@ void XYFitCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 		return;
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
 
-	for (auto* curve : m_curvesList)
-		dynamic_cast<XYFitCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+	const auto type = (XYAnalysisCurve::DataSourceType)uiGeneralTab.cbDataSourceType->currentIndex();
+	if (type == XYAnalysisCurve::DataSourceType::Curve) {
+		auto* dataSourceCurve = static_cast<XYCurve*>(aspect);
+		for (auto* curve : m_curvesList)
+			dynamic_cast<XYFitCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+	} else {
+		auto* dataSourceHist = static_cast<Histogram*>(aspect);
+		for (auto* curve : m_curvesList)
+			dynamic_cast<XYFitCurve*>(curve)->setDataSourceHistogram(dataSourceHist);
+	}
 }
 
 void XYFitCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -1084,7 +1121,8 @@ void XYFitCurveDock::enableRecalculate() {
 
 	//no fitting possible without the x- and y-data
 	bool hasSourceData = false;
-	if (m_fitCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet) {
+	auto type = m_fitCurve->dataSourceType();
+	if (type == XYAnalysisCurve::DataSourceType::Spreadsheet) {
 		auto* aspectX = static_cast<AbstractAspect*>(cbXDataColumn->currentModelIndex().internalPointer());
 		auto* aspectY = static_cast<AbstractAspect*>(cbYDataColumn->currentModelIndex().internalPointer());
 		hasSourceData = (aspectX && aspectY);
@@ -1096,9 +1134,10 @@ void XYFitCurveDock::enableRecalculate() {
 			cbYDataColumn->useCurrentIndexText(true);
 			cbYDataColumn->setInvalid(false);
 		}
-	} else {
+	} else if (type == XYAnalysisCurve::DataSourceType::Curve)
 		hasSourceData = (m_fitCurve->dataSourceCurve() != nullptr);
-	}
+	else
+		hasSourceData = (m_fitCurve->dataSourceHistogram() != nullptr);
 
 	uiGeneralTab.pbRecalculate->setEnabled(hasSourceData && m_parametersValid);
 

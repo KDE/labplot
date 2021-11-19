@@ -4,7 +4,7 @@
     Description          : Private members of Histogram
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2016 Anu Mittal <anu22mittal@gmail.com>
-    SPDX-FileCopyrightText: 2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2018-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -17,6 +17,7 @@
 #include <QGraphicsItem>
 #include <vector>
 
+class Column;
 extern "C" {
 #include <gsl/gsl_histogram.h>
 }
@@ -53,6 +54,9 @@ public:
 	double yMinimum();
 	double yMaximum();
 	double getMaximumOccuranceofHistogram();
+
+	Column* bins{nullptr};
+	Column* binValues{nullptr};
 
 	bool m_suppressRecalc{false};
 

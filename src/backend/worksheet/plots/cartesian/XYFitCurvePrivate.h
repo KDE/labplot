@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Private members of XYFitCurve
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,6 +16,7 @@
 
 class XYFitCurve;
 class Column;
+class Histogram;
 
 extern "C" {
 #include <gsl/gsl_multifit_nlin.h>
@@ -29,6 +30,7 @@ public:
 	void recalculate();
 	void evaluate(bool preview = false);
 
+	const Histogram* dataSourceHistogram{nullptr};
 	const AbstractColumn* xErrorColumn{nullptr}; //<! column storing the values for the x-error to be used in the fit
 	const AbstractColumn* yErrorColumn{nullptr}; //<! column storing the values for the y-error to be used in the fit
 	QString xErrorColumnPath;
