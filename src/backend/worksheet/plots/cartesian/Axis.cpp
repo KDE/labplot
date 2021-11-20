@@ -1988,6 +1988,10 @@ int AxisPrivate::lowerLabelsPrecision(const int precision, const Axis::LabelsFor
 	//round value to the current precision and look for duplicates.
 	//if there are duplicates, decrease the precision.
 
+	// no tick labels, no precision
+	if (tickLabelValues.size() == 0)
+		return 0;
+
 	QVector<double> tempValues;
 	tempValues.reserve(tickLabelValues.size());
 
