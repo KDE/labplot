@@ -1831,8 +1831,8 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			READ_DOUBLE_VALUE("opacity", medianLineOpacity);
 		} else if (!preview && reader->name() == "symbolMean")
 			d->symbolMean->load(reader, preview);
-		else if (!preview && reader->name() == "symbolMean")
-			d->symbolMean->load(reader, preview);
+		else if (!preview && reader->name() == "symbolMedian")
+			d->symbolMedian->load(reader, preview);
 		else if (!preview && reader->name() == "symbolOutlier")
 			d->symbolOutlier->load(reader, preview);
 		else if (!preview && reader->name() == "symbolFarOut")
