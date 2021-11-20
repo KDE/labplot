@@ -134,6 +134,17 @@ QMenu* Histogram::createContextMenu() {
 	QAction* firstAction = menu->actions().at(1); //skip the first action because of the "title-action"
 	visibilityAction->setChecked(isVisible());
 	menu->insertAction(firstAction, visibilityAction);
+
+	//"data analysis" menu
+	auto* analysisMenu = new QMenu(i18n("Analysis"));
+	auto* fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Distribution"));
+	analysisMenu->addAction(fitAction);
+	connect(fitAction, &QAction::triggered, this, [=]() { m_plot->addHistogramFit(this); });
+
+	menu->insertMenu(visibilityAction, analysisMenu);
+	menu->insertSeparator(visibilityAction);
+	menu->insertSeparator(firstAction);
+
 	return menu;
 }
 
@@ -253,11 +264,11 @@ double Histogram::yMaximum() const {
 
 
 const AbstractColumn* Histogram::bins() const {
-	return d_ptr->bins;
+	return d_ptr->bins();
 }
 
 const AbstractColumn* Histogram::binValues() const {
-	return d_ptr->binValues;
+	return d_ptr->binValues();
 }
 
 //##############################################################################
@@ -664,9 +675,6 @@ void Histogram::visibilityChangedSlot() {
 HistogramPrivate::HistogramPrivate(Histogram *owner) : q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
-
-	bins = new Column("bins");
-	binValues = new Column("values");
 }
 
 HistogramPrivate::~HistogramPrivate() {
@@ -772,6 +780,35 @@ double HistogramPrivate::yMaximum() {
 	}
 	return qInf();
 }
+
+const AbstractColumn* HistogramPrivate::bins() {
+	if (!m_binsColumn) {
+		m_binsColumn = new Column("bins");
+
+		const double width = (binRangesMax - binRangesMin)/m_bins;
+		m_binsColumn->resizeTo(m_bins);
+		for (size_t i = 0; i < m_bins; ++i) {
+			const double x = binRangesMin + i*width;
+			m_binsColumn->setValueAt(i, x);
+		}
+	}
+
+	return m_binsColumn;
+}
+
+const AbstractColumn* HistogramPrivate::binValues() {
+	if (!m_binValuesColumn) {
+		m_binValuesColumn = new Column("values");
+
+		m_binValuesColumn->resizeTo(m_bins);
+		const double width = (binRangesMax - binRangesMin)/m_bins;
+		for (size_t i = 0; i < m_bins; ++i)
+			m_binValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i)/totalCount/width); //probability density normalization
+	}
+
+	return m_binValuesColumn;
+}
+
 
 /*!
   Returns the shape of the Histogram as a QPainterPath in local coordinates
@@ -941,14 +978,18 @@ void HistogramPrivate::recalcHistogram() {
 				totalCount += gsl_histogram_get(m_histogram, i);
 
 			//fill the columns for the positions and values of the bins
-			bins->resizeTo(m_bins);
-			binValues->resizeTo(m_bins);
+			if (m_binsColumn) {
+				m_binsColumn->resizeTo(m_bins);
+				const double width = (binRangesMax - binRangesMin)/m_bins;
+				for (size_t i = 0; i < m_bins; ++i)
+					m_binsColumn->setValueAt(i, binRangesMin + i*width);
+			}
 
-			const double width = (binRangesMax - binRangesMin)/m_bins;
-			for (size_t i = 0; i < m_bins; ++i) {
-				const double x = binRangesMin + i*width;
-				bins->setValueAt(i, x);
-				binValues->setValueAt(i, gsl_histogram_get(m_histogram, i)/totalCount/width); //probability density normalization
+			if (m_binValuesColumn) {
+				m_binValuesColumn->resizeTo(m_bins);
+				const double width = (binRangesMax - binRangesMin)/m_bins;
+				for (size_t i = 0; i < m_bins; ++i)
+					m_binValuesColumn->setValueAt(i, gsl_histogram_get(m_histogram, i)/totalCount/width); //probability density normalization
 			}
 		} else
 			DEBUG("Number of bins must be positiv integer")

@@ -53,10 +53,9 @@ public:
 	double xMaximum();
 	double yMinimum();
 	double yMaximum();
+	const AbstractColumn* bins();
+	const AbstractColumn* binValues();
 	double getMaximumOccuranceofHistogram();
-
-	Column* bins{nullptr};
-	Column* binValues{nullptr};
 
 	bool m_suppressRecalc{false};
 
@@ -146,6 +145,8 @@ private:
 	QImage m_selectionEffectImage;
 	bool m_hoverEffectImageIsDirty{false};
 	bool m_selectionEffectImageIsDirty{false};
+	Column* m_binsColumn{nullptr};
+	Column* m_binValuesColumn{nullptr};
 
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;

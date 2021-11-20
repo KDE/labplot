@@ -1703,6 +1703,32 @@ void CartesianPlot::addHistogram() {
 	addChild(hist);
 }
 
+void CartesianPlot::addHistogramFit(Histogram* hist) {
+	if(!hist)
+		return;
+
+	beginMacro( i18n("%1: distribution fit to '%2'", name(), hist->name()) );
+	auto* curve = new XYFitCurve(i18n("Distribution Fit to '%1'", hist->name()));
+	curve->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+	curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
+	curve->setDataSourceHistogram(hist);
+
+	//set the fit model category and type
+// 	XYFitCurve::FitData fitData;
+// 	fitData.modelCategory = nsl_fit_model_distribution;
+// 	fitData.modelType = (int)nsl_fit_model_gaussian;
+// 	curve->setFitData(fitData);
+
+	curve->recalculate();
+
+	//add the child after the fit was calculated so the dock widgets gets the fit results
+	//and call retransform() after this to calculate and to paint the data points of the fit-curve
+	this->addChild(curve);
+	curve->retransform();
+
+	endMacro();
+}
+
 void CartesianPlot::addBoxPlot() {
 	addChild(new BoxPlot("Box Plot"));
 }

@@ -21,6 +21,7 @@ class CartesianPlotPrivate;
 class CartesianPlotLegend;
 class CartesianCoordinateSystem;
 class CartesianPlotDock;
+class Histogram;
 class InfoElementDialog;
 class XYCurve;
 class KConfig;
@@ -273,6 +274,7 @@ public slots:
 	void addVerticalAxis();
 	void addCurve();
 	void addHistogram();
+	void addHistogramFit(Histogram*);
 	void addBoxPlot();
 	void addEquationCurve();
 	void addDataReductionCurve();
