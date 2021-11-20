@@ -57,6 +57,10 @@ extern "C" {
 XYFitCurveDock::XYFitCurveDock(QWidget* parent) : XYCurveDock(parent) {
 }
 
+XYFitCurveDock::~XYFitCurveDock() {
+	delete m_dataSourceModel;
+}
+
 /*!
  * 	set up "General" tab
  */
@@ -293,23 +297,23 @@ void XYFitCurveDock::initGeneralTab() {
 }
 
 void XYFitCurveDock::setModel() {
-	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet, AspectType::CartesianPlot,
-		AspectType::XYCurve, AspectType::XYAnalysisCurve};
-	cbDataSourceCurve->setTopLevelClasses(list);
-
 	QList<const AbstractAspect*> hiddenAspects;
 	for (auto* curve : m_curvesList)
 		hiddenAspects << curve;
 	cbDataSourceCurve->setHiddenAspects(hiddenAspects);
 
-	list = {AspectType::Folder, AspectType::Workbook, AspectType::Spreadsheet, AspectType::LiveDataSource,
-	        AspectType::Column, AspectType::CantorWorksheet, AspectType::Datapicker};
+	QList<AspectType> list = {AspectType::Folder, AspectType::Workbook,
+								AspectType::Spreadsheet, AspectType::LiveDataSource,
+								AspectType::CantorWorksheet, AspectType::Datapicker,
+								AspectType::Column};
 	cbXDataColumn->setTopLevelClasses(list);
 	cbYDataColumn->setTopLevelClasses(list);
 	cbXErrorColumn->setTopLevelClasses(list);
 	cbYErrorColumn->setTopLevelClasses(list);
 
-	cbDataSourceCurve->setModel(m_aspectTreeModel);
+	list = {AspectType::Column};
+	m_aspectTreeModel->setSelectableAspects(list);
+
 	cbXDataColumn->setModel(m_aspectTreeModel);
 	cbYDataColumn->setModel(m_aspectTreeModel);
 	cbXErrorColumn->setModel(m_aspectTreeModel);
@@ -328,6 +332,12 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 	m_aspect = m_curve;
 	m_fitCurve = static_cast<XYFitCurve*>(m_curve);
 	m_aspectTreeModel = new AspectTreeModel(m_curve->project());
+
+	//we need a second model for data source comboboxe which will be dynamically
+	//updated in the slot depending on the current type (spreadsheet, curve or histogram)
+	//to allow to select the relevant aspects only
+	m_dataSourceModel = new AspectTreeModel(m_curve->project());
+
 	this->setModel();
 	m_fitData = m_fitCurve->fitData();
 
@@ -388,6 +398,20 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 		cbXDataColumn->show();
 		uiGeneralTab.lYColumn->show();
 		cbYDataColumn->show();
+
+		QList<AspectType> list{AspectType::Folder, AspectType::Workbook,
+							AspectType::Spreadsheet, AspectType::Datapicker};
+		cbDataSourceCurve->setTopLevelClasses(list);
+
+		//when the dock is initialized, this functions is called before setModel(),
+		//we need this nullptr check
+		if (m_dataSourceModel) {
+			list = {AspectType::Column};
+			m_dataSourceModel->setSelectableAspects(list);
+
+			//TODO: why do we need to reset the model here and below again to get the combobox updated?
+			cbDataSourceCurve->setModel(m_dataSourceModel);
+		}
 	} else {
 		uiGeneralTab.lDataSourceCurve->show();
 		cbDataSourceCurve->show();
@@ -398,22 +422,34 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 
 		if (type == XYAnalysisCurve::DataSourceType::Curve) {
 			uiGeneralTab.cbCategory->setEnabled(true);
-			uiGeneralTab.lDataSourceCurve->setText(i18n("Curve"));
-			QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet, AspectType::CartesianPlot,
-			AspectType::XYCurve, AspectType::XYAnalysisCurve};
+			uiGeneralTab.lDataSourceCurve->setText(i18n("Curve:"));
+
+			QList<AspectType> list{AspectType::Folder, AspectType::Datapicker,
+									AspectType::Worksheet, AspectType::CartesianPlot,
+									AspectType::XYCurve, AspectType::XYAnalysisCurve};
 			cbDataSourceCurve->setTopLevelClasses(list);
+
+			if (m_dataSourceModel) {
+				list = {AspectType::XYCurve, AspectType::XYAnalysisCurve};
+				m_dataSourceModel->setSelectableAspects(list);
+				cbDataSourceCurve->setModel(m_dataSourceModel);
+				cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());
+			}
 		} else {
 			uiGeneralTab.cbCategory->setEnabled(false);
 			uiGeneralTab.cbCategory->setCurrentIndex(3); //select "statistics (distributions);
+			uiGeneralTab.lDataSourceCurve->setText(i18n("Histogram:"));
 
-			uiGeneralTab.lDataSourceCurve->setText(i18n("Histogram"));
-			QList<AspectType> list{AspectType::Folder, AspectType::Worksheet, AspectType::CartesianPlot,
-				AspectType::Histogram};
+			QList<AspectType> list{AspectType::Folder, AspectType::Worksheet,
+								AspectType::CartesianPlot, AspectType::Histogram};
 			cbDataSourceCurve->setTopLevelClasses(list);
 
-			list = {AspectType::Histogram};
-			m_aspectTreeModel->setSelectableAspects(list);
-			cbDataSourceCurve->setModel(m_aspectTreeModel);
+			if (m_dataSourceModel) {
+				list = {AspectType::Histogram};
+				m_dataSourceModel->setSelectableAspects(list);
+				cbDataSourceCurve->setModel(m_dataSourceModel);
+				cbDataSourceCurve->setAspect(m_fitCurve->dataSourceHistogram());
+			}
 		}
 	}
 

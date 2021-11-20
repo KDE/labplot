@@ -3,7 +3,7 @@
     Project          : LabPlot
     Description      : widget for editing properties of equation curves
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2014-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2017-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
@@ -16,6 +16,7 @@
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 #include "ui_xyfitcurvedockgeneraltab.h"
 
+class AspectTreeModel;
 class TreeViewComboBox;
 class FitParametersWidget;
 class KMessageWidget;
@@ -25,6 +26,8 @@ class XYFitCurveDock: public XYCurveDock {
 
 public:
 	explicit XYFitCurveDock(QWidget* parent);
+	~XYFitCurveDock() override;
+
 	void setCurves(QList<XYCurve*>);
 	void setupGeneral() override;
 
@@ -49,6 +52,7 @@ private:
 	QList<double> parameterValues;
 	bool m_parametersValid{true};
 	KMessageWidget* m_messageWidget{nullptr};
+	AspectTreeModel* m_dataSourceModel{nullptr};
 
 protected:
 	void setModel() override;

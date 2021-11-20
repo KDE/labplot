@@ -869,45 +869,49 @@ void ColumnPrivate::resizeTo(int new_size) {
 		return;
 
 // 	DEBUG("ColumnPrivate::resizeTo() " << old_size << " -> " << new_size);
+	const int new_rows = new_size - old_size;
 
 	switch (m_column_mode) {
 	case AbstractColumn::ColumnMode::Double: {
-		auto* numeric_data = static_cast<QVector<double>*>(m_data);
-		numeric_data->insert(numeric_data->end(), new_size - old_size, NAN);
+		auto* data = static_cast<QVector<double>*>(m_data);
+		if (new_rows > 0)
+			data->insert(data->end(), new_rows, NAN);
+		else
+			data->remove(old_size - 1 + new_rows, -new_rows);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Integer: {
-		auto* numeric_data = static_cast<QVector<int>*>(m_data);
-		numeric_data->insert(numeric_data->end(), new_size - old_size, 0);
+		auto* data = static_cast<QVector<int>*>(m_data);
+		if (new_rows > 0)
+			data->insert(data->end(), new_rows, 0);
+		else
+			data->remove(old_size - 1 + new_rows, -new_rows);
 		break;
 	}
 	case AbstractColumn::ColumnMode::BigInt: {
-		auto* numeric_data = static_cast<QVector<qint64>*>(m_data);
-		numeric_data->insert(numeric_data->end(), new_size - old_size, 0);
+		auto* data = static_cast<QVector<qint64>*>(m_data);
+		if (new_rows > 0)
+			data->insert(data->end(), new_rows, 0);
+		else
+			data->remove(old_size - 1 + new_rows, -new_rows);
 		break;
 	}
 	case AbstractColumn::ColumnMode::Text: {
-		int new_rows = new_size - old_size;
-		if (new_rows > 0) {
-			for (int i = 0; i < new_rows; ++i)
-				static_cast<QVector<QString>*>(m_data)->append(QString());
-		} else {
-			for (int i = 0; i < -new_rows; ++i)
-				static_cast<QVector<QString>*>(m_data)->removeLast();
-		}
+		auto* data = static_cast<QVector<QString>*>(m_data);
+		if (new_rows > 0)
+			data->insert(data->end(), new_rows, QString());
+		else
+			data->remove(old_size - 1 + new_rows, -new_rows);
 		break;
 	}
 	case AbstractColumn::ColumnMode::DateTime:
 	case AbstractColumn::ColumnMode::Month:
 	case AbstractColumn::ColumnMode::Day: {
-		int new_rows = new_size - old_size;
-		if (new_rows > 0) {
-			for (int i = 0; i < new_rows; ++i)
-				static_cast<QVector<QDateTime>*>(m_data)->append(QDateTime());
-		} else {
-			for (int i = 0; i < -new_rows; ++i)
-				static_cast<QVector<QDateTime>*>(m_data)->removeLast();
-		}
+		auto* data = static_cast<QVector<QDateTime>*>(m_data);
+		if (new_rows > 0)
+			data->insert(data->end(), new_rows, QDateTime());
+		else
+			data->remove(old_size - 1 + new_rows, -new_rows);
 		break;
 	}
 	}
