@@ -218,12 +218,15 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 }
 
 StatisticsColumnWidget::~StatisticsColumnWidget() {
-	disconnect(m_tabWidget, 0, this, 0); //don't react on currentChanged signal
+	disconnect(m_tabWidget, nullptr, this, nullptr); //don't react on currentChanged signal
 	delete m_project;
 }
 
 void StatisticsColumnWidget::setCurrentTab(int index) {
-	m_tabWidget->setCurrentIndex(index);
+	if (index == m_tabWidget->currentIndex())
+		currentTabChanged(index); //manually call the slot so we get the data shown
+	else
+		m_tabWidget->setCurrentIndex(index);
 }
 
 void StatisticsColumnWidget::currentTabChanged(int index) {
