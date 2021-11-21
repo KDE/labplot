@@ -492,13 +492,19 @@ void XYCurveDock::setModel() {
 		cbXColumn->setModel(m_aspectTreeModel);
 		cbYColumn->setModel(m_aspectTreeModel);
 	}
-	cbValuesColumn->setModel(m_aspectTreeModel);
+
 	cbXErrorMinusColumn->setModel(m_aspectTreeModel);
 	cbXErrorPlusColumn->setModel(m_aspectTreeModel);
 	cbYErrorMinusColumn->setModel(m_aspectTreeModel);
 	cbYErrorPlusColumn->setModel(m_aspectTreeModel);
 
-	//this function is called after the dock widget is initializes and the curves are set.
+	//for value labels we need a dedicated model since we also want to allow
+	//to select text columns and we don't want to call enablePlottableColumnsOnly().
+	auto* valuesTreeModel = new AspectTreeModel(m_curve->project());
+	valuesTreeModel->setSelectableAspects(list);
+	cbValuesColumn->setModel(valuesTreeModel);
+
+	//this function is called after the dock widget is initialized and the curves are set.
 	//so, we use this function to finalize the initialization even though it's not related
 	//to the actual set of the model (could also be solved by a new class XYAnalysisiCurveDock).
 
