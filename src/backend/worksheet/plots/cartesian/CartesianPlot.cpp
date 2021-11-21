@@ -381,8 +381,8 @@ void CartesianPlot::initActions() {
 	addReferenceLineAction = new QAction(QIcon::fromTheme("draw-line"), i18n("Reference Line"), this);
 
 	connect(addCurveAction, &QAction::triggered, this, &CartesianPlot::addCurve);
-	connect(addHistogramAction,&QAction::triggered, this, &CartesianPlot::addHistogram);
-	connect(addBoxPlotAction,&QAction::triggered, this, &CartesianPlot::addBoxPlot);
+	connect(addHistogramAction, &QAction::triggered, this, &CartesianPlot::addHistogram);
+	connect(addBoxPlotAction, &QAction::triggered, this, &CartesianPlot::addBoxPlot);
 	connect(addEquationCurveAction, &QAction::triggered, this, &CartesianPlot::addEquationCurve);
 	connect(addDataReductionCurveAction, &QAction::triggered, this, &CartesianPlot::addDataReductionCurve);
 	connect(addDifferentiationCurveAction, &QAction::triggered, this, &CartesianPlot::addDifferentiationCurve);
@@ -1713,11 +1713,12 @@ void CartesianPlot::addHistogramFit(Histogram* hist) {
 	curve->setDataSourceType(XYAnalysisCurve::DataSourceType::Histogram);
 	curve->setDataSourceHistogram(hist);
 
-	//set the fit model category and type
-// 	XYFitCurve::FitData fitData;
-// 	fitData.modelCategory = nsl_fit_model_distribution;
-// 	fitData.modelType = (int)nsl_fit_model_gaussian;
-// 	curve->setFitData(fitData);
+	// set fit model category and type and initialize fit
+	XYFitCurve::FitData fitData = curve->fitData();
+	fitData.modelCategory = nsl_fit_model_distribution;
+	fitData.modelType = (int)nsl_fit_model_gaussian;
+	XYFitCurve::initFitData(fitData);
+	curve->setFitData(fitData);
 
 	curve->recalculate();
 

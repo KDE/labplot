@@ -1588,6 +1588,7 @@ void XYFitCurvePrivate::recalculate() {
 	const double delta = fitData.eps;		//fit tolerance
 	const unsigned int np = fitData.paramNames.size(); //number of fit parameters
 	if (np == 0) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: no parameter found.")
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters.");
