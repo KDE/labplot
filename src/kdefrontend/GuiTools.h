@@ -37,6 +37,7 @@ public:
 
 	static QString openImageFile(const QString&);
 	static QImage importPDFFile(const QString&, int dpi=0);
+	static QImage imageFromPDFData(const QByteArray&, int dpi = 0);
 };
 
 #endif // GUITOOLS_H

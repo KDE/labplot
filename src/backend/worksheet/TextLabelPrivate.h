@@ -44,7 +44,8 @@ public:
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
 	QColor backgroundColor{Qt::white}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
 	QImage teXImage;
-	QFutureWatcher<QImage> teXImageFutureWatcher;
+	QByteArray teXPdfData;
+	QFutureWatcher<QByteArray> teXImageFutureWatcher;
 	bool teXRenderSuccessful{false};
 
 	// see TextLabel::init() for type specific default settings

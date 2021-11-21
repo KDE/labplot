@@ -35,7 +35,7 @@
 
 	\ingroup tools
 */
-QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, const TeXRenderer::Formatting& format) {
+QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, const TeXRenderer::Formatting& format) {
 	const QColor& fontColor = format.fontColor;
 	const QColor& backgroundColor = format.backgroundColor;
 	const int fontSize = format.fontSize;
@@ -61,7 +61,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 		if (file.isEmpty()) {
 			WARN("Couldn't find preview.sty.");
 			*success = false;
-			return QImage();
+			return QByteArray();
 		}
 		else
 			QFile::copy(file, tempPath + QLatin1String("/") + QLatin1String("preview.sty"));
@@ -76,12 +76,12 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	} else {
 		WARN("Couldn't open the file " << STDSTRING(file.fileName()));
 		*success = false;
-		return QImage();
+		return QByteArray();
 	}
 
 	//determine latex engine to be used
-	KConfigGroup group = KSharedConfig::openConfig()->group("Settings_Worksheet");
-	QString engine = group.readEntry("LaTeXEngine", "pdflatex");
+	const auto& group = KSharedConfig::openConfig()->group("Settings_Worksheet");
+	const auto& engine = group.readEntry("LaTeXEngine", "pdflatex");
 
 	// create latex code
 	QTextStream out(&file);
@@ -126,6 +126,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 	out << "\\end{preview}";
 	out << "\\end{document}";
 	out.flush();
+
 	if (engine == "latex")
 		return imageFromDVI(file, dpi, success);
 	else
@@ -133,7 +134,7 @@ QImage TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success, co
 }
 
 // TEX -> PDF -> QImage
-QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, bool* success) {
+QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, bool* success) {
 	//DEBUG(Q_FUNC_INFO << ", tmp file = " << file.fileName().toStdString() << ", engine = " << engine.toStdString() << ", dpi = " << dpi)
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
@@ -152,21 +153,28 @@ QImage TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, cons
 		*success = false;
 		QFile::remove(baseName + ".aux");
 		QFile::remove(baseName + ".log");
-		return QImage();
+		return QByteArray();
 	}
 
 	QFile::remove(baseName + ".aux");
 	QFile::remove(baseName + ".log");
 
-	QImage image = GuiTools::importPDFFile(baseName + QLatin1String(".pdf"), dpi);
+	//read PDF file
+	QFile pdfFile(baseName + QLatin1String(".pdf"));
+	if (!pdfFile.open(QIODevice::ReadOnly)) {
+		QFile::remove(baseName + ".pdf");
+        return QByteArray();
+	}
 
-	QFile::remove(baseName + ".pdf");
+	QByteArray ba = pdfFile.readAll();
+ 	QFile::remove(baseName + ".pdf");
 	*success = true;
-	return image;
+
+	return ba;
 }
 
 // TEX -> DVI -> PS -> PNG
-QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool* success) {
+QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool* success) {
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
@@ -178,7 +186,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 		*success = false;
 		QFile::remove(baseName + ".aux");
 		QFile::remove(baseName + ".log");
-		return QImage();
+		return QByteArray();
 	}
 
 	// dvips: DVI -> PS
@@ -190,7 +198,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 		QFile::remove(baseName + ".aux");
 		QFile::remove(baseName + ".log");
 		QFile::remove(baseName + ".dvi");
-		return QImage();
+		return QByteArray();
 	}
 
 	// convert: PS -> PNG
@@ -202,7 +210,7 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 	convertProcess.setProcessEnvironment(env);
 #endif
 
-	const QStringList params{"-density", QString::number(dpi), baseName + ".ps", baseName + ".png"};
+	const QStringList params{"-density", QString::number(dpi), baseName + ".ps", baseName + ".pdf"};
 	convertProcess.start("convert", params);
 
 	if (!convertProcess.waitForFinished() || convertProcess.exitCode() != 0) {
@@ -212,21 +220,27 @@ QImage TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, bool
 		QFile::remove(baseName + ".log");
 		QFile::remove(baseName + ".dvi");
 		QFile::remove(baseName + ".ps");
-		return QImage();
+		return QByteArray();
 	}
-
-	// read png file
-	QImage image(baseName + ".png", "png");
 
 	// final clean up
 	QFile::remove(baseName + ".aux");
 	QFile::remove(baseName + ".log");
 	QFile::remove(baseName + ".dvi");
 	QFile::remove(baseName + ".ps");
-	QFile::remove(baseName + ".png");
 
+	//read PDF file
+	QFile pdfFile(baseName + QLatin1String(".pdf"));
+	if (!pdfFile.open(QIODevice::ReadOnly)) {
+		QFile::remove(baseName + ".pdf");
+        return QByteArray();
+	}
+
+	QByteArray ba = pdfFile.readAll();
+ 	QFile::remove(baseName + ".pdf");
 	*success = true;
-	return image;
+
+	return ba;
 }
 
 bool TeXRenderer::enabled() {

@@ -19,6 +19,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/core/Project.h"
+#include "kdefrontend/GuiTools.h"
 
 #include <QApplication>
 #include <QBuffer>
@@ -171,7 +172,7 @@ void TextLabel::init() {
 
 	DEBUG("CHECK: default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
 
-	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QImage>::finished, this, &TextLabel::updateTeXImage);
+	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QByteArray>::finished, this, &TextLabel::updateTeXImage);
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -625,7 +626,7 @@ void TextLabelPrivate::updateText() {
 		format.fontSize = teXFont.pointSize();
 		format.fontFamily = teXFont.family();
 		format.dpi = teXImageResolution;
-		QFuture<QImage> future = QtConcurrent::run(TeXRenderer::renderImageLaTeX, textWrapper.text, &teXRenderSuccessful, format);
+		QFuture<QByteArray> future = QtConcurrent::run(TeXRenderer::renderImageLaTeX, textWrapper.text, &teXRenderSuccessful, format);
 		teXImageFutureWatcher.setFuture(future);
 
 		//don't need to call retransorm() here since it is done in updateTeXImage
@@ -666,7 +667,8 @@ void TextLabelPrivate::updateText() {
 }
 
 void TextLabelPrivate::updateTeXImage() {
-	teXImage = teXImageFutureWatcher.result();
+	teXPdfData = teXImageFutureWatcher.result();
+	teXImage = GuiTools::imageFromPDFData(teXPdfData);
 	retransform();
 	DEBUG(Q_FUNC_INFO << ", TeX renderer successful = " << teXRenderSuccessful);
 	emit q->teXImageUpdated(teXRenderSuccessful);
@@ -1271,12 +1273,8 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement();
 
 	if (d->textWrapper.mode ==  TextLabel::Mode::LaTeX) {
-		writer->writeStartElement("teXImage");
-		QByteArray ba;
-		QBuffer buffer(&ba);
-		buffer.open(QIODevice::WriteOnly);
-		d->teXImage.save(&buffer, "PNG");
-		writer->writeCharacters(ba.toBase64());
+		writer->writeStartElement("teXPdfData");
+		writer->writeCharacters(d->teXPdfData.toBase64());
 		writer->writeEndElement();
 	}
 
@@ -1414,11 +1412,12 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("borderShape", borderShape, BorderShape);
 			READ_QPEN(d->borderPen);
 			READ_DOUBLE_VALUE("borderOpacity", borderOpacity);
-		} else if (!preview && reader->name() == "teXImage") {
+		} else if (!preview && reader->name() == "teXPdfData") {
 			reader->readNext();
 			QString content = reader->text().toString().trimmed();
-			QByteArray ba = QByteArray::fromBase64(content.toLatin1());
-			teXImageFound = d->teXImage.loadFromData(ba);
+			d->teXPdfData = QByteArray::fromBase64(content.toLatin1());
+			d->teXImage = GuiTools::imageFromPDFData(d->teXPdfData);
+			teXImageFound = true;
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;

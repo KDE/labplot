@@ -319,3 +319,40 @@ QImage GuiTools::importPDFFile(const QString& fileName, const int dpi) {
 	return QImage();
 #endif
 }
+
+QImage GuiTools::imageFromPDFData(const QByteArray& data, int dpi) {
+#ifdef HAVE_POPPLER
+	auto* document = Poppler::Document::loadFromData(data);
+	if (!document) {
+		WARN("Failed to process the byte array");
+		delete document;
+		return QImage();
+	}
+
+	auto* page = document->page(0);
+	if (!page) {
+		WARN("Failed to process the first page in the PDF file.")
+		delete document;
+		return QImage();
+	}
+
+	document->setRenderHint(Poppler::Document::TextAntialiasing);
+	document->setRenderHint(Poppler::Document::Antialiasing);
+	document->setRenderHint(Poppler::Document::TextHinting);
+	document->setRenderHint(Poppler::Document::TextSlightHinting);
+	document->setRenderHint(Poppler::Document::ThinLineSolid);
+	const double scaling = 1.5;	// scale to reasonable size
+	QImage image;
+	if (dpi)
+		image = page->renderToImage((double)dpi, (double)dpi);
+	else
+		image = page->renderToImage(scaling * QApplication::desktop()->logicalDpiX(), scaling * QApplication::desktop()->logicalDpiY());
+
+	delete page;
+	delete document;
+
+	return image;
+#else
+	return QImage();
+#endif
+}
