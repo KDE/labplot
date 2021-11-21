@@ -15,6 +15,7 @@
 		* Fuzzy matching when doing search/filter in the Project Explorer
 	* [analysis]
 		* Support Mathieu functions via GSL
+		* Support fitting of any distribution to a histogram
 		* Added Hilbert transform including envelope
 		* Improve entering ranges for various methods
 	* [import]

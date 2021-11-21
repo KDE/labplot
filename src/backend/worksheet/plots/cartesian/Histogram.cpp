@@ -137,9 +137,35 @@ QMenu* Histogram::createContextMenu() {
 
 	//"data analysis" menu
 	auto* analysisMenu = new QMenu(i18n("Analysis"));
-	auto* fitAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Distribution"));
-	analysisMenu->addAction(fitAction);
-	connect(fitAction, &QAction::triggered, this, [=]() { m_plot->addHistogramFit(this); });
+
+	//TODO: if there are more actions, add a group for all fit types
+	auto* fitGaussianAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Gaussian (Normal) Distribution"));
+	analysisMenu->addAction(fitGaussianAction);
+	connect(fitGaussianAction, &QAction::triggered, this, [=]() { m_plot->addHistogramFit(this, nsl_sf_stats_gaussian); });
+
+	auto* fitExponentialAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Exponential Distribution"));
+	analysisMenu->addAction(fitGaussianAction);
+	connect(fitExponentialAction, &QAction::triggered, this, [=]() { m_plot->addHistogramFit(this, nsl_sf_stats_exponential); });
+
+	auto* fitLaplaceAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Laplace Distribution"));
+	analysisMenu->addAction(fitLaplaceAction);
+	connect(fitLaplaceAction, &QAction::triggered, this, [=]() { m_plot->addHistogramFit(this, nsl_sf_stats_laplace); });
+
+	auto* fitCauchyAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Cauchy-Lorentz Distribution"));
+	analysisMenu->addAction(fitCauchyAction);
+	connect(fitCauchyAction, &QAction::triggered, this, [=]() { m_plot->addHistogramFit(this, nsl_sf_stats_cauchy_lorentz); });
+
+	auto* fitLognormalAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Log-normal Distribution"));
+	analysisMenu->addAction(fitLognormalAction);
+	connect(fitLognormalAction, &QAction::triggered, this, [=]() { m_plot->addHistogramFit(this, nsl_sf_stats_lognormal); });
+
+	auto* fitPoissonAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Poisson Distribution"));
+	analysisMenu->addAction(fitPoissonAction);
+	connect(fitPoissonAction, &QAction::triggered, this, [=]() { m_plot->addHistogramFit(this, nsl_sf_stats_poisson); });
+
+	auto* fitBinomialAction = new QAction(QIcon::fromTheme("labplot-xy-fit-curve"), i18n("Fit Binomial Distribution"));
+	analysisMenu->addAction(fitBinomialAction);
+	connect(fitBinomialAction, &QAction::triggered, this, [=]() { m_plot->addHistogramFit(this, nsl_sf_stats_binomial); });
 
 	menu->insertMenu(visibilityAction, analysisMenu);
 	menu->insertSeparator(visibilityAction);

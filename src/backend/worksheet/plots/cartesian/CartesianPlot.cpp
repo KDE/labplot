@@ -1703,7 +1703,7 @@ void CartesianPlot::addHistogram() {
 	addChild(hist);
 }
 
-void CartesianPlot::addHistogramFit(Histogram* hist) {
+void CartesianPlot::addHistogramFit(Histogram* hist, nsl_sf_stats_distribution type) {
 	if(!hist)
 		return;
 
@@ -1716,7 +1716,7 @@ void CartesianPlot::addHistogramFit(Histogram* hist) {
 	// set fit model category and type and initialize fit
 	XYFitCurve::FitData fitData = curve->fitData();
 	fitData.modelCategory = nsl_fit_model_distribution;
-	fitData.modelType = (int)nsl_fit_model_gaussian;
+	fitData.modelType = (int)type;
 	XYFitCurve::initFitData(fitData);
 	curve->setFitData(fitData);
 

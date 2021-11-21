@@ -1558,15 +1558,15 @@ void XYFitCurvePrivate::recalculate() {
 	const AbstractColumn* tmpXDataColumn = nullptr;
 	const AbstractColumn* tmpYDataColumn = nullptr;
 	if (dataSourceType == XYAnalysisCurve::DataSourceType::Spreadsheet) {
-		DEBUG(Q_FUNC_INFO << ", spreadsheet columns as data source");
+		DEBUG(Q_FUNC_INFO << ", SPREADSHEET columns as data source");
 		tmpXDataColumn = xDataColumn;
 		tmpYDataColumn = yDataColumn;
 	} else if (dataSourceType == XYAnalysisCurve::DataSourceType::Curve) {
-		DEBUG(Q_FUNC_INFO << ", curve columns as data source");
+		DEBUG(Q_FUNC_INFO << ", CURVE columns as data source");
 		tmpXDataColumn = dataSourceCurve->xColumn();
 		tmpYDataColumn = dataSourceCurve->yColumn();
 	} else {
-		DEBUG(Q_FUNC_INFO << ", histogram columns as data source");
+		DEBUG(Q_FUNC_INFO << ", HISTOGRAM columns as data source");
 		tmpXDataColumn = dataSourceHistogram->bins();
 		tmpYDataColumn = dataSourceHistogram->binValues();
 	}

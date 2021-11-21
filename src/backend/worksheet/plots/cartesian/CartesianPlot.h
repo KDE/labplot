@@ -16,6 +16,10 @@
 #include "backend/worksheet/plots/AbstractPlot.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 
+extern "C" {
+#include "backend/nsl/nsl_sf_stats.h"
+}
+
 class AbstractColumn;
 class CartesianPlotPrivate;
 class CartesianPlotLegend;
@@ -274,7 +278,7 @@ public slots:
 	void addVerticalAxis();
 	void addCurve();
 	void addHistogram();
-	void addHistogramFit(Histogram*);
+	void addHistogramFit(Histogram*, nsl_sf_stats_distribution);
 	void addBoxPlot();
 	void addEquationCurve();
 	void addDataReductionCurve();
