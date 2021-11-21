@@ -34,6 +34,7 @@ public:
 	explicit CantorWorksheet(const QString& name, bool loading = false);
 
 	bool init(QByteArray* content = nullptr);
+	const QString& error() const;
 
 	QWidget* view() const override;
 	QMenu* createContextMenu() override;
@@ -53,6 +54,7 @@ public:
 private:
 	mutable CantorWorksheetView* m_view{nullptr};
 	QString m_backendName;
+	QString m_error;
 	Cantor::Session* m_session{nullptr};
 	KParts::ReadWritePart* m_part{nullptr};
 	QList<Cantor::PanelPlugin*> m_plugins;

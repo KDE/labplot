@@ -33,7 +33,6 @@
 #include <QModelIndex>
 
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KParts/ReadWritePart>
 
 CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
@@ -56,11 +55,13 @@ bool CantorWorksheet::init(QByteArray* content) {
 		WARN("Failed to load Cantor plugin:")
 		WARN("Cantor Part file name: " << STDSTRING(loader.fileName()))
 		WARN("	" << STDSTRING(loader.errorString()))
+		m_error = i18n("Couldn't find the dynamic library 'cantorpart'. Please check your installation.");
 		return false;
 	} else {
 		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));
 		if (!m_part) {
 			DEBUG("Could not create the Cantor Part.")
+			m_error = i18n("Couldn't find the plugin for %1. Please check your installation.", m_backendName);
 			return false;
 		}
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
@@ -93,7 +94,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 #else
 		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
 		if (!handler) {
-			KMessageBox::error(nullptr, i18n("No PanelPluginHandle found for the Cantor Part."));
+			m_error = i18n("Couldn't find panel plugins. Please check your installation.");
 			return false;
 		}
 		m_plugins = handler->plugins();
@@ -101,6 +102,10 @@ bool CantorWorksheet::init(QByteArray* content) {
 	}
 
 	return true;
+}
+
+const QString& CantorWorksheet::error() const {
+	return m_error;
 }
 
 //SLots
@@ -117,7 +122,6 @@ void CantorWorksheet::dataChanged(const QModelIndex& index) {
 		if (parser.isParsed())
 			col->replaceValues(0, parser.values());
 	}
-
 }
 
 void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int last) {

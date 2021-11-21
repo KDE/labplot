@@ -32,8 +32,10 @@ CantorWorksheetView::CantorWorksheetView(CantorWorksheet* worksheet) : QWidget()
 		connect(m_worksheet, &CantorWorksheet::requestProjectContextMenu, this, &CantorWorksheetView::createContextMenu);
 		connect(m_worksheet, &CantorWorksheet::statusChanged, this, &CantorWorksheetView::statusChanged);
 	} else {
-		QLabel* label = new QLabel(i18n("Failed to initialize %1", m_worksheet->backendName()));
-		label->setAlignment(Qt::AlignHCenter);
+		QString msg = "<b>" + i18n("Failed to initialize %1.", m_worksheet->backendName()) + "</b><br>";
+		msg += worksheet->error();
+		QLabel* label = new QLabel(msg);
+		label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 		layout->addWidget(label);
 	}
 }
