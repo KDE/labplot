@@ -320,7 +320,7 @@ QImage GuiTools::importPDFFile(const QString& fileName, const int dpi) {
 #endif
 }
 
-QImage GuiTools::imageFromPDFData(const QByteArray& data, int dpi) {
+QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 #ifdef HAVE_POPPLER
 	auto* document = Poppler::Document::loadFromData(data);
 	if (!document) {
@@ -341,12 +341,9 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, int dpi) {
 	document->setRenderHint(Poppler::Document::TextHinting);
 	document->setRenderHint(Poppler::Document::TextSlightHinting);
 	document->setRenderHint(Poppler::Document::ThinLineSolid);
-	const double scaling = 1.5;	// scale to reasonable size
-	QImage image;
-	if (dpi)
-		image = page->renderToImage((double)dpi, (double)dpi);
-	else
-		image = page->renderToImage(scaling * QApplication::desktop()->logicalDpiX(), scaling * QApplication::desktop()->logicalDpiY());
+
+	const static int dpi = QApplication::desktop()->logicalDpiX();
+	QImage image = page->renderToImage(zoomFactor * dpi , zoomFactor * dpi);
 
 	delete page;
 	delete document;

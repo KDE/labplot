@@ -29,6 +29,7 @@ class TextLabelPrivate : public QGraphicsItem {
 public:
 	explicit TextLabelPrivate(TextLabel*);
 
+	double zoomFactor{1.0};
 	qreal rotationAngle{0.0};
 	//scaling:
 	//we need to scale from the font size specified in points to scene units.
@@ -65,6 +66,7 @@ public:
 
 	QString name() const;
 	void retransform();
+	void setZoomFactor(double);
 	bool swapVisible(bool on);
 	virtual void recalcShapeAndBoundingRect();
 	void updatePosition();

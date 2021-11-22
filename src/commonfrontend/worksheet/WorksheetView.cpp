@@ -1047,6 +1047,8 @@ void WorksheetView::animFinished() {
 	else
 		m_numScheduledScalings++;
 	sender()->~QObject();
+
+	updateLabelsZoom();
 }
 
 void WorksheetView::mousePressEvent(QMouseEvent* event) {
@@ -1330,9 +1332,21 @@ void WorksheetView::changeZoom(QAction* action) {
 		setTransform(QTransform::fromScale(scaleFactor, scaleFactor));
 	} else if (action == zoomFitSelectionAction)
 		fitInView(scene()->selectionArea().boundingRect(),Qt::KeepAspectRatio);
+
 	currentZoomAction = action;
 	if (tbZoom)
 		tbZoom->setDefaultAction(action);
+
+	updateLabelsZoom();
+}
+
+void WorksheetView::updateLabelsZoom() const {
+	double scale = transform().m11();
+	scale *= Worksheet::convertToSceneUnits(1, Worksheet::Unit::Inch)/QApplication::desktop()->physicalDpiX();
+	const auto& labels = m_worksheet->children<TextLabel>(AbstractAspect::ChildIndexFlag::Recursive
+														| AbstractAspect::ChildIndexFlag::IncludeHidden);
+	for (auto* label : labels)
+		label->setZoomFactor(scale);
 }
 
 void WorksheetView::magnificationChanged(QAction* action) {

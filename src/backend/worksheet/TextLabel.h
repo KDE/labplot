@@ -113,6 +113,7 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
+	void setZoomFactor(double);
 	void setVisible(bool on) override;
 	bool isVisible() const override;
 	QRectF size();

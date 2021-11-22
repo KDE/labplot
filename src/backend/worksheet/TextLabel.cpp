@@ -194,6 +194,11 @@ void TextLabel::setParentGraphicsItem(QGraphicsItem* item) {
 	d->updatePosition();
 }
 
+void TextLabel::setZoomFactor(double factor) {
+	Q_D(TextLabel);
+	d->setZoomFactor(factor);
+}
+
 void TextLabel::retransform() {
 	Q_D(TextLabel);
 	d->retransform();
@@ -555,6 +560,15 @@ void TextLabelPrivate::retransform() {
 	emit q->changed();
 }
 
+void TextLabelPrivate::setZoomFactor(double factor) {
+	zoomFactor = factor;
+
+	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
+		teXImage = GuiTools::imageFromPDFData(teXPdfData, zoomFactor);
+		retransform();
+	}
+
+}
 /*!
 	calculates the position of the label, when the position relative to the parent was specified (left, right, etc.)
 */
@@ -668,7 +682,7 @@ void TextLabelPrivate::updateText() {
 
 void TextLabelPrivate::updateTeXImage() {
 	teXPdfData = teXImageFutureWatcher.result();
-	teXImage = GuiTools::imageFromPDFData(teXPdfData);
+	teXImage = GuiTools::imageFromPDFData(teXPdfData, zoomFactor);
 	retransform();
 	DEBUG(Q_FUNC_INFO << ", TeX renderer successful = " << teXRenderSuccessful);
 	emit q->teXImageUpdated(teXRenderSuccessful);

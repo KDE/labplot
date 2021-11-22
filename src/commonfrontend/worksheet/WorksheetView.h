@@ -83,6 +83,7 @@ private:
 	void handleCartesianPlotSelected(const CartesianPlot *plot);
 	void handleXYCurveSelected();
 	bool eventFilter(QObject *watched, QEvent *event) override;
+	void updateLabelsZoom() const;
 
 	//events
 	void resizeEvent(QResizeEvent*) override;
