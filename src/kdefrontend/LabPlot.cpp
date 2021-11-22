@@ -14,7 +14,7 @@
 
 #include <KAboutData>
 #include <KColorSchemeManager>
-#include <kconfigwidgets_version.h>
+#include <kcoreaddons_version.h>
 #include <KCrash>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -200,7 +200,7 @@ int main (int argc, char *argv[]) {
 #endif
 
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0)	// KColorSchemeManager has a system default option
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0)	// KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
 #else
 	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");

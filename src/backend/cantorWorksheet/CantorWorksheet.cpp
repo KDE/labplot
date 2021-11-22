@@ -46,14 +46,17 @@ CantorWorksheet::CantorWorksheet(const QString &name, bool loading)
 	initializes Cantor's part and plugins
 */
 bool CantorWorksheet::init(QByteArray* content) {
+	DEBUG(Q_FUNC_INFO)
 	KPluginLoader loader(QLatin1String("cantorpart"));
 	KPluginFactory* factory = loader.factory();
+
+	if (!factory)	// try new path
+		factory = KPluginLoader(QLatin1String("kf5/parts/cantorpart")).factory();
 
 	if (!factory) {
 		//we can only get to this here if we open a project having Cantor content and Cantor plugins were not found.
 		//return false here, a proper error message will be created in load() and propagated further.
-		WARN("Failed to load Cantor plugin:")
-		WARN("Cantor Part file name: " << STDSTRING(loader.fileName()))
+		WARN("Failed to load Cantor plugins; file name: " << STDSTRING(loader.fileName()))
 		WARN("	" << STDSTRING(loader.errorString()))
 		m_error = i18n("Couldn't find the dynamic library 'cantorpart'. Please check your installation.");
 		return false;

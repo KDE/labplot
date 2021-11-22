@@ -111,7 +111,7 @@
 #include <KColorSchemeManager>
 #include <KToggleAction>
 #include <KToggleFullScreenAction>
-#include <kconfigwidgets_version.h>
+#include <kcoreaddons_version.h>
 
 #ifdef HAVE_CANTOR_LIBS
 #include <cantor/backend.h>
@@ -283,7 +283,7 @@ void MainWin::initGUI(const QString& fileName) {
 	}
 
 	//hamburger menu
-#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 81, 0)
 	m_hamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection());
 	toolBar()->addAction(m_hamburgerMenu);
 	m_hamburgerMenu->hideActionsOf(toolBar());
@@ -774,7 +774,9 @@ void MainWin::initMenus() {
 	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
 
 	//"Adding Cantor backends to menu and context menu"
+	DEBUG(Q_FUNC_INFO << ", list Cantor backends ...")
 	QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
+	QDEBUG(Q_FUNC_INFO << "," << m_availableBackend.count() << "backends available:" << m_availableBackend)
 	if (m_availableBackend.count() > 0) {
 		unplugActionList(QLatin1String("backends_list"));
 		QList<QAction*> newBackendActions;
@@ -810,7 +812,7 @@ void MainWin::initMenus() {
 #endif
 	//set the action for the current color scheme checked
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0)	// KColorSchemeManager has a system default option
+#if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0)	// KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
 #else
 	KConfigGroup generalGlobalsGroup = KSharedConfig::openConfig(QLatin1String("kdeglobals"))->group("General");
