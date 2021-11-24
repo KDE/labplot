@@ -1454,7 +1454,7 @@ QStringList ExpressionParser::getParameter(const QString& expr, const QStringLis
 bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min, const QString& max,
 		int count, QVector<double>* xVector, QVector<double>* yVector,
 		const QStringList& paramNames, const QVector<double>& paramValues) {
-	DEBUG(Q_FUNC_INFO << ", v1: range = " << min.toStdString() << " .. " << max.toStdString())
+	DEBUG(Q_FUNC_INFO << ", v1: range = " << STDSTRING(min) << " .. " << STDSTRING(max))
 	gsl_set_error_handler_off();
 
 	const Range<double> range{min, max};

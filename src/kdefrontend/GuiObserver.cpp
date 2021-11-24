@@ -174,7 +174,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	}
 
 	const AspectType type{ selectedAspects.front()->type() };
-	DEBUG(Q_FUNC_INFO << ", type: " << AbstractAspect::typeName(type).toStdString())
+	DEBUG(Q_FUNC_INFO << ", type: " << STDSTRING(AbstractAspect::typeName(type)))
 
 	// update cursor dock
 	if (m_mainWindow->cursorWidget) {

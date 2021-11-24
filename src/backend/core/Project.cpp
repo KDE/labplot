@@ -532,7 +532,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 }
 
 bool Project::load(const QString& filename, bool preview) {
-	DEBUG(Q_FUNC_INFO << ", LOADING file " << filename.toStdString())
+	DEBUG(Q_FUNC_INFO << ", LOADING file " << STDSTRING(filename))
 	QIODevice* file;
 	if (filename.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive)) {
 		DEBUG(Q_FUNC_INFO << ", filename ends with .lml")

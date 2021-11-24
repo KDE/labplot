@@ -366,8 +366,8 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	// TODO: save positions of the variables in extra variables to replace faster, because replace takes long time
 	TextLabel::TextWrapper wrapper = m_title->text();
 	if (markerPointsCount() < 1) {
-		DEBUG(wrapper.text.toStdString())
-		DEBUG(wrapper.textPlaceholder.toStdString())
+		DEBUG(STDSTRING(wrapper.text))
+		DEBUG(STDSTRING(wrapper.textPlaceholder))
 		wrapper.text = wrapper.textPlaceholder;
 		return wrapper;
 	}

@@ -1046,7 +1046,7 @@ void AxisPrivate::retransformRange() {
 }
 
 void AxisPrivate::retransformLine() {
-	DEBUG(Q_FUNC_INFO << ", \"" << title->name().toStdString() <<  "\", coordinate system " << q->m_cSystemIndex + 1)
+	DEBUG(Q_FUNC_INFO << ", \"" << STDSTRING(title->name()) <<  "\", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range is x range " << q->cSystem->xIndex() + 1)
 	DEBUG(Q_FUNC_INFO << ", y range is y range " << q->cSystem->yIndex() + 1)
 //	DEBUG(Q_FUNC_INFO << ", x range index check = " << dynamic_cast<const CartesianCoordinateSystem*>(plot()->coordinateSystem(q->m_cSystemIndex))->xIndex() )
@@ -1293,7 +1293,7 @@ bool AxisPrivate::transformAnchor(QPointF* anchorPoint) {
 	recalculates the position of the axis ticks.
  */
 void AxisPrivate::retransformTicks() {
-	// DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString())
+	// DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()))
 	if (suppressRetransform)
 		return;
 
@@ -2099,7 +2099,7 @@ void AxisPrivate::retransformTickLabelPositions() {
 	QPointF pos;
 
 //	const int xIndex{ q->cSystem->xIndex() }, yIndex{ q->cSystem->yIndex() };
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system index = " << q->m_cSystemIndex)
+	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system index = " << q->m_cSystemIndex)
 //	DEBUG(Q_FUNC_INFO << ", x range " << xIndex+1)
 //	DEBUG(Q_FUNC_INFO << ", y range " << yIndex+1)
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
@@ -2273,7 +2273,7 @@ void AxisPrivate::retransformMajorGrid() {
 	if (logicalMajorTickPoints.isEmpty())
 		return;
 
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system " << q->m_cSystemIndex + 1)
+	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex() + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->yIndex() + 1)
 	auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
@@ -2350,7 +2350,7 @@ void AxisPrivate::retransformMinorGrid() {
 	//Currently, grid lines disappear sometimes without this flag
 	QVector<QPointF> logicalMinorTickPoints = q->cSystem->mapSceneToLogical(minorTickPoints, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
-	DEBUG(Q_FUNC_INFO << ' ' << title->name().toStdString() << ", coordinate system " << q->m_cSystemIndex + 1)
+	DEBUG(Q_FUNC_INFO << ' ' << STDSTRING(title->name()) << ", coordinate system " << q->m_cSystemIndex + 1)
 	DEBUG(Q_FUNC_INFO << ", x range " << q->cSystem->xIndex() + 1)
 	DEBUG(Q_FUNC_INFO << ", y range " << q->cSystem->yIndex() + 1)
 

@@ -429,7 +429,7 @@ ReadStatFilterPrivate::ReadStatFilterPrivate(ReadStatFilter* owner) : q(owner) {
  * parse the file with name fileName
  */
 readstat_error_t ReadStatFilterPrivate::parse(const QString& fileName, bool preview, bool prepare) {
-	DEBUG(Q_FUNC_INFO << ", file " << fileName.toStdString() << ", start/end row: " << m_startRow << "/" << m_endRow)
+	DEBUG(Q_FUNC_INFO << ", file " << STDSTRING(fileName) << ", start/end row: " << m_startRow << "/" << m_endRow)
 	m_labelSets.clear();
 
 	readstat_parser_t *parser = readstat_parser_init();
@@ -518,7 +518,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 	// parse meta data and column modes only
 	readstat_error_t error = parse(fileName, false, true);
 	if (error != READSTAT_OK) {
-		DEBUG(Q_FUNC_INFO << ", ERROR preparsing file " << fileName.toStdString())
+		DEBUG(Q_FUNC_INFO << ", ERROR preparsing file " << STDSTRING(fileName))
 		return;
 	}
 
@@ -534,7 +534,7 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 
 	error = parse(fileName);
 	if (error != READSTAT_OK) {
-		DEBUG(Q_FUNC_INFO << ", ERROR parsing file " << fileName.toStdString())
+		DEBUG(Q_FUNC_INFO << ", ERROR parsing file " << STDSTRING(fileName))
 		return;
 	}
 
@@ -556,20 +556,20 @@ void ReadStatFilterPrivate::readDataFromFile(const QString& fileName, AbstractDa
 			switch (columnMode) {
 			case AbstractColumn::ColumnMode::Text:
 				for (int j = 0; j < valueLabels.size(); j++) {
-					DEBUG(Q_FUNC_INFO << ", column " << i << ": add string value label: " << m_labelSets[label].valueString(j).toStdString()  << " = " <<  valueLabels.at(j).toStdString())
+					DEBUG(Q_FUNC_INFO << ", column " << i << ": add string value label: " << STDSTRING(m_labelSets[label].valueString(j))  << " = " <<  STDSTRING(valueLabels.at(j)))
 					column->addValueLabel(m_labelSets[label].valueString(j), valueLabels.at(j));
 				}
 				break;
 			case AbstractColumn::ColumnMode::Double:
 				for (int j = 0; j < valueLabels.size(); j++) {
-					DEBUG(Q_FUNC_INFO << ", column " << i << ": add double value label: " << m_labelSets[label].valueDouble(j)  << " = " <<  valueLabels.at(j).toStdString())
+					DEBUG(Q_FUNC_INFO << ", column " << i << ": add double value label: " << m_labelSets[label].valueDouble(j)  << " = " <<  STDSTRING(valueLabels.at(j)))
 					column->addValueLabel(m_labelSets[label].valueDouble(j), valueLabels.at(j));
 				}
 				break;
 			case AbstractColumn::ColumnMode::Integer:
 			case AbstractColumn::ColumnMode::BigInt:
 				for (int j = 0; j < valueLabels.size(); j++) {
-					DEBUG(Q_FUNC_INFO << ", column " << i << ": add integer value label: " << m_labelSets[label].valueInt(j)  << " = " <<  valueLabels.at(j).toStdString())
+					DEBUG(Q_FUNC_INFO << ", column " << i << ": add integer value label: " << m_labelSets[label].valueInt(j)  << " = " <<  STDSTRING(valueLabels.at(j)))
 					column->addValueLabel(m_labelSets[label].valueInt(j), valueLabels.at(j));
 				}
 				break;

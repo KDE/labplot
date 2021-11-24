@@ -1126,7 +1126,7 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 	}
 }
 void CartesianPlotDock::yMinChanged(const QString& value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
+	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
 
@@ -1153,7 +1153,7 @@ void CartesianPlotDock::yMinChanged(const QString& value) {
 }
 
 void CartesianPlotDock::xMaxChanged(const QString& value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
+	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
 
@@ -1179,7 +1179,7 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 	}
 }
 void CartesianPlotDock::yMaxChanged(const QString& value) {
-	DEBUG(Q_FUNC_INFO << ", value = " << value.toStdString())
+	DEBUG(Q_FUNC_INFO << ", value = " << STDSTRING(value))
 	if (m_initializing)
 		return;
 
@@ -1380,7 +1380,7 @@ void CartesianPlotDock::removeXRange() {
 	}
 
 	if (msg.size() > 0) {
-		DEBUG(Q_FUNC_INFO << ", x range used in plot range " << msg.toStdString())
+		DEBUG(Q_FUNC_INFO << ", x range used in plot range " << STDSTRING(msg))
 		auto ret = KMessageBox::warningYesNo(this, i18n("X range %1 is used in plot range %2. ", currentRow+1, msg)
 							+ i18n("Really remove it?"));
 		if (ret == KMessageBox::No)
@@ -1428,7 +1428,7 @@ void CartesianPlotDock::removeYRange() {
 	}
 
 	if (msg.size() > 0) {
-		DEBUG(Q_FUNC_INFO << ", y range used in plot range " << msg.toStdString())
+		DEBUG(Q_FUNC_INFO << ", y range used in plot range " << STDSTRING(msg))
 		auto ret = KMessageBox::warningYesNo(this, i18n("Y range %1 is used in plot range %2. ", currentRow+1, msg)
 							+ i18n("Really remove it?"));
 		if (ret == KMessageBox::No)
@@ -1508,9 +1508,9 @@ void CartesianPlotDock::PlotRangeXChanged(const int index) {
 
 	for (auto* axis : m_plot->children<Axis>()) {
 		const int cSystemIndex{ axis->coordinateSystemIndex() };
-		DEBUG(Q_FUNC_INFO << ", Axis \"" << axis->name().toStdString() << "\" cSystem index = " << cSystemIndex)
+		DEBUG(Q_FUNC_INFO << ", Axis \"" << STDSTRING(axis->name()) << "\" cSystem index = " << cSystemIndex)
 		if (cSystemIndex == plotRangeIndex) {
-			DEBUG(Q_FUNC_INFO << ", Plot range used in axis \"" << axis->name().toStdString() << "\" has changed")
+			DEBUG(Q_FUNC_INFO << ", Plot range used in axis \"" << STDSTRING(axis->name()) << "\" has changed")
 			if (axis->rangeType() == Axis::RangeType::Auto && axis->orientation() == Axis::Orientation::Horizontal) {
 				DEBUG(Q_FUNC_INFO << ", set x range of axis to " << m_plot->xRange(index).toStdString())
 				axis->setRange(m_plot->xRange(index));
@@ -1534,7 +1534,7 @@ void CartesianPlotDock::PlotRangeYChanged(const int index) {
 	for (auto* axis : m_plot->children<Axis>()) {
 		const int cSystemIndex{ axis->coordinateSystemIndex() };
 		if (cSystemIndex == plotRangeIndex) {
-			DEBUG(Q_FUNC_INFO << ", plot range used in axis \"" << axis->name().toStdString() << "\" has changed")
+			DEBUG(Q_FUNC_INFO << ", plot range used in axis \"" << STDSTRING(axis->name()) << "\" has changed")
 			if (axis->rangeType() == Axis::RangeType::Auto  && axis->orientation() == Axis::Orientation::Vertical) {
 				DEBUG(Q_FUNC_INFO << ", set range to " << m_plot->yRange(index).toStdString())
 				axis->setRange(m_plot->yRange(index));

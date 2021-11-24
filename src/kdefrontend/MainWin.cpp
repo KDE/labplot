@@ -821,7 +821,7 @@ void MainWin::initMenus() {
 #endif
 	// default dark scheme on Windows is not optimal (Breeze dark is better)
 	// we can't find out if light or dark mode is used, so we don't switch to Breeze/Breeze dark here
-	DEBUG(Q_FUNC_INFO << ", Color scheme = " << schemeName.toStdString())
+	DEBUG(Q_FUNC_INFO << ", Color scheme = " << STDSTRING(schemeName))
 	KActionMenu* schemesMenu = m_schemeManager->createSchemeSelectionMenu(i18n("Color Scheme"), schemeName, this);
 	schemesMenu->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
 	connect(schemesMenu->menu(), &QMenu::triggered, this, &MainWin::colorSchemeChanged);

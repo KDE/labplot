@@ -1518,7 +1518,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
  * and returns its string representation.
  */
 QString AsciiFilterPrivate::previewValue(const QString& valueString, AbstractColumn::ColumnMode mode) {
-//	DEBUG(Q_FUNC_INFO << ", valueString = " << valueString.toStdString() << ", mode = " << (int)mode)
+//	DEBUG(Q_FUNC_INFO << ", valueString = " << STDSTRING(valueString) << ", mode = " << (int)mode)
 
 	QString result;
 	switch (mode) {

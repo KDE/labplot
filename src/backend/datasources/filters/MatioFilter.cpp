@@ -774,7 +774,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			break;
 		}
 		case MAT_C_SPARSE:
-			DEBUG(Q_FUNC_INFO << ", found SPARSE. name = " << var->name << ", type = " << typeName(var->data_type).toStdString()  << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
+			DEBUG(Q_FUNC_INFO << ", found SPARSE. name = " << var->name << ", type = " << STDSTRING(typeName(var->data_type))  << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
 			DEBUG(Q_FUNC_INFO << ", rank " << var->rank << ", dim = " << var->dims[0] << " x " << var->dims[1])
 
 			if (dataSource) {
@@ -786,7 +786,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			break;
 		case MAT_C_STRUCT: {
 			DEBUG(Q_FUNC_INFO << ", found STRUCT. name = " << var->name << ", nbytes = " << var->nbytes << ", size = " << var->data_size)
-			DEBUG(Q_FUNC_INFO << ", data type = " << typeName(var->data_type).toStdString() << ", dims = " << var->dims[0] << " x " << var->dims[1])
+			DEBUG(Q_FUNC_INFO << ", data type = " << STDSTRING(typeName(var->data_type)) << ", dims = " << var->dims[0] << " x " << var->dims[1])
 			const int nelem = var->dims[0]*var->dims[1];
 			const int nfields = Mat_VarGetNumberOfFields(var);
 			DEBUG(Q_FUNC_INFO << ", nelements = " << nelem << ", nfields = " << nfields)
@@ -936,9 +936,9 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				QString dims;
 				for (int j = 0; j < cell->rank; j++)
 					dims += QString::number(cell->dims[j]) + " ";
-				DEBUG(Q_FUNC_INFO << ", cell " << i+1 << " : class = " << className(cell->class_type).toStdString()
-						<< ", type = " << typeName(cell->data_type).toStdString() << ", rank = "
-						<< cell->rank << ", dims = " << dims.toStdString() << ", nbytes = " << cell->nbytes << ", size = " << cell->data_size)
+				DEBUG(Q_FUNC_INFO << ", cell " << i+1 << " : class = " << STDSTRING(className(cell->class_type))
+						<< ", type = " << STDSTRING(typeName(cell->data_type)) << ", rank = "
+						<< cell->rank << ", dims = " << STDSTRING(dims) << ", nbytes = " << cell->nbytes << ", size = " << cell->data_size)
 			}
 
 			// read cell data (see MAT_READ_VAR)
@@ -1014,7 +1014,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 						case MAT_C_SPARSE:
 						case MAT_C_FUNCTION:
 						case MAT_C_OPAQUE:
-							DEBUG(Q_FUNC_INFO << ", class type \"" << className(cell->class_type).toStdString() << "\" not supported yet")
+							DEBUG(Q_FUNC_INFO << ", class type \"" << STDSTRING(className(cell->class_type)) << "\" not supported yet")
 							break;
 						case MAT_C_EMPTY:
 							break;
@@ -1120,7 +1120,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				const int elem = i/nfields;
 #endif
 				DEBUG(Q_FUNC_INFO << ", var " << i + 1 << "(field " << field + 1 << ", elem " << elem + 1 <<"): name = " << fields[i]->name
-						<< ", type = " << className(fields[i]->class_type).toStdString())
+						<< ", type = " << STDSTRING(className(fields[i]->class_type)))
 
 				switch (fields[i]->class_type) {
 				case MAT_C_INT8:
@@ -1164,7 +1164,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 							DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
 						} else
 							DEBUG(Q_FUNC_INFO << "  rank = " << fields[i]->rank)
-						DEBUG(Q_FUNC_INFO << ", UTF16 data: \"" << QString::fromUtf16(data).toStdString() << "\"")
+						DEBUG(Q_FUNC_INFO << ", UTF16 data: \"" << STDSTRING(QString::fromUtf16(data)) << "\"")
 						//TODO: row
 						if (dataSource)
 							static_cast<QVector<QString>*>(dataContainer[colIndex])->operator[](0) = QString::fromUtf16(data);
@@ -1173,14 +1173,14 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					} else {
 						char* data = (char*)fields[i]->data;
 						if (fields[i]->data_type == MAT_T_UTF8) {
-							DEBUG(Q_FUNC_INFO << ", UTF8 data: \"" << QString::fromUtf8(data).toStdString() << "\"")
+							DEBUG(Q_FUNC_INFO << ", UTF8 data: \"" << STDSTRING(QString::fromUtf8(data)) << "\"")
 							//TODO: row
 							if (dataSource)
 								static_cast<QVector<QString>*>(dataContainer[colIndex])->operator[](0) = QString::fromUtf8(data);
 							else
 								dataStrings[1][colIndex] = QString::fromUtf8(data);
 						} else {
-							DEBUG(Q_FUNC_INFO << ", STRING data: \"" << QString(data).toStdString() << "\"")
+							DEBUG(Q_FUNC_INFO << ", STRING data: \"" << STDSTRING(QString(data)) << "\"")
 							//TODO: row
 							if (dataSource)
 								static_cast<QVector<QString>*>(dataContainer[colIndex])->operator[](0) = QString(data);
@@ -1195,7 +1195,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				case MAT_C_SPARSE:
 				case MAT_C_FUNCTION:
 				case MAT_C_OPAQUE:
-					DEBUG(Q_FUNC_INFO << ", not support struct field class type " << className(fields[i]->class_type).toStdString())
+					DEBUG(Q_FUNC_INFO << ", not support struct field class type " << STDSTRING(className(fields[i]->class_type)))
 					break;
 				case MAT_C_EMPTY:
 					break;

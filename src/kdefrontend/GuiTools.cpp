@@ -283,11 +283,11 @@ QString GuiTools::openImageFile(const QString& className) {
 
 // convert PDF to QImage using Poppler
 QImage GuiTools::importPDFFile(const QString& fileName, const int dpi) {
-	//DEBUG(Q_FUNC_INFO << ", PDF file name = " << fileName.toStdString());
+	//DEBUG(Q_FUNC_INFO << ", PDF file name = " << STDSTRING(fileName));
 #ifdef HAVE_POPPLER
 	auto* document = Poppler::Document::load(fileName);
 	if (!document) {
-		WARN("Failed to process PDF file" << fileName.toStdString());
+		WARN("Failed to process PDF file" << STDSTRING(fileName));
 		delete document;
 		return QImage();
 	}

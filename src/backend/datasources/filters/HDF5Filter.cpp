@@ -108,7 +108,7 @@ void HDF5Filter::saveFilterSettings(const QString& /*filterName*/) const {
 ///////////////////////////////////////////////////////////////////////
 
 void HDF5Filter::setCurrentDataSetName(const QString& ds) {
-	DEBUG(Q_FUNC_INFO << ", name = " << ds.toStdString())
+	DEBUG(Q_FUNC_INFO << ", name = " << STDSTRING(ds))
 	d->currentDataSetName = ds;
 }
 

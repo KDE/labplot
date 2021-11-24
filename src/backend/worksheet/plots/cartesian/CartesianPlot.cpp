@@ -3523,7 +3523,7 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 		rangep.prev = rangep.range;
 
 		for (auto* axis : q->children<Axis>()) {
-			DEBUG(Q_FUNC_INFO << ", auto-scale axis \"" << axis->name().toStdString() << "\"")
+			DEBUG(Q_FUNC_INFO << ", auto-scale axis \"" << STDSTRING(axis->name()) << "\"")
 			// use ranges of axis
 			int axisXIndex = q->coordinateSystem(axis->coordinateSystemIndex())->xIndex();
 			if (axis->rangeType() != Axis::RangeType::Auto || axis->orientation() != Axis::Orientation::Horizontal || axisXIndex != i)
@@ -3564,7 +3564,7 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 		rangep.prev = rangep.range;
 
 		for (auto* axis : q->children<Axis>()) {
-			DEBUG(Q_FUNC_INFO << ", auto-scale axis \"" << axis->name().toStdString() << "\"")
+			DEBUG(Q_FUNC_INFO << ", auto-scale axis \"" << STDSTRING(axis->name()) << "\"")
 			// use ranges of axis
 			int axisYIndex = q->coordinateSystem(axis->coordinateSystemIndex())->yIndex();
 			if (axis->rangeType() != Axis::RangeType::Auto || axis->orientation() != Axis::Orientation::Vertical || axisYIndex != i)

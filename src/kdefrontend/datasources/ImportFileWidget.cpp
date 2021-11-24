@@ -1164,7 +1164,7 @@ void ImportFileWidget::showFileInfo() {
 	(number of columns and lines for ASCII, color-depth for images etc.).
 */
 QString ImportFileWidget::fileInfoString(const QString& name) const {
-	DEBUG(Q_FUNC_INFO << ", file name = " << name.toStdString())
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(name))
 	QString infoString;
 	QFileInfo fileInfo;
 	QString fileTypeString;
@@ -1540,7 +1540,7 @@ void ImportFileWidget::refreshPreview() {
 		QVector<QStringList> strings;
 		// loop over all selected vars
 		for (const QString& var : filter->selectedVarNames()) {
-			//DEBUG(Q_FUNC_INFO << ", reading variable: " << var.toStdString())
+			//DEBUG(Q_FUNC_INFO << ", reading variable: " << STDSTRING(var))
 			filter->setCurrentVarName(var);
 			strings = filter->readCurrentVar(file, nullptr, AbstractFileFilter::ImportMode::Replace, lines);
 			if (importedStrings.size() == 0)	// first var
@@ -1620,7 +1620,7 @@ void ImportFileWidget::updateContent(const QString& fileName) {
 	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	WAIT_CURSOR;
 
-	DEBUG(Q_FUNC_INFO << ", file name = " << fileName.toStdString());
+	DEBUG(Q_FUNC_INFO << ", file name = " << STDSTRING(fileName));
 	if (auto filter = currentFileFilter()) {
 		switch (filter->type()) {
 		case AbstractFileFilter::FileType::HDF5:
