@@ -29,7 +29,6 @@
 #include <QDebug>
 #define QDEBUG(x) qDebug() << x;
 // C++ style debugging (works on Windows)
-#include <iomanip>
 #define DEBUG(x) std::cout << std::dec << std::boolalpha << std::setprecision (15) << x << std::endl;
 #else
 #define QDEBUG(x) {}

@@ -62,7 +62,7 @@ QAbstractItemModel* ProjectParser::model() {
 }
 
 void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPathes) {
-	DEBUG(Q_FUNC_INFO << ", starting import of " + STDSTRING(m_projectFileName));
+	DEBUG(Q_FUNC_INFO << ", starting import of " << STDSTRING(m_projectFileName));
 	QDEBUG(Q_FUNC_INFO << ", selected pathes: " << selectedPathes);
 
 	//import the selected objects into a temporary project
@@ -71,7 +71,7 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 	bool rc = load(project, false);
 	if (!rc) {
 		delete project;
-		DEBUG(Q_FUNC_INFO << ", ERROR: import of " + STDSTRING(m_projectFileName) + " failed.");
+		DEBUG(Q_FUNC_INFO << ", ERROR: import of " << STDSTRING(m_projectFileName) << " failed.");
 		return;
 	}
 
@@ -116,7 +116,7 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 	if (childToNavigate != nullptr)
 		targetFolder->project()->navigateTo(childToNavigate->path());
 
-	DEBUG(Q_FUNC_INFO << ", import of " + STDSTRING(m_projectFileName) + " DONE");
+	DEBUG(Q_FUNC_INFO << ", import of " << STDSTRING(m_projectFileName) << " DONE");
 }
 
 /*
