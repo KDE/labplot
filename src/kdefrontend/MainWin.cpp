@@ -332,7 +332,6 @@ void MainWin::initGUI(const QString& fileName) {
 			newProject();
 			QTimer::singleShot(0, this, [=] () { importFileDialog(fileName); });
 		}
-
 	} else {
 		//There is no file to open. Depending on the settings do nothing,
 		//create a new project or open the last used project.
@@ -353,7 +352,7 @@ void MainWin::initGUI(const QString& fileName) {
 			}
 
 			updateGUIOnProjectChanges();
-		} else{ //welcome screen
+		} else { //welcome screen
 // 			m_showWelcomeScreen = true;
 // 			m_welcomeWidget = createWelcomeScreen();
 // 			setCentralWidget(m_welcomeWidget);
