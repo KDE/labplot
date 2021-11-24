@@ -45,8 +45,12 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 #define WAIT_CURSOR QApplication::setOverrideCursor(QCursor(Qt::WaitCursor))
 #define RESET_CURSOR QApplication::restoreOverrideCursor()
 
-#define UTF8_QSTRING(str) QString::fromUtf8(str)
+#ifdef HAVE_WINDOWS
+#define STDSTRING(qstr) qstr.toUtf8().constData()
+#else
 #define STDSTRING(qstr) qstr.toStdString()
+#endif
+#define UTF8_QSTRING(str) QString::fromUtf8(str)
 
 #define DELETE(ptr) if (ptr) { delete ptr; ptr = nullptr; }
 

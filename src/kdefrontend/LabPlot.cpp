@@ -172,17 +172,17 @@ int main (int argc, char *argv[]) {
 	DEBUG("DEBUG debugging enabled")
 	QDEBUG("QDEBUG debugging enabled")
 
-	DEBUG("Current path: " << QDir::currentPath().toStdString())
+	DEBUG("Current path: " << STDSTRING(QDir::currentPath()))
 	const QString applicationPath = QCoreApplication::applicationDirPath();
-	DEBUG("Application dir: " << applicationPath.toStdString())
+	DEBUG("Application dir: " << STDSTRING(applicationPath))
 
 #ifdef _WIN32
 	// append application path to PATH to find Cantor backends
 	QString path = qEnvironmentVariable("PATH");
-	DEBUG("OLD PATH = " << path.toStdString())
+	DEBUG("OLD PATH = " << STDSTRING(path))
 	path.append(QLatin1String(";") + applicationPath);
 	qputenv("PATH", qPrintable(path));
-	DEBUG("NEW PATH = " << qEnvironmentVariable("PATH").toStdString())
+	DEBUG("NEW PATH = " << STDSTRING(qEnvironmentVariable("PATH")))
 #endif
 
 #ifndef NDEBUG
