@@ -28,14 +28,14 @@ void RangeTest::testNiceExtend() {
 	};
 
 	for (auto& test : tests) {
-		DEBUG(Q_FUNC_INFO << ", " << STDSTRING(test.first))
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
 		//DEBUG(std::setprecision(19) << test.first.start() << " == " << test.second.start())
 		//DEBUG(std::setprecision(19) << test.first.end() << " == " << test.second.end())
 		QCOMPARE(test.first, test.second);
 	}
 	for (auto& test : tests2) {
-		DEBUG(Q_FUNC_INFO << ", " << STDSTRING(test.first))
+		DEBUG(Q_FUNC_INFO << ", " << test.first.toStdString())
 		test.first.niceExtend();
 		FuzzyCompare(test.first.start(), test.second.start(), DBL_EPSILON);
 		FuzzyCompare(test.first.end(), test.second.end(), 1.e-15);

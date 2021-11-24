@@ -26,14 +26,14 @@ ProjectParser::ProjectParser() : QObject() {
 }
 
 ProjectParser::~ProjectParser() {
-	DELETE(m_project)
+	DELETEPTR(m_project)
 }
 
 void ProjectParser::setProjectFileName(const QString& name) {
 	m_projectFileName = name;
 
 	//delete the previous project object
-	DELETE(m_project)
+	DELETEPTR(m_project)
 }
 
 const QString& ProjectParser::projectFileName() const {

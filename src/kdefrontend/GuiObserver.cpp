@@ -161,6 +161,7 @@ GuiObserver::GuiObserver(MainWin* mainWin) {
   and activates the corresponding dockwidgets, toolbars etc.
 */
 void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects) const {
+	DEBUG(Q_FUNC_INFO)
 	auto clearDock = [&]() {
 		if (m_mainWindow->stackedWidget->currentWidget())
 			m_mainWindow->stackedWidget->currentWidget()->hide();
