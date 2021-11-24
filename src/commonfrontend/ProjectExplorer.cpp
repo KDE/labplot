@@ -210,8 +210,10 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
 	const auto* tree_model = dynamic_cast<AspectTreeModel*>(m_treeView->model());
 	if (tree_model) {
 		const auto& index = tree_model->modelIndexOfAspect(aspect);
-		//TODO: This crashes on Windows in Debug mode
+//TODO: This crashes on Windows in Debug mode
+#if !defined(HAVE_WINDOWS) || defined(NDEBUG)
 		m_treeView->setCurrentIndex(index);
+#endif
 	}
 }
 
