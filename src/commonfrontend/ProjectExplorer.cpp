@@ -208,8 +208,11 @@ void ProjectExplorer::setCurrentAspect(const AbstractAspect* aspect) {
 		return;
 
 	const auto* tree_model = dynamic_cast<AspectTreeModel*>(m_treeView->model());
-	if (tree_model)
-		m_treeView->setCurrentIndex(tree_model->modelIndexOfAspect(aspect));
+	if (tree_model) {
+		const auto& index = tree_model->modelIndexOfAspect(aspect);
+		//TODO: This crashes on Windows in Debug mode
+		m_treeView->setCurrentIndex(index);
+	}
 }
 
 /*!
@@ -758,21 +761,21 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	//there are four model indices in each row
 	//-> divide by 4 to obtain the number of selected rows (=aspects)
-	auto items = selected.indexes();
-	for (int i = 0; i < items.size()/4; ++i) {
-		index = items.at(i*4);
+	auto sitems = selected.indexes();
+	for (int i = 0; i < sitems.size()/4; ++i) {
+		index = sitems.at(i*4);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspect->setSelected(true);
 	}
 
-	items = deselected.indexes();
-	for (int i = 0; i < items.size()/4; ++i) {
-		index = items.at(i*4);
+	auto ditems = deselected.indexes();
+	for (int i = 0; i < ditems.size()/4; ++i) {
+		index = ditems.at(i*4);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		aspect->setSelected(false);
 	}
 
-	items = m_treeView->selectionModel()->selectedRows();
+	auto items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
 	for (const auto& index : qAsConst(items)) {
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());

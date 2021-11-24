@@ -55,7 +55,7 @@ private:
 	void showErrorMessage(const QString&);
 
 	int m_columnToHide{0};
-	QTreeView* m_treeView;
+	QTreeView* m_treeView{nullptr};
 	Project* m_project{nullptr};
 	KMessageWidget* m_messageWidget{nullptr};
 	QPoint m_dragStartPos;
