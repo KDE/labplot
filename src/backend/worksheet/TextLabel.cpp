@@ -582,7 +582,7 @@ void TextLabelPrivate::updatePosition() {
 	} else if(coordinateBindingEnabled && q->cSystem) {
 		QRectF pr;
 		if (q->plot()) {
-			pr = q->plot()->dataRect();
+			pr = q->plot()->graphicsItem()->mapRectFromScene(q->plot()->rect());
 		} else {
 			if (!parentRect(pr))
 				return;
@@ -598,7 +598,7 @@ void TextLabelPrivate::updatePosition() {
 		//determine the parent item
 		QRectF pr;
 		if (q->plot()) {
-			pr = q->plot()->dataRect();
+			pr = q->plot()->graphicsItem()->mapRectFromScene(q->plot()->rect());
 		} else {
 			if (!parentRect(pr))
 				return;
