@@ -243,7 +243,9 @@ void MatrixFunctionDialog::generate() {
 	}
 
 	// Timing
+#ifndef NDEBUG
 	DEBUG("elapsed time =" << timer.elapsed() << "ms");
+#endif
 
 	m_matrix->setFormula(ui.teEquation->toPlainText());
 	m_matrix->setData(new_data);

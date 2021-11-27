@@ -1118,10 +1118,9 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 					colIndex = 0;
 #ifndef NDEBUG
 				const int elem = i/nfields;
-#endif
 				DEBUG(Q_FUNC_INFO << ", var " << i + 1 << "(field " << field + 1 << ", elem " << elem + 1 <<"): name = " << fields[i]->name
 						<< ", type = " << STDSTRING(className(fields[i]->class_type)))
-
+#endif
 				switch (fields[i]->class_type) {
 				case MAT_C_INT8:
 					MAT_READ_STRUCT(qint8);

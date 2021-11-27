@@ -774,9 +774,12 @@ void MainWin::initMenus() {
 
 	//"Adding Cantor backends to menu and context menu"
 	DEBUG(Q_FUNC_INFO << ", list Cantor backends ...")
-	QStringList m_availableBackend = Cantor::Backend::listAvailableBackends();
-	QDEBUG(Q_FUNC_INFO << "," << m_availableBackend.count() << "backends available:" << m_availableBackend)
-	if (m_availableBackend.count() > 0) {
+	QStringList backendNames = Cantor::Backend::listAvailableBackends();
+	DEBUG(Q_FUNC_INFO << ", " << backendNames.count() << "backends available:")
+	for (const auto& b : backendNames)
+		DEBUG("Backend: " << STDSTRING(b))
+
+	if (backendNames.count() > 0) {
 		unplugActionList(QLatin1String("backends_list"));
 		QList<QAction*> newBackendActions;
 		for (auto* backend : Cantor::Backend::availableBackends()) {

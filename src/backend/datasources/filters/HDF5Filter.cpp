@@ -789,8 +789,8 @@ QVector<QStringList> HDF5FilterPrivate::readHDF5CompoundData2D(hid_t dataset, hi
 			}
 #ifndef NDEBUG
 			H5T_class_t mclass = H5Tget_member_class(tid, m);
-#endif
 			DEBUG("unsupported class " << STDSTRING(translateHDF5Class(mclass)));
+#endif
 		}
 
 		m_status = H5Tclose(ctype);
