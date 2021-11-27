@@ -443,8 +443,12 @@ void XYCurve::setValuesColumn(const AbstractColumn* column) {
 	Q_D(XYCurve);
 	if (column != d->valuesColumn) {
 		exec(new XYCurveSetValuesColumnCmd(d, column, ki18n("%1: set values column")));
+
+		//no need to recalculate the points on value labels changes
+		disconnect(column, &AbstractColumn::dataChanged, this, &XYCurve::recalcLogicalPoints);
+
 		if (column)
-			connect(column, SIGNAL(dataChanged(const AbstractColumn*)), this, SLOT(updateValues()));
+			connect(column, &AbstractColumn::dataChanged, this, &XYCurve::updateValues);
 	}
 }
 
@@ -1911,10 +1915,12 @@ void XYCurvePrivate::updateValues() {
 		const int endRow{qMin(numberOfPoints, valuesColumn->rowCount())};
 		auto xColMode{valuesColumn->columnMode()};
 		for (int i = 0; i < endRow; ++i) {
-			if (!m_pointVisible[i]) continue;
+			if (!m_pointVisible.at(i)) continue;
 
-			if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) )
+			if ( !valuesColumn->isValid(i) || valuesColumn->isMasked(i) ) {
+				m_valueStrings << QString();
 				continue;
+			}
 
 			switch (xColMode) {
 			case AbstractColumn::ColumnMode::Double:

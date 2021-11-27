@@ -585,7 +585,7 @@ void WorksheetView::initMenus() {
 	m_dataManipulationMenu->addAction(addDataReductionAction);
 
 	//themes menu
-	m_themeMenu = new QMenu(i18n("Apply Theme"), this);
+	m_themeMenu = new QMenu(i18n("Theme"), this);
 	m_themeMenu->setIcon(QIcon::fromTheme("color-management"));
 #ifndef SDK
 	auto* themeWidget = new ThemesWidget(nullptr);

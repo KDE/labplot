@@ -620,7 +620,7 @@ void CartesianPlot::initMenus() {
 	dataAnalysisMenu->addAction(addDataReductionAction);
 
 	//theme menu
-	themeMenu = new QMenu(i18n("Apply Theme"));
+	themeMenu = new QMenu(i18n("Theme"));
 	themeMenu->setIcon(QIcon::fromTheme("color-management"));
 #ifndef SDK
 	auto* themeWidget = new ThemesWidget(nullptr);
