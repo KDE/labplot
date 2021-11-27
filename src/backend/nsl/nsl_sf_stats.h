@@ -14,6 +14,7 @@
 #define NSL_SF_STATS_DISTRIBUTION_COUNT 35
 #define NSL_SF_STATS_DISTRIBUTION_RNG_COUNT 31	/* GSL RNG distributions */
 /* ordered as defined in GSL random number distributions */
+/* order is fixed, so append new distros at the end */
 typedef enum {nsl_sf_stats_gaussian, nsl_sf_stats_gaussian_tail, nsl_sf_stats_exponential, nsl_sf_stats_laplace, nsl_sf_stats_exponential_power,
 	nsl_sf_stats_cauchy_lorentz, nsl_sf_stats_rayleigh, nsl_sf_stats_rayleigh_tail, nsl_sf_stats_landau, nsl_sf_stats_levy_alpha_stable,
 	nsl_sf_stats_levy_skew_alpha_stable, nsl_sf_stats_gamma, nsl_sf_stats_flat, nsl_sf_stats_lognormal, nsl_sf_stats_chi_squared,

@@ -63,6 +63,7 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 	std::sort(std::begin(distros), std::end(distros));
 	for (const auto& d : distros)
 		ui.cbDistribution->addItem(d.first, d.second);
+	const int defaultDist = (int)nsl_sf_stats_gaussian;	// default dist
 
 	//use white background in the preview label
 	QPalette p;
@@ -89,18 +90,20 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 	create(); // ensure there's a window created
 	const KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
 	if (conf.exists()) {
-		ui.cbDistribution->setCurrentIndex(conf.readEntry("Distribution", 0));
-		this->distributionChanged(ui.cbDistribution->currentIndex()); //if index=0 no signal is emitted above, call this slot directly here
+		const int dist = conf.readEntry("Distribution", defaultDist);
+		ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(dist));
+		if (ui.cbDistribution->currentIndex() == 0)	// if index=0 no signal is emitted above, call this slot directly
+			this->distributionChanged();
 		SET_NUMBER_LOCALE
-		ui.leParameter1->setText(numberLocale.toString(conf.readEntry("Parameter1", 1.0)));
+		// read parameter or set values for default dist
+		ui.leParameter1->setText(numberLocale.toString(conf.readEntry("Parameter1", 0.0)));
 		ui.leParameter2->setText(numberLocale.toString(conf.readEntry("Parameter2", 1.0)));
 		ui.leParameter3->setText(numberLocale.toString(conf.readEntry("Parameter3", 1.0)));
 
 		KWindowConfig::restoreWindowSize(windowHandle(), conf);
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else {
-		//Gaussian distribution as default
-		this->distributionChanged(0);
+		ui.cbDistribution->setCurrentIndex(ui.cbDistribution->findData(defaultDist));
 
 		resize( QSize(400, 0).expandedTo(minimumSize()) );
 	}
@@ -109,7 +112,8 @@ RandomValuesDialog::RandomValuesDialog(Spreadsheet* s, QWidget* parent) : QDialo
 RandomValuesDialog::~RandomValuesDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "RandomValuesDialog");
-	conf.writeEntry("Distribution", ui.cbDistribution->currentIndex());
+	// saving enum value to be consistent
+	conf.writeEntry("Distribution", ui.cbDistribution->itemData(ui.cbDistribution->currentIndex()).toInt());
 	SET_NUMBER_LOCALE
 	conf.writeEntry("Parameter1", numberLocale.toDouble(ui.leParameter1->text()));
 	conf.writeEntry("Parameter2", numberLocale.toDouble(ui.leParameter2->text()));
@@ -123,7 +127,9 @@ void RandomValuesDialog::setColumns(const QVector<Column*>& columns) {
 }
 
 void RandomValuesDialog::distributionChanged(int index) {
-	nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
+	const nsl_sf_stats_distribution dist = (nsl_sf_stats_distribution)ui.cbDistribution->itemData(index).toInt();
+	DEBUG(Q_FUNC_INFO << ", dist = " << nsl_sf_stats_distribution_name[(int)dist])
 
 	//  default settings (used by most distributions)
 	ui.lParameter1->show();

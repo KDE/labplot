@@ -33,7 +33,7 @@ private:
 
 private slots:
 	void generate();
-	void distributionChanged(int index);
+	void distributionChanged(int index = 0);
 	void checkValues();
 };
 
