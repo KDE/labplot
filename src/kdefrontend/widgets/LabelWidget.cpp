@@ -625,10 +625,15 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	QTextCursor c = ui.teLabel->textCursor();
-	if (c.selectedText().isEmpty())
-		ui.teLabel->selectAll();
-	ui.teLabel->setTextColor(color);
+	if (!m_teXEnabled && m_label->text().mode == TextLabel::Mode::LaTeX) {
+		const auto& cursor = ui.teLabel->textCursor();
+		if (cursor.selectedText().isEmpty())
+			ui.teLabel->selectAll();
+		ui.teLabel->setTextColor(color);
+	} else {
+		for (auto* label : m_labelsList)
+			label->setFontColor(color);
+	}
 }
 
 void LabelWidget::backgroundColorChanged(const QColor& color) {
@@ -636,8 +641,8 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 		return;
 
 	if (!m_teXEnabled && m_label->text().mode == TextLabel::Mode::LaTeX) {
-		QTextCursor c = ui.teLabel->textCursor();
-		if (c.selectedText().isEmpty())
+		const auto& cursor = ui.teLabel->textCursor();
+		if (cursor.selectedText().isEmpty())
 			ui.teLabel->selectAll();
 
 		ui.teLabel->setTextBackgroundColor(color);
@@ -1138,7 +1143,7 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
 	const Lock lock(m_initializing);
 
 	//save and restore the current cursor position after changing the text
-	QTextCursor cursor = ui.teLabel->textCursor();
+	auto cursor = ui.teLabel->textCursor();
 	int position = cursor.position();
 	if(!ui.chbShowPlaceholderText->isChecked()) {
 		if (text.mode != TextLabel::Mode::Text)

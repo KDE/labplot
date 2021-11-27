@@ -110,6 +110,7 @@ private:
 	QPointF mapPlotAreaToParent(QPointF);
 	QPointF mapParentToPlotArea(QPointF);
 	bool parentRect(QRectF&);
+	void updateBoundingRect();
 };
 
 #endif

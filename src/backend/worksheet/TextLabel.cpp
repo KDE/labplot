@@ -537,23 +537,6 @@ void TextLabelPrivate::retransform() {
 	if (suppressRetransform)
 		return;
 
-	//determine the size of the label in scene units.
-	double w, h;
-	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
-		//image size is in pixel, convert to scene units
-		w = teXImage.width()*teXImageScaleFactor;
-		h = teXImage.height()*teXImageScaleFactor;
-	} else {
-		//size is in points, convert to scene units
-		w = m_textItem->boundingRect().width()*scaleFactor;
-		h = m_textItem->boundingRect().height()*scaleFactor;
-	}
-
-	boundingRectangle.setX(-w/2);
-	boundingRectangle.setY(-h/2);
-	boundingRectangle.setWidth(w);
-	boundingRectangle.setHeight(h);
-
 	updatePosition();
 	updateBorder();
 
@@ -651,9 +634,9 @@ void TextLabelPrivate::updateText() {
 		m_textItem->show();
 		m_textItem->setHtml(textWrapper.text);
 
-		//the size of the label was most probably changed.
-		//call retransform() to recalculate the position and the bounding box of the label
-		retransform();
+		//the size of the label was most probably changed,
+		//recalculate the bounding box of the label
+		updateBoundingRect();
 		break;
 	}
 	case TextLabel::Mode::Markdown: {
@@ -674,16 +657,37 @@ void TextLabelPrivate::updateText() {
 
 		m_textItem->show();
 		m_textItem->setHtml(html);
-		retransform();
+		updateBoundingRect();
 #endif
 	}
 	}
 }
 
+void TextLabelPrivate::updateBoundingRect() {
+	//determine the size of the label in scene units.
+	double w, h;
+	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
+		//image size is in pixel, convert to scene units
+		w = teXImage.width()*teXImageScaleFactor;
+		h = teXImage.height()*teXImageScaleFactor;
+	} else {
+		//size is in points, convert to scene units
+		w = m_textItem->boundingRect().width()*scaleFactor;
+		h = m_textItem->boundingRect().height()*scaleFactor;
+	}
+
+	boundingRectangle.setX(-w/2);
+	boundingRectangle.setY(-h/2);
+	boundingRectangle.setWidth(w);
+	boundingRectangle.setHeight(h);
+
+	updateBorder();
+}
+
 void TextLabelPrivate::updateTeXImage() {
 	teXPdfData = teXImageFutureWatcher.result();
 	teXImage = GuiTools::imageFromPDFData(teXPdfData, zoomFactor);
-	retransform();
+	updateBoundingRect();
 	DEBUG(Q_FUNC_INFO << ", TeX renderer successful = " << teXRenderSuccessful);
 	emit q->teXImageUpdated(teXRenderSuccessful);
 }
