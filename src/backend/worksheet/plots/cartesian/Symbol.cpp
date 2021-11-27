@@ -202,7 +202,7 @@ void Symbol::saveThemeConfig(const KConfigGroup& /*group*/) const {
 //*************************************************************
 
 int Symbol::stylesCount() {
-	return 21;
+	return ENUM_COUNT(Symbol, Style);
 }
 
 QPainterPath Symbol::pathFromStyle(Symbol::Style style) {

@@ -22,9 +22,11 @@ class Symbol : public AbstractAspect {
 	Q_OBJECT
 
 public:
+	// order is fixed; append new symbols at the end
 	enum class Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
 			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
 			Star4, Star5, Line, Cross, X, Heart, Lightning};
+	Q_ENUM(Style)
 
 	static int stylesCount();
 	static QPainterPath pathFromStyle(Symbol::Style);
