@@ -1236,7 +1236,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		//outlier values
 		if (symbolOutlier->style() != Symbol::Style::NoSymbols && !m_outlierPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::pathFromStyle(symbolOutlier->style());
+			QPainterPath path = Symbol::stylePath(symbolOutlier->style());
 			QTransform trafo;
 			trafo.scale(symbolOutlier->size(), symbolOutlier->size());
 			path = trafo.map(path);
@@ -1256,7 +1256,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		//jitter values
 		if (symbolData->style() != Symbol::Style::NoSymbols && !m_dataPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::pathFromStyle(symbolData->style());
+			QPainterPath path = Symbol::stylePath(symbolData->style());
 			QTransform trafo;
 			trafo.scale(symbolData->size(), symbolData->size());
 			path = trafo.map(path);
@@ -1276,7 +1276,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		//far out values
 		if (symbolFarOut->style() != Symbol::Style::NoSymbols && !m_farOutPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::pathFromStyle(symbolOutlier->style());
+			QPainterPath path = Symbol::stylePath(symbolOutlier->style());
 			QTransform trafo;
 			trafo.scale(symbolFarOut->size(), symbolFarOut->size());
 			path = trafo.map(path);
@@ -1388,7 +1388,7 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 		painter->setOpacity(symbolOutlier->opacity());
 		painter->setPen(symbolOutlier->pen());
 		painter->setBrush(symbolOutlier->brush());
-		QPainterPath path = Symbol::pathFromStyle(symbolOutlier->style());
+		QPainterPath path = Symbol::stylePath(symbolOutlier->style());
 		QTransform trafo;
 		trafo.scale(symbolOutlier->size(), symbolOutlier->size());
 		if (symbolOutlier->rotationAngle() != 0)
@@ -1410,7 +1410,7 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 		painter->setBrush(symbolMean->brush());
 		QTransform trafo;
 		trafo.scale(symbolMean->size(), symbolMean->size());
-		QPainterPath path = Symbol::pathFromStyle(symbolMean->style());
+		QPainterPath path = Symbol::stylePath(symbolMean->style());
 		if (symbolMean->rotationAngle() != 0)
 			trafo.rotate(-symbolMean->rotationAngle());
 
@@ -1428,7 +1428,7 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 		painter->setBrush(symbolMedian->brush());
 		QTransform trafo;
 		trafo.scale(symbolMedian->size(), symbolMedian->size());
-		QPainterPath path = Symbol::pathFromStyle(symbolMedian->style());
+		QPainterPath path = Symbol::stylePath(symbolMedian->style());
 		if (symbolMedian->rotationAngle() != 0)
 			trafo.rotate(-symbolMedian->rotationAngle());
 
@@ -1444,7 +1444,7 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 		painter->setOpacity(symbolData->opacity());
 		painter->setPen(symbolData->pen());
 		painter->setBrush(symbolData->brush());
-		QPainterPath path = Symbol::pathFromStyle(symbolData->style());
+		QPainterPath path = Symbol::stylePath(symbolData->style());
 		QTransform trafo;
 		trafo.scale(symbolData->size(), symbolData->size());
 		if (symbolData->rotationAngle() != 0)
@@ -1464,7 +1464,7 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 		painter->setOpacity(symbolFarOut->opacity());
 		painter->setPen(symbolFarOut->pen());
 		painter->setBrush(symbolFarOut->brush());
-		QPainterPath path = Symbol::pathFromStyle(symbolFarOut->style());
+		QPainterPath path = Symbol::stylePath(symbolFarOut->style());
 		QTransform trafo;
 		trafo.scale(symbolFarOut->size(), symbolFarOut->size());
 		if (symbolFarOut->rotationAngle() != 0)

@@ -4,6 +4,7 @@
     Description          : Symbol
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -29,8 +30,9 @@ public:
 	Q_ENUM(Style)
 
 	static int stylesCount();
-	static QPainterPath pathFromStyle(Symbol::Style);
-	static QString nameFromStyle(Symbol::Style);
+	static QString styleName(Symbol::Style);
+	static Symbol::Style styleIndex(int);
+	static QPainterPath stylePath(Symbol::Style);
 
 	explicit Symbol(const QString &name);
 	void init(const KConfigGroup&);

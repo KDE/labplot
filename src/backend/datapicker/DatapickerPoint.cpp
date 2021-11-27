@@ -308,7 +308,7 @@ QString DatapickerPointPrivate::name() const {
 void DatapickerPointPrivate::retransform() {
 	updatePropeties();
 	setPos(position);
-	QPainterPath path = Symbol::pathFromStyle(pointStyle);
+	QPainterPath path = Symbol::stylePath(pointStyle);
 	boundingRectangle = path.boundingRect();
 	recalcShapeAndBoundingRect();
 	retransformErrorBar();
@@ -405,7 +405,7 @@ void DatapickerPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 }
 
 void DatapickerPointPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
-	QPainterPath path = Symbol::pathFromStyle(pointStyle);
+	QPainterPath path = Symbol::stylePath(pointStyle);
 	QTransform trafo;
 	trafo.scale(size, size);
 	path = trafo.map(path);

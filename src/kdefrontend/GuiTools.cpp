@@ -244,15 +244,16 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 	trafo.scale(15, 15);
 
 	for (int i = 0; i < Symbol::stylesCount(); ++i) {
+		//TODO: set order here
 		const auto style = (Symbol::Style)i;
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setPen(pen);
 		pa.setRenderHint(QPainter::Antialiasing);
 		pa.translate(iconSize/2,iconSize/2);
-		pa.drawPath(trafo.map(Symbol::pathFromStyle(style)));
+		pa.drawPath(trafo.map(Symbol::stylePath(style)));
 		pa.end();
-		cb->addItem(QIcon(pm), Symbol::nameFromStyle(style), (int)style);
+		cb->addItem(QIcon(pm), Symbol::styleName(style), (int)style);
 	}
 }
 

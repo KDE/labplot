@@ -1741,7 +1741,7 @@ void XYCurvePrivate::updateSymbols() {
 #endif
 	symbolsPath = QPainterPath();
 	if (symbol->style() != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::pathFromStyle(symbol->style());
+		QPainterPath path = Symbol::stylePath(symbol->style());
 
 		QTransform trafo;
 		trafo.scale(symbol->size(), symbol->size());
@@ -2962,7 +2962,7 @@ void XYCurvePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*
 	Drawing of symbolsPath is very slow, so we draw every symbol in the loop which is much faster (factor 10)
 */
 void XYCurvePrivate::drawSymbols(QPainter* painter) {
-	QPainterPath path = Symbol::pathFromStyle(symbol->style());
+	QPainterPath path = Symbol::stylePath(symbol->style());
 
 	QTransform trafo;
 	trafo.scale(symbol->size(), symbol->size());

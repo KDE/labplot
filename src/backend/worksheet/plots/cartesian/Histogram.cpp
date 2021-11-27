@@ -1230,7 +1230,7 @@ void HistogramPrivate::horizontalHistogram() {
 void HistogramPrivate::updateSymbols() {
 	symbolsPath = QPainterPath();
 	if (symbol->style() != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::pathFromStyle(symbol->style());
+		QPainterPath path = Symbol::stylePath(symbol->style());
 
 		QTransform trafo;
 		trafo.scale(symbol->size(), symbol->size());
@@ -1593,7 +1593,7 @@ void HistogramPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 }
 
 void HistogramPrivate::drawSymbols(QPainter* painter) {
-	QPainterPath path = Symbol::pathFromStyle(symbol->style());
+	QPainterPath path = Symbol::stylePath(symbol->style());
 
 	QTransform trafo;
 	trafo.scale(symbol->size(), symbol->size());

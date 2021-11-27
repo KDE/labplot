@@ -4,6 +4,7 @@
     Description          : Symbol
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -205,9 +206,89 @@ int Symbol::stylesCount() {
 	return ENUM_COUNT(Symbol, Style);
 }
 
-QPainterPath Symbol::pathFromStyle(Symbol::Style style) {
+QString Symbol::styleName(Symbol::Style style) {
+	QString name;
+	switch (style) {
+	case Style::NoSymbols:
+		name = i18n("none");
+		break;
+	case Style::Circle:
+		name = i18n("circle");
+		break;
+	case Style::Square:
+		name = i18n("square");
+		break;
+	case Style::EquilateralTriangle:
+		name = i18n("equilateral triangle");
+		break;
+	case Style::RightTriangle:
+		name = i18n("right triangle");
+		break;
+	case Style::Bar:
+		name = i18n("bar");
+		break;
+	case Style::PeakedBar:
+		name = i18n("peaked bar");
+		break;
+	case Style::SkewedBar:
+		name = i18n("skewed bar");
+		break;
+	case Style::Diamond:
+		name = i18n("diamond");
+		break;
+	case Style::Lozenge:
+		name = i18n("lozenge");
+		break;
+	case Style::Tie:
+		name = i18n("tie");
+		break;
+	case Style::TinyTie:
+		name = i18n("tiny tie");
+		break;
+	case Style::Plus:
+		name = i18n("plus");
+		break;
+	case Style::Boomerang:
+		name = i18n("boomerang");
+		break;
+	case Style::SmallBoomerang:
+		name = i18n("small boomerang");
+		break;
+	case Style::Star4:
+		name = i18n("star4");
+		break;
+	case Style::Star5:
+		name = i18n("star5");
+		break;
+	case Style::Line:
+		name = i18n("line");
+		break;
+	case Style::Cross:
+		name = i18n("cross");
+		break;
+	case Style::X:
+		name = i18n("character 'X'");
+		break;
+	case Style::Heart:
+		name = i18n("heart");
+		break;
+	case Style::Lightning:
+		name = i18n("lightning");
+		break;
+	}
+
+	return name;
+}
+
+Symbol::Style Symbol::styleIndex(const int index) {
+	return (Symbol::Style)index;
+	//TODO
+}
+
+QPainterPath Symbol::stylePath(Symbol::Style style) {
 	QPainterPath path;
 	QPolygonF polygon;
+
 	switch (style) {
 	case Style::NoSymbols:
 		break;
@@ -325,78 +406,4 @@ QPainterPath Symbol::pathFromStyle(Symbol::Style style) {
 	}
 
 	return path;
-}
-
-QString Symbol::nameFromStyle(Symbol::Style style) {
-	QString name;
-	switch (style) {
-	case Style::NoSymbols:
-		name = i18n("none");
-		break;
-	case Style::Circle:
-		name = i18n("circle");
-		break;
-	case Style::Square:
-		name = i18n("square");
-		break;
-	case Style::EquilateralTriangle:
-		name = i18n("equilateral triangle");
-		break;
-	case Style::RightTriangle:
-		name = i18n("right triangle");
-		break;
-	case Style::Bar:
-		name = i18n("bar");
-		break;
-	case Style::PeakedBar:
-		name = i18n("peaked bar");
-		break;
-	case Style::SkewedBar:
-		name = i18n("skewed bar");
-		break;
-	case Style::Diamond:
-		name = i18n("diamond");
-		break;
-	case Style::Lozenge:
-		name = i18n("lozenge");
-		break;
-	case Style::Tie:
-		name = i18n("tie");
-		break;
-	case Style::TinyTie:
-		name = i18n("tiny tie");
-		break;
-	case Style::Plus:
-		name = i18n("plus");
-		break;
-	case Style::Boomerang:
-		name = i18n("boomerang");
-		break;
-	case Style::SmallBoomerang:
-		name = i18n("small boomerang");
-		break;
-	case Style::Star4:
-		name = i18n("star4");
-		break;
-	case Style::Star5:
-		name = i18n("star5");
-		break;
-	case Style::Line:
-		name = i18n("line");
-		break;
-	case Style::Cross:
-		name = i18n("cross");
-		break;
-	case Style::X:
-		name = i18n("character 'X'");
-		break;
-	case Style::Heart:
-		name = i18n("heart");
-		break;
-	case Style::Lightning:
-		name = i18n("lightning");
-		break;
-	}
-
-	return name;
 }

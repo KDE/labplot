@@ -830,7 +830,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 				painter->setBrush(symbol->brush());
 				painter->setPen(symbol->pen());
 
-				QPainterPath path = Symbol::pathFromStyle(symbol->style());
+				QPainterPath path = Symbol::stylePath(symbol->style());
 				QTransform trafo;
 				trafo.scale(symbol->size(), symbol->size());
 				path = trafo.map(path);

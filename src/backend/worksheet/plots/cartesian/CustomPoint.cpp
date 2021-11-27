@@ -235,7 +235,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 
 	pointShape = QPainterPath();
 	if (m_visible && symbol->style() != Symbol::Style::NoSymbols) {
-		QPainterPath path = Symbol::pathFromStyle(symbol->style());
+		QPainterPath path = Symbol::stylePath(symbol->style());
 
 		QTransform trafo;
 		trafo.scale(symbol->size(), symbol->size());

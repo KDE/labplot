@@ -70,7 +70,7 @@ void SymbolWidget::updateLocale() {
 //******** SLOTs for changes triggered in SymbolWidget ********
 //*************************************************************
 void SymbolWidget::styleChanged(int index) {
-	auto style = static_cast<Symbol::Style>(ui.cbStyle->itemData(index).toInt());
+	const auto style = static_cast<Symbol::Style>(ui.cbStyle->itemData(index).toInt());
 
 	if (style == Symbol::Style::NoSymbols) {
 		ui.sbSize->setEnabled(false);
