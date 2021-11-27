@@ -46,7 +46,8 @@ ThemeHandler::ThemeHandler(QWidget* parent) : QWidget(parent) {
 
 	m_pbLoadTheme = new QPushButton(this);
 	horizontalLayout->addWidget(m_pbLoadTheme);
-	m_pbLoadTheme->setText(i18n("Apply Theme"));
+	m_pbLoadTheme->setText(i18n("Theme"));
+	m_pbLoadTheme->setIcon(QIcon::fromTheme("color-management"));
 
 // 	pbSaveTheme = new QPushButton(this);
 // 	horizontalLayout->addWidget(pbSaveTheme);
@@ -137,10 +138,10 @@ const QString ThemeHandler::themeFilePath(const QString& name) {
 
 void ThemeHandler::setCurrentTheme(const QString& name) {
 	if (!name.isEmpty()) {
-		m_pbLoadTheme->setText(i18n("Apply theme [active '%1']", name));
+		m_pbLoadTheme->setText(i18n("Theme '%1'", name));
 		m_pbLoadTheme->setToolTip(i18n("Theme '%1' is active. Click on the button to change the theme.", name));
 	} else {
-		m_pbLoadTheme->setText(i18n("Apply Theme"));
+		m_pbLoadTheme->setText(i18n("Theme"));
 		m_pbLoadTheme->setToolTip(i18n("No theme is active. Click on the button to select a theme."));
 	}
 
