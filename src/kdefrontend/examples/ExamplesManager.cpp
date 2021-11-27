@@ -76,16 +76,36 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
 			names << name;
 			m_paths[name] = fileName;
 
-			//parse the XML and read the description and the preview pixmap of the project file
-			auto* file = new KCompressionDevice(fileName, KCompressionDevice::Xz);
+			// check compression, s.a. Project::load()
+			QIODevice* file = new QFile(fileName);
+			if (!file->open(QIODevice::ReadOnly)) {
+				delete file;
+				continue;
+			}
+
+			QDataStream in(file);
+			quint16 magic;
+			in >> magic;
+			file->close();
+			delete file;
+
+			if (!magic) //empty file
+				continue;
+
+			if (magic == 0xfd37)	// XZ compressed data
+				file = new KCompressionDevice(fileName, KCompressionDevice::Xz);
+			else	// gzip or not compressed data
+				file = new KCompressionDevice(fileName, KCompressionDevice::GZip);
+
 			if (!file->open(QIODevice::ReadOnly)) {
 				file->close();
 				delete file;
 				continue;
 			}
 
-			//parse XML
+			//parse the XML and read the description and the preview pixmap of the project file
 			QXmlStreamReader reader(file);
+			reader.readNext();
 			while (!reader.atEnd()) {
 				reader.readNext();
 
