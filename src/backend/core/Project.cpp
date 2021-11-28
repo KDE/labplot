@@ -541,6 +541,7 @@ bool Project::load(const QString& filename, bool preview) {
 		file = new QFile(filename);
 		if (!file->open(QIODevice::ReadOnly)) {
 			KMessageBox::error(nullptr, i18n("Sorry. Could not open file for reading."));
+			delete file;
 			return false;
 		}
 		QDataStream in(file);

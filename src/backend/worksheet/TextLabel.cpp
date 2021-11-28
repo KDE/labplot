@@ -1362,6 +1362,8 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 				} else
 					d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
 
+				//in the old format the order was reversed, multiple by -1 here
+				d->position.point.setY(-d->position.point.y());
 			} else {
 				READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
 				READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
