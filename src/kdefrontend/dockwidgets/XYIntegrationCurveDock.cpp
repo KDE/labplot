@@ -254,7 +254,7 @@ void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYIntegrationCurve*>(curve)->setDataSourceType(type);
+		static_cast<XYIntegrationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
@@ -268,7 +268,7 @@ void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYIntegrationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+		static_cast<XYIntegrationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -279,7 +279,7 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYIntegrationCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYIntegrationCurve*>(curve)->setXDataColumn(column);
 
 	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
@@ -319,7 +319,7 @@ void XYIntegrationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -414,7 +414,7 @@ void XYIntegrationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
+		static_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	emit info(i18n("Integration status: %1", m_integrationCurve->integrationResult().status));

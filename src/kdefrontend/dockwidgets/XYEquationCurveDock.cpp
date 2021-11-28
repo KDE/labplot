@@ -123,7 +123,7 @@ void XYEquationCurveDock::initGeneralTab() {
 	}
 
 	//show the properties of the first curve
-	const auto* equationCurve = dynamic_cast<const XYEquationCurve*>(m_curve);
+	const auto* equationCurve = static_cast<const XYEquationCurve*>(m_curve);
 	Q_ASSERT(equationCurve);
 	const XYEquationCurve::EquationData& data = equationCurve->equationData();
 	uiGeneralTab.cbType->setCurrentIndex(static_cast<int>(data.type));
@@ -152,7 +152,7 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	m_curvesList = list;
 	m_curve = list.first();
 	m_aspect = m_curve;
-	m_equationCurve = dynamic_cast<XYEquationCurve*>(m_curve);
+	m_equationCurve = static_cast<XYEquationCurve*>(m_curve);
 	Q_ASSERT(m_equationCurve);
 	m_aspectTreeModel =  new AspectTreeModel(m_curve->project());
 	XYCurveDock::setModel();

@@ -174,11 +174,8 @@ void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for (auto* curve : m_curvesList) {
-		const auto c = dynamic_cast<XYHilbertTransformCurve*>(curve);
-		if (c)
-			c->setXDataColumn(column);
-	}
+	for (auto* curve : m_curvesList)
+		static_cast<XYHilbertTransformCurve*>(curve)->setXDataColumn(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
 		SET_NUMBER_LOCALE
@@ -198,7 +195,7 @@ void XYHilbertTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYHilbertTransformCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYHilbertTransformCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -213,7 +210,7 @@ void XYHilbertTransformCurveDock::autoRangeChanged() {
 		uiGeneralTab.leMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.leMax->setEnabled(false);
-		m_transformCurve = dynamic_cast<XYHilbertTransformCurve*>(m_curve);
+		m_transformCurve = static_cast<XYHilbertTransformCurve*>(m_curve);
 		if (m_transformCurve->xDataColumn()) {
 			SET_NUMBER_LOCALE
 			uiGeneralTab.leMin->setText( numberLocale.toString(m_transformCurve->xDataColumn()->minimum()) );
@@ -246,7 +243,7 @@ void XYHilbertTransformCurveDock::recalculateClicked() {
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYHilbertTransformCurve*>(curve)->setTransformData(m_transformData);
+		static_cast<XYHilbertTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	emit info(i18n("Hilbert transformation status: %1", m_transformCurve->transformResult().status));

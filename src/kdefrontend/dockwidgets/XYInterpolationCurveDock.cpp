@@ -293,7 +293,7 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 		return;
 
 	for (XYCurve* curve: m_curvesList)
-		dynamic_cast<XYInterpolationCurve*>(curve)->setDataSourceType(type);
+		static_cast<XYInterpolationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
@@ -308,7 +308,7 @@ void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 		return;
 
 	for (XYCurve* curve: m_curvesList)
-		dynamic_cast<XYInterpolationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+		static_cast<XYInterpolationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -325,7 +325,7 @@ void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	for (XYCurve* curve: m_curvesList)
-		dynamic_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
 
 	cbXDataColumn->useCurrentIndexText(true);
 	cbXDataColumn->setInvalid(false);
@@ -422,7 +422,7 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	}
 
 	for (XYCurve* curve: m_curvesList)
-		dynamic_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -643,7 +643,7 @@ void XYInterpolationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (XYCurve* curve: m_curvesList)
-		dynamic_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
+		static_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	emit info(i18n("Interpolation status: %1", m_interpolationCurve->interpolationResult().status));

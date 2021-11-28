@@ -265,7 +265,7 @@ void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYCorrelationCurve*>(curve)->setDataSourceType(type);
+		static_cast<XYCorrelationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYCorrelationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
@@ -276,7 +276,7 @@ void XYCorrelationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYCorrelationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+		static_cast<XYCorrelationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -288,7 +288,7 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYCorrelationCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYCorrelationCurve*>(curve)->setXDataColumn(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
 		SET_NUMBER_LOCALE
@@ -308,7 +308,7 @@ void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYCorrelationCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYCorrelationCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -322,7 +322,7 @@ void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYCorrelationCurve*>(curve)->setY2DataColumn(column);
+		static_cast<XYCorrelationCurve*>(curve)->setY2DataColumn(column);
 
 	cbY2DataColumn->useCurrentIndexText(true);
 	cbY2DataColumn->setInvalid(false);
@@ -392,7 +392,7 @@ void XYCorrelationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYCorrelationCurve*>(curve)->setCorrelationData(m_correlationData);
+		static_cast<XYCorrelationCurve*>(curve)->setCorrelationData(m_correlationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	emit info(i18n("Correlation status: %1", m_correlationCurve->correlationResult().status));

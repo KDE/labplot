@@ -244,7 +244,7 @@ void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYFourierFilterCurve*>(curve)->setDataSourceType(type);
+		static_cast<XYFourierFilterCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
@@ -261,7 +261,7 @@ void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYFourierFilterCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+		static_cast<XYFourierFilterCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -272,7 +272,7 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
 
 	// update range of cutoff spin boxes (like a unit change)
 	unitChanged();
@@ -296,7 +296,7 @@ void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -568,7 +568,7 @@ void XYFourierFilterCurveDock::recalculateClicked() {
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
+		static_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	emit info(i18n("Fourier-Filter status: %1", m_filterCurve->filterResult().status));

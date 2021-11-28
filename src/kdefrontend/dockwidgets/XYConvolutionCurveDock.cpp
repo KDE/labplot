@@ -284,7 +284,7 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYConvolutionCurve*>(curve)->setDataSourceType(type);
+		static_cast<XYConvolutionCurve*>(curve)->setDataSourceType(type);
 
 	enableRecalculate();
 }
@@ -297,7 +297,7 @@ void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYConvolutionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+		static_cast<XYConvolutionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -309,7 +309,7 @@ void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYConvolutionCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYConvolutionCurve*>(curve)->setXDataColumn(column);
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
 		SET_NUMBER_LOCALE
@@ -329,7 +329,7 @@ void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYConvolutionCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYConvolutionCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -343,7 +343,7 @@ void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
+		static_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);
 
 	cbY2DataColumn->useCurrentIndexText(true);
 	cbY2DataColumn->setInvalid(false);
@@ -497,7 +497,7 @@ void XYConvolutionCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYConvolutionCurve*>(curve)->setConvolutionData(m_convolutionData);
+		static_cast<XYConvolutionCurve*>(curve)->setConvolutionData(m_convolutionData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	if (m_convolutionData.direction == nsl_conv_direction_forward)

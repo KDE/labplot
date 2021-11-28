@@ -279,7 +279,7 @@ void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYSmoothCurve*>(curve)->setDataSourceType(type);
+		static_cast<XYSmoothCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
@@ -290,7 +290,7 @@ void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYSmoothCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+		static_cast<XYSmoothCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -298,7 +298,7 @@ void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
 
 	// disable types that need more data points
 	if (column) {
@@ -347,7 +347,7 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -519,7 +519,7 @@ void XYSmoothCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
+		static_cast<XYSmoothCurve*>(curve)->setSmoothData(m_smoothData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	emit info(i18n("Smoothing status: %1", m_smoothCurve->smoothResult().status));

@@ -146,7 +146,8 @@ void ProjectParser::moveFolder(Folder* targetParentFolder, Folder* sourceChildFo
 	} else {
 		//folder doesn't exist yet in the target parent folder -> simply move it
 		auto* sourceParentFolder = dynamic_cast<Folder*>(sourceChildFolderToMove->parentAspect());
-		sourceParentFolder->removeChild(sourceChildFolderToMove);
+		if (sourceParentFolder)
+			sourceParentFolder->removeChild(sourceChildFolderToMove);
 		targetParentFolder->addChild(sourceChildFolderToMove);
 	}
 }

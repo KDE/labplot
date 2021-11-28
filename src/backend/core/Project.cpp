@@ -758,8 +758,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 			RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 		}
-		if (dynamic_cast<XYAnalysisCurve*>(curve))
-			RESTORE_POINTER(dynamic_cast<XYAnalysisCurve*>(curve), dataSourceCurve, DataSourceCurve, XYCurve, curves);
+		if (auto* acurve = dynamic_cast<XYAnalysisCurve*>(curve))
+			RESTORE_POINTER(acurve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
 
 		curve->suppressRetransform(false);
 	}

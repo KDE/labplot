@@ -254,7 +254,7 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceType(type);
+		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
@@ -268,7 +268,7 @@ void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+		static_cast<XYDifferentiationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -285,7 +285,7 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYDifferentiationCurve*>(curve)->setXDataColumn(column);
 
 	cbXDataColumn->useCurrentIndexText(true);
 	cbXDataColumn->setInvalid(false);
@@ -299,7 +299,7 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -496,8 +496,7 @@ void XYDifferentiationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (auto* curve : m_curvesList)
-		if (curve)
-			dynamic_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
+		static_cast<XYDifferentiationCurve*>(curve)->setDifferentiationData(m_differentiationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	emit info(i18n("Differentiation status: %1", m_differentiationCurve->differentiationResult().status));

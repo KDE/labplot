@@ -243,10 +243,12 @@ void XYSmoothCurvePrivate::recalculate() {
 	smoothResult.elapsedTime = timer.elapsed();
 
 	//fill rough vector
-	roughVector->resize((int)n);
-	for (int i = 0; i < (int)n; ++i)
-		roughVector->data()[i] = ydataOriginal[i] - ydata[i];
-	roughColumn->setChanged();
+	if (roughVector) {
+		roughVector->resize((int)n);
+		for (int i = 0; i < (int)n; ++i)
+			roughVector->data()[i] = ydataOriginal[i] - ydata[i];
+		roughColumn->setChanged();
+	}
 
 	delete [] ydataOriginal;
 

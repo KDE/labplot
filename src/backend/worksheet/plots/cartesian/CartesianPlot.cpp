@@ -718,7 +718,7 @@ QVector<AspectType> CartesianPlot::pasteTypes() const {
 }
 
 void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
-	auto cSystem = coordinateSystem(cSystemIndex);
+	const auto* cSystem = coordinateSystem(cSystemIndex);
 	int xIndex = -1, yIndex = -1;
 	if (cSystem) {
 		xIndex = cSystem->xIndex();
@@ -726,10 +726,9 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	}
 
 	if (op == NavigationOperation::ScaleAuto) {
-		if (cSystemIndex == -1) {
-			// TODO: needed? because the indices can also be -1 so only the else part is needed?
+		if (!cSystem) {	// all csystems
 			for (int i = 0; i < coordinateSystemCount(); i++) {
-				auto cSystem = coordinateSystem(i);
+				auto* cSystem = coordinateSystem(i);
 				auto xDirty = xRangeDirty(cSystem->xIndex());
 				auto yDirty = yRangeDirty(cSystem->yIndex());
 
@@ -4735,8 +4734,8 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "symmetricPadding", QString::number(d->symmetricPadding));
 	for (const auto& cSystem : m_coordinateSystems) {
 		writer->writeStartElement( "coordinateSystem" );
-		writer->writeAttribute( "xIndex", QString::number(dynamic_cast<CartesianCoordinateSystem*>(cSystem)->xIndex()) );
-		writer->writeAttribute( "yIndex", QString::number(dynamic_cast<CartesianCoordinateSystem*>(cSystem)->yIndex()) );
+		writer->writeAttribute( "xIndex", QString::number(static_cast<CartesianCoordinateSystem*>(cSystem)->xIndex()) );
+		writer->writeAttribute( "yIndex", QString::number(static_cast<CartesianCoordinateSystem*>(cSystem)->yIndex()) );
 		writer->writeEndElement();
 	}
 	writer->writeEndElement();

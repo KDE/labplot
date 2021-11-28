@@ -190,7 +190,7 @@ void XYFourierTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYFourierTransformCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYFourierTransformCurve*>(curve)->setXDataColumn(column);
 
 	if (column) {
 		if (uiGeneralTab.cbAutoRange->isChecked()) {
@@ -212,7 +212,7 @@ void XYFourierTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYFourierTransformCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -227,7 +227,7 @@ void XYFourierTransformCurveDock::autoRangeChanged() {
 		uiGeneralTab.leMin->setEnabled(false);
 		uiGeneralTab.lMax->setEnabled(false);
 		uiGeneralTab.leMax->setEnabled(false);
-		m_transformCurve = dynamic_cast<XYFourierTransformCurve*>(m_curve);
+		m_transformCurve = static_cast<XYFourierTransformCurve*>(m_curve);
 		if (m_transformCurve->xDataColumn()) {
 			SET_NUMBER_LOCALE
 			uiGeneralTab.leMin->setText( numberLocale.toString(m_transformCurve->xDataColumn()->minimum()) );
@@ -295,7 +295,7 @@ void XYFourierTransformCurveDock::recalculateClicked() {
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
+		static_cast<XYFourierTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	emit info(i18n("Fourier transformation status: %1", m_transformCurve->transformResult().status));

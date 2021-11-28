@@ -269,7 +269,7 @@ void XYDataReductionCurveDock::dataSourceTypeChanged(int index) {
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDataReductionCurve*>(curve)->setDataSourceType(type);
+		static_cast<XYDataReductionCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYDataReductionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
@@ -283,7 +283,7 @@ void XYDataReductionCurveDock::dataSourceCurveChanged(const QModelIndex& index) 
 		return;
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDataReductionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
+		static_cast<XYDataReductionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
@@ -294,7 +294,7 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
+		static_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
 	//TODO: this->updateSettings(column); ?
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
@@ -318,7 +318,7 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
+		static_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
 	cbYDataColumn->setInvalid(false);
@@ -594,7 +594,7 @@ void XYDataReductionCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	for (auto* curve : m_curvesList)
-		dynamic_cast<XYDataReductionCurve*>(curve)->setDataReductionData(m_dataReductionData);
+		static_cast<XYDataReductionCurve*>(curve)->setDataReductionData(m_dataReductionData);
 
 	QApplication::restoreOverrideCursor();
 	statusBar->removeWidget(progressBar);
