@@ -174,8 +174,11 @@ void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	auto* column = dynamic_cast<AbstractColumn*>(aspect);
 
-	for (auto* curve : m_curvesList)
-		dynamic_cast<XYHilbertTransformCurve*>(curve)->setXDataColumn(column);
+	for (auto* curve : m_curvesList) {
+		const auto c = dynamic_cast<XYHilbertTransformCurve*>(curve);
+		if (c)
+			c->setXDataColumn(column);
+	}
 
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
 		SET_NUMBER_LOCALE

@@ -47,11 +47,13 @@ void MultiRangeTest::initTestCase() {
 		QCOMPARE(aspect->name(), QLatin1String("Arbeitsblatt")); \
 	QCOMPARE(aspect->type() == AspectType::Worksheet, true); \
 	auto w = dynamic_cast<Worksheet*>(aspect); \
+	if (!w) return; \
  \
 	auto p1 = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0)); \
 	QCOMPARE(p1 != nullptr, true); \
 	auto p2 = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(1)); \
 	QCOMPARE(p2 != nullptr, true); \
+	if (!p1 || !p2) return; \
 \
 	auto* view = dynamic_cast<WorksheetView*>(w->view()); \
 	QCOMPARE(view != nullptr, true); \
@@ -60,16 +62,20 @@ void MultiRangeTest::initTestCase() {
 	/* axis selected */ \
 	auto sinCurve = dynamic_cast<XYCurve*>(p1->child<XYCurve>(0)); \
 	QCOMPARE(sinCurve != nullptr, true); \
+	if (!sinCurve) return; \
 	QCOMPARE(sinCurve->name(), "sinCurve"); \
 	auto tanCurve = dynamic_cast<XYCurve*>(p1->child<XYCurve>(1)); \
 	QCOMPARE(tanCurve != nullptr, true); \
+	if (!tanCurve) return; \
 	QCOMPARE(tanCurve->name(), "tanCurve"); \
 	auto logCurve = dynamic_cast<XYCurve*>(p1->child<XYCurve>(2)); \
 	QCOMPARE(logCurve != nullptr, true); \
+	if (!logCurve) return; \
 	QCOMPARE(logCurve->name(), "logx"); \
 \
 	auto cosCurve = dynamic_cast<XYCurve*>(p2->child<XYCurve>(0)); \
 	QCOMPARE(cosCurve != nullptr, true); \
+	if (!cosCurve) return; \
 	QCOMPARE(cosCurve->name(), "cosCurve"); \
 	\
 	auto horAxisP1 = static_cast<Axis*>(p1->child<Axis>(0)); \

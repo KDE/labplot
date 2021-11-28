@@ -651,6 +651,9 @@ void HistogramDock::binRangesMaxDateTimeChanged(const QDateTime& dateTime) {
 void HistogramDock::plotRangeChanged(int index) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	const auto* plot = dynamic_cast<const CartesianPlot*>(m_curve->parentAspect());
+	if (!plot)
+		return;
+
 	if (index < 0 || index > plot->coordinateSystemCount()) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;

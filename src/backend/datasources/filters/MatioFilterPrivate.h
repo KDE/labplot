@@ -38,7 +38,7 @@ public:
 
 	const MatioFilter* q;
 
-	size_t varCount;
+	size_t varCount{0};
 	QString currentVarName;
 	QStringList selectedVarNames;
 	QVector<QStringList> varsInfo;
