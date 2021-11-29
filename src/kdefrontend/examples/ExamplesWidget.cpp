@@ -172,7 +172,7 @@ void ExamplesWidget::viewModeChanged(int index) {
 
 void ExamplesWidget::activated(const QString& name) {
 	if (ui.bViewMode->isChecked())
-		activateListViewItem(name);
+		activateIconViewItem(name);
 	 else
 		activateListViewItem(name);
 }

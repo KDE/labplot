@@ -273,14 +273,11 @@ void XYDataReductionCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYDataReductionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-
-// 	// disable deriv orders and accuracies that need more data points
-// 	this->updateSettings(dataSourceCurve->xColumn());
 
 	if (m_initializing)
 		return;
+
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDataReductionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
@@ -290,13 +287,11 @@ void XYDataReductionCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDataReductionCurve*>(curve)->setXDataColumn(column);
 
-	//TODO: this->updateSettings(column); ?
 	if (column && uiGeneralTab.cbAutoRange->isChecked()) {
 		SET_NUMBER_LOCALE
 		uiGeneralTab.leMin->setText( numberLocale.toString(column->minimum()) );
@@ -314,8 +309,7 @@ void XYDataReductionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDataReductionCurve*>(curve)->setYDataColumn(column);

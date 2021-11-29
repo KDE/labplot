@@ -258,8 +258,7 @@ void XYIntegrationCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYIntegrationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
 	// disable integration orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
@@ -275,8 +274,7 @@ void XYIntegrationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYIntegrationCurve*>(curve)->setXDataColumn(column);
@@ -315,8 +313,7 @@ void XYIntegrationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 
 	cbYDataColumn->hidePopup();
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYIntegrationCurve*>(curve)->setYDataColumn(column);

@@ -171,8 +171,7 @@ void XYHilbertTransformCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYHilbertTransformCurve*>(curve)->setXDataColumn(column);
@@ -191,8 +190,7 @@ void XYHilbertTransformCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYHilbertTransformCurve*>(curve)->setYDataColumn(column);

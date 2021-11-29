@@ -290,23 +290,20 @@ void XYConvolutionCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYConvolutionCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-
 	if (m_initializing)
 		return;
+
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYConvolutionCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	DEBUG("XYConvolutionCurveDock::xDataColumnChanged()");
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setXDataColumn(column);
@@ -325,8 +322,7 @@ void XYConvolutionCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setYDataColumn(column);
@@ -339,8 +335,7 @@ void XYConvolutionCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYConvolutionCurve*>(curve)->setY2DataColumn(column);

@@ -248,10 +248,7 @@ void XYFourierFilterCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYFourierFilterCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	XYCurve* dataSourceCurve{};
-	if (aspect)
-		dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
 	// update range of cutoff spin boxes (like a unit change)
 	unitChanged();
@@ -268,8 +265,7 @@ void XYFourierFilterCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYFourierFilterCurve*>(curve)->setXDataColumn(column);
@@ -292,8 +288,7 @@ void XYFourierFilterCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYFourierFilterCurve*>(curve)->setYDataColumn(column);

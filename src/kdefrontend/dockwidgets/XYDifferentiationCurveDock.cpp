@@ -258,8 +258,7 @@ void XYDifferentiationCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYDifferentiationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(dataSourceCurve->xColumn());
@@ -275,8 +274,7 @@ void XYDifferentiationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	// disable deriv orders and accuracies that need more data points
 	this->updateSettings(column);
@@ -295,8 +293,7 @@ void XYDifferentiationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYDifferentiationCurve*>(curve)->setYDataColumn(column);

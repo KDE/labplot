@@ -269,11 +269,10 @@ void XYCorrelationCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYCorrelationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-
 	if (m_initializing)
 		return;
+
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
@@ -284,8 +283,7 @@ void XYCorrelationCurveDock::xDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setXDataColumn(column);
@@ -304,8 +302,7 @@ void XYCorrelationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setYDataColumn(column);
@@ -318,8 +315,7 @@ void XYCorrelationCurveDock::y2DataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYCorrelationCurve*>(curve)->setY2DataColumn(column);

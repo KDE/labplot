@@ -292,39 +292,31 @@ void XYInterpolationCurveDock::dataSourceTypeChanged(int index) {
 	if (m_initializing)
 		return;
 
-	for (XYCurve* curve: m_curvesList)
+	for (auto* curve: m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setDataSourceType(type);
 }
 
 void XYInterpolationCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 
 	// disable types that need more data points
-	if (dataSourceCurve)
-		this->updateSettings(dataSourceCurve->xColumn());
+	this->updateSettings(dataSourceCurve->xColumn());
 
 	if (m_initializing)
 		return;
 
-	for (XYCurve* curve: m_curvesList)
+	for (auto* curve: m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYInterpolationCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = nullptr;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
-
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 	this->updateSettings(column);
 
 	if (m_initializing)
 		return;
 
-	for (XYCurve* curve: m_curvesList)
+	for (auto* curve: m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setXDataColumn(column);
 
 	cbXDataColumn->useCurrentIndexText(true);
@@ -414,14 +406,9 @@ void XYInterpolationCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	AbstractColumn* column = nullptr;
-	if (aspect) {
-		column = dynamic_cast<AbstractColumn*>(aspect);
-		Q_ASSERT(column);
-	}
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
-	for (XYCurve* curve: m_curvesList)
+	for (auto* curve: m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setYDataColumn(column);
 
 	cbYDataColumn->useCurrentIndexText(true);
@@ -642,7 +629,7 @@ void XYInterpolationCurveDock::numberOfPointsChanged() {
 void XYInterpolationCurveDock::recalculateClicked() {
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-	for (XYCurve* curve: m_curvesList)
+	for (auto* curve: m_curvesList)
 		static_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);

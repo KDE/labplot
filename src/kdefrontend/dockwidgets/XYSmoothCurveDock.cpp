@@ -283,19 +283,19 @@ void XYSmoothCurveDock::dataSourceTypeChanged(int index) {
 }
 
 void XYSmoothCurveDock::dataSourceCurveChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* dataSourceCurve = dynamic_cast<XYCurve*>(aspect);
-
 	if (m_initializing)
 		return;
 
+	auto* dataSourceCurve = static_cast<XYCurve*>(index.internalPointer());
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setDataSourceCurve(dataSourceCurve);
 }
 
 void XYSmoothCurveDock::xDataColumnChanged(const QModelIndex& index) {
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	if (m_initializing)
+		return;
+
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setXDataColumn(column);
@@ -343,8 +343,7 @@ void XYSmoothCurveDock::yDataColumnChanged(const QModelIndex& index) {
 	if (m_initializing)
 		return;
 
-	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
-	auto* column = dynamic_cast<AbstractColumn*>(aspect);
+	auto* column = static_cast<AbstractColumn*>(index.internalPointer());
 
 	for (auto* curve : m_curvesList)
 		static_cast<XYSmoothCurve*>(curve)->setYDataColumn(column);
