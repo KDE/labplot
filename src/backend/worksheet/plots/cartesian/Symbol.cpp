@@ -25,10 +25,17 @@
 #include <KLocalizedString>
 #include <math.h>
 
+// order of styles in UI comboboxes (defined in Symbol.h, order can be changed without breaking projects)
+static QVector<Symbol::Style> StyleOrder = {Symbol::Style::NoSymbols, Symbol::Style::Circle, Symbol::Style::Square,
+		Symbol::Style::Line, Symbol::Style::Cross, Symbol::Style::X,
+		Symbol::Style::EquilateralTriangle, Symbol::Style::RightTriangle, Symbol::Style::Bar,
+		Symbol::Style::PeakedBar, Symbol::Style::SkewedBar, Symbol::Style::Diamond, Symbol::Style::Lozenge,
+		Symbol::Style::Tie, Symbol::Style::TinyTie, Symbol::Style::Plus, Symbol::Style::Boomerang,
+		Symbol::Style::SmallBoomerang, Symbol::Style::Star4, Symbol::Style::Star5, Symbol::Style::Heart,
+		Symbol::Style::Lightning};
 
 Symbol::Symbol(const QString& name) : AbstractAspect(name, AspectType::AbstractAspect),
 	d_ptr(new SymbolPrivate(this)) {
-
 }
 
 void Symbol::init(const KConfigGroup& group) {
@@ -280,9 +287,8 @@ QString Symbol::styleName(Symbol::Style style) {
 	return name;
 }
 
-Symbol::Style Symbol::styleIndex(const int index) {
-	return (Symbol::Style)index;
-	//TODO
+Symbol::Style Symbol::indexToStyle(const int index) {
+	return StyleOrder.at(index);
 }
 
 QPainterPath Symbol::stylePath(Symbol::Style style) {

@@ -23,15 +23,15 @@ class Symbol : public AbstractAspect {
 	Q_OBJECT
 
 public:
-	// order is fixed; append new symbols at the end
+	// order is fixed; append new symbols at the end and add to StyleOrder in Symbol.cpp
 	enum class Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
 			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
-			Star4, Star5, Line, Cross, X, Heart, Lightning};
+			Star4, Star5, Line, Cross, Heart, Lightning, X};
 	Q_ENUM(Style)
 
 	static int stylesCount();
 	static QString styleName(Symbol::Style);
-	static Symbol::Style styleIndex(int);
+	static Symbol::Style indexToStyle(int);
 	static QPainterPath stylePath(Symbol::Style);
 
 	explicit Symbol(const QString &name);

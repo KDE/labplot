@@ -244,8 +244,8 @@ void GuiTools::addSymbolStyles(QComboBox* cb) {
 	trafo.scale(15, 15);
 
 	for (int i = 0; i < Symbol::stylesCount(); ++i) {
-		//TODO: set order here
-		const auto style = (Symbol::Style)i;
+		//get styles in order
+		const auto style = Symbol::indexToStyle(i);
 		pm.fill(Qt::transparent);
 		pa.begin(&pm);
 		pa.setPen(pen);
