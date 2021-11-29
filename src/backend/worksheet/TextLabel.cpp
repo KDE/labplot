@@ -1096,7 +1096,8 @@ void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	QRectF pr;
-	parentRect(pr);
+	if (!parentRect(pr))
+		return;
 
 	//convert position of the item in parent coordinates to label's position
 	const QPointF point = q->parentPosToRelativePos(mapParentToPlotArea(pos()), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);

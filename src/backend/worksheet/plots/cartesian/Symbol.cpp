@@ -38,6 +38,10 @@ Symbol::Symbol(const QString& name) : AbstractAspect(name, AspectType::AbstractA
 	d_ptr(new SymbolPrivate(this)) {
 }
 
+Symbol::~Symbol() {
+	delete d_ptr;
+}
+
 void Symbol::init(const KConfigGroup& group) {
 	Q_D(Symbol);
 

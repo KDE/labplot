@@ -27,7 +27,7 @@ public:
 private:
 	QTextEdit* teValueLabels;
 	QList<Column*> m_columns;
-	Column* m_column;
+	Column* m_column{nullptr};
 	QString m_dateTimeFormat;
 
 private slots:

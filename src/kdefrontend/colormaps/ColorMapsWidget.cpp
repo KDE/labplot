@@ -174,7 +174,7 @@ void ColorMapsWidget::viewModeChanged(int index) {
 
 void ColorMapsWidget::activated(const QString& name) {
 	if (ui.bViewMode->isChecked())
-		activateListViewItem(name);
+		activateIconViewItem(name);
 	 else
 		activateListViewItem(name);
 }

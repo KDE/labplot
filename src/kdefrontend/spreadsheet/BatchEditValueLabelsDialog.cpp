@@ -29,7 +29,8 @@
 
 	\ingroup kdefrontend
  */
-BatchEditValueLabelsDialog::BatchEditValueLabelsDialog(QWidget* parent) : QDialog(parent) {
+BatchEditValueLabelsDialog::BatchEditValueLabelsDialog(QWidget* parent) : QDialog(parent),
+	teValueLabels(new QTextEdit()) {
 
 	setWindowTitle(i18nc("@title:window", "Edit Value Labels"));
 
@@ -38,7 +39,6 @@ BatchEditValueLabelsDialog::BatchEditValueLabelsDialog(QWidget* parent) : QDialo
 	auto* label = new QLabel(i18n("Value Labels:"));
 	layout->addWidget(label);
 
-	teValueLabels = new QTextEdit();
 	layout->addWidget(teValueLabels);
 
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

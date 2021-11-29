@@ -783,7 +783,37 @@ void DatapickerImageView::exportToFile(const QString& path, const WorksheetView:
 		exportPaint(&painter, targetRect, sourceRect);
 		painter.end();
 
-		image.save(path, "png");
+		if (!path.isEmpty()) {
+			bool rc{false};
+			switch (format) {
+			case WorksheetView::ExportFormat::PNG:
+				rc = image.save(path, "PNG");
+				break;
+			case WorksheetView::ExportFormat::JPG:
+				rc = image.save(path, "JPG");
+				break;
+			case WorksheetView::ExportFormat::BMP:
+				rc = image.save(path, "BMP");
+				break;
+			case WorksheetView::ExportFormat::PPM:
+				rc = image.save(path, "PPM");
+				break;
+			case WorksheetView::ExportFormat::XBM:
+				rc = image.save(path, "XBM");
+				break;
+			case WorksheetView::ExportFormat::XPM:
+				rc = image.save(path, "XPM");
+				break;
+			case WorksheetView::ExportFormat::PDF:
+			case WorksheetView::ExportFormat::SVG:
+				break;
+			}
+
+			if (!rc) {
+				RESET_CURSOR;
+				QMessageBox::critical(nullptr, i18n("Failed to export"), i18n("Failed to write to '%1'. Please check the path.", path));
+			}
+		}
 	}
 }
 

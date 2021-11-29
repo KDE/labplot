@@ -986,7 +986,7 @@ private:
 	CartesianPlotPrivate* m_private;
 	RangeT::Format m_format;
 	int m_index;
-	RangeT::Format m_formatOld;
+	RangeT::Format m_formatOld{RangeT::Format::Numeric};
 };
 class CartesianPlotSetYRangeFormatIndexCmd : public QUndoCommand {
 public:
@@ -1010,7 +1010,7 @@ private:
 	CartesianPlotPrivate* m_private;
 	RangeT::Format m_format;
 	int m_index;
-	RangeT::Format m_formatOld;
+	RangeT::Format m_formatOld{RangeT::Format::Numeric};
 };
 
 RangeT::Format CartesianPlot::xRangeFormat() const {
@@ -1435,7 +1435,7 @@ private:
 	CartesianPlotPrivate* m_private;
 	RangeT::Scale m_scale;
 	int m_index;
-	RangeT::Scale m_scaleOld;
+	RangeT::Scale m_scaleOld{RangeT::Scale::Linear};
 };
 class CartesianPlotSetYScaleIndexCmd : public QUndoCommand {
 public:
@@ -1459,7 +1459,7 @@ private:
 	CartesianPlotPrivate* m_private;
 	RangeT::Scale m_scale;
 	int m_index;
-	RangeT::Scale m_scaleOld;
+	RangeT::Scale m_scaleOld{RangeT::Scale::Linear};
 };
 
 RangeT::Scale CartesianPlot::xRangeScale() const {

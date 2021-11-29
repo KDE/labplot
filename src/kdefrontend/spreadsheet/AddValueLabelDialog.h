@@ -34,10 +34,9 @@ public:
 	QString label() const;
 
 private:
-	QLineEdit* leValue;
-	QLineEdit* leLabel;
-	QDateTimeEdit* dateTimeEdit;
-	AbstractColumn::ColumnMode m_mode;
+	QLineEdit* leValue{nullptr};
+	QLineEdit* leLabel{nullptr};
+	QDateTimeEdit* dateTimeEdit{nullptr};
 };
 
 #endif

@@ -84,56 +84,33 @@ public:
 	};
 
 	struct ColumnStatistics {
-		ColumnStatistics() {
-			size = 0;
-			minimum = NAN;
-			maximum = NAN;
-			arithmeticMean = NAN;
-			geometricMean = NAN;
-			harmonicMean = NAN;
-			contraharmonicMean = NAN;
-			mode = NAN;
-			firstQuartile = NAN;
-			median = NAN;
-			thirdQuartile = NAN;
-			iqr = NAN;
-			trimean = NAN;
-			variance = NAN;
-			standardDeviation = NAN;
-			meanDeviation = NAN;
-			meanDeviationAroundMedian = NAN;
-			medianDeviation = NAN;
-			skewness = NAN;
-			kurtosis = NAN;
-			entropy = NAN;
-		}
-		int size;
-		double minimum;
-		double maximum;
-		double arithmeticMean;
-		double geometricMean;
-		double harmonicMean;
-		double contraharmonicMean;
-		double mode;
-		double firstQuartile;
-		double median;
-		double thirdQuartile;
-		double iqr;
-		double percentile_1;
-		double percentile_5;
-		double percentile_10;
-		double percentile_90;
-		double percentile_95;
-		double percentile_99;
-		double trimean;
-		double variance;
-		double standardDeviation;
-		double meanDeviation; // mean absolute deviation around mean
-		double meanDeviationAroundMedian; // mean absolute deviation around median
-		double medianDeviation; // median absolute deviation
-		double skewness;
-		double kurtosis;
-		double entropy;
+		int size{0};
+		double minimum{NAN};
+		double maximum{NAN};
+		double arithmeticMean{NAN};
+		double geometricMean{NAN};
+		double harmonicMean{NAN};
+		double contraharmonicMean{NAN};
+		double mode{NAN};
+		double firstQuartile{NAN};
+		double median{NAN};
+		double thirdQuartile{NAN};
+		double iqr{NAN};
+		double percentile_1{NAN};
+		double percentile_5{NAN};
+		double percentile_10{NAN};
+		double percentile_90{NAN};
+		double percentile_95{NAN};
+		double percentile_99{NAN};
+		double trimean{NAN};
+		double variance{NAN};
+		double standardDeviation{NAN};
+		double meanDeviation{NAN}; // mean absolute deviation around mean
+		double meanDeviationAroundMedian{NAN}; // mean absolute deviation around median
+		double medianDeviation{NAN}; // median absolute deviation
+		double skewness{NAN};
+		double kurtosis{NAN};
+		double entropy{NAN};
 	};
 
 	AbstractColumn(const QString& name, AspectType type);
