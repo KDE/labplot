@@ -3403,6 +3403,7 @@ void XYCurve::loadThemeConfig(const KConfig& config) {
 	KConfigGroup group = config.group("XYCurve");
 
 	const auto* plot = dynamic_cast<const CartesianPlot*>(parentAspect());
+	if (!plot) return;
 	int index = plot->curveChildIndex(this);
 	QColor themeColor;
 	if (index<plot->themeColorPalette().size())

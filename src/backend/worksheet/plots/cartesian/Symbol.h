@@ -35,6 +35,7 @@ public:
 	static QPainterPath stylePath(Symbol::Style);
 
 	explicit Symbol(const QString &name);
+	~Symbol() override;
 	void init(const KConfigGroup&);
 
 	void save(QXmlStreamWriter*) const override;
