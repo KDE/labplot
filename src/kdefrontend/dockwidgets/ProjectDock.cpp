@@ -49,7 +49,17 @@ void ProjectDock::setProject(Project* project) {
 	ui.leName->setToolTip("");
 	ui.leName->setText(m_project->name());
 	ui.leAuthor->setText(m_project->author());
+
 	ui.teComment->setText(m_project->comment());
+
+	//resize the height of the comment field to fit the content (word wrap is ignored)
+	const QFont& font = ui.teComment->document()->defaultFont();
+	QFontMetrics fontMetrics(font);
+	const QSize& textSize = fontMetrics.size(0, m_project->comment());
+	double height = textSize.height() + 50;
+	ui.teComment->setMinimumSize(0, height);
+	ui.teComment->resize(ui.teComment->width(), height);
+
 	ui.lVersion->setText(project->version());
 	ui.lCreated->setText(project->creationTime().toString());
 	ui.lModified->setText(project->modificationTime().toString());
