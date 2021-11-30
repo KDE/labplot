@@ -23,16 +23,23 @@
 #include "backend/worksheet/Worksheet.h"
 
 #include <KLocalizedString>
-#include <math.h>
+
+extern "C" {
+#include <gsl/gsl_math.h>
+}
 
 // order of styles in UI comboboxes (defined in Symbol.h, order can be changed without breaking projects)
 static QVector<Symbol::Style> StyleOrder = {Symbol::Style::NoSymbols, Symbol::Style::Circle, Symbol::Style::Square,
-		Symbol::Style::Line, Symbol::Style::Cross, Symbol::Style::X,
-		Symbol::Style::EquilateralTriangle, Symbol::Style::RightTriangle, Symbol::Style::Bar,
-		Symbol::Style::PeakedBar, Symbol::Style::SkewedBar, Symbol::Style::Diamond, Symbol::Style::Lozenge,
-		Symbol::Style::Tie, Symbol::Style::TinyTie, Symbol::Style::Plus, Symbol::Style::Boomerang,
-		Symbol::Style::SmallBoomerang, Symbol::Style::Star4, Symbol::Style::Star5, Symbol::Style::Heart,
-		Symbol::Style::Lightning};
+		Symbol::Style::EquilateralTriangle, Symbol::Style::Line, Symbol::Style::Cross, Symbol::Style::X,
+		Symbol::Style::Asterisk, Symbol::Style::Tri, Symbol::Style::XPlus,Symbol::Style::TallPlus,
+		Symbol::Style::LatinCross, Symbol::Style::DotPlus, Symbol::Style::Hash,
+		Symbol::Style::SquareX, Symbol::Style::SquarePlus, Symbol::Style::SquareHalf, Symbol::Style::SquareDiag,
+		Symbol::Style::SquareTriangle, Symbol::Style::CircleHalf, Symbol::Style::CircleDot,
+		Symbol::Style::CircleX, Symbol::Style::CircleTri, Symbol::Style::Peace,
+		Symbol::Style::RightTriangle, Symbol::Style::Bar, Symbol::Style::PeakedBar, Symbol::Style::SkewedBar,
+		Symbol::Style::Diamond, Symbol::Style::Lozenge, Symbol::Style::Tie, Symbol::Style::TinyTie,
+		Symbol::Style::Plus, Symbol::Style::Boomerang, Symbol::Style::SmallBoomerang, Symbol::Style::Star4,
+		Symbol::Style::Star5, Symbol::Style::Heart, Symbol::Style::Lightning};
 
 Symbol::Symbol(const QString& name) : AbstractAspect(name, AspectType::AbstractAspect),
 	d_ptr(new SymbolPrivate(this)) {
@@ -218,77 +225,88 @@ int Symbol::stylesCount() {
 }
 
 QString Symbol::styleName(Symbol::Style style) {
-	QString name;
 	switch (style) {
 	case Style::NoSymbols:
-		name = i18n("none");
-		break;
+		return i18n("none");
 	case Style::Circle:
-		name = i18n("circle");
-		break;
+		return i18n("circle");
 	case Style::Square:
-		name = i18n("square");
-		break;
+		return i18n("square");
 	case Style::EquilateralTriangle:
-		name = i18n("equilateral triangle");
-		break;
+		return i18n("equilateral triangle");
 	case Style::RightTriangle:
-		name = i18n("right triangle");
-		break;
+		return i18n("right triangle");
 	case Style::Bar:
-		name = i18n("bar");
-		break;
+		return i18n("bar");
 	case Style::PeakedBar:
-		name = i18n("peaked bar");
-		break;
+		return i18n("peaked bar");
 	case Style::SkewedBar:
-		name = i18n("skewed bar");
-		break;
+		return i18n("skewed bar");
 	case Style::Diamond:
-		name = i18n("diamond");
-		break;
+		return i18n("diamond");
 	case Style::Lozenge:
-		name = i18n("lozenge");
-		break;
+		return i18n("lozenge");
 	case Style::Tie:
-		name = i18n("tie");
-		break;
+		return i18n("tie");
 	case Style::TinyTie:
-		name = i18n("tiny tie");
-		break;
+		return i18n("tiny tie");
 	case Style::Plus:
-		name = i18n("plus");
-		break;
+		return i18n("plus");
 	case Style::Boomerang:
-		name = i18n("boomerang");
-		break;
+		return i18n("boomerang");
 	case Style::SmallBoomerang:
-		name = i18n("small boomerang");
-		break;
+		return i18n("small boomerang");
 	case Style::Star4:
-		name = i18n("star4");
-		break;
+		return i18n("star4");
 	case Style::Star5:
-		name = i18n("star5");
-		break;
+		return i18n("star5");
 	case Style::Line:
-		name = i18n("line");
-		break;
+		return i18n("line");
 	case Style::Cross:
-		name = i18n("cross");
-		break;
-	case Style::X:
-		name = i18n("character 'X'");
-		break;
+		return i18n("cross");
 	case Style::Heart:
-		name = i18n("heart");
-		break;
+		return i18n("heart");
 	case Style::Lightning:
-		name = i18n("lightning");
-		break;
+		return i18n("lightning");
+	case Style::X:
+		return i18n("character 'X'");
+	case Style::Asterisk:
+		return i18n("asterisk");
+	case Style::Tri:
+		return i18n("tri");
+	case Style::XPlus:
+		return i18n("x plus");
+	case Style::TallPlus:
+		return i18n("tall plus");
+	case Style::LatinCross:
+		return i18n("latin cross");
+	case Style::DotPlus:
+		return i18n("dot plus");
+	case Style::Hash:
+		return i18n("hash");
+	case Style::SquareX:
+		return i18n("square x");
+	case Style::SquarePlus:
+		return i18n("square plus");
+	case Style::SquareHalf:
+		return i18n("half square");
+	case Style::SquareDiag:
+		return i18n("diag square");
+	case Style::SquareTriangle:
+		return i18n("square triangle");
+	case Style::CircleHalf:
+		return i18n("circle half");
+	case Style::CircleDot:
+		return i18n("circle dot");
+	case Style::CircleX:
+		return i18n("circle x");
+	case Style::CircleTri:
+		return i18n("circle tri");
+	case Style::Peace:
+		return i18n("peace");
 	}
 
-	return name;
+	return QString();
 }
 
 Symbol::Style Symbol::indexToStyle(const int index) {
@@ -303,7 +321,7 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 	case Style::NoSymbols:
 		break;
 	case Style::Circle:
-		path.addEllipse(QPoint(0,0), 0.5, 0.5);
+		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
 		break;
 	case Style::Square:
 		path.addRect(QRectF(- 0.5, -0.5, 1.0, 1.0));
@@ -379,25 +397,19 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.moveTo(-0.5, 0);
 		path.lineTo(0.5, 0);
 		break;
-	case Style::X:
-		path = QPainterPath(QPointF(-0.4, -0.5));
-		path.lineTo(0.4, 0.5);
-		path.moveTo(0.4, -0.5);
-		path.lineTo(-0.4, 0.5);
-		break;
 	case Style::Heart: {
 		//https://mathworld.wolfram.com/HeartCurve.html with additional
 		//normalization to fit into a 1.0x1.0 rectangular
 		int steps = 100;
-		double range = 2*M_PI/(steps - 1);
+		double range = 2.*M_PI/(steps - 1);
 		for (int i = 0; i < steps; ++i) {
 			double t = i*range + M_PI/2;
-			double x = pow(sin(t), 3);
+			double x = gsl_pow_3(sin(t));
 			double y = -(13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t))/17;
 			polygon << QPointF(x/2, y/2);
 		}
-		double t = M_PI/2;
-		double x = pow(sin(t), 3);
+		double t = M_PI/2.;
+		double x = gsl_pow_3(sin(t));
 		double y = -(13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t))/17;
 		polygon << QPointF(x/2, y/2);
 		path.addPolygon(polygon);
@@ -412,6 +424,172 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 			<< QPointF(0.06, 0.1)
 			<< QPointF(0, 0.5);
 		path.addPolygon(polygon);
+		break;
+	case Style::X:
+		path = QPainterPath(QPointF(-0.4, -0.5));
+		path.lineTo(0.4, 0.5);
+		path.moveTo(0.4, -0.5);
+		path.lineTo(-0.4, 0.5);
+		break;
+	case Style::Asterisk:
+		path = QPainterPath(QPointF(0., .5));
+		path.lineTo(0., -.5);
+		path.moveTo(M_SQRT3 / 4., -.25);
+		path.lineTo(-M_SQRT3 / 4., .25);
+		path.moveTo(M_SQRT3 / 4., .25);
+		path.lineTo(-M_SQRT3 / 4., -.25);
+		break;
+	case Style::Tri:
+		path = QPainterPath(QPointF(0., 0.));
+		path.lineTo(0., -1.);
+		path.moveTo(0., 0.);
+		path.lineTo(-M_SQRT3/2., 1./2.);
+		path.moveTo(0., 0.);
+		path.lineTo(M_SQRT3/2., 1./2.);
+		break;
+	case Style::XPlus:
+		path = QPainterPath(QPointF(.5, 0.));
+		path.lineTo(-.5, 0.);
+		path.moveTo(0., .5);
+		path.lineTo(0., -.5);
+		path.moveTo(.5/M_SQRT2, .5/M_SQRT2);
+		path.lineTo(-.5/M_SQRT2, -.5/M_SQRT2);
+		path.moveTo(.5/M_SQRT2, -.5/M_SQRT2);
+		path.lineTo(-.5/M_SQRT2, .5/M_SQRT2);
+		break;
+	case Style::TallPlus:
+		path = QPainterPath(QPointF(.25, 0.));
+		path.lineTo(-.25, 0.);
+		path.moveTo(0., .5);
+		path.lineTo(0., -.5);
+		break;
+	case Style::LatinCross:
+		path = QPainterPath(QPointF(0., .5));
+		path.lineTo(0., -.5);
+		path.moveTo(-1./3., -1./6.);
+		path.lineTo(1./3., -1./6.);
+		break;
+	case Style::DotPlus:
+		path = QPainterPath(QPointF(0., .5));
+		path.lineTo(0., .25);
+		path.moveTo(0., -.5);
+		path.lineTo(0., -.25);
+		path.moveTo(.5, 0.);
+		path.lineTo(.25, 0.);
+		path.moveTo(-.5, 0.);
+		path.lineTo(-.25, 0.);
+		path.addEllipse(-.05, -.05, .1, .1);
+		break;
+	case Style::Hash:
+		path = QPainterPath(QPointF(-.25, .5));
+		path.lineTo(-.25, -.5);
+		path.moveTo(.25, .5);
+		path.lineTo(.25, -.5);
+		path.moveTo(.5, .25);
+		path.lineTo(-.5, .25);
+		path.moveTo(.5, -.25);
+		path.lineTo(-.5, -.25);
+		break;
+	case Style::SquareX:
+		path = QPainterPath(QPointF(-.5, .5));
+		path.lineTo(.5, -.5);
+		path.lineTo(-.5, -.5);
+		path.lineTo(.5, .5);
+		path.lineTo(-.5, .5);
+		path.moveTo(-.5, .5);
+		path.lineTo(-.5, -.5);
+		path.moveTo(.5, .5);
+		path.lineTo(.5, -.5);
+		break;
+	case Style::SquarePlus:
+		path = QPainterPath(QPointF(-.5, .5));
+		path.lineTo(-.5, 0.);
+		path.lineTo(.5, 0.);
+		path.lineTo(.5, -.5);
+		path.lineTo(0., -.5);
+		path.lineTo(0., .5);
+		path.lineTo(-.5, .5);
+		path.moveTo(.5, .5);
+		path.lineTo(0., .5);
+		path.moveTo(.5, .5);
+		path.lineTo(.5, 0);
+		path.moveTo(-.5, -.5);
+		path.lineTo(0., -.5);
+		path.moveTo(-.5, -.5);
+		path.lineTo(-.5, 0);
+		break;
+	case Style::SquareHalf:
+		path = QPainterPath(QPointF(-.5, .5));
+		path.lineTo(.5, .5);
+		path.lineTo(.5, 0.);
+		path.lineTo(-.5, 0.);
+		path.lineTo(-.5, .5);
+		path.moveTo(-.5, -.5);
+		path.lineTo(-.5, 0);
+		path.moveTo(-.5, -.5);
+		path.lineTo(.5, -.5);
+		path.moveTo(.5, -.5);
+		path.lineTo(.5, 0.);
+		break;
+	case Style::SquareDiag:
+		path = QPainterPath(QPointF(-.5, .5));
+		path.lineTo(.5, .5);
+		path.lineTo(-.5, -.5);
+		path.lineTo(-.5, .5);
+		path.moveTo(.5, -.5);
+		path.lineTo(.5, .5);
+		path.moveTo(.5, -.5);
+		path.lineTo(-.5, -.5);
+		break;
+	case Style::SquareTriangle:
+		path = QPainterPath(QPointF(-.5, .5));
+		path.lineTo(0, -.5);
+		path.lineTo(.5, .5);
+		path.lineTo(-.5, .5);
+		path.moveTo(.5, -.5);
+		path.lineTo(-.5, -.5);
+		path.moveTo(.5, -.5);
+		path.lineTo(.5, .5);
+		path.moveTo(-.5, -.5);
+		path.lineTo(-.5, .5);
+		break;
+	case Style::CircleHalf:
+		path = QPainterPath(QPointF(0., .5));
+		path.arcTo(-.5, -.5, 1., 1., -90., 180.);
+		path.closeSubpath();
+		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
+		break;
+	case Style::CircleDot:
+		path.addEllipse(-.1, -.1, .2, .2);
+		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
+		break;
+	case Style::CircleX:
+		path = QPainterPath(QPointF(.5/M_SQRT2, .5/M_SQRT2));
+		path.lineTo(-.5/M_SQRT2, -.5/M_SQRT2);
+		path.arcTo(-.5, -.5, 1., 1., -45., 90.);
+		path.lineTo(-.5/M_SQRT2, .5/M_SQRT2);
+		path.arcTo(-.5, -.5, 1., 1., 225., -90.);
+		path.closeSubpath();
+		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
+		break;
+	case Style::CircleTri:
+		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
+		path.moveTo(0., 0.);
+		path.lineTo(0., -.5);
+		path.moveTo(0., 0.);
+		path.lineTo(-M_SQRT3/4., 1./4.);
+		path.moveTo(0., 0.);
+		path.lineTo(M_SQRT3/4., 1./4.);
+		break;
+	case Style::Peace:
+		path = QPainterPath(QPointF(0, .5));
+		path.lineTo(0, -.5);
+		path.moveTo(0., 0.);
+		path.lineTo(-.5/M_SQRT2, .5/M_SQRT2);
+		path.moveTo(0., 0.);
+		path.lineTo(.5/M_SQRT2, .5/M_SQRT2);
+		path.closeSubpath();
+		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
 		break;
 	}
 

@@ -773,11 +773,13 @@ void MainWin::initMenus() {
 	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
 
 	//"Adding Cantor backends to menu and context menu"
-	DEBUG(Q_FUNC_INFO << ", list Cantor backends ...")
 	QStringList backendNames = Cantor::Backend::listAvailableBackends();
+#ifndef NDEBUG
+	DEBUG(Q_FUNC_INFO << ", list Cantor backends ...")
 	DEBUG(Q_FUNC_INFO << ", " << backendNames.count() << "backends available:")
 	for (const auto& b : backendNames)
 		DEBUG("Backend: " << STDSTRING(b))
+#endif
 
 	if (backendNames.count() > 0) {
 		unplugActionList(QLatin1String("backends_list"));

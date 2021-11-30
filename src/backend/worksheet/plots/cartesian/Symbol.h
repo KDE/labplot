@@ -26,7 +26,9 @@ public:
 	// order is fixed; append new symbols at the end and add to StyleOrder in Symbol.cpp
 	enum class Style {NoSymbols, Circle, Square, EquilateralTriangle, RightTriangle, Bar, PeakedBar,
 			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
-			Star4, Star5, Line, Cross, Heart, Lightning, X};
+			Star4, Star5, Line, Cross, Heart, Lightning, X, Asterisk, Tri, XPlus, TallPlus,
+			LatinCross, DotPlus, Hash, SquareX, SquarePlus, SquareHalf, SquareDiag, SquareTriangle,
+			CircleHalf, CircleDot, CircleX, CircleTri, Peace};
 	Q_ENUM(Style)
 
 	static int stylesCount();
