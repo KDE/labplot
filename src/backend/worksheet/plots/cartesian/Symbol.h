@@ -28,7 +28,8 @@ public:
 			SkewedBar, Diamond, Lozenge, Tie, TinyTie, Plus, Boomerang, SmallBoomerang,
 			Star4, Star5, Line, Cross, Heart, Lightning, X, Asterisk, Tri, XPlus, TallPlus,
 			LatinCross, DotPlus, Hash, SquareX, SquarePlus, SquareHalf, SquareDiag, SquareTriangle,
-			CircleHalf, CircleDot, CircleX, CircleTri, Peace};
+			CircleHalf, CircleDot, CircleX, CircleTri, Peace, Flower, Flower2, Flower3, Flower5, Flower6,
+			Star, Star3, Star6, Pentagon, Hexagon, Latin, David, Home, Pin, Female, Male, Spade, Club};
 	Q_ENUM(Style)
 
 	static int stylesCount();

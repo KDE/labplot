@@ -36,7 +36,7 @@
 		* BoxPlot
 		* Crosshair cursor mode in the plot
 		* New themes "Monokai", "ggplot grey", "ggplot dark", "Tufte"
-		* New curve symbols "heart" and "lightning"
+		* Many more curve symbols
 		* Allow to specify text label's position in logical plot coordinates
 		* Allow to use a custom column to set the text for the axis ticks
 		* Allow to resize the plots on the worksheet with the mouse when no layout is active

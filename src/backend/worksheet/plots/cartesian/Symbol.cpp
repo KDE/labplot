@@ -24,22 +24,27 @@
 
 #include <KLocalizedString>
 
+#include <QFont>
+
 extern "C" {
 #include <gsl/gsl_math.h>
 }
 
 // order of styles in UI comboboxes (defined in Symbol.h, order can be changed without breaking projects)
 static QVector<Symbol::Style> StyleOrder = {Symbol::Style::NoSymbols, Symbol::Style::Circle, Symbol::Style::Square,
-		Symbol::Style::EquilateralTriangle, Symbol::Style::Line, Symbol::Style::Cross, Symbol::Style::X,
-		Symbol::Style::Asterisk, Symbol::Style::Tri, Symbol::Style::XPlus,Symbol::Style::TallPlus,
-		Symbol::Style::LatinCross, Symbol::Style::DotPlus, Symbol::Style::Hash,
-		Symbol::Style::SquareX, Symbol::Style::SquarePlus, Symbol::Style::SquareHalf, Symbol::Style::SquareDiag,
-		Symbol::Style::SquareTriangle, Symbol::Style::CircleHalf, Symbol::Style::CircleDot,
-		Symbol::Style::CircleX, Symbol::Style::CircleTri, Symbol::Style::Peace,
-		Symbol::Style::RightTriangle, Symbol::Style::Bar, Symbol::Style::PeakedBar, Symbol::Style::SkewedBar,
-		Symbol::Style::Diamond, Symbol::Style::Lozenge, Symbol::Style::Tie, Symbol::Style::TinyTie,
-		Symbol::Style::Plus, Symbol::Style::Boomerang, Symbol::Style::SmallBoomerang, Symbol::Style::Star4,
-		Symbol::Style::Star5, Symbol::Style::Heart, Symbol::Style::Lightning};
+		Symbol::Style::EquilateralTriangle, Symbol::Style::Line, Symbol::Style::Cross, Symbol::Style::Tri,
+		Symbol::Style::X, Symbol::Style::Asterisk, Symbol::Style::XPlus, Symbol::Style::TallPlus,
+		Symbol::Style::LatinCross, Symbol::Style::DotPlus, Symbol::Style::Pin, Symbol::Style::Hash, Symbol::Style::SquareX,
+		Symbol::Style::SquarePlus, Symbol::Style::SquareHalf, Symbol::Style::SquareDiag, Symbol::Style::SquareTriangle,
+		Symbol::Style::CircleHalf, Symbol::Style::CircleDot, Symbol::Style::CircleX, Symbol::Style::CircleTri,
+		Symbol::Style::Peace, Symbol::Style::RightTriangle, Symbol::Style::Bar, Symbol::Style::PeakedBar,
+		Symbol::Style::SkewedBar, Symbol::Style::Diamond, Symbol::Style::Lozenge, Symbol::Style::Tie, Symbol::Style::TinyTie,
+		Symbol::Style::Boomerang, Symbol::Style::SmallBoomerang, Symbol::Style::Star, Symbol::Style::Star3,
+		Symbol::Style::Star4, Symbol::Style::Star5, Symbol::Style::Star6,
+		Symbol::Style::Plus, Symbol::Style::Latin, Symbol::Style::David, Symbol::Style::Home, Symbol::Style::Pentagon,
+		Symbol::Style::Hexagon, Symbol::Style::Female, Symbol::Style::Male,
+		Symbol::Style::Flower, Symbol::Style::Flower2, Symbol::Style::Flower3, Symbol::Style::Flower5, Symbol::Style::Flower6,
+		Symbol::Style::Heart, Symbol::Style::Spade, Symbol::Style::Club, Symbol::Style::Lightning};
 
 Symbol::Symbol(const QString& name) : AbstractAspect(name, AspectType::AbstractAspect),
 	d_ptr(new SymbolPrivate(this)) {
@@ -304,6 +309,42 @@ QString Symbol::styleName(Symbol::Style style) {
 		return i18n("circle tri");
 	case Style::Peace:
 		return i18n("peace");
+	case Style::Flower:
+		return i18n("flower");
+	case Style::Flower2:
+		return i18n("flower2");
+	case Style::Flower3:
+		return i18n("flower3");
+	case Style::Flower5:
+		return i18n("flower5");
+	case Style::Flower6:
+		return i18n("flower6");
+	case Style::Star:
+		return i18n("star");
+	case Style::Star3:
+		return i18n("star3");
+	case Style::Star6:
+		return i18n("star6");
+	case Style::Pentagon:
+		return i18n("pentagon");
+	case Style::Hexagon:
+		return i18n("hexagon");
+	case Style::Latin:
+		return i18n("latin");
+	case Style::David:
+		return i18n("david");
+	case Style::Home:
+		return i18n("home");
+	case Style::Pin:
+		return i18n("pin");
+	case Style::Female:
+		return i18n("female");
+	case Style::Male:
+		return i18n("male");
+	case Style::Spade:
+		return i18n("spade");
+	case Style::Club:
+		return i18n("club");
 	}
 
 	return QString();
@@ -590,6 +631,177 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.lineTo(.5/M_SQRT2, .5/M_SQRT2);
 		path.closeSubpath();
 		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
+		break;
+	case Style::Flower: {
+		int steps = 100;
+		double range = 2.*M_PI/(steps - 1);
+		for (int i = 0; i < steps; ++i) {
+			double t = i*range;
+			double r = sin(2*t) * sin(2*t);
+			double x = r * sin(t);
+			double y = r * cos(t);
+			polygon << QPointF(x/2, y/2);
+		}
+		path.addPolygon(polygon);
+		break;
+	}
+	case Style::Flower2: {
+		int steps = 100;
+		double range = 2.*M_PI/(steps - 1);
+		for (int i = 0; i < steps; ++i) {
+			double t = i*range;
+			double r = sin(t) * sin(t);
+			double x = r * sin(t);
+			double y = r * cos(t);
+			polygon << QPointF(x/2, y/2);
+		}
+		path.addPolygon(polygon);
+		break;
+	}
+	case Style::Flower3: {
+		int steps = 100;
+		double range = 2.*M_PI/(steps - 1);
+		for (int i = 0; i < steps; ++i) {
+			double t = i*range;
+			double r = sin(3.*t/2.) * sin(3.*t/2.);
+			double x = r * sin(t);
+			double y = r * cos(t);
+			polygon << QPointF(x/2, y/2);
+		}
+		path.addPolygon(polygon);
+		break;
+	}
+	case Style::Flower5: {
+		int steps = 100;
+		double range = 2.*M_PI/(steps - 1);
+		for (int i = 0; i < steps; ++i) {
+			double t = i*range;
+			double r = sin(5.*t/2.) * sin(5.*t/2.);
+			double x = r * sin(t);
+			double y = r * cos(t);
+			polygon << QPointF(x/2, y/2);
+		}
+		path.addPolygon(polygon);
+		break;
+	}
+	case Style::Flower6: {
+		int steps = 100;
+		double range = 2.*M_PI/(steps - 1);
+		for (int i = 0; i < steps; ++i) {
+			double t = i*range;
+			double r = sin(3.*t) * sin(3.*t);
+			double x = r * sin(t);
+			double y = r * cos(t);
+			polygon << QPointF(x/2, y/2);
+		}
+		path.addPolygon(polygon);
+		break;
+	}
+	case Style::Star:
+		for (int i = 0; i < 5; i++) {
+			double angle = 2.*M_PI*i/5. - M_PI/10.;
+			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
+			polygon << QPointF(.2 * cos(angle + M_PI/5.), .2 * sin(angle + M_PI/5.));
+		}
+		path.addPolygon(polygon);
+		path.closeSubpath();
+		break;
+	case Style::Star3:
+		for (int i = 0; i < 3; i++) {
+			double angle = 2.*M_PI*i/3. + M_PI/6.;
+			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
+			polygon << QPointF(.1 * cos(angle + M_PI/3.), .1 * sin(angle + M_PI/3.));
+		}
+		path.addPolygon(polygon);
+		path.closeSubpath();
+		break;
+	case Style::Star6:
+		for (int i = 0; i < 6; i++) {
+			double angle = 2.*M_PI*i/6.;
+			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
+			polygon << QPointF(.1 * cos(angle + M_PI/6.), .1 * sin(angle + M_PI/6.));
+		}
+		path.addPolygon(polygon);
+		path.closeSubpath();
+		break;
+	case Style::Pentagon:
+		for (int i = 0; i < 5; i++) {
+			double angle = 2.*M_PI*i/5. - M_PI/10.;
+			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
+		}
+		path.addPolygon(polygon);
+		path.closeSubpath();
+		break;
+	case Style::Hexagon:
+		for (int i = 0; i < 6; i++) {
+			double angle = 2.*M_PI*i/6.;
+			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
+		}
+		path.addPolygon(polygon);
+		path.closeSubpath();
+		break;
+	case Style::Latin:
+		polygon<<QPointF(-0.1, -0.5)<<QPointF(0.1, -0.5)<<QPointF(0.1, -0.3)<<QPointF(0.5, -0.3)<<QPointF(0.5, -0.1)
+				<<QPointF(0.1, -0.1)<<QPointF(0.1, 0.5)<<QPointF(-0.1, 0.5)<<QPointF(-0.1, -0.1)<<QPointF(-0.5, -0.1)
+				<<QPointF(-0.5, -0.3)<<QPointF(-0.1, -0.3)<<QPointF(-0.1, -0.5);
+		path.addPolygon(polygon);
+		break;
+	case Style::David:
+		for (int i = 0; i < 4; i++) {
+			double angle = 2.*M_PI*i/3. + M_PI/6.;
+			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
+		}
+		path.setFillRule(Qt::FillRule::WindingFill);
+		path.addPolygon(polygon);
+		polygon.clear();
+		for (int i = 0; i < 4; i++) {
+			double angle = 2.*M_PI*i/3. - M_PI/6.;
+			polygon << QPointF(.5 * cos(angle), .5 * sin(angle));
+		}
+
+		path.addPolygon(polygon);
+		break;
+	case Style::Home:
+		path = QPainterPath(QPointF(-.25, .25));
+		path.lineTo(.25, .25);
+		path.lineTo(.25, -.25);
+		path.lineTo(0., -.5);
+		path.lineTo(-.25, -.25);
+		path.lineTo(-.25, .25);
+		break;
+	case Style::Pin:
+		path = QPainterPath(QPointF(0., 0.));
+		path.lineTo(0., -.3);
+		path.closeSubpath();
+		path.addEllipse(QPointF(0., -.4), 0.2, 0.2);
+		break;
+	case Style::Female:
+		path.addEllipse(QPointF(0., 0.), .25, .25);
+		path.closeSubpath();
+		path.moveTo(0., .25);
+		path.lineTo(0., .5);
+		path.moveTo(-.15, .375);
+		path.lineTo(.15, .375);
+		break;
+	case Style::Male:
+		path.addEllipse(QPointF(0., 0.), .3, .3);
+		path.closeSubpath();
+		path.moveTo(.3/M_SQRT2, -.3/M_SQRT2);
+		path.lineTo(.5, -.5);
+		path.moveTo(.5, -.5);
+		path.lineTo(.35, -.5);
+		path.moveTo(.5, -.5);
+		path.lineTo(.5, -.35);
+		break;
+	case Style::Spade: {
+		QFont font("Times", 1);
+		path.addText(-.3, .3, font, UTF8_QSTRING("♠"));
+		break;
+	}
+	case Style::Club:
+		QFont font("Times", 1);
+		path.addText(-.3, .3, font, UTF8_QSTRING("♣"));
+		break;
 		break;
 	}
 
