@@ -4326,47 +4326,41 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 	if (locked)
 		return;
 
-	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
 	int cSystemIndex = Worksheet::cSystemIndex(w);
 	int xIndex = -1, yIndex = -1;
-	if (!w || w->parent(AspectType::CartesianPlot) != q)
-		cSystemIndex = -1;
-	else {
+	if (w && w->parent(AspectType::CartesianPlot) == q) {
 		xIndex = coordinateSystem(cSystemIndex)->xIndex();
 		yIndex = coordinateSystem(cSystemIndex)->yIndex();
 	}
 
-	//determine first, which axes are selected and zoom only in the corresponding direction.
-	//zoom the entire plot if no axes selected.
 	bool zoomX = false;
 	bool zoomY = false;
-	/*for (auto* axis : q->children<Axis>()) {
-		if (!axis->graphicsItem()->isSelected() && !axis->isHovered())
-			continue;
+
+	// If an axis was selected, only the corresponding range
+	// should be changed
+	if (w && w->type() == AspectType::Axis) {
+		auto axis = static_cast<Axis*>(w);
 
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			zoomX  = true;
-			cSystemIndex = axis->coordinateSystemIndex();
-			break;
+			xIndex = coordinateSystem(axis->coordinateSystemIndex())->xIndex();
 		} else {
 			zoomY = true;
-			cSystemIndex = axis->coordinateSystemIndex();
-			break;
+			yIndex = coordinateSystem(axis->coordinateSystemIndex())->yIndex();
 		}
-	}*/
+	}
 
 	if (event->delta() > 0) {
 		if (!zoomX && !zoomY) {
-			//no special axis selected -> zoom in everything
-			q->zoomIn(-1, -1);
+			q->zoomIn(xIndex, yIndex);
 		} else {
 			if (zoomX) q->zoomInX(xIndex);
 			if (zoomY) q->zoomInY(yIndex);
 		}
 	} else {
 		if (!zoomX && !zoomY) {
-			//no special axis selected -> zoom in everything
-			q->zoomOut(-1, -1);
+			q->zoomOut(xIndex, yIndex);
 		} else {
 			if (zoomX) q->zoomOutX(xIndex);
 			if (zoomY) q->zoomOutY(yIndex);
