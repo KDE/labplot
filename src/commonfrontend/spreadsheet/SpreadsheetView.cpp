@@ -994,6 +994,13 @@ void SpreadsheetView::searchTextChanged(const QString& text) {
 	m_leSearch->setFocus(); //set the focus back to the line edit so we can continue typing
 }
 
+void SpreadsheetView::searchReturnPressed() {
+	//TODO:
+// 	m_model->setSearchText(QString());
+// 	QModelIndex index = m_model->index(m_leSearch->text());
+// 	goToCell(index.row(), index.column());
+}
+
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
 	static bool inside = false;
 	if (inside) return;
@@ -1333,10 +1340,13 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 // 					scrollBar->setValue(newValue);
 // 				}
 // 			}
+		} else if (key_event->matches(QKeySequence::Find)) {
+			showSearch();
 		} else if (key_event->key() == Qt::Key_Escape && m_frameSearch && m_frameSearch->isVisible()) {
 			m_leSearch->clear();
 			m_frameSearch->hide();
-		}
+		} else if (key_event->matches(QKeySequence::Cut))
+			cutSelection();
 	}
 
 	return QWidget::eventFilter(watched, event);
@@ -3177,6 +3187,7 @@ void SpreadsheetView::showSearch() {
 		static_cast<QVBoxLayout*>(this->layout())->addWidget(m_frameSearch);
 
 		connect(m_leSearch, &QLineEdit::textChanged, this, &SpreadsheetView::searchTextChanged);
+		connect(m_leSearch, &QLineEdit::returnPressed, this, &SpreadsheetView::searchReturnPressed);
 		//connect(bFilterOptions, &QPushButton::toggled, this, &SpreadsheetView::toggleSearchOptionsMenu);
 	}
 	m_frameSearch->show();

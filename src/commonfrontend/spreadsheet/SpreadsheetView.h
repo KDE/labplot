@@ -231,6 +231,7 @@ private slots:
 	void sortSpreadsheet();
 	void sortDialog(const QVector<Column*>&);
 	void searchTextChanged(const QString&);
+	void searchReturnPressed();
 	void formatHeatmap();
 	void removeFormat();
 

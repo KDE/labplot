@@ -18,6 +18,7 @@
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
+#include "backend/worksheet/plots/PlotArea.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/lib/macros.h"
@@ -517,6 +518,10 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	double padding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
+
+	QPen pen = plot->plotArea()->borderPen();
+	pen.setStyle(Qt::NoPen);
+	plot->plotArea()->setBorderPen(pen);
 
 	worksheet->addChild(plot);
 
