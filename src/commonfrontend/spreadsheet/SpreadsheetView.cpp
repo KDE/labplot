@@ -994,11 +994,15 @@ void SpreadsheetView::searchTextChanged(const QString& text) {
 	m_leSearch->setFocus(); //set the focus back to the line edit so we can continue typing
 }
 
+/*!
+ * determines the first cell in the spreadsheet matching the current search string and navigates to it
+ */
 void SpreadsheetView::searchReturnPressed() {
-	//TODO:
-// 	m_model->setSearchText(QString());
-// 	QModelIndex index = m_model->index(m_leSearch->text());
-// 	goToCell(index.row(), index.column());
+	const auto& index = m_model->index(m_leSearch->text());
+	goToCell(index.row(), index.column());
+	m_leSearch->setText(QString());
+	m_frameSearch->hide();
+	m_tableView->setFocus();
 }
 
 void SpreadsheetView::handleHorizontalSectionMoved(int index, int from, int to) {
@@ -1319,9 +1323,12 @@ bool SpreadsheetView::eventFilter(QObject* watched, QEvent* event) {
 			pasteIntoSelection();
 		else if (key_event->key() == Qt::Key_Backspace || key_event->matches(QKeySequence::Delete))
 			clearSelectedCells();
-		else if (key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter)
-			advanceCell();
-		else if (key_event->key() == Qt::Key_Insert) {
+		else if (key_event->key() == Qt::Key_Return || key_event->key() == Qt::Key_Enter) {
+			//only advance for return pressed events in the table,
+			//ignore it in the search field that has its own handling for it
+			if (watched  == m_tableView)
+				advanceCell();
+		} else if (key_event->key() == Qt::Key_Insert) {
 			if (!m_editorEntered) {
 				if (lastSelectedColumn(true) >= 0)
 					insertColumnRight();

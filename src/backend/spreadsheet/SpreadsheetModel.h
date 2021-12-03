@@ -52,6 +52,7 @@ public:
 	void suppressSignals(bool);
 
 	void setSearchText(const QString&);
+	QModelIndex index(const QString&) const;
 
 private slots:
 	void handleAspectAdded(const AbstractAspect*);

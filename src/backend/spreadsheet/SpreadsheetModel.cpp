@@ -84,6 +84,20 @@ void SpreadsheetModel::setSearchText(const QString& text) {
 	m_searchText = text;
 }
 
+QModelIndex SpreadsheetModel::index(const QString& text) const {
+	const int colCount = m_spreadsheet->columnCount();
+	const int rowCount = m_spreadsheet->rowCount();
+	for (int col = 0; col < colCount; ++col) {
+		auto* column = m_spreadsheet->column(col)->asStringColumn();
+		for (int row = 0; row < rowCount; ++row) {
+			if (column->textAt(row).indexOf(text) != -1)
+				return createIndex(row, col);
+		}
+	}
+
+	return createIndex(-1, -1);
+}
+
 QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 	if ( !index.isValid() )
 		return QVariant();
