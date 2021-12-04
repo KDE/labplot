@@ -62,7 +62,7 @@ mkdir -p $INPREFIX/Resources/kf5/kcharselect
 cp -v kde/share/kf5/kcharselect/kcharselect-data $INPREFIX/Resources/kf5/kcharselect/
 
 # misc
-cp -v labplot/admin/Info.plist $INPREFIX
+cp -v Info.plist $INPREFIX
 
 # translation (locale)
 cd kde/share
