@@ -185,7 +185,7 @@ int main (int argc, char *argv[]) {
 	DEBUG("NEW PATH = " << STDSTRING(qEnvironmentVariable("PATH")))
 #endif
 
-#if !defined(NDEBUG) || defined(Q_OS_WIN)
+#if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 	// debugging paths
 	const QStringList& appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 	WARN("AppDataLocation paths:")

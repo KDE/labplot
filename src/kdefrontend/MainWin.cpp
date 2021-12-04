@@ -769,7 +769,7 @@ void MainWin::initMenus() {
 
 	//"Adding Cantor backends to menu and context menu"
 	QStringList backendNames = Cantor::Backend::listAvailableBackends();
-#if !defined(NDEBUG) || defined(Q_OS_WIN)
+#if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 	WARN(Q_FUNC_INFO << ", " << backendNames.count() << " Cantor backends available:")
 	for (const auto& b : backendNames)
 		WARN("Backend: " << STDSTRING(b))
