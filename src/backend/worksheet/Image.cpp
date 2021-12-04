@@ -629,6 +629,7 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "general") {
 			attribs = reader->attributes();
 			d->fileName = attribs.value("fileName").toString();
+			READ_INT_VALUE("embedded", embedded, bool);
 			READ_DOUBLE_VALUE("opacity", opacity);
 		} else if (reader->name() == "data") {
 			QByteArray ba = QByteArray::fromBase64(reader->readElementText().toLatin1());

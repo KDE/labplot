@@ -1271,9 +1271,11 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeCharacters( d->textWrapper.text );
 	writer->writeEndElement();
 
-	writer->writeStartElement( "textPlaceholder");
-	writer->writeCharacters( d->textWrapper.textPlaceholder);
-	writer->writeEndElement();
+	if (!d->textWrapper.textPlaceholder.isEmpty()) {
+		writer->writeStartElement( "textPlaceholder");
+		writer->writeCharacters( d->textWrapper.textPlaceholder);
+		writer->writeEndElement();
+	}
 
 	writer->writeStartElement( "format" );
 	writer->writeAttribute( "placeholder", QString::number(d->textWrapper.allowPlaceholder) );

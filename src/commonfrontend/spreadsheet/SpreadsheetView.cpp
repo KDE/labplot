@@ -1383,9 +1383,19 @@ void SpreadsheetView::checkSpreadsheetMenu() {
 	action_clear_spreadsheet->setEnabled(cellsAvail);
 	action_sort_spreadsheet->setEnabled(cellsAvail);
 	action_go_to_cell->setEnabled(cellsAvail);
-	action_statistics_all_columns->setEnabled(cellsAvail);
 
 	const auto& columns = m_spreadsheet->children<Column>();
+
+	//deactive "Statictis" action if no numeric data is available
+	bool hasNumericValues = false;
+	for (auto* column : columns) {
+		if (column->isNumeric() && column->hasValues()) {
+			hasNumericValues = true;
+			break;
+		}
+	}
+
+	action_statistics_all_columns->setEnabled(hasNumericValues);
 
 	//deactivate the "Clear masks" action if there are no masked cells
 	bool hasMasked = false;
@@ -2938,8 +2948,9 @@ void SpreadsheetView::showColumnStatistics(bool forAll) {
 		columns = selectedColumns();
 	else if (forAll) {
 		for (int col = 0; col < m_spreadsheet->columnCount(); ++col) {
-			if (m_spreadsheet->column(col)->isNumeric())
-				columns << m_spreadsheet->column(col);
+			auto* column = m_spreadsheet->column(col);
+			if (column->isNumeric() && column->hasValues())
+				columns << column;
 		}
 	}
 
