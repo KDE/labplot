@@ -183,14 +183,9 @@ MainWin::~MainWin() {
 		delete m_project;
 	}
 
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
-
-	if (m_guiObserver)
-		delete m_guiObserver;
-
-// 	if (m_welcomeScreenHelper)
-// 		delete m_welcomeScreenHelper;
+	DELETEPTR(m_aspectTreeModel)
+	DELETEPTR(m_guiObserver)
+//	DELETEPTR(m_welcomeScreenHelper)
 }
 
 void MainWin::showPresenter() {
@@ -1199,11 +1194,8 @@ bool MainWin::newProject() {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	if (m_project)
-		delete m_project;
-
-	if (m_aspectTreeModel)
-		delete m_aspectTreeModel;
+	DELETEPTR(m_project)
+	DELETEPTR(m_aspectTreeModel)
 
 	m_project = new Project();
 	m_currentAspect = m_project;
@@ -2540,7 +2532,6 @@ void MainWin::importProjectDialog() {
 	}
 
 	delete dlg;
-
 	DEBUG(Q_FUNC_INFO << ", DONE");
 }
 
