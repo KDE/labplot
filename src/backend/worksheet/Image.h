@@ -38,6 +38,7 @@ public:
 	void saveThemeConfig(const KConfig&) override;
 
 	CLASS_D_ACCESSOR_DECL(QString, fileName, FileName)
+	BASIC_D_ACCESSOR_DECL(bool, embedded, Embedded)
 	BASIC_D_ACCESSOR_DECL(qreal, opacity, Opacity)
 	BASIC_D_ACCESSOR_DECL(int, width, Width)
 	BASIC_D_ACCESSOR_DECL(int, height, Height)
@@ -75,6 +76,7 @@ private:
 
 signals:
 	void fileNameChanged(const QString&);
+	void embeddedChanged(bool);
 	void opacityChanged(float);
 	void widthChanged(int);
 	void heightChanged(int);

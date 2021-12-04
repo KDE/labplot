@@ -33,6 +33,7 @@
 		* List random number distributions alphabetically
 	* [worksheet]:
 		* Info Element - a new worksheet element to annotate curve values on the plot
+		* Image Element - allow to embed the image data and save it in the project file
 		* BoxPlot
 		* Crosshair cursor mode in the plot
 		* New themes "Monokai", "ggplot grey", "ggplot dark", "Tufte"

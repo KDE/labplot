@@ -40,6 +40,7 @@ private slots:
 	//SLOTs for changes triggered in ImageDock
 	void selectFile();
 	void fileNameChanged();
+	void embeddedChanged(int);
 	void opacityChanged(int);
 
 	//geometry
@@ -65,6 +66,7 @@ private slots:
 
 	//SLOTs for changes triggered in Image
 	void imageFileNameChanged(const QString&);
+	void imageEmbeddedChanged(bool);
 	void imageOpacityChanged(float);
 	void imageWidthChanged(int);
 	void imageHeightChanged(int);

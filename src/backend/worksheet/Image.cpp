@@ -14,12 +14,14 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 
-#include <QPainter>
+#include <QBuffer>
+#include <QFileInfo>
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
-#include <QMenu>
-
 #include <QIcon>
+#include <QMenu>
+#include <QPainter>
+
 #include <KConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -53,6 +55,7 @@ void Image::init() {
 	KConfig config;
 	KConfigGroup group = config.group("Image");
 
+	d->embedded = group.readEntry("embedded", true);
 	d->opacity = group.readEntry("opacity", d->opacity);
 
 	//geometry
@@ -130,6 +133,7 @@ QMenu* Image::createContextMenu() {
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(Image, QString, fileName, fileName)
+BASIC_SHARED_D_READER_IMPL(Image, bool, embedded, embedded)
 BASIC_SHARED_D_READER_IMPL(Image, qreal, opacity, opacity)
 BASIC_SHARED_D_READER_IMPL(Image, int, width, width)
 BASIC_SHARED_D_READER_IMPL(Image, int, height, height)
@@ -148,6 +152,13 @@ void Image::setFileName(const QString& fileName) {
 	Q_D(Image);
 	if (fileName != d->fileName)
 		exec(new ImageSetFileNameCmd(d, fileName, ki18n("%1: set image")));
+}
+
+STD_SETTER_CMD_IMPL_S(Image, SetEmbedded, bool, embedded)
+void Image::setEmbedded(bool embedded) {
+	Q_D(Image);
+	if (embedded != d->embedded)
+		exec(new ImageSetEmbeddedCmd(d, embedded, ki18n("%1: embed image")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(Image, SetOpacity, qreal, opacity, update)
@@ -550,9 +561,26 @@ void Image::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement("general");
-	writer->writeAttribute("fileName", d->fileName);
+	if (d->embedded) {
+		QFileInfo fi(d->fileName);
+		writer->writeAttribute("fileName", fi.fileName()); //save the actual file name only and not the whole path
+	} else
+		writer->writeAttribute("fileName", d->fileName);
+
+	writer->writeAttribute("embedded", QString::number(d->embedded));
 	writer->writeAttribute("opacity", QString::number(d->opacity));
 	writer->writeEndElement();
+
+	//image data
+	if (d->embedded && !d->image.isNull()) {
+		writer->writeStartElement("data");
+		QByteArray data;
+		QBuffer buffer(&data);
+		buffer.open(QIODevice::WriteOnly);
+		d->image.save(&buffer, "PNG");
+		writer->writeCharacters(data.toBase64());
+		writer->writeEndElement();
+	}
 
 	//geometry
 	writer->writeStartElement("geometry");
@@ -602,6 +630,10 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 			d->fileName = attribs.value("fileName").toString();
 			READ_DOUBLE_VALUE("opacity", opacity);
+		} else if (reader->name() == "data") {
+			QByteArray ba = QByteArray::fromBase64(reader->readElementText().toLatin1());
+			if (!d->image.loadFromData(ba))
+				reader->raiseWarning(i18n("Failed to read image data"));
 		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
 
@@ -643,7 +675,8 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	if (!preview) {
-		d->image = QImage(d->fileName);
+		if (!d->embedded)
+			d->image = QImage(d->fileName);
 		d->scaleImage();
 	}
 

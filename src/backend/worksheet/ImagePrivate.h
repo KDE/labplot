@@ -23,6 +23,7 @@ public:
 
 	QImage image;
 	QString fileName;
+	bool embedded{true};
 	qreal opacity{1.0};
 	int width = (int)Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter);
 	int height = (int)Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Centimeter);

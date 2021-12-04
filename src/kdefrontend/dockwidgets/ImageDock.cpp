@@ -84,6 +84,7 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 	//SLOTs
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &ImageDock::nameChanged);
+	connect(ui.chbEmbedded, &QCheckBox::clicked, this, &ImageDock::embeddedChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &ImageDock::commentChanged);
 	connect(ui.bOpen, &QPushButton::clicked, this, &ImageDock::selectFile);
 	connect(ui.leFileName, &QLineEdit::returnPressed, this, &ImageDock::fileNameChanged);
@@ -154,6 +155,7 @@ void ImageDock::setImages(QList<Image*> list) {
 	//General
 	connect(m_image, &Image::aspectDescriptionChanged, this, &ImageDock::aspectDescriptionChanged);
 	connect(m_image, &Image::fileNameChanged, this, &ImageDock::imageFileNameChanged);
+	connect(m_image, &Image::embeddedChanged, this, &ImageDock::imageEmbeddedChanged);
 	connect(m_image, &Image::opacityChanged, this, &ImageDock::imageOpacityChanged);
 	connect(m_image, &Image::visibleChanged, this, &ImageDock::imageVisibleChanged);
 
@@ -230,6 +232,31 @@ void ImageDock::selectFile() {
 		return;
 
 	ui.leFileName->setText(path);
+
+	//above the path was set in the text field which triggered setting
+	//of it in Image and loading of the image. Call embeddedChanged()
+	//to update the text field and to show the actual file name only
+	//and not the whole path if the image is being embedded.
+	Lock lock(m_initializing);
+	embeddedChanged(ui.chbEmbedded->checkState());
+}
+
+void ImageDock::embeddedChanged(int state) {
+	bool embedded = static_cast<bool>(state);
+	if (embedded) {
+		QFileInfo fi(m_image->fileName());
+		ui.leFileName->setText(fi.fileName());
+		ui.leFileName->setEnabled(false);
+	} else {
+		ui.leFileName->setText(m_image->fileName());
+		ui.leFileName->setEnabled(true);
+	}
+
+	if (m_initializing)
+		return;
+
+	for (auto* image : m_imageList)
+		image->setEmbedded(embedded);
 }
 
 void ImageDock::fileNameChanged() {
@@ -422,6 +449,12 @@ void ImageDock::imageFileNameChanged(const QString& name) {
 	m_initializing = false;
 }
 
+void ImageDock::imageEmbeddedChanged(bool keep) {
+	m_initializing = true;
+	ui.chbEmbedded->setChecked(keep);
+	m_initializing = false;
+}
+
 void ImageDock::imageOpacityChanged(float opacity) {
 	m_initializing = true;
 	ui.sbOpacity->setValue( qRound(opacity*100.0) );
@@ -440,7 +473,6 @@ void ImageDock::imageHeightChanged(int height) {
 	ui.sbHeight->setValue( Worksheet::convertFromSceneUnits(height, m_worksheetUnit) );
 	m_initializing = false;
 }
-
 
 void ImageDock::imageKeepRatioChanged(bool keep) {
 	m_initializing = true;
@@ -508,9 +540,11 @@ void ImageDock::load() {
 	if (!m_image)
 		return;
 
-	m_initializing = true;
+	Lock lock(m_initializing);
 
 	ui.leFileName->setText(m_image->fileName());
+	ui.chbEmbedded->setChecked(m_image->embedded());
+	embeddedChanged(ui.chbEmbedded->checkState());
 	ui.chbVisible->setChecked(m_image->isVisible());
 
 	//Size
@@ -536,6 +570,4 @@ void ImageDock::load() {
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_image->borderPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( round(m_image->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-
-	m_initializing = false;
 }
