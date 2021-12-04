@@ -52,8 +52,6 @@ constexpr std::add_const_t<T>& qAsConst(T& t) noexcept {
 #endif
 #define UTF8_QSTRING(str) QString::fromUtf8(str)
 
-#define DELETEPTR(ptr) if (ptr) { delete ptr; ptr = nullptr; }
-
 #define CHECK(expr) if ( !(expr) ) { DEBUG(Q_FUNC_INFO << ", FAILING " #expr);  return false; }
 // check if var is in [min, max)
 #define INRANGE(var, min, max) (var >= min && var < max)

@@ -183,9 +183,9 @@ MainWin::~MainWin() {
 		delete m_project;
 	}
 
-	DELETEPTR(m_aspectTreeModel)
-	DELETEPTR(m_guiObserver)
-//	DELETEPTR(m_welcomeScreenHelper)
+	delete m_aspectTreeModel;
+	delete m_guiObserver;
+//	delete m_welcomeScreenHelper;
 }
 
 void MainWin::showPresenter() {
@@ -1194,8 +1194,8 @@ bool MainWin::newProject() {
 
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	DELETEPTR(m_project)
-	DELETEPTR(m_aspectTreeModel)
+	delete m_project; m_project = nullptr;
+	delete m_aspectTreeModel; m_aspectTreeModel = nullptr;
 
 	m_project = new Project();
 	m_currentAspect = m_project;

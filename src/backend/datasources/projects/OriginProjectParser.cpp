@@ -62,7 +62,7 @@ void OriginProjectParser::setImportUnusedObjects(bool importUnusedObjects) {
 bool OriginProjectParser::hasUnusedObjects() {
 	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
 	if (!m_originFile->parse()) {
-		DELETEPTR(m_originFile)
+		delete m_originFile; m_originFile = nullptr;
 		return false;
 	}
 
@@ -82,7 +82,7 @@ bool OriginProjectParser::hasUnusedObjects() {
 			return true;
 	}
 
-	DELETEPTR(m_originFile)
+	delete m_originFile; m_originFile = nullptr;
 	return false;
 }
 
@@ -152,7 +152,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	//read and parse the m_originFile-file
 	m_originFile = new OriginFile((const char*)m_projectFileName.toLocal8Bit());
 	if (!m_originFile->parse()) {
-		DELETEPTR(m_originFile)
+		delete m_originFile; m_originFile = nullptr;
 		return false;
 	}
 
@@ -253,7 +253,8 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 
 	project->setIsLoading(false);
 
-	DELETEPTR(m_originFile)
+	delete m_originFile;
+	m_originFile = nullptr;
 
 	return true;
 }
