@@ -583,7 +583,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	calculates the position of the legend, when the position relative to the parent was specified (left, right, etc.)
 */
 void CartesianPlotLegendPrivate::updatePosition() {
-	QPointF pos = q->relativePosToParentPos(plot->dataRect(), rect, position, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+	QPointF pos = q->relativePosToParentPos(rect, position, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
 
 	suppressItemChangeEvent = true;
     setPos(pos);

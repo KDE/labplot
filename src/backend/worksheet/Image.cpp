@@ -341,7 +341,8 @@ void ImagePrivate::scaleImage() {
 }
 
 void ImagePrivate::updatePosition() {
-	QPointF p = q->relativePosToParentPos(q->parentRect(), boundingRectangle, position, horizontalAlignment, verticalAlignment);
+	QPointF p = q->relativePosToParentPos(boundingRectangle, position,
+										  horizontalAlignment, verticalAlignment);
 // 	if (q->plot())
 // 		p = mapPlotAreaToParent(p);
 

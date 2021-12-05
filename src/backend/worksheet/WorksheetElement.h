@@ -63,8 +63,8 @@ public:
 	QRectF parentRect() const;
 	QPointF parentPosToRelativePos(QPointF parentPos, QRectF rect,
 								   PositionWrapper, HorizontalAlignment, VerticalAlignment) const;
-	QPointF relativePosToParentPos(QRectF parentRect, QRectF rect,
-								   PositionWrapper, HorizontalAlignment, VerticalAlignment) const;
+	QPointF relativePosToParentPos(QRectF rect, PositionWrapper,
+								   HorizontalAlignment, VerticalAlignment) const;
 
 	QPointF align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const;
 

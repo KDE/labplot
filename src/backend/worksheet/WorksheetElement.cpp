@@ -296,7 +296,10 @@ QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment ho
 QRectF WorksheetElement::parentRect() const {
 	QRectF rect;
 	if (plot()) {
-		rect = plot()->graphicsItem()->mapRectFromScene(plot()->rect());
+		if (type() != AspectType::Axis)
+			rect = plot()->graphicsItem()->mapRectFromScene(plot()->rect());
+		else
+			rect = plot()->dataRect(); //axes are positioned relative to the data rect and not to the whole plot rect
 	} else {
 		const auto* parent = graphicsItem()->parentItem();
 		if (parent) {
@@ -349,9 +352,10 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF rect,
 * \param position contains the alignement of the element to the parent
 * \return parent position
 */
-QPointF WorksheetElement::relativePosToParentPos(QRectF parentRect, QRectF rect, PositionWrapper position,
+QPointF WorksheetElement::relativePosToParentPos(QRectF rect, PositionWrapper position,
 												 HorizontalAlignment horAlign, VerticalAlignment vertAlign) const {
 	QPointF parentPos;
+	QRectF parentRect = this->parentRect();
 
 	if (position.horizontalPosition == HorizontalPosition::Left)
 		parentPos.setX(parentRect.x() + position.point.x());

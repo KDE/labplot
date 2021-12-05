@@ -573,8 +573,7 @@ void TextLabelPrivate::updatePosition() {
 		if (q->plot())
 			p = mapPlotAreaToParent(p);
 	} else {
-		p = q->relativePosToParentPos(q->parentRect(),
-									boundingRectangle, position,
+		p = q->relativePosToParentPos(boundingRectangle, position,
 									horizontalAlignment, verticalAlignment);
 		if (q->plot())
 			p = mapPlotAreaToParent(p);
