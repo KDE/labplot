@@ -341,20 +341,24 @@ void ImageDock::customPositionXChanged(double value) {
 	if (m_initializing)
 		return;
 
-	auto position = m_image->position();
-	position.point.setX(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
-	for (auto* image : m_imageList)
+	const double x = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* image : m_imageList) {
+		auto position = image->position();
+		position.point.setX(x);
 		image->setPosition(position);
+	}
 }
 
 void ImageDock::customPositionYChanged(double value) {
 	if (m_initializing)
 		return;
 
-	WorksheetElement::PositionWrapper position = m_image->position();
-	position.point.setY(Worksheet::convertToSceneUnits(value, m_worksheetUnit));
-	for (auto* image : m_imageList)
+	const double y = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	for (auto* image : m_imageList) {
+		auto position = image->position();
+		position.point.setY(y);
 		image->setPosition(position);
+	}
 }
 
 void ImageDock::horizontalAlignmentChanged(int index) {

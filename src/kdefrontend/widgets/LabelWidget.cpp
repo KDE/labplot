@@ -899,26 +899,26 @@ void LabelWidget::positionYChanged(int index) {
 }
 
 void LabelWidget::horizontalAlignmentChanged(int index) {
-    if (m_initializing)
-        return;
+	if (m_initializing)
+		return;
 
-    for (auto* label : m_labelsList)
-        label->setHorizontalAlignment(TextLabel::HorizontalAlignment(index));
+	for (auto* label : m_labelsList)
+		label->setHorizontalAlignment(TextLabel::HorizontalAlignment(index));
 }
 
 void LabelWidget::verticalAlignmentChanged(int index) {
-    if (m_initializing)
-        return;
+	if (m_initializing)
+		return;
 
-    for (auto* label : m_labelsList)
-        label->setVerticalAlignment(TextLabel::VerticalAlignment(index));
+	for (auto* label : m_labelsList)
+		label->setVerticalAlignment(TextLabel::VerticalAlignment(index));
 }
 
 void LabelWidget::customPositionXChanged(double value) {
 	if (m_initializing)
 		return;
 
-	double x = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	const double x = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* label : m_labelsList) {
 		auto position = label->position();
 		position.point.setX(x);
@@ -930,7 +930,7 @@ void LabelWidget::customPositionYChanged(double value) {
 	if (m_initializing)
 		return;
 
-	double y = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
+	const double y = Worksheet::convertToSceneUnits(value, m_worksheetUnit);
 	for (auto* label : m_labelsList) {
 		auto position = label->position();
 		position.point.setY(y);

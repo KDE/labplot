@@ -77,8 +77,6 @@ private:
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-
-	bool parentRect(QRectF&);
 };
 
 #endif

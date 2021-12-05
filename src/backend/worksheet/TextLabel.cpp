@@ -550,8 +550,8 @@ void TextLabelPrivate::setZoomFactor(double factor) {
 		teXImage = GuiTools::imageFromPDFData(teXPdfData, zoomFactor);
 		retransform();
 	}
-
 }
+
 /*!
 	calculates the position of the label, when the position relative to the parent was specified (left, right, etc.)
 */
@@ -563,31 +563,20 @@ void TextLabelPrivate::updatePosition() {
 		// so it is not possible to align with the bounding rect
 		p = position.point;
 	} else if(coordinateBindingEnabled && q->cSystem) {
-		QRectF pr;
-		if (q->plot()) {
-			pr = q->plot()->graphicsItem()->mapRectFromScene(q->plot()->rect());
-		} else {
-			if (!parentRect(pr))
-				return;
-		}
 		//the position in logical coordinates was changed, calculate the position in scene coordinates
 		bool visible;
 		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
-		position.point = q->parentPosToRelativePos(p, pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+		position.point = q->parentPosToRelativePos(p, q->parentRect(),
+												boundingRectangle, position,
+												horizontalAlignment, verticalAlignment);
+
 		if (q->plot())
 			p = mapPlotAreaToParent(p);
 	} else {
-		//determine the parent item
-		QRectF pr;
-		if (q->plot()) {
-			pr = q->plot()->graphicsItem()->mapRectFromScene(q->plot()->rect());
-		} else {
-			if (!parentRect(pr))
-				return;
-		}
-
-		p = q->relativePosToParentPos(pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+		p = q->relativePosToParentPos(q->parentRect(),
+									boundingRectangle, position,
+									horizontalAlignment, verticalAlignment);
 		if (q->plot())
 			p = mapPlotAreaToParent(p);
 		//position.point = p; // do not set, because position.point are relative coordinates not absolute!
@@ -1060,16 +1049,11 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 
-		QRectF pr;
 		QPointF pos;
-		if (!q->plot()) {
+		if (!q->plot())
 			pos = value.toPointF();
-			if (!parentRect(pr))
-				return QVariant();
-		} else {
-			pr = q->plot()->dataRect();
+		else
 			pos = mapParentToPlotArea(value.toPointF());
-		}
 
 		//emit the signals in order to notify the UI.
 		// don't use setPosition here, because then all small changes are on the undo stack
@@ -1080,7 +1064,9 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		} else {
 			//convert item's center point in parent's coordinates
 			TextLabel::PositionWrapper tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(pos, pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+			tempPosition.point = q->parentPosToRelativePos(pos, q->parentRect(),
+														boundingRectangle, position,
+														horizontalAlignment, verticalAlignment);
 			emit q->positionChanged(tempPosition);
 		}
 	}
@@ -1095,12 +1081,11 @@ void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 }*/
 
 void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	QRectF pr;
-	if (!parentRect(pr))
-		return;
-
 	//convert position of the item in parent coordinates to label's position
-	const QPointF point = q->parentPosToRelativePos(mapParentToPlotArea(pos()), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+	const QPointF point = q->parentPosToRelativePos(mapParentToPlotArea(pos()),
+													q->parentRect(),
+													boundingRectangle, position,
+													horizontalAlignment, verticalAlignment);
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
@@ -1120,17 +1105,9 @@ void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 
 		WorksheetElement::PositionWrapper tempPosition = position;
 		if(coordinateBindingEnabled && q->cSystem) {
-			QPointF p;
-			QRectF pr;
-			if (q->plot()) {
-				pr = q->plot()->dataRect();
-			} else {
-				if (!parentRect(pr))
-					return;
-			}
 			//the position in logical coordinates was changed, calculate the position in scene coordinates
 			bool visible;
-			p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			QPointF p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			if (event->key() == Qt::Key_Left) {
 				p.setX(p.x() - delta);
 			} else if (event->key() == Qt::Key_Right) {
@@ -1143,10 +1120,9 @@ void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 			auto pLogic = q->cSystem->mapSceneToLogical(p, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			q->setPositionLogical(pLogic);
 		} else {
-			QRectF pr;
-			if (!parentRect(pr))
-				return;
-			QPointF point = q->parentPosToRelativePos(pos(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+			QPointF point = q->parentPosToRelativePos(pos(), q->parentRect(),
+													boundingRectangle, position,
+													horizontalAlignment, verticalAlignment);
 
 			if (event->key() == Qt::Key_Left) {
 				point.setX(point.x() - delta);
@@ -1225,19 +1201,6 @@ void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 		emit q->unhovered();
 		update();
 	}
-}
-
-bool TextLabelPrivate::parentRect(QRectF& rect) {
-	QGraphicsItem* parent = parentItem();
-	if (parent) {
-		rect = parent->boundingRect();
-	} else {
-		if (!scene())
-			return false;
-
-		rect = scene()->sceneRect();
-	}
-	return true;
 }
 
 //##############################################################################

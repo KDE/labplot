@@ -14,6 +14,7 @@
 #include "plots/AbstractPlot.h"
 #include "plots/cartesian/CartesianCoordinateSystem.h"
 
+#include <QGraphicsScene>
 #include <QGraphicsItem>
 #include <QMenu>
 #include <QPen>
@@ -290,6 +291,23 @@ QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment ho
 		return QPointF(pos.x() + xAlign, pos.y() + yAlign);
 	else
 		return QPointF(pos.x() - xAlign, pos.y() + yAlign);
+}
+
+QRectF WorksheetElement::parentRect() const {
+	QRectF rect;
+	if (plot()) {
+		rect = plot()->graphicsItem()->mapRectFromScene(plot()->rect());
+	} else {
+		const auto* parent = graphicsItem()->parentItem();
+		if (parent) {
+			rect = parent->boundingRect();
+		} else {
+			if (graphicsItem()->scene())
+				rect = graphicsItem()->scene()->sceneRect();
+		}
+	}
+
+	return rect;
 }
 
 /*!

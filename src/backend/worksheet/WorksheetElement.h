@@ -60,6 +60,7 @@ public:
 	virtual void setPrinting(bool);
 	bool isPrinting() const;
 
+	QRectF parentRect() const;
 	QPointF parentPosToRelativePos(QPointF parentPos, QRectF parentRect, QRectF rect,
 								   PositionWrapper, HorizontalAlignment, VerticalAlignment) const;
 	QPointF relativePosToParentPos(QRectF parentRect, QRectF rect,

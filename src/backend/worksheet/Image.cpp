@@ -293,6 +293,8 @@ void ImagePrivate::retransform() {
 
 	updatePosition();
 	updateBorder();
+
+	emit q->changed();
 }
 
 void ImagePrivate::updateImage() {
@@ -338,30 +340,10 @@ void ImagePrivate::scaleImage() {
 	retransform();
 }
 
-/*!
-	calculates the position of the label, when the position relative to the parent was specified (left, right, etc.)
-*/
-
-bool ImagePrivate::parentRect(QRectF& rect) {
-	QGraphicsItem* parent = parentItem();
-	if (parent) {
-		rect = parent->boundingRect();
-	} else {
-		if (!scene())
-			return false;
-
-		rect = scene()->sceneRect();
-	}
-	return true;
-}
-
 void ImagePrivate::updatePosition() {
-	//determine the parent item
-	QRectF pr;
-	if (!parentRect(pr))
-		return;
-
-	QPointF p = q->relativePosToParentPos(pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+	QPointF p = q->relativePosToParentPos(q->parentRect(), boundingRectangle, position, horizontalAlignment, verticalAlignment);
+// 	if (q->plot())
+// 		p = mapPlotAreaToParent(p);
 
 	suppressItemChangeEvent = true;
 	setPos(p);
@@ -455,13 +437,12 @@ QVariant ImagePrivate::itemChange(GraphicsItemChange change, const QVariant &val
 		return value;
 
 	if (change == QGraphicsItem::ItemPositionChange) {
-		QRectF pr;
-		if (!parentRect(pr))
-			return QVariant();
-
 		//convert item's center point in parent's coordinates
 		TextLabel::PositionWrapper tempPosition = position;
-		tempPosition.point = q->parentPosToRelativePos(value.toPointF(), pr, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+		tempPosition.point = q->parentPosToRelativePos(value.toPointF(),
+													q->parentRect(),
+													boundingRectangle, position,
+													horizontalAlignment, verticalAlignment);
 
 		//emit the signals in order to notify the UI.
 		//we don't set the position related member variables during the mouse movements.
