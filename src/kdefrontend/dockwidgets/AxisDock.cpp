@@ -67,7 +67,7 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	cbMajorTicksColumn = new TreeViewComboBox(ui.tabTicks);
 	layout->addWidget(cbMajorTicksColumn, 8, 2);
 	cbLabelsTextColumn = new TreeViewComboBox(ui.tabTicks);
-	layout->addWidget(cbLabelsTextColumn, 9, 2);
+	layout->addWidget(cbLabelsTextColumn, 10, 2);
 	cbMinorTicksColumn = new TreeViewComboBox(ui.tabTicks);
 	layout->addWidget(cbMinorTicksColumn, 21, 2);
 	dtsbMajorTicksIncrement = new DateTimeSpinBox(ui.tabTicks);
