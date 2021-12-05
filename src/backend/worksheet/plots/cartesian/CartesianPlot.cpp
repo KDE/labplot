@@ -1977,7 +1977,6 @@ void CartesianPlot::addTextLabel() {
 	if (d->calledFromContextMenu)  {
 		auto position = label->position();
 		position.point = label->parentPosToRelativePos(d->scenePos,
-							d->boundingRect(),
 							label->graphicsItem()->boundingRect(),
 							position,
 							label->horizontalAlignment(),
@@ -1998,7 +1997,6 @@ void CartesianPlot::addImage() {
 	if (d->calledFromContextMenu)  {
 		auto position = image->position();
 		position.point = image->parentPosToRelativePos(d->scenePos,
-							d->boundingRect(),
 							image->graphicsItem()->boundingRect(),
 							position,
 							image->horizontalAlignment(),

@@ -883,7 +883,9 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 	if (change == QGraphicsItem::ItemPositionChange) {
 		//convert item's center point in parent's coordinates
 		WorksheetElement::PositionWrapper tempPosition;
-			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), plot->dataRect(), rect, position, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), rect, position,
+														WorksheetElement::HorizontalAlignment::Center,
+														WorksheetElement::VerticalAlignment::Center);
 		tempPosition.horizontalPosition = position.horizontalPosition;
 		tempPosition.verticalPosition = position.verticalPosition;
 
@@ -899,7 +901,9 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
 	QPointF point = pos();
-	point = q->parentPosToRelativePos(point, plot->dataRect(), rect, position, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+	point = q->parentPosToRelativePos(point, rect, position,
+									WorksheetElement::HorizontalAlignment::Center,
+									WorksheetElement::VerticalAlignment::Center);
 
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
@@ -919,7 +923,9 @@ void CartesianPlotLegendPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
 		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
 		const int delta = 5;
-		QPointF point = q->parentPosToRelativePos(pos(), plot->dataRect(), rect, position, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+		QPointF point = q->parentPosToRelativePos(pos(), rect, position,
+												WorksheetElement::HorizontalAlignment::Center,
+												WorksheetElement::VerticalAlignment::Center);
         WorksheetElement::PositionWrapper tempPosition = position;
 
 		if (event->key() == Qt::Key_Left) {

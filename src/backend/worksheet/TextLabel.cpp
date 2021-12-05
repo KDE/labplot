@@ -567,8 +567,7 @@ void TextLabelPrivate::updatePosition() {
 		bool visible;
 		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 		p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
-		position.point = q->parentPosToRelativePos(p, q->parentRect(),
-												boundingRectangle, position,
+		position.point = q->parentPosToRelativePos(p, boundingRectangle, position,
 												horizontalAlignment, verticalAlignment);
 
 		if (q->plot())
@@ -1064,8 +1063,7 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		} else {
 			//convert item's center point in parent's coordinates
 			TextLabel::PositionWrapper tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(pos, q->parentRect(),
-														boundingRectangle, position,
+			tempPosition.point = q->parentPosToRelativePos(pos, boundingRectangle, position,
 														horizontalAlignment, verticalAlignment);
 			emit q->positionChanged(tempPosition);
 		}
@@ -1083,7 +1081,6 @@ void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
 	const QPointF point = q->parentPosToRelativePos(mapParentToPlotArea(pos()),
-													q->parentRect(),
 													boundingRectangle, position,
 													horizontalAlignment, verticalAlignment);
 	if (point != position.point) {
@@ -1120,8 +1117,7 @@ void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
 			auto pLogic = q->cSystem->mapSceneToLogical(p, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			q->setPositionLogical(pLogic);
 		} else {
-			QPointF point = q->parentPosToRelativePos(pos(), q->parentRect(),
-													boundingRectangle, position,
+			QPointF point = q->parentPosToRelativePos(pos(), boundingRectangle, position,
 													horizontalAlignment, verticalAlignment);
 
 			if (event->key() == Qt::Key_Left) {

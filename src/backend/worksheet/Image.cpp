@@ -440,7 +440,6 @@ QVariant ImagePrivate::itemChange(GraphicsItemChange change, const QVariant &val
 		//convert item's center point in parent's coordinates
 		TextLabel::PositionWrapper tempPosition = position;
 		tempPosition.point = q->parentPosToRelativePos(value.toPointF(),
-													q->parentRect(),
 													boundingRectangle, position,
 													horizontalAlignment, verticalAlignment);
 

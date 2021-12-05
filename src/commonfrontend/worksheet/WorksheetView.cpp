@@ -1421,7 +1421,6 @@ void WorksheetView::addNew(QAction* action) {
 			//position the label at the point where the context menu was called
 			auto position = l->position();
 			position.point = l->parentPosToRelativePos(m_cursorPos,
-													m_worksheet->pageRect(),
 													l->graphicsItem()->boundingRect(),
 													position,
 													l->horizontalAlignment(),
@@ -1438,7 +1437,6 @@ void WorksheetView::addNew(QAction* action) {
 			//position the image at the point where the context menu was called
 			auto position = image->position();
 			position.point = image->parentPosToRelativePos(m_cursorPos,
-													m_worksheet->pageRect(),
 													image->graphicsItem()->boundingRect(),
 													position,
 													image->horizontalAlignment(),

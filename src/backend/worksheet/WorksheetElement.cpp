@@ -320,9 +320,10 @@ QRectF WorksheetElement::parentRect() const {
 	* \param position contains the alignement of the element to the parent
 	* \return distance between the parent position to the element
 	*/
-QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF parentRect, QRectF rect, PositionWrapper position,
+QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF rect, PositionWrapper position,
 												 HorizontalAlignment horAlign, VerticalAlignment vertAlign) const {
 	QPointF relPos;
+	QRectF parentRect = this->parentRect();
 
 	if (position.horizontalPosition == HorizontalPosition::Left)
 		relPos.setX(parentPos.x() - (parentRect.x()));
