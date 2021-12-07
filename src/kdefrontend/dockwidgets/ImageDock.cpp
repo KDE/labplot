@@ -45,12 +45,10 @@ ImageDock::ImageDock(QWidget* parent) : BaseDock(parent) {
 	ui.cbPositionX->addItem(i18n("Left"));
 	ui.cbPositionX->addItem(i18n("Center"));
 	ui.cbPositionX->addItem(i18n("Right"));
-	ui.cbPositionX->addItem(i18n("Custom"));
 
 	ui.cbPositionY->addItem(i18n("Top"));
 	ui.cbPositionY->addItem(i18n("Center"));
 	ui.cbPositionY->addItem(i18n("Bottom"));
-	ui.cbPositionY->addItem(i18n("Custom"));
 
 	ui.cbHorizontalAlignment->addItem(i18n("Left"));
 	ui.cbHorizontalAlignment->addItem(i18n("Center"));

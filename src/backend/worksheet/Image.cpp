@@ -13,6 +13,7 @@
 #include "ImagePrivate.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
+#include "backend/worksheet/plots/PlotArea.h"
 
 #include <QBuffer>
 #include <QFileInfo>
@@ -343,8 +344,6 @@ void ImagePrivate::scaleImage() {
 void ImagePrivate::updatePosition() {
 	QPointF p = q->relativePosToParentPos(boundingRectangle, position,
 										  horizontalAlignment, verticalAlignment);
-// 	if (q->plot())
-// 		p = mapPlotAreaToParent(p);
 
 	suppressItemChangeEvent = true;
 	setPos(p);
@@ -454,59 +453,20 @@ QVariant ImagePrivate::itemChange(GraphicsItemChange change, const QVariant &val
 }
 
 void ImagePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	//TODO:
-	//convert position of the item in parent coordinates to label's position
-	QPointF point = positionFromItemPosition(pos());
-	if (qAbs(point.x()-position.point.x())>20 && qAbs(point.y()-position.point.y())>20 ) {
+	//convert position of the item in parent coordinates to localposition
+	QPointF point = q->parentPosToRelativePos(pos(),
+									boundingRectangle, position,
+									horizontalAlignment, verticalAlignment);
+	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
-		WorksheetElement::PositionWrapper tempPosition;
+		WorksheetElement::PositionWrapper tempPosition = position;
 		tempPosition.point = point;
-		tempPosition.horizontalPosition = WorksheetElement::HorizontalPosition::Custom;
-		tempPosition.verticalPosition = WorksheetElement::VerticalPosition::Custom;
 		q->setPosition(tempPosition);
 		suppressRetransform = false;
 	}
 
 	QGraphicsItem::mouseReleaseEvent(event);
-}
-
-/*!
- *	converts label's position to GraphicsItem's position.
- */
-QPointF ImagePrivate::positionFromItemPosition(QPointF itemPos) {
-	double x = itemPos.x();
-	double y = itemPos.y();
-	int w = image.width();
-	int h = image.height();
-	QPointF tmpPosition;
-
-	//depending on the alignment, calculate the new position
-	switch (horizontalAlignment) {
-	case WorksheetElement::HorizontalAlignment::Left:
-		tmpPosition.setX(x + w/2);
-		break;
-	case WorksheetElement::HorizontalAlignment::Center:
-		tmpPosition.setX(x);
-		break;
-	case WorksheetElement::HorizontalAlignment::Right:
-		tmpPosition.setX(x - w/2);
-		break;
-	}
-
-	switch (verticalAlignment) {
-	case WorksheetElement::VerticalAlignment::Top:
-		tmpPosition.setY(y + h/2);
-		break;
-	case WorksheetElement::VerticalAlignment::Center:
-		tmpPosition.setY(y);
-		break;
-	case WorksheetElement::VerticalAlignment::Bottom:
-		tmpPosition.setY(y - h/2);
-		break;
-	}
-
-	return tmpPosition;
 }
 
 void ImagePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {

@@ -52,7 +52,6 @@ public:
 	void updateImage();
 	void scaleImage();
 	void updatePosition();
-	QPointF positionFromItemPosition(QPointF);
 	void updateBorder();
 
 	bool suppressItemChangeEvent{false};
