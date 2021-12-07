@@ -94,7 +94,7 @@
         </spacer>
        </item>
        <item row="19" column="0" colspan="2">
-        <widget class="QLabel" name="lYscale">
+        <widget class="QLabel" name="lYRanges">
          <property name="font">
           <font>
            <weight>75</weight>
@@ -245,7 +245,7 @@
         </spacer>
        </item>
        <item row="13" column="0" colspan="2">
-        <widget class="QLabel" name="lXscale">
+        <widget class="QLabel" name="lXRanges">
          <property name="font">
           <font>
            <weight>75</weight>

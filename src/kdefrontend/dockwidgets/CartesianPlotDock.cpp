@@ -601,6 +601,10 @@ void CartesianPlotDock::updateXRangeList() {
 	const int xRangeCount{ m_plot->xRangeCount() };
 	DEBUG(Q_FUNC_INFO << ", x range count = " << xRangeCount)
 
+	if (xRangeCount > 1)
+		ui.lXRanges->setText(i18n("X-Ranges:"));
+	else
+		ui.lXRanges->setText(i18n("X-Range:"));
 	ui.twXRanges->setRowCount(xRangeCount);
 	for (int i = 0; i < xRangeCount; i++) {
 		const auto xRange{ m_plot->xRange(i) };
@@ -679,7 +683,7 @@ void CartesianPlotDock::updateXRangeList() {
 	updatePlotRangeList();	// update x ranges used in plot ranges
 
 	// enable/disable widgets
-	for (int i{0}; i < xRangeCount; i++) {
+	for (int i = 0; i < xRangeCount; i++) {
 		const bool checked{ m_plot->xRange(i).autoScale() };
 		CELLWIDGET(twXRanges, i, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
 		CELLWIDGET(twXRanges, i, TwRangesColumn::Min, QWidget, setEnabled(!checked));
@@ -693,6 +697,10 @@ void CartesianPlotDock::updateYRangeList() {
 	const int yRangeCount{ m_plot->yRangeCount() };
 	DEBUG(Q_FUNC_INFO << ", y range count = " << yRangeCount)
 
+	if (yRangeCount > 1)
+		ui.lYRanges->setText(i18n("Y-Ranges:"));
+	else
+		ui.lYRanges->setText(i18n("Y-Range:"));
 	ui.twYRanges->setRowCount(yRangeCount);
 	for (int i = 0; i < yRangeCount; i++) {
 		const auto yRange{ m_plot->yRange(i) };
@@ -800,9 +808,13 @@ void CartesianPlotDock::updatePlotRangeList() {
 		return;
 
 	const int cSystemCount{ m_plot->coordinateSystemCount() };
-	DEBUG(Q_FUNC_INFO << ", nr of cSystems = " << cSystemCount)
+	DEBUG(Q_FUNC_INFO << ", nr of coordinate systems = " << cSystemCount)
+	if (cSystemCount > 1)
+		ui.lPlotRanges->setText(i18n("Plot Ranges:"));
+	else
+		ui.lPlotRanges->setText(i18n("Plot Range:"));
 	ui.twPlotRanges->setRowCount(cSystemCount);
-	for (int i{0}; i < cSystemCount; i++) {
+	for (int i = 0; i < cSystemCount; i++) {
 		const auto* cSystem{ m_plot->coordinateSystem(i) };
 		const int xIndex{ cSystem->xIndex() }, yIndex{ cSystem->yIndex() };
 		const auto xRange{ m_plot->xRange(xIndex) }, yRange{ m_plot->yRange(yIndex) };
@@ -1035,7 +1047,7 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
 			retransform = plot->scaleAutoX(index, true, true);
 
-			for (int i=0; i < plot->coordinateSystemCount(); i++)
+			for (int i = 0; i < plot->coordinateSystemCount(); i++)
 			{
 				auto cSystem = plot->coordinateSystem(i);
 				if (cSystem->xIndex() == index) {
@@ -1044,7 +1056,7 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 				}
 			}
 		}
-		if (retransform) // TODO: not necessay to retransform all coordinatesystems. Maybe storing in a vector all system indices and then retransform only them
+		if (retransform) // TODO: not necessary to retransform all coordinatesystems. Maybe storing in a vector all system indices and then retransform only them
 			plot->retransformScales();
 		else {
 			// TODO:when no object used the range, handle it differently
