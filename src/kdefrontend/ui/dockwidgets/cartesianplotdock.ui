@@ -101,9 +101,6 @@
            <bold>true</bold>
           </font>
          </property>
-         <property name="text">
-          <string>Y-Ranges:</string>
-         </property>
         </widget>
        </item>
        <item row="23" column="0">
@@ -113,9 +110,6 @@
            <weight>75</weight>
            <bold>true</bold>
           </font>
-         </property>
-         <property name="text">
-          <string>Plot Ranges:</string>
          </property>
         </widget>
        </item>
@@ -251,9 +245,6 @@
            <weight>75</weight>
            <bold>true</bold>
           </font>
-         </property>
-         <property name="text">
-          <string>X-Ranges:</string>
          </property>
         </widget>
        </item>
