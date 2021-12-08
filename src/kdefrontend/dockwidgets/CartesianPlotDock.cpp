@@ -679,8 +679,10 @@ void CartesianPlotDock::updateXRangeList() {
 
 	ui.tbRemoveXRange->setEnabled(xRangeCount > 1 ? true : false);
 
-	updateLocale();	// fill values
-	updatePlotRangeList();	// update x ranges used in plot ranges
+	if (m_updateUI) {
+		updateLocale();	// fill values
+		updatePlotRangeList();	// update x ranges used in plot ranges
+	}
 
 	// enable/disable widgets
 	for (int i = 0; i < xRangeCount; i++) {
@@ -790,8 +792,10 @@ void CartesianPlotDock::updateYRangeList() {
 
 	ui.tbRemoveYRange->setEnabled(yRangeCount > 1 ? true : false);
 
-	updateLocale();	// fill values
-	updatePlotRangeList();	// update y ranges used in plot ranges
+	if (m_updateUI) {
+		updateLocale();	// fill values
+		updatePlotRangeList();	// update y ranges used in plot ranges
+	}
 
 	// enable/disable widgets
 	for (int i = 0; i < yRangeCount; i++) {
@@ -865,7 +869,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		m_bgDefaultPlotRange = new QButtonGroup(this);
 		connect(m_bgDefaultPlotRange, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), this, &CartesianPlotDock::defaultPlotRangeChanged);
 	}
-	for (int i{0}; i < cSystemCount; i++) {
+	for (int i = 0; i < cSystemCount; i++) {
 		QRadioButton *rb = new QRadioButton();
 		if (i == m_plot->defaultCoordinateSystemIndex())
 			rb->setChecked(true);
@@ -1047,8 +1051,7 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
 			retransform = plot->scaleAutoX(index, true, true);
 
-			for (int i = 0; i < plot->coordinateSystemCount(); i++)
-			{
+			for (int i = 0; i < plot->coordinateSystemCount(); i++) {
 				auto cSystem = plot->coordinateSystem(i);
 				if (cSystem->xIndex() == index) {
 					if (plot->autoScaleY(cSystem->xIndex()))
@@ -1065,7 +1068,6 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 
 	}
 	updateXRangeList();	// see range changes
-	updatePlotRangeList();
 }
 
 void CartesianPlotDock::autoScaleYChanged(int state) {
@@ -1094,8 +1096,7 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
 			retransform = plot->scaleAutoY(index, true, true);
 
-			for (int i=0; i < plot->coordinateSystemCount(); i++)
-			{
+			for (int i = 0; i < plot->coordinateSystemCount(); i++) {
 				auto cSystem = plot->coordinateSystem(i);
 				if (cSystem->yIndex() == index) {
 					if (plot->autoScaleX(cSystem->xIndex()))
@@ -1108,7 +1109,6 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 			plot->retransformScales();
 	}
 	updateYRangeList();	// see range changes
-	updatePlotRangeList();
 }
 
 void CartesianPlotDock::xMinChanged(const QString& value) {
@@ -1131,10 +1131,8 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 				changed = true;
 			}
 
-		if (changed) {
+		if (changed)
 			updateYRangeList();	// plot is auto scaled
-			updatePlotRangeList();
-		}
 	}
 }
 void CartesianPlotDock::yMinChanged(const QString& value) {
@@ -1157,10 +1155,8 @@ void CartesianPlotDock::yMinChanged(const QString& value) {
 				changed = true;
 			}
 
-		if (changed) {
+		if (changed)
 			updateXRangeList();	// plot is auto scaled
-			updatePlotRangeList();
-		}
 	}
 }
 
@@ -1184,10 +1180,8 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 				changed = true;
 			}
 
-		if (changed) {
+		if (changed)
 			updateYRangeList();	// plot is auto scaled
-			updatePlotRangeList();
-		}
 	}
 }
 void CartesianPlotDock::yMaxChanged(const QString& value) {
@@ -1210,10 +1204,8 @@ void CartesianPlotDock::yMaxChanged(const QString& value) {
 				changed = true;
 			}
 
-		if (changed) {
+		if (changed)
 			updateXRangeList();	// plot is auto scaled
-			updatePlotRangeList();
-		}
 	}
 }
 
@@ -1327,7 +1319,6 @@ void CartesianPlotDock::xRangeFormatChanged(int index) {
 		plot->setXRangeFormat(xRangeIndex, format);
 	}
 	updateXRangeList();
-	updatePlotRangeList();
 }
 void CartesianPlotDock::yRangeFormatChanged(int index) {
 	const int yRangeIndex{ sender()->property("row").toInt() };
@@ -1342,7 +1333,6 @@ void CartesianPlotDock::yRangeFormatChanged(int index) {
 		plot->setYRangeFormat(yRangeIndex, format);
 	}
 	updateYRangeList();
-	updatePlotRangeList();
 }
 
 
@@ -2484,7 +2474,9 @@ void CartesianPlotDock::load() {
 	ui.cbRangeType->setCurrentIndex(index);
 	rangeTypeChanged(index);
 
+	m_updateUI = false;	// avoid updating twice
 	updateXRangeList();
+	m_updateUI = true;
 	updateYRangeList();
 
 	//Title

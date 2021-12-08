@@ -44,6 +44,7 @@ private:
 	ThemeHandler* m_themeHandler;
 	QButtonGroup* m_bgDefaultPlotRange{nullptr};
 	bool m_autoScale{false};
+	bool m_updateUI{true};
 
 	void autoScaleXRange(int rangeIndex, bool);
 	void autoScaleYRange(int rangeIndex, bool);
