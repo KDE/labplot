@@ -30,7 +30,7 @@ FITSHeaderEditAddUnitDialog::FITSHeaderEditAddUnitDialog(const QString& unit, QW
 	setWindowIcon(QIcon::fromTheme("document-new"));
 	m_okButton->setEnabled(false);
 
-	QCompleter* keyCompleter = new QCompleter(FITSFilter::units(), this);
+	auto* keyCompleter = new QCompleter(FITSFilter::units(), this);
 	ui.leUnit->setCompleter(keyCompleter);
 	ui.leUnit->setPlaceholderText(i18n("Enter unit name here"));
 

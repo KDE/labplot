@@ -53,7 +53,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 
 	if (curve) {
 		d->connectionLineCurveName = curve->name();
-		CustomPoint* custompoint = new CustomPoint(m_plot, curve->name());
+		auto* custompoint = new CustomPoint(m_plot, curve->name());
 		custompoint->setFixed(true);
 		addChild(custompoint);
 		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
@@ -264,12 +264,12 @@ void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
  */
 bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
 	bool success = true;
-	for (int i =0; i< markerpoints.length(); i++) {
+	for (auto mp : markerpoints) {
 		for (auto curve : curves) {
-			if(markerpoints[i].curvePath == curve->path()) {
-				markerpoints[i].curve = curve;
+			if(mp.curvePath == curve->path()) {
+				mp.curve = curve;
 				connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
-				markerpoints[i].customPoint->setVisible(curve->isVisible()); // initial visibility
+				mp.customPoint->setVisible(curve->isVisible()); // initial visibility
 				break;
 			}
 		}
@@ -277,7 +277,7 @@ bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
 
 	// check if all markerpoints have a valid curve
 	// otherwise delete customPoint with no valid curve
-	for (int i = markerpoints.count()-1; i >= 0; i--) {
+	for (int i = markerpoints.count() - 1; i >= 0; i--) {
 		if (markerpoints[i].curve == nullptr) {
 			removeChild(markerpoints[i].customPoint);
 			success = false;
@@ -296,10 +296,10 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 	if (m_curveGetsMoved)
 		return;
 
-	for (int i = 0; i< markerpoints.length(); i++) {
-		if (markerpoints[i].curve == curve) {
+	for (const auto& mp : markerpoints) {
+		if (mp.curve == curve) {
 			disconnect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
-			removeChild(markerpoints[i].customPoint);
+			removeChild(mp.customPoint);
 		}
 	}
 
@@ -325,7 +325,7 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 void InfoElement::setZValue(qreal value) {
 	graphicsItem()->setZValue(value);
 
-	m_title->setZValue(value+1);
+	m_title->setZValue(value + 1);
 
 	for (auto& markerpoint : markerpoints)
 		markerpoint.customPoint->setZValue(value+1);
@@ -372,7 +372,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 		return wrapper;
 	}
 
-	if (!(markerpoints[0].curve && markerpoints[0].curve->xColumn()))
+	if (!(markerpoints.at(0).curve && markerpoints.at(0).curve->xColumn()))
 		return wrapper; //no data is set in the curve yet, nothing to do
 
 	Q_D(const InfoElement);
@@ -381,7 +381,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 
 	//replace the placeholder for the x-value
 	QString xValueStr;
-	auto columnMode = markerpoints[0].curve->xColumn()->columnMode();
+	auto columnMode = markerpoints.at(0).curve->xColumn()->columnMode();
 	if (columnMode== AbstractColumn::ColumnMode::Double
 		|| columnMode == AbstractColumn::ColumnMode::Integer
 		|| columnMode == AbstractColumn::ColumnMode::BigInt)
@@ -531,9 +531,9 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 		return;
 
 	// point removed
-	const CustomPoint* point = dynamic_cast<const CustomPoint*>(child);
+	const auto* point = dynamic_cast<const CustomPoint*>(child);
 	if (point) {
-		for (int i =0; i< markerpoints.length(); i++) {
+		for (int i = 0; i < markerpoints.length(); i++) {
 			if (point == markerpoints[i].customPoint)
 				markerpoints.removeAt(i);
 			// no point->remove() needed, because it was already deleted
@@ -633,7 +633,7 @@ double InfoElement::setMarkerpointPosition(double x) {
 	Q_D(InfoElement);
 	double x_new;
 	double x_new_first = 0;
-	for (int i=0; i<markerpoints.length(); i++) {
+	for (int i = 0; i < markerpoints.length(); i++) {
 		bool valueFound;
 		double y = markerpoints[i].curve->y(x,x_new, valueFound);
 		d->xPos = x_new;
@@ -998,7 +998,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	// Finding which curve should be used to find the new values
 	double x = xPos;
 	int activeIndex = 0;
-	for (int i=1; i< q->markerPointsCount(); i++) {
+	for (int i = 1; i < q->markerPointsCount(); i++) {
 		if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
 			// not possible to use index, because when the number of elements in the columns of the curves are not the same there is a problem
 			x = q->markerpoints[i].customPoint->position().x(); //q->markerpoints[i].curve->xColumn()->valueAt(m_index)
@@ -1034,9 +1034,9 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 
 		// problem: when curves have different number of samples, the points are anymore aligned
 		// with the vertical line
-		QPointF position = q->markerpoints[0].customPoint->position();
+		QPointF position = q->markerpoints.at(0).customPoint->position();
 		m_index += index;
-		auto* column = q->markerpoints[0].curve->xColumn();
+		auto* column = q->markerpoints.at(0).curve->xColumn();
 		rowCount = column->rowCount();
 		if (m_index > rowCount - 1)
 			m_index = rowCount - 1;
@@ -1045,7 +1045,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 
 		// find markerpoint to which the values matches (curvename is stored in connectionLineCurveName)
 		x = column->valueAt(m_index);
-		for (int i=1; i< q->markerPointsCount(); i++) {
+		for (int i = 1; i < q->markerPointsCount(); i++) {
 			if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
 				position = q->markerpoints[i].customPoint->position();
 				if (m_index > rowCount - 1)

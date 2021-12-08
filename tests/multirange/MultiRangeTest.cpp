@@ -42,48 +42,48 @@ void MultiRangeTest::initTestCase() {
 	/* check the project tree for the imported project */ \
 	/* first child of the root folder, spreadsheet "Book3" */ \
 	auto* aspect = project.child<AbstractAspect>(0); \
-	QCOMPARE(aspect != nullptr, true); \
-	if (aspect != nullptr) \
+	QVERIFY(aspect != nullptr); \
+	if (aspect) \
 		QCOMPARE(aspect->name(), QLatin1String("Arbeitsblatt")); \
-	QCOMPARE(aspect->type() == AspectType::Worksheet, true); \
+	QVERIFY(aspect->type() == AspectType::Worksheet); \
 	auto w = dynamic_cast<Worksheet*>(aspect); \
 	if (!w) return; \
  \
 	auto p1 = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0)); \
-	QCOMPARE(p1 != nullptr, true); \
+	QVERIFY(p1 != nullptr); \
 	auto p2 = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(1)); \
-	QCOMPARE(p2 != nullptr, true); \
+	QVERIFY(p2 != nullptr); \
 	if (!p1 || !p2) return; \
 \
 	auto* view = dynamic_cast<WorksheetView*>(w->view()); \
-	QCOMPARE(view != nullptr, true); \
+	QVERIFY(view != nullptr); \
 	emit w->useViewSizeRequested(); /* To init the worksheet view actions */\
 \
 	/* axis selected */ \
 	auto sinCurve = dynamic_cast<XYCurve*>(p1->child<XYCurve>(0)); \
-	QCOMPARE(sinCurve != nullptr, true); \
+	QVERIFY(sinCurve != nullptr); \
 	if (!sinCurve) return; \
 	QCOMPARE(sinCurve->name(), "sinCurve"); \
 	auto tanCurve = dynamic_cast<XYCurve*>(p1->child<XYCurve>(1)); \
-	QCOMPARE(tanCurve != nullptr, true); \
+	QVERIFY(tanCurve != nullptr); \
 	if (!tanCurve) return; \
 	QCOMPARE(tanCurve->name(), "tanCurve"); \
 	auto logCurve = dynamic_cast<XYCurve*>(p1->child<XYCurve>(2)); \
-	QCOMPARE(logCurve != nullptr, true); \
+	QVERIFY(logCurve != nullptr); \
 	if (!logCurve) return; \
 	QCOMPARE(logCurve->name(), "logx"); \
 \
 	auto cosCurve = dynamic_cast<XYCurve*>(p2->child<XYCurve>(0)); \
-	QCOMPARE(cosCurve != nullptr, true); \
+	QVERIFY(cosCurve != nullptr); \
 	if (!cosCurve) return; \
 	QCOMPARE(cosCurve->name(), "cosCurve"); \
 	\
 	auto horAxisP1 = static_cast<Axis*>(p1->child<Axis>(0)); \
-	QCOMPARE(horAxisP1 != nullptr, true); \
+	QVERIFY(horAxisP1 != nullptr); \
 	QCOMPARE(horAxisP1->orientation() == Axis::Orientation::Horizontal, true); \
 	\
 	auto vertAxisP1 = static_cast<Axis*>(p1->child<Axis>(1)); \
-	QCOMPARE(vertAxisP1 != nullptr, true); \
+	QVERIFY(vertAxisP1 != nullptr); \
 	QCOMPARE(vertAxisP1->orientation() == Axis::Orientation::Vertical, true);
 
 #define SET_CARTESIAN_MOUSE_MODE(mode) \

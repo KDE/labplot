@@ -1386,35 +1386,35 @@ void WorksheetView::mouseModeChanged(QAction* action) {
 void WorksheetView::addNew(QAction* action) {
 	WorksheetElement* aspect = nullptr;
 	if (action == addCartesianPlot1Action) {
-		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
+		auto* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->setType(CartesianPlot::Type::FourAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot1Action);
 	} else if (action == addCartesianPlot2Action) {
-		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
+		auto* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->setType(CartesianPlot::Type::TwoAxes);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot2Action);
 	} else if (action == addCartesianPlot3Action) {
-		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
+		auto* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->setType(CartesianPlot::Type::TwoAxesCentered);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot3Action);
 	} else if (action == addCartesianPlot4Action) {
-		CartesianPlot* plot = new CartesianPlot(i18n("xy-plot"));
+		auto* plot = new CartesianPlot(i18n("xy-plot"));
 		plot->setType(CartesianPlot::Type::TwoAxesCenteredZero);
 		plot->setMouseMode(m_cartesianPlotMouseMode);
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
 	} else if (action == addTextLabelAction) {
-		TextLabel* l = new TextLabel(i18n("Text Label"));
+		auto* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
 
 		if (m_calledFromContextMenu) {
@@ -2171,7 +2171,7 @@ void WorksheetView::exportToFile(const QString& path, const ExportFormat format,
 
 bool WorksheetView::eventFilter(QObject* /*watched*/, QEvent* event) {
 	if (event->type() == QEvent::KeyPress) {
-		QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+		auto* keyEvent = static_cast<QKeyEvent *>(event);
 		int key = keyEvent->key();
 		switch(key) {
 		case Qt::Key_S:

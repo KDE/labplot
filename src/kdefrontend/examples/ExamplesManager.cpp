@@ -39,9 +39,7 @@ ExamplesManager::ExamplesManager() {
 	loadCollections();
 }
 
-ExamplesManager::~ExamplesManager() {
-
-}
+ExamplesManager::~ExamplesManager() = default;
 
 ExamplesManager* ExamplesManager::instance() {
 	if (!m_instance)

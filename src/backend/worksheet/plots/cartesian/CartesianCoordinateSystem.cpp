@@ -275,9 +275,9 @@ Lines CartesianCoordinateSystem::mapLogicalToScene(const Lines& lines, MappingFl
 	Lines result;
 	const bool doPageClipping = !pageRect.isNull() && !(flags & MappingFlag::SuppressPageClipping);
 
-	double xGapBefore = qQNaN();
+	double xGapBefore;
 	double xGapAfter = qQNaN();
-	double yGapBefore = qQNaN();
+	double yGapBefore;
 	double yGapAfter = qQNaN();
 
 	DEBUG(Q_FUNC_INFO << ", xScales/yScales size: " << d->xScales.size() << '/' << d->yScales.size())

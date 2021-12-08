@@ -185,7 +185,7 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int rol
 
 QModelIndex TreeModel::index(int row, int column, const QModelIndex& parent) const {
 	if (parent.isValid() && parent.column() != 0)
-		return QModelIndex();
+		return {};
 
 	TreeItem *parentItem = getItem(parent);
 
@@ -193,7 +193,7 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex& parent) con
 	if (childItem)
 		return createIndex(row, column, childItem);
 	else
-		return QModelIndex();
+		return {};
 }
 
 bool TreeModel::insertColumns(int position, int columns, const QModelIndex& parent) {

@@ -113,9 +113,6 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.leYBreakStart->setValidator( new QDoubleValidator(ui.leYBreakStart) );
 	ui.leYBreakEnd->setValidator( new QDoubleValidator(ui.leYBreakEnd) );
 
-	//set the current locale
-	updateLocale();
-
 	//SIGNAL/SLOT
 	//General
 	connect(ui.leName, &QLineEdit::textChanged, this, &CartesianPlotDock::nameChanged);
@@ -372,6 +369,8 @@ void CartesianPlotDock::setPlots(QList<CartesianPlot*> list) {
 	//show the properties of the first plot
 	this->load();
 
+	//set the current locale
+	updateLocale();
 	updatePlotRangeList();
 
 	//update active widgets
@@ -614,7 +613,7 @@ void CartesianPlotDock::updateXRangeList() {
 			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale) << ", auto scale = " << xRange.autoScale())
 
 		// auto scale
-		QCheckBox *chk = new QCheckBox(ui.twXRanges);
+		auto* chk = new QCheckBox(ui.twXRanges);
 		chk->setProperty("row", i);
 		chk->setChecked(xRange.autoScale());
 //		chk->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
@@ -622,7 +621,7 @@ void CartesianPlotDock::updateXRangeList() {
 		connect(chk, &QCheckBox::stateChanged, this, &CartesianPlotDock::autoScaleXChanged);
 
 		// format
-		QComboBox *cb = new QComboBox(ui.twXRanges);
+		auto* cb = new QComboBox(ui.twXRanges);
 		cb->addItem( i18n("Numeric") );
 		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::DateTime) );
 		cb->setProperty("row", i);
@@ -632,7 +631,7 @@ void CartesianPlotDock::updateXRangeList() {
 
 		// start/end (values set in updateLocale())
 		if (format == RangeT::Format::Numeric) {
-			QLineEdit *le = new QLineEdit(ui.twXRanges);
+			auto* le = new QLineEdit(ui.twXRanges);
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
 //			le->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
@@ -648,7 +647,7 @@ void CartesianPlotDock::updateXRangeList() {
 			ui.twXRanges->setCellWidget(i, TwRangesColumn::Max, le);
 			connect(le, &QLineEdit::textChanged, this, &CartesianPlotDock::xMaxChanged);
 		} else {
-			QDateTimeEdit *dte = new QDateTimeEdit(ui.twXRanges);
+			auto* dte = new QDateTimeEdit(ui.twXRanges);
 			dte->setDisplayFormat( m_plot->xRangeDateTimeFormat(i) );
 			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(xRange.start()));
 			dte->setWrapping(true);
@@ -712,7 +711,7 @@ void CartesianPlotDock::updateYRangeList() {
 			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale) << ", auto scale = " << yRange.autoScale())
 
 		// auto scale
-		QCheckBox *chk = new QCheckBox(ui.twYRanges);
+		auto* chk = new QCheckBox(ui.twYRanges);
 		chk->setProperty("row", i);
 		chk->setChecked(yRange.autoScale());
 		//	chk->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
@@ -720,7 +719,7 @@ void CartesianPlotDock::updateYRangeList() {
 		connect(chk, &QCheckBox::stateChanged, this, &CartesianPlotDock::autoScaleYChanged);
 
 		// format
-		QComboBox *cb = new QComboBox(ui.twYRanges);
+		auto* cb = new QComboBox(ui.twYRanges);
 		cb->addItem( i18n("Numeric") );
 		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::DateTime) );
 		cb->setProperty("row", i);
@@ -730,7 +729,7 @@ void CartesianPlotDock::updateYRangeList() {
 
 		// start/end (values set in updateLocale())
 		if (format == RangeT::Format::Numeric) {
-			QLineEdit *le = new QLineEdit(ui.twYRanges);
+			auto* le = new QLineEdit(ui.twYRanges);
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
 //TODO			le->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -749,7 +748,7 @@ void CartesianPlotDock::updateYRangeList() {
 			ui.twYRanges->setCellWidget(i, TwRangesColumn::Max, le);
 			connect(le, &QLineEdit::textChanged, this, &CartesianPlotDock::yMaxChanged);
 		} else {
-			QDateTimeEdit *dte = new QDateTimeEdit(ui.twYRanges);
+			auto* dte = new QDateTimeEdit(ui.twYRanges);
 			dte->setDisplayFormat( m_plot->yRangeDateTimeFormat(i) );
 			dte->setDateTime(QDateTime::fromMSecsSinceEpoch(m_plot->yRange(i).start()));
 			dte->setWrapping(true);
@@ -827,7 +826,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << ", auto scale = " << xRange.autoScale())
 		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", auto scale = " << yRange.autoScale())
 
-		QComboBox *cb = new QComboBox(ui.twPlotRanges);
+		auto* cb = new QComboBox(ui.twPlotRanges);
 		cb->setEditable(true);	// to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
@@ -870,7 +869,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		connect(m_bgDefaultPlotRange, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), this, &CartesianPlotDock::defaultPlotRangeChanged);
 	}
 	for (int i = 0; i < cSystemCount; i++) {
-		QRadioButton *rb = new QRadioButton();
+		auto* rb = new QRadioButton();
 		if (i == m_plot->defaultCoordinateSystemIndex())
 			rb->setChecked(true);
 		m_bgDefaultPlotRange->addButton(rb);

@@ -343,7 +343,7 @@ QPointF CustomPointPrivate::mapPlotAreaToParent(QPointF point) {
 		auto* plotArea = const_cast<CartesianPlot*>(plot())->plotArea();
 		return mapToParent(mapFromItem(plotArea->graphicsItem(), point));
 	}
-	return QPointF(0, 0);
+	return {0, 0};
 }
 
 /*!
@@ -360,7 +360,7 @@ QPointF CustomPointPrivate::mapParentToPlotArea(QPointF point) {
 		auto* plotArea = const_cast<CartesianPlot*>(plot())->plotArea();
 		return mapToItem(plotArea->graphicsItem(), mapFromParent(point));
 	}
-	return QPointF(0, 0);
+	return {0, 0};
 }
 
 //##############################################################################

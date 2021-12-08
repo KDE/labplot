@@ -139,8 +139,7 @@ m_container(container) {
 	m_handleItems.append(new HandleItem(Left, this));
 }
 
-ResizeItem::~ResizeItem() {
-}
+ResizeItem::~ResizeItem() = default;
 
 void ResizeItem::setRect(QRectF rect) {
 	prepareGeometryChange();

@@ -677,7 +677,7 @@ void DatapickerImageView::magnificationChanged(QAction* action) {
 
 void DatapickerImageView::addCurve() {
 	m_datapicker->beginMacro(i18n("%1: add new curve.", m_datapicker->name()));
-	DatapickerCurve* curve = new DatapickerCurve(i18n("Curve"));
+	auto* curve = new DatapickerCurve(i18n("Curve"));
 	curve->addDatasheet(m_image->axisPoints().type);
 	m_datapicker->addChild(curve);
 	m_datapicker->endMacro();

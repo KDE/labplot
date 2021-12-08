@@ -2230,7 +2230,7 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 			const auto* cSystem{ coordinateSystem(axis->coordinateSystemIndex()) };
 			if (axis->orientation() == orientation) {
 				const auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
-				d->xRanges[cSystem->xIndex()].range.setDateTimeFormat(filter->format());
+				d->xRanges[cSystem ? cSystem->xIndex() : 0].range.setDateTimeFormat(filter->format());
 				axis->setUndoAware(false);
 				axis->setLabelsDateTimeFormat(xRangeDateTimeFormat());
 				axis->setUndoAware(true);
@@ -3327,8 +3327,7 @@ CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPr
 	m_cursor1Text.prepare();
 }
 
-CartesianPlotPrivate::~CartesianPlotPrivate() {
-}
+CartesianPlotPrivate::~CartesianPlotPrivate() = default;
 
 /*!
 	updates the position of plot rectangular in scene coordinates to \c r and recalculates the scales.
@@ -3808,11 +3807,9 @@ void CartesianPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
  */
 void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{ defaultCoordinateSystem() };
-	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
+	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
 	int index = Worksheet::cSystemIndex(w);
-	if (!w || w->parent(AspectType::CartesianPlot) != q)
-		index = -1;
-	else if (index >= 0)
+	if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index]);
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
 		if (!locked && dataRect.contains(event->pos())) {
@@ -3921,9 +3918,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	const auto* cSystem{ defaultCoordinateSystem() };
 	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
 	int index = Worksheet::cSystemIndex(w);
-	if (!w || w->parent(AspectType::CartesianPlot) != q)
-		index = -1;
-	else if (index >= 0)
+	if (index >= 0)
 		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index]);
 
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
@@ -4406,7 +4401,6 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 	int index = Worksheet::cSystemIndex(w);
 	int xIndex = cSystem->xIndex(), yIndex = cSystem->yIndex();
 	if (!w || w->parent(AspectType::CartesianPlot) != q) {
-		index = -1;
 		xIndex = -1;
 		yIndex = -1;
 	} else if (index >= 0) {
@@ -5156,7 +5150,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			} else
 				addChildFast(image);
 		} else if (!preview && reader->name() == "infoElement") {
-			InfoElement* marker = new InfoElement("Marker", this);
+			auto* marker = new InfoElement("Marker", this);
 			if (marker->load(reader, preview)) {
 				addChildFast(marker);
 				marker->setParentGraphicsItem(graphicsItem());

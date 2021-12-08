@@ -121,9 +121,6 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 
 	//Validators
 
-	//set the current locale
-	updateLocale();
-
 	//SLOTS
 	//Tab "General"
 	connect(ui.leName, &QLineEdit::textChanged, this, &BoxPlotDock::nameChanged);
@@ -242,6 +239,9 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	loadDataColumns();
 	ui.chkVisible->setChecked(m_boxPlot->isVisible() );
 
+	//set the current locale
+	updateLocale();
+
 	//SIGNALs/SLOTs
 	//general
 	connect(m_boxPlot, &AbstractAspect::aspectDescriptionChanged,this, &BoxPlotDock::plotDescriptionChanged);
@@ -355,7 +355,7 @@ void BoxPlotDock::setDataColumns() const {
 //*** SLOTs for changes triggered in BoxPlotDock *****
 //**********************************************************
 void BoxPlotDock::addDataColumn() {
-	TreeViewComboBox* cb = new TreeViewComboBox;
+	auto* cb = new TreeViewComboBox;
 
 	static const QList<AspectType> list{AspectType::Folder, AspectType::Workbook, AspectType::Datapicker,
 	                       AspectType::DatapickerCurve, AspectType::Spreadsheet, AspectType::LiveDataSource,

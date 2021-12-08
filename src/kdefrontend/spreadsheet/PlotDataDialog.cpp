@@ -394,7 +394,7 @@ void PlotDataDialog::plot() {
 
 		if (ui->rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
-			CartesianPlot* plot = new CartesianPlot( i18n("Plot - %1", m_spreadsheet->name()) );
+			auto* plot = new CartesianPlot( i18n("Plot - %1", m_spreadsheet->name()) );
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
@@ -421,7 +421,7 @@ void PlotDataDialog::plot() {
 
 		if (ui->rbCurvePlacement1->isChecked()) {
 			//all curves in one plot
-			CartesianPlot* plot = new CartesianPlot( i18n("Plot - %1", m_spreadsheet->name()) );
+			auto* plot = new CartesianPlot( i18n("Plot - %1", m_spreadsheet->name()) );
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addCurvesToPlot(plot);
@@ -535,7 +535,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			if (yColumn == xColumn)
 				continue;
 
-			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
+			auto* plot = new CartesianPlot(i18n("Plot %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addCurve(name, xColumn, yColumn, plot);
@@ -549,7 +549,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
 
-			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
+			auto* plot = new CartesianPlot(i18n("Plot %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
@@ -563,7 +563,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			const QString& name = comboBox->currentText();
 			Column* column = columnFromName(name);
 
-			CartesianPlot* plot = new CartesianPlot(i18n("Plot %1", name));
+			auto* plot = new CartesianPlot(i18n("Plot %1", name));
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addBoxPlot(name, QVector<const AbstractColumn*>{column}, plot);

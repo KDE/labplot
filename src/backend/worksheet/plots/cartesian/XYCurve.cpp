@@ -1513,11 +1513,11 @@ void XYCurvePrivate::updateLines() {
 			break;
 		}
 		case XYCurve::LineType::Segments3: {
-			int skip{0};
-			for (int i{startIndex}; i < endIndex; i++) {
+			int skip = 0;
+			for (int i = startIndex; i < endIndex; i++) {
 				if (skip != 2) {
 					p0 = m_logicalPoints.at(i);
-					p1 = m_logicalPoints.at(i+1);
+					p1 = m_logicalPoints.at(i + 1);
 					if ( (!lineSkipGaps && !connectedPointsLogical[i])
 						|| (lineIncreasingXOnly && (p1.x() < p0.x())) ) {
 						skip = 0;
@@ -1526,7 +1526,6 @@ void XYCurvePrivate::updateLines() {
 					addLine(p0, p1, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, minLogicalDiffY);
 					skip++;
 				} else {
-					skip = 0;
 					if (!std::isnan(lastPoint.x())) {
 						lastPoint.setX(qQNaN());
 						m_lines.append(QLineF(lastPoint, p1));
@@ -1548,7 +1547,7 @@ void XYCurvePrivate::updateLines() {
 		case XYCurve::LineType::SplineAkimaPeriodic: {
 			std::unique_ptr<double[]> x(new double[numberOfPoints]());
 			std::unique_ptr<double[]> y(new double[numberOfPoints]());
-			for (int i{0}; i < numberOfPoints; i++) { // TODO: interpolating only between the visible points?
+			for (int i = 0; i < numberOfPoints; i++) { // TODO: interpolating only between the visible points?
 				x[i] = m_logicalPoints.at(i+startIndex).x();
 				y[i] = m_logicalPoints.at(i+startIndex).y();
 			}

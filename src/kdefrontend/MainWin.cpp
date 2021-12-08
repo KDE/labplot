@@ -972,7 +972,7 @@ void MainWin::updateGUIOnProjectChanges() {
  * depending on the currently active window (worksheet or spreadsheet).
  */
 void MainWin::updateGUI() {
-	if (m_project == nullptr || m_project->isLoading())
+	if (!m_project || m_project->isLoading())
 		return;
 
 	if (m_closing || m_projectClosing)
@@ -2628,7 +2628,7 @@ void MainWin::addAspectToProject(AbstractAspect* aspect) {
 #ifdef HAVE_MQTT
 		//doesn't make sense to add a new MQTTClient to an existing MQTTClient or to any of its successors
 		QString className = parent->metaObject()->className();
-		MQTTClient* clientAncestor = parent->ancestor<MQTTClient>();
+		auto* clientAncestor = parent->ancestor<MQTTClient>();
 		if (className == "MQTTClient")
 			parent = parent->parentAspect();
 		else if (clientAncestor != nullptr)

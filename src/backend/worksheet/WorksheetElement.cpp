@@ -288,9 +288,9 @@ QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment ho
 
 	// For yAlign it must be two times plus.
 	if (positive)
-		return QPointF(pos.x() + xAlign, pos.y() + yAlign);
+		return {pos.x() + xAlign, pos.y() + yAlign};
 	else
-		return QPointF(pos.x() - xAlign, pos.y() + yAlign);
+		return {pos.x() - xAlign, pos.y() + yAlign};
 }
 
 QRectF WorksheetElement::parentRect() const {

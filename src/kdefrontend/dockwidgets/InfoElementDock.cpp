@@ -124,15 +124,14 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		ui->cbConnectToCurve->setEnabled(true);
 
 		const auto& curves = m_element->plot()->children<XYCurve>();
-		for (int i = 0; i < curves.length(); ++i) {
-			const auto* curve = curves.at(i);
+		for (const auto* curve : curves) {
 			auto* item = new QListWidgetItem();
 			auto* checkBox = new QCheckBox(curve->name());
 			connect(checkBox, &QCheckBox::stateChanged, this, &InfoElementDock::curveSelectionChanged);
 			ui->lwCurves->addItem(item);
 			ui->lwCurves->setItemWidget(item, checkBox);
 
-			for (int i=0; i<m_element->markerPointsCount(); i++) {
+			for (int i = 0; i < m_element->markerPointsCount(); i++) {
 				auto* markerCurve = m_element->markerPointAt(i).curve;
 				if (markerCurve && markerCurve->name() == curve->name()) {
 					checkBox->setChecked(true);

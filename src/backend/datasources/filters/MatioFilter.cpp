@@ -24,9 +24,9 @@
 #define MAT_READ_VAR(type, dtype) \
 	{ \
 	if (var->isComplex) { \
-		mat_complex_split_t* complex_data = (mat_complex_split_t*)var->data; \
-		type* re = (type*)complex_data->Re; \
-		type* im = (type*)complex_data->Im; \
+		auto* complex_data = (mat_complex_split_t*)var->data; \
+		auto* re = (type*)complex_data->Re; \
+		auto* im = (type*)complex_data->Im; \
 		if (dataSource) { \
 			for (size_t i = 0; i < actualRows; i++) \
 				for (size_t j = 0; j < actualCols/2; j++) { \
@@ -50,7 +50,7 @@
 			} \
 		} \
 	} else { \
-		const type *data = static_cast<const type*>(var->data); \
+		const auto *data = static_cast<const type*>(var->data); \
 		if (dataSource) { \
 			for (size_t i = 0; i < actualRows; i++) \
 				for (size_t j = 0; j < actualCols; j++) { \
@@ -72,7 +72,7 @@
 // TODO: complex
 #define MAT_READ_CELL(type, dtype) \
 	{ \
-	const type* data = (const type*)cell->data; \
+	const auto* data = (const type*)cell->data; \
 	if (dataSource) { \
 		if (i + startRow - 1 < cellsize) \
 			static_cast<QVector<dtype>*>(dataContainer[j])->operator[](i) = data[i + startRow - 1]; \
@@ -104,9 +104,9 @@
 		} \
 	} \
 	if (var->isComplex) { \
-		mat_complex_split_t* complex_data = (mat_complex_split_t*)sparse->data; \
-		type* re = (type*)complex_data->Re; \
-		type* im = (type*)complex_data->Im; \
+		auto* complex_data = (mat_complex_split_t*)sparse->data; \
+		auto* re = (type*)complex_data->Re; \
+		auto* im = (type*)complex_data->Im; \
 		if (dataSource) { \
 			for (size_t i = 0; i < qMin((size_t)sparse->njc - 1, actualCols/2); i++) \
 				for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) { \
@@ -129,7 +129,7 @@
 				} \
 		} \
 	} else { /* real */ \
-		type* data = (type*)sparse->data; \
+		auto* data = (type*)sparse->data; \
 		if (dataSource) { \
 			for (size_t i = startColumn - 1; i < qMin((size_t)sparse->njc - 1, actualEndColumn); i++) \
 				for (size_t j = sparse->jc[i]; j < (size_t)sparse->jc[i + 1] && j < (size_t)sparse->ndata; j++) { \
@@ -158,9 +158,9 @@
 #define MAT_READ_STRUCT(type) \
 	{ \
 	if (fields[i]->isComplex) { \
-		mat_complex_split_t* complex_data = (mat_complex_split_t*)fields[i]->data; \
-		type* re = (type*)complex_data->Re; \
-		type* im = (type*)complex_data->Im; \
+		auto* complex_data = (mat_complex_split_t*)fields[i]->data; \
+		auto* re = (type*)complex_data->Re; \
+		auto* im = (type*)complex_data->Im; \
 		\
 		DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")") \
 		if (dataSource) { \
@@ -188,7 +188,7 @@
 		} \
 		colIndex++;	/* complex uses two columns atm */ \
 	} else { /* real */ \
-		type* data = (type*)fields[i]->data; \
+		auto* data = (type*)fields[i]->data; \
 		DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")") \
 		if (dataSource) { \
 			for (size_t j = 0; j < actualRows; j++) \
@@ -626,7 +626,7 @@ void MatioFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 #ifdef HAVE_MATIO
 	if (matfp) {	// only if opened
 		Mat_Close(matfp);
-		matfp = NULL;
+		matfp = nullptr;
 	}
 #endif
 }
@@ -807,7 +807,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			}
 
 			//set actualRows
-			matvar_t **fields = (matvar_t **)var->data;
+			auto** fields = (matvar_t **)var->data;
 			for (int i = startColumn - 1; i < qMin(nfields, endColumn); i++) {
 				if (fields[i]->name) {
 					//TODO: not needed when supporting complex column mode
@@ -925,7 +925,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 		case MAT_C_EMPTY:
 			break;
 		case MAT_C_CELL: {
-			if (var->nbytes == 0 || var->data_size == 0 || var->data == NULL)
+			if (var->nbytes == 0 || var->data_size == 0 || var->data == nullptr)
 				break;
 
 			//TODO: complex not supported yet
@@ -1037,7 +1037,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 				dataStrings << row;
 			}
 
-			mat_sparse_t* sparse = (mat_sparse_t*)var->data;
+			auto* sparse = (mat_sparse_t*)var->data;
 			size_t stride = Mat_SizeOf(var->data_type);
 			//DEBUG(Q_FUNC_INFO << ", stride = " << stride << ", njc = " << sparse->njc << ", ndata = " << sparse->ndata)
 
@@ -1099,7 +1099,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 			}
 
 			DEBUG(Q_FUNC_INFO << ", Reading data ...")
-			matvar_t **fields = (matvar_t **)var->data;
+			auto** fields = (matvar_t **)var->data;
 
 			if (!dataSource)
 				dataStrings[0] = vectorNames;
@@ -1158,7 +1158,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 						break;
 					}
 					if (fields[i]->data_type == MAT_T_UINT16 || fields[i]->data_type == MAT_T_INT16) {
-						mat_uint16_t* data = (mat_uint16_t*)fields[i]->data;
+						auto* data = (mat_uint16_t*)fields[i]->data;
 						if (fields[i]->rank == 2) {
 							DEBUG(Q_FUNC_INFO << "  rank = 2 (" << fields[i]->dims[0] << " x " << fields[i]->dims[1] << ")")
 						} else
@@ -1216,7 +1216,7 @@ QVector<QStringList> MatioFilterPrivate::readCurrentVar(const QString& fileName,
 	Mat_VarFree(var);
 	if (openedFile) {
 		Mat_Close(matfp);
-		matfp = NULL;
+		matfp = nullptr;
 	}
 
 	if (dataSource)

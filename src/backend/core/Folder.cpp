@@ -264,7 +264,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 	} else if (element_name == QLatin1String("cantorWorksheet")) {
 #ifdef HAVE_CANTOR_LIBS
 #ifndef SDK
-		CantorWorksheet* cantorWorksheet = new CantorWorksheet(QLatin1String("null"), true);
+		auto* cantorWorksheet = new CantorWorksheet(QLatin1String("null"), true);
 		if (!cantorWorksheet->load(reader, preview)) {
 			delete cantorWorksheet;
 
@@ -306,7 +306,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 #ifdef HAVE_MQTT
 #ifndef SDK
 	} else if (element_name == QLatin1String("MQTTClient")) {
-		MQTTClient* client = new MQTTClient(QString());
+		auto* client = new MQTTClient(QString());
 		if (!client->load(reader, preview)) {
 			delete client;
 			return false;
@@ -326,7 +326,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 #endif
 	} else if (element_name == QLatin1String("datapicker")) {
 #ifndef SDK
-		Datapicker* datapicker = new Datapicker(QString(), true);
+		auto* datapicker = new Datapicker(QString(), true);
 		if (!datapicker->load(reader, preview)) {
 			delete datapicker;
 			return false;

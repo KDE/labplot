@@ -48,7 +48,7 @@ void MatioOptionsWidget::updateContent(MatioFilter *filter, const QString& fileN
 	const int nrCols = 7;
 	for (int j = 0; j < nrCols; j++) {
 		for (int i = 0; i < n; i++) {
-			QTableWidgetItem *item = new QTableWidgetItem(varsInfo.at(i).at(j));
+			auto* item = new QTableWidgetItem(varsInfo.at(i).at(j));
 			item->setFlags(item->flags() ^ Qt::ItemIsEditable);	// readonly
 			ui.twContent->setItem(i, j, item);
 		}

@@ -214,7 +214,7 @@ void CustomPointDock::load() {
 		return;
 
 	SET_NUMBER_LOCALE
-	CartesianPlot* plot = static_cast<CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
+	auto* plot = static_cast<CartesianPlot*>(m_point->parent(AspectType::CartesianPlot));
 	if (plot->xRangeFormat() == RangeT::Format::Numeric) {
 		ui.lPositionX->show();
 		ui.lePositionX->show();

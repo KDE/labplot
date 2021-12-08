@@ -516,9 +516,9 @@ QJsonObject DatasetMetadataManagerWidget::createDatasetObject() {
  * @brief Adds a new QLineEdit so the user can set a new column description.
  */
 void DatasetMetadataManagerWidget::addColumnDescription() {
-	QLabel* label = new QLabel();
+	auto* label = new QLabel();
 	label->setText(i18n("Description for column %1", m_columnDescriptions.size() + 1));
-	QLineEdit* lineEdit = new QLineEdit;
+	auto* lineEdit = new QLineEdit();
 
 	int layoutIndex = m_columnDescriptions.size() + 1;
 	ui.columnLayout->addWidget(label, layoutIndex, 0);

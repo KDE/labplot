@@ -1019,7 +1019,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	int index = 1;
 	for (const auto& layer : graph.layers) {
 		if (!layer.is3D()) {
-			CartesianPlot* plot = new CartesianPlot(i18n("Plot%1", QString::number(index)));
+			auto* plot = new CartesianPlot(i18n("Plot%1", QString::number(index)));
 			worksheet->addChildFast(plot);
 
 			if (preview)
@@ -1223,7 +1223,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			//texts
 			for (const auto& t : layer.texts) {
 				DEBUG("EXTRA TEXT = " << t.text.c_str());
-				TextLabel* label = new TextLabel("text label");
+				auto* label = new TextLabel("text label");
 				label->setText(parseOriginText(QString::fromLatin1(t.text.c_str())));
 				plot->addChild(label);
 				label->setParentGraphicsItem(plot->graphicsItem());
@@ -1301,7 +1301,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 
 					function = m_originFile->function(funcIndex);
 
-					XYEquationCurve* xyEqCurve = new XYEquationCurve(function.name.c_str());
+					auto* xyEqCurve = new XYEquationCurve(function.name.c_str());
 					XYEquationCurve::EquationData eqData;
 
 					eqData.count = function.totalPoints;
@@ -1351,7 +1351,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 		while (it != textLabelPositions.constEnd()) {
 			TextLabel* label = it.key();
 			const QSizeF& ratios = it.value();
-			const CartesianPlot* plot = static_cast<const CartesianPlot*>(label->parentAspect());
+			const auto* plot = static_cast<const CartesianPlot*>(label->parentAspect());
 
 			TextLabel::PositionWrapper position = label->position();
 			position.point.setX(plot->dataRect().width()*(ratios.width()-0.5));
@@ -1896,7 +1896,7 @@ QColor OriginProjectParser::color(Origin::Color color) const {
 			break;
 	}
 
-	return QColor(Qt::white);
+	return Qt::white;
 }
 
 WorksheetElement::BackgroundColorStyle OriginProjectParser::backgroundColorStyle(Origin::ColorGradientDirection colorGradient) const {

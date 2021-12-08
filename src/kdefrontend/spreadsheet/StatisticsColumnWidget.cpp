@@ -512,7 +512,7 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	worksheet->setLayoutRightMargin(0.);
 	m_project->addChild(worksheet);
 
-	CartesianPlot* plot = new CartesianPlot(QString());
+	auto* plot = new CartesianPlot(QString());
 	plot->setType(CartesianPlot::Type::TwoAxes);
 	plot->setSymmetricPadding(false);
 	double padding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);

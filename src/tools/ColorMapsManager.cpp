@@ -36,9 +36,7 @@ ColorMapsManager::ColorMapsManager() {
 	loadCollections();
 }
 
-ColorMapsManager::~ColorMapsManager() {
-
-}
+ColorMapsManager::~ColorMapsManager()  = default;
 
 ColorMapsManager* ColorMapsManager::instance() {
 	if (!m_instance)

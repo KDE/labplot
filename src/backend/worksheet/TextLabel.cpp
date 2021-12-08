@@ -97,7 +97,7 @@ TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type)
 
 TextLabel::TextLabel(const QString &name, CartesianPlot* plot, Type type):
 	WorksheetElement(name, AspectType::TextLabel),
-	d_ptr(new TextLabelPrivate(this)), m_type(type), visibilityAction(nullptr) {
+	d_ptr(new TextLabelPrivate(this)), m_type(type) {
 
 	m_plot = plot;
 	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
@@ -474,7 +474,7 @@ QRectF TextLabelPrivate::size() {
 	}
 	qreal x = position.point.x();
 	qreal y = position.point.y();
-	return QRectF(x,y,w,h);
+	return {x, y, w, h};
 }
 
 /*!
@@ -673,7 +673,7 @@ void TextLabelPrivate::updateTeXImage() {
 }
 
 void TextLabelPrivate::updateBorder() {
-	typedef TextLabel::GluePoint GluePoint;
+	using GluePoint = TextLabel::GluePoint;
 
 	borderShapePath = QPainterPath();
 	switch (borderShape) {
@@ -972,8 +972,8 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 	labelShape = matrix.map(labelShape);
 
 	// rotate gluePoints
-	for (int i=0; i < m_gluePoints.length(); i++)
-		m_gluePoints[i].point = matrix.map(m_gluePoints[i].point);
+	for (auto gPoint : m_gluePoints)
+		gPoint.point = matrix.map(gPoint.point);
 
 	m_textItem->setRotationAngle(rotationAngle);
 
@@ -1136,7 +1136,7 @@ QPointF TextLabelPrivate::mapPlotAreaToParent(QPointF point) {
 	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
 
 	if (parent) {
-		CartesianPlot* plot = static_cast<CartesianPlot*>(parent);
+		auto* plot = static_cast<CartesianPlot*>(parent);
 		// first mapping to item coordinates and from there back to parent
 		// WorksheetinfoElement: parentItem()->parentItem() == plot->graphicsItem()
 		// plot->graphicsItem().pos() == plot->plotArea()->graphicsItem().pos()
@@ -1157,7 +1157,7 @@ QPointF TextLabelPrivate::mapPlotAreaToParent(QPointF point) {
 QPointF TextLabelPrivate::mapParentToPlotArea(QPointF point) {
 	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
 	if (parent) {
-		CartesianPlot* plot = static_cast<CartesianPlot*>(parent);
+		auto* plot = static_cast<CartesianPlot*>(parent);
 		// mapping from parent to item coordinates and them to plot area
 		return mapToItem(plot->plotArea()->graphicsItem(), mapFromParent(point));
 	}

@@ -135,6 +135,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success
 
 // TEX -> PDF -> QImage
 QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, const QString& engine, bool* success) {
+	Q_UNUSED(dpi)
 	//DEBUG(Q_FUNC_INFO << ", tmp file = " << STDSTRING(file.fileName()) << ", engine = " << STDSTRING(engine) << ", dpi = " << dpi)
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
