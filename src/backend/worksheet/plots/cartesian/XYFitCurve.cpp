@@ -2328,7 +2328,7 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
-	QString str;
+	QString str, model;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -2358,10 +2358,11 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("xWeightsType", fitData.xWeightsType, nsl_fit_weight_type);
 			READ_INT_VALUE("weightsType", fitData.yWeightsType, nsl_fit_weight_type);
 			READ_INT_VALUE("degree", fitData.degree, int);
-			if (d->fitData.modelCategory == nsl_fit_model_custom) {
-				READ_STRING_VALUE("model", fitData.model);
-				DEBUG("read model = " << STDSTRING(d->fitData.model));
-			}
+			// older projects have custom models with category == type == 0! So read the model
+			READ_STRING_VALUE("model", fitData.model);
+			model = d->fitData.model;
+			DEBUG("got model = " << STDSTRING(model));
+
 			READ_INT_VALUE("maxIterations", fitData.maxIterations, int);
 			READ_DOUBLE_VALUE("eps", fitData.eps);
 			READ_INT_VALUE("fittedPoints", fitData.evaluatedPoints, size_t);	// old name
@@ -2475,9 +2476,16 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	while (d->fitData.paramNames.size() > d->fitData.paramStartValues.size())
 		d->fitData.paramNames.removeLast();
 
-	// not present in old projects
+	// Utf8 names missing in old projects
 	if (d->fitData.paramNamesUtf8.isEmpty())
 		d->fitData.paramNamesUtf8 << d->fitData.paramNames;
+
+	// if we have more paramNames than the saved model type, we have a custom model
+	if (d->fitData.paramNamesUtf8.size() < d->fitData.paramNames.size()) {
+		d->fitData.modelCategory = nsl_fit_model_custom;
+		d->fitData.model = model;
+		d->fitData.paramNamesUtf8 = d->fitData.paramNames;
+	}
 
 	// not present in old projects
 	int np = d->fitResult.paramValues.size();
@@ -2488,9 +2496,10 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 	if (d->fitResult.tdist_marginValues.size() == 0)
 		d->fitResult.tdist_marginValues.resize(np);
 	if (d->fitResult.correlationMatrix.size() == 0)
-		d->fitResult.correlationMatrix.resize(np*(np+1)/2);
+		d->fitResult.correlationMatrix.resize(np * (np + 1) / 2);
 
 	// Loading done. Check some parameter
+	DEBUG(Q_FUNC_INFO << ", model category = " << d->fitData.modelCategory);
 	DEBUG(Q_FUNC_INFO << ", model type = " << d->fitData.modelType);
 	DEBUG(Q_FUNC_INFO << ", # params = " << d->fitData.paramNames.size());
 	DEBUG(Q_FUNC_INFO << ", # start values = " << d->fitData.paramStartValues.size());

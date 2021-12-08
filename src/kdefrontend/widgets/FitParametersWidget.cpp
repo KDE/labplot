@@ -60,7 +60,7 @@ FitParametersWidget::FitParametersWidget(QWidget* parent) : QWidget(parent) {
 }
 
 void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
-	DEBUG("FitParametersWidget::setFitData()");
+	DEBUG(Q_FUNC_INFO);
 	m_initializing = true;
 	m_fitData = data;
 
