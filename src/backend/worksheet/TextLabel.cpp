@@ -569,16 +569,9 @@ void TextLabelPrivate::updatePosition() {
 		p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
 		position.point = q->parentPosToRelativePos(p, boundingRectangle, position,
 												horizontalAlignment, verticalAlignment);
-
-		if (q->plot())
-			p = mapPlotAreaToParent(p);
-	} else {
+	} else
 		p = q->relativePosToParentPos(boundingRectangle, position,
 									horizontalAlignment, verticalAlignment);
-		if (q->plot())
-			p = mapPlotAreaToParent(p);
-		//position.point = p; // do not set, because position.point are relative coordinates not absolute!
-	}
 
 	suppressItemChangeEvent = true;
 	setPos(p);
@@ -1046,24 +1039,18 @@ QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant 
 		return value;
 
 	if (change == QGraphicsItem::ItemPositionChange) {
-
-		QPointF pos;
-		if (!q->plot())
-			pos = value.toPointF();
-		else
-			pos = mapParentToPlotArea(value.toPointF());
-
-		//emit the signals in order to notify the UI.
 		// don't use setPosition here, because then all small changes are on the undo stack
 		if(coordinateBindingEnabled) {
-			pos = q->align(pos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			QPointF pos = q->align(value.toPointF(), boundingRectangle, horizontalAlignment, verticalAlignment, false);
 			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			emit q->positionLogicalChanged(positionLogical);
 		} else {
 			//convert item's center point in parent's coordinates
 			TextLabel::PositionWrapper tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(pos, boundingRectangle, position,
+			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), boundingRectangle, position,
 														horizontalAlignment, verticalAlignment);
+
+			//emit the signals in order to notify the UI.
 			emit q->positionChanged(tempPosition);
 		}
 	}
@@ -1079,7 +1066,7 @@ void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
-	const QPointF point = q->parentPosToRelativePos(mapParentToPlotArea(pos()),
+	const QPointF point = q->parentPosToRelativePos(pos(),
 													boundingRectangle, position,
 													horizontalAlignment, verticalAlignment);
 	if (point != position.point) {
