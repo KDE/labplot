@@ -67,7 +67,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 	} else {
 		m_part = factory->create<KParts::ReadWritePart>(this, QVariantList() << m_backendName << QLatin1String("--noprogress"));
 		if (!m_part) {
-			WARN("Could not create the Cantor Part.")
+			WARN("Could not create the Cantor Part for backend " << STDSTRING(m_backendName))
 			m_error = i18n("Couldn't find the plugin for %1. Please check your installation.", m_backendName);
 			return false;
 		}

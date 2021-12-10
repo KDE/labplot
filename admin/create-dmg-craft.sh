@@ -20,6 +20,7 @@ GCP=/opt/local/libexec/gnubin/cp
 #########################################
 
 mkdir -pv $INPREFIX/share/{appdata,applications}
+mkdir -pv $INPREFIX/Resources/kxmlgui5/labplot2
 
 echo "Running macdeployqt ..."
 # -verbose=3
@@ -49,10 +50,12 @@ cp -v kde/share/applications/org.kde.$NAME.desktop $INPREFIX/share/applications/
 # cantor
 cp -v kde/Applications/cantor.app/Contents/MacOS/cantor $INPREFIX/MacOS
 cp -v kde/Applications/cantor_scripteditor.app/Contents/MacOS/cantor_scripteditor $INPREFIX/MacOS
+cp -v kde/Applications/cantor_pythonserver.app/Contents/MacOS/cantor_pythonserver $INPREFIX/MacOS
 cp -vr kde/plugins/cantor $INPREFIX/PlugIns
 cp -v kde/lib/libcantor_config.dylib $INPREFIX/Frameworks/
-# not available in cantor master
-#cp -v kde/lib/libcantor_pythonbackend.dylib $INPREFIX/Frameworks/
+# libcantorlibs.XX.dylib pulled in by macdeployqt may be broken
+$GCP -Pv kde/lib/libcantorlibs* $INPREFIX/Frameworks/
+cp -v kde/share/kxmlgui5/cantor/*.rc $INPREFIX/Resources/kxmlgui5/labplot2/
 
 # icons
 cp -vf kde/share/icontheme.rcc $INPREFIX/Resources/icontheme.rcc
