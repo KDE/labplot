@@ -935,9 +935,9 @@ private:
 	QRectF m_rect;
 };
 
-void CartesianPlot::setRect(const QRectF& rect) {
+void CartesianPlot::setRect(const QRectF& rect, bool forceUpdate) {
 	Q_D(CartesianPlot);
-	if (rect != d->rect)
+	if (forceUpdate || (rect != d->rect))
 		exec(new CartesianPlotSetRectCmd(d, rect));
 }
 

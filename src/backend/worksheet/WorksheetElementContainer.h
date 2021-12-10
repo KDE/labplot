@@ -33,7 +33,7 @@ public:
 	void setResizeEnabled(bool);
 
 	QRectF rect() const;
-	virtual void setRect(const QRectF&) = 0;
+	virtual void setRect(const QRectF&, bool forceUpdate = false) = 0;
 	virtual void prepareGeometryChange();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize = false) override;
 

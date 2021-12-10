@@ -80,7 +80,7 @@ public:
 	QVector<AbstractAspect*> dependsOn() const override;
 	QVector<AspectType> pasteTypes() const override;
 
-	void setRect(const QRectF&) override;
+	void setRect(const QRectF&, bool forceUpdate = false) override;
 	QRectF dataRect() const;
 	void setMouseMode(MouseMode);
 	MouseMode mouseMode() const;

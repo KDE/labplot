@@ -42,6 +42,8 @@ private:
 
 	protected:
 		QVariant itemChange(GraphicsItemChange, const QVariant&) override;
+		void mousePressEvent(QGraphicsSceneMouseEvent*) override;
+		void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 		void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 		void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 

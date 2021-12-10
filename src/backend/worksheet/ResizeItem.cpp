@@ -65,6 +65,15 @@ QVariant ResizeItem::HandleItem::itemChange(GraphicsItemChange change, const QVa
 	return newValue;
 }
 
+void ResizeItem::HandleItem::mousePressEvent(QGraphicsSceneMouseEvent*) {
+	m_parent->container()->setUndoAware(false);
+}
+
+void ResizeItem::HandleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent*) {
+	m_parent->container()->setUndoAware(true);
+	m_parent->container()->setRect(m_parent->container()->rect(), true /* forceUpdate */);
+}
+
 void ResizeItem::HandleItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {
 	//HACK: make the parent container/plot non-movable otherwise
 	//the move event doesn't reach HandleItem. Better solution?
