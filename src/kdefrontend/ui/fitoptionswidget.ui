@@ -73,10 +73,10 @@
       <item row="10" column="0" colspan="4">
        <widget class="QCheckBox" name="cbUseDataErrors">
         <property name="toolTip">
-         <string>This option can be used to turn on and off the usage of given data errors when fitting.</string>
+         <string>This option can be used to turn on and off the usage of given data uncertainties when fitting.</string>
         </property>
         <property name="text">
-         <string>Use given data errors</string>
+         <string>Use given data uncertainties</string>
         </property>
         <property name="checked">
          <bool>true</bool>

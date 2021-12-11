@@ -148,7 +148,7 @@ void XYFitCurveDock::setupGeneral() {
 
 	//header labels
 	QStringList headerLabels;
-	headerLabels << QString() << i18n("Value") << i18n("Error") << i18n("Error, %") << i18n("t statistic") << QLatin1String("P > |t|")
+	headerLabels << QString() << i18n("Value") << i18n("Uncertainty") << i18n("Uncertainty, %") << i18n("t statistic") << QLatin1String("P > |t|")
 		<< i18n("Lower") << i18n("Upper");
 	uiGeneralTab.twParameters->setHorizontalHeaderLabels(headerLabels);
 
@@ -1140,7 +1140,7 @@ void XYFitCurveDock::recalculateClicked() {
 }
 
 void XYFitCurveDock::expressionChanged() {
-	DEBUG("XYFitCurveDock::expressionChanged()");
+	DEBUG(Q_FUNC_INFO);
 	if (m_initializing)
 		return;
 
@@ -1152,7 +1152,7 @@ void XYFitCurveDock::expressionChanged() {
 }
 
 void XYFitCurveDock::enableRecalculate() {
-	DEBUG("XYFitCurveDock::enableRecalculate()");
+	DEBUG(Q_FUNC_INFO);
 	if (m_initializing || !m_fitCurve)
 		return;
 

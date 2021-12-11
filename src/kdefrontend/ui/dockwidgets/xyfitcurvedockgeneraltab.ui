@@ -358,7 +358,7 @@
          </item>
          <item row="2" column="0">
           <property name="text">
-           <string>Root mean square error (RMSE, SD)</string>
+           <string>Root mean square deviation (RMSD, SD)</string>
           </property>
          </item>
          <item row="2" column="1">
