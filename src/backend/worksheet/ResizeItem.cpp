@@ -67,11 +67,15 @@ QVariant ResizeItem::HandleItem::itemChange(GraphicsItemChange change, const QVa
 
 void ResizeItem::HandleItem::mousePressEvent(QGraphicsSceneMouseEvent*) {
 	m_parent->container()->setUndoAware(false);
+	m_oldRect = m_parent->container()->rect();
 }
 
 void ResizeItem::HandleItem::mouseReleaseEvent(QGraphicsSceneMouseEvent*) {
 	m_parent->container()->setUndoAware(true);
-	m_parent->container()->setRect(m_parent->container()->rect(), true /* forceUpdate */);
+
+	//the container has already the current rect set, we just need
+	//to pass the previous rect so the undo-step can be done properly
+	m_parent->container()->setPrevRect(m_oldRect);
 }
 
 void ResizeItem::HandleItem::hoverEnterEvent(QGraphicsSceneHoverEvent* event) {

@@ -911,7 +911,7 @@ const QString CartesianPlot::yRangeDateTimeFormat(const int index) const {
  */
 class CartesianPlotSetRectCmd : public QUndoCommand {
 public:
-	CartesianPlotSetRectCmd(CartesianPlotPrivate* private_obj, QRectF rect) : m_private(private_obj), m_rect(rect) {
+	CartesianPlotSetRectCmd(CartesianPlotPrivate* private_obj, const QRectF& rect) : m_private(private_obj), m_rect(rect) {
 		setText(i18n("%1: change geometry rect", m_private->name()));
 	}
 
@@ -935,10 +935,45 @@ private:
 	QRectF m_rect;
 };
 
-void CartesianPlot::setRect(const QRectF& rect, bool forceUpdate) {
+void CartesianPlot::setRect(const QRectF& rect) {
 	Q_D(CartesianPlot);
-	if (forceUpdate || (rect != d->rect))
+	if (rect != d->rect)
 		exec(new CartesianPlotSetRectCmd(d, rect));
+}
+
+
+class CartesianPlotSetPrevRectCmd : public QUndoCommand {
+public:
+	CartesianPlotSetPrevRectCmd(CartesianPlotPrivate* private_obj, const QRectF& rect) : m_private(private_obj), m_rect(rect) {
+		setText(i18n("%1: change geometry rect", m_private->name()));
+	}
+
+	void redo() override {
+		if (m_initilized) {
+			qSwap(m_private->rect, m_rect);
+			m_private->retransform();
+			emit m_private->q->rectChanged(m_private->rect);
+		} else {
+			//this function is called for the first time,
+			//nothing to do, we just need to remember what the previous rect was
+			//which has happened already in the constructor.
+			m_initilized = true;
+		}
+	}
+
+	void undo() override {
+		redo();
+	}
+
+private:
+	CartesianPlotPrivate* m_private;
+	QRectF m_rect;
+	bool m_initilized{false};
+};
+
+void CartesianPlot::setPrevRect(const QRectF& prevRect) {
+	Q_D(CartesianPlot);
+	exec(new CartesianPlotSetPrevRectCmd(d, prevRect));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeType, CartesianPlot::RangeType, rangeType, rangeChanged);

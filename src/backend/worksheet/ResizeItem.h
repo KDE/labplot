@@ -51,6 +51,7 @@ private:
 		QPointF restrictPosition(const QPointF&);
 		int m_position;
 		ResizeItem* m_parent;
+		QRectF m_oldRect;
 	};
 
 	QRectF boundingRect() const override;
