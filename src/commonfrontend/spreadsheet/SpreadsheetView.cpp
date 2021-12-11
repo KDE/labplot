@@ -1618,16 +1618,22 @@ void SpreadsheetView::pasteIntoSelection() {
 	if (input_row_count > 0 && input_rows.constFirst().indexOf(QLatin1Char('\t')) != -1)
 		hasTabs = true;
 
+	SET_NUMBER_LOCALE
+	// TEST ' ' as group separator:
+	// numberLocale = QLocale(QLocale::French, QLocale::France);
+	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	for (int i = 0; i < input_row_count; i++) {
 		if (hasTabs)
 			cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
+		else if (numberLocale.groupSeparator().isSpace() && !(numberOptions & QLocale::OmitGroupSeparator)) 	// locale with ' ' as group seperator && omit group seperator not set
+			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (QString::SplitBehavior)0x1));	// split with two spaces
 		else
 			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s+"))));
+
 		if (cellTexts.at(i).count() > input_col_count)
 			input_col_count = cellTexts.at(i).count();
 	}
 
-	SET_NUMBER_LOCALE
 // 	bool localeDetermined = false;
 
 	//expand the current selection to the needed size if
