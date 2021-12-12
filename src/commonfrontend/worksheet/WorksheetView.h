@@ -170,7 +170,6 @@ private:
 	QAction* addTextLabelAction{nullptr};
 	QAction* addImageAction{nullptr};
 	QAction* addGlobalInfoElementAction{nullptr};
-	QAction* addHistogram{nullptr};
 
 	QAction* verticalLayoutAction{nullptr};
 	QAction* horizontalLayoutAction{nullptr};
@@ -210,6 +209,7 @@ private:
 
 	QAction* addCurveAction{nullptr};
 	QAction* addHistogramAction{nullptr};
+	QAction* addBoxPlotAction{nullptr};
 	QAction* addEquationCurveAction{nullptr};
 	QAction* addDataOperationCurveAction{nullptr};
 	QAction* addDataReductionCurveAction{nullptr};

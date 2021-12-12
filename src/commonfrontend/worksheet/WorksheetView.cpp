@@ -314,6 +314,7 @@ void WorksheetView::initActions() {
 	auto* cartesianPlotAddNewActionGroup = new QActionGroup(this);
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-Curve"), cartesianPlotAddNewActionGroup);
 	addHistogramAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), cartesianPlotAddNewActionGroup);
+	addBoxPlotAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Box Plot"), cartesianPlotAddNewActionGroup);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-Curve from a Formula"), cartesianPlotAddNewActionGroup);
 	// TODO: no own icons yet
 	addDataOperationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data Operation"), cartesianPlotAddNewActionGroup);
@@ -503,6 +504,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotAddNewMenu->setIcon(QIcon::fromTheme("list-add"));
 	m_cartesianPlotAddNewMenu->addAction(addCurveAction);
 	m_cartesianPlotAddNewMenu->addAction(addHistogramAction);
+	m_cartesianPlotAddNewMenu->addAction(addBoxPlotAction);
 	m_cartesianPlotAddNewMenu->addAction(addEquationCurveAction);
 	m_cartesianPlotAddNewMenu->addSeparator();
 
@@ -2462,6 +2464,8 @@ void WorksheetView::cartesianPlotAdd(CartesianPlot* plot, QAction* action) {
 		plot->addCurve();
 	else if (action == addHistogramAction)
 		plot->addHistogram();
+	else if (action == addBoxPlotAction)
+		plot->addBoxPlot();
 	else if (action == addEquationCurveAction)
 		plot->addEquationCurve();
 	else if (action == addDataReductionCurveAction)
