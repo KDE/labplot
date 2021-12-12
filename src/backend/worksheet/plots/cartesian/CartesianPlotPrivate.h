@@ -182,6 +182,8 @@ private:
 	CartesianScale* createScale(RangeT::Scale,
 		const Range<double> &sceneRange, const Range<double> &logicalRange);
 
+	void navigateNextPrevCurve(bool next = true) const;
+
 	bool m_insideDataRect{false};
 	bool m_selectionBandIsShown{false};
 	QPointF m_selectionStart;

@@ -29,14 +29,12 @@
 #include "backend/core/column/Column.h"
 #include "backend/core/Project.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
-#include "backend/core/AbstractAspect.h"
 #include "backend/worksheet/plots/cartesian/BoxPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/CustomPoint.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/worksheet/plots/PlotArea.h"
-#include "backend/worksheet/plots/AbstractPlotPrivate.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/Image.h"
@@ -54,10 +52,9 @@
 #include <KLocalizedString>
 
 #include <QDir>
-#include <QDropEvent>
 #include <QIcon>
+#include <QKeyEvent>
 #include <QMenu>
-#include <QMimeData>
 #include <QPainter>
 #include <QWidgetAction>
 
@@ -4397,35 +4394,91 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 }
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
-	if (event->key() == Qt::Key_Escape) {
+	auto key = event->key();
+	qDebug()<<"key " << key;
+	if (key == Qt::Key_Escape) {
 		m_selectionBandIsShown = false;
-	} else if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
-		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
+	} else if (key == Qt::Key_Left || key == Qt::Key_Right
+		|| key == Qt::Key_Up || key == Qt::Key_Down) {
 
 		const auto* worksheet = static_cast<const Worksheet*>(q->parentAspect());
 		if (worksheet->layout() == Worksheet::Layout::NoLayout) {
+			//no layout is active -> use arrow keys to move the plot on the worksheet
 			const int delta = 5;
 			QRectF rect = q->rect();
 
-			if (event->key() == Qt::Key_Left) {
+			if (key == Qt::Key_Left) {
 				rect.setX(rect.x() - delta);
 				rect.setWidth(rect.width() - delta);
-			} else if (event->key() == Qt::Key_Right) {
+			} else if (key == Qt::Key_Right) {
 				rect.setX(rect.x() + delta);
 				rect.setWidth(rect.width() + delta);
-			} else if (event->key() == Qt::Key_Up) {
+			} else if (key == Qt::Key_Up) {
 				rect.setY(rect.y() - delta);
 				rect.setHeight(rect.height() - delta);
-			} else if (event->key() == Qt::Key_Down) {
+			} else if (key == Qt::Key_Down) {
 				rect.setY(rect.y() + delta);
 				rect.setHeight(rect.height() + delta);
 			}
 
 			q->setRect(rect);
 		}
-	}
+	} else if (key ==Qt::Key_N) // (key == Qt::Key_Tab)
+		navigateNextPrevCurve();
+	else if (key == Qt::Key_P) // (key == Qt::SHIFT + Qt::Key_Tab)
+		navigateNextPrevCurve(false /*next*/);
 
 	QGraphicsItem::keyPressEvent(event);
+}
+
+void CartesianPlotPrivate::navigateNextPrevCurve(bool next) const {
+	const auto& curves = q->children<XYCurve>();
+	if (curves.isEmpty())
+		return;
+
+	//determine the current selected curve
+	const XYCurve* selectedCurve = nullptr;
+	int index = 0;
+	for (const auto* curve : curves) {
+		if (curve->graphicsItem()->isSelected()) {
+			selectedCurve = curve;
+			break;
+		}
+		++index;
+	}
+
+	int newIndex = 0;
+	if (selectedCurve) {
+		if (next) { //havigate to the next curve
+			if (index < curves.size() - 1)
+				newIndex = index + 1;
+		} else { //navigate to the previous curve
+			if (index > 0)
+				newIndex = index - 1;
+			else
+				newIndex = curves.size() - 1;
+		}
+	}
+
+	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
+
+	//deselect the current curve
+	if (selectedCurve)
+		w->setItemSelectedInView(selectedCurve->graphicsItem(), false);
+	else {
+		//no curve is selected, either the plot itself or some
+		//other children like axis, etc. are selected.
+		//deselect all of them
+		w->setItemSelectedInView(this, false); //deselect the plot
+
+		//deselect children
+		const auto& elements = q->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden);
+		for (auto* element : elements)
+			w->setItemSelectedInView(element->graphicsItem(), false);
+	}
+
+	//select the new curve
+	w->setItemSelectedInView(curves.at(newIndex)->graphicsItem(), true);
 }
 
 void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
