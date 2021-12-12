@@ -4395,7 +4395,7 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 	auto key = event->key();
-	qDebug()<<"key " << key;
+	DEBUG("key " << key);
 	if (key == Qt::Key_Escape) {
 		m_selectionBandIsShown = false;
 	} else if (key == Qt::Key_Left || key == Qt::Key_Right
