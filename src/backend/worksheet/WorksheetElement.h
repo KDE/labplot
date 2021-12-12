@@ -13,11 +13,15 @@
 #ifndef WORKSHEETELEMENT_H
 #define WORKSHEETELEMENT_H
 
+#include "backend/lib/macros.h"
 #include "backend/core/AbstractAspect.h"
 #include <QPainterPath>
 
+#define D(obj_class) auto * d = static_cast<obj_class##Private*>(d_ptr);
+
 class CartesianPlot;
 class CartesianCoordinateSystem;
+class WorksheetElementPrivate;
 class KConfig;
 
 class QAction;
@@ -28,10 +32,10 @@ class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
 
 public:
-	enum class Orientation {Horizontal, Vertical, Both};
-	WorksheetElement(const QString&, AspectType);
+//	WorksheetElement(const QString&, AspectType);
 	~WorksheetElement() override;
 
+	enum class Orientation {Horizontal, Vertical, Both};
 	enum class HorizontalPosition {Left, Center, Right, Custom};
 	enum class VerticalPosition {Top, Center, Bottom, Custom};
 
@@ -49,12 +53,25 @@ public:
 		WorksheetElement::VerticalPosition verticalPosition;
 	};
 
+	typedef WorksheetElementPrivate Private;
+
+	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
+// 	BASIC_D_ACCESSOR_DELC(bool, coordinateBindingEnabled, CoordinateBindingEnabled)
+	void setCoordinateBindingEnabled(bool);
+	bool coordinateBindingEnabled() const;
+	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
+	void setPosition(QPointF);
+	void setPositionInvalid(bool);
+	BASIC_D_ACCESSOR_DECL(HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
+	BASIC_D_ACCESSOR_DECL(VerticalAlignment, verticalAlignment, VerticalAlignment)
+	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
+
 	void finalizeAdd() override;
 
 	virtual QGraphicsItem* graphicsItem() const = 0;
 	virtual void setZValue(qreal);
-	virtual void setVisible(bool on) = 0;
-	virtual bool isVisible() const = 0;
+	virtual void setVisible(bool on);
+	virtual bool isVisible() const;
 	virtual bool isFullyVisible() const;
 
 	virtual void setPrinting(bool);
@@ -70,6 +87,8 @@ public:
 
 	QMenu* createContextMenu() override;
 
+	virtual void save(QXmlStreamWriter*) const;
+	virtual bool load(XmlStreamReader*);
 	virtual void loadThemeConfig(const KConfig&);
 	virtual void saveThemeConfig(const KConfig&);
 
@@ -82,7 +101,12 @@ public:
 	int coordinateSystemCount() const;
 	QString coordinateSystemInfo(int index) const;
 
+private:
+	void init();
+
 protected:
+
+	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);
 	int m_cSystemIndex{0};	// index of coordinate system used from plot
 	// parent plot if available
 	// not const because of prepareGeometryChange()
@@ -93,10 +117,15 @@ protected:
 public slots:
 	virtual void retransform() = 0;
 
+protected:
+
+	WorksheetElementPrivate* const d_ptr;
+
 private:
-	QMenu* m_drawingOrderMenu;
-	QMenu* m_moveBehindMenu;
-	QMenu* m_moveInFrontOfMenu;
+	Q_DECLARE_PRIVATE(WorksheetElement)
+	QMenu* m_drawingOrderMenu{nullptr};
+	QMenu* m_moveBehindMenu{nullptr};
+	QMenu* m_moveInFrontOfMenu{nullptr};
 	bool m_printing{false};
 
 private slots:
@@ -115,6 +144,14 @@ signals:
 	void rightPaddingChanged(double);
 	void bottomPaddingChanged(double);
 	void symmetricPaddingChanged(double);
+	void positionChanged(const WorksheetElement::PositionWrapper&) const;
+	void horizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment) const;
+	void verticalAlignmentChanged(const WorksheetElement::VerticalAlignment) const;
+	void coordinateBindingEnabledChanged(bool) const;
+	void positionLogicalChanged(QPointF) const;
+	void rotationAngleChanged(qreal) const;
+	void visibleChanged(bool) const;
+	void changed();
 
 	void hovered();
 	void unhovered();
