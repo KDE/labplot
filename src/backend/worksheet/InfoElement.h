@@ -70,7 +70,7 @@ public:
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	BASIC_D_ACCESSOR_DECL(double, position, Position);
+	BASIC_D_ACCESSOR_DECL(double, positionLogical, PositionLogical);
 	BASIC_D_ACCESSOR_DECL(int, gluePointIndex, GluePointIndex);
 	CLASS_D_ACCESSOR_DECL(QString, connectionLineCurveName, ConnectionLineCurveName);
 	CLASS_D_ACCESSOR_DECL(QPen, verticalLinePen, VerticalLinePen)
@@ -120,7 +120,7 @@ private:
 signals:
 	void gluePointIndexChanged(const int);
 	void connectionLineCurveNameChanged(const QString&);
-	void positionChanged(const double);
+	void positionLogicalChanged(const double);
 	void labelBorderShapeChangedSignal();
 	void curveRemoved(const QString&);
 	void verticalLinePenChanged(const QPen&);

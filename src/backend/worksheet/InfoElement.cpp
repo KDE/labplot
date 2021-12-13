@@ -66,15 +66,15 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 			double y = curve->y(pos,xpos,valueFound);
 			if (valueFound) {
 				d->xPos = xpos;
-				d->position = xpos;
+				d->positionLogical = xpos;
 				d->m_index = curve->xColumn()->indexForValue(xpos);
-				custompoint->setPosition(QPointF(xpos,y));
+				custompoint->setPositionLogical(QPointF(xpos,y));
 				DEBUG("Value found")
 			}
 		} else {
 			d->xPos = 0;
-			d->position = 0;
-			custompoint->setPosition(cSystem->mapSceneToLogical(QPointF(0, 0)));
+			d->positionLogical = 0;
+			custompoint->setPositionLogical(cSystem->mapSceneToLogical(QPointF(0, 0)));
 			DEBUG("Value not found")
 		}
 
@@ -194,7 +194,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 				y = curve->y(markerpoints[0].customPoint->position().point.x(), x_new, valueFound);
 
 			custompoint->setUndoAware(false);
-			custompoint->setPosition(QPointF(x_new, y));
+			custompoint->setPositionLogical(QPointF(x_new, y));
 			custompoint->setUndoAware(true);
 		}
 	} else
@@ -385,11 +385,11 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 	if (columnMode== AbstractColumn::ColumnMode::Double
 		|| columnMode == AbstractColumn::ColumnMode::Integer
 		|| columnMode == AbstractColumn::ColumnMode::BigInt)
-		xValueStr = QString::number(d->position);
+		xValueStr = QString::number(d->positionLogical);
 	else if (columnMode== AbstractColumn::ColumnMode::Day ||
 			columnMode == AbstractColumn::ColumnMode::Month ||
 			columnMode == AbstractColumn::ColumnMode::DateTime) {
-		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->position);
+		const auto& dateTime = QDateTime::fromMSecsSinceEpoch(d->positionLogical);
 		xValueStr = dateTime.toString(m_plot->xRangeDateTimeFormat());
 	}
 
@@ -570,6 +570,7 @@ void InfoElement::childAdded(const AbstractAspect* child) {
 		connect(point, &CustomPoint::moveEnd, this, &InfoElement::moveElementEnd);
 
 		CustomPoint* p = const_cast<CustomPoint*>(point);
+		p->setCoordinateBindingEnabled(true);
 		p->setParentGraphicsItem(graphicsItem());
 		// otherwise Custom point must be patched to handle discrete curve points.
 		// This makes it much easier
@@ -645,7 +646,7 @@ double InfoElement::setMarkerpointPosition(double x) {
 			auto* point = markerpoints[i].customPoint;
 			point->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
 			point->setUndoAware(false);
-			point->setPosition(QPointF(x_new,y));
+			point->setPositionLogical(QPointF(x_new,y));
 			point->setUndoAware(false);
 			point->graphicsItem()->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 			m_suppressChildPositionChanged = false;
@@ -666,7 +667,7 @@ void InfoElement::pointPositionChanged(const WorksheetElement::PositionWrapper&)
 	if (point == nullptr)
 		return;
 
-	setPosition(point->position().point.x());
+	setPositionLogical(point->positionLogical().x());
 }
 
 void InfoElement::setParentGraphicsItem(QGraphicsItem* item) {
@@ -692,7 +693,7 @@ void InfoElement::handleResize(double /*horizontalRatio*/, double /*verticalRati
 //##############################################################################
 
 /* ============================ getter methods ================= */
-BASIC_SHARED_D_READER_IMPL(InfoElement, double, position, position);
+BASIC_SHARED_D_READER_IMPL(InfoElement, double, positionLogical, positionLogical);
 BASIC_SHARED_D_READER_IMPL(InfoElement, int, gluePointIndex, gluePointIndex);
 BASIC_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
 BASIC_SHARED_D_READER_IMPL(InfoElement, QPen, verticalLinePen, verticalLinePen)
@@ -701,21 +702,22 @@ BASIC_SHARED_D_READER_IMPL(InfoElement, QPen, connectionLinePen, connectionLineP
 BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, connectionLineOpacity, connectionLineOpacity)
 
 /* ============================ setter methods ================= */
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetPosition, double, position, retransform);
-void InfoElement::setPosition(double pos) {
+STD_SETTER_CMD_IMPL(InfoElement, SetPositionLogical, double, positionLogical);
+void InfoElement::setPositionLogical(double pos) {
 	Q_D(InfoElement);
 	double value = 0.;
 	int index = currentIndex(pos, &value);
 	if (index < 0)
 		return;
 
-	if (value != d->position) {
+	if (value != d->positionLogical) {
 		d->m_index = index;
-		exec(new InfoElementSetPositionCmd(d, pos, ki18n("%1: set position")));
+		exec(new InfoElementSetPositionLogicalCmd(d, pos, ki18n("%1: set position")));
 		setMarkerpointPosition(value);
 		m_title->setUndoAware(false);
 		m_title->setText(createTextLabelText());
 		m_title->setUndoAware(true);
+		retransform();
 	}
 }
 
@@ -807,8 +809,8 @@ void InfoElementPrivate::retransform() {
 
 	q->m_suppressChildPositionChanged = true;
 
+	// TODO: why do I need to retransform the label and the custompoints?
 	q->m_title->retransform();
-
 	for (auto& markerpoint : q->markerpoints)
 		markerpoint.customPoint->retransform();
 
@@ -818,7 +820,7 @@ void InfoElementPrivate::retransform() {
 		const auto* curve = q->markerpoints.at(i).curve;
 		if (curve && curve->name() == connectionLineCurveName) {
 			bool visible;
-			pointPos = q->cSystem->mapLogicalToScene(q->markerpoints.at(i).customPoint->position().point,
+			pointPos = q->cSystem->mapLogicalToScene(q->markerpoints.at(i).customPoint->positionLogical(),
 					visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
@@ -839,7 +841,7 @@ void InfoElementPrivate::retransform() {
 
 	//connection line
 	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
-	const QPointF pointPosItemCoords = mapFromParent(pointPos); // calculate item coords from scene coords
+	const QPointF pointPosItemCoords = mapFromParent(mapPlotAreaToParent(pointPos)); // calculate item coords from scene coords
 	if (boundingRectangle.contains(m_titlePosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
 		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(),
 					pointPosItemCoords.x(), pointPosItemCoords.y());
@@ -1007,7 +1009,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	double x_new = q->markerpoints[activeIndex].curve->xColumn()->valueAt(xindex);
 	if (abs(x_new - q->markerpoints[activeIndex].customPoint->position().point.x()) > 0) {
 		oldMousePos = eventPos;
-		q->setPosition(x);
+		q->setPositionLogical(x);
 	}
 }
 
@@ -1053,28 +1055,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 			}
 		}
 
-		q->setPosition(x);
-//		xNew = x;
-//		for (int i =0; i< q->markerpoints.length(); i++) {
-//			q->markerpoints[i].x = x;
-//			auto* curve = q->markerpoints[i].curve;
-//			if (curve->xColumn()->rowCount() == rowCount) { // if the other columns have the same length it can simply used the index
-//				q->markerpoints[i].y = curve->yColumn()->valueAt(m_index);
-//				valueFound = true;
-//			} else // if the length of the columns of the other curves are different, the y value must be searched
-//				q->markerpoints[i].y = curve->y(x, xNew, valueFound);
-//			if (valueFound) { // new set by curve->y()
-//				pointPosition.setX(xNew);
-//				pointPosition.setY(q->markerpoints[i].y);
-//				DEBUG("X_old: " << q->markerpoints[i].customPoint->position().point.x() << "X_new: " << x);
-//				q->m_suppressChildPositionChanged = true;
-//				q->markerpoints[i].customPoint->setPosition(pointPosition);
-//				q->m_suppressChildPositionChanged = false;
-//			}
-//		}
-//		q->m_title->setText(q->createTextLabelText());
-//		retransform();
-
+		q->setPositionLogical(x);
 	}
 }
 
@@ -1090,7 +1071,7 @@ void InfoElement::save(QXmlStreamWriter* writer) const {
 
 	//general
 	writer->writeStartElement("general");
-	writer->writeAttribute("position", QString::number(d->position));
+	writer->writeAttribute("position", QString::number(d->positionLogical));
 	writer->writeAttribute("curve", d->connectionLineCurveName);
 	writer->writeAttribute("gluePointIndex", QString::number(d->gluePointIndex));
 	writer->writeAttribute("markerIndex", QString::number(d->m_index));
@@ -1159,7 +1140,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 			else
 				setVisible(str.toInt());
 
-			READ_DOUBLE_VALUE("position", position);
+			READ_DOUBLE_VALUE("position", positionLogical);
 			READ_INT_VALUE("gluePointIndex", gluePointIndex, int);
 			READ_INT_VALUE("markerIndex", m_index, int);
 			READ_STRING_VALUE("curve", connectionLineCurveName);

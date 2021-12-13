@@ -49,6 +49,8 @@ public:
 	virtual void keyPressEvent(QKeyEvent*) override;
 	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
 	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	QPointF mapParentToPlotArea(QPointF);
+	QPointF mapPlotAreaToParent(QPointF);
 };
 
 #endif WORKSHEETELEMENTPRIVATE

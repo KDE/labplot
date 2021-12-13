@@ -173,14 +173,14 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 
 	SET_NUMBER_LOCALE
 	if (m_element->plot()->xRangeFormat() == RangeT::Format::Numeric) {
-		ui->lePosition->setText( numberLocale.toString(m_element->position()) );
+		ui->lePosition->setText( numberLocale.toString(m_element->positionLogical()) );
 		ui->lPosition->show();
 		ui->lePosition->show();
 		ui->lPositionDateTime->hide();
 		ui->dateTimeEditPosition->hide();
 	} else {
 		ui->dateTimeEditPosition->setDisplayFormat(m_element->plot()->xRangeDateTimeFormat());
-		ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_element->position()));
+		ui->dateTimeEditPosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_element->positionLogical()));
 		ui->lPosition->hide();
 		ui->lePosition->hide();
 		ui->lPositionDateTime->show();
@@ -194,7 +194,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 	//general
 	connect(m_element, &InfoElement::aspectDescriptionChanged,
 				this, &InfoElementDock::aspectDescriptionChanged);
-	connect(m_element, &InfoElement::positionChanged,
+	connect(m_element, &InfoElement::positionLogicalChanged,
 				this, &InfoElementDock::elementPositionChanged);
 	connect(m_element, &InfoElement::gluePointIndexChanged,
 			 this, &InfoElementDock::elementGluePointIndexChanged);
@@ -243,7 +243,7 @@ void InfoElementDock::positionChanged(const QString& value) {
 	const double pos = numberLocale.toDouble(value, &ok);
 	if (ok) {
 		for (auto* element : m_elements)
-			element->setPosition(pos);
+			element->setPositionLogical(pos);
 	}
 }
 
@@ -253,7 +253,7 @@ void InfoElementDock::positionDateTimeChanged(const QDateTime& dateTime) {
 
 	quint64 value = dateTime.toMSecsSinceEpoch();
 	for (auto* element : m_elements)
-		element->setPosition(value);
+		element->setPositionLogical(value);
 }
 
 void InfoElementDock::curveSelectionChanged(int state) {

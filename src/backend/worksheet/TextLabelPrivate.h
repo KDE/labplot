@@ -85,8 +85,6 @@ private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-
-	QPointF mapParentToPlotArea(QPointF);
 };
 
 #endif

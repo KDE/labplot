@@ -53,7 +53,7 @@ public:
 	int gluePointIndex{-1}; // negative value means automatic mode
 	int m_index{-1}; // index of the actual position
 	QString connectionLineCurveName;
-	double position;
+	double positionLogical;
 
 	QPen verticalLinePen;
 	qreal verticalLineOpacity;

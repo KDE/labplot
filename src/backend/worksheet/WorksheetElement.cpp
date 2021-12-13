@@ -15,6 +15,7 @@
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/core/Project.h"
+#include "plots/PlotArea.h"
 #include "plots/AbstractPlot.h"
 #include "plots/cartesian/CartesianCoordinateSystem.h"
 
@@ -720,5 +721,47 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 	}
 
 	return QGraphicsItem::itemChange(change, value);
+}
+
+/*!
+ * \brief TextLabelPrivate::mapParentToPlotArea
+ * Mapping a point from parent coordinates to plotArea coordinates
+ * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
+ * IMPORTANT: function is also used in Custompoint, so when changing anything, change it also there
+ * \param point point in parent coordinates
+ * \return point in PlotArea coordinates
+ */
+QPointF WorksheetElementPrivate::mapParentToPlotArea(QPointF point) {
+	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
+	if (parent) {
+		auto* plot = static_cast<CartesianPlot*>(parent);
+		// mapping from parent to item coordinates and them to plot area
+		return mapToItem(plot->plotArea()->graphicsItem(), mapFromParent(point));
+	}
+
+	return point; // don't map if no parent set. Then it's during load
+}
+
+/*!
+ * \brief TextLabelPrivate::mapPlotAreaToParent
+ * Mapping a point from the PlotArea (CartesianPlot::plotArea) coordinates to the parent
+ * coordinates of this item
+ * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
+ * IMPORTANT: function is also used in Custompoint, so when changing anything, change it also there
+ * \param point point in plotArea coordinates
+ * \return point in parent coordinates
+ */
+QPointF WorksheetElementPrivate::mapPlotAreaToParent(QPointF point) {
+	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
+
+	if (parent) {
+		auto* plot = static_cast<CartesianPlot*>(parent);
+		// first mapping to item coordinates and from there back to parent
+		// WorksheetinfoElement: parentItem()->parentItem() == plot->graphicsItem()
+		// plot->graphicsItem().pos() == plot->plotArea()->graphicsItem().pos()
+		return mapToParent(mapFromItem(plot->plotArea()->graphicsItem(), point));
+	}
+
+	return point; // don't map if no parent set. Then it's during load
 }
 

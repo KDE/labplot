@@ -937,25 +937,6 @@ void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	return QGraphicsItem::mouseMoveEvent(event);
 }*/
 
-/*!
- * \brief TextLabelPrivate::mapParentToPlotArea
- * Mapping a point from parent coordinates to plotArea coordinates
- * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
- * IMPORTANT: function is also used in Custompoint, so when changing anything, change it also there
- * \param point point in parent coordinates
- * \return point in PlotArea coordinates
- */
-QPointF TextLabelPrivate::mapParentToPlotArea(QPointF point) {
-	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
-	if (parent) {
-		auto* plot = static_cast<CartesianPlot*>(parent);
-		// mapping from parent to item coordinates and them to plot area
-		return mapToItem(plot->plotArea()->graphicsItem(), mapFromParent(point));
-	}
-
-	return point; // don't map if no parent set. Then it's during load
-}
-
 void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	q->createContextMenu()->exec(event->screenPos());
 }
