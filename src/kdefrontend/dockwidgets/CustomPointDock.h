@@ -47,7 +47,7 @@ private slots:
 
 	//SLOTs for changes triggered in CustomPoint
 	//General-Tab
-	void pointPositionChanged(QPointF);
+	void pointPositionChanged(const WorksheetElement::PositionWrapper &);
 	void updatePlotRanges() const override;
 	void pointVisibilityChanged(bool);
 

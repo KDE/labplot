@@ -12,7 +12,7 @@
 #ifndef INFOELEMENTPRIVATE_H
 #define INFOELEMENTPRIVATE_H
 
-#include <QGraphicsItem>
+#include "backend/worksheet/WorksheetElementPrivate.h"
 
 class InfoElement;
 class TextLabel;
@@ -23,12 +23,11 @@ class XYCurve;
 class QGraphicsSceneMouseEvent;
 class QPen;
 
-class InfoElementPrivate : public QGraphicsItem {
+class InfoElementPrivate : public WorksheetElementPrivate {
 
 public:
 	InfoElementPrivate(InfoElement* owner);
 	InfoElementPrivate(InfoElement* owner, const XYCurve *);
-	QString name() const;
 
 	//reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
@@ -44,6 +43,8 @@ public:
 	void updateVerticalLine();
 	void updateConnectionLine();
 	void visibilityChanged();
+
+	virtual void recalcShapeAndBoundingRect() override {};
 
 	bool visible{true};
 	double xPos;

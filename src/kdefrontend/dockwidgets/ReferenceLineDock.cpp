@@ -105,7 +105,10 @@ void ReferenceLineDock::updateLocale() {
 	ui.sbLineWidth->setLocale(numberLocale);
 
 	Lock lock(m_initializing);
-	ui.lePosition->setText(numberLocale.toString(m_line->position()));
+	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal)
+		ui.lePosition->setText(numberLocale.toString(m_line->position().point.y()));
+	else
+		ui.lePosition->setText(numberLocale.toString(m_line->position().point.x()));
 }
 
 void ReferenceLineDock::updatePlotRanges() const {
@@ -138,8 +141,12 @@ void ReferenceLineDock::positionChanged() {
 	SET_NUMBER_LOCALE
 	const double pos{ numberLocale.toDouble(ui.lePosition->text(), &ok) };
 	if (ok) {
-		for (auto* line : m_linesList)
-			line->setPosition(pos);
+		for (auto* line : m_linesList) {
+			auto position = line->position();
+			position.point.setX(pos);
+			position.point.setY(pos);
+			line->setPosition(position);
+		}
 	}
 }
 
@@ -203,9 +210,12 @@ void ReferenceLineDock::visibilityChanged(bool state) {
 //*************************************************************
 //******* SLOTs for changes triggered in ReferenceLine ********
 //*************************************************************
-void ReferenceLineDock::linePositionChanged(double position) {
+void ReferenceLineDock::linePositionChanged(const WorksheetElement::PositionWrapper& position) {
 	m_initializing = true;
-	ui.lePosition->setText(QString::number(position));
+	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal)
+		ui.lePosition->setText(QString::number(position.point.x()));
+	else
+		ui.lePosition->setText(QString::number(position.point.y()));
 	m_initializing = false;
 }
 
@@ -247,7 +257,10 @@ void ReferenceLineDock::load() {
 
 	SET_NUMBER_LOCALE
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(m_line->orientation()));
-	ui.lePosition->setText(numberLocale.toString(m_line->position()));
+	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal)
+		ui.lePosition->setText(numberLocale.toString(m_line->position().point.y()));
+	else
+		ui.lePosition->setText(numberLocale.toString(m_line->position().point.x()));
 	ui.cbLineStyle->setCurrentIndex( (int) m_line->pen().style() );
 	ui.kcbLineColor->setColor( m_line->pen().color() );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_line->pen().widthF(), Worksheet::Unit::Point) );

@@ -140,7 +140,6 @@ public:
 	}
 
 	CartesianPlot::MouseMode mouseMode{CartesianPlot::MouseMode::Selection};
-	bool suppressRetransform{false};
 	bool panningStarted{false};
 	bool locked{false};
 	QPointF scenePos; //current position under the mouse cursor in scene coordinates

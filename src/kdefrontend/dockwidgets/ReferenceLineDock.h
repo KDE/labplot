@@ -54,7 +54,7 @@ private slots:
 	void lineVisibilityChanged(bool);
 
 	//Position
-	void linePositionChanged(double);
+	void linePositionChanged(const WorksheetElement::PositionWrapper&);
 	void lineOrientationChanged(ReferenceLine::Orientation);
 
 	//Line

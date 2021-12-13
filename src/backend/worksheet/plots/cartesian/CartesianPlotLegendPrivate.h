@@ -11,7 +11,7 @@
 #ifndef CARTESIANPLOTLEGENDPRIVATE_H
 #define CARTESIANPLOTLEGENDPRIVATE_H
 
-#include <QGraphicsItem>
+#include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QPen>
 #include <QFont>
 
@@ -21,14 +21,12 @@ class XYCurve;
 class QGraphicsSceneContextMenuEvent;
 class QKeyEvent;
 
-class CartesianPlotLegendPrivate : public QGraphicsItem {
+class CartesianPlotLegendPrivate : public WorksheetElementPrivate {
 public:
 	explicit CartesianPlotLegendPrivate(CartesianPlotLegend* owner);
 
 	CartesianPlotLegend* const q;
 
-	QString name() const;
-	bool swapVisible(bool on);
 	void retransform();
 	void updatePosition();
 
@@ -37,9 +35,8 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	virtual void recalcShapeAndBoundingRect() override {};
 
-	bool suppressItemChangeEvent{false};
-	bool suppressRetransform{false};
 	bool m_hovered{false};
 
 	QList<WorksheetElement*> curvesList; //list containing all visible curves
@@ -47,8 +44,6 @@ public:
 	QFont labelFont;
 	QColor labelColor;
 	bool labelColumnMajor;
-	WorksheetElement::PositionWrapper position; //position in parent's coordinate system
-	qreal rotationAngle;
 	float lineSymbolWidth; //the width of line+symbol
 	QList<float> maxColumnTextWidths; //the maximal width of the text within each column
 	int columnCount; //the actual number of columns, can be smaller then the specified layoutColumnCount

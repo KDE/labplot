@@ -39,13 +39,13 @@
 
 
 Image::Image(const QString& name)
-	: WorksheetElement(name, AspectType::Image), d_ptr(new ImagePrivate(this)) {
+	: WorksheetElement(name, new ImagePrivate(this), AspectType::Image) {
 
 	init();
 }
 
 Image::Image(const QString &name, ImagePrivate *dd)
-	: WorksheetElement(name, AspectType::Image), d_ptr(dd) {
+	: WorksheetElement(name, dd, AspectType::Image) {
 
 	init();
 }
@@ -139,10 +139,6 @@ BASIC_SHARED_D_READER_IMPL(Image, qreal, opacity, opacity)
 BASIC_SHARED_D_READER_IMPL(Image, int, width, width)
 BASIC_SHARED_D_READER_IMPL(Image, int, height, height)
 BASIC_SHARED_D_READER_IMPL(Image, bool, keepRatio, keepRatio)
-BASIC_SHARED_D_READER_IMPL(Image, WorksheetElement::PositionWrapper, position, position)
-BASIC_SHARED_D_READER_IMPL(Image, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment)
-BASIC_SHARED_D_READER_IMPL(Image, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment)
-BASIC_SHARED_D_READER_IMPL(Image, qreal, rotationAngle, rotationAngle)
 
 BASIC_SHARED_D_READER_IMPL(Image, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(Image, qreal, borderOpacity, borderOpacity)
@@ -190,45 +186,6 @@ void Image::setKeepRatio(bool keepRatio) {
 		exec(new ImageSetKeepRatioCmd(d, keepRatio, ki18n("%1: change keep ratio")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Image, SetPosition, WorksheetElement::PositionWrapper, position, retransform);
-void Image::setPosition(const WorksheetElement::PositionWrapper& pos) {
-	Q_D(Image);
-	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition)
-		exec(new ImageSetPositionCmd(d, pos, ki18n("%1: set position")));
-}
-
-/*!
-	sets the position without undo/redo-stuff
-*/
-void Image::setPosition(QPointF point) {
-	Q_D(Image);
-	if (point != d->position.point) {
-		d->position.point = point;
-		retransform();
-	}
-}
-
-STD_SETTER_CMD_IMPL_F_S(Image, SetRotationAngle, qreal, rotationAngle, recalcShapeAndBoundingRect);
-void Image::setRotationAngle(qreal angle) {
-	Q_D(Image);
-	if (angle != d->rotationAngle)
-		exec(new ImageSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Image, SetHorizontalAlignment, WorksheetElement::HorizontalAlignment, horizontalAlignment, retransform);
-void Image::setHorizontalAlignment(const WorksheetElement::HorizontalAlignment hAlign) {
-	Q_D(Image);
-	if (hAlign != d->horizontalAlignment)
-		exec(new ImageSetHorizontalAlignmentCmd(d, hAlign, ki18n("%1: set horizontal alignment")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(Image, SetVerticalAlignment, WorksheetElement::VerticalAlignment, verticalAlignment, retransform);
-void Image::setVerticalAlignment(const WorksheetElement::VerticalAlignment vAlign) {
-	Q_D(Image);
-	if (vAlign != d->verticalAlignment)
-		exec(new ImageSetVerticalAlignmentCmd(d, vAlign, ki18n("%1: set vertical alignment")));
-}
-
 //Border
 STD_SETTER_CMD_IMPL_F_S(Image, SetBorderPen, QPen, borderPen, update)
 void Image::setBorderPen(const QPen &pen) {
@@ -244,18 +201,6 @@ void Image::setBorderOpacity(qreal opacity) {
 		exec(new ImageSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
 }
 
-//misc
-STD_SWAP_METHOD_SETTER_CMD_IMPL_F(Image, SetVisible, bool, swapVisible, retransform);
-void Image::setVisible(bool on) {
-	Q_D(Image);
-	exec(new ImageSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
-}
-
-bool Image::isVisible() const {
-	Q_D(const Image);
-	return d->isVisible();
-}
-
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
@@ -267,15 +212,12 @@ void Image::visibilityChanged() {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-ImagePrivate::ImagePrivate(Image* owner) : q(owner) {
+ImagePrivate::ImagePrivate(Image* owner) : WorksheetElementPrivate(owner), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
-}
-
-QString ImagePrivate::name() const {
-	return q->name();
 }
 
 /*!
@@ -358,14 +300,6 @@ void ImagePrivate::updateBorder() {
 	recalcShapeAndBoundingRect();
 }
 
-bool ImagePrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-	setVisible(on);
-	emit q->changed();
-	emit q->visibleChanged(on);
-	return oldValue;
-}
-
 /*!
 	Returns the outer bounds of the item as a rectangle.
  */
@@ -430,26 +364,6 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(imageShape);
 	}
-}
-
-QVariant ImagePrivate::itemChange(GraphicsItemChange change, const QVariant &value) {
-	if (suppressItemChangeEvent)
-		return value;
-
-	if (change == QGraphicsItem::ItemPositionChange) {
-		//convert item's center point in parent's coordinates
-		TextLabel::PositionWrapper tempPosition = position;
-		tempPosition.point = q->parentPosToRelativePos(value.toPointF(),
-													boundingRectangle, position,
-													horizontalAlignment, verticalAlignment);
-
-		//emit the signals in order to notify the UI.
-		//we don't set the position related member variables during the mouse movements.
-		//this is done on mouse release events only.
-		emit q->positionChanged(tempPosition);
-	}
-
-	return QGraphicsItem::itemChange(change, value);
 }
 
 void ImagePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
@@ -525,17 +439,10 @@ void Image::save(QXmlStreamWriter* writer) const {
 
 	//geometry
 	writer->writeStartElement("geometry");
+	WorksheetElement::save(writer);
 	writer->writeAttribute("width", QString::number(d->width));
 	writer->writeAttribute("height", QString::number(d->height));
 	writer->writeAttribute("keepRatio", QString::number(d->keepRatio));
-	writer->writeAttribute("x", QString::number(d->position.point.x()));
-	writer->writeAttribute("y", QString::number(d->position.point.y()));
-	writer->writeAttribute("horizontalPosition", QString::number(static_cast<int>(d->position.horizontalPosition)));
-	writer->writeAttribute("verticalPosition", QString::number(static_cast<int>(d->position.verticalPosition)));
-	writer->writeAttribute("horizontalAlignment", QString::number(static_cast<int>(d->horizontalAlignment)));
-	writer->writeAttribute("verticalAlignment", QString::number(static_cast<int>(d->verticalAlignment)));
-	writer->writeAttribute("rotationAngle", QString::number(d->rotationAngle));
-	writer->writeAttribute("visible", QString::number(d->isVisible()));
 	writer->writeEndElement();
 
 	//border
@@ -583,29 +490,7 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("height", height, int);
 			READ_INT_VALUE("keepRatio", keepRatio, bool);
 
-			str = attribs.value("x").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->position.point.setX(str.toDouble());
-
-			str = attribs.value("y").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("y").toString());
-			else
-				d->position.point.setY(str.toDouble());
-
-			READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
-			READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
-			READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
-			READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
-			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
-
-			str = attribs.value("visible").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("visible").toString());
-			else
-				d->setVisible(str.toInt());
+			WorksheetElement::load(reader);
 		} else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
 			READ_QPEN(d->borderPen);

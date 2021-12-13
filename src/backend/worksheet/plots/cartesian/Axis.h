@@ -133,7 +133,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksSpacing, MajorTicksSpacing)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTickStartOffset, MajorTickStartOffset)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, majorTicksColumn, MajorTicksColumn)
-	QString& majorTicksColumnPath() const;
+	QString &majorTicksColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QPen, majorTicksPen, MajorTicksPen)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksLength, MajorTicksLength)
 	BASIC_D_ACCESSOR_DECL(qreal, majorTicksOpacity, MajorTicksOpacity)
@@ -143,7 +143,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, minorTicksNumber, MinorTicksNumber)
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksSpacing, MinorTicksSpacing)
 	POINTER_D_ACCESSOR_DECL(const AbstractColumn, minorTicksColumn, MinorTicksColumn)
-	QString& minorTicksColumnPath() const;
+	QString &minorTicksColumnPath() const;
 	CLASS_D_ACCESSOR_DECL(QPen, minorTicksPen, MinorTicksPen)
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksLength, MinorTicksLength)
 	BASIC_D_ACCESSOR_DECL(qreal, minorTicksOpacity, MinorTicksOpacity)
@@ -176,9 +176,6 @@ public:
 	void setDefault(bool);
 	bool isDefault() const;
 
-	void setVisible(bool) override;
-	bool isVisible() const override;
-
 	bool isHovered() const;
 	void setSuppressRetransform(bool);
 	void retransform() override;
@@ -186,13 +183,12 @@ public:
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
 protected:
-	AxisPrivate* const d_ptr;
 	Axis(const QString&, Orientation, AxisPrivate*);
 	TextLabel* m_title;
 
 private:
 	Q_DECLARE_PRIVATE(Axis)
-	void init();
+	void init(Orientation orientation);
 	void initActions();
 	void initMenus();
 

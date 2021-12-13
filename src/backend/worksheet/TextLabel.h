@@ -98,24 +98,12 @@ public:
 	BASIC_D_ACCESSOR_DECL(QColor, teXFontColor, TeXFontColor)
 	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
-	CLASS_D_ACCESSOR_DECL(WorksheetElement::PositionWrapper, position, Position)
-// 	BASIC_D_ACCESSOR_DELC(bool, coordinateBindingEnabled, CoordinateBindingEnabled)
-	void setCoordinateBindingEnabled(bool);
-	bool coordinateBindingEnabled() const;
-	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)
-	void setPosition(QPointF);
-	void setPositionInvalid(bool);
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::VerticalAlignment, verticalAlignment, VerticalAlignment)
-	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
 	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape);
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 
 	void setZoomFactor(double);
-	void setVisible(bool on) override;
-	bool isVisible() const override;
 	QRectF size();
 	QPointF findNearestGluePoint(QPointF scenePoint);
 	int gluePointCount();
@@ -142,7 +130,6 @@ private slots:
 	void visibilityChanged();
 
 protected:
-	TextLabelPrivate* const d_ptr;
 	TextLabel(const QString& name, TextLabelPrivate* dd, Type type = Type::General);
 
 private:
@@ -159,19 +146,11 @@ signals:
 	void fontColorChanged(const QColor);
 	void backgroundColorChanged(const QColor);
 
-	void positionChanged(const WorksheetElement::PositionWrapper&);
-	void horizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment);
-	void verticalAlignmentChanged(const WorksheetElement::VerticalAlignment);
-	void coordinateBindingEnabledChanged(bool);
-	void positionLogicalChanged(QPointF);
-	void rotationAngleChanged(qreal);
-	void visibleChanged(bool);
 	void borderShapeChanged(TextLabel::BorderShape);
 	void borderPenChanged(QPen&);
 	void borderOpacityChanged(float);
 
 	void teXImageUpdated(bool);
-	void changed();
 };
 
 #endif

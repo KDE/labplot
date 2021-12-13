@@ -2066,9 +2066,9 @@ void CartesianPlot::addReferenceLine() {
 
 	if (d->calledFromContextMenu)  {
 		if (line->orientation() == WorksheetElement::Orientation::Vertical)
-			line->setPosition(d->logicalPos.x());
+			line->setPositionLogical(d->logicalPos);
 		else
-			line->setPosition(d->logicalPos.y());
+			line->setPositionLogical(d->logicalPos);
 		d->calledFromContextMenu = false;
 	}
 

@@ -44,13 +44,14 @@ extern "C" {
 }
 
 Histogram::Histogram(const QString &name)
-	: WorksheetElement(name, AspectType::Histogram), Curve(), d_ptr(new HistogramPrivate(this)) {
+	: WorksheetElement(name, new HistogramPrivate(this),
+	  AspectType::Histogram), Curve() {
 
 	init();
 }
 
 Histogram::Histogram(const QString &name, HistogramPrivate *dd)
-	: WorksheetElement(name, AspectType::Histogram), Curve(), d_ptr(dd) {
+	: WorksheetElement(name, dd, AspectType::Histogram), Curve(){
 
 	init();
 }
@@ -185,17 +186,6 @@ QGraphicsItem* Histogram::graphicsItem() const {
 	return d_ptr;
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(Histogram, SetVisible, bool, swapVisible)
-void Histogram::setVisible(bool on) {
-	Q_D(Histogram);
-	exec(new HistogramSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
-}
-
-bool Histogram::isVisible() const {
-	Q_D(const Histogram);
-	return d->isVisible();
-}
-
 bool Histogram::activateCurve(QPointF mouseScenePos, double maxDist) {
 	Q_D(Histogram);
 	return d->activateCurve(mouseScenePos, maxDist);
@@ -222,7 +212,8 @@ BASIC_SHARED_D_READER_IMPL(Histogram, double, binRangesMax, binRangesMax)
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn*, dataColumn, dataColumn)
 
 QString& Histogram::dataColumnPath() const {
-	return d_ptr->dataColumnPath;
+	D(Histogram);
+	return d->dataColumnPath;
 }
 
 //line
@@ -240,7 +231,8 @@ Symbol* Histogram::symbol() const {
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesType, valuesType, valuesType)
 BASIC_SHARED_D_READER_IMPL(Histogram, const AbstractColumn *, valuesColumn, valuesColumn)
 QString& Histogram::valuesColumnPath() const {
-	return d_ptr->valuesColumnPath;
+	D(Histogram);
+	return d->valuesColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Histogram, Histogram::ValuesPosition, valuesPosition, valuesPosition)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, valuesDistance, valuesDistance)
@@ -273,28 +265,34 @@ BASIC_SHARED_D_READER_IMPL(Histogram, QPen, errorBarsPen, errorBarsPen)
 BASIC_SHARED_D_READER_IMPL(Histogram, qreal, errorBarsOpacity, errorBarsOpacity)
 
 double Histogram::xMinimum() const {
-	return d_ptr->xMinimum();
+	Q_D(const Histogram);
+	return d->xMinimum();
 }
 
 double Histogram::xMaximum() const {
-	return d_ptr->xMaximum();
+	Q_D(const Histogram);
+	return d->xMaximum();
 }
 
 double Histogram::yMinimum() const {
-	return d_ptr->yMinimum();
+	Q_D(const Histogram);
+	return d->yMinimum();
 }
 
 double Histogram::yMaximum() const {
-	return d_ptr->yMaximum();
+	Q_D(const Histogram);
+	return d->yMaximum();
 }
 
 
 const AbstractColumn* Histogram::bins() const {
-	return d_ptr->bins();
+	D(Histogram);
+	return d->bins();
 }
 
 const AbstractColumn* Histogram::binValues() const {
-	return d_ptr->binValues();
+	D(Histogram);
+	return d->binValues();
 }
 
 //##############################################################################
@@ -652,7 +650,8 @@ void Histogram::retransform() {
 }
 
 void Histogram::recalcHistogram() {
-	d_ptr->recalcHistogram();
+	D(Histogram);
+	d->recalcHistogram();
 }
 
 //TODO
@@ -668,7 +667,8 @@ void Histogram::handleResize(double horizontalRatio, double /*verticalRatio*/, b
 }
 
 void Histogram::updateValues() {
-	d_ptr->updateValues();
+	D(Histogram);
+	d->updateValues();
 }
 
 void Histogram::dataColumnAboutToBeRemoved(const AbstractAspect* aspect) {
@@ -698,7 +698,7 @@ void Histogram::visibilityChangedSlot() {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-HistogramPrivate::HistogramPrivate(Histogram *owner) : q(owner) {
+HistogramPrivate::HistogramPrivate(Histogram *owner) : WorksheetElementPrivate(owner), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setAcceptHoverEvents(false);
 }
@@ -708,15 +708,11 @@ HistogramPrivate::~HistogramPrivate() {
 		gsl_histogram_free(m_histogram);
 }
 
-QString HistogramPrivate::name() const {
-	return q->name();
-}
-
 QRectF HistogramPrivate::boundingRect() const {
 	return boundingRectangle;
 }
 
-double HistogramPrivate::getMaximumOccuranceofHistogram() {
+double HistogramPrivate::getMaximumOccuranceofHistogram() const {
 	if (m_histogram) {
 		double yMaxRange = -qInf();
 		switch (type) {
@@ -767,7 +763,7 @@ double HistogramPrivate::getMaximumOccuranceofHistogram() {
 	return -qInf();
 }
 
-double HistogramPrivate::xMinimum() {
+double HistogramPrivate::xMinimum() const {
 	switch (orientation) {
 	case Histogram::Vertical:
 		return autoBinRanges ? dataColumn->minimum() : binRangesMin;
@@ -777,7 +773,7 @@ double HistogramPrivate::xMinimum() {
 	return qInf();
 }
 
-double HistogramPrivate::xMaximum() {
+double HistogramPrivate::xMaximum() const {
 	switch (orientation) {
 	case Histogram::Vertical:
 		return autoBinRanges ? dataColumn->maximum() : binRangesMax;
@@ -787,7 +783,7 @@ double HistogramPrivate::xMaximum() {
 	return -qInf();
 }
 
-double HistogramPrivate::yMinimum() {
+double HistogramPrivate::yMinimum() const {
 	switch (orientation) {
 	case Histogram::Vertical:
 		return 0;
@@ -797,7 +793,7 @@ double HistogramPrivate::yMinimum() {
 	return qInf();
 }
 
-double HistogramPrivate::yMaximum() {
+double HistogramPrivate::yMaximum() const {
 	switch (orientation) {
 	case Histogram::Vertical:
 		return getMaximumOccuranceofHistogram();
@@ -845,21 +841,6 @@ QPainterPath HistogramPrivate::shape() const {
 
 void HistogramPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	q->createContextMenu()->exec(event->screenPos());
-}
-
-bool HistogramPrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-
-	//When making a graphics item invisible, it gets deselected in the scene.
-	//In this case we don't want to deselect the item in the project explorer.
-	//We need to supress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	worksheet->suppressSelectionChangedEvent(true);
-	setVisible(on);
-	worksheet->suppressSelectionChangedEvent(false);
-
-	emit q->visibilityChanged(on);
-	return oldValue;
 }
 
 /*!

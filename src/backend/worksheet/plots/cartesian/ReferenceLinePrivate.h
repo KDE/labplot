@@ -12,23 +12,18 @@
 #ifndef REFERENCELINEPRIVATE_H
 #define REFERENCELINEPRIVATE_H
 
-#include <QGraphicsItem>
+#include "backend/worksheet/WorksheetElementPrivate.h"
 
 class CartesianCoordinateSystem;
 
-class ReferenceLinePrivate: public QGraphicsItem {
+class ReferenceLinePrivate: public WorksheetElementPrivate {
 public:
 	explicit ReferenceLinePrivate(ReferenceLine*);
 
-	QString name() const;
 	void retransform();
-	bool swapVisible(bool);
 	virtual void recalcShapeAndBoundingRect();
 	void updatePosition();
 	void updateData();
-
-	bool suppressItemChangeEvent{false};
-	bool suppressRetransform{false};
 
 	bool m_hovered{false};
 	bool m_visible{true}; //point inside the plot (visible) or not
@@ -37,7 +32,6 @@ public:
 	QPainterPath lineShape;
 
 	ReferenceLine::Orientation orientation{ReferenceLine::Orientation::Horizontal};
-	double position{0.0}; //position in plot coordinates
 	double length{0.0}; //length of the line in graphic item's coordinates
 	QPen pen;
 	qreal opacity{1.0};
@@ -53,7 +47,6 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 };

@@ -137,7 +137,3 @@ void AbstractPlot::setSymmetricPadding(bool symmetric) {
 AbstractPlotPrivate::AbstractPlotPrivate(AbstractPlot *owner)
 	: WorksheetElementContainerPrivate(owner) {
 }
-
-QString AbstractPlotPrivate::name() const {
-	return q->name();
-}

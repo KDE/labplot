@@ -90,9 +90,6 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, whiskersCapPen, WhiskersCapPen)
 	BASIC_D_ACCESSOR_DECL(qreal, whiskersCapOpacity, WhiskersCapOpacity)
 
-	void setVisible(bool on) override;
-	bool isVisible() const override;
-
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
@@ -104,7 +101,6 @@ public:
 	typedef BoxPlotPrivate Private;
 
 protected:
-	BoxPlotPrivate* const d_ptr;
 	BoxPlot(const QString& name, BoxPlotPrivate* dd);
 
 private:

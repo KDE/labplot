@@ -35,8 +35,6 @@ public:
 	Q_DECLARE_FLAGS(BorderType, BorderTypeFlags)
 
 	QGraphicsItem* graphicsItem() const override;
-	void setVisible(bool on) override;
-	bool isVisible() const override;
 	void loadThemeConfig(const KConfig& config) override;
 	void saveThemeConfig(const KConfig& config) override;
 	bool isHovered() const;
@@ -69,7 +67,6 @@ public:
 
 protected:
 	PlotArea(const QString& name, CartesianPlot *parent, PlotAreaPrivate* dd);
-	PlotAreaPrivate* const d_ptr;
 
 private:
 	Q_DECLARE_PRIVATE(PlotArea)

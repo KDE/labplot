@@ -12,22 +12,20 @@
 #ifndef REFERENCELINEPRIVATE_H
 #define REFERENCELINEPRIVATE_H
 
-#include <QGraphicsItem>
+#include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QPen>
 
 class CartesianCoordinateSystem;
 
 typedef QVector<QPointF> Points;
 
-class BoxPlotPrivate: public QGraphicsItem {
+class BoxPlotPrivate: public WorksheetElementPrivate {
 public:
 	explicit BoxPlotPrivate(BoxPlot*);
 
-	QString name() const;
-	void retransform();
+	void retransform() override;
 	void recalc();
-	bool swapVisible(bool);
-	virtual void recalcShapeAndBoundingRect();
+	virtual void recalcShapeAndBoundingRect() override;
 	void updatePixmap();
 
 	bool m_suppressRecalc{false};

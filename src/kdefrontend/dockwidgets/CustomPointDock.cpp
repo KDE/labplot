@@ -144,7 +144,7 @@ void CustomPointDock::positionXChanged() {
 	SET_NUMBER_LOCALE
 	double x = numberLocale.toDouble(ui.lePositionX->text(), &ok);
 	if (ok) {
-		QPointF pos{m_point->position()};
+		QPointF pos{m_point->position().point};
 		pos.setX(x);
 		for (auto* point : m_points)
 			point->setPosition(pos);
@@ -156,7 +156,7 @@ void CustomPointDock::positionXDateTimeChanged(const QDateTime& dateTime) {
 		return;
 
 	qint64 x = dateTime.toMSecsSinceEpoch();
-	QPointF pos{m_point->position()};
+	QPointF pos{m_point->position().point};
 	pos.setX(x);
 	for (auto* point : m_points)
 		point->setPosition(pos);
@@ -170,7 +170,7 @@ void CustomPointDock::positionYChanged() {
 	SET_NUMBER_LOCALE
 	double y = numberLocale.toDouble(ui.lePositionY->text(), &ok);
 	if (ok) {
-		QPointF pos{m_point->position()};
+		QPointF pos{m_point->position().point};
 		pos.setY(y);
 		for (auto* point : m_points)
 			point->setPosition(pos);
@@ -191,12 +191,12 @@ void CustomPointDock::visibilityChanged(bool state) {
 //**** SLOTs for changes triggered in CustomPoint *********
 //*********************************************************
 //"General"-tab
-void CustomPointDock::pointPositionChanged(QPointF position) {
+void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapper &position) {
 	m_initializing = true;
 	SET_NUMBER_LOCALE
-	ui.lePositionX->setText(numberLocale.toString(position.x()));
-	ui.dateTimeEditPositionX->setDateTime(QDateTime::fromMSecsSinceEpoch(position.x()));
-	ui.lePositionY->setText(numberLocale.toString(position.y()));
+	ui.lePositionX->setText(numberLocale.toString(position.point.x()));
+	ui.dateTimeEditPositionX->setDateTime(QDateTime::fromMSecsSinceEpoch(position.point.x()));
+	ui.lePositionY->setText(numberLocale.toString(position.point.y()));
 	m_initializing = false;
 }
 
@@ -221,7 +221,7 @@ void CustomPointDock::load() {
 		ui.lPositionXDateTime->hide();
 		ui.dateTimeEditPositionX->hide();
 
-		ui.lePositionX->setText(numberLocale.toString(m_point->position().x()));
+		ui.lePositionX->setText(numberLocale.toString(m_point->position().point.x()));
 	} else {
 		ui.lPositionX->hide();
 		ui.lePositionX->hide();
@@ -229,10 +229,10 @@ void CustomPointDock::load() {
 		ui.dateTimeEditPositionX->show();
 
 		ui.dateTimeEditPositionX->setDisplayFormat(plot->xRangeDateTimeFormat());
-		ui.dateTimeEditPositionX->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->position().x()));
+		ui.dateTimeEditPositionX->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->position().point.x()));
 	}
 
-	ui.lePositionY->setText(numberLocale.toString(m_point->position().y()));
+	ui.lePositionY->setText(numberLocale.toString(m_point->position().point.y()));
 	ui.chkVisible->setChecked( m_point->isVisible() );
 }
 

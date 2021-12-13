@@ -12,7 +12,7 @@
 #ifndef XYCURVEPRIVATE_H
 #define XYCURVEPRIVATE_H
 
-#include <QGraphicsItem>
+#include "backend/worksheet/WorksheetElementPrivate.h"
 #include <vector>
 
 class CartesianPlot;
@@ -20,14 +20,13 @@ class CartesianCoordinateSystem;
 class Symbol;
 class XYCurve;
 
-class XYCurvePrivate : public QGraphicsItem {
+class XYCurvePrivate : public WorksheetElementPrivate {
 public:
 	explicit XYCurvePrivate(XYCurve*);
 
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	QString name() const;
 	void retransform();
 	void recalcLogicalPoints();
 	void updateLines();
@@ -40,7 +39,6 @@ public:
 	void updateValues();
 	void updateFilling();
 	void updateErrorBars();
-	bool swapVisible(bool);
 	void recalcShapeAndBoundingRect();
 	void updatePixmap();
 	void suppressRetransform(bool);

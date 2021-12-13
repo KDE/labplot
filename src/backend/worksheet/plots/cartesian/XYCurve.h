@@ -138,8 +138,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(double, rugLength, RugLength)
 	BASIC_D_ACCESSOR_DECL(double, rugWidth, RugWidth)
 
-	void setVisible(bool on) override;
-	bool isVisible() const override;
 	void suppressRetransform(bool);
 	bool isSourceDataChangedSinceLastRecalc() const;
 
@@ -174,7 +172,6 @@ private slots:
 
 protected:
 	XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type);
-	XYCurvePrivate* const d_ptr;
 
 private:
 	Q_DECLARE_PRIVATE(XYCurve)

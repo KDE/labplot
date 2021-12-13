@@ -12,29 +12,28 @@
 #ifndef WORKSHEETELEMENTCONTAINERPRIVATE_H
 #define WORKSHEETELEMENTCONTAINERPRIVATE_H
 
-#include <QGraphicsItem>
+#include "WorksheetElementPrivate.h"
 
 class QGraphicsSceneContextMenuEvent;
 class WorksheetElementContainer;
 
-class WorksheetElementContainerPrivate : public QGraphicsItem {
+class WorksheetElementContainerPrivate : public WorksheetElementPrivate {
 
 public:
 	explicit WorksheetElementContainerPrivate(WorksheetElementContainer*);
 	~WorksheetElementContainerPrivate() override= default;
 
-	QString name() const;
 	QRectF boundingRect() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
-	bool swapVisible(bool on);
 	void prepareGeometryChangeRequested();
 	void recalcShapeAndBoundingRect();
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
+	virtual void retransform() override;
 
-	WorksheetElementContainer* q;
+	WorksheetElementContainer* q{nullptr};
 	QRectF boundingRectangle;
 	QPainterPath containerShape;
 	QRectF rect;

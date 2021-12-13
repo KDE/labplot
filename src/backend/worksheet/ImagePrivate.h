@@ -11,13 +11,12 @@
 #ifndef IMAGEPRIVATE_H
 #define IMAGEPRIVATE_H
 
-#include <QGraphicsItem>
-
+#include "backend/worksheet/WorksheetElementPrivate.h"
 #include "backend/worksheet/TextLabel.h"
 
 class QGraphicsSceneHoverEvent;
 
-class ImagePrivate: public QGraphicsItem {
+class ImagePrivate: public WorksheetElementPrivate {
 public:
 	explicit ImagePrivate(Image*);
 
@@ -28,34 +27,18 @@ public:
 	int width = (int)Worksheet::convertToSceneUnits(2.0, Worksheet::Unit::Centimeter);
 	int height = (int)Worksheet::convertToSceneUnits(3.0, Worksheet::Unit::Centimeter);
 	bool keepRatio{true}; //keep aspect ratio when scaling the image
-	qreal rotationAngle{0.0};
-
-	// position in parent's coordinate system, the image will be aligned around this point
-	TextLabel::PositionWrapper position{
-		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter),
-			   Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)),
-		TextLabel::HorizontalPosition::Center,
-		TextLabel::VerticalPosition::Center};
-
-	//alignment
-	TextLabel::HorizontalAlignment horizontalAlignment{TextLabel::HorizontalAlignment::Center};
-	TextLabel::VerticalAlignment verticalAlignment{TextLabel::VerticalAlignment::Center};
 
 	//border
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
-	QString name() const;
-	void retransform();
-	bool swapVisible(bool on);
+	virtual void retransform() override;
 	virtual void recalcShapeAndBoundingRect();
 	void updateImage();
 	void scaleImage();
 	void updatePosition();
 	void updateBorder();
 
-	bool suppressItemChangeEvent{false};
-	bool suppressRetransform{false};
 	bool m_hovered{false};
 
 	QRectF boundingRectangle; //bounding rectangle of the text
@@ -67,7 +50,6 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
 	Image* const q;
 

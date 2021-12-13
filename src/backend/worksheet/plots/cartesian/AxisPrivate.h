@@ -14,7 +14,7 @@
 
 #include "Axis.h"
 
-#include <QGraphicsItem>
+#include "backend/worksheet/WorksheetElementPrivate.h"
 #include <QPen>
 #include <QFont>
 
@@ -23,14 +23,13 @@ class QGraphicsSceneHoverEvent;
 class AxisGrid;
 class TextLabel;
 
-class AxisPrivate: public QGraphicsItem {
+class AxisPrivate: public WorksheetElementPrivate {
 public:
 	explicit AxisPrivate(Axis*);
 
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	QString name() const;
 	void retransform();
 	void retransformRange();
 	void retransformLine();
@@ -125,7 +124,6 @@ public:
 	QPainterPath linePath;
 	QPainterPath majorGridPath;
 	QPainterPath minorGridPath;
-	bool suppressRetransform{false};
 	bool labelsFormatOverruled{false};
 	bool labelsFormatAutoChanged{false};
 

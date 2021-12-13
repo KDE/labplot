@@ -111,7 +111,8 @@ void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, XYAnalysisCurve::DataSourceType, dataSourceType, dataSourceType)
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const XYCurve*, dataSourceCurve, dataSourceCurve)
 const QString& XYAnalysisCurve::dataSourceCurvePath() const {
-	return d_ptr->dataSourceCurvePath;
+	D(XYAnalysisCurve);
+	return d->dataSourceCurvePath;
 }
 
 BASIC_SHARED_D_READER_IMPL(XYAnalysisCurve, const AbstractColumn*, xDataColumn, xDataColumn)

@@ -29,16 +29,15 @@
  * \ingroup worksheet
  */
 
-PlotArea::PlotArea(const QString &name, CartesianPlot* parent) : WorksheetElement(name, AspectType::PlotArea),
-	d_ptr(new PlotAreaPrivate(this)),
+PlotArea::PlotArea(const QString &name, CartesianPlot* parent) :
+	WorksheetElement(name, new PlotAreaPrivate(this), AspectType::PlotArea),
 	m_parent(parent) {
 
 	init();
 }
 
 PlotArea::PlotArea(const QString &name, CartesianPlot* parent, PlotAreaPrivate *dd)
-	: WorksheetElement(name, AspectType::PlotArea),
-	  d_ptr(dd),
+	: WorksheetElement(name, dd, AspectType::PlotArea),
 	  m_parent(parent) {
 
 	init();
@@ -87,17 +86,6 @@ QGraphicsItem* PlotArea::graphicsItem() const {
 	return d_ptr;
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(PlotArea, SetVisible, bool, swapVisible)
-void PlotArea::setVisible(bool on) {
-	Q_D(PlotArea);
-	exec(new PlotAreaSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
-}
-
-bool PlotArea::isVisible() const {
-	Q_D(const PlotArea);
-	return d->isVisible();
-}
-
 bool PlotArea::isHovered() const {
 	return m_parent->isHovered();
 }
@@ -117,6 +105,8 @@ void PlotArea::handleResize(double horizontalRatio, double verticalRatio, bool /
 }
 
 void PlotArea::retransform() {
+	Q_D(PlotArea);
+	d->retransform();
 }
 
 /* ============================ getter methods ================= */
@@ -244,11 +234,7 @@ void PlotArea::setBorderOpacity(qreal opacity) {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner) : q(owner) {
-}
-
-QString PlotAreaPrivate::name() const {
-	return q->name();
+PlotAreaPrivate::PlotAreaPrivate(PlotArea *owner) : WorksheetElementPrivate(owner), q(owner) {
 }
 
 bool PlotAreaPrivate::clippingEnabled() const {
@@ -258,12 +244,6 @@ bool PlotAreaPrivate::clippingEnabled() const {
 bool PlotAreaPrivate::toggleClipping(bool on) {
 	bool oldValue = clippingEnabled();
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape, on);
-	return oldValue;
-}
-
-bool PlotAreaPrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-	setVisible(on);
 	return oldValue;
 }
 

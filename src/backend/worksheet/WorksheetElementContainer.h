@@ -27,7 +27,6 @@ public:
 	QGraphicsItem* graphicsItem() const override;
 
 	void setVisible(bool) override;
-	bool isVisible() const override;
 	bool isFullyVisible() const override;
 	void setPrinting(bool) override;
 	void setResizeEnabled(bool);
@@ -46,7 +45,6 @@ public slots:
 	void childUnhovered();
 
 protected:
-	WorksheetElementContainerPrivate* const d_ptr;
 	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*, AspectType);
 	ResizeItem* m_resizeItem{nullptr};
 
@@ -58,7 +56,6 @@ private:
 
 signals:
 	friend class WorksheetElementContainerSetVisibleCmd;
-	void visibleChanged(bool);
 };
 
 #endif

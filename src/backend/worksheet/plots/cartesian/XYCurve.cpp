@@ -56,13 +56,13 @@ XYCURVE_COLUMN_CONNECT(yErrorMinus)
 XYCURVE_COLUMN_CONNECT(values)
 
 XYCurve::XYCurve(const QString &name, AspectType type)
-	: WorksheetElement(name, type), d_ptr(new XYCurvePrivate(this)) {
+	: WorksheetElement(name, new XYCurvePrivate(this), type) {
 
 	init();
 }
 
 XYCurve::XYCurve(const QString& name, XYCurvePrivate* dd, AspectType type)
-	: WorksheetElement(name, type), d_ptr(dd) {
+	: WorksheetElement(name, dd, type) {
 
 	init();
 }
@@ -199,17 +199,6 @@ QIcon XYCurve::icon() const {
 
 QGraphicsItem* XYCurve::graphicsItem() const {
 	return d_ptr;
-}
-
-STD_SWAP_METHOD_SETTER_CMD_IMPL(XYCurve, SetVisible, bool, swapVisible)
-void XYCurve::setVisible(bool on) {
-	Q_D(XYCurve);
-	exec(new XYCurveSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
-}
-
-bool XYCurve::isVisible() const {
-	Q_D(const XYCurve);
-	return d->isVisible();
 }
 
 /*!
@@ -969,15 +958,11 @@ void XYCurve::navigateTo() {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : q(owner) {
+XYCurvePrivate::XYCurvePrivate(XYCurve *owner) : WorksheetElementPrivate(owner), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	setData(0, static_cast<int>(AspectType::XYCurve));
 	setAcceptHoverEvents(false);
-}
-
-QString XYCurvePrivate::name() const {
-	return q->name();
 }
 
 QRectF XYCurvePrivate::boundingRect() const {
@@ -997,22 +982,6 @@ void XYCurvePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 		return;
 	}
 	QGraphicsItem::contextMenuEvent(event);
-}
-
-bool XYCurvePrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-
-	//When making a graphics item invisible, it gets deselected in the scene.
-	//In this case we don't want to deselect the item in the project explorer.
-	//We need to supress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	worksheet->suppressSelectionChangedEvent(true);
-	setVisible(on);
-	worksheet->suppressSelectionChangedEvent(false);
-
-	emit q->visibilityChanged(on);
-	retransform();
-	return oldValue;
 }
 
 /*!

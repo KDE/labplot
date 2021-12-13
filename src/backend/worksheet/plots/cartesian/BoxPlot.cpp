@@ -35,14 +35,13 @@
  * \brief Box Plot
  */
 
-BoxPlot::BoxPlot(const QString& name) : WorksheetElement(name, AspectType::BoxPlot),
-	d_ptr(new BoxPlotPrivate(this)) {
-
+BoxPlot::BoxPlot(const QString& name) : WorksheetElement(name, new BoxPlotPrivate(this), AspectType::BoxPlot)
+{
 	init();
 }
 
 BoxPlot::BoxPlot(const QString& name, BoxPlotPrivate* dd)
-	: WorksheetElement(name, AspectType::BoxPlot), d_ptr(dd) {
+	: WorksheetElement(name, dd, AspectType::BoxPlot){
 
 	init();
 }
@@ -293,23 +292,28 @@ BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersCapPen, whiskersCapPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersCapOpacity, whiskersCapOpacity)
 
 QVector<QString>& BoxPlot::dataColumnPaths() const {
-	return d_ptr->dataColumnPaths;
+	D(BoxPlot);
+	return d->dataColumnPaths;
 }
 
 double BoxPlot::xMinimum() const {
-	return d_ptr->xMin;
+	D(BoxPlot);
+	return d->xMin;
 }
 
 double BoxPlot::xMaximum() const {
-	return d_ptr->xMax;
+	D(BoxPlot);
+	return d->xMax;
 }
 
 double BoxPlot::yMinimum() const {
-	return d_ptr->yMin;
+	D(BoxPlot);
+	return d->yMin;
 }
 
 double BoxPlot::yMaximum() const {
-	return d_ptr->yMax;
+	D(BoxPlot);
+	return d->yMax;
 }
 
 /* ============================ setter methods and undo commands ================= */
@@ -369,17 +373,6 @@ void BoxPlot::setNotchesEnabled(bool notchesEnabled) {
 	Q_D(BoxPlot);
 	if (notchesEnabled != d->notchesEnabled)
 		exec(new BoxPlotSetNotchesEnabledCmd(d, notchesEnabled, ki18n("%1: changed notches")));
-}
-
-STD_SWAP_METHOD_SETTER_CMD_IMPL_F(BoxPlot, SetVisible, bool, swapVisible, update);
-void BoxPlot::setVisible(bool on) {
-	Q_D(BoxPlot);
-	exec(new BoxPlotSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
-}
-
-bool BoxPlot::isVisible() const {
-	Q_D(const BoxPlot);
-	return d->isVisible();
 }
 
 //Filling
@@ -564,13 +557,9 @@ void BoxPlot::visibilityChangedSlot() {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner) : q(owner) {
+BoxPlotPrivate::BoxPlotPrivate(BoxPlot* owner) : WorksheetElementPrivate(owner), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setAcceptHoverEvents(false);
-}
-
-QString BoxPlotPrivate::name() const {
-	return q->name();
 }
 
 bool BoxPlotPrivate::activateCurve(QPointF mouseScenePos, double /*maxDist*/) {
@@ -1186,22 +1175,6 @@ void BoxPlotPrivate::mapOutliersToScene(int index) {
 									m_outlierPoints[index],
 									m_pointVisible);
 	}
-}
-
-bool BoxPlotPrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-
-	//When making a graphics item invisible, it gets deselected in the scene.
-	//In this case we don't want to deselect the item in the project explorer.
-	//We need to supress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	worksheet->suppressSelectionChangedEvent(true);
-	setVisible(on);
-	worksheet->suppressSelectionChangedEvent(false);
-
-// 	emit q->changed();
-	emit q->visibilityChanged(on);
-	return oldValue;
 }
 
 /*!

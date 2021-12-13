@@ -534,8 +534,8 @@ bool XYInterpolationCurve::load(XmlStreamReader* reader, bool preview) {
 		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
 		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
 
-		XYCurve::d_ptr->xColumn = d->xColumn;
-		XYCurve::d_ptr->yColumn = d->yColumn;
+		D_OBJ(XYCurve)->xColumn = d->xColumn;
+		D_OBJ(XYCurve)->yColumn = d->yColumn;
 
 		recalcLogicalPoints();
 	}

@@ -103,8 +103,6 @@ public:
 	CLASS_D_ACCESSOR_DECL(QPen, errorBarsPen, ErrorBarsPen)
 	BASIC_D_ACCESSOR_DECL(qreal, errorBarsOpacity, ErrorBarsOpacity)
 
-	void setVisible(bool on) override;
-	bool isVisible() const override;
 	void suppressRetransform(bool);
 
 	double xMinimum() const;
@@ -133,7 +131,6 @@ private slots:
 
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
-	HistogramPrivate* const d_ptr;
 
 private:
 	Q_DECLARE_PRIVATE(Histogram)

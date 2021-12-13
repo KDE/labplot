@@ -34,13 +34,13 @@
  */
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)
-	: WorksheetElement(name, type), d_ptr(new WorksheetElementContainerPrivate(this)) {
+	: WorksheetElement(name, new WorksheetElementContainerPrivate(this), type) {
 
 	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd, AspectType type)
-	: WorksheetElement(name, type), d_ptr(dd) {
+	: WorksheetElement(name, dd, type) {
 
 	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
@@ -91,11 +91,6 @@ void WorksheetElementContainer::setVisible(bool on) {
 		exec(new WorksheetElementContainerSetVisibleCmd(d, false, ki18n("%1: set invisible")));
 
 	endMacro();
-}
-
-bool WorksheetElementContainer::isVisible() const {
-	Q_D(const WorksheetElementContainer);
-	return d->isVisible();
 }
 
 bool WorksheetElementContainer::isFullyVisible() const {
@@ -206,12 +201,8 @@ void WorksheetElementContainer::prepareGeometryChange() {
 //################################################################
 //################### Private implementation ##########################
 //################################################################
-WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner) : q(owner) {
+WorksheetElementContainerPrivate::WorksheetElementContainerPrivate(WorksheetElementContainer *owner) : WorksheetElementPrivate(owner), q(owner) {
 	setAcceptHoverEvents(true);
-}
-
-QString WorksheetElementContainerPrivate::name() const {
-	return q->name();
 }
 
 void WorksheetElementContainerPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
@@ -233,21 +224,6 @@ void WorksheetElementContainerPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*
 		m_hovered = false;
 		update();
 	}
-}
-
-bool WorksheetElementContainerPrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-
-	//When making a graphics item invisible, it gets deselected in the scene.
-	//In this case we don't want to deselect the item in the project explorer.
-	//We need to supress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	worksheet->suppressSelectionChangedEvent(true);
-	setVisible(on);
-	emit q->visibleChanged(on);
-	worksheet->suppressSelectionChangedEvent(false);
-
-	return oldValue;
 }
 
 void WorksheetElementContainerPrivate::prepareGeometryChangeRequested() {
@@ -298,4 +274,8 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(containerShape);
 	}
+}
+
+void WorksheetElementContainerPrivate::retransform() {
+
 }

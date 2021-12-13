@@ -204,7 +204,7 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 			this, &CartesianPlotLegendDock::legendPositionChanged);
 	connect(m_legend, &CartesianPlotLegend::rotationAngleChanged, this, &CartesianPlotLegendDock::legendRotationAngleChanged);
 	connect(m_legend, &CartesianPlotLegend::lineSymbolWidthChanged, this, &CartesianPlotLegendDock::legendLineSymbolWidthChanged);
-	connect(m_legend, &CartesianPlotLegend::visibilityChanged, this, &CartesianPlotLegendDock::legendVisibilityChanged);
+	connect(m_legend, &CartesianPlotLegend::visibleChanged, this, &CartesianPlotLegendDock::legendVisibilityChanged);
 
 	//background
 	connect(m_legend, &CartesianPlotLegend::backgroundTypeChanged, this, &CartesianPlotLegendDock::legendBackgroundTypeChanged);

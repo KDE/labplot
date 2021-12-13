@@ -93,23 +93,22 @@ private:
  *  \ingroup worksheet
  */
 Axis::Axis(const QString& name, Orientation orientation)
-	: WorksheetElement(name, AspectType::Axis), d_ptr(new AxisPrivate(this)) {
-	d_ptr->orientation = orientation;
-	init();
+	: WorksheetElement(name, new AxisPrivate(this), AspectType::Axis) {
+	init(orientation);
 }
 
 Axis::Axis(const QString& name, Orientation orientation, AxisPrivate* dd)
-	: WorksheetElement(name, AspectType::Axis), d_ptr(dd) {
-	d_ptr->orientation = orientation;
-	init();
+	: WorksheetElement(name, dd, AspectType::Axis) {
+	init(orientation);
 }
 
-void Axis::init() {
+void Axis::init(Orientation orientation) {
 	Q_D(Axis);
 
 	KConfig config;
 	KConfigGroup group = config.group("Axis");
 
+	d->orientation = orientation;
 	d->rangeType = (Axis::RangeType) group.readEntry("RangeType", static_cast<int>(RangeType::Auto));
 	d->position = Axis::Position::Centered;
 	d->offset = group.readEntry("PositionOffset", 0);
@@ -386,7 +385,8 @@ BASIC_SHARED_D_READER_IMPL(Axis, int, majorTicksNumber, majorTicksNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksSpacing, majorTicksSpacing)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, majorTicksColumn, majorTicksColumn)
 QString& Axis::majorTicksColumnPath() const {
-	return d_ptr->majorTicksColumnPath;
+	D(Axis);
+	return d->majorTicksColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, majorTicksLength, majorTicksLength)
 BASIC_SHARED_D_READER_IMPL(Axis, QPen, majorTicksPen, majorTicksPen)
@@ -398,7 +398,8 @@ BASIC_SHARED_D_READER_IMPL(Axis, int, minorTicksNumber, minorTicksNumber)
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksSpacing, minorTicksIncrement)
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, minorTicksColumn, minorTicksColumn)
 QString& Axis::minorTicksColumnPath() const {
-	return d_ptr->minorTicksColumnPath;
+	D(Axis);
+	return d->minorTicksColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Axis, qreal, minorTicksLength, minorTicksLength)
 BASIC_SHARED_D_READER_IMPL(Axis, QPen, minorTicksPen, minorTicksPen)
@@ -414,7 +415,8 @@ BASIC_SHARED_D_READER_IMPL(Axis, qreal, labelsRotationAngle, labelsRotationAngle
 BASIC_SHARED_D_READER_IMPL(Axis, Axis::LabelsTextType, labelsTextType, labelsTextType);
 BASIC_SHARED_D_READER_IMPL(Axis, const AbstractColumn*, labelsTextColumn, labelsTextColumn)
 QString& Axis::labelsTextColumnPath() const {
-	return d_ptr->labelsTextColumnPath;
+	D(Axis);
+	return d->labelsTextColumnPath;
 }
 BASIC_SHARED_D_READER_IMPL(Axis, QColor, labelsColor, labelsColor);
 BASIC_SHARED_D_READER_IMPL(Axis, QFont, labelsFont, labelsFont);
@@ -435,17 +437,6 @@ void Axis::setRangeType(const Axis::RangeType rangeType) {
 	Q_D(Axis);
 	if (rangeType != d->rangeType)
 		exec(new AxisSetRangeTypeCmd(d, rangeType, ki18n("%1: set axis range type")));
-}
-
-STD_SWAP_METHOD_SETTER_CMD_IMPL(Axis, SetVisible, bool, swapVisible);
-void Axis::setVisible(bool on) {
-	Q_D(Axis);
-	exec(new AxisSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
-}
-
-bool Axis::isVisible() const {
-	Q_D(const Axis);
-	return d->isVisible();
 }
 
 void Axis::setDefault(bool value) {
@@ -965,15 +956,11 @@ void Axis::visibilityChangedSlot() {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AxisPrivate::AxisPrivate(Axis* owner) : gridItem(new AxisGrid(this)), q(owner) {
+AxisPrivate::AxisPrivate(Axis* owner) : WorksheetElementPrivate(owner), gridItem(new AxisGrid(this)), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
 	setData(0, static_cast<int>(AspectType::Axis));
 	setAcceptHoverEvents(true);
-}
-
-QString AxisPrivate::name() const {
-	return q->name();
 }
 
 bool AxisPrivate::swapVisible(bool on) {
@@ -983,12 +970,16 @@ bool AxisPrivate::swapVisible(bool on) {
 	//In this case we don't want to deselect the item in the project explorer.
 	//We need to supress the deselection in the view.
 	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	worksheet->suppressSelectionChangedEvent(true);
-	setVisible(on);
-	gridItem->setVisible(on);
-	worksheet->suppressSelectionChangedEvent(false);
+	if (worksheet) {
+		worksheet->suppressSelectionChangedEvent(true);
+		setVisible(on);
+		gridItem->setVisible(on);
+		worksheet->suppressSelectionChangedEvent(false);
+	} else
+		setVisible(on);
 
-	emit q->visibilityChanged(on);
+	emit q->changed();
+	emit q->visibleChanged(on);
 	return oldValue;
 }
 

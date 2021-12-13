@@ -43,17 +43,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, width, Width)
 	BASIC_D_ACCESSOR_DECL(int, height, Height)
 	BASIC_D_ACCESSOR_DECL(bool, keepRatio, KeepRatio)
-	CLASS_D_ACCESSOR_DECL(WorksheetElement::PositionWrapper, position, Position)
-	void setPosition(QPointF);
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::HorizontalAlignment, horizontalAlignment, HorizontalAlignment)
-	BASIC_D_ACCESSOR_DECL(WorksheetElement::VerticalAlignment, verticalAlignment, VerticalAlignment)
-	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
-
-	void setVisible(bool on) override;
-	bool isVisible() const override;
 
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
@@ -65,7 +57,6 @@ private slots:
 	void visibilityChanged();
 
 protected:
-	ImagePrivate* const d_ptr;
 	Image(const QString&, ImagePrivate*);
 
 private:
@@ -81,14 +72,8 @@ signals:
 	void widthChanged(int);
 	void heightChanged(int);
 	void keepRatioChanged(bool);
-	void positionChanged(const WorksheetElement::PositionWrapper&);
-	void horizontalAlignmentChanged(WorksheetElement::HorizontalAlignment);
-	void verticalAlignmentChanged(WorksheetElement::VerticalAlignment);
-	void rotationAngleChanged(qreal);
 	void borderPenChanged(QPen&);
 	void borderOpacityChanged(float);
-	void visibleChanged(bool);
-	void changed();
 };
 
 #endif

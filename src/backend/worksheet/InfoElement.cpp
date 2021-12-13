@@ -33,8 +33,8 @@
 #include <QDateTime>
 
 InfoElement::InfoElement(const QString& name, CartesianPlot* plot):
-	WorksheetElement(name, AspectType::InfoElement),
-	d_ptr(new InfoElementPrivate(this)) {
+	WorksheetElement(name, new InfoElementPrivate(this), AspectType::InfoElement)
+{
 	m_plot = plot;
 
 	init();
@@ -42,8 +42,8 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* plot):
 }
 
 InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* curve, double pos):
-	WorksheetElement(name, AspectType::InfoElement),
-	d_ptr(new InfoElementPrivate(this, curve)) {
+	WorksheetElement(name, new InfoElementPrivate(this, curve), AspectType::InfoElement)
+{
 	Q_D(InfoElement);
 	m_plot = p;
 
@@ -82,9 +82,9 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		text.allowPlaceholder = true;
 
 		QString textString;
-		textString = QString::number(markerpoints[0].customPoint->position().x()) + ", ";
+		textString = QString::number(markerpoints[0].customPoint->position().point.x()) + ", ";
 		textString.append(QString(QString(markerpoints[0].curve->name()+":")));
-		textString.append(QString::number(markerpoints[0].customPoint->position().y()));
+		textString.append(QString::number(markerpoints[0].customPoint->position().point.y()));
 		text.text = textString;
 
 		// TODO: Find better solution than using textedit
@@ -191,7 +191,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 			if (markerpoints.isEmpty())
 				y = curve->y(d->xPos, x_new, valueFound);
 			else
-				y = curve->y(markerpoints[0].customPoint->position().x(), x_new, valueFound);
+				y = curve->y(markerpoints[0].customPoint->position().point.x(), x_new, valueFound);
 
 			custompoint->setUndoAware(false);
 			custompoint->setPosition(QPointF(x_new, y));
@@ -211,7 +211,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	custompoint->setUndoAware(true);
 
 	if (d->m_index < 0 && curve->xColumn())
-		d->m_index = curve->xColumn()->indexForValue(custompoint->position().x());
+		d->m_index = curve->xColumn()->indexForValue(custompoint->position().point.x());
 
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
 	markerpoints.append(markerpoint);
@@ -407,7 +407,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 			replace = QLatin1String("&(");
 
 		replace += markerpoint.curve->name() + QLatin1Char(')');
-		text.replace(replace, QString::number(markerpoint.customPoint->position().y()));
+		text.replace(replace, QString::number(markerpoint.customPoint->position().point.y()));
 	}
 
 	wrapper.text = text;
@@ -658,7 +658,7 @@ double InfoElement::setMarkerpointPosition(double x) {
  * Will be called, when the customPoint changes his position
  * @param pos
  */
-void InfoElement::pointPositionChanged(QPointF /*pos*/) {
+void InfoElement::pointPositionChanged(const WorksheetElement::PositionWrapper&) {
 	if (m_suppressChildPositionChanged)
 		return;
 
@@ -666,7 +666,7 @@ void InfoElement::pointPositionChanged(QPointF /*pos*/) {
 	if (point == nullptr)
 		return;
 
-	setPosition(point->position().x());
+	setPosition(point->position().point.x());
 }
 
 void InfoElement::setParentGraphicsItem(QGraphicsItem* item) {
@@ -779,12 +779,12 @@ void InfoElement::setConnectionLineOpacity(qreal opacity) {
 //##############################################################################
 
 InfoElementPrivate::InfoElementPrivate(InfoElement* owner):
-	q(owner) {
+	WorksheetElementPrivate(owner), q(owner) {
 	init();
 }
 
 InfoElementPrivate::InfoElementPrivate(InfoElement* owner, const XYCurve*):
-	q(owner) {
+	WorksheetElementPrivate(owner), q(owner) {
 	init();
 }
 
@@ -794,10 +794,6 @@ void InfoElementPrivate::init() {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
-}
-
-QString InfoElementPrivate::name() const {
-	return q->name();
 }
 
 /*!
@@ -822,7 +818,7 @@ void InfoElementPrivate::retransform() {
 		const auto* curve = q->markerpoints.at(i).curve;
 		if (curve && curve->name() == connectionLineCurveName) {
 			bool visible;
-			pointPos = q->cSystem->mapLogicalToScene(q->markerpoints.at(i).customPoint->position(),
+			pointPos = q->cSystem->mapLogicalToScene(q->markerpoints.at(i).customPoint->position().point,
 					visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
@@ -1001,7 +997,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	for (int i = 1; i < q->markerPointsCount(); i++) {
 		if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
 			// not possible to use index, because when the number of elements in the columns of the curves are not the same there is a problem
-			x = q->markerpoints[i].customPoint->position().x(); //q->markerpoints[i].curve->xColumn()->valueAt(m_index)
+			x = q->markerpoints[i].customPoint->position().point.x(); //q->markerpoints[i].curve->xColumn()->valueAt(m_index)
 			activeIndex = i;
 			break;
 		}
@@ -1009,7 +1005,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	x += delta_logic.x();
 	int xindex = q->markerpoints[activeIndex].curve->xColumn()->indexForValue(x);
 	double x_new = q->markerpoints[activeIndex].curve->xColumn()->valueAt(xindex);
-	if (abs(x_new - q->markerpoints[activeIndex].customPoint->position().x()) > 0) {
+	if (abs(x_new - q->markerpoints[activeIndex].customPoint->position().point.x()) > 0) {
 		oldMousePos = eventPos;
 		q->setPosition(x);
 	}
@@ -1034,7 +1030,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 
 		// problem: when curves have different number of samples, the points are anymore aligned
 		// with the vertical line
-		QPointF position = q->markerpoints.at(0).customPoint->position();
+		QPointF position = q->markerpoints.at(0).customPoint->position().point;
 		m_index += index;
 		auto* column = q->markerpoints.at(0).curve->xColumn();
 		rowCount = column->rowCount();
@@ -1047,7 +1043,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 		x = column->valueAt(m_index);
 		for (int i = 1; i < q->markerPointsCount(); i++) {
 			if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
-				position = q->markerpoints[i].customPoint->position();
+				position = q->markerpoints[i].customPoint->position().point;
 				if (m_index > rowCount - 1)
 					m_index = rowCount - 1;
 				if (m_index < 0)
@@ -1070,7 +1066,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 //			if (valueFound) { // new set by curve->y()
 //				pointPosition.setX(xNew);
 //				pointPosition.setY(q->markerpoints[i].y);
-//				DEBUG("X_old: " << q->markerpoints[i].customPoint->position().x() << "X_new: " << x);
+//				DEBUG("X_old: " << q->markerpoints[i].customPoint->position().point.x() << "X_new: " << x);
 //				q->m_suppressChildPositionChanged = true;
 //				q->markerpoints[i].customPoint->setPosition(pointPosition);
 //				q->m_suppressChildPositionChanged = false;

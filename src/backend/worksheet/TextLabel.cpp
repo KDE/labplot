@@ -84,20 +84,20 @@ private:
  */
 
 TextLabel::TextLabel(const QString& name, Type type)
-	: WorksheetElement(name, AspectType::TextLabel), d_ptr(new TextLabelPrivate(this)), m_type(type) {
+	: WorksheetElement(name, new TextLabelPrivate(this), AspectType::TextLabel), m_type(type) {
 
 	init();
 }
 
 TextLabel::TextLabel(const QString &name, TextLabelPrivate *dd, Type type)
-	: WorksheetElement(name, AspectType::TextLabel), d_ptr(dd), m_type(type) {
+	: WorksheetElement(name, dd, AspectType::TextLabel), m_type(type) {
 
 	init();
 }
 
 TextLabel::TextLabel(const QString &name, CartesianPlot* plot, Type type):
-	WorksheetElement(name, AspectType::TextLabel),
-	d_ptr(new TextLabelPrivate(this)), m_type(type) {
+	WorksheetElement(name, new TextLabelPrivate(this), AspectType::TextLabel),
+	m_type(type) {
 
 	m_plot = plot;
 	cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
@@ -258,15 +258,9 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
 BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor);
 BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, backgroundColor, backgroundColor);
 BASIC_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont);
-BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::PositionWrapper, position, position);
-BASIC_SHARED_D_READER_IMPL(TextLabel, WorksheetElement::HorizontalAlignment, horizontalAlignment, horizontalAlignment);
-BASIC_SHARED_D_READER_IMPL(TextLabel, WorksheetElement::VerticalAlignment, verticalAlignment, verticalAlignment);
-BASIC_SHARED_D_READER_IMPL(TextLabel, QPointF, positionLogical, positionLogical);
-BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, rotationAngle, rotationAngle);
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::BorderShape, borderShape, borderShape)
 BASIC_SHARED_D_READER_IMPL(TextLabel, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
-BASIC_SHARED_D_READER_IMPL(TextLabel, bool, coordinateBindingEnabled, coordinateBindingEnabled)
 
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText);
@@ -306,71 +300,6 @@ void TextLabel::setBackgroundColor(const QColor color) {
 		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, ki18n("%1: set background color")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPosition, TextLabel::PositionWrapper, position, retransform);
-void TextLabel::setPosition(const PositionWrapper& pos) {
-	Q_D(TextLabel);
-	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition)
-		exec(new TextLabelSetPositionCmd(d, pos, ki18n("%1: set position")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetHorizontalAlignment, TextLabel::HorizontalAlignment, horizontalAlignment, retransform);
-void TextLabel::setHorizontalAlignment(const WorksheetElement::HorizontalAlignment hAlign) {
-	Q_D(TextLabel);
-	if (hAlign != d->horizontalAlignment)
-		exec(new TextLabelSetHorizontalAlignmentCmd(d, hAlign, ki18n("%1: set horizontal alignment")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetVerticalAlignment, WorksheetElement::VerticalAlignment, verticalAlignment, retransform);
-void TextLabel::setVerticalAlignment(const TextLabel::VerticalAlignment vAlign) {
-	Q_D(TextLabel);
-	if (vAlign != d->verticalAlignment)
-		exec(new TextLabelSetVerticalAlignmentCmd(d, vAlign, ki18n("%1: set vertical alignment")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetCoordinateBindingEnabled, bool, coordinateBindingEnabled, retransform);
-void TextLabel::setCoordinateBindingEnabled(bool on) {
-	Q_D(TextLabel);
-	if (on != d->coordinateBindingEnabled)
-		exec(new TextLabelSetCoordinateBindingEnabledCmd(d, on, on ? ki18n("%1: use logical coordinates") : ki18n("%1: set invisible")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPositionLogical, QPointF, positionLogical, retransform);
-void TextLabel::setPositionLogical(QPointF pos) {
-	Q_D(TextLabel);
-	if (pos != d->positionLogical)
-		exec(new TextLabelSetPositionLogicalCmd(d, pos, ki18n("%1: set logical position")));
-}
-
-/*!
- * \brief TextLabel::setPosition
- * sets the position without undo/redo-stuff
- * \param point point in scene coordinates
- */
-void TextLabel::setPosition(QPointF point) {
-	Q_D(TextLabel);
-	if (point != d->position.point) {
-		d->position.point = point;
-		retransform();
-	}
-}
-
-/*!
- * position is set to invalid if the parent item is not drawn on the scene
- * (e.g. axis is not drawn because it's outside plot ranges -> don't draw axis' title label)
- */
-void TextLabel::setPositionInvalid(bool invalid) {
-	Q_D(TextLabel);
-	if (invalid != d->positionInvalid)
-		d->positionInvalid = invalid;
-}
-
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetRotationAngle, qreal, rotationAngle, recalcShapeAndBoundingRect);
-void TextLabel::setRotationAngle(qreal angle) {
-	Q_D(TextLabel);
-	if (angle != d->rotationAngle)
-		exec(new TextLabelSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
-}
-
 //Border
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetBorderShape, TextLabel::BorderShape, borderShape, updateBorder)
 void TextLabel::setBorderShape(TextLabel::BorderShape shape) {
@@ -394,11 +323,6 @@ void TextLabel::setBorderOpacity(qreal opacity) {
 }
 
 //misc
-STD_SWAP_METHOD_SETTER_CMD_IMPL_F(TextLabel, SetVisible, bool, swapVisible, retransform);
-void TextLabel::setVisible(bool on) {
-	Q_D(TextLabel);
-	exec(new TextLabelSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
-}
 
 QRectF TextLabel::size() {
 	Q_D(TextLabel);
@@ -420,11 +344,6 @@ int TextLabel::gluePointCount() {
 	return d->m_gluePoints.length();
 }
 
-bool TextLabel::isVisible() const {
-	Q_D(const TextLabel);
-	return d->isVisible();
-}
-
 void TextLabel::updateTeXImage() {
 	Q_D(TextLabel);
 	d->updateTeXImage();
@@ -441,7 +360,7 @@ void TextLabel::visibilityChanged() {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : q(owner) {
+TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : WorksheetElementPrivate(owner), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -451,10 +370,6 @@ TextLabelPrivate::TextLabelPrivate(TextLabel* owner) : q(owner) {
 	m_textItem = new ScaledTextItem(this);
 	m_textItem->setScaleFactor(scaleFactor);
 	m_textItem->setTextInteractionFlags(Qt::NoTextInteraction);
-}
-
-QString TextLabelPrivate::name() const {
-	return q->name();
 }
 
 /*!
@@ -919,25 +834,6 @@ void TextLabelPrivate::updateBorder() {
 	recalcShapeAndBoundingRect();
 }
 
-bool TextLabelPrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-
-	//When making a graphics item invisible, it gets deselected in the scene.
-	//In this case we don't want to deselect the item in the project explorer.
-	//We need to supress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	if (worksheet) {
-		worksheet->suppressSelectionChangedEvent(true);
-		setVisible(on);
-		worksheet->suppressSelectionChangedEvent(false);
-	} else
-		setVisible(on);
-
-	emit q->changed();
-	emit q->visibleChanged(on);
-	return oldValue;
-}
-
 /*!
 	Returns the outer bounds of the item as a rectangle.
  */
@@ -1034,117 +930,12 @@ void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
 #endif
 }
 
-QVariant TextLabelPrivate::itemChange(GraphicsItemChange change, const QVariant &value) {
-	if (suppressItemChangeEvent)
-		return value;
-
-	if (change == QGraphicsItem::ItemPositionChange) {
-		// don't use setPosition here, because then all small changes are on the undo stack
-		if(coordinateBindingEnabled) {
-			QPointF pos = q->align(value.toPointF(), boundingRectangle, horizontalAlignment, verticalAlignment, false);
-			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			emit q->positionLogicalChanged(positionLogical);
-		} else {
-			//convert item's center point in parent's coordinates
-			TextLabel::PositionWrapper tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), boundingRectangle, position,
-														horizontalAlignment, verticalAlignment);
-
-			//emit the signals in order to notify the UI.
-			emit q->positionChanged(tempPosition);
-		}
-	}
-
-	return QGraphicsItem::itemChange(change, value);
-}
 /*
 void TextLabelPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	if(coordinateBinding)
 		positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(pos()), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	return QGraphicsItem::mouseMoveEvent(event);
 }*/
-
-void TextLabelPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	//convert position of the item in parent coordinates to label's position
-	const QPointF point = q->parentPosToRelativePos(pos(),
-													boundingRectangle, position,
-													horizontalAlignment, verticalAlignment);
-	if (point != position.point) {
-		//position was changed -> set the position related member variables
-		suppressRetransform = true;
-		TextLabel::PositionWrapper tempPosition = position;
-		tempPosition.point = point;
-		q->setPosition(tempPosition);
-		suppressRetransform = false;
-	}
-
-	QGraphicsItem::mouseReleaseEvent(event);
-}
-
-void TextLabelPrivate::keyPressEvent(QKeyEvent* event) {
-	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
-	        || event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
-		const int delta = 5; // always in scene coordinates
-
-		WorksheetElement::PositionWrapper tempPosition = position;
-		if(coordinateBindingEnabled && q->cSystem) {
-			//the position in logical coordinates was changed, calculate the position in scene coordinates
-			bool visible;
-			QPointF p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			if (event->key() == Qt::Key_Left) {
-				p.setX(p.x() - delta);
-			} else if (event->key() == Qt::Key_Right) {
-				p.setX(p.x() + delta);
-			} else if (event->key() == Qt::Key_Up) {
-				p.setY(p.y() - delta); // Don't understand why I need a negative here and below a positive delta
-			} else if (event->key() == Qt::Key_Down) {
-				p.setY(p.y() + delta);
-			}
-			auto pLogic = q->cSystem->mapSceneToLogical(p, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			q->setPositionLogical(pLogic);
-		} else {
-			QPointF point = q->parentPosToRelativePos(pos(), boundingRectangle, position,
-													horizontalAlignment, verticalAlignment);
-
-			if (event->key() == Qt::Key_Left) {
-				point.setX(point.x() - delta);
-			} else if (event->key() == Qt::Key_Right) {
-				point.setX(point.x() + delta);
-			} else if (event->key() == Qt::Key_Up) {
-				point.setY(point.y() + delta);
-			} else if (event->key() == Qt::Key_Down) {
-				point.setY(point.y() - delta);
-			}
-			tempPosition.point = point;
-			q->setPosition(tempPosition);
-		}
-	}
-
-	QGraphicsItem::keyPressEvent(event);
-}
-
-/*!
- * \brief TextLabelPrivate::mapPlotAreaToParent
- * Mapping a point from the PlotArea (CartesianPlot::plotArea) coordinates to the parent
- * coordinates of this item
- * Needed because in some cases the parent is not the PlotArea, but a child of it (Marker/InfoElement)
- * IMPORTANT: function is also used in Custompoint, so when changing anything, change it also there
- * \param point point in plotArea coordinates
- * \return point in parent coordinates
- */
-QPointF TextLabelPrivate::mapPlotAreaToParent(QPointF point) {
-	AbstractAspect* parent = q->parent(AspectType::CartesianPlot);
-
-	if (parent) {
-		auto* plot = static_cast<CartesianPlot*>(parent);
-		// first mapping to item coordinates and from there back to parent
-		// WorksheetinfoElement: parentItem()->parentItem() == plot->graphicsItem()
-		// plot->graphicsItem().pos() == plot->plotArea()->graphicsItem().pos()
-		return mapToParent(mapFromItem(plot->plotArea()->graphicsItem(), point));
-	}
-
-	return point; // don't map if no parent set. Then it's during load
-}
 
 /*!
  * \brief TextLabelPrivate::mapParentToPlotArea
@@ -1196,20 +987,8 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writeBasicAttributes(writer);
 	writeCommentElement(writer);
 
-	//geometry
-	writer->writeStartElement( "geometry" );
-	writer->writeAttribute( "x", QString::number(d->position.point.x()) );
-	writer->writeAttribute( "y", QString::number(d->position.point.y()) );
-	writer->writeAttribute( "horizontalPosition", QString::number(static_cast<int>(d->position.horizontalPosition)) );
-	writer->writeAttribute( "verticalPosition", QString::number(static_cast<int>(d->position.verticalPosition)) );
-	writer->writeAttribute( "horizontalAlignment", QString::number(static_cast<int>(d->horizontalAlignment)) );
-	writer->writeAttribute( "verticalAlignment", QString::number(static_cast<int>(d->verticalAlignment)) );
-	writer->writeAttribute( "rotationAngle", QString::number(d->rotationAngle) );
-	writer->writeAttribute( "plotRangeIndex", QString::number(m_cSystemIndex) );
-	writer->writeAttribute( "visible", QString::number(d->isVisible()) );
-	writer->writeAttribute( "coordinateBinding", QString::number(d->coordinateBindingEnabled));
-	writer->writeAttribute( "logicalPosX", QString::number(d->positionLogical.x()));
-	writer->writeAttribute( "logicalPosY", QString::number(d->positionLogical.y()));
+	writer->writeStartElement("geometry");
+	WorksheetElement::save(writer);
 	writer->writeEndElement();
 
 	writer->writeStartElement( "text" );
@@ -1269,76 +1048,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
 		} else if (!preview && reader->name() == "geometry") {
-			attribs = reader->attributes();
-
-			str = attribs.value("x").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->position.point.setX(str.toDouble());
-
-			str = attribs.value("y").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("y").toString());
-			else
-				d->position.point.setY(str.toDouble());
-
-			READ_INT_VALUE("horizontalPosition", position.horizontalPosition, WorksheetElement::HorizontalPosition);
-			READ_INT_VALUE("verticalPosition", position.verticalPosition, WorksheetElement::VerticalPosition);
-			if ( Project::xmlVersion() < 1) {
-				// Before 2.9.0 the position.point is only used when horizontalPosition or
-				// vertical position was set to custom, otherwise the label was attached to the
-				// "position" and it was not possible to arrange relative to this alignpoint
-				// From 2.9.0, the horizontalPosition and verticalPosition indicate the anchor
-				// point and position.point indicates the distance to them
-				// Custom is the same as Center, so rename it, because Custom is legacy
-				if (d->position.horizontalPosition != WorksheetElement::HorizontalPosition::Custom) {
-					d->position.point.setX(0);
-					if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Left)
-						d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Left;
-					else if (d->position.horizontalPosition == WorksheetElement::HorizontalPosition::Right)
-						d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Right;
-				} else
-					d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Center;
-
-				if (d->position.verticalPosition != WorksheetElement::VerticalPosition::Custom) {
-					d->position.point.setY(0);
-					if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Top)
-						d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
-					else if (d->position.verticalPosition == WorksheetElement::VerticalPosition::Bottom)
-						d->verticalAlignment = WorksheetElement::VerticalAlignment::Bottom;
-				} else
-					d->position.verticalPosition = WorksheetElement::VerticalPosition::Center;
-
-				//in the old format the order was reversed, multiple by -1 here
-				d->position.point.setY(-d->position.point.y());
-			} else {
-				READ_INT_VALUE("horizontalAlignment", horizontalAlignment, WorksheetElement::HorizontalAlignment);
-				READ_INT_VALUE("verticalAlignment", verticalAlignment, WorksheetElement::VerticalAlignment);
-			}
-			READ_DOUBLE_VALUE("rotationAngle", rotationAngle);
-			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
-
-			str = attribs.value("visible").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("visible").toString());
-			else
-				d->setVisible(str.toInt());
-
-			READ_INT_VALUE("coordinateBinding", coordinateBindingEnabled, bool);
-
-			str = attribs.value("logicalPosX").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("logicalPosX").toString());
-			else
-				d->positionLogical.setX(str.toDouble());
-
-			str = attribs.value("logicalPosY").toString();
-			if(str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("logicalPosY").toString());
-			else
-				d->positionLogical.setY(str.toDouble());
-
+			WorksheetElement::load(reader);
 		} else if (!preview && reader->name() == "text")
 			d->textWrapper.text = reader->readElementText();
 		else if (!preview && reader->name() == "textPlaceholder")

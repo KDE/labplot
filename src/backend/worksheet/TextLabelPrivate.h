@@ -13,10 +13,9 @@
 #define TEXTLABELPRIVATE_H
 
 #include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
-
+#include "src/backend/worksheet/WorksheetElementPrivate.h"
 #include <QStaticText>
 #include <QFutureWatcher>
-#include <QGraphicsItem>
 #include <QDesktopWidget>
 
 class QGraphicsSceneHoverEvent;
@@ -25,12 +24,11 @@ class CartesianCoordinateSystem;
 class ScaledTextItem;
 class TextLabel;
 
-class TextLabelPrivate : public QGraphicsItem {
+class TextLabelPrivate : public WorksheetElementPrivate {
 public:
 	explicit TextLabelPrivate(TextLabel*);
 
 	double zoomFactor{1.0};
-	qreal rotationAngle{0.0};
 	//scaling:
 	//we need to scale from the font size specified in points to scene units.
 	//furhermore, we create the tex-image in a higher resolution then usual desktop resolution
@@ -50,25 +48,14 @@ public:
 	bool teXRenderSuccessful{false};
 
 	// see TextLabel::init() for type specific default settings
-	// position in parent's coordinate system, the label gets aligned around this point
-	WorksheetElement::PositionWrapper position{
-		QPoint(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)),
-		TextLabel::HorizontalPosition::Center, TextLabel::VerticalPosition::Center};
-	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
-	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
-	bool positionInvalid{false};
-	bool coordinateBindingEnabled{false};
-	QPointF positionLogical;
 
 	TextLabel::BorderShape borderShape{TextLabel::BorderShape::NoBorder};
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
-	QString name() const;
 	void retransform();
 	void updateBoundingRect();
 	void setZoomFactor(double);
-	bool swapVisible(bool on);
 	virtual void recalcShapeAndBoundingRect();
 	void updatePosition();
 	void updateText();
@@ -79,13 +66,8 @@ public:
 	TextLabel::GluePoint gluePointAt(int index);
 
 	ScaledTextItem* m_textItem{nullptr};
-	bool suppressItemChangeEvent{false};
-	bool suppressRetransform{false};
 	bool m_hovered{false};
-	bool m_coordBinding{false};
-	bool m_coordBindingEnable{false};
 
-	QRectF boundingRectangle; //bounding rectangle of the text
 	QRectF transformedBoundingRectangle; //bounding rectangle of transformed (rotated etc.) text
 	QPainterPath borderShapePath;
 	QPainterPath labelShape;
@@ -94,8 +76,6 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
-
 	TextLabel* const q{nullptr};
 
 	// used in the InfoElement (Marker) to attach the line to the label
@@ -103,12 +83,9 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-	void keyPressEvent(QKeyEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
-	QPointF mapPlotAreaToParent(QPointF);
 	QPointF mapParentToPlotArea(QPointF);
 };
 

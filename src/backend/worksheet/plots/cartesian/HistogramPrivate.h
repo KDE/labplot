@@ -14,7 +14,7 @@
 
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 
-#include <QGraphicsItem>
+#include "backend/worksheet/WorksheetElementPrivate.h"
 #include <vector>
 
 class Column;
@@ -22,12 +22,11 @@ extern "C" {
 #include <gsl/gsl_histogram.h>
 }
 
-class HistogramPrivate : public QGraphicsItem {
+class HistogramPrivate : public WorksheetElementPrivate {
 public:
 	explicit HistogramPrivate(Histogram* owner);
 	~HistogramPrivate() override;
 
-	QString name() const;
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
@@ -43,19 +42,18 @@ public:
 	void updateFilling();
 	void updateErrorBars();
 	void updatePixmap();
-	bool swapVisible(bool on);
 	void recalcShapeAndBoundingRect();
 
 	void setHover(bool on);
 	bool activateCurve(QPointF mouseScenePos, double maxDist);
 
-	double xMinimum();
-	double xMaximum();
-	double yMinimum();
-	double yMaximum();
+	double xMinimum() const;
+	double xMaximum() const;
+	double yMinimum() const;
+	double yMaximum() const;
 	const AbstractColumn* bins();
 	const AbstractColumn* binValues();
-	double getMaximumOccuranceofHistogram();
+	double getMaximumOccuranceofHistogram() const;
 
 	bool m_suppressRecalc{false};
 

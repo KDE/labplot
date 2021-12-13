@@ -35,11 +35,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-	BASIC_D_ACCESSOR_DECL(QPointF, position, Position)
 	Symbol* symbol() const;
-
-	void setVisible(bool on) override;
-	bool isVisible() const override;
 	void setParentGraphicsItem(QGraphicsItem* item);
 
 	void retransform() override;
@@ -51,7 +47,6 @@ private slots:
 	void visibilityChanged();
 
 protected:
-	CustomPointPrivate* const d_ptr;
 	CustomPoint(const QString& name, CustomPointPrivate* dd);
 
 private:
@@ -63,9 +58,6 @@ private:
 
 signals:
 	friend class CustomPointSetPositionCmd;
-	void positionChanged(const QPointF&);
-	void visibleChanged(bool);
-	void changed();
 };
 
 #endif

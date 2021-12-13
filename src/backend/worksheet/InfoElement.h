@@ -86,7 +86,7 @@ public:
 public slots:
 	void labelPositionChanged(TextLabel::PositionWrapper);
 	void labelVisibleChanged(bool);
-	void pointPositionChanged(QPointF);
+	void pointPositionChanged(const PositionWrapper &);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void childAdded(const AbstractAspect*);
 	void labelBorderShapeChanged();
@@ -94,9 +94,6 @@ public slots:
 	void moveElementBegin();
 	void moveElementEnd();
 	void curveVisibilityChanged();
-
-protected:
-	InfoElementPrivate* const d_ptr;
 
 private:
 	Q_DECLARE_PRIVATE(InfoElement)
@@ -121,7 +118,6 @@ private:
 	void initMenus();
 
 signals:
-	void visibleChanged(const bool);
 	void gluePointIndexChanged(const int);
 	void connectionLineCurveNameChanged(const QString&);
 	void positionChanged(const double);

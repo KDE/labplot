@@ -26,6 +26,7 @@
 #include "backend/lib/XmlStreamReader.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/lib/commandtemplates.h"
+#include "backend/core/Project.h"
 
 #include <QGraphicsSceneContextMenuEvent>
 #include <QKeyEvent>
@@ -38,13 +39,13 @@
 #include <KLocalizedString>
 
 CartesianPlotLegend::CartesianPlotLegend(const QString &name)
-		: WorksheetElement(name, AspectType::CartesianPlotLegend), d_ptr(new CartesianPlotLegendPrivate(this)) {
+		: WorksheetElement(name, new CartesianPlotLegendPrivate(this), AspectType::CartesianPlotLegend) {
 
 	init();
 }
 
 CartesianPlotLegend::CartesianPlotLegend(const QString &name, CartesianPlotLegendPrivate *dd)
-		: WorksheetElement(name, AspectType::CartesianPlotLegend), d_ptr(dd) {
+		: WorksheetElement(name, dd, AspectType::CartesianPlotLegend) {
 
 	init();
 }
@@ -141,17 +142,6 @@ QIcon CartesianPlotLegend::icon() const{
 	return QIcon::fromTheme("text-field");
 }
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(CartesianPlotLegend, SetVisible, bool, swapVisible)
-void CartesianPlotLegend::setVisible(bool on) {
-	Q_D(CartesianPlotLegend);
-	exec(new CartesianPlotLegendSetVisibleCmd(d, on, on ? ki18n("%1: set visible") : ki18n("%1: set invisible")));
-}
-
-bool CartesianPlotLegend::isVisible() const{
-	Q_D(const CartesianPlotLegend);
-	return d->isVisible();
-}
-
 QGraphicsItem *CartesianPlotLegend::graphicsItem() const{
 	return d_ptr;
 }
@@ -180,13 +170,12 @@ void CartesianPlotLegend::handleResize(double /*horizontalRatio*/, double /*vert
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QFont, labelFont, labelFont)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, QColor, labelColor, labelColor)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, bool, labelColumnMajor, labelColumnMajor)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, WorksheetElement::PositionWrapper, position, position)
-BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, qreal, rotationAngle, rotationAngle)
 BASIC_SHARED_D_READER_IMPL(CartesianPlotLegend, float, lineSymbolWidth, lineSymbolWidth)
 
 //Title
 TextLabel* CartesianPlotLegend::title() {
-	return d_ptr->title;
+	D(CartesianPlotLegend);
+	return d->title;
 }
 
 //Background
@@ -242,24 +231,6 @@ void CartesianPlotLegend::setLineSymbolWidth(float width) {
 	Q_D(CartesianPlotLegend);
 	if (width != d->lineSymbolWidth)
 		exec(new CartesianPlotLegendSetLineSymbolWidthCmd(d, width, ki18n("%1: change line+symbol width")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetPosition, WorksheetElement::PositionWrapper, position, updatePosition);
-void CartesianPlotLegend::setPosition(const PositionWrapper& pos) {
-	Q_D(CartesianPlotLegend);
-	if (pos.point != d->position.point
-		|| pos.horizontalPosition != d->position.horizontalPosition
-		|| pos.verticalPosition != d->position.verticalPosition)
-		exec(new CartesianPlotLegendSetPositionCmd(d, pos, ki18n("%1: set position")));
-}
-
-STD_SETTER_CMD_IMPL_F_S(CartesianPlotLegend, SetRotationAngle, qreal, rotationAngle, retransform)
-void CartesianPlotLegend::setRotationAngle(qreal angle) {
-	Q_D(CartesianPlotLegend);
-	if (angle != d->rotationAngle) {
-		exec(new CartesianPlotLegendSetRotationAngleCmd(d, angle, ki18n("%1: set rotation angle")));
-		d->title->setRotationAngle(angle);
-	}
 }
 
 //Background
@@ -407,16 +378,12 @@ void CartesianPlotLegend::visibilityChangedSlot() {
 //##############################################################################
 //######################### Private implementation #############################
 //##############################################################################
-CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend *owner) : q(owner) {
+CartesianPlotLegendPrivate::CartesianPlotLegendPrivate(CartesianPlotLegend *owner) : WorksheetElementPrivate(owner), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
-}
-
-QString CartesianPlotLegendPrivate::name() const {
-	return q->name();
 }
 
 QRectF CartesianPlotLegendPrivate::boundingRect() const {
@@ -449,21 +416,6 @@ QPainterPath CartesianPlotLegendPrivate::shape() const {
 	}
 
 	return path;
-}
-
-bool CartesianPlotLegendPrivate::swapVisible(bool on) {
-	bool oldValue = isVisible();
-
-	//When making a graphics item invisible, it gets deselected in the scene.
-	//In this case we don't want to deselect the item in the project explorer.
-	//We need to supress the deselection in the view.
-	auto* worksheet = static_cast<Worksheet*>(q->parent(AspectType::Worksheet));
-	worksheet->suppressSelectionChangedEvent(true);
-	setVisible(on);
-	worksheet->suppressSelectionChangedEvent(false);
-
-	emit q->visibilityChanged(on);
-	return oldValue;
 }
 
 /*!
@@ -983,11 +935,7 @@ void CartesianPlotLegend::save(QXmlStreamWriter* writer) const {
 
 	//geometry
 	writer->writeStartElement( "geometry" );
-	writer->writeAttribute( "x", QString::number(d->position.point.x()) );
-	writer->writeAttribute( "y", QString::number(d->position.point.y()) );
-	writer->writeAttribute( "horizontalPosition", QString::number(static_cast<int>(d->position.horizontalPosition)) );
-	writer->writeAttribute( "verticalPosition", QString::number(static_cast<int>(d->position.verticalPosition)) );
-	writer->writeAttribute( "rotation", QString::number(d->rotationAngle) );
+	WorksheetElement::save(writer);
 	writer->writeEndElement();
 
 	//title
@@ -1059,39 +1007,47 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("columnMajor", labelColumnMajor, int);
 			READ_DOUBLE_VALUE("lineSymbolWidth", lineSymbolWidth);
 
-			str = attribs.value("visible").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("visible").toString());
-			else
-				d->setVisible(str.toInt());
+			if (Project::xmlVersion() < 6) {
+				str = attribs.value("visible").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("visible").toString());
+				else
+					d->setVisible(str.toInt());
+			}
 		} else if (!preview && reader->name() == "geometry") {
-			attribs = reader->attributes();
+			if (Project::xmlVersion() >= 6)
+				WorksheetElement::load(reader);
+			else {
+				// Visible is in "general" before version 6
+				// therefore WorksheetElement::load() cannot be used
+				attribs = reader->attributes();
 
-			str = attribs.value("x").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("x").toString());
-			else
-				d->position.point.setX(str.toDouble());
+				str = attribs.value("x").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("x").toString());
+				else
+					d->position.point.setX(str.toDouble());
 
-			str = attribs.value("y").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("y").toString());
-			else
-				d->position.point.setY(str.toDouble());
+				str = attribs.value("y").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("y").toString());
+				else
+					d->position.point.setY(str.toDouble());
 
-			str = attribs.value("horizontalPosition").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("horizontalPosition").toString());
-			else
-				d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)str.toInt();
+				str = attribs.value("horizontalPosition").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("horizontalPosition").toString());
+				else
+					d->position.horizontalPosition = (WorksheetElement::HorizontalPosition)str.toInt();
 
-			str = attribs.value("verticalPosition").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("verticalPosition").toString());
-			else
-				d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
+				str = attribs.value("verticalPosition").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("verticalPosition").toString());
+				else
+					d->position.verticalPosition = (WorksheetElement::VerticalPosition)str.toInt();
 
-			READ_DOUBLE_VALUE("rotation", rotationAngle);
+				READ_DOUBLE_VALUE("rotation", rotationAngle);
+			}
 		} else if (reader->name() == "textLabel") {
 			if (!d->title->load(reader, preview)) {
 				delete d->title;
