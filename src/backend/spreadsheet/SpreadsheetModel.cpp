@@ -282,7 +282,7 @@ bool SpreadsheetModel::hasChildren(const QModelIndex& /*parent*/) const {
 }
 
 void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
-	PERFTRACE(Q_FUNC_INFO);
+	//PERFTRACE(Q_FUNC_INFO);
 
 	const Column* col = dynamic_cast<const Column*>(aspect);
 	if (!col || aspect->parentAspect() != m_spreadsheet)

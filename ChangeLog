@@ -24,6 +24,7 @@
 		* HDF5: Select first variable when loading file
 		* HDF5: Use data type when importing data
 		* HDF5: Preview and import 2d data of strings
+		* Improved OPJ project import
 	* [spreadsheet]:
 		* Allow to freeze the first column
 		* Search in the spreadsheet

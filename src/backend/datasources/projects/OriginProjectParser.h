@@ -4,7 +4,7 @@
     Description          : parser for Origin projects
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2018-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -49,10 +49,10 @@ private:
 	bool loadNote(Note*, bool preview);
 	void handleLooseWindows(Folder*, bool preview);
 
-	unsigned int findSpreadByName(const QString&);
+	unsigned int findSpreadsheetByName(const QString&);
 	unsigned int findMatrixByName(const QString&);
-	unsigned int findExcelByName(const QString&);
-	unsigned int findGraphByName(const QString&);
+	unsigned int findWorkbookByName(const QString&);
+	unsigned int findWorksheetByName(const QString&);
 	unsigned int findNoteByName(const QString&);
 	QString parseOriginText(const QString&) const;
 	QString parseOriginTags(const QString&) const;
@@ -64,10 +64,10 @@ private:
 	QString replaceSpecialChars(const QString&) const;
 
 	OriginFile* m_originFile{nullptr};
-	QStringList m_spreadNameList;
-	QStringList m_excelNameList;
+	QStringList m_spreadsheetNameList;
+	QStringList m_workbookNameList;
 	QStringList m_matrixNameList;
-	QStringList m_graphNameList;
+	QStringList m_worksheetNameList;
 	QStringList m_noteNameList;
 	bool m_importUnusedObjects{false};
 

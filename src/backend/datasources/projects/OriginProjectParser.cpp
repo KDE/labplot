@@ -92,11 +92,13 @@ QString OriginProjectParser::supportedExtensions() {
 	return extensions;
 }
 
-unsigned int OriginProjectParser::findSpreadByName(const QString& name) {
+// sets first found spread of given name
+unsigned int OriginProjectParser::findSpreadsheetByName(const QString& name) {
 	for (unsigned int i = 0; i < m_originFile->spreadCount(); i++) {
 		const Origin::SpreadSheet& spread = m_originFile->spread(i);
 		if (spread.name == name.toStdString()) {
-			m_spreadNameList << name;
+			m_spreadsheetNameList << name;
+			m_spreadsheetNameList.removeDuplicates();
 			return i;
 		}
 	}
@@ -107,26 +109,30 @@ unsigned int OriginProjectParser::findMatrixByName(const QString& name) {
 		const Origin::Matrix& originMatrix = m_originFile->matrix(i);
 		if (originMatrix.name == name.toStdString()) {
 			m_matrixNameList << name;
+			m_matrixNameList.removeDuplicates();
 			return i;
 		}
 	}
 	return 0;
 }
-unsigned int OriginProjectParser::findExcelByName(const QString& name) {
+unsigned int OriginProjectParser::findWorkbookByName(const QString& name) {
+	// QDEBUG("WORKBOOK LIST: " << m_workbookNameList << ", name = " << name)
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
 		const Origin::Excel& excel = m_originFile->excel(i);
 		if (excel.name == name.toStdString()) {
-			m_excelNameList << name;
+			m_workbookNameList << name;
+			m_workbookNameList.removeDuplicates();
 			return i;
 		}
 	}
 	return 0;
 }
-unsigned int OriginProjectParser::findGraphByName(const QString& name) {
+unsigned int OriginProjectParser::findWorksheetByName(const QString& name) {
 	for (unsigned int i = 0; i < m_originFile->graphCount(); i++) {
 		const Origin::Graph& graph = m_originFile->graph(i);
 		if (graph.name == name.toStdString()) {
-			m_graphNameList << name;
+			m_worksheetNameList << name;
+			m_worksheetNameList.removeDuplicates();
 			return i;
 		}
 	}
@@ -137,6 +143,7 @@ unsigned int OriginProjectParser::findNoteByName(const QString& name) {
 		const Origin::Note& originNote = m_originFile->note(i);
 		if (originNote.name == name.toStdString()) {
 			m_noteNameList << name;
+			m_noteNameList.removeDuplicates();
 			return i;
 		}
 	}
@@ -160,10 +167,10 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	const tree<Origin::ProjectNode>* projectTree = m_originFile->project();
 	tree<Origin::ProjectNode>::iterator projectIt = projectTree->begin(projectTree->begin());
 
-	m_spreadNameList.clear();
-	m_excelNameList.clear();
+	m_spreadsheetNameList.clear();
+	m_workbookNameList.clear();
 	m_matrixNameList.clear();
-	m_graphNameList.clear();
+	m_worksheetNameList.clear();
 	m_noteNameList.clear();
 
 	//convert the project tree from liborigin's representation to LabPlot's project object
@@ -174,7 +181,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		project->setName(name);
 		project->setCreationTime(creationTime(projectIt));
 		loadFolder(project, projectIt, preview);
-	} else { // for lower versions put all windows on rootfolder
+	} else { // for older versions put all windows on rootfolder
 		DEBUG(Q_FUNC_INFO << ", no project tree");
 		int pos = m_projectFileName.lastIndexOf(QLatin1String("/")) + 1;
 		project->setName((const char*)m_projectFileName.mid(pos).toLocal8Bit());
@@ -187,27 +194,38 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 	//2. restore the pointers from the pathes
 	const QVector<Column*> columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 	const QVector<Spreadsheet*> spreadsheets = project->children<Spreadsheet>(AbstractAspect::ChildIndexFlag::Recursive);
+	DEBUG(Q_FUNC_INFO << ", NUMBER of spreadsheets/columns = " << "/" << spreadsheets.count() << "/" << columns.count())
 	for (auto* curve : project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive)) {
-		// DEBUG(Q_FUNC_INFO << ", Restore COLUMN. number of spreads/cols = " << spreadsheets.count() << "/" << columns.count())
+		DEBUG(Q_FUNC_INFO << ", RESTORE CURVE with x/y column path "
+			<< STDSTRING(curve->xColumnPath()) << " " << STDSTRING(curve->yColumnPath()))
 		curve->suppressRetransform(true);
 
 		//x-column
-		QString spreadsheetName = curve->xColumnPath().left(curve->xColumnPath().indexOf(QLatin1Char('/')));
+		QString spreadsheetName = curve->xColumnPath();
+		spreadsheetName.truncate(curve->xColumnPath().lastIndexOf(QLatin1Char('/')));
+		//DEBUG(Q_FUNC_INFO << ", SPREADSHEET name from column: " << STDSTRING(spreadsheetName))
 		for (const auto* spreadsheet : spreadsheets) {
-			//DEBUG(Q_FUNC_INFO << ", spreadsheet names = \"" << STDSTRING(spreadsheet->name())
-			//	<< "\"/\"" << STDSTRING(spreadsheetName) << "\"")
-			if (spreadsheet->name() == spreadsheetName) {
-				const QString& newPath = spreadsheet->parentAspect()->path() + '/' + curve->xColumnPath();
+			QString container, containerPath = spreadsheet->parentAspect()->path();
+			if (spreadsheetName.contains('/')) {	// part of a workbook
+				container = containerPath.mid(containerPath.lastIndexOf('/') + 1) + '/';
+				containerPath = containerPath.left(containerPath.lastIndexOf('/'));
+			}
+			//DEBUG("CONTAINER = " << STDSTRING(container))
+			//DEBUG("CONTAINER PATH = " << STDSTRING(containerPath))
+			//DEBUG(Q_FUNC_INFO << ", LOOP spreadsheet names = \"" << STDSTRING(container) +
+			//	STDSTRING(spreadsheet->name()) << "\", path = " << STDSTRING(spreadsheetName))
+			//DEBUG("SPREADSHEET parent path = " << STDSTRING(spreadsheet->parentAspect()->path()))
+			if (container + spreadsheet->name() == spreadsheetName) {
+				const QString& newPath = containerPath + '/' + curve->xColumnPath();
 				//const QString& newPath = QLatin1String("Project") + '/' + curve->xColumnPath();
-				// DEBUG(Q_FUNC_INFO << ", set column path to \"" << STDSTRING(newPath) << "\"")
+				DEBUG(Q_FUNC_INFO << ", SET COLUMN PATH to \"" << STDSTRING(newPath) << "\"")
 				curve->setXColumnPath(newPath);
 
 				for (auto* column : columns) {
 					if (!column)
 						continue;
-					//DEBUG(Q_FUNC_INFO << ", column paths = \"" << STDSTRING(column->path())
-					//	<< "\" / \"" << STDSTRING(newPath) << "\"" )
 					if (column->path() == newPath) {
+						// DEBUG(Q_FUNC_INFO << ", set X column path = \"" << STDSTRING(column->path()) << "\"")
 						curve->setXColumn(column);
 						break;
 					}
@@ -217,10 +235,16 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 		}
 
 		//y-column
-		spreadsheetName = curve->yColumnPath().left(curve->yColumnPath().indexOf(QLatin1Char('/')));
+		spreadsheetName = curve->yColumnPath();
+		spreadsheetName.truncate(curve->yColumnPath().lastIndexOf(QLatin1Char('/')));
 		for (const auto* spreadsheet : spreadsheets) {
-			if (spreadsheet->name() == spreadsheetName) {
-				const QString& newPath = spreadsheet->parentAspect()->path() + '/' + curve->yColumnPath();
+			QString container, containerPath = spreadsheet->parentAspect()->path();
+			if (spreadsheetName.contains('/')) {	// part of a workbook
+				container = containerPath.mid(containerPath.lastIndexOf('/') + 1) + '/';
+				containerPath = containerPath.left(containerPath.lastIndexOf('/'));
+			}
+			if (container + spreadsheet->name() == spreadsheetName) {
+				const QString& newPath = containerPath + '/' + curve->yColumnPath();
 				curve->setYColumnPath(newPath);
 
 				for (auto* column : columns) {
@@ -236,7 +260,7 @@ bool OriginProjectParser::load(Project* project, bool preview) {
 				break;
 			}
 		}
-		//DEBUG(Q_FUNC_INFO << ", curve x/y COLUMNS = " << curve->xColumn() << "/" << curve->yColumn())
+		DEBUG(Q_FUNC_INFO << ", curve x/y COLUMNS = " << curve->xColumn() << "/" << curve->yColumn())
 
 		//TODO: error columns
 
@@ -360,7 +384,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 			break;
 		}
 		case Origin::ProjectNode::Excel: {
-			DEBUG(Q_FUNC_INFO << ", top level EXCEL");
+			DEBUG(Q_FUNC_INFO << ", top level WORKBOOK");
 			Workbook* workbook = new Workbook(name);
 			loadWorkbook(workbook, preview);
 			aspect = workbook;
@@ -410,21 +434,16 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 
 void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 	QDEBUG(Q_FUNC_INFO << ", paths to load:" << folder->pathesToLoad());
-	m_spreadNameList.removeDuplicates();
-	m_excelNameList.removeDuplicates();
-	m_matrixNameList.removeDuplicates();
-	m_graphNameList.removeDuplicates();
-	m_noteNameList.removeDuplicates();
-	QDEBUG("	spreads =" << m_spreadNameList);
-	QDEBUG("	excels =" << m_excelNameList);
+	QDEBUG("	spreads =" << m_spreadsheetNameList);
+	QDEBUG("	workbooks =" << m_workbookNameList);
 	QDEBUG("	matrices =" << m_matrixNameList);
-	QDEBUG("	graphs =" << m_graphNameList);
+	QDEBUG("	worksheets =" << m_worksheetNameList);
 	QDEBUG("	notes =" << m_noteNameList);
 
-	DEBUG("Number of spreads loaded:\t" << m_spreadNameList.size() << ", in file: " << m_originFile->spreadCount());
-	DEBUG("Number of excels loaded:\t" << m_excelNameList.size() << ", in file: " << m_originFile->excelCount());
+	DEBUG("Number of spreads loaded:\t" << m_spreadsheetNameList.size() << ", in file: " << m_originFile->spreadCount());
+	DEBUG("Number of excels loaded:\t" << m_workbookNameList.size() << ", in file: " << m_originFile->excelCount());
 	DEBUG("Number of matrices loaded:\t" << m_matrixNameList.size() << ", in file: " << m_originFile->matrixCount());
-	DEBUG("Number of graphs loaded:\t" << m_graphNameList.size() << ", in file: " << m_originFile->graphCount());
+	DEBUG("Number of graphs loaded:\t" << m_worksheetNameList.size() << ", in file: " << m_originFile->graphCount());
 	DEBUG("Number of notes loaded:\t\t" << m_noteNameList.size() << ", in file: " << m_originFile->noteCount());
 
 	// loop over all spreads to find loose ones
@@ -442,7 +461,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 
 		const QString childPath = folder->path() + '/' + name;
 		// we could also use spread.loose
-		if (!m_spreadNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
+		if (!m_spreadsheetNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose spread: " << STDSTRING(name));
 
 			Spreadsheet* spreadsheet = new Spreadsheet(name);
@@ -455,7 +474,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			aspect->setCreationTime(QDateTime::fromTime_t(spread.creationDate));
 		}
 	}
-	// loop over all excels to find loose ones
+	// loop over all workbooks to find loose ones
 	for (unsigned int i = 0; i < m_originFile->excelCount(); i++) {
 		AbstractAspect* aspect = nullptr;
 		const Origin::Excel& excel = m_originFile->excel(i);
@@ -470,7 +489,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 
 		const QString childPath = folder->path() + '/' + name;
 		// we could also use excel.loose
-		if (!m_excelNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
+		if (!m_workbookNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose excel: " << STDSTRING(name));
 			DEBUG("	 containing number of sheets = " << excel.sheets.size());
 
@@ -530,7 +549,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		}
 
 		const QString childPath = folder->path() + '/' + name;
-		if (!m_graphNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
+		if (!m_worksheetNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose graph: " << STDSTRING(name));
 			Worksheet* worksheet = new Worksheet(name);
 			loadWorksheet(worksheet, preview);
@@ -571,10 +590,11 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	DEBUG(Q_FUNC_INFO);
 	//load workbook sheets
-	const Origin::Excel& excel = m_originFile->excel(findExcelByName(workbook->name()));
-	DEBUG(Q_FUNC_INFO << " excel name = " << excel.name);
-	DEBUG(Q_FUNC_INFO << " number of sheets = " << excel.sheets.size());
+	const Origin::Excel& excel = m_originFile->excel(findWorkbookByName(workbook->name()));
+	DEBUG(Q_FUNC_INFO << ", workbook name = " << excel.name);
+	DEBUG(Q_FUNC_INFO << ", number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
+		DEBUG(Q_FUNC_INFO << ", LOADING SHEET " << excel.sheets[s].name.c_str())
 		Spreadsheet* spreadsheet = new Spreadsheet(QString::fromLatin1(excel.sheets[s].name.c_str()));
 		loadSpreadsheet(spreadsheet, preview, workbook->name(), s);
 		workbook->addChildFast(spreadsheet);
@@ -583,17 +603,18 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	return true;
 }
 
-// load spreadsheet from spread (sheetIndex == -1) or from excel (only sheet sheetIndex)
+// load spreadsheet from spread (sheetIndex == -1) or from workbook (only sheet sheetIndex)
+// name is the spreadsheet name (spread) or the workbook name (if inside a workbook)
 bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview, const QString& name, int sheetIndex) {
-	DEBUG("loadSpreadsheet() sheetIndex = " << sheetIndex);
+	DEBUG(Q_FUNC_INFO << ", own/workbook name = " << STDSTRING(name) << ", sheetIndex = " << sheetIndex);
 
 	//load spreadsheet data
 	Origin::SpreadSheet spread;
 	Origin::Excel excel;
 	if (sheetIndex == -1)	// spread
-		spread = m_originFile->spread(findSpreadByName(name));
+		spread = m_originFile->spread(findSpreadsheetByName(name));
 	else {
-		excel = m_originFile->excel(findExcelByName(name));
+		excel = m_originFile->excel(findWorkbookByName(name));
 		spread = excel.sheets.at(sheetIndex);
 	}
 
@@ -610,7 +631,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 	spreadsheet->setColumnCount((int)cols);
 	if (sheetIndex == -1)
 		spreadsheet->setComment(QString::fromLatin1(spread.label.c_str()));
-	else
+	else	// TODO: only first spread should get the comments
 		spreadsheet->setComment(QString::fromLatin1(excel.label.c_str()));
 
 	//in Origin column width is measured in characters, we need to convert to pixels
@@ -623,6 +644,7 @@ bool OriginProjectParser::loadSpreadsheet(Spreadsheet* spreadsheet, bool preview
 		Origin::SpreadColumn column = spread.columns[j];
 		Column* col = spreadsheet->column((int)j);
 
+		DEBUG(Q_FUNC_INFO << ", column " << j << ", name = " << column.name.c_str())
 		QString name(column.name.c_str());
 		col->setName(name.replace(QRegExp(".*_"), QString()));
 
@@ -966,11 +988,13 @@ bool OriginProjectParser::loadMatrix(Matrix* matrix, bool preview, size_t sheetI
 }
 
 bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
-	DEBUG(Q_FUNC_INFO << ", preview = " << preview);
+	DEBUG(Q_FUNC_INFO << ", preview = " << preview)
+	if (worksheet->parentAspect())
+		DEBUG(Q_FUNC_INFO << ", parent PATH " << STDSTRING(worksheet->parentAspect()->path()))
 
 	//load worksheet data
-	const Origin::Graph& graph = m_originFile->graph(findGraphByName(worksheet->name()));
-	DEBUG(Q_FUNC_INFO << ", graph name = " << graph.name);
+	const Origin::Graph& graph = m_originFile->graph(findWorksheetByName(worksheet->name()));
+	DEBUG(Q_FUNC_INFO << ", worksheet name = " << graph.name);
 	worksheet->setComment(graph.label.c_str());
 
 	//TODO: width, height, view mode (print view, page view, window view, draft view)
@@ -1019,6 +1043,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 	int index = 1;
 	for (const auto& layer : graph.layers) {
 		if (!layer.is3D()) {
+			DEBUG(Q_FUNC_INFO << ", NEW PLOT")
 			auto* plot = new CartesianPlot(i18n("Plot%1", QString::number(index)));
 			worksheet->addChildFast(plot);
 
@@ -1066,9 +1091,11 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			case Origin::GraphAxis::Log2:
 				plot->setXRangeScale(RangeT::Scale::Log2);
 				break;
+			case Origin::GraphAxis::Reciprocal:
+				plot->setXRangeScale(RangeT::Scale::Inverse);
+				break;
 			case Origin::GraphAxis::Probability:
 			case Origin::GraphAxis::Probit:
-			case Origin::GraphAxis::Reciprocal:
 			case Origin::GraphAxis::OffsetReciprocal:
 			case Origin::GraphAxis::Logit:
 				//TODO:
@@ -1089,9 +1116,11 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			case Origin::GraphAxis::Log2:
 				plot->setYRangeScale(RangeT::Scale::Log2);
 				break;
+			case Origin::GraphAxis::Reciprocal:
+				plot->setYRangeScale(RangeT::Scale::Inverse);
+				break;
 			case Origin::GraphAxis::Probability:
 			case Origin::GraphAxis::Probit:
-			case Origin::GraphAxis::Reciprocal:
 			case Origin::GraphAxis::OffsetReciprocal:
 			case Origin::GraphAxis::Logit:
 				//TODO:
@@ -1250,9 +1279,10 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			int curveIndex = 1;
 			for (const auto& originCurve : layer.curves) {
 				QString data(originCurve.dataName.c_str());
-				switch (data[0].toLatin1()) {
-				case 'T':
-				case 'E': {
+				DEBUG(Q_FUNC_INFO << ", NEW CURVE " << STDSTRING(data))
+				switch (data.at(0).toLatin1()) {
+				case 'T':	// Spreadsheet
+				case 'E': {	// Workbook
 					if (originCurve.type == Origin::GraphCurve::Line || originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol
 						|| originCurve.type == Origin::GraphCurve::ErrorBar || originCurve.type == Origin::GraphCurve::XErrorBar) {
 
@@ -1270,10 +1300,29 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 						//TODO: curve (legend) does not support HTML text yet.
 						//XYCurve* xyCurve = new XYCurve(curveText);
 						XYCurve* curve = new XYCurve(QString::fromLatin1(originCurve.yColumnName.c_str()));
-						const QString& tableName = data.right(data.length() - 2);
+						//DEBUG("CURVE path = " << STDSTRING(data))
+						QString containerName = data.right(data.length() - 2); // strip "E_" or "T_"
+						int sheetIndex = 0;	// which sheet? "@..."
+						const int atIndex = containerName.indexOf('@');
+						if (atIndex != -1) {
+							sheetIndex = containerName.mid(atIndex+1).toInt() - 1;
+							containerName.truncate(atIndex);
+						}
+						//DEBUG("CONTAINER = " << STDSTRING(containerName) << ", SHEET = " << sheetIndex)
+						int workbookIndex = findWorkbookByName(containerName);
+						// if workbook not found, findWorkbookByName() returns 0: check this
+						if (workbookIndex == 0 && (m_originFile->excelCount() == 0 || containerName.toStdString() != m_originFile->excel(0).name))
+							workbookIndex = -1;
+						//DEBUG("WORKBOOK  index = " << workbookIndex)
+						QString tableName = containerName;
+						if (workbookIndex != -1)	// container is a workbook
+							tableName = containerName + '/' + QLatin1String(m_originFile->excel(workbookIndex).sheets[sheetIndex].name.c_str());
+						//DEBUG("SPREADSHEET name = " << STDSTRING(tableName))
 						curve->setXColumnPath(tableName + '/' + originCurve.xColumnName.c_str());
 						curve->setYColumnPath(tableName + '/' + originCurve.yColumnName.c_str());
-						DEBUG(Q_FUNC_INFO << ", x column path = \"" << STDSTRING(curve->xColumnPath()) << "\"")
+						DEBUG(Q_FUNC_INFO << ", x/y column path = \""
+							<< STDSTRING(curve->xColumnPath()) << "\" \""
+							<< STDSTRING(curve->yColumnPath()) << "\"")
 
 						curve->suppressRetransform(true);
 						if (!preview)
@@ -1329,6 +1378,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 					plot->addChildFast(xyEqCurve);
 					xyEqCurve->suppressRetransform(false);
 				}
+				// TODO case 'M': Matrix
 				}
 
 				++curveIndex;
