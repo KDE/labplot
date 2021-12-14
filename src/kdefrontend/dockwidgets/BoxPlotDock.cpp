@@ -120,6 +120,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	}
 
 	//Validators
+	ui.leWhiskersRangeParameter->setValidator( new QDoubleValidator(ui.leWhiskersRangeParameter) );
 
 	//SLOTS
 	//Tab "General"
@@ -177,6 +178,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 
 	//Tab "Whiskers"
 	connect(ui.cbWhiskersType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersTypeChanged);
+	connect(ui.leWhiskersRangeParameter, &QLineEdit::textChanged, this, &BoxPlotDock::whiskersRangeParameterChanged);
 	connect(ui.cbWhiskersStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersStyleChanged);
 	connect(ui.kcbWhiskersColor, &KColorButton::changed, this, &BoxPlotDock::whiskersColorChanged);
 	connect(ui.sbWhiskersWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BoxPlotDock::whiskersWidthChanged);
@@ -277,6 +279,7 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 
 	//whiskers
 	connect(m_boxPlot, &BoxPlot::whiskersTypeChanged, this, &BoxPlotDock::plotWhiskersTypeChanged);
+	connect(m_boxPlot, &BoxPlot::whiskersRangeParameterChanged, this, &BoxPlotDock::plotWhiskersRangeParameterChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersPenChanged, this, &BoxPlotDock::plotWhiskersPenChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersOpacityChanged, this, &BoxPlotDock::plotWhiskersOpacityChanged);
 	connect(m_boxPlot, &BoxPlot::whiskersCapSizeChanged, this, &BoxPlotDock::plotWhiskersCapSizeChanged);
@@ -298,6 +301,7 @@ void BoxPlotDock::setModel() {
 void BoxPlotDock::updateLocale() {
 	SET_NUMBER_LOCALE
 	ui.sbBorderWidth->setLocale(numberLocale);
+	ui.leWhiskersRangeParameter->setLocale(numberLocale);
 
 // 	Lock lock(m_initializing);
 // 	ui.lePosition->setText(numberLocale.toString(m_boxPlot->position()));
@@ -799,6 +803,11 @@ void BoxPlotDock::whiskersTypeChanged(int index) const {
 	auto type = BoxPlot::WhiskersType(index);
 	ui.rbOutlier->setEnabled(type != BoxPlot::WhiskersType::MinMax);
 	ui.rbFarOut->setEnabled(type == BoxPlot::WhiskersType::IQR);
+
+	//range parameter 'k' only available for IQR(=Tukey)
+	ui.lWhiskersRangeParameter->setVisible(type == BoxPlot::WhiskersType::IQR);
+	ui.leWhiskersRangeParameter->setVisible(type == BoxPlot::WhiskersType::IQR);
+
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersType(type);
 }
@@ -814,6 +823,21 @@ void BoxPlotDock::whiskersStyleChanged(int index) const {
 		pen.setStyle(penStyle);
 		boxPlot->setWhiskersPen(pen);
 	}
+}
+
+void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) const {
+	if (m_initializing)
+		return;
+
+	bool ok;
+	SET_NUMBER_LOCALE
+	double value{numberLocale.toDouble(text, &ok)};
+	if (!ok)
+		return;
+
+
+	for (auto* boxPlot : m_boxPlots)
+		boxPlot->setWhiskersRangeParameter(value);
 }
 
 void BoxPlotDock::whiskersColorChanged(const QColor& color) {
@@ -1042,6 +1066,11 @@ void BoxPlotDock::plotWhiskersTypeChanged(BoxPlot::WhiskersType type) {
 	Lock lock(m_initializing);
 	ui.cbWhiskersType->setCurrentIndex((int)type);
 }
+void BoxPlotDock::plotWhiskersRangeParameterChanged(double value) {
+	Lock lock(m_initializing);
+	SET_NUMBER_LOCALE
+	ui.leWhiskersRangeParameter->setText(numberLocale.toString(value));
+}
 void BoxPlotDock::plotWhiskersPenChanged(QPen& pen) {
 	Lock lock(m_initializing);
 	if (ui.cbWhiskersStyle->currentIndex() != pen.style())
@@ -1128,6 +1157,8 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	//whiskers
 	const QPen& penWhiskers = m_boxPlot->whiskersPen();
 	ui.cbWhiskersType->setCurrentIndex( group.readEntry("WhiskersType", (int)m_boxPlot->whiskersType()) );
+	SET_NUMBER_LOCALE
+	ui.leWhiskersRangeParameter->setText( numberLocale.toString(m_boxPlot->whiskersRangeParameter()) );
 	ui.cbWhiskersStyle->setCurrentIndex( group.readEntry("WhiskersStyle", (int)penWhiskers.style()) );
 	ui.kcbWhiskersColor->setColor( group.readEntry("WhiskersColor", penWhiskers.color()) );
 	ui.sbWhiskersWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("WhiskersWidth", penWhiskers.widthF()), Worksheet::Unit::Point) );
@@ -1208,6 +1239,8 @@ void BoxPlotDock::saveConfigAsTemplate(KConfig& config) {
 
 	//whiskers
 	group.writeEntry("WhiskersType", ui.cbWhiskersType->currentIndex());
+	SET_NUMBER_LOCALE
+	group.writeEntry("WhiskersRangeParameter", numberLocale.toDouble(ui.leWhiskersRangeParameter->text()));
 	group.writeEntry("WhiskersStyle", ui.cbWhiskersStyle->currentIndex());
 	group.writeEntry("WhiskersColor", ui.kcbWhiskersColor->color());
 	group.writeEntry("WhiskersWidth", Worksheet::convertToSceneUnits(ui.sbWhiskersWidth->value(), Worksheet::Unit::Point));

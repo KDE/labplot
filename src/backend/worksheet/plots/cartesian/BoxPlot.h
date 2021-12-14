@@ -83,6 +83,7 @@ public:
 
 	//whiskers
 	BASIC_D_ACCESSOR_DECL(BoxPlot::WhiskersType, whiskersType, WhiskersType)
+	BASIC_D_ACCESSOR_DECL(double, whiskersRangeParameter, WhiskersRangeParameter)
 	CLASS_D_ACCESSOR_DECL(QPen, whiskersPen, WhiskersPen)
 	BASIC_D_ACCESSOR_DECL(qreal, whiskersOpacity, WhiskersOpacity)
 	BASIC_D_ACCESSOR_DECL(double, whiskersCapSize, WhiskersCapSize)
@@ -162,6 +163,7 @@ signals:
 
 	//whiskers
 	void whiskersTypeChanged(BoxPlot::WhiskersType);
+	void whiskersRangeParameterChanged(double);
 	void whiskersPenChanged(QPen&);
 	void whiskersOpacityChanged(float);
 	void whiskersCapSizeChanged(double);

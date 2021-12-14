@@ -60,6 +60,7 @@ void BoxPlot::init() {
 	//general
 	d->ordering = (BoxPlot::Ordering) group.readEntry("Ordering", (int)BoxPlot::Ordering::None);
 	d->whiskersType = (BoxPlot::WhiskersType) group.readEntry("WhiskersType", (int)BoxPlot::WhiskersType::IQR);
+	d->whiskersRangeParameter= group.readEntry("WhiskersIQRParameter", 1.5);
 	d->orientation = (BoxPlot::Orientation) group.readEntry("Orientation", (int)BoxPlot::Orientation::Vertical);
 	d->variableWidth = group.readEntry("VariableWidth", false);
 	d->widthFactor = group.readEntry("WidthFactor", 1.0);
@@ -284,6 +285,7 @@ Symbol* BoxPlot::symbolData() const {
 
 //whiskers
 BASIC_SHARED_D_READER_IMPL(BoxPlot, BoxPlot::WhiskersType, whiskersType, whiskersType)
+BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersRangeParameter, whiskersRangeParameter)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, QPen, whiskersPen, whiskersPen)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, qreal, whiskersOpacity, whiskersOpacity)
 BASIC_SHARED_D_READER_IMPL(BoxPlot, double, whiskersCapSize, whiskersCapSize)
@@ -477,10 +479,16 @@ void BoxPlot::setMedianLineOpacity(qreal opacity) {
 //whiskers
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersType, BoxPlot::WhiskersType, whiskersType, recalc)
 void BoxPlot::setWhiskersType(BoxPlot::WhiskersType type) {
-	DEBUG(Q_FUNC_INFO)
 	Q_D(BoxPlot);
 	if (type != d->whiskersType)
 		exec(new BoxPlotSetWhiskersTypeCmd(d, type, ki18n("%1: set whiskers type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersRangeParameter, double, whiskersRangeParameter, recalc)
+void BoxPlot::setWhiskersRangeParameter(double k) {
+	Q_D(BoxPlot);
+	if (k != d->whiskersRangeParameter)
+		exec(new BoxPlotSetWhiskersRangeParameterCmd(d, k, ki18n("%1: set whiskers range parameter")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetWhiskersPen, QPen, whiskersPen, recalcShapeAndBoundingRect)
@@ -789,8 +797,8 @@ void BoxPlotPrivate::recalc(int index) {
 		break;
 	}
 	case BoxPlot::WhiskersType::IQR: {
-		m_whiskerMax[index] = statistics.thirdQuartile + 1.5*statistics.iqr;
-		m_whiskerMin[index] = statistics.firstQuartile - 1.5*statistics.iqr;
+		m_whiskerMax[index] = statistics.thirdQuartile + whiskersRangeParameter*statistics.iqr;
+		m_whiskerMin[index] = statistics.firstQuartile - whiskersRangeParameter*statistics.iqr;
 		break;
 	}
 	case BoxPlot::WhiskersType::SD: {
@@ -1716,6 +1724,7 @@ void BoxPlot::save(QXmlStreamWriter* writer) const {
 	//whiskers
 	writer->writeStartElement("whiskers");
 	writer->writeAttribute("type", QString::number(static_cast<int>(d->whiskersType)));
+	writer->writeAttribute("rangeParameter", QString::number(d->whiskersRangeParameter));
 	WRITE_QPEN(d->whiskersPen);
 	writer->writeAttribute("opacity", QString::number(d->whiskersOpacity));
 	writer->writeEndElement();
@@ -1843,6 +1852,7 @@ bool BoxPlot::load(XmlStreamReader* reader, bool preview) {
 			attribs = reader->attributes();
 
 			READ_INT_VALUE("type", whiskersType, BoxPlot::WhiskersType);
+			READ_DOUBLE_VALUE("rangeParameter", whiskersRangeParameter);
 			READ_QPEN(d->whiskersPen);
 			READ_DOUBLE_VALUE("opacity", whiskersOpacity);
 			READ_DOUBLE_VALUE("capSize", whiskersCapSize);

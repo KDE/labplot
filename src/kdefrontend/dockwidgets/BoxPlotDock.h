@@ -93,6 +93,7 @@ private slots:
 
 	//whiskers
 	void whiskersTypeChanged(int) const;
+	void whiskersRangeParameterChanged(const QString&) const;
 	void whiskersStyleChanged(int) const;
 	void whiskersColorChanged(const QColor&);
 	void whiskersWidthChanged(double) const;
@@ -138,6 +139,7 @@ private slots:
 
 	//whiskers
 	void plotWhiskersTypeChanged(BoxPlot::WhiskersType);
+	void plotWhiskersRangeParameterChanged(double);
 	void plotWhiskersPenChanged(QPen&);
 	void plotWhiskersOpacityChanged(float);
 	void plotWhiskersCapSizeChanged(double);

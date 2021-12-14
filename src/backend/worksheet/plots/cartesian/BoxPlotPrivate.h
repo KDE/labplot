@@ -86,6 +86,7 @@ public:
 
 	//whiskers
 	BoxPlot::WhiskersType whiskersType{BoxPlot::WhiskersType::IQR};
+	double whiskersRangeParameter; //Tukey's parameter k controlling the range of the whiskers, usually k=1.5
 	QPen whiskersPen;
 	qreal whiskersOpacity;
 	double whiskersCapSize;
