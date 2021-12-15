@@ -594,7 +594,7 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	DEBUG(Q_FUNC_INFO << ", workbook name = " << excel.name);
 	DEBUG(Q_FUNC_INFO << ", number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
-		DEBUG(Q_FUNC_INFO << ", LOADING SHEET " << excel.sheets[s].name.c_str())
+		// DEBUG(Q_FUNC_INFO << ", LOADING SHEET " << excel.sheets[s].name.c_str())
 		Spreadsheet* spreadsheet = new Spreadsheet(QString::fromLatin1(excel.sheets[s].name.c_str()));
 		loadSpreadsheet(spreadsheet, preview, workbook->name(), s);
 		workbook->addChildFast(spreadsheet);
@@ -1678,11 +1678,12 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	if (originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		//try to map the different symbols, mapping is not exact
 		symbol->setRotationAngle(0);
-		switch (originCurve.symbolShape) {
+		//TODO: use new symbols
+		switch (originCurve.symbolShape) {	// see https://www.originlab.com/doc/Labtalk/Ref/List-of-Symbol-Shapes
 		case 0: //NoSymbol
 			symbol->setStyle(Symbol::Style::NoSymbols);
 			break;
-		case 1: //Rect
+		case 1: //Square
 			symbol->setStyle(Symbol::Style::Square);
 			break;
 		case 2: //Ellipse
@@ -1694,6 +1695,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			break;
 		case 4: //DTriangle
 			symbol->setStyle(Symbol::Style::EquilateralTriangle);
+			symbol->setRotationAngle(180);
 			break;
 		case 5: //Diamond
 			symbol->setStyle(Symbol::Style::Diamond);
@@ -1703,9 +1705,10 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			break;
 		case 7: //Cross x
 			symbol->setStyle(Symbol::Style::Cross);
+			symbol->setRotationAngle(45);
 			break;
 		case 8: //Snow
-			symbol->setStyle(Symbol::Style::Star4);
+			symbol->setStyle(Symbol::Style::XPlus);
 			break;
 		case 9: //Horizontal -
 			symbol->setStyle(Symbol::Style::Line);
@@ -1716,23 +1719,28 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			break;
 		case 15: //LTriangle
 			symbol->setStyle(Symbol::Style::EquilateralTriangle);
+			symbol->setRotationAngle(90);
 			break;
 		case 16: //RTriangle
 			symbol->setStyle(Symbol::Style::EquilateralTriangle);
+			symbol->setRotationAngle(-90);
 			break;
 		case 17: //Hexagon
-		case 19: //Pentagon
-			symbol->setStyle(Symbol::Style::Square);
+			symbol->setStyle(Symbol::Style::Hexagon);
 			break;
 		case 18: //Star
-			symbol->setStyle(Symbol::Style::Star5);
+			symbol->setStyle(Symbol::Style::Star);
+			break;
+		case 19: //Pentagon
+			symbol->setStyle(Symbol::Style::Pentagon);
 			break;
 		default:
 			symbol->setStyle(Symbol::Style::NoSymbols);
 		}
 
 		//symbol size
-		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize, Worksheet::Unit::Point));
+		const double scaleFactor = 0.5;	// match size
+		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize * scaleFactor, Worksheet::Unit::Point));
 
 		//symbol fill color
 		QBrush brush = symbol->brush();
@@ -2109,8 +2117,7 @@ QString OriginProjectParser::replaceSpecialChars(const QString& text) const {
  * https://doc.qt.io/qt-5/richtext-html-subset.html
  */
 QString OriginProjectParser::parseOriginTags(const QString& str) const {
-	DEBUG("parseOriginTags()");
-	DEBUG("	string: " << STDSTRING(str));
+	DEBUG(Q_FUNC_INFO << ", string = " << STDSTRING(str));
 	QDEBUG("	UTF8 string: " << str.toUtf8());
 	QString line = str;
 
