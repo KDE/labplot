@@ -884,7 +884,7 @@ void BoxPlotPrivate::recalc(int index) {
 			if (whiskersType == BoxPlot::WhiskersType::IQR && (value > outerFenceMax || value < outerFenceMin))
 				m_farOutPointsLogical[index] << setOutlierPoint(x - width/2 + rand*width, value);
 			else
-				m_outlierPointsLogical[index] << setOutlierPoint(x - width/2 + rand*width, value);;
+				m_outlierPointsLogical[index] << setOutlierPoint(x - width/2 + rand*width, value);
 		} else {
 			if (orientation == BoxPlot::Orientation::Vertical)
 				m_dataPointsLogical[index] << QPointF(x - width/2 + rand*width, value);
@@ -895,7 +895,8 @@ void BoxPlotPrivate::recalc(int index) {
 			if (whiskersType == BoxPlot::WhiskersType::IQR) {
 				if (value > whiskerMax)
 					whiskerMax = value;
-				else if (value < whiskerMin)
+
+				if (value < whiskerMin)
 					whiskerMin = value;
 			}
 		}
