@@ -264,7 +264,7 @@ void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
  */
 bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
 	bool success = true;
-	for (auto mp : markerpoints) {
+	for (auto& mp : markerpoints) {
 		for (auto curve : curves) {
 			if(mp.curvePath == curve->path()) {
 				mp.curve = curve;
@@ -845,7 +845,7 @@ void InfoElementPrivate::retransform() {
 	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
 	const QPointF pointPosItemCoords = mapFromParent(pointPos); // calculate item coords from scene coords
 	if (boundingRectangle.contains(m_titlePosItemCoords) && boundingRectangle.contains(pointPosItemCoords))
-		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(), 
+		connectionLine = QLineF(m_titlePosItemCoords.x(), m_titlePosItemCoords.y(),
 					pointPosItemCoords.x(), pointPosItemCoords.y());
 	else
 		connectionLine = QLineF();

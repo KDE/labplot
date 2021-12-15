@@ -673,7 +673,10 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 							return false;
 					} else if (!preview && reader->name() == "state") {
 						//load the state of the views (visible, maximized/minimized/geometry)
-						//and the state of the project explorer (expanded items, currently selected item)
+						//and the state of the project explorer (expanded items, currently selected item).
+						//"state" is read at the very end of XML, restore the pointers here so the current index
+						//can be properly selected in ProjectExplorer after requestLoadState() is called.
+						restorePointers(this, preview);
 						emit requestLoadState(reader);
 					} else {
 						if (!preview)
@@ -686,9 +689,6 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 			reader->raiseError(i18n("no project element found"));
 	} else  // no start document
 		reader->raiseError(i18n("no valid XML document found"));
-
-	//everything is read now, restore the pointers
-	restorePointers(this, preview);
 
 	return !reader->hasError();
 }
