@@ -17,6 +17,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/Symbol.h"
+#include "backend/core/Project.h"
 #include "backend/lib/commandtemplates.h"
 #include "backend/lib/XmlStreamReader.h"
 
@@ -316,6 +317,12 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 			if (!readCommentElement(reader)) return false;
 		} else if (!preview && reader->name() == "geometry") {
 			WorksheetElement::load(reader);
+			if (project()->xmlVersion() < 6) {
+				// In version 5 and smaller the position in the file was always a logical position
+				d->positionLogical = d->position.point;
+				d->position.point = QPointF(0,0);
+				d->coordinateBindingEnabled = true;
+			}
 		} else if (!preview && reader->name() == "symbol") {
 			d->symbol->load(reader, preview);
 		} else { // unknown element
