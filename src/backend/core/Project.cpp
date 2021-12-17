@@ -716,10 +716,13 @@ void Project::retransformElements(AbstractAspect* aspect) {
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
 	}
 
-	// TODO: do it for all childs!
+	auto childs = aspect->project()->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+	for (auto child: childs) {
+		child->setIsLoading(false);
+	}
+
 	for (auto* plot : plots) {
-		plot->setIsLoading(false);
-		plot->retransform();
+		plot->retransform(); // retransforms recursive
 	}
 
 #ifndef SDK
