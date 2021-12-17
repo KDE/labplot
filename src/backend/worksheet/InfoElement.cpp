@@ -855,8 +855,7 @@ void InfoElementPrivate::retransform() {
 
 	//new item position
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-	QPointF itemPos(qMin(rect.top(), rect.bottom()), qMin(rect.left(), rect.right()));
-	setPos(itemPos);
+	setPos(QPointF(0,0));
 	update(boundingRectangle);
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 
