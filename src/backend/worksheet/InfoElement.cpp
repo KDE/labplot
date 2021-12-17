@@ -718,6 +718,7 @@ void InfoElement::setPositionLogical(double pos) {
 		m_title->setText(createTextLabelText());
 		m_title->setUndoAware(true);
 		retransform();
+		positionLogicalChanged(d->positionLogical);
 	}
 }
 
