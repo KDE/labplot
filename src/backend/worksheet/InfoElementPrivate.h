@@ -32,7 +32,6 @@ public:
 	//reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 	void keyPressEvent(QKeyEvent*) override;
 	void mousePressEvent(QGraphicsSceneMouseEvent*) override;
 	void mouseMoveEvent(QGraphicsSceneMouseEvent*) override;

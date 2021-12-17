@@ -924,10 +924,6 @@ void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 #endif
 }
 
-QVariant InfoElementPrivate::itemChange(GraphicsItemChange change, const QVariant &value) {
-	return QGraphicsItem::itemChange(change, value);
-}
-
 void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	if (event->button() == Qt::MouseButton::LeftButton) {
 		if (verticalLinePen.style() != Qt::NoPen) {
