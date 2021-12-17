@@ -432,10 +432,6 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			if (!reader->skipToEndElement()) return false;
 		}
 	}
-
-	if (!preview)
-		retransform();
-
 	return true;
 }
 
