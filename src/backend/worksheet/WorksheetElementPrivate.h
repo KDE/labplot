@@ -53,4 +53,4 @@ public:
 	QPointF mapPlotAreaToParent(QPointF);
 };
 
-#endif WORKSHEETELEMENTPRIVATE
+#endif //WORKSHEETELEMENTPRIVATE
