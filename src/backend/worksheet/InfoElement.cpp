@@ -898,7 +898,6 @@ QRectF InfoElementPrivate::boundingRect() const {
 	return boundingRectangle;
 }
 
-#define INFOELEMENT_DRAW_BOUNDING_RECT 0
 void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*) {
 	if (!visible)
 		return;
@@ -917,12 +916,6 @@ void InfoElementPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem
 		painter->setPen(verticalLinePen);
 		painter->drawLine(xposLine);
 	}
-#if INFOELEMENT_DRAW_BOUNDING_RECT == 1
-	QPen p;
-	p.setColor(QColor(Qt::red));
-	painter->setPen(p);
-	painter->drawRect(boundingRect());
-#endif
 }
 
 void InfoElementPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {

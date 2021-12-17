@@ -188,7 +188,7 @@ protected:
 
 private:
 	Q_DECLARE_PRIVATE(Axis)
-	void init(Orientation orientation);
+	void init(Orientation);
 	void initActions();
 	void initMenus();
 

@@ -333,62 +333,6 @@ void ReferenceLinePrivate::paint(QPainter* painter, const QStyleOptionGraphicsIt
 	}
 }
 
-QVariant ReferenceLinePrivate::itemChange(GraphicsItemChange change, const QVariant &value) {
-	if (suppressItemChangeEvent)
-		return value;
-
-	// TODO: limit to the borders is not implemented yet
-	// For that AbstractCoordinateSystem::MappingFlag::Limit
-	// must be set
-	return WorksheetElementPrivate::itemChange(change, value);
-
-//	if (change != QGraphicsItem::ItemPositionChange)
-//		return QGraphicsItem::itemChange(change, value);
-
-//	QPointF positionSceneNew = value.toPointF();
-
-//	//don't allow to move the line outside of the plot rect
-//	//in the direction orthogonal to the orientation of the line
-//	if (orientation == ReferenceLine::Orientation::Horizontal) {
-//		if (positionSceneNew.x() != positionScene.x())
-//			positionSceneNew.setX(positionScene.x());
-//	} else {
-//		if (positionSceneNew.y() != positionScene.y())
-//			positionSceneNew.setY(positionScene.y());
-//	}
-
-//	if (q->m_plot->dataRect().contains(positionSceneNew)) {
-//		//emit the signals in order to notify the UI (dock widget and status bar) about the new logical position.
-//		//we don't set the position related member variables during the mouse movements.
-//		//this is done on mouse release events only.
-//		//TODO
-//		const auto* cSystem{ q->m_plot->defaultCoordinateSystem() };
-//		QPointF positionLogical = cSystem->mapSceneToLogical(positionSceneNew);
-//		if (orientation == ReferenceLine::Orientation::Horizontal) {
-//			emit q->positionChanged(positionLogical.y());
-//			emit q->statusInfo(QLatin1String("y=") + QString::number(positionLogical.y()));
-//		} else {
-//			emit q->positionChanged(positionLogical.x());
-//			emit q->statusInfo(QLatin1String("x=") + QString::number(positionLogical.x()));
-//		}
-//	} else {
-//		//line is moved outside of the plot, keep it at the plot boundary
-//		if (orientation == ReferenceLine::Orientation::Horizontal) {
-//			if (positionSceneNew.y() < q->m_plot->dataRect().y())
-//				positionSceneNew.setY(q->m_plot->dataRect().y());
-//			else
-//				positionSceneNew.setY(q->m_plot->dataRect().y() + q->m_plot->dataRect().height());
-//		} else {
-//			if (positionSceneNew.x() < q->m_plot->dataRect().x())
-//				positionSceneNew.setX(q->m_plot->dataRect().x());
-//			else
-//				positionSceneNew.setX(q->m_plot->dataRect().x() + q->m_plot->dataRect().width());
-//		}
-//	}
-
-//	return QGraphicsItem::itemChange(change, QVariant(positionSceneNew));
-}
-
 void ReferenceLinePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 	q->createContextMenu()->exec(event->screenPos());
 }

@@ -33,7 +33,6 @@ class WorksheetElement : public AbstractAspect {
 	Q_OBJECT
 
 public:
-//	WorksheetElement(const QString&, AspectType);
 	~WorksheetElement() override;
 
 	enum class Orientation {Horizontal, Vertical, Both};
@@ -57,7 +56,6 @@ public:
 	typedef WorksheetElementPrivate Private;
 
 	CLASS_D_ACCESSOR_DECL(PositionWrapper, position, Position)
-// 	BASIC_D_ACCESSOR_DELC(bool, coordinateBindingEnabled, CoordinateBindingEnabled)
 	void setCoordinateBindingEnabled(bool);
 	bool coordinateBindingEnabled() const;
 	BASIC_D_ACCESSOR_DECL(QPointF, positionLogical, PositionLogical)

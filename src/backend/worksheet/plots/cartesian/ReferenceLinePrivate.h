@@ -41,7 +41,6 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
-	QVariant itemChange(GraphicsItemChange change, const QVariant& value) override;
 
 	ReferenceLine* const q;
 
