@@ -421,6 +421,10 @@ QPainterPath CartesianPlotLegendPrivate::shape() const {
 	return path;
 }
 
+void CartesianPlotLegendPrivate::recalcShapeAndBoundingRect() {
+	retransform();
+}
+
 /*!
   recalculates the rectangular of the legend.
 */
