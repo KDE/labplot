@@ -809,6 +809,12 @@ void InfoElementPrivate::retransform() {
 
 	q->m_suppressChildPositionChanged = true;
 
+	//new bounding rectangle
+	const QRectF& rect = parentItem()->mapRectFromScene(q->plot()->rect());
+	boundingRectangle = mapFromParent(rect).boundingRect();
+	QDEBUG(Q_FUNC_INFO << ", rect = " << rect)
+	QDEBUG(Q_FUNC_INFO << ", bounding rect = " << boundingRectangle)
+
 	// TODO: why do I need to retransform the label and the custompoints?
 	q->m_title->retransform();
 	for (auto& markerpoint : q->markerpoints)
@@ -833,12 +839,6 @@ void InfoElementPrivate::retransform() {
 	else
 		m_titlePos = q->m_title->gluePointAt(gluePointIndex).point;
 
-	//new bounding rectangle
-	const QRectF& rect = q->m_plot->dataRect();
-	boundingRectangle = mapFromParent(rect).boundingRect();
-	QDEBUG(Q_FUNC_INFO << ", rect = " << rect)
-	QDEBUG(Q_FUNC_INFO << ", bounding rect = " << boundingRectangle)
-
 	//connection line
 	const QPointF m_titlePosItemCoords = mapFromParent(m_titlePos); // calculate item coords from scene coords
 	const QPointF pointPosItemCoords = mapFromParent(mapPlotAreaToParent(pointPos)); // calculate item coords from scene coords
@@ -850,7 +850,8 @@ void InfoElementPrivate::retransform() {
 	QDEBUG(Q_FUNC_INFO << ", connection line = " << connectionLine)
 
 	//vertical line
-	xposLine = QLineF(pointPosItemCoords.x(), boundingRectangle.bottom(), pointPosItemCoords.x(), boundingRectangle.top());
+	QRectF dataRect = mapFromParent(q->m_plot->dataRect()).boundingRect();
+	xposLine = QLineF(pointPosItemCoords.x(), dataRect.bottom(), pointPosItemCoords.x(), dataRect.top());
 	QDEBUG(Q_FUNC_INFO << ", vertical line " << xposLine)
 
 	//new item position
