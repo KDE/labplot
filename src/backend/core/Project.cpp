@@ -762,13 +762,6 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	}
 #endif
 
-	const auto& children = aspect->project()->children<WorksheetElement>();
-	for (auto child: children) {
-		child->setIsLoading(false);
-		child->retransform();
-		child->retransformChilds();
-	}
-
 	//loop over all affected plots and retransform them
 	for (auto* plot : plots) {
 		plot->setSuppressDataChangedSignal(false);

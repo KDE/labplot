@@ -123,13 +123,6 @@ bool WorksheetElement::isPrinting() const {
 	return m_printing;
 }
 
-void WorksheetElement::retransformChilds() {
-	auto childs = children<WorksheetElement>();
-	for (auto child: childs) {
-		child->retransform();
-	}
-}
-
 void WorksheetElement::setZValue(qreal value) {
 	graphicsItem()->setZValue(value);
 }

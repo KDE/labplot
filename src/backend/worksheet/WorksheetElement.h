@@ -65,7 +65,6 @@ public:
 	BASIC_D_ACCESSOR_DECL(qreal, rotationAngle, RotationAngle)
 
 	void finalizeAdd() override;
-	void retransformChilds();
 
 	virtual QGraphicsItem* graphicsItem() const = 0;
 	virtual void setZValue(qreal);
