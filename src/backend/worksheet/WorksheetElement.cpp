@@ -677,9 +677,10 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			tempPosition.point = point;
 			q->setPosition(tempPosition);
 		}
+		event->accept();
+	} else {
+		QGraphicsItem::keyPressEvent(event);
 	}
-
-	QGraphicsItem::keyPressEvent(event);
 }
 
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
