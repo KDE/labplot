@@ -849,28 +849,6 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 	}
 }
 
-QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const QVariant &value) {
-	if (suppressItemChangeEvent)
-		return value;
-
-	if (change == QGraphicsItem::ItemPositionChange) {
-		//convert item's center point in parent's coordinates
-		WorksheetElement::PositionWrapper tempPosition;
-			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), rect, position,
-														WorksheetElement::HorizontalAlignment::Center,
-														WorksheetElement::VerticalAlignment::Center);
-		tempPosition.horizontalPosition = position.horizontalPosition;
-		tempPosition.verticalPosition = position.verticalPosition;
-
-		//emit the signals in order to notify the UI.
-		//we don't set the position related member variables during the mouse movements.
-		//this is done on mouse release events only.
-		emit q->positionChanged(tempPosition);
-	 }
-
-	return QGraphicsItem::itemChange(change, value);
-}
-
 void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;

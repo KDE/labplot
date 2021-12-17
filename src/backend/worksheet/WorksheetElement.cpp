@@ -684,7 +684,7 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
 	const QPointF point = q->parentPosToRelativePos(pos(),
-													boundingRectangle, position,
+													boundingRect(), position,
 													horizontalAlignment, verticalAlignment);
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
