@@ -151,7 +151,8 @@ const CartesianPlot* CustomPointPrivate::plot() {
  */
 void CustomPointPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (suppressRetransform || q->isLoading())
+	assert(!q->isLoading());
+	if (suppressRetransform)
 		return;
 
 	QPointF p;

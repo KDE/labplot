@@ -718,7 +718,10 @@ void Project::retransformElements(AbstractAspect* aspect) {
 			// the plots will then recursive retransform the childs of them
 			auto elements = child->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
 			for (auto e: elements) {
-				e->retransform();
+				if (e->type() == AspectType::CartesianPlot)
+					static_cast<CartesianPlot*>(e)->retransformAll();
+				else
+					e->retransform();
 			}
 		}
 	} else {

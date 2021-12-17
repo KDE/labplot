@@ -429,7 +429,8 @@ void CartesianPlotLegendPrivate::recalcShapeAndBoundingRect() {
   recalculates the rectangular of the legend.
 */
 void CartesianPlotLegendPrivate::retransform() {
-	if (suppressRetransform || !plot || q->isLoading())
+	assert(!q->isLoading());
+	if (suppressRetransform || !plot)
 		return;
 
 	prepareGeometryChange();

@@ -849,7 +849,8 @@ void HistogramPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void HistogramPrivate::retransform() {
-	if (m_suppressRetransform || q->isLoading())
+	assert(!q->isLoading());
+	if (m_suppressRetransform)
 		return;
 
 	if (!isVisible())

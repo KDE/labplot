@@ -184,6 +184,7 @@ public:
 
 public slots:
 	void setTheme(const QString&);
+	void retransformAll();
 
 private:
 	void init();

@@ -131,11 +131,11 @@ void InfoElement::init() {
 	connect(this, &InfoElement::aspectAdded, this, &InfoElement::childAdded);
 
 	m_title = new TextLabel(i18n("Label"), m_plot);
-	addChild(m_title);
 	m_title->setHidden(true);
 	TextLabel::TextWrapper text;
 	text.allowPlaceholder = true;
 	m_title->setText(text); // set placeholder to true
+	addChild(m_title);
 
 	//use the color for the axis line from the theme also for info element's lines
 	KConfig config;
@@ -284,7 +284,6 @@ bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
 		}
 	}
 
-	retransform();
 	return success;
 }
 
@@ -805,7 +804,8 @@ void InfoElementPrivate::init() {
  */
 void InfoElementPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (!q->m_title || q->markerpoints.isEmpty() || q->isLoading())
+	assert(!q->isLoading());
+	if (!q->m_title || q->markerpoints.isEmpty())
 		return;
 
 	q->m_suppressChildPositionChanged = true;

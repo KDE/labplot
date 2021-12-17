@@ -1677,6 +1677,12 @@ void CartesianPlot::setTheme(const QString& theme) {
 	}
 }
 
+void CartesianPlot::retransformAll() {
+	Q_D(CartesianPlot);
+	d->retransform();
+	WorksheetElementContainer::retransform();
+}
+
 //################################################################
 //########################## Slots ###############################
 //################################################################
@@ -3370,7 +3376,8 @@ CartesianPlotPrivate::~CartesianPlotPrivate() = default;
  */
 void CartesianPlotPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (suppressRetransform) // || q->isloading() is not needed here, otherwise this function will not called when loading a project
+	assert(!q->isLoading());
+	if (suppressRetransform)
 		return;
 
 	PERFTRACE("CartesianPlotPrivate::retransform()");
@@ -5433,8 +5440,6 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 
 	if (preview)
 		return true;
-
-	d->retransform();
 
 	//if a theme was used, initialize the color palette
 	if (!d->theme.isEmpty()) {
