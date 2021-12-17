@@ -66,6 +66,7 @@ public:
 
 	QString name() const;
 	void retransform();
+	void updateBoundingRect();
 	void setZoomFactor(double);
 	bool swapVisible(bool on);
 	virtual void recalcShapeAndBoundingRect();
@@ -109,7 +110,6 @@ private:
 
 	QPointF mapPlotAreaToParent(QPointF);
 	QPointF mapParentToPlotArea(QPointF);
-	void updateBoundingRect();
 };
 
 #endif
