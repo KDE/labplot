@@ -1396,12 +1396,12 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		return true;
 
 	//in case we use latex and the image was stored (older versions of LabPlot didn't save the image)and loaded,
-	//we just need to retransform.
-	//otherwise, we set the static text and retransform in updateText()
+	//we just need to call updateBoundingRect() to calculate the new rect.
+	//otherwise, we set the static text and call updateBoundingRect() in updateText()
 	if ( !(d->textWrapper.mode == TextLabel::Mode::LaTeX && teXImageFound) )
 		d->updateText();
 	else
-		retransform();
+		d->updateBoundingRect();
 
 	return true;
 }
