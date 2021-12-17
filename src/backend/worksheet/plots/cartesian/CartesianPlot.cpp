@@ -3370,7 +3370,7 @@ CartesianPlotPrivate::~CartesianPlotPrivate() = default;
  */
 void CartesianPlotPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (suppressRetransform || q->isLoading())
+	if (suppressRetransform) // || q->isloading() is not needed here, otherwise this function will not called when loading a project
 		return;
 
 	PERFTRACE("CartesianPlotPrivate::retransform()");
