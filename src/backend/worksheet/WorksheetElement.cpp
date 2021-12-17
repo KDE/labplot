@@ -343,7 +343,8 @@ QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment ho
 
 QRectF WorksheetElement::parentRect() const {
 	QRectF rect;
-	if (plot()) {
+	auto parent = parentAspect();
+	if (parent && parent->type() == AspectType::CartesianPlot && plot()) {
 		if (type() != AspectType::Axis)
 			rect = plot()->graphicsItem()->mapRectFromScene(plot()->rect());
 		else
