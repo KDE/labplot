@@ -486,8 +486,8 @@ void CartesianPlotLegendDock::rotationChanged(int value) {
 	if (m_initializing)
 		return;
 
-	for (auto* curve : m_legendList)
-		curve->setRotationAngle(value);
+	for (auto* legend : m_legendList)
+		legend->setRotationAngle(value);
 }
 
 /*!
@@ -511,11 +511,11 @@ void CartesianPlotLegendDock::bindingChanged(bool checked) {
 		ui.lPositionXLogicalDateTime->setVisible(checked);
 		ui.dtePositionXLogical->setVisible(checked);
 
-		ui.lPositionXLogical->setVisible(!checked);
-		ui.lePositionXLogical->setVisible(!checked);
+		ui.lPositionXLogical->setVisible(false);
+		ui.lePositionXLogical->setVisible(false);
 	} else {
-		ui.lPositionXLogicalDateTime->setVisible(!checked);
-		ui.dtePositionXLogical->setVisible(!checked);
+		ui.lPositionXLogicalDateTime->setVisible(false);
+		ui.dtePositionXLogical->setVisible(false);
 
 		ui.lPositionXLogical->setVisible(checked);
 		ui.lePositionXLogical->setVisible(checked);

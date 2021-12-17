@@ -1106,11 +1106,11 @@ void LabelWidget::bindingChanged(bool checked) {
 		ui.lPositionXLogicalDateTime->setVisible(checked);
 		ui.dtePositionXLogical->setVisible(checked);
 
-		ui.lPositionXLogical->setVisible(!checked);
-		ui.lePositionXLogical->setVisible(!checked);
+		ui.lPositionXLogical->setVisible(false);
+		ui.lePositionXLogical->setVisible(false);
 	} else {
-		ui.lPositionXLogicalDateTime->setVisible(!checked);
-		ui.dtePositionXLogical->setVisible(!checked);
+		ui.lPositionXLogicalDateTime->setVisible(false);
+		ui.dtePositionXLogical->setVisible(false);
 
 		ui.lPositionXLogical->setVisible(checked);
 		ui.lePositionXLogical->setVisible(checked);
