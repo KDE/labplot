@@ -2525,8 +2525,8 @@ bool XYFitCurve::load(XmlStreamReader* reader, bool preview) {
 		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
 		d->residualsVector = static_cast<QVector<double>* >(d->residualsColumn->data());
 
-		D_OBJ(XYCurve)->xColumn = d->xColumn;
-		D_OBJ(XYCurve)->yColumn = d->yColumn;
+		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
+		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
 		recalcLogicalPoints();
 	}

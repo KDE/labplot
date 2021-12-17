@@ -17,7 +17,6 @@
 #include "backend/core/AbstractAspect.h"
 #include <QPainterPath>
 
-#define D_OBJ(obj_class) static_cast<obj_class##Private*>(d_ptr)
 #define D(obj_class) auto * d = static_cast<obj_class##Private*>(d_ptr)
 
 class CartesianPlot;

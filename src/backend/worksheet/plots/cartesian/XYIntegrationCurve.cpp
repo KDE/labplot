@@ -311,8 +311,8 @@ bool XYIntegrationCurve::load(XmlStreamReader* reader, bool preview) {
 		d->xVector = static_cast<QVector<double>* >(d->xColumn->data());
 		d->yVector = static_cast<QVector<double>* >(d->yColumn->data());
 
-		D_OBJ(XYCurve)->xColumn = d->xColumn;
-		D_OBJ(XYCurve)->yColumn = d->yColumn;
+		static_cast<XYCurvePrivate*>(d_ptr)->xColumn = d->xColumn;
+		static_cast<XYCurvePrivate*>(d_ptr)->yColumn = d->yColumn;
 
 		recalcLogicalPoints();
 	}
