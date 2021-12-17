@@ -704,25 +704,32 @@ void Project::retransformElements(AbstractAspect* aspect) {
 			curve->recalculate();
 	}
 
-	//all data was read:
-	//call retransform() to every element
-	QVector<CartesianPlot*> plots;
-	if (hasChildren && aspect->type() != AspectType::CartesianPlot)
-		plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
-	else {
-		if (aspect->type() == AspectType::CartesianPlot)
-			plots << static_cast<CartesianPlot*>(aspect);
-		else if (aspect->inherits(AspectType::XYCurve) || aspect->type() == AspectType::Histogram)
-			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
-	}
-
 	auto childs = aspect->project()->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
 	for (auto child: childs) {
 		child->setIsLoading(false);
 	}
 
-	for (auto* plot : plots) {
-		plot->retransform(); // retransforms recursive
+	//all data was read:
+	//call retransform() to every element
+	if (hasChildren && aspect->type() != AspectType::CartesianPlot) {
+		auto c = aspect->project()->children<Worksheet>(ChildIndexFlag::IncludeHidden);
+		for (auto child: c) {
+			// retransform all elements in the worksheet (labels, images, plots)
+			// the plots will then recursive retransform the childs of them
+			auto elements = child->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
+			for (auto e: elements) {
+				e->retransform();
+			}
+		}
+	} else {
+		QVector<CartesianPlot*> plots;
+		if (aspect->type() == AspectType::CartesianPlot)
+			plots << static_cast<CartesianPlot*>(aspect);
+		else if (aspect->inherits(AspectType::XYCurve) || aspect->type() == AspectType::Histogram)
+			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
+
+		for (auto plot: plots)
+			plot->retransform();
 	}
 
 #ifndef SDK
@@ -734,7 +741,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	//call CartesianPlot::dataChanged() to notify affected plots about the new data.
 	//this needs to be done here since in LiveDataSource::finalizeImport() called above
 	//where the data is read the column pointers are not restored yes in curves.
-	plots.clear();
+	QVector<CartesianPlot*> plots;
 	for (auto* source : sources) {
 		for (int n = 0; n < source->columnCount(); ++n) {
 			Column* column = source->column(n);
