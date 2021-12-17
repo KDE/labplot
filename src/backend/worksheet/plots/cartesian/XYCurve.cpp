@@ -1709,7 +1709,7 @@ void XYCurvePrivate::updateDropLines() {
 
 void XYCurvePrivate::updateSymbols() {
 #ifdef PERFTRACE_CURVES
-	PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateSymbols()");
+	PERFTRACE(name().toLatin1() + ", " + Q_FUNC_INFO);
 #endif
 	symbolsPath = QPainterPath();
 	if (symbol->style() != Symbol::Style::NoSymbols) {
@@ -2942,7 +2942,7 @@ void XYCurvePrivate::drawSymbols(QPainter* painter) {
 	trafo.scale(symbol->size(), symbol->size());
 
 	if (symbol->rotationAngle() != 0.)
-		trafo.rotate(-symbol->rotationAngle());
+		trafo.rotate(symbol->rotationAngle());
 
 	path = trafo.map(path);
 
