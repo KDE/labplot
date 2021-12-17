@@ -1012,11 +1012,18 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		}
 	}
 	x += delta_logic.x();
-	int xindex = q->markerpoints[activeIndex].curve->xColumn()->indexForValue(x);
-	double x_new = q->markerpoints[activeIndex].curve->xColumn()->valueAt(xindex);
-	if (abs(x_new - q->markerpoints[activeIndex].customPoint->position().point.x()) > 0) {
-		oldMousePos = eventPos;
-		q->setPositionLogical(x);
+	auto xColumn = q->markerpoints[activeIndex].curve->xColumn();
+	int xindex = xColumn->indexForValue(x);
+	double x_new = xColumn->valueAt(xindex);
+	auto pointPos = q->markerpoints[activeIndex].customPoint->position().point.x();
+	if (abs(x_new - pointPos) > 0) {
+		if ((xColumn->rowCount() - 1 == xindex && pointPos > x_new) || (xindex == 0 && pointPos < x_new))
+		{
+			q->setPositionLogical(x_new);
+		} else {
+			oldMousePos = eventPos;
+			q->setPositionLogical(x);
+		}
 	}
 }
 
