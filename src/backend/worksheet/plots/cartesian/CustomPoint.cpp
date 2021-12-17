@@ -329,7 +329,5 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 			if (!reader->skipToEndElement()) return false;
 		}
 	}
-
-	retransform();
 	return true;
 }
