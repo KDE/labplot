@@ -535,12 +535,30 @@ void CartesianPlotLegendPrivate::retransform() {
 	calculates the position of the legend, when the position relative to the parent was specified (left, right, etc.)
 */
 void CartesianPlotLegendPrivate::updatePosition() {
-	QPointF pos = q->relativePosToParentPos(rect, position, WorksheetElement::HorizontalAlignment::Center, WorksheetElement::VerticalAlignment::Center);
+	QPointF p;
+	if(coordinateBindingEnabled && q->cSystem) {
+		//the position in logical coordinates was changed, calculate the position in scene coordinates
+		bool visible;
+		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
+		position.point = q->parentPosToRelativePos(p, boundingRectangle, position,
+												horizontalAlignment, verticalAlignment);
+	} else
+		p = q->relativePosToParentPos(boundingRect(), position,
+									horizontalAlignment, verticalAlignment);
 
 	suppressItemChangeEvent = true;
-    setPos(pos);
+	setPos(p);
 	suppressItemChangeEvent = false;
+
 	emit q->positionChanged(position);
+
+	//the position in scene coordinates was changed, calculate the position in logical coordinates
+	if (q->cSystem) {
+		if (!coordinateBindingEnabled)
+			positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		emit q->positionLogicalChanged(positionLogical);
+	}
 
 	suppressRetransform = true;
 	title->retransform();
@@ -848,53 +866,6 @@ QVariant CartesianPlotLegendPrivate::itemChange(GraphicsItemChange change, const
 	 }
 
 	return QGraphicsItem::itemChange(change, value);
-}
-
-void CartesianPlotLegendPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	//convert position of the item in parent coordinates to label's position
-	QPointF point = pos();
-	point = q->parentPosToRelativePos(point, rect, position,
-									WorksheetElement::HorizontalAlignment::Center,
-									WorksheetElement::VerticalAlignment::Center);
-
-	if (point != position.point) {
-		//position was changed -> set the position related member variables
-		suppressRetransform = true;
-		WorksheetElement::PositionWrapper tempPosition;
-		tempPosition.point = point;
-        tempPosition.horizontalPosition = position.horizontalPosition;
-        tempPosition.verticalPosition = position.verticalPosition;
-		q->setPosition(tempPosition);
-		suppressRetransform = false;
-	}
-
-	QGraphicsItem::mouseReleaseEvent(event);
-}
-
-void CartesianPlotLegendPrivate::keyPressEvent(QKeyEvent* event) {
-	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
-		|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
-		const int delta = 5;
-		QPointF point = q->parentPosToRelativePos(pos(), rect, position,
-												WorksheetElement::HorizontalAlignment::Center,
-												WorksheetElement::VerticalAlignment::Center);
-        WorksheetElement::PositionWrapper tempPosition = position;
-
-		if (event->key() == Qt::Key_Left) {
-            point.setX(point.x() + delta);
-		} else if (event->key() == Qt::Key_Right) {
-            point.setX(point.x() - delta);
-		} else if (event->key() == Qt::Key_Up) {
-            point.setY(point.y() + delta);
-		} else if (event->key() == Qt::Key_Down) {
-            point.setY(point.y() - delta);
-		}
-
-		tempPosition.point = point;
-		q->setPosition(tempPosition);
-	}
-
-	QGraphicsItem::keyPressEvent(event);
 }
 
 void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {

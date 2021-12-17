@@ -53,7 +53,11 @@ private slots:
 	void positionYChanged(int);
 	void customPositionXChanged(double);
 	void customPositionYChanged(double);
+	void horizontalAlignmentChanged(int index);
+	void verticalAlignmentChanged(int index);
 	void rotationChanged(int value);
+	void bindingChanged(bool checked);
+
 
 	//"Background"-tab
   	void backgroundTypeChanged(int);
@@ -88,6 +92,9 @@ private slots:
 	void legendPositionChanged(const CartesianPlotLegend::PositionWrapper&);
 	void legendRotationAngleChanged(qreal);
 	void legendVisibilityChanged(bool);
+	void legendPositionLogicalChanged(QPointF);
+	void legendHorizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment);
+	void legendVerticalAlignmentChanged(const WorksheetElement::VerticalAlignment);
 
 	void legendBackgroundTypeChanged(WorksheetElement::BackgroundType);
 	void legendBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);

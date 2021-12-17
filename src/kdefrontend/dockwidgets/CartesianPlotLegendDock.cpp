@@ -72,6 +72,7 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 	connect(ui.sbLineSymbolWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &CartesianPlotLegendDock::lineSymbolWidthChanged);
 
+	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CartesianPlotLegendDock::bindingChanged);
 	connect(ui.cbPositionX, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			this, &CartesianPlotLegendDock::positionXChanged);
 	connect(ui.cbPositionY, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -81,6 +82,8 @@ CartesianPlotLegendDock::CartesianPlotLegendDock(QWidget* parent) : BaseDock(par
 	connect(ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
 			this, &CartesianPlotLegendDock::customPositionYChanged);
 
+	connect( ui.cbHorizontalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::horizontalAlignmentChanged);
+	connect( ui.cbVerticalAlignment, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CartesianPlotLegendDock::verticalAlignmentChanged);
 	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged),
 			this, &CartesianPlotLegendDock::rotationChanged);
 
@@ -200,8 +203,10 @@ void CartesianPlotLegendDock::setLegends(QList<CartesianPlotLegend*> list) {
 	connect(m_legend, &CartesianPlotLegend::labelFontChanged, this, &CartesianPlotLegendDock::legendLabelFontChanged);
 	connect(m_legend, &CartesianPlotLegend::labelColorChanged, this, &CartesianPlotLegendDock::legendLabelColorChanged);
 	connect(m_legend, &CartesianPlotLegend::labelColumnMajorChanged, this, &CartesianPlotLegendDock::legendLabelOrderChanged);
-	connect(m_legend, QOverload<const CartesianPlotLegend::PositionWrapper&>::of(&CartesianPlotLegend::positionChanged),
-			this, &CartesianPlotLegendDock::legendPositionChanged);
+	connect(m_legend, &CartesianPlotLegend::positionChanged, this, &CartesianPlotLegendDock::legendPositionChanged);
+	connect(m_legend, &CartesianPlotLegend::positionLogicalChanged, this, &CartesianPlotLegendDock::legendPositionLogicalChanged);
+	connect(m_legend, &CartesianPlotLegend::horizontalAlignmentChanged, this, &CartesianPlotLegendDock::legendHorizontalAlignmentChanged);
+	connect(m_legend, &CartesianPlotLegend::verticalAlignmentChanged, this, &CartesianPlotLegendDock::legendVerticalAlignmentChanged);
 	connect(m_legend, &CartesianPlotLegend::rotationAngleChanged, this, &CartesianPlotLegendDock::legendRotationAngleChanged);
 	connect(m_legend, &CartesianPlotLegend::lineSymbolWidthChanged, this, &CartesianPlotLegendDock::legendLineSymbolWidthChanged);
 	connect(m_legend, &CartesianPlotLegend::visibleChanged, this, &CartesianPlotLegendDock::legendVisibilityChanged);
@@ -241,6 +246,8 @@ void CartesianPlotLegendDock::updateLocale() {
 	ui.sbLineSymbolWidth->setLocale(numberLocale);
 	ui.sbPositionX->setLocale(numberLocale);
 	ui.sbPositionY->setLocale(numberLocale);
+	ui.lePositionXLogical->setLocale(numberLocale);
+	ui.lePositionYLogical->setLocale(numberLocale);
 	ui.sbBorderWidth->setLocale(numberLocale);
 	ui.sbBorderCornerRadius->setLocale(numberLocale);
 	ui.sbLayoutTopMargin->setLocale(numberLocale);
@@ -329,12 +336,22 @@ void CartesianPlotLegendDock::retranslateUi() {
 	ui.cbOrder->addItem(i18n("Column Major"));
 	ui.cbOrder->addItem(i18n("Row Major"));
 
+	//Positioning and alignment
 	ui.cbPositionX->addItem(i18n("Left"));
 	ui.cbPositionX->addItem(i18n("Center"));
 	ui.cbPositionX->addItem(i18n("Right"));
+
 	ui.cbPositionY->addItem(i18n("Top"));
 	ui.cbPositionY->addItem(i18n("Center"));
 	ui.cbPositionY->addItem(i18n("Bottom"));
+
+	ui.cbHorizontalAlignment->addItem(i18n("Left"));
+	ui.cbHorizontalAlignment->addItem(i18n("Center"));
+	ui.cbHorizontalAlignment->addItem(i18n("Right"));
+
+	ui.cbVerticalAlignment->addItem(i18n("Top"));
+	ui.cbVerticalAlignment->addItem(i18n("Center"));
+	ui.cbVerticalAlignment->addItem(i18n("Bottom"));
 
 	GuiTools::updatePenStyles(ui.cbBorderStyle, Qt::black);
 	GuiTools::updateBrushStyles(ui.cbBackgroundBrushStyle, Qt::SolidPattern);
@@ -403,7 +420,7 @@ void CartesianPlotLegendDock::lineSymbolWidthChanged(double value) {
 }
 
 /*!
-	called when legend's current horizontal position relative to its parent (left, center, right, custom ) is changed.
+	called when legend's current horizontal position relative to its parent (left, center, right ) is changed.
 */
 void CartesianPlotLegendDock::positionXChanged(int index) {
 	if (m_initializing)
@@ -415,8 +432,24 @@ void CartesianPlotLegendDock::positionXChanged(int index) {
 		legend->setPosition(position);
 }
 
+void CartesianPlotLegendDock::horizontalAlignmentChanged(int index) {
+	if (m_initializing)
+		return;
+
+	for (auto* legend : m_legendList)
+		legend->setHorizontalAlignment(WorksheetElement::HorizontalAlignment(index));
+}
+
+void CartesianPlotLegendDock::verticalAlignmentChanged(int index) {
+	if (m_initializing)
+		return;
+
+	for (auto* legend : m_legendList)
+		legend->setVerticalAlignment(WorksheetElement::VerticalAlignment(index));
+}
+
 /*!
-	called when legend's current horizontal position relative to its parent (top, center, bottom, custom ) is changed.
+	called when legend's current horizontal position relative to its parent (top, center, bottom ) is changed.
 */
 void CartesianPlotLegendDock::positionYChanged(int index) {
 
@@ -455,6 +488,47 @@ void CartesianPlotLegendDock::rotationChanged(int value) {
 
 	for (auto* curve : m_legendList)
 		curve->setRotationAngle(value);
+}
+
+/*!
+ * \brief CartesianPlotLegendDock::bindingChanged
+ * Bind CartesianPlotLegend to the cartesian plot coords or not
+ * \param checked
+ */
+void CartesianPlotLegendDock::bindingChanged(bool checked) {
+	//widgets for positioning using absolute plot distances
+	ui.lPositionX->setVisible(!checked);
+	ui.cbPositionX->setVisible(!checked);
+	ui.sbPositionX->setVisible(!checked);
+
+	ui.lPositionY->setVisible(!checked);
+	ui.cbPositionY->setVisible(!checked);
+	ui.sbPositionY->setVisible(!checked);
+
+	//widgets for positioning using logical plot coordinates
+	const auto* plot = static_cast<const CartesianPlot*>(m_legend->parent(AspectType::CartesianPlot));
+	if (plot && plot->xRangeFormat() == RangeT::Format::DateTime) {
+		ui.lPositionXLogicalDateTime->setVisible(checked);
+		ui.dtePositionXLogical->setVisible(checked);
+
+		ui.lPositionXLogical->setVisible(!checked);
+		ui.lePositionXLogical->setVisible(!checked);
+	} else {
+		ui.lPositionXLogicalDateTime->setVisible(!checked);
+		ui.dtePositionXLogical->setVisible(!checked);
+
+		ui.lPositionXLogical->setVisible(checked);
+		ui.lePositionXLogical->setVisible(checked);
+	}
+
+	ui.lPositionYLogical->setVisible(checked);
+	ui.lePositionYLogical->setVisible(checked);
+
+	if(m_initializing)
+		return;
+
+	for (auto* legend : m_legendList)
+		legend->setCoordinateBindingEnabled(checked);
 }
 
 // "Background"-tab
@@ -639,9 +713,9 @@ void CartesianPlotLegendDock::borderColorChanged(const QColor& color) {
 		legend->setBorderPen(pen);
 	}
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	GuiTools::updatePenStyles(ui.cbBorderStyle, color);
-	m_initializing = false;
+
 }
 
 void CartesianPlotLegendDock::borderWidthChanged(double value) {
@@ -738,104 +812,113 @@ void CartesianPlotLegendDock::layoutColumnCountChanged(int count) {
 //*************************************************************
 //General
 void CartesianPlotLegendDock::legendLabelFontChanged(QFont& font) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	//we need to set the font size in points for KFontRequester
 	QFont f(font);
 	f.setPointSizeF( Worksheet::convertFromSceneUnits(f.pixelSize(), Worksheet::Unit::Point) );
 	ui.kfrLabelFont->setFont(f);
-	m_initializing = false;
+
 }
 
 void CartesianPlotLegendDock::legendLabelColorChanged(QColor& color) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbLabelColor->setColor(color);
-	m_initializing = false;
+
 }
 
 void CartesianPlotLegendDock::legendLabelOrderChanged(bool b) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	if (b)
 		ui.cbOrder->setCurrentIndex(0); //column major
 	else
 		ui.cbOrder->setCurrentIndex(1); //row major
-	m_initializing = false;
+
 }
 
 void CartesianPlotLegendDock::legendLineSymbolWidthChanged(float value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLineSymbolWidth->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
+
+}
+
+void CartesianPlotLegendDock::legendHorizontalAlignmentChanged(TextLabel::HorizontalAlignment index) {
+	const Lock lock(m_initializing);
+	ui.cbHorizontalAlignment->setCurrentIndex(static_cast<int>(index));
+}
+
+void CartesianPlotLegendDock::legendVerticalAlignmentChanged(TextLabel::VerticalAlignment index) {
+	const Lock lock(m_initializing);
+	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
+}
+
+void CartesianPlotLegendDock::legendPositionLogicalChanged(QPointF pos) {
+	const Lock lock(m_initializing);
+	SET_NUMBER_LOCALE
+	ui.lePositionXLogical->setText(numberLocale.toString(pos.x()));
+	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
+	ui.lePositionYLogical->setText(numberLocale.toString(pos.y()));
 }
 
 
 void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::PositionWrapper& position) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
 	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
 	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendRotationAngleChanged(qreal angle) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbRotation->setValue(angle);
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendVisibilityChanged(bool on) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.chkVisible->setChecked(on);
-	m_initializing = false;
 }
 
 //Background
 void CartesianPlotLegendDock::legendBackgroundTypeChanged(WorksheetElement::BackgroundType type) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbBackgroundType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendBackgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle style) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbBackgroundColorStyle->setCurrentIndex(static_cast<int>(style));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendBackgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle style) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbBackgroundImageStyle->setCurrentIndex(static_cast<int>(style));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendBackgroundBrushStyleChanged(Qt::BrushStyle style) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.cbBackgroundBrushStyle->setCurrentIndex(style);
-	m_initializing = false;
+
 }
 
 void CartesianPlotLegendDock::legendBackgroundFirstColorChanged(QColor& color) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbBackgroundFirstColor->setColor(color);
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendBackgroundSecondColorChanged(QColor& color) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.kcbBackgroundSecondColor->setColor(color);
-	m_initializing = false;
+
 }
 
 void CartesianPlotLegendDock::legendBackgroundFileNameChanged(QString& filename) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.leBackgroundFileName->setText(filename);
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendBackgroundOpacityChanged(float opacity) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbBackgroundOpacity->setValue( qRound(opacity*100.0) );
-	m_initializing = false;
 }
 
 //Border
@@ -843,69 +926,59 @@ void CartesianPlotLegendDock::legendBorderPenChanged(QPen& pen) {
 	if (m_initializing)
 		return;
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	if (ui.cbBorderStyle->currentIndex() != pen.style())
 		ui.cbBorderStyle->setCurrentIndex(pen.style());
 	if (ui.kcbBorderColor->color() != pen.color())
 		ui.kcbBorderColor->setColor(pen.color());
 	if (ui.sbBorderWidth->value() != pen.widthF())
 		ui.sbBorderWidth->setValue(Worksheet::convertFromSceneUnits(pen.widthF(), Worksheet::Unit::Point));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendBorderCornerRadiusChanged(float value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendBorderOpacityChanged(float opacity) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbBorderOpacity->setValue( qRound(opacity*100.0) );
-	m_initializing = false;
 }
 
 //Layout
 void CartesianPlotLegendDock::legendLayoutTopMarginChanged(float value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLayoutTopMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutBottomMarginChanged(float value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLayoutBottomMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutLeftMarginChanged(float value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLayoutLeftMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutRightMarginChanged(float value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLayoutRightMargin->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutVerticalSpacingChanged(float value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLayoutVerticalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutHorizontalSpacingChanged(float value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLayoutHorizontalSpacing->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotLegendDock::legendLayoutColumnCountChanged(int value) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	ui.sbLayoutColumnCount->setValue(value);
-	m_initializing = false;
 }
 
 //*************************************************************
@@ -930,10 +1003,54 @@ void CartesianPlotLegendDock::load() {
 	ui.sbLineSymbolWidth->setValue( Worksheet::convertFromSceneUnits(m_legend->lineSymbolWidth(), m_worksheetUnit) );
 
 	//Geometry
-	ui.cbPositionX->setCurrentIndex(static_cast<int>(m_legend->position().horizontalPosition));
+
+	//widgets for positioning using absolute plot distances
+	ui.cbPositionX->setCurrentIndex( (int)m_legend->position().horizontalPosition );
+//	positionXChanged(ui.cbPositionX->currentIndex());
 	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.x(), m_worksheetUnit) );
-	ui.cbPositionY->setCurrentIndex(static_cast<int>(m_legend->position().verticalPosition));
+	ui.cbPositionY->setCurrentIndex( (int)m_legend->position().verticalPosition );
+//	positionYChanged(ui.cbPositionY->currentIndex());
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(m_legend->position().point.y(), m_worksheetUnit) );
+
+	ui.cbHorizontalAlignment->setCurrentIndex( (int) m_legend->horizontalAlignment() );
+	ui.cbVerticalAlignment->setCurrentIndex( (int) m_legend->verticalAlignment() );
+
+	//widgets for positioning using logical plot coordinates
+	SET_NUMBER_LOCALE
+	bool allowLogicalCoordinates = (m_legend->plot() != nullptr);
+	ui.lBindLogicalPos->setVisible(allowLogicalCoordinates);
+	ui.chbBindLogicalPos->setVisible(allowLogicalCoordinates);
+
+	if (allowLogicalCoordinates) {
+		const auto* plot = static_cast<const CartesianPlot*>(m_legend->plot());
+		if (plot->xRangeFormat() == RangeT::Format::Numeric) {
+			ui.lPositionXLogical->show();
+			ui.lePositionXLogical->show();
+			ui.lPositionXLogicalDateTime->hide();
+			ui.dtePositionXLogical->hide();
+
+			ui.lePositionXLogical->setText(numberLocale.toString(m_legend->positionLogical().x()));
+			ui.lePositionYLogical->setText(numberLocale.toString(m_legend->positionLogical().y()));
+		} else { //DateTime
+			ui.lPositionXLogical->hide();
+			ui.lePositionXLogical->hide();
+			ui.lPositionXLogicalDateTime->show();
+			ui.dtePositionXLogical->show();
+
+			ui.dtePositionXLogical->setDisplayFormat(plot->xRangeDateTimeFormat());
+			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_legend->positionLogical().x()));
+		}
+
+		ui.chbBindLogicalPos->setChecked(m_legend->coordinateBindingEnabled());
+		bindingChanged(m_legend->coordinateBindingEnabled());
+	} else {
+		ui.lPositionXLogical->hide();
+		ui.lePositionXLogical->hide();
+		ui.lPositionYLogical->hide();
+		ui.lePositionYLogical->hide();
+		ui.lPositionXLogicalDateTime->hide();
+		ui.dtePositionXLogical->hide();
+	}
 	ui.sbRotation->setValue(m_legend->rotationAngle());
 
 	ui.chkVisible->setChecked( m_legend->isVisible() );
@@ -970,9 +1087,9 @@ void CartesianPlotLegendDock::load() {
 
 	ui.sbLayoutColumnCount->setValue( m_legend->layoutColumnCount() );
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-	m_initializing = false;
+
 }
 
 void CartesianPlotLegendDock::loadConfigFromTemplate(KConfig& config) {
@@ -1055,9 +1172,9 @@ void CartesianPlotLegendDock::loadConfig(KConfig& config) {
 	group = config.group("PlotLegend");
 	labelWidget->loadConfig(group);
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
-	m_initializing = false;
+
 }
 
 void CartesianPlotLegendDock::saveConfigAsTemplate(KConfig& config) {

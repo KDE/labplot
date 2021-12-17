@@ -81,8 +81,6 @@ private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
-	void keyPressEvent(QKeyEvent*) override;
 };
 
 #endif

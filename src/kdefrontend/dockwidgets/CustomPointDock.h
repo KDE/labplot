@@ -35,21 +35,31 @@ private:
 	SymbolWidget* symbolWidget{nullptr};
 
 	void load();
+	void initConnections() const;
 	void loadConfig(KConfig&);
 
 private slots:
 	//SLOTs for changes triggered in CustomPointDock
 	//General-Tab
-	void positionXChanged();
-	void positionXDateTimeChanged(const QDateTime&);
-	void positionYChanged();
+	void positionXChanged(int);
+	void positionYChanged(int);
+	void customPositionXChanged(double);
+	void customPositionYChanged(double);
 	void visibilityChanged(bool);
+	void bindingChanged(bool checked);
+
+	void positionXLogicalChanged(const QString&);
+	void positionXLogicalDateTimeChanged(const QDateTime&);
+	void positionYLogicalChanged(const QString&);
+
+
 
 	//SLOTs for changes triggered in CustomPoint
 	//General-Tab
-	void pointPositionChanged(const WorksheetElement::PositionWrapper &);
 	void updatePlotRanges() const override;
 	void pointVisibilityChanged(bool);
+	void pointPositionChanged(const WorksheetElement::PositionWrapper &position);
+	void pointPositionLogicalChanged(QPointF);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);
