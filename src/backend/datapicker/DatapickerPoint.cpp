@@ -306,6 +306,8 @@ QString DatapickerPointPrivate::name() const {
     calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void DatapickerPointPrivate::retransform() {
+	if (q->isLoading())
+		return;
 	updatePropeties();
 	setPos(position);
 	QPainterPath path = Symbol::stylePath(pointStyle);

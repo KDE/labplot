@@ -121,7 +121,6 @@ Symbol* CustomPoint::symbol() const {
 void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
 	Q_D(CustomPoint);
 	d->setParentItem(item);
-	//d->updatePosition();
 }
 
 //##############################################################################
@@ -152,7 +151,7 @@ const CartesianPlot* CustomPointPrivate::plot() {
  */
 void CustomPointPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (suppressRetransform)
+	if (suppressRetransform || q->isLoading())
 		return;
 
 	QPointF p;

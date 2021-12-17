@@ -1741,6 +1741,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(plot);
 		} else if (!preview && reader->name() == "textLabel") {
 			TextLabel* label = new TextLabel(QString());
+			label->setIsLoading(true);
 			if (!label->load(reader, preview)) {
 				delete label;
 				return false;
@@ -1748,6 +1749,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(label);
 		} else if (!preview && reader->name() == "image") {
 			Image* image = new Image(QString());
+			image->setIsLoading(true);
 			if (!image->load(reader, preview)) {
 				delete image;
 				return false;

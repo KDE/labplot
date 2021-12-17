@@ -191,7 +191,6 @@ QGraphicsItem* TextLabel::graphicsItem() const {
 void TextLabel::setParentGraphicsItem(QGraphicsItem* item) {
 	Q_D(TextLabel);
 	d->setParentItem(item);
-	d->updatePosition();
 }
 
 void TextLabel::setZoomFactor(double factor) {
@@ -449,7 +448,7 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 	calculates the position and the bounding box of the label. Called on geometry or text changes.
  */
 void TextLabelPrivate::retransform() {
-	if (suppressRetransform)
+	if (suppressRetransform || q->isLoading())
 		return;
 
 	updatePosition();
@@ -471,6 +470,9 @@ void TextLabelPrivate::setZoomFactor(double factor) {
 	calculates the position of the label, when the position relative to the parent was specified (left, right, etc.)
 */
 void TextLabelPrivate::updatePosition() {
+
+	if (q->isLoading())
+		return;
 
 	QPointF p;
 	if (q->m_type == TextLabel::Type::AxisTitle) {

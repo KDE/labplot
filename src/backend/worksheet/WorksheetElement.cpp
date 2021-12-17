@@ -123,13 +123,12 @@ bool WorksheetElement::isPrinting() const {
 	return m_printing;
 }
 
-/**
- * \fn void WorksheetElement::retransform()
- * \brief Tell the element to newly transform its graphics item into its coordinate system.
- *
- * This method must not change the undo-aware data of the element, only
- * the graphics item which represents the item is to be updated.
- */
+void WorksheetElement::retransformChilds() {
+	auto childs = children<WorksheetElement>();
+	for (auto child: childs) {
+		child->retransform();
+	}
+}
 
 void WorksheetElement::setZValue(qreal value) {
 	graphicsItem()->setZValue(value);

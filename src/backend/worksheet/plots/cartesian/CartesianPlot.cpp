@@ -3370,7 +3370,7 @@ CartesianPlotPrivate::~CartesianPlotPrivate() = default;
  */
 void CartesianPlotPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (suppressRetransform)
+	if (suppressRetransform || q->isLoading())
 		return;
 
 	PERFTRACE("CartesianPlotPrivate::retransform()");
@@ -5212,6 +5212,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			d->yRangeBreaks.list << b;
 		} else if (!preview && reader->name() == "textLabel") {
 			if (!titleLabelRead) {
+				m_title->setIsLoading(true);
 				//the first text label is always the title label
 				m_title->load(reader, preview);
 				titleLabelRead = true;
@@ -5222,6 +5223,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				m_title->setName(name() + QLatin1String(" - ") + i18n("Title"));
 			} else {
 				TextLabel* label = new TextLabel("text label", this);
+				label->setIsLoading(true);
 				if (label->load(reader, preview)) {
 					addChildFast(label);
 					label->setParentGraphicsItem(graphicsItem());
@@ -5232,6 +5234,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == "image") {
 			auto* image = new Image(QString());
+			image->setIsLoading(true);
 			if (!image->load(reader, preview)) {
 				delete image;
 				return false;
@@ -5239,6 +5242,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				addChildFast(image);
 		} else if (!preview && reader->name() == "infoElement") {
 			auto* marker = new InfoElement("Marker", this);
+			marker->setIsLoading(true);
 			if (marker->load(reader, preview)) {
 				addChildFast(marker);
 				marker->setParentGraphicsItem(graphicsItem());
@@ -5246,10 +5250,12 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 				delete marker;
 				return false;
 			}
-		} else if (!preview && reader->name() == "plotArea")
+		} else if (!preview && reader->name() == "plotArea") {
+			m_plotArea->setIsLoading(true);
 			m_plotArea->load(reader, preview);
-		else if (!preview && reader->name() == "axis") {
+		} else if (!preview && reader->name() == "axis") {
 			auto* axis = new Axis(QString());
+			axis->setIsLoading(true);
 			if (axis->load(reader, preview))
 				addChildFast(axis);
 			else {
@@ -5258,6 +5264,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyCurve") {
 			auto* curve = new XYCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5266,6 +5273,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyEquationCurve") {
 			auto* curve = new XYEquationCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5274,6 +5282,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyDataReductionCurve") {
 			auto* curve = new XYDataReductionCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5282,6 +5291,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyDifferentiationCurve") {
 			auto* curve = new XYDifferentiationCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5290,6 +5300,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyIntegrationCurve") {
 			auto* curve = new XYIntegrationCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5298,6 +5309,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyInterpolationCurve") {
 			auto* curve = new XYInterpolationCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5306,6 +5318,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xySmoothCurve") {
 			auto* curve = new XYSmoothCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5314,6 +5327,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyFitCurve") {
 			auto* curve = new XYFitCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5322,6 +5336,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyFourierFilterCurve") {
 			auto* curve = new XYFourierFilterCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5330,6 +5345,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyFourierTransformCurve") {
 			auto* curve = new XYFourierTransformCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5338,6 +5354,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyHilbertTransformCurve") {
 			auto* curve = new XYHilbertTransformCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5346,6 +5363,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyConvolutionCurve") {
 			auto* curve = new XYConvolutionCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5354,6 +5372,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "xyCorrelationCurve") {
 			auto* curve = new XYCorrelationCurve(QString());
+			curve->setIsLoading(true);
 			if (curve->load(reader, preview))
 				addChildFast(curve);
 			else {
@@ -5362,6 +5381,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == "cartesianPlotLegend") {
 			m_legend = new CartesianPlotLegend(QString());
+			m_legend->setIsLoading(true);
 			if (m_legend->load(reader, preview))
 				addChildFast(m_legend);
 			else {
@@ -5370,6 +5390,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == "customPoint") {
 			auto* point = new CustomPoint(this, QString());
+			point->setIsLoading(true);
 			if (point->load(reader, preview))
 				addChildFast(point);
 			else {
@@ -5378,6 +5399,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == "referenceLine") {
 			auto* line = new ReferenceLine(this, QString());
+			line->setIsLoading(true);
 			if (line->load(reader, preview))
 				addChildFast(line);
 			else {
@@ -5386,6 +5408,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "boxPlot") {
 			auto* boxPlot = new BoxPlot("BoxPlot");
+			boxPlot->setIsLoading(true);
 			if (boxPlot->load(reader, preview))
 				addChildFast(boxPlot);
 			else {
@@ -5394,6 +5417,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (reader->name() == "Histogram") {
 			auto* hist = new Histogram("Histogram");
+			hist->setIsLoading(true);
 			if (hist->load(reader, preview))
 				addChildFast(hist);
 			else {

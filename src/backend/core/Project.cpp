@@ -677,6 +677,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 						//"state" is read at the very end of XML, restore the pointers here so the current index
 						//can be properly selected in ProjectExplorer after requestLoadState() is called.
 						restorePointers(this, preview);
+						retransformElements(this);
 						emit requestLoadState(reader);
 					} else {
 						if (!preview)
@@ -691,6 +692,78 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 		reader->raiseError(i18n("no valid XML document found"));
 
 	return !reader->hasError();
+}
+
+void Project::retransformElements(AbstractAspect* aspect) {
+	bool hasChildren = aspect->childCount<AbstractAspect>();
+
+	//recalculate all analysis curves if the results of the calculations were not saved in the project
+	if (!aspect->project()->saveCalculations()) {
+		const auto& curves = aspect->children<XYAnalysisCurve>(ChildIndexFlag::Recursive);
+		for (auto* curve : curves)
+			curve->recalculate();
+	}
+
+	//all data was read:
+	//call retransform() to every element
+	QVector<CartesianPlot*> plots;
+	if (hasChildren && aspect->type() != AspectType::CartesianPlot)
+		plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
+	else {
+		if (aspect->type() == AspectType::CartesianPlot)
+			plots << static_cast<CartesianPlot*>(aspect);
+		else if (aspect->inherits(AspectType::XYCurve) || aspect->type() == AspectType::Histogram)
+			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
+	}
+
+	// TODO: do it for all childs!
+	for (auto* plot : plots) {
+		plot->setIsLoading(false);
+		plot->retransform();
+	}
+
+#ifndef SDK
+	QVector<XYCurve*> curves;
+	if (hasChildren)
+		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
+	const auto& sources = aspect->children<LiveDataSource>(ChildIndexFlag::Recursive);
+	//all data was read in live-data sources:
+	//call CartesianPlot::dataChanged() to notify affected plots about the new data.
+	//this needs to be done here since in LiveDataSource::finalizeImport() called above
+	//where the data is read the column pointers are not restored yes in curves.
+	plots.clear();
+	for (auto* source : sources) {
+		for (int n = 0; n < source->columnCount(); ++n) {
+			Column* column = source->column(n);
+
+			//determine the plots where the column is consumed
+			for (const auto* curve : curves) {
+				if (curve->xColumn() == column || curve->yColumn() == column) {
+					auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
+					if (plots.indexOf(plot) == -1) {
+						plots << plot;
+						plot->setSuppressDataChangedSignal(true);
+					}
+				}
+			}
+
+			column->setChanged();
+		}
+	}
+#endif
+
+	const auto& children = aspect->project()->children<WorksheetElement>();
+	for (auto child: children) {
+		child->setIsLoading(false);
+		child->retransform();
+		child->retransformChilds();
+	}
+
+	//loop over all affected plots and retransform them
+	for (auto* plot : plots) {
+		plot->setSuppressDataChangedSignal(false);
+		plot->dataChanged(-1, -1);
+	}
 }
 
 /*!
@@ -773,26 +846,6 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 	for (auto* element : elements)
 		element->assignCurve(curves);
-
-	// retransform all labels so their positioning relative to the parent is properly updated
-	QVector<TextLabel*> labels;
-	if (aspect->type() == AspectType::TextLabel)
-		labels << static_cast<TextLabel*>(aspect);
-	else if (hasChildren)
-		labels = aspect->children<TextLabel>(ChildIndexFlag::Recursive);
-
-	for (auto* label : labels)
-		label->retransform();
-
-	// retransform all images so their positioning relative to the parent is properly updated
-	QVector<Image*> images;
-	if (aspect->type() == AspectType::Image)
-		images << static_cast<Image*>(aspect);
-	else if (hasChildren)
-		images = aspect->children<Image>(ChildIndexFlag::Recursive);
-
-	for (auto* image : images)
-		image->retransform();
 
 	//axes
 	QVector<Axis*> axes;
@@ -893,62 +946,6 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 	if (preview)
 		return;
-
-	//recalculate all analysis curves if the results of the calculations were not saved in the project
-	if (!aspect->project()->saveCalculations()) {
-		const auto& curves = aspect->children<XYAnalysisCurve>(ChildIndexFlag::Recursive);
-		for (auto* curve : curves)
-			curve->recalculate();
-	}
-
-	//all data was read in spreadsheets:
-	//call CartesianPlot::retransform() to retransform the plots
-	QVector<CartesianPlot*> plots;
-	if (hasChildren && aspect->type() != AspectType::CartesianPlot)
-		plots = aspect->children<CartesianPlot>(ChildIndexFlag::Recursive);
-	else {
-		if (aspect->type() == AspectType::CartesianPlot)
-			plots << static_cast<CartesianPlot*>(aspect);
-		else if (aspect->inherits(AspectType::XYCurve) || aspect->type() == AspectType::Histogram)
-			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
-	}
-
-	for (auto* plot : plots) {
-		plot->setIsLoading(false);
-		plot->retransform();
-	}
-
-#ifndef SDK
-	//all data was read in live-data sources:
-	//call CartesianPlot::dataChanged() to notify affected plots about the new data.
-	//this needs to be done here since in LiveDataSource::finalizeImport() called above
-	//where the data is read the column pointers are not restored yes in curves.
-	plots.clear();
-	for (auto* source : sources) {
-		for (int n = 0; n < source->columnCount(); ++n) {
-			Column* column = source->column(n);
-
-			//determine the plots where the column is consumed
-			for (const auto* curve : curves) {
-				if (curve->xColumn() == column || curve->yColumn() == column) {
-					auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
-					if (plots.indexOf(plot) == -1) {
-						plots << plot;
-						plot->setSuppressDataChangedSignal(true);
-					}
-				}
-			}
-
-			column->setChanged();
-		}
-	}
-#endif
-
-	//loop over all affected plots and retransform them
-	for (auto* plot : plots) {
-		plot->setSuppressDataChangedSignal(false);
-		plot->dataChanged(-1, -1);
-	}
 }
 
 bool Project::readProjectAttributes(XmlStreamReader* reader) {

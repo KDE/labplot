@@ -120,8 +120,8 @@ void WorksheetElementContainer::setResizeEnabled(bool enabled) {
 }
 
 void WorksheetElementContainer::retransform() {
-// 	if (isLoading())
-// 		return;
+	if (isLoading())
+	return;
 
 	PERFTRACE("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);

@@ -584,7 +584,7 @@ void BoxPlotPrivate::setHover(bool on) {
   triggers the update of lines, drop lines, symbols etc.
 */
 void BoxPlotPrivate::retransform() {
-	if (m_suppressRetransform || !isVisible())
+	if (m_suppressRetransform || !isVisible() || q->isLoading())
 		return;
 
 	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::retransform()");

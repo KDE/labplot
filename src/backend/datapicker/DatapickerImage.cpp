@@ -317,6 +317,8 @@ QString DatapickerImagePrivate::name() const {
 }
 
 void DatapickerImagePrivate::retransform() {
+	if (q->isLoading())
+		return;
 	auto points = q->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->retransform();

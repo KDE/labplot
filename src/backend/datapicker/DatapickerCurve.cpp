@@ -378,6 +378,8 @@ QString DatapickerCurvePrivate::name() const {
 }
 
 void DatapickerCurvePrivate::retransform() {
+	if (q->isLoading())
+		return;
 	const auto& points = q->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* point : points)
 		point->retransform();

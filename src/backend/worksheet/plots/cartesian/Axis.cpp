@@ -999,7 +999,7 @@ QPainterPath AxisPrivate::shape() const {
  */
 void AxisPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (suppressRetransform || !plot())
+	if (suppressRetransform || !plot() || q->isLoading())
 		return;
 
 // 	PERFTRACE(name().toLatin1() + ", AxisPrivate::retransform()");

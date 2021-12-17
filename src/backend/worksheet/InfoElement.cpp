@@ -805,7 +805,7 @@ void InfoElementPrivate::init() {
  */
 void InfoElementPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	if (!q->m_title || q->markerpoints.isEmpty())
+	if (!q->m_title || q->markerpoints.isEmpty() || q->isLoading())
 		return;
 
 	q->m_suppressChildPositionChanged = true;
@@ -1159,6 +1159,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 		} else if (reader->name() == "textLabel") {
 			if (!m_title) {
 				m_title = new TextLabel(i18n("Label"), m_plot);
+				m_title->setIsLoading(true);
 				this->addChild(m_title);
 			}
 			if (!m_title->load(reader, preview))
@@ -1168,6 +1169,7 @@ bool InfoElement::load(XmlStreamReader* reader, bool preview) {
 				continue;
 
 			auto* point = new CustomPoint(m_plot, QString());
+			point->setIsLoading(true);
 			if (!point->load(reader,preview)) {
 				delete  point;
 				return false;
