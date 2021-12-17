@@ -34,11 +34,14 @@ extern "C" {
 static QVector<Symbol::Style> StyleOrder = {Symbol::Style::NoSymbols, Symbol::Style::Circle, Symbol::Style::Square,
 		Symbol::Style::EquilateralTriangle, Symbol::Style::Line, Symbol::Style::Cross, Symbol::Style::Tri,
 		Symbol::Style::X, Symbol::Style::Asterisk, Symbol::Style::XPlus, Symbol::Style::TallPlus,
-		Symbol::Style::LatinCross, Symbol::Style::DotPlus, Symbol::Style::Pin, Symbol::Style::Hash, Symbol::Style::SquareX,
-		Symbol::Style::SquarePlus, Symbol::Style::SquareHalf, Symbol::Style::SquareDiag, Symbol::Style::SquareTriangle,
+		Symbol::Style::LatinCross, Symbol::Style::DotPlus, Symbol::Style::Pin, Symbol::Style::Hash,
+		Symbol::Style::SquareX, Symbol::Style::SquarePlus, Symbol::Style::SquareHalf, Symbol::Style::SquareDot,
+		Symbol::Style::SquareDiag, Symbol::Style::SquareTriangle,
 		Symbol::Style::CircleHalf, Symbol::Style::CircleDot, Symbol::Style::CircleX, Symbol::Style::CircleTri,
-		Symbol::Style::Peace, Symbol::Style::RightTriangle, Symbol::Style::Bar, Symbol::Style::PeakedBar,
-		Symbol::Style::SkewedBar, Symbol::Style::Diamond, Symbol::Style::Lozenge, Symbol::Style::Tie, Symbol::Style::TinyTie,
+		Symbol::Style::Peace, Symbol::Style::TriangleDot, Symbol::Style::TriangleLine, Symbol::Style::TriangleHalf,
+		Symbol::Style::RightTriangle,
+		Symbol::Style::Bar, Symbol::Style::PeakedBar, Symbol::Style::SkewedBar,
+		Symbol::Style::Diamond, Symbol::Style::Lozenge, Symbol::Style::Tie, Symbol::Style::TinyTie,
 		Symbol::Style::Boomerang, Symbol::Style::SmallBoomerang, Symbol::Style::Star, Symbol::Style::Star3,
 		Symbol::Style::Star4, Symbol::Style::Star5, Symbol::Style::Star6,
 		Symbol::Style::Plus, Symbol::Style::Latin, Symbol::Style::David, Symbol::Style::Home, Symbol::Style::Pentagon,
@@ -295,6 +298,8 @@ QString Symbol::styleName(Symbol::Style style) {
 		return i18n("square plus");
 	case Style::SquareHalf:
 		return i18n("half square");
+	case Style::SquareDot:
+		return i18n("square dot");
 	case Style::SquareDiag:
 		return i18n("diag square");
 	case Style::SquareTriangle:
@@ -309,6 +314,12 @@ QString Symbol::styleName(Symbol::Style style) {
 		return i18n("circle tri");
 	case Style::Peace:
 		return i18n("peace");
+	case Style::TriangleDot:
+		return i18n("triangle dot");
+	case Style::TriangleLine:
+		return i18n("triangle line");
+	case Style::TriangleHalf:
+		return i18n("half triangle");
 	case Style::Flower:
 		return i18n("flower");
 	case Style::Flower2:
@@ -368,62 +379,62 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.addRect(QRectF(- 0.5, -0.5, 1.0, 1.0));
 		break;
 	case Style::EquilateralTriangle:
-		polygon<<QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5);
+		polygon << QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::RightTriangle:
-		polygon<<QPointF(-0.5, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5)<<QPointF(-0.5, -0.5);
+		polygon << QPointF(-0.5, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5)<<QPointF(-0.5, -0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::Bar:
 		path.addRect(QRectF(- 0.5, -0.2, 1.0, 0.4));
 		break;
 	case Style::PeakedBar:
-		polygon<<QPointF(-0.5, 0)<<QPointF(-0.3, -0.2)<<QPointF(0.3, -0.2)<<QPointF(0.5, 0)
+		polygon << QPointF(-0.5, 0)<<QPointF(-0.3, -0.2)<<QPointF(0.3, -0.2)<<QPointF(0.5, 0)
 				<<QPointF(0.3, 0.2)<<QPointF(-0.3, 0.2)<<QPointF(-0.5, 0);
 		path.addPolygon(polygon);
 		break;
 	case Style::SkewedBar:
-		polygon<<QPointF(-0.5, 0.2)<<QPointF(-0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.2, 0.2)<<QPointF(-0.5, 0.2);
+		polygon << QPointF(-0.5, 0.2)<<QPointF(-0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.2, 0.2)<<QPointF(-0.5, 0.2);
 		path.addPolygon(polygon);
 		break;
 	case Style::Diamond:
-		polygon<<QPointF(-0.5, 0)<<QPointF(0, -0.5)<<QPointF(0.5, 0)<<QPointF(0, 0.5)<<QPointF(-0.5, 0);
+		polygon << QPointF(-0.5, 0)<<QPointF(0, -0.5)<<QPointF(0.5, 0)<<QPointF(0, 0.5)<<QPointF(-0.5, 0);
 		path.addPolygon(polygon);
 		break;
 	case Style::Lozenge:
-		polygon<<QPointF(-0.25, 0)<<QPointF(0, -0.5)<<QPointF(0.25, 0)<<QPointF(0, 0.5)<<QPointF(-0.25, 0);
+		polygon << QPointF(-0.25, 0)<<QPointF(0, -0.5)<<QPointF(0.25, 0)<<QPointF(0, 0.5)<<QPointF(-0.25, 0);
 		path.addPolygon(polygon);
 		break;
 	case Style::Tie:
-		polygon<<QPointF(-0.5, -0.5)<<QPointF(0.5, -0.5)<<QPointF(-0.5, 0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, -0.5);
+		polygon << QPointF(-0.5, -0.5)<<QPointF(0.5, -0.5)<<QPointF(-0.5, 0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, -0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::TinyTie:
-		polygon<<QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(-0.2, 0.5)<<QPointF(0.2, 0.5)<<QPointF(-0.2, -0.5);
+		polygon << QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(-0.2, 0.5)<<QPointF(0.2, 0.5)<<QPointF(-0.2, -0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::Plus:
-		polygon<<QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.5, 0.2)
+		polygon << QPointF(-0.2, -0.5)<<QPointF(0.2, -0.5)<<QPointF(0.2, -0.2)<<QPointF(0.5, -0.2)<<QPointF(0.5, 0.2)
 				<<QPointF(0.2, 0.2)<<QPointF(0.2, 0.5)<<QPointF(-0.2, 0.5)<<QPointF(-0.2, 0.2)<<QPointF(-0.5, 0.2)
 				<<QPointF(-0.5, -0.2)<<QPointF(-0.2, -0.2)<<QPointF(-0.2, -0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::Boomerang:
-		polygon<<QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(0, 0)<<QPointF(-0.5, 0.5);
+		polygon << QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(0, 0)<<QPointF(-0.5, 0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::SmallBoomerang:
-		polygon<<QPointF(-0.3, 0.5)<<QPointF(0, -0.5)<<QPointF(0.3, 0.5)<<QPointF(0, 0)<<QPointF(-0.3, 0.5);
+		polygon << QPointF(-0.3, 0.5)<<QPointF(0, -0.5)<<QPointF(0.3, 0.5)<<QPointF(0, 0)<<QPointF(-0.3, 0.5);
 		path.addPolygon(polygon);
 		break;
 	case Style::Star4:
-		polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
+		polygon << QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
 				<<QPointF(0.1, 0.1)<<QPointF(0, 0.5)<<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
 		path.addPolygon(polygon);
 		break;
 	case Style::Star5:
-		polygon<<QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
+		polygon << QPointF(-0.5, 0)<<QPointF(-0.1, -0.1)<<QPointF(0, -0.5)<<QPointF(0.1, -0.1)<<QPointF(0.5, 0)
 				<<QPointF(0.1, 0.1)<<QPointF(0.5, 0.5)<<QPointF(0, 0.2)<<QPointF(-0.5, 0.5)
 				<<QPointF(-0.1, 0.1)<<QPointF(-0.5, 0);
 		path.addPolygon(polygon);
@@ -572,6 +583,10 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.moveTo(.5, -.5);
 		path.lineTo(.5, 0.);
 		break;
+	case Style::SquareDot:
+		path.addEllipse(-.1, -.1, .2, .2);
+		path.addRect(QRectF(- 0.5, -0.5, 1.0, 1.0));
+		break;
 	case Style::SquareDiag:
 		path = QPainterPath(QPointF(-.5, .5));
 		path.lineTo(.5, .5);
@@ -631,6 +646,33 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		path.lineTo(.5/M_SQRT2, .5/M_SQRT2);
 		path.closeSubpath();
 		path.addEllipse(QPoint(0, 0), 0.5, 0.5);
+		break;
+	case Style::TriangleDot:
+		path.addEllipse(-.1, -.1, .2, .2);
+		polygon << QPointF(-0.5, 0.5)<<QPointF(0, -0.5)<<QPointF(0.5, 0.5)<<QPointF(-0.5, 0.5);
+		path.addPolygon(polygon);
+		break;
+	case Style::TriangleHalf:
+		path = QPainterPath(QPointF(-.25, 0));
+		path.lineTo(0, -.5);
+		path.lineTo(.25, 0);
+		path.closeSubpath();
+		path.moveTo(.5, .5);
+		path.lineTo(.25, 0);
+		path.moveTo(.5, .5);
+		path.lineTo(-.5, .5);
+		path.moveTo(-.5, .5);
+		path.lineTo(-.25, 0);
+		break;
+	case Style::TriangleLine:
+		path = QPainterPath(QPointF(-.5, .5));
+		path.lineTo(0, -.5);
+		path.lineTo(0, .5);
+		path.closeSubpath();
+		path.moveTo(.5, .5);
+		path.lineTo(0, .5);
+		path.moveTo(.5, .5);
+		path.lineTo(0, -.5);
 		break;
 	case Style::Flower: {
 		int steps = 100;

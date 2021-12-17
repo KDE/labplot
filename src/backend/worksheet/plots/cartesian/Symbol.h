@@ -29,7 +29,8 @@ public:
 			Star4, Star5, Line, Cross, Heart, Lightning, X, Asterisk, Tri, XPlus, TallPlus,
 			LatinCross, DotPlus, Hash, SquareX, SquarePlus, SquareHalf, SquareDiag, SquareTriangle,
 			CircleHalf, CircleDot, CircleX, CircleTri, Peace, Flower, Flower2, Flower3, Flower5, Flower6,
-			Star, Star3, Star6, Pentagon, Hexagon, Latin, David, Home, Pin, Female, Male, Spade, Club};
+			Star, Star3, Star6, Pentagon, Hexagon, Latin, David, Home, Pin, Female, Male, Spade, Club,
+			SquareDot, TriangleDot, TriangleHalf, TriangleLine};
 	Q_ENUM(Style)
 
 	static int stylesCount();
