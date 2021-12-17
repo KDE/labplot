@@ -1228,7 +1228,7 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				//To achieve this we'll need to increase padding area in the plot and to place the legend outside of the plot area.
 				CartesianPlotLegend::PositionWrapper position;
 				position.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
-				position.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
+				position.verticalPosition = WorksheetElement::VerticalPosition::Top;
 				legend->setPosition(position);
 
 				//rotation
@@ -1678,27 +1678,193 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 	if (originCurve.type == Origin::GraphCurve::Scatter || originCurve.type == Origin::GraphCurve::LineSymbol) {
 		//try to map the different symbols, mapping is not exact
 		symbol->setRotationAngle(0);
-		//TODO: use new symbols
 		switch (originCurve.symbolShape) {	// see https://www.originlab.com/doc/Labtalk/Ref/List-of-Symbol-Shapes
 		case 0: //NoSymbol
 			symbol->setStyle(Symbol::Style::NoSymbols);
 			break;
 		case 1: //Square
-			symbol->setStyle(Symbol::Style::Square);
+			switch (originCurve.symbolInterior) {
+			case 0:	// solid
+			case 1:	// open
+			case 3:	// hollow
+				symbol->setStyle(Symbol::Style::Square);
+				break;
+			case 2:	// dot
+				symbol->setStyle(Symbol::Style::SquareDot);
+				break;
+			case 4:	// plus
+				symbol->setStyle(Symbol::Style::SquarePlus);
+				break;
+			case 5:	// X
+				symbol->setStyle(Symbol::Style::SquareX);
+				break;
+			case 6:	// minus
+			case 10: // down
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				break;
+			case 7:	// pipe
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(90);
+				break;
+			case 8:	// up
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(180);
+				break;
+			case 9:	// right
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(-90);
+				break;
+			case 11: // left
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(90);
+				break;
+			}
 			break;
 		case 2: //Ellipse
 		case 20://Sphere
-			symbol->setStyle(Symbol::Style::Circle);
+			switch (originCurve.symbolInterior) {
+			case 0:	// solid
+			case 1:	// open
+			case 3:	// hollow
+				symbol->setStyle(Symbol::Style::Circle);
+				break;
+			case 2:	// dot
+				symbol->setStyle(Symbol::Style::CircleDot);
+				break;
+			case 4:	// plus
+				symbol->setStyle(Symbol::Style::CircleX);
+				symbol->setRotationAngle(45);
+				break;
+			case 5:	// X
+				symbol->setStyle(Symbol::Style::CircleX);
+				break;
+			case 6:	// minus
+				symbol->setStyle(Symbol::Style::CircleHalf);
+				symbol->setRotationAngle(90);
+				break;
+			case 7:	// pipe
+			case 11: // left
+				symbol->setStyle(Symbol::Style::CircleHalf);
+				break;
+			case 8:	// up
+				symbol->setStyle(Symbol::Style::CircleHalf);
+				symbol->setRotationAngle(90);
+				break;
+			case 9:	// right
+				symbol->setStyle(Symbol::Style::CircleHalf);
+				symbol->setRotationAngle(180);
+				break;
+			case 10: // down
+				symbol->setStyle(Symbol::Style::CircleHalf);
+				symbol->setRotationAngle(-90);
+				break;
+			}
 			break;
 		case 3: //UTriangle
-			symbol->setStyle(Symbol::Style::EquilateralTriangle);
+			switch (originCurve.symbolInterior) {
+			case 0:	// solid
+			case 1:	// open
+			case 3:	// hollow
+			case 4:	// plus	TODO
+			case 5:	// X	TODO
+				symbol->setStyle(Symbol::Style::EquilateralTriangle);
+				break;
+			case 2:	// dot
+				symbol->setStyle(Symbol::Style::TriangleDot);
+				break;
+			case 7:	// pipe
+			case 11: // left
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				break;
+			case 6:	// minus
+			case 8:	// up
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				break;
+			case 9:	// right	TODO
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				//symbol->setRotationAngle(180);
+				break;
+			case 10: // down	TODO
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				//symbol->setRotationAngle(180);
+				break;
+			}
 			break;
 		case 4: //DTriangle
-			symbol->setStyle(Symbol::Style::EquilateralTriangle);
-			symbol->setRotationAngle(180);
+			switch (originCurve.symbolInterior) {
+			case 0:	// solid
+			case 1:	// open
+			case 3:	// hollow
+			case 4:	// plus	TODO
+			case 5:	// X	TODO
+				symbol->setStyle(Symbol::Style::EquilateralTriangle);
+				symbol->setRotationAngle(180);
+				break;
+			case 2:	// dot
+				symbol->setStyle(Symbol::Style::TriangleDot);
+				symbol->setRotationAngle(180);
+				break;
+			case 7:	// pipe
+			case 11: // left
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(180);
+				break;
+			case 6:	// minus
+			case 8:	// up
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(180);
+				break;
+			case 9:	// right	TODO
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(180);
+				break;
+			case 10: // down	TODO
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(180);
+				break;
+			}
 			break;
 		case 5: //Diamond
 			symbol->setStyle(Symbol::Style::Diamond);
+			switch (originCurve.symbolInterior) {
+			case 0:	// solid
+			case 1:	// open
+			case 3:	// hollow
+				symbol->setStyle(Symbol::Style::Diamond);
+				break;
+			case 2:	// dot
+				symbol->setStyle(Symbol::Style::SquareDot);
+				symbol->setRotationAngle(45);
+				break;
+			case 4:	// plus
+				symbol->setStyle(Symbol::Style::SquareX);
+				symbol->setRotationAngle(45);
+				break;
+			case 5:	// X
+				symbol->setStyle(Symbol::Style::SquarePlus);
+				symbol->setRotationAngle(45);
+				break;
+			case 6:	// minus
+			case 10: // down
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				break;
+			case 7:	// pipe
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(90);
+				break;
+			case 8:	// up
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(180);
+				break;
+			case 9:	// right
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(-90);
+				break;
+			case 11: // left
+				symbol->setStyle(Symbol::Style::SquareHalf);
+				symbol->setRotationAngle(90);
+				break;
+			}
 			break;
 		case 6: //Cross +
 			symbol->setStyle(Symbol::Style::Cross);
@@ -1718,12 +1884,72 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 			symbol->setStyle(Symbol::Style::Line);
 			break;
 		case 15: //LTriangle
-			symbol->setStyle(Symbol::Style::EquilateralTriangle);
-			symbol->setRotationAngle(90);
+			switch (originCurve.symbolInterior) {
+			case 0:	// solid
+			case 1:	// open
+			case 3:	// hollow
+			case 4:	// plus	TODO
+			case 5:	// X	TODO
+				symbol->setStyle(Symbol::Style::EquilateralTriangle);
+				symbol->setRotationAngle(-90);
+				break;
+			case 2:	// dot
+				symbol->setStyle(Symbol::Style::TriangleDot);
+				symbol->setRotationAngle(-90);
+				break;
+			case 7:	// pipe
+			case 11: // left
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(-90);
+				break;
+			case 6:	// minus
+			case 8:	// up
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(-90);
+				break;
+			case 9:	// right	TODO
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(-90);
+				break;
+			case 10: // down	TODO
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(-90);
+				break;
+			}
 			break;
 		case 16: //RTriangle
-			symbol->setStyle(Symbol::Style::EquilateralTriangle);
-			symbol->setRotationAngle(-90);
+			switch (originCurve.symbolInterior) {
+			case 0:	// solid
+			case 1:	// open
+			case 3:	// hollow
+			case 4:	// plus	TODO
+			case 5:	// X	TODO
+				symbol->setStyle(Symbol::Style::EquilateralTriangle);
+				symbol->setRotationAngle(90);
+				break;
+			case 2:	// dot
+				symbol->setStyle(Symbol::Style::TriangleDot);
+				symbol->setRotationAngle(90);
+				break;
+			case 7:	// pipe
+			case 11: // left
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(90);
+				break;
+			case 6:	// minus
+			case 8:	// up
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(90);
+				break;
+			case 9:	// right	TODO
+				symbol->setStyle(Symbol::Style::TriangleLine);
+				symbol->setRotationAngle(90);
+				break;
+			case 10: // down	TODO
+				symbol->setStyle(Symbol::Style::TriangleHalf);
+				symbol->setRotationAngle(90);
+				break;
+			}
 			break;
 		case 17: //Hexagon
 			symbol->setStyle(Symbol::Style::Hexagon);
@@ -1737,22 +1963,23 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		default:
 			symbol->setStyle(Symbol::Style::NoSymbols);
 		}
-
 		//symbol size
-		const double scaleFactor = 0.5;	// match size
-		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize * scaleFactor, Worksheet::Unit::Point));
+		const double sizeScaleFactor = 0.5;	// match size
+		symbol->setSize(Worksheet::convertToSceneUnits(originCurve.symbolSize * sizeScaleFactor, Worksheet::Unit::Point));
 
 		//symbol fill color
 		QBrush brush = symbol->brush();
 		if (originCurve.symbolFillColor.type == Origin::Color::ColorType::Automatic) {
-			//"automatic" color -> the color of the line, if available, has to be used, black otherwise
+			//DEBUG(Q_FUNC_INFO << ", AUTOMATIC fill color")
+			//"automatic" color -> the color of the line, if available, is used, and black otherwise
 			if (curve->lineType() != XYCurve::LineType::NoLine)
 				brush.setColor(curve->linePen().color());
 			else
 				brush.setColor(Qt::black);
 		} else
 			brush.setColor(color(originCurve.symbolFillColor));
-
+		if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8)
+			brush.setStyle(Qt::NoBrush);
 		symbol->setBrush(brush);
 
 		//symbol border/edge color and width
@@ -1766,8 +1993,11 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 		} else
 			pen.setColor(color(originCurve.symbolColor));
 
-		//border width (edge thickness in Origin) is given by percentage of the symbol radius
-		pen.setWidthF(originCurve.symbolThickness/100.*symbol->size()/2.);
+		//DEBUG(Q_FUNC_INFO << ", SYMBOL THICKNESS = " << (int)originCurve.symbolThickness)
+		//DEBUG(Q_FUNC_INFO << ", BORDER THICKNESS = " << borderScaleFactor * originCurve.symbolThickness/100.*symbol->size()/scaleFactor)
+		//border width (edge thickness in Origin) is given as percentage of the symbol radius
+		const double borderScaleFactor = 5.;	// match size
+		pen.setWidthF(borderScaleFactor * originCurve.symbolThickness/100.*symbol->size()/sizeScaleFactor);
 
 		symbol->setPen(pen);
 

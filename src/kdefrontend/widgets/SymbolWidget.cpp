@@ -166,7 +166,7 @@ void SymbolWidget::fillingColorChanged(const QColor& color) {
 	}
 
 	m_initializing = true;
-	GuiTools::updateBrushStyles(ui.cbFillingStyle, color );
+	GuiTools::updateBrushStyles(ui.cbFillingStyle, color);
 	m_initializing = false;
 }
 
