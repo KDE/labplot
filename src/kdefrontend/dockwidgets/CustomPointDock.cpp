@@ -315,10 +315,10 @@ void CustomPointDock::bindingChanged(bool checked) {
 //"General"-tab
 void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapper &position) {
 	const Lock lock(m_initializing);
-	SET_NUMBER_LOCALE
-	ui.lePositionXLogical->setText(numberLocale.toString(position.point.x()));
-	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(position.point.x()));
-	ui.lePositionYLogical->setText(numberLocale.toString(position.point.y()));
+	ui.sbPositionX->setValue( Worksheet::convertFromSceneUnits(position.point.x(), m_worksheetUnit) );
+	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
+	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
+	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
 }
 
 void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
