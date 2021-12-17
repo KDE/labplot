@@ -804,8 +804,7 @@ void InfoElementPrivate::init() {
  */
 void InfoElementPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	assert(!q->isLoading());
-	if (!q->m_title || q->markerpoints.isEmpty())
+	if (!q->m_title || q->markerpoints.isEmpty() || q->isLoading())
 		return;
 
 	q->m_suppressChildPositionChanged = true;

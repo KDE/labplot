@@ -228,8 +228,7 @@ ImagePrivate::ImagePrivate(Image* owner) : WorksheetElementPrivate(owner), q(own
 	calculates the position and the bounding box of the label. Called on geometry or text changes.
  */
 void ImagePrivate::retransform() {
-	assert(!q->isLoading());
-	if (suppressRetransform)
+	if (suppressRetransform || q->isLoading())
 		return;
 
 	int w = image.width();

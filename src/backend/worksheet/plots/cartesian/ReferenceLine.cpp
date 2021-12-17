@@ -232,8 +232,7 @@ ReferenceLinePrivate::ReferenceLinePrivate(ReferenceLine* owner) :	WorksheetElem
     calculates the position and the bounding box of the item/point. Called on geometry or properties changes.
  */
 void ReferenceLinePrivate::retransform() {
-	assert(!q->isLoading());
-	if (suppressRetransform || ! q->cSystem)
+	if (suppressRetransform || ! q->cSystem || q->isLoading())
 		return;
 
 	auto cs = q->m_plot->coordinateSystem(q->coordinateSystemIndex());

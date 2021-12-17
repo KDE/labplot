@@ -448,8 +448,7 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 	calculates the position and the bounding box of the label. Called on geometry or text changes.
  */
 void TextLabelPrivate::retransform() {
-	assert(!q->isLoading());
-	if (suppressRetransform)
+	if (suppressRetransform || q->isLoading())
 		return;
 
 	updatePosition();

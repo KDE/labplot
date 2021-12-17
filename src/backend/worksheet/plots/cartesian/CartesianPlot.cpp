@@ -3376,8 +3376,7 @@ CartesianPlotPrivate::~CartesianPlotPrivate() = default;
  */
 void CartesianPlotPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
-	assert(!q->isLoading());
-	if (suppressRetransform)
+	if (suppressRetransform || q->isLoading())
 		return;
 
 	PERFTRACE("CartesianPlotPrivate::retransform()");
