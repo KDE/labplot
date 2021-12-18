@@ -18,37 +18,36 @@
 #include <random>
 
 namespace Ui {
-class MainWindow;
+	class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
+class MainWindow : public QMainWindow {
+	Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+	explicit MainWindow(QWidget *parent = 0);
+	~MainWindow();
 
 public slots:
-    void setClientPort(int p);
+	void setClientPort(int p);
 
 private slots:
-    void on_buttonConnect_clicked();
-    void on_buttonQuit_clicked();
-    void brokerDisconnected();
+	void on_buttonConnect_clicked();
+	void on_buttonQuit_clicked();
+	void brokerDisconnected();
 	void on_buttonSubscribe_clicked();
 	void onTimeout();
 	void intervalChanged(const QString&);
 	void onConnect();
 
 private:
-    Ui::MainWindow *ui;
-    QMqttClient *m_client;
+	Ui::MainWindow *ui;
+	QMqttClient *m_client;
 	bool m_run;
 	QMqttTopicName* m_brownianX;
 	quint8 m_qos;
 	QTimer* m_timer;
-	unsigned m_seed;
+	unsigned int m_seed;
 	std::default_random_engine* m_generator;
 	std::normal_distribution<double>* m_distribution;
 	double m_delta;

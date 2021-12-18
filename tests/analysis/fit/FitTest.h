@@ -71,5 +71,8 @@ private slots:
 	void testLinearGP_PY_xyerror_custom_inverse_weight();
 
 	void testNonLinear_yerror_zero_bug408535();
+
+	// histogram fit
+	void testHistogramFit();
 };
 #endif

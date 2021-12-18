@@ -10,7 +10,10 @@
 */
 
 #include "FitTest.h"
+#include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/worksheet/Worksheet.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYFitCurve.h"
 
 extern "C" {
@@ -2818,5 +2821,72 @@ void FitTest::testNonLinear_yerror_zero_bug408535() {
 	DEBUG(std::setprecision(15) << fitResult.rsquareAdj);	// result: 0.999724193304893
 	FuzzyCompare(fitResult.rsquareAdj, 0.999724193304893, 1.e-9);
 }
+
+void FitTest::testHistogramFit() {
+	Project project;
+	project.load(QFINDTESTDATA(QLatin1String("data/TestHistogramFit.lml")));
+
+	auto* aspect = project.child<AbstractAspect>(0);
+	QVERIFY(aspect != nullptr);
+	if (aspect)
+		QCOMPARE(aspect->name(), QLatin1String("Spreadsheet"));
+	QVERIFY(aspect->type() == AspectType::Spreadsheet);
+	aspect = project.child<AbstractAspect>(1);
+	QVERIFY(aspect != nullptr);
+	if (aspect)
+		QCOMPARE(aspect->name(), QLatin1String("Worksheet - Spreadsheet"));
+	QVERIFY(aspect->type() == AspectType::Worksheet);
+	auto w = dynamic_cast<Worksheet*>(aspect);
+	if (!w) return;
+
+	auto plot = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+	if (plot)
+		QCOMPARE(plot->name(), QLatin1String("Plot - Spreadsheet"));
+
+	auto hist = dynamic_cast<Histogram*>(plot->child<Histogram>(0));
+	QVERIFY(hist != nullptr);
+	if (hist)
+		QCOMPARE(hist->name(), QLatin1String("2"));
+
+	// Do the fit
+	plot->addHistogramFit(hist, nsl_sf_stats_gaussian);
+
+	auto fit = dynamic_cast<XYFitCurve*>(plot->child<XYFitCurve>(0));
+	QVERIFY(fit != nullptr);
+	if (fit)
+		QCOMPARE(fit->name(), QLatin1String("Distribution Fit to '2'"));
+
+	// get results
+	const XYFitCurve::FitResult& fitResult = fit->fitResult();
+
+	QCOMPARE(fitResult.available, true);
+	QCOMPARE(fitResult.valid, true);
+
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(0));
+	QCOMPARE(fitResult.paramValues.at(0), 0.999829585605626);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(0));
+	QCOMPARE(fitResult.errorValues.at(0), 0.0313884775124071);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(1));
+	QCOMPARE(fitResult.paramValues.at(1), 0.988871409810129);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(1));
+	QCOMPARE(fitResult.errorValues.at(1), 0.0358652107488108);
+	DEBUG(std::setprecision(15) << fitResult.paramValues.at(2));
+	QCOMPARE(fitResult.paramValues.at(2), -0.138053471452345);
+	DEBUG(std::setprecision(15) << fitResult.errorValues.at(2));
+	QCOMPARE(fitResult.errorValues.at(2), 0.0358379697268546);
+
+	DEBUG(std::setprecision(15) << fitResult.rms);	// result:
+	QCOMPARE(fitResult.rms, 0.000890023253844838);
+	DEBUG(std::setprecision(15) << fitResult.rsd);	// result:
+	QCOMPARE(fitResult.rsd, 0.0298332575131318);
+	DEBUG(std::setprecision(15) << fitResult.sse);	// result:
+	QCOMPARE(fitResult.sse, 0.0249206511076555);
+	DEBUG(std::setprecision(15) << fitResult.rsquare);	// result:
+	QCOMPARE(fitResult.rsquare, 0.961753741845289);
+	DEBUG(std::setprecision(15) << fitResult.rsquareAdj);	// result:
+	QCOMPARE(fitResult.rsquareAdj, 0.957504157605876);
+}
+
 
 QTEST_MAIN(FitTest)

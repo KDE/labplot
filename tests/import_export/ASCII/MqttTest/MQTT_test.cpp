@@ -21,18 +21,17 @@
 #include <random>
 
 MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent),
-	ui(new Ui::MainWindow),
-	m_run (false),
-	m_pathes (1),
-	m_itersTotal (100000),
-	m_iters (300),
-	m_iterCount (0),
-	m_delta (0.25),
-	m_dt (0.1),
-	m_interval (1000),
-	m_seed (std::chrono::system_clock::now().time_since_epoch().count())
-{
+		QMainWindow(parent),
+		ui(new Ui::MainWindow),
+		m_run (false),
+		m_pathes (1),
+		m_itersTotal (100000),
+		m_iters (300),
+		m_iterCount (0),
+		m_delta (0.25),
+		m_dt (0.1),
+		m_interval (1000),
+		m_seed (std::chrono::system_clock::now().time_since_epoch().count()) {
 	ui->setupUi(this);
 
 	m_timer = new QTimer(this);
@@ -46,7 +45,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	m_client = new QMqttClient(this);
 	m_client->setHostname(ui->lineEditHost->text());
 	m_client->setPort(ui->spinBoxPort->value());
-
 
 	connect(m_client, &QMqttClient::disconnected, this, &MainWindow::brokerDisconnected);
 	connect(m_timer, &QTimer::timeout, this, &MainWindow::onTimeout);
@@ -136,16 +134,16 @@ void MainWindow::onTimeout() {
 		QVector<QString> brownianY;
 		brownianY.fill(QString(), m_pathes);
 
-		if(m_iterCount < m_itersTotal - m_iters - 1)
+		if (m_iterCount < m_itersTotal - m_iters - 1)
 			for (int i = 0; i < m_iters; i++) {
 				if (!s.isEmpty())
 					s.append("\n");
 
 				s.append(QString::number(m_iterCount * m_dt));
-				for(int j = 0; j < m_pathes; j++) {
+				for (int j = 0; j < m_pathes; j++) {
 					if(!brownianY[j].isEmpty())
 						brownianY[j].append("\n");
-					m_x[j] =m_x[j] + m_distribution->operator() (*m_generator);
+					m_x[j] = m_x[j] + m_distribution->operator() (*m_generator);
 					brownianY[j].append(QString::number(m_x[j]));
 				}
 				m_iterCount++;
