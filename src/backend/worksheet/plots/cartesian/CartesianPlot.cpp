@@ -1679,6 +1679,7 @@ void CartesianPlot::setTheme(const QString& theme) {
 
 void CartesianPlot::retransformAll() {
 	Q_D(CartesianPlot);
+	dataChanged(-1, -1, nullptr);
 	d->retransform();
 	WorksheetElementContainer::retransform();
 }
@@ -2376,7 +2377,7 @@ bool CartesianPlot::autoScale(int xIndex, int yIndex, bool fullRange) {
 */
 void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender) {
 	DEBUG(Q_FUNC_INFO << ", x/y index = " << xIndex << "/" << yIndex)
-	if (project() && project()->isLoading())
+	if (isLoading())
 		return;
 
 	Q_D(CartesianPlot);
