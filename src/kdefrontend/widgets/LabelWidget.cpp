@@ -631,7 +631,8 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	if (!m_teXEnabled && m_label->text().mode == TextLabel::Mode::LaTeX) {
+	auto mode = m_label->text().mode;
+	if ((!m_teXEnabled && mode == TextLabel::Mode::LaTeX) || mode == TextLabel::Mode::Text) {
 		const auto& cursor = ui.teLabel->textCursor();
 		if (cursor.selectedText().isEmpty())
 			ui.teLabel->selectAll();
