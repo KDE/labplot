@@ -5525,41 +5525,26 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 		m_themeColorPalette.append(group.readEntry("ThemePaletteColor4", QColor()));
 		m_themeColorPalette.append(group.readEntry("ThemePaletteColor5", QColor()));
 	} else {
-		//no theme is available, provide 5 "default colors"
+		//no theme is available, provide "default colors"
 		m_themeColorPalette.clear();
-		m_themeColorPalette.append(QColor(25, 25, 25));
-		m_themeColorPalette.append(QColor(0, 0, 127));
-		m_themeColorPalette.append(QColor(127 ,0, 0));
-		m_themeColorPalette.append(QColor(0, 127, 0));
-		m_themeColorPalette.append(QColor(85, 0, 127));
-	}
 
-	//generate 30 additional shades if the color palette contains more than one color
-	if (m_themeColorPalette.at(0) != m_themeColorPalette.at(1)) {
-		QColor c;
+		m_themeColorPalette.append(QColor(28, 113, 216));
+		m_themeColorPalette.append(QColor(255, 120, 0));
+		m_themeColorPalette.append(QColor(224, 27, 36));
+		m_themeColorPalette.append(QColor(46, 194, 126));
+		m_themeColorPalette.append(QColor(246, 211, 45));
+		m_themeColorPalette.append(QColor(143, 19, 178));
+		m_themeColorPalette.append(QColor(0, 255, 255));
+		m_themeColorPalette.append(QColor(235, 26, 209));
+		m_themeColorPalette.append(QColor(41, 221, 37));
+		m_themeColorPalette.append(QColor(33, 6, 227));
+		m_themeColorPalette.append(QColor(14, 136, 22));
+		m_themeColorPalette.append(QColor(147, 97, 22));
+		m_themeColorPalette.append(QColor(85, 85, 91));
+		m_themeColorPalette.append(QColor(156, 4, 4));
+		// TODO: maybe removing black?
+		m_themeColorPalette.append(QColor(0, 0, 0));
 
-		//3 factors to create shades from theme's palette
-		std::array<float, 3> fac = {0.25f, 0.45f, 0.65f};
-
-		//Generate 15 lighter shades
-		for (int i = 0; i < 5; i++) {
-			for (int j = 1; j < 4; j++) {
-				c.setRed( m_themeColorPalette.at(i).red()*(1-fac[j-1]) );
-				c.setGreen( m_themeColorPalette.at(i).green()*(1-fac[j-1]) );
-				c.setBlue( m_themeColorPalette.at(i).blue()*(1-fac[j-1]) );
-				m_themeColorPalette.append(c);
-			}
-		}
-
-		//Generate 15 darker shades
-		for (int i = 0; i < 5; i++) {
-			for (int j = 4; j < 7; j++) {
-				c.setRed( m_themeColorPalette.at(i).red()+((255-m_themeColorPalette.at(i).red())*fac[j-4]) );
-				c.setGreen( m_themeColorPalette.at(i).green()+((255-m_themeColorPalette.at(i).green())*fac[j-4]) );
-				c.setBlue( m_themeColorPalette.at(i).blue()+((255-m_themeColorPalette.at(i).blue())*fac[j-4]) );
-				m_themeColorPalette.append(c);
-			}
-		}
 	}
 
 	//use the color of the axis lines as the color for the different mouse cursor lines
@@ -5572,4 +5557,9 @@ void CartesianPlot::setColorPalette(const KConfig& config) {
 
 const QList<QColor>& CartesianPlot::themeColorPalette() const {
 	return m_themeColorPalette;
+}
+
+const QColor CartesianPlot::themeColorPalette(int index) const {
+	const int i = index % m_themeColorPalette.count();
+	return m_themeColorPalette.at(i);
 }

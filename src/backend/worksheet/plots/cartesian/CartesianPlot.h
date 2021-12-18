@@ -89,6 +89,7 @@ public:
 	void navigate(int cSystemIndex, NavigationOperation);
 	void setSuppressDataChangedSignal(bool);
 	const QList<QColor>& themeColorPalette() const;
+	const QColor themeColorPalette(int index) const;
 	void processDropEvent(const QVector<quintptr>&) override;
 	bool isPanningActive() const;
 	bool isHovered() const;
