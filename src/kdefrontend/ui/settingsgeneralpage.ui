@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>613</width>
-    <height>474</height>
+    <width>484</width>
+    <height>501</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -86,7 +86,7 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="lStartup">
      <property name="text">
       <string>Startup:</string>
      </property>
@@ -156,7 +156,16 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -216,7 +225,7 @@
     </widget>
    </item>
    <item row="7" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lNumberOptions">
      <property name="text">
       <string>Number options:</string>
      </property>
@@ -226,6 +235,16 @@
     <widget class="QCheckBox" name="chkIncludeTrailingZeroesAfterDot">
      <property name="text">
       <string>Include trailing zeroes after dot</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="3">
+    <widget class="QCheckBox" name="chkCompatible">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save projects in a compatible format that can be opened in LabPlot versions older than 2.9.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Save in compatible format</string>
      </property>
     </widget>
    </item>

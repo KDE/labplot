@@ -36,6 +36,7 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	connect(ui.chkOmitLeadingZeroInExponent, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
 	connect(ui.chkIncludeTrailingZeroesAfterDot, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
 	connect(ui.chkAutoSave, &QCheckBox::stateChanged, this, &SettingsGeneralPage::autoSaveChanged);
+	connect(ui.chkCompatible, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
@@ -109,6 +110,7 @@ void SettingsGeneralPage::applySettings() {
 	group.writeEntry(QLatin1String("NumberOptions"), static_cast<int>(numberOptions));
 	group.writeEntry(QLatin1String("AutoSave"), ui.chkAutoSave->isChecked());
 	group.writeEntry(QLatin1String("AutoSaveInterval"), ui.sbAutoSaveInterval->value());
+	group.writeEntry(QLatin1String("CompatibleSave"), ui.chkCompatible->isChecked());
 }
 
 void SettingsGeneralPage::restoreDefaults() {
@@ -123,8 +125,8 @@ void SettingsGeneralPage::restoreDefaults() {
 	ui.chkOmitLeadingZeroInExponent->setChecked(true);
 	ui.chkIncludeTrailingZeroesAfterDot->setChecked(false);
 	ui.chkAutoSave->setChecked(false);
-	ui.sbAutoSaveInterval->setValue(0);
 	ui.sbAutoSaveInterval->setValue(5);
+	ui.chkCompatible->setChecked(false);
 }
 
 void SettingsGeneralPage::loadSettings() {
@@ -149,6 +151,7 @@ void SettingsGeneralPage::loadSettings() {
 		ui.chkIncludeTrailingZeroesAfterDot->setChecked(true);
 	ui.chkAutoSave->setChecked(group.readEntry<bool>(QLatin1String("AutoSave"), false));
 	ui.sbAutoSaveInterval->setValue(group.readEntry(QLatin1String("AutoSaveInterval"), 0));
+	ui.chkCompatible->setChecked(group.readEntry<bool>(QLatin1String("CompatibleSave"), false));
 }
 
 void SettingsGeneralPage::retranslateUi() {

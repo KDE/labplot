@@ -1584,8 +1584,9 @@ bool MainWin::saveProject() {
 bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
-	QString path  = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Save Project As"), dir + m_project->fileName(),
+	QString path = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Save Project As"), dir + m_project->fileName(),
 		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
+	// The "Automatically select filename extension (.lml)" option does not change anything
 
 	if (path.isEmpty())// "Cancel" was clicked
 		return false;
@@ -1620,13 +1621,16 @@ bool MainWin::save(const QString& fileName) {
 	tempFile.close();
 
 	QIODevice* file;
-	// if ending is .lml, do xz compression anyway
-	if (fileName.endsWith(QLatin1String(".lml")))
-		file = new KCompressionDevice(tempFileName, KCompressionDevice::Xz);
-	else	// use file ending to find out how to compress file
+	// if file ending is .lml, do xz compression or gzip compression in compatibility mode
+	const KConfigGroup group = KSharedConfig::openConfig()->group("Settings_General");
+	if (fileName.endsWith(QLatin1String(".lml"))) {
+		if (group.readEntry("CompatibleSave", false))
+			file = new KCompressionDevice(tempFileName, KCompressionDevice::GZip);
+		else
+			file = new KCompressionDevice(tempFileName, KCompressionDevice::Xz);
+	} else	// use file ending to find out how to compress file
 		file = new KFilterDev(tempFileName);
-
-	if (file == nullptr)
+	if (!file)
 		file = new QFile(tempFileName);
 
 	bool ok;
@@ -2350,7 +2354,7 @@ void MainWin::dropEvent(QDropEvent* event) {
 }
 
 void MainWin::handleSettingsChanges() {
-	const KConfigGroup group = KSharedConfig::openConfig()->group( "Settings_General" );
+	const KConfigGroup group = KSharedConfig::openConfig()->group("Settings_General");
 
 	//title bar
 	MainWin::TitleBarMode titleBarMode = static_cast<MainWin::TitleBarMode>(group.readEntry("TitleBar", 0));
