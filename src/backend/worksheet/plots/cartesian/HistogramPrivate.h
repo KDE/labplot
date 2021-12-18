@@ -30,7 +30,7 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	void retransform();
+	void retransform() override;
 	void recalcHistogram();
 	void updateType();
 	void updateOrientation();
@@ -42,7 +42,7 @@ public:
 	void updateFilling();
 	void updateErrorBars();
 	void updatePixmap();
-	void recalcShapeAndBoundingRect();
+	void recalcShapeAndBoundingRect() override;
 
 	void setHover(bool on);
 	bool activateCurve(QPointF mouseScenePos, double maxDist);
