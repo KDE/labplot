@@ -794,8 +794,11 @@ void InfoElementPrivate::init() {
 	setFlag(QGraphicsItem::ItemIsMovable, false);
 	setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
-	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
+
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
+	setPos(QPointF(0,0));
+	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 }
 
 /*!
@@ -850,15 +853,11 @@ void InfoElementPrivate::retransform() {
 	QDEBUG(Q_FUNC_INFO << ", connection line = " << connectionLine)
 
 	//vertical line
-	QRectF dataRect = mapFromParent(q->m_plot->dataRect()).boundingRect();
+	const QRectF& dataRect = mapFromParent(q->m_plot->dataRect()).boundingRect();
 	xposLine = QLineF(pointPosItemCoords.x(), dataRect.bottom(), pointPosItemCoords.x(), dataRect.top());
 	QDEBUG(Q_FUNC_INFO << ", vertical line " << xposLine)
 
-	//new item position
-	setFlag(QGraphicsItem::ItemSendsGeometryChanges, false);
-	setPos(QPointF(0,0));
 	update(boundingRectangle);
-	setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
 
 	q->m_suppressChildPositionChanged = false;
 }
