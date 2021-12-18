@@ -975,7 +975,7 @@ bool CartesianPlotLegend::load(XmlStreamReader* reader, bool preview) {
 			}
 		} else if (!preview && reader->name() == "geometry") {
 			if (Project::xmlVersion() >= 6)
-				WorksheetElement::load(reader);
+				WorksheetElement::load(reader, preview);
 			else {
 				// Visible is in "general" before version 6
 				// therefore WorksheetElement::load() cannot be used

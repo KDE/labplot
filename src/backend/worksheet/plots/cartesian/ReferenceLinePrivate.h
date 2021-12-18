@@ -20,8 +20,8 @@ class ReferenceLinePrivate: public WorksheetElementPrivate {
 public:
 	explicit ReferenceLinePrivate(ReferenceLine*);
 
-	void retransform();
-	virtual void recalcShapeAndBoundingRect();
+	void retransform() override;
+	void recalcShapeAndBoundingRect() override;
 	void updatePosition();
 	void updateData();
 

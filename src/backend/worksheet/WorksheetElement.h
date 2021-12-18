@@ -85,8 +85,8 @@ public:
 
 	QMenu* createContextMenu() override;
 
-	virtual void save(QXmlStreamWriter*) const;
-	virtual bool load(XmlStreamReader*);
+	void save(QXmlStreamWriter*) const override;
+	bool load(XmlStreamReader*, bool) override;
 	virtual void loadThemeConfig(const KConfig&);
 	virtual void saveThemeConfig(const KConfig&);
 

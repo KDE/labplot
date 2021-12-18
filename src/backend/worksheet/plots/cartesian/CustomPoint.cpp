@@ -315,7 +315,7 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
 		} else if (!preview && reader->name() == "geometry") {
-			WorksheetElement::load(reader);
+			WorksheetElement::load(reader, preview);
 			if (project()->xmlVersion() < 6) {
 				// In version 5 and smaller the position in the file was always a logical position
 				d->positionLogical = d->position.point;

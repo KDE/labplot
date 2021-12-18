@@ -32,8 +32,8 @@ public:
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
-	virtual void retransform() override;
-	virtual void recalcShapeAndBoundingRect();
+	void retransform() override;
+	void recalcShapeAndBoundingRect() override;
 	void updateImage();
 	void scaleImage();
 	void updatePosition();

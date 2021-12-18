@@ -492,7 +492,7 @@ bool Image::load(XmlStreamReader* reader, bool preview) {
 			READ_INT_VALUE("height", height, int);
 			READ_INT_VALUE("keepRatio", keepRatio, bool);
 
-			WorksheetElement::load(reader);
+			WorksheetElement::load(reader, preview);
 		} else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
 			READ_QPEN(d->borderPen);

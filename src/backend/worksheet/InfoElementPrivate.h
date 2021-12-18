@@ -38,7 +38,7 @@ public:
 
 	void init();
 	void updatePosition();
-	void retransform();
+	void retransform() override;
 	void updateVerticalLine();
 	void updateConnectionLine();
 	void visibilityChanged();

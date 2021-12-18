@@ -53,10 +53,10 @@ public:
 	QPen borderPen{Qt::black, Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Point), Qt::SolidLine};
 	qreal borderOpacity{1.0};
 
-	void retransform();
+	void retransform() override;
 	void updateBoundingRect();
 	void setZoomFactor(double);
-	virtual void recalcShapeAndBoundingRect();
+	virtual void recalcShapeAndBoundingRect() override;
 	void updatePosition();
 	void updateText();
 	void updateTeXImage();

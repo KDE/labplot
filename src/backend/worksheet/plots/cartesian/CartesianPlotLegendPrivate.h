@@ -27,7 +27,7 @@ public:
 
 	CartesianPlotLegend* const q;
 
-	void retransform();
+	void retransform() override;
 	void updatePosition();
 
 	//QGraphicsItem's virtual functions

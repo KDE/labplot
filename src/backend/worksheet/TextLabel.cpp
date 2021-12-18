@@ -1031,7 +1031,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
 		} else if (!preview && reader->name() == "geometry") {
-			WorksheetElement::load(reader);
+			WorksheetElement::load(reader, preview);
 		} else if (!preview && reader->name() == "text")
 			d->textWrapper.text = reader->readElementText();
 		else if (!preview && reader->name() == "textPlaceholder")

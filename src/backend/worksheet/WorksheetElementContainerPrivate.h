@@ -29,7 +29,7 @@ public:
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 
 	void prepareGeometryChangeRequested();
-	void recalcShapeAndBoundingRect();
+	void recalcShapeAndBoundingRect() override;
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 	virtual void retransform() override;
 

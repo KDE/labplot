@@ -30,7 +30,7 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	void retransform();
+	void retransform() override;
 	void retransformRange();
 	void retransformLine();
 	void retransformArrow();
@@ -41,7 +41,7 @@ public:
 	void retransformMajorGrid();
 	void updateGrid();
 	bool swapVisible(bool);
-	void recalcShapeAndBoundingRect();
+	void recalcShapeAndBoundingRect() override;
 	bool isHovered() const;
 
 	bool isDefault{false};

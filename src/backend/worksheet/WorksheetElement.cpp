@@ -431,7 +431,9 @@ void WorksheetElement::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "logicalPosY", QString::number(d->positionLogical.y()));
 }
 
-bool WorksheetElement::load(XmlStreamReader* reader) {
+bool WorksheetElement::load(XmlStreamReader* reader, bool preview) {
+	if (preview)
+		return true;
 
 	Q_D(WorksheetElement);
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
@@ -628,7 +630,7 @@ QRectF WorksheetElementPrivate::boundingRect() const {
 	return boundingRectangle;
 }
 
-void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget) {
+void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
 
 }
 

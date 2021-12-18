@@ -23,8 +23,8 @@ class CustomPointPrivate: public WorksheetElementPrivate {
 public:
 	explicit CustomPointPrivate(CustomPoint*);
 
-	void retransform();
-	virtual void recalcShapeAndBoundingRect();
+	void retransform() override;
+	void recalcShapeAndBoundingRect() override;
 	void updatePosition();
 	void updateData();
 

@@ -27,7 +27,7 @@ public:
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 
-	void retransform();
+	void retransform() override;
 	void recalcLogicalPoints();
 	void updateLines();
 	void addLine(QPointF p0, QPointF p1, QPointF& lastPoint, qint64& pixelDiff, int numberOfPixelX, double minLogicalDiffX, double minLogicalDiffY); // for any x scale
@@ -39,7 +39,7 @@ public:
 	void updateValues();
 	void updateFilling();
 	void updateErrorBars();
-	void recalcShapeAndBoundingRect();
+	void recalcShapeAndBoundingRect() override;
 	void updatePixmap();
 	void suppressRetransform(bool);
 

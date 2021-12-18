@@ -422,7 +422,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "geometry") {
 			// Available from xmlVersion >= 6 on
 			READ_INT_VALUE("orientation", orientation, Orientation);
-			WorksheetElement::load(reader);
+			WorksheetElement::load(reader, preview);
 		} else if (!preview && reader->name() == "line") {
 			attribs = reader->attributes();
 			READ_QPEN(d->pen);
