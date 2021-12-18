@@ -3011,7 +3011,7 @@ void CartesianPlot::zoomInY(int index) {
 		const auto cs = coordinateSystem(i);
 		if ((index == -1 || index == cs->yIndex())) {
 			if (autoScaleX(cs->xIndex()))
-				scaleAutoX(cs->yIndex(), true);
+				scaleAutoX(cs->xIndex(), true);
 			retransform = true;
 		}
 	}
