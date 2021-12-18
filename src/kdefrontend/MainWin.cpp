@@ -1564,30 +1564,33 @@ bool MainWin::closeProject() {
 	removeDockWidget(cursorDock);
 	delete cursorDock;
 	cursorDock = nullptr;
-	cursorWidget = nullptr; // is deleted, because it's the cild of cursorDock
+	cursorWidget = nullptr; // is deleted, because it's the child of cursorDock
 
 	return true;
 }
 
 bool MainWin::saveProject() {
-	const QString& fileName = m_project->fileName();
+	QString fileName = m_project->fileName();
 	if (fileName.isEmpty())
 		return saveProjectAs();
-	else
+	else {
+		// don't overwrite OPJ files
+		if (fileName.endsWith(".opj", Qt::CaseInsensitive))
+			fileName.replace(".opj", ".lml");
 		return save(fileName);
+	}
 }
 
 bool MainWin::saveProjectAs() {
 	KConfigGroup conf(KSharedConfig::openConfig(), "MainWin");
 	const QString& dir = conf.readEntry("LastOpenDir", "");
-	QString path  = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Save Project As"),
-												 dir + m_project->fileName(),
+	QString path  = QFileDialog::getSaveFileName(this, i18nc("@title:window", "Save Project As"), dir + m_project->fileName(),
 		i18n("LabPlot Projects (*.lml *.lml.gz *.lml.bz2 *.lml.xz *.LML *.LML.GZ *.LML.BZ2 *.LML.XZ)"));
 
 	if (path.isEmpty())// "Cancel" was clicked
 		return false;
 
-	if (path.contains(QLatin1String(".lml"), Qt::CaseInsensitive) == false)
+	if (!path.endsWith(QLatin1String(".lml"), Qt::CaseInsensitive))
 		path.append(QLatin1String(".lml"));
 
 	//save new "last open directory"

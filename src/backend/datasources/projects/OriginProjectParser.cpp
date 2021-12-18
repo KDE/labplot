@@ -1978,7 +1978,7 @@ void OriginProjectParser::loadCurve(const Origin::GraphCurve& originCurve, XYCur
 				brush.setColor(Qt::black);
 		} else
 			brush.setColor(color(originCurve.symbolFillColor));
-		if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8)
+		if (originCurve.symbolInterior > 0 && originCurve.symbolInterior < 8)	// unfilled styles
 			brush.setStyle(Qt::NoBrush);
 		symbol->setBrush(brush);
 
