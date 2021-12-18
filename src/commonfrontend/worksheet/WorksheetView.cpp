@@ -1226,7 +1226,7 @@ void WorksheetView::keyPressEvent(QKeyEvent* event) {
 		auto* we = dynamic_cast<WorksheetElement*>(aspect);
 		if (we)
 			we->setVisible(!we->isVisible());
-	} else if (m_worksheet->layout() != Worksheet::Layout::NoLayout) {
+	} else if (aspect->type() == AspectType::CartesianPlot && m_worksheet->layout() != Worksheet::Layout::NoLayout) {
 		//use the arrow keys to navigate only if a layout is active in the worksheet.
 		//without any layout the arrow keys are used to move the plot within the worksheet
 		if (event->key() == Qt::Key_Left)
