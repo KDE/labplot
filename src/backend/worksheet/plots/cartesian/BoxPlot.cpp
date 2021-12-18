@@ -791,23 +791,13 @@ void BoxPlotPrivate::recalc(int index) {
 		break;
 	}
 	case BoxPlot::WhiskersType::SD: {
-		m_whiskerMax[index] = statistics.arithmeticMean + statistics.standardDeviation;
-		m_whiskerMin[index] = statistics.arithmeticMean - statistics.standardDeviation;
-		break;
-	}
-	case BoxPlot::WhiskersType::SD_3: {
-		m_whiskerMax[index] = statistics.arithmeticMean + 3*statistics.standardDeviation;
-		m_whiskerMin[index] = statistics.arithmeticMean - 3*statistics.standardDeviation;
+		m_whiskerMax[index] = statistics.arithmeticMean + whiskersRangeParameter*statistics.standardDeviation;
+		m_whiskerMin[index] = statistics.arithmeticMean - whiskersRangeParameter*statistics.standardDeviation;
 		break;
 	}
 	case BoxPlot::WhiskersType::MAD: {
-		m_whiskerMax[index] = statistics.median + statistics.meanDeviationAroundMedian;
-		m_whiskerMin[index] = statistics.median - statistics.meanDeviationAroundMedian;
-		break;
-	}
-	case BoxPlot::WhiskersType::MAD_3: {
-		m_whiskerMax[index] = statistics.median + 3*statistics.meanDeviationAroundMedian;
-		m_whiskerMin[index] = statistics.median - 3*statistics.meanDeviationAroundMedian;
+		m_whiskerMax[index] = statistics.median + whiskersRangeParameter*statistics.meanDeviationAroundMedian;
+		m_whiskerMin[index] = statistics.median - whiskersRangeParameter*statistics.meanDeviationAroundMedian;
 		break;
 	}
 	case BoxPlot::WhiskersType::PERCENTILES_1_99: {

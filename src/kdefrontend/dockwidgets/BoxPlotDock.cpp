@@ -41,10 +41,8 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 
 	ui.cbWhiskersType->addItem(QLatin1String("min/max"));
 	ui.cbWhiskersType->addItem(QLatin1String("Tukey"));
-	ui.cbWhiskersType->addItem(QLatin1String("mean +/- 1 SD"));
-	ui.cbWhiskersType->addItem(QLatin1String("mean +/- 3 SD"));
-	ui.cbWhiskersType->addItem(QLatin1String("median +/- 1 MAD"));
-	ui.cbWhiskersType->addItem(QLatin1String("median +/- 3 MAD"));
+	ui.cbWhiskersType->addItem(QString("mean ∓ k*SD"));
+	ui.cbWhiskersType->addItem(QString("median ∓ k*MAD"));
 	ui.cbWhiskersType->addItem(i18n("10/90 percentiles"));
 	ui.cbWhiskersType->addItem(i18n("5/95 percentiles"));
 	ui.cbWhiskersType->addItem(i18n("1/99 percentiles"));
@@ -57,6 +55,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.cbOrdering->addItem(i18n("By Median, Descending"));
 	ui.cbOrdering->addItem(i18n("By Mean, Ascending"));
 	ui.cbOrdering->addItem(i18n("By Mean, Descending"));
+
 	QString msg = i18n("If multiple data sets are provided, define how they should be ordered or use 'None' to keep the original order.");
 	ui.lOrdering->setToolTip(msg);
 	ui.cbOrdering->setToolTip(msg);
@@ -64,6 +63,10 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	msg = i18n("If checked, the box width is made proportional to the square root of the number of data points.");
 	ui.lVariableWidth->setToolTip(msg);
 	ui.chkVariableWidth->setToolTip(msg);
+
+	msg = i18n("Parameter controlling the range of the inner fences of the box plot.");
+	ui.lWhiskersRangeParameter->setToolTip(msg);
+	ui.leWhiskersRangeParameter->setToolTip(msg);
 
 	//Tab "Box"
 	msg = i18n("Specify the factor in percent to control the width of the box relative to its default value.");
@@ -804,9 +807,12 @@ void BoxPlotDock::whiskersTypeChanged(int index) const {
 	ui.rbOutlier->setEnabled(type != BoxPlot::WhiskersType::MinMax);
 	ui.rbFarOut->setEnabled(type == BoxPlot::WhiskersType::IQR);
 
-	//range parameter 'k' only available for IQR(=Tukey)
-	ui.lWhiskersRangeParameter->setVisible(type == BoxPlot::WhiskersType::IQR);
-	ui.leWhiskersRangeParameter->setVisible(type == BoxPlot::WhiskersType::IQR);
+	//range parameter 'k' only available for IQR(=Tukey), SD and MAD
+	bool visible = (type == BoxPlot::WhiskersType::IQR)
+				|| (type == BoxPlot::WhiskersType::SD)
+				|| (type == BoxPlot::WhiskersType::MAD);
+	ui.lWhiskersRangeParameter->setVisible(visible);
+	ui.leWhiskersRangeParameter->setVisible(visible);
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersType(type);
@@ -834,7 +840,6 @@ void BoxPlotDock::whiskersRangeParameterChanged(const QString& text) const {
 	double value{numberLocale.toDouble(text, &ok)};
 	if (!ok)
 		return;
-
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setWhiskersRangeParameter(value);
