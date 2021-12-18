@@ -471,6 +471,12 @@ void LabelWidget::textChanged() {
 			if (m_label->text().text.isEmpty()) {
 				ui.teLabel->selectAll();
 				ui.teLabel->setTextColor(m_label->fontColor());
+				// Due to the select all, when entering a new character
+				// the first one will be deleted. So clear the selection
+				// after setting the color
+				auto tc = ui.teLabel->textCursor();
+				tc.setPosition(tc.selectionEnd());
+				ui.teLabel->setTextCursor(tc);
 			}
 
 			text = ui.teLabel->toHtml();
