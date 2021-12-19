@@ -1730,8 +1730,12 @@ void AxisPrivate::retransformTickLabelStrings() {
 		case Axis::LabelsFormat::Decimal: {
 			QString nullStr = numberLocale.toString(0., 'f', labelsPrecision);
 			for (const auto value : tickLabelValues) {
-				// toString does not round: use NSL function
-				str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
+				// toString() does not round: use NSL function
+				if (scale == RangeT::Scale::Log10 || scale == RangeT::Scale::Log2 ||
+					scale == RangeT::Scale::Ln)	// don't use same precision for all label on log scales
+					str = numberLocale.toString(value, 'f', qMax(0, nsl_math_rounded_decimals(value)));
+				else
+					str = numberLocale.toString(nsl_math_round_places(value, labelsPrecision), 'f', labelsPrecision);
 				if (str == "-" + nullStr) str = nullStr;
 				str = labelsPrefix + str + labelsSuffix;
 				tickLabelStrings << str;
