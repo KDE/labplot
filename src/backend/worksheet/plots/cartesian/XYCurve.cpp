@@ -1630,9 +1630,15 @@ void XYCurvePrivate::updateLines() {
 		PERFTRACE(name().toLatin1() + ", XYCurvePrivate::updateLines(), calculate new line path");
 #endif
 		//new line path
-		for (const auto& line : qAsConst(m_lines)) {
-			linePath.moveTo(line.p1());
-			linePath.lineTo(line.p2());
+		if (!m_lines.isEmpty()) {
+			linePath.moveTo(m_lines.constFirst().p1());
+			QPointF prevP2;
+			for (const auto& line : qAsConst(m_lines)) {
+				if (prevP2 != line.p1())
+					linePath.moveTo(line.p1());
+				linePath.lineTo(line.p2());
+				prevP2 = line.p2();
+			}
 		}
 	}
 
