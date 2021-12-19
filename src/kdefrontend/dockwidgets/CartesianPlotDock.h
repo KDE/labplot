@@ -61,6 +61,7 @@ private slots:
 	void layoutChanged(Worksheet::Layout);
 
 	void rangeTypeChanged(int);
+	void niceExtendChanged(bool checked);
 	void rangePointsChanged(const QString&);
 
 	void autoScaleXChanged(int);

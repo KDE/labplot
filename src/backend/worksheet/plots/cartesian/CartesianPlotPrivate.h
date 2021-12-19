@@ -31,6 +31,7 @@ public:
 	void retransformXScale(int index);
 	void retransformScales(int xIndex, int yIndex);
 	void rangeChanged();
+	void niceExtendChanged();
 	void xRangeFormatChanged();
 	void yRangeFormatChanged();
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
@@ -132,7 +133,7 @@ public:
 	};
 
 	QVector<RichRange> xRanges{{}}, yRanges{{}}; // at least one range must exist.
-
+	bool niceExtend{false};
 	CartesianCoordinateSystem* coordinateSystem(int index) const;
 	QVector<AbstractCoordinateSystem*> coordinateSystems() const;
 	CartesianCoordinateSystem* defaultCoordinateSystem() const {

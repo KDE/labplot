@@ -124,6 +124,7 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.sbHeight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CartesianPlotDock::geometryChanged);
 
 	connect(ui.cbRangeType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::rangeTypeChanged);
+	connect(ui.cbNiceExtend, &QCheckBox::clicked, this, &CartesianPlotDock::niceExtendChanged);
 	connect(ui.leRangePoints, &QLineEdit::textChanged, this, &CartesianPlotDock::rangePointsChanged);
 
 	//Range breaks
@@ -1005,6 +1006,14 @@ void CartesianPlotDock::rangeTypeChanged(int index) {
 
 	for (auto* plot : m_plotList)
 		plot->setRangeType(type);
+}
+
+void CartesianPlotDock::niceExtendChanged(bool checked) {
+	if (m_initializing)
+		return;
+
+	for (auto* plot : m_plotList)
+		plot->setNiceExtend(checked);
 }
 
 void CartesianPlotDock::rangePointsChanged(const QString& text) {
@@ -2472,6 +2481,7 @@ void CartesianPlotDock::load() {
 	int index = static_cast<int>(m_plot->rangeType());
 	ui.cbRangeType->setCurrentIndex(index);
 	rangeTypeChanged(index);
+	ui.cbNiceExtend->setChecked(m_plot->niceExtend());
 
 	m_updateUI = false;	// avoid updating twice
 	updateXRangeList();

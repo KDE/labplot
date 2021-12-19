@@ -120,6 +120,7 @@ public:
 	const QString yRangeDateTimeFormat() const;
 	const QString yRangeDateTimeFormat(int index) const;
 	BASIC_D_ACCESSOR_DECL(CartesianPlot::RangeType, rangeType, RangeType)
+	BASIC_D_ACCESSOR_DECL(bool, niceExtend, NiceExtend)
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
@@ -346,6 +347,7 @@ protected:
 
 signals:
 	void rangeTypeChanged(CartesianPlot::RangeType);
+	void niceExtendChanged(bool);
 	void xRangeFormatChanged(int xRangeIndex, RangeT::Format);
 	void yRangeFormatChanged(int yRangeIndex, RangeT::Format);
 	void rangeLastValuesChanged(int);

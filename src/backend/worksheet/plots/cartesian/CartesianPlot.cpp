@@ -856,6 +856,7 @@ bool CartesianPlot::isSelected() const {
 //################################  getter methods  ############################
 //##############################################################################
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeType, rangeType, rangeType)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, niceExtend, niceExtend)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeLastValues, rangeLastValues)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, int, rangeFirstValues, rangeFirstValues)
 
@@ -978,6 +979,13 @@ void CartesianPlot::setRangeType(RangeType type) {
 	Q_D(CartesianPlot);
 	if (type != d->rangeType)
 		exec(new CartesianPlotSetRangeTypeCmd(d, type, ki18n("%1: set range type")));
+}
+
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetNiceExtend, bool, niceExtend, niceExtendChanged);
+void CartesianPlot::setNiceExtend(const bool value) {
+	Q_D(CartesianPlot);
+	if (value != d->niceExtend)
+		exec(new CartesianPlotSetNiceExtendCmd(d, value, ki18n("%1: set nice extend")));
 }
 
 STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, rangeChanged);
@@ -2617,7 +2625,7 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 
 	auto& xRange{ d->xRange(index) };
 	auto dataRange = d->dataXRange(index);
-	if (dataRange.finite())
+	if (dataRange.finite() && d->niceExtend)
 		dataRange.niceExtend();	// auto scale to nice data range
 
 	// if no curve: do not reset to [0, 1]
@@ -2647,7 +2655,8 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 			xRange.extend( xRange.size() * d->autoScaleOffsetFactor );
 		}
 		// extend to nice values
-//		xRange.niceExtend();
+		// if (niceExtend)
+		//   xRange.niceExtend();
 
 		if (!suppressRetransform)
 			d->retransformScales(index, -1); // TODO: all y?
@@ -2687,7 +2696,7 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 
 	auto& yRange{ d->yRange(index) };
 	auto dataRange = d->dataYRange(index);
-	if (dataRange.finite())
+	if (dataRange.finite() && d->niceExtend)
 		dataRange.niceExtend();	// auto scale to nice data range
 
 	bool update = false;
@@ -3126,10 +3135,12 @@ void CartesianPlot::zoom(int index, bool x, bool zoom_in) {
 	}
 
 	// make nice again
-	if (zoom_in)
-		range.niceShrink();
-	else
-		range.niceExtend();
+	if (d->niceExtend) {
+		if (zoom_in)
+			range.niceShrink();
+		else
+			range.niceExtend();
+	}
 
 	if (range.finite())
 		x ? d->xRange(index) = range : d->yRange(index) = range;
@@ -3674,6 +3685,22 @@ QVector<AbstractCoordinateSystem*> CartesianPlotPrivate::coordinateSystems() con
 }
 
 void CartesianPlotPrivate::rangeChanged() {
+	DEBUG(Q_FUNC_INFO)
+	for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
+		int xIndex = coordinateSystem(i)->xIndex();
+		int yIndex = coordinateSystem(i)->yIndex();
+		xRanges[xIndex].dirty = true;
+		yRanges[yIndex].dirty = true;
+		if (autoScaleX(xIndex) && autoScaleY(yIndex))
+			q->scaleAuto(xIndex, yIndex);
+		else if (autoScaleX(xIndex))
+			q->scaleAutoX(xIndex);
+		else if (autoScaleY(yIndex))
+			q->scaleAutoY(yIndex);
+	}
+}
+
+void CartesianPlotPrivate::niceExtendChanged() {
 	DEBUG(Q_FUNC_INFO)
 	for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
 		int xIndex = coordinateSystem(i)->xIndex();
@@ -4318,13 +4345,17 @@ bool CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 			xRange(xIndex).setRange(logicalZoomStart.x(), logicalZoomEnd.x());
 		else
 			xRange(xIndex).setRange(logicalZoomEnd.x(), logicalZoomStart.x());
-		xRange(xIndex).niceExtend();
+
+		if (niceExtend)
+			xRange(xIndex).niceExtend();
 
 		if (m_selectionEnd.y() > m_selectionStart.y())
 			yRange(yIndex).setRange(logicalZoomEnd.y(), logicalZoomStart.y());
 		else
 			yRange(yIndex).setRange(logicalZoomStart.y(), logicalZoomEnd.y());
-		yRange(yIndex).niceExtend();
+
+		if (niceExtend)
+			yRange(yIndex).niceExtend();
 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection) {
 			q->setXRangeDirty(xIndex, true);
@@ -4813,6 +4844,7 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "rightPadding", QString::number(d->rightPadding) );
 	writer->writeAttribute( "bottomPadding", QString::number(d->bottomPadding) );
 	writer->writeAttribute( "symmetricPadding", QString::number(d->symmetricPadding));
+	writer->writeAttribute( "niceExtend", QString::number(d->niceExtend));
 	for (const auto& cSystem : m_coordinateSystems) {
 		writer->writeStartElement( "coordinateSystem" );
 		writer->writeAttribute( "xIndex", QString::number(static_cast<CartesianCoordinateSystem*>(cSystem)->xIndex()) );
@@ -5037,6 +5069,17 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			hasCoordinateSystems = true;
 
 			m_coordinateSystems.clear();
+
+			if (project()->xmlVersion() < 7) {
+				d->niceExtend = true;
+			} else {
+				str = attribs.value("niceExtend").toString();
+				if (str.isEmpty())
+					reader->raiseWarning(attributeWarning.subs("nice").toString());
+				else
+					d->niceExtend = str.toInt();
+			}
+
 		} else if (!preview && reader->name() == "coordinateSystem") {
 			attribs = reader->attributes();
 			// new style
