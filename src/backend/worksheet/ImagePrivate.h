@@ -58,6 +58,8 @@ private:
 	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
+
+	QImage m_image; //scaled and the actual version of the original image that is used for drawing
 };
 
 #endif

@@ -231,8 +231,11 @@ void ImagePrivate::retransform() {
 	if (suppressRetransform || q->isLoading())
 		return;
 
-	int w = image.width();
-	int h = image.height();
+	if (m_image.isNull())
+		m_image = image; //initial call, m_image not initialized yet
+
+	int w = m_image.width();
+	int h = m_image.height();
 	boundingRectangle.setX(-w/2);
 	boundingRectangle.setY(-h/2);
 	boundingRectangle.setWidth(w);
@@ -249,32 +252,33 @@ void ImagePrivate::updateImage() {
 		image = QImage(fileName);
 		width = image.width();
 		height = image.height();
-		emit q->widthChanged(width);
-		emit q->heightChanged(height);
 	} else {
 		width = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Centimeter);
 		height = Worksheet::convertToSceneUnits(3, Worksheet::Unit::Centimeter);
 		image = QIcon::fromTheme("viewimage").pixmap(width, height).toImage();
-		emit q->widthChanged(width);
-		emit q->heightChanged(height);
 	}
+
+	m_image = image;
+
+	emit q->widthChanged(width);
+	emit q->heightChanged(height);
 
 	retransform();
 }
 
 void ImagePrivate::scaleImage() {
 	if (keepRatio) {
-		if (width != image.width()) {
+		if (width != m_image.width()) {
 			//width was changed -> rescale the height to keep the ratio
-			if (image.width() != 0)
-				height = image.height()*width/image.width();
+			if (m_image.width() != 0)
+				height = m_image.height()*width/m_image.width();
 			else
 				height = 0;
 			emit q->heightChanged(height);
-		} else {
+		} else if (height != m_image.height()) {
 			//height was changed -> rescale the width to keep the ratio
-			if (image.height() != 0)
-				width = image.width()*height/image.height();
+			if (m_image.height() != 0)
+				width = m_image.width()*height/m_image.height();
 			else
 				width = 0;
 			emit q->widthChanged(width);
@@ -282,7 +286,7 @@ void ImagePrivate::scaleImage() {
 	}
 
 	if (width != 0 && height != 0)
-		image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		m_image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
 
 void ImagePrivate::updatePosition() {
@@ -344,7 +348,7 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 	//draw the image
 	painter->rotate(-rotationAngle);
 	painter->setOpacity(opacity);
-	painter->drawImage(boundingRectangle.topLeft(), image, image.rect());
+	painter->drawImage(boundingRectangle.topLeft(), m_image, m_image.rect());
 	painter->restore();
 
 	//draw the border
