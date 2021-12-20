@@ -133,7 +133,7 @@ public:
 	};
 
 	QVector<RichRange> xRanges{{}}, yRanges{{}}; // at least one range must exist.
-	bool niceExtend{false};
+	bool niceExtend{true};
 	CartesianCoordinateSystem* coordinateSystem(int index) const;
 	QVector<AbstractCoordinateSystem*> coordinateSystems() const;
 	CartesianCoordinateSystem* defaultCoordinateSystem() const {

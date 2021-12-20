@@ -5075,7 +5075,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			} else {
 				str = attribs.value("niceExtend").toString();
 				if (str.isEmpty())
-					reader->raiseWarning(attributeWarning.subs("nice").toString());
+					reader->raiseWarning(attributeWarning.subs("niceExtend").toString());
 				else
 					d->niceExtend = str.toInt();
 			}

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>416</width>
-    <height>1052</height>
+    <height>1067</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -161,6 +161,7 @@
         <widget class="QLabel" name="lYRanges">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -170,6 +171,7 @@
         <widget class="QLabel" name="lXRanges">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -378,6 +380,7 @@
         <widget class="QLabel" name="lGeometry">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -505,6 +508,7 @@
         <widget class="QLabel" name="lPlotRanges">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -590,17 +594,16 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Extend range to Integer</string>
-         </property>
-        </widget>
-       </item>
        <item row="10" column="4">
         <widget class="QCheckBox" name="cbNiceExtend">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Extend the plot range to nice values.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="text">
-          <string/>
+          <string>Auto Extend</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -767,6 +770,7 @@
         <widget class="QLabel" name="label_3">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -860,6 +864,7 @@
         <widget class="QLabel" name="label">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1172,6 +1177,7 @@
         <widget class="QLabel" name="lPadding">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1294,6 +1300,7 @@
         <widget class="QLabel" name="lBackground">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1320,6 +1327,7 @@
         <widget class="QLabel" name="lBorder">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1503,6 +1511,7 @@
         <widget class="QLabel" name="label_9">
          <property name="font">
           <font>
+           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

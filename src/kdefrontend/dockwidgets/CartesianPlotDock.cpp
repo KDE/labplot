@@ -1014,6 +1014,7 @@ void CartesianPlotDock::niceExtendChanged(bool checked) {
 
 	for (auto* plot : m_plotList)
 		plot->setNiceExtend(checked);
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::rangePointsChanged(const QString& text) {
