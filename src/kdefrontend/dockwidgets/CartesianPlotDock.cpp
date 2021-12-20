@@ -477,14 +477,15 @@ void CartesianPlotDock::updateLocale() {
 			const auto xRange{ m_plot->xRange(row) };
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
 			if (m_plot->xRangeFormat(row) == RangeT::Format::Numeric) {
+				const int relPrec = xRange.relativePrecision();
 				auto* le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Min));
 				// save cursor position
 				int pos = le->cursorPosition();
-				CELLWIDGET(twXRanges, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(xRange.start(), 'g', 15)));
+				CELLWIDGET(twXRanges, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(xRange.start(), 'g', relPrec)));
 				le->setCursorPosition(pos);
 				le = qobject_cast<QLineEdit*>(ui.twXRanges->cellWidget(row, TwRangesColumn::Max));
 				pos = le->cursorPosition();
-				CELLWIDGET(twXRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(xRange.end(), 'g', 15)));
+				CELLWIDGET(twXRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(xRange.end(), 'g', relPrec)));
 				le->setCursorPosition(pos);
 
 			} else {
@@ -508,14 +509,15 @@ void CartesianPlotDock::updateLocale() {
 			const auto yRange{ m_plot->yRange(row) };
 			DEBUG(Q_FUNC_INFO << ", y range " << row << " auto scale = " << yRange.autoScale())
 			if (m_plot->yRangeFormat(row) == RangeT::Format::Numeric) {
+				const int relPrec = yRange.relativePrecision();
 				auto* le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Min));
 				// save cursor position
 				int pos = le->cursorPosition();
-				CELLWIDGET(twYRanges, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(yRange.start(), 'g', 15)));
+				CELLWIDGET(twYRanges, row, TwRangesColumn::Min, QLineEdit, setText(numberLocale.toString(yRange.start(), 'g', relPrec)));
 				le->setCursorPosition(pos);
 				le = qobject_cast<QLineEdit*>(ui.twYRanges->cellWidget(row, TwRangesColumn::Max));
 				pos = le->cursorPosition();
-				CELLWIDGET(twYRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(yRange.end(), 'g', 15)));
+				CELLWIDGET(twYRanges, row, TwRangesColumn::Max, QLineEdit, setText(numberLocale.toString(yRange.end(), 'g', relPrec)));
 				le->setCursorPosition(pos);
 			} else {
 				CELLWIDGET(twYRanges, row, TwRangesColumn::Min, QDateTimeEdit, setDateTime( QDateTime::fromMSecsSinceEpoch(yRange.start())));
@@ -833,12 +835,12 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
 		if (m_plot->xRangeCount() > 1) {
 			for (int index = 0; index < m_plot->xRangeCount(); index++)
-				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + m_plot->xRange(index).toLocaleString() );
+				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + m_plot->xRange(index).toLocaleString(true) );
 			cb->setCurrentIndex(xIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeXChanged);
 		} else {
-			cb->addItem( xRange.toLocaleString() );
+			cb->addItem( xRange.toLocaleString(true) );
 			cb->setStyleSheet("QComboBox::drop-down {border-width: 0px;}");	// hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, 0, cb);
@@ -848,13 +850,13 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
 		if (m_plot->yRangeCount() > 1) {
-			for (int index{0}; index < m_plot->yRangeCount(); index++)
-				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + m_plot->yRange(index).toLocaleString() );
+			for (int index = 0; index < m_plot->yRangeCount(); index++)
+				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + m_plot->yRange(index).toLocaleString(true) );
 			cb->setCurrentIndex(yIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeYChanged);
 		} else {
-			cb->addItem( yRange.toLocaleString() );
+			cb->addItem( yRange.toLocaleString(true) );
 			cb->setStyleSheet("QComboBox::drop-down {border-width: 0px;}");	// hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, 1, cb);

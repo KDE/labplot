@@ -14,6 +14,7 @@
 
 extern "C" {
 #include "backend/gsl/parser.h"
+#include "backend/nsl/nsl_math.h"
 }
 
 #include <klocalizedstring.h>
@@ -101,6 +102,8 @@ public:
 	bool finite() const { return ( qIsFinite(m_start) && qIsFinite(m_end) ); }
 	bool inverse() const { return (m_start > m_end); }
 	int direction() const { return m_start <= m_end ? 1 : -1; }
+	// relative precision (high when interval is small compared to range). At least 4 digits
+	int relativePrecision() const { return qMax(4, -nsl_math_rounded_decimals(std::abs(m_start)/length()) + 1); }
 	bool contains(const Range<T>& other) const { return ( qMin(m_start, m_end) <= qMin(other.start(), other.end()) && qMax(m_start, m_end) >= qMax(other.start(), other.end()) ); }
 	bool contains(T value) const { return ( qMin(m_start, m_end) <= value && qMax(m_start, m_end) >= value ); }
 	void translate(T offset) { m_start += offset; m_end += offset; }
@@ -111,7 +114,9 @@ public:
 	Range<T>& operator*=(const T value) { m_start *= value; m_end *= value; return *this; }
 
 	//! Return a string in the format 'start .. end' and uses system locale (specialization see below)
-	QString toString() const {
+	// round == true rounds the double values
+	QString toString(bool round = true) const {
+		Q_UNUSED(round)
 		if (m_format == Format::Numeric)
 			return QLocale().toString(m_start) + " .. " + QLocale().toString(m_end);
 		else
@@ -120,9 +125,9 @@ public:
 	}
 	std::string toStdString() const { return STDSTRING(toString()); }
 	//! Return a string in the format 'start .. end' and uses number locale
-	QString toLocaleString() const {
+	QString toLocaleString(bool round = true) const {
 		SET_NUMBER_LOCALE
-		return this->toString();
+		return this->toString(round);
 	}
 //extend/shrink range to nice numbers (used in auto scaling)
 	// get nice size to extend to (see Glassner: Graphic Gems)
@@ -218,13 +223,19 @@ private:
 
 // specialization
 template<>
-inline QString Range<double>::toString() const {
-		if (m_format == Format::Numeric)
-			return QLocale().toString(m_start, 'g', 15) + " .. " + QLocale().toString(m_end, 'g', 15);
-		else
-			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " .. "
-				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
-	}
+inline QString Range<double>::toString(bool round) const {
+	if (m_format == Format::Numeric) {
+		if (round) {
+			const int relPrec = relativePrecision();
+			//DEBUG(Q_FUNC_INFO << ", rel prec = " << relPrec)
+			return QLocale().toString(nsl_math_round_precision(m_start, relPrec), 'g', relPrec) + " .. " + 
+				QLocale().toString(nsl_math_round_precision(m_end, relPrec), 'g', relPrec);
+		} else
+			return QLocale().toString(m_start, 'g', 12) + " .. " + QLocale().toString(m_end, 'g', 12);
+	} else
+		return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " .. "
+			+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
+}
 
 #endif
 
