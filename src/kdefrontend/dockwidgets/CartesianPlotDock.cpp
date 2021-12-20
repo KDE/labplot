@@ -835,12 +835,12 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
 		if (m_plot->xRangeCount() > 1) {
 			for (int index = 0; index < m_plot->xRangeCount(); index++)
-				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + m_plot->xRange(index).toLocaleString(true) );
+				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + m_plot->xRange(index).toLocaleString() );
 			cb->setCurrentIndex(xIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeXChanged);
 		} else {
-			cb->addItem( xRange.toLocaleString(true) );
+			cb->addItem( xRange.toLocaleString() );
 			cb->setStyleSheet("QComboBox::drop-down {border-width: 0px;}");	// hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, 0, cb);
@@ -851,12 +851,12 @@ void CartesianPlotDock::updatePlotRangeList() {
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
 		if (m_plot->yRangeCount() > 1) {
 			for (int index = 0; index < m_plot->yRangeCount(); index++)
-				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + m_plot->yRange(index).toLocaleString(true) );
+				cb->addItem( QString::number(index + 1) + QLatin1String(" : ") + m_plot->yRange(index).toLocaleString() );
 			cb->setCurrentIndex(yIndex);
 			cb->setProperty("row", i);
 			connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::PlotRangeYChanged);
 		} else {
-			cb->addItem( yRange.toLocaleString(true) );
+			cb->addItem( yRange.toLocaleString() );
 			cb->setStyleSheet("QComboBox::drop-down {border-width: 0px;}");	// hide arrow if there is only one range
 		}
 		ui.twPlotRanges->setCellWidget(i, 1, cb);
