@@ -231,9 +231,6 @@ void ImagePrivate::retransform() {
 	if (suppressRetransform || q->isLoading())
 		return;
 
-	if (m_image.isNull())
-		m_image = image; //initial call, m_image not initialized yet
-
 	int w = m_image.width();
 	int h = m_image.height();
 	boundingRectangle.setX(-w/2);
@@ -267,6 +264,9 @@ void ImagePrivate::updateImage() {
 }
 
 void ImagePrivate::scaleImage() {
+	if (m_image.isNull())
+		m_image = image; //initial call from load(), m_image not initialized yet
+
 	if (keepRatio) {
 		if (width != m_image.width()) {
 			//width was changed -> rescale the height to keep the ratio
@@ -287,6 +287,8 @@ void ImagePrivate::scaleImage() {
 
 	if (width != 0 && height != 0)
 		m_image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+	retransform();
 }
 
 void ImagePrivate::updatePosition() {
