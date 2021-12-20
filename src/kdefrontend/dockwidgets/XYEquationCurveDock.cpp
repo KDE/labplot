@@ -261,10 +261,10 @@ void XYEquationCurveDock::showConstants() {
 	menu.addAction(widgetAction);
 
 	if (QObject::sender() == uiGeneralTab.tbConstants1) {
-		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbConstants1->width(),-menu.sizeHint().height());
+		QPoint pos(-menu.sizeHint().width() + uiGeneralTab.tbConstants1->width(), -menu.sizeHint().height());
 		menu.exec(uiGeneralTab.tbConstants1->mapToGlobal(pos));
 	} else {
-		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbConstants2->width(),-menu.sizeHint().height());
+		QPoint pos(-menu.sizeHint().width() + uiGeneralTab.tbConstants2->width(), -menu.sizeHint().height());
 		menu.exec(uiGeneralTab.tbConstants2->mapToGlobal(pos));
 	}
 }
@@ -285,10 +285,10 @@ void XYEquationCurveDock::showFunctions() {
 	menu.addAction(widgetAction);
 
 	if (QObject::sender() == uiGeneralTab.tbFunctions1) {
-		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbFunctions1->width(),-menu.sizeHint().height());
+		QPoint pos(-menu.sizeHint().width() + uiGeneralTab.tbFunctions1->width(), -menu.sizeHint().height());
 		menu.exec(uiGeneralTab.tbFunctions1->mapToGlobal(pos));
 	} else {
-		QPoint pos(-menu.sizeHint().width()+uiGeneralTab.tbFunctions2->width(),-menu.sizeHint().height());
+		QPoint pos(-menu.sizeHint().width() + uiGeneralTab.tbFunctions2->width(), -menu.sizeHint().height());
 		menu.exec(uiGeneralTab.tbFunctions2->mapToGlobal(pos));
 	}
 }
@@ -315,7 +315,7 @@ void XYEquationCurveDock::enableRecalculate() const {
 	if (m_initializing)
 		return;
 
-	//check whether the formular expressions are correct
+	//check whether the formula expressions are correct
 	bool valid = false;
 	const auto type = XYEquationCurve::EquationType(uiGeneralTab.cbType->currentIndex());
 	if (type != XYEquationCurve::EquationType::Parametric)

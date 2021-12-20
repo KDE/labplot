@@ -1409,7 +1409,17 @@ bool ExpressionParser::isValid(const QString& expr, const QStringList& vars) {
 		assign_symbol(qPrintable(var), 0);
 
 	SET_NUMBER_LOCALE
+	DEBUG(Q_FUNC_INFO << ", number locale: " << STDSTRING(numberLocale.name()))
 	parse(qPrintable(expr), qPrintable(numberLocale.name()));
+
+	// if parsing with number locale fails, try default locale
+	if (parse_errors() > 0) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: failed parsing expr \"" << STDSTRING(expr)
+			<< "\" with locale " << numberLocale.name().toStdString() << ", errors = "  << parse_errors())
+		parse(qPrintable(expr), "en_US");
+		if (parse_errors() > 0)
+			DEBUG(Q_FUNC_INFO << ", ERROR: parsing FAILED, errors = " << parse_errors())
+	}
 
 	/* remove temporarily defined symbols */
 	for (const auto& var: vars)
@@ -1469,7 +1479,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 		const double x{ range.start() + step * i };
 		assign_symbol("x", x);
 
-		const double y{ parse(qPrintable(expr), qPrintable(numberLocale.name())) };
+		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	// try default locale if failing
+			y = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
 
@@ -1493,7 +1505,11 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 		const double x{ range.start() + step * i };
 		assign_symbol("x", x);
 
-		const double y{ parse(qPrintable(expr), qPrintable(numberLocale.name())) };
+		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	{ // try default locale if failing
+			y = parse(qPrintable(expr), "en_US");
+			//DEBUG(Q_FUNC_INFO << ", WARNING: PARSER failed, trying default locale: y = " << y)
+		}
 		if (parse_errors() > 0)
 			return false;
 
@@ -1511,8 +1527,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	SET_NUMBER_LOCALE
 	for (int i = 0; i < xVector->count(); i++) {
 		assign_symbol("x", xVector->at(i));
-		const double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
-
+		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	// try default locale if failing
+			y = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
 
@@ -1534,7 +1551,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 	for (int i = 0; i < xVector->count(); i++) {
 		assign_symbol("x", xVector->at(i));
 
-		const double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	// try default locale if failing
+			y = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
 
@@ -1569,7 +1588,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		for (int n = 0; n < vars.size(); ++n)
 			assign_symbol(qPrintable(vars.at(n)), xVectors.at(n)->at(i));
 
-		const double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		double y = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	// try default locale if failing
+			y = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
 
@@ -1595,7 +1616,9 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 		const double phi = range.start() + step * i;
 		assign_symbol("phi", phi);
 
-		const double r = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		double r = parse(qPrintable(expr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	// try default locale if failing
+			r = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
 
@@ -1617,11 +1640,15 @@ bool ExpressionParser::evaluateParametric(const QString& xexpr, const QString& y
 	for (int i = 0; i < count; i++) {
 		assign_symbol("t", range.start() + step * i);
 
-		const double x = parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
+		double x = parse(qPrintable(xexpr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	// try default locale if failing
+			x = parse(qPrintable(xexpr), "en_US");
 		if (parse_errors() > 0)
 			return false;
 
-		const double y = parse(qPrintable(yexpr), qPrintable(numberLocale.name()));
+		double y = parse(qPrintable(yexpr), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	// try default locale if failing
+			y = parse(qPrintable(yexpr), "en_US");
 		if (parse_errors() > 0)
 			return false;
 

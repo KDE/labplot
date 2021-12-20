@@ -786,6 +786,8 @@ int func_f(const gsl_vector* paramValues, void* params, gsl_vector* f) {
 		assign_symbol("x", x[i]);
 		//DEBUG("evaluate function \"" << STDSTRING(func) << "\" @ x = " << x[i] << ":");
 		double Yi = parse(qPrintable(func), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	// fallback to default locale
+			Yi = parse(qPrintable(func), "en_US");
 		//DEBUG("	f(x["<< i <<"]) = " << Yi);
 
 		if (parse_errors() > 0)
@@ -1484,14 +1486,18 @@ int func_df(const gsl_vector* paramValues, void* params, gsl_matrix* J) {
 
 				value = nsl_fit_map_bound(gsl_vector_get(paramValues, j), min[j], max[j]);
 				assign_symbol(qPrintable(paramNames->at(j)), value);
-				const double f_p = parse(qPrintable(func), qPrintable(numberLocale.name()));
+				double f_p = parse(qPrintable(func), qPrintable(numberLocale.name()));
+				if (parse_errors() > 0)	// fallback to default locale
+					f_p = parse(qPrintable(func), "en_US");
 
 				double eps = 1.e-9;
 				if (std::abs(f_p) > 0)
 					eps *= std::abs(f_p);	// scale step size with function value
 				value += eps;
 				assign_symbol(qPrintable(paramNames->at(j)), value);
-				const double f_pdp = parse(qPrintable(func), qPrintable(numberLocale.name()));
+				double f_pdp = parse(qPrintable(func), qPrintable(numberLocale.name()));
+				if (parse_errors() > 0)	// fallback to default locale
+					f_pdp = parse(qPrintable(func), "en_US");
 
 //				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]) ="<<QString::number(f_p, 'g', 15));
 //				DEBUG("evaluate deriv"<<func<<": f(x["<<i<<"]+dx) ="<<QString::number(f_pdp, 'g', 15));

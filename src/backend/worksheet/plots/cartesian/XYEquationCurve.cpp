@@ -174,7 +174,7 @@ void XYEquationCurve::save(QXmlStreamWriter* writer) const{
 	writer->writeAttribute( "type", QString::number(static_cast<int>(d->equationData.type)) );
 	writer->writeAttribute( "expression1", d->equationData.expression1 );
 	writer->writeAttribute( "expression2", d->equationData.expression2 );
-	writer->writeAttribute( "min", d->equationData.min);
+	writer->writeAttribute( "min", d->equationData.min );
 	writer->writeAttribute( "max", d->equationData.max );
 	writer->writeAttribute( "count", QString::number(d->equationData.count) );
 	writer->writeEndElement();

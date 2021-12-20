@@ -60,10 +60,22 @@ public:
 	Range(const QString& start, const QString& end, const Format format = Format::Numeric,
 	      const Scale scale = Scale::Linear) {
 		SET_NUMBER_LOCALE
+		// min
+		double min = parse(qPrintable(start.simplified()), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	// if parsing fails, try default locale
+			min = parse(qPrintable(start.simplified()), "en_US");
+		if (parse_errors() > 0)
+			min = 0;
+
+		// max
+		double max = parse(qPrintable(end.simplified()), qPrintable(numberLocale.name()));
+		if (parse_errors() > 0)	// if parsing fails, try default locale
+			max = parse(qPrintable(end.simplified()), "en_US");
+		if (parse_errors() > 0)
+			max = 1.;
+
 		//TODO: check for NAN, INF?
-		this->setRange(parse(qPrintable(start.simplified()), qPrintable(numberLocale.name())),
-				parse(qPrintable(end.simplified()), qPrintable(numberLocale.name())),
-				format, scale);
+		this->setRange(min, max, format, scale);
 	}
 
 	T start() const { return m_start; }
