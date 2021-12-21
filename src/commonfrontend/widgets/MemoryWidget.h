@@ -20,7 +20,7 @@ class MemoryWidget : public QLabel {
 public:
 	explicit MemoryWidget(QWidget*);
 
-public slots:
+public Q_SLOTS:
 	void refreshMemoryInfo();
 
 private:

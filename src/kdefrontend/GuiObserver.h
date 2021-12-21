@@ -24,7 +24,7 @@ public:
 private:
 	MainWin* m_mainWindow;
 
-private slots:
+private Q_SLOTS:
 	void selectedAspectsChanged(QList<AbstractAspect*>&) const;
 	void hiddenAspectSelected(const AbstractAspect*) const;
 };

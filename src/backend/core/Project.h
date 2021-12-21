@@ -78,11 +78,11 @@ public:
 
 	class Private;
 
-public slots:
+public Q_SLOTS:
 	void descriptionChanged(const AbstractAspect*);
 	void aspectAddedSlot(const AbstractAspect*);
 
-signals:
+Q_SIGNALS:
 	void authorChanged(const QString&);
 	void saveCalculationsChanged(bool);
 	void requestSaveState(QXmlStreamWriter*) const;

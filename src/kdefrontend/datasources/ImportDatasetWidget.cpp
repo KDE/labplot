@@ -67,7 +67,7 @@ ImportDatasetWidget::ImportDatasetWidget(QWidget* parent) : QWidget(parent),
 		if (!m_initializing)
 			datasetChanged();
 	});
-	connect(ui.lwDatasets, &QListWidget::doubleClicked, [this]() {emit datasetDoubleClicked(); });
+	connect(ui.lwDatasets, &QListWidget::doubleClicked, [this]() {Q_EMIT datasetDoubleClicked(); });
 	connect(m_networkManager, &QNetworkAccessManager::finished, this, &ImportDatasetWidget::downloadFinished);
 
 	//select the last used collection
@@ -546,7 +546,7 @@ void ImportDatasetWidget::datasetChanged() {
 		m_datasetObject = QJsonObject();
 
 	ui.lInfo->setText(info);
-	emit datasetSelected();
+	Q_EMIT datasetSelected();
 }
 
 void ImportDatasetWidget::downloadFinished(QNetworkReply* reply) {

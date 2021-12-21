@@ -1582,7 +1582,7 @@ void XYFitCurvePrivate::recalculate() {
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		DEBUG(Q_FUNC_INFO << ", ERROR: Preparing source data columns failed!");
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -1598,7 +1598,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Model has no parameters.");
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -1608,7 +1608,7 @@ void XYFitCurvePrivate::recalculate() {
 			fitResult.available = true;
 			fitResult.valid = false;
 			fitResult.status = i18n("Not sufficient weight data points provided.");
-			emit q->dataChanged();
+			Q_EMIT q->dataChanged();
 			sourceDataChangedSinceLastRecalc = false;
 			return;
 		}
@@ -1706,7 +1706,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("No data points available.");
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -1715,7 +1715,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("The number of data points (%1) must be greater than or equal to the number of parameters (%2).", n, np);
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -1724,7 +1724,7 @@ void XYFitCurvePrivate::recalculate() {
 		fitResult.available = true;
 		fitResult.valid = false;
 		fitResult.status = i18n("Fit model not specified.");
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -2114,7 +2114,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	if (!tmpXDataColumn) {
 		DEBUG("	ERROR: Preparing source data column failed!");
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		return;
 	}
 
@@ -2126,14 +2126,14 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	if (!xVector || !yVector) {
 		DEBUG(Q_FUNC_INFO << ", xVector or yVector not defined!");
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		return;
 	}
 
 	if (fitData.model.simplified().isEmpty()) {
 		DEBUG(Q_FUNC_INFO << ", no fit-model specified.");
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		return;
 	}
 
@@ -2163,7 +2163,7 @@ void XYFitCurvePrivate::evaluate(bool preview) {
 	}
 
 	recalcLogicalPoints();
-	emit q->dataChanged();
+	Q_EMIT q->dataChanged();
 }
 
 /*!

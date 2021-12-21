@@ -107,7 +107,7 @@ QMenu* Column::createContextMenu() {
 	//later, once we have some actions in the menu also for MQTT topics we'll
 	//need to explicitly to dynamic_cast for MQTTTopic
 	if (firstAction)
-		emit requestProjectContextMenu(menu);
+		Q_EMIT requestProjectContextMenu(menu);
 
 	//"Used in" menu containing all curves where the column is used
 	QMenu* usedInMenu = new QMenu(i18n("Used in"));
@@ -370,7 +370,7 @@ void Column::handleRowInsertion(int before, int count) {
 	AbstractColumn::handleRowInsertion(before, count);
 	exec(new ColumnInsertRowsCmd(d, before, count));
 	if (!m_suppressDataChangedSignal)
-		emit dataChanged(this);
+		Q_EMIT dataChanged(this);
 
 	invalidateProperties();
 }
@@ -382,7 +382,7 @@ void Column::handleRowRemoval(int first, int count) {
 	AbstractColumn::handleRowRemoval(first, count);
 	exec(new ColumnRemoveRowsCmd(d, first, count));
 	if (!m_suppressDataChangedSignal)
-		emit dataChanged(this);
+		Q_EMIT dataChanged(this);
 
 	invalidateProperties();
 }
@@ -1010,12 +1010,12 @@ qint64 Column::bigIntAt(int row) const {
 
 /*
  * call this function if the data of the column was changed directly via the data()-pointer
- * and not via the setValueAt() in order to emit the dataChanged-signal.
+ * and not via the setValueAt() in order to Q_EMIT the dataChanged-signal.
  * This is used e.g. in \c XYFitCurvePrivate::recalculate()
  */
 void Column::setChanged() {
 	if (!m_suppressDataChangedSignal)
-		emit dataChanged(this);
+		Q_EMIT dataChanged(this);
 
 	invalidateProperties();
 }
@@ -1690,9 +1690,9 @@ void Column::handleFormatChange() {
 		input_filter->setFormat(output_filter->format());
 	}
 
-	emit aspectDescriptionChanged(this); // the icon for the type changed
+	Q_EMIT aspectDescriptionChanged(this); // the icon for the type changed
 	if (!m_suppressDataChangedSignal)
-		emit formatChanged(this); // all cells must be repainted
+		Q_EMIT formatChanged(this); // all cells must be repainted
 
 	d->statisticsAvailable = false;
 	d->hasValuesAvailable = false;

@@ -27,7 +27,7 @@ public:
 private:
 	Ui::AspectDock ui;
 
-private slots:
+private Q_SLOTS:
 	void aspectDescriptionChanged(const AbstractAspect*);
 };
 

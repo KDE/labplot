@@ -187,7 +187,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 					double value = qGray(image.pixel(j+startColumn-1, i+startRow-1));
 					static_cast<QVector<double>*>(dataContainer[j])->operator[](i) = value;
 				}
-				emit q->completed(100*i/actualRows);
+				Q_EMIT q->completed(100*i/actualRows);
 			}
 			break;
 		}
@@ -201,7 +201,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 					static_cast<QVector<int>*>(dataContainer[2])->operator[](currentRow) = qGray(color);
 					currentRow++;
 				}
-				emit q->completed(100*i/actualRows);
+				Q_EMIT q->completed(100*i/actualRows);
 			}
 			break;
 		}
@@ -217,7 +217,7 @@ void ImageFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataS
 					static_cast<QVector<int>*>(dataContainer[4])->operator[](currentRow) = qBlue(color);
 					currentRow++;
 				}
-				emit q->completed(100*i/actualRows);
+				Q_EMIT q->completed(100*i/actualRows);
 			}
 			break;
 		}

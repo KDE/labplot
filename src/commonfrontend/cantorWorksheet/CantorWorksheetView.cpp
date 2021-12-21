@@ -255,10 +255,10 @@ void CantorWorksheetView::statusChanged(Cantor::Session::Status status) {
 	if (status == Cantor::Session::Running) {
 		m_evaluateWorsheetAction->setText(i18n("Interrupt"));
 		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("dialog-close")));
-		emit m_worksheet->statusInfo(i18n("Calculating..."));
+		Q_EMIT m_worksheet->statusInfo(i18n("Calculating..."));
 	} else {
 		m_evaluateWorsheetAction->setText(i18n("Evaluate Worksheet"));
 		m_evaluateWorsheetAction->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
-		emit m_worksheet->statusInfo(i18n("Ready"));
+		Q_EMIT m_worksheet->statusInfo(i18n("Ready"));
 	}
 }

@@ -39,7 +39,7 @@ protected:
 	virtual bool inputAcceptable(int port, const AbstractColumn* source);
 	virtual void inputAboutToBeDisconnected(const AbstractColumn* source);
 
-protected slots:
+protected Q_SLOTS:
 	virtual void inputDescriptionAboutToChange(const AbstractColumn* source);
 	void inputDescriptionAboutToChange(const AbstractAspect* aspect);
 	virtual void inputDescriptionChanged(const AbstractColumn* source);

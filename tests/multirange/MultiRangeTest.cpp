@@ -55,7 +55,7 @@ void MultiRangeTest::initTestCase() {
 \
 	auto* view = dynamic_cast<WorksheetView*>(w->view()); \
 	QVERIFY(view != nullptr); \
-	emit w->useViewSizeRequested(); /* To init the worksheet view actions */\
+	Q_EMIT w->useViewSizeRequested(); /* To init the worksheet view actions */\
 \
 	/* axis selected */ \
 	auto sinCurve = dynamic_cast<XYCurve*>(p1->child<XYCurve>(0)); \

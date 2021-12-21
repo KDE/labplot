@@ -140,15 +140,15 @@ void Datapicker::childSelected(const AbstractAspect* aspect) {
 	if (m_activeCurve) {
 		//if one of the curves is currently selected, select the image with the plot (the very first child)
 		index = 0;
-		emit statusInfo(i18n("%1, active curve \"%2\"", this->name(), m_activeCurve->name()));
-		emit requestUpdateActions();
+		Q_EMIT statusInfo(i18n("%1, active curve \"%2\"", this->name(), m_activeCurve->name()));
+		Q_EMIT requestUpdateActions();
 	} else if (aspect) {
 		const auto* curve = aspect->ancestor<const DatapickerCurve>();
 		index = indexOfChild<AbstractAspect>(curve);
 		++index; //+1 because of the hidden plot image being the first child and shown in the first tab in the view
 	}
 
-	emit datapickerItemSelected(index);
+	Q_EMIT datapickerItemSelected(index);
 }
 
 /*!
@@ -168,13 +168,13 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 	//select/deselect the datapicker itself if the first tab "representing" the plot image and the curves was selected in the view
 	if (index == 0) {
 		if (selected)
-			emit childAspectSelectedInView(this);
+			Q_EMIT childAspectSelectedInView(this);
 		else {
-			emit childAspectDeselectedInView(this);
+			Q_EMIT childAspectDeselectedInView(this);
 
 			//deselect also all curves (they don't have any tab index in the view) that were potentially selected before
 			for (const auto* curve : children<const DatapickerCurve>())
-				emit childAspectDeselectedInView(curve);
+				Q_EMIT childAspectDeselectedInView(curve);
 		}
 
 		return;
@@ -186,17 +186,17 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 	auto spreadsheets = children<const Spreadsheet>(ChildIndexFlag::Recursive);
 	const AbstractAspect* aspect = spreadsheets.at(index);
 	if (selected) {
-		emit childAspectSelectedInView(aspect);
+		Q_EMIT childAspectSelectedInView(aspect);
 
 		//deselect the datapicker in the project explorer, if a child (spreadsheet or image) was selected.
 		//prevents unwanted multiple selection with datapicker if it was selected before.
-		emit childAspectDeselectedInView(this);
+		Q_EMIT childAspectDeselectedInView(this);
 	} else {
-		emit childAspectDeselectedInView(aspect);
+		Q_EMIT childAspectDeselectedInView(aspect);
 
 		//deselect also all children that were potentially selected before (columns of a spreadsheet)
 		for (const auto* child : aspect->children<const AbstractAspect>())
-			emit childAspectDeselectedInView(child);
+			Q_EMIT childAspectDeselectedInView(child);
 	}
 }
 
@@ -206,9 +206,9 @@ void Datapicker::setChildSelectedInView(int index, bool selected) {
 */
 void Datapicker::setSelectedInView(const bool b) {
 	if (b)
-		emit childAspectSelectedInView(this);
+		Q_EMIT childAspectSelectedInView(this);
 	else
-		emit childAspectDeselectedInView(this);
+		Q_EMIT childAspectDeselectedInView(this);
 }
 
 void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
@@ -234,7 +234,7 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 	}
 
 	endMacro();
-	emit requestUpdateActions();
+	Q_EMIT requestUpdateActions();
 }
 
 QVector3D Datapicker::mapSceneToLogical(QPointF point) const {
@@ -255,12 +255,12 @@ void Datapicker::handleAspectAboutToBeRemoved(const AbstractAspect* aspect) {
 
 		if (curve == m_activeCurve) {
 			m_activeCurve = nullptr;
-			emit statusInfo(QString());
+			Q_EMIT statusInfo(QString());
 		}
 	} else
 		handleChildAspectAboutToBeRemoved(aspect);
 
-	emit requestUpdateActions();
+	Q_EMIT requestUpdateActions();
 }
 
 void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
@@ -286,7 +286,7 @@ void Datapicker::handleAspectAdded(const AbstractAspect* aspect) {
 			point->graphicsItem()->setZValue(zVal++);
 	}
 
-	emit requestUpdateActions();
+	Q_EMIT requestUpdateActions();
 }
 
 void Datapicker::handleChildAspectAboutToBeRemoved(const AbstractAspect* aspect) {

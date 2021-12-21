@@ -264,7 +264,7 @@ void FitParametersWidget::changed() {
 	DEBUG("FitParametersWidget::changed()");
 	if (!m_initializing) {
 		apply();
-		emit parametersChanged(false);
+		Q_EMIT parametersChanged(false);
 	}
 }
 
@@ -427,7 +427,7 @@ void FitParametersWidget::highlightInvalid(int row, int col, bool invalid) {
 		le->setStyleSheet(QString());
 
 	if (m_invalidRanges)
-		emit parametersValid(false);
+		Q_EMIT parametersValid(false);
 	else
-		emit parametersValid(true);
+		Q_EMIT parametersValid(true);
 }

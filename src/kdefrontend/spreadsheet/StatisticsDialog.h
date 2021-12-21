@@ -29,7 +29,7 @@ private:
 	QVector<Column*> m_columns;
 	int m_currentWidgetTab{0};
 
-private slots:
+private Q_SLOTS:
 	void currentTabChanged(int);
 	void currentWidgetTabChanged(int);
 };

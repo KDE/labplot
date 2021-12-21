@@ -26,7 +26,7 @@ public:
 	explicit ErrorBarItem(DatapickerPoint* parent = nullptr, ErrorBarType type = ErrorBarType::PlusDeltaX);
 	void setRectSize(const qreal);
 
-public slots:
+public Q_SLOTS:
 	void setPosition(QPointF);
 
 private:
@@ -67,7 +67,7 @@ public:
 
 	typedef DatapickerPointPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void retransform();
 
 protected:
@@ -82,7 +82,7 @@ private:
 
 	QList<ErrorBarItem*> m_errorBarItemList;
 
-signals:
+Q_SIGNALS:
 	void positionChanged(QPointF);
 	void plusDeltaXPosChanged(QPointF);
 	void minusDeltaXPosChanged(QPointF);

@@ -42,7 +42,7 @@ private:
 	SpreadsheetCommentsHeaderView* m_slave;
 	bool m_showComments;
 
-private slots:
+private Q_SLOTS:
 	void refresh();
 	void headerDataChanged(Qt::Orientation, int logicalFirst, int logicalLast);
 

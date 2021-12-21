@@ -57,7 +57,7 @@ void AbstractColumnClearMasksCmd::redo() {
 		m_copied = true;
 	}
 	m_col->m_masking.clear();
-	emit m_col->owner()->dataChanged(m_col->owner());
+	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
 }
 
 /**
@@ -65,7 +65,7 @@ void AbstractColumnClearMasksCmd::redo() {
  */
 void AbstractColumnClearMasksCmd::undo() {
 	m_col->m_masking = m_masking;
-	emit m_col->owner()->dataChanged(m_col->owner());
+	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
 }
 
 /** ***************************************************************************
@@ -125,7 +125,7 @@ void AbstractColumnSetMaskedCmd::redo() {
 		m_copied = true;
 	}
 	m_col->m_masking.setValue(m_interval, m_masked);
-	emit m_col->owner()->dataChanged(m_col->owner());
+	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
 }
 
 /**
@@ -133,7 +133,7 @@ void AbstractColumnSetMaskedCmd::redo() {
  */
 void AbstractColumnSetMaskedCmd::undo() {
 	m_col->m_masking = m_masking;
-	emit m_col->owner()->dataChanged(m_col->owner());
+	Q_EMIT m_col->owner()->dataChanged(m_col->owner());
 }
 
 /** ***************************************************************************
@@ -247,7 +247,7 @@ void AbstractColumnSetHeatmapFormatCmd::redo() {
 	*(m_col->m_heatmapFormat) = m_format;
 	m_format = tmp;
 
-	emit m_col->owner()->formatChanged(m_col->owner());
+	Q_EMIT m_col->owner()->formatChanged(m_col->owner());
 }
 
 void AbstractColumnSetHeatmapFormatCmd::undo() {
@@ -273,7 +273,7 @@ void AbstractColumnRemoveHeatmapFormatCmd::redo() {
 		m_col->m_heatmapFormat = nullptr;
 	}
 
-	emit m_col->owner()->formatChanged(m_col->owner());
+	Q_EMIT m_col->owner()->formatChanged(m_col->owner());
 }
 
 void AbstractColumnRemoveHeatmapFormatCmd::undo() {
@@ -282,5 +282,5 @@ void AbstractColumnRemoveHeatmapFormatCmd::undo() {
 
 	*(m_col->m_heatmapFormat) = m_format;
 
-	emit m_col->owner()->formatChanged(m_col->owner());
+	Q_EMIT m_col->owner()->formatChanged(m_col->owner());
 }

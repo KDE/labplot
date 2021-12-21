@@ -332,7 +332,7 @@ void NgspiceRawAsciiFilterPrivate::readDataFromFile(const QString& fileName, Abs
 		file.readLine(); //skip the empty line after each value block
 
 		currentRow++;
-		emit q->completed(100 * currentRow/actualRows);
+		Q_EMIT q->completed(100 * currentRow/actualRows);
 	}
 
 	dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);

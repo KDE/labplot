@@ -46,5 +46,5 @@ void SettingsSpreadsheetPage::loadSettings() {
 
 void SettingsSpreadsheetPage::changed() {
 	m_changed = true;
-	emit settingsChanged();
+	Q_EMIT settingsChanged();
 }

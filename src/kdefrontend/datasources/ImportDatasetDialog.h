@@ -30,7 +30,7 @@ public:
 private:
 	ImportDatasetWidget* m_importDatasetWidget;
 
-protected slots:
+protected Q_SLOTS:
 	void checkOkButton() override;
 
 };

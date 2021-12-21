@@ -221,16 +221,16 @@ private:
 	int m_subscriptionCountToLoad{0};
 	MQTTWill m_MQTTWill;
 
-public slots:
+public Q_SLOTS:
 	void read();
 
-private slots:
+private Q_SLOTS:
 	void onMQTTConnect();
 	void MQTTSubscriptionMessageReceived(const QMqttMessage&);
 	void MQTTErrorChanged(QMqttClient::ClientError);
 	void subscriptionLoaded(const QString&);
 
-signals:
+Q_SIGNALS:
 	void MQTTSubscribed();
 	void MQTTTopicsChanged();
 	void readFromTopics();

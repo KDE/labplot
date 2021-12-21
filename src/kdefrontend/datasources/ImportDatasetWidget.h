@@ -70,13 +70,13 @@ private:
 	void loadCategories();
 	QJsonObject loadDatasetObject();
 
-private slots:
+private Q_SLOTS:
 	void datasetChanged();
 	void collectionChanged(int);
 	void downloadFinished(QNetworkReply*);
 	void updateCategories();
 
-signals:
+Q_SIGNALS:
 	void datasetSelected();
 	void datasetDoubleClicked();
 };

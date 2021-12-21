@@ -185,7 +185,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 	bool filter_is_temporary = false; // it can also become outputFilter(), which we may not delete here
 	Column* temp_col = nullptr;
 
-	emit m_owner->modeAboutToChange(m_owner);
+	Q_EMIT m_owner->modeAboutToChange(m_owner);
 
 	// determine the conversion filter and allocate the new data vector
 	SET_NUMBER_LOCALE
@@ -505,7 +505,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
 
 	if (filter_is_temporary) delete filter;
 
-	emit m_owner->modeChanged(m_owner);
+	Q_EMIT m_owner->modeChanged(m_owner);
 }
 
 /**
@@ -515,7 +515,7 @@ void ColumnPrivate::setColumnMode(AbstractColumn::ColumnMode mode) {
  */
 void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 				AbstractSimpleFilter* in_filter, AbstractSimpleFilter* out_filter) {
-	emit m_owner->modeAboutToChange(m_owner);
+	Q_EMIT m_owner->modeAboutToChange(m_owner);
 	// disconnect formatChanged()
 	switch (m_column_mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -574,18 +574,18 @@ void ColumnPrivate::replaceModeData(AbstractColumn::ColumnMode mode, void* data,
 		break;
 	}
 
-	emit m_owner->modeChanged(m_owner);
+	Q_EMIT m_owner->modeChanged(m_owner);
 }
 
 /**
  * \brief Replace data pointer
  */
 void ColumnPrivate::replaceData(void* data) {
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	m_data = data;
 	invalidate();
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -601,7 +601,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	int num_rows = other->rowCount();
 // 	DEBUG(Q_FUNC_INFO << ", rows " << num_rows);
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	resizeTo(num_rows);
 
 	// copy the data
@@ -641,7 +641,7 @@ bool ColumnPrivate::copy(const AbstractColumn* other) {
 	}
 
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 
 	return true;
 }
@@ -660,7 +660,7 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 	if (source->columnMode() != m_column_mode) return false;
 	if (num_rows == 0) return true;
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	if (dest_start + num_rows > rowCount())
 		resizeTo(dest_start + num_rows);
 
@@ -697,7 +697,7 @@ bool ColumnPrivate::copy(const AbstractColumn* source, int source_start, int des
 	}
 
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 	return true;
 }
 
@@ -712,7 +712,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 	if (other->columnMode() != m_column_mode) return false;
 	int num_rows = other->rowCount();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	resizeTo(num_rows);
 
 	// copy the data
@@ -748,7 +748,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* other) {
 	}
 
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 
 	return true;
 }
@@ -767,7 +767,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 	if (source->columnMode() != m_column_mode) return false;
 	if (num_rows == 0) return true;
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	if (dest_start + num_rows > rowCount())
 		resizeTo(dest_start + num_rows);
 
@@ -806,7 +806,7 @@ bool ColumnPrivate::copy(const ColumnPrivate* source, int source_start, int dest
 	invalidate();
 
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 
 	return true;
 }
@@ -1003,9 +1003,9 @@ AbstractColumn::PlotDesignation ColumnPrivate::plotDesignation() const {
  * \brief Set the column plot designation
  */
 void ColumnPrivate::setPlotDesignation(AbstractColumn::PlotDesignation pd) {
-	emit m_owner->plotDesignationAboutToChange(m_owner);
+	Q_EMIT m_owner->plotDesignationAboutToChange(m_owner);
 	m_plot_designation = pd;
-	emit m_owner->plotDesignationChanged(m_owner);
+	Q_EMIT m_owner->plotDesignationChanged(m_owner);
 }
 
 /**
@@ -1497,13 +1497,13 @@ void ColumnPrivate::setTextAt(int row, const QString& new_value) {
 
 	invalidate();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
 		resizeTo(row + 1);
 
 	static_cast<QVector<QString>*>(m_data)->replace(row, new_value);
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -1516,7 +1516,7 @@ void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) 
 
 	invalidate();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
@@ -1525,7 +1525,7 @@ void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) 
 		static_cast<QVector<QString>*>(m_data)->replace(first+i, new_values.at(i));
 
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -1569,13 +1569,13 @@ void ColumnPrivate::setDateTimeAt(int row, const QDateTime& new_value) {
 
 	invalidate();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
 		resizeTo(row+1);
 
 	static_cast< QVector<QDateTime>* >(m_data)->replace(row, new_value);
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -1591,7 +1591,7 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
 
 	invalidate();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
@@ -1601,7 +1601,7 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
 
 
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -1615,13 +1615,13 @@ void ColumnPrivate::setValueAt(int row, double new_value) {
 
 	invalidate();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
 		resizeTo(row+1);
 
 	static_cast<QVector<double>*>(m_data)->replace(row, new_value);
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -1636,7 +1636,7 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 
 	invalidate();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
@@ -1646,7 +1646,7 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 		ptr[first+i] = new_values.at(i);
 
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 void ColumnPrivate::initLabels() {
@@ -1726,13 +1726,13 @@ void ColumnPrivate::setIntegerAt(int row, int new_value) {
 
 	invalidate();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
 		resizeTo(row+1);
 
 	static_cast<QVector<int>*>(m_data)->replace(row, new_value);
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -1746,7 +1746,7 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 
 	invalidate();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
@@ -1756,7 +1756,7 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 		ptr[first+i] = new_values.at(i);
 
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -1770,13 +1770,13 @@ void ColumnPrivate::setBigIntAt(int row, qint64 new_value) {
 
 	invalidate();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	if (row >= rowCount())
 		resizeTo(row+1);
 
 	static_cast<QVector<qint64>*>(m_data)->replace(row, new_value);
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 /**
@@ -1790,7 +1790,7 @@ void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) 
 
 	invalidate();
 
-	emit m_owner->dataAboutToChange(m_owner);
+	Q_EMIT m_owner->dataAboutToChange(m_owner);
 	int num_rows = new_values.size();
 	if (first + num_rows > rowCount())
 		resizeTo(first + num_rows);
@@ -1800,7 +1800,7 @@ void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) 
 		ptr[first+i] = new_values.at(i);
 
 	if (!m_owner->m_suppressDataChangedSignal)
-		emit m_owner->dataChanged(m_owner);
+		Q_EMIT m_owner->dataChanged(m_owner);
 }
 
 /*!

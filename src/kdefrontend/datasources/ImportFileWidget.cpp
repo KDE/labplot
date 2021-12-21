@@ -422,7 +422,7 @@ void ImportFileWidget::initSlots() {
 #ifdef HAVE_MQTT
 	connect(ui.cbConnection, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), this, &ImportFileWidget::mqttConnectionChanged);
 	connect(ui.cbFileType, static_cast<void (QComboBox::*) (int)>(&QComboBox::currentIndexChanged), [this]() {
-		emit checkFileType();
+		Q_EMIT checkFileType();
 	});
 	connect(ui.bManageConnections, &QPushButton::clicked, this, &ImportFileWidget::showMQTTConnectionManager);
 	connect(ui.bLWT, &QPushButton::clicked, this, &ImportFileWidget::showWillSettings);
@@ -859,7 +859,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		m_twPreview->clear();
 		initOptionsWidget();
 
-		emit fileNameChanged();
+		Q_EMIT fileNameChanged();
 		return;
 	}
 
@@ -875,7 +875,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 					if (fileType == AbstractFileFilter::FileType::Ascii && name.endsWith(QLatin1String("csv"), Qt::CaseInsensitive))
 						m_asciiOptionsWidget->setSeparatingCharacter(QLatin1Char(','));
 
-					emit fileNameChanged();
+					Q_EMIT fileNameChanged();
 					return;
 				} else {
 					initOptionsWidget();
@@ -891,7 +891,7 @@ void ImportFileWidget::fileNameChanged(const QString& name) {
 		}
 	}
 
-	emit fileNameChanged();
+	Q_EMIT fileNameChanged();
 	refreshPreview();
 }
 
@@ -1476,7 +1476,7 @@ void ImportFileWidget::refreshPreview() {
 
 		bool readFitsTableToMatrix;
 		importedStrings = filter->readChdu(file, &readFitsTableToMatrix, lines);
-		emit checkedFitsTableToMatrix(readFitsTableToMatrix);
+		Q_EMIT checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 		tmpTableWidget = m_fitsOptionsWidget->previewWidget();
 		break;
@@ -1930,7 +1930,7 @@ void ImportFileWidget::sourceTypeChanged(int idx) {
 	if (m_asciiOptionsWidget)
 		m_asciiOptionsWidget->showAsciiHeaderOptions(visible);
 
-	emit sourceTypeChanged();
+	Q_EMIT sourceTypeChanged();
 	refreshPreview();
 }
 
@@ -1949,7 +1949,7 @@ void ImportFileWidget::mqttConnectionChanged() {
 	}
 
 	WAIT_CURSOR;
-	emit error(QString());
+	Q_EMIT error(QString());
 
 	//disconnected from the broker that was selected before
 	disconnectMqttConnection();
@@ -1990,7 +1990,7 @@ void ImportFileWidget::mqttConnectionChanged() {
 
 void ImportFileWidget::disconnectMqttConnection() {
 	if (m_client && m_client->state() == QMqttClient::ClientState::Connected) {
-		emit MQTTClearTopics();
+		Q_EMIT MQTTClearTopics();
 		disconnect(m_client, &QMqttClient::disconnected, this, &ImportFileWidget::onMqttDisconnect);
 		QDEBUG("Disconnecting from " << m_client->hostname());
 		m_client->disconnectFromHost();
@@ -2028,17 +2028,17 @@ void ImportFileWidget::onMqttConnect() {
 		m_subscriptionWidget->makeVisible(true);
 
 		if (!m_client->subscribe(QMqttTopicFilter(QLatin1String("#")), 1))
-			emit error(i18n("Couldn't subscribe to all available topics."));
+			Q_EMIT error(i18n("Couldn't subscribe to all available topics."));
 		else {
-			emit error(QString());
+			Q_EMIT error(QString());
 			ui.lLWT->show();
 			ui.bLWT->show();
 			ui.lTopics->show();
 		}
 	} else
-		emit error("on mqtt connect error " + QString::number(m_client->error()));
+		Q_EMIT error("on mqtt connect error " + QString::number(m_client->error()));
 
-	emit subscriptionsChanged();
+	Q_EMIT subscriptionsChanged();
 	RESET_CURSOR;
 }
 
@@ -2057,8 +2057,8 @@ void ImportFileWidget::onMqttDisconnect() {
 
 	ui.cbConnection->setCurrentIndex(-1);
 
-	emit subscriptionsChanged();
-	emit error(i18n("Disconnected from '%1'.", m_client->hostname()));
+	Q_EMIT subscriptionsChanged();
+	Q_EMIT error(i18n("Disconnected from '%1'.", m_client->hostname()));
 	RESET_CURSOR;
 }
 
@@ -2073,7 +2073,7 @@ void ImportFileWidget::subscribeTopic(const QString& name, uint QoS) {
 	if (tempSubscription) {
 		m_mqttSubscriptions.push_back(tempSubscription);
 		connect(tempSubscription, &QMqttSubscription::messageReceived, this, &ImportFileWidget::mqttSubscriptionMessageReceived);
-		emit subscriptionsChanged();
+		Q_EMIT subscriptionsChanged();
 	}
 }
 
@@ -2113,7 +2113,7 @@ void ImportFileWidget::unsubscribeTopic(const QString& topicName, QVector<QTreeW
 	}
 
 	//signals that there was a change among the subscribed topics
-	emit subscriptionsChanged();
+	Q_EMIT subscriptionsChanged();
 	refreshPreview();
 }
 
@@ -2211,14 +2211,14 @@ void ImportFileWidget::mqttMessageReceived(const QByteArray& /*message*/, const 
 				QVector<QString> subscriptions;
 				for (const auto& sub : m_mqttSubscriptions)
 					subscriptions.push_back(sub->topic().filter());
-				emit updateSubscriptionTree(subscriptions);
+				Q_EMIT updateSubscriptionTree(subscriptions);
 				break;
 			}
 		}
 	}
 
 	//signals that a newTopic was added, in order to fill the completer of leTopics
-	emit newTopic(rootName);
+	Q_EMIT newTopic(rootName);
 }
 
 /*!
@@ -2239,29 +2239,29 @@ void ImportFileWidget::mqttSubscriptionMessageReceived(const QMqttMessage &msg) 
 void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 	switch (clientError) {
 	case QMqttClient::BadUsernameOrPassword:
-		emit error(i18n("Wrong username or password"));
+		Q_EMIT error(i18n("Wrong username or password"));
 		break;
 	case QMqttClient::IdRejected:
-		emit error(i18n("The client ID wasn't accepted"));
+		Q_EMIT error(i18n("The client ID wasn't accepted"));
 		break;
 	case QMqttClient::ServerUnavailable:
 	case QMqttClient::TransportInvalid:
-		emit error(i18n("The broker %1 couldn't be reached.", m_client->hostname()));
+		Q_EMIT error(i18n("The broker %1 couldn't be reached.", m_client->hostname()));
 		break;
 	case QMqttClient::NotAuthorized:
-		emit error(i18n("The client is not authorized to connect."));
+		Q_EMIT error(i18n("The client is not authorized to connect."));
 		break;
 	case QMqttClient::UnknownError:
-		emit error(i18n("An unknown error occurred."));
+		Q_EMIT error(i18n("An unknown error occurred."));
 		break;
 	case QMqttClient::NoError:
 	case QMqttClient::InvalidProtocolVersion:
 	case QMqttClient::ProtocolViolation:
 	case QMqttClient::Mqtt5SpecificError:
-		emit error(i18n("An error occurred."));
+		Q_EMIT error(i18n("An error occurred."));
 		break;
 	default:
-		emit error(i18n("An error occurred."));
+		Q_EMIT error(i18n("An error occurred."));
 		break;
 	}
 	m_connectTimeoutTimer->stop();
@@ -2275,7 +2275,7 @@ void ImportFileWidget::mqttErrorChanged(QMqttClient::ClientError clientError) {
 void ImportFileWidget::mqttConnectTimeout() {
 	m_client->disconnectFromHost();
 	m_connectTimeoutTimer->stop();
-	emit error(i18n("Connecting to '%1:%2' timed out.", m_client->hostname(), m_client->port()));
+	Q_EMIT error(i18n("Connecting to '%1:%2' timed out.", m_client->hostname(), m_client->port()));
 	RESET_CURSOR;
 }
 

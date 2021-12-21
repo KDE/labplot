@@ -39,7 +39,7 @@ private:
 	SymbolWidget* symbolWidget{nullptr};
 	bool m_suppressTypeChange{false};
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in DatapickerCurveDock
 	void updateSymbolWidgets();
 	void xErrorTypeChanged(int);

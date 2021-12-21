@@ -285,7 +285,7 @@ Qt::ItemFlags AspectTreeModel::flags(const QModelIndex &index) const {
 }
 
 void AspectTreeModel::aspectDescriptionChanged(const AbstractAspect* aspect) {
-	emit dataChanged(modelIndexOfAspect(aspect), modelIndexOfAspect(aspect, 3));
+	Q_EMIT dataChanged(modelIndexOfAspect(aspect), modelIndexOfAspect(aspect, 3));
 }
 
 void AspectTreeModel::aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* /*child*/) {
@@ -299,7 +299,7 @@ void AspectTreeModel::aspectAboutToBeAdded(const AbstractAspect* parent, const A
 void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 	endInsertRows();
 	AbstractAspect* parent = aspect->parentAspect();
-	emit dataChanged(modelIndexOfAspect(parent), modelIndexOfAspect(parent, 3));
+	Q_EMIT dataChanged(modelIndexOfAspect(parent), modelIndexOfAspect(parent, 3));
 
 	connect(aspect, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 	connect(aspect, &AbstractAspect::childAspectSelectedInView, this, &AspectTreeModel::aspectSelectedInView);
@@ -349,7 +349,7 @@ bool AspectTreeModel::setData(const QModelIndex &index, const QVariant &value, i
 	switch (index.column()) {
 	case 0: {
 		if (!aspect->setName(value.toString(), false)) {
-			emit statusInfo(i18n("The name \"%1\" is already in use. Choose another name.", value.toString()));
+			Q_EMIT statusInfo(i18n("The name \"%1\" is already in use. Choose another name.", value.toString()));
 			return false;
 		}
 		break;
@@ -359,7 +359,7 @@ bool AspectTreeModel::setData(const QModelIndex &index, const QVariant &value, i
 	default:
 		return false;
 	}
-	emit dataChanged(index, index);
+	Q_EMIT dataChanged(index, index);
 	return true;
 }
 
@@ -397,7 +397,7 @@ void AspectTreeModel::setFilterString(const QString& s) {
 	m_filterString = s;
 	QModelIndex topLeft = this->index(0, 0, QModelIndex());
 	QModelIndex bottomRight = this->index(this->rowCount() - 1, 3, QModelIndex());
-	emit dataChanged(topLeft, bottomRight);
+	Q_EMIT dataChanged(topLeft, bottomRight);
 }
 
 void AspectTreeModel::setFilterCaseSensitivity(Qt::CaseSensitivity cs) {
@@ -437,7 +437,7 @@ bool AspectTreeModel::containsFilterString(const AbstractAspect* aspect) const {
 void AspectTreeModel::renameRequestedSlot() {
 	auto* aspect = dynamic_cast<AbstractAspect*>(QObject::sender());
 	if (aspect)
-		emit renameRequested(modelIndexOfAspect(aspect));
+		Q_EMIT renameRequested(modelIndexOfAspect(aspect));
 }
 
 void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect) {
@@ -446,23 +446,23 @@ void AspectTreeModel::aspectSelectedInView(const AbstractAspect* aspect) {
 		//select the parent aspect first, if available
 		AbstractAspect* parent = aspect->parentAspect();
 		if (parent)
-			emit indexSelected(modelIndexOfAspect(parent));
+			Q_EMIT indexSelected(modelIndexOfAspect(parent));
 
-		//emit also this signal, so the GUI can handle this selection.
-		emit hiddenAspectSelected(aspect);
+		//Q_EMIT also this signal, so the GUI can handle this selection.
+		Q_EMIT hiddenAspectSelected(aspect);
 	} else
-		emit indexSelected(modelIndexOfAspect(aspect));
+		Q_EMIT indexSelected(modelIndexOfAspect(aspect));
 
 	//deselect the root item when one of the children was selected in the view
 	//in order to avoid multiple selection with the project item (if selected) in the project explorer
-	emit indexDeselected(modelIndexOfAspect(m_root));
+	Q_EMIT indexDeselected(modelIndexOfAspect(m_root));
 }
 
 void AspectTreeModel::aspectDeselectedInView(const AbstractAspect* aspect) {
 	if (aspect->hidden()) {
 		AbstractAspect* parent = aspect->parentAspect();
 		if (parent)
-			emit indexDeselected(modelIndexOfAspect(parent));
+			Q_EMIT indexDeselected(modelIndexOfAspect(parent));
 	} else
-		emit indexDeselected(modelIndexOfAspect(aspect));
+		Q_EMIT indexDeselected(modelIndexOfAspect(aspect));
 }

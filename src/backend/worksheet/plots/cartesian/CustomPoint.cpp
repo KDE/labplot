@@ -175,9 +175,9 @@ void CustomPointPrivate::retransform() {
 		setPos(p);
 		suppressItemChangeEvent = false;
 
-		emit q->positionChanged(position);
+		Q_EMIT q->positionChanged(position);
 		if (q->cSystem)
-			emit q->positionLogicalChanged(positionLogical);
+			Q_EMIT q->positionLogicalChanged(positionLogical);
 
 	recalcShapeAndBoundingRect();
 }
@@ -259,7 +259,7 @@ void CustomPointPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event)
 void CustomPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		emit q->hovered();
+		Q_EMIT q->hovered();
 		update();
 	}
 }
@@ -267,7 +267,7 @@ void CustomPointPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void CustomPointPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		emit q->unhovered();
+		Q_EMIT q->unhovered();
 		update();
 	}
 }

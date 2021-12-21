@@ -68,7 +68,7 @@ void SortDialog::sortColumns() {
 	if (ui.cbSorting->currentIndex() == Together)
 		leading = m_columns.at(ui.cbColumns->currentIndex());
 
-	emit sort(leading, m_columns, ui.cbOrdering->currentIndex() == Qt::AscendingOrder);
+	Q_EMIT sort(leading, m_columns, ui.cbOrdering->currentIndex() == Qt::AscendingOrder);
 }
 
 void SortDialog::setColumns(const QVector<Column*>& columns) {

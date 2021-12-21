@@ -921,7 +921,7 @@ public:
 
 // 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
 		m_private->retransform();
-		emit m_private->q->rectChanged(m_private->rect);
+		Q_EMIT m_private->q->rectChanged(m_private->rect);
 	}
 
 	void undo() override {
@@ -950,7 +950,7 @@ public:
 		if (m_initilized) {
 			qSwap(m_private->rect, m_rect);
 			m_private->retransform();
-			emit m_private->q->rectChanged(m_private->rect);
+			Q_EMIT m_private->q->rectChanged(m_private->rect);
 		} else {
 			//this function is called for the first time,
 			//nothing to do, we just need to remember what the previous rect was
@@ -1014,12 +1014,12 @@ public:
 	void redo() override {
 		m_formatOld = m_private->xRanges.at(m_index).range.format();
 		m_private->xRanges[m_index].range.setFormat(m_format);
-		emit m_private->q->xRangeFormatChanged(m_index, m_format);
+		Q_EMIT m_private->q->xRangeFormatChanged(m_index, m_format);
 	}
 
 	void undo() override {
 		m_private->xRanges[m_index].range.setFormat(m_formatOld);
-		emit m_private->q->xRangeFormatChanged(m_index, m_formatOld);
+		Q_EMIT m_private->q->xRangeFormatChanged(m_index, m_formatOld);
 	}
 
 private:
@@ -1038,12 +1038,12 @@ public:
 	void redo() override {
 		m_formatOld = m_private->yRanges.at(m_index).range.format();
 		m_private->yRanges[m_index].range.setFormat(m_format);
-		emit m_private->q->yRangeFormatChanged(m_index, m_format);
+		Q_EMIT m_private->q->yRangeFormatChanged(m_index, m_format);
 	}
 
 	void undo() override {
 		m_private->yRanges[m_index].range.setFormat(m_formatOld);
-		emit m_private->q->yRangeFormatChanged(m_index, m_formatOld);
+		Q_EMIT m_private->q->yRangeFormatChanged(m_index, m_formatOld);
 	}
 
 private:
@@ -1090,7 +1090,7 @@ void CartesianPlot::setXRangeFormat(const int index, const RangeT::Format format
 	if (format != xRangeFormat(index)) {
 //		d->xRanges[index].setFormat(format);
 		exec(new CartesianPlotSetXRangeFormatIndexCmd(d, format, index));
-		emit d->xRangeFormatChanged();
+		Q_EMIT d->xRangeFormatChanged();
 		if (project())
 			project()->setChanged(true);
 	}
@@ -1104,7 +1104,7 @@ void CartesianPlot::setYRangeFormat(const int index, const RangeT::Format format
 	if (format != yRangeFormat(index)) {
 //		d->yRanges[index].setFormat(format);
 		exec(new CartesianPlotSetYRangeFormatIndexCmd(d, format, index));
-		emit d->yRangeFormatChanged();
+		Q_EMIT d->yRangeFormatChanged();
 		if (project())
 			project()->setChanged(true);
 	}
@@ -1147,7 +1147,7 @@ public:
 			m_private->q->scaleAutoX(m_index);
 		}
 		m_private->setAutoScaleX(m_index, m_autoScale);
-		emit m_private->q->xAutoScaleChanged(m_index, m_autoScale);
+		Q_EMIT m_private->q->xAutoScaleChanged(m_index, m_autoScale);
 	}
 
 	void undo() override {
@@ -1156,7 +1156,7 @@ public:
 			m_private->retransformScales(m_index, -1); // TODO: correct?
 		}
 		m_private->setAutoScaleX(m_index, m_autoScaleOld);
-		emit m_private->q->xAutoScaleChanged(m_index, m_autoScaleOld);
+		Q_EMIT m_private->q->xAutoScaleChanged(m_index, m_autoScaleOld);
 	}
 
 private:
@@ -1180,7 +1180,7 @@ public:
 			m_private->q->scaleAutoY(m_index);
 		}
 		m_private->setAutoScaleY(m_index, m_autoScale);
-		emit m_private->q->yAutoScaleChanged(m_index, m_autoScale);
+		Q_EMIT m_private->q->yAutoScaleChanged(m_index, m_autoScale);
 	}
 
 	void undo() override {
@@ -1189,7 +1189,7 @@ public:
 			m_private->retransformScales(-1, m_index);
 		}
 		m_private->setAutoScaleY(m_index, m_autoScaleOld);
-		emit m_private->q->yAutoScaleChanged(m_index, m_autoScaleOld);
+		Q_EMIT m_private->q->yAutoScaleChanged(m_index, m_autoScaleOld);
 	}
 
 private:
@@ -1267,13 +1267,13 @@ void CartesianPlot::setYRange(const Range<double> range) {
 //public:
 //	CartesianPlotSetXRangeIndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description)
 //		: StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>>(target, &CartesianPlot::Private::xRanges, index, newValue, description) {}
-//	virtual void finalize() override { m_target->retransformScales(); emit m_target->q->xRangeChanged((*m_target.*m_field).at(m_index)); }
+//	virtual void finalize() override { m_target->retransformScales(); Q_EMIT m_target->q->xRangeChanged((*m_target.*m_field).at(m_index)); }
 //};
 //class CartesianPlotSetYRangeIndexCmd: public StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>> {
 //public:
 //	CartesianPlotSetYRangeIndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description)
 //		: StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>>(target, &CartesianPlot::Private::CoordinateSystemProperties, index, newValue, description) {}
-//	virtual void finalize() override { m_target->retransformScales(); emit m_target->q->yRangeChanged((*m_target.*m_field).at(m_index)); }
+//	virtual void finalize() override { m_target->retransformScales(); Q_EMIT m_target->q->yRangeChanged((*m_target.*m_field).at(m_index)); }
 //};
 
 #define CartesianPlotSetRangeIndexCmd(element) \
@@ -1289,7 +1289,7 @@ public: \
 		finalize(); \
 	} \
 	void undo() override { redo(); } \
-	virtual void finalize() { m_target->retransformScales(-1, -1); emit m_target->q->element ## Changed(m_index, m_target->element ## s.at(m_index).range); } \
+	virtual void finalize() { m_target->retransformScales(-1, -1); Q_EMIT m_target->q->element ## Changed(m_index, m_target->element ## s.at(m_index).range); } \
 private:\
 	CartesianPlot::Private* m_target; \
 	Range<double> m_otherValue; \
@@ -1463,12 +1463,12 @@ public:
 	void redo() override {
 		m_scaleOld = m_private->xRanges.at(m_index).range.scale();
 		m_private->xRanges[m_index].range.setScale(m_scale);
-		emit m_private->q->xScaleChanged(m_index, m_scale);
+		Q_EMIT m_private->q->xScaleChanged(m_index, m_scale);
 	}
 
 	void undo() override {
 		m_private->xRanges[m_index].range.setScale(m_scaleOld);
-		emit m_private->q->xScaleChanged(m_index, m_scaleOld);
+		Q_EMIT m_private->q->xScaleChanged(m_index, m_scaleOld);
 	}
 
 private:
@@ -1487,12 +1487,12 @@ public:
 	void redo() override {
 		m_scaleOld = m_private->yRanges.at(m_index).range.scale();
 		m_private->yRanges[m_index].range.setScale(m_scale);
-		emit m_private->q->yScaleChanged(m_index, m_scale);
+		Q_EMIT m_private->q->yScaleChanged(m_index, m_scale);
 	}
 
 	void undo() override {
 		m_private->yRanges[m_index].range.setScale(m_scaleOld);
-		emit m_private->q->yScaleChanged(m_index, m_scaleOld);
+		Q_EMIT m_private->q->yScaleChanged(m_index, m_scaleOld);
 	}
 
 private:
@@ -1803,7 +1803,7 @@ void CartesianPlot::addDataReductionCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
-		emit curve->dataReductionDataChanged(curve->dataReductionData());
+		Q_EMIT curve->dataReductionDataChanged(curve->dataReductionData());
 	} else {
 		beginMacro(i18n("%1: add data reduction curve", name()));
 		this->addChild(curve);
@@ -1823,7 +1823,7 @@ void CartesianPlot::addDifferentiationCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
-		emit curve->differentiationDataChanged(curve->differentiationData());
+		Q_EMIT curve->differentiationDataChanged(curve->differentiationData());
 	} else {
 		beginMacro(i18n("%1: add differentiation curve", name()));
 		this->addChild(curve);
@@ -1843,7 +1843,7 @@ void CartesianPlot::addIntegrationCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
-		emit curve->integrationDataChanged(curve->integrationData());
+		Q_EMIT curve->integrationDataChanged(curve->integrationData());
 	} else {
 		beginMacro(i18n("%1: add integration curve", name()));
 		this->addChild(curve);
@@ -1863,7 +1863,7 @@ void CartesianPlot::addInterpolationCurve() {
 		curve->setDataSourceCurve(curCurve);
 		curve->recalculate();
 		this->addChild(curve);
-		emit curve->interpolationDataChanged(curve->interpolationData());
+		Q_EMIT curve->interpolationDataChanged(curve->interpolationData());
 	} else {
 		beginMacro(i18n("%1: add interpolation curve", name()));
 		this->addChild(curve);
@@ -1883,7 +1883,7 @@ void CartesianPlot::addSmoothCurve() {
 		curve->setDataSourceCurve(curCurve);
 		this->addChild(curve);
 		curve->recalculate();
-		emit curve->smoothDataChanged(curve->smoothData());
+		Q_EMIT curve->smoothDataChanged(curve->smoothData());
 	} else {
 		beginMacro(i18n("%1: add smoothing curve", name()));
 		this->addChild(curve);
@@ -2187,7 +2187,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 
 		cSystemIndex = curve->coordinateSystemIndex();
-		emit curveAdded(curve);
+		Q_EMIT curveAdded(curve);
 
 	} else {
 		const auto* hist = qobject_cast<const Histogram*>(child);
@@ -2334,7 +2334,7 @@ void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const Abstrac
 		if (curve) {
 			DEBUG(Q_FUNC_INFO << ", a curve")
 			updateLegend();
-			emit curveRemoved(curve);
+			Q_EMIT curveRemoved(curve);
 			auto cs = coordinateSystem(curve->coordinateSystemIndex());
 			autoScale(cs->xIndex(), cs->yIndex());	// update all plot ranges
 		}
@@ -2466,7 +2466,7 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 			setUndoAware(true);
 		}
 	}
-	emit curveDataChanged(curve);
+	Q_EMIT curveDataChanged(curve);
 }
 
 /*!
@@ -2515,7 +2515,7 @@ void CartesianPlot::yDataChanged(XYCurve* curve) {
 			setUndoAware(true);
 		}
 	}
-	emit curveDataChanged(curve);
+	Q_EMIT curveDataChanged(curve);
 }
 
 void CartesianPlot::curveVisibilityChanged() {
@@ -2532,12 +2532,12 @@ void CartesianPlot::curveVisibilityChanged() {
 	else if (autoScaleY(yIndex))
 		this->scaleAutoY(yIndex);
 
-	emit curveVisibilityChangedSignal();
+	Q_EMIT curveVisibilityChangedSignal();
 }
 
 void CartesianPlot::curveLinePenChanged(QPen pen) {
 	const auto* curve = qobject_cast<const XYCurve*>(QObject::sender());
-	emit curveLinePenChanged(pen, curve->name());
+	Q_EMIT curveLinePenChanged(pen, curve->name());
 }
 
 void CartesianPlot::setMouseMode(MouseMode mouseMode) {
@@ -2577,7 +2577,7 @@ void CartesianPlot::setMouseMode(MouseMode mouseMode) {
 			graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	}
 
-	emit mouseModeChanged(mouseMode);
+	Q_EMIT mouseModeChanged(mouseMode);
 }
 
 BASIC_SHARED_D_ACCESSOR_IMPL(CartesianPlot, bool, isLocked, Locked, locked)
@@ -3562,9 +3562,9 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 		double deltaXMax = rangep.range.end() - rangep.prev.end();
 
 		if (!qFuzzyIsNull(deltaXMin))
-			emit q->xMinChanged(i, rangep.range.start());
+			Q_EMIT q->xMinChanged(i, rangep.range.start());
 		if (!qFuzzyIsNull(deltaXMax))
-			emit q->xMaxChanged(i, rangep.range.end());
+			Q_EMIT q->xMaxChanged(i, rangep.range.end());
 
 		rangep.prev = rangep.range;
 
@@ -3603,9 +3603,9 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 		const double deltaYMax = rangep.range.end() - rangep.prev.end();
 
 		if (!qFuzzyIsNull(deltaYMin))
-			emit q->yMinChanged(i, rangep.range.start());
+			Q_EMIT q->yMinChanged(i, rangep.range.start());
 		if (!qFuzzyIsNull(deltaYMax))
-			emit q->yMaxChanged(i, rangep.range.end());
+			Q_EMIT q->yMaxChanged(i, rangep.range.end());
 
 		rangep.prev = rangep.range;
 
@@ -3843,7 +3843,7 @@ QVariant CartesianPlotPrivate::itemChange(GraphicsItemChange change, const QVari
 		newRect.setY(y - h/2);
 		newRect.setWidth(w);
 		newRect.setHeight(h);
-		emit q->rectChanged(newRect);
+		Q_EMIT q->rectChanged(newRect);
 	}
 	return QGraphicsItem::itemChange(change, value);
 }
@@ -3887,7 +3887,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		|| mouseMode == CartesianPlot::MouseMode::ZoomXSelection
 		|| mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
-		emit q->mousePressZoomSelectionModeSignal(logicalPos);
+		Q_EMIT q->mousePressZoomSelectionModeSignal(logicalPos);
 	} else if (mouseMode == CartesianPlot::MouseMode::Cursor) {
 		setCursor(Qt::SizeHorCursor);
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
@@ -3903,13 +3903,13 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		} else if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
 			cursor1Enable = true;
 			selectedCursor = 1;
-			emit q->cursor1EnableChanged(cursor1Enable);
+			Q_EMIT q->cursor1EnableChanged(cursor1Enable);
 		} else {
 			cursor0Enable = true;
 			selectedCursor = 0;
-			emit q->cursor0EnableChanged(cursor0Enable);
+			Q_EMIT q->cursor0EnableChanged(cursor0Enable);
 		}
-		emit q->mousePressCursorModeSignal(selectedCursor, logicalPos);
+		Q_EMIT q->mousePressCursorModeSignal(selectedCursor, logicalPos);
 	}
 
 	QGraphicsItem::mousePressEvent(event);
@@ -3998,7 +3998,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			const QPointF logicalEnd = cSystem->mapSceneToLogical(event->pos());
 			const QPointF logicalStart = cSystem->mapSceneToLogical(m_panningStart);
 			m_panningStart = event->pos();
-			emit q->mouseMoveSelectionModeSignal(logicalStart, logicalEnd);
+			Q_EMIT q->mouseMoveSelectionModeSignal(logicalStart, logicalEnd);
 		} else
 			QGraphicsItem::mouseMoveEvent(event);
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection
@@ -4010,7 +4010,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 			return;
 		}
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
-		emit q->mouseMoveZoomSelectionModeSignal(logicalPos);
+		Q_EMIT q->mouseMoveZoomSelectionModeSignal(logicalPos);
 
 	} else if (mouseMode == CartesianPlot::MouseMode::Cursor) {
 		QGraphicsItem::mouseMoveEvent(event);
@@ -4023,7 +4023,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		// updating cursor position is done in Worksheet, because
 		// multiple plots must be updated
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
-		emit q->mouseMoveCursorModeSignal(selectedCursor, logicalPos);
+		Q_EMIT q->mouseMoveCursorModeSignal(selectedCursor, logicalPos);
 	}
 }
 
@@ -4314,7 +4314,7 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 		QGraphicsItem::mouseReleaseEvent(event);
 	} else if (mouseMode == CartesianPlot::MouseMode::ZoomSelection || mouseMode == CartesianPlot::MouseMode::ZoomXSelection
 			|| mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
-		emit q->mouseReleaseZoomSelectionModeSignal();
+		Q_EMIT q->mouseReleaseZoomSelectionModeSignal();
 	}
 }
 
@@ -4559,21 +4559,21 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 		}
 
 		if (mouseMode == CartesianPlot::MouseMode::ZoomSelection && !m_selectionBandIsShown) {
-			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
+			Q_EMIT q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection && !m_selectionBandIsShown) {
 			info = "x=";
 			if (xRangeFormat == RangeT::Format::Numeric)
 				 info += QString::number(logicalPoint.x());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.x()).toString(xRangeDateTimeFormat);
-			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
+			Q_EMIT q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection && !m_selectionBandIsShown) {
 			info = "y=";
 			if (yRangeFormat == RangeT::Format::Numeric)
 				info += QString::number(logicalPoint.y());
 			else
 				info += QDateTime::fromMSecsSinceEpoch(logicalPoint.y()).toString(yRangeDateTimeFormat);
-			emit q->mouseHoverZoomSelectionModeSignal(logicalPoint);
+			Q_EMIT q->mouseHoverZoomSelectionModeSignal(logicalPoint);
 		} else if (mouseMode == CartesianPlot::MouseMode::Selection) {
 			// hover the nearest curve to the mousepointer
 			// hovering curves is implemented in the parent, because no ignoreEvent() exists
@@ -4617,7 +4617,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 			update();
 		}
 	} else
-		emit q->mouseHoverOutsideDataRectSignal();
+		Q_EMIT q->mouseHoverOutsideDataRectSignal();
 
 	q->info(info);
 

@@ -31,10 +31,10 @@ private:
 	ThemesWidget* m_view;
 	bool eventFilter(QObject*, QEvent*) override;
 
-private slots:
+private Q_SLOTS:
 	void handleThemeChanged(const QString&);
 
-signals:
+Q_SIGNALS:
 	void currentThemeChanged(const QString&);
 };
 

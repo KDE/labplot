@@ -43,7 +43,7 @@ public:
 
 	typedef CustomPointPrivate Private;
 
-private slots:
+private Q_SLOTS:
 	void visibilityChanged();
 
 protected:
@@ -56,7 +56,7 @@ private:
 
 	QAction* visibilityAction;
 
-signals:
+Q_SIGNALS:
 	friend class CustomPointSetPositionCmd;
 };
 

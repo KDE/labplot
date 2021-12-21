@@ -64,14 +64,14 @@ private:
 	QMenu* lineStyleMenu{nullptr};
 	QMenu* lineColorMenu{nullptr};
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
 	void lineStyleChanged(QAction*);
 	void lineColorChanged(QAction*);
 	void visibilityChangedSlot();
 
-signals:
+Q_SIGNALS:
 	friend class ReferenceLineSetPositionCmd;
 	void orientationChanged(Orientation);
 	void penChanged(const QPen&);

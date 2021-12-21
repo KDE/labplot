@@ -29,7 +29,7 @@ public:
 	void setScalePixmap(const QString&);
 	int *bins{nullptr};
 
-public slots:
+public Q_SLOTS:
 	void setSpan(int, int);
 
 private:
@@ -70,7 +70,7 @@ private:
 	HistogramView* gvSaturation;
 	HistogramView* gvValue;
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in DatapickerImageWidget
 	//"General"-tab
 	void fileNameChanged();

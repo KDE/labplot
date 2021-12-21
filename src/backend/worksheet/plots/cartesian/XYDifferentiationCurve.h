@@ -61,7 +61,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYDifferentiationCurve)
 
-signals:
+Q_SIGNALS:
 	void differentiationDataChanged(const XYDifferentiationCurve::DifferentiationData&);
 };
 

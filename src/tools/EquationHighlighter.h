@@ -22,7 +22,7 @@ public:
 	void setVariables(const QStringList&);
 // 	void setErrorPosition(int position);
 
-public slots:
+public Q_SLOTS:
 	void rehighlight();
 
 protected:

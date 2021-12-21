@@ -37,7 +37,7 @@ protected:
 	void closeEvent(QCloseEvent*) override;
 #endif
 
-private slots:
+private Q_SLOTS:
 	void slideDown();
 	void slideUp();
 };

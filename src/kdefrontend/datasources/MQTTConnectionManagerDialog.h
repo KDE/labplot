@@ -32,7 +32,7 @@ private:
 	bool m_initialConnectionChanged;
 	QString m_initialConnection;
 
-private slots:
+private Q_SLOTS:
 	void changed();
 	void save();
 };

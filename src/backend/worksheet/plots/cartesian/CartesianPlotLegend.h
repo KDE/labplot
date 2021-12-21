@@ -82,11 +82,11 @@ private:
 	void initActions();
 	QAction* visibilityAction{nullptr};
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChangedSlot();
 
-signals:
+Q_SIGNALS:
 	void labelFontChanged(QFont&);
 	void labelColorChanged(QColor&);
 	void labelColumnMajorChanged(bool);

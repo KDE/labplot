@@ -785,11 +785,11 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	}
 
 	//notify GuiObserver about the new selection
-	emit selectedAspectsChanged(selectedAspects);
+	Q_EMIT selectedAspectsChanged(selectedAspects);
 
 	//notify MainWin about the new current aspect (last selected aspect).
 	if (!selectedAspects.isEmpty())
-		emit currentAspectChanged(selectedAspects.last());
+		Q_EMIT currentAspectChanged(selectedAspects.last());
 
 	//emitting the signal above is done to show the properties widgets for the selected aspect(s).
 	//with this the project explorer looses the focus and don't react on the key events like DEL key press, etc.
@@ -1025,7 +1025,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				if (!part)
 					continue; //TODO: add error/warning message here?
 
-				emit activateView(part); //request to show the view in MainWin
+				Q_EMIT activateView(part); //request to show the view in MainWin
 
 				str = attribs.value("state").toString();
 				if (str.isEmpty())
@@ -1093,7 +1093,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 				if (!part)
 					continue; //TODO: add error/warning message here?
 
-				emit activateView(part); //request to show the view in MainWin
+				Q_EMIT activateView(part); //request to show the view in MainWin
 
 				str = attribs.value("state").toString();
 				if (str.isEmpty())
@@ -1147,8 +1147,8 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	m_treeView->setCurrentIndex(currentIndex);
 	m_treeView->scrollTo(currentIndex);
 	auto* aspect = static_cast<AbstractAspect*>(currentIndex.internalPointer());
-	emit currentAspectChanged(aspect); //notify MainWin to bring up the proper view
-	emit selectedAspectsChanged(QList<AbstractAspect*>()<<aspect); //notify GuiObserver to bring up the proper dock widget
+	Q_EMIT currentAspectChanged(aspect); //notify MainWin to bring up the proper view
+	Q_EMIT selectedAspectsChanged(QList<AbstractAspect*>()<<aspect); //notify GuiObserver to bring up the proper dock widget
 
 	//when setting the current index above it gets expanded, collapse all parent indices if they were not expanded when saved
 	collapseParents(currentIndex, expanded);

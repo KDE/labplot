@@ -35,7 +35,7 @@ protected:
 	void focusOutEvent(QFocusEvent*) override;
 	void mouseMoveEvent(QMouseEvent*) override;
 
-private slots:
+private Q_SLOTS:
 	void insertCompletion(const QString&);
 	void validateExpression(bool force = false);
 
@@ -47,7 +47,7 @@ private:
 	bool m_isValid{false};
 	QString m_currentExpression;
 
-signals:
+Q_SIGNALS:
 	void expressionChanged();
 };
 

@@ -15,7 +15,7 @@
 class CorrelationTest : public AnalysisTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// linear tests
 	void testLinear();
 	void testLinear2();

@@ -15,7 +15,7 @@
 class NSLSmoothTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// moving average tests
 	void testMA_padnone();
 	void testMA_padmirror();

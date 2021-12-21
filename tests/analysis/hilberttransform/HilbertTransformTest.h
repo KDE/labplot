@@ -15,7 +15,7 @@
 class HilbertTransformTest : public AnalysisTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void test1();
 	void test2();
 	void test3();

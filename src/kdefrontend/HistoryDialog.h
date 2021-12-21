@@ -28,7 +28,7 @@ private:
 	QPushButton* m_okButton;
 	QPushButton* m_clearUndoStackButton{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void clearUndoStack();
 };
 

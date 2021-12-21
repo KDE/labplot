@@ -86,7 +86,7 @@ void Double2StringFilterSetFormatCmd::redo() {
 	char tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
 	m_other_format = tmp;
-	emit m_target->formatChanged();
+	Q_EMIT m_target->formatChanged();
 }
 
 void Double2StringFilterSetFormatCmd::undo() {
@@ -105,7 +105,7 @@ void Double2StringFilterSetDigitsCmd::redo() {
 	int tmp = m_target->m_digits;
 	m_target->m_digits = m_other_digits;
 	m_other_digits = tmp;
-	emit m_target->digitsChanged();
+	Q_EMIT m_target->digitsChanged();
 }
 
 void Double2StringFilterSetDigitsCmd::undo() {

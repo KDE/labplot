@@ -40,7 +40,7 @@ private:
 	void load();
 	void loadConfig(KConfig&);
 
-private slots:
+private Q_SLOTS:
 	void retranslateUi();
 
 	//SLOTs for changes triggered in WorksheetDock
@@ -102,7 +102,7 @@ private slots:
 	void saveConfigAsTemplate(KConfig&);
 	void loadTheme(const QString&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

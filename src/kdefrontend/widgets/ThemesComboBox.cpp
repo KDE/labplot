@@ -72,7 +72,7 @@ void ThemesComboBox::handleThemeChanged(const QString& theme) {
 			setItemText(0, i18n("Default")); //default theme
 		else
 			setItemText(0, theme);
-		emit currentThemeChanged(theme);
+		Q_EMIT currentThemeChanged(theme);
 	}
 
 	m_groupBox->hide();

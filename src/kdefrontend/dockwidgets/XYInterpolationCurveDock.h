@@ -45,7 +45,7 @@ private:
 protected:
 	void setModel() override;
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in XYInterpolationCurveDock
 	//general tab
 	void dataSourceTypeChanged(int);

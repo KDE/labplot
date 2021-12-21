@@ -78,7 +78,7 @@ void WorksheetElement::finalizeAdd() {
 
 	if (m_plot) {
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(m_cSystemIndex));
-		emit plotRangeListChanged();
+		Q_EMIT plotRangeListChanged();
 	} else
 		DEBUG(Q_FUNC_INFO << ", WARNING: no plot available.")
 }
@@ -147,8 +147,8 @@ bool WorksheetElementPrivate::swapVisible(bool on) {
 	} else
 		setVisible(on);
 
-	emit q->changed();
-	emit q->visibleChanged(on);
+	Q_EMIT q->changed();
+	Q_EMIT q->visibleChanged(on);
 	return oldValue;
 }
 
@@ -264,7 +264,7 @@ void WorksheetElement::prepareDrawingOrderMenu() {
 }
 
 void WorksheetElement::execMoveInFrontOf(QAction* action) {
-	emit moveBegin();
+	Q_EMIT moveBegin();
 	AbstractAspect* parent = parentAspect();
 	int index = action->data().toInt();
 	AbstractAspect* sibling1 = parent->child<WorksheetElement>(index);
@@ -275,11 +275,11 @@ void WorksheetElement::execMoveInFrontOf(QAction* action) {
 	parent->insertChildBefore(this, sibling2);
 	setMoved(false);
 	endMacro();
-	emit moveEnd();
+	Q_EMIT moveEnd();
 }
 
 void WorksheetElement::execMoveBehind(QAction* action) {
-	emit moveBegin();
+	Q_EMIT moveBegin();
 	AbstractAspect* parent = parentAspect();
 	int index = action->data().toInt();
 	AbstractAspect* sibling = parent->child<WorksheetElement>(index);
@@ -289,7 +289,7 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	parent->insertChildBefore(this, sibling);
 	setMoved(false);
 	endMacro();
-	emit moveEnd();
+	Q_EMIT moveEnd();
 }
 
 QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const
@@ -704,15 +704,15 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 			QPointF pos = q->align(value.toPointF(), boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			emit q->positionLogicalChanged(positionLogical);
+			Q_EMIT q->positionLogicalChanged(positionLogical);
 		} else {
 			//convert item's center point in parent's coordinates
 			WorksheetElement::PositionWrapper tempPosition = position;
 			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), boundingRectangle, position,
 														horizontalAlignment, verticalAlignment);
 
-			//emit the signals in order to notify the UI.
-			emit q->positionChanged(tempPosition);
+			//Q_EMIT the signals in order to notify the UI.
+			Q_EMIT q->positionChanged(tempPosition);
 		}
 	}
 

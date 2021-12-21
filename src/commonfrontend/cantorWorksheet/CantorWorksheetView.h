@@ -28,11 +28,11 @@ public:
 	explicit CantorWorksheetView(CantorWorksheet*);
 	~CantorWorksheetView() override;
 
-public slots:
+public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void fillToolBar(QToolBar*);
 
-private slots:
+private Q_SLOTS:
 	void triggerCantorAction(QAction*);
 
 private:
@@ -73,7 +73,7 @@ private:
 	void initActions();
 	void initMenus();
 
-private slots:
+private Q_SLOTS:
 	void statusChanged(Cantor::Session::Status);
 };
 

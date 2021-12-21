@@ -1094,7 +1094,7 @@ void WorksheetView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void WorksheetView::mouseDoubleClickEvent(QMouseEvent*) {
-	emit propertiesExplorerRequested();
+	Q_EMIT propertiesExplorerRequested();
 }
 
 void WorksheetView::mouseMoveEvent(QMouseEvent* event) {

@@ -122,7 +122,7 @@ void XYEquationCurvePrivate::recalculate() {
 			xVector->clear();
 			yVector->clear();
 			recalcLogicalPoints();
-			emit q->dataChanged();
+			Q_EMIT q->dataChanged();
 			return;
 		}
 		xColumn->invalidateProperties();
@@ -154,7 +154,7 @@ void XYEquationCurvePrivate::recalculate() {
 	}
 
 	recalcLogicalPoints();
-	emit q->dataChanged();
+	Q_EMIT q->dataChanged();
 }
 
 //##############################################################################

@@ -212,7 +212,7 @@ private:
 	QMenu* m_plotDataMenu{nullptr};
 	QMenu* m_analyzePlotMenu{nullptr};
 
-public slots:
+public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void fillToolBar(QToolBar*);
 #ifdef Q_OS_MAC
@@ -220,7 +220,7 @@ public slots:
 #endif
 	void print(QPrinter*) const;
 
-private slots:
+private Q_SLOTS:
 	void createColumnContextMenu(QMenu*);
 	void goToCell(int row, int col);
 	void showSearch();

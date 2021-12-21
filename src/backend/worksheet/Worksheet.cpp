@@ -140,7 +140,7 @@ QIcon Worksheet::icon() const {
 QMenu* Worksheet::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
-	emit requestProjectContextMenu(menu);
+	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 
@@ -329,7 +329,7 @@ QRectF Worksheet::pageRect() const {
 void Worksheet::childSelected(const AbstractAspect* aspect) {
 	auto* element = qobject_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (element)
-		emit itemSelected(element->graphicsItem());
+		Q_EMIT itemSelected(element->graphicsItem());
 }
 
 /*!
@@ -340,7 +340,7 @@ void Worksheet::childSelected(const AbstractAspect* aspect) {
 void Worksheet::childDeselected(const AbstractAspect* aspect) {
 	auto* element = qobject_cast<WorksheetElement*>(const_cast<AbstractAspect*>(aspect));
 	if (element)
-		emit itemDeselected(element->graphicsItem());
+		Q_EMIT itemDeselected(element->graphicsItem());
 }
 
 /*!
@@ -363,9 +363,9 @@ void Worksheet::setItemSelectedInView(const QGraphicsItem* item, const bool b) {
 
 	//forward selection/deselection to AbstractTreeModel
 	if (b)
-		emit childAspectSelectedInView(aspect);
+		Q_EMIT childAspectSelectedInView(aspect);
 	else
-		emit childAspectDeselectedInView(aspect);
+		Q_EMIT childAspectDeselectedInView(aspect);
 
 	//handle the resize items on selection changes
 	if (layout() == Worksheet::Layout::NoLayout) {
@@ -420,9 +420,9 @@ WorksheetElement* Worksheet::aspectFromGraphicsItem(const WorksheetElement* pare
 */
 void Worksheet::setSelectedInView(const bool b) {
 	if (b)
-		emit childAspectSelectedInView(this);
+		Q_EMIT childAspectSelectedInView(this);
 	else
-		emit childAspectDeselectedInView(this);
+		Q_EMIT childAspectDeselectedInView(this);
 }
 
 void Worksheet::deleteAspectFromGraphicsItem(const QGraphicsItem* item) {
@@ -479,7 +479,7 @@ TreeModel* Worksheet::cursorModel() {
 }
 
 void Worksheet::update() {
-	emit requestUpdate();
+	Q_EMIT requestUpdate();
 }
 
 void Worksheet::setSuppressLayoutUpdate(bool value) {
@@ -596,7 +596,7 @@ STD_SETTER_CMD_IMPL_S(Worksheet, SetUseViewSize, bool, useViewSize)
 void Worksheet::setUseViewSize(bool useViewSize) {
 	if (useViewSize != d->useViewSize) {
 		exec(new WorksheetSetUseViewSizeCmd(d, useViewSize, ki18n("%1: change size type")));
-		emit useViewSizeRequested();
+		Q_EMIT useViewSizeRequested();
 	}
 }
 
@@ -743,18 +743,18 @@ public:
 		: StandardMacroSetterCmd<Worksheet::Private, QRectF>(target, &Worksheet::Private::pageRect, newValue, description) {}
 	void finalize() override {
 		m_target->updatePageRect();
-		emit m_target->q->pageRectChanged(m_target->*m_field);
+		Q_EMIT m_target->q->pageRectChanged(m_target->*m_field);
 	}
 	void finalizeUndo() override {
 		m_target->m_scene->setSceneRect(m_target->*m_field);
-		emit m_target->q->pageRectChanged(m_target->*m_field);
+		Q_EMIT m_target->q->pageRectChanged(m_target->*m_field);
 	}
 };
 
 void Worksheet::setPageRect(const QRectF& rect) {
 	//don't allow any rectangulars of width/height equal to zero
 	if (qFuzzyCompare(rect.width(), 0.) || qFuzzyCompare(rect.height(), 0.)) {
-		emit pageRectChanged(d->pageRect);
+		Q_EMIT pageRectChanged(d->pageRect);
 		return;
 	}
 
@@ -766,7 +766,7 @@ void Worksheet::setPageRect(const QRectF& rect) {
 		} else {
 			d->pageRect = rect;
 			d->updatePageRect();
-			emit pageRectChanged(d->pageRect);
+			Q_EMIT pageRectChanged(d->pageRect);
 		}
 	}
 }
@@ -1150,7 +1150,7 @@ void Worksheet::cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mode)
 		d->updateCompleteCursorModel = false;
 	}
 
-	emit cartesianPlotMouseModeChanged(mode);
+	Q_EMIT cartesianPlotMouseModeChanged(mode);
 }
 
 void Worksheet::curveDataChanged(const XYCurve* curve) {
@@ -1502,7 +1502,7 @@ void WorksheetPrivate::updateLayout(bool undoable) {
 		//add new rows, if not sufficient
 		if (count > layoutRowCount*layoutColumnCount) {
 			layoutRowCount = floor( (double)count/layoutColumnCount + 0.5);
-			emit q->layoutRowCountChanged(layoutRowCount);
+			Q_EMIT q->layoutRowCountChanged(layoutRowCount);
 		}
 
 		w = (m_scene->sceneRect().width()-layoutLeftMargin-layoutRightMargin- (layoutColumnCount-1)*layoutHorizontalSpacing)/layoutColumnCount;

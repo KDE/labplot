@@ -457,7 +457,7 @@ void PlotDataDialog::plot() {
 				path = m_lastAddedCurve->parentAspect()->path();
 		}
 
-		emit m_spreadsheet->project()->requestNavigateTo(path);
+		Q_EMIT m_spreadsheet->project()->requestNavigateTo(path);
 	}
 	RESET_CURSOR;
 }

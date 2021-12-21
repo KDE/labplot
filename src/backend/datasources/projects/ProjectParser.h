@@ -44,7 +44,7 @@ protected:
 private:
 	void moveFolder(Folder* targetParentFolder, Folder* sourceChildFolderToMove) const;
 
-signals:
+Q_SIGNALS:
 	void completed(int);
 };
 

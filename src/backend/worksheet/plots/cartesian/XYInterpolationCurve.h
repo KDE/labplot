@@ -66,7 +66,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYInterpolationCurve)
 
-signals:
+Q_SIGNALS:
 	void interpolationDataChanged(const XYInterpolationCurve::InterpolationData&);
 };
 

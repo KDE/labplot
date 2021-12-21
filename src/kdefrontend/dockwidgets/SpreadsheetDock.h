@@ -33,7 +33,7 @@ private:
 	void load();
 	void loadConfig(KConfig&);
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in SpreadsheetDock
 	void rowCountChanged(int);
 	void columnCountChanged(int);
@@ -48,7 +48,7 @@ private slots:
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

@@ -32,7 +32,7 @@ public:
 	explicit SettingsDialog(QWidget*);
 	~SettingsDialog() override;
 
-private slots:
+private Q_SLOTS:
 	void changed();
 	void slotButtonClicked(QAbstractButton*);
 
@@ -51,7 +51,7 @@ private:
 	void applySettings();
 	void restoreDefaults();
 
-signals:
+Q_SIGNALS:
 	void settingsChanged();
 	void resetWelcomeScreen();
 };

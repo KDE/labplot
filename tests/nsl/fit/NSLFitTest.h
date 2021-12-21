@@ -15,7 +15,7 @@
 class NSLFitTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testBounds();
 	// performance
 	//void testPerformance();

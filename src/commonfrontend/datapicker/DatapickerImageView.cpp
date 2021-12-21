@@ -471,7 +471,7 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 	if (m_image->plotPointsType() == DatapickerImage::PointsType::CurvePoints) {
 		QVector3D logicalPos = m_transform->mapSceneToLogical(pos, m_image->axisPoints());
 		if (m_image->axisPoints().type == DatapickerImage::GraphType::Ternary) {
-			emit statusInfo( "a =" + QString::number(logicalPos.x()) + ", b =" + QString::number(logicalPos.y()) + ", c =" + QString::number(logicalPos.z()));
+			Q_EMIT statusInfo( "a =" + QString::number(logicalPos.x()) + ", b =" + QString::number(logicalPos.y()) + ", c =" + QString::number(logicalPos.z()));
 		} else {
 			QString xLabel('x');
 			QString yLabel('y');
@@ -485,7 +485,7 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 
 			if (m_datapicker->activeCurve()) {
 				QString statusText = i18n("%1, active curve \"%2\": %3=%4, %5=%6", m_datapicker->name(), m_datapicker->activeCurve()->name(), xLabel, QString::number(logicalPos.x()), yLabel, QString::number(logicalPos.y()));
-				emit statusInfo(statusText);
+				Q_EMIT statusInfo(statusText);
 			}
 		}
 	}

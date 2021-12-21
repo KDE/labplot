@@ -33,7 +33,7 @@ private:
 	void updateTypeWidgets(AbstractColumn::ColumnMode);
 	void showValueLabels();
 
-private slots:
+private Q_SLOTS:
 	void retranslateUi();
 
 	void typeChanged(int);
@@ -53,7 +53,7 @@ private slots:
 	void columnPrecisionChanged();
 	void columnPlotDesignationChanged(const AbstractColumn*);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

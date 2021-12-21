@@ -54,7 +54,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-public slots:
+public Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 
 private:
@@ -66,12 +66,12 @@ private:
 	void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleChildAspectAdded(const AbstractAspect*);
 
-private slots:
+private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 
-signals:
+Q_SIGNALS:
 	void datapickerItemSelected(int);
 	void requestUpdateActions();
 };

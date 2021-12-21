@@ -18,7 +18,7 @@
 
 
 /*!
-  This macro is used to connect the column to the XYCurve slots:
+  This macro is used to connect the column to the XYCurveQ_SLOTS:
 	- <column_prefix>ColumnAboutToBeRemoved
 	- <column_prefix>ColumnNameChanged
 	- <column_prefix>DataChanged

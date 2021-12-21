@@ -49,7 +49,7 @@ public:
     Spreadsheet* releaseConfiguredSpreadsheet();
 	DatasetModel* getDatasetModel();
 
-public slots:
+public Q_SLOTS:
 	void datasetClicked(const QString& category, const QString& subcategory, const QString& datasetName);
 	void exampleProjectClicked(const QString&);
 
@@ -70,7 +70,7 @@ private:
 	void processExampleProjects();
 	void loadConfig();
 
-signals:
+Q_SIGNALS:
     void datasetFound();
     void datasetNotFound();
     void showFirstDataset();

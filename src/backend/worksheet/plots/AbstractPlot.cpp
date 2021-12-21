@@ -76,14 +76,14 @@ void AbstractPlot::handleResize(double horizontalRatio, double verticalRatio, bo
 // 		qDebug()<<name() << ": old hor padding - " << d->horizontalPadding;
 		d->horizontalPadding *= horizontalRatio;
 // 		qDebug()<<name() << ": new hor padding - " << d->horizontalPadding;
-		emit horizontalPaddingChanged(d->horizontalPadding);
+		Q_EMIT horizontalPaddingChanged(d->horizontalPadding);
 	}
 
 	if (verticalRatio < 1 && verticalRatio > 0.2) {
 // 		qDebug()<<name() << ": old ver padding - " << d->verticalPadding;
 		d->verticalPadding *= verticalRatio;
 // 		qDebug()<<name() << ": new ver padding - " << d->verticalPadding;
-		emit verticalPaddingChanged(d->verticalPadding);
+		Q_EMIT verticalPaddingChanged(d->verticalPadding);
 	}
 
 // 	WorksheetElementContainer::handleResize(horizontalRatio, verticalRatio, pageResize);

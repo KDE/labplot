@@ -151,7 +151,7 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	void finalizeLoad();
 
-public slots:
+public Q_SLOTS:
 	void updateFormula();
 
 private:
@@ -172,10 +172,10 @@ private:
 	ColumnPrivate* d;
 	ColumnStringIO* m_string_io;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 
-private slots:
+private Q_SLOTS:
 	void navigateTo(QAction*);
 	void handleFormatChange();
 	void copyData();

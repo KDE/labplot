@@ -223,7 +223,7 @@ void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 	if (index.internalPointer()) {
 		QComboBox::setCurrentIndex(0);
 		QComboBox::setItemText(0, index.data().toString());
-		emit currentModelIndexChanged(index);
+		Q_EMIT currentModelIndexChanged(index);
 		m_groupBox->hide();
 		return;
 	}
@@ -231,7 +231,7 @@ void TreeViewComboBox::treeViewIndexActivated(const QModelIndex& index) {
 	m_treeView->setCurrentIndex(QModelIndex());
 	setCurrentIndex(0);
 	QComboBox::setItemText(0, QString());
-	emit currentModelIndexChanged(QModelIndex());
+	Q_EMIT currentModelIndexChanged(QModelIndex());
 	m_groupBox->hide();
 }
 

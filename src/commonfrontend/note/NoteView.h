@@ -24,10 +24,10 @@ class NoteView : public QWidget {
 public:
 	explicit NoteView(Note* notes);
 
-public slots:
+public Q_SLOTS:
 	void print(QPrinter*) const;
 
-private slots:
+private Q_SLOTS:
 	void backgroundColorChanged(QColor);
 	void textColorChanged(QColor);
 	void textFontChanged(const QFont&);

@@ -135,7 +135,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -177,7 +177,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 		filterResult.valid = false;
 		filterResult.status = i18n("No data points available.");
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -248,7 +248,7 @@ void XYFourierFilterCurvePrivate::recalculate() {
 
 	//redraw the curve
 	recalcLogicalPoints();
-	emit q->dataChanged();
+	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }
 

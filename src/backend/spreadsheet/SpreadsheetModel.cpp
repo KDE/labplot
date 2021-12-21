@@ -307,7 +307,7 @@ void SpreadsheetModel::handleAspectAdded(const AbstractAspect* aspect) {
 		int index = m_spreadsheet->indexOfChild<AbstractAspect>(aspect);
 		m_columnCount = m_spreadsheet->columnCount();
 		m_spreadsheet->emitColumnCountChanged();
-		emit headerDataChanged(Qt::Horizontal, index, m_columnCount - 1);
+		Q_EMIT headerDataChanged(Qt::Horizontal, index, m_columnCount - 1);
 	}
 }
 
@@ -348,7 +348,7 @@ void SpreadsheetModel::handleDescriptionChange(const AbstractAspect* aspect) {
 	if (!m_suppressSignals) {
 		updateHorizontalHeader();
 		int index = m_spreadsheet->indexOfChild<Column>(col);
-		emit headerDataChanged(Qt::Horizontal, index, index);
+		Q_EMIT headerDataChanged(Qt::Horizontal, index, index);
 	}
 }
 
@@ -358,7 +358,7 @@ void SpreadsheetModel::handleModeChange(const AbstractColumn* col) {
 
 	updateHorizontalHeader();
 	int index = m_spreadsheet->indexOfChild<Column>(col);
-	emit headerDataChanged(Qt::Horizontal, index, index);
+	Q_EMIT headerDataChanged(Qt::Horizontal, index, index);
 	handleDataChange(col);
 
 	//output filter was changed after the mode change, update the signal-slot connection
@@ -384,7 +384,7 @@ void SpreadsheetModel::handlePlotDesignationChange(const AbstractColumn* col) {
 
 	updateHorizontalHeader();
 	int index = m_spreadsheet->indexOfChild<Column>(col);
-	emit headerDataChanged(Qt::Horizontal, index, m_columnCount-1);
+	Q_EMIT headerDataChanged(Qt::Horizontal, index, m_columnCount-1);
 }
 
 void SpreadsheetModel::handleDataChange(const AbstractColumn* col) {
@@ -392,7 +392,7 @@ void SpreadsheetModel::handleDataChange(const AbstractColumn* col) {
 		return;
 
 	int i = m_spreadsheet->indexOfChild<Column>(col);
-	emit dataChanged(index(0, i), index(m_rowCount-1, i));
+	Q_EMIT dataChanged(index(0, i), index(m_rowCount-1, i));
 }
 
 void SpreadsheetModel::handleRowsInserted(const AbstractColumn* col, int /*before*/, int /*count*/) {
@@ -401,7 +401,7 @@ void SpreadsheetModel::handleRowsInserted(const AbstractColumn* col, int /*befor
 
 	int i = m_spreadsheet->indexOfChild<Column>(col);
 	m_rowCount = col->rowCount();
-	emit dataChanged(index(0, i), index(m_rowCount-1, i));
+	Q_EMIT dataChanged(index(0, i), index(m_rowCount-1, i));
 	updateVerticalHeader();
 	m_spreadsheet->emitRowCountChanged();
 }
@@ -412,7 +412,7 @@ void SpreadsheetModel::handleRowsRemoved(const AbstractColumn* col, int /*first*
 
 	int i = m_spreadsheet->indexOfChild<Column>(col);
 	m_rowCount = col->rowCount();
-	emit dataChanged(index(0, i), index(m_rowCount-1, i));
+	Q_EMIT dataChanged(index(0, i), index(m_rowCount-1, i));
 	updateVerticalHeader();
 	m_spreadsheet->emitRowCountChanged();
 }
@@ -504,7 +504,7 @@ void SpreadsheetModel::activateFormulaMode(bool on) {
 
 	m_formula_mode = on;
 	if (m_rowCount > 0 && m_columnCount > 0)
-		emit dataChanged(index(0,0), index(m_rowCount - 1, m_columnCount - 1));
+		Q_EMIT dataChanged(index(0,0), index(m_rowCount - 1, m_columnCount - 1));
 }
 
 bool SpreadsheetModel::formulaModeActive() const {

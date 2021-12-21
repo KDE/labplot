@@ -27,7 +27,7 @@ public:
 	void loadSettings() const;
 	void saveSettings();
 
-public slots:
+public Q_SLOTS:
 	void headerChanged(int state);
 
 private:

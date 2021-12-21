@@ -16,7 +16,7 @@
 class ParserTest : public CommonTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testBasics();
 	void testErrors();
 	void testVariables();

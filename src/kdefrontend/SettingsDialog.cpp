@@ -131,7 +131,7 @@ void SettingsDialog::applySettings() {
 	mainWin->userFeedbackProvider().setSurveyInterval(m_userFeedbackWidget->surveyInterval());
 #endif
 
-	emit settingsChanged();
+	Q_EMIT settingsChanged();
 }
 
 void SettingsDialog::restoreDefaults() {

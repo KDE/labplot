@@ -37,7 +37,7 @@ private:
     QDialogButtonBox* m_buttonBox;
     QPushButton* m_okButton;
 
-protected  slots:
+protected Q_SLOTS:
     void checkOkButton();
 
 };

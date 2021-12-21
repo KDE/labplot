@@ -28,7 +28,7 @@ private:
 	DatabaseManagerWidget* mainWidget;
 	bool m_changed{false};
 
-private slots:
+private Q_SLOTS:
 	void changed();
 	void save();
 };

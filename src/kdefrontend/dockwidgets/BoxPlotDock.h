@@ -47,7 +47,7 @@ private:
 	void loadDataColumns();
 	void updateSymbolWidgets();
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in BoxPlotDock
 
 	//"General"-tab
@@ -150,7 +150,7 @@ private slots:
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

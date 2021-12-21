@@ -561,13 +561,13 @@ void CartesianPlotLegendPrivate::updatePosition() {
 	setPos(p);
 	suppressItemChangeEvent = false;
 
-	emit q->positionChanged(position);
+	Q_EMIT q->positionChanged(position);
 
 	//the position in scene coordinates was changed, calculate the position in logical coordinates
 	if (q->cSystem) {
 		if (!coordinateBindingEnabled)
 			positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		emit q->positionLogicalChanged(positionLogical);
+		Q_EMIT q->positionLogicalChanged(positionLogical);
 	}
 
 	suppressRetransform = true;
@@ -859,7 +859,7 @@ void CartesianPlotLegendPrivate::paint(QPainter* painter, const QStyleOptionGrap
 void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		emit q->hovered();
+		Q_EMIT q->hovered();
 		update();
 	}
 }
@@ -867,7 +867,7 @@ void CartesianPlotLegendPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void CartesianPlotLegendPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		emit q->unhovered();
+		Q_EMIT q->unhovered();
 		update();
 	}
 }

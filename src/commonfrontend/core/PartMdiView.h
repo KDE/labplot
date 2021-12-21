@@ -30,7 +30,7 @@ private:
 	AbstractPart* m_part;
 	bool m_closing{false};
 
-private slots:
+private Q_SLOTS:
 	void handleAspectDescriptionChanged(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void slotWindowStateChanged(Qt::WindowStates oldState, Qt::WindowStates newState);

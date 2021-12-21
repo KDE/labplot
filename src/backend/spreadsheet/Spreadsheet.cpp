@@ -315,7 +315,7 @@ void Spreadsheet::clearMasks() {
 QMenu* Spreadsheet::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
-	emit requestProjectContextMenu(menu);
+	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 
@@ -791,7 +791,7 @@ void Spreadsheet::childSelected(const AbstractAspect* aspect) {
 	const Column* column = qobject_cast<const Column*>(aspect);
 	if (column) {
 		int index = indexOfChild<Column>(column);
-		emit columnSelected(index);
+		Q_EMIT columnSelected(index);
 	}
 }
 
@@ -803,7 +803,7 @@ void Spreadsheet::childDeselected(const AbstractAspect* aspect) {
 	const Column* column = qobject_cast<const Column*>(aspect);
 	if (column) {
 		int index = indexOfChild<Column>(column);
-		emit columnDeselected(index);
+		Q_EMIT columnDeselected(index);
 	}
 }
 
@@ -815,7 +815,7 @@ void Spreadsheet::childDeselected(const AbstractAspect* aspect) {
  */
 void Spreadsheet::setColumnSelectedInView(int index, bool selected) {
 	if (selected) {
-		emit childAspectSelectedInView(child<Column>(index));
+		Q_EMIT childAspectSelectedInView(child<Column>(index));
 
 		//deselect the spreadsheet in the project explorer, if a child (column) was selected
 		//and also all possible parents like folder, workbook, datapicker curve, datapicker
@@ -823,11 +823,11 @@ void Spreadsheet::setColumnSelectedInView(int index, bool selected) {
 		//if one of the parents of the selected column was also selected before.
 		AbstractAspect* parent = this;
 		while (parent) {
-			emit childAspectDeselectedInView(parent);
+			Q_EMIT childAspectDeselectedInView(parent);
 			parent = parent->parentAspect();
 		}
 	} else
-		emit childAspectDeselectedInView(child<Column>(index));
+		Q_EMIT childAspectDeselectedInView(child<Column>(index));
 }
 
 
@@ -1040,7 +1040,7 @@ int Spreadsheet::resize(AbstractFileFilter::ImportMode mode, QStringList colName
 		//    will not be connected again to the curves (project.cpp, descriptionChanged)
 		for (int i = 0; i < childCount<Column>(); i++) {
 			child<Column>(i)->setSuppressDataChangedSignal(true);
-			emit child<Column>(i)->reset(child<Column>(i));
+			Q_EMIT child<Column>(i)->reset(child<Column>(i));
 			child<Column>(i)->setName(colNameList.at(i));
 			child<Column>(i)->aspectDescriptionChanged(child<Column>(i));
 		}

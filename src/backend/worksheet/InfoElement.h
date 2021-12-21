@@ -83,7 +83,7 @@ public:
 
 	typedef InfoElementPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void labelPositionChanged(TextLabel::PositionWrapper);
 	void labelVisibleChanged(bool);
 	void pointPositionChanged(const PositionWrapper &);
@@ -117,7 +117,7 @@ private:
 	void initActions();
 	void initMenus();
 
-signals:
+Q_SIGNALS:
 	void gluePointIndexChanged(const int);
 	void connectionLineCurveNameChanged(const QString&);
 	void positionLogicalChanged(const double);

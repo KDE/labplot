@@ -149,13 +149,13 @@ void ThemeHandler::setCurrentTheme(const QString& name) {
 }
 
 void ThemeHandler::loadSelected(const QString& name) {
-	emit loadThemeRequested(name);
+	Q_EMIT loadThemeRequested(name);
 	this->setCurrentTheme(name);
 
 	if (!name.isEmpty())
-		emit info( i18n("Theme \"%1\" was loaded.", name) );
+		Q_EMIT info( i18n("Theme \"%1\" was loaded.", name) );
 	else
-		emit info( i18n("Theming deactivated.") );
+		Q_EMIT info( i18n("Theming deactivated.") );
 
 	//in case a local theme file was loaded (we have write access), allow to publish it
 	//TODO: activate this later
@@ -213,8 +213,8 @@ void ThemeHandler::showPanel() {
 
 // void ThemeHandler::saveNewSelected(const QString& filename) {
 // 	KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + '/' + "themes" + '/' + filename, KConfig::SimpleConfig);
-// 	emit saveThemeRequested(config);
-// 	emit info( i18n("New theme \"%1\" was saved.", filename) );
+// 	Q_EMIT saveThemeRequested(config);
+// 	Q_EMIT info( i18n("New theme \"%1\" was saved.", filename) );
 //
 // 	m_currentLocalTheme = filename;
 // 	m_themeList.append(config.name());

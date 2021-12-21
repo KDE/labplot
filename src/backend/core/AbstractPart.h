@@ -46,7 +46,7 @@ private:
 protected:
 	mutable QWidget* m_partView{nullptr};
 
-signals:
+Q_SIGNALS:
 	void showRequested();
 	void importFromFileRequested();
 	void importFromSQLDatabaseRequested();

@@ -38,7 +38,7 @@ private:
 	void initConnections() const;
 	void loadConfig(KConfig&);
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in CustomPointDock
 	//General-Tab
 	void positionXChanged(int);
@@ -65,7 +65,7 @@ private slots:
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

@@ -103,7 +103,7 @@ void ExpressionTextEdit::validateExpression(bool force) {
 		m_currentExpression = text;
 	}
 	if (textChanged)
-		emit expressionChanged();
+		Q_EMIT expressionChanged();
 }
 
 //##############################################################################

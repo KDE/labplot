@@ -35,7 +35,7 @@ private:
 	void activateIconViewItem(const QString& name);
 	void activateListViewItem(const QString& name);
 
-private slots:
+private Q_SLOTS:
 	void collectionChanged(int);
 	void exampleChanged();
 	void showInfo();
@@ -43,7 +43,7 @@ private slots:
 	void viewModeChanged(int);
 	void activated(const QString&);
 
-signals:
+Q_SIGNALS:
 	void doubleClicked();
 };
 

@@ -118,7 +118,7 @@ public:
 
 	typedef WorksheetPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void setTheme(const QString&);
 	void cartesianPlotMousePressZoomSelectionMode(QPointF logicPos);
 	void cartesianPlotMousePressCursorMode(int cursorNumber, QPointF logicPos);
@@ -147,7 +147,7 @@ private:
 	mutable WorksheetView* m_view{nullptr};
 	friend class WorksheetPrivate;
 
-private slots:
+private Q_SLOTS:
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
@@ -155,7 +155,7 @@ private slots:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void itemSelected(QGraphicsItem*);
 	void itemDeselected(QGraphicsItem*);

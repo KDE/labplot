@@ -226,9 +226,9 @@ void FitOptionsWidget::applyClicked() {
 	m_fitData->confidenceInterval = ui.sbConfidenceInterval->value();
 
 	if (m_changed)
-		emit optionsChanged();
+		Q_EMIT optionsChanged();
 
-	emit finished();
+	Q_EMIT finished();
 }
 
 void FitOptionsWidget::changed() {

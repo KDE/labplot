@@ -94,7 +94,7 @@ QIcon Matrix::icon() const {
 */
 QMenu* Matrix::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
-	emit requestProjectContextMenu(menu);
+	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 
@@ -264,7 +264,7 @@ void Matrix::setHeaderFormat(Matrix::HeaderFormat format) {
 	if (m_view)
 		m_view->resizeHeaders();
 
-	emit headerFormatChanged(format);
+	Q_EMIT headerFormatChanged(format);
 }
 
 //columns
@@ -525,7 +525,7 @@ void Matrix::copy(Matrix* other) {
 	setPrecision(other->precision());
 	d->formula = other->formula();
 	d->suppressDataChange = false;
-	emit dataChanged(0, 0, rows-1, columns-1);
+	Q_EMIT dataChanged(0, 0, rows-1, columns-1);
 	if (m_view)
 		m_view->adjustHeaders();
 
@@ -828,7 +828,7 @@ void MatrixPrivate::insertColumns(int before, int count) {
 	Q_ASSERT(before >= 0);
 	Q_ASSERT(before <= columnCount);
 
-	emit q->columnsAboutToBeInserted(before, count);
+	Q_EMIT q->columnsAboutToBeInserted(before, count);
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Double:
 		for (int i = 0; i < count; i++) {
@@ -865,14 +865,14 @@ void MatrixPrivate::insertColumns(int before, int count) {
 	}
 
 	columnCount += count;
-	emit q->columnsInserted(before, count);
+	Q_EMIT q->columnsInserted(before, count);
 }
 
 /*!
 	Remove \c count columns starting with column index \c first
 */
 void MatrixPrivate::removeColumns(int first, int count) {
-	emit q->columnsAboutToBeRemoved(first, count);
+	Q_EMIT q->columnsAboutToBeRemoved(first, count);
 	Q_ASSERT(first >= 0);
 	Q_ASSERT(first + count <= columnCount);
 
@@ -899,14 +899,14 @@ void MatrixPrivate::removeColumns(int first, int count) {
 	for (int i = 0; i < count; i++)
 		columnWidths.remove(first);
 	columnCount -= count;
-	emit q->columnsRemoved(first, count);
+	Q_EMIT q->columnsRemoved(first, count);
 }
 
 /*!
 	Insert \c count rows before row with the index \c before
 */
 void MatrixPrivate::insertRows(int before, int count) {
-	emit q->rowsAboutToBeInserted(before, count);
+	Q_EMIT q->rowsAboutToBeInserted(before, count);
 	Q_ASSERT(before >= 0);
 	Q_ASSERT(before <= rowCount);
 
@@ -943,14 +943,14 @@ void MatrixPrivate::insertRows(int before, int count) {
 		rowHeights.insert(before+i, 0);
 
 	rowCount += count;
-	emit q->rowsInserted(before, count);
+	Q_EMIT q->rowsInserted(before, count);
 }
 
 /*!
 	Remove \c count columns starting from the column with index \c first
 */
 void MatrixPrivate::removeRows(int first, int count) {
-	emit q->rowsAboutToBeRemoved(first, count);
+	Q_EMIT q->rowsAboutToBeRemoved(first, count);
 	Q_ASSERT(first >= 0);
 	Q_ASSERT(first+count <= rowCount);
 
@@ -983,7 +983,7 @@ void MatrixPrivate::removeRows(int first, int count) {
 		rowHeights.remove(first);
 
 	rowCount -= count;
-	emit q->rowsRemoved(first, count);
+	Q_EMIT q->rowsRemoved(first, count);
 }
 
 //! Fill column with zeroes
@@ -1009,7 +1009,7 @@ void MatrixPrivate::clearColumn(int col) {
 	}
 
 	if (!suppressDataChange)
-		emit q->dataChanged(0, col, rowCount-1, col);
+		Q_EMIT q->dataChanged(0, col, rowCount-1, col);
 }
 
 //##############################################################################

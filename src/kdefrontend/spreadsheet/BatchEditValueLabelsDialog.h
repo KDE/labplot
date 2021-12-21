@@ -30,7 +30,7 @@ private:
 	Column* m_column{nullptr};
 	QString m_dateTimeFormat;
 
-private slots:
+private Q_SLOTS:
 	void save() const;
 };
 

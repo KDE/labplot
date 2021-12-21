@@ -15,7 +15,7 @@
 class NSLSFWindowTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testWindowTypes();
 
 	void testPerformance_triangle();

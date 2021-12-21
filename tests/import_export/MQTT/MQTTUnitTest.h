@@ -16,7 +16,7 @@ class MQTTUnitTest : public QObject {
 #ifdef HAVE_MQTT
 	Q_OBJECT	
 
-private slots:
+private Q_SLOTS:
 	void initTestCase();
 
 	//check superior and inferior relations

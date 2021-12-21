@@ -60,7 +60,7 @@ private:
 	int defaultPort(const QString&) const;
 	void dataChanged();
 
-private slots:
+private Q_SLOTS:
 	void loadConnections();
 	void addConnection();
 	void deleteConnection();
@@ -78,7 +78,7 @@ private slots:
 	void userNameChanged();
 	void passwordChanged();
 
-signals:
+Q_SIGNALS:
 	void changed();
 };
 

@@ -99,7 +99,7 @@ private:
 	bool m_liveDataSource;
 	bool m_suppressRefresh{false};
 
-private slots:
+private Q_SLOTS:
 	void fileNameChanged(const QString&);
 	void fileTypeChanged(int = 0);
 
@@ -114,7 +114,7 @@ private slots:
 	void showFileInfo();
 	void refreshPreview();
 
-signals:
+Q_SIGNALS:
 	void fileNameChanged();
 	void sourceTypeChanged();
 	void hostChanged();
@@ -148,14 +148,14 @@ public:
 	void saveMQTTSettings(MQTTClient*) const;
 	bool isMqttValid();
 
-signals:
+Q_SIGNALS:
 	void newTopic(const QString&);
 	void subscriptionsChanged();
 	void checkFileType();
 	void updateSubscriptionTree(const QVector<QString>&);
 	void MQTTClearTopics();
 
-private slots:
+private Q_SLOTS:
 	void mqttConnectionChanged();
 	void onMqttConnect();
 	void subscribeTopic(const QString&, uint);

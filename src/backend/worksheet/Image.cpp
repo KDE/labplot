@@ -241,7 +241,7 @@ void ImagePrivate::retransform() {
 	updatePosition();
 	updateBorder();
 
-	emit q->changed();
+	Q_EMIT q->changed();
 }
 
 void ImagePrivate::updateImage() {
@@ -257,8 +257,8 @@ void ImagePrivate::updateImage() {
 
 	m_image = image;
 
-	emit q->widthChanged(width);
-	emit q->heightChanged(height);
+	Q_EMIT q->widthChanged(width);
+	Q_EMIT q->heightChanged(height);
 
 	retransform();
 }
@@ -274,14 +274,14 @@ void ImagePrivate::scaleImage() {
 				height = m_image.height()*width/m_image.width();
 			else
 				height = 0;
-			emit q->heightChanged(height);
+			Q_EMIT q->heightChanged(height);
 		} else if (height != m_image.height()) {
 			//height was changed -> rescale the width to keep the ratio
 			if (m_image.height() != 0)
 				width = m_image.width()*height/m_image.height();
 			else
 				width = 0;
-			emit q->widthChanged(width);
+			Q_EMIT q->widthChanged(width);
 		}
 	}
 
@@ -299,7 +299,7 @@ void ImagePrivate::updatePosition() {
 	setPos(p);
 	suppressItemChangeEvent = false;
 
-	emit q->positionChanged(position);
+	Q_EMIT q->positionChanged(position);
 }
 
 void ImagePrivate::updateBorder() {
@@ -341,7 +341,7 @@ void ImagePrivate::recalcShapeAndBoundingRect() {
 
 	imageShape = matrix.map(imageShape);
 
-	emit q->changed();
+	Q_EMIT q->changed();
 }
 
 void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
@@ -398,7 +398,7 @@ void ImagePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 void ImagePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		emit q->hovered();
+		Q_EMIT q->hovered();
 		update();
 	}
 }
@@ -406,7 +406,7 @@ void ImagePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void ImagePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		emit q->unhovered();
+		Q_EMIT q->unhovered();
 		update();
 	}
 }

@@ -37,7 +37,7 @@ QIcon Workbook::icon() const {
 QMenu* Workbook::createContextMenu() {
 	QMenu *menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
-	emit requestProjectContextMenu(menu);
+	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 
@@ -119,7 +119,7 @@ Matrix* Workbook::currentMatrix() const {
  */
 void Workbook::childSelected(const AbstractAspect* aspect) {
 	int index = indexOfChild<AbstractAspect>(aspect);
-	emit workbookItemSelected(index);
+	Q_EMIT workbookItemSelected(index);
 }
 
 /*!
@@ -137,17 +137,17 @@ void Workbook::childDeselected(const AbstractAspect*) {
 void Workbook::setChildSelectedInView(int index, bool selected) {
 	auto* aspect = child<AbstractAspect>(index);
 	if (selected) {
-		emit childAspectSelectedInView(aspect);
+		Q_EMIT childAspectSelectedInView(aspect);
 
 		//deselect the workbook in the project explorer, if a child (spreadsheet or matrix) was selected.
 		//prevents unwanted multiple selection with workbook if it was selected before.
-		emit childAspectDeselectedInView(this);
+		Q_EMIT childAspectDeselectedInView(this);
 	} else {
-		emit childAspectDeselectedInView(aspect);
+		Q_EMIT childAspectDeselectedInView(aspect);
 
 		//deselect also all children that were potentially selected before (columns of a spreadsheet)
 		for (auto* child : aspect->children<AbstractAspect>())
-			emit childAspectDeselectedInView(child);
+			Q_EMIT childAspectDeselectedInView(child);
 	}
 }
 

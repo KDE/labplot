@@ -30,7 +30,7 @@ private:
 	Ui::HDF5OptionsWidget ui;
 	ImportFileWidget* m_fileWidget;
 
-private slots:
+private Q_SLOTS:
 	void hdf5TreeWidgetSelectionChanged();
 };
 

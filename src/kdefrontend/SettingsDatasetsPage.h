@@ -27,7 +27,7 @@ private:
 	Ui::SettingsDatasetsPage ui;
 	void loadSettings();
 
-private slots:
+private Q_SLOTS:
 	void clearCache();
 };
 

@@ -15,7 +15,7 @@
 class NSLIntTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// rules integral/area
 	void testRectangle_integral();
 	void testRectangle_area();

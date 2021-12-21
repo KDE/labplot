@@ -414,7 +414,7 @@ QQuickWidget* MainWin::createWelcomeScreen() {
 	QObject::connect(item, SIGNAL(datasetClicked(QString,QString,QString)), m_welcomeScreenHelper, SLOT(datasetClicked(QString,QString,QString)));
 	QObject::connect(item, SIGNAL(openDataset()), this, SLOT(openDatasetExample()));
 	QObject::connect(item, SIGNAL(openExampleProject(QString)), m_welcomeScreenHelper, SLOT(exampleProjectClicked(QString)));
-	emit m_welcomeScreenHelper->showFirstDataset();
+	Q_EMIT m_welcomeScreenHelper->showFirstDataset();
 
 	return quickWidget;
 }

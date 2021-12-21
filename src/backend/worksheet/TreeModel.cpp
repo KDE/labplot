@@ -271,7 +271,7 @@ bool TreeModel::setData(const QModelIndex& index, const QVariant& value, int rol
 		bool result = item->setData(index.column(), value);
 
 		if (result)
-			emit dataChanged(index, index);
+			Q_EMIT dataChanged(index, index);
 
 		return result;
 	} else if (role == Qt::BackgroundRole) {
@@ -279,7 +279,7 @@ bool TreeModel::setData(const QModelIndex& index, const QVariant& value, int rol
 		bool result = item->setBackgroundColor(index.column(), value);
 
 		if (result)
-			emit dataChanged(index, index);
+			Q_EMIT dataChanged(index, index);
 	}
 
 	return false;
@@ -292,7 +292,7 @@ bool TreeModel::setHeaderData(int section, Qt::Orientation orientation, const QV
 	bool result = rootItem->setData(section, value);
 
 	if (result)
-		emit headerDataChanged(orientation, section, section);
+		Q_EMIT headerDataChanged(orientation, section, section);
 
 	return result;
 }

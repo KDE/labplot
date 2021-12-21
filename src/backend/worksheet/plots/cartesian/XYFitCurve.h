@@ -129,7 +129,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYFitCurve)
 
-signals:
+Q_SIGNALS:
 	void dataSourceHistogramChanged(const Histogram*);
 	void xErrorColumnChanged(const AbstractColumn*);
 	void yErrorColumnChanged(const AbstractColumn*);

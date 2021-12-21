@@ -31,7 +31,7 @@ private:
 	Ui::XYEquationCurveDockGeneralTab uiGeneralTab;
 	XYEquationCurve* m_equationCurve{nullptr};
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in XYCurveDock
 	void typeChanged(int);
 	void recalculateClicked();

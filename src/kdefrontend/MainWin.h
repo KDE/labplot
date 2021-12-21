@@ -270,7 +270,7 @@ protected:
 	void dragEnterEvent(QDragEnterEvent*) override;
 	void dropEvent(QDropEvent*) override;
 
-private slots:
+private Q_SLOTS:
 	void initGUI(const QString&);
 // 	QQuickWidget* createWelcomeScreen();
 // 	void resetWelcomeScreen();

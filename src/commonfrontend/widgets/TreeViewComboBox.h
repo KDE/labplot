@@ -67,11 +67,11 @@ private:
 
 	void paintEvent(QPaintEvent*) override;
 
-private slots:
+private Q_SLOTS:
 	void treeViewIndexActivated(const QModelIndex&);
 	void filterChanged(const QString&);
 
-signals:
+Q_SIGNALS:
 	void currentModelIndexChanged(const QModelIndex&);
 };
 

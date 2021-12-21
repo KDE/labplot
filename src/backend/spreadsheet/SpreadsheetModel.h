@@ -54,7 +54,7 @@ public:
 	void setSearchText(const QString&);
 	QModelIndex index(const QString&) const;
 
-private slots:
+private Q_SLOTS:
 	void handleAspectAdded(const AbstractAspect*);
 	void handleAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleAspectRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);

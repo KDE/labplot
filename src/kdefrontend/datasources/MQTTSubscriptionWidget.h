@@ -41,7 +41,7 @@ public:
 	static bool checkTopicContains(const QString&, const QString&);
 	static void findSubscriptionLeafChildren(QVector<QTreeWidgetItem*>&, QTreeWidgetItem*);
 
-signals:
+Q_SIGNALS:
 	void subscriptionChanged();
 	void makeSubscription(const QString& name, quint8 QoS);
 	void MQTTUnsubscribeFromTopic(const QString&, QVector<QTreeWidgetItem*> children);
@@ -69,7 +69,7 @@ private:
 	static int commonLevelIndex(const QString& first, const QString& second);
 	static QString checkCommonLevel(const QString&, const QString&);
 
-private slots:
+private Q_SLOTS:
 	void mqttAvailableTopicDoubleClicked(QTreeWidgetItem* item, int column);
 	void mqttSubscribedTopicDoubleClicked(QTreeWidgetItem* item, int column);
 	void mqttSubscribe();

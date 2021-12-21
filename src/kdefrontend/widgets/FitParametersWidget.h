@@ -37,11 +37,11 @@ private:
 	void highlightInvalid(int row, int col, bool invalid);
 	void updateTableSize();
 
-signals:
+Q_SIGNALS:
 	void parametersChanged(bool);
 	void parametersValid(bool);
 
-private slots:
+private Q_SLOTS:
 	void changed();
 	void apply();
 	void startValueChanged();

@@ -479,11 +479,11 @@ void AbstractAspect::addChild(AbstractAspect* child) {
  * \brief Add the given Aspect to my list of children without any checks and without putting this step onto the undo-stack
  */
 void AbstractAspect::addChildFast(AbstractAspect* child) {
-	emit aspectAboutToBeAdded(this, nullptr, child); //TODO: before-pointer is 0 here, also in the commands classes. why?
+	Q_EMIT aspectAboutToBeAdded(this, nullptr, child); //TODO: before-pointer is 0 here, also in the commands classes. why?
 	d->insertChild(d->m_children.count(), child);
 	child->finalizeAdd();
 	//PERFTRACE(Q_FUNC_INFO);
-	emit aspectAdded(child);
+	Q_EMIT aspectAdded(child);
 	//print_callstack();
 }
 
@@ -518,10 +518,10 @@ void AbstractAspect::insertChildBeforeFast(AbstractAspect* child, AbstractAspect
 	if (index == -1)
 		index = d->m_children.count();
 
-	emit aspectAboutToBeAdded(this, nullptr, child);
+	Q_EMIT aspectAboutToBeAdded(this, nullptr, child);
 	d->insertChild(index, child);
 	child->finalizeAdd();
-	emit aspectAdded(child);
+	Q_EMIT aspectAdded(child);
 }
 
 /**
@@ -555,9 +555,9 @@ void AbstractAspect::removeAllChildren() {
 	}
 
 	while (current) {
-		emit aspectAboutToBeRemoved(current);
+		Q_EMIT aspectAboutToBeRemoved(current);
 		exec(new AspectChildRemoveCmd(d, current));
-		emit aspectRemoved(this, nextSibling, current);
+		Q_EMIT aspectRemoved(this, nextSibling, current);
 
 		current = nextSibling;
 		if (i != children_list.constEnd() && ++i != children_list.constEnd())
@@ -585,9 +585,9 @@ void AbstractAspect::reparent(AbstractAspect* newParent, int newIndex) {
 // 	auto* old_sibling = old_parent->child<AbstractAspect>(old_index+1, IncludeHidden);
 // 	auto* new_sibling = newParent->child<AbstractAspect>(newIndex, IncludeHidden);
 
-// 	emit newParent->aspectAboutToBeAdded(newParent, new_sibling, this);
+// 	Q_EMIT newParent->aspectAboutToBeAdded(newParent, new_sibling, this);
 	exec(new AspectChildReparentCmd(parentAspect()->d, newParent->d, this, newIndex));
-// 	emit old_parent->aspectRemoved(old_parent, old_sibling, this);
+// 	Q_EMIT old_parent->aspectRemoved(old_parent, old_sibling, this);
 }
 
 QVector<AbstractAspect*> AbstractAspect::children(AspectType type, ChildIndexFlags flags) const {
@@ -1003,9 +1003,9 @@ void AbstractAspect::endMacro() {
  */
 void AbstractAspect::setSelected(bool s) {
 	if (s)
-		emit selected(this);
+		Q_EMIT selected(this);
 	else
-		emit deselected(this);
+		Q_EMIT deselected(this);
 }
 
 void AbstractAspect::childSelected(const AbstractAspect* aspect) {
@@ -1022,7 +1022,7 @@ void AbstractAspect::childSelected(const AbstractAspect* aspect) {
 		&& !parent->inherits(AspectType::XYFitCurve)
 		&& !parent->inherits(AspectType::XYSmoothCurve)
 		&& !parent->inherits(AspectType::CantorWorksheet))
-		emit this->selected(aspect);
+		Q_EMIT this->selected(aspect);
 }
 
 void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
@@ -1039,7 +1039,7 @@ void AbstractAspect::childDeselected(const AbstractAspect* aspect) {
 		&& !parent->inherits(AspectType::XYFitCurve)
 		&& !parent->inherits(AspectType::XYSmoothCurve)
 		&& !parent->inherits(AspectType::CantorWorksheet))
-		emit this->deselected(aspect);
+		Q_EMIT this->deselected(aspect);
 }
 
 /**

@@ -32,7 +32,7 @@ private:
 
 	void init();
 
-private slots:
+private Q_SLOTS:
 	void backgroundColorChanged(const QColor&);
 	void textColorChanged(const QColor&);
 	void textFontChanged(const QFont&);

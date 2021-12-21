@@ -38,7 +38,7 @@ MQTTClient::MQTTClient(const QString& name) : Folder(name, AspectType::MQTTClien
 }
 
 MQTTClient::~MQTTClient() {
-	emit clientAboutToBeDeleted(m_client->hostname(), m_client->port());
+	Q_EMIT clientAboutToBeDeleted(m_client->hostname(), m_client->port());
 	//stop reading before deleting the objects
 	pauseReading();
 
@@ -406,7 +406,7 @@ void MQTTClient::addMQTTSubscription(const QString& topicName, quint8 QoS) {
 
 			connect(temp, &QMqttSubscription::messageReceived, this, &MQTTClient::MQTTSubscriptionMessageReceived);
 
-			emit MQTTTopicsChanged();
+			Q_EMIT MQTTTopicsChanged();
 		}
 	}
 }
@@ -450,7 +450,7 @@ void MQTTClient::removeMQTTSubscription(const QString& subscriptionName) {
 				break;
 			}
 		}
-		emit MQTTTopicsChanged();
+		Q_EMIT MQTTTopicsChanged();
 	}
 }
 
@@ -1007,7 +1007,7 @@ void MQTTClient::read() {
 	if ((m_client->state() == QMqttClient::ClientState::Connected) && m_MQTTFirstConnectEstablished) {
 // 		qDebug()<<"Read";
 		//Signal for every MQTTTopic that they can read
-		emit readFromTopics();
+		Q_EMIT readFromTopics();
 	}
 }
 
@@ -1044,7 +1044,7 @@ void MQTTClient::onMQTTConnect() {
 			}
 			m_MQTTFirstConnectEstablished = true;
 			//Signal that the initial subscriptions were made
-			emit MQTTSubscribed();
+			Q_EMIT MQTTSubscribed();
 		}
 		//if there was already a connection made(happens after updating will message)
 		else {
@@ -1088,7 +1088,7 @@ void MQTTClient::MQTTSubscriptionMessageReceived(const QMqttMessage& msg) {
 		if (msg.topic().name() == m_MQTTWill.willTopic) {
 			m_MQTTWill.willLastMessage = QString(msg.payload());
 
-			emit MQTTTopicsChanged();
+			Q_EMIT MQTTTopicsChanged();
 		}
 	}
 }

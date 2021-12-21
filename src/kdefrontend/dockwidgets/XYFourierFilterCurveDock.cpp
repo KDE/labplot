@@ -566,7 +566,7 @@ void XYFourierFilterCurveDock::recalculateClicked() {
 		static_cast<XYFourierFilterCurve*>(curve)->setFilterData(m_filterData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Fourier-Filter status: %1", m_filterCurve->filterResult().status));
+	Q_EMIT info(i18n("Fourier-Filter status: %1", m_filterCurve->filterResult().status));
 	QApplication::restoreOverrideCursor();
 }
 

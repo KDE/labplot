@@ -139,7 +139,7 @@ void String2DateTimeFilterSetFormatCmd::redo() {
 	QString tmp = m_target->m_format;
 	m_target->m_format = m_other_format;
 	m_other_format = tmp;
-	emit m_target->formatChanged();
+	Q_EMIT m_target->formatChanged();
 }
 
 void String2DateTimeFilterSetFormatCmd::undo() {

@@ -42,7 +42,7 @@ private:
 protected:
 	void setModel() override;
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in XYConvolutionCurveDock
 	//general tab
 	void dataSourceTypeChanged(int);

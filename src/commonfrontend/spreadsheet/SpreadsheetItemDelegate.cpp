@@ -53,13 +53,13 @@ bool SpreadsheetItemDelegate::eventFilter(QObject* editor, QEvent* event) {
 	if (event->type() == QEvent::KeyPress) {
 		auto* keyEvent = static_cast<QKeyEvent*>(event);
 		if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-			emit commitData((QWidget*)editor);
-			emit closeEditor((QWidget*)editor, QAbstractItemDelegate::NoHint);
-			emit returnPressed();
+			Q_EMIT commitData((QWidget*)editor);
+			Q_EMIT closeEditor((QWidget*)editor, QAbstractItemDelegate::NoHint);
+			Q_EMIT returnPressed();
 			return true;
 		}
 	} else if (event->type() == QEvent::InputMethodQuery) {
-		emit editorEntered();
+		Q_EMIT editorEntered();
 		return true;
 	}
 

@@ -79,7 +79,7 @@ private:
 	QLineEdit* m_leFilter{nullptr};
 	QPushButton* bFilterOptions{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void aspectAdded(const AbstractAspect*);
 	void toggleColumn(int);
 	void showAllColumns();
@@ -98,7 +98,7 @@ private slots:
 	void save(QXmlStreamWriter*) const;
 	bool load(XmlStreamReader*);
 
-signals:
+Q_SIGNALS:
 	void currentAspectChanged(AbstractAspect*);
 	void activateView(AbstractAspect*);
 	void selectedAspectsChanged(QList<AbstractAspect*>&);

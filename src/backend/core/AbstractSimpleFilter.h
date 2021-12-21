@@ -52,7 +52,7 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	virtual void writeExtraAttributes(QXmlStreamWriter*) const;
 
-signals:
+Q_SIGNALS:
 	void formatChanged();
 	void digitsChanged();
 

@@ -258,7 +258,7 @@ bool FITSHeaderEditWidget::save() {
 	}
 	if (saved) {
 		//to reset the window title
-		emit changed(false);
+		Q_EMIT changed(false);
 	}
 
 	return saved;
@@ -353,7 +353,7 @@ void FITSHeaderEditWidget::addKeyword() {
 		newKeyWordItem = new QTableWidgetItem(newKeyWord.comment);
 		newKeyWordItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 		ui->twKeywordsTable->setItem(lastRow, 2, newKeyWordItem);
-		emit changed(true);
+		Q_EMIT changed(true);
 	}
 	m_initializingTable = false;
 	delete newKeywordDialog;
@@ -388,7 +388,7 @@ void FITSHeaderEditWidget::removeKeyword() {
 
 			m_extensionData[m_seletedExtension].keywords.removeAt(row);
 			m_extensionData[m_seletedExtension].updates.removedKeywords.append(toRemove);
-			emit changed(true);
+			Q_EMIT changed(true);
 		} else
 			KMessageBox::information(this, i18n("Cannot remove mandatory keyword."), i18n("Removing Keyword"));
 	}
@@ -440,7 +440,7 @@ void FITSHeaderEditWidget::updateKeyword(QTableWidgetItem *item) {
 				m_extensionData[m_seletedExtension].updates.newKeywords.operator [](idx).updates.commentUpdated = true;
 			}
 		}
-		emit changed(true);
+		Q_EMIT changed(true);
 	}
 }
 
@@ -483,7 +483,7 @@ void FITSHeaderEditWidget::addModifyKeywordUnit() {
 			if (!m_extensionData[m_seletedExtension].keywords.at(idx).unit.isEmpty())
 				m_extensionData[m_seletedExtension].keywords.operator [](idx).updates.unitUpdated = true;
 		}
-		emit changed(true);
+		Q_EMIT changed(true);
 		fillTable();
 	}
 
@@ -515,7 +515,7 @@ void FITSHeaderEditWidget::removeExtension() {
 		fillTable();
 	}
 	ui->twExtensions->setCurrentItem(newCurrent);
-	emit changed(true);
+	Q_EMIT changed(true);
 }
 
 /*!
@@ -605,7 +605,7 @@ void FITSHeaderEditWidget::closeFile() {
 		delete current;
 
 		enableButtonAddUnit();
-		emit changed(false);
+		Q_EMIT changed(false);
 	}
 }
 void FITSHeaderEditWidget::enableButtonAddUnit() {

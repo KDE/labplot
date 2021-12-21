@@ -201,7 +201,7 @@ public:
 	void setHeatmapFormat(const HeatmapFormat&);
 	void removeFormat();
 
-signals:
+Q_SIGNALS:
 	void plotDesignationAboutToChange(const AbstractColumn* source);
 	void plotDesignationChanged(const AbstractColumn* source);
 	void modeAboutToChange(const AbstractColumn* source);

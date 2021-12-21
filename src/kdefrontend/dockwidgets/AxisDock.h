@@ -58,7 +58,7 @@ private:
 	DateTimeSpinBox* dtsbMajorTicksIncrement {nullptr};
 	DateTimeSpinBox* dtsbMinorTicksIncrement {nullptr};
 
-private slots:
+private Q_SLOTS:
 	void init();
 
 	//SLOTs for changes triggered in AxisDock
@@ -220,7 +220,7 @@ private slots:
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

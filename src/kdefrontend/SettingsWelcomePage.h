@@ -27,7 +27,7 @@ private:
 	Ui::SettingsWelcomePage ui;
 	void loadSettings();
 
-signals:
+Q_SIGNALS:
 	void settingsChanged();
 	void resetWelcomeScreen();
 };

@@ -64,7 +64,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYFourierTransformCurve)
 
-signals:
+Q_SIGNALS:
 	void transformDataChanged(const XYFourierTransformCurve::TransformData&);
 };
 

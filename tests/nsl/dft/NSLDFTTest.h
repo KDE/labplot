@@ -15,7 +15,7 @@
 class NSLDFTTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// one sided
 	void testOnesided_real();
 	void testOnesided_imag();

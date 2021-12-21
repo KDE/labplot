@@ -31,7 +31,7 @@ public:
 private:
 	ImportSQLDatabaseWidget* importSQLDatabaseWidget;
 
-protected  slots:
+protected Q_SLOTS:
 	void checkOkButton() override;
 };
 

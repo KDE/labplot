@@ -15,7 +15,7 @@
 class IntegrationTest : public AnalysisTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testLinear();
 
 //	void testPerformance();

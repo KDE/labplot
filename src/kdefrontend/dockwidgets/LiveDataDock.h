@@ -50,7 +50,7 @@ private:
 	void pauseReading();
 	void continueReading();
 
-private slots:
+private Q_SLOTS:
 	void nameChanged(const QString&);
 	void updateTypeChanged(int);
 	void readingTypeChanged(int);
@@ -67,7 +67,7 @@ public:
 	bool testSubscribe(const QString&);
 	bool testUnsubscribe(const QString&);
 
-private slots:
+private Q_SLOTS:
 	void useWillMessage(bool use);
 	void willQoSChanged(int);
 	void willRetainChanged(bool);
@@ -85,7 +85,7 @@ private slots:
 	void showWillSettings();
     void enableWill(bool enable);
 
-signals:
+Q_SIGNALS:
 	void newTopic(const QString&);
     void MQTTClearTopics();
     void updateSubscriptionTree(const QVector<QString>&);

@@ -153,7 +153,7 @@ void MQTTConnectionManagerWidget::nameChanged(const QString &name) {
 
 			if (!m_initializing) {
 				m_currentConnection->name = name;
-				emit changed();
+				Q_EMIT changed();
 			}
 		} else {
 			SET_WARNING_STYLE(ui.leName)
@@ -196,7 +196,7 @@ void MQTTConnectionManagerWidget::hostChanged(const QString& hostName) {
 			ui.lePort->setToolTip(QString());
 
 			if (!m_initializing)
-				emit changed();
+				Q_EMIT changed();
 		}
 	}
 }
@@ -235,7 +235,7 @@ void MQTTConnectionManagerWidget::portChanged(const QString& portString) {
 			ui.lePort->setToolTip(QString());
 
 			if (!m_initializing)
-				emit changed();
+				Q_EMIT changed();
 		}
 	}
 
@@ -275,7 +275,7 @@ void MQTTConnectionManagerWidget::authenticationChecked(int state) {
 	}
 
 	if (!m_initializing)
-		emit changed();
+		Q_EMIT changed();
 }
 
 /*!
@@ -304,7 +304,7 @@ void MQTTConnectionManagerWidget::idChecked(int state) {
 	}
 
 	if (!m_initializing)
-		emit changed();
+		Q_EMIT changed();
 }
 
 /*!
@@ -322,7 +322,7 @@ void MQTTConnectionManagerWidget::retainChecked(int state) {
 			m_currentConnection->retain = false;
 		}
 	}
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -343,7 +343,7 @@ void MQTTConnectionManagerWidget::userNameChanged(const QString& userName) {
 
 	if (m_currentConnection)
 		m_currentConnection->userName = userName;
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -364,7 +364,7 @@ void MQTTConnectionManagerWidget::passwordChanged(const QString& password) {
 
 	if (m_currentConnection)
 		m_currentConnection->password = password;
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -385,7 +385,7 @@ void MQTTConnectionManagerWidget::clientIdChanged(const QString& clientID) {
 
 	if (m_currentConnection)
 		m_currentConnection->clientID = clientID;
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -413,7 +413,7 @@ void MQTTConnectionManagerWidget::addConnection() {
 	ui.lePassword->setEnabled(true);
 	ui.leID->setEnabled(true);
 	ui.leName->setEnabled(true);
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -453,7 +453,7 @@ void MQTTConnectionManagerWidget::deleteConnection() {
 		ui.leID->setEnabled(false);
 		m_initializing = false;
 	}
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!

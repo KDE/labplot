@@ -391,7 +391,7 @@ void XYCorrelationCurveDock::recalculateClicked() {
 		static_cast<XYCorrelationCurve*>(curve)->setCorrelationData(m_correlationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Correlation status: %1", m_correlationCurve->correlationResult().status));
+	Q_EMIT info(i18n("Correlation status: %1", m_correlationCurve->correlationResult().status));
 	QApplication::restoreOverrideCursor();
 }
 

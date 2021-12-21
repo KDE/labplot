@@ -72,7 +72,7 @@ private:
 	Q_DECLARE_PRIVATE(PlotArea)
 	void init();
 
-signals:
+Q_SIGNALS:
 	void backgroundTypeChanged(WorksheetElement::BackgroundType);
 	void backgroundColorStyleChanged(WorksheetElement::BackgroundColorStyle);
 	void backgroundImageStyleChanged(WorksheetElement::BackgroundImageStyle);

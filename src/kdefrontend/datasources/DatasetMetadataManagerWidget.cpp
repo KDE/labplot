@@ -50,20 +50,20 @@ DatasetMetadataManagerWidget::DatasetMetadataManagerWidget(QWidget* parent, cons
 	ui.cbDateTimeFormat->addItems(AbstractColumn::dateTimeFormats());
 
 	connect(ui.leDatasetName, &QLineEdit::textChanged, [this] {
-		emit checkOk();
+		Q_EMIT checkOk();
 	});
 	connect(ui.leDownloadURL, &QLineEdit::textChanged, [this] {
-		emit checkOk();
+		Q_EMIT checkOk();
 	});
 	connect(ui.teDescription, &QTextEdit::textChanged, [this] {
-		emit checkOk();
+		Q_EMIT checkOk();
 	});
 	connect(ui.leFileName, &QLineEdit::textChanged, [this] {
-		emit checkOk();
+		Q_EMIT checkOk();
 	});
 
 	connect(ui.cbSubcategory, &QComboBox::currentTextChanged, [this] {
-		emit checkOk();
+		Q_EMIT checkOk();
 	});
 
 	connect(ui.cbCollection, &QComboBox::currentTextChanged, this, &DatasetMetadataManagerWidget::updateCategories);
@@ -311,7 +311,7 @@ void DatasetMetadataManagerWidget::updateCategories(const QString& collection) {
 	if( m_datasetModel->collections().contains(collection))
 		ui.cbCategory->addItems(m_datasetModel->categories(collection));
 
-	emit checkOk();
+	Q_EMIT checkOk();
 }
 
 /**
@@ -323,7 +323,7 @@ void DatasetMetadataManagerWidget::updateSubcategories(const QString& category) 
 	if( m_datasetModel->categories(collection).contains(category))
 		ui.cbSubcategory->addItems(m_datasetModel->subcategories(collection, category));
 
-	emit checkOk();
+	Q_EMIT checkOk();
 }
 
 /**

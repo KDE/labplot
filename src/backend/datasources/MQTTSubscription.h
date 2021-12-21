@@ -38,7 +38,7 @@ private:
 	QString m_subscriptionName;
 	MQTTClient* m_MQTTClient{nullptr};
 
-signals:
+Q_SIGNALS:
 	void loaded(const QString &);
 };
 

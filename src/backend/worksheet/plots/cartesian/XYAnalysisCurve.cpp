@@ -235,7 +235,7 @@ void XYAnalysisCurve::setY2DataColumnPath(const QString& path) {
 void XYAnalysisCurve::handleSourceDataChanged() {
 	Q_D(XYAnalysisCurve);
 	d->sourceDataChangedSinceLastRecalc = true;
-	emit sourceDataChanged();
+	Q_EMIT sourceDataChanged();
 }
 
 void XYAnalysisCurve::xDataColumnAboutToBeRemoved(const AbstractAspect* aspect) {

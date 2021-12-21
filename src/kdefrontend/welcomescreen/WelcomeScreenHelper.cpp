@@ -129,9 +129,9 @@ void WelcomeScreenHelper::datasetClicked(const QString& category, const QString&
 
 	if(timer.isActive()){
 		timer.stop();
-		emit datasetFound();
+		Q_EMIT datasetFound();
 	} else
-		emit datasetNotFound();
+		Q_EMIT datasetNotFound();
 }
 
 /**
@@ -308,7 +308,7 @@ QVariant WelcomeScreenHelper::getExampleProjectTags(const QString& exampleName) 
  */
 void WelcomeScreenHelper::exampleProjectClicked(const QString& exampleName) {
 	QString path = QStandardPaths::locate(QStandardPaths::AppDataLocation, "example_projects/" + m_pathMap[exampleName]);
-	emit openExampleProject(path);
+	Q_EMIT openExampleProject(path);
 }
 
 /**

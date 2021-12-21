@@ -106,12 +106,12 @@ private:
 	QAction* fourTimesMagnificationAction;
 	QAction* fiveTimesMagnificationAction;
 
-public slots:
+public Q_SLOTS:
 	void createContextMenu(QMenu*) const;
 	void fillToolBar(QToolBar*);
 	void print(QPrinter*);
 
-private slots:
+private Q_SLOTS:
 	void mouseModeChanged(QAction*);
 	void magnificationChanged(QAction*);
 	void changeZoom(QAction*);
@@ -125,7 +125,7 @@ private slots:
 	void scalingTime();
 	void animFinished();
 
-signals:
+Q_SIGNALS:
 	void statusInfo(const QString&);
 };
 

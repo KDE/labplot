@@ -244,7 +244,7 @@ void XYHilbertTransformCurveDock::recalculateClicked() {
 		static_cast<XYHilbertTransformCurve*>(curve)->setTransformData(m_transformData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Hilbert transformation status: %1", m_transformCurve->transformResult().status));
+	Q_EMIT info(i18n("Hilbert transformation status: %1", m_transformCurve->transformResult().status));
 	QApplication::restoreOverrideCursor();
 }
 

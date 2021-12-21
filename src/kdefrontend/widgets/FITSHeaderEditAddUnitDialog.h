@@ -26,7 +26,7 @@ private:
 	Ui::FITSHeaderEditAddUnitDialog  ui;
 	QPushButton* m_okButton;
 
-private slots:
+private Q_SLOTS:
 	void unitChanged();
 };
 

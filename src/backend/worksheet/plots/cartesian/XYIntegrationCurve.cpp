@@ -129,7 +129,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -156,7 +156,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 		integrationResult.valid = false;
 		integrationResult.status = i18n("Not enough data points available.");
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -205,7 +205,7 @@ void XYIntegrationCurvePrivate::recalculate() {
 
 	//redraw the curve
 	recalcLogicalPoints();
-	emit q->dataChanged();
+	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }
 

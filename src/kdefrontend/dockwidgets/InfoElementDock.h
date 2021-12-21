@@ -28,10 +28,10 @@ public:
 	~InfoElementDock();
 	void setInfoElements(QList<InfoElement*>);
 
-public slots:
+public Q_SLOTS:
 	void elementCurveRemoved(const QString&);
 
-private slots:
+private Q_SLOTS:
 	void gluePointChanged(int index);
 	void curveChanged();
 	void positionChanged(const QString&);

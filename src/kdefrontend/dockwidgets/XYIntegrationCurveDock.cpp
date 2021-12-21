@@ -414,7 +414,7 @@ void XYIntegrationCurveDock::recalculateClicked() {
 		static_cast<XYIntegrationCurve*>(curve)->setIntegrationData(m_integrationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Integration status: %1", m_integrationCurve->integrationResult().status));
+	Q_EMIT info(i18n("Integration status: %1", m_integrationCurve->integrationResult().status));
 	QApplication::restoreOverrideCursor();
 }
 

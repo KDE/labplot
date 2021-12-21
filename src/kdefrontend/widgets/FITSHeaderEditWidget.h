@@ -59,10 +59,10 @@ private:
 	QList<QString> mandatoryKeywords() const;
 	bool eventFilter(QObject*, QEvent*) override;
 
-public slots:
+public Q_SLOTS:
 	bool save();
 
-private slots:
+private Q_SLOTS:
 	void openFile();
 
 	void fillTableSlot(QTreeWidgetItem* item, int col);
@@ -75,7 +75,7 @@ private slots:
 	void closeFile();
 	void enableButtonCloseFile(QTreeWidgetItem *, int);
 	void enableButtonAddUnit();
-signals:
+Q_SIGNALS:
 	void changed(bool);
 };
 

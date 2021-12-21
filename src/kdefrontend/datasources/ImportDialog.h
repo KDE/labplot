@@ -53,10 +53,10 @@ protected:
 	QMenu* m_newDataContainerMenu{nullptr};
 	AspectTreeModel* m_aspectTreeModel;
 
-protected slots:
+protected Q_SLOTS:
 	virtual void checkOkButton() = 0;
 
-private slots:
+private Q_SLOTS:
 	void newDataContainerMenu();
 	void newDataContainer(QAction*);
 };

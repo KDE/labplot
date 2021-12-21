@@ -27,7 +27,7 @@ public:
 	static QStringList themes();
 	static const QString themeFilePath(const QString&);
 
-public  slots:
+public Q_SLOTS:
 	void setCurrentTheme(const QString&);
 
 private:
@@ -40,14 +40,14 @@ private:
 //      QPushButton* m_pbSaveTheme;
 // 	QPushButton* pbPublishTheme;
 
-private slots:
+private Q_SLOTS:
 	void loadSelected(const QString&);
 	void showPanel();
 // 	void saveMenu();
 // 	void saveNewSelected(const QString&);
 // 	void publishThemes();
 
-signals:
+Q_SIGNALS:
 	void loadThemeRequested(const QString&);
 	void saveThemeRequested(KConfig&);
 	void info(const QString&);

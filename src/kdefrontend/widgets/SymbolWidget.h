@@ -33,10 +33,10 @@ private:
 	QList<Symbol*> m_symbols;
 	bool m_initializing{false};
 
-signals:
+Q_SIGNALS:
 	void dataChanged(bool);
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in SymbolWidget
 	void styleChanged(int);
 	void sizeChanged(double);

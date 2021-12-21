@@ -28,7 +28,7 @@ private:
 	Matrix* m_matrix;
 	QPushButton* m_okButton;
 
-private slots:
+private Q_SLOTS:
 	void generate();
 	void checkValues();
 	void showConstants();

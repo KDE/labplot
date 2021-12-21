@@ -15,7 +15,7 @@
 class NSLStatsTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testQuantile();
 	// performance
 	//void testPerformance();

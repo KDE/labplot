@@ -184,7 +184,7 @@ public:
 
 	typedef CartesianPlotPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void setTheme(const QString&);
 	void retransformAll();
 
@@ -277,7 +277,7 @@ private:
 
 	Q_DECLARE_PRIVATE(CartesianPlot)
 
-public slots:
+public Q_SLOTS:
 	void addHorizontalAxis();
 	void addVerticalAxis();
 	void addCurve();
@@ -326,7 +326,7 @@ public slots:
 	bool autoScale(int xIndex = -1, int yIndex = -1, bool fullRange = true);
 	void dataChanged(int xIndex = -1, int yIndex = -1, WorksheetElement* sender = nullptr);
 
-private slots:
+private Q_SLOTS:
 	void updateLegend();
 	void childAdded(const AbstractAspect*);
 	void childRemoved(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
@@ -345,7 +345,7 @@ private slots:
 protected:
 	CartesianPlot(const QString &name, CartesianPlotPrivate *dd);
 
-signals:
+Q_SIGNALS:
 	void rangeTypeChanged(CartesianPlot::RangeType);
 	void niceExtendChanged(bool);
 	void xRangeFormatChanged(int xRangeIndex, RangeT::Format);

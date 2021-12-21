@@ -52,7 +52,7 @@ public:
 
 	FileType type() const { return m_type; }
 
-signals:
+Q_SIGNALS:
 	void completed(int) const; //!< int ranging from 0 to 100 notifies about the status of a read/write process
 
 protected:

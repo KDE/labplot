@@ -35,7 +35,7 @@ private:
 	QString m_name;
 	QVector<QColor> m_colors;
 
-private slots:
+private Q_SLOTS:
 	void autoRangeChanged(int);
 	void selectColorMap();
 	void checkValues();

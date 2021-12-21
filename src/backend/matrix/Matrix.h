@@ -101,7 +101,7 @@ public:
 
 	typedef MatrixPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void clear();
 	void transpose();
 	void mirrorVertically();
@@ -111,7 +111,7 @@ public slots:
 	void addRows();
 	void duplicate();
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void columnsAboutToBeInserted(int before, int count);
 	void columnsInserted(int first, int count);

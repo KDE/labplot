@@ -28,11 +28,11 @@ private:
 	bool m_dateTimeRange{false};
 	const QLocale locale;
 
-signals:
+Q_SIGNALS:
 	void finished();
 	void optionsChanged();
 
-private slots:
+private Q_SLOTS:
 	void autoRangeChanged();
 	void autoEvalRangeChanged();
 	void fitRangeMinChanged();

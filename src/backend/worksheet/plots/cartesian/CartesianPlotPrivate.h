@@ -159,7 +159,7 @@ public:
 	QPen zoomSelectPen{Qt::black, 3, Qt::SolidLine};
 	QPen crossHairPen{Qt::black, 2, Qt::DotLine};
 
-signals:
+Q_SIGNALS:
 	void mousePressZoomSelectionModeSignal(QPointF logicalPos);
 	void mousePressCursorModeSignal(QPointF logicalPos);
 

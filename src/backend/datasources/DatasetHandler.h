@@ -48,10 +48,10 @@ private:
 	bool saveToDisk(const QString& filename, QIODevice*);
 	void markMetadataAsInvalid();
 
-private slots:
+private Q_SLOTS:
 	void downloadFinished(QNetworkReply*);
 
-signals:
+Q_SIGNALS:
 	void downloadCompleted();
 	void downloadProgress(int progress);
 };

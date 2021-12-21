@@ -454,7 +454,7 @@ void TextLabelPrivate::retransform() {
 	updatePosition();
 	updateBorder();
 
-	emit q->changed();
+	Q_EMIT q->changed();
 }
 
 void TextLabelPrivate::setZoomFactor(double factor) {
@@ -494,13 +494,13 @@ void TextLabelPrivate::updatePosition() {
 	setPos(p);
 	suppressItemChangeEvent = false;
 
-	emit q->positionChanged(position);
+	Q_EMIT q->positionChanged(position);
 
 	//the position in scene coordinates was changed, calculate the position in logical coordinates
 	if (q->cSystem) {
 		if (!coordinateBindingEnabled)
 			positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		emit q->positionLogicalChanged(positionLogical);
+		Q_EMIT q->positionLogicalChanged(positionLogical);
 	}
 }
 
@@ -586,7 +586,7 @@ void TextLabelPrivate::updateTeXImage() {
 	teXImage = GuiTools::imageFromPDFData(teXPdfData, zoomFactor);
 	updateBoundingRect();
 	DEBUG(Q_FUNC_INFO << ", TeX renderer successful = " << teXRenderSuccessful);
-	emit q->teXImageUpdated(teXRenderSuccessful);
+	Q_EMIT q->teXImageUpdated(teXRenderSuccessful);
 }
 
 void TextLabelPrivate::updateBorder() {
@@ -875,7 +875,7 @@ void TextLabelPrivate::recalcShapeAndBoundingRect() {
 
 	m_textItem->setRotationAngle(rotationAngle);
 
-	emit q->changed();
+	Q_EMIT q->changed();
 }
 
 void TextLabelPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
@@ -946,7 +946,7 @@ void TextLabelPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 void TextLabelPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		emit q->hovered();
+		Q_EMIT q->hovered();
 		update();
 	}
 }
@@ -954,7 +954,7 @@ void TextLabelPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void TextLabelPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		emit q->unhovered();
+		Q_EMIT q->unhovered();
 		update();
 	}
 }

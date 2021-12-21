@@ -205,7 +205,7 @@ private:
 	QMenu* lineStyleMenu{nullptr};
 	QMenu* lineColorMenu{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void labelChanged();
 	void retransformTicks();
 	void majorTicksColumnAboutToBeRemoved(const AbstractAspect*);
@@ -217,7 +217,7 @@ private slots:
 	void lineColorChanged(QAction*);
 	void visibilityChangedSlot();
 
-signals:
+Q_SIGNALS:
 	void orientationChanged(Orientation);
 	void positionChanged(Position);
 	void positionChanged(double);

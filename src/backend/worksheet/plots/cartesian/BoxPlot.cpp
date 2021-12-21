@@ -574,7 +574,7 @@ void BoxPlotPrivate::setHover(bool on) {
 		return; // don't update if state not changed
 
 	m_hovered = on;
-	on ? emit q->hovered() : emit q->unhovered();
+	on ? Q_EMIT q->hovered() : emit q->unhovered();
 	update();
 }
 
@@ -711,9 +711,9 @@ void BoxPlotPrivate::recalc() {
 
 	//the size of the boxplot changed because of the actual
 	//data changes or because of new boxplot settings.
-	//emit dataChanged() in order to recalculate everything
+	//Q_EMIT dataChanged() in order to recalculate everything
 	//in the parent plot with the new size/shape of the boxplot
-	emit q->dataChanged();
+	Q_EMIT q->dataChanged();
 }
 
 QPointF BoxPlotPrivate::setOutlierPoint(double pos, double value) {
@@ -1605,7 +1605,7 @@ void BoxPlotPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 void BoxPlotPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		emit q->hovered();
+		Q_EMIT q->hovered();
 		update();
 	}
 }
@@ -1613,7 +1613,7 @@ void BoxPlotPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void BoxPlotPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		emit q->unhovered();
+		Q_EMIT q->unhovered();
 		update();
 	}
 }

@@ -119,12 +119,12 @@ QIcon DatapickerImage::icon() const {
 */
 QMenu* DatapickerImage::createContextMenu() {
 	QMenu* menu = new QMenu(nullptr);
-	emit requestProjectContextMenu(menu);
+	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 
 void DatapickerImage::createContextMenu(QMenu* menu) {
-	emit requestProjectContextMenu(menu);
+	Q_EMIT requestProjectContextMenu(menu);
 }
 
 //! Construct a primary view on me.
@@ -184,9 +184,9 @@ bool DatapickerImage::printPreview() const {
 */
 void DatapickerImage::setSelectedInView(const bool b) {
 	if (b)
-		emit childAspectSelectedInView(this);
+		Q_EMIT childAspectSelectedInView(this);
 	else
-		emit childAspectDeselectedInView(this);
+		Q_EMIT childAspectDeselectedInView(this);
 }
 
 void DatapickerImage::setSegmentsHoverEvent(const bool on) {
@@ -206,7 +206,7 @@ void DatapickerImage::setPlotImageType(const DatapickerImage::PlotImageType type
 	if (d->plotImageType == DatapickerImage::PlotImageType::ProcessedImage)
 		d->discretize();
 
-	emit requestUpdate();
+	Q_EMIT requestUpdate();
 }
 
 DatapickerImage::PlotImageType DatapickerImage::plotImageType() {
@@ -359,7 +359,7 @@ void DatapickerImagePrivate::discretize() {
 	ImageEditor::discretize(&q->processedPlotImage, &q->originalPlotImage, settings, q->background);
 
 	if (plotPointsType != DatapickerImage::PointsType::SegmentPoints)
-		emit q->requestUpdate();
+		Q_EMIT q->requestUpdate();
 	else
 		makeSegments();
 }
@@ -371,7 +371,7 @@ void DatapickerImagePrivate::makeSegments() {
 	PERFTRACE("DatapickerImagePrivate::makeSegments()");
 	q->m_segments->makeSegments(q->processedPlotImage);
 	q->m_segments->setSegmentsVisible(true);
-	emit q->requestUpdate();
+	Q_EMIT q->requestUpdate();
 }
 
 DatapickerImagePrivate::~DatapickerImagePrivate() {
@@ -397,8 +397,8 @@ void DatapickerImagePrivate::updateFileName() {
 			point->remove();
 	}
 
-	emit q->requestUpdate();
-	emit q->requestUpdateActions();
+	Q_EMIT q->requestUpdate();
+	Q_EMIT q->requestUpdateActions();
 	RESET_CURSOR;
 }
 

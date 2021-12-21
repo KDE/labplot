@@ -62,7 +62,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(Symbol)
 
-signals:
+Q_SIGNALS:
 	void styleChanged(Symbol::Style);
 	void sizeChanged(qreal);
 	void rotationAngleChanged(qreal);

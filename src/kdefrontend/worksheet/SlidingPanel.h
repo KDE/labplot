@@ -26,7 +26,7 @@ private:
 	QPushButton* m_quitPresentingMode;
 	QSize sizeHint() const override;
 
-public slots:
+public Q_SLOTS:
 	void movePanel(qreal);
 };
 

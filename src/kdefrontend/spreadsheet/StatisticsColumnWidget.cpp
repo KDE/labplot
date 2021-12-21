@@ -242,7 +242,7 @@ void StatisticsColumnWidget::currentTabChanged(int index) {
 	else if (index == 4 && !m_boxPlotInitialized)
 		showBoxPlot();
 
-	emit tabChanged(index);
+	Q_EMIT tabChanged(index);
 }
 
 void StatisticsColumnWidget::showOverview() {

@@ -140,7 +140,7 @@ void DatabaseManagerWidget::nameChanged(const QString& name) {
 
 			if (!m_initializing) {
 				m_current_connection->name = name;
-				emit changed();
+				Q_EMIT changed();
 			}
 		}
 	} else
@@ -207,7 +207,7 @@ void DatabaseManagerWidget::driverChanged() {
 
 	if (m_current_connection)
 		m_current_connection->driver = driver;
-	emit changed();
+	Q_EMIT changed();
 }
 
 void DatabaseManagerWidget::selectFile() {
@@ -237,7 +237,7 @@ void DatabaseManagerWidget::hostChanged() {
 	//don't allow to try to connect if no hostname provided
 	ui.bTestConnection->setEnabled( !ui.leHost->text().simplified().isEmpty() );
 
-	emit changed();
+	Q_EMIT changed();
 }
 
 void DatabaseManagerWidget::portChanged() {
@@ -246,7 +246,7 @@ void DatabaseManagerWidget::portChanged() {
 
 	if (m_current_connection)
 		m_current_connection->port = ui.sbPort->value();
-	emit changed();
+	Q_EMIT changed();
 }
 
 void DatabaseManagerWidget::databaseNameChanged() {
@@ -277,7 +277,7 @@ void DatabaseManagerWidget::databaseNameChanged() {
 
 	if (m_current_connection)
 		m_current_connection->dbName = dbName;
-	emit changed();
+	Q_EMIT changed();
 }
 
 void DatabaseManagerWidget::customConnectionEnabledChanged(int state) {
@@ -294,13 +294,13 @@ void DatabaseManagerWidget::customConnectionEnabledChanged(int state) {
 
 	if (m_current_connection)
 		m_current_connection->customConnectionEnabled = (state == Qt::Checked);
-	emit changed();
+	Q_EMIT changed();
 }
 
 void DatabaseManagerWidget::customConnectionChanged() {
 	if (m_current_connection)
 		m_current_connection->customConnectionString = ui.teCustomConnection->toPlainText();
-	emit changed();
+	Q_EMIT changed();
 }
 
 void DatabaseManagerWidget::userNameChanged() {
@@ -309,7 +309,7 @@ void DatabaseManagerWidget::userNameChanged() {
 
 	if (m_current_connection)
 		m_current_connection->userName = ui.leUserName->text();
-	emit changed();
+	Q_EMIT changed();
 }
 
 void DatabaseManagerWidget::passwordChanged() {
@@ -318,7 +318,7 @@ void DatabaseManagerWidget::passwordChanged() {
 
 	if (m_current_connection)
 		m_current_connection->password = ui.lePassword->text();
-	emit changed();
+	Q_EMIT changed();
 }
 
 void DatabaseManagerWidget::addConnection() {
@@ -395,7 +395,7 @@ void DatabaseManagerWidget::deleteConnection() {
 		m_initializing = false;
 	}
 
-	emit changed();
+	Q_EMIT changed();
 }
 
 void DatabaseManagerWidget::loadConnections() {

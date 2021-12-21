@@ -387,7 +387,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 
 	if (numeric != m_numeric) {
 		m_numeric = numeric;
-		emit stateChanged();
+		Q_EMIT stateChanged();
 	}
 
 	RESET_CURSOR;
@@ -486,7 +486,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 		}
 
 		row++;
-		emit completed(100 * row/rows);
+		Q_EMIT completed(100 * row/rows);
 	} while (q.next());
 	DEBUG("	Read " << row << " rows");
 
@@ -557,13 +557,13 @@ void ImportSQLDatabaseWidget::setInvalid() {
 		ui.twPreview->setRowCount(0);
 
 		m_valid = false;
-		emit stateChanged();
+		Q_EMIT stateChanged();
 	}
 }
 
 void ImportSQLDatabaseWidget::setValid() {
 	if (!m_valid) {
 		m_valid = true;
-		emit stateChanged();
+		Q_EMIT stateChanged();
 	}
 }

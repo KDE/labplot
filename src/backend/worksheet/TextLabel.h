@@ -122,7 +122,7 @@ public:
 
 	typedef TextLabelPrivate Private;
 
-private slots:
+private Q_SLOTS:
 	void updateTeXImage();
 
 	//SLOTs for changes triggered via QActions in the context menu
@@ -138,7 +138,7 @@ private:
 	Type m_type;
 	QAction* visibilityAction{nullptr};
 
-signals:
+Q_SIGNALS:
 	void textWrapperChanged(const TextLabel::TextWrapper&);
 	void teXFontSizeChanged(const int);
 	void teXFontChanged(const QFont);

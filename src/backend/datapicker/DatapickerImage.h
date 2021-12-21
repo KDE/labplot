@@ -113,7 +113,7 @@ private:
 	friend class DatapickerImagePrivate;
 	Segments* m_segments;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void requestUpdate();
 	void requestUpdateActions();

@@ -193,7 +193,7 @@ void SettingsGeneralPage::retranslateUi() {
 
 void SettingsGeneralPage::changed() {
 	m_changed = true;
-	emit settingsChanged();
+	Q_EMIT settingsChanged();
 }
 
 void SettingsGeneralPage::interfaceChanged(int index) {

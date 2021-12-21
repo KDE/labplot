@@ -176,14 +176,14 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 
 	if (m_previousMQTTClient == nullptr) {
 		m_updateSubscriptionConn = connect(client, &MQTTClient::MQTTSubscribed, [this]() {
-			emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+			Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 		});
 
 		//Fill the subscription tree(useful if the MQTTClient was loaded)
 		QVector<QString> topics = client->topicNames();
 		for (const auto& topic : topics)
 			addTopicToTree(topic);
-		emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+		Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 	}
 
 	//if the previous MQTTClient's host name was different from the current one we have to disconnect some slots
@@ -203,16 +203,16 @@ void LiveDataDock::setMQTTClient(MQTTClient* const client) {
 		m_previousHost->topicList = m_subscriptionWidget->getTopicList();
 		m_subscriptionWidget->setTopicList(m_currentHost->topicList);
 
-		emit MQTTClearTopics();
+		Q_EMIT MQTTClearTopics();
 		//repopulating the tree widget with the already known topics of the client
 		for (const auto& topic : m_currentHost->addedTopics)
 			addTopicToTree(topic);
 
 		//fill subscriptions tree widget
-		emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+		Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 
 		m_updateSubscriptionConn = connect(client, &MQTTClient::MQTTSubscribed, [this]() {
-			emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+			Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 		});
 		connect(m_currentHost->client, &QMqttClient::messageReceived, this, &LiveDataDock::mqttMessageReceived);
 
@@ -773,14 +773,14 @@ void LiveDataDock::addTopicToTree(const QString &topicName) {
 		QStringList subscriptionName = m_subscriptionWidget->topLevelSubscription(i)->text(0).split('/', QString::SkipEmptyParts);
 #endif
 		if (rootName == subscriptionName[0]) {
-			emit updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
+			Q_EMIT updateSubscriptionTree(m_mqttClient->MQTTSubscriptions());
 			break;
 		}
 	}
 
 	//signals that a newTopic was added, in order to fill the completer of leTopics
 	//we have to pass the whole topic name, not just the root name, for testing purposes
-	emit newTopic(topicName);
+	Q_EMIT newTopic(topicName);
 }
 
 /*!
@@ -819,7 +819,7 @@ void LiveDataDock::removeClient(const QString& hostname, quint16 port) {
 	}
 
 	if (m_mqttClient && m_mqttClient->clientHostName() == hostname) {
-		emit MQTTClearTopics();
+		Q_EMIT MQTTClearTopics();
 		m_mqttClient = nullptr;
 	}
 

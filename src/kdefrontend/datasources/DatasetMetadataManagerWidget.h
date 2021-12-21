@@ -52,13 +52,13 @@ private:
     void enableDatasetSettings(bool);
 	QJsonObject createDatasetObject();
 
-private slots:
+private Q_SLOTS:
 	void updateCategories(const QString&);
     void updateSubcategories(const QString&);
     void addColumnDescription();
     void removeColumnDescription();
 
-signals:
+Q_SIGNALS:
     void checkOk();
 };
 

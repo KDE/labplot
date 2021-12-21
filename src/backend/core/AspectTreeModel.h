@@ -48,7 +48,7 @@ public:
 	void setFilterCaseSensitivity(Qt::CaseSensitivity);
 	void setFilterMatchCompleteWord(bool);
 
-private slots:
+private Q_SLOTS:
 	void aspectDescriptionChanged(const AbstractAspect*);
 	void aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);
 	void aspectAdded(const AbstractAspect* parent);
@@ -75,7 +75,7 @@ private:
 	bool m_matchCompleteWord{false};
 	bool containsFilterString(const AbstractAspect*) const;
 
-signals:
+Q_SIGNALS:
 	void renameRequested(const QModelIndex&);
 	void indexSelected(const QModelIndex&);
 	void indexDeselected(const QModelIndex&);

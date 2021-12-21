@@ -112,7 +112,7 @@ protected:
 	CartesianPlot* m_plot{nullptr};
 	const CartesianCoordinateSystem* cSystem{nullptr};	//current cSystem
 
-public slots:
+public Q_SLOTS:
 	virtual void retransform() = 0;
 
 protected:
@@ -126,12 +126,12 @@ private:
 	QMenu* m_moveInFrontOfMenu{nullptr};
 	bool m_printing{false};
 
-private slots:
+private Q_SLOTS:
 	void prepareDrawingOrderMenu();
 	void execMoveBehind(QAction*);
 	void execMoveInFrontOf(QAction*);
 
-signals:
+Q_SIGNALS:
 	friend class AbstractPlotSetHorizontalPaddingCmd;
 	friend class AbstractPlotSetVerticalPaddingCmd;
 	friend class AbstractPlotSetRightPaddingCmd;

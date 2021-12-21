@@ -236,8 +236,8 @@ void TemplateHandler::loadMenu() {
 void TemplateHandler::loadMenuSelected(QAction* action) {
 	QString configFile = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + '/' + action->data().toString();
 	KConfig config(configFile, KConfig::SimpleConfig);
-	emit loadConfigRequested(config);
-	emit info( i18n("Template \"%1\" was loaded.", action->text().remove('&')) );
+	Q_EMIT loadConfigRequested(config);
+	Q_EMIT info( i18n("Template \"%1\" was loaded.", action->text().remove('&')) );
 }
 
 void TemplateHandler::saveMenu() {
@@ -285,8 +285,8 @@ void TemplateHandler::saveMenu() {
 void TemplateHandler::saveNewSelected(const QString& filename) {
 	QString path = m_dirName + m_subDirNames.at(static_cast<int>(m_className)) + '/' + filename;
 	KConfig config(path, KConfig::SimpleConfig);
-	emit saveConfigRequested(config);
-	emit info( i18n("New template \"%1\" was saved.", filename) );
+	Q_EMIT saveConfigRequested(config);
+	Q_EMIT info( i18n("New template \"%1\" was saved.", filename) );
 
 	//we have at least one saved template now -> enable the load button
 	m_tbLoad->setEnabled(true);
@@ -298,8 +298,8 @@ void TemplateHandler::saveNewSelected(const QString& filename) {
  */
 void TemplateHandler::saveMenuSelected(QAction* action) {
 	KConfig config(action->data().toString()+'/'+action->text(), KConfig::SimpleConfig);
-	emit saveConfigRequested(config);
-	emit info( i18n("Template \"%1\" was saved.", action->text()) );
+	Q_EMIT saveConfigRequested(config);
+	Q_EMIT info( i18n("Template \"%1\" was saved.", action->text()) );
 }
 
 /*!
@@ -308,6 +308,6 @@ void TemplateHandler::saveMenuSelected(QAction* action) {
  */
 void TemplateHandler::saveDefaults() {
 	KConfig config;
-	emit saveConfigRequested(config);
-	emit info( i18n("New default template was saved.") );
+	Q_EMIT saveConfigRequested(config);
+	Q_EMIT info( i18n("New default template was saved.") );
 }

@@ -35,12 +35,12 @@ private:
 	void loadSettings();
 	void retranslateUi();
 
-private slots:
+private Q_SLOTS:
 	void interfaceChanged(int);
 	void autoSaveChanged(int);
 	void changed();
 
-signals:
+Q_SIGNALS:
 	void settingsChanged();
 };
 

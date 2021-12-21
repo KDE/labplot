@@ -30,10 +30,10 @@ private:
 
 	MQTTClient::WillStatisticsType m_statisticsType{MQTTClient::WillStatisticsType::NoStatistics};
 
-signals:
+Q_SIGNALS:
 	void applyClicked();
 
-private slots:
+private Q_SLOTS:
 	void enableWillSettings(int);
 	void willMessageTypeChanged(int);
 	void loadSettings(const MQTTClient::MQTTWill&, const QVector<QString>&);

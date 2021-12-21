@@ -49,7 +49,7 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-signals:
+Q_SIGNALS:
 	void backgroundColorChanged(QColor);
 	void textColorChanged(QColor);
 	void textFontChanged(QFont);

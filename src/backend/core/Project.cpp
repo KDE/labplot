@@ -217,20 +217,20 @@ QMenu* Project::createContextMenu() {
 	menu->addAction(QIcon::fromTheme(QLatin1String("document-close")), i18n("Close"), this, SIGNAL(closeRequested()));
 
 	//add the actions from MainWin
-	emit requestProjectContextMenu(menu);
+	Q_EMIT requestProjectContextMenu(menu);
 
 	return menu;
 }
 
 QMenu* Project::createFolderContextMenu(const Folder* folder) {
 	QMenu* menu = const_cast<Folder*>(folder)->AbstractAspect::createContextMenu();
-	emit requestFolderContextMenu(folder, menu);
+	Q_EMIT requestFolderContextMenu(folder, menu);
 	return menu;
 }
 
 void Project::setMdiWindowVisibility(MdiWindowVisibility visibility) {
 	d->mdiWindowVisibility = visibility;
-	emit mdiWindowVisibilityChanged();
+	Q_EMIT mdiWindowVisibilityChanged();
 }
 
 Project::MdiWindowVisibility Project::mdiWindowVisibility() const {
@@ -261,7 +261,7 @@ void Project::setChanged(const bool value) {
 	d->changed = value;
 
 	if (value)
-		emit changed();
+		Q_EMIT changed();
 }
 
 void Project::setSuppressAspectAddedSignal(bool value) {
@@ -301,7 +301,7 @@ void Project::descriptionChanged(const AbstractAspect* aspect) {
 	}
 
 	d->changed = true;
-	emit changed();
+	Q_EMIT changed();
 }
 
 /*!
@@ -442,7 +442,7 @@ void Project::updateColumnDependencies(const QVector<BoxPlot*>& boxPlots, const 
 }
 
 void Project::navigateTo(const QString& path) {
-	emit requestNavigateTo(path);
+	Q_EMIT requestNavigateTo(path);
 }
 
 bool Project::isLabPlotProject(const QString& fileName) {
@@ -525,7 +525,7 @@ void Project::save(QXmlStreamWriter* writer) const {
 
 	//save the state of the views (visible, maximized/minimized/geometry)
 	//and the state of the project explorer (expanded items, currently selected item)
-	emit requestSaveState(writer);
+	Q_EMIT requestSaveState(writer);
 
 	writer->writeEndElement();
 	writer->writeEndDocument();
@@ -678,7 +678,7 @@ bool Project::load(XmlStreamReader* reader, bool preview) {
 						//can be properly selected in ProjectExplorer after requestLoadState() is called.
 						restorePointers(this, preview);
 						retransformElements(this);
-						emit requestLoadState(reader);
+						Q_EMIT requestLoadState(reader);
 					} else {
 						if (!preview)
 							reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));

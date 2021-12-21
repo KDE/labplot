@@ -39,7 +39,7 @@ private:
 	QAction* action_add_spreadsheet;
 	QAction* action_add_matrix;
 
-private  slots:
+private Q_SLOTS:
 	void createContextMenu(QMenu*) const;
 	void showTabContextMenu(QPoint);
 	void addSpreadsheet();

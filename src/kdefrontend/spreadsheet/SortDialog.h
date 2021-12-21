@@ -25,11 +25,11 @@ public:
 
 	enum {Separately = 0, Together = 1};
 
-private slots:
+private Q_SLOTS:
 	void sortColumns();
 	void changeType(int index);
 
-signals:
+Q_SIGNALS:
 	void sort(Column*, QVector<Column*>, bool ascending);
 
 private:

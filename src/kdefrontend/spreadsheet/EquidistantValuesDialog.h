@@ -31,7 +31,7 @@ private:
 	Spreadsheet* m_spreadsheet;
 	QPushButton* m_okButton;
 
-private slots:
+private Q_SLOTS:
 	void generate();
 	void typeChanged(int index);
 	void checkValues();

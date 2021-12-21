@@ -48,13 +48,13 @@ private:
 	QVector<QString> m_messagePuffer;
 	QAction* m_plotDataAction;
 
-public slots:
+public Q_SLOTS:
 	void read();
 
-private slots:
+private Q_SLOTS:
 	void plotData();
 
-signals:
+Q_SIGNALS:
 	void readOccured();
 };
 

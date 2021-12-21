@@ -38,7 +38,7 @@ public:
 	void setSuppressDataChangedSignal(bool);
 	void setChanged();
 
-private slots:
+private Q_SLOTS:
 	void handleColumnsAboutToBeInserted(int before, int count);
 	void handleColumnsInserted(int first, int count);
 	void handleColumnsAboutToBeRemoved(int first, int count);
@@ -55,7 +55,7 @@ private:
 	Matrix* m_matrix;
 	bool m_suppressDataChangedSignal{false};
 
-signals:
+Q_SIGNALS:
 	void changed();
 };
 

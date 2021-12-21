@@ -43,7 +43,7 @@ private:
 	ImportFileWidget* m_fileWidget;
 	bool histselected = false;
 
-private slots:
+private Q_SLOTS:
 	/// Updates the selected data set of a ROOT file when a new item is selected
 	void rootObjectSelectionChanged();
 };

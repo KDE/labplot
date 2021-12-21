@@ -15,7 +15,7 @@
 class SmoothTest : public AnalysisTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testPercentile();
 
 //	void testPerformance();

@@ -95,9 +95,9 @@ void ThemesWidget::applyClicked(const QModelIndex& index) {
 // 	else
 
 	if (index.row() == 0)
-		emit themeSelected(QString()); //item with the string "None" was selected -> no theme
+		Q_EMIT themeSelected(QString()); //item with the string "None" was selected -> no theme
 	else
-		emit themeSelected(themeName);
+		Q_EMIT themeSelected(themeName);
 }
 
 //TODO: activate this later

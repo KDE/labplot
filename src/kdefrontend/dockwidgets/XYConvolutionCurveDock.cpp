@@ -496,9 +496,9 @@ void XYConvolutionCurveDock::recalculateClicked() {
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 	if (m_convolutionData.direction == nsl_conv_direction_forward)
-		emit info(i18n("Convolution status: %1", m_convolutionCurve->convolutionResult().status));
+		Q_EMIT info(i18n("Convolution status: %1", m_convolutionCurve->convolutionResult().status));
 	else
-		emit info(i18n("Deconvolution status: %1", m_convolutionCurve->convolutionResult().status));
+		Q_EMIT info(i18n("Deconvolution status: %1", m_convolutionCurve->convolutionResult().status));
 	QApplication::restoreOverrideCursor();
 }
 

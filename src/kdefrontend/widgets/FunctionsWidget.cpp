@@ -88,5 +88,5 @@ void FunctionsWidget::insertClicked() {
 	const QString& name = text.left( text.indexOf(" (") );
 	int index = names.indexOf(name);
 
-	emit functionSelected(functions.at(index));
+	Q_EMIT functionSelected(functions.at(index));
 }

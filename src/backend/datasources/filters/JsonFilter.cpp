@@ -615,7 +615,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 		//only in 1% steps
 		progressIndex++;
 		if (m_actualRows > 1000 && progressIndex > progressInterval) {
-			emit q->completed(100 * i/m_actualRows);
+			Q_EMIT q->completed(100 * i/m_actualRows);
 			progressIndex = 0;
 			QApplication::processEvents(QEventLoop::AllEvents, 0);
 		}

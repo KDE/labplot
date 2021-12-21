@@ -20,8 +20,9 @@ extern "C" {
 class CommonTest : public QObject {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void initTestCase();
+
 protected:
 	// compare floats with given delta
 	// delta - relative error

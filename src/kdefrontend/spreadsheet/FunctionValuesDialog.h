@@ -53,7 +53,7 @@ private:
 
 	QPushButton* m_okButton;
 
-private slots:
+private Q_SLOTS:
 	void generate();	// calculate and set values from function
 	void checkValues();	// check user input and enable/diable Ok-button accordingly
 	void showConstants();	// select predefined constant

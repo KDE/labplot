@@ -116,12 +116,12 @@ public:
 	typedef WorksheetElement BaseClass;
 	typedef HistogramPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void retransform() override;
 	void recalcHistogram();
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-private slots:
+private Q_SLOTS:
 	void updateValues();
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
@@ -138,7 +138,7 @@ private:
 	void initActions();
 	QAction* visibilityAction{nullptr};
 
-signals:
+Q_SIGNALS:
 	//General-Tab
 	void dataChanged();
 	void dataColumnChanged(const AbstractColumn*);

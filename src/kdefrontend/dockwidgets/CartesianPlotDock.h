@@ -50,7 +50,7 @@ private:
 	void autoScaleYRange(int rangeIndex, bool);
 	void loadConfig(KConfig&);
 
-private slots:
+private Q_SLOTS:
 	void init();
 	void retranslateUi();
 
@@ -200,7 +200,7 @@ private slots:
 
 	void load();
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

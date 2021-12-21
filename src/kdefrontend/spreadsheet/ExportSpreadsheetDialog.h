@@ -66,7 +66,7 @@ private:
 	QPushButton* m_okButton;
 	QPushButton* m_cancelButton;
 
-private slots:
+private Q_SLOTS:
 	void setFormat(ExportSpreadsheetDialog::Format);
 	void slotButtonClicked(QAbstractButton*);
 	void okClicked();

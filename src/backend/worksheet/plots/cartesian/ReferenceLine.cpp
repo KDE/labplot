@@ -340,7 +340,7 @@ void ReferenceLinePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* even
 void ReferenceLinePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		emit q->hovered();
+		Q_EMIT q->hovered();
 		update();
 	}
 }
@@ -348,7 +348,7 @@ void ReferenceLinePrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void ReferenceLinePrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		emit q->unhovered();
+		Q_EMIT q->unhovered();
 		update();
 	}
 }

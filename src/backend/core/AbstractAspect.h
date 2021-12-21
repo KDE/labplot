@@ -377,7 +377,7 @@ private:
 	const QVector<AbstractAspect*>& children() const;
 	void connectChild(AbstractAspect*);
 
-public slots:
+public Q_SLOTS:
 	bool setName(const QString&, bool autoUnique = true);
 	void setComment(const QString&);
 	void remove();
@@ -385,15 +385,15 @@ public slots:
 	void duplicate();
 	void paste(bool duplicate = false);
 
-private slots:
+private Q_SLOTS:
 	void moveUp();
 	void moveDown();
 
-protected slots:
+protected Q_SLOTS:
 	virtual void childSelected(const AbstractAspect*);
 	virtual void childDeselected(const AbstractAspect*);
 
-signals:
+Q_SIGNALS:
 	void aspectDescriptionAboutToChange(const AbstractAspect*);
 	void aspectDescriptionChanged(const AbstractAspect*);
 	void aspectAboutToBeAdded(const AbstractAspect* parent, const AbstractAspect* before, const AbstractAspect* child);

@@ -15,7 +15,7 @@
 class NSLGeomTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void initTestCase();
 
 	void testDist();

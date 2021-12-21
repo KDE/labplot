@@ -61,7 +61,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYCorrelationCurve)
 
-signals:
+Q_SIGNALS:
 	void correlationDataChanged(const XYCorrelationCurve::CorrelationData&);
 };
 

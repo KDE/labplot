@@ -224,7 +224,7 @@ QWidget* CantorWorksheet::view() const {
 QMenu* CantorWorksheet::createContextMenu() {
 	QMenu* menu = AbstractPart::createContextMenu();
 	Q_ASSERT(menu);
-	emit requestProjectContextMenu(menu);
+	Q_EMIT requestProjectContextMenu(menu);
 	return menu;
 }
 

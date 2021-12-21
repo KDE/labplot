@@ -1270,7 +1270,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		//only in 1% steps
 		progressIndex++;
 		if (lines > 1000 && progressIndex > progressInterval) {
-			emit q->completed(100 * currentRow/lines);
+			Q_EMIT q->completed(100 * currentRow/lines);
 			progressIndex = 0;
 			QApplication::processEvents(QEventLoop::AllEvents, 0);
 		}

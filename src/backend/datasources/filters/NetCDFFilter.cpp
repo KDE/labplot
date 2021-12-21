@@ -99,7 +99,7 @@
 					line << QString::number(data[i][j]); \
 			} \
 			dataStrings << line; \
-			emit q->completed(100*i/actualRows); \
+			Q_EMIT q->completed(100*i/actualRows); \
 		} \
 	} \
 	free(data[0]); \
@@ -887,7 +887,7 @@ QVector<QStringList> NetCDFFilterPrivate::readCurrentVar(const QString& fileName
 							line << QString(data[i][j]);
 					}
 					dataStrings << line;
-					emit q->completed(100*i/actualRows);
+					Q_EMIT q->completed(100*i/actualRows);
 				}
 			}
 			free(data[0]);

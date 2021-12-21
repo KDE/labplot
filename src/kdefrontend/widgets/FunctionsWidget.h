@@ -26,11 +26,11 @@ private:
 	Ui::FunctionsWidget ui;
 	ExpressionParser* m_expressionParser;
 
-signals:
+Q_SIGNALS:
 	void functionSelected(const QString&);
 	void canceled();
 
-private slots:
+private Q_SLOTS:
 	void groupChanged(int);
 	void filterChanged(const QString&);
 	void insertClicked();

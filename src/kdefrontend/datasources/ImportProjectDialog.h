@@ -50,7 +50,7 @@ private:
 	void showTopLevelOnly(const QModelIndex&);
 	bool isTopLevel(const AbstractAspect*) const;
 
-private slots:
+private Q_SLOTS:
 	void fileNameChanged(const QString&);
 	void refreshPreview();
 	void selectionChanged(const QItemSelection&, const QItemSelection&);

@@ -66,7 +66,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYConvolutionCurve)
 
-signals:
+Q_SIGNALS:
 	void convolutionDataChanged(const XYConvolutionCurve::ConvolutionData&);
 };
 

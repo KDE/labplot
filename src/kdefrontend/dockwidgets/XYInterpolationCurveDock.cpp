@@ -633,7 +633,7 @@ void XYInterpolationCurveDock::recalculateClicked() {
 		static_cast<XYInterpolationCurve*>(curve)->setInterpolationData(m_interpolationData);
 
 	uiGeneralTab.pbRecalculate->setEnabled(false);
-	emit info(i18n("Interpolation status: %1", m_interpolationCurve->interpolationResult().status));
+	Q_EMIT info(i18n("Interpolation status: %1", m_interpolationCurve->interpolationResult().status));
 	QApplication::restoreOverrideCursor();
 }
 

@@ -55,7 +55,7 @@ public:
                            const bool entire, const bool captions) const;
 	void exportToFits(const QString& fileName, const int exportTo) const;
 
-public slots:
+public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void print(QPrinter*) const;
 
@@ -126,7 +126,7 @@ private:
 	QMenu* m_matrixMenu{nullptr};
 	QMenu* m_headerFormatMenu{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void goToCell();
 	void advanceCell();
 	void handleHorizontalSectionResized(int logicalIndex, int oldSize, int newSize);

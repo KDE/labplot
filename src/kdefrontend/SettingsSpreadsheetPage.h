@@ -31,10 +31,10 @@ private:
 
 	void loadSettings();
 
-private slots:
+private Q_SLOTS:
 	void changed();
 
-signals:
+Q_SIGNALS:
 	void settingsChanged();
 };
 

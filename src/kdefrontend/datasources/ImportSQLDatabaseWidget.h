@@ -62,14 +62,14 @@ private:
 	void setInvalid();
 	void setValid();
 
-private slots:
+private Q_SLOTS:
 	void loadSettings();
 	void showDatabaseManager();
 	void connectionChanged();
 	void importFromChanged(int);
 	void refreshPreview();
 
-signals:
+Q_SIGNALS:
 	void completed(int);
 	void stateChanged();
 };

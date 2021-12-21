@@ -34,14 +34,14 @@ private:
 	CantorWorksheet* m_worksheet{nullptr};
 	QList<int> index;
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in WorksheetDock
 	//"General"-tab
 	void evaluateWorksheet();
 	void restartBackend();
 	void visibilityRequested();
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 
 };

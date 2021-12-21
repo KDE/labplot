@@ -15,7 +15,7 @@
 class NSLSFBasicTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// log2
 	void testlog2_int_C99();
 	void testlog2_int();

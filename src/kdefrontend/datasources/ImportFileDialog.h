@@ -46,10 +46,10 @@ private:
 	QPushButton* m_optionsButton;
 	KMessageWidget* m_messageWidget{nullptr};
 
-protected slots:
+protected Q_SLOTS:
 	void checkOkButton() override;
 
-private slots:
+private Q_SLOTS:
 	void toggleOptions();
 	void checkOnFitsTableToMatrix(const bool enable);
 	void showErrorMessage(const QString&);

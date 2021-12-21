@@ -31,7 +31,7 @@ public:
 	~CursorDock();
 	void setWorksheet(Worksheet*);
 
-public slots:
+public Q_SLOTS:
 	void plotCursor0EnableChanged(bool);
 	void plotCursor1EnableChanged(bool);
 
@@ -48,7 +48,7 @@ private:
 	CartesianPlot* m_plot{nullptr};
 	QList<QMetaObject::Connection> selectedPlotsConnection;
 
-private slots:
+private Q_SLOTS:
 	void contextMenuRequested(QPoint);
 	void resultCopy();
 	void resultCopyAll();

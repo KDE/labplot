@@ -60,7 +60,7 @@ protected:
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
 	void updatePlotRangeList(QComboBox*) const;	// used in worksheet element docks
 
-protected slots:
+protected Q_SLOTS:
 	void nameChanged();
 	void commentChanged();
 	void aspectDescriptionChanged(const AbstractAspect*);

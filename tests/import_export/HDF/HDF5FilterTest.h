@@ -16,7 +16,7 @@
 class HDF5FilterTest : public CommonTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testImportDouble();
 	void testImportDoublePortion();
 	void testImportInt();

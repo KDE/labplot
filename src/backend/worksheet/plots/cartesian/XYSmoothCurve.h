@@ -66,7 +66,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYSmoothCurve)
 
-signals:
+Q_SIGNALS:
 	void smoothDataChanged(const XYSmoothCurve::SmoothData&);
 };
 

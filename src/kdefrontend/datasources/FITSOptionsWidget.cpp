@@ -96,7 +96,7 @@ void FITSOptionsWidget::fitsTreeWidgetSelectionChanged() {
 		auto filter = static_cast<FITSFilter*>(m_fileWidget->currentFileFilter());
 		bool readFitsTableToMatrix;
 		const QVector<QStringList> importedStrings = filter->readChdu(selectedExtension, &readFitsTableToMatrix, ui.sbPreviewLines->value());
-		emit m_fileWidget->checkedFitsTableToMatrix(readFitsTableToMatrix);
+		Q_EMIT m_fileWidget->checkedFitsTableToMatrix(readFitsTableToMatrix);
 
 		const int rows = importedStrings.size();
 		ui.twPreview->clear();

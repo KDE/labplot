@@ -177,11 +177,11 @@ private:
 	QIODevice* m_device{nullptr};
 	QAction* m_plotDataAction{nullptr};
 
-public slots:
+public Q_SLOTS:
 	void read();
 	void readOnUpdate();
 
-private slots:
+private Q_SLOTS:
 	void plotData();
 	void readyRead();
 

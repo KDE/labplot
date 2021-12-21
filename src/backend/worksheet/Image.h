@@ -52,7 +52,7 @@ public:
 
 	typedef ImagePrivate Private;
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered via QActions in the context menu
 	void visibilityChanged();
 
@@ -65,7 +65,7 @@ private:
 
 	QAction* visibilityAction{nullptr};
 
-signals:
+Q_SIGNALS:
 	void fileNameChanged(const QString&);
 	void embeddedChanged(bool);
 	void opacityChanged(float);

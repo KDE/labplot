@@ -43,7 +43,7 @@ private:
 	QPushButton* m_okButton;
 	Operation m_operation;
 
-private slots:
+private Q_SLOTS:
 	void generate();
 };
 

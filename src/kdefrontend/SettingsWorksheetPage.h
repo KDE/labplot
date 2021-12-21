@@ -32,11 +32,11 @@ private:
 
 	void loadSettings();
 
-private slots:
+private Q_SLOTS:
 	void changed();
 	void checkTeX(int);
 
-signals:
+Q_SIGNALS:
 	void settingsChanged();
 };
 

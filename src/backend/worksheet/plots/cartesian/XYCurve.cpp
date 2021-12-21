@@ -1554,7 +1554,7 @@ void XYCurvePrivate::updateLines() {
 					msg = i18n("Error: Akima spline interpolation requires a minimum of 5 points.");
 				else
 					msg = i18n("Error: Could not initialize the spline function.");
-				emit q->info(msg);
+				Q_EMIT q->info(msg);
 
 				recalcShapeAndBoundingRect();
 				gsl_interp_accel_free(acc);
@@ -1569,7 +1569,7 @@ void XYCurvePrivate::updateLines() {
 					gslError = i18n("x values must be monotonically increasing.");
 				else
 					gslError = gslErrorToString(status);
-				emit q->info( i18n("Error: %1", gslError) );
+				Q_EMIT q->info( i18n("Error: %1", gslError) );
 
 				recalcShapeAndBoundingRect();
 				gsl_spline_free(spline);
@@ -2884,7 +2884,7 @@ QVariant XYCurvePrivate::itemChange(GraphicsItemChange change, const QVariant & 
 	// signalize, that the curve was selected. Will be used to create a new InfoElement (Marker)
 	if (change == QGraphicsItem::ItemSelectedChange)
 		if (value.toBool() && q->cSystem)
-			emit q->selected(q->cSystem->mapSceneToLogical(mousePos).x());
+			Q_EMIT q->selected(q->cSystem->mapSceneToLogical(mousePos).x());
 	return QGraphicsItem::itemChange(change,value);
 }
 
@@ -3099,7 +3099,7 @@ void XYCurvePrivate::setHover(bool on) {
 		return; // don't update if state not changed
 
 	m_hovered = on;
-	on ? emit q->hovered() : emit q->unhovered();
+	on ? Q_EMIT q->hovered() : emit q->unhovered();
 	update();
 }
 

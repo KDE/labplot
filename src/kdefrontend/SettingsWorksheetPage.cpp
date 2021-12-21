@@ -121,7 +121,7 @@ void SettingsWorksheetPage::loadSettings() {
 
 void SettingsWorksheetPage::changed() {
 	m_changed = true;
-	emit settingsChanged();
+	Q_EMIT settingsChanged();
 }
 
 /*!

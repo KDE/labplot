@@ -40,7 +40,7 @@ public:
 	bool m_hovered{false};
 	bool m_printing{false};
 
-signals:
+Q_SIGNALS:
 	void selectedChange(QGraphicsItem*);
 };
 

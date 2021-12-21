@@ -35,7 +35,7 @@ private:
 	void maskValues() const;
 
 	QPushButton* m_okButton;
-private slots:
+private Q_SLOTS:
 	void operatorChanged(int) const;
 	void okClicked() const;
 };

@@ -42,7 +42,7 @@ private:
 // 	QToolButton* m_tbCopy;
 // 	QToolButton* m_tbPaste;
 
-private slots:
+private Q_SLOTS:
 	void loadMenu();
 	void saveMenu();
 	void loadMenuSelected(QAction*);
@@ -51,7 +51,7 @@ private slots:
 	void saveDefaults();
 	void updateTextPosition(QAction*);
 
-signals:
+Q_SIGNALS:
 	void loadConfigRequested(KConfig&);
 	void saveConfigRequested(KConfig&);
 	void info(const QString&);

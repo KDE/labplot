@@ -43,16 +43,16 @@ public:
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 
-public slots:
+public Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 
 private:
 	mutable WorkbookView* m_view{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void childDeselected(const AbstractAspect*) override;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void workbookItemSelected(int);
 };

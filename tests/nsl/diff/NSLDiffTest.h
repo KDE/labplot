@@ -15,7 +15,7 @@
 class NSLDiffTest : public NSLTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	// first derivative
 	void testFirst_order2();
 	void testFirst_order4();

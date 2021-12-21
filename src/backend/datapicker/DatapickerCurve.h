@@ -83,7 +83,7 @@ private:
 
 	Spreadsheet* m_datasheet{nullptr};
 
-signals:
+Q_SIGNALS:
 	void curveErrorTypesChanged(const DatapickerCurve::Errors&);
 	void posXColumnChanged(const AbstractColumn*);
 	void posYColumnChanged(const AbstractColumn*);

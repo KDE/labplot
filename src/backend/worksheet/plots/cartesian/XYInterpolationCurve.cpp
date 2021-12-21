@@ -130,7 +130,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -141,7 +141,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Number of x and y data points must be equal.");
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -180,7 +180,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 		interpolationResult.valid = false;
 		interpolationResult.status = i18n("Not enough data points available.");
 		recalcLogicalPoints();
-		emit q->dataChanged();
+		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
 		return;
 	}
@@ -418,7 +418,7 @@ void XYInterpolationCurvePrivate::recalculate() {
 
 	//redraw the curve
 	recalcLogicalPoints();
-	emit q->dataChanged();
+	Q_EMIT q->dataChanged();
 	sourceDataChangedSinceLastRecalc = false;
 }
 

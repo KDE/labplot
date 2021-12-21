@@ -58,7 +58,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYHilbertTransformCurve)
 
-signals:
+Q_SIGNALS:
 	void transformDataChanged(const XYHilbertTransformCurve::TransformData&);
 };
 

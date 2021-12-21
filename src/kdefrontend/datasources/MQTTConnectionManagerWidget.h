@@ -55,7 +55,7 @@ private:
 	void loadConnection();
 	void dataChanged();
 
-private slots:
+private Q_SLOTS:
 	void testConnection();
 	void loadConnections();
 	void addConnection();
@@ -74,7 +74,7 @@ private slots:
 	void onDisconnect();
 	void testTimeout();
 
-signals:
+Q_SIGNALS:
 	void changed();
 };
 

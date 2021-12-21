@@ -38,7 +38,7 @@ private:
 	void load();
 	void loadConfig(KConfig&);
 
-private slots:
+private Q_SLOTS:
 	void init();
 	void retranslateUi();
 
@@ -121,7 +121,7 @@ private slots:
 	void loadConfigFromTemplate(KConfig&);
 	void saveConfigAsTemplate(KConfig&);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

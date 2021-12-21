@@ -38,7 +38,7 @@ private:
 	int lastSelectedIndex{0};
 	bool m_initializing;
 
-private  slots:
+private Q_SLOTS:
 	void showTabContextMenu(QPoint);
 	void itemSelected(int);
 	void tabChanged(int);

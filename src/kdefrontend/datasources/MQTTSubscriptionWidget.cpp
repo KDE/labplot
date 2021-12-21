@@ -233,7 +233,7 @@ void MQTTSubscriptionWidget::unsubscribeFromTopic(const QString& topicName) {
 	findSubscriptionLeafChildren(children, ui.twSubscriptions->topLevelItem(0));
 
 	//signals for ImportFileWidget
-	emit MQTTUnsubscribeFromTopic(topicName, children);
+	Q_EMIT MQTTUnsubscribeFromTopic(topicName, children);
 
 	for (int row = 0; row < ui.twSubscriptions->topLevelItemCount(); row++)  {
 		if (ui.twSubscriptions->topLevelItem(row)->text(0) == topicName) {
@@ -336,7 +336,7 @@ void MQTTSubscriptionWidget::manageCommonLevelSubscriptions() {
 				ui.twSubscriptions->addTopLevelItem(newTopic);
 
 				if (m_parent == MQTTParentWidget::ImportFileWidget)
-					emit makeSubscription(commonTopic, static_cast<quint8> (ui.cbQos->currentText().toUInt()));
+					Q_EMIT makeSubscription(commonTopic, static_cast<quint8> (ui.cbQos->currentText().toUInt()));
 
 				//remove the "merged" topics
 				for (const auto& topic : equalTopics) {
@@ -367,7 +367,7 @@ void MQTTSubscriptionWidget::manageCommonLevelSubscriptions() {
 				}
 
 				if (m_parent == MQTTParentWidget::LiveDataDock)
-					emit makeSubscription(commonTopic, static_cast<quint8> (ui.cbQos->currentText().toUInt()));
+					Q_EMIT makeSubscription(commonTopic, static_cast<quint8> (ui.cbQos->currentText().toUInt()));
 			}
 		}
 	} while (foundEqual);
@@ -793,7 +793,7 @@ void MQTTSubscriptionWidget::mqttSubscribe() {
 				addSubscriptionChildren(item, newTopLevelItem);
 			}
 
-			emit makeSubscription(name, static_cast<quint8>(ui.cbQos->currentText().toUInt()));
+			Q_EMIT makeSubscription(name, static_cast<quint8>(ui.cbQos->currentText().toUInt()));
 
 			if (name.endsWith('#')) {
 				//if an already existing subscription contains a topic that the new subscription also contains
@@ -827,21 +827,21 @@ void MQTTSubscriptionWidget::mqttSubscribe() {
 											if (unsubscribeItem->text(0) != childText) {
 												//add topic as subscription
 												quint8 qos = static_cast<quint8>(ui.cbQos->currentText().toUInt());
-												emit addBeforeRemoveSubscription(childText, qos);
+												Q_EMIT addBeforeRemoveSubscription(childText, qos);
 												//also add it to twSubscriptions
 												ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
 												--i;
 											} else {
 												//before we remove the topic, we reparent it to the new subscription
 												//so no data is lost
-												emit reparentTopic(unsubscribeItem->text(0), name);
+												Q_EMIT reparentTopic(unsubscribeItem->text(0), name);
 											}
 										}
 										unsubscribeItem = unsubscribeItem->parent();
 									}
 
 									qDebug() << "Remove: " << unsubscribeItem->text(0);
-									emit removeMQTTSubscription(unsubscribeItem->text(0));
+									Q_EMIT removeMQTTSubscription(unsubscribeItem->text(0));
 
 									ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
 								}
@@ -856,7 +856,7 @@ void MQTTSubscriptionWidget::mqttSubscribe() {
 			manageCommonLevelSubscriptions();
 			updateSubscriptionCompleter();
 
-			emit enableWill(true);
+			Q_EMIT enableWill(true);
 		} else
 			QMessageBox::warning(this, i18n("Warning"), i18n("You already subscribed to a topic containing this one"));
 	} else
@@ -897,7 +897,7 @@ void MQTTSubscriptionWidget::mqttUnsubscribe() {
 		if (m_parent == MQTTParentWidget::ImportFileWidget)
 			unsubscribeFromTopic(unsubscribeItem->text(0));
 		else {
-			emit removeMQTTSubscription(unsubscribeItem->text(0));
+			Q_EMIT removeMQTTSubscription(unsubscribeItem->text(0));
 			ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
 		}
 	}
@@ -911,9 +911,9 @@ void MQTTSubscriptionWidget::mqttUnsubscribe() {
 				if (unsubscribeItem->text(0) != childText) {
 					quint8 qos = static_cast<quint8>(ui.cbQos->currentText().toUInt());
 					if (m_parent == MQTTParentWidget::ImportFileWidget)
-						emit makeSubscription(childText, qos);
+						Q_EMIT makeSubscription(childText, qos);
 					else
-						emit addBeforeRemoveSubscription(childText, qos);
+						Q_EMIT addBeforeRemoveSubscription(childText, qos);
 
 					ui.twSubscriptions->addTopLevelItem(unsubscribeItem->parent()->takeChild(i));
 					--i;
@@ -925,7 +925,7 @@ void MQTTSubscriptionWidget::mqttUnsubscribe() {
 		if (m_parent == MQTTParentWidget::ImportFileWidget)
 			unsubscribeFromTopic(unsubscribeItem->text(0));
 		else {
-			emit removeMQTTSubscription(unsubscribeItem->text(0));
+			Q_EMIT removeMQTTSubscription(unsubscribeItem->text(0));
 			ui.twSubscriptions->takeTopLevelItem(ui.twSubscriptions->indexOfTopLevelItem(unsubscribeItem));
 		}
 
@@ -935,7 +935,7 @@ void MQTTSubscriptionWidget::mqttUnsubscribe() {
 	updateSubscriptionCompleter();
 
 	if (ui.twSubscriptions->topLevelItemCount() <= 0)
-		emit enableWill(false);
+		Q_EMIT enableWill(false);
 }
 
 /*!

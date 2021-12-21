@@ -30,7 +30,7 @@ private:
 	Ui::MatioOptionsWidget ui;
 	ImportFileWidget* m_fileWidget;
 
-private slots:
+private Q_SLOTS:
 	void selectionChanged();
 };
 

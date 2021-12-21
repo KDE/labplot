@@ -35,7 +35,7 @@ private:
 	FITSFilter::Keyword m_newKeyword;
 	int okClicked();
 
-private slots:
+private Q_SLOTS:
 	void slotButtonClicked(QAbstractButton*);
 };
 

@@ -56,10 +56,10 @@ private:
 	bool m_qqPlotInitialized{false};
 	bool m_boxPlotInitialized{false};
 
-private slots:
+private Q_SLOTS:
 	void currentTabChanged(int);
 
-signals:
+Q_SIGNALS:
 	void tabChanged(int);
 };
 

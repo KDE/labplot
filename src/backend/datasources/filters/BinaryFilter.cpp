@@ -367,7 +367,7 @@ QVector<QStringList> BinaryFilterPrivate::preview(const QString& fileName, int l
 			}
 		}
 		dataStrings << lineString;
-		emit q->completed(100*i/m_actualRows);
+		Q_EMIT q->completed(100*i/m_actualRows);
 	}
 
 	return dataStrings;
@@ -491,7 +491,7 @@ void BinaryFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSour
 			}
 		}
 		if (m_actualRows > 0)
-			emit q->completed(100*i/m_actualRows);
+			Q_EMIT q->completed(100*i/m_actualRows);
 	}
 
 	dataSource->finalizeImport(columnOffset, 1, m_actualCols, QString(), importMode);

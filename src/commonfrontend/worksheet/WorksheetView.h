@@ -258,7 +258,7 @@ private:
 	QAction* addConvolutionAction{nullptr};
 	QAction* addCorrelationAction{nullptr};
 
-public slots:
+public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void createAnalysisMenu(QMenu*);
 	void fillToolBar(QToolBar*);
@@ -272,7 +272,7 @@ public slots:
 	void cartesianPlotMouseModeChangedSlot(CartesianPlot::MouseMode mouseMode); // from cartesian plot
 	void cartesianPlotMouseModeChanged(QAction*);
 
-private slots:
+private Q_SLOTS:
 	void addNew(QAction*);
 	void aspectAboutToBeRemoved(const AbstractAspect*);
 	void selectAllElements();
@@ -306,7 +306,7 @@ private slots:
 	void cartesianPlotAddNew(QAction*);
 	void handleCartesianPlotActions();
 
-signals:
+Q_SIGNALS:
 	void statusInfo(const QString&);
 	void propertiesExplorerRequested();
 };

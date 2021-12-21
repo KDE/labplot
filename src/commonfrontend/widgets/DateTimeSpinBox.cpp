@@ -74,7 +74,7 @@ void DateTimeSpinBox::writeValue() {
 						QString("%1").arg(m_minute, 2, 10, QLatin1Char('0')) + QLatin1Char(':') +
 						QString("%1").arg(m_second, 2, 10, QLatin1Char('0')) + QLatin1Char('.') +
 						QString("%1").arg(m_millisecond, 3, 10, QLatin1Char('0')));
-	emit valueChanged();
+	Q_EMIT valueChanged();
 }
 
 void DateTimeSpinBox::setValue(qint64 increment) {
@@ -150,7 +150,7 @@ void DateTimeSpinBox::getValue() {
 		}
 	}
 
-	emit valueChanged();
+	Q_EMIT valueChanged();
 }
 
 void DateTimeSpinBox::setCursorPosition(Type type) {

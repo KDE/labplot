@@ -495,7 +495,7 @@ void Axis::setOffset(double offset, bool undo) {
 			//don't need to call retransform() afterward
 			//since the only usage of this call is in CartesianPlot, where retransform is called for all children anyway.
 		}
-		emit positionChanged(offset);
+		Q_EMIT positionChanged(offset);
 	}
 }
 
@@ -978,8 +978,8 @@ bool AxisPrivate::swapVisible(bool on) {
 	} else
 		setVisible(on);
 
-	emit q->changed();
-	emit q->visibleChanged(on);
+	Q_EMIT q->changed();
+	Q_EMIT q->visibleChanged(on);
 	return oldValue;
 }
 
@@ -1033,7 +1033,7 @@ void AxisPrivate::retransformRange() {
 	}
 
 	retransform();
-	emit q->rangeChanged(range);
+	Q_EMIT q->rangeChanged(range);
 }
 
 void AxisPrivate::retransformLine() {
@@ -1653,7 +1653,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 			// switch to Scientific for large and small values
 			if ( qAbs(value) > 1.e4 || (qAbs(value) > 1.e-16 && qAbs(value) < 1e-4) ) {
 				labelsFormat = Axis::LabelsFormat::Scientific;
-				emit q->labelsFormatChanged(labelsFormat);
+				Q_EMIT q->labelsFormatChanged(labelsFormat);
 				labelsFormatAutoChanged = true;
 				break;
 			}
@@ -1671,7 +1671,7 @@ void AxisPrivate::retransformTickLabelStrings() {
 		if (changeBack) {
 			labelsFormatAutoChanged = false;
 			labelsFormat = Axis::LabelsFormat::Decimal;
-			emit q->labelsFormatChanged(labelsFormat);
+			Q_EMIT q->labelsFormatChanged(labelsFormat);
 		}
 	}
 
@@ -1681,13 +1681,13 @@ void AxisPrivate::retransformTickLabelStrings() {
 		int newPrecision = upperLabelsPrecision(labelsPrecision, labelsFormat);
 		if (newPrecision != labelsPrecision) {
 			labelsPrecision = newPrecision;
-			emit q->labelsPrecisionChanged(labelsPrecision);
+			Q_EMIT q->labelsPrecisionChanged(labelsPrecision);
 		} else {
 			//can we can reduce the current precision?
 			newPrecision = lowerLabelsPrecision(labelsPrecision, labelsFormat);
 			if (newPrecision != labelsPrecision) {
 				labelsPrecision = newPrecision;
-				emit q->labelsPrecisionChanged(labelsPrecision);
+				Q_EMIT q->labelsPrecisionChanged(labelsPrecision);
 			}
 		}
 		DEBUG(Q_FUNC_INFO << ", auto labels precision = " << labelsPrecision)
@@ -2618,7 +2618,7 @@ void AxisPrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {
 void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	if (!isSelected()) {
 		m_hovered = true;
-		emit q->hovered();
+		Q_EMIT q->hovered();
 		update(axisShape.boundingRect());
 	}
 }
@@ -2626,7 +2626,7 @@ void AxisPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 void AxisPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	if (m_hovered) {
 		m_hovered = false;
-		emit q->unhovered();
+		Q_EMIT q->unhovered();
 		update(axisShape.boundingRect());
 	}
 }

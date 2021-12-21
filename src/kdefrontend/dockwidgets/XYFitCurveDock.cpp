@@ -1118,7 +1118,7 @@ void XYFitCurveDock::recalculateClicked() {
 	const XYFitCurve::FitResult& fitResult = m_fitCurve->fitResult();
 	const QString& status = fitResult.status;
 	if (status != i18n("Success")) {
-		emit info(i18n("Fit status: %1", fitResult.status));
+		Q_EMIT info(i18n("Fit status: %1", fitResult.status));
 		if (!m_messageWidget) {
 			m_messageWidget = new KMessageWidget(this);
 			uiGeneralTab.gridLayout_2->addWidget(m_messageWidget, 25, 3, 1, 4);

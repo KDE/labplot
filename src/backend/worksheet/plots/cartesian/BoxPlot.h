@@ -114,17 +114,17 @@ private:
 	QAction* visibilityAction{nullptr};
 	QMenu* orientationMenu{nullptr};
 
-public slots:
+public Q_SLOTS:
 	void recalc();
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered via QActions in the context menu
 	void orientationChangedSlot(QAction*);
 	void visibilityChangedSlot();
 
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 
-signals:
+Q_SIGNALS:
 	//General-Tab
 	void dataChanged();
 	void dataColumnsChanged(const QVector<const AbstractColumn*>&);

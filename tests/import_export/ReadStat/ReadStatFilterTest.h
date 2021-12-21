@@ -16,7 +16,7 @@
 class ReadStatFilterTest : public CommonTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testDTAImport();
 	void testSASImport();
 	void testSAVImport();

@@ -228,7 +228,7 @@ void NgspiceRawBinaryFilterPrivate::readDataFromFile(const QString& fileName, Ab
 		}
 
 		currentRow++;
-		emit q->completed(100 * currentRow/actualRows);
+		Q_EMIT q->completed(100 * currentRow/actualRows);
 	}
 
 	dataSource->finalizeImport(columnOffset, 1, actualCols, QString(), importMode);

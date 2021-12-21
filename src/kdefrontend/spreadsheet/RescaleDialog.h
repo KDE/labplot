@@ -28,7 +28,7 @@ public:
 private:
 	Ui::RescaleWidget ui;
 
-private slots:
+private Q_SLOTS:
 	void validateOkButton();
 };
 

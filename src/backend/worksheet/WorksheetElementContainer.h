@@ -39,7 +39,7 @@ public:
 
 	typedef WorksheetElementContainerPrivate Private;
 
-public slots:
+public Q_SLOTS:
 	void retransform() override;
 	void childHovered();
 	void childUnhovered();
@@ -48,13 +48,13 @@ protected:
 	WorksheetElementContainer(const QString&, WorksheetElementContainerPrivate*, AspectType);
 	ResizeItem* m_resizeItem{nullptr};
 
-protected slots:
+protected Q_SLOTS:
 	virtual void handleAspectAdded(const AbstractAspect*);
 
 private:
 	Q_DECLARE_PRIVATE(WorksheetElementContainer)
 
-signals:
+Q_SIGNALS:
 	friend class WorksheetElementContainerSetVisibleCmd;
 };
 

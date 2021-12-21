@@ -375,7 +375,7 @@ public:
 			m_binRangesMaxOld = m_private->binRangesMax;
 			m_private->q->recalcHistogram();
 		}
-		emit m_private->q->autoBinRangesChanged(m_autoBinRanges);
+		Q_EMIT m_private->q->autoBinRangesChanged(m_autoBinRanges);
 	};
 
 	void undo() override {
@@ -383,15 +383,15 @@ public:
 		if (!m_autoBinRangesOld) {
 			if (m_private->binRangesMin != m_binRangesMinOld) {
 				m_private->binRangesMin = m_binRangesMinOld;
-				emit m_private->q->binRangesMinChanged(m_private->binRangesMin);
+				Q_EMIT m_private->q->binRangesMinChanged(m_private->binRangesMin);
 			}
 			if (m_private->binRangesMax != m_binRangesMaxOld) {
 				m_private->binRangesMax = m_binRangesMaxOld;
-				emit m_private->q->binRangesMaxChanged(m_private->binRangesMax);
+				Q_EMIT m_private->q->binRangesMaxChanged(m_private->binRangesMax);
 			}
 			m_private->recalcHistogram();
 		}
-		emit m_private->q->autoBinRangesChanged(m_autoBinRangesOld);
+		Q_EMIT m_private->q->autoBinRangesChanged(m_autoBinRangesOld);
 	}
 
 private:
@@ -906,18 +906,18 @@ void HistogramPrivate::recalcHistogram() {
 		if (autoBinRanges) {
 			if (binRangesMin != dataColumn->minimum()) {
 				binRangesMin = dataColumn->minimum();
-				emit q->binRangesMinChanged(binRangesMin);
+				Q_EMIT q->binRangesMinChanged(binRangesMin);
 			}
 
 			if (binRangesMax != dataColumn->maximum()) {
 				binRangesMax = dataColumn->maximum();
-				emit q->binRangesMaxChanged(binRangesMax);
+				Q_EMIT q->binRangesMaxChanged(binRangesMax);
 			}
 		}
 
 		if (binRangesMin >= binRangesMax) {
-			emit q->dataChanged();
-			emit q->info(i18n("Calculation of the histogram not possible. The max value must be bigger then the min value."));
+			Q_EMIT q->dataChanged();
+			Q_EMIT q->info(i18n("Calculation of the histogram not possible. The max value must be bigger then the min value."));
 			return;
 		}
 
@@ -1003,20 +1003,20 @@ void HistogramPrivate::recalcHistogram() {
 	}
 
 	//histogram changed because of the actual data changes or because of new bin settings,
-	//emit dataChanged() in order to recalculate everything with the new size/shape of the histogram
-	emit q->dataChanged();
+	//Q_EMIT dataChanged() in order to recalculate everything with the new size/shape of the histogram
+	Q_EMIT q->dataChanged();
 }
 
 void HistogramPrivate::updateType() {
 	//type (ordinary or cumulative) changed,
-	//emit dataChanged() in order to recalculate everything with the new size/shape of the histogram
-	emit q->dataChanged();
+	//Q_EMIT dataChanged() in order to recalculate everything with the new size/shape of the histogram
+	Q_EMIT q->dataChanged();
 }
 
 void HistogramPrivate::updateOrientation() {
 	//orientation (horizontal or vertical) changed
-	//emit dataChanged() in order to recalculate everything with the new size/shape of the histogram
-	emit q->dataChanged();
+	//Q_EMIT dataChanged() in order to recalculate everything with the new size/shape of the histogram
+	Q_EMIT q->dataChanged();
 }
 
 /*!
@@ -1697,7 +1697,7 @@ void HistogramPrivate::hoverEnterEvent(QGraphicsSceneHoverEvent*) {
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && !isSelected()) {
 		m_hovered = true;
-		emit q->hovered();
+		Q_EMIT q->hovered();
 		update();
 	}
 }
@@ -1706,7 +1706,7 @@ void HistogramPrivate::hoverLeaveEvent(QGraphicsSceneHoverEvent*) {
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 	if (plot->mouseMode() == CartesianPlot::MouseMode::Selection && m_hovered) {
 		m_hovered = false;
-		emit q->unhovered();
+		Q_EMIT q->unhovered();
 		update();
 	}
 }
@@ -1749,7 +1749,7 @@ void HistogramPrivate::setHover(bool on) {
 		return; // don't update if state not changed
 
 	m_hovered = on;
-	on ? emit q->hovered() : emit q->unhovered();
+	on ? Q_EMIT q->hovered() : emit q->unhovered();
 	update();
 }
 

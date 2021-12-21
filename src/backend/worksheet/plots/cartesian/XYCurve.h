@@ -149,7 +149,7 @@ public:
 	double y(double x, double &x_new, bool &valueFound) const;
 	int getNextValue(double xpos, int index, double& x, double& y, bool& valueFound) const;
 
-private slots:
+private Q_SLOTS:
 	void updateValues();
 	void updateErrorBars();
 	void xColumnAboutToBeRemoved(const AbstractAspect*);
@@ -189,7 +189,7 @@ private:
 	QAction* navigateToAction{nullptr};
 	bool m_menusInitialized{false};
 
-signals:
+Q_SIGNALS:
 	//General-Tab
 	void dataChanged(); //emitted when the actual curve data to be plotted was changed to re-adjust the plot
 	void xDataChanged();

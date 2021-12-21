@@ -61,14 +61,14 @@ private:
 	QAbstractItemModel* m_variableModel{nullptr};
 	Cantor::WorksheetAccessInterface* m_worksheetAccess{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void dataChanged(const QModelIndex&);
 	void rowsInserted(const QModelIndex & parent, int first, int last);
 	void rowsAboutToBeRemoved(const QModelIndex & parent, int first, int last);
 	void modelReset();
 	void modified();
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void statusChanged(Cantor::Session::Status);
 };

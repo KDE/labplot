@@ -20,11 +20,11 @@ public:
 	explicit ThemesWidget(QWidget*);
 	void setFixedMode();
 
-signals:
+Q_SIGNALS:
 	void themeSelected(const QString&);
 	void canceled();
 
-private slots:
+private Q_SLOTS:
 	void applyClicked(const QModelIndex&);
 // 	void downloadThemes();
 };

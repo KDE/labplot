@@ -55,7 +55,7 @@ private:
 	Q_DECLARE_PRIVATE(XYEquationCurve)
 	void init();
 
-signals:
+Q_SIGNALS:
 	void equationDataChanged(const XYEquationCurve::EquationData&);
 };
 

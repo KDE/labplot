@@ -57,9 +57,9 @@ private:
 	Q_DECLARE_PRIVATE(XYAnalysisCurve)
 	void init();
 
-public slots:
+public Q_SLOTS:
 	void handleSourceDataChanged();
-private slots:
+private Q_SLOTS:
 	void xDataColumnAboutToBeRemoved(const AbstractAspect*);
 	void yDataColumnAboutToBeRemoved(const AbstractAspect*);
 	void y2DataColumnAboutToBeRemoved(const AbstractAspect*);
@@ -67,7 +67,7 @@ private slots:
 	void yDataColumnNameChanged();
 	void y2DataColumnNameChanged();
 
-signals:
+Q_SIGNALS:
 	void sourceDataChanged(); //emitted when the source data used in the analysis curves was changed to enable the recalculation in the dock widgets
 	void dataSourceTypeChanged(XYAnalysisCurve::DataSourceType);
 	void dataSourceCurveChanged(const XYCurve*);

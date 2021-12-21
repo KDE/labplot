@@ -26,7 +26,7 @@ private:
 	QMqttClient::ClientError m_error;
 	MQTTClient* m_client;
 
-private slots:
+private Q_SLOTS:
 	void tryToReconnect();
 };
 

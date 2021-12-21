@@ -63,10 +63,10 @@ private:
 
 	void initConnections() const;
 
-signals:
+Q_SIGNALS:
 	void dataChanged(bool);
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in LabelWidget
 	void textChanged();
 	void charFormatChanged(const QTextCharFormat&);

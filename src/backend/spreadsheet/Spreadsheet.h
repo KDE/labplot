@@ -75,7 +75,7 @@ public:
 		const QString& dateTimeFormat, AbstractFileFilter::ImportMode) override;
 	int resize(AbstractFileFilter::ImportMode, QStringList colNameList, int cols);
 
-public slots:
+public Q_SLOTS:
 	void appendRows(int);
 	void appendRow();
 	void appendColumns(int);
@@ -98,11 +98,11 @@ private:
 protected:
 	mutable SpreadsheetView* m_view{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void childSelected(const AbstractAspect*) override;
 	void childDeselected(const AbstractAspect*) override;
 
-signals:
+Q_SIGNALS:
 	void requestProjectContextMenu(QMenu*);
 	void columnSelected(int);
 	void columnDeselected(int);

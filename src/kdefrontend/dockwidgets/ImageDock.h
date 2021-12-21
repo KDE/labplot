@@ -36,7 +36,7 @@ private:
 	void load();
 	void loadConfig(KConfig&);
 
-private slots:
+private Q_SLOTS:
 	//SLOTs for changes triggered in ImageDock
 	void selectFile();
 	void fileNameChanged();
@@ -82,7 +82,7 @@ private slots:
 
 	void imageVisibleChanged(bool);
 
-signals:
+Q_SIGNALS:
 	void info(const QString&);
 };
 

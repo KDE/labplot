@@ -27,7 +27,7 @@ private:
 	bool m_saved{false};
 	QPushButton* m_okButton;
 
-private slots:
+private Q_SLOTS:
 	void save();
 	void headersChanged(bool);
 };

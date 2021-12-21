@@ -511,7 +511,7 @@ void InfoElement::curveVisibilityChanged() {
 
 void InfoElement::labelBorderShapeChanged() {
 	Q_D(InfoElement);
-	emit labelBorderShapeChangedSignal();
+	Q_EMIT labelBorderShapeChangedSignal();
 	d->retransform();
 }
 

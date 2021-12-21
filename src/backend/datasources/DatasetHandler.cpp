@@ -174,7 +174,7 @@ void DatasetHandler::doDownload(const QUrl& url) {
 		else
 			progress = 100 * (static_cast<double>(bytesReceived) / static_cast<double>(bytesTotal));
 		qDebug() << "Progress: " << progress;
-		emit downloadProgress(progress);
+		Q_EMIT downloadProgress(progress);
 	});
 }
 
@@ -197,7 +197,7 @@ void DatasetHandler::downloadFinished(QNetworkReply* reply) {
 				qDebug("Download of %s succeeded (saved to %s)\n",
 					   url.toEncoded().constData(), qPrintable(filename));
 				m_fileName = filename;
-				emit downloadCompleted();
+				Q_EMIT downloadCompleted();
 			}
 		}
 	}

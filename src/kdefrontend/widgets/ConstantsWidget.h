@@ -27,11 +27,11 @@ private:
 	Ui::ConstantsWidget ui;
 	ExpressionParser* m_expressionParser;
 
-signals:
+Q_SIGNALS:
 	void constantSelected(const QString&);
 	void canceled();
 
-private slots:
+private Q_SLOTS:
 	void groupChanged(int);
 	void filterChanged(const QString&);
 	void constantChanged(const QString&);

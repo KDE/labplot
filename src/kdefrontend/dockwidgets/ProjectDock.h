@@ -29,7 +29,7 @@ private:
 	Ui::ProjectDock ui;
 	Project* m_project{nullptr};
 
-private slots:
+private Q_SLOTS:
 	void authorChanged();
 	void saveCalculationsChanged();
 

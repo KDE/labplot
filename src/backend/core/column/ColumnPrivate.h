@@ -153,7 +153,7 @@ private:
 	void initLabels();
 	void connectFormulaColumn(const AbstractColumn* column);
 
-private slots:
+private Q_SLOTS:
 	void formulaVariableColumnRemoved(const AbstractAspect*);
 	void formulaVariableColumnAdded(const AbstractAspect*);
 };

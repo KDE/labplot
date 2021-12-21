@@ -306,9 +306,9 @@ void DatapickerCurve::setPrinting(bool on) {
 */
 void DatapickerCurve::setSelectedInView(bool b) {
 	if (b)
-		emit childAspectSelectedInView(this);
+		Q_EMIT childAspectSelectedInView(this);
 	else
-		emit childAspectDeselectedInView(this);
+		Q_EMIT childAspectDeselectedInView(this);
 }
 
 //##############################################################################

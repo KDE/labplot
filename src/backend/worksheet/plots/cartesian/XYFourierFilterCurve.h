@@ -65,7 +65,7 @@ protected:
 private:
 	Q_DECLARE_PRIVATE(XYFourierFilterCurve)
 
-signals:
+Q_SIGNALS:
 	void filterDataChanged(const XYFourierFilterCurve::FilterData&);
 };
 

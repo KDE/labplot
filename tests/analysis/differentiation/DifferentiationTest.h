@@ -15,7 +15,7 @@
 class DifferentiationTest : public AnalysisTest {
 	Q_OBJECT
 
-private slots:
+private Q_SLOTS:
 	void testLinear();
 	void testLinearNonEquidistant();
 	void testQuadratic();

@@ -153,11 +153,11 @@ QString SymbolPrivate::name() const {
 }
 
 void SymbolPrivate::updateSymbols() {
-	emit q->updateRequested();
+	Q_EMIT q->updateRequested();
 }
 
 void SymbolPrivate::updatePixmap() {
-	emit q->updatePixmapRequested();
+	Q_EMIT q->updatePixmapRequested();
 }
 
 //##############################################################################
