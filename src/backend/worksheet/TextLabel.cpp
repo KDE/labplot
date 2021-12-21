@@ -254,15 +254,15 @@ QMenu* TextLabel::createContextMenu() {
 
 /* ============================ getter methods ================= */
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::TextWrapper, text, textWrapper)
-BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor);
-BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, backgroundColor, backgroundColor);
-BASIC_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont);
+BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, fontColor, fontColor)
+BASIC_SHARED_D_READER_IMPL(TextLabel, QColor, backgroundColor, backgroundColor)
+BASIC_SHARED_D_READER_IMPL(TextLabel, QFont, teXFont, teXFont)
 BASIC_SHARED_D_READER_IMPL(TextLabel, TextLabel::BorderShape, borderShape, borderShape)
 BASIC_SHARED_D_READER_IMPL(TextLabel, QPen, borderPen, borderPen)
 BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 
 /* ============================ setter methods and undo commands ================= */
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.mode != d->textWrapper.mode)
@@ -271,28 +271,28 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPlaceholderText, TextLabel::TextWrapper, textWrapper, updateText);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPlaceholderText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setPlaceholderText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder) || (textWrapper.mode != d->textWrapper.mode) )
 		exec(new TextLabelSetPlaceholderTextCmd(d, textWrapper, ki18n("%1: set label placeholdertext")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFont, QFont, teXFont, updateText);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFont, QFont, teXFont, updateText)
 void TextLabel::setTeXFont(const QFont& font) {
 	Q_D(TextLabel);
 	if (font != d->teXFont)
 		exec(new TextLabelSetTeXFontCmd(d, font, ki18n("%1: set TeX main font")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontColor, QColor, fontColor, updateText);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXFontColor, QColor, fontColor, updateText)
 void TextLabel::setFontColor(const QColor color) {
 	Q_D(TextLabel);
 	if (color != d->fontColor)
 		exec(new TextLabelSetTeXFontColorCmd(d, color, ki18n("%1: set font color")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText);
+STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText)
 void TextLabel::setBackgroundColor(const QColor color) {
 	Q_D(TextLabel);
 	if (color != d->backgroundColor)

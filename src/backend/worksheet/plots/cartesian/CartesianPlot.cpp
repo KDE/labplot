@@ -865,9 +865,9 @@ BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, xRangeBrea
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, yRangeBreakingEnabled, yRangeBreakingEnabled)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, CartesianPlot::RangeBreaks, yRangeBreaks, yRangeBreaks)
 
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, QPen, cursorPen, cursorPen);
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor0Enable, cursor0Enable);
-BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor1Enable, cursor1Enable);
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, QPen, cursorPen, cursorPen)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor0Enable, cursor0Enable)
+BASIC_SHARED_D_READER_IMPL(CartesianPlot, bool, cursor1Enable, cursor1Enable)
 BASIC_SHARED_D_READER_IMPL(CartesianPlot, QString, theme, theme)
 
 /*!
@@ -974,28 +974,28 @@ void CartesianPlot::setPrevRect(const QRectF& prevRect) {
 	exec(new CartesianPlotSetPrevRectCmd(d, prevRect));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeType, CartesianPlot::RangeType, rangeType, rangeChanged);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeType, CartesianPlot::RangeType, rangeType, rangeChanged)
 void CartesianPlot::setRangeType(RangeType type) {
 	Q_D(CartesianPlot);
 	if (type != d->rangeType)
 		exec(new CartesianPlotSetRangeTypeCmd(d, type, ki18n("%1: set range type")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetNiceExtend, bool, niceExtend, niceExtendChanged);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetNiceExtend, bool, niceExtend, niceExtendChanged)
 void CartesianPlot::setNiceExtend(const bool value) {
 	Q_D(CartesianPlot);
 	if (value != d->niceExtend)
 		exec(new CartesianPlotSetNiceExtendCmd(d, value, ki18n("%1: set nice extend")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, rangeChanged);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeLastValues, int, rangeLastValues, rangeChanged)
 void CartesianPlot::setRangeLastValues(int values) {
 	Q_D(CartesianPlot);
 	if (values != d->rangeLastValues)
 		exec(new CartesianPlotSetRangeLastValuesCmd(d, values, ki18n("%1: set range")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeFirstValues, int, rangeFirstValues, rangeChanged);
+STD_SETTER_CMD_IMPL_F_S(CartesianPlot, SetRangeFirstValues, int, rangeFirstValues, rangeChanged)
 void CartesianPlot::setRangeFirstValues(int values) {
 	Q_D(CartesianPlot);
 	if (values != d->rangeFirstValues)
@@ -1296,7 +1296,7 @@ private:\
 	int m_index; \
 };
 
-CartesianPlotSetRangeIndexCmd(xRange);
+CartesianPlotSetRangeIndexCmd(xRange)
 void CartesianPlot::setXRange(const int index, const Range<double>& range) {
 	Q_D(CartesianPlot);
 	if (index >= 0 && index < d->xRanges.count() && range.finite() && range != d->xRanges.at(index).range) {

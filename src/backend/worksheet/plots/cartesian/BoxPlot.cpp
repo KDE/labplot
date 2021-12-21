@@ -340,14 +340,14 @@ void BoxPlot::setDataColumns(const QVector<const AbstractColumn*> columns) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrdering, BoxPlot::Ordering, ordering, recalc);
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrdering, BoxPlot::Ordering, ordering, recalc)
 void BoxPlot::setOrdering(BoxPlot::Ordering ordering) {
 	Q_D(BoxPlot);
 	if (ordering != d->ordering)
 		exec(new BoxPlotSetOrderingCmd(d, ordering, ki18n("%1: set ordering")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrientation, BoxPlot::Orientation, orientation, recalc);
+STD_SETTER_CMD_IMPL_F_S(BoxPlot, SetOrientation, BoxPlot::Orientation, orientation, recalc)
 void BoxPlot::setOrientation(BoxPlot::Orientation orientation) {
 	Q_D(BoxPlot);
 	if (orientation != d->orientation)

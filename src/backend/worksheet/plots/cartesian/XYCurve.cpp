@@ -390,7 +390,7 @@ void XYCurve::setLinePen(const QPen &pen) {
 		exec(new XYCurveSetLinePenCmd(d, pen, ki18n("%1: set line style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineOpacity, qreal, lineOpacity, updatePixmap);
+STD_SETTER_CMD_IMPL_F_S(XYCurve, SetLineOpacity, qreal, lineOpacity, updatePixmap)
 void XYCurve::setLineOpacity(qreal opacity) {
 	Q_D(XYCurve);
 	if (opacity != d->lineOpacity)

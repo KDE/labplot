@@ -15,9 +15,7 @@
 #include "backend/core/Workbook.h"
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
-#define private public
 #include "commonfrontend/worksheet/WorksheetView.h"
-#undef private
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"

@@ -84,7 +84,7 @@ BASIC_SHARED_D_READER_IMPL(XYEquationCurve, XYEquationCurve::EquationData, equat
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_F_S(XYEquationCurve, SetEquationData, XYEquationCurve::EquationData, equationData, recalculate);
+STD_SETTER_CMD_IMPL_F_S(XYEquationCurve, SetEquationData, XYEquationCurve::EquationData, equationData, recalculate)
 void XYEquationCurve::setEquationData(const XYEquationCurve::EquationData& equationData) {
 	Q_D(XYEquationCurve);
 	if ( (equationData.expression1 != d->equationData.expression1)

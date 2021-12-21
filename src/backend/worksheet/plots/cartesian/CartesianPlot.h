@@ -168,9 +168,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(bool, yRangeBreakingEnabled, YRangeBreakingEnabled)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, xRangeBreaks, XRangeBreaks)
 	CLASS_D_ACCESSOR_DECL(RangeBreaks, yRangeBreaks, YRangeBreaks)
-	CLASS_D_ACCESSOR_DECL(QPen, cursorPen, CursorPen);
-	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable);
-	CLASS_D_ACCESSOR_DECL(bool, cursor1Enable, Cursor1Enable);
+	CLASS_D_ACCESSOR_DECL(QPen, cursorPen, CursorPen)
+	CLASS_D_ACCESSOR_DECL(bool, cursor0Enable, Cursor0Enable)
+	CLASS_D_ACCESSOR_DECL(bool, cursor1Enable, Cursor1Enable)
 
 	int coordinateSystemCount() const;	// get number of coordinate systems
 	CartesianCoordinateSystem* coordinateSystem(int) const;	// get coordinate system index

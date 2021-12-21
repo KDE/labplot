@@ -55,7 +55,7 @@ private:
 	};
 
 	QRectF boundingRect() const override;
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = 0) override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	WorksheetElementContainer* container();
 
 	void setTopLeft(const QPointF&);

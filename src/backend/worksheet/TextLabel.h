@@ -98,7 +98,7 @@ public:
 	BASIC_D_ACCESSOR_DECL(QColor, teXBackgroundColor, TeXBackgroundColor)
 	CLASS_D_ACCESSOR_DECL(QFont, teXFont, TeXFont)
 
-	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape);
+	BASIC_D_ACCESSOR_DECL(BorderShape, borderShape, BorderShape)
 	CLASS_D_ACCESSOR_DECL(QPen, borderPen, BorderPen)
 	BASIC_D_ACCESSOR_DECL(qreal, borderOpacity, BorderOpacity)
 

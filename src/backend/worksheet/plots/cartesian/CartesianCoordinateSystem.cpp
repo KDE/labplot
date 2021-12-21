@@ -41,7 +41,7 @@ QString CartesianCoordinateSystem::info() const {
 				   + QLatin1String(", y = ") + d->plot->yRange(d->yIndex).toString());
 
 	return i18n("no info available");
-};
+}
 
 //##############################################################################
 //######################### logical to scene mappers ###########################

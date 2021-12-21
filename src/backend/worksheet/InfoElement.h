@@ -70,9 +70,9 @@ public:
 	void retransform() override;
 	void handleResize(double horizontalRatio, double verticalRatio, bool pageResize) override;
 
-	BASIC_D_ACCESSOR_DECL(double, positionLogical, PositionLogical);
-	BASIC_D_ACCESSOR_DECL(int, gluePointIndex, GluePointIndex);
-	CLASS_D_ACCESSOR_DECL(QString, connectionLineCurveName, ConnectionLineCurveName);
+	BASIC_D_ACCESSOR_DECL(double, positionLogical, PositionLogical)
+	BASIC_D_ACCESSOR_DECL(int, gluePointIndex, GluePointIndex)
+	CLASS_D_ACCESSOR_DECL(QString, connectionLineCurveName, ConnectionLineCurveName)
 	CLASS_D_ACCESSOR_DECL(QPen, verticalLinePen, VerticalLinePen)
 	BASIC_D_ACCESSOR_DECL(qreal, verticalLineOpacity, VerticalLineOpacity)
 	CLASS_D_ACCESSOR_DECL(QPen, connectionLinePen, ConnectionLinePen)

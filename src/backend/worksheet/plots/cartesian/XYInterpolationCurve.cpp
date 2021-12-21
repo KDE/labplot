@@ -73,7 +73,7 @@ const XYInterpolationCurve::InterpolationResult& XYInterpolationCurve::interpola
 //##############################################################################
 //#################  setter methods and undo commands ##########################
 //##############################################################################
-STD_SETTER_CMD_IMPL_F_S(XYInterpolationCurve, SetInterpolationData, XYInterpolationCurve::InterpolationData, interpolationData, recalculate);
+STD_SETTER_CMD_IMPL_F_S(XYInterpolationCurve, SetInterpolationData, XYInterpolationCurve::InterpolationData, interpolationData, recalculate)
 void XYInterpolationCurve::setInterpolationData(const XYInterpolationCurve::InterpolationData& interpolationData) {
 	Q_D(XYInterpolationCurve);
 	exec(new XYInterpolationCurveSetInterpolationDataCmd(d, interpolationData, ki18n("%1: set options and perform the interpolation")));

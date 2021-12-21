@@ -239,7 +239,7 @@ symbol* assign_symbol(const char* symbol_name, double value) {
 		ptr->value.var = value;
 
 	return ptr;
-};
+}
 
 static int getcharstr(param *p) {
 	pdebug(" getcharstr() pos = %d\n", (int)(p->pos));

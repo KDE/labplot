@@ -18,7 +18,7 @@ class QRegularExpressionValidator;
 // Assumption: Month has always 30 days
 class DateTimeSpinBox : public QAbstractSpinBox {
 
-	Q_OBJECT;
+	Q_OBJECT
 private:
 	enum Type {
 		year,

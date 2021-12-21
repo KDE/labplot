@@ -383,7 +383,7 @@ void AbstractColumn::setFormula(int /*row*/, const QString& /*formula*/) {
 /**
  * \brief Clear all formulas
  */
-void AbstractColumn::clearFormulas() {};
+void AbstractColumn::clearFormulas() {}
 
 
 //conditional formatting
@@ -438,7 +438,7 @@ void AbstractColumn::setTextAt(int /*row*/, const QString& /*new_text*/) {
  * Use this only when columnMode() is Text
  */
 void AbstractColumn::replaceTexts(int /*first*/, const QVector<QString>& /*new_text*/) {
-};
+}
 
 /**
  * \brief Return the date part of row 'row'
@@ -455,7 +455,7 @@ QDate AbstractColumn::dateAt(int /*row*/) const {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void AbstractColumn::setDateAt(int /*row*/, QDate) {
-};
+}
 
 /**
  * \brief Return the time part of row 'row'
@@ -489,7 +489,7 @@ QDateTime AbstractColumn::dateTimeAt(int /*row*/) const {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void AbstractColumn::setDateTimeAt(int /*row*/, const QDateTime&) {
-};
+}
 
 /**
  * \brief Replace a range of values
@@ -497,7 +497,7 @@ void AbstractColumn::setDateTimeAt(int /*row*/, const QDateTime&) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void AbstractColumn::replaceDateTimes(int /*first*/, const QVector<QDateTime>&) {
-};
+}
 
 /**
  * \brief Return the double value in row 'row'
@@ -514,7 +514,7 @@ double AbstractColumn::valueAt(int /*row*/) const {
  * Use this only when columnMode() is Numeric
  */
 void AbstractColumn::setValueAt(int /*row*/, const double) {
-};
+}
 
 /**
  * \brief Replace a range of values
@@ -539,7 +539,7 @@ int AbstractColumn::integerAt(int /*row*/) const {
  * Use this only when columnMode() is Integer
  */
 void AbstractColumn::setIntegerAt(int /*row*/, const int) {
-};
+}
 
 /**
  * \brief Replace a range of values
@@ -564,7 +564,7 @@ qint64 AbstractColumn::bigIntAt(int /*row*/) const {
  * Use this only when columnMode() is BigInt
  */
 void AbstractColumn::setBigIntAt(int /*row*/, const qint64) {
-};
+}
 
 /**
  * \brief Replace a range of values

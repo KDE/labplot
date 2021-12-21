@@ -437,7 +437,7 @@ void Histogram::setLinePen(const QPen &pen) {
 		exec(new HistogramSetLinePenCmd(d, pen, ki18n("%1: set line style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(Histogram, SetLineOpacity, qreal, lineOpacity, updatePixmap);
+STD_SETTER_CMD_IMPL_F_S(Histogram, SetLineOpacity, qreal, lineOpacity, updatePixmap)
 void Histogram::setLineOpacity(qreal opacity) {
 	Q_D(Histogram);
 	if (opacity != d->lineOpacity)

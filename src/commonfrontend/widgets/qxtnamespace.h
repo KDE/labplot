@@ -74,6 +74,6 @@ namespace Qxt {
 		Month,
 		Year
 	};
-};
+}
 
 #endif // QXTNAMESPACE_H

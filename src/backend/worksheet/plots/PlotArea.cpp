@@ -129,7 +129,7 @@ BASIC_SHARED_D_READER_IMPL(PlotArea, qreal, borderOpacity, borderOpacity)
 
 /* ============================ setter methods and undo commands ================= */
 
-STD_SWAP_METHOD_SETTER_CMD_IMPL(PlotArea, SetClippingEnabled, bool, toggleClipping);
+STD_SWAP_METHOD_SETTER_CMD_IMPL(PlotArea, SetClippingEnabled, bool, toggleClipping)
 void PlotArea::setClippingEnabled(bool on) {
 	Q_D(PlotArea);
 

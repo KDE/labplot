@@ -692,16 +692,16 @@ void InfoElement::handleResize(double /*horizontalRatio*/, double /*verticalRati
 //##############################################################################
 
 /* ============================ getter methods ================= */
-BASIC_SHARED_D_READER_IMPL(InfoElement, double, positionLogical, positionLogical);
-BASIC_SHARED_D_READER_IMPL(InfoElement, int, gluePointIndex, gluePointIndex);
-BASIC_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName);
+BASIC_SHARED_D_READER_IMPL(InfoElement, double, positionLogical, positionLogical)
+BASIC_SHARED_D_READER_IMPL(InfoElement, int, gluePointIndex, gluePointIndex)
+BASIC_SHARED_D_READER_IMPL(InfoElement, QString, connectionLineCurveName, connectionLineCurveName)
 BASIC_SHARED_D_READER_IMPL(InfoElement, QPen, verticalLinePen, verticalLinePen)
 BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, verticalLineOpacity, verticalLineOpacity)
 BASIC_SHARED_D_READER_IMPL(InfoElement, QPen, connectionLinePen, connectionLinePen)
 BASIC_SHARED_D_READER_IMPL(InfoElement, qreal, connectionLineOpacity, connectionLineOpacity)
 
 /* ============================ setter methods ================= */
-STD_SETTER_CMD_IMPL(InfoElement, SetPositionLogical, double, positionLogical);
+STD_SETTER_CMD_IMPL(InfoElement, SetPositionLogical, double, positionLogical)
 void InfoElement::setPositionLogical(double pos) {
 	Q_D(InfoElement);
 	double value = 0.;
@@ -721,21 +721,21 @@ void InfoElement::setPositionLogical(double pos) {
 	}
 }
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetGluePointIndex, int, gluePointIndex, retransform);
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetGluePointIndex, int, gluePointIndex, retransform)
 void InfoElement::setGluePointIndex(int value) {
 	Q_D(InfoElement);
 	if (value != d->gluePointIndex)
 		exec(new InfoElementSetGluePointIndexCmd(d, value, ki18n("%1: set gluepoint index")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineCurveName, QString, connectionLineCurveName, retransform);
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineCurveName, QString, connectionLineCurveName, retransform)
 void InfoElement::setConnectionLineCurveName(const QString& name) {
 	Q_D(InfoElement);
 	if (name.compare(d->connectionLineCurveName) != 0)
 		exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVisible, bool, visible, visibilityChanged);
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVisible, bool, visible, visibilityChanged)
 void InfoElement::setVisible(bool visible) {
 	Q_D(InfoElement);
 	if (visible != d->visible)
@@ -750,7 +750,7 @@ void InfoElement::setVerticalLinePen(const QPen& pen) {
 		exec(new InfoElementSetVerticalLinePenCmd(d, pen, ki18n("%1: set vertical line style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVerticalLineOpacity, qreal, verticalLineOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVerticalLineOpacity, qreal, verticalLineOpacity, update)
 void InfoElement::setVerticalLineOpacity(qreal opacity) {
 	Q_D(InfoElement);
 	if (opacity != d->verticalLineOpacity)
@@ -765,7 +765,7 @@ void InfoElement::setConnectionLinePen(const QPen& pen) {
 		exec(new InfoElementSetConnectionLinePenCmd(d, pen, ki18n("%1: set connection line style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineOpacity, qreal, connectionLineOpacity, update);
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetConnectionLineOpacity, qreal, connectionLineOpacity, update)
 void InfoElement::setConnectionLineOpacity(qreal opacity) {
 	Q_D(InfoElement);
 	if (opacity != d->connectionLineOpacity)

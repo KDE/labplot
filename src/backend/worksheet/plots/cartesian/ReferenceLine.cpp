@@ -181,7 +181,7 @@ void ReferenceLine::setPen(const QPen& pen) {
 		exec(new ReferenceLineSetPenCmd(d, pen, ki18n("%1: set line style")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetOpacity, qreal, opacity, update);
+STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetOpacity, qreal, opacity, update)
 void ReferenceLine::setOpacity(qreal opacity) {
 	Q_D(ReferenceLine);
 	if (opacity != d->opacity)

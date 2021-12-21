@@ -20,7 +20,7 @@
  */
 class TreeItem {
 public:
-	explicit TreeItem(const QVector<QVariant>& data, TreeItem* parent = 0);
+	explicit TreeItem(const QVector<QVariant>& data, TreeItem* parent = nullptr);
 	~TreeItem();
 
 	TreeItem* child(int number);
