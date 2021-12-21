@@ -11,11 +11,22 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(QT_MINIMUM_VERSION 5.6.0)
 set(KF5_MIN_VERSION "5.16.0")
-
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
 find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
+
+include(ECMInstallIcons)
+include(ECMSetupVersion)
+include(ECMAddAppIcon)
+#include(KDEClangFormat)
+#include(GenerateExportHeader)
+include(FeatureSummary)
+
 # build type: "release", "debug", "debugfull"
 string (TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE)
 find_package(Qt5 ${QT_MIN_VERSION} NO_MODULE REQUIRED COMPONENTS
@@ -82,16 +93,10 @@ ENDIF ()
 
 find_package(BISON REQUIRED)
 
-include(FeatureSummary)
-include(ECMAddAppIcon)
-include(ECMInstallIcons)
-include(KDEInstallDirs)
-include(KDECompilerSettings)
-include(KDECMakeSettings)
-
 ### compiler flags ######################################
 set (GENERIC_FLAGS "-Wall -Wextra -Wundef -Wpointer-arith -Wunreachable-code -Wunused -Wdeprecated-declarations -fno-omit-frame-pointer -fstack-protector")
-set (GENERIC_GNU_FLAGS "-O2 -Wcast-align -Wswitch-enum -fvisibility=default")
+# TODO: enable -pedantic, etc. and fix problems
+set (GENERIC_GNU_FLAGS "-O2 -Wcast-align -Wswitch-enum -fvisibility=default")	# -pedantic -Wzero-as-null-pointer-constant (since version 5)
 set (GENERIC_C_FLAGS "${GENERIC_FLAGS} -fno-exceptions")
 # liborigin needs exceptions
 set (GENERIC_CXX_FLAGS "${GENERIC_FLAGS} -fexceptions -std=c++11")
@@ -152,13 +157,32 @@ endif ()
 
 ##########################################################
 
-add_definitions (${QT_DEFINITIONS} ${QT_QTDBUS_DEFINITIONS})
+add_definitions(
+# TODO: enable and fix problems
+#    -DQT_NO_CAST_TO_ASCII
+#    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_URL_CAST_FROM_STRING
+#    -DQT_NO_CAST_FROM_BYTEARRAY
+#    -DQT_USE_QSTRINGBUILDER
+#    -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
+# TODO: replace signals/slots/emit with Q_SIGNALS/Q_SLOTS/Q_EMIT
+#    -DQT_NO_SIGNALS_SLOTS_KEYWORDS
+    -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
+    -DKF_DEPRECATED_WARNINGS_SINCE=0x060000
+)
+if (NOT WIN32)
+    # Strict iterators can't be used on Windows, they lead to a link error
+    # when application code iterates over a QVector<QPoint> for instance, unless
+    # Qt itself was also built with strict iterators.
+    # See example at https://bugreports.qt.io/browse/AUTOSUITE-946
+    add_definitions(-DQT_STRICT_ITERATORS)
+endif()
+
 include_directories (${QDBUS_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 add_definitions (-DLVERSION=\"2.9.0\")
 add_definitions (-DCXX_COMPILER=\"${CMAKE_CXX_COMPILER_ID}\ ${CMAKE_CXX_COMPILER_VERSION}\")
 add_definitions (-DCXX_COMPILER_FLAGS=\"${CMAKE_CXX_FLAGS}\")
-add_definitions (-DQT_NO_URL_CAST_FROM_STRING)
 set(BUILD_SHARED_LIBS true)
 
 #cmake_policy(SET CMP0002 OLD)
@@ -502,7 +526,12 @@ if (ENABLE_TESTS)
 endif()
 
 install(FILES org.kde.labplot2.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
-feature_summary(WHAT ALL)
+
+# clang format
+#file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES *.cpp *.h *.c)
+#kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+
+feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 find_package(KF5I18n CONFIG REQUIRED)
 ki18n_install(po)
