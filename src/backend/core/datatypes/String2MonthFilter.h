@@ -36,9 +36,9 @@ public:
 		bool ok;
 		int month_value = input_value.toInt(&ok);
 		if(!ok) {
-			QDate temp = QDate::fromString(input_value, "MMM");
+			QDate temp = QDate::fromString(input_value, QLatin1String("MMM"));
 			if(!temp.isValid())
-				temp = QDate::fromString(input_value, "MMMM");
+				temp = QDate::fromString(input_value, QLatin1String("MMMM"));
 			if(!temp.isValid())
 				return QDateTime();
 			else

@@ -76,9 +76,9 @@ numberLocale.setNumberOptions(numberOptions);
 { \
 QPalette p; \
 if (qGray(p.color(QPalette::Base).rgb()) > 160)	/* light */ \
-	elem->setStyleSheet("background: rgb(255, 200, 200);"); \
+	elem->setStyleSheet( QLatin1String("background: rgb(255, 200, 200);") ); \
 else	/* dark */ \
-	elem->setStyleSheet("background: rgb(128, 0, 0);"); \
+	elem->setStyleSheet( QLatin1String("background: rgb(128, 0, 0);") ); \
 }
 
 #define SET_WARNING_PALETTE \

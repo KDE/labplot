@@ -72,7 +72,7 @@ public:
 		 * the text and the placeholder text can be switched
 		 */
 		bool allowPlaceholder{false};
-		QString textPlaceholder{""}; // text with placeholders
+		QString textPlaceholder{QLatin1String("")}; // text with placeholders
 	};
 
 	explicit TextLabel(const QString& name, Type type = Type::General);

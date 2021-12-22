@@ -26,7 +26,7 @@ public:
 	enum class EquationType {Cartesian, Polar, Parametric, Implicit, Neutral};
 
 	struct EquationData {
-		EquationData() : min("0"), max("1") {};
+		EquationData() : min(QLatin1String("0")), max(QLatin1String("1")) {};
 
 		EquationType type{EquationType::Cartesian};
 		QString expression1;

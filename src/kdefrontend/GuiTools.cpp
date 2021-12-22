@@ -90,7 +90,7 @@ void GuiTools::updatePenStyles(QMenu* menu, QActionGroup* actionGroup, const QCo
 	QAction* action;
 	if (actionGroup->actions().isEmpty()) {
 		//TODO setting of the icon size doesn't work here
-		menu->setStyleSheet( "QMenu::icon { width:50px; height:10px; }" );
+		menu->setStyleSheet( QLatin1String("QMenu::icon { width:50px; height:10px; }") );
 
 		for (int i = 0; i < 6; i++) {
 			pm.fill(Qt::transparent);
@@ -263,7 +263,7 @@ QString GuiTools::openImageFile(const QString& className) {
 
 	QString formats;
 	for (const QByteArray& format : QImageReader::supportedImageFormats()) {
-		QString f = "*." + QString(format.constData());
+		QString f = QLatin1String("*.") + QLatin1String(format.constData());
 		if (f == QLatin1String("*.svg"))
 			continue;
 		formats += f + QLatin1Char(' ');

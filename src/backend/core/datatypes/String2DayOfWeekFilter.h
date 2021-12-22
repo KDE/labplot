@@ -37,9 +37,9 @@ public:
 		bool ok;
 		int day_value = input_value.toInt(&ok);
 		if(!ok) {
-			QDate temp = QDate::fromString(input_value, "ddd");
+			QDate temp = QDate::fromString(input_value, QLatin1String("ddd"));
 			if(!temp.isValid())
-				temp = QDate::fromString(input_value, "dddd");
+				temp = QDate::fromString(input_value, QLatin1String("dddd"));
 			if(!temp.isValid())
 				return QDateTime();
 			else

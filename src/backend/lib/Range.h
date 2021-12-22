@@ -228,7 +228,7 @@ private:
 	T m_start;	// start value
 	T m_end;	// end value
 	Format m_format{Format::Numeric};	// format (Numeric or DateTime)
-	QString m_dateTimeFormat{"yyyy-MM-dd hh:mm:ss"};	// only used for DateTime
+	QString m_dateTimeFormat{QLatin1String("yyyy-MM-dd hh:mm:ss")};	// only used for DateTime
 	Scale m_scale{Scale::Linear};	// scale (Linear, Log , ...)
 	bool m_autoScale{true};	// auto adapt start and end to all curves using this range (in plot)
 };
@@ -240,13 +240,13 @@ inline QString Range<double>::toString(bool round) const {
 		if (round) {
 			const int relPrec = relativePrecision();
 			//DEBUG(Q_FUNC_INFO << ", rel prec = " << relPrec)
-			return QLocale().toString(nsl_math_round_precision(m_start, relPrec), 'g', relPrec) + " .. " + 
+			return QLocale().toString(nsl_math_round_precision(m_start, relPrec), 'g', relPrec) + QLatin1String(" .. ") +
 				QLocale().toString(nsl_math_round_precision(m_end, relPrec), 'g', relPrec);
 		} else
-			return QLocale().toString(m_start, 'g', 12) + " .. " + QLocale().toString(m_end, 'g', 12);
+			return QLocale().toString(m_start, 'g', 12) + QLatin1String(" .. ") + QLocale().toString(m_end, 'g', 12);
 	} else
-		return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " .. "
-			+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
+		return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + QLatin1String(" .. ") +
+			QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
 }
 
 #endif

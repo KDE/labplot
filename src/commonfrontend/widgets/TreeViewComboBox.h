@@ -52,7 +52,7 @@ private:
 	QTreeView* m_treeView;
 	QGroupBox* m_groupBox;
 	QLineEdit* m_lineEdit;
-	QString m_lineEditText{""};
+	QString m_lineEditText{QLatin1String("")};
 	bool m_useCurrentIndexText{true};
 
 	QList<AspectType> m_topLevelClasses;

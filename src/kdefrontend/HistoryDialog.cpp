@@ -30,13 +30,13 @@
 HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& emptyLabel) : QDialog(parent),
 	m_undoStack(stack) {
 	auto* undoView = new QUndoView(stack, this);
-	undoView->setCleanIcon( QIcon::fromTheme("edit-clear-history") );
+	undoView->setCleanIcon( QIcon::fromTheme(QLatin1String("edit-clear-history")) );
 	undoView->setEmptyLabel(emptyLabel);
 	undoView->setMinimumWidth(350);
 	undoView->setWhatsThis(i18n("List of all performed steps/actions.\n"
 	                            "Select an item in the list to navigate to the corresponding step."));
 
-	setWindowIcon( QIcon::fromTheme("view-history") );
+	setWindowIcon( QIcon::fromTheme(QLatin1String("view-history")) );
 	setWindowTitle(i18nc("@title:window", "Undo/Redo History"));
 	setAttribute(Qt::WA_DeleteOnClose);
 	auto* btnBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -51,7 +51,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 		btnBox->addButton(m_clearUndoStackButton, QDialogButtonBox::ActionRole);
 		m_clearUndoStackButton->setText(i18n("&Clear"));
 		m_clearUndoStackButton->setToolTip(i18n("Clears the undo history. Commands are not undone or redone; the state of the project remains unchanged."));
-		m_clearUndoStackButton->setIcon(QIcon::fromTheme("edit-clear"));
+		m_clearUndoStackButton->setIcon( QIcon::fromTheme(QLatin1String("edit-clear")) );
 		connect(m_clearUndoStackButton, &QPushButton::clicked, this, &HistoryDialog::clearUndoStack);
 	}
 
