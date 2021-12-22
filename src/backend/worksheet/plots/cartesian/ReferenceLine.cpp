@@ -420,6 +420,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 			else
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == "geometry") {
+			attribs = reader->attributes();
 			// Available from xmlVersion >= 6 on
 			READ_INT_VALUE("orientation", orientation, Orientation);
 			WorksheetElement::load(reader, preview);
