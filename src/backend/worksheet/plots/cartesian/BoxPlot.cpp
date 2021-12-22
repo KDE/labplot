@@ -587,7 +587,7 @@ void BoxPlotPrivate::retransform() {
 	if (m_suppressRetransform || !isVisible() || q->isLoading())
 		return;
 
-	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::retransform()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 
 	const int count = dataColumns.size();
 	if (!count || m_boxRect.size() != count) {
@@ -624,7 +624,7 @@ void BoxPlotPrivate::retransform() {
 }
 
 void BoxPlotPrivate::recalc() {
-	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalc()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 
 	//resize the internal containers
 	const int count = dataColumns.size();
@@ -740,7 +740,7 @@ QPointF BoxPlotPrivate::setOutlierPoint(double pos, double value) {
 }
 
 void BoxPlotPrivate::recalc(int index) {
-	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::recalc(index)");
+	PERFTRACE(name() + Q_FUNC_INFO);
 	auto* column = static_cast<const Column*>(dataColumnsOrdered.at(index));
 	if (!column)
 		return;
@@ -891,7 +891,7 @@ void BoxPlotPrivate::recalc(int index) {
 }
 
 void BoxPlotPrivate::verticalBoxPlot(int index) {
-	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::verticalBoxPlot()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 
 	QVector<QLineF> lines;
 	const double x = index + 1.0;
@@ -1021,7 +1021,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 }
 
 void BoxPlotPrivate::horizontalBoxPlot(int index) {
-	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::horizontalBoxPlot()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 
 	QVector<QLineF> lines;
 	const double y = index + 1.0;
@@ -1274,7 +1274,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 }
 
 void BoxPlotPrivate::updatePixmap() {
-	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::updatePixmap()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 	QPixmap pixmap(m_boundingRectangle.width(), m_boundingRectangle.height());
 	if (m_boundingRectangle.width() == 0 || m_boundingRectangle.height() == 0) {
 		m_pixmap = pixmap;
@@ -1297,7 +1297,7 @@ void BoxPlotPrivate::updatePixmap() {
 }
 
 void BoxPlotPrivate::draw(QPainter* painter) {
-	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::draw()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 
 	for (int i = 0; i < dataColumnsOrdered.size(); ++i) {
 		if (!dataColumnsOrdered.at(i))
@@ -1453,7 +1453,7 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 }
 
 void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
-	PERFTRACE(name().toLatin1() + ", BoxPlotPrivate::drawFilling()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 
 	if (m_boxRect.at(index).isEmpty())
 		return;

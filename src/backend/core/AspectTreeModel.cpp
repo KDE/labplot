@@ -207,9 +207,9 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 		}
 	case Qt::ToolTipRole:
 		if (aspect->comment().isEmpty())
-			return QLatin1String("<b>") + aspect->name() + QLatin1String("</b>");
+			return QString( QLatin1String("<b>") + aspect->name() + QLatin1String("</b>")) ;
 		else
-			return QLatin1String("<b>") + aspect->name() + QLatin1String("</b><br><br>") + aspect->comment().replace(QLatin1Char('\n'), QLatin1String("<br>"));
+			return QString( QLatin1String("<b>") + aspect->name() + QLatin1String("</b><br><br>") + aspect->comment().replace(QLatin1Char('\n'), QLatin1String("<br>")) );
 	case Qt::DecorationRole:
 		return index.column() == 0 ? aspect->icon() : QIcon();
 	case Qt::ForegroundRole: {

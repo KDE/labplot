@@ -3490,8 +3490,8 @@ void SpreadsheetView::print(QPrinter* printer) const {
 			}
 			for (; j < toJ; j++) {
 				int w = m_tableView->columnWidth(j);
-				cellText = m_spreadsheet->column(j)->isValid(i) ? m_spreadsheet->text(i,j)+'\t':
-						QLatin1String("- \t");
+				cellText = m_spreadsheet->column(j)->isValid(i) ? m_spreadsheet->text(i, j) + QString("\t"):
+						QString("- \t");
 				tr = painter.boundingRect(tr,Qt::AlignCenter,cellText);
 				br.setTopLeft(QPoint(right,height));
 				br.setWidth(w);

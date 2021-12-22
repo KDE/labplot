@@ -241,9 +241,9 @@ QVariant QJsonModel::data(const QModelIndex& index, int role) const {
 		if (index.column() == 0)
 			return item->key();
 		else if (index.column() == 1) {
-			//in case the value is very long, cut it so the preview tree tree view doesnt' explode
+			//in case the value is very long, cut it so the preview tree tree view doesn't explode
 			if (item->value().length() > 200)
-				return item->value().left(200) + QLatin1String(" ...");
+				return QString( item->value().left(200) + QLatin1String(" ...") );
 			else
 				return item->value();
 		} else {

@@ -15,8 +15,8 @@
 
 class PerfTracer {
 public:
-	explicit PerfTracer(const char* m) {
-		msg = m;
+	explicit PerfTracer(QString m) {
+		msg = STDSTRING(m);
 		start = std::chrono::high_resolution_clock::now();
 	};
 	~PerfTracer() {

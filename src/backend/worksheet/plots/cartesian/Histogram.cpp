@@ -855,7 +855,7 @@ void HistogramPrivate::retransform() {
 	if (!isVisible())
 		return;
 
-	PERFTRACE(name().toLatin1() + ", HistogramPrivate::retransform()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 
 	if (!dataColumn) {
 		linePath = QPainterPath();
@@ -884,7 +884,7 @@ void HistogramPrivate::retransform() {
  * called when the data was changed. recalculates the histogram.
  */
 void HistogramPrivate::recalcHistogram() {
-	PERFTRACE(name().toLatin1() + ", HistogramPrivate::recalcHistogram()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 
 	if (m_histogram) {
 		gsl_histogram_free(m_histogram);
@@ -1024,7 +1024,7 @@ void HistogramPrivate::updateOrientation() {
   Called each time when the type of this connection is changed.
   */
 void HistogramPrivate::updateLines() {
-	PERFTRACE(name().toLatin1() + ", HistogramPrivate::updateLines()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 
 	linePath = QPainterPath();
 	lines.clear();
@@ -1467,7 +1467,7 @@ void HistogramPrivate::recalcShapeAndBoundingRect() {
 }
 
 void HistogramPrivate::draw(QPainter* painter) {
-	PERFTRACE(name().toLatin1() + ", HistogramPrivate::draw()");
+	PERFTRACE(name() + Q_FUNC_INFO);
 
 	//drawing line
 	if (lineType != Histogram::NoLine) {
