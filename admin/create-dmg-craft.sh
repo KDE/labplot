@@ -54,7 +54,7 @@ cp -v kde/Applications/cantor_pythonserver.app/Contents/MacOS/cantor_pythonserve
 cp -vr kde/plugins/cantor $INPREFIX/PlugIns
 cp -v kde/lib/libcantor_config.dylib $INPREFIX/Frameworks/
 # libcantorlibs.XX.dylib pulled in by macdeployqt may be broken
-$GCP -Pv kde/lib/libcantorlibs* $INPREFIX/Frameworks/
+#$GCP -Pv kde/lib/libcantorlibs* $INPREFIX/Frameworks/
 cp -v kde/share/kxmlgui5/cantor/*.rc $INPREFIX/Resources/kxmlgui5/labplot2/
 
 # icons
