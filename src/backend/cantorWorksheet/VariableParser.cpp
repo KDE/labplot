@@ -49,8 +49,10 @@ void VariableParser::parsePythonValues() {
 	QStringList valueStringList;
 	m_string = m_string.trimmed();
 	if (m_string.startsWith(QStringLiteral("array"))) {
-		//parse numpy arrays, string representation like array([1,2,3,4,5])
+		//parse numpy arrays, string representation like array([1,2,3,4,5]) or
+		// array([1, 2,3], dtype=uint32)
 		m_string = m_string.replace(QStringLiteral("array(["), QString());
+		m_string = m_string.replace(QRegExp(QStringLiteral(", dtype=[a-z0-9]*")), QString());
 		m_string = m_string.replace(QStringLiteral("])"), QString());
 	} else if (m_string.startsWith(QStringLiteral("["))) {
 		//parse python's lists
