@@ -87,7 +87,7 @@ public:
 	MouseMode mouseMode() const;
 	BASIC_D_ACCESSOR_DECL(bool, isLocked, Locked)
 	void navigate(int cSystemIndex, NavigationOperation);
-	void setSuppressDataChangedSignal(bool);
+	void setSuppressRetransform(bool);
 	const QList<QColor>& themeColorPalette() const;
 	const QColor themeColorPalette(int index) const;
 	void processDropEvent(const QVector<quintptr>&) override;

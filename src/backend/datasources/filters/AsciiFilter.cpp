@@ -1142,14 +1142,14 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		//suppress retransform in the dependent plots
 		for (auto* plot : plots)
-			plot->setSuppressDataChangedSignal(true);
+			plot->setSuppressRetransform(true);
 
 		for (int n = 0; n < m_actualCols; ++n)
 			spreadsheet->column(n)->setChanged();
 
 		//retransform the dependent plots
 		for (auto* plot : plots) {
-			plot->setSuppressDataChangedSignal(false);
+			plot->setSuppressRetransform(false);
 			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated!
 		}
 	} else

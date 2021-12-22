@@ -1376,6 +1376,9 @@ void SpreadsheetView::advanceCell() {
  * disables cell data relevant actions in the spreadsheet menu if there're no cells available
  */
 void SpreadsheetView::checkSpreadsheetMenu() {
+	if (!m_plotDataMenu)
+		initMenus();
+
 	const bool cellsAvail = m_spreadsheet->columnCount()>0 && m_spreadsheet->rowCount()>0;
 	m_plotDataMenu->setEnabled(cellsAvail);
 	m_selectionMenu->setEnabled(cellsAvail);
@@ -1810,7 +1813,7 @@ void SpreadsheetView::maskSelection() {
 
 	//suppress retransform in the dependent plots
 	for (auto* plot : plots)
-		plot->setSuppressDataChangedSignal(true);
+		plot->setSuppressRetransform(true);
 
 	//mask the selected cells
 	for (auto* column : selectedColumns()) {
@@ -1821,7 +1824,7 @@ void SpreadsheetView::maskSelection() {
 
 	//retransform the dependent plots
 	for (auto* plot : plots) {
-		plot->setSuppressDataChangedSignal(false);
+		plot->setSuppressRetransform(false);
 		// TODO: check which ranges must be updated
 		plot->dataChanged(-1, -1);
 	}
@@ -1848,7 +1851,7 @@ void SpreadsheetView::unmaskSelection() {
 
 	//suppress retransform in the dependent plots
 	for (auto* plot : plots)
-		plot->setSuppressDataChangedSignal(true);
+		plot->setSuppressRetransform(true);
 
 	//unmask the selected cells
 	for (auto* column : selectedColumns()) {
@@ -1859,7 +1862,7 @@ void SpreadsheetView::unmaskSelection() {
 
 	//retransform the dependent plots
 	for (auto* plot : plots) {
-		plot->setSuppressDataChangedSignal(false);
+		plot->setSuppressRetransform(false);
 		// TODO: check which ranges must be updated
 		plot->dataChanged(-1, -1);
 	}

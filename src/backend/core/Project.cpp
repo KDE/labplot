@@ -755,7 +755,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 					auto* plot = static_cast<CartesianPlot*>(curve->parentAspect());
 					if (plots.indexOf(plot) == -1) {
 						plots << plot;
-						plot->setSuppressDataChangedSignal(true);
+						plot->setSuppressRetransform(true);
 					}
 				}
 			}
@@ -767,7 +767,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 
 	//loop over all affected plots and retransform them
 	for (auto* plot : plots) {
-		plot->setSuppressDataChangedSignal(false);
+		plot->setSuppressRetransform(false);
 		plot->dataChanged(-1, -1);
 	}
 }

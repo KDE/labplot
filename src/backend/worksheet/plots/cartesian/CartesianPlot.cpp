@@ -338,7 +338,10 @@ void CartesianPlot::setType(Type type) {
 
 	//all plot children are initialized -> set the geometry of the plot in scene coordinates.
 	d->rect = QRectF(x, y, w, h);
-	d->retransform();
+
+	const auto* worksheet = static_cast<const Worksheet*>(parentAspect());
+	if (worksheet  && worksheet->layout() != Worksheet::Layout::NoLayout)
+		d->retransform();
 }
 
 CartesianPlot::Type CartesianPlot::type() const {
@@ -773,7 +776,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 	else if (op == NavigationOperation::ShiftDownY) shiftDownY(yIndex);
 }
 
-void CartesianPlot::setSuppressDataChangedSignal(bool value) {
+void CartesianPlot::setSuppressRetransform(bool value) {
 	Q_D(CartesianPlot);
 	d->suppressRetransform = value;
 }
@@ -2219,6 +2222,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			if (curveTotalCount() == 1) {
 				connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
 				boxPlotOrientationChanged(boxPlot->orientation());
+				if (!boxPlot->dataColumns().isEmpty())
+					checkAxisFormat(boxPlot->dataColumns().constFirst(), Axis::Orientation::Vertical);
 			}
 		}
 
@@ -4433,7 +4438,6 @@ void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {
 
 void CartesianPlotPrivate::keyPressEvent(QKeyEvent* event) {
 	auto key = event->key();
-	DEBUG("key " << key);
 	if (key == Qt::Key_Escape) {
 		m_selectionBandIsShown = false;
 	} else if (key == Qt::Key_Left || key == Qt::Key_Right

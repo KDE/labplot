@@ -1064,7 +1064,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 
 		//suppress retransform in the dependent plots
 		for (auto* plot : plots)
-			plot->setSuppressDataChangedSignal(true);
+			plot->setSuppressRetransform(true);
 	}
 
 	// set the comments for each of the columns if datasource is a spreadsheet
@@ -1111,7 +1111,7 @@ void Spreadsheet::finalizeImport(size_t columnOffset, size_t startColumn, size_t
 	if (importMode == AbstractFileFilter::ImportMode::Replace) {
 		//retransform the dependent plots
 		for (auto* plot : plots) {
-			plot->setSuppressDataChangedSignal(false);
+			plot->setSuppressRetransform(false);
 			plot->dataChanged(-1, -1); // TODO: check if all ranges must be updated
 		}
 	}
