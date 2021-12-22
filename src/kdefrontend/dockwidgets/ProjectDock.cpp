@@ -36,7 +36,7 @@ ProjectDock::ProjectDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leName, &QLineEdit::textChanged, this, &ProjectDock::nameChanged);
 	connect(ui.leAuthor, &QLineEdit::textChanged, this, &ProjectDock::authorChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &ProjectDock::commentChanged);
-	connect(ui.chkSaveCalculations, &QCheckBox::stateChanged, this, &ProjectDock::saveCalculationsChanged);
+	connect(ui.chkSaveCalculations, &QCheckBox::toggled, this, &ProjectDock::saveCalculationsChanged);
 }
 
 void ProjectDock::setProject(Project* project) {
@@ -86,11 +86,11 @@ void ProjectDock::authorChanged() {
 	m_project->setAuthor(ui.leAuthor->text());
 }
 
-void ProjectDock::saveCalculationsChanged() {
+void ProjectDock::saveCalculationsChanged(bool state) {
 	if (m_initializing)
 		return;
 
-	m_project->setSaveCalculations(ui.chkSaveCalculations->isChecked());
+	m_project->setSaveCalculations(state);
 }
 
 //*************************************************************

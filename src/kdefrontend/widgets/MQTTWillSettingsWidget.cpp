@@ -23,25 +23,15 @@ MQTTWillSettingsWidget::MQTTWillSettingsWidget(QWidget* parent, const MQTTClient
 	connect(ui.cbWillMessageType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willMessageTypeChanged);
 	connect(ui.cbWillUpdate, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MQTTWillSettingsWidget::willUpdateTypeChanged);
 
-	connect(ui.chbEnabled, &QCheckBox::stateChanged, this, &MQTTWillSettingsWidget::enableWillSettings);
-	connect(ui.chbWillRetain, &QCheckBox::stateChanged, [this](int state) {
-		m_will.willRetain = (state == Qt::Checked);
-	});
-	connect(ui.leWillOwnMessage, &QLineEdit::textChanged, [this](const QString& text) {
-		m_will.willOwnMessage = text;
-	});
-	connect(ui.leWillUpdateInterval, &QLineEdit::textChanged, [this](const QString& text) {
-		m_will.willTimeInterval = text.toInt();
-	});
+	connect(ui.chbEnabled, &QCheckBox::toggled, this, &MQTTWillSettingsWidget::enableWillSettings);
+	connect(ui.chbWillRetain, &QCheckBox::toggled, [this](bool state) { m_will.willRetain = state; });
+	connect(ui.leWillOwnMessage, &QLineEdit::textChanged, [this](const QString& text) { m_will.willOwnMessage = text; });
+	connect(ui.leWillUpdateInterval, &QLineEdit::textChanged, [this](const QString& text) { m_will.willTimeInterval = text.toInt(); });
 	connect(ui.lwWillStatistics, &QListWidget::itemChanged, [this](QListWidgetItem* item) {
 		m_statisticsType = static_cast<MQTTClient::WillStatisticsType>(ui.lwWillStatistics->row(item));
 	});
-	connect(ui.cbWillQoS, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index) {
-		m_will.willQoS = index;
-	});
-	connect(ui.cbWillTopic, QOverload<const QString&>::of(&QComboBox::currentTextChanged), [this](const QString& text) {
-		m_will.willTopic = text;
-	});
+	connect(ui.cbWillQoS, QOverload<int>::of(&QComboBox::currentIndexChanged), [this](int index) { m_will.willQoS = index; });
+	connect(ui.cbWillTopic, QOverload<const QString&>::of(&QComboBox::currentTextChanged), [this](const QString& text) { m_will.willTopic = text; });
 	connect(ui.bApply, &QPushButton::clicked, this, &MQTTWillSettingsWidget::applyClicked);
 
 	loadSettings(will, topics);
@@ -134,8 +124,8 @@ void MQTTWillSettingsWidget::loadSettings(const MQTTClient::MQTTWill& will, cons
 	}
 }
 
-void MQTTWillSettingsWidget::enableWillSettings(int state) {
-	const bool enabled = m_will.enabled = (state == Qt::Checked);
+void MQTTWillSettingsWidget::enableWillSettings(bool enabled) {
+	m_will.enabled = enabled;
 	ui.lWillMessageType->setEnabled(enabled);
 	ui.cbWillMessageType->setEnabled(enabled);
 	ui.lWillOwnMessage->setEnabled(enabled);

@@ -621,7 +621,7 @@ void CartesianPlotDock::updateXRangeList() {
 		chk->setChecked(xRange.autoScale());
 //		chk->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
 		ui.twXRanges->setCellWidget(i, TwRangesColumn::Automatic, chk);
-		connect(chk, &QCheckBox::stateChanged, this, &CartesianPlotDock::autoScaleXChanged);
+		connect(chk, &QCheckBox::toggled, this, &CartesianPlotDock::autoScaleXChanged);
 
 		// format
 		auto* cb = new QComboBox(ui.twXRanges);
@@ -719,7 +719,7 @@ void CartesianPlotDock::updateYRangeList() {
 		chk->setChecked(yRange.autoScale());
 		//	chk->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
 		ui.twYRanges->setCellWidget(i, TwRangesColumn::Automatic, chk);
-		connect(chk, &QCheckBox::stateChanged, this, &CartesianPlotDock::autoScaleYChanged);
+		connect(chk, &QCheckBox::toggled, this, &CartesianPlotDock::autoScaleYChanged);
 
 		// format
 		auto* cb = new QComboBox(ui.twYRanges);
@@ -1035,16 +1035,15 @@ void CartesianPlotDock::rangePointsChanged(const QString& text) {
 }
 
 // x/y Ranges
-void CartesianPlotDock::autoScaleXChanged(int state) {
+void CartesianPlotDock::autoScaleXChanged(bool state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
 	if (m_initializing)
 		return;
 
-	bool checked = (state == Qt::Checked);
 	const int xRangeIndex{ sender()->property("row").toInt() };
 	DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
 
-	autoScaleXRange(xRangeIndex, checked);
+	autoScaleXRange(xRangeIndex, state);
 }
 void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " checked = " << checked)
@@ -1081,16 +1080,15 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 	updateXRangeList();	// see range changes
 }
 
-void CartesianPlotDock::autoScaleYChanged(int state) {
+void CartesianPlotDock::autoScaleYChanged(bool state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
 	if (m_initializing)
 		return;
 
-	bool checked = (state == Qt::Checked);
 	const int yRangeIndex{ sender()->property("row").toInt() };
 	DEBUG( Q_FUNC_INFO << ", y range " << yRangeIndex+1 )
 
-	autoScaleYRange(yRangeIndex, checked);
+	autoScaleYRange(yRangeIndex, state);
 }
 // index - y range index
 void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
@@ -2399,26 +2397,26 @@ void CartesianPlotDock::plotBorderPenChanged(QPen& pen) {
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotBorderCornerRadiusChanged(float value) {
+void CartesianPlotDock::plotBorderCornerRadiusChanged(double value) {
 	m_initializing = true;
 	ui.sbBorderCornerRadius->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotBorderOpacityChanged(float value) {
+void CartesianPlotDock::plotBorderOpacityChanged(double value) {
 	m_initializing = true;
 	float v = (float)value*100.;
 	ui.sbBorderOpacity->setValue(v);
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotHorizontalPaddingChanged(float value) {
+void CartesianPlotDock::plotHorizontalPaddingChanged(double value) {
 	m_initializing = true;
 	ui.sbPaddingHorizontal->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;
 }
 
-void CartesianPlotDock::plotVerticalPaddingChanged(float value) {
+void CartesianPlotDock::plotVerticalPaddingChanged(double value) {
 	m_initializing = true;
 	ui.sbPaddingVertical->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
 	m_initializing = false;

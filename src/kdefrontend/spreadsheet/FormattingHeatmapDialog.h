@@ -36,7 +36,7 @@ private:
 	QVector<QColor> m_colors;
 
 private Q_SLOTS:
-	void autoRangeChanged(int);
+	void autoRangeChanged(bool);
 	void selectColorMap();
 	void checkValues();
 };

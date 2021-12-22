@@ -32,15 +32,15 @@ SettingsGeneralPage::SettingsGeneralPage(QWidget* parent) : SettingsPage(parent)
 	connect(ui.cbTabPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbUnits, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
 	connect(ui.cbDecimalSeparator, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsGeneralPage::changed);
-	connect(ui.chkOmitGroupSeparator, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
-	connect(ui.chkOmitLeadingZeroInExponent, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
-	connect(ui.chkIncludeTrailingZeroesAfterDot, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
-	connect(ui.chkAutoSave, &QCheckBox::stateChanged, this, &SettingsGeneralPage::autoSaveChanged);
-	connect(ui.chkCompatible, &QCheckBox::stateChanged, this, &SettingsGeneralPage::changed);
+	connect(ui.chkOmitGroupSeparator, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkOmitLeadingZeroInExponent, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkIncludeTrailingZeroesAfterDot, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
+	connect(ui.chkAutoSave, &QCheckBox::toggled, this, &SettingsGeneralPage::autoSaveChanged);
+	connect(ui.chkCompatible, &QCheckBox::toggled, this, &SettingsGeneralPage::changed);
 
 	loadSettings();
 	interfaceChanged(ui.cbInterface->currentIndex());
-	autoSaveChanged(ui.chkAutoSave->checkState());
+	autoSaveChanged(ui.chkAutoSave->isChecked());
 }
 
 /* returns decimal separator (as SettingsGeneralPage::DecimalSeparator) of given locale (default: system setting) */
@@ -205,9 +205,8 @@ void SettingsGeneralPage::interfaceChanged(int index) {
 	changed();
 }
 
-void SettingsGeneralPage::autoSaveChanged(int state) {
-	const bool visible = (state == Qt::Checked);
-	ui.lAutoSaveInterval->setVisible(visible);
-	ui.sbAutoSaveInterval->setVisible(visible);
+void SettingsGeneralPage::autoSaveChanged(bool state) {
+	ui.lAutoSaveInterval->setVisible(state);
+	ui.sbAutoSaveInterval->setVisible(state);
 	changed();
 }

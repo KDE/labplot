@@ -133,8 +133,8 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 			 this, &BoxPlotDock::orderingChanged);
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &BoxPlotDock::orientationChanged);
-	connect(ui.chkVariableWidth, &QCheckBox::stateChanged, this, &BoxPlotDock::variableWidthChanged);
-	connect(ui.chkNotches, &QCheckBox::stateChanged, this, &BoxPlotDock::notchesEnabledChanged);
+	connect(ui.chkVariableWidth, &QCheckBox::toggled, this, &BoxPlotDock::variableWidthChanged);
+	connect(ui.chkNotches, &QCheckBox::toggled, this, &BoxPlotDock::notchesEnabledChanged);
 	connect(ui.chkVisible, &QCheckBox::toggled, this, &BoxPlotDock::visibilityChanged);
 
 	//Tab "Box"
@@ -142,7 +142,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 			this, &BoxPlotDock::widthFactorChanged);
 
 	//box filling
-	connect(ui.chkFillingEnabled, &QCheckBox::stateChanged, this, &BoxPlotDock::fillingEnabledChanged);
+	connect(ui.chkFillingEnabled, &QCheckBox::toggled, this, &BoxPlotDock::fillingEnabledChanged);
 	connect(ui.cbFillingType, QOverload<int>::of(&QComboBox::currentIndexChanged),
 			 this, &BoxPlotDock::fillingTypeChanged);
 	connect(ui.cbFillingColorStyle, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -177,7 +177,7 @@ BoxPlotDock::BoxPlotDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.rbOutlier, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbFarOut, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
 	connect(ui.rbJitter, &QRadioButton::toggled, this, &BoxPlotDock::symbolCategoryChanged);
-	connect(ui.chkJitteringEnabled, &QCheckBox::stateChanged, this, &BoxPlotDock::jitteringEnabledChanged);
+	connect(ui.chkJitteringEnabled, &QCheckBox::toggled, this, &BoxPlotDock::jitteringEnabledChanged);
 
 	//Tab "Whiskers"
 	connect(ui.cbWhiskersType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &BoxPlotDock::whiskersTypeChanged);
@@ -493,7 +493,7 @@ void BoxPlotDock::widthFactorChanged(int value) const {
 }
 
 //box filling
-void BoxPlotDock::fillingEnabledChanged(int state) const {
+void BoxPlotDock::fillingEnabledChanged(bool state) const {
 	ui.cbFillingType->setEnabled(state);
 	ui.cbFillingColorStyle->setEnabled(state);
 	ui.cbFillingBrushStyle->setEnabled(state);
@@ -790,7 +790,7 @@ void BoxPlotDock::symbolCategoryChanged() {
 	symbolWidget->setSymbols(symbols);
 }
 
-void BoxPlotDock::jitteringEnabledChanged(int state) const {
+void BoxPlotDock::jitteringEnabledChanged(bool state) const {
 	if (m_initializing)
 		return;
 

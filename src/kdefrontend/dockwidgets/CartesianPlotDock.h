@@ -64,7 +64,7 @@ private Q_SLOTS:
 	void niceExtendChanged(bool checked);
 	void rangePointsChanged(const QString&);
 
-	void autoScaleXChanged(int);
+	void autoScaleXChanged(bool);
 	void xMinChanged(const QString&);
 	void xMaxChanged(const QString&);
 	void xRangeChanged(const Range<double>&);
@@ -82,7 +82,7 @@ private Q_SLOTS:
 	void PlotRangeXChanged(const int index);
 	void PlotRangeYChanged(const int index);
 
-	void autoScaleYChanged(int);
+	void autoScaleYChanged(bool);
 	void yMinChanged(const QString&);
 	void yMaxChanged(const QString&);
 	void yRangeChanged(const Range<double>&);
@@ -179,10 +179,10 @@ private Q_SLOTS:
 	void plotBackgroundOpacityChanged(float);
 	void plotBorderTypeChanged(PlotArea::BorderType);
 	void plotBorderPenChanged(QPen&);
-	void plotBorderCornerRadiusChanged(float);
-	void plotBorderOpacityChanged(float);
-	void plotHorizontalPaddingChanged(float);
-	void plotVerticalPaddingChanged(float);
+	void plotBorderCornerRadiusChanged(double);
+	void plotBorderOpacityChanged(double);
+	void plotHorizontalPaddingChanged(double);
+	void plotVerticalPaddingChanged(double);
 	void plotRightPaddingChanged(double);
 	void plotBottomPaddingChanged(double);
 	void plotSymmetricPaddingChanged(bool);

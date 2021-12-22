@@ -168,7 +168,7 @@ XYCurveDock::XYCurveDock(QWidget* parent) : BaseDock(parent) {
 	connect( ui.sbErrorBarsOpacity, SIGNAL(valueChanged(int)), this, SLOT(errorBarsOpacityChanged(int)) );
 
 	//Margin Plots
-	connect(ui.chkRugEnabled, &QCheckBox::stateChanged, this, &XYCurveDock::rugEnabledChanged);
+	connect(ui.chkRugEnabled, &QCheckBox::toggled, this, &XYCurveDock::rugEnabledChanged);
 	connect(ui.cbRugOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYCurveDock::rugOrientationChanged);
 	connect(ui.sbRugLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::rugLengthChanged);
 	connect(ui.sbRugWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &XYCurveDock::rugWidthChanged);
@@ -1544,7 +1544,7 @@ void XYCurveDock::errorBarsOpacityChanged(int value) const {
 }
 
 //"Margin Plots"-Tab
-void XYCurveDock::rugEnabledChanged(int state) const {
+void XYCurveDock::rugEnabledChanged(bool state) const {
 	if (m_initializing)
 		return;
 

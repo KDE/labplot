@@ -64,7 +64,7 @@ private Q_SLOTS:
 	void widthFactorChanged(int) const;
 
 	//box filling
-	void fillingEnabledChanged(int) const;
+	void fillingEnabledChanged(bool) const;
 	void fillingTypeChanged(int) const;
 	void fillingColorStyleChanged(int) const;
 	void fillingImageStyleChanged(int) const;
@@ -89,7 +89,7 @@ private Q_SLOTS:
 
 	//symbols
 	void symbolCategoryChanged();
-	void jitteringEnabledChanged(int) const;
+	void jitteringEnabledChanged(bool) const;
 
 	//whiskers
 	void whiskersTypeChanged(int) const;

@@ -19,8 +19,8 @@
  */
 SettingsSpreadsheetPage::SettingsSpreadsheetPage(QWidget* parent) : SettingsPage(parent) {
 	ui.setupUi(this);
-	connect(ui.chkShowColumnType, &QCheckBox::stateChanged, this, &SettingsSpreadsheetPage::changed);
-	connect(ui.chkShowPlotDesignation, &QCheckBox::stateChanged, this, &SettingsSpreadsheetPage::changed);
+	connect(ui.chkShowColumnType, &QCheckBox::toggled, this, &SettingsSpreadsheetPage::changed);
+	connect(ui.chkShowPlotDesignation, &QCheckBox::toggled, this, &SettingsSpreadsheetPage::changed);
 	loadSettings();
 }
 

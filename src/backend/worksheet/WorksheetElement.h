@@ -137,11 +137,11 @@ Q_SIGNALS:
 	friend class AbstractPlotSetRightPaddingCmd;
 	friend class AbstractPlotSetBottomPaddingCmd;
 	friend class AbstractPlotSetSymmetricPaddingCmd;
-	void horizontalPaddingChanged(float);
-	void verticalPaddingChanged(float);
+	void horizontalPaddingChanged(double);
+	void verticalPaddingChanged(double);
 	void rightPaddingChanged(double);
 	void bottomPaddingChanged(double);
-	void symmetricPaddingChanged(double);
+	void symmetricPaddingChanged(bool);
 	void positionChanged(const WorksheetElement::PositionWrapper&) const;
 	void horizontalAlignmentChanged(const WorksheetElement::HorizontalAlignment) const;
 	void verticalAlignmentChanged(const WorksheetElement::VerticalAlignment) const;

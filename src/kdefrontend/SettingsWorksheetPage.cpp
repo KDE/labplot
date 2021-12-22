@@ -46,8 +46,8 @@ SettingsWorksheetPage::SettingsWorksheetPage(QWidget* parent) : SettingsPage(par
 		ui.cbTexEngine->addItem(QLatin1String("LaTeX"), QLatin1String("latex"));
 
 	connect(m_cbThemes, &ThemesComboBox::currentThemeChanged, this, &SettingsWorksheetPage::changed);
-	connect(ui.chkPresenterModeInteractive, &QCheckBox::stateChanged, this, &SettingsWorksheetPage::changed);
-	connect(ui.chkDoubleBuffering, &QCheckBox::stateChanged, this, &SettingsWorksheetPage::changed);
+	connect(ui.chkPresenterModeInteractive, &QCheckBox::toggled, this, &SettingsWorksheetPage::changed);
+	connect(ui.chkDoubleBuffering, &QCheckBox::toggled, this, &SettingsWorksheetPage::changed);
 	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::changed);
 	connect(ui.cbTexEngine, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsWorksheetPage::checkTeX);
 

@@ -66,7 +66,7 @@ DatabaseManagerWidget::DatabaseManagerWidget(QWidget* parent, QString conn) : QW
 	connect(ui.leDatabase, &QLineEdit::textChanged, this, &DatabaseManagerWidget::databaseNameChanged);
 	connect(ui.leHost, &QLineEdit::textChanged, this, &DatabaseManagerWidget::hostChanged);
 	connect(ui.sbPort, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &DatabaseManagerWidget::portChanged);
-	connect(ui.chkCustomConnection, &QCheckBox::stateChanged, this, &DatabaseManagerWidget::customConnectionEnabledChanged);
+	connect(ui.chkCustomConnection, &QCheckBox::toggled, this, &DatabaseManagerWidget::customConnectionEnabledChanged);
 	connect(ui.teCustomConnection, &QPlainTextEdit::textChanged, this, &DatabaseManagerWidget::customConnectionChanged);
 	connect(ui.leUserName, &QLineEdit::textChanged, this, &DatabaseManagerWidget::userNameChanged);
 	connect(ui.lePassword, &QLineEdit::textChanged, this, &DatabaseManagerWidget::passwordChanged);
@@ -280,20 +280,20 @@ void DatabaseManagerWidget::databaseNameChanged() {
 	Q_EMIT changed();
 }
 
-void DatabaseManagerWidget::customConnectionEnabledChanged(int state) {
+void DatabaseManagerWidget::customConnectionEnabledChanged(bool state) {
 	//in case custom connection string is provided:
 	//disable the line edit for the database name
 	//and hide the textedit for the connection string
-	ui.leDatabase->setEnabled(state != Qt::Checked);
-	ui.teCustomConnection->setVisible(state == Qt::Checked);
+	ui.leDatabase->setEnabled(!state);
+	ui.teCustomConnection->setVisible(state);
 
-	if (state == Qt::Checked)
+	if (state)
 		ui.teCustomConnection->setFocus();
 	else
 		ui.leDatabase->setFocus();
 
 	if (m_current_connection)
-		m_current_connection->customConnectionEnabled = (state == Qt::Checked);
+		m_current_connection->customConnectionEnabled = state;
 	Q_EMIT changed();
 }
 

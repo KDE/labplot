@@ -73,7 +73,7 @@ private Q_SLOTS:
 	void hostChanged();
 	void portChanged();
 	void databaseNameChanged();
-	void customConnectionEnabledChanged(int);
+	void customConnectionEnabledChanged(bool);
 	void customConnectionChanged();
 	void userNameChanged();
 	void passwordChanged();

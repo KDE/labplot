@@ -99,7 +99,7 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbDateTimeFormat->setToolTip(textDateTimeFormatShort);
 	ui.cbDateTimeFormat->setWhatsThis(textDateTimeFormat);
 
-	connect(ui.chbHeader, &QCheckBox::stateChanged, this, &AsciiOptionsWidget::headerChanged);
+	connect(ui.chbHeader, &QCheckBox::toggled, this, &AsciiOptionsWidget::headerChanged);
 }
 
 void AsciiOptionsWidget::showAsciiHeaderOptions(bool visible) {
@@ -122,10 +122,9 @@ void AsciiOptionsWidget::showTimestampOptions(bool visible) {
   Shows a text field for the vector names if the option "Use the first row..." was not selected.
   Hides it otherwise.
 */
-void AsciiOptionsWidget::headerChanged(int state) {
-	bool visible = (state != Qt::Checked);
-	ui.kleVectorNames->setVisible(visible);
-	ui.lVectorNames->setVisible(visible);
+void AsciiOptionsWidget::headerChanged(bool state) {
+	ui.kleVectorNames->setVisible(state);
+	ui.lVectorNames->setVisible(state);
 }
 
 void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {

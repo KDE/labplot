@@ -37,7 +37,7 @@ private:
 
 private Q_SLOTS:
 	void interfaceChanged(int);
-	void autoSaveChanged(int);
+	void autoSaveChanged(bool);
 	void changed();
 
 Q_SIGNALS:

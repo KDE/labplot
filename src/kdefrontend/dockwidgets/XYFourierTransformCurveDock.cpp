@@ -74,8 +74,8 @@ void XYFourierTransformCurveDock::setupGeneral() {
 	connect(uiGeneralTab.leMax, &QLineEdit::textChanged, this, &XYFourierTransformCurveDock::xRangeMaxChanged);
 	connect(uiGeneralTab.cbWindowType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::windowTypeChanged);
 	connect(uiGeneralTab.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::typeChanged);
-	connect(uiGeneralTab.cbTwoSided, &QCheckBox::stateChanged, this, &XYFourierTransformCurveDock::twoSidedChanged);
-	connect(uiGeneralTab.cbShifted, &QCheckBox::stateChanged, this, &XYFourierTransformCurveDock::shiftedChanged);
+	connect(uiGeneralTab.cbTwoSided, &QCheckBox::toggled, this, &XYFourierTransformCurveDock::twoSidedChanged);
+	connect(uiGeneralTab.cbShifted, &QCheckBox::toggled, this, &XYFourierTransformCurveDock::shiftedChanged);
 	connect(uiGeneralTab.cbXScale, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::xScaleChanged);
 	connect(uiGeneralTab.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &XYFourierTransformCurveDock::plotRangeChanged );
 	connect(uiGeneralTab.pbRecalculate, &QPushButton::clicked, this, &XYFourierTransformCurveDock::recalculateClicked);
@@ -262,10 +262,10 @@ void XYFourierTransformCurveDock::typeChanged() {
 }
 
 void XYFourierTransformCurveDock::twoSidedChanged() {
-	bool twoSided = uiGeneralTab.cbTwoSided->isChecked();
-	m_transformData.twoSided = twoSided;
+	bool checked = uiGeneralTab.cbTwoSided->isChecked();
+	m_transformData.twoSided = checked;
 
-	if (twoSided)
+	if (checked)
 		uiGeneralTab.cbShifted->setEnabled(true);
 	else {
 		uiGeneralTab.cbShifted->setEnabled(false);
@@ -276,8 +276,8 @@ void XYFourierTransformCurveDock::twoSidedChanged() {
 }
 
 void XYFourierTransformCurveDock::shiftedChanged() {
-	bool shifted = uiGeneralTab.cbShifted->isChecked();
-	m_transformData.shifted = shifted;
+	bool checked = uiGeneralTab.cbShifted->isChecked();
+	m_transformData.shifted = checked;
 
 	enableRecalculate();
 }

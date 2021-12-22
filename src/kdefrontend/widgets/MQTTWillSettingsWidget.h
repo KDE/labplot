@@ -34,7 +34,7 @@ Q_SIGNALS:
 	void applyClicked();
 
 private Q_SLOTS:
-	void enableWillSettings(int);
+	void enableWillSettings(bool);
 	void willMessageTypeChanged(int);
 	void loadSettings(const MQTTClient::MQTTWill&, const QVector<QString>&);
 	void willUpdateTypeChanged(int);

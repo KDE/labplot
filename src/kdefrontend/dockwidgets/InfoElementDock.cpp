@@ -127,7 +127,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 		for (const auto* curve : curves) {
 			auto* item = new QListWidgetItem();
 			auto* checkBox = new QCheckBox(curve->name());
-			connect(checkBox, &QCheckBox::stateChanged, this, &InfoElementDock::curveSelectionChanged);
+			connect(checkBox, &QCheckBox::toggled, this, &InfoElementDock::curveSelectionChanged);
 			ui->lwCurves->addItem(item);
 			ui->lwCurves->setItemWidget(item, checkBox);
 
@@ -256,7 +256,7 @@ void InfoElementDock::positionDateTimeChanged(const QDateTime& dateTime) {
 		element->setPositionLogical(value);
 }
 
-void InfoElementDock::curveSelectionChanged(int state) {
+void InfoElementDock::curveSelectionChanged(bool state) {
 	if (m_initializing || !m_sameParent)
 		return;
 
@@ -272,7 +272,7 @@ void InfoElementDock::curveSelectionChanged(int state) {
 	}
 
 	//add/remove the changed curve
-	if (state == Qt::Checked && curve) {
+	if (state && curve) {
 		for (auto* element : m_elements)
 			element->addCurve(curve);
 

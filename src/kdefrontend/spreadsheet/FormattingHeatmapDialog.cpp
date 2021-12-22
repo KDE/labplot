@@ -60,7 +60,7 @@ FormattingHeatmapDialog::FormattingHeatmapDialog(Spreadsheet* s, QWidget* parent
 	ui.leMinimum->setValidator(new QDoubleValidator(ui.leMinimum));
 	ui.leMaximum->setValidator(new QDoubleValidator(ui.leMaximum));
 
-	connect(ui.chkAutoRange, &QCheckBox::stateChanged, this, &FormattingHeatmapDialog::autoRangeChanged);
+	connect(ui.chkAutoRange, &QCheckBox::toggled, this, &FormattingHeatmapDialog::autoRangeChanged);
 	connect(ui.leMaximum, &QLineEdit::textChanged, this, &FormattingHeatmapDialog::checkValues);
 	connect(ui.leMinimum, &QLineEdit::textChanged, this, &FormattingHeatmapDialog::checkValues);
 	connect(ui.bColorMap, &QPushButton::clicked, this, &FormattingHeatmapDialog::selectColorMap);
@@ -142,10 +142,9 @@ AbstractColumn::HeatmapFormat FormattingHeatmapDialog::format() {
 	return format;
 }
 
-void FormattingHeatmapDialog::autoRangeChanged(int index) {
-	bool autoRange = (index == Qt::Checked);
-	ui.leMinimum->setEnabled(!autoRange);
-	ui.leMaximum->setEnabled(!autoRange);
+void FormattingHeatmapDialog::autoRangeChanged(bool state) {
+	ui.leMinimum->setEnabled(!state);
+	ui.leMaximum->setEnabled(!state);
 
 	checkValues();
 }

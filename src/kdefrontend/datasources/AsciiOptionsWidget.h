@@ -28,7 +28,7 @@ public:
 	void saveSettings();
 
 public Q_SLOTS:
-	void headerChanged(int state);
+	void headerChanged(bool);
 
 private:
 	Ui::AsciiOptionsWidget ui;

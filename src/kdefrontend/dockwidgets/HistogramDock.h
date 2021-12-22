@@ -65,7 +65,7 @@ private Q_SLOTS:
 	void binningMethodChanged(int);
 	void binCountChanged(int);
 	void binWidthChanged();
-	void autoBinRangesChanged(int);
+	void autoBinRangesChanged(bool);
 	void binRangesMinChanged(const QString&);
 	void binRangesMaxChanged(const QString&);
 	void binRangesMinDateTimeChanged(const QDateTime&);
@@ -95,7 +95,7 @@ private Q_SLOTS:
 	void valuesColorChanged(const QColor&);
 
 	//Filling-tab
-	void fillingEnabledChanged(int);
+	void fillingEnabledChanged(bool);
   	void fillingTypeChanged(int);
 	void fillingColorStyleChanged(int);
 	void fillingImageStyleChanged(int);

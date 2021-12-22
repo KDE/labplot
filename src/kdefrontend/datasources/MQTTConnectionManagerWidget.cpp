@@ -52,9 +52,9 @@ MQTTConnectionManagerWidget::MQTTConnectionManagerWidget(QWidget* parent, const 
 	connect(ui.leUserName, &QLineEdit::textChanged, this, &MQTTConnectionManagerWidget::userNameChanged);
 	connect(ui.lePassword, &QLineEdit::textChanged, this, &MQTTConnectionManagerWidget::passwordChanged);
 	connect(ui.leID, &QLineEdit::textChanged, this, &MQTTConnectionManagerWidget::clientIdChanged);
-	connect(ui.chbAuthentication, &QCheckBox::stateChanged, this, &MQTTConnectionManagerWidget::authenticationChecked);
-	connect(ui.chbID, &QCheckBox::stateChanged, this, &MQTTConnectionManagerWidget::idChecked);
-	connect(ui.chbRetain, &QCheckBox::stateChanged, this, &MQTTConnectionManagerWidget::retainChecked);
+	connect(ui.chbAuthentication, &QCheckBox::toggled, this, &MQTTConnectionManagerWidget::authenticationChecked);
+	connect(ui.chbID, &QCheckBox::toggled, this, &MQTTConnectionManagerWidget::idChecked);
+	connect(ui.chbRetain, &QCheckBox::toggled, this, &MQTTConnectionManagerWidget::retainChecked);
 	connect(ui.bTest, &QPushButton::clicked, this, &MQTTConnectionManagerWidget::testConnection);
 
 	ui.lePassword->hide();
@@ -247,8 +247,8 @@ void MQTTConnectionManagerWidget::portChanged(const QString& portString) {
  *
  * \param state the state of the checkbox
  */
-void MQTTConnectionManagerWidget::authenticationChecked(int state) {
-	if (state == Qt::CheckState::Checked) {
+void MQTTConnectionManagerWidget::authenticationChecked(bool state) {
+	if (state) {
 		ui.lPassword->show();
 		ui.lePassword->show();
 		ui.lUsername->show();
@@ -261,7 +261,7 @@ void MQTTConnectionManagerWidget::authenticationChecked(int state) {
 				m_currentConnection->useAuthentication = true;
 		}
 
-	} else if (state == Qt::CheckState::Unchecked) {
+	} else {
 		ui.lPassword->hide();
 		ui.lePassword->hide();
 		ui.lePassword->clear();
@@ -282,8 +282,8 @@ void MQTTConnectionManagerWidget::authenticationChecked(int state) {
  *\brief called when ID checkbox's state is changed, if checked a lineEdit is shown so the user can set the ID
  * \param state the state of the checkbox
  */
-void MQTTConnectionManagerWidget::idChecked(int state) {
-	if (state == Qt::CheckState::Checked) {
+void MQTTConnectionManagerWidget::idChecked(bool state) {
+	if (state) {
 		ui.lID->show();
 		ui.leID->show();
 
@@ -293,7 +293,7 @@ void MQTTConnectionManagerWidget::idChecked(int state) {
 				m_currentConnection->useID = true;
 		}
 
-	} else if (state == Qt::CheckState::Unchecked) {
+	} else {
 		ui.lID->hide();
 		ui.leID->hide();
 		ui.leID->clear();
@@ -311,16 +311,15 @@ void MQTTConnectionManagerWidget::idChecked(int state) {
  * \brief called when retain checkbox's state is changed
  * \param state the state of the checkbox
  */
-void MQTTConnectionManagerWidget::retainChecked(int state) {
+void MQTTConnectionManagerWidget::retainChecked(bool state) {
 	if (m_initializing)
 		return;
 
 	if (m_currentConnection) {
-		if (state == Qt::CheckState::Checked) {
+		if (state)
 			m_currentConnection->retain = true;
-		} else if (state == Qt::CheckState::Unchecked) {
+		else
 			m_currentConnection->retain = false;
-		}
 	}
 	Q_EMIT changed();
 }

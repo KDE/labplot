@@ -67,9 +67,9 @@ private Q_SLOTS:
 	void userNameChanged(const QString&);
 	void passwordChanged(const QString&);
 	void clientIdChanged(const QString&);
-	void authenticationChecked(int);
-	void idChecked(int);
-	void retainChecked(int);
+	void authenticationChecked(bool);
+	void idChecked(bool);
+	void retainChecked(bool);
 	void onConnect();
 	void onDisconnect();
 	void testTimeout();

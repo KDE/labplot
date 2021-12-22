@@ -134,7 +134,7 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.tbUnityScale, &QToolButton::clicked, this, &AxisDock::setUnityScale);
 	connect(ui.tbUnityRange, &QToolButton::clicked, this, &AxisDock::setUnityRange);
 
-	connect(ui.chkShowScaleOffset, &QCheckBox::stateChanged, this, &AxisDock::showScaleOffsetChanged);
+	connect(ui.chkShowScaleOffset, &QCheckBox::toggled, this, &AxisDock::showScaleOffsetChanged);
 
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AxisDock::plotRangeChanged);
 
@@ -209,7 +209,7 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	        this, &AxisDock::labelsFormatChanged);
 	connect(ui.sbLabelsPrecision, QOverload<int>::of(&QSpinBox::valueChanged),
 	        this, &AxisDock::labelsPrecisionChanged);
-	connect(ui.chkLabelsAutoPrecision, &QCheckBox::stateChanged, this, &AxisDock::labelsAutoPrecisionChanged);
+	connect(ui.chkLabelsAutoPrecision, &QCheckBox::toggled, this, &AxisDock::labelsAutoPrecisionChanged);
 	connect(ui.cbLabelsDateTimeFormat, QOverload<int>::of(&QComboBox::currentIndexChanged),
 	        this, &AxisDock::labelsDateTimeFormatChanged);
 	connect(ui.cbLabelsDateTimeFormat, &QComboBox::currentTextChanged,
@@ -936,14 +936,14 @@ void AxisDock::setUnityRange() {
 	ui.leZeroOffset->setText(numberLocale.toString(-m_axis->range().start()/m_axis->range().size()));
 }
 
-void AxisDock::showScaleOffsetChanged() {
+void AxisDock::showScaleOffsetChanged(bool state) {
 	DEBUG(Q_FUNC_INFO)
 	if (m_initializing)
 		return;
 
 	const Lock lock(m_initializing);
 	for (auto* axis : m_axesList)
-		axis->setShowScaleOffset(ui.chkShowScaleOffset->isChecked());
+		axis->setShowScaleOffset(state);
 }
 
 // "Line"-tab
@@ -1564,15 +1564,14 @@ void AxisDock::labelsPrecisionChanged(int value) {
 }
 
 
-void AxisDock::labelsAutoPrecisionChanged(int state) {
-	bool checked = (state == Qt::Checked);
-	ui.sbLabelsPrecision->setEnabled(!checked);
+void AxisDock::labelsAutoPrecisionChanged(bool state) {
+	ui.sbLabelsPrecision->setEnabled(!state);
 
 	if (m_initializing)
 		return;
 
 	for (auto* axis : m_axesList)
-		axis->setLabelsAutoPrecision(checked);
+		axis->setLabelsAutoPrecision(state);
 }
 
 void AxisDock::labelsDateTimeFormatChanged() {

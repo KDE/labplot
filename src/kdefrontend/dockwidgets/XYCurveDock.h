@@ -134,7 +134,7 @@ private Q_SLOTS:
 	void errorBarsOpacityChanged(int) const;
 
 	//"Margin Plots"-Tab
-	void rugEnabledChanged(int) const;
+	void rugEnabledChanged(bool) const;
 	void rugOrientationChanged(int) const;
 	void rugLengthChanged(double) const;
 	void rugWidthChanged(double) const;

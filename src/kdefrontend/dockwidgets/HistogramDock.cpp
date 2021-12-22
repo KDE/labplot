@@ -117,7 +117,7 @@ HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(n
 	connect( ui.cbBinningMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(binningMethodChanged(int)) );
 	connect(ui.sbBinCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &HistogramDock::binCountChanged);
 	connect(ui.leBinWidth, &QLineEdit::textChanged, this, &HistogramDock::binWidthChanged);
-	connect( ui.chkAutoBinRanges, &QCheckBox::stateChanged, this, &HistogramDock::autoBinRangesChanged );
+	connect( ui.chkAutoBinRanges, &QCheckBox::toggled, this, &HistogramDock::autoBinRangesChanged );
 	connect( ui.leBinRangesMin, &QLineEdit::textChanged, this, &HistogramDock::binRangesMinChanged );
 	connect( ui.leBinRangesMax, &QLineEdit::textChanged, this, &HistogramDock::binRangesMaxChanged );
 	connect(ui.dteBinRangesMin, &QDateTimeEdit::dateTimeChanged, this, &HistogramDock::binRangesMinDateTimeChanged);
@@ -147,7 +147,7 @@ HistogramDock::HistogramDock(QWidget* parent) : BaseDock(parent), cbDataColumn(n
 	connect( ui.kcbValuesColor, SIGNAL(changed(QColor)), this, SLOT(valuesColorChanged(QColor)) );
 
 	//Filling
-	connect(ui.chkFillingEnabled, &QCheckBox::stateChanged, this, &HistogramDock::fillingEnabledChanged);
+	connect(ui.chkFillingEnabled, &QCheckBox::toggled, this, &HistogramDock::fillingEnabledChanged);
 	connect( ui.cbFillingType, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingTypeChanged(int)) );
 	connect( ui.cbFillingColorStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingColorStyleChanged(int)) );
 	connect( ui.cbFillingImageStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(fillingImageStyleChanged(int)) );
@@ -588,18 +588,17 @@ void HistogramDock::binWidthChanged() {
 	}
 }
 
-void HistogramDock::autoBinRangesChanged(int state) {
-	bool checked = (state == Qt::Checked);
-	ui.leBinRangesMin->setEnabled(!checked);
-	ui.leBinRangesMax->setEnabled(!checked);
-	ui.dteBinRangesMin->setEnabled(!checked);
-	ui.dteBinRangesMax->setEnabled(!checked);
+void HistogramDock::autoBinRangesChanged(bool state) {
+	ui.leBinRangesMin->setEnabled(!state);
+	ui.leBinRangesMax->setEnabled(!state);
+	ui.dteBinRangesMin->setEnabled(!state);
+	ui.dteBinRangesMax->setEnabled(!state);
 
 	if (m_initializing)
 		return;
 
 	for (auto* hist : m_curvesList)
-		hist->setAutoBinRanges(checked);
+		hist->setAutoBinRanges(state);
 }
 
 void HistogramDock::binRangesMinChanged(const QString& value) {
@@ -933,7 +932,7 @@ void HistogramDock::valuesColorChanged(const QColor& color) {
 }
 
 //Filling-tab
-void HistogramDock::fillingEnabledChanged(int state) {
+void HistogramDock::fillingEnabledChanged(bool state) {
 	ui.cbFillingType->setEnabled(state);
 	ui.cbFillingColorStyle->setEnabled(state);
 	ui.cbFillingBrushStyle->setEnabled(state);

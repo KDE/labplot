@@ -37,7 +37,7 @@ SpreadsheetDock::SpreadsheetDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.teComment, &QTextEdit::textChanged, this, &SpreadsheetDock::commentChanged);
 	connect(ui.sbColumnCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpreadsheetDock::columnCountChanged);
 	connect(ui.sbRowCount, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &SpreadsheetDock::rowCountChanged);
-	connect(ui.cbShowComments, &QCheckBox::stateChanged, this, &SpreadsheetDock::commentsShownChanged);
+	connect(ui.cbShowComments, &QCheckBox::toggled, this, &SpreadsheetDock::commentsShownChanged);
 
 	auto* templateHandler = new TemplateHandler(this, TemplateHandler::ClassName::Spreadsheet);
 	ui.gridLayout->addWidget(templateHandler, 11, 0, 1, 4);
@@ -124,9 +124,9 @@ void SpreadsheetDock::columnCountChanged(int columns) {
 }
 
 /*!
-  switches on/off  the comment header in the views of the selected spreadsheets.
+  enable/disable the comment header in the views of the selected spreadsheets.
 */
-void SpreadsheetDock::commentsShownChanged(int state) {
+void SpreadsheetDock::commentsShownChanged(bool state) {
 	if (m_initializing)
 		return;
 
@@ -149,7 +149,7 @@ void SpreadsheetDock::spreadsheetColumnCountChanged(int count) {
 	m_initializing = false;
 }
 
-void SpreadsheetDock::spreadsheetShowCommentsChanged(int checked) {
+void SpreadsheetDock::spreadsheetShowCommentsChanged(bool checked) {
 	m_initializing = true;
 	ui.cbShowComments->setChecked(checked);
 	m_initializing = false;

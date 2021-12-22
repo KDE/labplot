@@ -31,7 +31,7 @@ private:
 
 private Q_SLOTS:
 	void authorChanged();
-	void saveCalculationsChanged();
+	void saveCalculationsChanged(bool);
 
 	//SLOTs for changes triggered in Project
 	void projectAuthorChanged(const QString&);

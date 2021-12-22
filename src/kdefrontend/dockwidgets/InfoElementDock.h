@@ -36,7 +36,7 @@ private Q_SLOTS:
 	void curveChanged();
 	void positionChanged(const QString&);
 	void positionDateTimeChanged(const QDateTime&);
-	void curveSelectionChanged(int);
+	void curveSelectionChanged(bool);
 	void visibilityChanged(bool);
 	void verticalLineStyleChanged(int);
 	void verticalLineWidthChanged(double);

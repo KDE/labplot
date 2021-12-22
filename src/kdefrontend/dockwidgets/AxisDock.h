@@ -76,7 +76,7 @@ private Q_SLOTS:
 	void endDateTimeChanged(const QDateTime&);
 	void zeroOffsetChanged();
 	void scalingFactorChanged();
-	void showScaleOffsetChanged();
+	void showScaleOffsetChanged(bool);
 	void setLeftOffset();
 	void setCenterOffset();
 	void setRightOffset();
@@ -124,7 +124,7 @@ private Q_SLOTS:
 	//"Tick labels"-tab
 	void labelsFormatChanged(int);
 	void labelsPrecisionChanged(int);
-	void labelsAutoPrecisionChanged(int);
+	void labelsAutoPrecisionChanged(bool);
 	void labelsDateTimeFormatChanged();
 	void labelsPositionChanged(int);
 	void labelsOffsetChanged(double);

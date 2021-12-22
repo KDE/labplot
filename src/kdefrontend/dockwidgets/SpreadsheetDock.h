@@ -37,12 +37,12 @@ private Q_SLOTS:
 	//SLOTs for changes triggered in SpreadsheetDock
 	void rowCountChanged(int);
 	void columnCountChanged(int);
-	void commentsShownChanged(int);
+	void commentsShownChanged(bool);
 
 	//SLOTs for changes triggered in Spreadsheet
 	void spreadsheetRowCountChanged(int);
 	void spreadsheetColumnCountChanged(int);
-	void spreadsheetShowCommentsChanged(int);
+	void spreadsheetShowCommentsChanged(bool);
 
 	//save/load template
 	void loadConfigFromTemplate(KConfig&);
