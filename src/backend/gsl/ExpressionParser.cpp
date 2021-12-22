@@ -1485,6 +1485,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 		if (parse_errors() > 0)
 			return false;
 
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << x << " is NAN")
+
 		(*xVector)[i] = x;
 		(*yVector)[i] = y;
 	}
@@ -1513,6 +1516,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QString& min
 		if (parse_errors() > 0)
 			return false;
 
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << x << " is NAN")
+
 		(*xVector)[i] = x;
 		(*yVector)[i] = y;
 	}
@@ -1533,7 +1539,10 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 		if (parse_errors() > 0)
 			return false;
 
-		(*yVector)[i] = y;
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << xVector->at(i) << " is NAN")
+ 
+ 		(*yVector)[i] = y;
 	}
 
 	return true;
@@ -1556,6 +1565,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, QVector<double>* x
 			y = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
+
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << xVector->at(i) << " is NAN")
 
 		(*yVector)[i] = y;
 	}
@@ -1594,6 +1606,9 @@ bool ExpressionParser::evaluateCartesian(const QString& expr, const QStringList&
 		if (parse_errors() > 0)
 			return false;
 
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated to NAN")
+
 		(*yVector)[i] = y;
 	}
 
@@ -1621,6 +1636,9 @@ bool ExpressionParser::evaluatePolar(const QString& expr, const QString& min, co
 			r = parse(qPrintable(expr), "en_US");
 		if (parse_errors() > 0)
 			return false;
+
+		if (std::isnan(r))
+			WARN(Q_FUNC_INFO << ", WARNING: expression " << STDSTRING(expr) << " evaluated @ " << phi << " is NAN")
 
 		(*xVector)[i] = r*cos(phi);
 		(*yVector)[i] = r*sin(phi);
@@ -1651,6 +1669,11 @@ bool ExpressionParser::evaluateParametric(const QString& xexpr, const QString& y
 			y = parse(qPrintable(yexpr), "en_US");
 		if (parse_errors() > 0)
 			return false;
+
+		if (std::isnan(x))
+			WARN(Q_FUNC_INFO << ", WARNING: X expression " << STDSTRING(xexpr) << " evaluated @ " << range.start() + step * i << " is NAN")
+		if (std::isnan(y))
+			WARN(Q_FUNC_INFO << ", WARNING: Y expression " << STDSTRING(yexpr) << " evaluated @ " << range.start() + step * i << " is NAN")
 
 		(*xVector)[i] = x;
 		(*yVector)[i] = y;
