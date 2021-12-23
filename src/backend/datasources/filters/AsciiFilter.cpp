@@ -2419,7 +2419,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 					CartesianPlot* plot = static_cast<CartesianPlot*>(curve->parentAspect());
 					if (plots.indexOf(plot) == -1) {
 						plots << plot;
-						plot->setSuppressDataChangedSignal(true);
+						plot->setSuppressRetransform(true);
 					}
 				}
 			}
