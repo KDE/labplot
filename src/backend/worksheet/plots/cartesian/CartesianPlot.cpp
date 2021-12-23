@@ -2132,7 +2132,8 @@ int CartesianPlot::curveChildIndex(const WorksheetElement* curve) const {
 
 		if (child->inherits(AspectType::XYCurve)
 			|| child->type() == AspectType::Histogram
-			|| child->type() == AspectType::BoxPlot)
+			|| child->type() == AspectType::BoxPlot
+			|| child->inherits(AspectType::XYAnalysisCurve))
 		++index;
 	}
 
