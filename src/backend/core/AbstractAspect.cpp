@@ -388,11 +388,7 @@ AspectType AbstractAspect::type() const {
 }
 
 bool AbstractAspect::inherits(AspectType type) const {
-	return inherits(m_type, type);
-}
-
-bool AbstractAspect::inherits(AspectType type, AspectType referenceType) {
-	return (static_cast<quint64>(type) & static_cast<quint64>(referenceType)) == static_cast<quint64>(referenceType);
+	return (static_cast<quint64>(m_type) & static_cast<quint64>(type)) == static_cast<quint64>(type);
 }
 
 /**

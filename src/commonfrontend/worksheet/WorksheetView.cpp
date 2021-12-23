@@ -2084,30 +2084,30 @@ void WorksheetView::handleCartesianPlotActions() {
 	bool handled = false, plot = false;
 	for (auto* item : m_selectedItems) {
 		//TODO: or if a children of a plot is selected
-		auto key = static_cast<AspectType>(item->data(0).toULongLong());
-		if (key == AspectType::CartesianPlot) {
+		auto* w = static_cast<WorksheetElementPrivate*>(item)->q;
+		if (w->type() == AspectType::CartesianPlot) {
 			handled = true;
 			plot = true;
 			m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
 			handleCartesianPlotSelected(static_cast<CartesianPlot*>(m_selectedElement));
 			break;
-		} else if (AbstractAspect::inherits(key, AspectType::XYCurve)) {
+		} else if (w->inherits(AspectType::XYCurve)) {
 			handled = true;
 			m_selectedElement = static_cast<XYCurvePrivate*>(item)->q;
 			// XYCurvePrivate does not depend yet on WorksheetElementContainerPrivate
 			//m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
 			handleXYCurveSelected();
 			break;
-		} else if (AbstractAspect::inherits(key, AspectType::XYAnalysisCurve)) {
+		} else if (w->inherits(AspectType::XYAnalysisCurve)) {
 			handled = true;
 			m_selectedElement = static_cast<XYAnalysisCurvePrivate*>(item)->q;
 			handleXYCurveSelected();
 			break;
-		} else if (key == AspectType::ReferenceLine) {
+		} else if (w->type() == AspectType::ReferenceLine) {
 			handled = true;
 			m_selectedElement = static_cast<ReferenceLinePrivate*>(item)->q;
 			handleReferenceLineSelected();
-		} else if (key == AspectType::Axis) {
+		} else if (w->type() == AspectType::Axis) {
 			handled = true;
 			m_selectedElement = static_cast<AxisPrivate*>(item)->q;
 			// AxisPrivate does not depend yet on WorksheetElementContainerPrivate

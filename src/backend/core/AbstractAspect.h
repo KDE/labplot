@@ -252,7 +252,6 @@ public:
 
 	AspectType type() const;
 	bool inherits(AspectType type) const;
-	static bool inherits(AspectType type, AspectType referenceType);
 
 	//functions related to the handling of the tree-like project structure
 	AbstractAspect* parentAspect() const;

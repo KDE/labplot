@@ -798,11 +798,10 @@ int Worksheet::cSystemIndex(WorksheetElement* e)
 		return -1;
 
 	auto type = e->type();
-
 	if (type == AspectType::CartesianPlot)
 		return -1;
-	else if (AbstractAspect::inherits(type, AspectType::XYCurve) ||
-			 AbstractAspect::inherits(type, AspectType::XYAnalysisCurve) ||
+	else if (e->inherits(AspectType::XYCurve) ||
+			 e->inherits(AspectType::XYAnalysisCurve) ||
 			 type == AspectType::ReferenceLine ||
 			 type == AspectType::Axis)
 		return e->coordinateSystemIndex();
