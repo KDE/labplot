@@ -13,13 +13,7 @@
 #include "backend/core/Project.h"
 #include "backend/worksheet/plots/cartesian/Axis.h"
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
-#include "backend/worksheet/plots/cartesian/XYCurve.h"
-#include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
-#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
-#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
 #include "backend/worksheet/plots/cartesian/ReferenceLine.h"
-#include "backend/worksheet/plots/cartesian/ReferenceLinePrivate.h"
-#include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
 #include "commonfrontend/core/PartMdiView.h"
@@ -2110,8 +2104,6 @@ void WorksheetView::handleCartesianPlotActions() {
 		} else if (w->type() == AspectType::Axis) {
 			handled = true;
 			m_selectedElement = w;
-			// AxisPrivate does not depend yet on WorksheetElementContainerPrivate
-			//m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
 			handleAxisSelected(static_cast<Axis*>(m_selectedElement));
 			break;
 		}
