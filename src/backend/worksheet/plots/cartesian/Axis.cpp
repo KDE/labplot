@@ -959,7 +959,6 @@ void Axis::visibilityChangedSlot() {
 AxisPrivate::AxisPrivate(Axis* owner) : WorksheetElementPrivate(owner), gridItem(new AxisGrid(this)), q(owner) {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
-	setData(0, static_cast<int>(AspectType::Axis));
 	setAcceptHoverEvents(true);
 }
 

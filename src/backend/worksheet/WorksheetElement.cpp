@@ -46,6 +46,8 @@ WorksheetElement::WorksheetElement(const QString& name, WorksheetElementPrivate*
 }
 
 void WorksheetElement::init() {
+
+	d_ptr->setData(0, static_cast<quint64>(type()));
 	m_drawingOrderMenu = new QMenu(i18n("Drawing &order"));
 	m_drawingOrderMenu->setIcon(QIcon::fromTheme("layer-bottom"));
 	m_moveBehindMenu = new QMenu(i18n("Move &behind"));

@@ -3400,7 +3400,6 @@ void CartesianPlot::visibilityChanged() {
 //################### Private implementation ##########################
 //#####################################################################
 CartesianPlotPrivate::CartesianPlotPrivate(CartesianPlot* plot) : AbstractPlotPrivate(plot), q(plot) {
-	setData(0, static_cast<int>(AspectType::CartesianPlot));
 	m_cursor0Text.prepare();
 	m_cursor1Text.prepare();
 }
