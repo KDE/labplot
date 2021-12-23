@@ -801,7 +801,9 @@ int Worksheet::cSystemIndex(WorksheetElement* e)
 
 	if (type == AspectType::CartesianPlot)
 		return -1;
-	else if (((int)type & (int)AspectType::XYCurve) == (int)AspectType::XYCurve || // All subclasses of xycurve
+	else if (AbstractAspect::inherits(type, AspectType::XYCurve) ||
+			 AbstractAspect::inherits(type, AspectType::XYAnalysisCurve) ||
+			 type == AspectType::ReferenceLine ||
 			 type == AspectType::Axis)
 		return e->coordinateSystemIndex();
 	return -1;

@@ -15,6 +15,10 @@
 #include "backend/worksheet/plots/cartesian/AxisPrivate.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
+#include "backend/worksheet/plots/cartesian/XYAnalysisCurvePrivate.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLine.h"
+#include "backend/worksheet/plots/cartesian/ReferenceLinePrivate.h"
 #include "backend/worksheet/WorksheetElementContainerPrivate.h"
 #include "backend/worksheet/Image.h"
 #include "backend/worksheet/TextLabel.h"
@@ -1824,6 +1828,90 @@ void WorksheetView::handleCartesianPlotSelected(const CartesianPlot* plot)
 	cartesianPlotCursorModeAction->setEnabled(true);
 }
 
+void WorksheetView::handleReferenceLineSelected() {
+	/* Action to All: action is applied to all ranges
+	 *	- Disable
+	 * Action to X: action is applied to all x ranges
+	 *	- x zoom selection: if vertical:Zooming into all ranges of all plots (mostly the x ranges are the same for all plots --> usecase)
+	 *  - y zoom selection: if !vertical:zoom only into the range from the reference line
+	 * Action to Y: action is applied to all y ranges
+	 *  - x zoom selection: if vertical: zoom only into the range from the reference line
+	 *  - y zoom selection: if !vertical: Zooming into all ranges of all plots
+	 * Action to Selection
+	 * - x zoom selection: if vertical: zoom only into the range from the reference line
+	 * - y zoom selection: if !vertical:zoom only into the range from the reference line
+	*/
+
+	auto l = static_cast<ReferenceLine*>(m_selectedElement);
+	bool vert = (l->orientation() == ReferenceLine::Orientation::Vertical);
+
+	zoomInAction->setEnabled(false);
+	zoomOutAction->setEnabled(false);
+	cartesianPlotZoomSelectionModeAction->setEnabled(false);
+	scaleAutoAction->setEnabled(false);
+
+	switch(m_worksheet->cartesianPlotActionMode()) {
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAll:
+		cartesianPlotZoomXSelectionModeAction->setEnabled(false);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(false);
+		zoomInXAction->setEnabled(false);
+		zoomOutXAction->setEnabled(false);
+		zoomInYAction->setEnabled(false);
+		zoomOutYAction->setEnabled(false);
+		shiftLeftXAction->setEnabled(false);
+		shiftRightXAction->setEnabled(false);
+		shiftUpYAction->setEnabled(false);
+		shiftDownYAction->setEnabled(false);
+		scaleAutoXAction->setEnabled(vert);
+		scaleAutoYAction->setEnabled(!vert);
+		break;
+	case Worksheet::CartesianPlotActionMode::ApplyActionToSelection:
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
+		zoomInXAction->setEnabled(vert);
+		zoomOutXAction->setEnabled(vert);
+		zoomInYAction->setEnabled(!vert);
+		zoomOutYAction->setEnabled(!vert);
+		shiftLeftXAction->setEnabled(vert);
+		shiftRightXAction->setEnabled(vert);
+		shiftUpYAction->setEnabled(!vert);
+		shiftDownYAction->setEnabled(!vert);
+		scaleAutoXAction->setEnabled(vert);
+		scaleAutoYAction->setEnabled(!vert);
+		break;
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAllX:
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
+		zoomInXAction->setEnabled(vert);
+		zoomOutXAction->setEnabled(vert);
+		zoomInYAction->setEnabled(!vert);
+		zoomOutYAction->setEnabled(!vert);
+		shiftLeftXAction->setEnabled(vert);
+		shiftRightXAction->setEnabled(vert);
+		shiftUpYAction->setEnabled(!vert);
+		shiftDownYAction->setEnabled(!vert);
+		scaleAutoXAction->setEnabled(vert);
+		scaleAutoYAction->setEnabled(!vert);
+		break;
+	case Worksheet::CartesianPlotActionMode::ApplyActionToAllY:
+		cartesianPlotZoomXSelectionModeAction->setEnabled(vert);
+		cartesianPlotZoomYSelectionModeAction->setEnabled(!vert);
+		zoomInXAction->setEnabled(vert);
+		zoomOutXAction->setEnabled(vert);
+		zoomInYAction->setEnabled(!vert);
+		zoomOutYAction->setEnabled(!vert);
+		shiftLeftXAction->setEnabled(vert);
+		shiftRightXAction->setEnabled(vert);
+		shiftUpYAction->setEnabled(!vert);
+		shiftDownYAction->setEnabled(!vert);
+		scaleAutoXAction->setEnabled(vert);
+		scaleAutoYAction->setEnabled(!vert);
+		break;
+	}
+	cartesianPlotSelectionModeAction->setEnabled(true);
+	cartesianPlotCursorModeAction->setEnabled(false);
+}
+
 void WorksheetView::handleXYCurveSelected() {
 	/* Action to All: action is applied to all ranges
 	 *	- Disable
@@ -1996,21 +2084,30 @@ void WorksheetView::handleCartesianPlotActions() {
 	bool handled = false, plot = false;
 	for (auto* item : m_selectedItems) {
 		//TODO: or if a children of a plot is selected
-		int key = item->data(0).toInt();
-		if (key == static_cast<int>(AspectType::CartesianPlot)) {
+		auto key = static_cast<AspectType>(item->data(0).toULongLong());
+		if (key == AspectType::CartesianPlot) {
 			handled = true;
 			plot = true;
 			m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
 			handleCartesianPlotSelected(static_cast<CartesianPlot*>(m_selectedElement));
 			break;
-		} else if (key == static_cast<int>(AspectType::XYCurve)) {
+		} else if (AbstractAspect::inherits(key, AspectType::XYCurve)) {
 			handled = true;
 			m_selectedElement = static_cast<XYCurvePrivate*>(item)->q;
 			// XYCurvePrivate does not depend yet on WorksheetElementContainerPrivate
 			//m_selectedElement = static_cast<WorksheetElementContainerPrivate*>(item)->q;
 			handleXYCurveSelected();
 			break;
-		} else if (key == static_cast<int>(AspectType::Axis)) {
+		} else if (AbstractAspect::inherits(key, AspectType::XYAnalysisCurve)) {
+			handled = true;
+			m_selectedElement = static_cast<XYAnalysisCurvePrivate*>(item)->q;
+			handleXYCurveSelected();
+			break;
+		} else if (key == AspectType::ReferenceLine) {
+			handled = true;
+			m_selectedElement = static_cast<ReferenceLinePrivate*>(item)->q;
+			handleReferenceLineSelected();
+		} else if (key == AspectType::Axis) {
 			handled = true;
 			m_selectedElement = static_cast<AxisPrivate*>(item)->q;
 			// AxisPrivate does not depend yet on WorksheetElementContainerPrivate
