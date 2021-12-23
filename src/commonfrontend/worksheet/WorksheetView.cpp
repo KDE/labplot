@@ -966,15 +966,15 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 }
 
 bool WorksheetView::isPlotAtPos(QPoint pos) const {
-	bool plot = false;
 	QGraphicsItem* item = itemAt(pos);
 	if (item) {
-		plot = item->data(0).toInt() == static_cast<int>(AspectType::CartesianPlot);
-		if (!plot && item->parentItem())
-			plot = item->parentItem()->data(0).toInt() == static_cast<int>(AspectType::CartesianPlot);
+		WorksheetElement* w = static_cast<WorksheetElementPrivate*>(item)->q;
+		if (w->type() == AspectType::CartesianPlot ||
+			w->parent(AspectType::CartesianPlot))
+			return true;
 	}
 
-	return plot;
+	return false;
 }
 
 CartesianPlot* WorksheetView::plotAt(QPoint pos) const {
