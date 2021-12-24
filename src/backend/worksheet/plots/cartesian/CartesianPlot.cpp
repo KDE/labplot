@@ -623,14 +623,18 @@ void CartesianPlot::initMenus() {
 	themeMenu = new QMenu(i18n("Theme"));
 	themeMenu->setIcon(QIcon::fromTheme("color-management"));
 #ifndef SDK
-	auto* themeWidget = new ThemesWidget(nullptr);
-	themeWidget->setFixedMode();
-	connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::loadTheme);
-	connect(themeWidget, &ThemesWidget::themeSelected, themeMenu, &QMenu::close);
+	connect(themeMenu, &QMenu::aboutToShow, this, [=]() {
+		if (!themeMenu->isEmpty()) return;
+		auto* themeWidget = new ThemesWidget(nullptr);
+		themeWidget->setFixedMode();
+		connect(themeWidget, &ThemesWidget::themeSelected, this, &CartesianPlot::loadTheme);
+		connect(themeWidget, &ThemesWidget::themeSelected, themeMenu, &QMenu::close);
 
-	auto* widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(themeWidget);
-	themeMenu->addAction(widgetAction);
+		auto* widgetAction = new QWidgetAction(this);
+		widgetAction->setDefaultWidget(themeWidget);
+		themeMenu->addAction(widgetAction);
+	}
+	);
 #endif
 
 	m_menusInitialized = true;

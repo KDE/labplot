@@ -590,14 +590,18 @@ void WorksheetView::initMenus() {
 	m_themeMenu = new QMenu(i18n("Theme"), this);
 	m_themeMenu->setIcon(QIcon::fromTheme("color-management"));
 #ifndef SDK
-	auto* themeWidget = new ThemesWidget(nullptr);
-	themeWidget->setFixedMode();
-	connect(themeWidget, &ThemesWidget::themeSelected, m_worksheet, &Worksheet::setTheme);
-	connect(themeWidget, &ThemesWidget::themeSelected, m_themeMenu, &QMenu::close);
+	connect(m_themeMenu, &QMenu::aboutToShow, this, [=]() {
+		if (!m_themeMenu->isEmpty()) return;
+		auto* themeWidget = new ThemesWidget(nullptr);
+		themeWidget->setFixedMode();
+		connect(themeWidget, &ThemesWidget::themeSelected, m_worksheet, &Worksheet::setTheme);
+		connect(themeWidget, &ThemesWidget::themeSelected, m_themeMenu, &QMenu::close);
 
-	auto* widgetAction = new QWidgetAction(this);
-	widgetAction->setDefaultWidget(themeWidget);
-	m_themeMenu->addAction(widgetAction);
+		auto* widgetAction = new QWidgetAction(this);
+		widgetAction->setDefaultWidget(themeWidget);
+		m_themeMenu->addAction(widgetAction);
+	}
+	);
 #endif
 	m_menusInitialized = true;
 }
@@ -2259,8 +2263,8 @@ void WorksheetView::print(QPrinter* printer) {
 	painter.setRenderHint(QPainter::Antialiasing);
 
 	// draw background
-	QRectF page_rect = printer->pageRect();
-	QRectF scene_rect = scene()->sceneRect();
+	const auto& page_rect = printer->pageRect();
+	const auto& scene_rect = scene()->sceneRect();
 	float scale = qMax(scene_rect.width()/page_rect.width(),scene_rect.height()/page_rect.height());
 	drawBackgroundItems(&painter, QRectF(0,0,scene_rect.width()/scale,scene_rect.height()/scale));
 
