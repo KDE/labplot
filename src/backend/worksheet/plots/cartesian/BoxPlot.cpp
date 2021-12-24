@@ -92,42 +92,42 @@ void BoxPlot::init() {
 	d->symbolMean = new Symbol("symbolMean");
 	addChild(d->symbolMean);
 	d->symbolMean->setHidden(true);
-	connect(d->symbolMean, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
-	connect(d->symbolMean, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 	d->symbolMean->init(group);
 	d->symbolMean->setStyle(Symbol::Style::Square);
+	connect(d->symbolMean, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbolMean, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 
 	d->symbolMedian = new Symbol("symbolMedian");
 	addChild(d->symbolMedian);
 	d->symbolMedian->setHidden(true);
-	connect(d->symbolMedian, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
-	connect(d->symbolMedian, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 	d->symbolMedian->init(group);
 	d->symbolMedian->setStyle(Symbol::Style::NoSymbols);
+	connect(d->symbolMedian, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbolMedian, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 
 	d->symbolOutlier = new Symbol("symbolOutlier");
 	addChild(d->symbolOutlier);
 	d->symbolOutlier->setHidden(true);
+	d->symbolOutlier->init(group);
 	connect(d->symbolOutlier, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
 	connect(d->symbolOutlier, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
-	d->symbolOutlier->init(group);
 
 	d->symbolFarOut = new Symbol("symbolFarOut");
 	addChild(d->symbolFarOut);
 	d->symbolFarOut->setHidden(true);
-	connect(d->symbolFarOut, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
-	connect(d->symbolFarOut, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 	d->symbolFarOut->init(group);
 	d->symbolFarOut->setStyle(Symbol::Style::Plus);
+	connect(d->symbolFarOut, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbolFarOut, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 
 	d->symbolData = new Symbol("symbolData");
 	addChild(d->symbolData);
 	d->symbolData->setHidden(true);
-	connect(d->symbolData, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
-	connect(d->symbolData, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 	d->symbolData->init(group);
 	d->symbolData->setStyle(Symbol::Style::NoSymbols);
 	d->symbolData->setOpacity(0.5);
+	connect(d->symbolData, &Symbol::updateRequested, [=]{d->recalcShapeAndBoundingRect();});
+	connect(d->symbolData, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
 
 	d->jitteringEnabled = group.readEntry("JitteringEnabled", true);
 

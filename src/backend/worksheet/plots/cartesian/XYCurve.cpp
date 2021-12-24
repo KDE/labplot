@@ -98,9 +98,9 @@ void XYCurve::init() {
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
+	d->symbol->init(group);
 	connect(d->symbol, &Symbol::updateRequested, [=]{d->updateSymbols();});
 	connect(d->symbol, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
-	d->symbol->init(group);
 
 	d->valuesType = (ValuesType) group.readEntry("ValuesType", static_cast<int>(ValuesType::NoValues));
 	d->valuesPosition = (ValuesPosition) group.readEntry("ValuesPosition", static_cast<int>(ValuesPosition::Above));

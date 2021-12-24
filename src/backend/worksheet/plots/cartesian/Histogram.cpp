@@ -84,9 +84,9 @@ void Histogram::init() {
 	d->symbol = new Symbol(QString());
 	addChild(d->symbol);
 	d->symbol->setHidden(true);
+	d->symbol->init(group);
 	connect(d->symbol, &Symbol::updateRequested, [=]{d->updateSymbols();});
 	connect(d->symbol, &Symbol::updatePixmapRequested, [=]{d->updatePixmap();});
-	d->symbol->init(group);
 
 	d->valuesType = (Histogram::ValuesType) group.readEntry("ValuesType", (int)Histogram::NoValues);
 	d->valuesColumn = nullptr;
