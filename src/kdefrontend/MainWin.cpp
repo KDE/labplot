@@ -1035,30 +1035,41 @@ void MainWin::updateGUI() {
 		w = dynamic_cast<Worksheet*>(m_currentAspect->parent(AspectType::Worksheet));
 
 	if (w) {
+		bool update = (w != m_lastWorksheet);
+		m_lastWorksheet = w;
+
 		//populate worksheet menu
 		auto* view = qobject_cast<WorksheetView*>(w->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("worksheet", this));
-		menu->clear();
-		view->createContextMenu(menu);
+		if (update) {
+			menu->clear();
+			view->createContextMenu(menu);
+		}
 		menu->setEnabled(true);
 
 		//populate analysis menu
 		menu = qobject_cast<QMenu*>(factory->container("analysis", this));
-		menu->clear();
-		view->createAnalysisMenu(menu);
+		if (update) {
+			menu->clear();
+			view->createAnalysisMenu(menu);
+		}
 		menu->setEnabled(true);
 
 		//populate worksheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container("worksheet_toolbar", this));
-		toolbar->clear();
-		view->fillToolBar(toolbar);
+		if (update) {
+			toolbar->clear();
+			view->fillToolBar(toolbar);
+		}
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
 		//populate the toolbar for cartesian plots
 		toolbar = qobject_cast<QToolBar*>(factory->container("cartesian_plot_toolbar", this));
-		toolbar->clear();
-		view->fillCartesianPlotToolBar(toolbar);
+		if (update) {
+			toolbar->clear();
+			view->fillCartesianPlotToolBar(toolbar);
+		}
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
@@ -1082,17 +1093,24 @@ void MainWin::updateGUI() {
 	if (!spreadsheet)
 		spreadsheet = dynamic_cast<Spreadsheet*>(m_currentAspect->parent(AspectType::Spreadsheet));
 	if (spreadsheet) {
+		bool update = (spreadsheet != m_lastSpreadsheet);
+		m_lastSpreadsheet = spreadsheet;
+
 		//populate spreadsheet-menu
 		auto* view = qobject_cast<SpreadsheetView*>(spreadsheet->view());
 		auto* menu = qobject_cast<QMenu*>(factory->container("spreadsheet", this));
-		menu->clear();
-		view->createContextMenu(menu);
+		if (update) {
+			menu->clear();
+			view->createContextMenu(menu);
+		}
 		menu->setEnabled(true);
 
 		//populate spreadsheet-toolbar
 		auto* toolbar = qobject_cast<QToolBar*>(factory->container("spreadsheet_toolbar", this));
-		toolbar->clear();
-		view->fillToolBar(toolbar);
+		if (update) {
+			toolbar->clear();
+			view->fillToolBar(toolbar);
+		}
 		toolbar->setVisible(true);
 		toolbar->setEnabled(true);
 
@@ -1339,6 +1357,8 @@ void MainWin::openProject(const QString& filename) {
 		return;
 
 	WAIT_CURSOR;
+	statusBar()->showMessage(i18n("Loading %1...", filename));
+	QApplication::processEvents(QEventLoop::AllEvents, 0);
 	m_project->setFileName(filename);
 	QElapsedTimer timer;
 	timer.start();
@@ -2108,9 +2128,7 @@ void MainWin::createFolderContextMenu(const Folder*, QMenu* menu) const {
 
 void MainWin::undo() {
 	WAIT_CURSOR;
-	m_project->setSuppressAspectAddedSignal(true);//don't change the current aspect in the project explorer
 	m_project->undoStack()->undo();
-	m_project->setSuppressAspectAddedSignal(false);
 	if (m_project->undoStack()->index() == 0) {
 		m_saveAction->setEnabled(false);
 		m_undoAction->setEnabled(false);
@@ -2123,9 +2141,7 @@ void MainWin::undo() {
 
 void MainWin::redo() {
 	WAIT_CURSOR;
-	m_project->setSuppressAspectAddedSignal(true);
 	m_project->undoStack()->redo();
-	m_project->setSuppressAspectAddedSignal(false);
 	m_project->setChanged(true);
 	projectChanged();
 	if (m_project->undoStack()->index() == m_project->undoStack()->count())

@@ -142,6 +142,8 @@ private:
 // 	WelcomeScreenHelper* m_welcomeScreenHelper{nullptr};
 	ImportDatasetWidget* m_importDatasetWidget{nullptr};
 	QString m_lastOpenFileFilter;
+	const Worksheet* m_lastWorksheet{nullptr};
+	const Spreadsheet* m_lastSpreadsheet{nullptr};
 	TitleBarMode m_titleBarMode{TitleBarMode::ShowFilePath};
 
 #ifdef HAVE_KUSERFEEDBACK

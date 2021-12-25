@@ -54,7 +54,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	m_htmlText = QString("<table border=0 width=100%>"
 	                     "<tr>"
 	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
-	                     + i18n("Location measures")+
+	                     + i18n("Location Measures")+
 	                     "</big><b></td>"
 	                     "</tr>"
 // 	                     "<tr></tr>"
@@ -133,7 +133,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	                     "<tr></tr>"
 	                     "<tr>"
 	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
-	                     + i18n("Dispersion measures")+
+	                     + i18n("Dispersion Measures")+
 	                     "</big></b></td>"
 	                     "</tr>"
 // 	                     "<tr></tr>"
@@ -176,7 +176,7 @@ StatisticsColumnWidget::StatisticsColumnWidget(const Column* column, QWidget* pa
 	                     "<tr></tr>"
 	                     "<tr>"
 	                     "<td colspan=2 align=center bgcolor=" + htmlColor + "><b><big>"
-	                     + i18n("Shape measures")+
+	                     + i18n("Shape Measures")+
 	                     "</big></b></td>"
 	                     "</tr>"
 // 	                     "<tr></tr>"
