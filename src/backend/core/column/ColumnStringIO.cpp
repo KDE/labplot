@@ -55,7 +55,6 @@ void ColumnStringIO::setTextAt(int row, const QString &value) {
 	m_owner->copy(m_owner->d->inputFilter()->output(0), 0, row, 1);
 	m_setting = false;
 	m_to_set.clear();
-	m_owner->setChanged();
 }
 
 QString ColumnStringIO::textAt(int row) const {

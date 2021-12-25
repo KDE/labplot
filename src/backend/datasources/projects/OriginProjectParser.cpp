@@ -312,7 +312,11 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 			}
 		}
 
-		//load top-level children
+		//load top-level children.
+		//use 'preview' as 'loading'-parameter in the constructors to skip the init() calls in Worksheet, Spreadsheet and Matrix:
+		//* when doing the preview of the project we don't want to initialize the objects and skip init()'s
+		//* when loading the project, 'preview' is false and we initialize all objects with our default values
+		//  and set all possible properties from Origin additionally
 		AbstractAspect* aspect = nullptr;
 		switch (it->type) {
 		case Origin::ProjectNode::Folder: {
@@ -351,16 +355,18 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 		}
 		case Origin::ProjectNode::SpreadSheet: {
 			DEBUG(Q_FUNC_INFO << ", top level SPREADSHEET");
-			Spreadsheet* spreadsheet = new Spreadsheet(name);
+			Spreadsheet* spreadsheet = new Spreadsheet(name, preview);
 			loadSpreadsheet(spreadsheet, preview, name);
 			aspect = spreadsheet;
 			break;
 		}
 		case Origin::ProjectNode::Graph: {
 			DEBUG(Q_FUNC_INFO << ", top level GRAPH");
-			Worksheet* worksheet = new Worksheet(name);
-			worksheet->setIsLoading(true);
-			worksheet->setTheme(QString());
+			Worksheet* worksheet = new Worksheet(name, preview);
+			if (!preview) {
+				worksheet->setIsLoading(true);
+				worksheet->setTheme(QString());
+			}
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
 			break;
@@ -372,7 +378,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 			DEBUG("	number of sheets = " << originMatrix.sheets.size());
 			if (originMatrix.sheets.size() == 1) {
 				// single sheet -> load into a matrix
-				Matrix* matrix = new Matrix(name);
+				Matrix* matrix = new Matrix(name, preview);
 				loadMatrix(matrix, preview);
 				aspect = matrix;
 			} else {

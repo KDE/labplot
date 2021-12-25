@@ -532,11 +532,7 @@ else \
 
 #define READ_STRING_VALUE(name, var) \
 { \
-str = attribs.value(name).toString(); \
-if (str.isEmpty()) \
-	reader->raiseWarning(attributeWarning.subs(name).toString()); \
-else \
-	d->var = str; \
+d->var = attribs.value(name).toString(); \
 }
 
 //used in Project::load()

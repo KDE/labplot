@@ -253,7 +253,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		addChildFast(matrix);
 #endif
 	} else if (element_name == QLatin1String("worksheet")) {
-		Worksheet* worksheet = new Worksheet(QString());
+		Worksheet* worksheet = new Worksheet(QString(), true);
 		worksheet->setIsLoading(true);
 		if (!worksheet->load(reader, preview)) {
 			delete worksheet;
