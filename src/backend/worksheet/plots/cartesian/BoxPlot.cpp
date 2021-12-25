@@ -1248,7 +1248,7 @@ void BoxPlotPrivate::recalcShapeAndBoundingRect() {
 
 		//far out values
 		if (symbolFarOut->style() != Symbol::Style::NoSymbols && !m_farOutPoints.at(i).isEmpty()) {
-			QPainterPath path = Symbol::stylePath(symbolOutlier->style());
+			QPainterPath path = Symbol::stylePath(symbolFarOut->style());
 			QTransform trafo;
 			trafo.scale(symbolFarOut->size(), symbolFarOut->size());
 			path = trafo.map(path);

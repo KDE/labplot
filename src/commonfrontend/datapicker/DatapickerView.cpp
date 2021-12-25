@@ -4,7 +4,7 @@
     Description          : View class for Datapicker
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2015-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -39,7 +39,6 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 	m_tabWidget->setTabShape(QTabWidget::Rounded);
 //     m_tabWidget->setMovable(true);
 	m_tabWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-	m_tabWidget->setMinimumSize(600, 600);
 
 	auto* layout = new QHBoxLayout(this);
 	layout->setContentsMargins(0, 0, 0, 0);
@@ -54,6 +53,11 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 		}
 	}
 	m_initializing = false;
+
+	if (!m_datapicker->isLoading()) {
+		const auto& size = m_datapicker->image()->view()->size();
+		resize(size.width()*1.1, size.height()*1.1);
+	}
 
 	//SIGNALs/SLOTs
 	connect(m_datapicker, &Datapicker::aspectDescriptionChanged, this, &DatapickerView::handleDescriptionChanged);

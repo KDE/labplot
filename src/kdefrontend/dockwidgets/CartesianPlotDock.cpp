@@ -905,6 +905,11 @@ void CartesianPlotDock::retranslateUi() {
 	ui.lRangeType->setToolTip(msg);
 	ui.cbRangeType->setToolTip(msg);
 
+
+	msg = i18n("If checked, automatically extend the plot range to nice values");
+	ui.lNiceExtend->setToolTip(msg);
+	ui.cbNiceExtend->setToolTip(msg);
+
 	//scale breakings
 	ui.cbXBreakStyle->addItem( i18n("Simple") );
 	ui.cbXBreakStyle->addItem( i18n("Vertical") );
