@@ -1,7 +1,19 @@
 Dependencies:
-- 'on': ['Linux', 'FreeBSD', 'Windows', 'Android']
+- 'on': ['Linux', 'FreeBSD', 'Windows']
   'require':
     'frameworks/extra-cmake-modules': '@stable'
+    'frameworks/kcrash': '@stable'
+    'frameworks/kguiaddons': '@stable'
+    'frameworks/ki18n': '@stable'
+    'frameworks/kparts': '@stable'
+    'frameworks/kwidgetaddons': '@stable'
+    'frameworks/kdoctools': '@stable'
+    'frameworks/karchive': '@stable'
+    'frameworks/kconfig': '@stable'
+    'frameworks/kcoreaddons': '@stable'
+    'frameworks/kitemviews': '@stable'
+    'frameworks/ktexteditor': '@stable'
+    'frameworks/kxmlgui': '@stable'
 
 Environment:
   KDECI_BUILD: "TRUE"
