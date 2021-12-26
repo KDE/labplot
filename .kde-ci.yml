@@ -1,0 +1,10 @@
+Dependencies:
+- 'on': ['Linux', 'FreeBSD', 'Windows', 'Android']
+  'require':
+    'frameworks/extra-cmake-modules': '@stable'
+
+Environment:
+  KDECI_BUILD: "TRUE"
+
+Options:
+  setup-dbus-session: False
