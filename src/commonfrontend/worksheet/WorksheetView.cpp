@@ -968,7 +968,7 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 bool WorksheetView::isPlotAtPos(QPoint pos) const {
 	QGraphicsItem* item = itemAt(pos);
 	if (item) {
-		WorksheetElement* w = static_cast<WorksheetElementPrivate*>(item)->q;
+		const auto* w = static_cast<WorksheetElementPrivate*>(item)->q;
 		if (w->type() == AspectType::CartesianPlot ||
 			w->parent(AspectType::CartesianPlot))
 			return true;
