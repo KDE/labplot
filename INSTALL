@@ -1,4 +1,4 @@
-To compile LabPlot following packages are required:
+To compile LabPlot from source following packages are required:
 	* CMake version 3.2.0 or higher
 	* ECM (extra cmake modules)
 	* KDE Frameworks 5.16.0 or higher (including the devel-package),
@@ -6,7 +6,7 @@ To compile LabPlot following packages are required:
 	* Qt version 5.6 or higher (including the devel-package, libqt5-devel or similar)
 	* GSL version 1.15 or higher (including the devel-package, gsl-devel or similar)
 
-optional
+optional packages
 	* LaTeX and Poppler version 0.62 or higher (including the devel-package, libpoppler-qt5-devel or similar) to enable LaTeX typesetting in LabPlot
 		* Required LaTeX packages: 'color', 'preview' and, in case xelatex or lualatex is used, 'xltxtra'.
 		* On Windows you need a LaTeX installation (like MiKTeX) for LaTeX support.
