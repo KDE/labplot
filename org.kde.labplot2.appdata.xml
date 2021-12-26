@@ -34,7 +34,7 @@
   <name xml:lang="x-test">xxLabPlotxx</name>
   <name xml:lang="zh-CN">LabPlot</name>
   <name xml:lang="zh-TW">LabPlot</name>
-  <summary>Interactive graphing and analysis of scientific data</summary>
+  <summary>Interactive Data Visualization and Analysis</summary>
   <summary xml:lang="ca">Representació interactiva de grafs i anàlisi de dades científiques</summary>
   <summary xml:lang="ca-valencia">Representació interactiva de grafs i anàlisi de dades científiques</summary>
   <summary xml:lang="cs">Interaktivní vykreslování grafů a analýza vědeckých dat</summary>
@@ -60,7 +60,7 @@
   <summary xml:lang="x-test">xxInteractive graphing and analysis of scientific dataxx</summary>
   <description>
     <p>
-      LabPlot is an application for interactive graphing and analysis of scientific data.
+      LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.
     </p>
     <p xml:lang="ca">El LabPlot és una aplicació per a la representació interactiva de grafs i anàlisi de dades científiques.</p>
     <p xml:lang="ca-valencia">El LabPlot és una aplicació per a la representació interactiva de grafs i anàlisi de dades científiques.</p>
