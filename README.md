@@ -1,6 +1,13 @@
 # LabPlot
 
-LabPlot is a KDE-application for interactive graphing and analysis of scientific data. LabPlot provides an easy way to create, manage and edit plots and to perform data analysis.
+LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.
+
+* High-quality interactive visualizations with just a few clicks
+* Reliable and easy data analysis, no coding required!
+* Support for live data and data extraction from plots
+* Drag & drop import and extensive export capabilities
+* Interactive programming notebooks for advanced users
+* Available for Windows, macOS, Linux and FreeBSD
 
 Visit our [Homepage](https://labplot.kde.org) for more details.
 
