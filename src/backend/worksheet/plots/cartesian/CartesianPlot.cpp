@@ -2250,26 +2250,25 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		autoScale(-1, -1);	// update all plot ranges
 	}
 
-	//new child was added which might chang the ranges and the axis tick labels.
-	//adjust the plot area padding if the axis label is outside of the plot area
-	const auto& axes = children<Axis>();
-	for (auto* axis : axes) {
-		if (axis->orientation() == WorksheetElement::Orientation::Vertical) {
-			double delta = plotArea()->graphicsItem()->boundingRect().x()
-							- axis->graphicsItem()->boundingRect().x();
-			if (delta > 0) {
-				setUndoAware(false);
-// 				setSuppressRetransform(true);
-				setSymmetricPadding(false);
-				setHorizontalPadding(horizontalPadding() + delta);
-// 				setSuppressRetransform(false);
-				setUndoAware(true);
-			}
-			break;
-		}
-	}
-
 	if (!isLoading() && !this->pasted() && !child->pasted() && !child->isMoved()) {
+		//new child was added which might chang the ranges and the axis tick labels.
+		//adjust the plot area padding if the axis label is outside of the plot area
+		const auto& axes = children<Axis>();
+		for (auto* axis : axes) {
+			if (axis->orientation() == WorksheetElement::Orientation::Vertical) {
+				double delta = plotArea()->graphicsItem()->boundingRect().x()
+								- axis->graphicsItem()->boundingRect().x();
+				if (delta > 0) {
+					setUndoAware(false);
+// 					setSuppressRetransform(true);
+					setSymmetricPadding(false);
+					setHorizontalPadding(horizontalPadding() + delta);
+// 					setSuppressRetransform(false);
+					setUndoAware(true);
+				}
+				break;
+			}
+		}
 		//if a theme was selected, apply the theme settings for newly added children,
 		//load default theme settings otherwise.
 		const auto* elem = qobject_cast<const WorksheetElement*>(child);

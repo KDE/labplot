@@ -67,7 +67,7 @@ public:
 	bool load(XmlStreamReader*, bool preview) override;
 	bool load(const QString&, bool preview = false);
 	static void restorePointers(AbstractAspect*, bool preview = false);
-	void retransformElements(AbstractAspect *aspect);
+	static void retransformElements(AbstractAspect*);
 
 	static bool isLabPlotProject(const QString& fileName);
 	static QString supportedExtensions();

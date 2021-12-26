@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : base class for project parsers
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
@@ -112,6 +112,8 @@ void ProjectParser::importTo(Folder* targetFolder, const QStringList& selectedPa
 	targetFolder->endMacro();
 
 	Project::restorePointers(targetFolder);
+	Project::retransformElements(targetFolder);
+
 	delete project;
 
 	if (childToNavigate != nullptr)
