@@ -247,6 +247,14 @@ bool CantorWorksheet::printPreview() const {
 	return true;
 }
 
+void CantorWorksheet::evaluate() {
+	m_part->action("evaluate_worksheet")->trigger();
+}
+
+void CantorWorksheet::restart() {
+	m_part->action("restart_backend")->trigger();
+}
+
 //##############################################################################
 //##################  Serialization/Deserialization  ###########################
 //##############################################################################

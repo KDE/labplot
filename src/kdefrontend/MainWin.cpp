@@ -764,7 +764,7 @@ void MainWin::initMenus() {
 
 #ifdef HAVE_CANTOR_LIBS
 	m_newMenu->addSeparator();
-	m_newCantorWorksheetMenu = new QMenu(i18n("CAS Worksheet"), this);
+	m_newCantorWorksheetMenu = new QMenu(i18n("Notebook"), this);
 	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
 
 	//"Adding Cantor backends to menu and context menu"
@@ -791,9 +791,9 @@ void MainWin::initMenus() {
 	}
 	m_newMenu->addMenu(m_newCantorWorksheetMenu);
 #else
-	delete this->guiFactory()->container("cas_worksheet", this);
-	delete this->guiFactory()->container("new_cas_worksheet", this);
-	delete this->guiFactory()->container("cas_worksheet_toolbar", this);
+	delete this->guiFactory()->container("notebook", this);
+	delete this->guiFactory()->container("new_notebook", this);
+	delete this->guiFactory()->container("notebook_toolbar", this);
 #endif
 
 	//menu subwindow visibility policy
@@ -938,8 +938,8 @@ void MainWin::updateGUIOnProjectChanges() {
 // 		factory->container("barchart_toolbar",this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 #ifdef HAVE_CANTOR_LIBS
-		factory->container("cas_worksheet", this)->setEnabled(false);
-		factory->container("cas_worksheet_toolbar", this)->hide();
+		factory->container("notebook", this)->setEnabled(false);
+		factory->container("notebook_toolbar", this)->hide();
 #endif
 	}
 
@@ -1007,8 +1007,8 @@ void MainWin::updateGUI() {
 		factory->container("cartesian_plot_toolbar", this)->hide();
 		factory->container("datapicker_toolbar", this)->hide();
 #ifdef HAVE_CANTOR_LIBS
-		factory->container("cas_worksheet", this)->setEnabled(false);
-		factory->container("cas_worksheet_toolbar", this)->hide();
+		factory->container("notebook", this)->setEnabled(false);
+		factory->container("notebook_toolbar", this)->hide();
 #endif
 		m_printAction->setEnabled(false);
 		m_printPreviewAction->setEnabled(false);
@@ -1154,19 +1154,19 @@ void MainWin::updateGUI() {
 		cantorworksheet = dynamic_cast<CantorWorksheet*>(m_currentAspect->parent(AspectType::CantorWorksheet));
 	if (cantorworksheet) {
 		auto* view = qobject_cast<CantorWorksheetView*>(cantorworksheet->view());
-		auto* menu = qobject_cast<QMenu*>(factory->container("cas_worksheet", this));
+		auto* menu = qobject_cast<QMenu*>(factory->container("notebook", this));
 		menu->clear();
 		view->createContextMenu(menu);
 		menu->setEnabled(true);
 
-		auto* toolbar = qobject_cast<QToolBar*>(factory->container("cas_worksheet_toolbar", this));
+		auto* toolbar = qobject_cast<QToolBar*>(factory->container("notebook_toolbar", this));
 		toolbar->setVisible(true);
 		toolbar->clear();
 		view->fillToolBar(toolbar);
 	} else {
 		//no Cantor worksheet selected -> deactivate Cantor worksheet related menu and toolbar
-		factory->container("cas_worksheet", this)->setEnabled(false);
-		factory->container("cas_worksheet_toolbar", this)->setVisible(false);
+		factory->container("notebook", this)->setEnabled(false);
+		factory->container("notebook_toolbar", this)->setVisible(false);
 	}
 #endif
 

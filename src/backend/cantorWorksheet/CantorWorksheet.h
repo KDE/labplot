@@ -44,6 +44,9 @@ public:
 	bool printView() override;
 	bool printPreview() const override;
 
+	void evaluate();
+	void restart();
+
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
 

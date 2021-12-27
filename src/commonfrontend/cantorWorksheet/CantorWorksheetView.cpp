@@ -47,7 +47,7 @@ void CantorWorksheetView::initActions() {
 	m_restartBackendAction = new QAction(QIcon::fromTheme("system-reboot"), i18n("Restart Backend"), cantorActionGroup);
 	m_restartBackendAction->setData("restart_backend");
 
-	m_evaluateWorsheetAction = new QAction(QIcon::fromTheme("system-run"), i18n("Evaluate Worksheet"), cantorActionGroup);
+	m_evaluateWorsheetAction = new QAction(QIcon::fromTheme("system-run"), i18n("Evaluate Notebook"), cantorActionGroup);
 	m_evaluateWorsheetAction->setData("evaluate_worksheet");
 
 	m_evaluateEntryAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18n("Evaluate Entry"), cantorActionGroup);
@@ -148,19 +148,6 @@ void CantorWorksheetView::initActions() {
 }
 
 void CantorWorksheetView::initMenus() {
-	m_worksheetMenu = new QMenu(i18n("Worksheet"), m_part->widget());
-	m_worksheetMenu->addAction(m_evaluateWorsheetAction);
-	m_worksheetMenu->addSeparator();
-	m_worksheetMenu->addAction(m_evaluateEntryAction);
-	m_worksheetMenu->addAction(m_insertCommandEntryAction);
-	m_worksheetMenu->addAction(m_insertTextEntryAction);
-	if (m_insertMarkdownEntryAction)
-		m_worksheetMenu->addAction(m_insertMarkdownEntryAction);
-	m_worksheetMenu->addAction(m_insertLatexEntryAction);
-	m_worksheetMenu->addAction(m_insertPageBreakAction);
-	m_worksheetMenu->addSeparator();
-	m_worksheetMenu->addAction(m_removeCurrentEntryAction);
-
 	if (m_invertMatrixAction || m_createMatrixAction || m_computeEigenvectorsAction || m_computeEigenvaluesAction) {
 		m_linearAlgebraMenu = new QMenu("Linear Algebra", m_part->widget());
 		if (m_invertMatrixAction)
@@ -210,14 +197,34 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 	if (menu->actions().size()>1)
 		firstAction = menu->actions().at(1);
 
-	if (!m_worksheetMenu)
+	if (!m_settingsMenu)
 		initMenus();
 
-	menu->insertMenu(firstAction, m_worksheetMenu);
-	if (m_linearAlgebraMenu)
-		menu->insertMenu(firstAction, m_linearAlgebraMenu);
-	if (m_calculateMenu)
-		menu->insertMenu(firstAction, m_calculateMenu);
+	menu->insertAction(firstAction, m_evaluateWorsheetAction);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, m_evaluateEntryAction);
+	menu->addSeparator();
+	menu->insertAction(firstAction, m_insertCommandEntryAction);
+	menu->insertAction(firstAction, m_insertTextEntryAction);
+	if (m_insertMarkdownEntryAction)
+		menu->insertAction(firstAction, m_insertMarkdownEntryAction);
+	menu->insertAction(firstAction, m_insertLatexEntryAction);
+	menu->insertAction(firstAction, m_insertPageBreakAction);
+	menu->insertSeparator(firstAction);
+	menu->insertAction(firstAction, m_removeCurrentEntryAction);
+
+	//assistants, if available
+	if (m_linearAlgebraMenu || m_calculateMenu) {
+		menu->insertSeparator(firstAction);
+		auto* menuAssistants = new QMenu(i18n("Assistants"));
+		if (m_linearAlgebraMenu)
+			menuAssistants->addMenu(m_linearAlgebraMenu);
+		if (m_calculateMenu)
+			menuAssistants->addMenu(m_calculateMenu);
+
+		menu->insertMenu(firstAction, menuAssistants);
+	}
+
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_zoomIn);
 	menu->insertAction(firstAction, m_zoomOut);
@@ -234,8 +241,12 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
 	if (!m_part)
 		return;
-	toolbar->addAction(m_restartBackendAction);
 	toolbar->addAction(m_evaluateWorsheetAction);
+	toolbar->addAction(m_find);
+	toolbar->addAction(m_zoomIn);
+	toolbar->addAction(m_zoomOut);
+	toolbar->addSeparator();
+	toolbar->addAction(m_restartBackendAction);
 }
 
 /*!

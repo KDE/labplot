@@ -65,7 +65,6 @@ private:
 	QAction* m_latexTypesetting{nullptr};
 	QAction* m_showCompletion{nullptr};
 
-	QMenu* m_worksheetMenu{nullptr};
 	QMenu* m_linearAlgebraMenu{nullptr};
 	QMenu* m_calculateMenu{nullptr};
 	QMenu* m_settingsMenu{nullptr};

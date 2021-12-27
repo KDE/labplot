@@ -28,8 +28,8 @@
 <text>Spreadsheet</text>
 </ToolBar>
 
-<ToolBar name="cas_worksheet_toolbar">
-<text>CAS Worksheet</text>
+<ToolBar name="notebook_toolbar">
+<text>Notebook</text>
 </ToolBar>
 
 <ToolBar name="cartesian_plot_toolbar" position="left">
@@ -52,7 +52,7 @@
 	<Action name="new_live_datasource" />
 	<Action name="new_database_datasource" />
 	<Separator/>
-	<Menu name="new_cas_worksheet"><text>&amp;CAS Worksheet</text>
+	<Menu name="new_notebook"><text>&amp;Notebook</text>
 	    <ActionList name="backends_list" />
 	</Menu>
 </Menu>
@@ -76,7 +76,7 @@
 <Menu name="spreadsheet"><text>&amp;Spreadsheet</text></Menu>
 <Menu name="matrix"><text>&amp;Matrix</text></Menu>
 <Menu name="worksheet"><text>&amp;Worksheet</text></Menu>
-<Menu name="cas_worksheet"><text>&amp;CAS Worksheet</text></Menu>
+<Menu name="notebook"><text>&amp;Notebook</text></Menu>
 <Menu name="analysis"><text>&amp;Analysis</text></Menu>
 <Menu name="datapicker"><text>&amp;Datapicker</text></Menu>
 <!-- <Menu name="drawing"><text>&amp;Drawing</text></Menu> -->

@@ -99,7 +99,8 @@ QMenu* AbstractPart::createContextMenu() {
 	}
 
 	//export/print actions
-	menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, &AbstractPart::exportRequested);
+	if (type != AspectType::CantorWorksheet)
+		menu->addAction(QIcon::fromTheme("document-export-database"), i18n("Export"), this, &AbstractPart::exportRequested);
 	menu->addAction(QIcon::fromTheme("document-print"), i18n("Print"), this, &AbstractPart::printRequested);
 	menu->addAction(QIcon::fromTheme("document-print-preview"), i18n("Print Preview"), this, &AbstractPart::printPreviewRequested);
 	menu->addSeparator();

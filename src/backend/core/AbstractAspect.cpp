@@ -308,7 +308,7 @@ QMenu* AbstractAspect::createContextMenu() {
 	//TODO: activate this again when the functionality is implemented
 // 	menu->addAction( KStandardAction::cut(this) );
 
-	if (!isFixed() && m_type != AspectType::Project) {
+	if (!isFixed() && m_type != AspectType::Project && m_type != AspectType::CantorWorksheet) {
 		//copy action:
 		//don't allow to copy fixed aspects
 		auto* action = KStandardAction::copy(this);

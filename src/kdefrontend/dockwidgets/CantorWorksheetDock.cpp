@@ -4,14 +4,13 @@
     Description          : widget for CantorWorksheet properties
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2015-2018 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CantorWorksheetDock.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
-#include <KParts/ReadWritePart>
 #include <QAction>
 
 CantorWorksheetDock::CantorWorksheetDock(QWidget* parent) : BaseDock(parent) {
@@ -53,8 +52,10 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
 		index.clear();
 		for (auto* plugin : plugins) {
+			//skip the "File Browser" plugin
 			if (plugin->name() == QLatin1String("File Browser"))
 				continue;
+
 			connect(plugin, &Cantor::PanelPlugin::visibilityRequested, this, &CantorWorksheetDock::visibilityRequested);
 			plugin->setParentWidget(this);
 			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
@@ -81,11 +82,13 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 //*************************************************************
 // "General"-tab
 void CantorWorksheetDock::evaluateWorksheet() {
-	m_worksheet->part()->action("evaluate_worksheet")->trigger();
+	for (auto* nb : m_cantorworksheetlist)
+		nb->evaluate();
 }
 
 void CantorWorksheetDock::restartBackend() {
-	m_worksheet->part()->action("restart_backend")->trigger();
+	for (auto* nb : m_cantorworksheetlist)
+		nb->restart();
 }
 
 /*!
