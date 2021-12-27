@@ -16,7 +16,7 @@ Dependencies:
     'frameworks/kxmlgui': '@stable'
     'frameworks/knewstuff': '@stable'
     'libraries/kuserfeedback': '@stable'
-    'edu/cantor': '@stable'
+    'kde/education/cantor': '@stable'
     'qtproject/qt/qtmqtt': '@stable'
 
 Environment:
