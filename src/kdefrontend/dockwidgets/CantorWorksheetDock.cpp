@@ -29,18 +29,12 @@ CantorWorksheetDock::CantorWorksheetDock(QWidget* parent) : BaseDock(parent) {
 }
 
 void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
-	m_initializing = true;
+	Lock lock(m_initializing);
 	m_cantorworksheetlist = list;
 	m_worksheet = list.first();
 	m_aspect = list.first();
 
-	//show name/comment
-	ui.leName->setText(m_worksheet->name());
-	ui.leName->setStyleSheet("");
-	ui.leName->setToolTip("");
-	ui.teComment->setText(m_worksheet->comment());
-
-	//show all available plugins
+	//remove the available panel plugins first
 	int k = 0;
 	int prev_index = ui.tabWidget->currentIndex();
 	for (int i : index) {
@@ -48,12 +42,23 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 		++k;
 	}
 
+	ui.leName->setStyleSheet("");
+	ui.leName->setToolTip("");
+
 	if (m_cantorworksheetlist.size() == 1) {
-		QList<Cantor::PanelPlugin*> plugins = m_cantorworksheetlist.first()->getPlugins();
+		//show name/comment
+		ui.leName->setText(m_worksheet->name());
+		ui.teComment->setText(m_worksheet->comment());
+
+		//add available panel plugins
+		const auto& plugins = m_cantorworksheetlist.first()->getPlugins();
 		index.clear();
 		for (auto* plugin : plugins) {
 			//skip the "File Browser" plugin
-			if (plugin->name() == QLatin1String("File Browser"))
+			//in the new code of Cantor the plugin id is set as the object name and we can use it.
+			//for the older version we need to rely on the translated name...
+			//TODO: remove the dependency on the plugin name later.
+			if (plugin->objectName() == QLatin1String("FileBrowserPanel") || plugin->name() == i18n("File Browser"))
 				continue;
 
 			connect(plugin, &Cantor::PanelPlugin::visibilityRequested, this, &CantorWorksheetDock::visibilityRequested);
@@ -61,7 +66,12 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
 			index.append(i);
 		}
+	} else {
+		//don't show any name/comment when multiple notebooks were selected
+		ui.leName->setText(QString());
+		ui.teComment->setText(QString());
 	}
+
 	ui.tabWidget->setCurrentIndex(prev_index);
 
 	if (m_worksheet->part()) {
@@ -74,7 +84,6 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 
 	//SIGNALs/SLOTs
 	connect(m_worksheet, &AbstractAspect::aspectDescriptionChanged, this, &CantorWorksheetDock::aspectDescriptionChanged);
-	m_initializing = false;
 }
 
 //*************************************************************

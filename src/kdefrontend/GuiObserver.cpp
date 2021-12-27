@@ -384,9 +384,9 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		{
 			auto list = castList<CantorWorksheet>(selectedAspects);
 			if (list.size() == 1)
-				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Worksheet", list.first()->backendName()));
+				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window %1 is a Cantor backend", "%1 Notebook", list.first()->backendName()));
 			else
-				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "CAS Properties"));
+				m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Notebook"));
 			m_mainWindow->cantorWorksheetDock->setCantorWorksheets(list);
 		}
 #endif

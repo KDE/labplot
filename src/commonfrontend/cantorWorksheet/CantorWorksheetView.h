@@ -4,6 +4,7 @@
     Description          : View class for CantorWorksheet
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
+    SPDX-FileCopyrightText: 2016-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -63,7 +64,8 @@ private:
 	QAction* m_lineNumbers{nullptr};
 	QAction* m_animateWorksheet{nullptr};
 	QAction* m_latexTypesetting{nullptr};
-	QAction* m_showCompletion{nullptr};
+	QAction* m_completion{nullptr};
+	QAction* m_highlight{nullptr};
 
 	QMenu* m_linearAlgebraMenu{nullptr};
 	QMenu* m_calculateMenu{nullptr};
