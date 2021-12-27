@@ -897,7 +897,7 @@ void ColumnSetValueCmd::undo() {
 
 ColumnSetIntegerCmd::ColumnSetIntegerCmd(ColumnPrivate* col, int row, int new_value, QUndoCommand* parent)
 	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(new_value) {
-		DEBUG("ColumnSetIntegerCmd::ColumnSetIntegerCmd()");
+		//DEBUG(Q_FUNC_INFO);
 	setText(i18n("%1: set value for row %2", col->name(), row));
 }
 
@@ -926,7 +926,7 @@ void ColumnSetIntegerCmd::undo() {
 
 ColumnSetBigIntCmd::ColumnSetBigIntCmd(ColumnPrivate* col, int row, qint64 new_value, QUndoCommand* parent)
 	: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(new_value) {
-		DEBUG("ColumnSetIntegerCmd::ColumnSetIntegerCmd()");
+		//DEBUG(Q_FUNC_INFO);
 	setText(i18n("%1: set value for row %2", col->name(), row));
 }
 

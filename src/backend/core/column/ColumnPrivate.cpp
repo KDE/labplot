@@ -1610,7 +1610,7 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
  * Use this only when columnMode() is Numeric
  */
 void ColumnPrivate::setValueAt(int row, double new_value) {
-//	DEBUG("ColumnPrivate::setValueAt()");
+	//DEBUG(Q_FUNC_INFO);
 	if (m_column_mode != AbstractColumn::ColumnMode::Double) return;
 
 	invalidate();
@@ -1630,7 +1630,7 @@ void ColumnPrivate::setValueAt(int row, double new_value) {
  * Use this only when columnMode() is Numeric
  */
 void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) {
-	DEBUG("ColumnPrivate::replaceValues()");
+	//DEBUG(Q_FUNC_INFO);
 
 	if (m_column_mode != AbstractColumn::ColumnMode::Double) return;
 
@@ -1721,7 +1721,7 @@ void ColumnPrivate::addValueLabel(qint64 value, const QString& label) {
  * Use this only when columnMode() is Integer
  */
 void ColumnPrivate::setIntegerAt(int row, int new_value) {
-	DEBUG("ColumnPrivate::setIntegerAt()");
+	//DEBUG(Q_FUNC_INFO);
 	if (m_column_mode != AbstractColumn::ColumnMode::Integer) return;
 
 	invalidate();
@@ -1741,7 +1741,7 @@ void ColumnPrivate::setIntegerAt(int row, int new_value) {
  * Use this only when columnMode() is Integer
  */
 void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
-	DEBUG("ColumnPrivate::replaceInteger()");
+	//DEBUG(Q_FUNC_INFO);
 	if (m_column_mode != AbstractColumn::ColumnMode::Integer) return;
 
 	invalidate();
@@ -1765,7 +1765,7 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
  * Use this only when columnMode() is BigInt
  */
 void ColumnPrivate::setBigIntAt(int row, qint64 new_value) {
-	DEBUG("ColumnPrivate::setBigIntAt()");
+	//DEBUG(Q_FUNC_INFO);
 	if (m_column_mode != AbstractColumn::ColumnMode::BigInt) return;
 
 	invalidate();
@@ -1785,7 +1785,7 @@ void ColumnPrivate::setBigIntAt(int row, qint64 new_value) {
  * Use this only when columnMode() is BigInt
  */
 void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) {
-	DEBUG("ColumnPrivate::replaceBigInt()");
+	//DEBUG(Q_FUNC_INFO);
 	if (m_column_mode != AbstractColumn::ColumnMode::BigInt) return;
 
 	invalidate();
@@ -1809,7 +1809,7 @@ void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) 
  * See where variable properties will be used.
  */
 void ColumnPrivate::updateProperties() {
-	DEBUG("ColumnPrivate::updateProperties()")
+	//DEBUG(Q_FUNC_INFO);
 
 	// TODO: for double Properties::Constant will never be used. Use an epsilon (difference smaller than epsilon is zero)
 	if (rowCount() == 0) {
