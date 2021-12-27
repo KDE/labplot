@@ -1259,7 +1259,14 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			for (const auto& t : layer.texts) {
 				DEBUG("EXTRA TEXT = " << t.text.c_str());
 				auto* label = new TextLabel("text label");
-				label->setText(parseOriginText(QString::fromLatin1(t.text.c_str())));
+				QTextEdit te(parseOriginText(QString::fromLatin1(t.text.c_str())));
+				// label settings (with resonable font size scaling)
+				te.selectAll();
+				te.setFontPointSize(int(t.fontSize * 0.4));
+				te.setTextColor(OriginProjectParser::color(t.color));
+				label->setText(te.toHtml());
+				//DEBUG(" TEXT = " << STDSTRING(label->text().text))
+
 				plot->addChild(label);
 				label->setParentGraphicsItem(plot->graphicsItem());
 
@@ -1274,8 +1281,6 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 				label->setRotationAngle(t.rotation);
 
 				//TODO:
-// 				Color color;
-// 				unsigned short fontSize;
 // 				int tab;
 // 				BorderType borderType;
 // 				Attach attach;
