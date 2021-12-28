@@ -426,16 +426,16 @@ void XYFitCurveDock::dataSourceTypeChanged(int index) {
 
 			QList<AspectType> list{AspectType::Folder, AspectType::Datapicker,
 									AspectType::Worksheet, AspectType::CartesianPlot,
-									AspectType::XYCurve, AspectType::XYAnalysisCurve};
+									AspectType::XYCurve, AspectType::XYAnalysisCurve, AspectType::XYEquationCurve};
 			cbDataSourceCurve->setTopLevelClasses(list);
 
 			if (m_dataSourceModel) {
-				list = {AspectType::XYCurve, AspectType::XYAnalysisCurve};
+				list = {AspectType::XYCurve, AspectType::XYAnalysisCurve, AspectType::XYEquationCurve};
 				m_dataSourceModel->setSelectableAspects(list);
 				cbDataSourceCurve->setModel(m_dataSourceModel);
 				cbDataSourceCurve->setAspect(m_fitCurve->dataSourceCurve());
 			}
-		} else {
+		} else {	// histogram
 			uiGeneralTab.cbCategory->setEnabled(false);
 			uiGeneralTab.cbCategory->setCurrentIndex(3); //select "statistics (distributions);
 			uiGeneralTab.lDataSourceCurve->setText(i18n("Histogram:"));

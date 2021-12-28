@@ -39,7 +39,7 @@ XYSmoothCurveDock::XYSmoothCurveDock(QWidget* parent) : XYCurveDock(parent) {
  * 	// Tab "General"
  */
 void XYSmoothCurveDock::setupGeneral() {
-	DEBUG("XYSmoothCurveDock::setupGeneral()");
+	DEBUG(Q_FUNC_INFO);
 
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
@@ -108,7 +108,7 @@ void XYSmoothCurveDock::setupGeneral() {
 }
 
 void XYSmoothCurveDock::initGeneralTab() {
-	DEBUG("XYSmoothCurveDock::initGeneralTab()");
+	DEBUG(Q_FUNC_INFO);
 
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
@@ -222,7 +222,7 @@ void XYSmoothCurveDock::setModel() {
   sets the curves. The properties of the curves in the list \c list can be edited in this widget.
 */
 void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
-	DEBUG("XYSmoothCurveDock::setCurves()");
+	DEBUG(Q_FUNC_INFO);
 
 	m_initializing = true;
 	m_curvesList = list;

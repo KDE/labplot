@@ -43,7 +43,7 @@ XYConvolutionCurveDock::XYConvolutionCurveDock(QWidget* parent) : XYCurveDock(pa
  * 	// Tab "General"
  */
 void XYConvolutionCurveDock::setupGeneral() {
-	DEBUG("XYConvolutionCurveDock::setupGeneral()");
+	DEBUG(Q_FUNC_INFO);
 	QWidget* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
@@ -89,7 +89,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 	layout->setMargin(0);
 	layout->addWidget(generalTab);
 
-	DEBUG("XYConvolutionCurveDock::setupGeneral() DONE");
+	DEBUG(Q_FUNC_INFO << ", DONE");
 
 	//Slots
 	connect(uiGeneralTab.leName, &QLineEdit::textChanged, this, &XYConvolutionCurveDock::nameChanged );
@@ -116,7 +116,7 @@ void XYConvolutionCurveDock::setupGeneral() {
 }
 
 void XYConvolutionCurveDock::initGeneralTab() {
-	DEBUG("XYConvolutionCurveDock::initGeneralTab()");
+	DEBUG(Q_FUNC_INFO);
 	//if there are more then one curve in the list, disable the tab "general"
 	if (m_curvesList.size() == 1) {
 		uiGeneralTab.lName->setEnabled(true);
@@ -185,7 +185,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 }
 
 void XYConvolutionCurveDock::setModel() {
-	DEBUG("XYConvolutionCurveDock::setModel()");
+	DEBUG(Q_FUNC_INFO);
 	QList<AspectType> list{AspectType::Folder, AspectType::Datapicker, AspectType::Worksheet,
 	                       AspectType::CartesianPlot, AspectType::XYCurve, AspectType::XYAnalysisCurve};
 	cbDataSourceCurve->setTopLevelClasses(list);
