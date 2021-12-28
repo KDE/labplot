@@ -11,6 +11,7 @@
 
 #include "VariableParser.h"
 #include <QStringList>
+#include <QRegularExpressionMatch>
 #include "backend/lib/trace.h"
 #include <cmath>	// NAN
 
@@ -34,6 +35,26 @@ VariableParser::VariableParser(QString name, QString value)
 		parseOctaveValues();
 }
 
+QVector<int>& VariableParser::integers() {
+	return *static_cast<QVector<int>*>(m_values);
+}
+
+QVector<qint64>& VariableParser::bigInt() {
+	return *static_cast<QVector<qint64>*>(m_values);
+}
+
+QVector<double>& VariableParser::doublePrecision() {
+	return *static_cast<QVector<double>*>(m_values);
+}
+
+QVector<QDateTime>& VariableParser::dateTime() {
+	return *static_cast<QVector<QDateTime>*>(m_values);
+}
+
+QVector<QString>& VariableParser::text() {
+	return *static_cast<QVector<QString>*>(m_values);
+}
+
 void VariableParser::parseMaximaValues() {
 	if (m_string.count(QStringLiteral("[")) < 2) {
 		m_string = m_string.replace(QStringLiteral("["), QString());
@@ -47,10 +68,17 @@ void VariableParser::parseMaximaValues() {
 
 void VariableParser::parsePythonValues() {
 	QStringList valueStringList;
+	QString datatype = "text";
 	m_string = m_string.trimmed();
 	if (m_string.startsWith(QStringLiteral("array"))) {
 		//parse numpy arrays, string representation like array([1,2,3,4,5]) or
 		// array([1, 2,3], dtype=uint32)
+		QRegularExpressionMatch match;
+		m_string.indexOf(QRegularExpression(QStringLiteral(", dtype='{0,1}[a-z0-9\\[\\]]*'{0,1}")), 0, &match);
+		if (match.isValid() && match.captured() != "")
+			datatype = match.captured().replace("'", "").replace(", dtype=", "");
+		else
+			datatype = "float64";
 		m_string = m_string.replace(QStringLiteral("array(["), QString());
 		m_string = m_string.replace(QRegExp(QStringLiteral(", dtype=[a-z0-9]*")), QString());
 		m_string = m_string.replace(QStringLiteral("])"), QString());
@@ -58,10 +86,12 @@ void VariableParser::parsePythonValues() {
 		//parse python's lists
 		m_string = m_string.replace(QStringLiteral("["), QString());
 		m_string = m_string.replace(QStringLiteral("]"), QString());
+		datatype = "float64";
 	} else if (m_string.startsWith(QStringLiteral("("))) {
 		//parse python's tuples
 		m_string = m_string.replace(QStringLiteral("("), QString());
 		m_string = m_string.replace(QStringLiteral(")"), QString());
+		datatype = "float64";
 	} else {
 		return;
 	}
@@ -71,7 +101,7 @@ void VariableParser::parsePythonValues() {
 	else
 		valueStringList = m_string.split(QStringLiteral(" "));
 
-	parseValues(valueStringList);
+	parsePythonValues(valueStringList, convertNumpyDatatype(datatype));
 }
 
 void VariableParser::parseRValues() {
@@ -100,12 +130,183 @@ bool VariableParser::isParsed() {
 	return m_parsed;
 }
 
-QVector< double > VariableParser::values() {
-	return m_values;
+void VariableParser::clearValues() {
+	switch(m_datatype) {
+		case AbstractColumn::ColumnMode::Integer:
+			delete static_cast<QVector<int>*>(m_values);
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			delete static_cast<QVector<qlonglong>*>(m_values);
+			break;
+		case AbstractColumn::ColumnMode::Double:
+			delete static_cast<QVector<qreal>*>(m_values);
+			break;
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::DateTime:
+			delete static_cast<QVector<QDateTime>*>(m_values);
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			delete static_cast<QVector<QString>*>(m_values);
+			break;
+	}
 }
+
+VariableParser::Datatype VariableParser::convertNumpyDatatype(const QString& d) {
+	if (d == "uint8")
+		return Datatype::uint8;
+	else if (d == "int8")
+		return Datatype::int8;
+	else if (d == "uint16")
+		return Datatype::uint16;
+	else if (d == "int16")
+		return Datatype::int16;
+	else if (d == "uint32")
+		return Datatype::uint32;
+	else if (d == "int32")
+		return Datatype::int32;
+	else if (d == "uint64")
+		return Datatype::uint64;
+	else if (d == "int64")
+		return Datatype::int64;
+	else if (d == "float32")
+		return Datatype::float32;
+	else if (d == "float64")
+		return Datatype::float64;
+	else if (d == "datetime64[ms]")
+		return Datatype::datetime64_ms;
+	else if (d == "datetime64[s]")
+		return Datatype::datetime64_s;
+	else if (d == "datetime64[m]")
+		return Datatype::datetime64_m;
+	else if (d == "datetime64[h]")
+		return Datatype::datetime64_h;
+	else if (d == "datetime64[D]" || d == "datetime64")
+		return Datatype::datetime64_D;
+
+	// as default text is used
+	return Datatype::text;
+}
+
+void VariableParser::parsePythonValues(QStringList& values, VariableParser::Datatype datatype) {
+	PERFTRACE("parsing variable values string list");
+	switch(datatype) {
+		case Datatype::uint8:
+		case Datatype::int8:
+		case Datatype::uint16:
+		case Datatype::int16:
+		case Datatype::int32:
+			m_values = new QVector<int>(values.size());
+			m_datatype = AbstractColumn::ColumnMode::Integer;
+			break;
+		case Datatype::uint32:
+		case Datatype::int64:
+			m_values = new QVector<qint64>(values.size());
+			m_datatype = AbstractColumn::ColumnMode::BigInt;
+			break;
+		case Datatype::uint64: // larger than qint64!
+		case Datatype::float32:
+		case Datatype::float64:
+			m_values = new QVector<double>(values.size());
+			m_datatype = AbstractColumn::ColumnMode::Double;
+			break;
+		case Datatype::datetime64_D:
+		case Datatype::datetime64_h:
+		case Datatype::datetime64_m:
+		case Datatype::datetime64_s:
+		case Datatype::datetime64_ms:
+			m_values = new QVector<QDateTime>(values.size());
+			m_datatype = AbstractColumn::ColumnMode::DateTime;
+			break;
+		case Datatype::text:
+			m_values = new QVector<QString>(values.size());
+			m_datatype = AbstractColumn::ColumnMode::Text;
+	}
+
+	for (QString& v : values) {
+
+		switch(datatype) {
+			case Datatype::uint8:
+			case Datatype::int8:
+			case Datatype::uint16:
+			case Datatype::int16:
+			case Datatype::int32: {
+				bool isNumber = false;
+				int value = v.trimmed().toUInt(&isNumber);
+
+				//accept the variable only if there is at least one numerical value in the array.
+				if (isNumber) {
+					if (!m_parsed)
+						m_parsed = true;
+				} else
+					value = NAN;
+
+				static_cast<QVector<int>*>(m_values)->append(value);
+				break;
+			}
+			case Datatype::uint32:
+			case Datatype::int64: {
+				bool isNumber = false;
+				qint64 value = v.trimmed().toLongLong(&isNumber);
+
+				//accept the variable only if there is at least one numerical value in the array.
+				if (isNumber) {
+					if (!m_parsed)
+						m_parsed = true;
+				} else
+					value = NAN;
+
+				static_cast<QVector<qint64>*>(m_values)->append(value);
+				break;
+			}
+			case Datatype::uint64:
+			case Datatype::float32:
+			case Datatype::float64: {
+				bool isNumber = false;
+				double value = v.trimmed().toDouble(&isNumber);
+
+				//accept the variable only if there is at least one numerical value in the array.
+				if (isNumber) {
+					if (!m_parsed)
+						m_parsed = true;
+				} else
+					value = NAN;
+
+				static_cast<QVector<double>*>(m_values)->append(value);
+				break;
+			}
+			case Datatype::datetime64_D:
+				static_cast<QVector<QDateTime>*>(m_values)->append(QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-dd"));
+				m_parsed = true;
+				break;
+			case Datatype::datetime64_h:
+				static_cast<QVector<QDateTime>*>(m_values)->append(QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh"));
+				m_parsed = true;
+				break;
+			case Datatype::datetime64_m:
+				static_cast<QVector<QDateTime>*>(m_values)->append(QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm"));
+				m_parsed = true;
+				break;
+			case Datatype::datetime64_s:
+				static_cast<QVector<QDateTime>*>(m_values)->append(QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss"));
+				m_parsed = true;
+				break;
+			case Datatype::datetime64_ms:
+				static_cast<QVector<QDateTime>*>(m_values)->append(QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss.zzz"));
+				m_parsed = true;
+				break;
+			case Datatype::text:
+				static_cast<QVector<QString>*>(m_values)->append(v);
+				break;
+		}
+	}
+}
+
 
 void VariableParser::parseValues(const QStringList& values) {
 	PERFTRACE("parsing variable values string list");
+	m_datatype = AbstractColumn::ColumnMode::Double;
+	m_values = new QVector<double>();
 	for (const QString& v : values) {
 		bool isNumber = false;
 		double value = v.trimmed().toDouble(&isNumber);
@@ -118,6 +319,6 @@ void VariableParser::parseValues(const QStringList& values) {
 			value = NAN;
 		}
 
-		m_values << value;
+		static_cast<QVector<double>*>(m_values)->append(value);
 	}
 }

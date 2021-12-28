@@ -14,24 +14,58 @@
 
 class QString;
 #include <QVector>
+#include <QDateTime>
+
+#include "backend/core/AbstractColumn.h"
 
 class VariableParser {
 public:
 	VariableParser(QString name, QString value);
-	QVector<double> values();
+	~VariableParser() {clearValues(); m_parsed=false;}
+	QVector<int>& integers();
+	QVector<qint64>& bigInt();
+	QVector<double>& doublePrecision();
+	QVector<QDateTime>& dateTime();
+	QVector<QString>& text();
 	bool isParsed();
+
+	enum class Datatype {
+		uint8,
+		int8,
+		uint16,
+		int16,
+		uint32,
+		int32,
+		uint64,
+		int64,
+		float32,
+		float64,
+		datetime64_ms,
+		datetime64_s,
+		datetime64_m,
+		datetime64_h, // hour is smallest unit
+		datetime64_D, // day is smallest unit
+		text,
+	};
+
+	AbstractColumn::ColumnMode datatype() {return m_datatype;}
 
 private:
 	QString m_backendName;
 	QString m_string;
-	QVector<double> m_values;
+	void* m_values{nullptr};
 	bool m_parsed{false};
+	AbstractColumn::ColumnMode m_datatype;
 
 	void parseMaximaValues();
 	void parsePythonValues();
 	void parseRValues();
 	void parseOctaveValues();
 	void parseValues(const QStringList&);
+	void parsePythonValues(QStringList &, Datatype);
+	Datatype convertNumpyDatatype(const QString& datatype);
+
+	void clearValues();
 };
 
 #endif // VARIABLEPARSER_H

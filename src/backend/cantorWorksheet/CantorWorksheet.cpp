@@ -126,8 +126,30 @@ void CantorWorksheet::dataChanged(const QModelIndex& index) {
 			dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1));
 		const QString& value = dataValue.toString();
 		VariableParser parser(m_backendName, value);
-		if (parser.isParsed())
-			col->replaceValues(0, parser.values());
+		if (parser.isParsed()) {
+			switch(parser.datatype()) {
+				case AbstractColumn::ColumnMode::Integer:
+				col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+				col->replaceInteger(0, parser.integers());
+				break;
+			case AbstractColumn::ColumnMode::BigInt:
+				col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+				col->replaceBigInt(0, parser.bigInt());
+				break;
+			case AbstractColumn::ColumnMode::Double:
+				col->setColumnMode(AbstractColumn::ColumnMode::Double);
+				col->replaceValues(0, parser.doublePrecision());
+				break;
+
+			case AbstractColumn::ColumnMode::Month:
+			case AbstractColumn::ColumnMode::Day:
+			case AbstractColumn::ColumnMode::DateTime:
+				col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+				col->replaceDateTimes(0, parser.dateTime());
+				break;
+
+			}
+		}
 	}
 }
 
@@ -141,18 +163,61 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 		VariableParser parser(m_backendName, value);
 		if (parser.isParsed()) {
 			Column* col = child<Column>(name);
-			if (col) {
-				col->replaceValues(0, parser.values());
-			} else {
-				col = new Column(name, parser.values());
-				col->setUndoAware(false);
-				col->setFixed(true);
-				addChild(col);
+				if (col) {
+					switch(parser.datatype()) {
+						case AbstractColumn::ColumnMode::Integer:
+						col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+						col->replaceInteger(0, parser.integers());
+						break;
+					case AbstractColumn::ColumnMode::BigInt:
+						col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+						col->replaceBigInt(0, parser.bigInt());
+						break;
+					case AbstractColumn::ColumnMode::Double:
+						col->setColumnMode(AbstractColumn::ColumnMode::Double);
+						col->replaceValues(0, parser.doublePrecision());
+						break;
 
-				//TODO: Cantor currently ignores the order of variables in the worksheets
-				//and adds new variables at the last position in the model.
-				//Fix this in Cantor and switch to insertChildBefore here later.
-				//insertChildBefore(col, child<Column>(i));
+					case AbstractColumn::ColumnMode::Month:
+					case AbstractColumn::ColumnMode::Day:
+					case AbstractColumn::ColumnMode::DateTime:
+						col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+						col->replaceDateTimes(0, parser.dateTime());
+						break;
+					case AbstractColumn::ColumnMode::Text:
+						col->setColumnMode(AbstractColumn::ColumnMode::Text);
+						col->replaceTexts(0, parser.text());
+						break;
+					}
+				} else {
+					switch(parser.datatype()) {
+						case AbstractColumn::ColumnMode::Integer:
+						col = new Column(name, parser.integers(), parser.datatype());
+						break;
+					case AbstractColumn::ColumnMode::BigInt:
+						col = new Column(name, parser.bigInt(), parser.datatype());
+						break;
+					case AbstractColumn::ColumnMode::Double:
+						col = new Column(name, parser.doublePrecision(), parser.datatype());
+						break;
+
+					case AbstractColumn::ColumnMode::Month:
+					case AbstractColumn::ColumnMode::Day:
+					case AbstractColumn::ColumnMode::DateTime:
+						col = new Column(name, parser.dateTime(), parser.datatype());
+						break;
+					case AbstractColumn::ColumnMode::Text:
+						col = new Column(name, parser.text(), parser.datatype());
+						break;
+					}
+					col->setUndoAware(false);
+					col->setFixed(true);
+					addChild(col);
+
+					//TODO: Cantor currently ignores the order of variables in the worksheets
+					//and adds new variables at the last position in the model.
+					//Fix this in Cantor and switch to insertChildBefore here later.
+					//insertChildBefore(col, child<Column>(i));
 			}
 		} else {
 			//the already existing variable doesn't contain any numerical values -> remove it
