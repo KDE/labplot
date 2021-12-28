@@ -2356,7 +2356,7 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 	range.setRange(qInf(), -qInf());
 	DEBUG(Q_FUNC_INFO << ", calculate range from " << indexRange.start() << " to " << indexRange.end())
 
-	for (int i = indexRange.start(); i < indexRange.end(); ++i) {
+	for (int i = indexRange.start(); i <= indexRange.end(); ++i) {
 		//DEBUG(Q_FUNC_INFO << ", i = " << (int)i)
 		if (!column1->isValid(i) || column1->isMasked(i) || (column2 && (!column2->isValid(i) || column2->isMasked(i))))
 			continue;
