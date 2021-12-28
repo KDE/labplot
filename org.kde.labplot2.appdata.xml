@@ -35,10 +35,22 @@
   <name xml:lang="zh-CN">LabPlot</name>
   <name xml:lang="zh-TW">LabPlot</name>
   <summary>Interactive Data Visualization and Analysis</summary>
+  <summary xml:lang="ca">Visualització i anàlisi de dades interactius</summary>
+  <summary xml:lang="es">Visualización y análisis de datos interactivo</summary>
+  <summary xml:lang="nl">Interactieve Datavisualisatie en analyse</summary>
+  <summary xml:lang="sv">Interaktiv datavisualisering och analys</summary>
+  <summary xml:lang="uk">Інтерактивна візуалізація та аналіз даних</summary>
+  <summary xml:lang="x-test">xxInteractive Data Visualization and Analysisxx</summary>
   <description>
     <p>
       LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.
     </p>
+    <p xml:lang="ca">El LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
+    <p xml:lang="es">LabPlot es un software de visualización y análisis de datos LIBRE, de código abierto y multiplataforma, al que todo el mundo puede acceder.</p>
+    <p xml:lang="nl">LabPlot is VRIJE opensource software voor Datavisualisatie en Analyse, voor meerdere soorten computers, die iedereen kan gebruiken.</p>
+    <p xml:lang="sv">Labplot är FRI datavisualiserings- och analysprogramvara med öppen källkod för flera plattformar tillgänglig för vem som helst.</p>
+    <p xml:lang="uk">LabPlot є вільним, доступним для будь-кого програмним забезпеченням з відкритим кодом, яке працює на багатьох платформах і виконує візуалізацію та аналіз даних.</p>
+    <p xml:lang="x-test">xxLabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.xx</p>
     <p>
       LabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.
     </p>
