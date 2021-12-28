@@ -3933,6 +3933,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 		|| mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
 		Q_EMIT q->mousePressZoomSelectionModeSignal(logicalPos);
+		return;
 	} else if (mouseMode == CartesianPlot::MouseMode::Cursor) {
 		setCursor(Qt::SizeHorCursor);
 		const QPointF logicalPos = cSystem->mapSceneToLogical(event->pos(), AbstractCoordinateSystem::MappingFlag::Limit);
