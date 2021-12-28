@@ -92,12 +92,15 @@ public:
 
 	void setStart(T start) { m_start = start; }
 	void setEnd(T end) { m_end = end; }
-	void setRange(T start, T end, Format format = Format::Numeric,
-		      Scale scale = Scale::Linear) {
+	void setRange(T start, T end, Format format, Scale scale) {
 		m_start = start;
 		m_end = end;
 		m_format = format;
 		m_scale = scale;
+	}
+	void setRange(T start, T end) {	// set range keeping format and scale
+		m_start = start;
+		m_end = end;
 	}
 	void setFormat(Format format) { m_format = format; }
 	void setScale(Scale scale) { m_scale = scale; }
