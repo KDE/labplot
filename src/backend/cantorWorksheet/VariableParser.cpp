@@ -226,8 +226,8 @@ void VariableParser::parsePythonValues(QStringList& values, VariableParser::Data
 			m_datatype = AbstractColumn::ColumnMode::Text;
 	}
 
+	int i = 0;
 	for (QString& v : values) {
-
 		switch(datatype) {
 			case Datatype::uint8:
 			case Datatype::int8:
@@ -244,7 +244,7 @@ void VariableParser::parsePythonValues(QStringList& values, VariableParser::Data
 				} else
 					value = NAN;
 
-				static_cast<QVector<int>*>(m_values)->append(value);
+				integers()[i] = value;
 				break;
 			}
 			case Datatype::uint32:
@@ -259,7 +259,7 @@ void VariableParser::parsePythonValues(QStringList& values, VariableParser::Data
 				} else
 					value = NAN;
 
-				static_cast<QVector<qint64>*>(m_values)->append(value);
+				bigInt()[i] = value;
 				break;
 			}
 			case Datatype::uint64:
@@ -275,33 +275,34 @@ void VariableParser::parsePythonValues(QStringList& values, VariableParser::Data
 				} else
 					value = NAN;
 
-				static_cast<QVector<double>*>(m_values)->append(value);
+				doublePrecision()[i] = value;
 				break;
 			}
 			case Datatype::datetime64_D:
-				static_cast<QVector<QDateTime>*>(m_values)->append(QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-dd"));
+				dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-dd");
 				m_parsed = true;
 				break;
 			case Datatype::datetime64_h:
-				static_cast<QVector<QDateTime>*>(m_values)->append(QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh"));
+				dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh");
 				m_parsed = true;
 				break;
 			case Datatype::datetime64_m:
-				static_cast<QVector<QDateTime>*>(m_values)->append(QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm"));
+				dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm");
 				m_parsed = true;
 				break;
 			case Datatype::datetime64_s:
-				static_cast<QVector<QDateTime>*>(m_values)->append(QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss"));
+				dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss");
 				m_parsed = true;
 				break;
 			case Datatype::datetime64_ms:
-				static_cast<QVector<QDateTime>*>(m_values)->append(QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss.zzz"));
+				dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss.zzz");
 				m_parsed = true;
 				break;
 			case Datatype::text:
-				static_cast<QVector<QString>*>(m_values)->append(v);
+				text()[i] = v;
 				break;
 		}
+		i++;
 	}
 }
 
