@@ -74,13 +74,14 @@ void VariableParser::parsePythonValues() {
 		//parse numpy arrays, string representation like array([1,2,3,4,5]) or
 		// array([1, 2,3], dtype=uint32)
 		QRegularExpressionMatch match;
-		m_string.indexOf(QRegularExpression(QStringLiteral(", dtype='{0,1}[a-z0-9\\[\\]]*'{0,1}")), 0, &match);
+		auto numpyDatatypeRegex = QStringLiteral("\\s*,\\s*dtype='{0,1}[a-zA-Z0-9\\[\\]]*'{0,1}");
+		m_string.indexOf(QRegularExpression(numpyDatatypeRegex), 0, &match);
 		if (match.isValid() && match.captured() != "")
 			datatype = match.captured().replace("'", "").replace(", dtype=", "");
 		else
 			datatype = "float64";
 		m_string = m_string.replace(QStringLiteral("array(["), QString());
-		m_string = m_string.replace(QRegExp(QStringLiteral(", dtype=[a-z0-9]*")), QString());
+		m_string = m_string.replace(QRegExp(numpyDatatypeRegex), QString());
 		m_string = m_string.replace(QStringLiteral("])"), QString());
 	} else if (m_string.startsWith(QStringLiteral("["))) {
 		//parse python's lists
