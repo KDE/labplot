@@ -97,7 +97,9 @@ void VariableParser::parsePythonValues() {
 		return;
 	}
 
-	if (m_string.count(QStringLiteral(","))>1)
+	// Fast method to determine the separator. It is assumed if at least one
+	// commas exist, the comma is the separator
+	if (m_string.indexOf(",") != -1)
 		valueStringList = m_string.split(QStringLiteral(","));
 	else
 		valueStringList = m_string.split(QStringLiteral(" "));
