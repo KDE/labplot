@@ -129,7 +129,7 @@ void CantorWorksheet::dataChanged(const QModelIndex& index) {
 	const QString& value = dataValue.toString();
 	VariableParser parser(m_backendName, value);
 	if (parser.isParsed()) {
-		switch(parser.datatype()) {
+		switch(parser.dataType()) {
 		case AbstractColumn::ColumnMode::Integer:
 			col->setColumnMode(AbstractColumn::ColumnMode::Integer);
 			col->replaceInteger(0, parser.integers());
@@ -169,7 +169,7 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 		if (parser.isParsed()) {
 			Column* col = child<Column>(name);
 			if (col) {
-				switch(parser.datatype()) {
+				switch(parser.dataType()) {
 					case AbstractColumn::ColumnMode::Integer:
 					col->setColumnMode(AbstractColumn::ColumnMode::Integer);
 					col->replaceInteger(0, parser.integers());
@@ -182,7 +182,6 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 					col->setColumnMode(AbstractColumn::ColumnMode::Double);
 					col->replaceValues(0, parser.doublePrecision());
 					break;
-
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::DateTime:
@@ -195,23 +194,23 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 					break;
 				}
 			} else {
-				switch(parser.datatype()) {
+				switch(parser.dataType()) {
 					case AbstractColumn::ColumnMode::Integer:
-					col = new Column(name, parser.integers(), parser.datatype());
+					col = new Column(name, parser.integers(), parser.dataType());
 					break;
 				case AbstractColumn::ColumnMode::BigInt:
-					col = new Column(name, parser.bigInt(), parser.datatype());
+					col = new Column(name, parser.bigInt(), parser.dataType());
 					break;
 				case AbstractColumn::ColumnMode::Double:
-					col = new Column(name, parser.doublePrecision(), parser.datatype());
+					col = new Column(name, parser.doublePrecision(), parser.dataType());
 					break;
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::Day:
 				case AbstractColumn::ColumnMode::DateTime:
-					col = new Column(name, parser.dateTime(), parser.datatype());
+					col = new Column(name, parser.dateTime(), parser.dataType());
 					break;
 				case AbstractColumn::ColumnMode::Text:
-					col = new Column(name, parser.text(), parser.datatype());
+					col = new Column(name, parser.text(), parser.dataType());
 					break;
 				}
 				col->setUndoAware(false);

@@ -48,14 +48,14 @@ public:
 		text,
 	};
 
-	AbstractColumn::ColumnMode datatype() {return m_datatype;}
+	AbstractColumn::ColumnMode dataType() {return m_dataType;}
 
 private:
 	QString m_backendName;
 	QString m_string;
 	void* m_values{nullptr};
 	bool m_parsed{false};
-	AbstractColumn::ColumnMode m_datatype;
+	AbstractColumn::ColumnMode m_dataType;
 
 	void parseMaximaValues();
 	void parsePythonValues();
