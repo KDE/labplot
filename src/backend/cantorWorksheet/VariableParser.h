@@ -61,8 +61,7 @@ private:
 	void parsePythonValues();
 	void parseRValues();
 	void parseOctaveValues();
-	void parseValues(const QStringList&);
-	void parsePythonValues(QStringList &, Datatype);
+	void parseValues(const QStringList&, Datatype type = Datatype::float64);
 	Datatype convertNumpyDatatype(const QString& datatype);
 
 	void clearValues();

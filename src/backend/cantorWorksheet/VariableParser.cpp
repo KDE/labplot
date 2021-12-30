@@ -104,7 +104,7 @@ void VariableParser::parsePythonValues() {
 	else
 		valueStringList = m_string.split(QStringLiteral(" "));
 
-	parsePythonValues(valueStringList, convertNumpyDatatype(datatype));
+	parseValues(valueStringList, convertNumpyDatatype(datatype));
 }
 
 void VariableParser::parseRValues() {
@@ -191,7 +191,7 @@ VariableParser::Datatype VariableParser::convertNumpyDatatype(const QString& d) 
 	return Datatype::text;
 }
 
-void VariableParser::parsePythonValues(QStringList& values, VariableParser::Datatype datatype) {
+void VariableParser::parseValues(const QStringList& values, VariableParser::Datatype datatype) {
 	PERFTRACE("parsing variable values string list");
 	switch(datatype) {
 		case Datatype::uint8:
@@ -227,101 +227,101 @@ void VariableParser::parsePythonValues(QStringList& values, VariableParser::Data
 	}
 
 	int i = 0;
-	for (QString& v : values) {
-		switch(datatype) {
-			case Datatype::uint8:
-			case Datatype::int8:
-			case Datatype::uint16:
-			case Datatype::int16:
-			case Datatype::int32: {
-				bool isNumber = false;
-				int value = v.trimmed().toUInt(&isNumber);
+	bool isNumber = false;
+	switch(datatype) {
+	case Datatype::uint8:
+	case Datatype::int8:
+	case Datatype::uint16:
+	case Datatype::int16:
+	case Datatype::int32: {
+		for (const auto& v : values) {
+			int value = v.trimmed().toUInt(&isNumber);
 
-				//accept the variable only if there is at least one numerical value in the array.
-				if (isNumber) {
-					if (!m_parsed)
-						m_parsed = true;
-				} else
-					value = 0;
+			//accept the variable only if there is at least one numerical value in the array.
+			if (isNumber) {
+				if (!m_parsed)
+					m_parsed = true;
+			} else
+				value = 0;
 
-				integers()[i] = value;
-				break;
-			}
-			case Datatype::uint32:
-			case Datatype::int64: {
-				bool isNumber = false;
-				qint64 value = v.trimmed().toLongLong(&isNumber);
-
-				//accept the variable only if there is at least one numerical value in the array.
-				if (isNumber) {
-					if (!m_parsed)
-						m_parsed = true;
-				} else
-					value = 0;
-
-				bigInt()[i] = value;
-				break;
-			}
-			case Datatype::uint64:
-			case Datatype::float32:
-			case Datatype::float64: {
-				bool isNumber = false;
-				double value = v.trimmed().toDouble(&isNumber);
-
-				//accept the variable only if there is at least one numerical value in the array.
-				if (isNumber) {
-					if (!m_parsed)
-						m_parsed = true;
-				} else
-					value = NAN;
-
-				doublePrecision()[i] = value;
-				break;
-			}
-			case Datatype::datetime64_D:
-				dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-dd");
-				m_parsed = true;
-				break;
-			case Datatype::datetime64_h:
-				dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh");
-				m_parsed = true;
-				break;
-			case Datatype::datetime64_m:
-				dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm");
-				m_parsed = true;
-				break;
-			case Datatype::datetime64_s:
-				dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss");
-				m_parsed = true;
-				break;
-			case Datatype::datetime64_ms:
-				dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss.zzz");
-				m_parsed = true;
-				break;
-			case Datatype::text:
-				text()[i] = v;
-				break;
+			integers()[i] = value;
+			i++;
 		}
-		i++;
+		break;
+	}
+	case Datatype::uint32:
+	case Datatype::int64: {
+		for (const auto& v : values) {
+			qint64 value = v.trimmed().toLongLong(&isNumber);
+			if (isNumber) {
+				if (!m_parsed)
+					m_parsed = true;
+			} else
+				value = 0;
+
+			bigInt()[i] = value;
+			i++;
+		}
+		break;
+	}
+	case Datatype::uint64:
+	case Datatype::float32:
+	case Datatype::float64: {
+		for (const auto& v : values) {
+			double value = v.trimmed().toDouble(&isNumber);
+			if (isNumber) {
+				if (!m_parsed)
+					m_parsed = true;
+			} else
+				value = NAN;
+
+			doublePrecision()[i] = value;
+			i++;
+		}
+		break;
+	}
+	case Datatype::datetime64_D:
+		for (const auto& v : values) {
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-dd");
+			m_parsed = true;
+			i++;
+		}
+		break;
+	case Datatype::datetime64_h:
+		for (const auto& v : values) {
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh");
+			m_parsed = true;
+			i++;
+		}
+		break;
+	case Datatype::datetime64_m:
+		for (const auto& v : values) {
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm");
+			m_parsed = true;
+			i++;
+		}
+		break;
+	case Datatype::datetime64_s:
+		for (const auto& v : values) {
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss");
+			m_parsed = true;
+			i++;
+		}
+		break;
+	case Datatype::datetime64_ms:
+		for (const auto& v : values) {
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss.zzz");
+			m_parsed = true;
+			i++;
+		}
+		break;
+	case Datatype::text:
+		for (const auto& v : values) {
+			text()[i] = v;
+			m_parsed = true;
+			i++;
+		}
+		break;
 	}
 }
 
-void VariableParser::parseValues(const QStringList& values) {
-	PERFTRACE("parsing variable values string list");
-	m_datatype = AbstractColumn::ColumnMode::Double;
-	m_values = new QVector<double>();
-	for (const QString& v : values) {
-		bool isNumber = false;
-		double value = v.trimmed().toDouble(&isNumber);
-
-		//accept the variable only if there is at least one numerical value in the array.
-		if (isNumber) {
-			if (!m_parsed)
-				m_parsed = true;
-		} else {
-			value = NAN;
-		}
-
-		static_cast<QVector<double>*>(m_values)->append(value);
-	}
-}
