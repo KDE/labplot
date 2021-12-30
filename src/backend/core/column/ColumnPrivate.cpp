@@ -1517,9 +1517,8 @@ void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) 
 	invalidate();
 
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	int num_rows = new_values.size();
-	if (first + num_rows > rowCount())
-		resizeTo(first + num_rows);
+	const int num_rows = new_values.size();
+	resizeTo(first + num_rows);
 
 	for (int i = 0; i < num_rows; ++i)
 		static_cast<QVector<QString>*>(m_data)->replace(first+i, new_values.at(i));
@@ -1592,13 +1591,11 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
 	invalidate();
 
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	int num_rows = new_values.size();
-	if (first + num_rows > rowCount())
-		resizeTo(first + num_rows);
+	const int num_rows = new_values.size();
+	resizeTo(first + num_rows);
 
 	for (int i = 0; i < num_rows; ++i)
 		static_cast<QVector<QDateTime>*>(m_data)->replace(first+i, new_values.at(i));
-
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
@@ -1637,9 +1634,8 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 	invalidate();
 
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	int num_rows = new_values.size();
-	if (first + num_rows > rowCount())
-		resizeTo(first + num_rows);
+	const int num_rows = new_values.size();
+	resizeTo(first + num_rows);
 
 	double* ptr = static_cast<QVector<double>*>(m_data)->data();
 	for (int i = 0; i < num_rows; ++i)
@@ -1747,9 +1743,8 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 	invalidate();
 
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	int num_rows = new_values.size();
-	if (first + num_rows > rowCount())
-		resizeTo(first + num_rows);
+	const int num_rows = new_values.size();
+	resizeTo(first + num_rows);
 
 	int* ptr = static_cast<QVector<int>*>(m_data)->data();
 	for (int i = 0; i < num_rows; ++i)
@@ -1791,9 +1786,8 @@ void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) 
 	invalidate();
 
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	int num_rows = new_values.size();
-	if (first + num_rows > rowCount())
-		resizeTo(first + num_rows);
+	const int num_rows = new_values.size();
+	resizeTo(first + num_rows);
 
 	qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
 	for (int i = 0; i < num_rows; ++i)

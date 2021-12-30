@@ -242,7 +242,7 @@ void VariableParser::parsePythonValues(QStringList& values, VariableParser::Data
 					if (!m_parsed)
 						m_parsed = true;
 				} else
-					value = NAN;
+					value = 0;
 
 				integers()[i] = value;
 				break;
@@ -257,7 +257,7 @@ void VariableParser::parsePythonValues(QStringList& values, VariableParser::Data
 					if (!m_parsed)
 						m_parsed = true;
 				} else
-					value = NAN;
+					value = 0;
 
 				bigInt()[i] = value;
 				break;
@@ -305,7 +305,6 @@ void VariableParser::parsePythonValues(QStringList& values, VariableParser::Data
 		i++;
 	}
 }
-
 
 void VariableParser::parseValues(const QStringList& values) {
 	PERFTRACE("parsing variable values string list");

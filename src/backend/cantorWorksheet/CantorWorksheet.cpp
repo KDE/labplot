@@ -119,36 +119,39 @@ const QString& CantorWorksheet::error() const {
 void CantorWorksheet::dataChanged(const QModelIndex& index) {
 	const QString& name = m_variableModel->data(m_variableModel->index(index.row(), 0)).toString();
 	Column* col = child<Column>(name);
-	if (col) {
-		// Cantor::DefaultVariableModel::DataRole == 257
-		QVariant dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1), 257);
-		if (dataValue.isNull())
-			dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1));
-		const QString& value = dataValue.toString();
-		VariableParser parser(m_backendName, value);
-		if (parser.isParsed()) {
-			switch(parser.datatype()) {
-				case AbstractColumn::ColumnMode::Integer:
-				col->setColumnMode(AbstractColumn::ColumnMode::Integer);
-				col->replaceInteger(0, parser.integers());
-				break;
-			case AbstractColumn::ColumnMode::BigInt:
-				col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
-				col->replaceBigInt(0, parser.bigInt());
-				break;
-			case AbstractColumn::ColumnMode::Double:
-				col->setColumnMode(AbstractColumn::ColumnMode::Double);
-				col->replaceValues(0, parser.doublePrecision());
-				break;
+	if (!col)
+		return;
 
-			case AbstractColumn::ColumnMode::Month:
-			case AbstractColumn::ColumnMode::Day:
-			case AbstractColumn::ColumnMode::DateTime:
-				col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
-				col->replaceDateTimes(0, parser.dateTime());
-				break;
+	QVariant dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1), 257); //Cantor::DefaultVariableModel::DataRole == 257
+	if (dataValue.isNull())
+		dataValue = m_variableModel->data(m_variableModel->index(index.row(), 1));
 
-			}
+	const QString& value = dataValue.toString();
+	VariableParser parser(m_backendName, value);
+	if (parser.isParsed()) {
+		switch(parser.datatype()) {
+		case AbstractColumn::ColumnMode::Integer:
+			col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+			col->replaceInteger(0, parser.integers());
+			break;
+		case AbstractColumn::ColumnMode::BigInt:
+			col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+			col->replaceBigInt(0, parser.bigInt());
+			break;
+		case AbstractColumn::ColumnMode::Double:
+			col->setColumnMode(AbstractColumn::ColumnMode::Double);
+			col->replaceValues(0, parser.doublePrecision());
+			break;
+		case AbstractColumn::ColumnMode::Month:
+		case AbstractColumn::ColumnMode::Day:
+		case AbstractColumn::ColumnMode::DateTime:
+			col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+			col->replaceDateTimes(0, parser.dateTime());
+			break;
+		case AbstractColumn::ColumnMode::Text:
+			col->setColumnMode(AbstractColumn::ColumnMode::Text);
+			col->replaceTexts(0, parser.text());
+			break;
 		}
 	}
 }
@@ -159,65 +162,66 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 		QVariant dataValue = m_variableModel->data(m_variableModel->index(i, 1), 257);
 		if (dataValue.isNull())
 			dataValue = m_variableModel->data(m_variableModel->index(i, 1));
+
 		const QString& value = dataValue.toString();
 		VariableParser parser(m_backendName, value);
+
 		if (parser.isParsed()) {
 			Column* col = child<Column>(name);
-				if (col) {
-					switch(parser.datatype()) {
-						case AbstractColumn::ColumnMode::Integer:
-						col->setColumnMode(AbstractColumn::ColumnMode::Integer);
-						col->replaceInteger(0, parser.integers());
-						break;
-					case AbstractColumn::ColumnMode::BigInt:
-						col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
-						col->replaceBigInt(0, parser.bigInt());
-						break;
-					case AbstractColumn::ColumnMode::Double:
-						col->setColumnMode(AbstractColumn::ColumnMode::Double);
-						col->replaceValues(0, parser.doublePrecision());
-						break;
+			if (col) {
+				switch(parser.datatype()) {
+					case AbstractColumn::ColumnMode::Integer:
+					col->setColumnMode(AbstractColumn::ColumnMode::Integer);
+					col->replaceInteger(0, parser.integers());
+					break;
+				case AbstractColumn::ColumnMode::BigInt:
+					col->setColumnMode(AbstractColumn::ColumnMode::BigInt);
+					col->replaceBigInt(0, parser.bigInt());
+					break;
+				case AbstractColumn::ColumnMode::Double:
+					col->setColumnMode(AbstractColumn::ColumnMode::Double);
+					col->replaceValues(0, parser.doublePrecision());
+					break;
 
-					case AbstractColumn::ColumnMode::Month:
-					case AbstractColumn::ColumnMode::Day:
-					case AbstractColumn::ColumnMode::DateTime:
-						col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
-						col->replaceDateTimes(0, parser.dateTime());
-						break;
-					case AbstractColumn::ColumnMode::Text:
-						col->setColumnMode(AbstractColumn::ColumnMode::Text);
-						col->replaceTexts(0, parser.text());
-						break;
-					}
-				} else {
-					switch(parser.datatype()) {
-						case AbstractColumn::ColumnMode::Integer:
-						col = new Column(name, parser.integers(), parser.datatype());
-						break;
-					case AbstractColumn::ColumnMode::BigInt:
-						col = new Column(name, parser.bigInt(), parser.datatype());
-						break;
-					case AbstractColumn::ColumnMode::Double:
-						col = new Column(name, parser.doublePrecision(), parser.datatype());
-						break;
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Day:
+				case AbstractColumn::ColumnMode::DateTime:
+					col->setColumnMode(AbstractColumn::ColumnMode::DateTime);
+					col->replaceDateTimes(0, parser.dateTime());
+					break;
+				case AbstractColumn::ColumnMode::Text:
+					col->setColumnMode(AbstractColumn::ColumnMode::Text);
+					col->replaceTexts(0, parser.text());
+					break;
+				}
+			} else {
+				switch(parser.datatype()) {
+					case AbstractColumn::ColumnMode::Integer:
+					col = new Column(name, parser.integers(), parser.datatype());
+					break;
+				case AbstractColumn::ColumnMode::BigInt:
+					col = new Column(name, parser.bigInt(), parser.datatype());
+					break;
+				case AbstractColumn::ColumnMode::Double:
+					col = new Column(name, parser.doublePrecision(), parser.datatype());
+					break;
+				case AbstractColumn::ColumnMode::Month:
+				case AbstractColumn::ColumnMode::Day:
+				case AbstractColumn::ColumnMode::DateTime:
+					col = new Column(name, parser.dateTime(), parser.datatype());
+					break;
+				case AbstractColumn::ColumnMode::Text:
+					col = new Column(name, parser.text(), parser.datatype());
+					break;
+				}
+				col->setUndoAware(false);
+				col->setFixed(true);
+				addChild(col);
 
-					case AbstractColumn::ColumnMode::Month:
-					case AbstractColumn::ColumnMode::Day:
-					case AbstractColumn::ColumnMode::DateTime:
-						col = new Column(name, parser.dateTime(), parser.datatype());
-						break;
-					case AbstractColumn::ColumnMode::Text:
-						col = new Column(name, parser.text(), parser.datatype());
-						break;
-					}
-					col->setUndoAware(false);
-					col->setFixed(true);
-					addChild(col);
-
-					//TODO: Cantor currently ignores the order of variables in the worksheets
-					//and adds new variables at the last position in the model.
-					//Fix this in Cantor and switch to insertChildBefore here later.
-					//insertChildBefore(col, child<Column>(i));
+				//TODO: Cantor currently ignores the order of variables in the worksheets
+				//and adds new variables at the last position in the model.
+				//Fix this in Cantor and switch to insertChildBefore here later.
+				//insertChildBefore(col, child<Column>(i));
 			}
 		} else {
 			//the already existing variable doesn't contain any numerical values -> remove it
