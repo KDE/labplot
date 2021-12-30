@@ -114,32 +114,6 @@ void CantorWorksheetView::initMenus() {
 // 	auto* insertHierarchyEntryAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-tree")), i18n("Hierarchy"), m_actionGroup);
 // 	insertHierarchyEntryAction->setData("insert_hierarchy_entry");
 
-	//notebook settings
-	auto* lineNumbers = new KToggleAction(i18n("Line Numbers"), m_actionGroup);
-	lineNumbers->setChecked(false);
-	lineNumbers->setData("enable_expression_numbers");
-
-	auto* animateWorksheet = new KToggleAction(i18n("Animate Worksheet"), m_actionGroup);
-	animateWorksheet->setChecked(true);
-	animateWorksheet->setData("enable_animations");
-
-	auto* latexTypesetting = new KToggleAction(i18n("LaTeX Typesetting"), m_actionGroup);
-	latexTypesetting->setChecked(true);
-	latexTypesetting->setData("enable_typesetting");
-
-	auto* highlight = new KToggleAction(i18n("Syntax Highlighting"), m_actionGroup);
-	highlight->setChecked(true);
-	highlight->setData(QLatin1String("enable_highlighting"));
-
-	auto* completion = new KToggleAction(i18n("Syntax Completion"), m_actionGroup);
-	completion->setChecked(true);
-	completion->setData(QLatin1String("enable_completion"));
-// 	completion->setShortcut(Qt::CTRL + Qt::Key_Space);
-
-	QAction* showCompletion = new QAction(i18n("Show Completion"), m_actionGroup);
-	showCompletion->setData(QLatin1String("show_completion"));
- 	showCompletion->setShortcut(Qt::CTRL + Qt::Key_Space);
-
 	//actions for "assistants", that are backend specific and not always available
 	QAction* computeEigenvectorsAction = nullptr;
 	if (m_part->action("eigenvectors_assistant")) {
@@ -223,15 +197,15 @@ void CantorWorksheetView::initMenus() {
 			m_calculateMenu->addAction(differentiationAction);
 	}
 
-	//"Settings"
+	//"Notebook Settings"
 	m_settingsMenu = new QMenu(i18n("Settings"), m_part->widget());
 	m_settingsMenu->setIcon(QIcon::fromTheme(QLatin1String("settings-configure")));
-	m_settingsMenu->addAction(lineNumbers);
-	m_settingsMenu->addAction(highlight);
-	m_settingsMenu->addAction(completion);
-	m_settingsMenu->addAction(animateWorksheet);
+	m_settingsMenu->addAction(m_part->action("enable_expression_numbers"));
+	m_settingsMenu->addAction(m_part->action("enable_highlighting"));
+	m_settingsMenu->addAction(m_part->action("enable_completion"));
+	m_settingsMenu->addAction(m_part->action("enable_animations"));
 	m_settingsMenu->addSeparator();
-	m_settingsMenu->addAction(latexTypesetting);
+	m_settingsMenu->addAction(m_part->action("enable_typesetting"));
 }
 
 /*!
@@ -264,6 +238,12 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_removeCurrentEntryAction);
 
+	//results related actions
+	menu->insertSeparator(firstAction);
+	menu->addAction(m_part->action("all_entries_collapse_results"));
+	menu->addAction(m_part->action("all_entries_uncollapse_results"));
+	menu->addAction(m_part->action("all_entries_remove_all_results"));
+
 	//assistants, if available
 	if (m_linearAlgebraMenu || m_calculateMenu) {
 		menu->insertSeparator(firstAction);
@@ -276,6 +256,7 @@ void CantorWorksheetView::createContextMenu(QMenu* menu) {
 
 		menu->insertMenu(firstAction, menuAssistants);
 	}
+
 
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, m_zoomIn);
@@ -305,9 +286,9 @@ void CantorWorksheetView::fillToolBar(QToolBar* toolbar) {
  * Slot for actions triggered
  */
 void CantorWorksheetView::triggerAction(QAction* action) {
-	QString actionName = action->data().toString();
-	if (!actionName.isEmpty()) {
-		auto* action = m_part->action(actionName.toStdString().c_str());
+	const auto& name = action->data().toString();
+	if (!name.isEmpty()) {
+		auto* action = m_part->action(name.toStdString().c_str());
 		if (action)
 			action->trigger();
 	}
