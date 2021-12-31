@@ -20,6 +20,7 @@ set(GUI_SOURCES
 	${KDEFRONTEND_DIR}/MainWin.cpp
 	${KDEFRONTEND_DIR}/SettingsDialog.cpp
 	${KDEFRONTEND_DIR}/SettingsGeneralPage.cpp
+	${KDEFRONTEND_DIR}/SettingsNotebookPage.cpp
 	${KDEFRONTEND_DIR}/SettingsSpreadsheetPage.cpp
 	${KDEFRONTEND_DIR}/SettingsWorksheetPage.cpp
 # 	${KDEFRONTEND_DIR}/SettingsWelcomePage.cpp
@@ -148,6 +149,7 @@ set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/fitparameterswidget.ui
 	${KDEFRONTEND_DIR}/ui/labelwidget.ui
 	${KDEFRONTEND_DIR}/ui/symbolwidget.ui
+	${KDEFRONTEND_DIR}/ui/settingsnotebookpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsgeneralpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsspreadsheetpage.ui
 	${KDEFRONTEND_DIR}/ui/settingsworksheetpage.ui

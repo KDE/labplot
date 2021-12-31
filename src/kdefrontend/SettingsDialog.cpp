@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : application settings dialog
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -15,6 +15,10 @@
 // #include "SettingsWelcomePage.h"
 #include "SettingsSpreadsheetPage.h"
 #include "SettingsWorksheetPage.h"
+
+#ifdef HAVE_CANTOR_LIBS
+#include "SettingsNotebookPage.h"
+#endif
 
 #include <QPushButton>
 #include <QDialogButtonBox>
@@ -60,6 +64,13 @@ SettingsDialog::SettingsDialog(QWidget* parent) : KPageDialog(parent) {
 	KPageWidgetItem* spreadsheetFrame = addPage(m_spreadsheetPage, i18n("Spreadsheet"));
 	spreadsheetFrame->setIcon(QIcon::fromTheme(QLatin1String("labplot-spreadsheet")));
 	connect(m_spreadsheetPage, &SettingsSpreadsheetPage::settingsChanged, this, &SettingsDialog::changed);
+
+#ifdef HAVE_CANTOR_LIBS
+	m_notebookPage = new SettingsNotebookPage(this);
+	KPageWidgetItem* notebookFrame = addPage(m_notebookPage, i18n("Notebook"));
+	notebookFrame->setIcon( QIcon::fromTheme(QLatin1String("cantor")));
+	connect(m_notebookPage, &SettingsNotebookPage::settingsChanged, this, &SettingsDialog::changed);
+#endif
 
 	m_datasetsPage = new SettingsDatasetsPage(this);
 	KPageWidgetItem* datasetsFrame = addPage(m_datasetsPage, i18n("Datasets"));
@@ -123,6 +134,10 @@ void SettingsDialog::applySettings() {
 	m_generalPage->applySettings();
 	m_worksheetPage->applySettings();
 	m_spreadsheetPage->applySettings();
+#ifdef HAVE_CANTOR_LIBS
+	m_notebookPage->applySettings();
+#endif
+
 	KSharedConfig::openConfig()->sync();
 
 #ifdef HAVE_KUSERFEEDBACK
@@ -139,4 +154,7 @@ void SettingsDialog::restoreDefaults() {
 	m_generalPage->restoreDefaults();
 	m_worksheetPage->restoreDefaults();
 	m_spreadsheetPage->restoreDefaults();
+#ifdef HAVE_CANTOR_LIBS
+	m_notebookPage->restoreDefaults();
+#endif
 }

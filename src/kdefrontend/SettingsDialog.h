@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : application settings dialog
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -16,6 +16,7 @@ class QAbstractButton;
 class SettingsGeneralPage;
 class SettingsSpreadsheetPage;
 class SettingsWorksheetPage;
+class SettingsNotebookPage;
 // class SettingsWelcomePage;
 class SettingsDatasetsPage;
 
@@ -41,6 +42,9 @@ private:
 	SettingsGeneralPage* m_generalPage;
 	SettingsWorksheetPage* m_worksheetPage;
 	SettingsSpreadsheetPage* m_spreadsheetPage;
+#ifdef HAVE_CANTOR_LIBS
+	SettingsNotebookPage* m_notebookPage;
+#endif
 // 	SettingsWelcomePage* m_welcomePage;
 	SettingsDatasetsPage* m_datasetsPage;
 
