@@ -71,6 +71,13 @@ void VariableParser::parseMaximaValues() {
 	parseValues(valueStringList, dataType);
 }
 
+/*!
+ * Python containers that can be parsed:
+ * * List (a collection which is ordered and changeable, allows duplicate members)
+ * * Tuple (collection which is ordered and unchangeable, allows duplicate members)
+ * * Set (collection which is unordered, unchangeable and unindexed, no duplicate members)
+ * * Numpy's array (with and without the explicit specification of the data type)
+ * */
 void VariableParser::parsePythonValues() {
 	QStringList valueStringList;
 	QString dataType = "float64";
@@ -78,6 +85,12 @@ void VariableParser::parsePythonValues() {
 	if (m_string.startsWith(QStringLiteral("array"))) {
 		//parse numpy arrays, string representation like array([1,2,3,4,5]) or
 		// array([1, 2,3], dtype=uint32)
+
+		//we don't handle array of arrays, e.g. the output of 'np.ones((2,2), dtype=np.int16)'
+		//which is 'array([[1, 1], [1, 1]], dtype=int16)'
+		if (m_string.count(QStringLiteral("[")) > 2)
+			return;
+
 		QRegularExpressionMatch match;
 		auto numpyDatatypeRegex = QStringLiteral("\\s*,\\s*dtype='{0,1}[a-zA-Z0-9\\[\\]]*'{0,1}");
 		m_string.indexOf(QRegularExpression(numpyDatatypeRegex), 0, &match);

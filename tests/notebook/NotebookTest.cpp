@@ -78,7 +78,6 @@ void NotebookTest::testParserPython01() {
 	QCOMPARE(values.at(1), 2.0);
 }
 
-
 /*!
 	read a tuple of doubles
 */
@@ -109,6 +108,30 @@ void NotebookTest::testParserPython03() {
 	QCOMPARE(values.size(), 2);
 	QCOMPARE(values.at(0), 1.0);
 	QCOMPARE(values.at(1), 2.0);
+}
+
+//numpy data types
+
+//np.ones(2, dtype=np.int16)
+void NotebookTest::testParserPython04() {
+	QString input = "array([1, 1], dtype=int16)";
+	VariableParser parser("python", input);
+
+	QCOMPARE(parser.isParsed(), true);
+	QCOMPARE(parser.dataType(), AbstractColumn::ColumnMode::Integer);
+
+	const auto values = parser.integers();
+	QCOMPARE(values.size(), 2);
+	QCOMPARE(values.at(0), 1);
+	QCOMPARE(values.at(1), 1);
+}
+
+//np.ones((2,2), dtype=np.int16)
+void NotebookTest::testParserPython05() {
+	QString input = "array([[1, 1], [1, 1]], dtype=int16)";
+	VariableParser parser("python", input);
+
+	QCOMPARE(parser.isParsed(), false);
 }
 
 QTEST_MAIN(NotebookTest)
