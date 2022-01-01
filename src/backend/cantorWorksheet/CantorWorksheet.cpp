@@ -72,7 +72,8 @@ bool CantorWorksheet::init(QByteArray* content) {
 			return false;
 		}
 		m_worksheetAccess = m_part->findChild<Cantor::WorksheetAccessInterface*>(Cantor::WorksheetAccessInterface::Name);
-// // 		if (!m_worksheetAccess)
+		if (!m_worksheetAccess)
+			return false;
 
 		//load worksheet content if available
 		if (content)
@@ -82,7 +83,7 @@ bool CantorWorksheet::init(QByteArray* content) {
 
 		//Cantor's session
 		m_session = m_worksheetAccess->session();
-		connect(m_session, SIGNAL(statusChanged(Cantor::Session::Status)), this, SIGNAL(statusChanged(Cantor::Session::Status)));
+		connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
 
 		//variable model
 		m_variableModel = m_session->variableDataModel();
@@ -90,6 +91,45 @@ bool CantorWorksheet::init(QByteArray* content) {
 		connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
 		connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
 		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
+
+		//default settings
+		const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));
+
+		//TODO: right now we don't have the direct accces to Cantor's worksheet and to all its public methods
+		//and we need to go through the actions provided in cantor_part.
+		//-> redesign this! expose Cantor's Worksheet directly and add more settings here.
+		auto* action = m_part->action("enable_highlighting");
+		if (action) {
+			bool value = group.readEntry(QLatin1String("SyntaxHighlighting"), false);
+			action->setChecked(value);
+		}
+
+		action = m_part->action("enable_completion");
+		if (action) {
+			bool value = group.readEntry(QLatin1String("SyntaxCompletion"), false);
+			action->setChecked(value);
+		}
+
+		action = m_part->action("enable_expression_numbers");
+		if (action) {
+			bool value = group.readEntry(QLatin1String("LineNumbers"), false);
+			action->setChecked(value);
+		}
+
+		action = m_part->action("enable_typesetting");
+		if (action) {
+			bool value = group.readEntry(QLatin1String("LatexTypesetting"), false);
+			action->setChecked(value);
+		}
+
+		action = m_part->action("enable_animations");
+		if (action) {
+			bool value = group.readEntry(QLatin1String("Animations"), false);
+			action->setChecked(value);
+		}
+
+		//bool value = group.readEntry(QLatin1String("ReevaluateEntries"), false);
+		//value = group.readEntry(QLatin1String("AskConfirmation"), true);
 
 		//available plugins
 #ifdef HAVE_NEW_CANTOR_LIBS
