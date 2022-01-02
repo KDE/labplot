@@ -152,6 +152,7 @@ public:
 	void finalizeLoad();
 
 public Q_SLOTS:
+	void pasteData();
 	void updateFormula();
 
 private:
@@ -167,6 +168,7 @@ private:
 
 	bool m_suppressDataChangedSignal{false};
 	QAction* m_copyDataAction{nullptr};
+	QAction* m_pasteDataAction{nullptr};
 	QActionGroup* m_usedInActionGroup{nullptr};
 
 	ColumnPrivate* d;

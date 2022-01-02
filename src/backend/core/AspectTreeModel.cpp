@@ -194,10 +194,11 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 				return QVariant();
 		}
 		case 1:
-			if (aspect->metaObject()->className() != QLatin1String("CantorWorksheet"))
-				return aspect->metaObject()->className();
-			else
+			if (aspect->metaObject()->className() == QLatin1String("CantorWorksheet"))
 				return QLatin1String("Notebook");
+			if (aspect->metaObject()->className() == QLatin1String("Datapicker"))
+				return QLatin1String("DataExtractor");
+			return aspect->metaObject()->className();
 		case 2:
 			return aspect->creationTime().toString();
 		case 3:

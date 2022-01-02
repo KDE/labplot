@@ -83,14 +83,16 @@ bool CantorWorksheet::init(QByteArray* content) {
 
 		//Cantor's session
 		m_session = m_worksheetAccess->session();
-		connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
+		if (m_session) {
+			connect(m_session, &Cantor::Session::statusChanged, this, &CantorWorksheet::statusChanged);
 
-		//variable model
-		m_variableModel = m_session->variableDataModel();
-		connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &CantorWorksheet::dataChanged);
-		connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
-		connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
-		connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
+			//variable model
+			m_variableModel = m_session->variableDataModel();
+			connect(m_variableModel, &QAbstractItemModel::dataChanged, this, &CantorWorksheet::dataChanged);
+			connect(m_variableModel, &QAbstractItemModel::rowsInserted, this, &CantorWorksheet::rowsInserted);
+			connect(m_variableModel, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CantorWorksheet::rowsAboutToBeRemoved);
+			connect(m_variableModel, &QAbstractItemModel::modelReset, this, &CantorWorksheet::modelReset);
+		}
 
 		//default settings
 		const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_Notebook"));

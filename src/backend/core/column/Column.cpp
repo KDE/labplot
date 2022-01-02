@@ -4,7 +4,7 @@
     Description          : Aspect that manages a column
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
-    SPDX-FileCopyrightText: 2013-2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -21,10 +21,12 @@
 #include "backend/core/datatypes/String2DateTimeFilter.h"
 #include "backend/core/datatypes/DateTime2StringFilter.h"
 #include "backend/core/datatypes/Double2StringFilter.h"
+#include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYAnalysisCurve.h"
+#include "commonfrontend/spreadsheet/SpreadsheetView.h"
 
 #include <KLocalizedString>
 
@@ -33,6 +35,7 @@
 #include <QFontMetrics>
 #include <QIcon>
 #include <QMenu>
+#include <QMimeData>
 #include <QThreadPool>
 
 #include <array>
@@ -69,7 +72,6 @@ Column::Column(const QString& name, ColumnMode mode)
  * \brief Common part of ctors
  */
 void Column::init() {
-
 	m_string_io = new ColumnStringIO(this);
 	d->inputFilter()->input(0, m_string_io);
 	d->outputFilter()->input(0, this);
@@ -77,14 +79,6 @@ void Column::init() {
 	d->outputFilter()->setHidden(true);
 	addChildFast(d->inputFilter());
 	addChildFast(d->outputFilter());
-	m_suppressDataChangedSignal = false;
-
-	m_copyDataAction = new QAction(QIcon::fromTheme("edit-copy"), i18n("Copy Data"), this);
-	connect(m_copyDataAction, &QAction::triggered, this, &Column::copyData);
-
-	m_usedInActionGroup = new QActionGroup(this);
-	connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
-	connect(this, &AbstractColumn::maskingChanged, this, [=]{d->invalidate();});
 }
 
 Column::~Column() {
@@ -93,6 +87,19 @@ Column::~Column() {
 }
 
 QMenu* Column::createContextMenu() {
+	//initialize the actions if not done yet
+	if (!m_copyDataAction) {
+		m_copyDataAction = new QAction(QIcon::fromTheme("edit-copy"), i18n("Copy Data"), this);
+		connect(m_copyDataAction, &QAction::triggered, this, &Column::copyData);
+
+		m_pasteDataAction = new QAction(QIcon::fromTheme("edit-paste"), i18n("Paste Data"), this);
+		connect(m_pasteDataAction, &QAction::triggered, this, &Column::pasteData);
+
+		m_usedInActionGroup = new QActionGroup(this);
+		connect(m_usedInActionGroup, &QActionGroup::triggered, this, &Column::navigateTo);
+		connect(this, &AbstractColumn::maskingChanged, this, [=]{d->invalidate();});
+	}
+
 	QMenu* menu = AbstractAspect::createContextMenu();
 	QAction* firstAction{nullptr};
 
@@ -179,8 +186,19 @@ QMenu* Column::createContextMenu() {
 		menu->insertSeparator(firstAction);
 	}
 
-	menu->insertAction(firstAction, m_copyDataAction);
-	menu->insertSeparator(firstAction);
+	if (hasValues()) {
+		menu->insertAction(firstAction, m_copyDataAction);
+		menu->insertSeparator(firstAction);
+	}
+
+	//pasting of data is only possible for spreadsheet columns
+	if (parentAspect()->type() == AspectType::Spreadsheet) {
+		const auto* mimeData = QApplication::clipboard()->mimeData();
+		if (mimeData->hasFormat("text/plain")) {
+			menu->insertAction(firstAction, m_pasteDataAction);
+			menu->insertSeparator(firstAction);
+		}
+	}
 
 	return menu;
 }
@@ -228,6 +246,13 @@ void Column::copyData() {
 
 	QApplication::clipboard()->setText(output);
 }
+
+void Column::pasteData() {
+	auto* spreadsheet = dynamic_cast<Spreadsheet*>(parentAspect());
+	if (spreadsheet)
+		static_cast<SpreadsheetView*>(spreadsheet->view())->pasteIntoSelection();
+}
+
 /*!
  *
  */

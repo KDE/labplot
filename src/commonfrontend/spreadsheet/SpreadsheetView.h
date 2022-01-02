@@ -219,6 +219,7 @@ public Q_SLOTS:
 	void fillTouchBar(KDMacTouchBar*);
 #endif
 	void print(QPrinter*) const;
+	void pasteIntoSelection();
 
 private Q_SLOTS:
 	void createColumnContextMenu(QMenu*);
@@ -240,7 +241,6 @@ private Q_SLOTS:
 	void clearSelectedCells();
 	void maskSelection();
 	void unmaskSelection();
-	void pasteIntoSelection();
 // 		void recalculateSelectedCells();
 
 	void plotData();
