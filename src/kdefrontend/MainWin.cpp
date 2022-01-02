@@ -502,8 +502,8 @@ void MainWin::initActions() {
 	m_newWorkbookAction->setWhatsThis(i18n("Creates a new workbook for collection spreadsheets, matrices and plots"));
 	connect(m_newWorkbookAction, &QAction::triggered, this, &MainWin::newWorkbook);
 
-	m_newDatapickerAction = new QAction(QIcon::fromTheme("color-picker-black"), i18n("Datapicker"), this);
-	m_newDatapickerAction->setWhatsThis(i18n("Creates a data picker for getting data from a picture"));
+	m_newDatapickerAction = new QAction(QIcon::fromTheme("color-picker-black"), i18n("Data Extractor"), this);
+	m_newDatapickerAction->setWhatsThis(i18n("Creates a data extractor for getting data from a picture"));
 	actionCollection()->addAction("new_datapicker", m_newDatapickerAction);
 	connect(m_newDatapickerAction, &QAction::triggered, this, &MainWin::newDatapicker);
 
@@ -1817,7 +1817,7 @@ void MainWin::newWorkbook() {
 	adds a new Datapicker to the project.
 */
 void MainWin::newDatapicker() {
-	Datapicker* datapicker = new Datapicker(i18n("Datapicker"));
+	Datapicker* datapicker = new Datapicker(i18n("Data Extractor"));
 	this->addAspectToProject(datapicker);
 }
 

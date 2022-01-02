@@ -364,7 +364,7 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 		m_mainWindow->datapickerCurveDock->setCurves(castList<DatapickerCurve>(selectedAspects));
 		break;
 	case AspectType::Datapicker:
-		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Datapicker"));
+		m_mainWindow->m_propertiesDock->setWindowTitle(i18nc("@title:window", "Data Extractor"));
 		raiseDock(m_mainWindow->datapickerImageDock, m_mainWindow->stackedWidget);
 		{
 			QList<DatapickerImage*> list;
