@@ -758,6 +758,7 @@ void AbstractAspect::paste(bool duplicate) {
 		}
 
 		project()->restorePointers(aspect);
+		project()->retransformElements(aspect);
 		aspect->setPasted(false);
 		endMacro();
 	}
