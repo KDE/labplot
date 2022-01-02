@@ -85,7 +85,7 @@ private Q_SLOTS:
 	void showOptions();
 	void insertFunction(const QString&) const;
 	void insertConstant(const QString&) const;
-	void setPlotXRange();
+//	void setPlotXRange();
 	void recalculateClicked();
 	void updateModelEquation();
 	void expressionChanged();

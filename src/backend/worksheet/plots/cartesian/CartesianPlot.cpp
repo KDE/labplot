@@ -2626,6 +2626,7 @@ void CartesianPlot::scaleAutoTriggered() {
 }
 
 bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransform) {
+	DEBUG(Q_FUNC_INFO)
 	Q_D(CartesianPlot);
 	if (index == -1) {	// all ranges
 		bool updated = false;
@@ -2695,6 +2696,7 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange, bool suppressRetransfo
 
 // TODO: copy paste code?
 bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransform) {
+	DEBUG(Q_FUNC_INFO << ", index = " << index)
 	Q_D(CartesianPlot);
 	if (index == -1) {
 		bool updated = false;
@@ -2728,6 +2730,7 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 		dataRange.niceExtend();	// auto scale to nice data range
 
 	bool update = false;
+	DEBUG(Q_FUNC_INFO << ", x range = " << d->xRange(index).toStdString() << ", curves x range = " << d->dataXRange(index).toStdString())
 	DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", curves y range = " << d->dataYRange(index).toStdString())
 	if (!qFuzzyCompare(dataRange.start(), yRange.start()) && !qIsInf(dataRange.start()) ) {
 		yRange.start() = dataRange.start();
@@ -2739,6 +2742,7 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 		update = true;
 	}
 	if (update) {
+		DEBUG(Q_FUNC_INFO << ", x range = " << d->xRange(index).toStdString())
 		DEBUG(Q_FUNC_INFO << ", set new y range = " << yRange.toStdString())
 		//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
 		if (yRange.isZero()) {
@@ -2791,7 +2795,7 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange) {
  * The range of the y axis is not considered.
  */
 void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
-	DEBUG(Q_FUNC_INFO << ", complete range = " << completeRange)
+	DEBUG(Q_FUNC_INFO << ", index = " << index << ", complete range = " << completeRange)
 	Q_D(CartesianPlot);
 
 	d->dataXRange(index).setRange(qInf(), -qInf());
@@ -2804,9 +2808,13 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 		if (!curve->isVisible())
 			continue;
 
+		DEBUG("CURVE " << STDSTRING(curve->name()))
+
 		auto* xColumn = curve->xColumn();
-		if (!xColumn)
+		if (!xColumn) {
+			DEBUG(" NO X column!")
 			continue;
+		}
 
 		// range of indices
 		Range<int> indexRange{0, 0};
@@ -2828,7 +2836,7 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 				break;
 			}
 		}
-		DEBUG(Q_FUNC_INFO << ", index range = " << indexRange.toStdString())
+		DEBUG(Q_FUNC_INFO << ", X index range = " << indexRange.toStdString())
 
 		auto range{d->xRange(index)};	// value does not matter, will be overwritten
 		curve->minMaxX(indexRange, range, true);
@@ -2922,6 +2930,7 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 					break;
 			}
 		}
+		DEBUG(Q_FUNC_INFO << ", Y index range = " << indexRange.toStdString())
 
 		curve->minMaxY(indexRange, range, true);
 
@@ -3415,6 +3424,9 @@ CartesianPlotPrivate::~CartesianPlotPrivate() = default;
  */
 void CartesianPlotPrivate::retransform() {
 	DEBUG(Q_FUNC_INFO)
+	for (int i = 0; i < xRanges.count(); i++)
+		DEBUG( Q_FUNC_INFO << ", x range " << i+1 << " : " << xRanges.at(i).range.toStdString()
+			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()) );
 	if (suppressRetransform || q->isLoading())
 		return;
 
@@ -3440,6 +3452,7 @@ void CartesianPlotPrivate::retransform() {
 }
 
 void CartesianPlotPrivate::retransformXScale(int index) {
+	DEBUG(Q_FUNC_INFO)
 	static const int breakGap = 20;
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
 	Range<double> sceneRange, logicalRange;
@@ -3562,6 +3575,7 @@ void CartesianPlotPrivate::retransformYScale(int index) {
  * calculate x and y scales from scence range and logical range (x/y range) for all coordinate systems
  */
 void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
+	DEBUG(Q_FUNC_INFO << ", SCALES x/y index = " << xIndex << "/" << yIndex)
 	for (int i = 0; i < xRanges.count(); i++)
 		DEBUG( Q_FUNC_INFO << ", x range " << i+1 << " : " << xRanges.at(i).range.toStdString()
 			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()) );

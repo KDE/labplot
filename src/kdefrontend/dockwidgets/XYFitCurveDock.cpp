@@ -1072,7 +1072,7 @@ void XYFitCurveDock::insertConstant(const QString& constantsName) const {
 /*!
  * When a custom evaluate range is specified, set the plot range too.
  */
-void XYFitCurveDock::setPlotXRange() {
+/*void XYFitCurveDock::setPlotXRange() {
 	if (m_fitData.autoEvalRange || !m_curve)
 		return;
 
@@ -1082,10 +1082,10 @@ void XYFitCurveDock::setPlotXRange() {
 		if (!range.isZero())
 			plot->setXRange(range);
 	}
-}
+}*/
 
 void XYFitCurveDock::recalculateClicked() {
-	DEBUG("XYFitCurveDock::recalculateClicked()");
+	DEBUG(Q_FUNC_INFO);
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 	m_fitData.degree = uiGeneralTab.sbDegree->value();
 	if (m_fitData.modelCategory == nsl_fit_model_custom)
@@ -1095,7 +1095,7 @@ void XYFitCurveDock::recalculateClicked() {
 		static_cast<XYFitCurve*>(curve)->setFitData(m_fitData);
 
 	m_fitCurve->recalculate();
-	setPlotXRange();
+	//setPlotXRange();
 
 	//update fitParametersWidget
 	if (m_fitData.useResults) {
@@ -1136,7 +1136,7 @@ void XYFitCurveDock::recalculateClicked() {
 	}
 
 	QApplication::restoreOverrideCursor();
-	DEBUG("XYFitCurveDock::recalculateClicked() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void XYFitCurveDock::expressionChanged() {
@@ -1185,12 +1185,12 @@ void XYFitCurveDock::enableRecalculate() {
 		m_fitCurve->setFitData(m_fitData);
 		// calculate fit function
 		m_fitCurve->evaluate(true);
-		setPlotXRange();
+		//setPlotXRange();
 	}
 	else {
 		DEBUG("	PREVIEW DISABLED");
 	}
-	DEBUG("XYFitCurveDock::enableRecalculate() DONE");
+	DEBUG(Q_FUNC_INFO << " DONE");
 }
 
 void XYFitCurveDock::resultCopy(bool copyAll) {
