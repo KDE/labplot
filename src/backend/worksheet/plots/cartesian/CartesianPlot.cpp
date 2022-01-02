@@ -2730,7 +2730,6 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 		dataRange.niceExtend();	// auto scale to nice data range
 
 	bool update = false;
-	DEBUG(Q_FUNC_INFO << ", x range = " << d->xRange(index).toStdString() << ", curves x range = " << d->dataXRange(index).toStdString())
 	DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", curves y range = " << d->dataYRange(index).toStdString())
 	if (!qFuzzyCompare(dataRange.start(), yRange.start()) && !qIsInf(dataRange.start()) ) {
 		yRange.start() = dataRange.start();
@@ -2742,7 +2741,6 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange, bool suppressRetransfo
 		update = true;
 	}
 	if (update) {
-		DEBUG(Q_FUNC_INFO << ", x range = " << d->xRange(index).toStdString())
 		DEBUG(Q_FUNC_INFO << ", set new y range = " << yRange.toStdString())
 		//in case min and max are equal (e.g. if we plot a single point), subtract/add 10% of the value
 		if (yRange.isZero()) {
