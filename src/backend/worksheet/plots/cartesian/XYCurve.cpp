@@ -2331,8 +2331,7 @@ bool XYCurve::minMaxY(const Range<int>& indexRange, Range<double>& yRange, bool 
  * \p errorType
  * \p errorPlusColumn
  * \p errorMinusColumn
- * \p indexMin
- * \p indexMax
+ * \p indexRange [min, max]
  * \p min
  * \p max
  * \p includeErrorBars If true respect the error bars in the min/max calculation
@@ -2354,7 +2353,7 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 		return false;
 
 	range.setRange(qInf(), -qInf());
-	//DEBUG(Q_FUNC_INFO << ", calculate range from " << indexRange.start() << " to " << indexRange.end())
+	//DEBUG(Q_FUNC_INFO << ", calculate range for index range " << indexRange.start() << " .. " << indexRange.end())
 
 	for (int i = indexRange.start(); i <= indexRange.end(); ++i) {
 		if (!column1->isValid(i) || column1->isMasked(i) || (column2 && (!column2->isValid(i) || column2->isMasked(i))))

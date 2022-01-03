@@ -2806,7 +2806,7 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 		if (!curve->isVisible())
 			continue;
 
-		DEBUG("CURVE " << STDSTRING(curve->name()))
+		//DEBUG("CURVE " << STDSTRING(curve->name()))
 
 		auto* xColumn = curve->xColumn();
 		if (!xColumn) {
@@ -2824,13 +2824,13 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 			DEBUG(Q_FUNC_INFO << ", else. range type = " << (int)d->rangeType)
 			switch (d->rangeType) {
 			case RangeType::Free:
-				indexRange.setRange(0, xColumn->rowCount());
+				indexRange.setRange(0, xColumn->rowCount() - 1);
 				break;
 			case RangeType::Last:
-				indexRange.setRange(xColumn->rowCount() - d->rangeLastValues, xColumn->rowCount());
+				indexRange.setRange(xColumn->rowCount() - d->rangeLastValues - 1, xColumn->rowCount() - 1);
 				break;
 			case RangeType::First:
-				indexRange.setRange(0, d->rangeFirstValues);
+				indexRange.setRange(0, d->rangeFirstValues - 1);
 				break;
 			}
 		}

@@ -2379,7 +2379,7 @@ int Column::indexForValue(double x) const {
  * \return
  */
 bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
-	DEBUG(Q_FUNC_INFO << ", values = " << v1 << "/" << v2)
+	//DEBUG(Q_FUNC_INFO << ", values = " << v1 << " .. " << v2)
 	start = -1;
 	end = -1;
 	if (rowCount() == 0)
@@ -2428,6 +2428,8 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			case ColumnMode::Text:
 				return false;
 		}
+		// DEBUG("monotonic start/end = " << start << "/" << end)
+
 		return true;
 	} else if (property == Properties::Constant) {
 		start = 0;
@@ -2475,5 +2477,7 @@ bool Column::indicesMinMax(double v1, double v2, int& start, int& end) const {
 			return false;
 
 	}
+	// DEBUG("non-monotonic start/end = " << start << "/" << end)
+
 	return true;
 }

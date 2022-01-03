@@ -1450,17 +1450,17 @@ QDateTime ColumnPrivate::dateTimeAt(int row) const {
 }
 
 /**
- * \brief Return the double value in row 'row' for columns with type Numeric, Integer or BigInt.
+ * \brief Return the double value at index 'index' for columns with type Numeric, Integer or BigInt.
  * This function has to be used everywhere where the exact type (double, int or qint64) is not relevant for numerical calculations.
  * For cases where the integer value is needed without any implicit conversions, \sa integerAt() has to be used.
  */
-double ColumnPrivate::valueAt(int row) const {
+double ColumnPrivate::valueAt(int index) const {
 	if (m_column_mode == AbstractColumn::ColumnMode::Double)
-		return static_cast<QVector<double>*>(m_data)->value(row, NAN);
+		return static_cast<QVector<double>*>(m_data)->value(index, NAN);
 	else if (m_column_mode == AbstractColumn::ColumnMode::Integer)
-		return static_cast<QVector<int>*>(m_data)->value(row, 0);
+		return static_cast<QVector<int>*>(m_data)->value(index, 0);
 	else if (m_column_mode == AbstractColumn::ColumnMode::BigInt)
-		return static_cast<QVector<qint64>*>(m_data)->value(row, 0);
+		return static_cast<QVector<qint64>*>(m_data)->value(index, 0);
 	else
 		 return NAN;
 }
