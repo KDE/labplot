@@ -309,11 +309,11 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 	// https://forum.qt.io/topic/133181/qdatetime-fromstring-returns-invalid-datetime
 	case Datatype::datetime64_D:
 		for (const auto& v : values) {
-			#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-				dateTime()[i] = QDate::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODate).startOfDay(Qt::UTC);
-			#else
-				dateTime()[i] = QDateTime(QDate::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODate));
-			#endif
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+			dateTime()[i] = QDate::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODate).startOfDay(Qt::UTC);
+#else
+			dateTime()[i] = QDateTime(QDate::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODate));
+#endif
 			m_parsed = true;
 			i++;
 		}
