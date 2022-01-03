@@ -134,4 +134,95 @@ void NotebookTest::testParserPython05() {
 	QCOMPARE(parser.isParsed(), false);
 }
 
+void NotebookTest::testParserPython06() {
+	// Testing datetime ms
+	QString input = "array(['2016-03-26T02:14:34.000', '2017-03-26T02:14:34.000', '2018-03-26T02:14:34.000'], dtype=datetime64[ms])";
+	VariableParser parser("python", input);
+
+	QTEST_ASSERT(parser.dataType() == AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(parser.isParsed(), true);
+	auto res = parser.dateTime();
+
+	QCOMPARE(res.length(), 3);
+	QCOMPARE(res.at(0).isValid(), true);
+	QCOMPARE(res.at(1).isValid(), true);
+	QCOMPARE(res.at(2).isValid(), true);
+	QTEST_ASSERT(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2016-03-26T02:14:34.000");
+	QTEST_ASSERT(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2017-03-26T02:14:34.000");
+	QTEST_ASSERT(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T02:14:34.000");
+}
+
+void NotebookTest::testParserPython07() {
+	// Testing datetime s
+	QString input = "array(['2016-03-26T02:14:34', '2017-03-26T02:14:34', '2018-03-26T02:14:34'], dtype=datetime64[s])";
+	VariableParser parser("python", input);
+
+	QTEST_ASSERT(parser.dataType() == AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(parser.isParsed(), true);
+	auto res = parser.dateTime();
+
+	QCOMPARE(res.length(), 3);
+	QCOMPARE(res.at(0).isValid(), true);
+	QCOMPARE(res.at(1).isValid(), true);
+	QCOMPARE(res.at(2).isValid(), true);
+	QTEST_ASSERT(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2016-03-26T02:14:34.000");
+	QTEST_ASSERT(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2017-03-26T02:14:34.000");
+	QTEST_ASSERT(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T02:14:34.000");
+}
+
+void NotebookTest::testParserPython08() {
+	// Testing minute datetime
+	QString input = "array(['2016-03-26T02:14', '2017-03-26T02:14', '2018-03-26T02:14'], dtype=datetime64[m])";
+	VariableParser parser("python", input);
+
+	QTEST_ASSERT(parser.dataType() == AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(parser.isParsed(), true);
+	auto res = parser.dateTime();
+
+	QCOMPARE(res.length(), 3);
+	QCOMPARE(res.at(0).isValid(), true);
+	QCOMPARE(res.at(1).isValid(), true);
+	QCOMPARE(res.at(2).isValid(), true);
+	QTEST_ASSERT(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2016-03-26T02:14:00.000");
+	QTEST_ASSERT(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2017-03-26T02:14:00.000");
+	QTEST_ASSERT(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T02:14:00.000");
+}
+
+
+void NotebookTest::testParserPython09() {
+	// Testing hour datetime
+	QString input = "array(['2016-03-26T02', '2017-03-26T02', '2018-03-26T02'], dtype=datetime64[h])";
+	VariableParser parser("python", input);
+
+	QTEST_ASSERT(parser.dataType() == AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(parser.isParsed(), true);
+	auto res = parser.dateTime();
+
+	QCOMPARE(res.length(), 3);
+	QCOMPARE(res.at(0).isValid(), true);
+	QCOMPARE(res.at(1).isValid(), true);
+	QCOMPARE(res.at(2).isValid(), true);
+	QTEST_ASSERT(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2016-03-26T02:00:00.000");
+	QTEST_ASSERT(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2017-03-26T02:00:00.000");
+	QTEST_ASSERT(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T02:00:00.000");
+}
+void NotebookTest::testParserPython10() {
+	// Testing datetime day
+	QString input = "array(['2016-03-26', '2017-03-26', '2018-03-26'], dtype=datetime64[D])";
+	VariableParser parser("python", input);
+
+	QTEST_ASSERT(parser.dataType() == AbstractColumn::ColumnMode::DateTime);
+	QCOMPARE(parser.isParsed(), true);
+	auto res = parser.dateTime();
+
+	QCOMPARE(res.length(), 3);
+	QCOMPARE(res.at(0).isValid(), true);
+	QCOMPARE(res.at(1).isValid(), true);
+	QCOMPARE(res.at(2).isValid(), true);
+	QTEST_ASSERT(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2016-03-26T00:00:00.000");
+	QTEST_ASSERT(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2017-03-26T00:00:00.000");
+	QTEST_ASSERT(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T00:00:00.000");
+}
+
+
 QTEST_MAIN(NotebookTest)

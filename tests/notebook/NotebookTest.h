@@ -29,6 +29,11 @@ private Q_SLOTS:
 	void testParserPython03();
 	void testParserPython04();
 	void testParserPython05();
+	void testParserPython06();
+	void testParserPython07();
+	void testParserPython08();
+	void testParserPython09();
+	void testParserPython10();
 };
 
 #endif

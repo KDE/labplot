@@ -304,37 +304,40 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 		}
 		break;
 	}
+	// Adding timezone indicator "Z" is necessary, because specific dates like
+	// 2017-03-26T02:14:34.000 are not available in different timezones.
+	// https://forum.qt.io/topic/133181/qdatetime-fromstring-returns-invalid-datetime
 	case Datatype::datetime64_D:
 		for (const auto& v : values) {
-			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-dd");
+			dateTime()[i] = QDate::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODate).startOfDay(Qt::UTC);
 			m_parsed = true;
 			i++;
 		}
 		break;
 	case Datatype::datetime64_h:
 		for (const auto& v : values) {
-			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh");
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", "") + "Z", "yyyy-MM-ddThht"); // last t is important. It is the timezone
 			m_parsed = true;
 			i++;
 		}
 		break;
 	case Datatype::datetime64_m:
 		for (const auto& v : values) {
-			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm");
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", "") + "Z", "yyyy-MM-ddThh:mmt"); // last t is important. It is the timezone
 			m_parsed = true;
 			i++;
 		}
 		break;
 	case Datatype::datetime64_s:
 		for (const auto& v : values) {
-			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss");
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODate);
 			m_parsed = true;
 			i++;
 		}
 		break;
 	case Datatype::datetime64_ms:
 		for (const auto& v : values) {
-			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", ""), "yyyy-MM-ddThh:mm:ss.zzz");
+			dateTime()[i] = QDateTime::fromString(v.trimmed().replace("'", "") + "Z", Qt::ISODateWithMs);
 			m_parsed = true;
 			i++;
 		}
