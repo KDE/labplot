@@ -80,9 +80,9 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		text.allowPlaceholder = true;
 
 		QString textString;
-		textString = QString::number(markerpoints[0].customPoint->position().point.x()) + ", ";
+		textString = QString::number(markerpoints[0].customPoint->positionLogical().x()) + ", ";
 		textString.append(QString(QString(markerpoints[0].curve->name()+":")));
-		textString.append(QString::number(markerpoints[0].customPoint->position().point.y()));
+		textString.append(QString::number(markerpoints[0].customPoint->positionLogical().y()));
 		text.text = textString;
 
 		// TODO: Find better solution than using textedit
@@ -214,7 +214,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	custompoint->setUndoAware(true);
 
 	if (d->m_index < 0 && curve->xColumn())
-		d->m_index = curve->xColumn()->indexForValue(custompoint->position().point.x());
+		d->m_index = curve->xColumn()->indexForValue(custompoint->positionLogical().x());
 
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
 	markerpoints.append(markerpoint);
@@ -409,7 +409,7 @@ TextLabel::TextWrapper InfoElement::createTextLabelText() {
 			replace = QLatin1String("&(");
 
 		replace += markerpoint.curve->name() + QLatin1Char(')');
-		text.replace(replace, QString::number(markerpoint.customPoint->position().point.y()));
+		text.replace(replace, QString::number(markerpoint.customPoint->positionLogical().y()));
 	}
 
 	wrapper.text = text;
@@ -1002,7 +1002,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	for (int i = 1; i < q->markerPointsCount(); i++) {
 		if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
 			// not possible to use index, because when the number of elements in the columns of the curves are not the same there is a problem
-			x = q->markerpoints[i].customPoint->position().point.x(); //q->markerpoints[i].curve->xColumn()->valueAt(m_index)
+			x = q->markerpoints[i].customPoint->positionLogical().x(); //q->markerpoints[i].curve->xColumn()->valueAt(m_index)
 			activeIndex = i;
 			break;
 		}
@@ -1011,7 +1011,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	auto xColumn = q->markerpoints[activeIndex].curve->xColumn();
 	int xindex = xColumn->indexForValue(x);
 	double x_new = xColumn->valueAt(xindex);
-	auto pointPos = q->markerpoints[activeIndex].customPoint->position().point.x();
+	auto pointPos = q->markerpoints[activeIndex].customPoint->positionLogical().x();
 	if (abs(x_new - pointPos) > 0) {
 		if ((xColumn->rowCount() - 1 == xindex && pointPos > x_new) || (xindex == 0 && pointPos < x_new))
 		{
@@ -1042,7 +1042,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 
 		// problem: when curves have different number of samples, the points are anymore aligned
 		// with the vertical line
-		QPointF position = q->markerpoints.at(0).customPoint->position().point;
+		QPointF position = q->markerpoints.at(0).customPoint->positionLogical();
 		m_index += index;
 		auto* column = q->markerpoints.at(0).curve->xColumn();
 		rowCount = column->rowCount();
@@ -1055,7 +1055,7 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 		x = column->valueAt(m_index);
 		for (int i = 1; i < q->markerPointsCount(); i++) {
 			if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
-				position = q->markerpoints[i].customPoint->position().point;
+				position = q->markerpoints[i].customPoint->positionLogical();
 				if (m_index > rowCount - 1)
 					m_index = rowCount - 1;
 				if (m_index < 0)
