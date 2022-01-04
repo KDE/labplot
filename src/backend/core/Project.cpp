@@ -704,20 +704,20 @@ void Project::retransformElements(AbstractAspect* aspect) {
 			curve->recalculate();
 	}
 
-	auto childs = aspect->project()->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
-	for (auto child: childs) {
+	//set "isLoading" to false for all worksheet elements
+	const auto& children = aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+	for (auto* child : children)
 		child->setIsLoading(false);
-	}
 
 	//all data was read:
 	//call retransform() to every element
 	if (hasChildren && aspect->type() != AspectType::CartesianPlot) {
-		auto c = aspect->project()->children<Worksheet>(ChildIndexFlag::IncludeHidden);
-		for (auto child: c) {
+		const auto& worksheets = aspect->children<Worksheet>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+		for (auto* w : worksheets) {
 			// retransform all elements in the worksheet (labels, images, plots)
 			// the plots will then recursive retransform the childs of them
-			auto elements = child->children<WorksheetElement>(ChildIndexFlag::IncludeHidden);
-			for (auto e: elements) {
+			const auto& elements = w->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+			for (auto* e : elements) {
 				if (e->type() == AspectType::CartesianPlot)
 					static_cast<CartesianPlot*>(e)->retransformAll();
 				else
@@ -731,7 +731,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 		else if (aspect->inherits(AspectType::XYCurve) || aspect->type() == AspectType::Histogram)
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
 
-		for (auto plot: plots)
+		for (auto* plot: plots)
 			plot->retransform();
 	}
 
