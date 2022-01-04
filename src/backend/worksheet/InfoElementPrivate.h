@@ -46,7 +46,6 @@ public:
 	virtual void recalcShapeAndBoundingRect() override {};
 
 	bool visible{true};
-	double xPos;
 
 	// TextLabel Gluepoint
 	int gluePointIndex{-1}; // negative value means automatic mode

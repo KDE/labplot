@@ -65,14 +65,12 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 			double xpos;
 			double y = curve->y(pos,xpos,valueFound);
 			if (valueFound) {
-				d->xPos = xpos;
 				d->positionLogical = xpos;
 				d->m_index = curve->xColumn()->indexForValue(xpos);
 				custompoint->setPositionLogical(QPointF(xpos,y));
 				DEBUG("Value found")
 			}
 		} else {
-			d->xPos = 0;
 			d->positionLogical = 0;
 			custompoint->setPositionLogical(cSystem->mapSceneToLogical(QPointF(0, 0)));
 			DEBUG("Value not found")
@@ -194,14 +192,13 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		if (curve->xColumn() && curve->yColumn()) {
 			bool valueFound;
 			double x_new, y;
-			if (markerpoints.isEmpty())
-				y = curve->y(d->xPos, x_new, valueFound);
-			else
-				y = curve->y(markerpoints[0].customPoint->position().point.x(), x_new, valueFound);
+			y = curve->y(d->positionLogical, x_new, valueFound);
 
+			m_suppressChildPositionChanged = true;
 			custompoint->setUndoAware(false);
 			custompoint->setPositionLogical(QPointF(x_new, y));
 			custompoint->setUndoAware(true);
+			m_suppressChildPositionChanged = false;
 		}
 	} else
 		addChild(custompoint);
@@ -570,16 +567,19 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 void InfoElement::childAdded(const AbstractAspect* child) {
 	const CustomPoint* point = dynamic_cast<const CustomPoint*>(child);
 	if (point) {
-		connect(point, &CustomPoint::positionChanged, this, &InfoElement::pointPositionChanged);
-		connect(point, &CustomPoint::moveBegin, this, &InfoElement::moveElementBegin);
-		connect(point, &CustomPoint::moveEnd, this, &InfoElement::moveElementEnd);
-
 		CustomPoint* p = const_cast<CustomPoint*>(point);
+		m_suppressChildPositionChanged = true;
 		p->setCoordinateBindingEnabled(true);
 		p->setParentGraphicsItem(graphicsItem());
 		// otherwise Custom point must be patched to handle discrete curve points.
 		// This makes it much easier
 		p->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
+		m_suppressChildPositionChanged = false;
+		// Must be done after setCoordinateBindingEnabled, otherwise positionChanged will be called and
+		// then the InfoElement position will be set incorrectly
+		connect(point, &CustomPoint::positionChanged, this, &InfoElement::pointPositionChanged);
+		connect(point, &CustomPoint::moveBegin, this, &InfoElement::moveElementBegin);
+		connect(point, &CustomPoint::moveEnd, this, &InfoElement::moveElementEnd);
 		return;
 	}
 
@@ -642,7 +642,7 @@ double InfoElement::setMarkerpointPosition(double x) {
 	for (int i = 0; i < markerpoints.length(); i++) {
 		bool valueFound;
 		double y = markerpoints[i].curve->y(x,x_new, valueFound);
-		d->xPos = x_new;
+		d->positionLogical = x_new;
 		if (i == 0)
 			x_new_first = x_new;
 
@@ -719,9 +719,11 @@ void InfoElement::setPositionLogical(double pos) {
 		d->m_index = index;
 		exec(new InfoElementSetPositionLogicalCmd(d, pos, ki18n("%1: set position")));
 		setMarkerpointPosition(value);
+		m_setTextLabelText = true;
 		m_title->setUndoAware(false);
 		m_title->setText(createTextLabelText());
 		m_title->setUndoAware(true);
+		m_setTextLabelText = false;
 		retransform();
 		positionLogicalChanged(d->positionLogical);
 	}
@@ -995,7 +997,7 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 	// TODO: find better method to do this. It's inefficient.
 	// Finding which curve should be used to find the new values
-	double x = xPos;
+	double x = positionLogical;
 	int activeIndex = 0;
 	for (int i = 1; i < q->markerPointsCount(); i++) {
 		if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
