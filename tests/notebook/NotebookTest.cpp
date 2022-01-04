@@ -183,9 +183,9 @@ void NotebookTest::testParserPython08() {
 	QCOMPARE(res.at(0).isValid(), true);
 	QCOMPARE(res.at(1).isValid(), true);
 	QCOMPARE(res.at(2).isValid(), true);
-	QTEST_ASSERT(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2016-03-26T02:14:00.000");
-	QTEST_ASSERT(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2017-03-26T02:14:00.000");
-	QTEST_ASSERT(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T02:14:00.000");
+	QVERIFY2(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2016-03-26T02:14:00.000", qPrintable(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz")));
+	QVERIFY2(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2017-03-26T02:14:00.000", qPrintable(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz")));
+	QVERIFY2(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T02:14:00.000", qPrintable(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz")));
 }
 
 
@@ -202,9 +202,9 @@ void NotebookTest::testParserPython09() {
 	QCOMPARE(res.at(0).isValid(), true);
 	QCOMPARE(res.at(1).isValid(), true);
 	QCOMPARE(res.at(2).isValid(), true);
-	QTEST_ASSERT(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2016-03-26T02:00:00.000");
-	QTEST_ASSERT(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2017-03-26T02:00:00.000");
-	QTEST_ASSERT(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T02:00:00.000");
+	QVERIFY2(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2016-03-26T02:00:00.000", qPrintable(res.at(0).toString("yyyy-MM-ddThh:mm:ss.zzz")));
+	QVERIFY2(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2017-03-26T02:00:00.000", qPrintable(res.at(1).toString("yyyy-MM-ddThh:mm:ss.zzz")));
+	QVERIFY2(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz") == "2018-03-26T02:00:00.000", qPrintable(res.at(2).toString("yyyy-MM-ddThh:mm:ss.zzz")));
 }
 void NotebookTest::testParserPython10() {
 	// Testing datetime day
