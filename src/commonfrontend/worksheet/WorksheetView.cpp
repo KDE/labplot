@@ -968,9 +968,12 @@ void WorksheetView::drawBackground(QPainter* painter, const QRectF& rect) {
 bool WorksheetView::isPlotAtPos(QPoint pos) const {
 	QGraphicsItem* item = itemAt(pos);
 	if (item) {
-		const auto* w = static_cast<WorksheetElementPrivate*>(item)->q;
-		if (w->type() == AspectType::CartesianPlot ||
-			w->parent(AspectType::CartesianPlot))
+		// Not every element is a WorksheetElementPrivate, for example the
+		// ScaledTextItem of the Textlabel. Therefore it must be checked
+		// it it is a WorksheetElementPrivate or not
+		const auto* w = dynamic_cast<WorksheetElementPrivate*>(item);
+		if (w && ((w->q->type() == AspectType::CartesianPlot) ||
+			w->q->parent(AspectType::CartesianPlot)))
 			return true;
 	}
 
