@@ -1254,7 +1254,7 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double x, double& minY, double& ma
 //			}
 			lines.append(QLineF(x, maxY, x, minY));
 			lines.append(QLineF(QPointF(x, lastPoint.y()), p));
-		} else
+		} else if (!isnan(lastPoint.x()) && !isnan(lastPoint.y()))
 			lines.append(QLineF(lastPoint, p));
 		prevPixelDiffZero = false;
 		minY = p.y();
