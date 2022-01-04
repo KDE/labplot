@@ -1189,26 +1189,6 @@ void XYCurvePrivate::recalcLogicalPoints() {
 /*!
  * Adds a line, which connects two points, but only if they don't lie on the same xAxis pixel.
  * If they lie on the same x pixel, draw a vertical line between the minimum and maximum y value. So all points are included
- * This function is only valid for linear x Axis scale!
- * @param p0 first point
- * @param p1 second point
- * @param minY
- * @param maxY
- * @param overlap if at the previous call was an overlap between the previous two points
- * @param minLogicalDiffX logical difference between two pixels
- * @param pixelDiff x pixel distance between two points
- */
-void XYCurvePrivate::addLinearLine(QPointF p0, QPointF p1, double& minY, double& maxY, QPointF& lastPoint, double minLogicalDiffX, int& pixelDiff) {
-	//DEBUG("XYCurvePrivate::addLinearLine()")
-	pixelDiff = qRound(p1.x() / minLogicalDiffX) - qRound(p0.x() / minLogicalDiffX);
-	//QDEBUG("	" << p0 << " -> " << p1  << "p0.x*minLogicalDiffX =" << p0.x()*minLogicalDiffX << ", p1.x*minLogicalDiffX =" << p1.x()*minLogicalDiffX << ", pixelDiff =" << pixelDiff);
-
-	addUniqueLine(p0, p1, minY, maxY, lastPoint, pixelDiff);
-}
-
-/*!
- * Adds a line, which connects two points, but only if they don't lie on the same xAxis pixel.
- * If they lie on the same x pixel, draw a vertical line between the minimum and maximum y value. So all points are included
  * This function can be used for all axis scalings (linear, log, sqrt, ...). For the linear case use the function above, because it's optimized for the linear case
  * @param p0 first point
  * @param p1 second point
@@ -1228,7 +1208,10 @@ void XYCurvePrivate::addLine(QPointF p0, QPointF p1, double& minY, double& maxY,
 		//DEBUG("	plot->xMax() - plot->xMin() = " << plot->xMax() - plot->xMin())
 		//DEBUG("	plot->dataRect().width() = " << plot->dataRect().width())
 		//DEBUG("	-> minLogicalDiffX = " << minLogicalDiffX)
-		addLinearLine(p0, p1, minY, maxY, lastPoint, minLogicalDiffX, pixelDiff);
+		pixelDiff = qRound(p1.x() / minLogicalDiffX) - qRound(p0.x() / minLogicalDiffX);
+		//QDEBUG("	" << p0 << " -> " << p1  << "p0.x*minLogicalDiffX =" << p0.x()*minLogicalDiffX << ", p1.x*minLogicalDiffX =" << p1.x()*minLogicalDiffX << ", pixelDiff =" << pixelDiff);
+
+		addUniqueLine(p0, p1, minY, maxY, lastPoint, pixelDiff);
 	} else {
 		// for nonlinear scaling the pixel distance must be calculated for every point pair
 		bool visible;
