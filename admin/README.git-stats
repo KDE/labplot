@@ -1,0 +1,20 @@
+* calculate the number of changes files and insertions and deletions between two tags (or branches):
+git diff --stat 2.6.0 2.7.0 | tail -n1
+
+* calculate the number of commits between two tags (or branches):
+git log 2.6.0..2.7.0 --oneline --no-merges | wc -l
+
+* use https://www.timeanddate.com/date/duration.html to calculate the number of dates between the announcements for major releases
+
+* Results:
+
+release files_changed insertions deletions commits days
+2.1 528 147256 29568 546 644
+2.2 188 31427 2599 232 156
+2.3 217 19157 6568 310 116
+2.4 421 30452 12030 780 260
+2.5 875 75135 29508 1807 438
+2.6 698 69462 18826 1150 302
+2.7 356 168107 9176 476 188
+2.8 563 54361 13968 867 328
+2.9 1129 87640 41732 1401 474
