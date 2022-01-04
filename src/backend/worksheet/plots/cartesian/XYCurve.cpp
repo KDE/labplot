@@ -1209,7 +1209,7 @@ void XYCurvePrivate::addLine(QPointF p, double& x, double& minY, double& maxY, Q
 			x = xRange.start();
 
 		pixelDiff = abs(qRound(p.x() / minLogicalDiffX) - qRound(x / minLogicalDiffX));
-		addUniqueLine(p, x, minY, maxY, lastPoint, pixelDiff);
+		addUniqueLine(p, x, minY, maxY, lastPoint, pixelDiff, m_lines);
 
 		if (pixelDiff > 0) // set x to next pixel
 			x += minLogicalDiffX;
@@ -1232,7 +1232,7 @@ void XYCurvePrivate::addLine(QPointF p, double& x, double& minY, double& maxY, Q
 		int p1Pixel = qRound((pScene.x() - plot()->dataRect().x()) / (double)plot()->dataRect().width() * numberOfPixelX);
 		pixelDiff = p1Pixel - xPixel;
 
-		addUniqueLine(p, x, minY, maxY, lastPoint, pixelDiff);
+		addUniqueLine(p, x, minY, maxY, lastPoint, pixelDiff, m_lines);
 	}
 }
 
@@ -1245,7 +1245,7 @@ void XYCurvePrivate::addLine(QPointF p, double& x, double& minY, double& maxY, Q
  * @param lastPoint remember last point in case of overlap
  * @param pixelDiff pixel distance in x between two points
  */
-void XYCurvePrivate::addUniqueLine(QPointF p, double x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff) {
+void XYCurvePrivate::addUniqueLine(QPointF p, double x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF>& lines) {
 	static bool prevPixelDiffZero = false;
 	if (pixelDiff == 0) {
 		maxY = qMax(p.y(), maxY);
@@ -1264,10 +1264,10 @@ void XYCurvePrivate::addUniqueLine(QPointF p, double x, double& minY, double& ma
 //				auto p_temp = m_lines.last().p2();
 //				m_lines.append(QLineF(p_temp.x(), p_temp.y(), x, p_temp.y()));
 //			}
-			m_lines.append(QLineF(x, maxY, x, minY));
-			m_lines.append(QLineF(QPointF(x, lastPoint.y()), p));
+			lines.append(QLineF(x, maxY, x, minY));
+			lines.append(QLineF(QPointF(x, lastPoint.y()), p));
 		} else
-			m_lines.append(QLineF(lastPoint, p));
+			lines.append(QLineF(lastPoint, p));
 		prevPixelDiffZero = false;
 		minY = p.y();
 		maxY = p.y();
@@ -1376,6 +1376,9 @@ void XYCurvePrivate::updateLines() {
 		case XYCurve::LineType::NoLine:
 			break;
 		case XYCurve::LineType::Line: {
+#ifdef PERFTRACE_CURVES
+		PERFTRACE(name() + Q_FUNC_INFO + ", find relevant lines");
+#endif
 			for (int i{startIndex}; i < endIndex; i++) {
 				if (!lineSkipGaps && !connectedPointsLogical.at(i))
 					continue;
@@ -2354,6 +2357,9 @@ bool XYCurve::minMaxY(const Range<int>& indexRange, Range<double>& yRange, bool 
  * \p includeErrorBars If true respect the error bars in the min/max calculation
  */
 bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column2, const ErrorType errorType, const AbstractColumn* errorPlusColumn, const AbstractColumn* errorMinusColumn, const Range<int>& indexRange, Range<double>& range, bool includeErrorBars) const {
+	#ifdef PERFTRACE_AUTOSCALE
+		PERFTRACE(name() + Q_FUNC_INFO);
+	#endif
 	// when property is increasing or decreasing there is a benefit in finding minimum and maximum
 	// for property == AbstractColumn::Properties::No it must be iterated over all values so it does not matter if this function or the below one is used
 	// if the property of the second column is not AbstractColumn::Properties::No means, that all values are valid and not masked
