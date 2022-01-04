@@ -1383,9 +1383,8 @@ void XYCurvePrivate::updateLines() {
 					continue;
 				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 			}
-
-			if (!isnan(lastPoint.x()))	// last line
-				m_lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
+			// last line
+			m_lines.append(QLineF(m_logicalPoints.at(endIndex - 1), m_logicalPoints.at(endIndex)));
 
 			break;
 		}
@@ -1402,8 +1401,8 @@ void XYCurvePrivate::updateLines() {
 				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 			}
-			if (!isnan(lastPoint.x()))	// last line
-				m_lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
+			// last line
+			m_lines.append(QLineF(m_logicalPoints.at(endIndex - 1), m_logicalPoints.at(endIndex)));
 
 			break;
 		}
@@ -1419,8 +1418,8 @@ void XYCurvePrivate::updateLines() {
 				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 			}
-			if (!isnan(lastPoint.x()))	// last line
-				m_lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
+			// last line
+			m_lines.append(QLineF(m_logicalPoints.at(endIndex - 1), m_logicalPoints.at(endIndex)));
 
 			break;
 		}
@@ -1439,8 +1438,8 @@ void XYCurvePrivate::updateLines() {
 				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 				addLine(tempPoint2, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 			}
-			if (!isnan(lastPoint.x()))	// last line
-				m_lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
+			// last line
+			m_lines.append(QLineF(m_logicalPoints.at(endIndex - 1), m_logicalPoints.at(endIndex)));
 
 			break;
 		}
@@ -1459,8 +1458,8 @@ void XYCurvePrivate::updateLines() {
 				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 				addLine(tempPoint2, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 			}
-			if (!isnan(lastPoint.x()))	// last line
-				m_lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
+			// last line
+			m_lines.append(QLineF(m_logicalPoints.at(endIndex - 1), m_logicalPoints.at(endIndex)));
 
 			break;
 		}
@@ -1485,8 +1484,8 @@ void XYCurvePrivate::updateLines() {
 					}
 				}
 			}
-			if (!std::isnan(lastPoint.x()))	// last line
-				m_lines.append(QLineF(m_logicalPoints.at(endIndex - 1), m_logicalPoints.at(endIndex)));
+			// last line
+			m_lines.append(QLineF(m_logicalPoints.at(endIndex - 1), m_logicalPoints.at(endIndex)));
 
 			break;
 		}
@@ -1509,14 +1508,12 @@ void XYCurvePrivate::updateLines() {
 						lastPoint = QPointF(NAN, NAN);
 						m_lines.append(QLineF(QPointF(p0.x(), minY), QPointF(p0.x(), maxY)));
 					}
-					if (!std::isnan(lastPoint.x()))	// last line
-						m_lines.append(QLineF(m_logicalPoints[endIndex-1], m_logicalPoints[endIndex]));
+					m_lines.append(QLineF(m_logicalPoints.at(endIndex - 1), m_logicalPoints.at(endIndex)));
 
 					break;
 				}
 			}
-			if (!std::isnan(lastPoint.x()))	// last line
-				m_lines.append(QLineF(m_logicalPoints.at(endIndex - 1), m_logicalPoints.at(endIndex)));
+			m_lines.append(QLineF(m_logicalPoints.at(endIndex - 1), m_logicalPoints.at(endIndex)));
 
 			break;
 		}
