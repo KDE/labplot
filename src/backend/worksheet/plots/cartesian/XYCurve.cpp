@@ -2360,10 +2360,11 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 	// if the property of the second column is not AbstractColumn::Properties::No means, that all values are valid and not masked
 	//DEBUG(Q_FUNC_INFO << std::endl << ", column 1 min/max = " << column1->minimum() << "/" << column1->maximum())
 	if ((!includeErrorBars || errorType == ErrorType::NoError) && column1->properties() != AbstractColumn::Properties::No && column2 && column2->properties() != AbstractColumn::Properties::No) {
-		DEBUG( Q_FUNC_INFO << std::endl << ", column 1 min/max in index range = " << column1->minimum(indexRange.start(), indexRange.end()) << "/"
-		      << column1->maximum(indexRange.start(), indexRange.end()) )
+		auto max = column1->maximum(indexRange.start(), indexRange.end());
+		auto min = column1->minimum(indexRange.start(), indexRange.end());
+		DEBUG( Q_FUNC_INFO << std::endl << ", column 1 min/max in index range = " << min << "/" << max )
 		//TODO: Range
-		range.setRange( column1->minimum(indexRange.start(), indexRange.end()), column1->maximum(indexRange.start(), indexRange.end()) );
+		range.setRange( min, max );
 		return true;
 	}
 
