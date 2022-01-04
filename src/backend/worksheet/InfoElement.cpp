@@ -93,7 +93,11 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		QTextEdit textedit(str);
 		text.textPlaceholder = textedit.toHtml();
 
+		m_setTextLabelText = true;
+		m_title->setUndoAware(false);
 		m_title->setText(text);
+		m_title->setUndoAware(true);
+		m_setTextLabelText = false;
 
 		connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
 		custompoint->setVisible(curve->isVisible());
@@ -103,8 +107,6 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		setVisible(false);
 
 	m_suppressChildPositionChanged = false;
-
-	d->retransform();
 }
 
 InfoElement::~InfoElement() {
@@ -134,7 +136,11 @@ void InfoElement::init() {
 	m_title->setHidden(true);
 	TextLabel::TextWrapper text;
 	text.allowPlaceholder = true;
-	m_title->setText(text); // set placeholder to true
+	m_setTextLabelText = true;
+	m_title->setUndoAware(false);
+	m_title->setText(text);  // set placeholder to true
+	m_title->setUndoAware(true);
+	m_setTextLabelText = false;
 	addChild(m_title);
 
 	//use the color for the axis line from the theme also for info element's lines
