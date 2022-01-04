@@ -2475,7 +2475,10 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 
 	bool updated = false;
 	if (autoScaleX(index))
-		updated = this->scaleAutoX(index);
+		updated = this->scaleAutoX(index, true);
+	if (updated && autoScaleY(index))
+		this->scaleAutoY(index);
+	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
 	if (!updated) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
@@ -2498,10 +2501,11 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 }
 
 /*!
-	called when in one of the curves the x-data was changed.
-	Autoscales the coordinate system and the x-axes, when "auto-scale" is active.
+	called when the y-data in one of the curves was changed.
+	Autoscales the coordinate system and the y-axes, when "auto-scale" is active.
 */
 void CartesianPlot::yDataChanged(XYCurve* curve) {
+	DEBUG(Q_FUNC_INFO)
 	if (project() && project()->isLoading())
 		return;
 
@@ -2523,14 +2527,16 @@ void CartesianPlot::yDataChanged(XYCurve* curve) {
 
 	bool updated = false;
 	if (autoScaleY(index))
-		updated = this->scaleAutoY(index);
+		updated = this->scaleAutoY(index, true);
+	if (updated && autoScaleX(index))
+		this->scaleAutoX(index);
+	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
 	if (!updated) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
 		curve->retransform();
-
 	}
 
 	//in case there is only one curve and its column mode was changed, check whether we start plotting datetime data
