@@ -1198,16 +1198,8 @@ void XYCurvePrivate::recalcLogicalPoints() {
  * @param pixelDiff x pixel distance between two points
  * @param pixelCount pixel count
  */
-void XYCurvePrivate::addLine(QPointF p, double& x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX) {
-	const auto xIndex{ q->cSystem->xIndex() };
-	if (plot()->xRangeScale(xIndex) == RangeT::Scale::Linear) {
-		const auto xRange{ plot()->xRange(xIndex) };
-		const double minLogicalDiffX = (xRange.end() - xRange.start())/numberOfPixelX; // due to the nonlinearity code belo it it is not possible to pull this calculation out.
-
-		// setting initial point
-		if (qIsNaN(x))
-			x = xRange.start();
-
+void XYCurvePrivate::addLine(QPointF p, double& x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX, double minLogicalDiffX, RangeT::Scale scale) {
+	if (scale == RangeT::Scale::Linear) {
 		pixelDiff = abs(qRound(p.x() / minLogicalDiffX) - qRound(x / minLogicalDiffX));
 		addUniqueLine(p, x, minY, maxY, lastPoint, pixelDiff, m_lines);
 
@@ -1221,10 +1213,6 @@ void XYCurvePrivate::addLine(QPointF p, double& x, double& minY, double& maxY, Q
 		// if the point is not valid, don't create a line
 		if (!visible)
 			return;
-
-		// setting initial point
-		if (qIsNaN(x))
-			x = plot()->dataRect().x();
 
 		// using only the difference between the points is not sufficient, because p0 is updated always
 		// independent if new line added or not
@@ -1368,9 +1356,16 @@ void XYCurvePrivate::updateLines() {
 		int pixelDiff = 0;
 		double xPos{qQNaN()}, minY{INFINITY}, maxY{-INFINITY};
 		QPointF p0, p1;
-		auto cs = plot()->coordinateSystem(q->coordinateSystemIndex());
-		double minLogicalDiffX = plot()->xRange(cs->xIndex()).size()/numberOfPixelX;
-		//double minLogicalDiffY = plot()->yRange(cs->yIndex()).size()/numberOfPixelY;
+		const auto xIndex{ q->cSystem->xIndex() };
+		const auto xRange{ plot()->xRange(xIndex) };
+		const double minLogicalDiffX = (xRange.end() - xRange.start())/numberOfPixelX; // due to the nonlinearity code belo it it is not possible to pull this calculation out.
+		const RangeT::Scale scale = plot()->xRangeScale(xIndex);
+
+		// setting initial point
+		if (scale == RangeT::Scale::Linear)
+			xPos = xRange.start();
+		else
+			xPos = plot()->dataRect().x();
 
 		switch (lineType) {
 		case XYCurve::LineType::NoLine:
@@ -1386,7 +1381,7 @@ void XYCurvePrivate::updateLines() {
 				p1 = m_logicalPoints.at(i+1);
 				if (lineIncreasingXOnly && (p1.x() < p0.x())) // skip points
 					continue;
-				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
+				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 			}
 
 			if (!isnan(lastPoint.x()))	// last line
@@ -1404,8 +1399,8 @@ void XYCurvePrivate::updateLines() {
 					continue;
 
 				tempPoint1 = QPointF(p1.x(), p0.y());
-				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
-				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
+				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
+				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 			}
 			if (!isnan(lastPoint.x()))	// last line
 				m_lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
@@ -1421,8 +1416,8 @@ void XYCurvePrivate::updateLines() {
 				if (lineIncreasingXOnly && (p1.x() < p0.x()))
 					continue;
 				tempPoint1 = QPointF(p0.x(), p1.y());
-				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
-				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
+				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
+				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 			}
 			if (!isnan(lastPoint.x()))	// last line
 				m_lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
@@ -1440,9 +1435,9 @@ void XYCurvePrivate::updateLines() {
 					continue;
 				tempPoint1 = QPointF(p0.x() + (p1.x()-p0.x())/2., p0.y());
 				tempPoint2 = QPointF(p0.x() + (p1.x()-p0.x())/2., p1.y());
-				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
-				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
-				addLine(tempPoint2, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
+				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
+				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
+				addLine(tempPoint2, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 			}
 			if (!isnan(lastPoint.x()))	// last line
 				m_lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
@@ -1460,9 +1455,9 @@ void XYCurvePrivate::updateLines() {
 					continue;
 				tempPoint1 = QPointF(p0.x(), p0.y() + (p1.y()-p0.y())/2.);
 				tempPoint2 = QPointF(p1.x(), p0.y() + (p1.y()-p0.y())/2.);
-				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
-				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
-				addLine(tempPoint2, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
+				addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
+				addLine(tempPoint1, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
+				addLine(tempPoint2, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 			}
 			if (!isnan(lastPoint.x()))	// last line
 				m_lines.append(QLineF(QPointF(p1.x(), minY), QPointF(p1.x(), maxY)));
@@ -1480,7 +1475,7 @@ void XYCurvePrivate::updateLines() {
 						skip = 0;
 						continue;
 					}
-					addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
+					addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 					skip++;
 				} else {
 					skip = 0;
@@ -1506,7 +1501,7 @@ void XYCurvePrivate::updateLines() {
 						skip = 0;
 						continue;
 					}
-					addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
+					addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 					skip++;
 				} else {
 					skip = 0;
@@ -1611,11 +1606,11 @@ void XYCurvePrivate::updateLines() {
 			if (!xinterp.empty()) {
 				for (unsigned int i{0}; i < xinterp.size() - 1; i++) {
 					p0 = QPointF(xinterp[i], yinterp[i]);
-					addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
+					addLine(p0, xPos, minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 				}
 
 				addLine(QPointF(x[numberOfPoints - 1], y[numberOfPoints - 1]), xPos,
-						minY, maxY, lastPoint, pixelDiff, numberOfPixelX);
+						minY, maxY, lastPoint, pixelDiff, numberOfPixelX, minLogicalDiffX, scale);
 
 				// add last line
 				if (!std::isnan(lastPoint.x()))
