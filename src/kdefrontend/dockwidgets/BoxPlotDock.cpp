@@ -239,10 +239,10 @@ void BoxPlotDock::setBoxPlots(QList<BoxPlot*> list) {
 	ui.leName->setToolTip("");
 
 	//show the properties of the first box plot
+	ui.chkVisible->setChecked(m_boxPlot->isVisible());
 	KConfig config(QString(), KConfig::SimpleConfig);
 	loadConfig(config);
 	loadDataColumns();
-	ui.chkVisible->setChecked(m_boxPlot->isVisible() );
 
 	//set the current locale
 	updateLocale();
@@ -623,12 +623,15 @@ void BoxPlotDock::fillingBrushStyleChanged(int index) const {
 		boxPlot->setFillingBrushStyle(style);
 }
 
-void BoxPlotDock::fillingFirstColorChanged(const QColor& c) const {
+void BoxPlotDock::fillingFirstColorChanged(const QColor& c) {
 	if (m_initializing)
 		return;
 
 	for (auto* boxPlot : m_boxPlots)
 		boxPlot->setFillingFirstColor(c);
+
+	Lock lock(m_initializing);
+	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, c);
 }
 
 void BoxPlotDock::fillingSecondColorChanged(const QColor& c) const {
@@ -1181,6 +1184,7 @@ void BoxPlotDock::loadConfig(KConfig& config) {
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
 	GuiTools::updatePenStyles(ui.cbMedianLineStyle, ui.kcbMedianLineColor->color());
 	GuiTools::updatePenStyles(ui.cbWhiskersStyle, ui.kcbWhiskersColor->color());
+	GuiTools::updatePenStyles(ui.cbWhiskersCapStyle, ui.kcbWhiskersCapColor->color());
 }
 
 void BoxPlotDock::loadConfigFromTemplate(KConfig& config) {

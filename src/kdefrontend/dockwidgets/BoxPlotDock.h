@@ -69,7 +69,7 @@ private Q_SLOTS:
 	void fillingColorStyleChanged(int) const;
 	void fillingImageStyleChanged(int) const;
 	void fillingBrushStyleChanged(int) const;
-	void fillingFirstColorChanged(const QColor&) const;
+	void fillingFirstColorChanged(const QColor&);
 	void fillingSecondColorChanged(const QColor&) const;
 	void selectFile();
 	void fileNameChanged() const;

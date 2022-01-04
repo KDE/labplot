@@ -1064,6 +1064,9 @@ void HistogramDock::fillingFirstColorChanged(const QColor& c) {
 
 	for (auto* curve : m_curvesList)
 		curve->setFillingFirstColor(c);
+
+	Lock lock(m_initializing);
+	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, c);
 }
 
 void HistogramDock::fillingSecondColorChanged(const QColor& c) {
@@ -1493,6 +1496,11 @@ void HistogramDock::loadConfig(KConfig& config) {
 	ui.kcbErrorBarsColor->setColor( group.readEntry("ErrorBarsColor", m_curve->errorBarsPen().color()) );
 	ui.sbErrorBarsWidth->setValue( Worksheet::convertFromSceneUnits(group.readEntry("ErrorBarsWidth", m_curve->errorBarsPen().widthF()),Worksheet::Unit::Point) );
 	ui.sbErrorBarsOpacity->setValue( round(group.readEntry("ErrorBarsOpacity", m_curve->errorBarsOpacity())*100.0) );
+
+	Lock lock(m_initializing);
+	GuiTools::updatePenStyles(ui.cbLineStyle, ui.kcbLineColor->color());
+	GuiTools::updateBrushStyles(ui.cbFillingBrushStyle, ui.kcbFillingFirstColor->color());
+	GuiTools::updatePenStyles(ui.cbErrorBarsStyle, ui.kcbErrorBarsColor->color());
 }
 
 void HistogramDock::loadConfigFromTemplate(KConfig& config) {
