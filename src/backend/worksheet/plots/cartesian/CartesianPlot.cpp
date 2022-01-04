@@ -2932,6 +2932,10 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index << ", complete range = " << completeRange)
 	Q_D(CartesianPlot);
 
+#ifdef PERFTRACE_AUTOSCALE
+	PERFTRACE(name() + Q_FUNC_INFO);
+#endif
+
 	d->dataYRange(index).setRange(qInf(), -qInf());
 	auto range{d->dataYRange(index)};
 

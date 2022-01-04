@@ -34,6 +34,7 @@ private:
 
 #define PERFTRACE_CURVES 1
 #define PERFTRACE_LIVE_IMPORT 1
+#define PERFTRACE_AUTOSCALE 1
 
 #ifdef PERFTRACE_ENABLED
 #define PERFTRACE(msg) PerfTracer tracer(msg)

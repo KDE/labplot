@@ -1774,6 +1774,9 @@ double Column::minimum(int count) const {
  * \p endIndex
  */
 double Column::minimum(int startIndex, int endIndex) const {
+#ifdef PERFTRACE_AUTOSCALE
+	PERFTRACE(name() + Q_FUNC_INFO);
+#endif
 	double min = qInf();
 
 	if (rowCount() == 0)
@@ -1888,6 +1891,9 @@ double Column::minimum(int startIndex, int endIndex) const {
  * for \c count < 0, the maximum of the last \p count elements is returned.
  */
 double Column::maximum(int count) const {
+#ifdef PERFTRACE_AUTOSCALE
+	PERFTRACE(name() + Q_FUNC_INFO);
+#endif
 	if (count == 0 && d->statisticsAvailable)
 		return const_cast<Column*>(this)->statistics().maximum;
 	else {
