@@ -26,7 +26,7 @@ optional packages
 	* Qt SerialPort to support serial port functionality
 	* Qt MQTT module (https://github.com/qt/qtmqtt) to support reading and plotting of data from MQTT brokers
 	* KUserFeedback to support collecting feedback from users
-
+	* Discount to support Markdown markup language text
 
 ===============================================================================
 To build LabPlot execute
