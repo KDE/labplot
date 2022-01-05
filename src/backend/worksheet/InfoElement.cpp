@@ -1037,35 +1037,22 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 		else
 			index = -1;
 
-		double x;
-		int rowCount;
-
 		// problem: when curves have different number of samples, the points are anymore aligned
 		// with the vertical line
-		QPointF position = q->markerpoints.at(0).customPoint->positionLogical();
-		m_index += index;
-		auto* column = q->markerpoints.at(0).curve->xColumn();
-		rowCount = column->rowCount();
-		if (m_index > rowCount - 1)
-			m_index = rowCount - 1;
-		if (m_index < 0)
-			m_index = 0;
-
 		// find markerpoint to which the values matches (curvename is stored in connectionLineCurveName)
-		x = column->valueAt(m_index);
-		for (int i = 1; i < q->markerPointsCount(); i++) {
+		for (int i = 0; i < q->markerPointsCount(); i++) {
 			if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
-				position = q->markerpoints[i].customPoint->positionLogical();
+				auto rowCount = q->markerpoints[i].curve->xColumn()->rowCount();
+				m_index += index;
 				if (m_index > rowCount - 1)
 					m_index = rowCount - 1;
 				if (m_index < 0)
 					m_index = 0;
-				q->markerpoints[i].curve->xColumn()->valueAt(m_index);
+				auto x = q->markerpoints[i].curve->xColumn()->valueAt(m_index);
+				q->setPositionLogical(x);
 				break;
 			}
 		}
-
-		q->setPositionLogical(x);
 	}
 }
 
