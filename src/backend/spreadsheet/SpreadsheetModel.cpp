@@ -456,40 +456,11 @@ void SpreadsheetModel::updateHorizontalHeader() {
 		QString header = col->name();
 
 		if (showColumnType)
-			header += QLatin1String(" {") + AbstractColumn::modeName(col->columnMode()) + QLatin1Char('}');
+			header += QLatin1String(" {") + AbstractColumn::modeString(col->columnMode()) + QLatin1Char('}');
 
 		if (showPlotDesignation) {
-			switch (col->plotDesignation()) {
-			case AbstractColumn::PlotDesignation::NoDesignation:
-				break;
-			case AbstractColumn::PlotDesignation::X:
-				header += QLatin1String(" [X]");
-				break;
-			case AbstractColumn::PlotDesignation::Y:
-				header += QLatin1String(" [Y]");
-				break;
-			case AbstractColumn::PlotDesignation::Z:
-				header += QLatin1String(" [Z]");
-				break;
-			case AbstractColumn::PlotDesignation::XError:
-				header += QLatin1String(" [") + i18n("X-error") + QLatin1Char(']');
-				break;
-			case AbstractColumn::PlotDesignation::XErrorPlus:
-				header += QLatin1String(" [") + i18n("X-error +") + QLatin1Char(']');
-				break;
-			case AbstractColumn::PlotDesignation::XErrorMinus:
-				header += QLatin1String(" [") + i18n("X-error -") + QLatin1Char(']');
-				break;
-			case AbstractColumn::PlotDesignation::YError:
-				header += QLatin1String(" [") + i18n("Y-error") + QLatin1Char(']');
-				break;
-			case AbstractColumn::PlotDesignation::YErrorPlus:
-				header += QLatin1String(" [") + i18n("Y-error +") + QLatin1Char(']');
-				break;
-			case AbstractColumn::PlotDesignation::YErrorMinus:
-				header += QLatin1String(" [") + i18n("Y-error -") + QLatin1Char(']');
-				break;
-			}
+			if (col->plotDesignation() != AbstractColumn::PlotDesignation::NoDesignation)
+				header += QLatin1String(" ") + AbstractColumn::designationString(col->plotDesignation());
 		}
 		m_horizontal_header_data.replace(i, header);
 	}

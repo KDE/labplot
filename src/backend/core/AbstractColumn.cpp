@@ -97,40 +97,57 @@ QStringList AbstractColumn::dateTimeFormats() {
 }
 
 /**
- * \brief Convenience method for getting designation string
- * translated to be used in UI
- */
-QString AbstractColumn::designationName(PlotDesignation d) {
-	switch (d) {
-	case PlotDesignation::NoDesignation:
-		return i18n("No");
-	case PlotDesignation::X:
-		return i18n("X");
-	case PlotDesignation::Y:
-		return i18n("Y");
-	case PlotDesignation::Z:
-		return i18n("Z");
-	case PlotDesignation::XError:
-		return i18n("X Error");
-	case PlotDesignation::XErrorPlus:
-		return i18n("X Error Plus");
-	case PlotDesignation::XErrorMinus:
-		return i18n("X Error Minus");
-	case PlotDesignation::YError:
-		return i18n("Y Error");
-	case PlotDesignation::YErrorPlus:
-		return i18n("Y Error Plus");
-	case PlotDesignation::YErrorMinus:
-		return i18n("Y Error Minus");
-	}
-
-	return i18n("UNDEFINED");
-}
-/**
- * \brief Convenience method for getting mode name
+ * \brief Convenience method for getting plot designation string
  * translated since used in UI
  */
-QString AbstractColumn::modeName(ColumnMode mode) {
+QString AbstractColumn::designationString(PlotDesignation d, bool withBrackets) {
+	QString s;
+
+	switch (d) {
+	case PlotDesignation::NoDesignation:
+		s = i18n("None");
+	case PlotDesignation::X:
+		s = QLatin1String("X");
+		break;
+	case PlotDesignation::Y:
+		s = QLatin1String("Y");
+		break;
+	case PlotDesignation::Z:
+		s = QLatin1String("Z");
+		break;
+	case PlotDesignation::XError:
+		s = i18n("X-error");
+		break;
+	case PlotDesignation::XErrorPlus:
+		s = i18n("X-error +");
+		break;
+	case PlotDesignation::XErrorMinus:
+		s = i18n("X-error -");
+		break;
+	case PlotDesignation::YError:
+		s = i18n("Y-error");
+		break;
+	case PlotDesignation::YErrorPlus:
+		s = i18n("Y-error +");
+		break;
+	case PlotDesignation::YErrorMinus:
+		s = i18n("Y-error -");
+		break;
+	default:
+		return QString("");
+	}
+
+	if (withBrackets)
+		s = QLatin1String("[") + s + QLatin1Char(']');
+
+	return s;
+}
+
+/**
+ * \brief Convenience method for getting mode string
+ * translated since used in UI
+ */
+QString AbstractColumn::modeString(ColumnMode mode) {
 	switch (mode) {
 	case ColumnMode::Double:
 		return i18n("Double");

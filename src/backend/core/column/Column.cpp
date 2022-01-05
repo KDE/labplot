@@ -1640,33 +1640,6 @@ AbstractColumn::PlotDesignation Column::plotDesignation() const {
 	return d->plotDesignation();
 }
 
-QString Column::plotDesignationString() const {
-	switch (plotDesignation()) {
-	case PlotDesignation::NoDesignation:
-		return QString("");
-	case PlotDesignation::X:
-		return QLatin1String("[X]");
-	case PlotDesignation::Y:
-		return QLatin1String("[Y]");
-	case PlotDesignation::Z:
-		return QLatin1String("[Z]");
-	case PlotDesignation::XError:
-		return QLatin1String("[") + i18n("X-error") + QLatin1Char(']');
-	case PlotDesignation::XErrorPlus:
-		return QLatin1String("[") + i18n("X-error +") + QLatin1Char(']');
-	case PlotDesignation::XErrorMinus:
-		return QLatin1String("[") + i18n("X-error -") + QLatin1Char(']');
-	case PlotDesignation::YError:
-		return QLatin1String("[") + i18n("Y-error") + QLatin1Char(']');
-	case PlotDesignation::YErrorPlus:
-		return QLatin1String("[") + i18n("Y-error +") + QLatin1Char(']');
-	case PlotDesignation::YErrorMinus:
-		return QLatin1String("[") + i18n("Y-error -") + QLatin1Char(']');
-	}
-
-	return QString("");
-}
-
 AbstractSimpleFilter* Column::outputFilter() const {
 	return d->outputFilter();
 }

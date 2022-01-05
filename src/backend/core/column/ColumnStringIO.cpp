@@ -30,10 +30,6 @@ AbstractColumn::PlotDesignation ColumnStringIO::plotDesignation() const {
 	return m_owner->plotDesignation();
 }
 
-QString ColumnStringIO::plotDesignationString() const {
-	return m_owner->plotDesignationString();
-}
-
 int ColumnStringIO::rowCount() const {
 	return m_owner->rowCount();
 }

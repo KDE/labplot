@@ -263,34 +263,35 @@ void SpreadsheetView::initActions() {
 	action_clear_columns = new QAction(QIcon::fromTheme("edit-clear"), i18n("Clear Content"), this);
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
-	action_set_as_none = new QAction(i18n("None"), this);
+	//TODO: action collection?
+	action_set_as_none = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::NoDesignation, false), this);
 	action_set_as_none->setData(static_cast<int>(AbstractColumn::PlotDesignation::NoDesignation));
 
-	action_set_as_x = new QAction(QLatin1String("X"), this);
+	action_set_as_x = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::X, false), this);
 	action_set_as_x->setData(static_cast<int>(AbstractColumn::PlotDesignation::X));
 
-	action_set_as_y = new QAction(QLatin1String("Y"), this);
+	action_set_as_y = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::Y, false), this);
 	action_set_as_y->setData(static_cast<int>(AbstractColumn::PlotDesignation::Y));
 
-	action_set_as_z = new QAction(QLatin1String("Z"), this);
+	action_set_as_z = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::Z, false), this);
 	action_set_as_z->setData(static_cast<int>(AbstractColumn::PlotDesignation::Z));
 
-	action_set_as_xerr = new QAction(i18n("X-error"), this);
+	action_set_as_xerr = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::XError, false), this);
 	action_set_as_xerr->setData(static_cast<int>(AbstractColumn::PlotDesignation::XError));
 
-	action_set_as_xerr_minus = new QAction(i18n("X-error minus"), this);
+	action_set_as_xerr_minus = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::XErrorMinus, false), this);
 	action_set_as_xerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorMinus));
 
-	action_set_as_xerr_plus = new QAction(i18n("X-error plus"), this);
+	action_set_as_xerr_plus = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::XErrorPlus, false), this);
 	action_set_as_xerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorPlus));
 
-	action_set_as_yerr = new QAction(i18n("Y-error"), this);
+	action_set_as_yerr = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::YError, false), this);
 	action_set_as_yerr->setData(static_cast<int>(AbstractColumn::PlotDesignation::YError));
 
-	action_set_as_yerr_minus = new QAction(i18n("Y-error minus"), this);
+	action_set_as_yerr_minus = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::YErrorMinus, false), this);
 	action_set_as_yerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorMinus));
 
-	action_set_as_yerr_plus = new QAction(i18n("Y-error plus"), this);
+	action_set_as_yerr_plus = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::YErrorPlus, false), this);
 	action_set_as_yerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorPlus));
 
 	//data manipulation

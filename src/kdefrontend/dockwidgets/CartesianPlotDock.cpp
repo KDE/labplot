@@ -626,7 +626,7 @@ void CartesianPlotDock::updateXRangeList() {
 		// format
 		auto* cb = new QComboBox(ui.twXRanges);
 		cb->addItem( i18n("Numeric") );
-		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::DateTime) );
+		cb->addItem( AbstractColumn::modeString(AbstractColumn::ColumnMode::DateTime) );
 		cb->setProperty("row", i);
 		cb->setCurrentIndex(static_cast<int>(format));
 		ui.twXRanges->setCellWidget(i, TwRangesColumn::Format, cb);
@@ -724,7 +724,7 @@ void CartesianPlotDock::updateYRangeList() {
 		// format
 		auto* cb = new QComboBox(ui.twYRanges);
 		cb->addItem( i18n("Numeric") );
-		cb->addItem( AbstractColumn::modeName(AbstractColumn::ColumnMode::DateTime) );
+		cb->addItem( AbstractColumn::modeString(AbstractColumn::ColumnMode::DateTime) );
 		cb->setProperty("row", i);
 		cb->setCurrentIndex(static_cast<int>(format));
 		ui.twYRanges->setCellWidget(i, TwRangesColumn::Format, cb);

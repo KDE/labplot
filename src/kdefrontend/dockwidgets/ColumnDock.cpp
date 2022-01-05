@@ -296,25 +296,25 @@ void ColumnDock::retranslateUi() {
 	const Lock lock(m_initializing);
 
 	ui.cbType->clear();
-	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::Double), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Double)));
-	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::Integer), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Integer)));
-	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::BigInt), QVariant(static_cast<int>(AbstractColumn::ColumnMode::BigInt)));
-	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::Text), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Text)));
-	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::Month), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Month)));
-	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::Day), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Day)));
-	ui.cbType->addItem(AbstractColumn::modeName(AbstractColumn::ColumnMode::DateTime), QVariant(static_cast<int>(AbstractColumn::ColumnMode::DateTime)));
+	ui.cbType->addItem(AbstractColumn::modeString(AbstractColumn::ColumnMode::Double), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Double)));
+	ui.cbType->addItem(AbstractColumn::modeString(AbstractColumn::ColumnMode::Integer), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Integer)));
+	ui.cbType->addItem(AbstractColumn::modeString(AbstractColumn::ColumnMode::BigInt), QVariant(static_cast<int>(AbstractColumn::ColumnMode::BigInt)));
+	ui.cbType->addItem(AbstractColumn::modeString(AbstractColumn::ColumnMode::Text), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Text)));
+	ui.cbType->addItem(AbstractColumn::modeString(AbstractColumn::ColumnMode::Month), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Month)));
+	ui.cbType->addItem(AbstractColumn::modeString(AbstractColumn::ColumnMode::Day), QVariant(static_cast<int>(AbstractColumn::ColumnMode::Day)));
+	ui.cbType->addItem(AbstractColumn::modeString(AbstractColumn::ColumnMode::DateTime), QVariant(static_cast<int>(AbstractColumn::ColumnMode::DateTime)));
 
 	ui.cbPlotDesignation->clear();
-	ui.cbPlotDesignation->addItem(i18n("None"));
-	ui.cbPlotDesignation->addItem(i18n("X"));
-	ui.cbPlotDesignation->addItem(i18n("Y"));
-	ui.cbPlotDesignation->addItem(i18n("Z"));
-	ui.cbPlotDesignation->addItem(i18n("X-error"));
-	ui.cbPlotDesignation->addItem(i18n("X-error -"));
-	ui.cbPlotDesignation->addItem(i18n("X-error +"));
-	ui.cbPlotDesignation->addItem(i18n("Y-error"));
-	ui.cbPlotDesignation->addItem(i18n("Y-error -"));
-	ui.cbPlotDesignation->addItem(i18n("Y-error +"));
+	ui.cbPlotDesignation->addItem(AbstractColumn::designationString(AbstractColumn::PlotDesignation::NoDesignation, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::designationString(AbstractColumn::PlotDesignation::X, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::designationString(AbstractColumn::PlotDesignation::Y, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::designationString(AbstractColumn::PlotDesignation::Z, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::designationString(AbstractColumn::PlotDesignation::XError, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::designationString(AbstractColumn::PlotDesignation::XErrorMinus, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::designationString(AbstractColumn::PlotDesignation::XErrorPlus, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::designationString(AbstractColumn::PlotDesignation::YError, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::designationString(AbstractColumn::PlotDesignation::YErrorMinus, false));
+	ui.cbPlotDesignation->addItem(AbstractColumn::designationString(AbstractColumn::PlotDesignation::YErrorPlus, false));
 
 	ui.bAddLabel->setToolTip(i18n("Add a new value label"));
 	ui.bRemoveLabel->setToolTip(i18n("Remove the selected value label"));

@@ -137,13 +137,6 @@ AbstractColumn::PlotDesignation AbstractSimpleFilter::plotDesignation() const {
 }
 
 /**
- * \brief Copy plot designation string of input port 0.
- */
-QString AbstractSimpleFilter::plotDesignationString() const {
-	return m_inputs.value(0) ? m_inputs.at(0)->plotDesignationString() : QString("");
-}
-
-/**
  * \brief Return the column mode
  *
  * This function is most used by tables but can also be used
