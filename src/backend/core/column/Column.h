@@ -13,7 +13,7 @@
 #ifndef COLUMN_H
 #define COLUMN_H
 
-#include "backend/core/column/ColumnPrivate.h"
+#include "backend/core/AbstractColumn.h"
 
 class AbstractSimpleFilter;
 class CartesianPlot;
@@ -34,10 +34,7 @@ public:
 	explicit Column(const QString& name, AbstractColumn::ColumnMode = ColumnMode::Double);
 	// template constructor for all supported data types (AbstractColumn::ColumnMode) must be defined in header
 	template <typename T>
-	Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode = ColumnMode::Double)
-		: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, mode, new QVector<T>(data))) {
-		init();
-	}
+	Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode = ColumnMode::Double);
 	void init();
 	~Column() override;
 

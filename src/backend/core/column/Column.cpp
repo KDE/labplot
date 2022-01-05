@@ -68,6 +68,12 @@ Column::Column(const QString& name, ColumnMode mode)
 	init();
 }
 
+template <typename T>
+Column::Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode)
+	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, mode, new QVector<T>(data))) {
+	init();
+}
+
 /**
  * \brief Common part of ctors
  */
