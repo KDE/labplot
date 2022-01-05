@@ -68,9 +68,33 @@ Column::Column(const QString& name, ColumnMode mode)
 	init();
 }
 
-template <typename T>
-Column::Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode)
-	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, mode, new QVector<T>(data))) {
+Column::Column(const QString& name, const QVector<double> &data)
+	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, ColumnMode::Double, new QVector<double>(data))) {
+	init();
+}
+
+Column::Column(const QString& name, const QVector<int>& data)
+	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, ColumnMode::Integer, new QVector<int>(data))) {
+	init();
+}
+
+Column::Column(const QString& name, const QVector<qint64>& data)
+	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, ColumnMode::BigInt, new QVector<qint64>(data))) {
+	init();
+}
+
+//Column::Column(const QString& name, const QStringList& data)
+//	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, ColumnMode::Text, new QVector<QString>(data))) {
+//	init();
+//}
+
+Column::Column(const QString& name, const QVector<QString> &data)
+	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, ColumnMode::Text, new QVector<QString>(data))) {
+	init();
+}
+
+Column::Column(const QString& name, const QVector<QDateTime>& data, ColumnMode mode)
+	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, mode, new QVector<QDateTime>(data))) {
 	init();
 }
 
@@ -459,22 +483,6 @@ void Column::clear() {
  * \brief Returns the formula used to generate column values
  */
 QString Column:: formula() const {
-	return d->formula();
-}
-
-const QStringList& Column::formulaVariableNames() const {
-	return d->formulaVariableNames();
-}
-
-const QVector<Column*>& Column::formulaVariableColumns() const {
-	return d->formulaVariableColumns();
-}
-
-const QStringList& Column::formulaVariableColumnPaths() const {
-	return d->formulaVariableColumnPaths();
-}
-
-void Column::setformulVariableColumnsPath(int index, const QString& path) {
 	d->setformulVariableColumnsPath(index, path);
 }
 
@@ -1116,19 +1124,6 @@ void Column::save(QXmlStreamWriter* writer) const {
 	//save the formula used to generate column values, if available
 	if (!formula().isEmpty() ) {
 		writer->writeStartElement("formula");
-		writer->writeAttribute("autoUpdate", QString::number(d->formulaAutoUpdate()));
-		writer->writeTextElement("text", formula());
-
-		writer->writeStartElement("variableNames");
-		for (const auto& name : formulaVariableNames())
-			writer->writeTextElement("name", name);
-		writer->writeEndElement();
-
-		writer->writeStartElement("columnPathes");
-		for (const auto& path : formulaVariableColumnPaths())
-			writer->writeTextElement("path", path);
-		writer->writeEndElement();
-
 		writer->writeEndElement();
 	}
 

@@ -238,13 +238,13 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 			} else {
 				switch(parser.dataType()) {
 					case AbstractColumn::ColumnMode::Integer:
-					col = new Column(name, parser.integers(), parser.dataType());
+					col = new Column(name, parser.integers());
 					break;
 				case AbstractColumn::ColumnMode::BigInt:
-					col = new Column(name, parser.bigInt(), parser.dataType());
+					col = new Column(name, parser.bigInt());
 					break;
 				case AbstractColumn::ColumnMode::Double:
-					col = new Column(name, parser.doublePrecision(), parser.dataType());
+					col = new Column(name, parser.doublePrecision());
 					break;
 				case AbstractColumn::ColumnMode::Month:
 				case AbstractColumn::ColumnMode::Day:
@@ -252,7 +252,7 @@ void CantorWorksheet::rowsInserted(const QModelIndex& /*parent*/, int first, int
 					col = new Column(name, parser.dateTime(), parser.dataType());
 					break;
 				case AbstractColumn::ColumnMode::Text:
-					col = new Column(name, parser.text(), parser.dataType());
+					col = new Column(name, parser.text());
 					break;
 				}
 				col->setUndoAware(false);

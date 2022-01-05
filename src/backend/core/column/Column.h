@@ -21,6 +21,7 @@ class ColumnStringIO;
 class QAction;
 class QActionGroup;
 class XmlStreamReader;
+class ColumnPrivate;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -32,9 +33,14 @@ class Column : public AbstractColumn {
 
 public:
 	explicit Column(const QString& name, AbstractColumn::ColumnMode = ColumnMode::Double);
-	// template constructor for all supported data types (AbstractColumn::ColumnMode) must be defined in header
-	template <typename T>
-	Column(const QString& name, QVector<T> data, AbstractColumn::ColumnMode mode = ColumnMode::Double);
+	// Templating does not work, because then ColumnPrivate.h must be included into this header,
+	// But Column.h is already included in ColumnPrivate.h
+	Column(const QString& name, const QVector<double>& data);
+	Column(const QString& name, const QVector<int> &data);
+	Column(const QString& name, const QVector<qint64>& data);
+	//Column(const QString& name, const QStringList &data);
+	Column(const QString& name, const QVector<QString>& data);
+	Column(const QString& name, const QVector<QDateTime> &data, ColumnMode);
 	void init();
 	~Column() override;
 
