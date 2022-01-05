@@ -1209,7 +1209,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 	if (column == m_owner)
 		return;
 
-	DEBUG("ColumnPrivate::connectFormulaColumn()")
+	DEBUG(Q_FUNC_INFO)
 	m_connectionsUpdateFormula << connect(column, &AbstractColumn::dataChanged, m_owner, &Column::updateFormula);
 	connect(column->parentAspect(), &AbstractAspect::aspectAboutToBeRemoved, this, &ColumnPrivate::formulaVariableColumnRemoved);
 	connect(column, &AbstractColumn::reset, this, &ColumnPrivate::formulaVariableColumnRemoved);
@@ -1257,7 +1257,7 @@ void ColumnPrivate::setformulVariableColumn(int index, Column* column) {
  * \sa FunctionValuesDialog::generate()
  */
 void ColumnPrivate::updateFormula() {
-	DEBUG("ColumnPrivate::updateFormula()")
+	DEBUG(Q_FUNC_INFO)
 	//determine variable names and the data vectors of the specified columns
 	QVector<QVector<double>*> xVectors;
 	QVector<QVector<double>*> xNewVectors;
@@ -1299,9 +1299,9 @@ void ColumnPrivate::updateFormula() {
 
 		//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		ExpressionParser* parser = ExpressionParser::getInstance();
-		DEBUG("Calling evaluateCartesian()")
+		DEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian()")
 		parser->evaluateCartesian(m_formula, m_formulaVariableNames, xVectors, &new_data);
-		DEBUG("Calling replaceValues()")
+		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
 		replaceValues(0, new_data);
 
 		// initialize remaining rows with NAN
@@ -1319,7 +1319,7 @@ void ColumnPrivate::updateFormula() {
 	for (auto* vector : xNewVectors)
 		delete vector;
 
-	DEBUG("ColumnPrivate::updateFormula() DONE")
+	DEBUG(Q_FUNC_INFO << " DONE")
 }
 
 void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {

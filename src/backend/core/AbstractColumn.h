@@ -119,8 +119,9 @@ public:
 	static QStringList dateFormats();	// supported date formats
 	static QStringList timeFormats();	// supported time formats
 	static QStringList dateTimeFormats();	// supported datetime formats
-	static QString modeName(ColumnMode mode);
-	static QIcon modeIcon(ColumnMode mode);
+	static QString designationName(PlotDesignation);
+	static QString modeName(ColumnMode);
+	static QIcon modeIcon(ColumnMode);
 
 	virtual bool isReadOnly() const {
 		return true;

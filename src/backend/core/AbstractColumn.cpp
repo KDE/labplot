@@ -97,6 +97,36 @@ QStringList AbstractColumn::dateTimeFormats() {
 }
 
 /**
+ * \brief Convenience method for getting designation string
+ * translated to be used in UI
+ */
+QString AbstractColumn::designationName(PlotDesignation d) {
+	switch (d) {
+	case PlotDesignation::NoDesignation:
+		return i18n("No");
+	case PlotDesignation::X:
+		return i18n("X");
+	case PlotDesignation::Y:
+		return i18n("Y");
+	case PlotDesignation::Z:
+		return i18n("Z");
+	case PlotDesignation::XError:
+		return i18n("X Error");
+	case PlotDesignation::XErrorPlus:
+		return i18n("X Error Plus");
+	case PlotDesignation::XErrorMinus:
+		return i18n("X Error Minus");
+	case PlotDesignation::YError:
+		return i18n("Y Error");
+	case PlotDesignation::YErrorPlus:
+		return i18n("Y Error Plus");
+	case PlotDesignation::YErrorMinus:
+		return i18n("Y Error Minus");
+	}
+
+	return i18n("UNDEFINED");
+}
+/**
  * \brief Convenience method for getting mode name
  * translated since used in UI
  */
