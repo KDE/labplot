@@ -25,6 +25,7 @@ public:
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode);
 	~ColumnPrivate() override;
 	ColumnPrivate(Column*, AbstractColumn::ColumnMode, void*);
+	void init();
 
 	AbstractColumn::ColumnMode columnMode() const;
 	void setColumnMode(AbstractColumn::ColumnMode);

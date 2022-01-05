@@ -22,8 +22,46 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 	m_column_mode(mode), m_owner(owner) {
 	Q_ASSERT(owner != nullptr);
 
+	init();
+
 	SET_NUMBER_LOCALE
 	switch (mode) {
+	case AbstractColumn::ColumnMode::Double:
+		m_data = new QVector<double>();
+		break;
+	case AbstractColumn::ColumnMode::Integer:
+		m_data = new QVector<int>();
+		break;
+	case AbstractColumn::ColumnMode::BigInt:
+		m_data = new QVector<qint64>();
+		break;
+	case AbstractColumn::ColumnMode::Text:
+		m_data = new QStringList();
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+		m_data = new QVector<QDateTime>();
+		break;
+	case AbstractColumn::ColumnMode::Month:
+		m_data = new QVector<QDateTime>();
+		break;
+	case AbstractColumn::ColumnMode::Day:
+		m_data = new QVector<QDateTime>();
+		break;
+	}
+}
+
+/**
+ * \brief Special ctor (to be called from Column only!)
+ */
+ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data) :
+	m_column_mode(mode), m_data(data), m_owner(owner) {
+
+	init();
+}
+
+void ColumnPrivate::init() {
+	SET_NUMBER_LOCALE
+	switch (m_column_mode) {
 	case AbstractColumn::ColumnMode::Double:
 		m_input_filter = new String2DoubleFilter();
 		m_input_filter->setNumberLocale(numberLocale);
@@ -69,72 +107,10 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 		break;
 	}
 
+	//m_input_filter->setName("InputFilter");
+	//m_output_filter->setName("OutputFilter");
+
 	connect(m_output_filter, &AbstractSimpleFilter::formatChanged, m_owner, &Column::handleFormatChange);
-
-	//m_input_filter->setName("InputFilter");
-	//m_output_filter->setName("OutputFilter");
-}
-
-/**
- * \brief Special ctor (to be called from Column only!)
- */
-ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode, void* data) :
-	m_column_mode(mode), m_data(data), m_owner(owner) {
-
-	SET_NUMBER_LOCALE
-	switch (mode) {
-	case AbstractColumn::ColumnMode::Double:
-		m_input_filter = new String2DoubleFilter();
-		m_input_filter->setNumberLocale(numberLocale);
-		m_output_filter = new Double2StringFilter();
-		m_output_filter->setNumberLocale(numberLocale);
-		connect(static_cast<Double2StringFilter *>(m_output_filter), &Double2StringFilter::formatChanged,
-				m_owner, &Column::handleFormatChange);
-		break;
-	case AbstractColumn::ColumnMode::Integer:
-		m_input_filter = new String2IntegerFilter();
-		m_input_filter->setNumberLocale(numberLocale);
-		m_output_filter = new Integer2StringFilter();
-		m_output_filter->setNumberLocale(numberLocale);
-		connect(static_cast<Integer2StringFilter *>(m_output_filter), &Integer2StringFilter::formatChanged,
-				m_owner, &Column::handleFormatChange);
-		break;
-	case AbstractColumn::ColumnMode::BigInt:
-		m_input_filter = new String2BigIntFilter();
-		m_input_filter->setNumberLocale(numberLocale);
-		m_output_filter = new BigInt2StringFilter();
-		m_output_filter->setNumberLocale(numberLocale);
-		connect(static_cast<BigInt2StringFilter *>(m_output_filter), &BigInt2StringFilter::formatChanged,
-				m_owner, &Column::handleFormatChange);
-		break;
-	case AbstractColumn::ColumnMode::Text:
-		m_input_filter = new SimpleCopyThroughFilter();
-		m_output_filter = new SimpleCopyThroughFilter();
-		break;
-	case AbstractColumn::ColumnMode::DateTime:
-		m_input_filter = new String2DateTimeFilter();
-		m_output_filter = new DateTime2StringFilter();
-		connect(static_cast<DateTime2StringFilter *>(m_output_filter), &DateTime2StringFilter::formatChanged,
-				m_owner, &Column::handleFormatChange);
-		break;
-	case AbstractColumn::ColumnMode::Month:
-		m_input_filter = new String2MonthFilter();
-		m_output_filter = new DateTime2StringFilter();
-		static_cast<DateTime2StringFilter *>(m_output_filter)->setFormat("MMMM");
-		connect(static_cast<DateTime2StringFilter *>(m_output_filter), &DateTime2StringFilter::formatChanged,
-				m_owner, &Column::handleFormatChange);
-		break;
-	case AbstractColumn::ColumnMode::Day:
-		m_input_filter = new String2DayOfWeekFilter();
-		m_output_filter = new DateTime2StringFilter();
-		static_cast<DateTime2StringFilter *>(m_output_filter)->setFormat("dddd");
-		connect(static_cast<DateTime2StringFilter *>(m_output_filter), &DateTime2StringFilter::formatChanged,
-				m_owner, &Column::handleFormatChange);
-		break;
-	}
-
-	//m_input_filter->setName("InputFilter");
-	//m_output_filter->setName("OutputFilter");
 }
 
 ColumnPrivate::~ColumnPrivate() {
