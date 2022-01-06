@@ -1612,6 +1612,10 @@ AbstractColumn::ColumnMode Column::columnMode() const {
 	return d->columnMode();
 }
 
+QString Column::columnModeString() const {
+	return AbstractColumn::columnModeString(d->columnMode());
+}
+
 void Column::resizeTo(int rows) {
 	d->resizeTo(rows);
 }
@@ -1638,6 +1642,10 @@ int Column::availableRowCount() const {
  */
 AbstractColumn::PlotDesignation Column::plotDesignation() const {
 	return d->plotDesignation();
+}
+
+QString Column::plotDesignationString(bool withBrackets) const {
+	return AbstractColumn::plotDesignationString(d->plotDesignation(), withBrackets);
 }
 
 AbstractSimpleFilter* Column::outputFilter() const {

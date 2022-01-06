@@ -119,8 +119,8 @@ public:
 	static QStringList dateFormats();	// supported date formats
 	static QStringList timeFormats();	// supported time formats
 	static QStringList dateTimeFormats();	// supported datetime formats
-	static QString designationString(PlotDesignation, bool withBrackets = true);
-	static QString modeString(ColumnMode);
+	static QString plotDesignationString(PlotDesignation, bool withBrackets = true);
+	static QString columnModeString(ColumnMode);
 	static QIcon modeIcon(ColumnMode);
 
 	virtual bool isReadOnly() const {

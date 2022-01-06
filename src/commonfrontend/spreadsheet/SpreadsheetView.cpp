@@ -264,34 +264,34 @@ void SpreadsheetView::initActions() {
 	action_freeze_columns = new QAction(i18n("Freeze Column"), this);
 
 	//TODO: action collection?
-	action_set_as_none = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::NoDesignation, false), this);
+	action_set_as_none = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::NoDesignation, false), this);
 	action_set_as_none->setData(static_cast<int>(AbstractColumn::PlotDesignation::NoDesignation));
 
-	action_set_as_x = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::X, false), this);
+	action_set_as_x = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::X, false), this);
 	action_set_as_x->setData(static_cast<int>(AbstractColumn::PlotDesignation::X));
 
-	action_set_as_y = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::Y, false), this);
+	action_set_as_y = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::Y, false), this);
 	action_set_as_y->setData(static_cast<int>(AbstractColumn::PlotDesignation::Y));
 
-	action_set_as_z = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::Z, false), this);
+	action_set_as_z = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::Z, false), this);
 	action_set_as_z->setData(static_cast<int>(AbstractColumn::PlotDesignation::Z));
 
-	action_set_as_xerr = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::XError, false), this);
+	action_set_as_xerr = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XError, false), this);
 	action_set_as_xerr->setData(static_cast<int>(AbstractColumn::PlotDesignation::XError));
 
-	action_set_as_xerr_minus = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::XErrorMinus, false), this);
+	action_set_as_xerr_minus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorMinus, false), this);
 	action_set_as_xerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorMinus));
 
-	action_set_as_xerr_plus = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::XErrorPlus, false), this);
+	action_set_as_xerr_plus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::XErrorPlus, false), this);
 	action_set_as_xerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::XErrorPlus));
 
-	action_set_as_yerr = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::YError, false), this);
+	action_set_as_yerr = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YError, false), this);
 	action_set_as_yerr->setData(static_cast<int>(AbstractColumn::PlotDesignation::YError));
 
-	action_set_as_yerr_minus = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::YErrorMinus, false), this);
+	action_set_as_yerr_minus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorMinus, false), this);
 	action_set_as_yerr_minus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorMinus));
 
-	action_set_as_yerr_plus = new QAction(AbstractColumn::designationString(AbstractColumn::PlotDesignation::YErrorPlus, false), this);
+	action_set_as_yerr_plus = new QAction(AbstractColumn::plotDesignationString(AbstractColumn::PlotDesignation::YErrorPlus, false), this);
 	action_set_as_yerr_plus->setData(static_cast<int>(AbstractColumn::PlotDesignation::YErrorPlus));
 
 	//data manipulation

@@ -456,11 +456,11 @@ void SpreadsheetModel::updateHorizontalHeader() {
 		QString header = col->name();
 
 		if (showColumnType)
-			header += QLatin1String(" {") + AbstractColumn::modeString(col->columnMode()) + QLatin1Char('}');
+			header += QLatin1String(" {") + col->columnModeString() + QLatin1Char('}');
 
 		if (showPlotDesignation) {
 			if (col->plotDesignation() != AbstractColumn::PlotDesignation::NoDesignation)
-				header += QLatin1String(" ") + AbstractColumn::designationString(col->plotDesignation());
+				header += QLatin1String(" ") + col->plotDesignationString();
 		}
 		m_horizontal_header_data.replace(i, header);
 	}

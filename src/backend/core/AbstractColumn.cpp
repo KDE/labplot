@@ -100,12 +100,13 @@ QStringList AbstractColumn::dateTimeFormats() {
  * \brief Convenience method for getting plot designation string
  * translated since used in UI
  */
-QString AbstractColumn::designationString(PlotDesignation d, bool withBrackets) {
+QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBrackets) {
 	QString s;
 
 	switch (d) {
 	case PlotDesignation::NoDesignation:
 		s = i18n("None");
+		break;
 	case PlotDesignation::X:
 		s = QLatin1String("X");
 		break;
@@ -147,7 +148,7 @@ QString AbstractColumn::designationString(PlotDesignation d, bool withBrackets) 
  * \brief Convenience method for getting mode string
  * translated since used in UI
  */
-QString AbstractColumn::modeString(ColumnMode mode) {
+QString AbstractColumn::columnModeString(ColumnMode mode) {
 	switch (mode) {
 	case ColumnMode::Double:
 		return i18n("Double");
