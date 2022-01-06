@@ -37,7 +37,6 @@
   <summary>Interactive Data Visualization and Analysis</summary>
   <summary xml:lang="ca">Visualització i anàlisi de dades interactius</summary>
   <summary xml:lang="ca-valencia">Visualització i anàlisi de dades interactius</summary>
-  <summary xml:lang="de">Interaktive Datenvisualisierung und -analyse</summary>
   <summary xml:lang="en-GB">Interactive Data Visualisation and Analysis</summary>
   <summary xml:lang="es">Visualización y análisis de datos interactivo</summary>
   <summary xml:lang="fr">Analyse et affichage interactif de données</summary>
@@ -51,7 +50,6 @@
     </p>
     <p xml:lang="ca">El LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
     <p xml:lang="ca-valencia">El LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
-    <p xml:lang="de">LabPlot ist ein FREIE, Open Source und plattformübergreifende Software zur Datenvisualisierung und -analyse, die für jeden verfügbar ist.</p>
     <p xml:lang="en-GB">LabPlot is a FREE, open source and cross-platform Data Visualisation and Analysis software accessible to everyone.</p>
     <p xml:lang="es">LabPlot es un software de visualización y análisis de datos LIBRE, de código abierto y multiplataforma, al que todo el mundo puede acceder.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
