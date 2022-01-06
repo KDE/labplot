@@ -898,7 +898,7 @@ void CartesianPlotDock::retranslateUi() {
 
 	QString msg = i18n("Data Range:"
 	"<ul>"
-	"<li>Free - full data range in plotted</li>"
+	"<li>Free - full data range is plotted</li>"
 	"<li>Last Points - specified number of last points is plotted</li>"
 	"<li>First Points - specified number of first points is plotted</li>"
 	"</ul>");
