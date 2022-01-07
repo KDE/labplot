@@ -65,7 +65,7 @@ void ColumnPrivate::init() {
 	case AbstractColumn::ColumnMode::Double:
 		m_input_filter = new String2DoubleFilter();
 		m_input_filter->setNumberLocale(numberLocale);
-		m_output_filter = new Double2StringFilter('g');
+		m_output_filter = new Double2StringFilter();
 		m_output_filter->setNumberLocale(numberLocale);
 		m_data = new QVector<double>();
 		break;
