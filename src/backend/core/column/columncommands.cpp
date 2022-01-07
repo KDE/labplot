@@ -667,25 +667,23 @@ void ColumnSetGlobalFormulaCmd::redo() {
 		m_formula = m_col->formula();
 		for (auto& d: m_col->formulaData()) {
 			m_variableNames << d.variableName();
-			m_variableColumns.append(d.m_column);
+			m_variableColumns << d.m_column;
 		}
 		m_autoUpdate = m_col->formulaAutoUpdate();
 		m_copied = true;
 	}
 
 	QVector<Column::FormulaData> formulaData;
-	for (int i =0; i < m_newVariableNames.count(); i++) {
-		formulaData.append(Column::FormulaData(m_newVariableNames.at(i), m_newVariableColumns.at(i)));
-	}
+	for (int i =0; i < m_newVariableNames.count(); i++)
+		formulaData << Column::FormulaData(m_newVariableNames.at(i), m_newVariableColumns.at(i));
 
 	m_col->setFormula(m_newFormula, formulaData, m_newAutoUpdate);
 }
 
 void ColumnSetGlobalFormulaCmd::undo() {
 	QVector<Column::FormulaData> formulaData;
-	for (int i =0; i < m_variableNames.count(); i++) {
-		formulaData.append(Column::FormulaData(m_variableNames.at(i), m_variableColumns.at(i)));
-	}
+	for (int i =0; i < m_variableNames.count(); i++)
+		formulaData << Column::FormulaData(m_variableNames.at(i), m_variableColumns.at(i));
 	m_col->setFormula(m_formula, formulaData, m_newAutoUpdate);
 }
 
