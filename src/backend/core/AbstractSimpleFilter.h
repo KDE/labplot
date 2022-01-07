@@ -44,7 +44,7 @@ public:
 	void setNumberLocaleToDefault() { m_useDefaultLocale = true; }
 
 	virtual int rowCount() const;
-	virtual int availableRowCount() const;
+	virtual int availableRowCount(int max = -1) const;
 	virtual QList<Interval<int>> dependentRows(const Interval<int>& inputRange) const;
 
 	void save(QXmlStreamWriter*) const override;
@@ -81,7 +81,7 @@ public:
 
 	AbstractColumn::ColumnMode columnMode() const override;
 	int rowCount() const override { return m_owner->rowCount(); }
-	int availableRowCount() const override { return m_owner->availableRowCount(); }
+	int availableRowCount(int max = -1) const override { return m_owner->availableRowCount(max); }
 	AbstractColumn::PlotDesignation plotDesignation() const override { return m_owner->plotDesignation(); }
 	QString textAt(int row) const override;
 	QDate dateAt(int row) const override;

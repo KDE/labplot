@@ -227,8 +227,8 @@ int AbstractSimpleFilter::rowCount() const {
  *
  * ... unless overridden in a subclass.
  */
-int AbstractSimpleFilter::availableRowCount() const {
-	return m_inputs.value(0) ? m_inputs.at(0)->availableRowCount() : 0;
+int AbstractSimpleFilter::availableRowCount(int max) const {
+	return m_inputs.value(0) ? m_inputs.at(0)->availableRowCount(max) : 0;
 }
 
 /**

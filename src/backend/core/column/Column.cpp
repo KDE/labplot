@@ -1633,8 +1633,8 @@ int Column::rowCount() const {
  * Rows beyond this can be masked etc. but should be ignored by filters,
  * plots etc.
  */
-int Column::availableRowCount() const {
-	return d->availableRowCount();
+int Column::availableRowCount(int max) const {
+	return d->availableRowCount(max);
 }
 
 /**

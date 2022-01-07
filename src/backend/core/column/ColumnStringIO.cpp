@@ -34,8 +34,8 @@ int ColumnStringIO::rowCount() const {
 	return m_owner->rowCount();
 }
 
-int ColumnStringIO::availableRowCount() const {
-	return m_owner->availableRowCount();
+int ColumnStringIO::availableRowCount(int max) const {
+	return m_owner->availableRowCount(max);
 }
 
 bool ColumnStringIO::isValid(int row) const {

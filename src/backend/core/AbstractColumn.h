@@ -137,7 +137,7 @@ public:
 	virtual bool copy(const AbstractColumn *source, int source_start, int dest_start, int num_rows);
 
 	virtual int rowCount() const = 0;
-	virtual int availableRowCount() const = 0;
+	virtual int availableRowCount(int max = -1) const = 0;
 	void insertRows(int before, int count);
 	void removeRows(int first, int count);
 	virtual void clear();

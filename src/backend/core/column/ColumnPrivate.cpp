@@ -842,15 +842,18 @@ int ColumnPrivate::rowCount() const {
  * Rows beyond this can be masked etc. but should be ignored by filters,
  * plots etc.
  */
-int ColumnPrivate::availableRowCount() const {
+int ColumnPrivate::availableRowCount(int max) const {
 
-	int availableRowCount = 0;
+	int count = 0;
 	for (int row = 0; row < rowCount(); row++) {
-		if (m_owner->isValid(row) && !m_owner->isMasked(row))
-			availableRowCount++;
+		if (m_owner->isValid(row) && !m_owner->isMasked(row)) {
+			count++;
+			if (count == max)
+				return max;
+		}
 	}
 
-	return availableRowCount;
+	return count;
 }
 
 /**

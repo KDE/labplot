@@ -804,7 +804,7 @@ void XYFitCurveDock::modelTypeChanged(int index) {
 			xColumn = m_fitCurve->dataSourceCurve()->xColumn();
 	}
 	// with no xColumn: show all models (assume 100 data points)
-	const int availableRowCount = xColumn ? xColumn->availableRowCount() : 100;
+	const int availableRowCount = xColumn ? xColumn->availableRowCount(100) : 100;
 	DEBUG("	available row count = " << availableRowCount)
 
 	bool disableFit = false;

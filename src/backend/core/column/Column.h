@@ -64,7 +64,7 @@ public:
 	bool isReadOnly() const override;
 	void resizeTo(int);
 	int rowCount() const override;
-	int availableRowCount() const override;
+	int availableRowCount(int max = -1) const override;
 	int width() const;
 	void setWidth(const int);
 	void clear() override;
