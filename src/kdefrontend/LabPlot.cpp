@@ -103,6 +103,7 @@ int main (int argc, char *argv[]) {
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), "alexander.semke@web.de", nullptr);
 	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), "f-kristof@hotmail.com", nullptr);
 	aboutData.addAuthor(i18n("Martin Marmsoler"), i18nc("@info:credit", "Developer"), "martin.marmsoler@gmail.com", nullptr);
+	aboutData.addAuthor(i18n("Dariusz Laska"), i18nc("@info:credit", "Conceptual work, documentation, example projects"), "martin.marmsoler@gmail.com", nullptr);
 	aboutData.addAuthor(i18n("Andreas Kainz"), i18nc("@info:credit", "Icon designer"), "kainz.a@gmail.com", nullptr);
 	aboutData.addCredit(i18n("Yuri Chornoivan"), i18nc("@info:credit", "Help on many questions about the KDE-infrastructure and translation related topics"), "yurchor@ukr.net", nullptr);
 	aboutData.addCredit(i18n("Garvit Khatri"), i18nc("@info:credit", "Porting LabPlot2 to KF5 and Integration with Cantor"), "garvitdelhi@gmail.com", nullptr);
