@@ -1215,9 +1215,8 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 }
 
 void ColumnPrivate::setFormulVariableColumnsPath(int index, const QString& path) {
-	if (!m_formulaData[index].setColumnPath(path)) {
-		DEBUG("For some reason, there was already a column assigned");
-	}
+	if (!m_formulaData[index].setColumnPath(path))
+		DEBUG("ColumnPrivate::setFormulVariableColumnsPath: For some reason, there was already a column assigned");
 }
 
 void ColumnPrivate::setFormulVariableColumn(int index, Column* column) {
