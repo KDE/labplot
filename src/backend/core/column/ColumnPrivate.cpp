@@ -1326,11 +1326,10 @@ void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 
 void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
 	PERFTRACE(Q_FUNC_INFO);
-	QString path = aspect->path();
+	const auto& path = aspect->path();
 	int index = -1;
 	for (int i=0; i < formulaData().count(); i++) {
-		auto& d = formulaData().at(i);
-		if (d.columnName() == path) {
+		if (formulaData().at(i).columnName() == path) {
 			index = i;
 			break;
 		}
