@@ -1170,8 +1170,8 @@ void ColumnPrivate::finalizeLoad() {
 	if (m_formulaAutoUpdate) {
 		for (const auto& formulaData : m_formulaData) {
 			const auto* column = formulaData.column();
-			assert(column);
-			connectFormulaColumn(column);
+			if (column)
+				connectFormulaColumn(column);
 		}
 	}
 }
