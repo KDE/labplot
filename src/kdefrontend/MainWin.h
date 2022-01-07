@@ -110,7 +110,7 @@ public:
 	Project* project() const;
 	void addAspectToProject(AbstractAspect*);
 
-	enum class LoadOnStart {Nothing, NewProject, NewProjectWorksheet, LastProject, WelcomeScreen};
+	enum class LoadOnStart {Nothing, NewProject, NewProjectWorksheet, NewProjectSpreadsheet, LastProject, WelcomeScreen};
 	enum class TitleBarMode {ShowFilePath, ShowFileName, ShowProjectName};
 
 #ifdef HAVE_KUSERFEEDBACK

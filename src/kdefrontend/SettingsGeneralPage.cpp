@@ -90,7 +90,7 @@ void SettingsGeneralPage::applySettings() {
 		return;
 
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentIndex());
+	group.writeEntry(QLatin1String("LoadOnStart"), ui.cbLoadOnStart->currentData().toInt());
 	group.writeEntry(QLatin1String("TitleBar"), ui.cbTitleBar->currentIndex());
 	group.writeEntry(QLatin1String("ViewMode"), ui.cbInterface->currentIndex());
 	group.writeEntry(QLatin1String("TabPosition"), ui.cbTabPosition->currentIndex());
@@ -114,7 +114,7 @@ void SettingsGeneralPage::applySettings() {
 }
 
 void SettingsGeneralPage::restoreDefaults() {
-	ui.cbLoadOnStart->setCurrentIndex(static_cast<int>(MainWin::LoadOnStart::NewProject));
+	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(static_cast<int>(MainWin::LoadOnStart::NewProject)));
 	ui.cbTitleBar->setCurrentIndex(0);
 	ui.cbInterface->setCurrentIndex(0);
 	ui.cbTabPosition->setCurrentIndex(0);
@@ -131,7 +131,8 @@ void SettingsGeneralPage::restoreDefaults() {
 
 void SettingsGeneralPage::loadSettings() {
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
-	ui.cbLoadOnStart->setCurrentIndex(group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject)));
+	auto loadOnStart = group.readEntry(QLatin1String("LoadOnStart"), static_cast<int>(MainWin::LoadOnStart::NewProject));
+	ui.cbLoadOnStart->setCurrentIndex(ui.cbLoadOnStart->findData(loadOnStart));
 	ui.cbTitleBar->setCurrentIndex(group.readEntry(QLatin1String("TitleBar"), 0));
 	ui.cbInterface->setCurrentIndex(group.readEntry(QLatin1String("ViewMode"), 0));
 	ui.cbTabPosition->setCurrentIndex(group.readEntry(QLatin1String("TabPosition"), 0));
@@ -156,10 +157,11 @@ void SettingsGeneralPage::loadSettings() {
 
 void SettingsGeneralPage::retranslateUi() {
 	ui.cbLoadOnStart->clear();
-	ui.cbLoadOnStart->addItem(i18n("Do Nothing"));
-	ui.cbLoadOnStart->addItem(i18n("Create New Empty Project"));
-	ui.cbLoadOnStart->addItem(i18n("Create New Project with Worksheet"));
-	ui.cbLoadOnStart->addItem(i18n("Load Last Used Project"));
+	ui.cbLoadOnStart->addItem(i18n("Do Nothing"), static_cast<int>(MainWin::LoadOnStart::Nothing));
+	ui.cbLoadOnStart->addItem(i18n("Create New Empty Project"), static_cast<int>(MainWin::LoadOnStart::NewProject));
+	ui.cbLoadOnStart->addItem(i18n("Create New Project with Worksheet"), static_cast<int>(MainWin::LoadOnStart::NewProjectWorksheet));
+	ui.cbLoadOnStart->addItem(i18n("Create New Project with Spreadsheet"), static_cast<int>(MainWin::LoadOnStart::NewProjectSpreadsheet));
+	ui.cbLoadOnStart->addItem(i18n("Load Last Used Project"), static_cast<int>(MainWin::LoadOnStart::LastProject));
 // 	ui.cbLoadOnStart->addItem(i18n("Show Welcome Screen"));
 
 	ui.cbTitleBar->clear();

@@ -226,6 +226,7 @@ void MainWin::initGUI(const QString& fileName) {
 	m_touchBar = new KDMacTouchBar(this);
 	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
 	//m_touchBar->setTouchButtonStyle(KDMacTouchBar::IconOnly);
+	setUnifiedTitleAndToolBarOnMac(true);
 #else
 	setupGUI(Default, KXMLGUIClient::xmlFile());	// should be "labplot2ui.rc"
 #endif
@@ -335,15 +336,27 @@ void MainWin::initGUI(const QString& fileName) {
 			createMdiArea();
 			setCentralWidget(m_mdiArea);
 
-			if (load == LoadOnStart::NewProject)	//create new project
+			switch(load) {
+			case LoadOnStart::NewProject:
 				newProject();
-			else if (load == LoadOnStart::NewProjectWorksheet) { //create new project with a worksheet
+				break;
+			case LoadOnStart::NewProjectWorksheet:
 				newProject();
 				newWorksheet();
-			} else if (load == LoadOnStart::LastProject) { //open last used project
+				break;
+			case LoadOnStart::NewProjectSpreadsheet:
+				newProject();
+				newSpreadsheet();
+				break;
+			case LoadOnStart::LastProject: {
 				const QString& path = KSharedConfig::openConfig()->group("MainWin").readEntry("LastOpenProject", "");
 				if (!path.isEmpty())
 					openProject(path);
+				break;
+			}
+			case LoadOnStart::Nothing:
+			case LoadOnStart::WelcomeScreen:
+				break;
 			}
 
 			updateGUIOnProjectChanges();
@@ -1240,6 +1253,10 @@ bool MainWin::newProject() {
 		m_projectExplorerDock = new QDockWidget(this);
 		m_projectExplorerDock->setObjectName("projectexplorer");
 		m_projectExplorerDock->setWindowTitle(i18nc("@title:window", "Project Explorer"));
+		qDebug()<<"########### " << m_projectExplorerDock->windowTitle();
+		m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace("&", QString()));
+		qDebug()<<"########### " << m_projectExplorerDock->windowTitle();
+		m_projectExplorerDock->toggleViewAction()->setText("");
 
 		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
 		m_projectExplorerDock->setWidget(m_projectExplorer);
@@ -1252,6 +1269,7 @@ bool MainWin::newProject() {
 		m_propertiesDock = new QDockWidget(this);
 		m_propertiesDock->setObjectName("aspect_properties_dock");
 		m_propertiesDock->setWindowTitle(i18nc("@title:window", "Properties"));
+		m_propertiesDock->setWindowTitle(m_propertiesDock->windowTitle().replace("&", QString()));
 
 		//restore the position of the dock widgets:
 		//"WindowState" doesn't always contain the positions of the dock widgets,
@@ -1271,6 +1289,18 @@ bool MainWin::newProject() {
 		m_propertiesDock->setWidget(scrollArea);	// scroll area inside dock
 
 		connect(m_propertiesDock, &QDockWidget::visibilityChanged, this, &MainWin::propertiesDockVisibilityChanged);
+
+
+
+		//BUG:
+		//m_projectExplorerDock->setShortcut(QKeySequence());
+		//m_projectExplorerDock->setStyleSheet("QDockWidget::title { "
+		//				" text-align: left; "
+		//				"}");
+		//m_propertiesDock->toggleViewAction()->setShortcut(QKeySequence());
+		//qDebug()<<"########### " << m_propertiesDock->toggleViewAction()->text();
+		//qDebug()<<"########### " << m_propertiesDock->windowTitle();
+
 
 		//GUI-observer;
 		m_guiObserver = new GuiObserver(this);
