@@ -1154,8 +1154,8 @@ void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::For
 		if (static_cast<bool>(connection))
 			disconnect(connection);
 
-	for (auto& formulaData : m_formulaData) {
-		auto* column = formulaData.column();
+	for (const auto& formulaData : m_formulaData) {
+		const auto* column = formulaData.column();
 		assert(column);
 		if (autoUpdate)
 			connectFormulaColumn(column);
@@ -1168,8 +1168,8 @@ void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::For
  */
 void ColumnPrivate::finalizeLoad() {
 	if (m_formulaAutoUpdate) {
-		for (auto& formulaData : m_formulaData) {
-			auto* column = formulaData.column();
+		for (const auto& formulaData : m_formulaData) {
+			const auto* column = formulaData.column();
 			assert(column);
 			connectFormulaColumn(column);
 		}
@@ -1247,7 +1247,7 @@ void ColumnPrivate::updateFormula() {
 
 	bool valid = true;
 	QStringList formulaVariableNames;
-	for (auto& formulaData : m_formulaData) {
+	for (const auto& formulaData : m_formulaData) {
 		auto* column = formulaData.column();
 		if (!column) {
 			valid = false;
