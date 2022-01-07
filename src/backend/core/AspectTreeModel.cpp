@@ -206,11 +206,25 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 		default:
 			return QVariant();
 		}
-	case Qt::ToolTipRole:
+	case Qt::ToolTipRole: {
+		QString toolTip;
 		if (aspect->comment().isEmpty())
-			return QString( QLatin1String("<b>") + aspect->name() + QLatin1String("</b>")) ;
+			toolTip = QLatin1String("<b>") + aspect->name() + QLatin1String("</b>");
 		else
-			return QString( QLatin1String("<b>") + aspect->name() + QLatin1String("</b><br><br>") + aspect->comment().replace(QLatin1Char('\n'), QLatin1String("<br>")) );
+			toolTip = QLatin1String("<b>") + aspect->name() + QLatin1String("</b><br><br>") + aspect->comment().replace(QLatin1Char('\n'), QLatin1String("<br>"));
+
+		const auto* col = dynamic_cast<const Column*>(aspect);
+		if (col) {
+			toolTip += QLatin1String("<br>");
+			toolTip += QLatin1String("<br>") + i18n("Size: %1", col->rowCount());
+			//TODO: active this once we have a more efficient implementation of this function
+			//toolTip += QLatin1String("<br>") + i18n("Values: %1", col->availableRowCount());
+			toolTip += QLatin1String("<br>") + i18n("Type: %1", col->columnModeString());
+			toolTip += QLatin1String("<br>") + i18n("Plot Designation: %1", col->plotDesignationString());
+		}
+
+		return toolTip;
+	}
 	case Qt::DecorationRole:
 		return index.column() == 0 ? aspect->icon() : QIcon();
 	case Qt::ForegroundRole: {

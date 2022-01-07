@@ -1253,9 +1253,7 @@ bool MainWin::newProject() {
 		m_projectExplorerDock = new QDockWidget(this);
 		m_projectExplorerDock->setObjectName("projectexplorer");
 		m_projectExplorerDock->setWindowTitle(i18nc("@title:window", "Project Explorer"));
-		qDebug()<<"########### " << m_projectExplorerDock->windowTitle();
 		m_projectExplorerDock->setWindowTitle(m_projectExplorerDock->windowTitle().replace("&", QString()));
-		qDebug()<<"########### " << m_projectExplorerDock->windowTitle();
 		m_projectExplorerDock->toggleViewAction()->setText("");
 
 		m_projectExplorer = new ProjectExplorer(m_projectExplorerDock);
@@ -1289,18 +1287,6 @@ bool MainWin::newProject() {
 		m_propertiesDock->setWidget(scrollArea);	// scroll area inside dock
 
 		connect(m_propertiesDock, &QDockWidget::visibilityChanged, this, &MainWin::propertiesDockVisibilityChanged);
-
-
-
-		//BUG:
-		//m_projectExplorerDock->setShortcut(QKeySequence());
-		//m_projectExplorerDock->setStyleSheet("QDockWidget::title { "
-		//				" text-align: left; "
-		//				"}");
-		//m_propertiesDock->toggleViewAction()->setShortcut(QKeySequence());
-		//qDebug()<<"########### " << m_propertiesDock->toggleViewAction()->text();
-		//qDebug()<<"########### " << m_propertiesDock->windowTitle();
-
 
 		//GUI-observer;
 		m_guiObserver = new GuiObserver(this);
