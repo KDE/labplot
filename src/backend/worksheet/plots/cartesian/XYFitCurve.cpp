@@ -73,9 +73,9 @@ void XYFitCurve::initStartValues(const XYCurve* curve) {
 }
 
 void XYFitCurve::initStartValues(XYFitCurve::FitData& fitData, const XYCurve* curve) {
-	DEBUG("XYFitCurve::initStartValues()");
+	DEBUG(Q_FUNC_INFO);
 	if (!curve) {
-		DEBUG("	no curve given");
+		DEBUG(Q_FUNC_INFO << ", WARNING: no curve given");
 		return;
 	}
 
