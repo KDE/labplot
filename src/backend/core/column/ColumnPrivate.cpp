@@ -1134,11 +1134,7 @@ QString ColumnPrivate::formula() const {
 	return m_formula;
 }
 
-const QVector<Column::FormulaData>& ColumnPrivate::formulaDatas() const {
-	return m_formulaData;
-}
-
-QVector<Column::FormulaData>& ColumnPrivate::formulaDatasNonConst() {
+const QVector<Column::FormulaData>& ColumnPrivate::formulaData() const {
 	return m_formulaData;
 }
 
@@ -1218,17 +1214,26 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 	m_formulaAutoUpdate = autoUpdate;
 }
 
-void ColumnPrivate::setformulVariableColumnsPath(int index, const QString& path) {
+void ColumnPrivate::setFormulVariableColumnsPath(int index, const QString& path) {
 	if (!m_formulaData[index].setColumnPath(path)) {
 		DEBUG("For some reason, there was already a column assigned");
 	}
 }
 
-void ColumnPrivate::setformulVariableColumn(int index, Column* column) {
+void ColumnPrivate::setFormulVariableColumn(int index, Column* column) {
 	if (m_formulaData.at(index).column()) // if there exists already a valid column, disconnect it first
 		disconnect(m_formulaData.at(index).column(), nullptr, this, nullptr);
 	m_formulaData[index].setColumn(column);
 	connectFormulaColumn(column);
+}
+
+void ColumnPrivate::setFormulVariableColumn(Column* c) {
+	for (auto& d: m_formulaData) {
+		if (d.columnName() == c->path()) {
+			d.setColumn(c);
+			break;
+		}
+	}
 }
 
 /*!
@@ -1306,8 +1311,8 @@ void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 	const Column* column = dynamic_cast<const Column*>(aspect);
 	disconnect(column, nullptr, this, nullptr);
 	int index = -1;
-	for (int i=0; i < formulaDatas().count(); i++) {
-		auto& d = formulaDatas().at(i);
+	for (int i=0; i < formulaData().count(); i++) {
+		auto& d = formulaData().at(i);
 		if (d.column() == column) {
 			index = i;
 			break;
@@ -1324,8 +1329,8 @@ void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
 	PERFTRACE(Q_FUNC_INFO);
 	QString path = aspect->path();
 	int index = -1;
-	for (int i=0; i < formulaDatas().count(); i++) {
-		auto& d = formulaDatas().at(i);
+	for (int i=0; i < formulaData().count(); i++) {
+		auto& d = formulaData().at(i);
 		if (d.columnName() == path) {
 			index = i;
 			break;

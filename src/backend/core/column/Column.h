@@ -105,10 +105,10 @@ public:
 		friend ColumnSetGlobalFormulaCmd;
 	};
 
-	const QVector<FormulaData>& formulaDatas() const;
-	QVector<FormulaData>& formulaDatasNonConst() const;
-	void setformulVariableColumnsPath(int index, const QString& path);
-	void setformulVariableColumn(int index, Column*);
+	const QVector<FormulaData>& formulaData() const;
+	void setFormulaVariableColumn(Column*);
+	void setFormulVariableColumnsPath(int index, const QString& path);
+	void setFormulVariableColumn(int index, Column*);
 	bool formulaAutoUpdate() const;
 
 	QString formula(int) const  override;

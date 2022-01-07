@@ -200,8 +200,8 @@ QMenu* Column::createContextMenu() {
 	const QString& path = this->path();
 	for (const auto* column : columns) {
 		int index = -1;
-		for (int i=0; column->formulaDatas().count(); i++) {
-			if (path == column->formulaDatas().at(i).columnName()) {
+		for (int i=0; column->formulaData().count(); i++) {
+			if (path == column->formulaData().at(i).columnName()) {
 				index = i;
 				break;
 			}
@@ -493,20 +493,20 @@ QString Column:: formula() const {
 	return d->formula();
 }
 
-const QVector<Column::FormulaData>& Column::formulaDatas() const {
-	return d->formulaDatas();
+const QVector<Column::FormulaData>& Column::formulaData() const {
+	return d->formulaData();
 }
 
-QVector<Column::FormulaData>& Column::formulaDatasNonConst() const {
-	return d->formulaDatasNonConst();
+void Column::setFormulaVariableColumn(Column* c) {
+	d->setFormulVariableColumn(c);
 }
 
-void Column::setformulVariableColumnsPath(int index, const QString& path) {
-	d->setformulVariableColumnsPath(index, path);
+void Column::setFormulVariableColumnsPath(int index, const QString& path) {
+	d->setFormulVariableColumnsPath(index, path);
 }
 
-void Column::setformulVariableColumn(int index, Column* column) {
-	d->setformulVariableColumn(index, column);
+void Column::setFormulVariableColumn(int index, Column* column) {
+	d->setFormulVariableColumn(index, column);
 }
 
 bool Column::formulaAutoUpdate() const {
@@ -1148,7 +1148,7 @@ void Column::save(QXmlStreamWriter* writer) const {
 
 		QStringList formulaVariableNames;
 		QStringList formulaVariableColumnPaths;
-		for (auto& d: formulaDatas()) {
+		for (auto& d: formulaData()) {
 			formulaVariableNames << d.variableName();
 			formulaVariableColumnPaths << d.columnName();
 		}

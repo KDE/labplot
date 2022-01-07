@@ -393,10 +393,10 @@ void Project::updateColumnDependencies(const QVector<XYCurve*>& curves, const Ab
 
 	const QVector<Column*>& columns = children<Column>(ChildIndexFlag::Recursive);
 	for (auto* tempColumn : columns) {
-		for (int i = 0; i < tempColumn->formulaDatas().count(); i++) {
-			auto path = tempColumn->formulaDatas().at(i).columnName();
+		for (int i = 0; i < tempColumn->formulaData().count(); i++) {
+			auto path = tempColumn->formulaData().at(i).columnName();
 			if (path == columnPath)
-				tempColumn->setformulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
+				tempColumn->setFormulVariableColumn(i, const_cast<Column*>(static_cast<const Column*>(column)));
 		}
 	}
 }
@@ -932,19 +932,10 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 	//if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {
-		if (!col->formulaDatas().isEmpty()) {
-			for (auto& fd: col->formulaDatasNonConst()) {
-				auto path = fd.columnName();
-				for (Column* c: columns) {
-					if (!c) continue;
-					if (c->path() == path) {
-						fd.setColumn(c);
-						col->finalizeLoad();
-						break;
-					}
-				}
-			}
+		for (Column* c: columns) {
+			col->setFormulaVariableColumn(c);
 		}
+		col->finalizeLoad();
 	}
 
 	if (preview)

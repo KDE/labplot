@@ -665,7 +665,7 @@ ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString
 void ColumnSetGlobalFormulaCmd::redo() {
 	if (!m_copied) {
 		m_formula = m_col->formula();
-		for (auto& d: m_col->formulaDatas()) {
+		for (auto& d: m_col->formulaData()) {
 			m_variableNames << d.variableName();
 			m_variableColumns.append(d.m_column);
 		}

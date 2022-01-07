@@ -107,7 +107,7 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	ui.teEquation->setPlainText(firstColumn->formula());
 
 	//variables
-	const auto& formulaDatas = firstColumn->formulaDatas();
+	const auto& formulaDatas = firstColumn->formulaData();
 	if (formulaDatas.isEmpty()) {	//no formula was used for this column -> add the first variable "x"
 		addVariable();
 		m_variableLineEdits[0]->setText("x");

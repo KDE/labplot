@@ -67,10 +67,10 @@ public:
 
 	//global formula defined for the whole column
 	QString formula() const;
-	const QVector<Column::FormulaData>& formulaDatas() const;
-	QVector<Column::FormulaData>& formulaDatasNonConst();
-	void setformulVariableColumnsPath(int index, const QString& path);
-	void setformulVariableColumn(int index, Column *column);
+	const QVector<Column::FormulaData>& formulaData() const;
+	void setFormulVariableColumnsPath(int index, const QString& path);
+	void setFormulVariableColumn(int index, Column *column);
+	void setFormulVariableColumn(Column*);
 	bool formulaAutoUpdate() const;
 	void setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate);
 	void setFormula(const QString& formula, const QStringList& variableNames,
