@@ -114,10 +114,12 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success
 
 	out << "\\usepackage{color}";
 	out << "\\usepackage[active,displaymath,textmath,tightpage]{preview}";
+	out << "\\setlength\\PreviewBorder{0pt}";
 	// TODO: this fails with pdflatex
 	//out << "\\usepackage{mathtools}";
 	out << "\\begin{document}";
 	out << "\\begin{preview}";
+	out << "\\setlength{\\fboxsep}{0.2pt}";
 	out << "\\colorbox[rgb]{" << backgroundColor.redF() << ',' << backgroundColor.greenF() << ',' << backgroundColor.blueF() << "}{";
 	out << "\\fontsize{" << QString::number(fontSize) << "}{" << QString::number(fontSize) << "}\\selectfont";
 	out << "\\color[rgb]{" << fontColor.redF() << ',' << fontColor.greenF() << ',' << fontColor.blueF() << "}";
