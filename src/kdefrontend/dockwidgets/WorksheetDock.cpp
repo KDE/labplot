@@ -460,11 +460,11 @@ void WorksheetDock::pageChanged(int i) {
 		ui.sbHeight->setValue(s.height()/25.4);
 	}
 
-	float w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Unit::Millimeter);
-	float h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Unit::Millimeter);
+	double w = Worksheet::convertToSceneUnits(s.width(), Worksheet::Unit::Millimeter);
+	double h = Worksheet::convertToSceneUnits(s.height(), Worksheet::Unit::Millimeter);
 	for (auto* worksheet : m_worksheetList) {
 		worksheet->setUseViewSize(false);
-		worksheet->setPageRect(QRect(0,0,w,h));
+		worksheet->setPageRect(QRectF(0,0,w,h));
 	}
 }
 
@@ -472,10 +472,10 @@ void WorksheetDock::sizeChanged() {
 	if (m_initializing)
 		return;
 
-	int w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
-	int h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
+	double w = Worksheet::convertToSceneUnits(ui.sbWidth->value(), m_worksheetUnit);
+	double h = Worksheet::convertToSceneUnits(ui.sbHeight->value(), m_worksheetUnit);
 	for (auto* worksheet : m_worksheetList)
-		worksheet->setPageRect(QRect(0,0,w,h));
+		worksheet->setPageRect(QRectF(0,0,w,h));
 }
 
 void WorksheetDock::orientationChanged(int /*index*/) {

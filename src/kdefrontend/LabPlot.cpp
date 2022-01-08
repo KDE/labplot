@@ -76,7 +76,7 @@ const QString getSystemInfo() {
 
 	return buildType + '\n'
 #ifndef REPRODUCIBLE_BUILD
-		+ QString("%1, %2").arg(__DATE__).arg(__TIME__) + '\n'
+		+ QString("%1, %2").arg(__DATE__, __TIME__) + '\n'
 #endif
 		+ i18n("System: ") + QSysInfo::prettyProductName() + '\n'
 		+ i18n("Locale: ") + usedLanguage + ' ' + numberSystemInfo + '\n'
@@ -188,7 +188,7 @@ int main (int argc, char *argv[]) {
 
 #if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
 	// debugging paths
-	const QStringList& appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+	const auto& appdatapaths = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
 	WARN("AppDataLocation paths:")
 	for (const auto& path: appdatapaths)
 		WARN("	" << STDSTRING(path))
@@ -200,7 +200,7 @@ int main (int argc, char *argv[]) {
 		WARN("	" << STDSTRING(path))
 #endif
 
-	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
+	const auto& group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0)	// KColorSchemeManager has a system default option
 	QString schemeName = group.readEntry("ColorScheme");
 #else
@@ -215,7 +215,7 @@ int main (int argc, char *argv[]) {
 	QApplication::setStyle(QStringLiteral("breeze"));
 #endif
 
-	MainWin* window = new MainWin(nullptr, filename);
+	auto* window = new MainWin(nullptr, filename);
 	window->show();
 
 	if (splash) {

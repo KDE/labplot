@@ -151,7 +151,6 @@ private:
 	QPainterPath valuesPath;
 	QPainterPath errorBarsPath;
 	QPainterPath symbolsPath;
-	QRectF boundingRectangle;
 	QPainterPath curveShape;
 	QVector<QLineF> m_lines;
 	QVector<QPointF> m_logicalPoints;	//points in logical coordinates

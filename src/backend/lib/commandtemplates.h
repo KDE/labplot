@@ -25,8 +25,8 @@ public:
 			setText(description.subs(m_target->name()).toString());
 		}
 
-	virtual void initialize() {};
-	virtual void finalize() {};
+	virtual void initialize() {}
+	virtual void finalize() {}
 
 	void redo() override {
 		initialize();
@@ -52,8 +52,8 @@ public:
 			setText(description.subs(m_target->name()).toString());
 		}
 
-	virtual void initialize() {};
-	virtual void finalize() {};
+	virtual void initialize() {}
+	virtual void finalize() {}
 
 	void redo() override {
 		DEBUG(Q_FUNC_INFO);
@@ -81,9 +81,9 @@ public:
 			setText(description.subs(m_target->name()).toString());
 		}
 
-	virtual void initialize() {};
-	virtual void finalize() {};
-	virtual void finalizeUndo() {};
+	virtual void initialize() {}
+	virtual void finalize() {}
+	virtual void finalizeUndo() {}
 
 	void redo() override {
 		initialize();
@@ -118,8 +118,8 @@ public:
 			setText(description.subs(m_target->name()).toString());
 		}
 
-	virtual void initialize() {};
-	virtual void finalize() {};
+	virtual void initialize() {}
+	virtual void finalize() {}
 
 	void redo() override {
 		initialize();
