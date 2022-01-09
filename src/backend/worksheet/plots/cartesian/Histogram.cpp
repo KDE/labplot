@@ -1495,8 +1495,8 @@ void HistogramPrivate::draw(QPainter* painter) {
 	//draw values
 	if (valuesType != Histogram::NoValues) {
 		painter->setOpacity(valuesOpacity);
-		painter->setPen(valuesColor);
-		painter->setBrush(Qt::SolidPattern);
+		painter->setPen(QPen(valuesColor));
+		painter->setFont(valuesFont);
 		drawValues(painter);
 	}
 }
@@ -1591,18 +1591,17 @@ void HistogramPrivate::drawSymbols(QPainter* painter) {
 }
 
 void HistogramPrivate::drawValues(QPainter* painter) {
-	QTransform trafo;
-	QPainterPath path;
-	for (int i = 0; i < valuesPoints.size(); i++) {
-		path = QPainterPath();
-		path.addText( QPoint(0,0), valuesFont, valuesStrings.at(i) );
-
-		trafo.reset();
-		trafo.translate( valuesPoints.at(i).x(), valuesPoints.at(i).y() );
+	int i = 0;
+	for (const auto& point : qAsConst(valuesPoints)) {
+		painter->translate(point);
 		if (valuesRotationAngle != 0.)
-			trafo.rotate(-valuesRotationAngle );
+			painter->rotate(-valuesRotationAngle);
 
-		painter->drawPath(trafo.map(path));
+		painter->drawText(QPoint(0, 0), valuesStrings.at(i++));
+
+		if (valuesRotationAngle != 0.)
+			painter->rotate(valuesRotationAngle);
+		painter->translate(-point);
 	}
 }
 
