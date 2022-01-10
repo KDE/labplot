@@ -200,7 +200,7 @@ QMenu* Column::createContextMenu() {
 	const QString& path = this->path();
 	for (const auto* column : columns) {
 		int index = -1;
-		for (int i=0; column->formulaData().count(); i++) {
+		for (int i = 0; column->formulaData().count(); i++) {
 			if (path == column->formulaData().at(i).columnName()) {
 				index = i;
 				break;

@@ -674,7 +674,7 @@ void ColumnSetGlobalFormulaCmd::redo() {
 	}
 
 	QVector<Column::FormulaData> formulaData;
-	for (int i =0; i < m_newVariableNames.count(); i++)
+	for (int i = 0; i < m_newVariableNames.count(); i++)
 		formulaData << Column::FormulaData(m_newVariableNames.at(i), m_newVariableColumns.at(i));
 
 	m_col->setFormula(m_newFormula, formulaData, m_newAutoUpdate);
@@ -682,7 +682,7 @@ void ColumnSetGlobalFormulaCmd::redo() {
 
 void ColumnSetGlobalFormulaCmd::undo() {
 	QVector<Column::FormulaData> formulaData;
-	for (int i =0; i < m_variableNames.count(); i++)
+	for (int i = 0; i < m_variableNames.count(); i++)
 		formulaData << Column::FormulaData(m_variableNames.at(i), m_variableColumns.at(i));
 	m_col->setFormula(m_formula, formulaData, m_newAutoUpdate);
 }

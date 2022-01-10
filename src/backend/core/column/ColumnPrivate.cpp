@@ -1310,7 +1310,7 @@ void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 	const Column* column = dynamic_cast<const Column*>(aspect);
 	disconnect(column, nullptr, this, nullptr);
 	int index = -1;
-	for (int i=0; i < formulaData().count(); i++) {
+	for (int i = 0; i < formulaData().count(); i++) {
 		auto& d = formulaData().at(i);
 		if (d.column() == column) {
 			index = i;
@@ -1319,7 +1319,7 @@ void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 	}
 	if (index != -1) {
 		m_formulaData[index].setColumn(nullptr);
-		DEBUG("ColumnPrivate::formulaVariableColumnRemoved():updateFormula()")
+		DEBUG(Q_FUNC_INFO << ", calling updateFormula()")
 		updateFormula();
 	}
 }
@@ -1328,7 +1328,7 @@ void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
 	PERFTRACE(Q_FUNC_INFO);
 	const auto& path = aspect->path();
 	int index = -1;
-	for (int i=0; i < formulaData().count(); i++) {
+	for (int i = 0; i < formulaData().count(); i++) {
 		if (formulaData().at(i).columnName() == path) {
 			index = i;
 			break;
