@@ -79,7 +79,10 @@ public:
 					const QVector<Column*>& columns, bool autoUpdate);
 	QString formula() const;
 	struct FormulaData {
-		FormulaData(const QString& variableName, const QString& columnPath): m_column(nullptr), m_variableName(variableName), m_columnPath(columnPath) {}
+#if (QT_VERSION < QT_VERSION_CHECK(5, 14, 0))	// required to use in QVector
+		FormulaData() = default;
+#endif
+		FormulaData(const QString& variableName, const QString& columnPath): m_variableName(variableName), m_columnPath(columnPath) {}
 		FormulaData(const QString& variableName, Column* column): m_column(column), m_variableName(variableName), m_columnPath(column->path()) {}
 		QString columnName() const {return (m_column ? m_column->path() : m_columnPath);}
 		bool setColumnPath(const QString& path) {
@@ -99,7 +102,7 @@ public:
 		const QString& variableName() const {return m_variableName;}
 	private:
 		// Should be only accessible by the columnName() function
-		Column* m_column;
+		Column* m_column{nullptr};
 		QString m_variableName;
 		QString m_columnPath;
 		friend ColumnSetGlobalFormulaCmd;
