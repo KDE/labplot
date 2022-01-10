@@ -78,7 +78,7 @@ public:
 	void setFormula(const QString& formula, const QStringList& variableNames,
 					const QVector<Column*>& columns, bool autoUpdate);
 	QString formula() const;
-	typedef struct FormulaData {
+	struct FormulaData {
 		FormulaData(const QString& variableName, const QString& columnPath): m_column(nullptr), m_variableName(variableName), m_columnPath(columnPath) {}
 		FormulaData(const QString& variableName, Column* column): m_column(column), m_variableName(variableName), m_columnPath(column->path()) {}
 		QString columnName() const {return (m_column ? m_column->path() : m_columnPath);}
@@ -99,9 +99,9 @@ public:
 		const QString& variableName() const {return m_variableName;}
 	private:
 		// Should be only accessible by the columnName() function
-		QString m_columnPath;
 		Column* m_column;
 		QString m_variableName;
+		QString m_columnPath;
 		friend ColumnSetGlobalFormulaCmd;
 	};
 
