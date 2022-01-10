@@ -1134,6 +1134,14 @@ QString ColumnPrivate::formula() const {
 	return m_formula;
 }
 
+const QVector<Column::FormulaData>& ColumnPrivate::formulaDatas() const {
+	return m_formulaData;
+}
+
+QVector<Column::FormulaData>& ColumnPrivate::formulaDatasNonConst() {
+	return m_formulaData;
+}
+
 bool ColumnPrivate::formulaAutoUpdate() const {
 	return m_formulaAutoUpdate;
 }
@@ -1141,21 +1149,18 @@ bool ColumnPrivate::formulaAutoUpdate() const {
 /**
  * \brief Sets the formula used to generate column values
  */
-void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames,
-							   const QVector<Column*>& variableColumns, bool autoUpdate) {
+void ColumnPrivate::setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate) {
 	m_formula = formula;
-	m_formulaVariableNames = variableNames;
-	m_formulaVariableColumns = variableColumns;
+	m_formulaData = formulaData; // TODO: disconnecting everything?
 	m_formulaAutoUpdate = autoUpdate;
 
 	for (auto connection: m_connectionsUpdateFormula)
 		if (static_cast<bool>(connection))
 			disconnect(connection);
 
-	m_formulaVariableColumnPaths.clear();
-
-	for (auto column : variableColumns) {
-		m_formulaVariableColumnPaths << column->path();
+	for (auto& formulaData : m_formulaData) {
+		auto* column = formulaData.column();
+		assert(column);
 		if (autoUpdate)
 			connectFormulaColumn(column);
 	}
@@ -1167,8 +1172,11 @@ void ColumnPrivate::setFormula(const QString& formula, const QStringList& variab
  */
 void ColumnPrivate::finalizeLoad() {
 	if (m_formulaAutoUpdate) {
-		for (auto column : m_formulaVariableColumns)
+		for (auto& formulaData : m_formulaData) {
+			auto* column = formulaData.column();
+			assert(column);
 			connectFormulaColumn(column);
+		}
 	}
 }
 
@@ -1201,34 +1209,25 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
  * after the project was loaded in Project::load().
  */
  void ColumnPrivate::setFormula(const QString& formula, const QStringList& variableNames,
-		const QStringList& variableColumnPaths, bool autoUpdate) {
+								const QStringList& variableColumnPaths, bool autoUpdate) {
 	m_formula = formula;
-	m_formulaVariableNames = variableNames;
-	m_formulaVariableColumnPaths = variableColumnPaths;
-	m_formulaVariableColumns.resize(variableColumnPaths.length());
+	m_formulaData.clear();
+	for (int i=0; i < variableNames.count(); i++) {
+		m_formulaData.append(Column::FormulaData(variableNames.at(i), variableColumnPaths.at(i)));
+	}
 	m_formulaAutoUpdate = autoUpdate;
 }
 
-const QStringList& ColumnPrivate::formulaVariableNames() const {
-	return m_formulaVariableNames;
-}
-
-const QVector<Column*>& ColumnPrivate::formulaVariableColumns() const {
-	return m_formulaVariableColumns;
-}
-
-const QStringList& ColumnPrivate::formulaVariableColumnPaths() const {
-	return m_formulaVariableColumnPaths;
-}
-
 void ColumnPrivate::setformulVariableColumnsPath(int index, const QString& path) {
-	m_formulaVariableColumnPaths[index] = path;
+	if (!m_formulaData[index].setColumnPath(path)) {
+		DEBUG("For some reason, there was already a column assigned");
+	}
 }
 
 void ColumnPrivate::setformulVariableColumn(int index, Column* column) {
-	if (m_formulaVariableColumns[index]) // if there exists already a valid column, disconnect it first
-		disconnect(m_formulaVariableColumns[index], nullptr, this, nullptr);
-	m_formulaVariableColumns[index] = column;
+	if (m_formulaData.at(index).column()) // if there exists already a valid column, disconnect it first
+		disconnect(m_formulaData.at(index).column(), nullptr, this, nullptr);
+	m_formulaData[index].setColumn(column);
 	connectFormulaColumn(column);
 }
 
@@ -1243,12 +1242,14 @@ void ColumnPrivate::updateFormula() {
 	int maxRowCount = 0;
 
 	bool valid = true;
-	for (auto column : m_formulaVariableColumns) {
+	QStringList formulaVariableNames;
+	for (auto& formulaData : m_formulaData) {
+		auto* column = formulaData.column();
 		if (!column) {
 			valid = false;
 			break;
 		}
-
+		formulaVariableNames << formulaData.variableName();
 		if (column->columnMode() == AbstractColumn::ColumnMode::Integer || column->columnMode() == AbstractColumn::ColumnMode::BigInt) {
 			//convert integers to doubles first
 			auto* xVector = new QVector<double>(column->rowCount());
@@ -1279,7 +1280,7 @@ void ColumnPrivate::updateFormula() {
 		//evaluate the expression for f(x_1, x_2, ...) and write the calculated values into a new vector.
 		ExpressionParser* parser = ExpressionParser::getInstance();
 		DEBUG(Q_FUNC_INFO << ", Calling evaluateCartesian()")
-		parser->evaluateCartesian(m_formula, m_formulaVariableNames, xVectors, &new_data);
+		parser->evaluateCartesian(m_formula, formulaVariableNames, xVectors, &new_data);
 		DEBUG(Q_FUNC_INFO << ", Calling replaceValues()")
 		replaceValues(0, new_data);
 
@@ -1304,10 +1305,16 @@ void ColumnPrivate::updateFormula() {
 void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 	const Column* column = dynamic_cast<const Column*>(aspect);
 	disconnect(column, nullptr, this, nullptr);
-	//TODO: why is const_cast required here?!?
-	int index = m_formulaVariableColumns.indexOf(const_cast<Column*>(column));
+	int index = -1;
+	for (int i=0; i < formulaDatas().count(); i++) {
+		auto& d = formulaDatas().at(i);
+		if (d.column() == column) {
+			index = i;
+			break;
+		}
+	}
 	if (index != -1) {
-		m_formulaVariableColumns[index] = nullptr;
+		m_formulaData[index].setColumn(nullptr);
 		DEBUG("ColumnPrivate::formulaVariableColumnRemoved():updateFormula()")
 		updateFormula();
 	}
@@ -1315,10 +1322,18 @@ void ColumnPrivate::formulaVariableColumnRemoved(const AbstractAspect* aspect) {
 
 void ColumnPrivate::formulaVariableColumnAdded(const AbstractAspect* aspect) {
 	PERFTRACE(Q_FUNC_INFO);
-	int index = m_formulaVariableColumnPaths.indexOf(aspect->path());
+	QString path = aspect->path();
+	int index = -1;
+	for (int i=0; i < formulaDatas().count(); i++) {
+		auto& d = formulaDatas().at(i);
+		if (d.columnName() == path) {
+			index = i;
+			break;
+		}
+	}
 	if (index != -1) {
 		const Column* column = dynamic_cast<const Column*>(aspect);
-		m_formulaVariableColumns[index] = const_cast<Column*>(column);
+		m_formulaData[index].setColumn(const_cast<Column*>(column));
 		DEBUG(Q_FUNC_INFO << ", calling updateFormula()")
 		updateFormula();
 	}

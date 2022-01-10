@@ -22,6 +22,7 @@ class QAction;
 class QActionGroup;
 class XmlStreamReader;
 class ColumnPrivate;
+class ColumnSetGlobalFormulaCmd;
 
 #ifdef SDK
 #include "labplot_export.h"
@@ -77,9 +78,35 @@ public:
 	void setFormula(const QString& formula, const QStringList& variableNames,
 					const QVector<Column*>& columns, bool autoUpdate);
 	QString formula() const;
-	const QStringList& formulaVariableNames() const;
-	const QVector<Column*>& formulaVariableColumns() const;
-	const QStringList& formulaVariableColumnPaths() const;
+	typedef struct FormulaData {
+		FormulaData(const QString& variableName, const QString& columnPath): m_column(nullptr), m_variableName(variableName), m_columnPath(columnPath) {}
+		FormulaData(const QString& variableName, Column* column): m_column(column), m_variableName(variableName), m_columnPath(column->path()) {}
+		QString columnName() const {return (m_column ? m_column->path() : m_columnPath);}
+		bool setColumnPath(const QString& path) {
+			if (m_column && m_column->path() != path)
+				return false;
+			else if (!m_column)
+				m_columnPath = path;
+			return true;
+		}
+		void setColumn(Column* c) {
+			m_column = c;
+			if (c)
+				m_columnPath = c->path(); // do not clear path
+		}
+		// column can be changed only with setColumn
+		const Column* column() const {return m_column;}
+		const QString& variableName() const {return m_variableName;}
+	private:
+		// Should be only accessible by the columnName() function
+		QString m_columnPath;
+		Column* m_column;
+		QString m_variableName;
+		friend ColumnSetGlobalFormulaCmd;
+	};
+
+	const QVector<FormulaData>& formulaDatas() const;
+	QVector<FormulaData>& formulaDatasNonConst() const;
 	void setformulVariableColumnsPath(int index, const QString& path);
 	void setformulVariableColumn(int index, Column*);
 	bool formulaAutoUpdate() const;

@@ -107,23 +107,21 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 	ui.teEquation->setPlainText(firstColumn->formula());
 
 	//variables
-	const QStringList& variableNames = firstColumn->formulaVariableNames();
-	if (variableNames.isEmpty()) {	//no formula was used for this column -> add the first variable "x"
+	const auto& formulaDatas = firstColumn->formulaDatas();
+	if (formulaDatas.isEmpty()) {	//no formula was used for this column -> add the first variable "x"
 		addVariable();
 		m_variableLineEdits[0]->setText("x");
 	} else {	//formula and variables are available
-		const QVector<Column*>& variableColumns = firstColumn->formulaVariableColumns();
-		const QStringList& columnPaths = firstColumn->formulaVariableColumnPaths();
 
 		//add all available variables and select the corresponding columns
 		const auto& cols = m_spreadsheet->project()->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
-		for (int i = 0; i < variableNames.size(); ++i) {
+		for (int i = 0; i < formulaDatas.size(); ++i) {
 			addVariable();
-			m_variableLineEdits[i]->setText(variableNames.at(i));
+			m_variableLineEdits[i]->setText(formulaDatas.at(i).variableName());
 
 			bool found = false;
 			for (const auto* col : cols) {
-				if (col != variableColumns.at(i))
+				if (col != formulaDatas.at(i).column())
 					continue;
 
 				const auto* column = dynamic_cast<const AbstractColumn*>(col);
@@ -144,8 +142,8 @@ void FunctionValuesDialog::setColumns(const QVector<Column*>& columns) {
 			if (!found) {
 				m_variableDataColumns[i]->setCurrentModelIndex(QModelIndex());
 				m_variableDataColumns[i]->useCurrentIndexText(false);
-				m_variableDataColumns[i]->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", columnPaths[i]));
-				m_variableDataColumns[i]->setText(columnPaths[i].split('/').last());
+				m_variableDataColumns[i]->setInvalid(true, i18n("The column \"%1\"\nis not available anymore. It will be automatically used once it is created again.", formulaDatas.at(i).columnName()));
+				m_variableDataColumns[i]->setText(formulaDatas.at(i).columnName().split('/').last());
 			}
 		}
 	}

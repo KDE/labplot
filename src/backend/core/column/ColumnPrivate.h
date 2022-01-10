@@ -15,8 +15,10 @@
 
 #include "backend/core/AbstractColumn.h"
 #include "backend/lib/IntervalAttribute.h"
+#include "backend/core/column/Column.h"
 
 class Column;
+class ColumnSetGlobalFormulaCmd;
 
 class ColumnPrivate : public QObject {
 	Q_OBJECT
@@ -65,14 +67,12 @@ public:
 
 	//global formula defined for the whole column
 	QString formula() const;
-	const QStringList& formulaVariableNames() const;
-	const QVector<Column*>& formulaVariableColumns() const;
-	const QStringList& formulaVariableColumnPaths() const;
+	const QVector<Column::FormulaData>& formulaDatas() const;
+	QVector<Column::FormulaData>& formulaDatasNonConst();
 	void setformulVariableColumnsPath(int index, const QString& path);
 	void setformulVariableColumn(int index, Column *column);
 	bool formulaAutoUpdate() const;
-	void setFormula(const QString& formula, const QStringList& variableNames,
-					const QVector<Column*>& variableColumns, bool autoUpdate);
+	void setFormula(const QString& formula, const QVector<Column::FormulaData>& formulaData, bool autoUpdate);
 	void setFormula(const QString& formula, const QStringList& variableNames,
 					const QStringList& variableColumnPaths, bool autoUpdate);
 	void updateFormula();
@@ -140,9 +140,7 @@ private:
 	AbstractSimpleFilter* m_input_filter{nullptr};	//input filter for string -> data type conversion
 	AbstractSimpleFilter* m_output_filter{nullptr};	//output filter for data type -> string conversion
 	QString m_formula;
-	QStringList m_formulaVariableNames;
-	QVector<Column*> m_formulaVariableColumns;
-	QStringList m_formulaVariableColumnPaths;
+	QVector<Column::FormulaData> m_formulaData;
 	bool m_formulaAutoUpdate{false};
 	IntervalAttribute<QString> m_formulas;
 	//TODO: rename to m_plotDesignation
@@ -157,6 +155,8 @@ private:
 private Q_SLOTS:
 	void formulaVariableColumnRemoved(const AbstractAspect*);
 	void formulaVariableColumnAdded(const AbstractAspect*);
+
+	friend ColumnSetGlobalFormulaCmd;
 };
 
 #endif

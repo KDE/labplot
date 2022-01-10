@@ -665,17 +665,28 @@ ColumnSetGlobalFormulaCmd::ColumnSetGlobalFormulaCmd(ColumnPrivate* col, QString
 void ColumnSetGlobalFormulaCmd::redo() {
 	if (!m_copied) {
 		m_formula = m_col->formula();
-		m_variableNames = m_col->formulaVariableNames();
-		m_variableColumns = m_col->formulaVariableColumns();
+		for (auto& d: m_col->formulaDatas()) {
+			m_variableNames << d.variableName();
+			m_variableColumns.append(d.m_column);
+		}
 		m_autoUpdate = m_col->formulaAutoUpdate();
 		m_copied = true;
 	}
 
-	m_col->setFormula(m_newFormula, m_newVariableNames, m_newVariableColumns, m_newAutoUpdate);
+	QVector<Column::FormulaData> formulaData;
+	for (int i =0; i < m_newVariableNames.count(); i++) {
+		formulaData.append(Column::FormulaData(m_newVariableNames.at(i), m_newVariableColumns.at(i)));
+	}
+
+	m_col->setFormula(m_newFormula, formulaData, m_newAutoUpdate);
 }
 
 void ColumnSetGlobalFormulaCmd::undo() {
-	m_col->setFormula(m_formula, m_variableNames, m_variableColumns, m_newAutoUpdate);
+	QVector<Column::FormulaData> formulaData;
+	for (int i =0; i < m_variableNames.count(); i++) {
+		formulaData.append(Column::FormulaData(m_variableNames.at(i), m_variableColumns.at(i)));
+	}
+	m_col->setFormula(m_formula, formulaData, m_newAutoUpdate);
 }
 
 

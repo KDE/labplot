@@ -199,8 +199,15 @@ QMenu* Column::createContextMenu() {
 	const auto& columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 	const QString& path = this->path();
 	for (const auto* column : columns) {
-		auto paths = column->formulaVariableColumnPaths();
-		if (paths.indexOf(path) != -1) {
+		int index = -1;
+		for (int i=0; column->formulaDatas().count(); i++) {
+			if (path == column->formulaDatas().at(i).columnName()) {
+				index = i;
+				break;
+			}
+		}
+
+		if (index != -1) {
 			QAction* action = new QAction(column->icon(), column->name(), m_usedInActionGroup);
 			action->setData(column->path());
 			usedInMenu->addAction(action);
@@ -483,6 +490,18 @@ void Column::clear() {
  * \brief Returns the formula used to generate column values
  */
 QString Column:: formula() const {
+	return d->formula();
+}
+
+const QVector<Column::FormulaData>& Column::formulaDatas() const {
+	return d->formulaDatas();
+}
+
+QVector<Column::FormulaData>& Column::formulaDatasNonConst() const {
+	return d->formulaDatasNonConst();
+}
+
+void Column::setformulVariableColumnsPath(int index, const QString& path) {
 	d->setformulVariableColumnsPath(index, path);
 }
 
@@ -1124,6 +1143,26 @@ void Column::save(QXmlStreamWriter* writer) const {
 	//save the formula used to generate column values, if available
 	if (!formula().isEmpty() ) {
 		writer->writeStartElement("formula");
+		writer->writeAttribute("autoUpdate", QString::number(d->formulaAutoUpdate()));
+		writer->writeTextElement("text", formula());
+
+		QStringList formulaVariableNames;
+		QStringList formulaVariableColumnPaths;
+		for (auto& d: formulaDatas()) {
+			formulaVariableNames << d.variableName();
+			formulaVariableColumnPaths << d.columnName();
+		}
+
+		writer->writeStartElement("variableNames");
+		for (const auto& name : formulaVariableNames)
+			writer->writeTextElement("name", name);
+		writer->writeEndElement();
+
+		writer->writeStartElement("columnPathes");
+		for (const auto& path : formulaVariableColumnPaths)
+			writer->writeTextElement("path", path);
+		writer->writeEndElement();
+
 		writer->writeEndElement();
 	}
 
