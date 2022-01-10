@@ -2476,8 +2476,8 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 	bool updated = false;
 	if (autoScaleX(index))
 		updated = this->scaleAutoX(index, true);
-	if (updated && autoScaleY(index))
-		this->scaleAutoY(index);
+	if (autoScaleY(index))
+		updated |= this->scaleAutoY(index);
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
 	if (!updated) {
@@ -2528,8 +2528,8 @@ void CartesianPlot::yDataChanged(XYCurve* curve) {
 	bool updated = false;
 	if (autoScaleY(index))
 		updated = this->scaleAutoY(index, true);
-	if (updated && autoScaleX(index))
-		this->scaleAutoX(index);
+	if (autoScaleX(index))
+		updated |= this->scaleAutoX(index);
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
 	if (!updated) {
@@ -2803,6 +2803,7 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 	Q_D(CartesianPlot);
 
 	d->dataXRange(index).setRange(qInf(), -qInf());
+	auto range{d->xRange(index)};	// value does not matter, will be overwritten
 
 	//loop over all xy-curves and determine the maximum and minimum x-values
 	for (const auto* curve : this->children<const XYCurve>()) {
@@ -2842,7 +2843,6 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 		}
 		DEBUG(Q_FUNC_INFO << ", X index range = " << indexRange.toStdString())
 
-		auto range{d->xRange(index)};	// value does not matter, will be overwritten
 		curve->minMaxX(indexRange, range, true);
 
 		if (range.start() < d->dataXRange(index).start())
@@ -2902,7 +2902,7 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 	Q_D(CartesianPlot);
 
 	d->dataYRange(index).setRange(qInf(), -qInf());
-	Range<double> range{d->dataYRange(index)};
+	auto range{d->dataYRange(index)};
 
 	//loop over all xy-curves and determine the maximum and minimum y-values
 	for (const auto* curve : this->children<const XYCurve>()) {
@@ -2923,15 +2923,15 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 			curve->xColumn()->indicesMinMax(xRange(xIndex).start(), xRange(xIndex).end(), indexRange.start(), indexRange.end());
 		} else {
 			switch (d->rangeType) {
-				case RangeType::Free:
-					indexRange.setRange(0, yColumn->rowCount());
-					break;
-				case RangeType::Last:
-					indexRange.setRange(yColumn->rowCount() - d->rangeLastValues, yColumn->rowCount());
-					break;
-				case RangeType::First:
-					indexRange.setRange(0, d->rangeFirstValues);
-					break;
+			case RangeType::Free:
+				indexRange.setRange(0, yColumn->rowCount() - 1);
+				break;
+			case RangeType::Last:
+				indexRange.setRange(yColumn->rowCount() - d->rangeLastValues - 1, yColumn->rowCount() - 1);
+				break;
+			case RangeType::First:
+				indexRange.setRange(0, d->rangeFirstValues - 1);
+				break;
 			}
 		}
 		DEBUG(Q_FUNC_INFO << ", Y index range = " << indexRange.toStdString())
