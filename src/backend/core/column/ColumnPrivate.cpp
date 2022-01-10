@@ -1208,7 +1208,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 								const QStringList& variableColumnPaths, bool autoUpdate) {
 	m_formula = formula;
 	m_formulaData.clear();
-	for (int i=0; i < variableNames.count(); i++) {
+	for (int i = 0; i < variableNames.count(); i++) {
 		m_formulaData.append(Column::FormulaData(variableNames.at(i), variableColumnPaths.at(i)));
 	}
 	m_formulaAutoUpdate = autoUpdate;
@@ -1216,7 +1216,7 @@ void ColumnPrivate::connectFormulaColumn(const AbstractColumn* column) {
 
 void ColumnPrivate::setFormulVariableColumnsPath(int index, const QString& path) {
 	if (!m_formulaData[index].setColumnPath(path))
-		DEBUG("ColumnPrivate::setFormulVariableColumnsPath: For some reason, there was already a column assigned");
+		DEBUG(Q_FUNC_INFO << ": For some reason, there was already a column assigned");
 }
 
 void ColumnPrivate::setFormulVariableColumn(int index, Column* column) {
