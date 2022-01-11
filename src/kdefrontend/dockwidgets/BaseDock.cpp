@@ -34,7 +34,7 @@ BaseDock::BaseDock(QWidget* parent) : QWidget(parent) {
 
 BaseDock::~BaseDock() = default;
 
-void BaseDock::updatePlotRangeList(QComboBox* cb) const {
+void BaseDock::updatePlotRangeList(QComboBox* cb) {
 	auto* element{ static_cast<WorksheetElement*>(m_aspect) };
 	if (!element) {
 		DEBUG(Q_FUNC_INFO << ", WARNING: no worksheet element!")
@@ -55,15 +55,19 @@ void BaseDock::updatePlotRangeList(QComboBox* cb) const {
 		return;
 	}
 	// fill ui.cbPlotRanges
+	m_suppressPlotRetransform = true;
 	cb->clear();
 	for (int i{0}; i < cSystemCount; i++)
 		cb->addItem( QString::number(i+1) + QLatin1String(" : ") + element->coordinateSystemInfo(i) );
+	m_suppressPlotRetransform = false;
 	cb->setCurrentIndex(cSystemIndex);
 	// disable when there is only on plot range
 	cb->setEnabled(cSystemCount == 1 ? false : true);
 }
 
 void BaseDock::plotRangeChanged(int index) {
+	if (m_suppressPlotRetransform)
+		return;
 	DEBUG(Q_FUNC_INFO << ", index = " << index)
 
 	auto* element{ static_cast<WorksheetElement*>(m_aspect) };

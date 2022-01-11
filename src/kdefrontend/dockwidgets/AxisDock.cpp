@@ -619,7 +619,7 @@ void AxisDock::setModelIndexFromColumn(TreeViewComboBox* cb, const AbstractColum
 		cb->setCurrentModelIndex(QModelIndex());
 }
 
-void AxisDock::updatePlotRanges() const {
+void AxisDock::updatePlotRanges() {
 	updatePlotRangeList(ui.cbPlotRanges);
 
 	if (m_axis->coordinateSystemCount() == 0)

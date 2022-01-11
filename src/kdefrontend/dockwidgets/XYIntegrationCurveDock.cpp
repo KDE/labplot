@@ -224,7 +224,7 @@ void XYIntegrationCurveDock::setCurves(QList<XYCurve*> list) {
 	ui.chkLineSkipGaps->hide();
 }
 
-void XYIntegrationCurveDock::updatePlotRanges() const {
+void XYIntegrationCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 

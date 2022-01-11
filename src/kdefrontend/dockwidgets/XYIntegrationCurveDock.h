@@ -28,7 +28,7 @@ public:
 private:
 	void initGeneralTab() override;
 	void updateSettings(const AbstractColumn*);
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 	void showIntegrationResult();
 
 	Ui::XYIntegrationCurveDockGeneralTab uiGeneralTab;

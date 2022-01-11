@@ -50,7 +50,7 @@ private Q_SLOTS:
 	void opacityChanged(int);
 
 	//SLOTs for changes triggered in ReferenceLine
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 	void lineVisibilityChanged(bool);
 
 	//Position

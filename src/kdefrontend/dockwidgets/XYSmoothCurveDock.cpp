@@ -250,7 +250,7 @@ void XYSmoothCurveDock::setCurves(QList<XYCurve*> list) {
 	ui.chkLineSkipGaps->hide();
 }
 
-void XYSmoothCurveDock::updatePlotRanges() const {
+void XYSmoothCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 

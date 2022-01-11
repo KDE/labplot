@@ -33,7 +33,7 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 	void updateSettings(const AbstractColumn*);
 	void showFitResult();
 	bool eventFilter(QObject*, QEvent*) override;

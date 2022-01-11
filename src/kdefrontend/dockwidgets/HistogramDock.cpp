@@ -470,7 +470,7 @@ void HistogramDock::retranslateUi() {
 
 	//TODO updatePenStyles, updateBrushStyles for all comboboxes
 }
-void HistogramDock::updatePlotRanges() const {
+void HistogramDock::updatePlotRanges() {
 	const int cSystemCount{ m_curve->coordinateSystemCount() };
 	const int cSystemIndex{ m_curve->coordinateSystemIndex() };
 	DEBUG(Q_FUNC_INFO << ", plot ranges count: " << cSystemCount)

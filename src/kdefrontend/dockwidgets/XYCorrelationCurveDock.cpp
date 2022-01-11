@@ -226,7 +226,7 @@ void XYCorrelationCurveDock::setCurves(QList<XYCurve*> list) {
 	ui.chkLineSkipGaps->hide();
 }
 
-void XYCorrelationCurveDock::updatePlotRanges() const {
+void XYCorrelationCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 

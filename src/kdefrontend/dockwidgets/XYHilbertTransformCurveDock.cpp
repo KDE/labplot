@@ -160,7 +160,7 @@ void XYHilbertTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	updatePlotRanges();
 }
 
-void XYHilbertTransformCurveDock::updatePlotRanges() const {
+void XYHilbertTransformCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 

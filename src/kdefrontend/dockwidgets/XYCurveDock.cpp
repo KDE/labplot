@@ -671,7 +671,7 @@ void XYCurveDock::updateLocale() {
 	symbolWidget->updateLocale();
 }
 
-void XYCurveDock::updatePlotRanges() const {
+void XYCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 

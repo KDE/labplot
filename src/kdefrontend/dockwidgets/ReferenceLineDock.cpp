@@ -111,7 +111,7 @@ void ReferenceLineDock::updateLocale() {
 		ui.lePosition->setText(numberLocale.toString(m_line->position().point.x()));
 }
 
-void ReferenceLineDock::updatePlotRanges() const {
+void ReferenceLineDock::updatePlotRanges() {
 	updatePlotRangeList(ui.cbPlotRanges);
 }
 

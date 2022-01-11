@@ -225,7 +225,7 @@ void XYDifferentiationCurveDock::setCurves(QList<XYCurve*> list) {
 	ui.chkLineSkipGaps->hide();
 }
 
-void XYDifferentiationCurveDock::updatePlotRanges() const {
+void XYDifferentiationCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 

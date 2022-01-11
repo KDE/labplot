@@ -240,7 +240,7 @@ void XYDataReductionCurveDock::setCurves(QList<XYCurve*> list) {
 	ui.chkLineSkipGaps->hide();
 }
 
-void XYDataReductionCurveDock::updatePlotRanges() const {
+void XYDataReductionCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 

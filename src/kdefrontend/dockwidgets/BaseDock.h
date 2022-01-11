@@ -47,7 +47,7 @@ public:
 
 	virtual void updateLocale() {};
 	virtual void updateUnits() {};
-	virtual void updatePlotRanges() const {};	// used in worksheet element docks
+	virtual void updatePlotRanges() {};	// used in worksheet element docks
     static void spinBoxCalculateMinMax(QDoubleSpinBox* spinbox, Range<double> range, double newValue=NAN);
 
 protected:
@@ -58,13 +58,16 @@ protected:
 	QList<AbstractAspect*> m_aspects;
 	Units m_units{Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
-	void updatePlotRangeList(QComboBox*) const;	// used in worksheet element docks
+	void updatePlotRangeList(QComboBox*);	// used in worksheet element docks
 
 protected Q_SLOTS:
 	void nameChanged();
 	void commentChanged();
 	void aspectDescriptionChanged(const AbstractAspect*);
 	void plotRangeChanged(int index);	// used in worksheet element docks
+
+private:
+	bool m_suppressPlotRetransform{false};
 };
 
 #endif

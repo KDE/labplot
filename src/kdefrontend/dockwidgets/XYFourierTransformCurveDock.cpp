@@ -175,7 +175,7 @@ void XYFourierTransformCurveDock::setCurves(QList<XYCurve*> list) {
 	updatePlotRanges();
 }
 
-void XYFourierTransformCurveDock::updatePlotRanges() const {
+void XYFourierTransformCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 

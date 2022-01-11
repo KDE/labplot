@@ -38,7 +38,7 @@ private:
 	TreeViewComboBox* cbValuesColumn;
 
 	void updateValuesWidgets();
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 	void loadConfig(KConfig&);
 
 protected:

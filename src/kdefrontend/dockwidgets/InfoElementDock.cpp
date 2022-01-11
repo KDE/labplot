@@ -221,7 +221,7 @@ void InfoElementDock::setInfoElements(QList<InfoElement*> list) {
 			this, &InfoElementDock::elementConnectionLineOpacityChanged);
 }
 
-void InfoElementDock::updatePlotRanges() const {
+void InfoElementDock::updatePlotRanges() {
 	updatePlotRangeList(ui->cbPlotRanges);
 }
 

@@ -57,7 +57,7 @@ private Q_SLOTS:
 	void elementVerticalLineOpacityChanged(qreal);
 	void elementConnectionLinePenChanged(const QPen&);
 	void elementConnectionLineOpacityChanged(qreal);
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 
 private:
 	Ui::InfoElementDock* ui;

@@ -240,7 +240,7 @@ void XYConvolutionCurveDock::setCurves(QList<XYCurve*> list) {
 	ui.chkLineSkipGaps->hide();
 }
 
-void XYConvolutionCurveDock::updatePlotRanges() const {
+void XYConvolutionCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 

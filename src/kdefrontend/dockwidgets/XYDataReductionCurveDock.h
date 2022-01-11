@@ -30,7 +30,7 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 	void updateTolerance();
 	void updateTolerance2();
 	void showDataReductionResult();

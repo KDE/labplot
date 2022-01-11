@@ -27,7 +27,7 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 	void showCorrelationResult();
 
 	Ui::XYCorrelationCurveDockGeneralTab uiGeneralTab;

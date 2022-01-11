@@ -166,7 +166,7 @@ void XYEquationCurveDock::setCurves(QList<XYCurve*> list) {
 	uiGeneralTab.pbRecalculate->setEnabled(false);
 }
 
-void XYEquationCurveDock::updatePlotRanges() const {
+void XYEquationCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 
@@ -311,7 +311,7 @@ void XYEquationCurveDock::insertConstant2(const QString& constantsName) {
 	uiGeneralTab.teEquation2->insertPlainText(constantsName);
 }
 
-void XYEquationCurveDock::enableRecalculate() const {
+void XYEquationCurveDock::enableRecalculate() {
 	if (m_initializing)
 		return;
 

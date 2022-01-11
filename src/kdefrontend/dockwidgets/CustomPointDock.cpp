@@ -149,7 +149,7 @@ void CustomPointDock::updateLocale() {
 	symbolWidget->updateLocale();
 }
 
-void CustomPointDock::updatePlotRanges() const {
+void CustomPointDock::updatePlotRanges() {
 	updatePlotRangeList(ui.cbPlotRanges);
 }
 

@@ -26,7 +26,7 @@ public:
 
 private:
 	void initGeneralTab() override;
-	void updatePlotRanges() const override;
+	void updatePlotRanges() override;
 
 	Ui::XYEquationCurveDockGeneralTab uiGeneralTab;
 	XYEquationCurve* m_equationCurve{nullptr};
@@ -41,7 +41,7 @@ private Q_SLOTS:
 	void insertConstant1(const QString&);
 	void insertFunction2(const QString&);
 	void insertConstant2(const QString&);
-	void enableRecalculate() const;
+	void enableRecalculate();
 
 	//SLOTs for changes triggered in XYCurve
 	//General-Tab

@@ -369,7 +369,7 @@ void XYFitCurveDock::setCurves(QList<XYCurve*> list) {
 		updateModelEquation();
 }
 
-void XYFitCurveDock	::updatePlotRanges() const {
+void XYFitCurveDock	::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 

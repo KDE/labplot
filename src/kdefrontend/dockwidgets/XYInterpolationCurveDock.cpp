@@ -264,7 +264,7 @@ void XYInterpolationCurveDock::setCurves(QList<XYCurve*> list) {
 	ui.chkLineSkipGaps->hide();
 }
 
-void XYInterpolationCurveDock::updatePlotRanges() const {
+void XYInterpolationCurveDock::updatePlotRanges() {
 	updatePlotRangeList(uiGeneralTab.cbPlotRanges);
 }
 
