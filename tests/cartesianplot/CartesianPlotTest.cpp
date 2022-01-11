@@ -48,12 +48,17 @@ void CartesianPlotTest::initTestCase() {
 	auto c1 = static_cast<Column*>(s->child<Column>(0)); \
 	QVERIFY(c1 != nullptr); \
 	QCOMPARE(c1->name(), QLatin1String("1")); \
+	QVERIFY(c1->columnMode() == AbstractColumn::ColumnMode::Double); \
+	QVERIFY(c1->rowCount() == 100); \
+	QVERIFY(c1->valueAt(0) == 1.); \
+	QVERIFY(c1->valueAt(1) == 2.); \
 	auto c2 = static_cast<Column*>(s->child<Column>(1)); \
 	QVERIFY(c2 != nullptr); \
 	QCOMPARE(c2->name(), QLatin1String("2")); \
-	/*TODO: check column mode */ \
-	/*TODO: check column sizes */ \
-	/*TODO: check column values */ \
+	QVERIFY(c2->columnMode() == AbstractColumn::ColumnMode::Double); \
+	QVERIFY(c2->rowCount() == 100); \
+	QVERIFY(c2->valueAt(0) == 1.); \
+	QVERIFY(c2->valueAt(1) == 2.); \
 \
 	/* Worksheet */ \
 	aspect = project.child<AbstractAspect>(1); \
@@ -68,11 +73,14 @@ void CartesianPlotTest::initTestCase() {
 	QVERIFY(plot != nullptr); \
 	if (!plot) return; \
 \
-	/* axis selected */ \
+	/* curve */ \
 	auto curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0)); \
 	QVERIFY(curve != nullptr); \
 	if (!curve) return; \
 	QCOMPARE(curve->name(), "2"); \
+\
+	CHECK_RANGE(plot, curve, x, 1, 2); \
+	CHECK_RANGE(plot, curve, y, 1, 2); \
 \
 	auto xAxis = static_cast<Axis*>(plot->child<Axis>(0)); \
 	QVERIFY(xAxis != nullptr); \
@@ -112,21 +120,85 @@ void CartesianPlotTest::initTestCase() {
 void CartesianPlotTest::changeData1() {
 	LOAD_PROJECT_DATA_CHANGE
 
-	CHECK_RANGE(plot, curve, x, 1, 2);
-	CHECK_RANGE(plot, curve, y, 1, 2);
-
-	// insert into x column
+	// insert data
 	c1->setValueAt(2, 3.);
 	c2->setValueAt(2, 3.);
 
+	QVERIFY(c1->valueAt(2) == 3.);
+	QVERIFY(c2->valueAt(2) == 3.);
+
 	CHECK_RANGE(plot, curve, x, 1, 3);
 	CHECK_RANGE(plot, curve, y, 1, 3);
+}
 
+void CartesianPlotTest::changeData2() {
+	LOAD_PROJECT_DATA_CHANGE
 
-	//TODO: add data point	: 3 3
-	//TODO: add data point	: 3 2
-	//TODO: add data point	: 2 3
-	//TODO: add data point	: same three but first y then x
+	// insert data
+	c1->setValueAt(2, 3.);
+	c2->setValueAt(2, 2.);
+
+	QVERIFY(c1->valueAt(2) == 3.);
+	QVERIFY(c2->valueAt(2) == 2.);
+
+	CHECK_RANGE(plot, curve, x, 1, 3);
+	CHECK_RANGE(plot, curve, y, 1, 2);
+}
+
+void CartesianPlotTest::changeData3() {
+	LOAD_PROJECT_DATA_CHANGE
+
+	// insert data
+	c1->setValueAt(2, 2.);
+	c2->setValueAt(2, 3.);
+
+	QVERIFY(c1->valueAt(2) == 2.);
+	QVERIFY(c2->valueAt(2) == 3.);
+
+	CHECK_RANGE(plot, curve, x, 1, 2);
+	CHECK_RANGE(plot, curve, y, 1, 3);
+}
+
+void CartesianPlotTest::changeData4() {
+	LOAD_PROJECT_DATA_CHANGE
+
+	// insert data
+	c2->setValueAt(2, 3.);
+	c1->setValueAt(2, 3.);
+
+	QVERIFY(c1->valueAt(2) == 3.);
+	QVERIFY(c2->valueAt(2) == 3.);
+
+	CHECK_RANGE(plot, curve, x, 1, 3);
+	CHECK_RANGE(plot, curve, y, 1, 3);
+}
+
+void CartesianPlotTest::changeData5() {
+	LOAD_PROJECT_DATA_CHANGE
+
+	// insert data
+	c2->setValueAt(2, 2.);
+	c1->setValueAt(2, 3.);
+
+	QVERIFY(c1->valueAt(2) == 3.);
+	QVERIFY(c2->valueAt(2) == 2.);
+
+	CHECK_RANGE(plot, curve, x, 1, 3);
+	CHECK_RANGE(plot, curve, y, 1, 2);
+}
+
+void CartesianPlotTest::changeData6() {
+	LOAD_PROJECT_DATA_CHANGE
+
+	// insert data
+	c2->setValueAt(2, 3.);
+	c1->setValueAt(2, 2.);
+
+	QVERIFY(c1->valueAt(2) == 2.);
+	QVERIFY(c2->valueAt(2) == 3.);
+
+	CHECK_RANGE(plot, curve, x, 1, 2);
+	CHECK_RANGE(plot, curve, y, 1, 3);
 }
 
 QTEST_MAIN(CartesianPlotTest)

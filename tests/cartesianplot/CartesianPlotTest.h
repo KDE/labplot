@@ -20,6 +20,11 @@ private Q_SLOTS:
 
 	// change data in spreadsheet source
 	void changeData1();
+	void changeData2();
+	void changeData3();
+	void changeData4();
+	void changeData5();
+	void changeData6();
 
 };
 #endif
