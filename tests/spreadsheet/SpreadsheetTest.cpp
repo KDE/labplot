@@ -68,8 +68,8 @@ void SpreadsheetTest::testCopyPasteColumnMode00() {
 }
 
 /*!
-   insert one column with integer values and one column with float numbers into an empty spreadsheet.
-   the first column has to be converted to integer column.
+   insert one column with integer and one column with big integer values into an empty spreadsheet.
+   the first column has to be converted to integer column, the second to big integer.
 */
 void SpreadsheetTest::testCopyPasteColumnMode01() {
 	Spreadsheet sheet("test", false);
@@ -99,8 +99,8 @@ void SpreadsheetTest::testCopyPasteColumnMode01() {
 }
 
 /*!
-   insert one column with integer and one column with big integer values into an empty spreadsheet.
-   the first column has to be converted to integer column, the second to big integer.
+   insert one column with integer values and one column with float numbers into an empty spreadsheet.
+   the first column has to be converted to integer column, the second to float.
 */
 void SpreadsheetTest::testCopyPasteColumnMode02() {
 	Spreadsheet sheet("test", false);

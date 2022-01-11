@@ -83,11 +83,6 @@ Column::Column(const QString& name, const QVector<qint64>& data)
 	init();
 }
 
-//Column::Column(const QString& name, const QStringList& data)
-//	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, ColumnMode::Text, new QVector<QString>(data))) {
-//	init();
-//}
-
 Column::Column(const QString& name, const QVector<QString> &data)
 	: AbstractColumn(name, AspectType::Column), d(new ColumnPrivate(this, ColumnMode::Text, new QVector<QString>(data))) {
 	init();

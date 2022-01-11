@@ -39,7 +39,6 @@ public:
 	Column(const QString& name, const QVector<double>& data);
 	Column(const QString& name, const QVector<int> &data);
 	Column(const QString& name, const QVector<qint64>& data);
-	//Column(const QString& name, const QStringList &data);
 	Column(const QString& name, const QVector<QString>& data);
 	Column(const QString& name, const QVector<QDateTime> &data, ColumnMode);
 	void init();

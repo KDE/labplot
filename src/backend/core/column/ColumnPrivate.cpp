@@ -22,8 +22,6 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 	m_column_mode(mode), m_owner(owner) {
 	Q_ASSERT(owner != nullptr);
 
-	init();
-
 	SET_NUMBER_LOCALE
 	switch (mode) {
 	case AbstractColumn::ColumnMode::Double:
@@ -36,7 +34,7 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 		m_data = new QVector<qint64>();
 		break;
 	case AbstractColumn::ColumnMode::Text:
-		m_data = new QStringList();
+		m_data = new QVector<QString>();
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
 		m_data = new QVector<QDateTime>();
@@ -48,6 +46,8 @@ ColumnPrivate::ColumnPrivate(Column* owner, AbstractColumn::ColumnMode mode) :
 		m_data = new QVector<QDateTime>();
 		break;
 	}
+
+	init();
 }
 
 /**
@@ -67,43 +67,36 @@ void ColumnPrivate::init() {
 		m_input_filter->setNumberLocale(numberLocale);
 		m_output_filter = new Double2StringFilter();
 		m_output_filter->setNumberLocale(numberLocale);
-		m_data = new QVector<double>();
 		break;
 	case AbstractColumn::ColumnMode::Integer:
 		m_input_filter = new String2IntegerFilter();
 		m_input_filter->setNumberLocale(numberLocale);
 		m_output_filter = new Integer2StringFilter();
 		m_output_filter->setNumberLocale(numberLocale);
-		m_data = new QVector<int>();
 		break;
 	case AbstractColumn::ColumnMode::BigInt:
 		m_input_filter = new String2BigIntFilter();
 		m_input_filter->setNumberLocale(numberLocale);
 		m_output_filter = new BigInt2StringFilter();
 		m_output_filter->setNumberLocale(numberLocale);
-		m_data = new QVector<qint64>();
 		break;
 	case AbstractColumn::ColumnMode::Text:
 		m_input_filter = new SimpleCopyThroughFilter();
 		m_output_filter = new SimpleCopyThroughFilter();
-		m_data = new QStringList();
 		break;
 	case AbstractColumn::ColumnMode::DateTime:
 		m_input_filter = new String2DateTimeFilter();
 		m_output_filter = new DateTime2StringFilter();
-		m_data = new QVector<QDateTime>();
 		break;
 	case AbstractColumn::ColumnMode::Month:
 		m_input_filter = new String2MonthFilter();
 		m_output_filter = new DateTime2StringFilter();
 		static_cast<DateTime2StringFilter*>(m_output_filter)->setFormat("MMMM");
-		m_data = new QVector<QDateTime>();
 		break;
 	case AbstractColumn::ColumnMode::Day:
 		m_input_filter = new String2DayOfWeekFilter();
 		m_output_filter = new DateTime2StringFilter();
 		static_cast<DateTime2StringFilter*>(m_output_filter)->setFormat("dddd");
-		m_data = new QVector<QDateTime>();
 		break;
 	}
 
