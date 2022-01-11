@@ -1,7 +1,7 @@
 /*
-	File                 : MultiRangeTest.cpp
+    File                 : MultiRangeTest.cpp
     Project              : LabPlot
-    Description          : Tests for project imports
+    Description          : Tests for multi ranges
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2021 Martin Marmsoler <martin.marmsoler@gmail.com>
     SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
@@ -38,7 +38,7 @@ void MultiRangeTest::initTestCase() {
 	Project project; \
 	project.load(QFINDTESTDATA(QLatin1String("data/TestMultiRange.lml"))); \
 	/* check the project tree for the imported project */ \
-	/* first child of the root folder, spreadsheet "Book3" */ \
+	/* first child of the root folder */ \
 	auto* aspect = project.child<AbstractAspect>(0); \
 	QVERIFY(aspect != nullptr); \
 	if (aspect) \

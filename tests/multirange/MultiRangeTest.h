@@ -1,5 +1,5 @@
 /*
-    File                 : ProjectImportTest.h
+    File                 : MultiRangeTest.h
     Project              : LabPlot
     Description          : Tests for project imports
     --------------------------------------------------------------------
@@ -8,8 +8,8 @@
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
-#ifndef PROJECTIMPORTTEST_H
-#define PROJECTIMPORTTEST_H
+#ifndef MULTIRANGETEST_H
+#define MULTIRANGETEST_H
 
 #include <QtTest>
 
