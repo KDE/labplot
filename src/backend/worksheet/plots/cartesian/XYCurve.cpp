@@ -1040,13 +1040,8 @@ void XYCurvePrivate::retransform() {
 		const auto dataRect{ plot()->dataRect() };
 		// this is the old method considering DPI
 		DEBUG(Q_FUNC_INFO << ", plot->dataRect() width/height = " << dataRect.width() << '/'  << dataRect.height());
-		//const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().width(), Worksheet::Unit::Inch);
-		//const double heightDatarectInch = Worksheet::convertFromSceneUnits(plot->dataRect().height(), Worksheet::Unit::Inch);
-		//DEBUG(Q_FUNC_INFO << ", widthDatarectInch/heightDatarectInch = " << widthDatarectInch << '/' << heightDatarectInch)
 		DEBUG(Q_FUNC_INFO << ", logical DPI X/Y = " << QApplication::desktop()->logicalDpiX() << '/' << QApplication::desktop()->logicalDpiY())
 		DEBUG(Q_FUNC_INFO << ", physical DPI X/Y = " << QApplication::desktop()->physicalDpiX() << '/' << QApplication::desktop()->physicalDpiY())
-		//const int numberOfPixelX = ceil(widthDatarectInch * QApplication::desktop()->physicalDpiX());
-		//const int numberOfPixelY = ceil(heightDatarectInch * QApplication::desktop()->physicalDpiY());
 
 		// new method
 		const int numberOfPixelX = dataRect.width();
@@ -1057,12 +1052,7 @@ void XYCurvePrivate::retransform() {
 			RESET_CURSOR;
 			return;
 		}
-
 		DEBUG("	numberOfPixelX/numberOfPixelY = " << numberOfPixelX << '/' << numberOfPixelY)
-			//TODO: not needed with improved method
-		const double minLogicalDiffX = dataRect.width()/numberOfPixelX;
-		const double minLogicalDiffY = dataRect.height()/numberOfPixelY;
-		DEBUG("	-> minLogicalDiffX/Y = " << minLogicalDiffX << '/' << minLogicalDiffY)
 
 		// eliminate multiple scene points (size (numberOfPixelX + 1) * (numberOfPixelY + 1)) TODO: why "+1"
 		QVector<QVector<bool>> scenePointsUsed(numberOfPixelX + 1);
@@ -1205,7 +1195,7 @@ void XYCurvePrivate::addLine(QPointF p, double& x, double& minY, double& maxY, Q
 			x = p.x();
 			lastPoint = p;
 		} else {
-			addUniqueLine(p, x, minY, maxY, lastPoint, pixelDiff, m_lines);
+			addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines);
 			if (pixelDiff > 0) // set x to next pixel
 				x = p.x();
 		}
@@ -1228,7 +1218,7 @@ void XYCurvePrivate::addLine(QPointF p, double& x, double& minY, double& maxY, Q
 			int p1Pixel = qRound((pScene.x() - plot()->dataRect().x()) / (double)plot()->dataRect().width() * numberOfPixelX);
 			pixelDiff = p1Pixel - xPixel;
 
-			addUniqueLine(p, x, minY, maxY, lastPoint, pixelDiff, m_lines);
+			addUniqueLine(p, minY, maxY, lastPoint, pixelDiff, m_lines);
 
 			if (pixelDiff > 0) // set x to next pixel
 				x = pScene.x();
@@ -1245,7 +1235,7 @@ void XYCurvePrivate::addLine(QPointF p, double& x, double& minY, double& maxY, Q
  * @param lastPoint remember last point in case of overlap
  * @param pixelDiff pixel distance in x between two points
  */
-void XYCurvePrivate::addUniqueLine(QPointF p, double x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF>& lines) {
+void XYCurvePrivate::addUniqueLine(QPointF p, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF>& lines) {
 	static bool prevPixelDiffZero = false;
 	if(pixelDiff == 0){
 		maxY = qMax(p.y(), maxY);
@@ -1306,17 +1296,10 @@ void XYCurvePrivate::updateLines() {
 
 	const QRectF pageRect = plot()->dataRect();
 	// old method using DPI
-	const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().width(), Worksheet::Unit::Inch);
-	float heightDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().height(), Worksheet::Unit::Inch);	// unsed
-	const int countPixelX = ceil(widthDatarectInch * QApplication::desktop()->physicalDpiX());
+	//const double widthDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().width(), Worksheet::Unit::Inch);
+	//float heightDatarectInch = Worksheet::convertFromSceneUnits(plot()->dataRect().height(), Worksheet::Unit::Inch);
+	//const int numberOfPixelX = ceil(widthDatarectInch * QApplication::desktop()->physicalDpiX());
 	const int numberOfPixelX = pageRect.width();
-	//TODO: countPixelX and numberOfPixelX are not the same!!! check which is better!
-
-	//int countPixelY = ceil(heightDatarectInch*QApplication::desktop()->physicalDpiY());	// unused
-
-	// only valid for linear scale
-	//double minLogicalDiffX = 1/((plot->xMax()-plot->xMin())/countPixelX);	// unused
-	//double minLogicalDiffY = 1/((plot->yMax()-plot->yMin())/countPixelY); // unused
 
 	//calculate the lines connecting the data points
 	{
@@ -1370,16 +1353,15 @@ void XYCurvePrivate::updateLines() {
 		QPointF p0, p1;
 		const auto xIndex{ q->cSystem->xIndex() };
 		const auto xRange{ plot()->xRange(xIndex) };
-		double minDiffX; // due to the nonlinearity code belo it it is not possible to pull this calculation out.
+		double minDiffX;
 		const RangeT::Scale scale = plot()->xRangeScale(xIndex);
 
 		// setting initial point
-		if (scale == RangeT::Scale::Linear) {
-			xPos = NAN;
+		xPos = NAN;
+		if (scale == RangeT::Scale::Linear)
 			minDiffX = (xRange.end() - xRange.start())/numberOfPixelX;
-		} else {
+		else {
 			// For nonlinear x achses, the linear scene coordinates are used
-			xPos = NAN;
 			minDiffX = plot()->dataRect().width() / numberOfPixelX;
 		}
 

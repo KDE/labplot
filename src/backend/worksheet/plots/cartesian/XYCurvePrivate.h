@@ -31,7 +31,7 @@ public:
 	void recalcLogicalPoints();
 	void updateLines();
 	void addLine(QPointF p, double& x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX, double minDiffX, RangeT::Scale scale); // for any x scale
-	static void addUniqueLine(QPointF p, double x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF> &lines);	// finally add line if unique (no overlay)
+	static void addUniqueLine(QPointF p, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF> &lines);	// finally add line if unique (no overlay)
 	void updateDropLines();
 	void updateSymbols();
 	void updateRug();

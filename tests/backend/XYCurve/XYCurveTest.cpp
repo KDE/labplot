@@ -42,7 +42,7 @@ void XYCurveTest::addUniqueLineTest01() {
 		PERFTRACE(QString(Q_FUNC_INFO) + "XYCurve::addUniqueLine");
 		for (int i=0; i < count; i++) {
 			pixelDiff = abs(qRound(points[i].x() / minLogicalDiffX) - qRound(x / minLogicalDiffX));
-			XYCurvePrivate::addUniqueLine(points[i], x, minY, maxY, lastPoint, pixelDiff, lines);
+			XYCurvePrivate::addUniqueLine(points[i], minY, maxY, lastPoint, pixelDiff, lines);
 			if (pixelDiff > 0) // set x to next pixel
 				x += minLogicalDiffX;
 		}
