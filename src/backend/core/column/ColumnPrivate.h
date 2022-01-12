@@ -132,19 +132,16 @@ public:
 	mutable AbstractColumn::Properties properties{AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
 
 private:
-	//TODO: rename to m_columnMode
-	AbstractColumn::ColumnMode m_column_mode;	// type of column data
+	AbstractColumn::ColumnMode m_columnMode;	// type of column data
 	void* m_data{nullptr};	//pointer to the data container (QVector<T>)
 	void* m_labels{nullptr};	//pointer to the container for the value labels(QMap<T, QString>)
-	// TODO: rename to m_InputFilter, m_OutputFilter
-	AbstractSimpleFilter* m_input_filter{nullptr};	//input filter for string -> data type conversion
-	AbstractSimpleFilter* m_output_filter{nullptr};	//output filter for data type -> string conversion
+	AbstractSimpleFilter* m_inputFilter{nullptr};	//input filter for string -> data type conversion
+	AbstractSimpleFilter* m_outputFilter{nullptr};	//output filter for data type -> string conversion
 	QString m_formula;
 	QVector<Column::FormulaData> m_formulaData;
 	bool m_formulaAutoUpdate{false};
 	IntervalAttribute<QString> m_formulas;
-	//TODO: rename to m_plotDesignation
-	AbstractColumn::PlotDesignation m_plot_designation{AbstractColumn::PlotDesignation::NoDesignation};
+	AbstractColumn::PlotDesignation m_plotDesignation{AbstractColumn::PlotDesignation::NoDesignation};
 	int m_width{0}; //column width in the view
 	Column* m_owner{nullptr};
 	QVector<QMetaObject::Connection> m_connectionsUpdateFormula;
