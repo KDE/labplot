@@ -741,7 +741,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 					setXRangeDirty(cSystem->xIndex(), true);
 					setYRangeDirty(cSystem->yIndex(), true);
 				}
-				scaleAuto(cSystem->xIndex(), cSystem->yIndex(), true);
+				scaleAuto(cSystem->xIndex(), cSystem->yIndex());
 			}
 			retransform();
 		} else {
@@ -752,11 +752,11 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				setXRangeDirty(xIndex, true);
 				setYRangeDirty(yIndex, true);
 			}
-			scaleAuto(xIndex, yIndex, true);
+			scaleAuto(xIndex, yIndex);
 			retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoX) {
-		if (scaleAutoX(xIndex, true)) {
+		if (scaleAutoX(xIndex)) {
 			for (int i=0; i < m_coordinateSystems.count(); i++) {
 				auto cs = coordinateSystem(i);
 				if ((cSystemIndex == -1 || xIndex == cs->xIndex()) && autoScaleY(cs->yIndex()))
@@ -765,7 +765,7 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 			retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoY) {
-		if (scaleAutoY(yIndex, true)) {
+		if (scaleAutoY(yIndex)) {
 			for (int i=0; i < m_coordinateSystems.count(); i++) {
 				auto cs = coordinateSystem(i);
 				if ((cSystemIndex == -1 || yIndex == cs->yIndex()) && autoScaleX(cs->xIndex()))
@@ -2276,11 +2276,11 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 		auto updated = false;
 		if (autoScaleX(xIndex) && autoScaleY(yIndex))
-			updated = scaleAuto(xIndex, yIndex, true);
+			updated = scaleAuto(xIndex, yIndex);
 		else if (autoScaleX(xIndex))
-			updated = scaleAutoX(xIndex, true);
+			updated = scaleAutoX(xIndex);
 		else if (autoScaleY(yIndex))
-			updated = scaleAutoY(yIndex, true);
+			updated = scaleAutoY(yIndex);
 
 		if (updated)
 			retransform();
@@ -2400,7 +2400,7 @@ void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const Abstrac
 			updateLegend();
 			Q_EMIT curveRemoved(curve);
 			auto cs = coordinateSystem(curve->coordinateSystemIndex());
-			scaleAuto(cs->xIndex(), cs->yIndex(), true);	// update all plot ranges
+			scaleAuto(cs->xIndex(), cs->yIndex());	// update all plot ranges
 		}
 	}
 }
@@ -2451,7 +2451,7 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 	} else
 		d->yRanges[yIndex].dirty = true;
 
-	const bool updated{ scaleAuto(xIndex, yIndex, true) };
+	const bool updated{ scaleAuto(xIndex, yIndex) };
 	if (!updated || !sender) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
@@ -2498,14 +2498,14 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 
 	bool updated = false;
 	if (autoScaleX(index))
-		updated = this->scaleAutoX(index, true);
-	if (updated && autoScaleY(index))
-		this->scaleAutoY(index, false);
-	if (updated)
-		retransform();
+		updated = this->scaleAutoX(index);
+	if (autoScaleY(index))
+		updated |= this->scaleAutoY(index, false);
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
-	if (!updated) {
+	if (updated)
+		retransform();
+	else {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
@@ -2552,14 +2552,14 @@ void CartesianPlot::yDataChanged(XYCurve* curve) {
 
 	bool updated = false;
 	if (autoScaleY(index))
-		updated = this->scaleAutoY(index, true);
-	if (updated && autoScaleX(index))
-		this->scaleAutoX(index, false);
-	if (updated)
-		retransform();
+		updated = this->scaleAutoY(index);
+	if (autoScaleX(index))
+		updated |= this->scaleAutoX(index, false);
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
-	if (!updated) {
+	if (updated)
+		retransform();
+	else {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
 		//retransform the curve in order to show the changes
@@ -2587,7 +2587,7 @@ void CartesianPlot::curveVisibilityChanged() {
 	setYRangeDirty(yIndex, true);
 	updateLegend();
 	if (autoScaleX(xIndex) && autoScaleY(yIndex))
-		this->scaleAuto(xIndex, yIndex, true);
+		this->scaleAuto(xIndex, yIndex);
 	else if (autoScaleX(xIndex))
 		this->scaleAutoX(xIndex, false);
 	else if (autoScaleY(yIndex))
@@ -2653,11 +2653,11 @@ void CartesianPlot::scaleAutoTriggered() {
 		return;
 
 	if (action == scaleAutoAction)
-		scaleAuto(-1, -1, true);
+		scaleAuto(-1, -1);
 	else if (action == scaleAutoXAction)
-		scaleAutoX(-1, true);
+		scaleAutoX(-1);
 	else if (action == scaleAutoYAction)
-		scaleAutoY(-1, true);
+		scaleAutoY(-1);
 
 	retransform();
 }
@@ -3055,7 +3055,7 @@ void CartesianPlot::zoomInX(int index) {
 		const auto cs = coordinateSystem(i);
 		if (index == -1 || index == cs->xIndex()) {
 			if (autoScaleY(cs->yIndex()))
-				scaleAutoY(cs->yIndex(), true); // TODO: full range false?
+				scaleAutoY(cs->yIndex()); // TODO: fullRange false?
 			retrans = true;
 		}
 	}
@@ -3079,7 +3079,7 @@ void CartesianPlot::zoomOutX(int index) {
 		const auto cs = coordinateSystem(i);
 		if ((index == -1 || index == cs->xIndex())) {
 			if (autoScaleY(cs->yIndex()))
-				scaleAutoY(cs->yIndex(), true); // TODO: Fullrange false?
+				scaleAutoY(cs->yIndex()); // TODO: fullRange false?
 			retrans = true;
 		}
 	}
@@ -3103,7 +3103,7 @@ void CartesianPlot::zoomInY(int index) {
 		const auto cs = coordinateSystem(i);
 		if ((index == -1 || index == cs->yIndex())) {
 			if (autoScaleX(cs->xIndex()))
-				scaleAutoX(cs->xIndex(), true);
+				scaleAutoX(cs->xIndex());
 			retrans = true;
 		}
 	}
@@ -3127,7 +3127,7 @@ void CartesianPlot::zoomOutY(int index) {
 		const auto cs = coordinateSystem(i);
 		if ((index == -1 || index == cs->yIndex())) {
 			if (autoScaleX(cs->xIndex()))
-				scaleAutoX(cs->xIndex(), true);
+				scaleAutoX(cs->xIndex());
 			retransform = true;
 		}
 	}
@@ -3321,7 +3321,7 @@ void CartesianPlot::shiftLeftX(int index) {
 		if ((index == -1 || index == cs->xIndex())) {
 			if (autoScaleY(cs->yIndex())) {
 				setYRangeDirty(cs->yIndex(), true);
-				scaleAutoY(cs->yIndex(), true);
+				scaleAutoY(cs->yIndex());
 			}
 			retrans = true;
 		}
@@ -3346,7 +3346,7 @@ void CartesianPlot::shiftRightX(int index) {
 		if ((index == -1 || index == cs->xIndex())) {
 			if (autoScaleY(cs->yIndex())) {
 				setYRangeDirty(cs->yIndex(), true);
-				scaleAutoY(cs->yIndex(), true);
+				scaleAutoY(cs->yIndex());
 			}
 			retrans = true;
 		}
@@ -3371,7 +3371,7 @@ void CartesianPlot::shiftUpY(int index) {
 		if ((index == -1 || index == cs->yIndex())) {
 			if (autoScaleX(cs->xIndex())) {
 				setXRangeDirty(cs->xIndex(), true);
-				scaleAutoX(cs->xIndex(), true);
+				scaleAutoX(cs->xIndex());
 			}
 			retrans = true;
 		}
@@ -3396,7 +3396,7 @@ void CartesianPlot::shiftDownY(int index) {
 		if ((index == -1 || index == cs->yIndex())) {
 			if (autoScaleX(cs->xIndex())) {
 				setXRangeDirty(cs->xIndex(), true);
-				scaleAutoX(cs->xIndex(), true);
+				scaleAutoX(cs->xIndex());
 			}
 			retrans = true;
 		}
@@ -3857,7 +3857,7 @@ void CartesianPlotPrivate::rangeChanged() {
 		xRanges[xIndex].dirty = true;
 		yRanges[yIndex].dirty = true;
 		if (autoScaleX(xIndex) && autoScaleY(yIndex))
-			q->scaleAuto(xIndex, yIndex, true);
+			q->scaleAuto(xIndex, yIndex);
 		else if (autoScaleX(xIndex))
 			q->scaleAutoX(xIndex, false);
 		else if (autoScaleY(yIndex))
@@ -3874,7 +3874,7 @@ void CartesianPlotPrivate::niceExtendChanged() {
 		xRanges[xIndex].dirty = true;
 		yRanges[yIndex].dirty = true;
 		if (autoScaleX(xIndex) && autoScaleY(yIndex))
-			q->scaleAuto(xIndex, yIndex, true);
+			q->scaleAuto(xIndex, yIndex);
 		else if (autoScaleX(xIndex))
 			q->scaleAutoX(xIndex, false);
 		else if (autoScaleY(yIndex))

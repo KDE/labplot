@@ -143,6 +143,8 @@ void CartesianPlotTest::changeData2() {
 
 	CHECK_RANGE(plot, curve, x, 1, 3);
 	CHECK_RANGE(plot, curve, y, 1, 2);
+
+	DEBUG_RANGE(plot, curve);
 }
 
 void CartesianPlotTest::changeData3() {

@@ -539,7 +539,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addCurve(name, xColumn, yColumn, plot);
-			plot->scaleAuto(-1, -1, true);
+			plot->scaleAuto(-1, -1);
 			plot->retransform();
 			setAxesTitles(plot, name);
 		}
@@ -555,7 +555,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			setAxesTitles(plot, name);
 			worksheet->addChild(plot);
 			addHistogram(name, column, plot);
-			plot->scaleAuto(-1, -1, true);
+			plot->scaleAuto(-1, -1);
 			plot->retransform();
 		}
 		break;
@@ -569,7 +569,7 @@ void PlotDataDialog::addCurvesToPlots(Worksheet* worksheet) {
 			plot->setType(CartesianPlot::Type::FourAxes);
 			worksheet->addChild(plot);
 			addBoxPlot(name, QVector<const AbstractColumn*>{column}, plot);
-			plot->scaleAuto(-1, -1, true);
+			plot->scaleAuto(-1, -1);
 			plot->retransform();
 			setAxesTitles(plot, name);
 		}

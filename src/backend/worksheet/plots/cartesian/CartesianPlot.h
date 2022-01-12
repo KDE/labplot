@@ -304,9 +304,9 @@ public Q_SLOTS:
 	void addInfoElement();
 
 	void scaleAutoTriggered();
-	bool scaleAuto(int xIndex, int yIndex, bool fullRange);
-	bool scaleAutoX(int index, bool fullRange);
-	bool scaleAutoY(int index, bool fullRange);
+	bool scaleAuto(int xIndex, int yIndex, bool fullRange = true);
+	bool scaleAutoX(int index, bool fullRange = true);
+	bool scaleAutoY(int index, bool fullRange = true);
 
 	void zoomIn(int xIndex = -1, int yIndex = -1);
 	void zoomOut(int xIndex = -1, int yIndex = -1);
