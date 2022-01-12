@@ -267,8 +267,16 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.mode != d->textWrapper.mode)
 	        || ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
-	        textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder)
+			textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder) {
+		bool changePos = d->textWrapper.text.isEmpty();
 		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
+		// If previously the text was empty, the bounding rect is zero
+		// therefore the alignment did not work properly.
+		// If thext is added, the bounding rectangle is updated
+		// and then the position must be changed to consider alignment
+		if (changePos)
+			d->updatePosition();
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPlaceholderText, TextLabel::TextWrapper, textWrapper, updateText)
