@@ -107,6 +107,9 @@ public:
 		}
 		yRanges[index].range.setAutoScale(b);
 	}
+	void checkXRange(int index);
+	void checkYRange(int index);
+	Range<double> checkRange(const Range<double>&);
 
 	//the following factor determines the size of the offset between the min/max points of the curves
 	//and the coordinate system ranges, when doing auto scaling
@@ -176,9 +179,6 @@ private:
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
 	void updateDataRect();
-	Range<double> checkRange(Range<double>);
-	void checkXRange(int index);
-	void checkYRange(int index);
 	CartesianScale* createScale(RangeT::Scale,
 		const Range<double> &sceneRange, const Range<double> &logicalRange);
 

@@ -1061,22 +1061,23 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 
 	for (auto* plot : m_plotList) {
 		int retransform = 0;
-		plot->setAutoScaleX(index, checked);
+		plot->setAutoScaleX(index, checked, true);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRange(index).autoScale())
 		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
-			retransform = plot->scaleAutoX(index, true, true);
+			retransform = plot->scaleAutoX(index, true);
 
 			for (int i = 0; i < plot->coordinateSystemCount(); i++) {
 				auto cSystem = plot->coordinateSystem(i);
 				if (cSystem->xIndex() == index) {
 					if (plot->autoScaleY(cSystem->xIndex()))
-						retransform += plot->scaleAutoY(cSystem->yIndex(), false, true);
+						retransform += plot->scaleAutoY(cSystem->yIndex(), false);
 				}
 			}
 		}
-		if (retransform) // TODO: not necessary to retransform all coordinatesystems. Maybe storing in a vector all system indices and then retransform only them
+		if (retransform) { // TODO: not necessary to retransform all coordinatesystems. Maybe storing in a vector all system indices and then retransform only them
 			plot->retransformScales();
-		else {
+			plot->retransform();
+		} else {
 			// TODO:when no object used the range, handle it differently
 
 		}
@@ -1105,22 +1106,24 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 
 	for (auto* plot : m_plotList) {
 		int retransform = 0;
-		plot->setAutoScaleY(index, checked);
+		plot->setAutoScaleY(index, checked, true);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRange(index).autoScale())
 		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
-			retransform = plot->scaleAutoY(index, true, true);
+			retransform = plot->scaleAutoY(index, true);
 
 			for (int i = 0; i < plot->coordinateSystemCount(); i++) {
 				auto cSystem = plot->coordinateSystem(i);
 				if (cSystem->yIndex() == index) {
 					if (plot->autoScaleX(cSystem->xIndex()))
-						retransform += plot->scaleAutoX(cSystem->xIndex(), false, true);
+						retransform += plot->scaleAutoX(cSystem->xIndex(), false);
 				}
 			}
 		}
 
-		if (retransform)
+		if (retransform) {
 			plot->retransformScales();
+			plot->retransform();
+		}
 	}
 	updateYRangeList();	// see range changes
 }

@@ -125,9 +125,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
 	bool autoScaleX(int index = -1) const;	// is x range index auto scaled?
-	void setAutoScaleX(int index = -1, bool = true);	// auto scale x range index
+	void setAutoScaleX(int index, bool autoscale, bool suppressRetransform);	// auto scale x range index
 	bool autoScaleY(int index = -1) const;	// is y range index auto scaled?
-	void setAutoScaleY(int index = -1, bool = true);	// auto scale y range index
+	void setAutoScaleY(int index, bool autoscale, bool suppressRetransform);	// auto scale y range index
 
 	int xRangeCount() const;
 	int yRangeCount() const;
@@ -137,7 +137,6 @@ public:
 	void setYRange(const Range<double>);		// set y range of default plot range
 	void setXRange(int index, const Range<double>&);
 	void setYRange(int index, const Range<double>&);
-
 	const Range<double>& dataXRange(int index = -1);
 	const Range<double>& dataYRange(int index = -1);
 	bool xRangeDirty(int index);
@@ -305,9 +304,9 @@ public Q_SLOTS:
 	void addInfoElement();
 
 	void scaleAutoTriggered();
-	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true);
-	bool scaleAutoX(int index = -1, bool fullRange = false, bool suppressRetransform = false);
-	bool scaleAutoY(int index = -1, bool fullRange = false, bool suppressRetransform = false);
+	bool scaleAuto(int xIndex, int yIndex, bool fullRange);
+	bool scaleAutoX(int index, bool fullRange);
+	bool scaleAutoY(int index, bool fullRange);
 
 	void zoomIn(int xIndex = -1, int yIndex = -1);
 	void zoomOut(int xIndex = -1, int yIndex = -1);
@@ -323,7 +322,6 @@ public Q_SLOTS:
 
 	void cursor();
 
-	bool autoScale(int xIndex = -1, int yIndex = -1, bool fullRange = true);
 	void dataChanged(int xIndex = -1, int yIndex = -1, WorksheetElement* sender = nullptr);
 
 private Q_SLOTS:
