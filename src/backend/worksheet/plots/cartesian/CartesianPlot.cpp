@@ -4503,20 +4503,16 @@ void CartesianPlotPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	}
 }
 
-bool CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform) {
+void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform) {
+	m_selectionBandIsShown = false;
 	//don't zoom if very small region was selected, avoid occasional/unwanted zooming
-	if ( qAbs(m_selectionEnd.x() - m_selectionStart.x()) < 20 && qAbs(m_selectionEnd.y() - m_selectionStart.y()) < 20 ) {
-		m_selectionBandIsShown = false;
-		return false;
-	}
-	bool retransformPlot = true;
+	if ( qAbs(m_selectionEnd.x() - m_selectionStart.x()) < 20 && qAbs(m_selectionEnd.y() - m_selectionStart.y()) < 20 )
+		return;
+
 	int xIndex = -1, yIndex = -1;
 	if (cSystemIndex == -1 || cSystemIndex >= q->m_coordinateSystems.count()) {
-		retransformPlot = false; // do a retransform only when at least one requested
-		for (int i=0; i < q->m_coordinateSystems.count(); i++) {
-			if (mouseReleaseZoomSelectionMode(i, true))
-				retransformPlot = true;
-		}
+		for (int i=0; i < q->m_coordinateSystems.count(); i++)
+			mouseReleaseZoomSelectionMode(i, true);
 	} else {
 
 		auto cSystem = coordinateSystem(cSystemIndex);
@@ -4550,22 +4546,20 @@ bool CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomXSelection) {
 			q->setYRangeDirty(yIndex, true);
 			q->setAutoScaleX(xIndex, false, true);
-			if (q->autoScaleY(yIndex) && q->scaleAutoY(yIndex, false))
-				retransformPlot = false;
+			if (q->autoScaleY(yIndex))
+				q->scaleAutoY(yIndex, false);
 		} else if (mouseMode == CartesianPlot::MouseMode::ZoomYSelection) {
 			q->setXRangeDirty(xIndex, true);
 			q->setAutoScaleY(yIndex, false, true);
-			if (q->autoScaleX(xIndex) && q->scaleAutoX(xIndex, false))
-				retransformPlot = false;
+			if (q->autoScaleX(xIndex))
+				q->scaleAutoX(xIndex, false);
 		}
 	}
 
-	if (retransformPlot && !suppressRetransform) {
+	if (!suppressRetransform) {
 		retransformScales(xIndex, yIndex);
 		q->retransform();
-		m_selectionBandIsShown = false;
 	}
-	return retransformPlot;
 }
 
 void CartesianPlotPrivate::wheelEvent(QGraphicsSceneWheelEvent* event) {

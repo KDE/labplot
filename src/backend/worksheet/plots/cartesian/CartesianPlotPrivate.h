@@ -37,7 +37,7 @@ public:
 	void mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
 	void mouseMoveSelectionMode(QPointF logicalStart, QPointF logicalEnd);
 	void mouseMoveCursorMode(int cursorNumber, QPointF logicalPos);
-	bool mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform=false);
+	void mouseReleaseZoomSelectionMode(int cSystemIndex, bool suppressRetransform=false);
 	void mouseHoverZoomSelectionMode(QPointF logicPos, int cSystemIndex);
 	void mouseHoverOutsideDataRect();
 	void mousePressZoomSelectionMode(QPointF logicalPos, int cSystemIndex);
