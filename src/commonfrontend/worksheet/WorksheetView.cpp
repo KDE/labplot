@@ -1462,7 +1462,7 @@ void WorksheetView::addNew(QAction* action) {
 
 	//labels and images with their initial positions need to be retransformed
 	//after they have gotten a parent
-	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image)
+	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image || aspect->type() == AspectType::CartesianPlot)
 		aspect->retransform();
 
 	handleCartesianPlotActions();
