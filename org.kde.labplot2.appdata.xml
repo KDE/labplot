@@ -148,6 +148,7 @@
     <screenshot type="default">
       <caption>Notebook</caption>
       <caption xml:lang="ca">Bloc de notes</caption>
+      <caption xml:lang="cs">Poznámkový blok</caption>
       <caption xml:lang="de">Notebook</caption>
       <caption xml:lang="es">Bloc de notas</caption>
       <caption xml:lang="fr">Notebook</caption>
