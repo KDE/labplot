@@ -1395,7 +1395,7 @@ void CartesianPlot::setXRangeDirty(int index, bool dirty) {
 	if (index >= 0 && index < xRangeCount())
 		d->xRanges[index].dirty = dirty;
 	else {
-		for (auto r : d->xRanges)
+		for (auto& r : d->xRanges)
 			r.dirty = dirty;
 	}
 }
@@ -1404,7 +1404,7 @@ void CartesianPlot::setYRangeDirty(int index, bool dirty) {
 	if (index >= 0 && index < yRangeCount())
 		d->yRanges[index].dirty = dirty;
 	else {
-		for (auto r : d->yRanges)
+		for (auto& r : d->yRanges)
 			r.dirty = dirty;
 	}
 }
