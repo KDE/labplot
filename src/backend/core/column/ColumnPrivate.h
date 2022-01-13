@@ -122,14 +122,29 @@ public:
 	void invalidate();
 	void finalizeLoad();
 
-	mutable AbstractColumn::ColumnStatistics statistics;
-	bool statisticsAvailable{false}; //is 'statistics' already available or needs to be (re-)calculated?
+	struct CachedValuesAvailable {
+		void setUnavailable() {
+			statistics = false;
+			min = false;
+			max = false;
+			hasValues = false;
+			properties = false;
+		}
+		bool statistics{false}; //is 'statistics' already available or needs to be (re-)calculated?
+		// are minMax already calculated or needs to be (re-)calculated?
+		// It is separated from statistics, because these are important values
+		// which are quite often needed, but if the curve is monoton a faster algorithm is
+		// used to recalculate the values
+		bool min{false};
+		bool max{false};
+		bool hasValues{false}; //is 'hasValues' already available or needs to be (re-)calculated?
+		bool properties{false}; //is 'properties' already available (true) or needs to be (re-)calculated (false)?
+	};
 
+	CachedValuesAvailable available;
+	AbstractColumn::ColumnStatistics statistics;
 	bool hasValues{false};
-	bool hasValuesAvailable{false}; //is 'hasValues' already available or needs to be (re-)calculated?
-
-	mutable bool propertiesAvailable{false}; //is 'properties' already available (true) or needs to be (re-)calculated (false)?
-	mutable AbstractColumn::Properties properties{AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
+	AbstractColumn::Properties properties{AbstractColumn::Properties::No}; // declares the properties of the curve (monotonic increasing/decreasing ...). Speed up algorithms
 
 private:
 	AbstractColumn::ColumnMode m_columnMode;	// type of column data

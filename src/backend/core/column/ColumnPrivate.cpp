@@ -1472,9 +1472,7 @@ qint64 ColumnPrivate::bigIntAt(int row) const {
 }
 
 void ColumnPrivate::invalidate() {
-	statisticsAvailable = false;
-	hasValuesAvailable = false;
-	propertiesAvailable = false;
+	available.setUnavailable();
 }
 
 /**
@@ -1798,7 +1796,7 @@ void ColumnPrivate::updateProperties() {
 	// TODO: for double Properties::Constant will never be used. Use an epsilon (difference smaller than epsilon is zero)
 	if (rowCount() == 0) {
 		properties = AbstractColumn::Properties::No;
-		propertiesAvailable = true;
+		available.properties = true;
 		return;
 	}
 
@@ -1819,7 +1817,7 @@ void ColumnPrivate::updateProperties() {
 		prevValueDatetime = dateTimeAt(0).toMSecsSinceEpoch();
 	else {
 		properties = AbstractColumn::Properties::No;
-		propertiesAvailable = true;
+		available.properties = true;
 		return;
 	}
 
@@ -1838,7 +1836,7 @@ void ColumnPrivate::updateProperties() {
 			// You don't know if you should increase the index or decrease it when
 			// you hit an invalid value
 			properties = AbstractColumn::Properties::No;
-			propertiesAvailable = true;
+			available.properties = true;
 			return;
 		}
 
@@ -1966,7 +1964,7 @@ void ColumnPrivate::updateProperties() {
 		DEBUG("	setting column MONTONIC INCREASING")
 	}
 
-	propertiesAvailable = true;
+	available.properties = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

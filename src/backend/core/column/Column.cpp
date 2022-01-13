@@ -415,9 +415,7 @@ bool Column::copy(const AbstractColumn* source, int source_start, int dest_start
 }
 
 void Column::invalidateProperties() {
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
+	d->available.setUnavailable();
 }
 
 /**
@@ -707,14 +705,14 @@ void Column::addValueLabel(qint64 value, const QString& label) {
  * \see AbstractColumn::properties
  */
 AbstractColumn::Properties Column::properties() const {
-	if (!d->propertiesAvailable)
+	if (!d->available.properties)
 		d->updateProperties();
 
 	return d->properties;
 }
 
 const Column::ColumnStatistics& Column::statistics() const {
-	if (!d->statisticsAvailable)
+	if (!d->available.statistics)
 		calculateStatistics();
 
 	return d->statistics;
@@ -818,7 +816,9 @@ void Column::calculateStatistics() const {
 	const int notNanCount = rowData.size();
 
 	if (notNanCount == 0) {
-		d->statisticsAvailable = true;
+		d->available.statistics = true;
+		d->available.min = true;
+		d->available.max = true;
 		return;
 	}
 
@@ -915,7 +915,9 @@ void Column::calculateStatistics() const {
 
 	statistics.entropy = -entropy;
 
-	d->statisticsAvailable = true;
+	d->available.statistics = true;
+	d->available.min = true;
+	d->available.max = true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -928,7 +930,7 @@ void* Column::data() const {
  * return \c true if the column has numeric values, \c false otherwise.
  */
 bool Column::hasValues() const {
-	if (d->hasValuesAvailable)
+	if (d->available.hasValues)
 		return d->hasValues;
 
 	bool foundValues = false;
@@ -970,7 +972,7 @@ bool Column::hasValues() const {
 	}
 
 	d->hasValues = foundValues;
-	d->hasValuesAvailable = true;
+	d->available.hasValues = true;
 	return d->hasValues;
 }
 
@@ -1737,9 +1739,7 @@ void Column::handleFormatChange() {
 	if (!m_suppressDataChangedSignal)
 		Q_EMIT formatChanged(this); // all cells must be repainted
 
-	d->statisticsAvailable = false;
-	d->hasValuesAvailable = false;
-	d->propertiesAvailable = false;
+	d->available.setUnavailable();
 }
 
 /*!
@@ -1749,8 +1749,8 @@ void Column::handleFormatChange() {
  * for \c count < 0, the minimum of the last \p count elements is returned.
  */
 double Column::minimum(int count) const {
-	if (count == 0 && d->statisticsAvailable)
-		return const_cast<Column*>(this)->statistics().minimum;
+	if (count == 0 && d->available.min)
+		return d->statistics.minimum;
 	else {
 		int start, end;
 
@@ -1792,6 +1792,9 @@ double Column::minimum(int startIndex, int endIndex) const {
 
 	startIndex = qMin(startIndex, rowCount() - 1);
 	endIndex = qMin(endIndex, rowCount() - 1);
+
+	if (startIndex == 0 && endIndex == rowCount() -1 && d->available.min)
+		return d->statistics.minimum;
 
 	int foundIndex = 0;
 
@@ -1861,26 +1864,32 @@ double Column::minimum(int startIndex, int endIndex) const {
 		case ColumnMode::Month:
 			break;
 		}
-		return min;
-	}
+	} else {
+		// use the properties knowledge to determine maximum faster
+		if (property == Properties::Constant || property == Properties::MonotonicIncreasing)
+			foundIndex = startIndex;
+		else if (property == Properties::MonotonicDecreasing)
+			foundIndex = endIndex;
 
-	// use the properties knowledge to determine maximum faster
-	if (property == Properties::Constant || property == Properties::MonotonicIncreasing)
-		foundIndex = startIndex;
-	else if (property == Properties::MonotonicDecreasing)
-		foundIndex = endIndex;
-
-	switch (mode) {
+		switch (mode) {
 		case ColumnMode::Double:
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
-			return valueAt(foundIndex);
+			min = valueAt(foundIndex);
+			break;
 		case ColumnMode::DateTime:
 		case ColumnMode::Month:
 		case ColumnMode::Day:
-			return dateTimeAt(foundIndex).toMSecsSinceEpoch();
+			min = dateTimeAt(foundIndex).toMSecsSinceEpoch();
+			break;
 		case ColumnMode::Text:
 			break;
+		}
+	}
+
+	if (startIndex == 0 && endIndex == rowCount() -1) {
+		d->available.min = true;
+		d->statistics.minimum = min;
 	}
 
 	return min;
@@ -1896,8 +1905,8 @@ double Column::maximum(int count) const {
 #ifdef PERFTRACE_AUTOSCALE
 	PERFTRACE(name() + Q_FUNC_INFO);
 #endif
-	if (count == 0 && d->statisticsAvailable)
-		return const_cast<Column*>(this)->statistics().maximum;
+	if (count == 0 && d->available.max)
+		return d->statistics.maximum;
 	else {
 		int start, end;
 
@@ -1923,6 +1932,7 @@ double Column::maximum(int count) const {
  * \p endIndex
  */
 double Column::maximum(int startIndex, int endIndex) const {
+
 	double max{ -qInf() };
 	if (rowCount() == 0)
 		return max;
@@ -1935,6 +1945,10 @@ double Column::maximum(int startIndex, int endIndex) const {
 
 	startIndex = qMin(startIndex, rowCount() - 1);
 	endIndex = qMin(endIndex, rowCount() - 1);
+
+	if (startIndex == 0 && endIndex == rowCount() -1 && d->available.max)
+		return d->statistics.maximum;
+
 	int foundIndex = 0;
 
 	ColumnMode mode = columnMode();
@@ -1997,26 +2011,32 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case ColumnMode::Month:
 			break;
 		}
-		return max;
-	}
+	} else {
+		// use the properties knowledge to determine maximum faster
+		if (property == Properties::Constant || property == Properties::MonotonicDecreasing)
+			foundIndex = startIndex;
+		else if (property == Properties::MonotonicIncreasing)
+			foundIndex = endIndex;
 
-	// use the properties knowledge to determine maximum faster
-	if (property == Properties::Constant || property == Properties::MonotonicDecreasing)
-		foundIndex = startIndex;
-	else if (property == Properties::MonotonicIncreasing)
-		foundIndex = endIndex;
-
-	switch (mode) {
+		switch (mode) {
 		case ColumnMode::Double:
 		case ColumnMode::Integer:
 		case ColumnMode::BigInt:
-			return valueAt(foundIndex);
+			max = valueAt(foundIndex);
+			break;
 		case ColumnMode::DateTime:
 		case ColumnMode::Month:
 		case ColumnMode::Day:
-			return dateTimeAt(foundIndex).toMSecsSinceEpoch();
+			max = dateTimeAt(foundIndex).toMSecsSinceEpoch();
+			break;
 		case ColumnMode::Text:
 			break;
+		}
+	}
+
+	if (startIndex == 0 && endIndex == rowCount() -1) {
+		d->statistics.maximum = max;
+		d->available.max = true;
 	}
 	return max;
 }
