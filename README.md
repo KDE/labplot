@@ -2,11 +2,11 @@
 
 LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.
 
-* High-quality interactive visualizations with just a few clicks
-* Reliable and easy data analysis, no coding required!
-* Support for live data and data extraction from plots
-* Drag & drop import and extensive export capabilities
-* Interactive programming notebooks for advanced users
+* High-quality Data Visualization and Plotting with just a few clicks
+* Reliable and easy Data Analysis and Statistics, no coding required!
+* Intuitive and fast Computing with Interactive Notebooks
+* Effortless Data Extraction from plots and support for Live Data
+* Smooth Data Import and Export to and from multiple formats
 * Available for Windows, macOS, Linux and FreeBSD
 
 [![](https://cdn.kde.org/screenshots/labplot2/01_basic_plots_linux.png "Main Window - Plotting and Fitting of Data")](https://cdn.kde.org/screenshots/labplot2/01_basic_plots_linux.png)
