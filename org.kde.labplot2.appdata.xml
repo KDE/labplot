@@ -94,68 +94,48 @@
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?product=LabPlot2&amp;format=guided</url>
   <screenshots>
     <screenshot type="default">
-      <caption>Fit example</caption>
-      <caption xml:lang="ca">Exemple d'ajust</caption>
-      <caption xml:lang="ca-valencia">Exemple d'ajust</caption>
-      <caption xml:lang="de">Beispiel für Anpassung</caption>
-      <caption xml:lang="en-GB">Fit example</caption>
-      <caption xml:lang="es">Ejemplo de ajuste</caption>
-      <caption xml:lang="et">Sobivuse näide</caption>
-      <caption xml:lang="eu">Egokitzeko adibidea</caption>
-      <caption xml:lang="fr">Exemple d'ajustement</caption>
-      <caption xml:lang="gl">Exemplo de axuste.</caption>
-      <caption xml:lang="id">Contoh pas</caption>
-      <caption xml:lang="it">Adatta esempio</caption>
-      <caption xml:lang="nl">Voorbeeld aanpassing</caption>
-      <caption xml:lang="nn">Eksempel på kurvetilpassing</caption>
-      <caption xml:lang="pl">Przykład dopasowania</caption>
-      <caption xml:lang="pt">Exemplo de ajuste</caption>
-      <caption xml:lang="pt-BR">Exemplo de ajuste</caption>
-      <caption xml:lang="ru">Пример автоподбора масштаба</caption>
-      <caption xml:lang="sl">Primer prilagajanja</caption>
-      <caption xml:lang="sv">Anpassningsexempel</caption>
-      <caption xml:lang="uk">Приклад апроксимації</caption>
-      <caption xml:lang="x-test">xxFit examplexx</caption>
-      <image>https://cdn.kde.org/screenshots/labplot2/labplot2_appdata_01.png</image>
+      <caption>Basic visualization of data</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/01_basic_plots_linux.png</image>
     </screenshot>
     <screenshot type="default">
-      <caption>Mathematical function</caption>
-      <caption xml:lang="ca">Funció matemàtica</caption>
-      <caption xml:lang="ca-valencia">Funció matemàtica</caption>
-      <caption xml:lang="cs">Matematická funkce</caption>
-      <caption xml:lang="de">Mathematische Funktion</caption>
-      <caption xml:lang="en-GB">Mathematical function</caption>
-      <caption xml:lang="es">Función matemática</caption>
-      <caption xml:lang="et">Matemaatikafunktsioon</caption>
-      <caption xml:lang="eu">Funtzio matematikoa</caption>
-      <caption xml:lang="fr">Fonction mathématique</caption>
-      <caption xml:lang="gl">Función matemática.</caption>
-      <caption xml:lang="id">Fungsi matematika</caption>
-      <caption xml:lang="it">Funzione matematica</caption>
-      <caption xml:lang="nl">Wiskundige functie</caption>
-      <caption xml:lang="nn">Matematisk funksjon</caption>
-      <caption xml:lang="pl">Funkcja matematyczna</caption>
-      <caption xml:lang="pt">Função matemática</caption>
-      <caption xml:lang="pt-BR">Função matemática</caption>
-      <caption xml:lang="ru">График функции</caption>
-      <caption xml:lang="sk">Matematická funkcia</caption>
-      <caption xml:lang="sl">Matematična funkcija</caption>
-      <caption xml:lang="sv">Matematisk funktion</caption>
-      <caption xml:lang="uk">Математична функція</caption>
-      <caption xml:lang="x-test">xxMathematical functionxx</caption>
-      <image>https://cdn.kde.org/screenshots/labplot2/labplot2_appdata_02.png</image>
+      <caption>Basic visualization of data</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/02_overview_linux.png</image>
     </screenshot>
     <screenshot type="default">
-      <caption>Notebook</caption>
-      <caption xml:lang="ca">Bloc de notes</caption>
-      <caption xml:lang="cs">Poznámkový blok</caption>
-      <caption xml:lang="de">Notebook</caption>
-      <caption xml:lang="es">Bloc de notas</caption>
-      <caption xml:lang="fr">Notebook</caption>
-      <caption xml:lang="sv">Anteckningsblock</caption>
-      <caption xml:lang="uk">Нотатник</caption>
-      <caption xml:lang="x-test">xxNotebookxx</caption>
-      <image>https://cdn.kde.org/screenshots/labplot2/labplot2_appdata_03.png</image>
+      <caption>Advanced layouting of plots and images</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/03_space_debris_linux.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Theming</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/04_theming_linux.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Visualization of mathematical functions</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/05_math_expression_linux.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Fit pre-defined or custom models to the data</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/06_fit_linux.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Smooth the data with the help of various smoothing methods</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/07_smooth_linux.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Notebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia and Lua</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/08_maxima_tutorial_linux.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Signal analysis</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/09_morse_signal_linux.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Herzsprung-Russel-Diagramm in LabPlot</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/10_hrd_linux.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Visualization of data calculated in an interactive Maxima session</caption>
+      <image>https://cdn.kde.org/screenshots/labplot2/11_maxima_Duffing_Oscillator_linux.png</image>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
