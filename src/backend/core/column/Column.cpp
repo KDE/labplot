@@ -1617,7 +1617,9 @@ bool Column::XmlReadRow(XmlStreamReader* reader) {
 	case ColumnMode::DateTime:
 	case ColumnMode::Month:
 	case ColumnMode::Day:
-		QDateTime date_time = QDateTime::fromString(str,"yyyy-dd-MM hh:mm:ss:zzz");
+		// Same as in the Variable Parser. UTC must be used, otherwise
+		// some dates are not valid. For example (2017-03-26)
+		QDateTime date_time = QDateTime::fromString(str + "Z","yyyy-dd-MM hh:mm:ss:zzzt"); // last t is important. It is the timezone
 		setDateTimeAt(index, date_time);
 		break;
 	}
