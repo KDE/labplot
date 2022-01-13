@@ -28,3 +28,14 @@ Please see the [INSTALL file](https://invent.kde.org/education/labplot/-/blob/ma
 
 # Bug Reports and Wishes
 Use [KDE Bugtracking System](https://bugs.kde.org/) to report any kind of issues with LabPlot.
+
+# Cite and reference LabPlot
+We have invested a lot of time and effort in creating LabPlot, please consider citing it when using it for data analysis or visualization.
+
+To cite LabPlot in publications use:
+
+```
+LabPlot Team (2022), LabPlot: A FREE, open source, cross-platform Data Visualization and Analysis software accessible to everyone, (Version 2.9) [Computer software]. https://labplot.kde.org.
+```
+
+See also: https://guides.libraries.uc.edu/citing/code
