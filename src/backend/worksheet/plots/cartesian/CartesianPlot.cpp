@@ -2488,19 +2488,25 @@ void CartesianPlot::xDataChanged(XYCurve* curve) {
 		return;
 
 	int cSystemIndex = curve->coordinateSystemIndex();
-	int index = coordinateSystem(cSystemIndex)->xIndex();
-	if (index == -1) {
-		for (int i = 0; i < xRangeCount(); i++)
-			d->xRanges[coordinateSystem(i)->xIndex()].dirty = true;
-		// don't return!
-	} else
-		d->xRanges[index].dirty = true;
+	if (cSystemIndex == -1)
+		return;
+	auto xIndex = coordinateSystem(cSystemIndex)->xIndex();
+	d->xRanges[xIndex].dirty = true;
 
 	bool updated = false;
-	if (autoScaleX(index))
-		updated = this->scaleAutoX(index);
-	if (autoScaleY(index))
-		updated |= this->scaleAutoY(index, false);
+	if (autoScaleX(xIndex))
+		updated = this->scaleAutoX(xIndex);
+
+	QVector<int> scaled;
+	for (auto* acSystem: m_coordinateSystems) {
+		auto* cSystem = static_cast<CartesianCoordinateSystem*>(acSystem);
+		if (cSystem->xIndex() == xIndex &&
+				scaled.indexOf(cSystem->yIndex()) == -1 && // do not scale again
+				autoScaleY(cSystem->yIndex())) {
+			scaled << cSystem->yIndex();
+			updated |= scaleAutoY(cSystem->yIndex(), false);
+		}
+	}
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
 	if (updated)
@@ -2542,19 +2548,26 @@ void CartesianPlot::yDataChanged(XYCurve* curve) {
 		return;
 
 	int cSystemIndex = curve->coordinateSystemIndex();
-	int index = coordinateSystem(cSystemIndex)->yIndex();
-	if (index == -1) {
-		for (int i = 0; i < yRangeCount(); i++)
-			d->yRanges[coordinateSystem(i)->yIndex()].dirty = true;
-		// don't return!
-	} else
-		d->yRanges[index].dirty = true;
+	if (cSystemIndex == -1)
+		return;
+	auto yIndex = coordinateSystem(cSystemIndex)->yIndex();
+	d->yRanges[yIndex].dirty = true;
 
 	bool updated = false;
-	if (autoScaleY(index))
-		updated = this->scaleAutoY(index);
-	if (autoScaleX(index))
-		updated |= this->scaleAutoX(index, false);
+	if (autoScaleY(yIndex))
+		updated = this->scaleAutoY(yIndex);
+
+	QVector<int> scaled;
+	for (auto* acSystem: m_coordinateSystems) {
+		auto* cSystem = static_cast<CartesianCoordinateSystem*>(acSystem);
+		if (cSystem->yIndex() == yIndex &&
+				scaled.indexOf(cSystem->xIndex()) == -1 && // do not scale again
+				autoScaleX(cSystem->xIndex())) {
+			scaled << cSystem->xIndex();
+			updated |= scaleAutoX(cSystem->xIndex(), false);
+		}
+	}
+
 	DEBUG(Q_FUNC_INFO << ", updated = " << updated)
 
 	if (updated)
