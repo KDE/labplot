@@ -3514,6 +3514,7 @@ void CartesianPlotPrivate::retransform() {
 
 	updateDataRect();
 	retransformScales(-1, -1); // TODO: check if all must be retransformed
+	q->retransform();
 
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	q->plotArea()->setRect(rect);
