@@ -1677,19 +1677,9 @@ bool MainWin::save(const QString& fileName) {
 		const auto& windows = m_mdiArea->subWindowList();
 		if (!windows.isEmpty()) {
 			//determine the bounding rectangle surrounding all visible sub-windows
-			QRect rect(std::numeric_limits<int>::max(), std::numeric_limits<int>::max(), 0, 0);
-			for (auto* window: windows) {
-				const auto geom = window->frameGeometry();
-				int w = rect.width();
-				int h = rect.height();
-				if (geom.x() < rect.x())
-					rect.setX(geom.x());
-				if (geom.y() < rect.y())
-					rect.setY(geom.y());
-				rect.setWidth(w);
-				rect.setHeight(h);
-				rect = rect.united(geom);
-			}
+			QRect rect;
+			for (auto* window: windows)
+				rect = rect.united(window->frameGeometry());
 
 			thumbnail = centralWidget()->grab(rect);
 		}

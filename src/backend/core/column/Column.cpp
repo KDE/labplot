@@ -1796,8 +1796,6 @@ double Column::minimum(int startIndex, int endIndex) const {
 	if (startIndex == 0 && endIndex == rowCount() -1 && d->available.min)
 		return d->statistics.minimum;
 
-	int foundIndex = 0;
-
 	ColumnMode mode = columnMode();
 	Properties property = properties();
 	if (property == Properties::No || property == Properties::NonMonotonic) {
@@ -1866,6 +1864,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		}
 	} else {
 		// use the properties knowledge to determine maximum faster
+		int foundIndex = 0;
 		if (property == Properties::Constant || property == Properties::MonotonicIncreasing)
 			foundIndex = startIndex;
 		else if (property == Properties::MonotonicDecreasing)
@@ -1949,8 +1948,6 @@ double Column::maximum(int startIndex, int endIndex) const {
 	if (startIndex == 0 && endIndex == rowCount() -1 && d->available.max)
 		return d->statistics.maximum;
 
-	int foundIndex = 0;
-
 	ColumnMode mode = columnMode();
 	Properties property = properties();
 	if (property == Properties::No || property == Properties::NonMonotonic) {
@@ -2013,6 +2010,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 		}
 	} else {
 		// use the properties knowledge to determine maximum faster
+		int foundIndex = 0;
 		if (property == Properties::Constant || property == Properties::MonotonicDecreasing)
 			foundIndex = startIndex;
 		else if (property == Properties::MonotonicIncreasing)
@@ -2092,8 +2090,6 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 	if (rowCount == 0)
 		return -1;
 
-	double prevValue = 0;
-	//qint64 prevValueDateTime = 0;
 	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
 			properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
@@ -2135,7 +2131,7 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// simple way
 		int index = 0;
-		prevValue = column[0];
+		double prevValue = column[0];
 		for (int row = 0; row < rowCount; row++) {
 			double value = column[row];
 			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
@@ -2160,8 +2156,6 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
 	if (rowCount == 0)
 		return -1;
 
-	double prevValue = 0;
-	//qint64 prevValueDateTime = 0;
 	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
 			properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
@@ -2203,7 +2197,7 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
 	} else {
 		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// naiv way
-		prevValue = points[0].x();
+		double prevValue = points[0].x();
 		int index = 0;
 		for (int row = 0; row < rowCount; row++) {
 
@@ -2228,9 +2222,8 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 	int rowCount = lines.count();
 	if (rowCount == 0)
 		return -1;
+
 	// use only p1 to find index
-	double prevValue = 0;
-	//qint64 prevValueDateTime = 0;
 	if (properties == AbstractColumn::Properties::MonotonicIncreasing ||
 			properties == AbstractColumn::Properties::MonotonicDecreasing) {
 		// bisects the index every time, so it is possible to find the value in log_2(rowCount) steps
@@ -2273,7 +2266,7 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// naiv way
 		int index = 0;
-		prevValue = lines[0].p1().x();
+		double prevValue = lines[0].p1().x();
 		for (int row = 0; row < rowCount; row++) {
 			double value = lines[row].p1().x();
 			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
