@@ -26,5 +26,8 @@ private Q_SLOTS:
 	void changeData5();
 	void changeData6();
 
+	// check deleting curve
+	void deleteCurve();
+
 };
 #endif

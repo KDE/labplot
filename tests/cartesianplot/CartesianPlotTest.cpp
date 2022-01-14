@@ -15,6 +15,7 @@
 #include "backend/matrix/Matrix.h"
 #include "commonfrontend/worksheet/WorksheetView.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -35,8 +36,8 @@ void CartesianPlotTest::initTestCase() {
 #define LOAD_PROJECT_DATA_CHANGE \
 	Project project; \
 	project.load(QFINDTESTDATA(QLatin1String("data/TestDataChange.lml"))); \
-	/* check the project tree for the imported project */ \
 \
+	/* check the project tree for the imported project */ \
 	/* Spreadsheet */ \
 	auto* aspect = project.child<AbstractAspect>(0); \
 	QVERIFY(aspect != nullptr); \
@@ -90,6 +91,56 @@ void CartesianPlotTest::initTestCase() {
 	QVERIFY(yAxis != nullptr); \
 	QCOMPARE(yAxis->orientation() == Axis::Orientation::Vertical, true);
 
+#define LOAD_PROJECT_HISTOGRAM_FIT_CURVE \
+	Project project; \
+	project.load(QFINDTESTDATA(QLatin1String("data/histogram-fit-curve.lml"))); \
+\
+	/* TODO: check the project tree for the imported project */ \
+	/* Spreadsheet */ \
+	auto* aspect = project.child<AbstractAspect>(0); \
+	QVERIFY(aspect != nullptr); \
+	if (aspect) \
+		QCOMPARE(aspect->name(), QLatin1String("Spreadsheet")); \
+	QVERIFY(aspect->type() == AspectType::Spreadsheet); \
+	auto s = dynamic_cast<Spreadsheet*>(aspect); \
+	if (!s) return; \
+	auto c1 = static_cast<Column*>( s->child<Column>(0)); \
+	QVERIFY(c1 != nullptr); \
+	QCOMPARE(c1->name(), QLatin1String("Data")); \
+	QVERIFY(c1->columnMode() == AbstractColumn::ColumnMode::Double); \
+	QVERIFY(c1->rowCount() == 10000); \
+\
+	/* Worksheet */ \
+	aspect = project.child<AbstractAspect>(1); \
+	QVERIFY(aspect != nullptr); \
+	if (aspect) \
+		QCOMPARE(aspect->name(), QLatin1String("Worksheet - Spreadsheet")); \
+	QVERIFY(aspect->type() == AspectType::Worksheet); \
+	auto w = dynamic_cast<Worksheet*>(aspect); \
+	if (!w) return; \
+\
+	auto plot = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0)); \
+	QVERIFY(plot != nullptr); \
+	if (!plot) return; \
+\
+	auto h = dynamic_cast<Histogram*>(plot->child<Histogram>(0)); \
+	QVERIFY(h != nullptr); \
+	if (!h) return; \
+	QCOMPARE(h->name(), "histogram"); \
+\
+	/* curves */ \
+	auto curve1 = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0)); \
+	QVERIFY(curve1 != nullptr); \
+	if (!curve1) return; \
+	QCOMPARE(curve1->name(), "fit"); \
+	auto curve2 = dynamic_cast<XYCurve*>(plot->child<XYCurve>(1)); \
+	QVERIFY(curve2 != nullptr); \
+	if (!curve2) return; \
+	QCOMPARE(curve2->name(), "f(x)"); \
+\
+	CHECK_RANGE(plot, curve1, x, -4, 4); \
+	CHECK_RANGE(plot, curve1, y, 0, 1);
+
 #define VALUES_EQUAL(v1, v2) QCOMPARE(nsl_math_approximately_equal(v1, v2), true)
 
 #define RANGE_CORRECT(range, start_, end_) \
@@ -111,6 +162,8 @@ void CartesianPlotTest::initTestCase() {
 	WARN(Q_FUNC_INFO << ", x index = " << xIndex << ", range = " << xrange.start() << " .. " << xrange.end()) \
 	WARN(Q_FUNC_INFO << ", y index = " << yIndex << ", range = " << yrange.start() << " .. " << yrange.end()) \
 }
+
+
 
 /*!
  * \brief CartesianPlotTest::changeData1: add data point 
@@ -201,6 +254,19 @@ void CartesianPlotTest::changeData6() {
 
 	CHECK_RANGE(plot, curve, x, 1, 2);
 	CHECK_RANGE(plot, curve, y, 1, 3);
+}
+
+// check deleting curve
+
+void CartesianPlotTest::deleteCurve() {
+        LOAD_PROJECT_HISTOGRAM_FIT_CURVE
+
+	// delete curve in plot
+	plot->removeChild(curve2);
+
+	// TODO: y should be rescaled to histogram range!
+	CHECK_RANGE(plot, curve1, x, -4, 4);
+	CHECK_RANGE(plot, curve1, y, 0, 1);
 }
 
 QTEST_MAIN(CartesianPlotTest)
