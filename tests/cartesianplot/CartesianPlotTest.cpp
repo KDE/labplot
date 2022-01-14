@@ -264,9 +264,8 @@ void CartesianPlotTest::deleteCurve() {
 	// delete curve in plot
 	plot->removeChild(curve2);
 
-	// TODO: y should be rescaled to histogram range!
 	CHECK_RANGE(plot, curve1, x, -4, 4);
-	CHECK_RANGE(plot, curve1, y, 0, 1);
+	CHECK_RANGE(plot, curve1, y, 0, 0.45);
 }
 
 QTEST_MAIN(CartesianPlotTest)

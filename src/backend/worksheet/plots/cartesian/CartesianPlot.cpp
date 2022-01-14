@@ -2388,19 +2388,24 @@ void CartesianPlot::boxPlotOrientationChanged(BoxPlot::Orientation orientation) 
 }
 
 void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+	DEBUG(Q_FUNC_INFO)
 	if (m_legend == child) {
 		DEBUG(Q_FUNC_INFO << ", a legend")
 		if (m_menusInitialized)
 			addLegendAction->setEnabled(true);
 		m_legend = nullptr;
 	} else {
+		Q_D(CartesianPlot);
 		const auto* curve = qobject_cast<const XYCurve*>(child);
 		if (curve) {
 			DEBUG(Q_FUNC_INFO << ", a curve")
 			updateLegend();
 			Q_EMIT curveRemoved(curve);
 			auto cs = coordinateSystem(curve->coordinateSystemIndex());
-			scaleAuto(cs->xIndex(), cs->yIndex());	// update all plot ranges
+			d->xRanges[cs->xIndex()].dirty = true;
+			d->yRanges[cs->yIndex()].dirty = true;
+			if (scaleAuto(cs->xIndex(), cs->yIndex()))	// update all plot ranges and update if changed
+				retransform();
 		}
 	}
 }
@@ -2808,6 +2813,7 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange) {
 	PERFTRACE(Q_FUNC_INFO);
 	bool updateX = scaleAutoX(xIndex, fullRange);
 	bool updateY = scaleAutoY(yIndex, fullRange);
+	DEBUG(Q_FUNC_INFO << ", update X/Y = " << updateX << "/" << updateY)
 
 	// x range is dirty, because scaleAutoY sets it to dirty.
 	if (xIndex < 0) {
