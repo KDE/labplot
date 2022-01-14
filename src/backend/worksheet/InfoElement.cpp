@@ -55,6 +55,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		d->connectionLineCurveName = curve->name();
 		auto* custompoint = new CustomPoint(m_plot, curve->name());
 		custompoint->setFixed(true);
+		custompoint->setCoordinateBindingEnabled(true);
 		addChild(custompoint);
 		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
 		markerpoints.append(markerpoint);
@@ -186,7 +187,9 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 	project()->setSuppressAspectAddedSignal(true);
 
 	if (!custompoint) {
+		m_suppressChildPositionChanged = true;
 		custompoint = new CustomPoint(m_plot, curve->name());
+		custompoint->setCoordinateBindingEnabled(true);
 		addChild(custompoint);
 
 		if (curve->xColumn() && curve->yColumn()) {
@@ -194,12 +197,11 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 			double x_new, y;
 			y = curve->y(d->positionLogical, x_new, valueFound);
 
-			m_suppressChildPositionChanged = true;
 			custompoint->setUndoAware(false);
 			custompoint->setPositionLogical(QPointF(x_new, y));
 			custompoint->setUndoAware(true);
-			m_suppressChildPositionChanged = false;
 		}
+		m_suppressChildPositionChanged = false;
 	} else
 		addChild(custompoint);
 
@@ -252,6 +254,9 @@ void InfoElement::addCurvePath(QString &curvePath, CustomPoint* custompoint) {
 	if (!custompoint) {
 		custompoint = new CustomPoint(m_plot, i18n("Symbol"));
 		custompoint->setVisible(false);
+		m_suppressChildPositionChanged = true;
+		custompoint->setCoordinateBindingEnabled(true);
+		m_suppressChildPositionChanged = false;
 		addChild(custompoint);
 	}
 
@@ -567,14 +572,11 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 void InfoElement::childAdded(const AbstractAspect* child) {
 	const CustomPoint* point = dynamic_cast<const CustomPoint*>(child);
 	if (point) {
-		CustomPoint* p = const_cast<CustomPoint*>(point);
-		m_suppressChildPositionChanged = true;
-		p->setCoordinateBindingEnabled(true);
-		p->setParentGraphicsItem(graphicsItem());
+		auto* p = const_cast<CustomPoint*>(point);
 		// otherwise Custom point must be patched to handle discrete curve points.
 		// This makes it much easier
 		p->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-		m_suppressChildPositionChanged = false;
+		p->setParentGraphicsItem(graphicsItem());
 		// Must be done after setCoordinateBindingEnabled, otherwise positionChanged will be called and
 		// then the InfoElement position will be set incorrectly
 		connect(point, &CustomPoint::positionChanged, this, &InfoElement::pointPositionChanged);
