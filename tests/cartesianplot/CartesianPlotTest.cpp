@@ -46,14 +46,14 @@ void CartesianPlotTest::initTestCase() {
 	QVERIFY(aspect->type() == AspectType::Spreadsheet); \
 	auto s = dynamic_cast<Spreadsheet*>(aspect); \
 	if (!s) return; \
-	auto c1 = static_cast<Column*>(s->child<Column>(0)); \
+	auto* c1 = static_cast<Column*>(s->child<Column>(0)); \
 	QVERIFY(c1 != nullptr); \
 	QCOMPARE(c1->name(), QLatin1String("1")); \
 	QVERIFY(c1->columnMode() == AbstractColumn::ColumnMode::Double); \
 	QVERIFY(c1->rowCount() == 100); \
 	QVERIFY(c1->valueAt(0) == 1.); \
 	QVERIFY(c1->valueAt(1) == 2.); \
-	auto c2 = static_cast<Column*>(s->child<Column>(1)); \
+	auto* c2 = static_cast<Column*>(s->child<Column>(1)); \
 	QVERIFY(c2 != nullptr); \
 	QCOMPARE(c2->name(), QLatin1String("2")); \
 	QVERIFY(c2->columnMode() == AbstractColumn::ColumnMode::Double); \
@@ -67,15 +67,15 @@ void CartesianPlotTest::initTestCase() {
 	if (aspect) \
 		QCOMPARE(aspect->name(), QLatin1String("Worksheet - Spreadsheet")); \
 	QVERIFY(aspect->type() == AspectType::Worksheet); \
-	auto w = dynamic_cast<Worksheet*>(aspect); \
+	auto* w = dynamic_cast<Worksheet*>(aspect); \
 	if (!w) return; \
  \
-	auto plot = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0)); \
+	auto* plot = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0)); \
 	QVERIFY(plot != nullptr); \
 	if (!plot) return; \
 \
 	/* curve */ \
-	auto curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0)); \
+	auto* curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0)); \
 	QVERIFY(curve != nullptr); \
 	if (!curve) return; \
 	QCOMPARE(curve->name(), "2"); \
@@ -83,11 +83,11 @@ void CartesianPlotTest::initTestCase() {
 	CHECK_RANGE(plot, curve, x, 1, 2); \
 	CHECK_RANGE(plot, curve, y, 1, 2); \
 \
-	auto xAxis = static_cast<Axis*>(plot->child<Axis>(0)); \
+	auto* xAxis = static_cast<Axis*>(plot->child<Axis>(0)); \
 	QVERIFY(xAxis != nullptr); \
 	QCOMPARE(xAxis->orientation() == Axis::Orientation::Horizontal, true); \
 	\
-	auto yAxis = static_cast<Axis*>(plot->child<Axis>(2)); \
+	auto* yAxis = static_cast<Axis*>(plot->child<Axis>(2)); \
 	QVERIFY(yAxis != nullptr); \
 	QCOMPARE(yAxis->orientation() == Axis::Orientation::Vertical, true);
 
@@ -104,7 +104,7 @@ void CartesianPlotTest::initTestCase() {
 	QVERIFY(aspect->type() == AspectType::Spreadsheet); \
 	auto s = dynamic_cast<Spreadsheet*>(aspect); \
 	if (!s) return; \
-	auto c1 = static_cast<Column*>( s->child<Column>(0)); \
+	auto* c1 = static_cast<Column*>( s->child<Column>(0)); \
 	QVERIFY(c1 != nullptr); \
 	QCOMPARE(c1->name(), QLatin1String("Data")); \
 	QVERIFY(c1->columnMode() == AbstractColumn::ColumnMode::Double); \
@@ -116,24 +116,24 @@ void CartesianPlotTest::initTestCase() {
 	if (aspect) \
 		QCOMPARE(aspect->name(), QLatin1String("Worksheet - Spreadsheet")); \
 	QVERIFY(aspect->type() == AspectType::Worksheet); \
-	auto w = dynamic_cast<Worksheet*>(aspect); \
+	auto* w = dynamic_cast<Worksheet*>(aspect); \
 	if (!w) return; \
 \
-	auto plot = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0)); \
+	auto* plot = dynamic_cast<CartesianPlot*>(aspect->child<CartesianPlot>(0)); \
 	QVERIFY(plot != nullptr); \
 	if (!plot) return; \
 \
-	auto h = dynamic_cast<Histogram*>(plot->child<Histogram>(0)); \
+	auto* h = dynamic_cast<Histogram*>(plot->child<Histogram>(0)); \
 	QVERIFY(h != nullptr); \
 	if (!h) return; \
 	QCOMPARE(h->name(), "histogram"); \
 \
 	/* curves */ \
-	auto curve1 = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0)); \
+	auto* curve1 = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0)); \
 	QVERIFY(curve1 != nullptr); \
 	if (!curve1) return; \
 	QCOMPARE(curve1->name(), "fit"); \
-	auto curve2 = dynamic_cast<XYCurve*>(plot->child<XYCurve>(1)); \
+	auto* curve2 = dynamic_cast<XYCurve*>(plot->child<XYCurve>(1)); \
 	QVERIFY(curve2 != nullptr); \
 	if (!curve2) return; \
 	QCOMPARE(curve2->name(), "f(x)"); \

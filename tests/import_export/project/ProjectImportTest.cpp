@@ -17,6 +17,7 @@
 #include "backend/matrix/Matrix.h"
 #include "backend/worksheet/Worksheet.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 void ProjectImportTest::initTestCase() {
@@ -73,7 +74,6 @@ void ProjectImportTest::testOrigin01() {
 	if (aspect != nullptr)
 		QCOMPARE(aspect->name(), QLatin1String("Book3"));
 	QCOMPARE(dynamic_cast<Spreadsheet*>(aspect) != nullptr, true);
-
 
 	//first child of the root folder, folder "Folder" -> import into a Folder
 	aspect = project.child<AbstractAspect>(1);
@@ -392,6 +392,55 @@ void ProjectImportTest::testOriginTextNumericColumns() {
 	QCOMPARE(column->valueAt(2), 3.3);
 	QCOMPARE(!std::isnan(column->valueAt(3)), false);
 	QCOMPARE(!std::isnan(column->valueAt(4)), false);
+}
+
+void ProjectImportTest::testOrigin_2folder_with_graphs() {
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/2folder-with-graphs.opj")));
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	//check the project tree for the imported project
+
+	// Folder 1
+	auto* f1 = project.child<AbstractAspect>(0);
+	QCOMPARE(f1 != nullptr, true);
+	if (f1 != nullptr)
+		QCOMPARE(f1->name(), QLatin1String("Folder1"));
+	QCOMPARE(dynamic_cast<Folder*>(f1) != nullptr, true);
+
+	auto* s1 = f1->child<AbstractAspect>(0);
+	QCOMPARE(s1 != nullptr, true);
+	if (s1 != nullptr)
+		QCOMPARE(s1->name(), QLatin1String("Book1"));
+	QCOMPARE(dynamic_cast<Spreadsheet*>(s1) != nullptr, true);
+
+	auto* w1 = f1->child<AbstractAspect>(1);
+	QCOMPARE(w1 != nullptr, true);
+	if (w1 != nullptr)
+		QCOMPARE(w1->name(), QLatin1String("Graph1"));
+	QCOMPARE(dynamic_cast<Worksheet*>(w1) != nullptr, true);
+
+	auto* plot = dynamic_cast<CartesianPlot*>(w1->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+	if (!plot) return;
+
+	//TODO: check plot properties
+
+	// CHECK_RANGE(plot, curve, x, 1, 2);
+	// CHECK_RANGE(plot, curve, y, 1, 2);
+
+	auto* curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
+	QVERIFY(curve != nullptr);
+	if (!curve) return;
+	QCOMPARE(curve->name(), "B");	// TODO: Origin uses Comments as curve name: "Length"
+
+	//TODO: check curve properties
+
+	// Folder 2
+
+	// TODO
+
 }
 
 void ProjectImportTest::testParseOriginTags_data() {

@@ -27,6 +27,9 @@ private Q_SLOTS:
 	void testOrigin03();
 	void testOrigin04();
 	void testOriginTextNumericColumns();
+	void testOrigin_2folder_with_graphs();
+
+	// test tags
 	void testParseOriginTags_data();
 	void testParseOriginTags();
 #endif
