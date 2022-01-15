@@ -4,6 +4,7 @@
     Description          : Dialog for generating plots for the spreadsheet data
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -277,7 +278,7 @@ void PlotDataDialog::processColumnsForXYCurve(const QStringList& columnNames, co
 	}
 
 	//show all selected/available column names in the data comboboxes
-	for (QComboBox* const comboBox : m_columnComboBoxes)
+	for (auto* const comboBox : m_columnComboBoxes)
 		comboBox->addItems(columnNames);
 
 	if (!xColumnName.isEmpty()) {
@@ -406,7 +407,7 @@ void PlotDataDialog::plot() {
 		worksheet->endMacro();
 	} else {
 		//add curves to a new plot(s) in a new worksheet
-		AbstractAspect* parent = m_spreadsheet->parentAspect();
+		auto* parent = m_spreadsheet->parentAspect();
 		if (parent->type() == AspectType::DatapickerCurve)
 			parent = parent->parentAspect()->parentAspect();
 		else if (parent->type() == AspectType::Workbook)
@@ -735,14 +736,23 @@ void PlotDataDialog::adjustWorksheetSize(Worksheet* worksheet) const {
 }
 
 void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) const {
+	DEBUG(Q_FUNC_INFO)
 	const auto& axes = plot->children<Axis>();
 	switch (m_plotType) {
 	case PlotType::XYCurve: {
 		//x-axis title
 		const QString& xColumnName = ui->cbXColumn->currentText();
+		//DEBUG(Q_FUNC_INFO << ", x column name = " << STDSTRING(xColumnName))
+
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {
-				axis->title()->setText(xColumnName);
+				auto wrapper = axis->title()->text();
+				//DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(wrapper.text))
+				QTextEdit te(wrapper.text);
+				te.selectAll();
+				te.setText(xColumnName);
+				//DEBUG(Q_FUNC_INFO << ", new text = " << STDSTRING(te.toHtml()))
+				axis->title()->setText(te.toHtml());
 				break;
 			}
 		}
@@ -750,15 +760,21 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		//y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
+				auto wrapper = axis->title()->text();
+				QTextEdit te(wrapper.text);
+				te.selectAll();
 				if (!name.isEmpty()) {
 					//multiple columns are plotted with "one curve per plot",
 					//the function is called with the column name.
 					//use it for the x-axis title
-					axis->title()->setText(name);
+					te.setText(name);
+					axis->title()->setText(te.toHtml());
 				} else if (m_columnComboBoxes.size() == 2) {
 					//if we only have one single y-column to plot, we can set the title of the y-axes
 					const QString& yColumnName = m_columnComboBoxes[1]->currentText();
-					axis->title()->setText(yColumnName);
+					DEBUG(Q_FUNC_INFO << ", y column name = " << STDSTRING(yColumnName))
+					te.setText(yColumnName);
+					axis->title()->setText(te.toHtml());
 				}
 
 				break;

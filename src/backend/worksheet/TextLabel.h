@@ -75,8 +75,8 @@ public:
 		QString textPlaceholder{QLatin1String("")}; // text with placeholders
 	};
 
-	explicit TextLabel(const QString& name, Type type = Type::General);
-	TextLabel(const QString& name, CartesianPlot*, Type type = Type::General);
+	explicit TextLabel(const QString& name, Type = Type::General);
+	TextLabel(const QString& name, CartesianPlot*, Type = Type::General);
 	~TextLabel() override;
 
 	Type type() const;
@@ -129,7 +129,7 @@ private Q_SLOTS:
 	void visibilityChanged();
 
 protected:
-	TextLabel(const QString& name, TextLabelPrivate* dd, Type type = Type::General);
+	TextLabel(const QString& name, TextLabelPrivate* dd, Type = Type::General);
 
 private:
 	Q_DECLARE_PRIVATE(TextLabel)

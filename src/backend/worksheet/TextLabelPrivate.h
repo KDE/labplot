@@ -75,7 +75,7 @@ public:
 	//reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
-	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
+	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* = nullptr) override;
 	TextLabel* const q{nullptr};
 
 	// used in the InfoElement (Marker) to attach the line to the label

@@ -272,7 +272,7 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 		// If previously the text was empty, the bounding rect is zero
 		// therefore the alignment did not work properly.
-		// If thext is added, the bounding rectangle is updated
+		// If text is added, the bounding rectangle is updated
 		// and then the position must be changed to consider alignment
 		if (changePos)
 			d->updatePosition();
@@ -1111,6 +1111,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void TextLabel::loadThemeConfig(const KConfig& config) {
+	// DEBUG(Q_FUNC_INFO << ", label = " << STDSTRING(name()))
 	Q_D(TextLabel);
 
 	KConfigGroup group = config.group("Label");
@@ -1118,8 +1119,8 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::white)); // used when it's latex text
 
 	if (d->textWrapper.mode == TextLabel::Mode::Text && !d->textWrapper.text.isEmpty()) {
-		// TODO: Replace QTextEdit by QTextDocument, because this does not contain the graphical stuff
-		// to set the color in a html text, a qTextEdit must be used
+		// TODO: Replace QTextEdit by QTextDocument, because this does not contain the graphical stuff.
+		// To set the color in a html text, a QTextEdit must be used
 		QTextEdit te;
 		te.setHtml(d->textWrapper.text);
 		te.selectAll();
