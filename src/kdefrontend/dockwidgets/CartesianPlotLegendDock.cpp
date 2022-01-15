@@ -815,15 +815,13 @@ void CartesianPlotLegendDock::legendLabelFontChanged(QFont& font) {
 	const Lock lock(m_initializing);
 	//we need to set the font size in points for KFontRequester
 	QFont f(font);
-	f.setPointSizeF( Worksheet::convertFromSceneUnits(f.pixelSize(), Worksheet::Unit::Point) );
+	f.setPointSizeF( round(Worksheet::convertFromSceneUnits(f.pixelSize(), Worksheet::Unit::Point)) );
 	ui.kfrLabelFont->setFont(f);
-
 }
 
 void CartesianPlotLegendDock::legendLabelColorChanged(QColor& color) {
 	const Lock lock(m_initializing);
 	ui.kcbLabelColor->setColor(color);
-
 }
 
 void CartesianPlotLegendDock::legendLabelOrderChanged(bool b) {
@@ -832,13 +830,11 @@ void CartesianPlotLegendDock::legendLabelOrderChanged(bool b) {
 		ui.cbOrder->setCurrentIndex(0); //column major
 	else
 		ui.cbOrder->setCurrentIndex(1); //row major
-
 }
 
 void CartesianPlotLegendDock::legendLineSymbolWidthChanged(float value) {
 	const Lock lock(m_initializing);
 	ui.sbLineSymbolWidth->setValue(Worksheet::convertFromSceneUnits(value, m_worksheetUnit));
-
 }
 
 void CartesianPlotLegendDock::legendHorizontalAlignmentChanged(TextLabel::HorizontalAlignment index) {
@@ -858,7 +854,6 @@ void CartesianPlotLegendDock::legendPositionLogicalChanged(QPointF pos) {
 	ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(pos.x()));
 	ui.lePositionYLogical->setText(numberLocale.toString(pos.y()));
 }
-
 
 void CartesianPlotLegendDock::legendPositionChanged(const CartesianPlotLegend::PositionWrapper& position) {
 	const Lock lock(m_initializing);
@@ -897,7 +892,6 @@ void CartesianPlotLegendDock::legendBackgroundImageStyleChanged(WorksheetElement
 void CartesianPlotLegendDock::legendBackgroundBrushStyleChanged(Qt::BrushStyle style) {
 	const Lock lock(m_initializing);
 	ui.cbBackgroundBrushStyle->setCurrentIndex(style);
-
 }
 
 void CartesianPlotLegendDock::legendBackgroundFirstColorChanged(QColor& color) {
@@ -908,7 +902,6 @@ void CartesianPlotLegendDock::legendBackgroundFirstColorChanged(QColor& color) {
 void CartesianPlotLegendDock::legendBackgroundSecondColorChanged(QColor& color) {
 	const Lock lock(m_initializing);
 	ui.kcbBackgroundSecondColor->setColor(color);
-
 }
 
 void CartesianPlotLegendDock::legendBackgroundFileNameChanged(QString& filename) {
