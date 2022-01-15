@@ -55,7 +55,7 @@
     <p xml:lang="en-GB">LabPlot is a FREE, open source and cross-platform Data Visualisation and Analysis software accessible to everyone.</p>
     <p xml:lang="es">LabPlot es un software de visualización y análisis de datos LIBRE, de código abierto y multiplataforma, al que todo el mundo puede acceder.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
-    <p xml:lang="nl">LabPlot is VRIJE opensource software voor Datavisualisatie en Analyse, voor meerdere soorten computers, die iedereen kan gebruiken.</p>
+    <p xml:lang="nl">LabPlot is VRIJE open source software voor Datavisualisatie en Analyse, voor meerdere soorten computers, die iedereen kan gebruiken.</p>
     <p xml:lang="sv">Labplot är FRI datavisualiserings- och analysprogramvara med öppen källkod för flera plattformar tillgänglig för vem som helst.</p>
     <p xml:lang="uk">LabPlot є вільним, доступним для будь-кого програмним забезпеченням з відкритим кодом, яке працює на багатьох платформах і виконує візуалізацію та аналіз даних.</p>
     <p xml:lang="x-test">xxLabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.xx</p>
@@ -95,38 +95,84 @@
   <screenshots>
     <screenshot type="default">
       <caption>Basic visualization of data</caption>
+      <caption xml:lang="ca">Visualització bàsica de dades</caption>
+      <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
+      <caption xml:lang="sv">Grundläggande visualisering av data</caption>
+      <caption xml:lang="uk">Базова візуалізація даних</caption>
+      <caption xml:lang="x-test">xxBasic visualization of dataxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/01_basic_plots_linux.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Basic visualization of data</caption>
+      <caption xml:lang="ca">Visualització bàsica de dades</caption>
+      <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
+      <caption xml:lang="sv">Grundläggande visualisering av data</caption>
+      <caption xml:lang="uk">Базова візуалізація даних</caption>
+      <caption xml:lang="x-test">xxBasic visualization of dataxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/02_overview_linux.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Advanced layouting of plots and images</caption>
+      <caption xml:lang="ca">Disposició avançada de grafs i imatges</caption>
+      <caption xml:lang="nl">Gevorderde indeling van plots en afbeeldingen</caption>
+      <caption xml:lang="sv">Avancerad layout av diagram och bilder</caption>
+      <caption xml:lang="uk">Розширені можливості з компонування креслень та зображень</caption>
+      <caption xml:lang="x-test">xxAdvanced layouting of plots and imagesxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/03_space_debris_linux.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Theming</caption>
+      <caption xml:lang="ca">Permet temes</caption>
+      <caption xml:lang="cs">Motivy</caption>
+      <caption xml:lang="nl">Thema's</caption>
+      <caption xml:lang="sv">Teman</caption>
+      <caption xml:lang="uk">Теми</caption>
+      <caption xml:lang="x-test">xxThemingxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/04_theming_linux.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Visualization of mathematical functions</caption>
+      <caption xml:lang="ca">Visualització de funcions matemàtiques</caption>
+      <caption xml:lang="nl">Wiskundige functies visualiseren</caption>
+      <caption xml:lang="sv">Visualisering av matematiska funktioner</caption>
+      <caption xml:lang="uk">Візуалізація математичних функцій</caption>
+      <caption xml:lang="x-test">xxVisualization of mathematical functionsxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/05_math_expression_linux.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Fit pre-defined or custom models to the data</caption>
+      <caption xml:lang="ca">Ajust de models predefinits o personalitzats a les dades</caption>
+      <caption xml:lang="nl">Voorgedefinieerde of aangepaste modellen aan gegevens aanpassen</caption>
+      <caption xml:lang="sv">Anpassa data till fördefinierade eller egna modeller</caption>
+      <caption xml:lang="uk">Апроксимація попередньо визначеними або нетиповими моделями даних</caption>
+      <caption xml:lang="x-test">xxFit pre-defined or custom models to the dataxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/06_fit_linux.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Smooth the data with the help of various smoothing methods</caption>
+      <caption xml:lang="ca">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
+      <caption xml:lang="nl">Gladstrijken van de gegevens met diverse methodes</caption>
+      <caption xml:lang="sv">Jämna ut data med hjälp av diverse utjämningsmetoder</caption>
+      <caption xml:lang="uk">Згладжування даних за допомогою різноманітних способів згладжування</caption>
+      <caption xml:lang="x-test">xxSmooth the data with the help of various smoothing methodsxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/07_smooth_linux.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Notebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia and Lua</caption>
+      <caption xml:lang="ca">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia i Lua</caption>
+      <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia en Lua</caption>
+      <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia och Lua</caption>
+      <caption xml:lang="uk">Інтерфейс нотатника для інтерактивних сеансів Maxima, Octave, R, Sage, Scilab, Python, Julia та Lua</caption>
+      <caption xml:lang="x-test">xxNotebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia and Luaxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/08_maxima_tutorial_linux.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Signal analysis</caption>
+      <caption xml:lang="ca">Anàlisi de senyals</caption>
+      <caption xml:lang="nl">Signaalanalyse</caption>
+      <caption xml:lang="sv">Signalanalys</caption>
+      <caption xml:lang="uk">Аналіз сигналів</caption>
+      <caption xml:lang="x-test">xxSignal analysisxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/09_morse_signal_linux.png</image>
     </screenshot>
     <screenshot type="default">
@@ -135,6 +181,11 @@
     </screenshot>
     <screenshot type="default">
       <caption>Visualization of data calculated in an interactive Maxima session</caption>
+      <caption xml:lang="ca">Visualització de dades calculades en una sessió interactiva del Maxima</caption>
+      <caption xml:lang="nl">Visualiseren van gegevens, berekend in een interactieve sessie in Maxima</caption>
+      <caption xml:lang="sv">Visualisering av data beräknad i en interaktiv Maxima-session</caption>
+      <caption xml:lang="uk">Візуалізація даних, які обчислено у інтерактивному сеансі Maxima</caption>
+      <caption xml:lang="x-test">xxVisualization of data calculated in an interactive Maxima sessionxx</caption>
       <image>https://cdn.kde.org/screenshots/labplot2/11_maxima_Duffing_Oscillator_linux.png</image>
     </screenshot>
   </screenshots>
