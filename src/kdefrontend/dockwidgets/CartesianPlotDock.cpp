@@ -86,8 +86,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
 	labelWidget = new LabelWidget(ui.tabTitle);
 	hboxLayout->addWidget(labelWidget);
-	hboxLayout->setContentsMargins(2,2,2,2);
-	hboxLayout->setSpacing(2);
+	hboxLayout->setContentsMargins(0,0,0,0);
+	hboxLayout->setSpacing(0);
 
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {

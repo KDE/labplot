@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : label settings widget
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2008-2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2008-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2012-2017 Stefan Gerlach <stefan.gerlach@uni-konstanz.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -45,6 +45,14 @@
  */
 LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
+
+	//adjust the layout margins
+	auto* l = dynamic_cast<QGridLayout*>(layout());
+	if (l) {
+		l->setContentsMargins(2,2,2,2);
+		l->setHorizontalSpacing(2);
+		l->setVerticalSpacing(2);
+	}
 
 	const KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 	m_units = (BaseDock::Units)group.readEntry("Units", (int)BaseDock::Units::Metric);
@@ -236,6 +244,10 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 	//the label is what the user identifies with the info element itself
 	bool visible = (m_label->parentAspect()->type() != AspectType::InfoElement);
 	ui.chbVisible->setVisible(visible);
+
+	//resize the widget to take the minimal height
+	layout()->activate();
+	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes) {
@@ -254,6 +266,10 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 	initConnections();
 	updateBackground();
 	updateLocale();
+
+	//resize the widget to take the minimal height
+	layout()->activate();
+	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
 }
 
 /*!

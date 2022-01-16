@@ -59,8 +59,8 @@ AxisDock::AxisDock(QWidget* parent) : BaseDock(parent) {
 	labelWidget = new LabelWidget(ui.tabTitle);
 	labelWidget->setFixedLabelMode(true);
 	hboxLayout->addWidget(labelWidget);
-	hboxLayout->setContentsMargins(2,2,2,2);
-	hboxLayout->setSpacing(2);
+	hboxLayout->setContentsMargins(0,0,0,0);
+	hboxLayout->setSpacing(0);
 
 	//"Ticks"-tab
 	auto* layout = static_cast<QGridLayout*>(ui.tabTicks->layout());
