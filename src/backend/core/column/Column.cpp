@@ -1399,9 +1399,6 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	else
 		d->setWidth(str.toInt());
 
-	QVector<double> doubleVector;
-	QVector<qint64> bigIntVector;
-	QVector<int> integerVector;
 	QVector<QDateTime> dateTimeVector;
 	QVector<QString> textVector;
 
