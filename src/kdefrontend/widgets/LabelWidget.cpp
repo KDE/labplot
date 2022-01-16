@@ -334,11 +334,11 @@ void LabelWidget::setFixedLabelMode(const bool b) {
 	ui.sbPositionX->setVisible(!b);
 	ui.lPositionY->setVisible(!b);
 	ui.cbPositionY->setVisible(!b);
-    ui.sbPositionY->setVisible(!b);
+	ui.sbPositionY->setVisible(!b);
 	ui.lHorizontalAlignment->setVisible(!b);
 	ui.cbHorizontalAlignment->setVisible(!b);
-    ui.lVerticalAlignment->setVisible(!b);
-    ui.cbVerticalAlignment->setVisible(!b);
+	ui.lVerticalAlignment->setVisible(!b);
+	ui.cbVerticalAlignment->setVisible(!b);
 	ui.lOffsetX->setVisible(b);
 	ui.lOffsetY->setVisible(b);
 	ui.sbOffsetX->setVisible(b);
@@ -359,8 +359,8 @@ void LabelWidget::setGeometryAvailable(const bool b) {
 	ui.sbPositionY->setVisible(b);
 	ui.lHorizontalAlignment->setVisible(b);
 	ui.cbHorizontalAlignment->setVisible(b);
-    ui.lVerticalAlignment->setVisible(b);
-    ui.cbVerticalAlignment->setVisible(b);
+	ui.lVerticalAlignment->setVisible(b);
+	ui.cbVerticalAlignment->setVisible(b);
 	ui.lOffsetX->setVisible(b);
 	ui.lOffsetY->setVisible(b);
 	ui.sbOffsetX->setVisible(b);
