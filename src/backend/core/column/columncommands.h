@@ -227,9 +227,6 @@ public:
 	}
 	void undo() override {
 		m_col->setValueAt(m_row, m_old_value);
-		// TODO: resizeTo and replaceData needed?
-		m_col->resizeTo(m_row_count);
-		m_col->replaceData(m_col->data());
 	}
 
 private:
@@ -290,9 +287,6 @@ public:
 	}
 	void undo() override {
 		m_col->replaceValues(m_first, m_old_values);
-		// TODO: resizeTo and replaceData needed?
-		m_col->resizeTo(m_row_count);
-		m_col->replaceData(m_col->data());
 	}
 
 private:
