@@ -266,11 +266,12 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
  * Called if the background color of the parent aspect has changed.
  */
 void LabelWidget::updateBackground() const {
+	DEBUG(Q_FUNC_INFO)
 	if (ui.cbMode->currentIndex() != 0)
 		return; //nothing to do if the current mode is not "Text"
 
 	QColor color(Qt::white);
-	AspectType type = m_label->parentAspect()->type();
+	auto type = m_label->parentAspect()->type();
 	if (type == AspectType::Worksheet)
 		color = static_cast<const Worksheet*>(m_label->parentAspect())->backgroundFirstColor();
 	else if (type == AspectType::CartesianPlot)
@@ -285,6 +286,7 @@ void LabelWidget::updateBackground() const {
 		DEBUG("Not handled type:" << static_cast<int>(type));
 
 	QPalette p = ui.teLabel->palette();
+	QDEBUG(Q_FUNC_INFO << ", color = " << color)
 	p.setColor(QPalette::Base, color);
 	ui.teLabel->setPalette(p);
 }
@@ -566,8 +568,8 @@ void LabelWidget::modeChanged(int index) {
 
 	//TODO:
 	//for normal text we need to hide the background color because of QTBUG-25420
-	ui.kcbBackgroundColor->setVisible(plain);
-	ui.lBackgroundColor->setVisible(plain);
+	//ui.kcbBackgroundColor->setVisible(plain);
+	//ui.lBackgroundColor->setVisible(plain);
 
 	if (plain) {
 		//reset all applied formattings when switching from html to tex mode
@@ -644,16 +646,19 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 }
 
 void LabelWidget::backgroundColorChanged(const QColor& color) {
+	QDEBUG(Q_FUNC_INFO << ", color = " << color)
 	if (m_initializing)
 		return;
 
+	DEBUG(Q_FUNC_INFO << ", tex enable = " << m_teXEnabled << ", mode = " << (int)m_label->text().mode)
 	if (!m_teXEnabled && m_label->text().mode == TextLabel::Mode::LaTeX) {
+		DEBUG(Q_FUNC_INFO << ", update background color")
 		const auto& cursor = ui.teLabel->textCursor();
 		if (cursor.selectedText().isEmpty())
 			ui.teLabel->selectAll();
 
 		ui.teLabel->setTextBackgroundColor(color);
-	} else {
+	} else {	// set the background color of the label
 		// Latex text does not support html code. For this the backgroundColor variable is used
 		// Only single color background is supported
 		for (auto* label : m_labelsList)
@@ -1334,11 +1339,12 @@ void LabelWidget::load() {
 	if (!m_label->text().text.isEmpty()) {
 		QTextCharFormat format = ui.teLabel->currentCharFormat();
 		ui.kcbFontColor->setColor(format.foreground().color());
-		//ui.kcbBackgroundColor->setColor(format.background().color());
+		//TODO
+		ui.kcbBackgroundColor->setColor(format.background().color());
 	} else
 		ui.kcbFontColor->setColor(m_label->fontColor());
 
-	//used for latex text only
+	//TODO: used for latex text only?
 	ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());

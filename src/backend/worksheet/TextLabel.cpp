@@ -302,6 +302,7 @@ void TextLabel::setFontColor(const QColor color) {
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetTeXBackgroundColor, QColor, backgroundColor, updateText)
 void TextLabel::setBackgroundColor(const QColor color) {
+	QDEBUG(Q_FUNC_INFO << ", color = " << color)
 	Q_D(TextLabel);
 	if (color != d->backgroundColor)
 		exec(new TextLabelSetTeXBackgroundColorCmd(d, color, ki18n("%1: set background color")));
@@ -478,7 +479,6 @@ void TextLabelPrivate::setZoomFactor(double factor) {
 	calculates the position of the label, when the position relative to the parent was specified (left, right, etc.)
 */
 void TextLabelPrivate::updatePosition() {
-
 	if (q->isLoading())
 		return;
 
@@ -1115,6 +1115,7 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 	Q_D(TextLabel);
 
 	KConfigGroup group = config.group("Label");
+	//TODO: dark mode support?
 	d->fontColor = group.readEntry("FontColor", QColor(Qt::black)); // used when it's latex text
 	d->backgroundColor = group.readEntry("BackgroundColor", QColor(Qt::white)); // used when it's latex text
 
@@ -1125,12 +1126,13 @@ void TextLabel::loadThemeConfig(const KConfig& config) {
 		te.setHtml(d->textWrapper.text);
 		te.selectAll();
 		te.setTextColor(d->fontColor);
-		//te.setTextBackgroundColor(backgroundColor); // for plain text no background color supported, due to bug https://bugreports.qt.io/browse/QTBUG-25420
+		te.setTextBackgroundColor(d->backgroundColor); // for plain text no background color supported, due to bug https://bugreports.qt.io/browse/QTBUG-25420
 
 		TextWrapper wrapper(te.toHtml(), TextLabel::Mode::Text, true);
 		te.setHtml(d->textWrapper.textPlaceholder);
 		te.selectAll();
 		te.setTextColor(d->fontColor);
+		te.setTextBackgroundColor(d->backgroundColor); // for plain text no background color supported, due to bug https://bugreports.qt.io/browse/QTBUG-25420
 		wrapper.textPlaceholder = te.toHtml();
 		wrapper.allowPlaceholder = d->textWrapper.allowPlaceholder;
 
