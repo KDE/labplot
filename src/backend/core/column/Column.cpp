@@ -560,8 +560,12 @@ void Column::clearFormulas() {
  * Use this only when columnMode() is Text
  */
 void Column::setTextAt(int row, const QString& new_value) {
-	exec(new ColumnSetTextCmd(d, row, new_value));
+	exec(new ColumnSetCmd<QString>(d, row, new_value, textAt(row)));
 	invalidateProperties();
+}
+
+void Column::setText(const QVector<QString>& texts) {
+	d->replaceTexts(-1, texts);
 }
 
 /**
@@ -570,7 +574,7 @@ void Column::setTextAt(int row, const QString& new_value) {
  * Use this only when columnMode() is Text
  */
 void Column::replaceTexts(int first, const QVector<QString>& new_values) {
-	exec(new ColumnReplaceTextsCmd(d, first, new_values));
+	exec(new ColumnReplaceCmd<QString>(d, first, new_values));
 	invalidateProperties();
 }
 
@@ -604,8 +608,12 @@ void Column::setTimeAt(int row, QTime new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value) {
-	exec(new ColumnSetDateTimeCmd(d, row, new_value));
+	exec(new ColumnSetCmd<QDateTime>(d, row, new_value, dateTimeAt(row)));
 	invalidateProperties();
+}
+
+void Column::setDateTimes(const QVector<QDateTime>& dateTimes) {
+	d->replaceDateTimes(-1, dateTimes);
 }
 
 /**
@@ -614,7 +622,7 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
-	exec(new ColumnReplaceDateTimesCmd(d, first, new_values));
+	exec(new ColumnReplaceCmd<QDateTime>(d, first, new_values));
 	invalidateProperties();
 }
 
@@ -623,13 +631,17 @@ void Column::addValueLabel(const QDateTime& value, const QString& label) {
 	project()->setChanged(true);
 }
 
+void Column::setValues(const QVector<double>& values) {
+	d->replaceValues(-1, values);
+}
+
 /**
  * \brief Set the content of row 'row'
  *
  * Use this only when columnMode() is Numeric
  */
 void Column::setValueAt(int row, const double new_value) {
-	exec(new ColumnSetValueCmd(d, row, new_value));
+	exec(new ColumnSetCmd<double>(d, row, new_value, valueAt(row)));
 	invalidateProperties();
 }
 
@@ -639,7 +651,7 @@ void Column::setValueAt(int row, const double new_value) {
  * Use this only when columnMode() is Numeric
  */
 void Column::replaceValues(int first, const QVector<double>& new_values) {
-	exec(new ColumnReplaceValuesCmd(d, first, new_values));
+	exec(new ColumnReplaceCmd<double>(d, first, new_values));
 	invalidateProperties();
 }
 
@@ -649,13 +661,17 @@ void Column::addValueLabel(double value, const QString& label) {
 		project()->setChanged(true);
 }
 
+void Column::setIntegers(const QVector<int>& integers) {
+	d->replaceInteger(-1, integers);
+}
+
 /**
  * \brief Set the content of row 'row'
  *
  * Use this only when columnMode() is Integer
  */
 void Column::setIntegerAt(int row, const int new_value) {
-	exec(new ColumnSetIntegerCmd(d, row, new_value));
+	exec(new ColumnSetCmd<int>(d, row, new_value, integerAt(row)));
 	invalidateProperties();
 }
 
@@ -665,7 +681,7 @@ void Column::setIntegerAt(int row, const int new_value) {
  * Use this only when columnMode() is Integer
  */
 void Column::replaceInteger(int first, const QVector<int>& new_values) {
-	exec(new ColumnReplaceIntegerCmd(d, first, new_values));
+	exec(new ColumnReplaceCmd<int>(d, first, new_values));
 	invalidateProperties();
 }
 
@@ -674,13 +690,17 @@ void Column::addValueLabel(int value, const QString& label) {
 	project()->setChanged(true);
 }
 
+void Column::setBigInts(const QVector<qint64>& bigInts) {
+	d->replaceBigInt(-1, bigInts);
+}
+
 /**
  * \brief Set the content of row 'row'
  *
  * Use this only when columnMode() is BigInt
  */
 void Column::setBigIntAt(int row, const qint64 new_value) {
-	exec(new ColumnSetBigIntCmd(d, row, new_value));
+	exec(new ColumnSetCmd<qint64>(d, row, new_value, bigIntAt(row)));
 	invalidateProperties();
 }
 
@@ -690,7 +710,7 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
  * Use this only when columnMode() is BigInt
  */
 void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
-	exec(new ColumnReplaceBigIntCmd(d, first, new_values));
+	exec(new ColumnReplaceCmd<qint64>(d, first, new_values));
 	invalidateProperties();
 }
 
@@ -1379,6 +1399,13 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 	else
 		d->setWidth(str.toInt());
 
+	QVector<double> doubleVector;
+	QVector<qint64> bigIntVector;
+	QVector<int> integerVector;
+	QVector<QDateTime> dateTimeVector;
+	QVector<QString> textVector;
+
+
 	// read child elements
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1457,9 +1484,26 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 					addValueLabel(QDateTime::fromMSecsSinceEpoch(attribs.value("value").toLongLong()), label);
 					break;
 				}
-			} else if (reader->name() == "row")
-				ret_val = XmlReadRow(reader);
-			else { // unknown element
+			} else if (reader->name() == "row") {
+				// Assumption: the next elements are all rows
+				switch(columnMode()) {
+				case Column::ColumnMode::Double:
+				case Column::ColumnMode::BigInt:
+				case Column::ColumnMode::Integer:
+					/* handled differently*/
+					break;
+				case Column::ColumnMode::DateTime:
+				case Column::ColumnMode::Month:
+				case Column::ColumnMode::Day: {
+					dateTimeVector << QDateTime::fromString(reader->readElementText() + "Z","yyyy-dd-MM hh:mm:ss:zzzt"); // timezone is important
+					break;
+				}
+				case Column::ColumnMode::Text: {
+					textVector << reader->readElementText();
+					break;
+				}
+				}
+			} else { // unknown element
 				reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 				if (!reader->skipToEndElement()) return false;
 			}
@@ -1469,12 +1513,29 @@ bool Column::load(XmlStreamReader* reader, bool preview) {
 
 		if (!preview) {
 			QString content = reader->text().toString().trimmed();
+			// Datetime and text are read in row by row
 			if (!content.isEmpty() && ( columnMode() == ColumnMode::Double ||
 				columnMode() == ColumnMode::Integer || columnMode() == ColumnMode::BigInt)) {
 				auto* task = new DecodeColumnTask(d, content);
 				QThreadPool::globalInstance()->start(task);
 			}
 		}
+	}
+
+	switch(columnMode()) {
+	case AbstractColumn::ColumnMode::Double:
+	case AbstractColumn::ColumnMode::BigInt:
+	case AbstractColumn::ColumnMode::Integer:
+		/* handled above*/
+		break;
+	case AbstractColumn::ColumnMode::DateTime:
+	case AbstractColumn::ColumnMode::Month:
+	case AbstractColumn::ColumnMode::Day:
+		setDateTimes(dateTimeVector);
+		break;
+	case AbstractColumn::ColumnMode::Text:
+		setText(textVector);
+		break;
 	}
 
 	return !reader->error();

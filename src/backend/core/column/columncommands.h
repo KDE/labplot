@@ -15,6 +15,9 @@
 
 #include "backend/lib/IntervalAttribute.h"
 #include "backend/core/column/Column.h"
+#include "backend/core/column/ColumnPrivate.h"
+
+#include <KLocalizedString>
 
 #include <QUndoCommand>
 #include <QDateTime>
@@ -190,157 +193,113 @@ private:
 	bool m_copied{false};
 };
 
-class ColumnSetTextCmd : public QUndoCommand {
+template <typename T>
+class ColumnSetCmd : public QUndoCommand {
 public:
-	explicit ColumnSetTextCmd(ColumnPrivate* col, int row, QString new_value, QUndoCommand* parent = nullptr);
+	/**
+	 * \var ColumnSetTextCmd::m_col
+	 * \brief The private column data to modify
+	 */
+	/**
+	 * \var ColumnSetTextCmd::m_row
+	 * \brief The row to modify
+	 */
+	/**
+	 * \var ColumnSetTextCmd::m_new_value
+	 * \brief The new value
+	 */
+	/**
+	 * \var ColumnSetTextCmd::m_old_value
+	 * \brief The old value
+	 */
+	/**
+	 * \var ColumnSetTextCmd::m_row_count
+	 * \brief The old number of rows
+	 */
+	explicit ColumnSetCmd(ColumnPrivate* col, int row, const T& old_value, const T& new_value, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent), m_col(col), m_row(row), m_new_value(std::move(new_value)) , m_old_value(std::move(old_value)){
+		setText(i18n("%1: set value for row %2", col->name(), row));
+	}
 
-	void redo() override;
-	void undo() override;
+	void redo() override  {
+		m_row_count = m_col->rowCount();
+		m_col->setValueAt(m_row, m_new_value);
+	}
+	void undo() override {
+		m_col->setValueAt(m_row, m_old_value);
+		// TODO: resizeTo and replaceData needed?
+		m_col->resizeTo(m_row_count);
+		m_col->replaceData(m_col->data());
+	}
 
 private:
 	ColumnPrivate* m_col;
 	int m_row;
-	QString m_new_value;
-	QString m_old_value;
+	T m_new_value;
+	T m_old_value;
 	int m_row_count{0};
 };
 
-class ColumnSetValueCmd : public QUndoCommand {
+template<typename T>
+class ColumnReplaceCmd : public QUndoCommand {
 public:
-	explicit ColumnSetValueCmd(ColumnPrivate* col, int row, double new_value, QUndoCommand* parent = nullptr);
+	/**
+	 * \var ColumnReplaceTextsCmd::m_col
+	 * \brief The private column data to modify
+	 */
 
-	void redo() override;
-	void undo() override;
+	/**
+	 * \var ColumnReplaceTextsCmd::m_first
+	 * \brief The first row to replace
+	 */
 
-private:
-	ColumnPrivate* m_col;
-	int m_row;
-	double m_new_value;
-	double m_old_value{0.};
-	int m_row_count{0};
-};
+	/**
+	 * \var ColumnReplaceTextsCmd::m_new_values
+	 * \brief The new values
+	 */
 
-class ColumnSetIntegerCmd : public QUndoCommand {
-public:
-	explicit ColumnSetIntegerCmd(ColumnPrivate* col, int row, int new_value, QUndoCommand* parent = nullptr);
+	/**
+	 * \var ColumnReplaceTextsCmd::m_old_values
+	 * \brief The old values
+	 */
 
-	void redo() override;
-	void undo() override;
+	/**
+	 * \var ColumnReplaceTextsCmd::m_copied
+	 * \brief Status flag
+	 */
 
-private:
-	ColumnPrivate* m_col;
-	int m_row;
-	int m_new_value;
-	int m_old_value{0};
-	int m_row_count{0};
-};
+	/**
+	 * \var ColumnReplaceTextsCmd::m_row_count
+	 * \brief The old number of rows
+	 */
+	explicit ColumnReplaceCmd(ColumnPrivate* col, int first, const QVector<T>& new_values, QUndoCommand* parent = nullptr)
+		: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
+		setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() - 1));
+	}
 
-class ColumnSetBigIntCmd : public QUndoCommand {
-public:
-	explicit ColumnSetBigIntCmd(ColumnPrivate* col, int row, qint64 new_value, QUndoCommand* parent = nullptr);
-
-	void redo() override;
-	void undo() override;
-
-private:
-	ColumnPrivate* m_col;
-	int m_row;
-	qint64 m_new_value;
-	qint64 m_old_value{0};
-	qint64 m_row_count{0};
-};
-
-class ColumnSetDateTimeCmd : public QUndoCommand {
-public:
-	explicit ColumnSetDateTimeCmd(ColumnPrivate* col, int row, QDateTime new_value, QUndoCommand* parent = nullptr);
-
-	void redo() override;
-	void undo() override;
-
-private:
-	ColumnPrivate* m_col;
-	int m_row;
-	QDateTime m_new_value;
-	QDateTime m_old_value;
-	int m_row_count{0};
-};
-
-class ColumnReplaceTextsCmd : public QUndoCommand {
-public:
-	explicit ColumnReplaceTextsCmd(ColumnPrivate* col, int first, const QVector<QString>& new_values, QUndoCommand* parent = nullptr);
-
-	void redo() override;
-	void undo() override;
+	void redo() override {
+		if (!m_copied) {
+			if (m_first < 0)
+				m_old_values = *static_cast<QVector<T>*>(m_col->data());
+			else
+				m_old_values = static_cast<QVector<T>*>(m_col->data())->mid(m_first, m_new_values.count());
+			m_row_count = m_col->rowCount();
+			m_copied = true;
+		}
+		m_col->replaceValues(m_first, m_new_values);
+	}
+	void undo() override {
+		m_col->replaceValues(m_first, m_old_values);
+		// TODO: resizeTo and replaceData needed?
+		m_col->resizeTo(m_row_count);
+		m_col->replaceData(m_col->data());
+	}
 
 private:
 	ColumnPrivate* m_col;
 	int m_first;
-	QVector<QString> m_new_values;
-	QVector<QString> m_old_values;
-	bool m_copied{false};
-	int m_row_count{0};
-};
-
-class ColumnReplaceValuesCmd : public QUndoCommand {
-public:
-	explicit ColumnReplaceValuesCmd(ColumnPrivate* col, int first, const QVector<double>& new_values, QUndoCommand* parent = nullptr);
-
-	void redo() override;
-	void undo() override;
-
-private:
-	ColumnPrivate* m_col;
-	int m_first;
-	QVector<double> m_new_values;
-	QVector<double> m_old_values;
-	bool m_copied{false};
-	int m_row_count{0};
-};
-
-class ColumnReplaceIntegerCmd : public QUndoCommand {
-public:
-	explicit ColumnReplaceIntegerCmd(ColumnPrivate* col, int first, const QVector<int>& new_values, QUndoCommand* parent = nullptr);
-
-	void redo() override;
-	void undo() override;
-
-private:
-	ColumnPrivate* m_col;
-	int m_first;
-	QVector<int> m_new_values;
-	QVector<int> m_old_values;
-	bool m_copied{false};
-	int m_row_count{0};
-};
-
-class ColumnReplaceBigIntCmd : public QUndoCommand {
-public:
-	explicit ColumnReplaceBigIntCmd(ColumnPrivate* col, int first, const QVector<qint64>& new_values, QUndoCommand* parent = nullptr);
-
-	void redo() override;
-	void undo() override;
-
-private:
-	ColumnPrivate* m_col;
-	int m_first;
-	QVector<qint64> m_new_values;
-	QVector<qint64> m_old_values;
-	bool m_copied{false};
-	int m_row_count{0};
-};
-
-class ColumnReplaceDateTimesCmd : public QUndoCommand {
-public:
-	explicit ColumnReplaceDateTimesCmd(ColumnPrivate* col, int first, const QVector<QDateTime>& new_values, QUndoCommand* parent = nullptr);
-
-	void redo() override;
-	void undo() override;
-
-private:
-	ColumnPrivate* m_col;
-	int m_first;
-	QVector<QDateTime> m_new_values;
-	QVector<QDateTime> m_old_values;
+	QVector<T> m_new_values;
+	QVector<T> m_old_values;
 	bool m_copied{false};
 	int m_row_count{0};
 };
