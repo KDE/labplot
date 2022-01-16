@@ -786,24 +786,34 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		//x-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {
+				auto wrapper = axis->title()->text();
+				QTextEdit te(wrapper.text);
+				te.selectAll();
 				if (!name.isEmpty()) {
 					//multiple columns are plotted with "one curve per plot",
 					//the function is called with the column name.
 					//use it for the x-axis title
-					axis->title()->setText(name);
+					te.setText(name);
+					axis->title()->setText(te.toHtml());
 				} else if (m_columnComboBoxes.size() == 1) {
 					const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
-					axis->title()->setText(yColumnName);
+					te.setText(yColumnName);
+					axis->title()->setText(te.toHtml());
 				}
 
 				break;
 			}
 		}
 
+
 		//y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
-				axis->title()->setText(i18n("Frequency"));
+				auto wrapper = axis->title()->text();
+				QTextEdit te(wrapper.text);
+				te.selectAll();
+				te.setText(i18n("Frequency"));
+				axis->title()->setText(te.toHtml());
 				break;
 			}
 		}
@@ -826,14 +836,19 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		//y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
+				auto wrapper = axis->title()->text();
+				QTextEdit te(wrapper.text);
+				te.selectAll();
 				if (!name.isEmpty()) {
 					//multiple columns are plotted with "one curve per plot",
 					//the function is called with the column name.
 					//use it for the x-axis title
-					axis->title()->setText(name);
+					te.setText(name);
+					axis->title()->setText(te.toHtml());
 				} else if (count == 1) {
 					const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
-					axis->title()->setText(yColumnName);
+					te.setText(yColumnName);
+					axis->title()->setText(te.toHtml());
 				}
 				break;
 			}
