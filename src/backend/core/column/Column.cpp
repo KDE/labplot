@@ -1790,8 +1790,8 @@ double Column::minimum(int startIndex, int endIndex) const {
 	startIndex = qMax(startIndex, 0);
 	endIndex = qMax(endIndex, 0);
 
-	startIndex = qMin(startIndex, rowCount() - 1);
-	endIndex = qMin(endIndex, rowCount() - 1);
+	startIndex = qMin(startIndex, rowCount());
+	endIndex = qMin(endIndex, rowCount());
 
 	if (startIndex == 0 && endIndex == rowCount() -1 && d->available.min)
 		return d->statistics.minimum;
@@ -1867,8 +1867,10 @@ double Column::minimum(int startIndex, int endIndex) const {
 		int foundIndex = 0;
 		if (property == Properties::Constant || property == Properties::MonotonicIncreasing)
 			foundIndex = startIndex;
-		else if (property == Properties::MonotonicDecreasing)
-			foundIndex = endIndex;
+		else if (property == Properties::MonotonicDecreasing) {
+			foundIndex = endIndex - 1;
+			foundIndex = qMax(0, foundIndex);
+		}
 
 		switch (mode) {
 		case ColumnMode::Double:
@@ -1942,8 +1944,8 @@ double Column::maximum(int startIndex, int endIndex) const {
 	startIndex = qMax(startIndex, 0);
 	endIndex = qMax(endIndex, 0);
 
-	startIndex = qMin(startIndex, rowCount() - 1);
-	endIndex = qMin(endIndex, rowCount() - 1);
+	startIndex = qMin(startIndex, rowCount());
+	endIndex = qMin(endIndex, rowCount());
 
 	if (startIndex == 0 && endIndex == rowCount() -1 && d->available.max)
 		return d->statistics.maximum;
@@ -2013,8 +2015,10 @@ double Column::maximum(int startIndex, int endIndex) const {
 		int foundIndex = 0;
 		if (property == Properties::Constant || property == Properties::MonotonicDecreasing)
 			foundIndex = startIndex;
-		else if (property == Properties::MonotonicIncreasing)
-			foundIndex = endIndex;
+		else if (property == Properties::MonotonicIncreasing) {
+			foundIndex = endIndex - 1;
+			foundIndex = qMax(0, foundIndex);
+		}
 
 		switch (mode) {
 		case ColumnMode::Double:
