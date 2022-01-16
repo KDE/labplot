@@ -271,7 +271,10 @@ public:
 	 */
 	explicit ColumnReplaceCmd(ColumnPrivate* col, int first, const QVector<T>& new_values, QUndoCommand* parent = nullptr)
 		: QUndoCommand(parent), m_col(col), m_first(first), m_new_values(new_values) {
-		setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() - 1));
+		if (m_first < 0)
+			setText(i18n("%1: replace values", col->name()));
+		else
+			setText(i18n("%1: replace the values for rows %2 to %3", col->name(), first, first + new_values.count() - 1));
 	}
 
 	void redo() override {
