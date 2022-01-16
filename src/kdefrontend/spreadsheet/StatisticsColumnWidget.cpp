@@ -285,16 +285,11 @@ void StatisticsColumnWidget::showHistogram() {
 
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
-		auto wrapper = axis->title()->text();
-		QTextEdit te(wrapper.text);
-		te.selectAll();
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
-			te.setText(m_column->name());
+			axis->title()->setText(m_column->name());
 			axis->setMajorGridPen(QPen(Qt::NoPen));
 		} else
-			te.setText(i18n("Frequency"));
-
-		axis->title()->setText(te.toHtml());
+			axis->title()->setText(i18n("Frequency"));
 
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}
@@ -318,15 +313,10 @@ void StatisticsColumnWidget::showKDEPlot() {
 	//set the axes lables
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
-		auto wrapper = axis->title()->text();
-		QTextEdit te(wrapper.text);
-		te.selectAll();
 		if (axis->orientation() == Axis::Orientation::Horizontal)
-			te.setText(m_column->name());
+			axis->title()->setText(m_column->name());
 		else
-			te.setText(i18n("Density"));
-
-		axis->title()->setText(te.toHtml());
+			axis->title()->setText(i18n("Density"));
 
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}
@@ -392,15 +382,10 @@ void StatisticsColumnWidget::showQQPlot() {
 
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
-		auto wrapper = axis->title()->text();
-		QTextEdit te(wrapper.text);
-		te.selectAll();
 		if (axis->orientation() == Axis::Orientation::Horizontal)
-			te.setText(i18n("Theoretical Quantiles"));
+			axis->title()->setText(i18n("Theoretical Quantiles"));
 		else
-			te.setText(i18n("Sample Quantiles"));
-
-		axis->title()->setText(te.toHtml());
+			axis->title()->setText(i18n("Sample Quantiles"));
 
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}
@@ -493,19 +478,14 @@ void StatisticsColumnWidget::showBoxPlot() {
 
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
-		auto wrapper = axis->title()->text();
-		QTextEdit te(wrapper.text);
-		te.selectAll();
 		if (axis->orientation() == Axis::Orientation::Horizontal) {
 			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
 			axis->setMajorTicksDirection(Axis::noTicks);
 			axis->setMajorGridPen(QPen(Qt::NoPen));
 			axis->setMinorGridPen(QPen(Qt::NoPen));
-			te.setText(QString());
+			axis->title()->setText(QString());
 		} else
-			te.setText(m_column->name());
-
-		axis->title()->setText(te.toHtml());
+			axis->title()->setText(m_column->name());
 
 		axis->setMinorTicksDirection(Axis::noTicks);
 	}

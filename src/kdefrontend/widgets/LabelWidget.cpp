@@ -639,6 +639,7 @@ void LabelWidget::modeChanged(int index) {
 
 	QString text = plain ? ui.teLabel->toPlainText() : ui.teLabel->toHtml();
 	TextLabel::TextWrapper wrapper(text, mode, !plain);
+	DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(wrapper.text))
 	for (auto* label : m_labelsList)
 		label->setText(wrapper);
 }
