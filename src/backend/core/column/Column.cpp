@@ -565,7 +565,7 @@ void Column::setTextAt(int row, const QString& new_value) {
 }
 
 void Column::setText(const QVector<QString>& texts) {
-	d->replaceTexts(-1, texts);
+	replaceTexts(-1, texts);
 }
 
 /**
@@ -574,7 +574,10 @@ void Column::setText(const QVector<QString>& texts) {
  * Use this only when columnMode() is Text
  */
 void Column::replaceTexts(int first, const QVector<QString>& new_values) {
-	exec(new ColumnReplaceCmd<QString>(d, first, new_values));
+	if (isLoading())
+		d->replaceTexts(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<QString>(d, first, new_values));
 	invalidateProperties();
 }
 
@@ -608,12 +611,15 @@ void Column::setTimeAt(int row, QTime new_value) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::setDateTimeAt(int row, const QDateTime& new_value) {
-	exec(new ColumnSetCmd<QDateTime>(d, row, new_value, dateTimeAt(row)));
+	if (isLoading())
+		d->setValueAt(row, new_value);
+	else
+		exec(new ColumnSetCmd<QDateTime>(d, row, new_value, dateTimeAt(row)));
 	invalidateProperties();
 }
 
 void Column::setDateTimes(const QVector<QDateTime>& dateTimes) {
-	d->replaceDateTimes(-1, dateTimes);
+	replaceDateTimes(-1, dateTimes);
 }
 
 /**
@@ -622,7 +628,10 @@ void Column::setDateTimes(const QVector<QDateTime>& dateTimes) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void Column::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
-	exec(new ColumnReplaceCmd<QDateTime>(d, first, new_values));
+	if (isLoading())
+		d->replaceDateTimes(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<QDateTime>(d, first, new_values));
 	invalidateProperties();
 }
 
@@ -632,7 +641,7 @@ void Column::addValueLabel(const QDateTime& value, const QString& label) {
 }
 
 void Column::setValues(const QVector<double>& values) {
-	d->replaceValues(-1, values);
+	replaceValues(-1, values);
 }
 
 /**
@@ -641,7 +650,10 @@ void Column::setValues(const QVector<double>& values) {
  * Use this only when columnMode() is Numeric
  */
 void Column::setValueAt(int row, const double new_value) {
-	exec(new ColumnSetCmd<double>(d, row, new_value, valueAt(row)));
+	if (isLoading())
+		d->setValueAt(row, new_value);
+	else
+		exec(new ColumnSetCmd<double>(d, row, new_value, valueAt(row)));
 	invalidateProperties();
 }
 
@@ -651,7 +663,10 @@ void Column::setValueAt(int row, const double new_value) {
  * Use this only when columnMode() is Numeric
  */
 void Column::replaceValues(int first, const QVector<double>& new_values) {
-	exec(new ColumnReplaceCmd<double>(d, first, new_values));
+	if (isLoading())
+		d->replaceValues(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<double>(d, first, new_values));
 	invalidateProperties();
 }
 
@@ -662,7 +677,7 @@ void Column::addValueLabel(double value, const QString& label) {
 }
 
 void Column::setIntegers(const QVector<int>& integers) {
-	d->replaceInteger(-1, integers);
+	replaceInteger(-1, integers);
 }
 
 /**
@@ -671,7 +686,10 @@ void Column::setIntegers(const QVector<int>& integers) {
  * Use this only when columnMode() is Integer
  */
 void Column::setIntegerAt(int row, const int new_value) {
-	exec(new ColumnSetCmd<int>(d, row, new_value, integerAt(row)));
+	if (isLoading())
+		d->setValueAt(row, new_value);
+	else
+		exec(new ColumnSetCmd<int>(d, row, new_value, integerAt(row)));
 	invalidateProperties();
 }
 
@@ -681,7 +699,10 @@ void Column::setIntegerAt(int row, const int new_value) {
  * Use this only when columnMode() is Integer
  */
 void Column::replaceInteger(int first, const QVector<int>& new_values) {
-	exec(new ColumnReplaceCmd<int>(d, first, new_values));
+	if (isLoading())
+		d->replaceInteger(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<int>(d, first, new_values));
 	invalidateProperties();
 }
 
@@ -691,7 +712,7 @@ void Column::addValueLabel(int value, const QString& label) {
 }
 
 void Column::setBigInts(const QVector<qint64>& bigInts) {
-	d->replaceBigInt(-1, bigInts);
+	replaceBigInt(-1, bigInts);
 }
 
 /**
@@ -700,7 +721,10 @@ void Column::setBigInts(const QVector<qint64>& bigInts) {
  * Use this only when columnMode() is BigInt
  */
 void Column::setBigIntAt(int row, const qint64 new_value) {
-	exec(new ColumnSetCmd<qint64>(d, row, new_value, bigIntAt(row)));
+	if (isLoading())
+		d->setValueAt(row, new_value);
+	else
+		exec(new ColumnSetCmd<qint64>(d, row, new_value, bigIntAt(row)));
 	invalidateProperties();
 }
 
@@ -710,7 +734,10 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
  * Use this only when columnMode() is BigInt
  */
 void Column::replaceBigInt(int first, const QVector<qint64>& new_values) {
-	exec(new ColumnReplaceCmd<qint64>(d, first, new_values));
+	if (isLoading())
+		d->replaceBigInt(first, new_values);
+	else
+		exec(new ColumnReplaceCmd<qint64>(d, first, new_values));
 	invalidateProperties();
 }
 

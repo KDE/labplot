@@ -878,6 +878,7 @@ bool Spreadsheet::load(XmlStreamReader* reader, bool preview) {
 				if (!readCommentElement(reader)) return false;
 			} else if (reader->name() == "column") {
 				Column* column = new Column(QString());
+				column->setIsLoading(true);
 				if (!column->load(reader, preview)) {
 					delete column;
 					setColumnCount(0);
