@@ -560,7 +560,7 @@ void Column::clearFormulas() {
  * Use this only when columnMode() is Text
  */
 void Column::setTextAt(int row, const QString& new_value) {
-	exec(new ColumnSetCmd<QString>(d, row, new_value, textAt(row)));
+	exec(new ColumnSetCmd<QString>(d, row, textAt(row), new_value));
 	invalidateProperties();
 }
 
@@ -614,7 +614,7 @@ void Column::setDateTimeAt(int row, const QDateTime& new_value) {
 	if (isLoading())
 		d->setValueAt(row, new_value);
 	else
-		exec(new ColumnSetCmd<QDateTime>(d, row, new_value, dateTimeAt(row)));
+		exec(new ColumnSetCmd<QDateTime>(d, row, dateTimeAt(row), new_value));
 	invalidateProperties();
 }
 
@@ -653,7 +653,7 @@ void Column::setValueAt(int row, const double new_value) {
 	if (isLoading())
 		d->setValueAt(row, new_value);
 	else
-		exec(new ColumnSetCmd<double>(d, row, new_value, valueAt(row)));
+		exec(new ColumnSetCmd<double>(d, row, valueAt(row), new_value));
 	invalidateProperties();
 }
 
@@ -689,7 +689,7 @@ void Column::setIntegerAt(int row, const int new_value) {
 	if (isLoading())
 		d->setValueAt(row, new_value);
 	else
-		exec(new ColumnSetCmd<int>(d, row, new_value, integerAt(row)));
+		exec(new ColumnSetCmd<int>(d, row, integerAt(row), new_value));
 	invalidateProperties();
 }
 
@@ -724,7 +724,7 @@ void Column::setBigIntAt(int row, const qint64 new_value) {
 	if (isLoading())
 		d->setValueAt(row, new_value);
 	else
-		exec(new ColumnSetCmd<qint64>(d, row, new_value, bigIntAt(row)));
+		exec(new ColumnSetCmd<qint64>(d, row, bigIntAt(row), new_value));
 	invalidateProperties();
 }
 
