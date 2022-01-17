@@ -264,7 +264,7 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 /* ============================ setter methods and undo commands ================= */
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper &textWrapper) {
-	// DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(textWrapper.text))
+	//DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(textWrapper.text) << std::endl)
 	Q_D(TextLabel);
 
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.mode != d->textWrapper.mode)
@@ -272,17 +272,18 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 			textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder) {
 		bool changePos = d->textWrapper.text.isEmpty();
 		if (textWrapper.mode == TextLabel::Mode::Text) {
-			QDEBUG(Q_FUNC_INFO << ", text = " << d->textWrapper.text <<  ", font color = " << d->fontColor)
+			//QDEBUG("\n" << Q_FUNC_INFO << ", OLD TEXT = " << d->textWrapper.text <<  ", font color = " << d->fontColor)
+			//DEBUG("\n" << Q_FUNC_INFO << ", NEW TEXT = " << STDSTRING(textWrapper.text) << std::endl)
 			// keep text formatting
 			QTextEdit te(d->textWrapper.text);
 			te.selectAll();
-			//TODO
-			if (d->textWrapper.mode != TextLabel::Mode::Text)	// restore text color when switch to text
-				te.setTextColor(d->fontColor);
 			te.setText(textWrapper.text);
-			if (d->textWrapper.mode != TextLabel::Mode::Text)	// restore text color when switch to text
-				te.setTextColor(d->fontColor);
-			exec(new TextLabelSetTextCmd(d, te.toHtml(), ki18n("%1: set label text")));
+			te.selectAll();
+			te.setTextColor(d->fontColor);
+
+			TextWrapper tw = textWrapper;
+			tw.text = te.toHtml();
+			exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
 		} else
 			exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 		// If previously the text was empty, the bounding rect is zero
