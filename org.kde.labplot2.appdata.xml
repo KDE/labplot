@@ -97,6 +97,7 @@
       <caption>Basic visualization of data</caption>
       <caption xml:lang="ca">Visualització bàsica de dades</caption>
       <caption xml:lang="ca-valencia">Visualització bàsica de dades</caption>
+      <caption xml:lang="es">Visualización básica de datos</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
       <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
@@ -108,6 +109,7 @@
       <caption>Basic visualization of data</caption>
       <caption xml:lang="ca">Visualització bàsica de dades</caption>
       <caption xml:lang="ca-valencia">Visualització bàsica de dades</caption>
+      <caption xml:lang="es">Visualización básica de datos</caption>
       <caption xml:lang="fr">Affichage basique de données</caption>
       <caption xml:lang="nl">Grondbeginselen visualisatie van gegevens</caption>
       <caption xml:lang="sv">Grundläggande visualisering av data</caption>
@@ -119,6 +121,7 @@
       <caption>Advanced layouting of plots and images</caption>
       <caption xml:lang="ca">Disposició avançada de grafs i imatges</caption>
       <caption xml:lang="ca-valencia">Disposició avançada de grafs i imatges</caption>
+      <caption xml:lang="es">Diseño avanzado de gráficos e imágenes</caption>
       <caption xml:lang="fr">Mise en forme avancée de tracés et d'images</caption>
       <caption xml:lang="nl">Gevorderde indeling van plots en afbeeldingen</caption>
       <caption xml:lang="sv">Avancerad layout av diagram och bilder</caption>
@@ -131,6 +134,7 @@
       <caption xml:lang="ca">Permet temes</caption>
       <caption xml:lang="ca-valencia">Permet temes</caption>
       <caption xml:lang="cs">Motivy</caption>
+      <caption xml:lang="es">Temas</caption>
       <caption xml:lang="fr">Application de thèmes</caption>
       <caption xml:lang="nl">Thema's</caption>
       <caption xml:lang="sv">Teman</caption>
@@ -142,6 +146,7 @@
       <caption>Visualization of mathematical functions</caption>
       <caption xml:lang="ca">Visualització de funcions matemàtiques</caption>
       <caption xml:lang="ca-valencia">Visualització de funcions matemàtiques</caption>
+      <caption xml:lang="es">Visualización de funciones matemáticas</caption>
       <caption xml:lang="fr">Affichage de fonctions mathématiques</caption>
       <caption xml:lang="nl">Wiskundige functies visualiseren</caption>
       <caption xml:lang="sv">Visualisering av matematiska funktioner</caption>
@@ -153,6 +158,7 @@
       <caption>Fit pre-defined or custom models to the data</caption>
       <caption xml:lang="ca">Ajust de models predefinits o personalitzats a les dades</caption>
       <caption xml:lang="ca-valencia">Ajust de models predefinits o personalitzats a les dades</caption>
+      <caption xml:lang="es">Ajuste de modelos predefinidos o personalizados a los datos</caption>
       <caption xml:lang="fr">Ajuster des modèles prédéfinis ou personnalisés aux données</caption>
       <caption xml:lang="nl">Voorgedefinieerde of aangepaste modellen aan gegevens aanpassen</caption>
       <caption xml:lang="sv">Anpassa data till fördefinierade eller egna modeller</caption>
@@ -164,6 +170,7 @@
       <caption>Smooth the data with the help of various smoothing methods</caption>
       <caption xml:lang="ca">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
       <caption xml:lang="ca-valencia">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
+      <caption xml:lang="es">Suavizar los datos con la ayuda de diversos métodos de suavizado</caption>
       <caption xml:lang="fr">Lisser les données grâce aux différentes méthodes de lissage</caption>
       <caption xml:lang="nl">Gladstrijken van de gegevens met diverse methodes</caption>
       <caption xml:lang="sv">Jämna ut data med hjälp av diverse utjämningsmetoder</caption>
@@ -175,6 +182,7 @@
       <caption>Notebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia and Lua</caption>
       <caption xml:lang="ca">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia i Lua</caption>
       <caption xml:lang="ca-valencia">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia i Lua</caption>
+      <caption xml:lang="es">Interfaz de bloc de notas para sesiones interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia y Lua</caption>
       <caption xml:lang="fr">Interface pour ordinateur de type » ;Notebook » pour des sessions interactives pour Maxima, Octave, R, Sage, Scilab, Python, Julia and Lua.</caption>
       <caption xml:lang="nl">Notebook-interface voor interactieve sessies  in Maxima, Octave, R, Sage, Scilab, Python, Julia en Lua</caption>
       <caption xml:lang="sv">Anteckningsbok för interaktiva sessioner i Maxima, Octave, R, Sage, Scilab, Python, Julia och Lua</caption>
@@ -186,6 +194,7 @@
       <caption>Signal analysis</caption>
       <caption xml:lang="ca">Anàlisi de senyals</caption>
       <caption xml:lang="ca-valencia">Anàlisi de senyals</caption>
+      <caption xml:lang="es">Análisis de señales</caption>
       <caption xml:lang="fr">Analyse de signaux</caption>
       <caption xml:lang="nl">Signaalanalyse</caption>
       <caption xml:lang="sv">Signalanalys</caption>
@@ -196,6 +205,8 @@
     <screenshot type="default">
       <caption>Herzsprung-Russel diagram in LabPlot</caption>
       <caption xml:lang="ca">Diagrama Herzsprung-Russel en el LabPlot</caption>
+      <caption xml:lang="es">Diagrama de Herzsprung-Russel en LabPlot</caption>
+      <caption xml:lang="fr">Diagramme de Herzsprung-Russel dans LabPlot</caption>
       <caption xml:lang="nl">Herzsprung-Russel-diagram in LabPlot</caption>
       <caption xml:lang="sv">Herzsprung-Russel-diagram i LabPlot</caption>
       <caption xml:lang="uk">Діаграма Герцшпрунга-Рассела у LabPlot</caption>
@@ -206,6 +217,7 @@
       <caption>Visualization of data calculated in an interactive Maxima session</caption>
       <caption xml:lang="ca">Visualització de dades calculades en una sessió interactiva del Maxima</caption>
       <caption xml:lang="ca-valencia">Visualització de dades calculades en una sessió interactiva del Maxima</caption>
+      <caption xml:lang="es">Visualización de datos calculados en una sesión interactiva de Maxima</caption>
       <caption xml:lang="fr">Affichage de données calculées dans une session interactive de Maxima</caption>
       <caption xml:lang="nl">Visualiseren van gegevens, berekend in een interactieve sessie in Maxima</caption>
       <caption xml:lang="sv">Visualisering av data beräknad i en interaktiv Maxima-session</caption>
