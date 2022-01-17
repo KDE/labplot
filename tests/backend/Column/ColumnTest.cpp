@@ -143,13 +143,13 @@ void ColumnTest::saveLoadDateTime() {
 
 	QCOMPARE(c2.rowCount(), 4);
 	QCOMPARE(c2.dateTimeAt(0).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(0).toString(Qt::DateFormat::ISODateWithMs), "2017-03-26T02:14:34.000Z");
+	QCOMPARE(c2.dateTimeAt(0), QDateTime::fromString("2017-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
 	QCOMPARE(c2.dateTimeAt(1).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(1).toString(Qt::DateFormat::ISODateWithMs), "2018-03-26T02:14:34.000Z");
+	QCOMPARE(c2.dateTimeAt(1), QDateTime::fromString("2018-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
 	QCOMPARE(c2.dateTimeAt(2).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(2).toString(Qt::DateFormat::ISODateWithMs), "2019-03-26T02:14:34.000Z");
+	QCOMPARE(c2.dateTimeAt(2), QDateTime::fromString("2019-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
 	QCOMPARE(c2.dateTimeAt(3).isValid(), true);
-	QCOMPARE(c2.dateTimeAt(3).toString(Qt::DateFormat::ISODateWithMs), "2019-03-26T02:14:34.000Z");
+	QCOMPARE(c2.dateTimeAt(3), QDateTime::fromString("2019-03-26T02:14:34.000Z", Qt::DateFormat::ISODateWithMs));
 }
 
 void ColumnTest::loadDoubleFromProject() {
