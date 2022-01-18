@@ -12,14 +12,12 @@
 #define MULTIRANGETEST_H
 
 #include <QtTest>
+#include "tests/CommonTest.h"
 
-class MultiRangeTest : public QObject {
+class MultiRangeTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
-	//import of LabPlot projects
 	void applyActionToSelection_CurveSelected_ZoomSelection();
 
 	// zoom selection tests

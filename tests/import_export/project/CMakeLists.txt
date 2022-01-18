@@ -1,4 +1,4 @@
-add_executable (projectimporttest ProjectImportTest.cpp)
+add_executable (projectimporttest ProjectImportTest.cpp ../../CommonTest.cpp)
 
 target_link_libraries(projectimporttest Qt5::Test KF5::Archive KF5::XmlGui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 IF (APPLE)
