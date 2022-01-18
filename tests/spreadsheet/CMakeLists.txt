@@ -1,11 +1,6 @@
 INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
+add_executable (SpreadsheetTest SpreadsheetTest.cpp)
 
-add_executable (spreadsheettest SpreadsheetTest.cpp)
+target_link_libraries(SpreadsheetTest labplot2lib Qt5::Test)
 
-target_link_libraries(spreadsheettest Qt5::Test ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
-IF (APPLE)
-	target_link_libraries(spreadsheettest KDMacTouchBar)
-ENDIF ()
-target_link_libraries(spreadsheettest labplot2lib)
-
-add_test(NAME spreadsheettest COMMAND spreadsheettest)
+add_test(NAME SpreadsheetTest COMMAND SpreadsheetTest)

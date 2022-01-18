@@ -1,7 +1,6 @@
 INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
-add_executable (nslinttest NSLIntTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
+add_executable (NSLIntTest NSLIntTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
 
-target_link_libraries(nslinttest Qt5::Test ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
-target_link_libraries(nslinttest labplot2lib)
+target_link_libraries(NSLIntTest labplot2lib Qt5::Test)
 
-add_test(NAME nslinttest COMMAND nslinttest)
+add_test(NAME NSLIntTest COMMAND NSLIntTest)

@@ -1,7 +1,6 @@
 INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
-add_executable (nslgeomtest NSLGeomTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
+add_executable (NSLGeomTest NSLGeomTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
 
-target_link_libraries(nslgeomtest Qt5::Test ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
-target_link_libraries(nslgeomtest labplot2lib)
+target_link_libraries(NSLGeomTest labplot2lib Qt5::Test)
 
-add_test(NAME nslgeomtest COMMAND nslgeomtest)
+add_test(NAME NSLGeomTest COMMAND NSLGeomTest)
