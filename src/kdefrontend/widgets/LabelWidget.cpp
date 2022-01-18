@@ -562,77 +562,20 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 	ui.kfontRequester->setFont(format.font());
 }
 
+// called when textlabel mode is changed
+void LabelWidget::labelModeChanged(TextLabel::Mode mode) {
+	if (m_initializing) return;
+	const Lock lock(m_initializing);
+
+	updateMode(mode);
+}
+
+// Called when the combobox changes index
 void LabelWidget::modeChanged(int index) {
 	auto mode = static_cast<TextLabel::Mode>(index);
 	bool plain = (mode != TextLabel::Mode::Text);
 
-	//hide text editing elements if TeX-option is used
-	ui.tbFontBold->setVisible(!plain);
-	ui.tbFontItalic->setVisible(!plain);
-
-	//TODO: https://bugreports.qt.io/browse/QTBUG-25420
-// 	ui.tbFontUnderline->setVisible(!plain);
-// 	ui.tbFontStrikeOut->setVisible(!plain);
-
-	ui.tbFontSubScript->setVisible(!plain);
-	ui.tbFontSuperScript->setVisible(!plain);
-
-	ui.lFont->setVisible(!plain);
-	ui.kfontRequester->setVisible(!plain);
-
-	//TODO:
-	//for normal text we need to hide the background color because of QTBUG-25420
-	ui.kcbBackgroundColor->setVisible(plain);
-	ui.lBackgroundColor->setVisible(plain);
-
-	if (plain) {
-		//reset all applied formattings when switching from html to tex mode
-		QTextCursor cursor = ui.teLabel->textCursor();
-		int position = cursor.position();
-		ui.teLabel->selectAll();
-		QTextCharFormat format;
-		ui.teLabel->setCurrentCharFormat(format);
-		cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, position);
-		ui.teLabel->setTextCursor(cursor);
-
-#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
-		m_highlighter->setDocument(ui.teLabel->document());
-		if (mode == TextLabel::Mode::LaTeX)
-			m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("LaTeX")));
-		else
-			m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("Markdown")));
-#endif
-		KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("Settings_Worksheet"));
-		QString engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
-		if (engine == QLatin1String("xelatex") || engine == QLatin1String("lualatex")) {
-			ui.lFontTeX->setVisible(true);
-			ui.kfontRequesterTeX->setVisible(true);
-			ui.lFontSize->setVisible(false);
-			ui.sbFontSize->setVisible(false);
-		} else {
-			ui.lFontTeX->setVisible(false);
-			ui.kfontRequesterTeX->setVisible(false);
-			ui.lFontSize->setVisible(true);
-			ui.sbFontSize->setVisible(true);
-		}
-
-		//update TeX colors
-		ui.kcbFontColor->setColor(m_label->fontColor());
-		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
-	} else {
-#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
-		m_highlighter->setDocument(nullptr);
-#endif
-		ui.lFontTeX->setVisible(false);
-		ui.kfontRequesterTeX->setVisible(false);
-		ui.lFontSize->setVisible(false);
-		ui.sbFontSize->setVisible(false);
-	}
-
-	//when switching to non-LaTeX mode, set the background color to white just for the case the latex code provided by the user
-	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
-	if (mode != TextLabel::Mode::LaTeX)
-		ui.teLabel->setStyleSheet(QString());
+	labelModeChanged(mode);
 
 	if (m_initializing)
 		return;
@@ -1193,7 +1136,7 @@ void LabelWidget::labelTextWrapperChanged(const TextLabel::TextWrapper& text) {
 
 	const int index = static_cast<int>(text.mode);
 	ui.cbMode->setCurrentIndex(index);
-	this->modeChanged(index);
+	this->labelModeChanged(text.mode);
 }
 
 /*!
@@ -1326,7 +1269,7 @@ void LabelWidget::load() {
 	//Text
 	const int index = static_cast<int>(m_label->text().mode);
 	ui.cbMode->setCurrentIndex(index);
-	this->modeChanged(index);
+	this->updateMode(m_label->text().mode);
 
 	if(!allowPlaceholder) {
 		if (m_label->text().mode != TextLabel::Mode::Text)
@@ -1432,6 +1375,79 @@ void LabelWidget::load() {
 	ui.sbBorderWidth->setValue( Worksheet::convertFromSceneUnits(m_label->borderPen().widthF(), Worksheet::Unit::Point) );
 	ui.sbBorderOpacity->setValue( round(m_label->borderOpacity()*100) );
 	GuiTools::updatePenStyles(ui.cbBorderStyle, ui.kcbBorderColor->color());
+}
+
+// General updater function to update the dock (used also in the load method)
+void LabelWidget::updateMode(TextLabel::Mode mode) {
+	bool plain = (mode != TextLabel::Mode::Text);
+
+	//hide text editing elements if TeX-option is used
+	ui.tbFontBold->setVisible(!plain);
+	ui.tbFontItalic->setVisible(!plain);
+
+	//TODO: https://bugreports.qt.io/browse/QTBUG-25420
+// 	ui.tbFontUnderline->setVisible(!plain);
+// 	ui.tbFontStrikeOut->setVisible(!plain);
+
+	ui.tbFontSubScript->setVisible(!plain);
+	ui.tbFontSuperScript->setVisible(!plain);
+
+	ui.lFont->setVisible(!plain);
+	ui.kfontRequester->setVisible(!plain);
+
+	//TODO:
+	//for normal text we need to hide the background color because of QTBUG-25420
+	ui.kcbBackgroundColor->setVisible(plain);
+	ui.lBackgroundColor->setVisible(plain);
+
+	if (plain) {
+		//reset all applied formattings when switching from html to tex mode
+		QTextCursor cursor = ui.teLabel->textCursor();
+		int position = cursor.position();
+		ui.teLabel->selectAll();
+		QTextCharFormat format;
+		ui.teLabel->setCurrentCharFormat(format);
+		cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, position);
+		ui.teLabel->setTextCursor(cursor);
+
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+		m_highlighter->setDocument(ui.teLabel->document());
+		if (mode == TextLabel::Mode::LaTeX)
+			m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("LaTeX")));
+		else
+			m_highlighter->setDefinition(m_repository.definitionForName(QLatin1String("Markdown")));
+#endif
+		KConfigGroup conf(KSharedConfig::openConfig(), QLatin1String("Settings_Worksheet"));
+		QString engine = conf.readEntry(QLatin1String("LaTeXEngine"), "");
+		if (engine == QLatin1String("xelatex") || engine == QLatin1String("lualatex")) {
+			ui.lFontTeX->setVisible(true);
+			ui.kfontRequesterTeX->setVisible(true);
+			ui.lFontSize->setVisible(false);
+			ui.sbFontSize->setVisible(false);
+		} else {
+			ui.lFontTeX->setVisible(false);
+			ui.kfontRequesterTeX->setVisible(false);
+			ui.lFontSize->setVisible(true);
+			ui.sbFontSize->setVisible(true);
+		}
+
+		//update TeX colors
+		ui.kcbFontColor->setColor(m_label->fontColor());
+		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
+	} else {
+#ifdef HAVE_KF5_SYNTAX_HIGHLIGHTING
+		m_highlighter->setDocument(nullptr);
+#endif
+		ui.lFontTeX->setVisible(false);
+		ui.kfontRequesterTeX->setVisible(false);
+		ui.lFontSize->setVisible(false);
+		ui.sbFontSize->setVisible(false);
+	}
+
+	//when switching to non-LaTeX mode, set the background color to white just for the case the latex code provided by the user
+	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
+	if (mode != TextLabel::Mode::LaTeX)
+		ui.teLabel->setStyleSheet(QString());
 }
 
 void LabelWidget::loadConfig(KConfigGroup& group) {
