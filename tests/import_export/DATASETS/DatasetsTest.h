@@ -1,5 +1,5 @@
 /*
-	File                 : DatasetsUnitTest.h
+	File                 : DatasetsTest.h
 	Project              : LabPlot
 	Description          : Tests for Dataset related features
 	--------------------------------------------------------------------
@@ -7,13 +7,12 @@
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
-#ifndef MQTTUNITTEST_H
-#define MQTTUNITTEST_H
+#ifndef DATASETSTEST_H
+#define DATASETSTEST_H
 
 #include <QtTest>
 
-class DatasetsUnitTest : public QObject {
-
+class DatasetsTest : public QObject {
 	Q_OBJECT	
 
 private Q_SLOTS:

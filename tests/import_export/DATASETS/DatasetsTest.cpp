@@ -1,5 +1,5 @@
 /*
-	File                 : DatasetsUnitTest.cpp
+	File                 : DatasetsTest.cpp
 	Project              : LabPlot
 	Description          : Tests for Dataset related features
 	--------------------------------------------------------------------
@@ -8,7 +8,7 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "DatasetsUnitTest.h"
+#include "DatasetsTest.h"
 
 #include "backend/datasources/filters/AsciiFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
@@ -26,7 +26,7 @@
 #include <QTreeWidgetItem>
 #include <QStandardPaths>
 
-void DatasetsUnitTest::initTestCase() {	
+void DatasetsTest::initTestCase() {	
 	const QString currentDir = __FILE__;
 	m_dataDir = currentDir.left(currentDir.lastIndexOf(QDir::separator())) + QDir::separator() + QLatin1String("data") + QDir::separator();
 
@@ -43,7 +43,7 @@ void DatasetsUnitTest::initTestCase() {
 	copyFiles();
 }
 
-void DatasetsUnitTest::copyFiles() {
+void DatasetsTest::copyFiles() {
 	const QString baseDir = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first();
 
 	if(!QDir(baseDir).exists())
@@ -60,7 +60,7 @@ void DatasetsUnitTest::copyFiles() {
 //#####################  Test processing metadata files  #######################
 //##############################################################################
 
-void DatasetsUnitTest::removeFiles() {
+void DatasetsTest::removeFiles() {
 	const QString baseDir = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first();
 	const QString containingDir = "labplot_data";
 	const QString jsonDir = baseDir + QDir::separator() + containingDir + QDir::separator();
@@ -74,7 +74,7 @@ void DatasetsUnitTest::removeFiles() {
 	}
 }
 
-void DatasetsUnitTest::testCategories() {
+void DatasetsTest::testCategories() {
 	copyFiles();
 	ImportDatasetWidget* importWidget = new ImportDatasetWidget(nullptr);
 	DatasetModel* model = new DatasetModel(importWidget->getDatasetsMap());
@@ -88,7 +88,7 @@ void DatasetsUnitTest::testCategories() {
 	delete  model;
 }
 
-void DatasetsUnitTest::testSubcategories() {
+void DatasetsTest::testSubcategories() {
 	ImportDatasetWidget* importWidget = new ImportDatasetWidget(nullptr);
 	DatasetModel* model = new DatasetModel(importWidget->getDatasetsMap());
 
@@ -102,7 +102,7 @@ void DatasetsUnitTest::testSubcategories() {
 	delete  model;
 }
 
-void DatasetsUnitTest::testDatasets() {
+void DatasetsTest::testDatasets() {
 	ImportDatasetWidget* importWidget = new ImportDatasetWidget(nullptr);
 	DatasetModel* model = new DatasetModel(importWidget->getDatasetsMap());
 
@@ -118,7 +118,7 @@ void DatasetsUnitTest::testDatasets() {
 //###################  Test processing and downloading dataset  ################
 //##############################################################################
 
-void DatasetsUnitTest::testProcessDataset() {
+void DatasetsTest::testProcessDataset() {
 	ImportDatasetWidget* importWidget = new ImportDatasetWidget(nullptr);
 
 	Spreadsheet* spreadsheet = new Spreadsheet("test");
@@ -168,7 +168,7 @@ void DatasetsUnitTest::testProcessDataset() {
 //###########  Test adding new datasets to the existing collection  ############
 //##############################################################################
 
-void DatasetsUnitTest::testNewCollection() {
+void DatasetsTest::testNewCollection() {
 	removeFiles();
 	copyFiles();
 
@@ -193,7 +193,7 @@ void DatasetsUnitTest::testNewCollection() {
 	QCOMPARE(model->allDatasetsList().toStringList().size(), 7);
 }
 
-void DatasetsUnitTest::testNewCategory() {
+void DatasetsTest::testNewCategory() {
 	removeFiles();
 	copyFiles();
 
@@ -218,7 +218,7 @@ void DatasetsUnitTest::testNewCategory() {
 	QCOMPARE(model->allDatasetsList().toStringList().size(), 7);
 }
 
-void DatasetsUnitTest::testNewSubcategory() {
+void DatasetsTest::testNewSubcategory() {
 	removeFiles();
 	copyFiles();
 
@@ -243,7 +243,7 @@ void DatasetsUnitTest::testNewSubcategory() {
 	QCOMPARE(model->allDatasetsList().toStringList().size(), 7);
 }
 
-void DatasetsUnitTest::testNewDataset() {
+void DatasetsTest::testNewDataset() {
 	removeFiles();
 	copyFiles();
 
@@ -268,6 +268,6 @@ void DatasetsUnitTest::testNewDataset() {
 	QCOMPARE(model->allDatasetsList().toStringList().size(), 7);
 }
 
-QTEST_MAIN(DatasetsUnitTest)
+QTEST_MAIN(DatasetsTest)
 
 

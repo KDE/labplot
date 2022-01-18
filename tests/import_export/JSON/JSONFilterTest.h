@@ -1,5 +1,5 @@
 /*
-    File                 : JsonFilterTest.h
+    File                 : JSONFilterTest.h
     Project              : LabPlot
     Description          : Tests for the JSON I/O-filter.
     --------------------------------------------------------------------
@@ -12,7 +12,7 @@
 
 #include <QtTest>
 
-class JsonFilterTest : public QObject {
+class JSONFilterTest : public QObject {
 	Q_OBJECT
 
 private Q_SLOTS:

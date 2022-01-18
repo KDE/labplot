@@ -1,7 +1,7 @@
 add_subdirectory(ASCII)
 add_subdirectory(JSON)
 add_subdirectory(MQTT)
-add_subdirectory(project)
+add_subdirectory(Project)
 
 IF (READSTAT_FOUND OR NOT WIN32)
 	add_subdirectory(ReadStat)
@@ -10,7 +10,7 @@ IF (MATIO_FOUND)
 	add_subdirectory(Matio)
 ENDIF ()
 IF (HDF5_FOUND)
-	add_subdirectory(HDF)
+	add_subdirectory(HDF5)
 ENDIF ()
 
 # add_subdirectory(DATASETS)
