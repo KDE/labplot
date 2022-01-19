@@ -265,16 +265,16 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
-	//DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(textWrapper.text) << std::endl)
-	//DEBUG(Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
+	DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(textWrapper.text) << std::endl)
+	DEBUG(Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
 
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.mode != d->textWrapper.mode)
 	        || ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
 			textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder) {
 		bool changePos = d->textWrapper.text.isEmpty();
 		if (textWrapper.mode == TextLabel::Mode::Text) {
-			//QDEBUG("\n" << Q_FUNC_INFO << ", OLD TEXT =" << d->textWrapper.text << ", font color =" << d->fontColor)
-			//DEBUG("\n" << Q_FUNC_INFO << ", NEW TEXT = " << STDSTRING(textWrapper.text) << std::endl)
+			QDEBUG("\n" << Q_FUNC_INFO << ", OLD TEXT =" << d->textWrapper.text << ", font color =" << d->fontColor)
+			DEBUG("\n" << Q_FUNC_INFO << ", NEW TEXT = " << STDSTRING(textWrapper.text) << std::endl)
 
 			TextWrapper tw = textWrapper;
 			if (d->textWrapper.mode != TextLabel::Mode::Text) {	// restore text formatting
@@ -283,6 +283,7 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 				te.setText(textWrapper.text);
 				te.selectAll();
 				te.setTextColor(d->fontColor);
+				te.setTextBackgroundColor(d->backgroundColor);
 
 				tw.text = te.toHtml();
 			}
@@ -536,10 +537,21 @@ void TextLabelPrivate::updatePosition() {
 	updates the static text.
  */
 void TextLabelPrivate::updateText() {
+	DEBUG(Q_FUNC_INFO)
 	if (suppressRetransform)
 		return;
 
 	switch (textWrapper.mode) {
+	case TextLabel::Mode::Text: {
+		DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(textWrapper.text))
+		m_textItem->show();
+		m_textItem->setHtml(textWrapper.text);
+
+		//the size of the label was most probably changed,
+		//recalculate the bounding box of the label
+		updateBoundingRect();
+		break;
+	}
 	case TextLabel::Mode::LaTeX: {
 		m_textItem->hide();
 		TeXRenderer::Formatting format;
@@ -551,17 +563,8 @@ void TextLabelPrivate::updateText() {
 		QFuture<QByteArray> future = QtConcurrent::run(TeXRenderer::renderImageLaTeX, textWrapper.text, &teXRenderSuccessful, format);
 		teXImageFutureWatcher.setFuture(future);
 
-		//don't need to call retransorm() here since it is done in updateTeXImage
+		//don't need to call retransform() here since it is done in updateTeXImage
 		//when the asynchronous rendering of the image is finished.
-		break;
-	}
-	case TextLabel::Mode::Text: {
-		m_textItem->show();
-		m_textItem->setHtml(textWrapper.text);
-
-		//the size of the label was most probably changed,
-		//recalculate the bounding box of the label
-		updateBoundingRect();
 		break;
 	}
 	case TextLabel::Mode::Markdown: {

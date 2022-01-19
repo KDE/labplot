@@ -62,6 +62,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
 
 	ui.kcbFontColor->setColor(Qt::black); // default color
+	ui.kcbBackgroundColor->setColor(Qt::white); // default color
 
 	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
 	ui.lBindLogicalPos->setToolTip(msg);
@@ -1162,10 +1163,11 @@ void LabelWidget::labelTeXFontChanged(const QFont& font) {
 	ui.sbFontSize->setValue(font.pointSize());
 }
 
-void LabelWidget::labelFontColorChanged(const QColor color) {
+void LabelWidget::labelFontColorChanged(const QColor& color) {
+	DEBUG(Q_FUNC_INFO)
 	// this function is only called when the theme is changed. Otherwise the color
 	// is directly in the html text.
-	// when the theme changes, the hole text should change color regardless of the color it has
+	// when the theme changes, the whole text should change color regardless of the color it has
 	const Lock lock(m_initializing);
 	ui.kcbFontColor->setColor(color);
 	ui.teLabel->selectAll();
@@ -1200,9 +1202,15 @@ void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
 	ui.lePositionYLogical->setText(numberLocale.toString(pos.y()));
 }
 
-void LabelWidget::labelBackgroundColorChanged(const QColor color) {
+void LabelWidget::labelBackgroundColorChanged(const QColor& color) {
+	DEBUG(Q_FUNC_INFO)
+	// this function is only called when the theme is changed. Otherwise the color
+	// is directly in the html text.
+	// when the theme changes, the whole text should change color regardless of the color it has
 	const Lock lock(m_initializing);
 	ui.kcbBackgroundColor->setColor(color);
+	ui.teLabel->selectAll();
+	ui.teLabel->setTextBackgroundColor(color);
 }
 
 void LabelWidget::labelOffsetxChanged(qreal offset) {
@@ -1299,13 +1307,14 @@ void LabelWidget::load() {
 	if (!m_label->text().text.isEmpty()) {
 		QTextCharFormat format = ui.teLabel->currentCharFormat();
 		ui.kcbFontColor->setColor(format.foreground().color());
-		//TODO
 		ui.kcbBackgroundColor->setColor(format.background().color());
-	} else
+	} else {
 		ui.kcbFontColor->setColor(m_label->fontColor());
+		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
+	}
 
 	//TODO: used for latex text only?
-	ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
+	//ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
@@ -1403,8 +1412,8 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 
 	//TODO:
 	//for normal text we need to hide the background color because of QTBUG-25420
-	ui.kcbBackgroundColor->setVisible(plain);
-	ui.lBackgroundColor->setVisible(plain);
+	//ui.kcbBackgroundColor->setVisible(plain);
+	//ui.lBackgroundColor->setVisible(plain);
 
 	if (plain) {
 		//reset all applied formattings when switching from html to tex mode
