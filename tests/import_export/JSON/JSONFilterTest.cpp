@@ -1,5 +1,5 @@
 /*
-    File                 : JsonFilterTest.cpp
+    File                 : JSONFilterTest.cpp
     Project              : LabPlot
     Description          : Tests for the JSON I/O-filter.
     --------------------------------------------------------------------
@@ -7,20 +7,20 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#include "JsonFilterTest.h"
+#include "JSONFilterTest.h"
 #include "backend/datasources/filters/JsonFilter.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <KLocalizedString>
 
-void JsonFilterTest::initTestCase() {
+void JSONFilterTest::initTestCase() {
 	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
 	//TODO: redesign/remove this
 	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
 	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
 }
 
-void JsonFilterTest::testArrayImport() {
+void JSONFilterTest::testArrayImport() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
@@ -64,7 +64,7 @@ void JsonFilterTest::testArrayImport() {
 /*!
  * import objects with an additional column for the index
  */
-void JsonFilterTest::testObjectImport01() {
+void JSONFilterTest::testObjectImport01() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
@@ -118,7 +118,7 @@ void JsonFilterTest::testObjectImport01() {
 /*!
  * import objects with an additional column for the object names
  */
-void JsonFilterTest::testObjectImport02() {
+void JSONFilterTest::testObjectImport02() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
@@ -173,7 +173,7 @@ void JsonFilterTest::testObjectImport02() {
  * import objects with an additional column for the object names
  * with custom start and end columns
  */
-void JsonFilterTest::testObjectImport03() {
+void JSONFilterTest::testObjectImport03() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
@@ -215,7 +215,7 @@ void JsonFilterTest::testObjectImport03() {
 /*!
  * import objects with an additional datetime column for the object names
  */
-void JsonFilterTest::testObjectImport04() {
+void JSONFilterTest::testObjectImport04() {
 	Spreadsheet spreadsheet("test", false);
 	JsonFilter filter;
 
@@ -275,4 +275,4 @@ void JsonFilterTest::testObjectImport04() {
 	QCOMPARE(spreadsheet.column(5)->integerAt(1), 127830);
 }
 
-QTEST_MAIN(JsonFilterTest)
+QTEST_MAIN(JSONFilterTest)

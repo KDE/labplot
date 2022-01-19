@@ -1,7 +1,6 @@
 INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
-add_executable (nslfittest NSLFitTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
+add_executable (NSLFitTest NSLFitTest.cpp ../NSLTest.cpp ../../CommonTest.cpp)
 
-target_link_libraries(nslfittest Qt5::Test ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
-target_link_libraries(nslfittest labplot2lib)
+target_link_libraries(NSLFitTest labplot2lib Qt5::Test)
 
-add_test(NAME nslfittest COMMAND nslfittest)
+add_test(NAME NSLFitTest COMMAND NSLFitTest)

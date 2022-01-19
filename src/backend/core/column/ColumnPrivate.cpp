@@ -1380,6 +1380,38 @@ void ColumnPrivate::clearFormulas() {
 	m_formulas.clear();
 }
 
+void ColumnPrivate::setValueAt(int row, int new_value) {
+	setIntegerAt(row, new_value);
+}
+
+void ColumnPrivate::setValueAt(int row, qint64 new_value) {
+	setBigIntAt(row, new_value);
+}
+
+void ColumnPrivate::setValueAt(int row, QDateTime new_value) {
+	setDateTimeAt(row, new_value);
+}
+
+void ColumnPrivate::setValueAt(int row, QString new_value) {
+	setTextAt(row, new_value);
+}
+
+void ColumnPrivate::replaceValues(int first, const QVector<int>& new_values) {
+	replaceInteger(first, new_values);
+}
+
+void ColumnPrivate::replaceValues(int first, const QVector<qint64>& new_values) {
+	replaceBigInt(first, new_values);
+}
+
+void ColumnPrivate::replaceValues(int first, const QVector<QDateTime>& new_values) {
+	replaceDateTimes(first, new_values);
+}
+
+void ColumnPrivate::replaceValues(int first, const QVector<QString>& new_values) {
+	replaceTexts(first, new_values);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 //@}
 ////////////////////////////////////////////////////////////////////////////////
@@ -1505,11 +1537,16 @@ void ColumnPrivate::replaceTexts(int first, const QVector<QString>& new_values) 
 	invalidate();
 
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	const int num_rows = new_values.size();
-	resizeTo(first + num_rows);
 
-	for (int i = 0; i < num_rows; ++i)
-		static_cast<QVector<QString>*>(m_data)->replace(first+i, new_values.at(i));
+	if (first < 0)
+		*static_cast<QVector<QString>*>(m_data) = new_values;
+	else {
+		const int num_rows = new_values.size();
+		resizeTo(first + num_rows);
+
+		for (int i = 0; i < num_rows; ++i)
+			static_cast<QVector<QString>*>(m_data)->replace(first+i, new_values.at(i));
+	}
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
@@ -1567,7 +1604,9 @@ void ColumnPrivate::setDateTimeAt(int row, const QDateTime& new_value) {
 
 /**
  * \brief Replace a range of values
- *
+ * \param first first index which should be replaced. If first < 0, the complete vector
+ * will be replaced
+ * \param new_values
  * Use this only when columnMode() is DateTime, Month or Day
  */
 void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_values) {
@@ -1579,11 +1618,16 @@ void ColumnPrivate::replaceDateTimes(int first, const QVector<QDateTime>& new_va
 	invalidate();
 
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	const int num_rows = new_values.size();
-	resizeTo(first + num_rows);
 
-	for (int i = 0; i < num_rows; ++i)
-		static_cast<QVector<QDateTime>*>(m_data)->replace(first+i, new_values.at(i));
+	if (first < 0)
+		*static_cast< QVector<QDateTime>* >(m_data) = new_values;
+	else {
+		const int num_rows = new_values.size();
+		resizeTo(first + num_rows);
+
+		for (int i = 0; i < num_rows; ++i)
+			static_cast<QVector<QDateTime>*>(m_data)->replace(first+i, new_values.at(i));
+	}
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
@@ -1622,12 +1666,16 @@ void ColumnPrivate::replaceValues(int first, const QVector<double>& new_values) 
 	invalidate();
 
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	const int num_rows = new_values.size();
-	resizeTo(first + num_rows);
+	if (first < 0)
+		*static_cast< QVector<double>* >(m_data) = new_values;
+	else {
+		const int num_rows = new_values.size();
+		resizeTo(first + num_rows);
 
-	double* ptr = static_cast<QVector<double>*>(m_data)->data();
-	for (int i = 0; i < num_rows; ++i)
-		ptr[first+i] = new_values.at(i);
+		double* ptr = static_cast<QVector<double>*>(m_data)->data();
+		for (int i = 0; i < num_rows; ++i)
+			ptr[first+i] = new_values.at(i);
+	}
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
@@ -1731,12 +1779,17 @@ void ColumnPrivate::replaceInteger(int first, const QVector<int>& new_values) {
 	invalidate();
 
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	const int num_rows = new_values.size();
-	resizeTo(first + num_rows);
 
-	int* ptr = static_cast<QVector<int>*>(m_data)->data();
-	for (int i = 0; i < num_rows; ++i)
-		ptr[first+i] = new_values.at(i);
+	if (first < 0)
+		*static_cast< QVector<int>* >(m_data) = new_values;
+	else {
+		const int num_rows = new_values.size();
+		resizeTo(first + num_rows);
+
+		int* ptr = static_cast<QVector<int>*>(m_data)->data();
+		for (int i = 0; i < num_rows; ++i)
+			ptr[first+i] = new_values.at(i);
+	}
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);
@@ -1774,12 +1827,17 @@ void ColumnPrivate::replaceBigInt(int first, const QVector<qint64>& new_values) 
 	invalidate();
 
 	Q_EMIT m_owner->dataAboutToChange(m_owner);
-	const int num_rows = new_values.size();
-	resizeTo(first + num_rows);
 
-	qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
-	for (int i = 0; i < num_rows; ++i)
-		ptr[first+i] = new_values.at(i);
+	if (first < 0)
+		*static_cast<QVector<qint64>*>(m_data) = new_values;
+	else {
+		const int num_rows = new_values.size();
+		resizeTo(first + num_rows);
+
+		qint64* ptr = static_cast<QVector<qint64>*>(m_data)->data();
+		for (int i = 0; i < num_rows; ++i)
+			ptr[first+i] = new_values.at(i);
+	}
 
 	if (!m_owner->m_suppressDataChangedSignal)
 		Q_EMIT m_owner->dataChanged(m_owner);

@@ -265,11 +265,31 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
+	//DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(textWrapper.text) << std::endl)
+	//DEBUG(Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
+
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.mode != d->textWrapper.mode)
 	        || ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
 			textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder) {
 		bool changePos = d->textWrapper.text.isEmpty();
-		exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
+		if (textWrapper.mode == TextLabel::Mode::Text) {
+			//QDEBUG("\n" << Q_FUNC_INFO << ", OLD TEXT =" << d->textWrapper.text << ", font color =" << d->fontColor)
+			//DEBUG("\n" << Q_FUNC_INFO << ", NEW TEXT = " << STDSTRING(textWrapper.text) << std::endl)
+
+			TextWrapper tw = textWrapper;
+			if (d->textWrapper.mode != TextLabel::Mode::Text) {	// restore text formatting
+				QTextEdit te(d->textWrapper.text);
+				te.selectAll();
+				te.setText(textWrapper.text);
+				te.selectAll();
+				te.setTextColor(d->fontColor);
+
+				tw.text = te.toHtml();
+			}
+
+			exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
+		} else
+			exec(new TextLabelSetTextCmd(d, textWrapper, ki18n("%1: set label text")));
 		// If previously the text was empty, the bounding rect is zero
 		// therefore the alignment did not work properly.
 		// If text is added, the bounding rectangle is updated
@@ -1111,7 +1131,7 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 //#########################  Theme management ##################################
 //##############################################################################
 void TextLabel::loadThemeConfig(const KConfig& config) {
-	// DEBUG(Q_FUNC_INFO << ", label = " << STDSTRING(name()))
+	DEBUG(Q_FUNC_INFO << ", label = " << STDSTRING(name()))
 	Q_D(TextLabel);
 
 	KConfigGroup group = config.group("Label");

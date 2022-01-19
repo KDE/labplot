@@ -71,6 +71,7 @@ private Q_SLOTS:
 	void textChanged();
 	void charFormatChanged(const QTextCharFormat&);
 	void modeChanged(int);
+	void updateMode(TextLabel::Mode mode);
 	void fontColorChanged(const QColor&);
 	void updateBackground() const;
 	void backgroundColorChanged(const QColor&);
@@ -133,6 +134,7 @@ private Q_SLOTS:
 
 	void labelVisibleChanged(bool);
 	void labelCartesianPlotParent(bool on);
+	void labelModeChanged(TextLabel::Mode);
 };
 
 #endif //LABELWIDGET_H

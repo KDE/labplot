@@ -184,8 +184,8 @@ void WorksheetView::initActions() {
 // 	selectionModeAction->setCheckable(true);
 
 	//"Add new" related actions
-	addCartesianPlot1Action = new QAction(QIcon::fromTheme("labplot-xy-plot-four-axes"), i18n("Box Plot, Four Axes"), addNewActionGroup);
-	addCartesianPlot2Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"), i18n("Box Plot, Two Axes"), addNewActionGroup);
+	addCartesianPlot1Action = new QAction(QIcon::fromTheme("labplot-xy-plot-four-axes"), i18n("Four Axes"), addNewActionGroup);
+	addCartesianPlot2Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"), i18n("Two Axes"), addNewActionGroup);
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("Two Axes, Centered"), addNewActionGroup);
 	addCartesianPlot4Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text"), addNewActionGroup);
@@ -233,7 +233,7 @@ void WorksheetView::initActions() {
 	snapToGridAction = new QAction(i18n("Snap to Grid"), this);
 	snapToGridAction->setCheckable(true);
 
-	showPresenterMode = new QAction(QIcon::fromTheme("view-fullscreen"), i18n("Show in Presenter Mode"), this);
+	showPresenterMode = new QAction(QIcon::fromTheme("view-fullscreen"), i18n("Presenter Mode"), this);
 	showPresenterMode->setShortcut(Qt::Key_F);
 
 	//check the action corresponding to the currently active layout in worksheet
@@ -249,7 +249,7 @@ void WorksheetView::initActions() {
 	connect(showPresenterMode, &QAction::triggered, this, &WorksheetView::presenterMode);
 
 	//worksheet control actions
-	plotsLockedAction = new QAction(i18n("Non-interactive Plots"), this);
+	plotsLockedAction = new QAction(QIcon::fromTheme("hidemouse"), i18n("Non-interactive Plots"), this);
 	plotsLockedAction->setToolTip(i18n("If activated, plots on the worksheet don't react on drag and mouse wheel events."));
 	plotsLockedAction->setCheckable(true);
 	plotsLockedAction->setChecked(m_worksheet->plotsLocked());
@@ -565,6 +565,7 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotActionModeMenu->addAction(cartesianPlotApplyToAllYAction);
 
 	m_cartesianPlotCursorModeMenu = new QMenu(i18n("Apply Cursor to"), this);
+	m_cartesianPlotCursorModeMenu->setIcon(QIcon::fromTheme("debug-execute-from-cursor"));
 	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToSelectionCursor);
 	m_cartesianPlotCursorModeMenu->addAction(cartesianPlotApplyToAllCursor);
 
@@ -575,8 +576,6 @@ void WorksheetView::initMenus() {
 	m_cartesianPlotMenu->addSeparator();
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotActionModeMenu);
 	m_cartesianPlotMenu->addMenu(m_cartesianPlotCursorModeMenu);
-	m_cartesianPlotMenu->addSeparator();
-	m_cartesianPlotMenu->addAction(plotsLockedAction);
 
 	// Data manipulation menu
 	m_dataManipulationMenu = new QMenu(i18n("Data Manipulation"),this);
@@ -629,8 +628,10 @@ void WorksheetView::createContextMenu(QMenu* menu) {
 	menu->insertMenu(firstAction, m_viewMouseModeMenu);
 	menu->insertMenu(firstAction, m_zoomMenu);
 	menu->insertMenu(firstAction, m_magnificationMenu);
+	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_layoutMenu);
 	menu->insertMenu(firstAction, m_gridMenu);
+	menu->insertSeparator(firstAction);
 	menu->insertMenu(firstAction, m_themeMenu);
 	menu->insertSeparator(firstAction);
 	menu->insertAction(firstAction, plotsLockedAction);

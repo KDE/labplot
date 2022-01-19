@@ -85,7 +85,9 @@ public:
 	void clearFormulas();
 
 	QString textAt(int row) const;
+	void setValueAt(int row, QString new_value);
 	void setTextAt(int row, const QString&);
+	void replaceValues(int first, const QVector<QString>&);
 	void replaceTexts(int first, const QVector<QString>&);
 	void addValueLabel(const QString&, const QString&);
 	const QMap<QString, QString>& textValueLabels();
@@ -95,7 +97,9 @@ public:
 	QTime timeAt(int row) const;
 	void setTimeAt(int row, QTime);
 	QDateTime dateTimeAt(int row) const;
+	void setValueAt(int row, QDateTime new_value);
 	void setDateTimeAt(int row, const QDateTime&);
+	void replaceValues(int first, const QVector<QDateTime>&);
 	void replaceDateTimes(int first, const QVector<QDateTime>&);
 	void addValueLabel(const QDateTime&, const QString&);
 	const QMap<QDateTime, QString>& dateTimeValueLabels();
@@ -107,13 +111,17 @@ public:
 	const QMap<double, QString>& valueLabels();
 
 	int integerAt(int row) const;
+	void setValueAt(int row, int new_value);
 	void setIntegerAt(int row, int new_value);
+	void replaceValues(int first, const QVector<int>&);
 	void replaceInteger(int first, const QVector<int>&);
 	void addValueLabel(int, const QString&);
 	const QMap<int, QString>& intValueLabels();
 
 	qint64 bigIntAt(int row) const;
+	void setValueAt(int row, qint64 new_value);
 	void setBigIntAt(int row, qint64 new_value);
+	void replaceValues(int first, const QVector<qint64>&);
 	void replaceBigInt(int first, const QVector<qint64>&);
 	void addValueLabel(qint64, const QString&);
 	const QMap<qint64, QString>& bigIntValueLabels();

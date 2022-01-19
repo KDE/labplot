@@ -709,6 +709,10 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	for (auto* child : children)
 		child->setIsLoading(false);
 
+	const auto& columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
+	for (auto& column: columns)
+		column->setIsLoading(false);
+
 	//all data was read:
 	//call retransform() to every element
 	if (hasChildren && aspect->type() != AspectType::CartesianPlot) {

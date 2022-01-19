@@ -23,13 +23,6 @@
 
 #include <QAction>
 
-void MultiRangeTest::initTestCase() {
-//	// needed in order to have the signals triggered by SignallingUndoCommand, see LabPlot.cpp
-//	//TODO: redesign/remove this
-	qRegisterMetaType<const AbstractAspect*>("const AbstractAspect*");
-	qRegisterMetaType<const AbstractColumn*>("const AbstractColumn*");
-}
-
 //##############################################################################
 //#####################  import of LabPlot projects ############################
 //##############################################################################
@@ -89,27 +82,7 @@ void MultiRangeTest::initTestCase() {
 	a.setData(static_cast<int>(mode)); \
 	view->cartesianPlotMouseModeChanged(&a);
 
-#define VALUES_EQUAL(v1, v2) QCOMPARE(nsl_math_approximately_equal(v1, v2), true)
-
-#define RANGE_CORRECT(range, start_, end_) \
-	VALUES_EQUAL(range.start(), start_); \
-	VALUES_EQUAL(range.end(), end_);
-
-#define CHECK_RANGE(plot, aspect, xy, start_, end_) \
-	RANGE_CORRECT(plot->xy ## Range(plot->coordinateSystem(aspect->coordinateSystemIndex())->xy ## Index()), start_, end_)
-
-#define DEBUG_RANGE(plot, aspect) \
-{\
-	int cSystem = aspect->coordinateSystemIndex(); \
-	WARN(Q_FUNC_INFO << ", csystem index = " << cSystem) \
-	int xIndex = plot->coordinateSystem(cSystem)->xIndex(); \
-	int yIndex = plot->coordinateSystem(cSystem)->yIndex(); \
-\
-	auto xrange = plot->xRange(xIndex); \
-	auto yrange = plot->yRange(yIndex); \
-	WARN(Q_FUNC_INFO << ", x index = " << xIndex << ", range = " << xrange.start() << " .. " << xrange.end()) \
-	WARN(Q_FUNC_INFO << ", y index = " << yIndex << ", range = " << yrange.start() << " .. " << yrange.end()) \
-}
+////////////////////////////////////////////////////////////////
 
 // Test1:
 // Check if the correct actions are enabled/disabled.

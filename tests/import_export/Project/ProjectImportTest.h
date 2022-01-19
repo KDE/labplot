@@ -11,14 +11,13 @@
 #define PROJECTIMPORTTEST_H
 
 #include <QtTest>
+#include "tests/CommonTest.h"
 
-class ProjectImportTest : public QObject {
+class ProjectImportTest : public CommonTest {
 	Q_OBJECT
 
 private Q_SLOTS:
-	void initTestCase();
-
-	//import of LabPlot projects
+	//TODO: import of LabPlot projects
 
 #ifdef HAVE_LIBORIGIN
 	//import of Origin projects

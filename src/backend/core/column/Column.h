@@ -132,6 +132,7 @@ public:
 	void setFromColumn(int, AbstractColumn*, int);
 	QString textAt(int) const override;
 	void setTextAt(int, const QString&) override;
+	void setText(const QVector<QString>&);
 	void replaceTexts(int, const QVector<QString>&) override;
 	void addValueLabel(const QString&, const QString&);
 	const QMap<QString, QString>& textValueLabels();
@@ -140,6 +141,7 @@ public:
 	void setDateAt(int, QDate) override;
 	QTime timeAt(int) const override;
 	void setTimeAt(int, QTime) override;
+	void setDateTimes(const QVector<QDateTime>&);
 	QDateTime dateTimeAt(int) const override;
 	void setDateTimeAt(int, const QDateTime&) override;
 	void replaceDateTimes(int, const QVector<QDateTime>&) override;
@@ -147,12 +149,14 @@ public:
 	const QMap<QDateTime, QString>& dateTimeValueLabels();
 
 	double valueAt(int) const override;
+	void setValues(const QVector<double>&);
 	void setValueAt(int, double) override;
 	void replaceValues(int, const QVector<double>&) override;
 	void addValueLabel(double, const QString&);
 	const QMap<double, QString>& valueLabels();
 
 	int integerAt(int) const override;
+	void setIntegers(const QVector<int>&);
 	void setIntegerAt(int, int) override;
 	void replaceInteger(int, const QVector<int>&) override;
 	void addValueLabel(int, const QString&);
@@ -160,6 +164,7 @@ public:
 
 	qint64 bigIntAt(int) const override;
 	void setBigIntAt(int, qint64) override;
+	void setBigInts(const QVector<qint64>&);
 	void replaceBigInt(int, const QVector<qint64>&) override;
 	void addValueLabel(qint64, const QString&);
 	const QMap<qint64, QString>& bigIntValueLabels();

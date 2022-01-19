@@ -746,13 +746,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {
-				auto wrapper = axis->title()->text();
-				//DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(wrapper.text))
-				QTextEdit te(wrapper.text);
-				te.selectAll();
-				te.setText(xColumnName);
-				//DEBUG(Q_FUNC_INFO << ", new text = " << STDSTRING(te.toHtml()))
-				axis->title()->setText(te.toHtml());
+				axis->title()->setText(xColumnName);
 				break;
 			}
 		}
@@ -760,21 +754,15 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		//y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
-				auto wrapper = axis->title()->text();
-				QTextEdit te(wrapper.text);
-				te.selectAll();
 				if (!name.isEmpty()) {
 					//multiple columns are plotted with "one curve per plot",
 					//the function is called with the column name.
 					//use it for the x-axis title
-					te.setText(name);
-					axis->title()->setText(te.toHtml());
+					axis->title()->setText(name);
 				} else if (m_columnComboBoxes.size() == 2) {
 					//if we only have one single y-column to plot, we can set the title of the y-axes
 					const QString& yColumnName = m_columnComboBoxes[1]->currentText();
-					DEBUG(Q_FUNC_INFO << ", y column name = " << STDSTRING(yColumnName))
-					te.setText(yColumnName);
-					axis->title()->setText(te.toHtml());
+					axis->title()->setText(yColumnName);
 				}
 
 				break;
@@ -786,19 +774,14 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		//x-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Horizontal) {
-				auto wrapper = axis->title()->text();
-				QTextEdit te(wrapper.text);
-				te.selectAll();
 				if (!name.isEmpty()) {
 					//multiple columns are plotted with "one curve per plot",
 					//the function is called with the column name.
 					//use it for the x-axis title
-					te.setText(name);
-					axis->title()->setText(te.toHtml());
+					axis->title()->setText(name);
 				} else if (m_columnComboBoxes.size() == 1) {
 					const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
-					te.setText(yColumnName);
-					axis->title()->setText(te.toHtml());
+					axis->title()->setText(yColumnName);
 				}
 
 				break;
@@ -809,11 +792,7 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		//y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
-				auto wrapper = axis->title()->text();
-				QTextEdit te(wrapper.text);
-				te.selectAll();
-				te.setText(i18n("Frequency"));
-				axis->title()->setText(te.toHtml());
+				axis->title()->setText(i18n("Frequency"));
 				break;
 			}
 		}
@@ -836,19 +815,14 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		//y-axis title
 		for (auto* axis : axes) {
 			if (axis->orientation() == Axis::Orientation::Vertical) {
-				auto wrapper = axis->title()->text();
-				QTextEdit te(wrapper.text);
-				te.selectAll();
 				if (!name.isEmpty()) {
 					//multiple columns are plotted with "one curve per plot",
 					//the function is called with the column name.
 					//use it for the x-axis title
-					te.setText(name);
-					axis->title()->setText(te.toHtml());
+					axis->title()->setText(name);
 				} else if (count == 1) {
 					const QString& yColumnName = m_columnComboBoxes.constFirst()->currentText();
-					te.setText(yColumnName);
-					axis->title()->setText(te.toHtml());
+					axis->title()->setText(yColumnName);
 				}
 				break;
 			}

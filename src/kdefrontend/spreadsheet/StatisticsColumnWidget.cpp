@@ -1,9 +1,11 @@
 /*
 	File                 : StatisticsColumnWidget.cpp
-    Project              : LabPlot
+	Project              : LabPlot
 	Description          : Widget showing statistics for column values
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -279,7 +281,7 @@ void StatisticsColumnWidget::showHistogram() {
 	WAIT_CURSOR;
 
 	//add plot
-	CartesianPlot* plot = addPlot(&m_histogramWidget);
+	auto* plot = addPlot(&m_histogramWidget);
 
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
@@ -293,7 +295,7 @@ void StatisticsColumnWidget::showHistogram() {
 	}
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	Histogram* histogram = new Histogram(QString());
+	auto* histogram = new Histogram(QString());
 	plot->addChild(histogram);
 	histogram->setDataColumn(m_column);
 
@@ -306,7 +308,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	WAIT_CURSOR;
 
 	//add plot
-	CartesianPlot* plot = addPlot(&m_kdePlotWidget);
+	auto* plot = addPlot(&m_kdePlotWidget);
 
 	//set the axes lables
 	auto axes = plot->children<Axis>();
@@ -322,7 +324,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
 	//add normalized histogram
-	Histogram* histogram = new Histogram(QString());
+	auto* histogram = new Histogram(QString());
 	plot->addChild(histogram);
 	histogram->setNormalization(Histogram::ProbabilityDensity);
 	histogram->setDataColumn(m_column);
@@ -341,7 +343,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	double max = *std::max_element(data.constBegin(), data.constEnd());
 	double step = (max - min)/count;
 	int n = data.count();
-	double h = GSL_MAX(nsl_kde_normal_dist_bandwith(data.data(), n), 1e-6);
+	double h = qMax(nsl_kde_normal_dist_bandwith(data.data(), n), 1e-6);
 	for (int i = 0; i < count; ++i) {
 		double x = min + i*step;
 		xData[i] = x;
@@ -376,7 +378,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	WAIT_CURSOR;
 
 	//add plot
-	CartesianPlot* plot = addPlot(&m_qqPlotWidget);
+	auto* plot = addPlot(&m_qqPlotWidget);
 
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
@@ -472,7 +474,7 @@ void StatisticsColumnWidget::showBoxPlot() {
 	WAIT_CURSOR;
 
 	//add plot
-	CartesianPlot* plot = addPlot(&m_boxPlotWidget);
+	auto* plot = addPlot(&m_boxPlotWidget);
 
 	auto axes = plot->children<Axis>();
 	for (auto* axis : qAsConst(axes)) {
@@ -489,7 +491,7 @@ void StatisticsColumnWidget::showBoxPlot() {
 	}
 	QApplication::processEvents(QEventLoop::AllEvents, 100);
 
-	BoxPlot* boxPlot = new BoxPlot(QString());
+	auto* boxPlot = new BoxPlot(QString());
 	boxPlot->setOrientation(BoxPlot::Orientation::Vertical);
 	boxPlot->setWhiskersType(BoxPlot::WhiskersType::IQR);
 	plot->addChild(boxPlot);
@@ -516,7 +518,7 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	plot->setSuppressRetransform(true);
 	plot->setType(CartesianPlot::Type::TwoAxes);
 	plot->setSymmetricPadding(false);
-	double padding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
+	const double padding = Worksheet::convertToSceneUnits(1.0, Worksheet::Unit::Centimeter);
 	plot->setRightPadding(padding);
 	plot->setVerticalPadding(padding);
 
@@ -572,7 +574,7 @@ QString StatisticsColumnWidget::modeValue(const Column* column, double value) co
  * into the vector \c data.
  */
 void StatisticsColumnWidget::copyValidData(QVector<double>& data) const {
-	int rowCount = m_column->rowCount();
+	const int rowCount = m_column->rowCount();
 	data.reserve(rowCount);
 	double val;
 	if (m_column->columnMode() == AbstractColumn::ColumnMode::Double) {
