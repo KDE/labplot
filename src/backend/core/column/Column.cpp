@@ -775,6 +775,7 @@ void Column::calculateStatistics() const {
 	d->statistics = ColumnStatistics();
 	ColumnStatistics& statistics = d->statistics;
 
+	//######  location measures  #######
 	int rowValuesSize = 0;
 	double val;
 	double columnSum = 0.0;
@@ -901,7 +902,6 @@ void Column::calculateStatistics() const {
 	}
 	statistics.mode = mode;
 
-
 	//sort the data to calculate the percentiles
 	std::sort(rowData.begin(), rowData.end());
 	statistics.firstQuartile = gsl_stats_quantile_from_sorted_data(rowData.data(), 1, notNanCount, 0.25);
@@ -916,44 +916,47 @@ void Column::calculateStatistics() const {
 	statistics.iqr = statistics.thirdQuartile - statistics.firstQuartile;
 	statistics.trimean = (statistics.firstQuartile + 2*statistics.median + statistics.thirdQuartile) / 4;
 
-	double columnSumVariance = 0;
-	double columnSumMeanDeviation = 0.0;
-	double columnSumMedianDeviation = 0.0;
-	double sumForCentralMoment_r3 = 0.0;
-	double sumForCentralMoment_r4 = 0.0;
+	//######  dispersion and shape measures  #######
+	statistics.variance = 0;
+	statistics.meanDeviation = 0.0;
+	statistics.meanDeviationAroundMedian = 0.0;
+	double centralMoment_r3 = 0.0;
+	double centralMoment_r4 = 0.0;
 	QVector<double> absoluteMedianList;
 	absoluteMedianList.reserve(notNanCount);
 	absoluteMedianList.resize(notNanCount);
 
 	for (int row = 0; row < notNanCount; ++row) {
 		val = rowData.value(row);
-		columnSumVariance += gsl_pow_2(val - statistics.arithmeticMean);
-
-		sumForCentralMoment_r3 += gsl_pow_3(val - statistics.arithmeticMean);
-		sumForCentralMoment_r4 += gsl_pow_4(val - statistics.arithmeticMean);
-		columnSumMeanDeviation += fabs(val - statistics.arithmeticMean);
+		statistics.variance += gsl_pow_2(val - statistics.arithmeticMean);
+		statistics.meanDeviation += fabs(val - statistics.arithmeticMean);
 
 		absoluteMedianList[row] = fabs(val - statistics.median);
-		columnSumMedianDeviation += absoluteMedianList[row];
+		statistics.meanDeviationAroundMedian += absoluteMedianList[row];
+
+		centralMoment_r3 += gsl_pow_3(val - statistics.arithmeticMean);
+		centralMoment_r4 += gsl_pow_4(val - statistics.arithmeticMean);
 	}
 
-	statistics.meanDeviationAroundMedian = columnSumMedianDeviation / notNanCount;
+	//normalize
+	statistics.variance = (notNanCount != 1) ? statistics.variance / (notNanCount - 1) : NAN;
+	statistics.meanDeviationAroundMedian = statistics.meanDeviationAroundMedian / notNanCount;
+	statistics.meanDeviation = statistics.meanDeviation / notNanCount;
 
-	//sort the data to calculate the median
+	//standard variation
+	statistics.standardDeviation = sqrt(statistics.variance);
+
+	//"median absolute deviation" - the median of the absolute deviations from the data's median.
 	std::sort(absoluteMedianList.begin(), absoluteMedianList.end());
 	statistics.medianDeviation = gsl_stats_quantile_from_sorted_data(absoluteMedianList.data(), 1, notNanCount, 0.50);
-	const double centralMoment_r3 = sumForCentralMoment_r3 / notNanCount;
-	const double centralMoment_r4 = sumForCentralMoment_r4 / notNanCount;
 
-	statistics.variance = columnSumVariance / notNanCount;
-	if (notNanCount != 1)
-		statistics.standardDeviation = sqrt(statistics.variance * notNanCount / (notNanCount - 1));
-	else
-		statistics.standardDeviation = NAN;
+	//skewness and kurtosis
+	centralMoment_r3 = centralMoment_r3 / notNanCount;
+	centralMoment_r4 = centralMoment_r4 / notNanCount;
 	statistics.skewness = centralMoment_r3 / gsl_pow_3(statistics.standardDeviation);
 	statistics.kurtosis = (centralMoment_r4 / gsl_pow_4(statistics.standardDeviation)) - 3.0;
-	statistics.meanDeviation = columnSumMeanDeviation / notNanCount;
 
+	//entropy
 	double entropy = 0.0;
 	for (const auto& v : frequencyOfValues) {
 		const double frequencyNorm = static_cast<double>(v.second) / notNanCount;
