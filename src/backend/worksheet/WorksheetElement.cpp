@@ -526,6 +526,7 @@ void  WorksheetElement::setCoordinateSystemIndex(int index) {
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(index));
 	else
 		DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
+	emit coordinateSystemIndexChanged(m_cSystemIndex);
 }
 
 int WorksheetElement::coordinateSystemCount() const {

@@ -56,6 +56,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		auto* custompoint = new CustomPoint(m_plot, curve->name());
 		custompoint->setFixed(true);
 		custompoint->setCoordinateBindingEnabled(true);
+		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
 		addChild(custompoint);
 		InfoElement::MarkerPoints_T markerpoint(custompoint, custompoint->path(), curve, curve->path());
 		markerpoints.append(markerpoint);
@@ -98,7 +99,7 @@ InfoElement::InfoElement(const QString& name, CartesianPlot* p, const XYCurve* c
 		m_title->setUndoAware(true);
 		m_setTextLabelText = false;
 
-		connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+		initCurveConnections(curve);
 		custompoint->setVisible(curve->isVisible());
 
 		setVisible(true);
@@ -157,6 +158,13 @@ void InfoElement::initMenus() {
 	m_menusInitialized = true;
 }
 
+void InfoElement::initCurveConnections(const XYCurve* curve) {
+	connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+	connect(curve, &XYCurve::coordinateSystemIndexChanged, this, &InfoElement::curveCoordinateSystemIndexChanged);
+	connect(curve, &XYCurve::moveBegin, this, [this]() { m_curveGetsMoved = true; });
+	connect(curve, &XYCurve::moveEnd, this, [this]() { m_curveGetsMoved = false; });
+}
+
 QMenu* InfoElement::createContextMenu() {
 	if (!m_menusInitialized)
 		initMenus();
@@ -190,6 +198,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 		m_suppressChildPositionChanged = true;
 		custompoint = new CustomPoint(m_plot, curve->name());
 		custompoint->setCoordinateBindingEnabled(true);
+		custompoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
 		addChild(custompoint);
 
 		if (curve->xColumn() && curve->yColumn()) {
@@ -207,9 +216,7 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 
 	project()->setSuppressAspectAddedSignal(true);
 
-	connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
-	connect(curve, &XYCurve::moveBegin, this, [this]() { m_curveGetsMoved = true; });
-	connect(curve, &XYCurve::moveEnd, this, [this]() { m_curveGetsMoved = false; });
+	initCurveConnections(curve);
 
 	custompoint->setUndoAware(false);
 	custompoint->setVisible(curve->isVisible());
@@ -220,6 +227,9 @@ void InfoElement::addCurve(const XYCurve* curve, CustomPoint* custompoint) {
 
 	struct MarkerPoints_T markerpoint = {custompoint, custompoint->path(), curve, curve->path()};
 	markerpoints.append(markerpoint);
+
+	if (markerpoints.count() == 1) // first point
+		setConnectionLineCurveName(curve->name());
 
 	m_title->setUndoAware(false);
 	m_title->setText(createTextLabelText());
@@ -276,8 +286,9 @@ bool InfoElement::assignCurve(const QVector<XYCurve *> &curves) {
 		for (auto curve : curves) {
 			if(mp.curvePath == curve->path()) {
 				mp.curve = curve;
-				connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+				initCurveConnections(curve);
 				mp.customPoint->setVisible(curve->isVisible()); // initial visibility
+				mp.customPoint->setCoordinateSystemIndex(curve->coordinateSystemIndex());
 				break;
 			}
 		}
@@ -305,7 +316,7 @@ void InfoElement::removeCurve(const XYCurve* curve) {
 
 	for (const auto& mp : markerpoints) {
 		if (mp.curve == curve) {
-			disconnect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+			disconnect(curve, nullptr, this, nullptr);
 			removeChild(mp.customPoint);
 		}
 	}
@@ -483,6 +494,20 @@ void InfoElement::moveElementBegin() {
  */
 void InfoElement::moveElementEnd() {
 	m_suppressChildRemoved = false;
+}
+
+void InfoElement::curveCoordinateSystemIndexChanged(int /*index*/) {
+	auto* curve = static_cast<XYCurve*>(QObject::sender());
+	auto cSystemIndex = curve->coordinateSystemIndex();
+
+	for (auto& custompoint: markerpoints) {
+		if (custompoint.curve == curve) {
+			custompoint.customPoint->setCoordinateSystemIndex(cSystemIndex);
+			break;
+		}
+	}
+
+	retransform();
 }
 
 void InfoElement::curveVisibilityChanged() {
@@ -839,7 +864,9 @@ void InfoElementPrivate::retransform() {
 		const auto* curve = q->markerpoints.at(i).curve;
 		if (curve && curve->name() == connectionLineCurveName) {
 			bool visible;
-			pointPos = q->cSystem->mapLogicalToScene(q->markerpoints.at(i).customPoint->positionLogical(),
+			const auto& point = q->markerpoints.at(i).customPoint;
+			const auto* cSystem = q->plot()->coordinateSystem(point->coordinateSystemIndex());
+			pointPos = cSystem->mapLogicalToScene(point->positionLogical(),
 					visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			break;
 		}
