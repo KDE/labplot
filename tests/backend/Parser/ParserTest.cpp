@@ -92,15 +92,15 @@ void ParserTest::testVariables() {
 }
 
 void ParserTest::testLocale() {
-//TODO: locale test currently does not work on FreeBSD?
-//#ifndef __FreeBSD__
+//TODO: locale test currently does not work on FreeBSD
+#ifndef __FreeBSD__
 	const QVector<QPair<QString, double>> tests{ 
 		{"1,", 1.}, {"1,5", 1.5}, {"1+0,5", 1.5}, {"2*1,5", 3.}
 	};
 
 	for ( auto& expr: tests)
 		QCOMPARE(parse(qPrintable(expr.first), "de_DE"), expr.second);
-//#endif
+#endif
 }
 
 ///////////// Performance ////////////////////////////////
