@@ -1039,7 +1039,12 @@ void InfoElementPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	x += delta_logic.x();
 	auto xColumn = q->markerpoints[activeIndex].curve->xColumn();
 	int xindex = xColumn->indexForValue(x);
-	double x_new = xColumn->valueAt(xindex);
+	double x_new = NAN;
+	if (xColumn->isNumeric())
+		x_new = xColumn->valueAt(xindex);
+	else
+		x_new = xColumn->dateTimeAt(xindex).toMSecsSinceEpoch();
+
 	auto pointPos = q->markerpoints[activeIndex].customPoint->positionLogical().x();
 	if (abs(x_new - pointPos) > 0) {
 		if ((xColumn->rowCount() - 1 == xindex && pointPos > x_new) || (xindex == 0 && pointPos < x_new))
@@ -1070,15 +1075,18 @@ void InfoElementPrivate::keyPressEvent(QKeyEvent * event) {
 		// with the vertical line
 		// find markerpoint to which the values matches (curvename is stored in connectionLineCurveName)
 		for (int i = 0; i < q->markerPointsCount(); i++) {
-			if (q->markerpoints[i].curve->name().compare(connectionLineCurveName) == 0) {
-				auto rowCount = q->markerpoints[i].curve->xColumn()->rowCount();
+			const auto* curve = q->markerpoints[i].curve;
+			if (curve->name().compare(connectionLineCurveName) == 0) {
+				auto rowCount = curve->xColumn()->rowCount();
 				m_index += index;
 				if (m_index > rowCount - 1)
 					m_index = rowCount - 1;
 				if (m_index < 0)
 					m_index = 0;
-				auto x = q->markerpoints[i].curve->xColumn()->valueAt(m_index);
-				q->setPositionLogical(x);
+				if (curve->xColumn()->isNumeric())
+					q->setPositionLogical(curve->xColumn()->valueAt(m_index));
+				else
+					q->setPositionLogical(curve->xColumn()->dateTimeAt(m_index).toMSecsSinceEpoch());
 				break;
 			}
 		}
