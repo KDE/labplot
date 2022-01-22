@@ -544,6 +544,10 @@ IF (WIN32)
 	target_link_libraries( labplot2lib ${PSAPI} )
 ENDIF ()
 
+IF (APPLE AND ENABLE_TOUCHBAR)
+	target_link_libraries( labplot2lib KDMacTouchBar )
+ENDIF()
+
 # icons for the executable and project files on Windows and Mac OS X
 
 set(LABPLOT_ICONS
@@ -586,9 +590,6 @@ ENDIF ()
 
 add_executable(labplot2 ${LABPLOT_SOURCE} ${qml_QRC})
 target_link_libraries(labplot2 labplot2lib)
-IF (APPLE AND ENABLE_TOUCHBAR)
-	target_link_libraries(labplot2 KDMacTouchBar)
-ENDIF()
 
 ############## installation ################################
 install( TARGETS labplot2 DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
