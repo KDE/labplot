@@ -147,7 +147,7 @@ bool DatapickerImage::exportView() const {
 	bool ret;
 	if ( (ret = (dlg->exec() == QDialog::Accepted)) ) {
 		const QString path = dlg->path();
-		const WorksheetView::ExportFormat format = dlg->exportFormat();
+		const auto format = dlg->exportFormat();
 		const int resolution = dlg->exportResolution();
 
 		WAIT_CURSOR;
@@ -292,9 +292,19 @@ void DatapickerImage::setPlotPointsType(const PointsType pointsType) {
 			endMacro();
 		}
 		m_segments->setSegmentsVisible(false);
-	} else if (pointsType == DatapickerImage::PointsType::CurvePoints)
+	} else if (pointsType == DatapickerImage::PointsType::CurvePoints) {
 		m_segments->setSegmentsVisible(false);
-	else if (pointsType == DatapickerImage::PointsType::SegmentPoints) {
+
+		//make the reference points non-interactive
+		const auto& points = children<DatapickerPoint>(ChildIndexFlag::IncludeHidden);
+		for (auto* point : points) {
+			auto* item = point->graphicsItem();
+			item->setFlag(QGraphicsItem::ItemIsSelectable, false);
+			item->setFlag(QGraphicsItem::ItemIsFocusable, false);
+			item->setAcceptHoverEvents(false);
+			item->setAcceptedMouseButtons(Qt::NoButton);
+		}
+	} else if (pointsType == DatapickerImage::PointsType::SegmentPoints) {
 		d->makeSegments();
 		m_segments->setSegmentsVisible(true);
 	}
@@ -705,12 +715,14 @@ bool DatapickerImage::load(XmlStreamReader* reader, bool preview) {
 			d->symbol->load(reader, preview);
 		} else if (reader->name() == "datapickerPoint") {
 			auto* datapickerPoint = new DatapickerPoint(QString());
-			datapickerPoint->setHidden(true);
 			if (!datapickerPoint->load(reader, preview)) {
 				delete datapickerPoint;
 				return false;
-			} else
+			} else {
+				datapickerPoint->setHidden(true);
+				datapickerPoint->setIsReferencePoint(true);
 				addChild(datapickerPoint);
+			}
 		} else { // unknown element
 			reader->raiseWarning(i18n("unknown element '%1'", reader->name().toString()));
 			if (!reader->skipToEndElement()) return false;

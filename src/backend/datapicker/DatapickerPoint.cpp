@@ -288,6 +288,16 @@ void DatapickerPoint::setPrinting(bool on) {
 	d->m_printing = on;
 }
 
+void DatapickerPoint::setIsReferencePoint(bool value) {
+	Q_D(DatapickerPoint);
+	d->isReferencePoint = value;
+}
+
+bool DatapickerPoint::isReferencePoint() const {
+	Q_D(const DatapickerPoint);
+	return d->isReferencePoint;
+}
+
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################

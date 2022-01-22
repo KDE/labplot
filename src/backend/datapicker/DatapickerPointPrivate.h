@@ -25,6 +25,8 @@ public:
 	void retransformErrorBar();
 
 	bool m_printing{false};
+	bool isReferencePoint{false};
+
 	qreal rotationAngle;
 	QPointF position;
 	QRectF boundingRectangle;
