@@ -1304,6 +1304,9 @@ void LabelWidget::load() {
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
 
+	ui.tbFontBold->setChecked(ui.teLabel->fontWeight() == QFont::Bold);
+	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
+
 	//move the cursor to the end
 	QTextCursor cursor = ui.teLabel->textCursor();
 	cursor.movePosition(QTextCursor::End);
