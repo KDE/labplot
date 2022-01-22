@@ -847,7 +847,7 @@ void SpreadsheetView::fillToolBar(QToolBar* toolBar) {
 	}
 }
 
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 void SpreadsheetView::fillTouchBar(KDMacTouchBar* touchBar){
 	//touchBar->addAction(action_insert_column_right);
 }

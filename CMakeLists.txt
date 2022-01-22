@@ -234,6 +234,9 @@ option(ENABLE_MQTT "Build with MQTT support" ON)
 option(ENABLE_QTSERIALPORT "Build with QtSerialPort support" ON)
 option(ENABLE_DISCOUNT "Build with Discount support" ON)
 option(ENABLE_REPRODUCIBLE "Enable reproducible builds" OFF)
+IF (APPLE)
+	option(ENABLE_TOUCHBAR "Enable touch bar support on macOS" ON)
+ENDIF ()
 
 ### OS macros ####################################
 IF (WIN32)
@@ -488,6 +491,11 @@ IF (ENABLE_DISCOUNT)
 	ENDIF ()
 ELSE ()
 	MESSAGE (STATUS "Discount DISABLED")
+ENDIF ()
+
+### Touch bar on macOS (optional) #############################
+IF (APPLE AND ENABLE_TOUCHBAR)
+	add_definitions (-DHAVE_TOUCHBAR)
 ENDIF ()
 
 #################################################

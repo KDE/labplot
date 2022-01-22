@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : View class for Spreadsheet
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2010-2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2010-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -34,7 +34,7 @@ class QResizeEvent;
 class QTableView;
 class QToolBar;
 
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 	class KDMacTouchBar;
 #endif
 
@@ -215,7 +215,7 @@ private:
 public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void fillToolBar(QToolBar*);
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
 #endif
 	void print(QPrinter*) const;

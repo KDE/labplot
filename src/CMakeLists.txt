@@ -586,7 +586,7 @@ ENDIF ()
 
 add_executable(labplot2 ${LABPLOT_SOURCE} ${qml_QRC})
 target_link_libraries(labplot2 labplot2lib)
-IF (APPLE)
+IF (APPLE AND ENABLE_TOUCHBAR)
 	target_link_libraries(labplot2 KDMacTouchBar)
 ENDIF()
 
