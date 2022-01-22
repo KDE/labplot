@@ -73,7 +73,7 @@
 #include <KUserFeedback/UsageTimeSource>
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 #include "3rdparty/kdmactouchbar/src/kdmactouchbar.h"
 #endif
 
@@ -222,10 +222,12 @@ void MainWin::initGUI(const QString& fileName) {
 	initActions();
 
 #ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 	// setup touchbar before GUI (otherwise actions in the toolbar are not selectable)
 	m_touchBar = new KDMacTouchBar(this);
-	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
 	//m_touchBar->setTouchButtonStyle(KDMacTouchBar::IconOnly);
+#endif
+	setupGUI(Default, QLatin1String("/Applications/labplot2.app/Contents/Resources/labplot2ui.rc"));
 	setUnifiedTitleAndToolBarOnMac(true);
 #else
 	setupGUI(Default, KXMLGUIClient::xmlFile());	// should be "labplot2ui.rc"
@@ -962,7 +964,7 @@ void MainWin::updateGUIOnProjectChanges() {
 
 	updateTitleBar();
 
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 	m_touchBar->clear();
 
 	if (!hasProject) {
@@ -999,7 +1001,7 @@ void MainWin::updateGUI() {
 	}
 
 	//reset the touchbar
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 	m_touchBar->clear();
 
 	m_touchBar->addAction(m_undoIconOnlyAction);
@@ -1033,7 +1035,7 @@ void MainWin::updateGUI() {
 		m_exportAction->setEnabled(true);
 	}
 
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 	if (dynamic_cast<Folder*>(m_currentAspect)) {
 		m_touchBar->addAction(m_newWorksheetAction);
 		m_touchBar->addAction(m_newSpreadsheetAction);
@@ -1087,7 +1089,7 @@ void MainWin::updateGUI() {
 		toolbar->setEnabled(true);
 
 		//populate the touchbar on Mac
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 		view->fillTouchBar(m_touchBar);
 #endif
 		//hide the spreadsheet toolbar
@@ -1128,7 +1130,7 @@ void MainWin::updateGUI() {
 		toolbar->setEnabled(true);
 
 		//populate the touchbar on Mac
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 		m_touchBar->addAction(m_importFileAction);
 		view->fillTouchBar(m_touchBar);
 #endif
@@ -1154,7 +1156,7 @@ void MainWin::updateGUI() {
 		menu->setEnabled(true);
 
 		//populate the touchbar on Mac
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 		m_touchBar->addAction(m_importFileAction);
 		//view->fillTouchBar(m_touchBar);
 #endif
