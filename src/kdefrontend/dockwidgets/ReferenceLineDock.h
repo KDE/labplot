@@ -42,6 +42,7 @@ private Q_SLOTS:
 	//Position
 	void orientationChanged(int);
 	void positionChanged();
+	void positionDateTimeChanged(const QDateTime&);
 
 	//Line
 	void styleChanged(int);
