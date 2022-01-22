@@ -277,7 +277,8 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 			//DEBUG("\n" << Q_FUNC_INFO << ", NEW TEXT = " << STDSTRING(textWrapper.text) << std::endl)
 
 			TextWrapper tw = textWrapper;
-			if (d->textWrapper.mode != TextLabel::Mode::Text) {	// restore text formatting
+			// restore formatting when text changes or switching back to text mode
+			if (d->textWrapper.mode != TextLabel::Mode::Text || textWrapper.text != d->textWrapper.text) {
 				QTextEdit te(d->textWrapper.text);
 				te.selectAll();
 				te.setText(textWrapper.text);
