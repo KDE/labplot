@@ -27,6 +27,7 @@
 #include <QIntValidator>
 #include <QPainter>
 #include <QRadioButton>
+#include <QWheelEvent>
 
 namespace {
 enum TwRangesColumn{
@@ -35,6 +36,27 @@ enum TwRangesColumn{
 	Min,
 	Max,
 	Scale
+};
+
+enum TwPlotRangesColumn {
+	XRange,
+	YRange,
+	Default
+};
+
+// https://stackoverflow.com/questions/5821802/qspinbox-inside-a-qscrollarea-how-to-prevent-spin-box-from-stealing-focus-when
+class ComboBoxIgnoreWheel : public QComboBox {
+public:
+	ComboBoxIgnoreWheel(QWidget *parent = 0) : QComboBox(parent) {
+		setFocusPolicy(Qt::StrongFocus);
+	}
+protected:
+	virtual void wheelEvent(QWheelEvent *event) {
+		if (!hasFocus())
+			event->ignore();
+		else
+			QComboBox::wheelEvent(event);
+	}
 };
 }
 
@@ -624,7 +646,7 @@ void CartesianPlotDock::updateXRangeList() {
 		connect(chk, &QCheckBox::toggled, this, &CartesianPlotDock::autoScaleXChanged);
 
 		// format
-		auto* cb = new QComboBox(ui.twXRanges);
+		auto* cb = new ComboBoxIgnoreWheel(ui.twXRanges);
 		cb->addItem( i18n("Numeric") );
 		cb->addItem( AbstractColumn::columnModeString(AbstractColumn::ColumnMode::DateTime) );
 		cb->setProperty("row", i);
@@ -667,7 +689,7 @@ void CartesianPlotDock::updateXRangeList() {
 		}
 
 		// scale
-		cb = new QComboBox(ui.twXRanges);
+		cb = new ComboBoxIgnoreWheel(ui.twXRanges);
 		//TODO: -> updateLocale()
 		for (const auto& name: RangeT::scaleNames)
 			cb->addItem(name);
@@ -722,7 +744,7 @@ void CartesianPlotDock::updateYRangeList() {
 		connect(chk, &QCheckBox::toggled, this, &CartesianPlotDock::autoScaleYChanged);
 
 		// format
-		auto* cb = new QComboBox(ui.twYRanges);
+		auto* cb = new ComboBoxIgnoreWheel(ui.twYRanges);
 		cb->addItem( i18n("Numeric") );
 		cb->addItem( AbstractColumn::columnModeString(AbstractColumn::ColumnMode::DateTime) );
 		cb->setProperty("row", i);
@@ -768,7 +790,7 @@ void CartesianPlotDock::updateYRangeList() {
 		}
 
 		// scale
-		cb = new QComboBox(ui.twYRanges);
+		cb = new ComboBoxIgnoreWheel(ui.twYRanges);
 		//TODO: -> updateLocale()
 		for (const auto& name: RangeT::scaleNames)
 			cb->addItem(name);
@@ -829,7 +851,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 		DEBUG(Q_FUNC_INFO << ", x range = " << xRange.toStdString() << ", auto scale = " << xRange.autoScale())
 		DEBUG(Q_FUNC_INFO << ", y range = " << yRange.toStdString() << ", auto scale = " << yRange.autoScale())
 
-		auto* cb = new QComboBox(ui.twPlotRanges);
+		auto* cb = new ComboBoxIgnoreWheel(ui.twPlotRanges);
 		cb->setEditable(true);	// to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
@@ -843,9 +865,9 @@ void CartesianPlotDock::updatePlotRangeList() {
 			cb->addItem( xRange.toLocaleString() );
 			cb->setStyleSheet("QComboBox::drop-down {border-width: 0px;}");	// hide arrow if there is only one range
 		}
-		ui.twPlotRanges->setCellWidget(i, 0, cb);
+		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::XRange, cb);
 
-		cb = new QComboBox(ui.twPlotRanges);
+		cb = new ComboBoxIgnoreWheel(ui.twPlotRanges);
 		cb->setEditable(true);	// to have a line edit
 		cb->lineEdit()->setReadOnly(true);
 		cb->lineEdit()->setAlignment(Qt::AlignHCenter);
@@ -859,7 +881,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 			cb->addItem( yRange.toLocaleString() );
 			cb->setStyleSheet("QComboBox::drop-down {border-width: 0px;}");	// hide arrow if there is only one range
 		}
-		ui.twPlotRanges->setCellWidget(i, 1, cb);
+		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::YRange, cb);
 	}
 	ui.twPlotRanges->resizeColumnToContents(0);
 	ui.twPlotRanges->resizeColumnToContents(1);
@@ -877,7 +899,7 @@ void CartesianPlotDock::updatePlotRangeList() {
 			rb->setChecked(true);
 		m_bgDefaultPlotRange->addButton(rb);
 		rb->setStyleSheet("margin-left:50%; margin-right:50%;");	// center button
-		ui.twPlotRanges->setCellWidget(i, 2, rb);
+		ui.twPlotRanges->setCellWidget(i, TwPlotRangesColumn::Default, rb);
 		m_bgDefaultPlotRange->setId(rb, i);
 	}
 
