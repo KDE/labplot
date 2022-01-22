@@ -1304,8 +1304,13 @@ void LabelWidget::load() {
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
 
+	auto format = ui.teLabel->currentCharFormat();
 	ui.tbFontBold->setChecked(ui.teLabel->fontWeight() == QFont::Bold);
 	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
+	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
+	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
+	ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
+	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 
 	//move the cursor to the end
 	QTextCursor cursor = ui.teLabel->textCursor();
