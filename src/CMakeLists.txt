@@ -528,7 +528,7 @@ IF (ENABLE_READSTAT)
 	# link system readstat with iconv
 	IF (READSTAT_FOUND AND (WIN32 OR APPLE))
 		FIND_LIBRARY ( ICONV_LIBRARIES NAMES iconv libiconv libconv-2 )
-		target_link_libraries (labplot2lib ${ICONV_LIBRARIES} )
+		target_link_libraries ( labplot2lib ${ICONV_LIBRARIES} )
 	ENDIF ()
 	target_link_libraries( labplot2lib ${READSTAT_LIBRARIES} )
 ENDIF ()
@@ -588,8 +588,8 @@ IF (APPLE AND ${ECM_VERSION} VERSION_GREATER "5.48.0")
 	ecm_add_app_icon(LABPLOT_SOURCE ICONS ${LML_ICONS} OUTFILE_BASENAME LML_ICONS)
 ENDIF ()
 
-add_executable(labplot2 ${LABPLOT_SOURCE} ${qml_QRC})
-target_link_libraries(labplot2 labplot2lib)
+add_executable( labplot2 ${LABPLOT_SOURCE} ${qml_QRC} )
+target_link_libraries( labplot2 labplot2lib )
 
 ############## installation ################################
 install( TARGETS labplot2 DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
