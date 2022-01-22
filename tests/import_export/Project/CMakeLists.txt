@@ -1,6 +1,6 @@
 INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
-add_executable (projectimporttest ProjectImportTest.cpp ../../CommonTest.cpp)
+add_executable (ProjectImportTest ProjectImportTest.cpp ../../CommonTest.cpp)
 
-target_link_libraries(projectimporttest labplot2lib Qt5::Test)
+target_link_libraries(ProjectImportTest labplot2lib Qt5::Test)
 
-add_test(NAME projectimporttest COMMAND projectimporttest)
+add_test(NAME ProjectImportTest COMMAND ProjectImportTest)
