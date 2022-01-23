@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>LabPlot</name>
+  <name xml:lang="ar">معمل الرسم</name>
   <name xml:lang="bs">LabPlot</name>
   <name xml:lang="ca">LabPlot</name>
   <name xml:lang="ca-valencia">LabPlot</name>
@@ -35,9 +36,9 @@
   <name xml:lang="zh-CN">LabPlot</name>
   <name xml:lang="zh-TW">LabPlot</name>
   <summary>Interactive Data Visualization and Analysis</summary>
+  <summary xml:lang="ar">تصور وتحليل البيانات التفاعلي</summary>
   <summary xml:lang="ca">Visualització i anàlisi de dades interactius</summary>
   <summary xml:lang="ca-valencia">Visualització i anàlisi de dades interactius</summary>
-  <summary xml:lang="de">Interaktive Datenvisualisierung und -analyse</summary>
   <summary xml:lang="en-GB">Interactive Data Visualisation and Analysis</summary>
   <summary xml:lang="es">Visualización y análisis de datos interactivo</summary>
   <summary xml:lang="fr">Analyse et affichage interactif de données</summary>
@@ -51,9 +52,9 @@
     <p>
       LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone.
     </p>
+    <p xml:lang="ar">معمل الرسم هو برنامج مجاني ومفتوح المصدر ومتعدد المنصات لتصور البيانات وتحليلها ويمكن للجميع الوصول إليه.</p>
     <p xml:lang="ca">El LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
     <p xml:lang="ca-valencia">El LabPlot és un programari de visualització i anàlisi de dades LLIURE, de codi obert i multiplataforma, accessible a tothom.</p>
-    <p xml:lang="de">LabPlot ist ein FREIE, Open Source und plattformübergreifende Software zur Datenvisualisierung und -analyse, die für jeden verfügbar ist.</p>
     <p xml:lang="en-GB">LabPlot is a FREE, open source and cross-platform Data Visualisation and Analysis software accessible to everyone.</p>
     <p xml:lang="es">LabPlot es un software de visualización y análisis de datos LIBRE, de código abierto y multiplataforma, al que todo el mundo puede acceder.</p>
     <p xml:lang="fr">LabPlot est un logiciel d'affichage et d'analyse de données, libre, « Open-source » et multi-plate-forme, accessible à tous.</p>
@@ -66,6 +67,7 @@
     <p>
       LabPlot provides an easy way to create, manage and edit plots. It allows you to produce plots based on data from a spreadsheet or on data imported from external files. Plots can be exported to several pixmap and vector graphic formats.
     </p>
+    <p xml:lang="ar">يوفر معمل الرسم طريقة سهلة لإنشاء وإدارة وتحرير الرسومات. يسمح لك بإنتاج الرسومات بناءً على بيانات من جدول بيانات أو على بيانات مستوردة من ملفات خارجية. يمكن تصدير الرسومات إلى العديد من تنسيقات الرسم البيكسي والمتجه.</p>
     <p xml:lang="bs">Grafikov LabPlot pruža jednostavan način za stvaranje, upravljanje i uređivanje crtanja dijagrama. On vam omogućava da proizvede crteže na osnovu podataka iz tabele ili podataka uvezenih iz eksternih fajlova. Crteži se mogu izvoziti u nekoliko pixmap i vektor grafičkih formata.</p>
     <p xml:lang="ca">El LabPlot proporciona una manera fàcil de crear, gestionar i editar grafs. Permet produir grafs a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els grafs es poden exportar a diversos formats de mapa de píxels i de gràfics vectorials.</p>
     <p xml:lang="ca-valencia">El LabPlot proporciona una manera fàcil de crear, gestionar i editar grafs. Permet produir grafs a partir de les dades d'un full de càlcul o en les dades importades des de fitxers externs. Els grafs es poden exportar a diversos formats de mapa de píxels i de gràfics vectorials.</p>
@@ -99,6 +101,7 @@
   <screenshots>
     <screenshot type="default">
       <caption>Basic visualization of data</caption>
+      <caption xml:lang="ar">تصوير البيانات</caption>
       <caption xml:lang="ca">Visualització bàsica de dades</caption>
       <caption xml:lang="ca-valencia">Visualització bàsica de dades</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
@@ -113,6 +116,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Basic visualization of data</caption>
+      <caption xml:lang="ar">تصوير البيانات</caption>
       <caption xml:lang="ca">Visualització bàsica de dades</caption>
       <caption xml:lang="ca-valencia">Visualització bàsica de dades</caption>
       <caption xml:lang="es">Visualización básica de datos</caption>
@@ -127,6 +131,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Advanced layouting of plots and images</caption>
+      <caption xml:lang="ar">التخطيط المتقدم للرسومات والصور</caption>
       <caption xml:lang="ca">Disposició avançada de grafs i imatges</caption>
       <caption xml:lang="ca-valencia">Disposició avançada de grafs i imatges</caption>
       <caption xml:lang="es">Diseño avanzado de gráficos e imágenes</caption>
@@ -141,6 +146,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Theming</caption>
+      <caption xml:lang="ar">سمات</caption>
       <caption xml:lang="ca">Permet temes</caption>
       <caption xml:lang="ca-valencia">Permet temes</caption>
       <caption xml:lang="cs">Motivy</caption>
@@ -156,6 +162,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Visualization of mathematical functions</caption>
+      <caption xml:lang="ar">تصوير الدوال الرياضية</caption>
       <caption xml:lang="ca">Visualització de funcions matemàtiques</caption>
       <caption xml:lang="ca-valencia">Visualització de funcions matemàtiques</caption>
       <caption xml:lang="es">Visualización de funciones matemáticas</caption>
@@ -170,6 +177,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Fit pre-defined or custom models to the data</caption>
+      <caption xml:lang="ar">تناسب النماذج المحددة مسبقًا أو المخصصة للبيانات</caption>
       <caption xml:lang="ca">Ajust de models predefinits o personalitzats a les dades</caption>
       <caption xml:lang="ca-valencia">Ajust de models predefinits o personalitzats a les dades</caption>
       <caption xml:lang="es">Ajuste de modelos predefinidos o personalizados a los datos</caption>
@@ -184,6 +192,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Smooth the data with the help of various smoothing methods</caption>
+      <caption xml:lang="ar">قم بسلاسة البيانات بمساعدة طرق التنعيم المختلفة</caption>
       <caption xml:lang="ca">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
       <caption xml:lang="ca-valencia">Suavitza les dades amb l'ajuda de diversos mètodes de suavitzat</caption>
       <caption xml:lang="es">Suavizar los datos con la ayuda de diversos métodos de suavizado</caption>
@@ -198,6 +207,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Notebook interface for interactive sessions in Maxima, Octave, R, Sage, Scilab, Python, Julia and Lua</caption>
+      <caption xml:lang="ar">واجهة حاسوب دفتري للجلسات التفاعلية في Maxima و Octave و R و Sage و Scilab و Python و Julia و Lua</caption>
       <caption xml:lang="ca">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia i Lua</caption>
       <caption xml:lang="ca-valencia">Interfície de bloc de notes per a sessions interactives en el Maxima, Octave, R, Sage, Scilab, Python, Julia i Lua</caption>
       <caption xml:lang="es">Interfaz de bloc de notas para sesiones interactivas en Maxima, Octave, R, Sage, Scilab, Python, Julia y Lua</caption>
@@ -212,6 +222,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Signal analysis</caption>
+      <caption xml:lang="ar">تحليل الإشارات</caption>
       <caption xml:lang="ca">Anàlisi de senyals</caption>
       <caption xml:lang="ca-valencia">Anàlisi de senyals</caption>
       <caption xml:lang="es">Análisis de señales</caption>
@@ -226,6 +237,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Herzsprung-Russel diagram in LabPlot</caption>
+      <caption xml:lang="ar">مخطط هيرتزبرونج-راسل في معمل الرسم</caption>
       <caption xml:lang="ca">Diagrama Herzsprung-Russel en el LabPlot</caption>
       <caption xml:lang="es">Diagrama de Herzsprung-Russel en LabPlot</caption>
       <caption xml:lang="fr">Diagramme de Herzsprung-Russel dans LabPlot</caption>
@@ -239,6 +251,7 @@
     </screenshot>
     <screenshot type="default">
       <caption>Visualization of data calculated in an interactive Maxima session</caption>
+      <caption xml:lang="ar">تصور البيانات المحسوبة في جَلسة ماكسيما تفاعلية</caption>
       <caption xml:lang="ca">Visualització de dades calculades en una sessió interactiva del Maxima</caption>
       <caption xml:lang="ca-valencia">Visualització de dades calculades en una sessió interactiva del Maxima</caption>
       <caption xml:lang="es">Visualización de datos calculados en una sesión interactiva de Maxima</caption>
