@@ -774,7 +774,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	if (m_project->isLoading())
 		return;
 
-	DEBUG(Q_FUNC_INFO)
+	QDEBUG(Q_FUNC_INFO << ", selected/deselected = " << selected << "/" << deselected)
 
 	QModelIndex index;
 	AbstractAspect* aspect = nullptr;
@@ -785,6 +785,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	for (int i = 0; i < sitems.size()/4; ++i) {
 		index = sitems.at(i*4);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		QDEBUG("sitems ASPECT =" << aspect)
 		aspect->setSelected(true);
 	}
 
@@ -792,6 +793,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	for (int i = 0; i < ditems.size()/4; ++i) {
 		index = ditems.at(i*4);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		QDEBUG("ditems ASPECT =" << aspect)
 		aspect->setSelected(false);
 	}
 
@@ -799,6 +801,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	QList<AbstractAspect*> selectedAspects;
 	for (const auto& index : qAsConst(items)) {
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
+		QDEBUG("items ASPECT =" << aspect)
 		selectedAspects << aspect;
 	}
 

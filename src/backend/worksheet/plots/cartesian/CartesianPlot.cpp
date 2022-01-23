@@ -2387,16 +2387,16 @@ void CartesianPlot::boxPlotOrientationChanged(BoxPlot::Orientation orientation) 
 
 }
 
-void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
-	DEBUG(Q_FUNC_INFO)
+void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+	QDEBUG(Q_FUNC_INFO << ", CHILD = " << child << ", PARENT = " << parent)
 	if (m_legend == child) {
 		DEBUG(Q_FUNC_INFO << ", a legend")
 		if (m_menusInitialized)
 			addLegendAction->setEnabled(true);
 		m_legend = nullptr;
 	} else {
-		Q_D(CartesianPlot);
 		const auto* curve = qobject_cast<const XYCurve*>(child);
+		Q_D(CartesianPlot);
 		if (curve) {
 			DEBUG(Q_FUNC_INFO << ", a curve")
 			updateLegend();

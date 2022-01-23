@@ -253,10 +253,11 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 void LabelWidget::setAxes(QList<Axis*> axes) {
 	m_labelsList.clear();
 	for (auto* axis : axes) {
+		DEBUG(Q_FUNC_INFO << ", axis TITLE = " << axis->title())
 		m_labelsList.append(axis->title());
 		connect(axis, &Axis::titleOffsetXChanged, this, &LabelWidget::labelOffsetxChanged);
-		connect(axis, &Axis::titleOffsetYChanged, this, &LabelWidget::labelOffsetyChanged );
-		connect(axis->title(), &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged );
+		connect(axis, &Axis::titleOffsetYChanged, this, &LabelWidget::labelOffsetyChanged);
+		connect(axis->title(), &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
 	}
 
 	m_axesList = axes;
@@ -293,9 +294,7 @@ void LabelWidget::updateBackground() const {
 		color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->backgroundFirstColor();
 	else if (type == AspectType::CartesianPlotLegend)
 		color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
-	else if (type == AspectType::InfoElement)
-		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
-	else if (type == AspectType::Axis)
+	else if (type == AspectType::InfoElement || type == AspectType::Axis)
 		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
 	else
 		DEBUG("Not handled type:" << static_cast<int>(type));
@@ -322,6 +321,10 @@ void LabelWidget::initConnections() const {
 	connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
 	connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
 
+	if (!m_label->parentAspect()) {
+		QDEBUG(Q_FUNC_INFO << ", LABEL " <<m_label << " HAS NO PARENT!")
+		return;
+}
 	AspectType type = m_label->parentAspect()->type();
 	if (type == AspectType::Worksheet) {
 		auto* worksheet = static_cast<const Worksheet*>(m_label->parentAspect());

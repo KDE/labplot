@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
     SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -47,9 +47,7 @@ extern "C" {
 
 class ScaledTextItem : public QGraphicsTextItem {
 public:
-	ScaledTextItem(QGraphicsItem* parent = nullptr) : QGraphicsTextItem(parent) {
-
-	}
+	ScaledTextItem(QGraphicsItem* parent = nullptr) : QGraphicsTextItem(parent) {}
 
 	void setScaleFactor(double scaleFactor) {
 		m_scaleFactor = scaleFactor;
@@ -71,7 +69,6 @@ private:
 	double m_scaleFactor = 1.;
 	double m_rotationAngle = 0.;
 };
-
 
 /**
  * \class TextLabel

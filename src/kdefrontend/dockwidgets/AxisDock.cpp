@@ -470,6 +470,7 @@ void AxisDock::setModel() {
   sets the axes. The properties of the axes in the list \c list can be edited in this widget.
 */
 void AxisDock::setAxes(QList<Axis*> list) {
+	QDEBUG(Q_FUNC_INFO << ", Axis LIST =" << list)
 	Lock lock(m_initializing);
 	m_axesList = list;
 	m_axis = list.first();
