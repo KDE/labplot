@@ -41,7 +41,7 @@ public:
 	void retransform() override;
 	void updateVerticalLine();
 	void updateConnectionLine();
-	void visibilityChanged();
+	void changeVisibility();
 
 	virtual void recalcShapeAndBoundingRect() override {};
 

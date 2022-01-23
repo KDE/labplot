@@ -508,7 +508,7 @@ void CartesianPlot::initActions() {
 	//visibility action
 	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CartesianPlot::visibilityChanged);
+	connect(visibilityAction, &QAction::triggered, this, &CartesianPlot::changeVisibility);
 }
 
 void CartesianPlot::initMenus() {
@@ -2199,7 +2199,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		connect(curve, &XYCurve::yErrorMinusColumnChanged, [this, curve] () {this->yDataChanged(const_cast<XYCurve*>(curve));});
 
 		//visibility
-		connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged),this, &CartesianPlot::curveVisibilityChanged);
+		connect(curve, &XYCurve::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 
 		//update the legend on changes of the name, line and symbol styles
 		connect(curve, &XYCurve::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
@@ -2228,7 +2228,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			DEBUG(Q_FUNC_INFO << ", HISTOGRAM")
 			// TODO: check if all ranges must be updated
 			connect(hist, &Histogram::dataChanged, [this, hist] {this->dataChanged(-1, -1, const_cast<Histogram*>(hist));});
-			connect(hist, &Histogram::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
+			connect(hist, &Histogram::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 			connect(hist, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
@@ -2243,7 +2243,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			DEBUG(Q_FUNC_INFO << ", BOX PLOT")
 			// TODO: check if all ranges must be updated
 			connect(boxPlot, &BoxPlot::dataChanged, [this, boxPlot] {this->dataChanged(-1, -1, const_cast<BoxPlot*>(boxPlot));});
-			connect(boxPlot, &BoxPlot::visibilityChanged, this, &CartesianPlot::curveVisibilityChanged);
+			connect(boxPlot, &BoxPlot::visibleChanged, this, &CartesianPlot::curveVisibilityChanged);
 			connect(boxPlot, &BoxPlot::aspectDescriptionChanged, this, &CartesianPlot::updateLegend);
 
 			updateLegend();
@@ -3473,14 +3473,6 @@ void CartesianPlot::mouseHoverZoomSelectionMode(QPointF logicPos, int cSystemInd
 void CartesianPlot::mouseHoverOutsideDataRect() {
 	Q_D(CartesianPlot);
 	d->mouseHoverOutsideDataRect();
-}
-
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
-void CartesianPlot::visibilityChanged() {
-	Q_D(CartesianPlot);
-	this->setVisible(!d->isVisible());
 }
 
 //#####################################################################

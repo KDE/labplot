@@ -126,6 +126,9 @@ private:
 	QMenu* m_moveInFrontOfMenu{nullptr};
 	bool m_printing{false};
 
+protected Q_SLOTS:
+	void changeVisibility();
+
 private Q_SLOTS:
 	void prepareDrawingOrderMenu();
 	void execMoveBehind(QAction*);

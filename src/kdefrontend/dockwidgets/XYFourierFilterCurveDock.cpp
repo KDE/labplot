@@ -162,7 +162,7 @@ void XYFourierFilterCurveDock::initGeneralTab() {
 	connect(m_filterCurve, &XYFourierFilterCurve::yDataColumnChanged, this, &XYFourierFilterCurveDock::curveYDataColumnChanged);
 	connect(m_filterCurve, &XYFourierFilterCurve::filterDataChanged, this, &XYFourierFilterCurveDock::curveFilterDataChanged);
 	connect(m_filterCurve, &XYFourierFilterCurve::sourceDataChanged, this, &XYFourierFilterCurveDock::enableRecalculate);
-	connect(m_filterCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYFourierFilterCurveDock::curveVisibilityChanged);
+	connect(m_filterCurve, &XYCurve::visibleChanged, this, &XYFourierFilterCurveDock::curveVisibilityChanged);
 	connect(m_filterCurve, &WorksheetElement::plotRangeListChanged, this, &XYFourierFilterCurveDock::updatePlotRanges);
 }
 

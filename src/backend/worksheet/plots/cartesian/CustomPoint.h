@@ -43,9 +43,6 @@ public:
 
 	typedef CustomPointPrivate Private;
 
-private Q_SLOTS:
-	void visibilityChanged();
-
 protected:
 	CustomPoint(const QString& name, CustomPointPrivate* dd);
 

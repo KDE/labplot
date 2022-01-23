@@ -575,7 +575,7 @@ void AxisDock::setAxes(QList<Axis*> list) {
 	connect(m_axis, &Axis::minorGridPenChanged, this, &AxisDock::axisMinorGridPenChanged);
 	connect(m_axis, &Axis::minorGridOpacityChanged, this, &AxisDock::axisMinorGridOpacityChanged);
 
-	connect(m_axis, &Axis::visibilityChanged, this, &AxisDock::axisVisibilityChanged);
+	connect(m_axis, &Axis::visibleChanged, this, &AxisDock::axisVisibilityChanged);
 }
 
 /*

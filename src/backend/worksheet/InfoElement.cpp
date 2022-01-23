@@ -159,7 +159,7 @@ void InfoElement::initMenus() {
 }
 
 void InfoElement::initCurveConnections(const XYCurve* curve) {
-	connect(curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &InfoElement::curveVisibilityChanged);
+	connect(curve, &XYCurve::visibleChanged, this, &InfoElement::curveVisibilityChanged);
 	connect(curve, &XYCurve::coordinateSystemIndexChanged, this, &InfoElement::curveCoordinateSystemIndexChanged);
 	connect(curve, &XYCurve::moveBegin, this, [this]() { m_curveGetsMoved = true; });
 	connect(curve, &XYCurve::moveEnd, this, [this]() { m_curveGetsMoved = false; });
@@ -770,7 +770,7 @@ void InfoElement::setConnectionLineCurveName(const QString& name) {
 		exec(new InfoElementSetConnectionLineCurveNameCmd(d, name, ki18n("%1: set connectionline curve name")));
 }
 
-STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVisible, bool, visible, visibilityChanged)
+STD_SETTER_CMD_IMPL_F_S(InfoElement, SetVisible, bool, visible, changeVisibility)
 void InfoElement::setVisible(bool visible) {
 	Q_D(InfoElement);
 	if (visible != d->visible)
@@ -917,7 +917,7 @@ void InfoElementPrivate::updateConnectionLine() {
 	update(boundingRect());
 }
 
-void InfoElementPrivate::visibilityChanged() {
+void InfoElementPrivate::changeVisibility() {
 	for(auto& markerpoint : q->markerpoints)
 		markerpoint.customPoint->setVisible(visible);
 	if(q->m_title) {

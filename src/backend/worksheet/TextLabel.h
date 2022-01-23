@@ -127,9 +127,6 @@ public:
 private Q_SLOTS:
 	void updateTeXImage();
 
-	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChanged();
-
 protected:
 	TextLabel(const QString& name, TextLabelPrivate* dd, Type = Type::General);
 

@@ -173,7 +173,7 @@ void XYDifferentiationCurveDock::initGeneralTab() {
 	connect(m_differentiationCurve, &XYDifferentiationCurve::differentiationDataChanged, this, &XYDifferentiationCurveDock::curveDifferentiationDataChanged);
 	connect(m_differentiationCurve, &XYDifferentiationCurve::sourceDataChanged, this, &XYDifferentiationCurveDock::enableRecalculate);
 	connect(m_differentiationCurve, &WorksheetElement::plotRangeListChanged, this, &XYDifferentiationCurveDock::updatePlotRanges);
-	connect(m_differentiationCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYDifferentiationCurveDock::curveVisibilityChanged);
+	connect(m_differentiationCurve, &XYCurve::visibleChanged, this, &XYDifferentiationCurveDock::curveVisibilityChanged);
 }
 
 void XYDifferentiationCurveDock::setModel() {

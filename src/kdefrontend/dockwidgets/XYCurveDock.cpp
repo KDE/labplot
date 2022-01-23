@@ -579,7 +579,7 @@ void XYCurveDock::initGeneralTab() {
 	connect(m_curve, &XYCurve::yColumnChanged, this, &XYCurveDock::curveYColumnChanged);
 	connect(m_curve, &WorksheetElement::plotRangeListChanged, this, &XYCurveDock::updatePlotRanges);
 	connect(m_curve, &XYCurve::legendVisibleChanged, this, &XYCurveDock::curveLegendVisibleChanged);
-	connect(m_curve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYCurveDock::curveVisibilityChanged);
+	connect(m_curve, &WorksheetElement::visibleChanged, this, &XYCurveDock::curveVisibilityChanged);
 	DEBUG("XYCurveDock::initGeneralTab() DONE");
 }
 

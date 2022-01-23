@@ -239,7 +239,7 @@ QMenu* TextLabel::createContextMenu() {
 	if (!visibilityAction) {
 		visibilityAction = new QAction(i18n("Visible"), this);
 		visibilityAction->setCheckable(true);
-		connect(visibilityAction, &QAction::triggered, this, &TextLabel::visibilityChanged);
+		connect(visibilityAction, &QAction::triggered, this, &TextLabel::changeVisibility);
 	}
 
 	visibilityAction->setChecked(isVisible());
@@ -372,14 +372,6 @@ int TextLabel::gluePointCount() {
 void TextLabel::updateTeXImage() {
 	Q_D(TextLabel);
 	d->updateTeXImage();
-}
-
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
-void TextLabel::visibilityChanged() {
-	Q_D(const TextLabel);
-	this->setVisible(!d->isVisible());
 }
 
 //##############################################################################

@@ -190,7 +190,7 @@ void XYSmoothCurveDock::initGeneralTab() {
 	connect(m_smoothCurve, &XYSmoothCurve::smoothDataChanged, this, &XYSmoothCurveDock::curveSmoothDataChanged);
 	connect(m_smoothCurve, &XYSmoothCurve::sourceDataChanged, this, &XYSmoothCurveDock::enableRecalculate);
 	connect(m_smoothCurve, &WorksheetElement::plotRangeListChanged, this, &XYSmoothCurveDock::updatePlotRanges);
-	connect(m_smoothCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYSmoothCurveDock::curveVisibilityChanged);
+	connect(m_smoothCurve, &WorksheetElement::visibleChanged, this, &XYSmoothCurveDock::curveVisibilityChanged);
 }
 
 void XYSmoothCurveDock::setModel() {

@@ -337,7 +337,6 @@ private Q_SLOTS:
 	void boxPlotOrientationChanged(WorksheetElement::Orientation);
 
 	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChanged();
 	void loadTheme(const QString&);
 
 protected:
