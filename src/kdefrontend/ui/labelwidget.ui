@@ -633,7 +633,7 @@
    <item row="1" column="3">
     <widget class="QCheckBox" name="chbShowPlaceholderText">
      <property name="text">
-      <string>Show Placeholder</string>
+      <string>Show Placeholder Text (editable)</string>
      </property>
     </widget>
    </item>

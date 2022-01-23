@@ -1100,11 +1100,13 @@ void LabelWidget::showPlaceholderTextChanged(bool checked) {
 	if(m_initializing)
 		return;
 	if (!checked) {
+		ui.teLabel->setEnabled(false);
 		if (m_label->text().mode != TextLabel::Mode::Text)
 			ui.teLabel->setText(m_label->text().text);
 		else
 			ui.teLabel->setHtml(m_label->text().text);
 	} else {
+		ui.teLabel->setEnabled(true);
 		if (m_label->text().mode != TextLabel::Mode::Text)
 			ui.teLabel->setText(m_label->text().textPlaceholder);
 		else
