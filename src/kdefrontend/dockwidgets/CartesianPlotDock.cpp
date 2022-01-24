@@ -105,11 +105,12 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent) : BaseDock(parent) {
 	ui.leBackgroundFileName->setCompleter(new QCompleter(new QDirModel, this));
 
 	//"Title"-tab
-	auto* hboxLayout = new QHBoxLayout(ui.tabTitle);
-	labelWidget = new LabelWidget(ui.tabTitle);
-	hboxLayout->addWidget(labelWidget);
-	hboxLayout->setContentsMargins(0,0,0,0);
-	hboxLayout->setSpacing(0);
+//	auto* hboxLayout = new QHBoxLayout(ui.titleScrollArea);
+	labelWidget = new LabelWidget(ui.titleScrollArea);
+//	hboxLayout->addWidget(labelWidget);
+//	hboxLayout->setContentsMargins(0,0,0,0);
+//	hboxLayout->setSpacing(0);
+	ui.titleScrollArea->setWidget(labelWidget);
 
 	//adjust layouts in the tabs
 	for (int i = 0; i < ui.tabWidget->count(); ++i) {

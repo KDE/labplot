@@ -1281,12 +1281,8 @@ bool MainWin::newProject() {
 		if (group.keyList().indexOf("WindowState") != -1)
 			restoreState(group.readEntry("WindowState", QByteArray()));
 
-		auto* scrollArea = new QScrollArea(m_propertiesDock);
-		scrollArea->setWidgetResizable(true);
-
-		stackedWidget = new QStackedWidget(scrollArea);
-		scrollArea->setWidget(stackedWidget);		// stacked widget inside scroll area
-		m_propertiesDock->setWidget(scrollArea);	// scroll area inside dock
+		stackedWidget = new QStackedWidget(m_propertiesDock);
+		m_propertiesDock->setWidget(stackedWidget);	// scroll area inside dock
 
 		connect(m_propertiesDock, &QDockWidget::visibilityChanged, this, &MainWin::propertiesDockVisibilityChanged);
 
