@@ -32,7 +32,11 @@ private:
 
 	//in the old Cantor the help panel plugin is coming as second
 	//in the new code we determine the position via the plugin name
+	//TODO: improve this logic without hard-coding for a fixed index,
+	//or remove the support for the old code in Cantor completely
 	int m_helpPanelIndex{1};
+
+	int m_documentationPanelIndex{0};
 
 private Q_SLOTS:
 	//SLOTs for changes triggered in WorksheetDock

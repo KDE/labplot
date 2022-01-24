@@ -64,13 +64,14 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 			if (plugin->objectName() == QLatin1String("FileBrowserPanel") || plugin->name() == i18n("File Browser"))
 				continue;
 
-
 			connect(plugin, &Cantor::PanelPlugin::visibilityRequested, this, &CantorWorksheetDock::visibilityRequested);
 			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
 			index.append(i);
 
 			if (plugin->objectName() == QLatin1String("HelpPanel"))
 				m_helpPanelIndex = i;
+			else if (plugin->objectName() == QLatin1String("DocumentationPanel"))
+				m_documentationPanelIndex = i;
 		}
 	} else {
 		//don't show any name/comment when multiple notebooks were selected
@@ -108,10 +109,13 @@ void CantorWorksheetDock::restartBackend() {
 
 /*!
  * this slot is called when the visibility for one of the panels in Cantor is requested.
- * At the moment this can only happen for the integrated help in Maxima, R, etc.
- * Here we hard-code the selection of the second tab being for the help.
- * TODO: improve this logic without hard-coding for a fixed index.
+ * At the moment this can only happen for the integrated help in Maxima and in R and
+ * for the integrated documentation.
  */
 void CantorWorksheetDock::visibilityRequested() {
-	ui.tabWidget->setCurrentIndex(m_helpPanelIndex);
+	const auto& name = QObject::sender()->objectName();
+	if (name == QLatin1String("HelpPanel"))
+		ui.tabWidget->setCurrentIndex(m_helpPanelIndex);
+	else if (name == QLatin1String("DocumentationPanel"))
+		ui.tabWidget->setCurrentIndex(m_documentationPanelIndex);
 }
