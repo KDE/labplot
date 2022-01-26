@@ -472,10 +472,10 @@ void CartesianPlotLegendPrivate::retransform() {
 	float w;
 	float h = fm.ascent();
 
-	float maxTextWidth = 0;
 	float legendWidth = 0;
 	int index;
 	for (int c = 0; c < columnCount; ++c) {
+		float maxTextWidth = 0;
 		for (int r = 0; r < rowCount; ++r) {
 			if (labelColumnMajor)
 				index = c*rowCount + r;
@@ -498,8 +498,9 @@ void CartesianPlotLegendPrivate::retransform() {
 		maxColumnTextWidths.append(maxTextWidth);
 		legendWidth += maxTextWidth;
 	}
+
 	legendWidth += layoutLeftMargin + layoutRightMargin; //margins
-	legendWidth += columnCount*lineSymbolWidth + layoutHorizontalSpacing; //width of the columns without the text
+	legendWidth += columnCount*(lineSymbolWidth + layoutHorizontalSpacing); //width of the columns without the text
 	legendWidth += (columnCount-1)*2*layoutHorizontalSpacing; //spacings between the columns
 	if (title->isVisible() && !title->text().text.isEmpty()) {
 		float titleWidth;
