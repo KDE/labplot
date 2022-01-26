@@ -47,8 +47,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	ui.setupUi(this);
 
 	//adjust the layout margins
-	auto* l = dynamic_cast<QGridLayout*>(layout());
-	if (l) {
+	if (auto* l = dynamic_cast<QGridLayout*>(layout())) {
 		l->setContentsMargins(2,2,2,2);
 		l->setHorizontalSpacing(2);
 		l->setVerticalSpacing(2);
@@ -60,8 +59,6 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 		m_worksheetUnit = Worksheet::Unit::Inch;
 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
-
-	ui.kcbFontColor->setColor(Qt::black); // default color
 
 	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
 	ui.lBindLogicalPos->setToolTip(msg);
@@ -482,6 +479,7 @@ void LabelWidget::textChanged() {
 		break;
 	}
 	case TextLabel::Mode::Text: {
+		QDEBUG(Q_FUNC_INFO << ", format color = " << ui.teLabel->currentCharFormat().foreground().color())
 		//save an empty string instead of a html-string with empty body,
 		//if no text available in QTextEdit
 		QString text;
@@ -552,10 +550,15 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 
 	//font and colors
-	if (format.foreground().color().isValid())
+	//QDEBUG(Q_FUNC_INFO << ", format color = " << format.foreground().color())
+	//QDEBUG(Q_FUNC_INFO << ", label color = " << m_label->fontColor())
+	//QDEBUG(Q_FUNC_INFO << ", label text = " << ui.teLabel->toPlainText())
+	// when text is empty the default color of format is black instead of the theme color!
+	if (format.foreground().color().isValid() && !ui.teLabel->toPlainText().isEmpty()) {
 		ui.kcbFontColor->setColor(format.foreground().color());
-	else
+	} else {
 		ui.kcbFontColor->setColor(m_label->fontColor());
+	}
 
 	if (format.background().color().isValid())
 		ui.kcbBackgroundColor->setColor(format.background().color());
@@ -567,7 +570,8 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 
 // called when textlabel mode is changed
 void LabelWidget::labelModeChanged(TextLabel::Mode mode) {
-	if (m_initializing) return;
+	if (m_initializing)
+		return;
 	const Lock lock(m_initializing);
 
 	updateMode(mode);
@@ -1162,10 +1166,10 @@ void LabelWidget::labelTeXFontChanged(const QFont& font) {
 	ui.sbFontSize->setValue(font.pointSize());
 }
 
+// this function is only called when the theme is changed. Otherwise the color is coded in the html text.
+// when the theme changes, the whole text should change color regardless of the color it has
 void LabelWidget::labelFontColorChanged(const QColor color) {
-	// this function is only called when the theme is changed. Otherwise the color
-	// is directly in the html text.
-	// when the theme changes, the hole text should change color regardless of the color it has
+	QDEBUG(Q_FUNC_INFO << ", COLOR = " << color)
 	const Lock lock(m_initializing);
 	ui.kcbFontColor->setColor(color);
 	ui.teLabel->selectAll();
@@ -1294,8 +1298,8 @@ void LabelWidget::load() {
 		}
 	}
 
-	// if the text is empty yet, user LabelWidget::fontColor(),
-	//extract the color from the html formatted text otherwise
+	// if the text is empty yet, use LabelWidget::fontColor(),
+	// extract the color from the html formatted text otherwise
 	if (!m_label->text().text.isEmpty()) {
 		QTextCharFormat format = ui.teLabel->currentCharFormat();
 		ui.kcbFontColor->setColor(format.foreground().color());
@@ -1473,6 +1477,8 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.cbMode->setCurrentIndex(group.readEntry("Mode", static_cast<int>(m_label->text().mode)));
 	this->modeChanged(ui.cbMode->currentIndex());
 	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFont().pointSize()) );
+	ui.kcbFontColor->setColor( group.readEntry("TeXFontColor", m_label->fontColor()) );
+	ui.kcbBackgroundColor->setColor( group.readEntry("TeXBackgroundColor", m_label->backgroundColor()) );
 	ui.kfontRequesterTeX->setFont(group.readEntry("TeXFont", m_label->teXFont()));
 
 	// Geometry
