@@ -339,6 +339,13 @@ writer->writeAttribute( "color_g", QString::number(color.green()) ); \
 writer->writeAttribute( "color_b", QString::number(color.blue()) ); \
 }
 
+#define WRITE_QCOLOR2(color, label) \
+{ \
+writer->writeAttribute( label"_r", QString::number(color.red()) ); \
+writer->writeAttribute( label"_g", QString::number(color.green()) ); \
+writer->writeAttribute( label"_b", QString::number(color.blue()) ); \
+}
+
 #define READ_QCOLOR(color) \
 { \
 str = attribs.value("color_r").toString(); \
@@ -360,6 +367,26 @@ else \
 	color.setBlue( str.toInt() ); \
 }
 
+#define READ_QCOLOR2(color, label) \
+{ \
+str = attribs.value(label"_r").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs(label"_r").toString()); \
+else \
+	color.setRed( str.toInt() ); \
+\
+str = attribs.value(label"_g").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs(label"_g").toString()); \
+else \
+	color.setGreen( str.toInt() ); \
+\
+str = attribs.value(label"_b").toString(); \
+if (str.isEmpty()) \
+	reader->raiseWarning(attributeWarning.subs(label"_b").toString()); \
+else \
+	color.setBlue( str.toInt() ); \
+}
 //QPen
 #define WRITE_QPEN(pen) \
 { \

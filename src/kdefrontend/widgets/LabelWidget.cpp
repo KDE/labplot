@@ -450,6 +450,7 @@ void LabelWidget::updateLocale() {
 // text formatting slots
 
 void LabelWidget::textChanged() {
+	QDEBUG("############\n" << Q_FUNC_INFO << ", label text =" << m_label->text().text)
 	if (m_initializing)
 		return;
 
@@ -481,15 +482,21 @@ void LabelWidget::textChanged() {
 		break;
 	}
 	case TextLabel::Mode::Text: {
+		QDEBUG(Q_FUNC_INFO << ", color = " << m_label->fontColor())
+		QDEBUG(Q_FUNC_INFO << ", background color = " << m_label->backgroundColor())
 		QDEBUG(Q_FUNC_INFO << ", format color = " << ui.teLabel->currentCharFormat().foreground().color())
+		QDEBUG(Q_FUNC_INFO << ", te TEXT = " << ui.teLabel->toPlainText() << '\n')
+		QDEBUG(Q_FUNC_INFO << ", label text =" << m_label->text().text << '\n')
 		//save an empty string instead of a html-string with empty body,
 		//if no text available in QTextEdit
 		QString text;
 		if (!ui.teLabel->toPlainText().isEmpty()) {
 			//if the current label text is empty, set the color first
 			if (m_label->text().text.isEmpty()) {
+				DEBUG("EMPTY TEXT")
 				ui.teLabel->selectAll();
-				ui.teLabel->setTextColor(m_label->fontColor());
+				//ui.teLabel->setTextColor(m_label->fontColor());
+				ui.teLabel->setTextBackgroundColor(m_label->backgroundColor());
 				// Due to the select all, when entering a new character
 				// the first one will be deleted. So clear the selection
 				// after setting the color
@@ -501,11 +508,10 @@ void LabelWidget::textChanged() {
 			text = ui.teLabel->toHtml();
 		}
 
+		QDEBUG(Q_FUNC_INFO << ", NEW TEXT = " << text << '\n')
 		TextLabel::TextWrapper wrapper(text, TextLabel::Mode::Text, true);
 		// Don't set FontColor, because the font color is already in the html code
 		// of the text. The font color is used to change the color for Latex text
-		// label->setFontColor(ui.kcbFontColor->color());
-		// label->setBackgroundColor(ui.kcbBackgroundColor->color());
 		if(!ui.chbShowPlaceholderText->isChecked()) {
 			wrapper.text = text;
 			for (auto* label : m_labelsList) {
@@ -525,7 +531,7 @@ void LabelWidget::textChanged() {
 	}
 
 	//background color gets lost on every text change...
-	updateBackground();
+	//updateBackground();
 }
 
 /*!
@@ -552,9 +558,15 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 
 	//font and colors
-	//QDEBUG(Q_FUNC_INFO << ", format color = " << format.foreground().color())
-	//QDEBUG(Q_FUNC_INFO << ", label color = " << m_label->fontColor())
-	//QDEBUG(Q_FUNC_INFO << ", label text = " << ui.teLabel->toPlainText())
+	QDEBUG(Q_FUNC_INFO << ", format color = " << format.foreground().color())
+	QDEBUG(Q_FUNC_INFO << ", label color = " << m_label->fontColor())
+	QDEBUG(Q_FUNC_INFO << ", text = " << ui.teLabel->toPlainText())
+	QDEBUG(Q_FUNC_INFO << ", label text = " << m_label->text().text)
+
+	//TEST
+	if (ui.teLabel->toPlainText().isEmpty())
+		return;
+
 	// when text is empty the default color of format is black instead of the theme color!
 	if (format.foreground().color().isValid() && !ui.teLabel->toPlainText().isEmpty()) {
 		ui.kcbFontColor->setColor(format.foreground().color());
@@ -562,7 +574,7 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 		ui.kcbFontColor->setColor(m_label->fontColor());
 	}
 
-	if (format.background().color().isValid())
+	if (format.background().color().isValid() && !ui.teLabel->toPlainText().isEmpty())
 		ui.kcbBackgroundColor->setColor(format.background().color());
 	else
 		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
@@ -621,10 +633,15 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 	if (!m_teXEnabled && m_label->text().mode == TextLabel::Mode::LaTeX) {
 		DEBUG(Q_FUNC_INFO << ", update background color")
 		const auto& cursor = ui.teLabel->textCursor();
-		if (cursor.selectedText().isEmpty())
+//		bool deselect = false;
+		if (cursor.selectedText().isEmpty()) {
 			ui.teLabel->selectAll();
+//			deselect = true;
+		}
 
 		ui.teLabel->setTextBackgroundColor(color);
+//		if (deselect)
+//			ui.teLabel->setTextCursor(cursor);
 	} else {	// set the background color of the label
 		// Latex text does not support html code. For this the backgroundColor variable is used
 		// Only single color background is supported
@@ -1209,15 +1226,16 @@ void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
 	ui.lePositionYLogical->setText(numberLocale.toString(pos.y()));
 }
 
+// this function is only called when the theme is changed. Otherwise the color is coded in the html text.
+// when the theme changes, the whole text should change color regardless of the color it has
 void LabelWidget::labelBackgroundColorChanged(const QColor& color) {
-	DEBUG(Q_FUNC_INFO)
-	// this function is only called when the theme is changed. Otherwise the color
-	// is directly in the html text.
-	// when the theme changes, the whole text should change color regardless of the color it has
+	QDEBUG(Q_FUNC_INFO << ", color =" << color)
 	const Lock lock(m_initializing);
 	ui.kcbBackgroundColor->setColor(color);
+//	auto cursor = ui.teLabel->textCursor();
 	ui.teLabel->selectAll();
 	ui.teLabel->setTextBackgroundColor(color);
+//	ui.teLabel->setTextCursor(cursor);	// restore cursor
 }
 
 void LabelWidget::labelOffsetxChanged(qreal offset) {
@@ -1424,11 +1442,6 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 
 	ui.lFont->setVisible(!plain);
 	ui.kfontRequester->setVisible(!plain);
-
-	//TODO:
-	//for normal text we need to hide the background color because of QTBUG-25420
-	//ui.kcbBackgroundColor->setVisible(plain);
-	//ui.lBackgroundColor->setVisible(plain);
 
 	if (plain) {
 		//reset all applied formattings when switching from html to tex mode

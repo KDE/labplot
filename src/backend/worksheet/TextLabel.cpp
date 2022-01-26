@@ -262,28 +262,36 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
-	DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(textWrapper.text) << std::endl)
 	DEBUG(Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
+	DEBUG("\ntext = " << STDSTRING(textWrapper.text) << std::endl)
+
+	QDEBUG("COLORS: font color =" << d->fontColor << ", background color =" << d->backgroundColor)
+	//QDEBUG("	kcb color =")
+	//TODO: Test
+//	if (textWrapper.text.isEmpty())
+//		return;
 
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.mode != d->textWrapper.mode)
 	        || ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
 			textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder) {
-		bool changePos = d->textWrapper.text.isEmpty();
-		if (textWrapper.mode == TextLabel::Mode::Text) {
-			QDEBUG("\n" << Q_FUNC_INFO << ", OLD TEXT =" << d->textWrapper.text << ", font color =" << d->fontColor)
-			DEBUG("\n" << Q_FUNC_INFO << ", NEW TEXT = " << STDSTRING(textWrapper.text) << std::endl)
+		bool oldEmpty = d->textWrapper.text.isEmpty();
+		if (textWrapper.mode == TextLabel::Mode::Text && !textWrapper.text.isEmpty()) {
+			QDEBUG("\nOLD TEXT =" << d->textWrapper.text << ", color =" << d->fontColor
+				<< ", background color = " << d->backgroundColor)
+			DEBUG("\nNEW TEXT = " << STDSTRING(textWrapper.text) << std::endl)
 
 			TextWrapper tw = textWrapper;
 			// restore formatting when text changes or switching back to text mode
-			if (d->textWrapper.mode != TextLabel::Mode::Text || textWrapper.text != d->textWrapper.text) {
+			if (d->textWrapper.mode != TextLabel::Mode::Text || d->textWrapper.text.isEmpty()) {
 				QTextEdit te(d->textWrapper.text);
 				te.selectAll();
 				te.setText(textWrapper.text);
 				te.selectAll();
 				te.setTextColor(d->fontColor);
-				te.setTextBackgroundColor(d->backgroundColor);
+				//te.setTextBackgroundColor(d->backgroundColor);
 
 				tw.text = te.toHtml();
+				DEBUG("\n" << Q_FUNC_INFO << ", TW TEXT = " << STDSTRING(tw.text) << std::endl)
 			}
 
 			exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
@@ -293,9 +301,10 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 		// therefore the alignment did not work properly.
 		// If text is added, the bounding rectangle is updated
 		// and then the position must be changed to consider alignment
-		if (changePos)
+		if (oldEmpty)
 			d->updatePosition();
 	}
+	DEBUG(Q_FUNC_INFO << " DONE")
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPlaceholderText, TextLabel::TextWrapper, textWrapper, updateText)
@@ -1009,9 +1018,8 @@ void TextLabel::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "placeholder", QString::number(d->textWrapper.allowPlaceholder) );
 	writer->writeAttribute( "mode", QString::number(static_cast<int>(d->textWrapper.mode)) );
 	WRITE_QFONT(d->teXFont);
-	writer->writeAttribute( "fontColor_r", QString::number(d->fontColor.red()) );
-	writer->writeAttribute( "fontColor_g", QString::number(d->fontColor.green()) );
-	writer->writeAttribute( "fontColor_b", QString::number(d->fontColor.blue()) );
+	WRITE_QCOLOR2(d->fontColor, "fontColor");
+	WRITE_QCOLOR2(d->backgroundColor, "backgroundColor");
 	writer->writeEndElement();
 
 	//border
@@ -1066,29 +1074,13 @@ bool TextLabel::load(XmlStreamReader* reader, bool preview) {
 			} else
 				READ_INT_VALUE("mode", textWrapper.mode, TextLabel::Mode);
 
-			READ_QFONT(d->teXFont);
-
 			str = attribs.value("placeholder").toString();
 			if(!str.isEmpty())
 				d->textWrapper.allowPlaceholder = str.toInt();
 
-			str = attribs.value("fontColor_r").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("fontColor_r").toString());
-			else
-				d->fontColor.setRed( str.toInt() );
-
-			str = attribs.value("fontColor_g").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("fontColor_g").toString());
-			else
-				d->fontColor.setGreen( str.toInt() );
-
-			str = attribs.value("fontColor_b").toString();
-			if (str.isEmpty())
-				reader->raiseWarning(attributeWarning.subs("fontColor_b").toString());
-			else
-				d->fontColor.setBlue( str.toInt() );
+			READ_QFONT(d->teXFont);
+			READ_QCOLOR2(d->fontColor, "fontColor");
+			READ_QCOLOR2(d->backgroundColor, "backgroundColor");
 		} else if (!preview && reader->name() == "border") {
 			attribs = reader->attributes();
 			READ_INT_VALUE("borderShape", borderShape, BorderShape);
