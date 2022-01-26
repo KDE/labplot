@@ -94,7 +94,7 @@ class KToggleFullScreenAction;
 #include <KUserFeedback/Provider>
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 	class KDMacTouchBar;
 #endif
 
@@ -151,7 +151,9 @@ private:
 #endif
 
 #ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 	KDMacTouchBar* m_touchBar;
+#endif
 	QAction* m_undoIconOnlyAction;
 	QAction* m_redoIconOnlyAction;
 #endif

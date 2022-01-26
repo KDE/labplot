@@ -395,28 +395,45 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 		return;
 	}
 
-	QPointF eventPos = mapToScene(event->pos());
+	const auto eventPos = mapToScene(event->pos());
+	const auto type = m_image->plotPointsType();
 	bool entryMode = (m_mouseMode == MouseMode::ReferencePointsEntry
 					  || m_mouseMode == MouseMode::CurvePointsEntry || m_mouseMode == MouseMode::CurveSegmentsEntry);
 
 	//check whether there is a point item under the cursor
 	bool pointsUnderCursor = false;
-	auto items = this->items(event->pos());
+	const auto& items = this->items(event->pos());
+	const auto& referencePoints = m_image->children<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 	for (auto* item : items) {
-		if (item != m_image->m_magnificationWindow) {
-			pointsUnderCursor = true;
-			break;
+		if (item == m_image->m_magnificationWindow)
+			continue;
+
+		//when entering curve points, ignore the reference points under the cursor,
+		//it should be possible to place curve points close to or over the reference points.
+		if (type == DatapickerImage::PointsType::CurvePoints) {
+			bool referenceItem = false;
+			for (auto* point : referencePoints) {
+				if (point->graphicsItem() == item) {
+					referenceItem = true;
+					break;
+				}
+			}
+
+			if (referenceItem)
+				continue;
 		}
+
+		pointsUnderCursor = true;
+		break;
 	}
 
 	if (entryMode && !pointsUnderCursor && m_image->isLoaded && sceneRect().contains(eventPos)) {
-		if ( m_image->plotPointsType() == DatapickerImage::PointsType::AxisPoints ) {
+		if (type == DatapickerImage::PointsType::AxisPoints) {
 			int childCount = m_image->childCount<DatapickerPoint>(AbstractAspect::ChildIndexFlag::IncludeHidden);
 			if (childCount < 3)
 				m_datapicker->addNewPoint(eventPos, m_image);
-		} else if ( m_image->plotPointsType() == DatapickerImage::PointsType::CurvePoints && m_datapicker->activeCurve() ) {
+		} else if (type == DatapickerImage::PointsType::CurvePoints && m_datapicker->activeCurve())
 			m_datapicker->addNewPoint(eventPos, m_datapicker->activeCurve());
-		}
 
 		if (m_image->m_magnificationWindow && m_image->m_magnificationWindow->isVisible())
 			updateMagnificationWindow();
@@ -424,7 +441,7 @@ void DatapickerImageView::mousePressEvent(QMouseEvent* event) {
 
 	// make sure the datapicker (or its currently active curve) is selected in the project explorer if the view was clicked.
 	// We need this for the case when we change from the project-node in the project explorer to the datapicker node by clicking the view.
-	if (m_datapicker->activeCurve() && m_image->plotPointsType() != DatapickerImage::PointsType::AxisPoints) {
+	if (m_datapicker->activeCurve() && type != DatapickerImage::PointsType::AxisPoints) {
 		m_datapicker->setSelectedInView(false);
 		m_datapicker->activeCurve()->setSelectedInView(true);
 	} else {
@@ -484,7 +501,13 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 			}
 
 			if (m_datapicker->activeCurve()) {
-				QString statusText = i18n("%1, active curve \"%2\": %3=%4, %5=%6", m_datapicker->name(), m_datapicker->activeCurve()->name(), xLabel, QString::number(logicalPos.x()), yLabel, QString::number(logicalPos.y()));
+				QString statusText = i18n("%1, active curve \"%2\": %3=%4, %5=%6",
+										  m_datapicker->name(),
+										  m_datapicker->activeCurve()->name(),
+										  xLabel,
+										  QString::number(logicalPos.x()),
+										  yLabel,
+										  QString::number(logicalPos.y()));
 				Q_EMIT statusInfo(statusText);
 			}
 		}
@@ -492,7 +515,6 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 
 	//show the magnification window
 	if ( magnificationFactor && m_image->isLoaded && sceneRect().contains(pos) ) {
-
 		if (!m_image->m_magnificationWindow) {
 			m_image->m_magnificationWindow = new QGraphicsPixmapItem;
 			scene()->addItem(m_image->m_magnificationWindow);
@@ -500,9 +522,8 @@ void DatapickerImageView::mouseMoveEvent(QMouseEvent* event) {
 		}
 
 		updateMagnificationWindow();
-	} else if (m_image->m_magnificationWindow) {
+	} else if (m_image->m_magnificationWindow)
 		m_image->m_magnificationWindow->setVisible(false);
-	}
 
 	QGraphicsView::mouseMoveEvent(event);
 }

@@ -132,22 +132,6 @@ bool CantorWorksheet::init(QByteArray* content) {
 
 		//bool value = group.readEntry(QLatin1String("ReevaluateEntries"), false);
 		//value = group.readEntry(QLatin1String("AskConfirmation"), true);
-
-		//available plugins
-#ifdef HAVE_NEW_CANTOR_LIBS
-		auto* handler = new Cantor::PanelPluginHandler(this);
-		handler->loadPlugins();
-		m_plugins = handler->activePluginsForSession(m_session, Cantor::PanelPluginHandler::PanelStates());
-		for (auto* plugin : m_plugins)
-			plugin->connectToShell(m_part);
-#else
-		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
-		if (!handler) {
-			m_error = i18n("Couldn't find panel plugins. Please check your installation.");
-			return false;
-		}
-		m_plugins = handler->plugins();
-#endif
 	}
 
 	return true;
@@ -294,6 +278,25 @@ void CantorWorksheet::rowsAboutToBeRemoved(const QModelIndex& /*parent*/, int fi
 }
 
 QList<Cantor::PanelPlugin*> CantorWorksheet::getPlugins() {
+	if (!m_pluginsLoaded) {
+#ifdef HAVE_NEW_CANTOR_LIBS
+		auto* handler = new Cantor::PanelPluginHandler(this);
+		handler->loadPlugins();
+		m_plugins = handler->activePluginsForSession(m_session, Cantor::PanelPluginHandler::PanelStates());
+		for (auto* plugin : m_plugins)
+			plugin->connectToShell(m_part);
+#else
+		auto* handler = m_part->findChild<Cantor::PanelPluginHandler*>(QLatin1String("PanelPluginHandler"));
+		if (!handler) {
+			m_error = i18n("Couldn't find panel plugins. Please check your installation.");
+			return false;
+		}
+		m_plugins = handler->plugins();
+#endif
+
+		m_pluginsLoaded = true;
+	}
+
 	return m_plugins;
 }
 

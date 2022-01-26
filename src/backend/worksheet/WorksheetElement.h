@@ -126,6 +126,9 @@ private:
 	QMenu* m_moveInFrontOfMenu{nullptr};
 	bool m_printing{false};
 
+protected Q_SLOTS:
+	void changeVisibility();
+
 private Q_SLOTS:
 	void prepareDrawingOrderMenu();
 	void execMoveBehind(QAction*);
@@ -149,6 +152,7 @@ Q_SIGNALS:
 	void positionLogicalChanged(QPointF) const;
 	void rotationAngleChanged(qreal) const;
 	void visibleChanged(bool) const;
+	void coordinateSystemIndexChanged(int) const;
 	void changed();
 
 	void hovered();

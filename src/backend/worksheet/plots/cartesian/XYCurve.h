@@ -167,7 +167,6 @@ private Q_SLOTS:
 	void yErrorMinusColumnNameChanged();
 	void valuesColumnNameChanged();
 	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChanged();
 	void navigateTo();
 
 protected:
@@ -200,7 +199,6 @@ Q_SIGNALS:
 	void yErrorMinusDataChanged();
 	void valuesDataChanged();
 	void legendVisibleChanged(bool);
-	void visibilityChanged(bool);
 	void selected(double pos);
 
 	void xColumnChanged(const AbstractColumn*);

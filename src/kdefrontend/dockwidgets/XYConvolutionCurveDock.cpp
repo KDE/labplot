@@ -181,7 +181,7 @@ void XYConvolutionCurveDock::initGeneralTab() {
 	connect(m_convolutionCurve, &XYConvolutionCurve::convolutionDataChanged, this, &XYConvolutionCurveDock::curveConvolutionDataChanged);
 	connect(m_convolutionCurve, &XYConvolutionCurve::sourceDataChanged, this, &XYConvolutionCurveDock::enableRecalculate);
 	connect(m_convolutionCurve, &WorksheetElement::plotRangeListChanged, this, &XYConvolutionCurveDock::updatePlotRanges);
-	connect(m_convolutionCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYConvolutionCurveDock::curveVisibilityChanged);
+	connect(m_convolutionCurve, &XYCurve::visibleChanged, this, &XYConvolutionCurveDock::curveVisibilityChanged);
 }
 
 void XYConvolutionCurveDock::setModel() {

@@ -65,6 +65,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(QPointF, plusDeltaYPos, PlusDeltaYPos)
 	BASIC_D_ACCESSOR_DECL(QPointF, minusDeltaYPos, MinusDeltaYPos)
 
+	void setIsReferencePoint(bool);
+	bool isReferencePoint() const;
+
 	typedef DatapickerPointPrivate Private;
 
 public Q_SLOTS:

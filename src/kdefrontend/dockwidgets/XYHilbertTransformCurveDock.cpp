@@ -121,7 +121,7 @@ void XYHilbertTransformCurveDock::initGeneralTab() {
 	connect(m_transformCurve, &XYHilbertTransformCurve::yDataColumnChanged, this, &XYHilbertTransformCurveDock::curveYDataColumnChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::transformDataChanged, this, &XYHilbertTransformCurveDock::curveTransformDataChanged);
 	connect(m_transformCurve, &XYHilbertTransformCurve::sourceDataChanged, this, &XYHilbertTransformCurveDock::enableRecalculate);
-	connect(m_transformCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYHilbertTransformCurveDock::curveVisibilityChanged);
+	connect(m_transformCurve, &XYCurve::visibleChanged, this, &XYHilbertTransformCurveDock::curveVisibilityChanged);
 	connect(m_transformCurve, &WorksheetElement::plotRangeListChanged, this, &XYHilbertTransformCurveDock::updatePlotRanges);
 }
 

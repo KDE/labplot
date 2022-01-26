@@ -129,6 +129,11 @@ void WorksheetElement::setZValue(qreal value) {
 	graphicsItem()->setZValue(value);
 }
 
+void WorksheetElement::changeVisibility() {
+	Q_D(const WorksheetElement);
+	this->setVisible(!d->isVisible());
+}
+
 STD_SWAP_METHOD_SETTER_CMD_IMPL_F(WorksheetElement, SetVisible, bool, swapVisible, update)
 void WorksheetElement::setVisible(bool on) {
 	Q_D(WorksheetElement);
@@ -526,6 +531,7 @@ void  WorksheetElement::setCoordinateSystemIndex(int index) {
 		cSystem = dynamic_cast<const CartesianCoordinateSystem*>(m_plot->coordinateSystem(index));
 	else
 		DEBUG(Q_FUNC_INFO << ", WARNING: No plot found. Failed setting csystem index.")
+	emit coordinateSystemIndexChanged(m_cSystemIndex);
 }
 
 int WorksheetElement::coordinateSystemCount() const {

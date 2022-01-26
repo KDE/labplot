@@ -953,14 +953,16 @@ void Worksheet::cartesianPlotMouseMoveCursorMode(int cursorNumber, QPointF logic
 }
 
 QString dateTimeDiffToString(const QDateTime& dt0, const QDateTime& dt1) {
+	// dt0 to dt1 is positive if dt0 is smaller than dt1
 	QString result;
 	qint64 diff;
 	bool negative = false;;
-	if (dt0 < dt1) {
+	if (dt0 < dt1)
 		diff = dt0.msecsTo(dt1);
-		negative = true;
-	} else
+	else {
 		diff = dt1.msecsTo(dt0);
+		negative = true;
+	}
 	const qint64 dayToMsecs = 24 * 3600 * 1000;
 	const qint64 hourToMsecs = 3600 * 1000;
 	const qint64 minutesToMsecs = 60 * 1000;

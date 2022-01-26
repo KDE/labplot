@@ -703,7 +703,7 @@ void WorksheetView::fillToolBar(QToolBar* toolBar) {
 	toolBar->addWidget(tbMagnification);
 }
 
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 void WorksheetView::fillTouchBar(KDMacTouchBar* touchBar) {
 	//touchBar->addAction(addCartesianPlot1Action);
 	touchBar->addAction(zoomInViewAction);

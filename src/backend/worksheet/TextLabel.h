@@ -45,8 +45,10 @@ public:
 			}
 			this->text = createHtml(text, html);
 		}
-
-		TextWrapper(const QString& text): text(text), mode(TextLabel::Mode::Text) {}
+		TextWrapper(const QString& text): mode(TextLabel::Mode::Text) {
+			// assume text is not HTML yet
+			this->text = createHtml(text, false);
+		}
 		TextWrapper(const QString& text, bool html, QString& placeholder): allowPlaceholder(true), textPlaceholder(placeholder) {
 			this->text = createHtml(text, html);
 		}
@@ -124,9 +126,6 @@ public:
 
 private Q_SLOTS:
 	void updateTeXImage();
-
-	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChanged();
 
 protected:
 	TextLabel(const QString& name, TextLabelPrivate* dd, Type = Type::General);

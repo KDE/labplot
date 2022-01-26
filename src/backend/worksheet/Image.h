@@ -52,10 +52,6 @@ public:
 
 	typedef ImagePrivate Private;
 
-private Q_SLOTS:
-	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChanged();
-
 protected:
 	Image(const QString&, ImagePrivate*);
 

@@ -224,10 +224,11 @@ void Datapicker::addNewPoint(QPointF pos, AbstractAspect* parentAspect) {
 
 	auto* datapickerCurve = static_cast<DatapickerCurve*>(parentAspect);
 	if (m_image == parentAspect) {
-		DatapickerImage::ReferencePoints axisPoints = m_image->axisPoints();
+		auto axisPoints = m_image->axisPoints();
 		axisPoints.scenePos[points.count()].setX(pos.x());
 		axisPoints.scenePos[points.count()].setY(pos.y());
 		m_image->setAxisPoints(axisPoints);
+		newPoint->setIsReferencePoint(true);
 	} else if (datapickerCurve) {
 		newPoint->initErrorBar(datapickerCurve->curveErrorTypes());
 		datapickerCurve->updatePoint(newPoint);

@@ -39,6 +39,7 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent) : BaseDock(parent) {
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
 	connect(ui.lePosition, &QLineEdit::textChanged, this, &ReferenceLineDock::positionChanged);
+	connect(ui.dtePosition, &QDateTimeEdit::dateTimeChanged, this, &ReferenceLineDock::positionDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
 
@@ -98,7 +99,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 }
 
 /*
- * updates the locale in the widgets. called when the application settins are changed.
+ * updates the locale in the widgets. called when the application settings are changed.
  */
 void ReferenceLineDock::updateLocale() {
 	SET_NUMBER_LOCALE
@@ -121,10 +122,34 @@ void ReferenceLineDock::updatePlotRanges() {
 //Position
 void ReferenceLineDock::orientationChanged(int index) {
 	auto orientation{ReferenceLine::Orientation(index)};
-	if (orientation == ReferenceLine::Orientation::Horizontal)
+	if (orientation == ReferenceLine::Orientation::Horizontal) {
 		ui.lPosition->setText(QLatin1String("y:"));
-	else
+		ui.lPositionDateTime->setText(QLatin1String("y:"));
+
+		//only numeric is possible for y
+		ui.lPosition->show();
+		ui.lePosition->show();
+		ui.lPositionDateTime->hide();
+		ui.dtePosition->hide();
+	} else {
 		ui.lPosition->setText(QLatin1String("x:"));
+		ui.lPositionDateTime->setText(QLatin1String("x:"));
+
+		//both - numeric and datetime - are possible for x,
+		//check what needs to be shown
+		const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
+		if (plot->xRangeFormat() == RangeT::Format::Numeric) {
+			ui.lPosition->show();
+			ui.lePosition->show();
+			ui.lPositionDateTime->hide();
+			ui.dtePosition->hide();
+		} else { //DateTime
+			ui.lPosition->hide();
+			ui.lePosition->hide();
+			ui.lPositionDateTime->show();
+			ui.dtePosition->show();
+		}
+	}
 
 	if (m_initializing)
 		return;
@@ -147,6 +172,19 @@ void ReferenceLineDock::positionChanged() {
 			position.point.setY(pos);
 			line->setPosition(position);
 		}
+	}
+}
+
+void ReferenceLineDock::positionDateTimeChanged(const QDateTime& dateTime) {
+	if (m_initializing)
+		return;
+
+	quint64 pos = dateTime.toMSecsSinceEpoch();
+	for (auto* line : m_linesList) {
+		auto position = line->position();
+		position.point.setX(pos);
+		position.point.setY(pos);
+		line->setPosition(position);
 	}
 }
 
@@ -211,12 +249,14 @@ void ReferenceLineDock::visibilityChanged(bool state) {
 //******* SLOTs for changes triggered in ReferenceLine ********
 //*************************************************************
 void ReferenceLineDock::linePositionChanged(const WorksheetElement::PositionWrapper& position) {
-	m_initializing = true;
+	const Lock lock(m_initializing);
+	SET_NUMBER_LOCALE
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal)
-		ui.lePosition->setText(QString::number(position.point.x()));
-	else
-		ui.lePosition->setText(QString::number(position.point.y()));
-	m_initializing = false;
+		ui.lePosition->setText(numberLocale.toString(position.point.y()));
+	else {
+		ui.lePosition->setText(numberLocale.toString(position.point.x()));
+		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(position.point.x()));
+	}
 }
 
 void ReferenceLineDock::lineOrientationChanged(ReferenceLine::Orientation orientation) {
@@ -257,10 +297,21 @@ void ReferenceLineDock::load() {
 
 	SET_NUMBER_LOCALE
 	ui.cbOrientation->setCurrentIndex(static_cast<int>(m_line->orientation()));
+	orientationChanged(ui.cbOrientation->currentIndex()); //call this to update the position widgets that depend on the orientation
+
+	//position
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal)
 		ui.lePosition->setText(numberLocale.toString(m_line->position().point.y()));
-	else
-		ui.lePosition->setText(numberLocale.toString(m_line->position().point.x()));
+	else {
+		const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
+		if (plot->xRangeFormat() == RangeT::Format::Numeric)
+			ui.lePosition->setText(numberLocale.toString(m_line->position().point.x()));
+		else { //DateTime
+			ui.dtePosition->setDisplayFormat(plot->xRangeDateTimeFormat());
+			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().x()));
+		}
+	}
+
 	ui.cbLineStyle->setCurrentIndex( (int) m_line->pen().style() );
 	ui.kcbLineColor->setColor( m_line->pen().color() );
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_line->pen().widthF(), Worksheet::Unit::Point) );

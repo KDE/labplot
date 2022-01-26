@@ -94,6 +94,7 @@ public Q_SLOTS:
 	void moveElementBegin();
 	void moveElementEnd();
 	void curveVisibilityChanged();
+	void curveCoordinateSystemIndexChanged(int);
 
 private:
 	Q_DECLARE_PRIVATE(InfoElement)
@@ -116,6 +117,7 @@ private:
 	void init();
 	void initActions();
 	void initMenus();
+	void initCurveConnections(const XYCurve*);
 
 Q_SIGNALS:
 	void gluePointIndexChanged(const int);

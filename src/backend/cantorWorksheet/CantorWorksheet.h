@@ -61,6 +61,7 @@ private:
 	Cantor::Session* m_session{nullptr};
 	KParts::ReadWritePart* m_part{nullptr};
 	QList<Cantor::PanelPlugin*> m_plugins;
+	bool m_pluginsLoaded{false};
 	QAbstractItemModel* m_variableModel{nullptr};
 	Cantor::WorksheetAccessInterface* m_worksheetAccess{nullptr};
 

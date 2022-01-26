@@ -146,7 +146,7 @@ void XYCurve::init() {
 void XYCurve::initActions() {
 	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, SIGNAL(triggered(bool)), this, SLOT(visibilityChanged()));
+	connect(visibilityAction, SIGNAL(triggered(bool)), this, SLOT(changeVisibility()));
 
 	navigateToAction = new QAction(QIcon::fromTheme("go-next-view"), QString(), this);
 	connect(navigateToAction, SIGNAL(triggered(bool)), this, SLOT(navigateTo()));
@@ -946,10 +946,6 @@ void XYCurve::valuesColumnNameChanged() {
 //##############################################################################
 //######  SLOTs for changes triggered via QActions in the context menu  ########
 //##############################################################################
-void XYCurve::visibilityChanged() {
-	Q_D(const XYCurve);
-	this->setVisible(!d->isVisible());
-}
 
 void XYCurve::navigateTo() {
 	project()->navigateTo(navigateToAction->data().toString());

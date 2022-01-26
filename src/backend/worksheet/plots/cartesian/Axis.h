@@ -285,8 +285,6 @@ Q_SIGNALS:
 	void majorGridOpacityChanged(qreal);
 	void minorGridPenChanged(QPen);
 	void minorGridOpacityChanged(qreal);
-
-	void visibilityChanged(bool);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Axis::TicksDirection)

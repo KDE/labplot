@@ -418,7 +418,7 @@ void HistogramDock::setCurves(QList<Histogram*> list) {
 	connect(m_curve, &Histogram::autoBinRangesChanged, this, &HistogramDock::curveAutoBinRangesChanged);
 	connect(m_curve, &Histogram::binRangesMinChanged, this, &HistogramDock::curveBinRangesMinChanged);
 	connect(m_curve, &Histogram::binRangesMaxChanged, this, &HistogramDock::curveBinRangesMaxChanged);
-	connect(m_curve, &Histogram::visibilityChanged, this, &HistogramDock::curveVisibilityChanged);
+	connect(m_curve, &Histogram::visibleChanged, this, &HistogramDock::curveVisibilityChanged);
 
 	//Line-tab
 	connect(m_curve, &Histogram::linePenChanged, this, &HistogramDock::curveLinePenChanged);

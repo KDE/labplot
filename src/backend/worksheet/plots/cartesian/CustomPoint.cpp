@@ -75,7 +75,7 @@ void CustomPoint::init() {
 void CustomPoint::initActions() {
 	visibilityAction = new QAction(i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &CustomPoint::visibilityChanged);
+	connect(visibilityAction, &QAction::triggered, this, &CustomPoint::changeVisibility);
 }
 
 /*!
@@ -121,14 +121,6 @@ Symbol* CustomPoint::symbol() const {
 void CustomPoint::setParentGraphicsItem(QGraphicsItem* item) {
 	Q_D(CustomPoint);
 	d->setParentItem(item);
-}
-
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
-void CustomPoint::visibilityChanged() {
-	Q_D(const CustomPoint);
-	this->setVisible(!d->isVisible());
 }
 
 //##############################################################################

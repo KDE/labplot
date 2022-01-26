@@ -122,7 +122,7 @@ QMenu* Image::createContextMenu() {
 	if (!visibilityAction) {
 		visibilityAction = new QAction(i18n("Visible"), this);
 		visibilityAction->setCheckable(true);
-		connect(visibilityAction, &QAction::triggered, this, &Image::visibilityChanged);
+		connect(visibilityAction, &QAction::triggered, this, &Image::changeVisibility);
 	}
 
 	visibilityAction->setChecked(isVisible());
@@ -203,14 +203,6 @@ void Image::setBorderOpacity(qreal opacity) {
 	Q_D(Image);
 	if (opacity != d->borderOpacity)
 		exec(new ImageSetBorderOpacityCmd(d, opacity, ki18n("%1: set border opacity")));
-}
-
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
-void Image::visibilityChanged() {
-	Q_D(const Image);
-	this->setVisible(!d->isVisible());
 }
 
 //##############################################################################

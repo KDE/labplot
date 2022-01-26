@@ -136,7 +136,7 @@ void XYFourierTransformCurveDock::initGeneralTab() {
 	connect(m_transformCurve, &XYFourierTransformCurve::yDataColumnChanged, this, &XYFourierTransformCurveDock::curveYDataColumnChanged);
 	connect(m_transformCurve, &XYFourierTransformCurve::transformDataChanged, this, &XYFourierTransformCurveDock::curveTransformDataChanged);
 	connect(m_transformCurve, &XYFourierTransformCurve::sourceDataChanged, this, &XYFourierTransformCurveDock::enableRecalculate);
-	connect(m_transformCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYFourierTransformCurveDock::curveVisibilityChanged);
+	connect(m_transformCurve, &XYCurve::visibleChanged, this, &XYFourierTransformCurveDock::curveVisibilityChanged);
 	connect(m_transformCurve, &WorksheetElement::plotRangeListChanged, this, &XYFourierTransformCurveDock::updatePlotRanges);
 }
 

@@ -47,8 +47,7 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	ui.setupUi(this);
 
 	//adjust the layout margins
-	auto* l = dynamic_cast<QGridLayout*>(layout());
-	if (l) {
+	if (auto* l = dynamic_cast<QGridLayout*>(layout())) {
 		l->setContentsMargins(2,2,2,2);
 		l->setHorizontalSpacing(2);
 		l->setVerticalSpacing(2);
@@ -60,9 +59,6 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 		m_worksheetUnit = Worksheet::Unit::Inch;
 
 	m_dateTimeMenu->setSeparatorsCollapsible(false); //we don't want the first separator to be removed
-
-	ui.kcbFontColor->setColor(Qt::black); // default color
-	ui.kcbBackgroundColor->setColor(Qt::white); // default color
 
 	QString msg = i18n("Use logical instead of absolute coordinates to specify the position on the plot");
 	ui.lBindLogicalPos->setToolTip(msg);
@@ -205,11 +201,11 @@ LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new 
 	connect(ui.lePositionXLogical, &QLineEdit::textChanged, this, &LabelWidget::positionXLogicalChanged);
 	connect(ui.dtePositionXLogical, &QDateTimeEdit::dateTimeChanged, this, &LabelWidget::positionXLogicalDateTimeChanged);
 	connect(ui.lePositionYLogical, &QLineEdit::textChanged, this, &LabelWidget::positionYLogicalChanged);
-	connect( ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
-	connect( ui.sbOffsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
-	connect( ui.sbOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
+	connect(ui.sbRotation, QOverload<int>::of(&QSpinBox::valueChanged), this, &LabelWidget::rotationChanged);
+	connect(ui.sbOffsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetXChanged);
+	connect(ui.sbOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &LabelWidget::offsetYChanged);
 
-	connect( ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
+	connect(ui.chbVisible, &QCheckBox::clicked, this, &LabelWidget::visibilityChanged);
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &LabelWidget::bindingChanged);
 	connect(ui.chbShowPlaceholderText, &QCheckBox::toggled, this, &LabelWidget::showPlaceholderTextChanged);
 
@@ -254,10 +250,11 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 void LabelWidget::setAxes(QList<Axis*> axes) {
 	m_labelsList.clear();
 	for (auto* axis : axes) {
+		DEBUG(Q_FUNC_INFO << ", axis TITLE = " << axis->title())
 		m_labelsList.append(axis->title());
 		connect(axis, &Axis::titleOffsetXChanged, this, &LabelWidget::labelOffsetxChanged);
-		connect(axis, &Axis::titleOffsetYChanged, this, &LabelWidget::labelOffsetyChanged );
-		connect(axis->title(), &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged );
+		connect(axis, &Axis::titleOffsetYChanged, this, &LabelWidget::labelOffsetyChanged);
+		connect(axis->title(), &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
 	}
 
 	m_axesList = axes;
@@ -295,12 +292,10 @@ void LabelWidget::updateBackground() const {
 		color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->backgroundFirstColor();
 	else if (type == AspectType::CartesianPlotLegend)
 		color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
-	else if (type == AspectType::InfoElement)
-		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
-	else if (type == AspectType::Axis)
+	else if (type == AspectType::InfoElement || type == AspectType::Axis)
 		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
 	else
-		DEBUG("Not handled type:" << static_cast<int>(type));
+		DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
 
 	QPalette p = ui.teLabel->palette();
 	QDEBUG(Q_FUNC_INFO << ", color = " << color)
@@ -325,6 +320,10 @@ void LabelWidget::initConnections() const {
 	connect(m_label, &TextLabel::borderOpacityChanged, this, &LabelWidget::labelBorderOpacityChanged);
 	connect(m_label, &TextLabel::visibleChanged, this, &LabelWidget::labelVisibleChanged);
 
+	if (!m_label->parentAspect()) {
+		QDEBUG(Q_FUNC_INFO << ", LABEL " <<m_label << " HAS NO PARENT!")
+		return;
+}
 	AspectType type = m_label->parentAspect()->type();
 	if (type == AspectType::Worksheet) {
 		auto* worksheet = static_cast<const Worksheet*>(m_label->parentAspect());
@@ -482,6 +481,7 @@ void LabelWidget::textChanged() {
 		break;
 	}
 	case TextLabel::Mode::Text: {
+		QDEBUG(Q_FUNC_INFO << ", format color = " << ui.teLabel->currentCharFormat().foreground().color())
 		//save an empty string instead of a html-string with empty body,
 		//if no text available in QTextEdit
 		QString text;
@@ -552,10 +552,15 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 
 	//font and colors
-	if (format.foreground().color().isValid())
+	//QDEBUG(Q_FUNC_INFO << ", format color = " << format.foreground().color())
+	//QDEBUG(Q_FUNC_INFO << ", label color = " << m_label->fontColor())
+	//QDEBUG(Q_FUNC_INFO << ", label text = " << ui.teLabel->toPlainText())
+	// when text is empty the default color of format is black instead of the theme color!
+	if (format.foreground().color().isValid() && !ui.teLabel->toPlainText().isEmpty()) {
 		ui.kcbFontColor->setColor(format.foreground().color());
-	else
+	} else {
 		ui.kcbFontColor->setColor(m_label->fontColor());
+	}
 
 	if (format.background().color().isValid())
 		ui.kcbBackgroundColor->setColor(format.background().color());
@@ -567,7 +572,8 @@ void LabelWidget::charFormatChanged(const QTextCharFormat& format) {
 
 // called when textlabel mode is changed
 void LabelWidget::labelModeChanged(TextLabel::Mode mode) {
-	if (m_initializing) return;
+	if (m_initializing)
+		return;
 	const Lock lock(m_initializing);
 
 	updateMode(mode);
@@ -1103,11 +1109,13 @@ void LabelWidget::showPlaceholderTextChanged(bool checked) {
 	if(m_initializing)
 		return;
 	if (!checked) {
+		ui.teLabel->setEnabled(false);
 		if (m_label->text().mode != TextLabel::Mode::Text)
 			ui.teLabel->setText(m_label->text().text);
 		else
 			ui.teLabel->setHtml(m_label->text().text);
 	} else {
+		ui.teLabel->setEnabled(true);
 		if (m_label->text().mode != TextLabel::Mode::Text)
 			ui.teLabel->setText(m_label->text().textPlaceholder);
 		else
@@ -1163,11 +1171,10 @@ void LabelWidget::labelTeXFontChanged(const QFont& font) {
 	ui.sbFontSize->setValue(font.pointSize());
 }
 
+// this function is only called when the theme is changed. Otherwise the color is coded in the html text.
+// when the theme changes, the whole text should change color regardless of the color it has
 void LabelWidget::labelFontColorChanged(const QColor& color) {
-	DEBUG(Q_FUNC_INFO)
-	// this function is only called when the theme is changed. Otherwise the color
-	// is directly in the html text.
-	// when the theme changes, the whole text should change color regardless of the color it has
+	QDEBUG(Q_FUNC_INFO << ", COLOR = " << color)
 	const Lock lock(m_initializing);
 	ui.kcbFontColor->setColor(color);
 	ui.teLabel->selectAll();
@@ -1302,8 +1309,8 @@ void LabelWidget::load() {
 		}
 	}
 
-	// if the text is empty yet, user LabelWidget::fontColor(),
-	//extract the color from the html formatted text otherwise
+	// if the text is empty yet, use LabelWidget::fontColor(),
+	// extract the color from the html formatted text otherwise
 	if (!m_label->text().text.isEmpty()) {
 		QTextCharFormat format = ui.teLabel->currentCharFormat();
 		ui.kcbFontColor->setColor(format.foreground().color());
@@ -1318,6 +1325,14 @@ void LabelWidget::load() {
 
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
+
+	auto format = ui.teLabel->currentCharFormat();
+	ui.tbFontBold->setChecked(ui.teLabel->fontWeight() == QFont::Bold);
+	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
+	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());
+	ui.tbFontStrikeOut->setChecked(format.fontStrikeOut());
+	ui.tbFontSuperScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSuperScript);
+	ui.tbFontSubScript->setChecked(format.verticalAlignment() == QTextCharFormat::AlignSubScript);
 
 	//move the cursor to the end
 	QTextCursor cursor = ui.teLabel->textCursor();
@@ -1475,6 +1490,8 @@ void LabelWidget::loadConfig(KConfigGroup& group) {
 	ui.cbMode->setCurrentIndex(group.readEntry("Mode", static_cast<int>(m_label->text().mode)));
 	this->modeChanged(ui.cbMode->currentIndex());
 	ui.sbFontSize->setValue( group.readEntry("TeXFontSize", m_label->teXFont().pointSize()) );
+	ui.kcbFontColor->setColor( group.readEntry("TeXFontColor", m_label->fontColor()) );
+	ui.kcbBackgroundColor->setColor( group.readEntry("TeXBackgroundColor", m_label->backgroundColor()) );
 	ui.kfontRequesterTeX->setFont(group.readEntry("TeXFont", m_label->teXFont()));
 
 	// Geometry

@@ -132,7 +132,6 @@ Q_SIGNALS:
 	void orientationChanged(BoxPlot::Orientation);
 	void variableWidthChanged(bool);
 	void widthFactorChanged(double);
-	void visibilityChanged(bool);
 	void notchesEnabledChanged(bool);
 
 	//box filling

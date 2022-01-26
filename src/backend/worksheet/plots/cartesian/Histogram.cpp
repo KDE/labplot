@@ -127,7 +127,7 @@ void Histogram::init() {
 void Histogram::initActions() {
 	visibilityAction = new QAction(QIcon::fromTheme("view-visible"), i18n("Visible"), this);
 	visibilityAction->setCheckable(true);
-	connect(visibilityAction, &QAction::triggered, this, &Histogram::visibilityChangedSlot);
+	connect(visibilityAction, &QAction::triggered, this, &Histogram::changeVisibility);
 }
 
 QMenu* Histogram::createContextMenu() {
@@ -685,14 +685,6 @@ void Histogram::valuesColumnAboutToBeRemoved(const AbstractAspect* aspect) {
 		d->valuesColumn = nullptr;
 		d->updateValues();
 	}
-}
-
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
-void Histogram::visibilityChangedSlot() {
-	Q_D(const Histogram);
-	this->setVisible(!d->isVisible());
 }
 
 //##############################################################################

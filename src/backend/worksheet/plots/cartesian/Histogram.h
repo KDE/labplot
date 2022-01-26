@@ -126,9 +126,6 @@ private Q_SLOTS:
 	void dataColumnAboutToBeRemoved(const AbstractAspect*);
 	void valuesColumnAboutToBeRemoved(const AbstractAspect*);
 
-	//SLOTs for changes triggered via QActions in the context menu
-	void visibilityChangedSlot();
-
 protected:
 	Histogram(const QString& name, HistogramPrivate* dd);
 
@@ -142,7 +139,6 @@ Q_SIGNALS:
 	//General-Tab
 	void dataChanged();
 	void dataColumnChanged(const AbstractColumn*);
-	void visibilityChanged(bool);
 
 	void typeChanged(Histogram::HistogramType);
 	void orientationChanged(Histogram::HistogramOrientation);

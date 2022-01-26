@@ -4,18 +4,21 @@
     Description          : widget for CantorWorksheet properties
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2015 Garvit Khatri <garvitdelhi@gmail.com>
-    SPDX-FileCopyrightText: 2015-2021 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2015-2022 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include "CantorWorksheetDock.h"
 #include "backend/cantorWorksheet/CantorWorksheet.h"
+
+#include <3rdparty/cantor/panelplugin.h>
+
 #include <QAction>
 
 CantorWorksheetDock::CantorWorksheetDock(QWidget* parent) : BaseDock(parent) {
 	ui.setupUi(this);
-	ui.tabWidget->setMovable(true);
+// 	ui.tabWidget->setMovable(true); //don't allow to move tabs until we properly keep track of the help panel's position
 	m_leName = ui.leName;
 	m_teComment = ui.teComment;
 	m_teComment->setFixedHeight(m_leName->height());
@@ -62,9 +65,13 @@ void CantorWorksheetDock::setCantorWorksheets(QList<CantorWorksheet*> list) {
 				continue;
 
 			connect(plugin, &Cantor::PanelPlugin::visibilityRequested, this, &CantorWorksheetDock::visibilityRequested);
-			plugin->setParentWidget(this);
 			int i = ui.tabWidget->addTab(plugin->widget(), plugin->name());
 			index.append(i);
+
+			if (plugin->objectName() == QLatin1String("HelpPanel"))
+				m_helpPanelIndex = i;
+			else if (plugin->objectName() == QLatin1String("DocumentationPanel"))
+				m_documentationPanelIndex = i;
 		}
 	} else {
 		//don't show any name/comment when multiple notebooks were selected
@@ -102,10 +109,13 @@ void CantorWorksheetDock::restartBackend() {
 
 /*!
  * this slot is called when the visibility for one of the panels in Cantor is requested.
- * At the moment this can only happen for the integrated help in Maxima, R, etc.
- * Here we hard-code the selection of the second tab being for the help.
- * TODO: improve this logic without hard-coding for a fixed index.
+ * At the moment this can only happen for the integrated help in Maxima and in R and
+ * for the integrated documentation.
  */
 void CantorWorksheetDock::visibilityRequested() {
-	ui.tabWidget->setCurrentIndex(1);
+	const auto& name = QObject::sender()->objectName();
+	if (name == QLatin1String("HelpPanel"))
+		ui.tabWidget->setCurrentIndex(m_helpPanelIndex);
+	else if (name == QLatin1String("DocumentationPanel"))
+		ui.tabWidget->setCurrentIndex(m_documentationPanelIndex);
 }

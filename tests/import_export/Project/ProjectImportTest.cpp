@@ -411,6 +411,13 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(s1->columnCount(), 2);
 	QCOMPARE(s1->rowCount(), 32);
 
+	auto* c1 = dynamic_cast<Column*>(s1->child<AbstractAspect>(0));
+	QVERIFY(c1 != nullptr);
+	QCOMPARE(c1->name(), QLatin1String("A"));
+	auto* c2 = dynamic_cast<Column*>(s1->child<AbstractAspect>(1));
+	QVERIFY(c2 != nullptr);
+	QCOMPARE(c2->name(), QLatin1String("B"));
+
 	auto* w1 = dynamic_cast<Worksheet*>(f1->child<AbstractAspect>(1));
 	QVERIFY(w1 != nullptr);
 	QCOMPARE(w1->name(), QLatin1String("Graph1"));
@@ -438,7 +445,10 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	CHECK_RANGE(plot, curve, x, 1, 8);	// should be 0 .. 9
 	CHECK_RANGE(plot, curve, y, 1, 8);	// should be 0 .. 9
 
-	//TODO: check curve properties
+	QCOMPARE(curve->xColumnPath(), QLatin1String("2folder-with-graphs/Folder1/Book1/A"));
+	QCOMPARE(curve->yColumnPath(), QLatin1String("2folder-with-graphs/Folder1/Book1/B"));
+	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
+	//TODO: check more curve properties
 
 	// Folder 2
 	auto* f2 = dynamic_cast<Folder*>(project.child<AbstractAspect>(1));
@@ -479,7 +489,114 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	CHECK_RANGE(plot, curve, x, 1, 5);	// should be 0.5 .. 5.5
 	CHECK_RANGE(plot, curve, y, 1, 5);	// should be 0.5 .. 5.5
 
-	//TODO: check curve properties
+	QCOMPARE(curve->xColumnPath(), QLatin1String("2folder-with-graphs/Folder2/Book2/A"));
+	QCOMPARE(curve->yColumnPath(), QLatin1String("2folder-with-graphs/Folder2/Book2/B"));
+	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
+	//TODO: check more curve properties
+}
+
+void ProjectImportTest::testOrigin_2graphs() {
+	OriginProjectParser parser;
+	parser.setProjectFileName(QFINDTESTDATA(QLatin1String("data/2graphs.opj")));
+	Project project;
+	parser.importTo(&project, QStringList());
+
+	//check the project tree for the imported project
+	// Book 2
+	auto* s2 = dynamic_cast<Spreadsheet*>(project.child<AbstractAspect>(0));
+	QVERIFY(s2 != nullptr);
+	QCOMPARE(s2->name(), QLatin1String("Book2"));
+
+	QCOMPARE(s2->columnCount(), 2);
+	QCOMPARE(s2->rowCount(), 32);
+
+	auto* c1 = dynamic_cast<Column*>(s2->child<AbstractAspect>(0));
+	QVERIFY(c1 != nullptr);
+	QCOMPARE(c1->name(), QLatin1String("A"));
+	auto* c2 = dynamic_cast<Column*>(s2->child<AbstractAspect>(1));
+	QVERIFY(c2 != nullptr);
+	QCOMPARE(c2->name(), QLatin1String("B"));
+
+	// Graph 2
+	auto* w2 = dynamic_cast<Worksheet*>(project.child<AbstractAspect>(1));
+	QVERIFY(w2 != nullptr);
+	QCOMPARE(w2->name(), QLatin1String("Graph2"));
+
+	auto* plot = dynamic_cast<CartesianPlot*>(w2->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+
+	QCOMPARE(plot->name(), QLatin1String("Plot1"));
+
+	auto* xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
+	QVERIFY(xAxis != nullptr);
+	QCOMPARE(xAxis->name(), "x");
+	auto* yAxis = dynamic_cast<Axis*>(plot->child<Axis>(1));
+	QVERIFY(yAxis != nullptr);
+	QCOMPARE(yAxis->name(), "y");
+
+	auto* legend = dynamic_cast<CartesianPlotLegend*>(plot->child<CartesianPlotLegend>(0));
+	QVERIFY(legend != nullptr);
+	QCOMPARE(legend->name(), "legend");
+
+	auto* curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
+	QVERIFY(curve != nullptr);
+	QCOMPARE(curve->name(), "B");	// TODO: Origin uses Comments as curve name: "Length"
+
+	CHECK_RANGE(plot, curve, x, 1, 5);
+	CHECK_RANGE(plot, curve, y, 1, 5);
+
+	QCOMPARE(curve->xColumnPath(), QLatin1String("2graphs/Book2/A"));
+	QCOMPARE(curve->yColumnPath(), QLatin1String("2graphs/Book2/B"));
+	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
+	//TODO: check more curve properties
+
+	// Graph 1
+	auto* w1 = dynamic_cast<Worksheet*>(project.child<AbstractAspect>(2));
+	QVERIFY(w1 != nullptr);
+	QCOMPARE(w1->name(), QLatin1String("Graph1"));
+
+	plot = dynamic_cast<CartesianPlot*>(w1->child<CartesianPlot>(0));
+	QVERIFY(plot != nullptr);
+
+	QCOMPARE(plot->name(), QLatin1String("Plot1"));
+
+	xAxis = dynamic_cast<Axis*>(plot->child<Axis>(0));
+	QVERIFY(xAxis != nullptr);
+	QCOMPARE(xAxis->name(), "x");
+	yAxis = dynamic_cast<Axis*>(plot->child<Axis>(1));
+	QVERIFY(yAxis != nullptr);
+	QCOMPARE(yAxis->name(), "y");
+
+	legend = dynamic_cast<CartesianPlotLegend*>(plot->child<CartesianPlotLegend>(0));
+	QVERIFY(legend != nullptr);
+	QCOMPARE(legend->name(), "legend");
+
+	curve = dynamic_cast<XYCurve*>(plot->child<XYCurve>(0));
+	QVERIFY(curve != nullptr);
+	QCOMPARE(curve->name(), "B");	// TODO: Origin uses Comments as curve name: "Length"
+
+	CHECK_RANGE(plot, curve, x, 1, 8);	 // should be 0 .. 9
+	CHECK_RANGE(plot, curve, y, 1, 8);	 // should be 0 .. 9
+
+	QCOMPARE(curve->xColumnPath(), QLatin1String("2graphs/Book1/A"));
+	QCOMPARE(curve->yColumnPath(), QLatin1String("2graphs/Book1/B"));
+	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
+	//TODO: check more curve properties
+
+	// Book 1
+	auto* s1 = dynamic_cast<Spreadsheet*>(project.child<AbstractAspect>(3));
+	QVERIFY(s1 != nullptr);
+	QCOMPARE(s1->name(), QLatin1String("Book1"));
+
+	QCOMPARE(s2->columnCount(), 2);
+	QCOMPARE(s2->rowCount(), 32);
+
+	c1 = dynamic_cast<Column*>(s1->child<AbstractAspect>(0));
+	QVERIFY(c1 != nullptr);
+	QCOMPARE(c1->name(), QLatin1String("A"));
+	c2 = dynamic_cast<Column*>(s1->child<AbstractAspect>(1));
+	QVERIFY(c2 != nullptr);
+	QCOMPARE(c2->name(), QLatin1String("B"));
 }
 
 void ProjectImportTest::testParseOriginTags_data() {

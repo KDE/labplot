@@ -62,6 +62,7 @@ private:
 	DatapickerCurve* m_activeCurve{nullptr};
 	Transform* m_transform;
 	DatapickerImage* m_image{nullptr};
+
 	void init();
 	void handleChildAspectAboutToBeRemoved(const AbstractAspect*);
 	void handleChildAspectAdded(const AbstractAspect*);

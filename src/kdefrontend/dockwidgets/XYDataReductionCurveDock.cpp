@@ -183,7 +183,7 @@ void XYDataReductionCurveDock::initGeneralTab() {
 	connect(m_dataReductionCurve, &XYDataReductionCurve::dataReductionDataChanged, this, &XYDataReductionCurveDock::curveDataReductionDataChanged);
 	connect(m_dataReductionCurve, &XYDataReductionCurve::sourceDataChanged, this, &XYDataReductionCurveDock::enableRecalculate);
 	connect(m_dataReductionCurve, &WorksheetElement::plotRangeListChanged, this, &XYDataReductionCurveDock::updatePlotRanges);
-	connect(m_dataReductionCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYDataReductionCurveDock::curveVisibilityChanged);
+	connect(m_dataReductionCurve, &WorksheetElement::visibleChanged, this, &XYDataReductionCurveDock::curveVisibilityChanged);
 }
 
 void XYDataReductionCurveDock::setModel() {

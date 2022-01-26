@@ -172,7 +172,7 @@ void XYIntegrationCurveDock::initGeneralTab() {
 	connect(m_integrationCurve, &XYIntegrationCurve::integrationDataChanged, this, &XYIntegrationCurveDock::curveIntegrationDataChanged);
 	connect(m_integrationCurve, &XYIntegrationCurve::sourceDataChanged, this, &XYIntegrationCurveDock::enableRecalculate);
 	connect(m_integrationCurve, &WorksheetElement::plotRangeListChanged, this, &XYIntegrationCurveDock::updatePlotRanges);
-	connect(m_integrationCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYIntegrationCurveDock::curveVisibilityChanged);
+	connect(m_integrationCurve, &WorksheetElement::visibleChanged, this, &XYIntegrationCurveDock::curveVisibilityChanged);
 }
 
 void XYIntegrationCurveDock::setModel() {

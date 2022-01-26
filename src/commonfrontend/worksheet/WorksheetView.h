@@ -26,7 +26,7 @@ class QTimeLine;
 class AbstractAspect;
 class WorksheetElement;
 
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 class KDMacTouchBar;
 #endif
 
@@ -263,7 +263,7 @@ public Q_SLOTS:
 	void createContextMenu(QMenu*);
 	void createAnalysisMenu(QMenu*);
 	void fillToolBar(QToolBar*);
-#ifdef Q_OS_MAC
+#ifdef HAVE_TOUCHBAR
 	void fillTouchBar(KDMacTouchBar*);
 #endif
 	void fillCartesianPlotToolBar(QToolBar*);

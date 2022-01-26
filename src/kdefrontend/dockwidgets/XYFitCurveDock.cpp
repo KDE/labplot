@@ -290,7 +290,7 @@ void XYFitCurveDock::initGeneralTab() {
 	connect(m_fitCurve, &XYFitCurve::fitDataChanged, this, &XYFitCurveDock::curveFitDataChanged);
 	connect(m_fitCurve, &XYFitCurve::sourceDataChanged, this, &XYFitCurveDock::enableRecalculate);
 	connect(m_fitCurve, &WorksheetElement::plotRangeListChanged, this, &XYFitCurveDock::updatePlotRanges);
-	connect(m_fitCurve, QOverload<bool>::of(&XYCurve::visibilityChanged), this, &XYFitCurveDock::curveVisibilityChanged);
+	connect(m_fitCurve, &WorksheetElement::visibleChanged, this, &XYFitCurveDock::curveVisibilityChanged);
 
 	connect(fitParametersWidget, &FitParametersWidget::parametersChanged, this, &XYFitCurveDock::parametersChanged);
 	connect(fitParametersWidget, &FitParametersWidget::parametersValid, this, &XYFitCurveDock::parametersValid);

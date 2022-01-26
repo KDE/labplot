@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2009 Tilman Benkert <thzs@gmx.net>
     SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -47,9 +47,7 @@ extern "C" {
 
 class ScaledTextItem : public QGraphicsTextItem {
 public:
-	ScaledTextItem(QGraphicsItem* parent = nullptr) : QGraphicsTextItem(parent) {
-
-	}
+	ScaledTextItem(QGraphicsItem* parent = nullptr) : QGraphicsTextItem(parent) {}
 
 	void setScaleFactor(double scaleFactor) {
 		m_scaleFactor = scaleFactor;
@@ -71,7 +69,6 @@ private:
 	double m_scaleFactor = 1.;
 	double m_rotationAngle = 0.;
 };
-
 
 /**
  * \class TextLabel
@@ -242,7 +239,7 @@ QMenu* TextLabel::createContextMenu() {
 	if (!visibilityAction) {
 		visibilityAction = new QAction(i18n("Visible"), this);
 		visibilityAction->setCheckable(true);
-		connect(visibilityAction, &QAction::triggered, this, &TextLabel::visibilityChanged);
+		connect(visibilityAction, &QAction::triggered, this, &TextLabel::changeVisibility);
 	}
 
 	visibilityAction->setChecked(isVisible());
@@ -277,7 +274,8 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 			DEBUG("\n" << Q_FUNC_INFO << ", NEW TEXT = " << STDSTRING(textWrapper.text) << std::endl)
 
 			TextWrapper tw = textWrapper;
-			if (d->textWrapper.mode != TextLabel::Mode::Text) {	// restore text formatting
+			// restore formatting when text changes or switching back to text mode
+			if (d->textWrapper.mode != TextLabel::Mode::Text || textWrapper.text != d->textWrapper.text) {
 				QTextEdit te(d->textWrapper.text);
 				te.selectAll();
 				te.setText(textWrapper.text);
@@ -376,14 +374,6 @@ int TextLabel::gluePointCount() {
 void TextLabel::updateTeXImage() {
 	Q_D(TextLabel);
 	d->updateTeXImage();
-}
-
-//##############################################################################
-//######  SLOTs for changes triggered via QActions in the context menu  ########
-//##############################################################################
-void TextLabel::visibilityChanged() {
-	Q_D(const TextLabel);
-	this->setVisible(!d->isVisible());
 }
 
 //##############################################################################
