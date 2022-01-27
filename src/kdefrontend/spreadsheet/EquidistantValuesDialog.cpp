@@ -173,19 +173,13 @@ void EquidistantValuesDialog::generate() {
 	if (m_spreadsheet->rowCount() < number)
 		m_spreadsheet->setRowCount(number);
 
-	for (auto* col : m_columns) {
-		col->setSuppressDataChangedSignal(true);
-
-		if (m_spreadsheet->rowCount()>number)
-			col->clear();
-
-		for (int i = 0; i < number; ++i) {
-			col->setValueAt(i, start + dist*i);
-		}
-
-		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
-	}
+	QVector<double> equidistantValuesVector;
+	
+     		for (int i = 0; i < number; ++i) 
+         equidistantValuesVector.push_back(start + dist*i);
+     	
+     		for (auto* col : m_columns)
+         col->replaceValues(0, equidistantValuesVector);
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;
