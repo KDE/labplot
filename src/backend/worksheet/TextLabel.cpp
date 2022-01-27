@@ -262,7 +262,7 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
-	DEBUG(Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
+	DEBUG("********************\n" << Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
 	DEBUG("\ntext = " << STDSTRING(textWrapper.text) << std::endl)
 
 	QDEBUG("COLORS: font color =" << d->fontColor << ", background color =" << d->backgroundColor)
@@ -288,7 +288,7 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 				te.setText(textWrapper.text);
 				te.selectAll();
 				te.setTextColor(d->fontColor);
-				//te.setTextBackgroundColor(d->backgroundColor);
+				te.setTextBackgroundColor(d->backgroundColor);
 
 				tw.text = te.toHtml();
 				DEBUG("\n" << Q_FUNC_INFO << ", TW TEXT = " << STDSTRING(tw.text) << std::endl)
@@ -542,7 +542,16 @@ void TextLabelPrivate::updateText() {
 
 	switch (textWrapper.mode) {
 	case TextLabel::Mode::Text: {
-		DEBUG(Q_FUNC_INFO << ", text = " << STDSTRING(textWrapper.text))
+		DEBUG(Q_FUNC_INFO << ", OLD TEXT = " << STDSTRING(textWrapper.text))
+
+		// update color
+		//QTextEdit te(textWrapper.text);
+		//te.selectAll();
+		//te.setTextColor(fontColor);
+		//te.setTextBackgroundColor(backgroundColor);
+
+		//textWrapper.text = te.toHtml();
+
 		m_textItem->show();
 		m_textItem->setHtml(textWrapper.text);
 

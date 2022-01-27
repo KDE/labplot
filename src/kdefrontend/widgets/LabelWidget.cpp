@@ -493,9 +493,9 @@ void LabelWidget::textChanged() {
 		if (!ui.teLabel->toPlainText().isEmpty()) {
 			//if the current label text is empty, set the color first
 			if (m_label->text().text.isEmpty()) {
-				DEBUG("EMPTY TEXT")
+				//DEBUG("EMPTY TEXT")
 				ui.teLabel->selectAll();
-				//ui.teLabel->setTextColor(m_label->fontColor());
+				ui.teLabel->setTextColor(m_label->fontColor());
 				ui.teLabel->setTextBackgroundColor(m_label->backgroundColor());
 				// Due to the select all, when entering a new character
 				// the first one will be deleted. So clear the selection
@@ -514,7 +514,12 @@ void LabelWidget::textChanged() {
 		// of the text. The font color is used to change the color for Latex text
 		if(!ui.chbShowPlaceholderText->isChecked()) {
 			wrapper.text = text;
+			DEBUG(Q_FUNC_INFO << ", CALLING setText on label")
 			for (auto* label : m_labelsList) {
+				if (text.isEmpty()) {
+					label->setFontColor(ui.kcbFontColor->color());
+					label->setBackgroundColor(ui.kcbBackgroundColor->color());
+				}
 				wrapper.allowPlaceholder = label->text().allowPlaceholder;
 				wrapper.textPlaceholder = label->text().textPlaceholder;
 				label->setText(wrapper);
@@ -531,7 +536,8 @@ void LabelWidget::textChanged() {
 	}
 
 	//background color gets lost on every text change...
-	//updateBackground();
+	updateBackground();
+	DEBUG(Q_FUNC_INFO << " DONE")
 }
 
 /*!
