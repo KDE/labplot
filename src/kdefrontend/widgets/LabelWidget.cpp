@@ -46,6 +46,9 @@
 LabelWidget::LabelWidget(QWidget* parent) : QWidget(parent), m_dateTimeMenu(new QMenu(this)) {
 	ui.setupUi(this);
 
+	//set the minimum size of the text edit widget to one row of a QLineEdit
+	ui.teLabel->setMinimumHeight(ui.lePositionXLogical->height());
+
 	//adjust the layout margins
 	if (auto* l = dynamic_cast<QGridLayout*>(layout())) {
 		l->setContentsMargins(2,2,2,2);
