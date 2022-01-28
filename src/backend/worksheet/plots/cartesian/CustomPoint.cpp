@@ -178,7 +178,7 @@ void CustomPointPrivate::retransform() {
     Returns the outer bounds of the item as a rectangle.
  */
 QRectF CustomPointPrivate::boundingRect() const {
-	return transformedBoundingRectangle;
+	return boundingRectangle;
 }
 
 /*!
@@ -209,7 +209,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 		}
 
 		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
-		transformedBoundingRectangle = pointShape.boundingRect();
+		boundingRectangle = pointShape.boundingRect();
 	}
 }
 
