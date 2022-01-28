@@ -2098,7 +2098,7 @@ void CartesianPlot::addCustomPoint() {
 	point->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 
 	if (d->calledFromContextMenu) {
-		point->setPosition(d->logicalPos);
+		point->setPositionLogical(d->logicalPos);
 		d->calledFromContextMenu = false;
 	}
 
