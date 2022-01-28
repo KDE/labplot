@@ -41,7 +41,7 @@
 
 
 WorksheetElement::WorksheetElement(const QString& name, WorksheetElementPrivate* dd, AspectType type)
-	: AbstractAspect(name, type), d_ptr(dd){
+	: AbstractAspect(name, type), d_ptr(dd) {
 	init();
 }
 
@@ -299,8 +299,7 @@ void WorksheetElement::execMoveBehind(QAction* action) {
 	Q_EMIT moveEnd();
 }
 
-QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const
-{
+QPointF WorksheetElement::align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const {
 	// positive is right
 	double xAlign;
 	switch (horAlign) {
@@ -364,7 +363,7 @@ QRectF WorksheetElement::parentRect() const {
 /*!
 	* \brief parentPosToRelativePos
 	* Converts the absolute position of the element in parent coordinates into the distance between the
-	* alignement point of the parent and the element
+	* alignment point of the parent and the element
 	* \param parentPos Element position in parent coordinates
 	* \param parentRect Parent data rect
 	* \param rect element's rect
@@ -372,7 +371,7 @@ QRectF WorksheetElement::parentRect() const {
 	* \return distance between the parent position to the element
 	*/
 QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF rect, PositionWrapper position,
-												 HorizontalAlignment horAlign, VerticalAlignment vertAlign) const {
+		HorizontalAlignment horAlign, VerticalAlignment vertAlign) const {
 	QPointF relPos;
 	QRectF parentRect = this->parentRect();
 
@@ -397,11 +396,11 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF rect,
 * \brief relativePosToParentPos
 * \param parentRect
 * \param rect element's rect
-* \param position contains the alignement of the element to the parent
+* \param position contains the alignment of the element to the parent
 * \return parent position
 */
 QPointF WorksheetElement::relativePosToParentPos(QRectF rect, PositionWrapper position,
-												 HorizontalAlignment horAlign, VerticalAlignment vertAlign) const {
+		HorizontalAlignment horAlign, VerticalAlignment vertAlign) const {
 	QPointF parentPos;
 	QRectF parentRect = this->parentRect();
 
