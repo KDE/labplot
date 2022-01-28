@@ -716,7 +716,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		} else {
 			//convert item's center point in parent's coordinates
 			WorksheetElement::PositionWrapper tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), boundingRectangle, position,
+			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), boundingRect(), position,
 														horizontalAlignment, verticalAlignment);
 
 			//Q_EMIT the signals in order to notify the UI.
