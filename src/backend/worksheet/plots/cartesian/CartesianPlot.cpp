@@ -2096,6 +2096,7 @@ void CartesianPlot::addCustomPoint() {
 	Q_D(CartesianPlot);
 	auto* point = new CustomPoint(this, "custom point");
 	point->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
+	point->setCoordinateBindingEnabled(true);
 
 	if (d->calledFromContextMenu) {
 		point->setPositionLogical(d->logicalPos);
