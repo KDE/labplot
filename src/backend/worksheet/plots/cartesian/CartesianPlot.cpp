@@ -1340,8 +1340,10 @@ void CartesianPlot::setXRange(const int index, const Range<double>& range) {
 }
 CartesianPlotSetRangeIndexCmd(y, Y)
 void CartesianPlot::setYRange(const int index, const Range<double>& range) {
+	DEBUG(Q_FUNC_INFO << ", range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 	Q_D(CartesianPlot);
 	auto r = d->checkRange(range);
+	DEBUG(Q_FUNC_INFO << ", r = " << r.toStdString() << ", auto scale = " << r.autoScale())
 	if (index >= 0 && index < d->yRanges.count() && r.finite() && r != d->yRanges.at(index).range) {
 		exec(new CartesianPlotSetyRangeIndexCmd(d, r, index));
 		QVector<int> scaledIndices;
@@ -1358,6 +1360,7 @@ void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 		}
 		d->retransform();
 	}
+	DEBUG(Q_FUNC_INFO << ", DONE. range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 }
 
 const Range<double>& CartesianPlot::dataXRange(int index) {
@@ -1463,7 +1466,7 @@ void CartesianPlot::setXMin(const int index, const double value) {
 	setXRange(index, range);
 }
 void CartesianPlot::setXMax(const int index, const double value) {
-	DEBUG(Q_FUNC_INFO)
+	DEBUG(Q_FUNC_INFO << ", index = " << index << ", value = " << value)
 	Range<double> range{ xRange(index) };
 	range.setEnd(value);
 
@@ -1477,8 +1480,10 @@ void CartesianPlot::setYMin(const int index, const double value) {
 	setYRange(index, range);
 }
 void CartesianPlot::setYMax(const int index, const double value) {
-	Range<double> range{ yRange(index) };
+	Range<double> range = yRange(index);
+	DEBUG(Q_FUNC_INFO << ", old range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 	range.setEnd(value);
+	DEBUG(Q_FUNC_INFO << ", new range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 
 	setYRange(index, range);
 }
@@ -2694,6 +2699,10 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 		return updated;
 	}
 
+	auto& xRange{ d->xRange(index) };
+	if (!xRange.autoScale())
+		return false;
+
 	DEBUG(Q_FUNC_INFO << ", csystem index = " << index << " full range = " << fullRange)
 	if (xRangeDirty(index)) {
 		calculateDataXRange(index, fullRange);
@@ -2706,7 +2715,6 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 		}
 	}
 
-	auto& xRange{ d->xRange(index) };
 	auto dataRange = d->dataXRange(index);
 	if (dataRange.finite() && d->niceExtend)
 		dataRange.niceExtend();	// auto scale to nice data range
@@ -2761,6 +2769,10 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 		return updated;
 	}
 
+	auto& yRange{ d->yRange(index) };
+	if (!yRange.autoScale())
+		return false;
+
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " full range = " << fullRange)
 
 	if (yRangeDirty(index)) {
@@ -2775,7 +2787,6 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 		}
 	}
 
-	auto& yRange{ d->yRange(index) };
 	auto dataRange = d->dataYRange(index);
 	if (dataRange.finite() && d->niceExtend)
 		dataRange.niceExtend();	// auto scale to nice data range
@@ -3631,9 +3642,9 @@ void CartesianPlotPrivate::retransformYScale(int index) {
 		if (cs->yIndex() != index)
 			continue;
 
-		const auto yRange{ yRanges.at(index).range };
+		const auto yRange = yRanges.at(index).range;
 		//DEBUG(Q_FUNC_INFO << ", coordinate system " << i++ <<  ", y range is y range " << yRangeIndex+1)
-		DEBUG(Q_FUNC_INFO << ", yrange = " << yRange.toStdString())
+		DEBUG(Q_FUNC_INFO << ", yrange = " << yRange.toStdString() << ", auto scale = " << yRange.autoScale())
 
 		QVector<CartesianScale*> scales;
 
@@ -3724,10 +3735,12 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 	DEBUG(Q_FUNC_INFO << ", SCALES x/y index = " << xIndex << "/" << yIndex)
 	for (int i = 0; i < xRanges.count(); i++)
 		DEBUG( Q_FUNC_INFO << ", x range " << i+1 << " : " << xRanges.at(i).range.toStdString()
-			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()) );
+			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()) 
+			<< ", auto scale = " << xRanges.at(i).range.autoScale() );
 	for (int i = 0; i < yRanges.count(); i++)
 		DEBUG( Q_FUNC_INFO << ", y range " << i+1 << " : " << yRanges.at(i).range.toStdString()
-			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, yRanges.at(i).range.scale()) );
+			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, yRanges.at(i).range.scale())
+			<< ", auto scale = " << yRanges.at(i).range.autoScale() );
 
 	PERFTRACE(Q_FUNC_INFO);
 
@@ -3923,7 +3936,7 @@ void CartesianPlotPrivate::yRangeFormatChanged() {
 Range<double> CartesianPlotPrivate::checkRange(const Range<double>& range) {
 	double start = range.start(), end = range.end();
 	const auto scale = range.scale();
-	if (start > 0 && end > 0)	// nothing to do
+	if (scale == RangeT::Scale::Linear || (start > 0 && end > 0))	// nothing to do
 		return range;
 	if (start >= 0 && end >= 0 && scale == RangeT::Scale::Sqrt)	// nothing to do
 		return range;
@@ -5162,6 +5175,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			//TODO: Range<double> range = Range::load(reader)
 			Range<double> range;
 			str = attribs.value("autoScale").toString();
+			QDEBUG(Q_FUNC_INFO << ", str =" << str << ", value = " << str.toInt())
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("autoScale").toString());
 			else
@@ -5192,6 +5206,7 @@ bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 			else
 				range.setDateTimeFormat(str);
 
+			DEBUG(Q_FUNC_INFO << ", auto scale =" << range.autoScale())
 			addXRange(range);
 		} else if (!preview && reader->name() == "yRanges") {
 			d->yRanges.clear();
