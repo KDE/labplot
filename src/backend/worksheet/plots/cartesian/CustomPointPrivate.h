@@ -37,7 +37,6 @@ public:
 	Symbol* symbol{nullptr};
 
 	//reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 

@@ -175,13 +175,6 @@ void CustomPointPrivate::retransform() {
 }
 
 /*!
-    Returns the outer bounds of the item as a rectangle.
- */
-QRectF CustomPointPrivate::boundingRect() const {
-	return boundingRectangle;
-}
-
-/*!
     Returns the shape of this item as a QPainterPath in local coordinates.
 */
 QPainterPath CustomPointPrivate::shape() const {
