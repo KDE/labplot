@@ -62,15 +62,15 @@ CustomPointDock::CustomPointDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.leName, &QLineEdit::textChanged, this, &CustomPointDock::nameChanged);
 	connect(ui.teComment, &QTextEdit::textChanged, this, &CustomPointDock::commentChanged);
 	// geometry
-	connect( ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionXChanged);
-	connect( ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionYChanged);
-	connect( ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CustomPointDock::customPositionXChanged);
-	connect( ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CustomPointDock::customPositionYChanged);
+	connect(ui.cbPositionX, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionXChanged);
+	connect(ui.cbPositionY, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CustomPointDock::positionYChanged);
+	connect(ui.sbPositionX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CustomPointDock::customPositionXChanged);
+	connect(ui.sbPositionY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CustomPointDock::customPositionYChanged);
 	connect(ui.lePositionXLogical, &QLineEdit::textChanged, this, &CustomPointDock::positionXLogicalChanged);
 	connect(ui.dtePositionXLogical, &QDateTimeEdit::dateTimeChanged, this, &CustomPointDock::positionXLogicalDateTimeChanged);
 	connect(ui.lePositionYLogical, &QLineEdit::textChanged, this, &CustomPointDock::positionYLogicalChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CustomPointDock::plotRangeChanged);
-	connect( ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
+	connect(ui.chkVisible, &QCheckBox::clicked, this, &CustomPointDock::visibilityChanged);
 	connect(ui.chbBindLogicalPos, &QCheckBox::clicked, this, &CustomPointDock::bindingChanged);
 
 	//Template handler

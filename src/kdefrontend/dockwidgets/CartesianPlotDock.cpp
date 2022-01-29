@@ -622,7 +622,7 @@ void CartesianPlotDock::updateXRangeList() {
 	if (!m_plot)
 		return;
 
-	const int xRangeCount{ m_plot->xRangeCount() };
+	const int xRangeCount = m_plot->xRangeCount();
 	DEBUG(Q_FUNC_INFO << ", x range count = " << xRangeCount)
 
 	if (xRangeCount > 1)
@@ -631,9 +631,9 @@ void CartesianPlotDock::updateXRangeList() {
 		ui.lXRanges->setText(i18n("X-Range:"));
 	ui.twXRanges->setRowCount(xRangeCount);
 	for (int i = 0; i < xRangeCount; i++) {
-		const auto xRange{ m_plot->xRange(i) };
-		const auto format{ xRange.format() };
-		const auto scale { xRange.scale() };
+		const auto xRange = m_plot->xRange(i);
+		const auto format = xRange.format();
+		const auto scale = xRange.scale();
 		DEBUG(Q_FUNC_INFO << ", x range " << i << ": format = " << ENUM_TO_STRING(RangeT, Format, format)
 			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, scale) << ", auto scale = " << xRange.autoScale())
 
@@ -1082,8 +1082,8 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 	}
 
 	for (auto* plot : m_plotList) {
-		int retransform = 0;
-		plot->setAutoScaleX(index, checked, true);
+		bool retransform = 0;
+		plot->enableAutoScaleX(index, checked, true);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRange(index).autoScale())
 		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
 			retransform = plot->scaleAutoX(index, true);
@@ -1092,7 +1092,7 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 				auto cSystem = plot->coordinateSystem(i);
 				if (cSystem->xIndex() == index) {
 					if (plot->autoScaleY(cSystem->xIndex()))
-						retransform += plot->scaleAutoY(cSystem->yIndex(), false);
+						retransform |= plot->scaleAutoY(cSystem->yIndex(), false);
 				}
 			}
 		}
@@ -1122,13 +1122,15 @@ void CartesianPlotDock::autoScaleYChanged(bool state) {
 void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 	DEBUG(Q_FUNC_INFO << ", index = " << index << ", check = " << checked)
 
-	CELLWIDGET(twYRanges, index, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
-	CELLWIDGET(twYRanges, index, TwRangesColumn::Min, QWidget, setEnabled(!checked));
-	CELLWIDGET(twYRanges, index, TwRangesColumn::Max, QWidget, setEnabled(!checked));
+	if (ui.twYRanges->cellWidget(index, TwRangesColumn::Format)) {
+		CELLWIDGET(twYRanges, index, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
+		CELLWIDGET(twYRanges, index, TwRangesColumn::Min, QWidget, setEnabled(!checked));
+		CELLWIDGET(twYRanges, index, TwRangesColumn::Max, QWidget, setEnabled(!checked));
+	}
 
 	for (auto* plot : m_plotList) {
-		int retransform = 0;
-		plot->setAutoScaleY(index, checked, true);
+		bool retransform = 0;
+		plot->enableAutoScaleY(index, checked, true);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRange(index).autoScale())
 		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
 			retransform = plot->scaleAutoY(index, true);
@@ -1137,7 +1139,7 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 				auto cSystem = plot->coordinateSystem(i);
 				if (cSystem->yIndex() == index) {
 					if (plot->autoScaleX(cSystem->xIndex()))
-						retransform += plot->scaleAutoX(cSystem->xIndex(), false);
+						retransform |= plot->scaleAutoX(cSystem->xIndex(), false);
 				}
 			}
 		}
@@ -1163,7 +1165,7 @@ void CartesianPlotDock::xMinChanged(const QString& value) {
 		// selected x range
 		const int index{ sender()->property("row").toInt() };
 		DEBUG( Q_FUNC_INFO << ", x range index: " << index )
-		bool changed{false};
+		bool changed = false;
 		for (auto* plot : m_plotList)
 			if (!qFuzzyCompare(xMin, plot->xRange(index).start())) {
 				plot->setXMin(index, xMin);
@@ -1187,7 +1189,7 @@ void CartesianPlotDock::yMinChanged(const QString& value) {
 		// selected y range
 		const int index{ sender()->property("row").toInt() };
 		DEBUG( Q_FUNC_INFO << ", y range index: " << index )
-		bool changed{false};
+		bool changed = false;
 		for (auto* plot : m_plotList)
 			if (!qFuzzyCompare(yMin, plot->yRange(index).start())) {
 				plot->setYMin(index, yMin);
@@ -1212,7 +1214,7 @@ void CartesianPlotDock::xMaxChanged(const QString& value) {
 		// selected x range
 		const int index{ sender()->property("row").toInt() };
 		DEBUG( Q_FUNC_INFO << ", x range index: " << index )
-		bool changed{false};
+		bool changed = false;
 		for (auto* plot : m_plotList)
 			if (!qFuzzyCompare(xMax, plot->xRange(index).end())) {
 				plot->setXMax(index, xMax);
@@ -1236,7 +1238,7 @@ void CartesianPlotDock::yMaxChanged(const QString& value) {
 		// selected y range
 		const int index{ sender()->property("row").toInt() };
 		DEBUG( Q_FUNC_INFO << ", y range index: " << index )
-		bool changed{false};
+		bool changed = false;
 		for (auto* plot : m_plotList)
 			if (!qFuzzyCompare(yMax, plot->yRange(index).end())) {
 				plot->setYMax(index, yMax);

@@ -91,18 +91,18 @@ public:
 		}
 		return yRanges[index].range.autoScale();
 	}
-	void setAutoScaleX(int index = -1, bool b = true) {
+	void enableAutoScaleX(int index = -1, bool b = true) {
 		if (index == -1) {
 			for (int i = 0; i < q->xRangeCount(); i++)
-				setAutoScaleX(i, b);
+				enableAutoScaleX(i, b);
 			return;
 		}
 		xRanges[index].range.setAutoScale(b);
 	}
-	void setAutoScaleY(int index = -1, bool b = true) {
+	void enableAutoScaleY(int index = -1, bool b = true) {
 		if (index == -1) {
 			for (int i = 0; i < q->yRangeCount(); i++)
-				setAutoScaleY(i, b);
+				enableAutoScaleY(i, b);
 			return;
 		}
 		yRanges[index].range.setAutoScale(b);

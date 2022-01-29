@@ -148,37 +148,28 @@ void CustomPointPrivate::retransform() {
 
 	QPointF p;
 	if(coordinateBindingEnabled && q->cSystem) {
-			//the position in logical coordinates was changed, calculate the position in scene coordinates
-			bool visible;
-			p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-			p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
-			QPointF inParentCoords = mapPlotAreaToParent(p);
-			p = inParentCoords;
-			position.point = q->parentPosToRelativePos(p, boundingRectangle, position,
-													horizontalAlignment, verticalAlignment);
-		} else {
-			p = q->relativePosToParentPos(boundingRectangle, position,
-										horizontalAlignment, verticalAlignment);
-			if (q->cSystem)
-				positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		}
-
-		suppressItemChangeEvent = true;
-		setPos(p);
-		suppressItemChangeEvent = false;
-
-		Q_EMIT q->positionChanged(position);
+		//the position in logical coordinates was changed, calculate the position in scene coordinates
+		bool visible;
+		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
+		QPointF inParentCoords = mapPlotAreaToParent(p);
+		p = inParentCoords;
+		position.point = q->parentPosToRelativePos(p, boundingRectangle, position, horizontalAlignment, verticalAlignment);
+	} else {
+		p = q->relativePosToParentPos(boundingRectangle, position, horizontalAlignment, verticalAlignment);
 		if (q->cSystem)
-			Q_EMIT q->positionLogicalChanged(positionLogical);
+			positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+	}
+
+	suppressItemChangeEvent = true;
+	setPos(p);
+	suppressItemChangeEvent = false;
+
+	Q_EMIT q->positionChanged(position);
+	if (q->cSystem)
+		Q_EMIT q->positionLogicalChanged(positionLogical);
 
 	recalcShapeAndBoundingRect();
-}
-
-/*!
-    Returns the outer bounds of the item as a rectangle.
- */
-QRectF CustomPointPrivate::boundingRect() const {
-	return transformedBoundingRectangle;
 }
 
 /*!
@@ -209,7 +200,7 @@ void CustomPointPrivate::recalcShapeAndBoundingRect() {
 		}
 
 		pointShape.addPath(WorksheetElement::shapeFromPath(trafo.map(path), symbol->pen()));
-		transformedBoundingRectangle = pointShape.boundingRect();
+		boundingRectangle = pointShape.boundingRect();
 	}
 }
 
@@ -309,9 +300,9 @@ bool CustomPoint::load(XmlStreamReader* reader, bool preview) {
 		} else if (!preview && reader->name() == "geometry") {
 			WorksheetElement::load(reader, preview);
 			if (project()->xmlVersion() < 6) {
-				// In version 5 and smaller the position in the file was always a logical position
+				// Before version 6 the position in the file was always a logical position
 				d->positionLogical = d->position.point;
-				d->position.point = QPointF(0,0);
+				d->position.point = QPointF(0, 0);
 				d->coordinateBindingEnabled = true;
 			}
 		} else if (!preview && reader->name() == "symbol") {

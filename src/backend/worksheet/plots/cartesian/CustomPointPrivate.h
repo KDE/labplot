@@ -31,15 +31,12 @@ public:
 	bool m_hovered{false};
 	bool m_visible{true}; //point inside the plot (visible) or not
 
-	QRectF boundingRectangle;
-	QRectF transformedBoundingRectangle;
 	QPainterPath pointShape;
 
 	QPointF positionScene; //position in scene coordinates
 	Symbol* symbol{nullptr};
 
 	//reimplemented from QGraphicsItem
-	QRectF boundingRect() const override;
 	QPainterPath shape() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 
