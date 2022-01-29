@@ -124,10 +124,10 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeLastValues, RangeLastValues)
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
-	bool autoScaleX(int index = -1) const;	// is x range index auto scaled?
-	void setAutoScaleX(int index, bool autoscale, bool suppressRetransform);	// auto scale x range index
-	bool autoScaleY(int index = -1) const;	// is y range index auto scaled?
-	void setAutoScaleY(int index, bool autoscale, bool suppressRetransform);	// auto scale y range index
+	bool autoScaleX(int index = -1) const;
+	void enableAutoScaleX(int index = -1, bool enable = true, bool suppressRetransform = true);
+	bool autoScaleY(int index = -1) const;
+	void enableAutoScaleY(int index = -1, bool enable = true, bool suppressRetransform = true);
 
 	int xRangeCount() const;
 	int yRangeCount() const;
@@ -304,9 +304,9 @@ public Q_SLOTS:
 	void addInfoElement();
 
 	void scaleAutoTriggered();
-	bool scaleAuto(int xIndex, int yIndex, bool fullRange = true);
-	bool scaleAutoX(int index, bool fullRange = true);
-	bool scaleAutoY(int index, bool fullRange = true);
+	bool scaleAuto(int xIndex = -1, int yIndex = -1, bool fullRange = true);
+	bool scaleAutoX(int index = -1, bool fullRange = true);
+	bool scaleAutoY(int index = -1, bool fullRange = true);
 
 	void zoomIn(int xIndex = -1, int yIndex = -1);
 	void zoomOut(int xIndex = -1, int yIndex = -1);
