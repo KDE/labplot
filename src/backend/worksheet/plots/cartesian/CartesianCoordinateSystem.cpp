@@ -138,8 +138,10 @@ void CartesianCoordinateSystem::mapLogicalToScene(const Points& logicalPoints,
 				const QPointF mappedPoint(x, y);
 				if (noPageClipping || limit || rectContainsPoint(pageRect, mappedPoint)) {
 					scenePoints.append(mappedPoint);
-					visiblePoints[i] = !visiblePoints.at(i);
-				}
+					visiblePoints[i] = true;
+				} else
+					visiblePoints[i] = false;
+
 				i++;
 			}
 		}
@@ -215,8 +217,9 @@ void CartesianCoordinateSystem::mapLogicalToScene(int startIndex, int endIndex, 
 					scenePointsUsed[indexX][indexY] = true;
 					scenePoints.append(mappedPoint);
 					//DEBUG(mappedPoint.x() << ' ' << mappedPoint.y())
-					visiblePoints[i] = !visiblePoints.at(i);
-				}
+					visiblePoints[i] = true;
+				} else
+					visiblePoints[i] = false;
 			}
 		}
 	}
