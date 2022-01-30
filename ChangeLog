@@ -53,6 +53,7 @@
 		* Tufte's "range frames" - a new mode in Axis to automatically set the start and end points of the axis to the min and max data points
 		* Allow to specify which curves should be shown in the plot legend
 		* Switched to Poppler for better LaTeX typesetting support
+		* Support background color for label
 
 Bug fixes:
 	* Fitting: Fix missing locale support in evaluating range of fit function
