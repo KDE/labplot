@@ -638,8 +638,9 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 	if (m_initializing)
 		return;
 
-	DEBUG(Q_FUNC_INFO << ", tex enable = " << m_teXEnabled << ", mode = " << (int)m_label->text().mode)
-	if (!m_teXEnabled && m_label->text().mode == TextLabel::Mode::LaTeX) {
+	auto mode = m_label->text().mode;
+	DEBUG(Q_FUNC_INFO << ", tex enable = " << m_teXEnabled << ", mode = " << (int)mode)
+	if ((!m_teXEnabled && mode == TextLabel::Mode::LaTeX) || mode == TextLabel::Mode::Text) {
 		DEBUG(Q_FUNC_INFO << ", update background color")
 		const auto& cursor = ui.teLabel->textCursor();
 //		bool deselect = false;
