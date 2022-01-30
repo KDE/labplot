@@ -623,10 +623,17 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 
 	auto mode = m_label->text().mode;
 	if ((!m_teXEnabled && mode == TextLabel::Mode::LaTeX) || mode == TextLabel::Mode::Text) {
-		const auto& cursor = ui.teLabel->textCursor();
-		if (cursor.selectedText().isEmpty())
+		auto cursor = ui.teLabel->textCursor();
+		bool deselect = false;
+		if (!cursor.hasSelection()) {
 			ui.teLabel->selectAll();
+			deselect = true;
+		}
 		ui.teLabel->setTextColor(color);
+		if (deselect) {
+			cursor.clearSelection();
+			ui.teLabel->setTextCursor(cursor);
+		}
 	} else {
 		for (auto* label : m_labelsList)
 			label->setFontColor(color);
@@ -642,17 +649,19 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 	DEBUG(Q_FUNC_INFO << ", tex enable = " << m_teXEnabled << ", mode = " << (int)mode)
 	if ((!m_teXEnabled && mode == TextLabel::Mode::LaTeX) || mode == TextLabel::Mode::Text) {
 		DEBUG(Q_FUNC_INFO << ", update background color")
-		const auto& cursor = ui.teLabel->textCursor();
-//		bool deselect = false;
-		if (cursor.selectedText().isEmpty()) {
+		auto cursor = ui.teLabel->textCursor();
+		bool deselect = false;
+		if (!cursor.hasSelection()) {
 			ui.teLabel->selectAll();
-//			deselect = true;
+			deselect = true;
 		}
 
 		ui.teLabel->setTextBackgroundColor(color);
-//		if (deselect)
-//			ui.teLabel->setTextCursor(cursor);
-	} else {	// set the background color of the label
+		if (deselect) {
+			cursor.clearSelection();
+			ui.teLabel->setTextCursor(cursor);
+		}
+	} else {
 		// Latex text does not support html code. For this the backgroundColor variable is used
 		// Only single color background is supported
 		for (auto* label : m_labelsList)
