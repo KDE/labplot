@@ -60,6 +60,7 @@ private Q_SLOTS:
 	void pointVisibilityChanged(bool);
 	void pointPositionChanged(const WorksheetElement::PositionWrapper &position);
 	void pointPositionLogicalChanged(QPointF);
+	void pointCoordinateBindingEnabledChanged(bool);
 
 	//load and save
 	void loadConfigFromTemplate(KConfig&);

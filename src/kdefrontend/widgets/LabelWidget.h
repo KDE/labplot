@@ -124,6 +124,7 @@ private Q_SLOTS:
 	void labelHorizontalAlignmentChanged(const TextLabel::HorizontalAlignment);
 	void labelVerticalAlignmentChanged(const TextLabel::VerticalAlignment);
 	void labelPositionLogicalChanged(QPointF);
+	void labelCoordinateBindingEnabledChanged(bool);
 	void labelOffsetxChanged(qreal);
 	void labelOffsetyChanged(qreal);
 	void labelRotationAngleChanged(qreal);

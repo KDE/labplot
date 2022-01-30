@@ -315,6 +315,7 @@ void LabelWidget::initConnections() const {
 	connect(m_label, &TextLabel::positionChanged, this, &LabelWidget::labelPositionChanged);
 
 	connect(m_label, &TextLabel::positionLogicalChanged, this, &LabelWidget::labelPositionLogicalChanged);
+	connect(m_label, &TextLabel::coordinateBindingEnabledChanged, this, &LabelWidget::labelCoordinateBindingEnabledChanged);
 	connect(m_label, &TextLabel::horizontalAlignmentChanged, this, &LabelWidget::labelHorizontalAlignmentChanged);
 	connect(m_label, &TextLabel::verticalAlignmentChanged, this, &LabelWidget::labelVerticalAlignmentChanged);
 	connect(m_label, &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
@@ -1106,6 +1107,8 @@ void LabelWidget::borderOpacityChanged(int value) {
  * \param checked
  */
 void LabelWidget::bindingChanged(bool checked) {
+	ui.chbBindLogicalPos->setChecked(checked);
+
 	//widgets for positioning using absolute plot distances
 	ui.lPositionX->setVisible(!checked);
 	ui.cbPositionX->setVisible(!checked);
@@ -1235,6 +1238,11 @@ void LabelWidget::labelVerticalAlignmentChanged(TextLabel::VerticalAlignment ind
 	m_initializing = true;
 	ui.cbVerticalAlignment->setCurrentIndex(static_cast<int>(index));
 	m_initializing = false;
+}
+
+void LabelWidget::labelCoordinateBindingEnabledChanged(bool enabled) {
+	const Lock lock(m_initializing);
+	bindingChanged(enabled);
 }
 
 void LabelWidget::labelPositionLogicalChanged(QPointF pos) {
@@ -1415,7 +1423,6 @@ void LabelWidget::load() {
 			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_label->positionLogical().x()));
 		}
 
-		ui.chbBindLogicalPos->setChecked(m_label->coordinateBindingEnabled());
 		bindingChanged(m_label->coordinateBindingEnabled());
 	} else {
 		ui.lPositionXLogical->hide();

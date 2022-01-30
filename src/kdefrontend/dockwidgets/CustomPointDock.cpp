@@ -135,6 +135,7 @@ void CustomPointDock::initConnections() const {
 	connect(m_point, &CustomPoint::visibleChanged, this, &CustomPointDock::pointVisibilityChanged);
 	connect(m_point, &CustomPoint::positionChanged, this, &CustomPointDock::pointPositionChanged);
 	connect(m_point, &CustomPoint::positionLogicalChanged, this, &CustomPointDock::pointPositionLogicalChanged);
+	connect(m_point, &CustomPoint::coordinateBindingEnabledChanged, this, &CustomPointDock::pointCoordinateBindingEnabledChanged);
 }
 
 /*
@@ -274,6 +275,8 @@ void CustomPointDock::visibilityChanged(bool state) {
  * \param checked
  */
 void CustomPointDock::bindingChanged(bool checked) {
+	ui.chbBindLogicalPos->setChecked(checked);
+
 	//widgets for positioning using absolute plot distances
 	ui.lPositionX->setVisible(!checked);
 	ui.cbPositionX->setVisible(!checked);
@@ -319,6 +322,11 @@ void CustomPointDock::pointPositionChanged(const WorksheetElement::PositionWrapp
 	ui.sbPositionY->setValue( Worksheet::convertFromSceneUnits(position.point.y(), m_worksheetUnit) );
 	ui.cbPositionX->setCurrentIndex( static_cast<int>(position.horizontalPosition) );
 	ui.cbPositionY->setCurrentIndex( static_cast<int>(position.verticalPosition) );
+}
+
+void CustomPointDock::pointCoordinateBindingEnabledChanged(bool enabled) {
+	const Lock lock(m_initializing);
+	bindingChanged(enabled);
 }
 
 void CustomPointDock::pointPositionLogicalChanged(QPointF pos) {
@@ -376,7 +384,6 @@ void CustomPointDock::load() {
 			ui.dtePositionXLogical->setDateTime(QDateTime::fromMSecsSinceEpoch(m_point->positionLogical().x()));
 		}
 
-		ui.chbBindLogicalPos->setChecked(m_point->coordinateBindingEnabled());
 		bindingChanged(m_point->coordinateBindingEnabled());
 	} else {
 		ui.lPositionXLogical->hide();
