@@ -2104,14 +2104,21 @@ void CartesianPlot::addCustomPoint() {
 	Q_D(CartesianPlot);
 	auto* point = new CustomPoint(this, "custom point");
 	point->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
-	point->setCoordinateBindingEnabled(true);
+
+	// must be before setting the position
+	this->addChild(point);
 
 	if (d->calledFromContextMenu) {
+		point->setCoordinateBindingEnabled(true);
 		point->setPositionLogical(d->logicalPos);
 		d->calledFromContextMenu = false;
+	} else {
+		auto p = point->position();
+		p.point = QPointF(0, 0);
+		point->setPosition(p);
+		point->setCoordinateBindingEnabled(true);
 	}
 
-	this->addChild(point);
 	point->retransform();
 }
 

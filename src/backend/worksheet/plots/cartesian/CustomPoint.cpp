@@ -57,8 +57,10 @@ void CustomPoint::init() {
 
 	// default position
 	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
-	d->position.point.setX(m_plot->xRange(cs->xIndex()).center());
-	d->position.point.setY(m_plot->yRange(cs->yIndex()).center());
+	const auto x = m_plot->xRange(cs->xIndex()).center();
+	const auto y = m_plot->yRange(cs->yIndex()).center();
+	d->positionLogical = QPointF(x, y);
+	d->updatePosition(); // To update also scene coordinates
 
 	//initialize the symbol
 	d->symbol = new Symbol(QString());
