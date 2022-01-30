@@ -1424,36 +1424,9 @@ void WorksheetView::addNew(QAction* action) {
 	} else if (action == addTextLabelAction) {
 		auto* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));
-
-		if (m_calledFromContextMenu) {
-			//position the label at the point where the context menu was called
-			auto position = l->position();
-			position.point = l->parentPosToRelativePos(m_cursorPos,
-													l->graphicsItem()->boundingRect(),
-													position,
-													l->horizontalAlignment(),
-													l->verticalAlignment()
-			);
-			l->setPosition(position);
-			m_calledFromContextMenu = false;
-		}
 		aspect = l;
 	} else if (action == addImageAction) {
 		Image* image = new Image(i18n("Image"));
-
-		if (m_calledFromContextMenu) {
-			//position the image at the point where the context menu was called
-			auto position = image->position();
-			position.point = image->parentPosToRelativePos(m_cursorPos,
-													image->graphicsItem()->boundingRect(),
-													position,
-													image->horizontalAlignment(),
-													image->verticalAlignment()
-			);
-			image->setPosition(position);
-			m_calledFromContextMenu = false;
-		}
-
 		aspect = image;
 	}
 	if (!aspect)
@@ -1463,7 +1436,18 @@ void WorksheetView::addNew(QAction* action) {
 
 	//labels and images with their initial positions need to be retransformed
 	//after they have gotten a parent
-	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image || aspect->type() == AspectType::CartesianPlot)
+	if (aspect->type() == AspectType::TextLabel || aspect->type() == AspectType::Image) {
+		if (m_calledFromContextMenu) {
+			// must be done after add Child, because otherwise the parentData rect is not available
+			// and therefore aligning will not work
+			auto position = aspect->position();
+			position.point = aspect->parentPosToRelativePos(m_cursorPos, position);
+			position.point = aspect->align(position.point, aspect->graphicsItem()->boundingRect(), aspect->horizontalAlignment(), aspect->verticalAlignment(), false);
+			aspect->setPosition(position);
+			m_calledFromContextMenu = false;
+		} else
+			aspect->retransform();
+	} else if (aspect->type() == AspectType::CartesianPlot)
 		aspect->retransform();
 
 	handleCartesianPlotActions();
