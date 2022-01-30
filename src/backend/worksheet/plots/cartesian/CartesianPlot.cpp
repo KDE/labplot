@@ -2079,6 +2079,7 @@ void CartesianPlot::addTextLabel() {
 
 	this->addChild(label);
 	label->setParentGraphicsItem(graphicsItem());
+	label->retransform();
 }
 
 void CartesianPlot::addImage() {
