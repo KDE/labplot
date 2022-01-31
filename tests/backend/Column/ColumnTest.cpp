@@ -242,8 +242,9 @@ void ColumnTest::loadDateTimeFromProject() {
 	QVERIFY(childs.count() == 3);
 	auto* dateTimeColumn = static_cast<Column*>(childs.at(0));
 	QCOMPARE(dateTimeColumn->rowCount(), 8);
-	auto* dayColumn = static_cast<Column*>(childs.at(1));
-	auto* monthColumn = static_cast<Column*>(childs.at(2));
+	//TODO:
+	//auto* dayColumn = static_cast<Column*>(childs.at(1));
+	//auto* monthColumn = static_cast<Column*>(childs.at(2));
 
 	// TODO: must be implemented
 //	for (int i=0; i < 8; i++) {

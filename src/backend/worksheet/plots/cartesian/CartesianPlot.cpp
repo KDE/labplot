@@ -2404,8 +2404,8 @@ void CartesianPlot::boxPlotOrientationChanged(BoxPlot::Orientation orientation) 
 
 }
 
-void CartesianPlot::childRemoved(const AbstractAspect* parent, const AbstractAspect* /*before*/, const AbstractAspect* child) {
-	QDEBUG(Q_FUNC_INFO << ", CHILD = " << child << ", PARENT = " << parent)
+void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const AbstractAspect* /*before*/, const AbstractAspect* child) {
+	QDEBUG(Q_FUNC_INFO << ", CHILD = " << child)
 	if (m_legend == child) {
 		DEBUG(Q_FUNC_INFO << ", a legend")
 		if (m_menusInitialized)
