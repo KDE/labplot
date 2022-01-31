@@ -146,29 +146,7 @@ void CustomPointPrivate::retransform() {
 	if (suppressRetransform || q->isLoading())
 		return;
 
-	QPointF p;
-	if(coordinateBindingEnabled && q->cSystem) {
-		//the position in logical coordinates was changed, calculate the position in scene coordinates
-		bool visible;
-		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
-		QPointF inParentCoords = mapPlotAreaToParent(p);
-		p = inParentCoords;
-		position.point = q->parentPosToRelativePos(p, boundingRectangle, position, horizontalAlignment, verticalAlignment);
-	} else {
-		p = q->relativePosToParentPos(boundingRectangle, position, horizontalAlignment, verticalAlignment);
-		if (q->cSystem)
-			positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-	}
-
-	suppressItemChangeEvent = true;
-	setPos(p);
-	suppressItemChangeEvent = false;
-
-	Q_EMIT q->positionChanged(position);
-	if (q->cSystem)
-		Q_EMIT q->positionLogicalChanged(positionLogical);
-
+	updatePosition();
 	recalcShapeAndBoundingRect();
 }
 

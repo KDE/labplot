@@ -36,7 +36,6 @@ public:
 	void recalcShapeAndBoundingRect() override;
 	void updateImage();
 	void scaleImage();
-	void updatePosition();
 	void updateBorder();
 
 	bool m_hovered{false};
@@ -55,7 +54,6 @@ public:
 
 private:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
 	void hoverEnterEvent(QGraphicsSceneHoverEvent*) override;
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent*) override;
 

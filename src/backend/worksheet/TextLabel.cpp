@@ -507,28 +507,23 @@ void TextLabelPrivate::updatePosition() {
 		// In an axis element, the label is part of the bounding rect of the axis
 		// so it is not possible to align with the bounding rect
 		p = position.point;
-	} else if(coordinateBindingEnabled && q->cSystem) {
-		//the position in logical coordinates was changed, calculate the position in scene coordinates
-		bool visible;
-		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
-		position.point = q->parentPosToRelativePos(p, boundingRectangle, position,
-												horizontalAlignment, verticalAlignment);
-	} else
-		p = q->relativePosToParentPos(boundingRectangle, position,
-									horizontalAlignment, verticalAlignment);
+		suppressItemChangeEvent = true;
+		setPos(p);
+		suppressItemChangeEvent = false;
 
-	suppressItemChangeEvent = true;
-	setPos(p);
-	suppressItemChangeEvent = false;
+		Q_EMIT q->positionChanged(position);
 
-	Q_EMIT q->positionChanged(position);
-
-	//the position in scene coordinates was changed, calculate the position in logical coordinates
-	if (q->cSystem) {
-		if (!coordinateBindingEnabled)
-			positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		Q_EMIT q->positionLogicalChanged(positionLogical);
+		//the position in scene coordinates was changed, calculate the position in logical coordinates
+		if (q->cSystem) {
+			if (!coordinateBindingEnabled) {
+				QPointF pos = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, false);
+				positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			}
+			Q_EMIT q->positionLogicalChanged(positionLogical);
+		}
+	} else {
+		WorksheetElementPrivate::updatePosition();
+		return;
 	}
 }
 

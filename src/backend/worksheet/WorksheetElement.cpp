@@ -370,13 +370,17 @@ QRectF WorksheetElement::parentRect() const {
 	* \param position contains the alignement of the element to the parent
 	* \return distance between the parent position to the element
 	*/
-QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF rect, PositionWrapper position,
-		HorizontalAlignment horAlign, VerticalAlignment vertAlign) const {
+QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, PositionWrapper position) const {
+	// increasing relative pos hor --> right
+	// increasing relative pos vert --> top
+	// increasing parent pos hor --> right
+	// increasing parent pos vert --> bottom
+
 	QPointF relPos;
 	QRectF parentRect = this->parentRect();
 
 	if (position.horizontalPosition == HorizontalPosition::Left)
-		relPos.setX(parentPos.x() - (parentRect.x()));
+		relPos.setX(parentPos.x() - parentRect.x());
 	else if (position.horizontalPosition == HorizontalPosition::Center || position.horizontalPosition == HorizontalPosition::Custom)
 		relPos.setX(parentPos.x() - (parentRect.x() + parentRect.width()/2));
 	else  //position.horizontalPosition == WorksheetElement::HorizontalPosition::Right // default
@@ -389,7 +393,7 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF rect,
 	else // position.verticalPosition == VerticalPosition::Top // default
 		relPos.setY(parentRect.y() - parentPos.y());
 
-	return align(relPos, rect, horAlign, vertAlign, false);
+	return relPos;
 }
 
 /*!
@@ -399,8 +403,13 @@ QPointF WorksheetElement::parentPosToRelativePos(QPointF parentPos, QRectF rect,
 * \param position contains the alignment of the element to the parent
 * \return parent position
 */
-QPointF WorksheetElement::relativePosToParentPos(QRectF rect, PositionWrapper position,
-		HorizontalAlignment horAlign, VerticalAlignment vertAlign) const {
+QPointF WorksheetElement::relativePosToParentPos(PositionWrapper position) const {
+
+	// increasing relative pos hor --> right
+	// increasing relative pos vert --> top
+	// increasing parent pos hor --> right
+	// increasing parent pos vert --> bottom
+
 	QPointF parentPos;
 	QRectF parentRect = this->parentRect();
 
@@ -418,7 +427,7 @@ QPointF WorksheetElement::relativePosToParentPos(QRectF rect, PositionWrapper po
 	else // position.verticalPosition == WorksheetElement::VerticalPosition::Top // default
 		parentPos.setY(parentRect.y() - position.point.y());
 
-	return align(parentPos, rect, horAlign, vertAlign, true);
+	return parentPos;
 }
 
 void WorksheetElement::save(QXmlStreamWriter* writer) const {
@@ -641,6 +650,34 @@ void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, 
 
 }
 
+void WorksheetElementPrivate::updatePosition() {
+	QPointF p;
+	if(coordinateBindingEnabled && q->cSystem) {
+		//the position in logical coordinates was changed, calculate the position in scene coordinates
+		bool visible;
+		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+		QPointF inParentCoords = mapPlotAreaToParent(p);
+		p = inParentCoords;
+		position.point = q->parentPosToRelativePos(p, position);
+		p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
+		Q_EMIT q->positionChanged(position);
+	} else {
+		p = q->relativePosToParentPos(position);
+
+		//the position in scene coordinates was changed, calculate the position in logical coordinates
+		if (q->cSystem) {
+			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(p),
+															AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			Q_EMIT q->positionLogicalChanged(positionLogical);
+		}
+		p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
+	}
+
+	suppressItemChangeEvent = true;
+	setPos(p);
+	suppressItemChangeEvent = false;
+}
+
 void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 	if (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right
 			|| event->key() == Qt::Key_Up ||event->key() == Qt::Key_Down) {
@@ -663,8 +700,8 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 			auto pLogic = q->cSystem->mapSceneToLogical(p, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			q->setPositionLogical(pLogic);
 		} else {
-			QPointF point = q->parentPosToRelativePos(pos(), boundingRectangle, position,
-													horizontalAlignment, verticalAlignment);
+			QPointF point = q->parentPosToRelativePos(pos(), position);
+			point = q->align(point, boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			if (event->key() == Qt::Key_Left) {
 				point.setX(point.x() - delta);
@@ -686,15 +723,15 @@ void WorksheetElementPrivate::keyPressEvent(QKeyEvent* event) {
 
 void WorksheetElementPrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
 	//convert position of the item in parent coordinates to label's position
-	const QPointF point = q->parentPosToRelativePos(pos(),
-													boundingRect(), position,
-													horizontalAlignment, verticalAlignment);
+	QPointF point = q->parentPosToRelativePos(pos(), position);
+	point = q->align(point, boundingRect(), horizontalAlignment, verticalAlignment, false);
 	if (point != position.point) {
 		//position was changed -> set the position related member variables
 		suppressRetransform = true;
 		WorksheetElement::PositionWrapper tempPosition = position;
 		tempPosition.point = point;
 		q->setPosition(tempPosition);
+		updatePosition(); // to update the logical position if available
 		suppressRetransform = false;
 	}
 
@@ -707,6 +744,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 
 	if (change == QGraphicsItem::ItemPositionChange) {
 		// don't use setPosition here, because then all small changes are on the undo stack
+		// setPosition is used then in mouseReleaseEvent
 		if(coordinateBindingEnabled) {
 			QPointF pos = q->align(value.toPointF(), boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
@@ -715,8 +753,8 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		} else {
 			//convert item's center point in parent's coordinates
 			WorksheetElement::PositionWrapper tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), boundingRect(), position,
-														horizontalAlignment, verticalAlignment);
+			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), position);
+			tempPosition.point = q->align(tempPosition.point, boundingRect(), horizontalAlignment, verticalAlignment, false);
 
 			//Q_EMIT the signals in order to notify the UI.
 			Q_EMIT q->positionChanged(tempPosition);

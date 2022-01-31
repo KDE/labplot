@@ -1066,9 +1066,7 @@ void AxisPrivate::retransformLine() {
 				wrapper.verticalPosition = WorksheetElement::VerticalPosition::Bottom;
 
 			wrapper.point = QPointF(offset, offset);
-			const auto pos = q->relativePosToParentPos(boundingRectangle, wrapper,
-													WorksheetElement::HorizontalAlignment::Center,
-													WorksheetElement::VerticalAlignment::Center);
+			const auto pos = q->relativePosToParentPos(wrapper);
 
 			Lines ranges{QLineF(QPointF(range.start(), 1.), QPointF(range.end(), 1.))};
 			// y=1 may be outside clip range: suppress clipping. value must be > 0 for log scales
@@ -1102,9 +1100,7 @@ void AxisPrivate::retransformLine() {
 				wrapper.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
 
 			wrapper.point = QPointF(offset, offset);
-			const auto pos = q->relativePosToParentPos(boundingRectangle, wrapper,
-													WorksheetElement::HorizontalAlignment::Center,
-													WorksheetElement::VerticalAlignment::Center);
+			const auto pos = q->relativePosToParentPos(wrapper);
 
 			Lines ranges{QLineF(QPointF(1., range.start()), QPointF(1., range.end()))};
 			// x=1 may be outside clip range: suppress clipping. value must be > 0 for log scales

@@ -283,17 +283,6 @@ void ImagePrivate::scaleImage() {
 	retransform();
 }
 
-void ImagePrivate::updatePosition() {
-	QPointF p = q->relativePosToParentPos(boundingRectangle, position,
-										  horizontalAlignment, verticalAlignment);
-
-	suppressItemChangeEvent = true;
-	setPos(p);
-	suppressItemChangeEvent = false;
-
-	Q_EMIT q->positionChanged(position);
-}
-
 void ImagePrivate::updateBorder() {
 	borderShapePath = QPainterPath();
 	borderShapePath.addRect(boundingRectangle);
@@ -364,23 +353,6 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Highlight), 2, Qt::SolidLine));
 		painter->drawPath(imageShape);
 	}
-}
-
-void ImagePrivate::mouseReleaseEvent(QGraphicsSceneMouseEvent* event) {
-	//convert position of the item in parent coordinates to localposition
-	QPointF point = q->parentPosToRelativePos(pos(),
-									boundingRectangle, position,
-									horizontalAlignment, verticalAlignment);
-	if (point != position.point) {
-		//position was changed -> set the position related member variables
-		suppressRetransform = true;
-		WorksheetElement::PositionWrapper tempPosition = position;
-		tempPosition.point = point;
-		q->setPosition(tempPosition);
-		suppressRetransform = false;
-	}
-
-	QGraphicsItem::mouseReleaseEvent(event);
 }
 
 void ImagePrivate::contextMenuEvent(QGraphicsSceneContextMenuEvent* event) {

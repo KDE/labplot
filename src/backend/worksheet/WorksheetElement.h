@@ -76,12 +76,10 @@ public:
 	bool isPrinting() const;
 
 	QRectF parentRect() const;
-	QPointF parentPosToRelativePos(QPointF parentPos, QRectF rect,
-								   PositionWrapper, HorizontalAlignment, VerticalAlignment) const;
-	QPointF relativePosToParentPos(QRectF rect, PositionWrapper,
-								   HorizontalAlignment, VerticalAlignment) const;
+	QPointF parentPosToRelativePos(QPointF parentPos, PositionWrapper) const;
+	QPointF relativePosToParentPos(PositionWrapper) const;
 
-	QPointF align(QPointF pos, QRectF rect, HorizontalAlignment horAlign, VerticalAlignment vertAlign, bool positive) const;
+	QPointF align(QPointF, QRectF, HorizontalAlignment, VerticalAlignment, bool positive) const;
 
 	QMenu* createContextMenu() override;
 

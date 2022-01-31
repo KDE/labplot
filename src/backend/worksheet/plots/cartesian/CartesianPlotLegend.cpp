@@ -546,30 +546,7 @@ void CartesianPlotLegendPrivate::retransform() {
 	calculates the position of the legend, when the position relative to the parent was specified (left, right, etc.)
 */
 void CartesianPlotLegendPrivate::updatePosition() {
-	QPointF p;
-	if(coordinateBindingEnabled && q->cSystem) {
-		//the position in logical coordinates was changed, calculate the position in scene coordinates
-		bool visible;
-		p = q->cSystem->mapLogicalToScene(positionLogical, visible, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		p = q->align(p, boundingRectangle, horizontalAlignment, verticalAlignment, true);
-		position.point = q->parentPosToRelativePos(p, boundingRectangle, position,
-												horizontalAlignment, verticalAlignment);
-	} else
-		p = q->relativePosToParentPos(boundingRect(), position,
-									horizontalAlignment, verticalAlignment);
-
-	suppressItemChangeEvent = true;
-	setPos(p);
-	suppressItemChangeEvent = false;
-
-	Q_EMIT q->positionChanged(position);
-
-	//the position in scene coordinates was changed, calculate the position in logical coordinates
-	if (q->cSystem) {
-		if (!coordinateBindingEnabled)
-			positionLogical = q->cSystem->mapSceneToLogical(position.point, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
-		Q_EMIT q->positionLogicalChanged(positionLogical);
-	}
+	WorksheetElementPrivate::updatePosition();
 
 	suppressRetransform = true;
 	title->retransform();

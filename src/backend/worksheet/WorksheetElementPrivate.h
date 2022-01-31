@@ -44,6 +44,7 @@ public:
 	QString name() const;
 	virtual void retransform() = 0;
 	virtual void recalcShapeAndBoundingRect() = 0;
+	void updatePosition();
 	QRectF boundingRect() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	virtual void keyPressEvent(QKeyEvent*) override;

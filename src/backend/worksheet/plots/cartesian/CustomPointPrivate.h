@@ -25,7 +25,6 @@ public:
 
 	void retransform() override;
 	void recalcShapeAndBoundingRect() override;
-	void updatePosition();
 	void updateData();
 
 	bool m_hovered{false};
