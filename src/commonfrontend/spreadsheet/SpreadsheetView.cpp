@@ -3667,8 +3667,14 @@ void SpreadsheetView::exportToLaTeX(const QString & path, const bool exportHeade
 	bool columnsSeparating = (cols > columnsPerTable);
 	QTextStream out(&file);
 
+	const QString latexFullPath = QStandardPaths::findExecutable(QLatin1String("latex"));
+	if (latexFullPath.isEmpty()) {
+		DEBUG(Q_FUNC_INFO << ", WARNING: latex not found!")
+		return;
+	}
+
 	QProcess tex;
-	tex.start("latex", QStringList() << "--version", QProcess::ReadOnly);
+	tex.start(latexFullPath, QStringList() << "--version", QProcess::ReadOnly);
 	tex.waitForFinished(500);
 	QString texVersionOutput = QString(tex.readAllStandardOutput());
 	texVersionOutput = texVersionOutput.split('\n')[0];

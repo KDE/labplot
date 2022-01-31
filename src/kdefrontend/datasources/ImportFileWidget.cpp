@@ -1182,20 +1182,23 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 
 		// File type given by "file"
 #ifdef Q_OS_LINUX
-		auto* proc = new QProcess();
+		const QString fileFullPath = QStandardPaths::findExecutable(QLatin1String("file"));
+		if (fileFullPath.isEmpty())
+			return i18n("file command not found");
+
+		QProcess proc;
 		QStringList args;
 		args << "-b" << fileName;
-		proc->start( "file", args);
+		proc.start(fileFullPath, args);
 
-		if (proc->waitForReadyRead(1000) == false)
+		if (proc.waitForReadyRead(1000) == false)
 			infoStrings << i18n("Reading from file %1 failed.", fileName);
 		else {
-			fileTypeString = proc->readLine();
+			fileTypeString = proc.readLine();
 			if (fileTypeString.contains(i18n("cannot open")))
 				fileTypeString.clear();
-			else {
+			else
 				fileTypeString.remove(fileTypeString.length() - 1, 1);	// remove '\n'
-			}
 		}
 		infoStrings << i18n("<b>File type:</b> %1", fileTypeString);
 #endif

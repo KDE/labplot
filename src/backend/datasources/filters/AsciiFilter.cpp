@@ -208,9 +208,10 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 	size_t lineCount = 0;
 #if defined(Q_OS_LINUX) || defined(Q_OS_BSD4)
 	//on linux and BSD use wc, if available, which is much faster than counting lines in the file
-	if (device.compressionType() == KCompressionDevice::None && !QStandardPaths::findExecutable(QLatin1String("wc")).isEmpty()) {
+	const QString wcFullPath = QStandardPaths::findExecutable(QLatin1String("wc"));
+	if (device.compressionType() == KCompressionDevice::None && !wcFullPath.isEmpty()) {
 		QProcess wc;
-		wc.start(QLatin1String("wc"), QStringList() << QLatin1String("-l") << fileName);
+		wc.start(wcFullPath, QStringList() << QLatin1String("-l") << fileName);
 		size_t lineCount = 0;
 		while (wc.waitForReadyRead()) {
 			QString line(wc.readLine());

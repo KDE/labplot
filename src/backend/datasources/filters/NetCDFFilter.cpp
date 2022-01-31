@@ -264,15 +264,19 @@ QString NetCDFFilter::fileCDLString(const QString& fileName) {
 
 	QString CDLString;
 #ifdef Q_OS_LINUX
-	auto* proc = new QProcess();
+	const QString ncdumpFullPath = QStandardPaths::findExecutable(QLatin1String("ncdump"));
+	if (ncdumpFullPath.isEmpty())
+		return i18n("ncdump not found.");
+
+	QProcess proc;
 	QStringList args;
 	args << "-cs" << fileName;
-	proc->start( "ncdump", args);
+	proc.start(ncdumpFullPath, args);
 
-	if (proc->waitForReadyRead(1000) == false)
+	if (proc.waitForReadyRead(1000) == false)
 		CDLString += i18n("Reading from file %1 failed.", fileName);
 	else {
-		CDLString += proc->readAll();
+		CDLString += proc.readAll();
 		CDLString.replace('\n', "<br>\n");
 		CDLString.replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;");
 		//DEBUG("	CDL string: " << STDSTRING(CDLString));

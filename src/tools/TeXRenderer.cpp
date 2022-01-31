@@ -142,17 +142,23 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 	QFileInfo fi(file.fileName());
 	const QString& baseName = fi.completeBaseName();
 
-	// pdflatex: produce the PDF file
+	// produce the PDF file with 'engine'
+	const QString engineFullPath = QStandardPaths::findExecutable(engine);
+	if (engineFullPath.isEmpty()) {
+		WARN("engine " << STDSTRING(engine) << " not found");
+		return QByteArray();
+	}
+
 	QProcess latexProcess;
 #if defined(HAVE_WINDOWS)
 	latexProcess.setNativeArguments("-interaction=batchmode " + file.fileName());
-	latexProcess.start(engine, QStringList() << QString());
+	latexProcess.start(engineFullPath, QStringList() << QString());
 #else
-	latexProcess.start(engine, QStringList() << "-interaction=batchmode" << file.fileName());
+	latexProcess.start(engineFullPath, QStringList() << "-interaction=batchmode" << file.fileName());
 #endif
 
 	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
-		WARN("pdflatex process failed, exit code = " << latexProcess.exitCode());
+		WARN("LaTeX process failed, exit code = " << latexProcess.exitCode());
 		*success = false;
 		QFile::remove(baseName + ".aux");
 		QFile::remove(baseName + ".log");
@@ -182,8 +188,13 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	const QString& baseName = fi.completeBaseName();
 
 	//latex: produce the DVI file
+	const QString latexFullPath = QStandardPaths::findExecutable(QLatin1String("latex"));
+	if (latexFullPath.isEmpty()) {
+		WARN("latex not found");
+		return QByteArray();
+	}
 	QProcess latexProcess;
-	latexProcess.start("latex", QStringList() << "-interaction=batchmode" << file.fileName());
+	latexProcess.start(latexFullPath, QStringList() << "-interaction=batchmode" << file.fileName());
 	if (!latexProcess.waitForFinished() || latexProcess.exitCode() != 0) {
 		WARN("latex process failed, exit code = " << latexProcess.exitCode());
 		*success = false;
@@ -193,8 +204,13 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	}
 
 	// dvips: DVI -> PS
+	const QString dvipsFullPath = QStandardPaths::findExecutable(QLatin1String("dvips"));
+	if (dvipsFullPath.isEmpty()) {
+		WARN("dvips not found");
+		return QByteArray();
+	}
 	QProcess dvipsProcess;
-	dvipsProcess.start("dvips", QStringList() << "-E" << baseName);
+	dvipsProcess.start(dvipsFullPath, QStringList() << "-E" << baseName);
 	if (!dvipsProcess.waitForFinished() || dvipsProcess.exitCode() != 0) {
 		WARN("dvips process failed, exit code = " << dvipsProcess.exitCode());
 		*success = false;
@@ -212,9 +228,14 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	env.insert("MAGICK_CODER_MODULE_PATH", qPrintable(qgetenv("PROGRAMFILES") + QString("\\labplot2")));
 	convertProcess.setProcessEnvironment(env);
 #endif
+	const QString convertFullPath = QStandardPaths::findExecutable(QLatin1String("convert"));
+	if (convertFullPath.isEmpty()) {
+		WARN("convert not found");
+		return QByteArray();
+	}
 
 	const QStringList params{"-density", QString::number(dpi), baseName + ".ps", baseName + ".pdf"};
-	convertProcess.start("convert", params);
+	convertProcess.start(convertFullPath, params);
 
 	if (!convertProcess.waitForFinished() || convertProcess.exitCode() != 0) {
 		WARN("convert process failed, exit code = " << convertProcess.exitCode());

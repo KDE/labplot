@@ -15,7 +15,6 @@
 #include "backend/lib/XmlStreamReader.h"
 
 #include <KLocalizedString>
-#include <QProcess>
 
 ///////////// macros ///////////////////////////////////////////////
 

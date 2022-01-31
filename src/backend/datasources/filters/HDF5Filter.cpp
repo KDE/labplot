@@ -336,15 +336,19 @@ QString HDF5Filter::fileDDLString(const QString& fileName) {
 
 	QString DDLString;
 #ifdef Q_OS_LINUX
-	auto* proc = new QProcess();
+	const QString h5dumpFullPath = QStandardPaths::findExecutable(QLatin1String("h5dump"));
+	if (h5dumpFullPath.isEmpty())
+		return i18n("h5dump not found.");
+
+	QProcess proc;
 	QStringList args;
 	args << "-H" << fileName;
-	proc->start( "h5dump", args);
+	proc.start(h5dumpFullPath, args);
 
-	if (proc->waitForReadyRead(1000) == false)
+	if (proc.waitForReadyRead(1000) == false)
 		DDLString += i18n("Reading from file %1 failed.", fileName);
 	else {
-		DDLString += proc->readAll();
+		DDLString += proc.readAll();
 		DDLString.replace('\n', "<br>\n");
 		DDLString.replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;");
 		//DEBUG("	DDL string: " << STDSTRING(DDLString));

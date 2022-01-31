@@ -28,7 +28,6 @@
 #include <QIcon>
 #include <QMenu>
 #include <QMessageBox>
-#include <QProcess>
 #include <QTimer>
 #include <QTcpSocket>
 #include <QUdpSocket>
