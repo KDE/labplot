@@ -715,7 +715,15 @@ void Project::retransformElements(AbstractAspect* aspect) {
 
 	//all data was read:
 	//call retransform() to every element
-	if (hasChildren && aspect->type() != AspectType::CartesianPlot) {
+	if (hasChildren && aspect->type() == AspectType::Worksheet) {
+		const auto& elements = aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+		for (auto* e : elements) {
+			if (e->type() == AspectType::CartesianPlot)
+				static_cast<CartesianPlot*>(e)->retransformAll();
+			else
+				e->retransform();
+		}
+	} else if (hasChildren && aspect->type() != AspectType::CartesianPlot) {
 		const auto& worksheets = aspect->children<Worksheet>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
 		for (auto* w : worksheets) {
 			// retransform all elements in the worksheet (labels, images, plots)
