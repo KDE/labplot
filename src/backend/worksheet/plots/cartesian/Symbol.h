@@ -8,7 +8,6 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-
 #ifndef SYMBOL_H
 #define SYMBOL_H
 

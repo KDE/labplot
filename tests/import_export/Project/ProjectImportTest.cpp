@@ -20,6 +20,7 @@
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlotLegend.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/Symbol.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 //##############################################################################
@@ -448,7 +449,19 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->xColumnPath(), QLatin1String("2folder-with-graphs/Folder1/Book1/A"));
 	QCOMPARE(curve->yColumnPath(), QLatin1String("2folder-with-graphs/Folder1/Book1/B"));
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
+	QCOMPARE(curve->legendVisible(), true);
+	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
+	QCOMPARE(curve->lineSkipGaps(), false);
+	QCOMPARE(curve->lineOpacity(), 1);
+	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	//TODO: check more curve properties
+
+	auto* symbol = curve->symbol();
+	QVERIFY(symbol != nullptr);
+	QCOMPARE(symbol->style(), Symbol::Style::SquareHalf);
+	QCOMPARE(symbol->size(), 31.75);
+	//TODO: more symbol props
 
 	// Folder 2
 	auto* f2 = dynamic_cast<Folder*>(project.child<AbstractAspect>(1));
@@ -492,7 +505,19 @@ void ProjectImportTest::testOrigin_2folder_with_graphs() {
 	QCOMPARE(curve->xColumnPath(), QLatin1String("2folder-with-graphs/Folder2/Book2/A"));
 	QCOMPARE(curve->yColumnPath(), QLatin1String("2folder-with-graphs/Folder2/Book2/B"));
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
+	QCOMPARE(curve->legendVisible(), true);
+	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
+	QCOMPARE(curve->lineSkipGaps(), false);
+	QCOMPARE(curve->lineOpacity(), 1);
+	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
 	//TODO: check more curve properties
+
+	symbol = curve->symbol();
+	QVERIFY(symbol != nullptr);
+	QCOMPARE(symbol->style(), Symbol::Style::Hexagon);
+	QCOMPARE(symbol->size(), 31.75);
+	//TODO: more symbol props
 }
 
 void ProjectImportTest::testOrigin_2graphs() {
@@ -548,7 +573,19 @@ void ProjectImportTest::testOrigin_2graphs() {
 	QCOMPARE(curve->xColumnPath(), QLatin1String("2graphs/Book2/A"));
 	QCOMPARE(curve->yColumnPath(), QLatin1String("2graphs/Book2/B"));
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
-	//TODO: check more curve properties
+	QCOMPARE(curve->legendVisible(), true);
+	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
+	QCOMPARE(curve->lineSkipGaps(), false);
+	QCOMPARE(curve->lineOpacity(), 1);
+	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	//TODO: more curve properties
+
+	auto* symbol = curve->symbol();
+	QVERIFY(symbol != nullptr);
+	QCOMPARE(symbol->style(), Symbol::Style::Hexagon);
+	QCOMPARE(symbol->size(), 31.75);
+	//TODO: more symbol props
 
 	// Graph 1
 	auto* w1 = dynamic_cast<Worksheet*>(project.child<AbstractAspect>(2));
@@ -580,8 +617,19 @@ void ProjectImportTest::testOrigin_2graphs() {
 
 	QCOMPARE(curve->xColumnPath(), QLatin1String("2graphs/Book1/A"));
 	QCOMPARE(curve->yColumnPath(), QLatin1String("2graphs/Book1/B"));
+	QCOMPARE(curve->legendVisible(), true);
 	QCOMPARE(curve->lineType(), XYCurve::LineType::Line);
-	//TODO: check more curve properties
+	QCOMPARE(curve->lineSkipGaps(), false);
+	QCOMPARE(curve->lineOpacity(), 1);
+	QCOMPARE(curve->dropLineType(), XYCurve::DropLineType::NoDropLine);
+	QCOMPARE(curve->valuesType(), XYCurve::ValuesType::NoValues);
+	//TODO: more curve properties
+
+	symbol = curve->symbol();
+	QVERIFY(symbol != nullptr);
+	QCOMPARE(symbol->style(), Symbol::Style::SquareHalf);
+	QCOMPARE(symbol->size(), 31.75);
+	//TODO: more symbol props
 
 	// Book 1
 	auto* s1 = dynamic_cast<Spreadsheet*>(project.child<AbstractAspect>(3));
