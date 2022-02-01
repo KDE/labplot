@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Custom user-defined point on the plot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
 
     SPDX-License-Identifier: GPL-2.0-or-later
@@ -54,9 +54,8 @@ void ReferenceLine::init() {
 
 	d->coordinateBindingEnabled = true; // TODO: maybe adding also to dock?
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
-	auto position = group.readEntry("Position", m_plot->xRange().center());
-	d->position.point.setX(position);
-	d->position.point.setY(position);
+	d->position.point.setX(m_plot->xRange().center());
+	d->position.point.setY(m_plot->yRange().center());
 
 	d->pen.setStyle( (Qt::PenStyle) group.readEntry("Style", (int)Qt::SolidLine) );
 	d->pen.setColor( group.readEntry("Color", QColor(Qt::black)) );

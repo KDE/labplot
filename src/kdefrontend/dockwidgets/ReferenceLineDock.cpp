@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dock widget for the reference line on the plot
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2020-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2021 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -108,8 +108,12 @@ void ReferenceLineDock::updateLocale() {
 	Lock lock(m_initializing);
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal)
 		ui.lePosition->setText(numberLocale.toString(m_line->position().point.y()));
-	else
-		ui.lePosition->setText(numberLocale.toString(m_line->position().point.x()));
+	else {
+		//update locale if numeric, nothing to do if datetime format is used for the x-range
+		const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
+		if (plot->xRangeFormat() == RangeT::Format::Numeric)
+			ui.lePosition->setText(numberLocale.toString(m_line->position().point.x()));
+	}
 }
 
 void ReferenceLineDock::updatePlotRanges() {
@@ -156,6 +160,9 @@ void ReferenceLineDock::orientationChanged(int index) {
 
 	for (auto* line : m_linesList)
 		line->setOrientation(orientation);
+
+	//call this slot to show the x or y value depending on the new orientation
+	linePositionChanged(m_line->position());
 }
 
 void ReferenceLineDock::positionChanged() {
@@ -168,8 +175,10 @@ void ReferenceLineDock::positionChanged() {
 	if (ok) {
 		for (auto* line : m_linesList) {
 			auto position = line->position();
-			position.point.setX(pos);
-			position.point.setY(pos);
+			if (line->orientation() == ReferenceLine::Orientation::Horizontal)
+				position.point.setY(pos);
+			else
+				position.point.setX(pos);
 			line->setPosition(position);
 		}
 	}
@@ -182,8 +191,7 @@ void ReferenceLineDock::positionDateTimeChanged(const QDateTime& dateTime) {
 	quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* line : m_linesList) {
 		auto position = line->position();
-		position.point.setX(pos);
-		position.point.setY(pos);
+		position.point.setX(pos); //datetime is only possible for x
 		line->setPosition(position);
 	}
 }
@@ -293,14 +301,15 @@ void ReferenceLineDock::load() {
 	if (!m_line)
 		return;
 
-	m_initializing = true;
+	const Lock lock(m_initializing);
 
 	SET_NUMBER_LOCALE
-	ui.cbOrientation->setCurrentIndex(static_cast<int>(m_line->orientation()));
+	auto orientation = m_line->orientation();
+	ui.cbOrientation->setCurrentIndex(static_cast<int>(orientation));
 	orientationChanged(ui.cbOrientation->currentIndex()); //call this to update the position widgets that depend on the orientation
 
 	//position
-	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal)
+	if (orientation == ReferenceLine::Orientation::Horizontal)
 		ui.lePosition->setText(numberLocale.toString(m_line->position().point.y()));
 	else {
 		const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
@@ -317,6 +326,4 @@ void ReferenceLineDock::load() {
 	ui.sbLineWidth->setValue( Worksheet::convertFromSceneUnits(m_line->pen().widthF(), Worksheet::Unit::Point) );
 	ui.sbLineOpacity->setValue( round(m_line->opacity()*100.0) );
 	ui.chkVisible->setChecked( m_line->isVisible() );
-
-	m_initializing = false;
 }
