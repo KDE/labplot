@@ -629,6 +629,7 @@ void BoxPlotPrivate::recalc() {
 	//resize the internal containers
 	const int count = dataColumns.size();
 	m_boxRect.resize(count);
+	m_boxRectUnclipped.resize(count);
 	m_xMinBox.resize(count);
 	m_xMaxBox.resize(count);
 	m_yMinBox.resize(count);
@@ -930,6 +931,7 @@ void BoxPlotPrivate::verticalBoxPlot(int index) {
 	}
 
 	m_boxRect[index] = q->cSystem->mapLogicalToScene(lines);
+	m_boxRectUnclipped[index] = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	//median line
 	lines.clear();
@@ -1059,6 +1061,7 @@ void BoxPlotPrivate::horizontalBoxPlot(int index) {
 	}
 
 	m_boxRect[index] = q->cSystem->mapLogicalToScene(lines);
+	m_boxRectUnclipped[index] = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	//median line
 	lines.clear();
@@ -1455,17 +1458,54 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 	PERFTRACE(name() + Q_FUNC_INFO);
 
-	if (m_boxRect.at(index).isEmpty())
+	const auto& lines = m_boxRectUnclipped.at(index);
+
+	if (lines.isEmpty())
 		return;
 
-	QPainterPath boxPath;
+	//we have four unclipped lines for the box.
+	//clip the points to the plot data rect and create a new polygon
+	//out of them that will be filled out.
 	QPolygonF polygon;
-	for (const auto& line : qAsConst(m_boxRect.at(index))) {
-		boxPath.moveTo(line.p1());
-		boxPath.lineTo(line.p2());
-		polygon << line.p1();
+	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
+	QPointF lastP2;
+	int i = 0;
+	for (const auto& line : lines) {
+		//clip the first point of the line
+		QPointF p1 = line.p1();
+		if (p1.x() < dataRect.left())
+			p1.setX(dataRect.left());
+		else if (p1.x() > dataRect.right())
+			p1.setX(dataRect.right());
+
+		if (p1.y() < dataRect.top())
+			p1.setY(dataRect.top());
+		else if (p1.y() > dataRect.bottom())
+			p1.setY(dataRect.bottom());
+
+		//clip the second point of the line
+		QPointF p2 = line.p2();
+		if (p2.x() < dataRect.left())
+			p2.setX(dataRect.left());
+		else if (p2.x() > dataRect.right())
+			p2.setX(dataRect.right());
+
+		if (p2.y() < dataRect.top())
+			p2.setY(dataRect.top());
+		else if (p2.y() > dataRect.bottom())
+			p2.setY(dataRect.bottom());
+
+		if (i == lines.size() -1 )
+			lastP2 = p2;
+
+		polygon << p1;
+		++i;
 	}
-	const QRectF& rect = boxPath.boundingRect();
+
+	//close the polygon
+	polygon << lastP2;
+
+	const QRectF& rect = polygon.boundingRect();
 
 	if (fillingType == WorksheetElement::BackgroundType::Color) {
 		switch (fillingColorStyle) {

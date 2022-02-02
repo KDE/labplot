@@ -114,6 +114,7 @@ private:
 	QPainterPath m_boxPlotShape;
 
 	QVector<QVector<QLineF>> m_boxRect; //QVector<QLineF> contains four lines that are clipped on the plot rectangle
+	QVector<QVector<QLineF>> m_boxRectUnclipped; //QVector<QLineF> contains four lines that are not clipped on the plot rectangle, used for the filling
 	double m_widthScaleFactor{1.0};
 	QVector<double> m_xMinBox;
 	QVector<double> m_xMaxBox;
