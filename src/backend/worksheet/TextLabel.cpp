@@ -266,7 +266,7 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 	DEBUG("********************\n" << Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
 	DEBUG("\ntext = " << STDSTRING(textWrapper.text) << std::endl)
 
-	QDEBUG("COLORS: font color =" << d->fontColor << ", background color =" << d->backgroundColor)
+	QDEBUG("COLORS: color =" << d->fontColor << ", background color =" << d->backgroundColor)
 	//QDEBUG("	kcb color =")
 	//TODO: Test
 //	if (textWrapper.text.isEmpty())
@@ -277,13 +277,15 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 			textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder) {
 		bool oldEmpty = d->textWrapper.text.isEmpty();
 		if (textWrapper.mode == TextLabel::Mode::Text && !textWrapper.text.isEmpty()) {
-			QDEBUG("\nOLD TEXT =" << d->textWrapper.text << ", color =" << d->fontColor
-				<< ", background color = " << d->backgroundColor)
-			DEBUG("\nNEW TEXT = " << STDSTRING(textWrapper.text) << std::endl)
-
+			QDEBUG("\nOLD TEXT =" << d->textWrapper.text)
+			DEBUG("\nNEW TEXT = " << STDSTRING(textWrapper.text) << '\n')
 			TextWrapper tw = textWrapper;
+
+			QTextEdit pte(d->textWrapper.text);	// te with previous text
 			// restore formatting when text changes or switching back to text mode
-			if (d->textWrapper.mode != TextLabel::Mode::Text || d->textWrapper.text.isEmpty()) {
+			if (d->textWrapper.mode != TextLabel::Mode::Text ||
+				oldEmpty || pte.toPlainText().isEmpty()) {
+				DEBUG("Restore COLORS")
 				QTextEdit te(d->textWrapper.text);
 				te.selectAll();
 				te.setText(textWrapper.text);

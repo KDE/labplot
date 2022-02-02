@@ -293,7 +293,7 @@ void LabelWidget::updateBackground() const {
 		return; //nothing to do
 
 	QColor color(Qt::white);
-	auto type = m_label->parentAspect()->type();
+	const auto type = m_label->parentAspect()->type();
 	if (type == AspectType::Worksheet)
 		color = static_cast<const Worksheet*>(m_label->parentAspect())->backgroundFirstColor();
 	else if (type == AspectType::CartesianPlot)
@@ -305,7 +305,7 @@ void LabelWidget::updateBackground() const {
 	else
 		DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
 
-	QPalette p = ui.teLabel->palette();
+	auto p = ui.teLabel->palette();
 	QDEBUG(Q_FUNC_INFO << ", color = " << color)
 	p.setColor(QPalette::Base, color);
 	ui.teLabel->setPalette(p);
@@ -494,21 +494,19 @@ void LabelWidget::textChanged() {
 		QDEBUG(Q_FUNC_INFO << ", color = " << m_label->fontColor())
 		QDEBUG(Q_FUNC_INFO << ", background color = " << m_label->backgroundColor())
 		QDEBUG(Q_FUNC_INFO << ", format color = " << ui.teLabel->currentCharFormat().foreground().color())
-		QDEBUG(Q_FUNC_INFO << ", te TEXT = " << ui.teLabel->toPlainText() << '\n')
-		QDEBUG(Q_FUNC_INFO << ", label text =" << m_label->text().text << '\n')
-		//save an empty string instead of a html-string with empty body,
-		//if no text available in QTextEdit
+		QDEBUG(Q_FUNC_INFO << ", Plain TEXT = " << ui.teLabel->toPlainText() << '\n')
+		QDEBUG(Q_FUNC_INFO << ", OLD TEXT =" << m_label->text().text << '\n')
+		//save an empty string instead of html with empty body if no text is in QTextEdit
 		QString text;
 		if (!ui.teLabel->toPlainText().isEmpty()) {
-			//if the current label text is empty, set the color first
-			if (m_label->text().text.isEmpty()) {
+			//if the current or previous label text is empty, set the color first
+			QTextEdit pte(m_label->text().text);	// te with previous text
+			if (m_label->text().text.isEmpty() || pte.toPlainText().isEmpty()) {
 				//DEBUG("EMPTY TEXT")
 				ui.teLabel->selectAll();
 				ui.teLabel->setTextColor(m_label->fontColor());
 				ui.teLabel->setTextBackgroundColor(m_label->backgroundColor());
-				// Due to the select all, when entering a new character
-				// the first one will be deleted. So clear the selection
-				// after setting the color
+				// clear the selection after setting the color
 				auto tc = ui.teLabel->textCursor();
 				tc.setPosition(tc.selectionEnd());
 				ui.teLabel->setTextCursor(tc);
@@ -523,7 +521,6 @@ void LabelWidget::textChanged() {
 		// of the text. The font color is used to change the color for Latex text
 		if(!ui.chbShowPlaceholderText->isChecked()) {
 			wrapper.text = text;
-			DEBUG(Q_FUNC_INFO << ", CALLING setText on label")
 			for (auto* label : m_labelsList) {
 				if (text.isEmpty()) {
 					label->setFontColor(ui.kcbFontColor->color());
@@ -1342,44 +1339,40 @@ void LabelWidget::load() {
 	this->updateMode(mode);
 
 	if(!allowPlaceholder) {
-		if (mode != TextLabel::Mode::Text)
-			ui.teLabel->setText(m_label->text().text);
-		else {
+		if (mode == TextLabel::Mode::Text) {
 			ui.teLabel->setHtml(m_label->text().text);
 			ui.teLabel->selectAll(); // must be done to retrieve font
 			ui.kfontRequester->setFont(ui.teLabel->currentFont());
-		}
+		} else
+			ui.teLabel->setText(m_label->text().text);
+
 	} else {
-		if (mode != TextLabel::Mode::Text)
-			ui.teLabel->setText(m_label->text().textPlaceholder);
-		else {
+		if (mode == TextLabel::Mode::Text) {
 			ui.teLabel->setHtml(m_label->text().textPlaceholder);
 			ui.teLabel->selectAll(); // must be done to retrieve font
 			ui.kfontRequester->setFont(ui.teLabel->currentFont());
-		}
+		} else
+			ui.teLabel->setText(m_label->text().textPlaceholder);
 	}
 
-	// if the text is empty yet, use LabelWidget::fontColor(),
+	// if the text is empty, use LabelWidget::fontColor(),
 	// extract the color from the html formatted text otherwise
-	//TODO: empty label bug?
-	if (!m_label->text().text.isEmpty()) {
-		DEBUG(Q_FUNC_INFO << ", TEXT EMPTY")
-		QTextCharFormat format = ui.teLabel->currentCharFormat();
-		ui.kcbFontColor->setColor(format.foreground().color());
-		ui.kcbBackgroundColor->setColor(format.background().color());
-	} else {
-		DEBUG(Q_FUNC_INFO << ", TEXT NOT EMPTY")
+	auto format = ui.teLabel->currentCharFormat();
+//	QDEBUG(Q_FUNC_INFO << ", format color = " << format.foreground().color())
+//	QDEBUG(Q_FUNC_INFO << ", format bg color = " << format.background().color())
+//	QDEBUG(Q_FUNC_INFO << ", label color = " << m_label->fontColor())
+//	QDEBUG(Q_FUNC_INFO << ", label bg color = " << m_label->backgroundColor())
+	if (m_label->text().text.isEmpty() || mode == TextLabel::Mode::Text) {
 		ui.kcbFontColor->setColor(m_label->fontColor());
 		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
+	} else {
+		ui.kcbFontColor->setColor(format.foreground().color());
+		ui.kcbBackgroundColor->setColor(format.background().color());
 	}
-
-	//TODO: used for latex text only?
-	//ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
 	ui.sbFontSize->setValue(m_label->teXFont().pointSize());
 
-	auto format = ui.teLabel->currentCharFormat();
 	ui.tbFontBold->setChecked(ui.teLabel->fontWeight() == QFont::Bold);
 	ui.tbFontItalic->setChecked(ui.teLabel->fontItalic());
 	ui.tbFontUnderline->setChecked(ui.teLabel->fontUnderline());

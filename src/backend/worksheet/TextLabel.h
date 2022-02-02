@@ -64,6 +64,7 @@ public:
 				return text;
 
 			QTextEdit te(text);
+			// the html does not contain any colors!
 			return te.toHtml();
 		}
 

@@ -135,7 +135,6 @@ void Axis::init(Orientation orientation) {
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 	d->title->graphicsItem()->setFlag(QGraphicsItem::ItemIsFocusable, false);
 	d->title->graphicsItem()->setAcceptHoverEvents(false);
-	d->title->setText(this->name());
 	if (d->orientation == Orientation::Vertical)
 		d->title->setRotationAngle(90);
 	d->titleOffsetX = Worksheet::convertToSceneUnits(2, Worksheet::Unit::Point); //distance to the axis tick labels
