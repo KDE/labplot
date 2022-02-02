@@ -1135,15 +1135,17 @@ bool OriginProjectParser::loadWorksheet(Worksheet* worksheet, bool preview) {
 			}
 
 			//axes
-			//x bottom
 			if (layer.curves.size()) {
 				Origin::GraphCurve originCurve = layer.curves[0];
 				QString xColumnName = QString::fromLatin1(originCurve.xColumnName.c_str());
 				//TODO: "Partikelgrö"
 				DEBUG("	xColumnName = " << STDSTRING(xColumnName));
+//				xColumnName.replace("%(?X,@LL)", );	// Long Name
+
 				QDEBUG("	UTF8 xColumnName = " << xColumnName.toUtf8());
 				QString yColumnName = QString::fromLatin1(originCurve.yColumnName.c_str());
 
+				//x bottom
 				if (!originXAxis.formatAxis[0].hidden) {
 					Axis* axis = new Axis("x", Axis::Orientation::Horizontal);
 					axis->setSuppressRetransform(true);

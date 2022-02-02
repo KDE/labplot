@@ -252,16 +252,17 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 
 void LabelWidget::setAxes(QList<Axis*> axes) {
 	m_labelsList.clear();
-	for (auto* axis : axes) {
+	for (const auto* axis : axes) {
 		DEBUG(Q_FUNC_INFO << ", axis TITLE = " << axis->title())
 		m_labelsList.append(axis->title());
-		connect(axis, &Axis::titleOffsetXChanged, this, &LabelWidget::labelOffsetxChanged);
-		connect(axis, &Axis::titleOffsetYChanged, this, &LabelWidget::labelOffsetyChanged);
+		connect(axis, &Axis::titleOffsetXChanged, this, &LabelWidget::labelOffsetXChanged);
+		connect(axis, &Axis::titleOffsetYChanged, this, &LabelWidget::labelOffsetYChanged);
 		connect(axis->title(), &TextLabel::rotationAngleChanged, this, &LabelWidget::labelRotationAngleChanged);
 	}
 
 	m_axesList = axes;
 	m_label = m_labelsList.first();
+
 
 	this->load();
 	initConnections();
@@ -284,8 +285,8 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
  */
 void LabelWidget::updateBackground() const {
 	DEBUG(Q_FUNC_INFO)
-	if (ui.cbMode->currentIndex() != 0)
-		return; //nothing to do if the current mode is not "Text"
+	if (static_cast<TextLabel::Mode>(ui.cbMode->currentIndex()) != TextLabel::Mode::Text)
+		return; //nothing to do
 
 	QColor color(Qt::white);
 	auto type = m_label->parentAspect()->type();
@@ -1265,12 +1266,12 @@ void LabelWidget::labelBackgroundColorChanged(const QColor& color) {
 //	ui.teLabel->setTextCursor(cursor);	// restore cursor
 }
 
-void LabelWidget::labelOffsetxChanged(qreal offset) {
+void LabelWidget::labelOffsetXChanged(qreal offset) {
 	const Lock lock(m_initializing);
 	ui.sbOffsetX->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
 }
 
-void LabelWidget::labelOffsetyChanged(qreal offset) {
+void LabelWidget::labelOffsetYChanged(qreal offset) {
 	const Lock lock(m_initializing);
 	ui.sbOffsetY->setValue(Worksheet::convertFromSceneUnits(offset, Worksheet::Unit::Point));
 }
@@ -1332,12 +1333,12 @@ void LabelWidget::load() {
 	ui.chbShowPlaceholderText->setChecked(allowPlaceholder);
 
 	//Text
-	const int index = static_cast<int>(m_label->text().mode);
-	ui.cbMode->setCurrentIndex(index);
-	this->updateMode(m_label->text().mode);
+	const auto mode = m_label->text().mode;
+	ui.cbMode->setCurrentIndex(static_cast<int>(mode));
+	this->updateMode(mode);
 
 	if(!allowPlaceholder) {
-		if (m_label->text().mode != TextLabel::Mode::Text)
+		if (mode != TextLabel::Mode::Text)
 			ui.teLabel->setText(m_label->text().text);
 		else {
 			ui.teLabel->setHtml(m_label->text().text);
@@ -1345,7 +1346,7 @@ void LabelWidget::load() {
 			ui.kfontRequester->setFont(ui.teLabel->currentFont());
 		}
 	} else {
-		if (m_label->text().mode != TextLabel::Mode::Text)
+		if (mode != TextLabel::Mode::Text)
 			ui.teLabel->setText(m_label->text().textPlaceholder);
 		else {
 			ui.teLabel->setHtml(m_label->text().textPlaceholder);
@@ -1356,11 +1357,14 @@ void LabelWidget::load() {
 
 	// if the text is empty yet, use LabelWidget::fontColor(),
 	// extract the color from the html formatted text otherwise
+	//TODO: empty label bug?
 	if (!m_label->text().text.isEmpty()) {
+		DEBUG(Q_FUNC_INFO << ", TEXT EMPTY")
 		QTextCharFormat format = ui.teLabel->currentCharFormat();
 		ui.kcbFontColor->setColor(format.foreground().color());
 		ui.kcbBackgroundColor->setColor(format.background().color());
 	} else {
+		DEBUG(Q_FUNC_INFO << ", TEXT NOT EMPTY")
 		ui.kcbFontColor->setColor(m_label->fontColor());
 		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 	}
@@ -1369,7 +1373,7 @@ void LabelWidget::load() {
 	//ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 
 	ui.kfontRequesterTeX->setFont(m_label->teXFont());
-	ui.sbFontSize->setValue( m_label->teXFont().pointSize() );
+	ui.sbFontSize->setValue(m_label->teXFont().pointSize());
 
 	auto format = ui.teLabel->currentCharFormat();
 	ui.tbFontBold->setChecked(ui.teLabel->fontWeight() == QFont::Bold);

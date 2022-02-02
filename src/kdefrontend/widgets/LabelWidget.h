@@ -51,8 +51,8 @@ private:
 	TextLabel* m_label{nullptr};
 	QList<TextLabel*> m_labelsList;
 	QList<Axis*> m_axesList;
-	bool m_initializing{false};
 	QMenu* m_dateTimeMenu;
+	bool m_initializing{false};
 	bool m_teXEnabled{false};
 	BaseDock::Units m_units{BaseDock::Units::Metric};
 	Worksheet::Unit m_worksheetUnit{Worksheet::Unit::Centimeter};
@@ -121,12 +121,12 @@ private Q_SLOTS:
 	void labelFontColorChanged(const QColor&);
 	void labelBackgroundColorChanged(const QColor&);
 	void labelPositionChanged(const TextLabel::PositionWrapper&);
-	void labelHorizontalAlignmentChanged(const TextLabel::HorizontalAlignment);
-	void labelVerticalAlignmentChanged(const TextLabel::VerticalAlignment);
+	void labelHorizontalAlignmentChanged(TextLabel::HorizontalAlignment);
+	void labelVerticalAlignmentChanged(TextLabel::VerticalAlignment);
 	void labelPositionLogicalChanged(QPointF);
 	void labelCoordinateBindingEnabledChanged(bool);
-	void labelOffsetxChanged(qreal);
-	void labelOffsetyChanged(qreal);
+	void labelOffsetXChanged(qreal);
+	void labelOffsetYChanged(qreal);
 	void labelRotationAngleChanged(qreal);
 
 	void labelBorderShapeChanged(TextLabel::BorderShape);
