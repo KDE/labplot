@@ -247,7 +247,9 @@ void LabelWidget::setLabels(QList<TextLabel*> labels) {
 
 	//resize the widget to take the minimal height
 	layout()->activate();
-	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
+	const auto s = QSize(this->width(), 0).expandedTo(minimumSize());
+	if (s.height() > 0)
+		resize(s);
 }
 
 void LabelWidget::setAxes(QList<Axis*> axes) {
@@ -271,7 +273,9 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
 
 	//resize the widget to take the minimal height
 	layout()->activate();
-	resize( QSize(this->width(), 0).expandedTo(minimumSize()) );
+	const auto s = QSize(this->width(), 0).expandedTo(minimumSize());
+	if (s.height() > 0)
+		resize(s);
 }
 
 /*!
