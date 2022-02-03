@@ -59,6 +59,7 @@ void CustomPoint::init() {
 	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
 	const auto x = m_plot->xRange(cs->xIndex()).center();
 	const auto y = m_plot->yRange(cs->yIndex()).center();
+	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
 	d->positionLogical = QPointF(x, y);
 	d->updatePosition(); // To update also scene coordinates
 

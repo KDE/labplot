@@ -646,9 +646,7 @@ QRectF WorksheetElementPrivate::boundingRect() const {
 	return boundingRectangle;
 }
 
-void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {
-
-}
+void WorksheetElementPrivate::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*) {}
 
 void WorksheetElementPrivate::updatePosition() {
 	QPointF p;
@@ -666,12 +664,12 @@ void WorksheetElementPrivate::updatePosition() {
 
 		//the position in scene coordinates was changed, calculate the position in logical coordinates
 		if (q->cSystem) {
-			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(p),
-															AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
+			positionLogical = q->cSystem->mapSceneToLogical(mapParentToPlotArea(p), AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 		}
 		p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
 	}
+	QDEBUG("POSITION = " << p)
 
 	suppressItemChangeEvent = true;
 	setPos(p);

@@ -54,8 +54,15 @@ void ReferenceLine::init() {
 
 	d->coordinateBindingEnabled = true; // TODO: maybe adding also to dock?
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
-	d->position.point.setX(m_plot->xRange().center());
-	d->position.point.setY(m_plot->yRange().center());
+
+	// default position
+	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
+	const auto x = m_plot->xRange(cs->xIndex()).center();
+	const auto y = m_plot->yRange(cs->yIndex()).center();
+	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
+	d->position.point = QPointF(x, y);
+	d->positionLogical = QPointF(x, y);
+	d->updatePosition(); // To update also scene coordinates
 
 	d->pen.setStyle( (Qt::PenStyle) group.readEntry("Style", (int)Qt::SolidLine) );
 	d->pen.setColor( group.readEntry("Color", QColor(Qt::black)) );
@@ -234,7 +241,7 @@ void ReferenceLinePrivate::retransform() {
 	if (suppressRetransform || ! q->cSystem || q->isLoading())
 		return;
 
-	auto cs = q->m_plot->coordinateSystem(q->coordinateSystemIndex());
+	auto cs = q->plot()->coordinateSystem(q->coordinateSystemIndex());
 	const auto xRange{ q->m_plot->xRange(cs->xIndex()) };
 	const auto yRange{ q->m_plot->yRange(cs->yIndex()) };
 
@@ -244,8 +251,10 @@ void ReferenceLinePrivate::retransform() {
 		listLogical << QPointF(position.point.x(), yRange.center());
 	else
 		listLogical << QPointF(xRange.center(), position.point.y());
+	QDEBUG(Q_FUNC_INFO << ", logical list = " << listLogical)
 
 	QVector<QPointF> listScene = q->cSystem->mapLogicalToScene(listLogical);
+	QDEBUG(Q_FUNC_INFO << ", scene list = " << listScene)
 
 	if (!listScene.isEmpty()) {
 		positionScene = listScene.at(0);
@@ -257,9 +266,9 @@ void ReferenceLinePrivate::retransform() {
 		//determine the length of the line to be drawn
 		QVector<QPointF> pointsLogical;
 		if (orientation == ReferenceLine::Orientation::Vertical)
-			pointsLogical << QPointF(position.point.y(), yRange.start()) << QPointF(position.point.y(), yRange.end());
+			pointsLogical << QPointF(position.point.x(), yRange.start()) << QPointF(position.point.x(), yRange.end());
 		else
-			pointsLogical << QPointF(xRange.start(), position.point.x()) << QPointF(xRange.end(), position.point.x());
+			pointsLogical << QPointF(xRange.start(), position.point.y()) << QPointF(xRange.end(), position.point.y());
 
 		QVector<QPointF> pointsScene = q->cSystem->mapLogicalToScene(pointsLogical);
 
@@ -271,6 +280,7 @@ void ReferenceLinePrivate::retransform() {
 		}
 	} else
 		m_visible = false;
+	QDEBUG(Q_FUNC_INFO << ", scene list after = " << listScene)
 
 	recalcShapeAndBoundingRect();
 }

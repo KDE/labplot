@@ -285,7 +285,6 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 			// restore formatting when text changes or switching back to text mode
 			if (d->textWrapper.mode != TextLabel::Mode::Text ||
 				oldEmpty || pte.toPlainText().isEmpty()) {
-				DEBUG("Restore COLORS")
 				QTextEdit te(d->textWrapper.text);
 				te.selectAll();
 				te.setText(textWrapper.text);
