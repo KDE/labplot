@@ -569,7 +569,10 @@ BASIC_SHARED_D_READER_IMPL(WorksheetElement, bool, coordinateBindingEnabled, coo
 STD_SETTER_CMD_IMPL_F_S(WorksheetElement, SetPosition, WorksheetElement::PositionWrapper, position, retransform)
 void WorksheetElement::setPosition(const PositionWrapper& pos) {
 	Q_D(WorksheetElement);
-	if (pos.point != d->position.point || pos.horizontalPosition != d->position.horizontalPosition || pos.verticalPosition != d->position.verticalPosition)
+	if (pos.point != d->position.point ||
+		pos.horizontalPosition != d->position.horizontalPosition ||
+		pos.verticalPosition != d->position.verticalPosition ||
+		pos.positionLimit != d->position.positionLimit)
 		exec(new WorksheetElementSetPositionCmd(d, pos, ki18n("%1: set position")));
 }
 
@@ -741,22 +744,36 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		return value;
 
 	if (change == QGraphicsItem::ItemPositionChange) {
+		auto currPos = pos();
+		auto newPos = value.toPointF();
+		switch (position.positionLimit) {
+		case WorksheetElement::PositionLimit::X:
+			newPos.setY(currPos.y());
+			break;
+		case WorksheetElement::PositionLimit::Y:
+			newPos.setX(currPos.x());
+			break;
+		default:
+			break;
+		}
+
 		// don't use setPosition here, because then all small changes are on the undo stack
 		// setPosition is used then in mouseReleaseEvent
 		if(coordinateBindingEnabled) {
-			QPointF pos = q->align(value.toPointF(), boundingRectangle, horizontalAlignment, verticalAlignment, false);
+			QPointF pos = q->align(newPos, boundingRectangle, horizontalAlignment, verticalAlignment, false);
 
 			positionLogical = q->cSystem->mapSceneToLogical(pos, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 		} else {
 			//convert item's center point in parent's coordinates
 			WorksheetElement::PositionWrapper tempPosition = position;
-			tempPosition.point = q->parentPosToRelativePos(value.toPointF(), position);
+			tempPosition.point = q->parentPosToRelativePos(newPos, position);
 			tempPosition.point = q->align(tempPosition.point, boundingRect(), horizontalAlignment, verticalAlignment, false);
 
 			//Q_EMIT the signals in order to notify the UI.
 			Q_EMIT q->positionChanged(tempPosition);
 		}
+		return QGraphicsItem::itemChange(change, newPos);
 	}
 
 	return QGraphicsItem::itemChange(change, value);

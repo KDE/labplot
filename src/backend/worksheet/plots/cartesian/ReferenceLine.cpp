@@ -54,6 +54,12 @@ void ReferenceLine::init() {
 
 	d->coordinateBindingEnabled = true;
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
+	if (d->orientation == Orientation::Horizontal)
+		d->position.positionLimit = PositionLimit::Y;
+	else if (d->orientation == Orientation::Vertical)
+		d->position.positionLimit = PositionLimit::X;
+	else
+		d->position.positionLimit = PositionLimit::None;
 
 	// default position
 	auto cs = plot()->coordinateSystem(coordinateSystemIndex());
@@ -175,8 +181,20 @@ BASIC_SHARED_D_READER_IMPL(ReferenceLine, qreal, opacity, opacity)
 STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetOrientation, ReferenceLine::Orientation, orientation, retransform)
 void ReferenceLine::setOrientation(Orientation orientation) {
 	Q_D(ReferenceLine);
-	if (orientation != d->orientation)
+	if (orientation != d->orientation) {
 		exec(new ReferenceLineSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
+		switch(orientation) {
+		case ReferenceLine::Orientation::Horizontal:
+			d->position.positionLimit = PositionLimit::Y;
+			break;
+		case ReferenceLine::Orientation::Vertical:
+			d->position.positionLimit = PositionLimit::X;
+			break;
+		default:
+			d->position.positionLimit = PositionLimit::None;
+			break;
+		}
+	}
 }
 
 STD_SETTER_CMD_IMPL_F_S(ReferenceLine, SetPen, QPen, pen, recalcShapeAndBoundingRect)

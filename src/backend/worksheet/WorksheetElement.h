@@ -46,10 +46,17 @@ public:
 			TopLeftDiagonalLinearGradient, BottomLeftDiagonalLinearGradient, RadialGradient};
 	enum class BackgroundImageStyle {ScaledCropped, Scaled, ScaledAspectRatio, Centered, Tiled, CenterTiled};
 
+	enum class PositionLimit {
+		None,
+		X,
+		Y
+	};
+
 	struct PositionWrapper {
 		QPointF point;
 		WorksheetElement::HorizontalPosition horizontalPosition;
 		WorksheetElement::VerticalPosition verticalPosition;
+		PositionLimit positionLimit;
 	};
 
 	typedef WorksheetElementPrivate Private;
