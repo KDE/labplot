@@ -34,7 +34,6 @@ public:
 	double length{0.0}; //length of the line in graphic item's coordinates
 	QPen pen;
 	qreal opacity{1.0};
-	QPointF positionScene; //position of the graphics item in scene coordinates
 
 	//reimplemented from QGraphicsItem
 	QRectF boundingRect() const override;

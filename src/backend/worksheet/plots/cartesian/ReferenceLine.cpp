@@ -245,29 +245,26 @@ void ReferenceLinePrivate::retransform() {
 	const auto yRange{ q->m_plot->yRange(cs->yIndex()) };
 
 	//calculate the position in the scene coordinates
-	QVector<QPointF> listLogical;
 	if (orientation == ReferenceLine::Orientation::Vertical)
-		listLogical << QPointF(position.point.x(), yRange.center());
+		positionLogical = QPointF(positionLogical.x(), yRange.center());
 	else
-		listLogical << QPointF(xRange.center(), position.point.y());
-	QDEBUG(Q_FUNC_INFO << ", logical list = " << listLogical)
+		positionLogical = QPointF(xRange.center(), positionLogical.y());
+	updatePosition(); // To update position.point
 
-	QVector<QPointF> listScene = q->cSystem->mapLogicalToScene(listLogical);
+	// position.point contains already the scene position, but here it will be determined,
+	// if the point lies outside of the datarect or not
+	QVector<QPointF> listScene = q->cSystem->mapLogicalToScene(Points() << positionLogical);
 	QDEBUG(Q_FUNC_INFO << ", scene list = " << listScene)
 
 	if (!listScene.isEmpty()) {
-		positionScene = listScene.at(0);
 		m_visible = true;
-		suppressItemChangeEvent = true;
-		setPos(positionScene);
-		suppressItemChangeEvent = false;
 
 		//determine the length of the line to be drawn
 		QVector<QPointF> pointsLogical;
 		if (orientation == ReferenceLine::Orientation::Vertical)
-			pointsLogical << QPointF(position.point.x(), yRange.start()) << QPointF(position.point.x(), yRange.end());
+			pointsLogical << QPointF(positionLogical.x(), yRange.start()) << QPointF(positionLogical.x(), yRange.end());
 		else
-			pointsLogical << QPointF(xRange.start(), position.point.y()) << QPointF(xRange.end(), position.point.y());
+			pointsLogical << QPointF(xRange.start(), positionLogical.y()) << QPointF(xRange.end(), positionLogical.y());
 
 		QVector<QPointF> pointsScene = q->cSystem->mapLogicalToScene(pointsLogical);
 
