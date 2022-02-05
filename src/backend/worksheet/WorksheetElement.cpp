@@ -637,9 +637,7 @@ void WorksheetElement::setRotationAngle(qreal angle) {
 //##############################################################################
 //####################### Private implementation ###############################
 //##############################################################################
-WorksheetElementPrivate::WorksheetElementPrivate(WorksheetElement *owner): q(owner) {
-
-}
+WorksheetElementPrivate::WorksheetElementPrivate(WorksheetElement *owner): q(owner) {}
 
 QString WorksheetElementPrivate::name() const {
 	return q->name();
@@ -753,6 +751,7 @@ QVariant WorksheetElementPrivate::itemChange(GraphicsItemChange change, const QV
 		case WorksheetElement::PositionLimit::Y:
 			newPos.setX(currPos.x());
 			break;
+		case WorksheetElement::PositionLimit::None:
 		default:
 			break;
 		}

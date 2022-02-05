@@ -27,7 +27,7 @@ public:
 	// TODO: try to get away the Worksheet dependency
 	WorksheetElement::PositionWrapper position{
 		QPointF(Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter), Worksheet::convertToSceneUnits(1, Worksheet::Unit::Centimeter)),
-	WorksheetElement::HorizontalPosition::Center, WorksheetElement::VerticalPosition::Center};
+		WorksheetElement::HorizontalPosition::Center, WorksheetElement::VerticalPosition::Center, WorksheetElement::PositionLimit::None};
 	WorksheetElement::HorizontalAlignment horizontalAlignment{WorksheetElement::HorizontalAlignment::Center};
 	WorksheetElement::VerticalAlignment verticalAlignment{WorksheetElement::VerticalAlignment::Center};
 	bool positionInvalid{false};
