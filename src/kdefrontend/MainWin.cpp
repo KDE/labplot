@@ -786,10 +786,6 @@ void MainWin::initMenus() {
 #endif
 
 #ifdef HAVE_CANTOR_LIBS
-	m_newMenu->addSeparator();
-	m_newCantorWorksheetMenu = new QMenu(i18n("Notebook"), this);
-	m_newCantorWorksheetMenu->setIcon(QIcon::fromTheme("archive-insert"));
-
 	//"Adding Cantor backends to menu and context menu"
 	QStringList backendNames = Cantor::Backend::listAvailableBackends();
 #if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
@@ -798,21 +794,29 @@ void MainWin::initMenus() {
 		WARN("Backend: " << STDSTRING(b))
 #endif
 
-	if (backendNames.count() > 0) {
-		unplugActionList(QLatin1String("backends_list"));
-		QList<QAction*> newBackendActions;
-		for (auto* backend : Cantor::Backend::availableBackends()) {
-			if (!backend->isEnabled()) continue;
-			QAction* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
-			action->setData(backend->name());
-			newBackendActions << action;
-			m_newCantorWorksheetMenu->addAction(action);
-		}
+	if (!backendNames.isEmpty()) {
+		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
+		if (menu) {
+			m_newMenu->addSeparator();
+			menu->setIcon(QIcon::fromTheme(QLatin1String("archive-insert")));
+			m_newMenu->addMenu(menu);
 
-		connect(m_newCantorWorksheetMenu, &QMenu::triggered, this, &MainWin::newCantorWorksheet);
-		plugActionList(QLatin1String("backends_list"), newBackendActions);
+			unplugActionList(QLatin1String("backends_list"));
+			QList<QAction*> newBackendActions;
+			for (auto* backend : Cantor::Backend::availableBackends()) {
+				if (!backend->isEnabled())
+					continue;
+
+				QAction* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
+				action->setData(backend->name());
+				newBackendActions << action;
+				menu->addAction(action);
+			}
+
+			connect(menu, &QMenu::triggered, this, &MainWin::newCantorWorksheet);
+			plugActionList(QLatin1String("backends_list"), newBackendActions);
+		}
 	}
-	m_newMenu->addMenu(m_newCantorWorksheetMenu);
 #else
 	delete this->guiFactory()->container("notebook", this);
 	delete this->guiFactory()->container("new_notebook", this);

@@ -262,7 +262,6 @@ private:
 
 	//Cantor
 #ifdef HAVE_CANTOR_LIBS
-	QMenu* m_newCantorWorksheetMenu;
 	CantorWorksheetDock* cantorWorksheetDock{nullptr};
 #endif
 
