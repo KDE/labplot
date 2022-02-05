@@ -113,7 +113,11 @@
           <widget class="KComboBox" name="cbPositionX"/>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="sbPositionX"/>
+          <widget class="QDoubleSpinBox" name="sbPositionX">
+           <property name="minimum">
+            <double>-100.000000000000000</double>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -179,7 +183,11 @@
           <widget class="KComboBox" name="cbPositionY"/>
          </item>
          <item>
-          <widget class="QDoubleSpinBox" name="sbPositionY"/>
+          <widget class="QDoubleSpinBox" name="sbPositionY">
+           <property name="minimum">
+            <double>-100.000000000000000</double>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
