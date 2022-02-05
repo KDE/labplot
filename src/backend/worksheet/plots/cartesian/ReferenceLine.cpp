@@ -52,7 +52,7 @@ void ReferenceLine::init() {
 	KConfig config;
 	KConfigGroup group = config.group("ReferenceLine");
 
-	d->coordinateBindingEnabled = true; // TODO: maybe adding also to dock?
+	d->coordinateBindingEnabled = true;
 	d->orientation = (Orientation)group.readEntry("Orientation", static_cast<int>(Orientation::Vertical));
 
 	// default position
@@ -60,7 +60,6 @@ void ReferenceLine::init() {
 	const auto x = m_plot->xRange(cs->xIndex()).center();
 	const auto y = m_plot->yRange(cs->yIndex()).center();
 	DEBUG(Q_FUNC_INFO << ", x/y pos = " << x << " / " << y)
-	d->position.point = QPointF(x, y);
 	d->positionLogical = QPointF(x, y);
 	d->updatePosition(); // To update also scene coordinates
 
