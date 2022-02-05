@@ -247,7 +247,13 @@ void MainWin::initGUI(const QString& fileName) {
 		const QString& str = groupMain.readEntry(QLatin1String("ToolBarsMovable"), "");
 		bool locked = (str == QLatin1String("Disabled"));
 		KToolBar::setToolBarsLocked(locked);
-	} else {
+	}
+
+	//in case we're starting for the first time, put all toolbars into the IconOnly mode
+	//and maximize the main window. Tthe occurence of LabPlot's own section "MainWin"
+	//indicates whether this is the first start or not
+	groupMain = KSharedConfig::openConfig()->group("MainWin");
+	if (!groupMain.exists()) {
 		//first start
 		KToolBar::setToolBarsLocked(false);
 
@@ -258,6 +264,8 @@ void MainWin::initGUI(const QString& fileName) {
 			if (toolbar)
 				toolbar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 		}
+
+		showMaximized();
 	}
 
 	initMenus();
