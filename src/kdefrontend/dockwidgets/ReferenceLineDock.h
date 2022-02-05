@@ -55,7 +55,7 @@ private Q_SLOTS:
 	void lineVisibilityChanged(bool);
 
 	//Position
-	void linePositionChanged(const WorksheetElement::PositionWrapper&);
+	void linePositionLogicalChanged(const QPointF &positionLogical);
 	void lineOrientationChanged(ReferenceLine::Orientation);
 
 	//Line

@@ -91,7 +91,7 @@ void ReferenceLineDock::setReferenceLines(QList<ReferenceLine*> list) {
 
 	//position
 	connect(m_line, &ReferenceLine::orientationChanged, this, &ReferenceLineDock::lineOrientationChanged);
-	connect(m_line, &ReferenceLine::positionChanged, this, &ReferenceLineDock::linePositionChanged);
+	connect(m_line, &ReferenceLine::positionLogicalChanged, this, &ReferenceLineDock::linePositionLogicalChanged);
 
 	//line
 	connect(m_line, &ReferenceLine::penChanged, this, &ReferenceLineDock::linePenChanged);
@@ -162,7 +162,7 @@ void ReferenceLineDock::orientationChanged(int index) {
 		line->setOrientation(orientation);
 
 	//call this slot to show the x or y value depending on the new orientation
-	linePositionChanged(m_line->position());
+	linePositionLogicalChanged(m_line->positionLogical());
 }
 
 void ReferenceLineDock::positionChanged() {
@@ -256,14 +256,14 @@ void ReferenceLineDock::visibilityChanged(bool state) {
 //*************************************************************
 //******* SLOTs for changes triggered in ReferenceLine ********
 //*************************************************************
-void ReferenceLineDock::linePositionChanged(const WorksheetElement::PositionWrapper& position) {
+void ReferenceLineDock::linePositionLogicalChanged(const QPointF& positionLogical) {
 	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal)
-		ui.lePosition->setText(numberLocale.toString(position.point.y()));
+		ui.lePosition->setText(numberLocale.toString(positionLogical.y()));
 	else {
-		ui.lePosition->setText(numberLocale.toString(position.point.x()));
-		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(position.point.x()));
+		ui.lePosition->setText(numberLocale.toString(positionLogical.x()));
+		ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(positionLogical.x()));
 	}
 }
 
