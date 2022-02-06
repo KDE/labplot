@@ -4,6 +4,7 @@
 	Description          : Tests for Column
 	--------------------------------------------------------------------
 	SPDX-FileCopyrightText: 2021 Martin Marmsoler <martin.marmsoler@gmail.com>
+	SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
 
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -19,99 +20,99 @@ void ColumnTest::doubleMinimum() {
 	Column c("Double column", Column::ColumnMode::Double);
 	c.setValues({-1.0, 2.0, 5.0});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicIncreasing);
-	QCOMPARE(c.minimum(0, 3), -1.0);
-	QCOMPARE(c.minimum(1, 3), 2.0);
+	QCOMPARE(c.minimum(0, 2), -1.0);
+	QCOMPARE(c.minimum(1, 2), 2.0);
 
 	c.setValues({-1.0, -3.0, -4.0});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicDecreasing);
-	QCOMPARE(c.minimum(0, 3), -4.0);
-	QCOMPARE(c.minimum(1, 3), -4.0);
+	QCOMPARE(c.minimum(0, 2), -4.0);
+	QCOMPARE(c.minimum(1, 2), -4.0);
 
 	c.setValues({-1.0, 2.0, -4.0});
 	QCOMPARE(c.properties(), Column::Properties::NonMonotonic);
-	QCOMPARE(c.minimum(0, 3), -4.0);
-	QCOMPARE(c.minimum(0, 2), -1.0);
+	QCOMPARE(c.minimum(0, 2), -4.0);
+	QCOMPARE(c.minimum(0, 1), -1.0);
 }
 
 void ColumnTest::doubleMaximum() {
 	Column c("Double column", Column::ColumnMode::Double);
 	c.setValues({-1.0, 2.0, 5.0});
-	QCOMPARE(c.maximum(0, 3), 5.0);
-	QCOMPARE(c.maximum(1, 2), 2.0);
+	QCOMPARE(c.maximum(0, 2), 5.0);
+	QCOMPARE(c.maximum(1, 1), 2.0);
 
 	c.setValues({-1.0, -3.0, -4.0});
-	QCOMPARE(c.maximum(0, 3), -1.0);
-	QCOMPARE(c.maximum(1, 3), -3.0);
+	QCOMPARE(c.maximum(0, 2), -1.0);
+	QCOMPARE(c.maximum(1, 2), -3.0);
 
 	c.setValues({-1.0, 2.0, -4.0});
-	QCOMPARE(c.maximum(0, 3), 2.0);
 	QCOMPARE(c.maximum(0, 2), 2.0);
+	QCOMPARE(c.maximum(0, 1), 2.0);
 }
 
 void ColumnTest::integerMinimum() {
-	Column c("Interger column", Column::ColumnMode::Integer);
+	Column c("Integer column", Column::ColumnMode::Integer);
 	c.setIntegers({-1, 2, 5});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicIncreasing);
-	QCOMPARE(c.minimum(0, 3), -1);
-	QCOMPARE(c.minimum(1, 3), 2);
+	QCOMPARE(c.minimum(0, 2), -1);
+	QCOMPARE(c.minimum(1, 2), 2);
 
 	c.setIntegers({-1, -3, -4});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicDecreasing);
-	QCOMPARE(c.minimum(0, 3), -4);
-	QCOMPARE(c.minimum(1, 3), -4);
+	QCOMPARE(c.minimum(0, 2), -4);
+	QCOMPARE(c.minimum(1, 2), -4);
 
 	c.setIntegers({-1, 2, -4});
 	QCOMPARE(c.properties(), Column::Properties::NonMonotonic);
-	QCOMPARE(c.minimum(0, 3), -4);
-	QCOMPARE(c.minimum(0, 2), -1);
+	QCOMPARE(c.minimum(0, 2), -4);
+	QCOMPARE(c.minimum(0, 1), -1);
 }
 
 void ColumnTest::integerMaximum() {
-	Column c("Interger column", Column::ColumnMode::Integer);
+	Column c("Integer column", Column::ColumnMode::Integer);
 	c.setIntegers({-1, 2, 5});
-	QCOMPARE(c.maximum(0, 3), 5);
-	QCOMPARE(c.maximum(1, 2), 2);
+	QCOMPARE(c.maximum(0, 2), 5);
+	QCOMPARE(c.maximum(1, 1), 2);
 
 	c.setIntegers({-1, -3, -4});
-	QCOMPARE(c.maximum(0, 3), -1);
-	QCOMPARE(c.maximum(1, 3), -3);
+	QCOMPARE(c.maximum(0, 2), -1);
+	QCOMPARE(c.maximum(1, 2), -3);
 
 	c.setIntegers({-1, 2, -4});
-	QCOMPARE(c.maximum(0, 3), 2);
 	QCOMPARE(c.maximum(0, 2), 2);
+	QCOMPARE(c.maximum(0, 1), 2);
 }
 
 void ColumnTest::bigIntMinimum() {
-	Column c("Interger column", Column::ColumnMode::BigInt);
+	Column c("BigInt column", Column::ColumnMode::BigInt);
 	c.setBigInts({-1, 2, 5});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicIncreasing);
-	QCOMPARE(c.minimum(0, 3), -1);
-	QCOMPARE(c.minimum(1, 3), 2);
+	QCOMPARE(c.minimum(0, 2), -1);
+	QCOMPARE(c.minimum(1, 2), 2);
 
 	c.setBigInts({-1, -3, -4});
 	QCOMPARE(c.properties(), Column::Properties::MonotonicDecreasing);
-	QCOMPARE(c.minimum(0, 3), -4);
-	QCOMPARE(c.minimum(1, 3), -4);
+	QCOMPARE(c.minimum(0, 2), -4);
+	QCOMPARE(c.minimum(1, 2), -4);
 
 	c.setBigInts({-1, 2, -4});
 	QCOMPARE(c.properties(), Column::Properties::NonMonotonic);
-	QCOMPARE(c.minimum(0, 3), -4);
-	QCOMPARE(c.minimum(0, 2), -1);
+	QCOMPARE(c.minimum(0, 2), -4);
+	QCOMPARE(c.minimum(0, 1), -1);
 }
 
 void ColumnTest::bigIntMaximum() {
-	Column c("Interger column", Column::ColumnMode::BigInt);
+	Column c("BigInt column", Column::ColumnMode::BigInt);
 	c.setBigInts({-1, 2, 5});
-	QCOMPARE(c.maximum(0, 3), 5);
-	QCOMPARE(c.maximum(1, 2), 2);
+	QCOMPARE(c.maximum(0, 2), 5);
+	QCOMPARE(c.maximum(0, 1), 2);
 
 	c.setBigInts({-1, -3, -4});
-	QCOMPARE(c.maximum(0, 3), -1);
-	QCOMPARE(c.maximum(1, 3), -3);
+	QCOMPARE(c.maximum(0, 2), -1);
+	QCOMPARE(c.maximum(1, 2), -3);
 
 	c.setBigInts({-1, 2, -4});
-	QCOMPARE(c.maximum(0, 3), 2);
 	QCOMPARE(c.maximum(0, 2), 2);
+	QCOMPARE(c.maximum(0, 1), 2);
 }
 
 void ColumnTest::saveLoadDateTime() {
