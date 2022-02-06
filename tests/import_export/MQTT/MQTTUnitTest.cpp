@@ -402,7 +402,7 @@ void MQTTUnitTest::testTextMessage() {
 //##############################################################################
 //#####################  test subscribing and unsubscribing  ###################
 //##############################################################################
-void MQTTUnitTest::testSubscriptions() {
+/*void MQTTUnitTest::testSubscriptions() {
 	AsciiFilter* filter = new AsciiFilter();
 	filter->setAutoModeEnabled(true);
 
@@ -597,7 +597,7 @@ void MQTTUnitTest::testSubscriptions() {
 		file->close();
 		delete file;
 	}
-}
+}*/
 
 QTEST_MAIN(MQTTUnitTest)
 
