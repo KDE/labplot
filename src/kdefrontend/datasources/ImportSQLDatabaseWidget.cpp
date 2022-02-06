@@ -3,8 +3,7 @@
     Project              : LabPlot
     Description          : Datapicker
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Ankit Wagadre <wagadre.ankit@gmail.com>
-    SPDX-FileCopyrightText: 2016-2017 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2016-2022 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,7 +12,6 @@
 #include "DatabaseManagerDialog.h"
 #include "DatabaseManagerWidget.h"
 #include "backend/datasources/AbstractDataSource.h"
-#include "backend/datasources/filters/AbstractFileFilter.h"
 #include "backend/lib/macros.h"
 
 #include <QTimer>
@@ -120,11 +118,11 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 
 	m_configPath = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).constFirst() +  "sql_connections";
 
-	connect( ui.cbConnection, SIGNAL(currentIndexChanged(int)), SLOT(connectionChanged()) );
-	connect( ui.cbImportFrom, SIGNAL(currentIndexChanged(int)), SLOT(importFromChanged(int)) );
-	connect( ui.bDatabaseManager, SIGNAL(clicked()), this, SLOT(showDatabaseManager()) );
-	connect( ui.lwTables, SIGNAL(currentRowChanged(int)), this, SLOT(refreshPreview()) );
-	connect( ui.bRefreshPreview, SIGNAL(clicked()), this, SLOT(refreshPreview()) );
+	connect(ui.cbConnection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportSQLDatabaseWidget::connectionChanged);
+	connect(ui.cbImportFrom, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImportSQLDatabaseWidget::importFromChanged);
+	connect(ui.bDatabaseManager, &QPushButton::clicked, this, &ImportSQLDatabaseWidget::showDatabaseManager);
+	connect(ui.lwTables, &QListWidget::currentRowChanged, this, &ImportSQLDatabaseWidget::refreshPreview);
+	connect(ui.bRefreshPreview, &QPushButton::clicked, this, &ImportSQLDatabaseWidget::refreshPreview);
 
 	//defer the loading of settings a bit in order to show the dialog prior to blocking the GUI in refreshPreview()
 	QTimer::singleShot( 100, this, SLOT(loadSettings()) );
@@ -303,7 +301,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 	if (customQuery) {
 		KConfig config(m_configPath, KConfig::SimpleConfig);
 		KConfigGroup group = config.group(ui.cbConnection->currentText());
-		group.writeEntry("Query", ui.teQuery->toPlainText().simplified());
+		group.writeEntry("Query", ui.teQuery->toPlainText());
 	}
 
 	//execute the current query (select on a table or a custom query)
@@ -397,10 +395,12 @@ void ImportSQLDatabaseWidget::importFromChanged(int index) {
 	if (index == 0) { //import from a table
 		ui.gbQuery->hide();
 		ui.lwTables->show();
+		ui.bRefreshPreview->setToolTip(i18n("Refresh the data preview of the selected table"));
 	} else { //import the result set of a custom query
 		ui.gbQuery->show();
 		ui.lwTables->hide();
 		ui.twPreview->clear();
+		ui.bRefreshPreview->setToolTip(i18n("Execute the query and preview its result"));
 	}
 
 	refreshPreview();

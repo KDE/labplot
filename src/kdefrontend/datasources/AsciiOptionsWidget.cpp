@@ -123,8 +123,8 @@ void AsciiOptionsWidget::showTimestampOptions(bool visible) {
   Hides it otherwise.
 */
 void AsciiOptionsWidget::headerChanged(bool state) {
-	ui.kleVectorNames->setVisible(state);
-	ui.lVectorNames->setVisible(state);
+	ui.kleVectorNames->setVisible(!state);
+	ui.lVectorNames->setVisible(!state);
 }
 
 void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
