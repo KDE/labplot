@@ -2348,13 +2348,13 @@ bool XYCurve::minMax(const AbstractColumn* column1, const AbstractColumn* column
 	// when property is increasing or decreasing there is a benefit in finding minimum and maximum
 	// for property == AbstractColumn::Properties::No it must be iterated over all values so it does not matter if this function or the below one is used
 	// if the property of the second column is not AbstractColumn::Properties::No means, that all values are valid and not masked
-	//DEBUG(Q_FUNC_INFO << std::endl << ", column 1 min/max = " << column1->minimum() << "/" << column1->maximum())
+	//DEBUG(Q_FUNC_INFO << "\n, column 1 min/max = " << column1->minimum() << "/" << column1->maximum())
 	if ((!includeErrorBars || errorType == ErrorType::NoError) && column1->properties() != AbstractColumn::Properties::No && column2 && column2->properties() != AbstractColumn::Properties::No) {
-		auto max = column1->maximum(indexRange.start(), indexRange.end());
 		auto min = column1->minimum(indexRange.start(), indexRange.end());
-		DEBUG( Q_FUNC_INFO << std::endl << ", column 1 min/max in index range = " << min << "/" << max )
+		auto max = column1->maximum(indexRange.start(), indexRange.end());
+		DEBUG(Q_FUNC_INFO << "\n, column 1 min/max in index range = " << min << "/" << max)
 		//TODO: Range
-		range.setRange( min, max );
+		range.setRange(min, max);
 		return true;
 	}
 

@@ -5,7 +5,7 @@
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2007-2009 Tilman Benkert <thzs@gmx.net>
     SPDX-FileCopyrightText: 2013-2022 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -1840,19 +1840,14 @@ double Column::minimum(int count) const {
 	if (count == 0 && d->available.min)
 		return d->statistics.minimum;
 	else {
-		int start, end;
+		int startIndex = 0, endIndex = rowCount() - 1;
 
-		if (count == 0) {
-			start = 0;
-			end = rowCount();
-		} else if (count > 0) {
-			start  = 0;
-			end = qMin(rowCount(), count);
-		} else {
-			start = qMax(rowCount() + count, 0);
-			end = rowCount();
-		}
-		return minimum(start, end);
+		if (count > 0)
+			endIndex = qMin(rowCount() - 1, count - 1);
+		else if (count < 0)
+			startIndex = qMax(rowCount() - count, 0);
+
+		return minimum(startIndex, endIndex);
 	}
 }
 
@@ -1878,10 +1873,10 @@ double Column::minimum(int startIndex, int endIndex) const {
 	startIndex = qMax(startIndex, 0);
 	endIndex = qMax(endIndex, 0);
 
-	startIndex = qMin(startIndex, rowCount());
-	endIndex = qMin(endIndex, rowCount());
+	startIndex = qMin(startIndex, rowCount() - 1);
+	endIndex = qMin(endIndex, rowCount() - 1);
 
-	if (startIndex == 0 && endIndex == rowCount() -1 && d->available.min)
+	if (startIndex == 0 && endIndex == rowCount() - 1 && d->available.min)
 		return d->statistics.minimum;
 
 	ColumnMode mode = columnMode();
@@ -1892,7 +1887,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		switch (mode) {
 		case ColumnMode::Double: {
 			auto* vec = static_cast<QVector<double>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 
@@ -1907,7 +1902,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::Integer: {
 			auto* vec = static_cast<QVector<int>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 
@@ -1920,7 +1915,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::BigInt: {
 			auto* vec = static_cast<QVector<qint64>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 
@@ -1935,7 +1930,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 			break;
 		case ColumnMode::DateTime: {
 			auto* vec = static_cast<QVector<QDateTime>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 
@@ -1950,13 +1945,12 @@ double Column::minimum(int startIndex, int endIndex) const {
 		case ColumnMode::Month:
 			break;
 		}
-	} else {
-		// use the properties knowledge to determine maximum faster
+	} else {	// monotonic: use the properties knowledge to determine maximum faster
 		int foundIndex = 0;
 		if (property == Properties::Constant || property == Properties::MonotonicIncreasing)
 			foundIndex = startIndex;
 		else if (property == Properties::MonotonicDecreasing) {
-			foundIndex = endIndex - 1;
+			foundIndex = endIndex;
 			foundIndex = qMax(0, foundIndex);
 		}
 
@@ -1976,7 +1970,7 @@ double Column::minimum(int startIndex, int endIndex) const {
 		}
 	}
 
-	if (startIndex == 0 && endIndex == rowCount() -1) {
+	if (startIndex == 0 && endIndex == rowCount() - 1) {
 		d->available.min = true;
 		d->statistics.minimum = min;
 	}
@@ -1997,19 +1991,14 @@ double Column::maximum(int count) const {
 	if (count == 0 && d->available.max)
 		return d->statistics.maximum;
 	else {
-		int start, end;
+		int startIndex = 0, endIndex = rowCount() - 1;
 
-		if (count == 0) {
-			start = 0;
-			end = rowCount();
-		} else if (count > 0) {
-			start  = 0;
-			end = qMin(rowCount(), count);
-		} else {
-			start = qMax(rowCount() + count, 0);
-			end = rowCount();
-		}
-		return maximum(start, end);
+		if (count > 0)
+			endIndex = qMin(rowCount() - 1, count - 1);
+		else if (count < 0)
+			startIndex = qMax(rowCount() - count, 0);
+
+		return maximum(startIndex, endIndex);
 	}
 }
 
@@ -2021,8 +2010,7 @@ double Column::maximum(int count) const {
  * \p endIndex
  */
 double Column::maximum(int startIndex, int endIndex) const {
-
-	double max{ -qInf() };
+	double max = -qInf();
 	if (rowCount() == 0)
 		return max;
 
@@ -2032,10 +2020,10 @@ double Column::maximum(int startIndex, int endIndex) const {
 	startIndex = qMax(startIndex, 0);
 	endIndex = qMax(endIndex, 0);
 
-	startIndex = qMin(startIndex, rowCount());
-	endIndex = qMin(endIndex, rowCount());
+	startIndex = qMin(startIndex, rowCount() - 1);
+	endIndex = qMin(endIndex, rowCount() - 1);
 
-	if (startIndex == 0 && endIndex == rowCount() -1 && d->available.max)
+	if (startIndex == 0 && endIndex == rowCount() - 1 && d->available.max)
 		return d->statistics.maximum;
 
 	ColumnMode mode = columnMode();
@@ -2044,7 +2032,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 		switch (mode) {
 		case ColumnMode::Double: {
 			auto* vec = static_cast<QVector<double>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 				const double val = vec->at(row);
@@ -2058,7 +2046,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::Integer: {
 			auto* vec = static_cast<QVector<int>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 				const int val = vec->at(row);
@@ -2070,7 +2058,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 		}
 		case ColumnMode::BigInt: {
 			auto* vec = static_cast<QVector<qint64>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 				const qint64 val = vec->at(row);
@@ -2084,7 +2072,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 			break;
 		case ColumnMode::DateTime: {
 			auto* vec = static_cast<QVector<QDateTime>*>(data());
-			for (int row = startIndex; row < endIndex; ++row) {
+			for (int row = startIndex; row <= endIndex; ++row) {
 				if (!isValid(row) || isMasked(row))
 					continue;
 				const qint64 val = vec->at(row).toMSecsSinceEpoch();
@@ -2098,13 +2086,12 @@ double Column::maximum(int startIndex, int endIndex) const {
 		case ColumnMode::Month:
 			break;
 		}
-	} else {
-		// use the properties knowledge to determine maximum faster
+	} else {	// monotonic: use the properties knowledge to determine maximum faster
 		int foundIndex = 0;
 		if (property == Properties::Constant || property == Properties::MonotonicDecreasing)
 			foundIndex = startIndex;
 		else if (property == Properties::MonotonicIncreasing) {
-			foundIndex = endIndex - 1;
+			foundIndex = endIndex;
 			foundIndex = qMax(0, foundIndex);
 		}
 
@@ -2124,7 +2111,7 @@ double Column::maximum(int startIndex, int endIndex) const {
 		}
 	}
 
-	if (startIndex == 0 && endIndex == rowCount() -1) {
+	if (startIndex == 0 && endIndex == rowCount() - 1) {
 		d->statistics.maximum = max;
 		d->available.max = true;
 	}
