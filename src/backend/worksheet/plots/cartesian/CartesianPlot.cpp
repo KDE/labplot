@@ -2907,7 +2907,7 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 				indexRange.setRange(0, xColumn->rowCount() - 1);
 				break;
 			case RangeType::Last:
-				indexRange.setRange(xColumn->rowCount() - d->rangeLastValues - 1, xColumn->rowCount() - 1);
+				indexRange.setRange(xColumn->rowCount() - d->rangeLastValues, xColumn->rowCount() - 1);
 				break;
 			case RangeType::First:
 				indexRange.setRange(0, d->rangeFirstValues - 1);
@@ -2928,9 +2928,7 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 
 	//loop over all histograms and determine the maximum and minimum x-value
 	for (const auto* curve : this->children<const Histogram>()) {
-		if (!curve->isVisible())
-			continue;
-		if (!curve->dataColumn())
+		if (!curve->isVisible() || !curve->dataColumn())
 			continue;
 
 		const double min = curve->xMinimum();
@@ -2944,9 +2942,7 @@ void CartesianPlot::calculateDataXRange(const int index, bool completeRange) {
 
 	//loop over all box plots and determine the maximum and minimum x-values
 	for (const auto* curve : this->children<const BoxPlot>()) {
-		if (!curve->isVisible())
-			continue;
-		if (curve->dataColumns().isEmpty())
+		if (!curve->isVisible() || curve->dataColumns().isEmpty())
 			continue;
 
 		const double min = curve->xMinimum();
@@ -3008,7 +3004,7 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 				indexRange.setRange(0, yColumn->rowCount() - 1);
 				break;
 			case RangeType::Last:
-				indexRange.setRange(yColumn->rowCount() - d->rangeLastValues - 1, yColumn->rowCount() - 1);
+				indexRange.setRange(yColumn->rowCount() - d->rangeLastValues, yColumn->rowCount() - 1);
 				break;
 			case RangeType::First:
 				indexRange.setRange(0, d->rangeFirstValues - 1);
@@ -3028,7 +3024,7 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 
 	//loop over all histograms and determine the maximum y-value
 	for (const auto* curve : this->children<const Histogram>()) {
-		if (!curve->isVisible())
+		if (!curve->isVisible() || !curve->dataColumn())
 			continue;
 
 		const double min = curve->yMinimum();
@@ -3042,7 +3038,7 @@ void CartesianPlot::calculateDataYRange(const int index, bool completeRange) {
 
 	//loop over all box plots and determine the maximum y-value
 	for (const auto* curve : this->children<const BoxPlot>()) {
-		if (!curve->isVisible())
+		if (!curve->isVisible() || curve->dataColumns().isEmpty())
 			continue;
 
 		const double min = curve->yMinimum();
