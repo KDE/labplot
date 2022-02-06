@@ -34,6 +34,7 @@ public:
 	~BoxPlot() override;
 
 	QIcon icon() const override;
+	static QIcon staticIcon();
 	QMenu* createContextMenu() override;
 	QGraphicsItem* graphicsItem() const override;
 

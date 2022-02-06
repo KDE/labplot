@@ -353,7 +353,7 @@ void CartesianPlot::initActions() {
 	//"add new" actions
 	addCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("xy-curve"), this);
 	addHistogramAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
-	addBoxPlotAction = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Box Plot"), this);
+	addBoxPlotAction = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
 	addEquationCurveAction = new QAction(QIcon::fromTheme("labplot-xy-equation-curve"), i18n("xy-curve from a Formula"), this);
 // no icons yet
 	addDataReductionCurveAction = new QAction(QIcon::fromTheme("labplot-xy-curve"), i18n("Data Reduction"), this);
@@ -3750,7 +3750,7 @@ void CartesianPlotPrivate::retransformScales(int xIndex, int yIndex) {
 	DEBUG(Q_FUNC_INFO << ", SCALES x/y index = " << xIndex << "/" << yIndex)
 	for (int i = 0; i < xRanges.count(); i++)
 		DEBUG( Q_FUNC_INFO << ", x range " << i+1 << " : " << xRanges.at(i).range.toStdString()
-			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()) 
+			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale())
 			<< ", auto scale = " << xRanges.at(i).range.autoScale() );
 	for (int i = 0; i < yRanges.count(); i++)
 		DEBUG( Q_FUNC_INFO << ", y range " << i+1 << " : " << yRanges.at(i).range.toStdString()

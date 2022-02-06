@@ -21,6 +21,7 @@
 #include "tools/ImageTools.h"
 #include "backend/lib/trace.h"
 
+#include <QApplication>
 #include <QActionGroup>
 #include <QPainter>
 #include <QMenu>
@@ -147,7 +148,30 @@ void BoxPlot::init() {
     Returns an icon to be used in the project explorer.
 */
 QIcon BoxPlot::icon() const {
-	return  QIcon::fromTheme(QLatin1String("draw-line"));
+// 	return QIcon::fromTheme(QLatin1String("draw-line"));
+	return BoxPlot::staticIcon();
+}
+
+QIcon BoxPlot::staticIcon() {
+	QPainter pa;
+	pa.setRenderHint(QPainter::Antialiasing);
+	int iconSize = 20;
+	QPixmap pm(iconSize, iconSize);
+
+	QPen pen(Qt::SolidLine);
+	const QColor& color = (QApplication::palette().color(QPalette::Base).lightness() < 128) ? Qt::white : Qt::black;
+	pen.setColor(color);
+	pen.setWidthF(0.0);
+
+	pm.fill(Qt::transparent);
+	pa.begin(&pm);
+	pa.setPen(pen);
+	pa.drawRect(6, 6, 8, 8); //box
+	pa.drawLine(10, 6, 10, 0); //upper whisker
+	pa.drawLine(10, 14, 10, 20); //lower whisker
+	pa.end();
+
+	return QIcon(pm);
 }
 
 void BoxPlot::initActions() {
