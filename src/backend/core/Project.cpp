@@ -86,7 +86,7 @@ public:
 	Private(Project* owner) : modificationTime(QDateTime::currentDateTime()), q(owner) {
 		setVersion(LVERSION);
 	}
-	QString name() const  {
+	QString name() const {
 		return q->name();
 	}
 
@@ -95,13 +95,13 @@ public:
 		auto l = v.split(".");
 		Q_ASSERT(l.length() == 3);
 		bool ok;
-		int major = l[0].toInt(&ok);
+		int major = l.at(0).toInt(&ok);
 		if (!ok)
 			return false;
-		int minor = l[1].toInt(&ok);
+		int minor = l.at(1).toInt(&ok);
 		if (!ok)
 			return false;
-		int patch = l[2].toInt(&ok);
+		int patch = l.at(2).toInt(&ok);
 		if (!ok)
 			return false;
 		m_versionNumber = QT_VERSION_CHECK(major, minor, patch);
@@ -458,7 +458,7 @@ QString Project::supportedExtensions() {
 }
 
 QVector<quintptr> Project::droppedAspects(const QMimeData* mimeData) {
-	QByteArray data = mimeData->data(QLatin1String("labplot-dnd"));
+	auto data = mimeData->data(QLatin1String("labplot-dnd"));
 	QDataStream stream(&data, QIODevice::ReadOnly);
 
 	//read the project pointer first
@@ -503,11 +503,8 @@ void Project::save(const QPixmap& thumbnail, QXmlStreamWriter* writer) const {
 	}
 
 	writer->writeAttribute("thumbnail", image);
-
 	writeBasicAttributes(writer);
-
 	writeCommentElement(writer);
-
 	save(writer);
 }
 
@@ -699,37 +696,31 @@ void Project::retransformElements(AbstractAspect* aspect) {
 
 	//recalculate all analysis curves if the results of the calculations were not saved in the project
 	if (!aspect->project()->saveCalculations()) {
-		const auto& curves = aspect->children<XYAnalysisCurve>(ChildIndexFlag::Recursive);
-		for (auto* curve : curves)
+		for (auto* curve : aspect->children<XYAnalysisCurve>(ChildIndexFlag::Recursive))
 			curve->recalculate();
 	}
 
 	//set "isLoading" to false for all worksheet elements
-	const auto& children = aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
-	for (auto* child : children)
+	for (auto* child : aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden))
 		child->setIsLoading(false);
 
-	const auto& columns = aspect->project()->children<Column>(ChildIndexFlag::Recursive);
-	for (auto& column: columns)
+	for (auto& column : aspect->project()->children<Column>(ChildIndexFlag::Recursive))
 		column->setIsLoading(false);
 
 	//all data was read:
 	//call retransform() to every element
 	if (hasChildren && aspect->type() == AspectType::Worksheet) {
-		const auto& elements = aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
-		for (auto* e : elements) {
+		for (auto* e : aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
 			if (e->type() == AspectType::CartesianPlot)
 				static_cast<CartesianPlot*>(e)->retransformAll();
 			else
 				e->retransform();
 		}
 	} else if (hasChildren && aspect->type() != AspectType::CartesianPlot) {
-		const auto& worksheets = aspect->children<Worksheet>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
-		for (auto* w : worksheets) {
+		for (const auto* w : aspect->children<Worksheet>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
 			// retransform all elements in the worksheet (labels, images, plots)
 			// the plots will then recursive retransform the childs of them
-			const auto& elements = w->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
-			for (auto* e : elements) {
+			for (auto* e : w->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
 				if (e->type() == AspectType::CartesianPlot)
 					static_cast<CartesianPlot*>(e)->retransformAll();
 				else
@@ -751,13 +742,12 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	QVector<XYCurve*> curves;
 	if (hasChildren)
 		curves = aspect->children<XYCurve>(ChildIndexFlag::Recursive);
-	const auto& sources = aspect->children<LiveDataSource>(ChildIndexFlag::Recursive);
 	//all data was read in live-data sources:
 	//call CartesianPlot::dataChanged() to notify affected plots about the new data.
 	//this needs to be done here since in LiveDataSource::finalizeImport() called above
 	//where the data is read the column pointers are not restored yes in curves.
 	QVector<CartesianPlot*> plots;
-	for (auto* source : sources) {
+	for (auto* source : aspect->children<LiveDataSource>(ChildIndexFlag::Recursive)) {
 		for (int n = 0; n < source->columnCount(); ++n) {
 			Column* column = source->column(n);
 
@@ -802,8 +792,7 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 	//LiveDataSource:
 	//call finalizeLoad() to replace relative with absolute paths if required
 	//and to create columns during the initial read
-	const auto& sources = aspect->children<LiveDataSource>(ChildIndexFlag::Recursive);
-	for (auto* source : sources) {
+	for (auto* source : aspect->children<LiveDataSource>(ChildIndexFlag::Recursive)) {
 		if (!source) continue;
 		source->finalizeLoad();
 	}
@@ -849,8 +838,9 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 			RESTORE_COLUMN_POINTER(curve, yErrorPlusColumn, YErrorPlusColumn);
 			RESTORE_COLUMN_POINTER(curve, yErrorMinusColumn, YErrorMinusColumn);
 		}
-		if (auto* acurve = dynamic_cast<XYAnalysisCurve*>(curve))
-			RESTORE_POINTER(acurve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
+
+		if (analysisCurve)
+			RESTORE_POINTER(analysisCurve, dataSourceCurve, DataSourceCurve, XYCurve, curves);
 
 		curve->suppressRetransform(false);
 	}
@@ -944,9 +934,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 
 	//if a column was calculated via a formula, restore the pointers to the variable columns defining the formula
 	for (auto* col : columns) {
-		for (Column* c: columns) {
+		for (Column* c: columns)
 			col->setFormulaVariableColumn(c);
-		}
 		col->finalizeLoad();
 	}
 

@@ -2183,10 +2183,10 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 
 		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
-			double value = column[index];
+			double value = column.at(index);
 
 			if (higherIndex - lowerIndex < 2) {
-				if (qAbs(column[lowerIndex] - x) < qAbs(column[higherIndex] - x))
+				if (qAbs(column.at(lowerIndex) - x) < qAbs(column.at(higherIndex) - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -2206,16 +2206,15 @@ int Column::indexForValue(double x, QVector<double>& column, Properties properti
 		}
 	} else if (properties == AbstractColumn::Properties::Constant) {
 		return 0;
-	} else {
-		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
+	} else { // AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// simple way
 		int index = 0;
-		double prevValue = column[0];
+		double prevValue = column.at(0);
 		for (int row = 0; row < rowCount; row++) {
-			double value = column[row];
-			if (std::abs(value - x) <= std::abs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
-					prevValue = value;
-					index = row;
+			double value = column.at(row);
+			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
+				prevValue = value;
+				index = row;
 			}
 		}
 		return index;
@@ -2249,10 +2248,10 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
 
 		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
-			double value = points[index].x();
+			double value = points.at(index).x();
 
 			if (higherIndex - lowerIndex < 2) {
-				if (qAbs(points[lowerIndex].x() - x) < qAbs(points[higherIndex].x() - x))
+				if (qAbs(points.at(lowerIndex).x() - x) < qAbs(points.at(higherIndex).x() - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -2276,11 +2275,10 @@ int Column::indexForValue(const double x, const QVector<QPointF>& points, Proper
 	} else {
 		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// naiv way
-		double prevValue = points[0].x();
+		double prevValue = points.at(0).x();
 		int index = 0;
 		for (int row = 0; row < rowCount; row++) {
-
-			double value = points[row].x();
+			double value = points.at(row).x();
 			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
 					prevValue = value;
 					index = row;
@@ -2317,10 +2315,10 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 
 		for (unsigned int i = 0; i < maxSteps; i++) { // so no log_2(rowCount) needed
 			int index = lowerIndex + round(static_cast<double>(higherIndex - lowerIndex)/2);
-			double value = lines[index].p1().x();
+			double value = lines.at(index).p1().x();
 
 			if (higherIndex - lowerIndex < 2) {
-				if (qAbs(lines[lowerIndex].p1().x() - x) < qAbs(lines[higherIndex].p1().x() - x))
+				if (qAbs(lines.at(lowerIndex).p1().x() - x) < qAbs(lines.at(higherIndex).p1().x() - x))
 					index = lowerIndex;
 				else
 					index = higherIndex;
@@ -2345,9 +2343,9 @@ int Column::indexForValue(double x, QVector<QLineF>& lines, Properties propertie
 		// AbstractColumn::Properties::No || AbstractColumn::Properties::NonMonotonic
 		// naiv way
 		int index = 0;
-		double prevValue = lines[0].p1().x();
+		double prevValue = lines.at(0).p1().x();
 		for (int row = 0; row < rowCount; row++) {
-			double value = lines[row].p1().x();
+			double value = lines.at(row).p1().x();
 			if (qAbs(value - x) <= qAbs(prevValue - x)) { // "<=" prevents also that row - 1 become < 0
 				prevValue = value;
 				index = row;
@@ -2413,7 +2411,7 @@ int Column::indexForValue(double x) const {
 				qint64 value = dateTimeAt(index).toMSecsSinceEpoch();
 
 				if (higherIndex - lowerIndex < 2) {
-					if (abs(dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < abs(dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
+					if (qAbs(dateTimeAt(lowerIndex).toMSecsSinceEpoch() - xInt64) < qAbs(dateTimeAt(higherIndex).toMSecsSinceEpoch() - xInt64))
 						index = lowerIndex;
 					else
 						index = higherIndex;
@@ -2453,7 +2451,7 @@ int Column::indexForValue(double x) const {
 					prevValue = valueAt(row);
 
 				double value = valueAt(row);
-				if (abs(value - x) <= abs(prevValue - x)) { // <= prevents also that row - 1 become < 0
+				if (qAbs(value - x) <= qAbs(prevValue - x)) { // <= prevents also that row - 1 become < 0
 					prevValue = value;
 					index = row;
 				}
@@ -2473,7 +2471,7 @@ int Column::indexForValue(double x) const {
 					prevValueDateTime = dateTimeAt(row).toMSecsSinceEpoch();
 
 				qint64 value = dateTimeAt(row).toMSecsSinceEpoch();
-				if (abs(value - xInt64) <= abs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
+				if (qAbs(value - xInt64) <= qAbs(prevValueDateTime - xInt64)) { // "<=" prevents also that row - 1 become < 0
 					prevValueDateTime = value;
 					index = row;
 				}

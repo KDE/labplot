@@ -3892,9 +3892,10 @@ QVector<AbstractCoordinateSystem*> CartesianPlotPrivate::coordinateSystems() con
 
 void CartesianPlotPrivate::rangeChanged() {
 	DEBUG(Q_FUNC_INFO)
-	for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
-		int xIndex = coordinateSystem(i)->xIndex();
-		int yIndex = coordinateSystem(i)->yIndex();
+	for (const auto* coordinateSystem : q->m_coordinateSystems) {
+		const auto cSystem = static_cast<const CartesianCoordinateSystem*>(coordinateSystem);
+		int xIndex = cSystem->xIndex();
+		int yIndex = cSystem->yIndex();
 		xRanges[xIndex].dirty = true;
 		yRanges[yIndex].dirty = true;
 		if (autoScaleX(xIndex) && autoScaleY(yIndex))
@@ -3909,9 +3910,10 @@ void CartesianPlotPrivate::rangeChanged() {
 
 void CartesianPlotPrivate::niceExtendChanged() {
 	DEBUG(Q_FUNC_INFO)
-	for (int i = 0; i < q->m_coordinateSystems.count(); i++) {
-		int xIndex = coordinateSystem(i)->xIndex();
-		int yIndex = coordinateSystem(i)->yIndex();
+	for (const auto* coordinateSystem : q->m_coordinateSystems) {
+		const auto cSystem = static_cast<const CartesianCoordinateSystem*>(coordinateSystem);
+		int xIndex = cSystem->xIndex();
+		int yIndex = cSystem->yIndex();
 		xRanges[xIndex].dirty = true;
 		yRanges[yIndex].dirty = true;
 		if (autoScaleX(xIndex) && autoScaleY(yIndex))
@@ -4171,13 +4173,11 @@ void CartesianPlotPrivate::mousePressCursorMode(int cursorNumber, QPointF logica
 	QPointF p1(logicalPos.x(), yRange().start());
 	QPointF p2(logicalPos.x(), yRange().end());
 
-	if (cursorNumber == 0) {
-		cursor0Pos.setX(logicalPos.x());
-		cursor0Pos.setY(0);
-	} else {
-		cursor1Pos.setX(logicalPos.x());
-		cursor1Pos.setY(0);
-	}
+	if (cursorNumber == 0)
+		cursor0Pos = QPointF(logicalPos.x(), 0);
+	else
+		cursor1Pos = QPointF(logicalPos.x(), 0);
+
 	update();
 }
 
@@ -4236,8 +4236,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	}
 }
 
-bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY)
-{
+bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF& logicalStart, const QPointF& logicalEnd, bool translateX, bool translateY) {
 	//handle the change in x
 	bool translationX = false, translationY = false;
 	if (translateX && logicalStart.x() - logicalEnd.x() != 0) { // TODO: find better method
@@ -4730,7 +4729,7 @@ void CartesianPlotPrivate::hoverMoveEvent(QGraphicsSceneHoverEvent* event) {
 		xIndex = -1;
 		yIndex = -1;
 	} else if (index >= 0) {
-		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index]);
+		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
 		xIndex = cSystem->xIndex();
 		yIndex = cSystem->yIndex();
 	}

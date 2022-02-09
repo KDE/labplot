@@ -183,7 +183,7 @@ void ReferenceLine::setOrientation(Orientation orientation) {
 	Q_D(ReferenceLine);
 	if (orientation != d->orientation) {
 		exec(new ReferenceLineSetOrientationCmd(d, orientation, ki18n("%1: set orientation")));
-		switch(orientation) {
+		switch (orientation) {
 		case ReferenceLine::Orientation::Horizontal:
 			d->position.positionLimit = PositionLimit::Y;
 			break;
