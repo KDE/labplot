@@ -12,6 +12,7 @@
 
 #include "SpreadsheetView.h"
 #include "backend/worksheet/plots/cartesian/CartesianPlot.h"
+#include "backend/worksheet/plots/cartesian/BoxPlot.h"//TODO: needed for the icon only, remove later once we have a breeze icon
 #include "backend/spreadsheet/SpreadsheetModel.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "commonfrontend/spreadsheet/SpreadsheetItemDelegate.h"
@@ -407,7 +408,7 @@ void SpreadsheetView::initActions() {
 	action_plot_data_xycurve->setData(static_cast<int>(PlotDataDialog::PlotType::XYCurve));
 	action_plot_data_histogram = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Histogram"), this);
 	action_plot_data_histogram->setData(static_cast<int>(PlotDataDialog::PlotType::Histogram));
-	action_plot_data_boxplot = new QAction(QIcon::fromTheme("view-object-histogram-linear"), i18n("Box Plot"), this);
+	action_plot_data_boxplot = new QAction(BoxPlot::staticIcon(), i18n("Box Plot"), this);
 	action_plot_data_boxplot->setData(static_cast<int>(PlotDataDialog::PlotType::BoxPlot));
 
 	//Analyze and plot menu actions
