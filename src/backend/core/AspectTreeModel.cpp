@@ -200,7 +200,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 				return QLatin1String("DataExtractor");
 			return aspect->metaObject()->className();
 		case 2:
-			return aspect->creationTime().toString();
+			return QLocale::system().toString(aspect->creationTime(), QLocale::ShortFormat);
 		case 3:
 			return aspect->comment().replace('\n', ' ').simplified();
 		default:
