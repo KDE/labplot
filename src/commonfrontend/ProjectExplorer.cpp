@@ -781,7 +781,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 
 	//there are four model indices in each row
 	//-> divide by 4 to obtain the number of selected rows (=aspects)
-	auto sitems = selected.indexes();
+	const auto& sitems = selected.indexes();
 	for (int i = 0; i < sitems.size()/4; ++i) {
 		index = sitems.at(i*4);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -789,7 +789,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 		aspect->setSelected(true);
 	}
 
-	auto ditems = deselected.indexes();
+	const auto& ditems = deselected.indexes();
 	for (int i = 0; i < ditems.size()/4; ++i) {
 		index = ditems.at(i*4);
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
@@ -797,9 +797,9 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 		aspect->setSelected(false);
 	}
 
-	auto items = m_treeView->selectionModel()->selectedRows();
+	const auto& items = m_treeView->selectionModel()->selectedRows();
 	QList<AbstractAspect*> selectedAspects;
-	for (const auto& index : qAsConst(items)) {
+	for (const auto& index : items) {
 		aspect = static_cast<AbstractAspect*>(index.internalPointer());
 		QDEBUG("items ASPECT =" << aspect)
 		selectedAspects << aspect;
@@ -1168,6 +1168,7 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	m_treeView->setCurrentIndex(currentIndex);
 	m_treeView->scrollTo(currentIndex);
 	auto* aspect = static_cast<AbstractAspect*>(currentIndex.internalPointer());
+	aspect->setSelected(true);
 	Q_EMIT currentAspectChanged(aspect); //notify MainWin to bring up the proper view
 	Q_EMIT selectedAspectsChanged(QList<AbstractAspect*>()<<aspect); //notify GuiObserver to bring up the proper dock widget
 
