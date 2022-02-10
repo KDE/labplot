@@ -1104,6 +1104,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		dtsbMajorTicksIncrement->hide();
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
+		ui.leZeroOffset->show();
+		ui.tbFirstTickAuto->show();
+		ui.tbFirstTickData->show();
 		ui.leMajorTickStartOffset->show();
 		ui.lMajorTickStartOffset->show();
 	} else if (type == Axis::TicksType::Spacing) {
@@ -1125,6 +1128,9 @@ void AxisDock::majorTicksTypeChanged(int index) {
 
 		ui.lMajorTicksColumn->hide();
 		cbMajorTicksColumn->hide();
+		ui.leZeroOffset->show();
+		ui.tbFirstTickAuto->show();
+		ui.tbFirstTickData->show();
 		ui.leMajorTickStartOffset->show();
 		ui.lMajorTickStartOffset->show();
 
@@ -1137,8 +1143,13 @@ void AxisDock::majorTicksTypeChanged(int index) {
 		ui.sbMajorTicksSpacingNumeric->hide();
 		ui.lMajorTicksIncrementDateTime->hide();
 		dtsbMajorTicksIncrement->hide();
+		ui.leZeroOffset->hide();
+		ui.tbFirstTickAuto->hide();
+		ui.tbFirstTickData->hide();
+
 		ui.lMajorTicksColumn->show();
 		cbMajorTicksColumn->show();
+
 		ui.leMajorTickStartOffset->hide();
 		ui.lMajorTickStartOffset->hide();
 	}
