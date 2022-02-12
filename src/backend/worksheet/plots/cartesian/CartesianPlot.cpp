@@ -858,8 +858,10 @@ void CartesianPlot::processDropEvent(const QVector<quintptr>& vec) {
 		curvesAdded = true;
 	}
 
-	if (curvesAdded)
-		dataChanged(-1, -1); // TODO: check if all ranges must be updated
+	if (curvesAdded) {
+		// In addChild() the curve gets the coordinatesystem which is the default coordinate system
+		dataChanged(defaultCoordinateSystem()->xIndex(), defaultCoordinateSystem()->yIndex());
+	}
 }
 
 bool CartesianPlot::isPanningActive() const {
