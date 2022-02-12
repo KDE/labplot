@@ -855,6 +855,7 @@ void HistogramPrivate::retransform() {
 		valuesPath = QPainterPath();
 		curveShape = QPainterPath();
 		lines.clear();
+		linesUnclipped.clear();
 		pointsLogical.clear();
 		pointsScene.clear();
 		visiblePoints.clear();
@@ -1020,6 +1021,7 @@ void HistogramPrivate::updateLines() {
 
 	linePath = QPainterPath();
 	lines.clear();
+	linesUnclipped.clear();
 	pointsLogical.clear();
 	pointsScene.clear();
 
@@ -1031,6 +1033,7 @@ void HistogramPrivate::updateLines() {
 	//map the lines and the symbol positions to the scene coordinates
 	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
 	const auto* cSystem{ plot->defaultCoordinateSystem() };
+	linesUnclipped = cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 	lines = cSystem->mapLogicalToScene(lines);
 	visiblePoints = std::vector<bool>(pointsLogical.count(), false);
 	cSystem->mapLogicalToScene(pointsLogical, pointsScene, visiblePoints);
@@ -1358,68 +1361,55 @@ void HistogramPrivate::updateFilling() {
 		return;
 	}
 
-	QVector<QLineF> fillLines;
-	const auto* plot = static_cast<const CartesianPlot*>(q->parentAspect());
-	const AbstractCoordinateSystem* cSystem{ plot->defaultCoordinateSystem() };
-
-	//if there're no interpolation lines available (Histogram::NoLine selected), create line-interpolation,
-	//use already available lines otherwise.
-	if (lines.size())
-		fillLines = lines;
-	else {
-		for (int i = 0; i < pointsLogical.count()-1; i++)
-			fillLines.append(QLineF(pointsLogical.at(i), pointsLogical.at(i+1)));
-		fillLines = cSystem->mapLogicalToScene(fillLines);
-	}
-
-	//no lines available (no points), nothing to do
-	if (!fillLines.size())
+	const auto& lines = linesUnclipped;
+	if (lines.isEmpty())
 		return;
 
-	//create the filling polygon for the visible lines
+	//clip the line points to the plot data rect and create a new polygon
+	//out of them that will be filled out.
+	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
+	int i = 0;
+	for (const auto& line : lines) {
+		//clip the first point of the line
+		QPointF p1 = line.p1();
+		if (p1.x() < dataRect.left())
+			p1.setX(dataRect.left());
+		else if (p1.x() > dataRect.right())
+			p1.setX(dataRect.right());
 
-	//in case the histogram is zoomed, handle the clipping on the l.h.s.
-	const QPointF& firstPoint = fillLines.constFirst().p1();
-	QPointF start;
-	bool visible;
-	if (plot->xRange().start() > binRangesMin) {
-		start = cSystem->mapLogicalToScene(QPointF(plot->xRange().start(), plot->yRange().start() > 0 ? plot->yRange().start() : 0), visible);
+		if (p1.y() < dataRect.top())
+			p1.setY(dataRect.top());
+		else if (p1.y() > dataRect.bottom())
+			p1.setY(dataRect.bottom());
 
-		if (visible && !qFuzzyCompare(start.x(), firstPoint.x()) )
-			fillPolygon << QPointF(start.x(), firstPoint.y());
-	}
+		//clip the second point of the line
+		QPointF p2 = line.p2();
+		if (p2.x() < dataRect.left())
+			p2.setX(dataRect.left());
+		else if (p2.x() > dataRect.right())
+			p2.setX(dataRect.right());
 
-	//add the first point of the first visible line
-	fillPolygon << firstPoint;
+		if (p2.y() < dataRect.top())
+			p2.setY(dataRect.top());
+		else if (p2.y() > dataRect.bottom())
+			p2.setY(dataRect.bottom());
 
-	//iterate over all visible lines and add unique points.
-	//skip the last closing line, the filling polygon will be closed below.
-	QPointF p1, p2;
-	for (int i = 0; i < fillLines.size() - 1; ++i) {
-		const QLineF& line = fillLines.at(i);
-		p1 = line.p1();
-		p2 = line.p2();
-		if (i != 0 && p1 != fillLines.at(i-1).p2())
+		if (i != lines.size() - 1)
 			fillPolygon << p1;
+		else {
+			//close the polygon for the last line,
+			//take care of the different order for different orientations
+			if (orientation == Histogram::Vertical) {
+				fillPolygon << p1;
+				fillPolygon << p2;
+			} else {
+				fillPolygon << p2;
+				fillPolygon << p1;
+			}
+		}
 
-		fillPolygon << p2;
+		++i;
 	}
-
-	//in case the histogram is zoomed, handle the clipping on the r.h.s.
-	const QPointF& lastPoint = fillLines.at(fillLines.size()-2).p2();
-	QPointF end;
-	if (plot->xRange().end() < binRangesMax) {
-		end = cSystem->mapLogicalToScene(QPointF(plot->xRange().end(), plot->yRange().start() > 0 ? plot->yRange().start() : 0), visible);
-
-		if (visible && end.y() != lastPoint.y())
-			fillPolygon << QPointF(end.x(), lastPoint.y());
-	} else
-		end = cSystem->mapLogicalToScene(QPointF(binRangesMax, plot->yRange().start() > 0 ? plot->yRange().start() : 0), visible);
-
-	//close the polygon
-	fillPolygon << end;
-	if (plot->xRange().start() > binRangesMin)
-		fillPolygon << start;
 
 	recalcShapeAndBoundingRect();
 }

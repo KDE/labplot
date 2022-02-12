@@ -1492,7 +1492,6 @@ void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 	//out of them that will be filled out.
 	QPolygonF polygon;
 	const QRectF& dataRect = static_cast<CartesianPlot*>(q->parentAspect())->dataRect();
-	QPointF lastP2;
 	int i = 0;
 	for (const auto& line : lines) {
 		//clip the first point of the line
@@ -1519,15 +1518,16 @@ void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 		else if (p2.y() > dataRect.bottom())
 			p2.setY(dataRect.bottom());
 
-		if (i == lines.size() -1 )
-			lastP2 = p2;
+		if (i != lines.size() - 1)
+			polygon << p1;
+		else {
+			//close the polygon for the last line
+			polygon << p1;
+			polygon << p2;
+		}
 
-		polygon << p1;
 		++i;
 	}
-
-	//close the polygon
-	polygon << lastP2;
 
 	const QRectF& rect = polygon.boundingRect();
 

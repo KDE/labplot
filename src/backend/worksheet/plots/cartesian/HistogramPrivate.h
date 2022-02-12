@@ -122,6 +122,7 @@ public:
 	//TODO: use Qt container
 	//TODO: add m_
 	QVector<QLineF> lines;
+	QVector<QLineF> linesUnclipped;
 	QVector<QPointF> pointsLogical;	//points in logical coordinates
 	QVector<QPointF> pointsScene;	//points in scene coordinates
 	std::vector<bool> visiblePoints;	//vector of the size of symbolPointsLogical with true of false for the points currently visible or not in the plot
