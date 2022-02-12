@@ -4,7 +4,7 @@
     Description          : Main window of the application
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2008-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2009-2020 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -785,44 +785,6 @@ void MainWin::initMenus() {
 	m_importMenu ->addAction(m_importOpjAction);
 #endif
 
-#ifdef HAVE_CANTOR_LIBS
-	//"Adding Cantor backends to menu and context menu"
-	QStringList backendNames = Cantor::Backend::listAvailableBackends();
-#if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
-	WARN(Q_FUNC_INFO << ", " << backendNames.count() << " Cantor backends available:")
-	for (const auto& b : backendNames)
-		WARN("Backend: " << STDSTRING(b))
-#endif
-
-	if (!backendNames.isEmpty()) {
-		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
-		if (menu) {
-			m_newMenu->addSeparator();
-			menu->setIcon(QIcon::fromTheme(QLatin1String("archive-insert")));
-			m_newMenu->addMenu(menu);
-
-			unplugActionList(QLatin1String("backends_list"));
-			QList<QAction*> newBackendActions;
-			for (auto* backend : Cantor::Backend::availableBackends()) {
-				if (!backend->isEnabled())
-					continue;
-
-				QAction* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
-				action->setData(backend->name());
-				newBackendActions << action;
-				menu->addAction(action);
-			}
-
-			connect(menu, &QMenu::triggered, this, &MainWin::newCantorWorksheet);
-			plugActionList(QLatin1String("backends_list"), newBackendActions);
-		}
-	}
-#else
-	delete this->guiFactory()->container("notebook", this);
-	delete this->guiFactory()->container("new_notebook", this);
-	delete this->guiFactory()->container("notebook_toolbar", this);
-#endif
-
 	//menu subwindow visibility policy
 	m_visibilityMenu = new QMenu(i18n("Window Visibility"), this);
 	m_visibilityMenu->setIcon(QIcon::fromTheme("window-duplicate"));
@@ -862,12 +824,48 @@ void MainWin::initMenus() {
 		settingsMenu->insertAction(actions.at(index + 1), m_toggleMemoryInfoAction);
 	}
 
+	//Cantor backends to menu and context menu
 #ifdef HAVE_CANTOR_LIBS
-	QAction* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
-	connect(action, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
-	action->setMenuRole(QAction::NoRole);	// prevent macOS Qt heuristics to select this action for preferences
-	if (settingsMenu)
-		settingsMenu->addAction(action);
+	QStringList backendNames = Cantor::Backend::listAvailableBackends();
+#if !defined(NDEBUG) || defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+	WARN(Q_FUNC_INFO << ", " << backendNames.count() << " Cantor backends available:")
+	for (const auto& b : backendNames)
+		WARN("Backend: " << STDSTRING(b))
+#endif
+
+	if (!backendNames.isEmpty()) {
+		auto* menu = dynamic_cast<QMenu*>(factory()->container(QLatin1String("new_notebook"), this));
+		if (menu) {
+			m_newMenu->addSeparator();
+			menu->setIcon(QIcon::fromTheme(QLatin1String("archive-insert")));
+			m_newMenu->addMenu(menu);
+
+			unplugActionList(QLatin1String("backends_list"));
+			QList<QAction*> newBackendActions;
+			for (auto* backend : Cantor::Backend::availableBackends()) {
+				if (!backend->isEnabled())
+					continue;
+
+				auto* action = new QAction(QIcon::fromTheme(backend->icon()), backend->name(), this);
+				action->setData(backend->name());
+				newBackendActions << action;
+				menu->addAction(action);
+			}
+
+			connect(menu, &QMenu::triggered, this, &MainWin::newCantorWorksheet);
+			plugActionList(QLatin1String("backends_list"), newBackendActions);
+		}
+
+		auto* action = new QAction(QIcon::fromTheme(QLatin1String("cantor")), i18n("Configure CAS..."), this);
+		connect(action, &QAction::triggered, this, &MainWin::cantorSettingsDialog);
+		action->setMenuRole(QAction::NoRole);	// prevent macOS Qt heuristics to select this action for preferences
+		if (settingsMenu)
+			settingsMenu->addAction(action);
+	}
+#else
+	delete this->guiFactory()->container("notebook", this);
+	delete this->guiFactory()->container("new_notebook", this);
+	delete this->guiFactory()->container("notebook_toolbar", this);
 #endif
 }
 
