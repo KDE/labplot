@@ -849,12 +849,8 @@ void Project::restorePointers(AbstractAspect* aspect, bool preview) {
 		if (!curve) continue;
 		curve->suppressRetransform(true);
 
-		auto* equationCurve = dynamic_cast<XYEquationCurve*>(curve);
 		auto* analysisCurve = dynamic_cast<XYAnalysisCurve*>(curve);
-		if (equationCurve) {
-			//curves defined by a mathematical equations recalculate their own columns on load again.
-			equationCurve->recalculate();
-		} else if (analysisCurve) {
+		if (analysisCurve) {
 			RESTORE_COLUMN_POINTER(analysisCurve, xDataColumn, XDataColumn);
 			RESTORE_COLUMN_POINTER(analysisCurve, yDataColumn, YDataColumn);
 			RESTORE_COLUMN_POINTER(analysisCurve, y2DataColumn, Y2DataColumn);
