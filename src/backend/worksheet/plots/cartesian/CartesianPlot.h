@@ -197,13 +197,15 @@ public:
 	void removeCoordinateSystem(int index); // remove coordinate system index
 	BASIC_D_ACCESSOR_DECL(int, defaultCoordinateSystemIndex, DefaultCoordinateSystemIndex)
 
+	void retransformScales();
+
 	QString theme() const;
 
 	typedef CartesianPlotPrivate Private;
 
 public Q_SLOTS:
 	void setTheme(const QString&);
-	void retransformAll();
+	virtual void retransform() override;
 
 private:
 	void init();
@@ -216,7 +218,6 @@ private:
 	void checkAxisFormat(const AbstractColumn*, Axis::Orientation);
 	void calculateDataXRange(int index, bool completeRange = true);
 	void calculateDataYRange(int index, bool completeRange = true);
-	void retransformScales();
 	int curveTotalCount() const;
 
 	CartesianPlotLegend* m_legend{nullptr};

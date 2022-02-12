@@ -949,7 +949,7 @@ public:
 		qSwap(m_private->rect, m_rect);
 
 // 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
-		m_private->retransform();
+		m_private->q->retransform();
 		Q_EMIT m_private->q->rectChanged(m_private->rect);
 	}
 
@@ -978,7 +978,7 @@ public:
 	void redo() override {
 		if (m_initilized) {
 			qSwap(m_private->rect, m_rect);
-			m_private->retransform();
+			m_private->q->retransform();
 			Q_EMIT m_private->q->rectChanged(m_private->rect);
 		} else {
 			//this function is called for the first time,
@@ -1308,19 +1308,6 @@ void CartesianPlot::setYRange(const Range<double> range) {
 	const int index{ defaultCoordinateSystem()->yIndex()};
 	setYRange(index, range);
 }
-// set x/y range command with index
-//class CartesianPlotSetXRangeIndexCmd: public StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>> {
-//public:
-//	CartesianPlotSetXRangeIndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description)
-//		: StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>>(target, &CartesianPlot::Private::xRanges, index, newValue, description) {}
-//	virtual void finalize() override { m_target->retransformScales(); Q_EMIT m_target->q->xRangeChanged((*m_target.*m_field).at(m_index)); }
-//};
-//class CartesianPlotSetYRangeIndexCmd: public StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>> {
-//public:
-//	CartesianPlotSetYRangeIndexCmd(CartesianPlot::Private *target, Range<double> newValue, int index, const KLocalizedString &description)
-//		: StandardQVectorSetterCmd<CartesianPlot::Private, Range<double>>(target, &CartesianPlot::Private::CoordinateSystemProperties, index, newValue, description) {}
-//	virtual void finalize() override { m_target->retransformScales(); Q_EMIT m_target->q->yRangeChanged((*m_target.*m_field).at(m_index)); }
-//};
 
 #define CartesianPlotSetRangeIndexCmd(lower, upper) \
 class CartesianPlotSet ## lower ## Range ## IndexCmd: public QUndoCommand \
@@ -1361,7 +1348,7 @@ void CartesianPlot::setXRange(const int index, const Range<double>& range) {
 			}
 
 		}
-		d->retransform();
+		retransform();
 	}
 }
 CartesianPlotSetRangeIndexCmd(y, Y)
@@ -1384,7 +1371,7 @@ void CartesianPlot::setYRange(const int index, const Range<double>& range) {
 			}
 
 		}
-		d->retransform();
+		retransform();
 	}
 	DEBUG(Q_FUNC_INFO << ", DONE. range = " << range.toStdString() << ", auto scale = " << range.autoScale())
 }
@@ -1613,9 +1600,8 @@ void CartesianPlot::setXRangeScale(const int index, const RangeT::Scale scale) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-//	d->xRanges[index].setScale(scale);
 	exec(new CartesianPlotSetXScaleIndexCmd(d, scale, index));
-	d->retransformScales(index, -1); // TODO: check which scales must be updated
+	d->retransformXScale(index);
 	if (project())
 		project()->setChanged(true);
 }
@@ -1625,9 +1611,8 @@ void CartesianPlot::setYRangeScale(const int index, const RangeT::Scale scale) {
 		DEBUG(Q_FUNC_INFO << ", index " << index << " out of range")
 		return;
 	}
-//	d->yRanges[index].setScale(scale);
 	exec(new CartesianPlotSetYScaleIndexCmd(d, scale, index));
-	d->retransformScales(-1, index); // TODO: check which indices must be retransformed
+	d->retransformYScale(index);
 	if (project())
 		project()->setChanged(true);
 }
@@ -1666,17 +1651,15 @@ void CartesianPlot::removeCoordinateSystem(int index) {
 		project()->setChanged(true);
 }
 
-STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetDefaultCoordinateSystemIndex, int, defaultCoordinateSystemIndex, retransformScales(-1, -1))
+STD_SETTER_CMD_IMPL_S(CartesianPlot, SetDefaultCoordinateSystemIndex, int, defaultCoordinateSystemIndex)
 int CartesianPlot::defaultCoordinateSystemIndex() const {
 	Q_D(const CartesianPlot);
 	return d->defaultCoordinateSystemIndex;
 }
 void CartesianPlot::setDefaultCoordinateSystemIndex(int index) {
         Q_D(CartesianPlot);
-	if (index != d->defaultCoordinateSystemIndex) {
+	if (index != d->defaultCoordinateSystemIndex)
 		exec(new CartesianPlotSetDefaultCoordinateSystemIndexCmd(d, index, ki18n("%1: set default plot range")));
-		d->retransform(); //TODO: check
-	}
 }
 CartesianCoordinateSystem* CartesianPlot::defaultCoordinateSystem() const {
 	Q_D(const CartesianPlot);
@@ -1685,30 +1668,40 @@ CartesianCoordinateSystem* CartesianPlot::defaultCoordinateSystem() const {
 
 // range breaks
 
-STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBreakingEnabled, retransformScales(-1, -1))
+STD_SETTER_CMD_IMPL_S(CartesianPlot, SetXRangeBreakingEnabled, bool, xRangeBreakingEnabled)
 void CartesianPlot::setXRangeBreakingEnabled(bool enabled) {
 	Q_D(CartesianPlot);
-	if (enabled != d->xRangeBreakingEnabled)
+	if (enabled != d->xRangeBreakingEnabled) {
 		exec(new CartesianPlotSetXRangeBreakingEnabledCmd(d, enabled, ki18n("%1: x-range breaking enabled")));
+		retransformScales(); // TODO: replace by retransformXScale() with the corresponding index!
+		retransform(); // retransformScales does not contain any retransfrom() anymore
+	}
 }
 
-STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks, retransformScales(-1, -1))
+STD_SETTER_CMD_IMPL_S(CartesianPlot, SetXRangeBreaks, CartesianPlot::RangeBreaks, xRangeBreaks)
 void CartesianPlot::setXRangeBreaks(const RangeBreaks& breakings) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetXRangeBreaksCmd(d, breakings, ki18n("%1: x-range breaks changed")));
+	retransformScales(); // TODO: replace by retransformXScale() with the corresponding index!
+	retransform(); // retransformScales does not contain any retransfrom() anymore
 }
 
-STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled, retransformScales(-1, -1))
+STD_SETTER_CMD_IMPL_S(CartesianPlot, SetYRangeBreakingEnabled, bool, yRangeBreakingEnabled)
 void CartesianPlot::setYRangeBreakingEnabled(bool enabled) {
 	Q_D(CartesianPlot);
-	if (enabled != d->yRangeBreakingEnabled)
+	if (enabled != d->yRangeBreakingEnabled) {
 		exec(new CartesianPlotSetYRangeBreakingEnabledCmd(d, enabled, ki18n("%1: y-range breaking enabled")));
+		retransformScales(); // TODO: replace by retransformYScale() with the corresponding index!
+		retransform(); // retransformScales does not contain any retransfrom() anymore
+	}
 }
 
-STD_SETTER_CMD_IMPL_F_S_Arguments(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks, retransformScales(-1, -1))
+STD_SETTER_CMD_IMPL_S(CartesianPlot, SetYRangeBreaks, CartesianPlot::RangeBreaks, yRangeBreaks)
 void CartesianPlot::setYRangeBreaks(const RangeBreaks& breaks) {
 	Q_D(CartesianPlot);
 	exec(new CartesianPlotSetYRangeBreaksCmd(d, breaks, ki18n("%1: y-range breaks changed")));
+	retransformScales(); // TODO: replace by retransformYScale() with the corresponding index!
+	retransform(); // retransformScales does not contain any retransfrom() anymore
 }
 
 // cursor
@@ -1760,9 +1753,9 @@ void CartesianPlot::setTheme(const QString& theme) {
 	endMacro();
 }
 
-void CartesianPlot::retransformAll() {
+void CartesianPlot::retransform() {
 	Q_D(CartesianPlot);
-	dataChanged(-1, -1, nullptr);
+	//dataChanged(-1, -1, nullptr);
 	d->retransform();
 	WorksheetElementContainer::retransform();
 }
@@ -3590,19 +3583,9 @@ void CartesianPlotPrivate::retransform() {
 	setPos(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
 
 	updateDataRect();
-	retransformScales(-1, -1); // TODO: check if all must be retransformed
-	q->retransform();
 
 	//plotArea position is always (0, 0) in parent's coordinates, don't need to update here
 	q->plotArea()->setRect(rect);
-
-	//call retransform() for the title and the legend (if available)
-	//when a predefined position relative to the (Left, Centered etc.) is used,
-	//the actual position needs to be updated on plot's geometry changes.
-	if (q->title())
-		q->title()->retransform();
-	if (q->m_legend)
-		q->m_legend->retransform();
 
 	WorksheetElementContainerPrivate::recalcShapeAndBoundingRect();
 }
