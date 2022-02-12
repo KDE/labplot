@@ -1150,7 +1150,7 @@ bool CartesianPlot::autoScaleY(int index) const {
 class CartesianPlotEnableAutoScaleXIndexCmd : public QUndoCommand {
 public:
 	CartesianPlotEnableAutoScaleXIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index) :
-		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
+		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_oldRange(0.0, 0.0) {
 		setText(i18n("%1: change x-range %2 auto scaling", m_private->name(), m_index + 1));
 	}
 
@@ -1176,14 +1176,14 @@ public:
 private:
 	CartesianPlotPrivate* m_private;
 	bool m_autoScale;
+	bool m_autoScaleOld{false};
 	int m_index;
-	bool m_autoScaleOld;
 	Range<double> m_oldRange;
 };
 class CartesianPlotEnableAutoScaleYIndexCmd : public QUndoCommand {
 public:
 	CartesianPlotEnableAutoScaleYIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index) :
-		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_autoScaleOld(false), m_oldRange(0.0, 0.0) {
+		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_oldRange(0.0, 0.0) {
 		setText(i18n("%1: change y-range %2 auto scaling", m_private->name(), m_index + 1));
 	}
 
@@ -1209,8 +1209,8 @@ public:
 private:
 	CartesianPlotPrivate* m_private;
 	bool m_autoScale;
+	bool m_autoScaleOld{false};
 	int m_index;
-	bool m_autoScaleOld;
 	Range<double> m_oldRange;
 };
 

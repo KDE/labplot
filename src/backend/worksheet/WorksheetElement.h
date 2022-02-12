@@ -53,10 +53,14 @@ public:
 	};
 
 	struct PositionWrapper {
+		PositionWrapper() {}
+		PositionWrapper(QPointF p, HorizontalPosition hor, VerticalPosition vert, PositionLimit limit) :
+			point(p), horizontalPosition(hor), verticalPosition(vert), positionLimit(limit) {}
+
 		QPointF point;
-		WorksheetElement::HorizontalPosition horizontalPosition;
-		WorksheetElement::VerticalPosition verticalPosition;
-		PositionLimit positionLimit;
+		HorizontalPosition horizontalPosition{HorizontalPosition::Center};
+		VerticalPosition verticalPosition{VerticalPosition::Center};
+		PositionLimit positionLimit{PositionLimit::None};
 	};
 
 	typedef WorksheetElementPrivate Private;
@@ -108,7 +112,6 @@ private:
 	void init();
 
 protected:
-
 	WorksheetElement(const QString&, WorksheetElementPrivate* dd, AspectType);
 	int m_cSystemIndex{0};	// index of coordinate system used from plot
 	// parent plot if available

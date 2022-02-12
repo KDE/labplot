@@ -321,7 +321,8 @@ void AspectTreeModel::aspectAdded(const AbstractAspect* aspect) {
 	connect(aspect, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
 
 	//add signal-slot connects for all children, too
-	for (const auto* child : aspect->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive)) {
+	const auto& children = aspect->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* child : children) {
 		connect(child, &AbstractAspect::renameRequested, this, &AspectTreeModel::renameRequestedSlot);
 		connect(child, &AbstractAspect::childAspectSelectedInView, this, &AspectTreeModel::aspectSelectedInView);
 		connect(child, &AbstractAspect::childAspectDeselectedInView, this, &AspectTreeModel::aspectDeselectedInView);
