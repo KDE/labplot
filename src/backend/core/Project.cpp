@@ -736,10 +736,13 @@ void Project::retransformElements(AbstractAspect* aspect) {
 	//all data was read:
 	//call retransform() to every element
 	if (hasChildren && aspect->type() == AspectType::Worksheet) {
-		for (auto* e : aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden)) {
-			if (e->type() == AspectType::CartesianPlot)
-				static_cast<CartesianPlot*>(e)->retransformAll();
-			else
+		const auto& elements = aspect->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
+		for (auto* e : elements) {
+			if (e->type() == AspectType::CartesianPlot) {
+				static_cast<CartesianPlot*>(e)->retransform(); // important to retransform private otherwise datarect needed in retransformScales is incorrect
+				static_cast<CartesianPlot*>(e)->retransformScales();
+				static_cast<CartesianPlot*>(e)->retransform(); // important to retransform all childs
+			} else
 				e->retransform();
 		}
 	} else if (hasChildren && aspect->type() != AspectType::CartesianPlot) {
