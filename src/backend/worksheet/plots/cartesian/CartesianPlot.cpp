@@ -5082,6 +5082,12 @@ void CartesianPlot::save(QXmlStreamWriter* writer) const {
 	writer->writeEndElement(); // cartesianPlot
 }
 
+void CartesianPlot::finalizeLoad() {
+	retransform(); // important to retransform private otherwise datarect needed in retransformScales is incorrect
+	retransformScales();
+	retransform(); // important to retransform all childs
+}
+
 //! Load from XML
 bool CartesianPlot::load(XmlStreamReader* reader, bool preview) {
 	Q_D(CartesianPlot);

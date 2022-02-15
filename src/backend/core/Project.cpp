@@ -752,9 +752,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 			const auto& elements = w->children<WorksheetElement>(ChildIndexFlag::Recursive | ChildIndexFlag::IncludeHidden);
 			for (auto* e : elements) {
 				if (e->type() == AspectType::CartesianPlot) {
-					static_cast<CartesianPlot*>(e)->retransform(); // important to retransform private otherwise datarect needed in retransformScales is incorrect
-					static_cast<CartesianPlot*>(e)->retransformScales();
-					static_cast<CartesianPlot*>(e)->retransform(); // important to retransform all childs
+					static_cast<CartesianPlot*>(e)->finalizeLoad();
 				} else
 					e->retransform();
 			}
@@ -767,9 +765,7 @@ void Project::retransformElements(AbstractAspect* aspect) {
 			plots << static_cast<CartesianPlot*>(aspect->parentAspect());
 
 		for (auto* plot: plots) {
-			plot->retransform(); // important to retransform private otherwise datarect needed in retransformScales is incorrect
-			plot->retransformScales();
-			plot->retransform(); // important to retransform all childs
+			plot->finalizeLoad();
 		}
 	}
 

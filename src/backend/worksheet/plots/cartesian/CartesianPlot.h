@@ -122,6 +122,7 @@ public:
 
 	void save(QXmlStreamWriter*) const override;
 	bool load(XmlStreamReader*, bool preview) override;
+	void finalizeLoad();
 	void loadThemeConfig(const KConfig&) override;
 	void saveTheme(KConfig& config);
 	void mousePressZoomSelectionMode(QPointF logicPos, int cSystemIndex);
