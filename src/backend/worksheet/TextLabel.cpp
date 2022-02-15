@@ -263,28 +263,24 @@ BASIC_SHARED_D_READER_IMPL(TextLabel, qreal, borderOpacity, borderOpacity)
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetText, TextLabel::TextWrapper, textWrapper, updateText)
 void TextLabel::setText(const TextWrapper &textWrapper) {
 	Q_D(TextLabel);
-	DEBUG("********************\n" << Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
-	DEBUG("\ntext = " << STDSTRING(textWrapper.text) << std::endl)
+	//DEBUG("********************\n" << Q_FUNC_INFO << ", old/new mode = " << (int)d->textWrapper.mode << " " << (int)textWrapper.mode)
+	//DEBUG("\nOLD TEXT = " << STDSTRING(d->textWrapper.text) << '\n')
+	//DEBUG("NEW TEXT = " << STDSTRING(textWrapper.text) << '\n')
 
-	QDEBUG("COLORS: color =" << d->fontColor << ", background color =" << d->backgroundColor)
-	//QDEBUG("	kcb color =")
-	//TODO: Test
-//	if (textWrapper.text.isEmpty())
-//		return;
+	//QDEBUG("COLORS: color =" << d->fontColor << ", background color =" << d->backgroundColor)
 
 	if ( (textWrapper.text != d->textWrapper.text) || (textWrapper.mode != d->textWrapper.mode)
 	        || ((d->textWrapper.allowPlaceholder || textWrapper.allowPlaceholder) && (textWrapper.textPlaceholder != d->textWrapper.textPlaceholder)) ||
 			textWrapper.allowPlaceholder != d->textWrapper.allowPlaceholder) {
 		bool oldEmpty = d->textWrapper.text.isEmpty();
 		if (textWrapper.mode == TextLabel::Mode::Text && !textWrapper.text.isEmpty()) {
-			QDEBUG("\nOLD TEXT =" << d->textWrapper.text)
-			DEBUG("\nNEW TEXT = " << STDSTRING(textWrapper.text) << '\n')
+			//DEBUG("SET TEXTWRAPPER")
 			TextWrapper tw = textWrapper;
 
 			QTextEdit pte(d->textWrapper.text);	// te with previous text
 			// restore formatting when text changes or switching back to text mode
-			if (d->textWrapper.mode != TextLabel::Mode::Text ||
-				oldEmpty || pte.toPlainText().isEmpty()) {
+			if (d->textWrapper.mode != TextLabel::Mode::Text || oldEmpty || pte.toPlainText().isEmpty()) {
+				//DEBUG("RESTORE FORMATTING")
 				QTextEdit te(d->textWrapper.text);
 				te.selectAll();
 				te.setText(textWrapper.text);
@@ -293,7 +289,7 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 				te.setTextBackgroundColor(d->backgroundColor);
 
 				tw.text = te.toHtml();
-				DEBUG("\n" << Q_FUNC_INFO << ", TW TEXT = " << STDSTRING(tw.text) << std::endl)
+				//DEBUG("\nTW TEXT = " << STDSTRING(tw.text) << std::endl)
 			}
 
 			exec(new TextLabelSetTextCmd(d, tw, ki18n("%1: set label text")));
@@ -306,7 +302,8 @@ void TextLabel::setText(const TextWrapper &textWrapper) {
 		if (oldEmpty)
 			d->updatePosition();
 	}
-	DEBUG(Q_FUNC_INFO << " DONE")
+
+	//DEBUG(Q_FUNC_INFO << " DONE\n***********************")
 }
 
 STD_SETTER_CMD_IMPL_F_S(TextLabel, SetPlaceholderText, TextLabel::TextWrapper, textWrapper, updateText)
@@ -539,15 +536,16 @@ void TextLabelPrivate::updateText() {
 
 	switch (textWrapper.mode) {
 	case TextLabel::Mode::Text: {
-		DEBUG(Q_FUNC_INFO << ", OLD TEXT = " << STDSTRING(textWrapper.text))
+		//DEBUG(Q_FUNC_INFO << ", TEXT = " << STDSTRING(textWrapper.text))
 
-		// update color
-		//QTextEdit te(textWrapper.text);
-		//te.selectAll();
-		//te.setTextColor(fontColor);
-		//te.setTextBackgroundColor(backgroundColor);
-
-		//textWrapper.text = te.toHtml();
+		// use colors when not already in text
+		if ( !textWrapper.text.contains(QLatin1String(" color:")) ) {
+			QTextEdit te(textWrapper.text);
+			te.selectAll();
+			te.setTextColor(fontColor);
+			te.setTextBackgroundColor(backgroundColor);
+			textWrapper.text = te.toHtml();
+		}
 
 		m_textItem->show();
 		m_textItem->setHtml(textWrapper.text);

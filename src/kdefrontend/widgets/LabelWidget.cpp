@@ -459,7 +459,7 @@ void LabelWidget::updateLocale() {
 // text formatting slots
 
 void LabelWidget::textChanged() {
-	QDEBUG("############\n" << Q_FUNC_INFO << ", label text =" << m_label->text().text)
+	//QDEBUG("############\n" << Q_FUNC_INFO << ", label text =" << m_label->text().text)
 	if (m_initializing)
 		return;
 
@@ -491,11 +491,11 @@ void LabelWidget::textChanged() {
 		break;
 	}
 	case TextLabel::Mode::Text: {
-		QDEBUG(Q_FUNC_INFO << ", color = " << m_label->fontColor())
-		QDEBUG(Q_FUNC_INFO << ", background color = " << m_label->backgroundColor())
-		QDEBUG(Q_FUNC_INFO << ", format color = " << ui.teLabel->currentCharFormat().foreground().color())
-		QDEBUG(Q_FUNC_INFO << ", Plain TEXT = " << ui.teLabel->toPlainText() << '\n')
-		QDEBUG(Q_FUNC_INFO << ", OLD TEXT =" << m_label->text().text << '\n')
+		//QDEBUG(Q_FUNC_INFO << ", color = " << m_label->fontColor())
+		//QDEBUG(Q_FUNC_INFO << ", background color = " << m_label->backgroundColor())
+		//QDEBUG(Q_FUNC_INFO << ", format color = " << ui.teLabel->currentCharFormat().foreground().color())
+		//QDEBUG(Q_FUNC_INFO << ", Plain TEXT = " << ui.teLabel->toPlainText() << '\n')
+		//QDEBUG(Q_FUNC_INFO << ", OLD TEXT =" << m_label->text().text << '\n')
 		//save an empty string instead of html with empty body if no text is in QTextEdit
 		QString text;
 		if (!ui.teLabel->toPlainText().isEmpty()) {
@@ -515,9 +515,9 @@ void LabelWidget::textChanged() {
 			text = ui.teLabel->toHtml();
 		}
 
-		QDEBUG(Q_FUNC_INFO << ", NEW TEXT = " << text << '\n')
+		//QDEBUG(Q_FUNC_INFO << ", NEW TEXT = " << text << '\n')
 		TextLabel::TextWrapper wrapper(text, TextLabel::Mode::Text, true);
-		// Don't set FontColor, because the font color is already in the html code
+		// Don't set font color, because it is already in the html code
 		// of the text. The font color is used to change the color for Latex text
 		if(!ui.chbShowPlaceholderText->isChecked()) {
 			wrapper.text = text;
@@ -543,7 +543,7 @@ void LabelWidget::textChanged() {
 
 	//background color gets lost on every text change...
 	updateBackground();
-	DEBUG(Q_FUNC_INFO << " DONE")
+	//DEBUG(Q_FUNC_INFO << " DONE\n#################################")
 }
 
 /*!
