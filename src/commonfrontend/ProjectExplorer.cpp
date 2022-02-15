@@ -787,7 +787,7 @@ void ProjectExplorer::selectionChanged(const QItemSelection &selected, const QIt
 	if (m_project->isLoading())
 		return;
 
-	QDEBUG(Q_FUNC_INFO << ", selected/deselected = " << selected << "/" << deselected)
+	//QDEBUG(Q_FUNC_INFO << ", selected/deselected = " << selected << "/" << deselected)
 
 	QModelIndex index;
 	AbstractAspect* aspect = nullptr;
