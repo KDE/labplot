@@ -190,7 +190,7 @@ void ReferenceLine::setOrientation(Orientation orientation) {
 		case ReferenceLine::Orientation::Vertical:
 			d->position.positionLimit = PositionLimit::X;
 			break;
-		default:
+		case ReferenceLine::Orientation::Both:
 			d->position.positionLimit = PositionLimit::None;
 			break;
 		}
