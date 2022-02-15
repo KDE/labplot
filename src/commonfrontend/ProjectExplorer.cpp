@@ -168,9 +168,22 @@ void ProjectExplorer::contextMenuEvent(QContextMenuEvent *event) {
 		menu = new QMenu();
 
 		if (items.size()/4 > 1) {
-			menu->addAction(expandSelectedTreeAction);
-			menu->addAction(collapseSelectedTreeAction);
-			menu->addSeparator();
+			//add "expand/collapse" entries if the selected indices have children
+			bool hasChildren = false;
+			for (int i = 0; i < items.size()/4; ++i) {
+				const auto& index = items.at(i*4);
+				const auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
+				if (aspect->childCount<AbstractAspect>()) {
+					hasChildren = true;
+					break;
+				}
+			}
+			if (hasChildren) {
+				menu->addAction(expandSelectedTreeAction);
+				menu->addAction(collapseSelectedTreeAction);
+				menu->addSeparator();
+			}
+
 			menu->addAction(deleteSelectedTreeAction);
 		} else {
 			QMenu* projectMenu = m_project->createContextMenu();
