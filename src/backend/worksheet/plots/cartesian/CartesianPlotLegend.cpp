@@ -76,7 +76,7 @@ void CartesianPlotLegend::init() {
 	d->columnCount = 0;
 
 	d->position.horizontalPosition = WorksheetElement::HorizontalPosition::Right;
-    d->position.verticalPosition = WorksheetElement::VerticalPosition::Top;
+	d->position.verticalPosition = WorksheetElement::VerticalPosition::Top;
 	d->horizontalAlignment = WorksheetElement::HorizontalAlignment::Right;
 	d->verticalAlignment = WorksheetElement::VerticalAlignment::Top;
 	d->position.point = QPointF(0, 0);

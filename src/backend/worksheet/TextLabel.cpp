@@ -538,8 +538,8 @@ void TextLabelPrivate::updateText() {
 	case TextLabel::Mode::Text: {
 		//DEBUG(Q_FUNC_INFO << ", TEXT = " << STDSTRING(textWrapper.text))
 
-		// use colors when not already in text
-		if ( !textWrapper.text.contains(QLatin1String(" color:")) ) {
+		// use colors when text not empty and not already defined in text
+		if ( !textWrapper.text.isEmpty() && !textWrapper.text.contains(QLatin1String(" color:")) ) {
 			QTextEdit te(textWrapper.text);
 			te.selectAll();
 			te.setTextColor(fontColor);
