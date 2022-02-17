@@ -101,7 +101,10 @@ ImportSQLDatabaseWidget::ImportSQLDatabaseWidget(QWidget* parent) : QWidget(pare
 	                                       "<tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr>"
 	                                       "<tr><td>ddd MMMM d yy</td><td>Sun July 20 69</td></tr>"
 	                                       "<tr><td>'The day is' dddd</td><td>The day is Sunday</td></tr>"
-	                                       "</table>");
+	                                       "</table>"
+											"<br><br>"
+										   "In case the provided expression is empty, the format will be auto-detected."
+											);
 
 	ui.lDateTimeFormat->setToolTip(textDateTimeFormatShort);
 	ui.lDateTimeFormat->setWhatsThis(textDateTimeFormat);
@@ -340,7 +343,7 @@ void ImportSQLDatabaseWidget::refreshPreview() {
 		lang = QLocale::Language::C;
 	else
 		lang = QLocale::Language::German;
-	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
+	QString dateTimeFormat = ui.cbDateTimeFormat->currentText();
 // 	ui.twPreview->setRowCount(1); //add the first row for the check boxes
 	for (int i = 0; i < m_cols; ++i) {
 		//name
@@ -435,7 +438,7 @@ void ImportSQLDatabaseWidget::read(AbstractDataSource* dataSource, AbstractFileF
 	int columnOffset = dataSource->prepareImport(dataContainer, importMode, rows, m_cols, m_columnNames, m_columnModes);
 
 	//number and DateTime formatting
-	const QString& dateTimeFormat = ui.cbDateTimeFormat->currentText();
+	QString dateTimeFormat = ui.cbDateTimeFormat->currentText();
 
 	//TODO: use general setting for decimal separator?
 	QLocale::Language lang;

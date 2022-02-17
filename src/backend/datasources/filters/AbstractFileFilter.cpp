@@ -28,7 +28,7 @@ bool AbstractFileFilter::isNan(const QString& s) {
 	return false;
 }
 
-AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, QLocale::Language lang) {
+AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, QLocale::Language lang) {
 	return columnMode(valueString, dateTimeFormat, QLocale(lang));
 }
 
@@ -36,7 +36,7 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
  * return the column mode for the given value string and settings \c dateTimeFormat and \c locale.
  * in case \c dateTimeFormat is empty, all possible datetime formats are tried out to determine the valid datetime object.
  */
-AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, const QString& dateTimeFormat, const QLocale& locale) {
+AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueString, QString& dateTimeFormat, const QLocale& locale) {
 	//TODO: use BigInt as default integer?
 	if (valueString.size() == 0)	// empty string treated as integer (meaning the non-empty strings will determine the data type)
 		return AbstractColumn::ColumnMode::Integer;
@@ -71,15 +71,18 @@ AbstractColumn::ColumnMode AbstractFileFilter::columnMode(const QString& valueSt
 		if (dateTimeFormat.isEmpty()) {
 			for (const auto& format : AbstractColumn::dateTimeFormats()) {
 				valueDateTime = QDateTime::fromString(valueString, format);
-				if (valueDateTime.isValid())
+				if (valueDateTime.isValid()) {
+					DEBUG(Q_FUNC_INFO << ", " << STDSTRING(valueString) << " : valid DateTime format - " << STDSTRING(format));
+					dateTimeFormat = format;
 					break;
+				}
 			}
 		} else
 			valueDateTime = QDateTime::fromString(valueString, dateTimeFormat);
 
-		if (valueDateTime.isValid())
+		if (valueDateTime.isValid()) {
 			mode = AbstractColumn::ColumnMode::DateTime;
-		else {
+		} else {
 			DEBUG(Q_FUNC_INFO << ", DATETIME invalid! String: " << STDSTRING(valueString) << " DateTime format: " << STDSTRING(dateTimeFormat))
 			mode = AbstractColumn::ColumnMode::Text;
 		}

@@ -71,8 +71,11 @@ AbstractColumn::~AbstractColumn() {
 }
 
 QStringList AbstractColumn::dateFormats() {
-	static const QStringList dates{"yyyy-MM-dd", "yyyy/MM/dd", "dd/MM/yyyy",
-		"dd/MM/yy", "dd.MM.yyyy", "dd.MM.yy", "MM/yyyy", "dd.MM.", "yyyyMMdd"};
+	static const QStringList dates{"yyyy-MM-dd", "yyyy.MM.dd", "yyyy/MM/dd", "yyyyMMdd",
+									"dd-MM-yyyy", "dd.MM.yyyy", "dd/MM/yyyy", "ddMMyyyy",
+									"dd-MM-yy", "dd.MM.yy", "dd/MM/yy", "ddMMyy",
+									"MM-yyyy", "MM.yyyy", "MM/yyyy",
+									"dd-MM", "dd.MM", "dd/MM", "ddMM"};
 
 	return dates;
 }

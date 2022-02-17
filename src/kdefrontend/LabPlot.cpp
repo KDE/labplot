@@ -98,7 +98,7 @@ int main (int argc, char *argv[]) {
 
 	KAboutData aboutData( QStringLiteral("labplot2"), QString("LabPlot"),
 		LVERSION, i18n("LabPlot is a FREE, open-source and cross-platform Data Visualization and Analysis software accessible to everyone."),
-		KAboutLicense::GPL, i18n("(c) 2007-2021"), systemInfo, QStringLiteral("https://labplot.kde.org"));
+		KAboutLicense::GPL, i18n("(c) 2007-2022"), systemInfo, QStringLiteral("https://labplot.kde.org"));
 	aboutData.addAuthor(i18n("Stefan Gerlach"), i18nc("@info:credit", "Developer"), "stefan.gerlach@uni.kn", nullptr);
 	aboutData.addAuthor(i18n("Alexander Semke"), i18nc("@info:credit", "Developer"), "alexander.semke@web.de", nullptr);
 	aboutData.addAuthor(i18n("Fábián Kristóf-Szabolcs"), i18nc("@info:credit", "Developer"), "f-kristof@hotmail.com", nullptr);

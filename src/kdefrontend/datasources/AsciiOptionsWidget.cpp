@@ -92,7 +92,10 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 	                                       "<tr><td>dd.MM.yyyy</td><td>20.07.1969</td></tr>"
 	                                       "<tr><td>ddd MMMM d yy</td><td>Sun July 20 69</td></tr>"
 	                                       "<tr><td>'The day is' dddd</td><td>The day is Sunday</td></tr>"
-	                                       "</table>");
+	                                       "</table>"
+										   "<br><br>"
+										   "In case the provided expression is empty, the format will be auto-detected."
+											);
 
 	ui.lDateTimeFormat->setToolTip(textDateTimeFormatShort);
 	ui.lDateTimeFormat->setWhatsThis(textDateTimeFormat);
