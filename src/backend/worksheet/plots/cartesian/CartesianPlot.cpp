@@ -327,7 +327,7 @@ void CartesianPlot::setType(Type type) {
 
 	const auto* worksheet = static_cast<const Worksheet*>(parentAspect());
 	if (worksheet  && worksheet->layout() != Worksheet::Layout::NoLayout)
-		d->retransform();
+		finalizeLoad();
 }
 
 CartesianPlot::Type CartesianPlot::type() const {
