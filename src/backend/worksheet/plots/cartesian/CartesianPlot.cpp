@@ -951,7 +951,9 @@ public:
 		qSwap(m_private->rect, m_rect);
 
 // 		m_private->q->handleResize(horizontalRatio, verticalRatio, false);
-		m_private->q->retransform();
+		m_private->retransform(); // update the datarect
+		m_private->q->retransformScales(); // update the scales
+		m_private->q->retransform(); // retransform all childs
 		Q_EMIT m_private->q->rectChanged(m_private->rect);
 	}
 
