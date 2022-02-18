@@ -2187,6 +2187,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 	const auto* curve = qobject_cast<const XYCurve*>(child);
 	int cSystemIndex = -1;
+	bool checkRanges = false; //check/change ranges when adding new children like curves for example
 	if (curve) {
 		DEBUG(Q_FUNC_INFO << ", CURVE")
 		//x and y data
@@ -2237,8 +2238,8 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 		}
 
 		cSystemIndex = curve->coordinateSystemIndex();
+		checkRanges = true;
 		Q_EMIT curveAdded(curve);
-
 	} else {
 		const auto* hist = qobject_cast<const Histogram*>(child);
 		if (hist) {
@@ -2250,6 +2251,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 			updateLegend();
 			cSystemIndex = hist->coordinateSystemIndex();
+			checkRanges = true;
 
 			if (curveTotalCount() == 1)
 				checkAxisFormat(hist->dataColumn(), Axis::Orientation::Horizontal);
@@ -2265,6 +2267,7 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 
 			updateLegend();
 			cSystemIndex = boxPlot->coordinateSystemIndex();
+			checkRanges = true;
 
 			if (curveTotalCount() == 1) {
 				connect(boxPlot, &BoxPlot::orientationChanged, this, &CartesianPlot::boxPlotOrientationChanged);
@@ -2285,43 +2288,46 @@ void CartesianPlot::childAdded(const AbstractAspect* child) {
 			connect(wsElement, &WorksheetElement::hovered, this, &CartesianPlot::childHovered);
 	}
 
-	if (INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
+	auto rangeChanged = false;
+	if (checkRanges && INRANGE(cSystemIndex, 0, m_coordinateSystems.count())) {
 		auto xIndex = coordinateSystem(cSystemIndex)->xIndex();
 		auto yIndex = coordinateSystem(cSystemIndex)->yIndex();
 		setXRangeDirty(xIndex, true);
 		setYRangeDirty(yIndex, true);
 
-		auto updated = false;
 		if (autoScaleX(xIndex) && autoScaleY(yIndex))
-			updated = scaleAuto(xIndex, yIndex);
+			rangeChanged = scaleAuto(xIndex, yIndex);
 		else if (autoScaleX(xIndex))
-			updated = scaleAutoX(xIndex);
+			rangeChanged = scaleAutoX(xIndex);
 		else if (autoScaleY(yIndex))
-			updated = scaleAutoY(yIndex);
+			rangeChanged = scaleAutoY(yIndex);
 
-		if (updated)
+		if (rangeChanged)
 			retransform();
 	}
 
 	if (!isLoading() && !this->pasted() && !child->pasted() && !child->isMoved()) {
-		//new child was added which might chang the ranges and the axis tick labels.
+		//new child was added which might change the ranges and the axis tick labels.
 		//adjust the plot area padding if the axis label is outside of the plot area
-		const auto& axes = children<Axis>();
-		for (auto* axis : axes) {
-			if (axis->orientation() == WorksheetElement::Orientation::Vertical) {
-				double delta = plotArea()->graphicsItem()->boundingRect().x()
-								- axis->graphicsItem()->boundingRect().x();
-				if (delta > 0) {
-					setUndoAware(false);
-// 					setSuppressRetransform(true);
-					setSymmetricPadding(false);
-					setHorizontalPadding(horizontalPadding() + delta);
-// 					setSuppressRetransform(false);
-					setUndoAware(true);
+		if (rangeChanged) {
+			const auto& axes = children<Axis>();
+			for (auto* axis : axes) {
+				if (axis->orientation() == WorksheetElement::Orientation::Vertical) {
+					double delta = plotArea()->graphicsItem()->boundingRect().x()
+									- axis->graphicsItem()->boundingRect().x();
+					if (delta > 0) {
+						setUndoAware(false);
+	// 					setSuppressRetransform(true);
+						setSymmetricPadding(false);
+						setHorizontalPadding(horizontalPadding() + delta);
+	// 					setSuppressRetransform(false);
+						setUndoAware(true);
+					}
+					break;
 				}
-				break;
 			}
 		}
+
 		//if a theme was selected, apply the theme settings for newly added children,
 		//load default theme settings otherwise.
 		const auto* elem = qobject_cast<const WorksheetElement*>(child);
