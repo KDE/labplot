@@ -543,7 +543,7 @@ void TextLabelPrivate::updateText() {
 			QTextEdit te(textWrapper.text);
 			te.selectAll();
 			te.setTextColor(fontColor);
-			te.setTextBackgroundColor(backgroundColor);
+			// don't set background color (not used if not inside text)
 			textWrapper.text = te.toHtml();
 		}
 
