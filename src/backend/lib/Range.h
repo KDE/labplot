@@ -154,7 +154,7 @@ public:
 		if (round) {
 			if (fraction < 1.5)
 				niceFraction = 1;
-			else if (fraction < 3)
+			else if (fraction <= 2)
 				niceFraction = 2;
 			else if (fraction < 7)
 				niceFraction = 5;
