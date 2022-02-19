@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating plots for the spreadsheet data
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2017-2019 Alexander Semke <alexander.semke@web.de>
+	SPDX-FileCopyrightText: 2017-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -13,6 +13,7 @@
 #include "backend/core/AspectTreeModel.h"
 #include "backend/core/Project.h"
 #include "backend/core/column/Column.h"
+#include "backend/lib/Range.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 #include "backend/worksheet/TextLabel.h"
 #include "backend/worksheet/Worksheet.h"
@@ -803,13 +804,23 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 		auto orientation = boxPlot->orientation();
 		int count = m_columnComboBoxes.count();
 
-		//x-axis title
+		//set the range of the plot and the number of ticks manuall.
+		//the n-th box plot is positioned at x=n and and has the width=0.5 in logical coordinatates.
+		//manually set the range to (0.5, n+0.5) and ajdust the number of ticks starting at 0.5
+		//to make sure we have every tick precisely under the middle of the box plot
+		Range<double> range(0.5, count + 0.5);
+		if (orientation == WorksheetElement::Orientation::Vertical)
+			plot->setXRange(range);
+		else
+			plot->setYRange(range);
+
 		for (auto* axis : axes) {
 			if (axis->orientation() != orientation) {
-				axis->title()->setText(QString());
-				axis->setMajorTicksNumber(count + 2);
+				axis->setMajorTicksNumber(count + 1);
+				axis->setMajorTickStartOffset(0.5);
 				axis->setMinorTicksNumber(0);
 			}
+			axis->title()->setText(QString()); //no title
 		}
 
 		//y-axis title
