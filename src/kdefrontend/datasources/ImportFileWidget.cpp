@@ -1227,6 +1227,8 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 		infoStrings << "<b>" << i18n("Summary:") << "</b>";
 		//depending on the file type, generate summary and content information about the file
 		//TODO: content information (in BNF) for more types
+		//TODO: introduce a function in the base class and work with infoStrings << currentFileFilter()->fileInfoString(fileName);
+		//instead of this big switch-case.
 		switch (AbstractFileFilter::fileType(fileName)) {
 		case AbstractFileFilter::FileType::Ascii:
 			infoStrings << AsciiFilter::fileInfoString(fileName);
@@ -1257,8 +1259,10 @@ QString ImportFileWidget::fileInfoString(const QString& name) const {
 			infoStrings << ROOTFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::FileType::NgspiceRawAscii:
-		case AbstractFileFilter::FileType::NgspiceRawBinary:
 			infoStrings << NgspiceRawAsciiFilter::fileInfoString(fileName);
+			break;
+		case AbstractFileFilter::FileType::NgspiceRawBinary:
+			infoStrings << NgspiceRawBinaryFilter::fileInfoString(fileName);
 			break;
 		case AbstractFileFilter::FileType::READSTAT:
 			infoStrings << ReadStatFilter::fileInfoString(fileName);
