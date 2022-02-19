@@ -38,8 +38,8 @@ ReferenceLineDock::ReferenceLineDock(QWidget* parent) : BaseDock(parent) {
 	connect(ui.teComment, &QTextEdit::textChanged, this, &ReferenceLineDock::commentChanged);
 
 	connect(ui.cbOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::orientationChanged);
-	connect(ui.lePosition, &QLineEdit::textChanged, this, &ReferenceLineDock::positionChanged);
-	connect(ui.dtePosition, &QDateTimeEdit::dateTimeChanged, this, &ReferenceLineDock::positionDateTimeChanged);
+	connect(ui.lePosition, &QLineEdit::textChanged, this, &ReferenceLineDock::positionLogicalChanged);
+	connect(ui.dtePosition, &QDateTimeEdit::dateTimeChanged, this, &ReferenceLineDock::positionLogicalDateTimeChanged);
 	connect(ui.cbPlotRanges, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ReferenceLineDock::plotRangeChanged);
 	connect(ui.chkVisible, &QCheckBox::clicked, this, &ReferenceLineDock::visibilityChanged);
 
@@ -107,12 +107,12 @@ void ReferenceLineDock::updateLocale() {
 
 	Lock lock(m_initializing);
 	if (m_line->orientation() == ReferenceLine::Orientation::Horizontal)
-		ui.lePosition->setText(numberLocale.toString(m_line->position().point.y()));
+		ui.lePosition->setText(numberLocale.toString(m_line->positionLogical().y()));
 	else {
 		//update locale if numeric, nothing to do if datetime format is used for the x-range
 		const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 		if (plot->xRangeFormat() == RangeT::Format::Numeric)
-			ui.lePosition->setText(numberLocale.toString(m_line->position().point.x()));
+			ui.lePosition->setText(numberLocale.toString(m_line->positionLogical().x()));
 	}
 }
 
@@ -165,34 +165,34 @@ void ReferenceLineDock::orientationChanged(int index) {
 	linePositionLogicalChanged(m_line->positionLogical());
 }
 
-void ReferenceLineDock::positionChanged() {
+void ReferenceLineDock::positionLogicalChanged(const QString& value) {
 	if (m_initializing)
 		return;
 
 	bool ok;
 	SET_NUMBER_LOCALE
-	const double pos{ numberLocale.toDouble(ui.lePosition->text(), &ok) };
+	const double pos = numberLocale.toDouble(value , &ok);
 	if (ok) {
 		for (auto* line : m_linesList) {
-			auto position = line->position();
+			auto positionLogical = line->positionLogical();
 			if (line->orientation() == ReferenceLine::Orientation::Horizontal)
-				position.point.setY(pos);
+				positionLogical.setY(pos);
 			else
-				position.point.setX(pos);
-			line->setPosition(position);
+				positionLogical.setX(pos);
+			line->setPositionLogical(positionLogical);
 		}
 	}
 }
 
-void ReferenceLineDock::positionDateTimeChanged(const QDateTime& dateTime) {
+void ReferenceLineDock::positionLogicalDateTimeChanged(const QDateTime& dateTime) {
 	if (m_initializing)
 		return;
 
 	quint64 pos = dateTime.toMSecsSinceEpoch();
 	for (auto* line : m_linesList) {
-		auto position = line->position();
-		position.point.setX(pos); //datetime is only possible for x
-		line->setPosition(position);
+		auto positionLogical = line->positionLogical();
+		positionLogical.setX(pos); //datetime is only possible for x
+		line->setPositionLogical(positionLogical);
 	}
 }
 
@@ -310,11 +310,11 @@ void ReferenceLineDock::load() {
 
 	//position
 	if (orientation == ReferenceLine::Orientation::Horizontal)
-		ui.lePosition->setText(numberLocale.toString(m_line->position().point.y()));
+		ui.lePosition->setText(numberLocale.toString(m_line->positionLogical().y()));
 	else {
 		const auto* plot = static_cast<const CartesianPlot*>(m_line->plot());
 		if (plot->xRangeFormat() == RangeT::Format::Numeric)
-			ui.lePosition->setText(numberLocale.toString(m_line->position().point.x()));
+			ui.lePosition->setText(numberLocale.toString(m_line->positionLogical().x()));
 		else { //DateTime
 			ui.dtePosition->setDisplayFormat(plot->xRangeDateTimeFormat());
 			ui.dtePosition->setDateTime(QDateTime::fromMSecsSinceEpoch(m_line->positionLogical().x()));

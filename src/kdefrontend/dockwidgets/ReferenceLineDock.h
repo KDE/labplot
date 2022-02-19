@@ -41,8 +41,8 @@ private Q_SLOTS:
 
 	//Position
 	void orientationChanged(int);
-	void positionChanged();
-	void positionDateTimeChanged(const QDateTime&);
+	void positionLogicalChanged(const QString&);
+	void positionLogicalDateTimeChanged(const QDateTime&);
 
 	//Line
 	void styleChanged(int);
@@ -55,7 +55,7 @@ private Q_SLOTS:
 	void lineVisibilityChanged(bool);
 
 	//Position
-	void linePositionLogicalChanged(const QPointF &positionLogical);
+	void linePositionLogicalChanged(const QPointF&);
 	void lineOrientationChanged(ReferenceLine::Orientation);
 
 	//Line
