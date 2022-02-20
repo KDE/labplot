@@ -163,8 +163,16 @@ QMenu* Column::createContextMenu() {
 			if (analysisCurve->dataSourceType() == XYAnalysisCurve::DataSourceType::Spreadsheet
 					&& (analysisCurve->xDataColumn() == this || analysisCurve->yDataColumn() == this || analysisCurve->y2DataColumn() == this) )
 				used = true;
-		} else if (curve) {
-			if (curve->xColumn() == this || curve->yColumn() == this)
+		} else {
+			if (curve->xColumn() == this || curve->yColumn() == this
+				|| curve->xErrorMinusColumn() == this || curve->xErrorPlusColumn() == this
+				|| curve->yErrorMinusColumn() == this || curve->yErrorPlusColumn() == this )
+				used = true;
+		}
+
+		if (!used) {
+			//the column is not used direclty as a data source, check the values custom column
+			if (curve->valuesColumn() == this)
 				used = true;
 		}
 
@@ -193,6 +201,23 @@ QMenu* Column::createContextMenu() {
 			}
 			QAction* action = new QAction(hist->icon(), hist->name(), m_usedInActionGroup);
 			action->setData(hist->path());
+			usedInMenu->addAction(action);
+			showIsUsed = true;
+		}
+	}
+
+	//add axes where the column is used as a custom column for ticks positions or labels
+	sectionAdded = false;
+	const auto& axes = project->children<Axis>(AbstractAspect::ChildIndexFlag::Recursive);
+	for (const auto* axis : axes) {
+		bool used = (axis->majorTicksColumn() == this || axis->minorTicksColumn() == this || axis->labelsTextColumn() == this);
+		if (used) {
+			if (!sectionAdded) {
+				usedInMenu->addSection(i18n("Axes"));
+				sectionAdded = true;
+			}
+			QAction* action = new QAction(axis->icon(), axis->name(), m_usedInActionGroup);
+			action->setData(axis->path());
 			usedInMenu->addAction(action);
 			showIsUsed = true;
 		}
