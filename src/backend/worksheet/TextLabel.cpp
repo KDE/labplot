@@ -157,8 +157,8 @@ void TextLabel::init() {
 		d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
 
 		//position and alignment relevant properties
-		d->position.point.setX( group.readEntry("PositionXValue", d->position.point.x()) );
-		d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
+		d->position.point.setX(group.readEntry("PositionXValue", 0.));
+		d->position.point.setY(group.readEntry("PositionYValue", 0.));
 		d->position.horizontalPosition = (HorizontalPosition) group.readEntry("PositionX", (int)d->position.horizontalPosition);
 		d->position.verticalPosition = (VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
 		d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", static_cast<int>(d->horizontalAlignment));
