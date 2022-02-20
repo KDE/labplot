@@ -153,7 +153,7 @@ QMenu* Column::createContextMenu() {
 	bool showIsUsed = false;
 
 	//add curves where the column is currently in use
-	usedInMenu->addSection(i18n("XY-Curves"));
+	bool sectionAdded = false;
 	const auto& curves = project->children<XYCurve>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* curve : curves) {
 		bool used = false;
@@ -169,6 +169,11 @@ QMenu* Column::createContextMenu() {
 		}
 
 		if (used) {
+			if (!sectionAdded) {
+				usedInMenu->addSection(i18n("XY-Curves"));
+				sectionAdded = true;
+			}
+
 			QAction* action = new QAction(curve->icon(), curve->name(), m_usedInActionGroup);
 			action->setData(curve->path());
 			usedInMenu->addAction(action);
@@ -177,11 +182,15 @@ QMenu* Column::createContextMenu() {
 	}
 
 	//add histograms where the column is used
-	usedInMenu->addSection(i18n("Histograms"));
+	sectionAdded = false;
 	const auto& hists = project->children<Histogram>(AbstractAspect::ChildIndexFlag::Recursive);
 	for (const auto* hist : hists) {
 		bool used = (hist->dataColumn() == this);
 		if (used) {
+			if (!sectionAdded) {
+				usedInMenu->addSection(i18n("Histograms"));
+				sectionAdded = true;
+			}
 			QAction* action = new QAction(hist->icon(), hist->name(), m_usedInActionGroup);
 			action->setData(hist->path());
 			usedInMenu->addAction(action);
@@ -190,12 +199,12 @@ QMenu* Column::createContextMenu() {
 	}
 
 	//add calculated columns where the column is used in formula variables
-	usedInMenu->addSection(i18n("Calculated Columns"));
+	sectionAdded = false;
 	const auto& columns = project->children<Column>(AbstractAspect::ChildIndexFlag::Recursive);
 	const QString& path = this->path();
 	for (const auto* column : columns) {
 		int index = -1;
-		for (int i = 0; column->formulaData().count(); i++) {
+		for (int i = 0; i < column->formulaData().count(); i++) {
 			if (path == column->formulaData().at(i).columnName()) {
 				index = i;
 				break;
@@ -203,6 +212,10 @@ QMenu* Column::createContextMenu() {
 		}
 
 		if (index != -1) {
+			if (!sectionAdded) {
+				usedInMenu->addSection(i18n("Calculations"));
+				sectionAdded = true;
+			}
 			QAction* action = new QAction(column->icon(), column->name(), m_usedInActionGroup);
 			action->setData(column->path());
 			usedInMenu->addAction(action);
