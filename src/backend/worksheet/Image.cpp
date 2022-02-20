@@ -339,6 +339,7 @@ void ImagePrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*op
 		painter->save();
 		painter->rotate(-rotationAngle);
 		painter->setPen(borderPen);
+		painter->setBrush(Qt::NoBrush);
 		painter->setOpacity(borderOpacity);
 		painter->drawPath(borderShapePath);
 		painter->restore();
