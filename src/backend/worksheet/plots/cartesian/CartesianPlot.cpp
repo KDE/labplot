@@ -3368,8 +3368,8 @@ void CartesianPlot::shiftLeftX(int index) {
 	shift(index, true, true);
 
 	bool retrans = false;
-	for (int i = 0; i < m_coordinateSystems.count(); i++) {
-		const auto cs = coordinateSystem(i);
+	for (const auto cSystem : m_coordinateSystems) {
+		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
 		if ((index == -1 || index == cs->xIndex())) {
 			if (autoScaleY(cs->yIndex())) {
 				setYRangeDirty(cs->yIndex(), true);
@@ -3393,8 +3393,8 @@ void CartesianPlot::shiftRightX(int index) {
 	shift(index, true, false);
 
 	bool retrans = false;
-	for (int i = 0; i < m_coordinateSystems.count(); i++) {
-		const auto cs = coordinateSystem(i);
+	for (const auto cSystem : m_coordinateSystems) {
+		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
 		if ((index == -1 || index == cs->xIndex())) {
 			if (autoScaleY(cs->yIndex())) {
 				setYRangeDirty(cs->yIndex(), true);
@@ -3418,8 +3418,8 @@ void CartesianPlot::shiftUpY(int index) {
 	shift(index, false, false);
 
 	bool retrans = false;
-	for (int i = 0; i < m_coordinateSystems.count(); i++) {
-		const auto cs = coordinateSystem(i);
+	for (const auto cSystem : m_coordinateSystems) {
+		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
 		if ((index == -1 || index == cs->yIndex())) {
 			if (autoScaleX(cs->xIndex())) {
 				setXRangeDirty(cs->xIndex(), true);
@@ -3443,8 +3443,8 @@ void CartesianPlot::shiftDownY(int index) {
 	shift(index, false, true);
 
 	bool retrans = false;
-	for (int i = 0; i < m_coordinateSystems.count(); i++) {
-		const auto cs = coordinateSystem(i);
+	for (const auto cSystem : m_coordinateSystems) {
+		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
 		if ((index == -1 || index == cs->yIndex())) {
 			if (autoScaleX(cs->xIndex())) {
 				setXRangeDirty(cs->xIndex(), true);
@@ -3557,8 +3557,8 @@ void CartesianPlotPrivate::retransformXScale(int index) {
 	Range<double> plotSceneRange{dataRect.x(), dataRect.x() + dataRect.width()};
 	Range<double> sceneRange, logicalRange;
 
-	for (auto cSystem: coordinateSystems()) {
-		auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
+	for (const auto cSystem : coordinateSystems()) {
+		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
 		if (cs->xIndex() != index)
 			continue;
 
@@ -3654,8 +3654,8 @@ void CartesianPlotPrivate::retransformYScale(int index) {
 	Range<double> plotSceneRange{dataRect.y() + dataRect.height(), dataRect.y()};
 	Range<double> sceneRange, logicalRange;
 
-	for (auto cSystem: coordinateSystems()) {
-		auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
+	for (const auto cSystem : coordinateSystems()) {
+		const auto cs = static_cast<CartesianCoordinateSystem*>(cSystem);
 		if (cs->yIndex() != index)
 			continue;
 
@@ -3898,10 +3898,10 @@ QVector<AbstractCoordinateSystem*> CartesianPlotPrivate::coordinateSystems() con
 
 void CartesianPlotPrivate::rangeChanged() {
 	DEBUG(Q_FUNC_INFO)
-	for (const auto* coordinateSystem : q->m_coordinateSystems) {
-		const auto cSystem = static_cast<const CartesianCoordinateSystem*>(coordinateSystem);
-		int xIndex = cSystem->xIndex();
-		int yIndex = cSystem->yIndex();
+	for (const auto* cSystem : q->m_coordinateSystems) {
+		const auto cs = static_cast<const CartesianCoordinateSystem*>(cSystem);
+		int xIndex = cs->xIndex();
+		int yIndex = cs->yIndex();
 		xRanges[xIndex].dirty = true;
 		yRanges[yIndex].dirty = true;
 		if (autoScaleX(xIndex) && autoScaleY(yIndex))
@@ -3916,10 +3916,10 @@ void CartesianPlotPrivate::rangeChanged() {
 
 void CartesianPlotPrivate::niceExtendChanged() {
 	DEBUG(Q_FUNC_INFO)
-	for (const auto* coordinateSystem : q->m_coordinateSystems) {
-		const auto cSystem = static_cast<const CartesianCoordinateSystem*>(coordinateSystem);
-		int xIndex = cSystem->xIndex();
-		int yIndex = cSystem->yIndex();
+	for (const auto* cSystem : q->m_coordinateSystems) {
+		const auto cs = static_cast<const CartesianCoordinateSystem*>(cSystem);
+		int xIndex = cs->xIndex();
+		int yIndex = cs->yIndex();
 		xRanges[xIndex].dirty = true;
 		yRanges[yIndex].dirty = true;
 		if (autoScaleX(xIndex) && autoScaleY(yIndex))
@@ -4092,7 +4092,7 @@ void CartesianPlotPrivate::mousePressEvent(QGraphicsSceneMouseEvent* event) {
 	auto* w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
 	int index = Worksheet::cSystemIndex(w);
 	if (index >= 0)
-		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index]);
+		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
 		if (!locked && dataRect.contains(event->pos())) {
 			panningStarted = true;
@@ -4200,7 +4200,7 @@ void CartesianPlotPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 	auto*w = static_cast<Worksheet*>(q->parent(AspectType::Worksheet))->currentSelection();
 	int index = Worksheet::cSystemIndex(w);
 	if (index >= 0)
-		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems[index]);
+		cSystem = static_cast<CartesianCoordinateSystem*>(q->m_coordinateSystems.at(index));
 
 	if (mouseMode == CartesianPlot::MouseMode::Selection) {
 		if (panningStarted && dataRect.contains(event->pos()) ) {
@@ -4540,7 +4540,7 @@ void CartesianPlotPrivate::mouseReleaseZoomSelectionMode(int cSystemIndex, bool 
 
 	int xIndex = -1, yIndex = -1;
 	if (cSystemIndex == -1 || cSystemIndex >= q->m_coordinateSystems.count()) {
-		for (int i=0; i < q->m_coordinateSystems.count(); i++)
+		for (int i = 0; i < q->m_coordinateSystems.count(); i++)
 			mouseReleaseZoomSelectionMode(i, true);
 	} else {
 
