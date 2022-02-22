@@ -102,6 +102,7 @@ private:
 	void horizontalBoxPlot(int);
 	QPointF setOutlierPoint(double pos, double value);
 	void mapOutliersToScene(int index);
+	void updateFillingRect(int index, const QVector<QLineF>&);
 
 	void draw(QPainter*);
 	void drawFilling(QPainter*, int);
@@ -114,7 +115,7 @@ private:
 	QPainterPath m_boxPlotShape;
 
 	QVector<QVector<QLineF>> m_boxRect; //QVector<QLineF> contains four lines that are clipped on the plot rectangle
-	QVector<QVector<QLineF>> m_boxRectUnclipped; //QVector<QLineF> contains four lines that are not clipped on the plot rectangle, used for the filling
+	QVector<QRectF> m_fillRect; //rectangles used for the filling (clipped versions of the boxes)
 	double m_widthScaleFactor{1.0};
 	QVector<double> m_xMinBox;
 	QVector<double> m_xMaxBox;
