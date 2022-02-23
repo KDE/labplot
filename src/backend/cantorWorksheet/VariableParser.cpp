@@ -291,17 +291,42 @@ void VariableParser::parseValues(const QStringList& values, VariableParser::Data
 	case Datatype::uint64:
 	case Datatype::float32:
 	case Datatype::float64: {
-		for (const auto& v : values) {
-			double value = v.trimmed().toDouble(&isNumber);
-			if (isNumber) {
-				if (!m_parsed)
-					m_parsed = true;
-			} else
-				value = NAN;
-
-			doublePrecision()[i] = value;
-			i++;
+		//use the first value in the vector to check whether we need to consider
+		//the locale specific representation of floats (for example, R's output is locale specific)
+		bool useLocale = false;
+		if (!values.isEmpty()) {
+			values.constFirst().trimmed().toDouble(&isNumber);
+			if (!isNumber)
+				useLocale = true; //direct conversion has failed, use QLocale to parse the strings further below
 		}
+
+		if (!useLocale) {
+			for (const auto& v : values) {
+				double value = v.trimmed().toDouble(&isNumber);
+				if (isNumber) {
+					if (!m_parsed)
+						m_parsed = true;
+				} else
+					value = NAN;
+
+				doublePrecision()[i] = value;
+				i++;
+			}
+		} else {
+			QLocale locale;
+			for (const auto& v : values) {
+				double value = locale.toDouble(v.trimmed(), &isNumber);
+				if (isNumber) {
+					if (!m_parsed)
+						m_parsed = true;
+				} else
+					value = NAN;
+
+				doublePrecision()[i] = value;
+				i++;
+			}
+		}
+
 		break;
 	}
 	// Adding timezone indicator "Z" is necessary, because specific dates like
