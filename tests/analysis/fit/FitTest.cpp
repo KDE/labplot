@@ -703,7 +703,7 @@ void FitTest::testLinearWampler5() {
 	for (int i = 0; i < np; i++) {
 		const double paramValue = fitResult.paramValues.at(i);
 		DEBUG(std::setprecision(15) << paramValue);
-		FuzzyCompare(paramValue, 1.0, 1.e-7);
+		FuzzyCompare(paramValue, 1.0, 3.e-7);
 	}
 	QCOMPARE(fitResult.errorValues.at(0), 21523262.4678170);
 	QCOMPARE(fitResult.errorValues.at(1), 23635517.3469681);
