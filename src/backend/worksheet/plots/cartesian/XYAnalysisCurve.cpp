@@ -114,31 +114,32 @@ void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
 	if (uniqueX || !avgUniqueX)
 		return;
 
-	for (int i = 0; i < xData.size(); i++)
-		DEBUG( xData.at(i) << " " << yData.at(i))
+	//for (int i = 0; i < xData.size(); i++)
+	//	WARN( xData.at(i) << " " << yData.at(i))
 
 	// average values for consecutive same x value
 	double oldX = qQNaN(), sum = 0.;
 	int count = 1;
 	for (int i = 0; i < xData.size(); i++) {
-		//DEBUG(" i = " << i)
+		//WARN(" i = " << i)
 		const double x = xData.at(i);
 		const double y = yData.at(i);
-		//DEBUG(x << " / " << y << ": " << sum << " " << oldX  << " " << count)
+		//WARN(x << " / " << y << ": " << sum << " " << oldX  << " " << count)
 		if(x == oldX) {	// same x, but not last
 			//DEBUG(" same x")
 			sum += y;
 			count++;
-			if (i < xData.size() - 1)
+			if (i < xData.size() - 1) {
 				continue;
+			}
 		}
 
-		//DEBUG(" next/last x")
+		//WARN(" next/last x")
 		if (count > 1) {	// average and remove duplicate
-			//DEBUG("average")
+			//WARN("average: " << sum/count)
 			const int index = i - count + 1;
-			yData[index-1] = sum/count;
-			//DEBUG("remove at " << index << ", count = " << count-1)
+			yData[index - 1] = sum/count;
+			//WARN("remove at " << index << ", count = " << count-1)
 			xData.remove(index, count - 1);
 			yData.remove(index, count - 1);
 

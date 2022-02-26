@@ -26,6 +26,8 @@ private Q_SLOTS:
 	void testCubicSecondOrder();
 	void testCubicThirdOrder();
 
+	// duplicate X
+	void testLinearDuplicateX();
 //	void testPerformance();
 };
 #endif

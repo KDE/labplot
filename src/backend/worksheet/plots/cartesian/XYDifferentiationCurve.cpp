@@ -172,6 +172,9 @@ void XYDifferentiationCurvePrivate::recalculate() {
 
 	DEBUG(nsl_diff_deriv_order_name[derivOrder] << " derivative");
 	DEBUG("accuracy order: " << accOrder);
+	//WARN("DATA:")
+	//for (int i = 0; i < n; i++)
+	//	WARN(xdata[i] << "," << ydata[i])
 
 ///////////////////////////////////////////////////////////
 	int status = 0;
@@ -202,9 +205,9 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	memcpy(xVector->data(), xdata, n * sizeof(double));
 	memcpy(yVector->data(), ydata, n * sizeof(double));
 ///////////////////////////////////////////////////////////
-//	DEBUG("RESULT:")
-//	for (int i = 0; i < n; i++)
-//		DEBUG(xdata[i] << "," << ydata[i])
+	//WARN("RESULT:")
+	//for (int i = 0; i < n; i++)
+	//	WARN(xdata[i] << "," << ydata[i])
 
 	//write the result
 	differentiationResult.available = true;
