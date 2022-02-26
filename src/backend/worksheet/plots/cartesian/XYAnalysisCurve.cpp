@@ -4,7 +4,7 @@
     Description          : Base class for all analysis curves
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017-2018 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -50,10 +50,15 @@ void XYAnalysisCurve::init() {
 	d->symbol->setStyle(Symbol::Style::NoSymbols);
 }
 
+// copy valid data from x/y data columns to x/y data vectors
+// for analysis functions
+// avgUniqueX: average y values for duplicate x values
 void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
-		const AbstractColumn* xDataColumn, const AbstractColumn* yDataColumn, double xMin, double xMax) {
+		const AbstractColumn* xDataColumn, const AbstractColumn* yDataColumn,
+		double xMin, double xMax, bool avgUniqueX) {
 
 	const int rowCount = qMin(xDataColumn->rowCount(), yDataColumn->rowCount());
+	bool uniqueX = true;
 	for (int row = 0; row < rowCount; ++row) {
 		if (!xDataColumn->isValid(row) || xDataColumn->isMasked(row) ||
 				!yDataColumn->isValid(row) || yDataColumn->isMasked(row))
@@ -99,9 +104,49 @@ void XYAnalysisCurve::copyData(QVector<double>& xData, QVector<double>& yData,
 
 		// only when inside given range
 		if (x >= xMin && x <= xMax) {
+			if (xData.contains(x))
+				uniqueX = false;
 			xData.append(x);
 			yData.append(y);
 		}
+	}
+
+	if (uniqueX || !avgUniqueX)
+		return;
+
+	for (int i = 0; i < xData.size(); i++)
+		DEBUG( xData.at(i) << " " << yData.at(i))
+
+	// average values for consecutive same x value
+	double oldX = qQNaN(), sum = 0.;
+	int count = 1;
+	for (int i = 0; i < xData.size(); i++) {
+		//DEBUG(" i = " << i)
+		const double x = xData.at(i);
+		const double y = yData.at(i);
+		//DEBUG(x << " / " << y << ": " << sum << " " << oldX  << " " << count)
+		if(x == oldX) {	// same x, but not last
+			//DEBUG(" same x")
+			sum += y;
+			count++;
+			if (i < xData.size() - 1)
+				continue;
+		}
+
+		//DEBUG(" next/last x")
+		if (count > 1) {	// average and remove duplicate
+			//DEBUG("average")
+			const int index = i - count + 1;
+			yData[index-1] = sum/count;
+			//DEBUG("remove at " << index << ", count = " << count-1)
+			xData.remove(index, count - 1);
+			yData.remove(index, count - 1);
+
+			i -= count - 1;
+			count = 1;
+		}
+		sum = y;
+		oldX = x;
 	}
 }
 

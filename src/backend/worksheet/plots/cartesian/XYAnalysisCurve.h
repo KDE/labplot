@@ -4,7 +4,7 @@
     Description          : Base class for all analysis curves
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2017-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2018-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -29,7 +29,8 @@ public:
 	XYAnalysisCurve(const QString&, AspectType type);
 	~XYAnalysisCurve() override;
 
-	static void copyData(QVector<double>& xData, QVector<double>& yData, const AbstractColumn* xDataColumn, const AbstractColumn* yDataColumn, double xMin, double xMax);
+	static void copyData(QVector<double>& xData, QVector<double>& yData, const AbstractColumn* xDataColumn,
+				const AbstractColumn* yDataColumn, double xMin, double xMax, bool avgUniqueX = false);
 
 	virtual void recalculate() = 0;
 	void save(QXmlStreamWriter*) const override;

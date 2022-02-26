@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : A xy-curve defined by an differentiation
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2016 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2016-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -131,6 +131,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	if (!tmpXDataColumn || !tmpYDataColumn) {
 		Q_EMIT q->dataChanged();
 		sourceDataChangedSinceLastRecalc = false;
+		DEBUG(Q_FUNC_INFO << ", MISSING DATA COLUMN")
 		return;
 	}
 
@@ -148,7 +149,7 @@ void XYDifferentiationCurvePrivate::recalculate() {
 		xmax = differentiationData.xRange.last();
 	}
 
-	XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax);
+	XYAnalysisCurve::copyData(xdataVector, ydataVector, tmpXDataColumn, tmpYDataColumn, xmin, xmax, true);
 
 	//number of data points to differentiate
 	const size_t n = (size_t)xdataVector.size();
@@ -169,8 +170,8 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	const nsl_diff_deriv_order_type derivOrder = differentiationData.derivOrder;
 	const int accOrder = differentiationData.accOrder;
 
-	DEBUG(nsl_diff_deriv_order_name[derivOrder] << "derivative");
-	DEBUG("accuracy order:" << accOrder);
+	DEBUG(nsl_diff_deriv_order_name[derivOrder] << " derivative");
+	DEBUG("accuracy order: " << accOrder);
 
 ///////////////////////////////////////////////////////////
 	int status = 0;
@@ -201,6 +202,9 @@ void XYDifferentiationCurvePrivate::recalculate() {
 	memcpy(xVector->data(), xdata, n * sizeof(double));
 	memcpy(yVector->data(), ydata, n * sizeof(double));
 ///////////////////////////////////////////////////////////
+//	DEBUG("RESULT:")
+//	for (int i = 0; i < n; i++)
+//		DEBUG(xdata[i] << "," << ydata[i])
 
 	//write the result
 	differentiationResult.available = true;
