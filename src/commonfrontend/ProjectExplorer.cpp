@@ -1181,7 +1181,8 @@ bool ProjectExplorer::load(XmlStreamReader* reader) {
 	m_treeView->setCurrentIndex(currentIndex);
 	m_treeView->scrollTo(currentIndex);
 	auto* aspect = static_cast<AbstractAspect*>(currentIndex.internalPointer());
-	aspect->setSelected(true);
+	if (aspect)
+		aspect->setSelected(true);
 	Q_EMIT currentAspectChanged(aspect); //notify MainWin to bring up the proper view
 	Q_EMIT selectedAspectsChanged(QList<AbstractAspect*>()<<aspect); //notify GuiObserver to bring up the proper dock widget
 
