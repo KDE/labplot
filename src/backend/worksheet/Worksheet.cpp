@@ -772,9 +772,9 @@ void Worksheet::setPageRect(const QRectF& rect) {
 }
 
 void Worksheet::setPrinting(bool on) const {
-	QVector<WorksheetElement*> childElements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
-	for (auto* child : childElements)
-		child->setPrinting(on);
+	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden);
+	for (auto* elem : elements)
+		elem->setPrinting(on);
 }
 
 STD_SETTER_CMD_IMPL_S(Worksheet, SetTheme, QString, theme)
@@ -1624,7 +1624,6 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	KLocalizedString attributeWarning = ki18n("Attribute '%1' missing or empty, default value is used");
 	QXmlStreamAttributes attribs;
 	QString str;
-	QRectF rect;
 
 	while (!reader->atEnd()) {
 		reader->readNext();
@@ -1647,25 +1646,25 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("x").toString());
 			else
-				rect.setX(str.toDouble());
+				d->pageRect.setX(str.toDouble());
 
 			str = attribs.value("y").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("y").toString());
 			else
-				rect.setY(str.toDouble());
+				d->pageRect.setY(str.toDouble());
 
 			str = attribs.value("width").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("width").toString());
 			else
-				rect.setWidth(str.toDouble());
+				d->pageRect.setWidth(str.toDouble());
 
 			str = attribs.value("height").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("height").toString());
 			else
-				rect.setHeight(str.toDouble());
+				d->pageRect.setHeight(str.toDouble());
 
 			READ_INT_VALUE("useViewSize", useViewSize, int);
 		} else if (!preview && reader->name() == "layout") {
@@ -1766,7 +1765,7 @@ bool Worksheet::load(XmlStreamReader* reader, bool preview) {
 	}
 
 	if (!preview) {
-		d->m_scene->setSceneRect(rect);
+		d->m_scene->setSceneRect(d->pageRect);
 		d->updateLayout();
 		updateCompleteCursorTreeModel();
 	}
