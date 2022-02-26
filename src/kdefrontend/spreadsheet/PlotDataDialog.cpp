@@ -802,7 +802,11 @@ void PlotDataDialog::setAxesTitles(CartesianPlot* plot, const QString& name) con
 	case PlotType::BoxPlot: {
 		auto* boxPlot = static_cast<BoxPlot*>(m_lastAddedCurve);
 		auto orientation = boxPlot->orientation();
-		int count = m_columnComboBoxes.count();
+
+		//number of box plots per plot:
+		int count = 1; //1 if we create a separate plot for every box plot
+		if (ui->rbCurvePlacement1->isChecked())
+			count = m_columnComboBoxes.count(); //all box plots in one single plot
 
 		//set the range of the plot and the number of ticks manuall.
 		//the n-th box plot is positioned at x=n and and has the width=0.5 in logical coordinatates.
