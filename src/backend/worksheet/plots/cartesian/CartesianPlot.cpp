@@ -2693,14 +2693,16 @@ void CartesianPlot::scaleAutoTriggered() {
 	if (!action)
 		return;
 
+	bool updated = false;
 	if (action == scaleAutoAction)
-		scaleAuto();
+		updated = scaleAuto();
 	else if (action == scaleAutoXAction)
-		scaleAutoX();
+		updated = scaleAutoX();
 	else if (action == scaleAutoYAction)
-		scaleAutoY();
+		updated = scaleAutoY();
 
-	retransform();
+	if (updated)
+		retransform();
 }
 
 // auto scale x axis 'index' when auto scale is enabled (index == -1: all x axes)
@@ -2718,11 +2720,6 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 
 	Q_D(CartesianPlot);
 	auto& xRange{ d->xRange(index) };
-	if (!xRange.autoScale()) {
-		DEBUG(Q_FUNC_INFO << ", INFO: x range " << index << " auto scale disabled.")
-		return false;
-	}
-
 	DEBUG(Q_FUNC_INFO << ", auto scale enabled" << ", dirty = " << xRangeDirty(index))
 	if (xRangeDirty(index)) {
 		calculateDataXRange(index, fullRange);
@@ -2790,8 +2787,6 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 
 	Q_D(CartesianPlot);
 	auto& yRange{ d->yRange(index) };
-	if (!yRange.autoScale())
-		return false;
 
 	DEBUG(Q_FUNC_INFO << ", index = " << index << " full range = " << fullRange)
 	if (yRangeDirty(index)) {

@@ -250,7 +250,7 @@ void MainWin::initGUI(const QString& fileName) {
 	}
 
 	//in case we're starting for the first time, put all toolbars into the IconOnly mode
-	//and maximize the main window. Tthe occurence of LabPlot's own section "MainWin"
+	//and maximize the main window. The occurence of LabPlot's own section "MainWin"
 	//indicates whether this is the first start or not
 	groupMain = KSharedConfig::openConfig()->group("MainWin");
 	if (!groupMain.exists()) {
@@ -294,10 +294,6 @@ void MainWin::initGUI(const QString& fileName) {
 	toolBar()->addAction(m_hamburgerMenu);
 	m_hamburgerMenu->hideActionsOf(toolBar());
 	m_hamburgerMenu->setMenuBar(menuBar());
-
-	QMenu* menu = new QMenu;
-	menu->addAction(new QAction("test"));
-	m_hamburgerMenu->setMenu(menu);
 #endif
 
 	setWindowIcon(QIcon::fromTheme("LabPlot2", QGuiApplication::windowIcon()));
@@ -748,7 +744,6 @@ void MainWin::initMenus() {
 	//add the actions to toggle the status bar and the project and properties explorer widgets to the "View" menu.
 	//this menu is created automatically when the default "full screen" action is created in initActions().
 	auto* menu = dynamic_cast<QMenu*>(factory()->container("view", this));
-
 	if (menu) {
 		menu->addSeparator();
 		menu->addAction(m_toggleProjectExplorerDockAction);
@@ -797,6 +792,7 @@ void MainWin::initMenus() {
 #ifdef HAVE_FITS
 //	m_editMenu->addAction(m_editFitsFileAction);
 #endif
+
 	//set the action for the current color scheme checked
 	KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Settings_General"));
 #if KCOREADDONS_VERSION >= QT_VERSION_CHECK(5, 67, 0)	// KColorSchemeManager has a system default option

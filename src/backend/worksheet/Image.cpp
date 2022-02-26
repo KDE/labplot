@@ -60,12 +60,12 @@ void Image::init() {
 	d->opacity = group.readEntry("opacity", d->opacity);
 
 	//geometry
-	d->position.point.setX( group.readEntry("PositionXValue", d->position.point.x()) );
-	d->position.point.setY( group.readEntry("PositionYValue", d->position.point.y()) );
-	d->position.horizontalPosition = (WorksheetElement::HorizontalPosition) group.readEntry("PositionX", (int)d->position.horizontalPosition);
-	d->position.verticalPosition = (WorksheetElement::VerticalPosition) group.readEntry("PositionY", (int)d->position.verticalPosition);
-	d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)d->horizontalAlignment);
-	d->verticalAlignment = (WorksheetElement::VerticalAlignment) group.readEntry("VerticalAlignment", (int)d->verticalAlignment);
+	d->position.point.setX(group.readEntry("PositionXValue", 0.));
+	d->position.point.setY(group.readEntry("PositionYValue", 0.));
+	d->position.horizontalPosition = (WorksheetElement::HorizontalPosition) group.readEntry("PositionX", (int)WorksheetElement::HorizontalPosition::Center);
+	d->position.verticalPosition = (WorksheetElement::VerticalPosition) group.readEntry("PositionY", (int)WorksheetElement::VerticalPosition::Center);
+	d->horizontalAlignment = (WorksheetElement::HorizontalAlignment) group.readEntry("HorizontalAlignment", (int)WorksheetElement::HorizontalAlignment::Center);
+	d->verticalAlignment = (WorksheetElement::VerticalAlignment) group.readEntry("VerticalAlignment", (int)WorksheetElement::VerticalAlignment::Center);
 	d->rotationAngle = group.readEntry("Rotation", d->rotationAngle);
 
 	//border
@@ -73,9 +73,6 @@ void Image::init() {
 						group.readEntry("BorderWidth", d->borderPen.widthF()),
 						(Qt::PenStyle) group.readEntry("BorderStyle", (int)(d->borderPen.style())));
 	d->borderOpacity = group.readEntry("BorderOpacity", d->borderOpacity);
-
-	//initial placeholder image
-	d->image = QIcon::fromTheme("viewimage").pixmap(d->width, d->height).toImage();
 }
 
 //no need to delete the d-pointer here - it inherits from QGraphicsItem
@@ -214,6 +211,10 @@ ImagePrivate::ImagePrivate(Image* owner) : WorksheetElementPrivate(owner), q(own
 	setFlag(QGraphicsItem::ItemSendsGeometryChanges);
 	setFlag(QGraphicsItem::ItemIsFocusable);
 	setAcceptHoverEvents(true);
+
+	//initial placeholder image
+	image = QIcon::fromTheme("viewimage").pixmap(width, height).toImage();
+	m_image = image;
 }
 
 /*!
