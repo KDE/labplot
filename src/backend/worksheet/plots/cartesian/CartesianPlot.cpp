@@ -162,8 +162,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis(QLatin1String("x2"), Axis::Orientation::Horizontal);
-			//TEST: use second cSystem of plot
-			//axis->setCoordinateSystemIndex(1);
+			axis->title()->setText(QString());
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 
@@ -180,7 +179,6 @@ void CartesianPlot::setType(Type type) {
 			pen.setStyle(Qt::NoPen);
 			axis->setMinorGridPen(pen);
 			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
-			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
@@ -195,6 +193,7 @@ void CartesianPlot::setType(Type type) {
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis(QLatin1String("y2"), Axis::Orientation::Vertical);
+			axis->title()->setText(QString());
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -210,7 +209,6 @@ void CartesianPlot::setType(Type type) {
 			pen.setStyle(Qt::NoPen);
 			axis->setMinorGridPen(pen);
 			axis->setLabelsPosition(Axis::LabelsPosition::NoLabels);
-			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
 			break;

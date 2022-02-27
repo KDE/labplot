@@ -599,14 +599,15 @@ void TextLabelPrivate::updateBoundingRect() {
 	double w, h;
 	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
 		//image size is in pixel, convert to scene units
-		w = teXImage.width()*teXImageScaleFactor;
-		h = teXImage.height()*teXImageScaleFactor;
+		w = teXImage.width() * teXImageScaleFactor;
+		h = teXImage.height() * teXImageScaleFactor;
 	} else {
 		//size is in points, convert to scene units
-		w = m_textItem->boundingRect().width()*scaleFactor;
-		h = m_textItem->boundingRect().height()*scaleFactor;
+		w = m_textItem->boundingRect().width() * scaleFactor;
+		h = m_textItem->boundingRect().height() * scaleFactor;
 	}
 
+	DEBUG(Q_FUNC_INFO << ", X/Y = " << -w/2 << " / " << -h/2 << ", w/h = " << w << " / " << h)
 	boundingRectangle.setX(-w/2);
 	boundingRectangle.setY(-h/2);
 	boundingRectangle.setWidth(w);

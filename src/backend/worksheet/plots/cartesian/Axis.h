@@ -88,7 +88,7 @@ public:
 
 	typedef AxisPrivate Private;	// for Axis::Private used in macros instead of AxisPrivate
 
-	explicit Axis(const QString&, Orientation orientation = Orientation::Horizontal);
+	explicit Axis(const QString&, Orientation = Orientation::Horizontal);
 	~Axis() override;
 
 	QIcon icon() const override;

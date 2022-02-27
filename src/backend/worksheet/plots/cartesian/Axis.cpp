@@ -2427,7 +2427,7 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 	// QDEBUG(Q_FUNC_INFO << ", title text plain: " << doc.toPlainText())
 	if ( title->isVisible() && !doc.toPlainText().isEmpty() ) {
 		const QRectF& titleRect = title->graphicsItem()->boundingRect();
-		if (titleRect.width() != 0.0 &&  titleRect.height() != 0.0) {
+		if (titleRect.size() != QSizeF(0, 0)) {
 			//determine the new position of the title label:
 			//we calculate the new position here and not in retransform(),
 			//since it depends on the size and position of the tick labels, tickLabelsPath, available here.

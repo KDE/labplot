@@ -60,7 +60,7 @@ public:
 			this->text = createHtml(text, html);
 		}
 		QString createHtml(QString text, bool isHtml) {
-			if (isHtml)
+			if (isHtml || text.isEmpty())
 				return text;
 
 			QTextEdit te(text);
