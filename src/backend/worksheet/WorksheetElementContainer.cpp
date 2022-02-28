@@ -78,7 +78,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 		auto* curve = dynamic_cast<XYCurve*>(elem);
 		if (curve) {
 			//making curves invisible triggers the recalculation of plot ranges if auto-scale is active.
-			//this needs to avoided by supressing the retransformation in the curves.
+			//this should be avoided by supressing the retransformation in the curves.
 			curve->suppressRetransform(true);
 			elem->setVisible(on);
 			curve->suppressRetransform(false);
@@ -121,7 +121,7 @@ void WorksheetElementContainer::setResizeEnabled(bool enabled) {
 
 void WorksheetElementContainer::retransform() {
 	if (isLoading())
-	return;
+		return;
 
 	PERFTRACE("WorksheetElementContainer::retransform()");
 	Q_D(WorksheetElementContainer);
@@ -145,7 +145,7 @@ void WorksheetElementContainer::retransform() {
  * in the container children.
  */
 void WorksheetElementContainer::handleResize(double horizontalRatio, double verticalRatio, bool pageResize) {
-	DEBUG("WorksheetElementContainer::handleResize()");
+	DEBUG(Q_FUNC_INFO);
 	Q_D(const WorksheetElementContainer);
 	if (pageResize) {
 		QRectF rect(d->rect);
@@ -244,6 +244,7 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 //
 	float penWidth = 2.;
 	boundingRectangle = q->rect();
+	QDEBUG(Q_FUNC_INFO << ", bound rect = " << boundingRectangle)
 	boundingRectangle = QRectF(-boundingRectangle.width()/2 - penWidth / 2, -boundingRectangle.height()/2 - penWidth / 2,
 				  boundingRectangle.width() + penWidth, boundingRectangle.height() + penWidth);
 

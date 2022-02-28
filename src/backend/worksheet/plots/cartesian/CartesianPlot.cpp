@@ -252,6 +252,7 @@ void CartesianPlot::setType(Type type) {
 			m_plotArea->setBorderPen(pen);
 
 			Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
+			axis->title()->setText(QString());
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -261,10 +262,10 @@ void CartesianPlot::setType(Type type) {
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
-			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
+			axis->title()->setText(QString());
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -274,7 +275,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
-			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
 			break;
@@ -291,6 +291,7 @@ void CartesianPlot::setType(Type type) {
 			m_plotArea->setBorderPen(pen);
 
 			Axis* axis = new Axis(QLatin1String("x"), Axis::Orientation::Horizontal);
+			axis->title()->setText(QString());
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -302,10 +303,10 @@ void CartesianPlot::setType(Type type) {
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
-			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
 			axis = new Axis(QLatin1String("y"), Axis::Orientation::Vertical);
+			axis->title()->setText(QString());
 			axis->setDefault(true);
 			axis->setSuppressRetransform(true);
 			addChild(axis);
@@ -317,7 +318,6 @@ void CartesianPlot::setType(Type type) {
 			axis->setMinorTicksDirection(Axis::ticksBoth);
 			axis->setMinorTicksNumber(1);
 			axis->setArrowType(Axis::ArrowType::FilledSmall);
-			axis->title()->setText(QString());
 			axis->setSuppressRetransform(false);
 
 			break;

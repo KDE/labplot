@@ -407,12 +407,12 @@ QRectF TextLabelPrivate::size() {
 	double w, h;
 	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
 		//image size is in pixel, convert to scene units
-		w = teXImage.width()*teXImageScaleFactor;
-		h = teXImage.height()*teXImageScaleFactor;
+		w = teXImage.width() * teXImageScaleFactor;
+		h = teXImage.height() * teXImageScaleFactor;
 	} else {
 		//size is in points, convert to scene units
-		w = m_textItem->boundingRect().width()*scaleFactor;
-		h = m_textItem->boundingRect().height()*scaleFactor;
+		w = m_textItem->boundingRect().width() * scaleFactor;
+		h = m_textItem->boundingRect().height() * scaleFactor;
 	}
 	qreal x = position.point.x();
 	qreal y = position.point.y();
@@ -595,6 +595,7 @@ void TextLabelPrivate::updateText() {
 }
 
 void TextLabelPrivate::updateBoundingRect() {
+	DEBUG(Q_FUNC_INFO)
 	//determine the size of the label in scene units.
 	double w, h;
 	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
