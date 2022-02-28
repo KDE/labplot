@@ -20,6 +20,33 @@ private Q_SLOTS:
 
 	void addUniqueLineTest01();
 
+	// lineSkipGaps = false
+	void updateLinesNoGapDirectConnection();
+	void updateLinesNoGapStartHorizontal();
+	void updateLinesNoGapStartVertical();
+	void updateLinesNoGapMidPointHorizontal();
+	void updateLinesNoGapMidPointVertical();
+	void updateLinesNoGapSegments2();
+	void updateLinesNoGapSegments3();
+
+	// lineSkipGaps = false
+	void updateLinesNoGapDirectConnectionLastVertical();
+	void updateLinesNoGapStartHorizontalLastVertical();
+	void updateLinesNoGapStartVerticalLastVertical();
+	void updateLinesNoGapMidPointHorizontalLastVertical();
+	void updateLinesNoGapMidPointVerticalLastVertical();
+	void updateLinesNoGapSegments2LastVertical();
+	void updateLinesNoGapSegments3LastVertical();
+
+	// lineSkipGaps = false
+	void updateLinesWithGapDirectConnection();
+	void updateLinesWithGapDirectConnection2();
+	void updateLinesWithGapStartHorizontal();
+	void updateLinesWithGapStartVertical();
+	void updateLinesWithGapMidPointHorizontal();
+	void updateLinesWithGapMidPointVertical();
+	void updateLinesWithGapSegments2();
+	void updateLinesWithGapSegments3();
 };
 
 #endif // XYCURVETEST_H
