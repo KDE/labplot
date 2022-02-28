@@ -30,8 +30,8 @@ public:
 	void retransform() override;
 	void recalcLogicalPoints();
 	void updateLines();
-	void addLine(QPointF p, double& x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX, double minDiffX, RangeT::Scale scale); // for any x scale
-	static void addUniqueLine(QPointF p, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF> &lines);	// finally add line if unique (no overlay)
+	void addLine(QPointF p, double& x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX, double minDiffX, RangeT::Scale scale, bool &prevPixelDiffZero); // for any x scale
+	static void addUniqueLine(QPointF p, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, QVector<QLineF> &lines, bool &prevPixelDiffZero);	// finally add line if unique (no overlay)
 	void updateDropLines();
 	void updateSymbols();
 	void updateRug();

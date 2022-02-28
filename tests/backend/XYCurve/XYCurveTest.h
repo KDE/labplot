@@ -38,9 +38,18 @@ private Q_SLOTS:
 	void updateLinesNoGapSegments2LastVertical();
 	void updateLinesNoGapSegments3LastVertical();
 
+	// lineSkipGaps = true
+	void updateLinesWithGapLineSkipDirectConnection();
+	void updateLinesWithGapLineSkipDirectConnection2();
+	void updateLinesWithGapLineSkipStartHorizontal();
+	void updateLinesWithGapLineSkipStartVertical();
+	void updateLinesWithGapLineSkipMidPointHorizontal();
+	void updateLinesWithGapLineSkipMidPointVertical();
+	void updateLinesWithGapLineSkipSegments2();
+	void updateLinesWithGapLineSkipSegments3();
+
 	// lineSkipGaps = false
 	void updateLinesWithGapDirectConnection();
-	void updateLinesWithGapDirectConnection2();
 	void updateLinesWithGapStartHorizontal();
 	void updateLinesWithGapStartVertical();
 	void updateLinesWithGapMidPointHorizontal();
