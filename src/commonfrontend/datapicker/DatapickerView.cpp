@@ -32,8 +32,7 @@
     \ingroup commonfrontend
  */
 DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
-	m_tabWidget(new QTabWidget(this)),
-	m_datapicker(datapicker) {
+		m_tabWidget(new QTabWidget(this)), m_datapicker(datapicker) {
 
 	m_tabWidget->setTabPosition(QTabWidget::South);
 	m_tabWidget->setTabShape(QTabWidget::Rounded);
@@ -48,15 +47,14 @@ DatapickerView::DatapickerView(Datapicker* datapicker) : QWidget(),
 	m_initializing = true;
 	for (const auto* aspect : m_datapicker->children<AbstractAspect>(AbstractAspect::ChildIndexFlag::IncludeHidden)) {
 		handleAspectAdded(aspect);
-		for (const auto* child : aspect->children<AbstractAspect>()) {
+		for (const auto* child : aspect->children<AbstractAspect>())
 			handleAspectAdded(child);
-		}
 	}
 	m_initializing = false;
 
 	if (!m_datapicker->isLoading()) {
 		const auto& size = m_datapicker->image()->view()->size();
-		resize(size.width()*1.1, size.height()*1.1);
+		resize(size.width() * 1.1, size.height() * 1.1);
 	}
 
 	//SIGNALs/SLOTs
@@ -106,10 +104,7 @@ int DatapickerView::currentIndex() const {
   or of a \c DatapickerImage object to \c Datapicker.
 */
 void DatapickerView::tabChanged(int index) {
-	if (m_initializing)
-		return;
-
-	if (index == -1)
+	if (m_initializing || index == -1)
 		return;
 
 	m_datapicker->setChildSelectedInView(lastSelectedIndex, false);
@@ -177,15 +172,14 @@ void DatapickerView::handleDescriptionChanged(const AbstractAspect* aspect) {
 }
 
 void DatapickerView::handleAspectAdded(const AbstractAspect* aspect) {
-	int index;
+	int index = 0;
 	QString name;
 	const AbstractPart* part = dynamic_cast<const DatapickerImage*>(aspect);
 	if (part) {
-		index = 0;
 		name = aspect->name();
 	} else if (dynamic_cast<const DatapickerCurve*>(aspect)) {
 		index = m_datapicker->indexOfChild<AbstractAspect>(aspect, AbstractAspect::ChildIndexFlag::IncludeHidden);
-		const Spreadsheet* spreadsheet = static_cast<const Spreadsheet*>(aspect->child<AbstractAspect>(0));
+		const auto* spreadsheet = static_cast<const Spreadsheet*>(aspect->child<AbstractAspect>(0));
 		part = spreadsheet;
 		name = aspect->name() + ": " + spreadsheet->name();
 	} else
