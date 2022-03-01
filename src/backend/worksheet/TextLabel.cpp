@@ -410,8 +410,10 @@ QRectF TextLabelPrivate::size() {
 		h = teXImage.height() * teXImageScaleFactor;
 	} else {
 		//size is in points, convert to scene units
-		w = m_textItem->boundingRect().width() * scaleFactor;
-		h = m_textItem->boundingRect().height() * scaleFactor;
+		// TODO: the shift and scaling is just a workaround to avoid the big bounding box
+		// see updateBoundingRect()
+		w = m_textItem->boundingRect().width() * scaleFactor - 23.;
+		h = m_textItem->boundingRect().height() * scaleFactor * 0.8;
 	}
 	qreal x = position.point.x();
 	qreal y = position.point.y();
@@ -599,11 +601,14 @@ void TextLabelPrivate::updateBoundingRect() {
 		h = teXImage.height() * teXImageScaleFactor;
 	} else {
 		//size is in points, convert to scene units
-		w = m_textItem->boundingRect().width() * scaleFactor;
-		h = m_textItem->boundingRect().height() * scaleFactor;
+		m_textItem->adjustSize();
+		//QDEBUG(" BOUNDING RECT = " << m_textItem->boundingRect())
+		// TODO: the shift and scaling is just a workaround to avoid the big bounding box
+		w = m_textItem->boundingRect().width() * scaleFactor - 23.;
+		h = m_textItem->boundingRect().height() * scaleFactor * 0.8;
 	}
 
-	DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
+	//DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
 	boundingRectangle.setX(-w/2);
 	boundingRectangle.setY(-h/2);
 	boundingRectangle.setWidth(w);

@@ -670,7 +670,6 @@ void WorksheetElementPrivate::updatePosition() {
 		}
 		p = q->align(p, boundingRect(), horizontalAlignment, verticalAlignment, true);
 	}
-	QDEBUG("POSITION = " << p)
 
 	suppressItemChangeEvent = true;
 	setPos(p);
