@@ -97,28 +97,18 @@ CartesianPlot::~CartesianPlot() {
 	initializes all member variables of \c CartesianPlot
 */
 void CartesianPlot::init() {
-	Q_D(CartesianPlot);
-
 	m_coordinateSystems.append( new CartesianCoordinateSystem(this) );
-	// TEST: second cSystem for testing
-	//d->coordinateSystems.append( new CartesianCoordinateSystem(this) );
-	//m_coordinateSystems.append( d->coordinateSystems.at(1) );
-	// TEST: set x range to second x range
-	//d->coordinateSystems[1]->setXIndex(1);
-	// TEST: second x/y range
-	//d->xRanges.append(Range<double>(0, 2));
-	//d->yRanges.append(Range<double>(0, 2));
-
 	m_plotArea = new PlotArea(name() + " plot area", this);
 	addChildFast(m_plotArea);
 
-	//Plot title
+	// title
 	m_title = new TextLabel(this->name() + QLatin1String("- ") + i18n("Title"), TextLabel::Type::PlotTitle);
 	addChild(m_title);
 	m_title->setHidden(true);
 	m_title->setParentGraphicsItem(m_plotArea->graphicsItem());
 
 	//offset between the plot area and the area defining the coordinate system, in scene units.
+	Q_D(CartesianPlot);
 	d->horizontalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->verticalPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);
 	d->rightPadding = Worksheet::convertToSceneUnits(1.5, Worksheet::Unit::Centimeter);

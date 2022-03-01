@@ -17,13 +17,13 @@
 #include "backend/worksheet/WorksheetElement.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 
-#include <QPen>
 #include <QTextEdit>
 
 class QBrush;
 class QFont;
 class TextLabelPrivate;
 class CartesianPlot;
+class QPen;
 
 class TextLabel : public WorksheetElement {
 	Q_OBJECT
@@ -37,13 +37,12 @@ public:
 
 	// The text is always in HMTL format
 	struct TextWrapper {
-		TextWrapper() {}
+		TextWrapper() = default;
 		TextWrapper(const QString& text, TextLabel::Mode mode, bool html): mode(mode) {
-			if (mode != TextLabel::Mode::Text) {
-				this->text = text; //LaTeX and markdown use plain string
-				return;
-			}
-			this->text = createHtml(text, html);
+			if (mode == TextLabel::Mode::Text)
+				this->text = createHtml(text, html);
+			else //LaTeX and markdown use plain string
+				this->text = text;
 		}
 		TextWrapper(const QString& text): mode(TextLabel::Mode::Text) {
 			// assume text is not HTML yet
@@ -52,12 +51,8 @@ public:
 		TextWrapper(const QString& text, bool html, QString& placeholder): allowPlaceholder(true), textPlaceholder(placeholder) {
 			this->text = createHtml(text, html);
 		}
-		TextWrapper(const QString& text, TextLabel::Mode mode, bool html, bool allowPlaceholder): mode(mode), allowPlaceholder(allowPlaceholder) {
-			if (mode != TextLabel::Mode::Text) {
-				this->text = text; //LaTeX and markdown use plain string
-				return;
-			}
-			this->text = createHtml(text, html);
+		TextWrapper(const QString& text, TextLabel::Mode mode, bool html, bool allowPlaceholder): allowPlaceholder(allowPlaceholder) {
+			TextWrapper(text, mode, html);
 		}
 		QString createHtml(QString text, bool isHtml) {
 			if (isHtml || text.isEmpty())
@@ -129,7 +124,7 @@ private Q_SLOTS:
 	void updateTeXImage();
 
 protected:
-	TextLabel(const QString& name, TextLabelPrivate* dd, Type = Type::General);
+	TextLabel(const QString& name, TextLabelPrivate*, Type = Type::General);
 
 private:
 	Q_DECLARE_PRIVATE(TextLabel)

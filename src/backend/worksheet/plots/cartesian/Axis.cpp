@@ -2432,18 +2432,17 @@ void AxisPrivate::recalcShapeAndBoundingRect() {
 			//we calculate the new position here and not in retransform(),
 			//since it depends on the size and position of the tick labels, tickLabelsPath, available here.
 			QRectF rect = linePath.boundingRect();
-			qreal offsetX = titleOffsetX; //the distance to the axis line
-			qreal offsetY = titleOffsetY; //the distance to the axis line
+			qreal offsetX = titleOffsetX, offsetY = titleOffsetY; //the distances to the axis line
 			if (orientation == Axis::Orientation::Horizontal) {
-				offsetY -= titleRect.height()/2;
+				offsetY -= titleRect.height()/2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
 					offsetY -= labelsOffset + tickLabelsPath.boundingRect().height();
-				title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2 + titleOffsetX, rect.bottomLeft().y() - offsetY ) );
+				title->setPosition( QPointF( (rect.topLeft().x() + rect.topRight().x())/2. + titleOffsetX, rect.bottomLeft().y() - offsetY) );
 			} else {
-				offsetX -= titleRect.width()/2;
+				offsetX -= titleRect.width()/2.;
 				if (labelsPosition == Axis::LabelsPosition::Out)
-					offsetX -= labelsOffset+ tickLabelsPath.boundingRect().width();
-				title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2 - titleOffsetY) );
+					offsetX -= labelsOffset + tickLabelsPath.boundingRect().width();
+				title->setPosition( QPointF( rect.topLeft().x() + offsetX, (rect.topLeft().y() + rect.bottomLeft().y())/2. - titleOffsetY) );
 			}
 			axisShape.addPath(WorksheetElement::shapeFromPath(title->graphicsItem()->mapToParent(title->graphicsItem()->shape()), linePen));
 		}
@@ -2519,7 +2518,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* /*opt
 					}
 					painter->drawText(QPoint(0, 0), tickLabelStrings.at(i));
 				} else {
-					QString style("p {color: %1;}");
+					const QString style("p {color: %1;}");
 					doc.setDefaultStyleSheet(style.arg(labelsColor.name()));
 					doc.setHtml("<p>" + tickLabelStrings.at(i) + "</p>");
 					QSizeF size = doc.size();
@@ -2556,8 +2555,6 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* /*opt
 			if (scalingFactor != 1)
 				text += UTF8_QSTRING("×") + numberLocale.toString(1./scalingFactor);
 			if (zeroOffset != 0) {
-//				if (!text.isEmpty())
-//					text += QLatin1String(" ");
 				if (zeroOffset < 0)
 					text += QLatin1String("+");
 				text += numberLocale.toString(-zeroOffset);
@@ -2595,6 +2592,7 @@ void AxisPrivate::paint(QPainter *painter, const QStyleOptionGraphicsItem* /*opt
 		}
 	}
 
+	// shape and label
 	if (m_hovered && !isSelected() && !q->isPrinting()) {
 		painter->setPen(QPen(QApplication::palette().color(QPalette::Shadow), 2, Qt::SolidLine));
 		painter->drawPath(axisShape);
@@ -2641,7 +2639,7 @@ void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		if (orientation == WorksheetElement::Orientation::Horizontal) {
 			setCursor(Qt::SizeHorCursor);
 			const int deltaXScene = (m_panningStart.x() - event->pos().x());
-			if (abs(deltaXScene) < 5)
+			if (std::abs(deltaXScene) < 5.)
 				return;
 
 			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());
@@ -2652,7 +2650,7 @@ void AxisPrivate::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 		} else {
 			setCursor(Qt::SizeVerCursor);
 			const int deltaYScene = (m_panningStart.y() - event->pos().y());
-			if (abs(deltaYScene) < 5)
+			if (std::abs(deltaYScene) < 5.)
 				return;
 
 			auto* plot = static_cast<CartesianPlot*>(q->parentAspect());

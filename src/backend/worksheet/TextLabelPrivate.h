@@ -13,7 +13,6 @@
 
 #include "src/backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "src/backend/worksheet/WorksheetElementPrivate.h"
-#include <QStaticText>
 #include <QFutureWatcher>
 #include <QDesktopWidget>
 
@@ -26,6 +25,7 @@ class CartesianPlot;
 class CartesianCoordinateSystem;
 class ScaledTextItem;
 class TextLabel;
+class QStaticText;
 
 class TextLabelPrivate : public WorksheetElementPrivate {
 public:
@@ -43,7 +43,7 @@ public:
 	TextLabel::TextWrapper textWrapper;
 	QFont teXFont{"Computer Modern", 20};	// reasonable default font and size
 	QColor fontColor{Qt::black}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
-	QColor backgroundColor{Qt::white}; // used only by the theme for unformatted text. The text font is in the HTML and so this variable is never set
+	QColor backgroundColor{Qt::white}; // same as fontColor
 	QImage teXImage;
 	QByteArray teXPdfData;
 	QFutureWatcher<QByteArray> teXImageFutureWatcher;

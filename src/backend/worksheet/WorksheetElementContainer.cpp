@@ -34,14 +34,12 @@
  */
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, AspectType type)
-	: WorksheetElement(name, new WorksheetElementContainerPrivate(this), type) {
-
+		: WorksheetElement(name, new WorksheetElementContainerPrivate(this), type) {
 	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
 WorksheetElementContainer::WorksheetElementContainer(const QString& name, WorksheetElementContainerPrivate* dd, AspectType type)
-	: WorksheetElement(name, dd, type) {
-
+		: WorksheetElement(name, dd, type) {
 	connect(this, &WorksheetElementContainer::aspectAdded, this, &WorksheetElementContainer::handleAspectAdded);
 }
 
@@ -72,8 +70,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 		beginMacro( i18n("%1: set invisible", name()) );
 
 	//change the visibility of all children
-	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden
-													| AbstractAspect::ChildIndexFlag::Compress);
+	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (auto* elem : elements) {
 		auto* curve = dynamic_cast<XYCurve*>(elem);
 		if (curve) {
@@ -94,8 +91,7 @@ void WorksheetElementContainer::setVisible(bool on) {
 }
 
 bool WorksheetElementContainer::isFullyVisible() const {
-	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden
-													| AbstractAspect::ChildIndexFlag::Compress);
+	const auto& elements = children<WorksheetElement>(AbstractAspect::ChildIndexFlag::IncludeHidden | AbstractAspect::ChildIndexFlag::Compress);
 	for (const auto* elem : elements) {
 		if (!elem->isVisible())
 			return false;
@@ -149,8 +145,8 @@ void WorksheetElementContainer::handleResize(double horizontalRatio, double vert
 	Q_D(const WorksheetElementContainer);
 	if (pageResize) {
 		QRectF rect(d->rect);
-		rect.setWidth(d->rect.width()*horizontalRatio);
-		rect.setHeight(d->rect.height()*verticalRatio);
+		rect.setWidth(d->rect.width() * horizontalRatio);
+		rect.setHeight(d->rect.height() * verticalRatio);
 		setRect(rect);
 	} else {
 // 		for (auto* elem : children<WorksheetElement>(IncludeHidden))
@@ -242,10 +238,10 @@ void WorksheetElementContainerPrivate::recalcShapeAndBoundingRect() {
 // 	foreach (const WorksheetElement* elem, childList)
 // 		boundingRectangle |= elem->graphicsItem()->mapRectToParent(elem->graphicsItem()->boundingRect());
 //
-	float penWidth = 2.;
+	qreal penWidth = 2.;
 	boundingRectangle = q->rect();
-	QDEBUG(Q_FUNC_INFO << ", bound rect = " << boundingRectangle)
-	boundingRectangle = QRectF(-boundingRectangle.width()/2 - penWidth / 2, -boundingRectangle.height()/2 - penWidth / 2,
+	//QDEBUG(Q_FUNC_INFO << ", bound rect = " << boundingRectangle)
+	boundingRectangle = QRectF(-boundingRectangle.width()/2. - penWidth/2., -boundingRectangle.height()/2. - penWidth/2.,
 				  boundingRectangle.width() + penWidth, boundingRectangle.height() + penWidth);
 
 	QPainterPath path;
@@ -277,6 +273,4 @@ void WorksheetElementContainerPrivate::paint(QPainter* painter, const QStyleOpti
 	}
 }
 
-void WorksheetElementContainerPrivate::retransform() {
-
-}
+void WorksheetElementContainerPrivate::retransform() {}

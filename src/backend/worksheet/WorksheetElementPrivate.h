@@ -7,22 +7,18 @@
 	SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-#ifndef WORKSHEETELEMENTPRIVATE
-#define WORKSHEETELEMENTPRIVATE
+#ifndef WORKSHEETELEMENTPRIVATE_H
+#define WORKSHEETELEMENTPRIVATE_H
 
 #include <QGraphicsItem>
-
-#include "WorksheetElement.h"
 #include "Worksheet.h"
 
 class WorksheetElement;
 
 class WorksheetElementPrivate: public QGraphicsItem {
-
 public:
-	WorksheetElementPrivate(WorksheetElement *);
+	WorksheetElementPrivate(WorksheetElement*);
 
-public:
 	// position in parent's coordinate system, the label gets aligned around this point
 	// TODO: try to get away the Worksheet dependency
 	WorksheetElement::PositionWrapper position{
@@ -39,7 +35,6 @@ public:
 	bool suppressRetransform{false};
 	WorksheetElement* const q{nullptr};
 
-public:
 	bool swapVisible(bool on);
 	QString name() const;
 	virtual void retransform() = 0;
@@ -48,10 +43,10 @@ public:
 	QRectF boundingRect() const override;
 	void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget* widget = nullptr) override;
 	virtual void keyPressEvent(QKeyEvent*) override;
-	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* event) override;
-	virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent*) override;
+	virtual QVariant itemChange(GraphicsItemChange, const QVariant &value) override;
 	QPointF mapParentToPlotArea(QPointF);
 	QPointF mapPlotAreaToParent(QPointF);
 };
 
-#endif //WORKSHEETELEMENTPRIVATE
+#endif
