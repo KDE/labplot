@@ -102,8 +102,6 @@ TextLabel::TextLabel(const QString &name, CartesianPlot* plot, Type type):
 }
 
 void TextLabel::init() {
-	Q_D(TextLabel);
-
 	QString groupName;
 	switch (m_type) {
 	case Type::General:
@@ -129,6 +127,7 @@ void TextLabel::init() {
 	if (config.hasGroup(groupName))
 		group = config.group(groupName);
 
+	Q_D(TextLabel);
 	d->position.point = QPointF(0, 0);
 	if (m_type == Type::PlotTitle || m_type == Type::PlotLegendTitle) {
 		d->position.verticalPosition = WorksheetElement::VerticalPosition::Top;
@@ -168,7 +167,7 @@ void TextLabel::init() {
 	}
 	d->updatePosition();
 
-	DEBUG("CHECK: default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
+	DEBUG(Q_FUNC_INFO << ", default/run time image resolution: " << d->teXImageResolution << '/' << QApplication::desktop()->physicalDpiX());
 
 	connect(&d->teXImageFutureWatcher, &QFutureWatcher<QByteArray>::finished, this, &TextLabel::updateTeXImage);
 }
@@ -203,7 +202,6 @@ void TextLabel::retransform() {
 
 void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool /*pageResize*/) {
 	DEBUG(Q_FUNC_INFO);
-	Q_D(TextLabel);
 
 	double ratio = 0;
 	if (horizontalRatio > 1.0 || verticalRatio > 1.0)
@@ -211,6 +209,7 @@ void TextLabel::handleResize(double horizontalRatio, double verticalRatio, bool 
 	else
 		ratio = qMin(horizontalRatio, verticalRatio);
 
+	Q_D(TextLabel);
 	d->teXFont.setPointSizeF(d->teXFont.pointSizeF() * ratio);
 	d->updateText();
 
@@ -460,7 +459,7 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 
 	if (m_gluePoints.isEmpty() || index > m_gluePoints.length()) {
 		pos = boundingRectangle.center();
-		name = "center";
+		name = QLatin1String("center");
 	} else if (index < 0) {
 		pos = m_gluePoints.at(0).point;
 		name = m_gluePoints.at(0).name;
@@ -501,11 +500,10 @@ void TextLabelPrivate::updatePosition() {
 	if (q->isLoading())
 		return;
 
-	QPointF p;
 	if (q->m_type == TextLabel::Type::AxisTitle) {
 		// In an axis element, the label is part of the bounding rect of the axis
 		// so it is not possible to align with the bounding rect
-		p = position.point;
+		QPointF p = position.point;
 		suppressItemChangeEvent = true;
 		setPos(p);
 		suppressItemChangeEvent = false;
@@ -520,10 +518,8 @@ void TextLabelPrivate::updatePosition() {
 			}
 			Q_EMIT q->positionLogicalChanged(positionLogical);
 		}
-	} else {
+	} else
 		WorksheetElementPrivate::updatePosition();
-		return;
-	}
 }
 
 /*!
@@ -572,11 +568,10 @@ void TextLabelPrivate::updateText() {
 	}
 	case TextLabel::Mode::Markdown: {
 #ifdef HAVE_DISCOUNT
-		QByteArray mdCharArray = textWrapper.text.toUtf8();
+		auto mdCharArray = textWrapper.text.toUtf8();
 		MMIOT* mdHandle = mkd_string(mdCharArray.data(), mdCharArray.size()+1, 0);
-		if(!mkd_compile(mdHandle, MKD_LATEX | MKD_FENCEDCODE | MKD_GITHUBTAGS))
-		{
-			DEBUG("Failed to compile the markdown document");
+		if(!mkd_compile(mdHandle, MKD_LATEX | MKD_FENCEDCODE | MKD_GITHUBTAGS)) {
+			DEBUG(Q_FUNC_INFO << ", Failed to compile the markdown document");
 			mkd_cleanup(mdHandle);
 			return;
 		}
@@ -608,7 +603,7 @@ void TextLabelPrivate::updateBoundingRect() {
 		h = m_textItem->boundingRect().height() * scaleFactor;
 	}
 
-	DEBUG(Q_FUNC_INFO << ", X/Y = " << -w/2 << " / " << -h/2 << ", w/h = " << w << " / " << h)
+	DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)
 	boundingRectangle.setX(-w/2);
 	boundingRectangle.setY(-h/2);
 	boundingRectangle.setWidth(w);

@@ -4,10 +4,9 @@
     Description          : Private members of TextLabel
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2012-2021 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2019 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2019-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef TEXTLABELPRIVATE_H
 #define TEXTLABELPRIVATE_H
@@ -17,6 +16,10 @@
 #include <QStaticText>
 #include <QFutureWatcher>
 #include <QDesktopWidget>
+
+extern "C" {
+#include <gsl/gsl_const_cgs.h>
+}
 
 class QGraphicsSceneHoverEvent;
 class CartesianPlot;
@@ -35,8 +38,7 @@ public:
 	// -> take this into account
 	double scaleFactor{Worksheet::convertToSceneUnits(1, Worksheet::Unit::Point)};
 	int teXImageResolution{QApplication::desktop()->physicalDpiX()};
-	//TODO: use constant for 2.54
-	double teXImageScaleFactor{Worksheet::convertToSceneUnits(2.54/QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
+	double teXImageScaleFactor{Worksheet::convertToSceneUnits(GSL_CONST_CGS_INCH/QApplication::desktop()->physicalDpiX(), Worksheet::Unit::Centimeter)};
 
 	TextLabel::TextWrapper textWrapper;
 	QFont teXFont{"Computer Modern", 20};	// reasonable default font and size
