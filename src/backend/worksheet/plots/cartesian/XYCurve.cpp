@@ -1186,7 +1186,7 @@ void XYCurvePrivate::recalcLogicalPoints() {
  */
 void XYCurvePrivate::addLine(QPointF p, double& x, double& minY, double& maxY, QPointF& lastPoint, int& pixelDiff, int numberOfPixelX, double minDiffX, RangeT::Scale scale, bool& prevPixelDiffZero) {
 	if (scale == RangeT::Scale::Linear) {
-		pixelDiff = abs(qRound(p.x() / minDiffX) - qRound(x / minDiffX));
+		pixelDiff = llabs(qRound64(p.x() / minDiffX) - qRound64(x / minDiffX)) > 0; // only relevant if greater zero or not
 		if (isnan(x)) {
 			x = p.x();
 			lastPoint = p;
