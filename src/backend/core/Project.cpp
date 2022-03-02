@@ -93,17 +93,30 @@ public:
 	bool setVersion(const QString &v) const {
 		versionString = v;
 		auto l = v.split(".");
-		Q_ASSERT(l.length() == 3);
+		const int count = l.count();
+		int major = 0;
+		int minor = 0;
+		int patch = 0;
 		bool ok;
-		int major = l.at(0).toInt(&ok);
-		if (!ok)
-			return false;
-		int minor = l.at(1).toInt(&ok);
-		if (!ok)
-			return false;
-		int patch = l.at(2).toInt(&ok);
-		if (!ok)
-			return false;
+
+		if (count > 0) {
+			major = l.at(0).toInt(&ok);
+			if (!ok)
+				return false;
+		}
+
+		if (count > 1) {
+			minor = l.at(1).toInt(&ok);
+			if (!ok)
+				return false;
+		}
+
+		if (count > 2) {
+			patch = l.at(2).toInt(&ok);
+			if (!ok)
+				return false;
+		}
+
 		m_versionNumber = QT_VERSION_CHECK(major, minor, patch);
 		return true;
 	}
