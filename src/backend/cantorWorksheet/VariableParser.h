@@ -55,7 +55,7 @@ private:
 	QString m_string;
 	void* m_values{nullptr};
 	bool m_parsed{false};
-	AbstractColumn::ColumnMode m_dataType;
+	AbstractColumn::ColumnMode m_dataType{AbstractColumn::ColumnMode::Double};
 
 	void parseMaximaValues();
 	void parsePythonValues();

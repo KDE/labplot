@@ -26,7 +26,7 @@ public:
 	explicit DatabaseManagerWidget(QWidget*, QString);
 
 	struct SQLConnection {
-		int port;
+		int port{0};
 		QString name;
 		QString driver;
 		QString hostName;

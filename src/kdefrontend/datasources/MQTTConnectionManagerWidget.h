@@ -25,14 +25,14 @@ public:
 
 	struct MQTTConnection {
 		QString name;
-		int port;
+		int port{1883};
 		QString hostName;
-		bool useAuthentication;
+		bool useAuthentication{false};
 		QString userName;
 		QString password;
-		bool useID;
+		bool useID{false};
 		QString clientID;
-		bool retain;
+		bool retain{false};
 	};
 
 	QString connection() const;

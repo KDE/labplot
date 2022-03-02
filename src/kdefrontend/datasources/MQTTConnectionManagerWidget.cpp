@@ -395,9 +395,6 @@ void MQTTConnectionManagerWidget::addConnection() {
 	MQTTConnection conn;
 	conn.name = uniqueName();
 	conn.hostName = QStringLiteral("localhost");
-	conn.port = 1883;
-	conn.useAuthentication = false;
-	conn.useID = false;
 
 	m_connections.append(conn);
 	m_currentConnection = &m_connections.back();
