@@ -32,7 +32,7 @@ QMutex mutex;
 
 class DiscretizeTask : public QRunnable {
 public:
-	DiscretizeTask(int start, int end, QImage* plotImage, QImage* originalImage, const DatapickerImage::EditorSettings& settings, QColor background) :
+	DiscretizeTask(int start, int end, QImage* plotImage, const QImage* originalImage, const DatapickerImage::EditorSettings& settings, QColor background) :
 		m_start(start),
 		m_end(end),
 		m_plotImage(plotImage),
@@ -76,7 +76,7 @@ private:
 	int m_start;
 	int m_end;
 	QImage* m_plotImage;
-	QImage* m_originalImage;
+	const QImage* m_originalImage;
 	DatapickerImage::EditorSettings m_settings;
 	QColor m_background;
 };
@@ -84,7 +84,7 @@ private:
 /*!
  *
  */
-void ImageEditor::discretize(QImage* plotImage, QImage* originalImage,
+void ImageEditor::discretize(QImage* plotImage, const QImage* originalImage,
                              const DatapickerImage::EditorSettings& settings, QColor background) {
 	plotImage->fill(white);
 	QThreadPool* pool = QThreadPool::globalInstance();

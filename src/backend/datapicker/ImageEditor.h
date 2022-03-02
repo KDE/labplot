@@ -18,7 +18,7 @@ class QColor;
 
 class ImageEditor {
 public:
-	static void discretize(QImage*, QImage*, const DatapickerImage::EditorSettings&, QColor);
+	static void discretize(QImage*, const QImage *, const DatapickerImage::EditorSettings&, QColor);
 	static bool processedPixelIsOn(const QImage&, int, int);
 	static QRgb findBackgroundColor(const QImage*);
 	static int colorAttributeMax(DatapickerImage::ColorAttributes);
