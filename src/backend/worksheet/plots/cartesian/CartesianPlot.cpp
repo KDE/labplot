@@ -2700,7 +2700,7 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 	if (index == -1) {	// all ranges
 		bool updated = false;
 		for (int i = 0; i < xRangeCount(); i++) {
-			if (scaleAutoX(i, fullRange))
+			if (autoScaleX(i) && scaleAutoX(i, fullRange))
 				updated = true; // at least one was updated
 		}
 		return updated;
@@ -2767,7 +2767,7 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 	if (index == -1) {
 		bool updated = false;
 		for (int i = 0; i < yRangeCount(); i++) {
-			if (scaleAutoY(i, fullRange))
+			if (autoScaleY(i) && scaleAutoY(i, fullRange))
 				updated = true; // at least one was updated
 		}
 		return updated;
