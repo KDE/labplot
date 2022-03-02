@@ -60,7 +60,7 @@ public:
 					continue;
 
 				value = ImageEditor::discretizeIntensity(x, y, m_originalImage);
-				if (!ImageEditor::pixelIsOn(value, DatapickerImage::ColorAttributes::Saturation, m_settings))
+				if (!ImageEditor::pixelIsOn(value, DatapickerImage::ColorAttributes::Intensity, m_settings))
 					continue;
 
 				value = ImageEditor::discretizeForeground(x, y, m_background, m_originalImage);
