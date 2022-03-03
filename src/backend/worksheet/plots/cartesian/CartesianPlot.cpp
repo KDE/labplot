@@ -2744,12 +2744,8 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 				xRange.setRange(value * 0.9, value * 1.1);
 			else
 				xRange.setRange(-0.1, 0.1);
-		} else {
+		} else
 			xRange.extend( xRange.size() * d->autoScaleOffsetFactor );
-		}
-		// extend to nice values
-		// if (niceExtend)
-		//   xRange.niceExtend();
 
 		d->retransformXScale(index);
 	}
@@ -2810,9 +2806,8 @@ bool CartesianPlot::scaleAutoY(int index, bool fullRange) {
 				yRange.setRange(value * 0.9, value * 1.1);
 			else
 				yRange.setRange(-0.1, 0.1);
-		} else {
+		} else
 			yRange.extend( yRange.size() * d->autoScaleOffsetFactor );
-		}
 
 		d->retransformYScale(index);
 	}
