@@ -2708,7 +2708,7 @@ bool CartesianPlot::scaleAutoX(int index, bool fullRange) {
 
 	Q_D(CartesianPlot);
 	auto& xRange{ d->xRange(index) };
-	DEBUG(Q_FUNC_INFO << ", auto scale enabled" << ", dirty = " << xRangeDirty(index))
+	DEBUG(Q_FUNC_INFO << ", x range dirty = " << xRangeDirty(index))
 	if (xRangeDirty(index)) {
 		calculateDataXRange(index, fullRange);
 		setXRangeDirty(index, false);
