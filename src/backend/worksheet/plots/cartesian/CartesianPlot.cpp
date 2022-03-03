@@ -2117,10 +2117,7 @@ void CartesianPlot::addReferenceLine() {
 	line->setCoordinateSystemIndex(defaultCoordinateSystemIndex());
 
 	if (d->calledFromContextMenu)  {
-		if (line->orientation() == WorksheetElement::Orientation::Vertical)
-			line->setPositionLogical(d->logicalPos);
-		else
-			line->setPositionLogical(d->logicalPos);
+		line->setPositionLogical(d->logicalPos);
 		d->calledFromContextMenu = false;
 	}
 
