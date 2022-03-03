@@ -653,7 +653,7 @@ void BoxPlotPrivate::recalc() {
 	//resize the internal containers
 	const int count = dataColumns.size();
 	m_boxRect.resize(count);
-	m_fillRect.resize(count);
+	m_fillPolygon.resize(count);
 	m_xMinBox.resize(count);
 	m_xMaxBox.resize(count);
 	m_yMinBox.resize(count);
@@ -1178,7 +1178,7 @@ void BoxPlotPrivate::updateFillingRect(int index, const QVector<QLineF>& lines) 
 	const auto& unclippedLines = q->cSystem->mapLogicalToScene(lines, AbstractCoordinateSystem::MappingFlag::SuppressPageClipping);
 
 	if (unclippedLines.isEmpty()) {
-		m_fillRect[index] = QRectF();
+		m_fillPolygon[index] = QPolygonF();
 		return;
 	}
 
@@ -1224,7 +1224,7 @@ void BoxPlotPrivate::updateFillingRect(int index, const QVector<QLineF>& lines) 
 		++i;
 	}
 
-	m_fillRect[index] = polygon.boundingRect();
+	m_fillPolygon[index] = polygon;
 }
 
 /*!
@@ -1535,7 +1535,8 @@ void BoxPlotPrivate::drawSymbols(QPainter* painter, int index) {
 void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 	PERFTRACE(name() + Q_FUNC_INFO);
 
-	const QRectF& rect = m_fillRect.at(index);
+	const QPolygonF& polygon = m_fillPolygon.at(index);
+	const QRectF& rect = polygon.boundingRect();
 
 	if (fillingType == WorksheetElement::BackgroundType::Color) {
 		switch (fillingColorStyle) {
@@ -1619,7 +1620,7 @@ void BoxPlotPrivate::drawFilling(QPainter* painter, int index) {
 	} else if (fillingType == WorksheetElement::BackgroundType::Pattern)
 		painter->setBrush(QBrush(fillingFirstColor,fillingBrushStyle));
 
-	painter->drawRect(rect);
+	painter->drawPolygon(polygon);
 }
 
 void BoxPlotPrivate::paint(QPainter* painter, const QStyleOptionGraphicsItem* /*option*/, QWidget*) {
