@@ -494,7 +494,7 @@ void CartesianPlotDock::updateLocale() {
 			ui.leRangePoints->setText( numberLocale.toString(m_plot->rangeLastValues()) );
 
 		// x ranges
-		bool isDateTime{ false };
+		bool isDateTime = false;
 		for (int row = 0; row < qMin(ui.twXRanges->rowCount(), m_plot->xRangeCount()); row++) {
 			const auto xRange{ m_plot->xRange(row) };
 			DEBUG(Q_FUNC_INFO << ", x range " << row << " auto scale = " << xRange.autoScale())
@@ -549,23 +549,17 @@ void CartesianPlotDock::updateLocale() {
 					isDateTime = true;
 			}
 		}
-//TODO
-		DEBUG(Q_FUNC_INFO << ", section size = " << ui.twYRanges->horizontalHeader()->sectionSize(2));
-		DEBUG(Q_FUNC_INFO << ", min section size = " << ui.twYRanges->horizontalHeader()->minimumSectionSize());
-//		ui.twYRanges->horizontalHeader()->resizeSection(2, ui.twYRanges->horizontalHeader()->minimumSectionSize());
-//		ui.twYRanges->horizontalHeader()->setDefaultSectionSize(ui.twYRanges->horizontalHeader()->minimumSectionSize());
-		DEBUG(Q_FUNC_INFO << ", section size = " << ui.twYRanges->horizontalHeader()->sectionSize(2));
-		DEBUG(Q_FUNC_INFO << ", min section size = " << ui.twYRanges->horizontalHeader()->minimumSectionSize());
 		if (isDateTime) {
 			ui.twYRanges->resizeColumnToContents(2);
-			DEBUG(Q_FUNC_INFO << ", section size = " << ui.twYRanges->horizontalHeader()->sectionSize(2));
-			DEBUG(Q_FUNC_INFO << ", min section size = " << ui.twYRanges->horizontalHeader()->minimumSectionSize());
 			ui.twYRanges->resizeColumnToContents(3);
 		}
 	}
 
 	//update the title label
 	labelWidget->updateLocale();
+
+	//update locale plot range list
+	updatePlotRangeList();
 }
 
 void CartesianPlotDock::updateUnits() {
@@ -659,16 +653,12 @@ void CartesianPlotDock::updateXRangeList() {
 			auto* le = new QLineEdit(ui.twXRanges);
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
-//			le->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
-//			le->resize(le->minimumSizeHint());
 			ui.twXRanges->setCellWidget(i, TwRangesColumn::Min, le);
 			connect(le, &QLineEdit::textChanged, this, &CartesianPlotDock::xMinChanged);
 			DEBUG(Q_FUNC_INFO << ", max length = " << le->maxLength())
 			le = new QLineEdit(ui.twXRanges);
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
-//			le->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
-//			le->resize(le->minimumSizeHint());
 			ui.twXRanges->setCellWidget(i, TwRangesColumn::Max, le);
 			connect(le, &QLineEdit::textChanged, this, &CartesianPlotDock::xMaxChanged);
 		} else {
