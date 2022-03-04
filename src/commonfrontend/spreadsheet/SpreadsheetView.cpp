@@ -1631,7 +1631,11 @@ void SpreadsheetView::pasteIntoSelection() {
 		if (hasTabs)
 			cellTexts.append(input_rows.at(i).split(QLatin1Char('\t')));
 		else if (numberLocale.groupSeparator().isSpace() && !(numberOptions & QLocale::OmitGroupSeparator)) 	// locale with ' ' as group seperator && omit group seperator not set
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (Qt::SplitBehavior)0x1));	// split with two spaces
+#else
 			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s\\s")), (QString::SplitBehavior)0x1));	// split with two spaces
+#endif
 		else
 			cellTexts.append(input_rows.at(i).split(QRegularExpression(QStringLiteral("\\s+"))));
 
@@ -2002,7 +2006,11 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: fill cells with random values", m_spreadsheet->name()));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
+	QRandomGenerator rng(QTime::currentTime().msec());
+#else
 	qsrand(QTime::currentTime().msec());
+#endif
 	for (auto* col_ptr : selectedColumns()) {
 		int col = m_spreadsheet->indexOfChild<Column>(col_ptr);
 		col_ptr->setSuppressDataChangedSignal(true);
@@ -2012,7 +2020,7 @@ void SpreadsheetView::fillSelectedCellsWithRandomNumbers() {
 				for (int row = first; row <= last; row++)
 					if (isCellSelected(row, col))
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-						results[row-first] = QRandomGenerator::global()->generateDouble();
+						results[row-first] = rng.generateDouble();
 #else
 						results[row-first] = double(qrand())/double(RAND_MAX);
 #endif

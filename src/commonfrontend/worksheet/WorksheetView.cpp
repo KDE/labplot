@@ -1025,6 +1025,7 @@ void WorksheetView::resizeEvent(QResizeEvent* event) {
 void WorksheetView::wheelEvent(QWheelEvent* event) {
 	if (m_mouseMode == MouseMode::ZoomSelection || (QApplication::keyboardModifiers() & Qt::ControlModifier)) {
 		//https://wiki.qt.io/Smooth_Zoom_In_QGraphicsView
+		//TODO: use angleDelta()
 		int numDegrees = event->delta() / 8;
 		int numSteps = numDegrees / 15; // see QWheelEvent documentation
 		zoom(numSteps);
