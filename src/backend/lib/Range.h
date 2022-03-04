@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : basic data range class
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2020-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2020-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -130,10 +130,10 @@ public:
 
 	//! Return a string in the format 'start .. end' and uses system locale (specialization see below)
 	// round == true rounds the double values
-	QString toString(bool round = true) const {
+	QString toString(bool round = true, QLocale locale = QLocale()) const {
 		Q_UNUSED(round)
 		if (m_format == Format::Numeric)
-			return QLocale().toString(m_start) + " .. " + QLocale().toString(m_end);
+			return locale.toString(m_start) + " .. " + locale.toString(m_end);
 		else
 			return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + " .. "
 				+ QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);
@@ -142,7 +142,7 @@ public:
 	//! Return a string in the format 'start .. end' and uses number locale
 	QString toLocaleString(bool round = true) const {
 		SET_NUMBER_LOCALE
-		return this->toString(round);
+		return this->toString(round, numberLocale);
 	}
 //extend/shrink range to nice numbers (used in auto scaling)
 	// get nice size to extend to (see Glassner: Graphic Gems)
@@ -344,15 +344,15 @@ private:
 
 // specialization
 template<>
-inline QString Range<double>::toString(bool round) const {
+inline QString Range<double>::toString(bool round, QLocale locale) const {
 	if (m_format == Format::Numeric) {
 		if (round) {
 			const int relPrec = relativePrecision();
 			//DEBUG(Q_FUNC_INFO << ", rel prec = " << relPrec)
-			return QLocale().toString(nsl_math_round_precision(m_start, relPrec), 'g', relPrec) + QLatin1String(" .. ") +
-				QLocale().toString(nsl_math_round_precision(m_end, relPrec), 'g', relPrec);
+			return locale.toString(nsl_math_round_precision(m_start, relPrec), 'g', relPrec) + QLatin1String(" .. ") +
+				locale.toString(nsl_math_round_precision(m_end, relPrec), 'g', relPrec);
 		} else
-			return QLocale().toString(m_start, 'g', 12) + QLatin1String(" .. ") + QLocale().toString(m_end, 'g', 12);
+			return locale.toString(m_start, 'g', 12) + QLatin1String(" .. ") + locale.toString(m_end, 'g', 12);
 	} else
 		return QDateTime::fromMSecsSinceEpoch(m_start).toString(m_dateTimeFormat) + QLatin1String(" .. ") +
 			QDateTime::fromMSecsSinceEpoch(m_end).toString(m_dateTimeFormat);

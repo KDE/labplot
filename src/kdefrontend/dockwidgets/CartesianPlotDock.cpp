@@ -757,19 +757,11 @@ void CartesianPlotDock::updateYRangeList() {
 			auto* le = new QLineEdit(ui.twYRanges);
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
-//TODO			le->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-//			QDEBUG(Q_FUNC_INFO << ", SIZE HINT = " << le->sizeHint())
-//			QDEBUG(Q_FUNC_INFO << ", MIN SIZE HINT = " << le->minimumSizeHint())
-//			QDEBUG(Q_FUNC_INFO << ", SIZE = " << le->size())
-//			le->resize(le->minimumSizeHint());
-//			QDEBUG(Q_FUNC_INFO << ", resize SIZE = " << le->size())
 			ui.twYRanges->setCellWidget(i, TwRangesColumn::Min, le);
 			connect(le, &QLineEdit::textChanged, this, &CartesianPlotDock::yMinChanged);
 			le = new QLineEdit(ui.twYRanges);
 			le->setValidator(new QDoubleValidator(le));
 			le->setProperty("row", i);
-//			le->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-//			le->setMinimumSize(le->minimumSizeHint());
 			ui.twYRanges->setCellWidget(i, TwRangesColumn::Max, le);
 			connect(le, &QLineEdit::textChanged, this, &CartesianPlotDock::yMaxChanged);
 		} else {
@@ -800,13 +792,9 @@ void CartesianPlotDock::updateYRangeList() {
 		ui.twYRanges->setCellWidget(i, TwRangesColumn::Scale, cb);
 		connect(cb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::yScaleChanged);
 	}
-//TODO	ui.twYRanges->horizontalHeader()->resizeSection(2, ui.twYRanges->horizontalHeader()->minimumSectionSize());
 	DEBUG(Q_FUNC_INFO << ", section resize mode = " << ui.twYRanges->horizontalHeader()->sectionResizeMode(2));
 	DEBUG(Q_FUNC_INFO << ", section size = " << ui.twYRanges->horizontalHeader()->sectionSize(2));
 	DEBUG(Q_FUNC_INFO << ", min section size = " << ui.twYRanges->horizontalHeader()->minimumSectionSize());
-//	DEBUG(Q_FUNC_INFO << ", min section size = " << ui.twYRanges->sizeHintForColumn());
-//	ui.twYRanges->resizeColumnsToContents();
-//	ui.twYRanges->setColumnWidth(2, 57);
 	DEBUG(Q_FUNC_INFO << ", section size = " << ui.twYRanges->horizontalHeader()->sectionSize(2));
 	DEBUG(Q_FUNC_INFO << ", min section size = " << ui.twYRanges->horizontalHeader()->minimumSectionSize());
 	ui.twYRanges->resizeColumnToContents(0);
