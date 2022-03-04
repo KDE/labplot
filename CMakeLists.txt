@@ -1,7 +1,6 @@
 project(labplot2)
 
-# minimum may be 3.16.0 for FindIcoTool.cmake and FindSharedMimeInfo.cmake
-cmake_minimum_required (VERSION 3.2.0 FATAL_ERROR)
+cmake_minimum_required (VERSION 3.16.0 FATAL_ERROR)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
