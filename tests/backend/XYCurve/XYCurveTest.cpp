@@ -13,11 +13,9 @@
 
 // To be able to access the private of the curve
 #define private public
-#define protected public
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
 #include "backend/worksheet/plots/cartesian/XYCurvePrivate.h"
 #undef private
-#undef protected
 
 #include "backend/lib/trace.h"
 #include "backend/core/Project.h"
@@ -27,7 +25,8 @@
 	QVERIFY(curve_variable_name != nullptr); \
 	QCOMPARE(curve_variable_name->name(), QLatin1String(column_name)); \
 	QCOMPARE(curve_variable_name->type(), AspectType::XYCurve); \
-	auto* curve_variable_name ## Private = curve_variable_name->d_func();
+	auto* curve_variable_name ## Private = curve_variable_name->d_func(); \
+	Q_UNUSED(curve_variable_name ## Private)
 
 #define LOAD_PROJECT \
 	Project project; \
