@@ -485,7 +485,11 @@ void LiveDataSource::read() {
 			m_tcpSocket->connectToHost(m_host, m_port, QIODevice::ReadOnly);
 
 			connect(m_tcpSocket, &QTcpSocket::readyRead, this, &LiveDataSource::readyRead);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+			connect(m_tcpSocket, static_cast<void (QTcpSocket::*) (QAbstractSocket::SocketError)>(&QTcpSocket::errorOccurred), this, &LiveDataSource::tcpSocketError);
+#else
 			connect(m_tcpSocket, static_cast<void (QTcpSocket::*) (QAbstractSocket::SocketError)>(&QTcpSocket::error), this, &LiveDataSource::tcpSocketError);
+#endif
 
 			break;
 		case SourceType::NetworkUdpSocket:
@@ -497,7 +501,11 @@ void LiveDataSource::read() {
 			// only connect to readyRead when update is on new data
 			if (m_updateType == UpdateType::NewData)
 				connect(m_udpSocket, &QUdpSocket::readyRead, this, &LiveDataSource::readyRead);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+			connect(m_udpSocket, static_cast<void (QUdpSocket::*) (QAbstractSocket::SocketError)>(&QUdpSocket::errorOccurred), this, &LiveDataSource::tcpSocketError);
+#else
 			connect(m_udpSocket, static_cast<void (QUdpSocket::*) (QAbstractSocket::SocketError)>(&QUdpSocket::error), this, &LiveDataSource::tcpSocketError);
+#endif
 
 			break;
 		case SourceType::LocalSocket:
@@ -506,7 +514,11 @@ void LiveDataSource::read() {
 			m_localSocket->connectToServer(m_localSocketName, QLocalSocket::ReadOnly);
 
 			connect(m_localSocket, &QLocalSocket::readyRead, this, &LiveDataSource::readyRead);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+			connect(m_localSocket, static_cast<void (QLocalSocket::*) (QLocalSocket::LocalSocketError)>(&QLocalSocket::errorOccurred), this, &LiveDataSource::localSocketError);
+#else
 			connect(m_localSocket, static_cast<void (QLocalSocket::*) (QLocalSocket::LocalSocketError)>(&QLocalSocket::error), this, &LiveDataSource::localSocketError);
+#endif
 
 			break;
 		case SourceType::SerialPort:
