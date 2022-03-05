@@ -2447,10 +2447,21 @@ void CartesianPlot::childRemoved(const AbstractAspect* /*parent*/, const Abstrac
 			DEBUG(Q_FUNC_INFO << ", a curve")
 			updateLegend();
 			Q_EMIT curveRemoved(curve);
-			auto cs = coordinateSystem(curve->coordinateSystemIndex());
-			d->xRanges[cs->xIndex()].dirty = true;
-			d->yRanges[cs->yIndex()].dirty = true;
-			if (scaleAuto(cs->xIndex(), cs->yIndex()))	// update all plot ranges and update if changed
+			const auto cs = coordinateSystem(curve->coordinateSystemIndex());
+			const auto xIndex = cs->xIndex();
+			const auto yIndex = cs->yIndex();
+			d->xRanges[xIndex].dirty = true;
+			d->yRanges[yIndex].dirty = true;
+
+			bool rangeChanged = false;
+			if (autoScaleX(xIndex) && autoScaleY(yIndex))
+				rangeChanged = scaleAuto(xIndex, yIndex);
+			else if (autoScaleX(xIndex))
+				rangeChanged = scaleAutoX(xIndex);
+			else if (autoScaleY(yIndex))
+				rangeChanged = scaleAutoY(yIndex);
+
+			if (rangeChanged)
 				retransform();
 		}
 	}
@@ -2502,7 +2513,14 @@ void CartesianPlot::dataChanged(int xIndex, int yIndex, WorksheetElement* sender
 	} else
 		d->yRanges[yIndex].dirty = true;
 
-	const bool updated{ scaleAuto(xIndex, yIndex) };
+	bool updated = false;
+	if (autoScaleX(xIndex) && autoScaleY(yIndex))
+		updated = scaleAuto(xIndex, yIndex);
+	else if (autoScaleX(xIndex))
+		updated = scaleAutoX(xIndex);
+	else if (autoScaleY(yIndex))
+		updated = scaleAutoY(yIndex);
+
 	if (!updated || !sender) {
 		//even if the plot ranges were not changed, either no auto scale active or the new data
 		//is within the current ranges and no change of the ranges is required,
