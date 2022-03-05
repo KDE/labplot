@@ -729,7 +729,15 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 					setXRangeDirty(cSystem->xIndex(), true);
 					setYRangeDirty(cSystem->yIndex(), true);
 				}
-				scaleAuto(cSystem->xIndex(), cSystem->yIndex());
+				if (!autoScaleX(cSystem->xIndex()))
+					enableAutoScaleX(cSystem->xIndex(), true, true, true);
+				else // if already autoscale set, scaleAutoX will not be called anymore, so force it to do
+					scaleAutoX(cSystem->xIndex(), true);
+
+				if (!autoScaleY(cSystem->yIndex()))
+					enableAutoScaleY(cSystem->yIndex(), true, true, true);
+				else
+					scaleAutoY(cSystem->yIndex(), true);
 			}
 			retransform();
 		} else {
@@ -740,11 +748,24 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 				setXRangeDirty(xIndex, true);
 				setYRangeDirty(yIndex, true);
 			}
-			scaleAuto(xIndex, yIndex);
+			if (!autoScaleX(cSystem->xIndex()))
+				enableAutoScaleX(cSystem->xIndex(), true, true, true);
+			else
+				scaleAutoX(cSystem->xIndex(), true);
+
+			if (!autoScaleY(cSystem->yIndex()))
+				enableAutoScaleY(cSystem->yIndex(), true, true, true);
+			else
+				scaleAutoY(cSystem->yIndex(), true);
 			retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoX) {
-		if (scaleAutoX(xIndex)) {
+		bool update = autoScaleX(xIndex) && xRangeDirty(xIndex);
+		if (!autoScaleX(cSystem->xIndex()))
+			enableAutoScaleX(cSystem->xIndex(), true, true, true);
+		else
+			update |= scaleAutoX(cSystem->xIndex(), true);
+		if (update) {
 			for (int i=0; i < m_coordinateSystems.count(); i++) {
 				auto cs = coordinateSystem(i);
 				if ((cSystemIndex == -1 || xIndex == cs->xIndex()) && autoScaleY(cs->yIndex()))
@@ -753,7 +774,12 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 			retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoY) {
-		if (scaleAutoY(yIndex)) {
+		bool update = autoScaleY(yIndex) && yRangeDirty(yIndex);
+		if (!autoScaleY(cSystem->yIndex()))
+			enableAutoScaleY(cSystem->yIndex(), true, true, true);
+		else
+			update |= scaleAutoY(cSystem->yIndex(), true);
+		if (update) {
 			for (int i=0; i < m_coordinateSystems.count(); i++) {
 				auto cs = coordinateSystem(i);
 				if ((cSystemIndex == -1 || yIndex == cs->yIndex()) && autoScaleX(cs->xIndex()))
@@ -1137,18 +1163,18 @@ bool CartesianPlot::autoScaleY(int index) const {
 
 class CartesianPlotEnableAutoScaleXIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotEnableAutoScaleXIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index) :
-		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_oldRange(0.0, 0.0) {
+	CartesianPlotEnableAutoScaleXIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index, bool fullRange) :
+		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_oldRange(0.0, 0.0), m_fullRange(fullRange) {
 		setText(i18n("%1: change x-range %2 auto scaling", m_private->name(), m_index + 1));
 	}
 
 	void redo() override {
 		m_autoScaleOld = m_private->autoScaleX(m_index);
+		m_private->enableAutoScaleX(m_index, m_autoScale);
 		if (m_autoScale) {
 			m_oldRange = m_private->xRange(m_index);
-			m_private->q->scaleAutoX(m_index, false);
+			m_private->q->scaleAutoX(m_index, m_fullRange);
 		}
-		m_private->enableAutoScaleX(m_index, m_autoScale);
 		Q_EMIT m_private->q->xAutoScaleChanged(m_index, m_autoScale);
 	}
 
@@ -1167,21 +1193,22 @@ private:
 	bool m_autoScaleOld{false};
 	int m_index;
 	Range<double> m_oldRange;
+	bool m_fullRange;
 };
 class CartesianPlotEnableAutoScaleYIndexCmd : public QUndoCommand {
 public:
-	CartesianPlotEnableAutoScaleYIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index) :
-		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_oldRange(0.0, 0.0) {
+	CartesianPlotEnableAutoScaleYIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index, bool fullRange) :
+		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_oldRange(0.0, 0.0) m_fullRange(fullRange) {
 		setText(i18n("%1: change y-range %2 auto scaling", m_private->name(), m_index + 1));
 	}
 
 	void redo() override {
 		m_autoScaleOld = m_private->autoScaleY(m_index);
+		m_private->enableAutoScaleY(m_index, m_autoScale);
 		if (m_autoScale) {
 			m_oldRange = m_private->yRange(m_index);
-			m_private->q->scaleAutoY(m_index, false);
+			m_private->q->scaleAutoY(m_index, m_fullRange);
 		}
-		m_private->enableAutoScaleY(m_index, m_autoScale);
 		Q_EMIT m_private->q->yAutoScaleChanged(m_index, m_autoScale);
 	}
 
@@ -1200,10 +1227,11 @@ private:
 	bool m_autoScaleOld{false};
 	int m_index;
 	Range<double> m_oldRange;
+	bool m_fullRange;
 };
 
 // set auto scale for x range index (index == -1: all ranges)
-void CartesianPlot::enableAutoScaleX(int index, const bool enable, bool suppressRetransform) {
+void CartesianPlot::enableAutoScaleX(int index, const bool enable, bool suppressRetransform, bool fullRange) {
 	PERFTRACE(Q_FUNC_INFO);
 	Q_D(CartesianPlot);
 	if (index == -1) {	// all x ranges
@@ -1217,18 +1245,16 @@ void CartesianPlot::enableAutoScaleX(int index, const bool enable, bool suppress
 	if (enable != xRange(index).autoScale()) {
 		DEBUG(Q_FUNC_INFO << ", x range " << index << " enable auto scale: " << enable)
 		// TODO: maybe using the first and then adding the first one as parent to the next undo command
-		exec(new CartesianPlotEnableAutoScaleXIndexCmd(d, enable, index));
+		exec(new CartesianPlotEnableAutoScaleXIndexCmd(d, enable, index, fullRange));
 		if (!suppressRetransform)
 			retransform();
-		if (enable)	// prepare auto scale
-			d->xRanges[index].dirty = true;
 		if (project())
 			project()->setChanged(true);
 	}
 
 }
 // set auto scale for y range index (index == -1: all ranges)
-void CartesianPlot::enableAutoScaleY(int index, const bool enable, bool suppressRetransform) {
+void CartesianPlot::enableAutoScaleY(int index, const bool enable, bool suppressRetransform, bool fullRange) {
 	PERFTRACE(Q_FUNC_INFO);
 	Q_D(CartesianPlot);
 	if (index == -1) {	// all y axes
@@ -1241,11 +1267,9 @@ void CartesianPlot::enableAutoScaleY(int index, const bool enable, bool suppress
 
 	if (enable != yRange(index).autoScale()) {
 		// TODO: maybe using the first and then adding the first one as parent to the next undo command
-		exec(new CartesianPlotEnableAutoScaleYIndexCmd(d, enable, index));
+		exec(new CartesianPlotEnableAutoScaleYIndexCmd(d, enable, index, fullRange));
 		if (!suppressRetransform)
 			retransform();
-		if (enable)	// prepare auto scale
-			d->yRanges[index].dirty = true;
 		if (project())
 			project()->setChanged(true);
 	}
@@ -1385,11 +1409,25 @@ const Range<double>& CartesianPlot::dataYRange(int index) {
 
 bool CartesianPlot::xRangeDirty(int index) {
 	Q_D(CartesianPlot);
-	return d->xRanges.at(index).dirty;
+	if (index >= 0 && index < xRangeCount())
+		return d->xRanges.at(index).dirty;
+	else {
+		bool dirty = false;
+		for (const auto&r: d->xRanges)
+			dirty |= r.dirty;
+		return dirty;
+	}
 }
 bool CartesianPlot::yRangeDirty(int index) {
 	Q_D(CartesianPlot);
-	return d->yRanges.at(index).dirty;
+	if (index >= 0 && index < yRangeCount())
+		return d->yRanges.at(index).dirty;
+	else {
+		bool dirty = false;
+		for (const auto&r: d->yRanges)
+			dirty |= r.dirty;
+		return dirty;
+	}
 }
 
 void CartesianPlot::setXRangeDirty(int index, bool dirty) {

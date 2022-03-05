@@ -125,9 +125,9 @@ public:
 	BASIC_D_ACCESSOR_DECL(int, rangeFirstValues, RangeFirstValues)
 
 	bool autoScaleX(int index = -1) const;
-	void enableAutoScaleX(int index = -1, bool enable = true, bool suppressRetransform = true);
+	void enableAutoScaleX(int index = -1, bool enable = true, bool suppressRetransform = true, bool fullRange = false);
 	bool autoScaleY(int index = -1) const;
-	void enableAutoScaleY(int index = -1, bool enable = true, bool suppressRetransform = true);
+	void enableAutoScaleY(int index = -1, bool enable = true, bool suppressRetransform = true, bool fullRange = false);
 
 	int xRangeCount() const;
 	int yRangeCount() const;
