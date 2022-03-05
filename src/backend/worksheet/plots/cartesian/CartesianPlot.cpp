@@ -2872,15 +2872,6 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange) {
 		//setYRangeDirty(coordinateSystem(cSystemIndex)->yIndex(), false);
 	}
 
-	Q_D(CartesianPlot);
-	if (updateX || updateY) {
-		if (updateX)
-			enableAutoScaleX(xIndex, true, true);
-		if (updateY)
-			enableAutoScaleY(yIndex, true, true);
-
-	}
-
 	return (updateX || updateY);
 }
 
