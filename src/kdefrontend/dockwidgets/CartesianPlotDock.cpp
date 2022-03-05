@@ -1063,7 +1063,7 @@ void CartesianPlotDock::autoScaleXRange(const int index, bool checked) {
 
 	for (auto* plot : m_plotList) {
 		bool retransform = false;
-		plot->enableAutoScaleX(index, checked, true);
+		plot->enableAutoScaleX(index, checked, true, true);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->xRange(index).autoScale())
 		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
 			retransform = plot->scaleAutoX(index, true);
@@ -1112,7 +1112,7 @@ void CartesianPlotDock::autoScaleYRange(const int index, const bool checked) {
 
 	for (auto* plot : m_plotList) {
 		bool retransform = false;
-		plot->enableAutoScaleY(index, checked, true);
+		plot->enableAutoScaleY(index, checked, true, true);
 		DEBUG(Q_FUNC_INFO << " new auto scale = " << plot->yRange(index).autoScale())
 		if (checked) { // && index == plot->defaultCoordinateSystem()->yIndex()
 			retransform = plot->scaleAutoY(index, true);
