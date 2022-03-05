@@ -1023,8 +1023,8 @@ void XYCurveDock::updateValuesWidgets() {
 				break;
 		}
 
-		hasInteger = (xColumn && (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::Integer))
-						|| (yColumn && (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::Integer));
+		hasInteger = (xColumn && (xColumn->columnMode() == AbstractColumn::ColumnMode::Integer || xColumn->columnMode() == AbstractColumn::ColumnMode::BigInt))
+						|| (yColumn && (yColumn->columnMode() == AbstractColumn::ColumnMode::Integer || yColumn->columnMode() == AbstractColumn::ColumnMode::BigInt));
 
 		hasNumeric = (xColumn && xColumn->columnMode() == AbstractColumn::ColumnMode::Double)
 						|| (yColumn && yColumn->columnMode() == AbstractColumn::ColumnMode::Double);

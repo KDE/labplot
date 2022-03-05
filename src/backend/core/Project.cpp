@@ -83,7 +83,7 @@ namespace {
 
 class Project::Private {
 public:
-	Private(Project* owner) : modificationTime(QDateTime::currentDateTime()), q(owner) {
+	explicit Private(Project* owner) : modificationTime(QDateTime::currentDateTime()), q(owner) {
 		setVersion(LVERSION);
 	}
 	QString name() const {

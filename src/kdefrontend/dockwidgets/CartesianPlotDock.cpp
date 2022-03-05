@@ -47,7 +47,7 @@ enum TwPlotRangesColumn {
 // https://stackoverflow.com/questions/5821802/qspinbox-inside-a-qscrollarea-how-to-prevent-spin-box-from-stealing-focus-when
 class ComboBoxIgnoreWheel : public QComboBox {
 public:
-	ComboBoxIgnoreWheel(QWidget *parent = nullptr) : QComboBox(parent) {
+	explicit ComboBoxIgnoreWheel(QWidget* parent = nullptr) : QComboBox(parent) {
 		setFocusPolicy(Qt::StrongFocus);
 	}
 protected:
