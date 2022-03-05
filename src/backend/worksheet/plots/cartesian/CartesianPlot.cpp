@@ -760,11 +760,11 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 			retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoX) {
-		bool update = autoScaleX(xIndex) && xRangeDirty(xIndex);
-		if (!autoScaleX(cSystem->xIndex()))
-			enableAutoScaleX(cSystem->xIndex(), true, true, true);
+		bool update = xRangeDirty(xIndex);
+		if (!autoScaleX(xIndex))
+			enableAutoScaleX(xIndex, true, true, true);
 		else
-			update |= scaleAutoX(cSystem->xIndex(), true);
+			update |= scaleAutoX(xIndex, true);
 		if (update) {
 			for (int i=0; i < m_coordinateSystems.count(); i++) {
 				auto cs = coordinateSystem(i);
@@ -774,11 +774,11 @@ void CartesianPlot::navigate(int cSystemIndex, NavigationOperation op) {
 			retransform();
 		}
 	} else if (op == NavigationOperation::ScaleAutoY) {
-		bool update = autoScaleY(yIndex) && yRangeDirty(yIndex);
-		if (!autoScaleY(cSystem->yIndex()))
-			enableAutoScaleY(cSystem->yIndex(), true, true, true);
+		bool update = yRangeDirty(yIndex);
+		if (!autoScaleY(yIndex))
+			enableAutoScaleY(yIndex, true, true, true);
 		else
-			update |= scaleAutoY(cSystem->yIndex(), true);
+			update |= scaleAutoY(yIndex, true);
 		if (update) {
 			for (int i=0; i < m_coordinateSystems.count(); i++) {
 				auto cs = coordinateSystem(i);
@@ -1236,7 +1236,7 @@ void CartesianPlot::enableAutoScaleX(int index, const bool enable, bool suppress
 	Q_D(CartesianPlot);
 	if (index == -1) {	// all x ranges
 		for (int i = 0; i < xRangeCount(); i++)
-			enableAutoScaleX(i, enable, true);
+			enableAutoScaleX(i, enable, true, fullRange);
 		if (!suppressRetransform)
 			retransform();
 		return;
@@ -1259,7 +1259,7 @@ void CartesianPlot::enableAutoScaleY(int index, const bool enable, bool suppress
 	Q_D(CartesianPlot);
 	if (index == -1) {	// all y axes
 		for (int i = 0; i < yRangeCount(); i++)
-			enableAutoScaleY(i, enable, true);
+			enableAutoScaleY(i, enable, true, fullRange);
 		if (!suppressRetransform)
 			retransform();
 		return;
