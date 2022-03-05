@@ -27,7 +27,11 @@ private Q_SLOTS:
 	void changeData6();
 
 	// check deleting curve
-	void deleteCurve();
+	void deleteCurveAutoscale();
+	void deleteCurveNoAutoscale();
+
+	void invisibleCurveAutoscale();
+	void invisibleCurveNoAutoscale();
 
 };
 #endif

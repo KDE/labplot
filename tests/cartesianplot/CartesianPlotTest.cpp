@@ -258,14 +258,57 @@ void CartesianPlotTest::changeData6() {
 
 // check deleting curve
 
-void CartesianPlotTest::deleteCurve() {
-        LOAD_PROJECT_HISTOGRAM_FIT_CURVE
+void CartesianPlotTest::deleteCurveAutoscale() {
+	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
 
 	// delete curve in plot
 	plot->removeChild(curve2);
 
 	CHECK_RANGE(plot, curve1, x, -4, 4);
 	CHECK_RANGE(plot, curve1, y, 0, 0.45);
+}
+
+void CartesianPlotTest::deleteCurveNoAutoscale() {
+	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
+	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
+	plot->enableAutoScaleY(cs->yIndex(), false, false, true);
+
+	CHECK_RANGE(plot, curve1, x, -4, 4);
+	CHECK_RANGE(plot, curve1, y, 0, 1);
+
+	// delete curve in plot
+	plot->removeChild(curve2);
+
+	CHECK_RANGE(plot, curve1, x, -4, 4);
+	CHECK_RANGE(plot, curve1, y, 0, 1);
+
+	QCOMPARE(plot->autoScaleY(cs->yIndex()), false);
+}
+
+void CartesianPlotTest::invisibleCurveAutoscale() {
+	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
+
+	curve2->setVisible(false);
+
+	CHECK_RANGE(plot, curve1, x, -4, 4);
+	CHECK_RANGE(plot, curve1, y, 0, 0.45);
+}
+
+void CartesianPlotTest::invisibleCurveNoAutoscale() {
+	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
+	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
+	plot->enableAutoScaleY(cs->yIndex(), false, false, true);
+
+	CHECK_RANGE(plot, curve1, x, -4, 4);
+	CHECK_RANGE(plot, curve1, y, 0, 1);
+
+	// delete curve in plot
+	curve2->setVisible(false);
+
+	CHECK_RANGE(plot, curve1, x, -4, 4);
+	CHECK_RANGE(plot, curve1, y, 0, 1);
+
+	QCOMPARE(plot->autoScaleY(cs->yIndex()), false);
 }
 
 QTEST_MAIN(CartesianPlotTest)
