@@ -174,8 +174,8 @@ QString TreeViewComboBox::currentText() const {
 		return itemText(currentIndex());
 	else if (!m_useCurrentIndexText)
 		return m_lineEditText;
-	else
-		return QString();
+
+	return {};
 }
 
 void TreeViewComboBox::setText(const QString& text) {

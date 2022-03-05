@@ -358,7 +358,7 @@ QString Symbol::styleName(Symbol::Style style) {
 		return i18n("club");
 	}
 
-	return QString();
+	return {};
 }
 
 Symbol::Style Symbol::indexToStyle(const int index) {

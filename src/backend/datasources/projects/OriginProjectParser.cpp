@@ -355,14 +355,14 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 		}
 		case Origin::ProjectNode::SpreadSheet: {
 			DEBUG(Q_FUNC_INFO << ", top level SPREADSHEET");
-			Spreadsheet* spreadsheet = new Spreadsheet(name, preview);
+			auto* spreadsheet = new Spreadsheet(name, preview);
 			loadSpreadsheet(spreadsheet, preview, name);
 			aspect = spreadsheet;
 			break;
 		}
 		case Origin::ProjectNode::Graph: {
 			DEBUG(Q_FUNC_INFO << ", top level GRAPH");
-			Worksheet* worksheet = new Worksheet(name, preview);
+			auto* worksheet = new Worksheet(name, preview);
 			if (!preview) {
 				worksheet->setIsLoading(true);
 				worksheet->setTheme(QString());
@@ -391,7 +391,7 @@ bool OriginProjectParser::loadFolder(Folder* folder, tree<Origin::ProjectNode>::
 		}
 		case Origin::ProjectNode::Excel: {
 			DEBUG(Q_FUNC_INFO << ", top level WORKBOOK");
-			Workbook* workbook = new Workbook(name);
+			auto* workbook = new Workbook(name);
 			loadWorkbook(workbook, preview);
 			aspect = workbook;
 			break;
@@ -470,7 +470,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		if (!m_spreadsheetNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose spread: " << STDSTRING(name));
 
-			Spreadsheet* spreadsheet = new Spreadsheet(name);
+			auto* spreadsheet = new Spreadsheet(name);
 			loadSpreadsheet(spreadsheet, preview, name);
 			aspect = spreadsheet;
 		}
@@ -499,7 +499,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 			DEBUG("	Adding loose excel: " << STDSTRING(name));
 			DEBUG("	 containing number of sheets = " << excel.sheets.size());
 
-			Workbook* workbook = new Workbook(name);
+			auto* workbook = new Workbook(name);
 			loadWorkbook(workbook, preview);
 			aspect = workbook;
 		}
@@ -531,7 +531,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 				loadMatrix(matrix, preview);
 				aspect = matrix;
 			} else { // multiple sheets -> load into a workbook
-				Workbook* workbook = new Workbook(name);
+				auto* workbook = new Workbook(name);
 				loadMatrixWorkbook(workbook, preview);
 				aspect = workbook;
 			}
@@ -557,7 +557,7 @@ void OriginProjectParser::handleLooseWindows(Folder* folder, bool preview) {
 		const QString childPath = folder->path() + '/' + name;
 		if (!m_worksheetNameList.contains(name) && (preview || folder->pathesToLoad().indexOf(childPath) != -1)) {
 			DEBUG("	Adding loose graph: " << STDSTRING(name));
-			Worksheet* worksheet = new Worksheet(name);
+			auto* worksheet = new Worksheet(name);
 			loadWorksheet(worksheet, preview);
 			aspect = worksheet;
 		}
@@ -601,7 +601,7 @@ bool OriginProjectParser::loadWorkbook(Workbook* workbook, bool preview) {
 	DEBUG(Q_FUNC_INFO << ", number of sheets = " << excel.sheets.size());
 	for (unsigned int s = 0; s < excel.sheets.size(); ++s) {
 		// DEBUG(Q_FUNC_INFO << ", LOADING SHEET " << excel.sheets[s].name.c_str())
-		Spreadsheet* spreadsheet = new Spreadsheet(QString::fromLatin1(excel.sheets[s].name.c_str()));
+		auto* spreadsheet = new Spreadsheet(QString::fromLatin1(excel.sheets[s].name.c_str()));
 		loadSpreadsheet(spreadsheet, preview, workbook->name(), s);
 		workbook->addChildFast(spreadsheet);
 	}
@@ -2231,7 +2231,7 @@ QString strreverse(const QString &str) {	//QString reversing
 	QByteArray ba = str.toLocal8Bit();
 	std::reverse(ba.begin(), ba.end());
 
-	return QString(ba);
+	return {ba};
 }
 
 QList<QPair<QString, QString>> OriginProjectParser::charReplacementList() const {

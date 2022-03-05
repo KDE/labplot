@@ -144,7 +144,7 @@ void XYFourierTransformCurvePrivate::recalculate() {
 	}
 
 	//number of data points to transform
-	unsigned int n = (unsigned int)ydataVector.size();
+	auto n = (unsigned int)ydataVector.size();
 	if (n == 0) {
 		transformResult.available = true;
 		transformResult.valid = false;

@@ -470,7 +470,7 @@ TextLabel::GluePoint TextLabelPrivate::gluePointAt(int index) {
 		name = m_gluePoints.at(index).name;
 	}
 
-	return TextLabel::GluePoint(mapParentToPlotArea(mapToParent(pos)), name);
+	return {mapParentToPlotArea(mapToParent(pos)), name};
 }
 
 /*!

@@ -1348,7 +1348,7 @@ void XYCurvePrivate::updateLines() {
 		QPointF lastPoint{qQNaN(), qQNaN()};	// last x value
 		int pixelDiff = 0;
 		bool prevPixelDiffZero = false;
-		double xPos{qQNaN()}, minY{INFINITY}, maxY{-INFINITY};
+		double minY{INFINITY}, maxY{-INFINITY};
 		QPointF p0, p1;
 		const auto xIndex{ q->cSystem->xIndex() };
 		const auto xRange{ plot()->xRange(xIndex) };
@@ -1356,7 +1356,7 @@ void XYCurvePrivate::updateLines() {
 		const RangeT::Scale scale = plot()->xRangeScale(xIndex);
 
 		// setting initial point
-		xPos = NAN;
+		double xPos = NAN;
 		if (scale == RangeT::Scale::Linear)
 			minDiffX = (xRange.end() - xRange.start())/numberOfPixelX;
 		else {
@@ -2351,14 +2351,14 @@ double XYCurve::y(double x, double &x_new, bool &valueFound) const {
 QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
 	if (!yColumn() || !xColumn()) {
 		valueFound = false;
-		return QDateTime();
+		return {};
 	}
 
 	auto yColumnMode = yColumn()->columnMode();
 	const int index = xColumn()->indexForValue(x);
 	if (index < 0) {
 		valueFound = false;
-		return QDateTime();
+		return {};
 	}
 
 	valueFound = true;
@@ -2368,7 +2368,7 @@ QDateTime XYCurve::yDateTime(double x, bool &valueFound) const {
 		return yColumn()->dateTimeAt(index);
 
 	valueFound = false;
-	return QDateTime();
+	return {};
 }
 
 bool XYCurve::minMaxX(const Range<int>& indexRange, Range<double>& xRange, bool includeErrorBars) const {

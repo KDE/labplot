@@ -72,26 +72,26 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 			//DEBUG("MatrixModel::data() DisplayRole, mode = " << mode);
 			switch (mode) {
 			case AbstractColumn::ColumnMode::Double:
-				return QVariant(m_matrix->text<double>(row, col));
+				return {m_matrix->text<double>(row, col)};
 			case AbstractColumn::ColumnMode::Integer:
-				return QVariant(m_matrix->text<int>(row, col));
+				return {m_matrix->text<int>(row, col)};
 			case AbstractColumn::ColumnMode::BigInt:
-				return QVariant(m_matrix->text<qint64>(row, col));
+				return {m_matrix->text<qint64>(row, col)};
 			case AbstractColumn::ColumnMode::DateTime:
 			case AbstractColumn::ColumnMode::Month:
 			case AbstractColumn::ColumnMode::Day:
-				return QVariant(m_matrix->text<QDateTime>(row, col));
+				return {m_matrix->text<QDateTime>(row, col)};
 			case AbstractColumn::ColumnMode::Text:	// should not happen
-				return QVariant(m_matrix->text<QString>(row, col));
+				return {m_matrix->text<QString>(row, col)};
 			}
 			break;
 		}
 		case Qt::BackgroundRole:
 			//use bluish background color to distinguish Matrix from Spreadsheet
-			return QVariant(QColor(192,255,255));
+			return {QColor(192,255,255)};
 		case Qt::ForegroundRole:
 			//ignore current theme settings and always use black foreground color so Matrix is usable with dark themes, too.
-			return QVariant(QColor(Qt::black));
+			return {QColor(Qt::black)};
 	}
 
 	return {};

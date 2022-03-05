@@ -61,7 +61,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success
 		if (file.isEmpty()) {
 			WARN("Couldn't find preview.sty.");
 			*success = false;
-			return QByteArray();
+			return {};
 		}
 		else
 			QFile::copy(file, tempPath + QLatin1String("/") + QLatin1String("preview.sty"));
@@ -76,7 +76,7 @@ QByteArray TeXRenderer::renderImageLaTeX(const QString& teXString, bool* success
 	} else {
 		WARN("Couldn't open the file " << STDSTRING(file.fileName()));
 		*success = false;
-		return QByteArray();
+		return {};
 	}
 
 	//determine latex engine to be used
@@ -146,7 +146,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 	const QString engineFullPath = QStandardPaths::findExecutable(engine);
 	if (engineFullPath.isEmpty()) {
 		WARN("engine " << STDSTRING(engine) << " not found");
-		return QByteArray();
+		return {};
 	}
 
 	QProcess latexProcess;
@@ -162,7 +162,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 		*success = false;
 		QFile::remove(baseName + ".aux");
 		QFile::remove(baseName + ".log");
-		return QByteArray();
+		return {};
 	}
 
 	QFile::remove(baseName + ".aux");
@@ -172,7 +172,7 @@ QByteArray TeXRenderer::imageFromPDF(const QTemporaryFile& file, const int dpi, 
 	QFile pdfFile(baseName + QLatin1String(".pdf"));
 	if (!pdfFile.open(QIODevice::ReadOnly)) {
 		QFile::remove(baseName + ".pdf");
-        return QByteArray();
+		return {};
 	}
 
 	QByteArray ba = pdfFile.readAll();
@@ -191,7 +191,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	const QString latexFullPath = QStandardPaths::findExecutable(QLatin1String("latex"));
 	if (latexFullPath.isEmpty()) {
 		WARN("latex not found");
-		return QByteArray();
+		return {};
 	}
 	QProcess latexProcess;
 	latexProcess.start(latexFullPath, QStringList() << "-interaction=batchmode" << file.fileName());
@@ -200,14 +200,14 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		*success = false;
 		QFile::remove(baseName + ".aux");
 		QFile::remove(baseName + ".log");
-		return QByteArray();
+		return {};
 	}
 
 	// dvips: DVI -> PS
 	const QString dvipsFullPath = QStandardPaths::findExecutable(QLatin1String("dvips"));
 	if (dvipsFullPath.isEmpty()) {
 		WARN("dvips not found");
-		return QByteArray();
+		return {};
 	}
 	QProcess dvipsProcess;
 	dvipsProcess.start(dvipsFullPath, QStringList() << "-E" << baseName);
@@ -217,7 +217,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		QFile::remove(baseName + ".aux");
 		QFile::remove(baseName + ".log");
 		QFile::remove(baseName + ".dvi");
-		return QByteArray();
+		return {};
 	}
 
 	// convert: PS -> PNG
@@ -231,7 +231,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	const QString convertFullPath = QStandardPaths::findExecutable(QLatin1String("convert"));
 	if (convertFullPath.isEmpty()) {
 		WARN("convert not found");
-		return QByteArray();
+		return {};
 	}
 
 	const QStringList params{"-density", QString::number(dpi), baseName + ".ps", baseName + ".pdf"};
@@ -244,7 +244,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 		QFile::remove(baseName + ".log");
 		QFile::remove(baseName + ".dvi");
 		QFile::remove(baseName + ".ps");
-		return QByteArray();
+		return {};
 	}
 
 	// final clean up
@@ -257,7 +257,7 @@ QByteArray TeXRenderer::imageFromDVI(const QTemporaryFile& file, const int dpi, 
 	QFile pdfFile(baseName + QLatin1String(".pdf"));
 	if (!pdfFile.open(QIODevice::ReadOnly)) {
 		QFile::remove(baseName + ".pdf");
-        return QByteArray();
+		return {};
 	}
 
 	QByteArray ba = pdfFile.readAll();

@@ -171,7 +171,7 @@ QIcon BoxPlot::staticIcon() {
 	pa.drawLine(10, 14, 10, 20); //lower whisker
 	pa.end();
 
-	return QIcon(pm);
+	return {pm};
 }
 
 void BoxPlot::initActions() {

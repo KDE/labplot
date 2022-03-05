@@ -164,7 +164,7 @@ void WorkbookView::addMatrix() {
 }
 
 void WorkbookView::addSpreadsheet() {
-	Spreadsheet* spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
+	auto* spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
 	m_workbook->addChild(spreadsheet);
 }
 

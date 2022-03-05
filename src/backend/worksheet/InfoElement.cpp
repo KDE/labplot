@@ -578,7 +578,7 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 	}
 
 	// textlabel was deleted
-	const TextLabel* textlabel = dynamic_cast<const TextLabel*>(child);
+	const auto* textlabel = dynamic_cast<const TextLabel*>(child);
 	if (textlabel) {
 		Q_ASSERT(m_title == textlabel);
 		m_title = nullptr;
@@ -595,7 +595,7 @@ void InfoElement::childRemoved(const AbstractAspect* parent, const AbstractAspec
 }
 
 void InfoElement::childAdded(const AbstractAspect* child) {
-	const CustomPoint* point = dynamic_cast<const CustomPoint*>(child);
+	const auto* point = dynamic_cast<const CustomPoint*>(child);
 	if (point) {
 		auto* p = const_cast<CustomPoint*>(point);
 		// otherwise Custom point must be patched to handle discrete curve points.
@@ -610,7 +610,7 @@ void InfoElement::childAdded(const AbstractAspect* child) {
 		return;
 	}
 
-	const TextLabel* m_titleChild = dynamic_cast<const TextLabel*>(child);
+	const auto* m_titleChild = dynamic_cast<const TextLabel*>(child);
 	if (m_titleChild) {
 		connect(m_title, &TextLabel::positionChanged, this, &InfoElement::labelPositionChanged);
 		connect(m_title, &TextLabel::visibleChanged, this, &InfoElement::labelVisibleChanged);
@@ -620,7 +620,7 @@ void InfoElement::childAdded(const AbstractAspect* child) {
 		connect(m_title, &TextLabel::moveEnd, this, &InfoElement::moveElementEnd);
 		connect(m_title, &TextLabel::rotationAngleChanged, this, &InfoElement::retransform);
 
-		TextLabel* l = const_cast<TextLabel*>(m_titleChild);
+		auto* l = const_cast<TextLabel*>(m_titleChild);
 		l->setParentGraphicsItem(graphicsItem());
 	}
 }
@@ -695,8 +695,8 @@ void InfoElement::pointPositionChanged(const WorksheetElement::PositionWrapper&)
 	if (m_suppressChildPositionChanged)
 		return;
 
-	CustomPoint* point = dynamic_cast<CustomPoint*>(QObject::sender());
-	if (point == nullptr)
+	const auto* point = dynamic_cast<CustomPoint*>(QObject::sender());
+	if (!point)
 		return;
 
 	setPositionLogical(point->positionLogical().x());

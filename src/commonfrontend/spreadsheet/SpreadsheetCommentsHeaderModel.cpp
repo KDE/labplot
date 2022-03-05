@@ -41,14 +41,14 @@ Qt::ItemFlags SpreadsheetCommentsHeaderModel::flags(const QModelIndex& index ) c
 }
 
 QVariant SpreadsheetCommentsHeaderModel::data(const QModelIndex& /*index*/, int /*role*/) const {
-	return QVariant();
+	return {};
 }
 
 QVariant SpreadsheetCommentsHeaderModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	if (orientation != Qt::Horizontal || role != Qt::DisplayRole || section < 0 || section >= columnCount())
-		return QVariant();
+		return {};
 
-	return QVariant(m_spreadsheet_model->headerData(section, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::CommentRole)));
+	return {m_spreadsheet_model->headerData(section, Qt::Horizontal, static_cast<int>(SpreadsheetModel::CustomDataRole::CommentRole))};
 }
 
 int SpreadsheetCommentsHeaderModel::rowCount(const QModelIndex& /*parent*/) const{

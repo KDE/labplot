@@ -66,7 +66,7 @@ QStringList ColorMapsManager::colorMapNames(const QString& collectionName) {
 			QJsonDocument doc = QJsonDocument::fromJson(collectionFile.readAll());
 			if (!doc.isObject()) {
 				QDEBUG("Invalid definition of " + path)
-				return QStringList();
+				return {};
 			}
 
 			const QJsonObject& colorMaps = doc.object();

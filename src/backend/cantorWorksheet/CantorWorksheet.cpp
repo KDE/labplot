@@ -307,7 +307,7 @@ KParts::ReadWritePart* CantorWorksheet::part() {
 QIcon CantorWorksheet::icon() const {
 	if (m_session)
 		return QIcon::fromTheme(m_session->backend()->icon());
-	return QIcon();
+	return {};
 }
 
 QWidget* CantorWorksheet::view() const {

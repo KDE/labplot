@@ -206,7 +206,7 @@ QMenu* WorksheetElement::createContextMenu() {
 	//Since the order of the child in the list of children is opposite to the Z-factor, we change
 	//the names of the menus to adapt to the reversed logic.
 	if (dynamic_cast<AbstractPlot*>(this) ) {
-		const Worksheet* w = dynamic_cast<const Worksheet*>(this->parentAspect());
+		const auto* w = dynamic_cast<const Worksheet*>(this->parentAspect());
 		if (!w)
 			return menu;
 
@@ -554,7 +554,7 @@ QString WorksheetElement::coordinateSystemInfo(const int index) const {
 	if (m_plot)
 		return m_plot->coordinateSystem(index)->info();
 
-	return QString();
+	return {};
 }
 
 /* ============================ getter methods ================= */

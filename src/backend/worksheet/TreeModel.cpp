@@ -56,7 +56,7 @@ bool TreeItem::insertChildren(int position, int count, int columns) {
 
 	for (int row = 0; row < count; ++row) {
 		QVector<QVariant> data(columns);
-		TreeItem *item = new TreeItem(data, this);
+		auto* item = new TreeItem(data, this);
 		childItems.insert(position, item);
 	}
 
@@ -147,10 +147,10 @@ QVariant TreeModel::treeData(const int row, const int column, const QModelIndex&
 
 QVariant TreeModel::data(const QModelIndex& index, int role) const {
 	if (!index.isValid())
-		return QVariant();
+		return {};
 
 	if (role != Qt::DisplayRole && role != Qt::EditRole && role != Qt::BackgroundRole)
-		return QVariant();
+		return {};
 
 	TreeItem *item = getItem(index);
 
@@ -169,7 +169,7 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex& index) const {
 
 TreeItem *TreeModel::getItem(const QModelIndex& index) const {
 	if (index.isValid()) {
-		TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+		auto *item = static_cast<TreeItem*>(index.internalPointer());
 		if (item)
 			return item;
 	}
@@ -180,7 +180,7 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int rol
 	if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
 		return rootItem->data(section);
 
-	return QVariant();
+	return {};
 }
 
 QModelIndex TreeModel::index(int row, int column, const QModelIndex& parent) const {

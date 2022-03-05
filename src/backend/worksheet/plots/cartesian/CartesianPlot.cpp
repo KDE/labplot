@@ -3949,7 +3949,7 @@ Range<double> CartesianPlotPrivate::checkRange(const Range<double>& range) {
 	} else if (end <= 0)
 		end = max;
 
-	return Range<double>(start, end);
+	return {start, end};
 }
 
 /*!
