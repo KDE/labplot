@@ -322,7 +322,7 @@ void CartesianPlotTest::equationCurveEquationChangedAutoScale() {
 	equationData.max = "10";
 	eqc->setEquationData(equationData);
 
-	CHECK_RANGE(plot, curve2, x, -4, 10); // Fails, because new range is -5..+10 because of the niceExtend
+	CHECK_RANGE(plot, curve2, x, -5, 10); // NiceExtend Changes the xrange to -5 instead of 4
 	CHECK_RANGE(plot, curve2, y, 0, 10);
 
 	QCOMPARE(plot->autoScaleY(cs->yIndex()), true);
@@ -340,7 +340,7 @@ void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
 	equationData.max = "10";
 	eqc->setEquationData(equationData);
 
-	CHECK_RANGE(plot, curve2, x, -4, 10); // Fails, because new range is -5..+10 because of the nice Extend
+	CHECK_RANGE(plot, curve2, x, -5, 10); // NiceExtend Changes the xrange to -5 instead of 4
 	CHECK_RANGE(plot, curve2, y, 0, 1);
 
 	QCOMPARE(plot->autoScaleY(cs->yIndex()), false);
