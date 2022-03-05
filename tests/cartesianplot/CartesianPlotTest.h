@@ -33,5 +33,8 @@ private Q_SLOTS:
 	void invisibleCurveAutoscale();
 	void invisibleCurveNoAutoscale();
 
+	void equationCurveEquationChangedAutoScale();
+	void equationCurveEquationChangedNoAutoScale();
+
 };
 #endif

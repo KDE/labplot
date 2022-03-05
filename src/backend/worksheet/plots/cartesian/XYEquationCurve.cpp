@@ -148,10 +148,10 @@ void XYEquationCurvePrivate::recalculate() {
 
 	if (!rc) {
 		xVector->clear();
-		xColumn->invalidateProperties();
 		yVector->clear();
-		yColumn->invalidateProperties();
 	}
+	xColumn->invalidateProperties();
+	yColumn->invalidateProperties();
 
 	recalcLogicalPoints();
 	Q_EMIT q->dataChanged();

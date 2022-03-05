@@ -18,6 +18,7 @@
 #include "backend/worksheet/plots/cartesian/Histogram.h"
 #include "backend/worksheet/plots/cartesian/CartesianCoordinateSystem.h"
 #include "backend/worksheet/plots/cartesian/XYCurve.h"
+#include "backend/worksheet/plots/cartesian/XYEquationCurve.h"
 #include "backend/spreadsheet/Spreadsheet.h"
 
 #include <QAction>
@@ -302,11 +303,45 @@ void CartesianPlotTest::invisibleCurveNoAutoscale() {
 	CHECK_RANGE(plot, curve1, x, -4, 4);
 	CHECK_RANGE(plot, curve1, y, 0, 1);
 
-	// delete curve in plot
 	curve2->setVisible(false);
 
 	CHECK_RANGE(plot, curve1, x, -4, 4);
 	CHECK_RANGE(plot, curve1, y, 0, 1);
+
+	QCOMPARE(plot->autoScaleY(cs->yIndex()), false);
+}
+
+void CartesianPlotTest::equationCurveEquationChangedAutoScale() {
+	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
+	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
+
+	QCOMPARE(curve2->type(), AspectType::XYEquationCurve);
+	auto eqc = static_cast<XYEquationCurve*>(curve2);
+
+	auto equationData = eqc->equationData();
+	equationData.max = "10";
+	eqc->setEquationData(equationData);
+
+	CHECK_RANGE(plot, curve2, x, -4, 10); // Fails, because new range is -5..+10 because of the niceExtend
+	CHECK_RANGE(plot, curve2, y, 0, 10);
+
+	QCOMPARE(plot->autoScaleY(cs->yIndex()), true);
+}
+
+void CartesianPlotTest::equationCurveEquationChangedNoAutoScale() {
+	LOAD_PROJECT_HISTOGRAM_FIT_CURVE
+	const auto cs = plot->coordinateSystem(curve2->coordinateSystemIndex());
+	plot->enableAutoScaleY(cs->yIndex(), false, false, true);
+
+	QCOMPARE(curve2->type(), AspectType::XYEquationCurve);
+	auto eqc = static_cast<XYEquationCurve*>(curve2);
+
+	auto equationData = eqc->equationData();
+	equationData.max = "10";
+	eqc->setEquationData(equationData);
+
+	CHECK_RANGE(plot, curve2, x, -4, 10); // Fails, because new range is -5..+10 because of the nice Extend
+	CHECK_RANGE(plot, curve2, y, 0, 1);
 
 	QCOMPARE(plot->autoScaleY(cs->yIndex()), false);
 }
