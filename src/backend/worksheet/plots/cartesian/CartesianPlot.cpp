@@ -4434,8 +4434,10 @@ void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF 
 		}
 	}
 
-	if (translated)
+	if (translated) {
 		retransformScales(xIndex, yIndex);
+		q->retransform();
+	}
 }
 
 void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex) {
