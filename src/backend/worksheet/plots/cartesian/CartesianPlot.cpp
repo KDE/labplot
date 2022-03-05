@@ -2346,8 +2346,8 @@ void CartesianPlot::checkAxisFormat(const AbstractColumn* column, Axis::Orientat
 
 		//set column's datetime format for all horizontal axis
 		for (auto* axis : children<Axis>()) {
-			const auto* cSystem{ coordinateSystem(axis->coordinateSystemIndex()) };
 			if (axis->orientation() == orientation) {
+				const auto* cSystem{ coordinateSystem(axis->coordinateSystemIndex()) };
 				const auto* filter = static_cast<DateTime2StringFilter*>(col->outputFilter());
 				d->xRanges[cSystem ? cSystem->xIndex() : 0].range.setDateTimeFormat(filter->format());
 				axis->setUndoAware(false);

@@ -19,7 +19,7 @@ class QGraphicsSceneHoverEvent;
 
 class ResizeItem : public QGraphicsItem {
 public:
-	ResizeItem(WorksheetElementContainer*);
+	explicit ResizeItem(WorksheetElementContainer*);
 	virtual ~ResizeItem();
 	void setRect(QRectF);
 

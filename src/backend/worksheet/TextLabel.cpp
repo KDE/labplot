@@ -47,7 +47,7 @@ extern "C" {
 
 class ScaledTextItem : public QGraphicsTextItem {
 public:
-	ScaledTextItem(QGraphicsItem* parent = nullptr) : QGraphicsTextItem(parent) {}
+	explicit ScaledTextItem(QGraphicsItem* parent = nullptr) : QGraphicsTextItem(parent) {}
 
 	void setScaleFactor(double scaleFactor) {
 		m_scaleFactor = scaleFactor;

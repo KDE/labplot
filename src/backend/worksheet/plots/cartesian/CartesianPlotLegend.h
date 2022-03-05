@@ -28,7 +28,7 @@ class CartesianPlotLegend : public WorksheetElement {
 	Q_ENUMS(VerticalPosition)
 
 public:
-	CartesianPlotLegend(const QString &name);
+	explicit CartesianPlotLegend(const QString &name);
 	~CartesianPlotLegend() override;
 
 	void finalizeAdd() override;

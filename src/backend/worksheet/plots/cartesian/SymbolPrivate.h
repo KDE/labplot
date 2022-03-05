@@ -22,12 +22,12 @@ public:
 	void updateSymbols();
 	void updatePixmap();
 
-	Symbol::Style style;
+	Symbol::Style style{Symbol::Style::NoSymbols};
 	QBrush brush;
 	QPen pen;
-	qreal opacity;
-	qreal rotationAngle;
-	qreal size;
+	qreal opacity{1.0};
+	qreal rotationAngle{0.0};
+	qreal size{1.0};
 
 	Symbol* const q{nullptr};
 };

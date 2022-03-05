@@ -844,7 +844,6 @@ QPainterPath Symbol::stylePath(Symbol::Style style) {
 		QFont font("Times", 1);
 		path.addText(-.3, .3, font, UTF8_QSTRING("♣"));
 		break;
-		break;
 	}
 
 	return path;
