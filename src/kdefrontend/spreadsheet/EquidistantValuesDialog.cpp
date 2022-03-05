@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating equidistant numbers
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2014-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -61,11 +61,7 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 	ui.leIncrement->setValidator( new QDoubleValidator(ui.leIncrement) );
 	ui.leNumber->setValidator( new QIntValidator(ui.leNumber) );
 
-	ui.leFrom->setText("1");
-	ui.leTo->setText("100");
-	ui.leIncrement->setText("1");
-
-	connect( ui.cbType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &EquidistantValuesDialog::typeChanged);
+	connect( ui.cbType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EquidistantValuesDialog::typeChanged);
 	connect( ui.leFrom, &QLineEdit::textChanged, this, &EquidistantValuesDialog::checkValues);
 	connect( ui.leTo, &QLineEdit::textChanged, this, &EquidistantValuesDialog::checkValues);
 	connect( ui.leNumber, &QLineEdit::textChanged, this, &EquidistantValuesDialog::checkValues);
@@ -83,12 +79,24 @@ EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent
 		resize(windowHandle()->size()); // workaround for QTBUG-40584
 	} else
 		resize(QSize(300, 0).expandedTo(minimumSize()));
+
+	ui.cbType->setCurrentIndex(conf.readEntry("Type", 0));
+	ui.leFrom->setText(QString::number(conf.readEntry("From", 1)));
+	ui.leTo->setText(QString::number(conf.readEntry("To", 100)));
+	SET_NUMBER_LOCALE
+	ui.leIncrement->setText(numberLocale.toString(conf.readEntry("Increment", 1.)));
 }
 
 EquidistantValuesDialog::~EquidistantValuesDialog() {
 	//save current settings
 	KConfigGroup conf(KSharedConfig::openConfig(), "EquidistantValuesDialog");
 	KWindowConfig::saveWindowSize(windowHandle(), conf);
+
+	conf.writeEntry("Type", ui.cbType->currentIndex());
+	SET_NUMBER_LOCALE
+	conf.writeEntry("From", numberLocale.toInt(ui.leFrom->text()));
+	conf.writeEntry("To", numberLocale.toInt(ui.leTo->text()));
+	conf.writeEntry("Increment", numberLocale.toDouble(ui.leIncrement->text()));
 }
 
 void EquidistantValuesDialog::setColumns(const QVector<Column*>& columns) {
@@ -173,19 +181,12 @@ void EquidistantValuesDialog::generate() {
 	if (m_spreadsheet->rowCount() < number)
 		m_spreadsheet->setRowCount(number);
 
-	for (auto* col : m_columns) {
-		col->setSuppressDataChangedSignal(true);
+	QVector<double> newData;
+	for (int i = 0; i < number; ++i)
+		newData.push_back(start + dist*i);
 
-		if (m_spreadsheet->rowCount()>number)
-			col->clear();
-
-		for (int i = 0; i < number; ++i) {
-			col->setValueAt(i, start + dist*i);
-		}
-
-		col->setSuppressDataChangedSignal(false);
-		col->setChanged();
-	}
+	for (auto* col : m_columns)
+		col->replaceValues(0, newData);
 
 	m_spreadsheet->endMacro();
 	RESET_CURSOR;

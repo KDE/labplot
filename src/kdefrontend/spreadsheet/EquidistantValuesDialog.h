@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : Dialog for generating equidistant values
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2014-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2014-2012 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -21,7 +21,7 @@ class EquidistantValuesDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	explicit EquidistantValuesDialog(Spreadsheet* s, QWidget* parent = nullptr);
+	explicit EquidistantValuesDialog(Spreadsheet*, QWidget* parent = nullptr);
 	~EquidistantValuesDialog() override;
 	void setColumns(const QVector<Column*>&);
 
@@ -33,7 +33,7 @@ private:
 
 private Q_SLOTS:
 	void generate();
-	void typeChanged(int index);
+	void typeChanged(int);
 	void checkValues();
 };
 
