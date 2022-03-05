@@ -139,7 +139,7 @@ QStringList ExamplesManager::exampleNames(const QString& collectionName) {
  */
 QPixmap ExamplesManager::pixmap(const QString& name) const {
 	if (name.isEmpty())
-		return QPixmap();
+		return {};
 
 	return m_pixmaps[name];
 }

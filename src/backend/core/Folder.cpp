@@ -192,7 +192,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 
 	QString element_name = reader->name().toString();
 	if (element_name == QLatin1String("folder")) {
-		Folder* folder = new Folder(QString());
+		auto* folder = new Folder(QString());
 
 		if (!m_pathesToLoad.isEmpty()) {
 			//a child folder to be read -> provide the list of aspects to be loaded to the child folder, too.
@@ -227,7 +227,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		addChildFast(folder);
 	} else if (element_name == QLatin1String("workbook")) {
 #ifndef SDK
-		Workbook* workbook = new Workbook(QString());
+		auto* workbook = new Workbook(QString());
 		if (!workbook->load(reader, preview)) {
 			delete workbook;
 			return false;
@@ -236,7 +236,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 #endif
 	} else if (element_name == QLatin1String("spreadsheet")) {
 #ifndef SDK
-		Spreadsheet* spreadsheet = new Spreadsheet(QString(), true);
+		auto* spreadsheet = new Spreadsheet(QString(), true);
 		if (!spreadsheet->load(reader, preview)) {
 			delete spreadsheet;
 			return false;
@@ -245,7 +245,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 #endif
 	} else if (element_name == QLatin1String("matrix")) {
 #ifndef SDK
-		Matrix* matrix = new Matrix(QString(), true);
+		auto* matrix = new Matrix(QString(), true);
 		if (!matrix->load(reader, preview)) {
 			delete matrix;
 			return false;
@@ -253,7 +253,7 @@ bool Folder::readChildAspectElement(XmlStreamReader* reader, bool preview) {
 		addChildFast(matrix);
 #endif
 	} else if (element_name == QLatin1String("worksheet")) {
-		Worksheet* worksheet = new Worksheet(QString(), true);
+		auto* worksheet = new Worksheet(QString(), true);
 		worksheet->setIsLoading(true);
 		if (!worksheet->load(reader, preview)) {
 			delete worksheet;

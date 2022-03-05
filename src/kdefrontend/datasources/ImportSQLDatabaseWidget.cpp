@@ -183,7 +183,7 @@ QString ImportSQLDatabaseWidget::selectedTable() const {
 			return ui.lwTables->currentItem()->text();
 	}
 
-	return QString();
+	return {};
 }
 
 /*!

@@ -293,7 +293,7 @@ bool AbstractAspect::isLoading() const {
  * \brief Return an icon to be used for decorating my views.
  */
 QIcon AbstractAspect::icon() const {
-	return QIcon();
+	return {};
 }
 
 /**
@@ -660,7 +660,7 @@ QVector<AbstractAspect*> AbstractAspect::dependsOn() const {
  * that want to allow other aspects to be pasted into.
  */
 QVector<AspectType> AbstractAspect::pasteTypes() const {
-	return QVector<AspectType>();
+	return {};
 }
 
 void AbstractAspect::setPasted(bool pasted) {
@@ -808,7 +808,7 @@ bool AbstractAspect::isDraggable() const {
 }
 
 QVector<AspectType> AbstractAspect::dropableOn() const {
-	return QVector<AspectType>();
+	return {};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

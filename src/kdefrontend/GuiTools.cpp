@@ -290,14 +290,14 @@ QImage GuiTools::importPDFFile(const QString& fileName, const int dpi) {
 	if (!document) {
 		WARN("Failed to process PDF file" << STDSTRING(fileName));
 		delete document;
-		return QImage();
+		return {};
 	}
 
 	auto* page = document->page(0);
 	if (!page) {
 		WARN("Failed to process the first page in the PDF file.")
 		delete document;
-		return QImage();
+		return {};
 	}
 
 	document->setRenderHint(Poppler::Document::TextAntialiasing);
@@ -317,7 +317,7 @@ QImage GuiTools::importPDFFile(const QString& fileName, const int dpi) {
 
 	return image;
 #else
-	return QImage();
+	return {};
 #endif
 }
 
@@ -327,14 +327,14 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 	if (!document) {
 		WARN("Failed to process the byte array");
 		delete document;
-		return QImage();
+		return {};
 	}
 
 	auto* page = document->page(0);
 	if (!page) {
 		WARN("Failed to process the first page in the PDF file.")
 		delete document;
-		return QImage();
+		return {};
 	}
 
 	document->setRenderHint(Poppler::Document::TextAntialiasing);
@@ -351,6 +351,6 @@ QImage GuiTools::imageFromPDFData(const QByteArray& data, double zoomFactor) {
 
 	return image;
 #else
-	return QImage();
+	return {};
 #endif
 }

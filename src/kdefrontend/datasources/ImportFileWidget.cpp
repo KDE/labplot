@@ -1035,7 +1035,7 @@ void ImportFileWidget::initOptionsWidget() {
 	switch (currentFileType()) {
 	case AbstractFileFilter::FileType::Ascii: {
 		if (!m_asciiOptionsWidget) {
-			QWidget* asciiw = new QWidget();
+			auto* asciiw = new QWidget();
 			m_asciiOptionsWidget = std::unique_ptr<AsciiOptionsWidget>(new AsciiOptionsWidget(asciiw));
 			m_asciiOptionsWidget->loadSettings();
 
@@ -1050,7 +1050,7 @@ void ImportFileWidget::initOptionsWidget() {
 	}
 	case AbstractFileFilter::FileType::Binary:
 		if (!m_binaryOptionsWidget) {
-			QWidget* binaryw = new QWidget();
+			auto* binaryw = new QWidget();
 			m_binaryOptionsWidget = std::unique_ptr<BinaryOptionsWidget>(new BinaryOptionsWidget(binaryw));
 			ui.swOptions->addWidget(binaryw);
 			m_binaryOptionsWidget->loadSettings();
@@ -1059,7 +1059,7 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::Image:
 		if (!m_imageOptionsWidget) {
-			QWidget* imagew = new QWidget();
+			auto* imagew = new QWidget();
 			m_imageOptionsWidget = std::unique_ptr<ImageOptionsWidget>(new ImageOptionsWidget(imagew));
 			ui.swOptions->addWidget(imagew);
 			m_imageOptionsWidget->loadSettings();
@@ -1068,7 +1068,7 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::HDF5:
 		if (!m_hdf5OptionsWidget) {
-			QWidget* hdf5w = new QWidget();
+			auto* hdf5w = new QWidget();
 			m_hdf5OptionsWidget = std::unique_ptr<HDF5OptionsWidget>(new HDF5OptionsWidget(hdf5w, this));
 			ui.swOptions->addWidget(hdf5w);
 		} else
@@ -1077,7 +1077,7 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::NETCDF:
 		if (!m_netcdfOptionsWidget) {
-			QWidget* netcdfw = new QWidget();
+			auto* netcdfw = new QWidget();
 			m_netcdfOptionsWidget = std::unique_ptr<NetCDFOptionsWidget>(new NetCDFOptionsWidget(netcdfw, this));
 			ui.swOptions->insertWidget(static_cast<int>(AbstractFileFilter::FileType::NETCDF), netcdfw);
 		} else
@@ -1086,7 +1086,7 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::FITS:
 		if (!m_fitsOptionsWidget) {
-			QWidget* fitsw = new QWidget();
+			auto* fitsw = new QWidget();
 			m_fitsOptionsWidget = std::unique_ptr<FITSOptionsWidget>(new FITSOptionsWidget(fitsw, this));
 			ui.swOptions->addWidget(fitsw);
 		} else
@@ -1095,7 +1095,7 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::JSON:
 		if (!m_jsonOptionsWidget) {
-			QWidget* jsonw = new QWidget();
+			auto* jsonw = new QWidget();
 			m_jsonOptionsWidget = std::unique_ptr<JsonOptionsWidget>(new JsonOptionsWidget(jsonw, this));
 			ui.tvJson->setModel(m_jsonOptionsWidget->model());
 			ui.swOptions->addWidget(jsonw);
@@ -1107,7 +1107,7 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::ROOT:
 		if (!m_rootOptionsWidget) {
-			QWidget* rootw = new QWidget();
+			auto* rootw = new QWidget();
 			m_rootOptionsWidget = std::unique_ptr<ROOTOptionsWidget>(new ROOTOptionsWidget(rootw, this));
 			ui.swOptions->addWidget(rootw);
 		} else
@@ -1116,7 +1116,7 @@ void ImportFileWidget::initOptionsWidget() {
 		break;
 	case AbstractFileFilter::FileType::MATIO:
 		if (!m_matioOptionsWidget) {
-			QWidget* matiow = new QWidget();
+			auto* matiow = new QWidget();
 			m_matioOptionsWidget = std::unique_ptr<MatioOptionsWidget>(new MatioOptionsWidget(matiow, this));
 			ui.swOptions->insertWidget(static_cast<int>(AbstractFileFilter::FileType::MATIO), matiow);
 		} else

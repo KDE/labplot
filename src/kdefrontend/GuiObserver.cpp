@@ -180,12 +180,12 @@ void GuiObserver::selectedAspectsChanged(QList<AbstractAspect*>& selectedAspects
 	// update cursor dock
 	if (m_mainWindow->cursorWidget) {
 		if (type == AspectType::Worksheet) {
-			Worksheet* worksheet = static_cast<Worksheet*>(selectedAspects.front());
+			auto* worksheet = static_cast<Worksheet*>(selectedAspects.front());
 			m_mainWindow->cursorWidget->setWorksheet(worksheet);
 		} else {
 			auto* parent = selectedAspects.front()->parent(AspectType::Worksheet);
 			if (parent) {
-				Worksheet* worksheet = static_cast<Worksheet*>(parent);
+				auto* worksheet = static_cast<Worksheet*>(parent);
 				m_mainWindow->cursorWidget->setWorksheet(worksheet);
 			}
 		}

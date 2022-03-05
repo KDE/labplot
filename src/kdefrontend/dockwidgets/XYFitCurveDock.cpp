@@ -65,8 +65,7 @@ XYFitCurveDock::~XYFitCurveDock() {
  * 	set up "General" tab
  */
 void XYFitCurveDock::setupGeneral() {
-	DEBUG(Q_FUNC_INFO);
-	QWidget* generalTab = new QWidget(ui.tabGeneral);
+	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;

@@ -29,7 +29,7 @@
 EquidistantValuesDialog::EquidistantValuesDialog(Spreadsheet* s, QWidget* parent) : QDialog(parent), m_spreadsheet(s) {
 	setWindowTitle(i18nc("@title:window", "Equidistant Values"));
 
-	QWidget* mainWidget = new QWidget(this);
+	auto* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	auto* layout = new QVBoxLayout(this);
 

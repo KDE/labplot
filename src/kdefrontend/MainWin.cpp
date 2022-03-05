@@ -189,7 +189,7 @@ MainWin::~MainWin() {
 }
 
 void MainWin::showPresenter() {
-	const Worksheet* w = dynamic_cast<Worksheet*>(m_currentAspect);
+	const auto* w = dynamic_cast<Worksheet*>(m_currentAspect);
 	if (w) {
 		auto* view = static_cast<WorksheetView*>(w->view());
 		view->presenterMode();
@@ -1823,7 +1823,7 @@ void MainWin::newFolder() {
 	adds a new Workbook to the project.
 */
 void MainWin::newWorkbook() {
-	Workbook* workbook = new Workbook(i18n("Workbook"));
+	auto* workbook = new Workbook(i18n("Workbook"));
 	this->addAspectToProject(workbook);
 }
 
@@ -1831,7 +1831,7 @@ void MainWin::newWorkbook() {
 	adds a new Datapicker to the project.
 */
 void MainWin::newDatapicker() {
-	Datapicker* datapicker = new Datapicker(i18n("Data Extractor"));
+	auto* datapicker = new Datapicker(i18n("Data Extractor"));
 	this->addAspectToProject(datapicker);
 }
 
@@ -1839,11 +1839,11 @@ void MainWin::newDatapicker() {
 	adds a new Spreadsheet to the project.
 */
 void MainWin::newSpreadsheet() {
-	Spreadsheet* spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
+	auto* spreadsheet = new Spreadsheet(i18n("Spreadsheet"));
 
 	//if the current active window is a workbook or one of its children,
 	//add the new matrix to the workbook
-	Workbook* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
 	if (!workbook)
 		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
 
@@ -1861,7 +1861,7 @@ void MainWin::newMatrix() {
 
 	//if the current active window is a workbook or one of its children,
 	//add the new matrix to the workbook
-	Workbook* workbook = dynamic_cast<Workbook*>(m_currentAspect);
+	auto* workbook = dynamic_cast<Workbook*>(m_currentAspect);
 	if (!workbook)
 		workbook = static_cast<Workbook*>(m_currentAspect->parent(AspectType::Workbook));
 
@@ -1875,7 +1875,7 @@ void MainWin::newMatrix() {
 	adds a new Worksheet to the project.
 */
 void MainWin::newWorksheet() {
-	Worksheet* worksheet = new Worksheet(i18n("Worksheet"));
+	auto* worksheet = new Worksheet(i18n("Worksheet"));
 	this->addAspectToProject(worksheet);
 }
 
@@ -2445,7 +2445,7 @@ void MainWin::handleSettingsChanges() {
 	if (stackedWidget) {
 		for (int i = 0; i < stackedWidget->count(); ++i) {
 			auto* widget = stackedWidget->widget(i);
-			BaseDock* dock = dynamic_cast<BaseDock*>(widget);
+			auto* dock = dynamic_cast<BaseDock*>(widget);
 			if (dock) {
 				dock->updateLocale();
 				dock->updateUnits();
@@ -2578,7 +2578,7 @@ void MainWin::importProjectDialog() {
 void MainWin::importDatasetDialog() {
 	auto* dlg = new ImportDatasetDialog(this);
 	if (dlg->exec() == QDialog::Accepted) {
-			Spreadsheet* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
+			auto* spreadsheet = new Spreadsheet(i18n("Dataset%1", 1));
 			auto* dataset = new DatasetHandler(spreadsheet);
 			dlg->importToDataset(dataset, statusBar());
 

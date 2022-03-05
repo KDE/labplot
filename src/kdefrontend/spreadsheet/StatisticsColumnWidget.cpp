@@ -357,7 +357,7 @@ void StatisticsColumnWidget::showKDEPlot() {
 	yColumn->replaceValues(0, yData);
 
 	//add KDE curve
-	XYCurve* curve = new XYCurve("");
+	auto* curve = new XYCurve("");
 	curve->suppressRetransform(false);
 	plot->addChild(curve);
 	QPen pen = curve->linePen();
@@ -418,7 +418,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	xColumn->replaceValues(0, xData);
 
 	//add curve with the quantiles
-	XYCurve* curve = new XYCurve("");
+	auto* curve = new XYCurve("");
 	curve->suppressRetransform(true);
 	plot->addChild(curve);
 	curve->setLinePen(Qt::NoPen);
@@ -452,7 +452,7 @@ void StatisticsColumnWidget::showQQPlot() {
 	yColumn2->setValueAt(0, y1New);
 	yColumn2->setValueAt(1, y2New);
 
-	XYCurve* curve2 = new XYCurve("2");
+	auto* curve2 = new XYCurve("2");
 	curve2->suppressRetransform(true);
 	plot->addChild(curve2);
 	QPen pen = curve2->linePen();
@@ -506,13 +506,13 @@ void StatisticsColumnWidget::showBoxPlot() {
 }
 
 CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
-	Worksheet* worksheet = new Worksheet(QString());
-	worksheet->setUseViewSize(true);
-	worksheet->setLayoutTopMargin(0.);
-	worksheet->setLayoutBottomMargin(0.);
-	worksheet->setLayoutLeftMargin(0.);
-	worksheet->setLayoutRightMargin(0.);
-	m_project->addChild(worksheet);
+	auto* ws = new Worksheet(QString());
+	ws->setUseViewSize(true);
+	ws->setLayoutTopMargin(0.);
+	ws->setLayoutBottomMargin(0.);
+	ws->setLayoutLeftMargin(0.);
+	ws->setLayoutRightMargin(0.);
+	m_project->addChild(ws);
 
 	auto* plot = new CartesianPlot(QString());
 	plot->setSuppressRetransform(true);
@@ -526,13 +526,13 @@ CartesianPlot* StatisticsColumnWidget::addPlot(QWidget* widget) {
 	pen.setStyle(Qt::NoPen);
 	plot->plotArea()->setBorderPen(pen);
 
-	worksheet->addChild(plot);
+	ws->addChild(plot);
 	plot->setSuppressRetransform(false);
 
 	auto* layout = new QVBoxLayout(widget);
 	layout->setSpacing(0);
-	layout->addWidget(worksheet->view());
-	worksheet->setInteractive(false);
+	layout->addWidget(ws->view());
+	ws->setInteractive(false);
 	widget->setLayout(layout);
 
 	return plot;
@@ -566,7 +566,7 @@ QString StatisticsColumnWidget::modeValue(const Column* column, double value) co
 		return numberLocale.toString(value, 'f');
 	}
 
-	return QString();
+	return {};
 }
 
 /*!

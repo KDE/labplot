@@ -48,7 +48,7 @@ ImportProjectDialog::ImportProjectDialog(MainWin* parent, ProjectType type) : QD
 	auto* vLayout = new QVBoxLayout(this);
 
 	//main widget
-	QWidget* mainWidget = new QWidget(this);
+	auto* mainWidget = new QWidget(this);
 	ui.setupUi(mainWidget);
 	ui.chbUnusedObjects->hide();
 

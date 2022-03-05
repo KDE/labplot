@@ -87,7 +87,7 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 			connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
 
 			// fixed
-			QWidget* widget = new QWidget();
+			auto* widget = new QWidget();
 			auto* cb = new QCheckBox();
 			cb->setChecked(m_fitData->paramFixed.at(i));
 			auto* cbl = new QHBoxLayout(widget);
@@ -135,7 +135,7 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 				connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
 
 				// fixed
-				QWidget* widget = new QWidget();
+				auto* widget = new QWidget();
 				auto* cb = new QCheckBox();
 				cb->setChecked(m_fitData->paramFixed.at(i));
 				auto* cbl = new QHBoxLayout(widget);
@@ -178,7 +178,7 @@ void FitParametersWidget::setFitData(XYFitCurve::FitData* data) {
 			connect(le, SIGNAL(textChanged(QString)), this, SLOT(startValueChanged()) );
 
 			// fixed
-			QWidget* widget = new QWidget();
+			auto* widget = new QWidget();
 			auto* cb = new QCheckBox();
 			auto* cbl = new QHBoxLayout(widget);
 			cbl->addWidget(cb);

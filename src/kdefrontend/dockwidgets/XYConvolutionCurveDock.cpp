@@ -43,8 +43,7 @@ XYConvolutionCurveDock::XYConvolutionCurveDock(QWidget* parent) : XYCurveDock(pa
  * 	// Tab "General"
  */
 void XYConvolutionCurveDock::setupGeneral() {
-	DEBUG(Q_FUNC_INFO);
-	QWidget* generalTab = new QWidget(ui.tabGeneral);
+	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;

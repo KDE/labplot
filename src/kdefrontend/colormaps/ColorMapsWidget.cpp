@@ -217,7 +217,7 @@ QString ColorMapsWidget::name() const {
 			return ui.lwColorMaps->currentItem()->text();
 	}
 
-	return QString();
+	return {};
 }
 
 /*!

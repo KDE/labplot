@@ -33,7 +33,7 @@
 GridDialog::GridDialog(QWidget* parent) : QDialog(parent) {
 	setWindowTitle(i18nc("@title:window", "Custom Grid"));
 
-	QWidget* widget = new QWidget;
+	auto* widget = new QWidget;
 	auto* layout = new QGridLayout(widget);
 
 	QLabel* label = new QLabel(i18n("Style:"), widget);

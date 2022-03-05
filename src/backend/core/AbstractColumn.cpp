@@ -138,7 +138,7 @@ QString AbstractColumn::plotDesignationString(PlotDesignation d, bool withBracke
 		s = i18n("Y-error -");
 		break;
 	default:
-		return QString("");
+		return {};
 	}
 
 	if (withBrackets)
@@ -399,7 +399,7 @@ void AbstractColumn::setMasked(int row, bool mask) {
  * \brief Return the formula associated with row 'row'
  */
 QString AbstractColumn::formula(int /*row*/) const {
-	return QString();
+	return {};
 }
 
 /**
@@ -416,7 +416,7 @@ QString AbstractColumn::formula(int /*row*/) const {
  * \endcode
  */
 QVector< Interval<int> > AbstractColumn::formulaIntervals() const {
-	return QVector< Interval<int> >();
+	return {};
 }
 
 /**
@@ -472,7 +472,7 @@ void AbstractColumn::removeFormat() {
  * Use this only when columnMode() is Text
  */
 QString AbstractColumn::textAt(int /*row*/) const {
-	return QString();
+	return {};
 }
 
 /**
@@ -514,7 +514,7 @@ void AbstractColumn::setDateAt(int /*row*/, QDate) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 QTime AbstractColumn::timeAt(int /*row*/) const {
-	return QTime{};
+	return {};
 }
 
 /**
@@ -531,7 +531,7 @@ void AbstractColumn::setTimeAt(int /*row*/, QTime) {
  * Use this only when columnMode() is DateTime, Month or Day
  */
 QDateTime AbstractColumn::dateTimeAt(int /*row*/) const {
-	return QDateTime();
+	return {};
 }
 
 /**

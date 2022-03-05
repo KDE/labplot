@@ -46,7 +46,7 @@ XYEquationCurveDock::XYEquationCurveDock(QWidget *parent): XYCurveDock(parent) {
  * 	// Tab "General"
  */
 void XYEquationCurveDock::setupGeneral() {
-	QWidget* generalTab = new QWidget(ui.tabGeneral);
+	auto* generalTab = new QWidget(ui.tabGeneral);
 	uiGeneralTab.setupUi(generalTab);
 	m_leName = uiGeneralTab.leName;
 	m_teComment = uiGeneralTab.teComment;

@@ -660,7 +660,7 @@ QString MQTTSubscriptionWidget::checkCommonLevel(const QString& first, const QSt
 	const QStringList& firstList = first.split('/', QString::SkipEmptyParts);
 #endif
 	if (firstList.isEmpty())
-		return QString();
+		return {};
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 	const QStringList& secondtList = second.split('/', Qt::SkipEmptyParts);

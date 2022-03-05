@@ -64,7 +64,7 @@ PlotDataDialog::PlotDataDialog(Spreadsheet* s, PlotType type, QWidget* parent) :
 	setWindowTitle(i18nc("@title:window", "Plot Spreadsheet Data"));
 	setWindowIcon(QIcon::fromTheme("office-chart-line"));
 
-	QWidget* mainWidget = new QWidget(this);
+	auto* mainWidget = new QWidget(this);
 	ui->setupUi(mainWidget);
 
 	auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -418,7 +418,7 @@ void PlotDataDialog::plot() {
 			parent = m_spreadsheet->project();
 #endif
 		parent->beginMacro( i18n("Plot data from %1", m_spreadsheet->name()) );
-		Worksheet* worksheet = new Worksheet(i18n("Worksheet - %1", m_spreadsheet->name()));
+		auto* worksheet = new Worksheet(i18n("Worksheet - %1", m_spreadsheet->name()));
 		parent->addChild(worksheet);
 
 		if (ui->rbCurvePlacement1->isChecked()) {

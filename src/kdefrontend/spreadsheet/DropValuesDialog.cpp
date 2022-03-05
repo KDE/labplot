@@ -534,7 +534,7 @@ void DropValuesDialog::maskValues() const {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: mask values", m_spreadsheet->name()));
 
-	const Operator op = static_cast<Operator>(ui.cbOperator->currentIndex());
+	const auto op = static_cast<Operator>(ui.cbOperator->currentIndex());
 	SET_NUMBER_LOCALE
 	bool ok;
 	const double value1 = numberLocale.toDouble(ui.leValue1->text(), &ok);
@@ -571,7 +571,7 @@ void DropValuesDialog::dropValues() const {
 	WAIT_CURSOR;
 	m_spreadsheet->beginMacro(i18n("%1: drop values", m_spreadsheet->name()));
 
-	const Operator op = static_cast<Operator>(ui.cbOperator->currentIndex());
+	const auto op = static_cast<Operator>(ui.cbOperator->currentIndex());
 	SET_NUMBER_LOCALE
 	bool ok;
 	const double value1 = numberLocale.toDouble(ui.leValue1->text(), &ok);

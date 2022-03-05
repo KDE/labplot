@@ -82,8 +82,8 @@ MQTTConnectionManagerWidget::~MQTTConnectionManagerWidget() {
 QString MQTTConnectionManagerWidget::connection() const {
 	if (ui.lwConnections->currentItem())
 		return ui.lwConnections->currentItem()->text();
-	else
-		return QString();
+
+	return {};
 }
 
 /*!

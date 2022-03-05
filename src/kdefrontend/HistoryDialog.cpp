@@ -55,7 +55,7 @@ HistoryDialog::HistoryDialog(QWidget* parent, QUndoStack* stack, const QString& 
 		connect(m_clearUndoStackButton, &QPushButton::clicked, this, &HistoryDialog::clearUndoStack);
 	}
 
-	QFrame* line = new QFrame;
+	auto* line = new QFrame;
 	line->setFrameShape(QFrame::HLine);
 	line->setFrameShadow(QFrame::Sunken);
 

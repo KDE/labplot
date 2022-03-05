@@ -137,8 +137,7 @@ void ExportWorksheetDialog::setFileName(const QString& name) {
 QString ExportWorksheetDialog::path() const {
 	if (ui->cbExportTo->currentIndex() == 0)
 		return ui->leFileName->text();
-	else
-		return QString();
+	return {};
 }
 
 WorksheetView::ExportFormat ExportWorksheetDialog::exportFormat() const {

@@ -106,14 +106,14 @@ QStringList DatasetModel::allSubcategories(const QString& category) {
  * @brief Returns the list of datasets of a given category and subcategory.
  */
 QVariant DatasetModel::allDatasets(const QString& category, const QString& subcategory) {
-	return QVariant(m_allDatasets[category][subcategory]);
+	return {m_allDatasets[category][subcategory]};
 }
 
 /**
  * @brief Returns the list of every dataset.
  */
 QVariant DatasetModel::allDatasetsList() {
-	return QVariant(m_datasetList);
+	return {m_datasetList};
 }
 
 /**

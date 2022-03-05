@@ -360,8 +360,7 @@ void ImportDatasetWidget::addDatasetItems(const QString& collection, const QStri
 QString ImportDatasetWidget::getSelectedDataset() const {
 	if (!ui.lwDatasets->selectedItems().isEmpty())
 		return ui.lwDatasets->selectedItems().at(0)->text();
-	else
-		return QString();
+	return {};
 }
 
 /**
@@ -390,7 +389,7 @@ QJsonObject ImportDatasetWidget::loadDatasetObject() {
 				file.close();
 				if (!doc.isObject()) {
 					DEBUG("The " <<  STDSTRING(collection) << ".json file is invalid");
-					return QJsonObject();
+					return {};
 				}
 
 				QJsonArray categoryArray = doc.object().value(QLatin1String("categories")).toArray();
@@ -432,7 +431,7 @@ QJsonObject ImportDatasetWidget::loadDatasetObject() {
 		}
 	}
 
-	return QJsonObject();
+	return {};
 }
 
 /**

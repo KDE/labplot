@@ -71,7 +71,8 @@ ImportDatasetDialog::~ImportDatasetDialog() {
 }
 
 QString ImportDatasetDialog::selectedObject() const {
-	return QString();
+	//TODO?
+	return {};
 }
 
 /*!
