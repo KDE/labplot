@@ -2879,8 +2879,6 @@ bool CartesianPlot::scaleAuto(int xIndex, int yIndex, bool fullRange) {
 		if (updateY)
 			enableAutoScaleY(yIndex, true, true);
 
-		d->retransformXScale(xIndex);
-		d->retransformYScale(yIndex);
 	}
 
 	return (updateX || updateY);
