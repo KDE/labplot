@@ -109,7 +109,7 @@ QVector3D Transform::mapSceneToLogical(QPointF scenePoint, const DatapickerImage
 		y[3] = y[0] + (((X[3] - X[0])*sin + (Y[3] - Y[0])*cos)*scaleOfY);
 		return mapCartesianToType(QPointF(x[3], y[3]), axisPoints);
 	}
-	return QVector3D{};
+	return {};
 }
 
 QVector3D Transform::mapSceneLengthToLogical(QPointF errorSpan, const DatapickerImage::ReferencePoints& axisPoints) {

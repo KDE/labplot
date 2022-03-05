@@ -51,7 +51,7 @@ public:
 		setFocusPolicy(Qt::StrongFocus);
 	}
 protected:
-	virtual void wheelEvent(QWheelEvent *event) override {
+	void wheelEvent(QWheelEvent *event) override {
 		if (!hasFocus())
 			event->ignore();
 		else

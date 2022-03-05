@@ -622,7 +622,7 @@ void JsonFilterPrivate::importData(AbstractDataSource* dataSource, AbstractFileF
 	}
 
 	//set the plot designation to 'X' for index and name columns, if available
-	Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+	auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 	if (spreadsheet) {
 		if (createIndexEnabled)
 			spreadsheet->column(m_columnOffset )->setPlotDesignation(AbstractColumn::PlotDesignation::X);
@@ -652,14 +652,14 @@ QVector<QStringList> JsonFilterPrivate::preview(QIODevice& device, int lines) {
 		const int deviceError = prepareDeviceToRead(device);
 		if (deviceError != 0) {
 			DEBUG("Device error = " << deviceError);
-			return QVector<QStringList>();
+			return {};
 		}
 	}
 
 	if (prepareDocumentToRead())
 		return preview(lines);
-	else
-		return QVector<QStringList>();
+
+	return {};
 }
 
 /*!

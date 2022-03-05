@@ -34,10 +34,11 @@ void DateTime2StringFilter::setFormat(const QString& format) {
 }
 
 QString DateTime2StringFilter::textAt(int row) const {
-	//DEBUG("DateTime2StringFilter::textAt()");
-	if (!m_inputs.value(0)) return QString();
+	if (!m_inputs.value(0))
+		return {};
 	QDateTime inputValue = m_inputs.value(0)->dateTimeAt(row);
-	if (!inputValue.isValid()) return QString();
+	if (!inputValue.isValid())
+		return {};
 
 	//QDEBUG("	: " << inputValue << " -> " << m_format << " -> " << inputValue.toString(m_format));
 	return inputValue.toString(m_format);

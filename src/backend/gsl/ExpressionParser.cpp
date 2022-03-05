@@ -1319,62 +1319,62 @@ int ExpressionParser::functionArgumentCount(const QString& functionName) {
 QString ExpressionParser::functionArgumentString(const QString& functionName, const XYEquationCurve::EquationType type) {
 	switch (functionArgumentCount(functionName)) {
 	case 0:
-		return QString("()");
+		return {"()"};
 	case 1:
 		switch(type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QString("(x)");
+			return {"(x)"};
 		case XYEquationCurve::EquationType::Polar:
-			return QString("(phi)");
+			return {"(phi)"};
 		case XYEquationCurve::EquationType::Parametric:
-			return QString("(t)");
+			return {"(t)"};
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QString("(x)");
+			return {"(x)"};
 		}
 		break;
 	case 2:
 		switch(type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QString("(x, y)");
+			return {"(x, y)"};
 		case XYEquationCurve::EquationType::Polar:
-			return QString("(phi, theta)");
+			return {"(phi, theta)"};
 		case XYEquationCurve::EquationType::Parametric:
-			return QString("(u, v)");
+			return {"(u, v)"};
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QString("(x, y)");
+			return {"(x, y)"};
 		}
 		break;
 	case 3:
 		switch(type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QString("(x, y, z)");
+			return {"(x, y, z)"};
 		case XYEquationCurve::EquationType::Polar:
-			return QString("(alpha, beta, gamma)");
+			return {"(alpha, beta, gamma)"};
 		case XYEquationCurve::EquationType::Parametric:
-			return QString("(u, v, w)");
+			return {"(u, v, w)"};
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QString("(x, y, z)");
+			return {"(x, y, z)"};
 		}
 		break;
 	case 4:
 		switch(type) {
 		case XYEquationCurve::EquationType::Cartesian:
-			return QString("(a, b, c, d)");
+			return {"(a, b, c, d)"};
 		case XYEquationCurve::EquationType::Polar:
-			return QString("(alpha, beta, gamma, delta)");
+			return {"(alpha, beta, gamma, delta)"};
 		case XYEquationCurve::EquationType::Parametric:
-			return QString("(a, b, c, d)");
+			return {"(a, b, c, d)"};
 		case XYEquationCurve::EquationType::Implicit:
 		case XYEquationCurve::EquationType::Neutral:
-			return QString("(a, b, c, d)");
+			return {"(a, b, c, d)"};
 		}
 		break;
 	}
 
-	return QString("(...)");
+	return {"(...)"};
 }
 
 const QStringList& ExpressionParser::constants() {

@@ -179,7 +179,7 @@ void GuiTools::fillColorMenu(QMenu* menu, QActionGroup* actionGroup) {
 	QPainter p(&pix);
 	for (int i = 0; i < colorsCount; ++i) {
 		p.fillRect(pix.rect(), colors[i]);
-		QAction* action = new QAction(QIcon(pix), colorNames[i], actionGroup);
+		auto* action = new QAction(QIcon(pix), colorNames[i], actionGroup);
 		action->setCheckable(true);
 		menu->addAction(action);
 	}

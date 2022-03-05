@@ -578,7 +578,7 @@ bool DatapickerCurve::load(XmlStreamReader* reader, bool preview) {
 				curvePoint->initErrorBar(curveErrorTypes());
 			}
 		} else if (reader->name() == "spreadsheet") {
-			Spreadsheet* datasheet = new Spreadsheet("spreadsheet", true);
+			auto* datasheet = new Spreadsheet("spreadsheet", true);
 			if (!datasheet->load(reader, preview)) {
 				delete datasheet;
 				return false;

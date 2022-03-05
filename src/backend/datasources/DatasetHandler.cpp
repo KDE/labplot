@@ -237,7 +237,7 @@ QString DatasetHandler::saveFileName(const QUrl& url) {
 	if (!downloadDir.exists()) {
 		if (!downloadDir.mkpath(downloadDir.path())) {
 			qDebug()<<"Failed to create the directory " << downloadDir.path();
-			return QString();
+			return {};
 		}
 	}
 

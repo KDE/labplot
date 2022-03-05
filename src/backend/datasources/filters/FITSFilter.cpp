@@ -952,11 +952,11 @@ QMultiMap<QString, QString> FITSFilterPrivate::extensionNames(const QString& fil
 	int status = 0;
 	fitsfile* fitsFile = nullptr;
 	if (fits_open_file(&fitsFile, fileName.toLatin1(), READONLY, &status ))
-		return QMultiMap<QString, QString>();
+		return {};
 	int hduCount;
 
 	if (fits_get_num_hdus(fitsFile, &hduCount, &status))
-		return QMultiMap<QString, QString>();
+		return {};
 	int imageCount = 0;
 	int asciiTableCount = 0;
 	int binaryTableCount = 0;
@@ -1326,12 +1326,12 @@ QList<FITSFilter::Keyword> FITSFilterPrivate::chduKeywords(const QString& fileNa
 
 	if (fits_open_file(&m_fitsFile, fileName.toLatin1(), READONLY, &status )) {
 		printError(status);
-		return QList<FITSFilter::Keyword> ();
+		return {};
 	}
 	int numberOfKeys;
 	if (fits_get_hdrspace(m_fitsFile, &numberOfKeys, nullptr, &status)) {
 		printError(status);
-		return QList<FITSFilter::Keyword> ();
+		return {};
 	}
 
 	QList<FITSFilter::Keyword> keywords;

@@ -235,7 +235,7 @@ void ROOTFilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSo
 		DEBUG("	reading " << first - last + 1 << " lines");
 
 		int c = 0;
-		Spreadsheet* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
+		auto* spreadsheet = dynamic_cast<Spreadsheet*>(dataSource);
 
 		for (const auto& l : columns) {
 			QVector<double>& container = *static_cast<QVector<double>*>(dataContainer[c]);
@@ -394,7 +394,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 	long int pos = 0;
 	auto type = currentObjectPosition(fileName, pos);
 	if (pos == 0)
-		return QVector<QStringList>(1, QStringList());
+		return {1, QStringList()};
 
 	if (type == FileType::Hist) {
 		auto bins = readHistogram(pos);
@@ -462,7 +462,7 @@ QVector<QStringList> ROOTFilterPrivate::previewCurrentObject(const QString& file
 
 		return preview;
 	} else
-		return QVector<QStringList>(1, QStringList());
+		return {1, QStringList()};
 }
 
 int ROOTFilterPrivate::rowsInCurrentObject(const QString& fileName) {
@@ -584,12 +584,12 @@ std::string String(char*& buffer) {
 	// root/io/io/src/TBufferFile.cxx -> ReadTString
 	size_t s = *(buffer++);
 	if (s == 0)
-		return std::string();
+		return {};
 	else {
 		if (s == 0xFF)
 			s = read<int>(buffer);
 		buffer += s;
-		return std::string(buffer - s, buffer);
+		return {buffer - s, buffer};
 	}
 }
 
@@ -850,16 +850,14 @@ void ROOTData::readNBins(ROOTData::KeyBuffer& kbuffer) {
 	}
 }
 
-std::string ROOTData::histogramName(long int pos)
-{
+std::string ROOTData::histogramName(long int pos) {
 	auto it = histkeys.find(pos);
 	if (it != histkeys.end())
 		return it->second.name + ';' + std::to_string(it->second.cycle);
-	return std::string();
+	return {};
 }
 
-int ROOTData::histogramBins(long int pos)
-{
+int ROOTData::histogramBins(long int pos) {
 	auto it = histkeys.find(pos);
 	if (it != histkeys.end())
 		return it->second.nrows;
@@ -869,7 +867,7 @@ int ROOTData::histogramBins(long int pos)
 std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 	auto it = histkeys.find(pos);
 	if (it == histkeys.end())
-		return std::vector<ROOTData::BinPars>();
+		return {};
 
 	std::string buffer = data(it->second);
 	if (!buffer.empty()) {
@@ -886,7 +884,7 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 
 		std::vector<BinPars> r(read<int>(buf)); // fNcells
 		if (r.size() < 3)
-			return std::vector<BinPars>();
+			return {};
 
 		r.front().lowedge = -std::numeric_limits<double>::infinity();
 
@@ -931,7 +929,7 @@ std::vector<ROOTData::BinPars> ROOTData::readHistogram(long int pos) {
 
 		return r;
 	} else
-		return std::vector<BinPars>();
+		return {};
 }
 
 void ROOTData::readNEntries(ROOTData::KeyBuffer& kbuffer) {
@@ -947,16 +945,14 @@ void ROOTData::readNEntries(ROOTData::KeyBuffer& kbuffer) {
 	}
 }
 
-std::string ROOTData::treeName(long int pos)
-{
+std::string ROOTData::treeName(long int pos) {
 	auto it = treekeys.find(pos);
 	if (it != treekeys.end())
 		return it->second.name;
-	return std::string();
+	return {};
 }
 
-int ROOTData::treeEntries(long int pos)
-{
+int ROOTData::treeEntries(long int pos) {
 	auto it = treekeys.find(pos);
 	if (it != treekeys.end())
 		return it->second.nrows;
@@ -1278,7 +1274,7 @@ std::string ROOTData::data(const ROOTData::KeyBuffer& buffer, std::ifstream& is)
 #endif
 	}
 
-	return std::string();
+	return {};
 }
 
 void ROOTData::readStreamerInfo(const ROOTData::KeyBuffer& buffer) {

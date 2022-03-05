@@ -778,7 +778,7 @@ QIcon Spreadsheet::icon() const {
 QString Spreadsheet::text(int row, int col) const {
 	Column* c = column(col);
 	if (!c)
-		return QString();
+		return {};
 
 	return c->asStringColumn()->textAt(row);
 }

@@ -58,8 +58,8 @@ void Segments::makeSegments(QImage &imageProcessed) {
 	bool* lastBool = new bool [height];
 	bool* currBool = new bool [height];
 	bool* nextBool = new bool [height];
-	Segment** lastSegment = new Segment* [(size_t)height];
-	Segment** currSegment = new Segment* [(size_t)height];
+	auto** lastSegment = new Segment* [(size_t)height];
+	auto** currSegment = new Segment* [(size_t)height];
 	loadSegment(lastSegment, height);
 
 	//initialize one column of boolean flags using the pixels of the specified column

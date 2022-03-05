@@ -195,14 +195,14 @@ bool Workbook::load(XmlStreamReader* reader, bool preview) {
 			if (!readCommentElement(reader))
 				return false;
 		} else if (reader->name() == "spreadsheet") {
-			Spreadsheet* spreadsheet = new Spreadsheet("spreadsheet", true);
+			auto* spreadsheet = new Spreadsheet("spreadsheet", true);
 			if (!spreadsheet->load(reader, preview)) {
 				delete spreadsheet;
 				return false;
 			} else
 				addChild(spreadsheet);
 		} else if (reader->name() == "matrix") {
-			Matrix* matrix = new Matrix(i18n("matrix"), true);
+			auto* matrix = new Matrix(i18n("matrix"), true);
 			if (!matrix->load(reader, preview)) {
 				delete matrix;
 				return false;

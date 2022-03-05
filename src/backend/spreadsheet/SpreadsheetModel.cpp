@@ -100,41 +100,41 @@ QModelIndex SpreadsheetModel::index(const QString& text) const {
 
 QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 	if ( !index.isValid() )
-		return QVariant();
+		return  {};
 
 	const int row = index.row();
 	const int col = index.column();
 	const Column* col_ptr = m_spreadsheet->column(col);
 
 	if (!col_ptr)
-		return QVariant();
+		return {};
 
 	switch (role) {
 	case Qt::ToolTipRole:
 		if (col_ptr->isValid(row)) {
 			if (col_ptr->isMasked(row))
-				return QVariant(i18n("%1, masked (ignored in all operations)", col_ptr->asStringColumn()->textAt(row)));
+				return {i18n("%1, masked (ignored in all operations)", col_ptr->asStringColumn()->textAt(row))};
 			else
-				return QVariant(col_ptr->asStringColumn()->textAt(row));
+				return {col_ptr->asStringColumn()->textAt(row)};
 		} else {
 			if (col_ptr->isMasked(row))
-				return QVariant(i18n("invalid cell, masked (ignored in all operations)"));
+				return {i18n("invalid cell, masked (ignored in all operations)")};
 			else
-				return QVariant(i18n("invalid cell (ignored in all operations)"));
+				return {i18n("invalid cell (ignored in all operations)")};
 		}
 	case Qt::EditRole:
 		if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Double) {
 			double value = col_ptr->valueAt(row);
 			if (std::isnan(value))
-				return QVariant("-");
+				return {"-"};
 			else if (std::isinf(value))
-				return QVariant(QLatin1String("inf"));
+				return {QLatin1String("inf")};
 			else
-				return QVariant(col_ptr->asStringColumn()->textAt(row));
+				return {col_ptr->asStringColumn()->textAt(row)};
 		}
 
 		if (col_ptr->isValid(row))
-			return QVariant(col_ptr->asStringColumn()->textAt(row));
+			return {col_ptr->asStringColumn()->textAt(row)};
 
 		//m_formula_mode is not used at the moment
 		//if (m_formula_mode)
@@ -145,24 +145,24 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 		if (col_ptr->columnMode() == AbstractColumn::ColumnMode::Double) {
 			double value = col_ptr->valueAt(row);
 			if (std::isnan(value))
-				return QVariant("-");
+				return {"-"};
 			else if (std::isinf(value))
-				return QVariant(UTF8_QSTRING("∞"));
+				return {UTF8_QSTRING("∞")};
 			else
-				return QVariant(col_ptr->asStringColumn()->textAt(row));
+				return {col_ptr->asStringColumn()->textAt(row)};
 		}
 
 		if (!col_ptr->isValid(row))
-			return QVariant("-");
+			return {"-"};
 
 		//m_formula_mode is not used at the moment
 		//if (m_formula_mode)
 		//	return QVariant(col_ptr->formula(row));
 
-		return QVariant(col_ptr->asStringColumn()->textAt(row));
+		return {col_ptr->asStringColumn()->textAt(row)};
 	case Qt::ForegroundRole:
 		if (!col_ptr->isValid(row))
-			return QVariant(QBrush(Qt::red));
+			return {QBrush(Qt::red)};
 		return color(col_ptr, row, AbstractColumn::Formatting::Foreground);
 	case Qt::BackgroundRole:
 		if (m_searchText.isEmpty())
@@ -171,25 +171,25 @@ QVariant SpreadsheetModel::data(const QModelIndex& index, int role) const {
 			if (col_ptr->asStringColumn()->textAt(row).indexOf(m_searchText) == -1)
 				return color(col_ptr, row, AbstractColumn::Formatting::Background);
 			else
-				return QVariant(QApplication::palette().color(QPalette::Highlight));
+				return {QApplication::palette().color(QPalette::Highlight)};
 		}
 	case static_cast<int>(CustomDataRole::MaskingRole):
-		return QVariant(col_ptr->isMasked(row));
+		return {col_ptr->isMasked(row)};
 	case static_cast<int>(CustomDataRole::FormulaRole):
-		return QVariant(col_ptr->formula(row));
+		return {col_ptr->formula(row)};
 	case Qt::DecorationRole:
 		return color(col_ptr, row, AbstractColumn::Formatting::Icon);
 // 		if (m_formula_mode)
 // 			return QIcon(QPixmap(":/equals.png")); //TODO
 	}
 
-	return QVariant();
+	return {};
 }
 
 QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	if ( (orientation == Qt::Horizontal && section > m_columnCount-1)
-		|| (orientation == Qt::Vertical && section > m_rowCount-1) )
-		return QVariant();
+			|| (orientation == Qt::Vertical && section > m_rowCount-1) )
+		return {};
 
 	switch (orientation) {
 	case Qt::Horizontal:
@@ -212,7 +212,7 @@ QVariant SpreadsheetModel::headerData(int section, Qt::Orientation orientation, 
 		}
 	}
 
-	return QVariant();
+	return {};
 }
 
 int SpreadsheetModel::rowCount(const QModelIndex& /*parent*/) const {
@@ -486,11 +486,11 @@ QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, Abstract
 	if (!column->isNumeric()
 		|| !column->isValid(row)
 		|| !column->hasHeatmapFormat())
-		return QVariant();
+		return {};
 
 	const auto& format = column->heatmapFormat();
 	if (format.type != type || format.colors.isEmpty())
-		return QVariant();
+		return {};
 
 	double value = column->valueAt(row);
 	double range = (format.max - format.min)/format.colors.count();
@@ -502,5 +502,5 @@ QVariant SpreadsheetModel::color(const AbstractColumn* column, int row, Abstract
 		}
 	}
 
-	return QVariant(QColor(format.colors.at(index)));
+	return {QColor(format.colors.at(index))};
 }

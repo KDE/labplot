@@ -59,7 +59,7 @@ Qt::ItemFlags MatrixModel::flags(const QModelIndex& index) const {
 
 QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 	if ( !index.isValid() )
-		return QVariant();
+		return {};
 
 	int row = index.row();
 	int col = index.column();
@@ -94,7 +94,7 @@ QVariant MatrixModel::data(const QModelIndex& index, int role) const {
 			return QVariant(QColor(Qt::black));
 	}
 
-	return QVariant();
+	return {};
 }
 
 QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -126,7 +126,7 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 
 						result += ')';
 					}
-					return QVariant(result);
+					return {result};
 			}
 			break;
 		case Qt::Vertical:
@@ -157,10 +157,10 @@ QVariant MatrixModel::headerData(int section, Qt::Orientation orientation, int r
 									m_matrix->numericFormat(), m_matrix->precision());
 						result += ')';
 					}
-					return QVariant(result);
+					return {result};
 			}
 	}
-	return QVariant();
+	return {};
 }
 
 int MatrixModel::rowCount(const QModelIndex& /*parent*/) const {

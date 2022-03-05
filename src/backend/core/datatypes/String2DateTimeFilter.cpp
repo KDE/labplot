@@ -37,9 +37,11 @@ AbstractColumn::ColumnMode String2DateTimeFilter::columnMode() const {
 }
 
 QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
-	if (!m_inputs.value(0)) return QDateTime();
+	if (!m_inputs.value(0))
+		return {};
 	QString input_value = m_inputs.value(0)->textAt(row);
-	if (input_value.isEmpty()) return QDateTime();
+	if (input_value.isEmpty())
+		return {};
 
 	// first try the selected format string m_format
 	QDateTime result = QDateTime::fromString(input_value, m_format);
@@ -89,7 +91,7 @@ QDateTime String2DateTimeFilter::dateTimeAt(int row) const {
 	else if (date_result.isValid() && !time_result.isValid())
 		time_result = QTime(0, 0, 0, 0);
 
-	return QDateTime(date_result, time_result);
+	return {date_result, time_result};
 }
 
 QDate String2DateTimeFilter::dateAt(int row) const {

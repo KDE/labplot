@@ -143,7 +143,7 @@ int AspectTreeModel::columnCount(const QModelIndex& /*parent*/) const {
 
 QVariant AspectTreeModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	if (orientation != Qt::Horizontal)
-		return QVariant();
+		return {};
 
 	switch (role) {
 	case Qt::DisplayRole:
@@ -157,16 +157,16 @@ QVariant AspectTreeModel::headerData(int section, Qt::Orientation orientation, i
 		case 3:
 			return i18n("Comment");
 		default:
-			return QVariant();
+			return {};
 		}
 	default:
-		return QVariant();
+		return {};
 	}
 }
 
 QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 	if (!index.isValid())
-		return QVariant();
+		return {};
 
 	auto* aspect = static_cast<AbstractAspect*>(index.internalPointer());
 	switch (role) {
@@ -191,7 +191,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 			} else if (aspect)
 				return aspect->name();
 			else
-				return QVariant();
+				return {};
 		}
 		case 1:
 			if (aspect->metaObject()->className() == QLatin1String("CantorWorksheet"))
@@ -204,7 +204,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 		case 3:
 			return aspect->comment().replace('\n', ' ').simplified();
 		default:
-			return QVariant();
+			return {};
 		}
 	case Qt::ToolTipRole: {
 		QString toolTip;
@@ -236,7 +236,7 @@ QVariant AspectTreeModel::data(const QModelIndex &index, int role) const {
 			return QVariant( QApplication::palette().color(QPalette::Active,QPalette::Text ) );
 		}
 	default:
-		return QVariant();
+		return {};
 	}
 }
 
