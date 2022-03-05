@@ -3372,6 +3372,11 @@ void CartesianPlot::shift(int index, bool x, bool leftOrDown) {
 
 	if (range.finite())
 		x ? d->xRange(index) = range : d->yRange(index) = range;
+
+	if (x)
+		d->retransformXScale(index);
+	else
+		d->retransformYScale(index);
 }
 
 void CartesianPlot::shiftLeftX(int index) {
@@ -3392,11 +3397,8 @@ void CartesianPlot::shiftLeftX(int index) {
 		}
 	}
 
-	Q_D(CartesianPlot);
-	if (retrans) {
-		d->retransformScales(index, -1);
+	if (retrans)
 		retransform();
-	}
 }
 
 void CartesianPlot::shiftRightX(int index) {
@@ -3417,11 +3419,8 @@ void CartesianPlot::shiftRightX(int index) {
 		}
 	}
 
-	Q_D(CartesianPlot);
-	if (retrans) {
-		d->retransformScales(index, -1);
+	if (retrans)
 		retransform();
-	}
 }
 
 void CartesianPlot::shiftUpY(int index) {
@@ -3442,11 +3441,8 @@ void CartesianPlot::shiftUpY(int index) {
 		}
 	}
 
-	Q_D(CartesianPlot);
-	if (retrans) {
-		d->retransformScales(-1, index);
+	if (retrans)
 		retransform();
-	}
 }
 
 void CartesianPlot::shiftDownY(int index) {
@@ -3467,11 +3463,8 @@ void CartesianPlot::shiftDownY(int index) {
 		}
 	}
 
-	Q_D(CartesianPlot);
-	if (retrans) {
-		d->retransformScales(-1, index);
+	if (retrans)
 		retransform();
-	}
 }
 
 void CartesianPlot::cursor() {
@@ -4369,10 +4362,14 @@ bool CartesianPlotPrivate::translateRange(int xIndex, int yIndex, const QPointF&
 	}
 
 	q->setUndoAware(false);
-	if (translationX)
+	if (translationX) {
 		q->enableAutoScaleX(xIndex, false, true);
-	if (translationY)
+		retransformXScale(xIndex);
+	}
+	if (translationY) {
 		q->enableAutoScaleY(yIndex, false, true);
+		retransformYScale(yIndex);
+	}
 	q->setUndoAware(true);
 
 	// If x or y should not be translated, means, that it was done before
@@ -4434,10 +4431,8 @@ void CartesianPlotPrivate::mouseMoveSelectionMode(QPointF logicalStart, QPointF 
 		}
 	}
 
-	if (translated) {
-		retransformScales(xIndex, yIndex);
+	if (translated)
 		q->retransform();
-	}
 }
 
 void CartesianPlotPrivate::mouseMoveZoomSelectionMode(QPointF logicalPos, int cSystemIndex) {
