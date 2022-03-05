@@ -1198,7 +1198,7 @@ private:
 class CartesianPlotEnableAutoScaleYIndexCmd : public QUndoCommand {
 public:
 	CartesianPlotEnableAutoScaleYIndexCmd(CartesianPlotPrivate* private_obj, bool autoScale, int index, bool fullRange) :
-		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_oldRange(0.0, 0.0) m_fullRange(fullRange) {
+		m_private(private_obj), m_autoScale(autoScale), m_index(index), m_oldRange(0.0, 0.0), m_fullRange(fullRange) {
 		setText(i18n("%1: change y-range %2 auto scaling", m_private->name(), m_index + 1));
 	}
 
