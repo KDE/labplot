@@ -1045,6 +1045,8 @@ void CartesianPlotDock::autoScaleXChanged(bool state) {
 	if (m_initializing)
 		return;
 
+	Lock lock(m_initializing);
+
 	const int xRangeIndex{ sender()->property("row").toInt() };
 	DEBUG( Q_FUNC_INFO << ", x range index: " << xRangeIndex )
 
@@ -1090,6 +1092,8 @@ void CartesianPlotDock::autoScaleYChanged(bool state) {
 	DEBUG(Q_FUNC_INFO << ", state = " << state)
 	if (m_initializing)
 		return;
+
+	Lock lock(m_initializing);
 
 	const int yRangeIndex{ sender()->property("row").toInt() };
 	DEBUG( Q_FUNC_INFO << ", y range " << yRangeIndex+1 )
@@ -2176,46 +2180,52 @@ void CartesianPlotDock::cursorLineStyleChanged(int index) {
 //*************************************************************
 //general
 void CartesianPlotDock::plotRectChanged(QRectF& rect) {
-	m_initializing = true;
+	if (m_initializing)
+		return;
+	const Lock lock(m_initializing);
 	ui.sbLeft->setValue(Worksheet::convertFromSceneUnits(rect.x(), m_worksheetUnit));
 	ui.sbTop->setValue(Worksheet::convertFromSceneUnits(rect.y(), m_worksheetUnit));
 	ui.sbWidth->setValue(Worksheet::convertFromSceneUnits(rect.width(), m_worksheetUnit));
 	ui.sbHeight->setValue(Worksheet::convertFromSceneUnits(rect.height(), m_worksheetUnit));
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotRangeTypeChanged(CartesianPlot::RangeType type) {
-	m_initializing = true;
+	if (m_initializing)
+		return;
+	const Lock lock(m_initializing);
 	ui.cbRangeType->setCurrentIndex(static_cast<int>(type));
-	m_initializing = false;
 }
 void CartesianPlotDock::plotRangeFirstValuesChanged(int value) {
-	m_initializing = true;
+	if (m_initializing)
+		return;
+	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leRangePoints->setText(numberLocale.toString(value));
-	m_initializing = false;
 }
 void CartesianPlotDock::plotRangeLastValuesChanged(int value) {
-	m_initializing = true;
+	if (m_initializing)
+		return;
+	const Lock lock(m_initializing);
 	SET_NUMBER_LOCALE
 	ui.leRangePoints->setText(numberLocale.toString(value));
-	m_initializing = false;
 }
 
 // x & y ranges
 void CartesianPlotDock::plotXAutoScaleChanged(int xRangeIndex, bool checked) {
+	if (m_initializing)
+		return;
+	const Lock lock(m_initializing);
 	DEBUG(Q_FUNC_INFO << ", checked = " << checked)
-	m_initializing = true;
 	//OLD: ui.chkAutoScaleX->setChecked(value);
 	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Automatic, QCheckBox, setChecked(checked));
-	m_initializing = false;
 }
 void CartesianPlotDock::plotYAutoScaleChanged(int yRangeIndex, bool checked) {
+	if (m_initializing)
+		return;
+	const Lock lock(m_initializing);
 	DEBUG(Q_FUNC_INFO << ", checked = " << checked)
-	m_initializing = true;
 	//OLD: ui.chkAutoScaleY->setChecked(value);
 	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Automatic, QCheckBox, setChecked(checked));
-	m_initializing = false;
 }
 
 void CartesianPlotDock::plotXMinChanged(int xRangeIndex, double value) {
