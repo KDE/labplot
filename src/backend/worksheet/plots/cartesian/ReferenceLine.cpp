@@ -422,19 +422,19 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 		if (!preview && reader->name() == "comment") {
 			if (!readCommentElement(reader)) return false;
 		} else if (!preview && reader->name() == "general") {
+			// old logic for the position for xml version < 6
 			Q_D(ReferenceLine);
-			// It must be xml version < 6!
 			attribs = reader->attributes();
 			auto str = attribs.value("position").toString();
 			if (str.isEmpty())
 				reader->raiseWarning(attributeWarning.subs("position").toString());
 			else {
-				d->position.point.setX(str.toDouble());
-				d->position.point.setY(str.toDouble());
+				d->positionLogical.setX(str.toDouble());
+				d->positionLogical.setY(str.toDouble());
 			}
+			d->coordinateBindingEnabled = true;
 
 			READ_INT_VALUE("orientation", orientation, Orientation);
-
 			READ_INT_VALUE_DIRECT("plotRangeIndex", m_cSystemIndex, int);
 
 			str = attribs.value("visible").toString();
@@ -444,7 +444,7 @@ bool ReferenceLine::load(XmlStreamReader* reader, bool preview) {
 				d->setVisible(str.toInt());
 		} else if (!preview && reader->name() == "geometry") {
 			attribs = reader->attributes();
-			// Available from xmlVersion >= 6 on
+			//new logic for the position for xmlVersion >= 6
 			READ_INT_VALUE("orientation", orientation, Orientation);
 			WorksheetElement::load(reader, preview);
 		} else if (!preview && reader->name() == "line") {
