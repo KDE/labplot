@@ -411,9 +411,14 @@ QRectF TextLabelPrivate::size() {
 	} else {
 		//size is in points, convert to scene units
 		// TODO: the shift and scaling is just a workaround to avoid the big bounding box
+		// s.a. TextLabelPrivate::updateBoundingRect()
+		double xShift = 23., yScale = 0.8;
+		// better scaling for multiline Markdown
+		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains('\n'))
+			yScale = 0.95;
 		// see updateBoundingRect()
-		w = m_textItem->boundingRect().width() * scaleFactor - 23.;
-		h = m_textItem->boundingRect().height() * scaleFactor * 0.8;
+		w = m_textItem->boundingRect().width() * scaleFactor - xShift;
+		h = m_textItem->boundingRect().height() * scaleFactor * yScale;
 	}
 	qreal x = position.point.x();
 	qreal y = position.point.y();
@@ -528,7 +533,7 @@ void TextLabelPrivate::updatePosition() {
 	updates the static text.
  */
 void TextLabelPrivate::updateText() {
-	DEBUG(Q_FUNC_INFO)
+	//DEBUG(Q_FUNC_INFO)
 	if (suppressRetransform)
 		return;
 
@@ -601,7 +606,7 @@ void TextLabelPrivate::updateText() {
 }
 
 void TextLabelPrivate::updateBoundingRect() {
-	DEBUG(Q_FUNC_INFO)
+	//DEBUG(Q_FUNC_INFO)
 	//determine the size of the label in scene units.
 	double w, h;
 	if (textWrapper.mode == TextLabel::Mode::LaTeX) {
@@ -613,8 +618,13 @@ void TextLabelPrivate::updateBoundingRect() {
 		m_textItem->adjustSize();
 		//QDEBUG(" BOUNDING RECT = " << m_textItem->boundingRect())
 		// TODO: the shift and scaling is just a workaround to avoid the big bounding box
-		w = m_textItem->boundingRect().width() * scaleFactor - 23.;
-		h = m_textItem->boundingRect().height() * scaleFactor * 0.8;
+		// s.a. TextLabelPrivate::size()
+		double xShift = 23., yScale = 0.8;
+		// better scaling for multiline Markdown
+		if (textWrapper.mode == TextLabel::Mode::Markdown && textWrapper.text.contains('\n'))
+			yScale = 0.95;
+		w = m_textItem->boundingRect().width() * scaleFactor - xShift;
+		h = m_textItem->boundingRect().height() * scaleFactor * yScale;
 	}
 
 	//DEBUG(Q_FUNC_INFO << ", scale factor = " << scaleFactor << ", w/h = " << w << " / " << h)

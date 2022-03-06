@@ -288,8 +288,6 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
  * Called if the background color of the parent aspect has changed.
  */
 void LabelWidget::updateBackground() const {
-	DEBUG(Q_FUNC_INFO)
-
 	QColor color(Qt::white);
 	if (static_cast<TextLabel::Mode>(ui.cbMode->currentIndex()) == TextLabel::Mode::Text) {
 		const auto type = m_label->parentAspect()->type();
@@ -306,7 +304,7 @@ void LabelWidget::updateBackground() const {
 	}
 
 	auto p = ui.teLabel->palette();
-	QDEBUG(Q_FUNC_INFO << ", color = " << color)
+	//QDEBUG(Q_FUNC_INFO << ", color = " << color)
 	p.setColor(QPalette::Base, color);
 	ui.teLabel->setPalette(p);
 }
