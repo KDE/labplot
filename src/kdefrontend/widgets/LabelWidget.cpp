@@ -625,7 +625,7 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 		return;
 
 	auto mode = m_label->text().mode;
-	if ((!m_teXEnabled && mode == TextLabel::Mode::LaTeX) || mode == TextLabel::Mode::Text) {
+	if (mode == TextLabel::Mode::Text || (mode == TextLabel::Mode::LaTeX && !m_teXEnabled)) {
 		auto cursor = ui.teLabel->textCursor();
 		bool deselect = false;
 		if (!cursor.hasSelection()) {
@@ -637,7 +637,7 @@ void LabelWidget::fontColorChanged(const QColor& color) {
 			cursor.clearSelection();
 			ui.teLabel->setTextCursor(cursor);
 		}
-	} else {
+	} else {	// LaTeX (enabled) or Markup mode
 		for (auto* label : m_labelsList)
 			label->setFontColor(color);
 	}
@@ -650,7 +650,7 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 
 	auto mode = m_label->text().mode;
 	DEBUG(Q_FUNC_INFO << ", tex enable = " << m_teXEnabled << ", mode = " << (int)mode)
-	if ((!m_teXEnabled && mode == TextLabel::Mode::LaTeX) || mode == TextLabel::Mode::Text) {
+	if (mode == TextLabel::Mode::Text || (mode == TextLabel::Mode::LaTeX && !m_teXEnabled)) {
 		DEBUG(Q_FUNC_INFO << ", update background color")
 		auto cursor = ui.teLabel->textCursor();
 		bool deselect = false;
@@ -664,7 +664,7 @@ void LabelWidget::backgroundColorChanged(const QColor& color) {
 			cursor.clearSelection();
 			ui.teLabel->setTextCursor(cursor);
 		}
-	} else {
+	} else {	// LaTeX (enabled) or Markup mode
 		// Latex text does not support html code. For this the backgroundColor variable is used
 		// Only single color background is supported
 		for (auto* label : m_labelsList)
@@ -1261,10 +1261,13 @@ void LabelWidget::labelBackgroundColorChanged(const QColor& color) {
 	QDEBUG(Q_FUNC_INFO << ", color =" << color)
 	const Lock lock(m_initializing);
 	ui.kcbBackgroundColor->setColor(color);
-//	auto cursor = ui.teLabel->textCursor();
+
+	auto mode = static_cast<TextLabel::Mode>(ui.cbMode->currentIndex());
+	if (mode == TextLabel::Mode::Markdown)
+		return;
+
 	ui.teLabel->selectAll();
 	ui.teLabel->setTextBackgroundColor(color);
-//	ui.teLabel->setTextCursor(cursor);	// restore cursor
 }
 
 void LabelWidget::labelOffsetXChanged(qreal offset) {
