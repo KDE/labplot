@@ -583,8 +583,17 @@ void TextLabelPrivate::updateText() {
 
 		mkd_cleanup(mdHandle);
 
+		//use QTextEdit to add other global properties (font size and colors)
+		QTextEdit te;
+		te.setHtml(html);
+		te.selectAll();
+		te.setTextColor(fontColor);
+		te.setFontPointSize(teXFont.pointSize());
+		te.setTextBackgroundColor(backgroundColor);
+
+		m_textItem->setHtml(te.toHtml());
 		m_textItem->show();
-		m_textItem->setHtml(html);
+
 		updateBoundingRect();
 #endif
 	}
