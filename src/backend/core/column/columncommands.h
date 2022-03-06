@@ -278,18 +278,20 @@ public:
 	}
 
 	void redo() override {
-		if (!m_copied) {
-			if (m_first < 0)
-				m_old_values = *static_cast<QVector<T>*>(m_col->data());
-			else
-				m_old_values = static_cast<QVector<T>*>(m_col->data())->mid(m_first, m_new_values.count());
-			m_row_count = m_col->rowCount();
-			m_copied = true;
-		}
+		if (m_first < 0)
+			m_old_values = *static_cast<QVector<T>*>(m_col->data());
+		else
+			m_old_values = static_cast<QVector<T>*>(m_col->data())->mid(m_first, m_new_values.count());
 		m_col->replaceValues(m_first, m_new_values);
+		m_new_values.clear(); // delete values, because otherwise we use a lot of ram even if we don't need it
 	}
 	void undo() override {
+		if (m_first < 0)
+			m_new_values = *static_cast<QVector<T>*>(m_col->data());
+		else
+			m_new_values = static_cast<QVector<T>*>(m_col->data())->mid(m_first, m_old_values.count());
 		m_col->replaceValues(m_first, m_old_values);
+		m_old_values.clear();
 	}
 
 private:
@@ -297,8 +299,6 @@ private:
 	int m_first;
 	QVector<T> m_new_values;
 	QVector<T> m_old_values;
-	bool m_copied{false};
-	int m_row_count{0};
 };
 
 #endif
