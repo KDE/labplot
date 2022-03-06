@@ -1365,7 +1365,7 @@ void LabelWidget::load() {
 //	QDEBUG(Q_FUNC_INFO << ", format bg color = " << format.background().color())
 //	QDEBUG(Q_FUNC_INFO << ", label color = " << m_label->fontColor())
 //	QDEBUG(Q_FUNC_INFO << ", label bg color = " << m_label->backgroundColor())
-	if (m_label->text().text.isEmpty() || mode == TextLabel::Mode::Text) {
+	if (m_label->text().text.isEmpty() || mode != TextLabel::Mode::LaTeX) {
 		ui.kcbFontColor->setColor(m_label->fontColor());
 		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 	} else {
