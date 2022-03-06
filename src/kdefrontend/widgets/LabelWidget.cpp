@@ -289,21 +289,21 @@ void LabelWidget::setAxes(QList<Axis*> axes) {
  */
 void LabelWidget::updateBackground() const {
 	DEBUG(Q_FUNC_INFO)
-	if (static_cast<TextLabel::Mode>(ui.cbMode->currentIndex()) != TextLabel::Mode::Text)
-		return; //nothing to do
 
 	QColor color(Qt::white);
-	const auto type = m_label->parentAspect()->type();
-	if (type == AspectType::Worksheet)
-		color = static_cast<const Worksheet*>(m_label->parentAspect())->backgroundFirstColor();
-	else if (type == AspectType::CartesianPlot)
-		color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->backgroundFirstColor();
-	else if (type == AspectType::CartesianPlotLegend)
-		color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
-	else if (type == AspectType::InfoElement || type == AspectType::Axis)
-		color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
-	else
-		DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
+	if (static_cast<TextLabel::Mode>(ui.cbMode->currentIndex()) == TextLabel::Mode::Text) {
+		const auto type = m_label->parentAspect()->type();
+		if (type == AspectType::Worksheet)
+			color = static_cast<const Worksheet*>(m_label->parentAspect())->backgroundFirstColor();
+		else if (type == AspectType::CartesianPlot)
+			color = static_cast<CartesianPlot*>(m_label->parentAspect())->plotArea()->backgroundFirstColor();
+		else if (type == AspectType::CartesianPlotLegend)
+			color = static_cast<const CartesianPlotLegend*>(m_label->parentAspect())->backgroundFirstColor();
+		else if (type == AspectType::InfoElement || type == AspectType::Axis)
+			color = static_cast<CartesianPlot*>(m_label->parentAspect()->parentAspect())->plotArea()->backgroundFirstColor();
+		else
+			DEBUG(Q_FUNC_INFO << ", Not handled type:" << static_cast<int>(type));
+	}
 
 	auto p = ui.teLabel->palette();
 	QDEBUG(Q_FUNC_INFO << ", color = " << color)
@@ -1504,7 +1504,7 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 			ui.sbFontSize->setVisible(true);
 		}
 
-		//update TeX colors
+		//update colors
 		ui.kcbFontColor->setColor(m_label->fontColor());
 		ui.kcbBackgroundColor->setColor(m_label->backgroundColor());
 	} else {
@@ -1516,6 +1516,8 @@ void LabelWidget::updateMode(TextLabel::Mode mode) {
 		ui.lFontSize->setVisible(false);
 		ui.sbFontSize->setVisible(false);
 	}
+
+	updateBackground();
 
 	//when switching to non-LaTeX mode, set the background color to white just for the case the latex code provided by the user
 	//in the TeX-mode is not valid and the background was set to red (s.a. LabelWidget::labelTeXImageUpdated())
