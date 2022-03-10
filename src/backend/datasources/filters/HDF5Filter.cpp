@@ -524,7 +524,7 @@ QStringList HDF5FilterPrivate::readHDF5Compound(hid_t tid) {
 
 template <typename T>
 QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t dtype, int rows, int lines, void* dataContainer) {
-	DEBUG("readHDF5Data1D() rows = " << rows << ", lines = " << lines);
+	DEBUG(Q_FUNC_INFO << ", rows = " << rows << ", lines = " << lines);
 	QStringList dataString;
 
 	// we read all rows of data
@@ -532,8 +532,8 @@ QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t dtype, int ro
 
 	m_status = H5Dread(dataset, dtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, data);
 	handleError(m_status, "H5Dread");
-	DEBUG(" startRow = " << startRow << ", endRow = " << endRow);
-	DEBUG("	dataContainer = " << dataContainer);
+	DEBUG(Q_FUNC_INFO << ", startRow = " << startRow << ", endRow = " << endRow);
+	DEBUG(Q_FUNC_INFO << ", dataContainer = " << dataContainer);
 
 	H5T_class_t dclass = H5Tget_class(dtype);
 	handleError((int)dclass, "H5Dget_class");
@@ -565,6 +565,7 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 	}
 
 	for (int m = 0; m < members; ++m) {
+		DEBUG(Q_FUNC_INFO << ", member " << m)
 		hid_t mtype = H5Tget_member_type(tid, m);
 		handleError((int)mtype, "H5Tget_member_type");
 		size_t msize = H5Tget_size(mtype);
@@ -632,9 +633,19 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 		else if (H5Tequal(mtype, H5T_NATIVE_LDOUBLE))
 			mdataString = readHDF5Data1D<long double>(dataset, ctype, rows, lines, dataContainer[m]);
 		else {
+			DEBUG(Q_FUNC_INFO << ", UNKNOWN member type " << mtype)
+			//TODO: or if dataContainer.size() == 0?
+			QDEBUG("container size: " << dataContainer[m])
+			QDEBUG("container element: " << dataContainer.size())
 			if (dataContainer[m]) {
-				for (int i = startRow-1; i < qMin(endRow, lines + startRow - 1); ++i)
-					static_cast<QVector<double>*>(dataContainer[m])->operator[](i - startRow + 1) = 0;
+				DEBUG("start/end row = " << startRow << "/" << endRow << ", lines = " << lines)
+				DEBUG("loop: " << startRow-1 << " .. " << qMin(endRow, lines + startRow - 1))
+				DEBUG("container size = " << static_cast<QVector<double>*>(dataContainer[m])->size())
+				for (int r = startRow-1; r < qMin(endRow, lines + startRow - 1); ++r) {
+					DEBUG(" row = " << r)
+					// CRASH
+					static_cast<QVector<double>*>(dataContainer[m])->operator[](r - startRow + 1) = 0;
+				}
 			} else {
 				for (int i = 0; i < qMin(rows, lines); ++i)
 					mdataString << QLatin1String("_");
@@ -1477,7 +1488,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 		ok = false;
 		return dataStrings << (QStringList() << i18n("No data set selected"));
 	}
-	DEBUG(" current data set = " << STDSTRING(currentDataSetName));
+	DEBUG(Q_FUNC_INFO << ", current data set = " << STDSTRING(currentDataSetName));
 
 #ifdef HAVE_HDF5
 	hid_t file = H5Fopen(qPrintable(fileName), H5F_ACC_RDONLY, H5P_DEFAULT);
@@ -1497,7 +1508,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 	handleError((int)dataspace, "H5Dget_space");
 	int rank = H5Sget_simple_extent_ndims(dataspace);
 	handleError(rank, "H5Dget_simple_extent_ndims");
-	DEBUG(" rank = " << rank);
+	DEBUG(Q_FUNC_INFO << ", rank = " << rank);
 
 	int columnOffset = 0;			// offset to import data
 	int actualRows = 0, actualCols = 0;	// rows and cols to read
@@ -1563,7 +1574,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 		H5T_order_t order = H5Tget_order(dtype);
 		handleError((int)order, "H5Sget_order");
 #endif
-		QDEBUG(translateHDF5Class(dclass) << '(' << typeSize << ')' << translateHDF5Order(order)
+		QDEBUG(Q_FUNC_INFO << ": " << translateHDF5Class(dclass) << '(' << typeSize << ')' << translateHDF5Order(order)
 		         << ", rows:" << rows << " max:" << maxSize);
 
 		QVector<AbstractColumn::ColumnMode> columnModes;
@@ -1584,7 +1595,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 
 		// use current data set name (without path) for column name
 		QStringList vectorNames = {currentDataSetName.mid(currentDataSetName.lastIndexOf("/") + 1)};
-		QDEBUG("	vector names = " << vectorNames)
+		QDEBUG(Q_FUNC_INFO << ", vector names = " << vectorNames)
 
 		if (dataSource)
 			columnOffset = dataSource->prepareImport(dataContainer, mode, actualRows, actualCols, vectorNames, columnModes);
@@ -1698,6 +1709,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			break;
 		}
 		case H5T_COMPOUND: {
+			DEBUG(Q_FUNC_INFO << ", COMPOUND type")
 			int members = H5Tget_nmembers(dtype);
 			handleError(members, "H5Tget_nmembers");
 			if (dataSource) {
