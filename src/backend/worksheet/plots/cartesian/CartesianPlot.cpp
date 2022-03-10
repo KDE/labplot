@@ -3535,14 +3535,13 @@ CartesianPlotPrivate::~CartesianPlotPrivate() = default;
 	Also, the size (=bounding box) of CartesianPlot can be greater than the size of the plot area.
  */
 void CartesianPlotPrivate::retransform() {
-	DEBUG(Q_FUNC_INFO)
 	for (int i = 0; i < xRanges.count(); i++)
 		DEBUG( Q_FUNC_INFO << ", x range " << i+1 << " : " << xRanges.at(i).range.toStdString()
 			<< ", scale = " << ENUM_TO_STRING(RangeT, Scale, xRanges.at(i).range.scale()) );
 	if (suppressRetransform || q->isLoading())
 		return;
 
-	PERFTRACE("CartesianPlotPrivate::retransform()");
+	PERFTRACE(Q_FUNC_INFO);
 	prepareGeometryChange();
 	setPos(rect.x() + rect.width()/2, rect.y() + rect.height()/2);
 

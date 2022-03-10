@@ -332,7 +332,7 @@ QString HDF5Filter::fileInfoString(const QString& fileName) {
  * uses "h5dump"
  */
 QString HDF5Filter::fileDDLString(const QString& fileName) {
-	DEBUG("HDF5Filter::fileDDLString()");
+	DEBUG(Q_FUNC_INFO);
 
 	QString DDLString;
 #ifdef Q_OS_LINUX
@@ -825,7 +825,7 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 	m_status = H5Aget_name(aid, MAXNAMELENGTH, name);
 	handleError(m_status, "H5Aget_name");
 	attr << QString(name);
-	// DEBUG("	name =" << QString(name));
+	//QDEBUG(Q_FUNC_INFO << ", name =" << QString(name));
 
 	hid_t aspace = H5Aget_space(aid); // the dimensions of the attribute data
 	handleError((int)aspace, "H5Aget_space");
@@ -835,12 +835,13 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 	handleError((int)aclass, "H5Aget_class");
 
 	if (aclass == H5T_STRING) {
-		char buf[MAXSTRINGLENGTH];	// buffer to read attr value
+		char *buf = nullptr;	// buffer to read attr value
 		hid_t amem = H5Tget_native_type(atype, H5T_DIR_ASCEND);
 		handleError((int)amem, "H5Tget_native_type");
-		m_status = H5Aread(aid, amem, buf);
+		m_status = H5Aread(aid, amem, &buf);
 		handleError(m_status, "H5Aread");
 		attr << QLatin1String("=") << QString(buf);
+		//DEBUG(Q_FUNC_INFO << ", value = " << buf)
 		m_status = H5Tclose(amem);
 		handleError(m_status, "H5Tclose");
 	} else if (aclass == H5T_INTEGER) {
@@ -1003,6 +1004,7 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 }
 
 QStringList HDF5FilterPrivate::scanHDF5Attrs(hid_t oid) {
+	DEBUG(Q_FUNC_INFO)
 	QStringList attrList;
 
 	int numAttr = H5Aget_num_attrs(oid);
@@ -1342,7 +1344,7 @@ void HDF5FilterPrivate::scanHDF5Link(hid_t gid, char *linkName, QTreeWidgetItem*
 }
 
 void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char *groupName, QTreeWidgetItem* parentItem) {
-	DEBUG("HDF5FilterPrivate::scanHDF5Group()");
+	DEBUG(Q_FUNC_INFO);
 
 	//check for hard link
 	H5G_stat_t statbuf;
@@ -1426,9 +1428,8 @@ void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char *groupName, QTreeWidgetIte
     parses the content of the file \c fileName and fill the tree using rootItem.
 */
 void HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem) {
-	DEBUG("HDF5FilterPrivate::parse()");
 #ifdef HAVE_HDF5
-	DEBUG("fileName = " << qPrintable(fileName));
+	DEBUG(Q_FUNC_INFO << ", fileName = " << qPrintable(fileName));
 
 	// check file type first
 	htri_t isHdf5 = H5Fis_hdf5(qPrintable(fileName));
@@ -1458,7 +1459,7 @@ void HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem
 	m_status = H5Fclose(file);
 	handleError(m_status, "H5Fclose", QString());
 #else
-	DEBUG("HDF5 not available");
+	DEBUG(Q_FUNC_INFO <<", HDF5 not available");
 	Q_UNUSED(fileName)
 	Q_UNUSED(rootItem)
 #endif
@@ -1468,7 +1469,7 @@ void HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem
     reads the content of the date set in the file \c fileName to a string (for preview) or to the data source.
 */
 QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode mode, int lines) {
-	DEBUG("HDF5Filter::readCurrentDataSet()");
+	DEBUG(Q_FUNC_INFO);
 	QVector<QStringList> dataStrings;
 
 	if (currentDataSetName.isEmpty()) {
@@ -1968,7 +1969,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
     Uses the settings defined in the data source.
 */
 void HDF5FilterPrivate::readDataFromFile(const QString& fileName, AbstractDataSource* dataSource, AbstractFileFilter::ImportMode mode) {
-	DEBUG("HDF5Filter::readDataFromFile()");
+	DEBUG(Q_FUNC_INFO);
 
 	if (currentDataSetName.isEmpty()) {
 		DEBUG("WARNING: No data set selected");
