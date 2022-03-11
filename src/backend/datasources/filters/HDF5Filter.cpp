@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : HDF5 I/O-filter
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2015-2018 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2015-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-FileCopyrightText: 2017 Alexander Semke <alexander.semke@web.de>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -556,7 +556,7 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 	int members = H5Tget_nmembers(tid);
 	bool preview = !dataContainer[0];
 	handleError(members, "H5Tget_nmembers");
-	DEBUG(" # members = " << members);
+	//DEBUG(" # members = " << members);
 
 	QStringList dataString;
 	if (preview) {
@@ -566,7 +566,7 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 	}
 
 	for (int m = 0; m < members; ++m) {
-		DEBUG(Q_FUNC_INFO << ", member " << m)
+		//DEBUG(Q_FUNC_INFO << ", member " << m)
 		hid_t mtype = H5Tget_member_type(tid, m);
 		handleError((int)mtype, "H5Tget_member_type");
 		size_t msize = H5Tget_size(mtype);
@@ -635,9 +635,6 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 			mdataString = readHDF5Data1D<long double>(dataset, ctype, rows, lines, dataContainer[m]);
 		else {
 			if (dataContainer[m]) {
-				DEBUG("start/end row = " << startRow << "/" << endRow << ", lines = " << lines)
-				DEBUG("loop: " << startRow-1 << " .. " << qMin(endRow, lines + startRow - 1))
-				DEBUG("container size = " << static_cast<QVector<double>*>(dataContainer[m])->size())
 				for (int row = startRow - 1; row < qMin(endRow, lines + startRow - 1); ++row)
 					static_cast<QVector<double>*>(dataContainer[m])->operator[](row - startRow + 1) = 0;
 			} else {
@@ -830,7 +827,7 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 	m_status = H5Aget_name(aid, MAXNAMELENGTH, name);
 	handleError(m_status, "H5Aget_name");
 	attr << QString(name);
-	//QDEBUG(Q_FUNC_INFO << ", name =" << QString(name));
+	//DEBUG(Q_FUNC_INFO << ", name =" << name);
 
 	hid_t aspace = H5Aget_space(aid); // the dimensions of the attribute data
 	handleError((int)aspace, "H5Aget_space");
@@ -840,10 +837,21 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 	handleError((int)aclass, "H5Aget_class");
 
 	if (aclass == H5T_STRING) {
+		hid_t amem = H5Tget_native_type(atype, H5T_DIR_DEFAULT);
+		handleError((int)amem, "H5Aget_native_type");
+		htri_t isVariable = H5Tis_variable_str(amem);
+		handleError((int)isVariable, "H5Tis_variable_str");
+		//DEBUG("variable string: " << isVariable)
 		char *buf = nullptr;	// buffer to read attr value
-		hid_t amem = H5Tget_native_type(atype, H5T_DIR_ASCEND);
-		handleError((int)amem, "H5Tget_native_type");
-		m_status = H5Aread(aid, amem, &buf);
+		if (!isVariable) {	// fixed length
+			hsize_t sz = H5Tget_size(atype);
+			handleError((int)sz, "H5Aget_storage_size");
+			//DEBUG("variable string = " << isVariable << ", storage size = " << sz)
+			buf = new char[sz+1];
+			m_status = H5Aread(aid, amem, buf);
+			buf[sz] = '\0';
+		} else
+			m_status = H5Aread(aid, amem, &buf);
 		handleError(m_status, "H5Aread");
 		attr << QLatin1String("=") << QString(buf);
 		//DEBUG(Q_FUNC_INFO << ", value = " << buf)
@@ -1009,12 +1017,11 @@ QStringList HDF5FilterPrivate::readHDF5Attr(hid_t aid) {
 }
 
 QStringList HDF5FilterPrivate::scanHDF5Attrs(hid_t oid) {
-	DEBUG(Q_FUNC_INFO)
 	QStringList attrList;
 
 	int numAttr = H5Aget_num_attrs(oid);
 	handleError(numAttr, "H5Aget_num_attrs");
-	DEBUG("number of attr = " << numAttr);
+	//DEBUG(Q_FUNC_INFO << ", number of attr = " << numAttr);
 
 	for (int i = 0; i < numAttr; ++i) {
 		hid_t aid = H5Aopen_idx(oid, i);
@@ -1113,7 +1120,7 @@ QStringList HDF5FilterPrivate::readHDF5DataType(hid_t tid) {
 		}
 	case H5T_COMPOUND: {
 			// not shown in tree widget
-			QDEBUG(readHDF5Compound(tid).join(QString()));
+			//QDEBUG(readHDF5Compound(tid).join(QString()));
 			break;
 		}
 	case H5T_ENUM: {
@@ -1349,8 +1356,6 @@ void HDF5FilterPrivate::scanHDF5Link(hid_t gid, char *linkName, QTreeWidgetItem*
 }
 
 void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char *groupName, QTreeWidgetItem* parentItem) {
-	DEBUG(Q_FUNC_INFO);
-
 	//check for hard link
 	H5G_stat_t statbuf;
 	m_status = H5Gget_objinfo(gid, ".", true, &statbuf);
@@ -1382,6 +1387,7 @@ void HDF5FilterPrivate::scanHDF5Group(hid_t gid, char *groupName, QTreeWidgetIte
 	hsize_t numObj;
 	m_status = H5Gget_num_objs(gid, &numObj);
 	handleError(m_status, "H5Gget_num_objs");
+	//DEBUG(Q_FUNC_INFO << ", # of objects = " << numObj)
 
 	for (unsigned int i = 0; i < numObj; ++i) {
 		char memberName[MAXNAMELENGTH];
@@ -1474,7 +1480,6 @@ void HDF5FilterPrivate::parse(const QString& fileName, QTreeWidgetItem* rootItem
     reads the content of the date set in the file \c fileName to a string (for preview) or to the data source.
 */
 QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileName, AbstractDataSource* dataSource, bool &ok, AbstractFileFilter::ImportMode mode, int lines) {
-	DEBUG(Q_FUNC_INFO);
 	QVector<QStringList> dataStrings;
 
 	if (currentDataSetName.isEmpty()) {
@@ -1763,7 +1768,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 		H5T_order_t order = H5Tget_order(dtype);
 		handleError((int)order, "H5Tget_order");
 #endif
-		QDEBUG(translateHDF5Class(dclass) << '(' << typeSize << ')' << translateHDF5Order(order) << "," << rows << "x" << cols);
+		//QDEBUG(translateHDF5Class(dclass) << '(' << typeSize << ')' << translateHDF5Order(order) << "," << rows << "x" << cols);
 		DEBUG(Q_FUNC_INFO << ", start/end row = " << startRow << "/" << endRow);
 		DEBUG(Q_FUNC_INFO << ", start/end column = " << startColumn << "/" << endColumn);
 		DEBUG(Q_FUNC_INFO << ", actual rows/cols = " << actualRows << "/" << actualCols);
