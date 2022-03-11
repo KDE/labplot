@@ -62,6 +62,7 @@ Bug fixes:
 	* Windows: use breeze as default for better dark mode
 	* Properly save the geometry of visible windows in the project
 	* Interpolation: avoid crash when x data contains invalid data points or is not strictly increasing
+	* HDF5: Fix reading attribute strings and better handle strings in compound data
 
 -----2.8.2 (01.04.2021) -----
 Bug fixes:
