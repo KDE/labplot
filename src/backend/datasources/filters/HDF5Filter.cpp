@@ -552,13 +552,14 @@ QStringList HDF5FilterPrivate::readHDF5Data1D(hid_t dataset, hid_t dtype, int ro
 }
 
 QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, int rows, int lines, std::vector<void*>& dataContainer) {
-	DEBUG(Q_FUNC_INFO << ", dataContainer size = " << dataContainer.size());
+	DEBUG(Q_FUNC_INFO << ", data container size = " << dataContainer.size());
 	int members = H5Tget_nmembers(tid);
+	bool preview = !dataContainer[0];
 	handleError(members, "H5Tget_nmembers");
 	DEBUG(" # members = " << members);
 
 	QStringList dataString;
-	if (!dataContainer[0]) {
+	if (preview) {
 		for (int i = 0; i < qMin(rows, lines); ++i)
 			dataString <<  QLatin1String("(");
 		dataContainer.resize(members);	// avoid "index out of range" for preview
@@ -633,29 +634,22 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 		else if (H5Tequal(mtype, H5T_NATIVE_LDOUBLE))
 			mdataString = readHDF5Data1D<long double>(dataset, ctype, rows, lines, dataContainer[m]);
 		else {
-			DEBUG(Q_FUNC_INFO << ", UNKNOWN member type " << mtype)
-			//TODO: or if dataContainer.size() == 0?
-			QDEBUG("container size: " << dataContainer[m])
-			QDEBUG("container element: " << dataContainer.size())
 			if (dataContainer[m]) {
 				DEBUG("start/end row = " << startRow << "/" << endRow << ", lines = " << lines)
 				DEBUG("loop: " << startRow-1 << " .. " << qMin(endRow, lines + startRow - 1))
 				DEBUG("container size = " << static_cast<QVector<double>*>(dataContainer[m])->size())
-				for (int r = startRow-1; r < qMin(endRow, lines + startRow - 1); ++r) {
-					DEBUG(" row = " << r)
-					// CRASH
-					static_cast<QVector<double>*>(dataContainer[m])->operator[](r - startRow + 1) = 0;
-				}
+				for (int row = startRow - 1; row < qMin(endRow, lines + startRow - 1); ++row)
+					static_cast<QVector<double>*>(dataContainer[m])->operator[](row - startRow + 1) = 0;
 			} else {
 				for (int i = 0; i < qMin(rows, lines); ++i)
 					mdataString << QLatin1String("_");
 			}
 			H5T_class_t mclass = H5Tget_member_class(tid, m);
 			handleError((int)mclass, "H5Tget_member_class");
-			DEBUG("unsupported type of class " << STDSTRING(translateHDF5Class(mclass)));
+			DEBUG(Q_FUNC_INFO << ", unsupported type of class " << STDSTRING(translateHDF5Class(mclass)));
 		}
 
-		if (!dataContainer[0]) {
+		if (preview) {
 			for (int i = 0; i < qMin(rows, lines); ++i) {
 				dataString[i] +=  mdataString[i];
 				if (m < members - 1)
@@ -666,7 +660,7 @@ QStringList HDF5FilterPrivate::readHDF5CompoundData1D(hid_t dataset, hid_t tid, 
 		H5Tclose(ctype);
 	}
 
-	if (!dataContainer[0]) {
+	if (preview) {
 		for (int i = 0; i < qMin(rows, lines); ++i)
 			dataString[i] +=  QLatin1String(")");
 	}
@@ -1516,7 +1510,7 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 	// dataContainer is used to store the data read from the dataSource
 	// it contains the pointers of all columns
 	// initially there is one pointer set to nullptr
-	// check for dataContainer[0] != nullptr to decide if dataSource can be used
+	// check for dataContainer[0] to decide if dataSource can be used
 	std::vector<void*> dataContainer(1, nullptr);
 
 	// rank= 0: single value, 1: vector, 2: matrix, 3: 3D data, ...
@@ -1709,9 +1703,10 @@ QVector<QStringList> HDF5FilterPrivate::readCurrentDataSet(const QString& fileNa
 			break;
 		}
 		case H5T_COMPOUND: {
-			DEBUG(Q_FUNC_INFO << ", COMPOUND type")
 			int members = H5Tget_nmembers(dtype);
 			handleError(members, "H5Tget_nmembers");
+			DEBUG(Q_FUNC_INFO << ", COMPOUND type. members: " << members)
+			columnModes.resize(members);
 			if (dataSource) {
 				// re-create data pointer
 				dataContainer.clear();

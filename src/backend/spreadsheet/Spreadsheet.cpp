@@ -925,7 +925,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 	}
 
 	if (columnMode.size() < actualCols) {
-		qWarning("columnMode[] size is too small! Giving up.");
+		DEBUG(Q_FUNC_INFO << ", columnMode[] size is too small! Giving up.");
 		return -1;
 	}
 
@@ -936,7 +936,7 @@ int Spreadsheet::prepareImport(std::vector<void*>& dataContainer, AbstractFileFi
 		DEBUG(" column " << n << " columnMode = " << static_cast<int>(columnMode[n]));
 		column->setColumnModeFast(columnMode[n]);
 
-		//in the most cases the first imported column is meant to be used as x-data.
+		//in most cases the first imported column is meant to be used as x-data.
 		//Other columns provide mostly y-data or errors.
 		//TODO: this has to be configurable for the user in the import widget,
 		//it should be possible to specify x-error plot designation, etc.
