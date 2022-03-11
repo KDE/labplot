@@ -174,14 +174,15 @@ void ExportWorksheetDialog::slotButtonClicked(QAbstractButton* button) {
 
 //SLOTS
 void ExportWorksheetDialog::okClicked() {
-	if ( m_askOverwrite && QFile::exists(ui->leFileName->text()) ) {
+	if (ui->cbExportTo->currentIndex() == 0 /*export to file*/
+		&& m_askOverwrite && QFile::exists(ui->leFileName->text())) {
 		int r = KMessageBox::questionYesNo(this, i18n("The file already exists. Do you really want to overwrite it?"), i18n("Export"));
 		if (r == KMessageBox::No)
 			return;
 	}
 
 	KConfigGroup conf(KSharedConfig::openConfig(), "ExportWorksheetDialog");
-	QString path = ui->leFileName->text();
+	const auto& path = ui->leFileName->text();
 	if (!path.isEmpty()) {
 		QString dir = conf.readEntry("LastDir", "");
 		int pos = path.lastIndexOf(QLatin1String("/"));
