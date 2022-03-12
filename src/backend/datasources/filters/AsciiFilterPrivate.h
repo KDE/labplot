@@ -4,7 +4,7 @@
     Description          : Private implementation class for AsciiFilter.
     --------------------------------------------------------------------
     SPDX-FileCopyrightText: 2009-2020 Alexander Semke <alexander.semke@web.de>
-    SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2017-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
@@ -48,6 +48,7 @@ public:
 	void initDataContainers(Spreadsheet*);
 	QString previewValue(const QString&, AbstractColumn::ColumnMode);
 	void setValue(int col, int row, const QString& value);
+	QString getLine(QIODevice&);
 	QStringList getLineString(QIODevice&);
 
 #ifdef HAVE_MQTT
@@ -67,14 +68,15 @@ public:
 	QLocale::Language numberFormat{QLocale::C};
 	QLocale locale{QLocale::C};
 	bool autoModeEnabled{true};
-	bool headerEnabled{true};
+	bool headerEnabled{true};	// read header from file
+	int headerLine{0};	// 0: no header line
 	bool skipEmptyParts{false};
 	bool simplifyWhitespacesEnabled{false};
 	double nanValue{NAN};
 	bool removeQuotesEnabled{false};
 	bool createIndexEnabled{false};
 	bool createTimestampEnabled{false};
-	QStringList vectorNames;
+	QStringList columnNames;
 	QVector<AbstractColumn::ColumnMode> columnModes;
 	int startRow{1};
 	int endRow{-1};

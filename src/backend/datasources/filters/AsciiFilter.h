@@ -3,7 +3,7 @@
     Project              : LabPlot
     Description          : ASCII I/O-filter
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
     SPDX-FileCopyrightText: 2017 Stefan Gerlach <stefan.gerlach@uni.kn>
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -73,6 +73,7 @@ public:
 	void setAutoModeEnabled(const bool);
 	bool isAutoModeEnabled() const;
 	void setHeaderEnabled(const bool);
+	void setHeaderLine(int);
 	bool isHeaderEnabled() const;
 	void setSkipEmptyParts(const bool);
 	bool skipEmptyParts() const;

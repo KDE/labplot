@@ -102,6 +102,16 @@ AsciiOptionsWidget::AsciiOptionsWidget(QWidget* parent) : QWidget(parent) {
 	ui.cbDateTimeFormat->setToolTip(textDateTimeFormatShort);
 	ui.cbDateTimeFormat->setWhatsThis(textDateTimeFormat);
 
+	QString info = i18n("If checked, the specified line in the file will be used to determine the column names.");
+	ui.chbHeader->setToolTip(info);
+
+	info = i18n("Line in the file that should be used to determine the column names.");
+	ui.sbHeaderLine->setToolTip(info);
+
+	info = i18n("Custom column names, space separated. E.g. \"x y\"");
+	ui.lVectorNames->setToolTip(info);
+	ui.kleVectorNames->setToolTip(info);
+
 	connect(ui.chbHeader, &QCheckBox::toggled, this, &AsciiOptionsWidget::headerChanged);
 }
 
@@ -126,6 +136,7 @@ void AsciiOptionsWidget::showTimestampOptions(bool visible) {
   Hides it otherwise.
 */
 void AsciiOptionsWidget::headerChanged(bool state) {
+	ui.sbHeaderLine->setEnabled(state);
 	ui.kleVectorNames->setVisible(!state);
 	ui.lVectorNames->setVisible(!state);
 }
@@ -156,6 +167,7 @@ void AsciiOptionsWidget::applyFilterSettings(AsciiFilter* filter) const {
 	filter->setSkipEmptyParts( ui.chbSkipEmptyParts->isChecked() );
 	filter->setVectorNames( ui.kleVectorNames->text() );
 	filter->setHeaderEnabled( ui.chbHeader->isChecked() );
+	filter->setHeaderLine( ui.sbHeaderLine->value() );
 }
 
 void AsciiOptionsWidget::setSeparatingCharacter(QLatin1Char character) {

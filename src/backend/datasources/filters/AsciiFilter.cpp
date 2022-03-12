@@ -3,8 +3,8 @@
     Project              : LabPlot
     Description          : ASCII I/O-filter
     --------------------------------------------------------------------
-    SPDX-FileCopyrightText: 2009-2021 Stefan Gerlach <stefan.gerlach@uni.kn>
-    SPDX-FileCopyrightText: 2009-2019 Alexander Semke <alexander.semke@web.de>
+    SPDX-FileCopyrightText: 2009-2022 Stefan Gerlach <stefan.gerlach@uni.kn>
+    SPDX-FileCopyrightText: 2009-2022 Alexander Semke <alexander.semke@web.de>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
@@ -178,7 +178,7 @@ QString AsciiFilter::fileInfoString(const QString& fileName) {
 int AsciiFilter::columnNumber(const QString& fileName, const QString& separator) {
 	KFilterDev device(fileName);
 	if (!device.open(QIODevice::ReadOnly)) {
-		DEBUG("Could not open file " << STDSTRING(fileName) << " for determining number of columns");
+		DEBUG(Q_FUNC_INFO << ", Could not open file " << STDSTRING(fileName) << " for determining number of columns");
 		return -1;
 	}
 
@@ -190,7 +190,7 @@ int AsciiFilter::columnNumber(const QString& fileName, const QString& separator)
 		lineStringList = line.split(separator);
 	else
 		lineStringList = line.split(QRegularExpression(QStringLiteral("\\s+")));
-	DEBUG("number of columns : " << lineStringList.size());
+	DEBUG(Q_FUNC_INFO << ", number of columns : " << lineStringList.size());
 
 	return lineStringList.size();
 }
@@ -199,7 +199,7 @@ size_t AsciiFilter::lineNumber(const QString& fileName) {
 	KFilterDev device(fileName);
 
 	if (!device.open(QIODevice::ReadOnly)) {
-		DEBUG("Could not open file " << STDSTRING(fileName) << " to determine number of lines");
+		DEBUG(Q_FUNC_INFO << ", Could not open file " << STDSTRING(fileName) << " to determine number of lines");
 
 		return 0;
 	}
@@ -303,6 +303,10 @@ bool AsciiFilter::isHeaderEnabled() const {
 	return d->headerEnabled;
 }
 
+void AsciiFilter::setHeaderLine(int line) {
+	d->headerLine = line;
+}
+
 void AsciiFilter::setSkipEmptyParts(const bool b) {
 	d->skipEmptyParts = b;
 }
@@ -351,15 +355,15 @@ bool AsciiFilter::removeQuotesEnabled() const {
 }
 
 void AsciiFilter::setVectorNames(const QString& s) {
-	d->vectorNames.clear();
+	d->columnNames.clear();
 	if (!s.simplified().isEmpty())
-		d->vectorNames = s.simplified().split(' ');
+		d->columnNames = s.simplified().split(' ');
 }
 void AsciiFilter::setVectorNames(const QStringList& list) {
-	d->vectorNames = list;
+	d->columnNames = list;
 }
 QStringList AsciiFilter::vectorNames() const {
-	return d->vectorNames;
+	return d->columnNames;
 }
 
 QVector<AbstractColumn::ColumnMode> AsciiFilter::columnModes() {
@@ -397,8 +401,7 @@ int AsciiFilter::endColumn() const {
 //#####################################################################
 //################### Private implementation ##########################
 //#####################################################################
-AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner) {
-}
+AsciiFilterPrivate::AsciiFilterPrivate(AsciiFilter* owner) : q(owner) {}
 
 int AsciiFilterPrivate::isPrepared() {
 	return m_prepared;
@@ -412,7 +415,6 @@ QString AsciiFilterPrivate::separator() const {
 	return m_separator;
 }
 
-
 //#####################################################################
 //############################# Read ##################################
 //#####################################################################
@@ -420,7 +422,7 @@ QString AsciiFilterPrivate::separator() const {
  * returns -1 if the device couldn't be opened, 1 if the current read position in the device is at the end and 0 otherwise.
  */
 int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
-	DEBUG("AsciiFilterPrivate::prepareDeviceToRead(): is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine());
+	DEBUG(Q_FUNC_INFO << ", is sequential = " << device.isSequential() << ", can readLine = " << device.canReadLine());
 
 	if (!device.open(QIODevice::ReadOnly))
 		return -1;
@@ -428,62 +430,39 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	if (device.atEnd() && !device.isSequential()) // empty file
 		return 1;
 
+// NEW method
+// 1. First read header (vector names) at given headerLine (counting comment lines)
+// 2. Go further to first data line (at given startRow)
+// startRow==1: first row after header, etc.
+
 /////////////////////////////////////////////////////////////////
-	// Parse the first line:
-	// Determine the number of columns, create the columns and use (if selected) the first row to name them
+	DEBUG(Q_FUNC_INFO << ", headerEnabled = " << headerEnabled << ", header line at " << headerLine)
+
 	QString firstLine;
-
-	// skip the comment lines and read the first line
-	if (!commentCharacter.isEmpty()) {
-		do {
-			if (!device.canReadLine())
-				DEBUG(Q_FUNC_INFO << ", WARNING: device cannot 'readLine()' but using it anyway.");
-
-			if (device.atEnd()) {
-				DEBUG("device at end! Giving up.");
-				if (device.isSequential())
-					break;
-				else
-					return 1;
-			}
-
-			firstLine = device.readLine();
-		} while (firstLine.startsWith(commentCharacter) || firstLine.simplified().isEmpty());
-	} else
-		firstLine = device.readLine();
-
-	// navigate to the line where we asked to start reading from
-	DEBUG(Q_FUNC_INFO << ", Skipping " << startRow - 1 << " lines");
-	for (int i = 0; i < startRow - 1; ++i) {
-		if (!device.canReadLine())
-			DEBUG(Q_FUNC_INFO << ", WARNING: device cannot 'readLine()' but using it anyway.");
-
-		if (device.atEnd()) {
-			DEBUG("device at end! Giving up.");
-			if (device.isSequential())
-				break;
-			else
-				return 1;
+	if (headerEnabled && headerLine) {
+		// go to header line (counting comment lines)
+		for (int l = 0; l < headerLine; l++) {
+			firstLine = getLine(device);
+			//DEBUG(Q_FUNC_INFO << ", skip header line = \"" << STDSTRING(firstLine) << "\"");
 		}
-
-		firstLine = device.readLine();
-		DEBUG("	line = " << STDSTRING(firstLine));
+	} else {	// read first data line (skipping comments)
+		if (!commentCharacter.isEmpty()) {
+			do {
+				firstLine = getLine(device);
+			} while (firstLine.startsWith(commentCharacter) || firstLine.simplified().isEmpty());
+		} else
+			firstLine = device.readLine();
 	}
 
-	DEBUG(" device position after first line and comments = " << device.pos());
-	firstLine.remove(QRegularExpression(QStringLiteral("[\\n\\r]")));	// remove any newline
+	firstLine.remove(QRegularExpression(QStringLiteral("[\\n\\r]"))); // remove any newline
 	if (removeQuotesEnabled)
-		firstLine = firstLine.remove(QLatin1Char('"'));
-
-	//TODO: this doesn't work, the split below introduces whitespaces again
-// 	if (simplifyWhitespacesEnabled)
-// 		firstLine = firstLine.simplified();
-	DEBUG("First line: \'" << STDSTRING(firstLine) << '\'');
+		firstLine.remove(QLatin1Char('"'));
+	QDEBUG(Q_FUNC_INFO << ", first line = " << firstLine);
 
 	// determine separator and split first line
 	QStringList firstLineStringList;
 	if (separatingCharacter == "auto") {
-		DEBUG("automatic separator");
+		DEBUG(Q_FUNC_INFO << ", automatic separator");
 		if (firstLine.indexOf(QLatin1Char('\t')) != -1) {
 			//in case we have a mix of tabs and spaces in the header, give the tab character the preference
 			m_separator = QLatin1Char('\t');
@@ -523,33 +502,28 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 		firstLineStringList = firstLine.split(m_separator, (QString::SplitBehavior)skipEmptyParts);
 #endif
 	}
-	DEBUG(Q_FUNC_INFO << ", separator: \'" << STDSTRING(m_separator) << '\'');
+	QDEBUG(Q_FUNC_INFO << ", separator: \'" << m_separator << '\'');
 	DEBUG(Q_FUNC_INFO << ", number of columns: " << firstLineStringList.size());
-	QDEBUG(Q_FUNC_INFO << ", first line: " << firstLineStringList);
-	DEBUG(Q_FUNC_INFO << ", headerEnabled: " << headerEnabled);
+	QDEBUG(Q_FUNC_INFO << ", first line split: " << firstLineStringList);
 
-	//optionally, remove potential spaces in the first line
-	//TODO: this part should be obsolete actually if we do firstLine = firstLine.simplified(); above...
+	// remove whitespaces at start and end
 	if (simplifyWhitespacesEnabled) {
-		for (int i = 0; i < firstLineStringList.size(); ++i)
-			firstLineStringList[i] = firstLineStringList[i].simplified();
+		for (auto& s : firstLineStringList)
+			s = s.simplified();
 	}
 
-	//in GUI in AsciiOptionsWidget we start counting from 1, subtract 1 here to start from zero
-	m_actualStartRow = startRow - 1;
-
 	if (headerEnabled) {	// use first line to name vectors (starting from startColumn)
-		vectorNames = firstLineStringList.mid(startColumn - 1);
-		++m_actualStartRow;
+		columnNames = firstLineStringList.mid(startColumn - 1);
+		QDEBUG(Q_FUNC_INFO << ", column names =" << columnNames);
 	}
 
 	// set range to read
 	if (endColumn == -1) {
-		if (headerEnabled || vectorNames.size() == 0)
+		if (headerEnabled || columnNames.size() == 0)
 			endColumn = firstLineStringList.size(); // last column
 		else
-			//number of vector names provided in the import dialog (not more than the maximal number of columns in the file)
-			endColumn = qMin(vectorNames.size(), firstLineStringList.size());
+			//number of column names provided in the import dialog (not more than the maximal number of columns in the file)
+			endColumn = qMin(columnNames.size(), firstLineStringList.size());
 	}
 
 	if (endColumn < startColumn)
@@ -557,19 +531,34 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	else
 		m_actualCols = endColumn - startColumn + 1;
 
-	//add index column
+	//add time stamp and index column
 	if (createTimestampEnabled) {
-		vectorNames.prepend(i18n("Timestamp"));
+		columnNames.prepend(i18n("Timestamp"));
 		m_actualCols++;
 	}
-
-	//add index column
 	if (createIndexEnabled) {
-		vectorNames.prepend(i18n("Index"));
+		columnNames.prepend(i18n("Index"));
 		m_actualCols++;
 	}
+	QDEBUG(Q_FUNC_INFO << ", all column names =" << columnNames);
 
-	QDEBUG(Q_FUNC_INFO << ", vector names =" << vectorNames);
+/////////////////////////////////////////////////////////////////
+
+	// navigate to the line where we asked to start reading from
+	DEBUG(Q_FUNC_INFO << ", Skipping " << startRow - 1 << " lines");
+	for (int i = 0; i < startRow - 1; ++i) {
+		firstLine = getLine(device);
+		//DEBUG(Q_FUNC_INFO << ", skip line = " << STDSTRING(firstLine));
+	}
+
+	//DEBUG(Q_FUNC_INFO << ", device position after first line and comments = " << device.pos());
+	firstLine.remove(QRegularExpression(QStringLiteral("[\\n\\r]")));	// remove any newline
+	if (removeQuotesEnabled)
+		firstLine = firstLine.remove(QLatin1Char('"'));
+	DEBUG(Q_FUNC_INFO << ", First line: \'" << STDSTRING(firstLine) << '\'');
+
+	//in GUI in AsciiOptionsWidget we start counting from 1, subtract 1 here to start from zero
+	m_actualStartRow = startRow - 1;
 
 //TEST: readline-seek-readline fails
 	/*	qint64 testpos = device.pos();
@@ -581,9 +570,12 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 /////////////////////////////////////////////////////////////////
 
 	// parse first data line to determine data type for each column
-	// if the first line was already parsed as the header, read the next line
-	if (headerEnabled && !device.isSequential())
+	if (headerEnabled && !device.isSequential()) {
+		m_actualStartRow++;
+		if (headerLine)	// start from headerLine
+			m_actualStartRow += headerLine - 1;
 		firstLineStringList = getLineString(device);
+	}
 
 	columnModes.resize(m_actualCols);
 	int col = 0;
@@ -598,7 +590,7 @@ int AsciiFilterPrivate::prepareDeviceToRead(QIODevice& device) {
 	}
 
 	for (auto& valueString : firstLineStringList) { // parse columns available in first data line
-		const int index{ col - startColumn + 1 };
+		const int index = col - startColumn + 1;
 		if (index < (int)createIndexEnabled + (int)createTimestampEnabled) {
 			col++;
 			continue;
@@ -731,21 +723,21 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 			columnModes.clear();
 			if (createIndexEnabled) {
 				columnModes << AbstractColumn::ColumnMode::Integer;
-				vectorNames << i18n("Index");
+				columnNames << i18n("Index");
 				m_actualCols++;
 			}
 
 			if (createTimestampEnabled) {
 				columnModes << AbstractColumn::ColumnMode::DateTime;
-				vectorNames << i18n("Timestamp");
+				columnNames << i18n("Timestamp");
 				m_actualCols++;
 			}
 
 			//add column for the actual value
 			columnModes << AbstractColumn::ColumnMode::Double;
-			vectorNames << i18n("Value");
+			columnNames << i18n("Value");
 
-			QDEBUG("	vector names = " << vectorNames);
+			QDEBUG("	column names = " << columnNames);
 			break;
 		case LiveDataSource::SourceType::MQTT:
 			break;
@@ -753,7 +745,7 @@ qint64 AsciiFilterPrivate::readFromLiveDevice(QIODevice& device, AbstractDataSou
 
 		// prepare import for spreadsheet
 		spreadsheet->setUndoAware(false);
-		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, vectorNames, m_actualCols);
+		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, columnNames, m_actualCols);
 
 		//columns in a file data source don't have any manual changes.
 		//make the available columns undo unaware and suppress the "data changed" signal.
@@ -1207,7 +1199,7 @@ void AsciiFilterPrivate::readDataFromDevice(QIODevice& device, AbstractDataSourc
 		}
 
 		Q_ASSERT(dataSource);
-		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, vectorNames, columnModes);
+		m_columnOffset = dataSource->prepareImport(m_dataContainer, importMode, m_actualRows, m_actualCols, columnNames, columnModes);
 		m_prepared = true;
 	}
 
@@ -1350,17 +1342,17 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 	if (linesToRead == 0)
 		return dataStrings;
 
-	vectorNames.clear();
+	columnNames.clear();
 	columnModes.clear();
 
 	if (createIndexEnabled) {
 		columnModes << AbstractColumn::ColumnMode::Integer;
-		vectorNames << i18n("Index");
+		columnNames << i18n("Index");
 	}
 
 	if (createTimestampEnabled) {
 		columnModes << AbstractColumn::ColumnMode::DateTime;
-		vectorNames << i18n("Timestamp");
+		columnNames << i18n("Timestamp");
 	}
 
 	//parse the first data line to determine data type for each column
@@ -1378,7 +1370,7 @@ QVector<QStringList> AsciiFilterPrivate::preview(QIODevice &device) {
 		if (skipEmptyParts && !QString::compare(valueString, " "))	// handle left white spaces
 			continue;
 
-		vectorNames << i18n("Value %1", i);
+		columnNames << i18n("Value %1", i);
 		columnModes << AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 		++i;
 	}
@@ -1472,9 +1464,9 @@ QVector<QStringList> AsciiFilterPrivate::preview(const QString& fileName, int li
 		if (createIndexEnabled)
 			start = 1;
 		for (int i = start; i < m_actualCols; i++)
-			vectorNames << "Column " + QString::number(i + 1);
+			columnNames << "Column " + QString::number(i + 1);
 	}
-	QDEBUG("	column names = " << vectorNames);
+	QDEBUG("	column names = " << columnNames);
 
 	//skip data lines, if required
 	DEBUG("	Skipping " << m_actualStartRow << " line(s)");
@@ -1693,6 +1685,24 @@ void AsciiFilterPrivate::initDataContainers(Spreadsheet* spreadsheet) {
 /*!
  * get a single line from device
  */
+QString AsciiFilterPrivate::getLine(QIODevice& device) {
+	if (!device.canReadLine())
+		DEBUG(Q_FUNC_INFO << ", WARNING: device cannot 'readLine()' but using it anyway.");
+
+	if (device.atEnd()) {
+		DEBUG(Q_FUNC_INFO << ", device at end! Giving up.");
+		return {};
+	}
+
+	QString line = device.readLine();
+	//DEBUG(Q_FUNC_INFO << ", line = " << STDSTRING(line));
+
+	return line;
+}
+
+/*!
+ * get a single line from device
+ */
 QStringList AsciiFilterPrivate::getLineString(QIODevice& device) {
 	QString line;
 	do {	// skip comment lines in data lines
@@ -1764,7 +1774,7 @@ void AsciiFilter::save(QXmlStreamWriter* writer) const {
 	writer->writeAttribute( "createIndex", QString::number(d->createIndexEnabled));
 	writer->writeAttribute( "createTimestamp", QString::number(d->createTimestampEnabled));
 	writer->writeAttribute( "header", QString::number(d->headerEnabled));
-	writer->writeAttribute( "vectorNames", d->vectorNames.join(' '));
+	writer->writeAttribute( "vectorNames", d->columnNames.join(' '));
 	writer->writeAttribute( "skipEmptyParts", QString::number(d->skipEmptyParts));
 	writer->writeAttribute( "simplifyWhitespaces", QString::number(d->simplifyWhitespacesEnabled));
 	writer->writeAttribute( "nanValue", QString::number(d->nanValue));
@@ -1793,7 +1803,7 @@ bool AsciiFilter::load(XmlStreamReader* reader) {
 	READ_INT_VALUE("header", headerEnabled, bool);
 
 	str = attribs.value("vectorNames").toString();
-	d->vectorNames = str.split(' '); //may be empty
+	d->columnNames = str.split(' '); //may be empty
 
 	READ_INT_VALUE("simplifyWhitespaces", simplifyWhitespacesEnabled, bool);
 	READ_DOUBLE_VALUE("nanValue", nanValue);
@@ -1858,18 +1868,18 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 	//when reading the message strings for different topics, it's not possible to specify vector names
 	//since the different topics can have different content and different number of columns/vectors
 	//->we always set the vector names here to fixed values
-	vectorNames.clear();
+	columnNames.clear();
 	columnModes.clear();
 
 	//add index column
 	if (createIndexEnabled) {
-		vectorNames << i18n("Index");
+		columnNames << i18n("Index");
 		columnModes << AbstractColumn::ColumnMode::Integer;
 	}
 
 	//add timestamp column
 	if (createTimestampEnabled) {
-		vectorNames << i18n("Timestamp");
+		columnNames << i18n("Timestamp");
 		columnModes << AbstractColumn::ColumnMode::DateTime;
 	}
 
@@ -1881,7 +1891,7 @@ int AsciiFilterPrivate::prepareToRead(const QString& message) {
 		if (removeQuotesEnabled)
 			valueString.remove(QLatin1Char('"'));
 
-		vectorNames << i18n("Value %1", i);
+		columnNames << i18n("Value %1", i);
 		columnModes << AbstractFileFilter::columnMode(valueString, dateTimeFormat, numberFormat);
 		++i;
 	}
@@ -1989,7 +1999,7 @@ void AsciiFilterPrivate::readMQTTTopic(const QString& message, AbstractDataSourc
 
 		// prepare import for spreadsheet
 		spreadsheet->setUndoAware(false);
-		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, vectorNames, m_actualCols);
+		spreadsheet->resize(AbstractFileFilter::ImportMode::Replace, columnNames, m_actualCols);
 
 		//columns in a MQTTTopic don't have any manual changes.
 		//make the available columns undo unaware and suppress the "data changed" signal.

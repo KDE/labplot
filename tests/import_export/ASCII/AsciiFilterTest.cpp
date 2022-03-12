@@ -326,7 +326,7 @@ void AsciiFilterTest::testHeader07() {
 
 	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
 	filter.setSeparatingCharacter("TAB");
-	filter.setStartRow(2);
+	filter.setHeaderLine(2);
 	filter.setHeaderEnabled(true);
 	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
 	filter.readDataFromFile(fileName, &spreadsheet, mode);
@@ -361,6 +361,51 @@ void AsciiFilterTest::testHeader07() {
 	QCOMPARE(spreadsheet.column(0)->integerAt(3), 3);
 	QCOMPARE(spreadsheet.column(1)->valueAt(3), 0.1516);
 	QCOMPARE(spreadsheet.column(2)->valueAt(3), 0.3433);
+}
+
+/*!
+ * test with a file containing the header in the second line
+ * with a subsequent comment line ignored by using startRow.
+ */
+void AsciiFilterTest::testHeader07a() {
+	Spreadsheet spreadsheet("test", false);
+	AsciiFilter filter;
+	const QString& fileName = QFINDTESTDATA(QLatin1String("data/comment_header_comment.txt"));
+
+	AbstractFileFilter::ImportMode mode = AbstractFileFilter::ImportMode::Replace;
+	filter.setSeparatingCharacter("TAB");
+	filter.setHeaderLine(2);
+	filter.setHeaderEnabled(true);
+	filter.setStartRow(2);
+	filter.setDateTimeFormat(QLatin1String("yyyy-MM-dd hh:mm:ss.zzz"));
+	filter.readDataFromFile(fileName, &spreadsheet, mode);
+
+	//spreadsheet size
+	QCOMPARE(spreadsheet.columnCount(), 3);
+	QCOMPARE(spreadsheet.rowCount(), 3);
+
+	//column names
+	QCOMPARE(spreadsheet.column(0)->name(), QLatin1String("counter"));
+	QCOMPARE(spreadsheet.column(1)->name(), QLatin1String("t[min]"));
+	QCOMPARE(spreadsheet.column(2)->name(), QLatin1String("#1ch1"));
+
+	//data types
+	QCOMPARE(spreadsheet.column(0)->columnMode(), AbstractColumn::ColumnMode::Integer);
+	QCOMPARE(spreadsheet.column(1)->columnMode(), AbstractColumn::ColumnMode::Double);
+	QCOMPARE(spreadsheet.column(2)->columnMode(), AbstractColumn::ColumnMode::Double);
+
+	//values
+	QCOMPARE(spreadsheet.column(0)->integerAt(0), 1);
+	QCOMPARE(spreadsheet.column(1)->valueAt(0), 0.0513);
+	QCOMPARE(spreadsheet.column(2)->valueAt(0), 0.3448);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(1), 2);
+	QCOMPARE(spreadsheet.column(1)->valueAt(1), 0.1005);
+	QCOMPARE(spreadsheet.column(2)->valueAt(1), 0.3418);
+
+	QCOMPARE(spreadsheet.column(0)->integerAt(2), 3);
+	QCOMPARE(spreadsheet.column(1)->valueAt(2), 0.1516);
+	QCOMPARE(spreadsheet.column(2)->valueAt(2), 0.3433);
 }
 
 /*!

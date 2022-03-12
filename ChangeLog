@@ -19,6 +19,7 @@
 		* Added Hilbert transform including envelope
 		* Improve entering ranges for various methods
 	* [import]
+		* Add Option to specify header line in ASCII data
 		* Import SAS, Stata and SPSS files using readstat library
 		* Import MATLAB MAT files using matio library
 		* HDF5: Select first variable when loading file

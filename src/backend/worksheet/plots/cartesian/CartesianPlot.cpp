@@ -58,9 +58,6 @@
 #include <QPainter>
 #include <QWidgetAction>
 
-#include <array>
-#include <cmath>
-
 /**
  * \class CartesianPlot
  * \brief A xy-plot.
