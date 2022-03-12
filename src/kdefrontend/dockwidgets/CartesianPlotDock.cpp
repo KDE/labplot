@@ -66,11 +66,15 @@ protected:
 			auto obj = qobject_cast<castObject*>(ui.treewidget->cellWidget(i, Column)); \
 			if (obj) \
 				obj->function; \
+			else \
+				qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " ( rangeIndex:" << rangeIndex <<  ", Column: " << Column << "). Wether the object does not exist or the cellWidget has differnt type"; \
 		} \
 	} else {\
 		auto obj = qobject_cast<castObject*>(ui.treewidget->cellWidget(rangeIndex, Column)); \
 		if (obj) \
 			obj->function; \
+		else \
+			qDebug() << "ERROR: qobject_cast <castObject*> failed: " << __FILE__ << ":" << __LINE__ << " (rangeIndex:" << rangeIndex <<  ", Column: " << Column << "). Wether the object does not exist or the cellWidget has differnt type"; \
 	}
 
 /*!
@@ -2218,6 +2222,10 @@ void CartesianPlotDock::plotXAutoScaleChanged(int xRangeIndex, bool checked) {
 	DEBUG(Q_FUNC_INFO << ", checked = " << checked)
 	//OLD: ui.chkAutoScaleX->setChecked(value);
 	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Automatic, QCheckBox, setChecked(checked));
+	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
+	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Min, QLineEdit, setEnabled(!checked));
+	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Max, QLineEdit, setEnabled(!checked));
+	CELLWIDGET(twXRanges, xRangeIndex, TwRangesColumn::Scale, QComboBox, setEnabled(!checked));
 }
 void CartesianPlotDock::plotYAutoScaleChanged(int yRangeIndex, bool checked) {
 	if (m_initializing)
@@ -2226,6 +2234,10 @@ void CartesianPlotDock::plotYAutoScaleChanged(int yRangeIndex, bool checked) {
 	DEBUG(Q_FUNC_INFO << ", checked = " << checked)
 	//OLD: ui.chkAutoScaleY->setChecked(value);
 	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Automatic, QCheckBox, setChecked(checked));
+	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Format, QComboBox, setEnabled(!checked));
+	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Min, QLineEdit, setEnabled(!checked));
+	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Max, QLineEdit, setEnabled(!checked));
+	CELLWIDGET(twYRanges, yRangeIndex, TwRangesColumn::Scale, QComboBox, setEnabled(!checked));
 }
 
 void CartesianPlotDock::plotXMinChanged(int xRangeIndex, double value) {
