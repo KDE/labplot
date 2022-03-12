@@ -23,6 +23,11 @@
 #include "kdefrontend/worksheet/DynamicPresenterWidget.h"
 #include "kdefrontend/worksheet/GridDialog.h"
 #include "kdefrontend/worksheet/PresenterWidget.h"
+#include "kdefrontend/worksheet/DynamicPresenterWidget.h"
+#include "backend/lib/trace.h"
+#include "kdefrontend/TemplateChooserDialog.h"
+#include "backend/lib/XmlStreamReader.h"
+#include "backend/core/AbstractAspect.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -190,8 +195,8 @@ void WorksheetView::initActions() {
 	addCartesianPlot1Action = new QAction(QIcon::fromTheme("labplot-xy-plot-four-axes"), i18n("Four Axes"), addNewActionGroup);
 	addCartesianPlot2Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes"), i18n("Two Axes"), addNewActionGroup);
 	addCartesianPlot3Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered"), i18n("Two Axes, Centered"), addNewActionGroup);
-	addCartesianPlot4Action =
-		new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
+	addCartesianPlot4Action = new QAction(QIcon::fromTheme("labplot-xy-plot-two-axes-centered-origin"), i18n("Two Axes, Crossing at Origin"), addNewActionGroup);
+	addCartesianPlotTemplateAction = new QAction(QIcon::fromTheme("labplot-template-plot"), i18n("Load plot from template"), addNewActionGroup);
 	addTextLabelAction = new QAction(QIcon::fromTheme("draw-text"), i18n("Text"), addNewActionGroup);
 	addImageAction = new QAction(QIcon::fromTheme("viewimage"), i18n("Image"), addNewActionGroup);
 
@@ -439,6 +444,7 @@ void WorksheetView::initMenus() {
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot2Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot3Action);
 	m_addNewCartesianPlotMenu->addAction(addCartesianPlot4Action);
+	m_addNewCartesianPlotMenu->addAction(addCartesianPlotTemplateAction);
 
 	m_addNewMenu = new QMenu(i18n("Add New"), this);
 	m_addNewMenu->setIcon(QIcon::fromTheme("list-add"));
@@ -1431,6 +1437,45 @@ void WorksheetView::addNew(QAction* action) {
 		aspect = plot;
 		if (tbNewCartesianPlot)
 			tbNewCartesianPlot->setDefaultAction(addCartesianPlot4Action);
+	} else if (action == addCartesianPlotTemplateAction) {
+		// open dialog
+		TemplateChooserDialog d;
+		if (d.exec() != QDialog::Accepted)
+			return;
+		QFile file(d.templatePath());
+		if (!file.exists())
+			return;
+
+		if (!file.open(QIODevice::OpenModeFlag::ReadOnly))
+			return;
+
+		XmlStreamReader reader(&file);
+		while (!(reader.isStartDocument() || reader.atEnd()))
+			reader.readNext();
+
+		if (!(reader.atEnd())) {
+			if (!reader.skipToNextTag())
+				return;
+			if (!reader.isStartElement())
+				return;
+
+			if (reader.name() != "cartesianPlot")
+				return;
+		}
+
+
+
+		auto* plot = new CartesianPlot(i18n("xy-plot"));
+		plot->setMouseMode(m_cartesianPlotMouseMode);
+		//plot->setType(CartesianPlot::Type::TwoAxesCenteredZero);
+		auto res = plot->load(&reader, false);
+		//set "isLoading" to false for all worksheet elements
+		for (auto* child : plot->children<WorksheetElement>(AbstractAspect::ChildIndexFlag::Recursive | AbstractAspect::ChildIndexFlag::IncludeHidden))
+			child->setIsLoading(false);
+		plot->retransformAll();
+		aspect = plot;
+		if (tbNewCartesianPlot)
+			tbNewCartesianPlot->setDefaultAction(addCartesianPlotTemplateAction);
 	} else if (action == addTextLabelAction) {
 		auto* l = new TextLabel(i18n("Text Label"));
 		l->setText(i18n("Text Label"));

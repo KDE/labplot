@@ -17,6 +17,7 @@
 #include "kdefrontend/TemplateHandler.h"
 #include "kdefrontend/ThemeHandler.h"
 #include "kdefrontend/widgets/LabelWidget.h"
+#include "kdefrontend/TemplateChooserDialog.h"
 
 #include <KMessageBox>
 
@@ -29,6 +30,9 @@
 #include <QPainter>
 #include <QRadioButton>
 #include <QWheelEvent>
+#include <QXmlStreamWriter>
+#include <QFile>
+#include <QFileDialog>
 
 namespace {
 enum TwRangesColumn { Automatic = 0, Format, Min, Max, Scale };
@@ -201,6 +205,8 @@ CartesianPlotDock::CartesianPlotDock(QWidget* parent)
 	connect(ui.sbCursorLineWidth, QOverload<int>::of(&QSpinBox::valueChanged), this, &CartesianPlotDock::cursorLineWidthChanged);
 	connect(ui.kcbCursorLineColor, &KColorButton::changed, this, &CartesianPlotDock::cursorLineColorChanged);
 	connect(ui.cbCursorLineStyle, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CartesianPlotDock::cursorLineStyleChanged);
+
+	connect(ui.pbExportTemplate, &QPushButton::pressed, this, &CartesianPlotDock::exportPlotTemplate);
 
 	// theme and template handlers
 	auto* frame = new QFrame(this);
@@ -2169,6 +2175,25 @@ void CartesianPlotDock::cursorLineStyleChanged(int index) {
 		pen.setStyle(static_cast<Qt::PenStyle>(index));
 		plot->setCursorPen(pen);
 	}
+}
+
+void CartesianPlotDock::exportPlotTemplate() {
+	const QString dir;
+	QString path = QFileDialog::getSaveFileName(nullptr, i18nc("@title:window", "Select Template File"), dir, i18n("Labplot Plot Templates (*%1)", TemplateChooserDialog::format));
+
+	if (path.split(TemplateChooserDialog::format).count() < 2)
+		path.append(TemplateChooserDialog::format);
+	QFile file(path);
+	if (!file.open(QIODevice::OpenModeFlag::WriteOnly)) {
+		// TODO: show error message
+		return;
+	}
+	QXmlStreamWriter writer(&file);
+	writer.setAutoFormatting(true);
+	writer.writeStartDocument();
+	writer.writeDTD("<!DOCTYPE LabPlotXML>");
+	m_plot->save(&writer);
+	writer.writeEndDocument();
 }
 
 //*************************************************************

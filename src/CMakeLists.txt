@@ -15,6 +15,7 @@ set_property(SOURCE gsl_parser.h gsl_parser.c PROPERTY SKIP_AUTOMOC ON)
 set(GUI_SOURCES
     ${KDEFRONTEND_DIR}/DatasetModel.cpp
 	${KDEFRONTEND_DIR}/GuiObserver.cpp
+	${KDEFRONTEND_DIR}/TemplateChooserDialog.cpp
 	${KDEFRONTEND_DIR}/GuiTools.cpp
 	${KDEFRONTEND_DIR}/HistoryDialog.cpp
 	${KDEFRONTEND_DIR}/MainWin.cpp
@@ -144,6 +145,7 @@ endif()
 set(UI_SOURCES
 	${KDEFRONTEND_DIR}/ui/colormapswidget.ui
 	${KDEFRONTEND_DIR}/ui/constantswidget.ui
+	${KDEFRONTEND_DIR}/ui/TemplateChooserDialog.ui
 	${KDEFRONTEND_DIR}/ui/exampleswidget.ui
 	${KDEFRONTEND_DIR}/ui/functionswidget.ui
 	${KDEFRONTEND_DIR}/ui/fitoptionswidget.ui

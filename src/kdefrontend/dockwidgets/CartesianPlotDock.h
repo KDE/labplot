@@ -139,8 +139,10 @@ private Q_SLOTS:
 	void cursorLineColorChanged(const QColor&);
 	void cursorLineStyleChanged(int);
 
-	// SLOTs for changes triggered in CartesianPlot
-	// general
+	void exportPlotTemplate();
+
+	//SLOTs for changes triggered in CartesianPlot
+	//general
 	void plotRectChanged(QRectF&);
 	void plotRangeTypeChanged(CartesianPlot::RangeType);
 	void plotRangeFirstValuesChanged(int);
